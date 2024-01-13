@@ -113,10 +113,11 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
             new_turns = int(new_turns)
         """Set turns for motions of a specific type to a new value."""
         self.update_turns_display(new_turns)
-        if self.attr_box.attribute_type == MOTION_TYPE:
-            if hasattr(self.attr_box, "same_button"):
+        
+        if hasattr(self.attr_box, "same_button"):
+            self.vtg_dir_btn_state = self.attr_box.vtg_dir_btn_state
+            if self.attr_box.attribute_type == MOTION_TYPE:
             
-                self.vtg_dir_btn_state = self.attr_box.vtg_dir_btn_state
                 if self.are_pictographs_with_dash_or_static_motion_in_scroll_area():
                     if new_turns == 0:
                         self.attr_box.same_button.setStyleSheet(
@@ -166,9 +167,9 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
                         if new_turns == 0 and motion.motion_type in [DASH, STATIC]:
                             motion.prop_rot_dir = NO_ROT
                         if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
-                            if self.attr_box.same_button.isChecked():
+                            if self.vtg_dir_btn_state[SAME]:
                                 motion.prop_rot_dir = other_motion.prop_rot_dir
-                            elif self.attr_box.opp_button.isChecked():
+                            elif self.vtg_dir_btn_state[OPP]:
                                 if other_motion.prop_rot_dir == CLOCKWISE:
                                     motion.prop_rot_dir = COUNTER_CLOCKWISE
                                 elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
