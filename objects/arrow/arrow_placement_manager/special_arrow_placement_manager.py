@@ -125,7 +125,7 @@ class SpecialArrowPlacementManager:
 
     def _determine_key(self, arrow: "Arrow") -> str:
         if self.pictograph.letter in ["S", "T"]:
-            return arrow.lead_state
+            return arrow.motion.lead_state
         elif self.pictograph.letter in Type1_non_hybrid_letters:
             return arrow.color
         else:
@@ -138,7 +138,7 @@ class SpecialArrowPlacementManager:
             else self.pictograph.red_arrow
         )
         if self.pictograph.letter in ["S", "T"]:
-            return other_arrow.lead_state
+            return other_arrow.motion.lead_state
         elif self.pictograph.letter in Type1_non_hybrid_letters:
             return other_arrow.color
         else:
@@ -187,17 +187,19 @@ class SpecialArrowPlacementManager:
         if adjustment_key is None:
             adjustment_key = self.key_generator.generate(letter)
         self.special_placements = self._load_placements()
-        letter_adjustments: Dict = self.special_placements.get(letter, {}).get(adjustment_key, {})
-        
+        letter_adjustments: Dict = self.special_placements.get(letter, {}).get(
+            adjustment_key, {}
+        )
+
         if letter in ["S", "T"]:
-            return letter_adjustments.get(arrow.lead_state)
+            return letter_adjustments.get(arrow.motion.lead_state)
         elif letter in Type1_hybrid_letters:
             return letter_adjustments.get(arrow.motion_type)
         elif letter in non_hybrid_letters:
             return letter_adjustments.get(arrow.color)
         elif letter in Type2_letters or letter in Type3_letters:
             return letter_adjustments.get(arrow.motion_type)
-        
+
         return None
 
     def _get_special_adjustment(

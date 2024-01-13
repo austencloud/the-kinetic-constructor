@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING, Union
-from constants import BLUE, CLOCKWISE, DASH, ICON_DIR, NO_ROT, RED, STATIC
+from constants import BLUE, COLOR, DASH, LEAD_STATE, MOTION_TYPE, NO_ROT, RED, STATIC
 from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QPushButton, QHBoxLayout
+from PyQt6.QtWidgets import QPushButton, QHBoxLayout, QFrame
 from objects.motion.motion import Motion
+from objects.pictograph.pictograph import Pictograph
 from ....attr_box_widgets.base_turns_widget import BaseTurnsWidget
 from ....attr_panel.base_attr_box import BaseAttrBox
 
@@ -13,10 +14,6 @@ if TYPE_CHECKING:
     from .ig_color_turns_widget import IGColorTurnsWidget
     from .ig_lead_state_turns_widget import IGLeadStateTurnsWidget
     from .ig_motion_type_turns_widget import IGMotionTypeTurnsWidget
-
-from PyQt6.QtWidgets import QSizePolicy
-from PyQt6.QtWidgets import QLabel, QFrame
-from PyQt6.QtCore import Qt
 
 
 class BaseIGTurnsWidget(BaseTurnsWidget):
@@ -56,6 +53,31 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         self.turns_buttons_layout.setSpacing(0)
         self.layout.addWidget(self.turns_buttons_frame)
 
+    def adjust_turns(self, pictograph: Pictograph, adjustment: float) -> None:
+        """Adjust turns for a given pictograph based on the AttrBox's attribute type."""
+        new_turns = None
+        for motion in pictograph.motions.values():
+            if self.attr_box.attribute_type == MOTION_TYPE:
+                if motion.motion_type == self.attr_box.motion_type:
+                    self.process_turns_adjustment_for_single_motion(motion, adjustment)
+                    if new_turns is None:
+                        new_turns = motion.turns
+            elif self.attr_box.attribute_type == COLOR:
+                if motion.color == self.attr_box.color:
+                    self.process_turns_adjustment_for_single_motion(motion, adjustment)
+                    if new_turns is None:
+                        new_turns = motion.turns
+            elif self.attr_box.attribute_type == LEAD_STATE:
+                if motion.lead_state == self.attr_box.lead_state:
+                    self.process_turns_adjustment_for_single_motion(motion, adjustment)
+                    if new_turns is None:
+                        new_turns = motion.turns
+
+        if new_turns in [0.0, 1.0, 2.0, 3.0]:
+            new_turns = int(new_turns)
+        self.update_turns_display(new_turns)
+
+
     def create_frame(self) -> QFrame:
         frame = QFrame()
         frame.setContentsMargins(0, 0, 0, 0)
@@ -82,8 +104,8 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         new_turns = self._calculate_new_turns(motion.turns, adjustment)
         if new_turns == 0 and motion.motion_type in [DASH, STATIC]:
             motion.prop_rot_dir = NO_ROT
-            for button in self.attr_box.header_widget.same_opp_buttons:
-                button.setStyleSheet(self.get_button_style(pressed=False))
+            for button in self.attr_box.same_opp_buttons:
+                button.setStyleSheet(self.get_vtg_dir_button_style(pressed=False))
         simulate_same_click = False
 
         if new_turns > 0 and motion.motion_type in [DASH, STATIC]:
@@ -92,10 +114,10 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
                 motion.prop_rot_dir = other_motion.prop_rot_dir
             if simulate_same_click:
                 if (
-                    not self.attr_box.header_widget.same_button.isChecked()
-                    and not self.attr_box.header_widget.opp_button.isChecked()
+                    not self.attr_box.same_button.isChecked()
+                    and not self.attr_box.opp_button.isChecked()
                 ):
-                    self._simulate_same_button_click_in_header_widget()
+                    self._simulate_same_button_click()
 
         motion.set_turns(new_turns)
         pictograph_dict = {

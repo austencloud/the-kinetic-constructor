@@ -38,7 +38,7 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
         elif self.attr_box.lead_state == LEADING:
             motions = self.get_leading_motions()
         for motion in pictograph.motions.values():
-            if motion.arrow.lead_state == self.attr_box.lead_state:
+            if motion.arrow.motion.lead_state == self.attr_box.lead_state:
                 self.process_turns_adjustment_for_single_motion(motion, adjustment)
         new_turns = motion.turns
         if new_turns in [0.0, 1.0, 2.0, 3.0]:
@@ -54,7 +54,7 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
         self.update_turns_display(new_turns)
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
-                if motion.arrow.lead_state == self.attr_box.lead_state:
+                if motion.arrow.motion.lead_state == self.attr_box.lead_state:
                     motion.set_turns(new_turns)
                     self.update_pictograph_dict(motion, new_turns)
 
@@ -65,22 +65,22 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
     def _update_pictographs_turns_by_lead_state(self, new_turns):
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
-                if motion.arrow.lead_state == self.attr_box.lead_state:
+                if motion.arrow.motion.lead_state == self.attr_box.lead_state:
                     motion.set_turns(new_turns)
 
                     if motion.motion_type in [DASH, STATIC] and (
                         motion.prop_rot_dir == NO_ROT and motion.turns > 0
                     ):
                         motion.manipulator.set_prop_rot_dir(
-                            self.attr_box.prop_rot_dir_widget._get_current_prop_rot_dir()
+                            self.attr_box.vtg_dir_widget._get_current_prop_rot_dir()
                         )
                         pictograph_dict = {
-                            f"{motion.arrow.lead_state}_turns": new_turns,
-                            f"{motion.arrow.lead_state}_prop_rot_dir": self.attr_box.prop_rot_dir_widget._get_current_prop_rot_dir(),
+                            f"{motion.arrow.motion.lead_state}_turns": new_turns,
+                            f"{motion.arrow.motion.lead_state}_prop_rot_dir": self.attr_box.vtg_dir_widget._get_current_prop_rot_dir(),
                         }
                     else:
                         pictograph_dict = {
-                            f"{motion.arrow.lead_state}_turns": new_turns,
+                            f"{motion.arrow.motion.lead_state}_turns": new_turns,
                         }
                     motion.scene.update_pictograph(pictograph_dict)
 
@@ -154,12 +154,12 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
         return leading_motions
 
     def _simulate_cw_button_click_in_attr_box_widget(self) -> None:
-        self.attr_box.prop_rot_dir_widget.cw_button.setChecked(True)
-        self.attr_box.prop_rot_dir_widget.cw_button.click()
+        self.attr_box.vtg_dir_widget.same_button.setChecked(True)
+        self.attr_box.vtg_dir_widget.same_button.click()
 
     def _simulate_cw_button_click(self) -> None:
-        self.attr_box.prop_rot_dir_widget.cw_button.setChecked(True)
-        self.attr_box.prop_rot_dir_widget.cw_button.click()
+        self.attr_box.vtg_dir_widget.same_button.setChecked(True)
+        self.attr_box.vtg_dir_widget.same_button.click()
 
     ### EVENT HANDLERS ###
 

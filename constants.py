@@ -89,6 +89,7 @@ FLOAT = "float"
 DASH = "dash"
 STATIC = "static"
 
+LEAD_STATE = "lead_state"
 COLOR = "color"
 ARROW = "arrow"
 GHOST_ARROW = "ghost_arrow"

@@ -23,7 +23,7 @@ class IGColorAttrPanel(BaseAttrPanel):
             self.blue_attr_box,
             self.red_attr_box,
         ]
-
+    
         self.setup_layouts()
 
     def setup_layouts(self) -> None:
@@ -51,4 +51,4 @@ class IGColorAttrPanel(BaseAttrPanel):
 
     def reset_turns(self) -> None:
         for box in self.boxes:
-            box.turns_widget.turns_display.setCurrentText("0")
+            box.turns_widget.turns_display.setText("0")

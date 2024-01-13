@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtGui import QPixmap
+from constants import LEAD_STATE
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import LeadStates, LeadStates
 from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
@@ -40,6 +41,7 @@ class IGLeadStateAttrBox(BaseAttrBox):
         self.layout: QHBoxLayout = self.hbox_layout
         self.hbox_layout.addLayout(self.vbox_layout)
         self._setup_widgets()
+        self.attribute_type = LEAD_STATE
 
     def _setup_widgets(self) -> None:  # add common widgets
         self.header_widget = IGLeadStateHeaderWidget(self, self.lead_state)

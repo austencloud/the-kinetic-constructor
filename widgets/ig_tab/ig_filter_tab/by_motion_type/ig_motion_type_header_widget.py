@@ -103,14 +103,18 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
 
                 if prop_rot_dir:
                     self.same_button.setStyleSheet(
-                        self.get_button_style(pressed=vtg_dir == SAME)
+                        self.get_vtg_dir_button_style(pressed=vtg_dir == SAME)
                     )
                     self.opp_button.setStyleSheet(
-                        self.get_button_style(pressed=vtg_dir == OPP)
+                        self.get_vtg_dir_button_style(pressed=vtg_dir == OPP)
                     )
                 else:
-                    self.same_button.setStyleSheet(self.get_button_style(pressed=False))
-                    self.opp_button.setStyleSheet(self.get_button_style(pressed=False))
+                    self.same_button.setStyleSheet(
+                        self.get_vtg_dir_button_style(pressed=False)
+                    )
+                    self.opp_button.setStyleSheet(
+                        self.get_vtg_dir_button_style(pressed=False)
+                    )
 
     def _setup_vtg_dir_buttons(self) -> List[QPushButton]:
         self.same_button: QPushButton = self._create_button(
@@ -121,36 +125,13 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
             lambda: self._set_vtg_dir(OPP),
         )
 
-        self.same_button.setStyleSheet(self.get_button_style(pressed=False))
-        self.opp_button.setStyleSheet(self.get_button_style(pressed=False))
+        self.same_button.setStyleSheet(self.get_vtg_dir_button_style(pressed=False))
+        self.opp_button.setStyleSheet(self.get_vtg_dir_button_style(pressed=False))
         self.same_button.setCheckable(True)
         self.opp_button.setCheckable(True)
 
         buttons = [self.same_button, self.opp_button]
         return buttons
-
-    def get_button_style(self, pressed: bool) -> str:
-        if pressed:
-            return """
-                QPushButton {
-                    background-color: #ccd9ff;
-                    border: 2px solid #555555;
-                    border-bottom-color: #888888; /* darker shadow on the bottom */
-                    border-right-color: #888888; /* darker shadow on the right */
-                    padding: 5px;
-                }
-            """
-        else:
-            return """
-                QPushButton {
-                    background-color: white;
-                    border: 1px solid black;
-                    padding: 5px;
-                }
-                QPushButton:hover {
-                    background-color: #e6f0ff;
-                }
-            """
 
     def _create_button(self, icon_path, action) -> QPushButton:
         button = QPushButton("", self)

@@ -4,6 +4,7 @@ from objects.motion.motion_manipulator import MotionManipulator
 from utilities.TypeChecking.TypeChecking import (
     Colors,
     Handpaths,
+    LeadStates,
     Locations,
     MotionTypes,
     Orientations,
@@ -44,7 +45,8 @@ class Motion:
         self.start_ori: Orientations = None
         self.end_loc: Locations = None
         self.end_ori: Orientations = None
-        self.prop_rot_dir = None
+        self.prop_rot_dir: PropRotDirs = None
+        self.lead_state: LeadStates = None
 
     ### SETUP ###
 

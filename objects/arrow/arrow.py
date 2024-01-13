@@ -61,7 +61,6 @@ class Arrow(GraphicalObject):
         self.loc: Locations = None
         self.is_ghost: bool = False
         self.drag_offset = QPointF(0, 0)
-        self.lead_state: LeadStates = None
 
     ### SETUP ###
 

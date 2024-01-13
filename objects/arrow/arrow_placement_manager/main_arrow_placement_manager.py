@@ -164,8 +164,8 @@ class MainArrowPlacementManager:
         """Generate the lead state key for 'S' and 'T' letters."""
         leading_motion = self.pictograph.get_leading_motion()
         trailing_motion = self.pictograph.get_trailing_motion()
-        leading_motion.arrow.lead_state = LEADING
-        trailing_motion.arrow.lead_state = TRAILING
+        leading_motion.arrow.motion.lead_state = LEADING
+        trailing_motion.arrow.motion.lead_state = TRAILING
         return f"({leading_motion.turns}, {trailing_motion.turns})"
 
     def generate_adjustment_key(self) -> str:

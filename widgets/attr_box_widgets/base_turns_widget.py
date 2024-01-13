@@ -152,3 +152,33 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
     def _convert_turns_from_str_to_num(self, turns) -> Union[int, float]:
         """Convert turn values from string to numeric."""
         return int(turns) if turns in ["0", "1", "2", "3"] else float(turns)
+
+
+    def update_turnbox_size(self) -> None:
+        """Update the size of the turns display for motion type."""
+        self.spacing = self.attr_box.attr_panel.height() // 250
+        border_radius = (
+            min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        )
+        turns_display_font_size = int(self.attr_box.height() / 8)
+
+        self.turns_display.setMinimumHeight(int(self.attr_box.height() / 3))
+        self.turns_display.setMaximumHeight(int(self.attr_box.height() / 3))
+        self.turns_display.setMinimumWidth(int(self.attr_box.height() / 3))
+        self.turns_display.setMaximumWidth(int(self.attr_box.height() / 3))
+        self.turns_display.setFont(
+            QFont("Arial", turns_display_font_size, QFont.Weight.Bold)
+        )
+
+        # Adjust the stylesheet to match the combo box style without the arrow
+        self.turns_display.setStyleSheet(
+            f"""
+            QLabel {{
+                border: {self.attr_box.combobox_border}px solid black;
+                border-radius: {border_radius}px;
+                background-color: white;
+                padding-left: 2px; /* add some padding on the left for the text */
+                padding-right: 2px; /* add some padding on the right for symmetry */
+            }}
+            """
+        )
