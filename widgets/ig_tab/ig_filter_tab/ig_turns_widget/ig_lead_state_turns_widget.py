@@ -45,7 +45,6 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
             new_turns = int(new_turns)
         self.update_turns_display(new_turns)
 
-
     def _update_turns_directly_by_lead_state(self, turns: str) -> None:
         turns = self._convert_turns_from_str_to_num(turns)
         self._set_turns_by_lead_state(turns)
@@ -62,7 +61,6 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
     def adjust_turns_incrementally_by_lead_state(self, adjustment) -> None:
         for pictograph in self.attr_box.pictographs.values():
             self.adjust_turns_by_lead_state(pictograph, adjustment)
-
 
     def _update_pictographs_turns_by_lead_state(self, new_turns):
         for pictograph in self.attr_box.pictographs.values():
@@ -86,13 +84,16 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
                         }
                     motion.scene.update_pictograph(pictograph_dict)
 
-
     def update_ig_lead_state_turnbox_size(self) -> None:
         self.spacing = self.attr_box.attr_panel.width() // 250
-        border_radius = min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        border_radius = (
+            min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        )
         box_font_size = int(self.attr_box.width() / 14)
         dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
-        border_radius = min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        border_radius = (
+            min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        )
         turns_label_font = QFont("Arial", int(self.width() / 25))
         turnbox_font = QFont("Arial", box_font_size, QFont.Weight.Bold)
 
@@ -164,10 +165,14 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
 
     def update_ig_turnbox_size(self) -> None:
         self.spacing = self.attr_box.attr_panel.width() // 250
-        border_radius = min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        border_radius = (
+            min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        )
         box_font_size = int(self.attr_box.width() / 14)
         dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
-        border_radius = min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        border_radius = (
+            min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        )
         turns_label_font = QFont("Arial", int(self.width() / 25))
         turnbox_font = QFont("Arial", box_font_size, QFont.Weight.Bold)
 
@@ -207,9 +212,9 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
         )
 
     def update_ig_lead_state_turns_button_size(self) -> None:
-        for turns_button in self.add_subtract_buttons:
+        for turns_button in self.adjust_turns_buttons:
             button_size = self.calculate_turns_button_size()
-            turns_button.update_attr_box_turns_button_size(button_size)
+            turns_button.update_attr_box_adjust_turns_button_size(button_size)
 
     def resize_turns_widget(self) -> None:
         self.update_ig_turnbox_size()
@@ -219,10 +224,9 @@ class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
         """Adjust turns for a given pictograph based on color."""
         for pictograph in self.attr_box.pictographs.values():
             self.adjust_turns_by_lead_state(pictograph, adjustment)
-            
+
     def _adjust_turns_callback(self, adjustment: float) -> None:
         self.adjust_turns_incrementally_by_lead_state(adjustment)
-
 
     def _set_turns(self, new_turns: int | float) -> None:
         self._set_turns_by_lead_state(new_turns)

@@ -1,29 +1,20 @@
 from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QFrame, QSizePolicy, QLabel
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from typing import TYPE_CHECKING, List, Union
+from typing import List, Union
 from widgets.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
 from widgets.attr_box_widgets.attr_box_button import AttrBoxButton
 from widgets.attr_panel.base_attr_box import BaseAttrBox
-
-if TYPE_CHECKING:
-    from widgets.graph_editor_tab.graph_editor_turns_widget import (
-        GraphEditorTurnsWidget,
-    )
-    from widgets.ig_tab.ig_filter_tab.ig_turns_widget.ig_motion_type_turns_widget import (
-        IGMotionTypeTurnsWidget,
-    )
 
 
 class BaseTurnsWidget(BaseAttrBoxWidget):
     def __init__(self, attr_box: "BaseAttrBox") -> None:
         self.attr_box = attr_box
         super().__init__(attr_box)
-        # self._initialize_ui()
 
     def _initialize_ui(self) -> None:
         self.turns_display = self.create_turns_display()
-        self.add_subtract_buttons = self._setup_add_subtract_turns_buttons()
+        self.adjust_turns_buttons = self._setup_adjust_turns_buttons()
         self._setup_layout()
         self._create_frames()
         self._add_frames_to_main_layout()
@@ -62,12 +53,12 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
         self.turn_display_and_adjust_btns_hbox_layout.addWidget(self.add_button_frame)
         self.layout.addWidget(turn_display_and_adjust_btns_frame)
 
-    def _setup_add_subtract_turns_buttons(self) -> List[AttrBoxButton]:
+    def _setup_adjust_turns_buttons(self) -> List[AttrBoxButton]:
         self.subtract_turns_buttons = [
-            self._create_turns_button(text) for text in ["-1", "-0.5"]
+            self._create_adjust_turns_button(text) for text in ["-1", "-0.5"]
         ]
         self.add_turns_buttons = [
-            self._create_turns_button(text) for text in ["+0.5", "+1"]
+            self._create_adjust_turns_button(text) for text in ["+1", "+0.5"]
         ]
         turns_buttons = self.subtract_turns_buttons + self.add_turns_buttons
         return turns_buttons
@@ -105,18 +96,21 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
             layout.addWidget(button)
         return frame
 
-    def _create_turns_button(self, text: str) -> AttrBoxButton:
+    def _create_adjust_turns_button(self, text: str) -> AttrBoxButton:
         button = AttrBoxButton(self)
         button.setText(text)
         turn_adjustment_mapping = {"-1": -1, "-0.5": -0.5, "+0.5": 0.5, "+1": 1}
         turn_adjustment = turn_adjustment_mapping.get(text, 0)
         button.clicked.connect(lambda: self._adjust_turns(turn_adjustment))
+
+
         return button
 
     def _get_turns_display_style_sheet(self) -> str:
         return """
             QLabel {
-                border: 1px solid #c0c0c0;
+                background-color: #ffffff;
+                border: 2px solid #000000;
                 border-radius: 5px;
                 padding: 5px;
                 font-weight: bold;

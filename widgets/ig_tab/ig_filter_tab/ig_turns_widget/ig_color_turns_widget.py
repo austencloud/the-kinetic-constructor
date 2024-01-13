@@ -113,10 +113,14 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
 
     def update_ig_color_turnbox_size(self) -> None:
         self.spacing = self.attr_box.attr_panel.width() // 250
-        border_radius = min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        border_radius = (
+            min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        )
         box_font_size = int(self.attr_box.width() / 14)
         dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
-        border_radius = min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        border_radius = (
+            min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        )
         turns_label_font = QFont("Arial", int(self.width() / 25))
         turnbox_font = QFont("Arial", box_font_size, QFont.Weight.Bold)
 
@@ -157,7 +161,7 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
 
     def resize_turns_widget(self) -> None:
         self.update_ig_color_turnbox_size()
-        self.update_add_subtract_button_size()
+        self.update_adjust_turns_button_size()
 
     def _adjust_turns(self, adjustment) -> None:
         """Adjust turns for a given pictograph based on color."""

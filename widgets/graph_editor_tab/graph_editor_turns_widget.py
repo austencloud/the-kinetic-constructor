@@ -255,13 +255,13 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
         self.turnbox_vbox_frame.setMaximumWidth(int(self.attr_box.width() / 3.25))
 
     def _update_button_size(self) -> None:
-        for button in self.add_subtract_buttons:
+        for button in self.adjust_turns_buttons:
             button_size = int(self.attr_box.width() / 7)
             if button.text() == "-0.5" or button.text() == "+0.5":
                 button_size = int(button_size * 0.85)
             else:
                 button_size = int(self.attr_box.width() / 6)
-            button.update_attr_box_turns_button_size(button_size)
+            button.update_attr_box_adjust_turns_button_size(button_size)
 
     def resize_turns_widget(self) -> None:
         self._update_clock_size()

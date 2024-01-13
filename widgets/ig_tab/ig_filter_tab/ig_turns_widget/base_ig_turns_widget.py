@@ -25,12 +25,7 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         self.attr_box: Union[
             "IGMotionTypeAttrBox", "IGLeadStateAttrBox", "IGColorAttrBox"
         ] = attr_box
-        self.turns_display = QLabel(
-            "0", self
-        )  # Initialize the QLabel with "0" as default text.
-        self.turns_display.setAlignment(
-            Qt.AlignmentFlag.AlignCenter
-        )  # Center the text.
+
         self._initialize_ui()
         self.setup_direct_set_turns_buttons()
 
@@ -43,7 +38,6 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         self.turns_buttons_layout = QHBoxLayout()  # Create a horizontal layout
         button_style_sheet = self._get_direct_set_button_style_sheet()
 
-        # Create buttons and add them to the turns_buttons_layout
         for value in turns_values:
             button = QPushButton(value, self)
             button.setStyleSheet(button_style_sheet)
@@ -54,11 +48,12 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
             button.clicked.connect(lambda checked, v=value: self._direct_set_turns(v))
             self.turns_buttons_layout.addWidget(button)
 
-        # Use a dedicated frame to hold the turns buttons
         self.turns_buttons_frame = QFrame(self)
         self.turns_buttons_frame.setLayout(self.turns_buttons_layout)
 
-        # Add the frame to the main layout of the widget
+        self.turns_buttons_frame.setContentsMargins(0, 0, 0, 0)
+        self.turns_buttons_layout.setContentsMargins(0, 0, 0, 0)
+        self.turns_buttons_layout.setSpacing(0)
         self.layout.addWidget(self.turns_buttons_frame)
 
     def create_frame(self) -> QFrame:
@@ -152,22 +147,17 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
         """Update the turns display based on the latest turns value."""
         self.turns_display.setText(str(turns))
 
-    def update_ig_lead_state_turns_button_size(self) -> None:
-        for turns_button in self.add_subtract_buttons:
-            button_size = self.calculate_turns_button_size()
-            turns_button.update_attr_box_turns_button_size(button_size)
-
     def calculate_turns_button_size(self) -> int:
         return int(self.attr_box.width() / 10)
 
     def resize_turns_widget(self) -> None:
         self.update_ig_turnbox_size()
-        self.update_ig_lead_state_turns_button_size()
+        self.update_adjust_turns_button_size()
 
-    def update_add_subtract_button_size(self) -> None:
-        for button in self.add_subtract_buttons:
-            button_size = self.calculate_button_size()
-            button.update_attr_box_turns_button_size(button_size)
+    def update_adjust_turns_button_size(self) -> None:
+        for button in self.adjust_turns_buttons:
+            button_size = self.calculate_adjust_turns_button_size()
+            button.update_attr_box_adjust_turns_button_size(button_size)
 
-    def calculate_button_size(self) -> int:
+    def calculate_adjust_turns_button_size(self) -> int:
         return int(self.attr_box.height() / 6)
