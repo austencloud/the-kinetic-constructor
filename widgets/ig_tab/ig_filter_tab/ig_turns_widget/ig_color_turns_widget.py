@@ -48,11 +48,11 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
                 if motion.color == self.attr_box.color:
                     if motion.motion_type == STATIC and motion.turns == 0:
                         if (
-                            not self.attr_box.header_widget.cw_button.isChecked()
-                            and not self.attr_box.header_widget.ccw_button.isChecked()
+                            not self.attr_box.header_widget.same_button.isChecked()
+                            and not self.attr_box.header_widget.opp_button.isChecked()
                         ):
                             self._simulate_cw_button_click_in_attr_box_widget()
-                        elif self.attr_box.header_widget.cw_button.isChecked():
+                        elif self.attr_box.header_widget.same_button.isChecked():
                             motion.prop_rot_dir = CLOCKWISE
                         else:
                             motion.prop_rot_dir = COUNTER_CLOCKWISE

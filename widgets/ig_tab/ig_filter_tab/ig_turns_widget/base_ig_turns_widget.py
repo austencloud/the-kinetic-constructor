@@ -16,6 +16,7 @@ if TYPE_CHECKING:
 
 from PyQt6.QtWidgets import QSizePolicy
 
+
 class BaseIGTurnsWidget(BaseTurnsWidget):
     def __init__(self, attr_box: "BaseAttrBox") -> None:
         super().__init__(attr_box)
@@ -39,7 +40,9 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
             button.setContentsMargins(0, 0, 0, 0)
             # button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)  # Set size policy
             # set the button's minimum width to contain its text
-            button.setMinimumWidth(button.fontMetrics().boundingRect(value).width() + 10)
+            button.setMinimumWidth(
+                button.fontMetrics().boundingRect(value).width() + 10
+            )
             button.clicked.connect(lambda checked, v=value: self._direct_set_turns(v))
             self.turns_buttons_layout.addWidget(button)
         self.layout.addLayout(self.turns_buttons_layout)
@@ -71,8 +74,8 @@ class BaseIGTurnsWidget(BaseTurnsWidget):
                 motion.prop_rot_dir = CLOCKWISE
             if simulate_cw_click:
                 if (
-                    not self.attr_box.header_widget.cw_button.isChecked()
-                    and not self.attr_box.header_widget.ccw_button.isChecked()
+                    not self.attr_box.header_widget.same_button.isChecked()
+                    and not self.attr_box.header_widget.opp_button.isChecked()
                 ):
                     self._simulate_cw_button_click_in_header_widget()
 

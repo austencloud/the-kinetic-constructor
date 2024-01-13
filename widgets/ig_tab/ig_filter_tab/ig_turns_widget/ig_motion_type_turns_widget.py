@@ -47,8 +47,8 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
             # Simulate CW button click if necessary
             if simulate_cw_click:
                 if (
-                    not self.attr_box.header_widget.cw_button.isChecked()
-                    and not self.attr_box.header_widget.ccw_button.isChecked()
+                    not self.attr_box.header_widget.same_button.isChecked()
+                    and not self.attr_box.header_widget.opp_button.isChecked()
                 ):
                     self._simulate_cw_button_click_in_header_widget()
 
@@ -59,9 +59,9 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
                     if new_turns == 0 and motion.motion_type in [DASH, STATIC]:
                         motion.prop_rot_dir = NO_ROT
                     if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
-                        if self.attr_box.header_widget.cw_button.isChecked():
+                        if self.attr_box.header_widget.same_button.isChecked():
                             motion.prop_rot_dir = CLOCKWISE
-                        elif self.attr_box.header_widget.ccw_button.isChecked():
+                        elif self.attr_box.header_widget.opp_button.isChecked():
                             motion.prop_rot_dir = COUNTER_CLOCKWISE
                     pictograph_dict = {
                         f"{motion.color}_turns": new_turns,
@@ -147,22 +147,22 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         if simulate_cw_click:
             if hasattr(self.attr_box.header_widget, "cw_button"):
                 if (
-                    not self.attr_box.header_widget.cw_button.isChecked()
-                    and not self.attr_box.header_widget.ccw_button.isChecked()
+                    not self.attr_box.header_widget.same_button.isChecked()
+                    and not self.attr_box.header_widget.opp_button.isChecked()
                 ):
                     self._simulate_cw_button_click_in_header_widget()
 
         if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
             if hasattr(self.attr_box.header_widget, "cw_button"):
-                if self.attr_box.header_widget.cw_button.isChecked():
+                if self.attr_box.header_widget.same_button.isChecked():
                     motion.prop_rot_dir = CLOCKWISE
-                elif self.attr_box.header_widget.ccw_button.isChecked():
+                elif self.attr_box.header_widget.opp_button.isChecked():
                     motion.prop_rot_dir = COUNTER_CLOCKWISE
         for pictograph in self.attr_box.pictographs.values():
             self.adjust_turns_by_motion_type(pictograph, adjustment)
 
     def _simulate_cw_button_click_in_header_widget(self):
-        self.attr_box.header_widget.cw_button.setChecked(True)
+        self.attr_box.header_widget.same_button.setChecked(True)
         # self.attr_box.header_widget.cw_button.click
 
     def _set_turns(self, new_turns: int | float) -> None:

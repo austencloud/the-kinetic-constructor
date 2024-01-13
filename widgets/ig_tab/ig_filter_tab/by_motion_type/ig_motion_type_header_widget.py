@@ -3,21 +3,21 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING, List
-from utilities.TypeChecking.TypeChecking import MotionTypes
+from utilities.TypeChecking.TypeChecking import MotionTypes, VtgDirections
 
-from widgets.attr_box_widgets.base_header_widget import BaseHeaderWidget
+from ....attr_box_widgets.base_header_widget import BaseHeaderWidget
 
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_filter_tab.by_motion_type.ig_motion_type_attr_box import (
-        IGMotionTypeAttrBox,
-    )
+    from .ig_motion_type_attr_box import IGMotionTypeAttrBox
 from constants import (
     ANTI,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     DASH,
     ICON_DIR,
+    OPP,
     PRO,
+    SAME,
     STATIC,
 )
 
@@ -52,11 +52,13 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
     def _setup_dash_static_layout(self) -> None:
         super()._setup_layout()
         header_layout = QHBoxLayout()
+        header_layout.addStretch(3)
         header_layout.addWidget(self.prop_rot_dir_buttons[0])
         header_layout.addStretch(1)
         header_layout.addWidget(self.header_label)
         header_layout.addStretch(1)
         header_layout.addWidget(self.prop_rot_dir_buttons[1])
+        header_layout.addStretch(3)
         self.layout.addLayout(header_layout)
         self.layout.addWidget(self.separator)
 
@@ -67,17 +69,59 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
             for motion in pictograph.motions.values()
             if motion.motion_type == DASH
         )
-        self._set_prop_rot_dir(CLOCKWISE if has_turns else None)
+        self._set_vtg_direction(CLOCKWISE if has_turns else None)
 
-    def _set_prop_rot_dir(self, prop_rot_dir: str) -> None:
+    def _set_vtg_direction(self, vtg_direction: VtgDirections) -> None:
+        prop_rot_dir = None
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.motion_type == self.attr_box.motion_type:
+                    other_motion = (
+                        pictograph.red_motion
+                        if motion == pictograph.blue_motion
+                        else pictograph.blue_motion
+                    )
+                    if motion.motion_type == DASH:
+                        if vtg_direction is SAME:
+                            motion.prop_rot_dir = other_motion.prop_rot_dir
+                            prop_rot_dir = other_motion.prop_rot_dir
+                        elif vtg_direction is OPP:
+                            if other_motion.prop_rot_dir == CLOCKWISE:
+                                motion.prop_rot_dir = COUNTER_CLOCKWISE
+                                prop_rot_dir = COUNTER_CLOCKWISE
+                            elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                                motion.prop_rot_dir = CLOCKWISE
+                                prop_rot_dir = CLOCKWISE
+                        else:
+                            prop_rot_dir = None
                     if motion.turns > 0:
                         pictograph_dict = {
                             f"{motion.color}_prop_rot_dir": prop_rot_dir,
                         }
                         motion.scene.update_pictograph(pictograph_dict)
+
+            if self.attr_box.motion_type in [DASH, STATIC]:
+                self.same_button.setChecked(
+                    prop_rot_dir == other_motion.prop_rot_dir
+                    and prop_rot_dir is not None
+                    and other_motion.prop_rot_dir is not None
+                )
+                self.opp_button.setChecked(
+                    prop_rot_dir != other_motion.prop_rot_dir
+                    and prop_rot_dir is not None
+                    and other_motion.prop_rot_dir is not None
+                )
+
+                if prop_rot_dir:
+                    self.same_button.setStyleSheet(
+                        self.get_button_style(pressed=vtg_direction == SAME)
+                    )
+                    self.opp_button.setStyleSheet(
+                        self.get_button_style(pressed=vtg_direction == OPP)
+                    )
+                else:
+                    self.same_button.setStyleSheet(self.get_button_style(pressed=False))
+                    self.opp_button.setStyleSheet(self.get_button_style(pressed=False))
             for motion in pictograph.motions.values():
                 if motion.motion_type == DASH and (
                     prop_rot_dir is None or motion.turns > 0
@@ -85,35 +129,21 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
                     motion.prop_rot_dir = prop_rot_dir if prop_rot_dir else CLOCKWISE
                     motion.manipulator.set_prop_rot_dir(motion.prop_rot_dir)
 
-        self.cw_button.setChecked(prop_rot_dir == CLOCKWISE)
-        self.ccw_button.setChecked(prop_rot_dir == COUNTER_CLOCKWISE)
-
-        if prop_rot_dir:
-            self.cw_button.setStyleSheet(
-                self.get_button_style(pressed=prop_rot_dir == CLOCKWISE)
-            )
-            self.ccw_button.setStyleSheet(
-                self.get_button_style(pressed=prop_rot_dir == COUNTER_CLOCKWISE)
-            )
-        else:
-            self.cw_button.setStyleSheet(self.get_button_style(pressed=False))
-            self.ccw_button.setStyleSheet(self.get_button_style(pressed=False))
-
     def _setup_prop_rot_dir_buttons(self) -> List[QPushButton]:
-        self.cw_button: QPushButton = self._create_button(
-            f"{ICON_DIR}clock/clockwise.png", lambda: self._set_prop_rot_dir(CLOCKWISE)
+        self.same_button: QPushButton = self._create_button(
+            f"{ICON_DIR}same_direction.png", lambda: self._set_vtg_direction(SAME)
         )
-        self.ccw_button: QPushButton = self._create_button(
-            f"{ICON_DIR}clock/counter_clockwise.png",
-            lambda: self._set_prop_rot_dir(COUNTER_CLOCKWISE),
+        self.opp_button: QPushButton = self._create_button(
+            f"{ICON_DIR}opp_direction.png",
+            lambda: self._set_vtg_direction(OPP),
         )
 
-        self.cw_button.setStyleSheet(self.get_button_style(pressed=True))
-        self.ccw_button.setStyleSheet(self.get_button_style(pressed=False))
-        self.cw_button.setCheckable(True)
-        self.ccw_button.setCheckable(True)
+        self.same_button.setStyleSheet(self.get_button_style(pressed=True))
+        self.opp_button.setStyleSheet(self.get_button_style(pressed=False))
+        self.same_button.setCheckable(True)
+        self.opp_button.setCheckable(True)
 
-        buttons = [self.cw_button, self.ccw_button]
+        buttons = [self.same_button, self.opp_button]
         return buttons
 
     def get_button_style(self, pressed: bool) -> str:

@@ -230,14 +230,29 @@ class ArrowRotAngleManager:
     def _get_default_dash_angle(
         self,
     ) -> Dict[Orientations, Dict[PropRotDirs, Dict[Locations, int]]]:
+        other_motion = (
+            self.arrow.scene.motions[RED]
+            if self.arrow.color == BLUE
+            else self.arrow.scene.motions[BLUE]
+        )
+        
+        
         if self.arrow.motion.prop_rot_dir == NO_ROT:
-            return {
-                (NORTH, SOUTH): 90,
-                (SOUTH, NORTH): 270,
-                (EAST, WEST): 180,
-                (WEST, EAST): 0,
-            }.get((self.arrow.motion.start_loc, self.arrow.motion.end_loc), {})
-
+            if other_motion.prop_rot_dir == CLOCKWISE:
+                return {
+                    (NORTH, SOUTH): 90,
+                    (SOUTH, NORTH): 270,
+                    (EAST, WEST): 180,
+                    (WEST, EAST): 0,
+                }.get((self.arrow.motion.start_loc, self.arrow.motion.end_loc), {})
+            elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                return {
+                    (NORTH, SOUTH): 90,
+                    (SOUTH, NORTH): 270,
+                    (EAST, WEST): 180,
+                    (WEST, EAST): 0,
+                }.get((self.arrow.motion.start_loc, self.arrow.motion.end_loc), {})
+                
         elif self.arrow.motion.prop_rot_dir in [CLOCKWISE, COUNTER_CLOCKWISE]:
             orientation_map = {
                 IN: {

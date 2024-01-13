@@ -57,7 +57,6 @@ class IGScrollArea(PictographScrollArea):
         if hasattr(pictograph, "arrow_placement_manager"):
             pictograph.arrow_placement_manager.update_arrow_placement()
 
-
     def reset_turns(self) -> None:
         for pictograph in self.pictographs.values():
             for motion in pictograph.motions.values():
@@ -144,9 +143,9 @@ class IGScrollArea(PictographScrollArea):
             self.ig_tab.filter_tab.motion_attr_panel.dash_attr_box.header_widget
         )
         if motion_type == DASH:
-            if header_widget.cw_button.isChecked():
+            if header_widget.same_button.isChecked():
                 return CLOCKWISE
-            elif header_widget.ccw_button.isChecked():
+            elif header_widget.opp_button.isChecked():
                 return COUNTER_CLOCKWISE
             else:
                 return NO_ROT
@@ -160,9 +159,9 @@ class IGScrollArea(PictographScrollArea):
             self.ig_tab.filter_tab.motion_attr_panel.static_attr_box.header_widget
         )
         if motion_type == STATIC:
-            if header_widget.cw_button.isChecked():
+            if header_widget.same_button.isChecked():
                 return CLOCKWISE
-            elif header_widget.ccw_button.isChecked():
+            elif header_widget.opp_button.isChecked():
                 return COUNTER_CLOCKWISE
             else:
                 return NO_ROT
