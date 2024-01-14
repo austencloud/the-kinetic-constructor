@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
+from widgets.attr_panel.base_attr_panel import BaseAttrPanel
 from widgets.base_filter_tab import BaseFilterTab
 from .by_color.ig_color_attr_panel import IGColorAttrPanel
 from .by_lead_state.ig_lead_state_attr_panel import IGLeadStateAttrPanel
@@ -21,6 +22,13 @@ class IGFilterTab(BaseFilterTab):
         self.addTab(self.motion_attr_panel, "Filter by Motion Type")
         self.addTab(self.color_attr_panel, "Filter by Colors")
         self.addTab(self.lead_state_attr_panel, "Filter by Lead State")
+        self.panels: List[
+            IGMotionTypeAttrPanel | IGColorAttrPanel | IGLeadStateAttrPanel
+        ] = [
+            self.motion_attr_panel,
+            self.color_attr_panel,
+            self.lead_state_attr_panel,
+        ]
         self.currentChanged.connect(self.ig_tab.resize_ig_tab)
         self.currentChanged.connect(self.ig_tab.ig_scroll_area.reset_turns)
         self.currentChanged.connect(self.motion_attr_panel.reset_turns)

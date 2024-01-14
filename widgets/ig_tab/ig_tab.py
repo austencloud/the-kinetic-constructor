@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
     QApplication,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
-from constants import IG_PICTOGRAPH
+from constants import IG_PICTOGRAPH, OPP, SAME
 from widgets.ig_tab.ig_filter_tab.ig_filter_tab import IGFilterTab
 from widgets.ig_tab.ig_letter_button_frame import IGLetterButtonFrame
 from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
@@ -158,6 +158,15 @@ class IGTab(QWidget):
         )
         button.setFlat(not is_selected)
         button.setStyleSheet(self.get_button_style(pressed=not is_selected))
+        for panel in self.filter_tab.panels:
+            for box in panel.boxes:
+                if hasattr(box, "same_button"):
+                    for button in box.same_opp_buttons:
+                        button.setStyleSheet(
+                            box.header_widget.get_vtg_dir_btn_style(pressed=False)
+                        )
+                        box.vtg_dir_btn_state = {SAME: False, OPP: False}
+                        
         self.ig_scroll_area.update_pictographs()
 
     def generate_selected_images(self) -> None:
