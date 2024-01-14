@@ -108,6 +108,42 @@ class IGScrollArea(PictographScrollArea):
         )
         self.pictographs[pictograph_key] = ig_pictograph
         self.update_pictograph_motions(ig_pictograph, pictograph_dict)
+
+        for motion in ig_pictograph.motions.values():
+            if motion.motion_type in [DASH, STATIC]:
+                for box in self.ig_tab.filter_tab.motion_attr_panel.boxes:
+                    if hasattr(box, "same_button"):
+                        if box.vtg_dir_btn_state[SAME]:
+                            # motion.prop_rot_dir = other_motion.prop_rot_dir
+                            if pictograph_dict[BLUE_MOTION_TYPE] in [DASH, STATIC]:
+                                pictograph_dict[BLUE_PROP_ROT_DIR] = pictograph_dict[
+                                    RED_PROP_ROT_DIR
+                                ]
+                            elif pictograph_dict[RED_MOTION_TYPE] in [DASH, STATIC]:
+                                pictograph_dict[RED_PROP_ROT_DIR] = pictograph_dict[
+                                    BLUE_PROP_ROT_DIR
+                                ]
+
+                        elif box.vtg_dir_btn_state[OPP]:
+                            # if other_motion.prop_rot_dir == CLOCKWISE:
+                            #     motion.prop_rot_dir = COUNTER_CLOCKWISE
+                            # elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                            #     motion.prop_rot_dir = CLOCKWISE
+                            # elif other_motion.prop_rot_dir == NO_ROT:
+                            #     motion.prop_rot_dir = NO_ROT
+                            if pictograph_dict[BLUE_MOTION_TYPE] in [DASH, STATIC]:
+                                pictograph_dict[BLUE_PROP_ROT_DIR] = (
+                                    COUNTER_CLOCKWISE
+                                    if pictograph_dict[RED_PROP_ROT_DIR] == CLOCKWISE
+                                    else CLOCKWISE
+                                )
+                            elif pictograph_dict[RED_MOTION_TYPE] in [DASH, STATIC]:
+                                pictograph_dict[RED_PROP_ROT_DIR] = (
+                                    COUNTER_CLOCKWISE
+                                    if pictograph_dict[BLUE_PROP_ROT_DIR] == CLOCKWISE
+                                    else CLOCKWISE
+                                )
+
         ig_pictograph.update_pictograph(pictograph_dict)
 
     def update_pictograph_motions(self, ig_pictograph, pictograph_dict) -> None:
@@ -166,22 +202,6 @@ class IGScrollArea(PictographScrollArea):
     def update_attr_panel_if_needed(self) -> None:
         if self.pictographs:
             self.update_attr_panel()
-
-    def get_dash_prop_rot_dir_from_attr_panel(
-        self, motion_type
-    ) -> Literal["cw", "ccw", "no_rot"]:
-        header_widget = (
-            self.ig_tab.filter_tab.motion_attr_panel.dash_attr_box.header_widget
-        )
-        if motion_type == DASH:
-            if header_widget.same_button.isChecked():
-                return CLOCKWISE
-            elif header_widget.opp_button.isChecked():
-                return COUNTER_CLOCKWISE
-            else:
-                return NO_ROT
-        else:
-            return NO_ROT
 
     def get_static_prop_rot_dir_from_attr_panel(
         self, motion_type

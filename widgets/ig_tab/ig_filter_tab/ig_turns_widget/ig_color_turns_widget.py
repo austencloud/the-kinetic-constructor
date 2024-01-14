@@ -59,7 +59,7 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
 
     def adjust_turns_incrementally_by_color(self, adjustment) -> None:
         for pictograph in self.attr_box.pictographs.values():
-            self.adjust_turns(pictograph, adjustment)
+            self.set_turns(pictograph, adjustment)
 
     def _update_pictographs_turns_by_color(self, new_turns) -> None:
         for pictograph in self.attr_box.pictographs.values():
@@ -92,7 +92,7 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
     def _adjust_turns(self, adjustment) -> None:
         """Adjust turns for a given pictograph based on color."""
         for pictograph in self.attr_box.pictographs.values():
-            self.adjust_turns(pictograph, adjustment)
+            self.set_turns(pictograph, adjustment)
 
     def _adjust_turns_callback(self, adjustment: float) -> None:
         self.adjust_turns_incrementally_by_color(adjustment)

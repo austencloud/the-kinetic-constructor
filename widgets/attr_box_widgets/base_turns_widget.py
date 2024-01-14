@@ -141,9 +141,6 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
             }
         """
 
-    def _adjust_turns(self, adjustment: float) -> None:
-        # This method should be implemented in the subclasses where it's needed.
-        pass
 
     def set_layout_margins_and_alignment(self) -> None:
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -182,3 +179,11 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
             }}
             """
         )
+
+    def update_adjust_turns_button_size(self) -> None:
+        for button in self.adjust_turns_buttons:
+            button_size = self.calculate_adjust_turns_button_size()
+            button.update_attr_box_adjust_turns_button_size(button_size)
+
+    def calculate_adjust_turns_button_size(self) -> int:
+        return int(self.attr_box.height() / 6)

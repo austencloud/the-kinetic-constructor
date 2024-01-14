@@ -165,8 +165,7 @@ class IGTab(QWidget):
                         button.setStyleSheet(
                             box.header_widget.get_vtg_dir_btn_style(pressed=False)
                         )
-                        box.vtg_dir_btn_state = {SAME: False, OPP: False}
-                        
+                      
         self.ig_scroll_area.update_pictographs()
 
     def generate_selected_images(self) -> None:

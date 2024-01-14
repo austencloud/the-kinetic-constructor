@@ -80,8 +80,7 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
                             elif other_motion.prop_rot_dir is COUNTER_CLOCKWISE:
                                 motion.prop_rot_dir = CLOCKWISE
 
-        for pictograph in self.attr_box.pictographs.values():
-            self.adjust_turns(pictograph, adjustment)
+        self.adjust_turns(adjustment)
 
     def _simulate_same_button_click(self) -> None:
         self.attr_box.same_button.setChecked(True)

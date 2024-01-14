@@ -50,7 +50,7 @@ class IGColorAttrBox(BaseAttrBox):
         self.same_opp_buttons = [self.same_button, self.opp_button]
         self.attribute_type = COLOR
         self.vtg_dir_btn_state = {SAME: True, OPP: False}
-
+        
     def _setup_widgets(self) -> None:  # add common widgets
         self.header_widget = IGColorHeaderWidget(self, self.color)
         self.vtg_dir_widget = IGColorVtgDirWidget(self)
