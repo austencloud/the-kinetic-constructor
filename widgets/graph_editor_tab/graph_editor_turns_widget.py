@@ -11,15 +11,13 @@ from PyQt6.QtGui import QFont, QPixmap
 from typing import TYPE_CHECKING, List
 from objects.motion.motion import Motion
 from constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON, ICON_DIR
-from widgets.attr_box_widgets.base_turns_widget import (
+from ..filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
     BaseTurnsWidget,
 )
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.graph_editor_attr_box import (
-        GraphEditorAttrBox,
-    )
+    from ..graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
 
 
 class GraphEditorTurnsWidget(BaseTurnsWidget):
@@ -29,10 +27,10 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
         self.counter_clockwise_pixmap = self._create_clock_pixmap(
             COUNTER_CLOCKWISE_ICON
         )
-        self._initialize_ui()
+        self._setup_ui()
 
-    def _initialize_ui(self) -> None:
-        super().initialize_ui()
+    def _setup_ui(self) -> None:
+        super().setup_ui()
         self._create_clock_labels()
         self.turnbox_vbox_frame: QFrame = self._create_turnbox_vbox_frame()
         self.buttons_hbox_layout = QHBoxLayout()
@@ -61,6 +59,11 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
 
         self.layout.addWidget(self.header_frame)
         self.layout.addWidget(self.button_frame)
+
+    def setup_additional_layouts(self):
+        # Override to add specific layout components
+        self.turn_display_and_adjust_btns_hbox_layout = QHBoxLayout()
+        # ... setup other components as needed ...
 
     def _create_frame(self, layout: QHBoxLayout | QVBoxLayout) -> QFrame:
         """Creates a frame with the given layout."""
@@ -160,12 +163,12 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
 
     def _update_turnbox(self, turns) -> None:
         turns_str = str(turns)
-        for i in range(self.turnbox.count()):
-            if self.turnbox.itemText(i) == turns_str:
-                self.turnbox.setCurrentIndex(i)
+        for i in range(self.turns_display.count()):
+            if self.turns_display.itemText(i) == turns_str:
+                self.turns_display.setCurrentIndex(i)
                 return
             elif turns == None:
-                self.turnbox.setCurrentIndex(-1)
+                self.turns_display.setCurrentIndex(-1)
 
     def _update_turns(self, index: int) -> None:
         turns = str(index)
@@ -184,7 +187,7 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
                     self.attr_box.update_attr_box(motion)
                     self.attr_box.pictograph.update()
         else:
-            self.turnbox.setCurrentIndex(-1)
+            self.turns_display.setCurrentIndex(-1)
 
     ### EVENT HANDLERS ###
 
@@ -209,24 +212,28 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
 
         self.spacing = self.attr_box.attr_panel.width() // 250
 
-        border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
-        self.turnbox.setMaximumWidth(int(self.attr_box.width() / 3.25))
+        border_radius = (
+            min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        )
+        self.turns_display.setMaximumWidth(int(self.attr_box.width() / 3.25))
 
-        self.turnbox.setMinimumHeight(int(self.attr_box.height() / 8))
-        self.turnbox.setMaximumHeight(int(self.attr_box.height() / 8))
+        self.turns_display.setMinimumHeight(int(self.attr_box.height() / 8))
+        self.turns_display.setMaximumHeight(int(self.attr_box.height() / 8))
         box_font_size = int(self.attr_box.width() / 10)
 
         self.turns_label.setContentsMargins(0, 0, self.spacing, 0)
         self.turns_label.setFont(QFont("Arial", int(self.width() / 22)))
 
-        self.turnbox.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
+        self.turns_display.setFont(QFont("Arial", box_font_size, QFont.Weight.Bold))
         dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
 
         # Calculate the border radius as a fraction of the width or height
-        border_radius = min(self.turnbox.width(), self.turnbox.height()) * 0.25
+        border_radius = (
+            min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        )
 
         # Adjust the stylesheet to add padding inside the combo box on the left
-        self.turnbox.setStyleSheet(
+        self.turns_display.setStyleSheet(
             f"""
             QComboBox {{
                 padding-left: 2px; /* add some padding on the left for the text */

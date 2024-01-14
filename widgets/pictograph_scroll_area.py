@@ -30,9 +30,9 @@ class PictographScrollArea(QScrollArea):
         self.letters: Dict[Letters, List[Dict[str, str]]] = self.main_widget.letters
         self.pictographs: Dict[Letters, Union["IGPictograph", "Option"]] = {}
 
-        self._initialize_ui()
+        self._setup_ui()
 
-    def _initialize_ui(self) -> None:
+    def _setup_ui(self) -> None:
         self.setWidgetResizable(True)
         self.container = QWidget()
         self.layout: QGridLayout = QGridLayout(self.container)
@@ -60,3 +60,10 @@ class PictographScrollArea(QScrollArea):
         elif graph_type == IG_PICTOGRAPH:
             pictograph = IGPictograph(self.main_widget, self)
         return pictograph
+
+    def reset_turns(self) -> None:
+        for pictograph in self.pictographs.values():
+            for motion in pictograph.motions.values():
+                motion.turns = 0
+                motion.update_motion()
+            pictograph.update_pictograph()

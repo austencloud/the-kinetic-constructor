@@ -5,7 +5,9 @@ from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
 from widgets.graph_editor_tab.graph_editor_attr_panel import GraphEditorAttrPanel
 from widgets.graph_editor_tab.graph_editor_pictograph import GraphEditorPictograph
 
-from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import ArrowBox
+from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import (
+    ArrowBox,
+)
 from widgets.graph_editor_tab.graph_editor_pictograph_widget import (
     GraphEditorPictographWidget,
 )
@@ -21,14 +23,14 @@ class GraphEditorFrame(QFrame):
         self, main_widget: "MainWidget", graph_editor_tab: "GraphEditorTab"
     ) -> None:
         super().__init__()
-        self._initialize_main_widget_attributes(main_widget)
+        self._setup_main_widget_attributes(main_widget)
         # self._setup_frame_style()
         self._create_children(main_widget)
         self._setup_main_layout()
         self._apply_layout()
         self._setup_size_policy()
 
-    def _initialize_main_widget_attributes(self, main_widget: "MainWidget") -> None:
+    def _setup_main_widget_attributes(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
 

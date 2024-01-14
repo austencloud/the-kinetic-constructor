@@ -64,12 +64,6 @@ class IGScrollArea(PictographScrollArea):
         if hasattr(pictograph, "arrow_placement_manager"):
             pictograph.arrow_placement_manager.update_arrow_placement()
 
-    def reset_turns(self) -> None:
-        for pictograph in self.pictographs.values():
-            for motion in pictograph.motions.values():
-                motion.turns = 0
-                motion.update_motion()
-            pictograph.update_pictograph()
 
     def update_pictographs(self) -> None:
         self.remove_deselected_pictographs()

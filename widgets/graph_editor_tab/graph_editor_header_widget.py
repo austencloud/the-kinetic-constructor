@@ -6,8 +6,10 @@ from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING, Callable
-from widgets.attr_box_widgets.base_header_widget import BaseHeaderWidget
-from widgets.attr_box_widgets.attr_box_button import AttrBoxButton
+from widgets.filter_frame.attr_box.attr_box_widgets.attr_box_button import AttrBoxButton
+from widgets.filter_frame.attr_box.attr_box_widgets.header_widgets.base_header_widget import (
+    BaseHeaderWidget,
+)
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_attr_box import (

@@ -89,7 +89,7 @@ class MainWidget(QWidget):
         self.letters = letters
         return self.letters
 
-    def add_turns_and_ori_to_pictograph_dict(self, pictograph_dict):#:
+    def add_turns_and_ori_to_pictograph_dict(self, pictograph_dict):  #:
         pictograph_dict = pictograph_dict[
             [
                 LETTER,
@@ -138,7 +138,7 @@ class MainWidget(QWidget):
         self.left_frame = QFrame()
         self.left_layout = QVBoxLayout(self.left_frame)
         self.left_layout.addWidget(self.sequence_widget)
-        
+
         self.right_frame = QFrame()
         self.right_layout = QVBoxLayout(self.right_frame)
         self.tab_widget = QTabWidget()
@@ -204,7 +204,7 @@ class MainWidget(QWidget):
         self.main_layout = QHBoxLayout(self)
         self.main_layout.addWidget(self.horizontal_splitter)
         self.setLayout(self.main_layout)
-        # self.initialize_image_cache()
+        # self.setup_image_cache()
 
     ### EVENT HANDLERS ###
 
@@ -246,7 +246,7 @@ class MainWidget(QWidget):
         super().showEvent(event)
         self.option_picker_tab.resize_option_picker_tab()
         self.sequence_widget.resize_sequence_widget()
-        self.ig_tab.resize_ig_tab()
+        self.ig_tab.resize_tab()
 
     ### IMAGE CACHE ###
 

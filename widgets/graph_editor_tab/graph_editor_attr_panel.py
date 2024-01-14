@@ -2,12 +2,11 @@ from constants import BLUE, RED
 from typing import TYPE_CHECKING
 from objects.motion.motion import Motion
 
-from widgets.graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
-
-from widgets.attr_panel.base_attr_panel import BaseAttrPanel
+from ..graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
+from ..filter_frame.attr_panel.base_attr_panel import BaseAttrPanel
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.graph_editor_frame import GraphEditorFrame
+    from ..graph_editor_tab.graph_editor_frame import GraphEditorFrame
 
 
 class GraphEditorAttrPanel(BaseAttrPanel):
