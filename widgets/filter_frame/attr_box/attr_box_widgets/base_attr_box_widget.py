@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Callable, Union
 
 from constants import ICON_DIR
 from objects.motion.motion import Motion
-from .attr_box_button import AttrBoxButton
+from .attr_box_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
     pass
@@ -32,8 +32,8 @@ class BaseAttrBoxWidget(QWidget):
 
     def create_attr_box_button(
         self, icon_path: str, callback: Callable
-    ) -> AttrBoxButton:
-        button = AttrBoxButton(self)
+    ) -> AdjustTurnsButton:
+        button = AdjustTurnsButton(self)
         button.setIcon(QIcon(ICON_DIR + icon_path))
         button.clicked.connect(callback)
         return button

@@ -2,9 +2,13 @@ from typing import TYPE_CHECKING
 from constants import HEX_BLUE, HEX_RED, RED
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import Colors
-from ..filter_frame.attr_box.attr_box_widgets.attr_box_button import AttrBoxButton
-from ..filter_frame.attr_box.attr_box_widgets.motion_types_widget import MotionTypeWidget
-from ..filter_frame.attr_box.attr_box_widgets.start_end_loc_widget import StartEndLocWidget
+from ..filter_frame.attr_box.attr_box_widgets.attr_box_button import AdjustTurnsButton
+from ..filter_frame.attr_box.attr_box_widgets.motion_types_widget import (
+    MotionTypeWidget,
+)
+from ..filter_frame.attr_box.attr_box_widgets.start_end_loc_widget import (
+    StartEndLocWidget,
+)
 from ..graph_editor_tab.graph_editor_header_widget import GraphEditorHeaderWidget
 from ..graph_editor_tab.graph_editor_turns_widget import GraphEditorTurnsWidget
 
@@ -13,7 +17,7 @@ if TYPE_CHECKING:
     from ..filter_frame.attr_panel.base_attr_panel import BaseAttrPanel
     from objects.pictograph.pictograph import Pictograph
     from ..graph_editor_tab.graph_editor_tab import GraphEditorTab
-    
+
 from ..filter_frame.attr_box.base_attr_box import BaseAttrBox
 
 from PyQt6.QtGui import QFont
@@ -56,7 +60,7 @@ class GraphEditorAttrBox(BaseAttrBox):
         self.setMinimumHeight(self.pictograph.view.height())
         self.setMaximumHeight(self.pictograph.view.height())
 
-        for button in self.findChildren(AttrBoxButton):
+        for button in self.findChildren(AdjustTurnsButton):
             button.update_attr_box_adjust_turns_button_size(int(self.width() / 8))
 
         self.header_spacing = int(self.width() * 0.02)

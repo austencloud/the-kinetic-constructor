@@ -1,9 +1,9 @@
-from PyQt6.QtWidgets import QPushButton
-from typing import TYPE_CHECKING, Union
+from PyQt6.QtWidgets import QPushButton, QVBoxLayout, QFrame
+from typing import TYPE_CHECKING, List, Union
 from constants import *
 from objects.motion.motion import Motion
 from objects.pictograph.pictograph import Pictograph
-from ...attr_box_button import AttrBoxButton
+from ...attr_box_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
     from ..base_turns_widget.base_turns_widget import BaseTurnsWidget
@@ -18,32 +18,37 @@ class AdjustTurnsManager:
             "ColorAttrBox", "MotionTypeAttrBox", "LeadStateAttrBox"
         ] = attr_box
         self.parent_widget = parent_widget
-        self.setup_adjustment_buttons()
 
-    def setup_adjustment_buttons(self):
+    def setup_adjustment_buttons(self) -> None:
+        self.negative_buttons_frame = QFrame()
+        self.positive_buttons_frame = QFrame()
+        self.negative_buttons_layout = QVBoxLayout(self.negative_buttons_frame)
+        self.positive_buttons_layout = QVBoxLayout(self.positive_buttons_frame)
         """Create and setup adjustment buttons."""
+        adjustments = [(-1, "-1"), (-0.5, "-0.5"), (0.5, "+0.5"), (1, "+1")]
         self.adjust_turns_buttons = []
 
-        # Define adjustment values and corresponding button texts
-        adjustments = [(-1, "-1"), (-0.5, "-0.5"), (0.5, "+0.5"), (1, "+1")]
-
-        # Create buttons for each adjustment
         for adjustment, text in adjustments:
-            button = AttrBoxButton(self.parent_widget, text)
-            button.clicked.connect(lambda _, adj=adjustment: self.adjust_turns(adj))
-            self.adjust_turns_buttons.append(button)
-            # Add button to the parent widget's layout
-            self.parent_widget.add_to_layout(button)
+            button = self.create_adjust_turns_button(text)
 
-    def set_turns(self, new_turns: Union[int, float]) -> None:
-        for pictograph in self.attr_box.pictographs.values():
-            for motion in pictograph.motions.values():
-                if self.is_motion_relevant(motion):
-                    self.update_motion_properties(motion, new_turns)
+            button.clicked.connect(lambda _, adj=adjustment: self.adjust_turns(adj))
+            if adjustment < 0:
+                self.negative_buttons_layout.addWidget(button)
+            else:
+                self.positive_buttons_layout.addWidget(button)
+            self.adjust_turns_buttons.append(button)
+
+    def create_adjust_turns_button(self, text: str) -> QPushButton:
+        button = AdjustTurnsButton(self.parent_widget, text)
+        button.setContentsMargins(0, 0, 0, 0)
+        button.setMinimumWidth(button.fontMetrics().boundingRect(text).width() + 10)
+        return button
+
+
 
     def adjust_turns(self, adjustment: float) -> None:
         """Adjust turns for a given pictograph based on the attribute type."""
-        turns = self.parent_widget.turns_display.text()
+        turns = self.parent_widget.turn_display_manager.turns_display.text()
         turns = self.parent_widget._convert_turns_from_str_to_num(turns)
         turns += adjustment
         if turns < 0:
@@ -132,7 +137,7 @@ class AdjustTurnsManager:
             elif motion.turns == 0:
                 self._set_prop_rot_dir_based_on_vtg_state(motion)
 
-        motion.set_turns(new_turns)
+        motion.set_motion_turns(new_turns)
 
     def update_pictograph(self, motion: Motion, new_turns: Union[int, float]) -> None:
         pictograph_dict = {f"{motion.color}_turns": new_turns}
@@ -200,3 +205,10 @@ class AdjustTurnsManager:
         """Update the pictograph with the new turns value."""
         pictograph_dict = {f"{motion.color}_turns": new_turns}
         motion.scene.update_pictograph(pictograph_dict)
+
+    def set_turns(self, new_turns: Union[int, float]) -> None:
+        self.parent_widget.turn_display_manager.update_turns_display(new_turns)
+        for pictograph in self.attr_box.pictographs.values():
+            for motion in pictograph.motions.values():
+                if self.is_motion_relevant(motion):
+                    self.update_motion_properties(motion, new_turns)

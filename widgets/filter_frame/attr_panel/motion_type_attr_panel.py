@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 
 class MotionTypeAttrPanel(BaseAttrPanel):
-    def __init__(self, parent_tab : Union["IGTab", "OptionPickerTab"]) -> None:
+    def __init__(self, parent_tab: Union["IGTab", "OptionPickerTab"]) -> None:
         super().__init__(parent_tab)
         self.parent_tab = parent_tab
 
@@ -114,10 +114,23 @@ class MotionTypeAttrPanel(BaseAttrPanel):
     def get_turns_for_motion_type(self, motion_type: MotionTypes) -> int:
         for box in self.boxes:
             if box.motion_type == motion_type:
-                if box.turns_widget.turns_display.text() in ["0", "1", "2", "3"]:
-                    return int(box.turns_widget.turns_display.text())
-                elif box.turns_widget.turns_display.text() in ["0.5", "1.5", "2.5"]:
-                    return float(box.turns_widget.turns_display.text())
+                if box.turns_widget.turn_display_manager.turns_display.text() in [
+                    "0",
+                    "1",
+                    "2",
+                    "3",
+                ]:
+                    return int(
+                        box.turns_widget.turn_display_manager.turns_display.text()
+                    )
+                elif box.turns_widget.turn_display_manager.turns_display.text() in [
+                    "0.5",
+                    "1.5",
+                    "2.5",
+                ]:
+                    return float(
+                        box.turns_widget.turn_display_manager.turns_display.text()
+                    )
 
     def resize_ig_motion_type_attr_panel(self) -> None:
         for box in self.boxes:

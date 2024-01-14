@@ -12,17 +12,18 @@ from constants import (
 )
 from objects.motion.motion import Motion
 from objects.pictograph.pictograph import Pictograph
-from widgets.filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import BaseTurnsWidget
+from widgets.filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
+    BaseTurnsWidget,
+)
+
 if TYPE_CHECKING:
     from widgets.filter_frame.attr_box.lead_state_attr_box import LeadStateAttrBox
-
 
 
 class LeadStateTurnsWidget(BaseTurnsWidget):
     def __init__(self, attr_box: "LeadStateAttrBox") -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
-        self.update_ig_lead_state_turnbox_size()
 
     def adjust_turns_by_lead_state(
         self, pictograph: Pictograph, adjustment: float
@@ -51,7 +52,7 @@ class LeadStateTurnsWidget(BaseTurnsWidget):
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.arrow.motion.lead_state == self.attr_box.lead_state:
-                    motion.set_turns(new_turns)
+                    motion.set_motion_turns(new_turns)
                     self.update_pictograph_dict(motion, new_turns)
 
     def adjust_turns_incrementally_by_lead_state(self, adjustment) -> None:
@@ -62,7 +63,7 @@ class LeadStateTurnsWidget(BaseTurnsWidget):
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.arrow.motion.lead_state == self.attr_box.lead_state:
-                    motion.set_turns(new_turns)
+                    motion.set_motion_turns(new_turns)
 
                     if motion.motion_type in [DASH, STATIC] and (
                         motion.prop_rot_dir == NO_ROT and motion.turns > 0

@@ -6,7 +6,9 @@ from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING, Callable
-from widgets.filter_frame.attr_box.attr_box_widgets.attr_box_button import AttrBoxButton
+from widgets.filter_frame.attr_box.attr_box_widgets.attr_box_button import (
+    AdjustTurnsButton,
+)
 from widgets.filter_frame.attr_box.attr_box_widgets.header_widgets.base_header_widget import (
     BaseHeaderWidget,
 )
@@ -69,8 +71,8 @@ class GraphEditorHeaderWidget(BaseHeaderWidget):
 
     def _create_button(
         self, icon_path: str, callback: Callable[[], None]
-    ) -> AttrBoxButton:
-        button = AttrBoxButton(self)
+    ) -> AdjustTurnsButton:
+        button = AdjustTurnsButton(self)
         button.setIcon(QIcon(icon_path))
         button.clicked.connect(callback)
         return button

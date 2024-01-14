@@ -30,7 +30,7 @@ class ColorTurnsWidget(BaseTurnsWidget):
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.color == self.attr_box.color:
-                    motion.set_turns(new_turns)
+                    motion.set_motion_turns(new_turns)
 
                     if motion.motion_type in [DASH, STATIC] and (
                         motion.prop_rot_dir == NO_ROT and motion.turns > 0
@@ -48,12 +48,11 @@ class ColorTurnsWidget(BaseTurnsWidget):
                         }
                     motion.scene.update_pictograph(pictograph_dict)
 
-
     def _update_pictographs_turns_by_color(self, new_turns) -> None:
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.color == self.attr_box.color:
-                    motion.set_turns(new_turns)
+                    motion.set_motion_turns(new_turns)
 
                     if motion.motion_type in [DASH, STATIC] and (
                         motion.prop_rot_dir == NO_ROT and motion.turns > 0
@@ -80,8 +79,6 @@ class ColorTurnsWidget(BaseTurnsWidget):
     def _adjust_turns(self, adjustment) -> None:
         """Adjust turns for a given pictograph based on color."""
         for pictograph in self.attr_box.pictographs.values():
-            self.adjust_turns_manager._adjust_turns_for_pictograph(
+            self.turn_adjustment_manager._adjust_turns_for_pictograph(
                 pictograph, adjustment
             )
-
-

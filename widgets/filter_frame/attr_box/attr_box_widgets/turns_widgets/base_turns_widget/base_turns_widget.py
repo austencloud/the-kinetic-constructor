@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QVBoxLayout, QLabel
+from PyQt6.QtWidgets import QVBoxLayout, QLabel, QHBoxLayout, QFrame
 from typing import Union
 
 
@@ -14,13 +14,11 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
     def __init__(self, attr_box: "BaseAttrBox") -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        # Initialize additional layout components
-        self.setup_additional_layouts()
+        self.vbox_layout: QVBoxLayout = QVBoxLayout(self)
 
         # Initialize manager classes
         self.turn_direct_set_manager = DirectSetTurnsManager(self)
-        self.adjust_turns_manager = AdjustTurnsManager(self.attr_box, self)
+        self.turn_adjustment_manager = AdjustTurnsManager(self.attr_box, self)
         self.turn_display_manager = DisplayTurnsManager(self, self.attr_box)
 
         # Call the setup_ui method
@@ -34,22 +32,22 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
 
     def setup_ui(self) -> None:
         # Initialize UI components through manager classes
-        self.turn_direct_set_manager.setup_direct_set_buttons()
-        self.adjust_turns_manager.setup_adjustment_buttons()
+        self.turn_adjustment_manager.setup_adjustment_buttons()
         self.turn_display_manager.setup_display_components()
-
-    def setup_additional_layouts(self) -> None:
-        # Initialize additional layouts here
-        # For example: self.turn_display_and_adjust_btns_hbox_layout = QHBoxLayout()
-        pass
-
-    def add_to_layout(self, widget) -> None:
-        """Method to add widgets to the layout."""
-        self.layout.addWidget(widget)
+        self.turn_direct_set_manager.setup_direct_set_buttons()
 
     def _convert_turns_from_str_to_num(self, turns) -> Union[int, float]:
         """Convert turn values from string to numeric."""
         return int(turns) if turns in ["0", "1", "2", "3"] else float(turns)
+
+    @staticmethod
+    def create_frame(layout: QHBoxLayout) -> QFrame:
+        frame = QFrame()
+        frame.setLayout(layout)
+        frame.setContentsMargins(0, 0, 0, 0)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        return frame
 
 
 # class BaseTurnsWidget(BaseAttrBoxWidget):

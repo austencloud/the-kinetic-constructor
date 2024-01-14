@@ -45,7 +45,7 @@ class MotionTypeAttrBox(BaseAttrBox):
             self.same_button = self.header_widget.same_button
             self.opp_button = self.header_widget.opp_button
             self.same_opp_buttons = [self.same_button, self.opp_button]
-            self.vtg_dir_btn_state = {SAME: True, OPP: False}
+            self.vtg_dir_btn_state = {SAME: False, OPP: False}
 
     def _setup_widgets(self) -> None:
         self.header_widget = IGMotionTypeHeaderWidget(self, self.motion_type)

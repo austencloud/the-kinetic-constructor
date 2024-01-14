@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     )
 
 
-class AttrBoxButton(QPushButton):
+class AdjustTurnsButton(QPushButton):
     def __init__(
         self,
         parent_widget: Union[

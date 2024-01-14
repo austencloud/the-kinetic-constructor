@@ -34,7 +34,12 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
         self._create_clock_labels()
         self.turnbox_vbox_frame: QFrame = self._create_turnbox_vbox_frame()
         self.buttons_hbox_layout = QHBoxLayout()
+        self.setup_additional_layouts()
         self._setup_layout_frames()
+
+    def setup_additional_layouts(self) -> None:
+        self.turn_display_and_adjust_btns_hbox_layout = QHBoxLayout()
+        pass
 
     ### LAYOUTS ###
 
@@ -57,8 +62,8 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
         self.header_frame.setContentsMargins(0, 0, 0, 0)
         self.button_frame.setContentsMargins(0, 0, 0, 0)
 
-        self.layout.addWidget(self.header_frame)
-        self.layout.addWidget(self.button_frame)
+        self.vbox_layout.addWidget(self.header_frame)
+        self.vbox_layout.addWidget(self.button_frame)
 
     def setup_additional_layouts(self):
         # Override to add specific layout components
