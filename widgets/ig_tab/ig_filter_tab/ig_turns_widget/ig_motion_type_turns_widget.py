@@ -8,13 +8,13 @@ from constants import (
     STATIC,
 )
 from objects.pictograph.pictograph import Pictograph
-from .base_ig_turns_widget import BaseIGTurnsWidget
+from widgets.attr_box_widgets.base_turns_widget import BaseTurnsWidget
 
 if TYPE_CHECKING:
     from ..by_motion_type.ig_motion_type_attr_box import IGMotionTypeAttrBox
 
 
-class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
+class IGMotionTypeTurnsWidget(BaseTurnsWidget):
     def __init__(self, attr_box: "IGMotionTypeAttrBox") -> None:
         """Initialize the IGMotionTypeTurnsWidget."""
         super().__init__(attr_box)
@@ -34,63 +34,6 @@ class IGMotionTypeTurnsWidget(BaseIGTurnsWidget):
         self.update_turnbox_size()
         self.update_adjust_turns_button_size()
 
-    def _adjust_turns(self, adjustment) -> None:
-        """Adjust turns for a given pictograph based on motion type."""
-        simulate_same_click = False
-
-        # Check if any static motion with zero turns exists
-        for pictograph in self.attr_box.pictographs.values():
-            for motion in pictograph.motions.values():
-                if (
-                    motion.motion_type in [DASH, STATIC]
-                    and motion.turns == 0
-                    and motion.motion_type == self.attr_box.motion_type
-                ):
-                    simulate_same_click = True
-                    break
-            if simulate_same_click:
-                break
-
-        # Simulate CW button click if necessary
-        if simulate_same_click:
-            if hasattr(self.attr_box.header_widget, "same_button"):
-                if (
-                    not self.attr_box.same_button.isChecked()
-                    and not self.attr_box.opp_button.isChecked()
-                ):
-                    self._simulate_same_button_click()
-                # set the stylesheet to pressed
-                self.attr_box.same_button.setStyleSheet(
-                    self.attr_box.header_widget.get_vtg_dir_btn_style(pressed=True)
-                )
-
-        for pictograph in self.attr_box.pictographs.values():
-            for motion in pictograph.motions.values():
-                if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
-                    other_motion = pictograph.motions[
-                        RED if motion.color == BLUE else BLUE
-                    ]
-                    if hasattr(self.attr_box.header_widget, "same_button"):
-                        if self.attr_box.same_button.isChecked():
-                            if other_motion.prop_rot_dir:
-                                motion.prop_rot_dir = other_motion.prop_rot_dir
-                        elif self.attr_box.opp_button.isChecked():
-                            if other_motion.prop_rot_dir is CLOCKWISE:
-                                motion.prop_rot_dir = COUNTER_CLOCKWISE
-                            elif other_motion.prop_rot_dir is COUNTER_CLOCKWISE:
-                                motion.prop_rot_dir = CLOCKWISE
-
-        self.adjust_turns(adjustment)
-
-    def _simulate_same_button_click(self) -> None:
-        self.attr_box.same_button.setChecked(True)
-        self.attr_box.opp_button.setChecked(False)
-        self.attr_box.same_button.setStyleSheet(
-            self.attr_box.header_widget.get_vtg_dir_btn_style(pressed=True)
-        )
-        self.attr_box.opp_button.setStyleSheet(
-            self.attr_box.header_widget.get_vtg_dir_btn_style(pressed=False)
-        )
 
     def _set_turns(self, new_turns: int | float) -> None:
         self._direct_set_turns(new_turns)

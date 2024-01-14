@@ -11,15 +11,14 @@ from constants import (
     STATIC,
 )
 from objects.pictograph.pictograph import Pictograph
-from widgets.ig_tab.ig_filter_tab.ig_turns_widget.base_ig_turns_widget import (
-    BaseIGTurnsWidget,
-)
+from widgets.attr_box_widgets.base_turns_widget import BaseTurnsWidget
+
 
 if TYPE_CHECKING:
     from widgets.ig_tab.ig_filter_tab.by_color.ig_color_attr_box import IGColorAttrBox
 
 
-class IGColorTurnsWidget(BaseIGTurnsWidget):
+class IGColorTurnsWidget(BaseTurnsWidget):
     def __init__(self, attr_box: "IGColorAttrBox") -> None:
         """Initialize the IGColorTurnsWidget."""
         super().__init__(attr_box)
@@ -97,16 +96,3 @@ class IGColorTurnsWidget(BaseIGTurnsWidget):
     def _adjust_turns_callback(self, adjustment: float) -> None:
         self.adjust_turns_incrementally_by_color(adjustment)
 
-    def _simulate_same_button_click(self) -> None:
-        self.attr_box.vtg_dir_widget.same_button.setChecked(True)
-        self.attr_box.vtg_dir_widget.same_button.click()
-
-    def _simulate_same_button_click(self) -> None:
-        self.attr_box.same_button.setChecked(True)
-        self.attr_box.opp_button.setChecked(False)
-        self.attr_box.same_button.setStyleSheet(
-            self.attr_box.vtg_dir_widget.get_vtg_dir_btn_style(pressed=True)
-        )
-        self.attr_box.opp_button.setStyleSheet(
-            self.attr_box.vtg_dir_widget.get_vtg_dir_btn_style(pressed=False)
-        )

@@ -32,7 +32,7 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
         self._initialize_ui()
 
     def _initialize_ui(self) -> None:
-        super()._initialize_ui()
+        super().initialize_ui()
         self._create_clock_labels()
         self.turnbox_vbox_frame: QFrame = self._create_turnbox_vbox_frame()
         self.buttons_hbox_layout = QHBoxLayout()

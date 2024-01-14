@@ -12,9 +12,8 @@ from constants import (
 )
 from objects.motion.motion import Motion
 from objects.pictograph.pictograph import Pictograph
-from widgets.ig_tab.ig_filter_tab.ig_turns_widget.base_ig_turns_widget import (
-    BaseIGTurnsWidget,
-)
+from widgets.attr_box_widgets.base_turns_widget import BaseTurnsWidget
+
 
 if TYPE_CHECKING:
     from widgets.ig_tab.ig_filter_tab.by_lead_state.ig_lead_state_attr_box import (
@@ -22,7 +21,7 @@ if TYPE_CHECKING:
     )
 
 
-class IGLeadStateTurnsWidget(BaseIGTurnsWidget):
+class IGLeadStateTurnsWidget(BaseTurnsWidget):
     def __init__(self, attr_box: "IGLeadStateAttrBox") -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
