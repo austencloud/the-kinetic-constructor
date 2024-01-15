@@ -29,13 +29,14 @@ class Motion:
     def __init__(
         self,
         scene: Union["ArrowBox", "PropBox", "Pictograph"],
-        motion_dict,
+        motion_dict: Dict,
     ) -> None:
         self.scene = scene
         self.manipulator = MotionManipulator(self)
         self.attr_manager = MotionAttrManager(self)
         self.init_attributes()
-        self.update_attributes(motion_dict)
+        self.color = motion_dict.get(COLOR)
+        self.turns = motion_dict.get(TURNS)
 
     def init_attributes(self) -> None:
         self.color: Colors = None
@@ -89,7 +90,7 @@ class Motion:
             LOC: self.end_loc,
             ORI: self.get_end_ori(),
         }
-
+        self.end_ori = self.get_end_ori()
         self.arrow.update_arrow(arrow_dict)
         self.prop.update_prop(prop_dict)
 

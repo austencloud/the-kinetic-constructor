@@ -61,7 +61,7 @@ class ColorAttrBox(BaseAttrBox):
     def update_attr_box(self, motion: Motion) -> None:
         for pictograph in self.pictographs.values():
             for motion in pictograph.motions.values():
-                self.turns_widget.update_turns_display(motion.turns)
+                self.turns_widget.turn_display_manager.update_turns_display(motion.turns)
 
     def get_pictographs(self) -> List["Pictograph"]:
         return list(self.pictographs.values())

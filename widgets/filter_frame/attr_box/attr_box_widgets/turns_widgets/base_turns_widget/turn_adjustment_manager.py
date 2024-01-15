@@ -2,7 +2,12 @@ from PyQt6.QtWidgets import QVBoxLayout, QFrame
 from typing import TYPE_CHECKING, List, Literal, Union
 from constants import *
 from objects.pictograph.pictograph import Pictograph
-from utilities.TypeChecking.TypeChecking import AdjustmentNum, AdjustmentStr, PropRotDirs, Turns
+from utilities.TypeChecking.TypeChecking import (
+    AdjustmentNum,
+    AdjustmentStr,
+    PropRotDirs,
+    Turns,
+)
 from ...adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
@@ -164,10 +169,17 @@ class TurnAdjustmentManager:
         turns = self.parent_widget.turn_display_manager.turns_display.text()
         turns = self.parent_widget._convert_turns_from_str_to_num(turns)
         turns = self._clamp_turns(turns + adjustment)
+        turns = self.convert_turn_floats_to_ints(turns)
         self.parent_widget.turn_display_manager.update_turns_display(str(turns))
 
         for pictograph in self.attr_box.pictographs.values():
             self._adjust_turns_for_pictograph(pictograph, adjustment)
+
+    def convert_turn_floats_to_ints(self, turns: Turns) -> Turns:
+        if turns in [0.0, 1.0, 2.0, 3.0]:
+            return int(turns)
+        else:
+            return turns
 
     def set_turns(self, new_turns: Turns) -> None:
         self.parent_widget.turn_display_manager.update_turns_display(new_turns)

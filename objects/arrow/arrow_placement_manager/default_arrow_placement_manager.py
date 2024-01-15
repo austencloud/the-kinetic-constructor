@@ -49,11 +49,11 @@ class DefaultArrowPlacementManager:
         
         key_suffix = "_to_"
         motion_end_ori_key: OrientationTypes = ""
-
-        if motion_end_ori in [IN, OUT]:
-            motion_end_ori_key = RADIAL
-        elif motion_end_ori in [CLOCK, COUNTER]:
-            motion_end_ori_key = ANTIRADIAL
+        if has_hybrid_orientation:
+            if motion_end_ori in [IN, OUT]:
+                motion_end_ori_key = f"{RADIAL}_"
+            elif motion_end_ori in [CLOCK, COUNTER]:
+                motion_end_ori_key = f"{ANTIRADIAL}_"
             
         if has_radial_props:
             key_middle = "layer1"
