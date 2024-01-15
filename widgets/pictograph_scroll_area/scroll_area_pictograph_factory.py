@@ -27,7 +27,6 @@ from constants import (
 
 class ScrollAreaPictographFactory:
     def __init__(self, scroll_area: "PictographScrollArea") -> None:
-        self.pictographs: Dict[Letters, IGPictograph] = {}
         self.scroll_area = scroll_area
 
     def process_selected_letters(self) -> None:
@@ -53,6 +52,7 @@ class ScrollAreaPictographFactory:
         ig_pictograph = self.get_or_create_pictograph(pictograph_key)
         self.update_pictograph_from_attr_panel(ig_pictograph, pictograph_dict)
         ig_pictograph.update_pictograph(pictograph_dict)
+        # self.scroll_area.pictographs[pictograph_key] = ig_pictograph
 
     def update_pictograph_from_attr_panel(
         self, ig_pictograph: Pictograph, pictograph_dict
@@ -64,32 +64,38 @@ class ScrollAreaPictographFactory:
 
     def get_deselected_letters(self) -> Set[Letters]:
         selected_letters = set(self.scroll_area.parent_tab.selected_letters)
-        existing_letters = {key.split("_")[0] for key in self.pictographs.keys()}
+        existing_letters = {
+            key.split("_")[0] for key in self.scroll_area.pictographs.keys()
+        }
         return existing_letters - selected_letters
 
     def remove_deselected_letter_pictographs(self, deselected_letter) -> None:
         keys_to_remove = [
-            key for key in self.pictographs if key.startswith(deselected_letter + "_")
+            key
+            for key in self.scroll_area.pictographs
+            if key.startswith(deselected_letter + "_")
         ]
         for key in keys_to_remove:
-            ig_pictograph = self.pictographs.pop(key)
+            ig_pictograph = self.scroll_area.pictographs.pop(key)
             self.scroll_area.layout.removeWidget(ig_pictograph.view)
             ig_pictograph.view.setParent(None)
             ig_pictograph.view.deleteLater()
 
     def get_or_create_pictograph(self, pictograph_key) -> IGPictograph:
-        if pictograph_key not in self.pictographs:
-            self.pictographs[pictograph_key] = self._create_pictograph(IG_PICTOGRAPH)
-        return self.pictographs[pictograph_key]
+        if pictograph_key not in self.scroll_area.pictographs:
+            self.scroll_area.pictographs[pictograph_key] = self._create_pictograph(
+                IG_PICTOGRAPH
+            )
+        return self.scroll_area.pictographs[pictograph_key]
 
     def _create_pictograph(
         self,
         graph_type: Literal["option", "ig_pictograph"],
     ) -> Option | IGPictograph:
         if graph_type == OPTION:
-            pictograph = Option(self.scroll_area.main_widget, self)
+            pictograph = Option(self.scroll_area.main_widget, self.scroll_area)
         elif graph_type == IG_PICTOGRAPH:
-            pictograph = IGPictograph(self.scroll_area.main_widget, self)
+            pictograph = IGPictograph(self.scroll_area.main_widget, self.scroll_area)
         return pictograph
 
     def generate_pictograph_key_from_dict(self, pictograph_dict) -> str:

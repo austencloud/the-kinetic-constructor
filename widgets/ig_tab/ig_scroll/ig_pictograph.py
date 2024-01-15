@@ -54,9 +54,9 @@ class IG_Pictograph_View(QGraphicsView):
         view_width = (
             int(
                 self.ig_pictograph.ig_scroll_area.width()
-                / self.ig_pictograph.ig_scroll_area.COLUMN_COUNT
+                / self.ig_pictograph.ig_scroll_area.display_manager.COLUMN_COUNT
             )
-            - self.ig_pictograph.ig_scroll_area.SPACING
+            - self.ig_pictograph.ig_scroll_area.display_manager.SPACING
         )
 
         self.setMinimumWidth(view_width)

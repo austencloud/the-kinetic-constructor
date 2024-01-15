@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 
 class ScrollAreaDisplayManager:
     COLUMN_COUNT = 6
+    SPACING = 10
 
     def __init__(self, scroll_area: "PictographScrollArea") -> None:
         self.scroll_area = scroll_area
@@ -57,7 +58,7 @@ class ScrollAreaDisplayManager:
             widget = self.scroll_area.layout.takeAt(0).widget()
             if widget is not None:
                 widget.setParent(None)
-                widget.deleteLater()
+                # widget.deleteLater()
 
     def cleanup_unused_pictographs(self) -> None:
         keys_to_remove = self.get_keys_to_remove()
@@ -80,6 +81,6 @@ class ScrollAreaDisplayManager:
             k: v
             for k, v in sorted(
                 self.scroll_area.pictographs.items(),
-                key=lambda item: (Letters.index(item[1].letter), item[1].start_pos),
+                key=lambda item: (Letters_list.index(item[1].letter), item[1].start_pos),
             )
         }
