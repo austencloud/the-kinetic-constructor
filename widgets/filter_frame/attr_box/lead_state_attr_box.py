@@ -3,7 +3,6 @@ from PyQt6.QtGui import QPixmap
 from constants import LEAD_STATE
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import LeadStates, LeadStates
-from .attr_box_widgets.prop_rot_dir_widgets.prop_rot_dir_widget import PropRotDirWidget
 
 from .base_attr_box import BaseAttrBox
 from .attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
@@ -45,22 +44,14 @@ class LeadStateAttrBox(BaseAttrBox):
     def _setup_widgets(self) -> None:  # add common widgets
         self.header_widget = LeadStateHeaderWidget(self, self.lead_state)
         self.turns_widget = LeadStateTurnsWidget(self)
-        self.prop_rot_dir_widget = PropRotDirWidget(self)
         self.vbox_layout.addWidget(self.header_widget, 1)
         self.vbox_layout.addWidget(self.turns_widget, 2)
-        self.hbox_layout.addWidget(self.prop_rot_dir_widget, 2)
         self.setLayout(self.hbox_layout)
 
     def resize_ig_lead_state_attr_box(self) -> None:
         self.setMinimumWidth(int(self.attr_panel.ig_tab.width() / 3))
         self.setMaximumWidth(int(self.attr_panel.ig_tab.width() / 3))
         self.turns_widget.resize_turns_widget()
-        self.prop_rot_dir_widget.resize_prop_rot_dir_widget()
-
-    def update_attr_box(self, motion: Motion) -> None:
-        for pictograph in self.pictographs.values():
-            for motion in pictograph.motions.values():
-                self.turns_widget._update_turnbox(motion.turns)
 
     def get_pictographs(self) -> List["Pictograph"]:
         return list(self.pictographs.values())

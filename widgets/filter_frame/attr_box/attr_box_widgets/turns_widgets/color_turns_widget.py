@@ -18,7 +18,4 @@ class ColorTurnsWidget(BaseTurnsWidget):
         self.pictographs = self.attr_box.pictographs
 
 
-    ### EVENT HANDLERS ###
-
-
 
