@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from .base_turns_widget import BaseTurnsWidget
 
 
-class DisplayTurnsManager:
+class TurnDisplayManager:
     def __init__(self, parent_widget: "BaseTurnsWidget", attr_box: QFrame) -> None:
         self.parent_widget = parent_widget
         self.attr_box: BaseAttrBox = attr_box
@@ -49,8 +49,6 @@ class DisplayTurnsManager:
     def update_turns_display(self, turns: Union[int, float]) -> None:
         self.turns_display.setText(str(turns))
 
-
-
     def _get_turns_display_style_sheet(self) -> str:
         return """
             QLabel {
@@ -71,13 +69,13 @@ class DisplayTurnsManager:
         turns_display = self.turns_display
         self.spacing = self.attr_box.attr_panel.height() // 250
         border_radius = min(turns_display.width(), turns_display.height()) * 0.25
-        
+
         turns_display_font_size = int(self.attr_box.height() / 8)
         turns_display.setMinimumHeight(int(self.attr_box.height() / 3))
         turns_display.setMaximumHeight(int(self.attr_box.height() / 3))
         turns_display.setMinimumWidth(int(self.attr_box.height() / 3))
         turns_display.setMaximumWidth(int(self.attr_box.height() / 3))
-        
+
         turns_display.setFont(
             QFont("Arial", turns_display_font_size, QFont.Weight.Bold)
         )

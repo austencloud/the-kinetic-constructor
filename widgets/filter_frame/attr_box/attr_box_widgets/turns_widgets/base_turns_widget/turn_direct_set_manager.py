@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from .base_turns_widget import BaseTurnsWidget
 
 
-class DirectSetTurnsManager:
+class TurnDirectSetManager:
     def __init__(self, parent_widget: "BaseTurnsWidget") -> None:
         self.parent_widget = parent_widget
 

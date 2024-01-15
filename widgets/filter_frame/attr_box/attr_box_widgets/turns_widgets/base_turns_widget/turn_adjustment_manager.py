@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from ......filter_frame.attr_box.lead_state_attr_box import LeadStateAttrBox
 
 
-class TurnsAdjustmentManager:
+class TurnAdjustmentManager:
     def __init__(self, attr_box, parent_widget: "BaseTurnsWidget") -> None:
         self.attr_box: Union[
             "ColorAttrBox", "MotionTypeAttrBox", "LeadStateAttrBox"
@@ -58,10 +58,8 @@ class TurnsAdjustmentManager:
             turns = turns[:-2]
         self.parent_widget.turn_display_manager.update_turns_display(turns)
 
-
         for pictograph in self.attr_box.pictographs.values():
             self._adjust_turns_for_pictograph(pictograph, adjustment)
-
 
     def _adjust_turns_for_pictograph(
         self, pictograph: Pictograph, adjustment: float
