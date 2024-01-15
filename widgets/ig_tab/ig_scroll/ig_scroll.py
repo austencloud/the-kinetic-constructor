@@ -13,6 +13,7 @@ from constants import (
     DASH,
     END_POS,
     LETTER,
+    MOTION_TYPE,
     NO_ROT,
     OPP,
     RED,
@@ -64,7 +65,6 @@ class IGScrollArea(PictographScrollArea):
         if hasattr(pictograph, "arrow_placement_manager"):
             pictograph.arrow_placement_manager.update_arrow_placement()
 
-
     def update_pictographs(self) -> None:
         self.remove_deselected_pictographs()
         self.process_selected_letters()
@@ -101,53 +101,76 @@ class IGScrollArea(PictographScrollArea):
             pictograph_key, self._create_pictograph(IG_PICTOGRAPH)
         )
         self.pictographs[pictograph_key] = ig_pictograph
-        self.update_pictograph_motions(ig_pictograph, pictograph_dict)
 
         for motion in ig_pictograph.motions.values():
-            if motion.motion_type in [DASH, STATIC]:
-                for box in self.ig_tab.filter_tab.motion_attr_panel.boxes:
-                    if hasattr(box, "same_button"):
-                        if box.vtg_dir_btn_state[SAME]:
-                            # motion.prop_rot_dir = other_motion.prop_rot_dir
-                            if pictograph_dict[BLUE_MOTION_TYPE] in [DASH, STATIC]:
-                                pictograph_dict[BLUE_PROP_ROT_DIR] = pictograph_dict[
-                                    RED_PROP_ROT_DIR
-                                ]
-                            elif pictograph_dict[RED_MOTION_TYPE] in [DASH, STATIC]:
-                                pictograph_dict[RED_PROP_ROT_DIR] = pictograph_dict[
-                                    BLUE_PROP_ROT_DIR
-                                ]
+            for box in self.ig_tab.filter_tab.motion_attr_panel.boxes:
+                if box.attribute_type == MOTION_TYPE:
+                    if box.motion_type == motion.motion_type:
+                        box_text = (
+                            box.turns_widget.turn_display_manager.turns_display.text()
+                        )
+                        if box_text in ["0", "1", "2", "3"]:
+                            turns = int(box_text)
+                        elif box_text in ["0.5", "1.5", "2.5"]:
+                            turns = float(box_text)
+                        if box.motion_type == DASH:
+                            if box.vtg_dir_btn_state[SAME]:
+                                if pictograph_dict[BLUE_MOTION_TYPE] == DASH:
+                                    pictograph_dict[BLUE_PROP_ROT_DIR] = pictograph_dict[
+                                        RED_PROP_ROT_DIR
+                                    ]
+                                    pictograph_dict[BLUE_TURNS] = turns
 
-                        elif box.vtg_dir_btn_state[OPP]:
-                            # if other_motion.prop_rot_dir == CLOCKWISE:
-                            #     motion.prop_rot_dir = COUNTER_CLOCKWISE
-                            # elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                            #     motion.prop_rot_dir = CLOCKWISE
-                            # elif other_motion.prop_rot_dir == NO_ROT:
-                            #     motion.prop_rot_dir = NO_ROT
-                            if pictograph_dict[BLUE_MOTION_TYPE] in [DASH, STATIC]:
-                                pictograph_dict[BLUE_PROP_ROT_DIR] = (
-                                    COUNTER_CLOCKWISE
-                                    if pictograph_dict[RED_PROP_ROT_DIR] == CLOCKWISE
-                                    else CLOCKWISE
-                                )
-                            elif pictograph_dict[RED_MOTION_TYPE] in [DASH, STATIC]:
-                                pictograph_dict[RED_PROP_ROT_DIR] = (
-                                    COUNTER_CLOCKWISE
-                                    if pictograph_dict[BLUE_PROP_ROT_DIR] == CLOCKWISE
-                                    else CLOCKWISE
-                                )
+                                elif pictograph_dict[RED_MOTION_TYPE] == DASH:
+                                    pictograph_dict[RED_PROP_ROT_DIR] = pictograph_dict[
+                                        BLUE_PROP_ROT_DIR
+                                    ]
+                                    pictograph_dict[RED_TURNS] = turns
+
+                            elif box.vtg_dir_btn_state[OPP]:
+                                if pictograph_dict[BLUE_MOTION_TYPE] == DASH:
+                                    pictograph_dict[BLUE_PROP_ROT_DIR] = (
+                                        COUNTER_CLOCKWISE
+                                        if pictograph_dict[RED_PROP_ROT_DIR] == CLOCKWISE
+                                        else CLOCKWISE
+                                    )
+                                    pictograph_dict[BLUE_TURNS] = turns
+                                elif pictograph_dict[RED_MOTION_TYPE] == DASH:
+                                    pictograph_dict[RED_PROP_ROT_DIR] = (
+                                        COUNTER_CLOCKWISE
+                                        if pictograph_dict[BLUE_PROP_ROT_DIR] == CLOCKWISE
+                                        else CLOCKWISE
+                                    )
+                                    pictograph_dict[RED_TURNS] = turns
+                        elif box.motion_type == STATIC:
+                            if box.vtg_dir_btn_state[SAME]:
+                                if pictograph_dict[BLUE_MOTION_TYPE] == STATIC:
+                                    pictograph_dict[BLUE_PROP_ROT_DIR] = pictograph_dict[
+                                        RED_PROP_ROT_DIR
+                                    ]
+                                    pictograph_dict[BLUE_TURNS] = turns
+                                elif pictograph_dict[RED_MOTION_TYPE] == STATIC:
+                                    pictograph_dict[RED_PROP_ROT_DIR] = pictograph_dict[
+                                        BLUE_PROP_ROT_DIR
+                                    ]
+                                    pictograph_dict[RED_TURNS] = turns
+                            elif box.vtg_dir_btn_state[OPP]:
+                                if pictograph_dict[BLUE_MOTION_TYPE] == STATIC:
+                                    pictograph_dict[BLUE_PROP_ROT_DIR] = (
+                                        COUNTER_CLOCKWISE
+                                        if pictograph_dict[RED_PROP_ROT_DIR] == CLOCKWISE
+                                        else CLOCKWISE
+                                    )
+                                    pictograph_dict[BLUE_TURNS] = turns
+                                elif pictograph_dict[RED_MOTION_TYPE] == STATIC:
+                                    pictograph_dict[RED_PROP_ROT_DIR] = (
+                                        COUNTER_CLOCKWISE
+                                        if pictograph_dict[BLUE_PROP_ROT_DIR] == CLOCKWISE
+                                        else CLOCKWISE
+                                    )
+                                    pictograph_dict[RED_TURNS] = turns
 
         ig_pictograph.update_pictograph(pictograph_dict)
-
-    def update_pictograph_motions(self, ig_pictograph, pictograph_dict) -> None:
-        for motion_color in (BLUE, RED):
-            motion_type = pictograph_dict.get(f"{motion_color}_motion_type")
-            if motion_type:
-                turns_value = self.get_turns_from_attr_panel(motion_type)
-                vtg_dir = self.get_vtg_dir_from_attr_panel()
-                pictograph_dict[f"{motion_color}_turns"] = turns_value
-                # pictograph_dict[f"{motion_color}_prop_rot_dir"] = vtg_dir
 
     def order_and_display_pictographs(self) -> None:
         ordered_pictographs = self.get_ordered_pictographs()

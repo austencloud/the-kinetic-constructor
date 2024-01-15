@@ -36,7 +36,7 @@ class DisplayTurnsManager:
         self.turns_display = QLabel("0", self.parent_widget)
         self.turns_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.turns_display.setStyleSheet(self._get_turns_display_style_sheet())
-        self.turns_display.setFont(QFont("Arial", 16))
+        self.turns_display.setFont(QFont("Arial"))
         self.turn_display_with_buttons_frame: QFrame = QFrame()
         self.hbox_with_turn_display_and_buttons: QHBoxLayout = QHBoxLayout(
             self.turn_display_with_buttons_frame
@@ -48,6 +48,8 @@ class DisplayTurnsManager:
 
     def update_turns_display(self, turns: Union[int, float]) -> None:
         self.turns_display.setText(str(turns))
+
+
 
     def _get_turns_display_style_sheet(self) -> str:
         return """
@@ -69,11 +71,13 @@ class DisplayTurnsManager:
         turns_display = self.turns_display
         self.spacing = self.attr_box.attr_panel.height() // 250
         border_radius = min(turns_display.width(), turns_display.height()) * 0.25
+        
         turns_display_font_size = int(self.attr_box.height() / 8)
         turns_display.setMinimumHeight(int(self.attr_box.height() / 3))
         turns_display.setMaximumHeight(int(self.attr_box.height() / 3))
         turns_display.setMinimumWidth(int(self.attr_box.height() / 3))
         turns_display.setMaximumWidth(int(self.attr_box.height() / 3))
+        
         turns_display.setFont(
             QFont("Arial", turns_display_font_size, QFont.Weight.Bold)
         )

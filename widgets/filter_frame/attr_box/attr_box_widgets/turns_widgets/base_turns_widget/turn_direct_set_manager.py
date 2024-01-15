@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QHBoxLayout, QPushButton
+from PyQt6.QtWidgets import QHBoxLayout, QPushButton, QFrame
 from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
@@ -10,8 +10,12 @@ class DirectSetTurnsManager:
         self.parent_widget = parent_widget
 
     def setup_direct_set_buttons(self) -> None:
+        self.turns_buttons_frame = QFrame()
+        self.turns_buttons_layout = QHBoxLayout(self.turns_buttons_frame)
+        self.turns_buttons_layout.setContentsMargins(0, 0, 0, 0)
+        self.turns_buttons_layout.setSpacing(0)
+
         turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
-        self.turns_buttons_layout = QHBoxLayout()
 
         for value in turns_values:
             button = self.create_button(value)
@@ -22,7 +26,6 @@ class DirectSetTurnsManager:
         button = QPushButton(value, self.parent_widget)
         button.setStyleSheet(self._get_direct_set_button_style_sheet())
         button.setContentsMargins(0, 0, 0, 0)
-        button.setMinimumWidth(button.fontMetrics().boundingRect(value).width() + 10)
         button.clicked.connect(
             lambda _, v=value: self._directly_set_turns(
                 float(v) if v in ["0.5", "1.5", "2.5"] else int(v)
@@ -55,7 +58,4 @@ class DirectSetTurnsManager:
         """
 
     def add_direct_set_turns_to_vbox_layout(self) -> None:
-        self.turns_buttons_frame = self.parent_widget.create_frame(
-            self.turns_buttons_layout
-        )
         self.parent_widget.vbox_layout.addWidget(self.turns_buttons_frame)

@@ -27,7 +27,6 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
 
     def initialize_components(self) -> None:
         """Initialize components here."""
-        self.turns_display: QLabel = None
         self.turns_label = None
 
     def setup_ui(self) -> None:
