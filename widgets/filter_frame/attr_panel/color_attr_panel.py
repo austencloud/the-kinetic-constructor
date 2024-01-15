@@ -1,4 +1,4 @@
-from constants import BLUE, RED
+from constants import BLUE, RED, SAME
 from typing import TYPE_CHECKING, List
 from utilities.TypeChecking.TypeChecking import Colors, Turns
 from widgets.filter_frame.attr_box.color_attr_box import ColorAttrBox
@@ -59,11 +59,5 @@ class ColorAttrPanel(BaseAttrPanel):
     def reset_turns(self) -> None:
         for box in self.boxes:
             box.turns_widget.turn_display_manager.turns_display.setText("0")
-            # if the box has buttons, set them to deselected
-            if box.same_button:
-                box.same_button.setStyleSheet(
-                    box.turns_widget.get_vtg_dir_btn_style(pressed=False)
-                )
-                box.opp_button.setStyleSheet(
-                    box.turns_widget.get_vtg_dir_btn_style(pressed=False)
-                )
+            box.vtg_dir_btn_state[SAME] = False
+            box.vtg_dir_btn_state[BLUE] = False

@@ -324,8 +324,8 @@ class Pictograph(QGraphicsScene):
         if pictograph_dict:
             if self.is_pictograph_dict_complete(pictograph_dict):
                 self.pictograph_dict = pictograph_dict
-
             self._update_from_pictograph_dict(pictograph_dict)
+            
         self._update_letter()
         self._position_objects()
 

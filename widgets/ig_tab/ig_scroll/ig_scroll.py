@@ -93,7 +93,7 @@ class IGScrollArea(PictographScrollArea):
     def process_letter(self, letter) -> None:
         pictograph_dicts = self.letters.get(letter, [])
         for pictograph_dict in self.filter_pictographs(pictograph_dicts):
-            self.create_or_update_pictograph(pictograph_dict, letter)
+            self.create_or_update_pictograph(pictograph_dict.copy(), letter)
 
     def create_or_update_pictograph(self, pictograph_dict, letter) -> None:
         pictograph_key = self.generate_pictograph_key_from_dict(pictograph_dict)
@@ -101,11 +101,15 @@ class IGScrollArea(PictographScrollArea):
             pictograph_key, self._create_pictograph(IG_PICTOGRAPH)
         )
         self.pictographs[pictograph_key] = ig_pictograph
+        # make a deep copy of the pictograph_dict so that the original dict is not modified
 
         for motion in ig_pictograph.motions.values():
             for box in self.ig_tab.filter_tab.motion_attr_panel.boxes:
                 if box.attribute_type == MOTION_TYPE:
-                    if box.motion_type == motion.motion_type:
+                    if (
+                        box.motion_type
+                        == pictograph_dict[f"{motion.color}_{MOTION_TYPE}"]
+                    ):
                         box_text = (
                             box.turns_widget.turn_display_manager.turns_display.text()
                         )
@@ -116,9 +120,9 @@ class IGScrollArea(PictographScrollArea):
                         if box.motion_type == DASH:
                             if box.vtg_dir_btn_state[SAME]:
                                 if pictograph_dict[BLUE_MOTION_TYPE] == DASH:
-                                    pictograph_dict[BLUE_PROP_ROT_DIR] = pictograph_dict[
-                                        RED_PROP_ROT_DIR
-                                    ]
+                                    pictograph_dict[
+                                        BLUE_PROP_ROT_DIR
+                                    ] = pictograph_dict[RED_PROP_ROT_DIR]
                                     pictograph_dict[BLUE_TURNS] = turns
 
                                 elif pictograph_dict[RED_MOTION_TYPE] == DASH:
@@ -131,23 +135,26 @@ class IGScrollArea(PictographScrollArea):
                                 if pictograph_dict[BLUE_MOTION_TYPE] == DASH:
                                     pictograph_dict[BLUE_PROP_ROT_DIR] = (
                                         COUNTER_CLOCKWISE
-                                        if pictograph_dict[RED_PROP_ROT_DIR] == CLOCKWISE
+                                        if pictograph_dict[RED_PROP_ROT_DIR]
+                                        == CLOCKWISE
                                         else CLOCKWISE
                                     )
                                     pictograph_dict[BLUE_TURNS] = turns
                                 elif pictograph_dict[RED_MOTION_TYPE] == DASH:
                                     pictograph_dict[RED_PROP_ROT_DIR] = (
                                         COUNTER_CLOCKWISE
-                                        if pictograph_dict[BLUE_PROP_ROT_DIR] == CLOCKWISE
+                                        if pictograph_dict[BLUE_PROP_ROT_DIR]
+                                        == CLOCKWISE
                                         else CLOCKWISE
                                     )
                                     pictograph_dict[RED_TURNS] = turns
+
                         elif box.motion_type == STATIC:
                             if box.vtg_dir_btn_state[SAME]:
                                 if pictograph_dict[BLUE_MOTION_TYPE] == STATIC:
-                                    pictograph_dict[BLUE_PROP_ROT_DIR] = pictograph_dict[
-                                        RED_PROP_ROT_DIR
-                                    ]
+                                    pictograph_dict[
+                                        BLUE_PROP_ROT_DIR
+                                    ] = pictograph_dict[RED_PROP_ROT_DIR]
                                     pictograph_dict[BLUE_TURNS] = turns
                                 elif pictograph_dict[RED_MOTION_TYPE] == STATIC:
                                     pictograph_dict[RED_PROP_ROT_DIR] = pictograph_dict[
@@ -158,17 +165,28 @@ class IGScrollArea(PictographScrollArea):
                                 if pictograph_dict[BLUE_MOTION_TYPE] == STATIC:
                                     pictograph_dict[BLUE_PROP_ROT_DIR] = (
                                         COUNTER_CLOCKWISE
-                                        if pictograph_dict[RED_PROP_ROT_DIR] == CLOCKWISE
+                                        if pictograph_dict[RED_PROP_ROT_DIR]
+                                        == CLOCKWISE
                                         else CLOCKWISE
                                     )
                                     pictograph_dict[BLUE_TURNS] = turns
                                 elif pictograph_dict[RED_MOTION_TYPE] == STATIC:
                                     pictograph_dict[RED_PROP_ROT_DIR] = (
                                         COUNTER_CLOCKWISE
-                                        if pictograph_dict[BLUE_PROP_ROT_DIR] == CLOCKWISE
+                                        if pictograph_dict[BLUE_PROP_ROT_DIR]
+                                        == CLOCKWISE
                                         else CLOCKWISE
                                     )
                                     pictograph_dict[RED_TURNS] = turns
+
+                        if pictograph_dict[BLUE_TURNS] == 0 and pictograph_dict[
+                            BLUE_MOTION_TYPE
+                        ] in [DASH, STATIC]:
+                            pictograph_dict[BLUE_PROP_ROT_DIR] = NO_ROT
+                        if pictograph_dict[RED_TURNS] == 0 and pictograph_dict[
+                            RED_MOTION_TYPE
+                        ] in [DASH, STATIC]:
+                            pictograph_dict[RED_PROP_ROT_DIR] = NO_ROT
 
         ig_pictograph.update_pictograph(pictograph_dict)
 

@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QHBoxLayout, QPushButton, QFrame
 from typing import TYPE_CHECKING, Union
+from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from .base_turns_widget import BaseTurnsWidget
@@ -14,7 +15,10 @@ class DirectSetTurnsManager:
         self.turns_buttons_layout = QHBoxLayout(self.turns_buttons_frame)
         self.turns_buttons_layout.setContentsMargins(0, 0, 0, 0)
         self.turns_buttons_layout.setSpacing(0)
-
+        self.turns_buttons_layout.setAlignment(
+            self.parent_widget.turn_display_manager.turns_display,
+            Qt.AlignmentFlag.AlignCenter,
+        )
         turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
 
         for value in turns_values:
@@ -30,6 +34,9 @@ class DirectSetTurnsManager:
             lambda _, v=value: self._directly_set_turns(
                 float(v) if v in ["0.5", "1.5", "2.5"] else int(v)
             )
+        )
+        button.setMaximumWidth(
+            int(self.parent_widget.turn_display_manager.turns_display.width() / 2)
         )
         return button
 
