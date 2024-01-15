@@ -77,13 +77,7 @@ class IG_Pictograph_View(QGraphicsView):
 
     def keyPressEvent(self, event) -> None:
         shift_held = event.modifiers() & Qt.KeyboardModifier.ShiftModifier
-        if event.key() in [Qt.Key.Key_Q, Qt.Key.Key_E]:
-            # Handle half turn adjustments for 'q' and 'e'
-            self.ig_pictograph.wasd_adjustment_manager.turn_manager.handle_half_turns(
-                event.key()
-            )
-            event.accept()
-        elif event.key() in [Qt.Key.Key_W, Qt.Key.Key_A, Qt.Key.Key_S, Qt.Key.Key_D]:
+        if event.key() in [Qt.Key.Key_W, Qt.Key.Key_A, Qt.Key.Key_S, Qt.Key.Key_D]:
             self.ig_pictograph.wasd_adjustment_manager.movement_manager.handle_arrow_movement(
                 event.key(), shift_held
             )

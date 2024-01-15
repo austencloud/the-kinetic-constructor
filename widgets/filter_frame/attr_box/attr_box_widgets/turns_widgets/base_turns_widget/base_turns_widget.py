@@ -5,7 +5,7 @@ from typing import Union
 from .....attr_box.base_attr_box import BaseAttrBox
 from ...base_attr_box_widget import BaseAttrBoxWidget
 from ...base_attr_box_widget import BaseAttrBoxWidget
-from .turn_adjustment_manager import AdjustTurnsManager
+from .turn_adjustment_manager import TurnsAdjustmentManager
 from .turn_direct_set_manager import DirectSetTurnsManager
 from .turn_display_manager import DisplayTurnsManager
 
@@ -18,7 +18,7 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
 
         # Initialize manager classes
         self.turn_direct_set_manager = DirectSetTurnsManager(self)
-        self.turn_adjustment_manager = AdjustTurnsManager(self.attr_box, self)
+        self.turn_adjustment_manager = TurnsAdjustmentManager(self.attr_box, self)
         self.turn_display_manager = DisplayTurnsManager(self, self.attr_box)
 
         # Call the setup_ui method

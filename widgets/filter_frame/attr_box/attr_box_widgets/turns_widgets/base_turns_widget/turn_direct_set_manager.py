@@ -16,7 +16,6 @@ class DirectSetTurnsManager:
         self.turns_buttons_layout.setContentsMargins(0, 0, 0, 0)
         self.turns_buttons_layout.setSpacing(0)
         self.turns_buttons_layout.setAlignment(
-            self.parent_widget.turn_display_manager.turns_display,
             Qt.AlignmentFlag.AlignCenter,
         )
         turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]

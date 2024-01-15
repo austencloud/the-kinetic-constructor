@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QPushButton, QVBoxLayout, QFrame
+from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, List, Union
 from constants import *
 from objects.motion.motion import Motion
@@ -12,7 +13,7 @@ if TYPE_CHECKING:
     from ......filter_frame.attr_box.lead_state_attr_box import LeadStateAttrBox
 
 
-class AdjustTurnsManager:
+class TurnsAdjustmentManager:
     def __init__(self, attr_box, parent_widget: "BaseTurnsWidget") -> None:
         self.attr_box: Union[
             "ColorAttrBox", "MotionTypeAttrBox", "LeadStateAttrBox"
@@ -43,8 +44,6 @@ class AdjustTurnsManager:
         button.setContentsMargins(0, 0, 0, 0)
         button.setMinimumWidth(button.fontMetrics().boundingRect(text).width() + 10)
         return button
-
-
 
     def adjust_turns(self, adjustment: float) -> None:
         """Adjust turns for a given pictograph based on the attribute type."""
@@ -212,3 +211,4 @@ class AdjustTurnsManager:
             for motion in pictograph.motions.values():
                 if self.is_motion_relevant(motion):
                     self.update_motion_properties(motion, new_turns)
+
