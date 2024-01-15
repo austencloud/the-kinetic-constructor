@@ -44,3 +44,6 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
         layout.setSpacing(0)
         return frame
 
+    def resize_turns_widget(self) -> None:
+        self.turn_display_manager.update_turnbox_size()
+        self.turn_display_manager.update_adjust_turns_button_size()

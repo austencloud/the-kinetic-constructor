@@ -5,9 +5,9 @@ from typing import Union, TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from ..attr_box_widgets.motion_types_widget import MotionTypeWidget
-    from ..attr_box_widgets.start_end_loc_widget import StartEndLocWidget
-    from ..attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
+    from .motion_types_widget import MotionTypeWidget
+    from .start_end_loc_widget import StartEndLocWidget
+    from .turns_widgets.base_turns_widget.base_turns_widget import (
         BaseTurnsWidget,
     )
 

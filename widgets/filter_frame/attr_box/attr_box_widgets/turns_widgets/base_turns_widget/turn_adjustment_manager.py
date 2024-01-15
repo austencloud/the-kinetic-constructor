@@ -1,9 +1,9 @@
 from PyQt6.QtWidgets import QPushButton, QVBoxLayout, QFrame
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, List, Union
 from constants import *
 from objects.motion.motion import Motion
 from objects.pictograph.pictograph import Pictograph
-from ...attr_box_button import AdjustTurnsButton
+from ...adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
     from ..base_turns_widget.base_turns_widget import BaseTurnsWidget
@@ -26,7 +26,7 @@ class TurnsAdjustmentManager:
         self.positive_buttons_layout = QVBoxLayout(self.positive_buttons_frame)
         """Create and setup adjustment buttons."""
         adjustments = [(-1, "-1"), (-0.5, "-0.5"), (1, "+1"), (0.5, "+0.5")]
-        self.adjust_turns_buttons = []
+        self.adjust_turns_buttons: List[AdjustTurnsButton] = []
 
         for adjustment, text in adjustments:
             button = self.create_adjust_turns_button(text)

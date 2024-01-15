@@ -20,13 +20,5 @@ class ColorTurnsWidget(BaseTurnsWidget):
 
     ### EVENT HANDLERS ###
 
-    def resize_turns_widget(self) -> None:
-        self.turn_display_manager.update_turnbox_size()
-        self.turn_display_manager.update_adjust_turns_button_size()
 
-    def _adjust_turns(self, adjustment) -> None:
-        """Adjust turns for a given pictograph based on color."""
-        for pictograph in self.attr_box.pictographs.values():
-            self.turn_adjustment_manager._adjust_turns_for_pictograph(
-                pictograph, adjustment
-            )
+

@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Callable, Union
 
 from constants import ICON_DIR
 from objects.motion.motion import Motion
-from .attr_box_button import AdjustTurnsButton
+from .adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
     pass

@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from constants import HEX_BLUE, HEX_RED, RED
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import Colors
-from ..filter_frame.attr_box.attr_box_widgets.attr_box_button import AdjustTurnsButton
+from ..filter_frame.attr_box.attr_box_widgets.adjust_turns_button import AdjustTurnsButton
 from ..filter_frame.attr_box.attr_box_widgets.motion_types_widget import (
     MotionTypeWidget,
 )

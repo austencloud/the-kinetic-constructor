@@ -6,7 +6,7 @@ from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING, Callable
-from widgets.filter_frame.attr_box.attr_box_widgets.attr_box_button import (
+from widgets.filter_frame.attr_box.attr_box_widgets.adjust_turns_button import (
     AdjustTurnsButton,
 )
 from widgets.filter_frame.attr_box.attr_box_widgets.header_widgets.base_header_widget import (
