@@ -158,13 +158,7 @@ class IGTab(QWidget):
         )
         button.setFlat(not is_selected)
         button.setStyleSheet(self.get_button_style(pressed=not is_selected))
-        for panel in self.filter_tab.panels:
-            for box in panel.boxes:
-                if hasattr(box, "same_button"):
-                    for button in box.same_opp_buttons:
-                        button.setStyleSheet(
-                            box.header_widget.get_vtg_dir_btn_style(pressed=False)
-                        )
+                        
         self.scroll_area.update_pictographs()
 
     def generate_selected_images(self) -> None:
