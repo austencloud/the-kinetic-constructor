@@ -28,7 +28,7 @@ from constants import (
 
 from objects.motion.motion import Motion
 from objects.prop.prop import Prop
-from utilities.TypeChecking.Letters import Letters
+from utilities.TypeChecking.Letters import Letters_list
 from utilities.TypeChecking.TypeChecking import Directions
 from utilities.TypeChecking.prop_types import (
     PropTypesList,
@@ -52,7 +52,7 @@ class BasePropPositioner:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
         self.letters: Dict[
-            Letters, List[Dict[str, str]]
+            Letters_list, List[Dict[str, str]]
         ] = pictograph.main_widget.letters
         self.position_offsets_cache = {}
         self.location_points_cache = {}
@@ -105,7 +105,9 @@ class BasePropPositioner:
 
     def _get_location_points(self, strict: bool, grid_mode: str) -> Dict[str, QPointF]:
         strict_key = "strict" if strict else "normal"
-        location_points = self.pictograph.grid.circle_coordinates_cache["hand_points"][grid_mode][strict_key]
+        location_points = self.pictograph.grid.circle_coordinates_cache["hand_points"][
+            grid_mode
+        ][strict_key]
         return location_points
 
     def _reposition_small_bilateral_props(
@@ -122,7 +124,7 @@ class BasePropPositioner:
             for prop in self.props:
                 self._set_prop_to_default_location(prop)
 
-        else:  
+        else:
             if self.current_letter in ["G", "H"]:
                 self.reposition_G_H()
             elif self.current_letter == "I":

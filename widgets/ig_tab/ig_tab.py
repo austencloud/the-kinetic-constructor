@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from constants import IG_PICTOGRAPH
+from utilities.TypeChecking.TypeChecking import Letters
 from widgets.filter_frame.filter_tab.filter_tab import FilterTab
 from widgets.ig_tab.ig_letter_button_frame import IGLetterButtonFrame
 from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
@@ -22,7 +23,7 @@ if TYPE_CHECKING:
 
 class IGTab(QWidget):
     imageGenerated = pyqtSignal(str)
-    selected_letters: List[IGPictograph] = []
+    selected_letters: List[Letters] = []
 
     ### INITIALIZATION ###
 

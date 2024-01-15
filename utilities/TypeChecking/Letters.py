@@ -1,4 +1,4 @@
-Letters = [
+Letters_list = [
     "A",
     "B",
     "C",
@@ -103,7 +103,19 @@ Type1_anti_letters = [
 
 Type1_non_hybrid_letters = Type1_pro_letters + Type1_anti_letters
 non_hybrid_letters = Type1_non_hybrid_letters + ["Φ-", "Ψ-", "Λ-", "α", "β", "Γ"]
-hybrid_letters = Type1_hybrid_letters + ["Φ", "Ψ", "Λ", "W", "X", "Y", "Z", "W-", "X-", "Y-", "Z-"]
+hybrid_letters = Type1_hybrid_letters + [
+    "Φ",
+    "Ψ",
+    "Λ",
+    "W",
+    "X",
+    "Y",
+    "Z",
+    "W-",
+    "X-",
+    "Y-",
+    "Z-",
+]
 Type1_alpha_beta_letters = [
     "A",
     "B",

@@ -1,7 +1,9 @@
 import json
-from constants import ANTI, DASH, PRO, STATIC
+from constants import ANTI, ANTIRADIAL, CLOCK, COUNTER, DASH, IN, OUT, PRO, RADIAL, STATIC
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, List, Tuple
+
+from utilities.TypeChecking.TypeChecking import OrientationTypes
 
 if TYPE_CHECKING:
     from objects.arrow.arrow_placement_manager.main_arrow_placement_manager import (
@@ -43,31 +45,34 @@ class DefaultArrowPlacementManager:
         has_hybrid_orientation = arrow.pictograph.has_hybrid_orientations()
         has_radial_props = arrow.pictograph.has_all_radial_props()
         has_antiradial_props = arrow.pictograph.has_all_antiradial_props()
+        motion_end_ori = arrow.motion.end_ori
+        
+        key_suffix = "_to_"
+        motion_end_ori_key: OrientationTypes = ""
 
-        if arrow.motion_type == STATIC:
-            return "static_to_beta" if has_beta_props else STATIC
-        elif arrow.motion_type in [DASH, PRO, ANTI]:
-            key_suffix = "_to_"
-            key_middle = ""
-            if has_radial_props and has_beta_props:
-                key_middle = "radial_beta"
-            elif has_antiradial_props and has_beta_props:
-                key_middle = "antiradial_beta"
-            elif has_radial_props and has_alpha_props:
-                key_middle = "radial_alpha"
-            elif has_antiradial_props and has_alpha_props:
-                key_middle = "antiradial_alpha"
-            elif has_hybrid_orientation:
-                key_middle = "hybrid_ori"
-                if has_alpha_props:
-                    key_middle += "_alpha"
-                elif has_beta_props:
-                    key_middle += "_beta"
-                elif has_gamma_props:
-                    key_middle += "_gamma"
+        if motion_end_ori in [IN, OUT]:
+            motion_end_ori_key = RADIAL
+        elif motion_end_ori in [CLOCK, COUNTER]:
+            motion_end_ori_key = ANTIRADIAL
+            
+        if has_radial_props:
+            key_middle = "layer1"
+        elif has_antiradial_props:
+            key_middle = "layer2" 
+        elif has_hybrid_orientation:
+            key_middle = "layer3"
+        if has_alpha_props:
+            key_middle += "_alpha"
+        elif has_beta_props:
+            key_middle += "_beta"
+        elif has_gamma_props:
+            key_middle += "_gamma"
 
-            return arrow.motion_type + (key_suffix + key_middle if key_middle else "")
-        return arrow.motion_type
+        key = arrow.motion_type + (key_suffix + motion_end_ori_key + key_middle if key_middle else "")
+        if key in self._load_default_placements(arrow.motion_type):
+            return key
+        else:
+            return arrow.motion_type
 
     def get_default_adjustment(self, arrow: Arrow) -> Tuple[int, int]:
         motion_type_placements = self._load_default_placements(arrow.motion_type)

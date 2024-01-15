@@ -10,7 +10,7 @@ from utilities.TypeChecking.TypeChecking import (
     Turns,
 )
 from utilities.TypeChecking.prop_types import PropTypes
-from utilities.TypeChecking.Letters import Letters
+from utilities.TypeChecking.Letters import Letters_list
 
 image_path = "resources/images/"
 
@@ -222,7 +222,7 @@ class TKAHandpathMode(Enum):
 
 
 class PictographAttributesDict(TypedDict):
-    letter: Letters
+    letter: Letters_list
     start_pos: SpecificPositions
     end_pos: SpecificPositions
     blue_motion_type: MotionTypes

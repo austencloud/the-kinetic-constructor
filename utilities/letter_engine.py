@@ -1,7 +1,7 @@
 import logging
 
 from utilities.TypeChecking.Letters import (
-    Letters,
+    Letters_list,
     alpha_ending_letters,
     alpha_starting_letters,
     beta_ending_letters,
@@ -28,7 +28,13 @@ from constants import (
     PRO,
     RED,
 )
-from utilities.TypeChecking.TypeChecking import Colors, MotionTypeCombinations, Positions, PropRotDirs, SpecificPositions
+from utilities.TypeChecking.TypeChecking import (
+    Colors,
+    MotionTypeCombinations,
+    Positions,
+    PropRotDirs,
+    SpecificPositions,
+)
 
 
 logging.basicConfig(
@@ -51,7 +57,7 @@ class LetterEngine:
         self.cached_parallel = None
         self.cached_handpath = None
 
-    def get_current_letter(self) -> Letters:
+    def get_current_letter(self) -> Letters_list:
         self.red_motion = self.get_motion(RED)
         self.blue_motion = self.get_motion(BLUE)
 
@@ -97,8 +103,8 @@ class LetterEngine:
                 return None
 
     def filter_by_start_pos(
-        self, start_pos: Positions, motion_letter_set: Set[Letters]
-    ) -> Set[Letters]:
+        self, start_pos: Positions, motion_letter_set: Set[Letters_list]
+    ) -> Set[Letters_list]:
         if start_pos == ALPHA:
             filtered_letter_group = list(alpha_starting_letters)
         elif start_pos == BETA:
@@ -114,7 +120,7 @@ class LetterEngine:
 
         return filtered_letter_group
 
-    def filter_by_end_pos(self, end_pos, motion_letter_set) -> Set[Letters]:
+    def filter_by_end_pos(self, end_pos, motion_letter_set) -> Set[Letters_list]:
         if end_pos == ALPHA:
             filtered_letter_group = list(alpha_ending_letters)
         elif end_pos == BETA:

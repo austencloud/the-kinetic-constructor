@@ -16,6 +16,7 @@ from constants import (
     MOTION_TYPE,
     NO_ROT,
     OPP,
+    PROP_ROT_DIR,
     RED,
     RED_END_LOC,
     RED_END_ORI,
@@ -27,9 +28,16 @@ from constants import (
     SAME,
     START_POS,
     STATIC,
+    TURNS,
 )
-from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
-from widgets.pictograph_scroll_area import PictographScrollArea
+from objects.motion.motion import Motion
+from objects.pictograph.pictograph import Pictograph
+from utilities.TypeChecking.Letters import Letters_list
+from ...filter_frame.attr_box.color_attr_box import ColorAttrBox
+from ...filter_frame.attr_box.lead_state_attr_box import LeadStateAttrBox
+from ...filter_frame.attr_box.motion_type_attr_box import MotionTypeAttrBox
+from .ig_pictograph import IGPictograph
+from ...pictograph_scroll_area.pictograph_scroll_area import PictographScrollArea
 from constants import IG_PICTOGRAPH
 from utilities.TypeChecking.TypeChecking import (
     Letters,
@@ -40,8 +48,8 @@ from utilities.TypeChecking.TypeChecking import (
 from PyQt6.QtCore import QTimer
 
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_tab import IGTab
-    from widgets.main_widget import MainWidget
+    from ...ig_tab.ig_tab import IGTab
+    from ...main_widget import MainWidget
 
 
 class IGScrollArea(PictographScrollArea):
@@ -88,7 +96,7 @@ class IGScrollArea(PictographScrollArea):
             self.process_letter(letter)
 
     def get_sorted_selected_letters(self) -> List[Letters]:
-        return sorted(self.ig_tab.selected_letters, key=lambda x: Letters.index(x))
+        return sorted(self.ig_tab.selected_letters, key=lambda x: Letters_list.index(x))
 
     def process_letter(self, letter) -> None:
         pictograph_dicts = self.letters.get(letter, [])
@@ -97,98 +105,89 @@ class IGScrollArea(PictographScrollArea):
 
     def create_or_update_pictograph(self, pictograph_dict, letter) -> None:
         pictograph_key = self.generate_pictograph_key_from_dict(pictograph_dict)
-        ig_pictograph = self.pictographs.get(
-            pictograph_key, self._create_pictograph(IG_PICTOGRAPH)
-        )
-        self.pictographs[pictograph_key] = ig_pictograph
-        # make a deep copy of the pictograph_dict so that the original dict is not modified
-
-        for motion in ig_pictograph.motions.values():
-            for box in self.ig_tab.filter_tab.motion_attr_panel.boxes:
-                if box.attribute_type == MOTION_TYPE:
-                    if (
-                        box.motion_type
-                        == pictograph_dict[f"{motion.color}_{MOTION_TYPE}"]
-                    ):
-                        box_text = (
-                            box.turns_widget.turn_display_manager.turns_display.text()
-                        )
-                        if box_text in ["0", "1", "2", "3"]:
-                            turns = int(box_text)
-                        elif box_text in ["0.5", "1.5", "2.5"]:
-                            turns = float(box_text)
-                        if box.motion_type == DASH:
-                            if box.vtg_dir_btn_state[SAME]:
-                                if pictograph_dict[BLUE_MOTION_TYPE] == DASH:
-                                    pictograph_dict[
-                                        BLUE_PROP_ROT_DIR
-                                    ] = pictograph_dict[RED_PROP_ROT_DIR]
-                                    pictograph_dict[BLUE_TURNS] = turns
-
-                                elif pictograph_dict[RED_MOTION_TYPE] == DASH:
-                                    pictograph_dict[RED_PROP_ROT_DIR] = pictograph_dict[
-                                        BLUE_PROP_ROT_DIR
-                                    ]
-                                    pictograph_dict[RED_TURNS] = turns
-
-                            elif box.vtg_dir_btn_state[OPP]:
-                                if pictograph_dict[BLUE_MOTION_TYPE] == DASH:
-                                    pictograph_dict[BLUE_PROP_ROT_DIR] = (
-                                        COUNTER_CLOCKWISE
-                                        if pictograph_dict[RED_PROP_ROT_DIR]
-                                        == CLOCKWISE
-                                        else CLOCKWISE
-                                    )
-                                    pictograph_dict[BLUE_TURNS] = turns
-                                elif pictograph_dict[RED_MOTION_TYPE] == DASH:
-                                    pictograph_dict[RED_PROP_ROT_DIR] = (
-                                        COUNTER_CLOCKWISE
-                                        if pictograph_dict[BLUE_PROP_ROT_DIR]
-                                        == CLOCKWISE
-                                        else CLOCKWISE
-                                    )
-                                    pictograph_dict[RED_TURNS] = turns
-
-                        elif box.motion_type == STATIC:
-                            if box.vtg_dir_btn_state[SAME]:
-                                if pictograph_dict[BLUE_MOTION_TYPE] == STATIC:
-                                    pictograph_dict[
-                                        BLUE_PROP_ROT_DIR
-                                    ] = pictograph_dict[RED_PROP_ROT_DIR]
-                                    pictograph_dict[BLUE_TURNS] = turns
-                                elif pictograph_dict[RED_MOTION_TYPE] == STATIC:
-                                    pictograph_dict[RED_PROP_ROT_DIR] = pictograph_dict[
-                                        BLUE_PROP_ROT_DIR
-                                    ]
-                                    pictograph_dict[RED_TURNS] = turns
-                            elif box.vtg_dir_btn_state[OPP]:
-                                if pictograph_dict[BLUE_MOTION_TYPE] == STATIC:
-                                    pictograph_dict[BLUE_PROP_ROT_DIR] = (
-                                        COUNTER_CLOCKWISE
-                                        if pictograph_dict[RED_PROP_ROT_DIR]
-                                        == CLOCKWISE
-                                        else CLOCKWISE
-                                    )
-                                    pictograph_dict[BLUE_TURNS] = turns
-                                elif pictograph_dict[RED_MOTION_TYPE] == STATIC:
-                                    pictograph_dict[RED_PROP_ROT_DIR] = (
-                                        COUNTER_CLOCKWISE
-                                        if pictograph_dict[BLUE_PROP_ROT_DIR]
-                                        == CLOCKWISE
-                                        else CLOCKWISE
-                                    )
-                                    pictograph_dict[RED_TURNS] = turns
-
-                        if pictograph_dict[BLUE_TURNS] == 0 and pictograph_dict[
-                            BLUE_MOTION_TYPE
-                        ] in [DASH, STATIC]:
-                            pictograph_dict[BLUE_PROP_ROT_DIR] = NO_ROT
-                        if pictograph_dict[RED_TURNS] == 0 and pictograph_dict[
-                            RED_MOTION_TYPE
-                        ] in [DASH, STATIC]:
-                            pictograph_dict[RED_PROP_ROT_DIR] = NO_ROT
-
+        ig_pictograph = self.get_or_create_pictograph(pictograph_key)
+        self.update_pictograph_from_attr_panel(ig_pictograph, pictograph_dict)
         ig_pictograph.update_pictograph(pictograph_dict)
+
+    def get_or_create_pictograph(self, pictograph_key) -> IGPictograph:
+        if pictograph_key not in self.pictographs:
+            self.pictographs[pictograph_key] = self._create_pictograph(IG_PICTOGRAPH)
+        return self.pictographs[pictograph_key]
+
+    def update_pictograph_from_attr_panel(self, ig_pictograph: Pictograph, pictograph_dict) -> None:
+        for motion in ig_pictograph.motions.values():
+            self.update_motion_attributes_from_boxes(motion, pictograph_dict)
+
+    def update_motion_attributes_from_boxes(self, motion:Motion, pictograph_dict: Dict) -> None:
+        for box in self.ig_tab.filter_tab.motion_attr_panel.boxes:
+            if (
+                box.attribute_type == MOTION_TYPE
+                and box.motion_type
+                == pictograph_dict.get(f"{motion.color}_{MOTION_TYPE}")
+            ):
+                self.set_motion_attributes_from_box(box, motion, pictograph_dict)
+
+    def set_motion_attributes_from_box(
+        self,
+        box: Union["ColorAttrBox", "MotionTypeAttrBox", "LeadStateAttrBox"],
+        motion,
+        pictograph_dict,
+    ) -> None:
+        box_text = box.turns_widget.turn_display_manager.turns_display.text()
+        turns = float(box_text) if "." in box_text else int(box_text)
+
+        if box.motion_type in [DASH, STATIC]:
+            self.set_motion_turns_and_direction(box, motion, pictograph_dict, turns)
+
+    def set_motion_turns_and_direction(
+        self,
+        box: Union["ColorAttrBox", "MotionTypeAttrBox", "LeadStateAttrBox"],
+        motion: Motion,
+        pictograph_dict,
+        turns,
+    ) -> None:
+        if box.vtg_dir_btn_state[SAME]:
+            self.set_same_direction_turns(box, motion, pictograph_dict, turns)
+        elif box.vtg_dir_btn_state[OPP]:
+            self.set_opposite_direction_turns(box, motion, pictograph_dict, turns)
+
+        # Setting rotation direction to NO_ROT if turns are 0
+        if turns == 0 and pictograph_dict[motion.color + "_" + MOTION_TYPE] in [
+            DASH,
+            STATIC,
+        ]:
+            pictograph_dict[motion.color + "_" + PROP_ROT_DIR] = NO_ROT
+
+    def set_same_direction_turns(
+        self,
+        box: Union["ColorAttrBox", "MotionTypeAttrBox", "LeadStateAttrBox"],
+        motion: Motion,
+        pictograph_dict,
+        turns,
+    ) -> None:
+        other_color = RED if motion.color == BLUE else BLUE
+        if pictograph_dict[motion.color + "_" + MOTION_TYPE] == box.motion_type:
+            pictograph_dict[motion.color + "_" + PROP_ROT_DIR] = pictograph_dict[
+                other_color + "_" + PROP_ROT_DIR
+            ]
+            pictograph_dict[motion.color + "_" + TURNS] = turns
+
+    def set_opposite_direction_turns(
+        self,
+        box: Union["ColorAttrBox", "MotionTypeAttrBox", "LeadStateAttrBox"],
+        motion: Motion,
+        pictograph_dict,
+        turns,
+    ) -> None:
+        other_color = RED if motion.color == BLUE else BLUE
+        opposite_dir = (
+            COUNTER_CLOCKWISE
+            if pictograph_dict[other_color + "_" + PROP_ROT_DIR] == CLOCKWISE
+            else CLOCKWISE
+        )
+        if pictograph_dict[motion.color + "_" + MOTION_TYPE] == box.motion_type:
+            pictograph_dict[motion.color + "_" + PROP_ROT_DIR] = opposite_dir
+            pictograph_dict[motion.color + "_" + TURNS] = turns
 
     def order_and_display_pictographs(self) -> None:
         ordered_pictographs = self.get_ordered_pictographs()
@@ -210,12 +209,11 @@ class IGScrollArea(PictographScrollArea):
         ]
 
     def get_ordered_pictographs(self) -> Dict[Letters, IGPictograph]:
-        # Assuming you want to order by the letter's index and then by start position
         return {
             k: v
             for k, v in sorted(
                 self.pictographs.items(),
-                key=lambda item: (Letters.index(item[1].letter), item[1].start_pos),
+                key=lambda item: (Letters_list.index(item[1].letter), item[1].start_pos),
             )
         }
 
@@ -392,3 +390,66 @@ class IGScrollArea(PictographScrollArea):
                 ig_pictograph.motions[RED].update_motion(update)
 
             ig_pictograph.update_pictograph()
+
+
+        
+class MotionAttributeManagement:
+    def __init__(self, ig_tab: "IGTab"):
+        self.ig_tab = ig_tab
+
+    def update_motion_attributes_from_boxes(self, motion: Motion, pictograph_dict: Dict) -> None:
+        for box in self.ig_tab.filter_tab.motion_attr_panel.boxes:
+            if (
+                box.attribute_type == MOTION_TYPE
+                and box.motion_type
+                == pictograph_dict.get(f"{motion.color}_{MOTION_TYPE}")
+            ):
+                self.set_motion_attributes_from_box(box, motion, pictograph_dict)
+                
+    def set_motion_attributes_from_box(self, box: Union["ColorAttrBox", "MotionTypeAttrBox", "LeadStateAttrBox"], motion: Motion, pictograph_dict) -> None:
+        box_text = box.turns_widget.turn_display_manager.turns_display.text()
+        turns = float(box_text) if "." in box_text else int(box_text)
+
+        if box.motion_type in [DASH, STATIC]:
+            self.set_motion_turns_and_direction(box, motion, pictograph_dict, turns)
+
+class PictographDisplayManagement:
+    def __init__(self, layout):
+        self.layout = layout
+
+    def order_and_display_pictographs(self, pictographs: Dict[Letters, IGPictograph]) -> None:
+        ordered_pictographs = self.get_ordered_pictographs(pictographs)
+        for index, (key, ig_pictograph) in enumerate(ordered_pictographs.items()):
+            self.add_pictograph_to_layout(ig_pictograph, index)
+        self.pictographs.update(ordered_pictographs)
+        
+    def get_ordered_pictographs(self, pictographs: Dict[Letters, IGPictograph]) -> Dict[Letters, IGPictograph]:
+        return {
+            k: v
+            for k, v in sorted(
+                pictographs.items(),
+                key=lambda item: (Letters_list.index(item[1].letter), item[1].start_pos),
+            )
+        }
+
+class FilterManagement:
+    def __init__(self, ig_tab: "IGTab"):
+        self.ig_tab = ig_tab
+
+    def filter_pictographs(self, pictograph_dicts: List[Dict]) -> List[Dict]:
+        return [
+            pictograph_dict
+            for pictograph_dict in pictograph_dicts
+            if self.pictograph_matches_filters(pictograph_dict)
+        ]
+        
+    def pictograph_matches_filters(self, pictograph_dict: Dict) -> bool:
+        for filter_key, filter_value in self.filters.items():
+            if filter_value in ["0", "1", "2", "3"]:
+                filter_value = int(filter_value)
+            elif filter_value in ["0.5", "1.5", "2.5"]:
+                filter_value = float(filter_value)
+            if filter_value != "":
+                if pictograph_dict.get(filter_key) != filter_value:
+                    return False
+        return True
