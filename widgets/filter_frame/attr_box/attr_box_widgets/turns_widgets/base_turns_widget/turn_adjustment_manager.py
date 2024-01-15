@@ -26,7 +26,7 @@ class TurnsAdjustmentManager:
         self.negative_buttons_layout = QVBoxLayout(self.negative_buttons_frame)
         self.positive_buttons_layout = QVBoxLayout(self.positive_buttons_frame)
         """Create and setup adjustment buttons."""
-        adjustments = [(-1, "-1"), (-0.5, "-0.5"), (0.5, "+0.5"), (1, "+1")]
+        adjustments = [(-1, "-1"), (-0.5, "-0.5"), (1, "+1"), (0.5, "+0.5")]
         self.adjust_turns_buttons = []
 
         for adjustment, text in adjustments:
@@ -211,4 +211,3 @@ class TurnsAdjustmentManager:
             for motion in pictograph.motions.values():
                 if self.is_motion_relevant(motion):
                     self.update_motion_properties(motion, new_turns)
-
