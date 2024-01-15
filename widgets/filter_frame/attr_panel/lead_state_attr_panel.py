@@ -9,14 +9,14 @@ if TYPE_CHECKING:
 
 
 class IGLeadStateAttrPanel(BaseAttrPanel):
-    def __init__(self, ig_tab: "IGTab") -> None:
-        super().__init__(ig_tab)
-        self.ig_tab = ig_tab
+    def __init__(self, parent_tab: "IGTab") -> None:
+        super().__init__(parent_tab)
+        self.parent_tab = parent_tab
         self.leading_box = LeadStateAttrBox(
-            self, self.ig_tab.scroll_area.pictographs, LEADING
+            self, self.parent_tab.scroll_area.pictographs, LEADING
         )
         self.trailing_box = LeadStateAttrBox(
-            self, self.ig_tab.scroll_area.pictographs, TRAILING
+            self, self.parent_tab.scroll_area.pictographs, TRAILING
         )
         self.boxes: List[LeadStateAttrBox] = [
             self.leading_box,

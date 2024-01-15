@@ -11,14 +11,14 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, pyqtSignal
 from constants import IG_PICTOGRAPH
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.filter_frame.filter_tab.filter_tab import FilterTab
-from widgets.ig_tab.ig_letter_button_frame import IGLetterButtonFrame
-from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
-from widgets.ig_tab.ig_scroll.ig_scroll import IGScrollArea
+from ..filter_frame.filter_tab.filter_tab import FilterTab
+from .ig_letter_button_frame import IGLetterButtonFrame
+from .ig_scroll.ig_pictograph import IGPictograph
+from ..pictograph_scroll_area.pictograph_scroll_area import PictographScrollArea
 
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
+    from ..main_widget import MainWidget
 
 
 class IGTab(QWidget):
@@ -39,7 +39,7 @@ class IGTab(QWidget):
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.setLayout(self.layout)
         self.setup_buttons()
-        self.scroll_area = IGScrollArea(self.main_widget, self)
+        self.scroll_area = PictographScrollArea(self.main_widget, self)
         self.filter_tab = FilterTab(self)
         self.left_layout = QVBoxLayout()
         self.right_layout = QVBoxLayout()
@@ -154,12 +154,12 @@ class IGTab(QWidget):
         else:
             self.selected_letters.append(letter)
 
-        self.filter_tab.motion_attr_panel.update_motion_type_widget_visibility(
+        self.filter_tab.motion_type_attr_panel.update_motion_type_widget_visibility(
             self.selected_letters
         )
         button.setFlat(not is_selected)
         button.setStyleSheet(self.get_button_style(pressed=not is_selected))
-                        
+
         self.scroll_area.update_pictographs()
 
     def generate_selected_images(self) -> None:
@@ -225,8 +225,8 @@ class IGTab(QWidget):
                     pictograph_dict["blue_turns"] = self.filters["turns"]
 
     def resize_tab(self) -> None:
-        if self.filter_tab.motion_attr_panel.isVisible():
-            self.filter_tab.motion_attr_panel.resize_ig_motion_type_attr_panel()
+        if self.filter_tab.motion_type_attr_panel.isVisible():
+            self.filter_tab.motion_type_attr_panel.resize_ig_motion_type_attr_panel()
         elif self.filter_tab.color_attr_panel.isVisible():
             self.filter_tab.color_attr_panel.resize_ig_color_attr_panel()
         elif self.filter_tab.lead_state_attr_panel.isVisible():

@@ -10,13 +10,15 @@ if TYPE_CHECKING:
 
 
 class ColorAttrPanel(BaseAttrPanel):
-    def __init__(self, ig_tab: "IGTab") -> None:
-        super().__init__(ig_tab)
-        self.ig_tab = ig_tab
+    def __init__(self, parent_tab: "IGTab") -> None:
+        super().__init__(parent_tab)
+        self.parent_tab = parent_tab
         self.blue_attr_box = ColorAttrBox(
-            self, self.ig_tab.scroll_area.pictographs, BLUE
+            self, self.parent_tab.scroll_area.pictographs, BLUE
         )
-        self.red_attr_box = ColorAttrBox(self, self.ig_tab.scroll_area.pictographs, RED)
+        self.red_attr_box = ColorAttrBox(
+            self, self.parent_tab.scroll_area.pictographs, RED
+        )
         self.boxes: List[ColorAttrBox] = [
             self.blue_attr_box,
             self.red_attr_box,

@@ -40,8 +40,8 @@ class OptionPickerTab(QFrame):
             return pd.DataFrame()  # Return an empty DataFrame in case of error
 
     def resize_tab(self) -> None:
-        if self.filter_tab.motion_attr_panel.isVisible():
-            self.filter_tab.motion_attr_panel.resize_ig_motion_type_attr_panel()
+        if self.filter_tab.motion_type_attr_panel.isVisible():
+            self.filter_tab.motion_type_attr_panel.resize_ig_motion_type_attr_panel()
         elif self.filter_tab.color_attr_panel.isVisible():
             self.filter_tab.color_attr_panel.resize_ig_color_attr_panel()
         elif self.filter_tab.lead_state_attr_panel.isVisible():

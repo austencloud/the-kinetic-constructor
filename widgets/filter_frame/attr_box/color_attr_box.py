@@ -8,6 +8,7 @@ from .attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
 from .attr_box_widgets.header_widgets.color_header_widget import ColorHeaderWidget
 from .attr_box_widgets.turns_widgets.color_turns_widget import ColorTurnsWidget
 from .attr_box_widgets.vtg_dir_widget import VtgDirWidget
+
 if TYPE_CHECKING:
     from widgets.filter_frame.attr_panel.color_attr_panel import ColorAttrPanel
     from objects.pictograph.pictograph import Pictograph
@@ -52,8 +53,8 @@ class ColorAttrBox(BaseAttrBox):
         self.setLayout(self.hbox_layout)
 
     def resize_ig_color_attr_box(self) -> None:
-        self.setMinimumWidth(int(self.attr_panel.ig_tab.width() / 3))
-        self.setMaximumWidth(int(self.attr_panel.ig_tab.width() / 3))
+        self.setMinimumWidth(int(self.attr_panel.parent_tab.width() / 3))
+        self.setMaximumWidth(int(self.attr_panel.parent_tab.width() / 3))
         self.turns_widget.resize_turns_widget()
         self.vtg_dir_widget.resize_prop_rot_dir_widget()
 

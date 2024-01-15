@@ -51,7 +51,7 @@ class OptionPickerScrollArea(PictographScrollArea):
                     pictograph_dict[START_POS] == start_pos
                     and pictograph_dict[END_POS] == end_pos
                 ):
-                    start_option = self._create_pictograph(OPTION)
+                    start_option = self.pictograph_factory._create_pictograph(OPTION)
                     start_option.letter = letter
                     start_option.start_pos = start_pos
                     start_option.end_pos = end_pos

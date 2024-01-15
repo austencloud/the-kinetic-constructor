@@ -5,20 +5,18 @@ from objects.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import Qt
 
 from utilities.TypeChecking.TypeChecking import Colors
-from widgets.ig_tab.ig_scroll.wasd_adjustment_manager.wasd_adjustment_manager import (
+from ..ig_scroll.wasd_adjustment_manager.wasd_adjustment_manager import (
     WASD_AdjustmentManager,
 )
-
-
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_scroll.ig_scroll import IGScrollArea
+    from ...pictograph_scroll_area.pictograph_scroll_area import PictographScrollArea
 
 
 class IGPictograph(Pictograph):
-    def __init__(self, main_widget, ig_scroll_area: "IGScrollArea") -> None:
+    def __init__(self, main_widget, scroll_area: "PictographScrollArea") -> None:
         super().__init__(main_widget, IG_PICTOGRAPH)
         self.view = IG_Pictograph_View(self)
-        self.ig_scroll_area = ig_scroll_area
+        self.ig_scroll_area = scroll_area
         self.selected_arrow = None
         self.wasd_adjustment_manager = WASD_AdjustmentManager(self)
 

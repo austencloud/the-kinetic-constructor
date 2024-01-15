@@ -13,7 +13,7 @@ from ..attr_panel.base_attr_panel import BaseAttrPanel
 
 if TYPE_CHECKING:
     from ...option_picker_tab.option_picker_tab import OptionPickerTab
-    from ...ig_tab.ig_tab import IGTab
+    from ...parent_tab.parent_tab import IGTab
 
 
 class MotionTypeAttrPanel(BaseAttrPanel):

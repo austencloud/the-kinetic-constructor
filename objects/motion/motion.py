@@ -1,5 +1,6 @@
 from constants import *
 from typing import TYPE_CHECKING, Dict, Union
+from objects.motion.motion_attr_manager import MotionAttrManager
 from objects.motion.motion_manipulator import MotionManipulator
 from utilities.TypeChecking.TypeChecking import (
     Colors,
@@ -32,6 +33,7 @@ class Motion:
     ) -> None:
         self.scene = scene
         self.manipulator = MotionManipulator(self)
+        self.attr_manager = MotionAttrManager(self)
         self.init_attributes()
         self.update_attributes(motion_dict)
 

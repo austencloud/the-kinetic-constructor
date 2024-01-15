@@ -49,8 +49,8 @@ class LeadStateAttrBox(BaseAttrBox):
         self.setLayout(self.hbox_layout)
 
     def resize_ig_lead_state_attr_box(self) -> None:
-        self.setMinimumWidth(int(self.attr_panel.ig_tab.width() / 3))
-        self.setMaximumWidth(int(self.attr_panel.ig_tab.width() / 3))
+        self.setMinimumWidth(int(self.attr_panel.parent_tab.width() / 3))
+        self.setMaximumWidth(int(self.attr_panel.parent_tab.width() / 3))
         self.turns_widget.resize_turns_widget()
 
     def get_pictographs(self) -> List["Pictograph"]:
