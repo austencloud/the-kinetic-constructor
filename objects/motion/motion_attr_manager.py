@@ -58,11 +58,11 @@ class MotionAttrManager:
     ) -> None:
         if box.vtg_dir_btn_state[SAME]:
             self.set_same_direction_turns_from_attr_box(
-                box, self.motion, pictograph_dict, turns
+                box, pictograph_dict, turns
             )
         elif box.vtg_dir_btn_state[OPP]:
             self.set_opposite_direction_turns_from_attr_box(
-                box, self.motion, pictograph_dict, turns
+                box, pictograph_dict, turns
             )
 
         if turns == 0 and pictograph_dict[self.motion.color + "_" + MOTION_TYPE] in [
