@@ -59,48 +59,10 @@ class TurnsAdjustmentManager:
             turns = turns[:-2]
         self.parent_widget.turn_display_manager.update_turns_display(turns)
 
-        simulate_same_click = self._check_dash_static_motion_with_zero_turns()
-
-        # Simulate button click if necessary
-        if simulate_same_click:
-            self._simulate_same_button_click()
 
         for pictograph in self.attr_box.pictographs.values():
             self._adjust_turns_for_pictograph(pictograph, adjustment)
 
-    def _check_dash_static_motion_with_zero_turns(self) -> bool:
-        """Check if any dash or static motion with zero turns exists."""
-        for pictograph in self.attr_box.pictographs.values():
-            for motion in pictograph.motions.values():
-                if motion.motion_type in [DASH, STATIC] and motion.turns == 0:
-                    return True
-        return False
-
-    def _simulate_same_button_click(self) -> None:
-        """Simulate clicking the 'same' button."""
-        if hasattr(self.attr_box, "same_button"):
-            self.attr_box.same_button.click()
-            # Assuming there's a method to update the button's stylesheet
-            self.update_button_stylesheet(self.attr_box.same_button, pressed=True)
-
-    def update_button_stylesheet(self, button: QPushButton, pressed: bool) -> None:
-        """Update the stylesheet of a button based on whether it's pressed."""
-        if pressed:
-            # Assuming there is a predefined style for pressed buttons
-            button.setStyleSheet(self.get_pressed_button_style())
-        else:
-            # Assuming there is a predefined style for unpressed buttons
-            button.setStyleSheet(self.get_unpressed_button_style())
-
-    def get_pressed_button_style(self) -> str:
-        """Return the stylesheet for a pressed button."""
-        # Placeholder for the actual stylesheet
-        return "QPushButton { background-color: #cccccc; }"
-
-    def get_unpressed_button_style(self) -> str:
-        """Return the stylesheet for an unpressed button."""
-        # Placeholder for the actual stylesheet
-        return "QPushButton { background-color: #ffffff; }"
 
     def _adjust_turns_for_pictograph(
         self, pictograph: Pictograph, adjustment: float
