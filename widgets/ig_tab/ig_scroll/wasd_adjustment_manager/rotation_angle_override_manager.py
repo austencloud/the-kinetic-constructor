@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 from constants import BLUE, RED, STATIC
 from PyQt6.QtCore import Qt
 

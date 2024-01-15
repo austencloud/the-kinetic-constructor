@@ -1,7 +1,7 @@
 from PyQt6.QtCore import QPointF
 from constants import *
 from objects.arrow.arrow import Arrow
-from typing import TYPE_CHECKING, List, Literal, Tuple
+from typing import TYPE_CHECKING, Literal, Tuple
 
 from objects.arrow.arrow_placement_manager.adjustment_key_generator import (
     AdjustmentKeyGenerator,
@@ -12,11 +12,6 @@ from objects.arrow.arrow_placement_manager.directional_tuple_generator import (
 from .default_arrow_placement_manager import DefaultArrowPlacementManager
 from .special_arrow_placement_manager import SpecialArrowPlacementManager
 from objects.motion.motion import Motion
-from utilities.TypeChecking.Letters import (
-    Type1_hybrid_letters,
-    non_hybrid_letters,
-    Type2_letters,
-)
 from utilities.TypeChecking.TypeChecking import Colors, Locations
 
 if TYPE_CHECKING:

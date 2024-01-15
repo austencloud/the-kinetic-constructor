@@ -1,7 +1,6 @@
 import json
 import re
 from typing import TYPE_CHECKING, Dict, Optional, Tuple, Union
-from constants import BLUE, LEADING, PRO, RED, TRAILING
 from ..arrow import Arrow
 from ..arrow_placement_manager.adjustment_key_generator import AdjustmentKeyGenerator
 from utilities.TypeChecking.Letters import (

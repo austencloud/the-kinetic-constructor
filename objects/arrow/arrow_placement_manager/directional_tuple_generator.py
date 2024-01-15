@@ -11,7 +11,6 @@ from constants import (
     OPP,
 )
 from objects.motion.motion import Motion
-from objects.arrow.arrow import Arrow
 
 
 class DirectionalTupleGenerator:

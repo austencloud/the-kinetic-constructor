@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import QPushButton, QVBoxLayout, QFrame
-from PyQt6.QtCore import Qt
-from typing import TYPE_CHECKING, List, Union
+from typing import TYPE_CHECKING, Union
 from constants import *
 from objects.motion.motion import Motion
 from objects.pictograph.pictograph import Pictograph

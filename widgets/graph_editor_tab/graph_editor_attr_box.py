@@ -16,7 +16,6 @@ from ..graph_editor_tab.graph_editor_turns_widget import GraphEditorTurnsWidget
 if TYPE_CHECKING:
     from ..filter_frame.attr_panel.base_attr_panel import BaseAttrPanel
     from objects.pictograph.pictograph import Pictograph
-    from ..graph_editor_tab.graph_editor_tab import GraphEditorTab
 
 from ..filter_frame.attr_box.base_attr_box import BaseAttrBox
 

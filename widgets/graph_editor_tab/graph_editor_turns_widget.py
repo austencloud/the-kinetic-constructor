@@ -39,7 +39,6 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
 
     def setup_additional_layouts(self) -> None:
         self.turn_display_and_adjust_btns_hbox_layout = QHBoxLayout()
-        pass
 
     ### LAYOUTS ###
 

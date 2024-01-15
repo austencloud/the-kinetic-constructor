@@ -11,7 +11,6 @@ from ..prop.prop import Prop
 from ..graphical_object import GraphicalObject
 from utilities.TypeChecking.TypeChecking import (
     Colors,
-    LeadStates,
     Locations,
     MotionTypes,
     Turns,

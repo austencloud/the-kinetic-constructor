@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
     QApplication,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
-from constants import IG_PICTOGRAPH, OPP, SAME
+from constants import IG_PICTOGRAPH
 from widgets.filter_frame.filter_tab.filter_tab import FilterTab
 from widgets.ig_tab.ig_letter_button_frame import IGLetterButtonFrame
 from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
