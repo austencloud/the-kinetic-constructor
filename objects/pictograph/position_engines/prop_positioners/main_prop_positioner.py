@@ -22,7 +22,7 @@ from objects.pictograph.position_engines.prop_positioners.by_letter_type.Type6_p
     Type6PropPositioner,
 )
 
-from utilities.TypeChecking.Letters import (
+from utilities.TypeChecking.letter_lists import (
     Type1_letters,
     Type2_letters,
     Type3_letters,

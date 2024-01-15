@@ -7,7 +7,7 @@ from utilities.dataframe_generators.base_dataframe_generator import (
 )
 
 from constants import *
-from utilities.TypeChecking.Letters import Type4_letters
+from utilities.TypeChecking.letter_lists import Type4_letters
 
 
 class Type4Generator(BaseDataFrameGenerator):

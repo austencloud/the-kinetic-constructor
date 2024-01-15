@@ -6,7 +6,7 @@ from Enums import LetterNumberType
 from constants import LETTER_BTN_ICON_DIR
 from typing import TYPE_CHECKING, Dict, List
 
-from utilities.TypeChecking.Letters import Letters_list
+from utilities.TypeChecking.letter_lists import all_letters
 
 
 if TYPE_CHECKING:
@@ -18,7 +18,7 @@ class IGLetterButtonFrame(QFrame):
         super().__init__()
         self.main_widget = main_widget
         self.spacing = int(self.width() * 0.01)
-        self.buttons: Dict[Letters_list, QPushButton] = {}
+        self.buttons: Dict[all_letters, QPushButton] = {}
         self.init_letter_buttons_layout()
         self.add_black_borders()
 
@@ -103,7 +103,7 @@ class IGLetterButtonFrame(QFrame):
                 return letter_type.name.replace("_", "").lower().capitalize()
         return None
 
-    def get_icon_path(self, letter_type: str, letter: Letters_list) -> str:
+    def get_icon_path(self, letter_type: str, letter: all_letters) -> str:
         return f"{LETTER_BTN_ICON_DIR}/{letter_type}/{letter}.svg"
 
     def create_button(self, icon_path: str, letter: str) -> QPushButton:

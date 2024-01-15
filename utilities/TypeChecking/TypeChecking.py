@@ -1,7 +1,7 @@
 from typing import *
 
 
-from .Letters import *
+from .letter_lists import *
 from typing import Literal
 from constants import *
 

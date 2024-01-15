@@ -28,7 +28,7 @@ from constants import (
 
 from objects.motion.motion import Motion
 from objects.prop.prop import Prop
-from utilities.TypeChecking.Letters import Letters_list
+from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Directions
 from utilities.TypeChecking.prop_types import (
     PropTypesList,
@@ -52,7 +52,7 @@ class BasePropPositioner:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
         self.letters: Dict[
-            Letters_list, List[Dict[str, str]]
+            all_letters, List[Dict[str, str]]
         ] = pictograph.main_widget.letters
         self.position_offsets_cache = {}
         self.location_points_cache = {}

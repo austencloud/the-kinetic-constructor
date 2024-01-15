@@ -32,7 +32,7 @@ from constants import (
 )
 from objects.motion.motion import Motion
 from objects.pictograph.pictograph import Pictograph
-from utilities.TypeChecking.Letters import Letters_list
+from utilities.TypeChecking.letter_lists import all_letters
 from ...filter_frame.attr_box.color_attr_box import ColorAttrBox
 from ...filter_frame.attr_box.lead_state_attr_box import LeadStateAttrBox
 from ...filter_frame.attr_box.motion_type_attr_box import MotionTypeAttrBox

@@ -1,4 +1,4 @@
-Letters_list = [
+all_letters = [
     "A",
     "B",
     "C",

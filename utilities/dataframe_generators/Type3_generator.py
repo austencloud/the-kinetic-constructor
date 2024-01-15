@@ -6,7 +6,7 @@ from utilities.dataframe_generators.base_dataframe_generator import (
 )
 
 from constants import *
-from utilities.TypeChecking.Letters import Type3_letters
+from utilities.TypeChecking.letter_lists import Type3_letters
 from utilities.TypeChecking.TypeChecking import Locations
 
 

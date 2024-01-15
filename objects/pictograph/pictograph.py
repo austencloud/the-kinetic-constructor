@@ -14,7 +14,7 @@ from utilities.TypeChecking.prop_types import (
     strictly_placed_props,
     non_strictly_placed_props,
 )
-from utilities.TypeChecking.Letters import Letters_list
+from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Colors, Locations, SpecificPositions
 
 from utilities.letter_item import LetterItem
@@ -69,7 +69,7 @@ class Pictograph(QGraphicsScene):
         self.ghost_arrows: Dict[Colors, GhostArrow] = {}
         self.ghost_props: Dict[Colors, GhostProp] = {}
         self.motions: Dict[Colors, Motion] = {}
-        self.letter: Letters_list = None
+        self.letter: all_letters = None
         self.pictograph_dict: Dict = {}
         self.motion_dict_list: List[Dict] = []
         self.start_pos: SpecificPositions = None
@@ -173,7 +173,7 @@ class Pictograph(QGraphicsScene):
 
     ### GETTERS ###
 
-    def _get_letter_type(self, letter: Letters_list) -> Optional[str]:
+    def _get_letter_type(self, letter: all_letters) -> Optional[str]:
         for letter_type in LetterNumberType:
             if letter in letter_type.letters:
                 return letter_type.description

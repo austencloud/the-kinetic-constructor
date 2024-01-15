@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
 from data.rules import get_next_letters
 from constants import *
-from utilities.TypeChecking.Letters import Letters_list
+from utilities.TypeChecking.letter_lists import all_letters
 from widgets.option_picker_tab.option import Option
 from PyQt6.QtGui import QPixmap
 
@@ -162,7 +162,7 @@ class OptionPickerScrollArea(PictographScrollArea):
         QApplication.restoreOverrideCursor()
 
     def _sort_options(self):
-        custom_sort_order = [letter for letter in Letters_list]
+        custom_sort_order = [letter for letter in all_letters]
         custom_order_dict = {
             char: index for index, char in enumerate(custom_sort_order)
         }

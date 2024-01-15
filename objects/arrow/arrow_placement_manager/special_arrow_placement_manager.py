@@ -3,7 +3,7 @@ import re
 from typing import TYPE_CHECKING, Dict, Optional, Tuple, Union
 from ..arrow import Arrow
 from ..arrow_placement_manager.adjustment_key_generator import AdjustmentKeyGenerator
-from utilities.TypeChecking.Letters import (
+from utilities.TypeChecking.letter_lists import (
     Type1_hybrid_letters,
     Type1_letters,
     Type1_non_hybrid_letters,

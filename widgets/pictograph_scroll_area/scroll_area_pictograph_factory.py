@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Dict, List, Literal, Set
 from constants import IG_PICTOGRAPH, OPTION
 from objects.pictograph.pictograph import Pictograph
-from utilities.TypeChecking.Letters import Letters_list
+from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Letters
 from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
 from widgets.option_picker_tab.option import Option
@@ -37,7 +37,7 @@ class ScrollAreaPictographFactory:
     def get_sorted_selected_letters(self) -> List[Letters]:
         return sorted(
             self.scroll_area.parent_tab.selected_letters,
-            key=lambda x: Letters_list.index(x),
+            key=lambda x: all_letters.index(x),
         )
 
     def process_letter(self, letter) -> None:

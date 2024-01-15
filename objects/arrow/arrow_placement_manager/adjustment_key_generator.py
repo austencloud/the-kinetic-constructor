@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Tuple
 from objects.arrow.arrow import Arrow
-from utilities.TypeChecking.Letters import (
+from utilities.TypeChecking.letter_lists import (
     Type1_hybrid_letters,
     Type3_letters,
     non_hybrid_letters,

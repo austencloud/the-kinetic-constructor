@@ -1,16 +1,13 @@
 from typing import TYPE_CHECKING, Dict, List
-from PyQt6.QtWidgets import QGridLayout
 from objects.pictograph.pictograph import Pictograph
-from utilities.TypeChecking.Letters import Letters_list
+from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import (
     Letters,
 )
-from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
+from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
 
 if TYPE_CHECKING:
-    from widgets.pictograph_scroll_area.pictograph_scroll_area import (
-        PictographScrollArea,
-    )
+    from .pictograph_scroll_area import PictographScrollArea
 
 
 class ScrollAreaDisplayManager:
@@ -32,7 +29,7 @@ class ScrollAreaDisplayManager:
             for k, v in sorted(
                 self.scroll_area.pictographs.items(),
                 key=lambda item: (
-                    Letters_list.index(item[1].letter),
+                    all_letters.index(item[1].letter),
                     item[1].start_pos,
                 ),
             )
@@ -58,7 +55,6 @@ class ScrollAreaDisplayManager:
             widget = self.scroll_area.layout.takeAt(0).widget()
             if widget is not None:
                 widget.setParent(None)
-                # widget.deleteLater()
 
     def cleanup_unused_pictographs(self) -> None:
         keys_to_remove = self.get_keys_to_remove()
@@ -81,6 +77,9 @@ class ScrollAreaDisplayManager:
             k: v
             for k, v in sorted(
                 self.scroll_area.pictographs.items(),
-                key=lambda item: (Letters_list.index(item[1].letter), item[1].start_pos),
+                key=lambda item: (
+                    all_letters.index(item[1].letter),
+                    item[1].start_pos,
+                ),
             )
         }
