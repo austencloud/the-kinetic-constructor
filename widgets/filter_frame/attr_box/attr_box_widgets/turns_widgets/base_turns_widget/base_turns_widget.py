@@ -2,7 +2,6 @@ from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QFrame
 from typing import TYPE_CHECKING, Union
 
 
-from .....attr_box.base_attr_box import BaseAttrBox
 from ...base_attr_box_widget import BaseAttrBoxWidget
 from ...base_attr_box_widget import BaseAttrBoxWidget
 from .turn_adjustment_manager import TurnAdjustmentManager

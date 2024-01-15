@@ -4,7 +4,10 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Callable, Union
 
 from constants import ICON_DIR
-from objects.motion.motion import Motion
+
+if TYPE_CHECKING:
+    from widgets.filter_frame.attr_box.base_attr_box import BaseAttrBox
+    from objects.motion.motion import Motion
 from .adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
@@ -14,7 +17,7 @@ if TYPE_CHECKING:
 class BaseAttrBoxWidget(QWidget):
     def __init__(self, attr_box) -> None:
         super().__init__(attr_box)
-        self.attr_box = attr_box
+        self.attr_box: "BaseAttrBox" = attr_box
 
     def create_attr_header_label(
         self, text: str, align: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter
@@ -42,7 +45,7 @@ class BaseAttrBoxWidget(QWidget):
         return initial_turns == 0 and new_turns > 0
 
     def update_pictograph_dict(
-        self, motion: Motion, new_turns: Union[int, float]
+        self, motion: "Motion", new_turns: Union[int, float]
     ) -> None:
         """Update the pictograph dictionary with new turns."""
         pictograph_dict = {

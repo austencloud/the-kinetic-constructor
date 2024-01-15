@@ -3,9 +3,9 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
 
-from widgets.filter_frame.attr_box.base_attr_box import BaseAttrBox
 
 if TYPE_CHECKING:
+    from widgets.filter_frame.attr_box.base_attr_box import BaseAttrBox
     from .base_turns_widget import BaseTurnsWidget
 
 

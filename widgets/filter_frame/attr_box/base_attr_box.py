@@ -2,6 +2,10 @@ from typing import TYPE_CHECKING, Dict, List, Union
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
+
+from constants import OPP, SAME
+from utilities.TypeChecking.TypeChecking import MotionTypes
+from widgets.filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import BaseTurnsWidget
 from ..attr_box.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
 
 if TYPE_CHECKING:
@@ -18,11 +22,14 @@ class BaseAttrBox(QFrame):
         self.pictograph = pictograph
         self.font_size = self.width() // 10
         self.widgets: List[BaseAttrBoxWidget] = []
+        self.turns_widget: BaseTurnsWidget = None
+        self.motion_type: MotionTypes = None
         self.combobox_border = 2
         self.border_width = 3
         self.pixmap_cache: Dict[str, QPixmap] = {}  
+        self.vtg_dir_btn_state: Dict[str, bool] = {SAME: True, OPP: False}
         self.init_ui()
-
+        
     def init_ui(self) -> None:
         self.setup_box()
         self.vbox_layout: QVBoxLayout = QVBoxLayout()

@@ -1,11 +1,11 @@
 from PyQt6.QtWidgets import QPushButton, QVBoxLayout, QFrame
 from typing import TYPE_CHECKING, List, Union
 from constants import *
-from objects.motion.motion import Motion
 from objects.pictograph.pictograph import Pictograph
 from ...adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
+    from objects.motion.motion import Motion
     from ..base_turns_widget.base_turns_widget import BaseTurnsWidget
     from ......filter_frame.attr_box.color_attr_box import ColorAttrBox
     from ......filter_frame.attr_box.motion_type_attr_box import MotionTypeAttrBox
@@ -75,18 +75,18 @@ class TurnAdjustmentManager:
         new_turns = max(0, min(3, current_turns + adjustment))
         return int(new_turns) if new_turns in [0.0, 1.0, 2.0, 3.0] else new_turns
 
-    def is_motion_relevant(self, motion: Motion) -> bool:
+    def is_motion_relevant(self, motion: "Motion") -> bool:
         attr_type = self.attr_box.attribute_type
         return getattr(motion, attr_type) == getattr(self.attr_box, attr_type)
 
     def update_motion_properties(
-        self, motion: Motion, new_turns: Union[int, float]
+        self, motion: "Motion", new_turns: Union[int, float]
     ) -> None:
         self._update_turns_and_rotation(motion, new_turns)
         self.update_pictograph(motion, new_turns)
 
     def _update_turns_and_rotation(
-        self, motion: Motion, new_turns: Union[int, float]
+        self, motion: "Motion", new_turns: Union[int, float]
     ) -> None:
         if motion.motion_type in [DASH, STATIC]:
             if new_turns == 0:
@@ -97,7 +97,7 @@ class TurnAdjustmentManager:
 
         motion.set_motion_turns(new_turns)
 
-    def update_pictograph(self, motion: Motion, new_turns: Union[int, float]) -> None:
+    def update_pictograph(self, motion: "Motion", new_turns: Union[int, float]) -> None:
         pictograph_dict = {f"{motion.color}_turns": new_turns}
         motion.scene.update_pictograph(pictograph_dict)
 
@@ -111,7 +111,7 @@ class TurnAdjustmentManager:
                 self.attr_box.header_widget.get_vtg_dir_btn_style(pressed=False)
             )
 
-    def is_motion_relevant(self, motion: Motion) -> bool:
+    def is_motion_relevant(self, motion: "Motion") -> bool:
         """Check if a motion is relevant based on the attribute type of the attr_box."""
         return (
             (
@@ -128,7 +128,7 @@ class TurnAdjustmentManager:
             )
         )
 
-    def _set_prop_rot_dir_based_on_vtg_state(self, motion: Motion) -> None:
+    def _set_prop_rot_dir_based_on_vtg_state(self, motion: "Motion") -> None:
         """Set the rotation direction of the motion based on the vtg directional relationship."""
         other_motion = motion.scene.motions[RED if motion.color == BLUE else BLUE]
         if (
@@ -159,7 +159,7 @@ class TurnAdjustmentManager:
                 self.attr_box.header_widget.get_vtg_dir_btn_style(pressed=True)
             )
 
-    def update_pictograph(self, motion: Motion, new_turns: Union[int, float]) -> None:
+    def update_pictograph(self, motion: "Motion", new_turns: Union[int, float]) -> None:
         """Update the pictograph with the new turns value."""
         pictograph_dict = {f"{motion.color}_turns": new_turns}
         motion.scene.update_pictograph(pictograph_dict)
