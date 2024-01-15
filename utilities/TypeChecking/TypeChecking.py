@@ -113,3 +113,6 @@ Letters = Literal[
     "β",
     "Γ",
 ]
+AdjustmentStr = Literal["-1", "-0.5", "+1", "+0.5"]
+AdjustmentNum = Union[float, int]
+

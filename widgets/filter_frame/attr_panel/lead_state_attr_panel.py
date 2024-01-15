@@ -34,14 +34,23 @@ class IGLeadStateAttrPanel(BaseAttrPanel):
     def get_turns_for_lead_state(self, lead_state: LeadStates) -> Turns:
         for box in self.boxes:
             if box.lead_state == lead_state:
-                if box.turns_widget.turns_display.text() in ["0", "1", "2", "3"]:
-                    return int(box.turns_widget.turns_display.text())
-                elif box.turns_widget.turns_display.text() in [
+                if box.turns_widget.turn_display_manager.turns_display.text() in [
+                    "0",
+                    "1",
+                    "2",
+                    "3",
+                ]:
+                    return int(
+                        box.turns_widget.turn_display_manager.turns_display.text()
+                    )
+                elif box.turns_widget.turn_display_manager.turns_display.text() in [
                     "0.5",
                     "1.5",
                     "2.5",
                 ]:
-                    return float(box.turns_widget.turns_display.text())
+                    return float(
+                        box.turns_widget.turn_display_manager.turns_display.text()
+                    )
 
     def resize_ig_lead_state_attr_panel(self) -> None:
         self.layout.setSpacing(int(self.trailing_box.width() / 5))
@@ -50,4 +59,4 @@ class IGLeadStateAttrPanel(BaseAttrPanel):
 
     def reset_turns(self) -> None:
         for box in self.boxes:
-            box.turns_widget.turns_display.setCurrentText("0")
+            box.turns_widget.turn_display_manager.turns_display.setText("0")

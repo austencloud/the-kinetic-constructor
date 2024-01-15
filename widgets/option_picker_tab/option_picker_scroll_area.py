@@ -89,27 +89,7 @@ class OptionPickerScrollArea(PictographScrollArea):
             widget = self.layout.takeAt(0).widget()
             if widget is not None:
                 widget.setParent(None)
-                widget.deleteLater()
 
-        # for i, (_, pictograph_data) in enumerate(filtered_pictographs.iterrows()):
-        #     option: Option = self._create_pictograph(OPTION)
-        #     self.load_image_if_visible(option)
-
-        #     row = i // self.COLUMN_COUNT
-        #     col = i % self.COLUMN_COUNT
-        #     self.layout.addWidget(option.view, row, col)
-        #     self.pictographs[option.current_letter] = option
-        #     option.update_pictograph()
-        #     option.view.resize_option_view()
-
-    #     self.update_scroll_area_content()
-
-    # def update_scroll_area_content(self):
-    #     self.container.adjustSize()
-    #     self.layout.update()
-    #     self.updateGeometry()
-
-    ### UPDATE ###
 
     def update_options(self, clicked_option) -> None:
         """Updates the options based on the clicked option."""
@@ -125,7 +105,7 @@ class OptionPickerScrollArea(PictographScrollArea):
             prop.motion = option.motions[arrow.color]
             prop.motion.update_prop_ori()
             prop.update_prop()
-            arrow.loc = arrow.motion.get_arrow_location(
+            arrow.loc = arrow.arrow_location_manager.get_arrow_location(
                 arrow.motion.start_loc, arrow.motion.end_loc, arrow.motion.motion_type
             )
         option.update_pictograph()
@@ -155,7 +135,7 @@ class OptionPickerScrollArea(PictographScrollArea):
         self.pictographs.clear()
         self.clear()
         for motion_dict in filtered_data:
-            option = self._create_pictograph(OPTION)
+            option = self.pictograph_factory._create_pictograph(OPTION)
             self.pictographs[motion_dict[LETTER]] = option
         self._sort_options()
         self._add_sorted_options_to_layout()
@@ -173,14 +153,14 @@ class OptionPickerScrollArea(PictographScrollArea):
             )
         )
 
-    def _add_sorted_options_to_layout(self):
+    def _add_sorted_options_to_layout(self) -> None:
         for _, option in self.pictographs.items():
             option.view.resize_option_view()
 
             self._add_option_to_layout(
                 option,
-                row=len(self.pictographs) // self.COLUMN_COUNT,
-                col=len(self.pictographs) % self.COLUMN_COUNT,
+                row=len(self.pictographs) // self.display_manager.COLUMN_COUNT,
+                col=len(self.pictographs) % self.display_manager.COLUMN_COUNT,
                 is_start_pos=False,
             )
 
@@ -193,7 +173,7 @@ class OptionPickerScrollArea(PictographScrollArea):
         """
         if is_start_pos:
             return lambda event: self._on_start_pos_clicked(
-                option, self.option_picker_tab.filter_tab.filters
+                option, self.filter_frame_manager.filters
             )
         else:
             return lambda event: self._on_option_clicked(option)
@@ -215,6 +195,4 @@ class OptionPickerScrollArea(PictographScrollArea):
 
     ### RESIZE ###
 
-    def resize_option_picker_scroll(self) -> None:
-        for letter, option in self.pictographs:
-            option.view.resize_option_view()
+

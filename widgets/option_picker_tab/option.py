@@ -44,8 +44,8 @@ class OptionView(QGraphicsView):
     def resize_option_view(self) -> None:
         view_width = int(
             self.option.option_picker_scroll.width() / 4
-        ) - self.option.option_picker_scroll.SPACING * (
-            self.option.option_picker_scroll.COLUMN_COUNT - 1
+        ) - self.option.option_picker_scroll.display_manager.SPACING * (
+            self.option.option_picker_scroll.display_manager.COLUMN_COUNT - 1
         )
 
         self.setMinimumWidth(view_width)
@@ -64,7 +64,3 @@ class OptionView(QGraphicsView):
         if event.type() == QEvent.Type.Wheel:
             event.ignore()
         return False
-
-    def showEvent(self, event) -> None:
-        super().showEvent(event)
-        QTimer.singleShot(0, self.option.load_image_if_needed)

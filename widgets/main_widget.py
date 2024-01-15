@@ -244,7 +244,6 @@ class MainWidget(QWidget):
 
     def showEvent(self, event) -> None:
         super().showEvent(event)
-        self.option_picker_tab.resize_option_picker_tab()
         self.sequence_widget.resize_sequence_widget()
         self.parent_tab.resize_tab()
 

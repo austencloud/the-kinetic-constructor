@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QVBoxLayout, QFrame
 from typing import TYPE_CHECKING, List, Literal, Union
 from constants import *
 from objects.pictograph.pictograph import Pictograph
-from utilities.TypeChecking.TypeChecking import PropRotDirs, Turns
+from utilities.TypeChecking.TypeChecking import AdjustmentNum, AdjustmentStr, PropRotDirs, Turns
 from ...adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
@@ -11,9 +11,6 @@ if TYPE_CHECKING:
     from ......filter_frame.attr_box.color_attr_box import ColorAttrBox
     from ......filter_frame.attr_box.motion_type_attr_box import MotionTypeAttrBox
     from ......filter_frame.attr_box.lead_state_attr_box import LeadStateAttrBox
-
-AdjustmentStr = Literal["-1", "-0.5", "+1", "+0.5"]
-AdjustmentNum = Union[float, int]
 
 
 class TurnAdjustmentManager:

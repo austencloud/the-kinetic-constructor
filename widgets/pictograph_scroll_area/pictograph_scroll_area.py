@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Dict, List, Union
 from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QTimer
+from objects.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.TypeChecking import (
     Letters,
 )
@@ -17,20 +18,20 @@ if TYPE_CHECKING:
 
 
 class PictographScrollArea(QScrollArea):
-    def __init__(
-        self, main_widget: "MainWidget", parent_tab: Union["IGTab", "OptionPickerTab"]
-    ) -> None:
+    def __init__(self, main_widget: "MainWidget", parent_tab) -> None:
         super().__init__(parent_tab)
         self.main_widget = main_widget
         self.parent_tab = parent_tab
         self.letters: Dict[Letters, List[Dict[str, str]]] = self.main_widget.letters
-        self.pictographs: Dict[Letters, Union["IGPictograph", "Option"]] = {}
-
+        self.pictographs: Dict[Letters, Pictograph] = {}
         self.pictograph_factory = ScrollAreaPictographFactory(self)
         self.display_manager = ScrollAreaDisplayManager(self)
         self.filter_frame_manager = ScrollAreaFilterFrameManager(self)
         
         self._setup_ui()
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update_arrow_placements)
+        self.timer.start(1000)
 
     def _setup_ui(self) -> None:
         self.setWidgetResizable(True)
@@ -49,3 +50,7 @@ class PictographScrollArea(QScrollArea):
         self.display_manager.order_and_display_pictographs()
         self.display_manager.cleanup_unused_pictographs()
         self.filter_frame_manager.update_filter_frame_if_needed()
+
+    def update_arrow_placements(self) -> None:
+        for pictograph in self.pictographs.values():
+            pictograph.arrow_placement_manager.update_arrow_placement()

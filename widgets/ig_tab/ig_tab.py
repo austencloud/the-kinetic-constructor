@@ -221,8 +221,10 @@ class IGTab(QWidget):
     def update_letters_dict(self) -> None:
         for letter, pictograph_list in self.letters_dict.items():
             for pictograph_dict in pictograph_list:
-                if "turns" in self.filters:
-                    pictograph_dict["blue_turns"] = self.filters["turns"]
+                if "turns" in self.scroll_area.filter_frame_manager.filters:
+                    pictograph_dict[
+                        "blue_turns"
+                    ] = self.scroll_area.filter_frame_manager.filters["turns"]
 
     def resize_tab(self) -> None:
         if self.filter_tab.motion_type_attr_panel.isVisible():
