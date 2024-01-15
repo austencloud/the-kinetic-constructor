@@ -52,14 +52,11 @@ class Grid:
         self.center = self.circle_coordinates_cache["center_point"]
 
     def _load_circle_coordinates(self) -> Dict[str, str | Dict[str, str | Dict[str, Dict[str, str]]]]:
-        # Load the JSON file containing the circle coordinates
         with open("F:\\CODE\\tka-app\\tka-sequence-constructor\\data\\circle_coords.json", "r") as file:
             data: Dict[str, Union[str,Dict[str, Union[str, Dict[str, Dict[str, str]]]]]] = json.load(file)
-        # Convert string coordinates to QPointF
         for section, values in data.items():
             if section in ["hand_points", "layer2_points", "outer_points"]:
                 for mode, types in values.items():
-                    # if types is a dict
                     if isinstance(types, dict):
                         for type_name, points in types.items():
                             for point_id, coords in points.items():
@@ -71,7 +68,6 @@ class Grid:
         return data
 
     def _create_grid_items(self, grid_scene: "Pictograph") -> None:
-        # Paths for each grid mode
         paths = {
             DIAMOND: f"{GRID_DIR}diamond_grid.svg",
             BOX: f"{GRID_DIR}box_grid.svg",
@@ -81,9 +77,7 @@ class Grid:
             item = GridItem(path)
             grid_scene.addItem(item)
             self.items[mode] = item
-            # Set initial visibility based on the grid mode
             item.setVisible(mode == self.grid_mode)
-
 
     def setPos(self, position: QPointF) -> None:
         for item in self.items.values():
@@ -124,5 +118,5 @@ class Grid:
 
     def eventFilter(self, obj, event: QEvent) -> Literal[False]:
         if event.type() == QEvent.Type.Wheel:
-            event.ignore()  # Ignore the event to let it propagate
-        return False  # Return False to continue event propagation
+            event.ignore()
+        return False 

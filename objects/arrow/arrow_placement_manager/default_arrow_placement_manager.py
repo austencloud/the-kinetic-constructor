@@ -2,7 +2,7 @@ import json
 from constants import ANTI, ANTIRADIAL, CLOCK, COUNTER, DASH, IN, OUT, PRO, RADIAL, STATIC
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, List, Tuple
-
+from utilities.TypeChecking.letter_lists import dash_letters
 from utilities.TypeChecking.TypeChecking import OrientationTypes
 
 if TYPE_CHECKING:
@@ -14,6 +14,8 @@ import codecs
 
 
 class DefaultArrowPlacementManager:
+    
+
     def __init__(
         self,
         pictograph: "Pictograph",
@@ -54,7 +56,14 @@ class DefaultArrowPlacementManager:
                 motion_end_ori_key = f"{RADIAL}_"
             elif motion_end_ori in [CLOCK, COUNTER]:
                 motion_end_ori_key = f"{ANTIRADIAL}_"
-            
+        letter_suffix = ""
+        if arrow.pictograph.letter and arrow.pictograph.letter in dash_letters:
+            letter_suffix = f"_{arrow.pictograph.letter}dash"
+        elif arrow.pictograph.letter:
+            letter_suffix = f"_{arrow.pictograph.letter}"
+
+
+
         if has_radial_props:
             key_middle = "layer1"
         elif has_antiradial_props:
@@ -68,11 +77,18 @@ class DefaultArrowPlacementManager:
         elif has_gamma_props:
             key_middle += "_gamma"
 
+        key_with_letter = f"{key}{letter_suffix}"
+        default_placements = self._load_default_placements(arrow.motion_type)
         key = arrow.motion_type + (key_suffix + motion_end_ori_key + key_middle if key_middle else "")
-        if key in self._load_default_placements(arrow.motion_type):
-            return key
+
+        if key_with_letter in default_placements:
+            return key_with_letter
+        elif key in default_placements:
+            return key 
         else:
             return arrow.motion_type
+
+
 
     def get_default_adjustment(self, arrow: Arrow) -> Tuple[int, int]:
         motion_type_placements = self._load_default_placements(arrow.motion_type)
