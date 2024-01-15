@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QFrame
-from typing import Union
+from typing import TYPE_CHECKING, Union
 
 
 from .....attr_box.base_attr_box import BaseAttrBox
@@ -8,17 +8,27 @@ from ...base_attr_box_widget import BaseAttrBoxWidget
 from .turn_adjustment_manager import TurnsAdjustmentManager
 from .turn_direct_set_manager import DirectSetTurnsManager
 from .turn_display_manager import DisplayTurnsManager
-
+ 
+if TYPE_CHECKING:
+    from ....color_attr_box import ColorAttrBox
+    from ....motion_type_attr_box import MotionTypeAttrBox
+    from ....lead_state_attr_box import LeadStateAttrBox
 
 class BaseTurnsWidget(BaseAttrBoxWidget):
-    def __init__(self, attr_box: "BaseAttrBox") -> None:
+    def __init__(self, attr_box) -> None:
         super().__init__(attr_box)
-        self.attr_box = attr_box
+        self.attr_box: Union[
+            "ColorAttrBox", "MotionTypeAttrBox", "LeadStateAttrBox"
+            ] = attr_box
         self.vbox_layout: QVBoxLayout = QVBoxLayout(self)
         self.turn_direct_set_manager = DirectSetTurnsManager(self)
         self.turn_adjustment_manager = TurnsAdjustmentManager(self.attr_box, self)
         self.turn_display_manager = DisplayTurnsManager(self, self.attr_box)
-
+        if hasattr(self.attr_box, "same_button"):
+            self.same_button = self.attr_box.same_button
+            self.opp_button = self.attr_box.opp_button
+            self.same_opp_buttons = [self.same_button, self.opp_button]
+            self.pictographs = self.attr_box.pictographs
         self.initialize_components()
         self.setup_ui()
 

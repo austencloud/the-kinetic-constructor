@@ -12,8 +12,6 @@ class ColorTurnsWidget(BaseTurnsWidget):
         self.attr_box = attr_box
 
         self.attr_box.same_button = self.attr_box.vtg_dir_widget.same_button
-        self.opp_btn = self.attr_box.vtg_dir_widget.opp_button
-        self.same_opp_buttons = [self.attr_box.same_button, self.opp_btn]
         self.color = self.attr_box.color
         self.pictographs = self.attr_box.pictographs
 
