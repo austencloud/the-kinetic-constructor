@@ -9,8 +9,8 @@ if TYPE_CHECKING:
 
 
 class ScrollAreaFilterFrameManager:
-    def __init__(self, scroll_area: "PictographScrollArea") -> None:
-        self.scroll_area = scroll_area
+    def __init__(self, scroll_area) -> None:
+        self.scroll_area: "PictographScrollArea" = scroll_area
         self.filters: Dict[str, Union[Turns, Orientations]] = {}
 
     def filter_pictographs(self, pictograph_dicts: List[Dict]) -> List[Dict]:
