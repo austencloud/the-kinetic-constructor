@@ -40,7 +40,7 @@ class ScrollAreaSection(QWidget):
         """Creates a QLabel for the section label with the given styled text."""
         section_label = QLabel()
         section_label.setText(styled_text)  # Set the HTML styled text
-        font_size = self.calculate_font_size()
+        font_size = 25
         section_label.setStyleSheet(f"font-size: {font_size}px; font-weight: bold;")
         size_policy = QSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
@@ -100,8 +100,3 @@ class ScrollAreaSection(QWidget):
 
         styled_text = f"{letter_type[0:4]} {letter_type[4]}: {styled_type_name}"
         return styled_text
-
-    def calculate_font_size(self) -> int:
-        window_width = self.scroll_area.width()
-        font_size = window_width // 50
-        return font_size
