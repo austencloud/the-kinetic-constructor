@@ -15,7 +15,7 @@ from utilities.TypeChecking.prop_types import (
     non_strictly_placed_props,
 )
 from utilities.TypeChecking.letter_lists import all_letters
-from utilities.TypeChecking.TypeChecking import Colors, Locations, SpecificPositions
+from utilities.TypeChecking.TypeChecking import Colors, LetterTypeNums, Locations, SpecificPositions
 
 from utilities.letter_item import LetterItem
 from ..motion.motion import Motion
@@ -70,6 +70,7 @@ class Pictograph(QGraphicsScene):
         self.ghost_props: Dict[Colors, GhostProp] = {}
         self.motions: Dict[Colors, Motion] = {}
         self.letter: all_letters = None
+        self.letter_type: LetterTypeNums = None
         self.pictograph_dict: Dict = {}
         self.motion_dict_list: List[Dict] = []
         self.start_pos: SpecificPositions = None
@@ -336,7 +337,7 @@ class Pictograph(QGraphicsScene):
         motion_dicts = []
         if LETTER in pictograph_dict:
             self.letter = pictograph_dict[LETTER]
-
+            self.letter_type = self._get_letter_type(self.letter)
         if "pro_turns" in pictograph_dict:
             pro_motion = (
                 self.blue_motion

@@ -55,12 +55,11 @@ class ScrollAreaSection(QWidget):
         self.layout.addWidget(self.pictograph_frame)
 
     def add_pictograph(self, pictograph: IGPictograph) -> None:
-        self.pictographs.append(pictograph)
         self.pictograph_layout.addWidget(pictograph.view)
 
     def remove_pictograph(self, pictograph: IGPictograph) -> None:
-        self.pictographs.remove(pictograph)
-        self.pictograph_layout.removeWidget(pictograph.view)
+        pictograph.view.hide()
+        pictograph.view.setParent(None)
         pictograph.setParent(None)
 
     def update_filter(self) -> None:
@@ -106,4 +105,3 @@ class ScrollAreaSection(QWidget):
         window_width = self.scroll_area.width()
         font_size = window_width // 50
         return font_size
-

@@ -11,7 +11,4 @@ class ColorTurnsWidget(TurnsWidget):
         super().__init__(attr_box)
         self.attr_box = attr_box
 
-        self.attr_box.vtg_dir_widget.same_button = (
-            self.attr_box.vtg_dir_widget.same_button
-        )
         self.color = self.attr_box.color

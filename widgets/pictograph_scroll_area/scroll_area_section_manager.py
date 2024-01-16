@@ -52,7 +52,7 @@ class ScrollAreaSectionManager:
         """Creates a QLabel for the section label with the given styled text."""
         section_label = QLabel()
         section_label.setText(styled_text)  # Set the HTML styled text
-        font_size = self.calculate_font_size()
+        font_size = self.sections[0].calculate_font_size()
         section_label.setStyleSheet(f"font-size: {font_size}px; font-weight: bold;")
         size_policy = QSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
@@ -69,3 +69,5 @@ class ScrollAreaSectionManager:
             section_label, 0, 0, 1, self.scroll_area.display_manager.COLUMN_COUNT
         )
 
+    def get_section(self, letter_type: LetterTypeNums) -> ScrollAreaSection:
+        return self.sections.get(letter_type)

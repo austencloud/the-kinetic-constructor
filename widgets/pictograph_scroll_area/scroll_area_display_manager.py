@@ -12,8 +12,8 @@ if TYPE_CHECKING:
 
 
 class ScrollAreaDisplayManager:
-    COLUMN_COUNT = 6
-    SPACING = 10
+    COLUMN_COUNT = 8
+    SPACING = 5
 
     def __init__(self, scroll_area: "PictographScrollArea") -> None:
         self.scroll_area = scroll_area
