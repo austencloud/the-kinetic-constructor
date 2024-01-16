@@ -51,10 +51,10 @@ class ScrollAreaDisplayManager:
         else:
             print(f"Section not found for letter type {letter_type}")
 
-    def remove_pictograph(
-        self, pictograph_key: str, pictographs: Dict[Letters, IGPictograph]
-    ) -> None:
-        ig_pictograph: Pictograph = pictographs.pop(pictograph_key, None)
+    def remove_pictograph(self, pictograph_key: str) -> None:
+        ig_pictograph: Pictograph = self.scroll_area.pictographs.pop(
+            pictograph_key, None
+        )
         if ig_pictograph:
             self.scroll_area.layout.removeWidget(ig_pictograph.view)
             ig_pictograph.view.setParent(None)

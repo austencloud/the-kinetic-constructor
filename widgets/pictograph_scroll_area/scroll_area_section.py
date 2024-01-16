@@ -14,14 +14,14 @@ from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
 
 if TYPE_CHECKING:
     from .pictograph_scroll_area import PictographScrollArea
-    from ..filter_frame.filter_tab.filter_tab import ScrollAreaFilterTab
+    from ..filter_frame.filter_tab.filter_tab import FilterTab
 
 
 class ScrollAreaSection(QWidget):
     def __init__(
         self,
         letter_type: LetterTypeNums,
-        filter_tab: "ScrollAreaFilterTab",
+        filter_tab: "FilterTab",
         scroll_area: "PictographScrollArea",
     ) -> None:
         super().__init__(scroll_area)
@@ -106,3 +106,4 @@ class ScrollAreaSection(QWidget):
         window_width = self.scroll_area.width()
         font_size = window_width // 50
         return font_size
+

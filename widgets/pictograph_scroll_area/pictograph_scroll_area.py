@@ -6,13 +6,13 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, QTimer
 from utilities.TypeChecking.TypeChecking import LetterTypeNums, Letters
-from widgets.filter_frame.filter_tab.filter_tab import ScrollAreaFilterTab
+from widgets.filter_frame.filter_tab.filter_tab import FilterTab
 from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
 from widgets.pictograph_scroll_area.scroll_area_section_manager import (
     ScrollAreaSectionManager,
 )
 from .scroll_area_display_manager import ScrollAreaDisplayManager
-from .scroll_area_filter_manager import ScrollAreaFilterFrameManager
+from .scroll_area_filter_manager import ScrollAreaFilterTabManager
 from .scroll_area_pictograph_factory import ScrollAreaPictographFactory
 
 if TYPE_CHECKING:
@@ -32,7 +32,7 @@ class PictographScrollArea(QScrollArea):
         self.pictographs: Dict[Letters, IGPictograph] = {}
         self.pictograph_factory = ScrollAreaPictographFactory(self)
         self.display_manager = ScrollAreaDisplayManager(self)
-        self.filter_frame_manager = ScrollAreaFilterFrameManager(self)
+        self.filter_frame_manager = ScrollAreaFilterTabManager(self)
         self.section_manager = ScrollAreaSectionManager(self)
         self.letters_by_type: Dict[
             LetterTypeNums, List[Letters]
@@ -41,7 +41,11 @@ class PictographScrollArea(QScrollArea):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_arrow_placements)
         self.timer.start(1000)
-
+        self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
+        for letter_type, pictographs in self.pictographs_by_type.items():
+            filter_tab = FilterTab(self)
+            self.section_manager.create_section(letter_type, filter_tab)
+            
     def _setup_ui(self) -> None:
         self.setWidgetResizable(True)
         self.container = QWidget()
@@ -54,14 +58,11 @@ class PictographScrollArea(QScrollArea):
 
     def organize_pictographs_by_type(self) -> None:
         self.section_manager.clear_sections()
-        pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
         for key, pictograph in self.pictographs.items():
             letter_type = self.section_manager.get_pictograph_letter_type(key)
-            pictographs_by_type[letter_type].append(pictograph)
+            self.pictographs_by_type[letter_type].append(pictograph)
 
-        for letter_type, pictographs in pictographs_by_type.items():
-            filter_tab = ScrollAreaFilterTab(self)
-            self.section_manager.create_section(letter_type, filter_tab)
+        for letter_type, pictographs in self.pictographs_by_type.items():
             for index, pictograph in enumerate(pictographs):
                 self.display_manager.add_pictograph_to_layout(pictograph, index)
 
@@ -71,7 +72,6 @@ class PictographScrollArea(QScrollArea):
             self.pictograph_factory.remove_deselected_letter_pictographs(letter)
         self.pictograph_factory.process_selected_letters()
         self.display_manager.cleanup_unused_pictographs()
-        # self.filter_frame_manager.update_filter_frame_if_needed()
         self.organize_pictographs_by_type()
 
     def update_arrow_placements(self) -> None:

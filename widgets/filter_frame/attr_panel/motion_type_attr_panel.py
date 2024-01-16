@@ -31,18 +31,10 @@ class MotionTypeAttrPanel(BaseAttrPanel):
         self.setup_layouts()
         self.layout.addWidget(self.placeholder_label)
 
-        self.pro_attr_box = MotionTypeAttrBox(
-            self, self.parent_tab.scroll_area.pictographs, PRO
-        )
-        self.anti_attr_box = MotionTypeAttrBox(
-            self, self.parent_tab.scroll_area.pictographs, ANTI
-        )
-        self.dash_attr_box = MotionTypeAttrBox(
-            self, self.parent_tab.scroll_area.pictographs, DASH
-        )
-        self.static_attr_box = MotionTypeAttrBox(
-            self, self.parent_tab.scroll_area.pictographs, STATIC
-        )
+        self.pro_attr_box = MotionTypeAttrBox(self, PRO)
+        self.anti_attr_box = MotionTypeAttrBox(self, ANTI)
+        self.dash_attr_box = MotionTypeAttrBox(self, DASH)
+        self.static_attr_box = MotionTypeAttrBox(self, STATIC)
         self.boxes: List[MotionTypeAttrBox] = [
             self.pro_attr_box,
             self.anti_attr_box,
@@ -142,4 +134,3 @@ class MotionTypeAttrPanel(BaseAttrPanel):
             elif total_visible_boxes == 4:
                 box.setMinimumWidth(int(self.width() / 4))
                 box.setMaximumWidth(int(self.width() / 4))
-

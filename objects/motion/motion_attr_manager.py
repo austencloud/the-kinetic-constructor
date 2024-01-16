@@ -16,7 +16,7 @@ from constants import (
 
 if TYPE_CHECKING:
     from widgets.filter_frame.attr_box.base_attr_box import BaseAttrBox
-    from widgets.filter_frame.filter_tab.filter_tab import ScrollAreaFilterTab
+    from widgets.filter_frame.filter_tab.filter_tab import FilterTab
     from objects.motion.motion import Motion
 
 
@@ -25,7 +25,7 @@ class MotionAttrManager:
         self.motion = motion
 
     def update_motion_attributes_from_filter_tab(
-        self, filter_tab: "ScrollAreaFilterTab", pictograph_dict: Dict
+        self, filter_tab: "FilterTab", pictograph_dict: Dict
     ):
         for box in filter_tab.motion_type_attr_panel.boxes:
             if (

@@ -117,4 +117,19 @@ AdjustmentStrs = Literal["-1", "-0.5", "+1", "+0.5"]
 AdjustmentNums = Union[float, int]
 
 LetterTypeNums = Literal["Type1", "Type2", "Type3", "Type4", "Type5", "Type6"]
-LetterTypeDescriptions = Literal["Dual-Shift", "Shift", "Cross-Shift", "Dash", "Dual-Dash", "Static"]
+LetterTypeDescriptions = Literal[
+    "Dual-Shift", "Shift", "Cross-Shift", "Dash", "Dual-Dash", "Static"
+]
+
+MotionAttributes = Literal[
+    "color",
+    "arrow",
+    "prop",
+    "motion_type",
+    "prop_rot_dir",
+    "turns",
+    "start_loc",
+    "start_ori",
+    "end_loc",
+    "end_ori",
+]

@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     )
 
 
-class ScrollAreaFilterFrameManager:
+class ScrollAreaFilterTabManager:
     def __init__(self, scroll_area: "PictographScrollArea") -> None:
         self.scroll_area = scroll_area
         self.filters: Dict[str, Union[Turns, Orientations]] = {}
@@ -31,11 +31,11 @@ class ScrollAreaFilterFrameManager:
                     return False
         return True
 
-    def update_filter_frame_if_needed(self) -> None:
+    def update_filter_tab_if_needed(self) -> None:
         if self.scroll_area.pictographs:
-            self.update_filter_frame()
+            self.update_filter_tab()
 
-    def update_filter_frame(self) -> None:
+    def update_filter_tab(self) -> None:
         first_pictograph = next(iter(self.scroll_area.pictographs.values()), None)
         for motion in first_pictograph.motions.values():
             if (

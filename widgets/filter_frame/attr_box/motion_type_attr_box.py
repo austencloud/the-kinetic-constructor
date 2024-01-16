@@ -23,13 +23,14 @@ class MotionTypeAttrBox(BaseAttrBox):
     def __init__(
         self,
         attr_panel: "MotionTypeAttrPanel",
-        pictographs: List["Pictograph"],
         motion_type: MotionTypes,
     ) -> None:
         super().__init__(attr_panel, None)
         self.attr_panel = attr_panel
         self.motion_type = motion_type
-        self.pictographs: Dict[str, Pictograph] = pictographs
+        self.pictographs: Dict[
+            str, Pictograph
+        ] = self.attr_panel.parent_tab.scroll_area.pictographs
         self.font_size = self.width() // 10
         self.widgets: List[AttrBoxWidget] = []
         self.combobox_border = 2
@@ -47,7 +48,6 @@ class MotionTypeAttrBox(BaseAttrBox):
     def hide_buttons(self) -> None:
         for button in self.header_widget.prop_rot_dir_buttons:
             button.hide()
-            
 
     def show_vtg_dir_buttons(self) -> None:
         for i in range(len(self.header_widget.prop_rot_dir_buttons)):

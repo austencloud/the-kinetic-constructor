@@ -4,7 +4,7 @@ from utilities.TypeChecking.TypeChecking import (
     LetterTypeNums,
     Letters,
 )
-from widgets.filter_frame.filter_tab.filter_tab import ScrollAreaFilterTab
+from widgets.filter_frame.filter_tab.filter_tab import FilterTab
 from widgets.pictograph_scroll_area.scroll_area_section import ScrollAreaSection
 
 if TYPE_CHECKING:
@@ -25,7 +25,6 @@ class ScrollAreaSectionManager:
             letters_by_type[letter_type.description] = letter_type.letters
         return letters_by_type
 
-
     def get_pictograph_letter_type(self, pictograph_key: str) -> str:
         letter = pictograph_key.split("_")[0]
         for letter_type, letters in self.letters_by_type.items():
@@ -41,12 +40,13 @@ class ScrollAreaSectionManager:
                 layout_item.widget().hide()
         self.sections.clear()
 
-    def create_section(self, letter_type: LetterTypeNums, filter_tab: ScrollAreaFilterTab) -> None:
+    def create_section(
+        self, letter_type: LetterTypeNums, filter_tab: FilterTab
+    ) -> None:
         # Instead of creating a QWidget, you will create an instance of the Section class
         section = ScrollAreaSection(letter_type, filter_tab, self.scroll_area)
         self.scroll_area.layout.addWidget(section)
         self.sections[letter_type] = section
-
 
     def create_section_label(self, styled_text: str) -> QLabel:
         """Creates a QLabel for the section label with the given styled text."""
