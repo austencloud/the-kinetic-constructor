@@ -154,7 +154,8 @@ class IGTab(QWidget):
 
         for section in self.scroll_area.section_manager.sections.values():
             if section.letter_type == letter_type:
-                section.update_filter()
+                section.filter_tab.show()
+                section.filter_tab.show_panels_based_on_chosen_letters()
 
         button.setFlat(not is_selected)
         button.setStyleSheet(self.get_button_style(pressed=not is_selected))
