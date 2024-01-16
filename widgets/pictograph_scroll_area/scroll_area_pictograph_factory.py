@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, List, Literal, Set
+from typing import TYPE_CHECKING, List, Literal, Set
 from constants import IG_PICTOGRAPH, OPTION
 from objects.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.letter_lists import all_letters

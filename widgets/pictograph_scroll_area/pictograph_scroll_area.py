@@ -1,19 +1,15 @@
-from typing import TYPE_CHECKING, Dict, List, Union
+from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget
 from PyQt6.QtCore import Qt, QTimer
 from objects.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.TypeChecking import (
     Letters,
 )
-from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
-from ..option_picker_tab.option import Option
 from .scroll_area_display_manager import ScrollAreaDisplayManager
 from .scroll_area_filter_manager import ScrollAreaFilterFrameManager
 from .scroll_area_pictograph_factory import ScrollAreaPictographFactory
 
 if TYPE_CHECKING:
-    from ..option_picker_tab.option_picker_tab import OptionPickerTab
-    from ..ig_tab.ig_tab import IGTab
     from ..main_widget import MainWidget
 
 

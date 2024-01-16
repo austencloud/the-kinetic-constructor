@@ -7,7 +7,6 @@ from constants import (
     RED,
     RED_PROP_ROT_DIR,
     RED_TURNS,
-    SAME,
     STATIC,
 )
 from typing import TYPE_CHECKING, List

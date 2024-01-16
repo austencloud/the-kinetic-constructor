@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtGui import QPixmap
 from constants import LEAD_STATE
-from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import LeadStates, LeadStates
 
 from .base_attr_box import BaseAttrBox

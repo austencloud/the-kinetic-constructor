@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
 
 from PyQt6.QtGui import QPixmap
-from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout
+from PyQt6.QtWidgets import QHBoxLayout
 
 
 class ColorAttrBox(BaseAttrBox):

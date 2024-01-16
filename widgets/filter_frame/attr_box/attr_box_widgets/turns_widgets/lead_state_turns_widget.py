@@ -2,20 +2,13 @@ from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, List, Union
 from constants import (
     BLUE,
-    DASH,
     ICON_DIR,
-    LEADING,
-    NO_ROT,
     RED,
-    STATIC,
-    TRAILING,
 )
 from objects.motion.motion import Motion
-from objects.pictograph.pictograph import Pictograph
 from widgets.filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
     TurnsWidget,
 )
-from widgets.filter_frame.attr_box.base_attr_box import BaseAttrBox
 
 if TYPE_CHECKING:
     from widgets.filter_frame.attr_box.lead_state_attr_box import LeadStateAttrBox
