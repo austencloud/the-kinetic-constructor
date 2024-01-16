@@ -13,12 +13,11 @@ from constants import (
 )
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, List, Tuple
-from objects.arrow.arrow_placement_manager.main_arrow_placement_manager import ArrowPlacementManager
 from utilities.TypeChecking.letter_lists import dash_letters
 from utilities.TypeChecking.TypeChecking import OrientationTypes
 
 if TYPE_CHECKING:
-
+    from .main_arrow_placement_manager import ArrowPlacementManager
     from objects.pictograph.pictograph import Pictograph
 import codecs
 
@@ -41,9 +40,7 @@ class DefaultArrowPlacementManager:
     def _load_default_placements(
         self, motion_type: str
     ) -> Dict[str, Dict[str, List[int]]]:
-        json_filename = self.motion_type_files.get(
-            motion_type, "default_placements.json"
-        )
+        json_filename = self.motion_type_files.get(motion_type)
         json_path = f"arrow_placement/{json_filename}"
         with codecs.open(json_path, "r", encoding="utf-8") as file:
             return json.load(file)

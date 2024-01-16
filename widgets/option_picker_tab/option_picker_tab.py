@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 import pandas as pd
 
 from constants import END_POS, START_POS
-from widgets.filter_frame.filter_tab.filter_tab import FilterTab
+from widgets.filter_frame.filter_tab.filter_tab import ScrollAreaFilterTab
 from .option_picker_scroll_area import OptionPickerScrollArea
 
 if TYPE_CHECKING:
@@ -20,7 +20,8 @@ class OptionPickerTab(QFrame):
     def setup_ui(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.scroll_area = OptionPickerScrollArea(self.main_widget, self)
-        self.filter_tab = FilterTab(self)
+        
+        self.filter_tab = ScrollAreaFilterTab(self.scroll_area)
 
         self.layout.addWidget(self.filter_tab)
         self.layout.addWidget(self.scroll_area)

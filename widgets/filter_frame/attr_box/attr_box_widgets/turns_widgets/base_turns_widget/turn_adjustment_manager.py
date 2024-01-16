@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING, List, Union
 from constants import *
 from objects.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.TypeChecking import (
-    AdjustmentNum,
-    AdjustmentStr,
+    AdjustmentNums,
+    AdjustmentStrs,
     PropRotDirs,
     Turns,
 )
@@ -47,7 +47,7 @@ class TurnAdjustmentManager:
         self.positive_buttons_layout = QVBoxLayout(self.positive_buttons_frame)
 
     def _create_and_add_button(
-        self, adjustment: AdjustmentNum, text: AdjustmentStr
+        self, adjustment: AdjustmentNums, text: AdjustmentStrs
     ) -> AdjustTurnsButton:
         """Create an adjust turns button and add it to the appropriate layout."""
         button: AdjustTurnsButton = self.parent_widget.create_adjust_turns_button(text)
@@ -116,7 +116,7 @@ class TurnAdjustmentManager:
             motion.prop_rot_dir = NO_ROT
             self.unpress_vtg_buttons()
             self.attr_box.hide_buttons()
-            
+
         elif motion.turns == 0:
             self._set_prop_rot_dir_based_on_vtg_state(motion)
 
@@ -156,11 +156,11 @@ class TurnAdjustmentManager:
             if self.attr_box.vtg_dir_btn_state[SAME]:
                 return other_motion.prop_rot_dir
             if self.attr_box.vtg_dir_btn_state[OPP]:
-               if other_motion.prop_rot_dir == CLOCKWISE:
+                if other_motion.prop_rot_dir == CLOCKWISE:
                     return COUNTER_CLOCKWISE
-               elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
                     return CLOCKWISE
-                
+
         elif motion.scene.letter in Type4_letters:
             if other_motion.prop_rot_dir == NO_ROT:
                 self.parent_widget.attr_box.show_prop_rot_dir_buttons()

@@ -8,6 +8,7 @@ from utilities.TypeChecking.TypeChecking import Colors
 from ..ig_scroll.wasd_adjustment_manager.wasd_adjustment_manager import (
     WASD_AdjustmentManager,
 )
+
 if TYPE_CHECKING:
     from ...pictograph_scroll_area.pictograph_scroll_area import PictographScrollArea
 
@@ -51,12 +52,13 @@ class IG_Pictograph_View(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
     def resize_for_scroll_area(self) -> None:
-        view_width = (
-            int(
+        view_width = int(
+            (
                 self.ig_pictograph.ig_scroll_area.width()
                 / self.ig_pictograph.ig_scroll_area.display_manager.COLUMN_COUNT
             )
             - self.ig_pictograph.ig_scroll_area.display_manager.SPACING
+            - 10
         )
 
         self.setMinimumWidth(view_width)

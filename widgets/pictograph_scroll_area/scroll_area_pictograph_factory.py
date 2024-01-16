@@ -50,7 +50,7 @@ class ScrollAreaPictographFactory:
     def create_or_update_pictograph(self, pictograph_dict, letter) -> None:
         pictograph_key = self.generate_pictograph_key_from_dict(pictograph_dict)
         ig_pictograph = self.get_or_create_pictograph(pictograph_key)
-        self.update_pictograph_from_attr_panel(ig_pictograph, pictograph_dict)
+        # self.update_pictograph_from_attr_panel(ig_pictograph, pictograph_dict)
         ig_pictograph.update_pictograph(pictograph_dict)
 
     def update_pictograph_from_attr_panel(

@@ -69,8 +69,8 @@ class MainWidget(QWidget):
         self.sequence_widget = SequenceWidget(self)
         self.graph_editor_tab = GraphEditorTab(self)
         self.option_picker_tab = OptionPickerTab(self)
-        self.parent_tab = IGTab(self)
-        self.parent_tab.imageGenerated.connect(self.on_image_generated)
+        self.ig_tab = IGTab(self)
+        self.ig_tab.imageGenerated.connect(self.on_image_generated)
         self.configure_layouts()
         self.pixmap_cache = {}
 
@@ -185,7 +185,7 @@ class MainWidget(QWidget):
 
             """
         )
-        self.tab_widget.addTab(self.parent_tab, "Image Generator")
+        self.tab_widget.addTab(self.ig_tab, "Image Generator")
         self.tab_widget.addTab(self.graph_editor_tab, "Graph Editor")
         self.tab_widget.addTab(self.option_picker_tab, "Option Picker")
 
@@ -245,7 +245,7 @@ class MainWidget(QWidget):
     def showEvent(self, event) -> None:
         super().showEvent(event)
         self.sequence_widget.resize_sequence_widget()
-        self.parent_tab.resize_tab()
+        # self.parent_tab.resize_tab()
 
     ### IMAGE CACHE ###
 
