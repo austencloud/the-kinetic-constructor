@@ -73,14 +73,8 @@ class MotionTypeAttrPanel(BaseAttrPanel):
                 box.hide()
                 box.turns_widget.turn_display_manager.turns_display.setText("0")
                 if hasattr(box.header_widget, "same_button"):
-                    box.header_widget.same_button.setChecked(False)
-                    box.header_widget.opp_button.setChecked(False)
-                    box.header_widget.same_button.setStyleSheet(
-                        box.header_widget.get_dir_button_style(pressed=False)
-                    )
-                    box.header_widget.opp_button.setStyleSheet(
-                        box.header_widget.get_dir_button_style(pressed=False)
-                    )
+                    box.header_widget.same_button.unpress()
+                    box.header_widget.opp_button.unpress()
         else:
             self.hide_placeholder_message()
             motion_types_in_use = set()

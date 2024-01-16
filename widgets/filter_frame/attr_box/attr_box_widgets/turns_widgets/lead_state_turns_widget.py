@@ -117,13 +117,6 @@ class LeadStateTurnsWidget(TurnsWidget):
                 leading_motions.append(leading_motion)
         return leading_motions
 
-    def _simulate_cw_button_click_in_attr_box_widget(self) -> None:
-        self.attr_box.vtg_dir_widget.same_button.setChecked(True)
-        self.attr_box.vtg_dir_widget.same_button.click()
-
-    def _simulate_cw_button_click(self) -> None:
-        self.attr_box.vtg_dir_widget.same_button.setChecked(True)
-        self.attr_box.vtg_dir_widget.same_button.click()
 
     ### EVENT HANDLERS ###
 

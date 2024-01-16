@@ -5,6 +5,9 @@ from typing import Union, TYPE_CHECKING
 
 
 if TYPE_CHECKING:
+    from ..filter_frame.attr_box.attr_box_widgets.header_widgets.base_header_widget import (
+        HeaderWidget,
+    )
     from ..filter_frame.attr_box.attr_box_widgets.motion_types_widget import (
         MotionTypeWidget,
     )
@@ -14,18 +17,19 @@ if TYPE_CHECKING:
     from ..filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
         TurnsWidget,
     )
+from PyQt6.QtGui import QIcon
 
-
-class PropRotDirButton(QPushButton):
+class VtgDirButton(QPushButton):
     def __init__(
         self,
-        parent_widget: Union["StartEndLocWidget", "TurnsWidget", "MotionTypeWidget"],
+        parent_widget: Union[
+            "StartEndLocWidget", "TurnsWidget", "MotionTypeWidget", "HeaderWidget"
+        ],
     ) -> None:
         super().__init__(parent_widget)
         self.parent_widget = parent_widget
-
-
-    def get_button_style(self, pressed: bool) -> str:
+        
+    def get_vtg_dir_button_style(self, pressed: bool) -> str:
         if pressed:
             return """
                 QPushButton {
@@ -49,7 +53,13 @@ class PropRotDirButton(QPushButton):
             """
 
     def press(self) -> None:
-        self.setStyleSheet(self.get_button_style(pressed=True))
-    
+        self.setStyleSheet(self.get_vtg_dir_button_style(pressed=True))
+
     def unpress(self) -> None:
-        self.setStyleSheet(self.get_button_style(pressed=False))
+        self.setStyleSheet(self.get_vtg_dir_button_style(pressed=False))
+
+    def is_pressed(self) -> bool:
+        return self.styleSheet() == self.get_vtg_dir_button_style(pressed=True)
+    
+    def is_unpressed(self) -> bool:
+        return self.styleSheet() == self.get_vtg_dir_button_style(pressed=False)

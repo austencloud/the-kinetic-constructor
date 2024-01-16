@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Callable, Union
 from constants import ICON_DIR
 from widgets.buttons.prop_rot_dir_button import PropRotDirButton
 from widgets.buttons.swap_button import SwapButton
+from widgets.buttons.vtg_dir_button import VtgDirButton
 
 if TYPE_CHECKING:
     from widgets.filter_frame.attr_box.base_attr_box import BaseAttrBox
@@ -35,28 +36,29 @@ class AttrBoxWidget(QWidget):
         frame.setLayout(layout)
         return frame
 
+    def create_vtg_dir_button(
+        self, icon_path: str, callback: Callable
+    ) -> "VtgDirButton":
+        button = VtgDirButton(self.attr_box)
+        button.setIcon(QIcon(icon_path))
+        button.clicked.connect(callback)
+        return button
+
     def create_prop_rot_dir_button(
         self, icon_path: str, callback: Callable
     ) -> "PropRotDirButton":
-        button = PropRotDirButton(self.attr_box, icon_path)
-        button.setIcon(QIcon(ICON_DIR + icon_path))
+        button = PropRotDirButton(self.attr_box)
+        button.setIcon(QIcon(icon_path))
         button.clicked.connect(callback)
         return button
-    
-    def create_swap_button(
-        self, icon_path: str, callback: Callable
-    ) -> "SwapButton":
+
+    def create_swap_button(self, icon_path: str, callback: Callable) -> "SwapButton":
         button = SwapButton(self.attr_box, icon_path)
-        button.setIcon(QIcon(ICON_DIR + icon_path))
+        button.setIcon(QIcon(icon_path))
         button.clicked.connect(callback)
         return button
 
-    
-
-
-    def create_adjust_turns_button(
-        self, text: str
-    ) -> AdjustTurnsButton:
+    def create_adjust_turns_button(self, text: str) -> AdjustTurnsButton:
         button = AdjustTurnsButton(self)
         button.setText(text)
         return button
@@ -72,26 +74,3 @@ class AttrBoxWidget(QWidget):
             f"{motion.color}_turns": new_turns,
         }
         motion.scene.update_pictograph(pictograph_dict)
-
-    def get_dir_button_style(self, pressed: bool) -> str:
-        if pressed:
-            return """
-                QPushButton {
-                    background-color: #ccd9ff;
-                    border: 2px solid #555555;
-                    border-bottom-color: #888888; /* darker shadow on the bottom */
-                    border-right-color: #888888; /* darker shadow on the right */
-                    padding: 5px;
-                }
-            """
-        else:
-            return """
-                QPushButton {
-                    background-color: white;
-                    border: 1px solid black;
-                    padding: 5px;
-                }
-                QPushButton:hover {
-                    background-color: #e6f0ff;
-                }
-            """

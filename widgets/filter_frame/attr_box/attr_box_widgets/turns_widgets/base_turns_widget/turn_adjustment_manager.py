@@ -75,10 +75,10 @@ class TurnAdjustmentManager:
         """Unpress the vtg buttons."""
         if hasattr(self.attr_box, "same_button"):
             self.attr_box.header_widget.same_button.setStyleSheet(
-                self.attr_box.header_widget.get_dir_button_style(pressed=False)
+                self.attr_box.header_widget.get_vtg_dir_button_style(pressed=False)
             )
             self.attr_box.header_widget.opp_button.setStyleSheet(
-                self.attr_box.header_widget.get_dir_button_style(pressed=False)
+                self.attr_box.header_widget.get_vtg_dir_button_style(pressed=False)
             )
 
     ### UPDATE ###
@@ -130,14 +130,15 @@ class TurnAdjustmentManager:
 
     def _update_vtg_button_styles(self) -> None:
         """Update the vtg button styles."""
-        same_pressed = self.attr_box.vtg_dir_btn_state[SAME]
-        opp_pressed = self.attr_box.vtg_dir_btn_state[OPP]
-        self.attr_box.header_widget.same_button.setStyleSheet(
-            self.attr_box.header_widget.get_dir_button_style(pressed=same_pressed)
-        )
-        self.attr_box.header_widget.opp_button.setStyleSheet(
-            self.attr_box.header_widget.get_dir_button_style(pressed=opp_pressed)
-        )
+        if self.attr_box.vtg_dir_btn_state[SAME]:
+            self.attr_box.header_widget.same_button.press()
+            self.attr_box.header_widget.opp_button.unpress()
+        elif self.attr_box.vtg_dir_btn_state[OPP]:
+            self.attr_box.header_widget.same_button.unpress()
+            self.attr_box.header_widget.opp_button.press()
+        else:
+            self.attr_box.header_widget.same_button.unpress()
+            self.attr_box.header_widget.opp_button.unpress()
 
     def _determine_prop_rot_dir(
         self, motion: "Motion", other_motion: "Motion"
@@ -167,11 +168,7 @@ class TurnAdjustmentManager:
 
             if other_motion.prop_rot_dir == NO_ROT:
                 self.parent_widget.attr_box.swap_prop_rot_dir_buttons_and_vtg_dir_buttons()
-                self.parent_widget.attr_box.header_widget.cw_button.setStyleSheet(
-                    self.parent_widget.attr_box.header_widget.get_dir_button_style(
-                        pressed=True
-                    )
-                )
+                self.parent_widget.attr_box.header_widget.cw_button.press()
                 return CLOCKWISE
 
     def _set_vtg_dir_state_default(self) -> None:
