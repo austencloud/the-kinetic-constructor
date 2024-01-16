@@ -74,10 +74,10 @@ class TurnAdjustmentManager:
     def unpress_vtg_buttons(self) -> None:
         """Unpress the vtg buttons."""
         if hasattr(self.attr_box, "same_button"):
-            self.attr_box.same_button.setStyleSheet(
+            self.attr_box.header_widget.same_button.setStyleSheet(
                 self.attr_box.header_widget.get_dir_button_style(pressed=False)
             )
-            self.attr_box.opp_button.setStyleSheet(
+            self.attr_box.header_widget.opp_button.setStyleSheet(
                 self.attr_box.header_widget.get_dir_button_style(pressed=False)
             )
 
@@ -132,10 +132,10 @@ class TurnAdjustmentManager:
         """Update the vtg button styles."""
         same_pressed = self.attr_box.vtg_dir_btn_state[SAME]
         opp_pressed = self.attr_box.vtg_dir_btn_state[OPP]
-        self.attr_box.same_button.setStyleSheet(
+        self.attr_box.header_widget.same_button.setStyleSheet(
             self.attr_box.header_widget.get_dir_button_style(pressed=same_pressed)
         )
-        self.attr_box.opp_button.setStyleSheet(
+        self.attr_box.header_widget.opp_button.setStyleSheet(
             self.attr_box.header_widget.get_dir_button_style(pressed=opp_pressed)
         )
 
@@ -143,12 +143,12 @@ class TurnAdjustmentManager:
         self, motion: "Motion", other_motion: "Motion"
     ) -> PropRotDirs:
         """Determine the property rotation direction."""
-        if (
-            not self.attr_box.vtg_dir_btn_state[SAME]
-            and not self.attr_box.vtg_dir_btn_state[OPP]
-        ):
-            self._set_vtg_dir_state_default()
-        if motion.scene.letter in Type2_letters or Type3_letters:
+        if motion.scene.letter in Type2_letters or motion.scene.letter in Type3_letters:
+            if (
+                not self.attr_box.vtg_dir_btn_state[SAME]
+                and not self.attr_box.vtg_dir_btn_state[OPP]
+            ):
+                self._set_vtg_dir_state_default()
             if self.attr_box.vtg_dir_btn_state[SAME]:
                 return other_motion.prop_rot_dir
             if self.attr_box.vtg_dir_btn_state[OPP]:
@@ -157,13 +157,22 @@ class TurnAdjustmentManager:
                     if other_motion.prop_rot_dir == CLOCKWISE
                     else CLOCKWISE
                 )
-        # elif motion.scene.letter in Type4_letters:
-        #     # if other_motion.prop_rot_dir == NO_ROT, then we should set the prop rot dir of our motion to clockwise by default.
-        #     # When this is the case (one dash/static has turns and the other one doesn't), we want to be
-        #     # able to set the prop rot dir directly. So we need special buttons in the attr box that should appear in place of the
-        #     # vtg dir buttons for this specific senario. These buttons should be be the CW and CCW clocks.
-        #     # Once the other motion has turns, then we can revert back to the normal vtg dir buttons.
-        #     # if the other motion's prop rot is not NO_ROT, then we want to apply the logic to set it based on the vtg dir state as normal.
+        elif motion.scene.letter in Type4_letters:
+            # if other_motion.prop_rot_dir == NO_ROT, then we should set the prop rot dir of our motion to clockwise by default.
+            # When this is the case (one dash/static has turns and the other one doesn't), we want to be
+            # able to set the prop rot dir directly. So we need special buttons in the attr box that should appear in place of the
+            # vtg dir buttons for this specific senario. These buttons should be be the CW and CCW clocks.
+            # Once the other motion has turns, then we can revert back to the normal vtg dir buttons.
+            # if the other motion's prop rot is not NO_ROT, then we want to apply the logic to set it based on the vtg dir state as normal.
+
+            if other_motion.prop_rot_dir == NO_ROT:
+                self.parent_widget.attr_box.swap_prop_rot_dir_buttons_and_vtg_dir_buttons()
+                self.parent_widget.attr_box.header_widget.cw_button.setStyleSheet(
+                    self.parent_widget.attr_box.header_widget.get_dir_button_style(
+                        pressed=True
+                    )
+                )
+                return CLOCKWISE
 
     def _set_vtg_dir_state_default(self) -> None:
         """Set the vtg direction state to default."""

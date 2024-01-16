@@ -45,7 +45,10 @@ class BaseAttrBox(QFrame):
 
     def apply_border_style(self, color_hex: str) -> None:
         self.setStyleSheet(
-            f"#AttributeBox {{ border: {self.border_width}px solid {color_hex}; border-style: inset; }}"
+            f"#AttributeBox {{ "
+            f"border: {self.border_width}px solid {color_hex};"
+            f" border-style: inset; "
+            f"}}"
         )
 
     ### CREATE LABELS ###

@@ -28,11 +28,7 @@ class TurnsWidget(AttrBoxWidget):
         self.turn_direct_set_manager = TurnDirectSetManager(self)
         self.turn_adjustment_manager = TurnAdjustmentManager(self.attr_box, self)
         self.turn_display_manager = TurnDisplayManager(self, self.attr_box)
-        if hasattr(self.attr_box, "same_button"):
-            self.same_button = self.attr_box.same_button
-            self.opp_button = self.attr_box.opp_button
-            self.same_opp_buttons = [self.same_button, self.opp_button]
-            self.pictographs = self.attr_box.pictographs
+
         self.initialize_components()
         self.setup_ui()
 
@@ -48,25 +44,29 @@ class TurnsWidget(AttrBoxWidget):
 
     def _setup_prop_rot_dir_buttons(self):
         # Create CW and CCW buttons here and hide them initially
-        self.cw_button = PropRotDirButton(self.attr_box, CLOCKWISE)
-        self.ccw_button = PropRotDirButton(self.attr_box, COUNTER_CLOCKWISE)
-        self.cw_button.hide()
-        self.ccw_button.hide()
+        self.attr_box.header_widget.cw_button = PropRotDirButton(
+            self.attr_box, CLOCKWISE
+        )
+        self.attr_box.header_widgetccw_button = PropRotDirButton(
+            self.attr_box, COUNTER_CLOCKWISE
+        )
+        self.attr_box.header_widget.cw_button.hide()
+        self.attr_box.header_widgetccw_button.hide()
 
         # Add logic to determine when to show VTG buttons or CW/CCW buttons
         self._update_button_visibility()
 
     def _update_button_visibility(self):
         if self._should_show_cw_ccw_buttons():
-            self.same_button.hide()
-            self.opp_button.hide()
-            self.cw_button.show()
-            self.ccw_button.show()
+            self.attr_box.header_widget.same_button.hide()
+            self.attr_box.header_widget.opp_button.hide()
+            self.attr_box.header_widget.cw_button.show()
+            self.attr_box.header_widgetccw_button.show()
         else:
-            self.cw_button.hide()
-            self.ccw_button.hide()
-            self.same_button.show()
-            self.opp_button.show()
+            self.attr_box.header_widget.cw_button.hide()
+            self.attr_box.header_widgetccw_button.hide()
+            self.attr_box.header_widget.same_button.show()
+            self.attr_box.header_widget.opp_button.show()
 
     def _should_show_cw_ccw_buttons(self):
         # Logic to determine if the CW/CCW buttons should be shown

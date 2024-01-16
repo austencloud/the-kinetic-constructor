@@ -32,14 +32,9 @@ class ColorAttrBox(BaseAttrBox):
         self.widgets: List[AttrBoxWidget] = []
         self.combobox_border = 2
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
-        self.hbox_layout = QHBoxLayout()
-        self.vbox2 = QVBoxLayout()
-        self.layout: QHBoxLayout = self.hbox_layout
+        self.hbox_layout = QHBoxLayout(self)
         self.hbox_layout.addLayout(self.vbox_layout)
         self._setup_widgets()
-        self.same_button = self.vtg_dir_widget.same_button
-        self.opp_button = self.vtg_dir_widget.opp_button
-        self.vtg_dir_buttons = [self.same_button, self.opp_button]
         self.attribute_type = COLOR
         self.vtg_dir_btn_state = {SAME: True, OPP: False}
 

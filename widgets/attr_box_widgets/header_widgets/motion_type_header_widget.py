@@ -130,9 +130,7 @@ class MotionTypeHeaderWidget(BaseHeaderWidget):
         )
         self.same_button.setStyleSheet(self.get_dir_button_style(pressed=False))
         self.opp_button.setStyleSheet(self.get_dir_button_style(pressed=False))
-
-        buttons = [self.same_button, self.opp_button]
-        return buttons
+        return [self.same_button, self.opp_button]
 
     def _setup_prop_rot_dir_buttons(self) -> List[QPushButton]:
         self.cw_button: QPushButton = self._create_button(
@@ -142,13 +140,11 @@ class MotionTypeHeaderWidget(BaseHeaderWidget):
             f"{ICON_DIR}clock/counter_clockwise.png",
             lambda: self._set_vtg_dir(OPP),
         )
-
         self.cw_button.setStyleSheet(self.get_dir_button_style(pressed=False))
         self.ccw_button.setStyleSheet(self.get_dir_button_style(pressed=False))
         self.cw_button.hide()
         self.ccw_button.hide()
-        buttons = [self.cw_button, self.ccw_button]
-        return buttons
+        return [self.cw_button, self.ccw_button]
 
     def _create_button(self, icon_path, action) -> QPushButton:
         button = QPushButton("", self)
