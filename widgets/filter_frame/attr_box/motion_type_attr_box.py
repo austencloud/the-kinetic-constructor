@@ -73,7 +73,6 @@ class MotionTypeAttrBox(BaseAttrBox):
     def resize_ig_motion_type_attr_box(self) -> None:
         self.header_widget.resize_header_widget()
         self.turns_widget.resize_turns_widget()
-        self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))
 
     def get_pictographs(self) -> List["Pictograph"]:
         return list(self.attr_panel.parent_tab.scroll_area.pictographs.values())

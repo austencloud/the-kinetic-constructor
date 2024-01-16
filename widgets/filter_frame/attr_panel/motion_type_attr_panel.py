@@ -27,7 +27,6 @@ class MotionTypeAttrPanel(BaseAttrPanel):
         self.placeholder_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.placeholder_label.setFont(QFont("Arial", 14))
         self.placeholder_label.setWordWrap(True)
-        # Add the placeholder label to the layout
         self.setup_layouts()
         self.layout.addWidget(self.placeholder_label)
 
@@ -75,20 +74,7 @@ class MotionTypeAttrPanel(BaseAttrPanel):
                 box.setVisible(box.motion_type in motion_types_in_use)
                 self.layout.addWidget(box)
                 box.resize_ig_motion_type_attr_box()
-            # if the number of visible boxes is 4,
-            for box in self.boxes:
-                if len([box for box in self.boxes if box.isVisible()]) == 4:
-                    box.setMinimumWidth(int(self.width() / 4 * 0.95))
-                    box.setMaximumWidth(int(self.width() / 4 * 0.95))
-                elif len([box for box in self.boxes if box.isVisible()]) == 3:
-                    box.setMinimumWidth(int(self.width() / 3 * 0.95))
-                    box.setMaximumWidth(int(self.width() / 3 * 0.95))
-                elif len([box for box in self.boxes if box.isVisible()]) == 2:
-                    box.setMinimumWidth(int(self.width() / 2 * 0.95))
-                    box.setMaximumWidth(int(self.width() / 2 * 0.95))
-                elif len([box for box in self.boxes if box.isVisible()]) == 1:
-                    box.setMinimumWidth(int(self.width() * 0.95))
-                    box.setMaximumWidth(int(self.width() * 0.95))
+
 
     def hide_placeholder_message(self) -> None:
         """Hide the placeholder message."""

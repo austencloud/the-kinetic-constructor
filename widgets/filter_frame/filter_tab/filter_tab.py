@@ -28,9 +28,7 @@ class FilterTab(QTabWidget):
         self.motion_type_attr_panel = MotionTypeAttrPanel(self.scroll_area.parent_tab)
         self.color_attr_panel = ColorAttrPanel(self.scroll_area.parent_tab)
         self.lead_state_attr_panel = IGLeadStateAttrPanel(self.scroll_area.parent_tab)
-        # self.addTab(self.motion_type_attr_panel, "Filter by Motion Type")
-        # self.addTab(self.color_attr_panel, "Filter by Colors")
-        # self.addTab(self.lead_state_attr_panel, "Filter by Lead State")
+
         self.tabs: List[MotionTypeAttrPanel | ColorAttrPanel | IGLeadStateAttrPanel] = [
             self.motion_type_attr_panel,
             self.color_attr_panel,
@@ -40,7 +38,6 @@ class FilterTab(QTabWidget):
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.setMinimumHeight(self.color_attr_panel.height())
 
     def show_tab(self, tabs: List[MotionAttributes]) -> None:
         for tab in tabs:

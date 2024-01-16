@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton
 from PyQt6.QtCore import Qt
-
+from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, List
 from utilities.TypeChecking.TypeChecking import MotionTypes, VtgDirections
 from widgets.buttons.prop_rot_dir_button import PropRotDirButton
@@ -174,6 +174,7 @@ class MotionTypeHeaderWidget(HeaderWidget):
     def resize_header_widget(self) -> None:
         self.setMinimumHeight(int(self.attr_box.height() / 4))
         self.setMaximumHeight(int(self.attr_box.height() / 4))
+        self.header_label.setFont(QFont("Arial", int(self.width() / 10)))
 
         if self.motion_type in [DASH, STATIC]:
             button_size = int(self.height() * 0.9)
