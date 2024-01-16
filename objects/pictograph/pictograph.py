@@ -653,3 +653,15 @@ class Pictograph(QGraphicsScene):
 
     def has_all_antiradial_props(self) -> bool:
         return all(prop.is_antiradial() for prop in self.props.values())
+
+    def has_a_dash(self) -> bool:
+        for motion in self.motions.values():
+            if motion.motion_type == DASH:
+                return True
+        return False
+
+    def has_a_static_motion(self) -> bool:
+        for motion in self.motions.values():
+            if motion.motion_type == STATIC:
+                return True
+        return False

@@ -1,4 +1,15 @@
-from constants import BLUE, RED, SAME
+from constants import (
+    BLUE,
+    BLUE_PROP_ROT_DIR,
+    BLUE_TURNS,
+    DASH,
+    NO_ROT,
+    RED,
+    RED_PROP_ROT_DIR,
+    RED_TURNS,
+    SAME,
+    STATIC,
+)
 from typing import TYPE_CHECKING, List
 from utilities.TypeChecking.TypeChecking import Colors, Turns
 from widgets.filter_frame.attr_box.color_attr_box import ColorAttrBox
@@ -61,5 +72,16 @@ class ColorAttrPanel(BaseAttrPanel):
     def reset_turns(self) -> None:
         for box in self.boxes:
             box.turns_widget.turn_display_manager.turns_display.setText("0")
-            box.vtg_dir_btn_state[SAME] = False
-            box.vtg_dir_btn_state[BLUE] = False
+
+        for pictograph in self.parent_tab.scroll_area.pictographs.values():
+            pictograph_dict = {
+                BLUE_TURNS: 0,
+                RED_TURNS: 0,
+            }
+            if pictograph.has_a_dash() or pictograph.has_a_static_motion():
+                if pictograph.motions[BLUE].motion_type in [DASH, STATIC]:
+                    pictograph_dict[BLUE_PROP_ROT_DIR] = NO_ROT
+                elif pictograph.motions[RED].motion_type in [DASH, STATIC]:
+                    pictograph_dict[RED_PROP_ROT_DIR] = NO_ROT
+
+            pictograph.update_pictograph(pictograph_dict)
