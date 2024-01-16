@@ -44,9 +44,9 @@ class ScrollAreaDisplayManager:
 
         # If the section exists, add the pictograph to it
         if section_layout:
-            pictograph_count = section_layout.count() - 1  # Subtracting the label at the start
-            row = pictograph_count // self.COLUMN_COUNT
-            col = pictograph_count % self.COLUMN_COUNT
+
+            row = index // self.COLUMN_COUNT + 1 
+            col = index % self.COLUMN_COUNT
             section_layout.addWidget(ig_pictograph.view, row, col)
             ig_pictograph.view.resize_for_scroll_area()
         else:

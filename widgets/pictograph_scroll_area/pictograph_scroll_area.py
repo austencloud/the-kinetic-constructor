@@ -4,9 +4,8 @@ from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
     QLabel,
-    QGraphicsView,
-    QHBoxLayout,
     QGridLayout,
+    QSizePolicy,
 )
 from PyQt6.QtCore import Qt, QTimer
 from Enums import LetterNumberType
@@ -60,15 +59,13 @@ class PictographScrollArea(QScrollArea):
                 return letter_type
         return "Unknown"
 
-    def organize_pictographs(self) -> None:
-        # Clear previous sections before setting up new ones
+    def organize_pictographs_by_type(self) -> None:
         self.clear_sections()
         pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
         for key, pictograph in self.pictographs.items():
             letter_type = self.get_pictograph_letter_type(key)
             pictographs_by_type[letter_type].append(pictograph)
 
-        # Create sections and add pictographs to them
         for letter_type, pictographs in pictographs_by_type.items():
             self.create_section(letter_type)
             for index, pictograph in enumerate(pictographs):
@@ -81,22 +78,7 @@ class PictographScrollArea(QScrollArea):
         self.pictograph_factory.process_selected_letters()
         self.display_manager.cleanup_unused_pictographs()
         self.filter_frame_manager.update_filter_frame_if_needed()
-
-        # Organize pictographs by their types after updates
-        self.organize_pictographs()
-
-    def organize_pictographs_by_type(self) -> Dict[str, List[IGPictograph]]:
-        pictographs_by_type = {
-            type_desc: [] for type_desc in LetterNumberType._member_names_
-        }
-
-        for key, ig_pictograph in self.pictographs.items():
-            letter = key.split("_")[0]
-            letter_type = ig_pictograph._get_letter_type(letter)
-            if letter_type:
-                pictographs_by_type[letter_type].append(ig_pictograph)
-
-        return pictographs_by_type
+        self.organize_pictographs_by_type()
 
     def clear_sections(self) -> None:
         """Clears all sections from the layout."""
@@ -106,23 +88,72 @@ class PictographScrollArea(QScrollArea):
                 layout_item.widget().hide()
         self.sections.clear()
 
-    def create_section(self, letter_type: str):
+    # In PictographScrollArea class
+
+    def create_section(self, letter_type: str) -> None:
         """Creates a new section for a given letter type."""
         section_frame = QWidget()
         section_layout = QGridLayout(section_frame)
-        section_label = QLabel(f"{letter_type} - Dual-Shifts")
-        section_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        section_layout.addWidget(section_label)
+        type_map = {
+            "Type1": "Dual-Shifts",
+            "Type2": "Shifts",
+            "Type3": "Cross-Shifts",
+            "Type4": "Dashes",
+            "Type5": "Dual-Dashes",
+            "Type6": "Statics",
+        }
+
+        colors = {
+            "Shift": "#800080",  # purple
+            "Shifts": "#800080",  # purple
+            "Dual": "#008080",  # teal
+            "Dash": "#008000",  # green
+            "Dashes": "#008000",  # green
+            "Cross": "#008000",  # green
+            "Statics": "#FFA500",  # orange
+            "-": "black",  # Assuming you want the hyphen in 'Dual-Dash
+        }
+
+        # Extract the words from type_name for styling
+        type_words = type_map[letter_type].split("-")
+
+        # Apply HTML styling to each word based on its meaning
+        styled_words = []
+        for word in type_words:
+            color = colors.get(word, "black")
+            styled_words.append(f"<span style='color: {color};'>{word}</span>")
+
+        styled_type_name = (
+            "-".join(styled_words)
+            if "-" in type_map[letter_type]
+            else "".join(styled_words)
+        )
+
+        styled_text = f"{letter_type[0:4]} {letter_type[4]}: {styled_type_name}"
+        section_label = QLabel()
+        section_label.setText(styled_text)  # Set the HTML styled text
+        font_size = self.calculate_font_size()
+
+        section_label.setStyleSheet(f"font-size: {font_size}px; font-weight: bold;")
+
+        size_policy = QSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
+        )
+        section_label.setSizePolicy(size_policy)
+
+        section_label.setMinimumSize(section_label.sizeHint())
+
+        section_layout.addWidget(
+            section_label, 0, 0, 1, self.display_manager.COLUMN_COUNT
+        )
         self.layout.addWidget(section_frame)
         self.sections[letter_type] = section_layout
 
-    def add_pictograph_to_section(
-        self, pictograph_view: QGraphicsView, letter_type: str
-    ) -> None:
-        """Adds a pictograph view to the section corresponding to its letter type."""
-        section_layout = self.sections.get(letter_type)
-        if section_layout:
-            section_layout.addWidget(pictograph_view)
+    def calculate_font_size(self) -> int:
+        # Calculate the font size relative to the window size
+        window_width = self.width()
+        font_size = window_width // 50  # Adjust the division factor as needed
+        return font_size
 
     def update_arrow_placements(self) -> None:
         for pictograph in self.pictographs.values():

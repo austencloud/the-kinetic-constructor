@@ -36,9 +36,13 @@ class FilterTab(QTabWidget):
             self.lead_state_attr_panel,
         ]
         self.currentChanged.connect(self.parent_tab.resize_tab)
-        self.currentChanged.connect(self.lead_state_attr_panel.reset_turns)
-        self.currentChanged.connect(self.motion_type_attr_panel.reset_turns)
-        self.currentChanged.connect(self.color_attr_panel.reset_turns)
+        if self.lead_state_attr_panel.isVisible():
+            self.currentChanged.connect(self.lead_state_attr_panel.reset_turns)
+        elif self.motion_type_attr_panel.isVisible():
+            self.currentChanged.connect(self.motion_type_attr_panel.reset_turns)
+        elif self.color_attr_panel.isVisible():
+            self.currentChanged.connect(self.color_attr_panel.reset_turns)
+
         self.setContentsMargins(0, 0, 0, 0)
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setSpacing(0)

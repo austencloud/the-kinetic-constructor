@@ -13,13 +13,12 @@ from constants import (
 )
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, List, Tuple
+from objects.arrow.arrow_placement_manager.main_arrow_placement_manager import ArrowPlacementManager
 from utilities.TypeChecking.letter_lists import dash_letters
 from utilities.TypeChecking.TypeChecking import OrientationTypes
 
 if TYPE_CHECKING:
-    from objects.arrow.arrow_placement_manager.main_arrow_placement_manager import (
-        ArrowPlacementManager,
-    )
+
     from objects.pictograph.pictograph import Pictograph
 import codecs
 
@@ -28,10 +27,10 @@ class DefaultArrowPlacementManager:
     def __init__(
         self,
         pictograph: "Pictograph",
-        main_arrow_placement_manager: "ArrowPlacementManager",
+        arrow_placement_manager: "ArrowPlacementManager",
     ) -> None:
         self.pictograph = pictograph
-        self.main_arrow_placement_manager = main_arrow_placement_manager
+        self.arrow_placement_manager = arrow_placement_manager
         self.motion_type_files = {
             PRO: "pro_placements.json",
             ANTI: "anti_placements.json",
