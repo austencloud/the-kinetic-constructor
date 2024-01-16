@@ -98,9 +98,6 @@ class ArrowRotAngleManager:
             self.arrow.motion.prop_rot_dir
         ].get(self.arrow.loc, 0)
 
-    def _get_dash_angle(self) -> int:
-        return self._get_default_dash_angle()
-
     def _get_static_angle(self) -> int:
         direction_map = {
             IN: {
@@ -119,7 +116,6 @@ class ArrowRotAngleManager:
             .get(self.arrow.motion.prop_rot_dir)
             .get(self.arrow.loc)
         )
-
 
     def _get_motion_specific_angle(self) -> int:
         motion_type = self.arrow.motion_type
@@ -195,24 +191,16 @@ class ArrowRotAngleManager:
             )
         return 0
 
-    def _get_default_dash_angle(
+    def _get_dash_angle(
         self,
     ) -> Dict[Orientations, Dict[PropRotDirs, Dict[Locations, int]]]:
         if self.arrow.motion.prop_rot_dir == NO_ROT:
-            if self.other_motion.prop_rot_dir == CLOCKWISE:
-                return {
-                    (NORTH, SOUTH): 90,
-                    (SOUTH, NORTH): 270,
-                    (EAST, WEST): 180,
-                    (WEST, EAST): 0,
-                }.get((self.arrow.motion.start_loc, self.arrow.motion.end_loc), {})
-            elif self.other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                return {
-                    (NORTH, SOUTH): 90,
-                    (SOUTH, NORTH): 270,
-                    (EAST, WEST): 180,
-                    (WEST, EAST): 0,
-                }.get((self.arrow.motion.start_loc, self.arrow.motion.end_loc), {})
+            return {
+                (NORTH, SOUTH): 90,
+                (SOUTH, NORTH): 270,
+                (EAST, WEST): 180,
+                (WEST, EAST): 0,
+            }.get((self.arrow.motion.start_loc, self.arrow.motion.end_loc), {})
 
         elif self.arrow.motion.prop_rot_dir in [CLOCKWISE, COUNTER_CLOCKWISE]:
             orientation_map = {
@@ -230,6 +218,3 @@ class ArrowRotAngleManager:
                 .get(self.arrow.motion.prop_rot_dir)
                 .get(self.arrow.loc)
             )
-
-
-

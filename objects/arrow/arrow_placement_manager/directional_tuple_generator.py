@@ -35,18 +35,26 @@ class DirectionalTupleGenerator:
             (ANTI, COUNTER_CLOCKWISE): [(x, y), (-y, x), (-x, -y), (y, -x)],
         }
 
-        pro_vs_dash_no_rot_dash_directional_tuples = (
+        pro_vs_no_rot_dash_directional_tuples = (
             [(x, y), (-y, x), (-x, -y), (y, -x)]
             if self.other_motion.prop_rot_dir == CLOCKWISE
             else [(-x, y), (-y, -x), (x, -y), (y, x)]  # COUNTER_CLOCKWISE
         )
 
-        anti_vs_dash_no_rot_dash_directional_tuples = (
+        anti_vs_no_rot_dash_directional_tuples = (
             [(-x, y), (-y, -x), (x, -y), (y, x)]
             if self.other_motion.prop_rot_dir == CLOCKWISE
             else [(x, y), (-y, x), (-x, -y), (y, -x)]  # COUNTER_CLOCKWISE
         )
 
+        no_rot_dash_vs_dash_directional_tuples = (
+            [(x, y), (-y, x), (-x, -y), (y, -x)]
+        )
+
+        no_rot_dash_vs_static_directional_tuples = (
+            [(x, y), (-y, x), (-x, -y), (y, -x)]
+        )
+        
         same_dash_directional_tuples = {
             (DASH, CLOCKWISE): ([(x, -y), (y, x), (-x, y), (-y, -x)]),
             (DASH, COUNTER_CLOCKWISE): ([(-x, -y), (y, -x), (x, y), (-y, x)]),
@@ -69,14 +77,17 @@ class DirectionalTupleGenerator:
             and prop_rot_dir == NO_ROT
             and self.other_motion.motion_type == PRO
         ):
-            return pro_vs_dash_no_rot_dash_directional_tuples
+            return pro_vs_no_rot_dash_directional_tuples
         elif (
             motion_type == DASH
             and prop_rot_dir == NO_ROT
             and self.other_motion.motion_type == ANTI
         ):
-            return anti_vs_dash_no_rot_dash_directional_tuples
-
+            return anti_vs_no_rot_dash_directional_tuples
+        elif motion_type == DASH and prop_rot_dir == NO_ROT and self.other_motion.motion_type == DASH:
+            return no_rot_dash_vs_dash_directional_tuples
+        elif motion_type == DASH and prop_rot_dir == NO_ROT and self.other_motion.motion_type == STATIC:
+            return no_rot_dash_vs_static_directional_tuples
         elif motion_type == DASH and self.motion.scene.vtg_timing == SAME:
             return same_dash_directional_tuples.get((motion_type, prop_rot_dir), [])
         elif motion_type == DASH and self.motion.scene.vtg_timing == OPP:

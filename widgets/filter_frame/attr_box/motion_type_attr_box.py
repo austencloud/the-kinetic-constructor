@@ -8,7 +8,7 @@ from .attr_box_widgets.turns_widgets.motion_type_turns_widget import (
 )
 from .base_attr_box import BaseAttrBox
 from ...attr_box_widgets.header_widgets.motion_type_header_widget import (
-    IGMotionTypeHeaderWidget,
+    MotionTypeHeaderWidget,
 )
 
 if TYPE_CHECKING:
@@ -47,9 +47,9 @@ class MotionTypeAttrBox(BaseAttrBox):
             self.same_opp_buttons = [self.same_button, self.opp_button]
             self.vtg_dir_btn_state = {SAME: False, OPP: False}
             self.vtg_dir_buttons = self.header_widget.vtg_dir_buttons
-            
+
     def _setup_widgets(self) -> None:
-        self.header_widget = IGMotionTypeHeaderWidget(self, self.motion_type)
+        self.header_widget = MotionTypeHeaderWidget(self, self.motion_type)
         self.turns_widget = MotionTypeTurnsWidget(self)
         self.vbox_layout.addWidget(self.header_widget, 1)
         self.vbox_layout.addWidget(self.turns_widget, 2)

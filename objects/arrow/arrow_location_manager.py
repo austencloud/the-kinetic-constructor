@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Callable
-from utilities.TypeChecking.letter_lists import Type3_letters
+from utilities.TypeChecking.letter_lists import Type3_letters, Type4_letters
 from utilities.TypeChecking.TypeChecking import Locations
 from constants import *
 
@@ -50,11 +50,12 @@ class ArrowLocationManager:
 
     def _dash_location_zero_turns(self) -> Locations:
         other_motion = self.arrow.scene.get_other_motion(self.arrow.motion)
-        if self.arrow.scene.letter in Type3_letters:
+        if (
+            self.arrow.scene.letter in Type3_letters
+            or self.arrow.scene.letter in Type4_letters
+        ):
             return self._default_dash_location()
-        if self.arrow.scene.letter in ["Φ", "Ψ"]:
-            dash_map = {NORTH: SOUTH, SOUTH: NORTH, EAST: WEST, WEST: EAST}
-            return dash_map.get(other_motion.arrow.loc, self._default_dash_location())
+
         elif self.arrow.scene.letter in ["Λ-"]:
             loc_map = {
                 ((NORTH, SOUTH), (EAST, WEST)): EAST,
@@ -124,10 +125,22 @@ class ArrowLocationManager:
 
     def _default_dash_location(self) -> Locations:
         color_map = {
-            BLUE: {NORTH: EAST, EAST: SOUTH, SOUTH: WEST, WEST: NORTH},
-            RED: {NORTH: WEST, EAST: NORTH, SOUTH: EAST, WEST: SOUTH},
+            BLUE: {
+                (NORTH, SOUTH): WEST,
+                (EAST, WEST): SOUTH,
+                (SOUTH, NORTH): WEST,
+                (WEST, EAST): SOUTH,
+            },
+            RED: {
+                (NORTH, SOUTH): EAST,
+                (EAST, WEST): NORTH,
+                (SOUTH, NORTH): EAST,
+                (WEST, EAST): NORTH,
+            },
         }
-        return color_map[self.arrow.color][self.arrow.motion.start_loc]
+        return color_map[self.arrow.color].get(
+            (self.arrow.motion.start_loc, self.arrow.motion.end_loc)
+        )
 
     def get_static_location(self) -> Locations:
         return self.arrow.motion.start_loc

@@ -22,7 +22,7 @@ from constants import (
 )
 
 
-class IGMotionTypeHeaderWidget(BaseHeaderWidget):
+class MotionTypeHeaderWidget(BaseHeaderWidget):
     def __init__(self, attr_box: "MotionTypeAttrBox", motion_type: MotionTypes) -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
@@ -34,7 +34,7 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
         if self.motion_type in [PRO, ANTI]:
             self._setup_pro_anti_layout()
         if self.motion_type in [DASH, STATIC]:
-            self.same_opp_buttons = self._setup_vtg_dir_buttons()
+            self.vtg_rot_dir_buttons = self._setup_vtg_dir_buttons()
             self._set_default_vtg_direction()
             self._setup_dash_static_layout()
 
@@ -51,11 +51,11 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
         super()._setup_layout()
         header_layout = QHBoxLayout()
         header_layout.addStretch(3)
-        header_layout.addWidget(self.same_opp_buttons[0])
+        header_layout.addWidget(self.vtg_rot_dir_buttons[0])
         header_layout.addStretch(1)
         header_layout.addWidget(self.header_label)
         header_layout.addStretch(1)
-        header_layout.addWidget(self.same_opp_buttons[1])
+        header_layout.addWidget(self.vtg_rot_dir_buttons[1])
         header_layout.addStretch(3)
         self.layout.addLayout(header_layout)
         self.layout.addWidget(self.separator)
@@ -165,7 +165,7 @@ class IGMotionTypeHeaderWidget(BaseHeaderWidget):
 
         if self.motion_type in [DASH, STATIC]:
             button_size = int(self.height() * 0.9)
-            for button in self.same_opp_buttons:
+            for button in self.vtg_rot_dir_buttons:
                 button.setMinimumSize(button_size, button_size)
                 button.setMaximumSize(button_size, button_size)
                 button.setIconSize(button.size() * 0.9)
