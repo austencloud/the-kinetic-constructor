@@ -4,6 +4,7 @@ from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import (
     Letters,
 )
+from widgets.pictograph_scroll_area.scroll_area_section import ScrollAreaSection
 from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
 
 if TYPE_CHECKING:
@@ -39,14 +40,16 @@ class ScrollAreaDisplayManager:
         letter_type = self.scroll_area.section_manager.get_pictograph_letter_type(
             ig_pictograph.letter
         )
-        section_layout = self.scroll_area.sections.get(letter_type)
-        if section_layout:
+        section: ScrollAreaSection = self.scroll_area.section_manager.sections.get(
+            letter_type
+        )
+        if section:
             row = index // self.COLUMN_COUNT + 1
             col = index % self.COLUMN_COUNT
-            section_layout.addWidget(ig_pictograph.view, row, col)
+            section.pictograph_layout.addWidget(ig_pictograph.view, row, col)
             ig_pictograph.view.resize_for_scroll_area()
         else:
-            print(f"No section found for letter type '{letter_type}'")
+            print(f"Section not found for letter type {letter_type}")
 
     def remove_pictograph(
         self, pictograph_key: str, pictographs: Dict[Letters, IGPictograph]

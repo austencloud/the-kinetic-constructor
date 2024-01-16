@@ -38,7 +38,6 @@ class PictographScrollArea(QScrollArea):
         self.display_manager = ScrollAreaDisplayManager(self)
         self.filter_frame_manager = ScrollAreaFilterFrameManager(self)
         self.section_manager = ScrollAreaSectionManager(self)
-        self.sections: Dict[str, QGridLayout] = {}
         self.letters_by_type: Dict[
             LetterTypeNums, List[Letters]
         ] = self.section_manager.setup_letters_by_type()

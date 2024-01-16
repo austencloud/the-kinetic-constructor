@@ -27,8 +27,6 @@ class MotionTypeAttrPanel(BaseAttrPanel):
         self.placeholder_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.placeholder_label.setFont(QFont("Arial", 14))
         self.placeholder_label.setWordWrap(True)
-        self.placeholder_label.hide()
-
         # Add the placeholder label to the layout
         self.setup_layouts()
         self.layout.addWidget(self.placeholder_label)
@@ -54,7 +52,6 @@ class MotionTypeAttrPanel(BaseAttrPanel):
         for box in self.boxes:
             box.hide()
             self.layout.addWidget(box)
-        self.placeholder_label.show()
 
     def add_black_borders(self) -> None:
         self.setStyleSheet(

@@ -1,0 +1,108 @@
+# Import necessary components
+from typing import TYPE_CHECKING, List
+from PyQt6.QtWidgets import (
+    QFrame,
+    QVBoxLayout,
+    QWidget,
+    QGridLayout,
+    QLabel,
+    QSizePolicy,
+)
+
+from utilities.TypeChecking.TypeChecking import LetterTypeNums
+from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
+
+if TYPE_CHECKING:
+    from .pictograph_scroll_area import PictographScrollArea
+    from ..filter_frame.filter_tab.filter_tab import ScrollAreaFilterTab
+
+
+class ScrollAreaSection(QWidget):
+    def __init__(
+        self,
+        letter_type: LetterTypeNums,
+        filter_tab: "ScrollAreaFilterTab",
+        scroll_area: "PictographScrollArea",
+    ) -> None:
+        super().__init__(scroll_area)
+        self.scroll_area = scroll_area
+        self.letter_type = letter_type
+        self.filter_tab = filter_tab
+        self.pictographs: List[IGPictograph] = []
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.pictograph_frame = QFrame()
+        self.pictograph_layout: QGridLayout = QGridLayout(self.pictograph_frame)
+        self.styled_text = self.get_styled_text(letter_type)
+        self.section_label = self.create_section_label(self.styled_text)
+        self.initialize_ui()
+
+    def create_section_label(self, styled_text: str) -> QLabel:
+        """Creates a QLabel for the section label with the given styled text."""
+        section_label = QLabel()
+        section_label.setText(styled_text)  # Set the HTML styled text
+        font_size = self.calculate_font_size()
+        section_label.setStyleSheet(f"font-size: {font_size}px; font-weight: bold;")
+        size_policy = QSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
+        )
+        section_label.setSizePolicy(size_policy)
+        section_label.setMinimumSize(section_label.sizeHint())
+        return section_label
+
+    def initialize_ui(self) -> None:
+        self.layout.addWidget(self.section_label)
+        self.layout.addWidget(self.filter_tab)
+        self.layout.addWidget(self.pictograph_frame)
+
+    def add_pictograph(self, pictograph: IGPictograph) -> None:
+        self.pictographs.append(pictograph)
+        self.pictograph_layout.addWidget(pictograph.view)
+
+    def remove_pictograph(self, pictograph: IGPictograph) -> None:
+        self.pictographs.remove(pictograph)
+        self.pictograph_layout.removeWidget(pictograph.view)
+        pictograph.setParent(None)
+
+    def update_filter(self) -> None:
+        pass
+
+    def get_styled_text(self, letter_type: LetterTypeNums) -> str:
+        """Returns the styled text for the section label."""
+        type_map = {
+            "Type1": "Dual-Shift",
+            "Type2": "Shift",
+            "Type3": "Cross-Shift",
+            "Type4": "Dash",
+            "Type5": "Dual-Dash",
+            "Type6": "Static",
+        }
+
+        colors = {
+            "Shift": "#6F2DA8",  # purple
+            "Dual": "#00b3ff",  # cyan
+            "Dash": "#26e600",  # green
+            "Cross": "#26e600",  # green
+            "Static": "#ff4000",  # orange
+            "-": "#000000",  # black
+        }
+
+        type_words = type_map[letter_type].split("-")
+
+        styled_words = []
+        for word in type_words:
+            color = colors.get(word, "black")
+            styled_words.append(f"<span style='color: {color};'>{word}</span>")
+
+        styled_type_name = (
+            "-".join(styled_words)
+            if "-" in type_map[letter_type]
+            else "".join(styled_words)
+        )
+
+        styled_text = f"{letter_type[0:4]} {letter_type[4]}: {styled_type_name}"
+        return styled_text
+
+    def calculate_font_size(self) -> int:
+        window_width = self.scroll_area.width()
+        font_size = window_width // 50
+        return font_size
