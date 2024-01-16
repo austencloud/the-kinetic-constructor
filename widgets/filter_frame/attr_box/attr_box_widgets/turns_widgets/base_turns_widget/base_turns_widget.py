@@ -43,7 +43,7 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
         self.turn_adjustment_manager.setup_adjustment_buttons()
         self.turn_display_manager.setup_display_components()
         self.turn_direct_set_manager.setup_direct_set_buttons()
-        self._setup_prop_rot_dir_buttons()
+        # self._setup_prop_rot_dir_buttons()
 
     def _setup_prop_rot_dir_buttons(self):
         # Create CW and CCW buttons here and hide them initially

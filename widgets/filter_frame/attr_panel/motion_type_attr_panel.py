@@ -13,7 +13,7 @@ from ..attr_panel.base_attr_panel import BaseAttrPanel
 
 if TYPE_CHECKING:
     from ...option_picker_tab.option_picker_tab import OptionPickerTab
-    from ...parent_tab.parent_tab import IGTab
+    from ...ig_tab.ig_tab import IGTab
 
 
 class MotionTypeAttrPanel(BaseAttrPanel):
@@ -76,10 +76,10 @@ class MotionTypeAttrPanel(BaseAttrPanel):
                     box.header_widget.same_button.setChecked(False)
                     box.header_widget.opp_button.setChecked(False)
                     box.header_widget.same_button.setStyleSheet(
-                        box.header_widget.get_vtg_dir_btn_style(pressed=False)
+                        box.header_widget.get_dir_button_style(pressed=False)
                     )
                     box.header_widget.opp_button.setStyleSheet(
-                        box.header_widget.get_vtg_dir_btn_style(pressed=False)
+                        box.header_widget.get_dir_button_style(pressed=False)
                     )
         else:
             self.hide_placeholder_message()

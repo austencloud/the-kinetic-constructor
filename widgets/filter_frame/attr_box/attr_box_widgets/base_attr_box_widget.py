@@ -53,7 +53,7 @@ class BaseAttrBoxWidget(QWidget):
         }
         motion.scene.update_pictograph(pictograph_dict)
 
-    def get_vtg_dir_btn_style(self, pressed: bool) -> str:
+    def get_dir_button_style(self, pressed: bool) -> str:
         if pressed:
             return """
                 QPushButton {

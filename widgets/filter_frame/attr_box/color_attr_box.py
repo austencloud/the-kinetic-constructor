@@ -39,7 +39,7 @@ class ColorAttrBox(BaseAttrBox):
         self._setup_widgets()
         self.same_button = self.vtg_dir_widget.same_button
         self.opp_button = self.vtg_dir_widget.opp_button
-        self.vtg_rot_dir_buttons = [self.same_button, self.opp_button]
+        self.vtg_dir_buttons = [self.same_button, self.opp_button]
         self.attribute_type = COLOR
         self.vtg_dir_btn_state = {SAME: True, OPP: False}
 

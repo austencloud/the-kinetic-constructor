@@ -24,9 +24,9 @@ from constants import (
 
 
 class MotionTypeHeaderWidget(BaseHeaderWidget):
-    def __init__(self, attr_box: "MotionTypeAttrBox", motion_type: MotionTypes) -> None:
+    def __init__(self, attr_box, motion_type: MotionTypes) -> None:
         super().__init__(attr_box)
-        self.attr_box = attr_box
+        self.attr_box: "MotionTypeAttrBox" = attr_box
         self.motion_type = motion_type
 
         self.header_label = self._setup_header_label()
@@ -36,6 +36,7 @@ class MotionTypeHeaderWidget(BaseHeaderWidget):
             self._setup_pro_anti_layout()
         if self.motion_type in [DASH, STATIC]:
             self.vtg_dir_buttons = self._setup_vtg_dir_buttons()
+            self.prop_rot_dir_buttons = self._setup_prop_rot_dir_buttons()
             self._set_default_vtg_direction()
             self._setup_dash_static_layout()
 
@@ -51,13 +52,13 @@ class MotionTypeHeaderWidget(BaseHeaderWidget):
     def _setup_dash_static_layout(self) -> None:
         super()._setup_layout()
         header_layout = QHBoxLayout()
-        header_layout.addStretch(3)
+        header_layout.addStretch(5)
         header_layout.addWidget(self.vtg_dir_buttons[0])
         header_layout.addStretch(1)
         header_layout.addWidget(self.header_label)
         header_layout.addStretch(1)
         header_layout.addWidget(self.vtg_dir_buttons[1])
-        header_layout.addStretch(3)
+        header_layout.addStretch(5)
         self.layout.addLayout(header_layout)
         self.layout.addWidget(self.separator)
 
@@ -106,17 +107,17 @@ class MotionTypeHeaderWidget(BaseHeaderWidget):
 
                 if prop_rot_dir:
                     self.same_button.setStyleSheet(
-                        self.get_vtg_dir_btn_style(pressed=vtg_dir == SAME)
+                        self.get_dir_button_style(pressed=vtg_dir == SAME)
                     )
                     self.opp_button.setStyleSheet(
-                        self.get_vtg_dir_btn_style(pressed=vtg_dir == OPP)
+                        self.get_dir_button_style(pressed=vtg_dir == OPP)
                     )
                 else:
                     self.same_button.setStyleSheet(
-                        self.get_vtg_dir_btn_style(pressed=False)
+                        self.get_dir_button_style(pressed=False)
                     )
                     self.opp_button.setStyleSheet(
-                        self.get_vtg_dir_btn_style(pressed=False)
+                        self.get_dir_button_style(pressed=False)
                     )
 
     def _setup_vtg_dir_buttons(self) -> List[QPushButton]:
@@ -127,13 +128,26 @@ class MotionTypeHeaderWidget(BaseHeaderWidget):
             f"{ICON_DIR}opp_direction.png",
             lambda: self._set_vtg_dir(OPP),
         )
-
-        self.same_button.setStyleSheet(self.get_vtg_dir_btn_style(pressed=False))
-        self.opp_button.setStyleSheet(self.get_vtg_dir_btn_style(pressed=False))
-        self.same_button.setCheckable(True)
-        self.opp_button.setCheckable(True)
+        self.same_button.setStyleSheet(self.get_dir_button_style(pressed=False))
+        self.opp_button.setStyleSheet(self.get_dir_button_style(pressed=False))
 
         buttons = [self.same_button, self.opp_button]
+        return buttons
+
+    def _setup_prop_rot_dir_buttons(self) -> List[QPushButton]:
+        self.cw_button: QPushButton = self._create_button(
+            f"{ICON_DIR}clock/clockwise.png", lambda: self._set_vtg_dir(SAME)
+        )
+        self.ccw_button: QPushButton = self._create_button(
+            f"{ICON_DIR}clock/counter_clockwise.png",
+            lambda: self._set_vtg_dir(OPP),
+        )
+
+        self.cw_button.setStyleSheet(self.get_dir_button_style(pressed=False))
+        self.ccw_button.setStyleSheet(self.get_dir_button_style(pressed=False))
+        self.cw_button.hide()
+        self.ccw_button.hide()
+        buttons = [self.cw_button, self.ccw_button]
         return buttons
 
     def _create_button(self, icon_path, action) -> QPushButton:

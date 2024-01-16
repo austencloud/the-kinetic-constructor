@@ -58,8 +58,8 @@ class VtgDirWidget(BaseAttrBoxWidget):
             lambda: self._set_vtg_dir(OPP),
         )
 
-        self.same_button.setStyleSheet(self.get_vtg_dir_btn_style(pressed=False))
-        self.opp_button.setStyleSheet(self.get_vtg_dir_btn_style(pressed=False))
+        self.same_button.setStyleSheet(self.get_dir_button_style(pressed=False))
+        self.opp_button.setStyleSheet(self.get_dir_button_style(pressed=False))
         self.same_button.setCheckable(True)
         self.opp_button.setCheckable(True)
 
@@ -102,17 +102,17 @@ class VtgDirWidget(BaseAttrBoxWidget):
 
                 if prop_rot_dir:
                     self.same_button.setStyleSheet(
-                        self.get_vtg_dir_btn_style(pressed=vtg_dir == SAME)
+                        self.get_dir_button_style(pressed=vtg_dir == SAME)
                     )
                     self.opp_button.setStyleSheet(
-                        self.get_vtg_dir_btn_style(pressed=vtg_dir == OPP)
+                        self.get_dir_button_style(pressed=vtg_dir == OPP)
                     )
                 else:
                     self.same_button.setStyleSheet(
-                        self.get_vtg_dir_btn_style(pressed=False)
+                        self.get_dir_button_style(pressed=False)
                     )
                     self.opp_button.setStyleSheet(
-                        self.get_vtg_dir_btn_style(pressed=False)
+                        self.get_dir_button_style(pressed=False)
                     )
 
     def _set_default_rotation_direction(self):
@@ -143,14 +143,14 @@ class VtgDirWidget(BaseAttrBoxWidget):
 
         if prop_rot_dir:
             self.same_button.setStyleSheet(
-                self.get_vtg_dir_btn_style(pressed=prop_rot_dir == CLOCKWISE)
+                self.get_dir_button_style(pressed=prop_rot_dir == CLOCKWISE)
             )
             self.opp_button.setStyleSheet(
-                self.get_vtg_dir_btn_style(pressed=prop_rot_dir == COUNTER_CLOCKWISE)
+                self.get_dir_button_style(pressed=prop_rot_dir == COUNTER_CLOCKWISE)
             )
         else:
-            self.same_button.setStyleSheet(self.get_vtg_dir_btn_style(pressed=False))
-            self.opp_button.setStyleSheet(self.get_vtg_dir_btn_style(pressed=False))
+            self.same_button.setStyleSheet(self.get_dir_button_style(pressed=False))
+            self.opp_button.setStyleSheet(self.get_dir_button_style(pressed=False))
 
     def _create_button(self, icon_path, action) -> QPushButton:
         button = QPushButton("", self)

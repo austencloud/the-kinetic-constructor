@@ -8,7 +8,11 @@ from utilities.TypeChecking.TypeChecking import (
     PropRotDirs,
     Turns,
 )
-from utilities.TypeChecking.letter_lists import Type2_letters, Type3_letters, Type4_letters
+from utilities.TypeChecking.letter_lists import (
+    Type2_letters,
+    Type3_letters,
+    Type4_letters,
+)
 from ...adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
@@ -71,10 +75,10 @@ class TurnAdjustmentManager:
         """Unpress the vtg buttons."""
         if hasattr(self.attr_box, "same_button"):
             self.attr_box.same_button.setStyleSheet(
-                self.attr_box.header_widget.get_vtg_dir_btn_style(pressed=False)
+                self.attr_box.header_widget.get_dir_button_style(pressed=False)
             )
             self.attr_box.opp_button.setStyleSheet(
-                self.attr_box.header_widget.get_vtg_dir_btn_style(pressed=False)
+                self.attr_box.header_widget.get_dir_button_style(pressed=False)
             )
 
     ### UPDATE ###
@@ -129,13 +133,15 @@ class TurnAdjustmentManager:
         same_pressed = self.attr_box.vtg_dir_btn_state[SAME]
         opp_pressed = self.attr_box.vtg_dir_btn_state[OPP]
         self.attr_box.same_button.setStyleSheet(
-            self.attr_box.header_widget.get_vtg_dir_btn_style(pressed=same_pressed)
+            self.attr_box.header_widget.get_dir_button_style(pressed=same_pressed)
         )
         self.attr_box.opp_button.setStyleSheet(
-            self.attr_box.header_widget.get_vtg_dir_btn_style(pressed=opp_pressed)
+            self.attr_box.header_widget.get_dir_button_style(pressed=opp_pressed)
         )
 
-    def _determine_prop_rot_dir(self, motion: "Motion", other_motion: "Motion") -> PropRotDirs:
+    def _determine_prop_rot_dir(
+        self, motion: "Motion", other_motion: "Motion"
+    ) -> PropRotDirs:
         """Determine the property rotation direction."""
         if (
             not self.attr_box.vtg_dir_btn_state[SAME]
@@ -152,15 +158,13 @@ class TurnAdjustmentManager:
                     else CLOCKWISE
                 )
         # elif motion.scene.letter in Type4_letters:
-        #     # if other_motion.prop_rot_dir == NO_ROT, then we should set the prop rot dir of our motion to clockwise by default. 
-        #     # When this is the case (one dash/static has turns and the other one doesn't), we want to be 
-        #     # able to set the prop rot dir directly. So we need special buttons in the attr box that should appear in place of the 
-        #     # vtg dir buttons for this specific senario. These buttons should be be the CW and CCW clocks. 
+        #     # if other_motion.prop_rot_dir == NO_ROT, then we should set the prop rot dir of our motion to clockwise by default.
+        #     # When this is the case (one dash/static has turns and the other one doesn't), we want to be
+        #     # able to set the prop rot dir directly. So we need special buttons in the attr box that should appear in place of the
+        #     # vtg dir buttons for this specific senario. These buttons should be be the CW and CCW clocks.
         #     # Once the other motion has turns, then we can revert back to the normal vtg dir buttons.
         #     # if the other motion's prop rot is not NO_ROT, then we want to apply the logic to set it based on the vtg dir state as normal.
 
-            
-            
     def _set_vtg_dir_state_default(self) -> None:
         """Set the vtg direction state to default."""
         self.attr_box.vtg_dir_btn_state[SAME] = True
@@ -195,5 +199,3 @@ class TurnAdjustmentManager:
             for motion in pictograph.motions.values():
                 if self.is_motion_relevant(motion):
                     self.update_motion_properties(motion, new_turns)
-
-

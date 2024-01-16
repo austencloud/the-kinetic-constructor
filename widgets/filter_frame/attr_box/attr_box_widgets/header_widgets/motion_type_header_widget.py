@@ -34,7 +34,7 @@ class MotionTypeHeaderWidget(BaseHeaderWidget):
         if self.motion_type in [PRO, ANTI]:
             self._setup_pro_anti_layout()
         if self.motion_type in [DASH, STATIC]:
-            self.vtg_rot_dir_buttons = self._setup_vtg_dir_buttons()
+            self.vtg_dir_buttons = self._setup_vtg_dir_buttons()
             self._set_default_vtg_direction()
             self._setup_dash_static_layout()
 
@@ -51,11 +51,11 @@ class MotionTypeHeaderWidget(BaseHeaderWidget):
         super()._setup_layout()
         header_layout = QHBoxLayout()
         header_layout.addStretch(3)
-        header_layout.addWidget(self.vtg_rot_dir_buttons[0])
+        header_layout.addWidget(self.vtg_dir_buttons[0])
         header_layout.addStretch(1)
         header_layout.addWidget(self.header_label)
         header_layout.addStretch(1)
-        header_layout.addWidget(self.vtg_rot_dir_buttons[1])
+        header_layout.addWidget(self.vtg_dir_buttons[1])
         header_layout.addStretch(3)
         self.layout.addLayout(header_layout)
         self.layout.addWidget(self.separator)
@@ -105,17 +105,17 @@ class MotionTypeHeaderWidget(BaseHeaderWidget):
 
                 if prop_rot_dir:
                     self.same_button.setStyleSheet(
-                        self.get_vtg_dir_btn_style(pressed=vtg_dir == SAME)
+                        self.get_dir_button_style(pressed=vtg_dir == SAME)
                     )
                     self.opp_button.setStyleSheet(
-                        self.get_vtg_dir_btn_style(pressed=vtg_dir == OPP)
+                        self.get_dir_button_style(pressed=vtg_dir == OPP)
                     )
                 else:
                     self.same_button.setStyleSheet(
-                        self.get_vtg_dir_btn_style(pressed=False)
+                        self.get_dir_button_style(pressed=False)
                     )
                     self.opp_button.setStyleSheet(
-                        self.get_vtg_dir_btn_style(pressed=False)
+                        self.get_dir_button_style(pressed=False)
                     )
 
     def _setup_vtg_dir_buttons(self) -> List[QPushButton]:
@@ -127,8 +127,8 @@ class MotionTypeHeaderWidget(BaseHeaderWidget):
             lambda: self._set_vtg_dir(OPP),
         )
 
-        self.same_button.setStyleSheet(self.get_vtg_dir_btn_style(pressed=False))
-        self.opp_button.setStyleSheet(self.get_vtg_dir_btn_style(pressed=False))
+        self.same_button.setStyleSheet(self.get_dir_button_style(pressed=False))
+        self.opp_button.setStyleSheet(self.get_dir_button_style(pressed=False))
         self.same_button.setCheckable(True)
         self.opp_button.setCheckable(True)
 
@@ -165,7 +165,7 @@ class MotionTypeHeaderWidget(BaseHeaderWidget):
 
         if self.motion_type in [DASH, STATIC]:
             button_size = int(self.height() * 0.9)
-            for button in self.vtg_rot_dir_buttons:
+            for button in self.vtg_dir_buttons:
                 button.setMinimumSize(button_size, button_size)
                 button.setMaximumSize(button_size, button_size)
                 button.setIconSize(button.size() * 0.9)
