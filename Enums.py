@@ -16,7 +16,7 @@ image_path = "resources/images/"
 
 
 class LetterNumberType(Enum):
-    TYPE_1 = (
+    Type1 = (
         [
             "A",
             "B",
@@ -43,11 +43,11 @@ class LetterNumberType(Enum):
         ],
         "Type1",
     )
-    TYPE_2 = (["W", "X", "Y", "Z", "Σ", "Δ", "θ", "Ω"], "Type2")
-    TYPE_3 = (["W-", "X-", "Y-", "Z-", "Σ-", "Δ-", "θ-", "Ω-"], "Type3")
-    TYPE_4 = (["Φ", "Ψ", "Λ"], "Type4")
-    TYPE_5 = (["Φ-", "Ψ-", "Λ-"], "Type5")
-    TYPE_6 = (["α", "β", "Γ"], "Type6")
+    Type2 = (["W", "X", "Y", "Z", "Σ", "Δ", "θ", "Ω"], "Type2")
+    Type3 = (["W-", "X-", "Y-", "Z-", "Σ-", "Δ-", "θ-", "Ω-"], "Type3")
+    Type4 = (["Φ", "Ψ", "Λ"], "Type4")
+    Type5 = (["Φ-", "Ψ-", "Λ-"], "Type5")
+    Type6 = (["α", "β", "Γ"], "Type6")
 
     def __init__(self, letters, description):
         self._letters = letters

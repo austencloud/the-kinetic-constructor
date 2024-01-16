@@ -62,7 +62,7 @@ class OptionPickerScrollArea(PictographScrollArea):
         self, option: Option, row: int, col: int, is_start_pos: bool
     ) -> None:
         option.view.mousePressEvent = self._get_click_handler(option, is_start_pos)
-        self.layout.addWidget(option.view, row, col)
+        self.layout.addWidget(option.view)
 
     def load_image_if_visible(self, option: "Option") -> None:
         """Loads the image for an option if it is visible."""
@@ -114,7 +114,7 @@ class OptionPickerScrollArea(PictographScrollArea):
         while self.layout.count():
             child = self.layout.takeAt(0)
             if child.widget():
-                child.widget().deleteLater()
+                child.widget().hide()
 
     def _update_pictographs(self, clicked_option: "Option") -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)

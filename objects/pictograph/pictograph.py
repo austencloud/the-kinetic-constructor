@@ -7,8 +7,8 @@ from Enums import LetterNumberType
 
 from constants import *
 
-from objects.arrow.arrow_placement_manager.main_arrow_placement_manager import (
-    MainArrowPlacementManager,
+from ..arrow.arrow_placement_manager.main_arrow_placement_manager import (
+    ArrowPlacementManager,
 )
 from utilities.TypeChecking.prop_types import (
     strictly_placed_props,
@@ -25,11 +25,11 @@ from ..arrow.ghost_arrow import GhostArrow
 from ..prop.ghost_prop import GhostProp
 from ..grid import Grid
 
-from objects.pictograph.pictograph_event_handler import PictographEventHandler
-from objects.pictograph.pictograph_init import PictographInit
-from objects.pictograph.pictograph_menu_handler import PictographMenuHandler
-from objects.pictograph.position_engines.prop_positioners.main_prop_positioner import (
-    MainPropPlacementManager,
+from .pictograph_event_handler import PictographEventHandler
+from .pictograph_init import PictographInit
+from .pictograph_menu_handler import PictographMenuHandler
+from .position_engines.prop_positioners.main_prop_positioner import (
+    PropPlacementManager,
 )
 from utilities.letter_engine import LetterEngine
 from data.rules import beta_ending_letters, alpha_ending_letters, gamma_ending_letters
@@ -138,8 +138,8 @@ class Pictograph(QGraphicsScene):
 
     def _setup_managers(self, main_widget: "MainWidget") -> None:
         self.pictograph_menu_handler = PictographMenuHandler(main_widget, self)
-        self.arrow_placement_manager = MainArrowPlacementManager(self)
-        self.prop_placement_manager = MainPropPlacementManager(self)
+        self.arrow_placement_manager = ArrowPlacementManager(self)
+        self.prop_placement_manager = PropPlacementManager(self)
         self.letter_engine = LetterEngine(self)
 
     def _create_motion_dict(

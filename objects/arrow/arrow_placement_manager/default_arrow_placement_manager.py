@@ -18,7 +18,7 @@ from utilities.TypeChecking.TypeChecking import OrientationTypes
 
 if TYPE_CHECKING:
     from objects.arrow.arrow_placement_manager.main_arrow_placement_manager import (
-        MainArrowPlacementManager,
+        ArrowPlacementManager,
     )
     from objects.pictograph.pictograph import Pictograph
 import codecs
@@ -28,7 +28,7 @@ class DefaultArrowPlacementManager:
     def __init__(
         self,
         pictograph: "Pictograph",
-        main_arrow_placement_manager: "MainArrowPlacementManager",
+        main_arrow_placement_manager: "ArrowPlacementManager",
     ) -> None:
         self.pictograph = pictograph
         self.main_arrow_placement_manager = main_arrow_placement_manager

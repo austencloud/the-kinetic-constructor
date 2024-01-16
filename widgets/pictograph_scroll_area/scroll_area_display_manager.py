@@ -38,7 +38,7 @@ class ScrollAreaDisplayManager:
     def add_pictograph_to_layout(self, ig_pictograph: IGPictograph, index: int) -> None:
         row = index // self.COLUMN_COUNT
         col = index % self.COLUMN_COUNT
-        self.scroll_area.layout.addWidget(ig_pictograph.view, row, col)
+        self.scroll_area.layout.addWidget(ig_pictograph.view)
         ig_pictograph.view.resize_for_scroll_area()
 
     def remove_pictograph(
@@ -48,7 +48,6 @@ class ScrollAreaDisplayManager:
         if ig_pictograph:
             self.scroll_area.layout.removeWidget(ig_pictograph.view)
             ig_pictograph.view.setParent(None)
-            ig_pictograph.view.deleteLater()
 
     def clear_layout(self) -> None:
         while self.scroll_area.layout.count():

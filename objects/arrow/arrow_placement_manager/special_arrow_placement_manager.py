@@ -14,15 +14,13 @@ from utilities.TypeChecking.letter_lists import (
 
 if TYPE_CHECKING:
     from ..arrow_placement_manager.main_arrow_placement_manager import (
-        MainArrowPlacementManager,
+        ArrowPlacementManager,
     )
     from ...pictograph.pictograph import Pictograph
 
 
 class SpecialArrowPlacementManager:
-    def __init__(
-        self, pictograph: "Pictograph", main_manager: "MainArrowPlacementManager"
-    ):
+    def __init__(self, pictograph: "Pictograph", main_manager: "ArrowPlacementManager"):
         self.pictograph = pictograph
         self.main_manager = main_manager
         self.json_path = "arrow_placement/special_placements.json"

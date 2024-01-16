@@ -79,7 +79,6 @@ class ScrollAreaPictographFactory:
             ig_pictograph = self.scroll_area.pictographs.pop(key)
             self.scroll_area.layout.removeWidget(ig_pictograph.view)
             ig_pictograph.view.setParent(None)
-            ig_pictograph.view.deleteLater()
 
     def get_or_create_pictograph(self, pictograph_key) -> IGPictograph:
         if pictograph_key not in self.scroll_area.pictographs:

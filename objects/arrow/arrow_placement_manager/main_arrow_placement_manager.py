@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
 
 
-class MainArrowPlacementManager:
+class ArrowPlacementManager:
     """Manages the placement of main arrows within the pictograph based on specific rules and letter types."""
 
     def __init__(self, pictograph: "Pictograph") -> None:

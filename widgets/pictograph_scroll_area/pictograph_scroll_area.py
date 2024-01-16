@@ -1,12 +1,17 @@
-from typing import TYPE_CHECKING, Dict, List, Union
-from PyQt6.QtWidgets import QScrollArea, QGridLayout, QWidget, QVBoxLayout, QFrame, QLabel
-from PyQt6.QtCore import Qt, QTimer
-from objects.pictograph.pictograph import Pictograph
-from utilities.TypeChecking.TypeChecking import (
-    Letters,
+from typing import TYPE_CHECKING, Dict, List
+from PyQt6.QtWidgets import (
+    QScrollArea,
+    QWidget,
+    QVBoxLayout,
+    QLabel,
+    QGraphicsView,
+    QHBoxLayout,
+    QGridLayout,
 )
-from widgets.ig_tab.ig_tab import IGTab
-from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
+from PyQt6.QtCore import Qt, QTimer
+from Enums import LetterNumberType
+from utilities.TypeChecking.TypeChecking import Letters
+from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
 from .scroll_area_display_manager import ScrollAreaDisplayManager
 from .scroll_area_filter_manager import ScrollAreaFilterFrameManager
 from .scroll_area_pictograph_factory import ScrollAreaPictographFactory
@@ -19,41 +24,53 @@ class PictographScrollArea(QScrollArea):
     def __init__(self, main_widget: "MainWidget", parent_tab) -> None:
         super().__init__(parent_tab)
         self.main_widget = main_widget
-        self.parent_tab: Union[
-            "IGTab", "OptionPickerTab"
-            ] = parent_tab
-        self.letters: Dict[Letters, List[Dict[str, str]]] = self.main_widget.letters
-        self.pictographs: Dict[Letters, Pictograph] = {}
+        self.parent_tab = parent_tab
+        self.letters = self.main_widget.letters
+        self.pictographs: Dict[Letters, IGPictograph] = {}
         self.pictograph_factory = ScrollAreaPictographFactory(self)
         self.display_manager = ScrollAreaDisplayManager(self)
         self.filter_frame_manager = ScrollAreaFilterFrameManager(self)
-        self.sections: Dict[Letters, QVBoxLayout] = {}
+        self.sections: Dict[str, QGridLayout] = {}
+        self.letters_by_type: Dict[str, List[str]] = self.setup_letters_by_type()
         self._setup_ui()
-        self.timer = QTimer()
+        self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_arrow_placements)
         self.timer.start(1000)
+
+    def setup_letters_by_type(self) -> Dict[str, List[str]]:
+        letters_by_type = {}
+        for letter_type in LetterNumberType:
+            letters_by_type[letter_type.description] = letter_type.letters
+        return letters_by_type
 
     def _setup_ui(self) -> None:
         self.setWidgetResizable(True)
         self.container = QWidget()
-        self.layout:QVBoxLayout = QVBoxLayout(self.container)
+        self.layout: QVBoxLayout = QVBoxLayout(self.container)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.container.setContentsMargins(10, 10, 10, 10)
         self.setWidget(self.container)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
-    def create_section(self, letter_type):
-        section_layout = QVBoxLayout()
-        section_label = QLabel(f"Type {letter_type} - Dual-Shifts")
-        section_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        section_layout.addWidget(section_label)
-        self.layout.addLayout(section_layout)
-        self.sections[letter_type] = section_layout
+    def get_pictograph_letter_type(self, pictograph_key: str) -> str:
+        letter = pictograph_key.split("_")[0]
+        for letter_type, letters in self.letters_by_type.items():
+            if letter in letters:
+                return letter_type
+        return "Unknown"
 
-    def add_pictograph_to_section(self, pictograph, letter_type):
-        section_layout = self.sections.get(letter_type)
-        if section_layout is not None:
-            section_layout.addWidget(pictograph)
+    def organize_pictographs(self) -> None:
+        self.clear_sections()
+        pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
+        for key, pictograph in self.pictographs.items():
+            letter_type = self.get_pictograph_letter_type(key)
+            pictographs_by_type[letter_type].append(pictograph)
+
+        for letter_type, pictographs in pictographs_by_type.items():
+            self.create_section(letter_type)
+            for pictograph in pictographs:
+                self.add_pictograph_to_section(pictograph, letter_type)
 
     def update_pictographs(self) -> None:
         deselected_letters = self.pictograph_factory.get_deselected_letters()
@@ -70,12 +87,55 @@ class PictographScrollArea(QScrollArea):
             if widget_to_remove is not None:
                 widget_to_remove.setParent(None)
 
-        # Create and populate new sections based on the current selection
-        for letter_type, pictographs in self.letters_by_type.items():
+        # Organize pictographs by their types
+        pictographs_by_type = self.organize_pictographs_by_type()
+
+        # Now iterate over the organized pictographs and create sections
+        for letter_type, pictographs in pictographs_by_type.items():
             self.create_section(letter_type)
-            for pictograph_dict in pictographs:
-                pictograph_widget = self.pictograph_factory.create_or_update_pictograph(pictograph_dict, letter_type)
-                self.add_pictograph_to_section(pictograph_widget, letter_type)        
+            for pictograph in pictographs:
+                self.add_pictograph_to_section(pictograph.view, letter_type)
+
+        self.filter_frame_manager.update_filter_frame_if_needed()
+
+    def organize_pictographs_by_type(self) -> Dict[str, List[IGPictograph]]:
+        pictographs_by_type = {
+            type_desc: [] for type_desc in LetterNumberType._member_names_
+        }
+
+        for key, ig_pictograph in self.pictographs.items():
+            letter = key.split("_")[0]
+            letter_type = ig_pictograph._get_letter_type(letter)
+            if letter_type:
+                pictographs_by_type[letter_type].append(ig_pictograph)
+
+        return pictographs_by_type
+
+    def clear_sections(self) -> None:
+        """Clears all sections from the layout."""
+        while self.layout.count():
+            layout_item = self.layout.takeAt(0)
+            if layout_item.widget():
+                layout_item.widget().hide()
+        self.sections.clear()
+
+    def create_section(self, letter_type: str):
+        """Creates a new section for a given letter type."""
+        section_frame = QWidget()
+        section_layout = QGridLayout(section_frame)
+        section_label = QLabel(f"{letter_type} - Dual-Shifts")
+        section_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        section_layout.addWidget(section_label)
+        self.layout.addWidget(section_frame)
+        self.sections[letter_type] = section_layout
+
+    def add_pictograph_to_section(
+        self, pictograph_view: QGraphicsView, letter_type: str
+    ) -> None:
+        """Adds a pictograph view to the section corresponding to its letter type."""
+        section_layout = self.sections.get(letter_type)
+        if section_layout:
+            section_layout.addWidget(pictograph_view)
 
     def update_arrow_placements(self) -> None:
         for pictograph in self.pictographs.values():
