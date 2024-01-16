@@ -36,10 +36,22 @@ class ScrollAreaDisplayManager:
         }
 
     def add_pictograph_to_layout(self, ig_pictograph: IGPictograph, index: int) -> None:
-        row = index // self.COLUMN_COUNT
-        col = index % self.COLUMN_COUNT
-        self.scroll_area.layout.addWidget(ig_pictograph.view)
-        ig_pictograph.view.resize_for_scroll_area()
+        # Get the letter type from the pictograph
+        letter_type = self.scroll_area.get_pictograph_letter_type(ig_pictograph.letter)
+
+        # Retrieve the section grid layout for the letter type
+        section_layout = self.scroll_area.sections.get(letter_type)
+
+        # If the section exists, add the pictograph to it
+        if section_layout:
+            pictograph_count = section_layout.count() - 1  # Subtracting the label at the start
+            row = pictograph_count // self.COLUMN_COUNT
+            col = pictograph_count % self.COLUMN_COUNT
+            section_layout.addWidget(ig_pictograph.view, row, col)
+            ig_pictograph.view.resize_for_scroll_area()
+        else:
+            # Handle the case where the section does not exist
+            print(f"No section found for letter type '{letter_type}'")
 
     def remove_pictograph(
         self, pictograph_key: str, pictographs: Dict[Letters, IGPictograph]

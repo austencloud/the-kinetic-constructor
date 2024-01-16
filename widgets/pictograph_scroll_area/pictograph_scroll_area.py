@@ -61,42 +61,29 @@ class PictographScrollArea(QScrollArea):
         return "Unknown"
 
     def organize_pictographs(self) -> None:
+        # Clear previous sections before setting up new ones
         self.clear_sections()
         pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
         for key, pictograph in self.pictographs.items():
             letter_type = self.get_pictograph_letter_type(key)
             pictographs_by_type[letter_type].append(pictograph)
 
+        # Create sections and add pictographs to them
         for letter_type, pictographs in pictographs_by_type.items():
             self.create_section(letter_type)
-            for pictograph in pictographs:
-                self.add_pictograph_to_section(pictograph, letter_type)
+            for index, pictograph in enumerate(pictographs):
+                self.display_manager.add_pictograph_to_layout(pictograph, index)
 
     def update_pictographs(self) -> None:
         deselected_letters = self.pictograph_factory.get_deselected_letters()
         for letter in deselected_letters:
             self.pictograph_factory.remove_deselected_letter_pictographs(letter)
         self.pictograph_factory.process_selected_letters()
-        self.display_manager.order_and_display_pictographs()
         self.display_manager.cleanup_unused_pictographs()
         self.filter_frame_manager.update_filter_frame_if_needed()
 
-        # Remove all previous sections
-        while self.layout.count():
-            widget_to_remove = self.layout.takeAt(0).widget()
-            if widget_to_remove is not None:
-                widget_to_remove.setParent(None)
-
-        # Organize pictographs by their types
-        pictographs_by_type = self.organize_pictographs_by_type()
-
-        # Now iterate over the organized pictographs and create sections
-        for letter_type, pictographs in pictographs_by_type.items():
-            self.create_section(letter_type)
-            for pictograph in pictographs:
-                self.add_pictograph_to_section(pictograph.view, letter_type)
-
-        self.filter_frame_manager.update_filter_frame_if_needed()
+        # Organize pictographs by their types after updates
+        self.organize_pictographs()
 
     def organize_pictographs_by_type(self) -> Dict[str, List[IGPictograph]]:
         pictographs_by_type = {
