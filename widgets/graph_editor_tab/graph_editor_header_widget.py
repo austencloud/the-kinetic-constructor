@@ -8,7 +8,7 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Callable
 from widgets.buttons.rotate_motion_button import RotateMotionButton
 from widgets.filter_frame.attr_box.attr_box_widgets.header_widgets.base_header_widget import (
-    BaseHeaderWidget,
+    HeaderWidget,
 )
 
 if TYPE_CHECKING:
@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 from constants import BLUE, CCW_HANDPATH, CW_HANDPATH, HEX_BLUE, HEX_RED, ICON_DIR, RED
 
 
-class GraphEditorHeaderWidget(BaseHeaderWidget):
+class GraphEditorHeaderWidget(HeaderWidget):
     def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
         super().__init__(attr_box)
         self.header_label = self._setup_header_label()

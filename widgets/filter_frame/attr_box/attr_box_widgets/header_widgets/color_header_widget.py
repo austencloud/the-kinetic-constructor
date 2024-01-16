@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from utilities.TypeChecking.TypeChecking import Colors
 
-from .base_header_widget import BaseHeaderWidget
+from .base_header_widget import HeaderWidget
 
 if TYPE_CHECKING:
     from widgets.filter_frame.attr_box.color_attr_box import ColorAttrBox
@@ -14,7 +14,7 @@ from constants import (
 )
 
 
-class ColorHeaderWidget(BaseHeaderWidget):
+class ColorHeaderWidget(HeaderWidget):
     def __init__(self, attr_box: "ColorAttrBox", color: Colors) -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box

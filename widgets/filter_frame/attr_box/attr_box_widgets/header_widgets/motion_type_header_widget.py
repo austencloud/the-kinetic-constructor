@@ -3,9 +3,11 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING, List
+from objects.motion.motion import Motion
+from objects.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.TypeChecking import MotionTypes, PropRotDirs, VtgDirections
 
-from .base_header_widget import BaseHeaderWidget
+from .base_header_widget import HeaderWidget
 
 if TYPE_CHECKING:
     from widgets.filter_frame.attr_box.motion_type_attr_box import MotionTypeAttrBox
@@ -15,6 +17,7 @@ from constants import (
     COUNTER_CLOCKWISE,
     DASH,
     ICON_DIR,
+    NO_ROT,
     OPP,
     PRO,
     SAME,
@@ -22,11 +25,11 @@ from constants import (
 )
 
 
-class MotionTypeHeaderWidget(BaseHeaderWidget):
-    def __init__(self, attr_box: "MotionTypeAttrBox", motion_type: MotionTypes) -> None:
+class MotionTypeHeaderWidget(HeaderWidget):
+    def __init__(self, attr_box, motion_type) -> None:
         super().__init__(attr_box)
-        self.attr_box = attr_box
-        self.motion_type = motion_type
+        self.attr_box: "MotionTypeAttrBox" = attr_box
+        self.motion_type: MotionTypes = motion_type
 
         self.header_label = self._setup_header_label()
         self.separator = self.create_separator()
@@ -70,53 +73,68 @@ class MotionTypeHeaderWidget(BaseHeaderWidget):
         self._set_vtg_dir(SAME if has_turns else None)
 
     def _set_vtg_dir(self, vtg_dir: VtgDirections) -> None:
-        if vtg_dir == SAME:
-            self.attr_box.vtg_dir_btn_state = {SAME: True, OPP: False}
-        elif vtg_dir == OPP:
-            self.attr_box.vtg_dir_btn_state = {SAME: False, OPP: True}
-        prop_rot_dir: PropRotDirs = None
+        self._update_vtg_dir_btn_state(vtg_dir)
+        self._apply_vtg_dir_to_motions(vtg_dir)
+
+    def _update_vtg_dir_btn_state(self, vtg_dir: VtgDirections) -> None:
+        state = {SAME: vtg_dir == SAME, OPP: vtg_dir == OPP}
+        self.attr_box.vtg_dir_btn_state.update(state)
+
+    def _apply_vtg_dir_to_motions(self, vtg_dir: VtgDirections) -> None:
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
-                other_motion = (
-                    pictograph.red_motion
-                    if motion == pictograph.blue_motion
-                    else pictograph.blue_motion
+                if motion.motion_type != self.attr_box.motion_type:
+                    continue
+                other_motion = self._get_other_motion(pictograph, motion)
+                prop_rot_dir = self._determine_prop_rot_dir(
+                    motion, other_motion, vtg_dir
                 )
-                if motion.motion_type == self.attr_box.motion_type:
-                    if motion.motion_type in [DASH, STATIC]:
-                        if motion.turns > 0:
-                            if vtg_dir is SAME:
-                                motion.prop_rot_dir = other_motion.prop_rot_dir
-                                prop_rot_dir = other_motion.prop_rot_dir
-                            elif vtg_dir is OPP:
-                                if other_motion.prop_rot_dir == CLOCKWISE:
-                                    motion.prop_rot_dir = COUNTER_CLOCKWISE
-                                    prop_rot_dir = COUNTER_CLOCKWISE
-                                elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                                    motion.prop_rot_dir = CLOCKWISE
-                                    prop_rot_dir = CLOCKWISE
-                            else:
-                                prop_rot_dir = None
-                    if motion.turns > 0:
-                        pictograph_dict = {
-                            f"{motion.color}_prop_rot_dir": prop_rot_dir,
-                        }
-                        motion.scene.update_pictograph(pictograph_dict)
+                self._update_motion_prop_rot_dir(motion, prop_rot_dir)
+                self._style_vtg_buttons(vtg_dir, prop_rot_dir)
 
-                if prop_rot_dir:
-                    self.same_button.setStyleSheet(
-                        self.get_dir_button_style(pressed=vtg_dir == SAME)
-                    )
-                    self.opp_button.setStyleSheet(
-                        self.get_dir_button_style(pressed=vtg_dir == OPP)
-                    )
-                else:
-                    self.same_button.setStyleSheet(
-                        self.get_dir_button_style(pressed=False)
-                    )
-                    self.opp_button.setStyleSheet(
-                        self.get_dir_button_style(pressed=False)
-                    )
+    def _get_other_motion(self, pictograph: Pictograph, motion: Motion) -> "Motion":
+        return (
+            pictograph.red_motion
+            if motion == pictograph.blue_motion
+            else pictograph.blue_motion
+        )
+
+    def _determine_prop_rot_dir(
+        self, motion: Motion, other_motion: Motion, vtg_dir: VtgDirections
+    ) -> PropRotDirs:
+        if motion.motion_type not in [DASH, STATIC] or motion.turns == 0:
+            return None
+        if vtg_dir is SAME:
+            return other_motion.prop_rot_dir
+        if vtg_dir is OPP:
+            if other_motion.prop_rot_dir == CLOCKWISE:
+                return COUNTER_CLOCKWISE
+            elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                return CLOCKWISE
+            elif other_motion.prop_rot_dir == NO_ROT:
+                print(
+                    "ERROR: No rotation direction for other motion."
+                    "Triggered in motion_type_header_widget"
+                )
+
+    def _update_motion_prop_rot_dir(self, motion: Motion, prop_rot_dir: PropRotDirs) -> None:
+        if motion.turns > 0 and prop_rot_dir is not None:
+            motion.prop_rot_dir = prop_rot_dir
+            motion.scene.update_pictograph(
+                {f"{motion.color}_prop_rot_dir": prop_rot_dir}
+            )
+
+    def _style_vtg_buttons(self, vtg_dir, prop_rot_dir) -> None:
+        if prop_rot_dir is not None:
+            self.same_button.setStyleSheet(
+                self.get_dir_button_style(pressed=vtg_dir == SAME)
+            )
+            self.opp_button.setStyleSheet(
+                self.get_dir_button_style(pressed=vtg_dir == OPP)
+            )
+        else:
+            self.same_button.setStyleSheet(self.get_dir_button_style(pressed=False))
+            self.opp_button.setStyleSheet(self.get_dir_button_style(pressed=False))
 
     def _setup_vtg_dir_buttons(self) -> List[QPushButton]:
         self.same_button: QPushButton = self._create_button(

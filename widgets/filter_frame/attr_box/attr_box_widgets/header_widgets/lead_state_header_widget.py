@@ -2,14 +2,14 @@ from PyQt6.QtWidgets import QHBoxLayout, QLabel
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from utilities.TypeChecking.TypeChecking import LeadStates
-from .base_header_widget import BaseHeaderWidget
+from .base_header_widget import HeaderWidget
 
 if TYPE_CHECKING:
     from ....attr_box.lead_state_attr_box import LeadStateAttrBox
 from constants import LEADING, TRAILING
 
 
-class LeadStateHeaderWidget(BaseHeaderWidget):
+class LeadStateHeaderWidget(HeaderWidget):
     def __init__(self, attr_box: "LeadStateAttrBox", lead_state: LeadStates) -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box

@@ -6,7 +6,7 @@ from constants import BLUE, HEX_BLUE, HEX_RED, RED
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 
-class BaseHeaderWidget(AttrBoxWidget):
+class HeaderWidget(AttrBoxWidget):
     def __init__(self, attr_box) -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box

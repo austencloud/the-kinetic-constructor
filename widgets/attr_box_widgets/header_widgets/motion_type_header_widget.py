@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, List
 from utilities.TypeChecking.TypeChecking import MotionTypes, PropRotDirs, VtgDirections
 from widgets.filter_frame.attr_box.attr_box_widgets.header_widgets.base_header_widget import (
-    BaseHeaderWidget,
+    HeaderWidget,
 )
 
 if TYPE_CHECKING:
@@ -23,7 +23,7 @@ from constants import (
 )
 
 
-class MotionTypeHeaderWidget(BaseHeaderWidget):
+class MotionTypeHeaderWidget(HeaderWidget):
     def __init__(self, attr_box, motion_type: MotionTypes) -> None:
         super().__init__(attr_box)
         self.attr_box: "MotionTypeAttrBox" = attr_box
