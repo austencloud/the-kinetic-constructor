@@ -1,13 +1,6 @@
 from constants import (
     BLUE,
-    BLUE_PROP_ROT_DIR,
-    BLUE_TURNS,
-    DASH,
-    NO_ROT,
     RED,
-    RED_PROP_ROT_DIR,
-    RED_TURNS,
-    STATIC,
 )
 from typing import TYPE_CHECKING, List
 from utilities.TypeChecking.TypeChecking import Colors, Turns

@@ -3,12 +3,8 @@ from PyQt6.QtWidgets import (
     QScrollArea,
     QWidget,
     QVBoxLayout,
-    QLabel,
-    QGridLayout,
-    QSizePolicy,
 )
 from PyQt6.QtCore import Qt, QTimer
-from Enums import LetterNumberType
 from utilities.TypeChecking.TypeChecking import LetterTypeNums, Letters
 from widgets.filter_frame.filter_tab.filter_tab import ScrollAreaFilterTab
 from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph

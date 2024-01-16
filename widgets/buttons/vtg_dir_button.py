@@ -1,6 +1,4 @@
 from PyQt6.QtWidgets import QPushButton
-from PyQt6.QtCore import QSize
-from PyQt6.QtGui import QFont
 from typing import Union, TYPE_CHECKING
 
 
@@ -17,7 +15,6 @@ if TYPE_CHECKING:
     from ..filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
         TurnsWidget,
     )
-from PyQt6.QtGui import QIcon
 
 class VtgDirButton(QPushButton):
     def __init__(

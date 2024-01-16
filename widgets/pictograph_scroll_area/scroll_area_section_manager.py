@@ -6,15 +6,11 @@ from utilities.TypeChecking.TypeChecking import (
 )
 from widgets.filter_frame.filter_tab.filter_tab import ScrollAreaFilterTab
 from widgets.pictograph_scroll_area.scroll_area_section import ScrollAreaSection
-from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
 
 if TYPE_CHECKING:
-    from widgets.pictograph_scroll_area.scroll_area_display_manager import (
-        ScrollAreaDisplayManager,
-    )
     from .pictograph_scroll_area import PictographScrollArea
 
-from PyQt6.QtWidgets import QWidget, QLabel, QGridLayout, QSizePolicy
+from PyQt6.QtWidgets import QLabel, QGridLayout, QSizePolicy
 
 
 class ScrollAreaSectionManager:

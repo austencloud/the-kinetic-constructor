@@ -1,12 +1,10 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QTabWidget
 
 from widgets.filter_frame.attr_panel.color_attr_panel import ColorAttrPanel
 
 if TYPE_CHECKING:
     from widgets.pictograph_scroll_area.pictograph_scroll_area import PictographScrollArea
-    from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
-    from widgets.ig_tab.ig_tab import IGTab
 
 from typing import TYPE_CHECKING, List
 from ..attr_panel.lead_state_attr_panel import IGLeadStateAttrPanel

@@ -21,14 +21,13 @@ from constants import (
     SAME,
     STATIC,
 )
-from utilities.TypeChecking.TypeChecking import PropRotDirs, VtgDirections
+from utilities.TypeChecking.TypeChecking import VtgDirections
 from widgets.buttons.vtg_dir_button import VtgDirButton
 from .base_attr_box_widget import AttrBoxWidget
 
 if TYPE_CHECKING:
     from widgets.filter_frame.attr_box.color_attr_box import ColorAttrBox
     from widgets.filter_frame.attr_box.motion_type_attr_box import MotionTypeAttrBox
-    from ...attr_box.base_attr_box import BaseAttrBox
 
 
 class VtgDirWidget(AttrBoxWidget):

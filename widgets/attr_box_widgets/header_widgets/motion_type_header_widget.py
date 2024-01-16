@@ -1,9 +1,8 @@
 from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton
-from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING, List
-from utilities.TypeChecking.TypeChecking import MotionTypes, PropRotDirs, VtgDirections
+from utilities.TypeChecking.TypeChecking import MotionTypes, VtgDirections
 from widgets.buttons.prop_rot_dir_button import PropRotDirButton
 from widgets.buttons.vtg_dir_button import VtgDirButton
 from widgets.filter_frame.attr_box.attr_box_widgets.header_widgets.base_header_widget import (
@@ -25,7 +24,6 @@ from constants import (
     RED,
     SAME,
     STATIC,
-    VTG_DIR,
 )
 
 

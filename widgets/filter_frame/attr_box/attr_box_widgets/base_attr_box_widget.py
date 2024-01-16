@@ -3,7 +3,6 @@ from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Callable, Union
 
-from constants import ICON_DIR
 from widgets.buttons.prop_rot_dir_button import PropRotDirButton
 from widgets.buttons.swap_button import SwapButton
 from widgets.buttons.vtg_dir_button import VtgDirButton
