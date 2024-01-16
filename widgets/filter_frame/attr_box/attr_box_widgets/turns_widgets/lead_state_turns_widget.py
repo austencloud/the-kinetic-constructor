@@ -26,7 +26,9 @@ class LeadStateTurnsWidget(TurnsWidget):
     def _set_turns_by_lead_state(self, new_turns: Union[int, float]) -> None:
         """Set turns for motions of a specific type to a new value."""
         self.turn_display_manager.update_turns_display(new_turns)
-        for pictograph in self.attr_box.pictographs.values():
+        for (
+            pictograph
+        ) in self.attr_box.attr_panel.parent_tab.scroll_area.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.arrow.motion.lead_state == self.attr_box.lead_state:
                     motion.set_motion_turns(new_turns)
@@ -116,7 +118,6 @@ class LeadStateTurnsWidget(TurnsWidget):
             if leading_motion:
                 leading_motions.append(leading_motion)
         return leading_motions
-
 
     ### EVENT HANDLERS ###
 

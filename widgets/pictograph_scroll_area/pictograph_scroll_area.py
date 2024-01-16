@@ -57,7 +57,7 @@ class PictographScrollArea(QScrollArea):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
     def organize_pictographs_by_type(self) -> None:
-        self.section_manager.clear_sections()
+        # self.section_manager.clear_sections()
         for key, pictograph in self.pictographs.items():
             letter_type = self.section_manager.get_pictograph_letter_type(key)
             self.pictographs_by_type[letter_type].append(pictograph)

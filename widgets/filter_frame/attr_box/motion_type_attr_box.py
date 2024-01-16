@@ -28,9 +28,6 @@ class MotionTypeAttrBox(BaseAttrBox):
         super().__init__(attr_panel, None)
         self.attr_panel = attr_panel
         self.motion_type = motion_type
-        self.pictographs: Dict[
-            str, Pictograph
-        ] = self.attr_panel.parent_tab.scroll_area.pictographs
         self.font_size = self.width() // 10
         self.widgets: List[AttrBoxWidget] = []
         self.combobox_border = 2
@@ -79,7 +76,7 @@ class MotionTypeAttrBox(BaseAttrBox):
         self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))
 
     def get_pictographs(self) -> List["Pictograph"]:
-        return list(self.pictographs.values())
+        return list(self.attr_panel.parent_tab.scroll_area.pictographs.values())
 
     def update_attr_box(self, motion: Motion) -> None:
         self.turns_widget.turn_display_manager.update_turns_display(motion.turns)

@@ -190,7 +190,9 @@ class TurnAdjustmentManager:
         turns = self.convert_turn_floats_to_ints(turns)
         self.parent_widget.turn_display_manager.update_turns_display(str(turns))
 
-        for pictograph in self.attr_box.pictographs.values():
+        for (
+            pictograph
+        ) in self.attr_box.attr_panel.parent_tab.scroll_area.pictographs.values():
             self._adjust_turns_for_pictograph(pictograph, adjustment)
 
     def convert_turn_floats_to_ints(self, turns: Turns) -> Turns:
@@ -201,7 +203,9 @@ class TurnAdjustmentManager:
 
     def set_turns(self, new_turns: Turns) -> None:
         self.parent_widget.turn_display_manager.update_turns_display(new_turns)
-        for pictograph in self.attr_box.pictographs.values():
+        for (
+            pictograph
+        ) in self.attr_box.attr_panel.parent_tab.scroll_area.pictographs.values():
             for motion in pictograph.motions.values():
                 if self.is_motion_relevant(motion):
                     self.update_motion_properties(motion, new_turns)

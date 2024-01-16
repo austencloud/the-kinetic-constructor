@@ -68,18 +68,19 @@ class VtgDirWidget(AttrBoxWidget):
         buttons = [self.same_button, self.opp_button]
         return buttons
 
-
     def _set_default_vtg_dir(self):
         has_turns = any(
             motion.turns > 0
-            for pictograph in self.attr_box.pictographs.values()
+            for pictograph in self.attr_box.attr_panel.parent_tab.scroll_area.pictographs.values()
             for motion in pictograph.motions.values()
             if motion.motion_type == DASH
         )
         self._set_prop_rot_dir(CLOCKWISE if has_turns else None)
 
     def _set_prop_rot_dir(self, prop_rot_dir: VtgDirections) -> None:
-        for pictograph in self.attr_box.pictographs.values():
+        for (
+            pictograph
+        ) in self.attr_box.attr_panel.parent_tab.scroll_area.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.motion_type in [DASH, STATIC]:
                     if motion.color == self.attr_box.color:

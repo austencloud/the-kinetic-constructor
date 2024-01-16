@@ -15,4 +15,3 @@ class ColorTurnsWidget(TurnsWidget):
             self.attr_box.vtg_dir_widget.same_button
         )
         self.color = self.attr_box.color
-        self.pictographs = self.attr_box.pictographs

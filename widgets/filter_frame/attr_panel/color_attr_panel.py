@@ -16,12 +16,8 @@ class ColorAttrPanel(BaseAttrPanel):
     def __init__(self, parent_tab: "IGTab") -> None:
         super().__init__(parent_tab)
         self.parent_tab = parent_tab
-        self.blue_attr_box = ColorAttrBox(
-            self, self.parent_tab.scroll_area.pictographs, BLUE
-        )
-        self.red_attr_box = ColorAttrBox(
-            self, self.parent_tab.scroll_area.pictographs, RED
-        )
+        self.blue_attr_box = ColorAttrBox(self, BLUE)
+        self.red_attr_box = ColorAttrBox(self, RED)
         self.boxes: List[ColorAttrBox] = [
             self.blue_attr_box,
             self.red_attr_box,
@@ -60,4 +56,3 @@ class ColorAttrPanel(BaseAttrPanel):
         self.layout.setSpacing(int(self.blue_attr_box.width() / 5))
         for box in self.boxes:
             box.resize_ig_color_attr_box()
-

@@ -21,13 +21,11 @@ class ColorAttrBox(BaseAttrBox):
     def __init__(
         self,
         attr_panel: "ColorAttrPanel",
-        pictographs: List["Pictograph"],
         color: Colors,
     ) -> None:
         super().__init__(attr_panel, None)  # Note the None for the single pictograph
         self.attr_panel = attr_panel
         self.color = color
-        self.pictographs: Dict[str, Pictograph] = pictographs
         self.font_size = self.width() // 10
         self.widgets: List[AttrBoxWidget] = []
         self.combobox_border = 2
@@ -54,11 +52,11 @@ class ColorAttrBox(BaseAttrBox):
         self.vtg_dir_widget.resize_prop_rot_dir_widget()
 
     def update_attr_box(self, motion: Motion) -> None:
-        for pictograph in self.pictographs.values():
+        for pictograph in self.attr_panel.parent_tab.scroll_area.pictographs.values():
             for motion in pictograph.motions.values():
                 self.turns_widget.turn_display_manager.update_turns_display(
                     motion.turns
                 )
 
     def get_pictographs(self) -> List["Pictograph"]:
-        return list(self.pictographs.values())
+        return list(self.attr_panel.parent_tab.scroll_area.pictographs.values())

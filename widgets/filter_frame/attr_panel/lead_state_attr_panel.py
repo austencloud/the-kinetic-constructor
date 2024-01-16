@@ -12,12 +12,8 @@ class IGLeadStateAttrPanel(BaseAttrPanel):
     def __init__(self, parent_tab: "IGTab") -> None:
         super().__init__(parent_tab)
         self.parent_tab = parent_tab
-        self.leading_box = LeadStateAttrBox(
-            self, self.parent_tab.scroll_area.pictographs, LEADING
-        )
-        self.trailing_box = LeadStateAttrBox(
-            self, self.parent_tab.scroll_area.pictographs, TRAILING
-        )
+        self.leading_box = LeadStateAttrBox(self, LEADING)
+        self.trailing_box = LeadStateAttrBox(self, TRAILING)
         self.boxes: List[LeadStateAttrBox] = [
             self.leading_box,
             self.trailing_box,
@@ -56,4 +52,3 @@ class IGLeadStateAttrPanel(BaseAttrPanel):
         self.layout.setSpacing(int(self.trailing_box.width() / 5))
         for box in self.boxes:
             box.resize_ig_lead_state_attr_box()
-

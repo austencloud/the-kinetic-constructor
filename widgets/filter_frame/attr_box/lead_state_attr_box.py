@@ -22,19 +22,16 @@ class LeadStateAttrBox(BaseAttrBox):
     def __init__(
         self,
         attr_panel: "IGLeadStateAttrPanel",
-        pictographs: List["Pictograph"],
         lead_state: LeadStates,
     ) -> None:
         super().__init__(attr_panel, None)  # Note the None for the single pictograph
         self.attr_panel = attr_panel
         self.lead_state = lead_state
-        self.pictographs: Dict[str, Pictograph] = pictographs
         self.font_size = self.width() // 10
         self.widgets: List[AttrBoxWidget] = []
         self.combobox_border = 2
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
         self.hbox_layout = QHBoxLayout()
-        self.vbox2 = QVBoxLayout()
         self.layout: QHBoxLayout = self.hbox_layout
         self.hbox_layout.addLayout(self.vbox_layout)
         self._setup_widgets()
@@ -53,4 +50,4 @@ class LeadStateAttrBox(BaseAttrBox):
         self.turns_widget.resize_turns_widget()
 
     def get_pictographs(self) -> List["Pictograph"]:
-        return list(self.pictographs.values())
+        return list(self.attr_panel.parent_tab.scroll_area.pictographs.values())

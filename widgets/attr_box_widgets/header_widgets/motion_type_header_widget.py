@@ -40,7 +40,9 @@ class MotionTypeHeaderWidget(HeaderWidget):
             self._setup_pro_anti_layout()
         if self.motion_type in [DASH, STATIC]:
             self.vtg_dir_buttons: List[VtgDirButton] = self._setup_vtg_dir_buttons()
-            self.prop_rot_dir_buttons: List[PropRotDirButton] = self._setup_prop_rot_dir_buttons()
+            self.prop_rot_dir_buttons: List[
+                PropRotDirButton
+            ] = self._setup_prop_rot_dir_buttons()
             # self._set_default_vtg_direction()
             self._setup_dash_static_layout()
 
@@ -65,7 +67,6 @@ class MotionTypeHeaderWidget(HeaderWidget):
         header_layout.addStretch(5)
         self.layout.addLayout(header_layout)
         self.layout.addWidget(self.separator)
-
 
     def _setup_vtg_dir_buttons(self) -> List[QPushButton]:
         self.same_button: VtgDirButton = self.create_vtg_dir_button(
@@ -96,7 +97,9 @@ class MotionTypeHeaderWidget(HeaderWidget):
         return [self.cw_button, self.ccw_button]
 
     def _set_vtg_dir(self, vtg_dir: VtgDirections) -> None:
-        for pictograph in self.attr_box.pictographs.values():
+        for (
+            pictograph
+        ) in self.attr_box.attr_panel.parent_tab.scroll_area.pictographs.values():
             for motion in pictograph.motions.values():
                 other_motion = pictograph.motions[RED if motion.color == BLUE else BLUE]
                 if motion.is_dash() or motion.is_static():
@@ -107,7 +110,9 @@ class MotionTypeHeaderWidget(HeaderWidget):
                                 self.opp_button.unpress()
                                 motion.prop_rot_dir = other_motion.prop_rot_dir
                                 pictograph_dict = {
-                                    motion.color + "_" + PROP_ROT_DIR: other_motion.prop_rot_dir,
+                                    motion.color
+                                    + "_"
+                                    + PROP_ROT_DIR: other_motion.prop_rot_dir,
                                 }
                                 motion.scene.update_pictograph(pictograph_dict)
                             elif vtg_dir == OPP:
@@ -116,7 +121,9 @@ class MotionTypeHeaderWidget(HeaderWidget):
                                 if other_motion.prop_rot_dir == CLOCKWISE:
                                     motion.prop_rot_dir = COUNTER_CLOCKWISE
                                     pictograph_dict = {
-                                        motion.color + "_" + PROP_ROT_DIR: COUNTER_CLOCKWISE,
+                                        motion.color
+                                        + "_"
+                                        + PROP_ROT_DIR: COUNTER_CLOCKWISE,
                                     }
                                     motion.scene.update_pictograph(pictograph_dict)
                                 elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
@@ -126,11 +133,10 @@ class MotionTypeHeaderWidget(HeaderWidget):
                                     }
                                     motion.scene.update_pictograph(pictograph_dict)
 
-        
-
-
     def _set_prop_rot_dir(self, prop_rot_dir: VtgDirections) -> None:
-        for pictograph in self.attr_box.pictographs.values():
+        for (
+            pictograph
+        ) in self.attr_box.attr_panel.parent_tab.scroll_area.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.motion_type in [DASH, STATIC]:
                     if motion.motion_type == self.attr_box.motion_type:
