@@ -14,14 +14,18 @@ if TYPE_CHECKING:
     from widgets.filter_frame.attr_box.motion_type_attr_box import MotionTypeAttrBox
 from constants import (
     ANTI,
+    BLUE,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     DASH,
     ICON_DIR,
     OPP,
     PRO,
+    PROP_ROT_DIR,
+    RED,
     SAME,
     STATIC,
+    VTG_DIR,
 )
 
 
@@ -67,11 +71,11 @@ class MotionTypeHeaderWidget(HeaderWidget):
 
     def _setup_vtg_dir_buttons(self) -> List[QPushButton]:
         self.same_button: VtgDirButton = self.create_vtg_dir_button(
-            f"{ICON_DIR}same_direction.png", lambda: self._set_prop_rot_dir(SAME)
+            f"{ICON_DIR}same_direction.png", lambda: self._set_vtg_dir(SAME)
         )
         self.opp_button: VtgDirButton = self.create_vtg_dir_button(
             f"{ICON_DIR}opp_direction.png",
-            lambda: self._set_prop_rot_dir(OPP),
+            lambda: self._set_vtg_dir(OPP),
         )
         self.same_button.unpress()
         self.opp_button.unpress()
@@ -81,17 +85,71 @@ class MotionTypeHeaderWidget(HeaderWidget):
 
     def _setup_prop_rot_dir_buttons(self) -> List[QPushButton]:
         self.cw_button: PropRotDirButton = self.create_prop_rot_dir_button(
-            f"{ICON_DIR}clock/clockwise.png", lambda: self._set_prop_rot_dir(SAME)
+            f"{ICON_DIR}clock/clockwise.png", lambda: self._set_prop_rot_dir(CLOCKWISE)
         )
         self.ccw_button: PropRotDirButton = self.create_prop_rot_dir_button(
             f"{ICON_DIR}clock/counter_clockwise.png",
-            lambda: self._set_prop_rot_dir(OPP),
+            lambda: self._set_prop_rot_dir(COUNTER_CLOCKWISE),
         )
         self.cw_button.unpress()
         self.ccw_button.unpress()
         self.cw_button.hide()
         self.ccw_button.hide()
         return [self.cw_button, self.ccw_button]
+
+    def _set_vtg_dir(self, vtg_dir: VtgDirections) -> None:
+        for pictograph in self.attr_box.pictographs.values():
+            for motion in pictograph.motions.values():
+                other_motion = pictograph.motions[RED if motion.color == BLUE else BLUE]
+                if motion.is_dash() or motion.is_static():
+                    if other_motion.is_shift():
+                        if motion.motion_type == self.attr_box.motion_type:
+                            if vtg_dir == SAME:
+                                self.same_button.press()
+                                self.opp_button.unpress()
+                                motion.prop_rot_dir = other_motion.prop_rot_dir
+                                pictograph_dict = {
+                                    motion.color + "_" + PROP_ROT_DIR: other_motion.prop_rot_dir,
+                                }
+                                motion.scene.update_pictograph(pictograph_dict)
+                            elif vtg_dir == OPP:
+                                self.same_button.unpress()
+                                self.opp_button.press()
+                                if other_motion.prop_rot_dir == CLOCKWISE:
+                                    motion.prop_rot_dir = COUNTER_CLOCKWISE
+                                    pictograph_dict = {
+                                        motion.color + "_" + PROP_ROT_DIR: COUNTER_CLOCKWISE,
+                                    }
+                                    motion.scene.update_pictograph(pictograph_dict)
+                                elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                                    motion.prop_rot_dir = CLOCKWISE
+                                    pictograph_dict = {
+                                        motion.color + "_" + PROP_ROT_DIR: CLOCKWISE,
+                                    }
+                                    motion.scene.update_pictograph(pictograph_dict)
+
+        
+
+
+    def _set_prop_rot_dir(self, prop_rot_dir: VtgDirections) -> None:
+        for pictograph in self.attr_box.pictographs.values():
+            for motion in pictograph.motions.values():
+                if motion.motion_type in [DASH, STATIC]:
+                    if motion.motion_type == self.attr_box.motion_type:
+                        pictograph_dict = {
+                            f"{motion.color}_prop_rot_dir": prop_rot_dir,
+                        }
+                        motion.scene.update_pictograph(pictograph_dict)
+        if prop_rot_dir:
+            if prop_rot_dir == CLOCKWISE:
+                self.cw_button.press()
+                self.ccw_button.unpress()
+            elif prop_rot_dir == COUNTER_CLOCKWISE:
+                self.cw_button.unpress()
+                self.ccw_button.press()
+        else:
+            self.cw_button.unpress()
+            self.ccw_button.unpress()
 
     def _setup_header_label(self) -> QLabel:
         font_size = 30

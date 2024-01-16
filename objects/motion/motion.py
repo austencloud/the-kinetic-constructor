@@ -292,11 +292,11 @@ class Motion:
             else self.scene.arrows[BLUE]
         )
 
-    def update_turns(self, turns: Turns) -> None:
+    def set_motion_turns(self, turns: Turns) -> None:
         self.turns = turns
         self.arrow.turns = turns
 
-    def adjust_turns(self, adjustment: float) -> None:
+    def adjust_motion_turns(self, adjustment: float) -> None:
         new_turns = max(0, min(3, self.arrow.turns + adjustment))
 
         if new_turns != self.arrow.turns:
@@ -304,16 +304,16 @@ class Motion:
             self.arrow.turns = new_turns
 
     def add_half_turn(self) -> None:
-        self.adjust_turns(0.5)
+        self.adjust_motion_turns(0.5)
 
     def subtract_half_turn(self) -> None:
-        self.adjust_turns(-0.5)
+        self.adjust_motion_turns(-0.5)
 
     def add_turn(self) -> None:
-        self.adjust_turns(1)
+        self.adjust_motion_turns(1)
 
     def subtract_turn(self) -> None:
-        self.adjust_turns(-1)
+        self.adjust_motion_turns(-1)
 
     ### FLAGS ###
 

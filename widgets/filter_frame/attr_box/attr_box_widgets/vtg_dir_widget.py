@@ -54,11 +54,11 @@ class VtgDirWidget(AttrBoxWidget):
 
     def _setup_vtg_dir_buttons(self) -> List[QPushButton]:
         self.same_button: VtgDirButton = self.create_vtg_dir_button(
-            f"{ICON_DIR}same_direction.png", lambda: self._set_vtg_dir(SAME)
+            f"{ICON_DIR}same_direction.png", lambda: self._set_prop_rot_dir(SAME)
         )
         self.opp_button: VtgDirButton = self.create_vtg_dir_button(
             f"{ICON_DIR}opp_direction.png",
-            lambda: self._set_vtg_dir(OPP),
+            lambda: self._set_prop_rot_dir(OPP),
         )
 
         self.same_button.unpress()
@@ -77,22 +77,22 @@ class VtgDirWidget(AttrBoxWidget):
             for motion in pictograph.motions.values()
             if motion.motion_type == DASH
         )
-        self._set_vtg_dir(SAME if has_turns else None)
+        self._set_prop_rot_dir(CLOCKWISE if has_turns else None)
 
-    def _set_vtg_dir(self, vtg_dir: VtgDirections) -> None:
+    def _set_prop_rot_dir(self, prop_rot_dir: VtgDirections) -> None:
         for pictograph in self.attr_box.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.motion_type in [DASH, STATIC]:
                     if motion.color == self.attr_box.color:
                         pictograph_dict = {
-                            f"{motion.color}_prop_rot_dir": vtg_dir,
+                            f"{motion.color}_prop_rot_dir": prop_rot_dir,
                         }
                         motion.scene.update_pictograph(pictograph_dict)
-        if vtg_dir:
-            if vtg_dir == SAME:
+        if prop_rot_dir:
+            if prop_rot_dir == SAME:
                 self.same_button.press()
                 self.opp_button.unpress()
-            elif vtg_dir == OPP:
+            elif prop_rot_dir == OPP:
                 self.same_button.unpress()
                 self.opp_button.press()
         else:
@@ -120,7 +120,7 @@ class VtgDirWidget(AttrBoxWidget):
     ### EVENT HANDLERS ###
 
     def update_button_size(self) -> None:
-        button_size = self.width() // 3
+        button_size = self.width() // 5
         for vtg_dir_button in self.vtg_dir_buttons:
             vtg_dir_button.setMinimumSize(button_size, button_size)
             vtg_dir_button.setMaximumSize(button_size, button_size)

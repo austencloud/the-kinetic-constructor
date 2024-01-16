@@ -89,6 +89,9 @@ FLOAT = "float"
 DASH = "dash"
 STATIC = "static"
 
+VTG_DIR = "vtg_dir"
+VTG_TIMING = "vtg_timing"
+
 LEAD_STATE = "lead_state"
 COLOR = "color"
 ARROW = "arrow"

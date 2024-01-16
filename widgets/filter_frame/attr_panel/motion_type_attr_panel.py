@@ -146,6 +146,3 @@ class MotionTypeAttrPanel(BaseAttrPanel):
                 box.setMinimumWidth(int(self.width() / 4))
                 box.setMaximumWidth(int(self.width() / 4))
 
-    def reset_turns(self) -> None:
-        for box in self.boxes:
-            box.turns_widget.turn_display_manager.turns_display.setText("0")

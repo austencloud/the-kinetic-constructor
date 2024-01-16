@@ -174,14 +174,14 @@ class GraphEditorTurnsWidget(TurnsWidget):
             motion: Motion = self.attr_box.pictograph.motions[self.attr_box.color]
             if motion and motion.arrow:
                 if int(turns) != motion.turns:
-                    motion.update_turns(int(turns))
+                    motion.set_motion_turns(int(turns))
                     self.attr_box.update_attr_box(motion)
                     self.attr_box.pictograph.update()
         elif turns == "0.5" or turns == "1.5" or turns == "2.5":
             motion: Motion = self.attr_box.pictograph.motions[self.attr_box.color]
             if motion:
                 if float(turns) != motion.turns:
-                    motion.update_turns(float(turns))
+                    motion.set_motion_turns(float(turns))
                     self.attr_box.update_attr_box(motion)
                     self.attr_box.pictograph.update()
         else:

@@ -44,12 +44,25 @@ class MotionTypeAttrBox(BaseAttrBox):
         if self.motion_type in [DASH, STATIC]:
             self.vtg_dir_btn_state = {SAME: False, OPP: False}
 
-    def swap_prop_rot_dir_buttons_and_vtg_dir_buttons(
-        self,
-    ) -> None:
+    def hide_buttons(self) -> None:
+        for button in self.header_widget.prop_rot_dir_buttons:
+            button.hide()
+            
+
+    def show_vtg_dir_buttons(self) -> None:
+        for i in range(len(self.header_widget.prop_rot_dir_buttons)):
+            self.header_widget.layout.replaceWidget(
+                self.header_widget.prop_rot_dir_buttons[i],
+                self.header_widget.vtg_dir_buttons[i],
+            )
+            self.header_widget.prop_rot_dir_buttons[i].hide()
+            self.header_widget.vtg_dir_buttons[i].show()
+
+    def show_prop_rot_dir_buttons(self) -> None:
         for i in range(len(self.header_widget.vtg_dir_buttons)):
             self.header_widget.layout.replaceWidget(
-                self.header_widget.vtg_dir_buttons[i], self.header_widget.prop_rot_dir_buttons[i]
+                self.header_widget.vtg_dir_buttons[i],
+                self.header_widget.prop_rot_dir_buttons[i],
             )
             self.header_widget.vtg_dir_buttons[i].hide()
             self.header_widget.prop_rot_dir_buttons[i].show()

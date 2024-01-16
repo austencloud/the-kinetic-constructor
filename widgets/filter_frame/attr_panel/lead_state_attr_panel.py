@@ -57,6 +57,3 @@ class IGLeadStateAttrPanel(BaseAttrPanel):
         for box in self.boxes:
             box.resize_ig_lead_state_attr_box()
 
-    def reset_turns(self) -> None:
-        for box in self.boxes:
-            box.turns_widget.turn_display_manager.turns_display.setText("0")

@@ -80,7 +80,7 @@ class Pictograph(QGraphicsScene):
         self.view_scale = 1
         self.event_handler = PictographEventHandler(self)
         self.vtg_timing = None
-        self.vtg_direction = None
+        self.vtg_dir = None
         self.dragged_arrow: Arrow = None
         self.dragged_prop: Prop = None
         self.initializer = PictographInit(self)

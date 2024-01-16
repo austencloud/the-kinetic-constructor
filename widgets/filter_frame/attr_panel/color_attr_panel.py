@@ -68,19 +68,3 @@ class ColorAttrPanel(BaseAttrPanel):
         for box in self.boxes:
             box.resize_ig_color_attr_box()
 
-    def reset_turns(self) -> None:
-        for box in self.boxes:
-            box.turns_widget.turn_display_manager.turns_display.setText("0")
-
-        for pictograph in self.parent_tab.scroll_area.pictographs.values():
-            pictograph_dict = {
-                BLUE_TURNS: 0,
-                RED_TURNS: 0,
-            }
-            if pictograph.has_a_dash() or pictograph.has_a_static_motion():
-                if pictograph.motions[BLUE].motion_type in [DASH, STATIC]:
-                    pictograph_dict[BLUE_PROP_ROT_DIR] = NO_ROT
-                elif pictograph.motions[RED].motion_type in [DASH, STATIC]:
-                    pictograph_dict[RED_PROP_ROT_DIR] = NO_ROT
-
-            pictograph.update_pictograph(pictograph_dict)
