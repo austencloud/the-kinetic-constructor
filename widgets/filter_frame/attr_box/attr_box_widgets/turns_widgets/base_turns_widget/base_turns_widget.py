@@ -3,10 +3,11 @@ from typing import TYPE_CHECKING, Union
 
 from constants import CLOCKWISE, COUNTER_CLOCKWISE, DASH, STATIC
 from utilities.TypeChecking.letter_lists import Type4_letters
+from widgets.buttons.prop_rot_dir_button import PropRotDirButton
 
 
-from ...base_attr_box_widget import BaseAttrBoxWidget
-from ...base_attr_box_widget import BaseAttrBoxWidget
+from ...base_attr_box_widget import AttrBoxWidget
+from ...base_attr_box_widget import AttrBoxWidget
 from .turn_adjustment_manager import TurnAdjustmentManager
 from .turn_direct_set_manager import TurnDirectSetManager
 from .turn_display_manager import TurnDisplayManager
@@ -17,7 +18,7 @@ if TYPE_CHECKING:
     from ....lead_state_attr_box import LeadStateAttrBox
 
 
-class BaseTurnsWidget(BaseAttrBoxWidget):
+class TurnsWidget(AttrBoxWidget):
     def __init__(self, attr_box) -> None:
         super().__init__(attr_box)
         self.attr_box: Union[
@@ -47,8 +48,8 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
 
     def _setup_prop_rot_dir_buttons(self):
         # Create CW and CCW buttons here and hide them initially
-        self.cw_button = self.create_attr_box_button('cw_icon.png', self._set_cw)
-        self.ccw_button = self.create_attr_box_button('ccw_icon.png', self._set_ccw)
+        self.cw_button = PropRotDirButton(self.attr_box, CLOCKWISE)
+        self.ccw_button = PropRotDirButton(self.attr_box, COUNTER_CLOCKWISE)
         self.cw_button.hide()
         self.ccw_button.hide()
 
@@ -72,9 +73,10 @@ class BaseTurnsWidget(BaseAttrBoxWidget):
         # based on the current state of the motion's turns and the letter type.
         motion, other_motion = self._get_motion_pair()
         return (
-            self.attr_box.motion_type in [DASH, STATIC] and
-            motion.turns > 0 and other_motion.turns == 0 and
-            self.attr_box.pictograph.letter in Type4_letters
+            self.attr_box.motion_type in [DASH, STATIC]
+            and motion.turns > 0
+            and other_motion.turns == 0
+            and self.attr_box.pictograph.letter in Type4_letters
         )
 
     def _set_cw(self):

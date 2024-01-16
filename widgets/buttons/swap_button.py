@@ -5,19 +5,21 @@ from typing import Union, TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from .motion_types_widget import MotionTypeWidget
-    from .start_end_loc_widget import StartEndLocWidget
-    from .turns_widgets.base_turns_widget.base_turns_widget import (
-        BaseTurnsWidget,
+    from ..filter_frame.attr_box.attr_box_widgets.motion_types_widget import (
+        MotionTypeWidget,
+    )
+    from ..filter_frame.attr_box.attr_box_widgets.start_end_loc_widget import (
+        StartEndLocWidget,
+    )
+    from ..filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
+        TurnsWidget,
     )
 
 
-class AdjustTurnsButton(QPushButton):
+class SwapButton(QPushButton):
     def __init__(
         self,
-        parent_widget: Union[
-            "StartEndLocWidget", "BaseTurnsWidget", "MotionTypeWidget"
-        ],
+        parent_widget: Union["StartEndLocWidget", "TurnsWidget", "MotionTypeWidget"],
         text=None,
     ) -> None:
         super().__init__(text, parent_widget)

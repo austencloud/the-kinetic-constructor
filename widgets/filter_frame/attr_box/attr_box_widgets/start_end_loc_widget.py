@@ -12,7 +12,7 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from constants import ICON_DIR, SWAP_ICON
 from utilities.TypeChecking.TypeChecking import Locations
-from .base_attr_box_widget import BaseAttrBoxWidget
+from .base_attr_box_widget import AttrBoxWidget
 
 
 if TYPE_CHECKING:
@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     )
 
 
-class StartEndLocWidget(BaseAttrBoxWidget):
+class StartEndLocWidget(AttrBoxWidget):
     def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
         super().__init__(attr_box)
 
@@ -106,7 +106,7 @@ class StartEndLocWidget(BaseAttrBoxWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
-        self.swap_button = self.create_attr_box_button(
+        self.swap_button = self.create_swap_button(
             SWAP_ICON, self._swap_locations_callback
         )
 

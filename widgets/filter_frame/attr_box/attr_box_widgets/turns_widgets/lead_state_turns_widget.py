@@ -13,7 +13,7 @@ from constants import (
 from objects.motion.motion import Motion
 from objects.pictograph.pictograph import Pictograph
 from widgets.filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
-    BaseTurnsWidget,
+    TurnsWidget,
 )
 from widgets.filter_frame.attr_box.base_attr_box import BaseAttrBox
 
@@ -21,11 +21,10 @@ if TYPE_CHECKING:
     from widgets.filter_frame.attr_box.lead_state_attr_box import LeadStateAttrBox
 
 
-class LeadStateTurnsWidget(BaseTurnsWidget):
+class LeadStateTurnsWidget(TurnsWidget):
     def __init__(self, attr_box: "LeadStateAttrBox") -> None:
         super().__init__(attr_box)
         self.attr_box: LeadStateAttrBox = attr_box
-
 
     def _update_turns_directly_by_lead_state(self, turns: str) -> None:
         turns = self._convert_turns_from_str_to_num(turns)
@@ -40,26 +39,39 @@ class LeadStateTurnsWidget(BaseTurnsWidget):
                     motion.set_motion_turns(new_turns)
                     self.update_pictograph_dict(motion, new_turns)
 
-
-
-
     def update_ig_lead_state_turnbox_size(self) -> None:
         self.spacing = self.attr_box.attr_panel.width() // 250
         border_radius = (
-            min(self.turn_display_manager.turns_display.width(), self.turn_display_manager.turns_display.height()) * 0.25
+            min(
+                self.turn_display_manager.turns_display.width(),
+                self.turn_display_manager.turns_display.height(),
+            )
+            * 0.25
         )
         box_font_size = int(self.attr_box.width() / 14)
         dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
         border_radius = (
-            min(self.turn_display_manager.turns_display.width(), self.turn_display_manager.turns_display.height()) * 0.25
+            min(
+                self.turn_display_manager.turns_display.width(),
+                self.turn_display_manager.turns_display.height(),
+            )
+            * 0.25
         )
         turns_label_font = QFont("Arial", int(self.width() / 25))
         turnbox_font = QFont("Arial", box_font_size, QFont.Weight.Bold)
 
-        self.turn_display_manager.turns_display.setMinimumHeight(int(self.attr_box.width() / 8))
-        self.turn_display_manager.turns_display.setMaximumHeight(int(self.attr_box.width() / 8))
-        self.turn_display_manager.turns_display.setMinimumWidth(int(self.attr_box.width() / 4))
-        self.turn_display_manager.turns_display.setMaximumWidth(int(self.attr_box.width() / 4))
+        self.turn_display_manager.turns_display.setMinimumHeight(
+            int(self.attr_box.width() / 8)
+        )
+        self.turn_display_manager.turns_display.setMaximumHeight(
+            int(self.attr_box.width() / 8)
+        )
+        self.turn_display_manager.turns_display.setMinimumWidth(
+            int(self.attr_box.width() / 4)
+        )
+        self.turn_display_manager.turns_display.setMaximumWidth(
+            int(self.attr_box.width() / 4)
+        )
         self.turns_label.setContentsMargins(0, 0, self.spacing, 0)
         self.turns_label.setFont(turns_label_font)
         self.turn_display_manager.turns_display.setFont(turnbox_font)
@@ -125,20 +137,36 @@ class LeadStateTurnsWidget(BaseTurnsWidget):
     def update_ig_turnbox_size(self) -> None:
         self.spacing = self.attr_box.attr_panel.width() // 250
         border_radius = (
-            min(self.turn_display_manager.turns_display.width(), self.turn_display_manager.turns_display.height()) * 0.25
+            min(
+                self.turn_display_manager.turns_display.width(),
+                self.turn_display_manager.turns_display.height(),
+            )
+            * 0.25
         )
         box_font_size = int(self.attr_box.width() / 14)
         dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
         border_radius = (
-            min(self.turn_display_manager.turns_display.width(), self.turn_display_manager.turns_display.height()) * 0.25
+            min(
+                self.turn_display_manager.turns_display.width(),
+                self.turn_display_manager.turns_display.height(),
+            )
+            * 0.25
         )
         turns_label_font = QFont("Arial", int(self.width() / 25))
         turnbox_font = QFont("Arial", box_font_size, QFont.Weight.Bold)
 
-        self.turn_display_manager.turns_display.setMinimumHeight(int(self.attr_box.width() / 8))
-        self.turn_display_manager.turns_display.setMaximumHeight(int(self.attr_box.width() / 8))
-        self.turn_display_manager.turns_display.setMinimumWidth(int(self.attr_box.width() / 4))
-        self.turn_display_manager.turns_display.setMaximumWidth(int(self.attr_box.width() / 4))
+        self.turn_display_manager.turns_display.setMinimumHeight(
+            int(self.attr_box.width() / 8)
+        )
+        self.turn_display_manager.turns_display.setMaximumHeight(
+            int(self.attr_box.width() / 8)
+        )
+        self.turn_display_manager.turns_display.setMinimumWidth(
+            int(self.attr_box.width() / 4)
+        )
+        self.turn_display_manager.turns_display.setMaximumWidth(
+            int(self.attr_box.width() / 4)
+        )
         self.turns_label.setContentsMargins(0, 0, self.spacing, 0)
         self.turns_label.setFont(turns_label_font)
         self.turn_display_manager.turns_display.setFont(turnbox_font)
@@ -169,7 +197,6 @@ class LeadStateTurnsWidget(BaseTurnsWidget):
             }}
         """
         )
-
 
     def _set_turns(self, new_turns: int | float) -> None:
         self._set_turns_by_lead_state(new_turns)

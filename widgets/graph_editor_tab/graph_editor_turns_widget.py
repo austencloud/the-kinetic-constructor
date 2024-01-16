@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, List
 from objects.motion.motion import Motion
 from constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON, ICON_DIR
 from ..filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
-    BaseTurnsWidget,
+    TurnsWidget,
 )
 
 
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from ..graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
 
 
-class GraphEditorTurnsWidget(BaseTurnsWidget):
+class GraphEditorTurnsWidget(TurnsWidget):
     def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
         super().__init__(attr_box)
         self.clockwise_pixmap = self._create_clock_pixmap(CLOCKWISE_ICON)
@@ -59,7 +59,6 @@ class GraphEditorTurnsWidget(BaseTurnsWidget):
 
         self.header_frame.setContentsMargins(0, 0, 0, 0)
         self.button_frame.setContentsMargins(0, 0, 0, 0)
-
 
     def setup_additional_layouts(self):
         self.turn_display_and_adjust_btns_hbox_layout = QHBoxLayout()

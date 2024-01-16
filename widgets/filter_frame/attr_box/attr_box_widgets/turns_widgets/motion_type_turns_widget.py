@@ -1,14 +1,14 @@
 from typing import TYPE_CHECKING
 from objects.pictograph.pictograph import Pictograph
 from widgets.filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
-    BaseTurnsWidget,
+    TurnsWidget,
 )
 
 if TYPE_CHECKING:
     from widgets.filter_frame.attr_box.motion_type_attr_box import MotionTypeAttrBox
 
 
-class MotionTypeTurnsWidget(BaseTurnsWidget):
+class MotionTypeTurnsWidget(TurnsWidget):
     def __init__(self, attr_box: "MotionTypeAttrBox") -> None:
         """Initialize the IGMotionTypeTurnsWidget."""
         super().__init__(attr_box)

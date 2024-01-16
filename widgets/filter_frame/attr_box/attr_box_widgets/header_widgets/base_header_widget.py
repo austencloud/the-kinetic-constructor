@@ -1,12 +1,12 @@
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import Qt
-from ..base_attr_box_widget import BaseAttrBoxWidget
+from ..base_attr_box_widget import AttrBoxWidget
 
 from constants import BLUE, HEX_BLUE, HEX_RED, RED
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 
-class BaseHeaderWidget(BaseAttrBoxWidget):
+class BaseHeaderWidget(AttrBoxWidget):
     def __init__(self, attr_box) -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box

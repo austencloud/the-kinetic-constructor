@@ -6,11 +6,11 @@ from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from widgets.filter_frame.attr_box.base_attr_box import BaseAttrBox
-    from .base_turns_widget import BaseTurnsWidget
+    from .base_turns_widget import TurnsWidget
 
 
 class TurnDisplayManager:
-    def __init__(self, parent_widget: "BaseTurnsWidget", attr_box: QFrame) -> None:
+    def __init__(self, parent_widget: "TurnsWidget", attr_box: QFrame) -> None:
         self.parent_widget = parent_widget
         self.attr_box: BaseAttrBox = attr_box
 

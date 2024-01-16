@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     )
 
 
-class PropRotDirButton(QPushButton):
+class RotateMotionButton(QPushButton):
     def __init__(
         self,
         parent_widget: Union["StartEndLocWidget", "TurnsWidget", "MotionTypeWidget"],

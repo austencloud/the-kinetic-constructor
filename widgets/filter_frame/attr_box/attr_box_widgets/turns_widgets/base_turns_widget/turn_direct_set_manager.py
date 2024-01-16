@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING, Union
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from .base_turns_widget import BaseTurnsWidget
+    from .base_turns_widget import TurnsWidget
 
 
 class TurnDirectSetManager:
-    def __init__(self, parent_widget: "BaseTurnsWidget") -> None:
+    def __init__(self, parent_widget: "TurnsWidget") -> None:
         self.parent_widget = parent_widget
 
     def setup_direct_set_buttons(self) -> None:

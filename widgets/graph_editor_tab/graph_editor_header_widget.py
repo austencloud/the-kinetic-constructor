@@ -6,9 +6,10 @@ from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING, Callable
-from widgets.filter_frame.attr_box.attr_box_widgets.adjust_turns_button import (
+from widgets.buttons.adjust_turns_button import (
     AdjustTurnsButton,
 )
+from widgets.buttons.rotate_motion_button import RotateMotionButton
 from widgets.filter_frame.attr_box.attr_box_widgets.header_widgets.base_header_widget import (
     BaseHeaderWidget,
 )
@@ -24,10 +25,10 @@ class GraphEditorHeaderWidget(BaseHeaderWidget):
     def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
         super().__init__(attr_box)
         self.header_label = self._setup_header_label()
-        self.rotate_cw_button = self._create_button(
+        self.rotate_cw_button = self._create_rotate_motion_button(
             f"{ICON_DIR}rotate_cw.png", self._rotate_cw
         )
-        self.rotate_ccw_button = self._create_button(
+        self.rotate_ccw_button = self._create_rotate_motion_button(
             f"{ICON_DIR}rotate_ccw.png", self._rotate_ccw
         )
 
@@ -69,10 +70,10 @@ class GraphEditorHeaderWidget(BaseHeaderWidget):
         label.setStyleSheet(f"color: {color_hex}; font-weight: bold;")
         return label
 
-    def _create_button(
+    def _create_rotate_motion_button(
         self, icon_path: str, callback: Callable[[], None]
-    ) -> AdjustTurnsButton:
-        button = AdjustTurnsButton(self)
+    ) -> RotateMotionButton:
+        button = RotateMotionButton(self)
         button.setIcon(QIcon(icon_path))
         button.clicked.connect(callback)
         return button

@@ -5,8 +5,10 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
 
 from constants import OPP, SAME
 from utilities.TypeChecking.TypeChecking import MotionTypes
-from widgets.filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import BaseTurnsWidget
-from ..attr_box.attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
+from widgets.filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
+    TurnsWidget,
+)
+from ..attr_box.attr_box_widgets.base_attr_box_widget import AttrBoxWidget
 
 if TYPE_CHECKING:
     from ..attr_box.motion_type_attr_box import MotionTypeAttrBox
@@ -21,15 +23,15 @@ class BaseAttrBox(QFrame):
         self.attr_panel = attr_panel
         self.pictograph = pictograph
         self.font_size = self.width() // 10
-        self.widgets: List[BaseAttrBoxWidget] = []
-        self.turns_widget: BaseTurnsWidget = None
+        self.widgets: List[AttrBoxWidget] = []
+        self.turns_widget: TurnsWidget = None
         self.motion_type: MotionTypes = None
         self.combobox_border = 2
         self.border_width = 3
-        self.pixmap_cache: Dict[str, QPixmap] = {}  
+        self.pixmap_cache: Dict[str, QPixmap] = {}
         self.vtg_dir_btn_state: Dict[str, bool] = {SAME: True, OPP: False}
         self.init_ui()
-        
+
     def init_ui(self) -> None:
         self.setup_box()
         self.vbox_layout: QVBoxLayout = QVBoxLayout()

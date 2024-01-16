@@ -22,13 +22,13 @@ from constants import (
     STATIC,
 )
 from utilities.TypeChecking.TypeChecking import PropRotDirs, VtgDirections
-from .base_attr_box_widget import BaseAttrBoxWidget
+from .base_attr_box_widget import AttrBoxWidget
 
 if TYPE_CHECKING:
     from ...attr_box.base_attr_box import BaseAttrBox
 
 
-class VtgDirWidget(BaseAttrBoxWidget):
+class VtgDirWidget(AttrBoxWidget):
     def __init__(self, attr_box: "BaseAttrBox") -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box

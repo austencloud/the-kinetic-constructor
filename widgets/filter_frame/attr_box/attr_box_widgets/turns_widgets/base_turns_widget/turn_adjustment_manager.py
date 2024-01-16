@@ -13,18 +13,18 @@ from utilities.TypeChecking.letter_lists import (
     Type3_letters,
     Type4_letters,
 )
-from ...adjust_turns_button import AdjustTurnsButton
+from ......buttons.adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
-    from ..base_turns_widget.base_turns_widget import BaseTurnsWidget
+    from ..base_turns_widget.base_turns_widget import TurnsWidget
     from ......filter_frame.attr_box.color_attr_box import ColorAttrBox
     from ......filter_frame.attr_box.motion_type_attr_box import MotionTypeAttrBox
     from ......filter_frame.attr_box.lead_state_attr_box import LeadStateAttrBox
 
 
 class TurnAdjustmentManager:
-    def __init__(self, attr_box, parent_widget: "BaseTurnsWidget") -> None:
+    def __init__(self, attr_box, parent_widget: "TurnsWidget") -> None:
         self.attr_box: Union[
             "ColorAttrBox", "MotionTypeAttrBox", "LeadStateAttrBox"
         ] = attr_box
@@ -50,7 +50,7 @@ class TurnAdjustmentManager:
         self, adjustment: AdjustmentNum, text: AdjustmentStr
     ) -> AdjustTurnsButton:
         """Create an adjust turns button and add it to the appropriate layout."""
-        button = AdjustTurnsButton(self.parent_widget, text)
+        button: AdjustTurnsButton = self.parent_widget.create_adjust_turns_button(text)
         button.setContentsMargins(0, 0, 0, 0)
         button.setMinimumWidth(button.fontMetrics().boundingRect(text).width() + 10)
         button.clicked.connect(lambda _, adj=adjustment: self.adjust_turns(adj))

@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Dict, List
 from constants import DASH, MOTION_TYPE, OPP, SAME, STATIC
 from utilities.TypeChecking.TypeChecking import MotionTypes
 from objects.motion.motion import Motion
-from .attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
+from .attr_box_widgets.base_attr_box_widget import AttrBoxWidget
 from .attr_box_widgets.turns_widgets.motion_type_turns_widget import (
     MotionTypeTurnsWidget,
 )
@@ -31,7 +31,7 @@ class MotionTypeAttrBox(BaseAttrBox):
         self.motion_type = motion_type
         self.pictographs: Dict[str, Pictograph] = pictographs
         self.font_size = self.width() // 10
-        self.widgets: List[BaseAttrBoxWidget] = []
+        self.widgets: List[AttrBoxWidget] = []
         self.combobox_border = 2
         self.pixmap_cache: Dict[str, QPixmap] = {}
         self.setLayout(self.vbox_layout)

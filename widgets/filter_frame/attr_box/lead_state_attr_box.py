@@ -5,7 +5,7 @@ from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import LeadStates, LeadStates
 
 from .base_attr_box import BaseAttrBox
-from .attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
+from .attr_box_widgets.base_attr_box_widget import AttrBoxWidget
 from .attr_box_widgets.header_widgets.lead_state_header_widget import (
     LeadStateHeaderWidget,
 )
@@ -31,7 +31,7 @@ class LeadStateAttrBox(BaseAttrBox):
         self.lead_state = lead_state
         self.pictographs: Dict[str, Pictograph] = pictographs
         self.font_size = self.width() // 10
-        self.widgets: List[BaseAttrBoxWidget] = []
+        self.widgets: List[AttrBoxWidget] = []
         self.combobox_border = 2
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
         self.hbox_layout = QHBoxLayout()

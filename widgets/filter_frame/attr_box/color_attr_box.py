@@ -4,7 +4,7 @@ from constants import COLOR, OPP, SAME
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import Colors
 from .base_attr_box import BaseAttrBox
-from .attr_box_widgets.base_attr_box_widget import BaseAttrBoxWidget
+from .attr_box_widgets.base_attr_box_widget import AttrBoxWidget
 from .attr_box_widgets.header_widgets.color_header_widget import ColorHeaderWidget
 from .attr_box_widgets.turns_widgets.color_turns_widget import ColorTurnsWidget
 from .attr_box_widgets.vtg_dir_widget import VtgDirWidget
@@ -29,7 +29,7 @@ class ColorAttrBox(BaseAttrBox):
         self.color = color
         self.pictographs: Dict[str, Pictograph] = pictographs
         self.font_size = self.width() // 10
-        self.widgets: List[BaseAttrBoxWidget] = []
+        self.widgets: List[AttrBoxWidget] = []
         self.combobox_border = 2
         self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
         self.hbox_layout = QHBoxLayout()
@@ -61,7 +61,9 @@ class ColorAttrBox(BaseAttrBox):
     def update_attr_box(self, motion: Motion) -> None:
         for pictograph in self.pictographs.values():
             for motion in pictograph.motions.values():
-                self.turns_widget.turn_display_manager.update_turns_display(motion.turns)
+                self.turns_widget.turn_display_manager.update_turns_display(
+                    motion.turns
+                )
 
     def get_pictographs(self) -> List["Pictograph"]:
         return list(self.pictographs.values())

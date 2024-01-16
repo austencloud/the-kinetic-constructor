@@ -10,20 +10,20 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from constants import ICON_DIR, SWAP_ICON
-from .base_attr_box_widget import BaseAttrBoxWidget
+from .base_attr_box_widget import AttrBoxWidget
 
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
 
 
-class MotionTypeWidget(BaseAttrBoxWidget):
+class MotionTypeWidget(AttrBoxWidget):
     def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
         super().__init__(attr_box)
 
         self.header_label = self.create_attr_header_label("Type")
         self.motion_type_box: QComboBox = self._setup_motion_type_box()
-        self.swap_button = self.create_attr_box_button(
+        self.swap_button = self.create_swap_button(
             SWAP_ICON, self._swap_motion_type_callback
         )
         self.swap_button_frame = self._setup_swap_button_frame()

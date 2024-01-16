@@ -4,17 +4,19 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Callable, Union
 
 from constants import ICON_DIR
+from widgets.buttons.prop_rot_dir_button import PropRotDirButton
+from widgets.buttons.swap_button import SwapButton
 
 if TYPE_CHECKING:
     from widgets.filter_frame.attr_box.base_attr_box import BaseAttrBox
     from objects.motion.motion import Motion
-from .adjust_turns_button import AdjustTurnsButton
+from ....buttons.adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
     pass
 
 
-class BaseAttrBoxWidget(QWidget):
+class AttrBoxWidget(QWidget):
     def __init__(self, attr_box) -> None:
         super().__init__(attr_box)
         self.attr_box: "BaseAttrBox" = attr_box
@@ -33,12 +35,30 @@ class BaseAttrBoxWidget(QWidget):
         frame.setLayout(layout)
         return frame
 
-    def create_attr_box_button(
+    def create_prop_rot_dir_button(
         self, icon_path: str, callback: Callable
-    ) -> AdjustTurnsButton:
-        button = AdjustTurnsButton(self)
+    ) -> "PropRotDirButton":
+        button = PropRotDirButton(self.attr_box, icon_path)
         button.setIcon(QIcon(ICON_DIR + icon_path))
         button.clicked.connect(callback)
+        return button
+    
+    def create_swap_button(
+        self, icon_path: str, callback: Callable
+    ) -> "SwapButton":
+        button = SwapButton(self.attr_box, icon_path)
+        button.setIcon(QIcon(ICON_DIR + icon_path))
+        button.clicked.connect(callback)
+        return button
+
+    
+
+
+    def create_adjust_turns_button(
+        self, text: str
+    ) -> AdjustTurnsButton:
+        button = AdjustTurnsButton(self)
+        button.setText(text)
         return button
 
     def _turns_added(self, initial_turns, new_turns) -> bool:
