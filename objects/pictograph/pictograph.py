@@ -163,6 +163,11 @@ class Pictograph(QGraphicsScene):
 
     ### BOOLS ###
 
+
+
+    def is_view_visible(self) -> bool:
+        return self.view.isVisible()
+
     def is_pictograph_dict_complete(self, pictograph_dict: Dict) -> bool:
         required_keys = [
             "letter",

@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, QTimer
 from constants import Type1, Type2, Type3, Type4, Type5, Type6
+from objects.pictograph.pictograph_loader import PictographLoader
 from utilities.TypeChecking.TypeChecking import LetterTypeNums, Letters
 from ..filter_tab.Type1_filter_tab import Type1FilterTab
 from ..filter_tab.Type2_filter_tab import Type2FilterTab
@@ -20,7 +21,7 @@ from ..pictograph_scroll_area.scroll_area_section_manager import (
 )
 from .scroll_area_display_manager import ScrollAreaDisplayManager
 from .scroll_area_filter_manager import ScrollAreaFilterTabManager
-from .scroll_area_pictograph_factory import ScrollAreaPictographFactory
+from .scroll_area_pictograph_factory import PictographFactory
 
 if TYPE_CHECKING:
     from ..ig_tab.ig_tab import IGTab
@@ -37,32 +38,17 @@ class ScrollArea(QScrollArea):
         self.parent_tab = parent_tab
         self.letters = self.main_widget.letters
         self.pictographs: Dict[Letters, IGPictograph] = {}
-        self.pictograph_factory = ScrollAreaPictographFactory(self)
-        self.display_manager = ScrollAreaDisplayManager(self)
-        self.filter_tab_manager = ScrollAreaFilterTabManager(self)
-        self.section_manager = ScrollAreaSectionManager(self)
-        self.pictograph_factory.create_all_pictographs()
-        self.letters_by_type: Dict[
-            LetterTypeNums, List[Letters]
-        ] = self.section_manager.setup_letters_by_type()
         self._setup_ui()
+        self._setup_managers()
+
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_arrow_placements)
         self.timer.start(1000)
-        self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
-        filter_tab_map = {
-            Type1: Type1FilterTab,
-            Type2: Type2FilterTab,
-            Type3: Type3FilterTab,
-            Type4: Type4FilterTab,
-            Type5: Type5FilterTab,
-            Type6: Type6FilterTab,
-        }
-        for letter_type, pictographs in self.pictographs_by_type.items():
-            filter_tab = filter_tab_map.get(letter_type, BaseFilterTab)(
-                self, letter_type
-            )
-            self.section_manager.create_section(letter_type, filter_tab)
+
+    def _setup_managers(self) -> None:
+        self.display_manager = ScrollAreaDisplayManager(self)
+        self.filter_tab_manager = ScrollAreaFilterTabManager(self)
+        self.section_manager = ScrollAreaSectionManager(self)
 
     def _setup_ui(self) -> None:
         self.setWidgetResizable(True)
@@ -74,31 +60,26 @@ class ScrollArea(QScrollArea):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
-    def organize_pictographs_by_type(self) -> None:
-        for key, pictograph in self.pictographs.items():
-            letter_type = self.section_manager.get_pictograph_letter_type(key)
-            self.pictographs_by_type[letter_type].append(pictograph)
-
-        for letter_type, pictographs in self.pictographs_by_type.items():
-            for index, pictograph in enumerate(pictographs):
-                self.display_manager.add_pictograph_to_layout(pictograph, index)
-
     def update_pictographs(self) -> None:
-        deselected_letters = self.pictograph_factory.get_deselected_letters()
+        deselected_letters = (
+            self.main_widget.pictograph_factory.get_deselected_letters()
+        )
         selected_letters = set(self.parent_tab.selected_letters)
 
         if self._only_deselection_occurred(deselected_letters, selected_letters):
-            # Handle only deselection case
             for letter in deselected_letters:
-                self.pictograph_factory.remove_deselected_letter_pictographs(letter)
+                self.main_widget.pictograph_factory.remove_deselected_letter_pictographs(
+                    letter
+                )
         else:
-            # Handle other cases
             for letter in deselected_letters:
-                self.pictograph_factory.remove_deselected_letter_pictographs(letter)
-            self.pictograph_factory.process_selected_letters()
+                self.main_widget.pictograph_factory.remove_deselected_letter_pictographs(
+                    letter
+                )
+            self.main_widget.pictograph_factory.process_selected_letters()
 
         self.display_manager.cleanup_unused_pictographs()
-        self.organize_pictographs_by_type()
+        self.section_manager.organize_pictographs_by_type()
 
     def _only_deselection_occurred(self, deselected_letters, selected_letters) -> bool:
         if not deselected_letters:
@@ -106,7 +87,6 @@ class ScrollArea(QScrollArea):
         if not selected_letters:
             return True
 
-        # Extract the unique letters from the keys in self.pictographs
         current_pictograph_letters = {key.split("_")[0] for key in self.pictographs}
 
         return (

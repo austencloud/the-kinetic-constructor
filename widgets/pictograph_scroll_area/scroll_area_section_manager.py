@@ -6,6 +6,16 @@ from utilities.TypeChecking.TypeChecking import (
 )
 from widgets.filter_tab.Type1_filter_tab import BaseFilterTab
 from widgets.pictograph_scroll_area.scroll_area_section import ScrollAreaSection
+from constants import Type1, Type2, Type3, Type4, Type5, Type6
+from objects.pictograph.pictograph_loader import PictographLoader
+from utilities.TypeChecking.TypeChecking import LetterTypeNums, Letters
+from ..filter_tab.Type1_filter_tab import Type1FilterTab
+from ..filter_tab.Type2_filter_tab import Type2FilterTab
+from ..filter_tab.Type3_filter_tab import Type3FilterTab
+from ..filter_tab.Type4_filter_tab import Type4FilterTab
+from ..filter_tab.Type5_filter_tab import Type5FilterTab
+from ..filter_tab.Type6_filter_tab import Type6FilterTab
+from ..filter_tab.base_filter_tab import BaseFilterTab
 
 if TYPE_CHECKING:
     from .scroll_area import ScrollArea
@@ -18,6 +28,29 @@ class ScrollAreaSectionManager:
         self.scroll_area = scroll_area
         self.sections: Dict[LetterTypeNums, ScrollAreaSection] = {}
         self.letters_by_type = self.setup_letters_by_type()
+
+        self.letters_by_type: Dict[
+            LetterTypeNums, List[Letters]
+        ] = self.setup_letters_by_type()
+        self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
+        filter_tab_map = self.get_filter_tab_map()
+        for letter_type, pictographs in self.pictographs_by_type.items():
+            filter_tab = filter_tab_map.get(letter_type, BaseFilterTab)(
+                self.scroll_area, letter_type
+            )
+            self.create_section(letter_type, filter_tab)
+
+    def get_filter_tab_map(self) -> Dict[LetterTypeNums, BaseFilterTab]:
+        filter_tab_map = {
+            Type1: Type1FilterTab,
+            Type2: Type2FilterTab,
+            Type3: Type3FilterTab,
+            Type4: Type4FilterTab,
+            Type5: Type5FilterTab,
+            Type6: Type6FilterTab,
+        }
+
+        return filter_tab_map
 
     def setup_letters_by_type(self) -> Dict[LetterTypeNums, List[Letters]]:
         letters_by_type = {}
@@ -71,3 +104,12 @@ class ScrollAreaSectionManager:
 
     def get_section(self, letter_type: LetterTypeNums) -> ScrollAreaSection:
         return self.sections.get(letter_type)
+
+    def organize_pictographs_by_type(self) -> None:
+        for key, pictograph in self.scroll_area.pictographs.items():
+            letter_type = self.get_pictograph_letter_type(key)
+            self.pictographs_by_type[letter_type].append(pictograph)
+
+        for letter_type, pictographs in self.pictographs_by_type.items():
+            for index, pictograph in enumerate(pictographs):
+                self.scroll_area.display_manager.add_pictograph_to_layout(pictograph, index)

@@ -34,6 +34,7 @@ from constants import (
     STAFF,
     START_POS,
 )
+from objects.pictograph.pictograph_loader import PictographLoader
 from utilities.TypeChecking.TypeChecking import Letters
 from widgets.ig_tab.ig_tab import IGTab
 from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
@@ -42,6 +43,9 @@ from widgets.graph_editor_tab.graph_editor_key_event_handler import (
     GraphEditorKeyEventHandler,
 )
 from objects.pictograph.pictograph import Pictograph
+from widgets.pictograph_scroll_area.scroll_area_pictograph_factory import (
+    PictographFactory,
+)
 from widgets.sequence_widget.sequence_widget import SequenceWidget
 from widgets.styled_splitter import StyledSplitter
 
@@ -59,20 +63,34 @@ class MainWidget(QWidget):
         self.prop_type = STAFF
         self.grid_mode = DIAMOND
         self.arrows = []
+        self.all_pictographs: Dict[str, Pictograph] = {}
         self.export_handler = None
         self.main_window = main_window
-        self.thread_pool = QThreadPool()
         self.image_cache_initialized = False
         self.resize(int(self.main_window.width()), int(self.main_window.height()))
+        self.pictograph_factory = PictographFactory(self)
+        self.pictograph_loader = PictographLoader(self)
+
         self.key_event_handler = GraphEditorKeyEventHandler()
         self.letters: Dict[Letters, List[Dict]] = self.load_all_letters()
         self.sequence_widget = SequenceWidget(self)
         self.graph_editor_tab = GraphEditorTab(self)
-        self.option_picker_tab = OptionPickerTab(self)
         self.ig_tab = IGTab(self)
+        self.option_picker_tab = OptionPickerTab(self)
+
         self.ig_tab.imageGenerated.connect(self.on_image_generated)
         self.configure_layouts()
         self.pixmap_cache = {}
+
+    def handle_pictograph_ready(self, pictograph_key):
+        # This method will run in the main thread
+        ig_pictograph = self.pictograph_factory.all_pictographs[pictograph_key]
+        if (
+            ig_pictograph.needs_displaying()
+        ):  # You need to define the needs_displaying logic
+            ig_pictograph.show()  # Ensure this method is thread-safe or called in the main thread
+        else:
+            ig_pictograph.hide()  # Ensure this method is thread-safe or called in the main thread
 
     def load_all_letters(self) -> dict:
         df = pd.read_csv("PictographDataframe.csv")
@@ -247,7 +265,6 @@ class MainWidget(QWidget):
         self.sequence_widget.resize_sequence_widget()
         # self.ig_tab.resize_ig_tab()
 
-
     ### IMAGE CACHE ###
 
     def on_image_generated(self, image_path) -> None:
@@ -318,4 +335,3 @@ class MainWidget(QWidget):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.main_window._set_dimensions()
-

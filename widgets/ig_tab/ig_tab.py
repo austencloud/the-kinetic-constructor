@@ -146,7 +146,7 @@ class IGTab(QWidget):
         button = self.letter_button_frame.buttons[letter]
         letter_type = self.letter_button_frame.get_letter_type(letter)
         is_selected = letter in self.selected_letters
-
+        
         if is_selected:
             self.selected_letters.remove(letter)
         else:

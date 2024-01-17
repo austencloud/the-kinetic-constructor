@@ -79,3 +79,8 @@ class BaseFilterTab(QTabWidget):
     def resize_filter_tab(self) -> None:
         for tab in self.tabs:
             tab.resize_attr_panel()
+
+    def show_panels_based_on_chosen_letters(self) -> None:
+        # implement in subclass
+        pass 
+    

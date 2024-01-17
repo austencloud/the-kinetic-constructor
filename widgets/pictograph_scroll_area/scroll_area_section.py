@@ -10,24 +10,24 @@ from PyQt6.QtWidgets import (
 )
 
 from utilities.TypeChecking.TypeChecking import LetterTypeNums
+from widgets.filter_tab.base_filter_tab import BaseFilterTab
 from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
 
 if TYPE_CHECKING:
     from .scroll_area import ScrollArea
-    from ..filter_tab.filter_tab.Type1_filter_tab import BaseFilterTab
 
 
 class ScrollAreaSection(QWidget):
     def __init__(
         self,
         letter_type: LetterTypeNums,
-        filter_tab: "BaseFilterTab",
+        filter_tab,
         scroll_area: "ScrollArea",
     ) -> None:
         super().__init__(scroll_area)
         self.scroll_area = scroll_area
         self.letter_type = letter_type
-        self.filter_tab = filter_tab
+        self.filter_tab: BaseFilterTab = filter_tab
         self.pictographs: List[IGPictograph] = []
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.pictograph_frame = QFrame()
