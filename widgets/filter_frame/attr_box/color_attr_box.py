@@ -43,15 +43,14 @@ class ColorAttrBox(BaseAttrBox):
         self.setLayout(self.hbox_layout)
 
     def update_attr_box(self, motion: Motion) -> None:
-        for pictograph in self.attr_panel.parent_tab.scroll_area.pictographs.values():
+        for pictograph in self.attr_panel.scroll_area.scroll_area.pictographs.values():
             for motion in pictograph.motions.values():
                 self.turns_widget.turn_display_manager.update_turns_display(
                     motion.turns
                 )
 
     def get_pictographs(self) -> List["Pictograph"]:
-        return list(self.attr_panel.parent_tab.scroll_area.pictographs.values())
-
+        return list(self.attr_panel.scroll_area.scroll_area.pictographs.values())
 
     def resize_attr_box(self) -> None:
         self.turns_widget.resize_turns_widget()

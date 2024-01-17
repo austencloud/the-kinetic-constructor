@@ -28,7 +28,7 @@ class LeadStateTurnsWidget(TurnsWidget):
         self.turn_display_manager.update_turns_display(new_turns)
         for (
             pictograph
-        ) in self.attr_box.attr_panel.parent_tab.scroll_area.pictographs.values():
+        ) in self.attr_box.attr_panel.scroll_area.scroll_area.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.arrow.motion.lead_state == self.attr_box.lead_state:
                     motion.set_motion_turns(new_turns)

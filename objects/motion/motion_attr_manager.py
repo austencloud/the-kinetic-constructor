@@ -16,7 +16,7 @@ from constants import (
 
 if TYPE_CHECKING:
     from widgets.filter_frame.attr_box.base_attr_box import BaseAttrBox
-    from widgets.filter_frame.filter_tab.filter_tab import FilterTab
+    from widgets.filter_frame.filter_tab.Type1_filter_tab import FilterTab
     from objects.motion.motion import Motion
 
 

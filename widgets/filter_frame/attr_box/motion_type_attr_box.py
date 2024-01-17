@@ -12,7 +12,9 @@ from ...attr_box_widgets.header_widgets.motion_type_header_widget import (
 )
 
 if TYPE_CHECKING:
-    from ..attr_panel.motion_type_attr_panel import MotionTypeAttrPanel
+    from ..attr_panel.motion_type_attr_panels.Type1_motion_type_attr_panel import (
+        Type1MotionTypeAttrPanel,
+    )
     from objects.pictograph.pictograph import Pictograph
 
 from PyQt6.QtGui import QPixmap
@@ -22,7 +24,7 @@ from PyQt6.QtWidgets import QSizePolicy
 class MotionTypeAttrBox(BaseAttrBox):
     def __init__(
         self,
-        attr_panel: "MotionTypeAttrPanel",
+        attr_panel: "Type1MotionTypeAttrPanel",
         motion_type: MotionTypes,
     ) -> None:
         super().__init__(attr_panel, None)
@@ -75,7 +77,7 @@ class MotionTypeAttrBox(BaseAttrBox):
         self.turns_widget.resize_turns_widget()
 
     def get_pictographs(self) -> List["Pictograph"]:
-        return list(self.attr_panel.parent_tab.scroll_area.pictographs.values())
+        return list(self.attr_panel.scroll_area.scroll_area.pictographs.values())
 
     def update_attr_box(self, motion: Motion) -> None:
         self.turns_widget.turn_display_manager.update_turns_display(motion.turns)

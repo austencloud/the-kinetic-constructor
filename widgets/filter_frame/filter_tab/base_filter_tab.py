@@ -24,7 +24,9 @@ if TYPE_CHECKING:
 
 from typing import TYPE_CHECKING, List
 from ..attr_panel.lead_state_attr_panel import LeadStateAttrPanel
-from ..attr_panel.motion_type_attr_panel import MotionTypeAttrPanel
+from ..attr_panel.motion_type_attr_panels.Type1_motion_type_attr_panel import (
+    Type1MotionTypeAttrPanel,
+)
 from PyQt6.QtWidgets import QHBoxLayout
 
 
@@ -34,14 +36,16 @@ class FilterTab(QTabWidget):
         self.scroll_area = scroll_area
         self.attr_panel = None
         self.letter_type: LetterTypeNums = letter_type
-        self._setup_ui()
+        self.setup_ui()
 
-    def _setup_ui(self) -> None:
-        self.motion_type_attr_panel = MotionTypeAttrPanel(self.scroll_area.parent_tab)
+    def setup_ui(self) -> None:
+
         self.color_attr_panel = ColorAttrPanel(self.scroll_area.parent_tab)
         self.lead_state_attr_panel = LeadStateAttrPanel(self.scroll_area.parent_tab)
 
-        self.tabs: List[MotionTypeAttrPanel | ColorAttrPanel | LeadStateAttrPanel] = [
+        self.tabs: List[
+            Type1MotionTypeAttrPanel | ColorAttrPanel | LeadStateAttrPanel
+        ] = [
             self.motion_type_attr_panel,
             self.color_attr_panel,
             self.lead_state_attr_panel,
@@ -59,7 +63,6 @@ class FilterTab(QTabWidget):
                 self.addTab(self.color_attr_panel, "Filter by Colors")
             elif tab == LEAD_STATE and self.indexOf(self.lead_state_attr_panel) == -1:
                 self.addTab(self.lead_state_attr_panel, "Filter by Lead State")
-
 
     def hide_tabs(self, tabs: List[MotionAttributes]) -> None:
         for tab in tabs:
@@ -126,7 +129,7 @@ class FilterTab(QTabWidget):
                 self.indexOf(getattr(self, f"{tabs_to_show[0].lower()}_attr_panel"))
             )
         self.resize_filter_tab()
-        
+
     def bring_to_front(self, tab: MotionAttributes) -> None:
         if tab == MOTION_TYPE:
             index = self.indexOf(self.motion_type_attr_panel)

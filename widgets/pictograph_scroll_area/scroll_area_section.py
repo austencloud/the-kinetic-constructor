@@ -14,7 +14,7 @@ from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
 
 if TYPE_CHECKING:
     from .scroll_area import ScrollArea
-    from ..filter_frame.filter_tab.filter_tab import FilterTab
+    from ..filter_frame.filter_tab.Type1_filter_tab import FilterTab
 
 
 class ScrollAreaSection(QWidget):

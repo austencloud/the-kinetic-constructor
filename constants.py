@@ -186,6 +186,20 @@ ANTI_TURNS = "anti_turns"
 DASH_TURNS = "dash_turns"
 STATIC_TURNS = "static_turns"
 
+Type1 = "Type1"
+Type2 = "Type2"
+Type3 = "Type3"
+Type4 = "Type4"
+Type5 = "Type5"
+Type6 = "Type6"
+
+DUAL_SHIFT = "dual-shift"
+SHIFT = "shift"
+CROSS_SHIFT = "cross-shift"
+DASH = "dash"
+DUAL_DASH = "dual-dash"
+STATIC = "static"
+
 ### ICONS ###
 
 CLOCK_DIR = ICON_DIR + "clock/"

@@ -4,7 +4,7 @@ from utilities.TypeChecking.TypeChecking import (
     LetterTypeNums,
     Letters,
 )
-from widgets.filter_frame.filter_tab.filter_tab import FilterTab
+from widgets.filter_frame.filter_tab.Type1_filter_tab import FilterTab
 from widgets.pictograph_scroll_area.scroll_area_section import ScrollAreaSection
 
 if TYPE_CHECKING:

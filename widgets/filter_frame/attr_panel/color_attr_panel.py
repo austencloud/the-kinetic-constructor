@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 class ColorAttrPanel(BaseAttrPanel):
     def __init__(self, parent_tab: "IGTab") -> None:
         super().__init__(parent_tab)
-        self.parent_tab = parent_tab
+        self.scroll_area = parent_tab
         self.blue_attr_box = ColorAttrBox(self, BLUE)
         self.red_attr_box = ColorAttrBox(self, RED)
         self.boxes: List[ColorAttrBox] = [

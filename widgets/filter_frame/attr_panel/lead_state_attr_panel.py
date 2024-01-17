@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 class LeadStateAttrPanel(BaseAttrPanel):
     def __init__(self, parent_tab: "IGTab") -> None:
         super().__init__(parent_tab)
-        self.parent_tab = parent_tab
+        self.scroll_area = parent_tab
         self.leading_box = LeadStateAttrBox(self, LEADING)
         self.trailing_box = LeadStateAttrBox(self, TRAILING)
         self.boxes: List[LeadStateAttrBox] = [
@@ -52,4 +52,3 @@ class LeadStateAttrPanel(BaseAttrPanel):
         self.layout.setSpacing(int(self.boxes[0].width() / 5))
         for box in self.boxes:
             box.resize_attr_box()
-

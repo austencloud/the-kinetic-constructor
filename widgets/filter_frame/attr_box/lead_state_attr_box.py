@@ -48,4 +48,4 @@ class LeadStateAttrBox(BaseAttrBox):
         self.turns_widget.resize_turns_widget()
 
     def get_pictographs(self) -> List["Pictograph"]:
-        return list(self.attr_panel.parent_tab.scroll_area.pictographs.values())
+        return list(self.attr_panel.scroll_area.scroll_area.pictographs.values())

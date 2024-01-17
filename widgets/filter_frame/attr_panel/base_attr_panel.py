@@ -1,7 +1,4 @@
-from PyQt6.QtWidgets import (
-    QHBoxLayout,
-    QFrame,
-)
+from PyQt6.QtWidgets import QHBoxLayout, QFrame
 from typing import TYPE_CHECKING, List, Union
 
 from constants import (
@@ -15,26 +12,23 @@ from constants import (
     RED_TURNS,
     STATIC,
 )
-from widgets.filter_frame.attr_box.color_attr_box import ColorAttrBox
-from widgets.filter_frame.attr_box.lead_state_attr_box import LeadStateAttrBox
-from widgets.filter_frame.attr_box.motion_type_attr_box import MotionTypeAttrBox
+from ..attr_box.color_attr_box import ColorAttrBox
+from ..attr_box.lead_state_attr_box import LeadStateAttrBox
+from ..attr_box.motion_type_attr_box import MotionTypeAttrBox
 
 
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_tab import IGTab
-    from widgets.graph_editor_tab.graph_editor_frame import GraphEditorFrame
+    from ...pictograph_scroll_area.scroll_area import ScrollArea
+    from ...ig_tab.ig_tab import IGTab
+    from ...graph_editor_tab.graph_editor_frame import GraphEditorFrame
 
 
 class BaseAttrPanel(QFrame):
-    def __init__(
-        self,
-        parent: Union["GraphEditorFrame", "IGTab"],
-    ) -> None:
+    def __init__(self, scroll_area: "ScrollArea") -> None:
         super().__init__()
-        self.parent: Union["GraphEditorFrame", "IGTab"] = parent
         self.setContentsMargins(0, 0, 0, 0)
         self.boxes: List[MotionTypeAttrBox, ColorAttrBox, LeadStateAttrBox] = []
-        self.parent_tab: Union["GraphEditorFrame", "IGTab"] = parent
+        self.scroll_area: Union["GraphEditorFrame", "IGTab"] = scroll_area
 
     def setup_layouts(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
@@ -54,7 +48,7 @@ class BaseAttrPanel(QFrame):
                     + box.header_widget.prop_rot_dir_buttons
                 ):
                     button.unpress()
-        for pictograph in self.parent_tab.scroll_area.pictographs.values():
+        for pictograph in self.scroll_area.scroll_area.pictographs.values():
             pictograph_dict = {
                 BLUE_TURNS: 0,
                 RED_TURNS: 0,
