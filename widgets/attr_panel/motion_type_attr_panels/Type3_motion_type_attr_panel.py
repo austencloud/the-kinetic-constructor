@@ -1,11 +1,6 @@
 from constants import ANTI, DASH, PRO, STATIC
 from typing import TYPE_CHECKING, List, Union
-from utilities.TypeChecking.TypeChecking import MotionTypes
-from data.letter_engine_data import motion_type_letter_combinations
 
-from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QLabel
-from PyQt6.QtCore import Qt
 
 from ...attr_box.motion_type_attr_box import MotionTypeAttrBox
 from ...attr_panel.base_attr_panel import BaseAttrPanel

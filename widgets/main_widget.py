@@ -1,6 +1,6 @@
 import os
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
-from PyQt6.QtCore import QEvent, Qt, QThreadPool
+from PyQt6.QtCore import QEvent, Qt
 from PyQt6.QtWidgets import (
     QSizePolicy,
     QWidget,
@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
     QFrame,
     QTabWidget,
 )
-from PyQt6.QtCore import QEvent, Qt, QThreadPool
+from PyQt6.QtCore import QEvent, Qt
 from PyQt6.QtGui import QResizeEvent, QWheelEvent, QPixmap
 import pandas as pd
 from constants import (

@@ -1,22 +1,11 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QTabWidget
-from constants import COLOR, LEAD_STATE, MOTION_TYPE, PRO, ANTI, STATIC, DASH
-from data.letter_engine_data import motion_type_letter_combinations
+from constants import COLOR, LEAD_STATE, MOTION_TYPE
 from utilities.TypeChecking.TypeChecking import (
     LetterTypeNums,
-    Letters,
     MotionAttributes,
 )
-from utilities.TypeChecking.letter_lists import (
-    Type1_letters,
-    Type2_letters,
-    Type3_letters,
-    Type4_letters,
-    Type5_letters,
-    Type6_letters,
-)
 from widgets.attr_panel.base_attr_panel import BaseAttrPanel
-from widgets.attr_panel.color_attr_panel import ColorAttrPanel
 
 if TYPE_CHECKING:
     from widgets.pictograph_scroll_area.scroll_area import (
@@ -24,10 +13,6 @@ if TYPE_CHECKING:
     )
 
 from typing import TYPE_CHECKING, List
-from ..attr_panel.lead_state_attr_panel import LeadStateAttrPanel
-from ..attr_panel.motion_type_attr_panels.Type1_motion_type_attr_panel import (
-    Type1MotionTypeAttrPanel,
-)
 from PyQt6.QtWidgets import QHBoxLayout
 
 

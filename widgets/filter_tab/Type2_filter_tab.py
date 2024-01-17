@@ -8,9 +8,6 @@ from widgets.attr_panel.motion_type_attr_panels.Type2_motion_type_attr_panel imp
 )
 from ..attr_panel.color_attr_panel import ColorAttrPanel
 from ..attr_panel.lead_state_attr_panel import LeadStateAttrPanel
-from ..attr_panel.motion_type_attr_panels.Type1_motion_type_attr_panel import (
-    Type1MotionTypeAttrPanel,
-)
 from .base_filter_tab import BaseFilterTab
 
 if TYPE_CHECKING:
@@ -19,7 +16,7 @@ if TYPE_CHECKING:
     )
 
 from typing import TYPE_CHECKING
-from constants import COLOR, LEAD_STATE, MOTION_TYPE, PRO, ANTI, STATIC, DASH
+from constants import COLOR, LEAD_STATE, MOTION_TYPE, PRO, ANTI
 from data.letter_engine_data import motion_type_letter_combinations
 from utilities.TypeChecking.TypeChecking import (
     LetterTypeNums,

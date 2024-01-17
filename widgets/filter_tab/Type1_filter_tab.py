@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     )
 
 from typing import TYPE_CHECKING
-from constants import COLOR, LEAD_STATE, MOTION_TYPE, PRO, ANTI, STATIC, DASH
+from constants import COLOR, LEAD_STATE, MOTION_TYPE, PRO, ANTI
 from data.letter_engine_data import motion_type_letter_combinations
 from utilities.TypeChecking.TypeChecking import (
     LetterTypeNums,

@@ -1,14 +1,11 @@
-from typing import TYPE_CHECKING, Dict, List, Literal, Set
+from typing import TYPE_CHECKING, List, Literal, Set
 from constants import IG_PICTOGRAPH, OPTION
-from objects.pictograph.pictograph import Pictograph
-from objects.pictograph.pictograph_loader import PictographLoader
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Letters
 from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
 from widgets.option_picker_tab.option import Option
 
 if TYPE_CHECKING:
-    from .scroll_area import ScrollArea
     from widgets.main_widget import MainWidget
 
 from constants import (

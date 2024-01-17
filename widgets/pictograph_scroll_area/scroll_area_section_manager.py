@@ -7,7 +7,6 @@ from utilities.TypeChecking.TypeChecking import (
 from widgets.filter_tab.Type1_filter_tab import BaseFilterTab
 from widgets.pictograph_scroll_area.scroll_area_section import ScrollAreaSection
 from constants import Type1, Type2, Type3, Type4, Type5, Type6
-from objects.pictograph.pictograph_loader import PictographLoader
 from utilities.TypeChecking.TypeChecking import LetterTypeNums, Letters
 from ..filter_tab.Type1_filter_tab import Type1FilterTab
 from ..filter_tab.Type2_filter_tab import Type2FilterTab

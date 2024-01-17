@@ -1,27 +1,17 @@
-from typing import TYPE_CHECKING, Dict, List, Union
+from typing import TYPE_CHECKING, Dict, Union
 from PyQt6.QtWidgets import (
     QScrollArea,
     QWidget,
     QVBoxLayout,
 )
 from PyQt6.QtCore import Qt, QTimer
-from constants import Type1, Type2, Type3, Type4, Type5, Type6
-from objects.pictograph.pictograph_loader import PictographLoader
-from utilities.TypeChecking.TypeChecking import LetterTypeNums, Letters
-from ..filter_tab.Type1_filter_tab import Type1FilterTab
-from ..filter_tab.Type2_filter_tab import Type2FilterTab
-from ..filter_tab.Type3_filter_tab import Type3FilterTab
-from ..filter_tab.Type4_filter_tab import Type4FilterTab
-from ..filter_tab.Type5_filter_tab import Type5FilterTab
-from ..filter_tab.Type6_filter_tab import Type6FilterTab
-from ..filter_tab.base_filter_tab import BaseFilterTab
+from utilities.TypeChecking.TypeChecking import Letters
 from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
 from ..pictograph_scroll_area.scroll_area_section_manager import (
     ScrollAreaSectionManager,
 )
 from .scroll_area_display_manager import ScrollAreaDisplayManager
 from .scroll_area_filter_manager import ScrollAreaFilterTabManager
-from .scroll_area_pictograph_factory import PictographFactory
 
 if TYPE_CHECKING:
     from ..ig_tab.ig_tab import IGTab

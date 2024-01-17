@@ -1,10 +1,6 @@
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QFrame
 from typing import TYPE_CHECKING, Union
 
-from constants import CLOCKWISE, COUNTER_CLOCKWISE, DASH, STATIC
-from objects.motion.motion import Motion
-from utilities.TypeChecking.letter_lists import Type4_letters
-from widgets.buttons.prop_rot_dir_button import PropRotDirButton
 
 
 from ...base_attr_box_widget import AttrBoxWidget
