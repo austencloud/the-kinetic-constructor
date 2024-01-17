@@ -1,28 +1,111 @@
 from typing import TYPE_CHECKING, Dict, Tuple
 from PyQt6.QtCore import QPointF
+from PyQt6.QtWidgets import QGraphicsView
+from objects.arrow.arrow_placement_manager.main_arrow_placement_manager import (
+    ArrowPlacementManager,
+)
+from objects.pictograph.pictograph_context_menu_handler import (
+    PictographContextMenuHandler,
+)
 
-from objects.arrow.arrow import Arrow
-from objects.arrow.ghost_arrow import GhostArrow
-from objects.prop.ghost_prop import GhostProp
-from objects.grid import Grid
+from objects.pictograph.pictograph_event_handler import PictographMouseEventHandler
+from objects.pictograph.pictograph_image_renderer import PictographImageRenderer
+from objects.pictograph.pictograph_menu_handler import PictographMenuHandler
+from objects.pictograph.pictograph_state_updater import PictographStateUpdater
+from objects.pictograph.position_engines.prop_positioners.main_prop_positioner import (
+    PropPlacementManager,
+)
+from utilities.letter_engine import LetterEngine
+from ..grid import Grid
+from ..arrow.arrow import Arrow
+from ..arrow.ghost_arrow import GhostArrow
+from ..prop.ghost_prop import GhostProp
+from ..prop.prop_types import *
+from ..prop.prop import Prop
+from ..motion.motion import Motion
 from utilities.TypeChecking.prop_types import PropTypes
 from utilities.letter_item import LetterItem
-from objects.motion.motion import Motion
-from objects.prop.prop import Prop
+from utilities.TypeChecking.TypeChecking import (
+    Colors,
+    Locations,
+    MotionTypes,
+)
 from constants import *
-from utilities.TypeChecking.TypeChecking import Colors, Locations, MotionTypes
-from objects.prop.prop_types import *
 
 if TYPE_CHECKING:
-    from objects.pictograph.pictograph import Pictograph
+    from ..pictograph.pictograph import Pictograph
 
 
 class PictographInit:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
-        self.main_widget = pictograph.main_widget
 
     ### INIT ###
+
+    def init_all_components(self) -> None:
+        self.pictograph.grid: Grid = self.init_grid()
+        self.pictograph.locations: Dict[
+            Locations, Tuple[int, int, int, int]
+        ] = self.init_quadrant_boundaries(self.pictograph.grid)
+
+        self.pictograph.motions: Dict[Colors, Motion] = self.init_motions()
+        self.pictograph.red_motion, self.pictograph.blue_motion = (
+            self.pictograph.motions[RED],
+            self.pictograph.motions[BLUE],
+        )
+        self.pictograph.arrows, self.pictograph.ghost_arrows = self.init_arrows()
+        self.pictograph.red_arrow, self.pictograph.blue_arrow = (
+            self.pictograph.arrows[RED],
+            self.pictograph.arrows[BLUE],
+        )
+        self.pictograph.props, self.pictograph.ghost_props = self.init_props(
+            self.pictograph.main_widget.prop_type
+        )
+        self.pictograph.red_prop, self.pictograph.blue_prop = (
+            self.pictograph.props[RED],
+            self.pictograph.props[BLUE],
+        )
+
+        self.pictograph.view = self.init_view(self.pictograph.graph_type)
+        self.pictograph.letter_item: LetterItem = self.init_letter_item()
+        self._setup_managers()
+
+    def _setup_managers(self) -> None:
+        self.pictograph.mouse_event_handler = PictographMouseEventHandler(
+            self.pictograph
+        )
+        self.pictograph.context_menu_handler = PictographContextMenuHandler(
+            self.pictograph
+        )
+        self.pictograph.state_updater = PictographStateUpdater(self.pictograph)
+        self.pictograph.image_renderer = PictographImageRenderer(self.pictograph)
+        self.pictograph.pictograph_menu_handler = PictographMenuHandler(self.pictograph)
+        self.pictograph.arrow_placement_manager = ArrowPlacementManager(self.pictograph)
+        self.pictograph.prop_placement_manager = PropPlacementManager(self.pictograph)
+        self.pictograph.letter_engine = LetterEngine(self.pictograph)
+
+    def init_view(self, graph_type) -> QGraphicsView:
+        from widgets.graph_editor_tab.graph_editor_pictograph_view import (
+            GraphEditorPictographView,
+        )
+        from widgets.option_picker_tab.option import OptionView
+        from widgets.sequence_widget.beat_frame.start_pos_beat import (
+            StartPositionBeatView,
+        )
+        from widgets.sequence_widget.beat_frame.beat import BeatView
+        from widgets.ig_tab.ig_scroll.ig_pictograph import IG_Pictograph_View
+
+        if graph_type == MAIN:
+            view = GraphEditorPictographView(self.pictograph)
+        elif graph_type == OPTION:
+            view = OptionView(self.pictograph)
+        elif graph_type == BEAT:
+            view = BeatView(self.pictograph)
+        elif graph_type == START_POS_BEAT:
+            view = StartPositionBeatView(self.pictograph)
+        elif graph_type == IG_PICTOGRAPH:
+            view = IG_Pictograph_View(self.pictograph)
+        return view
 
     def init_grid(self) -> Grid:
         grid = Grid(self.pictograph)
@@ -108,7 +191,9 @@ class PictographInit:
             TURNS: 0,
         }
         arrow = Arrow(self.pictograph, arrow_attributes, self.pictograph.motions[color])
-        ghost_arrow = GhostArrow(self.pictograph, arrow_attributes, self.pictograph.motions[color])
+        ghost_arrow = GhostArrow(
+            self.pictograph, arrow_attributes, self.pictograph.motions[color]
+        )
         arrow.ghost = ghost_arrow
         self.pictograph.motions[color].arrow = arrow
         arrow.motion = self.pictograph.motions[color]

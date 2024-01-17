@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 
-class PictographEventHandler:
+class PictographMouseEventHandler:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
 
@@ -17,6 +17,7 @@ class PictographEventHandler:
         scene_pos = event.scenePos()
         items_at_pos = self.pictograph.items(scene_pos)
 
+        # Prioritize arrows over props if both are clicked simultaneously
         arrow = next((item for item in items_at_pos if isinstance(item, Arrow)), None)
         if arrow:
             self.pictograph.select_arrow(arrow)  # Select the arrow
@@ -44,20 +45,3 @@ class PictographEventHandler:
             self.pictograph.dragged_arrow.mouseReleaseEvent(event)
             self.pictograph.dragged_arrow = None
 
-    def handle_context_menu(self, event: "QGraphicsSceneMouseEvent") -> None:
-        scene_pos = self.pictograph.view.mapToScene(event.pos().toPoint())
-        items_at_pos = self.pictograph.items(scene_pos)
-
-        clicked_item = None
-        for item in items_at_pos:
-            if isinstance(item, Arrow) or isinstance(item, Prop):
-                clicked_item = item
-                break
-
-        if not clicked_item and items_at_pos:
-            clicked_item = items_at_pos[0]
-
-        event_pos = event.screenPos()
-        self.pictograph.pictograph_menu_handler.create_master_menu(
-            event_pos, clicked_item
-        )

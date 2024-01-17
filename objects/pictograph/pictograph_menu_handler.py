@@ -7,10 +7,8 @@ if TYPE_CHECKING:
 
 
 class PictographMenuHandler:
-    def __init__(self, main_widget: "MainWidget", pictograph: "Pictograph") -> None:
+    def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
-        self.main_widget = main_widget
-        self.export_handler = main_widget.export_handler
 
     def create_master_menu(self, event_pos: QPoint, clicked_item) -> None:
         menu = QMenu()

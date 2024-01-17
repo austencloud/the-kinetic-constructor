@@ -1,11 +1,9 @@
 from typing import TYPE_CHECKING, Dict
 from PyQt6.QtSvg import QSvgRenderer
 from constants import *
-    
+
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
-
-
 
 
 if TYPE_CHECKING:
@@ -26,7 +24,7 @@ class PictographStateUpdater:
                 self.pictograph.pictograph_dict = pictograph_dict
             self._update_from_pictograph_dict(pictograph_dict)
 
-        self._update_letter()
+        self.update_letter()
         self._position_objects()
 
         if self.pictograph.graph_type == MAIN:
@@ -121,7 +119,7 @@ class PictographStateUpdater:
         for motion in self.pictograph.motions.values():
             motion.update_motion()
 
-    def _update_letter(self) -> None:
+    def update_letter(self) -> None:
         if all(motion.motion_type for motion in self.pictograph.motions.values()):
             self.pictograph.letter = self.pictograph.letter_engine.get_current_letter()
             self.pictograph.letter_item.letter = self.pictograph.letter
