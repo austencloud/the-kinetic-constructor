@@ -68,8 +68,8 @@ class ScrollArea(QScrollArea):
                 )
             self.main_widget.pictograph_factory.process_selected_letters(self)
 
-        self.display_manager.cleanup_unused_pictographs()
-        self.section_manager.organize_pictographs_by_type()
+        # self.display_manager.cleanup_unused_pictographs()
+        # self.section_manager.organize_pictographs_by_type()
 
     def _only_deselection_occurred(self, deselected_letters, selected_letters) -> bool:
         if not deselected_letters:

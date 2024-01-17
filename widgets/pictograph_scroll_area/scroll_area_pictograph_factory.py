@@ -39,8 +39,9 @@ class PictographFactory:
 
     def process_selected_letters(self, scroll_area: ScrollArea) -> None:
         selected_letters = set(scroll_area.parent_tab.selected_letters)
+        all_pictographs_copy = self.main_widget.all_pictographs.copy()
 
-        for pictograph_key, ig_pictograph in self.main_widget.all_pictographs.items():
+        for pictograph_key, ig_pictograph in all_pictographs_copy.items():
             letter = pictograph_key.split("_")[0]
             if letter in selected_letters:
                 scroll_area.pictographs[pictograph_key] = ig_pictograph

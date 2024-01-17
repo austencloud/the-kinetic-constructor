@@ -52,5 +52,4 @@ class ColorAttrBox(BaseAttrBox):
     def get_pictographs(self) -> List["Pictograph"]:
         return list(self.attr_panel.scroll_area.scroll_area.pictographs.values())
 
-    def resize_attr_box(self) -> None:
-        self.turns_widget.resize_turns_widget()
+

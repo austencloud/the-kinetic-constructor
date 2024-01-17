@@ -5,15 +5,15 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
 
 from constants import OPP, SAME
 from utilities.TypeChecking.TypeChecking import MotionTypes
-from widgets.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
+from .attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
     TurnsWidget,
 )
 from ..attr_box.attr_box_widgets.base_attr_box_widget import AttrBoxWidget
 
 if TYPE_CHECKING:
+    from ..graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
     from ..attr_box.motion_type_attr_box import MotionTypeAttrBox
     from ..attr_panel.base_attr_panel import BaseAttrPanel
-    from ...graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
     from objects.pictograph.pictograph import Pictograph
 
 
@@ -55,3 +55,6 @@ class BaseAttrBox(QFrame):
 
     def clear_attr_box(self: Union["MotionTypeAttrBox", "GraphEditorAttrBox"]) -> None:
         self.start_end_loc_widget.clear_start_end_boxes()
+
+    def resize_attr_box(self) -> None:
+        self.turns_widget.resize_turns_widget()

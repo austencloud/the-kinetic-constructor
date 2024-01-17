@@ -35,23 +35,22 @@ class PictographLoader(QObject):
             pictograph_dicts = self.main_widget.ig_tab.scroll_area.letters.get(
                 letter, []
             )
-            while not self.stopped:
-                try:
-                    for pictograph_dict in pictograph_dicts:
-                        pictograph_key = self.main_widget.pictograph_factory.generate_pictograph_key_from_dict(
-                            pictograph_dict
+            try:
+                for pictograph_dict in pictograph_dicts:
+                    pictograph_key = self.main_widget.pictograph_factory.generate_pictograph_key_from_dict(
+                        pictograph_dict
+                    )
+                    if pictograph_key not in self.main_widget.all_pictographs:
+                        self.main_widget.all_pictographs[
+                            pictograph_key
+                        ] = self.main_widget.pictograph_factory.create_pictograph(
+                            IG_PICTOGRAPH
                         )
-                        if pictograph_key not in self.main_widget.all_pictographs:
-                            self.main_widget.all_pictographs[
-                                pictograph_key
-                            ] = self.main_widget.pictograph_factory.create_pictograph(
-                                IG_PICTOGRAPH
-                            )
-                            self.main_widget.all_pictographs[
-                                pictograph_key
-                            ].state_updater.update_pictograph(pictograph_dict)
-                except queue.Empty:
-                    pass
+                        self.main_widget.all_pictographs[
+                            pictograph_key
+                        ].state_updater.update_pictograph(pictograph_dict)
+            except queue.Empty:
+                continue
 
     def stop(self) -> None:
         self.stopped = True
