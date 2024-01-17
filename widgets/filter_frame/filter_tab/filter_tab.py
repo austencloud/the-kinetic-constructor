@@ -59,9 +59,7 @@ class FilterTab(QTabWidget):
                 self.addTab(self.color_attr_panel, "Filter by Colors")
             elif tab == LEAD_STATE and self.indexOf(self.lead_state_attr_panel) == -1:
                 self.addTab(self.lead_state_attr_panel, "Filter by Lead State")
-        # if any tab is visible, call its resize function
-        if tabs:
-            self.resize_filter_tab()
+
 
     def hide_tabs(self, tabs: List[MotionAttributes]) -> None:
         for tab in tabs:
@@ -127,7 +125,8 @@ class FilterTab(QTabWidget):
             self.setCurrentIndex(
                 self.indexOf(getattr(self, f"{tabs_to_show[0].lower()}_attr_panel"))
             )
-
+        self.resize_filter_tab()
+        
     def bring_to_front(self, tab: MotionAttributes) -> None:
         if tab == MOTION_TYPE:
             index = self.indexOf(self.motion_type_attr_panel)

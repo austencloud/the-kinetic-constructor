@@ -53,6 +53,5 @@ class ColorAttrPanel(BaseAttrPanel):
                     )
 
     def resize_attr_panel(self) -> None:
-        self.layout.setSpacing(int(self.blue_attr_box.width() / 5))
         for box in self.boxes:
             box.resize_attr_box()
