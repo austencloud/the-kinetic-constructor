@@ -74,12 +74,8 @@ class TurnAdjustmentManager:
     def unpress_vtg_buttons(self) -> None:
         """Unpress the vtg buttons."""
         if hasattr(self.attr_box, "same_button"):
-            self.attr_box.header_widget.same_button.setStyleSheet(
-                self.attr_box.header_widget.get_vtg_dir_button_style(pressed=False)
-            )
-            self.attr_box.header_widget.opp_button.setStyleSheet(
-                self.attr_box.header_widget.get_vtg_dir_button_style(pressed=False)
-            )
+            self.attr_box.header_widget.same_button.unpress()
+            self.attr_box.header_widget.opp_button.unpress()
 
     ### UPDATE ###
 

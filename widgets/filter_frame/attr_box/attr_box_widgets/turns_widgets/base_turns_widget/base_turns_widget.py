@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QFrame
 from typing import TYPE_CHECKING, Union
 
 from constants import CLOCKWISE, COUNTER_CLOCKWISE, DASH, STATIC
+from objects.motion.motion import Motion
 from utilities.TypeChecking.letter_lists import Type4_letters
 from widgets.buttons.prop_rot_dir_button import PropRotDirButton
 
@@ -40,62 +41,6 @@ class TurnsWidget(AttrBoxWidget):
         self.turn_adjustment_manager.setup_adjustment_buttons()
         self.turn_display_manager.setup_display_components()
         self.turn_direct_set_manager.setup_direct_set_buttons()
-        # self._setup_prop_rot_dir_buttons()
-
-    def _setup_prop_rot_dir_buttons(self):
-        # Create CW and CCW buttons here and hide them initially
-        self.attr_box.header_widget.cw_button = PropRotDirButton(
-            self.attr_box, CLOCKWISE
-        )
-        self.attr_box.header_widgetccw_button = PropRotDirButton(
-            self.attr_box, COUNTER_CLOCKWISE
-        )
-        self.attr_box.header_widget.cw_button.hide()
-        self.attr_box.header_widgetccw_button.hide()
-
-        # Add logic to determine when to show VTG buttons or CW/CCW buttons
-        self._update_button_visibility()
-
-    def _update_button_visibility(self):
-        if self._should_show_cw_ccw_buttons():
-            self.attr_box.header_widget.same_button.hide()
-            self.attr_box.header_widget.opp_button.hide()
-            self.attr_box.header_widget.cw_button.show()
-            self.attr_box.header_widgetccw_button.show()
-        else:
-            self.attr_box.header_widget.cw_button.hide()
-            self.attr_box.header_widgetccw_button.hide()
-            self.attr_box.header_widget.same_button.show()
-            self.attr_box.header_widget.opp_button.show()
-
-    def _should_show_cw_ccw_buttons(self):
-        # Logic to determine if the CW/CCW buttons should be shown
-        # based on the current state of the motion's turns and the letter type.
-        motion, other_motion = self._get_motion_pair()
-        return (
-            self.attr_box.motion_type in [DASH, STATIC]
-            and motion.turns > 0
-            and other_motion.turns == 0
-            and self.attr_box.pictograph.letter in Type4_letters
-        )
-
-    def _set_cw(self):
-        # Logic to set the current motion's prop rotation direction to clockwise
-        motion, _ = self._get_motion_pair()
-        motion.prop_rot_dir = CLOCKWISE
-        self._update_button_visibility()
-
-    def _set_ccw(self):
-        # Logic to set the current motion's prop rotation direction to counter-clockwise
-        motion, _ = self._get_motion_pair()
-        motion.prop_rot_dir = COUNTER_CLOCKWISE
-        self._update_button_visibility()
-
-    def _get_motion_pair(self):
-        # Retrieve the current motion and its corresponding other motion
-        motion = self.attr_box.get_current_motion()
-        other_motion = self.attr_box.get_other_motion(motion)
-        return motion, other_motion
 
     def _convert_turns_from_str_to_num(self, turns) -> Union[int, float]:
         """Convert turn values from string to numeric."""

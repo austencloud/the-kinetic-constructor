@@ -52,7 +52,7 @@ class ColorAttrPanel(BaseAttrPanel):
                         box.turns_widget.turn_display_manager.turns_display.text()
                     )
 
-    def resize_ig_color_attr_panel(self) -> None:
+    def resize_attr_panel(self) -> None:
         self.layout.setSpacing(int(self.blue_attr_box.width() / 5))
         for box in self.boxes:
-            box.resize_ig_color_attr_box()
+            box.resize_attr_box()

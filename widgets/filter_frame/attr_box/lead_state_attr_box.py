@@ -11,7 +11,7 @@ from .attr_box_widgets.header_widgets.lead_state_header_widget import (
 from .attr_box_widgets.turns_widgets.lead_state_turns_widget import LeadStateTurnsWidget
 
 if TYPE_CHECKING:
-    from ..attr_panel.lead_state_attr_panel import IGLeadStateAttrPanel
+    from ..attr_panel.lead_state_attr_panel import LeadStateAttrPanel
     from objects.pictograph.pictograph import Pictograph
 
 from PyQt6.QtGui import QPixmap
@@ -21,7 +21,7 @@ from PyQt6.QtWidgets import QHBoxLayout
 class LeadStateAttrBox(BaseAttrBox):
     def __init__(
         self,
-        attr_panel: "IGLeadStateAttrPanel",
+        attr_panel: "LeadStateAttrPanel",
         lead_state: LeadStates,
     ) -> None:
         super().__init__(attr_panel, None)  # Note the None for the single pictograph
@@ -44,9 +44,7 @@ class LeadStateAttrBox(BaseAttrBox):
         self.vbox_layout.addWidget(self.turns_widget, 2)
         self.setLayout(self.hbox_layout)
 
-    def resize_ig_lead_state_attr_box(self) -> None:
-        self.setMinimumWidth(int(self.attr_panel.parent_tab.width() / 3))
-        self.setMaximumWidth(int(self.attr_panel.parent_tab.width() / 3))
+    def resize_attr_box(self) -> None:
         self.turns_widget.resize_turns_widget()
 
     def get_pictographs(self) -> List["Pictograph"]:

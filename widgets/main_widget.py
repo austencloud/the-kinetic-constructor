@@ -245,7 +245,8 @@ class MainWidget(QWidget):
     def showEvent(self, event) -> None:
         super().showEvent(event)
         self.sequence_widget.resize_sequence_widget()
-        # self.parent_tab.resize_tab()
+        self.ig_tab.resize_ig_tab()
+
 
     ### IMAGE CACHE ###
 
@@ -317,3 +318,4 @@ class MainWidget(QWidget):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.main_window._set_dimensions()
+

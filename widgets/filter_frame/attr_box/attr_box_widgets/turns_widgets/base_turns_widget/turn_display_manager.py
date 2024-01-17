@@ -94,7 +94,7 @@ class TurnDisplayManager:
     def update_adjust_turns_button_size(self) -> None:
         for button in self.parent_widget.turn_adjustment_manager.adjust_turns_buttons:
             button_size = self.calculate_adjust_turns_button_size()
-            button.update_attr_box_adjust_turns_button_size(button_size)
+            button.update_adjust_turns_button_size(button_size)
 
     def add_turns_display_to_layout(self) -> None:
         negative_buttons_frame = (

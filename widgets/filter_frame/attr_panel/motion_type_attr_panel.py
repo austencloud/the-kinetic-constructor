@@ -101,22 +101,7 @@ class MotionTypeAttrPanel(BaseAttrPanel):
                         box.turns_widget.turn_display_manager.turns_display.text()
                     )
 
-    def resize_ig_motion_type_attr_panel(self) -> None:
+    def resize_attr_panel(self) -> None:
+        self.layout.setSpacing(int(self.boxes[0].width() / 5))
         for box in self.boxes:
-            box.resize_ig_motion_type_attr_box()
-        total_visible_boxes = len([box for box in self.boxes if box.isVisible()])
-        for box in self.boxes:
-            if total_visible_boxes == 1:
-                box.setMinimumWidth(
-                    self.width()
-                )  # This should allow it to take full width
-                box.setMaximumWidth(self.width())
-            elif total_visible_boxes == 2:
-                box.setMinimumWidth(int(self.width() / 2))
-                box.setMaximumWidth(int(self.width() / 2))
-            elif total_visible_boxes == 3:
-                box.setMinimumWidth(int(self.width() / 3))
-                box.setMaximumWidth(int(self.width() / 3))
-            elif total_visible_boxes == 4:
-                box.setMinimumWidth(int(self.width() / 4))
-                box.setMaximumWidth(int(self.width() / 4))
+            box.resize_attr_box()

@@ -79,3 +79,6 @@ class MotionTypeAttrBox(BaseAttrBox):
 
     def update_attr_box(self, motion: Motion) -> None:
         self.turns_widget.turn_display_manager.update_turns_display(motion.turns)
+
+    def resize_attr_box(self) -> None:
+        self.turns_widget.resize_turns_widget()

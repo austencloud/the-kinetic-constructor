@@ -276,13 +276,13 @@ class GraphEditorTurnsWidget(TurnsWidget):
         self.turnbox_vbox_frame.setMaximumWidth(int(self.attr_box.width() / 3.25))
 
     def _update_button_size(self) -> None:
-        for button in self.turn_adjustment_manager.adjust_turns_buttons:
+        for adjust_turns_button in self.turn_adjustment_manager.adjust_turns_buttons:
             button_size = int(self.attr_box.width() / 7)
-            if button.text() == "-0.5" or button.text() == "+0.5":
+            if adjust_turns_button.text() == "-0.5" or adjust_turns_button.text() == "+0.5":
                 button_size = int(button_size * 0.85)
             else:
                 button_size = int(self.attr_box.width() / 6)
-            button.update_attr_box_adjust_turns_button_size(button_size)
+            adjust_turns_button.update_adjust_turns_button_size(button_size)
 
     def resize_turns_widget(self) -> None:
         super().resize_turns_widget()

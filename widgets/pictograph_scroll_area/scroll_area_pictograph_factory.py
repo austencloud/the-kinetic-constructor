@@ -7,9 +7,8 @@ from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
 from widgets.option_picker_tab.option import Option
 
 if TYPE_CHECKING:
-    from widgets.pictograph_scroll_area.pictograph_scroll_area import (
-        PictographScrollArea,
-    )
+    from .scroll_area import ScrollArea
+
 from constants import (
     BLUE_END_LOC,
     BLUE_MOTION_TYPE,
@@ -26,7 +25,7 @@ from constants import (
 
 
 class ScrollAreaPictographFactory:
-    def __init__(self, scroll_area: "PictographScrollArea") -> None:
+    def __init__(self, scroll_area: "ScrollArea") -> None:
         self.scroll_area = scroll_area
 
     def process_selected_letters(self) -> None:

@@ -10,11 +10,11 @@ from ..ig_scroll.wasd_adjustment_manager.wasd_adjustment_manager import (
 )
 
 if TYPE_CHECKING:
-    from ...pictograph_scroll_area.pictograph_scroll_area import PictographScrollArea
+    from ...pictograph_scroll_area.scroll_area import ScrollArea
 
 
 class IGPictograph(Pictograph):
-    def __init__(self, main_widget, scroll_area: "PictographScrollArea") -> None:
+    def __init__(self, main_widget, scroll_area: "ScrollArea") -> None:
         super().__init__(main_widget, IG_PICTOGRAPH)
         self.view = IG_Pictograph_View(self)
         self.ig_scroll_area = scroll_area

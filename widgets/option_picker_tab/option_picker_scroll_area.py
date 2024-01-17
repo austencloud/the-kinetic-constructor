@@ -7,7 +7,7 @@ from utilities.TypeChecking.letter_lists import all_letters
 from widgets.option_picker_tab.option import Option
 from PyQt6.QtGui import QPixmap
 
-from widgets.pictograph_scroll_area.pictograph_scroll_area import PictographScrollArea
+from widgets.pictograph_scroll_area.scroll_area import ScrollArea
 
 
 if TYPE_CHECKING:
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 
 
-class OptionPickerScrollArea(PictographScrollArea):
+class OptionPickerScrollArea(ScrollArea):
     def __init__(
         self, main_widget: "MainWidget", option_picker_tab: "OptionPickerTab"
     ) -> None:
@@ -89,7 +89,6 @@ class OptionPickerScrollArea(PictographScrollArea):
             widget = self.layout.takeAt(0).widget()
             if widget is not None:
                 widget.setParent(None)
-
 
     def update_options(self, clicked_option) -> None:
         """Updates the options based on the clicked option."""
@@ -194,5 +193,3 @@ class OptionPickerScrollArea(PictographScrollArea):
         self.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(new_beat)
 
     ### RESIZE ###
-
-

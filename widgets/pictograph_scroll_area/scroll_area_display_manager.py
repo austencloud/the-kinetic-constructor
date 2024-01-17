@@ -8,14 +8,14 @@ from widgets.pictograph_scroll_area.scroll_area_section import ScrollAreaSection
 from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
 
 if TYPE_CHECKING:
-    from .pictograph_scroll_area import PictographScrollArea
+    from .scroll_area import ScrollArea
 
 
 class ScrollAreaDisplayManager:
     COLUMN_COUNT = 8
     SPACING = 5
 
-    def __init__(self, scroll_area: "PictographScrollArea") -> None:
+    def __init__(self, scroll_area: "ScrollArea") -> None:
         self.scroll_area = scroll_area
 
     def order_and_display_pictographs(self) -> None:

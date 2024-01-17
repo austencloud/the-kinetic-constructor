@@ -3,13 +3,13 @@ from typing import TYPE_CHECKING, Dict, List, Union
 from utilities.TypeChecking.TypeChecking import Turns, Orientations
 
 if TYPE_CHECKING:
-    from widgets.pictograph_scroll_area.pictograph_scroll_area import (
-        PictographScrollArea,
+    from widgets.pictograph_scroll_area.scroll_area import (
+        ScrollArea,
     )
 
 
 class ScrollAreaFilterTabManager:
-    def __init__(self, scroll_area: "PictographScrollArea") -> None:
+    def __init__(self, scroll_area: "ScrollArea") -> None:
         self.scroll_area = scroll_area
         self.filters: Dict[str, Union[Turns, Orientations]] = {}
 

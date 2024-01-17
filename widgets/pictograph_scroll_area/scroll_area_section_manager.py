@@ -8,13 +8,13 @@ from widgets.filter_frame.filter_tab.filter_tab import FilterTab
 from widgets.pictograph_scroll_area.scroll_area_section import ScrollAreaSection
 
 if TYPE_CHECKING:
-    from .pictograph_scroll_area import PictographScrollArea
+    from .scroll_area import ScrollArea
 
 from PyQt6.QtWidgets import QLabel, QGridLayout, QSizePolicy
 
 
 class ScrollAreaSectionManager:
-    def __init__(self, scroll_area: "PictographScrollArea") -> None:
+    def __init__(self, scroll_area: "ScrollArea") -> None:
         self.scroll_area = scroll_area
         self.sections: Dict[LetterTypeNums, ScrollAreaSection] = {}
         self.letters_by_type = self.setup_letters_by_type()

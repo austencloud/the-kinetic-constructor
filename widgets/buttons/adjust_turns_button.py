@@ -25,7 +25,7 @@ class AdjustTurnsButton(QPushButton):
         super().__init__(text, parent_widget)
         self.parent_widget = parent_widget
 
-    def update_attr_box_adjust_turns_button_size(self, button_size) -> None:
+    def update_adjust_turns_button_size(self, button_size) -> None:
         self.button_size = button_size
         self.border_radius = button_size / 2
         self.setMinimumSize(button_size, button_size)

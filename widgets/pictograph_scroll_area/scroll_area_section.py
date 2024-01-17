@@ -13,7 +13,7 @@ from utilities.TypeChecking.TypeChecking import LetterTypeNums
 from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
 
 if TYPE_CHECKING:
-    from .pictograph_scroll_area import PictographScrollArea
+    from .scroll_area import ScrollArea
     from ..filter_frame.filter_tab.filter_tab import FilterTab
 
 
@@ -22,7 +22,7 @@ class ScrollAreaSection(QWidget):
         self,
         letter_type: LetterTypeNums,
         filter_tab: "FilterTab",
-        scroll_area: "PictographScrollArea",
+        scroll_area: "ScrollArea",
     ) -> None:
         super().__init__(scroll_area)
         self.scroll_area = scroll_area
@@ -100,3 +100,8 @@ class ScrollAreaSection(QWidget):
 
         styled_text = f"{letter_type[0:4]} {letter_type[4]}: {styled_type_name}"
         return styled_text
+
+    def resize_scroll_area_section(self) -> None:
+        self.section_label.setMinimumSize(self.section_label.sizeHint())
+        self.section_label.setMaximumSize(self.section_label.sizeHint())
+        self.filter_tab.resize_filter_tab()

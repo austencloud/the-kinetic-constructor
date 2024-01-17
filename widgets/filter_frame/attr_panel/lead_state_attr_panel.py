@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from widgets.ig_tab.ig_tab import IGTab
 
 
-class IGLeadStateAttrPanel(BaseAttrPanel):
+class LeadStateAttrPanel(BaseAttrPanel):
     def __init__(self, parent_tab: "IGTab") -> None:
         super().__init__(parent_tab)
         self.parent_tab = parent_tab
@@ -48,7 +48,8 @@ class IGLeadStateAttrPanel(BaseAttrPanel):
                         box.turns_widget.turn_display_manager.turns_display.text()
                     )
 
-    def resize_ig_lead_state_attr_panel(self) -> None:
-        self.layout.setSpacing(int(self.trailing_box.width() / 5))
+    def resize_attr_panel(self) -> None:
+        self.layout.setSpacing(int(self.boxes[0].width() / 5))
         for box in self.boxes:
-            box.resize_ig_lead_state_attr_box()
+            box.resize_attr_box()
+

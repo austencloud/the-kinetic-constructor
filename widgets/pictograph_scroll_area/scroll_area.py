@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from ..main_widget import MainWidget
 
 
-class PictographScrollArea(QScrollArea):
+class ScrollArea(QScrollArea):
     def __init__(
         self, main_widget: "MainWidget", parent_tab: Union["IGTab", "OptionPickerTab"]
     ) -> None:
@@ -45,7 +45,7 @@ class PictographScrollArea(QScrollArea):
         for letter_type, pictographs in self.pictographs_by_type.items():
             filter_tab = FilterTab(self, letter_type)
             self.section_manager.create_section(letter_type, filter_tab)
-            
+
     def _setup_ui(self) -> None:
         self.setWidgetResizable(True)
         self.container = QWidget()
@@ -77,3 +77,7 @@ class PictographScrollArea(QScrollArea):
     def update_arrow_placements(self) -> None:
         for pictograph in self.pictographs.values():
             pictograph.arrow_placement_manager.update_arrow_placement()
+
+    def resize_scroll_area(self) -> None:
+        for section in self.section_manager.sections.values():
+            section.resize_scroll_area_section()

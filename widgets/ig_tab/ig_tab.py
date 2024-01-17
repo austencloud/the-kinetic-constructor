@@ -13,7 +13,7 @@ from constants import IG_PICTOGRAPH
 from utilities.TypeChecking.TypeChecking import Letters
 from .ig_letter_button_frame import IGLetterButtonFrame
 from .ig_scroll.ig_pictograph import IGPictograph
-from ..pictograph_scroll_area.pictograph_scroll_area import PictographScrollArea
+from ..pictograph_scroll_area.scroll_area import ScrollArea
 
 
 if TYPE_CHECKING:
@@ -38,7 +38,7 @@ class IGTab(QWidget):
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.setLayout(self.layout)
         self.setup_buttons()
-        self.scroll_area = PictographScrollArea(self.main_widget, self)
+        self.scroll_area = ScrollArea(self.main_widget, self)
         self.left_layout = QVBoxLayout()
         self.right_layout = QVBoxLayout()
         self.left_layout.addWidget(self.scroll_area)
@@ -224,3 +224,7 @@ class IGTab(QWidget):
                     pictograph_dict[
                         "blue_turns"
                     ] = self.scroll_area.filter_frame_manager.filters["turns"]
+
+    def resize_ig_tab(self) -> None:
+        self.scroll_area.resize_scroll_area()
+        self.scroll_area.update_pictographs()
