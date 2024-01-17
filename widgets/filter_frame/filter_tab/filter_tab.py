@@ -1,6 +1,5 @@
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QTabWidget
-from Enums import LetterNumberType, MotionAttribute
 from constants import COLOR, LEAD_STATE, MOTION_TYPE, PRO, ANTI, STATIC, DASH
 from data.letter_engine_data import motion_type_letter_combinations
 from utilities.TypeChecking.TypeChecking import (
@@ -78,26 +77,18 @@ class FilterTab(QTabWidget):
             self.removeTab(self.indexOf(tab))
 
         selected_letters_that_match_section_type: set[Letters] = set()
-        for letter in self.scroll_area.parent_tab.selected_letters:
-            if self.letter_type == "Type1":
-                if letter in Type1_letters:
-                    selected_letters_that_match_section_type.add(letter)
-            elif self.letter_type == "Type2":
-                if letter in Type2_letters:
-                    selected_letters_that_match_section_type.add(letter)
-            elif self.letter_type == "Type3":
-                if letter in Type3_letters:
-                    selected_letters_that_match_section_type.add(letter)
-            elif self.letter_type == "Type4":
-                if letter in Type4_letters:
-                    selected_letters_that_match_section_type.add(letter)
-            elif self.letter_type == "Type5":
-                if letter in Type5_letters:
-                    selected_letters_that_match_section_type.add(letter)
-            elif self.letter_type == "Type6":
-                if letter in Type6_letters:
-                    selected_letters_that_match_section_type.add(letter)
+        letter_types = {
+            "Type1": Type1_letters,
+            "Type2": Type2_letters,
+            "Type3": Type3_letters,
+            "Type4": Type4_letters,
+            "Type5": Type5_letters,
+            "Type6": Type6_letters,
+        }
 
+        for letter in self.scroll_area.parent_tab.selected_letters:
+            if self.letter_type in letter_types and letter in letter_types[self.letter_type]:
+                selected_letters_that_match_section_type.add(letter)
         tabs = [
             MOTION_TYPE,
             COLOR,

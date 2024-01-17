@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from ..attr_panel.motion_type_attr_panel import MotionTypeAttrPanel
     from objects.pictograph.pictograph import Pictograph
 
-from PyQt6.QtGui import QPixmap, QFont
+from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QSizePolicy
 
 

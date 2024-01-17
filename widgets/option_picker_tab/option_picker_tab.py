@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 import pandas as pd
 
 from constants import END_POS, START_POS
-from widgets.filter_frame.filter_tab.filter_tab import FilterTab
 from .option_picker_scroll_area import OptionPickerScrollArea
 
 if TYPE_CHECKING:
