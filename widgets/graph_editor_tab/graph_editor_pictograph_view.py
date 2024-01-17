@@ -30,7 +30,7 @@ class GraphEditorPictographView(QGraphicsView):
     def init_buttons(self) -> List[QPushButton]:
         self.add_to_sequence_button = self.create_button(
             f"{ICON_DIR}add_to_sequence.png",
-            self.main_pictograph.add_to_sequence_callback,
+            self.main_pictograph.add_to_sequence_manager.add_to_sequence_callback,
         )
         self.clear_button = self.create_button(
             f"{ICON_DIR}clear.png", self.main_pictograph.clear_pictograph

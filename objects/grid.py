@@ -1,5 +1,5 @@
 import json
-from typing import TYPE_CHECKING, Dict, Union
+from typing import TYPE_CHECKING, Dict, Optional, Tuple, Union
 from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtGui import QTransform
@@ -12,6 +12,11 @@ from constants import (
     GRID_DIR,
 )
 from utilities.TypeChecking.TypeChecking import GridModes
+from utilities.TypeChecking.prop_types import (
+    PropTypes,
+    strictly_placed_props,
+    non_strictly_placed_props,
+)
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import (
@@ -44,16 +49,88 @@ class GridItem(QGraphicsSvgItem):
 
 
 class Grid:
-    def __init__(self, grid_scene: Union["ArrowBox", "PropBox", "Pictograph"]) -> None:
+    def __init__(self, scene: Union["ArrowBox", "PropBox", "Pictograph"]) -> None:
         self.items: Dict[GridModes, GridItem] = {}
         self.grid_mode = DIAMOND
         self.circle_coordinates_cache = self._load_circle_coordinates()
-        self._create_grid_items(grid_scene)
+        self._create_grid_items(scene)
         self.center = self.circle_coordinates_cache["center_point"]
+        self.scene = scene
 
-    def _load_circle_coordinates(self) -> Dict[str, str | Dict[str, str | Dict[str, Dict[str, str]]]]:
-        with open("F:\\CODE\\tka-app\\tka-sequence-constructor\\data\\circle_coords.json", "r") as file:
-            data: Dict[str, Union[str,Dict[str, Union[str, Dict[str, Dict[str, str]]]]]] = json.load(file)
+    def get_closest_hand_point(
+        self, pos: QPointF
+    ) -> Tuple[Optional[str], Optional[QPointF]]:
+        min_distance = float("inf")
+        nearest_point_name = None
+        nearest_point_coords = None
+        if self.scene.main_widget.prop_type in strictly_placed_props:
+            strict = True
+        elif self.scene.main_widget.prop_type in non_strictly_placed_props:
+            strict = False
+        if self.grid_mode == DIAMOND:
+            if strict is True:
+                for name, point in self.circle_coordinates_cache["hand_points"][
+                    self.grid_mode
+                ]["strict"].items():
+                    distance = (pos - point).manhattanLength()
+                    if distance < min_distance:
+                        min_distance = distance
+                        nearest_point_name = name
+                        nearest_point_coords = point
+            elif strict is False:
+                for name, point in self.circle_coordinates_cache["hand_points"][
+                    self.grid_mode
+                ]["normal"].items():
+                    distance = (pos - point).manhattanLength()
+                    if distance < min_distance:
+                        min_distance = distance
+                        nearest_point_name = name
+                        nearest_point_coords = point
+
+        elif self.grid_mode == BOX:
+            for name, point in self.box_hand_points.items():
+                distance = (pos - point).manhattanLength()
+                if distance < min_distance:
+                    min_distance = distance
+                    nearest_point_name = name
+                    nearest_point_coords = point
+
+        return nearest_point_name, nearest_point_coords
+
+    def get_closest_layer2_point(
+        self, pos: QPointF
+    ) -> Tuple[Optional[str], Optional[QPointF]]:
+        min_distance = float("inf")
+        nearest_point_name = None
+        nearest_point_coords = None
+
+        if self.grid_mode == DIAMOND:
+            for name, point in self.diamond_layer2_points.items():
+                distance = (pos - point).manhattanLength()
+                if distance < min_distance:
+                    min_distance = distance
+                    nearest_point_name = name
+                    nearest_point_coords = point
+
+        elif self.grid_mode == BOX:
+            for name, point in self.box_layer2_points.items():
+                distance = (pos - point).manhattanLength()
+                if distance < min_distance:
+                    min_distance = distance
+                    nearest_point_name = name
+                    nearest_point_coords = point
+
+        return nearest_point_name, nearest_point_coords
+
+    def _load_circle_coordinates(
+        self,
+    ) -> Dict[str, str | Dict[str, str | Dict[str, Dict[str, str]]]]:
+        with open(
+            "F:\\CODE\\tka-app\\tka-sequence-constructor\\data\\circle_coords.json", "r"
+        ) as file:
+            data: Dict[
+                str, Union[str, Dict[str, Union[str, Dict[str, Dict[str, str]]]]]
+            ] = json.load(file)
         for section, values in data.items():
             if section in ["hand_points", "layer2_points", "outer_points"]:
                 for mode, types in values.items():
@@ -119,4 +196,4 @@ class Grid:
     def eventFilter(self, obj, event: QEvent) -> Literal[False]:
         if event.type() == QEvent.Type.Wheel:
             event.ignore()
-        return False 
+        return False

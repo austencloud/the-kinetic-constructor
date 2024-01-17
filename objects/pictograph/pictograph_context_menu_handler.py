@@ -27,6 +27,4 @@ class PictographContextMenuHandler:
             clicked_item = items_at_pos[0]
 
         event_pos = event.screenPos()
-        self.pictograph.pictograph_menu_handler.create_master_menu(
-            event_pos, clicked_item
-        )
+        self.pictograph.menu_handler.create_master_menu(event_pos, clicked_item)

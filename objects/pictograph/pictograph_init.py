@@ -10,7 +10,6 @@ from objects.pictograph.pictograph_context_menu_handler import (
 
 from objects.pictograph.pictograph_event_handler import PictographMouseEventHandler
 from objects.pictograph.pictograph_image_renderer import PictographImageRenderer
-from objects.pictograph.pictograph_menu_handler import PictographMenuHandler
 from objects.pictograph.pictograph_state_updater import PictographStateUpdater
 from objects.pictograph.position_engines.prop_positioners.main_prop_positioner import (
     PropPlacementManager,
@@ -43,6 +42,8 @@ class PictographInit:
     ### INIT ###
 
     def init_all_components(self) -> None:
+        self.pictograph.dragged_prop = None
+        self.pictograph.dragged_arrow = None
         self.pictograph.grid: Grid = self.init_grid()
         self.pictograph.locations: Dict[
             Locations, Tuple[int, int, int, int]
@@ -68,21 +69,6 @@ class PictographInit:
 
         self.pictograph.view = self.init_view(self.pictograph.graph_type)
         self.pictograph.letter_item: LetterItem = self.init_letter_item()
-        self._setup_managers()
-
-    def _setup_managers(self) -> None:
-        self.pictograph.mouse_event_handler = PictographMouseEventHandler(
-            self.pictograph
-        )
-        self.pictograph.context_menu_handler = PictographContextMenuHandler(
-            self.pictograph
-        )
-        self.pictograph.state_updater = PictographStateUpdater(self.pictograph)
-        self.pictograph.image_renderer = PictographImageRenderer(self.pictograph)
-        self.pictograph.pictograph_menu_handler = PictographMenuHandler(self.pictograph)
-        self.pictograph.arrow_placement_manager = ArrowPlacementManager(self.pictograph)
-        self.pictograph.prop_placement_manager = PropPlacementManager(self.pictograph)
-        self.pictograph.letter_engine = LetterEngine(self.pictograph)
 
     def init_view(self, graph_type) -> QGraphicsView:
         from widgets.graph_editor_tab.graph_editor_pictograph_view import (

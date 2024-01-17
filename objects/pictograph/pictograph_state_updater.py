@@ -1,6 +1,7 @@
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, Union
 from PyQt6.QtSvg import QSvgRenderer
 from constants import *
+from utilities.TypeChecking.TypeChecking import Colors
 
 if TYPE_CHECKING:
     from objects.pictograph.pictograph import Pictograph
@@ -71,7 +72,7 @@ class PictographStateUpdater:
             static_motion.turns = pictograph_dict[STATIC_TURNS]
 
         for color in [BLUE, RED]:
-            motion_dict = self.pictograph._create_motion_dict(pictograph_dict, color)
+            motion_dict = self._create_motion_dict(pictograph_dict, color)
             motion_dicts.append(motion_dict)
             if MOTION_TYPE in motion_dict:
                 self.pictograph.motions[color].motion_type = motion_dict[MOTION_TYPE]
@@ -104,6 +105,20 @@ class PictographStateUpdater:
                 self.pictograph.motions[color].prop.update_prop()
 
         self._update_motions()
+        
+    def _create_motion_dict(
+        self, pictograph_dict: Dict, color: Colors
+    ) -> Dict:
+        motion_dict = {
+            COLOR: color,
+            MOTION_TYPE: pictograph_dict.get(f"{color}_motion_type"),
+            PROP_ROT_DIR: pictograph_dict.get(f"{color}_prop_rot_dir"),
+            START_LOC: pictograph_dict.get(f"{color}_start_loc"),
+            END_LOC: pictograph_dict.get(f"{color}_end_loc"),
+            TURNS: pictograph_dict.get(f"{color}_turns"),
+            START_ORI: pictograph_dict.get(f"{color}_start_ori"),
+        }
+        return {k: v for k, v in motion_dict.items() if v != None}
 
     def _update_attr_panel(self) -> None:
         for motion in self.pictograph.motions.values():
