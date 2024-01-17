@@ -44,6 +44,7 @@ class PictographInit:
     def init_all_components(self) -> None:
         self.pictograph.dragged_prop = None
         self.pictograph.dragged_arrow = None
+        
         self.pictograph.grid: Grid = self.init_grid()
         self.pictograph.locations: Dict[
             Locations, Tuple[int, int, int, int]

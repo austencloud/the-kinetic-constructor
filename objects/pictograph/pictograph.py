@@ -140,28 +140,18 @@ class Pictograph(QGraphicsScene):
 
     ### HELPERS ###
 
+    def show(self):
+        self.view.setVisible(True)
+
+    def hide(self):
+        self.view.setVisible(False)
+
     def select_arrow(self, arrow) -> None:
         self.selected_arrow: Arrow = arrow
 
     def rotate_pictograph(self, direction: str) -> None:
         for motion in self.motions.values():
             motion.manipulator.rotate_motion(direction)
-
-    def clear_pictograph(self) -> None:
-        for motion in self.motions.values():
-            motion.clear_attributes()
-        for arrow in self.arrows.values():
-            arrow.clear_attributes()
-        for prop in self.props.values():
-            prop.clear_attributes()
-        for ghost_arrow in self.ghost_arrows.values():
-            ghost_arrow.clear_attributes()
-        for ghost_prop in self.ghost_props.values():
-            ghost_prop.clear_attributes()
-        for item in self.items():
-            if isinstance(item, Arrow) or isinstance(item, Prop):
-                self.removeItem(item)
-        self.state_updater.update_letter()
 
     def clear_selections(self) -> None:
         for arrow in self.arrows.values():

@@ -41,6 +41,7 @@ class ScrollArea(QScrollArea):
         self.display_manager = ScrollAreaDisplayManager(self)
         self.filter_tab_manager = ScrollAreaFilterTabManager(self)
         self.section_manager = ScrollAreaSectionManager(self)
+        self.pictograph_factory.create_all_pictographs()
         self.letters_by_type: Dict[
             LetterTypeNums, List[Letters]
         ] = self.section_manager.setup_letters_by_type()

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Literal, Set
+from typing import TYPE_CHECKING, Dict, List, Literal, Set
 from constants import IG_PICTOGRAPH, OPTION
 from objects.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.letter_lists import all_letters
@@ -27,11 +27,30 @@ from constants import (
 class ScrollAreaPictographFactory:
     def __init__(self, scroll_area: "ScrollArea") -> None:
         self.scroll_area = scroll_area
+        self.all_pictographs: Dict[str, IGPictograph] = {}
+
+    def create_all_pictographs(self) -> None:
+        for letter in all_letters:
+            pictograph_dicts = self.scroll_area.letters.get(letter, [])
+            for pictograph_dict in pictograph_dicts:
+                pictograph_key = self.generate_pictograph_key_from_dict(pictograph_dict)
+                if pictograph_key not in self.all_pictographs:
+                    self.all_pictographs[pictograph_key] = self._create_pictograph(
+                        IG_PICTOGRAPH
+                    )
+                    self.all_pictographs[
+                        pictograph_key
+                    ].state_updater.update_pictograph(pictograph_dict)
 
     def process_selected_letters(self) -> None:
-        sorted_selected_letters = self.get_sorted_selected_letters()
-        for letter in sorted_selected_letters:
-            self.process_letter(letter)
+        selected_letters = set(self.scroll_area.parent_tab.selected_letters)
+        for pictograph_key, ig_pictograph in self.all_pictographs.items():
+            letter = pictograph_key.split("_")[0]
+            if letter in selected_letters:
+                self.scroll_area.pictographs[pictograph_key] = ig_pictograph
+                ig_pictograph.show()
+            # else:
+            #     ig_pictograph.hide()
 
     def get_sorted_selected_letters(self) -> List[Letters]:
         return sorted(

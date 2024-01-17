@@ -32,9 +32,6 @@ class GraphEditorPictographView(QGraphicsView):
             f"{ICON_DIR}add_to_sequence.png",
             self.main_pictograph.add_to_sequence_manager.add_to_sequence_callback,
         )
-        self.clear_button = self.create_button(
-            f"{ICON_DIR}clear.png", self.main_pictograph.clear_pictograph
-        )
         self.rotate_cw_button = self.create_button(
             f"{ICON_DIR}rotate_cw.png",
             lambda: self.main_pictograph.rotate_pictograph(CLOCKWISE),
@@ -45,7 +42,6 @@ class GraphEditorPictographView(QGraphicsView):
         )
         buttons = [
             self.add_to_sequence_button,
-            self.clear_button,
             self.rotate_cw_button,
             self.rotate_ccw_button,
         ]
