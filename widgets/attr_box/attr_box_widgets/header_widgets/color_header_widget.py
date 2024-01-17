@@ -7,7 +7,7 @@ from utilities.TypeChecking.TypeChecking import Colors
 from .base_header_widget import HeaderWidget
 
 if TYPE_CHECKING:
-    from widgets.filter_frame.attr_box.color_attr_box import ColorAttrBox
+    from widgets.attr_box.color_attr_box import ColorAttrBox
 from constants import (
     BLUE,
     RED,

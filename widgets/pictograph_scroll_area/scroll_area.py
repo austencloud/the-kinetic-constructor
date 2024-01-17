@@ -7,7 +7,15 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, QTimer
 from constants import Type1, Type2, Type3, Type4, Type5, Type6
 from utilities.TypeChecking.TypeChecking import LetterTypeNums, Letters
-from widgets.filter_frame.filter_tab.Type1_filter_tab import BaseFilterTab, Type1FilterTab, Type2FilterTab, Type3FilterTab, Type4FilterTab, Type5FilterTab, Type6FilterTab
+from widgets.filter_tab.Type1_filter_tab import (
+    BaseFilterTab,
+    Type1FilterTab,
+    Type2FilterTab,
+    Type3FilterTab,
+    Type4FilterTab,
+    Type5FilterTab,
+    Type6FilterTab,
+)
 from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
 from widgets.pictograph_scroll_area.scroll_area_section_manager import (
     ScrollAreaSectionManager,
@@ -52,7 +60,9 @@ class ScrollArea(QScrollArea):
             Type6: Type6FilterTab,
         }
         for letter_type, pictographs in self.pictographs_by_type.items():
-            filter_tab = filter_tab_map.get(letter_type, BaseFilterTab)(self, letter_type)
+            filter_tab = filter_tab_map.get(letter_type, BaseFilterTab)(
+                self, letter_type
+            )
             self.section_manager.create_section(letter_type, filter_tab)
 
     def _setup_ui(self) -> None:

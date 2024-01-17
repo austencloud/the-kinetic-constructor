@@ -5,12 +5,12 @@ from typing import TYPE_CHECKING, List
 from utilities.TypeChecking.TypeChecking import MotionTypes, VtgDirections
 from widgets.buttons.prop_rot_dir_button import PropRotDirButton
 from widgets.buttons.vtg_dir_button import VtgDirButton
-from widgets.filter_frame.attr_box.attr_box_widgets.header_widgets.base_header_widget import (
+from widgets.attr_box.attr_box_widgets.header_widgets.base_header_widget import (
     HeaderWidget,
 )
 
 if TYPE_CHECKING:
-    from widgets.filter_frame.attr_box.motion_type_attr_box import MotionTypeAttrBox
+    from widgets.attr_box.motion_type_attr_box import MotionTypeAttrBox
 from constants import (
     ANTI,
     BLUE,
@@ -23,6 +23,7 @@ from constants import (
     PROP_ROT_DIR,
     RED,
     SAME,
+    SHIFT,
     STATIC,
 )
 
@@ -172,6 +173,8 @@ class MotionTypeHeaderWidget(HeaderWidget):
             text = DASH.capitalize()
         elif self.motion_type == STATIC:
             text = STATIC.capitalize()
+        elif self.motion_type == SHIFT:
+            text = SHIFT.capitalize()
         label = QLabel(text, self)
         label.setStyleSheet(f"font-size: {font_size}px; font-weight: {font_weight};")
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)

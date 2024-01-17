@@ -8,7 +8,7 @@ from widgets.buttons.swap_button import SwapButton
 from widgets.buttons.vtg_dir_button import VtgDirButton
 
 if TYPE_CHECKING:
-    from widgets.filter_frame.attr_box.base_attr_box import BaseAttrBox
+    from widgets.attr_box.base_attr_box import BaseAttrBox
     from objects.motion.motion import Motion
 from ....buttons.adjust_turns_button import AdjustTurnsButton
 

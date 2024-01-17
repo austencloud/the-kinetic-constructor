@@ -26,8 +26,8 @@ from widgets.buttons.vtg_dir_button import VtgDirButton
 from .base_attr_box_widget import AttrBoxWidget
 
 if TYPE_CHECKING:
-    from widgets.filter_frame.attr_box.color_attr_box import ColorAttrBox
-    from widgets.filter_frame.attr_box.motion_type_attr_box import MotionTypeAttrBox
+    from widgets.attr_box.color_attr_box import ColorAttrBox
+    from widgets.attr_box.motion_type_attr_box import MotionTypeAttrBox
 
 
 class VtgDirWidget(AttrBoxWidget):

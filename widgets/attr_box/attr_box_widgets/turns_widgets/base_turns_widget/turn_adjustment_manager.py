@@ -13,14 +13,15 @@ from utilities.TypeChecking.letter_lists import (
     Type3_letters,
     Type4_letters,
 )
-from ......buttons.adjust_turns_button import AdjustTurnsButton
+from .....buttons.adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
     from ..base_turns_widget.base_turns_widget import TurnsWidget
-    from ......filter_frame.attr_box.color_attr_box import ColorAttrBox
-    from ......filter_frame.attr_box.motion_type_attr_box import MotionTypeAttrBox
-    from ......filter_frame.attr_box.lead_state_attr_box import LeadStateAttrBox
+    from .....attr_box.color_attr_box import ColorAttrBox
+    from .....attr_box.lead_state_attr_box import LeadStateAttrBox
+    from .....attr_box.motion_type_attr_box import MotionTypeAttrBox
+
 
 
 class TurnAdjustmentManager:
@@ -119,24 +120,14 @@ class TurnAdjustmentManager:
     def _set_prop_rot_dir_based_on_vtg_state(self, motion: "Motion") -> None:
         """Set the rotation direction of the motion based on the vtg directional relationship."""
         other_motion = self._get_other_motion(motion)
-        self._update_vtg_button_styles()
+        self.attr_box._update_vtg_button_styles()
         motion.prop_rot_dir = self._determine_prop_rot_dir(motion, other_motion)
 
     def _get_other_motion(self, motion: "Motion") -> "Motion":
         """Get the other motion based on color."""
         return motion.scene.motions[RED if motion.color == BLUE else BLUE]
 
-    def _update_vtg_button_styles(self) -> None:
-        """Update the vtg button styles."""
-        if self.attr_box.vtg_dir_btn_state[SAME]:
-            self.attr_box.header_widget.same_button.press()
-            self.attr_box.header_widget.opp_button.unpress()
-        elif self.attr_box.vtg_dir_btn_state[OPP]:
-            self.attr_box.header_widget.same_button.unpress()
-            self.attr_box.header_widget.opp_button.press()
-        else:
-            self.attr_box.header_widget.same_button.unpress()
-            self.attr_box.header_widget.opp_button.unpress()
+
 
     def _determine_prop_rot_dir(
         self, motion: "Motion", other_motion: "Motion"

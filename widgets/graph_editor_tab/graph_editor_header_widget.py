@@ -7,7 +7,7 @@ from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING, Callable
 from widgets.buttons.rotate_motion_button import RotateMotionButton
-from widgets.filter_frame.attr_box.attr_box_widgets.header_widgets.base_header_widget import (
+from widgets.attr_box.attr_box_widgets.header_widgets.base_header_widget import (
     HeaderWidget,
 )
 

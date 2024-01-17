@@ -4,8 +4,8 @@ from constants import (
 )
 from typing import TYPE_CHECKING, List
 from utilities.TypeChecking.TypeChecking import Colors, Turns
-from widgets.filter_frame.attr_box.color_attr_box import ColorAttrBox
-from widgets.filter_frame.attr_panel.base_attr_panel import BaseAttrPanel
+from widgets.attr_box.color_attr_box import ColorAttrBox
+from widgets.attr_panel.base_attr_panel import BaseAttrPanel
 
 
 if TYPE_CHECKING:

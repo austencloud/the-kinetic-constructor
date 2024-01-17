@@ -7,7 +7,7 @@ from .attr_box_widgets.turns_widgets.motion_type_turns_widget import (
     MotionTypeTurnsWidget,
 )
 from .base_attr_box import BaseAttrBox
-from ...attr_box_widgets.header_widgets.motion_type_header_widget import (
+from ..attr_box_widgets.header_widgets.motion_type_header_widget import (
     MotionTypeHeaderWidget,
 )
 
@@ -84,3 +84,15 @@ class MotionTypeAttrBox(BaseAttrBox):
 
     def resize_attr_box(self) -> None:
         self.turns_widget.resize_turns_widget()
+
+    def _update_vtg_button_styles(self) -> None:
+        """Update the vtg button styles."""
+        if self.vtg_dir_btn_state[SAME]:
+            self.header_widget.same_button.press()
+            self.header_widget.opp_button.unpress()
+        elif self.vtg_dir_btn_state[OPP]:
+            self.header_widget.same_button.unpress()
+            self.header_widget.opp_button.press()
+        else:
+            self.header_widget.same_button.unpress()
+            self.header_widget.opp_button.unpress()

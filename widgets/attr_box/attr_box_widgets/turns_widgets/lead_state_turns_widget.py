@@ -6,12 +6,12 @@ from constants import (
     RED,
 )
 from objects.motion.motion import Motion
-from widgets.filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
+from widgets.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
     TurnsWidget,
 )
 
 if TYPE_CHECKING:
-    from widgets.filter_frame.attr_box.lead_state_attr_box import LeadStateAttrBox
+    from widgets.attr_box.lead_state_attr_box import LeadStateAttrBox
 
 
 class LeadStateTurnsWidget(TurnsWidget):

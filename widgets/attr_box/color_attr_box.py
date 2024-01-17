@@ -9,7 +9,7 @@ from .attr_box_widgets.header_widgets.color_header_widget import ColorHeaderWidg
 from .attr_box_widgets.turns_widgets.color_turns_widget import ColorTurnsWidget
 
 if TYPE_CHECKING:
-    from widgets.filter_frame.attr_panel.color_attr_panel import ColorAttrPanel
+    from widgets.attr_panel.color_attr_panel import ColorAttrPanel
     from objects.pictograph.pictograph import Pictograph
 
 from PyQt6.QtGui import QPixmap

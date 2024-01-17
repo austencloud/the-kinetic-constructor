@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 from objects.pictograph.pictograph import Pictograph
-from widgets.filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
+from widgets.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
     TurnsWidget,
 )
 
 if TYPE_CHECKING:
-    from widgets.filter_frame.attr_box.motion_type_attr_box import MotionTypeAttrBox
+    from widgets.attr_box.motion_type_attr_box import MotionTypeAttrBox
 
 
 class MotionTypeTurnsWidget(TurnsWidget):

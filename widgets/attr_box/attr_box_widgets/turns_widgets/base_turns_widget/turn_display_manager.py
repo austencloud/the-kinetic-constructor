@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Union
 
 
 if TYPE_CHECKING:
-    from widgets.filter_frame.attr_box.base_attr_box import BaseAttrBox
+    from widgets.attr_box.base_attr_box import BaseAttrBox
     from .base_turns_widget import TurnsWidget
 
 

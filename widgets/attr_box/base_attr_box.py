@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
 
 from constants import OPP, SAME
 from utilities.TypeChecking.TypeChecking import MotionTypes
-from widgets.filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
+from widgets.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
     TurnsWidget,
 )
 from ..attr_box.attr_box_widgets.base_attr_box_widget import AttrBoxWidget
