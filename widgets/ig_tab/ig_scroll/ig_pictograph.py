@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 class IGPictograph(Pictograph):
     def __init__(self, main_widget, scroll_area: "ScrollArea") -> None:
         super().__init__(main_widget, IG_PICTOGRAPH)
-        self.view = IG_Pictograph_View(self)
+        self.view: IGPictographView = IGPictographView(self)
         self.ig_scroll_area = scroll_area
         self.selected_arrow = None
         self.wasd_adjustment_manager = WASD_AdjustmentManager(self)
@@ -59,7 +59,7 @@ class IGPictograph(Pictograph):
             print("No arrow selected")
 
 
-class IG_Pictograph_View(QGraphicsView):
+class IGPictographView(QGraphicsView):
     def __init__(self, ig_pictograph: IGPictograph) -> None:
         super().__init__(ig_pictograph)
         self.ig_pictograph = ig_pictograph

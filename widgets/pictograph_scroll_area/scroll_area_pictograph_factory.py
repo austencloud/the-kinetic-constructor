@@ -38,17 +38,18 @@ class PictographFactory:
                 self.main_widget.pictograph_loader.queue_pictograph(pictograph_key)
 
     def process_selected_letters(self, scroll_area: ScrollArea) -> None:
+        print("Processing selected letters")
         selected_letters = set(scroll_area.parent_tab.selected_letters)
         all_pictographs_copy = self.main_widget.all_pictographs.copy()
-
-        for pictograph_key, ig_pictograph in all_pictographs_copy.items():
-            letter = pictograph_key.split("_")[0]
+        for letter, pictographs_key_value_pair in all_pictographs_copy.items():
             if letter in selected_letters:
-                scroll_area.pictographs[pictograph_key] = ig_pictograph
-            elif letter not in selected_letters:
-                self.main_widget.pictograph_loader.generate_pictographs_for_specific_letter(
-                    letter
-                )
+                for pictograph_key, pictograph in pictographs_key_value_pair.items():
+                    scroll_area.pictographs[pictograph_key] = pictograph
+
+                    scroll_area.display_manager.order_and_display_pictographs()
+
+            else:
+                print(f"letter not in selected letters: {letter}")
 
     def get_sorted_selected_letters(self) -> List[Letters]:
         return sorted(

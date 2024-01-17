@@ -58,9 +58,9 @@ class ScrollAreaSection(QWidget):
         self.pictograph_layout.addWidget(pictograph.view)
 
     def remove_pictograph(self, pictograph: IGPictograph) -> None:
-        pictograph.view.hide()
+        # pictograph.view.hide()
         pictograph.view.setParent(None)
-        pictograph.setParent(None)
+        # pictograph.setParent(None)
 
     def update_filter(self) -> None:
         pass

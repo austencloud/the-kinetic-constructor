@@ -9,6 +9,7 @@ from PyQt6.QtWidgets import (
     QFrame,
     QTabWidget,
 )
+from utilities.TypeChecking.letter_lists import all_letters
 from PyQt6.QtCore import QEvent, Qt
 from PyQt6.QtGui import QResizeEvent, QWheelEvent, QPixmap
 import pandas as pd
@@ -64,7 +65,7 @@ class MainWidget(QWidget):
         self.prop_type = STAFF
         self.grid_mode = DIAMOND
         self.arrows = []
-        self.all_pictographs: Dict[str, Pictograph] = {}
+        self.all_pictographs: Dict[Letters, Dict[str, Pictograph]] = {letter: {} for letter in all_letters}
         self.export_handler = None
         self.main_window = main_window
         self.image_cache_initialized = False
@@ -85,7 +86,7 @@ class MainWidget(QWidget):
 
     def handle_pictograph_ready(self, pictograph_key):
         # This method will run in the main thread
-        ig_pictograph: IGPictograph = self.all_pictographs[pictograph_key]
+        ig_pictograph: IGPictograph = self.all_pictographs[pictograph_key.split("_")[0]][pictograph_key]
         if (
             ig_pictograph.needs_displaying()
         ):  # You need to define the needs_displaying logic

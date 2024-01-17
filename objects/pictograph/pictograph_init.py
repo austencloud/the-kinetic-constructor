@@ -44,7 +44,7 @@ class PictographInit:
     def init_all_components(self) -> None:
         self.pictograph.dragged_prop = None
         self.pictograph.dragged_arrow = None
-        
+
         self.pictograph.grid: Grid = self.init_grid()
         self.pictograph.locations: Dict[
             Locations, Tuple[int, int, int, int]
@@ -80,7 +80,7 @@ class PictographInit:
             StartPositionBeatView,
         )
         from widgets.sequence_widget.beat_frame.beat import BeatView
-        from widgets.ig_tab.ig_scroll.ig_pictograph import IG_Pictograph_View
+        from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictographView
 
         if graph_type == MAIN:
             view = GraphEditorPictographView(self.pictograph)
@@ -91,7 +91,7 @@ class PictographInit:
         elif graph_type == START_POS_BEAT:
             view = StartPositionBeatView(self.pictograph)
         elif graph_type == IG_PICTOGRAPH:
-            view = IG_Pictograph_View(self.pictograph)
+            view = IGPictographView(self.pictograph)
         return view
 
     def init_grid(self) -> Grid:

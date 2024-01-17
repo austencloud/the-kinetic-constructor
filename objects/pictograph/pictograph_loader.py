@@ -1,10 +1,9 @@
 import queue
 import threading
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import QObject, pyqtSignal
+from PyQt6.QtCore import QObject, pyqtSignal, QThread
 from constants import IG_PICTOGRAPH
 from utilities.TypeChecking.letter_lists import all_letters
-
 
 if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
@@ -19,8 +18,9 @@ class PictographLoader(QObject):
 
     def start_loading(self) -> None:
         self.pictograph_queue: queue.PriorityQueue = queue.PriorityQueue()
-        self.load_thread = threading.Thread(target=self.load_pictographs)
-        self.load_thread.daemon = True
+        self.load_thread = QThread()
+        self.load_thread.started.connect(self.load_pictographs)
+        self.load_thread.finished.connect(self.load_thread.deleteLater)
         self.stopped = False
         self.order_number = 0
 
@@ -41,20 +41,22 @@ class PictographLoader(QObject):
                         pictograph_dict
                     )
                     if pictograph_key not in self.main_widget.all_pictographs:
-                        self.main_widget.all_pictographs[
+                        self.main_widget.all_pictographs[pictograph_key.split("_")[0]][
                             pictograph_key
                         ] = self.main_widget.pictograph_factory.create_pictograph(
                             IG_PICTOGRAPH
                         )
-                        self.main_widget.all_pictographs[
+                        self.main_widget.all_pictographs[pictograph_key.split("_")[0]][
                             pictograph_key
                         ].state_updater.update_pictograph(pictograph_dict)
+                        print (f"Loaded {pictograph_key}")
             except queue.Empty:
                 continue
 
     def stop(self) -> None:
         self.stopped = True
-        self.load_thread.join()
+        self.load_thread.quit()
+        self.load_thread.wait()
 
     def queue_pictograph(self, pictograph_key) -> None:
         self.pictograph_queue.put((self.order_number, pictograph_key))
@@ -77,6 +79,7 @@ class PictographLoader(QObject):
     def generate_pictographs_for_specific_letter(
         self, letter
     ) -> None:
+        print (f"Generating pictographs for {letter}")
         for i in range(self.pictograph_queue.qsize()):
             order_number, pictograph_key = self.pictograph_queue.get()
             if pictograph_key.split("_")[0] == letter:
