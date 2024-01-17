@@ -36,6 +36,7 @@ from constants import (
 )
 from objects.pictograph.pictograph_loader import PictographLoader
 from utilities.TypeChecking.TypeChecking import Letters
+from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
 from widgets.ig_tab.ig_tab import IGTab
 from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
 from widgets.graph_editor_tab.graph_editor_tab import GraphEditorTab
@@ -84,7 +85,7 @@ class MainWidget(QWidget):
 
     def handle_pictograph_ready(self, pictograph_key):
         # This method will run in the main thread
-        ig_pictograph = self.pictograph_factory.all_pictographs[pictograph_key]
+        ig_pictograph: IGPictograph = self.all_pictographs[pictograph_key]
         if (
             ig_pictograph.needs_displaying()
         ):  # You need to define the needs_displaying logic

@@ -86,12 +86,6 @@ class OptionPickerScrollArea(ScrollArea):
 
             option.image_loaded = True
 
-    def update_pictographs(self) -> None:
-        while self.layout.count():
-            widget = self.layout.takeAt(0).widget()
-            if widget is not None:
-                widget.setParent(None)
-
     def update_options(self, clicked_option) -> None:
         """Updates the options based on the clicked option."""
         try:

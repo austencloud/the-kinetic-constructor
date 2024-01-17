@@ -66,7 +66,7 @@ class ScrollArea(QScrollArea):
                 self.main_widget.pictograph_factory.remove_deselected_letter_pictographs(
                     letter
                 )
-            self.main_widget.pictograph_factory.process_selected_letters()
+            self.main_widget.pictograph_factory.process_selected_letters(self)
 
         self.display_manager.cleanup_unused_pictographs()
         self.section_manager.organize_pictographs_by_type()

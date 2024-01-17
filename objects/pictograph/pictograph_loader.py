@@ -17,8 +17,8 @@ class PictographLoader(QObject):
         super().__init__()
         self.main_widget = main_widget
 
-    def start_loading(self):
-        self.pictograph_queue = queue.PriorityQueue()
+    def start_loading(self) -> None:
+        self.pictograph_queue: queue.PriorityQueue = queue.PriorityQueue()
         self.load_thread = threading.Thread(target=self.load_pictographs)
         self.load_thread.daemon = True
         self.stopped = False
@@ -35,23 +35,23 @@ class PictographLoader(QObject):
             pictograph_dicts = self.main_widget.ig_tab.scroll_area.letters.get(
                 letter, []
             )
-        while not self.stopped:
-            try:
-                for pictograph_dict in pictograph_dicts:
-                    pictograph_key = self.main_widget.pictograph_factory.generate_pictograph_key_from_dict(
-                        pictograph_dict
-                    )
-                    if pictograph_key not in self.main_widget.all_pictographs:
-                        self.main_widget.all_pictographs[
-                            pictograph_key
-                        ] = self.main_widget.pictograph_factory.create_pictograph(
-                            IG_PICTOGRAPH
+            while not self.stopped:
+                try:
+                    for pictograph_dict in pictograph_dicts:
+                        pictograph_key = self.main_widget.pictograph_factory.generate_pictograph_key_from_dict(
+                            pictograph_dict
                         )
-                        self.main_widget.all_pictographs[
-                            pictograph_key
-                        ].state_updater.update_pictograph(pictograph_dict)
-            except queue.Empty:
-                pass
+                        if pictograph_key not in self.main_widget.all_pictographs:
+                            self.main_widget.all_pictographs[
+                                pictograph_key
+                            ] = self.main_widget.pictograph_factory.create_pictograph(
+                                IG_PICTOGRAPH
+                            )
+                            self.main_widget.all_pictographs[
+                                pictograph_key
+                            ].state_updater.update_pictograph(pictograph_dict)
+                except queue.Empty:
+                    pass
 
     def stop(self) -> None:
         self.stopped = True
@@ -66,3 +66,23 @@ class PictographLoader(QObject):
 
     def reset_priority(self) -> None:
         self.order_number = 0
+
+    def bump_up_priority_for_specific_letter(self, letter) -> None:
+        for i in range(self.pictograph_queue.qsize()):
+            order_number, pictograph_key = self.pictograph_queue.get()
+            if pictograph_key.split("_")[0] == letter:
+                self.pictograph_queue.put((0, pictograph_key))
+            else:
+                self.pictograph_queue.put((order_number, pictograph_key))
+
+    def generate_pictographs_for_specific_letter(
+        self, letter
+    ) -> None:
+        for i in range(self.pictograph_queue.qsize()):
+            order_number, pictograph_key = self.pictograph_queue.get()
+            if pictograph_key.split("_")[0] == letter:
+                self.main_widget.pictograph_factory.get_or_create_pictograph(
+                    pictograph_key
+                )
+            else:
+                self.pictograph_queue.put((order_number, pictograph_key))

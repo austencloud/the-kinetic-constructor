@@ -20,7 +20,7 @@ class ScrollAreaDisplayManager:
 
     def order_and_display_pictographs(self) -> None:
         ordered_pictographs = self.get_ordered_pictographs()
-        self.clear_layout()
+        # self.clear_layout()
         for index, (key, ig_pictograph) in enumerate(ordered_pictographs.items()):
             self.add_pictograph_to_layout(ig_pictograph, index)
 
@@ -57,7 +57,7 @@ class ScrollAreaDisplayManager:
         )
         if ig_pictograph:
             self.scroll_area.layout.removeWidget(ig_pictograph.view)
-            ig_pictograph.view.setParent(None)
+            # ig_pictograph.view.setParent(None)
 
     def clear_layout(self) -> None:
         while self.scroll_area.layout.count():
