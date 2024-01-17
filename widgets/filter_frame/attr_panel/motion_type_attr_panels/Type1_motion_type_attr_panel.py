@@ -2,18 +2,16 @@ from constants import ANTI, PRO
 from typing import TYPE_CHECKING, List
 
 
-from widgets.pictograph_scroll_area.scroll_area import ScrollArea
-
 from ...attr_box.motion_type_attr_box import MotionTypeAttrBox
 from ..base_attr_panel import BaseAttrPanel
 
 
 if TYPE_CHECKING:
-    pass
+    from widgets.pictograph_scroll_area.scroll_area import ScrollArea
 
 
 class Type1MotionTypeAttrPanel(BaseAttrPanel):
-    def __init__(self, scroll_area: ScrollArea) -> None:
+    def __init__(self, scroll_area: "ScrollArea") -> None:
         super().__init__(scroll_area)
 
         self.setup_layouts()
@@ -27,4 +25,3 @@ class Type1MotionTypeAttrPanel(BaseAttrPanel):
         ]
         for box in self.boxes:
             self.layout.addWidget(box)
-
