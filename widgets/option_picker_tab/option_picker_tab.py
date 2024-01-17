@@ -21,9 +21,9 @@ class OptionPickerTab(QFrame):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.scroll_area = OptionPickerScrollArea(self.main_widget, self)
 
-        self.filter_tab = FilterTab(self.scroll_area)
+        # self.filter_tab = FilterTab(self.scroll_area)
 
-        self.layout.addWidget(self.filter_tab)
+        # self.layout.addWidget(self.filter_tab)
         self.layout.addWidget(self.scroll_area)
         self.scroll_area.show()
 
@@ -39,11 +39,3 @@ class OptionPickerTab(QFrame):
         except Exception as e:
             print(f"Error loading data: {e}")
             return pd.DataFrame()  # Return an empty DataFrame in case of error
-
-    def resize_tab(self) -> None:
-        if self.filter_tab.motion_type_attr_panel.isVisible():
-            self.filter_tab.motion_type_attr_panel.resize_ig_motion_type_attr_panel()
-        elif self.filter_tab.color_attr_panel.isVisible():
-            self.filter_tab.color_attr_panel.resize_ig_color_attr_panel()
-        elif self.filter_tab.lead_state_attr_panel.isVisible():
-            self.filter_tab.lead_state_attr_panel.resize_ig_lead_state_attr_panel()

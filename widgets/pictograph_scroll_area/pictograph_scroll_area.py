@@ -43,7 +43,7 @@ class PictographScrollArea(QScrollArea):
         self.timer.start(1000)
         self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
         for letter_type, pictographs in self.pictographs_by_type.items():
-            filter_tab = FilterTab(self)
+            filter_tab = FilterTab(self, letter_type)
             self.section_manager.create_section(letter_type, filter_tab)
             
     def _setup_ui(self) -> None:

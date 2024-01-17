@@ -1,9 +1,21 @@
 from typing import TYPE_CHECKING, Literal
 from PyQt6.QtWidgets import QTabWidget
-from Enums import MotionAttribute
+from Enums import LetterNumberType, MotionAttribute
 from constants import COLOR, LEAD_STATE, MOTION_TYPE, PRO, ANTI, STATIC, DASH
 from data.letter_engine_data import motion_type_letter_combinations
-from utilities.TypeChecking.TypeChecking import Letters, MotionAttributes
+from utilities.TypeChecking.TypeChecking import (
+    LetterTypeNums,
+    Letters,
+    MotionAttributes,
+)
+from utilities.TypeChecking.letter_lists import (
+    Type1_letters,
+    Type2_letters,
+    Type3_letters,
+    Type4_letters,
+    Type5_letters,
+    Type6_letters,
+)
 from widgets.filter_frame.attr_panel.color_attr_panel import ColorAttrPanel
 
 if TYPE_CHECKING:
@@ -18,10 +30,13 @@ from PyQt6.QtWidgets import QHBoxLayout
 
 
 class FilterTab(QTabWidget):
-    def __init__(self, scroll_area: "PictographScrollArea") -> None:
+    def __init__(
+        self, scroll_area: "PictographScrollArea", letter_type: LetterTypeNums
+    ) -> None:
         super().__init__(scroll_area)
         self.scroll_area = scroll_area
         self.attr_panel = None
+        self.letter_type: LetterTypeNums = letter_type
         self._setup_ui()
 
     def _setup_ui(self) -> None:
@@ -61,8 +76,27 @@ class FilterTab(QTabWidget):
         # remove all tabs first
         for tab in self.tabs:
             self.removeTab(self.indexOf(tab))
-        
-        selected_letters = set(self.scroll_area.parent_tab.selected_letters)
+
+        selected_letters_that_match_section_type: set[Letters] = set()
+        for letter in self.scroll_area.parent_tab.selected_letters:
+            if self.letter_type == "Type1":
+                if letter in Type1_letters:
+                    selected_letters_that_match_section_type.add(letter)
+            elif self.letter_type == "Type2":
+                if letter in Type2_letters:
+                    selected_letters_that_match_section_type.add(letter)
+            elif self.letter_type == "Type3":
+                if letter in Type3_letters:
+                    selected_letters_that_match_section_type.add(letter)
+            elif self.letter_type == "Type4":
+                if letter in Type4_letters:
+                    selected_letters_that_match_section_type.add(letter)
+            elif self.letter_type == "Type5":
+                if letter in Type5_letters:
+                    selected_letters_that_match_section_type.add(letter)
+            elif self.letter_type == "Type6":
+                if letter in Type6_letters:
+                    selected_letters_that_match_section_type.add(letter)
 
         tabs = [
             MOTION_TYPE,
@@ -71,7 +105,7 @@ class FilterTab(QTabWidget):
         ]
 
         motion_types_present = set()
-        for letter in selected_letters:
+        for letter in selected_letters_that_match_section_type:
             motion_types_present.update(motion_type_letter_combinations[letter])
 
         tabs_to_show: List[MotionAttributes] = []
@@ -79,14 +113,11 @@ class FilterTab(QTabWidget):
 
         if motion_types_present == {PRO} or motion_types_present == {ANTI}:
             tabs_to_show.append(COLOR)
-        elif PRO in motion_types_present and ANTI in motion_types_present:
-            tabs_to_show.extend([MOTION_TYPE, COLOR])
-        elif motion_types_present.issubset({STATIC, DASH}):
+        elif motion_types_present == {STATIC} or motion_types_present == {DASH}:
             tabs_to_show.append(COLOR)
-        else:
-            tabs_to_show.extend([MOTION_TYPE, COLOR, LEAD_STATE])
-
-        if selected_letters.intersection(["S", "T", "U", "V"]):
+        elif len(motion_types_present) > 1:
+            tabs_to_show.extend([MOTION_TYPE, COLOR])
+        if selected_letters_that_match_section_type.intersection(["S", "T", "U", "V"]):
             tabs_to_show.append(LEAD_STATE)
 
         for tab in tabs:
