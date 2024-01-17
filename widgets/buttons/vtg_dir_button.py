@@ -3,18 +3,19 @@ from typing import Union, TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from ..filter_frame.attr_box.attr_box_widgets.header_widgets.base_header_widget import (
+    from ..filter_tab.attr_box.attr_box_widgets.header_widgets.base_header_widget import (
         HeaderWidget,
     )
-    from ..filter_frame.attr_box.attr_box_widgets.motion_types_widget import (
+    from ..filter_tab.attr_box.attr_box_widgets.motion_types_widget import (
         MotionTypeWidget,
     )
-    from ..filter_frame.attr_box.attr_box_widgets.start_end_loc_widget import (
+    from ..filter_tab.attr_box.attr_box_widgets.start_end_loc_widget import (
         StartEndLocWidget,
     )
-    from ..filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
+    from ..filter_tab.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
         TurnsWidget,
     )
+
 
 class VtgDirButton(QPushButton):
     def __init__(
@@ -25,7 +26,7 @@ class VtgDirButton(QPushButton):
     ) -> None:
         super().__init__(parent_widget)
         self.parent_widget = parent_widget
-        
+
     def get_vtg_dir_button_style(self, pressed: bool) -> str:
         if pressed:
             return """
@@ -57,6 +58,6 @@ class VtgDirButton(QPushButton):
 
     def is_pressed(self) -> bool:
         return self.styleSheet() == self.get_vtg_dir_button_style(pressed=True)
-    
+
     def is_unpressed(self) -> bool:
         return self.styleSheet() == self.get_vtg_dir_button_style(pressed=False)

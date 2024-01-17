@@ -11,9 +11,8 @@ from PyQt6.QtGui import QFont, QPixmap
 from typing import TYPE_CHECKING, List
 from objects.motion.motion import Motion
 from constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON, ICON_DIR
-from ..filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
-    TurnsWidget,
-)
+from ..attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import TurnsWidget
+
 
 
 if TYPE_CHECKING:
@@ -278,7 +277,10 @@ class GraphEditorTurnsWidget(TurnsWidget):
     def _update_button_size(self) -> None:
         for adjust_turns_button in self.turn_adjustment_manager.adjust_turns_buttons:
             button_size = int(self.attr_box.width() / 7)
-            if adjust_turns_button.text() == "-0.5" or adjust_turns_button.text() == "+0.5":
+            if (
+                adjust_turns_button.text() == "-0.5"
+                or adjust_turns_button.text() == "+0.5"
+            ):
                 button_size = int(button_size * 0.85)
             else:
                 button_size = int(self.attr_box.width() / 6)

@@ -7,17 +7,15 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, QTimer
 from constants import Type1, Type2, Type3, Type4, Type5, Type6
 from utilities.TypeChecking.TypeChecking import LetterTypeNums, Letters
-from widgets.filter_tab.Type1_filter_tab import (
-    BaseFilterTab,
-    Type1FilterTab,
-    Type2FilterTab,
-    Type3FilterTab,
-    Type4FilterTab,
-    Type5FilterTab,
-    Type6FilterTab,
-)
-from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
-from widgets.pictograph_scroll_area.scroll_area_section_manager import (
+from ..filter_tab.Type1_filter_tab import Type1FilterTab
+from ..filter_tab.Type2_filter_tab import Type2FilterTab
+from ..filter_tab.Type3_filter_tab import Type3FilterTab
+from ..filter_tab.Type4_filter_tab import Type4FilterTab
+from ..filter_tab.Type5_filter_tab import Type5FilterTab
+from ..filter_tab.Type6_filter_tab import Type6FilterTab
+from ..filter_tab.base_filter_tab import BaseFilterTab
+from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
+from ..pictograph_scroll_area.scroll_area_section_manager import (
     ScrollAreaSectionManager,
 )
 from .scroll_area_display_manager import ScrollAreaDisplayManager
@@ -25,8 +23,8 @@ from .scroll_area_filter_manager import ScrollAreaFilterTabManager
 from .scroll_area_pictograph_factory import ScrollAreaPictographFactory
 
 if TYPE_CHECKING:
-    from widgets.ig_tab.ig_tab import IGTab
-    from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
+    from ..ig_tab.ig_tab import IGTab
+    from ..option_picker_tab.option_picker_tab import OptionPickerTab
     from ..main_widget import MainWidget
 
 
@@ -41,7 +39,7 @@ class ScrollArea(QScrollArea):
         self.pictographs: Dict[Letters, IGPictograph] = {}
         self.pictograph_factory = ScrollAreaPictographFactory(self)
         self.display_manager = ScrollAreaDisplayManager(self)
-        self.filter_frame_manager = ScrollAreaFilterTabManager(self)
+        self.filter_tab_manager = ScrollAreaFilterTabManager(self)
         self.section_manager = ScrollAreaSectionManager(self)
         self.letters_by_type: Dict[
             LetterTypeNums, List[Letters]
@@ -76,7 +74,6 @@ class ScrollArea(QScrollArea):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
     def organize_pictographs_by_type(self) -> None:
-        # self.section_manager.clear_sections()
         for key, pictograph in self.pictographs.items():
             letter_type = self.section_manager.get_pictograph_letter_type(key)
             self.pictographs_by_type[letter_type].append(pictograph)
@@ -87,11 +84,34 @@ class ScrollArea(QScrollArea):
 
     def update_pictographs(self) -> None:
         deselected_letters = self.pictograph_factory.get_deselected_letters()
-        for letter in deselected_letters:
-            self.pictograph_factory.remove_deselected_letter_pictographs(letter)
-        self.pictograph_factory.process_selected_letters()
+        selected_letters = set(self.parent_tab.selected_letters)
+
+        if self._only_deselection_occurred(deselected_letters, selected_letters):
+            # Handle only deselection case
+            for letter in deselected_letters:
+                self.pictograph_factory.remove_deselected_letter_pictographs(letter)
+        else:
+            # Handle other cases
+            for letter in deselected_letters:
+                self.pictograph_factory.remove_deselected_letter_pictographs(letter)
+            self.pictograph_factory.process_selected_letters()
+
         self.display_manager.cleanup_unused_pictographs()
         self.organize_pictographs_by_type()
+
+    def _only_deselection_occurred(self, deselected_letters, selected_letters) -> bool:
+        if not deselected_letters:
+            return False
+        if not selected_letters:
+            return True
+
+        # Extract the unique letters from the keys in self.pictographs
+        current_pictograph_letters = {key.split("_")[0] for key in self.pictographs}
+
+        return (
+            len(deselected_letters) > 0
+            and len(selected_letters) == len(current_pictograph_letters) - 1
+        )
 
     def update_arrow_placements(self) -> None:
         for pictograph in self.pictographs.values():

@@ -13,9 +13,7 @@ if TYPE_CHECKING:
 class Type1MotionTypeAttrPanel(BaseAttrPanel):
     def __init__(self, scroll_area: "ScrollArea") -> None:
         super().__init__(scroll_area)
-
         self.setup_layouts()
-
         self.pro_attr_box = MotionTypeAttrBox(self, PRO)
         self.anti_attr_box = MotionTypeAttrBox(self, ANTI)
 

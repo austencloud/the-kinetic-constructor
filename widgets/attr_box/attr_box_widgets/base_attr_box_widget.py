@@ -10,7 +10,7 @@ from widgets.buttons.vtg_dir_button import VtgDirButton
 if TYPE_CHECKING:
     from widgets.attr_box.base_attr_box import BaseAttrBox
     from objects.motion.motion import Motion
-from ....buttons.adjust_turns_button import AdjustTurnsButton
+from ...buttons.adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
     pass

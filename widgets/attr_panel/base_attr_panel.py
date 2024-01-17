@@ -18,9 +18,9 @@ from ..attr_box.motion_type_attr_box import MotionTypeAttrBox
 
 
 if TYPE_CHECKING:
-    from ...pictograph_scroll_area.scroll_area import ScrollArea
-    from ...ig_tab.ig_tab import IGTab
-    from ...graph_editor_tab.graph_editor_frame import GraphEditorFrame
+    from ..pictograph_scroll_area.scroll_area import ScrollArea
+    from ..ig_tab.ig_tab import IGTab
+    from ..graph_editor_tab.graph_editor_frame import GraphEditorFrame
 
 
 class BaseAttrPanel(QFrame):

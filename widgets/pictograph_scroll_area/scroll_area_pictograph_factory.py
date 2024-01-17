@@ -41,7 +41,7 @@ class ScrollAreaPictographFactory:
 
     def process_letter(self, letter) -> None:
         pictograph_dicts = self.scroll_area.letters.get(letter, [])
-        for pictograph_dict in self.scroll_area.filter_frame_manager.filter_pictographs(
+        for pictograph_dict in self.scroll_area.filter_tab_manager.filter_pictographs(
             pictograph_dicts
         ):
             self.create_or_update_pictograph(pictograph_dict.copy(), letter)
@@ -49,7 +49,6 @@ class ScrollAreaPictographFactory:
     def create_or_update_pictograph(self, pictograph_dict, letter) -> None:
         pictograph_key = self.generate_pictograph_key_from_dict(pictograph_dict)
         ig_pictograph = self.get_or_create_pictograph(pictograph_key)
-        # self.update_pictograph_from_attr_panel(ig_pictograph, pictograph_dict)
         ig_pictograph.state_updater.update_pictograph(pictograph_dict)
 
     def update_pictograph_from_attr_panel(
@@ -81,7 +80,7 @@ class ScrollAreaPictographFactory:
             scroll_section.remove_pictograph(ig_pictograph)
 
     def get_or_create_pictograph(self, pictograph_key) -> IGPictograph:
-        if pictograph_key not in self.scroll_area.pictographs:
+        if pictograph_key not in self.scroll_area.pictographs.keys():
             self.scroll_area.pictographs[pictograph_key] = self._create_pictograph(
                 IG_PICTOGRAPH
             )

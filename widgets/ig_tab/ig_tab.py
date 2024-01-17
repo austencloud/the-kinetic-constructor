@@ -220,10 +220,10 @@ class IGTab(QWidget):
     def update_letters_dict(self) -> None:
         for letter, pictograph_list in self.letters_dict.items():
             for pictograph_dict in pictograph_list:
-                if "turns" in self.scroll_area.filter_frame_manager.filters:
+                if "turns" in self.scroll_area.filter_tab_manager.filters:
                     pictograph_dict[
                         "blue_turns"
-                    ] = self.scroll_area.filter_frame_manager.filters["turns"]
+                    ] = self.scroll_area.filter_tab_manager.filters["turns"]
 
     def resize_ig_tab(self) -> None:
         self.scroll_area.resize_scroll_area()

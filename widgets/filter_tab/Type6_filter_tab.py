@@ -3,6 +3,12 @@ from typing import TYPE_CHECKING, List
 from utilities.TypeChecking.TypeChecking import (
     LetterTypeNums,
 )
+from widgets.attr_panel.motion_type_attr_panels.Type2_motion_type_attr_panel import (
+    Type2MotionTypeAttrPanel,
+)
+from widgets.attr_panel.motion_type_attr_panels.Type3_motion_type_attr_panel import (
+    Type3MotionTypeAttrPanel,
+)
 from ..attr_panel.color_attr_panel import ColorAttrPanel
 from ..attr_panel.lead_state_attr_panel import LeadStateAttrPanel
 from ..attr_panel.motion_type_attr_panels.Type1_motion_type_attr_panel import (
@@ -33,24 +39,15 @@ from utilities.TypeChecking.letter_lists import (
 )
 
 
-class Type1FilterTab(BaseFilterTab):
+class Type6FilterTab(BaseFilterTab):
     def __init__(self, scroll_area: "ScrollArea", letter_type: LetterTypeNums) -> None:
         super().__init__(scroll_area, letter_type)
 
     def setup_ui(self) -> None:
         super().setup_ui()
-        self.motion_type_attr_panel = Type1MotionTypeAttrPanel(
-            self.scroll_area.parent_tab
-        )
+
         self.color_attr_panel = ColorAttrPanel(self.scroll_area.parent_tab)
-        self.lead_state_attr_panel = LeadStateAttrPanel(self.scroll_area.parent_tab)
-        self.tabs: List[
-            Type1MotionTypeAttrPanel | ColorAttrPanel | LeadStateAttrPanel
-        ] = [
-            self.motion_type_attr_panel,
-            self.color_attr_panel,
-            self.lead_state_attr_panel,
-        ]
+        self.tabs: List[ColorAttrPanel] = [self.color_attr_panel]
 
     def show_panels_based_on_chosen_letters(self) -> None:
         selected_letters_that_match_section_type: set[Letters] = set()
@@ -102,7 +99,3 @@ class Type1FilterTab(BaseFilterTab):
                 self.indexOf(getattr(self, f"{tabs_to_show[0].lower()}_attr_panel"))
             )
         self.resize_filter_tab()
-
-
-
-

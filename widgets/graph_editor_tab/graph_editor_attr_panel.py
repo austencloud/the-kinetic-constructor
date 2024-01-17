@@ -1,9 +1,9 @@
 from constants import BLUE, RED
 from typing import TYPE_CHECKING
 from objects.motion.motion import Motion
+from widgets.attr_panel.base_attr_panel import BaseAttrPanel
 
 from ..graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
-from ..filter_frame.attr_panel.base_attr_panel import BaseAttrPanel
 
 if TYPE_CHECKING:
     from ..graph_editor_tab.graph_editor_frame import GraphEditorFrame
@@ -11,12 +11,11 @@ if TYPE_CHECKING:
 
 class GraphEditorAttrPanel(BaseAttrPanel):
     def __init__(self, graph_editor: "GraphEditorFrame") -> None:
-        super().__init__(graph_editor)
         self.graph_editor = graph_editor
-        self._setup_attr_boxes()
+        super().__init__(graph_editor)
         self.setup_layouts()
 
-    def _setup_attr_boxes(self):
+    def _setup_attr_boxes(self) -> None:
         self.blue_attr_box: GraphEditorAttrBox = GraphEditorAttrBox(
             self, self.graph_editor.main_pictograph, BLUE
         )
@@ -27,6 +26,7 @@ class GraphEditorAttrPanel(BaseAttrPanel):
 
     def setup_layouts(self) -> None:
         super().setup_layouts()
+        self._setup_attr_boxes()
         self.layout.addWidget(self.blue_attr_box)
         self.layout.addWidget(self.red_attr_box)
 

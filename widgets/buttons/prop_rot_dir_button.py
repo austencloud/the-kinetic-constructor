@@ -3,13 +3,13 @@ from typing import Union, TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from ..filter_frame.attr_box.attr_box_widgets.motion_types_widget import (
+    from ..filter_tab.attr_box.attr_box_widgets.motion_types_widget import (
         MotionTypeWidget,
     )
-    from ..filter_frame.attr_box.attr_box_widgets.start_end_loc_widget import (
+    from ..filter_tab.attr_box.attr_box_widgets.start_end_loc_widget import (
         StartEndLocWidget,
     )
-    from ..filter_frame.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
+    from ..filter_tab.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
         TurnsWidget,
     )
 
@@ -21,7 +21,6 @@ class PropRotDirButton(QPushButton):
     ) -> None:
         super().__init__(parent_widget)
         self.parent_widget = parent_widget
-
 
     def get_button_style(self, pressed: bool) -> str:
         if pressed:
@@ -48,6 +47,6 @@ class PropRotDirButton(QPushButton):
 
     def press(self) -> None:
         self.setStyleSheet(self.get_button_style(pressed=True))
-    
+
     def unpress(self) -> None:
         self.setStyleSheet(self.get_button_style(pressed=False))

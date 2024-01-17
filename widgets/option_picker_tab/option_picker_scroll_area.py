@@ -172,7 +172,7 @@ class OptionPickerScrollArea(ScrollArea):
         """
         if is_start_pos:
             return lambda event: self._on_start_pos_clicked(
-                option, self.filter_frame_manager.filters
+                option, self.filter_tab_manager.filters
             )
         else:
             return lambda event: self._on_option_clicked(option)

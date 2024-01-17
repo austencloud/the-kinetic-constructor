@@ -2,22 +2,19 @@ from typing import TYPE_CHECKING
 from constants import HEX_BLUE, HEX_RED, RED
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import Colors
+from ..attr_box.attr_box_widgets.motion_types_widget import MotionTypeWidget
+from ..attr_box.attr_box_widgets.start_end_loc_widget import StartEndLocWidget
+from ..attr_box.base_attr_box import BaseAttrBox
+from ..attr_panel.base_attr_panel import BaseAttrPanel
 from ..buttons.adjust_turns_button import AdjustTurnsButton
-from ..filter_frame.attr_box.attr_box_widgets.motion_types_widget import (
-    MotionTypeWidget,
-)
-from ..filter_frame.attr_box.attr_box_widgets.start_end_loc_widget import (
-    StartEndLocWidget,
-)
+
 from ..graph_editor_tab.graph_editor_header_widget import GraphEditorHeaderWidget
 from ..graph_editor_tab.graph_editor_turns_widget import GraphEditorTurnsWidget
 
 
 if TYPE_CHECKING:
-    from ..filter_frame.attr_panel.base_attr_panel import BaseAttrPanel
     from objects.pictograph.pictograph import Pictograph
 
-from ..filter_frame.attr_box.base_attr_box import BaseAttrBox
 
 from PyQt6.QtGui import QFont
 
@@ -28,10 +25,10 @@ class GraphEditorAttrBox(BaseAttrBox):
     ) -> None:
         super().__init__(attr_panel, pictograph)
         self.color = color
-        self.apply_border_style(HEX_RED if self.color == RED else HEX_BLUE)
         self._setup_widgets()
+        self.apply_border_style(HEX_RED if self.color == RED else HEX_BLUE)
         self.setLayout(self.vbox_layout)
-
+    
     def _setup_widgets(self) -> None:
         self.motion_type_widget = MotionTypeWidget(self)
         self.header_widget = GraphEditorHeaderWidget(self)
@@ -51,7 +48,6 @@ class GraphEditorAttrBox(BaseAttrBox):
     def clear_attr_box(self) -> None:
         super().clear_attr_box()
         self.motion_type_widget.clear_motion_type_box()
-        self.turns_widget._update_clocks(None)
 
     def resize_graph_editor_attr_box(self) -> None:
         self.setMinimumWidth(int(self.pictograph.view.width() * 0.85))
@@ -80,11 +76,7 @@ class GraphEditorAttrBox(BaseAttrBox):
         self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))
 
     def update_attr_box(self, motion: Motion) -> None:
-        self.turns_widget._update_clocks(motion.prop_rot_dir)
         self.start_end_loc_widget.update_start_end_loc_boxes(
             motion.start_loc, motion.end_loc
         )
         self.motion_type_widget.update_motion_type_box(motion.motion_type)
-
-        if motion.prop_rot_dir:
-            self.turns_widget._update_turnbox(motion.turns)
