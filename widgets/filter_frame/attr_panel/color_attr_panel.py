@@ -51,7 +51,3 @@ class ColorAttrPanel(BaseAttrPanel):
                     return float(
                         box.turns_widget.turn_display_manager.turns_display.text()
                     )
-
-    def resize_attr_panel(self) -> None:
-        for box in self.boxes:
-            box.resize_attr_box()

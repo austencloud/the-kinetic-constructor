@@ -15,6 +15,7 @@ from utilities.TypeChecking.letter_lists import (
     Type5_letters,
     Type6_letters,
 )
+from widgets.filter_frame.attr_panel.base_attr_panel import BaseAttrPanel
 from widgets.filter_frame.attr_panel.color_attr_panel import ColorAttrPanel
 
 if TYPE_CHECKING:
@@ -30,26 +31,18 @@ from ..attr_panel.motion_type_attr_panels.Type1_motion_type_attr_panel import (
 from PyQt6.QtWidgets import QHBoxLayout
 
 
-class FilterTab(QTabWidget):
+class BaseFilterTab(QTabWidget):
     def __init__(self, scroll_area: "ScrollArea", letter_type: LetterTypeNums) -> None:
         super().__init__(scroll_area)
         self.scroll_area = scroll_area
-        self.attr_panel = None
+        self.tabs: List[BaseAttrPanel] = []
+        self.motion_type_attr_panel = None
+        self.color_attr_panel = None
+        self.lead_state_attr_panel = None
         self.letter_type: LetterTypeNums = letter_type
         self.setup_ui()
 
     def setup_ui(self) -> None:
-
-        self.color_attr_panel = ColorAttrPanel(self.scroll_area.parent_tab)
-        self.lead_state_attr_panel = LeadStateAttrPanel(self.scroll_area.parent_tab)
-
-        self.tabs: List[
-            Type1MotionTypeAttrPanel | ColorAttrPanel | LeadStateAttrPanel
-        ] = [
-            self.motion_type_attr_panel,
-            self.color_attr_panel,
-            self.lead_state_attr_panel,
-        ]
         self.setContentsMargins(0, 0, 0, 0)
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setSpacing(0)

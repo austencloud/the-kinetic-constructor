@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, QTimer
 from constants import Type1, Type2, Type3, Type4, Type5, Type6
 from utilities.TypeChecking.TypeChecking import LetterTypeNums, Letters
-from widgets.filter_frame.filter_tab.Type1_filter_tab import FilterTab
+from widgets.filter_frame.filter_tab.Type1_filter_tab import BaseFilterTab, Type1FilterTab, Type2FilterTab, Type3FilterTab, Type4FilterTab, Type5FilterTab, Type6FilterTab
 from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
 from widgets.pictograph_scroll_area.scroll_area_section_manager import (
     ScrollAreaSectionManager,
@@ -43,19 +43,16 @@ class ScrollArea(QScrollArea):
         self.timer.timeout.connect(self.update_arrow_placements)
         self.timer.start(1000)
         self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
+        filter_tab_map = {
+            Type1: Type1FilterTab,
+            Type2: Type2FilterTab,
+            Type3: Type3FilterTab,
+            Type4: Type4FilterTab,
+            Type5: Type5FilterTab,
+            Type6: Type6FilterTab,
+        }
         for letter_type, pictographs in self.pictographs_by_type.items():
-            if letter_type == Type1:
-                filter_tab = FilterTab(self, letter_type)
-            elif letter_type == Type2:
-                filter_tab = Type2FilterTab(self, letter_type)
-            elif letter_type == Type3:
-                filter_tab = Type3FilterTab(self, letter_type)
-            elif letter_type == Type4:
-                filter_tab = Type4FilterTab(self, letter_type)
-            elif letter_type == Type5:
-                filter_tab = Type5FilterTab(self, letter_type)
-            elif letter_type == Type6:
-                filter_tab = Type6FilterTab(self, letter_type)
+            filter_tab = filter_tab_map.get(letter_type, BaseFilterTab)(self, letter_type)
             self.section_manager.create_section(letter_type, filter_tab)
 
     def _setup_ui(self) -> None:

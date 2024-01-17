@@ -14,14 +14,14 @@ from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
 
 if TYPE_CHECKING:
     from .scroll_area import ScrollArea
-    from ..filter_frame.filter_tab.Type1_filter_tab import FilterTab
+    from ..filter_frame.filter_tab.Type1_filter_tab import BaseFilterTab
 
 
 class ScrollAreaSection(QWidget):
     def __init__(
         self,
         letter_type: LetterTypeNums,
-        filter_tab: "FilterTab",
+        filter_tab: "BaseFilterTab",
         scroll_area: "ScrollArea",
     ) -> None:
         super().__init__(scroll_area)

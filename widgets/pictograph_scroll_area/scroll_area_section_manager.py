@@ -4,7 +4,7 @@ from utilities.TypeChecking.TypeChecking import (
     LetterTypeNums,
     Letters,
 )
-from widgets.filter_frame.filter_tab.Type1_filter_tab import FilterTab
+from widgets.filter_frame.filter_tab.Type1_filter_tab import BaseFilterTab
 from widgets.pictograph_scroll_area.scroll_area_section import ScrollAreaSection
 
 if TYPE_CHECKING:
@@ -41,7 +41,7 @@ class ScrollAreaSectionManager:
         self.sections.clear()
 
     def create_section(
-        self, letter_type: LetterTypeNums, filter_tab: FilterTab
+        self, letter_type: LetterTypeNums, filter_tab: BaseFilterTab
     ) -> None:
         # Instead of creating a QWidget, you will create an instance of the Section class
         section = ScrollAreaSection(letter_type, filter_tab, self.scroll_area)

@@ -60,3 +60,8 @@ class BaseAttrPanel(QFrame):
                     pictograph_dict[RED_PROP_ROT_DIR] = NO_ROT
 
             pictograph.state_updater.update_pictograph(pictograph_dict)
+
+    def resize_attr_panel(self) -> None:
+        self.layout.setSpacing(int(self.boxes[0].width() / 5))
+        for box in self.boxes:
+            box.resize_attr_box()

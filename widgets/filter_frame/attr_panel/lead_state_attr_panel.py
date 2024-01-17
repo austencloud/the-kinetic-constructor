@@ -47,8 +47,3 @@ class LeadStateAttrPanel(BaseAttrPanel):
                     return float(
                         box.turns_widget.turn_display_manager.turns_display.text()
                     )
-
-    def resize_attr_panel(self) -> None:
-        self.layout.setSpacing(int(self.boxes[0].width() / 5))
-        for box in self.boxes:
-            box.resize_attr_box()
