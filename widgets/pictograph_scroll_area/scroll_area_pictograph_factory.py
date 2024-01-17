@@ -27,20 +27,16 @@ class PictographFactory:
     def __init__(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
 
-    def create_all_pictographs(self) -> None:
+
+
+    def queue_initial_pictographs(self) -> None:
         for letter in all_letters:
             pictograph_dicts = self.main_widget.ig_tab.scroll_area.letters.get(
                 letter, []
             )
             for pictograph_dict in pictograph_dicts:
                 pictograph_key = self.generate_pictograph_key_from_dict(pictograph_dict)
-                if pictograph_key not in self.main_widget.all_pictographs:
-                    self.main_widget.all_pictographs[
-                        pictograph_key
-                    ] = self.create_pictograph(IG_PICTOGRAPH)
-                    self.main_widget.all_pictographs[
-                        pictograph_key
-                    ].state_updater.update_pictograph(pictograph_dict)
+                self.main_widget.pictograph_loader.queue_pictograph(pictograph_key)
 
     def process_selected_letters(self) -> None:
         selected_letters = set(
@@ -53,9 +49,6 @@ class PictographFactory:
                     self.main_widget.handle_pictograph_ready(pictograph_key)
                 )
                 self.main_widget.pictograph_loader.prioritize_pictograph(pictograph_key)
-                # ig_pictograph.show()
-            # else:
-            #     ig_pictograph.hide()
 
     def get_sorted_selected_letters(self) -> List[Letters]:
         return sorted(
@@ -71,10 +64,20 @@ class PictographFactory:
             pictograph_dicts
         ):
             pictograph_key = self.generate_pictograph_key_from_dict(pictograph_dict)
+            self.main_widget.pictograph_loader.queue_pictograph(pictograph_key)
             ig_pictograph = self.get_pictograph(pictograph_key)
             ig_pictograph.state_updater.update_pictograph(pictograph_dict)
 
-
+    def get_or_create_pictograph(self, pictograph_key) -> IGPictograph:
+        if pictograph_key not in self.main_widget.ig_tab.scroll_area.pictographs:
+            ig_pictograph = self.create_pictograph(IG_PICTOGRAPH)
+            self.main_widget.all_pictographs[pictograph_key] = ig_pictograph
+            ig_pictograph.state_updater.update_pictograph(
+                self.main_widget.all_pictographs[
+                    pictograph_key
+                ].generate_pictograph_dict_from_attributes()
+            )
+        return self.main_widget.ig_tab.scroll_area.pictographs[pictograph_key]
 
     def get_deselected_letters(self) -> Set[Letters]:
         selected_letters = set(

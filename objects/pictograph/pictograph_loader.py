@@ -2,46 +2,55 @@ import queue
 import threading
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QObject, pyqtSignal
+from constants import IG_PICTOGRAPH
+from utilities.TypeChecking.letter_lists import all_letters
+
 
 if TYPE_CHECKING:
-    from widgets.pictograph_scroll_area.scroll_area import ScrollArea
-    from widgets.pictograph_scroll_area.scroll_area_pictograph_factory import (
-        PictographFactory,
-    )
+    from widgets.main_widget import MainWidget
 
 
 class PictographLoader(QObject):
-    pictograph_ready = pyqtSignal(str)  # Signal to notify when a pictograph is ready
+    pictograph_ready = pyqtSignal(str)
 
-    def __init__(self, scroll_area: "ScrollArea") -> None:
+    def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
-        self.pictograph_factory = scroll_area.pictograph_factory
-        # Use PriorityQueue for loading pictographs, priority is given by the order number
+        self.main_widget = main_widget
 
-    def start_loading(self) -> None:
+    def start_loading(self):
         self.pictograph_queue = queue.PriorityQueue()
         self.load_thread = threading.Thread(target=self.load_pictographs)
-        self.load_thread.daemon = True  # Ensure thread closes with the program
+        self.load_thread.daemon = True
         self.stopped = False
-        self.order_number = 0  # To keep track of the order of pictographs added
+        self.order_number = 0
 
-        # Call this method after the main event loop has started
+        # Queue initial pictographs before starting the thread
+        self.main_widget.pictograph_factory.queue_initial_pictographs()
+
+        # Now you can start the thread
         self.load_thread.start()
 
     def load_pictographs(self) -> None:
+        for letter in all_letters:
+            pictograph_dicts = self.main_widget.ig_tab.scroll_area.letters.get(
+                letter, []
+            )
         while not self.stopped:
             try:
-                # Get the next pictograph to load, with priority
-                _, pictograph_key = self.pictograph_queue.get(
-                    timeout=3
-                )  # 3 seconds timeout
-                ig_pictograph = self.pictograph_factory.get_or_create_pictograph(
-                    pictograph_key
-                )
-                self.pictograph_ready.emit(pictograph_key)  # Emit signal to main thread
+                for pictograph_dict in pictograph_dicts:
+                    pictograph_key = self.main_widget.pictograph_factory.generate_pictograph_key_from_dict(
+                        pictograph_dict
+                    )
+                    if pictograph_key not in self.main_widget.all_pictographs:
+                        self.main_widget.all_pictographs[
+                            pictograph_key
+                        ] = self.main_widget.pictograph_factory.create_pictograph(
+                            IG_PICTOGRAPH
+                        )
+                        self.main_widget.all_pictographs[
+                            pictograph_key
+                        ].state_updater.update_pictograph(pictograph_dict)
             except queue.Empty:
-                # No pictographs to load, continue the loop
-                # You can also check for a shutdown signal here and break the loop if needed
                 pass
 
     def stop(self) -> None:
@@ -49,14 +58,11 @@ class PictographLoader(QObject):
         self.load_thread.join()
 
     def queue_pictograph(self, pictograph_key) -> None:
-        # All pictographs get added with increasing order numbers, ensuring FIFO without priority
         self.pictograph_queue.put((self.order_number, pictograph_key))
         self.order_number += 1
 
     def prioritize_pictograph(self, pictograph_key) -> None:
-        # Whenever a pictograph needs to be prioritized, it is added with the highest priority (lowest number)
         self.pictograph_queue.put((0, pictograph_key))
 
     def reset_priority(self) -> None:
-        # In case you need to reset priority when a user action dictates so
         self.order_number = 0

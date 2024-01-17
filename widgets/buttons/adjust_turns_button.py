@@ -4,22 +4,17 @@ from PyQt6.QtGui import QFont
 from typing import Union, TYPE_CHECKING
 
 
+
 if TYPE_CHECKING:
-    from ..filter_tab.attr_box.attr_box_widgets.motion_types_widget import (
-        MotionTypeWidget,
-    )
-    from ..filter_tab.attr_box.attr_box_widgets.start_end_loc_widget import (
-        StartEndLocWidget,
-    )
-    from ..filter_tab.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
-        TurnsWidget,
-    )
+    from ..attr_box.attr_box_widgets.motion_types_widget import MotionTypeWidget
+    from ..attr_box.attr_box_widgets.start_end_loc_widget import StartEndLocWidget
+    from ..attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import TurnsWidget
 
 
 class AdjustTurnsButton(QPushButton):
     def __init__(
         self,
-        parent_widget: Union["StartEndLocWidget", "TurnsWidget", "MotionTypeWidget"],
+        parent_widget: "TurnsWidget",
         text=None,
     ) -> None:
         super().__init__(text, parent_widget)
@@ -33,7 +28,7 @@ class AdjustTurnsButton(QPushButton):
         self.setStyleSheet(self._get_button_style())
         self.setFont(QFont("Arial", int(button_size * 0.3)))
 
-    def _get_button_style(self):
+    def _get_button_style(self) -> str:
         return (
             f"QPushButton {{"
             f"   background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(200, 200, 200, 255));"

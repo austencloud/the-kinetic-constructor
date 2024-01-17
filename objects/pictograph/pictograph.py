@@ -66,7 +66,7 @@ class Pictograph(QGraphicsScene):
         self.state_updater = PictographStateUpdater(self)
         self.image_renderer = PictographImageRenderer(self)
         self.add_to_sequence_manager = AddToSequenceManager(self)
-        
+
         self.initializer.init_all_components()
         self.arrow_placement_manager = ArrowPlacementManager(self)
         self.prop_placement_manager = PropPlacementManager(self)
@@ -138,6 +138,26 @@ class Pictograph(QGraphicsScene):
         elif arrow.color == BLUE:
             return self.red_arrow
 
+    def generate_pictograph_dict_from_attributes(self) -> Dict:
+        pictograph_dict = {
+            "letter": self.letter,
+            "start_pos": self.start_pos,
+            "end_pos": self.end_pos,
+            "blue_motion_type": self.blue_motion.motion_type,
+            "blue_prop_rot_dir": self.blue_motion.prop_rot_dir,
+            "blue_start_loc": self.blue_motion.start_loc,
+            "blue_end_loc": self.blue_motion.end_loc,
+            "blue_start_ori": self.blue_motion.start_ori,
+            "blue_turns": self.blue_motion.turns,
+            "red_motion_type": self.red_motion.motion_type,
+            "red_prop_rot_dir": self.red_motion.prop_rot_dir,
+            "red_start_loc": self.red_motion.start_loc,
+            "red_end_loc": self.red_motion.end_loc,
+            "red_start_ori": self.red_motion.start_ori,
+            "red_turns": self.red_motion.turns,
+        }
+        return pictograph_dict
+
     ### HELPERS ###
 
     def show(self):
@@ -162,8 +182,6 @@ class Pictograph(QGraphicsScene):
         self.dragged_arrow = None
 
     ### BOOLS ###
-
-
 
     def is_view_visible(self) -> bool:
         return self.view.isVisible()

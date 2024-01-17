@@ -40,17 +40,14 @@ class MainWindow(QMainWindow):
             self.profiler.runcall(func)
 
 
-
 def main() -> None:
     app = QApplication(sys.argv)
     profiler = Profiler()
-    main_window = MainWindow(profiler)    
-    main_window.main_widget.pictograph_loader.start_loading()
-
+    main_window = MainWindow(profiler)
 
     main_window.setFocus()
+    main_window.main_widget.pictograph_loader.start_loading()
     exit_code = main_window.exec_with_profiling(app)
-    root_directory = os.path.abspath(os.sep)
     root_directory = os.path.dirname(os.path.abspath(__file__))
 
     main_window.profiler.write_profiling_stats_to_file(
