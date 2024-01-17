@@ -32,6 +32,7 @@ class TurnsWidget(AttrBoxWidget):
 
         self.initialize_components()
         self.setup_ui()
+        # self.resize_turns_widget()
 
     def initialize_components(self) -> None:
         """Initialize components here."""
