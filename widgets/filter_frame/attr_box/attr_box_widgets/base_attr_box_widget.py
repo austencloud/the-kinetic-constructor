@@ -72,4 +72,4 @@ class AttrBoxWidget(QWidget):
         pictograph_dict = {
             f"{motion.color}_turns": new_turns,
         }
-        motion.scene.update_pictograph(pictograph_dict)
+        motion.scene.state_updater.update_pictograph(pictograph_dict)

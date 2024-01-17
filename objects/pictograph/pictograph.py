@@ -1,11 +1,12 @@
 from typing import TYPE_CHECKING, Dict, List, Literal, Optional, Tuple, Union
-from PyQt6.QtCore import Qt, QPointF, QByteArray, QBuffer
+from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvg import QSvgRenderer
-from PyQt6.QtGui import QImage, QPainter, QPixmap
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPixmapItem
 from Enums import LetterNumberType
 
 from constants import *
+from objects.pictograph.pictograph_image_renderer import PictographImageRenderer
+from objects.pictograph.pictograph_state_updater import PictographStateUpdater
 
 from ..arrow.arrow_placement_manager.main_arrow_placement_manager import (
     ArrowPlacementManager,
@@ -76,17 +77,17 @@ class Pictograph(QGraphicsScene):
         self.start_pos: SpecificPositions = None
         self.end_pos: SpecificPositions = None
         self.image_loaded: bool = False
-        self.pixmap = None
+        self.pixmap: QGraphicsPixmapItem = None
         self.pictograph_dict = None
-        self.view_scale = 1
-        self.event_handler = PictographEventHandler(self)
+        self.arrow_turns = 0
         self.vtg_timing = None
         self.vtg_dir = None
         self.dragged_arrow: Arrow = None
         self.dragged_prop: Prop = None
         self.initializer = PictographInit(self)
-
-        self.arrow_turns = 0
+        self.event_handler = PictographEventHandler(self)
+        self.state_updater = PictographStateUpdater(self)
+        self.image_renderer = PictographImageRenderer(self)
 
         self.grid: Grid = self.initializer.init_grid()
         self.locations: Dict[
@@ -314,124 +315,6 @@ class Pictograph(QGraphicsScene):
         self.dragged_prop = None
         self.dragged_arrow = None
 
-    ### UPDATERS ###
-
-    def update_attributes(self, pictograph_dict: Dict) -> None:
-        for attr_name, attr_value in pictograph_dict.items():
-            setattr(self, attr_name, attr_value)
-
-    def update_pictograph(self, pictograph_dict: Dict = None) -> None:
-        if pictograph_dict:
-            if self.is_pictograph_dict_complete(pictograph_dict):
-                self.pictograph_dict = pictograph_dict
-            self._update_from_pictograph_dict(pictograph_dict)
-
-        self._update_letter()
-        self._position_objects()
-
-        if self.graph_type == MAIN:
-            self._update_attr_panel()
-
-    def _update_from_pictograph_dict(self, pictograph_dict) -> None:
-        self.update_attributes(pictograph_dict)
-        motion_dicts = []
-        if LETTER in pictograph_dict:
-            self.letter = pictograph_dict[LETTER]
-            self.letter_type = self._get_letter_type(self.letter)
-        if "pro_turns" in pictograph_dict:
-            pro_motion = (
-                self.blue_motion
-                if self.blue_motion.motion_type == PRO
-                else self.red_motion
-            )
-            pro_motion.turns = pictograph_dict["pro_turns"]
-
-        if "anti_turns" in pictograph_dict:
-            anti_motion = (
-                self.blue_motion
-                if self.blue_motion.motion_type == ANTI
-                else self.red_motion
-            )
-            anti_motion.turns = pictograph_dict["anti_turns"]
-
-        if "dash_turns" in pictograph_dict:
-            dash_motion = (
-                self.blue_motion
-                if self.blue_motion.motion_type == DASH
-                else self.red_motion
-            )
-            dash_motion.turns = pictograph_dict["dash_turns"]
-
-        if "static_turns" in pictograph_dict:
-            static_motion = (
-                self.blue_motion
-                if self.blue_motion.motion_type == STATIC
-                else self.red_motion
-            )
-            static_motion.turns = pictograph_dict["static_turns"]
-
-        for color in [BLUE, RED]:
-            motion_dict = self._create_motion_dict(pictograph_dict, color)
-            motion_dicts.append(motion_dict)
-            if MOTION_TYPE in motion_dict:
-                self.motions[color].motion_type = motion_dict[MOTION_TYPE]
-            if PROP_ROT_DIR in motion_dict:
-                self.motions[color].prop_rot_dir = motion_dict[PROP_ROT_DIR]
-            if START_ORI in motion_dict:
-                self.motions[color].start_ori = motion_dict[START_ORI]
-            if START_LOC in motion_dict:
-                self.motions[color].start_loc = motion_dict[START_LOC]
-            if END_LOC in motion_dict:
-                self.motions[color].end_loc = motion_dict[END_LOC]
-            if TURNS in motion_dict:
-                self.motions[color].turns = motion_dict[TURNS]
-            if pictograph_dict.get(f"{color}_motion_type"):
-                arrow_dict = {
-                    MOTION_TYPE: pictograph_dict.get(f"{color}_motion_type"),
-                    TURNS: pictograph_dict.get(f"{color}_turns"),
-                }
-
-                self.motions[color].arrow.setup_arrow(arrow_dict)
-                self.ghost_arrows[color].setup_arrow(arrow_dict)
-                self.motions[color].arrow.show()
-                prop_dict = {
-                    PROP_ROT_DIR: pictograph_dict.get(f"{color}_prop_rot_dir"),
-                    ORI: self.motions[color].get_end_ori(),
-                }
-                self.motions[color].prop.update_attributes(prop_dict)
-                self.ghost_props[color].update_attributes(prop_dict)
-                self.motions[color].prop.show()
-                self.motions[color].prop.update_prop()
-
-        self._update_motions()
-
-    def _update_attr_panel(self) -> None:
-        for motion in self.motions.values():
-            self.main_widget.graph_editor_tab.graph_editor.attr_panel.update_attr_panel(
-                motion
-            )
-
-    def _position_objects(self) -> None:
-        self.prop_placement_manager.position_props()
-        self.arrow_placement_manager.update_arrow_placement()
-
-    def _update_motions(self) -> None:
-        for motion in self.motions.values():
-            motion.update_motion()
-
-    def _update_letter(self) -> None:
-        if all(motion.motion_type for motion in self.motions.values()):
-            self.letter = self.letter_engine.get_current_letter()
-            self.letter_item.letter = self.letter
-            self._set_letter_renderer(self.letter)
-            self.letter_item.position_letter_item(self.letter_item)
-        else:
-            self.letter = None
-            svg_path = f"resources/images/letter_button_icons/blank.svg"
-            renderer = QSvgRenderer(svg_path)
-            if renderer.isValid():
-                self.letter_item.setSharedRenderer(renderer)
-
     def create_new_beat(self) -> QGraphicsScene:
         from widgets.sequence_widget.beat_frame.beat import Beat
 
@@ -503,105 +386,6 @@ class Pictograph(QGraphicsScene):
 
         return new_beat
 
-    def render_and_cache_image(self) -> None:
-        image_path = self.main_widget.generate_image_path(self)
-        if os.path.isfile(image_path):
-            # If the image is already cached, use it
-            pixmap = self.main_widget.get_cached_pixmap(image_path)
-            if pixmap is None:
-                # If the pixmap is not loaded yet, load it
-                pixmap = QPixmap(image_path)
-                self.main_widget.cache_image(image_path, pixmap)
-            print(f"Using cached image for {image_path}")
-        else:
-            pixmap = self._render_scene_to_pixmap()
-            self.main_widget.cache_image(image_path, pixmap)
-            if not os.path.exists(image_path):
-                pixmap.save(image_path, "PNG")
-
-        self._update_thumbnail(pixmap)
-
-    def _update_thumbnail(self, pixmap: QPixmap) -> None:
-        if not self.pixmap:
-            self.pixmap = QGraphicsPixmapItem(pixmap)
-            self.addItem(self.pixmap)
-        else:
-            self.pixmap.setPixmap(pixmap)
-        self.image_loaded = True
-
-    def _render_scene_to_pixmap(self) -> None:
-        self.update_pictograph(self.pictograph_dict)
-
-        prop_type = self.main_widget.prop_type
-        letter = self.letter
-        letter_type = self._get_letter_type(letter)
-
-        blue_motion_type_prefix = self.motions[BLUE].motion_type[0]
-        red_motion_type_prefix = self.motions[RED].motion_type[0]
-        turns_string = f"{blue_motion_type_prefix}{self.motions[BLUE].turns},{red_motion_type_prefix}{self.motions[RED].turns}"
-
-        # Construct the folder name based on turns and motion types
-        basic_turns_string = f"{self.motions[BLUE].turns},{self.motions[RED].turns}"
-        start_to_end_string = f"{self.start_pos}→{self.end_pos}"
-        image_dir = os.path.join(
-            "resources",
-            "images",
-            "pictographs",
-            prop_type,
-            basic_turns_string,
-            letter_type,
-            letter,
-            start_to_end_string,
-        )
-        os.makedirs(image_dir, exist_ok=True)
-
-        # Modify the filename to include motion types and turns
-        blue_turns = self.motions[BLUE].turns
-        red_turns = self.motions[RED].turns
-        blue_end_ori = self.motions[BLUE].end_ori
-        red_end_ori = self.motions[RED].end_ori
-
-        image_name = (
-            f"{letter}_"
-            f"({start_to_end_string})_"
-            f"({self.motions[BLUE].motion_type}_{self.motions[BLUE].start_loc}→{self.motions[BLUE].end_loc}_"
-            f"{blue_turns}_"
-            f"{self.motions[BLUE].start_ori}→{blue_end_ori})_"
-            f"({self.motions[RED].motion_type}_{self.motions[RED].start_loc}→{self.motions[RED].end_loc}_"
-            f"{red_turns}_"
-            f"{self.motions[RED].start_ori}→{red_end_ori})_"
-            f"{prop_type}.png"
-        )
-
-        image_path = os.path.join(image_dir, image_name).replace("\\", "/")
-        image = QImage(
-            int(self.width()), int(self.height()), QImage.Format.Format_ARGB32
-        )
-        painter = QPainter(image)
-        self.render(painter)
-        painter.end()
-
-        if not image.isNull():
-            buffer = QByteArray()
-            buf = QBuffer(buffer)
-            buf.open(QBuffer.OpenModeFlag.WriteOnly)
-            success = image.save(buf, "PNG")
-            buf.close()
-
-            if success:
-                with open(image_path, "w", encoding="utf-8") as file:
-                    file.write(buffer.decode("utf-8"))
-                print(f"Image saved successfully to {image_path}")
-            else:
-                print(f"Failed to save the image to {image_path}")
-        else:
-            print("QImage is null. Nothing to save.")
-
-        return QPixmap.fromImage(image)
-
-    def load_image_if_needed(self) -> None:
-        if not self.image_loaded:
-            self.render_and_cache_image()
 
     ### BOOLS ###
 
@@ -666,3 +450,5 @@ class Pictograph(QGraphicsScene):
             if motion.motion_type == STATIC:
                 return True
         return False
+
+

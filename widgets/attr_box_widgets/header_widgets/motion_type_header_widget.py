@@ -114,7 +114,9 @@ class MotionTypeHeaderWidget(HeaderWidget):
                                     + "_"
                                     + PROP_ROT_DIR: other_motion.prop_rot_dir,
                                 }
-                                motion.scene.update_pictograph(pictograph_dict)
+                                motion.scene.state_updater.update_pictograph(
+                                    pictograph_dict
+                                )
                             elif vtg_dir == OPP:
                                 self.same_button.unpress()
                                 self.opp_button.press()
@@ -125,13 +127,17 @@ class MotionTypeHeaderWidget(HeaderWidget):
                                         + "_"
                                         + PROP_ROT_DIR: COUNTER_CLOCKWISE,
                                     }
-                                    motion.scene.update_pictograph(pictograph_dict)
+                                    motion.scene.state_updater.update_pictograph(
+                                        pictograph_dict
+                                    )
                                 elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
                                     motion.prop_rot_dir = CLOCKWISE
                                     pictograph_dict = {
                                         motion.color + "_" + PROP_ROT_DIR: CLOCKWISE,
                                     }
-                                    motion.scene.update_pictograph(pictograph_dict)
+                                    motion.scene.state_updater.update_pictograph(
+                                        pictograph_dict
+                                    )
 
     def _set_prop_rot_dir(self, prop_rot_dir: VtgDirections) -> None:
         for (
@@ -143,7 +149,7 @@ class MotionTypeHeaderWidget(HeaderWidget):
                         pictograph_dict = {
                             f"{motion.color}_prop_rot_dir": prop_rot_dir,
                         }
-                        motion.scene.update_pictograph(pictograph_dict)
+                        motion.scene.state_updater.update_pictograph(pictograph_dict)
         if prop_rot_dir:
             if prop_rot_dir == CLOCKWISE:
                 self.cw_button.press()

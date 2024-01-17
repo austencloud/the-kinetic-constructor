@@ -89,10 +89,4 @@ class GraphEditorPictographView(QGraphicsView):
             self.width() / self.main_pictograph.sceneRect().width(),
             self.height() / self.main_pictograph.sceneRect().height(),
         )
-
-        self.scale(
-            self.view_scale,
-            self.view_scale,
-        )
-        self.main_pictograph.view_scale = self.view_scale
         self.configure_button_size_and_position(int(self.width() / 10))

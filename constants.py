@@ -181,6 +181,10 @@ GAMMA6 = "gamma6"
 GAMMA7 = "gamma7"
 GAMMA8 = "gamma8"
 
+PRO_TURNS = "pro_turns"
+ANTI_TURNS = "anti_turns"
+DASH_TURNS = "dash_turns"
+STATIC_TURNS = "static_turns"
 
 ### ICONS ###
 

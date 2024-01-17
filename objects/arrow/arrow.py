@@ -81,7 +81,7 @@ class Arrow(GraphicalObject):
         if hasattr(self, GHOST) and self.ghost:
             self.ghost.show()
 
-        self.scene.update_pictograph()
+        self.scene.state_updater.update_pictograph()
 
     def mouseMoveEvent(
         self: Union["Prop", "Arrow"], event: "QGraphicsSceneMouseEvent"
@@ -91,12 +91,12 @@ class Arrow(GraphicalObject):
             new_pos = event.scenePos() - self.get_object_center()
             self.set_drag_pos(new_pos)
             if new_location != self.loc:
-                self._update_location(new_location)
+                self.arrow_location_manager.update_location(new_location)
 
     def mouseReleaseEvent(self, event) -> None:
         self.is_dragging = False
         self.scene.arrows[self.color] = self
-        self.scene.update_pictograph()
+        self.scene.state_updater.update_pictograph()
         self.ghost.hide()
 
     ### UPDATERS ###
@@ -243,4 +243,4 @@ class Arrow(GraphicalObject):
         else:
             self.scene.removeItem(self.prop)
 
-        self.scene.update_pictograph()
+        self.scene.state_updater.update_pictograph()

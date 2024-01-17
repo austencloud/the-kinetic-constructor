@@ -17,7 +17,6 @@ class PictographEventHandler:
         scene_pos = event.scenePos()
         items_at_pos = self.pictograph.items(scene_pos)
 
-        # Prioritize arrows over props if both are clicked simultaneously
         arrow = next((item for item in items_at_pos if isinstance(item, Arrow)), None)
         if arrow:
             self.pictograph.select_arrow(arrow)  # Select the arrow

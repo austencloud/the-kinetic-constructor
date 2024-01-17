@@ -96,7 +96,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
         arrow.update_arrow()
         arrow.show()
         arrow.setSelected(True)
-        self.pictograph.update_pictograph()
+        self.pictograph.state_updater.update_pictograph()
 
     ### UPDATERS ###
 
@@ -208,7 +208,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
             self.place_arrow_on_pictograph()
         self.arrowbox.drag = None
         self.deleteLater()
-        self.pictograph.update_pictograph()
+        self.pictograph.state_updater.update_pictograph()
         self.reset_drag_state()
 
     ### FLAGS ###
@@ -255,10 +255,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
 
     def update_drag_pixmap_rotation(self) -> None:
         renderer = QSvgRenderer(self.target_arrow.svg_file)
-        scaled_size = (
-            renderer.defaultSize()
-            * self.main_widget.graph_editor_tab.graph_editor.main_pictograph.view_scale
-        )
+        scaled_size = renderer.defaultSize()
         pixmap = QPixmap(scaled_size)
         pixmap.fill(Qt.GlobalColor.transparent)
         painter = QPainter(pixmap)

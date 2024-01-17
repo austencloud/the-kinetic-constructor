@@ -65,7 +65,7 @@ class Prop(GraphicalObject):
             self.ghost.show()
             self.scene.props[self.ghost.color] = self.ghost
             self.scene.props[self.color] = self.ghost
-            self.scene.update_pictograph()
+            self.scene.state_updater.update_pictograph()
             self.scene.props[self.color] = self
             for item in self.scene.items():
                 if item != self:
@@ -84,7 +84,7 @@ class Prop(GraphicalObject):
     def mouseReleaseEvent(self, event) -> None:
         if isinstance(self.scene, self.scene.__class__):
             self.ghost.hide()
-            self.scene.update_pictograph()
+            self.scene.state_updater.update_pictograph()
             self.finalize_prop_drop(event)
 
     ### UPDATERS ###
@@ -208,7 +208,7 @@ class Prop(GraphicalObject):
             self.ghost.loc = self.loc
             self.ghost.update_prop()
             self.scene.props[self.ghost.color] = self.ghost
-            self.scene.update_pictograph()
+            self.scene.state_updater.update_pictograph()
             self.scene.props[self.color] = self
             new_pos = new_pos - self.get_object_center()
             self.set_drag_pos(new_pos)
@@ -384,7 +384,7 @@ class Prop(GraphicalObject):
                 self.motion.end_loc = end_loc
                 self.motion.arrow.update_arrow()
                 self.motion.arrow.ghost.update_arrow()
-                self.pictograph.update_pictograph()
+                self.pictograph.state_updater.update_pictograph()
 
         elif self.motion.motion_type == STATIC:
             self.motion.arrow.loc = new_arrow_location
@@ -406,7 +406,7 @@ class Prop(GraphicalObject):
         if self.motion.arrow:
             self.motion.arrow.update_arrow()
         self.previous_location = closest_hand_point
-        self.scene.update_pictograph()
+        self.scene.state_updater.update_pictograph()
 
     def is_radial(self) -> bool:
         return self.ori in [IN, OUT]

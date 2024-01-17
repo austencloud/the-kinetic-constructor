@@ -235,7 +235,7 @@ class PropBox(BaseObjectBox):
         for ghost_prop in self.pictograph.ghost_props.values():
             ghost_prop.update_prop_type(new_prop_type)
         self.pictograph.main_widget.prop_type = new_prop_type
-        self.pictograph.update_pictograph()
+        self.pictograph.state_updater.update_pictograph()
 
     def mousePressEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         scene_pos = event.scenePos()

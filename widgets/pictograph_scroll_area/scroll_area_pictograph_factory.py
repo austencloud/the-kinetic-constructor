@@ -50,7 +50,7 @@ class ScrollAreaPictographFactory:
         pictograph_key = self.generate_pictograph_key_from_dict(pictograph_dict)
         ig_pictograph = self.get_or_create_pictograph(pictograph_key)
         # self.update_pictograph_from_attr_panel(ig_pictograph, pictograph_dict)
-        ig_pictograph.update_pictograph(pictograph_dict)
+        ig_pictograph.state_updater.update_pictograph(pictograph_dict)
 
     def update_pictograph_from_attr_panel(
         self, ig_pictograph: Pictograph, pictograph_dict
