@@ -9,8 +9,8 @@ from objects.arrow.arrow_placement_manager.managers.adjustment_key_generator imp
 from objects.arrow.arrow_placement_manager.managers.directional_tuple_generator import (
     DirectionalTupleGenerator,
 )
-from .default_arrow_placement_manager import DefaultArrowPlacementManager
-from ..special_arrow_placement_manager import SpecialArrowPlacementManager
+from .default_arrow_positioner import DefaultArrowPositioner
+from ..special_arrow_positioner import SpecialArrowPositioner
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import Colors, Locations
 
@@ -25,8 +25,8 @@ class ArrowPlacementManager:
         self.pictograph = pictograph
         self.blue_arrow = self.pictograph.arrows.get(BLUE)
         self.red_arrow = self.pictograph.arrows.get(RED)
-        self.default_manager = DefaultArrowPlacementManager(pictograph, self)
-        self.special_placement_manager = SpecialArrowPlacementManager(pictograph, self)
+        self.default_manager = DefaultArrowPositioner(pictograph, self)
+        self.special_placement_manager = SpecialArrowPositioner(pictograph, self)
         self.key_generator = AdjustmentKeyGenerator(self.pictograph)
 
     def reposition_for_letter(self, letter: str) -> None:

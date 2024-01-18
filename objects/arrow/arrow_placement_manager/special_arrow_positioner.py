@@ -1,7 +1,6 @@
 import json
 import re
 from typing import TYPE_CHECKING, Dict, Optional, Tuple, Union
-
 from ..arrow import Arrow
 from .managers.adjustment_key_generator import AdjustmentKeyGenerator
 from utilities.TypeChecking.letter_lists import (
@@ -14,13 +13,11 @@ from utilities.TypeChecking.letter_lists import (
 )
 
 if TYPE_CHECKING:
-    from .managers.main_arrow_placement_manager import (
-        ArrowPlacementManager,
-    )
+    from .managers.main_arrow_placement_manager import ArrowPlacementManager
     from widgets.pictograph.pictograph import Pictograph
 
 
-class SpecialArrowPlacementManager:
+class SpecialArrowPositioner:
     def __init__(self, pictograph: "Pictograph", main_manager: "ArrowPlacementManager"):
         self.pictograph = pictograph
         self.main_manager = main_manager

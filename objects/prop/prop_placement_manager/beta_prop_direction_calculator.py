@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Tuple
+from typing import TYPE_CHECKING, Tuple
 from constants import (
     ANTIRADIAL,
     BLUE,
@@ -24,7 +24,6 @@ from constants import (
 from objects.motion.motion import Motion
 from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import Directions
-
 
 if TYPE_CHECKING:
     pass
@@ -70,7 +69,7 @@ class BetaPropDirectionCalculator:
                 return RIGHT if motion.start_loc == SOUTH else LEFT
         return None
 
-    def determine_translation_direction(self, motion: Motion) -> Directions:
+    def determine_translation_dir(self, motion: Motion) -> Directions:
         """Determine the translation direction based on the motion type, start location, end location, and end layer."""
         if not (motion.is_shift() or motion.is_static()):
             return None
@@ -106,7 +105,7 @@ class BetaPropDirectionCalculator:
         }
         return direction_map.get((motion.end_loc, motion.start_loc))
 
-    def _get_translation_dir_for_non_shift(self, prop: Prop) -> Directions:
+    def _get_dir_for_non_shift(self, prop: Prop) -> Directions:
         layer_reposition_map = {
             RADIAL: {
                 (NORTH, RED): RIGHT,

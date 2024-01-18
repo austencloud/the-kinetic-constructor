@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 import codecs
 
 
-class DefaultArrowPlacementManager:
+class DefaultArrowPositioner:
     def __init__(
         self,
         pictograph: "Pictograph",

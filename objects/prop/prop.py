@@ -32,7 +32,7 @@ class Prop(GraphicalObject):
         self.motion = motion
         self.arrow: Arrow = None
 
-        self.prop_type = prop_dict[PROP_TYPE]
+        self.prop_type: PropTypes = prop_dict[PROP_TYPE]
         self.svg_file = self.get_svg_file(self.prop_type)
         self.ghost: Prop = None
         super().__init__(scene)
