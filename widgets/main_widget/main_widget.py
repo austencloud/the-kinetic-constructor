@@ -5,7 +5,7 @@ from utilities.TypeChecking.TypeChecking import Letters, TYPE_CHECKING, Dict, Li
 from constants import DIAMOND, STAFF
 from objects.pictograph.pictograph import Pictograph
 from ..image_cache_manager import ImageCacheManager
-from ..main_tab_widget import MainTabWidget
+from ..main_tab_widget.main_tab_widget import MainTabWidget
 from .main_widget_layout_manager import MainWidgetLayoutManager
 from .main_widget_letter_loader import MainLetterLoader
 from ..sequence_widget.sequence_widget import MainSequenceWidget

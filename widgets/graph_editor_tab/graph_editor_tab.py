@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from widgets.graph_editor_tab.graph_editor_frame import GraphEditorFrame
 
 if TYPE_CHECKING:
-    from widgets.main_tab_widget import MainTabWidget
+    from widgets.main_tab_widget.main_tab_widget import MainTabWidget
     from widgets.main_widget.main_widget import MainWidget
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
 from PyQt6.QtCore import Qt

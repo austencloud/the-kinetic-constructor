@@ -6,7 +6,7 @@ from constants import END_POS, START_POS
 from .option_picker_scroll_area import OptionPickerScrollArea
 
 if TYPE_CHECKING:
-    from widgets.main_tab_widget import MainTabWidget
+    from widgets.main_tab_widget.main_tab_widget import MainTabWidget
     from widgets.main_widget.main_widget import MainWidget
 
 
