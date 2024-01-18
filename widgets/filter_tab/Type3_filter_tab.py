@@ -3,7 +3,9 @@ from typing import TYPE_CHECKING, List
 from utilities.TypeChecking.TypeChecking import (
     LetterTypeNums,
 )
-from widgets.attr_panel.motion_type_attr_panels.Type3_motion_type_attr_panel import Type3MotionTypeAttrPanel
+from widgets.attr_panel.motion_type_attr_panels.Type3_motion_type_attr_panel import (
+    Type3MotionTypeAttrPanel,
+)
 from ..attr_panel.color_attr_panel import ColorAttrPanel
 from ..attr_panel.lead_state_attr_panel import LeadStateAttrPanel
 from .base_filter_tab import BaseFilterTab
@@ -50,7 +52,7 @@ class Type3FilterTab(BaseFilterTab):
             self.lead_state_attr_panel,
         ]
 
-    def show_panels_based_on_chosen_letters(self) -> None:
+    def show_tabs_based_on_chosen_letters(self) -> None:
         selected_letters_that_match_section_type: set[Letters] = set()
         letter_types = {
             "Type1": Type1_letters,
@@ -100,4 +102,3 @@ class Type3FilterTab(BaseFilterTab):
                 self.indexOf(getattr(self, f"{tabs_to_show[0].lower()}_attr_panel"))
             )
         self.resize_filter_tab()
-

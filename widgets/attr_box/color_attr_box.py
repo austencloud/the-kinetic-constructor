@@ -41,14 +41,5 @@ class ColorAttrBox(BaseAttrBox):
         self.vbox_layout.addWidget(self.turns_widget, 2)
         self.setLayout(self.hbox_layout)
 
-    def update_attr_box(self, motion: Motion) -> None:
-        for pictograph in self.attr_panel.scroll_area.pictographs.values():
-            for motion in pictograph.motions.values():
-                self.turns_widget.turn_display_manager.update_turns_display(
-                    motion.turns
-                )
-
-    def get_pictographs(self) -> List["Pictograph"]:
-        return list(self.attr_panel.scroll_area.pictographs.values())
 
 

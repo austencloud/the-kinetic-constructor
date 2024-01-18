@@ -27,7 +27,9 @@ class IGTab(QWidget):
 
     ### INITIALIZATION ###
 
-    def __init__(self, main_widget: "MainWidget", main_tab_widget: "MainTabWidget") -> None:
+    def __init__(
+        self, main_widget: "MainWidget", main_tab_widget: "MainTabWidget"
+    ) -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.letters_dict = deepcopy(self.main_widget.letters)  # Deep copy of letters
@@ -155,7 +157,7 @@ class IGTab(QWidget):
 
         for section in self.scroll_area.section_manager.sections.values():
             if section.letter_type == letter_type:
-                section.filter_tab.show_panels_based_on_chosen_letters()
+                section.filter_tab.show_tabs_based_on_chosen_letters()
 
         button.setFlat(not is_selected)
         button.setStyleSheet(self.get_button_style(pressed=not is_selected))

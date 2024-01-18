@@ -39,7 +39,7 @@ class Type5FilterTab(BaseFilterTab):
         self.color_attr_panel = ColorAttrPanel(self.scroll_area.parent_tab)
         self.tabs: List[ColorAttrPanel] = [self.color_attr_panel]
 
-    def show_panels_based_on_chosen_letters(self) -> None:
+    def show_tabs_based_on_chosen_letters(self) -> None:
         selected_letters_that_match_section_type: set[Letters] = set()
         letter_types = {
             "Type1": Type1_letters,

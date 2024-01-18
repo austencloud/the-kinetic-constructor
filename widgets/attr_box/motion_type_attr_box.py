@@ -7,7 +7,7 @@ from .attr_box_widgets.turns_widgets.motion_type_turns_widget import (
     MotionTypeTurnsWidget,
 )
 from .base_attr_box import BaseAttrBox
-from ..attr_box_widgets.header_widgets.motion_type_header_widget import (
+from .attr_box_widgets.header_widgets.motion_type_header_widget import (
     MotionTypeHeaderWidget,
 )
 
