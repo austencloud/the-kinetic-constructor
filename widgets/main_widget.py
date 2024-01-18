@@ -23,7 +23,6 @@ from constants import (
     BLUE_TURNS,
     DIAMOND,
     END_POS,
-    IG_PICTOGRAPH,
     IN,
     LETTER,
     RED,
@@ -36,15 +35,12 @@ from constants import (
     STAFF,
     START_POS,
 )
-from objects.pictograph.pictograph_loader import PictographLoader
 from utilities.TypeChecking.TypeChecking import Letters
-from .ig_tab.ig_scroll.ig_pictograph import IGPictograph
 from .ig_tab.ig_tab import IGTab
 from .option_picker_tab.option_picker_tab import OptionPickerTab
 from .graph_editor_tab.graph_editor_tab import GraphEditorTab
 from .graph_editor_tab.graph_editor_key_event_handler import GraphEditorKeyEventHandler
 from objects.pictograph.pictograph import Pictograph
-from .pictograph_scroll_area.scroll_area_pictograph_factory import PictographFactory
 from PyQt6.QtWidgets import QProgressBar
 from .sequence_widget.sequence_widget import SequenceWidget
 from .styled_splitter import StyledSplitter
@@ -70,10 +66,6 @@ class MainWidget(QWidget):
         self.main_window = main_window
         self.image_cache_initialized = False
         self.resize(int(self.main_window.width()), int(self.main_window.height()))
-        self.pictograph_factory = PictographFactory(self)
-        self.pictograph_loader = PictographLoader(self)
-        self.pictograph_loader.pictographs_created.connect(self.update_pictographs)
-        # self.pictograph_loader.finished.connect(self.on_pictographs_loaded)  # Define
         self.key_event_handler = GraphEditorKeyEventHandler()
         self.letters: Dict[Letters, List[Dict]] = self.load_all_letters()
         self.sequence_widget = SequenceWidget(self)
@@ -89,43 +81,8 @@ class MainWidget(QWidget):
         for key, pictograph in created_pictographs.items():
             self.all_pictographs[key] = pictograph
 
-    def create_and_add_pictograph(self, pictograph_dict) -> None:
-        pictograph_key = self.pictograph_factory.generate_pictograph_key_from_dict(
-            pictograph_dict
-        )
-        ig_pictograph = self.pictograph_factory.create_pictograph(IG_PICTOGRAPH)
-        ig_pictograph.state_updater.update_pictograph(pictograph_dict)
-        self.all_pictographs[pictograph_key.split("_")[0]][
-            pictograph_key
-        ] = ig_pictograph
-        # self.pictograph_ready.emit(pictograph_key)  # Now emit pictograph_ready
-
-    def process_pictograph_data(self, pictograph_data: list) -> None:
-        for pictograph_dict in pictograph_data:
-            pictograph_key = self.pictograph_factory.generate_pictograph_key_from_dict(
-                pictograph_dict
-            )
-            if pictograph_key not in self.all_pictographs:
-                ig_pictograph = self.pictograph_factory.create_pictograph(IG_PICTOGRAPH)
-                ig_pictograph.state_updater.update_pictograph(pictograph_dict)
-                self.all_pictographs[pictograph_key.split("_")[0]][
-                    pictograph_key
-                ] = ig_pictograph
-
-    def handle_pictograph_ready(self, pictograph_key) -> None:
-        # This method will run in the main thread
-        ig_pictograph: IGPictograph = self.all_pictographs[
-            pictograph_key.split("_")[0]
-        ][pictograph_key]
-        if (
-            ig_pictograph.needs_displaying()
-        ):  # You need to define the needs_displaying logic
-            ig_pictograph.show()  # Ensure this method is thread-safe or called in the main thread
-        else:
-            ig_pictograph.hide()  # Ensure this method is thread-safe or called in the main thread
-
     def load_all_letters(self) -> dict:
-        df = pd.read_csv("PictographDataframe.csv")
+        df: pd.Series = pd.read_csv("PictographDataframe.csv")
         df = df.sort_values(by=[LETTER, START_POS, END_POS])
 
         # Selecting the necessary columns
@@ -260,14 +217,8 @@ class MainWidget(QWidget):
         self.progress_bar.setGeometry(0, self.height() - 20, self.width(), 20)
         self.progress_bar.hide()  # Initially hidden, shown when loading starts
 
-        # Connect the signal to update the progress bar
-        self.pictograph_loader.progress_updated.connect(self.update_progress)
 
-    def start_loading(self) -> None:
-        # Show the progress bar and start loading
-        self.progress_bar.show()
-        self.progress_bar.setValue(0)  # Start progress at 0%
-        self.pictograph_loader.start_loading()
+
 
     def update_progress(self, value: int) -> None:
         self.progress_bar.setValue(value)  # Update the progress bar's value
@@ -391,4 +342,3 @@ class MainWidget(QWidget):
         if pictograph_key not in self.all_pictographs:
             self.pictograph_factory.get_or_create_pictograph(pictograph_key)
         pictograph = self.all_pictographs[pictograph_key]
-

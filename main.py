@@ -1,7 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow
 from PyQt6.QtGui import QGuiApplication
-from objects.pictograph.pictograph_loader import PictographLoader
 from widgets.main_widget import MainWidget
 from profiler import Profiler
 import os

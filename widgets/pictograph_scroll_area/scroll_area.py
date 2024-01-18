@@ -4,8 +4,11 @@ from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
 )
-from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtCore import Qt
 from utilities.TypeChecking.TypeChecking import Letters
+from widgets.pictograph_scroll_area.scroll_area_pictograph_factory import (
+    ScrollAreaPictographFactory,
+)
 from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
 from ..pictograph_scroll_area.scroll_area_section_manager import (
     ScrollAreaSectionManager,
@@ -39,6 +42,7 @@ class ScrollArea(QScrollArea):
         self.display_manager = ScrollAreaDisplayManager(self)
         self.filter_tab_manager = ScrollAreaFilterTabManager(self)
         self.section_manager = ScrollAreaSectionManager(self)
+        self.pictograph_factory = ScrollAreaPictographFactory(self)
 
     def _setup_ui(self) -> None:
         self.setWidgetResizable(True)
@@ -51,24 +55,15 @@ class ScrollArea(QScrollArea):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
 
     def update_pictographs(self) -> None:
-        deselected_letters = (
-            self.main_widget.pictograph_factory.get_deselected_letters()
-        )
-        selected_letters = set(self.parent_tab.selected_letters)
+        deselected_letters = self.pictograph_factory.get_deselected_letters()
 
-        if self._only_deselection_occurred(deselected_letters, selected_letters):
-            for letter in deselected_letters:
-                self.main_widget.pictograph_factory.remove_deselected_letter_pictographs(
-                    letter
-                )
-        else:
-            for letter in deselected_letters:
-                self.main_widget.pictograph_factory.remove_deselected_letter_pictographs(
-                    letter
-                )
-            self.main_widget.pictograph_factory.process_selected_letters(self)
+        # Remove pictographs associated with deselected letters
+        for letter in deselected_letters:
+            self.pictograph_factory.remove_deselected_letter_pictographs(letter)
 
-        # self.section_manager.organize_pictographs_by_type()
+        # Update display after processing deselections
+        self.display_manager.cleanup_unused_pictographs()
+        self.section_manager.organize_pictographs_by_type()
 
     def _only_deselection_occurred(self, deselected_letters, selected_letters) -> bool:
         if not deselected_letters:

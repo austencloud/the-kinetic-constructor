@@ -146,7 +146,7 @@ class IGTab(QWidget):
         button = self.letter_button_frame.buttons[letter]
         letter_type = self.letter_button_frame.get_letter_type(letter)
         is_selected = letter in self.selected_letters
-        
+
         if is_selected:
             self.selected_letters.remove(letter)
         else:
@@ -158,7 +158,6 @@ class IGTab(QWidget):
 
         button.setFlat(not is_selected)
         button.setStyleSheet(self.get_button_style(pressed=not is_selected))
-        self.main_widget.pictograph_factory.process_selected_letters(self.scroll_area)
         self.scroll_area.update_pictographs()
 
     def generate_selected_images(self) -> None:
@@ -169,10 +168,10 @@ class IGTab(QWidget):
         for letter in self.selected_letters:
             pictograph_dict_list = self.main_widget.letters[letter]
             for pictograph_dict in pictograph_dict_list:
-                ig_pictograph: IGPictograph = self.scroll_area._create_pictograph(
-                    IG_PICTOGRAPH
+                ig_pictograph: IGPictograph = (
+                    self.scroll_area.pictograph_factory.create_pictograph(IG_PICTOGRAPH)
                 )
-                ig_pictograph.render_and_cache_image()
+                ig_pictograph.image_renderer.render_and_cache_image()
         main_widget.setEnabled(True)
         QApplication.restoreOverrideCursor()
         self.setMouseTracking(True)
