@@ -10,10 +10,7 @@ from data.letter_engine_data import (
     motion_type_letter_combinations,
     letter_type_motion_type_map,
 )
-from widgets.attr_panel.base_attr_panel import BaseAttrPanel
-from widgets.attr_panel.motion_type_attr_panel import MotionTypeAttrPanel
-from widgets.attr_panel.color_attr_panel import ColorAttrPanel
-from widgets.attr_panel.lead_state_attr_panel import LeadStateAttrPanel
+from widgets.attr_panel import AttrPanel
 
 if TYPE_CHECKING:
     from widgets.pictograph_scroll_area.scroll_area import ScrollArea
@@ -23,17 +20,15 @@ class FilterTab(QTabWidget):
     def __init__(self, scroll_area: "ScrollArea", letter_type: LetterTypeNums) -> None:
         super().__init__(scroll_area)
         self.scroll_area = scroll_area
-        self.motion_type_attr_panel = MotionTypeAttrPanel(
-            self, self.get_motion_types_from_letter_type(letter_type)
-        )
-        self.color_attr_panel = ColorAttrPanel(self)
-        self.lead_state_attr_panel = LeadStateAttrPanel(self)
-        self.panels: List[BaseAttrPanel] = [
+        self.letter_type = letter_type
+        self.motion_type_attr_panel = AttrPanel(self, MOTION_TYPE)
+        self.color_attr_panel = AttrPanel(self, COLOR)
+        self.lead_state_attr_panel = AttrPanel(self, LEAD_STATE)
+        self.panels: List[AttrPanel] = [
             self.motion_type_attr_panel,
             self.color_attr_panel,
             self.lead_state_attr_panel,
         ]
-        self.letter_type = letter_type
         self.setup_ui()
 
     def get_motion_types_from_letter_type(

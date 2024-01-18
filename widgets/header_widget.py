@@ -17,6 +17,7 @@ class HeaderWidget(AttrBoxWidget):
         self.separator: QFrame = self.create_separator()
         self.setup_header()
 
+
     def setup_header(self) -> None:
         if self.attr_box.attribute_type == COLOR:
             text = "Left" if self.attr_box.color == BLUE else "Right"
@@ -27,7 +28,6 @@ class HeaderWidget(AttrBoxWidget):
             text = self.attr_box.lead_state.capitalize()
             self.header_label = self._setup_header_label(text)
             self._setup_layout()
-            
 
         elif self.attr_box.attribute_type == MOTION_TYPE:
             text = self.attr_box.motion_type.capitalize()

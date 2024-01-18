@@ -5,7 +5,7 @@ from utilities.TypeChecking.TypeChecking import Colors
 from ..attr_box.attr_box_widgets.motion_types_widget import MotionTypeWidget
 from ..attr_box.attr_box_widgets.start_end_loc_widget import StartEndLocWidget
 from ..attr_box.attr_box import AttrBox
-from ..attr_panel.base_attr_panel import BaseAttrPanel
+from ..attr_panel import AttrPanel
 from ..buttons.adjust_turns_button import AdjustTurnsButton
 
 from ..graph_editor_tab.graph_editor_header_widget import GraphEditorHeaderWidget
@@ -21,7 +21,7 @@ from PyQt6.QtGui import QFont
 
 class GraphEditorAttrBox(AttrBox):
     def __init__(
-        self, attr_panel: "BaseAttrPanel", pictograph: "Pictograph", color: Colors
+        self, attr_panel: "AttrPanel", pictograph: "Pictograph", color: Colors
     ) -> None:
         super().__init__(attr_panel, pictograph)
         self.color = color

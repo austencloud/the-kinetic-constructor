@@ -81,9 +81,13 @@ class GraphEditorHeaderWidget(HeaderWidget):
 
     def resize_header_widget(self) -> None:
         self.separator.setMaximumWidth(
-            self.attr_box.width() - self.attr_box.border_width * 2
+            self.attr_box.width() - self.attr_box.attr_box_border_width * 2
         )
         self.header_label.setFont(QFont("Arial", int(self.height() / 3)))
         self._update_button_size()
-        self.setMinimumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
-        self.setMaximumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
+        self.setMinimumWidth(
+            self.attr_box.width() - self.attr_box.attr_box_border_width * 2
+        )
+        self.setMaximumWidth(
+            self.attr_box.width() - self.attr_box.attr_box_border_width * 2
+        )

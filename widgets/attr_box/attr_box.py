@@ -1,8 +1,7 @@
 from typing import TYPE_CHECKING, Dict, List, Union
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
-from Enums import MotionAttribute
+from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 from constants import COLOR, LEAD_STATE, MOTION_TYPE, OPP, SAME
 from utilities.TypeChecking.TypeChecking import (
@@ -28,9 +27,7 @@ from .attr_box_widgets.turns_widget.base_turns_widget.base_turns_widget import (
 from .attr_box_widgets.base_attr_box_widget import AttrBoxWidget
 
 if TYPE_CHECKING:
-    from ..graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
-    from ..attr_panel.base_attr_panel import BaseAttrPanel
-    from objects.pictograph.pictograph import Pictograph
+    from ..attr_panel import AttrPanel
 
 
 class AttrBox(QFrame):
@@ -41,12 +38,12 @@ class AttrBox(QFrame):
         attribute: Union[MotionAttributes, Colors, LeadStates] = None,
     ) -> None:
         super().__init__(attr_panel)
-        self.attr_panel: "BaseAttrPanel" = attr_panel
+        self.attr_panel: "AttrPanel" = attr_panel
         self.font_size = self.width() // 10
         self.widgets: List[AttrBoxWidget] = []
         self.turns_widget: TurnsWidget = None
-        self.combobox_border = 0
-        self.border_width = 0
+        self.turn_display_border = 2
+        self.attr_box_border_width = 0
         self.pixmap_cache: Dict[str, QPixmap] = {}
         self.vtg_dir_btn_state: Dict[str, bool] = {SAME: True, OPP: False}
         self.attribute_type: MotionAttributes = attribute_type
@@ -83,7 +80,7 @@ class AttrBox(QFrame):
     def apply_border_style(self, color_hex: str) -> None:
         self.setStyleSheet(
             f"#AttributeBox {{ "
-            f"border: {self.border_width}px solid {color_hex};"
+            f"border: {self.attr_box_border_width}px solid {color_hex};"
             f" border-style: inset; "
             f"}}"
         )

@@ -80,7 +80,7 @@ class TurnDisplayManager:
         self.turns_display.setStyleSheet(
             f"""
             QLabel {{
-                border: {self.attr_box.combobox_border}px solid black;
+                border: {self.attr_box.turn_display_border}px solid black;
                 border-radius: {border_radius}px;
                 background-color: white;
                 padding-left: 2px; /* add some padding on the left for the text */

@@ -149,8 +149,12 @@ class StartEndLocWidget(AttrBoxWidget):
         self.end_loc_box.setCurrentIndex(-1)
 
     def resize_start_end_widget(self) -> None:
-        self.setMinimumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
-        self.setMaximumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
+        self.setMinimumWidth(
+            self.attr_box.width() - self.attr_box.attr_box_border_width * 2
+        )
+        self.setMaximumWidth(
+            self.attr_box.width() - self.attr_box.attr_box_border_width * 2
+        )
 
         self.swap_button_frame.setMaximumWidth(int(self.width() * 1 / 4))
         self.swap_button_frame.setMinimumWidth(int(self.width() * 1 / 4))
@@ -189,7 +193,7 @@ class StartEndLocWidget(AttrBoxWidget):
                 QComboBox {{
                     padding-left: 2px; /* add some padding on the left for the text */
                     padding-right: 0px; /* make room for the arrow on the right */
-                    border: {self.attr_box.combobox_border}px solid black;
+                    border: {self.attr_box.turn_display_border}px solid black;
                     border-radius: {border_radius}px;
                 }}
                 QComboBox::drop-down {{
