@@ -11,7 +11,10 @@ if TYPE_CHECKING:
 class LeadStateAttrPanel(BaseAttrPanel):
     def __init__(self, parent_tab: "IGTab") -> None:
         super().__init__(parent_tab)
-        self.parent_tab = parent_tab
+        self._setup_boxes()
+        self.setup_layouts()
+
+    def _setup_boxes(self) -> None:
         self.leading_box = LeadStateAttrBox(self, LEADING)
         self.trailing_box = LeadStateAttrBox(self, TRAILING)
         self.boxes: List[LeadStateAttrBox] = [
@@ -19,31 +22,7 @@ class LeadStateAttrPanel(BaseAttrPanel):
             self.trailing_box,
         ]
 
-        self.setup_layouts()
-
     def setup_layouts(self) -> None:
         super().setup_layouts()
         for box in self.boxes:
             self.layout.addWidget(box)
-        self.layout
-
-    def get_turns_for_lead_state(self, lead_state: LeadStates) -> Turns:
-        for box in self.boxes:
-            if box.lead_state == lead_state:
-                if box.turns_widget.turns_display_manager.turns_display.text() in [
-                    "0",
-                    "1",
-                    "2",
-                    "3",
-                ]:
-                    return int(
-                        box.turns_widget.turns_display_manager.turns_display.text()
-                    )
-                elif box.turns_widget.turns_display_manager.turns_display.text() in [
-                    "0.5",
-                    "1.5",
-                    "2.5",
-                ]:
-                    return float(
-                        box.turns_widget.turns_display_manager.turns_display.text()
-                    )

@@ -43,8 +43,8 @@ class BaseAttrPanel(QFrame):
             box.turns_widget.turns_display_manager.turns_display.setText("0")
             if hasattr(box, "header_widget"):
                 for button in (
-                    box.header_widget.vtg_dir_buttons
-                    + box.header_widget.prop_rot_dir_buttons
+                    box.rot_dir_button_manager.vtg_dir_buttons
+                    + box.rot_dir_button_manager.prop_rot_dir_buttons
                 ):
                     button.unpress()
         for pictograph in self.parent_tab.scroll_area.pictographs.values():
