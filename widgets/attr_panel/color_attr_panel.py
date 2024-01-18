@@ -26,4 +26,3 @@ class ColorAttrPanel(BaseAttrPanel):
         super().setup_layouts()
         for box in self.boxes:
             self.layout.addWidget(box)
-

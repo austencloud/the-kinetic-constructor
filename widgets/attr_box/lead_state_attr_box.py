@@ -44,6 +44,5 @@ class LeadStateAttrBox(BaseAttrBox):
         self.vbox_layout.addWidget(self.turns_widget, 2)
         self.setLayout(self.hbox_layout)
 
-
     def get_pictographs(self) -> List["Pictograph"]:
-        return list(self.attr_panel.scroll_area.scroll_area.pictographs.values())
+        return list(self.attr_panel.parent_tab.scroll_area.pictographs.values())

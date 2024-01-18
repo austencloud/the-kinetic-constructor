@@ -18,15 +18,17 @@ from ..attr_box.motion_type_attr_box import MotionTypeAttrBox
 
 
 if TYPE_CHECKING:
+    from widgets.graph_editor_tab.graph_editor_tab import GraphEditorTab
+    from widgets.ig_tab.ig_tab import IGTab
     from ..pictograph_scroll_area.scroll_area import ScrollArea
 
 
 class BaseAttrPanel(QFrame):
-    def __init__(self, scroll_area: "ScrollArea") -> None:
+    def __init__(self, parent_tab) -> None:
         super().__init__()
         self.boxes: List[MotionTypeAttrBox, ColorAttrBox, LeadStateAttrBox] = []
-        self.scroll_area: ScrollArea = scroll_area
-
+        self.parent_tab: "IGTab" | "GraphEditorTab" = parent_tab
+        
     def setup_layouts(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.setContentsMargins(0, 0, 0, 0)
@@ -46,7 +48,7 @@ class BaseAttrPanel(QFrame):
                     + box.header_widget.prop_rot_dir_buttons
                 ):
                     button.unpress()
-        for pictograph in self.scroll_area.pictographs.values():
+        for pictograph in self.parent_tab.scroll_area.pictographs.values():
             pictograph_dict = {
                 BLUE_TURNS: 0,
                 RED_TURNS: 0,
