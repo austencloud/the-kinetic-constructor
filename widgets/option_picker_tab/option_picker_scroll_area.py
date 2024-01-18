@@ -29,7 +29,7 @@ class OptionPickerScrollArea(ScrollArea):
     ### SETUP ###
 
     def _connect_signals(self) -> None:
-        self.main_widget.sequence_widget.beat_frame.picker_updater.connect(
+        self.main_widget.main_sequence_widget.beat_frame.picker_updater.connect(
             self.update_options
         )
 
@@ -174,16 +174,16 @@ class OptionPickerScrollArea(ScrollArea):
     ### EVENT HANDLERS ###
 
     def _on_start_pos_clicked(self, start_pos: "Option", attributes) -> None:
-        self.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
+        self.main_widget.main_sequence_widget.beat_frame.start_pos_view.set_start_pos(
             start_pos
         )
-        self.main_widget.sequence_widget.beat_frame.picker_updater.emit(
+        self.main_widget.main_sequence_widget.beat_frame.picker_updater.emit(
             start_pos, attributes
         )
 
     def _on_option_clicked(self, clicked_option: "Option") -> None:
         self._update_pictographs(clicked_option)
         new_beat = clicked_option.create_new_beat()
-        self.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(new_beat)
+        self.main_widget.main_sequence_widget.beat_frame.add_scene_to_sequence(new_beat)
 
     ### RESIZE ###

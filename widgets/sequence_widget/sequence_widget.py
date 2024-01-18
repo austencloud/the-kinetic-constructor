@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from widgets.main_widget import MainWidget
 
 
-class SequenceWidget(QWidget):
+class MainSequenceWidget(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget

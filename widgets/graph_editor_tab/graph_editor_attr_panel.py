@@ -35,7 +35,7 @@ class GraphEditorAttrPanel(BaseAttrPanel):
         max_width = int(
             (
                 self.graph_editor.main_widget.width()
-                - self.graph_editor.main_widget.sequence_widget.width()
+                - self.graph_editor.main_widget.main_sequence_widget.width()
             )
         )
         self.setMaximumWidth(

@@ -1,15 +1,4 @@
-from typing import TYPE_CHECKING, Dict, List, Optional
-from PyQt6.QtCore import QEvent
-from PyQt6.QtWidgets import (
-    QWidget,
-    QHBoxLayout,
-    QVBoxLayout,
-    QFrame,
-    QTabWidget,
-)
-from utilities.TypeChecking.letter_lists import all_letters
-from PyQt6.QtCore import QEvent
-from PyQt6.QtGui import QResizeEvent
+from typing import TYPE_CHECKING, Dict, List
 import pandas as pd
 from constants import (
     BLUE_END_LOC,
@@ -18,7 +7,6 @@ from constants import (
     BLUE_START_LOC,
     BLUE_START_ORI,
     BLUE_TURNS,
-    DIAMOND,
     END_POS,
     IN,
     LETTER,
@@ -28,26 +16,15 @@ from constants import (
     RED_START_LOC,
     RED_START_ORI,
     RED_TURNS,
-    STAFF,
     START_POS,
 )
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.image_cache_manager import ImageCacheManager
-from widgets.main_tab_widget import MainTabWidget
-from widgets.main_widget_layout_manager import MainWidgetLayoutManager
-from .ig_tab.ig_tab import IGTab
-from .option_picker_tab.option_picker_tab import OptionPickerTab
-from .graph_editor_tab.graph_editor_tab import GraphEditorTab
-from .graph_editor_tab.graph_editor_key_event_handler import KeyEventHandler
-from objects.pictograph.pictograph import Pictograph
-from .sequence_widget.sequence_widget import SequenceWidget
 
 if TYPE_CHECKING:
-    from main import MainWindow
     from widgets.main_widget import MainWidget
 
 
-class MainWidgetLetterLoader:
+class MainLetterLoader:
     def __init__(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
 

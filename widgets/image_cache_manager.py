@@ -1,52 +1,22 @@
 import os
-from typing import TYPE_CHECKING, Any, Dict, List, Optional
-from PyQt6.QtCore import QEvent, Qt
-from PyQt6.QtWidgets import (
-    QSizePolicy,
-    QWidget,
-    QHBoxLayout,
-    QVBoxLayout,
-    QFrame,
-    QTabWidget,
-)
-from utilities.TypeChecking.letter_lists import all_letters
-from PyQt6.QtCore import QEvent, Qt
-from PyQt6.QtGui import QResizeEvent, QWheelEvent, QPixmap
-import pandas as pd
+from typing import TYPE_CHECKING, Any
+from PyQt6.QtGui import QPixmap
 from constants import (
     BLUE,
     BLUE_END_LOC,
     BLUE_MOTION_TYPE,
-    BLUE_PROP_ROT_DIR,
     BLUE_START_LOC,
-    BLUE_START_ORI,
-    BLUE_TURNS,
-    DIAMOND,
     END_POS,
-    IN,
     LETTER,
     RED,
     RED_END_LOC,
     RED_MOTION_TYPE,
-    RED_PROP_ROT_DIR,
     RED_START_LOC,
-    RED_START_ORI,
-    RED_TURNS,
-    STAFF,
     START_POS,
 )
-from utilities.TypeChecking.TypeChecking import Letters
-from .ig_tab.ig_tab import IGTab
-from .option_picker_tab.option_picker_tab import OptionPickerTab
-from .graph_editor_tab.graph_editor_tab import GraphEditorTab
-from .graph_editor_tab.graph_editor_key_event_handler import KeyEventHandler
 from objects.pictograph.pictograph import Pictograph
-from PyQt6.QtWidgets import QProgressBar
-from .sequence_widget.sequence_widget import SequenceWidget
-from .styled_splitter import StyledSplitter
 
 if TYPE_CHECKING:
-    from main import MainWindow
     from widgets.main_widget import MainWidget
 from typing import Generator
 import os

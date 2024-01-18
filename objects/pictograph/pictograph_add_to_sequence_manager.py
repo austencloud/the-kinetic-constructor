@@ -18,7 +18,7 @@ class AddToSequenceManager:
 
     def add_to_sequence_callback(self) -> None:
         new_beat = self.create_new_beat()
-        self.pictograph.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(
+        self.pictograph.main_widget.main_sequence_widget.beat_frame.add_scene_to_sequence(
             new_beat
         )
 

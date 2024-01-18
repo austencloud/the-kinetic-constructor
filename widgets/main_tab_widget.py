@@ -6,7 +6,6 @@ from widgets.graph_editor_tab.graph_editor_tab import GraphEditorTab
 from widgets.ig_tab.ig_tab import IGTab
 from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
 
-from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 
 if TYPE_CHECKING:
