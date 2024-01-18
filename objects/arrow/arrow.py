@@ -49,25 +49,16 @@ class Arrow(GraphicalObject):
         self.motion_type = arrow_dict[MOTION_TYPE]
         self.turns = arrow_dict[TURNS]
 
-        self.svg_file = self.get_svg_file(
+        self.svg_file = self.svg_manager.get_arrow_svg_file(
             arrow_dict[MOTION_TYPE],
             arrow_dict[TURNS],
         )
         self.svg_manager.setup_svg_renderer(self.svg_file)
         self.setAcceptHoverEvents(True)
         self.attr_manager.update_attributes(arrow_dict)
-        self.is_dragging: bool = False
-        self.loc: Locations = None
         self.drag_offset = QPointF(0, 0)
 
     ### SETUP ###
-
-    def update_arrow_svg(self) -> None:
-        svg_file = self.get_svg_file(self.motion_type, self.turns)
-        self.svg_file = svg_file
-        self.svg_manager.update_svg(svg_file)
-        if not self.is_ghost and self.ghost:
-            self.ghost.svg_manager.update_svg(svg_file)
 
     ### MOUSE EVENTS ###
 
@@ -86,14 +77,13 @@ class Arrow(GraphicalObject):
         self: Union["Prop", "Arrow"], event: "QGraphicsSceneMouseEvent"
     ) -> None:
         if event.buttons() == Qt.MouseButton.LeftButton:
-            new_location = self.scene.get_closest_layer2_point(event.scenePos())[0]
+            new_location = self.scene.grid.get_closest_layer2_point(event.scenePos())[0]
             new_pos = event.scenePos() - self.get_center()
             self.set_drag_pos(new_pos)
             if new_location != self.loc:
                 self.location_manager.update_location(new_location)
 
     def mouseReleaseEvent(self, event) -> None:
-        self.is_dragging = False
         self.scene.arrows[self.color] = self
         self.scene.state_updater.update_pictograph()
         self.ghost.hide()
@@ -156,14 +146,6 @@ class Arrow(GraphicalObject):
     def get_attributes(self) -> Dict[str, Union[Colors, Locations, MotionTypes, Turns]]:
         arrow_attributes = [COLOR, LOC, MOTION_TYPE, TURNS]
         return {attr: getattr(self, attr) for attr in arrow_attributes}
-
-    def get_svg_file(self, motion_type: MotionTypes, turns: Turns) -> str:
-        cache_key = f"{motion_type}_{float(turns)}"
-        if cache_key not in Arrow.svg_cache:
-            file_path = f"resources/images/arrows/{self.pictograph.main_widget.grid_mode}/{motion_type}/{motion_type}_{float(turns)}.svg"
-            with open(file_path, "r") as file:
-                Arrow.svg_cache[cache_key] = file.name
-        return Arrow.svg_cache[cache_key]
 
     def _change_arrow_to_static(self) -> None:
         motion_dict = {

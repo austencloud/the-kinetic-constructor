@@ -7,8 +7,8 @@ from typing import TYPE_CHECKING, Union
 from objects.graphical_object.graphical_object_attr_manager import (
     GraphicalObjectAttrManager,
 )
-from objects.graphical_object.graphical_object_svg_manager import (
-    GraphicalObjectSvgManager,
+from objects.graphical_object.svg_manager import (
+    SvgManager,
 )
 from utilities.TypeChecking.TypeChecking import Colors
 
@@ -29,7 +29,7 @@ class GraphicalObject(QGraphicsSvgItem):
     def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__()
         self.pictograph = pictograph
-        self.svg_manager = GraphicalObjectSvgManager(self)
+        self.svg_manager = SvgManager(self)
         self.attr_manager = GraphicalObjectAttrManager(self)
 
     ### GETTERS ###
