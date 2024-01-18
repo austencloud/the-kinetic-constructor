@@ -6,8 +6,7 @@ from constants import *
 from utilities.TypeChecking.letter_lists import all_letters
 from widgets.option_picker_tab.option import Option
 from PyQt6.QtGui import QPixmap
-
-from widgets.pictograph_scroll_area.scroll_area import ScrollArea
+from widgets.scroll_area.scroll_area import ScrollArea
 
 
 if TYPE_CHECKING:
@@ -67,20 +66,26 @@ class OptionPickerScrollArea(ScrollArea):
     def load_image_if_visible(self, option: "Option") -> None:
         """Loads the image for an option if it is visible."""
         if not option.image_loaded:
-            image_path = self.main_widget.generate_image_path(option)
+            image_path = self.main_widget.image_cache_manager.generate_image_path(
+                option
+            )
 
-            if image_path not in self.main_widget.image_cache:
+            if image_path not in self.main_widget.image_cache_manager.image_cache:
                 if not os.path.exists(image_path):
                     option.image_renderer.render_and_cache_image()
                 else:
-                    self.main_widget.image_cache[image_path] = QPixmap(image_path)
+                    self.main_widget.image_cache_manager.image_cache[
+                        image_path
+                    ] = QPixmap(image_path)
 
             if not option.pixmap:
                 option.pixmap = option.addPixmap(
-                    self.main_widget.image_cache[image_path]
+                    self.main_widget.image_cache_manager.image_cache[image_path]
                 )
             else:
-                option.pixmap.setPixmap(self.main_widget.image_cache[image_path])
+                option.pixmap.setPixmap(
+                    self.main_widget.image_cache_manager.image_cache[image_path]
+                )
 
             option.image_loaded = True
 
@@ -101,7 +106,7 @@ class OptionPickerScrollArea(ScrollArea):
             arrow.loc = arrow.arrow_location_manager.get_arrow_location(
                 arrow.motion.start_loc, arrow.motion.end_loc, arrow.motion.motion_type
             )
-        option.update_pictograph()
+        option.state_updater.update_pictograph()
 
     def clear(self) -> None:
         while self.layout.count():
@@ -128,7 +133,7 @@ class OptionPickerScrollArea(ScrollArea):
         self.pictographs.clear()
         self.clear()
         for motion_dict in filtered_data:
-            option = self.pictograph_factory._create_pictograph(OPTION)
+            option = self.pictograph_factory.create_pictograph(OPTION)
             self.pictographs[motion_dict[LETTER]] = option
         self._sort_options()
         self._add_sorted_options_to_layout()
@@ -148,7 +153,7 @@ class OptionPickerScrollArea(ScrollArea):
 
     def _add_sorted_options_to_layout(self) -> None:
         for _, option in self.pictographs.items():
-            option.view.resize_option_view()
+            option.view.resize_for_scroll_area()
 
             self._add_option_to_layout(
                 option,
@@ -183,7 +188,7 @@ class OptionPickerScrollArea(ScrollArea):
 
     def _on_option_clicked(self, clicked_option: "Option") -> None:
         self._update_pictographs(clicked_option)
-        new_beat = clicked_option.create_new_beat()
+        new_beat = clicked_option.add_to_sequence_manager.create_new_beat()
         self.main_widget.main_sequence_widget.beat_frame.add_scene_to_sequence(new_beat)
 
     ### RESIZE ###

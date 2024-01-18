@@ -21,12 +21,10 @@ from .pictograph_image_renderer import PictographImageRenderer
 from .pictograph_state_updater import PictographStateUpdater
 from .pictograph_event_handler import PictographMouseEventHandler
 from .pictograph_init import PictographInit
-
 from ..arrow.arrow_placement_manager.main_arrow_placement_manager import (
     ArrowPlacementManager,
 )
 from .position_engines.prop_positioners.main_prop_positioner import PropPlacementManager
-
 from utilities.letter_item import LetterItem
 from ..motion.motion import Motion
 from ..prop.prop import Prop
@@ -223,14 +221,6 @@ class Pictograph(QGraphicsScene):
             if motion.motion_type == STATIC:
                 return True
         return False
-
-
-
-
-
-
-
-
 
 
 
