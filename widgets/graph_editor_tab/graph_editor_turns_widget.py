@@ -204,7 +204,7 @@ class GraphEditorTurnsWidget(TurnsWidget):
             clock.setMaximumSize(clock_size, clock_size)
 
     def _update_button_size(self) -> None:
-        for adjust_turns_button in self.turn_adjustment_manager.adjust_turns_buttons:
+        for adjust_turns_button in self.turn_adjust_manager.adjust_turns_buttons:
             button_size = int(self.attr_box.width() / 7)
             if (
                 adjust_turns_button.text() == "-0.5"

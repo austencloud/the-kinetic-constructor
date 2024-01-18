@@ -2,10 +2,9 @@ from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QFrame
 from typing import TYPE_CHECKING, Union
 
 
-
 from ...base_attr_box_widget import AttrBoxWidget
 from ...base_attr_box_widget import AttrBoxWidget
-from .turn_adjustment_manager import TurnAdjustmentManager
+from .turn_adjust_manager import TurnAdjustManager
 from .turn_direct_set_manager import TurnDirectSetManager
 from .turn_display_manager import TurnDisplayManager
 
@@ -23,19 +22,18 @@ class TurnsWidget(AttrBoxWidget):
         ] = attr_box
         self.vbox_layout: QVBoxLayout = QVBoxLayout(self)
         self.turn_direct_set_manager = TurnDirectSetManager(self)
-        self.turn_adjustment_manager = TurnAdjustmentManager(self.attr_box, self)
+        self.turn_adjust_manager = TurnAdjustManager(self.attr_box, self)
         self.turn_display_manager = TurnDisplayManager(self, self.attr_box)
 
         self.initialize_components()
         self.setup_ui()
-        # self.resize_turns_widget()
 
     def initialize_components(self) -> None:
         """Initialize components here."""
         self.turns_label = None
 
     def setup_ui(self) -> None:
-        self.turn_adjustment_manager.setup_adjustment_buttons()
+        self.turn_adjust_manager.setup_adjustment_buttons()
         self.turn_display_manager.setup_display_components()
         self.turn_direct_set_manager.setup_direct_set_buttons()
 

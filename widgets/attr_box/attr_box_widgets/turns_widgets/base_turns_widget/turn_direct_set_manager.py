@@ -40,7 +40,7 @@ class TurnDirectSetManager:
         return button
 
     def _directly_set_turns(self, new_turns: Union[int, float]) -> None:
-        self.parent_widget.turn_adjustment_manager.set_turns(new_turns)
+        self.parent_widget.turn_adjust_manager.set_turns(new_turns)
 
     @staticmethod
     def _get_direct_set_button_style_sheet() -> str:

@@ -17,14 +17,13 @@ from .....buttons.adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
-    from ..base_turns_widget.base_turns_widget import TurnsWidget
-    from .....attr_box.color_attr_box import ColorAttrBox
-    from .....attr_box.lead_state_attr_box import LeadStateAttrBox
-    from .....attr_box.motion_type_attr_box import MotionTypeAttrBox
+    from .base_turns_widget import TurnsWidget
+    from ....color_attr_box import ColorAttrBox
+    from ....lead_state_attr_box import LeadStateAttrBox
+    from ....motion_type_attr_box import MotionTypeAttrBox
 
 
-
-class TurnAdjustmentManager:
+class TurnAdjustManager:
     def __init__(self, attr_box, parent_widget: "TurnsWidget") -> None:
         self.attr_box: Union[
             "ColorAttrBox", "MotionTypeAttrBox", "LeadStateAttrBox"
@@ -126,8 +125,6 @@ class TurnAdjustmentManager:
     def _get_other_motion(self, motion: "Motion") -> "Motion":
         """Get the other motion based on color."""
         return motion.scene.motions[RED if motion.color == BLUE else BLUE]
-
-
 
     def _determine_prop_rot_dir(
         self, motion: "Motion", other_motion: "Motion"
