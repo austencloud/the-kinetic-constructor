@@ -159,29 +159,8 @@ class Grid:
         for item in self.items.values():
             item.setPos(position)
 
-    def scale_grid(self, scale_factor: float) -> None:
-        grid_center = QPointF(self.grid_scene.width() / 2, self.grid_scene.height() / 2)
-        for item in self.items.values():
-            item.setTransform(QTransform())
-            item_center = item.boundingRect().center()
-            transform = (
-                QTransform()
-                .translate(item_center.x(), item_center.y())
-                .scale(scale_factor, scale_factor)
-                .translate(-item_center.x(), -item_center.y())
-            )
-            item.setTransform(transform)
-            relative_pos = (item.pos() - grid_center) * scale_factor
-            item.setPos(grid_center + relative_pos - item_center * scale_factor)
 
-    def toggle_element_visibility(self, element_id: str, visible: bool) -> None:
-        if element_id in self.items:
-            self.items[element_id].setVisible(visible)
 
-    def toggle_grid_mode(self, grid_mode: GridModes) -> None:
-        self.grid_mode = grid_mode
-        self.items[DIAMOND].setVisible(grid_mode == DIAMOND)
-        self.items[BOX].setVisible(grid_mode == BOX)
 
     def mousePressEvent(self, event) -> None:
         event.ignore()

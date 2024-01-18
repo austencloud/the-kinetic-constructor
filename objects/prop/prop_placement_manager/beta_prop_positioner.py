@@ -3,27 +3,21 @@ from constants import ANTI, PRO
 
 from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import Directions
-from utilities.TypeChecking.prop_types import (
-    big_bilateral_prop_types,
-    big_unilateral_prop_types,
-    small_bilateral_prop_types,
-    small_unilateral_prop_types,
-    non_strictly_placed_props,
-    strictly_placed_props,
-)
+from utilities.TypeChecking.prop_types import *
 
 if TYPE_CHECKING:
-    from objects.prop.prop_placement_manager.prop_placement_manager import (
-        PropPlacementManager,
-    )
-
+    from .prop_placement_manager import PropPlacementManager
 
 class BetaPropPositioner:
     def __init__(self, placement_manager: "PropPlacementManager") -> None:
         self.ppm = placement_manager
         self.pictograph = placement_manager.pictograph
-        
-    def reposition_beta_props(self):
+        self.red_prop, self.blue_prop = (
+            self.pictograph.red_prop,
+            self.pictograph.blue_prop,
+        )
+
+    def reposition_beta_props(self) -> None:
         big_uni, small_uni, small_bi, big_bi = self._classify_props()
 
         if len(big_uni + big_bi) == 2:
@@ -68,22 +62,22 @@ class BetaPropPositioner:
     def _reposition_beta_props(self) -> None:
         big_unilateral_props: List[Prop] = [
             prop
-            for prop in self.ppm.props
+            for prop in self.pictograph.props.values()
             if prop.prop_type in big_unilateral_prop_types
         ]
         small_unilateral_props: List[Prop] = [
             prop
-            for prop in self.ppm.props
+            for prop in self.pictograph.props.values()
             if prop.prop_type in small_unilateral_prop_types
         ]
         small_bilateral_props: List[Prop] = [
             prop
-            for prop in self.ppm.props
+            for prop in self.pictograph.props.values()
             if prop.prop_type in small_bilateral_prop_types
         ]
         big_bilateral_props: List[Prop] = [
             prop
-            for prop in self.ppm.props
+            for prop in self.pictograph.props.values()
             if prop.prop_type in big_bilateral_prop_types
         ]
         big_props = big_unilateral_props + big_bilateral_props
@@ -93,28 +87,22 @@ class BetaPropPositioner:
         elif len(small_props) == 2:
             self._reposition_small_props(small_unilateral_props, small_bilateral_props)
 
-    def _reposition_small_props(
-        self, small_uni, small_bi
-    ) -> None:
+    def _reposition_small_props(self, small_uni, small_bi) -> None:
         if len(small_uni) == 2:
             self._reposition_small_unilateral_props(small_uni)
         elif len(small_bi) == 2:
             self._reposition_small_bilateral_props()
 
-    def _reposition_small_unilateral_props(
-        self, small_uni: List[Prop]
-    ) -> None:
+    def _reposition_small_unilateral_props(self, small_uni: List[Prop]) -> None:
         if small_uni[0].ori == small_uni[1].ori:
             for prop in small_uni:
                 self.ppm.default_positioner.set_prop_to_default_loc(prop)
                 (
                     red_direction,
                     blue_direction,
-                ) = self.ppm.dir_calculator.determine_direction_for_unilateral_props(
-                    self.pictograph.red_motion
-                )
-                self.move_prop(self.pictograph.red_prop, red_direction)
-                self.move_prop(self.pictograph.blue_prop, blue_direction)
+                ) = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
+                self.move_prop(self.red_prop, red_direction)
+                self.move_prop(self.blue_prop, blue_direction)
         else:
             for prop in small_uni:
                 self.ppm.default_positioner.set_prop_to_default_loc(prop)
@@ -129,45 +117,39 @@ class BetaPropPositioner:
                 (
                     red_direction,
                     blue_direction,
-                ) = self.ppm.dir_calculator.determine_direction_for_unilateral_props(
-                    self.pictograph.red_motion
-                )
-                self.move_prop(self.pictograph.red_prop, red_direction)
-                self.move_prop(self.pictograph.blue_prop, blue_direction)
+                ) = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
+                self.move_prop(self.red_prop, red_direction)
+                self.move_prop(self.blue_prop, blue_direction)
         else:
             for prop in big_props:
                 self.ppm.default_positioner.set_prop_to_default_loc(prop)
 
     def reposition_G_H(self) -> None:
-        further_direction = self.ppm.dir_calculator.determine_translation_dir(
-            self.pictograph.red_motion
-        )
-        other_direction = self.ppm.dir_calculator.get_opposite_direction(
-            further_direction
-        )
+        further_direction = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
+        other_direction = self.ppm.dir_calculator.get_opposite_dir(further_direction)
         new_red_pos = self.ppm.offset_calculator.calculate_new_position_with_offset(
-            self.pictograph.red_prop.pos(), further_direction
+            self.red_prop.pos(), further_direction
         )
         new_blue_pos = self.ppm.offset_calculator.calculate_new_position_with_offset(
-            self.pictograph.blue_prop.pos(), other_direction
+            self.blue_prop.pos(), other_direction
         )
-        self.pictograph.red_prop.setPos(new_red_pos)
-        self.pictograph.blue_prop.setPos(new_blue_pos)
+        self.red_prop.setPos(new_red_pos)
+        self.blue_prop.setPos(new_blue_pos)
 
     def reposition_I(self) -> None:
         pro_prop = (
-            self.pictograph.red_prop
+            self.red_prop
             if self.pictograph.red_motion.motion_type == PRO
-            else self.pictograph.blue_prop
+            else self.blue_prop
         )
         anti_prop = (
-            self.pictograph.red_prop
+            self.red_prop
             if self.pictograph.red_motion.motion_type == ANTI
-            else self.pictograph.blue_prop
+            else self.blue_prop
         )
         pro_motion = self.pictograph.motions[pro_prop.color]
-        pro_direction = self.ppm.dir_calculator.determine_translation_dir(pro_motion)
-        anti_direction = self.ppm.dir_calculator.get_opposite_direction(pro_direction)
+        pro_direction = self.ppm.dir_calculator.get_dir(pro_motion)
+        anti_direction = self.ppm.dir_calculator.get_opposite_dir(pro_direction)
         new_pro_position = (
             self.ppm.offset_calculator.calculate_new_position_with_offset(
                 pro_prop.pos(), pro_direction
@@ -182,14 +164,12 @@ class BetaPropPositioner:
         anti_prop.setPos(new_anti_position)
 
     def reposition_J_K_L(self) -> None:
-        red_dir = self.ppm.dir_calculator.determine_translation_dir(self.pictograph.red_motion)
-        blue_dir = self.ppm.dir_calculator.determine_translation_dir(
-            self.pictograph.blue_motion
-        )
+        red_dir = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
+        blue_dir = self.ppm.dir_calculator.get_dir(self.pictograph.blue_motion)
 
         if red_dir and blue_dir:
-            self.move_prop(self.pictograph.red_prop, red_dir)
-            self.move_prop(self.pictograph.blue_prop, blue_dir)
+            self.move_prop(self.red_prop, red_dir)
+            self.move_prop(self.blue_prop, blue_dir)
 
     def reposition_Y_Z(self) -> None:
         shift = (
@@ -203,17 +183,23 @@ class BetaPropPositioner:
             else self.pictograph.blue_motion
         )
 
-        direction = self.ppm.dir_calculator.determine_translation_dir(shift)
+        direction = self.ppm.dir_calculator.get_dir(shift)
         if direction:
             self.move_prop(
-                next(prop for prop in self.ppm.props if prop.color == shift.color),
+                next(
+                    prop
+                    for prop in self.pictograph.props.values()
+                    if prop.color == shift.color
+                ),
                 direction,
             )
             self.move_prop(
                 next(
-                    prop for prop in self.ppm.props if prop.color == static_motion.color
+                    prop
+                    for prop in self.pictograph.props.values()
+                    if prop.color == static_motion.color
                 ),
-                self.ppm.dir_calculator.get_opposite_direction(direction),
+                self.ppm.dir_calculator.get_opposite_dir(direction),
             )
 
     def reposition_Y_dash_Z_dash(self) -> None:
@@ -228,61 +214,63 @@ class BetaPropPositioner:
             else self.pictograph.blue_motion
         )
 
-        direction = self.ppm.dir_calculator.determine_translation_dir(shift)
+        direction = self.ppm.dir_calculator.get_dir(shift)
         if direction:
             self.move_prop(
-                next(prop for prop in self.ppm.props if prop.color == shift.color),
+                next(
+                    prop
+                    for prop in self.pictograph.props.values()
+                    if prop.color == shift.color
+                ),
                 direction,
             )
             self.move_prop(
-                next(prop for prop in self.ppm.props if prop.color == dash.color),
-                self.ppm.dir_calculator.get_opposite_direction(direction),
+                next(
+                    prop
+                    for prop in self.pictograph.props.values()
+                    if prop.color == dash.color
+                ),
+                self.ppm.dir_calculator.get_opposite_dir(direction),
             )
 
     def reposition_Ψ(self) -> None:
-        if self.pictograph.red_prop.prop_type in non_strictly_placed_props:
-            direction = self.ppm.dir_calculator._get_dir_for_non_shift(
-                self.pictograph.red_prop
-            )
+        if self.red_prop.prop_type in non_strictly_placed_props:
+            direction = self.ppm.dir_calculator.get_dir_for_non_shift(self.red_prop)
             if direction:
-                self.move_prop(self.pictograph.red_prop, direction)
+                self.move_prop(self.red_prop, direction)
                 self.move_prop(
-                    self.pictograph.blue_prop,
-                    self.ppm.dir_calculator.get_opposite_direction(direction),
+                    self.blue_prop,
+                    self.ppm.dir_calculator.get_opposite_dir(direction),
                 )
 
-        elif self.pictograph.red_prop.prop_type in strictly_placed_props:
-            self.ppm.default_positioner.set_prop_to_default_loc(self.pictograph.red_prop)
+        elif self.red_prop.prop_type in strictly_placed_props:
+            self.ppm.default_positioner.set_prop_to_default_loc(self.red_prop)
 
     def reposition_Ψ_dash(self) -> None:
-        if self.pictograph.red_prop.prop_type in non_strictly_placed_props:
-            direction = self.ppm.dir_calculator._get_dir_for_non_shift(
-                self.pictograph.red_prop
-            )
+        if self.red_prop.prop_type in non_strictly_placed_props:
+            direction = self.ppm.dir_calculator.get_dir_for_non_shift(self.red_prop)
             if direction:
-                self.move_prop(self.pictograph.red_prop, direction)
+                self.move_prop(self.red_prop, direction)
                 self.move_prop(
-                    self.pictograph.blue_prop,
-                    self.ppm.dir_calculator.get_opposite_direction(direction),
+                    self.blue_prop,
+                    self.ppm.dir_calculator.get_opposite_dir(direction),
                 )
 
-        elif self.pictograph.red_prop.prop_type in strictly_placed_props:
-            self.ppm.default_positioner.set_prop_to_default_loc()(self.pictograph.red_prop)
+        elif self.red_prop.prop_type in strictly_placed_props:
+            self.ppm.default_positioner.set_prop_to_default_loc()(self.red_prop)
 
     def reposition_β(self) -> None:
-        if self.pictograph.red_prop.prop_type in non_strictly_placed_props:
-            direction = self.ppm.dir_calculator._get_dir_for_non_shift(
-                self.pictograph.red_prop
-            )
+        if self.red_prop.prop_type in non_strictly_placed_props:
+            direction = self.ppm.dir_calculator.get_dir_for_non_shift(self.red_prop)
             if direction:
-                self.move_prop(self.pictograph.red_prop, direction)
+                self.move_prop(self.red_prop, direction)
                 self.move_prop(
-                    self.pictograph.blue_prop,
-                    self.ppm.dir_calculator.get_opposite_direction(direction),
+                    self.blue_prop,
+                    self.ppm.dir_calculator.get_opposite_dir(direction),
                 )
 
-        elif self.pictograph.red_prop.prop_type in strictly_placed_props:
-            self.ppm.default_positioner.set_prop_to_default_loc(self.pictograph.red_prop)
+        elif self.red_prop.prop_type in strictly_placed_props:
+            self.ppm.default_positioner.set_prop_to_default_loc(self.red_prop)
 
     def move_prop(self, prop: Prop, direction: Directions) -> None:
         new_position = self.ppm.offset_calculator.calculate_new_position_with_offset(

@@ -33,53 +33,17 @@ class BetaPropDirectionCalculator:
     def __init__(self, prop_placement_manager) -> None:
         self.prop_placement_manager = prop_placement_manager
 
-    def determine_direction_for_unilateral_props(
-        self, red_motion: Motion
-    ) -> Tuple[Directions]:
-        """Determine the translation direction for big unilateral props based on the motion type, start location, end location."""
-        red_direction = self.get_direction_for_motion(red_motion)
-        blue_direction = self.get_opposite_direction(red_direction)
-        return (red_direction or None, blue_direction or None)
-
-    def get_direction_for_motion(self, motion: Motion) -> Directions:
-        """Determine the direction based on a single motion."""
-        if motion.end_ori in [
-            IN,
-            OUT,
-        ] and motion.motion_type in [
-            PRO,
-            ANTI,
-            STATIC,
-        ]:
-            if motion.end_loc in [NORTH, SOUTH]:
-                return RIGHT if motion.start_loc == EAST else LEFT
-            elif motion.end_loc in [EAST, WEST]:
-                return DOWN if motion.start_loc == SOUTH else UP
-        elif motion.end_ori in [
-            CLOCK,
-            COUNTER,
-        ] and motion.motion_type in [
-            PRO,
-            ANTI,
-            STATIC,
-        ]:
-            if motion.end_loc in [NORTH, SOUTH]:
-                return UP if motion.start_loc == EAST else DOWN
-            elif motion.end_loc in [EAST, WEST]:
-                return RIGHT if motion.start_loc == SOUTH else LEFT
-        return None
-
-    def determine_translation_dir(self, motion: Motion) -> Directions:
+    def get_dir(self, motion: Motion) -> Directions:
         """Determine the translation direction based on the motion type, start location, end location, and end layer."""
         if not (motion.is_shift() or motion.is_static()):
             return None
 
         if motion.prop.is_radial():
-            return self._get_translation_dir_for_radial(motion)
+            return self.get_dir_for_radial(motion)
         elif motion.prop.is_antiradial():
-            return self._get_translation_dir_for_antiradial(motion)
+            return self.get_dir_for_antiradial(motion)
 
-    def _get_translation_dir_for_radial(self, motion: Motion) -> Directions:
+    def get_dir_for_radial(self, motion: Motion) -> Directions:
         direction_map = {
             (NORTH, EAST): RIGHT,
             (NORTH, WEST): LEFT,
@@ -92,7 +56,7 @@ class BetaPropDirectionCalculator:
         }
         return direction_map.get((motion.end_loc, motion.start_loc))
 
-    def _get_translation_dir_for_antiradial(self, motion: Motion) -> Directions:
+    def get_dir_for_antiradial(self, motion: Motion) -> Directions:
         direction_map = {
             (NORTH, EAST): UP,
             (NORTH, WEST): DOWN,
@@ -105,7 +69,7 @@ class BetaPropDirectionCalculator:
         }
         return direction_map.get((motion.end_loc, motion.start_loc))
 
-    def _get_dir_for_non_shift(self, prop: Prop) -> Directions:
+    def get_dir_for_non_shift(self, prop: Prop) -> Directions:
         layer_reposition_map = {
             RADIAL: {
                 (NORTH, RED): RIGHT,
@@ -133,7 +97,7 @@ class BetaPropDirectionCalculator:
         elif prop.is_antiradial():
             return layer_reposition_map[ANTIRADIAL][(prop.loc, prop.color)]
 
-    def get_opposite_direction(self, movement: Directions) -> Directions:
+    def get_opposite_dir(self, movement: Directions) -> Directions:
         opposite_directions = {
             LEFT: RIGHT,
             RIGHT: LEFT,
