@@ -3,9 +3,8 @@ from typing import TYPE_CHECKING, List
 from utilities.TypeChecking.TypeChecking import (
     LetterTypeNums,
 )
-from widgets.attr_panel.motion_type_attr_panels.Type3_motion_type_attr_panel import (
-    Type3MotionTypeAttrPanel,
-)
+from widgets.attr_panel.motion_type_attr_panel import MotionTypeAttrPanel
+
 from ..attr_panel.color_attr_panel import ColorAttrPanel
 from ..attr_panel.lead_state_attr_panel import LeadStateAttrPanel
 from .base_filter_tab import BaseFilterTab
@@ -16,7 +15,7 @@ if TYPE_CHECKING:
     )
 
 from typing import TYPE_CHECKING
-from constants import COLOR, LEAD_STATE, MOTION_TYPE, PRO, ANTI
+from constants import COLOR, DASH, LEAD_STATE, MOTION_TYPE, PRO, ANTI, STATIC
 from data.letter_engine_data import motion_type_letter_combinations
 from utilities.TypeChecking.TypeChecking import (
     LetterTypeNums,
@@ -39,14 +38,12 @@ class Type4FilterTab(BaseFilterTab):
 
     def setup_ui(self) -> None:
         super().setup_ui()
-        self.motion_type_attr_panel = Type3MotionTypeAttrPanel(
-            self.scroll_area.parent_tab
+        self.motion_type_attr_panel = MotionTypeAttrPanel(
+            self.scroll_area.parent_tab, [DASH, STATIC]
         )
         self.color_attr_panel = ColorAttrPanel(self.scroll_area.parent_tab)
         self.lead_state_attr_panel = LeadStateAttrPanel(self.scroll_area.parent_tab)
-        self.tabs: List[
-            Type3MotionTypeAttrPanel | ColorAttrPanel | LeadStateAttrPanel
-        ] = [
+        self.tabs: List[MotionTypeAttrPanel | ColorAttrPanel | LeadStateAttrPanel] = [
             self.motion_type_attr_panel,
             self.color_attr_panel,
             self.lead_state_attr_panel,

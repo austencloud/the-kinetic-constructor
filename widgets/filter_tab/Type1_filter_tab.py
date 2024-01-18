@@ -5,9 +5,7 @@ from utilities.TypeChecking.TypeChecking import (
 )
 from ..attr_panel.color_attr_panel import ColorAttrPanel
 from ..attr_panel.lead_state_attr_panel import LeadStateAttrPanel
-from ..attr_panel.motion_type_attr_panels.Type1_motion_type_attr_panel import (
-    Type1MotionTypeAttrPanel,
-)
+from ..attr_panel.motion_type_attr_panel import MotionTypeAttrPanel
 from .base_filter_tab import BaseFilterTab
 
 if TYPE_CHECKING:
@@ -34,14 +32,12 @@ class Type1FilterTab(BaseFilterTab):
         self._setup_tabs()
 
     def _setup_tabs(self) -> None:
-        self.motion_type_attr_panel = Type1MotionTypeAttrPanel(
-            self.scroll_area.parent_tab
+        self.motion_type_attr_panel = MotionTypeAttrPanel(
+            self.scroll_area.parent_tab, [PRO, ANTI]
         )
         self.color_attr_panel = ColorAttrPanel(self.scroll_area.parent_tab)
         self.lead_state_attr_panel = LeadStateAttrPanel(self.scroll_area.parent_tab)
-        self.tabs: List[
-            Type1MotionTypeAttrPanel | ColorAttrPanel | LeadStateAttrPanel
-        ] = [
+        self.tabs: List[MotionTypeAttrPanel | ColorAttrPanel | LeadStateAttrPanel] = [
             self.motion_type_attr_panel,
             self.color_attr_panel,
             self.lead_state_attr_panel,
@@ -53,7 +49,9 @@ class Type1FilterTab(BaseFilterTab):
         for letter in self.scroll_area.parent_tab.selected_letters:
             selected_letters_that_match_section_type.add(letter)
 
-        tabs_to_show = self._determine_tabs_to_show(selected_letters_that_match_section_type)
+        tabs_to_show = self._determine_tabs_to_show(
+            selected_letters_that_match_section_type
+        )
         tabs_to_hide = self._determine_tabs_to_hide(tabs_to_show)
 
         self.show_tabs(tabs_to_show)
@@ -65,7 +63,9 @@ class Type1FilterTab(BaseFilterTab):
             )
         self.resize_filter_tab()
 
-    def _determine_tabs_to_show(self, selected_letters: set[Letters]) -> List[MotionAttributes]:
+    def _determine_tabs_to_show(
+        self, selected_letters: set[Letters]
+    ) -> List[MotionAttributes]:
         tabs_to_show: List[MotionAttributes] = []
         motion_types_present = set()
 
@@ -81,7 +81,9 @@ class Type1FilterTab(BaseFilterTab):
 
         return tabs_to_show
 
-    def _determine_tabs_to_hide(self, tabs_to_show: List[MotionAttributes]) -> List[MotionAttributes]:
+    def _determine_tabs_to_hide(
+        self, tabs_to_show: List[MotionAttributes]
+    ) -> List[MotionAttributes]:
         tabs = [MOTION_TYPE, COLOR, LEAD_STATE]
         tabs_to_hide: List[MotionAttributes] = []
 
@@ -90,4 +92,3 @@ class Type1FilterTab(BaseFilterTab):
                 tabs_to_hide.append(tab)
 
         return tabs_to_hide
-
