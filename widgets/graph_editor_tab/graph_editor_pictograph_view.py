@@ -61,8 +61,7 @@ class GraphEditorPictographView(QGraphicsView):
 
             if button == self.add_to_sequence_button:
                 button.move(self.width() - button_size, self.height() - button_size)
-            elif button == self.clear_button:
-                button.move(0, self.height() - button_size)
+
             elif button == self.rotate_cw_button:
                 button.move(self.width() - button_size, 0)
             elif button == self.rotate_ccw_button:

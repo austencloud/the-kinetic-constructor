@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QHBoxLayout, QFrame
-from typing import TYPE_CHECKING, List, Union
+from typing import TYPE_CHECKING, List
 
 from constants import (
     BLUE,
@@ -19,15 +19,13 @@ from ..attr_box.motion_type_attr_box import MotionTypeAttrBox
 
 if TYPE_CHECKING:
     from ..pictograph_scroll_area.scroll_area import ScrollArea
-    from ..ig_tab.ig_tab import IGTab
-    from ..graph_editor_tab.graph_editor_frame import GraphEditorFrame
 
 
 class BaseAttrPanel(QFrame):
     def __init__(self, scroll_area: "ScrollArea") -> None:
         super().__init__()
         self.boxes: List[MotionTypeAttrBox, ColorAttrBox, LeadStateAttrBox] = []
-        self.scroll_area: Union["GraphEditorFrame", "IGTab"] = scroll_area
+        self.scroll_area: ScrollArea = scroll_area
 
     def setup_layouts(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
@@ -48,7 +46,7 @@ class BaseAttrPanel(QFrame):
                     + box.header_widget.prop_rot_dir_buttons
                 ):
                     button.unpress()
-        for pictograph in self.scroll_area.scroll_area.pictographs.values():
+        for pictograph in self.scroll_area.pictographs.values():
             pictograph_dict = {
                 BLUE_TURNS: 0,
                 RED_TURNS: 0,
@@ -62,6 +60,5 @@ class BaseAttrPanel(QFrame):
             pictograph.state_updater.update_pictograph(pictograph_dict)
 
     def resize_attr_panel(self) -> None:
-        # self.layout.setSpacing(int(self.boxes[0].width() / 5))
         for box in self.boxes:
             box.resize_attr_box()

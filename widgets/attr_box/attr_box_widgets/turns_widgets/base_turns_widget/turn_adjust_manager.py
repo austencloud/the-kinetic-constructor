@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QVBoxLayout, QFrame, QHBoxLayout
+from PyQt6.QtWidgets import QFrame, QHBoxLayout
 from typing import TYPE_CHECKING, List, Union
 from constants import *
 from objects.pictograph.pictograph import Pictograph

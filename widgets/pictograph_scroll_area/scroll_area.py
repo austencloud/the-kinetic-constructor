@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
 )
-from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtCore import Qt
 from utilities.TypeChecking.TypeChecking import Letters
 from widgets.pictograph_scroll_area.scroll_area_pictograph_factory import (
     ScrollAreaPictographFactory,

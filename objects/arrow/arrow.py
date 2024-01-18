@@ -43,6 +43,7 @@ class Arrow(GraphicalObject):
         self.is_svg_mirrored: bool = False
         self.color = arrow_dict[COLOR]
         self.prop: Prop = None
+        self.is_ghost: bool = False
 
     def setup_arrow(self, arrow_dict):
         self.motion_type = arrow_dict[MOTION_TYPE]
@@ -58,7 +59,6 @@ class Arrow(GraphicalObject):
 
         self.is_dragging: bool = False
         self.loc: Locations = None
-        self.is_ghost: bool = False
         self.drag_offset = QPointF(0, 0)
 
     ### SETUP ###
