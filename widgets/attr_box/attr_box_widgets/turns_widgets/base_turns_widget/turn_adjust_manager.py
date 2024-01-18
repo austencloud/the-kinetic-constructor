@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QVBoxLayout, QFrame
+from PyQt6.QtWidgets import QVBoxLayout, QFrame, QHBoxLayout
 from typing import TYPE_CHECKING, List, Union
 from constants import *
 from objects.pictograph.pictograph import Pictograph
@@ -32,10 +32,10 @@ class TurnAdjustManager:
 
     ### SETUP ###
 
-    def setup_adjustment_buttons(self) -> None:
+    def setup_adjust_turns_buttons(self) -> None:
         """Create and setup adjustment buttons."""
         self._setup_button_frames()
-        adjustments = [(-1, "-1"), (-0.5, "-0.5"), (1, "+1"), (0.5, "+0.5")]
+        adjustments = [(-1, "-1"), (-0.5, "-0.5"), (0.5, "+0.5"), (1, "+1")]
         self.adjust_turns_buttons: List[AdjustTurnsButton] = [
             self._create_and_add_button(adj, text) for adj, text in adjustments
         ]
@@ -43,8 +43,8 @@ class TurnAdjustManager:
     def _setup_button_frames(self) -> None:
         self.negative_buttons_frame = QFrame()
         self.positive_buttons_frame = QFrame()
-        self.negative_buttons_layout = QVBoxLayout(self.negative_buttons_frame)
-        self.positive_buttons_layout = QVBoxLayout(self.positive_buttons_frame)
+        self.negative_buttons_layout = QHBoxLayout(self.negative_buttons_frame)
+        self.positive_buttons_layout = QHBoxLayout(self.positive_buttons_frame)
 
     def _create_and_add_button(
         self, adjustment: AdjustmentNums, text: AdjustmentStrs

@@ -80,9 +80,7 @@ class MotionTypeAttrBox(BaseAttrBox):
         return list(self.attr_panel.scroll_area.scroll_area.pictographs.values())
 
     def update_attr_box(self, motion: Motion) -> None:
-        self.turns_widget.turn_display_manager.update_turns_display(motion.turns)
-
-
+        self.turns_widget.turns_display_manager.update_turns_display(motion.turns)
 
     def _update_vtg_button_styles(self) -> None:
         """Update the vtg button styles."""

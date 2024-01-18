@@ -31,23 +31,3 @@ class ColorAttrPanel(BaseAttrPanel):
             self.layout.addWidget(box)
         self.layout
 
-    def get_turns_for_color(self, color: Colors) -> Turns:
-        for box in self.boxes:
-            if box.color == color:
-                if box.turns_widget.turn_display_manager.turns_display.text() in [
-                    "0",
-                    "1",
-                    "2",
-                    "3",
-                ]:
-                    return int(
-                        box.turns_widget.turn_display_manager.turns_display.text()
-                    )
-                elif box.turns_widget.turn_display_manager.turns_display.text() in [
-                    "0.5",
-                    "1.5",
-                    "2.5",
-                ]:
-                    return float(
-                        box.turns_widget.turn_display_manager.turns_display.text()
-                    )

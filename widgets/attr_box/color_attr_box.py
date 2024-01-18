@@ -22,20 +22,19 @@ class ColorAttrBox(BaseAttrBox):
         attr_panel: "ColorAttrPanel",
         color: Colors,
     ) -> None:
-        super().__init__(attr_panel, None)  # Note the None for the single pictograph
+        super().__init__(attr_panel, None)
         self.attr_panel = attr_panel
         self.color = color
         self.font_size = self.width() // 10
         self.widgets: List[AttrBoxWidget] = []
-        self.combobox_border = 2
-        self.pixmap_cache: Dict[str, QPixmap] = {}  # Initialize the pixmap cache
+        self.pixmap_cache: Dict[str, QPixmap] = {} 
         self.hbox_layout = QHBoxLayout(self)
         self.hbox_layout.addLayout(self.vbox_layout)
         self._setup_widgets()
         self.attribute_type = COLOR
         self.vtg_dir_btn_state = {SAME: True, OPP: False}
 
-    def _setup_widgets(self) -> None:  # add common widgets
+    def _setup_widgets(self) -> None:
         self.header_widget = ColorHeaderWidget(self, self.color)
         self.turns_widget = ColorTurnsWidget(self)
         self.vbox_layout.addWidget(self.header_widget, 1)

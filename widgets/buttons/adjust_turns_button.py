@@ -22,6 +22,7 @@ class AdjustTurnsButton(QPushButton):
         self.button_size = button_size
         self.border_radius = button_size / 2
         self.setMinimumSize(button_size, button_size)
+        self.setMaximumSize(button_size, button_size)
         self.setIconSize(QSize(int(button_size * 0.6), int(button_size * 0.6)))
         self.setStyleSheet(self._get_button_style())
         self.setFont(QFont("Arial", int(button_size * 0.3)))

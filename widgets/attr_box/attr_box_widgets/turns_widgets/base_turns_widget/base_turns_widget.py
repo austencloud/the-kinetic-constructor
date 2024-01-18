@@ -1,12 +1,13 @@
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QFrame
 from typing import TYPE_CHECKING, Union
 
+from widgets.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.turns_display_manager import TurnDisplayManager
+
 
 from ...base_attr_box_widget import AttrBoxWidget
 from ...base_attr_box_widget import AttrBoxWidget
 from .turn_adjust_manager import TurnAdjustManager
 from .turn_direct_set_manager import TurnDirectSetManager
-from .turn_display_manager import TurnDisplayManager
 
 if TYPE_CHECKING:
     from ....color_attr_box import ColorAttrBox
@@ -33,7 +34,7 @@ class TurnsWidget(AttrBoxWidget):
         self.turns_label = None
 
     def setup_ui(self) -> None:
-        self.turn_adjust_manager.setup_adjustment_buttons()
+        self.turn_adjust_manager.setup_adjust_turns_buttons()
         self.turn_display_manager.setup_display_components()
         self.turn_direct_set_manager.setup_direct_set_buttons()
 
@@ -51,5 +52,5 @@ class TurnsWidget(AttrBoxWidget):
         return frame
 
     def resize_turns_widget(self) -> None:
-        self.turn_display_manager.update_turnbox_size()
+        self.turn_display_manager.update_turn_display()
         self.turn_display_manager.update_adjust_turns_button_size()

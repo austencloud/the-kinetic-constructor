@@ -64,22 +64,18 @@ class TurnDisplayManager:
             }
         """
 
-    def update_turnbox_size(self) -> None:
+    def update_turn_display(self) -> None:
         """Update the size of the turns display for motion type."""
-        turns_display = self.turns_display
-        self.spacing = self.attr_box.attr_panel.height() // 250
-        border_radius = min(turns_display.width(), turns_display.height()) * 0.25
+        self.resize_turn_display()
+        self.set_turn_display_styles()
 
-        turns_display_font_size = int(self.attr_box.height() / 8)
-        turns_display.setMinimumHeight(int(self.attr_box.height() / 3))
-        turns_display.setMaximumHeight(int(self.attr_box.height() / 3))
-        turns_display.setMinimumWidth(int(self.attr_box.height() / 3))
-        turns_display.setMaximumWidth(int(self.attr_box.height() / 3))
-
-        turns_display.setFont(
-            QFont("Arial", turns_display_font_size, QFont.Weight.Bold)
+    def set_turn_display_styles(self) -> None:
+        self.turns_display_font_size = int(self.attr_box.height() / 8)
+        self.turns_display.setFont(
+            QFont("Arial", self.turns_display_font_size, QFont.Weight.Bold)
         )
-        turns_display.setStyleSheet(
+        border_radius = min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        self.turns_display.setStyleSheet(
             f"""
             QLabel {{
                 border: {self.attr_box.combobox_border}px solid black;
@@ -90,6 +86,12 @@ class TurnDisplayManager:
             }}
             """
         )
+
+    def resize_turn_display(self) -> None:
+        self.turns_display.setMinimumHeight(int(self.attr_box.height() / 3))
+        self.turns_display.setMaximumHeight(int(self.attr_box.height() / 3))
+        self.turns_display.setMinimumWidth(int(self.attr_box.height() / 3))
+        self.turns_display.setMaximumWidth(int(self.attr_box.height() / 3))
 
     def update_adjust_turns_button_size(self) -> None:
         for button in self.parent_widget.turn_adjust_manager.adjust_turns_buttons:
@@ -117,4 +119,4 @@ class TurnDisplayManager:
         self.parent_widget.vbox_layout.addWidget(self.turn_display_with_buttons_frame)
 
     def calculate_adjust_turns_button_size(self) -> int:
-        return int(self.attr_box.height() / 6)
+        return int(self.attr_box.height() / 4)
