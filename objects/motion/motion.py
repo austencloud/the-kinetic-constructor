@@ -17,7 +17,7 @@ from widgets.graph_editor_tab.graph_editor_object_panel.propbox.propbox import P
 
 
 if TYPE_CHECKING:
-    from objects.pictograph.pictograph import Pictograph
+    from widgets.pictograph.pictograph import Pictograph
     from objects.arrow.arrow import Arrow
     from objects.prop.prop import Prop
     from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import (

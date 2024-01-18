@@ -1,7 +1,7 @@
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
 )
-from objects.pictograph.pictograph import Pictograph
+from widgets.pictograph.pictograph import Pictograph
 from widgets.graph_editor_tab.graph_editor_pictograph_view import (
     GraphEditorPictographView,
 )

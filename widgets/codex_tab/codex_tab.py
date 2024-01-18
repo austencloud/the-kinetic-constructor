@@ -9,11 +9,11 @@ from PyQt6.QtWidgets import (
     QApplication,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
-from constants import IG_PICTOGRAPH
+from constants import CODEX_PICTOGRAPH
 from utilities.TypeChecking.TypeChecking import Letters
+from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.scroll_area import ScrollArea
-from .ig_letter_button_frame import IGLetterButtonFrame
-from .ig_pictograph import IGPictograph
+from .codex_letter_button_frame import IGLetterButtonFrame
 
 
 if TYPE_CHECKING:
@@ -21,18 +21,18 @@ if TYPE_CHECKING:
     from ..main_widget.main_widget import MainWidget
 
 
-class IGTab(QWidget):
+class CodexTab(QWidget):
     imageGenerated = pyqtSignal(str)
     selected_letters: List[Letters] = []
 
     ### INITIALIZATION ###
 
-    def __init__(
-        self, main_widget: "MainWidget", main_tab_widget: "MainTabWidget"
-    ) -> None:
-        super().__init__(main_widget)
-        self.main_widget = main_widget
-        self.letters_dict = deepcopy(self.main_widget.letters)  # Deep copy of letters
+    def __init__(self, main_tab_widget: "MainTabWidget") -> None:
+        super().__init__(main_tab_widget)
+        self.main_tab_widget = main_tab_widget
+        self.letters_dict = deepcopy(
+            self.main_tab_widget.main_widget.letters
+        )  # Deep copy of letters
         self._setup_ui()
 
     ### UI SETUP ###
@@ -41,7 +41,7 @@ class IGTab(QWidget):
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.setLayout(self.layout)
         self.setup_buttons()
-        self.scroll_area = ScrollArea(self.main_widget, self)
+        self.scroll_area = ScrollArea(self.main_tab_widget.main_widget, self)
         self.left_layout = QVBoxLayout()
         self.right_layout = QVBoxLayout()
         self.left_layout.addWidget(self.scroll_area)
@@ -64,7 +64,7 @@ class IGTab(QWidget):
             )
 
     def setup_button_frames(self) -> IGLetterButtonFrame:
-        letter_button_frame = IGLetterButtonFrame(self.main_widget)
+        letter_button_frame = IGLetterButtonFrame(self.main_tab_widget.main_widget)
         letter_button_frame.setStyleSheet("QFrame { border: 1px solid black; }")
         action_button_frame = self._setup_action_button_frame()
         return letter_button_frame, action_button_frame
@@ -96,20 +96,15 @@ class IGTab(QWidget):
 
     def _setup_action_buttons(self) -> Dict[str, QPushButton]:
         buttons = {}
-
         select_all_button = QPushButton("Select All", self)
         select_all_button.setStyleSheet("font-size: 16px;")
-
         generate_all_images_button = QPushButton("Generate All Images 🧨", self)
         generate_all_images_button.setStyleSheet("font-size: 16px;")
-
         generate_selected_images_button = QPushButton("Generate Selected Images", self)
         generate_selected_images_button.setStyleSheet("font-size: 16px;")
-
         select_all_button.clicked.connect(self.select_all_letters)
         generate_all_images_button.clicked.connect(self.generate_all_images)
         generate_selected_images_button.clicked.connect(self.generate_selected_images)
-
         buttons["select_all_button"] = select_all_button
         buttons["generate_all_button"] = generate_all_images_button
         buttons["generate_selected_button"] = generate_selected_images_button
@@ -166,24 +161,16 @@ class IGTab(QWidget):
         self.scroll_area.update_pictographs()
 
     def process_pictographs_for_letter(self, letter) -> None:
-        pictograph_dicts = self.main_widget.letters.get(letter, [])
+        pictograph_dicts = self.main_tab_widget.main_widget.letters.get(letter, [])
         for pictograph_dict in pictograph_dicts:
             pictograph_key = (
                 self.scroll_area.pictograph_factory.generate_pictograph_key_from_dict(
                     pictograph_dict
                 )
             )
-            pictograph = self.scroll_area.pictograph_factory.get_or_create_pictograph(
+            self.scroll_area.pictograph_factory.get_or_create_pictograph(
                 pictograph_key, pictograph_dict
             )
-            # for (
-            #     letter_type,
-            #     pictographs,
-            # ) in self.scroll_area.section_manager.pictographs_by_type.items():
-            #     for index, pictograph in enumerate(pictographs):
-            #         self.scroll_area.display_manager.add_pictograph_to_layout(
-            #             pictograph, index
-            #         )
 
     def generate_selected_images(self) -> None:
         main_widget = self.parentWidget()
@@ -191,12 +178,14 @@ class IGTab(QWidget):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.setMouseTracking(False)
         for letter in self.selected_letters:
-            pictograph_dict_list = self.main_widget.letters[letter]
+            pictograph_dict_list = self.main_tab_widget.main_widget.letters[letter]
             for pictograph_dict in pictograph_dict_list:
-                ig_pictograph: IGPictograph = (
-                    self.scroll_area.pictograph_factory.create_pictograph(IG_PICTOGRAPH)
+                codex_pictograph: Pictograph = (
+                    self.scroll_area.pictograph_factory.create_pictograph(
+                        CODEX_PICTOGRAPH
+                    )
                 )
-                ig_pictograph.image_renderer.render_and_cache_image()
+                codex_pictograph.image_renderer.render_and_cache_image()
         main_widget.setEnabled(True)
         QApplication.restoreOverrideCursor()
         self.setMouseTracking(True)
@@ -206,12 +195,12 @@ class IGTab(QWidget):
         main_widget.setEnabled(False)
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.setMouseTracking(False)
-        for _, pictograph_dict_list in self.main_widget.letters.items():
+        for _, pictograph_dict_list in self.main_tab_widget.main_widget.letters.items():
             for pictograph_dict in pictograph_dict_list:
-                ig_pictograph: IGPictograph = self.scroll_area._create_pictograph(
-                    IG_PICTOGRAPH
+                codex_pictograph: Pictograph = self.scroll_area._create_pictograph(
+                    CODEX_PICTOGRAPH
                 )
-                ig_pictograph.render_and_cache_image()
+                codex_pictograph.render_and_cache_image()
 
         main_widget.setEnabled(True)
         QApplication.restoreOverrideCursor()
@@ -249,6 +238,6 @@ class IGTab(QWidget):
                         "blue_turns"
                     ] = self.scroll_area.filter_tab_manager.filters["turns"]
 
-    def resize_ig_tab(self) -> None:
+    def resize_codex_tab(self) -> None:
         self.scroll_area.resize_scroll_area()
         self.scroll_area.update_pictographs()

@@ -7,7 +7,7 @@ from widgets.sequence_widget.beat_frame.beat import Beat
 from widgets.sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 from widgets.sequence_widget.beat_frame.start_pos_beat import StartPositionBeatView
 
-from objects.pictograph.pictograph import Pictograph
+from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget

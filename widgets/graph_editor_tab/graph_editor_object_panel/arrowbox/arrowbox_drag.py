@@ -26,7 +26,7 @@ from widgets.graph_editor_tab.graph_editor_object_panel.base_objectbox.base_obje
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
-    from objects.pictograph.pictograph import Pictograph
+    from widgets.pictograph.pictograph import Pictograph
     from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import (
         ArrowBox,
     )

@@ -1,27 +1,15 @@
 from typing import TYPE_CHECKING, Dict, Tuple
 from PyQt6.QtCore import QPointF
 from PyQt6.QtWidgets import QGraphicsView
-from objects.arrow.arrow_placement_manager.main_arrow_placement_manager import (
-    ArrowPlacementManager,
-)
-from objects.pictograph.pictograph_context_menu_handler import (
-    PictographContextMenuHandler,
-)
 
-from objects.pictograph.pictograph_event_handler import PictographMouseEventHandler
-from objects.pictograph.pictograph_image_renderer import PictographImageRenderer
-from objects.pictograph.pictograph_state_updater import PictographStateUpdater
-from objects.pictograph.position_engines.prop_positioners.main_prop_positioner import (
-    PropPlacementManager,
-)
-from utilities.letter_engine import LetterEngine
-from ..grid import Grid
-from ..arrow.arrow import Arrow
-from ..arrow.ghost_arrow import GhostArrow
-from ..prop.ghost_prop import GhostProp
-from ..prop.prop_types import *
-from ..prop.prop import Prop
-from ..motion.motion import Motion
+from objects.arrow.arrow import Arrow
+from objects.arrow.ghost_arrow import GhostArrow
+from objects.grid import Grid
+from objects.motion.motion import Motion
+from objects.prop.ghost_prop import GhostProp
+from objects.prop.prop import Prop
+from objects.prop.prop_types import *
+
 from utilities.TypeChecking.prop_types import PropTypes
 from utilities.letter_item import LetterItem
 from utilities.TypeChecking.TypeChecking import (
@@ -30,10 +18,10 @@ from utilities.TypeChecking.TypeChecking import (
     MotionTypes,
 )
 from constants import *
+from widgets.pictograph.pictograph_view import PictographView
 
 if TYPE_CHECKING:
-    from ..pictograph.pictograph import Pictograph
-
+    from widgets.pictograph.pictograph import Pictograph
 
 class PictographInit:
     def __init__(self, pictograph: "Pictograph") -> None:
@@ -67,32 +55,9 @@ class PictographInit:
             self.pictograph.props[RED],
             self.pictograph.props[BLUE],
         )
-
-        self.pictograph.view = self.init_view(self.pictograph.graph_type)
         self.pictograph.letter_item: LetterItem = self.init_letter_item()
 
-    def init_view(self, graph_type) -> QGraphicsView:
-        from widgets.graph_editor_tab.graph_editor_pictograph_view import (
-            GraphEditorPictographView,
-        )
-        from widgets.option_picker_tab.option import OptionView
-        from widgets.sequence_widget.beat_frame.start_pos_beat import (
-            StartPositionBeatView,
-        )
-        from widgets.sequence_widget.beat_frame.beat import BeatView
-        from widgets.ig_tab.ig_pictograph import IGPictographView
-
-        if graph_type == MAIN:
-            view = GraphEditorPictographView(self.pictograph)
-        elif graph_type == OPTION:
-            view = OptionView(self.pictograph)
-        elif graph_type == BEAT:
-            view = BeatView(self.pictograph)
-        elif graph_type == START_POS_BEAT:
-            view = StartPositionBeatView(self.pictograph)
-        elif graph_type == IG_PICTOGRAPH:
-            view = IGPictographView(self.pictograph)
-        return view
+        
 
     def init_grid(self) -> Grid:
         grid = Grid(self.pictograph)

@@ -246,7 +246,7 @@ class PictographType(Enum):
     OPTION = "option"
     BEAT = "beat"
     START_POS = "start_pos"
-    IG_PICTOGRAPH = "ig_pictograph"
+    CODEX_PICTOGRAPH = "codex_pictograph"
 
 
 class Mode(Enum):

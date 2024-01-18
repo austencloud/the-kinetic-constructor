@@ -4,12 +4,12 @@ from PyQt6.QtWidgets import QGraphicsScene
 from constants import *
 
 if TYPE_CHECKING:
-    from objects.pictograph.pictograph import Pictograph
-from ..motion.motion import Motion
-from ..prop.prop import Prop
-from ..arrow.arrow import Arrow
-from ..arrow.ghost_arrow import GhostArrow
-from ..prop.ghost_prop import GhostProp
+    from widgets.pictograph.pictograph import Pictograph
+from objects.motion.motion import Motion
+from objects.arrow.arrow import Arrow
+from objects.prop.prop import Prop
+from objects.arrow.ghost_arrow import GhostArrow
+from objects.prop.ghost_prop import GhostProp
 
 
 class AddToSequenceManager:

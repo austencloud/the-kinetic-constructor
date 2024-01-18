@@ -1,26 +1,6 @@
 from typing import TYPE_CHECKING
 
-from objects.pictograph.position_engines.prop_positioners.base_prop_positioner import (
-    BasePropPositioner,
-)
-from objects.pictograph.position_engines.prop_positioners.by_letter_type.Type1_prop_positioner import (
-    Type1PropPositioner,
-)
-from objects.pictograph.position_engines.prop_positioners.by_letter_type.Type2_prop_positioner import (
-    Type2PropPositioner,
-)
-from objects.pictograph.position_engines.prop_positioners.by_letter_type.Type3_prop_positioner import (
-    Type3PropPositioner,
-)
-from objects.pictograph.position_engines.prop_positioners.by_letter_type.Type4_prop_positioner import (
-    Type4PropPositioner,
-)
-from objects.pictograph.position_engines.prop_positioners.by_letter_type.Type5_prop_positioner import (
-    Type5PropPositioner,
-)
-from objects.pictograph.position_engines.prop_positioners.by_letter_type.Type6_prop_positioner import (
-    Type6PropPositioner,
-)
+
 
 from utilities.TypeChecking.letter_lists import (
     Type1_letters,
@@ -33,7 +13,15 @@ from utilities.TypeChecking.letter_lists import (
 
 
 if TYPE_CHECKING:
-    from objects.pictograph.pictograph import Pictograph
+    from widgets.pictograph.pictograph import Pictograph
+
+from .base_prop_positioner import BasePropPositioner
+from .by_letter_type.Type1_prop_positioner import Type1PropPositioner
+from .by_letter_type.Type2_prop_positioner import Type2PropPositioner
+from .by_letter_type.Type3_prop_positioner import Type3PropPositioner
+from .by_letter_type.Type4_prop_positioner import Type4PropPositioner
+from .by_letter_type.Type5_prop_positioner import Type5PropPositioner
+from .by_letter_type.Type6_prop_positioner import Type6PropPositioner
 
 
 class PropPlacementManager:

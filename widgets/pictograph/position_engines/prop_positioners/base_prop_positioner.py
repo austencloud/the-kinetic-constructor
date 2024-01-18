@@ -39,7 +39,7 @@ from utilities.TypeChecking.prop_types import (
 )
 
 if TYPE_CHECKING:
-    from objects.pictograph.pictograph import Pictograph
+    from widgets.pictograph.pictograph import Pictograph
     from .by_letter_type.Type1_prop_positioner import Type1PropPositioner
     from .by_letter_type.Type2_prop_positioner import Type2PropPositioner
     from .by_letter_type.Type3_prop_positioner import Type3PropPositioner

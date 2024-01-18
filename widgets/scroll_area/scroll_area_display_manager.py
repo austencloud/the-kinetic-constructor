@@ -1,11 +1,8 @@
 from typing import TYPE_CHECKING, Dict, List
-from objects.pictograph.pictograph import Pictograph
+from widgets.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.letter_lists import all_letters
-from utilities.TypeChecking.TypeChecking import (
-    Letters,
-)
+from utilities.TypeChecking.TypeChecking import Letters
 from widgets.scroll_area.scroll_area_section import ScrollAreaSection
-from ..ig_tab.ig_pictograph import IGPictograph
 
 if TYPE_CHECKING:
     from .scroll_area import ScrollArea
@@ -20,10 +17,10 @@ class ScrollAreaDisplayManager:
 
     def order_and_display_pictographs(self) -> None:
         ordered_pictographs = self.get_ordered_pictographs()
-        for index, (key, ig_pictograph) in enumerate(ordered_pictographs.items()):
-            self.add_pictograph_to_layout(ig_pictograph, index)
+        for index, (key, codex_pictograph) in enumerate(ordered_pictographs.items()):
+            self.add_pictograph_to_layout(codex_pictograph, index)
 
-    def get_ordered_pictographs(self) -> Dict[Letters, IGPictograph]:
+    def get_ordered_pictographs(self) -> Dict[Letters, Pictograph]:
         return {
             k: v
             for k, v in sorted(
@@ -35,9 +32,11 @@ class ScrollAreaDisplayManager:
             )
         }
 
-    def add_pictograph_to_layout(self, ig_pictograph: IGPictograph, index: int) -> None:
+    def add_pictograph_to_layout(
+        self, codex_pictograph: Pictograph, index: int
+    ) -> None:
         letter_type = self.scroll_area.section_manager.get_pictograph_letter_type(
-            ig_pictograph.letter
+            codex_pictograph.letter
         )
         section: ScrollAreaSection = self.scroll_area.section_manager.sections.get(
             letter_type
@@ -45,18 +44,18 @@ class ScrollAreaDisplayManager:
         if section:
             row = index // self.COLUMN_COUNT + 1
             col = index % self.COLUMN_COUNT
-            section.pictograph_layout.addWidget(ig_pictograph.view, row, col)
-            ig_pictograph.view.resize_for_scroll_area()
+            section.pictograph_layout.addWidget(codex_pictograph.view, row, col)
+            codex_pictograph.view.resize_for_scroll_area()
         else:
             print(f"Section not found for letter type {letter_type}")
 
     def remove_pictograph(self, pictograph_key: str) -> None:
-        ig_pictograph: Pictograph = self.scroll_area.pictographs.pop(
+        codex_pictograph: Pictograph = self.scroll_area.pictographs.pop(
             pictograph_key, None
         )
-        if ig_pictograph:
-            self.scroll_area.layout.removeWidget(ig_pictograph.view)
-            # ig_pictograph.view.setParent(None)
+        if codex_pictograph:
+            self.scroll_area.layout.removeWidget(codex_pictograph.view)
+            # codex_pictograph.view.setParent(None)
 
     def clear_layout(self) -> None:
         while self.scroll_area.layout.count():
@@ -80,7 +79,7 @@ class ScrollAreaDisplayManager:
             if key.split("_")[0] not in selected_letters
         ]
 
-    def get_ordered_pictographs(self) -> Dict[Letters, IGPictograph]:
+    def get_ordered_pictographs(self) -> Dict[Letters, Pictograph]:
         return {
             k: v
             for k, v in sorted(

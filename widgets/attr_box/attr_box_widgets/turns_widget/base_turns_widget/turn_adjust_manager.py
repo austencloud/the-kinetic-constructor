@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
 from typing import TYPE_CHECKING, List
 from constants import *
-from objects.pictograph.pictograph import Pictograph
+from widgets.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.TypeChecking import (
     AdjustmentNums,
     AdjustmentStrs,
@@ -19,7 +19,6 @@ if TYPE_CHECKING:
     from widgets.attr_box.attr_box import AttrBox
     from objects.motion.motion import Motion
     from .base_turns_widget import TurnsWidget
-
 
 
 class TurnAdjustManager:
@@ -173,7 +172,10 @@ class TurnAdjustManager:
         for (
             pictograph
         ) in self.attr_box.attr_panel.filter_tab.scroll_area.pictographs.values():
-            if pictograph.letter_type == self.attr_box.attr_panel.filter_tab.letter_type:
+            if (
+                pictograph.letter_type
+                == self.attr_box.attr_panel.filter_tab.letter_type
+            ):
                 self._adjust_turns_for_pictograph(pictograph, adjustment)
 
     def convert_turn_floats_to_ints(self, turns: Turns) -> Turns:

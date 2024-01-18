@@ -1,29 +1,32 @@
 from typing import TYPE_CHECKING, Dict, Union
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt, QTimer
-from utilities.TypeChecking.TypeChecking import Letters
-from ..ig_tab.ig_pictograph import IGPictograph
+
 
 from .scroll_area_pictograph_factory import ScrollAreaPictographFactory
 from .scroll_area_section_manager import ScrollAreaSectionManager
 from .scroll_area_display_manager import ScrollAreaDisplayManager
 from .scroll_area_filter_manager import ScrollAreaFilterTabManager
+from utilities.TypeChecking.TypeChecking import Letters
+from ..pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from ..ig_tab.ig_tab import IGTab
+    from ..codex_tab.codex_tab import CodexTab
     from ..option_picker_tab.option_picker_tab import OptionPickerTab
     from ..main_widget.main_widget import MainWidget
 
 
 class ScrollArea(QScrollArea):
     def __init__(
-        self, main_widget: "MainWidget", parent_tab: Union["IGTab", "OptionPickerTab"]
+        self,
+        main_widget: "MainWidget",
+        parent_tab: Union["CodexTab", "OptionPickerTab"],
     ) -> None:
         super().__init__(parent_tab)
         self.main_widget = main_widget
         self.parent_tab = parent_tab
         self.letters = self.main_widget.letters
-        self.pictographs: Dict[Letters, IGPictograph] = {}
+        self.pictographs: Dict[Letters, Pictograph] = {}
         self._setup_ui()
         self._setup_managers()
 

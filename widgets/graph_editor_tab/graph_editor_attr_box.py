@@ -13,7 +13,7 @@ from ..graph_editor_tab.graph_editor_turns_widget import GraphEditorTurnsWidget
 
 
 if TYPE_CHECKING:
-    from objects.pictograph.pictograph import Pictograph
+    from widgets.pictograph.pictograph import Pictograph
 
 
 from PyQt6.QtGui import QFont

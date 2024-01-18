@@ -15,7 +15,7 @@ from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import Colors, Locations
 
 if TYPE_CHECKING:
-    from objects.pictograph.pictograph import Pictograph
+    from widgets.pictograph.pictograph import Pictograph
 
 
 class ArrowPlacementManager:

@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
 
 from utilities.TypeChecking.TypeChecking import LetterTypeNums
 from widgets.filter_tab import FilterTab
-from ..ig_tab.ig_pictograph import IGPictograph
+from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from .scroll_area import ScrollArea
@@ -28,7 +28,7 @@ class ScrollAreaSection(QWidget):
         self.scroll_area = scroll_area
         self.letter_type = letter_type
         self.filter_tab: FilterTab = filter_tab
-        self.pictographs: List[IGPictograph] = []
+        self.pictographs: List[Pictograph] = []
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.pictograph_frame = QFrame()
         self.pictograph_layout: QGridLayout = QGridLayout(self.pictograph_frame)
@@ -54,10 +54,10 @@ class ScrollAreaSection(QWidget):
         self.layout.addWidget(self.filter_tab)
         self.layout.addWidget(self.pictograph_frame)
 
-    def add_pictograph(self, pictograph: IGPictograph) -> None:
+    def add_pictograph(self, pictograph: Pictograph) -> None:
         self.pictograph_layout.addWidget(pictograph.view)
 
-    def remove_pictograph(self, pictograph: IGPictograph) -> None:
+    def remove_pictograph(self, pictograph: Pictograph) -> None:
         # pictograph.view.hide()
         pictograph.view.setParent(None)
         # pictograph.setParent(None)

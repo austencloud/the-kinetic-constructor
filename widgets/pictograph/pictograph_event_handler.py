@@ -5,7 +5,7 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 if TYPE_CHECKING:
-    from objects.pictograph.pictograph import Pictograph
+    from widgets.pictograph.pictograph import Pictograph
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 
@@ -30,7 +30,7 @@ class PictographMouseEventHandler:
                 self.pictograph.dragged_prop.mousePressEvent(event)
             else:
                 self.pictograph.clear_selections()
-                
+
     def handle_mouse_move(self, event) -> None:
         if self.pictograph.dragged_prop:
             self.pictograph.dragged_prop.mouseMoveEvent(event)
@@ -44,4 +44,3 @@ class PictographMouseEventHandler:
         elif self.pictograph.dragged_arrow:
             self.pictograph.dragged_arrow.mouseReleaseEvent(event)
             self.pictograph.dragged_arrow = None
-

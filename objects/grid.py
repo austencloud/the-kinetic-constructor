@@ -13,7 +13,6 @@ from constants import (
 )
 from utilities.TypeChecking.TypeChecking import GridModes
 from utilities.TypeChecking.prop_types import (
-    PropTypes,
     strictly_placed_props,
     non_strictly_placed_props,
 )
@@ -25,7 +24,7 @@ if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_object_panel.propbox.propbox import (
         PropBox,
     )
-    from objects.pictograph.pictograph import Pictograph
+    from widgets.pictograph.pictograph import Pictograph
 
 
 class GridItem(QGraphicsSvgItem):

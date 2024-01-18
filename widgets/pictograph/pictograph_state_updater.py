@@ -1,10 +1,10 @@
-from typing import TYPE_CHECKING, Dict, Union
+from typing import TYPE_CHECKING, Dict
 from PyQt6.QtSvg import QSvgRenderer
 from constants import *
 from utilities.TypeChecking.TypeChecking import Colors
 
 if TYPE_CHECKING:
-    from objects.pictograph.pictograph import Pictograph
+    from widgets.pictograph.pictograph import Pictograph
 
 
 if TYPE_CHECKING:
@@ -27,9 +27,6 @@ class PictographStateUpdater:
 
         self.update_letter()
         self._position_objects()
-
-        if self.pictograph.graph_type == MAIN:
-            self._update_attr_panel()
 
     def _update_from_pictograph_dict(self, pictograph_dict: Dict) -> None:
         self.update_attributes(pictograph_dict)
@@ -105,10 +102,8 @@ class PictographStateUpdater:
                 self.pictograph.motions[color].prop.update_prop()
 
         self._update_motions()
-        
-    def _create_motion_dict(
-        self, pictograph_dict: Dict, color: Colors
-    ) -> Dict:
+
+    def _create_motion_dict(self, pictograph_dict: Dict, color: Colors) -> Dict:
         motion_dict = {
             COLOR: color,
             MOTION_TYPE: pictograph_dict.get(f"{color}_motion_type"),

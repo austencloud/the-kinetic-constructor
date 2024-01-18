@@ -5,7 +5,7 @@ from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from objects.pictograph.pictograph import Pictograph
+    from widgets.pictograph.pictograph import Pictograph
 
 
 class GhostProp(Prop):

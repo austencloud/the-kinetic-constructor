@@ -1,11 +1,8 @@
 from typing import TYPE_CHECKING, Literal, Set
-from constants import IG_PICTOGRAPH, OPTION
+from constants import CODEX_PICTOGRAPH, OPTION
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.ig_tab.ig_pictograph import IGPictograph
 from widgets.option_picker_tab.option import Option
 
-if TYPE_CHECKING:
-    from widgets.pictograph_scroll_area.scroll_area import ScrollArea
 
 from constants import (
     BLUE_END_LOC,
@@ -20,6 +17,10 @@ from constants import (
     RED_START_LOC,
     START_POS,
 )
+from widgets.pictograph.pictograph import Pictograph
+
+if TYPE_CHECKING:
+    from widgets.scroll_area.scroll_area import ScrollArea
 
 
 class ScrollAreaPictographFactory:
@@ -28,7 +29,7 @@ class ScrollAreaPictographFactory:
 
     def get_or_create_pictograph(
         self, pictograph_key: str, pictograph_dict=None
-    ) -> IGPictograph:
+    ) -> Pictograph:
         if (
             pictograph_key
             in self.scroll_area.main_widget.all_pictographs[
@@ -39,12 +40,12 @@ class ScrollAreaPictographFactory:
                 pictograph_key.split("_")[0]
             ][pictograph_key]
         elif pictograph_dict is not None:
-            ig_pictograph = self.create_pictograph(IG_PICTOGRAPH)
-            ig_pictograph.state_updater.update_pictograph(pictograph_dict)
+            codex_pictograph = self.create_pictograph(CODEX_PICTOGRAPH)
+            codex_pictograph.state_updater.update_pictograph(pictograph_dict)
             self.scroll_area.main_widget.all_pictographs[pictograph_key.split("_")[0]][
                 pictograph_key
-            ] = ig_pictograph
-            return ig_pictograph
+            ] = codex_pictograph
+            return codex_pictograph
         else:
             raise ValueError(
                 "Pictograph dict is required for creating a new pictograph."
@@ -80,26 +81,26 @@ class ScrollAreaPictographFactory:
             if key.startswith(deselected_letter + "_")
         ]
         for key in keys_to_remove:
-            ig_pictograph = self.scroll_area.pictographs.pop(key)
+            codex_pictograph = self.scroll_area.pictographs.pop(key)
             scroll_section = self.scroll_area.section_manager.get_section(
-                ig_pictograph.letter_type
+                codex_pictograph.letter_type
             )
-            scroll_section.remove_pictograph(ig_pictograph)
+            scroll_section.remove_pictograph(codex_pictograph)
 
-    def get_pictograph(self, pictograph_key) -> IGPictograph:
+    def get_pictograph(self, pictograph_key) -> Pictograph:
         return self.scroll_area.pictographs[pictograph_key]
 
     def create_pictograph(
         self,
-        graph_type: Literal["option", "ig_pictograph"],
-    ) -> Option | IGPictograph:
+        graph_type: Literal["option", "codex_pictograph"],
+    ) -> Option | Pictograph:
         if graph_type == OPTION:
             pictograph = Option(
                 self.scroll_area.main_widget,
                 self.scroll_area,
             )
-        elif graph_type == IG_PICTOGRAPH:
-            pictograph = IGPictograph(
+        elif graph_type == CODEX_PICTOGRAPH:
+            pictograph = Pictograph(
                 self.scroll_area.main_widget,
                 self.scroll_area,
             )

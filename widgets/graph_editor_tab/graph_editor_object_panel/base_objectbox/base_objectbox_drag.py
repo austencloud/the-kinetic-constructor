@@ -10,7 +10,7 @@ from widgets.graph_editor_tab.graph_editor_object_panel.base_objectbox.base_obje
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
-    from objects.pictograph.pictograph import Pictograph
+    from widgets.pictograph.pictograph import Pictograph
     from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox_drag import (
         ArrowBoxDrag,
     )
@@ -61,9 +61,7 @@ class BaseObjectBoxDrag(QWidget):
         renderer = QSvgRenderer()
         renderer.load(new_svg_data)
 
-        scaled_size = (
-            renderer.defaultSize()
-        )
+        scaled_size = renderer.defaultSize()
         original_pixmap = QPixmap(scaled_size)
         self.setMinimumSize(scaled_size)
         self.preview.setMinimumSize(scaled_size)
@@ -96,9 +94,7 @@ class BaseObjectBoxDrag(QWidget):
         self.svg_file = target_object.svg_file
         pixmap = self.create_pixmap(target_object, drag_angle)
         self.preview.setPixmap(pixmap)
-        self.object_center = (
-            self.target_object.boundingRect().center()
-        )
+        self.object_center = self.target_object.boundingRect().center()
 
     def move_to_cursor(self, event_pos: QPoint) -> None:
         local_pos = self.BaseObjectBox.view.mapTo(self.main_widget, event_pos)

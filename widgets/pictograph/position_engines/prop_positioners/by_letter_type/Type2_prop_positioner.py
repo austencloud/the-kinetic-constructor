@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
-from objects.pictograph.position_engines.prop_positioners.base_prop_positioner import (
-    BasePropPositioner,
-)
+
+from ..base_prop_positioner import BasePropPositioner
 
 if TYPE_CHECKING:
     pass

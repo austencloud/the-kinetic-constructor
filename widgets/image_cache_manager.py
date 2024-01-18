@@ -14,9 +14,9 @@ from constants import (
     RED_START_LOC,
     START_POS,
 )
-from objects.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
+    from widgets.pictograph.pictograph import Pictograph
     from widgets.main_widget.main_widget import MainWidget
 from typing import Generator
 import os
@@ -42,7 +42,7 @@ class ImageCacheManager:
         pixmap = QPixmap(image_path)
         self.cache_image(image_path, pixmap)
 
-    def generate_image_path(self, pictograph: Pictograph) -> str:
+    def generate_image_path(self, pictograph: "Pictograph") -> str:
         pictograph_dict = pictograph.pictograph_dict
         prop_type = self.main_widget.prop_type
         letter = pictograph_dict[LETTER]

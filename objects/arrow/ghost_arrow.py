@@ -4,7 +4,7 @@ from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
-    from objects.pictograph.pictograph import Pictograph
+    from widgets.pictograph.pictograph import Pictograph
 
 
 class GhostArrow(Arrow):

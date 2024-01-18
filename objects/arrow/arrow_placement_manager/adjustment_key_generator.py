@@ -9,7 +9,7 @@ from utilities.TypeChecking.letter_lists import (
 from constants import *
 
 if TYPE_CHECKING:
-    from objects.pictograph.pictograph import Pictograph
+    from widgets.pictograph.pictograph import Pictograph
 
 
 class AdjustmentKeyGenerator:

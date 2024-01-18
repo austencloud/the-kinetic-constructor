@@ -3,7 +3,7 @@ from constants import *
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
-    from objects.pictograph.pictograph import Pictograph
+    from widgets.pictograph.pictograph import Pictograph
 
 from objects.prop.prop import Prop
 

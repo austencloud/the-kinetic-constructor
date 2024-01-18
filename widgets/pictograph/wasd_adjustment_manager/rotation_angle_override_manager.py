@@ -3,7 +3,7 @@ from constants import BLUE, RED, STATIC
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from objects.pictograph.pictograph import Pictograph
+    from widgets.pictograph.pictograph import Pictograph
 
 
 class RotationAngleOverrideManager:

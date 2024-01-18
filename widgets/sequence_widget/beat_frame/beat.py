@@ -1,13 +1,11 @@
 from utilities.TypeChecking.TypeChecking import (
     TYPE_CHECKING,
 )
-from objects.pictograph.pictograph import Pictograph
 from PyQt6.QtWidgets import QGraphicsView, QPushButton
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import pyqtSignal, QObject
-
-from objects.pictograph.pictograph import Pictograph
+from widgets.pictograph.pictograph import Pictograph
 
 
 

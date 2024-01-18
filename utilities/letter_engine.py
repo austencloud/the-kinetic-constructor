@@ -44,7 +44,7 @@ logging.basicConfig(
 from typing import TYPE_CHECKING, Dict, List, Literal, Set, Tuple
 
 if TYPE_CHECKING:
-    from objects.pictograph.pictograph import Pictograph
+    from widgets.pictograph.pictograph import Pictograph
 
 
 class LetterEngine:

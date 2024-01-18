@@ -5,15 +5,29 @@ from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPixmapItem
 from Enums import LetterNumberType
 
 from constants import *
+from objects.arrow.arrow import Arrow
+from objects.arrow.arrow_placement_manager.main_arrow_placement_manager import (
+    ArrowPlacementManager,
+)
+from objects.arrow.ghost_arrow import GhostArrow
+from objects.grid import Grid
+from objects.motion.motion import Motion
+from objects.prop.ghost_prop import GhostProp
+from objects.prop.prop import Prop
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import (
     Colors,
     LetterTypeNums,
     Letters,
     Locations,
+    MotionTypes,
     SpecificPositions,
     VtgDirections,
     VtgTimings,
+)
+from widgets.pictograph.pictograph_view import PictographView
+from widgets.pictograph.wasd_adjustment_manager.wasd_adjustment_manager import (
+    WASD_AdjustmentManager,
 )
 from .pictograph_add_to_sequence_manager import AddToSequenceManager
 from .pictograph_context_menu_handler import PictographContextMenuHandler
@@ -21,21 +35,15 @@ from .pictograph_image_renderer import PictographImageRenderer
 from .pictograph_state_updater import PictographStateUpdater
 from .pictograph_event_handler import PictographMouseEventHandler
 from .pictograph_init import PictographInit
-from ..arrow.arrow_placement_manager.main_arrow_placement_manager import (
-    ArrowPlacementManager,
-)
+
 from .position_engines.prop_positioners.main_prop_positioner import PropPlacementManager
 from utilities.letter_item import LetterItem
-from ..motion.motion import Motion
-from ..prop.prop import Prop
-from ..arrow.arrow import Arrow
-from ..arrow.ghost_arrow import GhostArrow
-from ..prop.ghost_prop import GhostProp
-from ..grid import Grid
+
 from utilities.letter_engine import LetterEngine
 from data.rules import beta_ending_letters, alpha_ending_letters, gamma_ending_letters
 
 if TYPE_CHECKING:
+    from widgets.scroll_area.scroll_area import ScrollArea
     from widgets.main_widget.main_widget import MainWidget
 
 
@@ -43,25 +51,19 @@ class Pictograph(QGraphicsScene):
     def __init__(
         self,
         main_widget: "MainWidget",
-        graph_type: Literal[
-            "main",
-            "option",
-            "beat",
-            "start_pos_beat",
-            "ig_pictograph",
-        ],
+        scroll_area: "ScrollArea",
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.graph_type = graph_type
-
+        self.scroll_area = scroll_area
         self.initializer = PictographInit(self)
         self.mouse_event_handler = PictographMouseEventHandler(self)
         self.context_menu_handler = PictographContextMenuHandler(self)
         self.state_updater = PictographStateUpdater(self)
         self.image_renderer = PictographImageRenderer(self)
         self.add_to_sequence_manager = AddToSequenceManager(self)
-
+        self.wasd_adjustment_manager = WASD_AdjustmentManager(self)
+        self.view = PictographView(self)
         self.initializer.init_all_components()
         self.arrow_placement_manager = ArrowPlacementManager(self)
         self.prop_placement_manager = PropPlacementManager(self)
@@ -72,7 +74,7 @@ class Pictograph(QGraphicsScene):
         self.setSceneRect(0, 0, 950, 950)
         self.setBackgroundBrush(Qt.GlobalColor.white)
 
-    def _set_letter_renderer(self, letter: str) -> None:
+    def _set_letter_renderer(self, letter: Letters) -> None:
         letter_type = self._get_letter_type(letter)
         svg_path = f"resources/images/letters_trimmed/{letter_type}/{letter}.svg"
         renderer = QSvgRenderer(svg_path)
@@ -101,7 +103,7 @@ class Pictograph(QGraphicsScene):
                 return letter_type.description
         return None
 
-    def get_motions_by_type(self, motion_type: str) -> List[Motion]:
+    def get_motions_by_type(self, motion_type: MotionTypes) -> List[Motion]:
         return [
             motion
             for motion in self.motions.values()
@@ -221,10 +223,6 @@ class Pictograph(QGraphicsScene):
             if motion.motion_type == STATIC:
                 return True
         return False
-
-
-
-
 
     arrows: Dict[Colors, Arrow]
     props: Dict[Colors, Prop]

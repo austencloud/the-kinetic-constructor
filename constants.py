@@ -155,7 +155,7 @@ MAIN = "main"
 OPTION = "option"
 BEAT = "beat"
 START_POS_BEAT = "start_pos_beat"
-IG_PICTOGRAPH = "ig_pictograph"
+CODEX_PICTOGRAPH = "codex_pictograph"
 
 DIAMOND = "diamond"
 BOX = "box"

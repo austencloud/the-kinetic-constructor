@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt, QEvent, pyqtSignal
 from PyQt6.QtWidgets import QGraphicsView
 from constants import OPTION
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
-from objects.pictograph.pictograph import Pictograph
+from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
