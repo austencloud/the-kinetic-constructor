@@ -17,17 +17,12 @@ from constants import (
 
 
 class MotionTypeHeaderWidget(HeaderWidget):
-    def __init__(self, attr_box, motion_type: MotionTypes) -> None:
+    def __init__(self, attr_box) -> None:
         super().__init__(attr_box)
         self.attr_box: "MotionTypeAttrBox" = attr_box
-        self.motion_type = motion_type
-        self.header_label = self._setup_header_label(self.motion_type.capitalize())
+        self.header_label = self._setup_header_label(self.attr_box.motion_type.capitalize())
 
-        if self.motion_type in [PRO, ANTI]:
+        if self.attr_box.motion_type in [PRO, ANTI]:
             self._setup_layout()
-        if self.motion_type in [DASH, STATIC]:
-            self.vtg_dir_buttons: List[VtgDirButton] = self._setup_vtg_dir_buttons()
-            self.prop_rot_dir_buttons: List[
-                PropRotDirButton
-            ] = self._setup_prop_rot_dir_buttons()
+        if self.attr_box.motion_type in [DASH, STATIC]:
             self._setup_layout_with_vtg_dir_buttons()

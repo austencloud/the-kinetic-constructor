@@ -119,7 +119,6 @@ class TurnAdjustManager:
     def _set_prop_rot_dir_based_on_vtg_state(self, motion: "Motion") -> None:
         """Set the rotation direction of the motion based on the vtg directional relationship."""
         other_motion = self._get_other_motion(motion)
-        # self.attr_box._update_vtg_button_styles()
         motion.prop_rot_dir = self._determine_prop_rot_dir(motion, other_motion)
 
     def _get_other_motion(self, motion: "Motion") -> "Motion":
@@ -168,11 +167,11 @@ class TurnAdjustManager:
 
     def adjust_turns(self, adjustment: Turns) -> None:
         """Adjust turns for a given pictograph based on the attribute type."""
-        turns = self.parent_widget.turn_display_manager.turns_display.text()
+        turns = self.parent_widget.turns_display_manager.turns_display.text()
         turns = self.parent_widget._convert_turns_from_str_to_num(turns)
         turns = self._clamp_turns(turns + adjustment)
         turns = self.convert_turn_floats_to_ints(turns)
-        self.parent_widget.turn_display_manager.update_turns_display(str(turns))
+        self.parent_widget.turns_display_manager.update_turns_display(str(turns))
 
         for (
             pictograph
@@ -186,7 +185,7 @@ class TurnAdjustManager:
             return turns
 
     def set_turns(self, new_turns: Turns) -> None:
-        self.parent_widget.turn_display_manager.update_turns_display(new_turns)
+        self.parent_widget.turns_display_manager.update_turns_display(new_turns)
         for (
             pictograph
         ) in self.attr_box.attr_panel.parent_tab.scroll_area.pictographs.values():

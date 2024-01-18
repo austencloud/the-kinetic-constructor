@@ -35,7 +35,7 @@ class TurnDirectSetManager:
             )
         )
         button.setMaximumWidth(
-            int(self.parent_widget.turn_display_manager.turns_display.width() / 2)
+            int(self.parent_widget.turns_display_manager.turns_display.width() / 2)
         )
         return button
 

@@ -35,21 +35,6 @@ class AttrBoxWidget(QWidget):
         frame.setLayout(layout)
         return frame
 
-    def create_vtg_dir_button(
-        self, icon_path: str, callback: Callable
-    ) -> "VtgDirButton":
-        button = VtgDirButton(self.attr_box)
-        button.setIcon(QIcon(icon_path))
-        button.clicked.connect(callback)
-        return button
-
-    def create_prop_rot_dir_button(
-        self, icon_path: str, callback: Callable
-    ) -> "PropRotDirButton":
-        button = PropRotDirButton(self.attr_box)
-        button.setIcon(QIcon(icon_path))
-        button.clicked.connect(callback)
-        return button
 
     def create_swap_button(self, icon_path: str, callback: Callable) -> "SwapButton":
         button = SwapButton(self.attr_box, icon_path)

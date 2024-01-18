@@ -161,12 +161,12 @@ class GraphEditorTurnsWidget(TurnsWidget):
 
     def _update_turnbox(self, turns) -> None:
         turns_str = str(turns)
-        for i in range(self.turn_display_manager.turns_display.count()):
-            if self.turn_display_manager.turns_display.itemText(i) == turns_str:
-                self.turn_display_manager.turns_display.setCurrentIndex(i)
+        for i in range(self.turns_display_manager.turns_display.count()):
+            if self.turns_display_manager.turns_display.itemText(i) == turns_str:
+                self.turns_display_manager.turns_display.setCurrentIndex(i)
                 return
             elif turns == None:
-                self.turn_display_manager.turns_display.setCurrentIndex(-1)
+                self.turns_display_manager.turns_display.setCurrentIndex(-1)
 
     def _update_turns(self, index: int) -> None:
         turns = str(index)
@@ -185,7 +185,7 @@ class GraphEditorTurnsWidget(TurnsWidget):
                     self.attr_box.update_attr_box(motion)
                     self.attr_box.pictograph.update()
         else:
-            self.turn_display_manager.turns_display.setCurrentIndex(-1)
+            self.turns_display_manager.turns_display.setCurrentIndex(-1)
 
     ### EVENT HANDLERS ###
 

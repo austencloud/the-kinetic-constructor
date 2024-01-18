@@ -38,7 +38,7 @@ class MotionAttrManager:
     def set_motion_attributes_from_attr_box(
         self, box: "BaseAttrBox", pictograph_dict: Dict
     ) -> None:
-        box_text = box.turns_widget.turn_display_manager.turns_display.text()
+        box_text = box.turns_widget.turns_display_manager.turns_display.text()
         turns = float(box_text) if "." in box_text else int(box_text)
 
         if box.motion_type in [DASH, STATIC]:

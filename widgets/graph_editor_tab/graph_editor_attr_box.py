@@ -27,7 +27,6 @@ class GraphEditorAttrBox(BaseAttrBox):
         self.color = color
         self._setup_widgets()
         self.apply_border_style(HEX_RED if self.color == RED else HEX_BLUE)
-        self.setLayout(self.vbox_layout)
 
     def _setup_widgets(self) -> None:
         self.motion_type_widget = MotionTypeWidget(self)

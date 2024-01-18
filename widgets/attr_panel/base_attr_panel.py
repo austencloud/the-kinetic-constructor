@@ -27,7 +27,7 @@ class BaseAttrPanel(QFrame):
         super().__init__()
         self.boxes: List[MotionTypeAttrBox, ColorAttrBox, LeadStateAttrBox] = []
         self.parent_tab: "IGTab" | "GraphEditorTab" = parent_tab
-        
+
     def setup_layouts(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.setContentsMargins(0, 0, 0, 0)
@@ -40,7 +40,7 @@ class BaseAttrPanel(QFrame):
 
     def reset_turns(self) -> None:
         for box in self.boxes:
-            box.turns_widget.turn_display_manager.turns_display.setText("0")
+            box.turns_widget.turns_display_manager.turns_display.setText("0")
             if hasattr(box, "header_widget"):
                 for button in (
                     box.header_widget.vtg_dir_buttons

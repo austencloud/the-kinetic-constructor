@@ -21,7 +21,7 @@ class TurnsWidget(AttrBoxWidget):
         self.vbox_layout: QVBoxLayout = QVBoxLayout(self)
         self.turn_direct_set_manager = TurnDirectSetManager(self)
         self.turn_adjust_manager = TurnAdjustManager(self.attr_box, self)
-        self.turn_display_manager = TurnDisplayManager(self, self.attr_box)
+        self.turns_display_manager = TurnDisplayManager(self, self.attr_box)
 
         self.initialize_components()
         self.setup_ui()
@@ -32,7 +32,7 @@ class TurnsWidget(AttrBoxWidget):
 
     def setup_ui(self) -> None:
         self.turn_adjust_manager.setup_adjust_turns_buttons()
-        self.turn_display_manager.setup_display_components()
+        self.turns_display_manager.setup_display_components()
         self.turn_direct_set_manager.setup_direct_set_buttons()
 
     def _convert_turns_from_str_to_num(self, turns) -> Union[int, float]:
@@ -49,5 +49,5 @@ class TurnsWidget(AttrBoxWidget):
         return frame
 
     def resize_turns_widget(self) -> None:
-        self.turn_display_manager.update_turn_display()
-        self.turn_display_manager.update_adjust_turns_button_size()
+        self.turns_display_manager.update_turn_display()
+        self.turns_display_manager.update_adjust_turns_button_size()
