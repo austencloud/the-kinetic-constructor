@@ -1,18 +1,11 @@
 from typing import TYPE_CHECKING, Dict, Union
-from PyQt6.QtWidgets import (
-    QScrollArea,
-    QWidget,
-    QVBoxLayout,
-)
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout
+from PyQt6.QtCore import Qt, QTimer
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.pictograph_scroll_area.scroll_area_pictograph_factory import (
-    ScrollAreaPictographFactory,
-)
 from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
-from ..pictograph_scroll_area.scroll_area_section_manager import (
-    ScrollAreaSectionManager,
-)
+
+from .scroll_area_pictograph_factory import ScrollAreaPictographFactory
+from .scroll_area_section_manager import ScrollAreaSectionManager
 from .scroll_area_display_manager import ScrollAreaDisplayManager
 from .scroll_area_filter_manager import ScrollAreaFilterTabManager
 
@@ -34,9 +27,9 @@ class ScrollArea(QScrollArea):
         self._setup_ui()
         self._setup_managers()
 
-        # self.timer = QTimer(self)
-        # self.timer.timeout.connect(self.update_arrow_placements)
-        # self.timer.start(1000)
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.update_arrow_placements)
+        self.timer.start(1000)
 
     def _setup_managers(self) -> None:
         self.display_manager = ScrollAreaDisplayManager(self)
