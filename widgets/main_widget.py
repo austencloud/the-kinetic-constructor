@@ -23,6 +23,7 @@ from constants import (
     BLUE_TURNS,
     DIAMOND,
     END_POS,
+    IG_PICTOGRAPH,
     IN,
     LETTER,
     RED,
@@ -37,19 +38,16 @@ from constants import (
 )
 from objects.pictograph.pictograph_loader import PictographLoader
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
-from widgets.ig_tab.ig_tab import IGTab
-from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
-from widgets.graph_editor_tab.graph_editor_tab import GraphEditorTab
-from widgets.graph_editor_tab.graph_editor_key_event_handler import (
-    GraphEditorKeyEventHandler,
-)
+from .ig_tab.ig_scroll.ig_pictograph import IGPictograph
+from .ig_tab.ig_tab import IGTab
+from .option_picker_tab.option_picker_tab import OptionPickerTab
+from .graph_editor_tab.graph_editor_tab import GraphEditorTab
+from .graph_editor_tab.graph_editor_key_event_handler import GraphEditorKeyEventHandler
 from objects.pictograph.pictograph import Pictograph
-from widgets.pictograph_scroll_area.scroll_area_pictograph_factory import (
-    PictographFactory,
-)
-from widgets.sequence_widget.sequence_widget import SequenceWidget
-from widgets.styled_splitter import StyledSplitter
+from .pictograph_scroll_area.scroll_area_pictograph_factory import PictographFactory
+from PyQt6.QtWidgets import QProgressBar
+from .sequence_widget.sequence_widget import SequenceWidget
+from .styled_splitter import StyledSplitter
 
 if TYPE_CHECKING:
     from main import MainWindow
@@ -65,14 +63,17 @@ class MainWidget(QWidget):
         self.prop_type = STAFF
         self.grid_mode = DIAMOND
         self.arrows = []
-        self.all_pictographs: Dict[Letters, Dict[str, Pictograph]] = {letter: {} for letter in all_letters}
+        self.all_pictographs: Dict[Letters, Dict[str, Pictograph]] = {
+            letter: {} for letter in all_letters
+        }
         self.export_handler = None
         self.main_window = main_window
         self.image_cache_initialized = False
         self.resize(int(self.main_window.width()), int(self.main_window.height()))
         self.pictograph_factory = PictographFactory(self)
         self.pictograph_loader = PictographLoader(self)
-
+        self.pictograph_loader.pictographs_created.connect(self.update_pictographs)
+        # self.pictograph_loader.finished.connect(self.on_pictographs_loaded)  # Define
         self.key_event_handler = GraphEditorKeyEventHandler()
         self.letters: Dict[Letters, List[Dict]] = self.load_all_letters()
         self.sequence_widget = SequenceWidget(self)
@@ -84,9 +85,38 @@ class MainWidget(QWidget):
         self.configure_layouts()
         self.pixmap_cache = {}
 
-    def handle_pictograph_ready(self, pictograph_key):
+    def update_pictographs(self, created_pictographs: dict) -> None:
+        for key, pictograph in created_pictographs.items():
+            self.all_pictographs[key] = pictograph
+
+    def create_and_add_pictograph(self, pictograph_dict) -> None:
+        pictograph_key = self.pictograph_factory.generate_pictograph_key_from_dict(
+            pictograph_dict
+        )
+        ig_pictograph = self.pictograph_factory.create_pictograph(IG_PICTOGRAPH)
+        ig_pictograph.state_updater.update_pictograph(pictograph_dict)
+        self.all_pictographs[pictograph_key.split("_")[0]][
+            pictograph_key
+        ] = ig_pictograph
+        # self.pictograph_ready.emit(pictograph_key)  # Now emit pictograph_ready
+
+    def process_pictograph_data(self, pictograph_data: list) -> None:
+        for pictograph_dict in pictograph_data:
+            pictograph_key = self.pictograph_factory.generate_pictograph_key_from_dict(
+                pictograph_dict
+            )
+            if pictograph_key not in self.all_pictographs:
+                ig_pictograph = self.pictograph_factory.create_pictograph(IG_PICTOGRAPH)
+                ig_pictograph.state_updater.update_pictograph(pictograph_dict)
+                self.all_pictographs[pictograph_key.split("_")[0]][
+                    pictograph_key
+                ] = ig_pictograph
+
+    def handle_pictograph_ready(self, pictograph_key) -> None:
         # This method will run in the main thread
-        ig_pictograph: IGPictograph = self.all_pictographs[pictograph_key.split("_")[0]][pictograph_key]
+        ig_pictograph: IGPictograph = self.all_pictographs[
+            pictograph_key.split("_")[0]
+        ][pictograph_key]
         if (
             ig_pictograph.needs_displaying()
         ):  # You need to define the needs_displaying logic
@@ -109,7 +139,7 @@ class MainWidget(QWidget):
         self.letters = letters
         return self.letters
 
-    def add_turns_and_ori_to_pictograph_dict(self, pictograph_dict):  #:
+    def add_turns_and_ori_to_pictograph_dict(self, pictograph_dict) -> Dict:
         pictograph_dict = pictograph_dict[
             [
                 LETTER,
@@ -225,6 +255,25 @@ class MainWidget(QWidget):
         self.main_layout.addWidget(self.horizontal_splitter)
         self.setLayout(self.main_layout)
         # self.setup_image_cache()
+        # Add a progress bar at the bottom
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setGeometry(0, self.height() - 20, self.width(), 20)
+        self.progress_bar.hide()  # Initially hidden, shown when loading starts
+
+        # Connect the signal to update the progress bar
+        self.pictograph_loader.progress_updated.connect(self.update_progress)
+
+    def start_loading(self) -> None:
+        # Show the progress bar and start loading
+        self.progress_bar.show()
+        self.progress_bar.setValue(0)  # Start progress at 0%
+        self.pictograph_loader.start_loading()
+
+    def update_progress(self, value: int) -> None:
+        self.progress_bar.setValue(value)  # Update the progress bar's value
+
+    def loading_finished(self) -> None:
+        self.progress_bar.hide()  # Hide the progress bar when loading is finished
 
     ### EVENT HANDLERS ###
 
@@ -337,3 +386,9 @@ class MainWidget(QWidget):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.main_window._set_dimensions()
+
+    def display_pictograph(self, pictograph_key):
+        if pictograph_key not in self.all_pictographs:
+            self.pictograph_factory.get_or_create_pictograph(pictograph_key)
+        pictograph = self.all_pictographs[pictograph_key]
+

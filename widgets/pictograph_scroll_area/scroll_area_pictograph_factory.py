@@ -37,19 +37,6 @@ class PictographFactory:
                 pictograph_key = self.generate_pictograph_key_from_dict(pictograph_dict)
                 self.main_widget.pictograph_loader.queue_pictograph(pictograph_key)
 
-    def process_selected_letters(self, scroll_area: ScrollArea) -> None:
-        print("Processing selected letters")
-        selected_letters = set(scroll_area.parent_tab.selected_letters)
-        all_pictographs_copy = self.main_widget.all_pictographs.copy()
-        for letter, pictographs_key_value_pair in all_pictographs_copy.items():
-            if letter in selected_letters:
-                for pictograph_key, pictograph in pictographs_key_value_pair.items():
-                    scroll_area.pictographs[pictograph_key] = pictograph
-
-                    scroll_area.display_manager.order_and_display_pictographs()
-
-            else:
-                print(f"letter not in selected letters: {letter}")
 
     def get_sorted_selected_letters(self) -> List[Letters]:
         return sorted(
@@ -69,11 +56,27 @@ class PictographFactory:
             ig_pictograph = self.get_pictograph(pictograph_key)
             ig_pictograph.state_updater.update_pictograph(pictograph_dict)
 
-    def get_or_create_pictograph(self, pictograph_key) -> IGPictograph:
-        if pictograph_key not in self.main_widget.ig_tab.scroll_area.pictographs:
+    def get_or_create_pictograph(self, pictograph_key, pictograph_dict=None) -> IGPictograph:
+        if pictograph_key in self.main_widget.all_pictographs:
+            return self.main_widget.all_pictographs[pictograph_key]
+        elif pictograph_dict is not None:
             ig_pictograph = self.create_pictograph(IG_PICTOGRAPH)
+            ig_pictograph.state_updater.update_pictograph(pictograph_dict)
             self.main_widget.all_pictographs[pictograph_key] = ig_pictograph
-        return self.main_widget.ig_tab.scroll_area.pictographs[pictograph_key]
+            return ig_pictograph
+        else:
+            raise ValueError("Pictograph dict is required for creating a new pictograph.")
+
+    def process_selected_letters(self, scroll_area: ScrollArea) -> None:
+        selected_letters = set(scroll_area.parent_tab.selected_letters)
+        for letter in selected_letters:
+            if letter not in self.main_widget.all_pictographs:
+                pictograph_dicts = self.main_widget.ig_tab.scroll_area.letters.get(letter, [])
+                for pictograph_dict in pictograph_dicts:
+                    pictograph_key = self.generate_pictograph_key_from_dict(pictograph_dict)
+                    self.get_or_create_pictograph(pictograph_key, pictograph_dict)
+            for pictograph_key, pictograph in self.main_widget.all_pictographs.get(letter, {}).items():
+                scroll_area.pictographs[pictograph_key] = pictograph
 
     def get_deselected_letters(self) -> Set[Letters]:
         selected_letters = set(

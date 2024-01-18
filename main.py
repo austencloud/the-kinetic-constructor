@@ -46,7 +46,7 @@ def main() -> None:
     main_window = MainWindow(profiler)
 
     main_window.setFocus()
-    main_window.main_widget.pictograph_loader.start_loading()
+    # main_window.main_widget.pictograph_loader.start_loading()
     exit_code = main_window.exec_with_profiling(app)
     root_directory = os.path.dirname(os.path.abspath(__file__))
 

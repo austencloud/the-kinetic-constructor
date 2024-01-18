@@ -10,7 +10,8 @@ if TYPE_CHECKING:
 
 
 class PictographLoader(QObject):
-    pictograph_ready = pyqtSignal(str)
+    progress_updated = pyqtSignal(int)  # Signal to update progress
+    pictographs_created = pyqtSignal(dict)  # Emit with created pictographs
 
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
@@ -30,29 +31,21 @@ class PictographLoader(QObject):
         # Now you can start the thread
         self.load_thread.start()
 
-    def load_pictographs(self) -> None:
-        for letter in all_letters:
-            pictograph_dicts = self.main_widget.ig_tab.scroll_area.letters.get(
-                letter, []
-            )
-            try:
-                for pictograph_dict in pictograph_dicts:
-                    pictograph_key = self.main_widget.pictograph_factory.generate_pictograph_key_from_dict(
-                        pictograph_dict
-                    )
-                    if pictograph_key not in self.main_widget.all_pictographs:
-                        self.main_widget.all_pictographs[pictograph_key.split("_")[0]][
-                            pictograph_key
-                        ] = self.main_widget.pictograph_factory.create_pictograph(
-                            IG_PICTOGRAPH
-                        )
-                        self.main_widget.all_pictographs[pictograph_key.split("_")[0]][
-                            pictograph_key
-                        ].state_updater.update_pictograph(pictograph_dict)
-                        print (f"Loaded {pictograph_key}")
-            except queue.Empty:
-                continue
 
+    def load_pictographs(self) -> None:
+        total = len(all_letters)
+        created_pictographs = {}  # Dict to accumulate created pictographs
+        for index, letter in enumerate(all_letters):
+            pictograph_dicts = self.main_widget.ig_tab.scroll_area.letters.get(letter, [])
+            for pictograph_dict in pictograph_dicts:
+                pictograph_key = self.main_widget.pictograph_factory.generate_pictograph_key_from_dict(pictograph_dict)
+                self.main_widget.pictograph_factory.get_or_create_pictograph(pictograph_key, pictograph_dict)
+
+            progress = int((index / total) * 100)
+            self.progress_updated.emit(progress)
+
+        self.pictographs_created.emit(created_pictographs)  # Emit created pictographs
+        
     def stop(self) -> None:
         self.stopped = True
         self.load_thread.quit()
@@ -76,10 +69,8 @@ class PictographLoader(QObject):
             else:
                 self.pictograph_queue.put((order_number, pictograph_key))
 
-    def generate_pictographs_for_specific_letter(
-        self, letter
-    ) -> None:
-        print (f"Generating pictographs for {letter}")
+    def generate_pictographs_for_specific_letter(self, letter) -> None:
+        print(f"Generating pictographs for {letter}")
         for i in range(self.pictograph_queue.qsize()):
             order_number, pictograph_key = self.pictograph_queue.get()
             if pictograph_key.split("_")[0] == letter:

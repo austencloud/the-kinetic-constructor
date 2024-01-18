@@ -158,7 +158,7 @@ class IGTab(QWidget):
 
         button.setFlat(not is_selected)
         button.setStyleSheet(self.get_button_style(pressed=not is_selected))
-
+        self.main_widget.pictograph_factory.process_selected_letters(self.scroll_area)
         self.scroll_area.update_pictographs()
 
     def generate_selected_images(self) -> None:

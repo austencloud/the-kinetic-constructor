@@ -5,16 +5,6 @@ from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPixmapItem
 from Enums import LetterNumberType
 
 from constants import *
-from objects.pictograph.pictograph_add_to_sequence_manager import AddToSequenceManager
-from objects.pictograph.pictograph_context_menu_handler import (
-    PictographContextMenuHandler,
-)
-from objects.pictograph.pictograph_image_renderer import PictographImageRenderer
-from objects.pictograph.pictograph_state_updater import PictographStateUpdater
-
-from ..arrow.arrow_placement_manager.main_arrow_placement_manager import (
-    ArrowPlacementManager,
-)
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import (
     Colors,
@@ -25,6 +15,17 @@ from utilities.TypeChecking.TypeChecking import (
     VtgDirections,
     VtgTimings,
 )
+from .pictograph_add_to_sequence_manager import AddToSequenceManager
+from .pictograph_context_menu_handler import PictographContextMenuHandler
+from .pictograph_image_renderer import PictographImageRenderer
+from .pictograph_state_updater import PictographStateUpdater
+from .pictograph_event_handler import PictographMouseEventHandler
+from .pictograph_init import PictographInit
+
+from ..arrow.arrow_placement_manager.main_arrow_placement_manager import (
+    ArrowPlacementManager,
+)
+from .position_engines.prop_positioners.main_prop_positioner import PropPlacementManager
 
 from utilities.letter_item import LetterItem
 from ..motion.motion import Motion
@@ -33,10 +34,6 @@ from ..arrow.arrow import Arrow
 from ..arrow.ghost_arrow import GhostArrow
 from ..prop.ghost_prop import GhostProp
 from ..grid import Grid
-
-from .pictograph_event_handler import PictographMouseEventHandler
-from .pictograph_init import PictographInit
-from .position_engines.prop_positioners.main_prop_positioner import PropPlacementManager
 from utilities.letter_engine import LetterEngine
 from data.rules import beta_ending_letters, alpha_ending_letters, gamma_ending_letters
 
@@ -137,7 +134,6 @@ class Pictograph(QGraphicsScene):
             return self.blue_arrow
         elif arrow.color == BLUE:
             return self.red_arrow
-
 
     ### HELPERS ###
 

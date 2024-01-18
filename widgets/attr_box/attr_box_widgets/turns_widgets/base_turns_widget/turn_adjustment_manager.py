@@ -120,7 +120,7 @@ class TurnAdjustmentManager:
     def _set_prop_rot_dir_based_on_vtg_state(self, motion: "Motion") -> None:
         """Set the rotation direction of the motion based on the vtg directional relationship."""
         other_motion = self._get_other_motion(motion)
-        self.attr_box._update_vtg_button_styles()
+        # self.attr_box._update_vtg_button_styles()
         motion.prop_rot_dir = self._determine_prop_rot_dir(motion, other_motion)
 
     def _get_other_motion(self, motion: "Motion") -> "Motion":
