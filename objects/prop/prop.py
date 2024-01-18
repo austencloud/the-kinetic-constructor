@@ -76,7 +76,7 @@ class Prop(GraphicalObject):
         self: Union["Prop", "Arrow"], event: "QGraphicsSceneMouseEvent"
     ) -> None:
         if event.buttons() == Qt.MouseButton.LeftButton:
-            new_pos = event.scenePos() - self.get_object_center()
+            new_pos = event.scenePos() - self.get_center()
             self.set_drag_pos(new_pos)
             self.update_ghost_prop_location(event.scenePos())
             self.update_arrow_location(self.loc)
@@ -90,7 +90,7 @@ class Prop(GraphicalObject):
     ### UPDATERS ###
 
     def set_prop_transform_origin_to_center(self: "Prop") -> None:
-        self.center = self.get_object_center()
+        self.center = self.get_center()
         self.setTransformOriginPoint(self.center)
 
     def clear_attributes(self) -> None:
@@ -210,7 +210,7 @@ class Prop(GraphicalObject):
             self.scene.props[self.ghost.color] = self.ghost
             self.scene.state_updater.update_pictograph()
             self.scene.props[self.color] = self
-            new_pos = new_pos - self.get_object_center()
+            new_pos = new_pos - self.get_center()
             self.set_drag_pos(new_pos)
             self.previous_location = new_location
 

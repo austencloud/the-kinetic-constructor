@@ -1,6 +1,6 @@
 # svg_manager.py
 
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from PyQt6.QtSvg import QSvgRenderer
 import re
 

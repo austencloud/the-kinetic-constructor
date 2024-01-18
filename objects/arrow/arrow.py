@@ -87,7 +87,7 @@ class Arrow(GraphicalObject):
     ) -> None:
         if event.buttons() == Qt.MouseButton.LeftButton:
             new_location = self.scene.get_closest_layer2_point(event.scenePos())[0]
-            new_pos = event.scenePos() - self.get_object_center()
+            new_pos = event.scenePos() - self.get_center()
             self.set_drag_pos(new_pos)
             if new_location != self.loc:
                 self.location_manager.update_location(new_location)
@@ -194,8 +194,8 @@ class Arrow(GraphicalObject):
         self.update_arrow_svg()
         self._update_mirror()
         self.svg_manager.update_color()
-        self.rot_angle_manager.update_rotation()
         self.location_manager.update_location()
+        self.rot_angle_manager.update_rotation()
 
     def mirror_svg(self) -> None:
         self.center_x = self.boundingRect().center().x()
