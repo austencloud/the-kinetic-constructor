@@ -27,14 +27,17 @@ class ScrollAreaPictographFactory:
         self.scroll_area = scroll_area
 
     def get_or_create_pictograph(
-        self, pictograph_key, pictograph_dict=None
+        self, pictograph_key: str, pictograph_dict=None
     ) -> IGPictograph:
-        if pictograph_key in self.scroll_area.main_widget.all_pictographs:
-            return self.scroll_area.main_widget.all_pictographs[pictograph_key]
+        print()
+        if pictograph_key in self.scroll_area.main_widget.all_pictographs[pictograph_key.split("_")[0]]:
+            return self.scroll_area.main_widget.all_pictographs[pictograph_key.split("_")[0]][pictograph_key]
         elif pictograph_dict is not None:
             ig_pictograph = self.create_pictograph(IG_PICTOGRAPH)
             ig_pictograph.state_updater.update_pictograph(pictograph_dict)
-            self.scroll_area.main_widget.all_pictographs[pictograph_key] = ig_pictograph
+            self.scroll_area.main_widget.all_pictographs[pictograph_key.split("_")[0]][
+                pictograph_key
+            ] = ig_pictograph
             return ig_pictograph
         else:
             raise ValueError(

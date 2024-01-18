@@ -158,7 +158,29 @@ class IGTab(QWidget):
 
         button.setFlat(not is_selected)
         button.setStyleSheet(self.get_button_style(pressed=not is_selected))
+        if letter in self.selected_letters:
+            self.process_pictographs_for_letter(letter)
         self.scroll_area.update_pictographs()
+
+    def process_pictographs_for_letter(self, letter) -> None:
+        pictograph_dicts = self.main_widget.letters.get(letter, [])
+        for pictograph_dict in pictograph_dicts:
+            pictograph_key = (
+                self.scroll_area.pictograph_factory.generate_pictograph_key_from_dict(
+                    pictograph_dict
+                )
+            )
+            pictograph = self.scroll_area.pictograph_factory.get_or_create_pictograph(
+                pictograph_key, pictograph_dict
+            )
+            # for (
+            #     letter_type,
+            #     pictographs,
+            # ) in self.scroll_area.section_manager.pictographs_by_type.items():
+            #     for index, pictograph in enumerate(pictographs):
+            #         self.scroll_area.display_manager.add_pictograph_to_layout(
+            #             pictograph, index
+            #         )
 
     def generate_selected_images(self) -> None:
         main_widget = self.parentWidget()

@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
 )
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QTimer
 from utilities.TypeChecking.TypeChecking import Letters
 from widgets.pictograph_scroll_area.scroll_area_pictograph_factory import (
     ScrollAreaPictographFactory,
@@ -56,14 +56,16 @@ class ScrollArea(QScrollArea):
 
     def update_pictographs(self) -> None:
         deselected_letters = self.pictograph_factory.get_deselected_letters()
+        selected_letters = set(self.parent_tab.selected_letters)
 
-        # Remove pictographs associated with deselected letters
-        for letter in deselected_letters:
-            self.pictograph_factory.remove_deselected_letter_pictographs(letter)
-
-        # Update display after processing deselections
-        self.display_manager.cleanup_unused_pictographs()
-        self.section_manager.organize_pictographs_by_type()
+        if self._only_deselection_occurred(deselected_letters, selected_letters):
+            for letter in deselected_letters:
+                self.pictograph_factory.remove_deselected_letter_pictographs(letter)
+        else:
+            for letter in deselected_letters:
+                self.pictograph_factory.remove_deselected_letter_pictographs(letter)
+            self.pictograph_factory.process_selected_letters()
+        self.display_manager.order_and_display_pictographs()
 
     def _only_deselection_occurred(self, deselected_letters, selected_letters) -> bool:
         if not deselected_letters:
