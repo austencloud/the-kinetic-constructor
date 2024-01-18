@@ -48,7 +48,6 @@ class TurnAdjustManager:
         """Create an adjust turns button and add it to the appropriate layout."""
         button: AdjustTurnsButton = self.turns_widget.create_adjust_turns_button(text)
         button.setContentsMargins(0, 0, 0, 0)
-        button.setMinimumWidth(button.fontMetrics().boundingRect(text).width())
         button.clicked.connect(lambda _, adj=adjustment: self.adjust_turns(adj))
 
         layout = (

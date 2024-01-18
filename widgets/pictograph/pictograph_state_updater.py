@@ -127,7 +127,7 @@ class PictographStateUpdater:
 
     def _update_motions(self) -> None:
         for motion in self.pictograph.motions.values():
-            motion.update_motion()
+            motion.updater.update_motion()
 
     def update_letter(self) -> None:
         if all(motion.motion_type for motion in self.pictograph.motions.values()):

@@ -19,7 +19,7 @@ from constants import (
     STATIC,
     TURNS,
 )
-from utilities.TypeChecking.TypeChecking import Orientations
+from utilities.TypeChecking.TypeChecking import Colors, Orientations, Turns
 from widgets.filter_tab import FilterTab
 
 if TYPE_CHECKING:
@@ -30,7 +30,9 @@ if TYPE_CHECKING:
 class MotionAttrManager:
     def __init__(self, motion: "Motion") -> None:
         self.motion = motion
-
+        self.motion.color: Colors = self.motion.motion_dict.get(COLOR)
+        self.motion.turns: Turns = self.motion.motion_dict.get(TURNS)
+        
     def update_attributes(self, motion_dict: Dict[str, str]) -> None:
         for attribute, value in motion_dict.items():
             if value is not None:

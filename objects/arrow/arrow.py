@@ -174,7 +174,7 @@ class Arrow(GraphicalObject):
             START_LOC: self.motion.prop.loc,
             END_LOC: self.motion.prop.loc,
         }
-        self.motion.update_motion(motion_dict)
+        self.motion.updater.update_motion(motion_dict)
 
         self.motion[COLOR] = self.color
         self.motion[MOTION_TYPE] = STATIC

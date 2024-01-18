@@ -1,19 +1,14 @@
 from typing import *
-
+from utilities.TypeChecking.MotionAttributes import *
 
 from .letter_lists import *
 from typing import Literal
 from constants import *
 
-Turns = Union[int, float]
-MotionTypes = Literal["pro", "anti", "float", "dash", "static"]
-Locations = Literal["n", "ne", "e", "se", "s", "sw", "w", "nw"]
-Colors = Literal["blue", "red"]
-Orientations = Literal["in", "out", "clock", "counter"]
+
 ParallelCombinationsSet = Set[Tuple[str, str, str, str]]
 Handpaths = Literal["dash_handpath", "static_handpath", "cw_handpath", "ccw_handpath"]
 RotationAngles = Literal[0, 90, 180, 270]
-PropRotDirs = Literal["cw", "ccw", "no_rot"]
 OptimalLocationEntries = Dict[Literal["x", "y"], float]
 StartEndLocationTuple = Tuple[Locations]
 OptimalLocationDicts = Dict[str, OptimalLocationEntries]
