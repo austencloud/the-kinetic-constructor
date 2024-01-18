@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Dict, Tuple, Union
 from Enums import PropAttribute
 
 from data.start_end_loc_map import get_start_end_locs
-from objects.graphical_object import GraphicalObject
+from objects.graphical_object.graphical_object import GraphicalObject
 from PyQt6.QtCore import QPointF, Qt
 from constants import *
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
@@ -37,7 +37,7 @@ class Prop(GraphicalObject):
         self.ghost: Prop = None
         super().__init__(scene)
         self._setup_attributes(scene, prop_dict)
-        self.setup_svg_renderer(self.svg_file)
+        self.svg_manager.setup_svg_renderer(self.svg_file)
         self.setZValue(10)
 
     def _setup_attributes(self, scene, prop_dict: Dict) -> None:
@@ -171,12 +171,12 @@ class Prop(GraphicalObject):
                 setattr(self, key, value)
         # self.motion.update_prop_ori()
         self.update_svg()
-        self._update_color()
+        self.svg_manager.update_color()
         self._update_prop_rotation_angle()
 
     def update_svg(self) -> None:
         self.svg_file = self.get_svg_file(self.prop_type)
-        super().update_svg(self.svg_file)
+        self.svg_manager.update_svg(self.svg_file)
 
     def get_svg_file(self, prop_type: PropTypes) -> str:
         svg_file = f"{PROP_DIR}{prop_type}.svg"
@@ -190,7 +190,7 @@ class Prop(GraphicalObject):
         self.update_prop()
 
     def update_ghost_prop_location(self, new_pos: QPointF) -> None:
-        new_location = self.pictograph.get_closest_hand_point(new_pos)[0][0]
+        new_location = self.pictograph.grid.get_closest_hand_point(new_pos)[0][0]
 
         if new_location != self.previous_location:
             self.loc = new_location

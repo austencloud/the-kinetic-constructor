@@ -8,7 +8,7 @@ from .arrow_location_manager import ArrowLocationManager
 from .arrow_rot_angle_manager import ArrowRotAngleManager
 from ..prop.prop import Prop
 
-from ..graphical_object import GraphicalObject
+from ..graphical_object.graphical_object import GraphicalObject
 from utilities.TypeChecking.TypeChecking import (
     Colors,
     Locations,
@@ -36,8 +36,8 @@ class Arrow(GraphicalObject):
         super().__init__(scene)
         self.scene: Pictograph | ArrowBox = scene
         self.motion: Motion = motion
-        self.arrow_rot_angle_manager = ArrowRotAngleManager(self)
-        self.arrow_location_manager = ArrowLocationManager(self)
+        self.rot_angle_manager = ArrowRotAngleManager(self)
+        self.location_manager = ArrowLocationManager(self)
         self.motion_type: MotionTypes = None
         self.ghost: GhostArrow = None
         self.is_svg_mirrored: bool = False
@@ -53,10 +53,9 @@ class Arrow(GraphicalObject):
             arrow_dict[MOTION_TYPE],
             arrow_dict[TURNS],
         )
-        self.setup_svg_renderer(self.svg_file)
+        self.svg_manager.setup_svg_renderer(self.svg_file)
         self.setAcceptHoverEvents(True)
-        self.update_attributes(arrow_dict)
-
+        self.attr_manager.update_attributes(arrow_dict)
         self.is_dragging: bool = False
         self.loc: Locations = None
         self.drag_offset = QPointF(0, 0)
@@ -66,9 +65,9 @@ class Arrow(GraphicalObject):
     def update_arrow_svg(self) -> None:
         svg_file = self.get_svg_file(self.motion_type, self.turns)
         self.svg_file = svg_file
-        super().update_svg(svg_file)
+        self.svg_manager.update_svg(svg_file)
         if not self.is_ghost and self.ghost:
-            self.ghost.update_svg(svg_file)
+            self.ghost.svg_manager.update_svg(svg_file)
 
     ### MOUSE EVENTS ###
 
@@ -91,7 +90,7 @@ class Arrow(GraphicalObject):
             new_pos = event.scenePos() - self.get_object_center()
             self.set_drag_pos(new_pos)
             if new_location != self.loc:
-                self.arrow_location_manager.update_location(new_location)
+                self.location_manager.update_location(new_location)
 
     def mouseReleaseEvent(self, event) -> None:
         self.is_dragging = False
@@ -186,17 +185,17 @@ class Arrow(GraphicalObject):
 
     def update_arrow(self, arrow_dict=None) -> None:
         if arrow_dict:
-            self.update_attributes(arrow_dict)
+            self.attr_manager.update_attributes(arrow_dict)
             if not self.is_ghost and self.ghost:
-                self.ghost.update_attributes(arrow_dict)
+                self.ghost.attr_manager.update_attributes(arrow_dict)
 
         if not self.is_ghost:
             self.ghost.transform = self.transform
         self.update_arrow_svg()
         self._update_mirror()
-        self._update_color()
-        # self.arrow_location_manager.update_location()
-        self.arrow_rot_angle_manager.update_rotation()
+        self.svg_manager.update_color()
+        self.rot_angle_manager.update_rotation()
+        self.location_manager.update_location()
 
     def mirror_svg(self) -> None:
         self.center_x = self.boundingRect().center().x()
@@ -216,16 +215,16 @@ class Arrow(GraphicalObject):
         self.center_x = self.boundingRect().center().x()
         self.center_y = self.boundingRect().center().y()
         transform = QTransform()
-        transform.translate(self.center.x(), self.center.y())
+        transform.translate(self.center_x, self.center_y)
         transform.scale(1, 1)
-        transform.translate(-self.center.x(), -self.center.y())
+        transform.translate(-self.center_x, -self.center_y)
         self.setTransform(transform)
         if hasattr(self, GHOST) and self.ghost:
             self.ghost.setTransform(transform)
             self.ghost.is_svg_mirrored = False
         self.is_svg_mirrored = False
 
-    def adjust_position(self, adjustment):
+    def adjust_position(self, adjustment) -> None:
         self.setPos(self.pos() + QPointF(*adjustment))
 
     ### DELETION ###

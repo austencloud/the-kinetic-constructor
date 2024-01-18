@@ -26,6 +26,7 @@ from utilities.TypeChecking.TypeChecking import (
     VtgDirections,
     VtgTimings,
 )
+from widgets.pictograph.pictograph_attr_manager import PictographAttrManager
 from widgets.pictograph.pictograph_view import PictographView
 from widgets.pictograph.wasd_adjustment_manager.wasd_adjustment_manager import (
     WASD_AdjustmentManager,
@@ -68,6 +69,7 @@ class Pictograph(QGraphicsScene):
         self.arrow_placement_manager = ArrowPlacementManager(self)
         self.prop_placement_manager = PropPlacementManager(self)
         self.letter_engine = LetterEngine(self)
+        self.attr_manager = PictographAttrManager(self)
         self.setup_scene()
 
     def setup_scene(self) -> None:

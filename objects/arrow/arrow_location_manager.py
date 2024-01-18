@@ -95,7 +95,7 @@ class ArrowLocationManager:
         )
         if not shift_motion.arrow.loc:
             shift_motion.arrow.loc = (
-                shift_motion.arrow.arrow_location_manager.get_arrow_location()
+                shift_motion.arrow.location_manager.get_arrow_location()
             )
         dash_location_map = {
             (NORTH, NORTHWEST): EAST,

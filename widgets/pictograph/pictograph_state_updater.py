@@ -15,9 +15,7 @@ class PictographStateUpdater:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
 
-    def update_attributes(self, pictograph_dict: Dict) -> None:
-        for attr_name, attr_value in pictograph_dict.items():
-            setattr(self.pictograph, attr_name, attr_value)
+
 
     def update_pictograph(self, pictograph_dict: Dict = None) -> None:
         if pictograph_dict:
@@ -29,7 +27,7 @@ class PictographStateUpdater:
         self._position_objects()
 
     def _update_from_pictograph_dict(self, pictograph_dict: Dict) -> None:
-        self.update_attributes(pictograph_dict)
+        self.pictograph.attr_manager.update_attributes(pictograph_dict)
         motion_dicts = []
         if LETTER in pictograph_dict:
             self.pictograph.letter = pictograph_dict[LETTER]
@@ -96,8 +94,8 @@ class PictographStateUpdater:
                     PROP_ROT_DIR: pictograph_dict.get(f"{color}_prop_rot_dir"),
                     ORI: self.pictograph.motions[color].ori_calculator.get_end_ori(),
                 }
-                self.pictograph.motions[color].prop.update_attributes(prop_dict)
-                self.pictograph.ghost_props[color].update_attributes(prop_dict)
+                self.pictograph.motions[color].prop.attr_manager.update_attributes(prop_dict)
+                self.pictograph.ghost_props[color].attr_manager.update_attributes(prop_dict)
                 self.pictograph.motions[color].prop.show()
                 self.pictograph.motions[color].prop.update_prop()
 

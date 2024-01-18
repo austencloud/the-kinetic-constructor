@@ -96,7 +96,7 @@ class ArrowBox(BaseObjectBox):
             elif arrow.color == BLUE:
                 blue_arrows.append(arrow)
             arrow.setTransformOriginPoint(arrow.boundingRect().center())
-            arrow.is_dim(True)
+            arrow.toggle_dimmer(True)
 
         red_arrow_positions: List[Tuple[int, int]] = [
             (525, 150),
@@ -115,7 +115,7 @@ class ArrowBox(BaseObjectBox):
         self.position_arrows(blue_arrows, blue_arrow_positions)
 
         for motion in self.motions:
-            motion.arrow.loc = motion.arrow.arrow_location_manager.get_arrow_location()
+            motion.arrow.loc = motion.arrow.location_manager.get_arrow_location()
 
         for arrow in arrows:
             arrow_dict = {
@@ -275,8 +275,8 @@ class ArrowBox(BaseObjectBox):
     def highlight_closest_arrow(self, cursor_pos: QPointF) -> None:
         closest_arrow = self.find_closest_arrow(cursor_pos)
         for arrow in self.arrows:
-            arrow.is_dim(arrow != closest_arrow)
+            arrow.toggle_dimmer(arrow != closest_arrow)
 
     def dim_all_arrows(self) -> None:
         for arrow in self.arrows:
-            arrow.is_dim(True)
+            arrow.toggle_dimmer(True)

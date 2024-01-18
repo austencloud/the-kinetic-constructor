@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QWidget
 from typing import TYPE_CHECKING, Optional, Union
 
-from objects.graphical_object import GraphicalObject
+from objects.graphical_object.graphical_object import GraphicalObject
 from utilities.TypeChecking.TypeChecking import RotationAngles
 from widgets.graph_editor_tab.graph_editor_object_panel.base_objectbox.base_objectbox import (
     BaseObjectBox,

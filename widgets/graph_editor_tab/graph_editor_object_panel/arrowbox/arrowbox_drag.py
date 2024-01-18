@@ -125,9 +125,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
         arrow_dict = {
             COLOR: self.color,
             MOTION_TYPE: self.motion_type,
-            LOC: self.pictograph.arrows[
-                self.color
-            ].arrow_location_manager.get_arrow_location(
+            LOC: self.pictograph.arrows[self.color].location_manager.get_arrow_location(
                 self.start_loc, self.end_loc, self.motion_type
             ),
             TURNS: self.turns,

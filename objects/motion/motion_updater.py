@@ -13,7 +13,7 @@ class MotionUpdater:
         if motion_dict:
             self.motion.attr_manager.update_attributes(motion_dict)
         arrow_dict = {
-            LOC: self.motion.arrow.arrow_location_manager.get_arrow_location(),
+            LOC: self.motion.arrow.location_manager.get_arrow_location(),
             MOTION_TYPE: self.motion.motion_type,
             TURNS: self.motion.turns,
         }

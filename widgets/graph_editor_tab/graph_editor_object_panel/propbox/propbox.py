@@ -284,9 +284,9 @@ class PropBox(BaseObjectBox):
 
             for prop in self.props:
                 if prop != closest_prop:
-                    prop.is_dim(True)
+                    prop.toggle_dimmer(True)
                 else:
-                    prop.is_dim(False)
+                    prop.toggle_dimmer(False)
 
     def mouseReleaseEvent(self, event) -> None:
         if self.target_prop and self.drag:
@@ -299,4 +299,4 @@ class PropBox(BaseObjectBox):
 
     def dim_all_props(self) -> None:
         for prop in self.props:
-            prop.is_dim(True)
+            prop.toggle_dimmer(True)
