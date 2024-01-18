@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
 from typing import TYPE_CHECKING, List
 from constants import *
-from widgets.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.TypeChecking import (
     AdjustmentNums,
     AdjustmentStrs,
@@ -16,6 +15,7 @@ from utilities.TypeChecking.letter_lists import (
 from .....buttons.adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
+    from widgets.pictograph.pictograph import Pictograph
     from widgets.attr_box.attr_box import AttrBox
     from objects.motion.motion import Motion
     from .base_turns_widget import TurnsWidget
@@ -83,7 +83,7 @@ class TurnAdjustManager:
     ### PRIVATE METHODS ###
 
     def _adjust_turns_for_pictograph(
-        self, pictograph: Pictograph, adjustment: Turns
+        self, pictograph: "Pictograph", adjustment: Turns
     ) -> None:
         """Adjust turns for each relevant motion in the pictograph."""
         for motion in pictograph.motions.values():

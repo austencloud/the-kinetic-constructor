@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QFrame
 from typing import TYPE_CHECKING, Union
+
 from ..base_turns_widget.turns_display_manager import TurnDisplayManager
 from ...base_attr_box_widget import AttrBoxWidget
 from ...base_attr_box_widget import AttrBoxWidget
@@ -7,17 +8,14 @@ from .turn_adjust_manager import TurnAdjustManager
 from .turn_direct_set_manager import TurnDirectSetManager
 
 if TYPE_CHECKING:
-    from ....color_attr_box import ColorAttrBox
-    from ....motion_type_attr_box import MotionTypeAttrBox
-    from ....lead_state_attr_box import LeadStateAttrBox
+    from attr_box.attr_box import AttrBox
+    
 
 
 class TurnsWidget(AttrBoxWidget):
     def __init__(self, attr_box) -> None:
         super().__init__(attr_box)
-        self.attr_box: Union[
-            "ColorAttrBox", "MotionTypeAttrBox", "LeadStateAttrBox"
-        ] = attr_box
+        self.attr_box: "AttrBox" = attr_box
         self.vbox_layout: QVBoxLayout = QVBoxLayout(self)
         self.turn_direct_set_manager = TurnDirectSetManager(self)
         self.turn_adjust_manager = TurnAdjustManager(self.attr_box, self)

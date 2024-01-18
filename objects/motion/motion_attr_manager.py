@@ -7,16 +7,17 @@ from constants import (
     MOTION_TYPE,
     NO_ROT,
     OPP,
+    PROP,
     PROP_ROT_DIR,
     RED,
     SAME,
     STATIC,
     TURNS,
 )
+from widgets.filter_tab import FilterTab
 
 if TYPE_CHECKING:
     from widgets.attr_box.attr_box import AttrBox
-    from widgets.filter_tab.Type1_filter_tab import BaseFilterTab
     from objects.motion.motion import Motion
 
 
@@ -25,7 +26,7 @@ class MotionAttrManager:
         self.motion = motion
 
     def update_motion_attributes_from_filter_tab(
-        self, filter_tab: "BaseFilterTab", pictograph_dict: Dict
+        self, filter_tab: "FilterTab", pictograph_dict: Dict
     ):
         for box in filter_tab.motion_type_attr_panel.boxes:
             if (
@@ -82,3 +83,11 @@ class MotionAttrManager:
         if pictograph_dict[self.motion.color + "_" + MOTION_TYPE] == box.motion_type:
             pictograph_dict[self.motion.color + "_" + PROP_ROT_DIR] = opposite_dir
             pictograph_dict[self.motion.color + "_" + TURNS] = turns
+
+    def update_prop_ori(self) -> None:
+        if hasattr(self.motion, PROP) and self.motion.prop:
+            if not self.motion.end_ori:
+                self.motion.end_ori = self.motion.ori_calculator.get_end_ori()
+            self.motion.prop.ori = self.motion.end_ori
+            self.motion.prop.loc = self.motion.end_loc
+            self.motion.prop.axis = self.motion.prop.get_axis_from_ori()

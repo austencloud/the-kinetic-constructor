@@ -94,7 +94,7 @@ class PictographStateUpdater:
                 self.pictograph.motions[color].arrow.show()
                 prop_dict = {
                     PROP_ROT_DIR: pictograph_dict.get(f"{color}_prop_rot_dir"),
-                    ORI: self.pictograph.motions[color].get_end_ori(),
+                    ORI: self.pictograph.motions[color].ori_calculator.get_end_ori(),
                 }
                 self.pictograph.motions[color].prop.update_attributes(prop_dict)
                 self.pictograph.ghost_props[color].update_attributes(prop_dict)
