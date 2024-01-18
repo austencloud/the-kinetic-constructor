@@ -6,11 +6,12 @@ from constants import END_POS, START_POS
 from .option_picker_scroll_area import OptionPickerScrollArea
 
 if TYPE_CHECKING:
+    from widgets.main_tab_widget import MainTabWidget
     from widgets.main_widget import MainWidget
 
 
 class OptionPickerTab(QFrame):
-    def __init__(self, main_widget: "MainWidget") -> None:
+    def __init__(self, main_widget: "MainWidget", main_tab_widget: "MainTabWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.pictograph_df = self.load_and_sort_data("PictographDataFrame.csv")

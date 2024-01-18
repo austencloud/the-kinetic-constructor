@@ -17,6 +17,7 @@ from ..pictograph_scroll_area.scroll_area import ScrollArea
 
 
 if TYPE_CHECKING:
+    from widgets.main_tab_widget import MainTabWidget
     from ..main_widget import MainWidget
 
 
@@ -26,7 +27,7 @@ class IGTab(QWidget):
 
     ### INITIALIZATION ###
 
-    def __init__(self, main_widget: "MainWidget") -> None:
+    def __init__(self, main_widget: "MainWidget", main_tab_widget: "MainTabWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.letters_dict = deepcopy(self.main_widget.letters)  # Deep copy of letters

@@ -29,8 +29,15 @@ class ScrollAreaPictographFactory:
     def get_or_create_pictograph(
         self, pictograph_key: str, pictograph_dict=None
     ) -> IGPictograph:
-        if pictograph_key in self.scroll_area.main_widget.all_pictographs[pictograph_key.split("_")[0]]:
-            return self.scroll_area.main_widget.all_pictographs[pictograph_key.split("_")[0]][pictograph_key]
+        if (
+            pictograph_key
+            in self.scroll_area.main_widget.all_pictographs[
+                pictograph_key.split("_")[0]
+            ]
+        ):
+            return self.scroll_area.main_widget.all_pictographs[
+                pictograph_key.split("_")[0]
+            ][pictograph_key]
         elif pictograph_dict is not None:
             ig_pictograph = self.create_pictograph(IG_PICTOGRAPH)
             ig_pictograph.state_updater.update_pictograph(pictograph_dict)
@@ -47,11 +54,7 @@ class ScrollAreaPictographFactory:
         selected_letters = set(self.scroll_area.parent_tab.selected_letters)
         for letter in selected_letters:
             if letter not in self.scroll_area.main_widget.all_pictographs:
-                pictograph_dicts = (
-                    self.scroll_area.main_widget.ig_tab.scroll_area.letters.get(
-                        letter, []
-                    )
-                )
+                pictograph_dicts = self.scroll_area.letters.get(letter, [])
                 for pictograph_dict in pictograph_dicts:
                     pictograph_key = self.generate_pictograph_key_from_dict(
                         pictograph_dict
@@ -64,34 +67,27 @@ class ScrollAreaPictographFactory:
                 self.scroll_area.pictographs[pictograph_key] = pictograph
 
     def get_deselected_letters(self) -> Set[Letters]:
-        selected_letters = set(
-            self.scroll_area.main_widget.ig_tab.scroll_area.parent_tab.selected_letters
-        )
+        selected_letters = set(self.scroll_area.parent_tab.selected_letters)
         existing_letters = {
-            key.split("_")[0]
-            for key in self.scroll_area.main_widget.ig_tab.scroll_area.pictographs.keys()
+            key.split("_")[0] for key in self.scroll_area.pictographs.keys()
         }
         return existing_letters - selected_letters
 
     def remove_deselected_letter_pictographs(self, deselected_letter) -> None:
         keys_to_remove = [
             key
-            for key in self.scroll_area.main_widget.ig_tab.scroll_area.pictographs
+            for key in self.scroll_area.pictographs
             if key.startswith(deselected_letter + "_")
         ]
         for key in keys_to_remove:
-            ig_pictograph = (
-                self.scroll_area.main_widget.ig_tab.scroll_area.pictographs.pop(key)
-            )
-            scroll_section = self.scroll_area.main_widget.ig_tab.scroll_area.section_manager.get_section(
+            ig_pictograph = self.scroll_area.pictographs.pop(key)
+            scroll_section = self.scroll_area.section_manager.get_section(
                 ig_pictograph.letter_type
             )
             scroll_section.remove_pictograph(ig_pictograph)
 
     def get_pictograph(self, pictograph_key) -> IGPictograph:
-        return self.scroll_area.main_widget.ig_tab.scroll_area.pictographs[
-            pictograph_key
-        ]
+        return self.scroll_area.pictographs[pictograph_key]
 
     def create_pictograph(
         self,
@@ -99,13 +95,13 @@ class ScrollAreaPictographFactory:
     ) -> Option | IGPictograph:
         if graph_type == OPTION:
             pictograph = Option(
-                self.scroll_area.main_widget.ig_tab.scroll_area.main_widget,
-                self.scroll_area.main_widget.ig_tab.scroll_area,
+                self.scroll_area.main_widget,
+                self.scroll_area,
             )
         elif graph_type == IG_PICTOGRAPH:
             pictograph = IGPictograph(
-                self.scroll_area.main_widget.ig_tab.scroll_area.main_widget,
-                self.scroll_area.main_widget.ig_tab.scroll_area,
+                self.scroll_area.main_widget,
+                self.scroll_area,
             )
         return pictograph
 

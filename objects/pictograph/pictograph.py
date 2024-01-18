@@ -84,7 +84,6 @@ class Pictograph(QGraphicsScene):
     ### EVENT HANDLERS ###
 
     def mousePressEvent(self, event) -> None:
-        self.main_widget.deselect_all_except(self)
         self.mouse_event_handler.handle_mouse_press(event)
 
     def mouseMoveEvent(self, event) -> None:
@@ -224,6 +223,18 @@ class Pictograph(QGraphicsScene):
             if motion.motion_type == STATIC:
                 return True
         return False
+
+
+
+
+
+
+
+
+
+
+
+
 
     arrows: Dict[Colors, Arrow]
     props: Dict[Colors, Prop]
