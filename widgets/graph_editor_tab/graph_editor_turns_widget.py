@@ -11,8 +11,9 @@ from PyQt6.QtGui import QFont, QPixmap
 from typing import TYPE_CHECKING, List
 from objects.motion.motion import Motion
 from constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON, ICON_DIR
-from ..attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import TurnsWidget
-
+from ..attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
+    TurnsWidget,
+)
 
 
 if TYPE_CHECKING:
@@ -194,7 +195,6 @@ class GraphEditorTurnsWidget(TurnsWidget):
         header_height = int(available_height * 2 / 3)
         turns_widget_height = int(available_height * 1 / 3)
         self.header_frame.setMaximumHeight(header_height)
-        # self.button_frame.setMaximumHeight(self.button_frame.height())
 
     def _update_clock_size(self) -> None:
         """Updates the sizes of the clock labels based on the widget's size."""
@@ -202,77 +202,6 @@ class GraphEditorTurnsWidget(TurnsWidget):
         for clock in [self.clock_left, self.clock_right]:
             clock.setMinimumSize(clock_size, clock_size)
             clock.setMaximumSize(clock_size, clock_size)
-
-    def _update_turnbox_size(self) -> None:
-        self.setMinimumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
-        self.setMaximumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
-
-        self.spacing = self.attr_box.attr_panel.width() // 250
-
-        border_radius = (
-            min(
-                self.turn_display_manager.turns_display.width(),
-                self.turn_display_manager.turns_display.height(),
-            )
-            * 0.25
-        )
-        self.turn_display_manager.turns_display.setMaximumWidth(
-            int(self.attr_box.width() / 3.25)
-        )
-
-        self.turn_display_manager.turns_display.setMinimumHeight(
-            int(self.attr_box.height() / 8)
-        )
-        self.turn_display_manager.turns_display.setMaximumHeight(
-            int(self.attr_box.height() / 8)
-        )
-        box_font_size = int(self.attr_box.width() / 10)
-
-        self.turns_label.setContentsMargins(0, 0, self.spacing, 0)
-        self.turns_label.setFont(QFont("Arial", int(self.width() / 22)))
-
-        self.turn_display_manager.turns_display.setFont(
-            QFont("Arial", box_font_size, QFont.Weight.Bold)
-        )
-        dropdown_arrow_width = int(self.width() * 0.075)  # Width of the dropdown arrow
-
-        # Calculate the border radius as a fraction of the width or height
-        border_radius = (
-            min(
-                self.turn_display_manager.turns_display.width(),
-                self.turn_display_manager.turns_display.height(),
-            )
-            * 0.25
-        )
-
-        # Adjust the stylesheet to add padding inside the combo box on the left
-        self.turn_display_manager.turns_display.setStyleSheet(
-            f"""
-            QComboBox {{
-                padding-left: 2px; /* add some padding on the left for the text */
-                padding-right: 0px; /* make room for the arrow on the right */
-                border: {self.attr_box.combobox_border}px solid black;
-                border-radius: {border_radius}px;
-            }}
-            QComboBox::drop-down {{
-                subcontrol-origin: padding;
-                subcontrol-position: top right;
-                width: {dropdown_arrow_width}px;
-                border-left-width: 1px;
-                border-left-color: darkgray;
-                border-left-style: solid; /* visually separate the arrow part */
-                border-top-right-radius: {border_radius}px;
-                border-bottom-right-radius: {border_radius}px;
-            }}
-            QComboBox::down-arrow {{
-                image: url("{ICON_DIR}/combobox_arrow.png");
-                width: {int(dropdown_arrow_width * 0.6)}px;
-                height: {int(dropdown_arrow_width * 0.6)}px;
-            }}
-        """
-        )
-        self.turnbox_vbox_frame.setMinimumWidth(int(self.attr_box.width() / 3.25))
-        self.turnbox_vbox_frame.setMaximumWidth(int(self.attr_box.width() / 3.25))
 
     def _update_button_size(self) -> None:
         for adjust_turns_button in self.turn_adjustment_manager.adjust_turns_buttons:
@@ -285,10 +214,3 @@ class GraphEditorTurnsWidget(TurnsWidget):
             else:
                 button_size = int(self.attr_box.width() / 6)
             adjust_turns_button.update_adjust_turns_button_size(button_size)
-
-    # def resize_turns_widget(self) -> None:
-    #     super().resize_turns_widget()
-    #     self._update_clock_size()
-    #     self._update_turnbox_size()
-    #     self._update_button_size()
-    #     self._update_widget_sizes()

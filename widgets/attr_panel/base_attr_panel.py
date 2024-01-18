@@ -26,12 +26,12 @@ if TYPE_CHECKING:
 class BaseAttrPanel(QFrame):
     def __init__(self, scroll_area: "ScrollArea") -> None:
         super().__init__()
-        self.setContentsMargins(0, 0, 0, 0)
         self.boxes: List[MotionTypeAttrBox, ColorAttrBox, LeadStateAttrBox] = []
         self.scroll_area: Union["GraphEditorFrame", "IGTab"] = scroll_area
 
     def setup_layouts(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
@@ -62,6 +62,6 @@ class BaseAttrPanel(QFrame):
             pictograph.state_updater.update_pictograph(pictograph_dict)
 
     def resize_attr_panel(self) -> None:
-        self.layout.setSpacing(int(self.boxes[0].width() / 5))
+        # self.layout.setSpacing(int(self.boxes[0].width() / 5))
         for box in self.boxes:
             box.resize_attr_box()

@@ -29,7 +29,6 @@ class ScrollAreaPictographFactory:
     def get_or_create_pictograph(
         self, pictograph_key: str, pictograph_dict=None
     ) -> IGPictograph:
-        print()
         if pictograph_key in self.scroll_area.main_widget.all_pictographs[pictograph_key.split("_")[0]]:
             return self.scroll_area.main_widget.all_pictographs[pictograph_key.split("_")[0]][pictograph_key]
         elif pictograph_dict is not None:

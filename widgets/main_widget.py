@@ -151,43 +151,95 @@ class MainWidget(QWidget):
         self.tab_widget = QTabWidget()
         self.tab_widget.setStyleSheet(
             """
-            QTabWidget::pane { /* The tab widget frame */
-                border-top: 2px solid #C2C7CB;
+            QTabWidget::pane {
+                border: 1px solid black;
+                background: white;
             }
 
+            QTabWidget::tab-bar:top {
+                top: 1px;
+            }
 
-            /* Style the tab using the tab sub-control. Note that
-                it uses a QTabBar sub-control called tab. */
+            QTabWidget::tab-bar:bottom {
+                bottom: 1px;
+            }
+
+            QTabWidget::tab-bar:left {
+                right: 1px;
+            }
+
+            QTabWidget::tab-bar:right {
+                left: 1px;
+            }
+
             QTabBar::tab {
-                background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                            stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
-                                            stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
-                border: 2px solid #C4C4C3;
-                border-bottom-color: #C2C7CB; /* same as the pane color */
-                border-top-left-radius: 4px;
-                border-top-right-radius: 4px;
-                min-width: 8ex;
-                padding: 2px;
-                font-size: 14px; /* Increase the font size */
-            }
-
-            QTabBar::tab:selected, QTabBar::tab:hover {
-                background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                            stop: 0 #fafafa, stop: 0.4 #f4f4f4,
-                                            stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);
+                border: 1px solid black;
             }
 
             QTabBar::tab:selected {
-                border-color: #9B9B9B;
-                border-bottom-color: #C2C7CB; /* same as pane color */
+                background: white;
             }
 
             QTabBar::tab:!selected {
-                margin-top: 2px; /* make non-selected tabs look smaller */
+                background: silver;
             }
 
-            QTabBar::tab:!selected {
-                font-size: 14px; /* Increase the font size */
+            QTabBar::tab:!selected:hover {
+                background: #999;
+            }
+
+            QTabBar::tab:top:!selected {
+                margin-top: 3px;
+            }
+
+            QTabBar::tab:bottom:!selected {
+                margin-bottom: 3px;
+            }
+
+            QTabBar::tab:top, QTabBar::tab:bottom {
+                min-width: 8ex;
+                margin-right: -1px;
+                padding: 5px 10px 5px 10px;
+            }
+
+            QTabBar::tab:top:selected {
+                border-bottom-color: none;
+            }
+
+            QTabBar::tab:bottom:selected {
+                border-top-color: none;
+            }
+
+            QTabBar::tab:top:last, QTabBar::tab:bottom:last,
+            QTabBar::tab:top:only-one, QTabBar::tab:bottom:only-one {
+                margin-right: 0;
+            }
+
+            QTabBar::tab:left:!selected {
+                margin-right: 3px;
+            }
+
+            QTabBar::tab:right:!selected {
+                margin-left: 3px;
+            }
+
+            QTabBar::tab:left, QTabBar::tab:right {
+                min-height: 8ex;
+                margin-bottom: -1px;
+                padding: 10px 5px 10px 5px;
+            }
+
+            QTabBar::tab:left:selected {
+                border-left-color: none;
+            }
+
+            QTabBar::tab:right:selected {
+                border-right-color: none;
+            }
+
+            QTabBar::tab:left:last, QTabBar::tab:right:last,
+            QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
+                margin-bottom: 0;
             }
 
             """
@@ -211,20 +263,16 @@ class MainWidget(QWidget):
         self.main_layout = QHBoxLayout(self)
         self.main_layout.addWidget(self.horizontal_splitter)
         self.setLayout(self.main_layout)
-        # self.setup_image_cache()
-        # Add a progress bar at the bottom
+
         self.progress_bar = QProgressBar(self)
         self.progress_bar.setGeometry(0, self.height() - 20, self.width(), 20)
-        self.progress_bar.hide()  # Initially hidden, shown when loading starts
-
-
-
+        self.progress_bar.hide()
 
     def update_progress(self, value: int) -> None:
-        self.progress_bar.setValue(value)  # Update the progress bar's value
+        self.progress_bar.setValue(value)
 
     def loading_finished(self) -> None:
-        self.progress_bar.hide()  # Hide the progress bar when loading is finished
+        self.progress_bar.hide()
 
     ### EVENT HANDLERS ###
 
