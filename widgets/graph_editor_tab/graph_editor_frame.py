@@ -14,7 +14,7 @@ from widgets.graph_editor_tab.graph_editor_pictograph_widget import (
 from widgets.graph_editor_tab.graph_editor_object_panel.propbox.propbox import PropBox
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
+    from widgets.main_widget.main_widget import MainWidget
     from widgets.graph_editor_tab.graph_editor_tab import GraphEditorTab
 
 

@@ -17,7 +17,7 @@ from constants import (
 from objects.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
+    from widgets.main_widget.main_widget import MainWidget
 from typing import Generator
 import os
 

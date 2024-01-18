@@ -10,7 +10,7 @@ from widgets.sequence_widget.beat_frame.start_pos_beat import StartPositionBeatV
 from objects.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
+    from widgets.main_widget.main_widget import MainWidget
     from widgets.sequence_widget.sequence_widget import MainSequenceWidget
 
 from widgets.sequence_widget.beat_frame.beat import BeatView

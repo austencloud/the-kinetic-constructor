@@ -6,7 +6,7 @@ from widgets.graph_editor_tab.graph_editor_object_panel.base_objectbox.base_obje
 )
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
+    from widgets.main_widget.main_widget import MainWidget
     from widgets.graph_editor_tab.graph_editor_frame import GraphEditorFrame
 
 

@@ -12,7 +12,7 @@ from objects.pictograph.pictograph import Pictograph
 
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
+    from widgets.main_widget.main_widget import MainWidget
     from widgets.sequence_widget.beat_frame.beat_frame import BeatFrame
 
 

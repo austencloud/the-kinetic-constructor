@@ -1,30 +1,19 @@
-from typing import TYPE_CHECKING, Dict, List
-from PyQt6.QtWidgets import (
-    QWidget,
-    QHBoxLayout,
-    QVBoxLayout,
-)
-from utilities.TypeChecking.letter_lists import all_letters
+from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QResizeEvent
-from constants import (
-    DIAMOND,
-    STAFF,
-)
-from utilities.TypeChecking.TypeChecking import Letters
-from widgets.image_cache_manager import ImageCacheManager
-from widgets.main_tab_widget import MainTabWidget
-from widgets.main_widget_layout_manager import MainWidgetLayoutManager
-from widgets.main_widget_letter_loader import MainLetterLoader
+from utilities.TypeChecking.letter_lists import all_letters
+from utilities.TypeChecking.TypeChecking import Letters, TYPE_CHECKING, Dict, List
+from constants import DIAMOND, STAFF
 from objects.pictograph.pictograph import Pictograph
-from .sequence_widget.sequence_widget import MainSequenceWidget
-
+from ..image_cache_manager import ImageCacheManager
+from ..main_tab_widget import MainTabWidget
+from .main_widget_layout_manager import MainWidgetLayoutManager
+from .main_widget_letter_loader import MainLetterLoader
+from ..sequence_widget.sequence_widget import MainSequenceWidget
 if TYPE_CHECKING:
     from main import MainWindow
 
 
 class MainWidget(QWidget):
-    layout: QVBoxLayout
-
     def __init__(self, main_window: "MainWindow") -> None:
         super().__init__(main_window)
         self.main_window = main_window
@@ -37,10 +26,9 @@ class MainWidget(QWidget):
         self.main_sequence_widget = MainSequenceWidget(self)
         self.main_tab_widget = MainTabWidget(self)
         self.image_cache_manager = ImageCacheManager(self)
-        self.layout_manager = MainWidgetLayoutManager(self)
 
     def _setup_layouts(self) -> None:
-        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.layout_manager = MainWidgetLayoutManager(self)
         self.layout_manager.configure_layouts()
 
     def _setup_default_modes(self) -> None:

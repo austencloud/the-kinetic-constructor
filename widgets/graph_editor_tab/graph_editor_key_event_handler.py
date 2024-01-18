@@ -6,7 +6,7 @@ from PyQt6.QtGui import QKeyEvent
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
+    from widgets.main_widget.main_widget import MainWidget
     from objects.pictograph.pictograph import Pictograph
 
 

@@ -12,7 +12,7 @@ from widgets.pictograph_scroll_area.scroll_area import ScrollArea
 
 if TYPE_CHECKING:
     from widgets.option_picker_tab.option_picker_tab import OptionPickerTab
-    from widgets.main_widget import MainWidget
+    from widgets.main_widget.main_widget import MainWidget
 
 
 class OptionPickerScrollArea(ScrollArea):

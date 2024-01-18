@@ -5,7 +5,7 @@ from widgets.sequence_widget.button_frame import ButtonFrame
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
+    from widgets.main_widget.main_widget import MainWidget
 
 
 class MainSequenceWidget(QWidget):

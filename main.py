@@ -1,7 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow
 from PyQt6.QtGui import QGuiApplication
-from widgets.main_widget import MainWidget
+from widgets.main_widget.main_widget import MainWidget
 from profiler import Profiler
 import os
 
@@ -45,7 +45,6 @@ def main() -> None:
     main_window = MainWindow(profiler)
 
     main_window.setFocus()
-    # main_window.main_widget.pictograph_loader.start_loading()
     exit_code = main_window.exec_with_profiling(app)
     root_directory = os.path.dirname(os.path.abspath(__file__))
 

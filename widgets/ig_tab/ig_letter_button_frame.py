@@ -10,7 +10,7 @@ from utilities.TypeChecking.letter_lists import all_letters
 
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
+    from widgets.main_widget.main_widget import MainWidget
 
 
 class IGLetterButtonFrame(QFrame):

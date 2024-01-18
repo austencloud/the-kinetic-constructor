@@ -38,7 +38,7 @@ from utilities.letter_engine import LetterEngine
 from data.rules import beta_ending_letters, alpha_ending_letters, gamma_ending_letters
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
+    from widgets.main_widget.main_widget import MainWidget
 
 
 class Pictograph(QGraphicsScene):

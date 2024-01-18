@@ -6,7 +6,7 @@ from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
 from objects.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
+    from widgets.main_widget.main_widget import MainWidget
     from widgets.option_picker_tab.option_picker_scroll_area import (
         OptionPickerScrollArea,
     )

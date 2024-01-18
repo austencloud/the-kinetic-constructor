@@ -18,7 +18,7 @@ from ..pictograph_scroll_area.scroll_area import ScrollArea
 
 if TYPE_CHECKING:
     from widgets.main_tab_widget import MainTabWidget
-    from ..main_widget import MainWidget
+    from ..main_widget.main_widget import MainWidget
 
 
 class IGTab(QWidget):

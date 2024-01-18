@@ -19,7 +19,7 @@ from .scroll_area_filter_manager import ScrollAreaFilterTabManager
 if TYPE_CHECKING:
     from ..ig_tab.ig_tab import IGTab
     from ..option_picker_tab.option_picker_tab import OptionPickerTab
-    from ..main_widget import MainWidget
+    from ..main_widget.main_widget import MainWidget
 
 
 class ScrollArea(QScrollArea):

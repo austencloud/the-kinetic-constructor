@@ -21,7 +21,7 @@ from constants import (
 from utilities.TypeChecking.TypeChecking import Letters
 
 if TYPE_CHECKING:
-    from widgets.main_widget import MainWidget
+    from widgets.main_widget.main_widget import MainWidget
 
 
 class MainLetterLoader:
