@@ -13,7 +13,7 @@ from data.letter_engine_data import (
 from widgets.attr_panel import AttrPanel
 
 if TYPE_CHECKING:
-    from widgets.pictograph_scroll_area.scroll_area import ScrollArea
+    from widgets.scroll_area.scroll_area import ScrollArea
 
 
 class FilterTab(QTabWidget):
