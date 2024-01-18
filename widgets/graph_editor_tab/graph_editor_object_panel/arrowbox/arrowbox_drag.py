@@ -85,7 +85,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
             END_LOC: self.end_loc,
         }
 
-        self.pictograph.motions[self.color].update_attributes(motion_dict)
+        self.pictograph.motions[self.color].attr_manager.update_attributes(motion_dict)
         self.pictograph.arrows[self.color] = arrow
         self.pictograph.ghost_arrows[self.color] = self.ghost
         arrow.ghost = self.ghost
@@ -133,7 +133,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
             TURNS: self.turns,
         }
         self.pictograph.arrows[self.color].update_arrow(arrow_dict)
-        self.pictograph.motions[self.color].update_attributes(motion_dict)
+        self.pictograph.motions[self.color].attr_manager.update_attributes(motion_dict)
         self.pictograph.motions[self.color].arrow = self.pictograph.arrows[self.color]
         self.ghost = self.pictograph.ghost_arrows[self.color]
         self.ghost.loc = new_location

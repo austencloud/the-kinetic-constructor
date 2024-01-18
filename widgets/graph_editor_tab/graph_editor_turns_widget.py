@@ -119,29 +119,6 @@ class GraphEditorTurnsWidget(TurnsWidget):
 
     ### CALLBACKS ###
 
-    def _add_turn_callback(self) -> None:
-        motion = self.attr_box.pictograph.motions[self.attr_box.color]
-        if motion:
-            motion.add_turn()
-            self.attr_box.update_attr_box(motion)
-
-    def _subtract_turn_callback(self) -> None:
-        motion = self.attr_box.pictograph.motions[self.attr_box.color]
-        if motion:
-            motion.subtract_turn()
-            self.attr_box.update_attr_box(motion)
-
-    def _add_half_turn_callback(self) -> None:
-        motion = self.attr_box.pictograph.motions[self.attr_box.color]
-        if motion:
-            motion.add_half_turn()
-            self.attr_box.update_attr_box(motion)
-
-    def _subtract_half_turn_callback(self) -> None:
-        motion = self.attr_box.pictograph.motions[self.attr_box.color]
-        if motion:
-            motion.subtract_half_turn()
-            self.attr_box.update_attr_box(motion)
 
     ### UPDATE METHODS ###
 
@@ -159,33 +136,6 @@ class GraphEditorTurnsWidget(TurnsWidget):
             self.clock_left.clear()
             self.clock_right.clear()
 
-    def _update_turnbox(self, turns) -> None:
-        turns_str = str(turns)
-        for i in range(self.turns_display_manager.turns_display.count()):
-            if self.turns_display_manager.turns_display.itemText(i) == turns_str:
-                self.turns_display_manager.turns_display.setCurrentIndex(i)
-                return
-            elif turns == None:
-                self.turns_display_manager.turns_display.setCurrentIndex(-1)
-
-    def _update_turns(self, index: int) -> None:
-        turns = str(index)
-        if turns == "0" or turns == "1" or turns == "2" or turns == "3":
-            motion: Motion = self.attr_box.pictograph.motions[self.attr_box.color]
-            if motion and motion.arrow:
-                if int(turns) != motion.turns:
-                    motion.set_motion_turns(int(turns))
-                    self.attr_box.update_attr_box(motion)
-                    self.attr_box.pictograph.update()
-        elif turns == "0.5" or turns == "1.5" or turns == "2.5":
-            motion: Motion = self.attr_box.pictograph.motions[self.attr_box.color]
-            if motion:
-                if float(turns) != motion.turns:
-                    motion.set_motion_turns(float(turns))
-                    self.attr_box.update_attr_box(motion)
-                    self.attr_box.pictograph.update()
-        else:
-            self.turns_display_manager.turns_display.setCurrentIndex(-1)
 
     ### EVENT HANDLERS ###
 

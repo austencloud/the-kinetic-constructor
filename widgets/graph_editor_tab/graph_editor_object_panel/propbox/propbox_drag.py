@@ -69,7 +69,7 @@ class PropBoxDrag(BaseObjectBoxDrag):
             START_ORI: self.orientation,
         }
 
-        self.pictograph.motions[self.color].update_attributes(motion_dict)
+        self.pictograph.motions[self.color].attr_manager.update_attributes(motion_dict)
         self.placed_prop.motion.arrow.loc = self.location
         self.placed_prop.motion.start_loc = self.location
         self.placed_prop.motion.end_loc = self.location
@@ -122,7 +122,7 @@ class PropBoxDrag(BaseObjectBoxDrag):
             START_ORI: self.orientation,
         }
 
-        self.pictograph.motions[self.color].update_attributes(motion_dict)
+        self.pictograph.motions[self.color].attr_manager.update_attributes(motion_dict)
 
         self.pictograph.state_updater.update_pictograph()
         self.move_to_cursor(self.propbox.view.mapFromGlobal(self.pos()))
@@ -171,7 +171,7 @@ class PropBoxDrag(BaseObjectBoxDrag):
                         START_ORI: self.orientation,
                     }
 
-                    self.pictograph.motions[self.color].update_attributes(motion_dict)
+                    self.pictograph.motions[self.color].attr_manager.update_attributes(motion_dict)
                     self.arrow.motion = self.pictograph.motions[self.color]
                     self.pictograph.motions[self.color].arrow = self.arrow
                 pos_in_main_window = self.propbox.view.mapToGlobal(event_pos)
@@ -179,7 +179,7 @@ class PropBoxDrag(BaseObjectBoxDrag):
                     pos_in_main_window
                 )
                 scene_pos = self.pictograph.view.mapToScene(view_pos_in_pictograph)
-                new_location = self.pictograph.get_closest_hand_point(scene_pos)[0]
+                new_location = self.pictograph.grid.get_closest_hand_point(scene_pos)[0]
 
                 if self.previous_drag_location != new_location and new_location:
                     self.previous_drag_location = new_location

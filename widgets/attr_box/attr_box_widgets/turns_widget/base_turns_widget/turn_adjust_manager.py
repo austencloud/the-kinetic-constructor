@@ -100,7 +100,7 @@ class TurnAdjustManager:
         """Update motion's turns and rotation properties based on new turn value."""
         if motion.motion_type in [DASH, STATIC]:
             self._handle_static_dash_motion(motion, new_turns)
-        motion.set_motion_turns(new_turns)
+        motion.turns_manager.set_motion_turns(new_turns)
 
     def _handle_static_dash_motion(self, motion: "Motion", new_turns: Turns) -> None:
         """Handle specific logic for static or dash motion types."""

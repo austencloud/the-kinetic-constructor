@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import (
         ArrowBox,
     )
+from objects.motion.motion_turn_manager import MotionTurnsManager
 
 
 class Motion:
@@ -36,46 +37,27 @@ class Motion:
         self.manipulator = MotionManipulator(self)
         self.attr_manager = MotionAttrManager(self)
         self.ori_calculator = MotionOriCalculator(self)
+        self.turns_manager = MotionTurnsManager(self)
+        self.color: Colors = motion_dict.get(COLOR)
+        self.turns: Turns = motion_dict.get(TURNS)
         self.init_attributes()
-        self.color = motion_dict.get(COLOR)
-        self.turns = motion_dict.get(TURNS)
 
     def init_attributes(self) -> None:
-        self.color: Colors = None
-        self.arrow: "Arrow" = None
-        self.prop: "Prop" = None
-        self.motion_type: MotionTypes = None
-        self.turns: Turns = None
-        self.start_loc: Locations = None
-        self.start_ori: Orientations = None
-        self.end_loc: Locations = None
-        self.end_ori: Orientations = None
-        self.prop_rot_dir: PropRotDirs = None
-        self.lead_state: LeadStates = None
-
-    ### SETUP ###
-
-    def update_attributes(self, motion_dict: Dict[str, str]) -> None:
-        for attribute, value in motion_dict.items():
-            if value is not None:
-                setattr(self, attribute, value)
-        if self.motion_type:
-            self.end_ori: Orientations = self.ori_calculator.get_end_ori()
+        self.arrow: "Arrow"
+        self.prop: "Prop"
+        self.motion_type: MotionTypes
+        self.start_loc: Locations
+        self.start_ori: Orientations
+        self.end_loc: Locations
+        self.end_ori: Orientations
+        self.prop_rot_dir: PropRotDirs
+        self.lead_state: LeadStates
 
     ### UPDATE ###
 
-
-    def clear_attributes(self) -> None:
-        self.start_loc = None
-        self.end_loc = None
-        self.turns = None
-        self.motion_type = None
-        self.start_ori = None
-        self.end_ori = None
-
     def update_motion(self, motion_dict=None) -> None:
         if motion_dict:
-            self.update_attributes(motion_dict)
+            self.attr_manager.update_attributes(motion_dict)
         arrow_dict = {
             LOC: self.arrow.arrow_location_manager.get_arrow_location(),
             MOTION_TYPE: self.motion_type,
@@ -91,17 +73,6 @@ class Motion:
 
     ### GETTERS ###
 
-    def get_attributes(self) -> Dict[str, str]:
-        return {
-            COLOR: self.color,
-            MOTION_TYPE: self.motion_type,
-            TURNS: self.turns,
-            PROP_ROT_DIR: self.prop_rot_dir,
-            START_LOC: self.start_loc,
-            END_LOC: self.end_loc,
-            START_ORI: self.start_ori,
-            END_ORI: self.end_ori,
-        }
 
     def get_other_arrow(self) -> "Arrow":
         return (
@@ -109,29 +80,6 @@ class Motion:
             if self.arrow.color == BLUE
             else self.scene.arrows[BLUE]
         )
-
-    def set_motion_turns(self, turns: Turns) -> None:
-        self.turns = turns
-        self.arrow.turns = turns
-
-    def adjust_motion_turns(self, adjustment: float) -> None:
-        new_turns = max(0, min(3, self.arrow.turns + adjustment))
-
-        if new_turns != self.arrow.turns:
-            self.turns = new_turns
-            self.arrow.turns = new_turns
-
-    def add_half_turn(self) -> None:
-        self.adjust_motion_turns(0.5)
-
-    def subtract_half_turn(self) -> None:
-        self.adjust_motion_turns(-0.5)
-
-    def add_turn(self) -> None:
-        self.adjust_motion_turns(1)
-
-    def subtract_turn(self) -> None:
-        self.adjust_motion_turns(-1)
 
     ### FLAGS ###
 
@@ -146,8 +94,3 @@ class Motion:
 
     def is_dash_or_static(self) -> bool:
         return self.motion_type in [DASH, STATIC]
-
-    def set_motion_turns(self, turns: Turns) -> None:
-        self.turns = turns
-        self.arrow.turns = turns
-        self.arrow.ghost.turns = turns

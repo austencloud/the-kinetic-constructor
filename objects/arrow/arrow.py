@@ -20,13 +20,13 @@ from utilities.TypeChecking.TypeChecking import (
 
 
 if TYPE_CHECKING:
-    from ..pictograph.pictograph import Pictograph
     from ..motion.motion import Motion
     from .ghost_arrow import GhostArrow
     from ..prop.prop import Prop
     from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import (
         ArrowBox,
     )
+    from widgets.pictograph.pictograph import Pictograph
 
 
 class Arrow(GraphicalObject):
@@ -45,7 +45,7 @@ class Arrow(GraphicalObject):
         self.prop: Prop = None
         self.is_ghost: bool = False
 
-    def setup_arrow(self, arrow_dict):
+    def setup_arrow(self, arrow_dict) -> None:
         self.motion_type = arrow_dict[MOTION_TYPE]
         self.turns = arrow_dict[TURNS]
 

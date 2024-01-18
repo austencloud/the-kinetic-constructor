@@ -2,8 +2,11 @@ from typing import TYPE_CHECKING, Dict, Union
 from constants import (
     BLUE,
     CLOCKWISE,
+    COLOR,
     COUNTER_CLOCKWISE,
     DASH,
+    END_LOC,
+    END_ORI,
     MOTION_TYPE,
     NO_ROT,
     OPP,
@@ -11,9 +14,12 @@ from constants import (
     PROP_ROT_DIR,
     RED,
     SAME,
+    START_LOC,
+    START_ORI,
     STATIC,
     TURNS,
 )
+from utilities.TypeChecking.TypeChecking import Orientations
 from widgets.filter_tab import FilterTab
 
 if TYPE_CHECKING:
@@ -25,9 +31,17 @@ class MotionAttrManager:
     def __init__(self, motion: "Motion") -> None:
         self.motion = motion
 
+    def update_attributes(self, motion_dict: Dict[str, str]) -> None:
+        for attribute, value in motion_dict.items():
+            if value is not None:
+                setattr(self, attribute, value)
+        if self.motion.motion_type:
+            self.motion.end_ori: Orientations = self.motion.ori_calculator.get_end_ori()
+
+
     def update_motion_attributes_from_filter_tab(
         self, filter_tab: "FilterTab", pictograph_dict: Dict
-    ):
+    ) -> None:
         for box in filter_tab.motion_type_attr_panel.boxes:
             if (
                 box.attribute_type == MOTION_TYPE
@@ -91,3 +105,15 @@ class MotionAttrManager:
             self.motion.prop.ori = self.motion.end_ori
             self.motion.prop.loc = self.motion.end_loc
             self.motion.prop.axis = self.motion.prop.get_axis_from_ori()
+
+    def get_attributes(self) -> Dict[str, str]:
+        return {
+            COLOR: self.motion.color,
+            MOTION_TYPE: self.motion.motion_type,
+            TURNS: self.motion.turns,
+            PROP_ROT_DIR: self.motion.prop_rot_dir,
+            START_LOC: self.motion.start_loc,
+            END_LOC: self.motion.end_loc,
+            START_ORI: self.motion.start_ori,
+            END_ORI: self.motion.end_ori,
+        }
