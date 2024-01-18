@@ -1,7 +1,7 @@
 from constants import LEAD_STATE, LEADING, TRAILING
 from typing import TYPE_CHECKING, List
 from utilities.TypeChecking.TypeChecking import LeadStates, Turns
-from ..attr_box.lead_state_attr_box import AttrBox
+from ..attr_box.attr_box import AttrBox
 from .base_attr_panel import BaseAttrPanel
 
 if TYPE_CHECKING:

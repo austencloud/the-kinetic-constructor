@@ -12,12 +12,9 @@ from constants import (
     RED_TURNS,
     STATIC,
 )
-from ..attr_box.color_attr_box import ColorAttrBox
-from ..attr_box.lead_state_attr_box import LeadStateAttrBox
-from ..attr_box.motion_type_attr_box import MotionTypeAttrBox
-
 
 if TYPE_CHECKING:
+    from widgets.attr_box.attr_box import AttrBox
     from widgets.filter_tab import FilterTab
     from widgets.graph_editor_tab.graph_editor_tab import GraphEditorTab
     from widgets.ig_tab.ig_tab import IGTab
@@ -26,7 +23,7 @@ if TYPE_CHECKING:
 class BaseAttrPanel(QFrame):
     def __init__(self, filter_tab: "FilterTab") -> None:
         super().__init__()
-        self.boxes: List[MotionTypeAttrBox, ColorAttrBox, LeadStateAttrBox] = []
+        self.boxes: AttrBox = []
         self.filter_tab = filter_tab
 
     def setup_layouts(self) -> None:

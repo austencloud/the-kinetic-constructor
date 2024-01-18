@@ -16,18 +16,15 @@ from utilities.TypeChecking.letter_lists import (
 from .....buttons.adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
+    from widgets.attr_box.attr_box import AttrBox
     from objects.motion.motion import Motion
     from .base_turns_widget import TurnsWidget
-    from ....color_attr_box import ColorAttrBox
-    from ....lead_state_attr_box import LeadStateAttrBox
-    from ....motion_type_attr_box import MotionTypeAttrBox
+
 
 
 class TurnAdjustManager:
     def __init__(self, attr_box, turns_widget: "TurnsWidget") -> None:
-        self.attr_box: Union[
-            "ColorAttrBox", "MotionTypeAttrBox", "LeadStateAttrBox"
-        ] = attr_box
+        self.attr_box: "AttrBox" = attr_box
         self.turns_widget = turns_widget
 
     ### SETUP ###

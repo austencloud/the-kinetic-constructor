@@ -4,7 +4,7 @@ from constants import (
     RED,
 )
 from typing import TYPE_CHECKING, List
-from widgets.attr_box.base_attr_box import AttrBox
+from widgets.attr_box.attr_box import AttrBox
 from widgets.attr_panel.base_attr_panel import BaseAttrPanel
 
 

@@ -1,17 +1,17 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel, QHBoxLayout, QFrame
 from PyQt6.QtCore import Qt
+
 from .attr_box.attr_box_widgets.base_attr_box_widget import AttrBoxWidget
 if TYPE_CHECKING:
-    from .attr_box.lead_state_attr_box import LeadStateAttrBox
-    from .attr_box.motion_type_attr_box import MotionTypeAttrBox
-    from .attr_box.color_attr_box import ColorAttrBox
+    from widgets.attr_box.attr_box import AttrBox
+
 from constants import BLUE, COLOR, LEAD_STATE, MOTION_TYPE, PRO, ANTI, DASH, STATIC
 
 class HeaderWidget(AttrBoxWidget):
     def __init__(self, attr_box) -> None:
         super().__init__(attr_box)
-        self.attr_box: Union["LeadStateAttrBox", "MotionTypeAttrBox", "ColorAttrBox"] = attr_box
+        self.attr_box: "AttrBox" = attr_box
         self.setMinimumWidth(self.attr_box.width())
         self.header_label: QLabel = None
         self.separator: QFrame = self.create_separator()
@@ -27,6 +27,7 @@ class HeaderWidget(AttrBoxWidget):
             text = self.attr_box.lead_state.capitalize()
             self.header_label = self._setup_header_label(text)
             self._setup_layout()
+            
 
         elif self.attr_box.attribute_type == MOTION_TYPE:
             text = self.attr_box.motion_type.capitalize()

@@ -2,7 +2,7 @@ from constants import ANTI, DASH, MOTION_TYPE, PRO, SHIFT, STATIC
 from typing import TYPE_CHECKING, List
 
 from utilities.TypeChecking.TypeChecking import MotionTypes
-from widgets.attr_box.base_attr_box import AttrBox
+from widgets.attr_box.attr_box import AttrBox
 from .base_attr_panel import BaseAttrPanel
 
 if TYPE_CHECKING:
