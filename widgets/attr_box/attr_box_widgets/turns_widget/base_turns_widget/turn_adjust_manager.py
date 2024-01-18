@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
-from typing import TYPE_CHECKING, List, Union
+from typing import TYPE_CHECKING, List
 from constants import *
 from objects.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.TypeChecking import (

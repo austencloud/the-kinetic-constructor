@@ -25,8 +25,6 @@ from data.letter_engine_data import letter_type_motion_type_map
 
 if TYPE_CHECKING:
     from widgets.filter_tab import FilterTab
-    from widgets.graph_editor_tab.graph_editor_tab import GraphEditorTab
-    from widgets.ig_tab.ig_tab import IGTab
 
 ATTRIBUTES_MAP = {
     MOTION_TYPE: [PRO, ANTI, DASH, STATIC],

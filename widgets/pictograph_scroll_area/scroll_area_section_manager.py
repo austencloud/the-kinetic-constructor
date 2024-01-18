@@ -7,7 +7,7 @@ from ..filter_tab import FilterTab
 if TYPE_CHECKING:
     from .scroll_area import ScrollArea
 
-from PyQt6.QtWidgets import QLabel, QGridLayout, QSizePolicy
+from PyQt6.QtWidgets import QLabel, QGridLayout
 
 
 class ScrollAreaSectionManager:
