@@ -11,9 +11,9 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, pyqtSignal
 from constants import IG_PICTOGRAPH
 from utilities.TypeChecking.TypeChecking import Letters
+from widgets.scroll_area.scroll_area import ScrollArea
 from .ig_letter_button_frame import IGLetterButtonFrame
-from .ig_scroll.ig_pictograph import IGPictograph
-from ..pictograph_scroll_area.scroll_area import ScrollArea
+from .ig_pictograph import IGPictograph
 
 
 if TYPE_CHECKING:

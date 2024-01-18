@@ -5,12 +5,9 @@ from objects.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import Qt
 
 from utilities.TypeChecking.TypeChecking import Colors
-from ..ig_scroll.wasd_adjustment_manager.wasd_adjustment_manager import (
-    WASD_AdjustmentManager,
-)
-
+from widgets.ig_tab.wasd_adjustment_manager.wasd_adjustment_manager import WASD_AdjustmentManager
 if TYPE_CHECKING:
-    from ...pictograph_scroll_area.scroll_area import ScrollArea
+    from widgets.scroll_area.scroll_area import ScrollArea
 
 
 class IGPictograph(Pictograph):
@@ -20,43 +17,6 @@ class IGPictograph(Pictograph):
         self.ig_scroll_area = scroll_area
         self.selected_arrow = None
         self.wasd_adjustment_manager = WASD_AdjustmentManager(self)
-
-    def needs_displaying(self) -> bool:
-        """
-        Determines whether the pictograph should be displayed based on
-        the current selection in the parent tab.
-
-        Returns:
-            bool: True if the pictograph's associated letter is in the current selection.
-        """
-        # Assuming you have a way to access the currently selected letters from the parent tab
-        current_selected_letters = set(self.ig_scroll_area.parent_tab.selected_letters)
-        pictograph_letter = (
-            self.letter
-        )  # Assuming 'self.letter' holds the letter of this pictograph
-
-        return pictograph_letter in current_selected_letters
-
-    def determine_leading_color(
-        self, red_start, red_end, blue_start, blue_end
-    ) -> Colors:
-        if red_start == blue_end:
-            return RED
-        elif blue_start == red_end:
-            return BLUE
-        return None
-
-    def swap_selected_arrow(self):
-        if self.selected_arrow == self.arrows[RED]:
-            self.arrows[RED].setSelected(False)
-            self.selected_arrow = self.arrows[BLUE]
-            self.arrows[BLUE].setSelected(True)
-        elif self.selected_arrow == self.arrows[BLUE]:
-            self.arrows[BLUE].setSelected(False)
-            self.selected_arrow = self.arrows[RED]
-            self.arrows[RED].setSelected(True)
-        else:
-            print("No arrow selected")
 
 
 class IGPictographView(QGraphicsView):
@@ -76,7 +36,6 @@ class IGPictographView(QGraphicsView):
             - self.ig_pictograph.ig_scroll_area.display_manager.SPACING
             - 10
         )
-
         self.setMinimumWidth(view_width)
         self.setMaximumWidth(view_width)
         self.setMinimumHeight(view_width)

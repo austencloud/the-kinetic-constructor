@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Literal, Set
 from constants import IG_PICTOGRAPH, OPTION
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictograph
+from widgets.ig_tab.ig_pictograph import IGPictograph
 from widgets.option_picker_tab.option import Option
 
 if TYPE_CHECKING:

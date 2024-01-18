@@ -4,8 +4,8 @@ from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import (
     Letters,
 )
-from widgets.pictograph_scroll_area.scroll_area_section import ScrollAreaSection
-from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
+from widgets.scroll_area.scroll_area_section import ScrollAreaSection
+from ..ig_tab.ig_pictograph import IGPictograph
 
 if TYPE_CHECKING:
     from .scroll_area import ScrollArea
@@ -20,7 +20,6 @@ class ScrollAreaDisplayManager:
 
     def order_and_display_pictographs(self) -> None:
         ordered_pictographs = self.get_ordered_pictographs()
-        # self.clear_layout()
         for index, (key, ig_pictograph) in enumerate(ordered_pictographs.items()):
             self.add_pictograph_to_layout(ig_pictograph, index)
 

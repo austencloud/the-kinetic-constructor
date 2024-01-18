@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
 
 from utilities.TypeChecking.TypeChecking import LetterTypeNums
 from widgets.filter_tab import FilterTab
-from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
+from ..ig_tab.ig_pictograph import IGPictograph
 
 if TYPE_CHECKING:
     from .scroll_area import ScrollArea

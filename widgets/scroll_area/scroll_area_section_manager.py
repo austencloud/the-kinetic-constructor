@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Dict, List
 from Enums import LetterNumberType
-from widgets.pictograph_scroll_area.scroll_area_section import ScrollAreaSection
 from utilities.TypeChecking.TypeChecking import LetterTypeNums, Letters
+from widgets.scroll_area.scroll_area_section import ScrollAreaSection
 from ..filter_tab import FilterTab
 
 if TYPE_CHECKING:

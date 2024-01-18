@@ -80,7 +80,7 @@ class PictographInit:
             StartPositionBeatView,
         )
         from widgets.sequence_widget.beat_frame.beat import BeatView
-        from widgets.ig_tab.ig_scroll.ig_pictograph import IGPictographView
+        from widgets.ig_tab.ig_pictograph import IGPictographView
 
         if graph_type == MAIN:
             view = GraphEditorPictographView(self.pictograph)

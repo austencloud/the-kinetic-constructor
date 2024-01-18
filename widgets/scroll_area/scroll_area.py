@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Dict, Union
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt, QTimer
 from utilities.TypeChecking.TypeChecking import Letters
-from ..ig_tab.ig_scroll.ig_pictograph import IGPictograph
+from ..ig_tab.ig_pictograph import IGPictograph
 
 from .scroll_area_pictograph_factory import ScrollAreaPictographFactory
 from .scroll_area_section_manager import ScrollAreaSectionManager
