@@ -1,8 +1,9 @@
 import json
 import re
 from typing import TYPE_CHECKING, Dict, Optional, Tuple, Union
+
 from ..arrow import Arrow
-from ..arrow_placement_manager.adjustment_key_generator import AdjustmentKeyGenerator
+from .managers.adjustment_key_generator import AdjustmentKeyGenerator
 from utilities.TypeChecking.letter_lists import (
     Type1_hybrid_letters,
     Type1_letters,
@@ -13,10 +14,10 @@ from utilities.TypeChecking.letter_lists import (
 )
 
 if TYPE_CHECKING:
-    from ..arrow_placement_manager.main_arrow_placement_manager import (
+    from .managers.main_arrow_placement_manager import (
         ArrowPlacementManager,
     )
-    from ...pictograph.pictograph import Pictograph
+    from widgets.pictograph.pictograph import Pictograph
 
 
 class SpecialArrowPlacementManager:

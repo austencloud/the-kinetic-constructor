@@ -3,14 +3,14 @@ from constants import *
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Literal, Tuple
 
-from objects.arrow.arrow_placement_manager.adjustment_key_generator import (
+from objects.arrow.arrow_placement_manager.managers.adjustment_key_generator import (
     AdjustmentKeyGenerator,
 )
-from objects.arrow.arrow_placement_manager.directional_tuple_generator import (
+from objects.arrow.arrow_placement_manager.managers.directional_tuple_generator import (
     DirectionalTupleGenerator,
 )
 from .default_arrow_placement_manager import DefaultArrowPlacementManager
-from .special_arrow_placement_manager import SpecialArrowPlacementManager
+from ..special_arrow_placement_manager import SpecialArrowPlacementManager
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import Colors, Locations
 

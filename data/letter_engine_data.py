@@ -22,6 +22,15 @@ motion_type_letter_groups = {
     "static_vs_static": "αβΓ",
 }
 
+letter_type_to_letter_map = {
+    "Type1": "ADGJMPSBEHKNQTCFILORUV",
+    "Type2": "WYΣθXZΔΩ",
+    "Type3": ["W-", "Y-", "Σ-", "θ-", "X-", "Z-", "Δ-", "Ω-"],
+    "Type4": "ΦΨΛ",
+    "Type5": ["Φ-", "Ψ-", "Λ-"],
+    "Type6": "αβΓ",
+}
+
 motion_type_combinations = {
     (PRO, PRO): "pro_vs_pro",
     (PRO, ANTI): "pro_vs_anti",

@@ -28,6 +28,9 @@ from constants import (
 
 from objects.motion.motion import Motion
 from objects.prop.prop import Prop
+from objects.prop.prop_placement_manager.beta_prop_direction_calculator import (
+    BetaPropDirectionCalculator,
+)
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Directions
 from utilities.TypeChecking.prop_types import (
@@ -38,17 +41,16 @@ from utilities.TypeChecking.prop_types import (
     small_unilateral_prop_types,
 )
 
+from utilities.TypeChecking.prop_types import (
+    non_strictly_placed_props,
+    strictly_placed_props,
+)
+
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
-    from .by_letter_type.Type1_prop_positioner import Type1PropPositioner
-    from .by_letter_type.Type2_prop_positioner import Type2PropPositioner
-    from .by_letter_type.Type3_prop_positioner import Type3PropPositioner
-    from .by_letter_type.Type4_prop_positioner import Type4PropPositioner
-    from .by_letter_type.Type5_prop_positioner import Type5PropPositioner
-    from .by_letter_type.Type6_prop_positioner import Type6PropPositioner
 
 
-class BasePropPositioner:
+class PropPlacementManager:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
         self.letters: Dict[
@@ -56,6 +58,7 @@ class BasePropPositioner:
         ] = pictograph.main_widget.letters
         self.position_offsets_cache = {}
         self.location_points_cache = {}
+        self.direction_calculator = BetaPropDirectionCalculator(self)
 
     def update_prop_positions(self) -> None:
         self.red_motion = self.pictograph.motions[RED]
@@ -67,7 +70,8 @@ class BasePropPositioner:
         self.props = self.pictograph.props.values()
         self.ghost_props = self.pictograph.ghost_props.values()
 
-        self.current_letter = self.pictograph.letter
+        self.letter = self.pictograph.letter
+        self.letter_type = self.pictograph.letter_type
         self.prop_type_counts = self._count_prop_types()
 
         for prop in self.props:
@@ -77,6 +81,122 @@ class BasePropPositioner:
 
         if self.pictograph.has_props_in_beta():
             self._reposition_beta_props()
+
+    def reposition_G_H(self) -> None:
+        further_direction = self.direction_calculator.determine_translation_direction(
+            self.red_motion
+        )
+        other_direction = self.direction_calculator.get_opposite_direction(
+            further_direction
+        )
+        new_red_pos = self._calculate_new_position(
+            self.red_prop.pos(), further_direction
+        )
+        new_blue_pos = self._calculate_new_position(
+            self.blue_prop.pos(), other_direction
+        )
+        self.red_prop.setPos(new_red_pos)
+        self.blue_prop.setPos(new_blue_pos)
+
+    def reposition_I(self) -> None:
+        pro_prop = (
+            self.red_prop if self.red_motion.motion_type == PRO else self.blue_prop
+        )
+        anti_prop = (
+            self.red_prop if self.red_motion.motion_type == ANTI else self.blue_prop
+        )
+        pro_motion = self.pictograph.motions[pro_prop.color]
+        pro_direction = self._determine_translation_direction(pro_motion)
+        anti_direction = self._get_opposite_direction(pro_direction)
+        new_pro_position = self._calculate_new_position(pro_prop.pos(), pro_direction)
+        new_anti_position = self._calculate_new_position(
+            anti_prop.pos(), anti_direction
+        )
+        pro_prop.setPos(new_pro_position)
+        anti_prop.setPos(new_anti_position)
+
+    def reposition_J_K_L(self) -> None:
+        red_direction = self.direction_calculator.determine_translation_direction(
+            self.red_motion
+        )
+        blue_direction = self.direction_calculator.determine_translation_direction(
+            self.blue_motion
+        )
+
+        if red_direction and blue_direction:
+            self._move_prop(self.red_prop, red_direction)
+            self._move_prop(self.blue_prop, blue_direction)
+
+    def reposition_Y_Z(self) -> None:
+        shift = self.red_motion if self.red_motion.is_shift() else self.blue_motion
+        static_motion = (
+            self.red_motion if self.red_motion.is_static() else self.blue_motion
+        )
+
+        direction = self._determine_translation_direction(shift)
+        if direction:
+            self._move_prop(
+                next(prop for prop in self.props if prop.color == shift.color),
+                direction,
+            )
+            self._move_prop(
+                next(prop for prop in self.props if prop.color == static_motion.color),
+                self._get_opposite_direction(direction),
+            )
+
+    def reposition_Y_dash_Z_dash(self) -> None:
+        shift = self.red_motion if self.red_motion.is_shift() else self.blue_motion
+        dash = self.red_motion if self.red_motion.is_dash() else self.blue_motion
+
+        direction = self._determine_translation_direction(shift)
+        if direction:
+            self._move_prop(
+                next(prop for prop in self.props if prop.color == shift.color),
+                direction,
+            )
+            self._move_prop(
+                next(prop for prop in self.props if prop.color == dash.color),
+                self._get_opposite_direction(direction),
+            )
+
+    def reposition_Ψ(self) -> None:
+        if self.red_prop.prop_type in non_strictly_placed_props:
+            direction = self.direction_calculator._get_translation_dir_for_non_shift(
+                self.red_prop
+            )
+            if direction:
+                self._move_prop(self.red_prop, direction)
+                self._move_prop(
+                    self.blue_prop,
+                    self.direction_calculator.get_opposite_direction(direction),
+                )
+
+        elif self.red_prop.prop_type in strictly_placed_props:
+            self._set_prop_to_default_location(self.red_prop)
+
+    def reposition_Ψ_dash(self) -> None:
+        if self.red_prop.prop_type in non_strictly_placed_props:
+            direction = self.direction_calculator._get_translation_dir_for_non_shift(
+                self.red_prop
+            )
+            if direction:
+                self._move_prop(self.red_prop, direction)
+                self._move_prop(self.blue_prop, self._get_opposite_direction(direction))
+
+        elif self.red_prop.prop_type in strictly_placed_props:
+            self._set_prop_to_default_location()(self.red_prop)
+
+    def reposition_β(self) -> None:
+        if self.red_prop.prop_type in non_strictly_placed_props:
+            direction = self.direction_calculator._get_translation_dir_for_non_shift(
+                self.red_prop
+            )
+            if direction:
+                self._move_prop(self.red_prop, direction)
+                self._move_prop(self.blue_prop, self._get_opposite_direction(direction))
+
+        elif self.red_prop.prop_type in strictly_placed_props:
+            self._set_prop_to_default_location()(self.red_prop)
 
     def _count_prop_types(self) -> Dict[str, int]:
         return {
@@ -110,36 +230,27 @@ class BasePropPositioner:
         ][strict_key]
         return location_points
 
-    def _reposition_small_bilateral_props(
-        self: Union[
-            "Type1PropPositioner",
-            "Type2PropPositioner",
-            "Type3PropPositioner",
-            "Type4PropPositioner",
-            "Type5PropPositioner",
-            "Type6PropPositioner",
-        ]
-    ) -> None:
+    def _reposition_small_bilateral_props(self) -> None:
         if self.pictograph.has_hybrid_orientations():
             for prop in self.props:
                 self._set_prop_to_default_location(prop)
 
         else:
-            if self.current_letter in ["G", "H"]:
+            if self.letter in ["G", "H"]:
                 self.reposition_G_H()
-            elif self.current_letter == "I":
+            elif self.letter == "I":
                 self.reposition_I()
-            elif self.current_letter in ["J", "K", "L"]:
+            elif self.letter in ["J", "K", "L"]:
                 self.reposition_J_K_L()
-            elif self.current_letter in ["Y", "Z"]:
+            elif self.letter in ["Y", "Z"]:
                 self.reposition_Y_Z()
-            elif self.current_letter == "β":
+            elif self.letter == "β":
                 self.reposition_β()
-            elif self.current_letter in ["Y-", "Z-"]:
+            elif self.letter in ["Y-", "Z-"]:
                 self.reposition_Y_dash_Z_dash()
-            elif self.current_letter == "Ψ":
+            elif self.letter == "Ψ":
                 self.reposition_Ψ()
-            elif self.current_letter == "Ψ-":
+            elif self.letter == "Ψ-":
                 self.reposition_Ψ_dash()
 
     def _move_prop(self, prop: Prop, direction: Directions) -> None:
@@ -181,8 +292,8 @@ class BasePropPositioner:
                 (
                     red_direction,
                     blue_direction,
-                ) = self._determine_translation_direction_for_unilateral_props(
-                    self.red_motion, self.blue_motion
+                ) = self.direction_calculator.determine_direction_for_unilateral_props(
+                    self.red_motion
                 )
                 self._move_prop(self.red_prop, red_direction)
                 self._move_prop(self.blue_prop, blue_direction)
@@ -192,7 +303,7 @@ class BasePropPositioner:
 
     def _reposition_big_props(
         self, big_unilateral_props: List[Prop], big_bilateral_props: List[Prop]
-    ):
+    ) -> None:
         big_props = big_unilateral_props + big_bilateral_props
         if self.pictograph.has_non_hybrid_orientations():
             for prop in big_props:
@@ -200,8 +311,8 @@ class BasePropPositioner:
                 (
                     red_direction,
                     blue_direction,
-                ) = self._determine_translation_direction_for_unilateral_props(
-                    self.red_motion, self.blue_motion
+                ) = self.direction_calculator.determine_direction_for_unilateral_props(
+                    self.red_motion
                 )
                 self._move_prop(self.red_prop, red_direction)
                 self._move_prop(self.blue_prop, blue_direction)
@@ -209,111 +320,7 @@ class BasePropPositioner:
             for prop in big_props:
                 self._set_prop_to_default_location(prop)
 
-    def _determine_translation_direction_for_unilateral_props(
-        self, red_motion: Motion, blue_motion: Motion
-    ) -> Tuple[Directions]:
-        """Determine the translation direction for big unilateral props based on the motion type, start location, end location."""
-        red_direction = self._get_direction_for_motion(red_motion)
-        blue_direction = self._get_opposite_direction(red_direction)
-
-        # Ensure that both directions are set, defaulting to None if necessary
-        return (red_direction or None, blue_direction or None)
-
-    def _get_direction_for_motion(self, motion: Motion) -> Directions | None:
-        """Determine the direction based on a single motion."""
-        if motion.end_ori in [
-            IN,
-            OUT,
-        ] and motion.motion_type in [
-            PRO,
-            ANTI,
-            STATIC,
-        ]:
-            if motion.end_loc in [NORTH, SOUTH]:
-                return RIGHT if motion.start_loc == EAST else LEFT
-            elif motion.end_loc in [EAST, WEST]:
-                return DOWN if motion.start_loc == SOUTH else UP
-        elif motion.end_ori in [
-            CLOCK,
-            COUNTER,
-        ] and motion.motion_type in [
-            PRO,
-            ANTI,
-            STATIC,
-        ]:
-            if motion.end_loc in [NORTH, SOUTH]:
-                return UP if motion.start_loc == EAST else DOWN
-            elif motion.end_loc in [EAST, WEST]:
-                return RIGHT if motion.start_loc == SOUTH else LEFT
-        return None
-
-    def _get_translation_dir_for_non_shift(
-        self, prop: Prop, end_loc: str
-    ) -> Directions | None:
-        layer_reposition_map = {
-            RADIAL: {
-                (NORTH, RED): RIGHT,
-                (NORTH, BLUE): LEFT,
-                (SOUTH, RED): RIGHT,
-                (SOUTH, BLUE): LEFT,
-                (EAST, RED): UP if end_loc == EAST else None,
-                (WEST, BLUE): DOWN if end_loc == WEST else None,
-                (WEST, RED): UP if end_loc == WEST else None,
-                (EAST, BLUE): DOWN if end_loc == EAST else None,
-            },
-            ANTIRADIAL: {
-                (NORTH, RED): UP,
-                (NORTH, BLUE): DOWN,
-                (SOUTH, RED): UP,
-                (SOUTH, BLUE): DOWN,
-                (EAST, RED): RIGHT if end_loc == EAST else None,
-                (WEST, BLUE): LEFT if end_loc == WEST else None,
-                (WEST, RED): RIGHT if end_loc == WEST else None,
-                (EAST, BLUE): LEFT if end_loc == EAST else None,
-            },
-        }
-        if prop.is_radial():
-            return layer_reposition_map[RADIAL][(prop.loc, prop.color)]
-        elif prop.is_antiradial():
-            return layer_reposition_map[ANTIRADIAL][(prop.loc, prop.color)]
-
     ### HELPERS ###
-
-    def _determine_translation_direction(self, motion: Motion) -> Directions:
-        """Determine the translation direction based on the motion type, start location, end location, and end layer."""
-        if not (motion.is_shift() or motion.is_static()):
-            return None
-
-        if motion.prop.is_radial():
-            return self._get_translation_dir_for_radial(motion)
-        elif motion.prop.is_antiradial():
-            return self._get_translation_dir_for_antiradial(motion)
-
-    def _get_translation_dir_for_radial(self, motion: Motion) -> Directions | None:
-        direction_map = {
-            (NORTH, EAST): RIGHT,
-            (NORTH, WEST): LEFT,
-            (SOUTH, EAST): RIGHT,
-            (SOUTH, WEST): LEFT,
-            (EAST, NORTH): UP,
-            (EAST, SOUTH): DOWN,
-            (WEST, NORTH): UP,
-            (WEST, SOUTH): DOWN,
-        }
-        return direction_map.get((motion.end_loc, motion.start_loc))
-
-    def _get_translation_dir_for_antiradial(self, motion: Motion) -> Directions | None:
-        direction_map = {
-            (NORTH, EAST): UP,
-            (NORTH, WEST): DOWN,
-            (SOUTH, EAST): UP,
-            (SOUTH, WEST): DOWN,
-            (EAST, NORTH): RIGHT,
-            (EAST, SOUTH): LEFT,
-            (WEST, NORTH): RIGHT,
-            (WEST, SOUTH): LEFT,
-        }
-        return direction_map.get((motion.end_loc, motion.start_loc))
 
     def _calculate_new_position(
         self,
@@ -342,7 +349,6 @@ class BasePropPositioner:
         x = prop_width / 2
         y = prop_length / 2
 
-        # Define a map for position offsets based on orientation and location
         position_offsets = {
             (IN, NORTH): QPointF(x, -y),
             (IN, SOUTH): QPointF(-x, y),
@@ -363,40 +369,3 @@ class BasePropPositioner:
         }
         self.position_offsets_cache[prop] = position_offsets
         return position_offsets
-
-    def _get_opposite_direction(self, movement: Directions) -> Directions:
-        opposite_directions = {
-            LEFT: RIGHT,
-            RIGHT: LEFT,
-            UP: DOWN,
-            DOWN: UP,
-        }
-        return opposite_directions.get(movement)
-
-    def _get_translation_dir_for_non_shift(self, prop: Prop) -> Directions | None:
-        layer_reposition_map = {
-            RADIAL: {
-                (NORTH, RED): RIGHT,
-                (NORTH, BLUE): LEFT,
-                (SOUTH, RED): RIGHT,
-                (SOUTH, BLUE): LEFT,
-                (EAST, RED): UP,
-                (WEST, BLUE): DOWN,
-                (WEST, RED): UP,
-                (EAST, BLUE): DOWN,
-            },
-            ANTIRADIAL: {
-                (NORTH, RED): UP,
-                (NORTH, BLUE): DOWN,
-                (SOUTH, RED): UP,
-                (SOUTH, BLUE): DOWN,
-                (EAST, RED): RIGHT,
-                (WEST, BLUE): LEFT,
-                (WEST, RED): RIGHT,
-                (EAST, BLUE): LEFT,
-            },
-        }
-        if prop.is_radial():
-            return layer_reposition_map[RADIAL][(prop.loc, prop.color)]
-        elif prop.is_antiradial():
-            return layer_reposition_map[ANTIRADIAL][(prop.loc, prop.color)]

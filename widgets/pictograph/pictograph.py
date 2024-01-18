@@ -6,7 +6,7 @@ from Enums import LetterNumberType
 
 from constants import *
 from objects.arrow.arrow import Arrow
-from objects.arrow.arrow_placement_manager.main_arrow_placement_manager import (
+from objects.arrow.arrow_placement_manager.managers.main_arrow_placement_manager import (
     ArrowPlacementManager,
 )
 from objects.arrow.ghost_arrow import GhostArrow
@@ -14,6 +14,7 @@ from objects.grid import Grid
 from objects.motion.motion import Motion
 from objects.prop.ghost_prop import GhostProp
 from objects.prop.prop import Prop
+from objects.prop.prop_placement_manager.prop_placement_manager import PropPlacementManager
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import (
     Colors,
@@ -34,9 +35,8 @@ from .pictograph_context_menu_handler import PictographContextMenuHandler
 from .pictograph_image_renderer import PictographImageRenderer
 from .pictograph_state_updater import PictographStateUpdater
 from .pictograph_event_handler import PictographMouseEventHandler
-from .pictograph_init import PictographInit
+from .pictograph_initializer import PictographInit
 
-from .position_engines.prop_positioners.main_prop_positioner import PropPlacementManager
 from utilities.letter_item import LetterItem
 
 from utilities.letter_engine import LetterEngine
