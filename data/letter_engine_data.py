@@ -1,4 +1,6 @@
+from typing import Dict, List
 from constants import ANTI, DASH, PRO, STATIC
+from utilities.TypeChecking.TypeChecking import LetterTypeNums, MotionTypes
 
 
 motion_type_letter_groups = {
@@ -89,6 +91,14 @@ motion_type_letter_combinations = {
     "Γ": (STATIC, STATIC),
 }
 
+letter_type_motion_type_map: Dict[LetterTypeNums, List[MotionTypes]] = {
+    "Type1": [PRO, ANTI],
+    "Type2": [PRO, ANTI, STATIC],
+    "Type3": [PRO, ANTI, DASH],
+    "Type4": [DASH, STATIC],
+    "Type5": [DASH, DASH],
+    "Type6": [STATIC, STATIC],
+}
 
 # Used for differentiating between antiparallel and parallel - Letters, MNOPQR
 parallel_combinations = {

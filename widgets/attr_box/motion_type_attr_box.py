@@ -31,3 +31,4 @@ class MotionTypeAttrBox(BaseAttrBox):
         self.turns_widget = MotionTypeTurnsWidget(self)
         self.vbox_layout.addWidget(self.header_widget, 1)
         self.vbox_layout.addWidget(self.turns_widget, 2)
+

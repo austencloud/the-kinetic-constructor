@@ -18,12 +18,13 @@ class MainTabWidget(QTabWidget):
         self.main_widget = main_widget
         self.setStyleSheet(self.get_main_tab_stylesheet())
         ig_tab = IGTab(self.main_widget, self)
-        graph_editor_tab = GraphEditorTab(self.main_widget, self)
-        option_picker_tab = OptionPickerTab(self.main_widget, self)
-        self.tabs = [ig_tab, option_picker_tab, graph_editor_tab]
+        # graph_editor_tab = GraphEditorTab(self.main_widget, self)
+        # option_picker_tab = OptionPickerTab(self.main_widget, self)
+        # self.tabs = [ig_tab, option_picker_tab, graph_editor_tab]
+        self.tabs = [ig_tab]
         self.addTab(ig_tab, "Image Generator")
-        self.addTab(graph_editor_tab, "Graph Editor")
-        self.addTab(option_picker_tab, "Option Picker")
+        # self.addTab(graph_editor_tab, "Graph Editor")
+        # self.addTab(option_picker_tab, "Option Picker")
 
     def get_main_tab_stylesheet(self) -> str:
         return """

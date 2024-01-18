@@ -5,12 +5,13 @@ from ..attr_box.lead_state_attr_box import LeadStateAttrBox
 from .base_attr_panel import BaseAttrPanel
 
 if TYPE_CHECKING:
+    from widgets.filter_tab import FilterTab
     from widgets.ig_tab.ig_tab import IGTab
 
 
 class LeadStateAttrPanel(BaseAttrPanel):
-    def __init__(self, parent_tab: "IGTab") -> None:
-        super().__init__(parent_tab)
+    def __init__(self, filter_tab: "FilterTab") -> None:
+        super().__init__(filter_tab)
         self._setup_boxes()
         self.setup_layouts()
 

@@ -24,11 +24,11 @@ if TYPE_CHECKING:
 
 
 class TurnAdjustManager:
-    def __init__(self, attr_box, parent_widget: "TurnsWidget") -> None:
+    def __init__(self, attr_box, turns_widget: "TurnsWidget") -> None:
         self.attr_box: Union[
             "ColorAttrBox", "MotionTypeAttrBox", "LeadStateAttrBox"
         ] = attr_box
-        self.parent_widget = parent_widget
+        self.turns_widget = turns_widget
 
     ### SETUP ###
 
@@ -50,7 +50,7 @@ class TurnAdjustManager:
         self, adjustment: AdjustmentNums, text: AdjustmentStrs
     ) -> AdjustTurnsButton:
         """Create an adjust turns button and add it to the appropriate layout."""
-        button: AdjustTurnsButton = self.parent_widget.create_adjust_turns_button(text)
+        button: AdjustTurnsButton = self.turns_widget.create_adjust_turns_button(text)
         button.setContentsMargins(0, 0, 0, 0)
         button.setMinimumWidth(button.fontMetrics().boundingRect(text).width())
         button.clicked.connect(lambda _, adj=adjustment: self.adjust_turns(adj))
@@ -74,8 +74,8 @@ class TurnAdjustManager:
     def unpress_vtg_buttons(self) -> None:
         """Unpress the vtg buttons."""
         if hasattr(self.attr_box, "same_button"):
-            self.attr_box.header_widget.same_button.unpress()
-            self.attr_box.header_widget.opp_button.unpress()
+            self.attr_box.rot_dir_button_manager.same_button.unpress()
+            self.attr_box.rot_dir_button_manager.opp_button.unpress()
 
     ### UPDATE ###
 
@@ -111,7 +111,7 @@ class TurnAdjustManager:
         if new_turns == 0:
             motion.prop_rot_dir = NO_ROT
             self.unpress_vtg_buttons()
-            self.attr_box.hide_buttons()
+            self.attr_box.rot_dir_button_manager.hide_buttons()
 
         elif motion.turns == 0:
             self._set_prop_rot_dir_based_on_vtg_state(motion)
@@ -135,7 +135,7 @@ class TurnAdjustManager:
                 and not self.attr_box.vtg_dir_btn_state[OPP]
             ):
                 self._set_vtg_dir_state_default()
-                self.parent_widget.attr_box.show_vtg_dir_buttons()
+                self.turns_widget.attr_box.rot_dir_button_manager.show_vtg_dir_buttons()
             if self.attr_box.vtg_dir_btn_state[SAME]:
                 return other_motion.prop_rot_dir
             if self.attr_box.vtg_dir_btn_state[OPP]:
@@ -146,12 +146,12 @@ class TurnAdjustManager:
 
         elif motion.scene.letter in Type4_letters:
             if other_motion.prop_rot_dir == NO_ROT:
-                self.parent_widget.attr_box.show_prop_rot_dir_buttons()
-                self.parent_widget.attr_box.header_widget.cw_button.press()
+                self.turns_widget.attr_box.rot_dir_button_manager.show_prop_rot_dir_buttons()
+                self.turns_widget.attr_box.rot_dir_button_manager.cw_button.press()
                 return CLOCKWISE
             elif other_motion.prop_rot_dir in [CLOCKWISE, COUNTER_CLOCKWISE]:
-                self.parent_widget.attr_box.show_vtg_dir_buttons()
-                self.parent_widget.attr_box.header_widget.cw_button.press()
+                self.turns_widget.attr_box.rot_dir_button_manager.show_vtg_dir_buttons()
+                self.turns_widget.attr_box.rot_dir_button_manager.cw_button.press()
                 return COUNTER_CLOCKWISE
 
     def _set_vtg_dir_state_default(self) -> None:
@@ -167,16 +167,17 @@ class TurnAdjustManager:
 
     def adjust_turns(self, adjustment: Turns) -> None:
         """Adjust turns for a given pictograph based on the attribute type."""
-        turns = self.parent_widget.turns_display_manager.turns_display.text()
-        turns = self.parent_widget._convert_turns_from_str_to_num(turns)
+        turns = self.turns_widget.turns_display_manager.turns_display.text()
+        turns = self.turns_widget._convert_turns_from_str_to_num(turns)
         turns = self._clamp_turns(turns + adjustment)
         turns = self.convert_turn_floats_to_ints(turns)
-        self.parent_widget.turns_display_manager.update_turns_display(str(turns))
+        self.turns_widget.turns_display_manager.update_turns_display(str(turns))
 
         for (
             pictograph
-        ) in self.attr_box.attr_panel.parent_tab.scroll_area.pictographs.values():
-            self._adjust_turns_for_pictograph(pictograph, adjustment)
+        ) in self.attr_box.attr_panel.filter_tab.scroll_area.pictographs.values():
+            if pictograph.letter_type == self.attr_box.attr_panel.filter_tab.letter_type:
+                self._adjust_turns_for_pictograph(pictograph, adjustment)
 
     def convert_turn_floats_to_ints(self, turns: Turns) -> Turns:
         if turns in [0.0, 1.0, 2.0, 3.0]:
@@ -185,10 +186,10 @@ class TurnAdjustManager:
             return turns
 
     def set_turns(self, new_turns: Turns) -> None:
-        self.parent_widget.turns_display_manager.update_turns_display(new_turns)
+        self.turns_widget.turns_display_manager.update_turns_display(new_turns)
         for (
             pictograph
-        ) in self.attr_box.attr_panel.parent_tab.scroll_area.pictographs.values():
+        ) in self.attr_box.attr_panel.filter_tab.scroll_area.pictographs.values():
             for motion in pictograph.motions.values():
                 if self.is_motion_relevant(motion):
                     self.update_motion_properties(motion, new_turns)

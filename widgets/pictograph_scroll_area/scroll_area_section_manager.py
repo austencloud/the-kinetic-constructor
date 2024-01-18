@@ -1,20 +1,8 @@
 from typing import TYPE_CHECKING, Dict, List
 from Enums import LetterNumberType
-from utilities.TypeChecking.TypeChecking import (
-    LetterTypeNums,
-    Letters,
-)
-from widgets.filter_tab.Type1_filter_tab import BaseFilterTab
 from widgets.pictograph_scroll_area.scroll_area_section import ScrollAreaSection
-from constants import Type1, Type2, Type3, Type4, Type5, Type6
 from utilities.TypeChecking.TypeChecking import LetterTypeNums, Letters
-from ..filter_tab.Type1_filter_tab import Type1FilterTab
-from ..filter_tab.Type2_filter_tab import Type2FilterTab
-from ..filter_tab.Type3_filter_tab import Type3FilterTab
-from ..filter_tab.Type4_filter_tab import Type4FilterTab
-from ..filter_tab.Type5_filter_tab import Type5FilterTab
-from ..filter_tab.Type6_filter_tab import Type6FilterTab
-from ..filter_tab.base_filter_tab import BaseFilterTab
+from ..filter_tab import FilterTab
 
 if TYPE_CHECKING:
     from .scroll_area import ScrollArea
@@ -32,24 +20,9 @@ class ScrollAreaSectionManager:
             LetterTypeNums, List[Letters]
         ] = self.setup_letters_by_type()
         self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
-        filter_tab_map = self.get_filter_tab_map()
         for letter_type, pictographs in self.pictographs_by_type.items():
-            filter_tab = filter_tab_map.get(letter_type, BaseFilterTab)(
-                self.scroll_area, letter_type
-            )
+            filter_tab = FilterTab(self.scroll_area, letter_type)
             self.create_section(letter_type, filter_tab)
-
-    def get_filter_tab_map(self) -> Dict[LetterTypeNums, BaseFilterTab]:
-        filter_tab_map = {
-            Type1: Type1FilterTab,
-            Type2: Type2FilterTab,
-            Type3: Type3FilterTab,
-            Type4: Type4FilterTab,
-            Type5: Type5FilterTab,
-            Type6: Type6FilterTab,
-        }
-
-        return filter_tab_map
 
     def setup_letters_by_type(self) -> Dict[LetterTypeNums, List[Letters]]:
         letters_by_type = {}
@@ -73,25 +46,11 @@ class ScrollAreaSectionManager:
         self.sections.clear()
 
     def create_section(
-        self, letter_type: LetterTypeNums, filter_tab: BaseFilterTab
+        self, letter_type: LetterTypeNums, filter_tab: FilterTab
     ) -> None:
-        # Instead of creating a QWidget, you will create an instance of the Section class
         section = ScrollAreaSection(letter_type, filter_tab, self.scroll_area)
         self.scroll_area.layout.addWidget(section)
         self.sections[letter_type] = section
-
-    def create_section_label(self, styled_text: str) -> QLabel:
-        """Creates a QLabel for the section label with the given styled text."""
-        section_label = QLabel()
-        section_label.setText(styled_text)  # Set the HTML styled text
-        font_size = self.sections[0].calculate_font_size()
-        section_label.setStyleSheet(f"font-size: {font_size}px; font-weight: bold;")
-        size_policy = QSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
-        )
-        section_label.setSizePolicy(size_policy)
-        section_label.setMinimumSize(section_label.sizeHint())
-        return section_label
 
     def add_section_label_to_layout(
         self, section_label: QLabel, section_layout: QGridLayout
@@ -111,4 +70,6 @@ class ScrollAreaSectionManager:
 
         for letter_type, pictographs in self.pictographs_by_type.items():
             for index, pictograph in enumerate(pictographs):
-                self.scroll_area.display_manager.add_pictograph_to_layout(pictograph, index)
+                self.scroll_area.display_manager.add_pictograph_to_layout(
+                    pictograph, index
+                )
