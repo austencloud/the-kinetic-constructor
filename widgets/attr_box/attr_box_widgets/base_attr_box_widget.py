@@ -8,7 +8,7 @@ from widgets.buttons.swap_button import SwapButton
 from widgets.buttons.vtg_dir_button import VtgDirButton
 
 if TYPE_CHECKING:
-    from widgets.attr_box.base_attr_box import BaseAttrBox
+    from widgets.attr_box.base_attr_box import AttrBox
     from objects.motion.motion import Motion
 from ...buttons.adjust_turns_button import AdjustTurnsButton
 
@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 class AttrBoxWidget(QWidget):
     def __init__(self, attr_box) -> None:
         super().__init__(attr_box)
-        self.attr_box: "BaseAttrBox" = attr_box
+        self.attr_box: "AttrBox" = attr_box
 
     def create_attr_header_label(
         self, text: str, align: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter
@@ -34,7 +34,6 @@ class AttrBoxWidget(QWidget):
         frame = QFrame(self)
         frame.setLayout(layout)
         return frame
-
 
     def create_swap_button(self, icon_path: str, callback: Callable) -> "SwapButton":
         button = SwapButton(self.attr_box, icon_path)

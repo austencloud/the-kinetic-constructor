@@ -2,10 +2,12 @@ from PyQt6.QtWidgets import QPushButton
 from typing import Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..attr_box.attr_box_widgets.header_widgets.base_header_widget import HeaderWidget
+    from ..header_widget import HeaderWidget
     from ..attr_box.attr_box_widgets.motion_types_widget import MotionTypeWidget
     from ..attr_box.attr_box_widgets.start_end_loc_widget import StartEndLocWidget
-    from ..attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import TurnsWidget
+    from ..attr_box.attr_box_widgets.turns_widget.base_turns_widget.base_turns_widget import (
+        TurnsWidget,
+    )
 
 
 class VtgDirButton(QPushButton):

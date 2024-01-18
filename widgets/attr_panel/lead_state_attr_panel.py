@@ -1,7 +1,7 @@
-from constants import LEADING, TRAILING
+from constants import LEAD_STATE, LEADING, TRAILING
 from typing import TYPE_CHECKING, List
 from utilities.TypeChecking.TypeChecking import LeadStates, Turns
-from ..attr_box.lead_state_attr_box import LeadStateAttrBox
+from ..attr_box.lead_state_attr_box import AttrBox
 from .base_attr_panel import BaseAttrPanel
 
 if TYPE_CHECKING:
@@ -16,9 +16,9 @@ class LeadStateAttrPanel(BaseAttrPanel):
         self.setup_layouts()
 
     def _setup_boxes(self) -> None:
-        self.leading_box = LeadStateAttrBox(self, LEADING)
-        self.trailing_box = LeadStateAttrBox(self, TRAILING)
-        self.boxes: List[LeadStateAttrBox] = [
+        self.leading_box = AttrBox(self, LEAD_STATE, LEADING)
+        self.trailing_box = AttrBox(self, LEAD_STATE, TRAILING)
+        self.boxes: List[AttrBox] = [
             self.leading_box,
             self.trailing_box,
         ]

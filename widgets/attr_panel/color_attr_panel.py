@@ -1,9 +1,10 @@
 from constants import (
     BLUE,
+    COLOR,
     RED,
 )
 from typing import TYPE_CHECKING, List
-from widgets.attr_box.color_attr_box import ColorAttrBox
+from widgets.attr_box.base_attr_box import AttrBox
 from widgets.attr_panel.base_attr_panel import BaseAttrPanel
 
 
@@ -19,9 +20,9 @@ class ColorAttrPanel(BaseAttrPanel):
         self.setup_layouts()
 
     def _setup_boxes(self) -> None:
-        self.blue_attr_box = ColorAttrBox(self, BLUE)
-        self.red_attr_box = ColorAttrBox(self, RED)
-        self.boxes: List[ColorAttrBox] = [
+        self.blue_attr_box = AttrBox(self, COLOR, BLUE)
+        self.red_attr_box = AttrBox(self, COLOR, RED)
+        self.boxes: List[AttrBox] = [
             self.blue_attr_box,
             self.red_attr_box,
         ]

@@ -5,14 +5,14 @@ from typing import TYPE_CHECKING, Union
 
 
 if TYPE_CHECKING:
-    from widgets.attr_box.base_attr_box import BaseAttrBox
+    from widgets.attr_box.base_attr_box import AttrBox
     from .base_turns_widget import TurnsWidget
 
 
 class TurnDisplayManager:
     def __init__(self, parent_widget: "TurnsWidget", attr_box: QFrame) -> None:
         self.parent_widget = parent_widget
-        self.attr_box: BaseAttrBox = attr_box
+        self.attr_box: AttrBox = attr_box
 
     def setup_display_components(self) -> None:
         self.setup_turns_display()
@@ -74,7 +74,9 @@ class TurnDisplayManager:
         self.turns_display.setFont(
             QFont("Arial", self.turns_display_font_size, QFont.Weight.Bold)
         )
-        border_radius = min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        border_radius = (
+            min(self.turns_display.width(), self.turns_display.height()) * 0.25
+        )
         self.turns_display.setStyleSheet(
             f"""
             QLabel {{

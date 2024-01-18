@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from objects.pictograph.pictograph import Pictograph
-from widgets.attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import (
+from widgets.attr_box.attr_box_widgets.turns_widget.base_turns_widget.base_turns_widget import (
     TurnsWidget,
 )
 

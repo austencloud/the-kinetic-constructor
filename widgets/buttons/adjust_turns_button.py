@@ -4,9 +4,10 @@ from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 
 
-
 if TYPE_CHECKING:
-    from ..attr_box.attr_box_widgets.turns_widgets.base_turns_widget.base_turns_widget import TurnsWidget
+    from ..attr_box.attr_box_widgets.turns_widget.base_turns_widget.base_turns_widget import (
+        TurnsWidget,
+    )
 
 
 class AdjustTurnsButton(QPushButton):

@@ -1,10 +1,8 @@
-from constants import ANTI, DASH, PRO, SHIFT, STATIC
+from constants import ANTI, DASH, MOTION_TYPE, PRO, SHIFT, STATIC
 from typing import TYPE_CHECKING, List
 
 from utilities.TypeChecking.TypeChecking import MotionTypes
-
-
-from ..attr_box.motion_type_attr_box import MotionTypeAttrBox
+from widgets.attr_box.base_attr_box import AttrBox
 from .base_attr_panel import BaseAttrPanel
 
 if TYPE_CHECKING:
@@ -21,17 +19,17 @@ class MotionTypeAttrPanel(BaseAttrPanel):
         self._setup_boxes(motion_types)
 
     def _setup_boxes(self, motion_types: List[str]) -> None:
-        self.boxes: List[MotionTypeAttrBox] = []
+        self.boxes: List[AttrBox] = []
 
         for motion_type in motion_types:
             if motion_type == PRO:
-                self.boxes.append(MotionTypeAttrBox(self, PRO))
+                self.boxes.append(AttrBox(self, MOTION_TYPE, PRO))
             elif motion_type == ANTI:
-                self.boxes.append(MotionTypeAttrBox(self, ANTI))
+                self.boxes.append(AttrBox(self, MOTION_TYPE, ANTI))
             elif motion_type == DASH:
-                self.boxes.append(MotionTypeAttrBox(self, DASH))
+                self.boxes.append(AttrBox(self, MOTION_TYPE, DASH))
             elif motion_type == STATIC:
-                self.boxes.append(MotionTypeAttrBox(self, STATIC))
+                self.boxes.append(AttrBox(self, MOTION_TYPE, STATIC))
 
         for box in self.boxes:
             self.layout.addWidget(box)
