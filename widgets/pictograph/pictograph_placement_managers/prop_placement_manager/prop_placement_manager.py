@@ -16,16 +16,13 @@ class PropPlacementManager:
         self.default_positioner = DefaultPropPositioner(self)
         self.beta_positioner = BetaPropPositioner(self)
 
-        # Calculators
         self.offset_calculator = PropOffsetCalculator(self)
         self.dir_calculator = BetaPropDirectionCalculator(self)
 
     def update_prop_positions(self) -> None:
-        for prop, ghost_prop in zip(
-            self.pictograph.props.values(), self.pictograph.ghost_props.values()
-        ):
+        for prop in self.pictograph.props.values():
             self.default_positioner.set_prop_to_default_loc(prop)
-            self.default_positioner.set_prop_to_default_loc(ghost_prop)
+            self.default_positioner.set_prop_to_default_loc(prop.ghost)
 
         if self.pictograph.check.has_props_in_beta():
             self.beta_positioner.reposition_beta_props()

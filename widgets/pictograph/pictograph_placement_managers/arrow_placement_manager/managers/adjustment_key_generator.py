@@ -9,12 +9,13 @@ from utilities.TypeChecking.letter_lists import (
 from constants import *
 
 if TYPE_CHECKING:
+    from ...arrow_placement_manager.arrow_placement_manager import ArrowPlacementManager
     from widgets.pictograph.pictograph import Pictograph
 
 
 class AdjustmentKeyGenerator:
-    def __init__(self, pictograph: "Pictograph") -> None:
-        self.p = pictograph
+    def __init__(self, placement_manager: "ArrowPlacementManager") -> None:
+        self.p = placement_manager.pictograph
         self.blue_arrow = self.p.arrows.get(BLUE)
         self.red_arrow = self.p.arrows.get(RED)
 

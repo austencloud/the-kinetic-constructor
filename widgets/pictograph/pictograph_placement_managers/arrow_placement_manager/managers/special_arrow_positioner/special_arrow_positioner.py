@@ -9,6 +9,7 @@ from .handlers.special_placement_data_loader import SpecialPlacementDataLoader
 from .handlers.special_placement_data_updater import SpecialPlacementDataUpdater
 
 if TYPE_CHECKING:
+    from ...arrow_placement_manager import ArrowPlacementManager
     from widgets.pictograph.pictograph import Pictograph
 
 
@@ -29,8 +30,9 @@ class SpecialArrowPositioner:
         adjustment_mapper (AdjustmentMapper): Maps adjustments to arrows.
     """
 
-    def __init__(self, pictograph: "Pictograph") -> None:
-        self.pictograph = pictograph
+    def __init__(self, placement_manager: "ArrowPlacementManager") -> None:
+        self.placement_manager = placement_manager
+        self.pictograph: Pictograph = placement_manager.pictograph
         self.data_loader = SpecialPlacementDataLoader(self)
         self.special_placements = self.data_loader.load_placements()
 

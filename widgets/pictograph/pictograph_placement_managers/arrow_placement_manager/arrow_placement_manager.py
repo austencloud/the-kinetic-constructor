@@ -17,18 +17,21 @@ class ArrowPlacementManager:
 
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
-        self.default_positioner = DefaultArrowPositioner(pictograph)
-        self.special_positioner = SpecialArrowPositioner(pictograph)
-        self.initial_pos_calculator = ArrowInitialPosCalculator(pictograph)
-        self.key_generator = AdjustmentKeyGenerator(pictograph)
-        self.quadrant_index_handler = QuadrantIndexHandler(pictograph)
+        
+        # Positioners
+        self.default_positioner = DefaultArrowPositioner(self)
+        self.special_positioner = SpecialArrowPositioner(self)
+        
+        self.initial_pos_calculator = ArrowInitialPosCalculator(self)
+        self.key_generator = AdjustmentKeyGenerator(self)
+        self.quadrant_index_handler = QuadrantIndexHandler(self)
 
     def update_arrow_placement(self) -> None:
-        """Update the placement of all arrows."""
         self.letter = self.pictograph.letter
         for arrow in self.pictograph.arrows.values():
-            if arrow.loc:
-                self.update_arrow_position(arrow)
+            self.update_arrow_position(arrow)
+            self.update_arrow_position(arrow.ghost)
+
 
     def update_arrow_position(self, arrow: Arrow) -> None:
         initial_pos = self.initial_pos_calculator.get_initial_pos(arrow)

@@ -18,12 +18,13 @@ from constants import (
 )
 
 if TYPE_CHECKING:
+    from ...arrow_placement_manager.arrow_placement_manager import ArrowPlacementManager
     from widgets.pictograph.pictograph import Pictograph
 
 
 class QuadrantIndexHandler:
-    def __init__(self, pictograph: "Pictograph") -> None:
-        self.grid_mode = pictograph.main_widget.grid_mode
+    def __init__(self, placement_manager: "ArrowPlacementManager") -> None:
+        self.grid_mode = placement_manager.pictograph.main_widget.grid_mode
 
     def get_quadrant_index(self, arrow: Arrow) -> Literal[0, 1, 2, 3]:
         if self.grid_mode == DIAMOND:

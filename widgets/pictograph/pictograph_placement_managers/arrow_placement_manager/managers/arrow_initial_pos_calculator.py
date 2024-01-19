@@ -4,12 +4,13 @@ from PyQt6.QtCore import QPointF
 from objects.arrow.arrow import Arrow
 
 if TYPE_CHECKING:
+    from ...arrow_placement_manager.arrow_placement_manager import ArrowPlacementManager
     from widgets.pictograph.pictograph import Pictograph
 
 
 class ArrowInitialPosCalculator:
-    def __init__(self, pictograph: "Pictograph") -> None:
-        self.pictograph = pictograph
+    def __init__(self, placement_manager: "ArrowPlacementManager") -> None:
+        self.pictograph: "Pictograph" = placement_manager.pictograph
 
     def get_initial_pos(self, arrow: Arrow) -> QPointF:
         if arrow.motion.motion_type in [PRO, ANTI]:

@@ -24,10 +24,9 @@ import codecs
 
 class DefaultArrowPositioner:
     def __init__(
-        self,
-        pictograph: "Pictograph",
+        self, placement_manager: "ArrowPlacementManager"
     ) -> None:
-        self.pictograph = pictograph
+        self.placement_manager = placement_manager
         self.motion_type_files = {
             PRO: "pro_placements.json",
             ANTI: "anti_placements.json",
