@@ -23,4 +23,3 @@ class GhostProp(Prop):
         self.color = attributes[COLOR]
         self.is_ghost = True
         self.target_prop: "Prop" = None
-        self.svg_manager.setup_svg_renderer(self.svg_file)

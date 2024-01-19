@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 class PropAttrManager:
     def __init__(self, prop: "Prop") -> None:
         self.p = prop
-
+        self.update_attributes(self.p.prop_dict)
     def update_attributes(
         self, prop_dict: Dict[str, Union[Colors, Locations, MotionTypes, Turns]]
     ) -> None:

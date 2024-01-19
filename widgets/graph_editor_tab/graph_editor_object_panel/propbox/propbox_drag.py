@@ -136,7 +136,7 @@ class PropBoxDrag(BaseObjectBoxDrag):
         self.ghost.motion.arrow.loc = self.location
         self.ghost.motion.start_loc = self.location
 
-        ghost_svg = self.ghost.get_prop_svg_file(self.prop_type)
+        ghost_svg = self.ghost.get_svg_file(self.prop_type)
         self.ghost.update_svg(ghost_svg)
         self.ghost.motion.attr_manager.update_prop_ori()
         self.ghost.update_prop()

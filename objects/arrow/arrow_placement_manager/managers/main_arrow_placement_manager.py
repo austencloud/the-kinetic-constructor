@@ -83,15 +83,15 @@ class ArrowPlacementManager:
             return self._get_diamond_static_dash_pos(arrow)
 
     def _get_diamond_shift_pos(self, arrow: Arrow) -> QPointF:
-        return self.pictograph.grid.circle_coordinates_cache["layer2_points"][
-            self.pictograph.main_widget.grid_mode
-        ]["normal"][f"{arrow.loc}_{self.pictograph.main_widget.grid_mode}_layer2_point"]
-
+        layer = self.pictograph.grid.grid_data.layer2_points_normal
+        point_name = f"{arrow.loc}_{self.pictograph.main_widget.grid_mode}_layer2_point"
+        return layer.points[point_name].coordinates
+    
     def _get_diamond_static_dash_pos(self, arrow: Arrow) -> QPointF:
-        return self.pictograph.grid.circle_coordinates_cache["hand_points"][
-            self.pictograph.main_widget.grid_mode
-        ]["normal"][f"{arrow.loc}_{self.pictograph.main_widget.grid_mode}_hand_point"]
-
+        layer = self.pictograph.grid.grid_data.hand_points_normal
+        point_name = f"{arrow.loc}_{self.pictograph.main_widget.grid_mode}_hand_point"
+        return layer.points[point_name].coordinates
+    
     def _get_adjustment(self, arrow: Arrow) -> QPointF:
         adjustment_key = self.generate_adjustment_key()
         self.special_placement_manager.special_placements = (
@@ -133,21 +133,21 @@ class ArrowPlacementManager:
             elif arrow.motion_type in [STATIC, DASH]:
                 return self._get_diamond_static_dash_quadrant_index(arrow.loc)
 
-    def _convert_turns_to_int(self, arrow):
+    def _convert_turns_to_int(self, arrow) -> None:
         """Convert arrow turns from float to int if they are whole numbers."""
         if arrow.turns in [0.0, 1.0, 2.0, 3.0]:
             arrow.turns = int(arrow.turns)
 
-    def _generate_pro_anti_key(self):
+    def _generate_pro_anti_key(self) -> str:
         """Generate the key for Type1 hybrid letters."""
         pro_arrow, anti_arrow = self._get_pro_anti_arrows()
         return f"({pro_arrow.turns}, {anti_arrow.turns})"
 
-    def _generate_color_key(self):
+    def _generate_color_key(self) -> str:
         """Generate the color key for non-hybrid letters."""
         return f"({self.blue_arrow.turns}, {self.red_arrow.turns})"
 
-    def _generate_shift_static_key(self):
+    def _generate_shift_static_key(self) -> str:
         """Generate the key for Type2 letters."""
         shift = self.red_arrow if self.red_arrow.motion.is_shift() else self.blue_arrow
         static = (
@@ -155,12 +155,12 @@ class ArrowPlacementManager:
         )
         return f"({shift.turns}, {static.turns})"
 
-    def _generate_lead_state_key(self):
+    def _generate_lead_state_key(self) -> str:
         """Generate the lead state key for 'S' and 'T' letters."""
-        leading_motion = self.pictograph.get_leading_motion()
-        trailing_motion = self.pictograph.get_trailing_motion()
-        leading_motion.arrow.motion.lead_state = LEADING
-        trailing_motion.arrow.motion.lead_state = TRAILING
+        leading_motion = self.pictograph.get.leading_motion()
+        trailing_motion = self.pictograph.get.trailing_motion()
+        leading_motion.lead_state = LEADING
+        trailing_motion.lead_state = TRAILING
         return f"({leading_motion.turns}, {trailing_motion.turns})"
 
     def generate_adjustment_key(self) -> str:
@@ -175,15 +175,6 @@ class ArrowPlacementManager:
             self.blue_arrow if self.blue_arrow.motion_type == ANTI else self.red_arrow
         )
         return pro_arrow, anti_arrow
-
-    def determine_leading_color(
-        self, red_start, red_end, blue_start, blue_end
-    ) -> Colors:
-        if red_start == blue_end:
-            return RED
-        elif blue_start == red_end:
-            return BLUE
-        return None
 
     def get_opposite_location(self, location: str) -> str:
         opposite_map = {NORTH: SOUTH, SOUTH: NORTH, EAST: WEST, WEST: EAST}

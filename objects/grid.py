@@ -1,9 +1,8 @@
 import json
-from typing import TYPE_CHECKING, Dict, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Dict, NamedTuple, Tuple, Union
 from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtGui import QTransform
-from PyQt6.QtWidgets import QGraphicsSceneWheelEvent
+from PyQt6.QtWidgets import QGraphicsSceneWheelEvent, QGraphicsSceneMouseEvent
 from typing import Dict, Literal
 from PyQt6.QtCore import QPointF, QEvent
 from constants import (
@@ -46,102 +45,69 @@ class GridItem(QGraphicsSvgItem):
     def mouseReleaseEvent(self, event) -> None:
         event.ignore()
 
+class GridPoint(NamedTuple):
+    name: str
+    coordinates: QPointF
+
+class GridLayer:
+    def __init__(self, points_data: Dict[str, str]) -> None:
+        self.points: Dict[str, GridPoint] = {}
+        for name, coords in points_data.items():
+            if coords != "None":
+                x, y = map(float, coords.strip("()").split(", "))
+                self.points[name] = GridPoint(name, QPointF(x, y))
+            else:
+                self.points[name] = GridPoint(name, None)
+
+class GridData:
+    def __init__(self, data: Dict[str, Union[str, Dict[str, Dict[str, str]]]]) -> None:
+        self.hand_points_normal = GridLayer(data["hand_points"]["diamond"]["normal"])
+        self.hand_points_strict = GridLayer(data["hand_points"]["diamond"]["strict"])
+        self.layer2_points_normal = GridLayer(data["layer2_points"]["diamond"]["normal"])
+        self.layer2_points_strict = GridLayer(data["layer2_points"]["diamond"]["strict"])
+        self.outer_points = GridLayer(data["outer_points"])
+        x, y = map(float, data["center_point"].strip("()").split(", "))
+        self.center_point = GridPoint("center_point", QPointF(x, y))
+
+    def get_point(self, layer: GridLayer, pos: QPointF) -> GridPoint:
+        min_distance = float("inf")
+        closest_point = None
+
+        for point in layer.points.values():
+            if point.coordinates is not None:
+                distance = (pos - point.coordinates).manhattanLength()
+                if distance < min_distance:
+                    min_distance = distance
+                    closest_point = point
+
+        return closest_point
+
+
 
 class Grid:
     def __init__(self, scene: Union["ArrowBox", "PropBox", "Pictograph"]) -> None:
+        self.scene = scene
         self.items: Dict[GridModes, GridItem] = {}
         self.grid_mode = DIAMOND
-        self.circle_coordinates_cache = self._load_circle_coordinates()
+        self.grid_data = self._load_grid_data()
         self._create_grid_items(scene)
-        self.center = self.circle_coordinates_cache["center_point"]
-        self.scene = scene
+        self.center = self.grid_data.center_point.coordinates
 
-    def get_closest_hand_point(
-        self, pos: QPointF
-    ) -> Tuple[Optional[str], Optional[QPointF]]:
-        min_distance = float("inf")
-        nearest_point_name = None
-        nearest_point_coords = None
-        if self.scene.main_widget.prop_type in strictly_placed_props:
-            strict = True
-        elif self.scene.main_widget.prop_type in non_strictly_placed_props:
-            strict = False
-        if self.grid_mode == DIAMOND:
-            if strict is True:
-                for name, point in self.circle_coordinates_cache["hand_points"][
-                    self.grid_mode
-                ]["strict"].items():
-                    distance = (pos - point).manhattanLength()
-                    if distance < min_distance:
-                        min_distance = distance
-                        nearest_point_name = name
-                        nearest_point_coords = point
-            elif strict is False:
-                for name, point in self.circle_coordinates_cache["hand_points"][
-                    self.grid_mode
-                ]["normal"].items():
-                    distance = (pos - point).manhattanLength()
-                    if distance < min_distance:
-                        min_distance = distance
-                        nearest_point_name = name
-                        nearest_point_coords = point
+    def _load_grid_data(self) -> GridData:
+        with open("F:\\CODE\\tka-app\\tka-sequence-constructor\\data\\circle_coords.json", "r") as file:
+            data = json.load(file)
+        return GridData(data)
 
-        elif self.grid_mode == BOX:
-            for name, point in self.box_hand_points.items():
-                distance = (pos - point).manhattanLength()
-                if distance < min_distance:
-                    min_distance = distance
-                    nearest_point_name = name
-                    nearest_point_coords = point
+    def get_closest_hand_point(self, pos: QPointF) -> Tuple[str, QPointF]:
+        strict = self.scene.main_widget.prop_type in strictly_placed_props
+        layer = self.grid_data.hand_points_strict if strict else self.grid_data.hand_points_normal
+        closest_point = self.grid_data.get_point(layer, pos)
+        return closest_point.name, closest_point.coordinates
 
-        return nearest_point_name, nearest_point_coords
-
-    def get_closest_layer2_point(
-        self, pos: QPointF
-    ) -> Tuple[Optional[str], Optional[QPointF]]:
-        min_distance = float("inf")
-        nearest_point_name = None
-        nearest_point_coords = None
-
-        if self.grid_mode == DIAMOND:
-            for name, point in self.diamond_layer2_points.items():
-                distance = (pos - point).manhattanLength()
-                if distance < min_distance:
-                    min_distance = distance
-                    nearest_point_name = name
-                    nearest_point_coords = point
-
-        elif self.grid_mode == BOX:
-            for name, point in self.box_layer2_points.items():
-                distance = (pos - point).manhattanLength()
-                if distance < min_distance:
-                    min_distance = distance
-                    nearest_point_name = name
-                    nearest_point_coords = point
-
-        return nearest_point_name, nearest_point_coords
-
-    def _load_circle_coordinates(
-        self,
-    ) -> Dict[str, str | Dict[str, str | Dict[str, Dict[str, str]]]]:
-        with open(
-            "F:\\CODE\\tka-app\\tka-sequence-constructor\\data\\circle_coords.json", "r"
-        ) as file:
-            data: Dict[
-                str, Union[str, Dict[str, Union[str, Dict[str, Dict[str, str]]]]]
-            ] = json.load(file)
-        for section, values in data.items():
-            if section in ["hand_points", "layer2_points", "outer_points"]:
-                for mode, types in values.items():
-                    if isinstance(types, dict):
-                        for type_name, points in types.items():
-                            for point_id, coords in points.items():
-                                x, y = map(float, coords.strip("()").split(", "))
-                                data[section][mode][type_name][point_id] = QPointF(x, y)
-            elif section == "center_point":
-                x, y = map(float, data[section].strip("()").split(", "))
-                data[section] = QPointF(x, y)
-        return data
+    def get_closest_layer2_point(self, pos: QPointF) -> Tuple[str, QPointF]:
+        layer = self.grid_data.layer2_points_normal  # or layer2_points_strict based on some condition
+        closest_point = self.grid_data.get_point(layer, pos)
+        return closest_point.name, closest_point.coordinates
 
     def _create_grid_items(self, grid_scene: "Pictograph") -> None:
         paths = {
@@ -159,16 +125,13 @@ class Grid:
         for item in self.items.values():
             item.setPos(position)
 
-
-
-
-    def mousePressEvent(self, event) -> None:
+    def mousePressEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         event.ignore()
 
-    def mouseMoveEvent(self, event) -> None:
+    def mouseMoveEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         event.ignore()
 
-    def mouseReleaseEvent(self, event) -> None:
+    def mouseReleaseEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         event.ignore()
 
     def eventFilter(self, obj, event: QEvent) -> Literal[False]:

@@ -92,7 +92,7 @@ class PictographInit:
         self, grid: Grid
     ) -> Dict[Locations, Tuple[int, int, int, int]]:
         # Use cached coordinates directly
-        grid_center: QPoint = grid.circle_coordinates_cache["center_point"].toPoint()
+        grid_center: QPoint = grid.grid_data.center_point.coordinates.toPoint()
 
         grid_center_x = grid_center.x()
         grid_center_y = grid_center.y()

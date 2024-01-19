@@ -48,18 +48,20 @@ class SvgManager:
         self.o.setSharedRenderer(self.o.renderer)
 
     def update_svg(self) -> None:
-        if self.o.__class__.__name__ in ["Arrow", "GhostArrow"]:
-            svg_file = self.get_arrow_svg_file(self.o.motion_type, self.o.turns)
-        elif self.o.__class__.__bases__[0].__name__ in ["Prop", "GhostProp"]:
-            svg_file = self.get_prop_svg_file(self.o.prop_type)
-        else:
-            raise ValueError("Unsupported graphical object type")
-
+        svg_file = self.get_svg_file()
         self.o.svg_file = svg_file
         self.set_svg_color(self.o.color)
         self.setup_svg_renderer(svg_file)
 
-    def get_arrow_svg_file(self, motion_type: MotionTypes, turns: Turns) -> str:
+    def get_svg_file(self) -> str:
+        if self.o.__class__.__name__ in ["Arrow", "GhostArrow"]:
+            return self._arrow_svg_file(self.o.motion_type, self.o.turns)
+        elif "Prop" in [base.__name__ for base in self.o.__class__.__bases__]:
+            return self._prop_svg_file(self.o.prop_type)
+        else:
+            raise ValueError(f"Unsupported graphical object type: {self.o.__class__.__name__}")
+
+    def _arrow_svg_file(self, motion_type: MotionTypes, turns: Turns) -> str:
         cache_key = f"{motion_type}_{float(turns)}"
         if cache_key not in self.o.svg_cache:
             file_path = (
@@ -70,6 +72,6 @@ class SvgManager:
                 self.o.svg_cache[cache_key] = file.name
         return self.o.svg_cache[cache_key]
 
-    def get_prop_svg_file(self, prop_type: PropTypes) -> str:
+    def _prop_svg_file(self, prop_type: PropTypes) -> str:
         svg_file = f"{PROP_DIR}{prop_type}.svg"
         return svg_file

@@ -35,6 +35,7 @@ class Prop(GraphicalObject):
         self.ghost: Prop = None
         self.is_ghost: bool = False
         self.previous_location: Locations
+        self.prop_dict = prop_dict
         self.attr_manager = PropAttrManager(self)
         self.rot_angle_manager = PropRotAngleManager(self)
         self.mouse_event_handler = PropMouseEventHandler(self)
@@ -42,11 +43,6 @@ class Prop(GraphicalObject):
         self.check = PropChecker(self)
         self.offest_calculator = PropOffsetCalculator(self)
         self.updater = PropUpdater(self)
-        self.attr_manager.update_attributes(prop_dict)
-        self.svg_file = self.svg_manager.get_prop_svg_file(self.prop_type)
-        self.svg_manager.setup_svg_renderer(self.svg_file)
-        self.setZValue(10)
-        self.center = self.boundingRect().center()
 
     ### MOUSE EVENTS ###
 
@@ -58,4 +54,3 @@ class Prop(GraphicalObject):
 
     def mouseReleaseEvent(self, event) -> None:
         self.mouse_event_handler.handle_mouse_release(event)
-
