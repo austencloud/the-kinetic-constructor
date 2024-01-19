@@ -23,14 +23,16 @@ class AdjustmentCalculator:
             self.positioner.pictograph.letter, {}
         )
         return letter_data.get(adjustment_key, {}).get(
-            self.positioner.key_generator.determine_key(arrow)
+            self.positioner.turns_tuple_generator.generate_adjustment_key(arrow)
         )
 
     def get_adjustment_for_letter(
         self, letter: str, arrow: Arrow, adjustment_key: str = None
     ) -> Optional[Tuple[int, int]]:
         if adjustment_key is None:
-            adjustment_key = self.positioner.key_generator.determine_key(letter)
+            adjustment_key = (
+                self.positioner.turns_tuple_generator.generate_adjustment_key(arrow)
+            )
         self.special_placements: Dict[
             str, Dict
         ] = self.positioner.data_loader.load_placements()

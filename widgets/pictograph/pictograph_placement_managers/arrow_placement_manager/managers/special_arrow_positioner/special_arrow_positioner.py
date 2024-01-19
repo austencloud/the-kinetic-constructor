@@ -1,9 +1,12 @@
 from typing import TYPE_CHECKING
 from objects.arrow.arrow import Arrow
+from widgets.pictograph.pictograph_placement_managers.arrow_placement_manager.managers.turns_tuple_generator import (
+    TurnsTupleGenerator,
+)
 from .handlers.adjustment_calculator import AdjustmentCalculator
 from .handlers.adjustment_mapper import AdjustmentMapper
 from .handlers.data_sorter import DataSorter
-from .handlers.key_generator import KeyGenerator
+from .handlers.motion_type_key_generator import MotionTypeKeyGenerator
 from .handlers.rot_angle_override_handler import RotAngleOverrideHandler
 from .handlers.special_placement_data_loader import SpecialPlacementDataLoader
 from .handlers.special_placement_data_updater import SpecialPlacementDataUpdater
@@ -40,13 +43,16 @@ class SpecialArrowPositioner:
         self.adjustment_calculator = AdjustmentCalculator(self)
         self.rot_angle_handler = RotAngleOverrideHandler(self)
         self.adjustment_mapper = AdjustmentMapper(self)
-        self.key_generator = KeyGenerator(self)
+        self.motion_type_key_generator = MotionTypeKeyGenerator(self)
+        self.turns_tuple_generator = TurnsTupleGenerator(self)
         self.data_sorter = DataSorter(self)
 
     def update_arrow_placement(self, arrow: Arrow) -> None:
-        adjustment_key = self.key_generator.generate_adjustment_key(arrow)
+        adjustment_key = self.turns_tuple_generator.generate_turns_tuple(
+            arrow.scene.letter
+        )
         adjustment = self.adjustment_mapper.apply_adjustment_to_arrow(arrow)
         if adjustment:
-            self.data_updater.update_specific_entry(
+            self.data_updater.update_specific_entry_in_json(
                 self.pictograph.letter, adjustment_key, adjustment
             )

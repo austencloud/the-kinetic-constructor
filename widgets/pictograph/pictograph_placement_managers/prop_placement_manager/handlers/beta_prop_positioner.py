@@ -213,7 +213,7 @@ class BetaPropPositioner:
         )
         dash = (
             self.pictograph.red_motion
-            if self.pictograph.red_motion.is_dash()
+            if self.pictograph.red_motion.check.is_dash()
             else self.pictograph.blue_motion
         )
 

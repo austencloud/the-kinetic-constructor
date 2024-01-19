@@ -17,10 +17,10 @@ class ArrowMovementManager:
 
         adjustment_increment = 20 if shift_held else 5
         adjustment = self.get_adjustment(key, adjustment_increment)
-        self.pictograph.arrow_placement_manager.special_positioner.update_arrow_adjustments_in_json(
+        self.pictograph.arrow_placement_manager.special_positioner.data_updater.update_arrow_adjustments_in_json(
             adjustment, self.pictograph.selected_arrow
         )
-        self.pictograph.arrow_placement_manager.update_arrow_placement()
+        self.pictograph.arrow_placement_manager.update_arrow_positions()
 
     def get_adjustment(self, key, increment) -> Tuple[int, int]:
         direction_map = {

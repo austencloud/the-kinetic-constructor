@@ -1,16 +1,16 @@
-
 from typing import TYPE_CHECKING, Tuple
 from objects.arrow.arrow import Arrow
+
 if TYPE_CHECKING:
     from ..special_arrow_positioner import SpecialArrowPositioner
-
 
 
 class AdjustmentMapper:
     def __init__(self, positioner: "SpecialArrowPositioner") -> None:
         self.positioner = positioner
+
     def apply_adjustment_to_arrow(self, arrow: Arrow) -> None:
-        key_generator = self.positioner.key_generator
+        key_generator = self.positioner.turns_tuple_generator
         adjustment_key = key_generator.generate_adjustment_key(arrow)
         adjustment = self.positioner.adjustment_calculator.calculate_adjustment(
             arrow, adjustment_key

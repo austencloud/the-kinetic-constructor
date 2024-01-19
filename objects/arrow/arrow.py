@@ -26,7 +26,6 @@ class Arrow(GraphicalObject):
     motion: "Motion"
     color: Colors
     location: Locations
-    motion_type: MotionTypes
     loc: Locations
 
     def __init__(self, pictograph, arrow_dict) -> None:

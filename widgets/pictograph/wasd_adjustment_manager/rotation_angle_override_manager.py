@@ -7,10 +7,10 @@ if TYPE_CHECKING:
 
 
 class RotationAngleOverrideManager:
-    def __init__(self, pictograph: "Pictograph"):
+    def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
 
-    def handle_rotation_angle_override(self, key):
+    def handle_rotation_angle_override(self, key) -> None:
         if (
             not self.pictograph.selected_arrow
             or self.pictograph.selected_arrow.motion.motion_type != STATIC
@@ -21,17 +21,17 @@ class RotationAngleOverrideManager:
             return
 
         data = (
-            self.pictograph.arrow_placement_manager.special_positioner._load_placements()
+            self.pictograph.arrow_placement_manager.special_positioner.data_loader.load_placements()
         )
 
         static_motion = (
             self.pictograph.motions[RED]
-            if self.pictograph.motions[RED].is_static()
+            if self.pictograph.motions[RED].check.is_static()
             else self.pictograph.motions[BLUE]
         )
         shift_motion = (
             self.pictograph.motions[BLUE]
-            if self.pictograph.motions[BLUE].is_shift()
+            if self.pictograph.motions[BLUE].check.is_shift()
             else self.pictograph.motions[RED]
         )
         if static_motion.turns > 0:
@@ -54,6 +54,6 @@ class RotationAngleOverrideManager:
 
         letter_data[adjustment_key_str] = turn_data
         data[self.pictograph.letter] = letter_data
-        self.pictograph.arrow_placement_manager.special_positioner.update_specific_entry_in_json(
+        self.pictograph.arrow_placement_manager.special_positioner.data_updater.update_specific_entry(
             self.pictograph.letter, adjustment_key_str, turn_data
         )

@@ -2480,7 +2480,6 @@
       "static_rot_angle": 0
     },
     "(s, 0, 0.5)": {
-      "static_rot_angle": 0,
       "static": [100, 100]
     }
   },

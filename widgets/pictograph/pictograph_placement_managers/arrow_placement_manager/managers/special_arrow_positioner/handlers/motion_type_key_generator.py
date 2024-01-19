@@ -1,13 +1,14 @@
-from typing import TYPE_CHECKING, Dict
-
+import json
+import re
+from typing import TYPE_CHECKING, Dict, Optional, Tuple, Union
+from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.letter_lists import Type1_non_hybrid_letters
 
 if TYPE_CHECKING:
-    from objects.arrow.arrow import Arrow
     from ..special_arrow_positioner import SpecialArrowPositioner
 
 
-class KeyGenerator:
+class MotionTypeKeyGenerator:
     def __init__(self, positioner: "SpecialArrowPositioner") -> None:
         self.positioner = positioner
 
@@ -32,7 +33,6 @@ class KeyGenerator:
         else:
             return other_arrow.motion.motion_type
 
-    def generate_adjustment_key(self, arrow: "Arrow") -> str:
+    def generate_motion_type_key(self, arrow: Arrow) -> str:
         key = self.determine_key(arrow)
-        other_key = self._get_other_key(arrow)
-        return f"{key}({other_key})"
+        return key
