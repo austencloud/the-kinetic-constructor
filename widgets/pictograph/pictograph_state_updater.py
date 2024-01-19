@@ -1,6 +1,4 @@
 from typing import TYPE_CHECKING, Dict
-from PyQt6.QtSvg import QSvgRenderer
-from Enums import LetterNumberType
 from constants import *
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import Colors
@@ -15,11 +13,11 @@ class PictographStateUpdater:
 
     def update_pictograph(self, pictograph_dict: Dict = None) -> None:
         if pictograph_dict:
-            if self.p.is_pictograph_dict_complete(pictograph_dict):
+            if self.p.check.is_pictograph_dict_complete(pictograph_dict):
                 self.p.pictograph_dict = pictograph_dict
             self._update_from_pictograph_dict(pictograph_dict)
 
-        self.update_letter()
+        self.p.letter_item.update_letter()
         self._position_objects()
 
     def _update_from_pictograph_dict(self, pictograph_dict: Dict) -> None:
@@ -69,23 +67,3 @@ class PictographStateUpdater:
     def _position_objects(self) -> None:
         self.p.prop_placement_manager.update_prop_positions()
         self.p.arrow_placement_manager.update_arrow_placement()
-
-    def update_letter(self) -> None:
-        if all(motion.motion_type for motion in self.p.motions.values()):
-            self.p.letter = self.p.letter_engine.get_current_letter()
-            self.p.letter_type = self.get_letter_type(self.p.letter)
-            self.p.letter_item.letter = self.p.letter
-            self.p._set_letter_renderer(self.p.letter)
-            self.p.letter_item.position_letter_item(self.p.letter_item)
-        else:
-            self.p.letter = None
-            svg_path = f"resources/images/letter_button_icons/blank.svg"
-            renderer = QSvgRenderer(svg_path)
-            if renderer.isValid():
-                self.p.letter_item.setSharedRenderer(renderer)
-
-    def get_letter_type(self, letter: str) -> str | None:
-        for letter_type in LetterNumberType:
-            if letter in letter_type.letters:
-                return letter_type.name.replace("_", "").lower().capitalize()
-        return None

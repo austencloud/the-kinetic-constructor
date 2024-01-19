@@ -1,14 +1,11 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView
-from constants import BLUE, CODEX_PICTOGRAPH, RED
 from PyQt6.QtCore import Qt
 
-from utilities.TypeChecking.TypeChecking import Colors
 
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
-    from widgets.scroll_area.scroll_area import ScrollArea
 
 
 class PictographView(QGraphicsView):

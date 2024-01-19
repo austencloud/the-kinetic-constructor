@@ -8,6 +8,7 @@ from utilities.TypeChecking.prop_types import *
 if TYPE_CHECKING:
     from .prop_placement_manager import PropPlacementManager
 
+
 class BetaPropPositioner:
     def __init__(self, placement_manager: "PropPlacementManager") -> None:
         self.ppm = placement_manager
@@ -35,7 +36,7 @@ class BetaPropPositioner:
         )
 
     def _reposition_small_bilateral_props(self) -> None:
-        if self.pictograph.has_hybrid_orientations():
+        if self.pictograph.check.has_hybrid_orientations():
             for prop in self.pictograph.props.values():
                 self.ppm.default_positioner.set_prop_to_default_loc(prop)
 
@@ -111,7 +112,7 @@ class BetaPropPositioner:
         self, big_unilateral_props: List[Prop], big_bilateral_props: List[Prop]
     ) -> None:
         big_props = big_unilateral_props + big_bilateral_props
-        if self.pictograph.has_non_hybrid_orientations():
+        if self.pictograph.check.has_non_hybrid_orientations():
             for prop in big_props:
                 self.ppm.default_positioner.set_prop_to_default_loc(prop)
                 (

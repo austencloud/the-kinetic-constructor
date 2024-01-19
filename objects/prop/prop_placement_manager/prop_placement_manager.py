@@ -27,5 +27,5 @@ class PropPlacementManager:
             self.default_positioner.set_prop_to_default_loc(prop)
             self.default_positioner.set_prop_to_default_loc(ghost_prop)
 
-        if self.pictograph.has_props_in_beta():
+        if self.pictograph.check.has_props_in_beta():
             self.beta_positioner.reposition_beta_props()

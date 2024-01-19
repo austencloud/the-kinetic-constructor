@@ -3,10 +3,7 @@ from typing import TYPE_CHECKING, Dict, List, Union
 from utilities.TypeChecking.TypeChecking import Turns, Orientations
 
 if TYPE_CHECKING:
-    from widgets.pictograph_scroll_area.scroll_area import (
-        ScrollArea,
-    )
-
+    from .scroll_area import ScrollArea
 
 class ScrollAreaFilterTabManager:
     def __init__(self, scroll_area: "ScrollArea") -> None:
@@ -31,26 +28,3 @@ class ScrollAreaFilterTabManager:
                     return False
         return True
 
-    def update_filter_tab_if_needed(self) -> None:
-        if self.scroll_area.pictographs:
-            self.update_filter_tab()
-
-    def update_filter_tab(self) -> None:
-        first_pictograph = next(iter(self.scroll_area.pictographs.values()), None)
-        for motion in first_pictograph.motions.values():
-            if (
-                self.scroll_area.parent_tab.filter_tab.motion_type_attr_panel.isVisible()
-            ):
-                for (
-                    attr_box
-                ) in (
-                    self.scroll_area.parent_tab.filter_tab.motion_type_attr_panel.boxes
-                ):
-                    if motion.motion_type == attr_box.motion_type:
-                        attr_box.update_attr_box(motion)
-            elif self.scroll_area.parent_tab.filter_tab.color_attr_panel.isVisible():
-                for (
-                    attr_box
-                ) in self.scroll_area.parent_tab.filter_tab.color_attr_panel.boxes:
-                    if motion.motion_type == attr_box.color:
-                        attr_box.update_attr_box(motion)

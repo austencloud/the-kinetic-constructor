@@ -12,7 +12,6 @@ from utilities.TypeChecking.TypeChecking import (
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 
-    pass
 
 
 class PictographGetter:

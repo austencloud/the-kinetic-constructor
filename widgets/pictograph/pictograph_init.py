@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING, Dict, Tuple
-from PyQt6.QtCore import QPointF
-from PyQt6.QtWidgets import QGraphicsView
+from PyQt6.QtCore import QPointF, QPoint, Qt
 
 from objects.arrow.arrow import Arrow
 from objects.arrow.ghost_arrow import GhostArrow
@@ -18,90 +17,82 @@ from utilities.TypeChecking.TypeChecking import (
     MotionTypes,
 )
 from constants import *
-from widgets.pictograph.pictograph_view import PictographView
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 
+
 class PictographInit:
     def __init__(self, pictograph: "Pictograph") -> None:
-        self.pictograph = pictograph
+        self.p = pictograph
+        self.p.setSceneRect(0, 0, 950, 950)
+        self.p.setBackgroundBrush(Qt.GlobalColor.white)
 
     ### INIT ###
 
     def init_all_components(self) -> None:
-        self.pictograph.dragged_prop = None
-        self.pictograph.dragged_arrow = None
+        self.p.dragged_prop = None
+        self.p.dragged_arrow = None
 
-        self.pictograph.grid: Grid = self.init_grid()
-        self.pictograph.locations: Dict[
+        self.p.grid: Grid = self.init_grid()
+        self.p.locations: Dict[
             Locations, Tuple[int, int, int, int]
-        ] = self.init_quadrant_boundaries(self.pictograph.grid)
+        ] = self.init_quadrant_boundaries(self.p.grid)
 
-        self.pictograph.motions: Dict[Colors, Motion] = self.init_motions()
-        self.pictograph.red_motion, self.pictograph.blue_motion = (
-            self.pictograph.motions[RED],
-            self.pictograph.motions[BLUE],
-        )
-        self.pictograph.arrows, self.pictograph.ghost_arrows = self.init_arrows()
-        self.pictograph.red_arrow, self.pictograph.blue_arrow = (
-            self.pictograph.arrows[RED],
-            self.pictograph.arrows[BLUE],
-        )
-        self.pictograph.props, self.pictograph.ghost_props = self.init_props(
-            self.pictograph.main_widget.prop_type
-        )
-        self.pictograph.red_prop, self.pictograph.blue_prop = (
-            self.pictograph.props[RED],
-            self.pictograph.props[BLUE],
-        )
-        self.pictograph.letter_item: LetterItem = self.init_letter_item()
-
-        
+        self.p.motions: Dict[Colors, Motion] = self.init_motions()
+        self.p.arrows, self.p.ghost_arrows = self.init_arrows()
+        self.p.props, self.p.ghost_props = self.init_props()
+        self.p.letter_item: LetterItem = self.init_letter_item()
 
     def init_grid(self) -> Grid:
-        grid = Grid(self.pictograph)
+        grid = Grid(self.p)
         grid_position = QPointF(0, 0)
         grid.setPos(grid_position)
 
-        self.pictograph.grid = grid
+        self.p.grid = grid
         return grid
 
     def init_motions(self) -> Dict[Colors, Motion]:
-        return {color: self._create_motion(color) for color in [RED, BLUE]}
+        motions = {}
+        for color in [RED, BLUE]:
+            motions[color] = self._create_motion(color)
+        self.p.red_motion, self.p.blue_motion = (motions[RED], motions[BLUE])
+        return motions
 
     def init_objects(self, prop_type: PropTypes) -> None:
         self.init_grid()
-        self.pictograph.motions = self.init_motions()
-        self.pictograph.arrows, self.pictograph.ghost_arrows = self.init_arrows()
-        self.pictograph.props, self.pictograph.ghost_props = self.init_props(prop_type)
+        self.p.motions = self.init_motions()
+        self.p.arrows, self.p.ghost_arrows = self.init_arrows()
+        self.p.props, self.p.ghost_props = self.init_props(prop_type)
 
     def init_arrows(self) -> Tuple[Dict[Colors, Arrow], Dict[Colors, GhostArrow]]:
         arrows = {}
         ghost_arrows = {}
         for color in [BLUE, RED]:
             arrows[color], ghost_arrows[color] = self._create_arrow(color, None)
+        self.p.red_arrow, self.p.blue_arrow = (arrows[RED], arrows[BLUE])
         return arrows, ghost_arrows
 
-    def init_props(
-        self, prop_type: PropTypes
-    ) -> Tuple[Dict[Colors, Prop], Dict[Colors, GhostProp]]:
+    def init_props(self) -> Tuple[Dict[Colors, Prop], Dict[Colors, GhostProp]]:
         props = {}
         ghost_props = {}
         for color in [RED, BLUE]:
-            props[color], ghost_props[color] = self._create_prop(color, prop_type)
+            props[color], ghost_props[color] = self._create_prop(
+                color, self.p.main_widget.prop_type
+            )
+        self.p.red_prop, self.p.blue_prop = (props[RED], props[BLUE])
         return props, ghost_props
 
     def init_letter_item(self) -> LetterItem:
-        letter_item = LetterItem(self.pictograph)
-        self.pictograph.addItem(letter_item)
+        letter_item = LetterItem(self.p)
+        self.p.addItem(letter_item)
         return letter_item
 
     def init_quadrant_boundaries(
         self, grid: Grid
     ) -> Dict[Locations, Tuple[int, int, int, int]]:
         # Use cached coordinates directly
-        grid_center = grid.circle_coordinates_cache["center_point"].toPoint()
+        grid_center: QPoint = grid.circle_coordinates_cache["center_point"].toPoint()
 
         grid_center_x = grid_center.x()
         grid_center_y = grid_center.y()
@@ -109,16 +100,16 @@ class PictographInit:
         ne_boundary = (
             grid_center_x,
             0,
-            self.pictograph.width(),
+            self.p.width(),
             grid_center_y,
         )
         se_boundary = (
             grid_center_x,
             grid_center_y,
-            self.pictograph.width(),
-            self.pictograph.height(),
+            self.p.width(),
+            self.p.height(),
         )
-        sw_boundary = (0, grid_center_y, grid_center_x, self.pictograph.height())
+        sw_boundary = (0, grid_center_y, grid_center_x, self.p.height())
         nw_boundary = (
             0,
             0,
@@ -142,16 +133,14 @@ class PictographInit:
             COLOR: color,
             TURNS: 0,
         }
-        arrow = Arrow(self.pictograph, arrow_attributes, self.pictograph.motions[color])
-        ghost_arrow = GhostArrow(
-            self.pictograph, arrow_attributes, self.pictograph.motions[color]
-        )
+        arrow = Arrow(self.p, arrow_attributes, self.p.motions[color])
+        ghost_arrow = GhostArrow(self.p, arrow_attributes, self.p.motions[color])
         arrow.ghost = ghost_arrow
-        self.pictograph.motions[color].arrow = arrow
-        arrow.motion = self.pictograph.motions[color]
-        ghost_arrow.motion = self.pictograph.motions[color]
+        self.p.motions[color].arrow = arrow
+        arrow.motion = self.p.motions[color]
+        ghost_arrow.motion = self.p.motions[color]
         arrow.ghost = ghost_arrow
-        self.pictograph.addItem(arrow)
+        self.p.addItem(arrow)
         arrow.hide()
         return arrow, ghost_arrow
 
@@ -167,17 +156,15 @@ class PictographInit:
             LOC: None,
             ORI: None,
         }
-        prop: Prop = prop_class(self.pictograph, prop_attributes, None)
-        ghost_prop = GhostProp(
-            self.pictograph, prop_attributes, self.pictograph.motions[color]
-        )
-        self.pictograph.motions[color].prop = prop
-        prop.motion = self.pictograph.motions[color]
-        ghost_prop.motion = self.pictograph.motions[color]
+        prop: Prop = prop_class(self.p, prop_attributes, None)
+        ghost_prop = GhostProp(self.p, prop_attributes, self.p.motions[color])
+        self.p.motions[color].prop = prop
+        prop.motion = self.p.motions[color]
+        ghost_prop.motion = self.p.motions[color]
         prop.ghost = ghost_prop
-        prop.arrow = self.pictograph.motions[color].arrow
-        self.pictograph.motions[color].arrow.prop = prop
-        self.pictograph.addItem(prop)
+        prop.arrow = self.p.motions[color].arrow
+        self.p.motions[color].arrow.prop = prop
+        self.p.addItem(prop)
         prop.hide()
         return prop, ghost_prop
 
@@ -193,7 +180,7 @@ class PictographInit:
             END_LOC: None,
             START_ORI: None,
         }
-        return Motion(self.pictograph, motion_dict)
+        return Motion(self.p, motion_dict)
 
 
 prop_class_mapping = {

@@ -74,7 +74,7 @@ class AttrPanel(QFrame):
                 BLUE_TURNS: 0,
                 RED_TURNS: 0,
             }
-            if pictograph.has_a_dash() or pictograph.has_a_static_motion():
+            if pictograph.check.has_a_dash() or pictograph.check.has_a_static_motion():
                 if pictograph.motions[BLUE].motion_type in [DASH, STATIC]:
                     pictograph_dict[BLUE_PROP_ROT_DIR] = NO_ROT
                 elif pictograph.motions[RED].motion_type in [DASH, STATIC]:
