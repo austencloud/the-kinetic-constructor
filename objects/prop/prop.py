@@ -27,12 +27,13 @@ if TYPE_CHECKING:
 
 class Prop(GraphicalObject):
     loc: Locations
-    
+    ori: Orientations
+
     def __init__(self, scene, prop_dict: Dict, motion: "Motion") -> None:
         super().__init__(scene)
         self.motion = motion
         self.scene: Pictograph | PropBox = scene
-        self.arrow: Arrow 
+        self.arrow: Arrow
         self.ghost: Prop = None
         self.is_ghost: bool = False
         self.previous_location: Locations
@@ -49,7 +50,7 @@ class Prop(GraphicalObject):
 
     def mousePressEvent(self, event) -> None:
         self.mouse_event_handler.handle_mouse_press()
-        
+
     def mouseMoveEvent(self, event) -> None:
         self.mouse_event_handler.handle_mouse_move(event)
 
@@ -58,28 +59,6 @@ class Prop(GraphicalObject):
 
     ### GETTERS ###
 
-
-
-    def swap_ori(self) -> None:
-        ori_map = {
-            IN: OUT,
-            OUT: IN,
-            CLOCK: COUNTER,
-            COUNTER: CLOCK,
-        }
-        self.ori = ori_map[self.ori]
-
-
-    def get_attributes(self) -> Dict[str, Union[Colors, Locations, Orientations]]:
-        prop_attributes = [attr.value for attr in PropAttribute]
-        return {attr: getattr(self, attr) for attr in prop_attributes}
-
-    def _update_prop_rotation_angle(self) -> None:
-        prop_rotation_angle = self.rot_angle_manager.get_rotation_angle()
-        if self.ghost:
-            self.ghost.setRotation(prop_rotation_angle)
-        self.setRotation(prop_rotation_angle)
-
     def update_prop(
         self, prop_dict: Dict[str, Union[Colors, Locations, Orientations]] = None
     ) -> None:
@@ -87,7 +66,7 @@ class Prop(GraphicalObject):
             self.attr_manager.update_attributes(prop_dict)
         self.svg_manager.update_prop_svg()
         self.svg_manager.update_color()
-        self._update_prop_rotation_angle()
+        self.rot_angle_manager.update_prop_rotation_angle()
 
     ### UPDATERS ###
 
@@ -95,7 +74,6 @@ class Prop(GraphicalObject):
         self.prop_type = prop_type
         self.svg_manager.update_prop_svg()
         self.update_prop()
-
 
     ### HELPERS ###
 
@@ -142,7 +120,6 @@ class Prop(GraphicalObject):
 
         offset_tuple = offset_map.get(self.loc, (0, 0))
         return QPointF(offset_tuple[0], offset_tuple[1])
-
 
     def is_radial(self) -> bool:
         return self.ori in [IN, OUT]

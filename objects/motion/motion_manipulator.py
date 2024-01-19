@@ -42,9 +42,9 @@ class MotionManipulator:
 
     def swap_rot_dir(self) -> None:
         if self.motion.arrow.is_svg_mirrored:
-            self.motion.arrow.unmirror_svg()
+            self.motion.arrow.mirror_manager.unmirror_svg()
         elif not self.motion.arrow.is_svg_mirrored:
-            self.motion.arrow.mirror_svg()
+            self.motion.arrow.mirror_manager.mirror_svg()
 
         if self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
             new_rot_dir = CLOCKWISE
@@ -80,7 +80,7 @@ class MotionManipulator:
         elif self.motion.prop_rot_dir == NO_ROT:
             new_rot_dir = NO_ROT
 
-        self.motion.prop.swap_ori(self.motion.prop.ori)
+        self.motion.prop.attr_manager.swap_ori(self.motion.prop.ori)
         pictograph_dict = {
             f"{self.motion.color}_motion_type": new_motion_type,
             f"{self.motion.color}_prop_rot_dir": new_rot_dir,

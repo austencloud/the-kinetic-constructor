@@ -40,3 +40,9 @@ class PropRotAngleManager:
         key = self.prop.ori
         rotation_angle = angle_map.get(key, {}).get(self.prop.loc, 0)
         return rotation_angle
+
+    def update_prop_rotation_angle(self) -> None:
+        prop_rotation_angle = self.get_rotation_angle()
+        if self.prop.ghost:
+            self.prop.ghost.setRotation(prop_rotation_angle)
+        self.prop.setRotation(prop_rotation_angle)

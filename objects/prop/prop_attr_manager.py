@@ -1,9 +1,11 @@
 from typing import TYPE_CHECKING, Dict, Union
+from Enums import PropAttribute
 
 from constants import *
 from utilities.TypeChecking.MotionAttributes import (
     Colors,
     Locations,
+    Orientations,
     Turns,
     MotionTypes,
 )
@@ -40,3 +42,16 @@ class PropAttrManager:
         else:
             axis: Axes = None
         return axis
+
+    def swap_ori(self) -> None:
+        ori_map = {
+            IN: OUT,
+            OUT: IN,
+            CLOCK: COUNTER,
+            COUNTER: CLOCK,
+        }
+        self.ori = ori_map[self.ori]
+
+    def get_attributes(self) -> Dict[str, Union[Colors, Locations, Orientations]]:
+        prop_attributes = [attr.value for attr in PropAttribute]
+        return {attr: getattr(self, attr) for attr in prop_attributes}
