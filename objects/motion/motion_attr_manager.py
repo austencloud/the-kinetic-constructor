@@ -7,6 +7,7 @@ from constants import (
     DASH,
     END_LOC,
     END_ORI,
+    LEADING,
     MOTION_TYPE,
     NO_ROT,
     OPP,
@@ -17,6 +18,7 @@ from constants import (
     START_LOC,
     START_ORI,
     STATIC,
+    TRAILING,
     TURNS,
 )
 from utilities.TypeChecking.TypeChecking import Colors, Orientations, Turns
@@ -40,6 +42,7 @@ class MotionAttrManager:
         for attribute, value in motion_dict.items():
             if value is not None:
                 setattr(self.m, attribute, value)
+
         if self.m.motion_type:
             self.m.end_ori: Orientations = self.m.ori_calculator.get_end_ori()
 

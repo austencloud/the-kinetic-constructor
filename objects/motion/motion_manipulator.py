@@ -36,7 +36,7 @@ class MotionManipulator:
             f"{self.motion.color}_start_location": new_start_loc,
             f"{self.motion.color}_end_location": new_end_loc,
         }
-        self.motion.scene.state_updater.update_pictograph(pictograph_dict)
+        self.motion.pictograph.state_updater.update_pictograph(pictograph_dict)
 
     ### MIRRORING ###
 
@@ -61,7 +61,7 @@ class MotionManipulator:
             f"{self.motion.color}_end_location": new_end_loc,
             f"{self.motion.color}_prop_rot_dir": new_rot_dir,
         }
-        self.motion.scene.state_updater.update_pictograph(pictograph_dict)
+        self.motion.pictograph.state_updater.update_pictograph(pictograph_dict)
 
     ### MOTION TYPE ###
 
@@ -86,7 +86,7 @@ class MotionManipulator:
             f"{self.motion.color}_prop_rot_dir": new_rot_dir,
             f"{self.motion.color}_end_ori": self.motion.prop.ori,
         }
-        self.motion.scene.state_updater.update_pictograph(pictograph_dict)
+        self.motion.pictograph.state_updater.update_pictograph(pictograph_dict)
 
     ### ROTATION ###
 

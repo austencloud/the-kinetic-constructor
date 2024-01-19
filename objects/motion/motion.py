@@ -1,5 +1,6 @@
-from constants import ANTI, DASH, FLOAT, PRO, STATIC
 from typing import TYPE_CHECKING, Dict
+
+from objects.motion.motion_checker import MotionChecker
 
 from .motion_attr_manager import MotionAttrManager
 from .motion_manipulator import MotionManipulator
@@ -16,6 +17,7 @@ from utilities.TypeChecking.TypeChecking import (
     PropRotDirs,
     Turns,
 )
+
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
     from objects.arrow.arrow import Arrow
@@ -24,26 +26,14 @@ if TYPE_CHECKING:
 
 class Motion:
     def __init__(self, pictograph: "Pictograph", motion_dict: Dict) -> None:
-        self.scene = pictograph
+        self.pictograph = pictograph
         self.motion_dict = motion_dict
-
         self.ori_calculator = MotionOriCalculator(self)
         self.manipulator = MotionManipulator(self)
         self.attr_manager = MotionAttrManager(self)
         self.turns_manager = MotionTurnsManager(self)
         self.updater = MotionUpdater(self)
-
-    def is_shift(self) -> bool:
-        return self.motion_type in [PRO, ANTI, FLOAT]
-
-    def is_dash(self) -> bool:
-        return self.motion_type == DASH
-
-    def is_static(self) -> bool:
-        return self.motion_type == STATIC
-
-    def is_dash_or_static(self) -> bool:
-        return self.motion_type in [DASH, STATIC]
+        self.check = MotionChecker(self)
 
     color: Colors
     turns: Turns

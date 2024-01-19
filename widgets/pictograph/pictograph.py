@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Dict, List, Tuple
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPixmapItem
 
 from objects.arrow.arrow import Arrow
-from objects.arrow.arrow_placement_manager.managers.main_arrow_placement_manager import (
+from objects.arrow.arrow_placement_manager.arrow_placement_manager import (
     ArrowPlacementManager,
 )
 from objects.arrow.ghost_arrow import GhostArrow

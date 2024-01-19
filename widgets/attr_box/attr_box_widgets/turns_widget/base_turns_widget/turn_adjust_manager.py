@@ -63,14 +63,16 @@ class TurnAdjustManager:
 
     def is_motion_relevant(self, motion: "Motion") -> bool:
         attr_type = self.attr_box.attribute_type
-        if self.attr_box.attr_panel.filter_tab.letter_type == motion.scene.letter_type:
+        if (
+            self.attr_box.attr_panel.filter_tab.letter_type
+            == motion.pictograph.letter_type
+        ):
             if attr_type == MOTION_TYPE:
                 return motion.motion_type == self.attr_box.motion_type
             elif attr_type == COLOR:
                 return motion.color == self.attr_box.color
             elif attr_type == LEAD_STATE:
                 return motion.lead_state == self.attr_box.lead_state
-        
 
     ### FLAGS ###
 
@@ -85,7 +87,7 @@ class TurnAdjustManager:
     def update_motion_properties(self, motion: "Motion", new_turns: Turns) -> None:
         self._update_turns_and_rotation(motion, new_turns)
         pictograph_dict = {f"{motion.color}_turns": new_turns}
-        motion.scene.state_updater.update_pictograph(pictograph_dict)
+        motion.pictograph.state_updater.update_pictograph(pictograph_dict)
 
     ### PRIVATE METHODS ###
 
@@ -121,14 +123,17 @@ class TurnAdjustManager:
 
     def _set_prop_rot_dir_based_on_vtg_state(self, motion: "Motion") -> None:
         """Set the rotation direction of the motion based on the vtg directional relationship."""
-        other_motion = motion.scene.get.other_motion(motion)
+        other_motion = motion.pictograph.get.other_motion(motion)
         motion.prop_rot_dir = self._determine_prop_rot_dir(motion, other_motion)
 
     def _determine_prop_rot_dir(
         self, motion: "Motion", other_motion: "Motion"
     ) -> PropRotDirs:
         """Determine the property rotation direction."""
-        if motion.scene.letter in Type2_letters or motion.scene.letter in Type3_letters:
+        if (
+            motion.pictograph.letter in Type2_letters
+            or motion.pictograph.letter in Type3_letters
+        ):
             if (
                 not self.attr_box.vtg_dir_btn_state[SAME]
                 and not self.attr_box.vtg_dir_btn_state[OPP]
@@ -143,7 +148,7 @@ class TurnAdjustManager:
                 elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
                     return CLOCKWISE
 
-        elif motion.scene.letter in Type4_letters:
+        elif motion.pictograph.letter in Type4_letters:
             if other_motion.prop_rot_dir == NO_ROT:
                 self.turns_widget.attr_box.rot_dir_button_manager.show_prop_rot_dir_buttons()
                 self.turns_widget.attr_box.rot_dir_button_manager.cw_button.press()

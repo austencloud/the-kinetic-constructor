@@ -32,9 +32,7 @@ class ArrowRotAngleCalculator:
         return self.angle_resolvers.get(self.a.motion.motion_type, lambda: 0)()
 
     def _get_final_rot_angle_override(self) -> Optional[int]:
-        special_manager = (
-            self.a.scene.arrow_placement_manager.special_placement_manager
-        )
+        special_manager = self.a.scene.arrow_placement_manager.special_positioner
         if special_manager:
             rotation_override = special_manager.get_rot_angle_override(self.a)
             if rotation_override == 0 or rotation_override:
@@ -94,9 +92,9 @@ class ArrowRotAngleCalculator:
                 },
             },
         }
-        return direction_map[self.a.motion_type][
-            self.a.motion.prop_rot_dir
-        ].get(self.a.loc, 0)
+        return direction_map[self.a.motion_type][self.a.motion.prop_rot_dir].get(
+            self.a.loc, 0
+        )
 
     def _get_static_angle(self) -> int:
         direction_map = {
@@ -129,9 +127,7 @@ class ArrowRotAngleCalculator:
 
     def _get_static_angle(self) -> int:
         direction_map = self._get_static_direction_map()
-        return direction_map.get(self.a.motion.prop_rot_dir, {}).get(
-            self.a.loc, 0
-        )
+        return direction_map.get(self.a.motion.prop_rot_dir, {}).get(self.a.loc, 0)
 
     def _get_static_direction_map(
         self,

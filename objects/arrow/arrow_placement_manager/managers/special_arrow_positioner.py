@@ -1,8 +1,9 @@
 import json
 import re
 from typing import TYPE_CHECKING, Dict, Optional, Tuple, Union
-from ..arrow import Arrow
-from .managers.adjustment_key_generator import AdjustmentKeyGenerator
+
+from .adjustment_key_generator import AdjustmentKeyGenerator
+from ...arrow import Arrow
 from utilities.TypeChecking.letter_lists import (
     Type1_hybrid_letters,
     Type1_letters,
@@ -13,14 +14,13 @@ from utilities.TypeChecking.letter_lists import (
 )
 
 if TYPE_CHECKING:
-    from .managers.main_arrow_placement_manager import ArrowPlacementManager
+    from ..arrow_placement_manager import ArrowPlacementManager
     from widgets.pictograph.pictograph import Pictograph
 
 
 class SpecialArrowPositioner:
-    def __init__(self, pictograph: "Pictograph", main_manager: "ArrowPlacementManager"):
+    def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
-        self.main_manager = main_manager
         self.json_path = "arrow_placement/special_placements.json"
         self.special_placements = None
         self.data_modified = False
@@ -41,7 +41,7 @@ class SpecialArrowPositioner:
         """Update a specific entry in the JSON file."""
         try:
             with open(self.json_path, "r", encoding="utf-8") as file:
-                data = json.load(file)
+                data: Dict = json.load(file)
             letter_data = data.get(letter, {})
             letter_data[adjustment_key] = new_data
             data[letter] = letter_data
@@ -99,14 +99,14 @@ class SpecialArrowPositioner:
         ]
 
     def _get_default_data(self, arrow: "Arrow") -> Tuple[int, int]:
-        default_mgr = self.pictograph.arrow_placement_manager.default_manager
+        default_mgr = self.pictograph.arrow_placement_manager.default_positioner
         default_turn_data = default_mgr.get_default_adjustment(arrow)
         return (default_turn_data[0], default_turn_data[1])
 
     def _create_default_turn_data(
         self, arrow: "Arrow", adjustment: Tuple[int, int]
     ) -> Dict:
-        default_mgr = self.pictograph.arrow_placement_manager.default_manager
+        default_mgr = self.pictograph.arrow_placement_manager.default_positioner
         default_turn_data = default_mgr.get_default_adjustment(arrow)
 
         key = self._determine_key(arrow)
@@ -181,26 +181,25 @@ class SpecialArrowPositioner:
     ) -> Optional[Tuple[int, int]]:
         if adjustment_key is None:
             adjustment_key = self.key_generator.generate(letter)
-        self.special_placements = self._load_placements()
+        self.special_placements: Dict[str, Dict] = self._load_placements()
         letter_adjustments: Dict = self.special_placements.get(letter, {}).get(
             adjustment_key, {}
         )
+    
+        adjustment_map = {
+            "S": letter_adjustments.get(arrow.motion.lead_state),
+            "T": letter_adjustments.get(arrow.motion.lead_state),
+            **{letter: letter_adjustments.get(arrow.motion_type) for letter in Type1_hybrid_letters},
+            **{letter: letter_adjustments.get(arrow.color) for letter in non_hybrid_letters},
+            **{letter: letter_adjustments.get(arrow.motion_type) for letter in Type2_letters + Type3_letters},
+        }
 
-        if letter in ["S", "T"]:
-            return letter_adjustments.get(arrow.motion.lead_state)
-        elif letter in Type1_hybrid_letters:
-            return letter_adjustments.get(arrow.motion_type)
-        elif letter in non_hybrid_letters:
-            return letter_adjustments.get(arrow.color)
-        elif letter in Type2_letters or letter in Type3_letters:
-            return letter_adjustments.get(arrow.motion_type)
-
-        return None
+        return adjustment_map.get(letter)
 
     def _get_special_adjustment(
         self, arrow: Arrow, adjustment_key: str
     ) -> Optional[Tuple[int, int]]:
-        letter_adjustments = self.special_placements.get(
+        letter_adjustments:Dict = self.special_placements.get(
             self.pictograph.letter, {}
         ).get(adjustment_key, {})
 

@@ -17,7 +17,7 @@ from utilities.TypeChecking.letter_lists import dash_letters
 from utilities.TypeChecking.TypeChecking import OrientationTypes
 
 if TYPE_CHECKING:
-    from .main_arrow_placement_manager import ArrowPlacementManager
+    from ..arrow_placement_manager import ArrowPlacementManager
     from widgets.pictograph.pictograph import Pictograph
 import codecs
 
@@ -26,10 +26,8 @@ class DefaultArrowPositioner:
     def __init__(
         self,
         pictograph: "Pictograph",
-        arrow_placement_manager: "ArrowPlacementManager",
     ) -> None:
         self.pictograph = pictograph
-        self.arrow_placement_manager = arrow_placement_manager
         self.motion_type_files = {
             PRO: "pro_placements.json",
             ANTI: "anti_placements.json",

@@ -18,8 +18,11 @@ class ArrowLocationCalculator:
             STATIC: self.get_static_location,
         }
 
-    def update_location(self) -> None:
-        if not self.a.is_ghost and self.a.ghost:
+    def update_location(self, new_location: Locations = None) -> None:
+        if new_location:
+            self.a.loc = new_location
+            self.a.ghost.loc = new_location
+        elif not self.a.is_ghost and self.a.ghost:
             self.a.loc = self.get_arrow_location()
             self.a.ghost.loc = self.a.loc
 
