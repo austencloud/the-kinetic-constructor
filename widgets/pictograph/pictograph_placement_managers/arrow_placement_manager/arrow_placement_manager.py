@@ -36,13 +36,13 @@ class ArrowPlacementManager:
         new_pos = initial_pos + adjustment - arrow.boundingRect().center()
         arrow.setPos(new_pos)
         arrow.rot_angle_calculator.update_rotation()
-
+ 
     def get_adjustment(self, arrow: Arrow) -> QPointF:
         adjustment_key = self.key_generator.generate(self.pictograph.letter)
         self.special_positioner.special_placements = (
-            self.special_positioner._load_placements()
+            self.special_positioner.data_loader.load_placements()
         )
-
+ 
         if self.letter in self.special_positioner.special_placements:
             special_adjustment = self.special_positioner.get_adjustment_for_letter(
                 self.letter, arrow, adjustment_key

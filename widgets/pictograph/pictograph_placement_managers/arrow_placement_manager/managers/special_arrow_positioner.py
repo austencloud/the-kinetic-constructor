@@ -21,167 +21,31 @@ if TYPE_CHECKING:
 class SpecialArrowPositioner:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
-        self.json_path = "arrow_placement/special_placements.json"
-        self.special_placements = None
-        self.data_modified = False
-        self.key_generator = AdjustmentKeyGenerator(pictograph)
+        self.data_loader = SpecialPlacementDataLoader()
+        self.data_updater = SpecialPlacementDataUpdater(pictograph)
+        self.adjustment_calculator = AdjustmentCalculator(pictograph)
+        self.key_generator = KeyGenerator(pictograph)
+        self.rot_angle_handler = RotAngleOverrideHandler(pictograph)
+        self.data_sorter = DataSorter(pictograph)
+        self.adjustment_mapper = AdjustmentMapper(pictograph)
+        self.special_placements: Dict = self.data_loader.load_placements()
 
-    def _load_placements(self) -> Dict:
-        try:
-            with open(self.json_path, "r", encoding="utf-8") as file:
-                self.special_placements = json.load(file)
-        except json.JSONDecodeError as e:
-            print(f"JSON decoding error occurred: {e}")
-            self.special_placements = {}
-        return self.special_placements
-
-    def update_specific_entry_in_json(
-        self, letter: str, adjustment_key: str, new_data: Dict
-    ) -> None:
-        """Update a specific entry in the JSON file."""
-        try:
-            with open(self.json_path, "r", encoding="utf-8") as file:
-                data: Dict = json.load(file)
-            letter_data = data.get(letter, {})
-            letter_data[adjustment_key] = new_data
-            data[letter] = letter_data
-            json_str = json.dumps(data, indent=2, ensure_ascii=False)
-            formatted_json_str = re.sub(
-                r"\[\s+(-?\d+),\s+(-?\d+)\s+\]", r"[\1, \2]", json_str
+    def update_arrow_placement(self, arrow: Arrow) -> None:
+        adjustment_key = self.key_generator.generate_adjustment_key(arrow)
+        adjustment = self.adjustment_calculator.calculate_adjustment(
+            arrow, adjustment_key
+        )
+        if adjustment:
+            self.data_updater.update_specific_entry(
+                self.pictograph.letter, adjustment_key, adjustment
             )
-            with open(self.json_path, "w", encoding="utf-8") as file:
-                file.write(formatted_json_str)
-        except json.JSONDecodeError as e:
-            print(f"JSON decoding error occurred: {e}")
-
-    def add_and_sort_new_entry(
-        self, letter: str, adjustment_key: str, new_adjustment: Dict
-    ) -> None:
-        letter_data = self.special_placements.get(letter, {})
-
-        if adjustment_key not in letter_data:
-            letter_data[adjustment_key] = new_adjustment
-            self.special_placements[letter] = letter_data
-            self.data_modified = True
-
-    def update_arrow_adjustments_in_json(
-        self, adjustment: Tuple[int, int], arrow: "Arrow"
-    ) -> None:
-        """Updates the arrow adjustments in the JSON file."""
-        if not arrow:
-            return
-
-        # Load current placements
-        self._load_placements()
-
-        adjustment_key = self._generate_adjustment_key()
-        letter_data: Dict = self.special_placements.get(self.pictograph.letter, {})
-        turn_data = letter_data.get(adjustment_key, {})
-
-        if turn_data:
-            self._update_turn_data(turn_data, arrow, adjustment)
-        else:
-            turn_data = self._create_default_turn_data(arrow, adjustment)
-
-        # Update the specific entry in the JSON file
-        self.update_specific_entry_in_json(
-            self.pictograph.letter, adjustment_key, turn_data
-        )
-
-    def _update_turn_data(
-        self, turn_data: Dict, arrow: "Arrow", adjustment: Tuple[int, int]
-    ) -> None:
-        key = self._determine_key(arrow)
-        turn_data.setdefault(key, self._get_default_data(arrow))
-        turn_data[key] = [
-            turn_data[key][0] + adjustment[0],
-            turn_data[key][1] + adjustment[1],
-        ]
-
-    def _get_default_data(self, arrow: "Arrow") -> Tuple[int, int]:
-        default_mgr = self.pictograph.arrow_placement_manager.default_positioner
-        default_turn_data = default_mgr.get_default_adjustment(arrow)
-        return (default_turn_data[0], default_turn_data[1])
-
-    def _create_default_turn_data(
-        self, arrow: "Arrow", adjustment: Tuple[int, int]
-    ) -> Dict:
-        default_mgr = self.pictograph.arrow_placement_manager.default_positioner
-        default_turn_data = default_mgr.get_default_adjustment(arrow)
-
-        key = self._determine_key(arrow)
-
-        return {
-            key: [
-                default_turn_data[0] + adjustment[0],
-                default_turn_data[1] + adjustment[1],
-            ]
-        }
-
-    def _determine_key(self, arrow: "Arrow") -> str:
-        if self.pictograph.letter in ["S", "T"]:
-            return arrow.motion.lead_state
-        elif self.pictograph.letter in Type1_non_hybrid_letters:
-            return arrow.color
-        else:
-            return arrow.motion_type
-
-    def _get_other_key(self, arrow: "Arrow") -> str:
-        other_arrow = (
-            self.pictograph.blue_arrow
-            if arrow == self.pictograph.red_arrow
-            else self.pictograph.red_arrow
-        )
-        if self.pictograph.letter in ["S", "T"]:
-            return other_arrow.motion.lead_state
-        elif self.pictograph.letter in Type1_non_hybrid_letters:
-            return other_arrow.color
-        else:
-            return other_arrow.motion_type
-
-    def _sort_entries(self, letter_data: Dict[str, Tuple[int, int]]) -> Dict:
-        """Should use this occasionally to sort the entries in the JSON file."""
-
-        def sort_key(item) -> Tuple[int, Union[int, float], Union[int, float]]:
-            key = item[0]
-            numbers = [
-                float(num) if "." in num else int(num)
-                for num in re.findall(r"\d+\.?\d*", key)
-            ]
-            char = re.search(r"[so]", key)
-
-            if self.pictograph.letter in Type1_letters:
-                return (numbers[0], numbers[1] if len(numbers) > 1 else float("inf"))
-            elif char:
-                char_priority = {"s": 1, "o": 2}.get(char.group(), 3)
-                return (
-                    char_priority,
-                    numbers[0],
-                    numbers[1] if len(numbers) > 1 else float("inf"),
-                )
-            else:
-                return (0, numbers[0], numbers[1] if len(numbers) > 1 else float("inf"))
-
-        return dict(sorted(letter_data.items(), key=sort_key))
-
-    def get_rot_angle_override(self, arrow: Arrow) -> Optional[int]:
-        adjustment_key = self._generate_adjustment_key()
-        placements = self._load_placements()
-        letter_adjustments: Dict = placements.get(self.pictograph.letter, {}).get(
-            adjustment_key, {}
-        )
-        return letter_adjustments.get(f"{arrow.motion_type}_rot_angle", {})
-
-    def _generate_adjustment_key(self) -> str:
-        """Delegate the adjustment key generation to the AdjustmentKeyGenerator."""
-        return self.key_generator.generate(self.pictograph.letter)
-
+            
     def get_adjustment_for_letter(
         self, letter: str, arrow: Arrow, adjustment_key: str = None
     ) -> Optional[Tuple[int, int]]:
         if adjustment_key is None:
-            adjustment_key = self.key_generator.generate(letter)
-        self.special_placements: Dict[str, Dict] = self._load_placements()
+            adjustment_key = self.key_generator.determine_key(letter)
+        self.special_placements: Dict[str, Dict] = self.data_loader.load_placements()
         letter_adjustments: Dict = self.special_placements.get(letter, {}).get(
             adjustment_key, {}
         )
@@ -205,29 +69,152 @@ class SpecialArrowPositioner:
 
         return adjustment_map.get(letter)
 
-    def _get_special_adjustment(
+class SpecialPlacementDataLoader:
+    def __init__(self) -> None:
+        self.json_path = "arrow_placement/special_placements.json"
+
+    def load_placements(self) -> Dict:
+        try:
+            with open(self.json_path, "r", encoding="utf-8") as file:
+                return json.load(file)
+        except FileNotFoundError:
+            print(f"File not found: {self.json_path}")
+            return {}
+        except json.JSONDecodeError as e:
+            print(f"JSON decoding error occurred: {e}")
+            return {}
+
+
+class SpecialPlacementDataUpdater:
+    def __init__(self, pictograph: "Pictograph") -> None:
+        self.pictograph = pictograph
+        self.data_loader = SpecialPlacementDataLoader()
+
+    def update_specific_entry(
+        self, letter: str, adjustment_key: str, new_data: Dict
+    ) -> None:
+        data = self.data_loader.load_placements()
+        data.setdefault(letter, {})[adjustment_key] = new_data
+        with open(self.data_loader.json_path, "w", encoding="utf-8") as file:
+            json.dump(data, file, indent=2, ensure_ascii=False)
+
+
+class AdjustmentCalculator:
+    def __init__(self, pictograph: "Pictograph") -> None:
+        self.pictograph = pictograph
+        self.data_loader = SpecialPlacementDataLoader()
+        self.key_generator = KeyGenerator(pictograph)
+
+    def calculate_adjustment(
         self, arrow: Arrow, adjustment_key: str
     ) -> Optional[Tuple[int, int]]:
-        letter_adjustments: Dict = self.special_placements.get(
-            self.pictograph.letter, {}
-        ).get(adjustment_key, {})
+        placements = self.data_loader.load_placements()
+        letter_data: Dict[str, Dict] = placements.get(self.pictograph.letter, {})
+        return letter_data.get(adjustment_key, {}).get(
+            self.key_generator.determine_key(arrow)
+        )
 
-        if (
-            self.pictograph.letter in Type1_hybrid_letters
-            or self.pictograph.letter in Type2_letters
-        ):
-            return letter_adjustments.get(arrow.motion_type)
+
+class KeyGenerator:
+    def __init__(self, pictograph: "Pictograph") -> None:
+        self.pictograph = pictograph
+
+    def determine_key(self, arrow: "Arrow") -> str:
+        if self.pictograph.letter in ["S", "T"]:
+            return arrow.motion.lead_state
         elif self.pictograph.letter in Type1_non_hybrid_letters:
-            return letter_adjustments.get(arrow.color)
+            return arrow.color
+        else:
+            return arrow.motion_type
 
-        return None
+    def _get_other_key(self, arrow: "Arrow") -> str:
+        other_arrow = (
+            self.pictograph.blue_arrow
+            if arrow == self.pictograph.red_arrow
+            else self.pictograph.red_arrow
+        )
+        if self.pictograph.letter in ["S", "T"]:
+            return other_arrow.motion.lead_state
+        elif self.pictograph.letter in Type1_non_hybrid_letters:
+            return other_arrow.color
+        else:
+            return other_arrow.motion_type
 
-    def _convert_key_to_tuple(self, key: str) -> Tuple[int, int]:
-        key_values = key.strip("()").split(", ")
-        converted_values = []
-        for value in key_values:
-            if value.isdigit() and int(value) in [0, 1, 2, 3]:
-                converted_values.append(int(value))
+    def generate_adjustment_key(self, arrow: Arrow) -> str:
+        key = self.determine_key(arrow)
+        other_key = self._get_other_key(arrow)
+        return f"{key}({other_key})"
+
+
+class RotAngleOverrideHandler:
+    def __init__(self, pictograph: "Pictograph") -> None:
+        self.pictograph = pictograph
+        self.data_loader = SpecialPlacementDataLoader()
+
+    def get_rot_angle_override_from_placements_dict(
+        self, arrow: Arrow
+    ) -> Optional[int]:
+        placements = self.data_loader.load_placements()
+        letter_data: Dict[str, Dict] = placements.get(self.pictograph.letter, {})
+        adjustment_key = KeyGenerator(self.pictograph).generate_adjustment_key(arrow)
+        return letter_data.get(adjustment_key, {}).get(f"{arrow.motion_type}_rot_angle")
+
+
+class DataSorter:
+    def __init__(self, pictograph: "Pictograph") -> None:
+        self.pictograph = pictograph
+        self.data_loader = SpecialPlacementDataLoader()
+        self.data_updater = SpecialPlacementDataUpdater(pictograph)
+
+    def sort_entries(self) -> None:
+        data = self.data_loader.load_placements()
+        for letter, letter_data in data.items():
+            sorted_data = self._sort_letter_data(letter_data)
+            data[letter] = sorted_data
+        self.data_updater.update_specific_entry(data)
+
+    def _sort_letter_data(self, letter_data: Dict) -> Dict:
+        def sort_key(item) -> Tuple[int, Union[int, float], Union[int, float]]:
+            key = item[0]
+            numbers = [
+                float(num) if "." in num else int(num)
+                for num in re.findall(r"\d+\.?\d*", key)
+            ]
+            char = re.search(r"[so]", key)
+
+            if self.pictograph.letter in Type1_letters:
+                return (numbers[0], numbers[1] if len(numbers) > 1 else float("inf"))
+            elif char:
+                char_priority = {"s": 1, "o": 2}.get(char.group(), 3)
+                return (
+                    char_priority,
+                    numbers[0],
+                    numbers[1] if len(numbers) > 1 else float("inf"),
+                )
             else:
-                converted_values.append(float(value))
-        return tuple(converted_values)
+                return (0, numbers[0], numbers[1] if len(numbers) > 1 else float("inf"))
+
+        return dict(sorted(letter_data.items(), key=sort_key))
+
+
+class AdjustmentMapper:
+    def __init__(self, pictograph: "Pictograph") -> None:
+        self.pictograph = pictograph
+        self.adjustment_calculator = AdjustmentCalculator(pictograph)
+
+    def apply_adjustment_to_arrow(self, arrow: Arrow) -> None:
+        key_generator = KeyGenerator(self.pictograph)
+        adjustment_key = key_generator.generate_adjustment_key(arrow)
+        adjustment = self.adjustment_calculator.calculate_adjustment(
+            arrow, adjustment_key
+        )
+
+        if adjustment:
+            self._apply_adjustment(arrow, adjustment)
+
+    def _apply_adjustment(self, arrow: Arrow, adjustment: Tuple[int, int]) -> None:
+        # Calculate the new position based on the adjustment
+        new_x = arrow.x() + adjustment[0]
+        new_y = arrow.y() + adjustment[1]
+        # Apply the new position to the arrow
+        arrow.setPos(new_x, new_y)
