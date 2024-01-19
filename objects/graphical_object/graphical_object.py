@@ -20,7 +20,7 @@ class GraphicalObject(QGraphicsSvgItem):
     svg_file: str
     self: Union["Arrow", "Prop"]
     ghost: Union["Arrow", "Prop"]
-    is_ghost: bool
+    is_ghost: bool = None
     color: Colors
     renderer: QSvgRenderer
 

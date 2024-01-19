@@ -51,7 +51,6 @@ class ArrowMirrorManager:
     def mirror_svg(self, arrow: "Arrow") -> None:
         center_x = self.arrow.boundingRect().center().x()
         center_y = self.arrow.boundingRect().center().y()
-        arrow.set_arrow_transform_origin_to_center()
         transform = QTransform()
         transform.translate(center_x, center_y)
         transform.scale(-1, 1)

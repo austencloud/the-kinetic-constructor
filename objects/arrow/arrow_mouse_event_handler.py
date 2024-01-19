@@ -1,4 +1,4 @@
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 from constants import *
@@ -17,7 +17,7 @@ class ArrowMouseEventHandler:
         self.arrow = arrow
 
     def handle_mouse_press(self, event) -> None:
-        self.arrow.pictograph.clear_selections()
+        self.arrow.pictograph.mouse_event_handler.clear_selections()
         self.arrow.setSelected(True)
         if hasattr(self.arrow, GHOST) and self.arrow.ghost:
             self.arrow.ghost.show()
@@ -29,7 +29,7 @@ class ArrowMouseEventHandler:
                 event.scenePos()
             )[0]
             new_pos = event.scenePos() - self.arrow.get_center()
-            self.arrow.set_drag_pos(new_pos)
+            self.set_drag_pos(new_pos)
             if new_location != self.arrow.loc:
                 self.arrow.location_calculator.update_location(new_location)
 
@@ -37,3 +37,7 @@ class ArrowMouseEventHandler:
         self.arrow.scene.arrows[self.arrow.color] = self.arrow
         self.arrow.scene.state_updater.update_pictograph()
         self.arrow.ghost.hide()
+        
+    def set_drag_pos(self, new_pos: QPointF) -> None:
+        self.arrow.setPos(new_pos)
+

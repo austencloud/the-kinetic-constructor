@@ -29,7 +29,7 @@ class Prop(GraphicalObject):
     loc: Locations
     ori: Orientations
     axis: Axes
-    
+
     def __init__(self, scene, prop_dict: Dict, motion: "Motion") -> None:
         super().__init__(scene)
         self.motion = motion
@@ -65,15 +65,15 @@ class Prop(GraphicalObject):
     ) -> None:
         if prop_dict:
             self.attr_manager.update_attributes(prop_dict)
-        self.svg_manager.update_prop_svg()
+        self.svg_manager.update_svg()
         self.svg_manager.update_color()
-        self.rot_angle_manager.update_prop_rotation_angle()
+        self.rot_angle_manager.update_prop_rot_angle()
 
     ### UPDATERS ###
 
     def update_prop_type(self, prop_type: PropTypes) -> None:
         self.prop_type = prop_type
-        self.svg_manager.update_prop_svg()
+        self.svg_manager.update_svg()
         self.update_prop()
 
     ### HELPERS ###

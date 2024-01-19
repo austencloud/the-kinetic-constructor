@@ -27,9 +27,8 @@ class GhostArrow(Arrow):
         self,
         pictograph: "Pictograph",
         arrow_dict,
-        motion: "Motion",
     ) -> None:
-        super().__init__(pictograph, arrow_dict, motion)
+        super().__init__(pictograph, arrow_dict)
         self.setOpacity(0.2)
         self.pictograph = pictograph
         self.color = arrow_dict[COLOR]

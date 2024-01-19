@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 
 class ArrowRotAngleCalculator:
     def __init__(self, arrow: "Arrow") -> None:
-        self.arrow = arrow
+        self.a = arrow
         self.angle_resolvers = {
             PRO: self._get_pro_anti_angle,
             ANTI: self._get_pro_anti_angle,
@@ -16,8 +16,8 @@ class ArrowRotAngleCalculator:
             STATIC: self._get_static_angle,
         }
 
-        if hasattr(self.arrow.scene, LETTER):
-            self.other_motion = self.arrow.scene.get.other_motion(self.arrow.motion)
+        if hasattr(self.a.scene, LETTER):
+            self.other_motion = self.a.scene.get.other_motion(self.a.motion)
 
     def update_rotation(self) -> None:
         angle = self._resolve_angle()
@@ -27,16 +27,16 @@ class ArrowRotAngleCalculator:
         rotation_override = self._get_final_rot_angle_override()
         if rotation_override == 0 or rotation_override:
             return rotation_override
-        if hasattr(self.arrow.scene, LETTER):
-            return self.angle_resolvers.get(self.arrow.motion.motion_type, lambda: 0)()
-        return self.angle_resolvers.get(self.arrow.motion.motion_type, lambda: 0)()
+        if hasattr(self.a.scene, LETTER):
+            return self.angle_resolvers.get(self.a.motion.motion_type, lambda: 0)()
+        return self.angle_resolvers.get(self.a.motion.motion_type, lambda: 0)()
 
     def _get_final_rot_angle_override(self) -> Optional[int]:
         special_manager = (
-            self.arrow.scene.arrow_placement_manager.special_placement_manager
+            self.a.scene.arrow_placement_manager.special_placement_manager
         )
         if special_manager:
-            rotation_override = special_manager.get_rot_angle_override(self.arrow)
+            rotation_override = special_manager.get_rot_angle_override(self.a)
             if rotation_override == 0 or rotation_override:
                 return self._get_rot_angle_override_according_to_loc(rotation_override)
         return None
@@ -50,18 +50,18 @@ class ArrowRotAngleCalculator:
         }
 
         if rotation_override == 0:
-            loc_angle = angle_map.get(self.arrow.loc)
+            loc_angle = angle_map.get(self.a.loc)
             if isinstance(loc_angle, dict):
-                return loc_angle.get(self.arrow.motion.prop_rot_dir, 0)
+                return loc_angle.get(self.a.motion.prop_rot_dir, 0)
             return loc_angle
 
         return rotation_override
 
     def _apply_rotation(self, angle: int) -> None:
-        self.arrow.set_arrow_transform_origin_to_center()
-        self.arrow.setRotation(angle)
-        if self.arrow.ghost:
-            self.arrow.ghost.setRotation(angle)
+        self.a.setTransformOriginPoint(self.a.boundingRect().center())
+        self.a.setRotation(angle)
+        if self.a.ghost:
+            self.a.ghost.setRotation(angle)
 
     def _get_pro_anti_angle(self) -> int:
         direction_map = {
@@ -94,9 +94,9 @@ class ArrowRotAngleCalculator:
                 },
             },
         }
-        return direction_map[self.arrow.motion_type][
-            self.arrow.motion.prop_rot_dir
-        ].get(self.arrow.loc, 0)
+        return direction_map[self.a.motion_type][
+            self.a.motion.prop_rot_dir
+        ].get(self.a.loc, 0)
 
     def _get_static_angle(self) -> int:
         direction_map = {
@@ -112,25 +112,25 @@ class ArrowRotAngleCalculator:
             },
         }
         return (
-            direction_map.get(self.arrow.motion.start_ori)
-            .get(self.arrow.motion.prop_rot_dir)
-            .get(self.arrow.loc)
+            direction_map.get(self.a.motion.start_ori)
+            .get(self.a.motion.prop_rot_dir)
+            .get(self.a.loc)
         )
 
     def _get_motion_specific_angle(self) -> int:
-        motion_type = self.arrow.motion_type
+        motion_type = self.a.motion_type
         if motion_type in [PRO, ANTI]:
-            return self._get_default_shift_angle()
+            return self._get_shift_angle()
         elif motion_type == STATIC:
-            return self._get_default_static_angle()
+            return self._get_static_angle()
         elif motion_type == DASH:
-            return self._get_default_dash_angle()
+            return self._get_dash_angle()
         return 0
 
-    def _get_default_static_angle(self) -> int:
+    def _get_static_angle(self) -> int:
         direction_map = self._get_static_direction_map()
-        return direction_map.get(self.arrow.motion.prop_rot_dir, {}).get(
-            self.arrow.loc, 0
+        return direction_map.get(self.a.motion.prop_rot_dir, {}).get(
+            self.a.loc, 0
         )
 
     def _get_static_direction_map(
@@ -148,10 +148,10 @@ class ArrowRotAngleCalculator:
                 NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
             },
         }
-        return orientation_map.get(self.arrow.motion.start_ori, {})
+        return orientation_map.get(self.a.motion.start_ori, {})
 
-    def _get_default_shift_angle(self) -> int:
-        if self.arrow.motion_type == PRO:
+    def _get_shift_angle(self) -> int:
+        if self.a.motion_type == PRO:
             return (
                 {
                     CLOCKWISE: {
@@ -167,10 +167,10 @@ class ArrowRotAngleCalculator:
                         NORTHWEST: 0,
                     },
                 }
-                .get(self.arrow.motion.prop_rot_dir)
-                .get(self.arrow.loc)
+                .get(self.a.motion.prop_rot_dir)
+                .get(self.a.loc)
             )
-        elif self.arrow.motion_type == ANTI:
+        elif self.a.motion_type == ANTI:
             return (
                 {
                     CLOCKWISE: {
@@ -186,23 +186,23 @@ class ArrowRotAngleCalculator:
                         NORTHWEST: 270,
                     },
                 }
-                .get(self.arrow.motion.prop_rot_dir, {})
-                .get(self.arrow.loc, 0)
+                .get(self.a.motion.prop_rot_dir, {})
+                .get(self.a.loc, 0)
             )
         return 0
 
     def _get_dash_angle(
         self,
     ) -> Dict[Orientations, Dict[PropRotDirs, Dict[Locations, int]]]:
-        if self.arrow.motion.prop_rot_dir == NO_ROT:
+        if self.a.motion.prop_rot_dir == NO_ROT:
             return {
                 (NORTH, SOUTH): 90,
                 (SOUTH, NORTH): 270,
                 (EAST, WEST): 180,
                 (WEST, EAST): 0,
-            }.get((self.arrow.motion.start_loc, self.arrow.motion.end_loc), {})
+            }.get((self.a.motion.start_loc, self.a.motion.end_loc), {})
 
-        elif self.arrow.motion.prop_rot_dir in [CLOCKWISE, COUNTER_CLOCKWISE]:
+        elif self.a.motion.prop_rot_dir in [CLOCKWISE, COUNTER_CLOCKWISE]:
             orientation_map = {
                 IN: {
                     CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
@@ -214,7 +214,7 @@ class ArrowRotAngleCalculator:
                 },
             }
             return (
-                orientation_map.get(self.arrow.motion.start_ori)
-                .get(self.arrow.motion.prop_rot_dir)
-                .get(self.arrow.loc)
+                orientation_map.get(self.a.motion.start_ori)
+                .get(self.a.motion.prop_rot_dir)
+                .get(self.a.loc)
             )

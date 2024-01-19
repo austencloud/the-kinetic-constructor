@@ -133,8 +133,8 @@ class PictographInit:
             COLOR: color,
             TURNS: 0,
         }
-        arrow = Arrow(self.p, arrow_attributes, self.p.motions[color])
-        ghost_arrow = GhostArrow(self.p, arrow_attributes, self.p.motions[color])
+        arrow = Arrow(self.p, arrow_attributes)
+        ghost_arrow = GhostArrow(self.p, arrow_attributes)
         arrow.ghost = ghost_arrow
         self.p.motions[color].arrow = arrow
         arrow.motion = self.p.motions[color]
