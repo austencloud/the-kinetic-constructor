@@ -29,7 +29,7 @@ class PictographStateUpdater:
         motion_dicts = []
         if LETTER in pictograph_dict:
             self.pictograph.letter = pictograph_dict[LETTER]
-            self.pictograph.letter_type = self.pictograph._get_letter_type(
+            self.pictograph.letter_type = self.pictograph.get.letter_type(
                 self.pictograph.letter
             )
         if PRO_TURNS in pictograph_dict:

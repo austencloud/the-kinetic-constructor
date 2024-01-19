@@ -74,8 +74,8 @@ class AdjustmentKeyGenerator:
 
     def _generate_key_for_s_t(self) -> str:
         """Generate the key for 'S' and 'T' letters based on leading and trailing states."""
-        leading_motion = self.pictograph.get_leading_motion()
-        trailing_motion = self.pictograph.get_trailing_motion()
+        leading_motion = self.pictograph.get.leading_motion()
+        trailing_motion = self.pictograph.get.trailing_motion()
         leading_motion.arrow.motion.lead_state = LEADING
         trailing_motion.arrow.motion.lead_state = TRAILING
         return f"({leading_motion.turns}, {trailing_motion.turns})"

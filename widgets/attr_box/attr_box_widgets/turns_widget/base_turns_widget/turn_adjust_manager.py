@@ -15,6 +15,7 @@ from utilities.TypeChecking.letter_lists import (
 from .....buttons.adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
+    from widgets.filter_tab import FilterTab
     from widgets.pictograph.pictograph import Pictograph
     from widgets.attr_box.attr_box import AttrBox
     from objects.motion.motion import Motion
@@ -62,7 +63,14 @@ class TurnAdjustManager:
 
     def is_motion_relevant(self, motion: "Motion") -> bool:
         attr_type = self.attr_box.attribute_type
-        return getattr(motion, attr_type) == getattr(self.attr_box, attr_type)
+        if self.attr_box.attr_panel.filter_tab.letter_type == motion.scene.letter_type:
+            if attr_type == MOTION_TYPE:
+                return motion.motion_type == self.attr_box.motion_type
+            elif attr_type == COLOR:
+                return motion.color == self.attr_box.color
+            elif attr_type == LEAD_STATE:
+                return motion.lead_state == self.attr_box.lead_state
+        
 
     ### FLAGS ###
 

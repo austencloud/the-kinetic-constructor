@@ -40,7 +40,7 @@ class PictographImageRenderer:
 
         prop_type = self.pictograph.main_widget.prop_type
         letter = self.pictograph.letter
-        letter_type = self.pictograph._get_letter_type(letter)
+        letter_type = self.pictograph.get.letter_type(letter)
 
         basic_turns_string = (
             f"{self.pictograph.blue_motion.turns},"

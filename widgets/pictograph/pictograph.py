@@ -1,8 +1,7 @@
-from typing import TYPE_CHECKING, Dict, List, Literal, Optional, Tuple
+from typing import TYPE_CHECKING, Dict, List, Tuple
 from PyQt6.QtCore import Qt
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPixmapItem
-from Enums import LetterNumberType
 
 from constants import *
 from objects.arrow.arrow import Arrow
@@ -15,18 +14,17 @@ from objects.motion.motion import Motion
 from objects.prop.ghost_prop import GhostProp
 from objects.prop.prop import Prop
 from objects.prop.prop_placement_manager.prop_placement_manager import PropPlacementManager
-from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import (
     Colors,
     LetterTypeNums,
     Letters,
     Locations,
-    MotionTypes,
     SpecificPositions,
     VtgDirections,
     VtgTimings,
 )
 from widgets.pictograph.pictograph_attr_manager import PictographAttrManager
+from widgets.pictograph.pictograph_getter import PictographGetter
 from widgets.pictograph.pictograph_view import PictographView
 from widgets.pictograph.wasd_adjustment_manager.wasd_adjustment_manager import (
     WASD_AdjustmentManager,
@@ -37,9 +35,7 @@ from .pictograph_image_renderer import PictographImageRenderer
 from .pictograph_state_updater import PictographStateUpdater
 from .pictograph_event_handler import PictographMouseEventHandler
 from .pictograph_init import PictographInit
-
 from utilities.letter_item import LetterItem
-
 from utilities.letter_engine import LetterEngine
 from data.rules import beta_ending_letters, alpha_ending_letters, gamma_ending_letters
 
@@ -64,6 +60,7 @@ class Pictograph(QGraphicsScene):
         self.image_renderer = PictographImageRenderer(self)
         self.add_to_sequence_manager = AddToSequenceManager(self)
         self.wasd_adjustment_manager = WASD_AdjustmentManager(self)
+        self.get = PictographGetter(self)
         self.view = PictographView(self)
         self.initializer.init_all_components()
         self.arrow_placement_manager = ArrowPlacementManager(self)
@@ -77,7 +74,7 @@ class Pictograph(QGraphicsScene):
         self.setBackgroundBrush(Qt.GlobalColor.white)
 
     def _set_letter_renderer(self, letter: Letters) -> None:
-        letter_type = self._get_letter_type(letter)
+        letter_type = self.get.letter_type(letter)
         svg_path = f"resources/images/letters_trimmed/{letter_type}/{letter}.svg"
         renderer = QSvgRenderer(svg_path)
         if renderer.isValid():
@@ -97,52 +94,7 @@ class Pictograph(QGraphicsScene):
     def contextMenuEvent(self, event) -> None:
         self.context_menu_handler.handle_context_menu(event)
 
-    ### GETTERS ###
-
-    def _get_letter_type(self, letter: all_letters) -> Optional[str]:
-        for letter_type in LetterNumberType:
-            if letter in letter_type.letters:
-                return letter_type.description
-        return None
-
-    def get_motions_by_type(self, motion_type: MotionTypes) -> List[Motion]:
-        return [
-            motion
-            for motion in self.motions.values()
-            if motion.motion_type == motion_type
-        ]
-
-    def get_leading_motion(self) -> Motion:
-        if self.red_motion.start_loc == self.blue_motion.end_loc:
-            return self.red_motion
-        elif self.blue_motion.start_loc == self.red_motion.end_loc:
-            return self.blue_motion
-
-    def get_trailing_motion(self) -> Motion:
-        if self.red_motion.start_loc == self.blue_motion.end_loc:
-            return self.blue_motion
-        elif self.blue_motion.start_loc == self.red_motion.end_loc:
-            return self.red_motion
-
-    def get_other_motion(self, motion: Motion) -> Motion:
-        if motion.color == RED:
-            return self.blue_motion
-        elif motion.color == BLUE:
-            return self.red_motion
-
-    def get_other_arrow(self, arrow: Arrow) -> Arrow:
-        if arrow.color == RED:
-            return self.blue_arrow
-        elif arrow.color == BLUE:
-            return self.red_arrow
-
     ### HELPERS ###
-
-    def show(self) -> None:
-        self.view.setVisible(True)
-
-    def hide(self) -> None:
-        self.view.setVisible(False)
 
     def select_arrow(self, arrow) -> None:
         self.selected_arrow: Arrow = arrow

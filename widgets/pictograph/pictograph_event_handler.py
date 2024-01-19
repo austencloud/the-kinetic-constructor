@@ -17,7 +17,6 @@ class PictographMouseEventHandler:
         scene_pos = event.scenePos()
         items_at_pos = self.pictograph.items(scene_pos)
 
-        # Prioritize arrows over props if both are clicked simultaneously
         arrow = next((item for item in items_at_pos if isinstance(item, Arrow)), None)
         if arrow:
             self.pictograph.select_arrow(arrow)  # Select the arrow
@@ -28,8 +27,8 @@ class PictographMouseEventHandler:
             if prop:
                 self.pictograph.dragged_prop = prop
                 self.pictograph.dragged_prop.mousePressEvent(event)
-            else:
-                self.pictograph.clear_selections()
+            # else:
+            #     self.pictograph.clear_selections()
 
     def handle_mouse_move(self, event) -> None:
         if self.pictograph.dragged_prop:

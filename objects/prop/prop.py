@@ -32,6 +32,7 @@ class Prop(GraphicalObject):
     def __init__(self, scene, prop_dict: Dict, motion: "Motion") -> None:
         super().__init__(scene)
         self.motion = motion
+        self.scene: Pictograph | PropBox = scene
         self.arrow: Arrow = None
         self.ghost: Prop = None
         self.is_ghost = False
@@ -363,8 +364,6 @@ class Prop(GraphicalObject):
                 self.motion.arrow.ghost.loc = new_arrow_location
                 self.motion.start_loc = start_loc
                 self.motion.end_loc = end_loc
-                self.motion.arrow.update_arrow()
-                self.motion.arrow.ghost.update_arrow()
                 self.pictograph.state_updater.update_pictograph()
 
         elif self.motion.motion_type == STATIC:
@@ -377,7 +376,7 @@ class Prop(GraphicalObject):
         (
             closest_hand_point,
             closest_hand_point_coord,
-        ) = self.pictograph.get_closest_hand_point(event.scenePos())
+        ) = self.pictograph.grid.get_closest_hand_point(event.scenePos())
 
         self.loc = closest_hand_point
         self.axis = self.get_axis_from_ori()

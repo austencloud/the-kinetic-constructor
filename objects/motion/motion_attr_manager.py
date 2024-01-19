@@ -119,3 +119,14 @@ class MotionAttrManager:
             START_ORI: self.motion.start_ori,
             END_ORI: self.motion.end_ori,
         }
+
+    def _change_motion_attributes_to_static(self) -> None:
+        motion_dict = {
+            MOTION_TYPE: STATIC,
+            TURNS: 0,
+            PROP_ROT_DIR: NO_ROT,
+            START_LOC: self.motion.prop.loc,
+            END_LOC: self.motion.prop.loc,
+        }
+        self.motion.updater.update_motion(motion_dict)
+        self.motion.arrow.loc = self.motion.prop.loc
