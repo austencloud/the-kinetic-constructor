@@ -18,25 +18,20 @@ from utilities.TypeChecking.TypeChecking import (
     VtgDirections,
     VtgTimings,
 )
-from widgets.pictograph.pictograph_attr_manager import PictographAttrManager
-from widgets.pictograph.pictograph_checker import PictographChecker
-from widgets.pictograph.pictograph_getter import PictographGetter
-from widgets.pictograph.pictograph_placement_managers.arrow_placement_manager.arrow_placement_manager import (
-    ArrowPlacementManager,
-)
-from widgets.pictograph.pictograph_placement_managers.prop_placement_manager.prop_placement_manager import (
-    PropPlacementManager,
-)
-from widgets.pictograph.pictograph_view import PictographView
-from widgets.pictograph.wasd_adjustment_manager.wasd_adjustment_manager import (
-    WASD_AdjustmentManager,
-)
-from .pictograph_add_to_sequence_manager import AddToSequenceManager
-from .pictograph_context_menu_handler import PictographContextMenuHandler
-from .pictograph_image_renderer import PictographImageRenderer
-from .pictograph_state_updater import PictographStateUpdater
-from .pictograph_event_handler import PictographMouseEventHandler
-from .pictograph_init import PictographInit
+from .components.pictograph_attr_manager import PictographAttrManager
+from .components.pictograph_checker import PictographChecker
+from .components.pictograph_getter import PictographGetter
+from .components.placement_managers.arrow_placement_manager.arrow_placement_manager import ArrowPlacementManager
+from .components.placement_managers.prop_placement_manager.prop_placement_manager import PropPlacementManager
+from .components.pictograph_view import PictographView
+from .components.wasd_adjustment_manager.wasd_adjustment_manager import WASD_AdjustmentManager
+from .components.pictograph_add_to_sequence_manager import AddToSequenceManager
+from .components.pictograph_context_menu_handler import PictographContextMenuHandler
+from .components.pictograph_image_renderer import PictographImageRenderer
+from .components.pictograph_state_updater import PictographStateUpdater
+from .components.pictograph_event_handler import PictographMouseEventHandler
+from .components.pictograph_init import PictographInit
+
 from utilities.letter_item import LetterItem
 from utilities.letter_engine import LetterCalculator
 

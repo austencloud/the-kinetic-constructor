@@ -2,12 +2,12 @@ from PyQt6.QtCore import QPointF
 from numpy import place
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
-from .managers.turns_tuple_generator import TurnsTupleGenerator
-from .managers.arrow_initial_pos_calculator import ArrowInitialPosCalculator
-from .managers.directional_tuple_generator import DirectionalTupleGenerator
-from .managers.quadrant_index_handler import QuadrantIndexHandler
-from .managers.default_arrow_positioner import DefaultArrowPositioner
-from .managers.special_arrow_positioner.special_arrow_positioner import (
+from .handlers.turns_tuple_generator import TurnsTupleGenerator
+from .handlers.arrow_initial_pos_calculator import ArrowInitialPosCalculator
+from .handlers.directional_tuple_generator import DirectionalTupleGenerator
+from .handlers.quadrant_index_handler import QuadrantIndexHandler
+from .handlers.default_arrow_positioner import DefaultArrowPositioner
+from .handlers.special_arrow_positioner.special_arrow_positioner import (
     SpecialArrowPositioner,
 )
 

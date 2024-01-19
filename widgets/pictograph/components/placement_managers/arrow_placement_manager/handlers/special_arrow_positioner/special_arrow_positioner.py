@@ -1,8 +1,6 @@
 from typing import TYPE_CHECKING
 from objects.arrow.arrow import Arrow
-from widgets.pictograph.pictograph_placement_managers.arrow_placement_manager.managers.turns_tuple_generator import (
-    TurnsTupleGenerator,
-)
+from ...handlers.turns_tuple_generator import TurnsTupleGenerator
 from .handlers.adjustment_calculator import AdjustmentCalculator
 from .handlers.adjustment_mapper import AdjustmentMapper
 from .handlers.data_sorter import DataSorter
