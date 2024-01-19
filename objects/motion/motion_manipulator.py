@@ -1,4 +1,4 @@
-from typing import List
+from typing import Callable, Dict, List, Tuple
 
 from constants import *
 from data.start_end_loc_map import get_start_end_locs
@@ -41,17 +41,14 @@ class MotionManipulator:
     ### MIRRORING ###
 
     def swap_rot_dir(self) -> None:
-        if self.motion.arrow.is_svg_mirrored:
-            self.motion.arrow.mirror_manager.unmirror_svg()
-        elif not self.motion.arrow.is_svg_mirrored:
-            self.motion.arrow.mirror_manager.mirror_svg()
+        self.motion.arrow.mirror_manager.update_mirror()
 
-        if self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
-            new_rot_dir = CLOCKWISE
-        elif self.motion.prop_rot_dir == CLOCKWISE:
-            new_rot_dir = COUNTER_CLOCKWISE
-        elif self.motion.prop_rot_dir == NO_ROT:
-            new_rot_dir = NO_ROT
+        rotation_direction_map = {
+            COUNTER_CLOCKWISE: CLOCKWISE,
+            CLOCKWISE: COUNTER_CLOCKWISE,
+            NO_ROT: NO_ROT,
+        }
+        new_rot_dir = rotation_direction_map.get(self.motion.prop_rot_dir)
 
         new_start_loc = self.motion.end_loc
         new_end_loc = self.motion.start_loc
@@ -66,19 +63,20 @@ class MotionManipulator:
     ### MOTION TYPE ###
 
     def swap_motion_type(self) -> None:
-        if self.motion.arrow.motion.motion_type == ANTI:
-            new_motion_type = PRO
-        elif self.motion.arrow.motion.motion_type == PRO:
-            new_motion_type = ANTI
-        elif self.motion.arrow.motion.motion_type == STATIC:
-            new_motion_type = STATIC
+        swap_motion_type_map = {
+            ANTI: PRO,
+            PRO: ANTI,
+            STATIC: DASH,
+            DASH: STATIC,
+        }
 
-        if self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
-            new_rot_dir = CLOCKWISE
-        elif self.motion.prop_rot_dir == CLOCKWISE:
-            new_rot_dir = COUNTER_CLOCKWISE
-        elif self.motion.prop_rot_dir == NO_ROT:
-            new_rot_dir = NO_ROT
+        rotation_direction_map = {
+            COUNTER_CLOCKWISE: CLOCKWISE,
+            CLOCKWISE: COUNTER_CLOCKWISE,
+            NO_ROT: NO_ROT,
+        }
+        new_motion_type = swap_motion_type_map.get(self.motion.arrow.motion.motion_type)
+        new_rot_dir = rotation_direction_map.get(self.motion.prop_rot_dir)
 
         self.motion.prop.attr_manager.swap_ori(self.motion.prop.ori)
         pictograph_dict = {
@@ -100,7 +98,7 @@ class MotionManipulator:
         if rotate_func:
             rotate_func(rotation_direction, locations)
 
-    def _get_mode_mappings(self):
+    def _get_mode_mappings(self) -> Dict[Tuple[str, str], Tuple[Callable, List]]:
         """Returns mappings for different modes and motion types."""
         return {
             (STATIC, DIAMOND): (self._rotate_arrow, [NORTH, EAST, SOUTH, WEST]),

@@ -111,7 +111,7 @@ class MotionAttrManager:
                 self.m.end_ori = self.m.ori_calculator.get_end_ori()
             self.m.prop.ori = self.m.end_ori
             self.m.prop.loc = self.m.end_loc
-            self.m.prop.axis = self.m.prop.get_axis_from_ori()
+            self.m.prop.axis = self.m.prop.attr_manager.get_axis_from_ori()
 
     def get_attributes(self) -> Dict[str, str]:
         return {

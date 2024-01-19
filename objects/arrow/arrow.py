@@ -1,10 +1,10 @@
 from constants import *
-from objects.arrow.arrow_attr_manager import ArrowAttrManager
-from objects.arrow.arrow_mirror_manager import ArrowMirrorManager
-from objects.arrow.arrow_mouse_event_handler import ArrowMouseEventHandler
-from objects.arrow.arrow_updater import ArrowUpdater
-from .arrow_location_manager import ArrowLocationCalculator
-from .arrow_rot_angle_manager import ArrowRotAngleCalculator
+from objects.arrow.managers.arrow_mirror_handler import ArrowMirrorHandler
+from objects.arrow.managers.arrow_mouse_event_handler import ArrowMouseEventHandler
+from objects.arrow.managers.arrow_updater import ArrowUpdater
+from objects.arrow.managers.arrow_attr_handler import ArrowAttrHandler
+from .managers.arrow_location_manager import ArrowLocationCalculator
+from .managers.arrow_rot_angle_manager import ArrowRotAngleCalculator
 from ..graphical_object.graphical_object import GraphicalObject
 from utilities.TypeChecking.TypeChecking import (
     Colors,
@@ -27,6 +27,7 @@ class Arrow(GraphicalObject):
     color: Colors
     location: Locations
     loc: Locations
+    is_svg_mirrored: bool
 
     def __init__(self, pictograph, arrow_dict) -> None:
         super().__init__(pictograph)
@@ -35,8 +36,8 @@ class Arrow(GraphicalObject):
         self.mouse_event_handler = ArrowMouseEventHandler(self)
         self.rot_angle_calculator = ArrowRotAngleCalculator(self)
         self.location_calculator = ArrowLocationCalculator(self)
-        self.mirror_manager = ArrowMirrorManager(self)
-        self.attr_manager = ArrowAttrManager(self)
+        self.mirror_manager = ArrowMirrorHandler(self)
+        self.attr_manager = ArrowAttrHandler(self)
         self.updater = ArrowUpdater(self)
         self.ghost: "GhostArrow" = None
         self.loc = None

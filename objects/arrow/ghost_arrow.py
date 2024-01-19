@@ -8,26 +8,7 @@ if TYPE_CHECKING:
 
 
 class GhostArrow(Arrow):
-    """
-    Represents a ghost arrow object, displaying the position that an arrow will be while dragging if the user were to drop it.
-
-    Inherits from the Arrow class.
-
-    Attributes:
-        pictograph (Pictograph): The pictograph object.
-        color (str): The color of the arrow.
-        target_arrow (Arrow): The arrow that the ghost arrow is copying.
-
-    Methods:
-        __init__: Initialize a GhostArrow object.
-
-    """
-
-    def __init__(
-        self,
-        pictograph: "Pictograph",
-        arrow_dict,
-    ) -> None:
+    def __init__(self, pictograph: "Pictograph", arrow_dict) -> None:
         super().__init__(pictograph, arrow_dict)
         self.setOpacity(0.2)
         self.pictograph = pictograph

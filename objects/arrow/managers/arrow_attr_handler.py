@@ -16,12 +16,12 @@ if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
 
 
-class ArrowAttrManager:
+class ArrowAttrHandler:
     def __init__(self, arrow: "Arrow") -> None:
         self.a = arrow
         self.a.color = self.a.arrow_dict[COLOR]
         self.a.turns = self.a.arrow_dict[TURNS]
-        
+
     def update_attributes(
         self, arrow_dict: Dict[str, Union[Colors, Locations, MotionTypes, Turns]]
     ) -> None:
@@ -36,4 +36,6 @@ class ArrowAttrManager:
         for attr in arrow_attributes:
             setattr(self.a, attr, None)
 
-
+    def get_arrow_attributes(self) -> Dict[str, Union[Colors, Locations, MotionTypes]]:
+        arrow_attributes = [COLOR, LOC, MOTION_TYPE]
+        return {attr: getattr(self.a, attr) for attr in arrow_attributes}
