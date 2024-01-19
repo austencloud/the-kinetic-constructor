@@ -17,7 +17,7 @@ class ArrowMovementManager:
 
         adjustment_increment = 20 if shift_held else 5
         adjustment = self.get_adjustment(key, adjustment_increment)
-        self.pictograph.arrow_placement_manager.special_placement_manager.update_arrow_adjustments_in_json(
+        self.pictograph.arrow_placement_manager.special_placement_manager.updater.update_arrow_adjustments_in_json(
             adjustment, self.pictograph.selected_arrow
         )
         self.pictograph.arrow_placement_manager.update_arrow_placement()

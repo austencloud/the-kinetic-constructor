@@ -157,7 +157,7 @@ class PropBoxDrag(BaseObjectBoxDrag):
                         TURNS: 0,
                     }
                     self.arrow = self.pictograph.arrows[self.color]
-                    self.arrow.update_arrow(static_arrow_dict)
+                    self.arrow.updater.update_arrow(static_arrow_dict)
 
                     motion_dict = {
                         COLOR: self.color,
@@ -278,6 +278,6 @@ class PropBoxDrag(BaseObjectBoxDrag):
         self.arrow.motion.end_loc = self.location
         self.arrow.ghost = self.pictograph.ghost_arrows[self.color]
         self.arrow.ghost.motion = self.pictograph.motions[self.color]
-        self.arrow.update_arrow()
-        self.arrow.ghost.update_arrow()
+        self.arrow.updater.update_arrow()
+        self.arrow.ghost.updater.update_arrow()
         self.pictograph.arrows[self.color] = self.arrow

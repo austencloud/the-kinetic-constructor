@@ -44,37 +44,8 @@ if TYPE_CHECKING:
 
 
 class Pictograph(QGraphicsScene):
-    class Types:
-        arrows: Dict[Colors, Arrow]
-        props: Dict[Colors, Prop]
-        ghost_arrows: Dict[Colors, GhostArrow]
-        ghost_props: Dict[Colors, GhostProp]
-        motions: Dict[Colors, Motion]
-        letter: Letters
-        letter_type: LetterTypeNums
-        pictograph_dict: Dict
-        motion_dict_list: List[Dict]
-        start_pos: SpecificPositions
-        end_pos: SpecificPositions
-        image_loaded: bool
-        pixmap: QGraphicsPixmapItem
-        arrow_turns: int
-        vtg_timing: VtgTimings
-        vtg_dir: VtgDirections
-        dragged_arrow: Arrow
-        dragged_prop: Prop
-        view: QGraphicsView
-        letter_item: LetterItem
-        grid: Grid
-        locations: Dict[Locations, Tuple[int, int, int, int]]
-        red_motion: Motion
-        blue_motion: Motion
-        red_arrow: Arrow
-        blue_arrow: Arrow
-        red_prop: Prop
-        blue_prop: Prop
-        selected_arrow: Arrow
-
+    
+    
     def __init__(self, main_widget: "MainWidget", scroll_area: "ScrollArea") -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -109,3 +80,33 @@ class Pictograph(QGraphicsScene):
     def contextMenuEvent(self, event) -> None:
         self.context_menu_handler.handle_context_menu(event)
 
+
+    arrows: Dict[Colors, Arrow]
+    props: Dict[Colors, Prop]
+    ghost_arrows: Dict[Colors, GhostArrow]
+    ghost_props: Dict[Colors, GhostProp]
+    motions: Dict[Colors, Motion]
+    letter: Letters
+    letter_type: LetterTypeNums
+    pictograph_dict: Dict
+    motion_dict_list: List[Dict]
+    start_pos: SpecificPositions
+    end_pos: SpecificPositions
+    image_loaded: bool
+    pixmap: QGraphicsPixmapItem
+    arrow_turns: int
+    vtg_timing: VtgTimings
+    vtg_dir: VtgDirections
+    dragged_arrow: Arrow
+    dragged_prop: Prop
+    view: QGraphicsView
+    letter_item: LetterItem
+    grid: Grid
+    locations: Dict[Locations, Tuple[int, int, int, int]]
+    red_motion: Motion
+    blue_motion: Motion
+    red_arrow: Arrow
+    blue_arrow: Arrow
+    red_prop: Prop
+    blue_prop: Prop
+    selected_arrow: Arrow

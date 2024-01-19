@@ -1,12 +1,8 @@
-from widgets.pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING, Dict
-
 from constants import *
-
 from data.rules import beta_ending_letters, alpha_ending_letters, gamma_ending_letters
-
 if TYPE_CHECKING:
-    pass
+    from widgets.pictograph.pictograph import Pictograph
 
 
 class PictographChecker:
@@ -69,4 +65,3 @@ class PictographChecker:
             "red_turns",
         ]
         return all(key in pictograph_dict for key in required_keys)
-

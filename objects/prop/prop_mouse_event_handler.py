@@ -203,7 +203,7 @@ class PropMouseEventHandler:
             self.p.motion.arrow.loc = new_arrow_location
             self.p.motion.start_loc = new_arrow_location
             self.p.motion.end_loc = new_arrow_location
-            self.p.motion.arrow.update_arrow()
+            self.p.motion.arrow.updater.update_arrow()
 
     def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
         (
@@ -217,6 +217,6 @@ class PropMouseEventHandler:
         self.p.setPos(closest_hand_point_coord)
 
         if self.p.motion.arrow:
-            self.p.motion.arrow.update_arrow()
+            self.p.motion.arrow.updater.update_arrow()
         self.p.previous_location = closest_hand_point
         self.p.scene.state_updater.update_pictograph()

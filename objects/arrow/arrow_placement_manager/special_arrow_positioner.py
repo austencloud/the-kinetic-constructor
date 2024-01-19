@@ -167,7 +167,7 @@ class SpecialArrowPositioner:
     def get_rot_angle_override(self, arrow: Arrow) -> Optional[int]:
         adjustment_key = self._generate_adjustment_key()
         placements = self._load_placements()
-        letter_adjustments = placements.get(self.pictograph.letter, {}).get(
+        letter_adjustments: Dict = placements.get(self.pictograph.letter, {}).get(
             adjustment_key, {}
         )
         return letter_adjustments.get(f"{arrow.motion_type}_rot_angle", {})

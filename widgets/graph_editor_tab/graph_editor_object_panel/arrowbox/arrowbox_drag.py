@@ -72,7 +72,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
 
     def place_arrow_on_pictograph(self) -> None:
         arrow = self.pictograph.arrows[self.color]
-        arrow.update_arrow(self.ghost.get_arrow_attributes())
+        arrow.updater.update_arrow(self.ghost.get_arrow_attributes())
         motion_dict = {
             COLOR: self.color,
             ARROW: arrow,
@@ -93,7 +93,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
         self.pictograph.clearSelection()
         self.pictograph.arrows[self.color] = arrow
         self.pictograph.arrows[self.color].motion = self.pictograph.motions[self.color]
-        arrow.update_arrow()
+        arrow.updater.update_arrow()
         arrow.show()
         arrow.setSelected(True)
         self.pictograph.state_updater.update_pictograph()
@@ -132,13 +132,13 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
             ),
             TURNS: self.turns,
         }
-        self.pictograph.arrows[self.color].update_arrow(arrow_dict)
+        self.pictograph.arrows[self.color].updater.update_arrow(arrow_dict)
         self.pictograph.motions[self.color].attr_manager.update_attributes(motion_dict)
         self.pictograph.motions[self.color].arrow = self.pictograph.arrows[self.color]
         self.ghost = self.pictograph.ghost_arrows[self.color]
         self.ghost.loc = new_location
         self.ghost.show()
-        self.ghost.update_arrow()
+        self.ghost.updater.update_arrow()
 
     def _update_ghost_arrow_for_new_location(self, new_location) -> None:
         self.ghost.color = self.color

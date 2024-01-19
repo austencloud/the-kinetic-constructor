@@ -22,7 +22,7 @@ class MotionUpdater:
             ORI: self.m.ori_calculator.get_end_ori(),
         }
         self.m.end_ori = self.m.ori_calculator.get_end_ori()
-        self.m.arrow.update_arrow(arrow_dict)
+        self.m.arrow.updater.update_arrow(arrow_dict)
         self.m.prop.update_prop(prop_dict)
-        self.m.arrow.ghost.update_arrow(arrow_dict)
+        self.m.arrow.ghost.updater.update_arrow(arrow_dict)
         self.m.prop.ghost.update_prop(prop_dict)

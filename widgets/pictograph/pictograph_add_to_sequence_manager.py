@@ -63,8 +63,8 @@ class AddToSequenceManager:
             new_beat.ghost_props[motion.color] = new_ghost_prop
 
             if new_arrow.loc:
-                new_arrow.update_arrow()
-                new_ghost_arrow.update_arrow()
+                new_arrow.updater.update_arrow()
+                new_ghost_arrow.updater.update_arrow()
 
             if new_prop.loc:
                 new_prop.update_prop()
@@ -92,7 +92,7 @@ class AddToSequenceManager:
             new_arrow.ghost.setTransformOriginPoint(
                 new_arrow.ghost.boundingRect().center()
             )
-            new_arrow.update_arrow()
+            new_arrow.updater.update_arrow()
         new_beat.state_updater.update_pictograph()
 
         return new_beat

@@ -7,6 +7,7 @@ from constants import *
 from objects.arrow.arrow_attr_manager import ArrowAttrManager
 from objects.arrow.arrow_mirror_manager import ArrowMirrorManager
 from objects.arrow.arrow_mouse_event_handler import ArrowMouseEventHandler
+from objects.arrow.arrow_updater import ArrowUpdater
 from .arrow_location_manager import ArrowLocationCalculator
 from .arrow_rot_angle_manager import ArrowRotAngleCalculator
 from ..prop.prop import Prop
@@ -32,6 +33,8 @@ if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 
 
+
+
 class Arrow(GraphicalObject):
     svg_cache = {}
     turns: Turns
@@ -45,6 +48,7 @@ class Arrow(GraphicalObject):
         self.location_calculator = ArrowLocationCalculator(self)
         self.mirror_manager = ArrowMirrorManager(self)
         self.attr_manager = ArrowAttrManager(self)
+        self.updater = ArrowUpdater(self)
         self.motion_type: MotionTypes = None
         self.ghost: GhostArrow = None
         self.is_svg_mirrored: bool = False
@@ -63,24 +67,9 @@ class Arrow(GraphicalObject):
     def set_arrow_transform_origin_to_center(self) -> None:
         self.setTransformOriginPoint(self.boundingRect().center())
 
-    ### GETTERS ###
-
-    def update_arrow(self, arrow_dict=None) -> None:
-        if arrow_dict:
-            self.attr_manager.update_attributes(arrow_dict)
-            if not self.is_ghost and self.ghost:
-                self.ghost.attr_manager.update_attributes(arrow_dict)
-
-        if not self.is_ghost:
-            self.ghost.transform = self.transform
-        self.svg_manager.update_arrow_svg()
-        self.mirror_manager.update_mirror()
-        self.svg_manager.update_color()
-        self.location_calculator.update_location()
-        self.rot_angle_calculator.update_rotation()
-
     def adjust_position(self, adjustment) -> None:
         self.setPos(self.pos() + QPointF(*adjustment))
+
 
     ### DELETION ###
 
