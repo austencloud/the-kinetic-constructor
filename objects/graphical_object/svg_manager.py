@@ -65,7 +65,7 @@ class SvgManager:
         cache_key = f"{motion_type}_{float(turns)}"
         if cache_key not in self.o.svg_cache:
             file_path = (
-                f"resources/images/arrows/{self.o.pictograph.main_widget.grid_mode}/"
+                f"images/arrows/{self.o.pictograph.main_widget.grid_mode}/"
                 f"{motion_type}/{motion_type}_{float(turns)}.svg"
             )
             with open(file_path, "r") as file:

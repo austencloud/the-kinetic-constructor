@@ -48,7 +48,6 @@ class PictographImageRenderer:
         )
         start_to_end_string = f"{self.pictograph.start_pos}→{self.pictograph.end_pos}"
         image_dir = os.path.join(
-            "resources",
             "images",
             "pictographs",
             prop_type,

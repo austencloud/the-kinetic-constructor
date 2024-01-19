@@ -12,7 +12,6 @@ from utilities.TypeChecking.TypeChecking import (
 from utilities.TypeChecking.prop_types import PropTypes
 from utilities.TypeChecking.letter_lists import all_letters
 
-image_path = "resources/images/"
 
 
 class LetterNumberType(Enum):

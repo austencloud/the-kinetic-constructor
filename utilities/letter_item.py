@@ -19,7 +19,7 @@ class LetterItem(QGraphicsSvgItem):
 
     def set_letter_renderer(self) -> None:
         letter_type = self.p.get.letter_type(self.letter)
-        svg_path = f"resources/images/letters_trimmed/{letter_type}/{self.letter}.svg"
+        svg_path = f"images/letters_trimmed/{letter_type}/{self.letter}.svg"
         renderer = QSvgRenderer(svg_path)
         if renderer.isValid():
             self.setSharedRenderer(renderer)
@@ -33,7 +33,7 @@ class LetterItem(QGraphicsSvgItem):
             self.p.letter_item.position_letter_item()
         else:
             self.p.letter = None
-            svg_path = f"resources/images/letter_button_icons/blank.svg"
+            svg_path = f"images/letter_button_icons/blank.svg"
             renderer = QSvgRenderer(svg_path)
             if renderer.isValid():
                 self.p.letter_item.setSharedRenderer(renderer)

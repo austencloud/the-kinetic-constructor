@@ -42,7 +42,7 @@ def process_directory(directory, namespace):
                 add_namespace_to_svg(file_path, namespace)
 
 # Set your directory and namespace here
-directory = "resources/images/arrows"
+directory = "images/arrows"
 namespace = "http://www.w3.org/2000/svg"
 
 process_directory(directory, namespace)

@@ -1,12 +1,12 @@
 from typing import TYPE_CHECKING, Dict
 
-from objects.motion.motion_checker import MotionChecker
+from objects.motion.managers.motion_checker import MotionChecker
 
-from .motion_attr_manager import MotionAttrManager
-from .motion_manipulator import MotionManipulator
-from .motion_ori_calculator import MotionOriCalculator
-from .motion_updater import MotionUpdater
-from .motion_turn_manager import MotionTurnsManager
+from .managers.motion_attr_manager import MotionAttrManager
+from .managers.motion_manipulator import MotionManipulator
+from .managers.motion_ori_calculator import MotionOriCalculator
+from .managers.motion_updater import MotionUpdater
+from .managers.motion_turn_manager import MotionTurnsManager
 
 from utilities.TypeChecking.TypeChecking import (
     Colors,

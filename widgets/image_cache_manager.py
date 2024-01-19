@@ -54,7 +54,6 @@ class ImageCacheManager:
 
         simple_turns_string = f"{blue_turns},{red_turns}"
         image_dir = os.path.join(
-            "resources",
             "images",
             "pictographs",
             prop_type,
@@ -84,7 +83,7 @@ class ImageCacheManager:
     def get_image_file_paths_for_prop_type(
         self, prop_type
     ) -> Generator[str, Any, None]:
-        image_root_dir = os.path.join("resources", "images", "pictographs", prop_type)
+        image_root_dir = os.path.join("images", "pictographs", prop_type)
         for subdir, _, files in os.walk(image_root_dir):
             for file in files:
                 if file.lower().endswith(".png"):

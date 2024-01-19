@@ -1,7 +1,7 @@
 from constants import *
 from typing import TYPE_CHECKING, Dict, Union
-from objects.motion.motion_attr_manager import MotionAttrManager
-from objects.motion.motion_manipulator import MotionManipulator
+from objects.motion.managers.motion_attr_manager import MotionAttrManager
+from objects.motion.managers.motion_manipulator import MotionManipulator
 from utilities.TypeChecking.TypeChecking import (
     Colors,
     Handpaths,

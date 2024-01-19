@@ -6,7 +6,6 @@ current_script_path = current_script_path[0].upper() + current_script_path[1:]
 current_dir = os.path.dirname(current_script_path)
 tka_sequence_constructor_dir = os.path.dirname(current_dir)
 tka_app_dir = os.path.dirname(tka_sequence_constructor_dir)
-resources_path = tka_app_dir + "/resources"
 
 INTEGER_TURNS = [0.0, 1.0, 2.0, 3.0]
 
@@ -120,13 +119,13 @@ ANTI_TURNS = "anti_turns"
 STATIC_HANDPATH = "static_handpath"
 DASH_HANDPATH = "dash_handpath"
 
-PICTOGRAPH_DIR = "resources/images/pictographs/"
-ARROW_DIR = "resources/images/arrows/"
-PROP_DIR = "resources/images/props/"
-LETTER_BTN_ICON_DIR = "resources/images/letter_button_icons"
-LETTERS_TRIMMED_SVG_DIR = "resources/images/letters_trimmed/"
-ICON_DIR = "resources/images/icons/"
-GRID_DIR = "resources/images/grid/"
+PICTOGRAPH_DIR = "images/pictographs/"
+ARROW_DIR = "images/arrows/"
+PROP_DIR = "images/props/"
+LETTER_BTN_ICON_DIR = "images/letter_button_icons"
+LETTERS_TRIMMED_SVG_DIR = "images/letters_trimmed/"
+ICON_DIR = "images/icons/"
+GRID_DIR = "images/grid/"
 
 
 GHOST = "ghost"
