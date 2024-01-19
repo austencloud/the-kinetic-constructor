@@ -81,8 +81,8 @@ class RotDirButtonManager:
         ) in self.attr_box.attr_panel.filter_tab.scroll_area.pictographs.values():
             for motion in pictograph.motions.values():
                 other_motion = pictograph.motions[RED if motion.color == BLUE else BLUE]
-                if motion.is_dash() or motion.is_static():
-                    if other_motion.is_shift():
+                if motion.is_dash() or motion.check.is_static():
+                    if other_motion.check.is_shift():
                         if motion.motion_type == self.attr_box.motion_type:
                             if vtg_dir == SAME:
                                 self.same_button.press()

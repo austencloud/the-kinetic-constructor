@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
-from .beta_prop_direction_calculator import BetaPropDirectionCalculator
-from .beta_prop_positioner import BetaPropPositioner
-from .default_prop_positioner import DefaultPropPositioner
-from .prop_offset_calculator import PropOffsetCalculator
+from .handlers.beta_prop_direction_calculator import BetaPropDirectionCalculator
+from .handlers.beta_prop_positioner import BetaPropPositioner
+from .handlers.default_prop_positioner import DefaultPropPositioner
+from .handlers.prop_offset_calculator import PropOffsetCalculator
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph

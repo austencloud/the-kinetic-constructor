@@ -6,7 +6,9 @@ from utilities.TypeChecking.TypeChecking import Directions
 from utilities.TypeChecking.prop_types import *
 
 if TYPE_CHECKING:
-    from .prop_placement_manager import PropPlacementManager
+    from widgets.pictograph.pictograph_placement_managers.prop_placement_manager.prop_placement_manager import (
+        PropPlacementManager,
+    )
 
 
 class BetaPropPositioner:
@@ -175,12 +177,12 @@ class BetaPropPositioner:
     def reposition_Y_Z(self) -> None:
         shift = (
             self.pictograph.red_motion
-            if self.pictograph.red_motion.is_shift()
+            if self.pictograph.red_motion.check.is_shift()
             else self.pictograph.blue_motion
         )
         static_motion = (
             self.pictograph.red_motion
-            if self.pictograph.red_motion.is_static()
+            if self.pictograph.red_motion.check.is_static()
             else self.pictograph.blue_motion
         )
 
@@ -206,7 +208,7 @@ class BetaPropPositioner:
     def reposition_Y_dash_Z_dash(self) -> None:
         shift = (
             self.pictograph.red_motion
-            if self.pictograph.red_motion.is_shift()
+            if self.pictograph.red_motion.check.is_shift()
             else self.pictograph.blue_motion
         )
         dash = (

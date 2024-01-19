@@ -2,17 +2,13 @@ from typing import TYPE_CHECKING, Dict, List, Tuple
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPixmapItem
 
 from objects.arrow.arrow import Arrow
-from objects.arrow.arrow_placement_manager.arrow_placement_manager import (
-    ArrowPlacementManager,
-)
+
 from objects.arrow.ghost_arrow import GhostArrow
 from objects.grid import Grid
 from objects.motion.motion import Motion
 from objects.prop.ghost_prop import GhostProp
 from objects.prop.prop import Prop
-from objects.prop.prop_placement_manager.prop_placement_manager import (
-    PropPlacementManager,
-)
+
 from utilities.TypeChecking.TypeChecking import (
     Colors,
     LetterTypeNums,
@@ -25,6 +21,8 @@ from utilities.TypeChecking.TypeChecking import (
 from widgets.pictograph.pictograph_attr_manager import PictographAttrManager
 from widgets.pictograph.pictograph_checker import PictographChecker
 from widgets.pictograph.pictograph_getter import PictographGetter
+from widgets.pictograph.pictograph_placement_managers.arrow_placement_manager.arrow_placement_manager import ArrowPlacementManager
+from widgets.pictograph.pictograph_placement_managers.prop_placement_manager.prop_placement_manager import PropPlacementManager
 from widgets.pictograph.pictograph_view import PictographView
 from widgets.pictograph.wasd_adjustment_manager.wasd_adjustment_manager import (
     WASD_AdjustmentManager,

@@ -3,7 +3,7 @@ import re
 from typing import TYPE_CHECKING, Dict, Optional, Tuple, Union
 
 from .adjustment_key_generator import AdjustmentKeyGenerator
-from ...arrow import Arrow
+from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.letter_lists import (
     Type1_hybrid_letters,
     Type1_letters,
@@ -185,13 +185,22 @@ class SpecialArrowPositioner:
         letter_adjustments: Dict = self.special_placements.get(letter, {}).get(
             adjustment_key, {}
         )
-    
+
         adjustment_map = {
             "S": letter_adjustments.get(arrow.motion.lead_state),
             "T": letter_adjustments.get(arrow.motion.lead_state),
-            **{letter: letter_adjustments.get(arrow.motion_type) for letter in Type1_hybrid_letters},
-            **{letter: letter_adjustments.get(arrow.color) for letter in non_hybrid_letters},
-            **{letter: letter_adjustments.get(arrow.motion_type) for letter in Type2_letters + Type3_letters},
+            **{
+                letter: letter_adjustments.get(arrow.motion_type)
+                for letter in Type1_hybrid_letters
+            },
+            **{
+                letter: letter_adjustments.get(arrow.color)
+                for letter in non_hybrid_letters
+            },
+            **{
+                letter: letter_adjustments.get(arrow.motion_type)
+                for letter in Type2_letters + Type3_letters
+            },
         }
 
         return adjustment_map.get(letter)
@@ -199,7 +208,7 @@ class SpecialArrowPositioner:
     def _get_special_adjustment(
         self, arrow: Arrow, adjustment_key: str
     ) -> Optional[Tuple[int, int]]:
-        letter_adjustments:Dict = self.special_placements.get(
+        letter_adjustments: Dict = self.special_placements.get(
             self.pictograph.letter, {}
         ).get(adjustment_key, {})
 

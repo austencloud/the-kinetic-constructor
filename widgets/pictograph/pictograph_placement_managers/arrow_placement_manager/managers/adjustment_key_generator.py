@@ -29,9 +29,15 @@ class AdjustmentKeyGenerator:
 
     def _generate_key_for_type2(self) -> str:
         """Generate the key for Type2 letters, including 's' or 'o' based on rotation direction."""
-        shift = self.red_arrow if self.red_arrow.motion.is_shift() else self.blue_arrow
+        shift = (
+            self.red_arrow
+            if self.red_arrow.motion.check.is_shift()
+            else self.blue_arrow
+        )
         static = (
-            self.red_arrow if self.red_arrow.motion.is_static() else self.blue_arrow
+            self.red_arrow
+            if self.red_arrow.motion.check.is_static()
+            else self.blue_arrow
         )
         if static.turns != 0 and static.motion.prop_rot_dir != NO_ROT:
             direction = (
@@ -49,7 +55,11 @@ class AdjustmentKeyGenerator:
 
     def _generate_key_for_type3(self) -> str:
         """Generate the key for Type3 letters, including 's' or 'o' based on rotation direction."""
-        shift = self.red_arrow if self.red_arrow.motion.is_shift() else self.blue_arrow
+        shift = (
+            self.red_arrow
+            if self.red_arrow.motion.check.is_shift()
+            else self.blue_arrow
+        )
         dash = self.red_arrow if self.red_arrow.motion.is_dash() else self.blue_arrow
         if dash.turns != 0 and dash.motion.prop_rot_dir != NO_ROT:
             direction = (

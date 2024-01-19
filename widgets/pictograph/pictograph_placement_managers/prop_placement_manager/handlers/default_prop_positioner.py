@@ -6,9 +6,7 @@ from objects.prop.prop import Prop
 
 
 if TYPE_CHECKING:
-    from objects.prop.prop_placement_manager.prop_placement_manager import (
-        PropPlacementManager,
-    )
+    from widgets.pictograph.pictograph_placement_managers.prop_placement_manager.prop_placement_manager import PropPlacementManager
 
 
 class DefaultPropPositioner:

@@ -1,20 +1,13 @@
-from typing import TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING
 from constants import (
     ANTIRADIAL,
     BLUE,
-    CLOCK,
-    COUNTER,
     EAST,
-    IN,
     NORTH,
-    OUT,
     RADIAL,
     RED,
     SOUTH,
     WEST,
-    PRO,
-    ANTI,
-    STATIC,
     LEFT,
     RIGHT,
     UP,
@@ -35,7 +28,7 @@ class BetaPropDirectionCalculator:
 
     def get_dir(self, motion: Motion) -> Directions:
         """Determine the translation direction based on the motion type, start location, end location, and end layer."""
-        if not (motion.is_shift() or motion.is_static()):
+        if not (motion.check.is_shift() or motion.check.is_static()):
             return None
 
         if motion.prop.check.is_radial():
