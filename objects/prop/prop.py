@@ -28,7 +28,8 @@ if TYPE_CHECKING:
 class Prop(GraphicalObject):
     loc: Locations
     ori: Orientations
-
+    axis: Axes
+    
     def __init__(self, scene, prop_dict: Dict, motion: "Motion") -> None:
         super().__init__(scene)
         self.motion = motion

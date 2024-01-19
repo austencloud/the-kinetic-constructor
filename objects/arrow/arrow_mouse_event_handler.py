@@ -21,9 +21,8 @@ class ArrowMouseEventHandler:
         self.arrow.setSelected(True)
         if hasattr(self.arrow, GHOST) and self.arrow.ghost:
             self.arrow.ghost.show()
-
         self.arrow.scene.state_updater.update_pictograph()
-
+        
     def hand_mouse_move(self, event: "QGraphicsSceneMouseEvent") -> None:
         if event.buttons() == Qt.MouseButton.LeftButton:
             new_location = self.arrow.scene.grid.get_closest_layer2_point(

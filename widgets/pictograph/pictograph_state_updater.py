@@ -85,8 +85,8 @@ class PictographStateUpdater:
                     TURNS: pictograph_dict.get(f"{color}_turns"),
                 }
 
-                self.pictograph.motions[color].arrow.setup_arrow(arrow_dict)
-                self.pictograph.ghost_arrows[color].setup_arrow(arrow_dict)
+                self.pictograph.motions[color].arrow.update_arrow(arrow_dict)
+                self.pictograph.ghost_arrows[color].update_arrow(arrow_dict)
                 self.pictograph.motions[color].arrow.show()
                 prop_dict = {
                     PROP_ROT_DIR: pictograph_dict.get(f"{color}_prop_rot_dir"),

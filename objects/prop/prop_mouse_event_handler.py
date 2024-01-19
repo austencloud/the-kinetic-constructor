@@ -3,7 +3,7 @@ from data.start_end_loc_map import get_start_end_locs
 
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
-from typing import TYPE_CHECKING, Dict, Tuple, Union
+from typing import TYPE_CHECKING, Dict, Tuple
 
 from constants import *
 from utilities.TypeChecking.MotionAttributes import Locations, MotionTypes, PropRotDirs
@@ -59,7 +59,7 @@ class PropMouseEventHandler:
                 self.p.motion.start_loc = new_location
                 self.p.motion.end_loc = new_location
 
-            self.p.axis = self.p.get_axis_from_ori()
+            self.p.axis = self.p.attr_manager.get_axis_from_ori()
             self.p.update_prop()
             self.update_arrow_location_during_prop_drag(new_location)
 
@@ -205,7 +205,6 @@ class PropMouseEventHandler:
             self.p.motion.end_loc = new_arrow_location
             self.p.motion.arrow.update_arrow()
 
-
     def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
         (
             closest_hand_point,
@@ -213,7 +212,7 @@ class PropMouseEventHandler:
         ) = self.p.pictograph.grid.get_closest_hand_point(event.scenePos())
  
         self.loc = closest_hand_point
-        self.axis = self.p.get_axis_from_ori()
+        self.axis = self.p.attr_manager.get_axis_from_ori()
         self.p.update_prop()
         self.p.setPos(closest_hand_point_coord)
 

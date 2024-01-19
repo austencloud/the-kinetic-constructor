@@ -34,39 +34,26 @@ if TYPE_CHECKING:
 
 class Arrow(GraphicalObject):
     svg_cache = {}
+    turns: Turns
 
     def __init__(self, scene, arrow_dict, motion: "Motion") -> None:
         super().__init__(scene)
         self.scene: Pictograph | ArrowBox = scene
         self.motion: Motion = motion
+        self.mouse_event_handler = ArrowMouseEventHandler(self)
         self.rot_angle_calculator = ArrowRotAngleCalculator(self)
         self.location_calculator = ArrowLocationCalculator(self)
         self.mirror_manager = ArrowMirrorManager(self)
         self.attr_manager = ArrowAttrManager(self)
-        
         self.motion_type: MotionTypes = None
         self.ghost: GhostArrow = None
         self.is_svg_mirrored: bool = False
         self.color = arrow_dict[COLOR]
+        self.turns = arrow_dict[TURNS]
         self.prop: Prop = None
         self.is_ghost: bool = False
         self.loc: Locations = None
 
-        # Create an instance of ArrowMouseEventHandler
-        self.mouse_event_handler = ArrowMouseEventHandler(self)
-
-    def setup_arrow(self, arrow_dict) -> None:
-        self.motion_type = arrow_dict[MOTION_TYPE]
-        self.turns = arrow_dict[TURNS]
-
-        self.svg_file = self.svg_manager.get_arrow_svg_file(
-            arrow_dict[MOTION_TYPE],
-            arrow_dict[TURNS],
-        )
-        self.svg_manager.setup_svg_renderer(self.svg_file)
-        self.setAcceptHoverEvents(True)
-        self.attr_manager.update_attributes(arrow_dict)
-        self.drag_offset = QPointF(0, 0)
 
     ### UPDATERS ###
 
@@ -101,7 +88,7 @@ class Arrow(GraphicalObject):
         if self in self.scene.arrows.values():
             self.scene.removeItem(self)
             self.scene.removeItem(self.ghost)
-            
+
             self.ghost.attr_manager.clear_attributes()
             self.prop.attr_manager.clear_attributes()
         if keep_prop:
@@ -113,7 +100,6 @@ class Arrow(GraphicalObject):
 
     ### MOUSE EVENTS ###
 
-    # Pass the events to the ArrowMouseEventHandler instance
     def mousePressEvent(self, event) -> None:
         self.mouse_event_handler.handle_mouse_press(event)
 
@@ -122,5 +108,3 @@ class Arrow(GraphicalObject):
 
     def mouseReleaseEvent(self, event) -> None:
         self.mouse_event_handler.handle_mouse_release(event)
-
-
