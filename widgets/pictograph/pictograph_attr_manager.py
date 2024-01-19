@@ -10,4 +10,5 @@ class PictographAttrManager:
 
     def update_attributes(self, pictograph_dict: Dict) -> None:
         for attr_name, attr_value in pictograph_dict.items():
-            setattr(self.pictograph, attr_name, attr_value)
+            if attr_value is not None:
+                setattr(self.pictograph, attr_name, attr_value)

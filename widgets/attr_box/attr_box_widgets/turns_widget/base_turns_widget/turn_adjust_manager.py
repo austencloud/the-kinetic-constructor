@@ -121,12 +121,8 @@ class TurnAdjustManager:
 
     def _set_prop_rot_dir_based_on_vtg_state(self, motion: "Motion") -> None:
         """Set the rotation direction of the motion based on the vtg directional relationship."""
-        other_motion = self._get_other_motion(motion)
+        other_motion = motion.scene.get.other_motion(motion)
         motion.prop_rot_dir = self._determine_prop_rot_dir(motion, other_motion)
-
-    def _get_other_motion(self, motion: "Motion") -> "Motion":
-        """Get the other motion based on color."""
-        return motion.scene.motions[RED if motion.color == BLUE else BLUE]
 
     def _determine_prop_rot_dir(
         self, motion: "Motion", other_motion: "Motion"

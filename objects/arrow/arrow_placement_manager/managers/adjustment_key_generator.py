@@ -14,9 +14,9 @@ if TYPE_CHECKING:
 
 class AdjustmentKeyGenerator:
     def __init__(self, pictograph: "Pictograph") -> None:
-        self.pictograph = pictograph
-        self.blue_arrow = self.pictograph.arrows.get(BLUE)
-        self.red_arrow = self.pictograph.arrows.get(RED)
+        self.p = pictograph
+        self.blue_arrow = self.p.arrows.get(BLUE)
+        self.red_arrow = self.p.arrows.get(RED)
 
     def _normalize_arrow_turns(self, arrow: Arrow) -> int:
         """Convert arrow turns from float to int if they are whole numbers."""
@@ -74,11 +74,17 @@ class AdjustmentKeyGenerator:
 
     def _generate_key_for_s_t(self) -> str:
         """Generate the key for 'S' and 'T' letters based on leading and trailing states."""
-        leading_motion = self.pictograph.get.leading_motion()
-        trailing_motion = self.pictograph.get.trailing_motion()
-        leading_motion.arrow.motion.lead_state = LEADING
-        trailing_motion.arrow.motion.lead_state = TRAILING
-        return f"({leading_motion.turns}, {trailing_motion.turns})"
+        leading_motion = self.p.get.leading_motion()
+        trailing_motion = self.p.get.trailing_motion()
+        if leading_motion:
+            leading_motion.arrow.motion.lead_state = LEADING
+            trailing_motion.arrow.motion.lead_state = TRAILING
+            return f"({leading_motion.turns}, {trailing_motion.turns})"
+        else:
+            return (
+                f"({self._normalize_arrow_turns(self.blue_arrow)}, "
+                f"{self._normalize_arrow_turns(self.red_arrow)})"
+            )
 
     def _get_pro_anti_arrows(self) -> Tuple[Arrow, Arrow]:
         """Get the arrows corresponding to the pro and anti motions."""

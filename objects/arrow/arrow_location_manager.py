@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 class ArrowLocationCalculator:
     def __init__(self, arrow: "Arrow") -> None:
-        self.arrow = arrow
+        self.a = arrow
         self.location_resolvers = {
             PRO: self.get_shift_location,
             ANTI: self.get_shift_location,
@@ -19,12 +19,14 @@ class ArrowLocationCalculator:
         }
 
     def update_location(self) -> None:
-        if not self.arrow.is_ghost and self.arrow.ghost:
-            self.arrow.loc = self.get_arrow_location()
-            self.arrow.ghost.loc = self.arrow.loc
+        if not self.a.is_ghost and self.a.ghost:
+            self.a.loc = self.get_arrow_location()
+            self.a.ghost.loc = self.a.loc
 
     def get_arrow_location(self) -> Locations:
-        resolve_location: Callable = self.location_resolvers.get(self.arrow.motion_type)
+        resolve_location: Callable = self.location_resolvers.get(
+            self.a.motion.motion_type
+        )
         if resolve_location:
             return resolve_location()
 
@@ -36,27 +38,24 @@ class ArrowLocationCalculator:
             frozenset({WEST, NORTH}): NORTHWEST,
         }
         return direction_pairs.get(
-            frozenset({self.arrow.motion.start_loc, self.arrow.motion.end_loc})
+            frozenset({self.a.motion.start_loc, self.a.motion.end_loc})
         )
 
     def get_dash_location(self) -> Locations:
-        if self.arrow.scene.letter in Type3_letters and self.arrow.motion.turns == 0:
+        if self.a.scene.letter in Type3_letters and self.a.motion.turns == 0:
             return self._zero_turns_type_3_dash_location()
         return (
             self._dash_location_zero_turns()
-            if self.arrow.motion.turns == 0
+            if self.a.motion.turns == 0
             else self._dash_location_non_zero_turns()
         )
 
     def _dash_location_zero_turns(self) -> Locations:
-        other_motion = self.arrow.scene.get_other_motion(self.arrow.motion)
-        if (
-            self.arrow.scene.letter in Type3_letters
-            or self.arrow.scene.letter in Type4_letters
-        ):
+        other_motion = self.a.scene.get.other_motion(self.a.motion)
+        if self.a.scene.letter in Type3_letters or self.a.scene.letter in Type4_letters:
             return self._default_dash_location()
 
-        elif self.arrow.scene.letter in ["Λ-"]:
+        elif self.a.scene.letter in ["Λ-"]:
             loc_map = {
                 ((NORTH, SOUTH), (EAST, WEST)): EAST,
                 ((EAST, WEST), (NORTH, SOUTH)): NORTH,
@@ -69,7 +68,7 @@ class ArrowLocationCalculator:
             }
             arrow_location = loc_map.get(
                 (
-                    (self.arrow.motion.start_loc, self.arrow.motion.end_loc),
+                    (self.a.motion.start_loc, self.a.motion.end_loc),
                     (other_motion.start_loc, other_motion.end_loc),
                 )
             )
@@ -80,18 +79,18 @@ class ArrowLocationCalculator:
             CLOCKWISE: {NORTH: EAST, EAST: SOUTH, SOUTH: WEST, WEST: NORTH},
             COUNTER_CLOCKWISE: {NORTH: WEST, EAST: NORTH, SOUTH: EAST, WEST: SOUTH},
         }
-        return loc_map[self.arrow.motion.prop_rot_dir][self.arrow.motion.start_loc]
+        return loc_map[self.a.motion.prop_rot_dir][self.a.motion.start_loc]
 
     def _zero_turns_type_3_dash_location(self) -> Locations:
         shift_motion = (
-            self.arrow.scene.red_motion
-            if self.arrow.scene.red_motion.motion_type in [PRO, ANTI, FLOAT]
-            else self.arrow.scene.blue_motion
+            self.a.scene.red_motion
+            if self.a.scene.red_motion.motion_type in [PRO, ANTI, FLOAT]
+            else self.a.scene.blue_motion
         )
         dash_motion = (
-            self.arrow.scene.red_motion
-            if self.arrow.scene.red_motion.motion_type == DASH
-            else self.arrow.scene.blue_motion
+            self.a.scene.red_motion
+            if self.a.scene.red_motion.motion_type == DASH
+            else self.a.scene.blue_motion
         )
         if not shift_motion.arrow.loc:
             shift_motion.arrow.loc = (
@@ -121,7 +120,7 @@ class ArrowLocationCalculator:
         return dash_location
 
     def get_opposite_arrow(self) -> "Arrow":
-        return self.arrow.scene.arrows[RED if self.arrow.color == BLUE else BLUE]
+        return self.a.scene.arrows[RED if self.a.color == BLUE else BLUE]
 
     def _default_dash_location(self) -> Locations:
         color_map = {
@@ -138,9 +137,9 @@ class ArrowLocationCalculator:
                 (WEST, EAST): NORTH,
             },
         }
-        return color_map[self.arrow.color].get(
-            (self.arrow.motion.start_loc, self.arrow.motion.end_loc)
+        return color_map[self.a.color].get(
+            (self.a.motion.start_loc, self.a.motion.end_loc)
         )
 
     def get_static_location(self) -> Locations:
-        return self.arrow.motion.start_loc
+        return self.a.motion.start_loc

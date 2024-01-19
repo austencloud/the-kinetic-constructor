@@ -7,20 +7,20 @@ if TYPE_CHECKING:
 
 class MotionUpdater:
     def __init__(self, motion: "Motion") -> None:
-        self.motion = motion
+        self.m = motion
 
     def update_motion(self, motion_dict=None) -> None:
         if motion_dict:
-            self.motion.attr_manager.update_attributes(motion_dict)
+            self.m.attr_manager.update_attributes(motion_dict)
         arrow_dict = {
-            LOC: self.motion.arrow.location_calculator.get_arrow_location(),
-            MOTION_TYPE: self.motion.motion_type,
-            TURNS: self.motion.turns,
+            LOC: self.m.arrow.location_calculator.get_arrow_location(),
+            MOTION_TYPE: self.m.motion_type,
+            TURNS: self.m.turns,
         }
         prop_dict = {
-            LOC: self.motion.end_loc,
-            ORI: self.motion.ori_calculator.get_end_ori(),
+            LOC: self.m.end_loc,
+            ORI: self.m.ori_calculator.get_end_ori(),
         }
-        self.motion.end_ori = self.motion.ori_calculator.get_end_ori()
-        self.motion.arrow.update_arrow(arrow_dict)
-        self.motion.prop.update_prop(prop_dict)
+        self.m.end_ori = self.m.ori_calculator.get_end_ori()
+        self.m.arrow.update_arrow(arrow_dict)
+        self.m.prop.update_prop(prop_dict)

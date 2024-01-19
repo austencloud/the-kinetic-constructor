@@ -17,7 +17,7 @@ class ArrowRotAngleCalculator:
         }
 
         if hasattr(self.arrow.scene, LETTER):
-            self.other_motion = self.arrow.scene.get_other_motion(self.arrow.motion)
+            self.other_motion = self.arrow.scene.get.other_motion(self.arrow.motion)
 
     def update_rotation(self) -> None:
         angle = self._resolve_angle()

@@ -33,11 +33,14 @@ class PictographGetter:
         ]
 
     def leading_motion(self) -> Motion:
-        if self.p.red_motion.start_loc == self.p.blue_motion.end_loc:
-            return self.p.red_motion
-        elif self.p.blue_motion.start_loc == self.p.red_motion.end_loc:
-            return self.p.blue_motion
-
+        if self.p.red_motion.start_loc and self.p.blue_motion.start_loc:
+            if self.p.red_motion.start_loc == self.p.blue_motion.end_loc:
+                return self.p.red_motion
+            elif self.p.blue_motion.start_loc == self.p.red_motion.end_loc:
+                return self.p.blue_motion
+        else: 
+            return None
+            
     def trailing_motion(self) -> Motion:
         if self.p.red_motion.start_loc == self.p.blue_motion.end_loc:
             return self.p.blue_motion
