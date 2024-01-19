@@ -106,7 +106,7 @@ class OptionPickerScrollArea(ScrollArea):
             arrow.loc = arrow.location_calculator.get_arrow_location(
                 arrow.motion.start_loc, arrow.motion.end_loc, arrow.motion.motion_type
             )
-        option.state_updater.update_pictograph()
+        option.updater.update_pictograph()
 
     def clear(self) -> None:
         while self.layout.count():

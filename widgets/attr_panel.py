@@ -80,7 +80,7 @@ class AttrPanel(QFrame):
                 elif pictograph.motions[RED].motion_type in [DASH, STATIC]:
                     pictograph_dict[RED_PROP_ROT_DIR] = NO_ROT
 
-            pictograph.state_updater.update_pictograph(pictograph_dict)
+            pictograph.updater.update_pictograph(pictograph_dict)
 
     def resize_attr_panel(self) -> None:
         for box in self.boxes:

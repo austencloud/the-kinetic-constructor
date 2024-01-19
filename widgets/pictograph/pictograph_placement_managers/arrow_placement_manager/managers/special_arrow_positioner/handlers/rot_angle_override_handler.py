@@ -16,9 +16,9 @@ class RotAngleOverrideHandler:
         letter_data: Dict[str, Dict] = placements.get(
             self.positioner.pictograph.letter, {}
         )
-        adjustment_key = self.positioner.turns_tuple_generator.generate_turns_tuple(
+        turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(
             arrow.scene.letter
         )
-        return letter_data.get(adjustment_key, {}).get(
+        return letter_data.get(turns_tuple, {}).get(
             f"{arrow.motion.motion_type}_rot_angle"
         )

@@ -93,6 +93,6 @@ class AddToSequenceManager:
                 new_arrow.ghost.boundingRect().center()
             )
             new_arrow.updater.update_arrow()
-        new_beat.state_updater.update_pictograph()
+        new_beat.updater.update_pictograph()
 
         return new_beat

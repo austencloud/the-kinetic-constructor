@@ -6,7 +6,7 @@ from widgets.pictograph.pictograph_placement_managers.arrow_placement_manager.ma
 from .handlers.adjustment_calculator import AdjustmentCalculator
 from .handlers.adjustment_mapper import AdjustmentMapper
 from .handlers.data_sorter import DataSorter
-from .handlers.motion_type_key_generator import MotionTypeKeyGenerator
+from .handlers.motion_attr_key_generator import MotionAttrKeyGenerator
 from .handlers.rot_angle_override_handler import RotAngleOverrideHandler
 from .handlers.special_placement_data_loader import SpecialPlacementDataLoader
 from .handlers.special_placement_data_updater import SpecialPlacementDataUpdater
@@ -43,7 +43,7 @@ class SpecialArrowPositioner:
         self.adjustment_calculator = AdjustmentCalculator(self)
         self.rot_angle_handler = RotAngleOverrideHandler(self)
         self.adjustment_mapper = AdjustmentMapper(self)
-        self.motion_type_key_generator = MotionTypeKeyGenerator(self)
+        self.motion_key_generator = MotionAttrKeyGenerator(self)
         self.turns_tuple_generator = TurnsTupleGenerator(self)
         self.data_sorter = DataSorter(self)
 

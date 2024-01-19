@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from ..special_arrow_positioner import SpecialArrowPositioner
 
 
-class MotionTypeKeyGenerator:
+class MotionAttrKeyGenerator:
     def __init__(self, positioner: "SpecialArrowPositioner") -> None:
         self.positioner = positioner
 
@@ -33,6 +33,6 @@ class MotionTypeKeyGenerator:
         else:
             return other_arrow.motion.motion_type
 
-    def generate_motion_type_key(self, arrow: Arrow) -> str:
+    def generate_motion_key(self, arrow: Arrow) -> str:
         key = self.determine_key(arrow)
         return key

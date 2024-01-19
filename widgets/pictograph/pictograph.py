@@ -21,8 +21,12 @@ from utilities.TypeChecking.TypeChecking import (
 from widgets.pictograph.pictograph_attr_manager import PictographAttrManager
 from widgets.pictograph.pictograph_checker import PictographChecker
 from widgets.pictograph.pictograph_getter import PictographGetter
-from widgets.pictograph.pictograph_placement_managers.arrow_placement_manager.arrow_placement_manager import ArrowPlacementManager
-from widgets.pictograph.pictograph_placement_managers.prop_placement_manager.prop_placement_manager import PropPlacementManager
+from widgets.pictograph.pictograph_placement_managers.arrow_placement_manager.arrow_placement_manager import (
+    ArrowPlacementManager,
+)
+from widgets.pictograph.pictograph_placement_managers.prop_placement_manager.prop_placement_manager import (
+    PropPlacementManager,
+)
 from widgets.pictograph.pictograph_view import PictographView
 from widgets.pictograph.wasd_adjustment_manager.wasd_adjustment_manager import (
     WASD_AdjustmentManager,
@@ -42,8 +46,6 @@ if TYPE_CHECKING:
 
 
 class Pictograph(QGraphicsScene):
-    
-    
     def __init__(self, main_widget: "MainWidget", scroll_area: "ScrollArea") -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -51,7 +53,7 @@ class Pictograph(QGraphicsScene):
         self.initializer = PictographInit(self)
         self.mouse_event_handler = PictographMouseEventHandler(self)
         self.context_menu_handler = PictographContextMenuHandler(self)
-        self.state_updater = PictographStateUpdater(self)
+        self.updater = PictographStateUpdater(self)
         self.image_renderer = PictographImageRenderer(self)
         self.add_to_sequence_manager = AddToSequenceManager(self)
         self.wasd_adjustment_manager = WASD_AdjustmentManager(self)
@@ -77,7 +79,6 @@ class Pictograph(QGraphicsScene):
 
     def contextMenuEvent(self, event) -> None:
         self.context_menu_handler.handle_context_menu(event)
-
 
     arrows: Dict[Colors, Arrow]
     props: Dict[Colors, Prop]

@@ -77,7 +77,7 @@ class PropBoxDrag(BaseObjectBoxDrag):
         self.pictograph.addItem(self.placed_prop)
         self.pictograph.props[self.color] = self.placed_prop
 
-        self.pictograph.state_updater.update_pictograph()
+        self.pictograph.updater.update_pictograph()
         self.pictograph.clearSelection()
 
         self.placed_prop.updater.update_prop()
@@ -124,7 +124,7 @@ class PropBoxDrag(BaseObjectBoxDrag):
 
         self.pictograph.motions[self.color].attr_manager.update_attributes(motion_dict)
 
-        self.pictograph.state_updater.update_pictograph()
+        self.pictograph.updater.update_pictograph()
         self.move_to_cursor(self.propbox.view.mapFromGlobal(self.pos()))
 
     def _update_ghost_prop_for_new_location(self, new_location) -> None:
@@ -190,13 +190,13 @@ class PropBoxDrag(BaseObjectBoxDrag):
                     self.ghost.motion.start_loc = new_location
                     self.ghost.motion.end_loc = new_location
                     self._update_prop_preview_for_new_location(new_location)
-                    self.pictograph.state_updater.update_pictograph()
+                    self.pictograph.updater.update_pictograph()
 
     def handle_mouse_release(self) -> None:
         if self.has_entered_pictograph_once:
             self.place_prop_on_pictograph()
         self.deleteLater()
-        self.pictograph.state_updater.update_pictograph()
+        self.pictograph.updater.update_pictograph()
         self.ghost.hide()
         self.propbox.drag = None
         self.reset_drag_state()

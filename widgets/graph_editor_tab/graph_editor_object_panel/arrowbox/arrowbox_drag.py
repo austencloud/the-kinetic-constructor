@@ -95,7 +95,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
         arrow.updater.update_arrow()
         arrow.show()
         arrow.setSelected(True)
-        self.pictograph.state_updater.update_pictograph()
+        self.pictograph.updater.update_pictograph()
 
     ### UPDATERS ###
 
@@ -207,7 +207,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
             self.place_arrow_on_pictograph()
         self.arrowbox.drag = None
         self.deleteLater()
-        self.pictograph.state_updater.update_pictograph()
+        self.pictograph.updater.update_pictograph()
         self.reset_drag_state()
 
     ### FLAGS ###

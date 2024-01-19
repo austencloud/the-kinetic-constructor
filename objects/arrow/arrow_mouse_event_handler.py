@@ -3,9 +3,7 @@ from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 from constants import *
 
-from utilities.TypeChecking.TypeChecking import (
-    TYPE_CHECKING
-)
+from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
@@ -21,8 +19,8 @@ class ArrowMouseEventHandler:
         self.arrow.setSelected(True)
         if hasattr(self.arrow, GHOST) and self.arrow.ghost:
             self.arrow.ghost.show()
-        self.arrow.scene.state_updater.update_pictograph()
-        
+        self.arrow.scene.updater.update_pictograph()
+
     def hand_mouse_move(self, event: "QGraphicsSceneMouseEvent") -> None:
         if event.buttons() == Qt.MouseButton.LeftButton:
             new_location = self.arrow.scene.grid.get_closest_layer2_point(
@@ -35,9 +33,8 @@ class ArrowMouseEventHandler:
 
     def handle_mouse_release(self, event) -> None:
         self.arrow.scene.arrows[self.arrow.color] = self.arrow
-        self.arrow.scene.state_updater.update_pictograph()
+        self.arrow.scene.updater.update_pictograph()
         self.arrow.ghost.hide()
-        
+
     def set_drag_pos(self, new_pos: QPointF) -> None:
         self.arrow.setPos(new_pos)
-

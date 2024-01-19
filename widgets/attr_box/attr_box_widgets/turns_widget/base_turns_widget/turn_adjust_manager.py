@@ -87,7 +87,7 @@ class TurnAdjustManager:
     def update_motion_properties(self, motion: "Motion", new_turns: Turns) -> None:
         self._update_turns_and_rotation(motion, new_turns)
         pictograph_dict = {f"{motion.color}_turns": new_turns}
-        motion.pictograph.state_updater.update_pictograph(pictograph_dict)
+        motion.pictograph.updater.update_pictograph(pictograph_dict)
 
     ### PRIVATE METHODS ###
 

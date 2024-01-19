@@ -28,7 +28,7 @@ class PropMouseEventHandler:
             self.p.ghost.show()
             self.p.scene.props[self.p.ghost.color] = self.p.ghost
             self.p.scene.props[self.p.color] = self.p.ghost
-            self.p.scene.state_updater.update_pictograph()
+            self.p.scene.updater.update_pictograph()
             self.p.scene.props[self.p.color] = self.p
             for item in self.p.scene.items():
                 if item != self.p:
@@ -45,7 +45,7 @@ class PropMouseEventHandler:
     def handle_mouse_release(self, event: QGraphicsSceneMouseEvent) -> None:
         if isinstance(self.p.scene, self.p.scene.__class__):
             self.p.ghost.hide()
-            self.p.scene.state_updater.update_pictograph()
+            self.p.scene.updater.update_pictograph()
             self.finalize_prop_drop(event)
 
     def update_ghost_prop_location_during_drag(self, new_pos: QPointF) -> None:
@@ -67,7 +67,7 @@ class PropMouseEventHandler:
             self.p.ghost.loc = self.p.loc
             self.p.ghost.updater.update_prop()
             self.p.scene.props[self.p.ghost.color] = self.p.ghost
-            self.p.scene.state_updater.update_pictograph()
+            self.p.scene.updater.update_pictograph()
             self.p.scene.props[self.p.color] = self.p
             new_pos = new_pos - self.p.get_center()
             self.set_drag_pos(new_pos)
@@ -197,7 +197,7 @@ class PropMouseEventHandler:
                 self.p.motion.arrow.ghost.loc = new_arrow_location
                 self.p.motion.start_loc = start_loc
                 self.p.motion.end_loc = end_loc
-                self.p.pictograph.state_updater.update_pictograph()
+                self.p.pictograph.updater.update_pictograph()
 
         elif self.p.motion.motion_type == STATIC:
             self.p.motion.arrow.loc = new_arrow_location
@@ -219,7 +219,7 @@ class PropMouseEventHandler:
         if self.p.motion.arrow:
             self.p.motion.arrow.updater.update_arrow()
         self.p.previous_location = closest_hand_point
-        self.p.scene.state_updater.update_pictograph()
+        self.p.scene.updater.update_pictograph()
 
     def set_drag_pos(self, new_pos: QPointF) -> None:
         object_length = self.p.boundingRect().width()

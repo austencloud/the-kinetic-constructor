@@ -41,7 +41,7 @@ class ScrollAreaPictographFactory:
             ][pictograph_key]
         elif pictograph_dict is not None:
             codex_pictograph = self.create_pictograph(CODEX_PICTOGRAPH)
-            codex_pictograph.state_updater.update_pictograph(pictograph_dict)
+            codex_pictograph.updater.update_pictograph(pictograph_dict)
             self.scroll_area.main_widget.all_pictographs[pictograph_key.split("_")[0]][
                 pictograph_key
             ] = codex_pictograph

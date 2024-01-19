@@ -66,7 +66,7 @@ class SpecialPlacementDataUpdater:
     def _update_turn_data(
         self, turn_data: Dict, arrow: "Arrow", adjustment: Tuple[int, int]
     ) -> None:
-        key = self.positioner.motion_type_key_generator.generate_motion_type_key(arrow)
+        key = self.positioner.motion_key_generator.generate_motion_key(arrow)
         turn_data.setdefault(key, self._get_default_data(arrow))
         turn_data[key] = [
             turn_data[key][0] + adjustment[0],
@@ -88,7 +88,7 @@ class SpecialPlacementDataUpdater:
         )
         default_turn_data = default_mgr.get_default_adjustment(arrow)
 
-        key = self.positioner.motion_type_key_generator.generate_motion_type_key(arrow)
+        key = self.positioner.motion_key_generator.generate_motion_key(arrow)
 
         return {
             key: [

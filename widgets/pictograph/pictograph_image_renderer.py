@@ -36,7 +36,7 @@ class PictographImageRenderer:
         self.pictograph.image_loaded = True
 
     def _render_scene_to_pixmap(self) -> QPixmap:
-        self.pictograph.state_updater.update_pictograph(self.pictograph.pictograph_dict)
+        self.pictograph.updater.update_pictograph(self.pictograph.pictograph_dict)
 
         prop_type = self.pictograph.main_widget.prop_type
         letter = self.pictograph.letter

@@ -36,7 +36,7 @@ class MotionManipulator:
             f"{self.motion.color}_start_location": new_start_loc,
             f"{self.motion.color}_end_location": new_end_loc,
         }
-        self.motion.pictograph.state_updater.update_pictograph(pictograph_dict)
+        self.motion.pictograph.updater.update_pictograph(pictograph_dict)
 
     ### MIRRORING ###
 
@@ -61,7 +61,7 @@ class MotionManipulator:
             f"{self.motion.color}_end_location": new_end_loc,
             f"{self.motion.color}_prop_rot_dir": new_rot_dir,
         }
-        self.motion.pictograph.state_updater.update_pictograph(pictograph_dict)
+        self.motion.pictograph.updater.update_pictograph(pictograph_dict)
 
     ### MOTION TYPE ###
 
@@ -86,7 +86,7 @@ class MotionManipulator:
             f"{self.motion.color}_prop_rot_dir": new_rot_dir,
             f"{self.motion.color}_end_ori": self.motion.prop.ori,
         }
-        self.motion.pictograph.state_updater.update_pictograph(pictograph_dict)
+        self.motion.pictograph.updater.update_pictograph(pictograph_dict)
 
     ### ROTATION ###
 
@@ -163,14 +163,14 @@ class MotionManipulator:
         """
         Refresh the arrow and prop, and update the pictograph.
         """
-        self.motion.arrow.scene.state_updater.update_pictograph()
+        self.motion.arrow.scene.updater.update_pictograph()
 
     def delete_prop(self) -> None:
         self.motion.prop.scene.removeItem(self.motion.prop)
         self.motion.prop.scene.removeItem(
             self.motion.prop.scene.ghost_props[self.motion.prop.color]
         )
-        self.motion.prop.scene.state_updater.update_pictograph()
+        self.motion.prop.scene.updater.update_pictograph()
 
     def set_prop_rot_dir(self, prop_rot_dir: str) -> None:
         self.motion.prop_rot_dir = prop_rot_dir

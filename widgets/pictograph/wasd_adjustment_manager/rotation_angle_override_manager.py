@@ -54,6 +54,7 @@ class RotationAngleOverrideManager:
 
         letter_data[adjustment_key_str] = turn_data
         data[self.pictograph.letter] = letter_data
-        self.pictograph.arrow_placement_manager.special_positioner.data_updater.update_specific_entry(
+        self.pictograph.arrow_placement_manager.special_positioner.data_updater.update_specific_entry_in_json(
             self.pictograph.letter, adjustment_key_str, turn_data
         )
+        self.pictograph.updater.update_pictograph()
