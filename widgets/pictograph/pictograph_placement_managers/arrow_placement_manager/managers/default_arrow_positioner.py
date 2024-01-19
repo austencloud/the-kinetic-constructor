@@ -79,8 +79,8 @@ class DefaultArrowPositioner:
         elif has_gamma_props:
             key_middle += "_gamma"
 
-        default_placements = self._load_default_placements(arrow.motion_type)
-        key = arrow.motion_type + (
+        default_placements = self._load_default_placements(arrow.motion.motion_type)
+        key = arrow.motion.motion_type + (
             key_suffix + motion_end_ori_key + key_middle if key_middle else ""
         )
         key_with_letter = f"{key}{letter_suffix}"
@@ -90,10 +90,10 @@ class DefaultArrowPositioner:
         elif key in default_placements:
             return key
         else:
-            return arrow.motion_type
+            return arrow.motion.motion_type
 
     def get_default_adjustment(self, arrow: Arrow) -> Tuple[int, int]:
-        motion_type_placements = self._load_default_placements(arrow.motion_type)
+        motion_type_placements = self._load_default_placements(arrow.motion.motion_type)
         adjustment_key = self._get_adjustment_key(arrow)
 
         if (
@@ -102,6 +102,6 @@ class DefaultArrowPositioner:
         ):
             return motion_type_placements[adjustment_key][str(arrow.turns)]
         else:
-            return motion_type_placements.get(arrow.motion_type, {}).get(
+            return motion_type_placements.get(arrow.motion.motion_type, {}).get(
                 str(arrow.turns), (0, 0)
             )

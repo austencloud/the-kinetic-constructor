@@ -1,6 +1,7 @@
 from PyQt6.QtGui import QTransform
 from constants import *
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
 
@@ -10,19 +11,19 @@ class ArrowMirrorManager:
         self.arrow = arrow
 
     def update_mirror(self) -> None:
-        if self.arrow.motion_type == PRO:
+        if self.arrow.motion.motion_type == PRO:
             rot_dir = self.arrow.motion.prop_rot_dir
             if rot_dir == CLOCKWISE:
                 self.arrow.is_svg_mirrored = False
             elif rot_dir == COUNTER_CLOCKWISE:
                 self.arrow.is_svg_mirrored = True
-        elif self.arrow.motion_type == ANTI:
+        elif self.arrow.motion.motion_type == ANTI:
             rot_dir = self.arrow.motion.prop_rot_dir
             if rot_dir == CLOCKWISE:
                 self.arrow.is_svg_mirrored = True
             elif rot_dir == COUNTER_CLOCKWISE:
                 self.arrow.is_svg_mirrored = False
-        elif self.arrow.motion_type == DASH:
+        elif self.arrow.motion.motion_type == DASH:
             if self.arrow.turns > 0:
                 if self.arrow.motion.prop_rot_dir == CLOCKWISE:
                     self.arrow.is_svg_mirrored = False
@@ -30,7 +31,7 @@ class ArrowMirrorManager:
                     self.arrow.is_svg_mirrored = True
             else:
                 self.arrow.is_svg_mirrored = False
-        elif self.arrow.motion_type == STATIC:
+        elif self.arrow.motion.motion_type == STATIC:
             if self.arrow.turns > 0:
                 if self.arrow.motion.prop_rot_dir == CLOCKWISE:
                     self.arrow.is_svg_mirrored = False

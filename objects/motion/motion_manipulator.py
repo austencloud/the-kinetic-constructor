@@ -30,7 +30,7 @@ class MotionManipulator:
             current_location, current_location
         )
         (new_start_loc, new_end_loc) = get_start_end_locs(
-            self.motion.arrow.motion_type, self.motion.prop_rot_dir, new_location
+            self.motion.arrow.motion.motion_type, self.motion.prop_rot_dir, new_location
         )
         pictograph_dict = {
             f"{self.motion.color}_start_location": new_start_loc,
@@ -66,11 +66,11 @@ class MotionManipulator:
     ### MOTION TYPE ###
 
     def swap_motion_type(self) -> None:
-        if self.motion.arrow.motion_type == ANTI:
+        if self.motion.arrow.motion.motion_type == ANTI:
             new_motion_type = PRO
-        elif self.motion.arrow.motion_type == PRO:
+        elif self.motion.arrow.motion.motion_type == PRO:
             new_motion_type = ANTI
-        elif self.motion.arrow.motion_type == STATIC:
+        elif self.motion.arrow.motion.motion_type == STATIC:
             new_motion_type = STATIC
 
         if self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
@@ -143,7 +143,7 @@ class MotionManipulator:
         new_location = locations[new_index]
 
         new_start_loc, new_end_loc = get_start_end_locs(
-            self.motion.arrow.motion_type, self.motion.prop_rot_dir, new_location
+            self.motion.arrow.motion.motion_type, self.motion.prop_rot_dir, new_location
         )
 
         self._update_motion_attributes(new_location, new_start_loc, new_end_loc)

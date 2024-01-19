@@ -6,7 +6,7 @@ from .managers.arrow_initial_pos_calculator import ArrowInitialPosCalculator
 from .managers.directional_tuple_generator import DirectionalTupleGenerator
 from .managers.quadrant_index_handler import QuadrantIndexHandler
 from .managers.default_arrow_positioner import DefaultArrowPositioner
-from .managers.special_arrow_positioner import SpecialArrowPositioner
+from .managers.special_arrow_positioner.special_arrow_positioner import SpecialArrowPositioner
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -36,16 +36,18 @@ class ArrowPlacementManager:
         new_pos = initial_pos + adjustment - arrow.boundingRect().center()
         arrow.setPos(new_pos)
         arrow.rot_angle_calculator.update_rotation()
- 
+
     def get_adjustment(self, arrow: Arrow) -> QPointF:
         adjustment_key = self.key_generator.generate(self.pictograph.letter)
         self.special_positioner.special_placements = (
             self.special_positioner.data_loader.load_placements()
         )
- 
+
         if self.letter in self.special_positioner.special_placements:
-            special_adjustment = self.special_positioner.get_adjustment_for_letter(
-                self.letter, arrow, adjustment_key
+            special_adjustment = (
+                self.special_positioner.adjustment_calculator.get_adjustment_for_letter(
+                    self.letter, arrow, adjustment_key
+                )
             )
             if special_adjustment:
                 x, y = special_adjustment

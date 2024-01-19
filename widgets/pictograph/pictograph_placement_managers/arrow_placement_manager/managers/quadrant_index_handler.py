@@ -27,9 +27,9 @@ class QuadrantIndexHandler:
 
     def get_quadrant_index(self, arrow: Arrow) -> Literal[0, 1, 2, 3]:
         if self.grid_mode == DIAMOND:
-            if arrow.motion_type in [PRO, ANTI]:
+            if arrow.motion.motion_type in [PRO, ANTI]:
                 return self._diamond_shift_quadrant_index(arrow.loc)
-            elif arrow.motion_type in [STATIC, DASH]:
+            elif arrow.motion.motion_type in [STATIC, DASH]:
                 return self._diamond_static_dash_quadrant_index(arrow.loc)
         return 0
 

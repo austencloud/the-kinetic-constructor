@@ -99,10 +99,14 @@ class AdjustmentKeyGenerator:
     def _get_pro_anti_arrows(self) -> Tuple[Arrow, Arrow]:
         """Get the arrows corresponding to the pro and anti motions."""
         pro_arrow = (
-            self.blue_arrow if self.blue_arrow.motion_type == PRO else self.red_arrow
+            self.blue_arrow
+            if self.blue_arrow.motion.motion_type == PRO
+            else self.red_arrow
         )
         anti_arrow = (
-            self.blue_arrow if self.blue_arrow.motion_type == ANTI else self.red_arrow
+            self.blue_arrow
+            if self.blue_arrow.motion.motion_type == ANTI
+            else self.red_arrow
         )
         return pro_arrow, anti_arrow
 

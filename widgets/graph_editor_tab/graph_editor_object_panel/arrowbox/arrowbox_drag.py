@@ -46,7 +46,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
     def match_target_arrow(self, target_arrow: "Arrow") -> None:
         self.target_arrow = target_arrow
         self.rot_dir = target_arrow.motion.prop_rot_dir
-        self.motion_type = target_arrow.motion_type
+        self.motion_type = target_arrow.motion.motion_type
         self.color = target_arrow.color
         self.arrow_location = target_arrow.loc
         self.turns = target_arrow.turns
@@ -61,7 +61,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
     def set_attributes(self, target_arrow: "Arrow") -> None:
         self.previous_drag_location = None
         self.color: Colors = target_arrow.color
-        self.motion_type: MotionTypes = target_arrow.motion_type
+        self.motion_type: MotionTypes = target_arrow.motion.motion_type
         self.arrow_location: Locations = target_arrow.loc
         self.rot_dir: PropRotDirs = target_arrow.motion.prop_rot_dir
 
@@ -295,7 +295,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
         RotationAngles: The calculated rotation angle for the arrow.
         """
         motion_type, rot_dir, color, location = (
-            arrow.motion_type,
+            arrow.motion.motion_type,
             self.rot_dir,
             arrow.color,
             self.arrow_location,

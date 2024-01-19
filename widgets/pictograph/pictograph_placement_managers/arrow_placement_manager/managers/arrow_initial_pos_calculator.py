@@ -12,9 +12,9 @@ class ArrowInitialPosCalculator:
         self.pictograph = pictograph
 
     def get_initial_pos(self, arrow: Arrow) -> QPointF:
-        if arrow.motion_type in [PRO, ANTI]:
+        if arrow.motion.motion_type in [PRO, ANTI]:
             return self._get_diamond_shift_pos(arrow)
-        elif arrow.motion_type in [STATIC, DASH]:
+        elif arrow.motion.motion_type in [STATIC, DASH]:
             return self._get_diamond_static_dash_pos(arrow)
 
     def _get_diamond_shift_pos(self, arrow: Arrow) -> QPointF:
