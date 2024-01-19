@@ -30,7 +30,9 @@ class AddToSequenceManager:
         for motion in self.pictograph.motions.values():
             new_beat.motions[motion.color] = Motion(new_beat, motion.get_attributes())
             new_arrow = Arrow(
-                new_beat, motion.arrow.get_attributes(), new_beat.motions[motion.color]
+                new_beat,
+                motion.arrow.get_arrow_attributes(),
+                new_beat.motions[motion.color],
             )
 
             new_prop = Prop(
@@ -38,7 +40,9 @@ class AddToSequenceManager:
             )
 
             new_ghost_arrow = GhostArrow(
-                new_beat, motion.arrow.get_attributes(), new_beat.motions[motion.color]
+                new_beat,
+                motion.arrow.get_arrow_attributes(),
+                new_beat.motions[motion.color],
             )
 
             new_ghost_prop = GhostProp(

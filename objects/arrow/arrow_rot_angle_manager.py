@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
 
 
-class ArrowRotAngleManager:
+class ArrowRotAngleCalculator:
     def __init__(self, arrow: "Arrow") -> None:
         self.arrow = arrow
         self.angle_resolvers = {

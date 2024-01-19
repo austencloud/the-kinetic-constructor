@@ -4,9 +4,7 @@ from PyQt6.QtCore import QPointF
 from typing import TYPE_CHECKING, Union
 
 
-from objects.graphical_object.graphical_object_attr_manager import (
-    GraphicalObjectAttrManager,
-)
+
 from objects.graphical_object.svg_manager import (
     SvgManager,
 )
@@ -30,7 +28,6 @@ class GraphicalObject(QGraphicsSvgItem):
         super().__init__()
         self.pictograph = pictograph
         self.svg_manager = SvgManager(self)
-        self.attr_manager = GraphicalObjectAttrManager(self)
 
     ### GETTERS ###
 

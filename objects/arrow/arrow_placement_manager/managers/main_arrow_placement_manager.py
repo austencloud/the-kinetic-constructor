@@ -74,7 +74,7 @@ class ArrowPlacementManager:
         adjustment = self._get_adjustment(arrow)
         new_pos = initial_pos + adjustment - arrow.boundingRect().center()
         arrow.setPos(new_pos)
-        arrow.rot_angle_manager.update_rotation()
+        arrow.rot_angle_calculator.update_rotation()
 
     def _get_initial_pos(self, arrow: Arrow) -> QPointF:
         if arrow.motion_type in [PRO, ANTI]:

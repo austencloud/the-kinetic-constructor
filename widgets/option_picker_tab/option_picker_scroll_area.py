@@ -103,7 +103,7 @@ class OptionPickerScrollArea(ScrollArea):
             prop.motion = option.motions[arrow.color]
             prop.motion.attr_manager.update_prop_ori()
             prop.update_prop()
-            arrow.loc = arrow.location_manager.get_arrow_location(
+            arrow.loc = arrow.location_calculator.get_arrow_location(
                 arrow.motion.start_loc, arrow.motion.end_loc, arrow.motion.motion_type
             )
         option.state_updater.update_pictograph()

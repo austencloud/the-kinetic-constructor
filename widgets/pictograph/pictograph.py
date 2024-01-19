@@ -36,7 +36,7 @@ from .pictograph_context_menu_handler import PictographContextMenuHandler
 from .pictograph_image_renderer import PictographImageRenderer
 from .pictograph_state_updater import PictographStateUpdater
 from .pictograph_event_handler import PictographMouseEventHandler
-from .pictograph_initializer import PictographInit
+from .pictograph_init import PictographInit
 
 from utilities.letter_item import LetterItem
 

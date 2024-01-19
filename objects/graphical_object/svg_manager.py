@@ -4,8 +4,9 @@ from typing import TYPE_CHECKING, Union
 from PyQt6.QtSvg import QSvgRenderer
 import re
 
-from constants import BLUE, HEX_BLUE, HEX_RED, RED
+from constants import BLUE, HEX_BLUE, HEX_RED, PROP_DIR, RED
 from utilities.TypeChecking.MotionAttributes import MotionTypes, Turns
+from utilities.TypeChecking.prop_types import PropTypes
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
@@ -14,8 +15,8 @@ if TYPE_CHECKING:
 
 
 class SvgManager:
-    def __init__(self, graphical_object: "GraphicalObject") -> None:
-        self.object: Union["Arrow", "Prop"] = graphical_object
+    def __init__(self, object: "GraphicalObject") -> None:
+        self.object: Union["Arrow", "Prop"] = object
         self.renderer = None
 
     def set_svg_color(self, new_color: str) -> bytes:
@@ -61,11 +62,19 @@ class SvgManager:
 
     def get_arrow_svg_file(self, motion_type: MotionTypes, turns: Turns) -> str:
         cache_key = f"{motion_type}_{float(turns)}"
-        if cache_key not in Arrow.svg_cache:
+        if cache_key not in self.object.svg_cache:
             file_path = (
                 f"resources/images/arrows/{self.object.pictograph.main_widget.grid_mode}/"
                 f"{motion_type}/{motion_type}_{float(turns)}.svg"
             )
             with open(file_path, "r") as file:
-                Arrow.svg_cache[cache_key] = file.name
-        return Arrow.svg_cache[cache_key]
+                self.object.svg_cache[cache_key] = file.name
+        return self.object.svg_cache[cache_key]
+
+    def update_prop_svg(self) -> None:
+        self.svg_file = self.get_prop_svg_file(self.object.prop_type)
+        self.update_svg(self.svg_file)
+
+    def get_prop_svg_file(self, prop_type: PropTypes) -> str:
+        svg_file = f"{PROP_DIR}{prop_type}.svg"
+        return svg_file

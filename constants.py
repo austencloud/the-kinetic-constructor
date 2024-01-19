@@ -112,7 +112,8 @@ END_ORI = "end_ori"
 AXIS = "axis"
 START_LOC = "start_loc"
 END_LOC = "end_loc"
-
+LAYER = "layer"
+MOTION = "motion"
 PRO_TURNS = "pro_turns"
 ANTI_TURNS = "anti_turns"
 

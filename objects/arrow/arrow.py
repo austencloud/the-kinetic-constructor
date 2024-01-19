@@ -4,8 +4,10 @@ from PyQt6.QtGui import QTransform
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 from constants import *
-from .arrow_location_manager import ArrowLocationManager
-from .arrow_rot_angle_manager import ArrowRotAngleManager
+from objects.arrow.arrow_attr_manager import ArrowAttrManager
+from objects.arrow.arrow_mirror_manager import ArrowMirrorManager
+from .arrow_location_manager import ArrowLocationCalculator
+from .arrow_rot_angle_manager import ArrowRotAngleCalculator
 from ..prop.prop import Prop
 
 from ..graphical_object.graphical_object import GraphicalObject
@@ -36,14 +38,17 @@ class Arrow(GraphicalObject):
         super().__init__(scene)
         self.scene: Pictograph | ArrowBox = scene
         self.motion: Motion = motion
-        self.rot_angle_manager = ArrowRotAngleManager(self)
-        self.location_manager = ArrowLocationManager(self)
+        self.rot_angle_calculator = ArrowRotAngleCalculator(self)
+        self.location_calculator = ArrowLocationCalculator(self)
+        self.mirror_manager = ArrowMirrorManager(self)
+        self.attr_manager = ArrowAttrManager(self)
         self.motion_type: MotionTypes = None
         self.ghost: GhostArrow = None
         self.is_svg_mirrored: bool = False
         self.color = arrow_dict[COLOR]
         self.prop: Prop = None
         self.is_ghost: bool = False
+        self.loc: Locations = None
 
     def setup_arrow(self, arrow_dict) -> None:
         self.motion_type = arrow_dict[MOTION_TYPE]
@@ -57,8 +62,6 @@ class Arrow(GraphicalObject):
         self.setAcceptHoverEvents(True)
         self.attr_manager.update_attributes(arrow_dict)
         self.drag_offset = QPointF(0, 0)
-
-    ### SETUP ###
 
     ### MOUSE EVENTS ###
 
@@ -81,7 +84,7 @@ class Arrow(GraphicalObject):
             new_pos = event.scenePos() - self.get_center()
             self.set_drag_pos(new_pos)
             if new_location != self.loc:
-                self.location_manager.update_location(new_location)
+                self.location_calculator.update_location(new_location)
 
     def mouseReleaseEvent(self, event) -> None:
         self.scene.arrows[self.color] = self
@@ -93,59 +96,10 @@ class Arrow(GraphicalObject):
     def set_drag_pos(self, new_pos: QPointF) -> None:
         self.setPos(new_pos)
 
-    def _update_mirror(self) -> None:
-        if self.motion_type == PRO:
-            rot_dir = self.motion.prop_rot_dir
-            if rot_dir == CLOCKWISE:
-                self.is_svg_mirrored = False
-            elif rot_dir == COUNTER_CLOCKWISE:
-                self.is_svg_mirrored = True
-        elif self.motion_type == ANTI:
-            rot_dir = self.motion.prop_rot_dir
-            if rot_dir == CLOCKWISE:
-                self.is_svg_mirrored = True
-            elif rot_dir == COUNTER_CLOCKWISE:
-                self.is_svg_mirrored = False
-        elif self.motion_type == DASH:
-            if self.turns > 0:
-                if self.motion.prop_rot_dir == CLOCKWISE:
-                    self.is_svg_mirrored = False
-                elif self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                    self.is_svg_mirrored = True
-            else:
-                self.is_svg_mirrored = False
-        elif self.motion_type == STATIC:
-            if self.turns > 0:
-                if self.motion.prop_rot_dir == CLOCKWISE:
-                    self.is_svg_mirrored = False
-                elif self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                    self.is_svg_mirrored = True
-            else:
-                self.is_svg_mirrored = False
-
-        if self.is_svg_mirrored:
-            self.mirror_svg()
-            if not self.is_ghost:
-                self.ghost.mirror_svg()
-        else:
-            self.unmirror_svg()
-            if not self.is_ghost:
-                self.ghost.unmirror_svg()
-
     def set_arrow_transform_origin_to_center(self) -> None:
         self.setTransformOriginPoint(self.boundingRect().center())
 
-    def clear_attributes(self) -> None:
-        self.motion_type = None
-        self.loc = None
-        self.turns = None
-        self.motion = None
-
     ### GETTERS ###
-
-    def get_attributes(self) -> Dict[str, Union[Colors, Locations, MotionTypes, Turns]]:
-        arrow_attributes = [COLOR, LOC, MOTION_TYPE, TURNS]
-        return {attr: getattr(self, attr) for attr in arrow_attributes}
 
     def _change_arrow_to_static(self) -> None:
         motion_dict = {
@@ -173,38 +127,11 @@ class Arrow(GraphicalObject):
 
         if not self.is_ghost:
             self.ghost.transform = self.transform
-        self.update_arrow_svg()
-        self._update_mirror()
+        self.svg_manager.update_arrow_svg()
+        self.mirror_manager.update_mirror()
         self.svg_manager.update_color()
-        self.location_manager.update_location()
-        self.rot_angle_manager.update_rotation()
-
-    def mirror_svg(self) -> None:
-        self.center_x = self.boundingRect().center().x()
-        self.center_y = self.boundingRect().center().y()
-        self.set_arrow_transform_origin_to_center()
-        transform = QTransform()
-        transform.translate(self.center_x, self.center_y)
-        transform.scale(-1, 1)
-        transform.translate(-self.center_x, -self.center_y)
-        self.setTransform(transform)
-        if not self.is_ghost and self.ghost:
-            self.ghost.setTransform(transform)
-            self.ghost.is_svg_mirrored = True
-        self.is_svg_mirrored = True
-
-    def unmirror_svg(self) -> None:
-        self.center_x = self.boundingRect().center().x()
-        self.center_y = self.boundingRect().center().y()
-        transform = QTransform()
-        transform.translate(self.center_x, self.center_y)
-        transform.scale(1, 1)
-        transform.translate(-self.center_x, -self.center_y)
-        self.setTransform(transform)
-        if hasattr(self, GHOST) and self.ghost:
-            self.ghost.setTransform(transform)
-            self.ghost.is_svg_mirrored = False
-        self.is_svg_mirrored = False
+        self.location_calculator.update_location()
+        self.rot_angle_calculator.update_rotation()
 
     def adjust_position(self, adjustment) -> None:
         self.setPos(self.pos() + QPointF(*adjustment))
@@ -215,7 +142,6 @@ class Arrow(GraphicalObject):
         if self in self.scene.arrows.values():
             self.scene.removeItem(self)
             self.scene.removeItem(self.ghost)
-            self.motion.clear_attributes()
             self.prop.clear_attributes()
             self.ghost.clear_attributes()
             self.prop.clear_attributes()

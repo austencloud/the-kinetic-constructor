@@ -72,7 +72,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
 
     def place_arrow_on_pictograph(self) -> None:
         arrow = self.pictograph.arrows[self.color]
-        arrow.update_arrow(self.ghost.get_attributes())
+        arrow.update_arrow(self.ghost.get_arrow_attributes())
         motion_dict = {
             COLOR: self.color,
             ARROW: arrow,
@@ -125,7 +125,9 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
         arrow_dict = {
             COLOR: self.color,
             MOTION_TYPE: self.motion_type,
-            LOC: self.pictograph.arrows[self.color].location_manager.get_arrow_location(
+            LOC: self.pictograph.arrows[
+                self.color
+            ].location_calculator.get_arrow_location(
                 self.start_loc, self.end_loc, self.motion_type
             ),
             TURNS: self.turns,

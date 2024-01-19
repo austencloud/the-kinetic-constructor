@@ -6,6 +6,7 @@ from objects.graphical_object.graphical_object import GraphicalObject
 from PyQt6.QtCore import QPointF, Qt
 from constants import *
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
+from objects.prop.prop_attr_manager import PropAttrManager
 from utilities.TypeChecking.TypeChecking import (
     Axes,
     Colors,
@@ -29,26 +30,16 @@ if TYPE_CHECKING:
 
 class Prop(GraphicalObject):
     def __init__(self, scene, prop_dict: Dict, motion: "Motion") -> None:
+        super().__init__(scene)
         self.motion = motion
         self.arrow: Arrow = None
-
-        self.prop_type: PropTypes = prop_dict[PROP_TYPE]
-        self.svg_file = self.get_svg_file(self.prop_type)
         self.ghost: Prop = None
-        super().__init__(scene)
-        self._setup_attributes(scene, prop_dict)
+        self.is_ghost = False
+        self.attr_manager = PropAttrManager(self)
+        self.attr_manager.update_attributes(prop_dict)
+        self.svg_file = self.svg_manager.get_prop_svg_file(self.prop_type)
         self.svg_manager.setup_svg_renderer(self.svg_file)
         self.setZValue(10)
-
-    def _setup_attributes(self, scene, prop_dict: Dict) -> None:
-        self.scene: Pictograph | PropBox = scene
-        self.drag_offset = QPointF(0, 0)
-        self.previous_location: Locations = None
-        self.is_ghost: bool = False
-        self.axis: Axes = None
-        self.color: Colors = prop_dict[COLOR]
-        self.loc: Locations = prop_dict[LOC]
-        self.ori: Orientations = prop_dict[ORI]
         self.center = self.boundingRect().center()
 
     ### MOUSE EVENTS ###
@@ -167,26 +158,16 @@ class Prop(GraphicalObject):
         self, prop_dict: Dict[str, Union[Colors, Locations, Orientations]] = None
     ) -> None:
         if prop_dict:
-            for key, value in prop_dict.items():
-                setattr(self, key, value)
-        # self.motion.update_prop_ori()
-        self.update_svg()
+            self.attr_manager.update_attributes(prop_dict)
+        self.svg_manager.update_prop_svg()
         self.svg_manager.update_color()
         self._update_prop_rotation_angle()
-
-    def update_svg(self) -> None:
-        self.svg_file = self.get_svg_file(self.prop_type)
-        self.svg_manager.update_svg(self.svg_file)
-
-    def get_svg_file(self, prop_type: PropTypes) -> str:
-        svg_file = f"{PROP_DIR}{prop_type}.svg"
-        return svg_file
 
     ### UPDATERS ###
 
     def update_prop_type(self, prop_type: PropTypes) -> None:
         self.prop_type = prop_type
-        self.update_svg()
+        self.update_prop_svg()
         self.update_prop()
 
     def update_ghost_prop_location(self, new_pos: QPointF) -> None:
