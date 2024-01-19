@@ -80,7 +80,7 @@ class PropBoxDrag(BaseObjectBoxDrag):
         self.pictograph.state_updater.update_pictograph()
         self.pictograph.clearSelection()
 
-        self.placed_prop.update_prop()
+        self.placed_prop.updater.update_prop()
         self.placed_prop.show()
         self.placed_prop.setSelected(True)
 

@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QVBoxLayout, QGraphicsSceneMouseEvent, QComboBox
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from objects.prop.prop import *
-from objects.prop.prop_types import BigTriad
+from objects.prop.prop_classes import BigTriad
 from utilities.TypeChecking.prop_types import PropTypesList
 from widgets.graph_editor_tab.graph_editor_object_panel.base_objectbox.base_objectbox import (
     BaseObjectBox,
@@ -67,7 +67,7 @@ class PropBox(BaseObjectBox):
             self.create_and_setup_prop(prop_dict, prop_classes)
 
     def get_prop_classes(self) -> Dict[str, type]:
-        from objects.prop.prop_types import (
+        from objects.prop.prop_classes import (
             Staff,
             BigStaff,
             Club,
@@ -231,9 +231,9 @@ class PropBox(BaseObjectBox):
 
     def update_prop_type_in_pictograph(self, new_prop_type: PropTypes) -> None:
         for prop in self.pictograph.props.values():
-            prop.update_prop_type(new_prop_type)
+            prop.updater.update_prop_type(new_prop_type)
         for ghost_prop in self.pictograph.ghost_props.values():
-            ghost_prop.update_prop_type(new_prop_type)
+            ghost_prop.updater.update_prop_type(new_prop_type)
         self.pictograph.main_widget.prop_type = new_prop_type
         self.pictograph.state_updater.update_pictograph()
 

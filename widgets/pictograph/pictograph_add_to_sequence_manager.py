@@ -67,8 +67,8 @@ class AddToSequenceManager:
                 new_ghost_arrow.updater.update_arrow()
 
             if new_prop.loc:
-                new_prop.update_prop()
-                new_ghost_prop.update_prop()
+                new_prop.updater.update_prop()
+                new_ghost_prop.updater.update_prop()
 
             new_arrow.ghost = new_ghost_arrow
             new_prop.ghost = new_ghost_prop

@@ -10,6 +10,7 @@ from utilities.TypeChecking.MotionAttributes import (
     MotionTypes,
 )
 from utilities.TypeChecking.TypeChecking import Axes
+from utilities.TypeChecking.prop_types import PropTypes
 
 
 if TYPE_CHECKING:
@@ -18,7 +19,7 @@ if TYPE_CHECKING:
 
 class PropAttrManager:
     def __init__(self, prop: "Prop") -> None:
-        self.prop = prop
+        self.p = prop
 
     def update_attributes(
         self, prop_dict: Dict[str, Union[Colors, Locations, MotionTypes, Turns]]
@@ -27,18 +28,18 @@ class PropAttrManager:
         for attr in prop_attributes:
             value = prop_dict.get(attr)
             if value is not None:
-                setattr(self.prop, attr, value)
+                setattr(self.p, attr, value)
 
     def clear_attributes(self) -> None:
         prop_attributes = [COLOR, LOC, LAYER, ORI, AXIS, MOTION, PROP_TYPE]
         for attr in prop_attributes:
-            setattr(self.prop, attr, None)
-            
+            setattr(self.p, attr, None)
+
     def get_axis_from_ori(self) -> None:
-        if self.prop.is_radial():
-            axis: Axes = VERTICAL if self.prop.loc in [NORTH, SOUTH] else HORIZONTAL
-        elif self.prop.is_antiradial():
-            axis: Axes = HORIZONTAL if self.prop.loc in [NORTH, SOUTH] else VERTICAL
+        if self.p.check.is_radial():
+            axis: Axes = VERTICAL if self.p.loc in [NORTH, SOUTH] else HORIZONTAL
+        elif self.p.check.is_antiradial():
+            axis: Axes = HORIZONTAL if self.p.loc in [NORTH, SOUTH] else VERTICAL
         else:
             axis: Axes = None
         return axis
@@ -55,3 +56,8 @@ class PropAttrManager:
     def get_attributes(self) -> Dict[str, Union[Colors, Locations, Orientations]]:
         prop_attributes = [attr.value for attr in PropAttribute]
         return {attr: getattr(self, attr) for attr in prop_attributes}
+
+    def update_prop_type(self, prop_type: PropTypes) -> None:
+        self.prop_type = prop_type
+        self.p.svg_manager.update_svg()
+        self.p.updater.update_prop()

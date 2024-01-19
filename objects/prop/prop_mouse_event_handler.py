@@ -24,7 +24,7 @@ class PropMouseEventHandler:
             self.p.ghost.color = self.p.color
             self.p.ghost.loc = self.p.loc
             self.p.ghost.ori = self.p.ori
-            self.p.ghost.update_prop()
+            self.p.ghost.updater.update_prop()
             self.p.ghost.show()
             self.p.scene.props[self.p.ghost.color] = self.p.ghost
             self.p.scene.props[self.p.color] = self.p.ghost
@@ -38,7 +38,7 @@ class PropMouseEventHandler:
     def handle_mouse_move(self, event: QGraphicsSceneMouseEvent) -> None:
         if event.buttons() == Qt.MouseButton.LeftButton:
             new_pos = event.scenePos() - self.p.get_center()
-            self.p.set_drag_pos(new_pos)
+            self.set_drag_pos(new_pos)
             self.update_ghost_prop_location_during_drag(event.scenePos())
             self.update_arrow_location_during_prop_drag(self.p.loc)
 
@@ -60,17 +60,17 @@ class PropMouseEventHandler:
                 self.p.motion.end_loc = new_location
 
             self.p.axis = self.p.attr_manager.get_axis_from_ori()
-            self.p.update_prop()
+            self.p.updater.update_prop()
             self.update_arrow_location_during_prop_drag(new_location)
 
             self.p.ghost.color = self.p.color
             self.p.ghost.loc = self.p.loc
-            self.p.ghost.update_prop()
+            self.p.ghost.updater.update_prop()
             self.p.scene.props[self.p.ghost.color] = self.p.ghost
             self.p.scene.state_updater.update_pictograph()
             self.p.scene.props[self.p.color] = self.p
             new_pos = new_pos - self.p.get_center()
-            self.p.set_drag_pos(new_pos)
+            self.set_drag_pos(new_pos)
             self.p.previous_location = new_location
 
     def update_arrow_location_during_prop_drag(
@@ -210,13 +210,21 @@ class PropMouseEventHandler:
             closest_hand_point,
             closest_hand_point_coord,
         ) = self.p.pictograph.grid.get_closest_hand_point(event.scenePos())
- 
+
         self.loc = closest_hand_point
         self.axis = self.p.attr_manager.get_axis_from_ori()
-        self.p.update_prop()
+        self.p.updater.update_prop()
         self.p.setPos(closest_hand_point_coord)
 
         if self.p.motion.arrow:
             self.p.motion.arrow.updater.update_arrow()
         self.p.previous_location = closest_hand_point
         self.p.scene.state_updater.update_pictograph()
+
+    def set_drag_pos(self, new_pos: QPointF) -> None:
+        object_length = self.p.boundingRect().width()
+        object_width = self.p.boundingRect().height()
+
+        offset = self.p.offest_calculator.get_offset(object_length, object_width)
+
+        self.p.setPos(new_pos + offset)

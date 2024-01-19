@@ -38,9 +38,9 @@ class BetaPropDirectionCalculator:
         if not (motion.is_shift() or motion.is_static()):
             return None
 
-        if motion.prop.is_radial():
+        if motion.prop.check.is_radial():
             return self.get_dir_for_radial(motion)
-        elif motion.prop.is_antiradial():
+        elif motion.prop.check.is_antiradial():
             return self.get_dir_for_antiradial(motion)
 
     def get_dir_for_radial(self, motion: Motion) -> Directions:
@@ -92,9 +92,9 @@ class BetaPropDirectionCalculator:
                 (EAST, BLUE): LEFT,
             },
         }
-        if prop.is_radial():
+        if prop.check.is_radial():
             return layer_reposition_map[RADIAL][(prop.loc, prop.color)]
-        elif prop.is_antiradial():
+        elif prop.check.is_antiradial():
             return layer_reposition_map[ANTIRADIAL][(prop.loc, prop.color)]
 
     def get_opposite_dir(self, movement: Directions) -> Directions:

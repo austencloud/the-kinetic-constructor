@@ -7,7 +7,7 @@ from objects.grid import Grid
 from objects.motion.motion import Motion
 from objects.prop.ghost_prop import GhostProp
 from objects.prop.prop import Prop
-from objects.prop.prop_types import *
+from objects.prop.prop_classes import *
 
 from utilities.TypeChecking.prop_types import PropTypes
 from utilities.letter_item import LetterItem

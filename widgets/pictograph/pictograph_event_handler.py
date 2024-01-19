@@ -28,7 +28,7 @@ class PictographMouseEventHandler:
                 self.p.dragged_prop = prop
                 self.p.dragged_prop.mousePressEvent(event)
             else:
-                self.pictograph.clear_selections()
+                self.clear_selections()
 
     def handle_mouse_move(self, event) -> None:
         if self.p.dragged_prop:

@@ -20,19 +20,19 @@ class PictographChecker:
 
     def has_hybrid_orientations(self) -> bool:
         red_prop, blue_prop = self.p.props[RED], self.p.props[BLUE]
-        return red_prop.is_radial() != blue_prop.is_radial()
+        return red_prop.check.is_radial() != blue_prop.check.is_radial()
 
     def has_non_hybrid_orientations(self) -> bool:
         red_prop, blue_prop = self.p.props[RED], self.p.props[BLUE]
-        return (red_prop.is_radial() == blue_prop.is_radial()) or (
-            red_prop.is_antiradial() and blue_prop.is_antiradial()
+        return (red_prop.check.is_radial() == blue_prop.check.is_radial()) or (
+            red_prop.check.is_antiradial() and blue_prop.check.is_antiradial()
         )
 
     def has_all_radial_props(self) -> bool:
-        return all(prop.is_radial() for prop in self.p.props.values())
+        return all(prop.check.is_radial() for prop in self.p.props.values())
 
     def has_all_antiradial_props(self) -> bool:
-        return all(prop.is_antiradial() for prop in self.p.props.values())
+        return all(prop.check.is_antiradial() for prop in self.p.props.values())
 
     def has_a_dash(self) -> bool:
         for motion in self.p.motions.values():
