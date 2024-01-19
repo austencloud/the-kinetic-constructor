@@ -170,10 +170,6 @@ class MotionManipulator:
         self.motion.prop.scene.removeItem(
             self.motion.prop.scene.ghost_props[self.motion.prop.color]
         )
-        self.motion.prop.motion.arrow.clear_attributes()
-        self.motion.prop.motion.arrow.ghost.clear_attributes()
-        self.motion.prop.motion.clear_attributes()
-        self.motion.prop.clear_attributes()
         self.motion.prop.scene.state_updater.update_pictograph()
 
     def set_prop_rot_dir(self, prop_rot_dir: str) -> None:

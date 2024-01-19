@@ -21,7 +21,7 @@ class DefaultPropPositioner:
             self.prop_placement_manager.offset_calculator.get_or_calculate_offsets(prop)
         )
         key = (prop.ori, prop.loc)
-        offset = position_offsets.get(key, QPointF(0, 0))
+        offset = position_offsets.get(key)
         prop.setTransformOriginPoint(0, 0)
 
         if self.pictograph.grid.grid_mode == DIAMOND:

@@ -1,20 +1,17 @@
 from typing import TYPE_CHECKING, Dict, Tuple, Union
 from Enums import PropAttribute
 
-from data.start_end_loc_map import get_start_end_locs
 from objects.graphical_object.graphical_object import GraphicalObject
-from PyQt6.QtCore import QPointF, Qt
+from PyQt6.QtCore import QPointF
 from constants import *
-from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from objects.prop.prop_attr_manager import PropAttrManager
+from objects.prop.prop_mouse_event_handler import PropMouseEventHandler
+from objects.prop.prop_rot_angle_manager import PropRotAngleManager
 from utilities.TypeChecking.TypeChecking import (
     Axes,
     Colors,
     Locations,
-    MotionTypes,
     Orientations,
-    PropRotDirs,
-    RotationAngles,
 )
 from utilities.TypeChecking.prop_types import PropTypes
 
@@ -29,14 +26,19 @@ if TYPE_CHECKING:
 
 
 class Prop(GraphicalObject):
+    loc: Locations
+    
     def __init__(self, scene, prop_dict: Dict, motion: "Motion") -> None:
         super().__init__(scene)
         self.motion = motion
         self.scene: Pictograph | PropBox = scene
-        self.arrow: Arrow = None
+        self.arrow: Arrow 
         self.ghost: Prop = None
-        self.is_ghost = False
+        self.is_ghost: bool = False
+        self.previous_location: Locations
         self.attr_manager = PropAttrManager(self)
+        self.rot_angle_manager = PropRotAngleManager(self)
+        self.mouse_event_handler = PropMouseEventHandler(self)
         self.attr_manager.update_attributes(prop_dict)
         self.svg_file = self.svg_manager.get_prop_svg_file(self.prop_type)
         self.svg_manager.setup_svg_renderer(self.svg_file)
@@ -46,63 +48,17 @@ class Prop(GraphicalObject):
     ### MOUSE EVENTS ###
 
     def mousePressEvent(self, event) -> None:
-        self.setSelected(True)
-        if isinstance(self.scene, self.scene.__class__):
-            if not self.ghost:
-                self.ghost = self.scene.ghost_props[self.color]
-            self.ghost.color = self.color
-            self.ghost.loc = self.loc
-            self.ghost.ori = self.ori
-            self.ghost.update_prop()
-            self.ghost.show()
-            self.scene.props[self.ghost.color] = self.ghost
-            self.scene.props[self.color] = self.ghost
-            self.scene.state_updater.update_pictograph()
-            self.scene.props[self.color] = self
-            for item in self.scene.items():
-                if item != self:
-                    item.setSelected(False)
-            self.previous_location = self.loc
-
-    def mouseMoveEvent(
-        self: Union["Prop", "Arrow"], event: "QGraphicsSceneMouseEvent"
-    ) -> None:
-        if event.buttons() == Qt.MouseButton.LeftButton:
-            new_pos = event.scenePos() - self.get_center()
-            self.set_drag_pos(new_pos)
-            self.update_ghost_prop_location(event.scenePos())
-            self.update_arrow_location(self.loc)
+        self.mouse_event_handler.handle_mouse_press()
+        
+    def mouseMoveEvent(self, event) -> None:
+        self.mouse_event_handler.handle_mouse_move(event)
 
     def mouseReleaseEvent(self, event) -> None:
-        if isinstance(self.scene, self.scene.__class__):
-            self.ghost.hide()
-            self.scene.state_updater.update_pictograph()
-            self.finalize_prop_drop(event)
-
-    ### UPDATERS ###
-
-    def set_prop_transform_origin_to_center(self: "Prop") -> None:
-        self.center = self.get_center()
-        self.setTransformOriginPoint(self.center)
-
-    def clear_attributes(self) -> None:
-        self.loc = None
-        self.layer = None
-        self.ori = None
-        self.axis = None
-        self.motion = None
-        self.update_prop()
+        self.mouse_event_handler.handle_mouse_release(event)
 
     ### GETTERS ###
 
-    def get_axis_from_ori(self) -> None:
-        if self.is_radial():
-            axis: Axes = VERTICAL if self.loc in [NORTH, SOUTH] else HORIZONTAL
-        elif self.is_antiradial():
-            axis: Axes = HORIZONTAL if self.loc in [NORTH, SOUTH] else VERTICAL
-        else:
-            axis: Axes = None
-        return axis
+
 
     def swap_ori(self) -> None:
         ori_map = {
@@ -113,44 +69,13 @@ class Prop(GraphicalObject):
         }
         self.ori = ori_map[self.ori]
 
-    def get_rotation_angle(self) -> RotationAngles:
-        angle_map: Dict[Orientations, Dict[Locations, RotationAngles]] = {
-            IN: {
-                NORTH: 90,
-                SOUTH: 270,
-                WEST: 0,
-                EAST: 180,
-            },
-            OUT: {
-                NORTH: 270,
-                SOUTH: 90,
-                WEST: 180,
-                EAST: 0,
-            },
-            CLOCK: {
-                NORTH: 0,
-                SOUTH: 180,
-                WEST: 270,
-                EAST: 90,
-            },
-            COUNTER: {
-                NORTH: 180,
-                SOUTH: 0,
-                WEST: 90,
-                EAST: 270,
-            },
-        }
-
-        key = self.ori
-        rotation_angle = angle_map.get(key, {}).get(self.loc, 0)
-        return rotation_angle
 
     def get_attributes(self) -> Dict[str, Union[Colors, Locations, Orientations]]:
         prop_attributes = [attr.value for attr in PropAttribute]
         return {attr: getattr(self, attr) for attr in prop_attributes}
 
     def _update_prop_rotation_angle(self) -> None:
-        prop_rotation_angle = self.get_rotation_angle()
+        prop_rotation_angle = self.rot_angle_manager.get_rotation_angle()
         if self.ghost:
             self.ghost.setRotation(prop_rotation_angle)
         self.setRotation(prop_rotation_angle)
@@ -168,33 +93,9 @@ class Prop(GraphicalObject):
 
     def update_prop_type(self, prop_type: PropTypes) -> None:
         self.prop_type = prop_type
-        self.update_prop_svg()
+        self.svg_manager.update_prop_svg()
         self.update_prop()
 
-    def update_ghost_prop_location(self, new_pos: QPointF) -> None:
-        new_location = self.pictograph.grid.get_closest_hand_point(new_pos)[0][0]
-
-        if new_location != self.previous_location:
-            self.loc = new_location
-
-            if self.motion.motion_type == STATIC:
-                self.motion.arrow.loc = new_location
-                self.motion.start_loc = new_location
-                self.motion.end_loc = new_location
-
-            self.axis = self.get_axis_from_ori()
-            self.update_prop()
-            self.update_arrow_location(new_location)
-
-            self.ghost.color = self.color
-            self.ghost.loc = self.loc
-            self.ghost.update_prop()
-            self.scene.props[self.ghost.color] = self.ghost
-            self.scene.state_updater.update_pictograph()
-            self.scene.props[self.color] = self
-            new_pos = new_pos - self.get_center()
-            self.set_drag_pos(new_pos)
-            self.previous_location = new_location
 
     ### HELPERS ###
 
@@ -242,151 +143,6 @@ class Prop(GraphicalObject):
         offset_tuple = offset_map.get(self.loc, (0, 0))
         return QPointF(offset_tuple[0], offset_tuple[1])
 
-    def update_arrow_location(self, new_arrow_location: Locations) -> None:
-        if self.motion.motion_type in [PRO, ANTI]:
-            shift_location_map: Dict[
-                Tuple(Locations, PropRotDirs, MotionTypes),
-                Dict[Locations, Locations],
-            ] = {
-                ### ISO ###
-                (NORTHEAST, CLOCKWISE, PRO): {
-                    NORTH: NORTHWEST,
-                    SOUTH: SOUTHEAST,
-                },
-                (NORTHWEST, CLOCKWISE, PRO): {
-                    EAST: NORTHEAST,
-                    WEST: SOUTHWEST,
-                },
-                (SOUTHWEST, CLOCKWISE, PRO): {
-                    NORTH: NORTHWEST,
-                    SOUTH: SOUTHEAST,
-                },
-                (SOUTHEAST, CLOCKWISE, PRO): {
-                    WEST: SOUTHWEST,
-                    EAST: NORTHEAST,
-                },
-                (
-                    NORTHEAST,
-                    COUNTER_CLOCKWISE,
-                    PRO,
-                ): {
-                    WEST: NORTHWEST,
-                    EAST: SOUTHEAST,
-                },
-                (
-                    NORTHWEST,
-                    COUNTER_CLOCKWISE,
-                    PRO,
-                ): {
-                    SOUTH: SOUTHWEST,
-                    NORTH: NORTHEAST,
-                },
-                (
-                    SOUTHWEST,
-                    COUNTER_CLOCKWISE,
-                    PRO,
-                ): {
-                    EAST: SOUTHEAST,
-                    WEST: NORTHWEST,
-                },
-                (
-                    SOUTHEAST,
-                    COUNTER_CLOCKWISE,
-                    PRO,
-                ): {
-                    NORTH: NORTHEAST,
-                    SOUTH: SOUTHWEST,
-                },
-                ### ANTI ###
-                (NORTHEAST, CLOCKWISE, ANTI): {
-                    EAST: SOUTHEAST,
-                    WEST: NORTHWEST,
-                },
-                (NORTHWEST, CLOCKWISE, ANTI): {
-                    NORTH: NORTHEAST,
-                    SOUTH: SOUTHWEST,
-                },
-                (SOUTHWEST, CLOCKWISE, ANTI): {
-                    EAST: SOUTHEAST,
-                    WEST: NORTHWEST,
-                },
-                (SOUTHEAST, CLOCKWISE, ANTI): {
-                    NORTH: NORTHEAST,
-                    SOUTH: SOUTHWEST,
-                },
-                (
-                    NORTHEAST,
-                    COUNTER_CLOCKWISE,
-                    ANTI,
-                ): {
-                    NORTH: NORTHWEST,
-                    SOUTH: SOUTHEAST,
-                },
-                (
-                    NORTHWEST,
-                    COUNTER_CLOCKWISE,
-                    ANTI,
-                ): {
-                    WEST: SOUTHWEST,
-                    EAST: NORTHEAST,
-                },
-                (
-                    SOUTHWEST,
-                    COUNTER_CLOCKWISE,
-                    ANTI,
-                ): {
-                    SOUTH: SOUTHEAST,
-                    NORTH: NORTHWEST,
-                },
-                (
-                    SOUTHEAST,
-                    COUNTER_CLOCKWISE,
-                    ANTI,
-                ): {
-                    EAST: NORTHEAST,
-                    WEST: SOUTHWEST,
-                },
-            }
-
-            current_arrow_location = self.motion.arrow.loc
-            rot_dir = self.motion.prop_rot_dir
-            motion_type = self.motion.motion_type
-            new_arrow_location = shift_location_map.get(
-                (current_arrow_location, rot_dir, motion_type), {}
-            ).get(new_arrow_location)
-
-            if new_arrow_location:
-                start_loc, end_loc = get_start_end_locs(
-                    motion_type, rot_dir, new_arrow_location
-                )
-
-                self.motion.arrow.loc = new_arrow_location
-                self.motion.arrow.ghost.loc = new_arrow_location
-                self.motion.start_loc = start_loc
-                self.motion.end_loc = end_loc
-                self.pictograph.state_updater.update_pictograph()
-
-        elif self.motion.motion_type == STATIC:
-            self.motion.arrow.loc = new_arrow_location
-            self.motion.start_loc = new_arrow_location
-            self.motion.end_loc = new_arrow_location
-            self.motion.arrow.update_arrow()
-
-    def finalize_prop_drop(self, event: "QGraphicsSceneMouseEvent") -> None:
-        (
-            closest_hand_point,
-            closest_hand_point_coord,
-        ) = self.pictograph.grid.get_closest_hand_point(event.scenePos())
-
-        self.loc = closest_hand_point
-        self.axis = self.get_axis_from_ori()
-        self.update_prop()
-        self.setPos(closest_hand_point_coord)
-
-        if self.motion.arrow:
-            self.motion.arrow.update_arrow()
-        self.previous_location = closest_hand_point
-        self.scene.state_updater.update_pictograph()
 
     def is_radial(self) -> bool:
         return self.ori in [IN, OUT]

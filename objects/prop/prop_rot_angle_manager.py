@@ -1,0 +1,42 @@
+from typing import TYPE_CHECKING
+from constants import IN, OUT, CLOCK, COUNTER, NORTH, SOUTH, WEST, EAST
+
+if TYPE_CHECKING:
+    from objects.prop.prop import Prop
+
+
+class PropRotAngleManager:
+    def __init__(self, prop: "Prop") -> None:
+        self.prop = prop
+
+    def get_rotation_angle(self) -> int:
+        angle_map = {
+            IN: {
+                NORTH: 90,
+                SOUTH: 270,
+                WEST: 0,
+                EAST: 180,
+            },
+            OUT: {
+                NORTH: 270,
+                SOUTH: 90,
+                WEST: 180,
+                EAST: 0,
+            },
+            CLOCK: {
+                NORTH: 0,
+                SOUTH: 180,
+                WEST: 270,
+                EAST: 90,
+            },
+            COUNTER: {
+                NORTH: 180,
+                SOUTH: 0,
+                WEST: 90,
+                EAST: 270,
+            },
+        }
+
+        key = self.prop.ori
+        rotation_angle = angle_map.get(key, {}).get(self.prop.loc, 0)
+        return rotation_angle

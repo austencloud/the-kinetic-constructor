@@ -7,6 +7,7 @@ from utilities.TypeChecking.MotionAttributes import (
     Turns,
     MotionTypes,
 )
+from utilities.TypeChecking.TypeChecking import Axes
 
 
 if TYPE_CHECKING:
@@ -31,3 +32,11 @@ class PropAttrManager:
         for attr in prop_attributes:
             setattr(self.prop, attr, None)
             
+    def get_axis_from_ori(self) -> None:
+        if self.prop.is_radial():
+            axis: Axes = VERTICAL if self.prop.loc in [NORTH, SOUTH] else HORIZONTAL
+        elif self.prop.is_antiradial():
+            axis: Axes = HORIZONTAL if self.prop.loc in [NORTH, SOUTH] else VERTICAL
+        else:
+            axis: Axes = None
+        return axis
