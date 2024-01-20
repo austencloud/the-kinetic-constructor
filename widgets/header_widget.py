@@ -16,7 +16,7 @@ class HeaderWidget(AttrBoxWidget):
         self.attr_box: "AttrBox" = attr_box
         self.separator: QFrame = self.create_separator()
         self.header_label: QLabel = self._setup_header()
-        self.layout:QHBoxLayout = self._setup_layout()
+        self.layout: QHBoxLayout = self._setup_layout()
 
     def _setup_header(self) -> None:
         if self.attr_box.attribute_type == COLOR:
@@ -42,6 +42,12 @@ class HeaderWidget(AttrBoxWidget):
 
     def _setup_layout(self) -> None:
         layout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        self._add_widgets(layout)
+        return layout
+
+    def _add_widgets(self, layout: QHBoxLayout) -> None:
         layout.addStretch(5)
         layout.addWidget(self.attr_box.rot_dir_button_manager.same_button)
         layout.addStretch(1)
@@ -50,7 +56,6 @@ class HeaderWidget(AttrBoxWidget):
         layout.addWidget(self.attr_box.rot_dir_button_manager.opp_button)
         layout.addStretch(5)
         layout.addWidget(self.separator)
-        return layout
 
     def _setup_header_label(self, text: str) -> QLabel:
         font_color = (

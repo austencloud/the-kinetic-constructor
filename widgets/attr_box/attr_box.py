@@ -34,7 +34,7 @@ class AttrBox(QFrame):
     ) -> None:
         super().__init__(attr_panel)
         self.attr_panel: "AttrPanel" = attr_panel
-        self.font_size = self.width() // 10
+        self.font_size = self.attr_panel.width() // 20
         self.turn_display_border = 2
         self.vtg_dir_btn_state: Dict[str, bool] = {SAME: True, OPP: False}
         self._setup_attribute_type(attribute_type, attribute)
@@ -86,10 +86,10 @@ class AttrBox(QFrame):
     def resize_attr_box(self) -> None:
         for button in self.rot_dir_button_manager.buttons:
             button.setMinimumSize(
-                self.attr_panel.width() // 16, self.attr_panel.width() // 16
+                self.attr_panel.width() // 20, self.attr_panel.width() // 20
             )
             button.setMaximumSize(
-                self.attr_panel.width() // 16, self.attr_panel.width() // 16
+                self.attr_panel.width() // 20, self.attr_panel.width() // 20
             )
             button.setIconSize(button.size())
         self.turns_widget.resize_turns_widget()
