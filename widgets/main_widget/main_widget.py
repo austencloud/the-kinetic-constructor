@@ -7,8 +7,9 @@ from widgets.pictograph.pictograph import Pictograph
 from ..image_cache_manager import ImageCacheManager
 from ..main_tab_widget.main_tab_widget import MainTabWidget
 from .main_widget_layout_manager import MainWidgetLayoutManager
-from .main_widget_letter_loader import MainLetterLoader
+from .letter_loader import LetterLoader
 from ..sequence_widget.sequence_widget import MainSequenceWidget
+
 if TYPE_CHECKING:
     from main import MainWindow
 
@@ -39,7 +40,7 @@ class MainWidget(QWidget):
         self.all_pictographs: Dict[Letters, Dict[str, Pictograph]] = {
             letter: {} for letter in all_letters
         }
-        self.letter_loader = MainLetterLoader(self)
+        self.letter_loader = LetterLoader(self)
         self.letters: Dict[Letters, List[Dict]] = self.letter_loader.load_all_letters()
 
     ### EVENT HANDLERS ###

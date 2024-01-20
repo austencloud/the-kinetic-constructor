@@ -24,7 +24,7 @@ if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
 
-class MainLetterLoader:
+class LetterLoader:
     def __init__(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
 

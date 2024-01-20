@@ -26,14 +26,14 @@ from widgets.buttons.vtg_dir_button import VtgDirButton
 from .base_attr_box_widget import AttrBoxWidget
 
 if TYPE_CHECKING:
-    from widgets.attr_box.color_attr_box import ColorAttrBox
-    from widgets.attr_box.motion_type_attr_box import MotionTypeAttrBox
+    from widgets.attr_box.attr_box import AttrBox
+
 
 
 class VtgDirWidget(AttrBoxWidget):
-    def __init__(self, attr_box) -> None:
+    def __init__(self, attr_box: AttrBox) -> None:
         super().__init__(attr_box)
-        self.attr_box: Union["ColorAttrBox", "MotionTypeAttrBox"] = attr_box
+        self.attr_box =  attr_box
         self.setup_ui()
 
     def _setup_layout(self) -> None:

@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QVBoxLayout
+from PyQt6.QtWidgets import QVBoxLayout, QLabel
 from typing import TYPE_CHECKING, Union
 from .managers.motion_relevance_checker import MotionRelevanceChecker
 from .managers.turns_widget_rot_dir_manager import TurnsWidgetRotDirManager
@@ -19,6 +19,7 @@ class TurnsWidget(AttrBoxWidget):
     def __init__(self, attr_box: "AttrBox") -> None:
         super().__init__(attr_box)
         self.attr_box = attr_box
+        self.turns_label: QLabel = None
         self.vbox_layout: QVBoxLayout = QVBoxLayout(self)
         self.turn_direct_set_manager = TurnDirectSetManager(self)
         self.turn_adjust_manager = TurnAdjustManager(self)

@@ -70,7 +70,7 @@ class TurnDisplayManager:
         self.set_turn_display_styles()
 
     def set_turn_display_styles(self) -> None:
-        self.turns_display_font_size = int(self.attr_box.height() / 8)
+        self.turns_display_font_size = int(self.attr_box.attr_panel.width() / 34)
         self.turns_display.setFont(
             QFont("Arial", self.turns_display_font_size, QFont.Weight.Bold)
         )
@@ -90,25 +90,19 @@ class TurnDisplayManager:
         )
 
     def resize_turn_display(self) -> None:
-        self.turns_display.setMinimumHeight(int(self.attr_box.height() / 3))
-        self.turns_display.setMaximumHeight(int(self.attr_box.height() / 3))
-        self.turns_display.setMinimumWidth(int(self.attr_box.height() / 3))
-        self.turns_display.setMaximumWidth(int(self.attr_box.height() / 3))
+        self.turns_display.setMinimumHeight(int(self.attr_box.attr_panel.width() / 18))
+        self.turns_display.setMaximumHeight(int(self.attr_box.attr_panel.width() / 18))
+        self.turns_display.setMinimumWidth(int(self.attr_box.attr_panel.width() / 14))
+        self.turns_display.setMaximumWidth(int(self.attr_box.attr_panel.width() / 14))
 
     def update_adjust_turns_button_size(self) -> None:
-        for (
-            button
-        ) in self.turns_widget.button_manager.adjust_turns_buttons:
+        for button in self.turns_widget.button_manager.adjust_turns_buttons:
             button_size = self.calculate_adjust_turns_button_size()
             button.update_adjust_turns_button_size(button_size)
 
     def add_turns_display_to_layout(self) -> None:
-        negative_buttons_frame = (
-            self.turns_widget.button_manager.negative_buttons_frame
-        )
-        positive_buttons_frame = (
-            self.turns_widget.button_manager.positive_buttons_frame
-        )
+        negative_buttons_frame = self.turns_widget.button_manager.negative_buttons_frame
+        positive_buttons_frame = self.turns_widget.button_manager.positive_buttons_frame
         self.hbox_with_turn_display_and_buttons.setContentsMargins(0, 0, 0, 0)
         self.hbox_with_turn_display_and_buttons.setSpacing(0)
         self.hbox_with_turn_display_and_buttons.setAlignment(
@@ -123,4 +117,4 @@ class TurnDisplayManager:
         self.turns_widget.vbox_layout.addWidget(self.turn_display_with_buttons_frame)
 
     def calculate_adjust_turns_button_size(self) -> int:
-        return int(self.attr_box.height() / 4)
+        return int(self.attr_box.attr_panel.width() / 25)

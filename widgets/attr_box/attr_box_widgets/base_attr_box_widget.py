@@ -4,14 +4,12 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Callable, Union
 
 from widgets.buttons.swap_button import SwapButton
+from ...buttons.adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
     from widgets.attr_box.attr_box import AttrBox
     from objects.motion.motion import Motion
-from ...buttons.adjust_turns_button import AdjustTurnsButton
 
-if TYPE_CHECKING:
-    pass
 
 
 class AttrBoxWidget(QWidget):

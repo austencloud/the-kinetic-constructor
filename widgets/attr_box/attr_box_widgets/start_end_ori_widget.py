@@ -10,16 +10,15 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from constants import ICON_DIR
 from utilities.TypeChecking.TypeChecking import Orientations
-from widgets.attr_box_widgets.base_attr_box_widget import (
-    BaseAttrBoxWidget,
-)
+from widgets.attr_box.attr_box_widgets.base_attr_box_widget import AttrBoxWidget
+
 
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
 
 
-class StartEndOriWidget(BaseAttrBoxWidget):
+class StartEndOriWidget(AttrBoxWidget):
     def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
         super().__init__(attr_box)
 
