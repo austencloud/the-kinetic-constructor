@@ -1,10 +1,10 @@
 from PyQt6.QtCore import QPointF
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
-from .handlers.directional_tuple_generator import DirectionalTupleGenerator
+from .directional_tuple_generator import DirectionalTupleGenerator
 
 if TYPE_CHECKING:
-    from .arrow_placement_manager import ArrowPlacementManager
+    from ..arrow_placement_manager import ArrowPlacementManager
 
 
 class ArrowAdjustmentCalculator:

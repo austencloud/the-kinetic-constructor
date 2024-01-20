@@ -1,12 +1,9 @@
-from PyQt6.QtCore import QPointF
-from numpy import place
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
 
-from widgets.pictograph.components.placement_managers.arrow_placement_manager.arrow_adjustment_calculator import ArrowAdjustmentCalculator
+from .handlers.arrow_adjustment_calculator import ArrowAdjustmentCalculator
 from .handlers.turns_tuple_generator import TurnsTupleGenerator
 from .handlers.arrow_initial_pos_calculator import ArrowInitialPosCalculator
-from .handlers.directional_tuple_generator import DirectionalTupleGenerator
 from .handlers.quadrant_index_handler import QuadrantIndexHandler
 from .handlers.default_arrow_positioner import DefaultArrowPositioner
 from .handlers.special_arrow_positioner.special_arrow_positioner import (
@@ -42,5 +39,3 @@ class ArrowPlacementManager:
         new_pos = initial_pos + adjustment - arrow.boundingRect().center()
         arrow.setPos(new_pos)
         arrow.rot_angle_calculator.update_rotation()
-
-
