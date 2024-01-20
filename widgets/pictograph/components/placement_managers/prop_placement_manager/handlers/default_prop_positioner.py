@@ -1,6 +1,4 @@
-from PyQt6.QtCore import QPointF
 from typing import TYPE_CHECKING, Dict
-from constants import *
 from objects.grid import GridPoint
 from objects.prop.prop import Prop
 

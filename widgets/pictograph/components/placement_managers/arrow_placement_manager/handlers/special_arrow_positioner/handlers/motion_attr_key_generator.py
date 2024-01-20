@@ -1,6 +1,4 @@
-import json
-import re
-from typing import TYPE_CHECKING, Dict, Optional, Tuple, Union
+from typing import TYPE_CHECKING
 from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.letter_lists import Type1_non_hybrid_letters
 

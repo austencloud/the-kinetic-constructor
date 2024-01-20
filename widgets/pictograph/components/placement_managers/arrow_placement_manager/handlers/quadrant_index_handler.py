@@ -19,7 +19,6 @@ from constants import (
 
 if TYPE_CHECKING:
     from ...arrow_placement_manager.arrow_placement_manager import ArrowPlacementManager
-    from widgets.pictograph.pictograph import Pictograph
 
 
 class QuadrantIndexHandler:

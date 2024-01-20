@@ -1,4 +1,3 @@
-from constants import *
 from objects.arrow.managers.arrow_mirror_handler import ArrowMirrorHandler
 from objects.arrow.managers.arrow_mouse_event_handler import ArrowMouseEventHandler
 from objects.arrow.managers.arrow_updater import ArrowUpdater
@@ -9,7 +8,6 @@ from ..graphical_object.graphical_object import GraphicalObject
 from utilities.TypeChecking.TypeChecking import (
     Colors,
     Locations,
-    MotionTypes,
     Turns,
     TYPE_CHECKING,
 )

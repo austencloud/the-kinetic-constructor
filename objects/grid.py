@@ -13,7 +13,6 @@ from constants import (
 from utilities.TypeChecking.TypeChecking import GridModes
 from utilities.TypeChecking.prop_types import (
     strictly_placed_props,
-    non_strictly_placed_props,
 )
 
 if TYPE_CHECKING:

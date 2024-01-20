@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING
 from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.letter_lists import (
     Type1_hybrid_letters,
@@ -10,7 +10,6 @@ from constants import *
 
 if TYPE_CHECKING:
     from ..arrow_placement_manager import ArrowPlacementManager
-    from widgets.pictograph.pictograph import Pictograph
 
 
 class TurnsTupleGenerator:

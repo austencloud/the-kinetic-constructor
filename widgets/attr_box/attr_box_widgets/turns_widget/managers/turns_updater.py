@@ -12,7 +12,6 @@ from utilities.TypeChecking.letter_lists import (
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
-    from widgets.attr_box.attr_box import AttrBox
     from objects.motion.motion import Motion
     from widgets.attr_box.attr_box_widgets.turns_widget.turns_widget import TurnsWidget
 

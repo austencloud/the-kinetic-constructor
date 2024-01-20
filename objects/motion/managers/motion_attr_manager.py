@@ -7,7 +7,6 @@ from constants import (
     DASH,
     END_LOC,
     END_ORI,
-    LEADING,
     MOTION_TYPE,
     NO_ROT,
     OPP,
@@ -18,7 +17,6 @@ from constants import (
     START_LOC,
     START_ORI,
     STATIC,
-    TRAILING,
     TURNS,
 )
 from utilities.TypeChecking.TypeChecking import Colors, Orientations, Turns

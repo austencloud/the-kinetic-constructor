@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QGuiApplication
-from PyQt6.QtWidgets import QMainWindow
 if TYPE_CHECKING        :
     from main import MainWindow
 

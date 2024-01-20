@@ -8,7 +8,6 @@ from utilities.TypeChecking.letter_lists import (
 )
 
 if TYPE_CHECKING:
-    from widgets.attr_box.attr_box import AttrBox
     from objects.motion.motion import Motion
     from ..turns_widget import TurnsWidget
 

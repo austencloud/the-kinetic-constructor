@@ -18,7 +18,6 @@ from utilities.TypeChecking.TypeChecking import OrientationTypes
 
 if TYPE_CHECKING:
     from ..arrow_placement_manager import ArrowPlacementManager
-    from widgets.pictograph.pictograph import Pictograph
 import codecs
 
 

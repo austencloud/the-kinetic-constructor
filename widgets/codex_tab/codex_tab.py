@@ -18,7 +18,6 @@ from .codex_letter_button_frame import IGLetterButtonFrame
 
 if TYPE_CHECKING:
     from widgets.main_tab_widget.main_tab_widget import MainTabWidget
-    from ..main_widget.main_widget import MainWidget
 
 
 class CodexTab(QWidget):

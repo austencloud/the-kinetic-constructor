@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from constants import COLOR
 from objects.arrow.arrow import Arrow
-from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph

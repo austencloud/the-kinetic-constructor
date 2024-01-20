@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING, Dict
 
-from constants import LEADING, TRAILING
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph

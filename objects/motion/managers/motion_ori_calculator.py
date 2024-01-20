@@ -1,29 +1,17 @@
 from constants import *
-from typing import TYPE_CHECKING, Dict, Union
-from objects.motion.managers.motion_attr_manager import MotionAttrManager
-from objects.motion.managers.motion_manipulator import MotionManipulator
+from typing import TYPE_CHECKING
 from utilities.TypeChecking.TypeChecking import (
-    Colors,
     Handpaths,
-    LeadStates,
     Locations,
     MotionTypes,
     Orientations,
-    PropRotDirs,
     Turns,
 )
 
-from widgets.graph_editor_tab.graph_editor_object_panel.propbox.propbox import PropBox
 
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
-    from widgets.pictograph.pictograph import Pictograph
-    from objects.arrow.arrow import Arrow
-    from objects.prop.prop import Prop
-    from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import (
-        ArrowBox,
-    )
 
 
 class MotionOriCalculator:
