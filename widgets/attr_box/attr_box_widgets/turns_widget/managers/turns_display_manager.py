@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from widgets.attr_box.attr_box import AttrBox
-    from .turns_widget import TurnsWidget
+    from ..turns_widget import TurnsWidget
 
 
 class TurnDisplayManager:

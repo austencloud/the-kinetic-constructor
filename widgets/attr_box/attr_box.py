@@ -13,7 +13,7 @@ from utilities.TypeChecking.TypeChecking import (
 
 from .rot_dir_button_manager import RotDirButtonManager
 from widgets.header_widget import HeaderWidget
-from .attr_box_widgets.turns_widget.turns_widget.turns_widget import (
+from .attr_box_widgets.turns_widget.turns_widget import (
     TurnsWidget,
 )
 from .attr_box_widgets.base_attr_box_widget import AttrBoxWidget

@@ -1,11 +1,11 @@
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QFrame
 from typing import TYPE_CHECKING, Union
 
-from .turns_display_manager import TurnDisplayManager
-from ...base_attr_box_widget import AttrBoxWidget
-from ...base_attr_box_widget import AttrBoxWidget
-from .turn_adjust_manager import TurnAdjustManager
-from .turn_direct_set_manager import TurnDirectSetManager
+from .managers.turns_display_manager import TurnDisplayManager
+from ..base_attr_box_widget import AttrBoxWidget
+from ..base_attr_box_widget import AttrBoxWidget
+from .managers.turn_adjust_manager import TurnAdjustManager
+from .managers.turn_direct_set_manager import TurnDirectSetManager
 
 if TYPE_CHECKING:
     from attr_box.attr_box import AttrBox

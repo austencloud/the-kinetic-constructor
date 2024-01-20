@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Union
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from .turns_widget import TurnsWidget
+    from ..turns_widget import TurnsWidget
 
 
 class TurnDirectSetManager:
