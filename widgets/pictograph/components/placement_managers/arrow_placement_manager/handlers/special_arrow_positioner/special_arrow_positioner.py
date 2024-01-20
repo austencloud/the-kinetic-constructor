@@ -46,11 +46,11 @@ class SpecialArrowPositioner:
         self.data_sorter = DataSorter(self)
 
     def update_arrow_placement(self, arrow: Arrow) -> None:
-        adjustment_key = self.turns_tuple_generator.generate_turns_tuple(
+        turns_tuple = self.turns_tuple_generator.generate_turns_tuple(
             arrow.scene.letter
         )
         adjustment = self.adjustment_mapper.apply_adjustment_to_arrow(arrow)
         if adjustment:
             self.data_updater.update_specific_entry_in_json(
-                self.pictograph.letter, adjustment_key, adjustment
+                self.pictograph.letter, turns_tuple, adjustment
             )

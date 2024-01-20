@@ -2,7 +2,7 @@ import cProfile
 import pstats
 import os
 import tempfile
-from typing import Any, Callable, Optional, List
+from typing import IO, Any, Callable, Optional, List
 
 
 class Profiler:
@@ -36,34 +36,27 @@ class Profiler:
         return inner
 
     def write_profiling_stats_to_file(self, file_path: str, app_root: str) -> None:
-        # Create a temporary file and close it immediately to avoid locking issues
         fd, temp_file_name = tempfile.mkstemp()
         os.close(fd)
 
         try:
-            # Ensure profiler data is dumped correctly
             self.profiler.dump_stats(temp_file_name)
-
-            # Instantiate pstats.Stats with the temporary file
             stats = pstats.Stats(temp_file_name)
-
-            # Normalize the app_root path to use consistent separators
             app_root = os.path.normpath(app_root)
 
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write("Organized by number of calls:\n\n")
                 self._write_stats_section(f, stats, "calls", app_root)
-                f.write("\n\n")  # Separate the two sections
+                f.write("\n\n")
                 f.write("Organized by total time:\n\n")
                 self._write_stats_section(f, stats, "time", app_root)
-                f.write("\n\n")  # Separate the two sections
+                f.write("\n\n")
                 f.write("Organized by cumulative time:\n\n")
                 self._write_stats_section(f, stats, "cumulative", app_root)
         finally:
-            # Clean up the temporary file
             os.remove(temp_file_name)
             
-    def _write_stats_section(self, file, stats, sort_by: str, app_root: str) -> None:
+    def _write_stats_section(self, file: IO[str], stats: pstats.Stats, sort_by: str, app_root: str) -> None:
         stats.sort_stats(sort_by)
         header = "{:>10} {:>15} {:>15} {:>20} {:>20} {:>30}\n".format(
             "Calls",
@@ -82,7 +75,6 @@ class Profiler:
             if app_root in os.path.normpath(func[0])
         ]
 
-        # Apply sorting manually
         if sort_by == "calls":
             sorted_stats = sorted(filtered_stats, key=lambda x: x[1][0], reverse=True)
         elif sort_by == "time":

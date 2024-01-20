@@ -4,6 +4,7 @@ from utilities.TypeChecking.letter_lists import (
     Type1_hybrid_letters,
     Type2_letters,
     Type3_letters,
+    Type4_letters,
     non_hybrid_letters,
 )
 
@@ -54,8 +55,9 @@ class AdjustmentCalculator:
             },
             **{
                 letter: letter_adjustments.get(arrow.motion.motion_type)
-                for letter in Type2_letters + Type3_letters
-            },
+                for letter in Type2_letters + Type3_letters + Type4_letters
+            }
+
         }
 
         return adjustment_map.get(letter)

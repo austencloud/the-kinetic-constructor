@@ -23,10 +23,10 @@ class SpecialPlacementDataUpdater:
         self.positioner.data_loader.load_placements()
 
         turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(
-            arrow.scene.letter
+            arrow.scene.letter.str
         )
         letter_data: Dict = self.positioner.special_placements.get(
-            self.positioner.pictograph.letter, {}
+            self.positioner.pictograph.letter.str, {}
         )
         turn_data = letter_data.get(turns_tuple, {})
 
