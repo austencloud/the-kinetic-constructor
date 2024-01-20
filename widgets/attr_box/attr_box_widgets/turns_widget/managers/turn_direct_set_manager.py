@@ -7,8 +7,8 @@ if TYPE_CHECKING:
 
 
 class TurnDirectSetManager:
-    def __init__(self, parent_widget: "TurnsWidget") -> None:
-        self.parent_widget = parent_widget
+    def __init__(self, turns_widget: "TurnsWidget") -> None:
+        self.turns_widget = turns_widget
 
     def setup_direct_set_buttons(self) -> None:
         self.turns_buttons_frame = QFrame()
@@ -26,7 +26,7 @@ class TurnDirectSetManager:
         self.add_direct_set_turns_to_vbox_layout()
 
     def create_button(self, value: str) -> QPushButton:
-        button = QPushButton(value, self.parent_widget)
+        button = QPushButton(value, self.turns_widget)
         button.setStyleSheet(self._get_direct_set_button_style_sheet())
         button.setContentsMargins(0, 0, 0, 0)
         button.clicked.connect(
@@ -35,12 +35,12 @@ class TurnDirectSetManager:
             )
         )
         button.setMaximumWidth(
-            int(self.parent_widget.turns_display_manager.turns_display.width() / 2)
+            int(self.turns_widget.turns_display_manager.turns_display.width() / 2)
         )
         return button
 
     def _directly_set_turns(self, new_turns: Union[int, float]) -> None:
-        self.parent_widget.turn_adjust_manager.set_turns(new_turns)
+        self.turns_widget.display_manager.set_turns(new_turns)
 
     @staticmethod
     def _get_direct_set_button_style_sheet() -> str:
@@ -64,4 +64,4 @@ class TurnDirectSetManager:
         """
 
     def add_direct_set_turns_to_vbox_layout(self) -> None:
-        self.parent_widget.vbox_layout.addWidget(self.turns_buttons_frame)
+        self.turns_widget.vbox_layout.addWidget(self.turns_buttons_frame)

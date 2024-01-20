@@ -29,12 +29,16 @@ class RotDirManager:
         letter = motion.pictograph.letter
         vtg_dir_state = self.attr_box.vtg_dir_btn_state
 
+        same_dir_selected = (True, False)
+        opp_dir_selected = (False, True)
+        neither_dir_selected = (False, False)
+
         rotation_mapping = {
-            (True, False): other_motion.prop_rot_dir,
-            (False, True): COUNTER_CLOCKWISE
+            same_dir_selected: other_motion.prop_rot_dir,
+            opp_dir_selected: COUNTER_CLOCKWISE
             if other_motion.prop_rot_dir == CLOCKWISE
             else CLOCKWISE,
-            (False, False): CLOCKWISE
+            neither_dir_selected: CLOCKWISE
             if other_motion.prop_rot_dir == NO_ROT
             else COUNTER_CLOCKWISE,
         }
