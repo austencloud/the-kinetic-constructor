@@ -59,7 +59,12 @@ class FilterTab(QTabWidget):
 
     def show_tabs_based_on_chosen_letters(self) -> None:
         selected_letters = self.section.scroll_area.codex.selected_letters
-        tabs_to_show = self._determine_tabs_to_show(selected_letters)
+        # Filter selected letters to match the current section's letter type
+        relevant_selected_letters = [
+            letter for letter in selected_letters
+            if self.section.scroll_area.codex.get_letter_type(letter) == self.section.letter_type
+        ]
+        tabs_to_show = self._determine_tabs_to_show(relevant_selected_letters)
         tabs_to_hide = self._determine_tabs_to_hide(tabs_to_show)
         self.show_tabs(tabs_to_show)
         self.hide_tabs(tabs_to_hide)
@@ -104,13 +109,16 @@ class FilterTab(QTabWidget):
                 self.addTab(self.lead_state_attr_panel, "Filter by Lead State")
 
     def hide_tabs(self, tabs: List[MotionAttributes]) -> None:
-        for tab in tabs:
-            if tab == COLOR and self.indexOf(self.color_attr_panel) != -1:
-                self.removeTab(self.indexOf(self.color_attr_panel))
-            elif tab == MOTION_TYPE and self.indexOf(self.motion_type_attr_panel) != -1:
-                self.removeTab(self.indexOf(self.motion_type_attr_panel))
-            elif tab == LEAD_STATE and self.indexOf(self.lead_state_attr_panel) != -1:
-                self.removeTab(self.indexOf(self.lead_state_attr_panel))
+        if not tabs:
+            self.clear()
+        else:
+            for tab in tabs:
+                if tab == COLOR and self.indexOf(self.color_attr_panel) != -1:
+                    self.removeTab(self.indexOf(self.color_attr_panel))
+                elif tab == MOTION_TYPE and self.indexOf(self.motion_type_attr_panel) != -1:
+                    self.removeTab(self.indexOf(self.motion_type_attr_panel))
+                elif tab == LEAD_STATE and self.indexOf(self.lead_state_attr_panel) != -1:
+                    self.removeTab(self.indexOf(self.lead_state_attr_panel))
 
     def resize_filter_tab(self) -> None:
         for panel in self.panels:
