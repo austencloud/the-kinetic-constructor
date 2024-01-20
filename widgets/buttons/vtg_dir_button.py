@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from ..header_widget import HeaderWidget
     from ..attr_box.attr_box_widgets.motion_types_widget import MotionTypeWidget
     from ..attr_box.attr_box_widgets.start_end_loc_widget import StartEndLocWidget
-    from ..attr_box.attr_box_widgets.turns_widget.base_turns_widget.base_turns_widget import (
+    from ..attr_box.attr_box_widgets.turns_widget.turns_widget.turns_widget import (
         TurnsWidget,
     )
 

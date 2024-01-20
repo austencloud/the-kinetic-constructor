@@ -10,18 +10,10 @@ from utilities.TypeChecking.TypeChecking import (
     MotionAttributes,
     MotionTypes,
 )
-from .attr_box_widgets.turns_widget.color_turns_widget import (
-    ColorTurnsWidget,
-)
-from .attr_box_widgets.turns_widget.lead_state_turns_widget import (
-    LeadStateTurnsWidget,
-)
-from .attr_box_widgets.turns_widget.motion_type_turns_widget import (
-    MotionTypeTurnsWidget,
-)
+
 from .rot_dir_button_manager import RotDirButtonManager
 from widgets.header_widget import HeaderWidget
-from .attr_box_widgets.turns_widget.base_turns_widget.base_turns_widget import (
+from .attr_box_widgets.turns_widget.turns_widget.turns_widget import (
     TurnsWidget,
 )
 from .attr_box_widgets.base_attr_box_widget import AttrBoxWidget
@@ -59,11 +51,7 @@ class AttrBox(QFrame):
     def _setup_widgets(self) -> None:
         if self.attribute_type == MOTION_TYPE:
             self.rot_dir_button_manager = RotDirButtonManager(self)
-            self.turns_widget = MotionTypeTurnsWidget(self)
-        elif self.attribute_type == COLOR:
-            self.turns_widget = ColorTurnsWidget(self)
-        elif self.attribute_type == LEAD_STATE:
-            self.turns_widget = LeadStateTurnsWidget(self)
+        self.turns_widget = TurnsWidget(self)
         self.header_widget = HeaderWidget(self)
 
     def _setup_layouts(self) -> None:

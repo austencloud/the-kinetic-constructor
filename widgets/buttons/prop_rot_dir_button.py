@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from ..filter_tab.attr_box.attr_box_widgets.start_end_loc_widget import (
         StartEndLocWidget,
     )
-    from ..filter_tab.attr_box.attr_box_widgets.turns_widget.base_turns_widget.base_turns_widget import (
+    from ..filter_tab.attr_box.attr_box_widgets.turns_widget.turns_widget.turns_widget import (
         TurnsWidget,
     )
 

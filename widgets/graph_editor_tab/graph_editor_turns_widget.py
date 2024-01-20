@@ -11,7 +11,7 @@ from PyQt6.QtGui import QPixmap
 from typing import TYPE_CHECKING, List
 from objects.motion.motion import Motion
 from constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON
-from ..attr_box.attr_box_widgets.turns_widget.base_turns_widget.base_turns_widget import (
+from ..attr_box.attr_box_widgets.turns_widget.turns_widget.turns_widget import (
     TurnsWidget,
 )
 
@@ -119,7 +119,6 @@ class GraphEditorTurnsWidget(TurnsWidget):
 
     ### CALLBACKS ###
 
-
     ### UPDATE METHODS ###
 
     def _update_clocks(self, rot_dir: str) -> None:
@@ -135,7 +134,6 @@ class GraphEditorTurnsWidget(TurnsWidget):
         elif rot_dir == None:
             self.clock_left.clear()
             self.clock_right.clear()
-
 
     ### EVENT HANDLERS ###
 

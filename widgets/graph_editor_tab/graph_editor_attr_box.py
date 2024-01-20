@@ -25,6 +25,7 @@ class GraphEditorAttrBox(AttrBox):
     ) -> None:
         super().__init__(attr_panel, pictograph)
         self.color = color
+        self.pictograph = pictograph
         self._setup_widgets()
         self.apply_border_style(HEX_RED if self.color == RED else HEX_BLUE)
 
@@ -45,7 +46,6 @@ class GraphEditorAttrBox(AttrBox):
         return int((self.pictograph.view.height() // 2 // 4) * 1)
 
     def clear_attr_box(self) -> None:
-        super().clear_attr_box()
         self.motion_type_widget.clear_motion_type_box()
 
     def resize_graph_editor_attr_box(self) -> None:

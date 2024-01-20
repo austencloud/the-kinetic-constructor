@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QFrame
 from typing import TYPE_CHECKING, Union
 
-from ..base_turns_widget.turns_display_manager import TurnDisplayManager
+from .turns_display_manager import TurnDisplayManager
 from ...base_attr_box_widget import AttrBoxWidget
 from ...base_attr_box_widget import AttrBoxWidget
 from .turn_adjust_manager import TurnAdjustManager

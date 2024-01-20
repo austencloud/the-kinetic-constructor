@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
     from widgets.attr_box.attr_box import AttrBox
     from objects.motion.motion import Motion
-    from .base_turns_widget import TurnsWidget
+    from .turns_widget import TurnsWidget
 
 
 class TurnAdjustManager:

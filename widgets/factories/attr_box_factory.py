@@ -1,22 +1,12 @@
-from PyQt6.QtWidgets import QHBoxLayout, QFrame
 from typing import TYPE_CHECKING, List
 
 from constants import (
-    ANTI,
     BLUE,
-    BLUE_PROP_ROT_DIR,
-    BLUE_TURNS,
     COLOR,
-    DASH,
     LEAD_STATE,
     LEADING,
     MOTION_TYPE,
-    NO_ROT,
-    PRO,
     RED,
-    RED_PROP_ROT_DIR,
-    RED_TURNS,
-    STATIC,
     TRAILING,
 )
 
