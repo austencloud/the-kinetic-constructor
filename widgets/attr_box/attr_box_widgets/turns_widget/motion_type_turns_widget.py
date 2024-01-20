@@ -15,7 +15,7 @@ class MotionTypeTurnsWidget(TurnsWidget):
 
     def update_turns_display_for_pictograph(self, pictograph: "Pictograph") -> None:
         """Update the turnbox display based on the latest turns value of the pictograph."""
-        for motion in pictograph.get_motions_by_type(self.attr_box.motion_type):
+        for motion in pictograph.get.motions_by_type(self.attr_box.motion_type):
             self.turns_display_manager.update_turns_display(motion.turns)
             break
 

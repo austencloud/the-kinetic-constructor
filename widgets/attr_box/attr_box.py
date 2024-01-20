@@ -10,16 +10,16 @@ from utilities.TypeChecking.TypeChecking import (
     MotionAttributes,
     MotionTypes,
 )
-from widgets.attr_box.attr_box_widgets.turns_widget.color_turns_widget import (
+from .attr_box_widgets.turns_widget.color_turns_widget import (
     ColorTurnsWidget,
 )
-from widgets.attr_box.attr_box_widgets.turns_widget.lead_state_turns_widget import (
+from .attr_box_widgets.turns_widget.lead_state_turns_widget import (
     LeadStateTurnsWidget,
 )
-from widgets.attr_box.attr_box_widgets.turns_widget.motion_type_turns_widget import (
+from .attr_box_widgets.turns_widget.motion_type_turns_widget import (
     MotionTypeTurnsWidget,
 )
-from widgets.attr_box.rot_dir_button_manager import RotDirButtonManager
+from .rot_dir_button_manager import RotDirButtonManager
 from widgets.header_widget import HeaderWidget
 from .attr_box_widgets.turns_widget.base_turns_widget.base_turns_widget import (
     TurnsWidget,
@@ -75,11 +75,11 @@ class AttrBox(QFrame):
         self.vbox_layout.addWidget(self.turns_widget, 2)
 
     def setup_box(self) -> None:
-        self.setObjectName("AttributeBox")
+        self.setObjectName("AttrBox")
 
     def apply_border_style(self, color_hex: str) -> None:
         self.setStyleSheet(
-            f"#AttributeBox {{ "
+            f"#AttrBox {{ "
             f"border: {self.attr_box_border_width}px solid {color_hex};"
             f" border-style: inset; "
             f"}}"
