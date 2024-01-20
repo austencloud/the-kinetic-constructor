@@ -11,6 +11,7 @@ from data.letter_engine_data import (
     letter_type_motion_type_map,
 )
 from widgets.attr_panel import AttrPanel
+from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from widgets.scroll_area.scroll_area import ScrollArea
@@ -21,6 +22,7 @@ class FilterTab(QTabWidget):
         super().__init__(scroll_area)
         self.scroll_area = scroll_area
         self.letter_type = letter_type
+        self.attr_box_border_width = 3
         self.motion_type_attr_panel = AttrPanel(self, MOTION_TYPE)
         self.color_attr_panel = AttrPanel(self, COLOR)
         self.lead_state_attr_panel = AttrPanel(self, LEAD_STATE)
@@ -39,9 +41,10 @@ class FilterTab(QTabWidget):
 
     def setup_ui(self) -> None:
         self.setContentsMargins(0, 0, 0, 0)
-        self.layout = QHBoxLayout(self)
+        self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignRight)
 
     def show_tabs_based_on_chosen_letters(self) -> None:
         selected_letters = self.scroll_area.parent_tab.selected_letters
@@ -98,27 +101,5 @@ class FilterTab(QTabWidget):
                 self.removeTab(self.indexOf(self.lead_state_attr_panel))
 
     def resize_filter_tab(self) -> None:
-        self.setMinimumWidth(
-            self.scroll_area.width()
-            - self.scroll_area.verticalScrollBar().width()
-            - self.scroll_area.layout.contentsMargins().left()
-            - self.scroll_area.layout.contentsMargins().right()
-        )
-        self.setMaximumWidth(
-            self.scroll_area.width()
-            - self.scroll_area.verticalScrollBar().width()
-            - self.scroll_area.layout.contentsMargins().left()
-            - self.scroll_area.layout.contentsMargins().right()
-        )
         for panel in self.panels:
             panel.resize_attr_panel()
-
-
-# Alright I'd like to add some functionality to how the boxes
-# get shown when we're filtering by motion type.
-# Right now, for Type 2 letters, we're adding both pro and anti AttrBoxes
-# (along with the static) regardless of what the current letter is. So it always has all three.
-# Instead, I want to make it so that if the letter is a pro letter like W, Y, Σ, θ, then it shows the pro
-# and the static. And if the letter is an anti letter like X, Z, Δ, Ω, then it shows the anti and the static.
-# If we have both a pro letter and an anti letter in the selected letters, then it shows all three.
-#

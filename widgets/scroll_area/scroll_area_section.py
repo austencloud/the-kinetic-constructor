@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
     QLabel,
     QSizePolicy,
 )
-
+from PyQt6.QtCore import Qt
 from utilities.TypeChecking.TypeChecking import LetterTypeNums
 from widgets.filter_tab import FilterTab
 from widgets.pictograph.pictograph import Pictograph
@@ -42,12 +42,14 @@ class ScrollAreaSection(QWidget):
         section_label.setText(styled_text)  # Set the HTML styled text
         font_size = 25
         section_label.setStyleSheet(f"font-size: {font_size}px; font-weight: bold;")
+        section_label.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Center the text
         size_policy = QSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
         )
         section_label.setSizePolicy(size_policy)
         section_label.setMinimumSize(section_label.sizeHint())
         return section_label
+
 
     def initialize_ui(self) -> None:
         self.layout.addWidget(self.section_label)

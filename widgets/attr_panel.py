@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QHBoxLayout, QFrame
+from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, List
-from constants import ANTI, DASH, MOTION_TYPE, PRO, STATIC
+from constants import ANTI, COLOR, DASH, MOTION_TYPE, PRO, STATIC
 from utilities.TypeChecking.TypeChecking import Letters
 from widgets.attr_box.attr_box import AttrBox
 from widgets.factories.attr_box_factory import AttrBoxFactory
@@ -29,15 +30,27 @@ class AttrPanel(QFrame):
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignRight)
         for box in self.boxes:
             self.layout.addWidget(box)
-            # give them black borders
-            box.setFrameStyle(1)
-            box.setLineWidth(1)
+            box.setObjectName("AttrBox")
+            if box.attribute_type != COLOR:
+                box.setStyleSheet(
+                    f"#AttrBox {{ "
+                    f"border: 1px solid black;"
+                    f" border-style: inset; "
+                    f"}}"
+                )
 
     def resize_attr_panel(self) -> None:
-        self.setMinimumWidth(self.filter_tab.width() - self.boxes[0].attr_box_border_width)
-        self.setMaximumWidth(self.filter_tab.width() - self.boxes[0].attr_box_border_width)
+        self.setMinimumWidth(
+            self.filter_tab.width()
+            - (self.filter_tab.attr_box_border_width * len(self.boxes))
+        )
+        # self.setMaximumWidth(
+        #     self.filter_tab.width()
+        #     - (self.filter_tab.attr_box_border_width * len(self.boxes))
+        # )
         for box in self.boxes:
             box.resize_attr_box()
 

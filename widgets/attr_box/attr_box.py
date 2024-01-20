@@ -35,7 +35,6 @@ class AttrBox(QFrame):
         self.attr_panel: "AttrPanel" = attr_panel
         self.font_size = self.width() // 10
         self.turn_display_border = 2
-        self.attr_box_border_width = 3
         self.vtg_dir_btn_state: Dict[str, bool] = {SAME: True, OPP: False}
         self._setup_attribute_type(attribute_type, attribute)
         self._setup_widgets()
@@ -71,10 +70,10 @@ class AttrBox(QFrame):
         self.layout.addWidget(self.turns_widget)
 
     def apply_border_style(self, color_hex: str) -> None:
-        self.setObjectName("AttrBox")
+        
         self.setStyleSheet(
             f"#AttrBox {{ "
-            f"border: {self.attr_box_border_width}px solid {color_hex};"
+            f"border: {self.attr_panel.filter_tab.attr_box_border_width}px solid {color_hex};"
             f" border-style: inset; "
             f"}}"
         )
