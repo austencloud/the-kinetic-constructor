@@ -96,16 +96,16 @@ class TurnDisplayManager:
         self.turns_display.setMaximumWidth(int(self.attr_box.height() / 3))
 
     def update_adjust_turns_button_size(self) -> None:
-        for button in self.parent_widget.turn_adjust_manager.adjust_turns_buttons:
+        for button in self.parent_widget.turn_adjust_manager.button_manager.adjust_turns_buttons:
             button_size = self.calculate_adjust_turns_button_size()
             button.update_adjust_turns_button_size(button_size)
 
     def add_turns_display_to_layout(self) -> None:
         negative_buttons_frame = (
-            self.parent_widget.turn_adjust_manager.negative_buttons_frame
+            self.parent_widget.turn_adjust_manager.button_manager.negative_buttons_frame
         )
         positive_buttons_frame = (
-            self.parent_widget.turn_adjust_manager.positive_buttons_frame
+            self.parent_widget.turn_adjust_manager.button_manager.positive_buttons_frame
         )
         self.hbox_with_turn_display_and_buttons.setContentsMargins(0, 0, 0, 0)
         self.hbox_with_turn_display_and_buttons.setSpacing(0)
