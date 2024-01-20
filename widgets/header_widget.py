@@ -14,28 +14,24 @@ class HeaderWidget(AttrBoxWidget):
     def __init__(self, attr_box) -> None:
         super().__init__(attr_box)
         self.attr_box: "AttrBox" = attr_box
-        self.header_label: QLabel = None
         self.separator: QFrame = self.create_separator()
-        self.setup_header()
+        self.header_label: QLabel = self._setup_header()
+        self.layout:QHBoxLayout = self._setup_layout()
 
-    def setup_header(self) -> None:
+    def _setup_header(self) -> None:
         if self.attr_box.attribute_type == COLOR:
             text = "Left" if self.attr_box.color == BLUE else "Right"
-            self.header_label = self._setup_header_label(text)
-            self._setup_layout()
+            header_label = self._setup_header_label(text)
 
         elif self.attr_box.attribute_type == LEAD_STATE:
             text = self.attr_box.lead_state.capitalize()
-            self.header_label = self._setup_header_label(text)
-            self._setup_layout()
+            header_label = self._setup_header_label(text)
 
         elif self.attr_box.attribute_type == MOTION_TYPE:
             text = self.attr_box.motion_type.capitalize()
-            self.header_label = self._setup_header_label(text)
-            if self.attr_box.motion_type in [PRO, ANTI]:
-                self._setup_layout()
-            elif self.attr_box.motion_type in [DASH, STATIC]:
-                self._setup_layout_with_vtg_dir_buttons()
+            header_label = self._setup_header_label(text)
+
+        return header_label
 
     def create_separator(self) -> QFrame:
         separator = QFrame(self)
@@ -45,22 +41,16 @@ class HeaderWidget(AttrBoxWidget):
         return separator
 
     def _setup_layout(self) -> None:
-        self.layout = QHBoxLayout(self)
-        # self.layout.addStretch(1)
-        self.layout.addWidget(self.header_label)
-        # self.layout.addStretch(1)
-        self.layout.addWidget(self.separator)
-
-    def _setup_layout_with_vtg_dir_buttons(self) -> None:
-        self.layout = QHBoxLayout(self)
-        self.layout.addStretch(5)
-        self.layout.addWidget(self.attr_box.rot_dir_button_manager.same_button)
-        self.layout.addStretch(1)
-        self.layout.addWidget(self.header_label)
-        self.layout.addStretch(1)
-        self.layout.addWidget(self.attr_box.rot_dir_button_manager.opp_button)
-        self.layout.addStretch(5)
-        self.layout.addWidget(self.separator)
+        layout = QHBoxLayout(self)
+        layout.addStretch(5)
+        layout.addWidget(self.attr_box.rot_dir_button_manager.same_button)
+        layout.addStretch(1)
+        layout.addWidget(self.header_label)
+        layout.addStretch(1)
+        layout.addWidget(self.attr_box.rot_dir_button_manager.opp_button)
+        layout.addStretch(5)
+        layout.addWidget(self.separator)
+        return layout
 
     def _setup_header_label(self, text: str) -> QLabel:
         font_color = (

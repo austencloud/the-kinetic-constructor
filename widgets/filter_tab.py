@@ -61,8 +61,10 @@ class FilterTab(QTabWidget):
         selected_letters = self.section.scroll_area.codex.selected_letters
         # Filter selected letters to match the current section's letter type
         relevant_selected_letters = [
-            letter for letter in selected_letters
-            if self.section.scroll_area.codex.get_letter_type(letter) == self.section.letter_type
+            letter
+            for letter in selected_letters
+            if self.section.scroll_area.codex.get_letter_type(letter)
+            == self.section.letter_type
         ]
         tabs_to_show = self._determine_tabs_to_show(relevant_selected_letters)
         tabs_to_hide = self._determine_tabs_to_hide(tabs_to_show)
@@ -80,16 +82,31 @@ class FilterTab(QTabWidget):
         tabs_to_show = []
         motion_types_present = set()
 
-        for letter in selected_letters:
-            letter_type = self.section.scroll_area.codex.get_letter_type(letter)
-            motion_types_present.update(motion_type_letter_combinations[str(letter)])
+        for letter_str in selected_letters:
+            motion_types_present.update(motion_type_letter_combinations[letter_str])
 
         if motion_types_present == {PRO} or motion_types_present == {ANTI}:
             tabs_to_show.append(COLOR)
         elif len(motion_types_present) > 1:
             tabs_to_show.extend([MOTION_TYPE, COLOR])
-        if ["S", "T", "U", "V"] in selected_letters:
+
+        # Check if any of the selected letters are in the 'S', 'T', 'U', 'V' set
+        if any(letter_str in {"S", "T", "U", "V"} for letter_str in selected_letters):
             tabs_to_show.append(LEAD_STATE)
+
+        # If no relevant letters for the section are selected, clear all tabs
+        for letter in selected_letters:
+            letter_type = self.section.scroll_area.codex.get_letter_type(letter)
+            if letter_type == self.section.letter_type:
+                break
+        else:
+            tabs_to_show.clear()
+        
+        
+        # if not any(
+        #     letter.type == self.section.letter_type for letter in selected_letters
+        # ):
+        #     tabs_to_show.clear()
 
         return tabs_to_show
 
@@ -115,9 +132,14 @@ class FilterTab(QTabWidget):
             for tab in tabs:
                 if tab == COLOR and self.indexOf(self.color_attr_panel) != -1:
                     self.removeTab(self.indexOf(self.color_attr_panel))
-                elif tab == MOTION_TYPE and self.indexOf(self.motion_type_attr_panel) != -1:
+                elif (
+                    tab == MOTION_TYPE
+                    and self.indexOf(self.motion_type_attr_panel) != -1
+                ):
                     self.removeTab(self.indexOf(self.motion_type_attr_panel))
-                elif tab == LEAD_STATE and self.indexOf(self.lead_state_attr_panel) != -1:
+                elif (
+                    tab == LEAD_STATE and self.indexOf(self.lead_state_attr_panel) != -1
+                ):
                     self.removeTab(self.indexOf(self.lead_state_attr_panel))
 
     def resize_filter_tab(self) -> None:

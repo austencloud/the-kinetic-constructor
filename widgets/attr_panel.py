@@ -48,6 +48,10 @@ class AttrPanel(QFrame):
             self.filter_tab.width()
             - (self.filter_tab.attr_box_border_width * len(self.boxes))
         )
+        # self.setMaximumWidth(
+        #     self.filter_tab.width()
+        #     - (self.filter_tab.attr_box_border_width * len(self.boxes))
+        # )
 
         for box in self.boxes:
             box.resize_attr_box()
@@ -55,19 +59,12 @@ class AttrPanel(QFrame):
     def show_boxes_based_on_chosen_letters(
         self, selected_letters: List[Letters]
     ) -> None:
-        # First, filter the selected letters by the current letter type
-        # relevant_selected_letters = [
-        #     letter for letter in selected_letters if letter.letter_type == self.filter_tab.section.letter_type
-        # ]
-
         relevant_selected_letters = []
-
         for letter in selected_letters:
             letter_type = self.get_letter_type(letter)
             if letter_type == self.filter_tab.section.letter_type:
                 relevant_selected_letters.append(letter)
 
-        # Then, show or hide boxes based on the filtered selected letters
         motion_type_mapping = {
             PRO: pro_letters,
             ANTI: anti_letters,

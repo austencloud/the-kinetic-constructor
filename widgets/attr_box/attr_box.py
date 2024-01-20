@@ -51,8 +51,7 @@ class AttrBox(QFrame):
             self.lead_state: LeadStates = attribute
 
     def _setup_widgets(self) -> None:
-        if self.attribute_type == MOTION_TYPE:
-            self.rot_dir_button_manager = RotDirButtonManager(self)
+        self.rot_dir_button_manager = RotDirButtonManager(self)
         self.header_widget = HeaderWidget(self)
         self.turns_widget = TurnsWidget(self)
 
@@ -63,17 +62,18 @@ class AttrBox(QFrame):
                 self.apply_border_style("#2E3192")
 
     def _setup_layouts(self) -> None:
-        self.layout:QVBoxLayout = QVBoxLayout(self)
+        self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.layout.addWidget(self.header_widget)
         self.layout.addWidget(self.header_widget.separator)
         self.layout.addWidget(self.turns_widget)
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        sizePolicy = QSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        )
         self.setSizePolicy(sizePolicy)
 
     def apply_border_style(self, color_hex: str) -> None:
-        
         self.setStyleSheet(
             f"#AttrBox {{ "
             f"border: {self.attr_panel.filter_tab.attr_box_border_width}px solid {color_hex};"
@@ -84,6 +84,12 @@ class AttrBox(QFrame):
     ### CREATE LABELS ###
 
     def resize_attr_box(self) -> None:
+        for button in self.rot_dir_button_manager.buttons:
+            button.setMinimumSize(
+                self.attr_panel.width() // 16, self.attr_panel.width() // 16
+            )
+            button.setMaximumSize(
+                self.attr_panel.width() // 16, self.attr_panel.width() // 16
+            )
+            button.setIconSize(button.size())
         self.turns_widget.resize_turns_widget()
-
-    

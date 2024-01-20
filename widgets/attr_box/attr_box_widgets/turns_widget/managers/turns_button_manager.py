@@ -7,7 +7,7 @@ from utilities.TypeChecking.TypeChecking import (
 
 if TYPE_CHECKING:
     from widgets.attr_box.attr_box_widgets.turns_widget.turns_widget import TurnsWidget
-from widgets.buttons.adjust_turns_button import AdjustTurnsButton
+from widgets.factories.button_factory.buttons.adjust_turns_button import AdjustTurnsButton
 
 
 class TurnsButtonManager:

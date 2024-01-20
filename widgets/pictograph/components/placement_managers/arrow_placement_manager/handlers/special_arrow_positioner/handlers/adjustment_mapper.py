@@ -11,7 +11,7 @@ class AdjustmentMapper:
 
     def apply_adjustment_to_arrow(self, arrow: Arrow) -> None:
         tuple_generator = self.positioner.turns_tuple_generator
-        adjustment_key = tuple_generator.generate_turns_tuple(arrow)
+        adjustment_key = tuple_generator.generate_turns_tuple(arrow.scene.letter)
         adjustment = self.positioner.adjustment_calculator.calculate_turns_tuple(
             arrow, adjustment_key
         )

@@ -6,7 +6,7 @@ from ..attr_box.attr_box_widgets.motion_types_widget import MotionTypeWidget
 from ..attr_box.attr_box_widgets.start_end_loc_widget import StartEndLocWidget
 from ..attr_box.attr_box import AttrBox
 from ..attr_panel import AttrPanel
-from ..buttons.adjust_turns_button import AdjustTurnsButton
+from ..factories.button_factory.buttons.adjust_turns_button import AdjustTurnsButton
 
 from ..graph_editor_tab.graph_editor_header_widget import GraphEditorHeaderWidget
 from ..graph_editor_tab.graph_editor_turns_widget import GraphEditorTurnsWidget

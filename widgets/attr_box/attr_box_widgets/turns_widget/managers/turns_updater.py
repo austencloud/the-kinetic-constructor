@@ -85,14 +85,10 @@ class TurnsUpdater:
                     return CLOCKWISE
 
         elif motion.pictograph.letter.str in Type4_letters:
-            if other_motion.prop_rot_dir == NO_ROT:
                 self.turns_widget.attr_box.rot_dir_button_manager.show_prop_rot_dir_buttons()
                 self.turns_widget.attr_box.rot_dir_button_manager.cw_button.press()
                 return CLOCKWISE
-            elif other_motion.prop_rot_dir in [CLOCKWISE, COUNTER_CLOCKWISE]:
-                self.turns_widget.attr_box.rot_dir_button_manager.show_vtg_dir_buttons()
-                self.turns_widget.attr_box.rot_dir_button_manager.cw_button.press()
-                return COUNTER_CLOCKWISE
+
 
     def _set_vtg_dir_state_default(self) -> None:
         """Set the vtg direction state to default."""

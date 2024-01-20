@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from objects.arrow.arrow import Arrow
+from utilities.TypeChecking.TypeChecking import Letters
 from utilities.TypeChecking.letter_lists import (
     Type1_hybrid_letters,
     Type3_letters,
@@ -7,6 +8,7 @@ from utilities.TypeChecking.letter_lists import (
     Type2_letters,
 )
 from constants import *
+from widgets.letter import Letter
 
 if TYPE_CHECKING:
     from ..arrow_placement_manager import ArrowPlacementManager
@@ -107,7 +109,7 @@ class TurnsTupleGenerator:
                 f"{self._normalize_arrow_turns(self.red_arrow)})"
             )
 
-    def generate_turns_tuple(self, letter) -> str:
+    def generate_turns_tuple(self, letter: Letters) -> str:
         """Generate a key based on the letter and motion details."""
         key_handlers = {
             tuple(Type1_hybrid_letters): self._generate_Type1_hybrid_key,

@@ -3,8 +3,8 @@ from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Callable, Union
 
-from widgets.buttons.swap_button import SwapButton
-from ...buttons.adjust_turns_button import AdjustTurnsButton
+from widgets.factories.button_factory.buttons.swap_button import SwapButton
+from ...factories.button_factory.buttons.adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
     from widgets.attr_box.attr_box import AttrBox

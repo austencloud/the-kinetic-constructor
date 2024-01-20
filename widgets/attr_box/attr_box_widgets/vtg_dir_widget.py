@@ -22,7 +22,7 @@ from constants import (
     STATIC,
 )
 from utilities.TypeChecking.TypeChecking import VtgDirections
-from widgets.buttons.vtg_dir_button import VtgDirButton
+from widgets.factories.button_factory.buttons.rot_dir_buttons import VtgDirButton
 from .base_attr_box_widget import AttrBoxWidget
 
 if TYPE_CHECKING:
