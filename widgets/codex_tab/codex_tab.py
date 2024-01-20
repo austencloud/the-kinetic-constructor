@@ -9,7 +9,9 @@ from PyQt6.QtWidgets import (
     QApplication,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
+from Enums import LetterNumberType
 from constants import CODEX_PICTOGRAPH
+from utilities.TypeChecking.TypeChecking import Letters
 from widgets.letter import Letter
 from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.scroll_area import ScrollArea
@@ -22,16 +24,15 @@ if TYPE_CHECKING:
 
 class CodexTab(QWidget):
     imageGenerated = pyqtSignal(str)
-    selected_letters: List[Letter] = []
+    selected_letters: List[Letters] = []
 
     ### INITIALIZATION ###
 
     def __init__(self, main_tab_widget: "MainTabWidget") -> None:
         super().__init__(main_tab_widget)
         self.main_tab_widget = main_tab_widget
-        self.letters_dict = deepcopy(
-            self.main_tab_widget.main_widget.letters
-        )
+        self.letters_dict = self.main_tab_widget.main_widget.letters
+
         self._setup_ui()
 
     ### UI SETUP ###
@@ -59,7 +60,7 @@ class CodexTab(QWidget):
     def connect_buttons(self, letter_button_frame: LetterButtonFrame) -> None:
         for letter, button in letter_button_frame.buttons.items():
             button.clicked.connect(
-                lambda checked, letter_obj=letter: self.on_letter_button_clicked(letter_obj)
+                lambda checked, letter=letter: self.on_letter_button_clicked(letter)
             )
 
     def setup_button_frames(self) -> LetterButtonFrame:
@@ -139,7 +140,7 @@ class CodexTab(QWidget):
 
     ### IMAGE GENERATION ###
 
-    def on_letter_button_clicked(self, letter: Letter) -> None:
+    def on_letter_button_clicked(self, letter: Letters) -> None:
         button = self.letter_button_frame.buttons[letter]
         is_selected = letter in self.selected_letters
 
@@ -148,9 +149,8 @@ class CodexTab(QWidget):
         else:
             self.selected_letters.append(letter)
 
-
         for section in self.scroll_area.section_manager.sections.values():
-            if section.letter_type == letter.type:
+            if section.letter_type == self.get_letter_type(letter):
                 section.filter_tab.show_tabs_based_on_chosen_letters()
 
         button.setFlat(not is_selected)
@@ -158,6 +158,12 @@ class CodexTab(QWidget):
         if letter in self.selected_letters:
             self.process_pictographs_for_letter(letter)
         self.scroll_area.update_pictographs()
+
+    def get_letter_type(self, str: str) -> str | None:
+        for letter_type in LetterNumberType:
+            if str in letter_type.letters:
+                return letter_type.name.replace("_", "").lower().capitalize()
+        return None
 
     def process_pictographs_for_letter(self, letter) -> None:
         pictograph_dicts = self.main_tab_widget.main_widget.letters.get(letter, [])

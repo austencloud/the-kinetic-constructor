@@ -5,9 +5,11 @@ from PyQt6.QtSvg import QSvgRenderer
 from Enums import LetterNumberType
 from constants import LETTER_BTN_ICON_DIR
 from typing import TYPE_CHECKING, Dict, List
+from utilities.TypeChecking.TypeChecking import Letters
 
 from utilities.TypeChecking.letter_lists import all_letters
 from widgets.factories.letter_factory import LetterFactory
+from widgets.letter import Letter
 
 
 if TYPE_CHECKING:
@@ -19,7 +21,7 @@ class LetterButtonFrame(QFrame):
         super().__init__()
         self.main_widget = main_widget
         self.spacing = int(self.width() * 0.01)
-        self.buttons: Dict[all_letters, QPushButton] = {}
+        self.buttons: Dict[Letters, QPushButton] = {}
         self.init_letter_buttons_layout()
         self.add_black_borders()
 
@@ -90,7 +92,7 @@ class LetterButtonFrame(QFrame):
                 icon_path = self.get_icon_path(letter.type, letter.str)
                 button = self.create_button(icon_path, letter.str)
                 row_layout.addWidget(button)
-                self.buttons[letter] = button  # Storing the Letter object as the key
+                self.buttons[letter.str] = button  # Storing the Letter object as the key
 
             letter_buttons_layout.addLayout(row_layout)
 

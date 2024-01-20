@@ -33,6 +33,14 @@ class FilterTab(QTabWidget):
             self.lead_state_attr_panel,
         ]
         self.setup_ui()
+        self.currentChanged.connect(self.on_current_changed)
+
+    def on_current_changed(self, index: int) -> None:
+        # index is the index of the current tab
+        # Here you can write code that will be executed when the tab changes
+        for panel in self.panels:
+            for attr_box in panel.boxes:
+                attr_box.turns_widget.display_manager.reset_turns_display()
 
     def get_motion_types_from_letter_type(
         self, letter_type: LetterTypeNums
@@ -104,8 +112,3 @@ class FilterTab(QTabWidget):
         for panel in self.panels:
             panel.resize_attr_panel()
             
-    def currentChanged(self, index: int) -> None:
-        for panel in self.panels:
-            for attr_box in panel.boxes:
-                attr_box.turns_widget.display_manager.reset_turns_display()
-

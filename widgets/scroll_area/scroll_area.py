@@ -12,16 +12,11 @@ from ..pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from ..codex_tab.codex_tab import CodexTab
-    from ..option_picker_tab.option_picker_tab import OptionPickerTab
     from ..main_widget.main_widget import MainWidget
 
 
 class ScrollArea(QScrollArea):
-    def __init__(
-        self,
-        main_widget: "MainWidget",
-        parent_tab: Union["CodexTab", "OptionPickerTab"],
-    ) -> None:
+    def __init__(self, main_widget: "MainWidget", parent_tab: "CodexTab") -> None:
         super().__init__(parent_tab)
         self.main_widget = main_widget
         self.parent_tab = parent_tab
@@ -48,7 +43,7 @@ class ScrollArea(QScrollArea):
         self.container.setStyleSheet("background-color: #f2f2f2;")
         self.setWidget(self.container)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)  
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
     def update_pictographs(self) -> None:
         deselected_letters = self.pictograph_factory.get_deselected_letters()

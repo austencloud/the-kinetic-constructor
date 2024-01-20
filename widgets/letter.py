@@ -2,9 +2,20 @@ from Enums import LetterNumberType
 
 
 class Letter:
+    _cache = dict()
     def __init__(self, letter_str: str) -> None:
+        if hasattr(self, 'str'):
+            return
         self.str = letter_str
         self.type = self.get_letter_type(letter_str)
+
+    def __new__(cls, letter_str):
+        if letter_str in cls._cache:
+            return cls._cache[letter_str]
+        self = super(Letter, cls).__new__(cls)
+        cls._cache[letter_str] = self
+        return self
+
 
     def __eq__(self, other) -> bool:
         if isinstance(other, Letter):
