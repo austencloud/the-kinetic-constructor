@@ -1,15 +1,18 @@
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QFrame
 from typing import TYPE_CHECKING, Union
-
-from .managers.turns_display_manager import TurnDisplayManager
-from ..base_attr_box_widget import AttrBoxWidget
-from ..base_attr_box_widget import AttrBoxWidget
+from .managers.motion_relevance_checker import MotionRelevanceChecker
+from .managers.rot_dir_manager import RotationDirectionManager
 from .managers.turn_adjust_manager import TurnAdjustManager
+from .managers.turns_button_manager import TurnsButtonManager
+from .managers.turn_adjustment_display_manager import TurnsAdjustmentDisplayManager
+from .managers.turns_updater import TurnsUpdater
+from .managers.turns_display_manager import TurnDisplayManager
 from .managers.turn_direct_set_manager import TurnDirectSetManager
+from ..base_attr_box_widget import AttrBoxWidget
+from ..base_attr_box_widget import AttrBoxWidget
 
 if TYPE_CHECKING:
     from attr_box.attr_box import AttrBox
-    
 
 
 class TurnsWidget(AttrBoxWidget):
@@ -18,9 +21,13 @@ class TurnsWidget(AttrBoxWidget):
         self.attr_box: "AttrBox" = attr_box
         self.vbox_layout: QVBoxLayout = QVBoxLayout(self)
         self.turn_direct_set_manager = TurnDirectSetManager(self)
-        self.turn_adjust_manager = TurnAdjustManager(self.attr_box, self)
-        self.turns_display_manager = TurnDisplayManager(self, self.attr_box)
-
+        self.turn_adjust_manager = TurnAdjustManager(self)
+        self.turns_display_manager = TurnDisplayManager(self)
+        self.button_manager = TurnsButtonManager(self)
+        self.relevance_checker = MotionRelevanceChecker(attr_box)
+        self.updater = TurnsUpdater(self)
+        self.rotation_direction_manager = RotationDirectionManager(self)
+        self.display_manager = TurnsAdjustmentDisplayManager(self)
         self.initialize_components()
         self.setup_ui()
 
