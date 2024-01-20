@@ -1,23 +1,16 @@
 from PyQt6.QtWidgets import QPushButton
-from typing import Union, TYPE_CHECKING
+from typing import TYPE_CHECKING
+
 
 
 if TYPE_CHECKING:
-    from ..filter_tab.attr_box.attr_box_widgets.motion_types_widget import (
-        MotionTypeWidget,
-    )
-    from ..filter_tab.attr_box.attr_box_widgets.start_end_loc_widget import (
-        StartEndLocWidget,
-    )
-    from ..filter_tab.attr_box.attr_box_widgets.turns_widget.turns_widget.turns_widget import (
-        TurnsWidget,
-    )
+    from widgets.attr_box.attr_box_widgets.turns_widget.turns_widget import TurnsWidget
 
 
 class PropRotDirButton(QPushButton):
     def __init__(
         self,
-        parent_widget: Union["StartEndLocWidget", "TurnsWidget", "MotionTypeWidget"],
+        parent_widget: "TurnsWidget",
     ) -> None:
         super().__init__(parent_widget)
         self.parent_widget = parent_widget

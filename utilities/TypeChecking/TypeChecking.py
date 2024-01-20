@@ -1,9 +1,6 @@
-from typing import *
-from utilities.TypeChecking.MotionAttributes import *
-
-from .letter_lists import *
+from typing import Union, Literal, Set, Tuple, Dict, float
 from typing import Literal
-from constants import *
+from utilities.TypeChecking.MotionAttributes import Locations
 
 
 ParallelCombinationsSet = Set[Tuple[str, str, str, str]]

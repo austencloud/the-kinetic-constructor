@@ -1,8 +1,6 @@
 from typing import TYPE_CHECKING
 from constants import *
-from utilities.TypeChecking.TypeChecking import (
-    PropRotDirs,
-)
+from utilities.TypeChecking.MotionAttributes import PropRotDirs
 from utilities.TypeChecking.letter_lists import (
     Type2_letters,
     Type3_letters,
@@ -15,7 +13,7 @@ if TYPE_CHECKING:
     from ..turns_widget import TurnsWidget
 
 
-class RotationDirectionManager:
+class RotDirManager:
     def __init__(self, turns_widget: "TurnsWidget") -> None:
         self.attr_box = turns_widget.attr_box
         self.turns_widget = turns_widget
@@ -28,26 +26,28 @@ class RotationDirectionManager:
     def _determine_prop_rot_dir(
         self, motion: "Motion", other_motion: "Motion"
     ) -> PropRotDirs:
-        """Determine the property rotation direction."""
-        if (
-            motion.pictograph.letter in Type2_letters
-            or motion.pictograph.letter in Type3_letters
-        ):
-            if (
-                not self.attr_box.vtg_dir_btn_state[SAME]
-                and not self.attr_box.vtg_dir_btn_state[OPP]
-            ):
+        """Determine the prop rot dir of the motion based on the vtg directional relationship."""
+        letter = motion.pictograph.letter
+        vtg_dir_state = self.attr_box.vtg_dir_btn_state
+
+        rotation_mapping = {
+            (True, False): other_motion.prop_rot_dir,
+            (False, True): COUNTER_CLOCKWISE
+            if other_motion.prop_rot_dir == CLOCKWISE
+            else CLOCKWISE,
+            (False, False): CLOCKWISE
+            if other_motion.prop_rot_dir == NO_ROT
+            else COUNTER_CLOCKWISE,
+        }
+
+        if letter in Type2_letters or letter in Type3_letters:
+            if not any(vtg_dir_state.values()):
                 self._set_vtg_dir_state_default()
                 self.turns_widget.attr_box.rot_dir_button_manager.show_vtg_dir_buttons()
-            if self.attr_box.vtg_dir_btn_state[SAME]:
-                return other_motion.prop_rot_dir
-            if self.attr_box.vtg_dir_btn_state[OPP]:
-                if other_motion.prop_rot_dir == CLOCKWISE:
-                    return COUNTER_CLOCKWISE
-                elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                    return CLOCKWISE
 
-        elif motion.pictograph.letter in Type4_letters:
+            return rotation_mapping[(vtg_dir_state[SAME], vtg_dir_state[OPP])]
+
+        elif letter in Type4_letters:
             if other_motion.prop_rot_dir == NO_ROT:
                 self.turns_widget.attr_box.rot_dir_button_manager.show_prop_rot_dir_buttons()
                 self.turns_widget.attr_box.rot_dir_button_manager.cw_button.press()
@@ -59,5 +59,4 @@ class RotationDirectionManager:
 
     def _set_vtg_dir_state_default(self) -> None:
         """Set the vtg direction state to default."""
-        self.attr_box.vtg_dir_btn_state[SAME] = True
-        self.attr_box.vtg_dir_btn_state[OPP] = False
+        self.attr_box.vtg_dir_btn_state = {SAME: True, OPP: False}

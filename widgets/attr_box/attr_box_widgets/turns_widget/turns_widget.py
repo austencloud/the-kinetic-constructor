@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QFrame
 from typing import TYPE_CHECKING, Union
 from .managers.motion_relevance_checker import MotionRelevanceChecker
-from .managers.rot_dir_manager import RotationDirectionManager
+from .managers.rot_dir_manager import RotDirManager
 from .managers.turn_adjust_manager import TurnAdjustManager
 from .managers.turns_button_manager import TurnsButtonManager
 from .managers.turn_adjustment_display_manager import TurnsAdjustmentDisplayManager
@@ -26,14 +26,9 @@ class TurnsWidget(AttrBoxWidget):
         self.button_manager = TurnsButtonManager(self)
         self.relevance_checker = MotionRelevanceChecker(attr_box)
         self.updater = TurnsUpdater(self)
-        self.rotation_direction_manager = RotationDirectionManager(self)
+        self.rotation_direction_manager = RotDirManager(self)
         self.display_manager = TurnsAdjustmentDisplayManager(self)
-        self.initialize_components()
         self.setup_ui()
-
-    def initialize_components(self) -> None:
-        """Initialize components here."""
-        self.turns_label = None
 
     def setup_ui(self) -> None:
         self.turn_adjust_manager.setup_adjust_turns_buttons()
@@ -41,17 +36,7 @@ class TurnsWidget(AttrBoxWidget):
         self.turn_direct_set_manager.setup_direct_set_buttons()
 
     def _convert_turns_from_str_to_num(self, turns) -> Union[int, float]:
-        """Convert turn values from string to numeric."""
         return int(turns) if turns in ["0", "1", "2", "3"] else float(turns)
-
-    @staticmethod
-    def create_frame(layout: QHBoxLayout) -> QFrame:
-        frame = QFrame()
-        frame.setLayout(layout)
-        frame.setContentsMargins(0, 0, 0, 0)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
-        return frame
 
     def resize_turns_widget(self) -> None:
         self.turns_display_manager.update_turn_display()
