@@ -13,13 +13,15 @@ from widgets.letter import Letter
 
 
 if TYPE_CHECKING:
+    from widgets.codex.codex import Codex
     from widgets.main_widget.main_widget import MainWidget
 
 
 class LetterButtonFrame(QFrame):
-    def __init__(self, main_widget: "MainWidget") -> None:
+    def __init__(self, codex: "Codex") -> None:
         super().__init__()
-        self.main_widget = main_widget
+        self.c = codex
+        self.main_widget = codex.main_tab_widget.main_widget
         self.spacing = int(self.width() * 0.01)
         self.buttons: Dict[Letters, QPushButton] = {}
         self.init_letter_buttons_layout()
@@ -92,7 +94,9 @@ class LetterButtonFrame(QFrame):
                 icon_path = self.get_icon_path(letter.type, letter.str)
                 button = self.create_button(icon_path, letter.str)
                 row_layout.addWidget(button)
-                self.buttons[letter.str] = button  # Storing the Letter object as the key
+                self.buttons[
+                    letter.str
+                ] = button  # Storing the Letter object as the key
 
             letter_buttons_layout.addLayout(row_layout)
 
@@ -156,6 +160,25 @@ class LetterButtonFrame(QFrame):
     def select_all_letters(self) -> None:
         for button in self.buttons.values():
             button.click()
+
+    def on_letter_button_clicked(self, letter: Letters) -> None:
+        button = self.buttons[letter]
+        is_selected = letter in self.c.selected_letters
+
+        if is_selected:
+            self.c.selected_letters.remove(letter)
+        else:
+            self.c.selected_letters.append(letter)
+
+        for section in self.c.scroll_area.section_manager.sections.values():
+            if section.letter_type == self.c.get_letter_type(letter):
+                section.filter_tab.show_tabs_based_on_chosen_letters()
+
+        button.setFlat(not is_selected)
+        button.setStyleSheet(self.c.get_button_style(pressed=not is_selected))
+        if letter in self.c.selected_letters:
+            self.c.process_pictographs_for_letter(letter)
+        self.c.scroll_area.update_pictographs()
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.resize_letter_buttons()

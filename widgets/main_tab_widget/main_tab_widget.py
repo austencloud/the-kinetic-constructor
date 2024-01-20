@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import (
     QTabWidget,
 )
 
-from widgets.codex_tab.codex_tab import CodexTab
+from widgets.codex.codex import Codex
 
 
 if TYPE_CHECKING:
@@ -15,9 +15,9 @@ class MainTabWidget(QTabWidget):
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.setStyleSheet(self.get_main_tab_stylesheet())
-        codex_tab = CodexTab(self)
-        self.tabs = [codex_tab]
-        self.addTab(codex_tab, "Codex")
+        codex = Codex(self)
+        self.tabs = [codex]
+        self.addTab(codex, "Codex")
         # self.addTab(graph_editor_tab, "Graph Editor")
         # self.addTab(option_picker_tab, "Option Picker")
 

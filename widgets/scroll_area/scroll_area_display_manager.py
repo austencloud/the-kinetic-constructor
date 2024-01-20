@@ -70,8 +70,7 @@ class ScrollAreaDisplayManager:
 
     def get_keys_to_remove(self) -> List[str]:
         selected_letters = {
-            letter.split("_")[0]
-            for letter in self.scroll_area.parent_tab.selected_letters
+            letter.split("_")[0] for letter in self.scroll_area.codex.selected_letters
         }
         return [
             key

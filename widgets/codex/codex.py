@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     from widgets.main_tab_widget.main_tab_widget import MainTabWidget
 
 
-class CodexTab(QWidget):
+class Codex(QWidget):
     imageGenerated = pyqtSignal(str)
     selected_letters: List[Letters] = []
 
@@ -41,7 +41,7 @@ class CodexTab(QWidget):
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.setLayout(self.layout)
         self.setup_buttons()
-        self.scroll_area = ScrollArea(self.main_tab_widget.main_widget, self)
+        self.scroll_area = ScrollArea(self)
         self.left_layout = QVBoxLayout()
         self.right_layout = QVBoxLayout()
         self.left_layout.addWidget(self.scroll_area)
@@ -60,11 +60,11 @@ class CodexTab(QWidget):
     def connect_buttons(self, letter_button_frame: LetterButtonFrame) -> None:
         for letter, button in letter_button_frame.buttons.items():
             button.clicked.connect(
-                lambda checked, letter=letter: self.on_letter_button_clicked(letter)
+                lambda checked, letter=letter: self.letter_button_frame.on_letter_button_clicked(letter)
             )
 
     def setup_button_frames(self) -> LetterButtonFrame:
-        letter_button_frame = LetterButtonFrame(self.main_tab_widget.main_widget)
+        letter_button_frame = LetterButtonFrame(self)
         letter_button_frame.setStyleSheet("QFrame { border: 1px solid black; }")
         action_button_frame = self._setup_action_button_frame()
         return letter_button_frame, action_button_frame
@@ -139,25 +139,6 @@ class CodexTab(QWidget):
             """
 
     ### IMAGE GENERATION ###
-
-    def on_letter_button_clicked(self, letter: Letters) -> None:
-        button = self.letter_button_frame.buttons[letter]
-        is_selected = letter in self.selected_letters
-
-        if is_selected:
-            self.selected_letters.remove(letter)
-        else:
-            self.selected_letters.append(letter)
-
-        for section in self.scroll_area.section_manager.sections.values():
-            if section.letter_type == self.get_letter_type(letter):
-                section.filter_tab.show_tabs_based_on_chosen_letters()
-
-        button.setFlat(not is_selected)
-        button.setStyleSheet(self.get_button_style(pressed=not is_selected))
-        if letter in self.selected_letters:
-            self.process_pictographs_for_letter(letter)
-        self.scroll_area.update_pictographs()
 
     def get_letter_type(self, str: str) -> str | None:
         for letter_type in LetterNumberType:
@@ -243,6 +224,6 @@ class CodexTab(QWidget):
                         "blue_turns"
                     ] = self.scroll_area.filter_tab_manager.filters["turns"]
 
-    def resize_codex_tab(self) -> None:
+    def resize_codex(self) -> None:
         self.scroll_area.resize_scroll_area()
         self.scroll_area.update_pictographs()

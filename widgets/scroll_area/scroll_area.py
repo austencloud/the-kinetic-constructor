@@ -11,15 +11,15 @@ from utilities.TypeChecking.TypeChecking import Letters
 from ..pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from ..codex_tab.codex_tab import CodexTab
+    from ..codex.codex import Codex
     from ..main_widget.main_widget import MainWidget
 
 
 class ScrollArea(QScrollArea):
-    def __init__(self, main_widget: "MainWidget", parent_tab: "CodexTab") -> None:
-        super().__init__(parent_tab)
-        self.main_widget = main_widget
-        self.parent_tab = parent_tab
+    def __init__(self, codex: "Codex") -> None:
+        super().__init__(codex)
+        self.main_widget = codex.main_tab_widget.main_widget
+        self.codex = codex
         self.letters = self.main_widget.letters
         self.pictographs: Dict[Letters, Pictograph] = {}
         self._setup_ui()
@@ -47,7 +47,7 @@ class ScrollArea(QScrollArea):
 
     def update_pictographs(self) -> None:
         deselected_letters = self.pictograph_factory.get_deselected_letters()
-        selected_letters = set(self.parent_tab.selected_letters)
+        selected_letters = set(self.codex.selected_letters)
 
         if self._only_deselection_occurred(deselected_letters, selected_letters):
             for letter in deselected_letters:

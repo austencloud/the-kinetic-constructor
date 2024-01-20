@@ -52,7 +52,7 @@ class ScrollAreaPictographFactory:
             )
 
     def process_selected_letters(self) -> None:
-        selected_letters = set(self.scroll_area.parent_tab.selected_letters)
+        selected_letters = set(self.scroll_area.codex.selected_letters)
         for letter in selected_letters:
             if str(letter) not in self.scroll_area.main_widget.all_pictographs:
                 pictograph_dicts = self.scroll_area.letters.get(letter, [])
@@ -68,7 +68,7 @@ class ScrollAreaPictographFactory:
                 self.scroll_area.pictographs[pictograph_key] = pictograph
 
     def get_deselected_letters(self) -> Set[Letters]:
-        selected_letters = set(self.scroll_area.parent_tab.selected_letters)
+        selected_letters = set(self.scroll_area.codex.selected_letters)
         existing_letters = {
             key.split("_")[0] for key in self.scroll_area.pictographs.keys()
         }

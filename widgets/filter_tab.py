@@ -36,11 +36,14 @@ class FilterTab(QTabWidget):
         self.currentChanged.connect(self.on_current_changed)
 
     def on_current_changed(self, index: int) -> None:
-        # index is the index of the current tab
-        # Here you can write code that will be executed when the tab changes
+        for pictograph in self.section.scroll_area.pictographs.values():
+            if pictograph.letter.type == self.section.letter_type:
+                for motion in pictograph.motions.values():
+                    motion.turns_manager.set_turns(0)
+                pictograph.updater.update_pictograph()
         for panel in self.panels:
-            for attr_box in panel.boxes:
-                attr_box.turns_widget.display_manager.reset_turns_display()
+            for box in panel.boxes:
+                box.turns_widget.turns_display_manager.update_turns_display("0")
 
     def get_motion_types_from_letter_type(
         self, letter_type: LetterTypeNums
@@ -55,7 +58,7 @@ class FilterTab(QTabWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
 
     def show_tabs_based_on_chosen_letters(self) -> None:
-        selected_letters = self.section.scroll_area.parent_tab.selected_letters
+        selected_letters = self.section.scroll_area.codex.selected_letters
         tabs_to_show = self._determine_tabs_to_show(selected_letters)
         tabs_to_hide = self._determine_tabs_to_hide(tabs_to_show)
         self.show_tabs(tabs_to_show)
@@ -73,6 +76,7 @@ class FilterTab(QTabWidget):
         motion_types_present = set()
 
         for letter in selected_letters:
+            letter_type = self.section.scroll_area.codex.get_letter_type(letter)
             motion_types_present.update(motion_type_letter_combinations[str(letter)])
 
         if motion_types_present == {PRO} or motion_types_present == {ANTI}:
@@ -111,4 +115,3 @@ class FilterTab(QTabWidget):
     def resize_filter_tab(self) -> None:
         for panel in self.panels:
             panel.resize_attr_panel()
-            

@@ -211,23 +211,23 @@ Organized by number of calls:
          3        0.000117        0.000039             0.000129             0.000043 process_selected_letters       scroll_area\scroll_area_pictograph_factory.py:54
          3        0.000011        0.000004             0.000014             0.000005 hide_tabs                      widgets\filter_tab.py:102
          3        0.000031        0.000010             0.024094             0.008031 show_tabs                      widgets\filter_tab.py:93
-         3        0.000390        0.000130             0.653902             0.217967 process_pictographs_for_letter codex_tab\codex_tab.py:162
-         3        0.000282        0.000094             0.710295             0.236765 on_letter_button_clicked       codex_tab\codex_tab.py:143
+         3        0.000390        0.000130             0.653902             0.217967 process_pictographs_for_letter codex\codex.py:162
+         3        0.000282        0.000094             0.710295             0.236765 on_letter_button_clicked       codex\codex.py:143
          3        0.000317        0.000106             0.003126             0.001042 remove_deselected_letter_pictographs scroll_area\scroll_area_pictograph_factory.py:77
          3        0.000093        0.000031             0.000109             0.000036 _determine_tabs_to_show        widgets\filter_tab.py:69
          3        0.000170        0.000057             0.015614             0.005205 update_pictographs             scroll_area\scroll_area.py:53
          3        0.000067        0.000022             0.015089             0.005030 resize_filter_tab              widgets\filter_tab.py:111
          3        0.000007        0.000002             0.000007             0.000002 _determine_tabs_to_hide        widgets\filter_tab.py:87
          3        0.000050        0.000017             0.000065             0.000022 get_deselected_letters         scroll_area\scroll_area_pictograph_factory.py:70
-         3        0.000061        0.000020             0.710356             0.236785 <lambda>                       codex_tab\codex_tab.py:61
+         3        0.000061        0.000020             0.710356             0.236785 <lambda>                       codex\codex.py:61
          3        0.000015        0.000005             0.000021             0.000007 _only_deselection_occurred     scroll_area\scroll_area.py:66
          3        0.000332        0.000111             0.012100             0.004033 order_and_display_pictographs  scroll_area\scroll_area_display_manager.py:18
-         3        0.000003        0.000001             0.000003             0.000001 get_button_style               codex_tab\codex_tab.py:115
+         3        0.000003        0.000001             0.000003             0.000001 get_button_style               codex\codex.py:115
          3        0.000040        0.000013             0.000271             0.000090 get_ordered_pictographs        scroll_area\scroll_area_display_manager.py:82
          2        0.000060        0.000030             0.000698             0.000349 show_boxes_based_on_chosen_letters widgets\attr_panel.py:55
          2        0.000027        0.000013             0.091177             0.045588 inner                          tka-sequence-constructor\profiler.py:23
-         2        0.000256        0.000128             0.000358             0.000179 resize_letter_buttons          codex_tab\codex_letter_button_frame.py:135
-         2        0.000034        0.000017             0.000392             0.000196 resizeEvent                    codex_tab\codex_letter_button_frame.py:158
+         2        0.000256        0.000128             0.000358             0.000179 resize_letter_buttons          codex\codex_letter_button_frame.py:135
+         2        0.000034        0.000017             0.000392             0.000196 resizeEvent                    codex\codex_letter_button_frame.py:158
          1        0.000185        0.000185             0.272166             0.272166 adjust_turns                   managers\turn_adjustment_display_manager.py:15
          1        0.000029        0.000029             0.001929             0.001929 showEvent                      main_widget\main_widget.py:48
          1        0.000013        0.000013             0.000013             0.000013 convert_turn_floats_to_ints    managers\turn_adjustment_display_manager.py:36
@@ -359,7 +359,7 @@ Organized by total time:
         64        0.000450        0.000007             0.014545             0.000227 __init__                       prop\ghost_prop.py:14
         32        0.000436        0.000014             0.653379             0.020418 get_or_create_pictograph       scroll_area\scroll_area_pictograph_factory.py:30
         64        0.000390        0.000006             0.001930             0.000030 _create_motion                 components\pictograph_init.py:171
-         3        0.000390        0.000130             0.653902             0.217967 process_pictographs_for_letter codex_tab\codex_tab.py:162
+         3        0.000390        0.000130             0.653902             0.217967 process_pictographs_for_letter codex\codex.py:162
         56        0.000375        0.000007             0.001137             0.000020 resize_for_scroll_area         components\pictograph_view.py:19
         32        0.000371        0.000012             0.017875             0.000559 __init__                       objects\grid.py:87
         32        0.000365        0.000011             0.006514             0.000204 _load_grid_data                objects\grid.py:95
@@ -372,14 +372,14 @@ Organized by total time:
          3        0.000317        0.000106             0.003126             0.001042 remove_deselected_letter_pictographs scroll_area\scroll_area_pictograph_factory.py:77
         32        0.000298        0.000009             0.000326             0.000010 __init__                       wasd_adjustment_manager\wasd_adjustment_manager.py:5
         32        0.000284        0.000009             0.002214             0.000069 init_motions                   components\pictograph_init.py:55
-         3        0.000282        0.000094             0.710295             0.236765 on_letter_button_clicked       codex_tab\codex_tab.py:143
+         3        0.000282        0.000094             0.710295             0.236765 on_letter_button_clicked       codex\codex.py:143
         16        0.000271        0.000017             0.271938             0.016996 _adjust_turns_for_pictograph   managers\turns_updater.py:29
        304        0.000269        0.000001             0.000352             0.000001 __init__                       widgets\letter.py:6
        304        0.000267        0.000001             0.000267             0.000001 __new__                        widgets\letter.py:12
        128        0.000261        0.000002             0.000866             0.000007 __init__                       managers\arrow_rot_angle_manager.py:10
         96        0.000260        0.000003             0.000260             0.000003 _get_button_style              buttons\adjust_turns_button.py:24
        128        0.000259        0.000002             0.000259             0.000002 __init__                       managers\arrow_location_manager.py:11
-         2        0.000256        0.000128             0.000358             0.000179 resize_letter_buttons          codex_tab\codex_letter_button_frame.py:135
+         2        0.000256        0.000128             0.000358             0.000179 resize_letter_buttons          codex\codex_letter_button_frame.py:135
          3        0.000249        0.000083             0.040261             0.013420 show_tabs_based_on_chosen_letters widgets\filter_tab.py:57
         27        0.000249        0.000009             0.000249             0.000009 <genexpr>                      widgets\attr_panel.py:71
         32        0.000248        0.000008             0.093755             0.002930 create_pictograph              scroll_area\scroll_area_pictograph_factory.py:93
@@ -414,7 +414,7 @@ Organized by total time:
        128        0.000069        0.000001             0.000069             0.000001 __init__                       prop\prop_checker.py:11
          3        0.000067        0.000022             0.015089             0.005030 resize_filter_tab              widgets\filter_tab.py:111
         56        0.000065        0.000001             0.000071             0.000001 <lambda>                       scroll_area\scroll_area_display_manager.py:87
-         3        0.000061        0.000020             0.710356             0.236785 <lambda>                       codex_tab\codex_tab.py:61
+         3        0.000061        0.000020             0.710356             0.236785 <lambda>                       codex\codex.py:61
          2        0.000060        0.000030             0.000698             0.000349 show_boxes_based_on_chosen_letters widgets\attr_panel.py:55
        128        0.000058        0.000000             0.000058             0.000000 __init__                       prop\prop_rot_angle_manager.py:9
        128        0.000057        0.000000             0.000057             0.000000 __init__                       prop\prop_offset_calculator.py:10
@@ -431,7 +431,7 @@ Organized by total time:
         64        0.000047        0.000001             0.000047             0.000001 is_shift                       managers\motion_checker.py:11
          3        0.000040        0.000013             0.000271             0.000090 get_ordered_pictographs        scroll_area\scroll_area_display_manager.py:82
         32        0.000036        0.000001             0.000036             0.000001 __init__                       handlers\beta_prop_positioner.py:14
-         2        0.000034        0.000017             0.000392             0.000196 resizeEvent                    codex_tab\codex_letter_button_frame.py:158
+         2        0.000034        0.000017             0.000392             0.000196 resizeEvent                    codex\codex_letter_button_frame.py:158
         64        0.000033        0.000001             0.000033             0.000001 is_static                      managers\motion_checker.py:17
          1        0.000032        0.000032             0.272198             0.272198 <lambda>                       managers\turns_button_manager.py:38
          3        0.000031        0.000010             0.024094             0.008031 show_tabs                      widgets\filter_tab.py:93
@@ -475,7 +475,7 @@ Organized by total time:
          1        0.000004        0.000004             0.000006             0.000006 _clamp_turns                   managers\turns_updater.py:101
          1        0.000004        0.000004             0.000005             0.000005 resizeEvent                    beat_frame\start_pos_beat.py:39
          1        0.000003        0.000003             0.000003             0.000003 _convert_turns_from_str_to_num turns_widget\turns_widget.py:39
-         3        0.000003        0.000001             0.000003             0.000001 get_button_style               codex_tab\codex_tab.py:115
+         3        0.000003        0.000001             0.000003             0.000001 get_button_style               codex\codex.py:115
 
 
 Organized by cumulative time:
@@ -498,9 +498,9 @@ Organized by cumulative time:
        608        0.020258        0.000033             2.249097             0.003699 update_motion                  managers\motion_updater.py:12
       1216        0.038792        0.000032             1.794899             0.001476 update_arrow                   managers\arrow_updater.py:11
       1216        0.130766        0.000108             1.685088             0.001386 get_adjustment                 handlers\arrow_adjustment_calculator.py:14
-         3        0.000061        0.000020             0.710356             0.236785 <lambda>                       codex_tab\codex_tab.py:61
-         3        0.000282        0.000094             0.710295             0.236765 on_letter_button_clicked       codex_tab\codex_tab.py:143
-         3        0.000390        0.000130             0.653902             0.217967 process_pictographs_for_letter codex_tab\codex_tab.py:162
+         3        0.000061        0.000020             0.710356             0.236785 <lambda>                       codex\codex.py:61
+         3        0.000282        0.000094             0.710295             0.236765 on_letter_button_clicked       codex\codex.py:143
+         3        0.000390        0.000130             0.653902             0.217967 process_pictographs_for_letter codex\codex.py:162
         32        0.000436        0.000014             0.653379             0.020418 get_or_create_pictograph       scroll_area\scroll_area_pictograph_factory.py:30
       3648        0.415819        0.000114             0.525856             0.000144 generate_turns_tuple           handlers\turns_tuple_generator.py:110
       2432        0.034979        0.000014             0.456659             0.000188 update_svg                     graphical_object\svg_manager.py:50
@@ -634,8 +634,8 @@ Organized by cumulative time:
        560        0.000473        0.000001             0.000537             0.000001 switch_orientation             managers\motion_ori_calculator.py:43
        272        0.000468        0.000002             0.000468             0.000002 set_motion_turns               managers\motion_turn_manager.py:48
         32        0.000185        0.000006             0.000409             0.000013 init_letter_item               components\pictograph_init.py:86
-         2        0.000034        0.000017             0.000392             0.000196 resizeEvent                    codex_tab\codex_letter_button_frame.py:158
-         2        0.000256        0.000128             0.000358             0.000179 resize_letter_buttons          codex_tab\codex_letter_button_frame.py:135
+         2        0.000034        0.000017             0.000392             0.000196 resizeEvent                    codex\codex_letter_button_frame.py:158
+         2        0.000256        0.000128             0.000358             0.000179 resize_letter_buttons          codex\codex_letter_button_frame.py:135
        304        0.000269        0.000001             0.000352             0.000001 __init__                       widgets\letter.py:6
         32        0.000298        0.000009             0.000326             0.000010 __init__                       wasd_adjustment_manager\wasd_adjustment_manager.py:5
         32        0.000218        0.000007             0.000291             0.000009 init_quadrant_boundaries       components\pictograph_init.py:91
@@ -715,4 +715,4 @@ Organized by cumulative time:
          1        0.000004        0.000004             0.000006             0.000006 _clamp_turns                   managers\turns_updater.py:101
          1        0.000004        0.000004             0.000005             0.000005 resizeEvent                    beat_frame\start_pos_beat.py:39
          1        0.000003        0.000003             0.000003             0.000003 _convert_turns_from_str_to_num turns_widget\turns_widget.py:39
-         3        0.000003        0.000001             0.000003             0.000001 get_button_style               codex_tab\codex_tab.py:115
+         3        0.000003        0.000001             0.000003             0.000001 get_button_style               codex\codex.py:115

@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QHBoxLayout, QFrame
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, List
+from Enums import LetterNumberType
 from constants import ANTI, COLOR, DASH, MOTION_TYPE, PRO, STATIC
 from utilities.TypeChecking.TypeChecking import Letters
 from widgets.attr_box.attr_box import AttrBox
@@ -54,6 +55,19 @@ class AttrPanel(QFrame):
     def show_boxes_based_on_chosen_letters(
         self, selected_letters: List[Letters]
     ) -> None:
+        # First, filter the selected letters by the current letter type
+        # relevant_selected_letters = [
+        #     letter for letter in selected_letters if letter.letter_type == self.filter_tab.section.letter_type
+        # ]
+
+        relevant_selected_letters = []
+
+        for letter in selected_letters:
+            letter_type = self.get_letter_type(letter)
+            if letter_type == self.filter_tab.section.letter_type:
+                relevant_selected_letters.append(letter)
+
+        # Then, show or hide boxes based on the filtered selected letters
         motion_type_mapping = {
             PRO: pro_letters,
             ANTI: anti_letters,
@@ -62,11 +76,18 @@ class AttrPanel(QFrame):
         }
 
         for box in self.boxes:
-            box.hide()
-
-        for box in self.boxes:
             if box.attribute_type == MOTION_TYPE:
-                for motion_type, letters in motion_type_mapping.items():
-                    if any(letter in selected_letters for letter in letters):
-                        if box.motion_type == motion_type:
-                            box.show()
+                show_box = any(
+                    letter in relevant_selected_letters
+                    for letter in motion_type_mapping[box.motion_type]
+                )
+                if show_box:
+                    box.show()
+                else:
+                    box.hide()
+
+    def get_letter_type(self, str: str) -> str | None:
+        for letter_type in LetterNumberType:
+            if str in letter_type.letters:
+                return letter_type.name.replace("_", "").lower().capitalize()
+        return None
