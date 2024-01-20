@@ -10,7 +10,6 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from constants import CODEX_PICTOGRAPH
-from utilities.TypeChecking.TypeChecking import Letters
 from widgets.letter import Letter
 from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.scroll_area import ScrollArea
@@ -32,7 +31,7 @@ class CodexTab(QWidget):
         self.main_tab_widget = main_tab_widget
         self.letters_dict = deepcopy(
             self.main_tab_widget.main_widget.letters
-        )  # Deep copy of letters
+        )
         self._setup_ui()
 
     ### UI SETUP ###

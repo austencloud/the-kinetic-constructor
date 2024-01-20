@@ -17,6 +17,7 @@ from .attr_box_widgets.turns_widget.turns_widget import (
     TurnsWidget,
 )
 from .attr_box_widgets.base_attr_box_widget import AttrBoxWidget
+from PyQt6.QtWidgets import QSizePolicy
 
 if TYPE_CHECKING:
     from ..attr_panel import AttrPanel
@@ -68,6 +69,8 @@ class AttrBox(QFrame):
         self.layout.addWidget(self.header_widget)
         self.layout.addWidget(self.header_widget.separator)
         self.layout.addWidget(self.turns_widget)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.setSizePolicy(sizePolicy)
 
     def apply_border_style(self, color_hex: str) -> None:
         
@@ -82,3 +85,5 @@ class AttrBox(QFrame):
 
     def resize_attr_box(self) -> None:
         self.turns_widget.resize_turns_widget()
+
+    

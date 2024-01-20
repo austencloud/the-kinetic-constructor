@@ -31,7 +31,7 @@ class AttrPanel(QFrame):
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignRight)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         for box in self.boxes:
             self.layout.addWidget(box)
             box.setObjectName("AttrBox")
@@ -47,7 +47,7 @@ class AttrPanel(QFrame):
         self.setMinimumWidth(
             self.filter_tab.width()
             - (self.filter_tab.attr_box_border_width * len(self.boxes))
-        )
+        ) # sets width for resizing buttons
 
         for box in self.boxes:
             box.resize_attr_box()

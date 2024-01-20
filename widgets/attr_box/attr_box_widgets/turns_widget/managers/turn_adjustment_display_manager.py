@@ -51,3 +51,14 @@ class TurnsAdjustmentDisplayManager:
                     self.turns_widget.updater.update_motion_properties(
                         motion, new_turns
                     )
+
+    def reset_turns_display(self) -> None:
+        self.turns_widget.turns_display_manager.update_turns_display("0")
+        for (
+            pictograph
+        ) in (
+            self.attr_box.attr_panel.filter_tab.section.scroll_area.pictographs.values()
+        ):
+            for motion in pictograph.motions.values():
+                if self.turns_widget.turn_adjust_manager.is_motion_relevant(motion):
+                    self.turns_widget.updater.update_motion_properties(motion, 0)

@@ -10,13 +10,13 @@ class PictographChecker:
         self.p = pictograph
 
     def has_props_in_beta(self) -> bool:
-        return self.p.letter in beta_ending_letters
+        return self.p.letter.str in beta_ending_letters
 
     def has_props_in_alpha(self) -> bool:
-        return self.p.letter in alpha_ending_letters
+        return self.p.letter.str in alpha_ending_letters
 
     def has_props_in_gamma(self) -> bool:
-        return self.p.letter in gamma_ending_letters
+        return self.p.letter.str in gamma_ending_letters
 
     def has_hybrid_orientations(self) -> bool:
         red_prop, blue_prop = self.p.props[RED], self.p.props[BLUE]

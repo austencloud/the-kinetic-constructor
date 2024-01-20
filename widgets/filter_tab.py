@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import QTabWidget, QHBoxLayout
 from constants import MOTION_TYPE, COLOR, LEAD_STATE, PRO, ANTI
 from utilities.TypeChecking.TypeChecking import (
     LetterTypeNums,
-    Letters,
     MotionAttributes,
 )
 from data.letter_engine_data import (
@@ -46,7 +45,6 @@ class FilterTab(QTabWidget):
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignRight)
 
     def show_tabs_based_on_chosen_letters(self) -> None:
         selected_letters = self.section.scroll_area.parent_tab.selected_letters
@@ -86,22 +84,28 @@ class FilterTab(QTabWidget):
 
     def show_tabs(self, tabs: List[MotionAttributes]) -> None:
         for tab in tabs:
-            if tab == MOTION_TYPE and self.indexOf(self.motion_type_attr_panel) == -1:
-                self.addTab(self.motion_type_attr_panel, "Filter by Motion Type")
-            elif tab == COLOR and self.indexOf(self.color_attr_panel) == -1:
+            if tab == COLOR and self.indexOf(self.color_attr_panel) == -1:
                 self.addTab(self.color_attr_panel, "Filter by Colors")
+            elif tab == MOTION_TYPE and self.indexOf(self.motion_type_attr_panel) == -1:
+                self.addTab(self.motion_type_attr_panel, "Filter by Motion Type")
             elif tab == LEAD_STATE and self.indexOf(self.lead_state_attr_panel) == -1:
                 self.addTab(self.lead_state_attr_panel, "Filter by Lead State")
 
     def hide_tabs(self, tabs: List[MotionAttributes]) -> None:
         for tab in tabs:
-            if tab == MOTION_TYPE and self.indexOf(self.motion_type_attr_panel) != -1:
-                self.removeTab(self.indexOf(self.motion_type_attr_panel))
-            elif tab == COLOR and self.indexOf(self.color_attr_panel) != -1:
+            if tab == COLOR and self.indexOf(self.color_attr_panel) != -1:
                 self.removeTab(self.indexOf(self.color_attr_panel))
+            elif tab == MOTION_TYPE and self.indexOf(self.motion_type_attr_panel) != -1:
+                self.removeTab(self.indexOf(self.motion_type_attr_panel))
             elif tab == LEAD_STATE and self.indexOf(self.lead_state_attr_panel) != -1:
                 self.removeTab(self.indexOf(self.lead_state_attr_panel))
 
     def resize_filter_tab(self) -> None:
         for panel in self.panels:
             panel.resize_attr_panel()
+            
+    def currentChanged(self, index: int) -> None:
+        for panel in self.panels:
+            for attr_box in panel.boxes:
+                attr_box.turns_widget.display_manager.reset_turns_display()
+
