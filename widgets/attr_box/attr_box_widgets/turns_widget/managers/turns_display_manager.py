@@ -114,7 +114,7 @@ class TurnDisplayManager:
         )
         self.hbox_with_turn_display_and_buttons.addWidget(positive_buttons_frame)
 
-        self.turns_widget.vbox_layout.addWidget(self.turn_display_with_buttons_frame)
+        self.turns_widget.layout.addWidget(self.turn_display_with_buttons_frame)
 
     def calculate_adjust_turns_button_size(self) -> int:
         return int(self.attr_box.attr_panel.width() / 25)

@@ -49,10 +49,9 @@ class FilterTab(QTabWidget):
         tabs_to_hide = self._determine_tabs_to_hide(tabs_to_show)
         self.show_tabs(tabs_to_show)
         self.hide_tabs(tabs_to_hide)
-
-        if tabs_to_show:
-            self.setCurrentIndex(
-                self.indexOf(getattr(self, f"{tabs_to_show[0].lower()}_attr_panel"))
+        if MOTION_TYPE in tabs_to_show:
+            self.motion_type_attr_panel.show_boxes_based_on_chosen_letters(
+                selected_letters
             )
         self.resize_filter_tab()
 
@@ -99,5 +98,27 @@ class FilterTab(QTabWidget):
                 self.removeTab(self.indexOf(self.lead_state_attr_panel))
 
     def resize_filter_tab(self) -> None:
+        self.setMinimumWidth(
+            self.scroll_area.width()
+            - self.scroll_area.verticalScrollBar().width()
+            - self.scroll_area.layout.contentsMargins().left()
+            - self.scroll_area.layout.contentsMargins().right()
+        )
+        self.setMaximumWidth(
+            self.scroll_area.width()
+            - self.scroll_area.verticalScrollBar().width()
+            - self.scroll_area.layout.contentsMargins().left()
+            - self.scroll_area.layout.contentsMargins().right()
+        )
         for panel in self.panels:
             panel.resize_attr_panel()
+
+
+# Alright I'd like to add some functionality to how the boxes
+# get shown when we're filtering by motion type.
+# Right now, for Type 2 letters, we're adding both pro and anti AttrBoxes
+# (along with the static) regardless of what the current letter is. So it always has all three.
+# Instead, I want to make it so that if the letter is a pro letter like W, Y, Σ, θ, then it shows the pro
+# and the static. And if the letter is an anti letter like X, Z, Δ, Ω, then it shows the anti and the static.
+# If we have both a pro letter and an anti letter in the selected letters, then it shows all three.
+#

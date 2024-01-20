@@ -59,7 +59,6 @@ Type1_alpha_to_beta_letters = ["J", "K", "L"]
 Type1_gamma_opp_parallel_letters = ["M", "N", "O"]
 Type1_gamma_opp_antiparallel_letters = ["P", "Q", "R"]
 Type1_gamma_same_dir_letters = ["S", "T", "U", "V"]
-
 Type1_gamma_opp_letters = (
     Type1_gamma_opp_parallel_letters + Type1_gamma_opp_antiparallel_letters
 )
@@ -318,3 +317,39 @@ Type6_letters = [
 ]
 
 dash_letters = {"W-", "X-", "Y-", "Z-", "Σ-", "Δ-", "θ-", "Ω-", "Φ-", "Ψ-", "Λ-"}
+pro_letters = {
+    "A",
+    "D",
+    "G",
+    "J",
+    "M",
+    "P",
+    "S",
+    "W",
+    "Y",
+    "Σ",
+    "θ",
+    "W-",
+    "Y-",
+    "Σ-",
+    "θ-",
+}
+anti_letters = {
+    "B",
+    "E",
+    "H",
+    "K",
+    "N",
+    "Q",
+    "T",
+    "X",
+    "Z",
+    "Δ",
+    "Ω",
+    "X-",
+    "Z-",
+    "Δ-",
+    "Ω-",
+}
+dash_letters = {"W-", "X-", "Y-", "Z-", "Σ-", "Δ-", "θ-", "Ω-", "Φ-", "Ψ-", "Λ-"}
+static_letters = {"W", "X", "Y", "Z", "Σ", "Δ", "θ", "Ω", "Φ", "Ψ", "Λ", "α", "β", "Γ"}

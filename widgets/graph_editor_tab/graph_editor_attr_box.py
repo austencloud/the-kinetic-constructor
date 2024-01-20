@@ -35,10 +35,10 @@ class GraphEditorAttrBox(AttrBox):
         self.start_end_loc_widget = StartEndLocWidget(self)
         self.turns_widget = GraphEditorTurnsWidget(self)
 
-        self.vbox_layout.addWidget(self.header_widget)
-        self.vbox_layout.addWidget(self.motion_type_widget)
-        self.vbox_layout.addWidget(self.start_end_loc_widget)
-        self.vbox_layout.addWidget(self.turns_widget)
+        self.layout.addWidget(self.header_widget)
+        self.layout.addWidget(self.motion_type_widget)
+        self.layout.addWidget(self.start_end_loc_widget)
+        self.layout.addWidget(self.turns_widget)
 
     ### CREATE LABELS ###
 

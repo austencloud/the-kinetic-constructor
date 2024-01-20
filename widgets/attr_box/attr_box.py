@@ -54,7 +54,6 @@ class AttrBox(QFrame):
         if self.attribute_type == MOTION_TYPE:
             self.rot_dir_button_manager = RotDirButtonManager(self)
         self.header_widget = HeaderWidget(self)
-
         self.turns_widget = TurnsWidget(self)
 
         if self.attribute_type == COLOR:
@@ -64,13 +63,12 @@ class AttrBox(QFrame):
                 self.apply_border_style("#2E3192")
 
     def _setup_layouts(self) -> None:
-        self.vbox_layout = QVBoxLayout(self)
-        self.vbox_layout.setContentsMargins(0, 0, 0, 0)
-        self.vbox_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        self.vbox_layout.setSpacing(0)
-        self.vbox_layout.addWidget(self.header_widget)
-        self.vbox_layout.addWidget(self.header_widget.separator)
-        self.vbox_layout.addWidget(self.turns_widget)
+        self.layout:QVBoxLayout = QVBoxLayout(self)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
+        self.layout.addWidget(self.header_widget)
+        self.layout.addWidget(self.header_widget.separator)
+        self.layout.addWidget(self.turns_widget)
 
     def apply_border_style(self, color_hex: str) -> None:
         self.setObjectName("AttrBox")
