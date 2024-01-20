@@ -66,8 +66,8 @@ class TurnsUpdater:
     ) -> PropRotDirs:
         """Determine the property rotation direction."""
         if (
-            motion.pictograph.letter in Type2_letters
-            or motion.pictograph.letter in Type3_letters
+            motion.pictograph.letter.str in Type2_letters
+            or motion.pictograph.letter.str in Type3_letters
         ):
             if (
                 not self.attr_box.vtg_dir_btn_state[SAME]
@@ -83,7 +83,7 @@ class TurnsUpdater:
                 elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
                     return CLOCKWISE
 
-        elif motion.pictograph.letter in Type4_letters:
+        elif motion.pictograph.letter.str in Type4_letters:
             if other_motion.prop_rot_dir == NO_ROT:
                 self.turns_widget.attr_box.rot_dir_button_manager.show_prop_rot_dir_buttons()
                 self.turns_widget.attr_box.rot_dir_button_manager.cw_button.press()

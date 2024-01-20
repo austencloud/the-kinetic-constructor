@@ -78,7 +78,9 @@ class RotDirButtonManager:
     def _set_vtg_dir(self, vtg_dir: VtgDirections) -> None:
         for (
             pictograph
-        ) in self.attr_box.attr_panel.filter_tab.scroll_area.pictographs.values():
+        ) in (
+            self.attr_box.attr_panel.filter_tab.section.scroll_area.pictographs.values()
+        ):
             for motion in pictograph.motions.values():
                 other_motion = pictograph.motions[RED if motion.color == BLUE else BLUE]
                 if motion.check.is_dash() or motion.check.is_static():
@@ -121,7 +123,9 @@ class RotDirButtonManager:
     def _set_prop_rot_dir(self, prop_rot_dir: VtgDirections) -> None:
         for (
             pictograph
-        ) in self.attr_box.attr_panel.filter_tab.scroll_area.pictographs.values():
+        ) in (
+            self.attr_box.attr_panel.filter_tab.section.scroll_area.pictographs.values()
+        ):
             for motion in pictograph.motions.values():
                 if motion.motion_type in [DASH, STATIC]:
                     if motion.motion_type == self.attr_box.motion_type:

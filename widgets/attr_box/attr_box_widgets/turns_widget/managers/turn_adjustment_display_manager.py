@@ -7,7 +7,6 @@ if TYPE_CHECKING:
     from widgets.attr_box.attr_box_widgets.turns_widget.turns_widget import TurnsWidget
 
 
-
 class TurnsAdjustmentDisplayManager:
     def __init__(self, turns_widget: "TurnsWidget") -> None:
         self.attr_box = turns_widget.attr_box
@@ -23,10 +22,12 @@ class TurnsAdjustmentDisplayManager:
 
         for (
             pictograph
-        ) in self.attr_box.attr_panel.filter_tab.scroll_area.pictographs.values():
+        ) in (
+            self.attr_box.attr_panel.filter_tab.section.scroll_area.pictographs.values()
+        ):
             if (
-                pictograph.letter_type
-                == self.attr_box.attr_panel.filter_tab.letter_type
+                pictograph.letter.type
+                == self.attr_box.attr_panel.filter_tab.section.letter_type
             ):
                 self.turns_widget.updater._adjust_turns_for_pictograph(
                     pictograph, adjustment
@@ -42,7 +43,9 @@ class TurnsAdjustmentDisplayManager:
         self.turns_widget.turns_display_manager.update_turns_display(new_turns)
         for (
             pictograph
-        ) in self.attr_box.attr_panel.filter_tab.scroll_area.pictographs.values():
+        ) in (
+            self.attr_box.attr_panel.filter_tab.section.scroll_area.pictographs.values()
+        ):
             for motion in pictograph.motions.values():
                 if self.turns_widget.turn_adjust_manager.is_motion_relevant(motion):
                     self.turns_widget.updater.update_motion_properties(

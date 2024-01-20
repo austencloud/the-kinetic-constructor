@@ -7,13 +7,14 @@ from constants import LETTER_BTN_ICON_DIR
 from typing import TYPE_CHECKING, Dict, List
 
 from utilities.TypeChecking.letter_lists import all_letters
+from widgets.factories.letter_factory import LetterFactory
 
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
 
-class IGLetterButtonFrame(QFrame):
+class LetterButtonFrame(QFrame):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -84,24 +85,17 @@ class IGLetterButtonFrame(QFrame):
             row_layout.setSpacing(self.spacing)
             self.row_layouts.append(row_layout)
 
-            for letter in row:
-                letter_type = self.get_letter_type(letter)
-                icon_path = self.get_icon_path(letter_type, letter)
-                button = self.create_button(icon_path, letter)
+            for letter_str in row:
+                letter = LetterFactory.create_letter(letter_str)
+                icon_path = self.get_icon_path(letter.type, letter.str)
+                button = self.create_button(icon_path, letter.str)
                 row_layout.addWidget(button)
-                self.buttons[letter] = button
+                self.buttons[letter] = button  # Storing the Letter object as the key
 
             letter_buttons_layout.addLayout(row_layout)
 
         self.letter_buttons_layout = letter_buttons_layout
         self.setLayout(letter_buttons_layout)
-
-    # Function to get the Enum member key from a given letter
-    def get_letter_type(self, letter: str) -> str | None:
-        for letter_type in LetterNumberType:
-            if letter in letter_type.letters:
-                return letter_type.name.replace("_", "").lower().capitalize()
-        return None
 
     def get_icon_path(self, letter_type: str, letter: all_letters) -> str:
         return f"{LETTER_BTN_ICON_DIR}/{letter_type}/{letter}.svg"

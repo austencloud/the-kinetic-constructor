@@ -21,20 +21,19 @@ class ScrollAreaSection(QWidget):
     def __init__(
         self,
         letter_type: LetterTypeNums,
-        filter_tab,
         scroll_area: "ScrollArea",
     ) -> None:
         super().__init__(scroll_area)
         self.scroll_area = scroll_area
         self.letter_type = letter_type
-        self.filter_tab: FilterTab = filter_tab
+        self.filter_tab = FilterTab(self)
         self.pictographs: List[Pictograph] = []
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.pictograph_frame = QFrame()
         self.pictograph_layout: QGridLayout = QGridLayout(self.pictograph_frame)
         self.styled_text = self.get_styled_text(letter_type)
         self.section_label = self.create_section_label(self.styled_text)
-        self.initialize_ui()
+        self._add_widgets_to_layout()
 
     def create_section_label(self, styled_text: str) -> QLabel:
         """Creates a QLabel for the section label with the given styled text."""
@@ -51,7 +50,7 @@ class ScrollAreaSection(QWidget):
         return section_label
 
 
-    def initialize_ui(self) -> None:
+    def _add_widgets_to_layout(self) -> None:
         self.layout.addWidget(self.section_label)
         self.layout.addWidget(self.filter_tab)
         self.layout.addWidget(self.pictograph_frame)

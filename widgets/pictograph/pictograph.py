@@ -17,6 +17,7 @@ from utilities.TypeChecking.TypeChecking import (
     VtgDirections,
     VtgTimings,
 )
+from widgets.letter import Letter
 from .components.pictograph_attr_manager import PictographAttrManager
 from .components.pictograph_checker import PictographChecker
 from .components.pictograph_getter import PictographGetter
@@ -32,7 +33,7 @@ from .components.pictograph_event_handler import PictographMouseEventHandler
 from .components.pictograph_init import PictographInit
 
 from utilities.letter_item import LetterItem
-from utilities.letter_engine import LetterCalculator
+from utilities.letter_calculator import LetterCalculator
 
 if TYPE_CHECKING:
     from widgets.scroll_area.scroll_area import ScrollArea
@@ -79,7 +80,7 @@ class Pictograph(QGraphicsScene):
     ghost_arrows: Dict[Colors, GhostArrow]
     ghost_props: Dict[Colors, GhostProp]
     motions: Dict[Colors, Motion]
-    letter: Letters
+    letter: Letter
     letter_type: LetterTypeNums
     pictograph_dict: Dict
     motion_dict_list: List[Dict]

@@ -13,15 +13,17 @@ from data.letter_engine_data import (
 from widgets.attr_panel import AttrPanel
 from PyQt6.QtCore import Qt
 
+from widgets.letter import Letter
+
+
 if TYPE_CHECKING:
-    from widgets.scroll_area.scroll_area import ScrollArea
+    from widgets.scroll_area.scroll_area_section import ScrollAreaSection
 
 
 class FilterTab(QTabWidget):
-    def __init__(self, scroll_area: "ScrollArea", letter_type: LetterTypeNums) -> None:
-        super().__init__(scroll_area)
-        self.scroll_area = scroll_area
-        self.letter_type = letter_type
+    def __init__(self, section: "ScrollAreaSection") -> None:
+        super().__init__(section)
+        self.section = section
         self.attr_box_border_width = 3
         self.motion_type_attr_panel = AttrPanel(self, MOTION_TYPE)
         self.color_attr_panel = AttrPanel(self, COLOR)
@@ -47,7 +49,7 @@ class FilterTab(QTabWidget):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignRight)
 
     def show_tabs_based_on_chosen_letters(self) -> None:
-        selected_letters = self.scroll_area.parent_tab.selected_letters
+        selected_letters = self.section.scroll_area.parent_tab.selected_letters
         tabs_to_show = self._determine_tabs_to_show(selected_letters)
         tabs_to_hide = self._determine_tabs_to_hide(tabs_to_show)
         self.show_tabs(tabs_to_show)
@@ -59,13 +61,13 @@ class FilterTab(QTabWidget):
         self.resize_filter_tab()
 
     def _determine_tabs_to_show(
-        self, selected_letters: set[Letters]
+        self, selected_letters: set[Letter]
     ) -> List[MotionAttributes]:
         tabs_to_show = []
         motion_types_present = set()
 
         for letter in selected_letters:
-            motion_types_present.update(motion_type_letter_combinations[letter])
+            motion_types_present.update(motion_type_letter_combinations[str(letter)])
 
         if motion_types_present == {PRO} or motion_types_present == {ANTI}:
             tabs_to_show.append(COLOR)

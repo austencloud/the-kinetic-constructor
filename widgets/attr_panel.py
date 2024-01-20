@@ -11,6 +11,7 @@ from utilities.TypeChecking.letter_lists import (
     dash_letters,
     static_letters,
 )
+from widgets.letter import Letter
 
 if TYPE_CHECKING:
     from widgets.filter_tab import FilterTab
@@ -47,16 +48,17 @@ class AttrPanel(QFrame):
             self.filter_tab.width()
             - (self.filter_tab.attr_box_border_width * len(self.boxes))
         )
-        # self.setMaximumWidth(
-        #     self.filter_tab.width()
-        #     - (self.filter_tab.attr_box_border_width * len(self.boxes))
-        # )
+
         for box in self.boxes:
             box.resize_attr_box()
 
     def show_boxes_based_on_chosen_letters(
-        self, selected_letters: List[Letters]
+        self, selected_letters: List[Letter]
     ) -> None:
+        relevant_selected_letters = {
+            letter.str: letter.type for letter in selected_letters
+        }
+
         motion_type_mapping = {
             PRO: pro_letters,
             ANTI: anti_letters,
@@ -65,11 +67,14 @@ class AttrPanel(QFrame):
         }
 
         for box in self.boxes:
-            box.hide()
-
-        for box in self.boxes:
             if box.attribute_type == MOTION_TYPE:
-                for motion_type, letters in motion_type_mapping.items():
-                    if any(letter in selected_letters for letter in letters):
-                        if box.motion_type == motion_type:
-                            box.show()
+                show_box = any(
+                    letter_str in motion_type_mapping[box.motion_type]
+                    and relevant_selected_letters[letter_str]
+                    == self.filter_tab.section.letter_type
+                    for letter_str in relevant_selected_letters
+                )
+                if show_box:
+                    box.show()
+                else:
+                    box.hide()

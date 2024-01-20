@@ -19,6 +19,7 @@ from constants import (
     START_POS,
 )
 from utilities.TypeChecking.TypeChecking import Letters
+from widgets.letter import Letter
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
@@ -29,12 +30,17 @@ class LetterLoader:
         self.main_widget = main_widget
 
     def load_all_letters(self) -> Dict[Letters, List[Dict]]:
-        df: pd.Series = pd.read_csv("PictographDataframe.csv")
+        df = pd.read_csv("PictographDataframe.csv")
         df = df.sort_values(by=[LETTER, START_POS, END_POS])
         df = self.add_turns_and_ori_to_pictograph_dict(df)
-        letters = (
-            df.groupby(LETTER).apply(lambda x: x.to_dict(orient="records")).to_dict()
-        )
+        
+        # Create Letter objects and use them as keys
+        letters = {}
+        for letter_str in df[LETTER].unique():
+            letter_obj = Letter(letter_str)
+            letter_dicts = df[df[LETTER] == letter_str].to_dict(orient="records")
+            letters[letter_obj] = letter_dicts
+
         return letters
 
     def add_turns_and_ori_to_pictograph_dict(self, pictograph_dict) -> Dict:

@@ -11,9 +11,10 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, pyqtSignal
 from constants import CODEX_PICTOGRAPH
 from utilities.TypeChecking.TypeChecking import Letters
+from widgets.letter import Letter
 from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.scroll_area import ScrollArea
-from .codex_letter_button_frame import IGLetterButtonFrame
+from .codex_letter_button_frame import LetterButtonFrame
 
 
 if TYPE_CHECKING:
@@ -22,7 +23,7 @@ if TYPE_CHECKING:
 
 class CodexTab(QWidget):
     imageGenerated = pyqtSignal(str)
-    selected_letters: List[Letters] = []
+    selected_letters: List[Letter] = []
 
     ### INITIALIZATION ###
 
@@ -50,20 +51,20 @@ class CodexTab(QWidget):
         self.connect_buttons(self.letter_button_frame)
 
     def setup_buttons(self) -> None:
-        self.letter_button_frame: IGLetterButtonFrame = self.setup_button_frames()[0]
+        self.letter_button_frame: LetterButtonFrame = self.setup_button_frames()[0]
         self.action_button_frame: QFrame = self.setup_button_frames()[1]
         self.button_panel = self._setup_button_panel(
             self.letter_button_frame, self.action_button_frame
         )
 
-    def connect_buttons(self, letter_button_frame: IGLetterButtonFrame) -> None:
-        for key, button in letter_button_frame.buttons.items():
+    def connect_buttons(self, letter_button_frame: LetterButtonFrame) -> None:
+        for letter, button in letter_button_frame.buttons.items():
             button.clicked.connect(
-                lambda checked, letter=key: self.on_letter_button_clicked(letter)
+                lambda checked, letter_obj=letter: self.on_letter_button_clicked(letter_obj)
             )
 
-    def setup_button_frames(self) -> IGLetterButtonFrame:
-        letter_button_frame = IGLetterButtonFrame(self.main_tab_widget.main_widget)
+    def setup_button_frames(self) -> LetterButtonFrame:
+        letter_button_frame = LetterButtonFrame(self.main_tab_widget.main_widget)
         letter_button_frame.setStyleSheet("QFrame { border: 1px solid black; }")
         action_button_frame = self._setup_action_button_frame()
         return letter_button_frame, action_button_frame
@@ -139,9 +140,8 @@ class CodexTab(QWidget):
 
     ### IMAGE GENERATION ###
 
-    def on_letter_button_clicked(self, letter) -> None:
+    def on_letter_button_clicked(self, letter: Letter) -> None:
         button = self.letter_button_frame.buttons[letter]
-        letter_type = self.letter_button_frame.get_letter_type(letter)
         is_selected = letter in self.selected_letters
 
         if is_selected:
@@ -149,8 +149,9 @@ class CodexTab(QWidget):
         else:
             self.selected_letters.append(letter)
 
+
         for section in self.scroll_area.section_manager.sections.values():
-            if section.letter_type == letter_type:
+            if section.letter_type == letter.type:
                 section.filter_tab.show_tabs_based_on_chosen_letters()
 
         button.setFlat(not is_selected)

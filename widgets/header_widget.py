@@ -46,9 +46,9 @@ class HeaderWidget(AttrBoxWidget):
 
     def _setup_layout(self) -> None:
         self.layout = QHBoxLayout(self)
-        self.layout.addStretch(1)
+        # self.layout.addStretch(1)
         self.layout.addWidget(self.header_label)
-        self.layout.addStretch(1)
+        # self.layout.addStretch(1)
         self.layout.addWidget(self.separator)
 
     def _setup_layout_with_vtg_dir_buttons(self) -> None:

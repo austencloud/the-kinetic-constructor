@@ -1,6 +1,7 @@
 import re
 from typing import TYPE_CHECKING, Dict, Tuple, Union
 from utilities.TypeChecking.letter_lists import Type1_letters
+
 if TYPE_CHECKING:
     from ..special_arrow_positioner import SpecialArrowPositioner
 
@@ -25,7 +26,7 @@ class DataSorter:
             ]
             char = re.search(r"[so]", key)
 
-            if self.positioner.pictograph.letter in Type1_letters:
+            if self.positioner.pictograph.letter.str in Type1_letters:
                 return (numbers[0], numbers[1] if len(numbers) > 1 else float("inf"))
             elif char:
                 char_priority = {"s": 1, "o": 2}.get(char.group(), 3)

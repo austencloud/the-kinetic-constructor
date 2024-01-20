@@ -45,7 +45,7 @@ class ArrowLocationCalculator:
         )
 
     def get_dash_location(self) -> Locations:
-        if self.a.scene.letter in Type3_letters and self.a.motion.turns == 0:
+        if str(self.a.scene.letter) in Type3_letters and self.a.motion.turns == 0:
             return self._zero_turns_type_3_dash_location()
         return (
             self._dash_location_zero_turns()
@@ -55,10 +55,12 @@ class ArrowLocationCalculator:
 
     def _dash_location_zero_turns(self) -> Locations:
         other_motion = self.a.scene.get.other_motion(self.a.motion)
-        if self.a.scene.letter in Type3_letters or self.a.scene.letter in Type4_letters:
+        letter_str = str(self.a.scene.letter)
+        
+        if letter_str in Type3_letters or letter_str in Type4_letters:
             return self._default_dash_location()
 
-        elif self.a.scene.letter in ["Λ-"]:
+        elif letter_str in ["Λ-"]:
             loc_map = {
                 ((NORTH, SOUTH), (EAST, WEST)): EAST,
                 ((EAST, WEST), (NORTH, SOUTH)): NORTH,
