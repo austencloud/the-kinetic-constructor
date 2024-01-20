@@ -15,7 +15,7 @@ class AdjustmentCalculator:
     def __init__(self, positioner: "SpecialArrowPositioner") -> None:
         self.positioner = positioner
 
-    def calculate_adjustment(
+    def calculate_turns_tuple(
         self, arrow: Arrow, adjustment_key: str
     ) -> Optional[Tuple[int, int]]:
         placements = self.positioner.data_loader.load_placements()
@@ -23,21 +23,21 @@ class AdjustmentCalculator:
             self.positioner.pictograph.letter, {}
         )
         return letter_data.get(adjustment_key, {}).get(
-            self.positioner.turns_tuple_generator.generate_adjustment_key(arrow)
+            self.positioner.turns_tuple_generator.generate_turns_tuple(arrow)
         )
 
     def get_adjustment_for_letter(
-        self, letter: str, arrow: Arrow, adjustment_key: str = None
+        self, letter: str, arrow: Arrow, turns_tuple: str = None
     ) -> Optional[Tuple[int, int]]:
-        if adjustment_key is None:
-            adjustment_key = (
-                self.positioner.turns_tuple_generator.generate_adjustment_key(arrow)
+        if turns_tuple is None:
+            turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(
+                arrow
             )
         self.special_placements: Dict[
             str, Dict
         ] = self.positioner.data_loader.load_placements()
         letter_adjustments: Dict = self.special_placements.get(letter, {}).get(
-            adjustment_key, {}
+            turns_tuple, {}
         )
 
         adjustment_map = {
@@ -50,6 +50,7 @@ class AdjustmentCalculator:
             **{
                 letter: letter_adjustments.get(arrow.color)
                 for letter in non_hybrid_letters
+                if letter not in ["S", "T"]
             },
             **{
                 letter: letter_adjustments.get(arrow.motion.motion_type)
