@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING, Dict, List, Tuple
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView, QGraphicsPixmapItem
 
 from objects.arrow.arrow import Arrow
-
 from objects.arrow.ghost_arrow import GhostArrow
 from objects.grid import Grid
 from objects.motion.motion import Motion

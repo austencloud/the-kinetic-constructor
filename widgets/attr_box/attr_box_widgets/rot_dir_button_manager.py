@@ -12,8 +12,8 @@ from constants import (
     STATIC,
 )
 from utilities.TypeChecking.TypeChecking import VtgDirections
-from ..buttons.prop_rot_dir_button import PropRotDirButton
-from ..buttons.vtg_dir_button import VtgDirButton
+from ...buttons.prop_rot_dir_button import PropRotDirButton
+from ...buttons.vtg_dir_button import VtgDirButton
 
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QPushButton

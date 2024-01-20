@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QVBoxLayout
 from typing import TYPE_CHECKING, Union
 from .managers.motion_relevance_checker import MotionRelevanceChecker
-from .managers.rot_dir_manager import RotDirManager
+from .managers.turns_widget_rot_dir_manager import TurnsWidgetRotDirManager
 from .managers.turn_adjust_manager import TurnAdjustManager
 from .managers.turns_button_manager import TurnsButtonManager
 from .managers.turn_adjustment_display_manager import TurnsAdjustmentDisplayManager
@@ -16,9 +16,9 @@ if TYPE_CHECKING:
 
 
 class TurnsWidget(AttrBoxWidget):
-    def __init__(self, attr_box) -> None:
+    def __init__(self, attr_box: "AttrBox") -> None:
         super().__init__(attr_box)
-        self.attr_box: "AttrBox" = attr_box
+        self.attr_box = attr_box
         self.vbox_layout: QVBoxLayout = QVBoxLayout(self)
         self.turn_direct_set_manager = TurnDirectSetManager(self)
         self.turn_adjust_manager = TurnAdjustManager(self)
@@ -26,7 +26,7 @@ class TurnsWidget(AttrBoxWidget):
         self.button_manager = TurnsButtonManager(self)
         self.relevance_checker = MotionRelevanceChecker(attr_box)
         self.updater = TurnsUpdater(self)
-        self.rotation_direction_manager = RotDirManager(self)
+        self.rotation_direction_manager = TurnsWidgetRotDirManager(self)
         self.display_manager = TurnsAdjustmentDisplayManager(self)
         self.setup_ui()
 

@@ -11,7 +11,7 @@ from utilities.TypeChecking.TypeChecking import (
     MotionTypes,
 )
 
-from .rot_dir_button_manager import RotDirButtonManager
+from .attr_box_widgets.rot_dir_button_manager import RotDirButtonManager
 from widgets.header_widget import HeaderWidget
 from .attr_box_widgets.turns_widget.turns_widget import (
     TurnsWidget,
