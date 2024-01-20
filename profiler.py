@@ -1,12 +1,13 @@
 import cProfile
 import pstats
 import os
+import tempfile
 from typing import Any, Callable, Optional, List
 
 
 class Profiler:
     def __init__(self, exclude_modules: Optional[List[str]] = None) -> None:
-        self.profiler = cProfile.Profile()
+        self.profiler: cProfile.Profile = cProfile.Profile()
         self.exclude_modules = exclude_modules or ["PyQt6", "__main__"]
 
     def enable(self) -> None:
@@ -35,21 +36,33 @@ class Profiler:
         return inner
 
     def write_profiling_stats_to_file(self, file_path: str, app_root: str) -> None:
-        stats = pstats.Stats(self.profiler)
+        # Create a temporary file and close it immediately to avoid locking issues
+        fd, temp_file_name = tempfile.mkstemp()
+        os.close(fd)
 
-        # Normalize the app_root path to use consistent separators
-        app_root = os.path.normpath(app_root)
+        try:
+            # Ensure profiler data is dumped correctly
+            self.profiler.dump_stats(temp_file_name)
 
-        with open(file_path, "w", encoding='utf-8') as f:
-            f.write("Organized by number of calls:\n\n")
-            self._write_stats_section(f, stats, "calls", app_root)
-            f.write("\n\n")  # Separate the two sections
-            f.write("Organized by total time:\n\n")
-            self._write_stats_section(f, stats, "time", app_root)
-            f.write("\n\n")  # Separate the two sections
-            f.write("Organized by cumulative time:\n\n")
-            self._write_stats_section(f, stats, "cumulative", app_root)
+            # Instantiate pstats.Stats with the temporary file
+            stats = pstats.Stats(temp_file_name)
 
+            # Normalize the app_root path to use consistent separators
+            app_root = os.path.normpath(app_root)
+
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write("Organized by number of calls:\n\n")
+                self._write_stats_section(f, stats, "calls", app_root)
+                f.write("\n\n")  # Separate the two sections
+                f.write("Organized by total time:\n\n")
+                self._write_stats_section(f, stats, "time", app_root)
+                f.write("\n\n")  # Separate the two sections
+                f.write("Organized by cumulative time:\n\n")
+                self._write_stats_section(f, stats, "cumulative", app_root)
+        finally:
+            # Clean up the temporary file
+            os.remove(temp_file_name)
+            
     def _write_stats_section(self, file, stats, sort_by: str, app_root: str) -> None:
         stats.sort_stats(sort_by)
         header = "{:>10} {:>15} {:>15} {:>20} {:>20} {:>30}\n".format(

@@ -81,7 +81,7 @@ class ScrollAreaSection(QWidget):
             "Dual": "#00b3ff",  # cyan
             "Dash": "#26e600",  # green
             "Cross": "#26e600",  # green
-            "Static": "#ff4000",  # orange
+            "Static": "#eb7d00",  # orange
             "-": "#000000",  # black
         }
 

@@ -10,8 +10,8 @@ class AdjustmentMapper:
         self.positioner = positioner
 
     def apply_adjustment_to_arrow(self, arrow: Arrow) -> None:
-        key_generator = self.positioner.turns_tuple_generator
-        adjustment_key = key_generator.generate_adjustment_key(arrow)
+        tuple_generator = self.positioner.turns_tuple_generator
+        adjustment_key = tuple_generator.generate_turns_tuple(arrow)
         adjustment = self.positioner.adjustment_calculator.calculate_adjustment(
             arrow, adjustment_key
         )

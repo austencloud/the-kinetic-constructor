@@ -1,57 +1,35 @@
+import os
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow
-from PyQt6.QtGui import QGuiApplication
-from widgets.main_widget.main_widget import MainWidget
 from profiler import Profiler
-import os
+from utilities.window_manager import MainWindowGeometryManager
+from widgets.main_widget.main_widget import MainWidget
 
 
 class MainWindow(QMainWindow):
     def __init__(self, profiler: Profiler) -> None:
         super().__init__()
         self.profiler = profiler
-
-        self._init_main_window()
-
-    def _init_main_window(self) -> None:
         self.main_widget = MainWidget(self)
-        self.installEventFilter(self.main_widget)
+        self.window_manager = MainWindowGeometryManager(self)
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Sequence Constructor")
         self.show()
 
-    def _set_dimensions(self) -> None:
-        screens = QGuiApplication.screens()
-        screen = screens[1] if len(screens) > 1 else QGuiApplication.primaryScreen()
-        available_geometry = screen.availableGeometry()
-        window_width = int(available_geometry.width() * 0.9)
-        window_height = int(available_geometry.height() * 0.9)
-        x = available_geometry.x() + int(
-            (available_geometry.width() - window_width) / 2
-        )
-        y = available_geometry.y() + int(
-            (available_geometry.height() - window_height) / 2
-        )
-        self.setGeometry(x, y, window_width, window_height)
-
     def exec_with_profiling(self, app: QApplication) -> int:
         for func in [app.exec, self.show]:
             self.profiler.runcall(func)
+        return 0
+
 
 
 def main() -> None:
     app = QApplication(sys.argv)
     profiler = Profiler()
     main_window = MainWindow(profiler)
-
-    main_window.setFocus()
     exit_code = main_window.exec_with_profiling(app)
     root_directory = os.path.dirname(os.path.abspath(__file__))
-
-    main_window.profiler.write_profiling_stats_to_file(
-        "main_profiling_stats.txt", root_directory
-    )
-
+    profiler.write_profiling_stats_to_file("main_profiling_stats.txt", root_directory)
     sys.exit(exit_code)
 
 

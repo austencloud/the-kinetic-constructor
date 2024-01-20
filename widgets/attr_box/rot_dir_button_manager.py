@@ -19,11 +19,11 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QPushButton
 
 if TYPE_CHECKING:
-    from widgets.attr_box.motion_type_attr_box import MotionTypeAttrBox
+    from widgets.attr_box.attr_box import AttrBox
 
 
 class RotDirButtonManager:
-    def __init__(self, attr_box: "MotionTypeAttrBox") -> None:
+    def __init__(self, attr_box: "AttrBox") -> None:
         self.attr_box = attr_box
 
         self.prop_rot_dir_buttons: List[
@@ -93,7 +93,7 @@ class RotDirButtonManager:
                                     + "_"
                                     + PROP_ROT_DIR: other_motion.prop_rot_dir,
                                 }
-                                motion.scene.state_updater.update_pictograph(
+                                motion.pictograph.updater.update_pictograph(
                                     pictograph_dict
                                 )
                             elif vtg_dir == OPP:
@@ -106,7 +106,7 @@ class RotDirButtonManager:
                                         + "_"
                                         + PROP_ROT_DIR: COUNTER_CLOCKWISE,
                                     }
-                                    motion.scene.state_updater.update_pictograph(
+                                    motion.pictograph.updater.update_pictograph(
                                         pictograph_dict
                                     )
                                 elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
@@ -114,7 +114,7 @@ class RotDirButtonManager:
                                     pictograph_dict = {
                                         motion.color + "_" + PROP_ROT_DIR: CLOCKWISE,
                                     }
-                                    motion.scene.state_updater.update_pictograph(
+                                    motion.pictograph.updater.update_pictograph(
                                         pictograph_dict
                                     )
 
@@ -128,7 +128,7 @@ class RotDirButtonManager:
                         pictograph_dict = {
                             f"{motion.color}_prop_rot_dir": prop_rot_dir,
                         }
-                        motion.scene.state_updater.update_pictograph(pictograph_dict)
+                        motion.pictograph.updater.update_pictograph(pictograph_dict)
         if prop_rot_dir:
             if prop_rot_dir == CLOCKWISE:
                 self.cw_button.press()

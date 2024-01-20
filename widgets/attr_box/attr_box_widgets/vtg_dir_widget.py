@@ -87,7 +87,9 @@ class VtgDirWidget(AttrBoxWidget):
                         pictograph_dict = {
                             f"{motion.color}_prop_rot_dir": prop_rot_dir,
                         }
-                        motion.scene.state_updater.update_pictograph(pictograph_dict)
+                        motion.pictograph.state_updater.update_pictograph(
+                            pictograph_dict
+                        )
         if prop_rot_dir:
             if prop_rot_dir == SAME:
                 self.same_button.press()

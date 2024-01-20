@@ -1,13 +1,10 @@
 from typing import TYPE_CHECKING, Dict
-
-from objects.motion.managers.motion_checker import MotionChecker
-
+from .managers.motion_checker import MotionChecker
 from .managers.motion_attr_manager import MotionAttrManager
 from .managers.motion_manipulator import MotionManipulator
 from .managers.motion_ori_calculator import MotionOriCalculator
 from .managers.motion_updater import MotionUpdater
 from .managers.motion_turn_manager import MotionTurnsManager
-
 from utilities.TypeChecking.TypeChecking import (
     Colors,
     LeadStates,
@@ -17,7 +14,6 @@ from utilities.TypeChecking.TypeChecking import (
     PropRotDirs,
     Turns,
 )
-
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
     from objects.arrow.arrow import Arrow
@@ -35,6 +31,7 @@ class Motion:
         self.updater = MotionUpdater(self)
         self.check = MotionChecker(self)
 
+    pictograph: "Pictograph"
     color: Colors
     turns: Turns
     arrow: "Arrow"

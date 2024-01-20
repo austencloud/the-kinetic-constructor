@@ -19,7 +19,6 @@ class SpecialPlacementDataUpdater:
         if not arrow:
             return
 
-        # Load current placements
         self.positioner.data_loader.load_placements()
 
         turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(
@@ -35,7 +34,6 @@ class SpecialPlacementDataUpdater:
         else:
             turn_data = self._create_default_turn_data(arrow, adjustment)
 
-        # Update the specific entry in the JSON file
         self.update_specific_entry_in_json(
             self.positioner.pictograph.letter, turns_tuple, turn_data
         )
