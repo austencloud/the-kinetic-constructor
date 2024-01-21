@@ -92,23 +92,15 @@ class FilterTab(QTabWidget):
             tabs_to_show.append(COLOR)
         elif len(motion_types_present) > 1:
             tabs_to_show.extend([MOTION_TYPE, COLOR])
-
-        # Check if any of the selected letters are in the 'S', 'T', 'U', 'V' set
         if any(letter_str in {"S", "T", "U", "V"} for letter_str in selected_letters):
             tabs_to_show.append(LEAD_STATE)
 
-        # If no relevant letters for the section are selected, clear all tabs
         for letter in selected_letters:
             letter_type = LetterType.get_letter_type(letter)
             if letter_type == self.section.letter_type:
                 break
         else:
             tabs_to_show.clear()
-
-        # if not any(
-        #     letter.type == self.section.letter_type for letter in selected_letters
-        # ):
-        #     tabs_to_show.clear()
 
         return tabs_to_show
 
@@ -148,8 +140,8 @@ class FilterTab(QTabWidget):
                     self.removeTab(self.indexOf(self.lead_state_turns_panel))
 
     def resize_filter_tab(self) -> None:
-        self.setMinimumWidth(self.section.pictograph_frame.width())
-        self.setMaximumWidth(self.section.pictograph_frame.width())
+        self.setMinimumWidth(self.section.width() - 10)
+        self.setMaximumWidth(self.section.width() - 10)
         for panel in self.panels:
             panel.resize_turns_panel()
         self.setMaximumHeight(int(self.section.width() / 4.5))

@@ -14,20 +14,31 @@ class ScrollAreaSectionManager:
     def __init__(self, scroll_area: "ScrollArea") -> None:
         self.scroll_area = scroll_area
         self.sections: Dict[LetterTypes, ScrollAreaSection] = {}
-        self.letters_by_type = self.setup_letters_by_type()
-
+        self.filter_tabs_cache: Dict[LetterTypes, FilterTab] = {}
         self.letters_by_type: Dict[
             LetterTypes, List[Letters]
         ] = self.setup_letters_by_type()
         self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
-        for letter_type, _ in self.pictographs_by_type.items():
-            self.create_section(letter_type)
 
     def setup_letters_by_type(self) -> Dict[LetterTypes, List[Letters]]:
         letters_by_type = {}
         for letter_type in LetterType:
             letters_by_type[letter_type.description] = letter_type.letters
         return letters_by_type
+
+    def initialize_sections(self):
+        for letter_type in self.letters_by_type:
+            self.create_section(letter_type)
+
+    def create_section(self, letter_type: LetterTypes) -> ScrollAreaSection:
+        if letter_type not in self.sections:
+            section = ScrollAreaSection(letter_type, self.scroll_area)
+            self.scroll_area.layout.addWidget(section)
+            self.sections[letter_type] = section
+        return self.sections[letter_type]
+
+    def get_section(self, letter_type: LetterTypes) -> ScrollAreaSection:
+        return self.create_section(letter_type)
 
     def get_pictograph_letter_type(self, pictograph_key: str) -> str:
         letter = pictograph_key.split("_")[0]
@@ -43,12 +54,6 @@ class ScrollAreaSectionManager:
             if layout_item.widget():
                 layout_item.widget().hide()
         self.sections.clear()
-
-    def create_section(self, letter_type: LetterTypes) -> ScrollAreaSection:
-        section = ScrollAreaSection(letter_type, self.scroll_area)
-        self.scroll_area.layout.addWidget(section)
-        self.sections[letter_type] = section
-        return section
 
     def add_section_label_to_layout(
         self, section_label: QLabel, section_layout: QGridLayout
@@ -72,10 +77,9 @@ class ScrollAreaSectionManager:
                     pictograph, index
                 )
 
-    def create_section_if_needed(self, letter_type: LetterTypes):
-        # Call this method to ensure a section for a given letter_type is created.
+    def create_section_if_needed(self, letter_type: LetterTypes) -> None:
         if letter_type not in self.sections:
             self.create_section(letter_type)
-        else:
-            # Ensure the filter tab is created for the existing section.
-            self.sections[letter_type].create_filter_tab_if_needed()
+        section = self.sections[letter_type]
+        if not section.filter_tab:
+            section.create_or_get_filter_tab()

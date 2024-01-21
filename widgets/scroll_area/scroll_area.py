@@ -6,7 +6,6 @@ from PyQt6.QtCore import Qt, QTimer
 from .scroll_area_pictograph_factory import ScrollAreaPictographFactory
 from .scroll_area_section_manager import ScrollAreaSectionManager
 from .scroll_area_display_manager import ScrollAreaDisplayManager
-from .scroll_area_filter_manager import ScrollAreaFilterTabManager
 from utilities.TypeChecking.TypeChecking import Letters
 from ..pictograph.pictograph import Pictograph
 
@@ -24,14 +23,14 @@ class ScrollArea(QScrollArea):
         self.pictographs: Dict[Letters, Pictograph] = {}
         self._setup_ui()
         self._setup_managers()
-
+        self.setContentsMargins(0, 0, 0, 0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_arrow_placements)
         # self.timer.start(1000)
 
     def _setup_managers(self) -> None:
         self.display_manager = ScrollAreaDisplayManager(self)
-        self.filter_tab_manager = ScrollAreaFilterTabManager(self)
         self.section_manager = ScrollAreaSectionManager(self)
         self.pictograph_factory = ScrollAreaPictographFactory(self)
 
@@ -74,4 +73,3 @@ class ScrollArea(QScrollArea):
     def update_arrow_placements(self) -> None:
         for pictograph in self.pictographs.values():
             pictograph.arrow_placement_manager.update_arrow_positions()
-

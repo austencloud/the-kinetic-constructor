@@ -42,12 +42,10 @@ class TurnsPanel(QFrame):
                 )
 
     def resize_turns_panel(self) -> None:
-        # self.setMinimumWidth(
-        #     self.filter_tab.width() - self.filter_tab.attr_box_border_width
-        # ) # DON'T DELETE - This allows for three turns boxes at once
-        # self.setMaximumWidth(
-        #     self.filter_tab.width() - self.filter_tab.attr_box_border_width
-        # )
+        self.setMaximumWidth(
+            self.filter_tab.section.scroll_area.width()
+            - self.filter_tab.section.scroll_area.verticalScrollBar().width()
+        )
         for box in self.boxes:
             box.resize_turns_box()
 

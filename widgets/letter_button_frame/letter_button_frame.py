@@ -184,6 +184,11 @@ class LetterButtonFrame(QFrame):
         if letter in self.button_panel.codex.selected_letters:
             self.process_pictographs_for_letter(letter)
         self.button_panel.codex.scroll_area.update_pictographs()
+        for (
+            section
+        ) in self.button_panel.codex.scroll_area.section_manager.sections.values():
+            if section.letter_type == LetterType.get_letter_type(letter):
+                section.resize_section()
 
     def _connect_letter_buttons(self) -> None:
         for letter, button in self.buttons.items():

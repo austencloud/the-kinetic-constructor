@@ -70,7 +70,7 @@ class TurnDisplayManager:
         self.set_turn_display_styles()
 
     def set_turn_display_styles(self) -> None:
-        self.turns_display_font_size = int(self.turns_box.turns_panel.width() / 20)
+        self.turns_display_font_size = int(self.turns_box.turns_panel.filter_tab.width() / 20)
         self.turns_display.setFont(
             QFont("Arial", self.turns_display_font_size, QFont.Weight.Bold)
         )
@@ -91,13 +91,13 @@ class TurnDisplayManager:
 
     def resize_turn_display(self) -> None:
         self.turns_display.setMinimumHeight(
-            int(self.turns_box.turns_panel.width() / 10)
+            int(self.turns_box.turns_panel.filter_tab.width() / 10)
         )
         self.turns_display.setMaximumHeight(
-            int(self.turns_box.turns_panel.width() / 10)
+            int(self.turns_box.turns_panel.filter_tab.width() / 10)
         )
-        self.turns_display.setMinimumWidth(int(self.turns_box.turns_panel.width() / 8))
-        self.turns_display.setMaximumWidth(int(self.turns_box.turns_panel.width() / 8))
+        self.turns_display.setMinimumWidth(int(self.turns_box.turns_panel.filter_tab.width() / 8))
+        self.turns_display.setMaximumWidth(int(self.turns_box.turns_panel.filter_tab.width() / 8))
 
     def update_adjust_turns_button_size(self) -> None:
         for button in self.turns_widget.button_manager.adjust_turns_buttons:

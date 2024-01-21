@@ -1,5 +1,5 @@
 # Import necessary components
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtWidgets import (
     QFrame,
     QVBoxLayout,
@@ -27,6 +27,8 @@ class ScrollAreaSection(QWidget):
         self.scroll_area = scroll_area
         self.letter_type = letter_type
         self.filter_tab: FilterTab = None
+        self.filter_tabs_cache: Dict[str, FilterTab] = {}  # Cache to store FilterTabs
+        self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
         self.pictographs: List[Pictograph] = []
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.pictograph_frame = self._setup_pictograph_frame()
@@ -103,9 +105,18 @@ class ScrollAreaSection(QWidget):
         styled_text = f"{letter_type[0:4]} {letter_type[4]}: {styled_type_name}"
         return styled_text
 
-
-    def create_filter_tab_if_needed(self) -> None:
+    def create_or_get_filter_tab(self) -> FilterTab:
         if not self.filter_tab:
             self.filter_tab = FilterTab(self)
             self.layout.insertWidget(1, self.filter_tab)
-            self.filter_tab.resize_filter_tab()
+        return self.filter_tab
+
+    def resize_section(self) -> None:
+        # self.setMaximumWidth(
+        #     self.scroll_area.width() - self.scroll_area.verticalScrollBar().width()
+        # )
+        self.resize(
+            self.scroll_area.width() - self.scroll_area.verticalScrollBar().width(),
+            self.height(),
+        )
+        self.filter_tab.resize_filter_tab()

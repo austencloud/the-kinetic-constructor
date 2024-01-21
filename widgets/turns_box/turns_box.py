@@ -90,10 +90,12 @@ class TurnsBox(QFrame):
     def resize_turns_box(self) -> None:
         for button in self.rot_dir_button_manager.buttons:
             button.setMinimumSize(
-                self.turns_panel.width() // 20, self.turns_panel.width() // 20
+                self.turns_panel.filter_tab.width() // 20,
+                self.turns_panel.filter_tab.width() // 20,
             )
             button.setMaximumSize(
-                self.turns_panel.width() // 20, self.turns_panel.width() // 20
+                self.turns_panel.filter_tab.width() // 20,
+                self.turns_panel.filter_tab.width() // 20,
             )
             button.setIconSize(button.size())
         self.turns_widget.resize_turns_widget()
