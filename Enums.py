@@ -13,8 +13,7 @@ from utilities.TypeChecking.prop_types import PropTypes
 from utilities.TypeChecking.letter_lists import all_letters
 
 
-
-class LetterNumberType(Enum):
+class LetterType(Enum):
     Type1 = (
         [
             "A",
@@ -59,6 +58,13 @@ class LetterNumberType(Enum):
     @property
     def description(self):
         return self._description
+
+    @staticmethod
+    def get_letter_type(str: str) -> str | None:
+        for letter_type in LetterType:
+            if str in letter_type.letters:
+                return letter_type.name.replace("_", "").lower().capitalize()
+        return None
 
 
 class MotionCombinationType(Enum):

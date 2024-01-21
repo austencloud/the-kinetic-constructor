@@ -34,7 +34,7 @@ class ArrowRotAngleCalculator:
     def _get_final_rot_angle_override(self) -> Optional[int]:
         special_manager = self.a.scene.arrow_placement_manager.special_positioner
         if special_manager:
-            rotation_override = special_manager.rot_angle_handler.get_rot_angle_override_from_placements_dict(
+            rotation_override = self.a.scene.wasd_manager.rotation_manager.get_rot_angle_override_from_placements_dict(
                 self.a
             )
             if rotation_override == 0 or rotation_override:

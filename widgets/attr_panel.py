@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QHBoxLayout, QFrame
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, List
-from Enums import LetterNumberType
+from Enums import LetterType
 from constants import ANTI, COLOR, DASH, MOTION_TYPE, PRO, STATIC
 from utilities.TypeChecking.TypeChecking import Letters
 from widgets.attr_box.attr_box import AttrBox
@@ -61,7 +61,7 @@ class AttrPanel(QFrame):
     ) -> None:
         relevant_selected_letters = []
         for letter in selected_letters:
-            letter_type = self.get_letter_type(letter)
+            letter_type = LetterType.get_letter_type(letter)
             if letter_type == self.filter_tab.section.letter_type:
                 relevant_selected_letters.append(letter)
 
@@ -82,9 +82,3 @@ class AttrPanel(QFrame):
                     box.show()
                 else:
                     box.hide()
-
-    def get_letter_type(self, str: str) -> str | None:
-        for letter_type in LetterNumberType:
-            if str in letter_type.letters:
-                return letter_type.name.replace("_", "").lower().capitalize()
-        return None

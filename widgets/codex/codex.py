@@ -9,10 +9,9 @@ from PyQt6.QtWidgets import (
     QApplication,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
-from Enums import LetterNumberType
+from Enums import LetterType
 from constants import CODEX_PICTOGRAPH
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.letter import Letter
 from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.scroll_area import ScrollArea
 from .codex_letter_button_frame import LetterButtonFrame
@@ -60,7 +59,9 @@ class Codex(QWidget):
     def connect_buttons(self, letter_button_frame: LetterButtonFrame) -> None:
         for letter, button in letter_button_frame.buttons.items():
             button.clicked.connect(
-                lambda checked, letter=letter: self.letter_button_frame.on_letter_button_clicked(letter)
+                lambda checked, letter=letter: self.letter_button_frame.on_letter_button_clicked(
+                    letter
+                )
             )
 
     def setup_button_frames(self) -> LetterButtonFrame:
@@ -139,12 +140,6 @@ class Codex(QWidget):
             """
 
     ### IMAGE GENERATION ###
-
-    def get_letter_type(self, str: str) -> str | None:
-        for letter_type in LetterNumberType:
-            if str in letter_type.letters:
-                return letter_type.name.replace("_", "").lower().capitalize()
-        return None
 
     def process_pictographs_for_letter(self, letter) -> None:
         pictograph_dicts = self.main_tab_widget.main_widget.letters.get(letter, [])

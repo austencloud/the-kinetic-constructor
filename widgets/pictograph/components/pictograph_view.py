@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import QGraphicsView
 from PyQt6.QtCore import Qt
 
 
-
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 
@@ -41,12 +40,12 @@ class PictographView(QGraphicsView):
     def keyPressEvent(self, event) -> None:
         shift_held = event.modifiers() & Qt.KeyboardModifier.ShiftModifier
         if event.key() in [Qt.Key.Key_W, Qt.Key.Key_A, Qt.Key.Key_S, Qt.Key.Key_D]:
-            self.pictograph.wasd_adjustment_manager.movement_manager.handle_arrow_movement(
+            self.pictograph.wasd_manager.movement_manager.handle_arrow_movement(
                 event.key(), shift_held
             )
 
         elif event.key() == Qt.Key.Key_X:
-            self.pictograph.wasd_adjustment_manager.rotation_manager.handle_rotation_angle_override(
+            self.pictograph.wasd_manager.rotation_manager.handle_rotation_angle_override(
                 event.key()
             )
 

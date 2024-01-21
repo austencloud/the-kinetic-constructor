@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from Enums import LetterType
 from utilities.TypeChecking.TypeChecking import (
     Turns,
 )
@@ -26,7 +27,7 @@ class TurnsAdjustmentDisplayManager:
             self.attr_box.attr_panel.filter_tab.section.scroll_area.pictographs.values()
         ):
             if (
-                pictograph.letter.type
+                LetterType.get_letter_type(pictograph.letter)
                 == self.attr_box.attr_panel.filter_tab.section.letter_type
             ):
                 self.turns_widget.updater._adjust_turns_for_pictograph(

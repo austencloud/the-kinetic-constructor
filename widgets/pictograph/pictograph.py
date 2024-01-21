@@ -10,21 +10,26 @@ from objects.prop.prop import Prop
 
 from utilities.TypeChecking.TypeChecking import (
     Colors,
-    LetterTypeNums,
+    LetterTypes,
     Letters,
     Locations,
     SpecificPositions,
     VtgDirections,
     VtgTimings,
 )
-from widgets.letter import Letter
 from .components.pictograph_attr_manager import PictographAttrManager
 from .components.pictograph_checker import PictographChecker
 from .components.pictograph_getter import PictographGetter
-from .components.placement_managers.arrow_placement_manager.arrow_placement_manager import ArrowPlacementManager
-from .components.placement_managers.prop_placement_manager.prop_placement_manager import PropPlacementManager
+from .components.placement_managers.arrow_placement_manager.arrow_placement_manager import (
+    ArrowPlacementManager,
+)
+from .components.placement_managers.prop_placement_manager.prop_placement_manager import (
+    PropPlacementManager,
+)
 from .components.pictograph_view import PictographView
-from .components.wasd_adjustment_manager.wasd_adjustment_manager import WASD_AdjustmentManager
+from .components.wasd_adjustment_manager.wasd_adjustment_manager import (
+    WASD_AdjustmentManager,
+)
 from .components.pictograph_add_to_sequence_manager import AddToSequenceManager
 from .components.pictograph_context_menu_handler import PictographContextMenuHandler
 from .components.pictograph_image_renderer import PictographImageRenderer
@@ -51,13 +56,13 @@ class Pictograph(QGraphicsScene):
         self.updater = PictographStateUpdater(self)
         self.image_renderer = PictographImageRenderer(self)
         self.add_to_sequence_manager = AddToSequenceManager(self)
-        self.wasd_adjustment_manager = WASD_AdjustmentManager(self)
         self.get = PictographGetter(self)
         self.check = PictographChecker(self)
         self.view = PictographView(self)
         self.initializer.init_all_components()
         self.arrow_placement_manager = ArrowPlacementManager(self)
         self.prop_placement_manager = PropPlacementManager(self)
+        self.wasd_manager = WASD_AdjustmentManager(self)
         self.letter_calculator = LetterCalculator(self)
         self.attr_manager = PictographAttrManager(self)
 
@@ -80,8 +85,8 @@ class Pictograph(QGraphicsScene):
     ghost_arrows: Dict[Colors, GhostArrow]
     ghost_props: Dict[Colors, GhostProp]
     motions: Dict[Colors, Motion]
-    letter: Letter
-    letter_type: LetterTypeNums
+    letter: Letters
+    letter_type: LetterTypes
     pictograph_dict: Dict
     motion_dict_list: List[Dict]
     start_pos: SpecificPositions
@@ -103,4 +108,4 @@ class Pictograph(QGraphicsScene):
     blue_arrow: Arrow
     red_prop: Prop
     blue_prop: Prop
-    selected_arrow: Arrow
+    selected_arrow: Arrow = None

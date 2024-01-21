@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtGui import QResizeEvent
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Letters, TYPE_CHECKING, Dict, List
@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 
 
 class MainWidget(QWidget):
+    
     def __init__(self, main_window: "MainWindow") -> None:
         super().__init__(main_window)
         self.main_window = main_window
@@ -51,3 +52,5 @@ class MainWidget(QWidget):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.main_window.window_manager.set_dimensions()
+
+    layout : QHBoxLayout

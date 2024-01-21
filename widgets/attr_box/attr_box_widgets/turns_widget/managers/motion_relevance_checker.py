@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from Enums import LetterType
 from constants import COLOR, LEAD_STATE, MOTION_TYPE
 
 if TYPE_CHECKING:
@@ -14,7 +15,7 @@ class MotionRelevanceChecker:
         attr_type = self.attr_box.attribute_type
         is_same_letter_type = (
             self.attr_box.attr_panel.filter_tab.section.letter_type
-            == motion.pictograph.letter.type
+            == LetterType.get_letter_type(motion.pictograph.letter)
         )
 
         if not is_same_letter_type:

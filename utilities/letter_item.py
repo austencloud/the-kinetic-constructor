@@ -2,7 +2,8 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 from typing import TYPE_CHECKING
 
-from widgets.letter import Letter
+from Enums import LetterType
+
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -19,14 +20,15 @@ class LetterItem(QGraphicsSvgItem):
         self.setPos(x, y)
 
     def set_letter_renderer(self) -> None:
-        svg_path = f"images/letters_trimmed/{self.p.letter.type}/{self.p.letter.str}.svg"
+        letter_type = LetterType.get_letter_type(self.p.letter)
+        svg_path = f"images/letters_trimmed/{letter_type}/{self.p.letter}.svg"
         renderer = QSvgRenderer(svg_path)
         if renderer.isValid():
             self.setSharedRenderer(renderer)
 
     def update_letter(self) -> None:
         if all(motion.motion_type for motion in self.p.motions.values()):
-            self.p.letter = Letter(self.p.letter_calculator.get_current_letter())
+            self.p.letter = self.p.letter_calculator.get_current_letter()
             self.set_letter_renderer()
             self.position_letter_item()
         else:

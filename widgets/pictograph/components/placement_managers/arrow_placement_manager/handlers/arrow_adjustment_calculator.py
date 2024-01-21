@@ -13,16 +13,16 @@ class ArrowAdjustmentCalculator:
 
     def get_adjustment(self, arrow: Arrow) -> QPointF:
         turns_tuple = self.pm.key_generator.generate_turns_tuple(
-            self.pm.pictograph.letter.str
+            self.pm.pictograph.letter
         )
         self.pm.special_positioner.special_placements = (
             self.pm.special_positioner.data_loader.load_placements()
         )
 
         special_placements = self.pm.special_positioner.special_placements
-        if self.pm.pictograph.letter.str in special_placements:
+        if self.pm.pictograph.letter in special_placements:
             special_adjustment = self.pm.special_positioner.adjustment_calculator.get_adjustment_for_letter(
-                self.pm.pictograph.letter.str, arrow, turns_tuple
+                self.pm.pictograph.letter, arrow, turns_tuple
             )
             (
                 x,

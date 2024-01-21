@@ -3,7 +3,7 @@ import re
 from typing import TYPE_CHECKING, Dict, Tuple
 
 from objects.arrow.arrow import Arrow
-from widgets.letter import Letter
+from utilities.TypeChecking.TypeChecking import Letters
 
 if TYPE_CHECKING:
     from ..special_arrow_positioner import SpecialArrowPositioner
@@ -23,10 +23,10 @@ class SpecialPlacementDataUpdater:
         self.positioner.data_loader.load_placements()
 
         turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(
-            arrow.scene.letter.str
+            arrow.scene.letter
         )
         letter_data: Dict = self.positioner.special_placements.get(
-            self.positioner.pictograph.letter.str, {}
+            self.positioner.pictograph.letter, {}
         )
         turn_data = letter_data.get(turns_tuple, {})
 
@@ -40,7 +40,7 @@ class SpecialPlacementDataUpdater:
         )
 
     def update_specific_entry_in_json(
-        self, letter: Letter, turns_tuple: str, new_data: Dict
+        self, letter: Letters, turns_tuple: str, new_data: Dict
     ) -> None:
         """Update a specific entry in the JSON file."""
         try:
@@ -48,9 +48,9 @@ class SpecialPlacementDataUpdater:
                 self.positioner.data_loader.json_path, "r", encoding="utf-8"
             ) as file:
                 data: Dict = json.load(file)
-            letter_data = data.get(letter.str, {})
+            letter_data = data.get(letter, {})
             letter_data[turns_tuple] = new_data
-            data[letter.str] = letter_data
+            data[letter] = letter_data
             json_str = json.dumps(data, indent=2, ensure_ascii=False)
             formatted_json_str = re.sub(
                 r"\[\s+(-?\d+),\s+(-?\d+)\s+\]", r"[\1, \2]", json_str

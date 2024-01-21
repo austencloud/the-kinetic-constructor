@@ -22,9 +22,7 @@ import codecs
 
 
 class DefaultArrowPositioner:
-    def __init__(
-        self, placement_manager: "ArrowPlacementManager"
-    ) -> None:
+    def __init__(self, placement_manager: "ArrowPlacementManager") -> None:
         self.placement_manager = placement_manager
         self.motion_type_files = {
             PRO: "pro_placements.json",
@@ -59,8 +57,8 @@ class DefaultArrowPositioner:
                 motion_end_ori_key = f"{ANTIRADIAL}_"
         letter_suffix = ""
         if arrow.pictograph.letter and arrow.pictograph.letter in dash_letters:
-            letter = arrow.pictograph.letter[:-1]
-            letter_suffix = f"_{letter}_dash"
+            char = arrow.pictograph.letter[:-1]
+            letter_suffix = f"_{char}_dash"
         elif arrow.pictograph.letter:
             letter_suffix = f"_{arrow.pictograph.letter}"
 

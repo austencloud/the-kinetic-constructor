@@ -9,7 +9,6 @@ if TYPE_CHECKING:
     from ..prop_placement_manager import PropPlacementManager
 
 
-
 class BetaPropPositioner:
     def __init__(self, placement_manager: "PropPlacementManager") -> None:
         self.ppm = placement_manager
@@ -42,21 +41,21 @@ class BetaPropPositioner:
                 self.ppm.default_positioner.set_prop_to_default_loc(prop)
 
         else:
-            if self.pictograph.letter.str in ["G", "H"]:
+            if self.pictograph.letter in ["G", "H"]:
                 self.reposition_G_H()
-            elif self.pictograph.letter.str == "I":
+            elif self.pictograph.letter == "I":
                 self.reposition_I()
-            elif self.pictograph.letter.str in ["J", "K", "L"]:
+            elif self.pictograph.letter in ["J", "K", "L"]:
                 self.reposition_J_K_L()
-            elif self.pictograph.letter.str in ["Y", "Z"]:
+            elif self.pictograph.letter in ["Y", "Z"]:
                 self.reposition_Y_Z()
-            elif self.pictograph.letter.str == "β":
+            elif self.pictograph.letter == "β":
                 self.reposition_β()
-            elif self.pictograph.letter.str in ["Y-", "Z-"]:
+            elif self.pictograph.letter in ["Y-", "Z-"]:
                 self.reposition_Y_dash_Z_dash()
-            elif self.pictograph.letter.str == "Ψ":
+            elif self.pictograph.letter == "Ψ":
                 self.reposition_Ψ()
-            elif self.pictograph.letter.str == "Ψ-":
+            elif self.pictograph.letter == "Ψ-":
                 self.reposition_Ψ_dash()
 
     ### REPOSITIONING ###

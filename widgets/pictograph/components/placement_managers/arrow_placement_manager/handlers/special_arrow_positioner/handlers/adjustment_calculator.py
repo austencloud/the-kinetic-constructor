@@ -56,8 +56,7 @@ class AdjustmentCalculator:
             **{
                 letter: letter_adjustments.get(arrow.motion.motion_type)
                 for letter in Type2_letters + Type3_letters + Type4_letters
-            }
-
+            },
         }
 
         return adjustment_map.get(letter)

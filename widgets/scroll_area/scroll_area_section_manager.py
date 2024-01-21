@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Dict, List
-from Enums import LetterNumberType
-from utilities.TypeChecking.TypeChecking import LetterTypeNums, Letters
+from Enums import LetterType
+from utilities.TypeChecking.TypeChecking import LetterTypes, Letters
 from widgets.scroll_area.scroll_area_section import ScrollAreaSection
 from ..filter_tab import FilterTab
 
@@ -13,19 +13,19 @@ from PyQt6.QtWidgets import QLabel, QGridLayout
 class ScrollAreaSectionManager:
     def __init__(self, scroll_area: "ScrollArea") -> None:
         self.scroll_area = scroll_area
-        self.sections: Dict[LetterTypeNums, ScrollAreaSection] = {}
+        self.sections: Dict[LetterTypes, ScrollAreaSection] = {}
         self.letters_by_type = self.setup_letters_by_type()
 
         self.letters_by_type: Dict[
-            LetterTypeNums, List[Letters]
+            LetterTypes, List[Letters]
         ] = self.setup_letters_by_type()
         self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
         for letter_type, _ in self.pictographs_by_type.items():
             self.create_section(letter_type)
-            
-    def setup_letters_by_type(self) -> Dict[LetterTypeNums, List[Letters]]:
+
+    def setup_letters_by_type(self) -> Dict[LetterTypes, List[Letters]]:
         letters_by_type = {}
-        for letter_type in LetterNumberType:
+        for letter_type in LetterType:
             letters_by_type[letter_type.description] = letter_type.letters
         return letters_by_type
 
@@ -44,14 +44,12 @@ class ScrollAreaSectionManager:
                 layout_item.widget().hide()
         self.sections.clear()
 
-    def create_section(
-        self, letter_type: LetterTypeNums
-    ) -> ScrollAreaSection:
+    def create_section(self, letter_type: LetterTypes) -> ScrollAreaSection:
         section = ScrollAreaSection(letter_type, self.scroll_area)
         self.scroll_area.layout.addWidget(section)
         self.sections[letter_type] = section
         return section
-    
+
     def add_section_label_to_layout(
         self, section_label: QLabel, section_layout: QGridLayout
     ) -> None:
@@ -60,7 +58,7 @@ class ScrollAreaSectionManager:
             section_label, 0, 0, 1, self.scroll_area.display_manager.COLUMN_COUNT
         )
 
-    def get_section(self, letter_type: LetterTypeNums) -> ScrollAreaSection:
+    def get_section(self, letter_type: LetterTypes) -> ScrollAreaSection:
         return self.sections.get(letter_type)
 
     def organize_pictographs_by_type(self) -> None:

@@ -1,8 +1,10 @@
 from typing import TYPE_CHECKING, List
 from PyQt6.QtWidgets import QTabWidget, QHBoxLayout
+from Enums import LetterType
 from constants import MOTION_TYPE, COLOR, LEAD_STATE, PRO, ANTI
 from utilities.TypeChecking.TypeChecking import (
-    LetterTypeNums,
+    LetterTypes,
+    Letters,
     MotionAttributes,
 )
 from data.letter_engine_data import (
@@ -11,8 +13,6 @@ from data.letter_engine_data import (
 )
 from widgets.attr_panel import AttrPanel
 from PyQt6.QtCore import Qt
-
-from widgets.letter import Letter
 
 
 if TYPE_CHECKING:
@@ -37,7 +37,10 @@ class FilterTab(QTabWidget):
 
     def on_current_changed(self, index: int) -> None:
         for pictograph in self.section.scroll_area.pictographs.values():
-            if pictograph.letter.type == self.section.letter_type:
+            if (
+                LetterType.get_letter_type(pictograph.letter)
+                == self.section.letter_type
+            ):
                 for motion in pictograph.motions.values():
                     motion.turns_manager.set_turns(0)
                 pictograph.updater.update_pictograph()
@@ -46,7 +49,7 @@ class FilterTab(QTabWidget):
                 box.turns_widget.turns_display_manager.update_turns_display("0")
 
     def get_motion_types_from_letter_type(
-        self, letter_type: LetterTypeNums
+        self, letter_type: LetterTypes
     ) -> List[MotionAttributes]:
         motion_types = letter_type_motion_type_map[letter_type]
         return motion_types
@@ -63,8 +66,7 @@ class FilterTab(QTabWidget):
         relevant_selected_letters = [
             letter
             for letter in selected_letters
-            if self.section.scroll_area.codex.get_letter_type(letter)
-            == self.section.letter_type
+            if LetterType.get_letter_type(letter) == self.section.letter_type
         ]
         tabs_to_show = self._determine_tabs_to_show(relevant_selected_letters)
         tabs_to_hide = self._determine_tabs_to_hide(tabs_to_show)
@@ -77,7 +79,7 @@ class FilterTab(QTabWidget):
         self.resize_filter_tab()
 
     def _determine_tabs_to_show(
-        self, selected_letters: set[Letter]
+        self, selected_letters: set[Letters]
     ) -> List[MotionAttributes]:
         tabs_to_show = []
         motion_types_present = set()
@@ -96,13 +98,12 @@ class FilterTab(QTabWidget):
 
         # If no relevant letters for the section are selected, clear all tabs
         for letter in selected_letters:
-            letter_type = self.section.scroll_area.codex.get_letter_type(letter)
+            letter_type = LetterType.get_letter_type(letter)
             if letter_type == self.section.letter_type:
                 break
         else:
             tabs_to_show.clear()
-        
-        
+
         # if not any(
         #     letter.type == self.section.letter_type for letter in selected_letters
         # ):

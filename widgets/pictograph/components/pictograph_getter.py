@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, List, Optional
-from Enums import LetterNumberType
+from Enums import LetterType
 
 from constants import *
 from objects.arrow.arrow import Arrow
@@ -13,13 +13,12 @@ if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 
 
-
 class PictographGetter:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.p = pictograph
 
     def letter_type(self, letter: all_letters) -> Optional[str]:
-        for letter_type in LetterNumberType:
+        for letter_type in LetterType:
             if letter in letter_type.letters:
                 return letter_type.description
         return None
@@ -37,9 +36,9 @@ class PictographGetter:
                 return self.p.red_motion
             elif self.p.blue_motion.start_loc == self.p.red_motion.end_loc:
                 return self.p.blue_motion
-        else: 
+        else:
             return None
-            
+
     def trailing_motion(self) -> Motion:
         if self.p.red_motion.start_loc == self.p.blue_motion.end_loc:
             return self.p.blue_motion
@@ -57,3 +56,12 @@ class PictographGetter:
             return self.p.blue_arrow
         elif arrow.color == BLUE:
             return self.p.red_arrow
+
+    def dash(self) -> Motion:
+        return self.p.motions[RED if self.p.red_motion.check.is_dash() else BLUE]
+
+    def shift(self) -> Motion:
+        return self.p.motions[RED if self.p.red_motion.check.is_shift() else BLUE]
+
+    def static(self) -> Motion:
+        return self.p.motions[RED if self.p.red_motion.check.is_static() else BLUE]

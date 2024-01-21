@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING, Literal, Set
+from Enums import LetterType
 from constants import CODEX_PICTOGRAPH, OPTION
 from utilities.TypeChecking.TypeChecking import Letters
 from widgets.option_picker_tab.option import Option
@@ -83,7 +84,7 @@ class ScrollAreaPictographFactory:
         for key in keys_to_remove:
             codex_pictograph = self.scroll_area.pictographs.pop(key)
             scroll_section = self.scroll_area.section_manager.get_section(
-                codex_pictograph.letter.type
+                LetterType.get_letter_type(codex_pictograph.letter)
             )
             scroll_section.remove_pictograph(codex_pictograph)
 

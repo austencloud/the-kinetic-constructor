@@ -2,14 +2,13 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QPushButton
 from PyQt6.QtGui import QIcon, QPixmap, QPainter, QFont, QColor, QResizeEvent
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtSvg import QSvgRenderer
-from Enums import LetterNumberType
+from Enums import LetterType
 from constants import LETTER_BTN_ICON_DIR
 from typing import TYPE_CHECKING, Dict, List
 from utilities.TypeChecking.TypeChecking import Letters
 
 from utilities.TypeChecking.letter_lists import all_letters
 from widgets.factories.letter_factory import LetterFactory
-from widgets.letter import Letter
 
 
 if TYPE_CHECKING:
@@ -90,13 +89,13 @@ class LetterButtonFrame(QFrame):
             self.row_layouts.append(row_layout)
 
             for letter_str in row:
-                letter = LetterFactory.create_letter(letter_str)
-                icon_path = self.get_icon_path(letter.type, letter.str)
-                button = self.create_button(icon_path, letter.str)
+                letter_type = LetterType.get_letter_type(letter_str)
+                icon_path = self.get_icon_path(letter_type, letter_str)
+                button = self.create_button(icon_path, letter_str)
                 row_layout.addWidget(button)
                 self.buttons[
-                    letter.str
-                ] = button  # Storing the Letter object as the key
+                    letter_str
+                ] = button  # Storing the Letters object as the key
 
             letter_buttons_layout.addLayout(row_layout)
 
@@ -171,7 +170,7 @@ class LetterButtonFrame(QFrame):
             self.c.selected_letters.append(letter)
 
         for section in self.c.scroll_area.section_manager.sections.values():
-            if section.letter_type == self.c.get_letter_type(letter):
+            if section.letter_type == LetterType.get_letter_type(letter):
                 section.filter_tab.show_tabs_based_on_chosen_letters()
 
         button.setFlat(not is_selected)

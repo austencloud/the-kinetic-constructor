@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
     QSizePolicy,
 )
 from PyQt6.QtCore import Qt
-from utilities.TypeChecking.TypeChecking import LetterTypeNums
+from utilities.TypeChecking.TypeChecking import LetterTypes
 from widgets.filter_tab import FilterTab
 from widgets.pictograph.pictograph import Pictograph
 
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 class ScrollAreaSection(QWidget):
     def __init__(
         self,
-        letter_type: LetterTypeNums,
+        letter_type: LetterTypes,
         scroll_area: "ScrollArea",
     ) -> None:
         super().__init__(scroll_area)
@@ -49,7 +49,6 @@ class ScrollAreaSection(QWidget):
         section_label.setMinimumSize(section_label.sizeHint())
         return section_label
 
-
     def _add_widgets_to_layout(self) -> None:
         self.layout.addWidget(self.section_label)
         self.layout.addWidget(self.filter_tab)
@@ -66,7 +65,7 @@ class ScrollAreaSection(QWidget):
     def update_filter(self) -> None:
         pass
 
-    def get_styled_text(self, letter_type: LetterTypeNums) -> str:
+    def get_styled_text(self, letter_type: LetterTypes) -> str:
         """Returns the styled text for the section label."""
         type_map = {
             "Type1": "Dual-Shift",

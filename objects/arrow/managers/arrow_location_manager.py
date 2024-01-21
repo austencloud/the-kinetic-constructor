@@ -56,7 +56,7 @@ class ArrowLocationCalculator:
     def _dash_location_zero_turns(self) -> Locations:
         other_motion = self.a.scene.get.other_motion(self.a.motion)
         letter_str = str(self.a.scene.letter)
-        
+
         if letter_str in Type3_letters or letter_str in Type4_letters:
             return self._default_dash_location()
 

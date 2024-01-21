@@ -36,7 +36,7 @@ class ScrollAreaDisplayManager:
         self, codex_pictograph: Pictograph, index: int
     ) -> None:
         letter_type = self.scroll_area.section_manager.get_pictograph_letter_type(
-            codex_pictograph.letter.str
+            codex_pictograph.letter
         )
         section: ScrollAreaSection = self.scroll_area.section_manager.sections.get(
             letter_type
@@ -84,7 +84,7 @@ class ScrollAreaDisplayManager:
             for k, v in sorted(
                 self.scroll_area.pictographs.items(),
                 key=lambda item: (
-                    all_letters.index(item[1].letter.str),
+                    all_letters.index(item[1].letter),
                     item[1].start_pos,
                 ),
             )

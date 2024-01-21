@@ -19,7 +19,6 @@ from constants import (
     START_POS,
 )
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.letter import Letter
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
@@ -33,15 +32,14 @@ class LetterLoader:
         df = pd.read_csv("PictographDataframe.csv")
         df = df.sort_values(by=[LETTER, START_POS, END_POS])
         df = self.add_turns_and_ori_to_pictograph_dict(df)
-        
-        # Use string directly instead of Letter instances
+
+        # Use string directly instead of Letters instances
         letters = {
             letter_str: df[df[LETTER] == letter_str].to_dict(orient="records")
             for letter_str in df[LETTER].unique()
         }
 
         return letters
-
 
     def add_turns_and_ori_to_pictograph_dict(self, pictograph_dict) -> pd.DataFrame:
         # Add default values for turns and orientation
