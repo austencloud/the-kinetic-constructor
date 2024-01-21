@@ -19,8 +19,7 @@ if TYPE_CHECKING:
 
 class ScrollAreaSection(QWidget):
     SCROLLBAR_WIDTH = 25
-    
-    
+
     def __init__(self, letter_type: LetterTypes, scroll_area: "ScrollArea") -> None:
         super().__init__(scroll_area)
         self.scroll_area = scroll_area
@@ -34,7 +33,7 @@ class ScrollAreaSection(QWidget):
         self.styled_text = self.get_styled_text(letter_type)
         self.section_label = self.create_section_label(self.styled_text)
         self._add_widgets_to_layout()
-        self.setStyleSheet("border: 1px solid black;")
+        # self.setStyleSheet("border: 1px solid black;")
 
     def _setup_pictograph_frame(self) -> QFrame:
         pictograph_frame = QFrame()
@@ -114,7 +113,15 @@ class ScrollAreaSection(QWidget):
         # self.setMaximumWidth(
         #     self.scroll_area.width() - self.scroll_area.verticalScrollBar().width()
         # )
-        self.setMinimumWidth(
-            self.scroll_area.width() - self.SCROLLBAR_WIDTH 
-        )
+        self.setMinimumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
         self.filter_tab.resize_filter_tab()
+
+    def hide_filter_tab(self) -> None:
+        if self.filter_tab:
+            self.filter_tab.hide()
+
+    def show_filter_tab(self) -> None:
+        if self.filter_tab:
+            self.filter_tab.show()
+        else:
+            self.create_or_get_filter_tab()

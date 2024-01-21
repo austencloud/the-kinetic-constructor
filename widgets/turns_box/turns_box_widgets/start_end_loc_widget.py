@@ -12,17 +12,17 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from constants import ICON_DIR, SWAP_ICON
 from utilities.TypeChecking.TypeChecking import Locations
-from .base_attr_box_widget import AttrBoxWidget
+from .base_attr_box_widget import TurnsBoxWidget
 
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_attr_box import (
-        GraphEditorAttrBox,
+        GraphEditorTurnsBox,
     )
 
 
-class StartEndLocWidget(AttrBoxWidget):
-    def __init__(self, turns_box: "GraphEditorAttrBox") -> None:
+class StartEndLocWidget(TurnsBoxWidget):
+    def __init__(self, turns_box: "GraphEditorTurnsBox") -> None:
         super().__init__(turns_box)
 
         # Setup start and end combo boxes

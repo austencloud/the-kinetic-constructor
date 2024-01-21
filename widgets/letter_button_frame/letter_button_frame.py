@@ -189,6 +189,11 @@ class LetterButtonFrame(QFrame):
         ) in self.button_panel.codex.scroll_area.section_manager.sections.values():
             if section.letter_type == LetterType.get_letter_type(letter):
                 section.resize_section()
+        # After processing selection, update the visibility of sections and tabs
+        self.button_panel.codex.scroll_area.section_manager.update_sections_based_on_letters(
+            self.button_panel.codex.selected_letters
+        )
+
 
     def _connect_letter_buttons(self) -> None:
         for letter, button in self.buttons.items():

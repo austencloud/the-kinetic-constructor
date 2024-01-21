@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 from PyQt6.QtGui import QFont
 
 
-class GraphEditorAttrBox(TurnsBox):
+class GraphEditorTurnsBox(TurnsBox):
     def __init__(
         self, turns_panel: "TurnsPanel", pictograph: "Pictograph", color: Colors
     ) -> None:

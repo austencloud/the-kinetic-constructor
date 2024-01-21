@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from objects.motion.motion import Motion
 
 
-class AttrBoxWidget(QWidget):
+class TurnsBoxWidget(QWidget):
     def __init__(self, turns_box) -> None:
         super().__init__(turns_box)
         self.turns_box: "TurnsBox" = turns_box

@@ -23,13 +23,13 @@ from constants import (
 )
 from utilities.TypeChecking.TypeChecking import VtgDirections
 from widgets.factories.button_factory.buttons.rot_dir_buttons import VtgDirButton
-from .base_attr_box_widget import AttrBoxWidget
+from .base_attr_box_widget import TurnsBoxWidget
 
 if TYPE_CHECKING:
     from widgets.turns_box.turns_box import TurnsBox
 
 
-class VtgDirWidget(AttrBoxWidget):
+class VtgDirWidget(TurnsBoxWidget):
     def __init__(self, turns_box: TurnsBox) -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box

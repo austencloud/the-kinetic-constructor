@@ -127,7 +127,7 @@ class TurnDisplayManager:
         self.turns_widget.layout.addWidget(self.turn_display_with_buttons_frame)
 
     def calculate_adjust_turns_button_size(self) -> int:
-        return int(self.turns_box.turns_panel.filter_tab.section.width() / 16)
+        return int(self.turns_box.turns_panel.filter_tab.section.width() / 20)
 
     def get_current_turns_value(self) -> int:
         return (

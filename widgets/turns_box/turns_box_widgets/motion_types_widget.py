@@ -10,15 +10,15 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from constants import ICON_DIR, SWAP_ICON
-from .base_attr_box_widget import AttrBoxWidget
+from .base_attr_box_widget import TurnsBoxWidget
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
+    from widgets.graph_editor_tab.graph_editor_attr_box import GraphEditorTurnsBox
 
 
-class MotionTypeWidget(AttrBoxWidget):
-    def __init__(self, turns_box: "GraphEditorAttrBox") -> None:
+class MotionTypeWidget(TurnsBoxWidget):
+    def __init__(self, turns_box: "GraphEditorTurnsBox") -> None:
         super().__init__(turns_box)
 
         self.header_label = self.create_attr_header_label("Type")

@@ -33,19 +33,10 @@ class TurnsPanel(QFrame):
         self.layout.setSpacing(0)
         for box in self.boxes:
             self.layout.addWidget(box)
-            box.setObjectName("AttrBox")
-            if box.attribute_type != COLOR:
-                box.setStyleSheet(
-                    f"{ 
-                        'border-right: 1px solid black;' if box != self.boxes[-1] else ''
-                    }"
-                )
+            box.setObjectName("TurnsBox")
+
 
     def resize_turns_panel(self) -> None:
-        # self.setMaximumWidth(
-        #     self.filter_tab.section.scroll_area.width()
-        #     - self.filter_tab.section.scroll_area.verticalScrollBar().width()
-        # )
         for box in self.boxes:
             box.resize_turns_box()
 

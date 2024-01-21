@@ -83,3 +83,16 @@ class ScrollAreaSectionManager:
         section = self.sections[letter_type]
         if not section.filter_tab:
             section.create_or_get_filter_tab()
+            
+    def update_sections_based_on_letters(self, selected_letters: List[Letters]) -> None:
+        # First, hide all sections and filter tabs
+        for section in self.sections.values():
+            section.hide()
+            section.hide_filter_tab()
+
+        # Now, show only the sections and filter tabs needed based on selected letters
+        for letter in selected_letters:
+            letter_type = LetterType.get_letter_type(letter)
+            if letter_type in self.sections:
+                self.sections[letter_type].show()
+                self.sections[letter_type].show_filter_tab()

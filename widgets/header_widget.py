@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel, QHBoxLayout, QFrame
 from PyQt6.QtCore import Qt
 
-from .turns_box.turns_box_widgets.base_attr_box_widget import AttrBoxWidget
+from .turns_box.turns_box_widgets.base_attr_box_widget import TurnsBoxWidget
 
 if TYPE_CHECKING:
     from widgets.turns_box.turns_box import TurnsBox
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 from constants import BLUE, COLOR, LEAD_STATE, MOTION_TYPE, PRO, ANTI, DASH, STATIC
 
 
-class HeaderWidget(AttrBoxWidget):
+class HeaderWidget(TurnsBoxWidget):
     def __init__(self, turns_box: "TurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box
@@ -18,7 +18,7 @@ class HeaderWidget(AttrBoxWidget):
         self.header_label: QLabel = self._setup_header()
         self.layout: QHBoxLayout = self._setup_layout()
         # add black border
-        self.setStyleSheet("border: 1px solid black;")
+        # self.setStyleSheet("border: 1px solid black;")
 
     def _setup_header(self) -> None:
         if self.turns_box.attribute_type == COLOR:

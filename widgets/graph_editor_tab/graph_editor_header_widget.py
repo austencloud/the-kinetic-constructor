@@ -13,13 +13,13 @@ from widgets.header_widget import (
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_attr_box import (
-        GraphEditorAttrBox,
+        GraphEditorTurnsBox,
     )
 from constants import BLUE, CCW_HANDPATH, CW_HANDPATH, HEX_BLUE, HEX_RED, ICON_DIR, RED
 
 
 class GraphEditorHeaderWidget(HeaderWidget):
-    def __init__(self, turns_box: "GraphEditorAttrBox") -> None:
+    def __init__(self, turns_box: "GraphEditorTurnsBox") -> None:
         super().__init__(turns_box)
         self.header_label = self._setup_header_label()
         self.rotate_cw_button = self._create_rotate_motion_button(

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from objects.motion.motion import Motion
 from widgets.turns_panel import TurnsPanel
 
-from ..graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
+from ..graph_editor_tab.graph_editor_attr_box import GraphEditorTurnsBox
 
 if TYPE_CHECKING:
     from ..graph_editor_tab.graph_editor_frame import GraphEditorFrame
@@ -16,10 +16,10 @@ class GraphEditorAttrPanel(TurnsPanel):
         self.setup_layouts()
 
     def _setup_attr_boxes(self) -> None:
-        self.blue_attr_box: GraphEditorAttrBox = GraphEditorAttrBox(
+        self.blue_attr_box: GraphEditorTurnsBox = GraphEditorTurnsBox(
             self, self.graph_editor.main_pictograph, BLUE
         )
-        self.red_attr_box: GraphEditorAttrBox = GraphEditorAttrBox(
+        self.red_attr_box: GraphEditorTurnsBox = GraphEditorTurnsBox(
             self, self.graph_editor.main_pictograph, RED
         )
         self.boxes = [self.blue_attr_box, self.red_attr_box]

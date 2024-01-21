@@ -16,7 +16,7 @@ from widgets.header_widget import HeaderWidget
 from .turns_box_widgets.turns_widget.turns_widget import (
     TurnsWidget,
 )
-from .turns_box_widgets.base_attr_box_widget import AttrBoxWidget
+from .turns_box_widgets.base_attr_box_widget import TurnsBoxWidget
 from PyQt6.QtWidgets import QSizePolicy
 
 if TYPE_CHECKING:
@@ -79,7 +79,7 @@ class TurnsBox(QFrame):
 
     def apply_border_style(self, color_hex: str) -> None:
         self.setStyleSheet(
-            f"#AttrBox {{ "
+            f"#TurnsBox {{ "
             f"border: {self.turns_panel.filter_tab.attr_box_border_width}px solid {color_hex};"
             f" border-style: inset; "
             f"}}"

@@ -8,14 +8,14 @@ from .managers.turn_adjustment_display_manager import TurnsAdjustmentDisplayMana
 from .managers.turns_updater import TurnsUpdater
 from .managers.turns_display_manager import TurnDisplayManager
 from .managers.turn_direct_set_manager import TurnDirectSetManager
-from ..base_attr_box_widget import AttrBoxWidget
-from ..base_attr_box_widget import AttrBoxWidget
+from ..base_attr_box_widget import TurnsBoxWidget
+from ..base_attr_box_widget import TurnsBoxWidget
 
 if TYPE_CHECKING:
     from turns_box.turns_box import TurnsBox
 
 
-class TurnsWidget(AttrBoxWidget):
+class TurnsWidget(TurnsBoxWidget):
     def __init__(self, turns_box: "TurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box
