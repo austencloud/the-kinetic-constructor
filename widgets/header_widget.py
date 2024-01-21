@@ -17,6 +17,8 @@ class HeaderWidget(AttrBoxWidget):
         self.separator: QFrame = self.create_separator()
         self.header_label: QLabel = self._setup_header()
         self.layout: QHBoxLayout = self._setup_layout()
+        # add black border
+        self.setStyleSheet("border: 1px solid black;")
 
     def _setup_header(self) -> None:
         if self.turns_box.attribute_type == COLOR:
@@ -72,4 +74,6 @@ class HeaderWidget(AttrBoxWidget):
         label.setStyleSheet(
             f"color: {font_color}; font-size: {font_size}px; font-weight: {font_weight};"
         )
+        label.setMaximumHeight(font_size * 2)
+        self.adjustSize()  # Set maximum height to contents
         return label
