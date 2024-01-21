@@ -16,6 +16,7 @@ from PyQt6.QtCore import Qt
 
 
 if TYPE_CHECKING:
+    from widgets.pictograph.pictograph import Pictograph
     from widgets.scroll_area.scroll_area_section import ScrollAreaSection
 
 
@@ -147,29 +148,36 @@ class FilterTab(QTabWidget):
                     self.removeTab(self.indexOf(self.lead_state_turns_panel))
 
     def resize_filter_tab(self) -> None:
+        self.resize(self.section.width() - self.attr_box_border_width, self.height())
         for panel in self.panels:
             panel.resize_turns_panel()
+        self.setMaximumHeight(int(self.section.width() / 4))
 
     def get_current_turns_values(self) -> dict[MotionAttributes, dict]:
-        # This dictionary will hold the current turns values for each motion type.
-        turns_values = {MOTION_TYPE: {}, COLOR: {}, LEAD_STATE: {}}
-
-        # Assuming each TurnsBox has a method called `get_current_turns_value`
-        # that returns the current turns value set in that box.
-        for panel in self.panels:
-            if panel.attribute_type == MOTION_TYPE:
-                for box in panel.boxes:
-                    turns_values[MOTION_TYPE][
-                        box.motion_type
-                    ] = box.turns_widget.turns_display_manager.get_current_turns_value()
-            elif panel.attribute_type == COLOR:
-                for box in panel.boxes:
-                    turns_values[COLOR][
-                        box.color
-                    ] = box.turns_widget.turns_display_manager.get_current_turns_value()
-            elif panel.attribute_type == LEAD_STATE:
-                for box in panel.boxes:
-                    turns_values[LEAD_STATE][
-                        box.lead_state
-                    ] = box.turns_widget.turns_display_manager.get_current_turns_value()
+        turns_values = {
+            attribute_type: {
+                box.attribute_value: box.turns_widget.turns_display_manager.get_current_turns_value()
+                for box in panel.boxes
+            }
+            for panel in self.panels
+            for attribute_type in [panel.attribute_type]
+        }
         return turns_values
+
+    def apply_turns_to_pictograph(self, pictograph: "Pictograph") -> None:
+        turns_values = self.get_current_turns_values()
+        for motion in pictograph.motions.values():
+            motion_type = motion.motion_type
+            if motion_type in turns_values[MOTION_TYPE]:
+                motion.turns_manager.set_turns(turns_values[MOTION_TYPE][motion_type])
+
+            if motion.color in turns_values[COLOR]:
+                motion.turns_manager.set_turns(turns_values[COLOR][motion.color])
+
+            if (
+                hasattr(motion, "lead_state")
+                and motion.lead_state in turns_values[LEAD_STATE]
+            ):
+                motion.turns_manager.set_turns(
+                    turns_values[LEAD_STATE][motion.lead_state]
+                )
