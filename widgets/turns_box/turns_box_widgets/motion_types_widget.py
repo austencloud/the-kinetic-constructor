@@ -18,8 +18,8 @@ if TYPE_CHECKING:
 
 
 class MotionTypeWidget(AttrBoxWidget):
-    def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
-        super().__init__(attr_box)
+    def __init__(self, turns_box: "GraphEditorAttrBox") -> None:
+        super().__init__(turns_box)
 
         self.header_label = self.create_attr_header_label("Type")
         self.motion_type_box: QComboBox = self._setup_motion_type_box()
@@ -76,7 +76,7 @@ class MotionTypeWidget(AttrBoxWidget):
         layout.setSpacing(0)
 
         self.swap_button.setMinimumSize(
-            int(self.attr_box.width() * 0.15), int(self.attr_box.width() * 0.15)
+            int(self.turns_box.width() * 0.15), int(self.turns_box.width() * 0.15)
         )
         layout.addSpacerItem(
             QSpacerItem(
@@ -105,7 +105,7 @@ class MotionTypeWidget(AttrBoxWidget):
         )
         if new_motion_type_index >= 0:
             self.motion_type_box.setCurrentIndex(new_motion_type_index)
-            motion = self.attr_box.pictograph.motions[self.attr_box.color]
+            motion = self.turns_box.pictograph.motions[self.turns_box.color]
             if motion:
                 motion.manipulator.swap_motion_type()
 
@@ -124,27 +124,27 @@ class MotionTypeWidget(AttrBoxWidget):
 
     def resize_motion_type_widget(self) -> None:
         self.setMinimumWidth(
-            self.attr_box.width() - self.attr_box.attr_box_border_width * 2
+            self.turns_box.width() - self.turns_box.attr_box_border_width * 2
         )
         self.setMaximumWidth(
-            self.attr_box.width() - self.attr_box.attr_box_border_width * 2
+            self.turns_box.width() - self.turns_box.attr_box_border_width * 2
         )
 
-        self.spacing = self.attr_box.pictograph.view.width() // 250
+        self.spacing = self.turns_box.pictograph.view.width() // 250
         self.swap_button_frame.setMinimumWidth(int(self.width() * 1 / 4))
         self.swap_button_frame.setMaximumWidth(int(self.width() * 1 / 4))
         self.motion_type_box.setMinimumWidth(int(self.width() * 0.5))
 
         self.header_label.setFont(QFont("Arial", int(self.width() / 22)))
 
-        self.motion_type_box.setMinimumHeight(int(self.attr_box.height() / 8))
-        self.motion_type_box.setMaximumHeight(int(self.attr_box.height() / 8))
+        self.motion_type_box.setMinimumHeight(int(self.turns_box.height() / 8))
+        self.motion_type_box.setMaximumHeight(int(self.turns_box.height() / 8))
         box_font_size = int(self.width() / 10)
         self.motion_type_box.setFont(
             QFont("Arial", box_font_size, QFont.Weight.Bold, True)
         )
         self.main_vbox_frame.layout().setSpacing(
-            self.attr_box.pictograph.view.width() // 100
+            self.turns_box.pictograph.view.width() // 100
         )
         # Update the stylesheet with the new border radius
         border_radius = (
@@ -157,7 +157,7 @@ class MotionTypeWidget(AttrBoxWidget):
         self.motion_type_box.setStyleSheet(
             f"""
             QComboBox {{
-                border: {self.attr_box.turn_display_border}px solid black;
+                border: {self.turns_box.turn_display_border}px solid black;
                 border-radius: {border_radius}px;
             }}
 

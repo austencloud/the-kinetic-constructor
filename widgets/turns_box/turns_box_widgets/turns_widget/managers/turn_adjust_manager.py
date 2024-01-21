@@ -4,16 +4,15 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 if TYPE_CHECKING:
-    from widgets.attr_box.attr_box import AttrBox
+    from widgets.turns_box.turns_box import TurnsBox
     from objects.motion.motion import Motion
     from ..turns_widget import TurnsWidget
 
 
 class TurnAdjustManager:
     def __init__(self, turns_widget: "TurnsWidget") -> None:
-        self.attr_box: "AttrBox" = turns_widget.attr_box
+        self.turns_box: "TurnsBox" = turns_widget.turns_box
         self.turns_widget = turns_widget
-
 
     def setup_adjust_turns_buttons(self) -> None:
         self.turns_widget.button_manager.setup_adjust_turns_buttons()
@@ -26,14 +25,9 @@ class TurnAdjustManager:
 
     def unpress_vtg_buttons(self) -> None:
         """Unpress the vtg buttons."""
-        if hasattr(self.attr_box, "same_button"):
-            self.attr_box.rot_dir_button_manager.same_button.unpress()
-            self.attr_box.rot_dir_button_manager.opp_button.unpress()
+        if hasattr(self.turns_box, "same_button"):
+            self.turns_box.rot_dir_button_manager.same_button.unpress()
+            self.turns_box.rot_dir_button_manager.opp_button.unpress()
 
     def update_motion_properties(self, motion: "Motion", new_turns: Turns) -> None:
         self.turns_widget.updater.update_motion_properties(motion, new_turns)
-
-
-
-
-

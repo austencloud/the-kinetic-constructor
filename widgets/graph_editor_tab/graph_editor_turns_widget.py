@@ -10,7 +10,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 from typing import TYPE_CHECKING, List
 from constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON
-from ..attr_box.attr_box_widgets.turns_widget.turns_widget import (
+from ..turns_box.turns_box_widgets.turns_widget.turns_widget import (
     TurnsWidget,
 )
 
@@ -20,8 +20,8 @@ if TYPE_CHECKING:
 
 
 class GraphEditorTurnsWidget(TurnsWidget):
-    def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
-        super().__init__(attr_box)
+    def __init__(self, turns_box: "GraphEditorAttrBox") -> None:
+        super().__init__(turns_box)
         self.clockwise_pixmap = self._create_clock_pixmap(CLOCKWISE_ICON)
         self.counter_clockwise_pixmap = self._create_clock_pixmap(
             COUNTER_CLOCKWISE_ICON
@@ -152,12 +152,12 @@ class GraphEditorTurnsWidget(TurnsWidget):
 
     def _update_button_size(self) -> None:
         for adjust_turns_button in self.turn_adjust_manager.adjust_turns_buttons:
-            button_size = int(self.attr_box.width() / 7)
+            button_size = int(self.turns_box.width() / 7)
             if (
                 adjust_turns_button.text() == "-0.5"
                 or adjust_turns_button.text() == "+0.5"
             ):
                 button_size = int(button_size * 0.85)
             else:
-                button_size = int(self.attr_box.width() / 6)
+                button_size = int(self.turns_box.width() / 6)
             adjust_turns_button.update_adjust_turns_button_size(button_size)

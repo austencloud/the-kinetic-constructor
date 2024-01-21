@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from ....attr_box.attr_box_widgets.turns_widget.turns_widget import (
+    from ....turns_box.turns_box_widgets.turns_widget.turns_widget import (
         TurnsWidget,
     )
 

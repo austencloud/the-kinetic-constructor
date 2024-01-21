@@ -12,20 +12,20 @@ from ..base_attr_box_widget import AttrBoxWidget
 from ..base_attr_box_widget import AttrBoxWidget
 
 if TYPE_CHECKING:
-    from attr_box.attr_box import AttrBox
+    from turns_box.turns_box import TurnsBox
 
 
 class TurnsWidget(AttrBoxWidget):
-    def __init__(self, attr_box: "AttrBox") -> None:
-        super().__init__(attr_box)
-        self.attr_box = attr_box
+    def __init__(self, turns_box: "TurnsBox") -> None:
+        super().__init__(turns_box)
+        self.turns_box = turns_box
         self.turns_label: QLabel = None
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.turn_direct_set_manager = TurnDirectSetManager(self)
         self.turn_adjust_manager = TurnAdjustManager(self)
         self.turns_display_manager = TurnDisplayManager(self)
         self.button_manager = TurnsButtonManager(self)
-        self.relevance_checker = MotionRelevanceChecker(attr_box)
+        self.relevance_checker = MotionRelevanceChecker(turns_box)
         self.updater = TurnsUpdater(self)
         self.rotation_direction_manager = TurnsWidgetRotDirManager(self)
         self.display_manager = TurnsAdjustmentDisplayManager(self)

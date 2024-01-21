@@ -22,8 +22,8 @@ if TYPE_CHECKING:
 
 
 class StartEndLocWidget(AttrBoxWidget):
-    def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
-        super().__init__(attr_box)
+    def __init__(self, turns_box: "GraphEditorAttrBox") -> None:
+        super().__init__(turns_box)
 
         # Setup start and end combo boxes
         self.start_loc_box: QComboBox = self._setup_loc_box()
@@ -130,7 +130,7 @@ class StartEndLocWidget(AttrBoxWidget):
         self.start_loc_box.setCurrentIndex(end_index)
         self.end_loc_box.setCurrentIndex(start_index)
 
-        motion = self.attr_box.pictograph.motions[self.attr_box.color]
+        motion = self.turns_box.pictograph.motions[self.turns_box.color]
         if motion:
             motion.manipulator.swap_rot_dir()
             self.update_start_end_loc_boxes(motion.start_loc, motion.end_loc)
@@ -150,10 +150,10 @@ class StartEndLocWidget(AttrBoxWidget):
 
     def resize_start_end_widget(self) -> None:
         self.setMinimumWidth(
-            self.attr_box.width() - self.attr_box.attr_box_border_width * 2
+            self.turns_box.width() - self.turns_box.attr_box_border_width * 2
         )
         self.setMaximumWidth(
-            self.attr_box.width() - self.attr_box.attr_box_border_width * 2
+            self.turns_box.width() - self.turns_box.attr_box_border_width * 2
         )
 
         self.swap_button_frame.setMaximumWidth(int(self.width() * 1 / 4))
@@ -183,8 +183,8 @@ class StartEndLocWidget(AttrBoxWidget):
             loc_box.setMinimumWidth(int(self.width() / 3.5))
             loc_box.setMaximumWidth(int(self.width() / 3.5))
 
-            loc_box.setMinimumHeight(int(self.attr_box.height() / 8))
-            loc_box.setMaximumHeight(int(self.attr_box.height() / 8))
+            loc_box.setMinimumHeight(int(self.turns_box.height() / 8))
+            loc_box.setMaximumHeight(int(self.turns_box.height() / 8))
 
             border_radius = min(loc_box.width(), loc_box.height()) * 0.25
 
@@ -193,7 +193,7 @@ class StartEndLocWidget(AttrBoxWidget):
                 QComboBox {{
                     padding-left: 2px; /* add some padding on the left for the text */
                     padding-right: 0px; /* make room for the arrow on the right */
-                    border: {self.attr_box.turn_display_border}px solid black;
+                    border: {self.turns_box.turn_display_border}px solid black;
                     border-radius: {border_radius}px;
                 }}
                 QComboBox::drop-down {{

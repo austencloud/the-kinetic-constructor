@@ -3,7 +3,9 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.attr_box.attr_box_widgets.turns_widget.turns_widget import TurnsWidget
+    from widgets.turns_box.turns_box_widgets.turns_widget.turns_widget import (
+        TurnsWidget,
+    )
 
 
 class TurnDirectSetManager:

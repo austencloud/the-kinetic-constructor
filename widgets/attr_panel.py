@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, List
 from Enums import LetterType
 from constants import ANTI, COLOR, DASH, MOTION_TYPE, PRO, STATIC
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.attr_box.attr_box import AttrBox
+from widgets.turns_box.turns_box import TurnsBox
 from widgets.factories.attr_box_factory import AttrBoxFactory
 from utilities.TypeChecking.letter_lists import (
     pro_letters,
@@ -23,7 +23,7 @@ class AttrPanel(QFrame):
         self.filter_tab = filter_tab
         self.attribute_type = attribute_type
         self.attr_box_factory = AttrBoxFactory(self)
-        self.boxes: List[AttrBox] = self.attr_box_factory.create_boxes()
+        self.boxes: List[TurnsBox] = self.attr_box_factory.create_boxes()
         self.setup_layouts()
 
     def setup_layouts(self) -> None:

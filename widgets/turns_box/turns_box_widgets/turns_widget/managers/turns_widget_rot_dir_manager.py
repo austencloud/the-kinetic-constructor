@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 class TurnsWidgetRotDirManager:
     def __init__(self, turns_widget: "TurnsWidget") -> None:
-        self.attr_box = turns_widget.attr_box
+        self.turns_box = turns_widget.turns_box
         self.turns_widget = turns_widget
 
     def _set_prop_rot_dir_based_on_vtg_state(self, motion: "Motion") -> None:
@@ -26,9 +26,9 @@ class TurnsWidgetRotDirManager:
         self, motion: "Motion", other_motion: "Motion"
     ) -> PropRotDirs:
         """Determine the prop rot dir of the motion based on the vtg directional relationship."""
-        rot_dir_btn_manager = self.turns_widget.attr_box.rot_dir_button_manager
+        rot_dir_btn_manager = self.turns_widget.turns_box.rot_dir_button_manager
         letter = motion.pictograph.letter
-        vtg_dir_state = self.attr_box.vtg_dir_btn_state
+        vtg_dir_state = self.turns_box.vtg_dir_btn_state
 
         same_dir_selected = (True, False)
         opp_dir_selected = (False, True)
@@ -63,4 +63,4 @@ class TurnsWidgetRotDirManager:
 
     def _set_vtg_dir_state_default(self) -> None:
         """Set the vtg direction state to default."""
-        self.attr_box.vtg_dir_btn_state = {SAME: True, OPP: False}
+        self.turns_box.vtg_dir_btn_state = {SAME: True, OPP: False}

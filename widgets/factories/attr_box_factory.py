@@ -15,7 +15,7 @@ from constants import (
 )
 from utilities.TypeChecking.MotionAttributes import MotionTypes
 from utilities.TypeChecking.letter_lists import pro_letters, anti_letters
-from widgets.attr_box.attr_box import AttrBox
+from widgets.turns_box.turns_box import TurnsBox
 
 
 if TYPE_CHECKING:
@@ -26,16 +26,19 @@ class AttrBoxFactory:
     def __init__(self, attr_panel: "AttrPanel") -> None:
         self.attr_panel = attr_panel
 
-    def create_boxes(self) -> List[AttrBox]:
+    def create_boxes(self) -> List[TurnsBox]:
         attributes = []
         if self.attr_panel.attribute_type == MOTION_TYPE:
-            return [AttrBox(self.attr_panel, MOTION_TYPE, motion_type)
-                    for motion_type in [PRO, ANTI, DASH, STATIC]]
+            return [
+                TurnsBox(self.attr_panel, MOTION_TYPE, motion_type)
+                for motion_type in [PRO, ANTI, DASH, STATIC]
+            ]
         elif self.attr_panel.attribute_type == COLOR:
             attributes = [BLUE, RED]
         elif self.attr_panel.attribute_type == LEAD_STATE:
             attributes = [LEADING, TRAILING]
 
-        return [AttrBox(self.attr_panel, self.attr_panel.attribute_type, attribute)
-                for attribute in attributes]
-
+        return [
+            TurnsBox(self.attr_panel, self.attr_panel.attribute_type, attribute)
+            for attribute in attributes
+        ]

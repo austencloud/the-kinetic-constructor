@@ -7,21 +7,20 @@ from widgets.factories.button_factory.buttons.swap_button import SwapButton
 from ...factories.button_factory.buttons.adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
-    from widgets.attr_box.attr_box import AttrBox
+    from widgets.turns_box.turns_box import TurnsBox
     from objects.motion.motion import Motion
 
 
-
 class AttrBoxWidget(QWidget):
-    def __init__(self, attr_box) -> None:
-        super().__init__(attr_box)
-        self.attr_box: "AttrBox" = attr_box
+    def __init__(self, turns_box) -> None:
+        super().__init__(turns_box)
+        self.turns_box: "TurnsBox" = turns_box
 
     def create_attr_header_label(
         self, text: str, align: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter
     ) -> QLabel:
         attr_label = QLabel(text, self)
-        attr_label.setFont(QFont("Arial", self.attr_box.font_size))
+        attr_label.setFont(QFont("Arial", self.turns_box.font_size))
         attr_label.setAlignment(align)
         attr_label.setContentsMargins(0, 0, 0, 0)
         return attr_label
@@ -32,7 +31,7 @@ class AttrBoxWidget(QWidget):
         return frame
 
     def create_swap_button(self, icon_path: str, callback: Callable) -> "SwapButton":
-        button = SwapButton(self.attr_box, icon_path)
+        button = SwapButton(self.turns_box, icon_path)
         button.setIcon(QIcon(icon_path))
         button.clicked.connect(callback)
         return button

@@ -25,20 +25,19 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QPushButton
 
 if TYPE_CHECKING:
-    from widgets.attr_box.attr_box import AttrBox
+    from widgets.turns_box.turns_box import TurnsBox
     from objects.motion.motion import Motion
 
 
 class RotDirButtonManager:
-    def __init__(self, attr_box: "AttrBox") -> None:
-        self.attr_box = attr_box
+    def __init__(self, turns_box: "TurnsBox") -> None:
+        self.turns_box = turns_box
 
         self.prop_rot_dir_buttons: List[
             PropRotDirButton
         ] = self._setup_prop_rot_dir_buttons()
         self.vtg_dir_buttons: List[VtgDirButton] = self._setup_vtg_dir_buttons()
         self.buttons = self.prop_rot_dir_buttons + self.vtg_dir_buttons
-
 
     def _setup_vtg_dir_buttons(self) -> List[QPushButton]:
         self.same_button: VtgDirButton = ButtonFactory.create_vtg_dir_button(
@@ -94,13 +93,13 @@ class RotDirButtonManager:
         for (
             pictograph
         ) in (
-            self.attr_box.attr_panel.filter_tab.section.scroll_area.pictographs.values()
+            self.turns_box.attr_panel.filter_tab.section.scroll_area.pictographs.values()
         ):
             for motion in pictograph.motions.values():
                 other_motion = pictograph.motions[RED if motion.color == BLUE else BLUE]
                 if motion.check.is_dash() or motion.check.is_static():
                     if other_motion.check.is_shift():
-                        if motion.motion_type == self.attr_box.motion_type:
+                        if motion.motion_type == self.turns_box.motion_type:
                             if vtg_dir == SAME:
                                 self._update_pictograph_vtg_dir(
                                     motion, other_motion.prop_rot_dir
@@ -117,15 +116,15 @@ class RotDirButtonManager:
         for (
             pictograph
         ) in (
-            self.attr_box.attr_panel.filter_tab.section.scroll_area.pictographs.values()
+            self.turns_box.attr_panel.filter_tab.section.scroll_area.pictographs.values()
         ):
             for motion in pictograph.motions.values():
                 if motion.motion_type in [DASH, STATIC]:
-                    if self.attr_box.attribute_type == MOTION_TYPE:
-                        if motion.motion_type == self.attr_box.motion_type:
+                    if self.turns_box.attribute_type == MOTION_TYPE:
+                        if motion.motion_type == self.turns_box.motion_type:
                             self._update_pictograph_prop_rot_dir(motion, prop_rot_dir)
-                    elif self.attr_box.attribute_type == COLOR:
-                        if motion.color == self.attr_box.color:
+                    elif self.turns_box.attribute_type == COLOR:
+                        if motion.color == self.turns_box.color:
                             self._update_pictograph_prop_rot_dir(motion, prop_rot_dir)
 
     def _update_pictograph_vtg_dir(
@@ -172,7 +171,7 @@ class RotDirButtonManager:
     def _replace_and_toggle(
         self, button_to_hide: QPushButton, button_to_show: QPushButton
     ) -> None:
-        layout = self.attr_box.header_widget.layout
+        layout = self.turns_box.header_widget.layout
         layout.replaceWidget(button_to_hide, button_to_show)
         button_to_hide.hide()
         button_to_show.show()

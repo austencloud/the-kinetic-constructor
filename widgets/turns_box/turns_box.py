@@ -11,19 +11,19 @@ from utilities.TypeChecking.TypeChecking import (
     MotionTypes,
 )
 
-from .attr_box_widgets.rot_dir_button_manager import RotDirButtonManager
+from .turns_box_widgets.rot_dir_button_manager import RotDirButtonManager
 from widgets.header_widget import HeaderWidget
-from .attr_box_widgets.turns_widget.turns_widget import (
+from .turns_box_widgets.turns_widget.turns_widget import (
     TurnsWidget,
 )
-from .attr_box_widgets.base_attr_box_widget import AttrBoxWidget
+from .turns_box_widgets.base_attr_box_widget import AttrBoxWidget
 from PyQt6.QtWidgets import QSizePolicy
 
 if TYPE_CHECKING:
     from ..attr_panel import AttrPanel
 
 
-class AttrBox(QFrame):
+class TurnsBox(QFrame):
     turns_widget: TurnsWidget
 
     def __init__(

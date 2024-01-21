@@ -10,8 +10,7 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from constants import ICON_DIR
 from utilities.TypeChecking.TypeChecking import Orientations
-from widgets.attr_box.attr_box_widgets.base_attr_box_widget import AttrBoxWidget
-
+from widgets.turns_box.turns_box_widgets.base_attr_box_widget import AttrBoxWidget
 
 
 if TYPE_CHECKING:
@@ -19,8 +18,8 @@ if TYPE_CHECKING:
 
 
 class StartEndOriWidget(AttrBoxWidget):
-    def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
-        super().__init__(attr_box)
+    def __init__(self, turns_box: "GraphEditorAttrBox") -> None:
+        super().__init__(turns_box)
 
         # Setup start and end combo boxes
         self.start_ori_box: QComboBox = self._setup_ori_box()
@@ -106,8 +105,8 @@ class StartEndOriWidget(AttrBoxWidget):
         self.end_ori_box.setCurrentIndex(-1)
 
     def resize_start_end_widget(self) -> None:
-        self.setMinimumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
-        self.setMaximumWidth(self.attr_box.width() - self.attr_box.border_width * 2)
+        self.setMinimumWidth(self.turns_box.width() - self.turns_box.border_width * 2)
+        self.setMaximumWidth(self.turns_box.width() - self.turns_box.border_width * 2)
 
         self.arrow_label.setMinimumHeight(self.start_ori_box.height())
         self.arrow_label.setMaximumHeight(self.start_ori_box.height())
@@ -133,8 +132,8 @@ class StartEndOriWidget(AttrBoxWidget):
             ori_box.setMinimumWidth(int(self.width() / 3.5))
             ori_box.setMaximumWidth(int(self.width() / 3.5))
 
-            ori_box.setMinimumHeight(int(self.attr_box.height() / 8))
-            ori_box.setMaximumHeight(int(self.attr_box.height() / 8))
+            ori_box.setMinimumHeight(int(self.turns_box.height() / 8))
+            ori_box.setMaximumHeight(int(self.turns_box.height() / 8))
 
             border_radius = min(ori_box.width(), ori_box.height()) * 0.25
 
@@ -143,7 +142,7 @@ class StartEndOriWidget(AttrBoxWidget):
                 QComboBox {{
                     padding-left: 2px; /* add some padding on the left for the text */
                     padding-right: 0px; /* make room for the arrow on the right */
-                    border: {self.attr_box.combobox_border}px solid black;
+                    border: {self.turns_box.combobox_border}px solid black;
                     border-radius: {border_radius}px;
                 }}
                 QComboBox::drop-down {{

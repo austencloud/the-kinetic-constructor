@@ -2,9 +2,9 @@ from typing import TYPE_CHECKING
 from constants import HEX_BLUE, HEX_RED, RED
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import Colors
-from ..attr_box.attr_box_widgets.motion_types_widget import MotionTypeWidget
-from ..attr_box.attr_box_widgets.start_end_loc_widget import StartEndLocWidget
-from ..attr_box.attr_box import AttrBox
+from ..turns_box.turns_box_widgets.motion_types_widget import MotionTypeWidget
+from ..turns_box.turns_box_widgets.start_end_loc_widget import StartEndLocWidget
+from ..turns_box.turns_box import TurnsBox
 from ..attr_panel import AttrPanel
 from ..factories.button_factory.buttons.adjust_turns_button import AdjustTurnsButton
 
@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 from PyQt6.QtGui import QFont
 
 
-class GraphEditorAttrBox(AttrBox):
+class GraphEditorAttrBox(TurnsBox):
     def __init__(
         self, attr_panel: "AttrPanel", pictograph: "Pictograph", color: Colors
     ) -> None:

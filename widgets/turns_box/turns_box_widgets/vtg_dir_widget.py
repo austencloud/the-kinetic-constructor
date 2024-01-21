@@ -26,14 +26,13 @@ from widgets.factories.button_factory.buttons.rot_dir_buttons import VtgDirButto
 from .base_attr_box_widget import AttrBoxWidget
 
 if TYPE_CHECKING:
-    from widgets.attr_box.attr_box import AttrBox
-
+    from widgets.turns_box.turns_box import TurnsBox
 
 
 class VtgDirWidget(AttrBoxWidget):
-    def __init__(self, attr_box: AttrBox) -> None:
-        super().__init__(attr_box)
-        self.attr_box =  attr_box
+    def __init__(self, turns_box: TurnsBox) -> None:
+        super().__init__(turns_box)
+        self.turns_box = turns_box
         self.setup_ui()
 
     def _setup_layout(self) -> None:
@@ -71,7 +70,7 @@ class VtgDirWidget(AttrBoxWidget):
     def _set_default_vtg_dir(self):
         has_turns = any(
             motion.turns > 0
-            for pictograph in self.attr_box.attr_panel.scroll_area.scroll_area.pictographs.values()
+            for pictograph in self.turns_box.attr_panel.scroll_area.scroll_area.pictographs.values()
             for motion in pictograph.motions.values()
             if motion.motion_type == DASH
         )
@@ -80,10 +79,10 @@ class VtgDirWidget(AttrBoxWidget):
     def _set_prop_rot_dir(self, prop_rot_dir: VtgDirections) -> None:
         for (
             pictograph
-        ) in self.attr_box.attr_panel.scroll_area.scroll_area.pictographs.values():
+        ) in self.turns_box.attr_panel.scroll_area.scroll_area.pictographs.values():
             for motion in pictograph.motions.values():
                 if motion.motion_type in [DASH, STATIC]:
-                    if motion.color == self.attr_box.color:
+                    if motion.color == self.turns_box.color:
                         pictograph_dict = {
                             f"{motion.color}_prop_rot_dir": prop_rot_dir,
                         }
@@ -132,8 +131,8 @@ class VtgDirWidget(AttrBoxWidget):
         self.update_button_size()
 
     def _setup_header_label(self) -> QLabel:
-        text = "Left" if self.attr_box.color == BLUE else "Right"
-        color_hex = HEX_RED if self.attr_box.color == RED else HEX_BLUE
+        text = "Left" if self.turns_box.color == BLUE else "Right"
+        color_hex = HEX_RED if self.turns_box.color == RED else HEX_BLUE
         label = QLabel(text, self)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label.setStyleSheet(f"color: {color_hex}; font-weight: bold;")

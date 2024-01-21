@@ -13,12 +13,14 @@ from utilities.TypeChecking.letter_lists import (
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
     from objects.motion.motion import Motion
-    from widgets.attr_box.attr_box_widgets.turns_widget.turns_widget import TurnsWidget
+    from widgets.turns_box.turns_box_widgets.turns_widget.turns_widget import (
+        TurnsWidget,
+    )
 
 
 class TurnsUpdater:
     def __init__(self, turns_widget: "TurnsWidget") -> None:
-        self.attr_box = turns_widget.attr_box
+        self.turns_box = turns_widget.turns_box
         self.turns_widget = turns_widget
 
     def update_motion_properties(self, motion: "Motion", new_turns: Turns) -> None:
@@ -51,8 +53,8 @@ class TurnsUpdater:
         if new_turns == 0:
             motion.prop_rot_dir = NO_ROT
             self.turns_widget.turn_adjust_manager.unpress_vtg_buttons()
-            if hasattr(self.attr_box, "rot_dir_button_manager"):
-                self.attr_box.rot_dir_button_manager.hide_buttons()
+            if hasattr(self.turns_box, "rot_dir_button_manager"):
+                self.turns_box.rot_dir_button_manager.hide_buttons()
 
         elif motion.turns == 0:
             self._set_prop_rot_dir_based_on_vtg_state(motion)
@@ -71,28 +73,28 @@ class TurnsUpdater:
             or motion.pictograph.letter in Type3_letters
         ):
             if (
-                not self.attr_box.vtg_dir_btn_state[SAME]
-                and not self.attr_box.vtg_dir_btn_state[OPP]
+                not self.turns_box.vtg_dir_btn_state[SAME]
+                and not self.turns_box.vtg_dir_btn_state[OPP]
             ):
                 self._set_vtg_dir_state_default()
-                self.turns_widget.attr_box.rot_dir_button_manager.show_vtg_dir_buttons()
-            if self.attr_box.vtg_dir_btn_state[SAME]:
+                self.turns_widget.turns_box.rot_dir_button_manager.show_vtg_dir_buttons()
+            if self.turns_box.vtg_dir_btn_state[SAME]:
                 return other_motion.prop_rot_dir
-            if self.attr_box.vtg_dir_btn_state[OPP]:
+            if self.turns_box.vtg_dir_btn_state[OPP]:
                 if other_motion.prop_rot_dir == CLOCKWISE:
                     return COUNTER_CLOCKWISE
                 elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
                     return CLOCKWISE
 
         elif motion.pictograph.letter in Type4_letters:
-            self.turns_widget.attr_box.rot_dir_button_manager.show_prop_rot_dir_buttons()
-            self.turns_widget.attr_box.rot_dir_button_manager.cw_button.press()
+            self.turns_widget.turns_box.rot_dir_button_manager.show_prop_rot_dir_buttons()
+            self.turns_widget.turns_box.rot_dir_button_manager.cw_button.press()
             return CLOCKWISE
 
     def _set_vtg_dir_state_default(self) -> None:
         """Set the vtg direction state to default."""
-        self.attr_box.vtg_dir_btn_state[SAME] = True
-        self.attr_box.vtg_dir_btn_state[OPP] = False
+        self.turns_box.vtg_dir_btn_state[SAME] = True
+        self.turns_box.vtg_dir_btn_state[OPP] = False
 
     def _clamp_turns(self, turns: Turns) -> Turns:
         """Clamp the turns value to be within allowable range."""

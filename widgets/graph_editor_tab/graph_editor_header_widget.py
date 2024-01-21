@@ -19,8 +19,8 @@ from constants import BLUE, CCW_HANDPATH, CW_HANDPATH, HEX_BLUE, HEX_RED, ICON_D
 
 
 class GraphEditorHeaderWidget(HeaderWidget):
-    def __init__(self, attr_box: "GraphEditorAttrBox") -> None:
-        super().__init__(attr_box)
+    def __init__(self, turns_box: "GraphEditorAttrBox") -> None:
+        super().__init__(turns_box)
         self.header_label = self._setup_header_label()
         self.rotate_cw_button = self._create_rotate_motion_button(
             f"{ICON_DIR}rotate_cw.png", self._rotate_cw
@@ -50,18 +50,18 @@ class GraphEditorHeaderWidget(HeaderWidget):
         self.layout.addWidget(self.separator)
 
     def _rotate_ccw(self) -> None:
-        motion = self.attr_box.pictograph.motions[self.attr_box.color]
+        motion = self.turns_box.pictograph.motions[self.turns_box.color]
         if motion:
             motion.manipulator.rotate_motion(CCW_HANDPATH)
 
     def _rotate_cw(self) -> None:
-        motion = self.attr_box.pictograph.motions[self.attr_box.color]
+        motion = self.turns_box.pictograph.motions[self.turns_box.color]
         if motion:
             motion.manipulator.rotate_motion(CW_HANDPATH)
 
     def _setup_header_label(self) -> QLabel:
-        text = "Left" if self.attr_box.color == BLUE else "Right"
-        color_hex = HEX_RED if self.attr_box.color == RED else HEX_BLUE
+        text = "Left" if self.turns_box.color == BLUE else "Right"
+        color_hex = HEX_RED if self.turns_box.color == RED else HEX_BLUE
         label = QLabel(text, self)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label.setStyleSheet(f"color: {color_hex}; font-weight: bold;")
@@ -81,13 +81,13 @@ class GraphEditorHeaderWidget(HeaderWidget):
 
     def resize_header_widget(self) -> None:
         self.separator.setMaximumWidth(
-            self.attr_box.width() - self.attr_box.attr_box_border_width * 2
+            self.turns_box.width() - self.turns_box.attr_box_border_width * 2
         )
         self.header_label.setFont(QFont("Arial", int(self.height() / 3)))
         self._update_button_size()
         self.setMinimumWidth(
-            self.attr_box.width() - self.attr_box.attr_box_border_width * 2
+            self.turns_box.width() - self.turns_box.attr_box_border_width * 2
         )
         self.setMaximumWidth(
-            self.attr_box.width() - self.attr_box.attr_box_border_width * 2
+            self.turns_box.width() - self.turns_box.attr_box_border_width * 2
         )
