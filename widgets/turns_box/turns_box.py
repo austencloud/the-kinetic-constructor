@@ -20,7 +20,7 @@ from .turns_box_widgets.base_attr_box_widget import AttrBoxWidget
 from PyQt6.QtWidgets import QSizePolicy
 
 if TYPE_CHECKING:
-    from ..attr_panel import AttrPanel
+    from ..turns_panel import TurnsPanel
 
 
 class TurnsBox(QFrame):
@@ -28,13 +28,13 @@ class TurnsBox(QFrame):
 
     def __init__(
         self,
-        attr_panel,
+        turns_panel,
         attribute_type: MotionAttributes,
         attribute: Union[MotionAttributes, Colors, LeadStates],
     ) -> None:
-        super().__init__(attr_panel)
-        self.attr_panel: "AttrPanel" = attr_panel
-        self.font_size = self.attr_panel.width() // 20
+        super().__init__(turns_panel)
+        self.turns_panel: "TurnsPanel" = turns_panel
+        self.font_size = self.turns_panel.width() // 20
         self.turn_display_border = 2
         self.vtg_dir_btn_state: Dict[str, bool] = {SAME: True, OPP: False}
         self._setup_attribute_type(attribute_type, attribute)
@@ -76,7 +76,7 @@ class TurnsBox(QFrame):
     def apply_border_style(self, color_hex: str) -> None:
         self.setStyleSheet(
             f"#AttrBox {{ "
-            f"border: {self.attr_panel.filter_tab.attr_box_border_width}px solid {color_hex};"
+            f"border: {self.turns_panel.filter_tab.attr_box_border_width}px solid {color_hex};"
             f" border-style: inset; "
             f"}}"
         )
@@ -86,10 +86,10 @@ class TurnsBox(QFrame):
     def resize_attr_box(self) -> None:
         for button in self.rot_dir_button_manager.buttons:
             button.setMinimumSize(
-                self.attr_panel.width() // 20, self.attr_panel.width() // 20
+                self.turns_panel.width() // 20, self.turns_panel.width() // 20
             )
             button.setMaximumSize(
-                self.attr_panel.width() // 20, self.attr_panel.width() // 20
+                self.turns_panel.width() // 20, self.turns_panel.width() // 20
             )
             button.setIconSize(button.size())
         self.turns_widget.resize_turns_widget()

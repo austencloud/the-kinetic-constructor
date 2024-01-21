@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
-from widgets.graph_editor_tab.graph_editor_attr_panel import GraphEditorAttrPanel
+from widgets.graph_editor_tab.graph_editor_turns_panel import GraphEditorAttrPanel
 from widgets.graph_editor_tab.graph_editor_pictograph import GraphEditorPictograph
 
 from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import (
@@ -48,17 +48,17 @@ class GraphEditorFrame(QFrame):
 
         self.objectbox_layout = QVBoxLayout()
         self.pictograph_layout = QVBoxLayout()
-        self.attr_panel_layout = QVBoxLayout()
+        self.turns_panel_layout = QVBoxLayout()
 
         self.objectbox_layout.addWidget(self.arrowbox.view)
         self.objectbox_layout.addWidget(self.propbox.view)
         self.pictograph_layout.addWidget(self.pictograph_widget)
-        self.attr_panel_layout.addWidget(self.attr_panel)
+        self.turns_panel_layout.addWidget(self.turns_panel)
 
         self.layout.addStretch(1)
         self.layout.addLayout(self.objectbox_layout)
         self.layout.addLayout(self.pictograph_layout)
-        self.layout.addLayout(self.attr_panel_layout)
+        self.layout.addLayout(self.turns_panel_layout)
         self.layout.addStretch(1)
 
         self.objectbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -70,7 +70,7 @@ class GraphEditorFrame(QFrame):
         self.main_pictograph = GraphEditorPictograph(main_widget, self)
         self.arrowbox = ArrowBox(main_widget, self)
         self.propbox = PropBox(main_widget, self)
-        self.attr_panel = GraphEditorAttrPanel(self)
+        self.turns_panel = GraphEditorAttrPanel(self)
 
         self.pictograph_widget = GraphEditorPictographWidget(
             self, self.main_pictograph.view

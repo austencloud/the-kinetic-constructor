@@ -5,7 +5,7 @@ from Enums import LetterType
 from constants import ANTI, COLOR, DASH, MOTION_TYPE, PRO, STATIC
 from utilities.TypeChecking.TypeChecking import Letters
 from widgets.turns_box.turns_box import TurnsBox
-from widgets.factories.attr_box_factory import AttrBoxFactory
+from widgets.factories.attr_box_factory import TurnsBoxFactory
 from utilities.TypeChecking.letter_lists import (
     pro_letters,
     anti_letters,
@@ -17,13 +17,13 @@ if TYPE_CHECKING:
     from widgets.filter_tab import FilterTab
 
 
-class AttrPanel(QFrame):
+class TurnsPanel(QFrame):
     def __init__(self, filter_tab: "FilterTab", attribute_type) -> None:
         super().__init__()
         self.filter_tab = filter_tab
         self.attribute_type = attribute_type
-        self.attr_box_factory = AttrBoxFactory(self)
-        self.boxes: List[TurnsBox] = self.attr_box_factory.create_boxes()
+        self.turns_box_factory = TurnsBoxFactory(self)
+        self.boxes: List[TurnsBox] = self.turns_box_factory.create_boxes()
         self.setup_layouts()
 
     def setup_layouts(self) -> None:
@@ -43,15 +43,11 @@ class AttrPanel(QFrame):
                     f"}}"
                 )
 
-    def resize_attr_panel(self) -> None:
+    def resize_turns_panel(self) -> None:
         self.setMinimumWidth(
             self.filter_tab.width()
             - (self.filter_tab.attr_box_border_width * len(self.boxes))
         )
-        # self.setMaximumWidth(
-        #     self.filter_tab.width()
-        #     - (self.filter_tab.attr_box_border_width * len(self.boxes))
-        # )
 
         for box in self.boxes:
             box.resize_attr_box()

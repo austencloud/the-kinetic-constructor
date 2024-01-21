@@ -1,7 +1,7 @@
 from constants import BLUE, RED
 from typing import TYPE_CHECKING
 from objects.motion.motion import Motion
-from widgets.attr_panel import AttrPanel
+from widgets.turns_panel import TurnsPanel
 
 from ..graph_editor_tab.graph_editor_attr_box import GraphEditorAttrBox
 
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from ..graph_editor_tab.graph_editor_frame import GraphEditorFrame
 
 
-class GraphEditorAttrPanel(AttrPanel):
+class GraphEditorAttrPanel(TurnsPanel):
     def __init__(self, graph_editor: "GraphEditorFrame") -> None:
         self.graph_editor = graph_editor
         super().__init__(graph_editor)
@@ -44,13 +44,13 @@ class GraphEditorAttrPanel(AttrPanel):
         for box in [self.blue_attr_box, self.red_attr_box]:
             box.resize_graph_editor_attr_box()
 
-        self.attr_panel_content_width = int(
+        self.turns_panel_content_width = int(
             self.blue_attr_box.width()
             + self.red_attr_box.width()
             + self.red_attr_box.attr_box_border_width / 2
         )
 
-    def update_attr_panel(self, motion: Motion) -> None:
+    def update_turns_panel(self, motion: Motion) -> None:
         if motion.motion_type:
             if motion.color == BLUE:
                 self.blue_attr_box.update_attr_box(motion)

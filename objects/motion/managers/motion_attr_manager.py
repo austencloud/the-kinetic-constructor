@@ -47,7 +47,7 @@ class MotionAttrManager:
     def update_motion_attributes_from_filter_tab(
         self, filter_tab: "FilterTab", pictograph_dict: Dict
     ) -> None:
-        for box in filter_tab.motion_type_attr_panel.boxes:
+        for box in filter_tab.motion_type_turns_panel.boxes:
             if (
                 box.attribute_type == MOTION_TYPE
                 and box.motion_type

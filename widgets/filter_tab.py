@@ -11,7 +11,7 @@ from data.letter_engine_data import (
     motion_type_letter_combinations,
     letter_type_motion_type_map,
 )
-from widgets.attr_panel import AttrPanel
+from widgets.turns_panel import TurnsPanel
 from PyQt6.QtCore import Qt
 
 
@@ -24,13 +24,13 @@ class FilterTab(QTabWidget):
         super().__init__(section)
         self.section = section
         self.attr_box_border_width = 3
-        self.motion_type_attr_panel = AttrPanel(self, MOTION_TYPE)
-        self.color_attr_panel = AttrPanel(self, COLOR)
-        self.lead_state_attr_panel = AttrPanel(self, LEAD_STATE)
-        self.panels: List[AttrPanel] = [
-            self.motion_type_attr_panel,
-            self.color_attr_panel,
-            self.lead_state_attr_panel,
+        self.motion_type_turns_panel = TurnsPanel(self, MOTION_TYPE)
+        self.color_turns_panel = TurnsPanel(self, COLOR)
+        self.lead_state_turns_panel = TurnsPanel(self, LEAD_STATE)
+        self.panels: List[TurnsPanel] = [
+            self.motion_type_turns_panel,
+            self.color_turns_panel,
+            self.lead_state_turns_panel,
         ]
         self.setup_ui()
         self.currentChanged.connect(self.on_current_changed)
@@ -73,7 +73,7 @@ class FilterTab(QTabWidget):
         self.show_tabs(tabs_to_show)
         self.hide_tabs(tabs_to_hide)
         if MOTION_TYPE in tabs_to_show:
-            self.motion_type_attr_panel.show_boxes_based_on_chosen_letters(
+            self.motion_type_turns_panel.show_boxes_based_on_chosen_letters(
                 selected_letters
             )
         self.resize_filter_tab()
@@ -119,30 +119,57 @@ class FilterTab(QTabWidget):
 
     def show_tabs(self, tabs: List[MotionAttributes]) -> None:
         for tab in tabs:
-            if tab == COLOR and self.indexOf(self.color_attr_panel) == -1:
-                self.addTab(self.color_attr_panel, "Filter by Colors")
-            elif tab == MOTION_TYPE and self.indexOf(self.motion_type_attr_panel) == -1:
-                self.addTab(self.motion_type_attr_panel, "Filter by Motion Type")
-            elif tab == LEAD_STATE and self.indexOf(self.lead_state_attr_panel) == -1:
-                self.addTab(self.lead_state_attr_panel, "Filter by Lead State")
+            if tab == COLOR and self.indexOf(self.color_turns_panel) == -1:
+                self.addTab(self.color_turns_panel, "Filter by Colors")
+            elif (
+                tab == MOTION_TYPE and self.indexOf(self.motion_type_turns_panel) == -1
+            ):
+                self.addTab(self.motion_type_turns_panel, "Filter by Motion Type")
+            elif tab == LEAD_STATE and self.indexOf(self.lead_state_turns_panel) == -1:
+                self.addTab(self.lead_state_turns_panel, "Filter by Lead State")
 
     def hide_tabs(self, tabs: List[MotionAttributes]) -> None:
         if not tabs:
             self.clear()
         else:
             for tab in tabs:
-                if tab == COLOR and self.indexOf(self.color_attr_panel) != -1:
-                    self.removeTab(self.indexOf(self.color_attr_panel))
+                if tab == COLOR and self.indexOf(self.color_turns_panel) != -1:
+                    self.removeTab(self.indexOf(self.color_turns_panel))
                 elif (
                     tab == MOTION_TYPE
-                    and self.indexOf(self.motion_type_attr_panel) != -1
+                    and self.indexOf(self.motion_type_turns_panel) != -1
                 ):
-                    self.removeTab(self.indexOf(self.motion_type_attr_panel))
+                    self.removeTab(self.indexOf(self.motion_type_turns_panel))
                 elif (
-                    tab == LEAD_STATE and self.indexOf(self.lead_state_attr_panel) != -1
+                    tab == LEAD_STATE
+                    and self.indexOf(self.lead_state_turns_panel) != -1
                 ):
-                    self.removeTab(self.indexOf(self.lead_state_attr_panel))
+                    self.removeTab(self.indexOf(self.lead_state_turns_panel))
 
     def resize_filter_tab(self) -> None:
         for panel in self.panels:
-            panel.resize_attr_panel()
+            panel.resize_turns_panel()
+
+    def get_current_turns_values(self) -> dict[MotionAttributes, dict]:
+        # This dictionary will hold the current turns values for each motion type.
+        turns_values = {MOTION_TYPE: {}, COLOR: {}, LEAD_STATE: {}}
+
+        # Assuming each TurnsBox has a method called `get_current_turns_value`
+        # that returns the current turns value set in that box.
+        for panel in self.panels:
+            if panel.attribute_type == MOTION_TYPE:
+                for box in panel.boxes:
+                    turns_values[MOTION_TYPE][
+                        box.motion_type
+                    ] = box.turns_widget.turns_display_manager.get_current_turns_value()
+            elif panel.attribute_type == COLOR:
+                for box in panel.boxes:
+                    turns_values[COLOR][
+                        box.color
+                    ] = box.turns_widget.turns_display_manager.get_current_turns_value()
+            elif panel.attribute_type == LEAD_STATE:
+                for box in panel.boxes:
+                    turns_values[LEAD_STATE][
+                        box.lead_state
+                    ] = box.turns_widget.turns_display_manager.get_current_turns_value()
+        return turns_values

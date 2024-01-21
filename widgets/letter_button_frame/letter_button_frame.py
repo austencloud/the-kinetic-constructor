@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout
 from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtCore import Qt, QSize
 from Enums import LetterType
-from constants import LETTER_BTN_ICON_DIR
+from constants import COLOR, LEAD_STATE, LETTER_BTN_ICON_DIR, MOTION_TYPE
 from typing import TYPE_CHECKING, Dict, List
 from utilities.TypeChecking.TypeChecking import Letters
 from utilities.TypeChecking.letter_lists import all_letters
@@ -158,21 +158,49 @@ class LetterButtonFrame(QFrame):
             self.process_pictographs_for_letter(letter)
         self.button_panel.codex.scroll_area.update_pictographs()
 
-
     def connect_letter_buttons(self) -> None:
         for letter, button in self.buttons.items():
             button.clicked.connect(
                 lambda checked, letter=letter: self.on_letter_button_clicked(letter)
             )
 
-    def process_pictographs_for_letter(self, letter) -> None:
+    def process_pictographs_for_letter(self, letter: Letters):
+        # Get the current turns values from the attribute panels.
+        turns_values = self.button_panel.codex.scroll_area.section_manager.sections[
+            LetterType.get_letter_type(letter)
+        ].filter_tab.get_current_turns_values()
+
+        # Find the pictographs that this letter can generate.
         pictograph_dicts = (
             self.button_panel.codex.main_tab_widget.main_widget.letters.get(letter, [])
         )
+
         for pictograph_dict in pictograph_dicts:
+            # Generate or retrieve the pictograph instance.
             pictograph_key = self.button_panel.codex.scroll_area.pictograph_factory.generate_pictograph_key_from_dict(
                 pictograph_dict
             )
-            self.button_panel.codex.scroll_area.pictograph_factory.get_or_create_pictograph(
+            pictograph = self.button_panel.codex.scroll_area.pictograph_factory.get_or_create_pictograph(
                 pictograph_key, pictograph_dict
             )
+
+            # Apply the turns values to the pictograph's motions based on their attributes.
+            for motion in pictograph.motions.values():
+                motion_type = (
+                    motion.motion_type
+                )  # Assuming motion has a 'motion_type' attribute
+                if motion_type in turns_values[MOTION_TYPE]:
+                    motion.turns_manager.set_turns(
+                        turns_values[MOTION_TYPE][motion_type]
+                    )
+
+                if motion.color in turns_values[COLOR]:
+                    motion.turns_manager.set_turns(turns_values[COLOR][motion.color])
+
+                if motion.lead_state in turns_values[LEAD_STATE]:
+                    motion.turns_manager.set_turns(
+                        turns_values[LEAD_STATE][motion.lead_state]
+                    )
+
+            # Update the pictograph to reflect the changes.
+            pictograph.updater.update_pictograph()

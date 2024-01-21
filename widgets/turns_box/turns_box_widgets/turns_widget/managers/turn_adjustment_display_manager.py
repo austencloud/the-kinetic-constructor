@@ -26,11 +26,11 @@ class TurnsAdjustmentDisplayManager:
         for (
             pictograph
         ) in (
-            self.turns_box.attr_panel.filter_tab.section.scroll_area.pictographs.values()
+            self.turns_box.turns_panel.filter_tab.section.scroll_area.pictographs.values()
         ):
             if (
                 LetterType.get_letter_type(pictograph.letter)
-                == self.turns_box.attr_panel.filter_tab.section.letter_type
+                == self.turns_box.turns_panel.filter_tab.section.letter_type
             ):
                 self.turns_widget.updater._adjust_turns_for_pictograph(
                     pictograph, adjustment
@@ -47,7 +47,7 @@ class TurnsAdjustmentDisplayManager:
         for (
             pictograph
         ) in (
-            self.turns_box.attr_panel.filter_tab.section.scroll_area.pictographs.values()
+            self.turns_box.turns_panel.filter_tab.section.scroll_area.pictographs.values()
         ):
             for motion in pictograph.motions.values():
                 if self.turns_widget.turn_adjust_manager.is_motion_relevant(motion):
@@ -60,8 +60,11 @@ class TurnsAdjustmentDisplayManager:
         for (
             pictograph
         ) in (
-            self.turns_box.attr_panel.filter_tab.section.scroll_area.pictographs.values()
+            self.turns_box.turns_panel.filter_tab.section.scroll_area.pictographs.values()
         ):
             for motion in pictograph.motions.values():
                 if self.turns_widget.turn_adjust_manager.is_motion_relevant(motion):
                     self.turns_widget.updater.update_motion_properties(motion, 0)
+
+    def get_current_turns_value(self) -> Turns:
+        return self.turns_widget.turns_display_manager.turns_display.text()
