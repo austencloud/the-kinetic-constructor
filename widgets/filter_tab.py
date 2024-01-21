@@ -63,7 +63,6 @@ class FilterTab(QTabWidget):
 
     def show_tabs_based_on_chosen_letters(self) -> None:
         selected_letters = self.section.scroll_area.codex.selected_letters
-        # Filter selected letters to match the current section's letter type
         relevant_selected_letters = [
             letter
             for letter in selected_letters
@@ -77,7 +76,6 @@ class FilterTab(QTabWidget):
             self.motion_type_turns_panel.show_boxes_based_on_chosen_letters(
                 selected_letters
             )
-        # self.resize_filter_tab()
 
     def _determine_tabs_to_show(
         self, selected_letters: set[Letters]
@@ -140,8 +138,7 @@ class FilterTab(QTabWidget):
                     self.removeTab(self.indexOf(self.lead_state_turns_panel))
 
     def resize_filter_tab(self) -> None:
-        # self.setMinimumWidth(self.section.width() - 10)
-        # self.setMaximumWidth(self.section.width() - 10)
+
         for panel in self.panels:
             panel.resize_turns_panel()
         self.setMaximumHeight(int(self.section.width() / 4.5))
