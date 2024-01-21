@@ -45,10 +45,13 @@ class TurnsBox(QFrame):
         self.attribute_type: MotionAttributes = attribute_type
         if self.attribute_type == MOTION_TYPE:
             self.motion_type: MotionTypes = attribute
+            self.attribute_value = self.motion_type
         elif self.attribute_type == COLOR:
             self.color: Colors = attribute
+            self.attribute_value = self.color
         elif self.attribute_type == LEAD_STATE:
             self.lead_state: LeadStates = attribute
+            self.attribute_value = self.lead_state
 
     def _setup_widgets(self) -> None:
         self.rot_dir_button_manager = RotDirButtonManager(self)
@@ -68,6 +71,7 @@ class TurnsBox(QFrame):
         self.layout.addWidget(self.header_widget)
         self.layout.addWidget(self.header_widget.separator)
         self.layout.addWidget(self.turns_widget)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         sizePolicy = QSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
@@ -83,7 +87,7 @@ class TurnsBox(QFrame):
 
     ### CREATE LABELS ###
 
-    def resize_attr_box(self) -> None:
+    def resize_turns_box(self) -> None:
         for button in self.rot_dir_button_manager.buttons:
             button.setMinimumSize(
                 self.turns_panel.width() // 20, self.turns_panel.width() // 20
