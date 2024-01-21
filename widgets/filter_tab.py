@@ -77,7 +77,7 @@ class FilterTab(QTabWidget):
             self.motion_type_turns_panel.show_boxes_based_on_chosen_letters(
                 selected_letters
             )
-        self.resize_filter_tab()
+        # self.resize_filter_tab()
 
     def _determine_tabs_to_show(
         self, selected_letters: set[Letters]
@@ -148,10 +148,11 @@ class FilterTab(QTabWidget):
                     self.removeTab(self.indexOf(self.lead_state_turns_panel))
 
     def resize_filter_tab(self) -> None:
-        self.resize(self.section.width() - self.attr_box_border_width, self.height())
+        self.setMinimumWidth(self.section.pictograph_frame.width())
+        self.setMaximumWidth(self.section.pictograph_frame.width())
         for panel in self.panels:
             panel.resize_turns_panel()
-        self.setMaximumHeight(int(self.section.width() / 4))
+        self.setMaximumHeight(int(self.section.width() / 4.5))
 
     def get_current_turns_values(self) -> dict[MotionAttributes, dict]:
         turns_values = {

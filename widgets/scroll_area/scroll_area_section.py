@@ -35,16 +35,16 @@ class ScrollAreaSection(QWidget):
         self._add_widgets_to_layout()
         self.setStyleSheet("border: 1px solid black;")
 
-    def _setup_pictograph_frame(self):
+    def _setup_pictograph_frame(self) -> QFrame:
         pictograph_frame = QFrame()
         self.pictograph_layout: QGridLayout = QGridLayout(pictograph_frame)
         return pictograph_frame
-    
+
     def create_section_label(self, styled_text: str) -> QLabel:
         """Creates a QLabel for the section label with the given styled text."""
         section_label = QLabel()
         section_label.setText(styled_text)  # Set the HTML styled text
-        font_size = 25
+        font_size = 30
         section_label.setStyleSheet(f"font-size: {font_size}px; font-weight: bold;")
         section_label.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Center the text
         size_policy = QSizePolicy(
@@ -103,8 +103,6 @@ class ScrollAreaSection(QWidget):
         styled_text = f"{letter_type[0:4]} {letter_type[4]}: {styled_type_name}"
         return styled_text
 
-    def resize_scroll_area_section(self) -> None:
-        pass
 
     def create_filter_tab_if_needed(self) -> None:
         if not self.filter_tab:

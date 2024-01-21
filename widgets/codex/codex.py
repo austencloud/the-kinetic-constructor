@@ -5,6 +5,7 @@ from utilities.TypeChecking.TypeChecking import Letters
 from ..codex.codex_button_panel import CodexButtonPanel
 from ..codex.codex_image_generator import CodexImageGenerator
 from ..scroll_area.scroll_area import ScrollArea
+
 if TYPE_CHECKING:
     from ..main_tab_widget.main_tab_widget import MainTabWidget
 
@@ -28,10 +29,9 @@ class Codex(QWidget):
 
         self.left_layout.addWidget(self.scroll_area)
         self.right_layout.addWidget(self.button_panel)
-        self.layout.addLayout(self.left_layout)
+        self.layout.addLayout(self.left_layout )
         self.layout.addLayout(self.right_layout)
 
     def resize_codex(self) -> None:
-        self.scroll_area.resize_scroll_area()
         self.scroll_area.update_pictographs()
         self.button_panel.letter_btn_frame.resize_letter_buttons()

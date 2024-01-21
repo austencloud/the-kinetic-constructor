@@ -75,6 +75,3 @@ class ScrollArea(QScrollArea):
         for pictograph in self.pictographs.values():
             pictograph.arrow_placement_manager.update_arrow_positions()
 
-    def resize_scroll_area(self) -> None:
-        for section in self.section_manager.sections.values():
-            section.resize_scroll_area_section()
