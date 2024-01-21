@@ -18,11 +18,10 @@ if TYPE_CHECKING:
 
 
 class ScrollAreaSection(QWidget):
-    def __init__(
-        self,
-        letter_type: LetterTypes,
-        scroll_area: "ScrollArea",
-    ) -> None:
+    SCROLLBAR_WIDTH = 25
+    
+    
+    def __init__(self, letter_type: LetterTypes, scroll_area: "ScrollArea") -> None:
         super().__init__(scroll_area)
         self.scroll_area = scroll_area
         self.letter_type = letter_type
@@ -115,8 +114,7 @@ class ScrollAreaSection(QWidget):
         # self.setMaximumWidth(
         #     self.scroll_area.width() - self.scroll_area.verticalScrollBar().width()
         # )
-        self.resize(
-            self.scroll_area.width() - self.scroll_area.verticalScrollBar().width(),
-            self.height(),
+        self.setMinimumWidth(
+            self.scroll_area.width() - self.SCROLLBAR_WIDTH 
         )
         self.filter_tab.resize_filter_tab()

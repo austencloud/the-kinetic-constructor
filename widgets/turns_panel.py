@@ -42,10 +42,10 @@ class TurnsPanel(QFrame):
                 )
 
     def resize_turns_panel(self) -> None:
-        self.setMaximumWidth(
-            self.filter_tab.section.scroll_area.width()
-            - self.filter_tab.section.scroll_area.verticalScrollBar().width()
-        )
+        # self.setMaximumWidth(
+        #     self.filter_tab.section.scroll_area.width()
+        #     - self.filter_tab.section.scroll_area.verticalScrollBar().width()
+        # )
         for box in self.boxes:
             box.resize_turns_box()
 

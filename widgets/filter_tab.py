@@ -140,8 +140,8 @@ class FilterTab(QTabWidget):
                     self.removeTab(self.indexOf(self.lead_state_turns_panel))
 
     def resize_filter_tab(self) -> None:
-        self.setMinimumWidth(self.section.width() - 10)
-        self.setMaximumWidth(self.section.width() - 10)
+        # self.setMinimumWidth(self.section.width() - 10)
+        # self.setMaximumWidth(self.section.width() - 10)
         for panel in self.panels:
             panel.resize_turns_panel()
         self.setMaximumHeight(int(self.section.width() / 4.5))
