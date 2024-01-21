@@ -71,3 +71,11 @@ class ScrollAreaSectionManager:
                 self.scroll_area.display_manager.add_pictograph_to_layout(
                     pictograph, index
                 )
+
+    def create_section_if_needed(self, letter_type: LetterTypes):
+        # Call this method to ensure a section for a given letter_type is created.
+        if letter_type not in self.sections:
+            self.create_section(letter_type)
+        else:
+            # Ensure the filter tab is created for the existing section.
+            self.sections[letter_type].create_filter_tab_if_needed()

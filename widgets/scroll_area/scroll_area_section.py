@@ -26,15 +26,20 @@ class ScrollAreaSection(QWidget):
         super().__init__(scroll_area)
         self.scroll_area = scroll_area
         self.letter_type = letter_type
-        self.filter_tab = FilterTab(self)
+        self.filter_tab: FilterTab = None
         self.pictographs: List[Pictograph] = []
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.pictograph_frame = QFrame()
-        self.pictograph_layout: QGridLayout = QGridLayout(self.pictograph_frame)
+        self.pictograph_frame = self._setup_pictograph_frame()
         self.styled_text = self.get_styled_text(letter_type)
         self.section_label = self.create_section_label(self.styled_text)
         self._add_widgets_to_layout()
+        self.setStyleSheet("border: 1px solid black;")
 
+    def _setup_pictograph_frame(self):
+        pictograph_frame = QFrame()
+        self.pictograph_layout: QGridLayout = QGridLayout(pictograph_frame)
+        return pictograph_frame
+    
     def create_section_label(self, styled_text: str) -> QLabel:
         """Creates a QLabel for the section label with the given styled text."""
         section_label = QLabel()
@@ -51,16 +56,13 @@ class ScrollAreaSection(QWidget):
 
     def _add_widgets_to_layout(self) -> None:
         self.layout.addWidget(self.section_label)
-        self.layout.addWidget(self.filter_tab)
         self.layout.addWidget(self.pictograph_frame)
 
     def add_pictograph(self, pictograph: Pictograph) -> None:
         self.pictograph_layout.addWidget(pictograph.view)
 
     def remove_pictograph(self, pictograph: Pictograph) -> None:
-        # pictograph.view.hide()
         pictograph.view.setParent(None)
-        # pictograph.setParent(None)
 
     def update_filter(self) -> None:
         pass
@@ -102,6 +104,10 @@ class ScrollAreaSection(QWidget):
         return styled_text
 
     def resize_scroll_area_section(self) -> None:
-        self.section_label.setMinimumSize(self.section_label.sizeHint())
-        self.section_label.setMaximumSize(self.section_label.sizeHint())
-        self.filter_tab.resize_filter_tab()
+        pass
+
+    def create_filter_tab_if_needed(self) -> None:
+        if not self.filter_tab:
+            self.filter_tab = FilterTab(self)
+            self.layout.insertWidget(1, self.filter_tab)
+            self.filter_tab.resize_filter_tab()
