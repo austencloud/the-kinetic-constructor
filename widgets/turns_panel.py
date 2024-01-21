@@ -31,26 +31,24 @@ class TurnsPanel(QFrame):
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignRight)
         for box in self.boxes:
             self.layout.addWidget(box)
             box.setObjectName("AttrBox")
             if box.attribute_type != COLOR:
                 box.setStyleSheet(
-                    f"#AttrBox {{ "
-                    f"border: 1px solid black;"
-                    f" border-style: inset; "
-                    f"}}"
+                    f"{ 
+                        'border-right: 1px solid black;' if box != self.boxes[-1] else ''
+                    }"
                 )
 
     def resize_turns_panel(self) -> None:
         self.setMinimumWidth(
             self.filter_tab.width()
             - (self.filter_tab.attr_box_border_width * len(self.boxes))
-        )
+        ) # DON'T DELETE - This allows for three turns boxes at once
 
         for box in self.boxes:
-            box.resize_attr_box()
+            box.resize_turns_box()
 
     def show_boxes_based_on_chosen_letters(
         self, selected_letters: List[Letters]
