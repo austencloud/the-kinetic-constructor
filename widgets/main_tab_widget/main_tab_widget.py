@@ -15,9 +15,9 @@ class MainTabWidget(QTabWidget):
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.setStyleSheet(self.get_main_tab_stylesheet())
-        codex = Codex(self)
-        self.tabs = [codex]
-        self.addTab(codex, "Codex")
+        self.codex = Codex(self)
+        self.tabs = [self.codex]
+        self.addTab(self.codex, "Codex")
         # self.addTab(graph_editor_tab, "Graph Editor")
         # self.addTab(option_picker_tab, "Option Picker")
 

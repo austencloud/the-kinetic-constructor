@@ -2,18 +2,27 @@ Organized by number of calls:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
-         1        0.000004        0.000004             0.000029             0.000029 disable                        tka-sequence-constructor\profiler.py:16
+         2        0.000027        0.000013             0.103875             0.051938 inner                          tka-sequence-constructor\profiler.py:23
+         1        0.000027        0.000027             0.001430             0.001430 showEvent                      main_widget\main_widget.py:49
+         1        0.000061        0.000061             0.001402             0.001402 resize_sequence_widget         sequence_widget\sequence_widget.py:30
+         1        0.000005        0.000005             0.000006             0.000006 resizeEvent                    beat_frame\start_pos_beat.py:39
 
 
 Organized by total time:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
-         1        0.000004        0.000004             0.000029             0.000029 disable                        tka-sequence-constructor\profiler.py:16
+         1        0.000061        0.000061             0.001402             0.001402 resize_sequence_widget         sequence_widget\sequence_widget.py:30
+         1        0.000027        0.000027             0.001430             0.001430 showEvent                      main_widget\main_widget.py:49
+         2        0.000027        0.000013             0.103875             0.051938 inner                          tka-sequence-constructor\profiler.py:23
+         1        0.000005        0.000005             0.000006             0.000006 resizeEvent                    beat_frame\start_pos_beat.py:39
 
 
 Organized by cumulative time:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
-         1        0.000004        0.000004             0.000029             0.000029 disable                        tka-sequence-constructor\profiler.py:16
+         2        0.000027        0.000013             0.103875             0.051938 inner                          tka-sequence-constructor\profiler.py:23
+         1        0.000027        0.000027             0.001430             0.001430 showEvent                      main_widget\main_widget.py:49
+         1        0.000061        0.000061             0.001402             0.001402 resize_sequence_widget         sequence_widget\sequence_widget.py:30
+         1        0.000005        0.000005             0.000006             0.000006 resizeEvent                    beat_frame\start_pos_beat.py:39

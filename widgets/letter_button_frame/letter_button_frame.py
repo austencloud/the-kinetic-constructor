@@ -1,30 +1,28 @@
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QPushButton
-from PyQt6.QtGui import QIcon, QPixmap, QPainter, QFont, QColor, QResizeEvent
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout
+from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtSvg import QSvgRenderer
 from Enums import LetterType
 from constants import LETTER_BTN_ICON_DIR
 from typing import TYPE_CHECKING, Dict, List
 from utilities.TypeChecking.TypeChecking import Letters
-
 from utilities.TypeChecking.letter_lists import all_letters
-from widgets.factories.letter_factory import LetterFactory
-
+from widgets.letter_button_frame.letter_button import LetterButton
 
 if TYPE_CHECKING:
+    from widgets.codex.codex_button_panel import CodexButtonPanel
     from widgets.codex.codex import Codex
-    from widgets.main_widget.main_widget import MainWidget
 
 
 class LetterButtonFrame(QFrame):
-    def __init__(self, codex: "Codex") -> None:
+    def __init__(self, button_panel: "CodexButtonPanel") -> None:
         super().__init__()
-        self.c = codex
-        self.main_widget = codex.main_tab_widget.main_widget
+        self.button_panel = button_panel
         self.spacing = int(self.width() * 0.01)
-        self.buttons: Dict[Letters, QPushButton] = {}
+        self.buttons: Dict[Letters, LetterButton] = {}
         self.init_letter_buttons_layout()
         self.add_black_borders()
+        self.setStyleSheet("QFrame { border: 1px solid black; }")
+        self.connect_letter_buttons()
 
     def add_black_borders(self) -> None:
         for letter in self.buttons:
@@ -91,7 +89,11 @@ class LetterButtonFrame(QFrame):
             for letter_str in row:
                 letter_type = LetterType.get_letter_type(letter_str)
                 icon_path = self.get_icon_path(letter_type, letter_str)
-                button = self.create_button(icon_path, letter_str)
+                button = LetterButton(
+                    icon_path,
+                    letter_str,
+                    self.button_panel.codex.main_tab_widget.main_widget,
+                )
                 row_layout.addWidget(button)
                 self.buttons[
                     letter_str
@@ -105,54 +107,29 @@ class LetterButtonFrame(QFrame):
     def get_icon_path(self, letter_type: str, letter: all_letters) -> str:
         return f"{LETTER_BTN_ICON_DIR}/{letter_type}/{letter}.svg"
 
-    def create_button(self, icon_path: str, letter: str) -> QPushButton:
-        renderer = QSvgRenderer(icon_path)
-        pixmap = QPixmap(renderer.defaultSize())
-        pixmap.fill(QColor(Qt.GlobalColor.transparent))
-        painter = QPainter(pixmap)
-        renderer.render(painter)
-        painter.end()
-        button = QPushButton(QIcon(pixmap), "", self.main_widget)
-
-        button.setStyleSheet(
-            """
-            QPushButton {
-                background-color: white;
-                border: none;
-                border-radius: 0px;
-                padding: 0px;
-            }
-            QPushButton:hover {
-                background-color: #e6f0ff;
-            }
-            QPushButton:pressed {
-                background-color: #cce0ff;
-            }
-            """
-        )
-        button.setFlat(True)
-        font = QFont()
-        font.setPointSize(int(20))
-        button.setFont(font)
-
-        return button
-
     def resize_letter_buttons(self) -> None:
         self.spacing = int(self.width() * 0.01)
         button_row_count = len(self.letter_rows)
-        button_size = int((self.main_widget.height() / button_row_count) / 2)
-        if button_size > self.height() / button_row_count:
-            button_size = int(self.height() / (button_row_count + 1))
+        # button_size = int(
+        #     (
+        #         self.button_panel.codex.main_tab_widget.main_widget.height()
+        #         / button_row_count
+        #     )
+        #     / 2
+        # )
+        button_size = int(self.height() / (button_row_count + 1))
         icon_size = int(button_size * 0.9)
 
         for row_layout in self.row_layouts:
             for i in range(row_layout.count()):
-                button: QPushButton = row_layout.itemAt(i).widget()
+                button: LetterButton = row_layout.itemAt(i).widget()
                 if button:
                     button.setMaximumSize(button_size, button_size)
                     button.setIconSize(QSize(icon_size, icon_size))
 
-        self.setMaximumHeight(int(self.main_widget.height() * 0.9))
+        self.setMaximumHeight(
+            int(self.button_panel.codex.main_tab_widget.main_widget.height() * 0.9)
+        )
         available_width = button_size * 4
         self.setMinimumWidth(int(available_width + self.spacing * 3))
 
@@ -162,22 +139,40 @@ class LetterButtonFrame(QFrame):
 
     def on_letter_button_clicked(self, letter: Letters) -> None:
         button = self.buttons[letter]
-        is_selected = letter in self.c.selected_letters
+        is_selected = letter in self.button_panel.codex.selected_letters
 
         if is_selected:
-            self.c.selected_letters.remove(letter)
+            self.button_panel.codex.selected_letters.remove(letter)
         else:
-            self.c.selected_letters.append(letter)
+            self.button_panel.codex.selected_letters.append(letter)
 
-        for section in self.c.scroll_area.section_manager.sections.values():
+        for (
+            section
+        ) in self.button_panel.codex.scroll_area.section_manager.sections.values():
             if section.letter_type == LetterType.get_letter_type(letter):
                 section.filter_tab.show_tabs_based_on_chosen_letters()
 
         button.setFlat(not is_selected)
-        button.setStyleSheet(self.c.get_button_style(pressed=not is_selected))
-        if letter in self.c.selected_letters:
-            self.c.process_pictographs_for_letter(letter)
-        self.c.scroll_area.update_pictographs()
+        button.setStyleSheet(button.get_button_style(pressed=not is_selected))
+        if letter in self.button_panel.codex.selected_letters:
+            self.process_pictographs_for_letter(letter)
+        self.button_panel.codex.scroll_area.update_pictographs()
 
-    def resizeEvent(self, event: QResizeEvent) -> None:
-        self.resize_letter_buttons()
+
+    def connect_letter_buttons(self) -> None:
+        for letter, button in self.buttons.items():
+            button.clicked.connect(
+                lambda checked, letter=letter: self.on_letter_button_clicked(letter)
+            )
+
+    def process_pictographs_for_letter(self, letter) -> None:
+        pictograph_dicts = (
+            self.button_panel.codex.main_tab_widget.main_widget.letters.get(letter, [])
+        )
+        for pictograph_dict in pictograph_dicts:
+            pictograph_key = self.button_panel.codex.scroll_area.pictograph_factory.generate_pictograph_key_from_dict(
+                pictograph_dict
+            )
+            self.button_panel.codex.scroll_area.pictograph_factory.get_or_create_pictograph(
+                pictograph_key, pictograph_dict
+            )

@@ -15,7 +15,6 @@ if TYPE_CHECKING:
 
 
 class MainWidget(QWidget):
-    
     def __init__(self, main_window: "MainWindow") -> None:
         super().__init__(main_window)
         self.main_window = main_window
@@ -49,8 +48,9 @@ class MainWidget(QWidget):
     def showEvent(self, event) -> None:
         super().showEvent(event)
         self.main_sequence_widget.resize_sequence_widget()
+        self.main_tab_widget.codex.resize_codex()
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.main_window.window_manager.set_dimensions()
 
-    layout : QHBoxLayout
+    layout: QHBoxLayout
