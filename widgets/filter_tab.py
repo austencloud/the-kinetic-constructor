@@ -137,12 +137,6 @@ class FilterTab(QTabWidget):
                 ):
                     self.removeTab(self.indexOf(self.lead_state_turns_panel))
 
-    def resize_filter_tab(self) -> None:
-
-        for panel in self.panels:
-            panel.resize_turns_panel()
-        self.setMaximumHeight(int(self.section.width() / 4.5))
-
     def get_current_turns_values(self) -> dict[MotionAttributes, dict]:
         turns_values = {
             attribute_type: {
@@ -171,3 +165,8 @@ class FilterTab(QTabWidget):
                 motion.turns_manager.set_turns(
                     turns_values[LEAD_STATE][motion.lead_state]
                 )
+
+    def resize_filter_tab(self) -> None:
+        for panel in self.panels:
+            panel.resize_turns_panel()
+        # self.setFixedHeight(self.color_turns_panel.height())

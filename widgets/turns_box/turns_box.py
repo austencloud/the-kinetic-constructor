@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Dict, List, Union
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
@@ -72,10 +72,6 @@ class TurnsBox(QFrame):
         self.layout.addWidget(self.header_widget.separator)
         self.layout.addWidget(self.turns_widget)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        sizePolicy = QSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
-        )
-        self.setSizePolicy(sizePolicy)
 
     def apply_border_style(self, color_hex: str) -> None:
         self.setStyleSheet(
@@ -84,6 +80,20 @@ class TurnsBox(QFrame):
             f" border-style: inset; "
             f"}}"
         )
+
+    def sizeHint(self) -> QSize:
+        # Initialize width and height
+        width, height = 0, 0
+        # Iterate over all items in the layout
+        for i in range(self.layout.count()):
+            item = self.layout.itemAt(i)
+            if item.widget():  # Check if the item is a widget
+                widget_size_hint = item.widget().sizeHint()
+                # Accumulate width and get the maximum height
+                width += widget_size_hint.width()
+                height = max(height, widget_size_hint.height())
+        # Return the QSize based on accumulated width and maximum height
+        return QSize(width, height)
 
     ### CREATE LABELS ###
 

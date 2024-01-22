@@ -21,6 +21,8 @@ class TurnsWidget(TurnsBoxWidget):
         self.turns_box = turns_box
         self.turns_label: QLabel = None
         self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
         self.turn_direct_set_manager = TurnDirectSetManager(self)
         self.turn_adjust_manager = TurnAdjustManager(self)
         self.turns_display_manager = TurnDisplayManager(self)

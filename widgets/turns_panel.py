@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QHBoxLayout, QFrame
+from PyQt6.QtWidgets import QHBoxLayout, QFrame, QSizePolicy
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, List
 from Enums import LetterType
@@ -35,11 +35,6 @@ class TurnsPanel(QFrame):
             self.layout.addWidget(box)
             box.setObjectName("TurnsBox")
 
-
-    def resize_turns_panel(self) -> None:
-        for box in self.boxes:
-            box.resize_turns_box()
-
     def show_boxes_based_on_chosen_letters(
         self, selected_letters: List[Letters]
     ) -> None:
@@ -66,3 +61,7 @@ class TurnsPanel(QFrame):
                     box.show()
                 else:
                     box.hide()
+
+    def resize_turns_panel(self) -> None:
+        for box in self.boxes:
+            box.resize_turns_box()

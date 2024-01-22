@@ -26,7 +26,7 @@ class ScrollAreaSectionManager:
             letters_by_type[letter_type.description] = letter_type.letters
         return letters_by_type
 
-    def initialize_sections(self):
+    def initialize_sections(self) -> None:
         for letter_type in self.letters_by_type:
             self.create_section(letter_type)
 
