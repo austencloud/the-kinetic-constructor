@@ -18,13 +18,9 @@ class LetterButtonFrame(QFrame):
     def __init__(self, button_panel: "CodexButtonPanel") -> None:
         super().__init__()
         self.button_panel = button_panel
-        self.spacing = 5  # Adjust spacing as needed
+        self.spacing = 5
         self.outer_frames: Dict[str, QFrame] = {}
-
-        # Define letter rows before initializing the button manager
         self.letter_rows = self._define_letter_rows()
-
-        # Now we can safely initialize the button manager
         self.layout_styler = LetterButtonFrameLayoutStyler(self)
         self.button_manager = LetterButtonManager(self)
         self.button_manager.create_buttons()

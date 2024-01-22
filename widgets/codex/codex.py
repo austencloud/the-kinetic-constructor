@@ -33,5 +33,5 @@ class Codex(QWidget):
         self.layout.addLayout(self.right_layout, 1)
 
     def resize_codex(self) -> None:
-        self.scroll_area.updater.update_pictographs()
+        self.scroll_area.update_pictographs()
         self.button_panel.letter_btn_frame.resize_letter_button_frame()

@@ -42,4 +42,4 @@ class CodexButtonPanel(QFrame):
             button.click()
             self.codex.selected_letters.append(button_letter)
 
-        self.codex.scroll_area.updater.update_pictographs()
+        self.codex.scroll_area.update_pictographs()

@@ -33,9 +33,7 @@ class ScrollAreaSection(QWidget):
         self.styled_text = self.get_styled_text(letter_type)
         self.section_label = self.create_section_label(self.styled_text)
         self._add_widgets_to_layout()
-        self.setStyleSheet("border: 1px solid black;")
         self.layout.setSpacing(0)
-        # self.pictograph_layout.setSpacing(0)
         self.pictograph_layout.setContentsMargins(0, 0, 0, 0)
 
     def _setup_pictograph_frame(self) -> QFrame:
@@ -45,7 +43,6 @@ class ScrollAreaSection(QWidget):
             Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignCenter
         )
         self.pictograph_layout.setContentsMargins(0, 0, 0, 0)
-        # self.pictograph_layout.setSpacing(0)
         self.pictograph_layout.setColumnStretch(0, 1)  # Stretch the first column
         self.pictograph_layout.setColumnStretch(2, 1)  # Stretch the last column
         return pictograph_frame
@@ -67,7 +64,6 @@ class ScrollAreaSection(QWidget):
     def _add_widgets_to_layout(self) -> None:
         self.layout.addWidget(self.section_label)
         self.layout.addWidget(self.pictograph_frame)
-        # self.layout.addStretch(1)
 
     def add_pictograph(self, pictograph: Pictograph) -> None:
         self.pictograph_layout.addWidget(pictograph.view)

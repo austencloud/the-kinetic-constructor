@@ -11,6 +11,9 @@ from PyQt6.QtWidgets import QLabel, QGridLayout
 
 
 class ScrollAreaSectionManager:
+    
+    SECTION_ORDER = ["Type1", "Type2", "Type3", "Type4", "Type5", "Type6"]
+
     def __init__(self, scroll_area: "ScrollArea") -> None:
         self.scroll_area = scroll_area
         self.sections: Dict[LetterTypes, ScrollAreaSection] = {}
@@ -19,6 +22,7 @@ class ScrollAreaSectionManager:
             LetterTypes, List[Letters]
         ] = self.setup_letters_by_type()
         self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
+        self.ordered_section_types = []  # Keep track of the order of added sections
 
     def setup_letters_by_type(self) -> Dict[LetterTypes, List[Letters]]:
         letters_by_type = {}
@@ -30,13 +34,32 @@ class ScrollAreaSectionManager:
         for letter_type in self.letters_by_type:
             self.create_section(letter_type)
 
+
     def create_section(self, letter_type: LetterTypes) -> ScrollAreaSection:
         if letter_type not in self.sections:
+            # Determine the correct index for the new section
+            correct_index = self.get_correct_index_for_section(letter_type)
             section = ScrollAreaSection(letter_type, self.scroll_area)
-            self.scroll_area.layout.addWidget(section)
+            self.scroll_area.insert_widget_at_index(section, correct_index)
             self.sections[letter_type] = section
-        return self.sections[letter_type]
+            self.ordered_section_types.append(letter_type)
 
+            # Ensure the stretch is still at the end
+            self.scroll_area.update_sections()
+
+        return self.sections[letter_type]
+    
+    
+    def get_correct_index_for_section(self, letter_type: LetterTypes) -> int:
+        try:
+            # Find the index where this section should be inserted
+            desired_position = self.SECTION_ORDER.index(letter_type)
+            current_positions = [self.SECTION_ORDER.index(typ) for typ in self.ordered_section_types]
+            insert_before = next((i for i, pos in enumerate(current_positions) if pos > desired_position), len(self.ordered_section_types))
+            return insert_before
+        except ValueError:
+            # If the letter_type is not in SECTION_ORDER, append at the end
+            return len(self.ordered_section_types)
     def get_section(self, letter_type: LetterTypes) -> ScrollAreaSection:
         return self.create_section(letter_type)
 
@@ -83,7 +106,7 @@ class ScrollAreaSectionManager:
         section = self.sections[letter_type]
         if not section.filter_tab:
             section.create_or_get_filter_tab()
-            
+
     def update_sections_based_on_letters(self, selected_letters: List[Letters]) -> None:
         # First, hide all sections and filter tabs
         for section in self.sections.values():
@@ -96,3 +119,4 @@ class ScrollAreaSectionManager:
             if letter_type in self.sections:
                 self.sections[letter_type].show()
                 self.sections[letter_type].show_filter_tab()
+        self.scroll_area.update_sections()

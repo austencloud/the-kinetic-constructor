@@ -63,6 +63,8 @@ class TurnsBox(QFrame):
                 self.apply_border_style("#ED1C24")
             elif self.color == BLUE:
                 self.apply_border_style("#2E3192")
+        else:
+            self.apply_border_style("#000000")  # Black border
 
     def _setup_layouts(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
