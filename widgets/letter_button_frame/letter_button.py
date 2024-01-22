@@ -17,17 +17,13 @@ if TYPE_CHECKING:
 
 
 class LetterButton(QPushButton):
-    def __init__(self, icon_path: str, letter: str, main_widget: "MainWidget") -> None:
+    def __init__(self, icon_path: str, letter_str: str, main_widget: "MainWidget") -> None:
         super().__init__("", main_widget)
         self.setIcon(QIcon(icon_path))
         self.setFlat(True)
         self.setStyleSheet(self.get_button_style(False))
-        font = QFont()
-        font.setPointSize(int(20))
-        self.setFont(font)
-
-
-
+        self.letter = letter_str
+        
     def get_button_style(self, pressed: bool) -> str:
         if pressed:
             return """

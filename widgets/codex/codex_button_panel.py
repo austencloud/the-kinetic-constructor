@@ -1,27 +1,11 @@
-from copy import deepcopy
-from typing import TYPE_CHECKING, Dict, List
-from PyQt6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QPushButton,
-    QHBoxLayout,
-    QFrame,
-    QApplication,
-)
-from PyQt6.QtCore import Qt, pyqtSignal
-from Enums import LetterType
-from constants import CODEX_PICTOGRAPH
-from utilities.TypeChecking.TypeChecking import Letters
-from widgets.codex.codex_image_generator import CodexImageGenerator
-from widgets.codex.ig_action_button_frame import ActionButtonFrame
-from widgets.pictograph.pictograph import Pictograph
-from widgets.scroll_area.scroll_area import ScrollArea
+from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QVBoxLayout, QFrame
+from PyQt6.QtCore import Qt
+from ..codex.action_button_frame import ActionButtonFrame
 from ..letter_button_frame.letter_button_frame import LetterButtonFrame
-
 
 if TYPE_CHECKING:
     from widgets.codex.codex import Codex
-    from widgets.main_tab_widget.main_tab_widget import MainTabWidget
 
 
 class CodexButtonPanel(QFrame):
@@ -39,7 +23,7 @@ class CodexButtonPanel(QFrame):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
-        self.layout.addWidget(self.letter_btn_frame, 8)
+        self.layout.addWidget(self.letter_btn_frame, 30)
         self.layout.addWidget(self.action_btn_frame, 1)
 
     def select_all_letters(self) -> None:
