@@ -44,3 +44,10 @@ class LetterButton(QPushButton):
                     background-color: #e6f0ff;
                 }
             """
+
+
+    def press(self) -> None:
+        self.setStyleSheet(self.get_button_style(pressed=True))
+
+    def unpress(self) -> None:
+        self.setStyleSheet(self.get_button_style(pressed=False))

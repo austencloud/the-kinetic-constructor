@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from widgets.letter_button_frame.letter_button_frame import LetterButtonFrame
 
 
-class LetterButtonLayoutStyler:
+class LetterButtonFrameLayoutStyler:
     def __init__(self, letter_button_frame: "LetterButtonFrame") -> None:
         self.spacing = letter_button_frame.spacing
 
@@ -26,7 +26,7 @@ class LetterButtonLayoutStyler:
         return self.border_colors.get(type_name, ("black", "black"))
 
     def create_layout(
-        self, type_name: str, rows: List[List[LetterButton]]
+        self, type_name: str, row_layouts: List[QHBoxLayout]
     ) -> Tuple[QFrame, QVBoxLayout]:
         border_colors = self.get_colors(type_name)
         outer_frame = self.create_styled_frame(border_colors[0], 6)
@@ -49,13 +49,7 @@ class LetterButtonLayoutStyler:
 
         type_frame_layout.addStretch(1)
 
-        for row in rows:
-            row_layout = QHBoxLayout()
-            row_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            row_layout.setSpacing(self.spacing)
-            for button in row:
-                row_layout.addWidget(button)
-            row_layout.addStretch(1)
+        for row_layout in row_layouts:
             type_frame_layout.addLayout(row_layout)
 
         outer_frame_layout.addStretch(1)

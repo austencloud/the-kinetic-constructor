@@ -2,40 +2,44 @@ Organized by number of calls:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
-         7        0.000013        0.000002             0.000014             0.000002 <genexpr>                      letter_button_frame\letter_button_frame.py:153
-         2        0.000029        0.000015             0.052266             0.026133 inner                          tka-sequence-constructor\profiler.py:23
-         1        0.000089        0.000089             0.002489             0.002489 resize_sequence_widget         sequence_widget\sequence_widget.py:30
+       140        0.000257        0.000002             0.000275             0.000002 <genexpr>                      components\letter_button_manager.py:45
+        20        0.002571        0.000129             0.004894             0.000245 resize_buttons                 components\letter_button_manager.py:44
+        20        0.000449        0.000022             0.004378             0.000219 resize_inner_and_outer_panels_so_that_theyre_large_enough_to_fit_their_contents letter_button_frame\letter_button_frame.py:94
+        20        0.000564        0.000028             0.009896             0.000495 resizeEvent                    letter_button_frame\letter_button_frame.py:107
+         9        0.000092        0.000010             0.000328             0.000036 set_dimensions                 utilities\window_manager.py:11
+         9        0.000098        0.000011             0.000427             0.000047 resizeEvent                    main_widget\main_widget.py:53
+         2        0.000027        0.000013             0.006852             0.003426 inner                          tka-sequence-constructor\profiler.py:23
+         1        0.000033        0.000033             0.000061             0.000061 update_pictographs             scroll_area\scroll_area.py:47
          1        0.000001        0.000001             0.000001             0.000001 process_selected_letters       scroll_area\scroll_area_pictograph_factory.py:55
-         1        0.000033        0.000033             0.000122             0.000122 update_pictographs             scroll_area\scroll_area.py:47
-         1        0.000211        0.000211             0.000424             0.000424 resize_letter_buttons          letter_button_frame\letter_button_frame.py:152
-         1        0.000044        0.000044             0.002671             0.002671 showEvent                      main_widget\main_widget.py:48
-         1        0.000067        0.000067             0.000067             0.000067 get_deselected_letters         scroll_area\scroll_area_pictograph_factory.py:71
-         1        0.000014        0.000014             0.000136             0.000136 resize_codex                   codex\codex.py:35
-         1        0.000033        0.000033             0.001481             0.001481 resize_inner_and_outer_panels_so_that_theyre_large_enough_to_fit_their_contents letter_button_frame\letter_button_frame.py:197
-         1        0.000031        0.000031             0.001936             0.001936 resizeEvent                    letter_button_frame\letter_button_frame.py:210
+         1        0.000031        0.000031             0.002602             0.002602 showEvent                      main_widget\main_widget.py:48
+         1        0.000006        0.000006             0.000006             0.000006 get_deselected_letters         scroll_area\scroll_area_pictograph_factory.py:71
+         1        0.000013        0.000013             0.000074             0.000074 resize_codex                   codex\codex.py:35
          1        0.000001        0.000001             0.000001             0.000001 _only_deselection_occurred     scroll_area\scroll_area.py:60
-         1        0.000008        0.000008             0.000019             0.000019 order_and_display_pictographs  scroll_area\scroll_area_display_manager.py:18
-         1        0.000009        0.000009             0.000012             0.000012 get_ordered_pictographs        scroll_area\scroll_area_display_manager.py:81
-         1        0.000005        0.000005             0.000007             0.000007 resizeEvent                    beat_frame\start_pos_beat.py:39
+         1        0.000009        0.000009             0.000020             0.000020 order_and_display_pictographs  scroll_area\scroll_area_display_manager.py:18
+         1        0.000007        0.000007             0.000010             0.000010 get_ordered_pictographs        scroll_area\scroll_area_display_manager.py:81
+         1        0.000065        0.000065             0.002497             0.002497 resize_sequence_widget         sequence_widget\sequence_widget.py:30
+         1        0.000006        0.000006             0.000007             0.000007 resizeEvent                    beat_frame\start_pos_beat.py:39
 
 
 Organized by total time:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
-         1        0.000211        0.000211             0.000424             0.000424 resize_letter_buttons          letter_button_frame\letter_button_frame.py:152
-         1        0.000089        0.000089             0.002489             0.002489 resize_sequence_widget         sequence_widget\sequence_widget.py:30
-         1        0.000067        0.000067             0.000067             0.000067 get_deselected_letters         scroll_area\scroll_area_pictograph_factory.py:71
-         1        0.000044        0.000044             0.002671             0.002671 showEvent                      main_widget\main_widget.py:48
-         1        0.000033        0.000033             0.001481             0.001481 resize_inner_and_outer_panels_so_that_theyre_large_enough_to_fit_their_contents letter_button_frame\letter_button_frame.py:197
-         1        0.000033        0.000033             0.000122             0.000122 update_pictographs             scroll_area\scroll_area.py:47
-         1        0.000031        0.000031             0.001936             0.001936 resizeEvent                    letter_button_frame\letter_button_frame.py:210
-         2        0.000029        0.000015             0.052266             0.026133 inner                          tka-sequence-constructor\profiler.py:23
-         1        0.000014        0.000014             0.000136             0.000136 resize_codex                   codex\codex.py:35
-         7        0.000013        0.000002             0.000014             0.000002 <genexpr>                      letter_button_frame\letter_button_frame.py:153
-         1        0.000009        0.000009             0.000012             0.000012 get_ordered_pictographs        scroll_area\scroll_area_display_manager.py:81
-         1        0.000008        0.000008             0.000019             0.000019 order_and_display_pictographs  scroll_area\scroll_area_display_manager.py:18
-         1        0.000005        0.000005             0.000007             0.000007 resizeEvent                    beat_frame\start_pos_beat.py:39
+        20        0.002571        0.000129             0.004894             0.000245 resize_buttons                 components\letter_button_manager.py:44
+        20        0.000564        0.000028             0.009896             0.000495 resizeEvent                    letter_button_frame\letter_button_frame.py:107
+        20        0.000449        0.000022             0.004378             0.000219 resize_inner_and_outer_panels_so_that_theyre_large_enough_to_fit_their_contents letter_button_frame\letter_button_frame.py:94
+       140        0.000257        0.000002             0.000275             0.000002 <genexpr>                      components\letter_button_manager.py:45
+         9        0.000098        0.000011             0.000427             0.000047 resizeEvent                    main_widget\main_widget.py:53
+         9        0.000092        0.000010             0.000328             0.000036 set_dimensions                 utilities\window_manager.py:11
+         1        0.000065        0.000065             0.002497             0.002497 resize_sequence_widget         sequence_widget\sequence_widget.py:30
+         1        0.000033        0.000033             0.000061             0.000061 update_pictographs             scroll_area\scroll_area.py:47
+         1        0.000031        0.000031             0.002602             0.002602 showEvent                      main_widget\main_widget.py:48
+         2        0.000027        0.000013             0.006852             0.003426 inner                          tka-sequence-constructor\profiler.py:23
+         1        0.000013        0.000013             0.000074             0.000074 resize_codex                   codex\codex.py:35
+         1        0.000009        0.000009             0.000020             0.000020 order_and_display_pictographs  scroll_area\scroll_area_display_manager.py:18
+         1        0.000007        0.000007             0.000010             0.000010 get_ordered_pictographs        scroll_area\scroll_area_display_manager.py:81
+         1        0.000006        0.000006             0.000007             0.000007 resizeEvent                    beat_frame\start_pos_beat.py:39
+         1        0.000006        0.000006             0.000006             0.000006 get_deselected_letters         scroll_area\scroll_area_pictograph_factory.py:71
          1        0.000001        0.000001             0.000001             0.000001 process_selected_letters       scroll_area\scroll_area_pictograph_factory.py:55
          1        0.000001        0.000001             0.000001             0.000001 _only_deselection_occurred     scroll_area\scroll_area.py:60
 
@@ -44,18 +48,20 @@ Organized by cumulative time:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
-         2        0.000029        0.000015             0.052266             0.026133 inner                          tka-sequence-constructor\profiler.py:23
-         1        0.000044        0.000044             0.002671             0.002671 showEvent                      main_widget\main_widget.py:48
-         1        0.000089        0.000089             0.002489             0.002489 resize_sequence_widget         sequence_widget\sequence_widget.py:30
-         1        0.000031        0.000031             0.001936             0.001936 resizeEvent                    letter_button_frame\letter_button_frame.py:210
-         1        0.000033        0.000033             0.001481             0.001481 resize_inner_and_outer_panels_so_that_theyre_large_enough_to_fit_their_contents letter_button_frame\letter_button_frame.py:197
-         1        0.000211        0.000211             0.000424             0.000424 resize_letter_buttons          letter_button_frame\letter_button_frame.py:152
-         1        0.000014        0.000014             0.000136             0.000136 resize_codex                   codex\codex.py:35
-         1        0.000033        0.000033             0.000122             0.000122 update_pictographs             scroll_area\scroll_area.py:47
-         1        0.000067        0.000067             0.000067             0.000067 get_deselected_letters         scroll_area\scroll_area_pictograph_factory.py:71
-         1        0.000008        0.000008             0.000019             0.000019 order_and_display_pictographs  scroll_area\scroll_area_display_manager.py:18
-         7        0.000013        0.000002             0.000014             0.000002 <genexpr>                      letter_button_frame\letter_button_frame.py:153
-         1        0.000009        0.000009             0.000012             0.000012 get_ordered_pictographs        scroll_area\scroll_area_display_manager.py:81
-         1        0.000005        0.000005             0.000007             0.000007 resizeEvent                    beat_frame\start_pos_beat.py:39
+        20        0.000564        0.000028             0.009896             0.000495 resizeEvent                    letter_button_frame\letter_button_frame.py:107
+         2        0.000027        0.000013             0.006852             0.003426 inner                          tka-sequence-constructor\profiler.py:23
+        20        0.002571        0.000129             0.004894             0.000245 resize_buttons                 components\letter_button_manager.py:44
+        20        0.000449        0.000022             0.004378             0.000219 resize_inner_and_outer_panels_so_that_theyre_large_enough_to_fit_their_contents letter_button_frame\letter_button_frame.py:94
+         1        0.000031        0.000031             0.002602             0.002602 showEvent                      main_widget\main_widget.py:48
+         1        0.000065        0.000065             0.002497             0.002497 resize_sequence_widget         sequence_widget\sequence_widget.py:30
+         9        0.000098        0.000011             0.000427             0.000047 resizeEvent                    main_widget\main_widget.py:53
+         9        0.000092        0.000010             0.000328             0.000036 set_dimensions                 utilities\window_manager.py:11
+       140        0.000257        0.000002             0.000275             0.000002 <genexpr>                      components\letter_button_manager.py:45
+         1        0.000013        0.000013             0.000074             0.000074 resize_codex                   codex\codex.py:35
+         1        0.000033        0.000033             0.000061             0.000061 update_pictographs             scroll_area\scroll_area.py:47
+         1        0.000009        0.000009             0.000020             0.000020 order_and_display_pictographs  scroll_area\scroll_area_display_manager.py:18
+         1        0.000007        0.000007             0.000010             0.000010 get_ordered_pictographs        scroll_area\scroll_area_display_manager.py:81
+         1        0.000006        0.000006             0.000007             0.000007 resizeEvent                    beat_frame\start_pos_beat.py:39
+         1        0.000006        0.000006             0.000006             0.000006 get_deselected_letters         scroll_area\scroll_area_pictograph_factory.py:71
          1        0.000001        0.000001             0.000001             0.000001 process_selected_letters       scroll_area\scroll_area_pictograph_factory.py:55
          1        0.000001        0.000001             0.000001             0.000001 _only_deselection_occurred     scroll_area\scroll_area.py:60

@@ -30,14 +30,14 @@ class CodexButtonPanel(QFrame):
         for (
             button_letter,
             button,
-        ) in self.letter_btn_frame.buttons.items():
+        ) in self.letter_btn_frame.button_manager.buttons.items():
             button.setFlat(True)
             button.setStyleSheet(button.get_button_style(pressed=True))
 
         for (
             button_letter,
             button,
-        ) in self.letter_btn_frame.buttons.items():
+        ) in self.letter_btn_frame.button_manager.buttons.items():
             button.clicked.disconnect()
             button.click()
 
