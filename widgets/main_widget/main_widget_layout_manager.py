@@ -20,8 +20,8 @@ class MainWidgetLayoutManager:
 
     def _setup_main_layout(self, left_frame, right_frame) -> None:
         self.main_widget.layout: QHBoxLayout = QHBoxLayout(self.main_widget)
-        self.main_widget.layout.addWidget(left_frame, 1)
-        self.main_widget.layout.addWidget(right_frame, 2)
+        self.main_widget.layout.addWidget(left_frame, 3)
+        self.main_widget.layout.addWidget(right_frame, 5)
 
     def _setup_right_frame(self) -> QFrame:
         right_frame = QFrame()

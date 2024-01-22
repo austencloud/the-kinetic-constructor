@@ -27,10 +27,10 @@ class Codex(QWidget):
         self.left_layout = QVBoxLayout()
         self.right_layout = QVBoxLayout()
 
-        self.left_layout.addWidget(self.scroll_area)
-        self.right_layout.addWidget(self.button_panel)
-        self.layout.addLayout(self.left_layout)
-        self.layout.addLayout(self.right_layout)
+        self.left_layout.addWidget(self.scroll_area, 5)
+        self.right_layout.addWidget(self.button_panel, 1)
+        self.layout.addLayout(self.left_layout, 5)
+        self.layout.addLayout(self.right_layout, 1)
 
     def resize_codex(self) -> None:
         self.scroll_area.update_pictographs()

@@ -22,8 +22,10 @@ class LetterButtonClickHandler:
 
         if is_selected:
             self.button_panel.codex.selected_letters.remove(letter)
+            button.release()
         else:
             self.button_panel.codex.selected_letters.append(letter)
+            button.press()
 
         if letter in self.button_panel.codex.selected_letters:
             letter_type = LetterType.get_letter_type(letter)
@@ -33,7 +35,7 @@ class LetterButtonClickHandler:
                 section.filter_tab.show_tabs_based_on_chosen_letters()
 
         button.setFlat(not is_selected)
-        button.press()
+
         if letter in self.button_panel.codex.selected_letters:
             self.process_pictographs_for_letter(letter)
         self.button_panel.codex.scroll_area.update_pictographs()

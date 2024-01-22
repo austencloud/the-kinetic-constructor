@@ -38,6 +38,7 @@ class ScrollAreaSection(QWidget):
     def _setup_pictograph_frame(self) -> QFrame:
         pictograph_frame = QFrame()
         self.pictograph_layout: QGridLayout = QGridLayout(pictograph_frame)
+        self.pictograph_layout.setAlignment(Qt.AlignmentFlag.AlignTop)  # Align to the top
         return pictograph_frame
 
     def create_section_label(self, styled_text: str) -> QLabel:
