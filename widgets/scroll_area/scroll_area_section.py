@@ -1,17 +1,19 @@
 # Import necessary components
 from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtWidgets import (
-    QFrame,
     QVBoxLayout,
     QWidget,
-    QGridLayout,
-    QLabel,
     QSizePolicy,
 )
-from PyQt6.QtCore import Qt
 from utilities.TypeChecking.TypeChecking import LetterTypes
 from widgets.filter_tab import FilterTab
 from widgets.pictograph.pictograph import Pictograph
+from widgets.scroll_area.scroll_area_section_pictograph_frame import (
+    ScrollAreaSectionPictographFrame,
+)
+from widgets.scroll_area.scroll_area_section_type_label import (
+    ScrollAreaSectionTypeLabel,
+)
 
 if TYPE_CHECKING:
     from .scroll_area import ScrollArea
@@ -25,90 +27,23 @@ class ScrollAreaSection(QWidget):
         self.scroll_area = scroll_area
         self.letter_type = letter_type
         self.filter_tab: FilterTab = None
-        self.filter_tabs_cache: Dict[str, FilterTab] = {}  # Cache to store FilterTabs
+        self.filter_tabs_cache: Dict[str, FilterTab] = {}
         self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
         self.pictographs: List[Pictograph] = []
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.pictograph_frame = self._setup_pictograph_frame()
-        self.styled_text = self.get_styled_text(letter_type)
-        self.section_label = self.create_section_label(self.styled_text)
+        self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
+        self.type_label = ScrollAreaSectionTypeLabel(self)
         self._add_widgets_to_layout()
         self.layout.setSpacing(0)
-        self.pictograph_layout.setContentsMargins(0, 0, 0, 0)
-
-    def _setup_pictograph_frame(self) -> QFrame:
-        pictograph_frame = QFrame()
-        self.pictograph_layout: QGridLayout = QGridLayout(pictograph_frame)
-        self.pictograph_layout.setAlignment(
-            Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignCenter
-        )
-        self.pictograph_layout.setContentsMargins(0, 0, 0, 0)
-        self.pictograph_layout.setColumnStretch(0, 1)  # Stretch the first column
-        self.pictograph_layout.setColumnStretch(2, 1)  # Stretch the last column
-        return pictograph_frame
-
-    def create_section_label(self, styled_text: str) -> QLabel:
-        """Creates a QLabel for the section label with the given styled text."""
-        section_label = QLabel()
-        section_label.setText(styled_text)  # Set the HTML styled text
-        font_size = 30
-        section_label.setStyleSheet(f"font-size: {font_size}px; font-weight: bold;")
-        section_label.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Center the text
-        size_policy = QSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
-        )
-        section_label.setSizePolicy(size_policy)
-        section_label.setMinimumSize(section_label.sizeHint())
-        return section_label
 
     def _add_widgets_to_layout(self) -> None:
-        self.layout.addWidget(self.section_label)
+        self.layout.addWidget(self.type_label)
         self.layout.addWidget(self.pictograph_frame)
 
-    def add_pictograph(self, pictograph: Pictograph) -> None:
-        self.pictograph_layout.addWidget(pictograph.view)
 
     def remove_pictograph(self, pictograph: Pictograph) -> None:
         pictograph.view.setParent(None)
 
-    def update_filter(self) -> None:
-        pass
-
-    def get_styled_text(self, letter_type: LetterTypes) -> str:
-        """Returns the styled text for the section label."""
-        type_map = {
-            "Type1": "Dual-Shift",
-            "Type2": "Shift",
-            "Type3": "Cross-Shift",
-            "Type4": "Dash",
-            "Type5": "Dual-Dash",
-            "Type6": "Static",
-        }
-
-        colors = {
-            "Shift": "#6F2DA8",  # purple
-            "Dual": "#00b3ff",  # cyan
-            "Dash": "#26e600",  # green
-            "Cross": "#26e600",  # green
-            "Static": "#eb7d00",  # orange
-            "-": "#000000",  # black
-        }
-
-        type_words = type_map[letter_type].split("-")
-
-        styled_words = []
-        for word in type_words:
-            color = colors.get(word, "black")
-            styled_words.append(f"<span style='color: {color};'>{word}</span>")
-
-        styled_type_name = (
-            "-".join(styled_words)
-            if "-" in type_map[letter_type]
-            else "".join(styled_words)
-        )
-
-        styled_text = f"{letter_type[0:4]} {letter_type[4]}: {styled_type_name}"
-        return styled_text
 
     def create_or_get_filter_tab(self) -> FilterTab:
         if not self.filter_tab:
@@ -117,9 +52,6 @@ class ScrollAreaSection(QWidget):
         return self.filter_tab
 
     def resize_section(self) -> None:
-        # self.setMaximumWidth(
-        #     self.scroll_area.width() - self.scroll_area.verticalScrollBar().width()
-        # )
         self.setMinimumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
         self.filter_tab.resize_filter_tab()
 

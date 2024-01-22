@@ -169,3 +169,4 @@ class FilterTab(QTabWidget):
         for panel in self.panels:
             panel.resize_turns_panel()
         # self.setFixedHeight(self.color_turns_panel.height())
+

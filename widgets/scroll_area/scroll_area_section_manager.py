@@ -11,6 +11,7 @@ from PyQt6.QtWidgets import QLabel, QGridLayout
 
 
 class ScrollAreaSectionManager:
+    """Manages all of the sections in the scroll area. Individual sections are managed by the ScrollAreaSection class."""
     
     SECTION_ORDER = ["Type1", "Type2", "Type3", "Type4", "Type5", "Type6"]
 
@@ -34,17 +35,13 @@ class ScrollAreaSectionManager:
         for letter_type in self.letters_by_type:
             self.create_section(letter_type)
 
-
     def create_section(self, letter_type: LetterTypes) -> ScrollAreaSection:
         if letter_type not in self.sections:
-            # Determine the correct index for the new section
             correct_index = self.get_correct_index_for_section(letter_type)
             section = ScrollAreaSection(letter_type, self.scroll_area)
             self.scroll_area.insert_widget_at_index(section, correct_index)
             self.sections[letter_type] = section
             self.ordered_section_types.append(letter_type)
-
-            # Ensure the stretch is still at the end
             self.scroll_area.update_sections()
 
         return self.sections[letter_type]
@@ -52,13 +49,11 @@ class ScrollAreaSectionManager:
     
     def get_correct_index_for_section(self, letter_type: LetterTypes) -> int:
         try:
-            # Find the index where this section should be inserted
             desired_position = self.SECTION_ORDER.index(letter_type)
             current_positions = [self.SECTION_ORDER.index(typ) for typ in self.ordered_section_types]
             insert_before = next((i for i, pos in enumerate(current_positions) if pos > desired_position), len(self.ordered_section_types))
             return insert_before
         except ValueError:
-            # If the letter_type is not in SECTION_ORDER, append at the end
             return len(self.ordered_section_types)
     def get_section(self, letter_type: LetterTypes) -> ScrollAreaSection:
         return self.create_section(letter_type)
@@ -108,12 +103,10 @@ class ScrollAreaSectionManager:
             section.create_or_get_filter_tab()
 
     def update_sections_based_on_letters(self, selected_letters: List[Letters]) -> None:
-        # First, hide all sections and filter tabs
         for section in self.sections.values():
             section.hide()
             section.hide_filter_tab()
 
-        # Now, show only the sections and filter tabs needed based on selected letters
         for letter in selected_letters:
             letter_type = LetterType.get_letter_type(letter)
             if letter_type in self.sections:

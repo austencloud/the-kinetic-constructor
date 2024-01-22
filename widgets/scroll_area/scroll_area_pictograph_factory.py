@@ -82,11 +82,11 @@ class ScrollAreaPictographFactory:
             if key.startswith(deselected_letter + "_")
         ]
         for key in keys_to_remove:
-            codex_pictograph = self.scroll_area.pictographs.pop(key)
+            pictograph = self.scroll_area.pictographs.pop(key)
             scroll_section = self.scroll_area.section_manager.get_section(
-                LetterType.get_letter_type(codex_pictograph.letter)
+                LetterType.get_letter_type(pictograph.letter)
             )
-            scroll_section.remove_pictograph(codex_pictograph)
+            scroll_section.remove_pictograph(pictograph)
 
     def get_pictograph(self, pictograph_key) -> Pictograph:
         return self.scroll_area.pictographs[pictograph_key]

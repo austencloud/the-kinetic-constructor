@@ -44,7 +44,7 @@ class ScrollAreaDisplayManager:
         if section:
             row = index // self.COLUMN_COUNT + 1
             col = index % self.COLUMN_COUNT
-            section.pictograph_layout.addWidget(codex_pictograph.view, row, col)
+            section.pictograph_frame.layout.addWidget(codex_pictograph.view, row, col)
             codex_pictograph.view.resize_for_scroll_area()
         else:
             print(f"Section not found for letter type {letter_type}")

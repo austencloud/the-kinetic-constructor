@@ -73,9 +73,14 @@ class TurnsBox(QFrame):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def apply_border_style(self, color_hex: str) -> None:
+        border_width = (
+            1
+            if color_hex == "#000000"
+            else self.turns_panel.filter_tab.attr_box_border_width
+        )
         self.setStyleSheet(
             f"#TurnsBox {{ "
-            f"border: {self.turns_panel.filter_tab.attr_box_border_width}px solid {color_hex};"
+            f"border: {border_width}px solid {color_hex};"
             f" border-style: inset; "
             f"}}"
         )
