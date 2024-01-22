@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 
 
 from .components.scroll_area_pictograph_factory import ScrollAreaPictographFactory
-from .components.section_manager.section_manager import SectionManager
+from .components.section_manager.section_manager import ScrollAreaSectionManager
 from .components.scroll_area_display_manager import ScrollAreaDisplayManager
 from utilities.TypeChecking.TypeChecking import Letters
 from ..pictograph.pictograph import Pictograph
@@ -26,7 +26,7 @@ class ScrollArea(QScrollArea):
 
     def _setup_managers(self) -> None:
         self.display_manager = ScrollAreaDisplayManager(self)
-        self.section_manager = SectionManager(self)
+        self.section_manager = ScrollAreaSectionManager(self)
         self.pictograph_factory = ScrollAreaPictographFactory(self)
 
     def _setup_ui(self) -> None:

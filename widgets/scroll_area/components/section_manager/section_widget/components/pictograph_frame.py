@@ -8,7 +8,9 @@ from PyQt6.QtCore import Qt
 
 
 if TYPE_CHECKING:
-    from widgets.scroll_area.components.section_manager.section_widget.section_widget import SectionWidget
+    from widgets.scroll_area.components.section_manager.section_widget.section_widget import (
+        SectionWidget,
+    )
 
 
 class ScrollAreaSectionPictographFrame(QFrame):
@@ -18,6 +20,6 @@ class ScrollAreaSectionPictographFrame(QFrame):
         self.layout: QGridLayout = QGridLayout(self)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
-        # self.layout.setColumnStretch(0, 1)  # Stretch the first column
-        # self.layout.setColumnStretch(2, 1)  # Stretch the last column
+
+        # add black border
+        # self.setStyleSheet("border: 1px solid black;")

@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsView
+from PyQt6.QtWidgets import QGraphicsView, QSizePolicy
 from PyQt6.QtCore import Qt
 
 
@@ -14,7 +14,10 @@ class PictographView(QGraphicsView):
         self.setScene(self.pictograph)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-
+        
+        # Set horizontal size policy to Expanding
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        
     def resize_for_scroll_area(self) -> None:
         view_width = int(
             (
@@ -22,7 +25,7 @@ class PictographView(QGraphicsView):
                 / self.pictograph.scroll_area.display_manager.COLUMN_COUNT
             )
             - self.pictograph.scroll_area.display_manager.SPACING
-            - 10
+            
         )
         self.setMinimumWidth(view_width)
         self.setMaximumWidth(view_width)

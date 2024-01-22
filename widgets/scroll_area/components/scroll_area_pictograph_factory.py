@@ -86,7 +86,8 @@ class ScrollAreaPictographFactory:
             section_widget = self.scroll_area.section_manager.get_section(
                 LetterType.get_letter_type(pictograph.letter)
             )
-            section_widget.remove_pictograph(pictograph)
+            pictograph.view.setParent(None)
+
 
     def get_pictograph(self, pictograph_key) -> Pictograph:
         return self.scroll_area.pictographs[pictograph_key]
