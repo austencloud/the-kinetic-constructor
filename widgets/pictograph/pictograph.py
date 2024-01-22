@@ -80,6 +80,7 @@ class Pictograph(QGraphicsScene):
     def contextMenuEvent(self, event) -> None:
         self.context_menu_handler.handle_context_menu(event)
 
+    view: PictographView
     arrows: Dict[Colors, Arrow]
     props: Dict[Colors, Prop]
     ghost_arrows: Dict[Colors, GhostArrow]
@@ -98,7 +99,6 @@ class Pictograph(QGraphicsScene):
     vtg_dir: VtgDirections
     dragged_arrow: Arrow
     dragged_prop: Prop
-    view: QGraphicsView
     letter_item: LetterItem
     grid: Grid
     locations: Dict[Locations, Tuple[int, int, int, int]]

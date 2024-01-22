@@ -40,12 +40,6 @@ class CodexButtonPanel(QFrame):
         ) in self.letter_btn_frame.button_manager.buttons.items():
             button.clicked.disconnect()
             button.click()
-
             self.codex.selected_letters.append(button_letter)
-            button.clicked.connect(
-                lambda checked, letter=button_letter: self.letter_btn_frame.on_letter_button_clicked(
-                    letter
-                )
-            )
 
-        self.codex.scroll_area.update_pictographs()
+        self.codex.scroll_area.updater.update_pictographs()

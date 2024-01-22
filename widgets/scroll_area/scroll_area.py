@@ -1,6 +1,6 @@
-from typing import TYPE_CHECKING, Dict, Union
+from typing import TYPE_CHECKING, Dict
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout
-from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtCore import Qt
 
 
 from .scroll_area_pictograph_factory import ScrollAreaPictographFactory
@@ -11,7 +11,39 @@ from ..pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from ..codex.codex import Codex
-    from ..main_widget.main_widget import MainWidget
+
+
+class ScrollAreaUpdater:
+    def __init__(self, scroll_area: "ScrollArea") -> None:
+        self.scroll_area = scroll_area
+
+    def update_pictographs(self) -> None:
+        deselected_letters = self.scroll_area.pictograph_factory.get_deselected_letters()
+        selected_letters = set(self.scroll_area.codex.selected_letters)
+
+        if self._only_deselection_occurred(deselected_letters, selected_letters):
+            for letter in deselected_letters:
+                self.scroll_area.pictograph_factory.remove_deselected_letter_pictographs(letter)
+        else:
+            for letter in deselected_letters:
+                self.scroll_area.pictograph_factory.remove_deselected_letter_pictographs(letter)
+            self.scroll_area.pictograph_factory.process_selected_letters()
+        self.scroll_area.display_manager.order_and_display_pictographs()
+
+    def _only_deselection_occurred(self, deselected_letters, selected_letters) -> bool:
+        if not deselected_letters:
+            return False
+        if not selected_letters:
+            return True
+
+        current_pictograph_letters = {key.split("_")[0] for key in self.scroll_area.pictographs}
+
+        return (
+            len(deselected_letters) > 0
+            and len(selected_letters) == len(current_pictograph_letters) - 1
+        )
+
+
 
 
 class ScrollArea(QScrollArea):
@@ -25,9 +57,9 @@ class ScrollArea(QScrollArea):
         self._setup_managers()
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.update_arrow_placements)
-        # self.timer.start(1000)
+        self.layout.setSpacing(0)
+        self.layout.addStretch(1)
+        self.updater = ScrollAreaUpdater(self)
 
     def _setup_managers(self) -> None:
         self.display_manager = ScrollAreaDisplayManager(self)
@@ -44,32 +76,3 @@ class ScrollArea(QScrollArea):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
-    def update_pictographs(self) -> None:
-        deselected_letters = self.pictograph_factory.get_deselected_letters()
-        selected_letters = set(self.codex.selected_letters)
-
-        if self._only_deselection_occurred(deselected_letters, selected_letters):
-            for letter in deselected_letters:
-                self.pictograph_factory.remove_deselected_letter_pictographs(letter)
-        else:
-            for letter in deselected_letters:
-                self.pictograph_factory.remove_deselected_letter_pictographs(letter)
-            self.pictograph_factory.process_selected_letters()
-        self.display_manager.order_and_display_pictographs()
-
-    def _only_deselection_occurred(self, deselected_letters, selected_letters) -> bool:
-        if not deselected_letters:
-            return False
-        if not selected_letters:
-            return True
-
-        current_pictograph_letters = {key.split("_")[0] for key in self.pictographs}
-
-        return (
-            len(deselected_letters) > 0
-            and len(selected_letters) == len(current_pictograph_letters) - 1
-        )
-
-    def update_arrow_placements(self) -> None:
-        for pictograph in self.pictographs.values():
-            pictograph.arrow_placement_manager.update_arrow_positions()
