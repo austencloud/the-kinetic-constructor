@@ -2,7 +2,7 @@ from Enums import LetterType
 from typing import TYPE_CHECKING
 
 from Enums import LetterType
-from widgets.filter_tab import FilterTab
+from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab import FilterTab
 
 if TYPE_CHECKING:
     from widgets.letter_button_frame.components.letter_button_manager import (

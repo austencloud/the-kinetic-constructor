@@ -13,7 +13,7 @@ from utilities.TypeChecking.letter_lists import (
 )
 
 if TYPE_CHECKING:
-    from widgets.filter_tab import FilterTab
+    from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab import FilterTab
 
 
 class TurnsPanel(QFrame):

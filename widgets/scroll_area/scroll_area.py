@@ -3,9 +3,9 @@ from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
 
 
-from .scroll_area_pictograph_factory import ScrollAreaPictographFactory
-from .scroll_area_section_manager import ScrollAreaSectionManager
-from .scroll_area_display_manager import ScrollAreaDisplayManager
+from .components.scroll_area_pictograph_factory import ScrollAreaPictographFactory
+from .components.section_manager.section_manager import SectionManager
+from .components.scroll_area_display_manager import ScrollAreaDisplayManager
 from utilities.TypeChecking.TypeChecking import Letters
 from ..pictograph.pictograph import Pictograph
 
@@ -26,7 +26,7 @@ class ScrollArea(QScrollArea):
 
     def _setup_managers(self) -> None:
         self.display_manager = ScrollAreaDisplayManager(self)
-        self.section_manager = ScrollAreaSectionManager(self)
+        self.section_manager = SectionManager(self)
         self.pictograph_factory = ScrollAreaPictographFactory(self)
 
     def _setup_ui(self) -> None:
@@ -50,7 +50,6 @@ class ScrollArea(QScrollArea):
 
     def insert_widget_at_index(self, widget: QWidget, index: int) -> None:
         self.layout.insertWidget(index, widget)
-
 
     def update_pictographs(self) -> None:
         deselected_letters = self.pictograph_factory.get_deselected_letters()

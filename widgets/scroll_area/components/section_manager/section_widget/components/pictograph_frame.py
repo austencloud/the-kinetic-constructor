@@ -8,11 +8,11 @@ from PyQt6.QtCore import Qt
 
 
 if TYPE_CHECKING:
-    from widgets.scroll_area.scroll_area_section import ScrollAreaSection
+    from widgets.scroll_area.components.section_manager.section_widget.section_widget import SectionWidget
 
 
 class ScrollAreaSectionPictographFrame(QFrame):
-    def __init__(self, scroll_area_section: "ScrollAreaSection") -> None:
+    def __init__(self, scroll_area_section: "SectionWidget") -> None:
         super().__init__()
         self.section = scroll_area_section
         self.layout: QGridLayout = QGridLayout(self)

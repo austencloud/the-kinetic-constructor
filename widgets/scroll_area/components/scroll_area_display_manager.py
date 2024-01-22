@@ -2,10 +2,12 @@ from typing import TYPE_CHECKING, Dict, List
 from widgets.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.scroll_area.scroll_area_section import ScrollAreaSection
+from widgets.scroll_area.components.section_manager.section_widget.section_widget import (
+    SectionWidget,
+)
 
 if TYPE_CHECKING:
-    from .scroll_area import ScrollArea
+    from ..scroll_area import ScrollArea
 
 
 class ScrollAreaDisplayManager:
@@ -35,10 +37,10 @@ class ScrollAreaDisplayManager:
     def add_pictograph_to_layout(
         self, codex_pictograph: Pictograph, index: int
     ) -> None:
-        letter_type = self.scroll_area.section_manager.get_pictograph_letter_type(
+        letter_type = self.scroll_area.section_manager.pictograph_organizer.get_pictograph_letter_type(
             codex_pictograph.letter
         )
-        section: ScrollAreaSection = self.scroll_area.section_manager.sections.get(
+        section: SectionWidget = self.scroll_area.section_manager.sections.get(
             letter_type
         )
         if section:
@@ -47,7 +49,7 @@ class ScrollAreaDisplayManager:
             section.pictograph_frame.layout.addWidget(codex_pictograph.view, row, col)
             codex_pictograph.view.resize_for_scroll_area()
         else:
-            print(f"Section not found for letter type {letter_type}")
+            self.scroll_area.section_manager.create_section_if_needed(letter_type)
 
     def remove_pictograph(self, pictograph_key: str) -> None:
         codex_pictograph: Pictograph = self.scroll_area.pictographs.pop(

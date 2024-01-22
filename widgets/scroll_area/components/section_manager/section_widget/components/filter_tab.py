@@ -16,11 +16,11 @@ from widgets.turns_panel import TurnsPanel
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
-    from widgets.scroll_area.scroll_area_section import ScrollAreaSection
+    from widgets.scroll_area.components.section_manager.section_widget.section_widget import SectionWidget
 
 
 class FilterTab(QTabWidget):
-    def __init__(self, section: "ScrollAreaSection") -> None:
+    def __init__(self, section: "SectionWidget") -> None:
         super().__init__(section)
         self.section = section
         self.attr_box_border_width = 3
@@ -169,4 +169,3 @@ class FilterTab(QTabWidget):
         for panel in self.panels:
             panel.resize_turns_panel()
         # self.setFixedHeight(self.color_turns_panel.height())
-
