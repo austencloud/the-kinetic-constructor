@@ -1,57 +1,22 @@
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QPushButton, QSizePolicy
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QSizePolicy
 from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtCore import Qt, QSize
+
 from Enums import LetterType
-from constants import COLOR, LEAD_STATE, LETTER_BTN_ICON_DIR, MOTION_TYPE
-from typing import TYPE_CHECKING, Dict, List, Tuple
+from constants import LETTER_BTN_ICON_DIR
+from typing import TYPE_CHECKING, Dict, List
 from utilities.TypeChecking.TypeChecking import Letters
 from utilities.TypeChecking.letter_lists import all_letters
-from widgets.filter_tab import FilterTab
-from widgets.letter_button_frame.letter_button import LetterButton
+
+from ..factories.button_factory.button_factory import ButtonFactory
+from ..filter_tab import FilterTab
+
+from .components.letter_button import LetterButton
+from .components.letter_button_click_handler import LetterButtonClickHandler
+from .components.letter_button_layout_styler import LetterButtonLayoutStyler
 
 if TYPE_CHECKING:
-    from widgets.codex.codex_button_panel import CodexButtonPanel
-    from widgets.codex.codex import Codex
-
-
-class LetterButtonClickHandler:
-    def __init__(self, letter_button_frame: "LetterButtonFrame"):
-        self.lbf = letter_button_frame
-
-    def on_letter_button_clicked(self, letter: str) -> None:
-        button = self.lbf.buttons[letter]
-        is_selected = letter in self.lbf.button_panel.codex.selected_letters
-
-        if is_selected:
-            self.lbf.button_panel.codex.selected_letters.remove(letter)
-        else:
-            self.lbf.button_panel.codex.selected_letters.append(letter)
-
-        if letter in self.lbf.button_panel.codex.selected_letters:
-            letter_type = LetterType.get_letter_type(letter)
-            self.lbf.button_panel.codex.scroll_area.section_manager.create_section_if_needed(
-                letter_type
-            )
-        for (
-            section
-        ) in self.lbf.button_panel.codex.scroll_area.section_manager.sections.values():
-            if section.letter_type == LetterType.get_letter_type(letter):
-                section.filter_tab.show_tabs_based_on_chosen_letters()
-
-        button.setFlat(not is_selected)
-        button.setStyleSheet(button.get_button_style(pressed=not is_selected))
-        if letter in self.lbf.button_panel.codex.selected_letters:
-            self.lbf.process_pictographs_for_letter(letter)
-        self.lbf.button_panel.codex.scroll_area.update_pictographs()
-        for (
-            section
-        ) in self.lbf.button_panel.codex.scroll_area.section_manager.sections.values():
-            if section.letter_type == LetterType.get_letter_type(letter):
-                section.resize_section()
-        # After processing selection, update the visibility of sections and tabs
-        self.lbf.button_panel.codex.scroll_area.section_manager.update_sections_based_on_letters(
-            self.lbf.button_panel.codex.selected_letters
-        )
+    from ..codex.codex_button_panel import CodexButtonPanel
 
 
 class LetterButtonFrame(QFrame):
@@ -61,6 +26,9 @@ class LetterButtonFrame(QFrame):
         self.spacing = 5  # Adjust spacing as needed
         self.buttons: Dict[Letters, LetterButton] = {}
         self.type_frames: Dict[str, QFrame] = {}
+        self.layout_styler = LetterButtonLayoutStyler(self)
+        self.click_handler = LetterButtonClickHandler(self)
+
         self.letter_rows = self._define_letter_rows()
         self._init_letter_buttons_layout()
         self._connect_letter_buttons()
@@ -115,63 +83,26 @@ class LetterButtonFrame(QFrame):
         main_layout = QVBoxLayout(self)
         main_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.setLayout(main_layout)
-
-        # Set the policy to allow the main frame to expand both horizontally and vertically
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         for type_name, rows in self.letter_rows.items():
-            border_colors = self.get_border_colors(type_name)
-            outer_frame = self.create_styled_frame(border_colors[0], 6)
-            outer_frame_layout = QVBoxLayout(outer_frame)
-            outer_frame_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-            outer_frame.setSizePolicy(
-                QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
-            )
-
-            if len(border_colors) == 2:
-                inner_frame = self.create_styled_frame(border_colors[1], 3, outer_frame)
-                inner_frame_layout = QVBoxLayout(inner_frame)
-                inner_frame_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-                inner_frame.setSizePolicy(
-                    QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
-                )
-
-                type_frame_layout = inner_frame_layout
-            else:
-                type_frame_layout = outer_frame_layout
-
-            # Adding stretch to ensure that the layout expands the items within it
-            type_frame_layout.addStretch(1)
-
+            buttons_row = []
             for row in rows:
-                row_layout = QHBoxLayout()
-                row_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                row_layout.setSpacing(self.spacing)
-
+                button_row = []
                 for letter_str in row:
-                    button = self._create_letter_button(letter_str)
-                    row_layout.addWidget(button)
-
-                # Adding stretch to ensure that the layout expands the items within it
-                row_layout.addStretch(1)
-                type_frame_layout.addLayout(row_layout)
-
-            # Add stretch to the outer layout to ensure it takes up all available space
-            outer_frame_layout.addStretch(1)
-            main_layout.addWidget(outer_frame)
+                    letter_type = LetterType.get_letter_type(letter_str)
+                    icon_path = f"{LETTER_BTN_ICON_DIR}/{letter_type}/{letter_str}.svg"
+                    button = ButtonFactory.create_letter_button(
+                        icon_path, letter_str, letter_type
+                    )
+                    self.buttons[letter_str] = button
+                    button_row.append(button)
+                buttons_row.append(button_row)
+            outer_frame, outer_frame_layout = self.layout_styler.create_layout(
+                type_name, buttons_row
+            )
             self.type_frames[type_name] = outer_frame
-
-    def get_border_colors(self, type_name: str) -> Tuple[str, str]:
-        # Define your border colors based on the type
-        border_colors = {
-            "Type1": ("#6F2DA8", "#00b3ff"),
-            "Type2": ("#6F2DA8", "#6F2DA8"),
-            "Type3": ("#6F2DA8", "#26e600"),
-            "Type4": ("#26e600", "#26e600"),
-            "Type5": ("#00b3ff", "#26e600"),
-            "Type6": ("#eb7d00", "#eb7d00"),
-        }
-        return border_colors[type_name]
+            main_layout.addWidget(outer_frame)
 
     def create_styled_frame(
         self, color: str, border_width: int, parent: QFrame = None
@@ -210,23 +141,6 @@ class LetterButtonFrame(QFrame):
         frame.layout().setSpacing(0)
         return frame
 
-    def _create_letter_button(self, letter_str) -> LetterButton:
-        letter_type = LetterType.get_letter_type(letter_str)
-        icon_path = f"{LETTER_BTN_ICON_DIR}/{letter_type}/{letter_str}.svg"
-        button = LetterButton(
-            icon_path,
-            letter_str,
-            self.button_panel.codex.main_tab_widget.main_widget,
-        )
-        self.buttons[letter_str] = button
-
-        # Add horizontal spacing between buttons
-        button_layout = QHBoxLayout()
-        button_layout.addWidget(button)
-        button_layout.addSpacing(self.spacing)
-
-        return button
-
     def get_icon_path(self, letter_type: str, letter: all_letters) -> str:
         return f"{LETTER_BTN_ICON_DIR}/{letter_type}/{letter}.svg"
 
@@ -249,10 +163,9 @@ class LetterButtonFrame(QFrame):
             button.click()
 
     def _connect_letter_buttons(self) -> None:
-        click_handler = LetterButtonClickHandler(self)
         for letter, button in self.buttons.items():
             button.clicked.connect(
-                lambda checked, letter=letter: click_handler.on_letter_button_clicked(
+                lambda checked, letter=letter: self.click_handler.on_letter_button_clicked(
                     letter
                 )
             )

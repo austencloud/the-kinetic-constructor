@@ -17,8 +17,8 @@ if TYPE_CHECKING:
 
 
 class LetterButton(QPushButton):
-    def __init__(self, icon_path: str, letter_str: str, main_widget: "MainWidget") -> None:
-        super().__init__("", main_widget)
+    def __init__(self, icon_path: str, letter_str: str) -> None:
+        super().__init__()
         self.setIcon(QIcon(icon_path))
         self.setFlat(True)
         self.setStyleSheet(self.get_button_style(False))

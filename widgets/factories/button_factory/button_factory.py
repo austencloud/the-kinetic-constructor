@@ -1,6 +1,6 @@
 from PyQt6.QtGui import QIcon
-from constants import ICON_DIR
 from widgets.factories.button_factory.buttons.rot_dir_buttons import PropRotDirButton, VtgDirButton
+from widgets.letter_button_frame.components.letter_button import LetterButton
 
 class ButtonFactory:
     @staticmethod
@@ -16,3 +16,9 @@ class ButtonFactory:
         button.setIcon(QIcon(icon_path))
         button.clicked.connect(callback)
         return button
+
+    @staticmethod
+    def create_letter_button(icon_path, letter_str: str, letter_type: str) -> LetterButton:
+        button = LetterButton(icon_path, letter_str)
+        return button
+
