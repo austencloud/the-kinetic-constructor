@@ -45,10 +45,10 @@ class LetterButtonFrame(QFrame):
         }
 
     def _init_letter_buttons_layout(self) -> None:
-        main_layout = QVBoxLayout(self)
-        main_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        main_layout.setContentsMargins(0, 0, 0, 0)
-        main_layout.setSpacing(0)
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
         frame_tuples = []
         stretch_factors = {
             "Type1": 7,
@@ -67,9 +67,9 @@ class LetterButtonFrame(QFrame):
             )
             self.outer_frames[type_name] = outer_frame
             stretch_factor = stretch_factors.get(type_name, 1)
-            main_layout.addWidget(outer_frame, stretch_factor)
+            self.layout.addWidget(outer_frame, stretch_factor)
 
-        self.layout_styler.add_frames_to_layout(main_layout, frame_tuples)
+        self.layout_styler.add_frames_to_layout(self.layout, frame_tuples)
         self.button_manager.connect_letter_buttons()
 
     def resize_letter_button_frame(self) -> None:
