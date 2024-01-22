@@ -57,7 +57,6 @@ class ScrollAreaDisplayManager:
         )
         if codex_pictograph:
             self.scroll_area.layout.removeWidget(codex_pictograph.view)
-            # codex_pictograph.view.setParent(None)
 
     def clear_layout(self) -> None:
         while self.scroll_area.layout.count():

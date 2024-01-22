@@ -15,8 +15,6 @@ class TurnDirectSetManager:
     def setup_direct_set_buttons(self) -> None:
         self.turns_buttons_frame = QFrame()
         self.turns_buttons_layout = QHBoxLayout(self.turns_buttons_frame)
-        self.turns_buttons_layout.setContentsMargins(0, 0, 0, 0)
-        self.turns_buttons_layout.setSpacing(0)
         self.turns_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
