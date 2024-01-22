@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QVBoxLayout, QLabel, QHBoxLayout, QFrame
+from PyQt6.QtWidgets import QVBoxLayout, QLabel
 from typing import TYPE_CHECKING, Union
 from .managers.motion_relevance_checker import MotionRelevanceChecker
 from .managers.turns_widget_rot_dir_manager import TurnsWidgetRotDirManager

@@ -1,6 +1,6 @@
-from typing import TYPE_CHECKING, Dict, Union
+from typing import TYPE_CHECKING, Dict
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout
-from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtCore import Qt
 
 
 from .scroll_area_pictograph_factory import ScrollAreaPictographFactory
@@ -11,7 +11,6 @@ from ..pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from ..codex.codex import Codex
-    from ..main_widget.main_widget import MainWidget
 
 
 class ScrollArea(QScrollArea):

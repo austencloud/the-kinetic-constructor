@@ -1,20 +1,10 @@
-from copy import deepcopy
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QPushButton,
-    QHBoxLayout,
-    QFrame,
     QApplication,
 )
-from PyQt6.QtCore import Qt, pyqtSignal
-from Enums import LetterType
+from PyQt6.QtCore import Qt
 from constants import CODEX_PICTOGRAPH
-from utilities.TypeChecking.TypeChecking import Letters
 from widgets.pictograph.pictograph import Pictograph
-from widgets.scroll_area.scroll_area import ScrollArea
-from ..letter_button_frame.letter_button_frame import LetterButtonFrame
 
 if TYPE_CHECKING:
     from widgets.codex.codex import Codex

@@ -12,7 +12,6 @@ from data.letter_engine_data import (
     letter_type_motion_type_map,
 )
 from widgets.turns_panel import TurnsPanel
-from PyQt6.QtCore import Qt
 
 
 if TYPE_CHECKING:

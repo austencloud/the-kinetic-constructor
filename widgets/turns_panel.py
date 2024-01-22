@@ -1,8 +1,7 @@
-from PyQt6.QtWidgets import QHBoxLayout, QFrame, QSizePolicy
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QHBoxLayout, QFrame
 from typing import TYPE_CHECKING, List
 from Enums import LetterType
-from constants import ANTI, COLOR, DASH, MOTION_TYPE, PRO, STATIC
+from constants import ANTI, DASH, MOTION_TYPE, PRO, STATIC
 from utilities.TypeChecking.TypeChecking import Letters
 from widgets.turns_box.turns_box import TurnsBox
 from widgets.factories.attr_box_factory import TurnsBoxFactory

@@ -1,24 +1,15 @@
 from typing import TYPE_CHECKING, Dict, List
 import pandas as pd
 from constants import (
-    BLUE_END_LOC,
-    BLUE_MOTION_TYPE,
-    BLUE_PROP_ROT_DIR,
-    BLUE_START_LOC,
     BLUE_START_ORI,
     BLUE_TURNS,
     END_POS,
     IN,
     LETTER,
-    RED_END_LOC,
-    RED_MOTION_TYPE,
-    RED_PROP_ROT_DIR,
-    RED_START_LOC,
     RED_START_ORI,
     RED_TURNS,
     START_POS,
 )
-from utilities.TypeChecking.TypeChecking import Letters
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget

@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
-from typing import TYPE_CHECKING, List, Union
+from typing import TYPE_CHECKING, List
 from constants import (
     BLUE,
     CLOCKWISE,

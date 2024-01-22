@@ -1,6 +1,5 @@
-from typing import TYPE_CHECKING, Dict, List, Union
+from typing import TYPE_CHECKING, Dict, Union
 from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 from constants import BLUE, COLOR, LEAD_STATE, MOTION_TYPE, OPP, RED, SAME
@@ -16,8 +15,6 @@ from widgets.header_widget import HeaderWidget
 from .turns_box_widgets.turns_widget.turns_widget import (
     TurnsWidget,
 )
-from .turns_box_widgets.base_attr_box_widget import TurnsBoxWidget
-from PyQt6.QtWidgets import QSizePolicy
 
 if TYPE_CHECKING:
     from ..turns_panel import TurnsPanel

@@ -13,8 +13,6 @@ from constants import (
     STATIC,
     TRAILING,
 )
-from utilities.TypeChecking.MotionAttributes import MotionTypes
-from utilities.TypeChecking.letter_lists import pro_letters, anti_letters
 from widgets.turns_box.turns_box import TurnsBox
 
 

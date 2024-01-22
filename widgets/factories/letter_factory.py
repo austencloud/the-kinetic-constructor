@@ -1,4 +1,3 @@
-from Enums import LetterType
 from utilities.TypeChecking.TypeChecking import Letters
 
 

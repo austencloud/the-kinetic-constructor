@@ -1,9 +1,7 @@
 from typing import Tuple
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QSizePolicy
-from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, List
 
-from utilities.TypeChecking.TypeChecking import Letters
 
 
 if TYPE_CHECKING:

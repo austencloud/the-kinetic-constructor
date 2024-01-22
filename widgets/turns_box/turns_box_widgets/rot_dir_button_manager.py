@@ -21,7 +21,6 @@ from ...factories.button_factory.buttons.rot_dir_buttons import (
     PropRotDirButton,
 )
 
-from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QPushButton
 
 if TYPE_CHECKING:

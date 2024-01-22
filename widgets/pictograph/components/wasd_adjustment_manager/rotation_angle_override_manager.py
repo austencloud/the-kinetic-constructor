@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Dict, Optional
-from constants import BLUE, RED, STATIC
+from constants import STATIC
 from PyQt6.QtCore import Qt
 
 from objects.arrow.arrow import Arrow
@@ -7,7 +7,6 @@ from objects.arrow.arrow import Arrow
 
 if TYPE_CHECKING:
     from ..wasd_adjustment_manager.wasd_adjustment_manager import WASD_AdjustmentManager
-    from widgets.pictograph.pictograph import Pictograph
 
 
 class RotationAngleOverrideManager:
