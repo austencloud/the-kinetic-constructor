@@ -1,19 +1,13 @@
 from Enums import LetterType
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
-from PyQt6.QtWidgets import QPushButton, QHBoxLayout, QSizePolicy
-from PyQt6.QtCore import QSize
 from Enums import LetterType
-from typing import Dict
-from utilities.TypeChecking.TypeChecking import Letters
 from widgets.filter_tab import FilterTab
-from .letter_button import LetterButton
 
 if TYPE_CHECKING:
     from widgets.letter_button_frame.components.letter_button_manager import (
         LetterButtonManager,
     )
-    from widgets.letter_button_frame.letter_button_frame import LetterButtonFrame
 
 
 class LetterButtonClickHandler:

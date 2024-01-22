@@ -1,19 +1,11 @@
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QPushButton
-from PyQt6.QtGui import QIcon, QPixmap, QPainter, QFont, QColor, QResizeEvent
-from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtSvg import QSvgRenderer
-from Enums import LetterType
-from constants import LETTER_BTN_ICON_DIR
-from typing import TYPE_CHECKING, Dict, List
-from utilities.TypeChecking.TypeChecking import Letters
+from PyQt6.QtWidgets import QPushButton
+from PyQt6.QtGui import QIcon
+from typing import TYPE_CHECKING
 
-from utilities.TypeChecking.letter_lists import all_letters
-from widgets.factories.letter_factory import LetterFactory
 
 
 if TYPE_CHECKING:
-    from widgets.codex.codex import Codex
-    from widgets.main_widget.main_widget import MainWidget
+    pass
 
 
 class LetterButton(QPushButton):

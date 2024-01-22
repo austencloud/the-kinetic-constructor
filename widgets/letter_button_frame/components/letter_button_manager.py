@@ -1,7 +1,7 @@
 from Enums import LetterType
 from typing import TYPE_CHECKING, List
 
-from PyQt6.QtWidgets import QPushButton, QHBoxLayout, QSizePolicy
+from PyQt6.QtWidgets import QHBoxLayout
 from PyQt6.QtCore import QSize
 from Enums import LetterType
 from typing import Dict

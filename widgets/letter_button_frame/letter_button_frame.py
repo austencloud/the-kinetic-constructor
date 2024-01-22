@@ -1,5 +1,4 @@
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
-from PyQt6.QtGui import QResizeEvent
+from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING, Dict, List
@@ -9,7 +8,6 @@ from widgets.letter_button_frame.components.letter_button_manager import (
 )
 
 
-from .components.letter_button_click_handler import LetterButtonClickHandler
 from .components.letter_button_frame_layout_styler import LetterButtonFrameLayoutStyler
 
 if TYPE_CHECKING:

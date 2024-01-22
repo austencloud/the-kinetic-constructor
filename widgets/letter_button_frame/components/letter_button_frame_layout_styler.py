@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, List
 
-from .letter_button import LetterButton
 
 if TYPE_CHECKING:
     from widgets.letter_button_frame.letter_button_frame import LetterButtonFrame
