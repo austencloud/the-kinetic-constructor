@@ -9,7 +9,7 @@ from widgets.turns_box.turns_box_widgets.rot_dir_button_manager import (
 from .components.filter_tab import FilterTab
 from .components.pictograph_frame import ScrollAreaSectionPictographFrame
 from .components.type_label import ScrollAreaSectionTypeLabel
-
+from PyQt6.QtCore import QTimer
 if TYPE_CHECKING:
     from ....scroll_area import ScrollArea
 
@@ -29,7 +29,9 @@ class SectionWidget(QWidget):
         self._setup_layout()
         self.rot_dir_button_manager = RotDirButtonManager(self)
         self.pictographs: Dict[str, Pictograph]  = {}
-        
+
+
+
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)

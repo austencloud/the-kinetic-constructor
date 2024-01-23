@@ -1,4 +1,5 @@
 import json
+import os
 import re
 from typing import TYPE_CHECKING, Dict, Tuple
 
@@ -16,18 +17,15 @@ class SpecialPlacementDataUpdater:
     def update_arrow_adjustments_in_json(
         self, adjustment: Tuple[int, int], arrow: "Arrow"
     ) -> None:
-        """Updates the arrow adjustments in the JSON file."""
         if not arrow:
             return
 
-        self.positioner.special_placements
+        letter = self.positioner.pictograph.letter
+        # Reload the JSON data to ensure it's current
 
-        turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(
-            arrow.scene.letter
-        )
-        letter_data: Dict = self.positioner.special_placements.get(
-            self.positioner.pictograph.letter, {}
-        )
+
+        turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
+        letter_data: Dict = self.positioner.placement_manager.pictograph.main_widget.special_placements.get(letter, {})
         turn_data = letter_data.get(turns_tuple, {})
 
         if turn_data:
@@ -35,29 +33,23 @@ class SpecialPlacementDataUpdater:
         else:
             turn_data = self._create_default_turn_data(arrow, adjustment)
 
-        self.update_specific_entry_in_json(
-            self.positioner.pictograph.letter, turns_tuple, turn_data
-        )
+        letter_data[turns_tuple] = turn_data
+        self.positioner.placement_manager.pictograph.main_widget.special_placements[letter] = letter_data
+        self.update_specific_entry_in_json(letter, letter_data)
 
-    def update_specific_entry_in_json(
-        self, letter: Letters, turns_tuple: str, new_data: Dict
-    ) -> None:
+    def update_specific_entry_in_json(self, letter: Letters, letter_data: Dict) -> None:
         """Update a specific entry in the JSON file."""
         try:
-            with open(
-                self.positioner.data_loader.json_path, "r", encoding="utf-8"
-            ) as file:
-                data: Dict = json.load(file)
-            letter_data = data.get(letter, {})
-            letter_data[turns_tuple] = new_data
-            data[letter] = letter_data
-            json_str = json.dumps(data, indent=2, ensure_ascii=False)
-            formatted_json_str = re.sub(
-                r"\[\s+(-?\d+),\s+(-?\d+)\s+\]", r"[\1, \2]", json_str
+            file_path = os.path.join(
+                self.positioner.data_loader.directory, f"{letter}_placements.json"
             )
-            with open(
-                self.positioner.data_loader.json_path, "w", encoding="utf-8"
-            ) as file:
+            with open(file_path, "w", encoding="utf-8") as file:
+                formatted_json_str = json.dumps(
+                    {letter: letter_data}, indent=2, ensure_ascii=False
+                )
+                formatted_json_str = re.sub(
+                    r"\[\s+(-?\d+),\s+(-?\d+)\s+\]", r"[\1, \2]", formatted_json_str
+                )
                 file.write(formatted_json_str)
         except json.JSONDecodeError as e:
             print(f"JSON decoding error occurred: {e}")
@@ -86,9 +78,7 @@ class SpecialPlacementDataUpdater:
             self.positioner.pictograph.arrow_placement_manager.default_positioner
         )
         default_turn_data = default_mgr.get_default_adjustment(arrow)
-
         key = self.positioner.motion_key_generator.generate_motion_key(arrow)
-
         return {
             key: [
                 default_turn_data[0] + adjustment[0],

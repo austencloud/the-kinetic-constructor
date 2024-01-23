@@ -64,7 +64,7 @@ class RotationAngleOverrideManager:
     def get_rot_angle_override_from_placements_dict(
         self, arrow: Arrow
     ) -> Optional[int]:
-        placements = self.special_positioner.special_placements
+        placements = self.special_positioner.placement_manager.pictograph.main_widget.special_placements
         letter = arrow.scene.letter
         letter_data: Dict[str, Dict] = placements.get(letter, {})
         turns_tuple = (

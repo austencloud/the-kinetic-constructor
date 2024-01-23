@@ -1,3 +1,5 @@
+import json
+import os
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtGui import QResizeEvent
 from utilities.TypeChecking.letter_lists import all_letters
@@ -22,7 +24,29 @@ class MainWidget(QWidget):
         self._setup_letters()
         self._setup_components()
         self._setup_layouts()
+        self.load_special_placements()
 
+    def load_special_placements(self) -> Dict:
+        """Loads the special placements for arrows."""
+        directory = "data/arrow_placement/special/"
+        self.special_placements = {}
+        for file_name in os.listdir(directory):
+            if file_name.endswith("_placements.json"):
+                with open(os.path.join(directory, file_name), "r", encoding="utf-8") as file:
+                    data = json.load(file)
+                    self.special_placements.update(data)
+        return self.special_placements
+
+    def refresh_placements(self):
+        """Refreshes the special placements and updates all pictographs."""
+        # Reload the special placements
+        self.load_special_placements()
+
+        # Iterate over all pictographs and update them
+        for letter, pictographs in self.all_pictographs.items():
+            for pictograph_key, pictograph in pictographs.items():
+                pictograph.updater.update_pictograph()
+                
     def _setup_components(self) -> None:
         self.main_sequence_widget = MainSequenceWidget(self)
         self.main_tab_widget = MainTabWidget(self)

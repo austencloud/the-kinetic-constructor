@@ -4,7 +4,6 @@ from ..turns_tuple_generator import TurnsTupleGenerator
 from .handlers.adjustment_calculator import AdjustmentCalculator
 from .handlers.adjustment_mapper import AdjustmentMapper
 from .handlers.motion_attr_key_generator import MotionAttrKeyGenerator
-from .handlers.special_placement_data_loader import SpecialPlacementDataLoader
 from .handlers.special_placement_data_updater import SpecialPlacementDataUpdater
 
 if TYPE_CHECKING:
@@ -31,8 +30,8 @@ class SpecialArrowPositioner:
     def __init__(self, placement_manager: "ArrowPlacementManager") -> None:
         self.placement_manager = placement_manager
         self.pictograph: Pictograph = placement_manager.pictograph
-        self.data_loader = SpecialPlacementDataLoader(self)
-        self.special_placements = self.data_loader.load_placements()
+        self.data_loader = (self)
+        # self.special_placements = self.data_loader.load_placements()
 
         self.data_updater = SpecialPlacementDataUpdater(self)
         self.adjustment_calculator = AdjustmentCalculator(self)
