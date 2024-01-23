@@ -29,7 +29,7 @@ class SectionWidget(QWidget):
         self.rot_dir_button_manager = RotDirButtonManager(self)
 
     def _setup_layout(self) -> None:
-        self.layout:QVBoxLayout = QVBoxLayout(self)
+        self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
         self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
 
@@ -45,3 +45,5 @@ class SectionWidget(QWidget):
     def resize_section(self) -> None:
         self.setMinimumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
         self.filter_tab.resize_filter_tab()
+        # font_size = self.width() / 15
+        # self.type_label.setStyleSheet(f"font-size: {font_size};")
