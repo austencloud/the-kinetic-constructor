@@ -3,7 +3,9 @@ from PyQt6.QtWidgets import QLabel, QSizePolicy
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from widgets.scroll_area.components.section_manager.section_widget.section_widget import SectionWidget
+    from widgets.scroll_area.components.section_manager.section_widget.section_widget import (
+        SectionWidget,
+    )
 
 
 class ScrollAreaSectionTypeLabel(QLabel):
@@ -27,6 +29,7 @@ class ScrollAreaSectionTypeLabel(QLabel):
 
     def __init__(self, scroll_area_section: "SectionWidget") -> None:
         super().__init__()
+        self.scroll_area_section = scroll_area_section
         self.set_styled_text(scroll_area_section.letter_type)
 
     def set_styled_text(self, letter_type: str) -> None:
@@ -37,12 +40,18 @@ class ScrollAreaSectionTypeLabel(QLabel):
             for word in type_words
         ]
 
-        styled_type_name = "-".join(styled_words) if "-" in self.TYPE_MAP.get(letter_type, "") else "".join(styled_words)
+        styled_type_name = (
+            "-".join(styled_words)
+            if "-" in self.TYPE_MAP.get(letter_type, "")
+            else "".join(styled_words)
+        )
 
         styled_text = f"{letter_type[0:4]} {letter_type[4]}: {styled_type_name}"
         self.setText(styled_text)
-        font_size = 30
+        font_size = self.scroll_area_section.scroll_area.width() // 34
         self.setStyleSheet(f"font-size: {font_size}px; font-weight: bold;")
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed))
+        self.setSizePolicy(
+            QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        )
         self.setMinimumSize(self.sizeHint())
