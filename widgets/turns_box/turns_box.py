@@ -85,17 +85,13 @@ class TurnsBox(QFrame):
         )
 
     def sizeHint(self) -> QSize:
-        # Initialize width and height
         width, height = 0, 0
-        # Iterate over all items in the layout
         for i in range(self.layout.count()):
             item = self.layout.itemAt(i)
             if item.widget():  # Check if the item is a widget
                 widget_size_hint = item.widget().sizeHint()
-                # Accumulate width and get the maximum height
                 width += widget_size_hint.width()
                 height = max(height, widget_size_hint.height())
-        # Return the QSize based on accumulated width and maximum height
         return QSize(width, height)
 
     ### CREATE LABELS ###

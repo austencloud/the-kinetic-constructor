@@ -16,7 +16,9 @@ from widgets.turns_panel import TurnsPanel
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
-    from widgets.scroll_area.components.section_manager.section_widget.section_widget import SectionWidget
+    from widgets.scroll_area.components.section_manager.section_widget.section_widget import (
+        SectionWidget,
+    )
 
 
 class FilterTab(QTabWidget):
@@ -93,8 +95,7 @@ class FilterTab(QTabWidget):
             tabs_to_show.append(LEAD_STATE)
 
         for letter in selected_letters:
-            letter_type = LetterType.get_letter_type(letter)
-            if letter_type == self.section.letter_type:
+            if LetterType.get_letter_type(letter) == self.section.letter_type:
                 break
         else:
             tabs_to_show.clear()
@@ -169,7 +170,6 @@ class FilterTab(QTabWidget):
         for panel in self.panels:
             panel.resize_turns_panel()
         # self.setFixedHeight(self.color_turns_panel.height())
-
 
     def get_currently_visible_panel(self) -> TurnsPanel:
         return self.panels[self.currentIndex()]

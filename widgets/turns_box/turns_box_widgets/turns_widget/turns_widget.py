@@ -2,7 +2,6 @@ from PyQt6.QtWidgets import QVBoxLayout, QLabel
 from typing import TYPE_CHECKING, Union
 from .managers.motion_relevance_checker import MotionRelevanceChecker
 from .managers.turns_widget_rot_dir_manager import TurnsWidgetRotDirManager
-from .managers.turn_adjust_manager import TurnAdjustManager
 from .managers.turns_button_manager import TurnsButtonManager
 from .managers.turn_adjustment_display_manager import TurnsAdjustmentDisplayManager
 from .managers.turns_updater import TurnsUpdater
@@ -24,17 +23,16 @@ class TurnsWidget(TurnsBoxWidget):
         self.layout.setContentsMargins(0, 4, 0, 0)
         self.layout.setSpacing(0)
         self.turn_direct_set_manager = TurnDirectSetManager(self)
-        self.turn_adjust_manager = TurnAdjustManager(self)
         self.turns_display_manager = TurnDisplayManager(self)
         self.button_manager = TurnsButtonManager(self)
         self.relevance_checker = MotionRelevanceChecker(turns_box)
-        self.updater = TurnsUpdater(self)
         self.rotation_direction_manager = TurnsWidgetRotDirManager(self)
         self.display_manager = TurnsAdjustmentDisplayManager(self)
+        self.updater = TurnsUpdater(self)
         self.setup_ui()
 
     def setup_ui(self) -> None:
-        self.turn_adjust_manager.setup_adjust_turns_buttons()
+        self.button_manager.setup_adjust_turns_buttons()
         self.turns_display_manager.setup_display_components()
         self.turn_direct_set_manager.setup_direct_set_buttons()
 

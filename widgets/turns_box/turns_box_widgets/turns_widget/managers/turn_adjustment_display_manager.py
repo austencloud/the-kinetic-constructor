@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Union
 from Enums import LetterType
 from constants import DASH, STATIC
 from utilities.TypeChecking.TypeChecking import Turns
@@ -6,6 +6,7 @@ from utilities.TypeChecking.TypeChecking import Turns
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
     from ....turns_box_widgets.turns_widget.turns_widget import TurnsWidget
+
 
 class TurnsAdjustmentDisplayManager:
     def __init__(self, turns_widget: "TurnsWidget") -> None:
@@ -37,13 +38,18 @@ class TurnsAdjustmentDisplayManager:
     # Private methods
 
     def _get_pictographs(self) -> List["Pictograph"]:
-        return self.turns_widget.turns_box.turns_panel.filter_tab.section.scroll_area.pictographs.values()
+        return (
+            self.turns_widget.turns_box.turns_panel.filter_tab.section.scroll_area.pictographs.values()
+        )
 
     def _get_turns(self) -> Turns:
         turns = self.turns_widget.turns_display_manager.turns_display.text()
-        turns = self.turns_widget._convert_turns_from_str_to_num(turns)
+        turns = self.convert_turns_from_str_to_num(turns)
         turns = self.convert_turn_floats_to_ints(turns)
         return turns
+
+    def convert_turns_from_str_to_num(self, turns) -> Union[int, float]:
+        return int(turns) if turns in ["0", "1", "2", "3"] else float(turns)
 
     def convert_turn_floats_to_ints(self, turns: Turns) -> Turns:
         if turns in [0.0, 1.0, 2.0, 3.0]:
@@ -58,13 +64,20 @@ class TurnsAdjustmentDisplayManager:
         self.turns_widget.turns_display_manager.update_turns_display(str(turns))
 
     def _update_visibility_based_on_motion(self, turns: Turns) -> None:
-        letter_type = self.turns_widget.turns_box.turns_panel.filter_tab.section.letter_type
+        letter_type = (
+            self.turns_widget.turns_box.turns_panel.filter_tab.section.letter_type
+        )
         if self.turns_widget.turns_box.attribute_value in [STATIC, DASH]:
-            button_manager = self.turns_widget.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager
+            button_manager = (
+                self.turns_widget.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager
+            )
             button_manager.update_visibility_based_on_motion(letter_type, turns)
 
     def _is_relevant_letter_type(self, pictograph: "Pictograph") -> bool:
-        return LetterType.get_letter_type(pictograph.letter) == self.turns_widget.turns_box.turns_panel.filter_tab.section.letter_type
+        return (
+            LetterType.get_letter_type(pictograph.letter)
+            == self.turns_widget.turns_box.turns_panel.filter_tab.section.letter_type
+        )
 
     def _adjust_turns_for_pictograph(self, pictograph, adjustment) -> None:
         self.turns_widget.updater._adjust_turns_for_pictograph(pictograph, adjustment)
@@ -72,5 +85,7 @@ class TurnsAdjustmentDisplayManager:
     def _update_motion_properties(self, new_turns) -> None:
         for pictograph in self.pictographs:
             for motion in pictograph.motions.values():
-                if self.turns_widget.turn_adjust_manager.is_motion_relevant(motion):
-                    self.turns_widget.updater.update_motion_properties(motion, new_turns)
+                if self.turns_widget.relevance_checker.is_motion_relevant(motion):
+                    self.turns_widget.updater.update_motion_properties(
+                        motion, new_turns
+                    )

@@ -26,7 +26,7 @@ class ScrollAreaSectionManager:
             LetterTypes, List[Letters]
         ] = self.setup_letters_by_type()
         self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
-        self.ordered_section_types = []  # Keep track of the order of added sections
+        self.ordered_section_types = []  
 
     def setup_letters_by_type(self) -> Dict[LetterTypes, List[Letters]]:
         letters_by_type = {}
@@ -40,37 +40,27 @@ class ScrollAreaSectionManager:
 
     def create_section(self, letter_type: LetterTypes) -> SectionWidget:
         if letter_type not in self.sections:
-            # Determine the correct index for the new section
             correct_index = self.get_correct_index_for_section(letter_type)
             section = SectionWidget(letter_type, self.scroll_area)
             self.scroll_area.insert_widget_at_index(section, correct_index)
             self.sections[letter_type] = section
             self.ordered_section_types.append(letter_type)
-
-            # Ensure the stretch is still at the end
             self.scroll_area.fix_stretch()
 
         return self.sections[letter_type]
 
     def get_correct_index_for_section(self, letter_type: LetterTypes) -> int:
-        try:
-            # Find the index where this section should be inserted
-            desired_position = self.SECTION_ORDER.index(letter_type)
-            current_positions = [
-                self.SECTION_ORDER.index(typ) for typ in self.ordered_section_types
-            ]
-            insert_before = next(
-                (
-                    i
-                    for i, pos in enumerate(current_positions)
-                    if pos > desired_position
-                ),
-                len(self.ordered_section_types),
-            )
-            return insert_before
-        except ValueError:
-            # If the letter_type is not in SECTION_ORDER, append at the end
-            return len(self.ordered_section_types)
+        desired_position = self.SECTION_ORDER.index(letter_type)
+        current_positions = [self.SECTION_ORDER.index(typ) for typ in self.ordered_section_types]
+
+        # Find the first current position that is greater than or equal to the desired position
+        for i, pos in enumerate(current_positions):
+            if pos >= desired_position:
+                return i
+
+        # If no such position exists, insert at the end
+        return len(self.ordered_section_types)
+
 
     def get_section(self, letter_type: LetterTypes) -> SectionWidget:
         return self.create_section(letter_type)

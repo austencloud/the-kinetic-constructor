@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from constants import *
 from utilities.TypeChecking.TypeChecking import (
     PropRotDirs,
@@ -33,7 +33,7 @@ class TurnsUpdater:
     ) -> None:
         """Adjust turns for each relevant motion in the pictograph."""
         for motion in pictograph.motions.values():
-            if self.turns_widget.turn_adjust_manager.is_motion_relevant(motion):
+            if self.turns_widget.relevance_checker.is_motion_relevant(motion):
                 new_turns = self._calculate_new_turns(motion.turns, adjustment)
                 self.update_motion_properties(motion, new_turns)
 
@@ -52,7 +52,7 @@ class TurnsUpdater:
         """Handle specific logic for static or dash motion types."""
         if new_turns == 0:
             motion.prop_rot_dir = NO_ROT
-            self.turns_widget.turn_adjust_manager.unpress_vtg_buttons()
+            self.turns_widget.button_manager.unpress_vtg_buttons()
             if hasattr(
                 self.turns_widget.turns_box.turns_panel.filter_tab.section,
                 "rot_dir_button_manager",
@@ -80,7 +80,7 @@ class TurnsUpdater:
                 and not self.turns_box.vtg_dir_btn_state[OPP]
             ):
                 self._set_vtg_dir_state_default()
-                # self.turns_widget.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager.show_vtg_dir_buttons()
+                
             if self.turns_box.vtg_dir_btn_state[SAME]:
                 return other_motion.prop_rot_dir
             if self.turns_box.vtg_dir_btn_state[OPP]:
@@ -90,7 +90,6 @@ class TurnsUpdater:
                     return CLOCKWISE
 
         elif motion.pictograph.letter in Type4_letters:
-            # self.turns_widget.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager.show_prop_rot_dir_buttons()
             self.turns_widget.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager.cw_button.press()
             return CLOCKWISE
 
@@ -103,18 +102,3 @@ class TurnsUpdater:
         """Clamp the turns value to be within allowable range."""
         return max(0, min(3, turns))
 
-    def update_turns_and_visibility(self, motion: "Motion", new_turns: Turns) -> None:
-        self._update_turns_and_rotation(motion, new_turns)
-        pictograph_dict = {f"{motion.color}_turns": new_turns}
-        motion.pictograph.updater.update_pictograph(pictograph_dict)
-
-        # Show/hide VTG direction buttons based on the new turns value
-        self._update_vtg_button_visibility(motion, new_turns)
-
-    def _update_vtg_button_visibility(self, motion: "Motion", new_turns: Turns) -> None:
-        if new_turns > 0:
-            # If turns are added, show the VTG direction buttons
-            self.turns_widget.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager.show_vtg_dir_buttons()
-        elif new_turns == 0:
-            # If turns are set to 0, hide the VTG direction buttons
-            self.turns_widget.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager.hide_buttons()
