@@ -37,7 +37,7 @@ class ScrollAreaDisplayManager:
     def add_pictograph_to_layout(
         self, codex_pictograph: Pictograph, index: int
     ) -> None:
-        letter_type = self.scroll_area.section_manager.pictograph_organizer.get_pictograph_letter_type(
+        letter_type = self.scroll_area.section_manager.get_pictograph_letter_type(
             codex_pictograph.letter
         )
         section: SectionWidget = self.scroll_area.section_manager.sections.get(
