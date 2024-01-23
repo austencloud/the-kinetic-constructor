@@ -45,5 +45,3 @@ class SectionWidget(QWidget):
     def resize_section(self) -> None:
         self.setMinimumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
         self.filter_tab.resize_filter_tab()
-        # font_size = self.width() / 15
-        # self.type_label.setStyleSheet(f"font-size: {font_size};")
