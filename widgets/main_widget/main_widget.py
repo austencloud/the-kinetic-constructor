@@ -28,11 +28,11 @@ class MainWidget(QWidget):
 
     def load_special_placements(self) -> Dict:
         """Loads the special placements for arrows."""
-        directory = "data/arrow_placement/special/"
+        self.directory = "data/arrow_placement/special/"
         self.special_placements = {}
-        for file_name in os.listdir(directory):
+        for file_name in os.listdir(self.directory):
             if file_name.endswith("_placements.json"):
-                with open(os.path.join(directory, file_name), "r", encoding="utf-8") as file:
+                with open(os.path.join(self.directory, file_name), "r", encoding="utf-8") as file:
                     data = json.load(file)
                     self.special_placements.update(data)
         return self.special_placements

@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Dict
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout
-from PyQt6.QtCore import Qt , QTimer
+from PyQt6.QtCore import Qt, QTimer
 
 
 from .components.scroll_area_pictograph_factory import ScrollAreaPictographFactory
@@ -25,9 +25,9 @@ class ScrollArea(QScrollArea):
         self._setup_managers()
 
         self.timer = QTimer(self)
-        self.timer.timeout.connect(self.update_arrow_placements)
-        self.timer.start(1000)
-        
+        self.timer.timeout.connect(self.main_widget.refresh_placements)
+        # self.timer.start(200)
+
     def _setup_managers(self) -> None:
         self.display_manager = ScrollAreaDisplayManager(self)
         self.sections_manager = ScrollAreaSectionManager(self)
@@ -82,7 +82,5 @@ class ScrollArea(QScrollArea):
         )
 
     def update_arrow_placements(self) -> None:
-        
         for pictograph in self.pictographs.values():
-            
             pictograph.arrow_placement_manager.update_arrow_positions()

@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QApplication, QMainWindow
 from profiler import Profiler
 from utilities.window_manager import MainWindowGeometryManager
 from widgets.main_widget.main_widget import MainWidget
+from widgets.menu_bar import MenuBar
 
 class MainWindow(QMainWindow):
     def __init__(self, profiler: Profiler) -> None:
@@ -13,6 +14,8 @@ class MainWindow(QMainWindow):
         self.window_manager = MainWindowGeometryManager(self)
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Sequence Constructor")
+        self.menu_bar = MenuBar(self.main_widget)
+        self.setMenuBar(self.menu_bar)
         self.show()
 
     def exec_with_profiling(self, app: QApplication) -> int:

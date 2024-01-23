@@ -41,8 +41,8 @@ class SpecialPlacementDataUpdater:
         """Update a specific entry in the JSON file."""
         try:
             file_path = os.path.join(
-                self.positioner.data_loader.directory, f"{letter}_placements.json"
-            )
+                self.positioner.placement_manager.pictograph.main_widget.directory, f"{letter}_placements.json"
+            ) 
             with open(file_path, "w", encoding="utf-8") as file:
                 formatted_json_str = json.dumps(
                     {letter: letter_data}, indent=2, ensure_ascii=False
