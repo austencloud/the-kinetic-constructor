@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Dict, List
 from Enums import LetterType
 from utilities.TypeChecking.TypeChecking import LetterTypes, Letters
-from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab import FilterTab
+from .section_widget.components.filter_tab import FilterTab
 from .pictograph_organizer import PictographOrganizer
 from .section_widget.section_widget import SectionWidget
 from .section_organizer import SectionOrganizer
@@ -78,3 +78,9 @@ class ScrollAreaSectionManager:
                     break
             else:
                 section.hide()
+
+    def get_currently_visible_section(self) -> SectionWidget:
+        for section in self.sections.values():
+            if section.isVisible():
+                return section
+        return None

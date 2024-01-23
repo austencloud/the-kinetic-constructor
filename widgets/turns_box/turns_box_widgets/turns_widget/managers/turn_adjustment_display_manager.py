@@ -14,6 +14,9 @@ class TurnsAdjustmentDisplayManager:
     def __init__(self, turns_widget: "TurnsWidget") -> None:
         self.turns_box = turns_widget.turns_box
         self.turns_widget = turns_widget
+        self.pictographs = (
+            self.turns_box.turns_panel.filter_tab.section.scroll_area.pictographs.values()
+        )
 
     def adjust_turns(self, adjustment: Turns) -> None:
         """Adjust turns for a given pictograph based on the attribute type."""
@@ -22,12 +25,11 @@ class TurnsAdjustmentDisplayManager:
         turns = self.turns_widget.updater._clamp_turns(turns + adjustment)
         turns = self.convert_turn_floats_to_ints(turns)
         self.turns_widget.turns_display_manager.update_turns_display(str(turns))
-
-        for (
-            pictograph
-        ) in (
-            self.turns_box.turns_panel.filter_tab.section.scroll_area.pictographs.values()
-        ):
+        letter_type = self.turns_box.turns_panel.filter_tab.section.letter_type
+        self.turns_widget.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager.update_visibility_based_on_motion(
+            letter_type, turns
+        )
+        for pictograph in self.pictographs:
             if (
                 LetterType.get_letter_type(pictograph.letter)
                 == self.turns_box.turns_panel.filter_tab.section.letter_type
@@ -44,11 +46,7 @@ class TurnsAdjustmentDisplayManager:
 
     def set_turns(self, new_turns: Turns) -> None:
         self.turns_widget.turns_display_manager.update_turns_display(new_turns)
-        for (
-            pictograph
-        ) in (
-            self.turns_box.turns_panel.filter_tab.section.scroll_area.pictographs.values()
-        ):
+        for pictograph in self.pictographs:
             for motion in pictograph.motions.values():
                 if self.turns_widget.turn_adjust_manager.is_motion_relevant(motion):
                     self.turns_widget.updater.update_motion_properties(
@@ -57,11 +55,7 @@ class TurnsAdjustmentDisplayManager:
 
     def reset_turns_display(self) -> None:
         self.turns_widget.turns_display_manager.update_turns_display("0")
-        for (
-            pictograph
-        ) in (
-            self.turns_box.turns_panel.filter_tab.section.scroll_area.pictographs.values()
-        ):
+        for pictograph in self.pictographs:
             for motion in pictograph.motions.values():
                 if self.turns_widget.turn_adjust_manager.is_motion_relevant(motion):
                     self.turns_widget.updater.update_motion_properties(motion, 0)

@@ -1,6 +1,10 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QPushButton, QHBoxLayout, QSizePolicy
+from constants import OPP, SAME
 from utilities.TypeChecking.TypeChecking import LetterTypes
+from widgets.turns_box.turns_box_widgets.rot_dir_button_manager import (
+    RotDirButtonManager,
+)
 from .components.filter_tab import FilterTab
 from .components.pictograph_frame import ScrollAreaSectionPictographFrame
 from .components.type_label import ScrollAreaSectionTypeLabel
@@ -21,12 +25,21 @@ class SectionWidget(QWidget):
         self.type_label = ScrollAreaSectionTypeLabel(self)
         self.filter_tab: FilterTab = None
         self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
-        
         self._setup_layout()
+        self.rot_dir_button_manager = RotDirButtonManager(self)
 
     def _setup_layout(self) -> None:
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addWidget(self.type_label)
+        self.layout = QVBoxLayout(self)
+        self.layout.setSpacing(0)
+        self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
+
+        # Header layout with type label
+        self.header_layout = QHBoxLayout()
+        self.header_layout.addStretch(1)
+        self.header_layout.addWidget(self.type_label)
+        self.header_layout.addStretch(1)
+
+        self.layout.addLayout(self.header_layout)
         self.layout.addWidget(self.pictograph_frame)
 
     def resize_section(self) -> None:

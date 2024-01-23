@@ -24,7 +24,8 @@ class TurnsPanel(QFrame):
         self.turns_box_factory = TurnsBoxFactory(self)
         self.boxes: List[TurnsBox] = self.turns_box_factory.create_boxes()
         self.setup_layouts()
-
+        self.visible_boxes: List[TurnsBox] = []
+        
     def setup_layouts(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.setContentsMargins(0, 0, 0, 0)
@@ -58,8 +59,12 @@ class TurnsPanel(QFrame):
                 )
                 if show_box:
                     box.show()
+                    if box not in self.visible_boxes:
+                        self.visible_boxes.append(box)
                 else:
                     box.hide()
+                    if box in self.visible_boxes:
+                        self.visible_boxes.remove(box)
 
     def resize_turns_panel(self) -> None:
         for box in self.boxes:

@@ -26,7 +26,9 @@ class TurnsWidgetRotDirManager:
         self, motion: "Motion", other_motion: "Motion"
     ) -> PropRotDirs:
         """Determine the prop rot dir of the motion based on the vtg directional relationship."""
-        rot_dir_btn_manager = self.turns_widget.turns_box.rot_dir_button_manager
+        rot_dir_btn_manager = (
+            self.turns_widget.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager
+        )
         letter = motion.pictograph.letter
         vtg_dir_state = self.turns_box.vtg_dir_btn_state
 
@@ -64,3 +66,18 @@ class TurnsWidgetRotDirManager:
     def _set_vtg_dir_state_default(self) -> None:
         """Set the vtg direction state to default."""
         self.turns_box.vtg_dir_btn_state = {SAME: True, OPP: False}
+
+    def inform_button_manager(self):
+        # Logic to determine if turns exist and what type they are
+        _, turns = self._get_motion_type_and_turns()
+        letter_type = self.turns_box.turns_panel.filter_tab.section.letter_type
+        self.turns_widget.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager.update_visibility_based_on_motion(
+            letter_type, turns
+        )
+
+    def _get_motion_type_and_turns(self) -> tuple:
+        motion_type = (
+            self.turns_box.turns_panel.filter_tab.get_currently_visible_panel().attribute_type
+        )
+        turns = self.turns_widget.turns_display_manager.turns_display.text()
+        return motion_type, turns

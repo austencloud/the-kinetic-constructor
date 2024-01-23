@@ -26,8 +26,8 @@ class TurnAdjustManager:
     def unpress_vtg_buttons(self) -> None:
         """Unpress the vtg buttons."""
         if hasattr(self.turns_box, "same_button"):
-            self.turns_box.rot_dir_button_manager.same_button.unpress()
-            self.turns_box.rot_dir_button_manager.opp_button.unpress()
+            self.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager.same_button.unpress()
+            self.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager.opp_button.unpress()
 
     def update_motion_properties(self, motion: "Motion", new_turns: Turns) -> None:
         self.turns_widget.updater.update_motion_properties(motion, new_turns)
