@@ -31,26 +31,28 @@ class ScrollAreaPictographFactory:
     def get_or_create_pictograph(
         self, pictograph_key: str, pictograph_dict=None
     ) -> Pictograph:
-        if (
-            pictograph_key
-            in self.scroll_area.main_widget.all_pictographs[
-                pictograph_key.split("_")[0]
-            ]
-        ):
-            return self.scroll_area.main_widget.all_pictographs[
-                pictograph_key.split("_")[0]
-            ][pictograph_key]
-        elif pictograph_dict is not None:
-            codex_pictograph = self.create_pictograph(CODEX_PICTOGRAPH)
-            codex_pictograph.updater.update_pictograph(pictograph_dict)
-            self.scroll_area.main_widget.all_pictographs[pictograph_key.split("_")[0]][
-                pictograph_key
-            ] = codex_pictograph
-            return codex_pictograph
-        else:
-            raise ValueError(
-                "Pictograph dict is required for creating a new pictograph."
-            )
+        letter = pictograph_key.split("_")[0]
+        all_pictographs = self.scroll_area.main_widget.all_pictographs
+
+        if pictograph_key in all_pictographs.get(letter, {}):
+            return all_pictographs[letter][pictograph_key]
+
+        if pictograph_dict is not None:
+            pictograph = self.create_pictograph(CODEX_PICTOGRAPH)
+            pictograph.updater.update_pictograph(pictograph_dict)
+
+            if letter not in all_pictographs:
+                all_pictographs[letter] = {}
+            all_pictographs[letter][pictograph_key] = pictograph
+
+            # Add pictograph to the specific section
+            letter_type = LetterType.get_letter_type(letter)
+            section = self.scroll_area.sections_manager.get_section(letter_type)
+            section.pictographs[pictograph_key] = pictograph
+
+            return pictograph
+
+        raise ValueError("Pictograph dict is required for creating a new pictograph.")
 
     def process_selected_letters(self) -> None:
         selected_letters = set(self.scroll_area.codex.selected_letters)
@@ -83,11 +85,10 @@ class ScrollAreaPictographFactory:
         ]
         for key in keys_to_remove:
             pictograph = self.scroll_area.pictographs.pop(key)
-            section_widget = self.scroll_area.section_manager.get_section(
+            section_widget = self.scroll_area.sections_manager.get_section(
                 LetterType.get_letter_type(pictograph.letter)
             )
             pictograph.view.setParent(None)
-
 
     def get_pictograph(self, pictograph_key) -> Pictograph:
         return self.scroll_area.pictographs[pictograph_key]

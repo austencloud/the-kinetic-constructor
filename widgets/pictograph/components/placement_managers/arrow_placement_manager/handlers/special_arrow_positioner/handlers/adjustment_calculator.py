@@ -19,7 +19,7 @@ class AdjustmentCalculator:
     def calculate_turns_tuple(
         self, arrow: Arrow, adjustment_key: str
     ) -> Optional[Tuple[int, int]]:
-        placements = self.positioner.data_loader.load_placements()
+        placements = self.positioner.special_placements
         letter_data: Dict[str, Dict] = placements.get(
             self.positioner.pictograph.letter, {}
         )
@@ -36,7 +36,7 @@ class AdjustmentCalculator:
             )
         self.special_placements: Dict[
             str, Dict
-        ] = self.positioner.data_loader.load_placements()
+        ] = self.positioner.special_placements
         letter_adjustments: Dict = self.special_placements.get(letter, {}).get(
             turns_tuple, {}
         )

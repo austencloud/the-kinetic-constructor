@@ -16,7 +16,7 @@ class ArrowAdjustmentCalculator:
             self.pm.pictograph.letter
         )
         self.pm.special_positioner.special_placements = (
-            self.pm.special_positioner.data_loader.load_placements()
+            self.pm.special_positioner.special_placements
         )
 
         special_placements = self.pm.special_positioner.special_placements

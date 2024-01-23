@@ -27,7 +27,7 @@ class RotationAngleOverrideManager:
         if key != Qt.Key.Key_X:
             return
 
-        data = self.special_positioner.data_loader.load_placements()
+        data = self.special_positioner.special_placements
 
         non_static = (
             self.wasd_manager.pictograph.get.shift()
@@ -64,7 +64,7 @@ class RotationAngleOverrideManager:
     def get_rot_angle_override_from_placements_dict(
         self, arrow: Arrow
     ) -> Optional[int]:
-        placements = self.special_positioner.data_loader.load_placements()
+        placements = self.special_positioner.special_placements
         letter = arrow.scene.letter
         letter_data: Dict[str, Dict] = placements.get(letter, {})
         turns_tuple = (

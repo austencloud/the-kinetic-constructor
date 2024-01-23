@@ -49,7 +49,7 @@ class RotDirButtonManager:
         self.section.header_layout.insertWidget(1, self.opp_button)
         self.section.header_layout.addWidget(self.same_button)
         self.section.header_layout.insertStretch(6, 8)
-        
+
         self.hide_vtg_dir_buttons()
 
     def show_vtg_dir_buttons(self):
@@ -109,11 +109,12 @@ class RotDirButtonManager:
         self._update_button_states(self.prop_rot_dir_buttons, prop_rot_dir)
 
     def _update_pictographs_vtg_dir(self, vtg_dir: VtgDirections) -> None:
-        for pictograph in self.section.scroll_area.pictographs.values():
+        for pictograph in self.section.pictographs.values(): 
             for motion in pictograph.motions.values():
-                other_motion = pictograph.motions[RED if motion.color == BLUE else BLUE]
+                other_motion = pictograph.get.other_motion(motion)
                 if motion.check.is_dash() or motion.check.is_static():
                     if other_motion.check.is_shift():
+                        pictograph.vtg_dir = vtg_dir
                         if vtg_dir == SAME:
                             self._update_pictograph_vtg_dir(
                                 motion, other_motion.prop_rot_dir

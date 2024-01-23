@@ -53,7 +53,6 @@ class LetterButtonClickHandler:
         section_manager = self.button_panel.codex.scroll_area.sections_manager
         main_widget = self.button_panel.codex.main_tab_widget.main_widget
         section = section_manager.sections[letter_type]
-        section.filter_tab.show_tabs_based_on_chosen_letters()
         pictograph_dicts = main_widget.letters.get(letter, [])
         for pictograph_dict in pictograph_dicts:
             self.apply_turns_to_pictograph(pictograph_dict, section.filter_tab)

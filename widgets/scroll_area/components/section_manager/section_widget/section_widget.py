@@ -1,7 +1,8 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QPushButton, QHBoxLayout, QSizePolicy
 from constants import OPP, SAME
-from utilities.TypeChecking.TypeChecking import LetterTypes
+from utilities.TypeChecking.TypeChecking import LetterTypes, Letters
+from widgets.pictograph.pictograph import Pictograph
 from widgets.turns_box.turns_box_widgets.rot_dir_button_manager import (
     RotDirButtonManager,
 )
@@ -27,7 +28,8 @@ class SectionWidget(QWidget):
         self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
         self._setup_layout()
         self.rot_dir_button_manager = RotDirButtonManager(self)
-
+        self.pictographs: Dict[str, Pictograph]  = {}
+        
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)

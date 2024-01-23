@@ -20,7 +20,7 @@ class SpecialPlacementDataUpdater:
         if not arrow:
             return
 
-        self.positioner.data_loader.load_placements()
+        self.positioner.special_placements
 
         turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(
             arrow.scene.letter

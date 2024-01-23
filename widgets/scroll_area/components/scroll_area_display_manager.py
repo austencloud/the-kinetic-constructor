@@ -37,10 +37,10 @@ class ScrollAreaDisplayManager:
     def add_pictograph_to_layout(
         self, codex_pictograph: Pictograph, index: int
     ) -> None:
-        letter_type = self.scroll_area.section_manager.get_pictograph_letter_type(
+        letter_type = self.scroll_area.sections_manager.get_pictograph_letter_type(
             codex_pictograph.letter
         )
-        section: SectionWidget = self.scroll_area.section_manager.sections.get(
+        section: SectionWidget = self.scroll_area.sections_manager.sections.get(
             letter_type
         )
         if section:
@@ -49,7 +49,7 @@ class ScrollAreaDisplayManager:
             section.pictograph_frame.layout.addWidget(codex_pictograph.view, row, col)
             codex_pictograph.view.resize_for_scroll_area()
         else:
-            self.scroll_area.section_manager.create_section_if_needed(letter_type)
+            self.scroll_area.sections_manager.create_section_if_needed(letter_type)
 
     def remove_pictograph(self, pictograph_key: str) -> None:
         codex_pictograph: Pictograph = self.scroll_area.pictographs.pop(

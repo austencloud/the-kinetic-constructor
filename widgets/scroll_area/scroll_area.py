@@ -26,7 +26,7 @@ class ScrollArea(QScrollArea):
 
     def _setup_managers(self) -> None:
         self.display_manager = ScrollAreaDisplayManager(self)
-        self.section_manager = ScrollAreaSectionManager(self)
+        self.sections_manager = ScrollAreaSectionManager(self)
         self.pictograph_factory = ScrollAreaPictographFactory(self)
 
     def _setup_ui(self) -> None:
@@ -41,7 +41,7 @@ class ScrollArea(QScrollArea):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
-    def update_sections(self):
+    def fix_stretch(self):
         if self.stretch_index >= 0:
             item = self.layout.takeAt(self.stretch_index)
             del item
