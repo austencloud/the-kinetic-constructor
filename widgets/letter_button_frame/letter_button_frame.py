@@ -62,7 +62,7 @@ class LetterButtonFrame(QFrame):
             buttons_row_layouts = [
                 self.button_manager.get_buttons_row_layout(row) for row in rows
             ]
-            outer_frame, outer_frame_layout = self.layout_styler.create_layout(
+            outer_frame, _ = self.layout_styler.create_layout(
                 type_name, buttons_row_layouts
             )
             self.outer_frames[type_name] = outer_frame

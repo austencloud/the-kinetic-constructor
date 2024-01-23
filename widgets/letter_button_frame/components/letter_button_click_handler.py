@@ -2,7 +2,9 @@ from Enums import LetterType
 from typing import TYPE_CHECKING
 
 from Enums import LetterType
-from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab import FilterTab
+from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab import (
+    FilterTab,
+)
 
 if TYPE_CHECKING:
     from widgets.letter_button_frame.components.letter_button_manager import (
@@ -14,7 +16,7 @@ class LetterButtonClickHandler:
     def __init__(self, letter_button_manager: "LetterButtonManager") -> None:
         self.letter_button_frame = letter_button_manager.letter_button_frame
         self.button_panel = self.letter_button_frame.button_panel
-        self.section_manager = self.button_panel.codex.scroll_area.section_manager
+        self.section_manager = self.button_panel.codex.scroll_area.sections_manager
 
     def on_letter_button_clicked(self, letter: str) -> None:
         button = self.letter_button_frame.button_manager.buttons[letter]
@@ -48,7 +50,7 @@ class LetterButtonClickHandler:
 
     def process_pictographs_for_letter(self, letter: str) -> None:
         letter_type = LetterType.get_letter_type(letter)
-        section_manager = self.button_panel.codex.scroll_area.section_manager
+        section_manager = self.button_panel.codex.scroll_area.sections_manager
         main_widget = self.button_panel.codex.main_tab_widget.main_widget
         section = section_manager.sections[letter_type]
         section.filter_tab.show_tabs_based_on_chosen_letters()
