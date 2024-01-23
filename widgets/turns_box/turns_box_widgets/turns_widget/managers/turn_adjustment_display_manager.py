@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums import LetterType
+from constants import DASH, STATIC
 from utilities.TypeChecking.TypeChecking import (
     Turns,
 )
@@ -26,9 +27,11 @@ class TurnsAdjustmentDisplayManager:
         turns = self.convert_turn_floats_to_ints(turns)
         self.turns_widget.turns_display_manager.update_turns_display(str(turns))
         letter_type = self.turns_box.turns_panel.filter_tab.section.letter_type
-        self.turns_widget.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager.update_visibility_based_on_motion(
-            letter_type, turns
-        )
+        if self.turns_box.attribute_value in [STATIC, DASH]:
+            button_manager = (
+                self.turns_widget.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager
+            )
+            button_manager.update_visibility_based_on_motion(letter_type, turns)
         for pictograph in self.pictographs:
             if (
                 LetterType.get_letter_type(pictograph.letter)

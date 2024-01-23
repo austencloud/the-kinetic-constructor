@@ -61,9 +61,6 @@ class RotDirButtonManager:
         self.same_button.show()
 
     def hide_vtg_dir_buttons(self):
-        # # remove the buttons and the stretch from the header layout but keep them existing so we can access them later
-        # self.section.header_layout.removeWidget(self.opp_button)
-        # self.section.header_layout.removeWidget(self.same_button)
         self.opp_button.hide()
         self.same_button.hide()
 
