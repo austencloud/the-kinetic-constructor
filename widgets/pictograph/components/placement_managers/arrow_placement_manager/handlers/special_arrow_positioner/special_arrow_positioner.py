@@ -3,7 +3,6 @@ from objects.arrow.arrow import Arrow
 from ..turns_tuple_generator import TurnsTupleGenerator
 from .handlers.adjustment_calculator import AdjustmentCalculator
 from .handlers.adjustment_mapper import AdjustmentMapper
-from .handlers.data_sorter import DataSorter
 from .handlers.motion_attr_key_generator import MotionAttrKeyGenerator
 from .handlers.special_placement_data_loader import SpecialPlacementDataLoader
 from .handlers.special_placement_data_updater import SpecialPlacementDataUpdater
@@ -26,7 +25,6 @@ class SpecialArrowPositioner:
         adjustment_calculator (AdjustmentCalculator): Calculates adjustments.
         key_generator (KeyGenerator): Generates adjustment keys.
         rot_angle_handler (RotAngleOverrideHandler): Overrides rot angles from json.
-        data_sorter (DataSorter): Sorts the json data.
         adjustment_mapper (AdjustmentMapper): Maps adjustments to arrows.
     """
 
@@ -41,7 +39,6 @@ class SpecialArrowPositioner:
         self.adjustment_mapper = AdjustmentMapper(self)
         self.motion_key_generator = MotionAttrKeyGenerator(self)
         self.turns_tuple_generator = TurnsTupleGenerator(self)
-        self.data_sorter = DataSorter(self)
 
     def update_arrow_placement(self, arrow: Arrow) -> None:
         turns_tuple = self.turns_tuple_generator.generate_turns_tuple(

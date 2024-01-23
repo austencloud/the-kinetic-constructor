@@ -1,6 +1,7 @@
-
 import json
+import os
 from typing import TYPE_CHECKING, Dict
+
 if TYPE_CHECKING:
     from ..special_arrow_positioner import SpecialArrowPositioner
 
@@ -8,17 +9,17 @@ if TYPE_CHECKING:
 class SpecialPlacementDataLoader:
     def __init__(self, positioner: "SpecialArrowPositioner") -> None:
         self.positioner = positioner
-        self.json_path = "arrow_placement/special_placements.json"
+        self.directory = "data/arrow_placement/special/"
 
     def load_placements(self) -> Dict:
-        try:
-            with open(self.json_path, "r", encoding="utf-8") as file:
-                return json.load(file)
-        except FileNotFoundError:
-            print(f"File not found: {self.json_path}")
-            return {}
-        except json.JSONDecodeError as e:
-            print(f"JSON decoding error occurred: {e}")
-            return {}
-
-
+        all_placements = {}
+        for file_name in os.listdir(self.directory):
+            if file_name.endswith("_placements.json"):
+                with open(
+                    os.path.join(self.directory, file_name),
+                    "r",
+                    encoding="utf-8",
+                ) as file:
+                    data = json.load(file)
+                    all_placements.update(data)
+        return all_placements

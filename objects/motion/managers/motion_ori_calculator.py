@@ -9,7 +9,6 @@ from utilities.TypeChecking.TypeChecking import (
 )
 
 
-
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
 
@@ -55,8 +54,8 @@ class MotionOriCalculator:
         self, motion_type: MotionTypes, turns: Turns, start_ori: Orientations
     ) -> Orientations:
         orientation_map = {
-            (IN, CLOCKWISE): (COUNTER if turns % 2 == 0.5 else CLOCK),
-            (IN, COUNTER_CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
+            (IN, CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
+            (IN, COUNTER_CLOCKWISE): (COUNTER if turns % 2 == 0.5 else CLOCK),
             (OUT, CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
             (OUT, COUNTER_CLOCKWISE): (COUNTER if turns % 2 == 0.5 else CLOCK),
             (CLOCK, CLOCKWISE): (OUT if turns % 2 == 0.5 else IN),

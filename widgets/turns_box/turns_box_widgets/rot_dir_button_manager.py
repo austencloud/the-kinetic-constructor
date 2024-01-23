@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING, Callable, List, Union
-from Enums import LetterType
 from constants import (
     BLUE,
     CLOCKWISE,
@@ -21,9 +20,8 @@ from constants import (
 )
 from utilities.TypeChecking.MotionAttributes import PropRotDirs
 from utilities.TypeChecking.TypeChecking import VtgDirections
-from widgets.factories.button_factory.button_factory import ButtonFactory
+from ...factories.button_factory.button_factory import ButtonFactory
 from ...factories.button_factory.buttons.rot_dir_buttons import (
-    RotDirButton,
     VtgDirButton,
     PropRotDirButton,
 )
@@ -41,19 +39,17 @@ if TYPE_CHECKING:
 class RotDirButtonManager:
     def __init__(self, section_widget: "SectionWidget") -> None:
         self.section = section_widget
-
+        self.previous_turns = 0
         self.prop_rot_dir_buttons: List[
             PropRotDirButton
         ] = self._setup_prop_rot_dir_buttons()
         self.vtg_dir_buttons: List[VtgDirButton] = self._setup_vtg_dir_buttons()
-        # self.show_vtg_dir_buttons()
-
         self.buttons = self.prop_rot_dir_buttons + self.vtg_dir_buttons
-
         self.section.header_layout.insertStretch(0, 8)
         self.section.header_layout.insertWidget(1, self.opp_button)
         self.section.header_layout.addWidget(self.same_button)
         self.section.header_layout.insertStretch(6, 8)
+        
         self.hide_vtg_dir_buttons()
 
     def show_vtg_dir_buttons(self):
@@ -113,9 +109,7 @@ class RotDirButtonManager:
         self._update_button_states(self.prop_rot_dir_buttons, prop_rot_dir)
 
     def _update_pictographs_vtg_dir(self, vtg_dir: VtgDirections) -> None:
-        for (
-            pictograph
-        ) in self.section.filter_tab.section.scroll_area.pictographs.values():
+        for pictograph in self.section.scroll_area.pictographs.values():
             for motion in pictograph.motions.values():
                 other_motion = pictograph.motions[RED if motion.color == BLUE else BLUE]
                 if motion.check.is_dash() or motion.check.is_static():
@@ -194,15 +188,19 @@ class RotDirButtonManager:
             COUNTER_CLOCKWISE: CLOCKWISE,
         }.get(prop_rot_dir, prop_rot_dir)
 
-    def update_visibility_based_on_motion(self, letter_type, turns):
+    def update_visibility_based_on_motion(self, letter_type, new_turns) -> None:
         if letter_type in [Type2, Type3]:
-            if turns > 0:
-                self.show_vtg_dir_buttons()
-                self.same_button.press()
-            else:
+            if new_turns > 0:
+                if self.previous_turns == 0:
+                    self.show_vtg_dir_buttons()
+                    self.same_button.press()
+                    self.previous_turns = new_turns
+            elif new_turns == 0:
+                self.previous_turns = 0
                 self.hide_vtg_dir_buttons()
         elif letter_type in [Type4, Type5, Type6]:
-            if turns > 0:
+            if new_turns > 0:
                 self.show_prop_rot_dir_buttons()
-            else:
+            elif new_turns == 0:
+                self.previous_turns = 0
                 self.hide_prop_rot_dir_buttons()

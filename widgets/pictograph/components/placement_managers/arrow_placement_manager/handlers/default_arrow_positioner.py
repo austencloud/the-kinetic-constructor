@@ -35,7 +35,7 @@ class DefaultArrowPositioner:
         self, motion_type: str
     ) -> Dict[str, Dict[str, List[int]]]:
         json_filename = self.motion_type_files.get(motion_type)
-        json_path = f"arrow_placement/{json_filename}"
+        json_path = f"data/arrow_placement/default/{json_filename}"
         with codecs.open(json_path, "r", encoding="utf-8") as file:
             return json.load(file)
 

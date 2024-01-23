@@ -55,7 +55,16 @@ class TurnsAdjustmentDisplayManager:
                     self.turns_widget.updater.update_motion_properties(
                         motion, new_turns
                     )
-
+        turns = self.turns_widget.turns_display_manager.turns_display.text()
+        turns = self.turns_widget._convert_turns_from_str_to_num(turns)
+        turns = self.convert_turn_floats_to_ints(turns)
+        letter_type = self.turns_box.turns_panel.filter_tab.section.letter_type
+        if self.turns_box.attribute_value in [STATIC, DASH]:
+            button_manager = (
+                self.turns_widget.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager
+            )
+            button_manager.update_visibility_based_on_motion(letter_type, turns)
+            
     def reset_turns_display(self) -> None:
         self.turns_widget.turns_display_manager.update_turns_display("0")
         for pictograph in self.pictographs:
