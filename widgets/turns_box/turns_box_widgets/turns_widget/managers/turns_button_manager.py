@@ -36,13 +36,11 @@ class TurnsButtonManager:
         self.negative_buttons_frame = QFrame()
         self.negative_buttons_container = QVBoxLayout(self.negative_buttons_frame)
         self.negative_buttons_hbox_layout = QHBoxLayout()
-        # self.negative_buttons_container.addWidget(self.left_spacer_frame)
         self.negative_buttons_container.addLayout(self.negative_buttons_hbox_layout)
 
         self.positive_buttons_frame = QFrame()
         self.positive_buttons_container = QVBoxLayout(self.positive_buttons_frame)
         self.positive_buttons_hbox_layout = QHBoxLayout()
-        # self.positive_buttons_container.addWidget(self.right_spacer_frame)
         self.positive_buttons_container.addLayout(self.positive_buttons_hbox_layout)
 
     def _create_and_add_button(
