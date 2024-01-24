@@ -49,7 +49,7 @@ class RotDirButtonManager:
         self.section.header_layout.insertWidget(1, self.opp_button)
         self.section.header_layout.addWidget(self.same_button)
         self.section.header_layout.insertStretch(6, 8)
-
+        # self.section.filter_tab.motion_type_turns_panel
         self.hide_vtg_dir_buttons()
 
     def show_vtg_dir_buttons(self):
@@ -109,7 +109,7 @@ class RotDirButtonManager:
         self._update_button_states(self.prop_rot_dir_buttons, prop_rot_dir)
 
     def _update_pictographs_vtg_dir(self, vtg_dir: VtgDirections) -> None:
-        for pictograph in self.section.pictographs.values(): 
+        for pictograph in self.section.pictographs.values():
             for motion in pictograph.motions.values():
                 other_motion = pictograph.get.other_motion(motion)
                 if motion.check.is_dash() or motion.check.is_static():
@@ -174,12 +174,10 @@ class RotDirButtonManager:
                 button.unpress()
 
     def show_prop_rot_dir_buttons(self):
-        # Show Prop rotation direction buttons
         self.cw_button.show()
         self.ccw_button.show()
 
     def hide_prop_rot_dir_buttons(self):
-        # Hide Prop rotation direction buttons
         self.cw_button.hide()
         self.ccw_button.hide()
 
@@ -205,3 +203,9 @@ class RotDirButtonManager:
             elif new_turns == 0:
                 self.previous_turns = 0
                 self.hide_prop_rot_dir_buttons()
+
+    def unpress_vtg_buttons(self) -> None:
+        """Unpress the vtg buttons."""
+        if hasattr(self, "same_button"):
+            self.same_button.unpress()
+            self.opp_button.unpress()

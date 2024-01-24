@@ -63,9 +63,3 @@ class TurnsButtonManager:
         layout.addWidget(button)
         return button
 
-    def unpress_vtg_buttons(self) -> None:
-        """Unpress the vtg buttons."""
-        if hasattr(self.turns_box, "same_button"):
-            self.turns_widget.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager.same_button.unpress()
-            self.turns_widget.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager.opp_button.unpress()
-

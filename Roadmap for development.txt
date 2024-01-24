@@ -1,0 +1,16 @@
+Roadmap for development:
+
+Animate individual pictographs and sequences
+Make a web app so people can access and share sequences easily
+Finish implementing rotation direction buttons
+Rebuild sequence construction interface as a guided, clickable flow
+Add ability to systematically modify turns in a sequence
+Develop a system to track turn patterns (right/left, numbers) to apply to sequences
+Automatically complete a sequence after constructing the first line
+Create a finite list of permutation options to apply (rotational, mirrored, swapped)
+Analyze videos of spinners to detect positions and motions, reconstruct sequences
+Complete rotation button implementation
+Rebuild sequence constructor interface
+Build kinetic encyclopedia/library for browsing sequences
+Create automatic sequence completion
+Build system for tracking/applying turn patterns

@@ -2,7 +2,17 @@ from typing import TYPE_CHECKING, Dict, Union
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
-from constants import BLUE, COLOR, LEAD_STATE, MOTION_TYPE, OPP, RED, SAME
+from constants import (
+    BLUE,
+    CLOCKWISE,
+    COLOR,
+    COUNTER_CLOCKWISE,
+    LEAD_STATE,
+    MOTION_TYPE,
+    OPP,
+    RED,
+    SAME,
+)
 from utilities.TypeChecking.TypeChecking import (
     Colors,
     LeadStates,
@@ -35,6 +45,10 @@ class TurnsBox(QFrame):
         self.font_size = self.turns_panel.width() // 20
         self.turn_display_border = 2
         self.vtg_dir_btn_state: Dict[str, bool] = {SAME: True, OPP: False}
+        self.prop_rot_dir_btn_state: Dict[str, bool] = {
+            CLOCKWISE: True,
+            COUNTER_CLOCKWISE: False,
+        }
         self._setup_attribute_type()
         self._setup_widgets()
         self._setup_layouts()
