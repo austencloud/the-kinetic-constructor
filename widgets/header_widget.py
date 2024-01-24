@@ -48,12 +48,18 @@ class HeaderWidget(TurnsBoxWidget):
         return layout
 
     def _add_widgets(self, layout: QHBoxLayout) -> None:
+        cw_button = (
+            self.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager.cw_button
+        )
+        ccw_button = (
+            self.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager.ccw_button
+        )
         layout.addStretch(5)
-        layout.addWidget(self.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager.cw_button)
+        layout.addWidget(cw_button)
         layout.addStretch(1)
         layout.addWidget(self.header_label)
         layout.addStretch(1)
-        layout.addWidget(self.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager.ccw_button)
+        layout.addWidget(ccw_button)
         layout.addStretch(5)
         layout.addWidget(self.separator)
 
