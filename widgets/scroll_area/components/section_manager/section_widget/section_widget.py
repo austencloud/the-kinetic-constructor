@@ -3,13 +3,14 @@ from PyQt6.QtWidgets import QVBoxLayout, QWidget, QPushButton, QHBoxLayout, QSiz
 from constants import OPP, SAME
 from utilities.TypeChecking.TypeChecking import LetterTypes, Letters
 from widgets.pictograph.pictograph import Pictograph
-from widgets.turns_box.turns_box_widgets.rot_dir_button_manager import (
-    RotDirButtonManager,
+from widgets.turns_box.turns_box_widgets.vtg_dir_button_manager import (
+    VtgDirButtonManager,
 )
 from .components.filter_tab import FilterTab
 from .components.pictograph_frame import ScrollAreaSectionPictographFrame
 from .components.type_label import ScrollAreaSectionTypeLabel
 from PyQt6.QtCore import QTimer
+
 if TYPE_CHECKING:
     from ....scroll_area import ScrollArea
 
@@ -27,10 +28,8 @@ class SectionWidget(QWidget):
         self.filter_tab: FilterTab = None
         self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
         self._setup_layout()
-        self.rot_dir_button_manager = RotDirButtonManager(self)
-        self.pictographs: Dict[str, Pictograph]  = {}
-
-
+        self.vtg_dir_button_manager = VtgDirButtonManager(self)
+        self.pictographs: Dict[str, Pictograph] = {}
 
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)

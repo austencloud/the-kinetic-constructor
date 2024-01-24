@@ -4,7 +4,7 @@ from constants import DASH, STATIC
 from utilities.TypeChecking.TypeChecking import Turns
 
 if TYPE_CHECKING:
-    from widgets.pictograph.pictograph import Pictograph
+    from .....pictograph.pictograph import Pictograph
     from ....turns_box_widgets.turns_widget.turns_widget import TurnsWidget
 
 
@@ -69,7 +69,7 @@ class TurnsAdjustmentDisplayManager:
         )
         if self.turns_widget.turns_box.attribute_value in [STATIC, DASH]:
             button_manager = (
-                self.turns_widget.turns_box.turns_panel.filter_tab.section.rot_dir_button_manager
+                self.turns_widget.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager
             )
             button_manager.update_visibility_based_on_motion(letter_type, turns)
 
