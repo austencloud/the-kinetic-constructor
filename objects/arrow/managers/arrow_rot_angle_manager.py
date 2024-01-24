@@ -94,31 +94,13 @@ class ArrowRotAngleCalculator:
                 },
             },
         }
-        return direction_map[self.a.motion_type][self.a.motion.prop_rot_dir].get(
+        return direction_map[self.a.motion.motion_type][self.a.motion.prop_rot_dir].get(
             self.a.loc, 0
         )
 
-    def _get_static_angle(self) -> int:
-        direction_map = {
-            IN: {
-                CLOCKWISE: {NORTH: 180, EAST: 270, SOUTH: 0, WEST: 90},
-                COUNTER_CLOCKWISE: {NORTH: 180, EAST: 90, SOUTH: 0, WEST: 270},
-                NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
-            },
-            OUT: {
-                CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
-                COUNTER_CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
-                NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
-            },
-        }
-        return (
-            direction_map.get(self.a.motion.start_ori)
-            .get(self.a.motion.prop_rot_dir)
-            .get(self.a.loc)
-        )
 
     def _get_motion_specific_angle(self) -> int:
-        motion_type = self.a.motion_type
+        motion_type = self.a.motion.motion_type
         if motion_type in [PRO, ANTI]:
             return self._get_shift_angle()
         elif motion_type == STATIC:
@@ -149,7 +131,7 @@ class ArrowRotAngleCalculator:
         return orientation_map.get(self.a.motion.start_ori, {})
 
     def _get_shift_angle(self) -> int:
-        if self.a.motion_type == PRO:
+        if self.a.motion.motion_type == PRO:
             return (
                 {
                     CLOCKWISE: {
@@ -168,7 +150,7 @@ class ArrowRotAngleCalculator:
                 .get(self.a.motion.prop_rot_dir)
                 .get(self.a.loc)
             )
-        elif self.a.motion_type == ANTI:
+        elif self.a.motion.motion_type == ANTI:
             return (
                 {
                     CLOCKWISE: {
