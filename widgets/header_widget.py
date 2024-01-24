@@ -49,11 +49,11 @@ class HeaderWidget(TurnsBoxWidget):
 
     def _add_widgets(self, layout: QHBoxLayout) -> None:
         layout.addStretch(5)
-        layout.addWidget(self.turns_box.prop_rot_dir_button_manager.same_button)
+        layout.addWidget(self.turns_box.prop_rot_dir_button_manager.ccw_button)
         layout.addStretch(1)
         layout.addWidget(self.header_label)
         layout.addStretch(1)
-        layout.addWidget(self.turns_box.prop_rot_dir_button_manager.opp_button)
+        layout.addWidget(self.turns_box.prop_rot_dir_button_manager.cw_button)
         layout.addStretch(5)
         layout.addWidget(self.separator)
 
@@ -75,4 +75,3 @@ class HeaderWidget(TurnsBoxWidget):
         label.setMaximumHeight(font_size * 2)
         self.adjustSize()
         return label
-

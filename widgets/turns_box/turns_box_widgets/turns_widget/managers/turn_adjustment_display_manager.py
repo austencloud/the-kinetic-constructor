@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, List, Union
 from Enums import LetterType
-from constants import DASH, STATIC
+from constants import DASH, STATIC, Type2, Type3
 from utilities.TypeChecking.TypeChecking import Turns
 
 if TYPE_CHECKING:
@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from ....turns_box_widgets.turns_widget.turns_widget import TurnsWidget
 
 
-class TurnsAdjustmentDisplayManager:
+class TurnsAdjustmentManager:
     def __init__(self, turns_widget: "TurnsWidget") -> None:
         self.turns_widget = turns_widget
         self.pictographs = self._get_pictographs()
@@ -16,6 +16,7 @@ class TurnsAdjustmentDisplayManager:
     def adjust_turns(self, adjustment: Turns) -> None:
         turns = self._get_turns()
         turns = self._clamp_turns(turns + adjustment)
+        turns = self.convert_turn_floats_to_ints(turns)
         self._update_turns_display(turns)
         self._update_visibility_based_on_motion(turns)
         for pictograph in self.pictographs:
@@ -25,12 +26,11 @@ class TurnsAdjustmentDisplayManager:
     def set_turns(self, new_turns: Turns) -> None:
         self._update_motion_properties(new_turns)
         turns = self._get_turns()
+        turns = self.convert_turn_floats_to_ints(turns)
+
         self._update_turns_display(new_turns)
         self._update_visibility_based_on_motion(turns)
 
-    def reset_turns_display(self) -> None:
-        self._update_turns_display("0")
-        self._update_motion_properties(0)
 
     def get_current_turns_value(self) -> Turns:
         return self._get_turns()
@@ -43,7 +43,7 @@ class TurnsAdjustmentDisplayManager:
         )
 
     def _get_turns(self) -> Turns:
-        turns = self.turns_widget.turns_display_manager.turns_display.text()
+        turns = self.turns_widget.display_manager.turns_display.text()
         turns = self.convert_turns_from_str_to_num(turns)
         turns = self.convert_turn_floats_to_ints(turns)
         return turns
@@ -61,7 +61,7 @@ class TurnsAdjustmentDisplayManager:
         return self.turns_widget.updater._clamp_turns(turns)
 
     def _update_turns_display(self, turns: Turns) -> None:
-        self.turns_widget.turns_display_manager.update_turns_display(str(turns))
+        self.turns_widget.display_manager.update_turns_display(str(turns))
 
     def _update_visibility_based_on_motion(self, turns: Turns) -> None:
         letter_type = (
@@ -70,6 +70,8 @@ class TurnsAdjustmentDisplayManager:
         if self.turns_widget.turns_box.attribute_value in [STATIC, DASH]:
             button_manager = (
                 self.turns_widget.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager
+            ) if self.turns_widget.turns_box.turns_panel.filter_tab.section.letter_type in [Type2, Type3] else (
+                self.turns_widget.turns_box.prop_rot_dir_button_manager
             )
             button_manager.update_visibility_based_on_motion(letter_type, turns)
 

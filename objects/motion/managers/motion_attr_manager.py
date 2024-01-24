@@ -20,7 +20,9 @@ from constants import (
     TURNS,
 )
 from utilities.TypeChecking.TypeChecking import Colors, Orientations, Turns
-from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab import FilterTab
+from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab import (
+    FilterTab,
+)
 
 if TYPE_CHECKING:
     from widgets.turns_box.turns_box import TurnsBox
@@ -58,7 +60,7 @@ class MotionAttrManager:
     def set_motion_attributes_from_attr_box(
         self, box: "TurnsBox", pictograph_dict: Dict
     ) -> None:
-        box_text = box.turns_widget.turns_display_manager.turns_display.text()
+        box_text = box.turns_widget.display_manager.turns_display.text()
         turns = float(box_text) if "." in box_text else int(box_text)
 
         if box.motion_type in [DASH, STATIC]:

@@ -55,47 +55,52 @@ class TurnsUpdater:
             self.turns_widget.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.unpress_vtg_buttons()
             if hasattr(self.turns_box, "prop_rot_dir_button_manager"):
                 self.turns_widget.turns_box.prop_rot_dir_button_manager.unpress_prop_rot_dir_buttons()
-  
-        elif motion.turns == 0:
-            self._set_prop_rot_dir_based_on_vtg_state(motion)
 
-    def _set_prop_rot_dir_based_on_vtg_state(self, motion: "Motion") -> None:
+        elif motion.turns == 0:
+            self._set_prop_rot_dir(motion)
+
+    def _set_prop_rot_dir(self, motion: "Motion") -> None:
         """Set the rotation direction of the motion based on the vtg directional relationship."""
         other_motion = motion.pictograph.get.other_motion(motion)
-        motion.prop_rot_dir = self._determine_prop_rot_dir(motion, other_motion)
+        if self.turns_box.turns_panel.filter_tab.section.letter_type in [Type2, Type3]:
+            motion.prop_rot_dir = self._determine_prop_rot_dir_for_type2_type3(
+                other_motion
+            )
+        elif self.turns_box.turns_panel.filter_tab.section.letter_type in [Type4]:
+            motion.prop_rot_dir = self._get_default_prop_rot_dir_for_type4_type5_type6()
 
-    def _determine_prop_rot_dir(
-        self, motion: "Motion", other_motion: "Motion"
+    def _determine_prop_rot_dir_for_type2_type3(
+        self, other_motion: "Motion"
     ) -> PropRotDirs:
         """Determine the property rotation direction."""
-        if (
-            motion.pictograph.letter in Type2_letters
-            or motion.pictograph.letter in Type3_letters
-        ):
-            if (
-                not self.turns_box.vtg_dir_btn_state[SAME]
-                and not self.turns_box.vtg_dir_btn_state[OPP]
-            ):
-                self._set_vtg_dir_state_default()
-                self.turns_widget.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.show_vtg_dir_buttons()
-            if self.turns_box.vtg_dir_btn_state[SAME]:
-                return other_motion.prop_rot_dir
-            if self.turns_box.vtg_dir_btn_state[OPP]:
-                if other_motion.prop_rot_dir == CLOCKWISE:
-                    return COUNTER_CLOCKWISE
-                elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                    return CLOCKWISE
+        self._set_vtg_dir_state_default()
+        self.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.show_vtg_dir_buttons()
+        self.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.same_button.press()
 
-        elif motion.pictograph.letter in Type4_letters:
-            self.turns_widget.turns_box.prop_rot_dir_button_manager.show_prop_rot_dir_buttons()
-            self.turns_widget.turns_box.prop_rot_dir_button_manager.cw_button.press()
-            return CLOCKWISE
+        if self.turns_box.vtg_dir_btn_state[SAME]:
+            return other_motion.prop_rot_dir
+        if self.turns_box.vtg_dir_btn_state[OPP]:
+            if other_motion.prop_rot_dir == CLOCKWISE:
+                return COUNTER_CLOCKWISE
+            elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                return CLOCKWISE
+
+    def _get_default_prop_rot_dir_for_type4_type5_type6(self) -> PropRotDirs:
+        self._set_prop_rot_dir_state_default()
+        self.turns_box.prop_rot_dir_button_manager.show_prop_rot_dir_buttons()
+        self.turns_box.prop_rot_dir_button_manager.cw_button.press()
+        return CLOCKWISE
 
     def _set_vtg_dir_state_default(self) -> None:
         """Set the vtg direction state to default."""
         self.turns_box.vtg_dir_btn_state[SAME] = True
         self.turns_box.vtg_dir_btn_state[OPP] = False
 
+    def _set_prop_rot_dir_state_default(self) -> None:
+        """Set the vtg direction state to default."""
+        self.turns_box.prop_rot_dir_btn_state[SAME] = True
+        self.turns_box.prop_rot_dir_btn_state[OPP] = False
+        
     def _clamp_turns(self, turns: Turns) -> Turns:
         """Clamp the turns value to be within allowable range."""
         return max(0, min(3, turns))

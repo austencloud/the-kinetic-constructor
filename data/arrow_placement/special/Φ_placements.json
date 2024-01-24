@@ -3,6 +3,61 @@
     "(o, 0.5, 1)": {
       "static_rot_angle": 0,
       "static": [95, 0]
+    },
+    "(o, 2, 1.5)": {
+      "dash": [-80, -70]
+    },
+    "(s, 1, 0.5)": {
+      "dash": [-10, -80]
+    },
+    "(s, 0.5, 1.5)": {
+      "static_rot_angle": 0,
+      "dash": [-85, -60],
+      "static": [-20, 0]
+    },
+    "(s, 0.5, 2.5)": {
+      "static": [-5, -25],
+      "dash": [-90, -60]
+    },
+    "(s, 1, 1.5)": {
+      "static_rot_angle": 0,
+      "static": [-15, 0]
+    },
+    "(s, 2, 1.5)": {
+      "static_rot_angle": 0,
+      "static": [-20, 0],
+      "dash": [-75, -75]
+    },
+    "(s, 2.5, 1.5)": {
+      "static": [0, 0],
+      "static_rot_angle": 0
+    },
+    "(s, 3, 1.5)": {
+      "static_rot_angle": 0,
+      "dash": [0, -80],
+      "static": [-20, 0]
+    },
+    "(s, 3, 2)": {
+      "static_rot_angle": 0,
+      "dash": [-5, -70]
+    },
+    "(s, 3, 2.5)": {
+      "dash": [-20, -80]
+    },
+    "(s, 1.5, 1.5)": {
+      "static_rot_angle": 0
+    },
+    "(o, 2, 0.5)": {
+      "static_rot_angle": 0,
+      "static": [100, 100]
+    },
+    "(o, 2.5, 0.5)": {
+      "static_rot_angle": 0,
+      "static": [100, 100]
+    },
+    "(o, 3, 0.5)": {
+      "static_rot_angle": 0,
+      "static": [100, 100]
     }
   }
 }

@@ -40,13 +40,13 @@ class PictographStateUpdater:
         self.p.ghost_props[color].show()
         self.p.arrows[color].show()
 
-    def override_motion_type_if_necessary(self, pictograph_dict: Dict, motion: Motion):
+    def override_motion_type_if_necessary(self, pictograph_dict: Dict, motion: Motion) -> None:
         motion_type = motion.motion_type
         turns_key = f"{motion_type}_turns"
         if turns_key in pictograph_dict:
             motion.turns = pictograph_dict[turns_key]
 
-    def update_motion_attrs_from_pictograph_dict(self, pictograph_dict):
+    def update_motion_attrs_from_pictograph_dict(self, pictograph_dict: Dict) -> None:
         motion_attributes = {
             f"{RED}_motion_type": "motion_type",
             f"{RED}_start_loc": "start_loc",

@@ -6,10 +6,7 @@ from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING, Callable
-from widgets.buttons.rotate_motion_button import RotateMotionButton
-from widgets.header_widget import (
-    HeaderWidget,
-)
+from widgets.header_widget import HeaderWidget
 
 if TYPE_CHECKING:
     from widgets.graph_editor_tab.graph_editor_attr_box import (

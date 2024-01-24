@@ -128,23 +128,13 @@ class ArrowLocationCalculator:
         return self.a.scene.arrows[RED if self.a.color == BLUE else BLUE]
 
     def _default_dash_location(self) -> Locations:
-        color_map = {
-            BLUE: {
-                (NORTH, SOUTH): WEST,
-                (EAST, WEST): SOUTH,
-                (SOUTH, NORTH): WEST,
-                (WEST, EAST): SOUTH,
-            },
-            RED: {
-                (NORTH, SOUTH): EAST,
-                (EAST, WEST): NORTH,
-                (SOUTH, NORTH): EAST,
-                (WEST, EAST): NORTH,
-            },
+        location_map = {
+            (NORTH, SOUTH): WEST,
+            (EAST, WEST): SOUTH,
+            (SOUTH, NORTH): EAST,
+            (WEST, EAST): NORTH,
         }
-        return color_map[self.a.color].get(
-            (self.a.motion.start_loc, self.a.motion.end_loc)
-        )
+        return location_map.get((self.a.motion.start_loc, self.a.motion.end_loc))
 
     def get_static_location(self) -> Locations:
         return self.a.motion.start_loc

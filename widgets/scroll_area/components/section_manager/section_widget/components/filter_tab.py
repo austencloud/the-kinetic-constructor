@@ -48,7 +48,7 @@ class FilterTab(QTabWidget):
                 pictograph.updater.update_pictograph()
         for panel in self.panels:
             for box in panel.boxes:
-                box.turns_widget.turns_display_manager.update_turns_display("0")
+                box.turns_widget.display_manager.update_turns_display("0")
 
     def get_motion_types_from_letter_type(
         self, letter_type: LetterTypes
@@ -140,7 +140,7 @@ class FilterTab(QTabWidget):
     def get_current_turns_values(self) -> dict[MotionAttributes, dict]:
         turns_values = {
             attribute_type: {
-                box.attribute_value: box.turns_widget.turns_display_manager.get_current_turns_value()
+                box.attribute_value: box.turns_widget.display_manager.get_current_turns_value()
                 for box in panel.boxes
             }
             for panel in self.panels

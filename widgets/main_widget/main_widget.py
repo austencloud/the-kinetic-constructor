@@ -43,8 +43,8 @@ class MainWidget(QWidget):
         self.load_special_placements()
 
         # Iterate over all pictographs and update them
-        for letter, pictographs in self.all_pictographs.items():
-            for pictograph_key, pictograph in pictographs.items():
+        for _, pictographs in self.all_pictographs.items():
+            for _, pictograph in pictographs.items():
                 pictograph.updater.update_pictograph()
                 
     def _setup_components(self) -> None:

@@ -31,7 +31,7 @@ if TYPE_CHECKING:
 class PropRotDirButtonManager:
     def __init__(self, turns_box: "TurnsBox") -> None:
         self.turns_box = turns_box
-
+        self.previous_turns = 0
         self.prop_rot_dir_buttons: List[
             PropRotDirButton
         ] = self._setup_prop_rot_dir_buttons()
@@ -74,11 +74,6 @@ class PropRotDirButtonManager:
 
         return callback
 
-    def _prop_rot_dir_callback(self, direction: VtgDirections) -> Callable:
-        def callback() -> None:
-            self._set_prop_rot_dir(direction)
-
-        return callback
 
     def _set_vtg_dir(self, vtg_dir: VtgDirections) -> None:
         self._update_pictographs_vtg_dir(vtg_dir)
@@ -188,3 +183,13 @@ class PropRotDirButtonManager:
     def unpress_prop_rot_dir_buttons(self) -> None:
         self.cw_button.unpress()
         self.ccw_button.unpress()
+
+    def update_visibility_based_on_motion(self, letter_type, new_turns) -> None:
+            if new_turns > 0:
+                if self.previous_turns == 0:
+                    self.show_prop_rot_dir_buttons()
+                    self.same_button.press()
+                    self.previous_turns = new_turns
+            elif new_turns == 0:
+                self.previous_turns = 0
+                self.hide_buttons()

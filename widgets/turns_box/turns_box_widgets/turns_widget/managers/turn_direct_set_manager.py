@@ -21,7 +21,7 @@ class TurnDirectSetManager:
         for value in turns_values:
             button = QPushButton(value, self.turns_widget)
             button.setMaximumWidth(
-                int(self.turns_widget.turns_display_manager.turns_display.width() / 2)
+                int(self.turns_widget.display_manager.turns_display.width() / 2)
             )
             button.setStyleSheet(
                 """
@@ -43,7 +43,7 @@ class TurnDirectSetManager:
             """
             )
             button.clicked.connect(
-                lambda _, v=value: self.turns_widget.display_manager.set_turns(
+                lambda _, v=value: self.turns_widget.adjustment_manager.set_turns(
                     float(v) if v in ["0.5", "1.5", "2.5"] else int(v)
                 )
             )

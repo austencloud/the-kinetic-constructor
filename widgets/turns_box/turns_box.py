@@ -117,7 +117,7 @@ class TurnsBox(QFrame):
     def resize_turns_box(self) -> None:
         for (
             button
-        ) in self.turns_panel.filter_tab.section.vtg_dir_button_manager.buttons:
+        ) in self.turns_panel.filter_tab.section.vtg_dir_button_manager.vtg_dir_buttons:
             button.setMinimumSize(
                 self.turns_panel.filter_tab.section.width() // 26,
                 self.turns_panel.filter_tab.section.width() // 26,

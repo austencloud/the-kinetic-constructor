@@ -50,7 +50,7 @@ class TurnsButtonManager:
         button: AdjustTurnsButton = self.turns_widget.create_adjust_turns_button(text)
         button.setContentsMargins(0, 0, 0, 0)
         button.clicked.connect(
-            lambda _, adj=adjustment: self.turns_widget.display_manager.adjust_turns(
+            lambda _, adj=adjustment: self.turns_widget.adjustment_manager.adjust_turns(
                 adj
             )
         )
@@ -62,4 +62,3 @@ class TurnsButtonManager:
         )
         layout.addWidget(button)
         return button
-

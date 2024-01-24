@@ -31,7 +31,6 @@ class SpecialArrowPositioner:
         self.placement_manager = placement_manager
         self.pictograph: Pictograph = placement_manager.pictograph
         self.data_loader = (self)
-        # self.special_placements = self.data_loader.load_placements()
 
         self.data_updater = SpecialPlacementDataUpdater(self)
         self.adjustment_calculator = AdjustmentCalculator(self)
