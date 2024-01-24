@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from objects.arrow.arrow import Arrow
 from ..turns_tuple_generator import TurnsTupleGenerator
-from .handlers.adjustment_calculator import AdjustmentCalculator
 from .handlers.adjustment_mapper import AdjustmentMapper
 from .handlers.motion_attr_key_generator import MotionAttrKeyGenerator
 from .handlers.special_placement_data_updater import SpecialPlacementDataUpdater
@@ -17,14 +16,20 @@ class SpecialArrowPositioner:
     are not optimal due to the placement of other graphical objects.
 
     Attributes:
-        pictograph (Pictograph): The associated pictograph.
-        special_placements (Dict): Loaded special placement rules.
-        data_loader (SpecialPlacementDataLoader): Loads the json data.
-        data_updater (SpecialPlacementDataUpdater): Updates the json data.
-        adjustment_calculator (AdjustmentCalculator): Calculates adjustments.
-        key_generator (KeyGenerator): Generates adjustment keys.
-        rot_angle_handler (RotAngleOverrideHandler): Overrides rot angles from json.
-        adjustment_mapper (AdjustmentMapper): Maps adjustments to arrows.
+        pictograph (Pictograph): The pictograph whose arrows are being positioned.
+        placement_manager (ArrowPlacementManager): The placement manager that
+            is using this positioner.
+        data_loader (SpecialPlacementDataLoader): The data loader that loads
+            the special placement data for the pictograph.
+        data_updater (SpecialPlacementDataUpdater): The data updater that
+            updates the special placement data for the pictograph.
+        adjustment_mapper (AdjustmentMapper): Maps the adjustment key to the
+            adjustment value.
+        motion_key_generator (MotionAttrKeyGenerator): Generates the motion
+            attribute key for the arrow.
+        turns_tuple_generator (TurnsTupleGenerator): Generates the turns tuple
+            for the arrow.
+            
     """
 
     def __init__(self, placement_manager: "ArrowPlacementManager") -> None:
@@ -33,7 +38,6 @@ class SpecialArrowPositioner:
         self.data_loader = (self)
 
         self.data_updater = SpecialPlacementDataUpdater(self)
-        self.adjustment_calculator = AdjustmentCalculator(self)
         self.adjustment_mapper = AdjustmentMapper(self)
         self.motion_key_generator = MotionAttrKeyGenerator(self)
         self.turns_tuple_generator = TurnsTupleGenerator(self)

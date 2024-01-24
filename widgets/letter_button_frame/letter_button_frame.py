@@ -51,12 +51,12 @@ class LetterButtonFrame(QFrame):
         self.layout.setSpacing(0)
         frame_tuples = []
         stretch_factors = {
-            "Type1": 5,
-            "Type2": 2,
-            "Type3": 2,
-            "Type4": 1,
-            "Type5": 1,
-            "Type6": 1,
+            "Type1": 100,
+            "Type2": 32,
+            "Type3": 32,
+            "Type4": 16,
+            "Type5": 19,
+            "Type6": 16,
         }
         for type_name, rows in self.letter_rows.items():
             buttons_row_layouts = [

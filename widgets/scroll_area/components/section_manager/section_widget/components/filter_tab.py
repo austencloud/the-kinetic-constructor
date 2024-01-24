@@ -41,7 +41,7 @@ class FilterTab(QTabWidget):
         for pictograph in self.section.scroll_area.pictographs.values():
             if (
                 LetterType.get_letter_type(pictograph.letter)
-                == self.section.letter_type
+                == self.section.letter_type 
             ):
                 for motion in pictograph.motions.values():
                     motion.turns_manager.set_turns(0)
@@ -49,7 +49,10 @@ class FilterTab(QTabWidget):
         for panel in self.panels:
             for box in panel.boxes:
                 box.turns_widget.display_manager.update_turns_display("0")
-
+                box.prop_rot_dir_button_manager.hide_prop_rot_dir_buttons()
+        self.section.vtg_dir_button_manager.hide_vtg_dir_buttons()
+        
+                
     def get_motion_types_from_letter_type(
         self, letter_type: LetterTypes
     ) -> List[MotionAttributes]:

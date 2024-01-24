@@ -35,19 +35,22 @@ class RotationAngleOverrideManager:
         )
         static = self.pictograph.get.static()
 
-        if static.turns > 0:
-            if static.prop_rot_dir != non_static.prop_rot_dir:
-                direction = "opp"
-            elif static.prop_rot_dir == non_static.prop_rot_dir:
-                direction = "same"
-
-            direction_prefix = direction[0]
+        # Determine the adjustment key based on motion turns
+        if static.turns > 0 and non_static.turns > 0:
+            direction = "s" if static.prop_rot_dir == non_static.prop_rot_dir else "o"
             adjustment_key_str = (
-                f"({direction_prefix}, {non_static.turns}, {static.turns})"
+                f"({direction}, {self._normalize_turns(non_static)}, {self._normalize_turns(static)})"
             )
+        elif static.turns > 0:
+            direction = static.prop_rot_dir.lower()  # 'cw' or 'ccw'
+            adjustment_key_str = (
+                f"({direction}, {self._normalize_turns(non_static)}, {self._normalize_turns(static)})"
+            )
+
         letter_data = data.get(self.pictograph.letter, {})
         turn_data = letter_data.get(adjustment_key_str, {})
 
+        # Toggle the rotation angle override
         if "static_rot_angle" in turn_data:
             del turn_data["static_rot_angle"]
         else:
@@ -74,3 +77,7 @@ class RotationAngleOverrideManager:
         return letter_data.get(turns_tuple, {}).get(
             f"{arrow.motion.motion_type}_rot_angle"
         )
+
+    def _normalize_turns(self, arrow: Arrow) -> str:
+        """Normalize arrow turns to a string representation."""
+        return str(int(arrow.turns)) if arrow.turns in {0.0, 1.0, 2.0, 3.0} else str(arrow.turns)

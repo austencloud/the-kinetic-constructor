@@ -3,8 +3,11 @@ from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.TypeChecking import Letters
 from utilities.TypeChecking.letter_lists import (
     Type1_hybrid_letters,
+    Type1_non_hybrid_letters,
     Type3_letters,
     Type4_letters,
+    Type5_letters,
+    Type6_letters,
     non_hybrid_letters,
     Type2_letters,
 )
@@ -89,28 +92,34 @@ class TurnsTupleGenerator:
             )
 
     def _generate_Type4_key(self) -> str:
-        """Generate the key for Type3 letters, including 's' or 'o' based on rotation direction."""
-        dash = (
-            self.red_arrow if self.red_arrow.motion.check.is_dash() else self.blue_arrow
-        )
-        static = (
-            self.red_arrow
-            if self.red_arrow.motion.check.is_static()
-            else self.blue_arrow
-        )
-        if static.turns != 0 and static.motion.prop_rot_dir != NO_ROT:
-            direction = (
-                "s" if static.motion.prop_rot_dir == dash.motion.prop_rot_dir else "o"
-            )
-            return (
-                f"({direction}, {self._normalize_arrow_turns(dash)}, "
-                f"{self._normalize_arrow_turns(static)})"
-            )
+        dash = self.p.get.dash()
+        static = self.p.get.static()
+
+        if dash.turns == 0 or static.turns == 0:
+            # One of the turns is zero, use the prop_rot_dir of the turning motion
+            turning_motion = dash if dash.turns != 0 else static
+            return f"({turning_motion.prop_rot_dir}, {self._normalize_arrow_turns(dash)}, {self._normalize_arrow_turns(static)})"
         else:
-            return (
-                f"({self._normalize_arrow_turns(dash)}, "
-                f"{self._normalize_arrow_turns(static)})"
+            # Both have turns, use 's' or 'o'
+            direction = "s" if dash.prop_rot_dir == static.prop_rot_dir else "o"
+            return f"({direction}, {self._normalize_arrow_turns(dash)}, {self._normalize_arrow_turns(static)})"
+
+    def _generate_Type5_6_key(self) -> str:
+        if self.blue_arrow.turns == 0 or self.red_arrow.turns == 0:
+            # One of the turns is zero, use the prop_rot_dir of the turning arrow
+            turning_arrow = (
+                self.blue_arrow if self.blue_arrow.turns != 0 else self.red_arrow
             )
+            return f"({turning_arrow.motion.prop_rot_dir}, {self._normalize_arrow_turns(self.blue_arrow)}, {self._normalize_arrow_turns(self.red_arrow)})"
+        else:
+            # Both have turns, use 's' or 'o'
+            direction = (
+                "s"
+                if self.blue_arrow.motion.prop_rot_dir
+                == self.red_arrow.motion.prop_rot_dir
+                else "o"
+            )
+            return f"({direction}, {self._normalize_arrow_turns(self.blue_arrow)}, {self._normalize_arrow_turns(self.red_arrow)})"
 
     def _generate_color_key(self) -> str:
         """Generate the key based on the color of the arrows."""
@@ -138,10 +147,12 @@ class TurnsTupleGenerator:
         key_handlers = {
             tuple(Type1_hybrid_letters): self._generate_Type1_hybrid_key,
             ("S", "T"): self._generate_lead_state_key,
-            tuple(non_hybrid_letters): self._generate_color_key,
+            tuple(Type1_non_hybrid_letters): self._generate_color_key,
             tuple(Type2_letters): self._generate_Type2_key,
             tuple(Type3_letters): self._generate_Type3_key,
             tuple(Type4_letters): self._generate_Type4_key,
+            tuple(Type5_letters + Type6_letters): self._generate_Type5_6_key,
+
         }
 
         for key_set, handler in key_handlers.items():

@@ -1,15 +1,5 @@
 {
   "Φ": {
-    "(o, 0.5, 1)": {
-      "static_rot_angle": 0,
-      "static": [95, 0]
-    },
-    "(o, 2, 1.5)": {
-      "dash": [-80, -70]
-    },
-    "(s, 1, 0.5)": {
-      "dash": [-10, -80]
-    },
     "(s, 0.5, 1.5)": {
       "static_rot_angle": 0,
       "dash": [-85, -60],
@@ -19,18 +9,51 @@
       "static": [-5, -25],
       "dash": [-90, -60]
     },
+    "(s, 1, 0.5)": {
+      "dash": [-10, -80]
+    },
     "(s, 1, 1.5)": {
       "static_rot_angle": 0,
       "static": [-15, 0]
     },
+    "(s, 1.5, 1.5)": {
+      "static_rot_angle": 0
+    },
+    "(s, 1.5, 2)": {
+      "static_rot_angle": 0,
+      "static": [0, 30],
+      "dash": [15, -125]
+    },
     "(s, 2, 1.5)": {
       "static_rot_angle": 0,
       "static": [-20, 0],
-      "dash": [-75, -75]
+      "dash": [-80, -70]
+    },
+    "(s, 2, 2.5)": {
+      "static_rot_angle": 0,
+      "static": [0, 25],
+      "dash": [-100, -30]
+    },
+    "(s, 2, 3)": {
+      "static_rot_angle": 0,
+      "static": [25, -15]
     },
     "(s, 2.5, 1.5)": {
       "static": [0, 0],
       "static_rot_angle": 0
+    },
+    "(s, 2.5, 2)": {
+      "static_rot_angle": 0,
+      "static": [0, 25],
+      "dash": [-85, -50]
+    },
+    "(s, 2.5, 2.5)": {
+      "static_rot_angle": 0,
+      "static": [-10, 25],
+      "dash": [-85, -50]
+    },
+    "(s, 2.5, 3)": {
+      "dash": [-20, -80]
     },
     "(s, 3, 1.5)": {
       "static_rot_angle": 0,
@@ -44,35 +67,114 @@
     "(s, 3, 2.5)": {
       "dash": [-20, -80]
     },
-    "(s, 1.5, 1.5)": {
-      "static_rot_angle": 0
+    "(s, 3, 3)": {
+      "static": [-20, -15]
+    },
+    "(o, 0.5, 1)": {
+      "static_rot_angle": 0,
+      "static": [95, 0]
+    },
+    "(o, 1, 0.5)": {
+      "static_rot_angle": 0,
+      "static": [100, 100]
+    },
+    "(o, 1, 1)": {
+      "static_rot_angle": 0,
+      "static": [90, -10]
+    },
+    "(o, 1, 2.5)": {
+      "static_rot_angle": 0,
+      "static": [5, 30],
+      "dash": [0, -65]
+    },
+    "(o, 1, 3)": {
+      "static_rot_angle": 0,
+      "static": [20, -10]
+    },
+    "(o, 1.5, 0.5)": {
+      "static_rot_angle": 0,
+      "static": [100, 100]
+    },
+    "(o, 1.5, 1)": {
+      "static_rot_angle": 0,
+      "static": [90, -10]
+    },
+    "(o, 1.5, 2.5)": {
+      "static_rot_angle": 0,
+      "static": [5, 35],
+      "dash": [-10, -110]
+    },
+    "(o, 1.5, 3)": {
+      "static_rot_angle": 0,
+      "static": [25, -15]
     },
     "(o, 2, 0.5)": {
       "static_rot_angle": 0,
       "static": [100, 100]
     },
+    "(o, 2, 1.5)": {
+      "dash": [-80, -70]
+    },
+    "(o, 2, 3)": {
+      "static_rot_angle": 0,
+      "static": [25, -15]
+    },
     "(o, 2.5, 0.5)": {
       "static_rot_angle": 0,
       "static": [100, 100]
+    },
+    "(o, 2.5, 3)": {
+      "static_rot_angle": 0,
+      "static": [25, -15]
     },
     "(o, 3, 0.5)": {
       "static_rot_angle": 0,
       "static": [100, 100]
     },
-    "(s, 1.5, 2)": {
+    "(o, 3, 3)": {
       "static_rot_angle": 0,
-      "static": [0, 30],
-      "dash": [15, -125]
+      "static": [25, -15]
     },
-    "(s, 2.5, 2.5)": {
+    "(o, 0.5, 0.5)": {
       "static_rot_angle": 0,
-      "static": [-10, 25],
+      "static": [100, 100]
+    },
+    "(o, 3, 1)": {
+      "static_rot_angle": 0,
+      "static": [90, -10]
+    },
+    "(cw, 0, 0.5)": {
+      "static": [-100, -100]
+    },
+    "(ccw, 0, 0.5)": {
+      "static_rot_angle": 0,
+      "static": [100, 100]
+    },
+    "(ccw, 0, 1)": {
+      "static_rot_angle": 0,
+      "static": [90, -10]
+    },
+    "(ccw, 0, 2.5)": {
+      "static_rot_angle": 0,
+      "static": [0, 30]
+    },
+    "(o, 0.5, 2.5)": {
+      "static_rot_angle": 0,
+      "static": [0, 35],
+      "dash": [-100, -50]
+    },
+    "(o, 0.5, 3)": {
+      "static_rot_angle": 0,
+      "static": [25, -15]
+    },
+    "(o, 2.5, 2.5)": {
+      "static_rot_angle": 0,
+      "static": [15, 35],
       "dash": [-85, -50]
     },
-    "(s, 2.5, 2)": {
+    "(o, 3, 2.5)": {
       "static_rot_angle": 0,
-      "static": [0, 25],
-      "dash": [-100, -30]
+      "static": [5, 30]
     }
   }
 }

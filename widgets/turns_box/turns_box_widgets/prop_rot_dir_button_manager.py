@@ -131,21 +131,7 @@ class PropRotDirButtonManager:
         self.cw_button.show()
         self.ccw_button.show()
 
-    def _toggle_button_sets(
-        self, buttons_to_hide: List[QPushButton], buttons_to_show: List[QPushButton]
-    ) -> None:
-        for hide_button, show_button in zip(buttons_to_hide, buttons_to_show):
-            self._replace_and_toggle(hide_button, show_button)
-
-    def _replace_and_toggle(
-        self, button_to_hide: QPushButton, button_to_show: QPushButton
-    ) -> None:
-        layout = self.turns_box.header_widget.layout
-        layout.replaceWidget(button_to_hide, button_to_show)
-        button_to_hide.hide()
-        button_to_show.show()
-
-    def hide_buttons(self) -> None:
+    def hide_prop_rot_dir_buttons(self) -> None:
         for button in self.prop_rot_dir_buttons:
             button.hide()
 
@@ -165,4 +151,4 @@ class PropRotDirButtonManager:
                 self.show_prop_rot_dir_buttons()
         elif new_turns == 0:
             self.previous_turns = 0
-            self.hide_buttons()
+            self.hide_prop_rot_dir_buttons()
