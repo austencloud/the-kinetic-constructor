@@ -126,7 +126,7 @@ class TurnsBox(QFrame):
                 self.turns_panel.filter_tab.section.width() // 20,
                 self.turns_panel.filter_tab.section.width() // 20,
             )
-            button.setIconSize(button.size() * 0.8)
+            button.setIconSize(button.size() * 0.9)
         for (
             button
         ) in (
@@ -140,9 +140,8 @@ class TurnsBox(QFrame):
                 self.turns_panel.filter_tab.section.width() // 20,
                 self.turns_panel.filter_tab.section.width() // 20,
             )
-            button.setIconSize(button.size() * 0.8)
+            button.setIconSize(button.size() * 0.9)
         self.header_widget.setMinimumHeight(
             self.turns_panel.filter_tab.section.width() // 20
-        
         )
         self.turns_widget.resize_turns_widget()
