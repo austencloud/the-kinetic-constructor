@@ -27,10 +27,10 @@ class ScrollAreaSectionTypeLabel(QLabel):
         "-": "#000000",  # black
     }
 
-    def __init__(self, scroll_area_section: "SectionWidget") -> None:
+    def __init__(self, section_widget: "SectionWidget") -> None:
         super().__init__()
-        self.scroll_area_section = scroll_area_section
-        self.set_styled_text(scroll_area_section.letter_type)
+        self.section = section_widget
+        self.set_styled_text(section_widget.letter_type)
 
     def set_styled_text(self, letter_type: str) -> None:
         type_words = self.TYPE_MAP.get(letter_type, "").split("-")
@@ -48,10 +48,9 @@ class ScrollAreaSectionTypeLabel(QLabel):
 
         styled_text = f"{letter_type[0:4]} {letter_type[4]}: {styled_type_name}"
         self.setText(styled_text)
-        font_size = self.scroll_area_section.scroll_area.width() // 34
+        font_size = self.section.scroll_area.width() // 34
         self.setStyleSheet(f"font-size: {font_size}px; font-weight: bold;")
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setSizePolicy(
             QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         )
-        self.setMinimumSize(self.sizeHint())
