@@ -35,21 +35,7 @@ class PropRotDirButtonManager:
         self.prop_rot_dir_buttons: List[
             PropRotDirButton
         ] = self._setup_prop_rot_dir_buttons()
-        self.vtg_dir_buttons: List[VtgDirButton] = self._setup_vtg_dir_buttons()
-        self.buttons = self.prop_rot_dir_buttons + self.vtg_dir_buttons
-
-    def _setup_vtg_dir_buttons(self) -> List[QPushButton]:
-        self.same_button: VtgDirButton = ButtonFactory.create_vtg_dir_button(
-            f"{ICON_DIR}same_direction.png", lambda: self._set_vtg_dir(SAME), SAME
-        )
-        self.opp_button: VtgDirButton = ButtonFactory.create_vtg_dir_button(
-            f"{ICON_DIR}opp_direction.png", lambda: self._set_vtg_dir(OPP), OPP
-        )
-        self.same_button.unpress()
-        self.opp_button.unpress()
-        self.same_button.hide()
-        self.opp_button.hide()
-        return [self.same_button, self.opp_button]
+        self.buttons = self.prop_rot_dir_buttons
 
     def _setup_prop_rot_dir_buttons(self) -> List[QPushButton]:
         self.cw_button: PropRotDirButton = ButtonFactory.create_prop_rot_dir_button(
@@ -67,17 +53,6 @@ class PropRotDirButtonManager:
         self.cw_button.hide()
         self.ccw_button.hide()
         return [self.cw_button, self.ccw_button]
-
-    def _vtg_dir_callback(self, direction: VtgDirections) -> Callable:
-        def callback() -> None:
-            self._set_vtg_dir(direction)
-
-        return callback
-
-
-    def _set_vtg_dir(self, vtg_dir: VtgDirections) -> None:
-        self._update_pictographs_vtg_dir(vtg_dir)
-        self._update_button_states(self.vtg_dir_buttons, vtg_dir)
 
     def _set_prop_rot_dir(self, prop_rot_dir: PropRotDirs) -> None:
         self._update_pictographs_prop_rot_dir(prop_rot_dir)
@@ -147,14 +122,14 @@ class PropRotDirButtonManager:
         for button in buttons:
             if button.prop_rot_dir == active_direction:
                 button.press()
+                self.turns_box.prop_rot_dir_btn_state[button.prop_rot_dir] = True
             else:
                 button.unpress()
-
-    def show_vtg_dir_buttons(self) -> None:
-        self._toggle_button_sets(self.prop_rot_dir_buttons, self.vtg_dir_buttons)
+                self.turns_box.prop_rot_dir_btn_state[button.prop_rot_dir] = False
 
     def show_prop_rot_dir_buttons(self) -> None:
-        self._toggle_button_sets(self.vtg_dir_buttons, self.prop_rot_dir_buttons)
+        self.cw_button.show()
+        self.ccw_button.show()
 
     def _toggle_button_sets(
         self, buttons_to_hide: List[QPushButton], buttons_to_show: List[QPushButton]
@@ -171,7 +146,7 @@ class PropRotDirButtonManager:
         button_to_show.show()
 
     def hide_buttons(self) -> None:
-        for button in self.prop_rot_dir_buttons + self.vtg_dir_buttons:
+        for button in self.prop_rot_dir_buttons:
             button.hide()
 
     def _opposite_prop_rot_dir(self, prop_rot_dir: PropRotDirs) -> PropRotDirs:
@@ -185,11 +160,9 @@ class PropRotDirButtonManager:
         self.ccw_button.unpress()
 
     def update_visibility_based_on_motion(self, letter_type, new_turns) -> None:
-            if new_turns > 0:
-                if self.previous_turns == 0:
-                    self.show_prop_rot_dir_buttons()
-                    self.same_button.press()
-                    self.previous_turns = new_turns
-            elif new_turns == 0:
-                self.previous_turns = 0
-                self.hide_buttons()
+        if new_turns > 0:
+            if self.previous_turns == 0:
+                self.show_prop_rot_dir_buttons()
+        elif new_turns == 0:
+            self.previous_turns = 0
+            self.hide_buttons()

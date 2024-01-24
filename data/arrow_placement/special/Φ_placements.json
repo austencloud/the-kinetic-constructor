@@ -58,6 +58,21 @@
     "(o, 3, 0.5)": {
       "static_rot_angle": 0,
       "static": [100, 100]
+    },
+    "(s, 1.5, 2)": {
+      "static_rot_angle": 0,
+      "static": [0, 30],
+      "dash": [15, -125]
+    },
+    "(s, 2.5, 2.5)": {
+      "static_rot_angle": 0,
+      "static": [-10, 25],
+      "dash": [-85, -50]
+    },
+    "(s, 2.5, 2)": {
+      "static_rot_angle": 0,
+      "static": [0, 25],
+      "dash": [-100, -30]
     }
   }
 }

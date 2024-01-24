@@ -67,7 +67,22 @@ class TurnsUpdater:
                 other_motion
             )
         elif self.turns_box.turns_panel.filter_tab.section.letter_type in [Type4]:
-            motion.prop_rot_dir = self._get_default_prop_rot_dir_for_type4_type5_type6()
+            if self.turns_box.prop_rot_dir_btn_state[CLOCKWISE]:
+                motion.prop_rot_dir = CLOCKWISE
+            elif self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE]:
+                motion.prop_rot_dir = COUNTER_CLOCKWISE
+            elif (
+                not self.turns_box.prop_rot_dir_btn_state[CLOCKWISE]
+                and not self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE]
+            ):
+                motion.prop_rot_dir = (
+                    self._get_default_prop_rot_dir_for_type4_type5_type6()
+                )
+            # press the correct button depending on the prop rot dir
+            if motion.prop_rot_dir == CLOCKWISE:
+                self.turns_box.prop_rot_dir_button_manager.cw_button.press()
+            elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                self.turns_box.prop_rot_dir_button_manager.ccw_button.press()
 
     def _determine_prop_rot_dir_for_type2_type3(
         self, other_motion: "Motion"
@@ -100,7 +115,7 @@ class TurnsUpdater:
         """Set the vtg direction state to default."""
         self.turns_box.prop_rot_dir_btn_state[SAME] = True
         self.turns_box.prop_rot_dir_btn_state[OPP] = False
-        
+
     def _clamp_turns(self, turns: Turns) -> Turns:
         """Clamp the turns value to be within allowable range."""
         return max(0, min(3, turns))

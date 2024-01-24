@@ -129,9 +129,9 @@ class ArrowLocationCalculator:
 
     def _default_dash_location(self) -> Locations:
         location_map = {
-            (NORTH, SOUTH): WEST,
+            (NORTH, SOUTH): EAST,
             (EAST, WEST): SOUTH,
-            (SOUTH, NORTH): EAST,
+            (SOUTH, NORTH): WEST,
             (WEST, EAST): NORTH,
         }
         return location_map.get((self.a.motion.start_loc, self.a.motion.end_loc))
