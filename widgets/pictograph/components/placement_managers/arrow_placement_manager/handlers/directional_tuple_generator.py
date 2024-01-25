@@ -17,6 +17,7 @@ from constants import (
     WEST,
 )
 from objects.motion.motion import Motion
+from utilities.TypeChecking.letter_lists import Type5_letters
 
 
 class DirectionalTupleGenerator:
@@ -77,7 +78,7 @@ class DirectionalTupleGenerator:
             (STATIC, COUNTER_CLOCKWISE): [(-x, -y), (y, -x), (x, y), (-y, x)],
         }
 
-        Ψ_dash_zero_turns_directional_tuples = {
+        Type5_zero_turns_directional_tuples = {
             (BLUE, (NORTH, SOUTH)): [(x, y), (-y, x), (-x, -y), (y, x)],
             (BLUE, (EAST, WEST)): [(-x, y), (-y, -x), (-x, -y), (y, x)],
             (BLUE, (SOUTH, NORTH)): [(x, y), (-y, -x), (-x, -y), (y, -x)],
@@ -88,8 +89,8 @@ class DirectionalTupleGenerator:
             (RED, (WEST, EAST)): [(x, y), (-y, x), (x, -y), (y, x)],
         }
 
-        if self.motion.pictograph.letter == "Ψ-" and self.motion.turns == 0:
-            return Ψ_dash_zero_turns_directional_tuples.get(
+        if self.motion.pictograph.letter in Type5_letters and self.motion.turns == 0:
+            return Type5_zero_turns_directional_tuples.get(
                 (self.motion.color, (self.motion.start_loc, self.motion.end_loc))
             )
 

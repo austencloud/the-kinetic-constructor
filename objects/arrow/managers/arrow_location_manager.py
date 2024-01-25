@@ -48,8 +48,8 @@ class ArrowLocationCalculator:
 
     def get_dash_location(self) -> Locations:
         self.other_motion = self.pictograph.get.other_motion(self.a.motion)
-        if self.a.pictograph.letter == "Ψ-":
-            return self._get_Ψ_dash_location()
+        if self.a.pictograph.letter in ["Φ-", "Ψ-"]:
+            return self._get_Φ_dash_Ψ_dash_location()
         elif self.a.motion.turns == 0:
             return self._dash_location_zero_turns()
         elif self.a.motion.turns != 0:
@@ -94,7 +94,7 @@ class ArrowLocationCalculator:
         }
         return loc_map[motion.prop_rot_dir][motion.start_loc]
 
-    def _get_Ψ_dash_location(self) -> Locations:
+    def _get_Φ_dash_Ψ_dash_location(self) -> Locations:
         self.other_motion = self.pictograph.get.other_motion(self.a.motion)
         if self.a.motion.turns == 0 and self.other_motion.turns == 0:
             location_map = {
