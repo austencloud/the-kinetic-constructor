@@ -1,14 +1,20 @@
 from typing import List, Tuple
 from constants import (
+    BLUE,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     DASH,
+    EAST,
     NO_ROT,
+    NORTH,
     PRO,
     ANTI,
+    RED,
+    SOUTH,
     STATIC,
     SAME,
     OPP,
+    WEST,
 )
 from objects.motion.motion import Motion
 
@@ -47,7 +53,10 @@ class DirectionalTupleGenerator:
             else [(x, y), (-y, x), (-x, -y), (y, -x)]  # COUNTER_CLOCKWISE
         )
 
-        no_rot_dash_vs_dash_directional_tuples = [(x, y), (-y, x), (-x, -y), (y, -x)]
+        no_rot_dash_vs_dash_directional_tuples = {
+            RED: [(x, y), (-y, x), (-x, -y), (y, -x)],
+            BLUE: [(-x, y), (-y, -x), (x, -y), (y, x)]
+        }
 
         no_rot_dash_vs_static_directional_tuples = [(x, y), (-y, x), (-x, -y), (y, -x)]
 
@@ -68,7 +77,23 @@ class DirectionalTupleGenerator:
             (STATIC, COUNTER_CLOCKWISE): [(-x, -y), (y, -x), (x, y), (-y, x)],
         }
 
-        if (
+        Ψ_dash_zero_turns_directional_tuples = {
+            (BLUE, (NORTH, SOUTH)): [(x, y), (-y, x), (-x, -y), (y, x)],
+            (BLUE, (EAST, WEST)): [(-x, y), (-y, -x), (-x, -y), (y, x)],
+            (BLUE, (SOUTH, NORTH)): [(x, y), (-y, -x), (-x, -y), (y, -x)],
+            (BLUE, (WEST, EAST)): [(x, y), (-y, -x), (x, -y), (-y, x)],
+            (RED, (NORTH, SOUTH)): [(-x, y), (-y, x), (x, -y), (y, x)],
+            (RED, (EAST, WEST)): [(-x, y), (-y, x), (-x, -y), (y, x)],
+            (RED, (SOUTH, NORTH)): [(-x, y), (-y, -x), (x, -y), (y, -x)],
+            (RED, (WEST, EAST)): [(x, y), (-y, x), (x, -y), (y, x)],
+        }
+
+        if self.motion.pictograph.letter == "Ψ-" and self.motion.turns == 0:
+            return Ψ_dash_zero_turns_directional_tuples.get(
+                (self.motion.color, (self.motion.start_loc, self.motion.end_loc))
+            )
+
+        elif (
             motion_type == DASH
             and prop_rot_dir == NO_ROT
             and self.other_motion.motion_type == PRO
@@ -85,7 +110,9 @@ class DirectionalTupleGenerator:
             and prop_rot_dir == NO_ROT
             and self.other_motion.motion_type == DASH
         ):
-            return no_rot_dash_vs_dash_directional_tuples
+            return no_rot_dash_vs_dash_directional_tuples.get(
+                self.motion.color, []
+            )
         elif (
             motion_type == DASH
             and prop_rot_dir == NO_ROT

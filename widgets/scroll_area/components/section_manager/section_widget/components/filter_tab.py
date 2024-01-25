@@ -1,7 +1,20 @@
 from typing import TYPE_CHECKING, List
 from PyQt6.QtWidgets import QTabWidget, QHBoxLayout
 from Enums import LetterType
-from constants import DASH, MOTION_TYPE, COLOR, LEAD_STATE, PRO, ANTI, STATIC
+from constants import (
+    BLUE,
+    CLOCKWISE,
+    COUNTER_CLOCKWISE,
+    DASH,
+    MOTION_TYPE,
+    COLOR,
+    LEAD_STATE,
+    NO_ROT,
+    PRO,
+    ANTI,
+    RED,
+    STATIC,
+)
 from utilities.TypeChecking.TypeChecking import (
     LetterTypes,
     Letters,
@@ -162,6 +175,29 @@ class FilterTab(QTabWidget):
                 motion.turns_manager.set_turns(turns_values[MOTION_TYPE][motion_type])
 
             if motion.color in turns_values[COLOR]:
+                if motion.motion_type in [DASH, STATIC]:
+                    if motion.color == BLUE:
+                        if self.color_turns_panel.boxes[0].prop_rot_dir_btn_state[
+                            CLOCKWISE
+                        ]:
+                            motion.prop_rot_dir = CLOCKWISE
+                        elif self.color_turns_panel.boxes[0].prop_rot_dir_btn_state[
+                            COUNTER_CLOCKWISE
+                        ]:
+                            motion.prop_rot_dir = COUNTER_CLOCKWISE
+                        else:
+                            motion.prop_rot_dir = NO_ROT
+                    elif motion.color == RED:
+                        if self.color_turns_panel.boxes[1].prop_rot_dir_btn_state[
+                            CLOCKWISE
+                        ]:
+                            motion.prop_rot_dir = CLOCKWISE
+                        elif self.color_turns_panel.boxes[1].prop_rot_dir_btn_state[
+                            COUNTER_CLOCKWISE
+                        ]:
+                            motion.prop_rot_dir = COUNTER_CLOCKWISE
+                        else:
+                            motion.prop_rot_dir = NO_ROT
                 motion.turns_manager.set_turns(turns_values[COLOR][motion.color])
 
             if (

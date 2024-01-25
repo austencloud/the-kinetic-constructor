@@ -1,9 +1,6 @@
 from typing import Dict, List, Tuple
-
 import pandas as pd
-from utilities.dataframe_generators.base_dataframe_generator import (
-    BaseDataFrameGenerator,
-)
+from .base_dataframe_generator import BaseDataFrameGenerator
 from constants import *
 from utilities.TypeChecking.letter_lists import Type2_letters
 from utilities.TypeChecking.TypeChecking import Locations

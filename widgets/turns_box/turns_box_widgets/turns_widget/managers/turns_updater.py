@@ -80,8 +80,12 @@ class TurnsUpdater:
             # press the correct button depending on the prop rot dir
             if motion.prop_rot_dir == CLOCKWISE:
                 self.turns_box.prop_rot_dir_button_manager.cw_button.press()
+                self.turns_box.prop_rot_dir_btn_state[CLOCKWISE] = True
+                self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE] = False
             elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
                 self.turns_box.prop_rot_dir_button_manager.ccw_button.press()
+                self.turns_box.prop_rot_dir_btn_state[CLOCKWISE] = False
+                self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE] = True
 
     def _determine_prop_rot_dir_for_type2_type3(
         self, other_motion: "Motion"

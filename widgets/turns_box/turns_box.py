@@ -47,9 +47,8 @@ class TurnsBox(QFrame):
         self.turns_panel: "TurnsPanel" = turns_panel
         self.font_size = self.turns_panel.width() // 20
         self.turn_display_border = 2
-        self.vtg_dir_btn_state: Dict[str, bool] = {SAME: True, OPP: False}
         self.prop_rot_dir_btn_state: Dict[str, bool] = {
-            CLOCKWISE: True,
+            CLOCKWISE: False,
             COUNTER_CLOCKWISE: False,
         }
         self._setup_attribute_type()

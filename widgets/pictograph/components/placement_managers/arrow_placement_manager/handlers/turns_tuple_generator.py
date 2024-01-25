@@ -107,7 +107,7 @@ class TurnsTupleGenerator:
     def _generate_Type5_6_key(self) -> str:
         if self.blue_arrow.turns == 0 and self.red_arrow.turns == 0:
             return f"({self._normalize_arrow_turns(self.blue_arrow)}, {self._normalize_arrow_turns(self.red_arrow)})"
-        
+
         if self.blue_arrow.turns == 0 or self.red_arrow.turns == 0:
             turning_arrow = (
                 self.blue_arrow if self.blue_arrow.turns != 0 else self.red_arrow
@@ -205,12 +205,70 @@ class TurnsTupleGenerator:
             vtg_dir = SAME if static.prop_rot_dir == dash.prop_rot_dir else OPP
             return f"({vtg_dir[0]}, {self._normalize_arrow_turns(dash)}, {self._normalize_arrow_turns(static)}, {dash_open_close_state}, {static_open_close_state})"
 
-    def _generate_Λ_dash_key(self, blue_dash, red_dash) -> str:
-        # Determine the opening/closing direction for Λ-
-        open_close_state = self._determine_lambda_open_close_state(blue_dash, red_dash)
+    def _generate_Λ_dash_key(self) -> str:
+        blue_dash = self.p.blue_motion
+        red_dash = self.p.red_motion
 
-        # Generate the tuple key for Λ-
-        return f"({blue_dash.motion.prop_rot_dir}, {self._normalize_arrow_turns(blue_dash)}, {self._normalize_arrow_turns(red_dash)}, {open_close_state})"
+        blue_dash_direction_map = {
+            (EAST, NORTH, CLOCKWISE): OPENING,
+            (EAST, NORTH, COUNTER_CLOCKWISE): CLOSING,
+            (EAST, SOUTH, CLOCKWISE): CLOSING,
+            (EAST, SOUTH, COUNTER_CLOCKWISE): OPENING,
+            (WEST, NORTH, CLOCKWISE): CLOSING,
+            (WEST, NORTH, COUNTER_CLOCKWISE): OPENING,
+            (WEST, SOUTH, CLOCKWISE): OPENING,
+            (WEST, SOUTH, COUNTER_CLOCKWISE): CLOSING,
+            (NORTH, EAST, CLOCKWISE): CLOSING,
+            (NORTH, EAST, COUNTER_CLOCKWISE): OPENING,
+            (NORTH, WEST, CLOCKWISE): OPENING,
+            (NORTH, WEST, COUNTER_CLOCKWISE): CLOSING,
+            (SOUTH, EAST, CLOCKWISE): OPENING,
+            (SOUTH, EAST, COUNTER_CLOCKWISE): CLOSING,
+            (SOUTH, WEST, CLOCKWISE): CLOSING,
+            (SOUTH, WEST, COUNTER_CLOCKWISE): OPENING,
+        }
+        red_dash_direction_map = {
+            (EAST, NORTH, CLOCKWISE): CLOSING,
+            (EAST, NORTH, COUNTER_CLOCKWISE): OPENING,
+            (EAST, SOUTH, CLOCKWISE): OPENING,
+            (EAST, SOUTH, COUNTER_CLOCKWISE): CLOSING,
+            (WEST, NORTH, CLOCKWISE): OPENING,
+            (WEST, NORTH, COUNTER_CLOCKWISE): CLOSING,
+            (WEST, SOUTH, CLOCKWISE): CLOSING,
+            (WEST, SOUTH, COUNTER_CLOCKWISE): OPENING,
+            (NORTH, EAST, CLOCKWISE): OPENING,
+            (NORTH, EAST, COUNTER_CLOCKWISE): CLOSING,
+            (NORTH, WEST, CLOCKWISE): CLOSING,
+            (NORTH, WEST, COUNTER_CLOCKWISE): OPENING,
+            (SOUTH, EAST, CLOCKWISE): CLOSING,
+            (SOUTH, EAST, COUNTER_CLOCKWISE): OPENING,
+            (SOUTH, WEST, CLOCKWISE): OPENING,
+            (SOUTH, WEST, COUNTER_CLOCKWISE): CLOSING,
+        }
+        if blue_dash.turns == 0 and red_dash.turns > 0:
+            red_dash_open_close_state = red_dash_direction_map.get(
+                (blue_dash.end_loc, red_dash.end_loc, red_dash.prop_rot_dir), ""
+            )
+            return f"({self._normalize_arrow_turns(blue_dash)}, {self._normalize_arrow_turns(red_dash)}, {red_dash_open_close_state})"
+
+        elif red_dash.turns == 0 and blue_dash.turns > 0:
+            blue_dash_open_close_state = blue_dash_direction_map.get(
+                (blue_dash.end_loc, red_dash.end_loc, blue_dash.prop_rot_dir), ""
+            )
+            return f"({self._normalize_arrow_turns(blue_dash)}, {self._normalize_arrow_turns(red_dash)}, {blue_dash_open_close_state})"
+
+        elif red_dash.turns > 0 and blue_dash.turns > 0:
+            red_dash_open_close_state = red_dash_direction_map.get(
+                (blue_dash.end_loc, red_dash.end_loc, red_dash.prop_rot_dir), ""
+            )
+            blue_dash_open_close_state = blue_dash_direction_map.get(
+                (blue_dash.end_loc, red_dash.end_loc, blue_dash.prop_rot_dir), ""
+            )
+            vtg_dir = SAME if red_dash.prop_rot_dir == blue_dash.prop_rot_dir else OPP
+            return f"({vtg_dir[0]}, {self._normalize_arrow_turns(blue_dash)}, {self._normalize_arrow_turns(red_dash)}, {blue_dash_open_close_state}, {red_dash_open_close_state})"
+
+        elif red_dash.turns == 0 and blue_dash.turns == 0:
+            return f"({self._normalize_arrow_turns(blue_dash)}, {self._normalize_arrow_turns(red_dash)})"
 
     def generate_turns_tuple(self, letter: Letters) -> str:
         """Generate a key based on the letter and motion details."""

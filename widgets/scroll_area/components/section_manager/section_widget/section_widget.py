@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Dict
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QSizePolicy
+from constants import OPP, SAME
 from utilities.TypeChecking.TypeChecking import LetterTypes
 from widgets.pictograph.pictograph import Pictograph
 from widgets.turns_box.turns_box_widgets.vtg_dir_button_manager import (
@@ -20,6 +21,7 @@ class SectionWidget(QWidget):
         super().__init__(scroll_area)
         self.scroll_area = scroll_area
         self.letter_type = letter_type
+        self.vtg_dir_btn_state: Dict[str, bool] = {SAME: False, OPP: False}
 
         # Components
         self.type_label = ScrollAreaSectionTypeLabel(self)

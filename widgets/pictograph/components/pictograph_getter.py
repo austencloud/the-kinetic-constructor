@@ -4,6 +4,7 @@ from Enums import LetterType
 from constants import *
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
+from utilities.TypeChecking.MotionAttributes import Locations
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import (
     MotionTypes,
@@ -65,3 +66,12 @@ class PictographGetter:
 
     def static(self) -> Motion:
         return self.p.motions[RED if self.p.red_motion.check.is_static() else BLUE]
+
+    def opposite_location(self, loc: Locations) -> Locations:
+        opposite_locations = {
+            NORTH: SOUTH,
+            SOUTH: NORTH,
+            EAST: WEST,
+            WEST: EAST
+        }
+        return opposite_locations.get(loc)

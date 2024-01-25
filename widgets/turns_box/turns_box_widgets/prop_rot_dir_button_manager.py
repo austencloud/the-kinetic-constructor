@@ -137,7 +137,9 @@ class PropRotDirButtonManager:
     def hide_prop_rot_dir_buttons(self) -> None:
         for button in self.prop_rot_dir_buttons:
             button.hide()
-
+        self.turns_box.prop_rot_dir_btn_state[CLOCKWISE] = False
+        self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE] = False
+        
     def _opposite_prop_rot_dir(self, prop_rot_dir: PropRotDirs) -> PropRotDirs:
         return {
             CLOCKWISE: COUNTER_CLOCKWISE,
