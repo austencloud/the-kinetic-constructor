@@ -72,7 +72,7 @@
     },
     "(o, 0.5, 1)": {
       "static_rot_angle": 0,
-      "static": [95, 0]
+      "static": [90, -10]
     },
     "(o, 1, 0.5)": {
       "static_rot_angle": 0,
@@ -182,6 +182,10 @@
     },
     "(o, 2.5, 1.5)": {
       "static": [25, 0]
+    },
+    "(o, 2, 1)": {
+      "static_rot_angle": 0,
+      "static": [90, -10]
     }
   }
 }
