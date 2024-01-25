@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, List
 from PyQt6.QtWidgets import QTabWidget, QHBoxLayout
 from Enums import LetterType
-from constants import MOTION_TYPE, COLOR, LEAD_STATE, PRO, ANTI
+from constants import DASH, MOTION_TYPE, COLOR, LEAD_STATE, PRO, ANTI, STATIC
 from utilities.TypeChecking.TypeChecking import (
     LetterTypes,
     Letters,
@@ -41,7 +41,7 @@ class FilterTab(QTabWidget):
         for pictograph in self.section.scroll_area.pictographs.values():
             if (
                 LetterType.get_letter_type(pictograph.letter)
-                == self.section.letter_type 
+                == self.section.letter_type
             ):
                 for motion in pictograph.motions.values():
                     motion.turns_manager.set_turns(0)
@@ -51,8 +51,7 @@ class FilterTab(QTabWidget):
                 box.turns_widget.display_manager.update_turns_display("0")
                 box.prop_rot_dir_button_manager.hide_prop_rot_dir_buttons()
         self.section.vtg_dir_button_manager.hide_vtg_dir_buttons()
-        
-                
+
     def get_motion_types_from_letter_type(
         self, letter_type: LetterTypes
     ) -> List[MotionAttributes]:
@@ -76,7 +75,7 @@ class FilterTab(QTabWidget):
         tabs_to_hide = self._determine_tabs_to_hide(tabs_to_show)
         self.show_tabs(tabs_to_show)
         self.hide_tabs(tabs_to_hide)
-        self.motion_type_turns_panel.show_boxes_based_on_chosen_letters(
+        self.motion_type_turns_panel.show_motion_type_boxes_based_on_chosen_letters(
             selected_letters
         )
 
@@ -89,7 +88,12 @@ class FilterTab(QTabWidget):
         for letter_str in selected_letters:
             motion_types_present.update(motion_type_letter_combinations[letter_str])
 
-        if motion_types_present == {PRO} or motion_types_present == {ANTI}:
+        if (
+            motion_types_present == {PRO}
+            or motion_types_present == {ANTI}
+            or motion_types_present == {DASH}
+            or motion_types_present == {STATIC}
+        ):
             tabs_to_show.append(COLOR)
         elif len(motion_types_present) > 1:
             tabs_to_show.extend([MOTION_TYPE, COLOR])

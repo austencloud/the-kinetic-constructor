@@ -13,7 +13,9 @@ from utilities.TypeChecking.letter_lists import (
 )
 
 if TYPE_CHECKING:
-    from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab import FilterTab
+    from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab import (
+        FilterTab,
+    )
 
 
 class TurnsPanel(QFrame):
@@ -25,7 +27,7 @@ class TurnsPanel(QFrame):
         self.boxes: List[TurnsBox] = self.turns_box_factory.create_boxes()
         self.setup_layouts()
         self.visible_boxes: List[TurnsBox] = []
-        
+
     def setup_layouts(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.setContentsMargins(0, 0, 0, 0)
@@ -35,7 +37,7 @@ class TurnsPanel(QFrame):
             self.layout.addWidget(box)
             box.setObjectName("TurnsBox")
 
-    def show_boxes_based_on_chosen_letters(
+    def show_motion_type_boxes_based_on_chosen_letters(
         self, selected_letters: List[Letters]
     ) -> None:
         relevant_selected_letters = []

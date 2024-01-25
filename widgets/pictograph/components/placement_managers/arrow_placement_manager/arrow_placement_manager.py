@@ -31,7 +31,6 @@ class ArrowPlacementManager:
         self.letter = self.pictograph.letter
         for arrow in self.pictograph.arrows.values():
             self.update_arrow_position(arrow)
-            # self.update_arrow_position(arrow.ghost)
 
     def update_arrow_position(self, arrow: Arrow) -> None:
         initial_pos = self.initial_pos_calculator.get_initial_pos(arrow)

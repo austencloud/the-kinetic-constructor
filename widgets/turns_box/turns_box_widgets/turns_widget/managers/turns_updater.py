@@ -49,7 +49,6 @@ class TurnsUpdater:
             motion.prop_rot_dir = NO_ROT
             self.turns_widget.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.unpress_vtg_buttons()
             if hasattr(self.turns_box, "prop_rot_dir_button_manager"):
-                
                 self.turns_widget.turns_box.prop_rot_dir_button_manager.unpress_prop_rot_dir_buttons()
 
         elif motion.turns == 0:
@@ -62,7 +61,11 @@ class TurnsUpdater:
             motion.prop_rot_dir = self._determine_prop_rot_dir_for_type2_type3(
                 other_motion
             )
-        elif self.turns_box.turns_panel.filter_tab.section.letter_type in [Type4]:
+        elif self.turns_box.turns_panel.filter_tab.section.letter_type in [
+            Type4,
+            Type5,
+            Type6,
+        ]:
             if self.turns_box.prop_rot_dir_btn_state[CLOCKWISE]:
                 motion.prop_rot_dir = CLOCKWISE
             elif self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE]:

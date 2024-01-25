@@ -98,23 +98,22 @@ class TurnsTupleGenerator:
         if dash.turns == 0 and static.turns == 0:
             return f"({self._normalize_arrow_turns(dash)}, {self._normalize_arrow_turns(static)})"
         elif dash.turns == 0 or static.turns == 0:
-            # One of the turns is zero, use the prop_rot_dir of the turning motion
             turning_motion = dash if dash.turns != 0 else static
             return f"({turning_motion.prop_rot_dir}, {self._normalize_arrow_turns(dash)}, {self._normalize_arrow_turns(static)})"
         else:
-            # Both have turns, use 's' or 'o'
             direction = "s" if dash.prop_rot_dir == static.prop_rot_dir else "o"
             return f"({direction}, {self._normalize_arrow_turns(dash)}, {self._normalize_arrow_turns(static)})"
 
     def _generate_Type5_6_key(self) -> str:
+        if self.blue_arrow.turns == 0 and self.red_arrow.turns == 0:
+            return f"({self._normalize_arrow_turns(self.blue_arrow)}, {self._normalize_arrow_turns(self.red_arrow)})"
+        
         if self.blue_arrow.turns == 0 or self.red_arrow.turns == 0:
-            # One of the turns is zero, use the prop_rot_dir of the turning arrow
             turning_arrow = (
                 self.blue_arrow if self.blue_arrow.turns != 0 else self.red_arrow
             )
             return f"({turning_arrow.motion.prop_rot_dir}, {self._normalize_arrow_turns(self.blue_arrow)}, {self._normalize_arrow_turns(self.red_arrow)})"
         else:
-            # Both have turns, use 's' or 'o'
             direction = (
                 "s"
                 if self.blue_arrow.motion.prop_rot_dir
