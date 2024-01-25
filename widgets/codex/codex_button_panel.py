@@ -33,13 +33,18 @@ class CodexButtonPanel(QFrame):
         ) in self.letter_btn_frame.button_manager.buttons.items():
             button.setFlat(True)
             button.setStyleSheet(button.get_button_style(pressed=True))
-
-        for (
-            button_letter,
-            button,
-        ) in self.letter_btn_frame.button_manager.buttons.items():
-            button.clicked.disconnect()
             button.click()
             self.codex.selected_letters.append(button_letter)
 
         self.codex.scroll_area.update_pictographs()
+
+    def deselect_all_letters(self) -> None:
+        # This is buggy because it causes some of the sections pictographs
+        # to pop up in widgets that are outside of the main window
+        # when you try to hide all of them.When you try to hide off ok
+        for (
+            button_letter,
+            button,
+        ) in self.letter_btn_frame.button_manager.buttons.items():
+            if button_letter in self.codex.selected_letters:
+                button.click()

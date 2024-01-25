@@ -84,3 +84,4 @@ class ScrollArea(QScrollArea):
     def update_arrow_placements(self) -> None:
         for pictograph in self.pictographs.values():
             pictograph.arrow_placement_manager.update_arrow_positions()
+

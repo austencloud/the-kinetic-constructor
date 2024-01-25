@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING, Callable
+from objects.motion.motion import Motion
 from utilities.TypeChecking.letter_lists import Type3_letters, Type4_letters
 from utilities.TypeChecking.TypeChecking import Locations
 from constants import *
@@ -57,27 +58,31 @@ class ArrowLocationCalculator:
         other_motion = self.a.scene.get.other_motion(self.a.motion)
         letter_str = str(self.a.scene.letter)
 
-        if letter_str in Type3_letters or letter_str in Type4_letters:
+        if letter_str in ["Λ", "Λ-"]:
+            arrow_location = self._get_Λ_location(other_motion)
+            return arrow_location
+        else:
             return self._default_dash_location()
 
-        elif letter_str in ["Λ-"]:
-            loc_map = {
-                ((NORTH, SOUTH), (EAST, WEST)): EAST,
-                ((EAST, WEST), (NORTH, SOUTH)): NORTH,
-                ((NORTH, SOUTH), (WEST, EAST)): WEST,
-                ((WEST, EAST), (NORTH, SOUTH)): NORTH,
-                ((SOUTH, NORTH), (EAST, WEST)): EAST,
-                ((EAST, WEST), (SOUTH, NORTH)): SOUTH,
-                ((SOUTH, NORTH), (WEST, EAST)): WEST,
-                ((WEST, EAST), (SOUTH, NORTH)): SOUTH,
-            }
-            arrow_location = loc_map.get(
-                (
-                    (self.a.motion.start_loc, self.a.motion.end_loc),
-                    (other_motion.start_loc, other_motion.end_loc),
-                )
+    def _get_Λ_location(self, other_motion: Motion) -> Locations:
+        loc_map = {
+            ((NORTH, SOUTH), WEST): EAST,
+            ((EAST, WEST), SOUTH): NORTH,
+            ((NORTH, SOUTH), EAST): WEST,
+            ((WEST, EAST), SOUTH): NORTH,
+            ((SOUTH, NORTH), WEST): EAST,
+            ((EAST, WEST), NORTH): SOUTH,
+            ((SOUTH, NORTH), EAST): WEST,
+            ((WEST, EAST), NORTH): SOUTH,
+        }
+        arrow_location = loc_map.get(
+            (
+                (self.a.motion.start_loc, self.a.motion.end_loc),
+                (other_motion.end_loc),
             )
-            return arrow_location
+        )
+
+        return arrow_location
 
     def _dash_location_non_zero_turns(self) -> Locations:
         loc_map = {

@@ -12,6 +12,9 @@ class ActionButtonFrame(QFrame):
         self.select_all_button = self._create_button(
             "Select All", self.bp.select_all_letters
         )
+        self.deselect_all_button = self._create_button(
+            "Deselect All", self.bp.deselect_all_letters
+        )
         # self.generate_all_button = self._create_button(
         #     "Generate All Images 🧨",
         #     self.bp.codex.image_generator.generate_all_images
@@ -33,3 +36,4 @@ class ActionButtonFrame(QFrame):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
         layout.addWidget(self.select_all_button)
+        layout.addWidget(self.deselect_all_button)
