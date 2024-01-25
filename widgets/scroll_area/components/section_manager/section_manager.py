@@ -49,14 +49,17 @@ class ScrollAreaSectionManager:
     def get_correct_index_for_section(self, letter_type: LetterTypes) -> int:
         desired_position = self.SECTION_ORDER.index(letter_type)
         current_positions = [self.SECTION_ORDER.index(typ) for typ in self.ordered_section_types]
-
-        # Find the first current position that is greater than or equal to the desired position
+        
+        # This will ensure that the position list is sorted so that we can find the correct insertion point.
+        current_positions.sort()
+        
         for i, pos in enumerate(current_positions):
             if pos >= desired_position:
                 return i
-
-        # If no such position exists, insert at the end
+        
+        # If no position is found that is greater than or equal to the desired, it means the new section should go at the end.
         return len(self.ordered_section_types)
+
 
 
     def get_section(self, letter_type: LetterTypes) -> SectionWidget:

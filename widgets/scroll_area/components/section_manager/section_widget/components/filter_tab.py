@@ -76,10 +76,9 @@ class FilterTab(QTabWidget):
         tabs_to_hide = self._determine_tabs_to_hide(tabs_to_show)
         self.show_tabs(tabs_to_show)
         self.hide_tabs(tabs_to_hide)
-        if MOTION_TYPE in tabs_to_show:
-            self.motion_type_turns_panel.show_boxes_based_on_chosen_letters(
-                selected_letters
-            )
+        self.motion_type_turns_panel.show_boxes_based_on_chosen_letters(
+            selected_letters
+        )
 
     def _determine_tabs_to_show(
         self, selected_letters: set[Letters]
@@ -172,7 +171,6 @@ class FilterTab(QTabWidget):
     def resize_filter_tab(self) -> None:
         for panel in self.panels:
             panel.resize_turns_panel()
-        # self.setFixedHeight(self.color_turns_panel.height())
 
     def get_currently_visible_panel(self) -> TurnsPanel:
         return self.panels[self.currentIndex()]

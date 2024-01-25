@@ -45,5 +45,6 @@ class SectionWidget(QWidget):
 
     def resize_section(self) -> None:
         self.setMinimumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
+        self.setMaximumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
         self.type_label.setMinimumHeight(self.width() // 20)
         self.filter_tab.resize_filter_tab()
