@@ -1,8 +1,8 @@
 import json
 import os
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton
+from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtGui import QResizeEvent, QKeyEvent
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtCore import Qt
 
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Letters, TYPE_CHECKING, Dict, List

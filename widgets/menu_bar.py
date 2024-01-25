@@ -2,7 +2,6 @@
 from PyQt6.QtWidgets import QMenuBar
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QAction
-from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from .main_widget.main_widget import MainWidget

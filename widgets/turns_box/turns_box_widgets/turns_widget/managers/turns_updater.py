@@ -4,11 +4,6 @@ from utilities.TypeChecking.TypeChecking import (
     PropRotDirs,
     Turns,
 )
-from utilities.TypeChecking.letter_lists import (
-    Type2_letters,
-    Type3_letters,
-    Type4_letters,
-)
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph

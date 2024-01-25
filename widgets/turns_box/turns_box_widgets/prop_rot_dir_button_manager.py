@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Callable, List, Union
+from typing import TYPE_CHECKING, List, Union
 from constants import (
     BLUE,
     CLOCKWISE,

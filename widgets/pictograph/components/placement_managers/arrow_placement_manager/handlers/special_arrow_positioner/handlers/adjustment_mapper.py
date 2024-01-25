@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, Tuple
+from typing import TYPE_CHECKING, Dict
 from objects.arrow.arrow import Arrow
 
 if TYPE_CHECKING:

@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, List, Union
 from Enums import LetterType
-from constants import DASH, STATIC, Type2, Type3
+from constants import Type2, Type3
 from utilities.TypeChecking.TypeChecking import Turns
 
 if TYPE_CHECKING:

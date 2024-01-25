@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Callable
 from objects.motion.motion import Motion
-from utilities.TypeChecking.letter_lists import Type3_letters, Type4_letters
+from utilities.TypeChecking.letter_lists import Type3_letters
 from utilities.TypeChecking.TypeChecking import Locations
 from constants import *
 

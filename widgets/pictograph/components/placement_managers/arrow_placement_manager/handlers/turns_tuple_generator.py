@@ -8,7 +8,6 @@ from utilities.TypeChecking.letter_lists import (
     Type4_letters,
     Type5_letters,
     Type6_letters,
-    non_hybrid_letters,
     Type2_letters,
 )
 from constants import *

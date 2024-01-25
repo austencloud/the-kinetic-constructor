@@ -1,40 +1,27 @@
-from typing import TYPE_CHECKING, Callable, List, Union
+from typing import TYPE_CHECKING, List, Union
 from constants import (
     ANTI,
-    BLUE,
     CLOCKWISE,
-    COLOR,
     COUNTER_CLOCKWISE,
-    DASH,
     ICON_DIR,
-    MOTION_TYPE,
     OPP,
     PRO,
     PROP_ROT_DIR,
-    RED,
     SAME,
-    STATIC,
-    Type2,
-    Type3,
-    Type4,
-    Type5,
-    Type6,
 )
 from utilities.TypeChecking.MotionAttributes import Colors, MotionTypes, PropRotDirs
 from utilities.TypeChecking.TypeChecking import LeadStates, VtgDirections
 from ...factories.button_factory.button_factory import ButtonFactory
 from ...factories.button_factory.buttons.rot_dir_buttons import (
     VtgDirButton,
-    PropRotDirButton,
 )
 
-from PyQt6.QtWidgets import QPushButton, QLabel
+from PyQt6.QtWidgets import QPushButton
 
 if TYPE_CHECKING:
     from widgets.scroll_area.components.section_manager.section_widget.section_widget import (
         SectionWidget,
     )
-    from widgets.turns_box.turns_box import TurnsBox
     from objects.motion.motion import Motion
 
 

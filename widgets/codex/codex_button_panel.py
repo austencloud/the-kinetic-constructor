@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QFrame
 from PyQt6.QtCore import Qt
-from ..codex.action_button_frame import ActionButtonFrame
 from ..letter_button_frame.letter_button_frame import LetterButtonFrame
 
 if TYPE_CHECKING:

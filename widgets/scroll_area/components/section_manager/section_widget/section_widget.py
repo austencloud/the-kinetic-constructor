@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING, Dict
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QPushButton, QHBoxLayout, QSizePolicy
-from constants import OPP, SAME
-from utilities.TypeChecking.TypeChecking import LetterTypes, Letters
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QSizePolicy
+from utilities.TypeChecking.TypeChecking import LetterTypes
 from widgets.pictograph.pictograph import Pictograph
 from widgets.turns_box.turns_box_widgets.vtg_dir_button_manager import (
     VtgDirButtonManager,
@@ -9,7 +8,6 @@ from widgets.turns_box.turns_box_widgets.vtg_dir_button_manager import (
 from .components.filter_tab import FilterTab
 from .components.pictograph_frame import ScrollAreaSectionPictographFrame
 from .components.type_label import ScrollAreaSectionTypeLabel
-from PyQt6.QtCore import QTimer
 
 if TYPE_CHECKING:
     from ....scroll_area import ScrollArea

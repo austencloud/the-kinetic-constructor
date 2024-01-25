@@ -1,11 +1,8 @@
 from typing import TYPE_CHECKING, Dict, List
 from Enums import LetterType
 from utilities.TypeChecking.TypeChecking import LetterTypes, Letters
-from widgets.pictograph.pictograph import Pictograph
 from .section_widget.components.filter_tab import FilterTab
-from .pictograph_organizer import PictographOrganizer
 from .section_widget.section_widget import SectionWidget
-from .section_organizer import SectionOrganizer
 from PyQt6.QtWidgets import QGridLayout, QLabel
 
 if TYPE_CHECKING:

@@ -1,6 +1,6 @@
 from typing import Dict, List
 from Enums import LetterType
-from utilities.TypeChecking.TypeChecking import Letters, LetterTypes
+from utilities.TypeChecking.TypeChecking import LetterTypes
 from widgets.pictograph.pictograph import Pictograph
 
 
