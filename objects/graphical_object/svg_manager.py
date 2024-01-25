@@ -31,12 +31,13 @@ class SvgManager:
         with open(self.o.svg_file, "r") as f:
             svg_data = f.read()
         class_color_pattern = re.compile(
-            r"(\.st0\s*\{\s*fill:\s*)(#[a-fA-F0-9]{6})(\s*;\s*\})"
+            r"(\.st0\s*\{.*?fill:\s*)(#[a-fA-F0-9]{6})(.*?\})"
         )
         svg_data = class_color_pattern.sub(replace_class_color, svg_data)
         fill_pattern = re.compile(r'(fill=")(#[a-fA-F0-9]{6})(")')
         svg_data = fill_pattern.sub(replace_fill_color, svg_data)
         return svg_data.encode("utf-8")
+
 
     def setup_svg_renderer(self, svg_file: str) -> None:
         self.o.renderer: QSvgRenderer = QSvgRenderer(svg_file)
