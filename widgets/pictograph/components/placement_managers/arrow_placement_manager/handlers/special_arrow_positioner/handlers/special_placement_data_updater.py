@@ -21,11 +21,9 @@ class SpecialPlacementDataUpdater:
             return
 
         letter = self.positioner.pictograph.letter
-        # Reload the JSON data to ensure it's current
-
 
         turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
-        letter_data: Dict = self.positioner.placement_manager.pictograph.main_widget.special_placements.get(letter, {})
+        letter_data: Dict = self.positioner.placement_manager.pictograph.main_widget.load_special_placements().get(letter, {})
         turn_data = letter_data.get(turns_tuple, {})
 
         if turn_data:

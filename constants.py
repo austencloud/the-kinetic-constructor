@@ -40,6 +40,10 @@ OPP = "opp"
 SPLIT = "split"
 TOG = "tog"
 
+# Open Close States
+OPENING = "op"
+CLOSING = "cl"
+
 
 START_POS = "start_pos"
 END_POS = "end_pos"

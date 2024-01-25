@@ -98,10 +98,12 @@ class BetaPropPositioner:
         if small_uni[0].ori == small_uni[1].ori:
             for prop in small_uni:
                 self.ppm.default_positioner.set_prop_to_default_loc(prop)
-                (
-                    red_direction,
-                    blue_direction,
-                ) = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
+                red_direction = self.ppm.dir_calculator.get_dir(
+                    self.pictograph.red_motion
+                )
+                blue_direction = self.ppm.dir_calculator.get_dir(
+                    self.pictograph.blue_motion
+                )
                 self.move_prop(self.red_prop, red_direction)
                 self.move_prop(self.blue_prop, blue_direction)
         else:

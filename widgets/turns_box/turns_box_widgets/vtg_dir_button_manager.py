@@ -12,9 +12,7 @@ from constants import (
 from utilities.TypeChecking.MotionAttributes import Colors, MotionTypes, PropRotDirs
 from utilities.TypeChecking.TypeChecking import LeadStates, VtgDirections
 from ...factories.button_factory.button_factory import ButtonFactory
-from ...factories.button_factory.buttons.rot_dir_buttons import (
-    VtgDirButton,
-)
+from ...factories.button_factory.buttons.rot_dir_buttons import VtgDirButton
 
 from PyQt6.QtWidgets import QPushButton
 
@@ -69,16 +67,16 @@ class VtgDirButtonManager:
                     if other_motion.check.is_shift():
                         pictograph.vtg_dir = vtg_dir
                         if vtg_dir == SAME:
-                            self._update_pictograph_prop_rot_dir_drom_vtg_dir_setting(
+                            self._update_pictograph_prop_rot_dir_from_vtg_dir_setting(
                                 motion, other_motion.prop_rot_dir
                             )
                         elif vtg_dir == OPP:
-                            self._update_pictograph_prop_rot_dir_drom_vtg_dir_setting(
+                            self._update_pictograph_prop_rot_dir_from_vtg_dir_setting(
                                 motion,
                                 self._opposite_prop_rot_dir(other_motion.prop_rot_dir),
                             )
 
-    def _update_pictograph_prop_rot_dir_drom_vtg_dir_setting(
+    def _update_pictograph_prop_rot_dir_from_vtg_dir_setting(
         self, motion: "Motion", prop_rot_dir: PropRotDirs
     ) -> None:
         motion.prop_rot_dir = prop_rot_dir
@@ -100,7 +98,12 @@ class VtgDirButtonManager:
             COUNTER_CLOCKWISE: CLOCKWISE,
         }.get(prop_rot_dir, prop_rot_dir)
 
-    def update_visibility_based_on_motion(self, letter_type, new_turns, attribute_value: Union[Colors, MotionTypes, LeadStates]) -> None:
+    def update_visibility_based_on_motion(
+        self,
+        letter_type,
+        new_turns,
+        attribute_value: Union[Colors, MotionTypes, LeadStates],
+    ) -> None:
         if attribute_value in [PRO, ANTI]:
             return
         if new_turns > 0:

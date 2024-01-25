@@ -6,7 +6,7 @@ from PyQt6.QtCore import Qt
 
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Letters, TYPE_CHECKING, Dict, List
-from constants import DIAMOND, STAFF
+from constants import DIAMOND, FAN, STAFF
 from widgets.pictograph.pictograph import Pictograph
 from ..image_cache_manager import ImageCacheManager
 from ..main_tab_widget.main_tab_widget import MainTabWidget
@@ -34,7 +34,9 @@ class MainWidget(QWidget):
         self.special_placements = {}
         for file_name in os.listdir(self.directory):
             if file_name.endswith("_placements.json"):
-                with open(os.path.join(self.directory, file_name), "r", encoding="utf-8") as file:
+                with open(
+                    os.path.join(self.directory, file_name), "r", encoding="utf-8"
+                ) as file:
                     data = json.load(file)
                     self.special_placements.update(data)
         return self.special_placements
@@ -48,13 +50,11 @@ class MainWidget(QWidget):
         for _, pictographs in self.all_pictographs.items():
             for _, pictograph in pictographs.items():
                 pictograph.updater.update_pictograph()
-                
+
     def _setup_components(self) -> None:
         self.main_sequence_widget = MainSequenceWidget(self)
         self.main_tab_widget = MainTabWidget(self)
         self.image_cache_manager = ImageCacheManager(self)
-
-
 
     def _setup_layouts(self) -> None:
         self.layout_manager = MainWidgetLayoutManager(self)
@@ -103,11 +103,15 @@ class MainWidget(QWidget):
 
     def resize_sequence_widget(self):
         if not self.main_sequence_widget.isHidden():
-            self.main_sequence_widget.setGeometry(0, 0, self.width() // 2, self.height())
+            self.main_sequence_widget.setGeometry(
+                0, 0, self.width() // 2, self.height()
+            )
 
     def resize_codex(self):
         if not self.main_sequence_widget.isHidden():
-            self.main_tab_widget.setGeometry(self.width() // 2, 0, self.width() // 2, self.height())
+            self.main_tab_widget.setGeometry(
+                self.width() // 2, 0, self.width() // 2, self.height()
+            )
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.main_window.window_manager.set_dimensions()

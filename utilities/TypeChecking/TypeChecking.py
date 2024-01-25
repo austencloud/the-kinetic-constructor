@@ -52,6 +52,7 @@ MotionTypeCombinations = Literal[
 LeadStates = Literal["leading", "trailing"]
 VtgTimings = Literal["split", "together"]
 VtgDirections = Literal["same", "opp"]
+OpenCloseStates = Literal["open", "close"]
 Letters = Literal[
     "A",
     "B",

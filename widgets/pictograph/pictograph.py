@@ -13,6 +13,7 @@ from utilities.TypeChecking.TypeChecking import (
     LetterTypes,
     Letters,
     Locations,
+    OpenCloseStates,
     SpecificPositions,
     VtgDirections,
     VtgTimings,
@@ -97,6 +98,7 @@ class Pictograph(QGraphicsScene):
     arrow_turns: int
     vtg_timing: VtgTimings
     vtg_dir: VtgDirections
+    open_close_state: OpenCloseStates
     dragged_arrow: Arrow
     dragged_prop: Prop
     letter_item: LetterItem

@@ -30,14 +30,17 @@ class RotationAngleOverrideManager:
 
         data = self.pictograph.main_widget.load_special_placements()
 
-        if LetterType.get_letter_type(self.pictograph.letter) == Type2:
+        letter = self.pictograph.letter
+        letter_type = LetterType.get_letter_type(letter)
+        
+        if letter_type == Type2:
             shift = self.pictograph.get.shift()
             static = self.pictograph.get.static()
 
             if static.turns > 0:
                 direction = "s" if static.prop_rot_dir == shift.prop_rot_dir else "o"
                 adjustment_key_str = f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(static)})"
-            letter_data = data.get(self.pictograph.letter, {})
+            letter_data = data.get(letter, {})
             turn_data = letter_data.get(adjustment_key_str, {})
 
             if "static_rot_angle" in turn_data:
@@ -45,7 +48,25 @@ class RotationAngleOverrideManager:
             else:
                 turn_data["static_rot_angle"] = 0
 
-        elif LetterType.get_letter_type(self.pictograph.letter) == Type4:
+        elif letter in  ["Λ", "Λ-"]:
+            # Call the method from TurnsTupleGenerator for Λ and Λ-
+            adjustment_key_str = self.special_positioner.turns_tuple_generator.generate_turns_tuple(letter)
+            letter_data = data.get(letter, {})
+            turn_data = letter_data.get(adjustment_key_str, {})
+            
+            if "static_rot_angle" in turn_data:
+                del turn_data["static_rot_angle"]
+            else:
+                turn_data["static_rot_angle"] = 0
+
+            letter_data[adjustment_key_str] = turn_data
+            data[letter] = letter_data
+            self.special_positioner.data_updater.update_specific_entry_in_json(
+                letter, letter_data
+            )
+            self.pictograph.updater.update_pictograph()
+
+        elif letter_type == Type4:
             dash = self.pictograph.get.dash()
             static = self.pictograph.get.static()
 
@@ -56,17 +77,19 @@ class RotationAngleOverrideManager:
             elif static.turns > 0:
                 direction = static.prop_rot_dir.lower()  # 'cw' or 'ccw'
                 adjustment_key_str = f"({direction}, {self._normalize_turns(dash)}, {self._normalize_turns(static)})"
-            letter_data = data.get(self.pictograph.letter, {})
+            letter_data = data.get(letter, {})
             turn_data = letter_data.get(adjustment_key_str, {})
             if "static_rot_angle" in turn_data:
                 del turn_data["static_rot_angle"]
             else:
                 turn_data["static_rot_angle"] = 0
 
+
+
         letter_data[adjustment_key_str] = turn_data
-        data[self.pictograph.letter] = letter_data
+        data[letter] = letter_data
         self.special_positioner.data_updater.update_specific_entry_in_json(
-            self.pictograph.letter, letter_data
+            letter, letter_data
         )
         self.pictograph.updater.update_pictograph()
 

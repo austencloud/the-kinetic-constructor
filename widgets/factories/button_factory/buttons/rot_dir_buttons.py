@@ -34,6 +34,11 @@ class RotDirButton(QPushButton):
     def unpress(self) -> None:
         self.setStyleSheet(self.get_button_style(pressed=False))
 
+class OpenCloseButton(RotDirButton):
+    def __init__(self, open_close_state: VtgDirections) -> None:
+        super().__init__(open_close_state)
+        self.open_close_dir = open_close_state
+
 
 class VtgDirButton(RotDirButton):
     def __init__(self, vtg_dir: VtgDirections) -> None:

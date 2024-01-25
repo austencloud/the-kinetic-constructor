@@ -79,7 +79,7 @@ class ArrowAdjustmentCalculator:
         if turns_tuple is None:
             turns_tuple = (
                 self.pm.special_positioner.turns_tuple_generator.generate_turns_tuple(
-                    arrow
+                    letter
                 )
             )
         self.special_placements: Dict[

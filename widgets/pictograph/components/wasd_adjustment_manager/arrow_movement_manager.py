@@ -11,11 +11,16 @@ class ArrowMovementManager:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
 
-    def handle_arrow_movement(self, key, shift_held) -> None:
+    def handle_arrow_movement(self, key, shift_held, ctrl_held) -> None:
         if not self.pictograph.selected_arrow:
             return
 
-        adjustment_increment = 20 if shift_held else 5
+        if shift_held and ctrl_held:
+            adjustment_increment = 200
+        elif shift_held:
+            adjustment_increment = 20
+        else:
+            adjustment_increment = 5
         adjustment = self.get_adjustment(key, adjustment_increment)
         self.pictograph.arrow_placement_manager.special_positioner.data_updater.update_arrow_adjustments_in_json(
             adjustment, self.pictograph.selected_arrow
