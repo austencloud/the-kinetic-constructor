@@ -22,6 +22,8 @@ class PictographMouseEventHandler:
             self.p.selected_arrow = arrow
             self.p.dragged_arrow = arrow
             self.p.dragged_arrow.mousePressEvent(event)
+            arrow.setSelected(True)  # Set the arrow as selected
+            self.p.update()
         else:
             prop = next((item for item in items_at_pos if isinstance(item, Prop)), None)
             if prop:
