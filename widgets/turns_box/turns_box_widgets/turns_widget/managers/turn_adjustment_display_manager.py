@@ -29,7 +29,7 @@ class TurnsAdjustmentManager:
         turns = self.convert_turn_floats_to_ints(turns)
 
         self._update_turns_display(new_turns)
-        self._update_visibility_based_on_motion(turns)
+        self._update_visibility_based_on_motion(new_turns)
 
 
     def get_current_turns_value(self) -> Turns:

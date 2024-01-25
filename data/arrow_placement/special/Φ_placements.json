@@ -169,12 +169,19 @@
     },
     "(o, 2.5, 2.5)": {
       "static_rot_angle": 0,
-      "static": [15, 35],
+      "static": [10, 35],
       "dash": [-85, -50]
     },
     "(o, 3, 2.5)": {
       "static_rot_angle": 0,
       "static": [5, 30]
+    },
+    "(o, 2.5, 1)": {
+      "static_rot_angle": 0,
+      "static": [90, -10]
+    },
+    "(o, 2.5, 1.5)": {
+      "static": [25, 0]
     }
   }
 }

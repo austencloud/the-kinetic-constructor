@@ -54,6 +54,7 @@ class TurnsUpdater:
             motion.prop_rot_dir = NO_ROT
             self.turns_widget.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.unpress_vtg_buttons()
             if hasattr(self.turns_box, "prop_rot_dir_button_manager"):
+                
                 self.turns_widget.turns_box.prop_rot_dir_button_manager.unpress_prop_rot_dir_buttons()
 
         elif motion.turns == 0:

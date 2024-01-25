@@ -1,7 +1,8 @@
 import json
 import os
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
-from PyQt6.QtGui import QResizeEvent
+from PyQt6.QtGui import QResizeEvent, QKeyEvent
+from PyQt6.QtCore import Qt
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Letters, TYPE_CHECKING, Dict, List
 from constants import DIAMOND, STAFF
@@ -26,7 +27,7 @@ class MainWidget(QWidget):
         self._setup_layouts()
         self.load_special_placements()
 
-    def load_special_placements(self) -> Dict:
+    def load_special_placements(self) -> Dict[str, Dict[str, List[str]]]:
         """Loads the special placements for arrows."""
         self.directory = "data/arrow_placement/special/"
         self.special_placements = {}
@@ -78,3 +79,9 @@ class MainWidget(QWidget):
         self.main_window.window_manager.set_dimensions()
 
     layout: QHBoxLayout
+
+    def keyPressEvent(self, event: QKeyEvent) -> None:
+        if event.key() == Qt.Key.Key_F5:
+            self.refresh_placements()
+        else:
+            super().keyPressEvent(event)

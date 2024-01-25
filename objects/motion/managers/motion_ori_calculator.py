@@ -53,16 +53,29 @@ class MotionOriCalculator:
     def calculate_half_turn_orientation(
         self, motion_type: MotionTypes, turns: Turns, start_ori: Orientations
     ) -> Orientations:
-        orientation_map = {
-            (IN, CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
-            (IN, COUNTER_CLOCKWISE): (COUNTER if turns % 2 == 0.5 else CLOCK),
-            (OUT, CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
-            (OUT, COUNTER_CLOCKWISE): (COUNTER if turns % 2 == 0.5 else CLOCK),
-            (CLOCK, CLOCKWISE): (OUT if turns % 2 == 0.5 else IN),
-            (CLOCK, COUNTER_CLOCKWISE): (IN if turns % 2 == 0.5 else OUT),
-            (COUNTER, CLOCKWISE): (IN if turns % 2 == 0.5 else OUT),
-            (COUNTER, COUNTER_CLOCKWISE): (OUT if turns % 2 == 0.5 else IN),
-        }
+        if motion_type in [PRO, ANTI, DASH]:
+            orientation_map = {
+                (IN, CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
+                (IN, COUNTER_CLOCKWISE): (COUNTER if turns % 2 == 0.5 else CLOCK),
+                (OUT, CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
+                (OUT, COUNTER_CLOCKWISE): (COUNTER if turns % 2 == 0.5 else CLOCK),
+                (CLOCK, CLOCKWISE): (OUT if turns % 2 == 0.5 else IN),
+                (CLOCK, COUNTER_CLOCKWISE): (IN if turns % 2 == 0.5 else OUT),
+                (COUNTER, CLOCKWISE): (IN if turns % 2 == 0.5 else OUT),
+                (COUNTER, COUNTER_CLOCKWISE): (OUT if turns % 2 == 0.5 else IN),
+            }
+        elif motion_type == STATIC:
+            orientation_map = {
+                (IN, CLOCKWISE): (COUNTER if turns % 2 == 0.5 else CLOCK),
+                (IN, COUNTER_CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
+                (OUT, CLOCKWISE): (COUNTER if turns % 2 == 0.5 else CLOCK),
+                (OUT, COUNTER_CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
+                (CLOCK, CLOCKWISE): (IN if turns % 2 == 0.5 else OUT),
+                (CLOCK, COUNTER_CLOCKWISE): (OUT if turns % 2 == 0.5 else IN),
+                (COUNTER, CLOCKWISE): (OUT if turns % 2 == 0.5 else IN),
+                (COUNTER, COUNTER_CLOCKWISE): (IN if turns % 2 == 0.5 else OUT),
+            }
+
         return orientation_map.get((start_ori, self.m.prop_rot_dir))
 
     def calculate_float_orientation(

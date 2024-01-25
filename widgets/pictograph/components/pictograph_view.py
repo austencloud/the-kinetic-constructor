@@ -52,5 +52,8 @@ class PictographView(QGraphicsView):
                 event.key()
             )
 
+        elif event.key() == Qt.Key.Key_F5:
+            self.pictograph.main_widget.refresh_placements()
+
         else:
             super().keyPressEvent(event)
