@@ -42,7 +42,6 @@ class VtgDirButtonManager:
     def hide_vtg_dir_buttons(self) -> None:
         self.opp_button.hide()
         self.same_button.hide()
-        self.section.vtg_dir_btn_state = {SAME: False, OPP: False}
 
     def _setup_vtg_dir_buttons(self) -> List[QPushButton]:
         self.same_button: VtgDirButton = ButtonFactory.create_vtg_dir_button(

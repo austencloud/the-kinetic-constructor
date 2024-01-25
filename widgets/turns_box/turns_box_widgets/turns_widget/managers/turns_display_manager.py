@@ -16,7 +16,6 @@ class TurnDisplayManager:
 
     def setup_display_components(self) -> None:
         self.setup_turns_display()
-        # self.setup_turns_label()
         self.setup_turns_display_with_label_frame()
         self.add_turns_display_to_layout()
 
@@ -27,9 +26,7 @@ class TurnDisplayManager:
         )
         self.turns_display_with_label_frame_vbox.setContentsMargins(2, 2, 2, 2)
         self.turns_display_with_label_frame_vbox.setSpacing(2)
-        # self.turns_display_with_label_frame_vbox.addWidget(
-        #     self.turns_widget.turns_label
-        # )
+
         self.turns_display_with_label_frame_vbox.addWidget(self.turns_display)
 
     def setup_turns_display(self) -> None:
@@ -41,10 +38,6 @@ class TurnDisplayManager:
         self.hbox_with_turn_display_and_buttons: QHBoxLayout = QHBoxLayout(
             self.turn_display_with_buttons_frame
         )
-
-    # def setup_turns_label(self) -> None:
-    #     self.turns_widget.turns_label = QLabel("Turns", self.turns_widget)
-    #     self.turns_widget.turns_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def update_turns_display(self, turns: Union[int, float]) -> None:
         self.turns_display.setText(str(turns))
