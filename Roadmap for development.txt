@@ -14,3 +14,6 @@ Rebuild sequence constructor interface
 Build kinetic encyclopedia/library for browsing sequences
 Create automatic sequence completion
 Build system for tracking/applying turn patterns
+
+
+

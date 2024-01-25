@@ -52,11 +52,11 @@ class ScrollAreaDisplayManager:
             self.scroll_area.sections_manager.create_section_if_needed(letter_type)
 
     def remove_pictograph(self, pictograph_key: str) -> None:
-        codex_pictograph: Pictograph = self.scroll_area.pictographs.pop(
+        pictograph_to_remove: Pictograph = self.scroll_area.pictographs.pop(
             pictograph_key, None
         )
-        if codex_pictograph:
-            self.scroll_area.layout.removeWidget(codex_pictograph.view)
+        if pictograph_to_remove:
+            self.scroll_area.layout.removeWidget(pictograph_to_remove.view)
 
     def clear_layout(self) -> None:
         while self.scroll_area.layout.count():

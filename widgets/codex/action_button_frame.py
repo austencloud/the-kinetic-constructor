@@ -9,12 +9,12 @@ class ActionButtonFrame(QFrame):
     def __init__(self, button_panel: "CodexButtonPanel") -> None:
         super().__init__(button_panel)
         self.bp = button_panel
-        self.select_all_button = self._create_button(
-            "Select All", self.bp.select_all_letters
-        )
-        self.deselect_all_button = self._create_button(
-            "Deselect All", self.bp.deselect_all_letters
-        )
+        # self.select_all_button = self._create_button(
+        #     "Select All", self.bp.select_all_letters
+        # )
+        # self.deselect_all_button = self._create_button(
+        #     "Deselect All", self.bp.deselect_all_letters
+        # )
         # self.generate_all_button = self._create_button(
         #     "Generate All Images 🧨",
         #     self.bp.codex.image_generator.generate_all_images
@@ -35,5 +35,5 @@ class ActionButtonFrame(QFrame):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
-        layout.addWidget(self.select_all_button)
-        layout.addWidget(self.deselect_all_button)
+        # layout.addWidget(self.select_all_button)
+        # layout.addWidget(self.deselect_all_button)

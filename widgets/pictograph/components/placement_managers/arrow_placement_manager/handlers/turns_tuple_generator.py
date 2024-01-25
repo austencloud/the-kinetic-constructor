@@ -160,3 +160,4 @@ class TurnsTupleGenerator:
                 return handler()
 
         return ""
+
