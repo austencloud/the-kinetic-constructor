@@ -12,6 +12,9 @@ from constants import (
     RED,
     SAME,
     STATIC,
+    Type4,
+    Type5,
+    Type6,
 )
 from utilities.TypeChecking.MotionAttributes import PropRotDirs
 from utilities.TypeChecking.TypeChecking import VtgDirections
@@ -145,10 +148,15 @@ class PropRotDirButtonManager:
         self.cw_button.unpress()
         self.ccw_button.unpress()
 
-    def update_visibility_based_on_motion(self, letter_type, new_turns) -> None:
-        if new_turns > 0:
-            if self.previous_turns == 0:
-                self.show_prop_rot_dir_buttons()
-        elif new_turns == 0:
-            self.previous_turns = 0
-            self.hide_prop_rot_dir_buttons()
+    def update_visibility_based_on_motion(self, letter_type, new_turns, attribute_value) -> None:
+        if self.turns_box.turns_panel.filter_tab.section.letter_type in [
+            Type4,
+            Type5,
+            Type6,
+        ]:
+            if new_turns > 0:
+                if self.previous_turns == 0:
+                    self.show_prop_rot_dir_buttons()
+            elif new_turns == 0:
+                self.previous_turns = 0
+                self.hide_prop_rot_dir_buttons()

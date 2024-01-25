@@ -1,8 +1,9 @@
 import json
 import os
-from PyQt6.QtWidgets import QWidget, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton
 from PyQt6.QtGui import QResizeEvent, QKeyEvent
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QSize
+
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Letters, TYPE_CHECKING, Dict, List
 from constants import DIAMOND, STAFF
@@ -53,6 +54,8 @@ class MainWidget(QWidget):
         self.main_tab_widget = MainTabWidget(self)
         self.image_cache_manager = ImageCacheManager(self)
 
+
+
     def _setup_layouts(self) -> None:
         self.layout_manager = MainWidgetLayoutManager(self)
         self.layout_manager.configure_layouts()
@@ -85,3 +88,28 @@ class MainWidget(QWidget):
             self.refresh_placements()
         else:
             super().keyPressEvent(event)
+
+    def toggle_main_sequence_widget(self):
+        if self.main_sequence_widget.isHidden():
+            self.main_sequence_widget.show()
+        else:
+            self.main_sequence_widget.hide()
+            self.main_tab_widget.setGeometry(0, 0, self.width(), self.height())
+
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        self.main_window.window_manager.set_dimensions()
+        if not self.main_sequence_widget.isHidden():
+            self.main_sequence_widget.resize_sequence_widget()
+
+    def resize_sequence_widget(self):
+        if not self.main_sequence_widget.isHidden():
+            self.main_sequence_widget.setGeometry(0, 0, self.width() // 2, self.height())
+
+    def resize_codex(self):
+        if not self.main_sequence_widget.isHidden():
+            self.main_tab_widget.setGeometry(self.width() // 2, 0, self.width() // 2, self.height())
+
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        self.main_window.window_manager.set_dimensions()
+        self.resize_sequence_widget()
+        self.resize_codex()

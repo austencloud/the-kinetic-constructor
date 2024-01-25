@@ -7,7 +7,7 @@ from .turns_box.turns_box_widgets.base_attr_box_widget import TurnsBoxWidget
 if TYPE_CHECKING:
     from widgets.turns_box.turns_box import TurnsBox
 
-from constants import BLUE, COLOR, LEAD_STATE, MOTION_TYPE
+from constants import BLUE, COLOR, LEAD_STATE, MOTION_TYPE, Type1
 
 
 class HeaderWidget(TurnsBoxWidget):
@@ -48,14 +48,19 @@ class HeaderWidget(TurnsBoxWidget):
         return layout
 
     def _add_widgets(self, layout: QHBoxLayout) -> None:
-        layout.addStretch(5)
-        layout.addWidget(self.turns_box.prop_rot_dir_button_manager.ccw_button)
-        layout.addStretch(1)
-        layout.addWidget(self.header_label)
-        layout.addStretch(1)
-        layout.addWidget(self.turns_box.prop_rot_dir_button_manager.cw_button)
-        layout.addStretch(5)
-        layout.addWidget(self.separator)
+        if self.turns_box.turns_panel.filter_tab.section.letter_type == Type1:
+            layout.addStretch(1)
+            layout.addWidget(self.header_label)
+            layout.addStretch(1)
+        else  :
+            layout.addStretch(5)
+            layout.addWidget(self.turns_box.prop_rot_dir_button_manager.ccw_button)
+            layout.addStretch(1)
+            layout.addWidget(self.header_label)
+            layout.addStretch(1)
+            layout.addWidget(self.turns_box.prop_rot_dir_button_manager.cw_button)
+            layout.addStretch(5)
+            layout.addWidget(self.separator)
 
     def _setup_header_label(self, text: str) -> QLabel:
         font_color = (

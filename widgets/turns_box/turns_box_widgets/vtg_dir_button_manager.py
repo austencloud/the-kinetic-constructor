@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Callable, List, Union
 from constants import (
+    ANTI,
     BLUE,
     CLOCKWISE,
     COLOR,
@@ -8,6 +9,7 @@ from constants import (
     ICON_DIR,
     MOTION_TYPE,
     OPP,
+    PRO,
     PROP_ROT_DIR,
     RED,
     SAME,
@@ -18,8 +20,8 @@ from constants import (
     Type5,
     Type6,
 )
-from utilities.TypeChecking.MotionAttributes import PropRotDirs
-from utilities.TypeChecking.TypeChecking import VtgDirections
+from utilities.TypeChecking.MotionAttributes import Colors, MotionTypes, PropRotDirs
+from utilities.TypeChecking.TypeChecking import LeadStates, VtgDirections
 from ...factories.button_factory.button_factory import ButtonFactory
 from ...factories.button_factory.buttons.rot_dir_buttons import (
     VtgDirButton,
@@ -111,7 +113,9 @@ class VtgDirButtonManager:
             COUNTER_CLOCKWISE: CLOCKWISE,
         }.get(prop_rot_dir, prop_rot_dir)
 
-    def update_visibility_based_on_motion(self, letter_type, new_turns) -> None:
+    def update_visibility_based_on_motion(self, letter_type, new_turns, attribute_value: Union[Colors, MotionTypes, LeadStates]) -> None:
+        if attribute_value in [PRO, ANTI]:
+            return
         if new_turns > 0:
             if self.previous_turns == 0:
                 self.show_vtg_dir_buttons()

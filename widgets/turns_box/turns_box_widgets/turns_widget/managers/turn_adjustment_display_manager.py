@@ -72,7 +72,7 @@ class TurnsAdjustmentManager:
         ) if self.turns_widget.turns_box.turns_panel.filter_tab.section.letter_type in [Type2, Type3] else (
             self.turns_widget.turns_box.prop_rot_dir_button_manager
         )
-        button_manager.update_visibility_based_on_motion(letter_type, turns)
+        button_manager.update_visibility_based_on_motion(letter_type, turns, self.turns_widget.turns_box.attribute_value)
 
     def _is_relevant_letter_type(self, pictograph: "Pictograph") -> bool:
         return (

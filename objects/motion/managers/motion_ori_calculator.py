@@ -53,7 +53,7 @@ class MotionOriCalculator:
     def calculate_half_turn_orientation(
         self, motion_type: MotionTypes, turns: Turns, start_ori: Orientations
     ) -> Orientations:
-        if motion_type in [PRO, ANTI, DASH]:
+        if motion_type in [ANTI, DASH]:
             orientation_map = {
                 (IN, CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
                 (IN, COUNTER_CLOCKWISE): (COUNTER if turns % 2 == 0.5 else CLOCK),
@@ -64,7 +64,7 @@ class MotionOriCalculator:
                 (COUNTER, CLOCKWISE): (IN if turns % 2 == 0.5 else OUT),
                 (COUNTER, COUNTER_CLOCKWISE): (OUT if turns % 2 == 0.5 else IN),
             }
-        elif motion_type == STATIC:
+        elif motion_type in [PRO, STATIC]:
             orientation_map = {
                 (IN, CLOCKWISE): (COUNTER if turns % 2 == 0.5 else CLOCK),
                 (IN, COUNTER_CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
