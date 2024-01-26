@@ -9,9 +9,7 @@ from constants import (
     COUNTER_CLOCKWISE,
     LEAD_STATE,
     MOTION_TYPE,
-    OPP,
     RED,
-    SAME,
 )
 from utilities.TypeChecking.TypeChecking import (
     Colors,

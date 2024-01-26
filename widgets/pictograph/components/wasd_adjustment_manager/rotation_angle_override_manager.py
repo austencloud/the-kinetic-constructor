@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Dict, Optional
 from Enums import LetterType
-from constants import BLUE, RED, STATIC, Type2, Type4, Type5, Type6
+from constants import BLUE, RED, STATIC, Type2, Type4, Type6
 from PyQt6.QtCore import Qt
 
 from objects.arrow.arrow import Arrow

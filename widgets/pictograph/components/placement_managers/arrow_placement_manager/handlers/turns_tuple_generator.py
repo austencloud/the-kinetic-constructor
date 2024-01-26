@@ -1,4 +1,3 @@
-import stat
 from typing import TYPE_CHECKING
 from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.TypeChecking import Letters

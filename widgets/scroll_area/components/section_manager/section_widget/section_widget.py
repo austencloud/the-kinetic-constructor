@@ -1,12 +1,9 @@
 from typing import TYPE_CHECKING, Dict
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QSizePolicy
-from cairo import Filter
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout
 from constants import OPP, SAME
 from utilities.TypeChecking.TypeChecking import LetterTypes
-from widgets.pictograph.pictograph import Pictograph
-from widgets.turns_box.turns_box_widgets.vtg_dir_button_manager import (
-    VtgDirButtonManager,
-)
+from .....pictograph.pictograph import Pictograph
+from .....turns_box.turns_box_widgets.vtg_dir_button_manager import VtgDirButtonManager
 from .components.filter_tab import FilterTab
 from .components.pictograph_frame import ScrollAreaSectionPictographFrame
 from .components.type_label import SectionTypeLabel
@@ -17,10 +14,10 @@ from PyQt6.QtWidgets import QGroupBox
 
 
 class SectionWidget(QGroupBox):
-    SCROLLBAR_WIDTH = 25
+    SCROLLBAR_WIDTH = 20
 
     def __init__(self, letter_type: LetterTypes, scroll_area: "ScrollArea") -> None:
-        super().__init__(None)  # No title, as we'll use a custom label
+        super().__init__(None)
         self.scroll_area = scroll_area
         self.letter_type = letter_type
         self.vtg_dir_btn_state: Dict[str, bool] = {SAME: False, OPP: False}
@@ -29,7 +26,7 @@ class SectionWidget(QGroupBox):
         self.type_label.clicked.connect(self.toggle_section)
         self._setup_layout()
 
-    def setup_components(self):
+    def setup_components(self) -> None:
         self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
         self.vtg_dir_button_manager = VtgDirButtonManager(self)
         self.pictographs: Dict[str, Pictograph] = {}
