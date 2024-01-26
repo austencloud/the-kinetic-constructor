@@ -9,7 +9,7 @@ from widgets.turns_box.turns_box_widgets.vtg_dir_button_manager import (
 )
 from .components.filter_tab import FilterTab
 from .components.pictograph_frame import ScrollAreaSectionPictographFrame
-from .components.type_label import ScrollAreaSectionTypeLabel
+from .components.type_label import SectionTypeLabel
 
 if TYPE_CHECKING:
     from ....scroll_area import ScrollArea
@@ -25,11 +25,9 @@ class SectionWidget(QGroupBox):
         self.letter_type = letter_type
         self.vtg_dir_btn_state: Dict[str, bool] = {SAME: False, OPP: False}
         self.filter_tab: FilterTab = None
-        self.type_label = ScrollAreaSectionTypeLabel(self)
+        self.type_label = SectionTypeLabel(self)
         self.type_label.clicked.connect(self.toggle_section)
         self._setup_layout()
-
-        # self.setup_components()
 
     def setup_components(self):
         self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
@@ -45,15 +43,18 @@ class SectionWidget(QGroupBox):
 
     def _setup_header_layout(self) -> QHBoxLayout:
         header_layout = QHBoxLayout()
-        header_layout.addStretch(1)
+        header_layout.addStretch(2)
         header_layout.addWidget(self.type_label)
         header_layout.addStretch(1)
+        header_layout.addWidget(self.type_label.arrow_label)
+        header_layout.addStretch(2)
         return header_layout
 
     def resize_section(self) -> None:
         self.setMinimumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
         self.setMaximumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
         self.type_label.setMinimumHeight(self.width() // 20)
+        self.type_label.setMaximumHeight(self.width() // 20)
         self.filter_tab.resize_filter_tab()
 
     def toggle_section(self) -> None:
@@ -61,3 +62,5 @@ class SectionWidget(QGroupBox):
         self.pictograph_frame.setVisible(is_visible)
         if self.filter_tab:
             self.filter_tab.setVisible(is_visible)
+        self.type_label.set_styled_text(self.letter_type)
+        self.type_label.toggle_dropdown_arrow(not is_visible)

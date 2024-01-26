@@ -29,13 +29,13 @@ class VtgDirButtonManager:
         self.previous_turns = 0
 
         self.vtg_dir_buttons: List[VtgDirButton] = self._setup_vtg_dir_buttons()
-        self.section.header_layout.insertStretch(0, 8)
+        self.section.header_layout.insertStretch(0, 9)
         self.section.header_layout.insertWidget(1, self.opp_button)
         self.section.header_layout.addWidget(self.same_button)
-        self.section.header_layout.insertStretch(6, 8)
+        self.section.header_layout.insertStretch(8, 9)
         self.hide_vtg_dir_buttons()
 
-    def show_vtg_dir_buttons(self) -> None: 
+    def show_vtg_dir_buttons(self) -> None:
         self.opp_button.show()
         self.same_button.show()
 

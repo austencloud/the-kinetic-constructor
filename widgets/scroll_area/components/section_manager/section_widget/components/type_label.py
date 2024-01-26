@@ -1,12 +1,14 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QLabel, QSizePolicy
+from PyQt6.QtWidgets import QLabel, QSizePolicy, QHBoxLayout, QWidget
+from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen
 from PyQt6.QtCore import Qt
+
 if TYPE_CHECKING:
     from ..section_widget import SectionWidget
 from PyQt6.QtCore import pyqtSignal
 
 
-class ScrollAreaSectionTypeLabel(QLabel):
+class SectionTypeLabel(QLabel):
     clicked = pyqtSignal()
 
     TYPE_MAP = {
@@ -27,10 +29,44 @@ class ScrollAreaSectionTypeLabel(QLabel):
         "-": "#000000",  # black
     }
 
+    EXPAND_ARROW_PATH = "images/icons/dropdown/expand.png"
+    COLLAPSE_ARROW_PATH = "images/icons/dropdown/collapse.png"
+
     def __init__(self, section_widget: "SectionWidget") -> None:
         super().__init__()
         self.section = section_widget
+        self.arrow_label = QLabel()  # Additional label for the arrow icon
+
+        # Load and resize the pixmaps
+        self.expand_arrow_pixmap = self.load_and_resize_expand_pixmap(
+            self.EXPAND_ARROW_PATH
+        )
+        self.collapse_arrow_pixmap = self.load_and_resize_collapse_pixmap(
+            self.COLLAPSE_ARROW_PATH
+        )
+
+        self.toggle_dropdown_arrow(False)
         self.set_styled_text(section_widget.letter_type)
+
+    def load_and_resize_collapse_pixmap(self, path: str) -> QPixmap:
+        pixmap = QPixmap(path)
+        # Resize pixmap to fit the label height
+        collapse_height = (
+            self.section.scroll_area.width() // 60
+        )  # Example size, adjust as needed
+        return pixmap.scaledToHeight(
+            collapse_height, Qt.TransformationMode.SmoothTransformation
+        )
+
+    def load_and_resize_expand_pixmap(self, path: str) -> QPixmap:
+        pixmap = QPixmap(path)
+        # Resize pixmap to fit the label height
+        collapse_height = (
+            self.section.scroll_area.width() // 40
+        )  # Example size, adjust as needed
+        return pixmap.scaledToHeight(
+            collapse_height, Qt.TransformationMode.SmoothTransformation
+        )
 
     def set_styled_text(self, letter_type: str) -> None:
         type_words = self.TYPE_MAP.get(letter_type, "").split("-")
@@ -55,6 +91,13 @@ class ScrollAreaSectionTypeLabel(QLabel):
             QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         )
 
-    def mousePressEvent(self, event):
+    def toggle_dropdown_arrow(self, is_expanded) -> None:
+        arrow_pixmap = (
+            self.expand_arrow_pixmap if is_expanded else self.collapse_arrow_pixmap
+        )
+        self.arrow_label.setPixmap(arrow_pixmap)
+
+    def mousePressEvent(self, event) -> None:
         super().mousePressEvent(event)
         self.clicked.emit()
+

@@ -51,15 +51,10 @@ class ScrollAreaSectionManager:
         current_positions = [
             self.SECTION_ORDER.index(typ) for typ in self.ordered_section_types
         ]
-
-        # This will ensure that the position list is sorted so that we can find the correct insertion point.
         current_positions.sort()
-
         for i, pos in enumerate(current_positions):
             if pos >= desired_position:
                 return i
-
-        # If no position is found that is greater than or equal to the desired, it means the new section should go at the end.
         return len(self.ordered_section_types)
 
     def get_section(self, letter_type: LetterTypes) -> SectionWidget:
@@ -113,8 +108,8 @@ class ScrollAreaSectionManager:
             section.filter_tab = self.filter_tabs_cache[letter_type]
 
     def update_sections_based_on_letters(self, selected_letters: List[Letters]) -> None:
-        for section in self.sections.values():
-            section.hide()
+        # for section in self.sections.values():
+        #     section.hide()
 
         for letter in selected_letters:
             letter_type = LetterType.get_letter_type(letter)
