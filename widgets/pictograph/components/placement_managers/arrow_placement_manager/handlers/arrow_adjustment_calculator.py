@@ -1,5 +1,6 @@
 import re
 from PyQt6.QtCore import QPointF
+from constants import IN, OUT
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Dict, Optional, Tuple
 
@@ -25,14 +26,19 @@ class ArrowAdjustmentCalculator:
             self.pm.pictograph.letter
         )
 
-        special_placements = (
-            self.pm.special_positioner.placement_manager.pictograph.main_widget.special_placements
+        # Determine the orientation key ('from_radial' or 'from_antiradial') based on the arrow's motion
+        orientation_key = (
+            "from_radial" if arrow.motion.start_ori in [IN, OUT] else "from_antiradial"
         )
+
+        # Access the correct placements data based on the orientation
+        special_placements = self.pm.pictograph.main_widget.special_placements[
+            orientation_key
+        ]
+
         if self.pm.pictograph.letter in special_placements:
-            special_adjustment = (
-                self.pm.adjustment_calculator.get_adjustment_for_letter(
-                    self.pm.pictograph.letter, arrow, turns_tuple
-                )
+            special_adjustment = self.get_adjustment_for_letter(
+                self.pm.pictograph.letter, arrow, turns_tuple, orientation_key
             )
             (
                 x,
@@ -59,7 +65,7 @@ class ArrowAdjustmentCalculator:
         return None
 
     def get_adjustment_for_letter(
-        self, letter: str, arrow: Arrow, turns_tuple: str = None
+        self, letter: str, arrow: Arrow, turns_tuple: str, orientation_key: str
     ) -> Optional[Tuple[int, int]]:
         if turns_tuple is None:
             turns_tuple = (
@@ -69,7 +75,7 @@ class ArrowAdjustmentCalculator:
             )
         self.special_placements: Dict[
             str, Dict
-        ] = self.pm.pictograph.main_widget.special_placements
+        ] = self.pm.pictograph.main_widget.special_placements[orientation_key]
 
         letter_adjustments: Dict = self.special_placements.get(letter, {}).get(
             turns_tuple, {}
