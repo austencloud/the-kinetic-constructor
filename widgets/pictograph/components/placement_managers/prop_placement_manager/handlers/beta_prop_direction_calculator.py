@@ -28,13 +28,13 @@ class BetaPropDirectionCalculator:
 
     def get_dir(self, motion: Motion) -> Directions:
         """Determine the translation direction based on the motion type, start location, end location, and end layer."""
-        if not (motion.check.is_shift() or motion.check.is_static()):
-            return None
-
-        if motion.prop.check.is_radial():
-            return self.get_dir_for_radial(motion)
-        elif motion.prop.check.is_antiradial():
-            return self.get_dir_for_antiradial(motion)
+        if motion.check.is_shift():
+            if motion.prop.check.is_radial():
+                return self.get_dir_for_radial(motion)
+            elif motion.prop.check.is_antiradial():
+                return self.get_dir_for_antiradial(motion)
+        elif motion.check.is_dash() or motion.check.is_static():
+            return self.get_dir_for_non_shift(motion.prop)
 
     def get_dir_for_radial(self, motion: Motion) -> Directions:
         direction_map = {
@@ -67,12 +67,12 @@ class BetaPropDirectionCalculator:
             RADIAL: {
                 (NORTH, RED): RIGHT,
                 (NORTH, BLUE): LEFT,
-                (SOUTH, RED): RIGHT,
-                (SOUTH, BLUE): LEFT,
-                (EAST, RED): UP,
+                (SOUTH, RED): LEFT,
+                (SOUTH, BLUE): RIGHT,
+                (EAST, RED): DOWN,
                 (WEST, BLUE): DOWN,
                 (WEST, RED): UP,
-                (EAST, BLUE): DOWN,
+                (EAST, BLUE): UP,
             },
             ANTIRADIAL: {
                 (NORTH, RED): UP,

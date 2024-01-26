@@ -95,7 +95,7 @@ class RotationAngleOverrideManager:
             # Determine the adjustment key based on motion turns
             if blue_static.turns > 0 and red_static.turns > 0:
                 direction = (
-                    "s" if blue_static.prop_rot_dir == blue_static.prop_rot_dir else "o"
+                    "s" if blue_static.prop_rot_dir == red_static.prop_rot_dir else "o"
                 )
                 adjustment_key_str = f"({direction}, {self._normalize_turns(blue_static)}, {self._normalize_turns(red_static)})"
             elif blue_static.turns > 0 or red_static.turns > 0:

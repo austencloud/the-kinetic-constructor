@@ -71,3 +71,17 @@ class PropOffsetCalculator:
         }
         offset = offset_map.get(direction, QPointF(0, 0))
         return current_position + offset
+
+    def calculate_rot_override_position_with_offset(
+        self, current_position: QPointF, direction: Directions
+    ) -> QPointF:
+        self.beta_offset = self.prop_placement_manager.pictograph.width() / 38
+
+        offset_map = {
+            LEFT: QPointF(self.beta_offset*2, 0),
+            RIGHT: QPointF(-self.beta_offset*2, 0),
+            UP: QPointF(0, self.beta_offset*2),
+            DOWN: QPointF(0, -self.beta_offset*2),
+        }
+        offset = offset_map.get(direction, QPointF(0, 0))
+        return current_position + offset

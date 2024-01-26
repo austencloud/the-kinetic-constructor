@@ -2,7 +2,7 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF
 from typing import TYPE_CHECKING, Union
-
+from PyQt6.QtWidgets import QGraphicsItem
 
 
 from objects.graphical_object.svg_manager import (
@@ -28,7 +28,9 @@ class GraphicalObject(QGraphicsSvgItem):
         super().__init__()
         self.pictograph = pictograph
         self.svg_manager = SvgManager(self)
-
+        self.setFlag(
+            QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True
+        )  
     ### GETTERS ###
 
     def get_center(self) -> QPointF:

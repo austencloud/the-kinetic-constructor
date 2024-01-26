@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsItem
+
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
 
@@ -7,10 +8,7 @@ if TYPE_CHECKING:
 class ArrowUpdater:
     def __init__(self, arrow: "Arrow") -> None:
         self.a = arrow
-        arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)  # Enable selection
-        arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)  # Enable movement
-        arrow.setFlag(QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges, True)  # Enable geometry changes
-        
+
     def update_arrow(self, arrow_dict=None) -> None:
         if arrow_dict:
             self.a.attr_manager.update_attributes(arrow_dict)

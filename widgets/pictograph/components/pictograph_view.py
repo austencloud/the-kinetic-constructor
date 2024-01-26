@@ -14,10 +14,10 @@ class PictographView(QGraphicsView):
         self.setScene(self.pictograph)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        
+
         # Set horizontal size policy to Expanding
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        
+
     def resize_for_scroll_area(self) -> None:
         view_width = int(
             (
@@ -25,7 +25,6 @@ class PictographView(QGraphicsView):
                 / self.pictograph.scroll_area.display_manager.COLUMN_COUNT
             )
             - self.pictograph.scroll_area.display_manager.SPACING
-            
         )
         self.setMinimumWidth(view_width)
         self.setMaximumWidth(view_width)
@@ -49,7 +48,11 @@ class PictographView(QGraphicsView):
             )
 
         elif event.key() == Qt.Key.Key_X:
-            self.pictograph.wasd_manager.rotation_manager.handle_rotation_angle_override(
+            self.pictograph.wasd_manager.rotation_angle_override_manager.handle_rotation_angle_override(
+                event.key()
+            )
+        elif event.key() == Qt.Key.Key_Z:
+            self.pictograph.wasd_manager.prop_placement_override_manager.handle_prop_placement_override(
                 event.key()
             )
 
