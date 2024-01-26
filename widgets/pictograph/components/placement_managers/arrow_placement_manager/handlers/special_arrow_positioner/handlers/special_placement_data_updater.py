@@ -2,6 +2,7 @@ import json
 import os
 import re
 from typing import TYPE_CHECKING, Dict, Tuple
+from constants import CLOCK, COUNTER, IN, OUT
 
 from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.TypeChecking import Letters
@@ -23,7 +24,12 @@ class SpecialPlacementDataUpdater:
         letter = self.positioner.pictograph.letter
 
         turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
-        letter_data: Dict = self.positioner.placement_manager.pictograph.main_widget.load_special_placements().get(letter, {})
+        # Determine the correct orientation key ('from_radial' or 'from_antiradial')
+        orientation_key = 'from_radial' if arrow.motion.start_ori in [IN, OUT] else 'from_antiradial'
+        
+        # Access the correct placements data based on the orientation
+        letter_data = self.positioner.placement_manager.pictograph.main_widget.special_placements[orientation_key].get(letter, {})
+
         turn_data = letter_data.get(turns_tuple, {})
 
         if turn_data:
@@ -33,24 +39,38 @@ class SpecialPlacementDataUpdater:
 
         letter_data[turns_tuple] = turn_data
         self.positioner.placement_manager.pictograph.main_widget.special_placements[letter] = letter_data
-        self.update_specific_entry_in_json(letter, letter_data)
+        self.update_specific_entry_in_json(letter, letter_data, arrow)
 
-    def update_specific_entry_in_json(self, letter: Letters, letter_data: Dict) -> None:
+    def update_specific_entry_in_json(self, letter: Letters, letter_data: Dict, arrow: Arrow) -> None:
         """Update a specific entry in the JSON file."""
         try:
-            file_path = os.path.join(
-                self.positioner.placement_manager.pictograph.main_widget.directory, f"{letter}_placements.json"
-            ) 
+            subfolder = 'from_radial' if arrow.motion.start_ori in [IN, OUT] else 'from_antiradial'
+            base_directory = self.positioner.placement_manager.pictograph.main_widget.parent_directory
+
+            # Construct the file path
+            file_path = os.path.join(base_directory, subfolder, f"{letter}_placements.json")
+
+            # Check if the directory exists, if not, create it
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+            # Check if the file exists. If not, initialize an empty dictionary for the letter
+            if not os.path.exists(file_path):
+                with open(file_path, "w", encoding="utf-8") as file:
+                    json.dump({letter: {}}, file, indent=2, ensure_ascii=False)
+
+            # Now, read the existing data, update it, and write back
+            with open(file_path, "r", encoding="utf-8") as file:
+                existing_data = json.load(file)
+
+            existing_data[letter] = letter_data
+
             with open(file_path, "w", encoding="utf-8") as file:
-                formatted_json_str = json.dumps(
-                    {letter: letter_data}, indent=2, ensure_ascii=False
-                )
-                formatted_json_str = re.sub(
-                    r"\[\s+(-?\d+),\s+(-?\d+)\s+\]", r"[\1, \2]", formatted_json_str
-                )
+                formatted_json_str = json.dumps(existing_data, indent=2, ensure_ascii=False)
+                formatted_json_str = re.sub(r"\[\s+(-?\d+),\s+(-?\d+)\s+\]", r"[\1, \2]", formatted_json_str)
                 file.write(formatted_json_str)
-        except json.JSONDecodeError as e:
-            print(f"JSON decoding error occurred: {e}")
+        except Exception as e:
+            print(f"Error occurred while updating JSON file: {e}")
+
 
     def _update_turn_data(
         self, turn_data: Dict, arrow: "Arrow", adjustment: Tuple[int, int]

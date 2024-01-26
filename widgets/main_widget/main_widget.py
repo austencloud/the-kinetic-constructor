@@ -28,20 +28,22 @@ class MainWidget(QWidget):
         self._setup_layouts()
         self.load_special_placements()
 
-    def load_special_placements(self) -> Dict[str, Dict[str, List[str]]]:
-        """Loads the special placements for arrows."""
-        self.directory = "data/arrow_placement/special/"
-        self.special_placements = {}
-        for file_name in os.listdir(self.directory):
-            if file_name.endswith("_placements.json"):
-                with open(
-                    os.path.join(self.directory, file_name), "r", encoding="utf-8"
-                ) as file:
-                    data = json.load(file)
-                    self.special_placements.update(data)
-        return self.special_placements
+    def load_special_placements(self) -> None:
+        """Loads the special placements for arrows from radial and antiradial directories."""
+        self.special_placements = {"from_radial": {}, "from_antiradial": {}}
 
-    def refresh_placements(self):
+        for subfolder in ["from_radial", "from_antiradial"]:
+            self.parent_directory = os.path.join("data/arrow_placement/special/")
+            self.directory = os.path.join("data/arrow_placement/special/", subfolder)
+            for file_name in os.listdir(self.directory):
+                if file_name.endswith("_placements.json"):
+                    with open(
+                        os.path.join(self.directory, file_name), "r", encoding="utf-8"
+                    ) as file:
+                        data = json.load(file)
+                        self.special_placements[subfolder].update(data)
+
+    def refresh_placements(self) -> None:
         """Refreshes the special placements and updates all pictographs."""
         self.load_special_placements()
 
