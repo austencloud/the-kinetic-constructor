@@ -35,7 +35,7 @@ class VtgDirButtonManager:
         self.section.header_layout.insertStretch(6, 8)
         self.hide_vtg_dir_buttons()
 
-    def show_vtg_dir_buttons(self) -> None:
+    def show_vtg_dir_buttons(self) -> None: 
         self.opp_button.show()
         self.same_button.show()
 

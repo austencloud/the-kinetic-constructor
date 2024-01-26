@@ -1,14 +1,14 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel, QSizePolicy
 from PyQt6.QtCore import Qt
-
 if TYPE_CHECKING:
-    from widgets.scroll_area.components.section_manager.section_widget.section_widget import (
-        SectionWidget,
-    )
+    from ..section_widget import SectionWidget
+from PyQt6.QtCore import pyqtSignal
 
 
 class ScrollAreaSectionTypeLabel(QLabel):
+    clicked = pyqtSignal()
+
     TYPE_MAP = {
         "Type1": "Dual-Shift",
         "Type2": "Shift",
@@ -54,3 +54,7 @@ class ScrollAreaSectionTypeLabel(QLabel):
         self.setSizePolicy(
             QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         )
+
+    def mousePressEvent(self, event):
+        super().mousePressEvent(event)
+        self.clicked.emit()

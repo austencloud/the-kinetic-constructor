@@ -23,7 +23,7 @@ class ScrollAreaSectionManager:
             LetterTypes, List[Letters]
         ] = self.setup_letters_by_type()
         self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
-        self.ordered_section_types = []  
+        self.ordered_section_types = []
 
     def setup_letters_by_type(self) -> Dict[LetterTypes, List[Letters]]:
         letters_by_type = {}
@@ -43,24 +43,24 @@ class ScrollAreaSectionManager:
             self.sections[letter_type] = section
             self.ordered_section_types.append(letter_type)
             self.scroll_area.fix_stretch()
-
+            section.setup_components()
         return self.sections[letter_type]
 
     def get_correct_index_for_section(self, letter_type: LetterTypes) -> int:
         desired_position = self.SECTION_ORDER.index(letter_type)
-        current_positions = [self.SECTION_ORDER.index(typ) for typ in self.ordered_section_types]
-        
+        current_positions = [
+            self.SECTION_ORDER.index(typ) for typ in self.ordered_section_types
+        ]
+
         # This will ensure that the position list is sorted so that we can find the correct insertion point.
         current_positions.sort()
-        
+
         for i, pos in enumerate(current_positions):
             if pos >= desired_position:
                 return i
-        
+
         # If no position is found that is greater than or equal to the desired, it means the new section should go at the end.
         return len(self.ordered_section_types)
-
-
 
     def get_section(self, letter_type: LetterTypes) -> SectionWidget:
         return self.create_section(letter_type)

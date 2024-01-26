@@ -20,6 +20,3 @@ class ScrollAreaSectionPictographFrame(QFrame):
         self.layout: QGridLayout = QGridLayout(self)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.layout.setContentsMargins(0, 0, 0, 0)
-
-        # add black border
-        # self.setStyleSheet("border: 1px solid black;")
