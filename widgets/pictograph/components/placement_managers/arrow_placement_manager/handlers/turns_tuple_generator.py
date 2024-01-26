@@ -269,6 +269,71 @@ class TurnsTupleGenerator:
 
         elif red_dash.turns == 0 and blue_dash.turns == 0:
             return f"({self._normalize_arrow_turns(blue_dash)}, {self._normalize_arrow_turns(red_dash)})"
+        
+    def _generate_Γ_key(self) -> str:
+        blue_static = self.p.blue_motion
+        red_static = self.p.red_motion
+
+        blue_static_direction_map = {
+            (EAST, NORTH, CLOCKWISE): OPENING,
+            (EAST, NORTH, COUNTER_CLOCKWISE): CLOSING,
+            (EAST, SOUTH, CLOCKWISE): CLOSING,
+            (EAST, SOUTH, COUNTER_CLOCKWISE): OPENING,
+            (WEST, NORTH, CLOCKWISE): CLOSING,
+            (WEST, NORTH, COUNTER_CLOCKWISE): OPENING,
+            (WEST, SOUTH, CLOCKWISE): OPENING,
+            (WEST, SOUTH, COUNTER_CLOCKWISE): CLOSING,
+            (NORTH, EAST, CLOCKWISE): CLOSING,
+            (NORTH, EAST, COUNTER_CLOCKWISE): OPENING,
+            (NORTH, WEST, CLOCKWISE): OPENING,
+            (NORTH, WEST, COUNTER_CLOCKWISE): CLOSING,
+            (SOUTH, EAST, CLOCKWISE): OPENING,
+            (SOUTH, EAST, COUNTER_CLOCKWISE): CLOSING,
+            (SOUTH, WEST, CLOCKWISE): CLOSING,
+            (SOUTH, WEST, COUNTER_CLOCKWISE): OPENING,
+        }
+        red_static_direction_map = {
+            (EAST, NORTH, CLOCKWISE): CLOSING,
+            (EAST, NORTH, COUNTER_CLOCKWISE): OPENING,
+            (EAST, SOUTH, CLOCKWISE): OPENING,
+            (EAST, SOUTH, COUNTER_CLOCKWISE): CLOSING,
+            (WEST, NORTH, CLOCKWISE): OPENING,
+            (WEST, NORTH, COUNTER_CLOCKWISE): CLOSING,
+            (WEST, SOUTH, CLOCKWISE): CLOSING,
+            (WEST, SOUTH, COUNTER_CLOCKWISE): OPENING,
+            (NORTH, EAST, CLOCKWISE): OPENING,
+            (NORTH, EAST, COUNTER_CLOCKWISE): CLOSING,
+            (NORTH, WEST, CLOCKWISE): CLOSING,
+            (NORTH, WEST, COUNTER_CLOCKWISE): OPENING,
+            (SOUTH, EAST, CLOCKWISE): CLOSING,
+            (SOUTH, EAST, COUNTER_CLOCKWISE): OPENING,
+            (SOUTH, WEST, CLOCKWISE): OPENING,
+            (SOUTH, WEST, COUNTER_CLOCKWISE): CLOSING,
+        }
+        if blue_static.turns == 0 and red_static.turns > 0:
+            red_static_open_close_state = red_static_direction_map.get(
+                (blue_static.end_loc, red_static.end_loc, red_static.prop_rot_dir), ""
+            )
+            return f"({self._normalize_arrow_turns(blue_static)}, {self._normalize_arrow_turns(red_static)}, {red_static_open_close_state})"
+
+        elif red_static.turns == 0 and blue_static.turns > 0:
+            blue_static_open_close_state = blue_static_direction_map.get(
+                (blue_static.end_loc, red_static.end_loc, blue_static.prop_rot_dir), ""
+            )
+            return f"({self._normalize_arrow_turns(blue_static)}, {self._normalize_arrow_turns(red_static)}, {blue_static_open_close_state})"
+
+        elif red_static.turns > 0 and blue_static.turns > 0:
+            red_static_open_close_state = red_static_direction_map.get(
+                (blue_static.end_loc, red_static.end_loc, red_static.prop_rot_dir), ""
+            )
+            blue_static_open_close_state = blue_static_direction_map.get(
+                (blue_static.end_loc, red_static.end_loc, blue_static.prop_rot_dir), ""
+            )
+            vtg_dir = SAME if red_static.prop_rot_dir == blue_static.prop_rot_dir else OPP
+            return f"({vtg_dir[0]}, {self._normalize_arrow_turns(blue_static)}, {self._normalize_arrow_turns(red_static)}, {blue_static_open_close_state}, {red_static_open_close_state})"
+
+        elif red_static.turns == 0 and blue_static.turns == 0:
+            return f"({self._normalize_arrow_turns(blue_static)}, {self._normalize_arrow_turns(red_static)})"
 
     def generate_turns_tuple(self, letter: Letters) -> str:
         """Generate a key based on the letter and motion details."""
@@ -280,6 +345,7 @@ class TurnsTupleGenerator:
             tuple(Type3_letters): self._generate_Type3_key,
             ("Λ"): self._generate_Λ_key,
             ("Λ-"): self._generate_Λ_dash_key,
+            ("Γ"): self._generate_Γ_key,
             tuple(Type4_letters): self._generate_Type4_key,
             tuple(Type5_letters + Type6_letters): self._generate_Type5_6_key,
         }

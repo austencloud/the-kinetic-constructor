@@ -51,10 +51,7 @@ class PictographView(QGraphicsView):
             self.pictograph.wasd_manager.rotation_angle_override_manager.handle_rotation_angle_override(
                 event.key()
             )
-        elif event.key() == Qt.Key.Key_Z:
-            self.pictograph.wasd_manager.prop_placement_override_manager.handle_prop_placement_override(
-                event.key()
-            )
+
 
         elif event.key() == Qt.Key.Key_F5:
             self.pictograph.main_widget.refresh_placements()

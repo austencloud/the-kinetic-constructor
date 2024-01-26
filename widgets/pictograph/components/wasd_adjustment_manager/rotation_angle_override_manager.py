@@ -49,7 +49,6 @@ class RotationAngleOverrideManager:
                 turn_data["static_rot_angle"] = 0
 
         elif letter in ["Λ", "Λ-"]:
-            # Call the method from TurnsTupleGenerator for Λ and Λ-
             adjustment_key_str = (
                 self.special_positioner.turns_tuple_generator.generate_turns_tuple(
                     letter
@@ -97,13 +96,22 @@ class RotationAngleOverrideManager:
                 direction = (
                     "s" if blue_static.prop_rot_dir == red_static.prop_rot_dir else "o"
                 )
-                adjustment_key_str = f"({direction}, {self._normalize_turns(blue_static)}, {self._normalize_turns(red_static)})"
+
+                adjustment_key_str = (
+                    self.special_positioner.turns_tuple_generator._generate_Γ_key()
+                    if letter == "Γ"
+                    else f"({direction}, {self._normalize_turns(blue_static)}, {self._normalize_turns(red_static)})"
+                )
             elif blue_static.turns > 0 or red_static.turns > 0:
                 if blue_static.turns > 0:
                     direction = blue_static.prop_rot_dir.lower()  # 'cw' or 'ccw'
                 elif red_static.turns > 0:
                     direction = red_static.prop_rot_dir.lower()  # 'cw' or 'ccw'
-                adjustment_key_str = f"({direction}, {self._normalize_turns(blue_static)}, {self._normalize_turns(red_static)})"
+                adjustment_key_str = (
+                    self.special_positioner.turns_tuple_generator._generate_Γ_key()
+                    if letter == "Γ"
+                    else f"({direction}, {self._normalize_turns(blue_static)}, {self._normalize_turns(red_static)})"
+                )
             letter_data = data.get(letter, {})
             turn_data = letter_data.get(adjustment_key_str, {})
             if self.pictograph.selected_arrow.color == BLUE:
