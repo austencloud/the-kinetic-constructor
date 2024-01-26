@@ -1,16 +1,17 @@
 from typing import TYPE_CHECKING, Dict
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QVBoxLayout, QGroupBox
 from constants import OPP, SAME
 from utilities.TypeChecking.TypeChecking import LetterTypes
+from widgets.scroll_area.components.section_manager.section_widget.components.section_header import (
+    SectionHeader,
+)
 from .....pictograph.pictograph import Pictograph
 from .....turns_box.turns_box_widgets.vtg_dir_button_manager import VtgDirButtonManager
 from .components.filter_tab import FilterTab
 from .components.pictograph_frame import ScrollAreaSectionPictographFrame
-from .components.type_label import SectionTypeLabel
 
 if TYPE_CHECKING:
     from ....scroll_area import ScrollArea
-from PyQt6.QtWidgets import QGroupBox
 
 
 class SectionWidget(QGroupBox):
@@ -22,42 +23,49 @@ class SectionWidget(QGroupBox):
         self.letter_type = letter_type
         self.vtg_dir_btn_state: Dict[str, bool] = {SAME: False, OPP: False}
         self.filter_tab: FilterTab = None
-        self.type_label = SectionTypeLabel(self)
-        self.type_label.clicked.connect(self.toggle_section)
-        self._setup_layout()
 
     def setup_components(self) -> None:
-        self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
         self.vtg_dir_button_manager = VtgDirButtonManager(self)
+        self._setup_layout()
+        self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
         self.pictographs: Dict[str, Pictograph] = {}
         self.layout.addWidget(self.pictograph_frame)
 
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
-        self.header_layout = self._setup_header_layout()
-        self.layout.addLayout(self.header_layout)
-
-    def _setup_header_layout(self) -> QHBoxLayout:
-        header_layout = QHBoxLayout()
-        header_layout.addStretch(2)
-        header_layout.addWidget(self.type_label)
-        header_layout.addStretch(1)
-        header_layout.addWidget(self.type_label.arrow_label)
-        header_layout.addStretch(2)
-        return header_layout
+        self.setContentsMargins(0, 0, 0, 0)
+        self.header = SectionHeader(self)
+        self.header.clicked.connect(self.toggle_section)
+        self.layout.addWidget(self.header)
 
     def resize_section(self) -> None:
         self.setMinimumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
         self.setMaximumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
-        self.type_label.setMinimumHeight(self.width() // 20)
-        self.type_label.setMaximumHeight(self.width() // 20)
+
+        self.header.type_label.setMinimumHeight(self.width() // 20)
+        self.header.type_label.setMaximumHeight(self.width() // 20)
         self.filter_tab.resize_filter_tab()
 
     def toggle_section(self) -> None:
+        self.layout.setEnabled(False)
         is_visible = not self.pictograph_frame.isVisible()
         self.pictograph_frame.setVisible(is_visible)
         if self.filter_tab:
             self.filter_tab.setVisible(is_visible)
-        self.type_label.set_styled_text(self.letter_type)
-        self.type_label.toggle_dropdown_arrow(not is_visible)
+
+        self.header.toggle_dropdown_arrow(not is_visible)
+
+        if is_visible:
+            if self.vtg_dir_btn_state[SAME] or self.vtg_dir_btn_state[OPP]:
+                self.vtg_dir_button_manager.show_vtg_dir_buttons()
+        else:
+            self.vtg_dir_btn_state[
+                SAME
+            ] = self.vtg_dir_button_manager.same_button.isVisible()
+            self.vtg_dir_btn_state[
+                OPP
+            ] = self.vtg_dir_button_manager.opp_button.isVisible()
+            self.vtg_dir_button_manager.hide_vtg_dir_buttons()
+        self.layout.setEnabled(True)
+        self.layout.activate()

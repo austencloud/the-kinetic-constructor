@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import Callable, Dict, List, Tuple
 from constants import (
     BLUE,
     CLOCKWISE,
@@ -12,8 +12,6 @@ from constants import (
     RED,
     SOUTH,
     STATIC,
-    SAME,
-    OPP,
     WEST,
 )
 from objects.motion.motion import Motion
@@ -25,62 +23,99 @@ class DirectionalTupleGenerator:
         self.motion = motion
         self.other_motion = other_motion
 
-    def generate_directional_tuples(self, x: int, y: int) -> List[Tuple[int, int]]:
-        motion_type = self.motion.motion_type
-        prop_rot_dir = self.motion.prop_rot_dir
-
-        if motion_type == DASH and self.motion.turns > 0:
-            if self.motion.prop_rot_dir == self.other_motion.prop_rot_dir:
-                self.motion.pictograph.vtg_timing = SAME
-            elif self.motion.prop_rot_dir != self.other_motion.prop_rot_dir:
-                self.motion.pictograph.vtg_timing = OPP
-
-        shift_directional_tuples = {
-            (PRO, CLOCKWISE): [(x, y), (-y, x), (-x, -y), (y, -x)],
-            (PRO, COUNTER_CLOCKWISE): [(-y, -x), (x, -y), (y, x), (-x, y)],
-            (ANTI, CLOCKWISE): [(-y, -x), (x, -y), (y, x), (-x, y)],
-            (ANTI, COUNTER_CLOCKWISE): [(x, y), (-y, x), (-x, -y), (y, -x)],
+    @property
+    def _situations(
+        self,
+    ) -> Dict[Tuple[str, str, str], Callable[[int, int], List[Tuple[int, int]]]]:
+        return {
+            (DASH, NO_ROT, PRO): self._pro_vs_no_rot_dash,
+            (DASH, NO_ROT, ANTI): self._anti_vs_no_rot_dash,
+            (STATIC, NO_ROT): self._no_rot_static,
+            (STATIC,): self._static,
         }
 
-        pro_vs_no_rot_dash_directional_tuples = (
+    def generate_directional_tuples(self, x: int, y: int) -> List[Tuple[int, int]]:
+        if self.motion.pictograph.letter in Type5_letters and self.motion.turns == 0:
+            return self._type5_zero_turns(x, y)
+        situation = (
+            self.motion.motion_type,
+            self.motion.prop_rot_dir,
+            self.other_motion.motion_type,
+        )
+        if situation in self._situations:
+            return self._situations[situation](x, y)
+        elif (
+            self.motion.motion_type,
+            self.motion.prop_rot_dir,
+        ) in self._shift_directional_tuples:
+            return self._shift_directional_tuples[
+                (self.motion.motion_type, self.motion.prop_rot_dir)
+            ](x, y)
+        else:
+            return self._default_case(x, y)
+
+    def _default_case(self, x: int, y: int) -> List[Tuple[int, int]]:
+        if self.motion.motion_type == DASH and self.motion.prop_rot_dir == NO_ROT:
+            if self.other_motion.motion_type == PRO:
+                return self._pro_vs_no_rot_dash(x, y)
+            elif self.other_motion.motion_type == ANTI:
+                return self._anti_vs_no_rot_dash(x, y)
+            elif self.other_motion.motion_type == DASH:
+                return self._no_rot_dash_vs_dash(x, y)
+            elif self.other_motion.motion_type == STATIC:
+                return self._no_rot_dash_vs_static(x, y)
+        elif self.motion.motion_type == DASH:
+            return self._dash(x, y)
+        elif self.motion.motion_type == STATIC:
+            if self.motion.prop_rot_dir == NO_ROT:
+                return self._no_rot_static(x, y)
+            else:
+                return self._static(x, y)
+        else:
+            return []
+
+    def _pro_vs_no_rot_dash(self, x: int, y: int) -> List[Tuple[int, int]]:
+        return (
             [(x, y), (-y, x), (-x, -y), (y, -x)]
             if self.other_motion.prop_rot_dir == CLOCKWISE
-            else [(-x, y), (-y, -x), (x, -y), (y, x)]  # COUNTER_CLOCKWISE
+            else [(-x, y), (-y, -x), (x, -y), (y, x)]
         )
 
-        anti_vs_no_rot_dash_directional_tuples = (
+    def _anti_vs_no_rot_dash(self, x: int, y: int) -> List[Tuple[int, int]]:
+        return (
             [(-x, y), (-y, -x), (x, -y), (y, x)]
             if self.other_motion.prop_rot_dir == CLOCKWISE
-            else [(x, y), (-y, x), (-x, -y), (y, -x)]  # COUNTER_CLOCKWISE
+            else [(x, y), (-y, x), (-x, -y), (y, -x)]
         )
 
-        no_rot_dash_vs_dash_directional_tuples = {
+    def _no_rot_dash_vs_dash(self, x: int, y: int) -> List[Tuple[int, int]]:
+        return {
             RED: [(x, y), (-y, x), (-x, -y), (y, -x)],
-            BLUE: [(-x, y), (-y, -x), (x, -y), (y, x)]
-        }
+            BLUE: [(-x, y), (-y, -x), (x, -y), (y, x)],
+        }.get(self.motion.color, [])
 
-        no_rot_dash_vs_static_directional_tuples = [(x, y), (-y, x), (-x, -y), (y, -x)]
+    def _no_rot_dash_vs_static(self, x: int, y: int) -> List[Tuple[int, int]]:
+        return [(x, y), (-y, x), (-x, -y), (y, -x)]
 
-        same_dash_directional_tuples = {
-            (DASH, CLOCKWISE): ([(x, -y), (y, x), (-x, y), (-y, -x)]),
-            (DASH, COUNTER_CLOCKWISE): ([(-x, -y), (y, -x), (x, y), (-y, x)]),
-        }
+    def _dash(self, x: int, y: int) -> List[Tuple[int, int]]:
+        return {
+            (DASH, CLOCKWISE): [(x, -y), (y, x), (-x, y), (-y, -x)],
+            (DASH, COUNTER_CLOCKWISE): [(-x, -y), (y, -x), (x, y), (-y, x)],
+        }.get((self.motion.motion_type, self.motion.prop_rot_dir), [])
 
-        opp_dash_directional_tuples = {
-            (DASH, CLOCKWISE): ([(x, -y), (y, x), (-x, y), (-y, -x)]),
-            (DASH, COUNTER_CLOCKWISE): ([(-x, -y), (y, -x), (x, y), (-y, x)]),
-        }
+    def _no_rot_static(self, x: int, y: int) -> List[Tuple[int, int]]:
+        return [(x, -y), (y, x), (-x, y), (-y, -x)]
 
-        no_rot_static_directional_tuples = [(x, -y), (y, x), (-x, y), (-y, -x)]
-
-        static_directional_tuples = {
+    def _static(self, x: int, y: int) -> List[Tuple[int, int]]:
+        return {
             (STATIC, CLOCKWISE): [(x, -y), (y, x), (-x, y), (-y, -x)],
             (STATIC, COUNTER_CLOCKWISE): [(-x, -y), (y, -x), (x, y), (-y, x)],
-        }
+        }.get((self.motion.motion_type, self.motion.prop_rot_dir), [])
 
+    def _type5_zero_turns(self, x: int, y: int) -> List[Tuple[int, int]]:
         Type5_zero_turns_directional_tuples = {
             (BLUE, (NORTH, SOUTH)): [(x, y), (-y, x), (-x, -y), (y, x)],
-            (BLUE, (EAST, WEST)): [(-x, y), (-y, -x), (-x, -y), (y, x)],
+            (BLUE, (EAST, WEST)): [(-x, y), (-y, -x), (x, -y), (y, x)],
             (BLUE, (SOUTH, NORTH)): [(x, y), (-y, -x), (-x, -y), (y, -x)],
             (BLUE, (WEST, EAST)): [(x, y), (-y, -x), (x, -y), (-y, x)],
             (RED, (NORTH, SOUTH)): [(-x, y), (-y, x), (x, -y), (y, x)],
@@ -88,45 +123,29 @@ class DirectionalTupleGenerator:
             (RED, (SOUTH, NORTH)): [(-x, y), (-y, -x), (x, -y), (y, -x)],
             (RED, (WEST, EAST)): [(x, y), (-y, x), (x, -y), (y, x)],
         }
+        return Type5_zero_turns_directional_tuples.get(
+            (self.motion.color, (self.motion.start_loc, self.motion.end_loc)), []
+        )
 
-        if self.motion.pictograph.letter in Type5_letters and self.motion.turns == 0:
-            return Type5_zero_turns_directional_tuples.get(
-                (self.motion.color, (self.motion.start_loc, self.motion.end_loc))
-            )
+    @property
+    def _shift_directional_tuples(
+        self,
+    ) -> Dict[Tuple[str, str], Callable[[int, int], List[Tuple[int, int]]]]:
+        return {
+            (PRO, CLOCKWISE): self._pro_clockwise,
+            (PRO, COUNTER_CLOCKWISE): self._pro_counter_clockwise,
+            (ANTI, CLOCKWISE): self._anti_clockwise,
+            (ANTI, COUNTER_CLOCKWISE): self._anti_counter_clockwise,
+        }
 
-        elif (
-            motion_type == DASH
-            and prop_rot_dir == NO_ROT
-            and self.other_motion.motion_type == PRO
-        ):
-            return pro_vs_no_rot_dash_directional_tuples
-        elif (
-            motion_type == DASH
-            and prop_rot_dir == NO_ROT
-            and self.other_motion.motion_type == ANTI
-        ):
-            return anti_vs_no_rot_dash_directional_tuples
-        elif (
-            motion_type == DASH
-            and prop_rot_dir == NO_ROT
-            and self.other_motion.motion_type == DASH
-        ):
-            return no_rot_dash_vs_dash_directional_tuples.get(
-                self.motion.color, []
-            )
-        elif (
-            motion_type == DASH
-            and prop_rot_dir == NO_ROT
-            and self.other_motion.motion_type == STATIC
-        ):
-            return no_rot_dash_vs_static_directional_tuples
-        elif motion_type == DASH and self.motion.pictograph.vtg_timing == SAME:
-            return same_dash_directional_tuples.get((motion_type, prop_rot_dir), [])
-        elif motion_type == DASH and self.motion.pictograph.vtg_timing == OPP:
-            return opp_dash_directional_tuples.get((motion_type, prop_rot_dir), [])
-        elif motion_type == STATIC and prop_rot_dir == NO_ROT:
-            return no_rot_static_directional_tuples
-        elif motion_type == STATIC:
-            return static_directional_tuples.get((motion_type, prop_rot_dir), [])
-        else:
-            return shift_directional_tuples.get((motion_type, prop_rot_dir), [])
+    def _pro_clockwise(self, x: int, y: int) -> List[Tuple[int, int]]:
+        return [(x, y), (-y, x), (-x, -y), (y, -x)]
+
+    def _pro_counter_clockwise(self, x: int, y: int) -> List[Tuple[int, int]]:
+        return [(-y, -x), (x, -y), (y, x), (-x, y)]
+
+    def _anti_clockwise(self, x: int, y: int) -> List[Tuple[int, int]]:
+        return [(-y, -x), (x, -y), (y, x), (-x, y)]
+
+    def _anti_counter_clockwise(self, x: int, y: int) -> List[Tuple[int, int]]:
+        return [(x, y), (-y, x), (-x, -y), (y, -x)]

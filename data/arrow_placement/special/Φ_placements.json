@@ -17,7 +17,9 @@
       "static": [-15, 0]
     },
     "(s, 1.5, 1.5)": {
-      "static_rot_angle": 0
+      "static_rot_angle": 0,
+      "static": [-25, 0],
+      "dash": [0, -110]
     },
     "(s, 1.5, 2)": {
       "static_rot_angle": 0,
