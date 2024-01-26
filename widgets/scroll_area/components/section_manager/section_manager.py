@@ -86,17 +86,6 @@ class ScrollAreaSectionManager:
     def get_section(self, letter_type: LetterTypes) -> SectionWidget:
         return self.sections.get(letter_type)
 
-    def organize_pictographs_by_type(self) -> None:
-        for key, pictograph in self.scroll_area.pictographs.items():
-            letter_type = self.get_pictograph_letter_type(key)
-            self.pictographs_by_type[letter_type].append(pictograph)
-
-        for letter_type, pictographs in self.pictographs_by_type.items():
-            for index, pictograph in enumerate(pictographs):
-                self.scroll_area.display_manager.add_pictograph_to_layout(
-                    pictograph, index
-                )
-
     def create_section_if_needed(self, letter_type: LetterTypes) -> None:
         if letter_type not in self.sections:
             self.create_section(letter_type)

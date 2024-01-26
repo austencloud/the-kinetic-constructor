@@ -28,7 +28,7 @@ positions_map: Dict[Tuple[Locations], SpecificPositions] = {
 }
 
 
-def get_specific_start_end_poss(
+def get_specific_start_end_pos(
     blue_motion: Motion, red_motion: Motion
 ) -> Dict[str, SpecificPositions]:
     start_locs = (

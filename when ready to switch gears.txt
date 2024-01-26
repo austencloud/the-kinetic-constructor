@@ -1,0 +1,55 @@
+Ok, it's time to switch gears to something big. My program as a whole is designed as a sequence constructor, where these pictographs are supposed to be added 1 by 1 to the sequence widget which lives on the left half of the screen. See the attached image of the entire main window to see what I mean.
+
+Up until now, we've been working on the codex widget. This widget's purpose is to show all of the pictographs that exist within the system. Now it's time to work on a new widget called the constructor. This should be a new tab in the main tab widget. Its purpose will be to guide the user through the creation of sequences. when the user switches over to this tab, the initial screen that they will see is a selection. Where they will be allowed to select from three starting positions. This is what I want to start building with you. When the user selects one of these positions, it will be placed in the start position view of the sequence widget. Then the contents of the constructor tabs scroll area will refresh. The purpose is to allow the user to build sequences one pictograph at a time. So after they select their first position, this scroll area will be populated with pictographs that can logically follow the start position that the user has chosen. The way that the program determines whether a pictograph can follow the previous pictograph or the start position is as follows. to determine if a pictograph can follow, we look at the end position of the previous position or the start position. This is going to be alpha beta or gamma, followed by a number. Take a look here at how I determine how to assign that number.
+
+from objects.motion.motion import Motion
+from constants import *
+from utilities.TypeChecking.TypeChecking import (
+    Dict,
+    Locations,
+    SpecificPositions,
+    Tuple,
+)
+
+positions_map: Dict[Tuple[Locations], SpecificPositions] = {
+    # (blue_loc, red_loc): position
+    (SOUTH, NORTH): ALPHA1,
+    (WEST, EAST): ALPHA2,
+    (NORTH, SOUTH): ALPHA3,
+    (EAST, WEST): ALPHA4,
+    (NORTH, NORTH): BETA1,
+    (EAST, EAST): BETA2,
+    (SOUTH, SOUTH): BETA3,
+    (WEST, WEST): BETA4,
+    (WEST, NORTH): GAMMA1,
+    (NORTH, EAST): GAMMA2,
+    (EAST, SOUTH): GAMMA3,
+    (SOUTH, WEST): GAMMA4,
+    (EAST, NORTH): GAMMA5,
+    (SOUTH, EAST): GAMMA6,
+    (WEST, SOUTH): GAMMA7,
+    (NORTH, WEST): GAMMA8,
+}
+
+
+def get_specific_start_end_pos(
+    blue_motion: Motion, red_motion: Motion
+) -> Dict[str, SpecificPositions]:
+    start_locs = (
+        blue_motion.start_loc,
+        red_motion.start_loc,
+    )
+    end_locs = (
+        red_motion.end_loc,
+        blue_motion.end_loc,
+    )
+
+    specific_positions = {
+        START_POS: positions_map.get(start_locs),
+        END_POS: positions_map.get(end_locs),
+    }
+    return specific_positions
+
+
+Ok so our purpose is to build a thing that allows the user to construct picked graphs one at a time. Each pictograph will need to have a start position that matches the end position of the previous pictograph. Furthermore, we're also going to have to pay close attention to the orientations of the props in the previous pictograph. The end orientation of the previous pictograph will be the start orientation of the new pictograph. This should apply to all of the pictographs within the scroll area. Up until now, we've been assuming that our orientation is always going to be "IN". This is how we visualized all of the picked graphs within the codex. However, there's a huge number of varieties in which the orientation is different. 
+

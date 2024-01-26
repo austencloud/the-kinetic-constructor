@@ -17,7 +17,7 @@ from data.letter_engine_data import (
     motion_type_letter_groups,
     parallel_combinations,
 )
-from data.positions_map import get_specific_start_end_poss
+from data.positions_map import get_specific_start_end_pos
 from objects.motion.motion import Motion
 from constants import (
     ALPHA,
@@ -74,7 +74,7 @@ class LetterCalculator:
             else self.pictograph.motions[RED]
         )
 
-        specific_position: Dict[str, SpecificPositions] = get_specific_start_end_poss(
+        specific_position: Dict[str, SpecificPositions] = get_specific_start_end_pos(
             self.get_motion(BLUE), self.get_motion(RED)
         )
         if specific_position:
