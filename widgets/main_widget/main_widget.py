@@ -43,7 +43,6 @@ class MainWidget(QWidget):
 
     def refresh_placements(self):
         """Refreshes the special placements and updates all pictographs."""
-        # Reload the special placements
         self.load_special_placements()
 
         # Iterate over all pictographs and update them

@@ -23,7 +23,7 @@ class ArrowMouseEventHandler:
 
     def hand_mouse_move(self, event: "QGraphicsSceneMouseEvent") -> None:
         if event.buttons() == Qt.MouseButton.LeftButton:
-            new_location = self.arrow.scene.grid.get_closest_hand_point(
+            new_location = self.arrow.scene.grid.get_closest_layer2_point(
                 event.scenePos()
             )[0].split("_")[0]
             new_pos = event.scenePos() - self.arrow.get_center()

@@ -64,36 +64,103 @@ class ArrowRotAngleCalculator:
             self.a.ghost.setRotation(angle)
 
     def _get_pro_anti_angle(self) -> int:
-        direction_map = {
-            PRO: {
-                CLOCKWISE: {
-                    NORTHEAST: 0,
-                    SOUTHEAST: 90,
-                    SOUTHWEST: 180,
-                    NORTHWEST: 270,
+        if self.a.motion.start_ori in [IN, OUT]:
+            direction_map = {
+                PRO: {
+                    CLOCKWISE: {
+                        NORTHEAST: 0,
+                        SOUTHEAST: 90,
+                        SOUTHWEST: 180,
+                        NORTHWEST: 270,
+                    },
+                    COUNTER_CLOCKWISE: {
+                        NORTHEAST: 270,
+                        SOUTHEAST: 180,
+                        SOUTHWEST: 90,
+                        NORTHWEST: 0,
+                    },
                 },
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: 270,
-                    SOUTHEAST: 180,
-                    SOUTHWEST: 90,
-                    NORTHWEST: 0,
+                ANTI: {
+                    CLOCKWISE: {
+                        NORTHEAST: 270,
+                        SOUTHEAST: 180,
+                        SOUTHWEST: 90,
+                        NORTHWEST: 0,
+                    },
+                    COUNTER_CLOCKWISE: {
+                        NORTHEAST: 0,
+                        SOUTHEAST: 90,
+                        SOUTHWEST: 180,
+                        NORTHWEST: 270,
+                    },
                 },
-            },
-            ANTI: {
-                CLOCKWISE: {
-                    NORTHEAST: 270,
-                    SOUTHEAST: 180,
-                    SOUTHWEST: 90,
-                    NORTHWEST: 0,
+            }
+        elif self.a.motion.start_ori in [CLOCK, COUNTER] and self.a.turns in [
+            0.5,
+            1.5,
+            2.5,
+        ]:
+            direction_map = {
+                PRO: {
+                    CLOCKWISE: {
+                        NORTHEAST: 315,
+                        SOUTHEAST: 45,
+                        SOUTHWEST: 135,
+                        NORTHWEST: 225,
+                    },
+                    COUNTER_CLOCKWISE: {
+                        NORTHEAST: 225,
+                        SOUTHEAST: 135,
+                        SOUTHWEST: 45,
+                        NORTHWEST: 315,
+                    },
                 },
-                COUNTER_CLOCKWISE: {
-                    NORTHEAST: 0,
-                    SOUTHEAST: 90,
-                    SOUTHWEST: 180,
-                    NORTHWEST: 270,
+                ANTI: {
+                    CLOCKWISE: {
+                        NORTHEAST: 225,
+                        SOUTHEAST: 135,
+                        SOUTHWEST: 45,
+                        NORTHWEST: 315,
+                    },
+                    COUNTER_CLOCKWISE: {
+                        NORTHEAST: 315,
+                        SOUTHEAST: 45,
+                        SOUTHWEST: 135,
+                        NORTHWEST: 225,
+                    },
                 },
-            },
-        }
+            }
+        elif self.a.motion.start_ori in [CLOCK, COUNTER]:
+            direction_map = {
+                PRO: {
+                    CLOCKWISE: {
+                        NORTHEAST: 0,
+                        SOUTHEAST: 90,
+                        SOUTHWEST: 180,
+                        NORTHWEST: 270,
+                    },
+                    COUNTER_CLOCKWISE: {
+                        NORTHEAST: 270,
+                        SOUTHEAST: 180,
+                        SOUTHWEST: 90,
+                        NORTHWEST: 0,
+                    },
+                },
+                ANTI: {
+                    CLOCKWISE: {
+                        NORTHEAST: 270,
+                        SOUTHEAST: 180,
+                        SOUTHWEST: 90,
+                        NORTHWEST: 0,
+                    },
+                    COUNTER_CLOCKWISE: {
+                        NORTHEAST: 0,
+                        SOUTHEAST: 90,
+                        SOUTHWEST: 180,
+                        NORTHWEST: 270,
+                    },
+                },
+            }
         return direction_map[self.a.motion.motion_type][self.a.motion.prop_rot_dir].get(
             self.a.loc, 0
         )

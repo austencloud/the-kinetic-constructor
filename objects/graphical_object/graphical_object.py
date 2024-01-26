@@ -42,3 +42,7 @@ class GraphicalObject(QGraphicsSvgItem):
             return QPointF(
                 (self.boundingRect().width() / 2), (self.boundingRect().height() / 2)
             )
+        else:
+            return QPointF(
+                (self.boundingRect().height() / 2), (self.boundingRect().width() / 2)
+            )

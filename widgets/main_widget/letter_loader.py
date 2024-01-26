@@ -3,9 +3,12 @@ import pandas as pd
 from constants import (
     BLUE_START_ORI,
     BLUE_TURNS,
+    CLOCK,
+    COUNTER,
     END_POS,
     IN,
     LETTER,
+    OUT,
     RED_START_ORI,
     RED_TURNS,
     START_POS,
@@ -36,7 +39,7 @@ class LetterLoader:
         # Add default values for turns and orientation
         pictograph_dict[BLUE_TURNS] = 0
         pictograph_dict[RED_TURNS] = 0
-        pictograph_dict[BLUE_START_ORI] = IN
-        pictograph_dict[RED_START_ORI] = IN
+        pictograph_dict[BLUE_START_ORI] = COUNTER
+        pictograph_dict[RED_START_ORI] = COUNTER
 
         return pictograph_dict
