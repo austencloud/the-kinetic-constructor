@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 class ScrollAreaDisplayManager:
-    COLUMN_COUNT = 4
+    COLUMN_COUNT = 8
     SPACING = 5
 
     def __init__(self, scroll_area: "ScrollArea") -> None:
