@@ -28,6 +28,16 @@ class BetaPropDirectionCalculator:
 
     def get_dir(self, motion: Motion) -> Directions:
         """Determine the translation direction based on the motion type, start location, end location, and end layer."""
+        if (
+            motion.pictograph.letter == "I"
+            and motion.pictograph.check.has_all_radial_props()
+        ):
+            return self.get_direction_for_radial_I(motion)
+        elif (
+            motion.pictograph.letter == "I"
+            and motion.pictograph.check.has_all_nonradial_props()
+        ):
+            return self.get_direction_for_nonradial_I(motion)
         if motion.check.is_shift():
             if motion.prop.check.is_radial():
                 return self.get_dir_for_radial(motion)
@@ -35,6 +45,32 @@ class BetaPropDirectionCalculator:
                 return self.get_dir_for_nonradial(motion)
         elif motion.check.is_dash() or motion.check.is_static():
             return self.get_dir_for_non_shift(motion.prop)
+
+    def get_direction_for_nonradial_I(self, motion: Motion) -> Directions:
+        direction_map = {
+            (NORTH, RED): UP,
+            (NORTH, BLUE): DOWN,
+            (EAST, RED): RIGHT,
+            (EAST, BLUE): LEFT,
+            (SOUTH, RED): DOWN,
+            (SOUTH, BLUE): UP,
+            (WEST, BLUE): LEFT,
+            (WEST, RED): RIGHT,
+            
+        }
+        return direction_map.get((motion.end_loc, motion.prop.color))
+    def get_direction_for_radial_I(self, motion: Motion) -> Directions:
+        direction_map = {
+            (NORTH, RED): RIGHT,
+            (NORTH, BLUE): LEFT,
+            (EAST, RED): DOWN,
+            (EAST, BLUE): UP,
+            (SOUTH, RED): LEFT,
+            (SOUTH, BLUE): RIGHT,
+            (WEST, BLUE): UP,
+            (WEST, RED): DOWN,
+        }
+        return direction_map.get((motion.end_loc, motion.prop.color))
 
     def get_dir_for_radial(self, motion: Motion) -> Directions:
         direction_map = {

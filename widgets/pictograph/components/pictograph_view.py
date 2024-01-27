@@ -57,5 +57,8 @@ class PictographView(QGraphicsView):
         elif event.key() == Qt.Key.Key_Q or event.key() == Qt.Key.Key_F5:
             self.pictograph.main_widget.refresh_placements()
 
+        elif event.key() == Qt.Key.Key_C:
+            self.pictograph.wasd_manager.prop_placement_override_manager.handle_prop_placement_override(event.key())
         else:
             super().keyPressEvent(event)
+

@@ -25,6 +25,49 @@ class BetaPropPositioner:
             self._reposition_big_props(big_uni, big_bi)
         elif len(small_uni + small_bi) == 2:
             self._reposition_small_props(small_uni, small_bi)
+        self.apply_swap_override_if_needed()
+
+    def apply_swap_override_if_needed(self) -> None:
+        beta_ori = None
+        if self.pictograph.blue_prop.motion.start_ori in [IN, OUT]:
+            ori_key = "from_radial"
+        elif self.pictograph.blue_prop.motion.start_ori in [CLOCK, COUNTER]:
+            ori_key = "from_nonradial"
+
+        # Access the correct placements data based on the orientation
+        letter_data = self.pictograph.main_widget.special_placements[ori_key].get(
+            self.pictograph.letter, {}
+        )
+
+        turns_tuple = self.pictograph.arrow_placement_manager.special_positioner.turns_tuple_generator.generate_turns_tuple(
+            self.pictograph.letter
+        )
+        prop_loc = self.pictograph.blue_prop.loc
+        if self.pictograph.check.has_all_radial_props():
+            beta_ori = "radial"
+        elif self.pictograph.check.has_all_nonradial_props():
+            beta_ori = "nonradial"
+        
+        override_key = (
+            f"swap_beta_{prop_loc}_{beta_ori}_"
+            f"blue_{self.blue_prop.motion.motion_type}_{self.blue_prop.motion.arrow.loc}_"
+            f"red_{self.red_prop.motion.motion_type}_{self.red_prop.motion.arrow.loc}"
+        )
+
+        turn_data = letter_data.get(turns_tuple, {})
+        if beta_ori:
+            if turn_data.get(override_key):
+                self.swap_beta()
+
+    def swap_beta(self) -> None:
+        red_direction = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
+        blue_direction = self.ppm.dir_calculator.get_dir(self.pictograph.blue_motion)
+
+        # move them double so they end up replacing each other's positions
+        self.move_prop(self.red_prop, blue_direction)
+        self.move_prop(self.red_prop, blue_direction)
+        self.move_prop(self.blue_prop, red_direction)
+        self.move_prop(self.blue_prop, red_direction)
 
     def _classify_props(self) -> Tuple[List[Prop], List[Prop], List[Prop], List[Prop]]:
         props = self.pictograph.props.values()
@@ -276,7 +319,7 @@ class BetaPropPositioner:
             self.ppm.default_positioner.set_prop_to_default_loc(self.red_prop)
 
     def move_prop(self, prop: Prop, direction: Directions) -> None:
-        new_position = self.ppm.offset_calculator.calculate_new_position_with_offset(
+        offset = self.ppm.offset_calculator.calculate_new_position_with_offset(
             prop.pos(), direction
         )
-        prop.setPos(new_position)
+        prop.setPos(offset)

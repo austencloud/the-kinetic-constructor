@@ -1,10 +1,11 @@
 import json
 import os
 import re
-from typing import TYPE_CHECKING, Dict, Tuple
+from typing import TYPE_CHECKING, Dict, Tuple, Union
 from constants import CLOCK, COUNTER, IN, OUT
 
 from objects.arrow.arrow import Arrow
+from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import Letters
 
 if TYPE_CHECKING:
@@ -50,15 +51,18 @@ class SpecialPlacementDataUpdater:
         self.update_specific_entry_in_json(letter, letter_data, arrow)
 
     def update_specific_entry_in_json(
-        self, letter: Letters, letter_data: Dict, arrow: Arrow
+        self, letter: Letters, letter_data: Dict, object: Union[Arrow, Prop]
     ) -> None:
         """Update a specific entry in the JSON file."""
+
         try:
-            subfolder = (
-                "from_radial"
-                if arrow.motion.start_ori in [IN, OUT]
-                else "from_nonradial"
-            )
+            # Determine the subfolder based on the object type
+            if object.motion.start_ori in [IN, OUT]:
+                subfolder = "from_radial"
+            elif object.motion.start_ori in [CLOCK, COUNTER]:
+                subfolder = "from_nonradial"
+
+
             base_directory = (
                 self.positioner.placement_manager.pictograph.main_widget.parent_directory
             )
@@ -68,20 +72,38 @@ class SpecialPlacementDataUpdater:
                 base_directory, subfolder, f"{letter}_placements.json"
             )
 
-            # Check if the directory exists, if not, create it
+            # Ensure the directory exists
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
-            # Check if the file exists. If not, initialize an empty dictionary for the letter
-            if not os.path.exists(file_path):
-                with open(file_path, "w", encoding="utf-8") as file:
-                    json.dump({letter: {}}, file, indent=2, ensure_ascii=False)
+            # Load existing data or initialize an empty dictionary
+            if os.path.exists(file_path):
+                with open(file_path, "r", encoding="utf-8") as file:
+                    existing_data = json.load(file)
+            else:
+                existing_data = {letter: {}}
 
-            # Now, read the existing data, update it, and write back
-            with open(file_path, "r", encoding="utf-8") as file:
-                existing_data = json.load(file)
-
+            # Update the specific entry
             existing_data[letter] = letter_data
 
+            # if isinstance(object, Prop):
+            #     # Construct the override key based on prop details
+            #     blue_motion_type = self.positioner.pictograph.blue_motion.motion_type
+            #     red_motion_type = self.positioner.pictograph.red_motion.motion_type
+            #     beta_ori = "radial" if object.motion.start_ori in [IN, OUT] else "nonradial"
+            #     prop_loc = object.loc
+            #     override_key = f"swap_beta_{prop_loc}_{beta_ori}_blue_{blue_motion_type}_red_{red_motion_type}"
+
+            #     # Check if override key needs to be updated
+            #     turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
+            #     turn_data = existing_data[letter].get(turns_tuple, {})
+            #     if override_key in turn_data:
+            #         del turn_data[override_key]
+            #     else:
+            #         turn_data[override_key] = True
+
+            #     existing_data[letter][turns_tuple] = turn_data
+
+            # Write the updated data back to the file
             with open(file_path, "w", encoding="utf-8") as file:
                 formatted_json_str = json.dumps(
                     existing_data, indent=2, ensure_ascii=False
@@ -90,6 +112,7 @@ class SpecialPlacementDataUpdater:
                     r"\[\s+(-?\d+),\s+(-?\d+)\s+\]", r"[\1, \2]", formatted_json_str
                 )
                 file.write(formatted_json_str)
+
         except Exception as e:
             print(f"Error occurred while updating JSON file: {e}")
 

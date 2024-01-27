@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+from widgets.pictograph.components.wasd_adjustment_manager.prop_placement_override_manager import PropPlacementOverrideManager
+
 from .arrow_movement_manager import ArrowMovementManager
 from .rotation_angle_override_manager import RotationAngleOverrideManager
 
@@ -12,7 +14,7 @@ class WASD_AdjustmentManager:
         self.pictograph = pictograph
         self.movement_manager = ArrowMovementManager(pictograph)
         self.rotation_angle_override_manager = RotationAngleOverrideManager(self)
-
+        self.prop_placement_override_manager = PropPlacementOverrideManager(self)
     def handle_special_placement_removal(self) -> None:
         if not self.pictograph.selected_arrow:
             return
