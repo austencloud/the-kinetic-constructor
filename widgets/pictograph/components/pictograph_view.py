@@ -54,7 +54,7 @@ class PictographView(QGraphicsView):
         elif event.key() == Qt.Key.Key_Z:
             self.pictograph.wasd_manager.handle_special_placement_removal()
 
-        elif event.key() == Qt.Key.Key_Q:
+        elif event.key() == Qt.Key.Key_Q or event.key() == Qt.Key.Key_F5:
             self.pictograph.main_widget.refresh_placements()
 
         else:

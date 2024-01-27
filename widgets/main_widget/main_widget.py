@@ -85,7 +85,7 @@ class MainWidget(QWidget):
     layout: QHBoxLayout
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
-        if event.key() == Qt.Key.Key_Q:
+        if event.key() == Qt.Key.Key_Q or event.key() == Qt.Key.Key_F5:
             self.refresh_placements()
         else:
             super().keyPressEvent(event)

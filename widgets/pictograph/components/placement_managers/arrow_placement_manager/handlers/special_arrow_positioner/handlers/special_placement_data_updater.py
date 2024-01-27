@@ -126,7 +126,7 @@ class SpecialPlacementDataUpdater:
         }
 
     def remove_special_placement_entry(self, letter: str, arrow: "Arrow") -> None:
-        """Remove a specific entry from the special placements JSON file."""
+        """Remove a specific motion entry from the special placements JSON file."""
         # Determine the orientation key and file path
         orientation_key = (
             "from_radial" if arrow.motion.start_ori in [IN, OUT] else "from_antiradial"
@@ -139,21 +139,28 @@ class SpecialPlacementDataUpdater:
         # Load current data
         if os.path.exists(file_path):
             with open(file_path, "r", encoding="utf-8") as file:
-                data: Dict = json.load(file)
+                data = json.load(file)
             letter_data = data.get(letter, {})
 
-            # Remove the specific entry
+            # Remove the specific motion entry
             turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(
                 letter
             )
-            if turns_tuple in letter_data:
-                del letter_data[turns_tuple]
+            turn_data = letter_data.get(turns_tuple, {})
 
+            motion_key = self.positioner.motion_key_generator.generate_motion_key(arrow)
+            if motion_key in turn_data:
+                del turn_data[motion_key]
+
+                # Remove the turn entry if it's now empty
+                if not turn_data:
+                    del letter_data[turns_tuple]
+
+            # Update the JSON file
             with open(file_path, "w", encoding="utf-8") as file:
                 formatted_json_str = json.dumps(data, indent=2, ensure_ascii=False)
                 formatted_json_str = re.sub(
                     r"\[\s+(-?\d+),\s+(-?\d+)\s+\]", r"[\1, \2]", formatted_json_str
                 )
                 file.write(formatted_json_str)
-
         arrow.pictograph.main_widget.refresh_placements()
