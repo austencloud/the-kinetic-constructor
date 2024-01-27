@@ -73,7 +73,7 @@ HEX_RED = "#ED1C24"
 HEX_BLUE = "#2E3192"
 
 RADIAL = "radial"
-ANTIRADIAL = "antiradial"
+NONRADIAL = "nonradial"
 
 IN = "in"
 OUT = "out"

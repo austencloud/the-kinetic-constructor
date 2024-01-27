@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from constants import (
-    ANTIRADIAL,
+    NONRADIAL,
     BLUE,
     EAST,
     NORTH,
@@ -31,8 +31,8 @@ class BetaPropDirectionCalculator:
         if motion.check.is_shift():
             if motion.prop.check.is_radial():
                 return self.get_dir_for_radial(motion)
-            elif motion.prop.check.is_antiradial():
-                return self.get_dir_for_antiradial(motion)
+            elif motion.prop.check.is_nonradial():
+                return self.get_dir_for_nonradial(motion)
         elif motion.check.is_dash() or motion.check.is_static():
             return self.get_dir_for_non_shift(motion.prop)
 
@@ -49,7 +49,7 @@ class BetaPropDirectionCalculator:
         }
         return direction_map.get((motion.end_loc, motion.start_loc))
 
-    def get_dir_for_antiradial(self, motion: Motion) -> Directions:
+    def get_dir_for_nonradial(self, motion: Motion) -> Directions:
         direction_map = {
             (NORTH, EAST): UP,
             (NORTH, WEST): DOWN,
@@ -74,7 +74,7 @@ class BetaPropDirectionCalculator:
                 (WEST, RED): UP,
                 (EAST, BLUE): UP,
             },
-            ANTIRADIAL: {
+            NONRADIAL: {
                 (NORTH, RED): UP,
                 (NORTH, BLUE): DOWN,
                 (SOUTH, RED): UP,
@@ -87,8 +87,8 @@ class BetaPropDirectionCalculator:
         }
         if prop.check.is_radial():
             return layer_reposition_map[RADIAL][(prop.loc, prop.color)]
-        elif prop.check.is_antiradial():
-            return layer_reposition_map[ANTIRADIAL][(prop.loc, prop.color)]
+        elif prop.check.is_nonradial():
+            return layer_reposition_map[NONRADIAL][(prop.loc, prop.color)]
 
     def get_opposite_dir(self, movement: Directions) -> Directions:
         opposite_directions = {

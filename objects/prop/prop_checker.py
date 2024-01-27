@@ -14,5 +14,5 @@ class PropChecker:
     def is_radial(self) -> bool:
         return self.prop.ori in [IN, OUT]
 
-    def is_antiradial(self) -> bool:
+    def is_nonradial(self) -> bool:
         return self.prop.ori in [CLOCK, COUNTER]

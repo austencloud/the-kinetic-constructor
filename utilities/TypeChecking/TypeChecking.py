@@ -34,8 +34,8 @@ HexColors = Literal["#ED1C24", "#2E3192"]
 Directions = Literal["left", "right", "up", "down"]
 GridModes = Literal["diamond", "box"]
 RadialOrientations = Literal["in", "out"]
-AntiradialOrientations = Literal["clock", "counter"]
-OrientationTypes = Literal["radial", "antiradial"]
+NonRadialOrientations = Literal["clock", "counter"]
+OrientationTypes = Literal["radial", "nonradial"]
 Axes = Literal["horizontal", "vertical"]
 MotionTypeCombinations = Literal[
     "pro_vs_pro",

@@ -24,9 +24,9 @@ class SpecialPlacementDataUpdater:
         letter = self.positioner.pictograph.letter
 
         turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
-        # Determine the correct orientation key ('from_radial' or 'from_antiradial')
+        # Determine the correct orientation key ('from_radial' or 'from_nonradial')
         orientation_key = (
-            "from_radial" if arrow.motion.start_ori in [IN, OUT] else "from_antiradial"
+            "from_radial" if arrow.motion.start_ori in [IN, OUT] else "from_nonradial"
         )
 
         # Access the correct placements data based on the orientation
@@ -57,7 +57,7 @@ class SpecialPlacementDataUpdater:
             subfolder = (
                 "from_radial"
                 if arrow.motion.start_ori in [IN, OUT]
-                else "from_antiradial"
+                else "from_nonradial"
             )
             base_directory = (
                 self.positioner.placement_manager.pictograph.main_widget.parent_directory
@@ -129,7 +129,7 @@ class SpecialPlacementDataUpdater:
         """Remove a specific motion entry from the special placements JSON file."""
         # Determine the orientation key and file path
         orientation_key = (
-            "from_radial" if arrow.motion.start_ori in [IN, OUT] else "from_antiradial"
+            "from_radial" if arrow.motion.start_ori in [IN, OUT] else "from_nonradial"
         )
         file_path = os.path.join(
             self.positioner.placement_manager.pictograph.main_widget.parent_directory,

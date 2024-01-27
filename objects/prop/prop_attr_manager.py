@@ -21,6 +21,7 @@ class PropAttrManager:
     def __init__(self, prop: "Prop") -> None:
         self.p = prop
         self.update_attributes(self.p.prop_dict)
+
     def update_attributes(
         self, prop_dict: Dict[str, Union[Colors, Locations, MotionTypes, Turns]]
     ) -> None:
@@ -38,7 +39,7 @@ class PropAttrManager:
     def get_axis_from_ori(self) -> None:
         if self.p.check.is_radial():
             axis: Axes = VERTICAL if self.p.loc in [NORTH, SOUTH] else HORIZONTAL
-        elif self.p.check.is_antiradial():
+        elif self.p.check.is_nonradial():
             axis: Axes = HORIZONTAL if self.p.loc in [NORTH, SOUTH] else VERTICAL
         else:
             axis: Axes = None

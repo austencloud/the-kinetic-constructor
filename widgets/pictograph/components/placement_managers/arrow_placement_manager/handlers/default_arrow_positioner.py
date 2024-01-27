@@ -1,7 +1,7 @@
 import json
 from constants import (
     ANTI,
-    ANTIRADIAL,
+    NONRADIAL,
     CLOCK,
     COUNTER,
     DASH,
@@ -45,7 +45,7 @@ class DefaultArrowPositioner:
         has_gamma_props = arrow.pictograph.check.has_props_in_gamma()
         has_hybrid_orientation = arrow.pictograph.check.has_hybrid_orientations()
         has_radial_props = arrow.pictograph.check.has_all_radial_props()
-        has_antiradial_props = arrow.pictograph.check.has_all_antiradial_props()
+        has_nonradial_props = arrow.pictograph.check.has_all_nonradial_props()
         motion_end_ori = arrow.motion.end_ori
 
         key_suffix = "_to_"
@@ -54,7 +54,7 @@ class DefaultArrowPositioner:
             if motion_end_ori in [IN, OUT]:
                 motion_end_ori_key = f"{RADIAL}_"
             elif motion_end_ori in [CLOCK, COUNTER]:
-                motion_end_ori_key = f"{ANTIRADIAL}_"
+                motion_end_ori_key = f"{NONRADIAL}_"
         letter_suffix = ""
         if arrow.pictograph.letter and arrow.pictograph.letter in dash_letters:
             char = arrow.pictograph.letter[:-1]
@@ -64,7 +64,7 @@ class DefaultArrowPositioner:
 
         if has_radial_props:
             key_middle = "layer1"
-        elif has_antiradial_props:
+        elif has_nonradial_props:
             key_middle = "layer2"
         elif has_hybrid_orientation:
             key_middle = "layer3"

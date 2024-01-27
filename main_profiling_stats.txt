@@ -80,12 +80,12 @@ Organized by number of calls:
         64        0.000247        0.000004             0.000665             0.000010 __init__                       prop\prop_attr_manager.py:21
         64        0.000487        0.000008             0.105259             0.001645 set_turns                      managers\motion_turn_manager.py:17
         64        0.000223        0.000003             0.000747             0.000012 get_or_calculate_offsets       handlers\prop_offset_calculator.py:30
-        64        0.000045        0.000001             0.000045             0.000001 is_antiradial                  prop\prop_checker.py:17
+        64        0.000045        0.000001             0.000045             0.000001 is_nonradial                  prop\prop_checker.py:17
         64        0.000040        0.000001             0.000040             0.000001 has_props_in_alpha             components\pictograph_checker.py:16
         64        0.000047        0.000001             0.000047             0.000001 has_props_in_gamma             components\pictograph_checker.py:19
         64        0.000057        0.000001             0.000092             0.000001 clamp_turns                    managers\motion_turn_manager.py:22
         64        0.000081        0.000001             0.001223             0.000019 has_all_radial_props           components\pictograph_checker.py:32
-        64        0.000242        0.000004             0.001021             0.000016 has_all_antiradial_props       components\pictograph_checker.py:35
+        64        0.000242        0.000004             0.001021             0.000016 has_all_nonradial_props       components\pictograph_checker.py:35
         64        0.000274        0.000004             0.000370             0.000006 get_initial_pos                handlers\arrow_initial_pos_calculator.py:15
         64        0.000029        0.000000             0.000029             0.000000 __init__                       prop\prop_offset_calculator.py:10
         64        0.000028        0.000000             0.000028             0.000000 __init__                       prop\prop_rot_angle_manager.py:9
@@ -409,7 +409,7 @@ Organized by total time:
         64        0.000247        0.000004             0.000665             0.000010 __init__                       prop\prop_attr_manager.py:21
         16        0.000247        0.000015             0.016770             0.001048 init_props                     components\pictograph_init.py:76
          8        0.000246        0.000031             0.039189             0.004899 __init__                       turns_box\turns_box.py:37
-        64        0.000242        0.000004             0.001021             0.000016 has_all_antiradial_props       components\pictograph_checker.py:35
+        64        0.000242        0.000004             0.001021             0.000016 has_all_nonradial_props       components\pictograph_checker.py:35
         32        0.000236        0.000007             0.002176             0.000068 update_adjust_turns_button_size buttons\adjust_turns_button.py:17
         32        0.000227        0.000007             0.002970             0.000093 resize_for_scroll_area         components\pictograph_view.py:21
          8        0.000226        0.000028             0.002438             0.000305 __init__                       widgets\header_widget.py:14
@@ -510,7 +510,7 @@ Organized by total time:
          8        0.000048        0.000006             0.000784             0.000098 _add_widgets                   widgets\header_widget.py:50
         64        0.000047        0.000001             0.000047             0.000001 has_props_in_gamma             components\pictograph_checker.py:19
         32        0.000046        0.000001             0.000046             0.000001 _get_diamond_static_dash_pos   handlers\arrow_initial_pos_calculator.py:26
-        64        0.000045        0.000001             0.000045             0.000001 is_antiradial                  prop\prop_checker.py:17
+        64        0.000045        0.000001             0.000045             0.000001 is_nonradial                  prop\prop_checker.py:17
          1        0.000045        0.000045             0.005246             0.005246 _setup_layout                  section_widget\section_widget.py:36
          1        0.000042        0.000042             0.125881             0.125881 create_section_if_needed       section_manager\section_manager.py:100
         32        0.000042        0.000001             0.000048             0.000002 __init__                       handlers\turns_tuple_generator.py:20
@@ -740,7 +740,7 @@ Organized by cumulative time:
         16        0.000141        0.000009             0.001100             0.000069 init_motions                   components\pictograph_init.py:55
        192        0.000935        0.000005             0.001091             0.000006 get_end_ori                    managers\motion_ori_calculator.py:22
         80        0.000875        0.000011             0.001071             0.000013 __init__                       objects\grid.py:52
-        64        0.000242        0.000004             0.001021             0.000016 has_all_antiradial_props       components\pictograph_checker.py:35
+        64        0.000242        0.000004             0.001021             0.000016 has_all_nonradial_props       components\pictograph_checker.py:35
         32        0.000214        0.000007             0.001006             0.000031 _create_and_add_button         managers\turns_button_manager.py:46
          8        0.000067        0.000008             0.000971             0.000121 _setup_header                  widgets\header_widget.py:21
         32        0.000183        0.000006             0.000960             0.000030 _create_motion                 components\pictograph_init.py:171
@@ -847,7 +847,7 @@ Organized by cumulative time:
         32        0.000042        0.000001             0.000048             0.000001 <lambda>                       components\scroll_area_display_manager.py:87
         64        0.000047        0.000001             0.000047             0.000001 has_props_in_gamma             components\pictograph_checker.py:19
         32        0.000046        0.000001             0.000046             0.000001 _get_diamond_static_dash_pos   handlers\arrow_initial_pos_calculator.py:26
-        64        0.000045        0.000001             0.000045             0.000001 is_antiradial                  prop\prop_checker.py:17
+        64        0.000045        0.000001             0.000045             0.000001 is_nonradial                  prop\prop_checker.py:17
          3        0.000024        0.000008             0.000041             0.000014 setup_layouts                  widgets\turns_panel.py:31
         64        0.000040        0.000001             0.000040             0.000001 has_props_in_alpha             components\pictograph_checker.py:16
         32        0.000031        0.000001             0.000037             0.000001 calculate_adjust_turns_button_size managers\turns_display_manager.py:122

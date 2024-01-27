@@ -26,9 +26,9 @@ class ArrowAdjustmentCalculator:
             self.pm.pictograph.letter
         )
 
-        # Determine the orientation key ('from_radial' or 'from_antiradial') based on the arrow's motion
+        # Determine the orientation key ('from_radial' or 'from_nonradial') based on the arrow's motion
         orientation_key = (
-            "from_radial" if arrow.motion.start_ori in [IN, OUT] else "from_antiradial"
+            "from_radial" if arrow.motion.start_ori in [IN, OUT] else "from_nonradial"
         )
 
         # Access the correct placements data based on the orientation
