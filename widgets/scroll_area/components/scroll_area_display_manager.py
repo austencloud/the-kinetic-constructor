@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING
 from widgets.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Letters
@@ -22,7 +22,7 @@ class ScrollAreaDisplayManager:
         for index, (key, codex_pictograph) in enumerate(ordered_pictographs.items()):
             self.add_pictograph_to_layout(codex_pictograph, index)
 
-    def get_ordered_pictographs(self) -> Dict[Letters, Pictograph]:
+    def get_ordered_pictographs(self) -> dict[Letters, Pictograph]:
         return {
             k: v
             for k, v in sorted(
@@ -69,7 +69,7 @@ class ScrollAreaDisplayManager:
         for key in keys_to_remove:
             self.remove_pictograph(key)
 
-    def get_keys_to_remove(self) -> List[str]:
+    def get_keys_to_remove(self) -> list[str]:
         selected_letters = {
             letter.split("_")[0] for letter in self.scroll_area.codex.selected_letters
         }
@@ -79,7 +79,7 @@ class ScrollAreaDisplayManager:
             if key.split("_")[0] not in selected_letters
         ]
 
-    def get_ordered_pictographs(self) -> Dict[Letters, Pictograph]:
+    def get_ordered_pictographs(self) -> dict[Letters, Pictograph]:
         return {
             k: v
             for k, v in sorted(

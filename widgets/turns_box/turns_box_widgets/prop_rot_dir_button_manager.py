@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Union
+from typing import TYPE_CHECKING, Union
 from constants import (
     BLUE,
     CLOCKWISE,
@@ -35,12 +35,12 @@ class PropRotDirButtonManager:
     def __init__(self, turns_box: "TurnsBox") -> None:
         self.turns_box = turns_box
         self.previous_turns = 0
-        self.prop_rot_dir_buttons: List[
+        self.prop_rot_dir_buttons: list[
             PropRotDirButton
         ] = self._setup_prop_rot_dir_buttons()
         self.buttons = self.prop_rot_dir_buttons
 
-    def _setup_prop_rot_dir_buttons(self) -> List[QPushButton]:
+    def _setup_prop_rot_dir_buttons(self) -> list[QPushButton]:
         self.cw_button: PropRotDirButton = ButtonFactory.create_prop_rot_dir_button(
             f"{ICON_DIR}clock/clockwise.png",
             lambda: self._set_prop_rot_dir(CLOCKWISE),
@@ -119,7 +119,7 @@ class PropRotDirButtonManager:
 
     def _update_button_states(
         self,
-        buttons: List[Union[PropRotDirButton, VtgDirButton]],
+        buttons: list[Union[PropRotDirButton, VtgDirButton]],
         active_direction: VtgDirections,
     ) -> None:
         for button in buttons:
@@ -138,7 +138,6 @@ class PropRotDirButtonManager:
         for button in self.prop_rot_dir_buttons:
             button.hide()
 
-        
     def _opposite_prop_rot_dir(self, prop_rot_dir: PropRotDirs) -> PropRotDirs:
         return {
             CLOCKWISE: COUNTER_CLOCKWISE,
@@ -149,7 +148,9 @@ class PropRotDirButtonManager:
         self.cw_button.unpress()
         self.ccw_button.unpress()
 
-    def update_visibility_based_on_motion(self, letter_type, new_turns, attribute_value) -> None:
+    def update_visibility_based_on_motion(
+        self, letter_type, new_turns, attribute_value
+    ) -> None:
         if self.turns_box.turns_panel.filter_tab.section.letter_type in [
             Type4,
             Type5,

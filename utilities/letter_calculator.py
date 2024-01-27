@@ -43,7 +43,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
-from typing import TYPE_CHECKING, Dict, List, Literal, Set, Tuple
+from typing import TYPE_CHECKING, Literal
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -53,8 +53,8 @@ class LetterCalculator:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
         self.letters = pictograph.main_widget.letters
-        self.parallel_combinations: Set[
-            Tuple[str, str, str, str]
+        self.parallel_combinations: set[
+            tuple[str, str, str, str]
         ] = parallel_combinations
         self.cached_parallel = None
         self.cached_handpath = None
@@ -74,11 +74,11 @@ class LetterCalculator:
             else self.pictograph.motions[RED]
         )
 
-        specific_position: Dict[str, SpecificPositions] = get_specific_start_end_pos(
+        specific_position: dict[str, SpecificPositions] = get_specific_start_end_pos(
             self.get_motion(BLUE), self.get_motion(RED)
         )
         if specific_position:
-            overall_position: Dict[str, Positions] = self.get_overall_position(
+            overall_position: dict[str, Positions] = self.get_overall_position(
                 specific_position
             )
             start_pos = overall_position[START_POS]
@@ -105,8 +105,8 @@ class LetterCalculator:
                 return None
 
     def filter_by_start_pos(
-        self, start_pos: Positions, motion_letter_set: Set[all_letters]
-    ) -> Set[all_letters]:
+        self, start_pos: Positions, motion_letter_set: set[all_letters]
+    ) -> set[all_letters]:
         if start_pos == ALPHA:
             filtered_letter_group = list(alpha_starting_letters)
         elif start_pos == BETA:
@@ -122,7 +122,7 @@ class LetterCalculator:
 
         return filtered_letter_group
 
-    def filter_by_end_pos(self, end_pos, motion_letter_set) -> Set[all_letters]:
+    def filter_by_end_pos(self, end_pos, motion_letter_set) -> set[all_letters]:
         if end_pos == ALPHA:
             filtered_letter_group = list(alpha_ending_letters)
         elif end_pos == BETA:
@@ -148,7 +148,7 @@ class LetterCalculator:
             None,
         )
 
-    def get_motion_type_letter_group(self) -> List[str]:
+    def get_motion_type_letter_group(self) -> list[str]:
         red_motion_type = self.red_motion.motion_type
         blue_motion_type = self.blue_motion.motion_type
 
@@ -223,7 +223,7 @@ class LetterCalculator:
         else:
             return "PQR"  # Return antiparallel group
 
-    def filter_gamma_letters(self, letter_group) -> Set[Letters]:
+    def filter_gamma_letters(self, letter_group) -> set[Letters]:
         gamma_handpath_letters = set(self.get_gamma_handpath_group())
         filtered_letter_group = {
             letter for letter in letter_group if letter in gamma_handpath_letters
@@ -254,7 +254,7 @@ class LetterCalculator:
         return filtered_letter_group
 
     def get_overall_position(
-        self, specific_positions: Dict[str, SpecificPositions]
+        self, specific_positions: dict[str, SpecificPositions]
     ) -> Positions:
         return {position: value[:-1] for position, value in specific_positions.items()}
 

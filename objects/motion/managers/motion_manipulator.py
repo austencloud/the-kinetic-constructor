@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List, Tuple
+from typing import Callable
 
 from constants import *
 from data.start_end_loc_map import get_start_end_locs
@@ -98,7 +98,7 @@ class MotionManipulator:
         if rotate_func:
             rotate_func(rotation_direction, locations)
 
-    def _get_mode_mappings(self) -> Dict[Tuple[str, str], Tuple[Callable, List]]:
+    def _get_mode_mappings(self) -> dict[tuple[str, str], tuple[Callable, list]]:
         """Returns mappings for different modes and motion types."""
         return {
             (STATIC, DIAMOND): (self._rotate_arrow, [NORTH, EAST, SOUTH, WEST]),
@@ -128,7 +128,7 @@ class MotionManipulator:
             ),
         }
 
-    def _rotate_arrow(self, handpath, locations: List[Locations]) -> None:
+    def _rotate_arrow(self, handpath, locations: list[Locations]) -> None:
         """
         Generic method to rotate arrows based on the handpath and locations.
         """

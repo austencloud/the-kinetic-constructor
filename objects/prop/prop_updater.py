@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, Union
+from typing import TYPE_CHECKING, Union
 
 from utilities.TypeChecking.MotionAttributes import Colors, Locations, Orientations
 
@@ -13,7 +13,7 @@ class PropUpdater:
         self.p.svg_manager.setup_svg_renderer(self.svg_file)
 
     def update_prop(
-        self, prop_dict: Dict[str, Union[Colors, Locations, Orientations]] = None
+        self, prop_dict: dict[str, Union[Colors, Locations, Orientations]] = None
     ) -> None:
         if prop_dict:
             self.p.attr_manager.update_attributes(prop_dict)

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING
 from Enums import LetterType
 from utilities.TypeChecking.TypeChecking import LetterTypes, Letters
 from .section_widget.components.filter_tab import FilterTab
@@ -16,16 +16,16 @@ class ScrollAreaSectionManager:
 
     def __init__(self, scroll_area: "ScrollArea") -> None:
         self.scroll_area = scroll_area
-        self.sections: Dict[LetterTypes, SectionWidget] = {}
-        self.filter_tabs_cache: Dict[LetterTypes, FilterTab] = {}
-        self.pictograph_cache: Dict[Letters, List[LetterTypes]] = {}
-        self.letters_by_type: Dict[
-            LetterTypes, List[Letters]
+        self.sections: dict[LetterTypes, SectionWidget] = {}
+        self.filter_tabs_cache: dict[LetterTypes, FilterTab] = {}
+        self.pictograph_cache: dict[Letters, list[LetterTypes]] = {}
+        self.letters_by_type: dict[
+            LetterTypes, list[Letters]
         ] = self.setup_letters_by_type()
         self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
         self.ordered_section_types = []
 
-    def setup_letters_by_type(self) -> Dict[LetterTypes, List[Letters]]:
+    def setup_letters_by_type(self) -> dict[LetterTypes, list[Letters]]:
         letters_by_type = {}
         for letter_type in LetterType:
             letters_by_type[letter_type.description] = letter_type.letters
@@ -96,7 +96,7 @@ class ScrollAreaSectionManager:
                 self.filter_tabs_cache[letter_type] = filter_tab
             section.filter_tab = self.filter_tabs_cache[letter_type]
 
-    def update_sections_based_on_letters(self, selected_letters: List[Letters]) -> None:
+    def update_sections_based_on_letters(self, selected_letters: list[Letters]) -> None:
         for section in self.sections.values():
             section.hide()
 

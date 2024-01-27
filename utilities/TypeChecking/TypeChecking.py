@@ -1,14 +1,14 @@
-from typing import Union, Literal, Set, Tuple, Dict
+from typing import Union, Literal
 from typing import *
 from utilities.TypeChecking.MotionAttributes import *
 
 
-ParallelCombinationsSet = Set[Tuple[str, str, str, str]]
+ParallelCombinationsSet = set[tuple[str, str, str, str]]
 Handpaths = Literal["dash_handpath", "static_handpath", "cw_handpath", "ccw_handpath"]
 RotationAngles = Literal[0, 90, 180, 270]
-OptimalLocationEntries = Dict[Literal["x", "y"], float]
-StartEndLocationTuple = Tuple[Locations]
-OptimalLocationDicts = Dict[str, OptimalLocationEntries]
+OptimalLocationEntries = dict[Literal["x", "y"], float]
+StartEndLocationTuple = tuple[Locations]
+OptimalLocationDicts = dict[str, OptimalLocationEntries]
 Positions = Literal["alpha", "beta", "gamma"]
 SpecificPositions = Literal[
     "alpha1",

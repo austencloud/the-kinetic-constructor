@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple
+from typing import dict, list, tuple
 
 import pandas as pd
 from utilities.TypeChecking.TypeChecking import Locations
@@ -23,7 +23,7 @@ class Type5Generator(BaseDataFrameGenerator):
             print("Generated dataframes for letter:", letter)
         return pd.DataFrame(all_data)
 
-    def create_dataframe(self, letter) -> List[Dict]:
+    def create_dataframe(self, letter) -> list[dict]:
         data = []
         if letter == "Λ-":
             data = self.create_dataframes_for_Λ_dash(letter)
@@ -92,7 +92,7 @@ class Type5Generator(BaseDataFrameGenerator):
 
         return variations
 
-    def get_blue_loc_tuples_for_Λ_dash(self, red_start_loc, red_end_loc) -> List[str]:
+    def get_blue_loc_tuples_for_Λ_dash(self, red_start_loc, red_end_loc) -> list[str]:
         """Gets valid dash tuples for Λ based on dash's start and end locs."""
         blue_location_map = {
             (NORTH, SOUTH): [(EAST, WEST), (WEST, EAST)],
@@ -131,7 +131,7 @@ class Type5Generator(BaseDataFrameGenerator):
 
     def get_blue_locations(
         self, letter, red_start_loc, red_end_loc
-    ) -> Tuple[Locations]:
+    ) -> tuple[Locations]:
         if letter == "Φ-":
             blue_start_loc, blue_end_loc = red_end_loc, red_start_loc
         elif letter == "Ψ-":

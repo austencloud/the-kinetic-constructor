@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, list
 from constants import (
     BLUE,
     CLOCKWISE,
@@ -50,7 +50,7 @@ class VtgDirWidget(TurnsBoxWidget):
         self.vtg_dir_buttons = self._setup_vtg_dir_buttons()
         self.setup_rot_dir_section()
 
-    def _setup_vtg_dir_buttons(self) -> List[QPushButton]:
+    def _setup_vtg_dir_buttons(self) -> list[QPushButton]:
         self.same_button: VtgDirButton = self.create_vtg_dir_button(
             f"{ICON_DIR}same_direction.png", lambda: self._set_prop_rot_dir(SAME)
         )

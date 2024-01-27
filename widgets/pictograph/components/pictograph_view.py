@@ -15,7 +15,7 @@ class PictographView(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
-        # Set horizontal size policy to Expanding
+        # set horizontal size policy to Expanding
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 
     def resize_for_scroll_area(self) -> None:
@@ -58,7 +58,8 @@ class PictographView(QGraphicsView):
             self.pictograph.main_widget.refresh_placements()
 
         elif event.key() == Qt.Key.Key_C:
-            self.pictograph.wasd_manager.prop_placement_override_manager.handle_prop_placement_override(event.key())
+            self.pictograph.wasd_manager.prop_placement_override_manager.handle_prop_placement_override(
+                event.key()
+            )
         else:
             super().keyPressEvent(event)
-

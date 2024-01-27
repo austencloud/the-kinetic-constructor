@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Union
+from typing import TYPE_CHECKING, Union
 from constants import (
     ANTI,
     CLOCKWISE,
@@ -28,7 +28,7 @@ class VtgDirButtonManager:
         self.section = section_widget
         self.previous_turns = 0
 
-        self.vtg_dir_buttons: List[VtgDirButton] = self._setup_vtg_dir_buttons()
+        self.vtg_dir_buttons: list[VtgDirButton] = self._setup_vtg_dir_buttons()
         self.hide_vtg_dir_buttons()
 
     def show_vtg_dir_buttons(self) -> None:
@@ -39,7 +39,7 @@ class VtgDirButtonManager:
         self.opp_button.hide()
         self.same_button.hide()
 
-    def _setup_vtg_dir_buttons(self) -> List[QPushButton]:
+    def _setup_vtg_dir_buttons(self) -> list[QPushButton]:
         self.same_button: VtgDirButton = ButtonFactory.create_vtg_dir_button(
             f"{ICON_DIR}same_direction.png", lambda: self._set_vtg_dir(SAME), SAME
         )
@@ -80,7 +80,7 @@ class VtgDirButtonManager:
         motion.pictograph.updater.update_pictograph(pictograph_dict)
 
     def _update_button_states(
-        self, buttons: List[VtgDirButton], active_direction: VtgDirections
+        self, buttons: list[VtgDirButton], active_direction: VtgDirections
     ) -> None:
         for button in buttons:
             if button.direction == active_direction:

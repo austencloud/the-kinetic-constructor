@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 from constants import *
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import Colors
@@ -11,7 +11,7 @@ class PictographStateUpdater:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.p = pictograph
 
-    def update_pictograph(self, pictograph_dict: Dict = None) -> None:
+    def update_pictograph(self, pictograph_dict: dict = None) -> None:
         if pictograph_dict:
             if self.p.check.is_pictograph_dict_complete(pictograph_dict):
                 self.p.pictograph_dict = pictograph_dict
@@ -20,7 +20,7 @@ class PictographStateUpdater:
         self.p.letter_item.update_letter()
         self._position_objects()
 
-    def _update_from_pictograph_dict(self, pictograph_dict: Dict) -> None:
+    def _update_from_pictograph_dict(self, pictograph_dict: dict) -> None:
         self.p.attr_manager.update_attributes(pictograph_dict)
         self.update_motion_attrs_from_pictograph_dict(pictograph_dict)
         for motion in self.p.motions.values():
@@ -40,13 +40,15 @@ class PictographStateUpdater:
         self.p.ghost_props[color].show()
         self.p.arrows[color].show()
 
-    def override_motion_type_if_necessary(self, pictograph_dict: Dict, motion: Motion) -> None:
+    def override_motion_type_if_necessary(
+        self, pictograph_dict: dict, motion: Motion
+    ) -> None:
         motion_type = motion.motion_type
         turns_key = f"{motion_type}_turns"
         if turns_key in pictograph_dict:
             motion.turns = pictograph_dict[turns_key]
 
-    def update_motion_attrs_from_pictograph_dict(self, pictograph_dict: Dict) -> None:
+    def update_motion_attrs_from_pictograph_dict(self, pictograph_dict: dict) -> None:
         motion_attributes = {
             f"{RED}_motion_type": "motion_type",
             f"{RED}_start_loc": "start_loc",

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, Optional
+from typing import TYPE_CHECKING, Optional
 from constants import *
 from utilities.TypeChecking.TypeChecking import Locations, Orientations, PropRotDirs
 
@@ -181,7 +181,7 @@ class ArrowRotAngleCalculator:
 
     def _get_static_direction_map(
         self,
-    ) -> Dict[Orientations, Dict[PropRotDirs, Dict[Locations, int]]]:
+    ) -> dict[Orientations, dict[PropRotDirs, dict[Locations, int]]]:
         orientation_map = {
             IN: {
                 CLOCKWISE: {NORTH: 180, EAST: 270, SOUTH: 0, WEST: 90},
@@ -239,7 +239,7 @@ class ArrowRotAngleCalculator:
 
     def _get_dash_angle(
         self,
-    ) -> Dict[Orientations, Dict[PropRotDirs, Dict[Locations, int]]]:
+    ) -> dict[Orientations, dict[PropRotDirs, dict[Locations, int]]]:
         if self.a.motion.prop_rot_dir == NO_ROT:
             return {
                 (NORTH, SOUTH): 90,

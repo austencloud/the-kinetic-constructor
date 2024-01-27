@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 from constants import *
 from data.rules import beta_ending_letters, alpha_ending_letters, gamma_ending_letters
 
@@ -47,7 +47,7 @@ class PictographChecker:
                 return True
         return False
 
-    def is_pictograph_dict_complete(self, pictograph_dict: Dict) -> bool:
+    def is_pictograph_dict_complete(self, pictograph_dict: dict) -> bool:
         required_keys = [
             "letter",
             "start_pos",

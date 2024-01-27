@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, Optional
+from typing import TYPE_CHECKING, Optional
 from Enums import LetterType
 from constants import BLUE, RED, STATIC, Type2, Type4, Type6
 from PyQt6.QtCore import Qt
@@ -138,7 +138,7 @@ class RotationAngleOverrideManager:
             self.special_positioner.placement_manager.pictograph.main_widget.special_placements
         )
         letter = arrow.scene.letter
-        letter_data: Dict[str, Dict] = placements.get(letter, {})
+        letter_data: dict[str, dict] = placements.get(letter, {})
         turns_tuple = (
             self.special_positioner.turns_tuple_generator.generate_turns_tuple(letter)
         )

@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from objects.prop.prop import *
 from objects.prop.prop_classes import BigTriad
-from utilities.TypeChecking.prop_types import PropTypesList
+from utilities.TypeChecking.prop_types import PropTypeslist
 from widgets.graph_editor_tab.graph_editor_object_panel.base_objectbox.base_objectbox import (
     BaseObjectBox,
 )
@@ -15,7 +15,7 @@ from widgets.graph_editor_tab.graph_editor_object_panel.propbox.propbox_view imp
 )
 from constants import *
 from objects.grid import Grid
-from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, Dict, List
+from utilities.TypeChecking.TypeChecking import TYPE_CHECKING, dict, list
 from utilities.TypeChecking.prop_types import (
     PropTypes,
     strictly_placed_props,
@@ -46,7 +46,7 @@ class PropBox(BaseObjectBox):
         self.grid_position = QPointF(0, 0)
         self.grid.setPos(self.grid_position)
         self.drag: PropBoxDrag = None
-        self.props: List[Prop] = []
+        self.props: list[Prop] = []
 
     def setup_ui(self) -> None:
         self.init_combobox()
@@ -55,18 +55,18 @@ class PropBox(BaseObjectBox):
 
     def init_combobox(self) -> None:
         self.prop_type_combobox = QComboBox(self.view)
-        for item in PropTypesList:
+        for item in PropTypeslist:
             self.prop_type_combobox.addItem(str(item.capitalize()))
 
     def populate_props(self) -> None:
         self.clear_props()
-        default_prop_dicts: List[Dict] = self.get_initial_prop_attributes()
-        prop_classes: Dict[str, type] = self.get_prop_classes()
+        default_prop_dicts: list[dict] = self.get_initial_prop_attributes()
+        prop_classes: dict[str, type] = self.get_prop_classes()
 
         for prop_dict in default_prop_dicts:
             self.create_and_setup_prop(prop_dict, prop_classes)
 
-    def get_prop_classes(self) -> Dict[str, type]:
+    def get_prop_classes(self) -> dict[str, type]:
         from objects.prop.prop_classes import (
             Staff,
             BigStaff,
@@ -111,7 +111,7 @@ class PropBox(BaseObjectBox):
         }
 
     def create_and_setup_prop(
-        self, prop_dict: Dict, prop_classes: Dict[str, type]
+        self, prop_dict: dict, prop_classes: dict[str, type]
     ) -> None:
         prop_class = prop_classes.get(self.prop_type)
         if not prop_class:
@@ -131,7 +131,7 @@ class PropBox(BaseObjectBox):
         self.set_prop_position(prop)
         self.addItem(prop)
 
-    def get_initial_prop_attributes(self) -> List[Dict]:
+    def get_initial_prop_attributes(self) -> list[dict]:
         if self.grid.grid_mode == DIAMOND:
             return self.get_diamond_mode_attributes()
         elif self.grid.grid_mode == BOX:
@@ -139,7 +139,7 @@ class PropBox(BaseObjectBox):
         else:
             raise ValueError("Invalid grid mode")
 
-    def get_diamond_mode_attributes(self) -> List[Dict]:
+    def get_diamond_mode_attributes(self) -> list[dict]:
         return [
             {
                 PROP_TYPE: self.prop_type,
@@ -167,7 +167,7 @@ class PropBox(BaseObjectBox):
             },
         ]
 
-    def get_box_mode_attributes(self) -> List[Dict]:
+    def get_box_mode_attributes(self) -> list[dict]:
         return [
             {
                 COLOR: RED,

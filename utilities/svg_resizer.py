@@ -1,6 +1,6 @@
 import sys
 import xml.etree.ElementTree as ET
-from typing import List
+from typing import list
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QRect
 from PyQt6.QtCore import QRectF
@@ -36,7 +36,7 @@ class SvgResizer(QMainWindow):
     A class for resizing SVG files.
 
     Attributes:
-        svg_file_paths (List[str]): The list of selected SVG file paths.
+        svg_file_paths (list[str]): The list of selected SVG file paths.
 
     Methods:
         __init__(): Initializes the SvgResizer class.
@@ -45,7 +45,7 @@ class SvgResizer(QMainWindow):
         load_thumbnails(svg_file_paths): Loads SVG thumbnails into the graphics view.
         apply_resize(): Applies the resize operation to the selected SVG files.
         resize_svg(svg_file_path, new_width, new_height): Resizes an SVG file.
-        get_svg_file_paths() -> List[str] | list: Opens a file dialog to select SVG files and returns the selected file paths.
+        get_svg_file_paths() -> list[str] | list: Opens a file dialog to select SVG files and returns the selected file paths.
     """
 
     def __init__(self) -> None:
@@ -102,15 +102,15 @@ class SvgResizer(QMainWindow):
         file_dialog = QFileDialog(self)
         file_dialog.setFileMode(
             QFileDialog.FileMode.Directory
-        )  # Set file mode to select a directory
+        )  # set file mode to select a directory
         file_dialog.setOption(QFileDialog.Option.ShowDirsOnly)  # Show only directories
-        file_dialog.setDirectory("images/letters/")  # Set the default directory
+        file_dialog.setDirectory("images/letters/")  # set the default directory
         if file_dialog.exec():
             directory = file_dialog.selectedFiles()[0]  # Get the selected directory
             self.svg_file_paths = self.get_svg_file_paths(directory)
             self.load_thumbnails(self.svg_file_paths)
 
-    def get_svg_file_paths(self, directory: str) -> List[str]:
+    def get_svg_file_paths(self, directory: str) -> list[str]:
         svg_file_paths = []
         for root, dirs, files in os.walk(directory):
             for file in files:
@@ -218,18 +218,20 @@ class SvgResizer(QMainWindow):
             ["inkscape", "--query-all", svg_file_path],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            universal_newlines=True
+            universal_newlines=True,
         )
         output, errors = process.communicate()
 
         # Parse the output to get the bounding box for the drawing (id='svg2')
         for line in output.splitlines():
-            line_parts = line.split(',')
-            if line_parts[0] == 'svg2':
+            line_parts = line.split(",")
+            if line_parts[0] == "svg2":
                 min_x, min_y, width, height = map(float, line_parts[1:])
                 break
         else:
-            QMessageBox.warning(self, "Warning", "Unable to determine the SVG content bounds.")
+            QMessageBox.warning(
+                self, "Warning", "Unable to determine the SVG content bounds."
+            )
             return
 
         # Center the content within the new viewBox
@@ -239,7 +241,9 @@ class SvgResizer(QMainWindow):
         new_viewbox_height = height * 2
 
         # Update the SVG's viewBox attribute
-        new_viewbox = f"{new_viewbox_x} {new_viewbox_y} {new_viewbox_width} {new_viewbox_height}"
+        new_viewbox = (
+            f"{new_viewbox_x} {new_viewbox_y} {new_viewbox_width} {new_viewbox_height}"
+        )
         root.attrib["viewBox"] = new_viewbox
 
         # Write the updated SVG back to file
@@ -247,7 +251,6 @@ class SvgResizer(QMainWindow):
 
         # Inform the user of success
         QMessageBox.information(self, "Success", "SVG content has been centered.")
-
 
     def update_viewbox(self, svg_file_path, new_viewbox) -> None:
         tree = ET.parse(svg_file_path)

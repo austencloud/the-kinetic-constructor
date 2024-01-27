@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Literal, Set
+from typing import TYPE_CHECKING, Literal
 from Enums import LetterType
 from constants import CODEX_PICTOGRAPH, OPTION
 from utilities.TypeChecking.TypeChecking import Letters
@@ -70,7 +70,7 @@ class ScrollAreaPictographFactory:
             ) in self.scroll_area.main_widget.all_pictographs.get(str(letter)).items():
                 self.scroll_area.pictographs[pictograph_key] = pictograph
 
-    def get_deselected_letters(self) -> Set[Letters]:
+    def get_deselected_letters(self) -> set[Letters]:
         selected_letters = set(self.scroll_area.codex.selected_letters)
         existing_letters = {
             key.split("_")[0] for key in self.scroll_area.pictographs.keys()

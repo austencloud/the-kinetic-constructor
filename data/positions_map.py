@@ -1,13 +1,11 @@
 from objects.motion.motion import Motion
 from constants import *
 from utilities.TypeChecking.TypeChecking import (
-    Dict,
     Locations,
     SpecificPositions,
-    Tuple,
 )
 
-positions_map: Dict[Tuple[Locations], SpecificPositions] = {
+positions_map: dict[tuple[Locations], SpecificPositions] = {
     # (blue_loc, red_loc): position
     (SOUTH, NORTH): ALPHA1,
     (WEST, EAST): ALPHA2,
@@ -30,7 +28,7 @@ positions_map: Dict[Tuple[Locations], SpecificPositions] = {
 
 def get_specific_start_end_pos(
     blue_motion: Motion, red_motion: Motion
-) -> Dict[str, SpecificPositions]:
+) -> dict[str, SpecificPositions]:
     start_locs = (
         blue_motion.start_loc,
         red_motion.start_loc,

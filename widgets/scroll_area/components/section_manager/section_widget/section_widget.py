@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QGroupBox
 from constants import OPP, SAME
 from utilities.TypeChecking.TypeChecking import LetterTypes
@@ -21,14 +21,14 @@ class SectionWidget(QGroupBox):
         super().__init__(None)
         self.scroll_area = scroll_area
         self.letter_type = letter_type
-        self.vtg_dir_btn_state: Dict[str, bool] = {SAME: False, OPP: False}
+        self.vtg_dir_btn_state: dict[str, bool] = {SAME: False, OPP: False}
         self.filter_tab: FilterTab = None
 
     def setup_components(self) -> None:
         self.vtg_dir_button_manager = VtgDirButtonManager(self)
         self._setup_layout()
         self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
-        self.pictographs: Dict[str, Pictograph] = {}
+        self.pictographs: dict[str, Pictograph] = {}
         self.layout.addWidget(self.pictograph_frame)
 
     def _setup_layout(self) -> None:

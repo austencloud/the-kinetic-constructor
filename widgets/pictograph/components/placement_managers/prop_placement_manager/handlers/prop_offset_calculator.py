@@ -13,7 +13,7 @@ from constants import (
     DOWN,
 )
 from PyQt6.QtCore import QPointF
-from typing import TYPE_CHECKING, Dict, Tuple
+from typing import TYPE_CHECKING
 from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import Directions
 
@@ -21,18 +21,17 @@ if TYPE_CHECKING:
     from ..prop_placement_manager import PropPlacementManager
 
 
-
 class PropOffsetCalculator:
     def __init__(self, prop_placement_manager: "PropPlacementManager") -> None:
-        self.position_offsets_cache: Dict[Prop, Dict[Tuple[str, str], QPointF]] = {}
+        self.position_offsets_cache: dict[Prop, dict[tuple[str, str], QPointF]] = {}
         self.prop_placement_manager = prop_placement_manager
 
-    def get_or_calculate_offsets(self, prop: Prop) -> Dict[Tuple[str, str], QPointF]:
+    def get_or_calculate_offsets(self, prop: Prop) -> dict[tuple[str, str], QPointF]:
         if prop not in self.position_offsets_cache:
             self.position_offsets_cache[prop] = self.calculate_offsets(prop)
         return self.position_offsets_cache[prop]
 
-    def calculate_offsets(self, prop: Prop) -> Dict[Tuple[str, str], QPointF]:
+    def calculate_offsets(self, prop: Prop) -> dict[tuple[str, str], QPointF]:
         prop_length = prop.boundingRect().width()
         prop_width = prop.boundingRect().height()
 
@@ -78,10 +77,10 @@ class PropOffsetCalculator:
         self.beta_offset = self.prop_placement_manager.pictograph.width() / 38
 
         offset_map = {
-            LEFT: QPointF(self.beta_offset*2, 0),
-            RIGHT: QPointF(-self.beta_offset*2, 0),
-            UP: QPointF(0, self.beta_offset*2),
-            DOWN: QPointF(0, -self.beta_offset*2),
+            LEFT: QPointF(self.beta_offset * 2, 0),
+            RIGHT: QPointF(-self.beta_offset * 2, 0),
+            UP: QPointF(0, self.beta_offset * 2),
+            DOWN: QPointF(0, -self.beta_offset * 2),
         }
         offset = offset_map.get(direction, QPointF(0, 0))
         return current_position + offset

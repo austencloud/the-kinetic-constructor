@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING
 from constants import NORTH, SOUTH, WEST, EAST, IN, OUT, CLOCK, COUNTER
 from PyQt6.QtCore import QPointF
 
@@ -10,7 +10,7 @@ class PropOffsetCalculator:
     def __init__(self, prop: "Prop") -> None:
         self.prop = prop
 
-    def get_offset(self, prop_length, prop_width) -> Tuple[int, int]:
+    def get_offset(self, prop_length, prop_width) -> tuple[int, int]:
         offset_map = {}
         if self.prop.ori == IN:
             offset_map = {

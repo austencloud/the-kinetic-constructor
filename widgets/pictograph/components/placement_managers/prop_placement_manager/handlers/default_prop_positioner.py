@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 from objects.grid import GridPoint
 from objects.prop.prop import Prop
 
@@ -14,7 +14,9 @@ class DefaultPropPositioner:
         self.location_points_cache = {}
 
     def set_prop_to_default_loc(self, prop: Prop, strict: bool = False) -> None:
-        position_offsets = self.prop_placement_manager.offset_calculator.get_or_calculate_offsets(prop)
+        position_offsets = (
+            self.prop_placement_manager.offset_calculator.get_or_calculate_offsets(prop)
+        )
         key = (prop.ori, prop.loc)
         offset = position_offsets.get(key)
         prop.setTransformOriginPoint(0, 0)
@@ -26,7 +28,7 @@ class DefaultPropPositioner:
                 prop.setPos(new_position)
                 return
 
-    def get_location_points(self, strict: bool) -> Dict[str, GridPoint]:
+    def get_location_points(self, strict: bool) -> dict[str, GridPoint]:
         location_points = (
             self.pictograph.grid.grid_data.hand_points_strict
             if strict

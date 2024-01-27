@@ -55,7 +55,7 @@ class TurnsUpdater:
             self._set_prop_rot_dir(motion)
 
     def _set_prop_rot_dir(self, motion: "Motion") -> None:
-        """Set the rotation direction of the motion based on the vtg directional relationship."""
+        """set the rotation direction of the motion based on the vtg directional relationship."""
         other_motion = motion.pictograph.get.other_motion(motion)
         if self.turns_box.turns_panel.filter_tab.section.letter_type in [Type2, Type3]:
             motion.prop_rot_dir = self._determine_prop_rot_dir_for_type2_type3(
@@ -110,12 +110,12 @@ class TurnsUpdater:
         return CLOCKWISE
 
     def _set_vtg_dir_state_default(self) -> None:
-        """Set the vtg direction state to default."""
+        """set the vtg direction state to default."""
         self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[SAME] = True
         self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[OPP] = False
 
     def _set_prop_rot_dir_state_default(self) -> None:
-        """Set the vtg direction state to default."""
+        """set the vtg direction state to default."""
         self.turns_box.prop_rot_dir_btn_state[SAME] = True
         self.turns_box.prop_rot_dir_btn_state[OPP] = False
 

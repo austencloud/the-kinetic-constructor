@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING
 import pandas as pd
 from constants import (
     BLUE_START_ORI,
@@ -22,7 +22,7 @@ class LetterLoader:
     def __init__(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
 
-    def load_all_letters(self) -> Dict[str, List[Dict]]:
+    def load_all_letters(self) -> dict[str, list[dict]]:
         df = pd.read_csv("PictographDataframe.csv")
         df = df.sort_values(by=[LETTER, START_POS, END_POS])
         df = self.add_turns_and_ori_to_pictograph_dict(df)

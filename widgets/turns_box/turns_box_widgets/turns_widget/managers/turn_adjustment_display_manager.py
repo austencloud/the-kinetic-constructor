@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Union
+from typing import TYPE_CHECKING, Union
 from Enums import LetterType
 from constants import Type2, Type3
 from utilities.TypeChecking.TypeChecking import Turns
@@ -31,13 +31,12 @@ class TurnsAdjustmentManager:
         self._update_turns_display(new_turns)
         self._update_visibility_based_on_motion(new_turns)
 
-
     def get_current_turns_value(self) -> Turns:
         return self._get_turns()
 
     # Private methods
 
-    def _get_pictographs(self) -> List["Pictograph"]:
+    def _get_pictographs(self) -> list["Pictograph"]:
         return (
             self.turns_widget.turns_box.turns_panel.filter_tab.section.scroll_area.pictographs.values()
         )
@@ -68,11 +67,16 @@ class TurnsAdjustmentManager:
             self.turns_widget.turns_box.turns_panel.filter_tab.section.letter_type
         )
         button_manager = (
-            self.turns_widget.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager
-        ) if self.turns_widget.turns_box.turns_panel.filter_tab.section.letter_type in [Type2, Type3] else (
-            self.turns_widget.turns_box.prop_rot_dir_button_manager
+            (
+                self.turns_widget.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager
+            )
+            if self.turns_widget.turns_box.turns_panel.filter_tab.section.letter_type
+            in [Type2, Type3]
+            else (self.turns_widget.turns_box.prop_rot_dir_button_manager)
         )
-        button_manager.update_visibility_based_on_motion(letter_type, turns, self.turns_widget.turns_box.attribute_value)
+        button_manager.update_visibility_based_on_motion(
+            letter_type, turns, self.turns_widget.turns_box.attribute_value
+        )
 
     def _is_relevant_letter_type(self, pictograph: "Pictograph") -> bool:
         return (

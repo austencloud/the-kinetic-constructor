@@ -6,7 +6,7 @@ from PyQt6.QtCore import Qt
 from constants import IN
 
 from objects.arrow.arrow import Arrow
-from typing import TYPE_CHECKING, Dict, Tuple
+from typing import TYPE_CHECKING, dict, tuple
 from objects.arrow.ghost_arrow import GhostArrow
 
 from utilities.TypeChecking.TypeChecking import (
@@ -301,9 +301,9 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
             self.arrow_location,
         )
 
-        rotation_angle_map: Dict[
-            Tuple[MotionTypes, Colors],
-            Dict[PropRotDirs, Dict[Locations, RotationAngles]],
+        rotation_angle_map: dict[
+            tuple[MotionTypes, Colors],
+            dict[PropRotDirs, dict[Locations, RotationAngles]],
         ] = {
             (PRO, RED): {
                 CLOCKWISE: {
@@ -363,10 +363,10 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
             },
         }
 
-        direction_map: Dict[
-            PropRotDirs, Dict[Locations, RotationAngles]
+        direction_map: dict[
+            PropRotDirs, dict[Locations, RotationAngles]
         ] = rotation_angle_map.get((motion_type, color), {})
-        location_map: Dict[Locations, RotationAngles] = direction_map.get(rot_dir, {})
+        location_map: dict[Locations, RotationAngles] = direction_map.get(rot_dir, {})
         rotation_angle: RotationAngles = location_map.get(location, 0)
 
         return rotation_angle

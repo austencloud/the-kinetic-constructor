@@ -1,5 +1,9 @@
-from typing import TYPE_CHECKING, Dict, List, Tuple
-from PyQt6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem
+from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import (
+    QGraphicsScene,
+    QGraphicsPixmapItem,
+    QGraphicsSceneMouseEvent,
+)
 
 from objects.arrow.arrow import Arrow
 from objects.arrow.ghost_arrow import GhostArrow
@@ -69,7 +73,7 @@ class Pictograph(QGraphicsScene):
 
     ### EVENT HANDLERS ###
 
-    def mousePressEvent(self, event) -> None:
+    def mousePressEvent(self, event: "QGraphicsSceneMouseEvent") -> None:
         self.mouse_event_handler.handle_mouse_press(event)
 
     def mouseMoveEvent(self, event) -> None:
@@ -78,19 +82,19 @@ class Pictograph(QGraphicsScene):
     def mouseReleaseEvent(self, event) -> None:
         self.mouse_event_handler.handle_mouse_release(event)
 
-    def contextMenuEvent(self, event) -> None:
+    def contextMenuEvent(self, event: "QGraphicsSceneMouseEvent") -> None:
         self.context_menu_handler.handle_context_menu(event)
 
     view: PictographView
-    arrows: Dict[Colors, Arrow]
-    props: Dict[Colors, Prop]
-    ghost_arrows: Dict[Colors, GhostArrow]
-    ghost_props: Dict[Colors, GhostProp]
-    motions: Dict[Colors, Motion]
+    arrows: dict[Colors, Arrow]
+    props: dict[Colors, Prop]
+    ghost_arrows: dict[Colors, GhostArrow]
+    ghost_props: dict[Colors, GhostProp]
+    motions: dict[Colors, Motion]
     letter: Letters
     letter_type: LetterTypes
-    pictograph_dict: Dict
-    motion_dict_list: List[Dict]
+    pictograph_dict: dict
+    motion_dict_list: list[dict]
     start_pos: SpecificPositions
     end_pos: SpecificPositions
     image_loaded: bool
@@ -103,7 +107,7 @@ class Pictograph(QGraphicsScene):
     dragged_prop: Prop
     letter_item: LetterItem
     grid: Grid
-    locations: Dict[Locations, Tuple[int, int, int, int]]
+    locations: dict[Locations, tuple[int, int, int, int]]
     red_motion: Motion
     blue_motion: Motion
     red_arrow: Arrow

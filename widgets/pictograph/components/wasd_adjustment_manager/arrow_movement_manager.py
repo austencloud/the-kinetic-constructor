@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
@@ -27,7 +27,7 @@ class ArrowMovementManager:
         )
         self.pictograph.arrow_placement_manager.update_arrow_positions()
 
-    def get_adjustment(self, key, increment) -> Tuple[int, int]:
+    def get_adjustment(self, key, increment) -> tuple[int, int]:
         direction_map = {
             Qt.Key.Key_W: (0, -1),
             Qt.Key.Key_A: (-1, 0),

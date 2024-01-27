@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, List, Tuple
+from typing import TYPE_CHECKING, dict, list, tuple
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
@@ -61,8 +61,8 @@ class ArrowBox(BaseObjectBox):
             self.turns_combobox, 0, 1
         )  # Adding the combo box to the layout
 
-        self.motions: List[Motion] = self.create_motions()
-        self.arrows: List[Arrow] = self.create_arrows()
+        self.motions: list[Motion] = self.create_motions()
+        self.arrows: list[Arrow] = self.create_arrows()
 
     def on_turns_changed(self, turns: str) -> None:
         """Update turns for all arrows when the selected value in the combo box changes."""
@@ -71,9 +71,9 @@ class ArrowBox(BaseObjectBox):
             arrow.updater.update_arrow()  # Update the appearance of the arrow based on the new turns
 
     def create_arrows(self) -> None:
-        red_arrows: List[Arrow] = []
-        blue_arrows: List[Arrow] = []
-        arrows: List[Arrow] = []
+        red_arrows: list[Arrow] = []
+        blue_arrows: list[Arrow] = []
+        arrows: list[Arrow] = []
         for motion in self.motions:
             arrow_dict = {
                 COLOR: motion.color,
@@ -98,13 +98,13 @@ class ArrowBox(BaseObjectBox):
             arrow.setTransformOriginPoint(arrow.boundingRect().center())
             arrow.toggle_dimmer(True)
 
-        red_arrow_positions: List[Tuple[int, int]] = [
+        red_arrow_positions: list[tuple[int, int]] = [
             (525, 150),
             (525, 525),
             (475, 475),
             (475, 200),
         ]
-        blue_arrow_positions: List[Tuple[int, int]] = [
+        blue_arrow_positions: list[tuple[int, int]] = [
             (150, 525),
             (150, 150),
             (200, 200),
@@ -126,7 +126,7 @@ class ArrowBox(BaseObjectBox):
 
     def create_motions(self) -> None:
         motions = []
-        motion_dicts: List[Dict] = [
+        motion_dicts: list[dict] = [
             {
                 COLOR: RED,
                 ARROW: None,
@@ -223,7 +223,7 @@ class ArrowBox(BaseObjectBox):
         return motions
 
     def position_arrows(
-        self, arrows: List[Arrow], positions: List[Tuple[int, int]]
+        self, arrows: list[Arrow], positions: list[tuple[int, int]]
     ) -> None:
         for arrow, pos in zip(arrows, positions):
             arrow.setPos(*pos)

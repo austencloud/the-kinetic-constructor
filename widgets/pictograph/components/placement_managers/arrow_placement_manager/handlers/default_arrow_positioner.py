@@ -12,7 +12,7 @@ from constants import (
     STATIC,
 )
 from objects.arrow.arrow import Arrow
-from typing import TYPE_CHECKING, Dict, List, Tuple
+from typing import TYPE_CHECKING
 from utilities.TypeChecking.letter_lists import dash_letters
 from utilities.TypeChecking.TypeChecking import OrientationTypes
 
@@ -33,7 +33,7 @@ class DefaultArrowPositioner:
 
     def _load_default_placements(
         self, motion_type: str
-    ) -> Dict[str, Dict[str, List[int]]]:
+    ) -> dict[str, dict[str, list[int]]]:
         json_filename = self.motion_type_files.get(motion_type)
         json_path = f"data/arrow_placement/default/{json_filename}"
         with codecs.open(json_path, "r", encoding="utf-8") as file:
@@ -88,7 +88,7 @@ class DefaultArrowPositioner:
         else:
             return arrow.motion.motion_type
 
-    def get_default_adjustment(self, arrow: Arrow) -> Tuple[int, int]:
+    def get_default_adjustment(self, arrow: Arrow) -> tuple[int, int]:
         motion_type_placements = self._load_default_placements(arrow.motion.motion_type)
         adjustment_key = self._get_adjustment_key(arrow)
 

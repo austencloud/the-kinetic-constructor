@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple
+from typing import dict, list, tuple
 import pandas as pd
 from .base_dataframe_generator import BaseDataFrameGenerator
 from constants import *
@@ -19,7 +19,7 @@ class Type2Generator(BaseDataFrameGenerator):
             print("Generated dataframes for letter:", letter)
         return pd.DataFrame(all_data)
 
-    def create_dataframe(self, letter) -> List[Dict]:
+    def create_dataframe(self, letter) -> list[dict]:
         if letter in ["W", "Y", "Σ", "θ"]:
             data = self.create_dataframes_for_letter(letter, PRO, STATIC)
             data += self.create_dataframes_for_letter(letter, STATIC, PRO)
@@ -83,7 +83,7 @@ class Type2Generator(BaseDataFrameGenerator):
 
     def get_static_locations(
         self, letter, shift_start_loc, shift_end_loc
-    ) -> Tuple[Locations]:
+    ) -> tuple[Locations]:
         if letter in ["W", "X"]:  # Static starts at shift_end_loc
             static_start_loc, static_end_loc = self.get_opposite_location(
                 shift_end_loc

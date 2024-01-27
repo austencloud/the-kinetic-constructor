@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Tuple
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QSizePolicy, QLabel
 from PyQt6.QtCore import Qt
 
@@ -19,13 +19,13 @@ class LetterButtonFrameLayoutStyler:
             "Type6": ("#eb7d00", "#eb7d00"),  # Orange, Orange
         }
 
-    def get_colors(self, type_name: str) -> Tuple[str, str]:
+    def get_colors(self, type_name: str) -> tuple[str, str]:
         border_colors = self.border_colors.get(type_name)
         if border_colors[0] == border_colors[1]:
             border_colors = (border_colors[0], "transparent")
         return border_colors
 
-    def create_layout(self, type_name: str, row_layouts: List[QHBoxLayout]) -> QFrame:
+    def create_layout(self, type_name: str, row_layouts: list[QHBoxLayout]) -> QFrame:
         border_colors = self.get_colors(type_name)
 
         # Create the outer frame with the primary border color
@@ -71,7 +71,7 @@ class LetterButtonFrameLayoutStyler:
         main_layout.addWidget(buttons_frame)
         main_layout.setStretchFactor(buttons_frame, 1)
 
-    def _create_main_frame(self) -> Tuple[QFrame, QVBoxLayout]:
+    def _create_main_frame(self) -> tuple[QFrame, QVBoxLayout]:
         main_frame = QFrame()
         main_layout = QVBoxLayout(main_frame)
         main_layout.setContentsMargins(0, 0, 0, 0)
@@ -79,7 +79,7 @@ class LetterButtonFrameLayoutStyler:
         return main_frame, main_layout
 
     def _create_buttons_frame(
-        self, row_layouts: List[QHBoxLayout], border_colors
+        self, row_layouts: list[QHBoxLayout], border_colors
     ) -> QFrame:
         buttons_frame = self.create_styled_frame(border_colors[1], 4)
         buttons_layout = QVBoxLayout(buttons_frame)
@@ -106,7 +106,7 @@ class LetterButtonFrameLayoutStyler:
         return frame
 
     def add_frames_to_layout(
-        self, main_layout: QVBoxLayout, frame_tuples: List[Tuple[QFrame, int]]
+        self, main_layout: QVBoxLayout, frame_tuples: list[tuple[QFrame, int]]
     ) -> None:
         for frame, stretch in frame_tuples:
             main_layout.addWidget(frame, stretch)

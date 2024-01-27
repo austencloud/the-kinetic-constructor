@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import list, tuple
 from constants import (
     BLUE,
     CLOCKWISE,
@@ -25,7 +25,7 @@ class DirectionalTupleGenerator:
         self.motion = motion
         self.other_motion = other_motion
 
-    def generate_directional_tuples(self, x: int, y: int) -> List[Tuple[int, int]]:
+    def generate_directional_tuples(self, x: int, y: int) -> list[tuple[int, int]]:
         motion_type = self.motion.motion_type
         prop_rot_dir = self.motion.prop_rot_dir
 
@@ -118,7 +118,7 @@ class DirectionalTupleGenerator:
             and self.other_motion.motion_type == STATIC
         ):
             return no_rot_dash_vs_static_directional_tuples
-        
+
         elif motion_type == DASH:
             return default_dash_directional_tuples.get((motion_type, prop_rot_dir), [])
         elif motion_type == STATIC and prop_rot_dir == NO_ROT:

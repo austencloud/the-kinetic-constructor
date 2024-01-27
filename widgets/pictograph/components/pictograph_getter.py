@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, Optional
 from Enums import LetterType
 
 from constants import *
@@ -24,7 +24,7 @@ class PictographGetter:
                 return letter_type.description
         return None
 
-    def motions_by_type(self, motion_type: MotionTypes) -> List[Motion]:
+    def motions_by_type(self, motion_type: MotionTypes) -> list[Motion]:
         return [
             motion
             for motion in self.p.motions.values()
@@ -68,10 +68,5 @@ class PictographGetter:
         return self.p.motions[RED if self.p.red_motion.check.is_static() else BLUE]
 
     def opposite_location(self, loc: Locations) -> Locations:
-        opposite_locations = {
-            NORTH: SOUTH,
-            SOUTH: NORTH,
-            EAST: WEST,
-            WEST: EAST
-        }
+        opposite_locations = {NORTH: SOUTH, SOUTH: NORTH, EAST: WEST, WEST: EAST}
         return opposite_locations.get(loc)

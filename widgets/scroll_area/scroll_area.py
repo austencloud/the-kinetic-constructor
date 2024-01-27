@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt, QTimer
 
@@ -19,7 +19,7 @@ class ScrollArea(QScrollArea):
         self.main_widget = codex.main_tab_widget.main_widget
         self.codex = codex
         self.letters = self.main_widget.letters
-        self.pictographs: Dict[Letters, Pictograph] = {}
+        self.pictographs: dict[Letters, Pictograph] = {}
         self.stretch_index = -1  # Initialize stretch index
         self._setup_ui()
         self._setup_managers()
@@ -84,4 +84,3 @@ class ScrollArea(QScrollArea):
     def update_arrow_placements(self) -> None:
         for pictograph in self.pictographs.values():
             pictograph.arrow_placement_manager.update_arrow_positions()
-

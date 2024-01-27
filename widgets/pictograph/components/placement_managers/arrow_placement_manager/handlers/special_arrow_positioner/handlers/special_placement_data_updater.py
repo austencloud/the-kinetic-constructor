@@ -1,7 +1,7 @@
 import json
 import os
 import re
-from typing import TYPE_CHECKING, Dict, Tuple, Union
+from typing import TYPE_CHECKING, Union
 from constants import CLOCK, COUNTER, IN, OUT
 
 from objects.arrow.arrow import Arrow
@@ -17,7 +17,7 @@ class SpecialPlacementDataUpdater:
         self.positioner = positioner
 
     def update_arrow_adjustments_in_json(
-        self, adjustment: Tuple[int, int], arrow: "Arrow"
+        self, adjustment: tuple[int, int], arrow: "Arrow"
     ) -> None:
         if not arrow:
             return
@@ -51,7 +51,7 @@ class SpecialPlacementDataUpdater:
         self.update_specific_entry_in_json(letter, letter_data, arrow)
 
     def update_specific_entry_in_json(
-        self, letter: Letters, letter_data: Dict, object: Union[Arrow, Prop]
+        self, letter: Letters, letter_data: dict, object: Union[Arrow, Prop]
     ) -> None:
         """Update a specific entry in the JSON file."""
 
@@ -61,7 +61,6 @@ class SpecialPlacementDataUpdater:
                 subfolder = "from_radial"
             elif object.motion.start_ori in [CLOCK, COUNTER]:
                 subfolder = "from_nonradial"
-
 
             base_directory = (
                 self.positioner.placement_manager.pictograph.main_widget.parent_directory
@@ -117,7 +116,7 @@ class SpecialPlacementDataUpdater:
             print(f"Error occurred while updating JSON file: {e}")
 
     def _update_turn_data(
-        self, turn_data: Dict, arrow: "Arrow", adjustment: Tuple[int, int]
+        self, turn_data: dict, arrow: "Arrow", adjustment: tuple[int, int]
     ) -> None:
         key = self.positioner.motion_key_generator.generate_motion_key(arrow)
         turn_data.setdefault(key, self._get_default_data(arrow))
@@ -126,7 +125,7 @@ class SpecialPlacementDataUpdater:
             turn_data[key][1] + adjustment[1],
         ]
 
-    def _get_default_data(self, arrow: "Arrow") -> Tuple[int, int]:
+    def _get_default_data(self, arrow: "Arrow") -> tuple[int, int]:
         default_mgr = (
             self.positioner.pictograph.arrow_placement_manager.default_positioner
         )
@@ -134,8 +133,8 @@ class SpecialPlacementDataUpdater:
         return (default_turn_data[0], default_turn_data[1])
 
     def _create_default_turn_data(
-        self, arrow: "Arrow", adjustment: Tuple[int, int]
-    ) -> Dict:
+        self, arrow: "Arrow", adjustment: tuple[int, int]
+    ) -> dict:
         default_mgr = (
             self.positioner.pictograph.arrow_placement_manager.default_positioner
         )

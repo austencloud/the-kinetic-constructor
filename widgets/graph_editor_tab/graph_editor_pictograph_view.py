@@ -1,5 +1,5 @@
 from PyQt6.QtCore import Qt, QSize
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, list
 from PyQt6.QtWidgets import QGraphicsView, QPushButton, QFrame
 from PyQt6.QtGui import QIcon
 
@@ -27,7 +27,7 @@ class GraphEditorPictographView(QGraphicsView):
         self.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
         self.setLineWidth(1)
 
-    def init_buttons(self) -> List[QPushButton]:
+    def init_buttons(self) -> list[QPushButton]:
         self.add_to_sequence_button = self.create_button(
             f"{ICON_DIR}add_to_sequence.png",
             self.main_pictograph.add_to_sequence_manager.add_to_sequence_callback,

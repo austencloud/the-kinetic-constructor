@@ -243,7 +243,7 @@ class PropBoxDrag(BaseObjectBoxDrag):
             RotationAngles: The rotation angle for the prop.
 
         """
-        angle_map: Dict[Orientations, Dict[Locations, RotationAngles]] = {
+        angle_map: dict[Orientations, dict[Locations, RotationAngles]] = {
             OUT: {
                 NORTH: 270,
                 SOUTH: 90,

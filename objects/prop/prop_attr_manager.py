@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, Union
+from typing import TYPE_CHECKING, Union
 from Enums import PropAttribute
 
 from constants import *
@@ -23,7 +23,7 @@ class PropAttrManager:
         self.update_attributes(self.p.prop_dict)
 
     def update_attributes(
-        self, prop_dict: Dict[str, Union[Colors, Locations, MotionTypes, Turns]]
+        self, prop_dict: dict[str, Union[Colors, Locations, MotionTypes, Turns]]
     ) -> None:
         prop_attributes = [COLOR, LOC, LAYER, ORI, AXIS, MOTION, PROP_TYPE]
         for attr in prop_attributes:
@@ -54,7 +54,7 @@ class PropAttrManager:
         }
         self.ori = ori_map[self.ori]
 
-    def get_attributes(self) -> Dict[str, Union[Colors, Locations, Orientations]]:
+    def get_attributes(self) -> dict[str, Union[Colors, Locations, Orientations]]:
         prop_attributes = [attr.value for attr in PropAttribute]
         return {attr: getattr(self, attr) for attr in prop_attributes}
 

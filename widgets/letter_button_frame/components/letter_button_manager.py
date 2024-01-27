@@ -1,10 +1,9 @@
 from Enums import LetterType
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 from PyQt6.QtWidgets import QHBoxLayout, QSizePolicy
 from PyQt6.QtCore import QSize, Qt
 from Enums import LetterType
-from typing import Dict
 from constants import LETTER_BTN_ICON_DIR
 from utilities.TypeChecking.TypeChecking import Letters
 from widgets.letter_button_frame.components.letter_button_click_handler import (
@@ -23,7 +22,7 @@ class LetterButtonManager:
     def __init__(self, letter_button_frame: "LetterButtonFrame") -> None:
         self.letter_rows = letter_button_frame.letter_rows
         self.icon_dir = LETTER_BTN_ICON_DIR
-        self.buttons: Dict[Letters, LetterButton] = {}
+        self.buttons: dict[Letters, LetterButton] = {}
         self.letter_button_frame = letter_button_frame
         self.click_handler = LetterButtonClickHandler(self)
 
@@ -51,7 +50,7 @@ class LetterButtonManager:
             button.setMaximumSize(QSize(button_size, button_size))
             button.setIconSize(QSize(icon_size, icon_size))
 
-    def get_buttons_row_layout(self, row: List[Letters]) -> QHBoxLayout:
+    def get_buttons_row_layout(self, row: list[Letters]) -> QHBoxLayout:
         row_layout = QHBoxLayout()
         row_layout.setContentsMargins(0, 0, 0, 0)
         row_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)

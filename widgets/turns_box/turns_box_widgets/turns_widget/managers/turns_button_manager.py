@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 from utilities.TypeChecking.TypeChecking import AdjustmentNums, AdjustmentStrs
 from widgets.factories.button_factory.buttons.adjust_turns_button import (
     AdjustTurnsButton,
@@ -15,7 +15,7 @@ class TurnsButtonManager:
     def __init__(self, turns_widget: "TurnsWidget") -> None:
         self.turns_widget = turns_widget
         self.adjustments = [(-1, "-1"), (-0.5, "-0.5"), (0.5, "+0.5"), (1, "+1")]
-        self.adjust_turns_buttons: List[AdjustTurnsButton] = []
+        self.adjust_turns_buttons: list[AdjustTurnsButton] = []
 
     def setup_adjust_turns_buttons(self) -> None:
         """Create and setup adjustment buttons."""

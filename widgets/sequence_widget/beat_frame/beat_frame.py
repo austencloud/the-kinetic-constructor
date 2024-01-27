@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 from PyQt6.QtWidgets import QGridLayout, QFrame, QSizePolicy
 from PyQt6.QtCore import Qt, pyqtSignal
@@ -29,7 +29,7 @@ class BeatFrame(QFrame):
         super().__init__()
         self.main_widget = main_widget
         self.sequence_widget = sequence_widget
-        self.beats: List[BeatView] = []
+        self.beats: list[BeatView] = []
         self.layout: QGridLayout = QGridLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)

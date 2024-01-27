@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import dict, list
 from Enums import LetterType
 from utilities.TypeChecking.TypeChecking import LetterTypes
 from widgets.pictograph.pictograph import Pictograph
@@ -6,9 +6,9 @@ from widgets.pictograph.pictograph import Pictograph
 
 class PictographOrganizer:
     def __init__(self):
-        self.pictographs_by_type: Dict[LetterTypes, List[Pictograph]] = {}
+        self.pictographs_by_type: dict[LetterTypes, list[Pictograph]] = {}
 
-    def organize_pictographs_by_type(self, pictographs: Dict[str, Pictograph]):
+    def organize_pictographs_by_type(self, pictographs: dict[str, Pictograph]):
         for key, pictograph in pictographs.items():
             letter_type = self.get_pictograph_letter_type(key)
             if letter_type not in self.pictographs_by_type:

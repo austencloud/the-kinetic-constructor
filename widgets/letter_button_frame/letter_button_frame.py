@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from PyQt6.QtCore import Qt
 
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING
 from utilities.TypeChecking.TypeChecking import Letters
 from widgets.letter_button_frame.components.letter_button_manager import (
     LetterButtonManager,
@@ -19,14 +19,14 @@ class LetterButtonFrame(QFrame):
         super().__init__()
         self.button_panel = button_panel
         self.spacing = 5
-        self.outer_frames: Dict[str, QFrame] = {}
+        self.outer_frames: dict[str, QFrame] = {}
         self.letter_rows = self._define_letter_rows()
         self.layout_styler = LetterButtonFrameLayoutStyler(self)
         self.button_manager = LetterButtonManager(self)
         self.button_manager.create_buttons()
         self._init_letter_buttons_layout()
 
-    def _define_letter_rows(self) -> Dict[str, List[List[Letters]]]:
+    def _define_letter_rows(self) -> dict[str, list[list[Letters]]]:
         return {
             "Type1": [
                 ["A", "B", "C"],

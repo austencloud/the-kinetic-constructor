@@ -75,7 +75,7 @@ strictly_placed_props = [
 
 ### LISTS FOR ITERATION ###
 
-PropTypesList = (
+PropTypeslist = (
     "staff",
     "bigstaff",
     "club",

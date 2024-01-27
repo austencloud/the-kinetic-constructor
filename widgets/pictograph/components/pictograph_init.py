@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, Tuple
+from typing import TYPE_CHECKING
 from PyQt6.QtCore import QPointF, QPoint, Qt
 
 from objects.arrow.arrow import Arrow
@@ -35,11 +35,11 @@ class PictographInit:
         self.p.dragged_arrow = None
 
         self.p.grid: Grid = self.init_grid()
-        self.p.locations: Dict[
-            Locations, Tuple[int, int, int, int]
+        self.p.locations: dict[
+            Locations, tuple[int, int, int, int]
         ] = self.init_quadrant_boundaries(self.p.grid)
 
-        self.p.motions: Dict[Colors, Motion] = self.init_motions()
+        self.p.motions: dict[Colors, Motion] = self.init_motions()
         self.p.arrows, self.p.ghost_arrows = self.init_arrows()
         self.p.props, self.p.ghost_props = self.init_props()
         self.p.letter_item: LetterItem = self.init_letter_item()
@@ -52,7 +52,7 @@ class PictographInit:
         self.p.grid = grid
         return grid
 
-    def init_motions(self) -> Dict[Colors, Motion]:
+    def init_motions(self) -> dict[Colors, Motion]:
         motions = {}
         for color in [RED, BLUE]:
             motions[color] = self._create_motion(color)
@@ -65,7 +65,7 @@ class PictographInit:
         self.p.arrows, self.p.ghost_arrows = self.init_arrows()
         self.p.props, self.p.ghost_props = self.init_props(prop_type)
 
-    def init_arrows(self) -> Tuple[Dict[Colors, Arrow], Dict[Colors, GhostArrow]]:
+    def init_arrows(self) -> tuple[dict[Colors, Arrow], dict[Colors, GhostArrow]]:
         arrows = {}
         ghost_arrows = {}
         for color in [BLUE, RED]:
@@ -73,7 +73,7 @@ class PictographInit:
         self.p.red_arrow, self.p.blue_arrow = (arrows[RED], arrows[BLUE])
         return arrows, ghost_arrows
 
-    def init_props(self) -> Tuple[Dict[Colors, Prop], Dict[Colors, GhostProp]]:
+    def init_props(self) -> tuple[dict[Colors, Prop], dict[Colors, GhostProp]]:
         props = {}
         ghost_props = {}
         for color in [RED, BLUE]:
@@ -90,7 +90,7 @@ class PictographInit:
 
     def init_quadrant_boundaries(
         self, grid: Grid
-    ) -> Dict[Locations, Tuple[int, int, int, int]]:
+    ) -> dict[Locations, tuple[int, int, int, int]]:
         # Use cached coordinates directly
         grid_center: QPoint = grid.grid_data.center_point.coordinates.toPoint()
 
@@ -128,7 +128,7 @@ class PictographInit:
 
     def _create_arrow(
         self, color: Colors, motion_type: MotionTypes
-    ) -> Tuple[Arrow, GhostArrow]:
+    ) -> tuple[Arrow, GhostArrow]:
         arrow_attributes = {
             COLOR: color,
             TURNS: 0,
@@ -146,7 +146,7 @@ class PictographInit:
 
     def _create_prop(
         self, color: Colors, prop_type: PropTypes
-    ) -> Tuple[Prop, GhostProp]:
+    ) -> tuple[Prop, GhostProp]:
         prop_class = prop_class_mapping.get(prop_type)
         if prop_class is None:
             raise ValueError(f"Invalid prop_type: {prop_type}")

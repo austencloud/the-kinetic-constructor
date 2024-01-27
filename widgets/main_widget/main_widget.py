@@ -5,7 +5,7 @@ from PyQt6.QtGui import QResizeEvent, QKeyEvent
 from PyQt6.QtCore import Qt
 
 from utilities.TypeChecking.letter_lists import all_letters
-from utilities.TypeChecking.TypeChecking import Letters, TYPE_CHECKING, Dict, List
+from utilities.TypeChecking.TypeChecking import Letters, TYPE_CHECKING
 from constants import DIAMOND, STAFF
 from widgets.pictograph.pictograph import Pictograph
 from ..image_cache_manager import ImageCacheManager
@@ -66,11 +66,11 @@ class MainWidget(QWidget):
         self.grid_mode = DIAMOND
 
     def _setup_letters(self) -> None:
-        self.all_pictographs: Dict[Letters, Dict[str, Pictograph]] = {
+        self.all_pictographs: dict[Letters, dict[str, Pictograph]] = {
             letter: {} for letter in all_letters
         }
         self.letter_loader = LetterLoader(self)
-        self.letters: Dict[Letters, List[Dict]] = self.letter_loader.load_all_letters()
+        self.letters: dict[Letters, list[dict]] = self.letter_loader.load_all_letters()
 
     ### EVENT HANDLERS ###
 

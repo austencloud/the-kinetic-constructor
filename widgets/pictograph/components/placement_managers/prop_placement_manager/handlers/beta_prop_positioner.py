@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Tuple
+from typing import TYPE_CHECKING
 from constants import ANTI, PRO
 
 from objects.prop.prop import Prop
@@ -28,16 +28,17 @@ class BetaPropPositioner:
         self.apply_swap_override_if_needed()
 
     def apply_swap_override_if_needed(self) -> None:
-        beta_ori = None
         if self.pictograph.blue_prop.motion.start_ori in [IN, OUT]:
-            ori_key = "from_radial"
+            ori_key: str = "from_radial"
         elif self.pictograph.blue_prop.motion.start_ori in [CLOCK, COUNTER]:
-            ori_key = "from_nonradial"
-
+            ori_key: str = "from_nonradial"
+        else:
+            return
         # Access the correct placements data based on the orientation
-        letter_data = self.pictograph.main_widget.special_placements[ori_key].get(
-            self.pictograph.letter, {}
-        )
+        if ori_key:
+            letter_data: dict = self.pictograph.main_widget.special_placements[
+                ori_key
+            ].get(self.pictograph.letter)
 
         turns_tuple = self.pictograph.arrow_placement_manager.special_positioner.turns_tuple_generator.generate_turns_tuple(
             self.pictograph.letter
@@ -47,14 +48,15 @@ class BetaPropPositioner:
             beta_ori = "radial"
         elif self.pictograph.check.has_all_nonradial_props():
             beta_ori = "nonradial"
-        
+        else:
+            return
         override_key = (
             f"swap_beta_{prop_loc}_{beta_ori}_"
             f"blue_{self.blue_prop.motion.motion_type}_{self.blue_prop.motion.arrow.loc}_"
             f"red_{self.red_prop.motion.motion_type}_{self.red_prop.motion.arrow.loc}"
         )
 
-        turn_data = letter_data.get(turns_tuple, {})
+        turn_data: dict = letter_data.get(turns_tuple, {})
         if beta_ori:
             if turn_data.get(override_key):
                 self.swap_beta()
@@ -69,7 +71,7 @@ class BetaPropPositioner:
         self.move_prop(self.blue_prop, red_direction)
         self.move_prop(self.blue_prop, red_direction)
 
-    def _classify_props(self) -> Tuple[List[Prop], List[Prop], List[Prop], List[Prop]]:
+    def _classify_props(self) -> tuple[list[Prop], list[Prop], list[Prop], list[Prop]]:
         props = self.pictograph.props.values()
         return (
             [p for p in props if p.prop_type in big_unilateral_prop_types],
@@ -104,22 +106,22 @@ class BetaPropPositioner:
     ### REPOSITIONING ###
 
     def _reposition_beta_props(self) -> None:
-        big_unilateral_props: List[Prop] = [
+        big_unilateral_props: list[Prop] = [
             prop
             for prop in self.pictograph.props.values()
             if prop.prop_type in big_unilateral_prop_types
         ]
-        small_unilateral_props: List[Prop] = [
+        small_unilateral_props: list[Prop] = [
             prop
             for prop in self.pictograph.props.values()
             if prop.prop_type in small_unilateral_prop_types
         ]
-        small_bilateral_props: List[Prop] = [
+        small_bilateral_props: list[Prop] = [
             prop
             for prop in self.pictograph.props.values()
             if prop.prop_type in small_bilateral_prop_types
         ]
-        big_bilateral_props: List[Prop] = [
+        big_bilateral_props: list[Prop] = [
             prop
             for prop in self.pictograph.props.values()
             if prop.prop_type in big_bilateral_prop_types
@@ -137,7 +139,7 @@ class BetaPropPositioner:
         elif len(small_bi) == 2:
             self._reposition_small_bilateral_props()
 
-    def _reposition_small_unilateral_props(self, small_uni: List[Prop]) -> None:
+    def _reposition_small_unilateral_props(self, small_uni: list[Prop]) -> None:
         if small_uni[0].ori == small_uni[1].ori:
             for prop in small_uni:
                 self.ppm.default_positioner.set_prop_to_default_loc(prop)
@@ -154,7 +156,7 @@ class BetaPropPositioner:
                 self.ppm.default_positioner.set_prop_to_default_loc(prop)
 
     def _reposition_big_props(
-        self, big_unilateral_props: List[Prop], big_bilateral_props: List[Prop]
+        self, big_unilateral_props: list[Prop], big_bilateral_props: list[Prop]
     ) -> None:
         big_props = big_unilateral_props + big_bilateral_props
         if self.pictograph.check.has_non_hybrid_orientations():

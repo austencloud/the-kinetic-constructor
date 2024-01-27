@@ -2,7 +2,7 @@ import re
 from PyQt6.QtCore import QPointF
 from constants import IN, OUT
 from objects.arrow.arrow import Arrow
-from typing import TYPE_CHECKING, Dict, Optional, Tuple
+from typing import TYPE_CHECKING, Optional
 
 from utilities.TypeChecking.letter_lists import (
     Type1_hybrid_letters,
@@ -58,7 +58,7 @@ class ArrowAdjustmentCalculator:
         quadrant_index = self.pm.quadrant_index_handler.get_quadrant_index(arrow)
         return QPointF(*directional_adjustments[quadrant_index])
 
-    def _find_special_rotation(self, turn_data: Dict) -> Optional[Dict]:
+    def _find_special_rotation(self, turn_data: dict) -> Optional[dict]:
         for key, value in turn_data.items():
             if re.match(r"^(cw|ccw)_static$", key):
                 return value
@@ -66,18 +66,18 @@ class ArrowAdjustmentCalculator:
 
     def get_adjustment_for_letter(
         self, letter: str, arrow: Arrow, turns_tuple: str, orientation_key: str
-    ) -> Optional[Tuple[int, int]]:
+    ) -> Optional[tuple[int, int]]:
         if turns_tuple is None:
             turns_tuple = (
                 self.pm.special_positioner.turns_tuple_generator.generate_turns_tuple(
                     letter
                 )
             )
-        self.special_placements: Dict[
-            str, Dict
+        self.special_placements: dict[
+            str, dict
         ] = self.pm.pictograph.main_widget.special_placements[orientation_key]
 
-        letter_adjustments: Dict = self.special_placements.get(letter, {}).get(
+        letter_adjustments: dict = self.special_placements.get(letter, {}).get(
             turns_tuple, {}
         )
         adjustment_map = {

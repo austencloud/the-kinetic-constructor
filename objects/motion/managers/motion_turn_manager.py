@@ -15,7 +15,7 @@ class MotionTurnsManager:
         self.m.turns_manager.set_motion_turns(new_turns)
 
     def set_turns(self, new_turns: Turns) -> None:
-        """Set the turns for a given motion object"""
+        """set the turns for a given motion object"""
         clamped_turns = MotionTurnsManager.clamp_turns(new_turns)
         self.m.turns_manager.set_motion_turns(clamped_turns)
 

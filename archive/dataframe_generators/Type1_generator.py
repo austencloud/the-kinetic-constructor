@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import dict, list
 import pandas as pd
 from .base_dataframe_generator import BaseDataFrameGenerator
 from constants import *
@@ -18,7 +18,7 @@ class Type1Generator(BaseDataFrameGenerator):
             print("Generated dataframes for letter:", letter)
         return pd.DataFrame(all_data)
 
-    def create_dataframe(self, letter) -> List[Dict]:
+    def create_dataframe(self, letter) -> list[dict]:
         data = []
         if letter in ["A", "D", "G", "J", "M", "P", "M", "P"]:
             return self.create_dataframes_for_letter(letter, PRO, PRO)
@@ -31,7 +31,7 @@ class Type1Generator(BaseDataFrameGenerator):
         if letter in ["S", "T"]:
             red_motion_type = PRO if letter == "S" else ANTI
             for red_handpath_rot_dir in self.shift_handpaths:
-                data: List = self.create_ST_dataframes(
+                data: list = self.create_ST_dataframes(
                     letter,
                     red_motion_type,
                     red_leading_bool=True,
@@ -53,7 +53,7 @@ class Type1Generator(BaseDataFrameGenerator):
 
     def create_dataframes_for_letter(
         self, letter, red_motion_type, blue_motion_type
-    ) -> List[Dict]:
+    ) -> list[dict]:
         data = []
 
         for shift_handpath in self.shift_handpaths:
@@ -139,7 +139,7 @@ class Type1Generator(BaseDataFrameGenerator):
 
         return variations
 
-    def create_dataframes_for_U(self) -> List[Dict]:
+    def create_dataframes_for_U(self) -> list[dict]:
         data = []
 
         for red_handpath_rot_dir in self.shift_handpaths:
@@ -253,7 +253,7 @@ class Type1Generator(BaseDataFrameGenerator):
 
         return data
 
-    def create_dataframes_for_V(self) -> List[Dict]:
+    def create_dataframes_for_V(self) -> list[dict]:
         data = []
 
         for red_handpath_rot_dir in self.shift_handpaths:

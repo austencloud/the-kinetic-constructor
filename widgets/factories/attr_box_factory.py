@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 from constants import (
     ANTI,
@@ -24,7 +24,7 @@ class TurnsBoxFactory:
     def __init__(self, turns_panel: "TurnsPanel") -> None:
         self.turns_panel = turns_panel
 
-    def create_boxes(self) -> List[TurnsBox]:
+    def create_boxes(self) -> list[TurnsBox]:
         attributes = []
         if self.turns_panel.attribute_type == MOTION_TYPE:
             return [

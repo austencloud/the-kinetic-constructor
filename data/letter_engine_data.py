@@ -1,4 +1,3 @@
-from typing import Dict, List
 from constants import ANTI, DASH, PRO, STATIC
 from utilities.TypeChecking.TypeChecking import LetterTypes, MotionTypes
 
@@ -100,7 +99,7 @@ motion_type_letter_combinations = {
     "Γ": (STATIC, STATIC),
 }
 
-letter_type_motion_type_map: Dict[LetterTypes, List[MotionTypes]] = {
+letter_type_motion_type_map: dict[LetterTypes, list[MotionTypes]] = {
     "Type1": [PRO, ANTI],
     "Type2": [PRO, ANTI, STATIC],
     "Type3": [PRO, ANTI, DASH],

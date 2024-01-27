@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple
+from typing import dict, list, tuple
 
 import pandas as pd
 from utilities.TypeChecking.TypeChecking import Locations
@@ -23,7 +23,7 @@ class Type4Generator(BaseDataFrameGenerator):
             print("Generated dataframes for letter:", letter)
         return pd.DataFrame(all_data)
 
-    def create_dataframe(self, letter) -> List[Dict]:
+    def create_dataframe(self, letter) -> list[dict]:
         data = []
         if letter == "Λ":
             data = self.create_dataframes_for_Λ(letter)
@@ -115,7 +115,7 @@ class Type4Generator(BaseDataFrameGenerator):
 
         return variations
 
-    def get_static_locations_for_Λ(self, dash_start_loc, dash_end_loc) -> List[str]:
+    def get_static_locations_for_Λ(self, dash_start_loc, dash_end_loc) -> list[str]:
         """Gets valid static locs for Λ based on dash's start and end locs."""
         static_location_map = {
             (NORTH, SOUTH): [EAST, WEST],
@@ -154,7 +154,7 @@ class Type4Generator(BaseDataFrameGenerator):
 
     def get_static_locations(
         self, letter, dash_start_loc, dash_end_loc
-    ) -> Tuple[Locations]:
+    ) -> tuple[Locations]:
         if letter == "Φ":
             static_start_loc, static_end_loc = dash_start_loc, dash_start_loc
         elif letter == "Ψ":

@@ -2,11 +2,11 @@ import cProfile
 import pstats
 import os
 import tempfile
-from typing import IO, Any, Callable, Optional, List
+from typing import IO, Any, Callable, Optional
 
 
 class Profiler:
-    def __init__(self, exclude_modules: Optional[List[str]] = None) -> None:
+    def __init__(self, exclude_modules: Optional[list[str]] = None) -> None:
         self.profiler: cProfile.Profile = cProfile.Profile()
         self.exclude_modules = exclude_modules or ["PyQt6", "__main__"]
 
@@ -55,8 +55,10 @@ class Profiler:
                 self._write_stats_section(f, stats, "cumulative", app_root)
         finally:
             os.remove(temp_file_name)
-            
-    def _write_stats_section(self, file: IO[str], stats: pstats.Stats, sort_by: str, app_root: str) -> None:
+
+    def _write_stats_section(
+        self, file: IO[str], stats: pstats.Stats, sort_by: str, app_root: str
+    ) -> None:
         stats.sort_stats(sort_by)
         header = "{:>10} {:>15} {:>15} {:>20} {:>20} {:>30}\n".format(
             "Calls",

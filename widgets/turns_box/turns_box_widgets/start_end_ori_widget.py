@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, list
 from PyQt6.QtWidgets import (
     QHBoxLayout,
     QVBoxLayout,
@@ -24,8 +24,8 @@ class StartEndOriWidget(TurnsBoxWidget):
         # Setup start and end combo boxes
         self.start_ori_box: QComboBox = self._setup_ori_box()
         self.end_ori_box: QComboBox = self._setup_ori_box()
-        self.ori_boxes: List[QComboBox] = [self.start_ori_box, self.end_ori_box]
-        self.header_labels: List[QLabel] = []
+        self.ori_boxes: list[QComboBox] = [self.start_ori_box, self.end_ori_box]
+        self.header_labels: list[QLabel] = []
 
         # Setup frames for start and end combo boxes with headers
         self.start_ori_box_with_header_frame = self._create_vbox_with_header_frame(

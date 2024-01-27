@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, list
 from constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON
 from ..turns_box.turns_box_widgets.turns_widget.turns_widget import (
     TurnsWidget,
@@ -73,7 +73,7 @@ class GraphEditorTurnsWidget(TurnsWidget):
     ### WIDGETS ###
 
     def _add_widgets_to_layout(
-        self, widgets: List[QWidget], layout: QHBoxLayout | QVBoxLayout
+        self, widgets: list[QWidget], layout: QHBoxLayout | QVBoxLayout
     ) -> None:
         """Adds the given widgets to the specified layout."""
         for widget in widgets:

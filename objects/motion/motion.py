@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 from .managers.motion_checker import MotionChecker
 from .managers.motion_attr_manager import MotionAttrManager
 from .managers.motion_manipulator import MotionManipulator
@@ -14,6 +14,7 @@ from utilities.TypeChecking.TypeChecking import (
     PropRotDirs,
     Turns,
 )
+
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
     from objects.arrow.arrow import Arrow
@@ -21,7 +22,7 @@ if TYPE_CHECKING:
 
 
 class Motion:
-    def __init__(self, pictograph: "Pictograph", motion_dict: Dict) -> None:
+    def __init__(self, pictograph: "Pictograph", motion_dict: dict) -> None:
         self.pictograph = pictograph
         self.motion_dict = motion_dict
         self.ori_calculator = MotionOriCalculator(self)

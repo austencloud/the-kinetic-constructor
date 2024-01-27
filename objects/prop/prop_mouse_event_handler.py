@@ -3,7 +3,7 @@ from data.start_end_loc_map import get_start_end_locs
 
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
-from typing import TYPE_CHECKING, Dict, Tuple
+from typing import TYPE_CHECKING
 
 from constants import *
 from utilities.TypeChecking.MotionAttributes import Locations, MotionTypes, PropRotDirs
@@ -77,9 +77,9 @@ class PropMouseEventHandler:
         self, new_arrow_location: Locations
     ) -> None:
         if self.p.motion.motion_type in [PRO, ANTI]:
-            shift_location_map: Dict[
-                Tuple(Locations, PropRotDirs, MotionTypes),
-                Dict[Locations, Locations],
+            shift_location_map: dict[
+                tuple(Locations, PropRotDirs, MotionTypes),
+                dict[Locations, Locations],
             ] = {
                 ### ISO ###
                 (NORTHEAST, CLOCKWISE, PRO): {

@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QHBoxLayout, QFrame
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 from Enums import LetterType
 from constants import ANTI, DASH, MOTION_TYPE, PRO, STATIC
 from utilities.TypeChecking.TypeChecking import Letters
@@ -24,9 +24,9 @@ class TurnsPanel(QFrame):
         self.filter_tab = filter_tab
         self.attribute_type = attribute_type
         self.turns_box_factory = TurnsBoxFactory(self)
-        self.boxes: List[TurnsBox] = self.turns_box_factory.create_boxes()
+        self.boxes: list[TurnsBox] = self.turns_box_factory.create_boxes()
         self.setup_layouts()
-        self.visible_boxes: List[TurnsBox] = []
+        self.visible_boxes: list[TurnsBox] = []
 
     def setup_layouts(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
@@ -38,7 +38,7 @@ class TurnsPanel(QFrame):
             box.setObjectName("TurnsBox")
 
     def show_motion_type_boxes_based_on_chosen_letters(
-        self, selected_letters: List[Letters]
+        self, selected_letters: list[Letters]
     ) -> None:
         relevant_selected_letters = []
         for letter in selected_letters:

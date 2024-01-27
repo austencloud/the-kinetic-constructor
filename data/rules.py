@@ -1,5 +1,3 @@
-from typing import Dict, List, Tuple
-
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Positions
 
@@ -116,7 +114,7 @@ gamma_starting_letters = [
 ]
 
 
-def get_next_letters(letter: all_letters) -> List[all_letters]:
+def get_next_letters(letter: all_letters) -> list[all_letters]:
     """Return the next possible letters for the given letter."""
     if letter in alpha_ending_letters:
         return alpha_starting_letters
@@ -128,7 +126,7 @@ def get_next_letters(letter: all_letters) -> List[all_letters]:
         return []
 
 
-positions: Dict[all_letters, Tuple[Positions]] = {
+positions: dict[all_letters, tuple[Positions]] = {
     # Type1
     "A": ("alpha", "alpha"),
     "B": ("alpha", "alpha"),

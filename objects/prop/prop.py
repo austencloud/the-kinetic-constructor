@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 
 from objects.graphical_object.graphical_object import GraphicalObject
 from objects.prop.prop_attr_manager import PropAttrManager
@@ -27,7 +27,7 @@ class Prop(GraphicalObject):
     axis: Axes
     prop_type: PropTypes
 
-    def __init__(self, scene, prop_dict: Dict, motion: "Motion") -> None:
+    def __init__(self, scene, prop_dict: dict, motion: "Motion") -> None:
         super().__init__(scene)
         self.motion = motion
         self.scene: Pictograph = scene

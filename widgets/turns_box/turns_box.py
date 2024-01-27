@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, Union
+from typing import TYPE_CHECKING, Union, cast
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
@@ -37,32 +37,35 @@ class TurnsBox(QFrame):
         self,
         turns_panel,
         attribute_type: MotionAttributes,
-        attribute: Union[MotionAttributes, Colors, LeadStates],
+        attribute: Union[MotionTypes, Colors, LeadStates],
     ) -> None:
         super().__init__(turns_panel)
         self.attribute_type: MotionAttributes = attribute_type
-        self.attribute_value: Union[MotionAttributes, Colors, LeadStates] = attribute
+        self.attribute_value = attribute
         self.turns_panel: "TurnsPanel" = turns_panel
+
         self.font_size = self.turns_panel.width() // 20
         self.turn_display_border = 2
-        self.prop_rot_dir_btn_state: Dict[str, bool] = {
+        self.prop_rot_dir_btn_state: dict[str, bool] = {
             CLOCKWISE: False,
             COUNTER_CLOCKWISE: False,
         }
+
+        self.motion_type: MotionTypes
+        self.color: Colors
+        self.lead_state: LeadStates
+
         self._setup_attribute_type()
         self._setup_widgets()
         self._setup_layouts()
 
     def _setup_attribute_type(self) -> None:
         if self.attribute_type == MOTION_TYPE:
-            self.motion_type: MotionTypes = self.attribute_value
-            self.attribute_value = self.motion_type
+            self.motion_type = cast(MotionTypes, self.attribute_value)
         elif self.attribute_type == COLOR:
-            self.color: Colors = self.attribute_value
-            self.attribute_value = self.color
+            self.color = cast(Colors, self.attribute_value)
         elif self.attribute_type == LEAD_STATE:
-            self.lead_state: LeadStates = self.attribute_value
-            self.attribute_value = self.lead_state
+            self.lead_state = cast(LeadStates, self.attribute_value)
 
     def _setup_widgets(self) -> None:
         self.prop_rot_dir_button_manager = PropRotDirButtonManager(self)
@@ -112,10 +115,9 @@ class TurnsBox(QFrame):
     ### CREATE LABELS ###
 
     def resize_turns_box(self) -> None:
-        for button in (
-            self.turns_panel.filter_tab.section.vtg_dir_button_manager.vtg_dir_buttons
-
-        ):
+        for (
+            button
+        ) in self.turns_panel.filter_tab.section.vtg_dir_button_manager.vtg_dir_buttons:
             button.setMinimumSize(
                 self.turns_panel.filter_tab.section.width() // 20,
                 self.turns_panel.filter_tab.section.width() // 20,

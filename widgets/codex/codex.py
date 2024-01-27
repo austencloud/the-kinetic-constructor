@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
 from utilities.TypeChecking.TypeChecking import Letters
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 class Codex(QWidget):
     imageGenerated = pyqtSignal(str)
-    selected_letters: List[Letters] = []
+    selected_letters: list[Letters] = []
 
     def __init__(self, main_tab_widget: "MainTabWidget") -> None:
         super().__init__(main_tab_widget)

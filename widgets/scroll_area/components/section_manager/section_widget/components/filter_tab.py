@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QTabWidget, QHBoxLayout
 from Enums import LetterType
 from constants import (
@@ -42,7 +42,7 @@ class FilterTab(QTabWidget):
         self.motion_type_turns_panel = TurnsPanel(self, MOTION_TYPE)
         self.color_turns_panel = TurnsPanel(self, COLOR)
         self.lead_state_turns_panel = TurnsPanel(self, LEAD_STATE)
-        self.panels: List[TurnsPanel] = [
+        self.panels: list[TurnsPanel] = [
             self.motion_type_turns_panel,
             self.color_turns_panel,
             self.lead_state_turns_panel,
@@ -67,7 +67,7 @@ class FilterTab(QTabWidget):
 
     def get_motion_types_from_letter_type(
         self, letter_type: LetterTypes
-    ) -> List[MotionAttributes]:
+    ) -> list[MotionAttributes]:
         motion_types = letter_type_motion_type_map[letter_type]
         return motion_types
 
@@ -94,7 +94,7 @@ class FilterTab(QTabWidget):
 
     def _determine_tabs_to_show(
         self, selected_letters: set[Letters]
-    ) -> List[MotionAttributes]:
+    ) -> list[MotionAttributes]:
         tabs_to_show = []
         motion_types_present = set()
 
@@ -122,12 +122,12 @@ class FilterTab(QTabWidget):
         return tabs_to_show
 
     def _determine_tabs_to_hide(
-        self, tabs_to_show: List[MotionAttributes]
-    ) -> List[MotionAttributes]:
+        self, tabs_to_show: list[MotionAttributes]
+    ) -> list[MotionAttributes]:
         all_tabs = [MOTION_TYPE, COLOR, LEAD_STATE]
         return [tab for tab in all_tabs if tab not in tabs_to_show]
 
-    def show_tabs(self, tabs: List[MotionAttributes]) -> None:
+    def show_tabs(self, tabs: list[MotionAttributes]) -> None:
         for tab in tabs:
             if tab == COLOR and self.indexOf(self.color_turns_panel) == -1:
                 self.addTab(self.color_turns_panel, "Filter by Colors")
@@ -138,7 +138,7 @@ class FilterTab(QTabWidget):
             elif tab == LEAD_STATE and self.indexOf(self.lead_state_turns_panel) == -1:
                 self.addTab(self.lead_state_turns_panel, "Filter by Lead State")
 
-    def hide_tabs(self, tabs: List[MotionAttributes]) -> None:
+    def hide_tabs(self, tabs: list[MotionAttributes]) -> None:
         if not tabs:
             self.clear()
         else:
