@@ -103,30 +103,30 @@ class ArrowRotAngleCalculator:
             direction_map = {
                 PRO: {
                     CLOCKWISE: {
-                        NORTHEAST: 315,
-                        SOUTHEAST: 45,
-                        SOUTHWEST: 135,
-                        NORTHWEST: 225,
+                        NORTHEAST: 360,
+                        SOUTHEAST: 90,
+                        SOUTHWEST: 180,
+                        NORTHWEST: 270,
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTHEAST: 225,
-                        SOUTHEAST: 135,
-                        SOUTHWEST: 45,
-                        NORTHWEST: 315,
+                        NORTHEAST: 270,
+                        SOUTHEAST: 180,
+                        SOUTHWEST: 90,
+                        NORTHWEST: 360,
                     },
                 },
                 ANTI: {
                     CLOCKWISE: {
-                        NORTHEAST: 225,
-                        SOUTHEAST: 135,
-                        SOUTHWEST: 45,
-                        NORTHWEST: 315,
+                        NORTHEAST: 270,
+                        SOUTHEAST: 180,
+                        SOUTHWEST: 90,
+                        NORTHWEST: 360,
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTHEAST: 315,
-                        SOUTHEAST: 45,
-                        SOUTHWEST: 135,
-                        NORTHWEST: 225,
+                        NORTHEAST: 360,
+                        SOUTHEAST: 90,
+                        SOUTHWEST: 180,
+                        NORTHWEST: 270,
                     },
                 },
             }

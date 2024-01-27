@@ -25,10 +25,16 @@ class SpecialPlacementDataUpdater:
 
         turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
         # Determine the correct orientation key ('from_radial' or 'from_antiradial')
-        orientation_key = 'from_radial' if arrow.motion.start_ori in [IN, OUT] else 'from_antiradial'
-        
+        orientation_key = (
+            "from_radial" if arrow.motion.start_ori in [IN, OUT] else "from_antiradial"
+        )
+
         # Access the correct placements data based on the orientation
-        letter_data = self.positioner.placement_manager.pictograph.main_widget.special_placements[orientation_key].get(letter, {})
+        letter_data = (
+            self.positioner.placement_manager.pictograph.main_widget.special_placements[
+                orientation_key
+            ].get(letter, {})
+        )
 
         turn_data = letter_data.get(turns_tuple, {})
 
@@ -38,17 +44,29 @@ class SpecialPlacementDataUpdater:
             turn_data = self._create_default_turn_data(arrow, adjustment)
 
         letter_data[turns_tuple] = turn_data
-        self.positioner.placement_manager.pictograph.main_widget.special_placements[letter] = letter_data
+        self.positioner.placement_manager.pictograph.main_widget.special_placements[
+            letter
+        ] = letter_data
         self.update_specific_entry_in_json(letter, letter_data, arrow)
 
-    def update_specific_entry_in_json(self, letter: Letters, letter_data: Dict, arrow: Arrow) -> None:
+    def update_specific_entry_in_json(
+        self, letter: Letters, letter_data: Dict, arrow: Arrow
+    ) -> None:
         """Update a specific entry in the JSON file."""
         try:
-            subfolder = 'from_radial' if arrow.motion.start_ori in [IN, OUT] else 'from_antiradial'
-            base_directory = self.positioner.placement_manager.pictograph.main_widget.parent_directory
+            subfolder = (
+                "from_radial"
+                if arrow.motion.start_ori in [IN, OUT]
+                else "from_antiradial"
+            )
+            base_directory = (
+                self.positioner.placement_manager.pictograph.main_widget.parent_directory
+            )
 
             # Construct the file path
-            file_path = os.path.join(base_directory, subfolder, f"{letter}_placements.json")
+            file_path = os.path.join(
+                base_directory, subfolder, f"{letter}_placements.json"
+            )
 
             # Check if the directory exists, if not, create it
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -65,12 +83,15 @@ class SpecialPlacementDataUpdater:
             existing_data[letter] = letter_data
 
             with open(file_path, "w", encoding="utf-8") as file:
-                formatted_json_str = json.dumps(existing_data, indent=2, ensure_ascii=False)
-                formatted_json_str = re.sub(r"\[\s+(-?\d+),\s+(-?\d+)\s+\]", r"[\1, \2]", formatted_json_str)
+                formatted_json_str = json.dumps(
+                    existing_data, indent=2, ensure_ascii=False
+                )
+                formatted_json_str = re.sub(
+                    r"\[\s+(-?\d+),\s+(-?\d+)\s+\]", r"[\1, \2]", formatted_json_str
+                )
                 file.write(formatted_json_str)
         except Exception as e:
             print(f"Error occurred while updating JSON file: {e}")
-
 
     def _update_turn_data(
         self, turn_data: Dict, arrow: "Arrow", adjustment: Tuple[int, int]
@@ -103,3 +124,36 @@ class SpecialPlacementDataUpdater:
                 default_turn_data[1] + adjustment[1],
             ]
         }
+
+    def remove_special_placement_entry(self, letter: str, arrow: "Arrow") -> None:
+        """Remove a specific entry from the special placements JSON file."""
+        # Determine the orientation key and file path
+        orientation_key = (
+            "from_radial" if arrow.motion.start_ori in [IN, OUT] else "from_antiradial"
+        )
+        file_path = os.path.join(
+            self.positioner.placement_manager.pictograph.main_widget.parent_directory,
+            f"{orientation_key}/{letter}_placements.json",
+        )
+
+        # Load current data
+        if os.path.exists(file_path):
+            with open(file_path, "r", encoding="utf-8") as file:
+                data: Dict = json.load(file)
+            letter_data = data.get(letter, {})
+
+            # Remove the specific entry
+            turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(
+                letter
+            )
+            if turns_tuple in letter_data:
+                del letter_data[turns_tuple]
+
+            with open(file_path, "w", encoding="utf-8") as file:
+                formatted_json_str = json.dumps(data, indent=2, ensure_ascii=False)
+                formatted_json_str = re.sub(
+                    r"\[\s+(-?\d+),\s+(-?\d+)\s+\]", r"[\1, \2]", formatted_json_str
+                )
+                file.write(formatted_json_str)
+
+        arrow.pictograph.main_widget.refresh_placements()

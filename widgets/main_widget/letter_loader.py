@@ -40,6 +40,6 @@ class LetterLoader:
         pictograph_dict[BLUE_TURNS] = 0
         pictograph_dict[RED_TURNS] = 0
         pictograph_dict[BLUE_START_ORI] = COUNTER
-        pictograph_dict[RED_START_ORI] = COUNTER
+        pictograph_dict[RED_START_ORI] = CLOCK
 
         return pictograph_dict
