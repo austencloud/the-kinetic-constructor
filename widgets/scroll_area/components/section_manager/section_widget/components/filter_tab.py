@@ -88,9 +88,10 @@ class FilterTab(QTabWidget):
         tabs_to_hide = self._determine_tabs_to_hide(tabs_to_show)
         self.show_tabs(tabs_to_show)
         self.hide_tabs(tabs_to_hide)
-        self.motion_type_turns_panel.show_motion_type_boxes_based_on_chosen_letters(
-            selected_letters
-        )
+        if MOTION_TYPE in tabs_to_show:
+            self.motion_type_turns_panel.show_motion_type_boxes_based_on_chosen_letters(
+                selected_letters
+            )
 
     def _determine_tabs_to_show(
         self, selected_letters: set[Letters]
@@ -139,22 +140,15 @@ class FilterTab(QTabWidget):
                 self.addTab(self.lead_state_turns_panel, "Filter by Lead State")
 
     def hide_tabs(self, tabs: list[MotionAttributes]) -> None:
-        if not tabs:
-            self.clear()
-        else:
-            for tab in tabs:
-                if tab == COLOR and self.indexOf(self.color_turns_panel) != -1:
-                    self.removeTab(self.indexOf(self.color_turns_panel))
-                elif (
-                    tab == MOTION_TYPE
-                    and self.indexOf(self.motion_type_turns_panel) != -1
-                ):
-                    self.removeTab(self.indexOf(self.motion_type_turns_panel))
-                elif (
-                    tab == LEAD_STATE
-                    and self.indexOf(self.lead_state_turns_panel) != -1
-                ):
-                    self.removeTab(self.indexOf(self.lead_state_turns_panel))
+        for tab in tabs:
+            if tab == COLOR and self.indexOf(self.color_turns_panel) != -1:
+                self.removeTab(self.indexOf(self.color_turns_panel))
+            elif (
+                tab == MOTION_TYPE and self.indexOf(self.motion_type_turns_panel) != -1
+            ):
+                self.removeTab(self.indexOf(self.motion_type_turns_panel))
+            elif tab == LEAD_STATE and self.indexOf(self.lead_state_turns_panel) != -1:
+                self.removeTab(self.indexOf(self.lead_state_turns_panel))
 
     def get_current_turns_values(self) -> dict[MotionAttributes, dict]:
         turns_values = {

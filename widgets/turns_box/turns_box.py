@@ -115,33 +115,15 @@ class TurnsBox(QFrame):
     ### CREATE LABELS ###
 
     def resize_turns_box(self) -> None:
-        for (
-            button
-        ) in self.turns_panel.filter_tab.section.vtg_dir_button_manager.vtg_dir_buttons:
-            button.setMinimumSize(
-                self.turns_panel.filter_tab.section.width() // 20,
-                self.turns_panel.filter_tab.section.width() // 20,
-            )
-            button.setMaximumSize(
-                self.turns_panel.filter_tab.section.width() // 20,
-                self.turns_panel.filter_tab.section.width() // 20,
-            )
-            button.setIconSize(button.size() * 0.9)
-        for (
-            button
-        ) in (
+        button_size = self.turns_panel.filter_tab.section.width() // 20
+
+        for button in (
             self.header_widget.turns_box.prop_rot_dir_button_manager.prop_rot_dir_buttons
+            + self.turns_panel.filter_tab.section.vtg_dir_button_manager.vtg_dir_buttons
         ):
-            button.setMinimumSize(
-                self.turns_panel.filter_tab.section.width() // 20,
-                self.turns_panel.filter_tab.section.width() // 20,
-            )
-            button.setMaximumSize(
-                self.turns_panel.filter_tab.section.width() // 20,
-                self.turns_panel.filter_tab.section.width() // 20,
-            )
+            button.setMinimumSize(button_size, button_size)
+            button.setMaximumSize(button_size, button_size)
             button.setIconSize(button.size() * 0.9)
-        self.header_widget.setMinimumHeight(
-            self.turns_panel.filter_tab.section.width() // 20
-        )
+
+        self.header_widget.setMinimumHeight(button_size)
         self.turns_widget.resize_turns_widget()

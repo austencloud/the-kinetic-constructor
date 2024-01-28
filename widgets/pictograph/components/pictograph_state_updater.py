@@ -28,9 +28,9 @@ class PictographStateUpdater:
             if pictograph_dict.get(f"{motion.color}_motion_type"):
                 self.show_graphical_objects(motion.color)
             motion.updater.update_motion()
-        if self.p.letter in ["S", "T"]:
-            self.p.get.leading_motion().lead_state == LEADING
-            self.p.get.trailing_motion().lead_state == TRAILING
+        if self.p.letter in ["S", "T", "U", "V"]:
+            self.p.get.leading_motion().lead_state = LEADING
+            self.p.get.trailing_motion().lead_state = TRAILING
         else:
             for motion in self.p.motions.values():
                 motion.lead_state = None

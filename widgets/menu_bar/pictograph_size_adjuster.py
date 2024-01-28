@@ -7,13 +7,15 @@ if TYPE_CHECKING:
     from widgets.menu_bar.preferences_dialog import PreferencesDialog
 
 
-class PictographSizeAdjuster:
+class PictographSizeAdjuster(QGroupBox):
     MAX_COLUMN_COUNT = 8
     MIN_COLUMN_COUNT = 3
 
     def __init__(self, preferences_dialog: "PreferencesDialog") -> None:
+        super().__init__()
         self.preferences_dialog = preferences_dialog
         self._setup_size_slider()
+        self._setup_layout()
 
     def _setup_size_slider(self) -> None:
         self.size_slider = ClickableSlider(Qt.Orientation.Horizontal)
@@ -24,12 +26,10 @@ class PictographSizeAdjuster:
         self.size_slider.setPageStep(1)
         self.size_slider.valueChanged.connect(self.slider_value_changed)
 
-    def create_widget(self) -> QGroupBox:
-        group_box = QGroupBox()
+    def _setup_layout(self) -> None:
         layout = QFormLayout()
         layout.addRow(QLabel("Pictograph size:"), self.size_slider)
-        group_box.setLayout(layout)
-        return group_box
+        self.setLayout(layout)
 
     def slider_value_changed(self, value) -> None:
         inverted_value = self.MAX_COLUMN_COUNT - (value - 1)

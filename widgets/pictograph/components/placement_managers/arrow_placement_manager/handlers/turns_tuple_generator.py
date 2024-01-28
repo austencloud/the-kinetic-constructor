@@ -127,12 +127,15 @@ class TurnsTupleGenerator:
             f"({self._normalize_arrow_turns(self.blue_arrow)}, "
             f"{self._normalize_arrow_turns(self.red_arrow)})"
         )
+        
+
+
 
     def _generate_lead_state_key(self) -> str:
         """Generate the key for 'S' and 'T' letters based on leading and trailing states."""
         leading_motion = self.p.get.leading_motion()
         trailing_motion = self.p.get.trailing_motion()
-        if leading_motion:
+        if self.p.get.leading_motion():
             leading_motion.arrow.motion.lead_state = LEADING
             trailing_motion.arrow.motion.lead_state = TRAILING
             return f"({leading_motion.turns}, {trailing_motion.turns})"

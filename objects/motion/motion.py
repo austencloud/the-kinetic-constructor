@@ -43,4 +43,4 @@ class Motion:
     end_loc: Locations
     end_ori: Orientations
     prop_rot_dir: PropRotDirs
-    lead_state: LeadStates
+    lead_state: LeadStates = None

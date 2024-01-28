@@ -13,3 +13,4 @@ class PictographAttrManager:
         for attr_name, attr_value in pictograph_dict.items():
             if attr_value is not None:
                 setattr(self.pictograph, attr_name, attr_value)
+

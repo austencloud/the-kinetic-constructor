@@ -7,6 +7,7 @@ from constants import (
     DASH,
     END_LOC,
     END_ORI,
+    LEADING,
     MOTION_TYPE,
     NO_ROT,
     OPP,
@@ -17,6 +18,7 @@ from constants import (
     START_LOC,
     START_ORI,
     STATIC,
+    TRAILING,
     TURNS,
 )
 from utilities.TypeChecking.TypeChecking import Colors, Orientations, Turns
@@ -45,6 +47,9 @@ class MotionAttrManager:
 
         if self.m.motion_type:
             self.m.end_ori: Orientations = self.m.ori_calculator.get_end_ori()
+
+        if self.m.pictograph.letter in ["S", "T", "U", "V"]:
+            self.assign_lead_states()
 
     def update_motion_attributes_from_filter_tab(
         self, filter_tab: "FilterTab", pictograph_dict: dict
@@ -135,3 +140,10 @@ class MotionAttrManager:
         }
         self.m.updater.update_motion(motion_dict)
         self.m.arrow.loc = self.m.prop.loc
+
+    def assign_lead_states(self) -> None:
+        leading_motion = self.m.pictograph.get.leading_motion()
+        trailing_motion = self.m.pictograph.get.trailing_motion()
+        if self.m.pictograph.get.leading_motion():
+            leading_motion.arrow.motion.lead_state = LEADING
+            trailing_motion.arrow.motion.lead_state = TRAILING
