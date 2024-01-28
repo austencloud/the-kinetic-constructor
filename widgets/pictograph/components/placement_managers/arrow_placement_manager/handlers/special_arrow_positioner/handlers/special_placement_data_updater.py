@@ -65,7 +65,7 @@ class SpecialPlacementDataUpdater:
     def _get_orientation_key(self, motion_start_ori) -> str:
         return "from_radial" if motion_start_ori in [IN, OUT] else "from_nonradial"
 
-    def _update_placement_data_in_json(
+    def _update_placement_json_data(
         self, letter: str, letter_data: dict, orientation_key: str
     ) -> None:
         file_path = os.path.join(
@@ -89,7 +89,7 @@ class SpecialPlacementDataUpdater:
 
         letter_data = self._get_letter_data(letter, orientation_key)
         self._update_or_create_turn_data(letter_data, turns_tuple, arrow, adjustment)
-        self._update_placement_data_in_json(letter, letter_data, orientation_key)
+        self._update_placement_json_data(letter, letter_data, orientation_key)
 
         logging.info(
             f"Updated {letter} in {orientation_key} at {turns_tuple} with adjustment {adjustment}. Current values: {letter_data.get(turns_tuple)}"
@@ -100,6 +100,6 @@ class SpecialPlacementDataUpdater:
     ) -> None:
         try:
             orientation_key = self._get_orientation_key(object.motion.start_ori)
-            self._update_placement_data_in_json(letter, letter_data, orientation_key)
+            self._update_placement_json_data(letter, letter_data, orientation_key)
         except Exception as e:
             logging.error(f"Error in update_specific_entry_in_json: {e}")

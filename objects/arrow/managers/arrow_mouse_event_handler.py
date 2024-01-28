@@ -16,6 +16,7 @@ class ArrowMouseEventHandler:
 
     def handle_mouse_press(self, event) -> None:
         self.arrow.pictograph.mouse_event_handler.clear_selections()
+        self.arrow.pictograph.selected_arrow = self.arrow
         self.arrow.setSelected(True)
         if hasattr(self.arrow, GHOST) and self.arrow.ghost:
             self.arrow.ghost.show()

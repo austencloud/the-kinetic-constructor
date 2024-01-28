@@ -15,6 +15,8 @@ if TYPE_CHECKING:
 
 
 class SpecialPlacementMirroredEntryHandler:
+    """Handles mirrored special placement entries."""
+    
     def __init__(self, data_updater: "SpecialPlacementDataUpdater") -> None:
         self.data_updater = data_updater
 

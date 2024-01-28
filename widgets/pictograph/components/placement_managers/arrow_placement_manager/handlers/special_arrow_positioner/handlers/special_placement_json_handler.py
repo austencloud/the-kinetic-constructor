@@ -5,7 +5,7 @@ import re
 
 
 class SpecialPlacementJsonHandler:
-    """Handles JSON file operations."""
+    """Handles read/write JSON file operations."""
 
     @staticmethod
     def load_json_data(file_path) -> dict:

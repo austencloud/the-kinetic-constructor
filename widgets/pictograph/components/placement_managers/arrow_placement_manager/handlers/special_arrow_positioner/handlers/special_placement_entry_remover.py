@@ -4,7 +4,7 @@ from Enums import LetterType
 from constants import Type1
 from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.MotionAttributes import Colors
-from utilities.TypeChecking.letter_lists import non_hybrid_letters
+from utilities.TypeChecking.letter_lists import Type1_non_hybrid_letters
 
 
 if TYPE_CHECKING:
@@ -42,17 +42,16 @@ class SpecialPlacementEntryRemover:
                 self._remove_turn_data_entry(
                     letter_data, turns_tuple, arrow, arrow.color
                 )
-                if arrow.pictograph.letter in non_hybrid_letters:
-                    mirrored_turns_tuple = (
-                        self.data_updater.mirrored_entry_handler.mirror_turns_tuple(
-                            turns_tuple
-                        )
+                mirrored_turns_tuple = (
+                    self.data_updater.mirrored_entry_handler.mirror_turns_tuple(
+                        turns_tuple
                     )
-                    if mirrored_turns_tuple:
-                        other_color = "blue" if arrow.color == "red" else "red"
-                        self._remove_turn_data_entry(
-                            letter_data, mirrored_turns_tuple, arrow, other_color
-                        )
+                )
+                if mirrored_turns_tuple:
+                    other_color = "blue" if arrow.color == "red" else "red"
+                    self._remove_turn_data_entry(
+                        letter_data, mirrored_turns_tuple, arrow, other_color
+                    )
 
                 self.data_updater.json_handler.write_json_data(data, file_path)
             arrow.pictograph.main_widget.refresh_placements()
