@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 class SpecialPlacementMirroredEntryHandler:
     """Handles mirrored special placement entries."""
-    
+
     def __init__(self, data_updater: "SpecialPlacementDataUpdater") -> None:
         self.data_updater = data_updater
 
@@ -26,6 +26,7 @@ class SpecialPlacementMirroredEntryHandler:
         if (
             not LetterType.get_letter_type(arrow.pictograph.letter) == Type1
             or arrow.pictograph.letter not in Type1_non_hybrid_letters
+            or arrow.pictograph.letter in ["S", "T", "U", "V"]
         ):
             return
 

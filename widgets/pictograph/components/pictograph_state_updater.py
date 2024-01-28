@@ -74,4 +74,4 @@ class PictographStateUpdater:
 
     def _position_objects(self) -> None:
         self.p.prop_placement_manager.update_prop_positions()
-        self.p.arrow_placement_manager.update_arrow_positions()
+        self.p.arrow_placement_manager.update_arrow_placements()

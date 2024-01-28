@@ -27,7 +27,7 @@ class ArrowPlacementManager:
         self.key_generator = TurnsTupleGenerator(self)
         self.quadrant_index_handler = QuadrantIndexHandler(self)
 
-    def update_arrow_positions(self) -> None:
+    def update_arrow_placements(self) -> None:
         self.letter = self.pictograph.letter
         for arrow in self.pictograph.arrows.values():
             self.update_arrow_position(arrow)

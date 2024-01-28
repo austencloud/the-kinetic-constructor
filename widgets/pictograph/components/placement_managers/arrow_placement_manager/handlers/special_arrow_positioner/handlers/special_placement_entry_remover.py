@@ -60,7 +60,11 @@ class SpecialPlacementEntryRemover:
         self, letter_data: dict, turns_tuple: str, arrow: Arrow, color: str = None
     ) -> None:
         turn_data = letter_data.get(turns_tuple, {})
-        if arrow.motion.motion_type in turn_data:
+        if arrow.motion.lead_state in turn_data:
+            del turn_data[arrow.motion.lead_state]
+            if not turn_data:
+                del letter_data[turns_tuple]
+        elif arrow.motion.motion_type in turn_data:
             del turn_data[arrow.motion.motion_type]
             if not turn_data:
                 del letter_data[turns_tuple]
