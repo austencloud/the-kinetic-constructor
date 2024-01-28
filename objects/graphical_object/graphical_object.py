@@ -3,6 +3,7 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QGraphicsItem
+from constants import BLUE, RED
 
 
 from objects.graphical_object.svg_manager import (
@@ -31,6 +32,12 @@ class GraphicalObject(QGraphicsSvgItem):
         self.setFlag(
             QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True
         )  
+
+    def set_z_value_based_on_color(self) -> None:
+        if self.color == RED:
+            self.setZValue(1)  # Higher Z value for red props
+        elif self.color == BLUE:
+            self.setZValue(0)  # Lower Z value for blue props
     ### GETTERS ###
 
     def get_center(self) -> QPointF:

@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from Enums import LetterType
 from constants import ANTI, PRO
 
 from objects.prop.prop import Prop
@@ -28,13 +29,8 @@ class BetaPropPositioner:
         self.apply_swap_override_if_needed()
 
     def apply_swap_override_if_needed(self) -> None:
-        if self.pictograph.blue_prop.motion.start_ori in [IN, OUT]:
-            ori_key: str = "from_radial"
-        elif self.pictograph.blue_prop.motion.start_ori in [CLOCK, COUNTER]:
-            ori_key: str = "from_nonradial"
-        else:
-            return
-        # Access the correct placements data based on the orientation
+        ori_key = self._generate_ori_key()
+
         if ori_key:
             letter_data: dict = self.pictograph.main_widget.special_placements[
                 ori_key
@@ -50,26 +46,48 @@ class BetaPropPositioner:
             beta_ori = "nonradial"
         else:
             return
-        override_key = (
-            f"swap_beta_{prop_loc}_{beta_ori}_"
-            f"blue_{self.blue_prop.motion.motion_type}_{self.blue_prop.motion.arrow.loc}_"
-            f"red_{self.red_prop.motion.motion_type}_{self.red_prop.motion.arrow.loc}"
-        )
+        override_key = self._generate_override_key(prop_loc, beta_ori)
         if letter_data:
             turn_data: dict = letter_data.get(turns_tuple, {})
             if beta_ori:
                 if turn_data.get(override_key):
                     self.swap_beta()
 
-    def swap_beta(self) -> None:
-        red_direction = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
-        blue_direction = self.ppm.dir_calculator.get_dir(self.pictograph.blue_motion)
+    def _generate_ori_key(self) -> str:
+        if self.pictograph.blue_prop.motion.start_ori in [IN, OUT]:
+            ori_key: str = "from_radial"
+        elif self.pictograph.blue_prop.motion.start_ori in [CLOCK, COUNTER]:
+            ori_key: str = "from_nonradial"
+        return ori_key
 
-        # move them double so they end up replacing each other's positions
-        self.move_prop(self.red_prop, blue_direction)
-        self.move_prop(self.red_prop, blue_direction)
-        self.move_prop(self.blue_prop, red_direction)
-        self.move_prop(self.blue_prop, red_direction)
+    def _generate_override_key(self, prop_loc, beta_ori) -> str:
+        override_key = (
+            f"swap_beta_{prop_loc}_{beta_ori}_"
+            f"blue_{self.blue_prop.motion.motion_type}_{self.blue_prop.motion.arrow.loc}_"
+            f"red_{self.red_prop.motion.motion_type}_{self.red_prop.motion.arrow.loc}"
+        )
+
+        return override_key
+
+    def swap_beta(self) -> None:
+        if LetterType.get_letter_type(self.pictograph.letter) == Type1:
+            red_direction = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
+            blue_direction = self.ppm.dir_calculator.get_dir(
+                self.pictograph.blue_motion
+            )
+            self.move_prop(self.red_prop, blue_direction)
+            self.move_prop(self.red_prop, blue_direction)
+            self.move_prop(self.blue_prop, red_direction)
+            self.move_prop(self.blue_prop, red_direction)
+        elif LetterType.get_letter_type(self.pictograph.letter) == Type2:
+            shift = self.pictograph.get.shift()
+            static = self.pictograph.get.static()
+            shift_direction = self.ppm.dir_calculator.get_dir(shift)
+            static_direction = self.ppm.dir_calculator.get_opposite_dir(shift_direction)
+            self.move_prop(shift.prop, static_direction)
+            self.move_prop(static.prop, shift_direction)
+            self.move_prop(shift.prop, static_direction)
+            self.move_prop(static.prop, shift_direction)
 
     def _classify_props(self) -> tuple[list[Prop], list[Prop], list[Prop], list[Prop]]:
         props = self.pictograph.props.values()

@@ -23,9 +23,6 @@ if TYPE_CHECKING:
 
 
 class BetaPropDirectionCalculator:
-    def __init__(self, prop_placement_manager) -> None:
-        self.prop_placement_manager = prop_placement_manager
-
     def get_dir(self, motion: Motion) -> Directions:
         """Determine the translation direction based on the motion type, start location, end location, and end layer."""
         if (
@@ -56,9 +53,9 @@ class BetaPropDirectionCalculator:
             (SOUTH, BLUE): UP,
             (WEST, BLUE): LEFT,
             (WEST, RED): RIGHT,
-            
         }
         return direction_map.get((motion.end_loc, motion.prop.color))
+
     def get_direction_for_radial_I(self, motion: Motion) -> Directions:
         direction_map = {
             (NORTH, RED): RIGHT,

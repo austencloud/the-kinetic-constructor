@@ -29,28 +29,12 @@ class PropPlacementOverrideManager:
             beta_state = "radial"
 
         if self.pictograph.check.has_props_in_beta():
-            adjustment_key_str = (
-                self.special_positioner.turns_tuple_generator.generate_turns_tuple(
-                    letter
-                )
-            )
+            adjustment_key_str = self._generate_adjustment_key_str(letter)
+            orientation_key = self._determine_orientation_key()
+            override_key = self._generate_override_key(beta_state)
 
-            orientation_key = (
-                "from_radial"
-                if self.pictograph.blue_prop.motion.start_ori in [IN, OUT]
-                else "from_nonradial"
-            )
-            override_key = (
-                f"swap_beta_{self.pictograph.blue_prop.loc}_{beta_state}_"
-                f"blue_{self.pictograph.blue_motion.motion_type}_{self.pictograph.blue_arrow.loc}_"
-                f"red_{self.pictograph.red_motion.motion_type}_{self.pictograph.red_arrow.loc}"
-            )
-
-            # Access the correct placements data based on the orientation
-            letter_data = self.pictograph.main_widget.special_placements[
-                orientation_key
-            ].get(letter, {})
-            turn_data = letter_data.get(adjustment_key_str, {})
+            letter_data = self._get_letter_data(orientation_key, letter)
+            turn_data = self._get_turn_data(letter_data, adjustment_key_str)
 
             if override_key in turn_data:
                 del turn_data[override_key]
@@ -59,7 +43,36 @@ class PropPlacementOverrideManager:
 
             letter_data[adjustment_key_str] = turn_data
             special_placements[orientation_key][letter] = letter_data
-            self.special_positioner.data_updater.update_specific_entry_in_json(
-                letter, letter_data, self.pictograph.blue_prop
-            )
+            self._update_json_entry(letter, letter_data)
             self.pictograph.updater.update_pictograph()
+
+    def _generate_adjustment_key_str(self, letter) -> str:
+        return self.special_positioner.turns_tuple_generator.generate_turns_tuple(
+            letter
+        )
+
+    def _determine_orientation_key(self) -> str:
+        if self.pictograph.blue_prop.motion.start_ori in [IN, OUT]:
+            return "from_radial"
+        else:
+            return "from_nonradial"
+
+    def _generate_override_key(self, beta_state) -> str:
+        return (
+            f"swap_beta_{self.pictograph.blue_prop.loc}_{beta_state}_"
+            f"blue_{self.pictograph.blue_motion.motion_type}_{self.pictograph.blue_arrow.loc}_"
+            f"red_{self.pictograph.red_motion.motion_type}_{self.pictograph.red_arrow.loc}"
+        )
+
+    def _get_letter_data(self, orientation_key, letter) -> dict:
+        return self.pictograph.main_widget.special_placements[orientation_key].get(
+            letter, {}
+        )
+
+    def _get_turn_data(self, letter_data, adjustment_key_str) -> dict:
+        return letter_data.get(adjustment_key_str, {})
+
+    def _update_json_entry(self, letter, letter_data) -> None:
+        self.special_positioner.data_updater.update_specific_entry_in_json(
+            letter, letter_data, self.pictograph.blue_prop
+        )

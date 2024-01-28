@@ -6,7 +6,14 @@
     },
     "(s, 0, 1)": {
       "pro": [50, -35],
-      "swap_beta_n_nonradial_blue_static_n_red_pro_ne": true
+      "swap_beta_e_nonradial_blue_pro_ne_red_static_e": true,
+      "swap_beta_n_nonradial_blue_static_n_red_pro_ne": true,
+      "swap_beta_s_nonradial_blue_static_s_red_pro_sw": true,
+      "swap_beta_w_nonradial_blue_pro_sw_red_static_w": true,
+      "swap_beta_n_nonradial_blue_pro_ne_red_static_n": true,
+      "swap_beta_e_nonradial_blue_static_e_red_pro_ne": true,
+      "swap_beta_w_nonradial_blue_static_w_red_pro_sw": true,
+      "swap_beta_s_nonradial_blue_pro_sw_red_static_s": true
     }
   }
 }

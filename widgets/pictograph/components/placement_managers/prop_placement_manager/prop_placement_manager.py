@@ -17,7 +17,7 @@ class PropPlacementManager:
         self.beta_positioner = BetaPropPositioner(self)
 
         self.offset_calculator = PropOffsetCalculator(self)
-        self.dir_calculator = BetaPropDirectionCalculator(self)
+        self.dir_calculator = BetaPropDirectionCalculator()
 
     def update_prop_positions(self) -> None:
         for prop in self.pictograph.props.values():

@@ -21,6 +21,7 @@ class PropAttrManager:
     def __init__(self, prop: "Prop") -> None:
         self.p = prop
         self.update_attributes(self.p.prop_dict)
+        self.p.set_z_value_based_on_color()
 
     def update_attributes(
         self, prop_dict: dict[str, Union[Colors, Locations, MotionTypes, Turns]]
