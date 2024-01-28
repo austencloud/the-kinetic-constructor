@@ -4,7 +4,7 @@ import os
 import re
 
 
-class SpecialPlacementJsonDataHandler:
+class SpecialPlacementJsonHandler:
     """Handles JSON file operations."""
 
     @staticmethod

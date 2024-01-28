@@ -23,7 +23,7 @@ class WASD_AdjustmentManager:
             return
 
         letter = self.pictograph.letter
-        self.pictograph.arrow_placement_manager.special_positioner.data_updater.remove_special_placement_entry(
+        self.pictograph.arrow_placement_manager.special_positioner.data_updater.entry_remover.remove_special_placement_entry(
             letter, self.pictograph.selected_arrow
         )
         self.pictograph.updater.update_pictograph()

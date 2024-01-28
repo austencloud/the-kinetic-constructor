@@ -27,14 +27,12 @@ class ArrowMovementManager:
             adjustment_increment = 5
         adjustment = self.get_adjustment(key, adjustment_increment)
 
-        # Update for the current selection
         self.pictograph.arrow_placement_manager.special_positioner.data_updater.update_arrow_adjustments_in_json(
             adjustment, self.pictograph.selected_arrow
         )
 
-        # Update for the mirrored entry if applicable (for nonhybrid type one letters)
         if LetterType.get_letter_type(self.pictograph.letter) == Type1 and self.pictograph.letter in Type1_non_hybrid_letters:
-            self.pictograph.arrow_placement_manager.special_positioner.data_updater.update_mirrored_entry_in_json(
+            self.pictograph.arrow_placement_manager.special_positioner.data_updater.mirrored_entry_handler.update_mirrored_entry_in_json(
                 adjustment, self.pictograph.selected_arrow
             )
 
