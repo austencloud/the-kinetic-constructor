@@ -1,5 +1,9 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
+from Enums import LetterType
+from constants import Type1
+
+from utilities.TypeChecking.letter_lists import Type1_non_hybrid_letters
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -22,10 +26,20 @@ class ArrowMovementManager:
         else:
             adjustment_increment = 5
         adjustment = self.get_adjustment(key, adjustment_increment)
+
+        # Update for the current selection
         self.pictograph.arrow_placement_manager.special_positioner.data_updater.update_arrow_adjustments_in_json(
             adjustment, self.pictograph.selected_arrow
         )
+
+        # Update for the mirrored entry if applicable (for nonhybrid type one letters)
+        if LetterType.get_letter_type(self.pictograph.letter) == Type1 and self.pictograph.letter in Type1_non_hybrid_letters:
+            self.pictograph.arrow_placement_manager.special_positioner.data_updater.update_mirrored_entry_in_json(
+                adjustment, self.pictograph.selected_arrow
+            )
+
         self.pictograph.arrow_placement_manager.update_arrow_positions()
+
 
     def get_adjustment(self, key, increment) -> tuple[int, int]:
         direction_map = {

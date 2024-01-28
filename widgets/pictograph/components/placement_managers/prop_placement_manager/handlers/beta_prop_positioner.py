@@ -55,11 +55,11 @@ class BetaPropPositioner:
             f"blue_{self.blue_prop.motion.motion_type}_{self.blue_prop.motion.arrow.loc}_"
             f"red_{self.red_prop.motion.motion_type}_{self.red_prop.motion.arrow.loc}"
         )
-
-        turn_data: dict = letter_data.get(turns_tuple, {})
-        if beta_ori:
-            if turn_data.get(override_key):
-                self.swap_beta()
+        if letter_data:
+            turn_data: dict = letter_data.get(turns_tuple, {})
+            if beta_ori:
+                if turn_data.get(override_key):
+                    self.swap_beta()
 
     def swap_beta(self) -> None:
         red_direction = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
