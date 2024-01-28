@@ -31,7 +31,7 @@ class RotationAngleOverrideManager:
             ori_key = "from_radial"
         elif self.pictograph.selected_arrow.motion.start_ori in [CLOCK, COUNTER]:
             ori_key = "from_nonradial"
-            
+
         data = self.pictograph.main_widget.load_special_placements()
 
         letter = self.pictograph.letter
@@ -133,7 +133,8 @@ class RotationAngleOverrideManager:
         self.special_positioner.data_updater.update_specific_entry_in_json(
             letter, letter_data, self.pictograph.selected_arrow
         )
-        self.pictograph.updater.update_pictograph()
+        for pictograph in self.pictograph.scroll_area.pictographs.values():
+            pictograph.updater.update_pictograph()
 
     def get_rot_angle_override_from_placements_dict(
         self, arrow: Arrow
@@ -141,18 +142,20 @@ class RotationAngleOverrideManager:
         placements = (
             self.special_positioner.placement_manager.pictograph.main_widget.special_placements
         )
+        if arrow.motion.start_ori in [IN, OUT]:
+            ori_key = "from_radial"
+        elif arrow.motion.start_ori in [CLOCK, COUNTER]:
+            ori_key = "from_nonradial"
+
         letter = arrow.scene.letter
-        letter_data: dict[str, dict] = placements.get(letter, {})
+        letter_data: dict[str, dict] = placements[ori_key].get(letter, {})
         turns_tuple = (
             self.special_positioner.turns_tuple_generator.generate_turns_tuple(letter)
         )
 
-        # Check if the letter is of Type 6 and if so, use color to get the rotation angle override
         letter_type = LetterType.get_letter_type(letter)
         if letter_type == Type6:
-            return letter_data.get(turns_tuple, {}).get(
-                f"{arrow.color}_rot_angle"  # Using color instead of motion type for Type 6
-            )
+            return letter_data.get(turns_tuple, {}).get(f"{arrow.color}_rot_angle")
         else:
             return letter_data.get(turns_tuple, {}).get(
                 f"{arrow.motion.motion_type}_rot_angle"
