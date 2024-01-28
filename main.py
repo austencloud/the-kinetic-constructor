@@ -2,9 +2,10 @@ import os
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow
 from profiler import Profiler
-from utilities.window_manager import MainWindowGeometryManager
+from settings_manager import SettingsManager
+from utilities.window_manager import WindowGeometryManager
 from widgets.main_widget.main_widget import MainWidget
-from widgets.menu_bar import MainWindowMenuBar
+from widgets.menu_bar.menu_bar import MainWindowMenuBar
 
 
 class MainWindow(QMainWindow):
@@ -12,7 +13,8 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.profiler = profiler
         self.main_widget = MainWidget(self)
-        self.window_manager = MainWindowGeometryManager(self)
+        self.settings_manager = SettingsManager(self)
+        self.window_manager = WindowGeometryManager(self)
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Sequence Constructor")
         self.menu_bar = MainWindowMenuBar(self.main_widget)
@@ -23,6 +25,10 @@ class MainWindow(QMainWindow):
         for func in [app.exec, self.show]:
             self.profiler.runcall(func)
         return 0
+
+    def closeEvent(self, event):
+        self.settings_manager.save_settings()
+        super().closeEvent(event)
 
 
 def main() -> None:

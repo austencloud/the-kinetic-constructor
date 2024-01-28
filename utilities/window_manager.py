@@ -1,13 +1,14 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QGuiApplication
-if TYPE_CHECKING        :
+
+if TYPE_CHECKING:
     from main import MainWindow
 
 
-class MainWindowGeometryManager:
+class WindowGeometryManager:
     def __init__(self, window: "MainWindow") -> None:
         self.window = window
-    
+
     def set_dimensions(self) -> None:
         screens = QGuiApplication.screens()
         screen = screens[1] if len(screens) > 1 else QGuiApplication.primaryScreen()

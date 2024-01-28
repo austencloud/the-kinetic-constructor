@@ -1,3 +1,4 @@
+from tkinter.tix import COLUMN
 from typing import TYPE_CHECKING
 from widgets.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.letter_lists import all_letters
@@ -11,10 +12,11 @@ if TYPE_CHECKING:
 
 
 class ScrollAreaDisplayManager:
-    COLUMN_COUNT = 8
     SPACING = 5
-
+    COLUMN_COUNT = 8
+    
     def __init__(self, scroll_area: "ScrollArea") -> None:
+
         self.scroll_area = scroll_area
 
     def order_and_display_pictographs(self) -> None:
