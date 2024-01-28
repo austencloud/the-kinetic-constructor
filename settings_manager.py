@@ -1,4 +1,3 @@
-# In SettingsManager.py
 import json
 import os
 from typing import TYPE_CHECKING
