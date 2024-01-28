@@ -45,8 +45,5 @@ class Arrow(GraphicalObject):
     def mousePressEvent(self, event) -> None:
         self.mouse_event_handler.handle_mouse_press(event)
 
-    def mouseMoveEvent(self, event) -> None:
-        self.mouse_event_handler.hand_mouse_move(event)
-
     def mouseReleaseEvent(self, event) -> None:
         self.mouse_event_handler.handle_mouse_release(event)
