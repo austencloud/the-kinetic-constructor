@@ -77,7 +77,6 @@ class TurnsUpdater:
                 motion.prop_rot_dir = (
                     self._get_default_prop_rot_dir_for_type4_type5_type6()
                 )
-            # press the correct button depending on the prop rot dir
             if motion.prop_rot_dir == CLOCKWISE:
                 self.turns_box.prop_rot_dir_button_manager.cw_button.press()
                 self.turns_box.prop_rot_dir_btn_state[CLOCKWISE] = True
@@ -91,13 +90,17 @@ class TurnsUpdater:
         self, other_motion: "Motion"
     ) -> PropRotDirs:
         """Determine the property rotation direction."""
-        self._set_vtg_dir_state_default()
-        self.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.show_vtg_dir_buttons()
-        self.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.same_button.press()
 
+        self.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.show_vtg_dir_buttons()
+        # self.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.same_button.press()
+        if (
+            not self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[SAME]
+            or not self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[OPP]
+        ):
+            self._set_vtg_dir_state_default()
         if self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[SAME]:
             return other_motion.prop_rot_dir
-        if self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[OPP]:
+        elif self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[OPP]:
             if other_motion.prop_rot_dir == CLOCKWISE:
                 return COUNTER_CLOCKWISE
             elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:

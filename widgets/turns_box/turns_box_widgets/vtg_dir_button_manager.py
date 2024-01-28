@@ -85,8 +85,10 @@ class VtgDirButtonManager:
         for button in buttons:
             if button.direction == active_direction:
                 button.press()
+                self.section.vtg_dir_btn_state[button.direction] = True
             else:
                 button.unpress()
+                self.section.vtg_dir_btn_state[button.direction] = False
 
     def _opposite_prop_rot_dir(self, prop_rot_dir: PropRotDirs) -> PropRotDirs:
         return {
@@ -105,7 +107,25 @@ class VtgDirButtonManager:
         if new_turns > 0:
             if self.previous_turns == 0:
                 self.show_vtg_dir_buttons()
-                self.same_button.press()
+                if (
+                    not self.section.vtg_dir_btn_state[SAME]
+                    and not self.section.vtg_dir_btn_state[OPP]
+                ):
+                    self.section.vtg_dir_btn_state[SAME] = True
+                    self.same_button.press()
+                    self.same_button.update_state_dict(
+                        self.section.vtg_dir_btn_state, True
+                    )
+                if self.section.vtg_dir_btn_state[SAME]:
+                    self.same_button.press()
+                    self.same_button.update_state_dict(
+                        self.section.vtg_dir_btn_state, True
+                    )
+                elif self.section.vtg_dir_btn_state[OPP]:
+                    self.opp_button.press()
+                    self.opp_button.update_state_dict(
+                        self.section.vtg_dir_btn_state, True
+                    )
                 self.previous_turns = new_turns
         elif new_turns == 0:
             self.previous_turns = 0

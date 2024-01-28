@@ -125,10 +125,10 @@ class PropRotDirButtonManager:
         for button in buttons:
             if button.prop_rot_dir == active_direction:
                 button.press()
-                self.turns_box.prop_rot_dir_btn_state[button.prop_rot_dir] = True
+                button.update_state_dict(self.turns_box.prop_rot_dir_btn_state, True)
             else:
                 button.unpress()
-                self.turns_box.prop_rot_dir_btn_state[button.prop_rot_dir] = False
+                button.update_state_dict(self.turns_box.prop_rot_dir_btn_state, False)
 
     def show_prop_rot_dir_buttons(self) -> None:
         self.cw_button.show()

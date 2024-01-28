@@ -60,12 +60,6 @@ class SectionWidget(QGroupBox):
             if self.vtg_dir_btn_state[SAME] or self.vtg_dir_btn_state[OPP]:
                 self.vtg_dir_button_manager.show_vtg_dir_buttons()
         else:
-            self.vtg_dir_btn_state[
-                SAME
-            ] = self.vtg_dir_button_manager.same_button.isVisible()
-            self.vtg_dir_btn_state[
-                OPP
-            ] = self.vtg_dir_button_manager.opp_button.isVisible()
             self.vtg_dir_button_manager.hide_vtg_dir_buttons()
         self.layout.setEnabled(True)
         self.layout.activate()
