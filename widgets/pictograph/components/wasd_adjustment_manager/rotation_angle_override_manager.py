@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Optional
 from Enums import LetterType
-from constants import BLUE, RED, STATIC, Type2, Type4, Type6
+from constants import BLUE, CLOCK, COUNTER, IN, OUT, RED, STATIC, Type2, Type4, Type6
 from PyQt6.QtCore import Qt
 
 from objects.arrow.arrow import Arrow
@@ -27,7 +27,11 @@ class RotationAngleOverrideManager:
 
         if key != Qt.Key.Key_X:
             return
-
+        if self.pictograph.selected_arrow.motion.start_ori in [IN, OUT]:
+            ori_key = "from_radial"
+        elif self.pictograph.selected_arrow.motion.start_ori in [CLOCK, COUNTER]:
+            ori_key = "from_nonradial"
+            
         data = self.pictograph.main_widget.load_special_placements()
 
         letter = self.pictograph.letter
@@ -40,7 +44,7 @@ class RotationAngleOverrideManager:
             if static.turns > 0:
                 direction = "s" if static.prop_rot_dir == shift.prop_rot_dir else "o"
                 adjustment_key_str = f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(static)})"
-            letter_data = data.get(letter, {})
+            letter_data = data[ori_key].get(letter, {})
             turn_data = letter_data.get(adjustment_key_str, {})
 
             if "static_rot_angle" in turn_data:
@@ -127,7 +131,7 @@ class RotationAngleOverrideManager:
         letter_data[adjustment_key_str] = turn_data
         data[letter] = letter_data
         self.special_positioner.data_updater.update_specific_entry_in_json(
-            letter, letter_data
+            letter, letter_data, self.pictograph.selected_arrow
         )
         self.pictograph.updater.update_pictograph()
 

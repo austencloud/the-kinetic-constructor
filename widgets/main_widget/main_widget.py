@@ -42,6 +42,7 @@ class MainWidget(QWidget):
                     ) as file:
                         data = json.load(file)
                         self.special_placements[subfolder].update(data)
+        return self.special_placements
 
     def refresh_placements(self) -> None:
         """Refreshes the special placements and updates all pictographs."""

@@ -193,6 +193,17 @@ class ArrowRotAngleCalculator:
                 COUNTER_CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
                 NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
             },
+            CLOCK: {
+                CLOCKWISE: {NORTH: 180, EAST: 270, SOUTH: 0, WEST: 90},
+                COUNTER_CLOCKWISE: {NORTH: 180, EAST: 90, SOUTH: 0, WEST: 270},
+                NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
+            },
+            COUNTER: {
+                CLOCKWISE: {NORTH: 180, EAST: 270, SOUTH: 0, WEST: 90},
+                COUNTER_CLOCKWISE: {NORTH: 180, EAST: 90, SOUTH: 0, WEST: 270},
+                NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
+            },
+            
         }
         return orientation_map.get(self.a.motion.start_ori, {})
 

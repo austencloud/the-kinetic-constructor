@@ -78,21 +78,17 @@ class SvgManager:
     def _arrow_svg_file(self, motion_type: MotionTypes, turns: Turns) -> str:
         cache_key = f"{motion_type}_{float(turns)}"
         if cache_key not in self.o.svg_cache:
-            if motion_type in [PRO, ANTI]:
-                if self.o.motion.start_ori in [IN, OUT]:
-                    file_path = (
-                        f"images/arrows/"
-                        f"{motion_type}/from_radial/{motion_type}_{float(turns)}.svg"
-                    )
-                elif self.o.motion.start_ori in [CLOCK, COUNTER]:
-                    file_path = (
-                        f"images/arrows/"
-                        f"{motion_type}/from_nonradial/{motion_type}_{float(turns)}.svg"
-                    )
-            else:
+            if self.o.motion.start_ori in [IN, OUT]:
                 file_path = (
-                    f"images/arrows/{motion_type}/{motion_type}_{float(turns)}.svg"
+                    f"images/arrows/"
+                    f"{motion_type}/from_radial/{motion_type}_{float(turns)}.svg"
                 )
+            elif self.o.motion.start_ori in [CLOCK, COUNTER]:
+                file_path = (
+                    f"images/arrows/"
+                    f"{motion_type}/from_nonradial/{motion_type}_{float(turns)}.svg"
+                )
+
             with open(file_path, "r") as file:
                 self.o.svg_cache[cache_key] = file.name
         return self.o.svg_cache[cache_key]
