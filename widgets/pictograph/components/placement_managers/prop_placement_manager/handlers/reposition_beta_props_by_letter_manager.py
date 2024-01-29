@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from Enums import LetterType
 from constants import ANTI, PRO
 
 from objects.prop.prop import Prop
@@ -7,15 +6,16 @@ from utilities.TypeChecking.TypeChecking import Directions
 from utilities.TypeChecking.prop_types import *
 
 if TYPE_CHECKING:
-    from widgets.pictograph.pictograph import Pictograph
-    from ..prop_placement_manager import PropPlacementManager
+    from widgets.pictograph.components.placement_managers.prop_placement_manager.handlers.beta_prop_positioner import (
+        BetaPropPositioner,
+    )
 
 
 class RepositionBetaPropsByLetterManager:
-    def __init__(self, pictograph: "Pictograph", ppm: "PropPlacementManager"):
-        self.pictograph = pictograph
+    def __init__(self, beta_prop_positioner: "BetaPropPositioner") -> None:
+        self.pictograph = beta_prop_positioner.pictograph
 
-        self.ppm = ppm
+        self.ppm = beta_prop_positioner.ppm
         self.red_prop = self.pictograph.red_prop
         self.blue_prop = self.pictograph.blue_prop
 
