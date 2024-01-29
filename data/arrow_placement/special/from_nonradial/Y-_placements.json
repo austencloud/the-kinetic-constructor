@@ -1,7 +1,6 @@
 {
   "Y-": {
     "(0, 0)": {
-      "pro": [30, 25],
       "swap_beta_s_nonradial_blue_dash_w_red_pro_se": true,
       "swap_beta_w_nonradial_blue_pro_nw_red_dash_s": true,
       "swap_beta_n_nonradial_blue_dash_e_red_pro_nw": true,
@@ -10,6 +9,20 @@
       "swap_beta_w_nonradial_blue_dash_s_red_pro_nw": true,
       "swap_beta_n_nonradial_blue_pro_nw_red_dash_e": true,
       "swap_beta_e_nonradial_blue_dash_n_red_pro_se": true
+    },
+    "(s, 0, 0.5)": {
+      "pro": [40, -35]
+    },
+    "(s, 0, 2.5)": {
+      "pro": [40, -35]
+    },
+    "(s, 0.5, 0.5)": {
+      "pro": [-100, 5],
+      "dash": [-15, -45]
+    },
+    "(s, 0.5, 2.5)": {
+      "pro": [-90, 5],
+      "dash": [0, -50]
     }
   }
 }
