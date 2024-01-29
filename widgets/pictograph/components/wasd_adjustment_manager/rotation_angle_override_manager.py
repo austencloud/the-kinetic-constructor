@@ -23,6 +23,7 @@ class RotationAngleOverrideManager:
         self.special_positioner = (
             self.pictograph.arrow_placement_manager.special_positioner
         )
+        self.turns_tuple_generator = self.special_positioner.turns_tuple_generator
 
     def handle_rotation_angle_override(self, key: Qt.Key) -> None:
         if not self._is_valid_for_override():
@@ -49,10 +50,8 @@ class RotationAngleOverrideManager:
     def _apply_override_if_needed(self, letter: str, data: dict, ori_key: str) -> None:
         letter_type = LetterType.get_letter_type(letter)
         rot_angle_key = self._determine_rot_angle_key(letter_type)
-        motion_pair = self._determine_motion_pair(letter_type)
-        self._process_rotation_override(
-            letter, data, ori_key, motion_pair, rot_angle_key
-        )
+        turns_tuple = self.turns_tuple_generator.generate_turns_tuple(letter)
+        self._apply_rotation_override(letter, data, ori_key, turns_tuple, rot_angle_key)
 
     def _determine_rot_angle_key(self, letter_type: LetterType) -> str:
         if letter_type == Type6:
@@ -60,31 +59,6 @@ class RotationAngleOverrideManager:
         else:
             return f"{self.pictograph.selected_arrow.motion.motion_type}_rot_angle"
 
-    def _determine_motion_pair(self, letter_type: LetterType) -> tuple[str, str]:
-        if letter_type in [Type2, Type4]:
-            return ("shift", "static")
-        elif letter_type == Type3:
-            return ("shift", "dash")
-        elif letter_type == Type6:
-            return ("blue_static", "red_static")
-        return (None, None)
-
-    def _process_rotation_override(
-        self,
-        letter: str,
-        data: dict,
-        ori_key: str,
-        motion_pair: tuple,
-        rot_angle_key: str,
-    ) -> None:
-        """ Applies a rotation angle override to the selected arrow, if needed. """
-        if not all(motion_pair):
-            return 
-
-        turns_tuple = (
-            self.special_positioner.turns_tuple_generator.generate_turns_tuple(letter)
-        )
-        self._apply_rotation_override(letter, data, ori_key, turns_tuple, rot_angle_key)
 
     def _apply_rotation_override(
         self,
