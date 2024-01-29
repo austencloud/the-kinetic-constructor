@@ -1,6 +1,18 @@
 from typing import TYPE_CHECKING, Optional
 from Enums import LetterType
-from constants import BLUE, IN, OUT, RED, STATIC, DASH, Type2, Type3, Type4, Type6
+from constants import (
+    BLUE,
+    IN,
+    OUT,
+    RED,
+    STATIC,
+    DASH,
+    Type2,
+    Type3,
+    Type4,
+    Type5,
+    Type6,
+)
 from PyQt6.QtCore import Qt
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
@@ -54,11 +66,11 @@ class RotationAngleOverrideManager:
         self._apply_rotation_override(letter, data, ori_key, turns_tuple, rot_angle_key)
 
     def _determine_rot_angle_key(self, letter_type: LetterType) -> str:
-        if letter_type == Type6:
+        if letter_type in [Type5, Type6]:
             return f"{self.pictograph.selected_arrow.color}_rot_angle"
+
         else:
             return f"{self.pictograph.selected_arrow.motion.motion_type}_rot_angle"
-
 
     def _apply_rotation_override(
         self,
@@ -100,6 +112,6 @@ class RotationAngleOverrideManager:
         letter_type = LetterType.get_letter_type(letter)
         return letter_data.get(turns_tuple, {}).get(
             f"{arrow.color}_rot_angle"
-            if letter_type == Type6
+            if letter_type in [Type5, Type6]
             else f"{arrow.motion.motion_type}_rot_angle"
         )
