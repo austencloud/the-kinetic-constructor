@@ -3,7 +3,7 @@ from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import Directions
 from .big_prop_positioner import BigPropPositioner
 from .prop_classifier import PropClassifier
-from .reposition_beta_props_by_letter_manager import RepositionBetaPropsByLetterManager
+from .reposition_beta_props_by_letter_manager import RepositionBetaByLetterHandler
 from .small_prop_positioner import SmallPropPositioner
 from .swap_beta_handler import SwapBetaHandler
 
@@ -17,13 +17,11 @@ class BetaPropPositioner:
         self.pictograph: "Pictograph" = ppm.pictograph
         self.ppm = ppm
 
-        self.reposition_beta_props_by_letter_manager = (
-            RepositionBetaPropsByLetterManager(self)
-        )
+        self.classifier = PropClassifier(self.pictograph)
         self.small_prop_positioner = SmallPropPositioner(self)
         self.big_prop_positioner = BigPropPositioner(self)
+        self.reposition_beta_by_letter_handler = RepositionBetaByLetterHandler(self)
         self.swap_beta_handler = SwapBetaHandler(self)
-        self.classifier = PropClassifier(self.pictograph)
 
     def reposition_beta_props(self) -> None:
         if len(self.classifier.big_props) == 2:

@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     )
 
 
-class RepositionBetaPropsByLetterManager:
+class RepositionBetaByLetterHandler:
     def __init__(self, beta_prop_positioner: "BetaPropPositioner") -> None:
         self.pictograph = beta_prop_positioner.pictograph
 
