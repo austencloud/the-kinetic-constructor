@@ -22,7 +22,7 @@ class TurnsTupleGenerator:
         self.blue_arrow = self.p.arrows.get(BLUE)
         self.red_arrow = self.p.arrows.get(RED)
 
-    def _normalize_arrow_turns(self, arrow: Arrow) -> int:
+    def _normalize_turns(self, arrow: Arrow) -> int:
         """Convert arrow turns from float to int if they are whole numbers."""
         return int(arrow.turns) if arrow.turns in {0.0, 1.0, 2.0, 3.0} else arrow.turns
 
@@ -57,61 +57,50 @@ class TurnsTupleGenerator:
                 "s" if static.motion.prop_rot_dir == shift.motion.prop_rot_dir else "o"
             )
             return (
-                f"({direction}, {self._normalize_arrow_turns(shift)}, "
-                f"{self._normalize_arrow_turns(static)})"
+                f"({direction}, {self._normalize_turns(shift)}, "
+                f"{self._normalize_turns(static)})"
             )
         else:
             return (
-                f"({self._normalize_arrow_turns(shift)}, "
-                f"{self._normalize_arrow_turns(static)})"
+                f"({self._normalize_turns(shift)}, " f"{self._normalize_turns(static)})"
             )
 
     def _generate_Type3_key(self) -> str:
         """Generate the key for Type3 letters, including 's' or 'o' based on rotation direction."""
-        shift = (
-            self.red_arrow
-            if self.red_arrow.motion.check.is_shift()
-            else self.blue_arrow
-        )
-        dash = (
-            self.red_arrow if self.red_arrow.motion.check.is_dash() else self.blue_arrow
-        )
-        if dash.turns != 0 and dash.motion.prop_rot_dir != NO_ROT:
-            direction = (
-                "s" if dash.motion.prop_rot_dir == shift.motion.prop_rot_dir else "o"
-            )
-            return (
-                f"({direction}, {self._normalize_arrow_turns(shift)}, "
-                f"{self._normalize_arrow_turns(dash)})"
-            )
+        shift = self.p.get.shift()
+        dash = self.p.get.dash()
+        if dash.turns > 0 and shift.turns > 0:
+            direction = "s" if dash.prop_rot_dir == shift.prop_rot_dir else "o"
+            adjustment_key_str = f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+        elif dash.turns > 0:
+            direction = dash.prop_rot_dir.lower()  # 'cw' or 'ccw'
+            adjustment_key_str = f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
         else:
-            return (
-                f"({self._normalize_arrow_turns(shift)}, "
-                f"{self._normalize_arrow_turns(dash)})"
-            )
+            adjustment_key_str = f"({self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+        return adjustment_key_str
 
     def _generate_Type4_key(self) -> str:
         dash = self.p.get.dash()
         static = self.p.get.static()
 
         if dash.turns == 0 and static.turns == 0:
-            return f"({self._normalize_arrow_turns(dash)}, {self._normalize_arrow_turns(static)})"
+            return f"({self._normalize_turns(dash)}, {self._normalize_turns(static)})"
         elif dash.turns == 0 or static.turns == 0:
             turning_motion = dash if dash.turns != 0 else static
-            return f"({turning_motion.prop_rot_dir}, {self._normalize_arrow_turns(dash)}, {self._normalize_arrow_turns(static)})"
+            return f"({turning_motion.prop_rot_dir}, {self._normalize_turns(dash)}, {self._normalize_turns(static)})"
         else:
             direction = "s" if dash.prop_rot_dir == static.prop_rot_dir else "o"
-            return f"({direction}, {self._normalize_arrow_turns(dash)}, {self._normalize_arrow_turns(static)})"
+            return f"({direction}, {self._normalize_turns(dash)}, {self._normalize_turns(static)})"
 
     def _generate_Type5_6_key(self) -> str:
         if self.blue_arrow.turns == 0 and self.red_arrow.turns == 0:
-            return f"({self._normalize_arrow_turns(self.blue_arrow)}, {self._normalize_arrow_turns(self.red_arrow)})"
+            return f"({self._normalize_turns(self.blue_arrow)}, {self._normalize_turns(self.red_arrow)})"
 
         if self.blue_arrow.turns == 0 or self.red_arrow.turns == 0:
             turning_arrow = (
                 self.blue_arrow if self.blue_arrow.turns != 0 else self.red_arrow
             )
-            return f"({turning_arrow.motion.prop_rot_dir}, {self._normalize_arrow_turns(self.blue_arrow)}, {self._normalize_arrow_turns(self.red_arrow)})"
+            return f"({turning_arrow.motion.prop_rot_dir}, {self._normalize_turns(self.blue_arrow)}, {self._normalize_turns(self.red_arrow)})"
         else:
             direction = (
                 "s"
@@ -119,17 +108,14 @@ class TurnsTupleGenerator:
                 == self.red_arrow.motion.prop_rot_dir
                 else "o"
             )
-            return f"({direction}, {self._normalize_arrow_turns(self.blue_arrow)}, {self._normalize_arrow_turns(self.red_arrow)})"
+            return f"({direction}, {self._normalize_turns(self.blue_arrow)}, {self._normalize_turns(self.red_arrow)})"
 
     def _generate_color_key(self) -> str:
         """Generate the key based on the color of the arrows."""
         return (
-            f"({self._normalize_arrow_turns(self.blue_arrow)}, "
-            f"{self._normalize_arrow_turns(self.red_arrow)})"
+            f"({self._normalize_turns(self.blue_arrow)}, "
+            f"{self._normalize_turns(self.red_arrow)})"
         )
-        
-
-
 
     def _generate_lead_state_key(self) -> str:
         """Generate the key for 'S' and 'T' letters based on leading and trailing states."""
@@ -141,8 +127,8 @@ class TurnsTupleGenerator:
             return f"({leading_motion.turns}, {trailing_motion.turns})"
         else:
             return (
-                f"({self._normalize_arrow_turns(self.blue_arrow)}, "
-                f"{self._normalize_arrow_turns(self.red_arrow)})"
+                f"({self._normalize_turns(self.blue_arrow)}, "
+                f"{self._normalize_turns(self.red_arrow)})"
             )
 
     def _generate_Λ_key(self) -> str:
@@ -189,13 +175,13 @@ class TurnsTupleGenerator:
             static_open_close_state = static_direction_map.get(
                 (dash.end_loc, static.end_loc, static.prop_rot_dir), ""
             )
-            return f"({self._normalize_arrow_turns(dash)}, {self._normalize_arrow_turns(static)}, {static_open_close_state})"
+            return f"({self._normalize_turns(dash)}, {self._normalize_turns(static)}, {static_open_close_state})"
 
         elif static.turns == 0 and dash.turns > 0:
             dash_open_close_state = dash_direction_map.get(
                 (dash.end_loc, static.end_loc, dash.prop_rot_dir), ""
             )
-            return f"({self._normalize_arrow_turns(dash)}, {self._normalize_arrow_turns(static)}, {dash_open_close_state})"
+            return f"({self._normalize_turns(dash)}, {self._normalize_turns(static)}, {dash_open_close_state})"
 
         elif static.turns > 0 and dash.turns > 0:
             static_open_close_state = static_direction_map.get(
@@ -205,7 +191,7 @@ class TurnsTupleGenerator:
                 (dash.end_loc, static.end_loc, dash.prop_rot_dir), ""
             )
             vtg_dir = SAME if static.prop_rot_dir == dash.prop_rot_dir else OPP
-            return f"({vtg_dir[0]}, {self._normalize_arrow_turns(dash)}, {self._normalize_arrow_turns(static)}, {dash_open_close_state}, {static_open_close_state})"
+            return f"({vtg_dir[0]}, {self._normalize_turns(dash)}, {self._normalize_turns(static)}, {dash_open_close_state}, {static_open_close_state})"
 
     def _generate_Λ_dash_key(self) -> str:
         blue_dash = self.p.blue_motion
@@ -251,13 +237,13 @@ class TurnsTupleGenerator:
             red_dash_open_close_state = red_dash_direction_map.get(
                 (blue_dash.end_loc, red_dash.end_loc, red_dash.prop_rot_dir), ""
             )
-            return f"({self._normalize_arrow_turns(blue_dash)}, {self._normalize_arrow_turns(red_dash)}, {red_dash_open_close_state})"
+            return f"({self._normalize_turns(blue_dash)}, {self._normalize_turns(red_dash)}, {red_dash_open_close_state})"
 
         elif red_dash.turns == 0 and blue_dash.turns > 0:
             blue_dash_open_close_state = blue_dash_direction_map.get(
                 (blue_dash.end_loc, red_dash.end_loc, blue_dash.prop_rot_dir), ""
             )
-            return f"({self._normalize_arrow_turns(blue_dash)}, {self._normalize_arrow_turns(red_dash)}, {blue_dash_open_close_state})"
+            return f"({self._normalize_turns(blue_dash)}, {self._normalize_turns(red_dash)}, {blue_dash_open_close_state})"
 
         elif red_dash.turns > 0 and blue_dash.turns > 0:
             red_dash_open_close_state = red_dash_direction_map.get(
@@ -267,11 +253,11 @@ class TurnsTupleGenerator:
                 (blue_dash.end_loc, red_dash.end_loc, blue_dash.prop_rot_dir), ""
             )
             vtg_dir = SAME if red_dash.prop_rot_dir == blue_dash.prop_rot_dir else OPP
-            return f"({vtg_dir[0]}, {self._normalize_arrow_turns(blue_dash)}, {self._normalize_arrow_turns(red_dash)}, {blue_dash_open_close_state}, {red_dash_open_close_state})"
+            return f"({vtg_dir[0]}, {self._normalize_turns(blue_dash)}, {self._normalize_turns(red_dash)}, {blue_dash_open_close_state}, {red_dash_open_close_state})"
 
         elif red_dash.turns == 0 and blue_dash.turns == 0:
-            return f"({self._normalize_arrow_turns(blue_dash)}, {self._normalize_arrow_turns(red_dash)})"
-        
+            return f"({self._normalize_turns(blue_dash)}, {self._normalize_turns(red_dash)})"
+
     def _generate_Γ_key(self) -> str:
         blue_static = self.p.blue_motion
         red_static = self.p.red_motion
@@ -316,13 +302,13 @@ class TurnsTupleGenerator:
             red_static_open_close_state = red_static_direction_map.get(
                 (blue_static.end_loc, red_static.end_loc, red_static.prop_rot_dir), ""
             )
-            return f"({self._normalize_arrow_turns(blue_static)}, {self._normalize_arrow_turns(red_static)}, {red_static_open_close_state})"
+            return f"({self._normalize_turns(blue_static)}, {self._normalize_turns(red_static)}, {red_static_open_close_state})"
 
         elif red_static.turns == 0 and blue_static.turns > 0:
             blue_static_open_close_state = blue_static_direction_map.get(
                 (blue_static.end_loc, red_static.end_loc, blue_static.prop_rot_dir), ""
             )
-            return f"({self._normalize_arrow_turns(blue_static)}, {self._normalize_arrow_turns(red_static)}, {blue_static_open_close_state})"
+            return f"({self._normalize_turns(blue_static)}, {self._normalize_turns(red_static)}, {blue_static_open_close_state})"
 
         elif red_static.turns > 0 and blue_static.turns > 0:
             red_static_open_close_state = red_static_direction_map.get(
@@ -331,11 +317,13 @@ class TurnsTupleGenerator:
             blue_static_open_close_state = blue_static_direction_map.get(
                 (blue_static.end_loc, red_static.end_loc, blue_static.prop_rot_dir), ""
             )
-            vtg_dir = SAME if red_static.prop_rot_dir == blue_static.prop_rot_dir else OPP
-            return f"({vtg_dir[0]}, {self._normalize_arrow_turns(blue_static)}, {self._normalize_arrow_turns(red_static)}, {blue_static_open_close_state}, {red_static_open_close_state})"
+            vtg_dir = (
+                SAME if red_static.prop_rot_dir == blue_static.prop_rot_dir else OPP
+            )
+            return f"({vtg_dir[0]}, {self._normalize_turns(blue_static)}, {self._normalize_turns(red_static)}, {blue_static_open_close_state}, {red_static_open_close_state})"
 
         elif red_static.turns == 0 and blue_static.turns == 0:
-            return f"({self._normalize_arrow_turns(blue_static)}, {self._normalize_arrow_turns(red_static)})"
+            return f"({self._normalize_turns(blue_static)}, {self._normalize_turns(red_static)})"
 
     def generate_turns_tuple(self, letter: Letters) -> str:
         """Generate a key based on the letter and motion details."""

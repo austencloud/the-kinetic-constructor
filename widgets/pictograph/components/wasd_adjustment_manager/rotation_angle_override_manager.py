@@ -1,6 +1,19 @@
 from typing import TYPE_CHECKING, Optional
 from Enums import LetterType
-from constants import BLUE, CLOCK, COUNTER, IN, OUT, RED, STATIC, Type2, Type4, Type6
+from constants import (
+    BLUE,
+    CLOCK,
+    COUNTER,
+    DASH,
+    IN,
+    OUT,
+    RED,
+    STATIC,
+    Type2,
+    Type3,
+    Type4,
+    Type6,
+)
 from PyQt6.QtCore import Qt
 
 from objects.arrow.arrow import Arrow
@@ -21,7 +34,7 @@ class RotationAngleOverrideManager:
     def handle_rotation_angle_override(self, key) -> None:
         if (
             not self.pictograph.selected_arrow
-            or self.pictograph.selected_arrow.motion.motion_type != STATIC
+            or self.pictograph.selected_arrow.motion.motion_type not in [STATIC, DASH]
         ):
             return
 
@@ -58,7 +71,7 @@ class RotationAngleOverrideManager:
                     letter
                 )
             )
-            letter_data = data.get(letter, {})
+            letter_data = data[ori_key].get(letter, {})
             turn_data = letter_data.get(adjustment_key_str, {})
 
             if "static_rot_angle" in turn_data:
@@ -72,6 +85,24 @@ class RotationAngleOverrideManager:
                 letter, letter_data
             )
             self.pictograph.updater.update_pictograph()
+
+        elif letter_type == Type3:
+            shift = self.pictograph.get.shift()
+            dash = self.pictograph.get.dash()
+
+            # Determine the adjustment key based on motion turns
+            if dash.turns > 0 and shift.turns > 0:
+                direction = "s" if dash.prop_rot_dir == shift.prop_rot_dir else "o"
+                adjustment_key_str = f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+            elif dash.turns > 0:
+                direction = dash.prop_rot_dir.lower()  # 'cw' or 'ccw'
+                adjustment_key_str = f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+            letter_data = data[ori_key].get(letter, {})
+            turn_data = letter_data.get(adjustment_key_str, {})
+            if "dash_rot_angle" in turn_data:
+                del turn_data["dash_rot_angle"]
+            else:
+                turn_data["dash_rot_angle"] = 0
 
         elif letter_type == Type4:
             dash = self.pictograph.get.dash()
@@ -149,6 +180,7 @@ class RotationAngleOverrideManager:
 
         letter = arrow.scene.letter
         letter_data: dict[str, dict] = placements[ori_key].get(letter, {})
+        
         turns_tuple = (
             self.special_positioner.turns_tuple_generator.generate_turns_tuple(letter)
         )
