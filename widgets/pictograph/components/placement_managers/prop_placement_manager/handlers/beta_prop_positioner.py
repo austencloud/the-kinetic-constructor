@@ -79,6 +79,7 @@ class BetaPropPositioner:
             self.move_prop(self.red_prop, blue_direction)
             self.move_prop(self.blue_prop, red_direction)
             self.move_prop(self.blue_prop, red_direction)
+
         elif LetterType.get_letter_type(self.pictograph.letter) == Type2:
             shift = self.pictograph.get.shift()
             static = self.pictograph.get.static()
@@ -88,6 +89,53 @@ class BetaPropPositioner:
             self.move_prop(static.prop, shift_direction)
             self.move_prop(shift.prop, static_direction)
             self.move_prop(static.prop, shift_direction)
+
+        elif LetterType.get_letter_type(self.pictograph.letter) == Type3:
+            shift = (
+                self.pictograph.red_motion
+                if self.pictograph.red_motion.check.is_shift()
+                else self.pictograph.blue_motion
+            )
+            dash = (
+                self.pictograph.red_motion
+                if self.pictograph.red_motion.check.is_dash()
+                else self.pictograph.blue_motion
+            )
+
+            direction = self.ppm.dir_calculator.get_dir(shift)
+            if direction:
+                self.move_prop(
+                    next(
+                        prop
+                        for prop in self.pictograph.props.values()
+                        if prop.color == shift.color
+                    ),
+                    self.ppm.dir_calculator.get_opposite_dir(direction),
+                )
+                self.move_prop(
+                    next(
+                        prop
+                        for prop in self.pictograph.props.values()
+                        if prop.color == dash.color
+                    ),
+                    direction,
+                )
+                self.move_prop(
+                    next(
+                        prop
+                        for prop in self.pictograph.props.values()
+                        if prop.color == shift.color
+                    ),
+                    self.ppm.dir_calculator.get_opposite_dir(direction),
+                )
+                self.move_prop(
+                    next(
+                        prop
+                        for prop in self.pictograph.props.values()
+                        if prop.color == dash.color
+                    ),
+                    direction,
+                )
 
     def _classify_props(self) -> tuple[list[Prop], list[Prop], list[Prop], list[Prop]]:
         props = self.pictograph.props.values()
