@@ -1,7 +1,7 @@
 import os
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from Enums import LetterType
-from constants import Type1
+from constants import Type1, Type4
 from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.MotionAttributes import Colors
 from utilities.TypeChecking.letter_lists import non_hybrid_letters
@@ -39,22 +39,40 @@ class SpecialPlacementEntryRemover:
                     self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
                 )
 
-                self._remove_turn_data_entry(
-                    letter_data, turns_tuple, arrow, arrow.color
-                )
-                if letter in non_hybrid_letters:
-                    mirrored_turns_tuple = (
-                        self.data_updater.mirrored_entry_handler.mirror_turns_tuple(
-                            turns_tuple
+                # Remove the primary entry
+                self._remove_turn_data_entry(letter_data, turns_tuple, arrow)
+
+                # Handle mirrored entry for Type 1 and Type 4 letters
+                letter_type = LetterType.get_letter_type(letter)
+                if letter_type in [Type1, Type4]:
+                    mirrored_turns_tuple = self._generate_mirrored_tuple(
+                        arrow, letter_type
+                    )
+                    if mirrored_turns_tuple:
+                        self._remove_turn_data_entry(
+                            letter_data, mirrored_turns_tuple, arrow
                         )
-                    )
-                    other_color = "blue" if arrow.color == "red" else "red"
-                    self._remove_turn_data_entry(
-                        letter_data, mirrored_turns_tuple, arrow, other_color
-                    )
 
                 self.data_updater.json_handler.write_json_data(data, file_path)
             arrow.pictograph.main_widget.refresh_placements()
+
+    def _generate_mirrored_tuple(
+        self, arrow: Arrow, letter_type: LetterType
+    ) -> Union[str, None]:
+        if letter_type == Type1:
+            turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(
+                arrow.pictograph.letter
+            )
+            items = turns_tuple.strip("()").split(", ")
+            return f"({items[1]}, {items[0]})"
+        elif letter_type == Type4:
+            turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(
+                arrow.pictograph.letter
+            )
+            prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
+            turns = turns_tuple[turns_tuple.find(",") + 2 :]
+            return f"({prop_rotation}, {turns}"
+        return None
 
     def _remove_turn_data_entry(
         self, letter_data: dict, turns_tuple: str, arrow: Arrow, color: str = None

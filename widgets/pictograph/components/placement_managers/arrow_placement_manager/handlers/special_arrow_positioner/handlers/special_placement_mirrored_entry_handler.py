@@ -63,7 +63,7 @@ class SpecialPlacementMirroredEntryHandler:
         prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
         turns = turns_tuple[turns_tuple.find(",") + 2 :]
         return (
-            f"({prop_rotation}, {turns})"
+            f"({prop_rotation}, {turns}"
             if "cw" in turns_tuple or "ccw" in turns_tuple
             else None
         )
