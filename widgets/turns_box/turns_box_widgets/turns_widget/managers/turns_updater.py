@@ -18,7 +18,7 @@ class TurnsUpdater:
         self.turns_box = turns_widget.turns_box
         self.turns_widget = turns_widget
 
-    def update_motion_properties(self, motion: "Motion", new_turns: Turns) -> None:
+    def set_motion_turns(self, motion: "Motion", new_turns: Turns) -> None:
         self._update_turns_and_rotation(motion, new_turns)
         pictograph_dict = {f"{motion.color}_turns": new_turns}
         motion.pictograph.updater.update_pictograph(pictograph_dict)
@@ -30,7 +30,7 @@ class TurnsUpdater:
         for motion in pictograph.motions.values():
             if self.turns_widget.relevance_checker.is_motion_relevant(motion):
                 new_turns = self._calculate_new_turns(motion.turns, adjustment)
-                self.update_motion_properties(motion, new_turns)
+                self.set_motion_turns(motion, new_turns)
 
     def _calculate_new_turns(self, current_turns: Turns, adjustment: Turns) -> Turns:
         """Calculate new turns value based on adjustment."""
@@ -95,7 +95,7 @@ class TurnsUpdater:
         # self.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.same_button.press()
         if (
             not self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[SAME]
-            or not self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[OPP]
+            and not self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[OPP]
         ):
             self._set_vtg_dir_state_default()
         if self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[SAME]:

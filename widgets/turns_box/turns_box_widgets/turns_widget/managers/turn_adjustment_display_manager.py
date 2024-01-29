@@ -24,12 +24,14 @@ class TurnsAdjustmentManager:
                 self._adjust_turns_for_pictograph(pictograph, adjustment)
 
     def set_turns(self, new_turns: Turns) -> None:
-        self._update_motion_properties(new_turns)
         turns = self._get_turns()
         turns = self.convert_turn_floats_to_ints(turns)
-
         self._update_turns_display(new_turns)
         self._update_visibility_based_on_motion(new_turns)
+        for pictograph in self.pictographs:
+            for motion in pictograph.motions.values():
+                if self.turns_widget.relevance_checker.is_motion_relevant(motion):
+                    self.turns_widget.updater.set_motion_turns(motion, new_turns)
 
     def get_current_turns_value(self) -> Turns:
         return self._get_turns()
@@ -86,11 +88,3 @@ class TurnsAdjustmentManager:
 
     def _adjust_turns_for_pictograph(self, pictograph, adjustment) -> None:
         self.turns_widget.updater._adjust_turns_for_pictograph(pictograph, adjustment)
-
-    def _update_motion_properties(self, new_turns) -> None:
-        for pictograph in self.pictographs:
-            for motion in pictograph.motions.values():
-                if self.turns_widget.relevance_checker.is_motion_relevant(motion):
-                    self.turns_widget.updater.update_motion_properties(
-                        motion, new_turns
-                    )
