@@ -19,16 +19,15 @@
       "pro": [40, -15]
     },
     "(s, 0, 2)": {
-      "static_rot_angle": 0,
       "pro": [50, 5],
-      "swap_beta_n_nonradial_blue_static_n_red_pro_ne": true,
-      "swap_beta_e_nonradial_blue_pro_ne_red_static_e": true,
-      "swap_beta_w_nonradial_blue_pro_sw_red_static_w": true,
-      "swap_beta_s_nonradial_blue_static_s_red_pro_sw": true,
-      "swap_beta_n_nonradial_blue_pro_ne_red_static_n": true,
-      "swap_beta_e_nonradial_blue_static_e_red_pro_ne": true,
-      "swap_beta_s_nonradial_blue_pro_sw_red_static_s": true,
-      "swap_beta_w_nonradial_blue_static_w_red_pro_sw": true
+      "swap_beta_s_nonradial_blue_pro_se_red_static_s": true,
+      "swap_beta_e_nonradial_blue_static_e_red_pro_se": true,
+      "swap_beta_w_nonradial_blue_static_w_red_pro_nw": true,
+      "swap_beta_n_nonradial_blue_pro_nw_red_static_n": true,
+      "swap_beta_e_nonradial_blue_pro_se_red_static_e": true,
+      "swap_beta_s_nonradial_blue_static_s_red_pro_se": true,
+      "swap_beta_n_nonradial_blue_static_n_red_pro_nw": true,
+      "swap_beta_w_nonradial_blue_pro_nw_red_static_w": true
     },
     "(s, 0, 2.5)": {
       "pro": [50, -15]

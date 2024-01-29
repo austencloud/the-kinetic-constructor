@@ -6,6 +6,7 @@ from constants import (
     CLOCK,
     COUNTER,
     END_POS,
+    IN,
     LETTER,
     RED_START_ORI,
     RED_TURNS,

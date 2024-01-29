@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 
 class SvgManager:
     def __init__(self, object: "GraphicalObject") -> None:
-        self.o: Union["Arrow", "Prop"] = object
+        self.object: Union["Arrow", "Prop"] = object
         self.renderer = None
 
     def set_svg_color(self, new_color: str) -> bytes:
@@ -40,7 +40,7 @@ class SvgManager:
 
         COLOR_MAP = {RED: HEX_RED, BLUE: HEX_BLUE}
         new_hex_color = COLOR_MAP.get(new_color)
-        with open(self.o.svg_file, "r") as f:
+        with open(self.object.svg_file, "r") as f:
             svg_data = f.read()
         class_color_pattern = re.compile(
             r"(\.st0\s*\{.*?fill:\s*)(#[a-fA-F0-9]{6})(.*?\})"
@@ -51,47 +51,50 @@ class SvgManager:
         return svg_data.encode("utf-8")
 
     def setup_svg_renderer(self, svg_file: str) -> None:
-        self.o.renderer: QSvgRenderer = QSvgRenderer(svg_file)
-        self.o.setSharedRenderer(self.o.renderer)
+        self.object.renderer: QSvgRenderer = QSvgRenderer(svg_file)
+        self.object.setSharedRenderer(self.object.renderer)
 
     def update_color(self) -> None:
-        new_svg_data = self.set_svg_color(self.o.color)
-        self.o.renderer.load(new_svg_data)
-        self.o.setSharedRenderer(self.o.renderer)
+        new_svg_data = self.set_svg_color(self.object.color)
+        self.object.renderer.load(new_svg_data)
+        self.object.setSharedRenderer(self.object.renderer)
 
     def update_svg(self) -> None:
         svg_file = self.get_svg_file()
-        self.o.svg_file = svg_file
-        self.set_svg_color(self.o.color)
+        self.object.svg_file = svg_file
+        self.set_svg_color(self.object.color)
         self.setup_svg_renderer(svg_file)
 
     def get_svg_file(self) -> str:
-        if self.o.__class__.__name__ in ["Arrow", "GhostArrow"]:
-            return self._arrow_svg_file(self.o.motion_type, self.o.turns)
-        elif "Prop" in [base.__name__ for base in self.o.__class__.__bases__]:
-            return self._prop_svg_file(self.o.prop_type)
+        if self.object.__class__.__name__ in ["Arrow", "GhostArrow"]:
+            return self._arrow_svg_file(self.object.motion.motion_type, self.object.turns)
+        elif "Prop" in [base.__name__ for base in self.object.__class__.__bases__]:
+            return self._prop_svg_file(self.object.prop_type)
         else:
             raise ValueError(
-                f"Unsupported graphical object type: {self.o.__class__.__name__}"
+                f"Unsupported graphical object type: {self.object.__class__.__name__}"
             )
 
     def _arrow_svg_file(self, motion_type: MotionTypes, turns: Turns) -> str:
-        cache_key = f"{motion_type}_{float(turns)}"
-        if cache_key not in self.o.svg_cache:
-            if self.o.motion.start_ori in [IN, OUT]:
+        start_ori = self.object.motion.start_ori
+        cache_key = f"{motion_type}_{float(turns)}_{start_ori}"  # Include start orientation in the cache key
+
+        if cache_key not in self.object.svg_cache:
+            if start_ori in [IN, OUT]:
                 file_path = (
                     f"images/arrows/"
                     f"{motion_type}/from_radial/{motion_type}_{float(turns)}.svg"
                 )
-            elif self.o.motion.start_ori in [CLOCK, COUNTER]:
+            elif start_ori in [CLOCK, COUNTER]:
                 file_path = (
                     f"images/arrows/"
                     f"{motion_type}/from_nonradial/{motion_type}_{float(turns)}.svg"
                 )
 
             with open(file_path, "r") as file:
-                self.o.svg_cache[cache_key] = file.name
-        return self.o.svg_cache[cache_key]
+                self.object.svg_cache[cache_key] = file.name
+
+        return self.object.svg_cache[cache_key]
 
     def _prop_svg_file(self, prop_type: PropTypes) -> str:
         svg_file = f"{PROP_DIR}{prop_type}.svg"

@@ -6,17 +6,17 @@ if TYPE_CHECKING:
 
 class ArrowUpdater:
     def __init__(self, arrow: "Arrow") -> None:
-        self.a = arrow
+        self.arrow = arrow
 
     def update_arrow(self, arrow_dict=None) -> None:
         if arrow_dict:
-            self.a.attr_manager.update_attributes(arrow_dict)
-            if not self.a.is_ghost and self.a.ghost:
-                self.a.ghost.attr_manager.update_attributes(arrow_dict)
-        if not self.a.is_ghost:
-            self.a.ghost.transform = self.a.transform
-        self.a.svg_manager.update_svg()
-        self.a.mirror_manager.update_mirror()
-        self.a.svg_manager.update_color()
-        self.a.location_calculator.update_location()
-        self.a.rot_angle_calculator.update_rotation()
+            self.arrow.attr_manager.update_attributes(arrow_dict)
+            if not self.arrow.is_ghost and self.arrow.ghost:
+                self.arrow.ghost.attr_manager.update_attributes(arrow_dict)
+        if not self.arrow.is_ghost:
+            self.arrow.ghost.transform = self.arrow.transform
+        self.arrow.svg_manager.update_svg()
+        self.arrow.mirror_manager.update_mirror()
+        self.arrow.svg_manager.update_color()
+        self.arrow.location_calculator.update_location()
+        self.arrow.rot_angle_calculator.update_rotation()
