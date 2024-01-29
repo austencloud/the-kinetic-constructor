@@ -35,6 +35,35 @@
       "dash_rot_angle": 0,
       "dash": [0, -165],
       "pro": [-80, 55]
+    },
+    "(o, 1, 1)": {
+      "dash_rot_angle": 0
+    },
+    "(o, 1.5, 1)": {
+      "dash_rot_angle": 0,
+      "dash": [-20, -145]
+    },
+    "(o, 1.5, 1.5)": {
+      "dash": [55, -115]
+    },
+    "(o, 1.5, 2)": {
+      "dash": [0, -30]
+    },
+    "(o, 1.5, 3)": {
+      "dash_rot_angle": 0,
+      "dash": [-10, -125]
+    },
+    "(o, 2, 1)": {
+      "dash_rot_angle": 0
+    },
+    "(o, 2, 3)": {
+      "dash_rot_angle": 0
+    },
+    "(o, 3, 1)": {
+      "dash_rot_angle": 0
+    },
+    "(o, 3, 3)": {
+      "dash_rot_angle": 0
     }
   }
 }
