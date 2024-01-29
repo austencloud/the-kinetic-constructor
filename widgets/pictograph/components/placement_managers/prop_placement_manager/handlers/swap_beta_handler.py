@@ -1,3 +1,4 @@
+import stat
 from typing import TYPE_CHECKING
 from Enums import LetterType
 from objects.prop.prop import Prop
@@ -35,6 +36,8 @@ class SwapBetaHandler:
             self._handle_type2_swap()
         elif letter_type == Type3:
             self._handle_type3_swap()
+        elif letter_type == Type4:
+            self._handle_type4_swap()
 
     def _handle_type1_swap(self) -> None:
         red_direction = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
@@ -69,6 +72,15 @@ class SwapBetaHandler:
                 self.ppm.dir_calculator.get_opposite_dir(direction),
                 direction,
             )
+
+    def _handle_type4_swap(self) -> None:
+        dash = self.pictograph.get.dash()
+        static = self.pictograph.get.static()
+
+        dash_direction = self.ppm.dir_calculator.get_dir(dash)
+        static_direction = self.ppm.dir_calculator.get_opposite_dir(dash_direction)
+
+        self._swap_props(dash.prop, static.prop, static_direction, dash_direction)
 
     def _generate_ori_key(self) -> str:
         if self.pictograph.blue_prop.motion.start_ori in [IN, OUT]:

@@ -3,6 +3,18 @@
     "(cw, 0, 2)": {
       "static": [0, -25],
       "swap_beta_n_nonradial_blue_dash_w_red_static_n": true
+    },
+    "(0, 0)": {
+      "swap_beta_n_nonradial_blue_static_n_red_dash_w": true,
+      "swap_beta_e_nonradial_blue_static_e_red_dash_n": true,
+      "swap_beta_w_nonradial_blue_dash_s_red_static_w": true,
+      "swap_beta_s_nonradial_blue_dash_e_red_static_s": true
+    },
+    "(cw, 0, 1)": {
+      "swap_beta_n_nonradial_blue_static_n_red_dash_w": true,
+      "swap_beta_s_nonradial_blue_dash_e_red_static_s": true,
+      "swap_beta_e_nonradial_blue_static_e_red_dash_n": true,
+      "swap_beta_w_nonradial_blue_dash_s_red_static_w": true
     }
   }
 }
