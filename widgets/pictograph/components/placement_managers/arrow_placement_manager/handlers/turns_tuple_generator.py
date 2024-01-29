@@ -76,7 +76,9 @@ class TurnsTupleGenerator:
             direction = dash.prop_rot_dir.lower()  # 'cw' or 'ccw'
             adjustment_key_str = f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
         else:
-            adjustment_key_str = f"({self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+            adjustment_key_str = (
+                f"({self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+            )
         return adjustment_key_str
 
     def _generate_Type4_key(self) -> str:
@@ -95,12 +97,13 @@ class TurnsTupleGenerator:
     def _generate_Type5_6_key(self) -> str:
         if self.blue_arrow.turns == 0 and self.red_arrow.turns == 0:
             return f"({self._normalize_turns(self.blue_arrow)}, {self._normalize_turns(self.red_arrow)})"
-
-        if self.blue_arrow.turns == 0 or self.red_arrow.turns == 0:
-            turning_arrow = (
-                self.blue_arrow if self.blue_arrow.turns != 0 else self.red_arrow
+        elif self.blue_arrow.motion.turns == 0 or self.red_arrow.motion.turns == 0:
+            turning_motion = (
+                self.blue_arrow.motion
+                if self.blue_arrow.motion.turns != 0
+                else self.red_arrow.motion
             )
-            return f"({turning_arrow.motion.prop_rot_dir}, {self._normalize_turns(self.blue_arrow)}, {self._normalize_turns(self.red_arrow)})"
+            return f"({turning_motion.prop_rot_dir}, {self._normalize_turns(self.blue_arrow.motion)}, {self._normalize_turns(self.red_arrow.motion)})"
         else:
             direction = (
                 "s"
