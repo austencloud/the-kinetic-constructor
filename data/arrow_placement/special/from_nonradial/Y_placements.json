@@ -467,6 +467,9 @@
       "swap_beta_s_nonradial_blue_static_s_red_pro_se": true,
       "swap_beta_n_nonradial_blue_static_n_red_pro_nw": true,
       "swap_beta_w_nonradial_blue_pro_nw_red_static_w": true
+    },
+    "(0, 0)": {
+      "swap_beta_n_nonradial_blue_pro_nw_red_static_n": true
     }
   }
 }
