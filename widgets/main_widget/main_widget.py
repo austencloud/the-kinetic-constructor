@@ -7,18 +7,20 @@ from PyQt6.QtCore import Qt
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Letters, TYPE_CHECKING
 from constants import CLUB, DIAMOND, STAFF, TRIAD
+from utilities.TypeChecking.prop_types import PropTypes
 from widgets.pictograph.pictograph import Pictograph
 from ..image_cache_manager import ImageCacheManager
 from ..main_tab_widget.main_tab_widget import MainTabWidget
 from .main_widget_layout_manager import MainWidgetLayoutManager
 from .letter_loader import LetterLoader
 from ..sequence_widget.sequence_widget import MainSequenceWidget
-
 if TYPE_CHECKING:
     from main import MainWindow
 
 
 class MainWidget(QWidget):
+    prop_type: PropTypes = STAFF
+
     def __init__(self, main_window: "MainWindow") -> None:
         super().__init__(main_window)
         self.main_window = main_window
@@ -63,7 +65,6 @@ class MainWidget(QWidget):
         self.layout_manager.configure_layouts()
 
     def _setup_default_modes(self) -> None:
-        self.prop_type = STAFF
         self.grid_mode = DIAMOND
 
     def _setup_letters(self) -> None:

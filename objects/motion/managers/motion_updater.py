@@ -25,4 +25,4 @@ class MotionUpdater:
         self.motion.arrow.updater.update_arrow(arrow_dict)
         self.motion.prop.updater.update_prop(prop_dict)
         self.motion.arrow.ghost.updater.update_arrow(arrow_dict)
-        self.motion.prop.ghost.updater.update_prop(prop_dict)
+        # self.motion.prop.ghost.updater.update_prop(prop_dict)

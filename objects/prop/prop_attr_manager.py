@@ -63,3 +63,9 @@ class PropAttrManager:
         self.prop_type = prop_type
         self.p.svg_manager.update_svg()
         self.p.updater.update_prop()
+
+    def set_prop_type(self, prop_type: PropTypes) -> None:
+        self.prop_type = prop_type
+        self.p.svg_manager.update_svg()
+        self.p.updater.update_prop()
+        self.p.pictograph.updater.update_pictograph()

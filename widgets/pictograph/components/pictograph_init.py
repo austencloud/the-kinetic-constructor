@@ -17,6 +17,7 @@ from utilities.TypeChecking.TypeChecking import (
     MotionTypes,
 )
 from constants import *
+from widgets.factories.prop_factory import PropFactory
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -27,6 +28,7 @@ class PictographInit:
         self.p = pictograph
         self.p.setSceneRect(0, 0, 950, 950)
         self.p.setBackgroundBrush(Qt.GlobalColor.white)
+        self.prop_factory = PropFactory()
 
     ### INIT ###
 
@@ -73,13 +75,36 @@ class PictographInit:
         self.p.red_arrow, self.p.blue_arrow = (arrows[RED], arrows[BLUE])
         return arrows, ghost_arrows
 
-    def init_props(self) -> tuple[dict[Colors, Prop], dict[Colors, GhostProp]]:
-        props = {}
-        ghost_props = {}
+    def init_props(self) -> None:
+        props: dict[Colors, Prop] = {}
+        ghost_props: dict[Colors, GhostProp] = {}
+        prop_type = self.p.main_widget.prop_type
         for color in [RED, BLUE]:
-            props[color], ghost_props[color] = self._create_prop(
-                color, self.p.main_widget.prop_type
-            )
+            # Create a temporary initial prop
+            initial_prop_attributes = {
+                COLOR: color,
+                PROP_TYPE: prop_type,
+                LOC: None,
+                ORI: None,
+            }
+            initial_prop_class = prop_class_mapping.get(prop_type)
+            if initial_prop_class is None:
+                raise ValueError(f"Invalid prop_type: {prop_type}")
+            initial_prop = initial_prop_class(self.p, initial_prop_attributes, None)
+
+            # Use the factory to create the actual prop
+            props[color] = self.prop_factory.create_prop_of_type(initial_prop, prop_type)
+            ghost_props[color] = GhostProp(self.p, initial_prop_attributes, self.p.motions[color])
+
+            self.p.motions[color].prop = props[color]
+            props[color].motion = self.p.motions[color]
+            ghost_props[color].motion = self.p.motions[color]
+            props[color].ghost = ghost_props[color]
+            props[color].arrow = self.p.motions[color].arrow
+            self.p.motions[color].arrow.motion.prop = props[color]
+            self.p.addItem(props[color])
+            props[color].hide()
+
         self.p.red_prop, self.p.blue_prop = (props[RED], props[BLUE])
         return props, ghost_props
 

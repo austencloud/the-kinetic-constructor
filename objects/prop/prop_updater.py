@@ -12,6 +12,8 @@ class PropUpdater:
         self.svg_file = self.p.svg_manager.get_svg_file()
         self.p.svg_manager.setup_svg_renderer(self.svg_file)
 
+
+
     def update_prop(
         self, prop_dict: dict[str, Union[Colors, Locations, Orientations]] = None
     ) -> None:

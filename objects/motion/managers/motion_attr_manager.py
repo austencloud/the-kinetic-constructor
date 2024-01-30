@@ -76,9 +76,9 @@ class MotionAttrManager:
     def set_motion_turns_and_direction_from_attr_box(
         self, box: "TurnsBox", pictograph_dict: dict, turns: Union[int, float]
     ) -> None:
-        if box.vtg_dir_btn_state[SAME]:
+        if box.turns_panel.filter_tab.section.vtg_dir_btn_state[SAME]:
             self.set_same_direction_turns_from_attr_box(box, pictograph_dict, turns)
-        elif box.vtg_dir_btn_state[OPP]:
+        elif box.turns_panel.filter_tab.section.vtg_dir_btn_state[OPP]:
             self.set_opposite_direction_turns_from_attr_box(box, pictograph_dict, turns)
 
         if turns == 0 and pictograph_dict[self.m.color + "_" + MOTION_TYPE] in [

@@ -52,6 +52,9 @@ class SpecialPlacementMirroredEntryHandler:
     ) -> Union[str, None]:
         turns_tuple = self._generate_turns_tuple(arrow)
         letter_type = LetterType.get_letter_type(arrow.pictograph.letter)
+        other_arrow = arrow.pictograph.get.other_arrow(arrow)
+        if arrow.turns == other_arrow.turns:
+            return
 
         if letter_type == Type1:
             items = turns_tuple.strip("()").split(", ")
@@ -65,26 +68,31 @@ class SpecialPlacementMirroredEntryHandler:
                 else None
             )
         elif letter_type == Type5:
-            other_arrow = arrow.pictograph.get.other_arrow(arrow)
             if arrow.turns > 0 and other_arrow.turns > 0:
                 items = turns_tuple.strip("()").split(", ")
                 return f"({items[0]}, {items[2]}, {items[1]})"
             elif arrow.turns > 0 or other_arrow.turns > 0:
                 prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
-                # Adjust the slicing to exclude the closing parenthesis
                 turns = turns_tuple[turns_tuple.find(",") + 2 : -1]
                 return f"({prop_rotation}, {turns})"
         return None
 
     def _create_or_update_mirrored_entry(
-        self, letter: str, mirrored_turns_tuple: str, adjustment: tuple[int, int], arrow: Arrow, color: str = None
+        self,
+        letter: str,
+        mirrored_turns_tuple: str,
+        adjustment: tuple[int, int],
+        arrow: Arrow,
+        color: str = None,
     ) -> None:
         orientation_key = self.data_updater._get_orientation_key(arrow.motion.start_ori)
         letter_data = self._get_letter_data(orientation_key, letter)
 
         original_turns_tuple = self._generate_turns_tuple(arrow)
         original_turn_data: dict = letter_data.get(original_turns_tuple)
-        mirrored_turn_data: dict = letter_data.get(mirrored_turns_tuple, original_turn_data.copy())
+        mirrored_turn_data: dict = letter_data.get(
+            mirrored_turns_tuple, original_turn_data.copy()
+        )
 
         if LetterType.get_letter_type(arrow.pictograph.letter) == Type5:
             other_arrow = arrow.pictograph.get.other_arrow(arrow)
