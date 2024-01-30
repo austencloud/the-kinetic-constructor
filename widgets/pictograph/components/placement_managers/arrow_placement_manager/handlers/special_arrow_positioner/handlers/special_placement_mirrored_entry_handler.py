@@ -2,7 +2,7 @@ import os
 import logging
 from typing import TYPE_CHECKING, Union
 from Enums import LetterType
-from constants import IN, OUT, Type1, Type4
+from constants import IN, OUT, Type1, Type4, Type5
 from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.TypeChecking import Letters
 from utilities.TypeChecking.letter_lists import Type1_non_hybrid_letters
@@ -27,6 +27,8 @@ class SpecialPlacementMirroredEntryHandler:
             self._mirror_entry_for_type1(adjustment, arrow)
         elif letter_type == Type4:
             self._mirror_entry_for_type4(adjustment, arrow)
+        elif letter_type == Type5:
+            self._mirror_entry_for_type5(adjustment, arrow)
 
         self._update_pictographs_in_section(letter_type)
 
@@ -38,7 +40,7 @@ class SpecialPlacementMirroredEntryHandler:
             or arrow.pictograph.letter in ["S", "T"]
         ):
             return
-        mirrored_turns_tuple = self._generate_mirrored_tuple(arrow)
+        mirrored_turns_tuple = self._generate_type1_mirrored_tuple(arrow)
         if mirrored_turns_tuple:
             mirrored_color = "blue" if arrow.color == "red" else "red"
             self._create_or_update_mirrored_entry(
@@ -49,16 +51,35 @@ class SpecialPlacementMirroredEntryHandler:
                 mirrored_color,
             )
 
+    def _mirror_entry_for_type5(
+        self, adjustment: tuple[int, int], arrow: "Arrow"
+    ) -> None:
+        mirrored_turns_tuple = self._generate_type5_mirrored_tuple(arrow)
+        if mirrored_turns_tuple:
+            self._create_or_update_mirrored_entry(
+                arrow.pictograph.letter,
+                mirrored_turns_tuple,
+                adjustment,
+                arrow,
+            )
+
+    def _generate_type5_mirrored_tuple(self, arrow: "Arrow") -> Union[str, None]:
+        turns_tuple = self._generate_turns_tuple(arrow)
+        items = turns_tuple.strip("()").split(", ")
+        return f"({items[0]}, {items[2]}, {items[1]})"
+
     def _mirror_entry_for_type4(
         self, adjustment: tuple[int, int], arrow: "Arrow"
     ) -> None:
-        mirrored_turns_tuple = self._generate_mirrored_prop_rotation(arrow)
+        mirrored_turns_tuple = self._generate_type4_mirrored_prop_rotation(arrow)
         if mirrored_turns_tuple:
             self._create_or_update_mirrored_entry(
                 arrow.pictograph.letter, mirrored_turns_tuple, adjustment, arrow
             )
 
-    def _generate_mirrored_prop_rotation(self, arrow: "Arrow") -> Union[str, None]:
+    def _generate_type4_mirrored_prop_rotation(
+        self, arrow: "Arrow"
+    ) -> Union[str, None]:
         turns_tuple = self._generate_turns_tuple(arrow)
         prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
         turns = turns_tuple[turns_tuple.find(",") + 2 :]
@@ -68,7 +89,7 @@ class SpecialPlacementMirroredEntryHandler:
             else None
         )
 
-    def _generate_mirrored_tuple(self, arrow: "Arrow") -> Union[str, None]:
+    def _generate_type1_mirrored_tuple(self, arrow: "Arrow") -> Union[str, None]:
         turns_tuple = self._generate_turns_tuple(arrow)
         items = turns_tuple.strip("()").split(", ")
         return f"({items[1]}, {items[0]})"
@@ -92,10 +113,15 @@ class SpecialPlacementMirroredEntryHandler:
         else:
             mirrored_turn_data = letter_data[mirrored_turns_tuple]
 
-        motion_type = arrow.motion.motion_type
-        mirrored_turn_data[motion_type] = mirrored_turn_data.get(
-            motion_type, adjustment
-        )
+        if LetterType.get_letter_type(letter) in [Type1, Type4]:
+            motion_type = arrow.motion.motion_type
+            mirrored_turn_data[motion_type] = mirrored_turn_data.get(
+                motion_type, adjustment
+            )
+        elif LetterType.get_letter_type(letter) == Type5:
+            mirrored_turn_data[arrow.color] = mirrored_turn_data.get(
+                arrow.pictograph.get.other_arrow(arrow).color, adjustment
+            )
 
         letter_data[mirrored_turns_tuple] = mirrored_turn_data
         self.data_updater.update_specific_entry_in_json(letter, letter_data, arrow)

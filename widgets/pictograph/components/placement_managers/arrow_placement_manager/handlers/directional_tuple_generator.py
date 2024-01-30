@@ -114,14 +114,14 @@ class DirectionalTupleGenerator:
 
     def _type5_zero_turns(self, x: int, y: int) -> list[tuple[int, int]]:
         Type5_zero_turns_directional_tuples = {
-            (BLUE, (NORTH, SOUTH)): [(x, y), (-y, x), (-x, -y), (y, -x)],
-            (BLUE, (EAST, WEST)): [(x, y), (-y, -x), (x, -y), (y, x)],
-            (BLUE, (SOUTH, NORTH)): [(x, y), (-y, x), (-x, -y), (y, x)],
-            (BLUE, (WEST, EAST)): [(x, y), (-y, -x), (-x, -y), (-y, x)],
-            (RED, (NORTH, SOUTH)): [(-x, y), (-y, -x), (x, -y), (y, -x)],
-            (RED, (EAST, WEST)): [(x, y), (-y, x), (-x, -y), (y, x)],
-            (RED, (SOUTH, NORTH)): [(-x, y), (-y, x), (x, -y), (y, -x)],
-            (RED, (WEST, EAST)): [(-x, y), (-y, x), (-x, -y), (y, x)],
+            (BLUE, (NORTH, SOUTH)): [(x, y), (-y, x), (-x, -y), (y, x)],
+            (BLUE, (EAST, WEST)): [(-x, y), (-y, -x), (-x, -y), (y, x)],
+            (BLUE, (SOUTH, NORTH)): [(x, y), (-y, -x), (-x, -y), (y, -x)],
+            (BLUE, (WEST, EAST)): [(x, y), (-y, -x), (x, -y), (-y, x)],
+            (RED, (NORTH, SOUTH)): [(-x, y), (-y, x), (x, -y), (y, x)],
+            (RED, (EAST, WEST)): [(-x, y), (-y, x), (-x, -y), (y, x)],
+            (RED, (SOUTH, NORTH)): [(-x, y), (-y, -x), (x, -y), (y, -x)],
+            (RED, (WEST, EAST)): [(x, y), (-y, x), (x, -y), (y, x)],
         }
         return Type5_zero_turns_directional_tuples.get(
             (self.motion.color, (self.motion.start_loc, self.motion.end_loc)), []
