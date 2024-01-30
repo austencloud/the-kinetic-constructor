@@ -63,6 +63,7 @@ class SettingsManager:
                     prop, new_prop_type
                 )
                 pictograph.props[color].deleteLater()
+                pictograph.props[color].hide()
                 pictograph.props[color] = new_prop
                 pictograph.addItem(new_prop)
                 pictograph.motions[color].prop = pictograph.props[color]

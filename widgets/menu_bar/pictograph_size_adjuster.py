@@ -39,3 +39,9 @@ class PictographSizeAdjuster(QGroupBox):
         self.preferences_dialog.scroll_area.display_manager.COLUMN_COUNT = column_count
         self.preferences_dialog.scroll_area.update_pictographs()
         self.preferences_dialog.apply_button.setEnabled(True)
+
+    def load_initial_settings(self) -> None:
+        initial_size = self.preferences_dialog.settings_manager.get_setting(
+            "pictograph_size"
+        )
+        self.size_slider.setValue(initial_size)

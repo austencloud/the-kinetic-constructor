@@ -2,7 +2,6 @@
 from PyQt6.QtWidgets import QMenuBar
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QAction
-
 from widgets.menu_bar.preferences_dialog import PreferencesDialog
 
 if TYPE_CHECKING:
@@ -17,10 +16,9 @@ class MainWindowMenuBar(QMenuBar):
         self._setup_settings_menu()
 
     def _setup_settings_menu(self) -> None:
-        settings_menu = self.addMenu("Settings")
-        preferences_action = QAction("Preferences", self)
-        preferences_action.triggered.connect(self.open_preferences_dialog)
-        settings_menu.addAction(preferences_action)
+        settings_action = QAction("Settings", self)
+        settings_action.triggered.connect(self.open_preferences_dialog)
+        self.addAction(settings_action)
 
     def open_preferences_dialog(self) -> None:
         preferences_dialog = PreferencesDialog(self.main_widget.main_window)
@@ -31,6 +29,9 @@ class MainWindowMenuBar(QMenuBar):
         refresh_action.triggered.connect(self.main_widget.refresh_placements)
         self.addAction(refresh_action)
 
-        collapse_action = QAction("Collapse", self)
-        collapse_action.triggered.connect(self.main_widget.toggle_main_sequence_widget)
-        self.addAction(collapse_action)
+        # Optionally, other menu items and actions can be added here.
+
+        # Set the font size for the menu items
+        font = self.font()  # Gets the current font
+        font.setPointSize(12)  # Adjust the font size as desired
+        self.setFont(font)
