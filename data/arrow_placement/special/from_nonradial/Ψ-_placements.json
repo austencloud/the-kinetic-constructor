@@ -1,11 +1,5 @@
 {
   "Ψ-": {
-    "(cw, 0, 1)": {
-      "red_rot_angle": 0
-    },
-    "(ccw, 0, 1)": {
-      "red_rot_angle": 0
-    },
     "(ccw, 0, 3)": {
       "red_rot_angle": 0
     },

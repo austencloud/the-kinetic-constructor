@@ -44,8 +44,34 @@ class SpecialPlacementEntryRemover:
                         letter_data, mirrored_turns_tuple, arrow, other_color
                     )
 
+                    if letter_type == Type5 and (
+                        arrow.turns > 0
+                        or arrow.pictograph.get.other_arrow(arrow).turns > 0
+                    ):
+                        turns_tuple = (
+                            self.positioner.turns_tuple_generator.generate_turns_tuple(
+                                arrow.pictograph.letter
+                            )
+                        )
+                        if (
+                            arrow.turns > 0
+                            or arrow.pictograph.get.other_arrow(arrow).turns > 0
+                        ):
+                            prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
+                            turns = turns_tuple[turns_tuple.find(",") + 2 : -1]
+                            second_mirrored_turns_tuple = f"({prop_rotation}, {turns})"
+
+                        if second_mirrored_turns_tuple:
+                            self._remove_turn_data_entry(
+                                letter_data,
+                                second_mirrored_turns_tuple,
+                                arrow,
+                                arrow.color,
+                            )
+
                 self.data_updater.json_handler.write_json_data(data, file_path)
             arrow.pictograph.main_widget.refresh_placements()
+
 
     def _get_other_color(self, color: Colors) -> Colors:
         return RED if color == BLUE else BLUE
