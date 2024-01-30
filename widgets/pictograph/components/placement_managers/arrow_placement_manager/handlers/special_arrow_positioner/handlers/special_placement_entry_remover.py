@@ -1,17 +1,12 @@
 import os
 from typing import TYPE_CHECKING, Union
 from Enums import LetterType
-from constants import BLUE, RED, Type1, Type4
+from constants import BLUE, RED, Type1, Type4, Type5
 from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.MotionAttributes import Colors
-from utilities.TypeChecking.letter_lists import non_hybrid_letters
-
 
 if TYPE_CHECKING:
-    from widgets.pictograph.components.placement_managers.arrow_placement_manager.handlers.special_arrow_positioner.handlers.special_placement_data_updater import (
-        MirroredTupleHandler,
-        SpecialPlacementDataUpdater,
-    )
+    from .special_placement_data_updater import SpecialPlacementDataUpdater
 
 
 class SpecialPlacementEntryRemover:
@@ -37,19 +32,23 @@ class SpecialPlacementEntryRemover:
                 turns_tuple = (
                     self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
                 )
-                self._remove_turn_data_entry(letter_data, turns_tuple, arrow, arrow.color)
+                self._remove_turn_data_entry(
+                    letter_data, turns_tuple, arrow, arrow.color
+                )
+
                 letter_type = LetterType.get_letter_type(letter)
-                if letter_type in [Type1, Type4]:
-                    mirrored_turns_tuple = self._generate_mirrored_tuple(
-                        arrow, letter_type
+                mirrored_turns_tuple = self._generate_mirrored_tuple(arrow, letter_type)
+                if mirrored_turns_tuple:
+                    other_color = self._get_other_color(arrow.color)
+                    self._remove_turn_data_entry(
+                        letter_data, mirrored_turns_tuple, arrow, other_color
                     )
-                    if mirrored_turns_tuple:
-                        other_color = RED if arrow.color == BLUE else BLUE
-                        self._remove_turn_data_entry(
-                            letter_data, mirrored_turns_tuple, arrow, other_color
-                        )
+
                 self.data_updater.json_handler.write_json_data(data, file_path)
             arrow.pictograph.main_widget.refresh_placements()
+
+    def _get_other_color(self, color: Colors) -> Colors:
+        return RED if color == BLUE else BLUE
 
     def _generate_mirrored_tuple(
         self, arrow: Arrow, letter_type: LetterType
@@ -67,6 +66,14 @@ class SpecialPlacementEntryRemover:
             prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
             turns = turns_tuple[turns_tuple.find(",") + 2 :]
             return f"({prop_rotation}, {turns}"
+        elif letter_type == Type5:
+            turns_tuple = (
+                self.data_updater.positioner.turns_tuple_generator.generate_turns_tuple(
+                    arrow.pictograph.letter
+                )
+            )
+            items = turns_tuple.strip("()").split(", ")
+            return f"({items[0]}, {items[2]}, {items[1]})"
         return None
 
     def _remove_turn_data_entry(

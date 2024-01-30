@@ -51,19 +51,17 @@ class SpecialPlacementMirroredEntryHandler:
                 mirrored_color,
             )
 
-    def _mirror_entry_for_type5(
-        self, adjustment: tuple[int, int], arrow: "Arrow"
-    ) -> None:
+    def _mirror_entry_for_type5(self, adjustment: tuple[int, int], arrow: Arrow) -> None:
         mirrored_turns_tuple = self._generate_type5_mirrored_tuple(arrow)
         if mirrored_turns_tuple:
-            self._create_or_update_mirrored_entry(
+            self._create_or_update_mirrored_entry_for_type5(
                 arrow.pictograph.letter,
                 mirrored_turns_tuple,
                 adjustment,
-                arrow,
+                arrow
             )
 
-    def _generate_type5_mirrored_tuple(self, arrow: "Arrow") -> Union[str, None]:
+    def _generate_type5_mirrored_tuple(self, arrow: Arrow) -> Union[str, None]:
         turns_tuple = self._generate_turns_tuple(arrow)
         items = turns_tuple.strip("()").split(", ")
         return f"({items[0]}, {items[2]}, {items[1]})"
@@ -99,32 +97,53 @@ class SpecialPlacementMirroredEntryHandler:
         letter: str,
         mirrored_turns_tuple: str,
         adjustment: tuple[int, int],
-        arrow: "Arrow",
+        arrow: Arrow,
+        color: str = None,
     ) -> None:
         orientation_key = self.data_updater._get_orientation_key(arrow.motion.start_ori)
         letter_data = self._get_letter_data(orientation_key, letter)
 
-        # Get original turn data or default to an empty dict
         original_turn_data = letter_data.get(self._generate_turns_tuple(arrow), {})
 
-        # Create or update mirrored entry
         if mirrored_turns_tuple not in letter_data:
             mirrored_turn_data = original_turn_data.copy()
+            mirrored_turn_data[color if color else arrow.color] = adjustment
         else:
             mirrored_turn_data = letter_data[mirrored_turns_tuple]
-
-        if LetterType.get_letter_type(letter) in [Type1, Type4]:
-            motion_type = arrow.motion.motion_type
-            mirrored_turn_data[motion_type] = mirrored_turn_data.get(
-                motion_type, adjustment
-            )
-        elif LetterType.get_letter_type(letter) == Type5:
-            mirrored_turn_data[arrow.color] = mirrored_turn_data.get(
-                arrow.pictograph.get.other_arrow(arrow).color, adjustment
-            )
+            mirrored_turn_data[
+                color if color else arrow.color
+            ] = mirrored_turn_data.get(color if color else arrow.color, adjustment)
 
         letter_data[mirrored_turns_tuple] = mirrored_turn_data
         self.data_updater.update_specific_entry_in_json(letter, letter_data, arrow)
+
+
+    def _create_or_update_mirrored_entry_for_type5(
+        self,
+        letter: str,
+        mirrored_turns_tuple: str,
+        adjustment: tuple[int, int],
+        arrow: Arrow
+    ) -> None:
+        orientation_key = self.data_updater._get_orientation_key(arrow.motion.start_ori)
+        letter_data = self._get_letter_data(orientation_key, letter)
+
+        original_turn_data = letter_data.get(self._generate_turns_tuple(arrow), {})
+        mirrored_turn_data = letter_data.get(mirrored_turns_tuple, {})
+
+        other_color = "blue" if arrow.color == "red" else "red"
+
+        # If mirrored entry does not exist, copy the original and replace with the opposite color
+        if not mirrored_turn_data:
+            mirrored_turn_data = original_turn_data.copy()
+            if arrow.color in mirrored_turn_data:
+                del mirrored_turn_data[arrow.color]
+
+        mirrored_turn_data[other_color] = original_turn_data.get(arrow.color, adjustment)
+        
+        letter_data[mirrored_turns_tuple] = mirrored_turn_data
+        self.data_updater.update_specific_entry_in_json(letter, letter_data, arrow)
+
 
     def _update_pictographs_in_section(self, letter_type: LetterType) -> None:
         for (
