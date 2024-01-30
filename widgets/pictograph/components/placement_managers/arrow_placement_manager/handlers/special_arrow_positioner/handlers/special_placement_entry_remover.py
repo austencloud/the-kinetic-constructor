@@ -1,7 +1,7 @@
 import os
 from typing import TYPE_CHECKING, Union
 from Enums import LetterType
-from constants import Type1, Type4
+from constants import BLUE, RED, Type1, Type4
 from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.MotionAttributes import Colors
 from utilities.TypeChecking.letter_lists import non_hybrid_letters
@@ -30,7 +30,6 @@ class SpecialPlacementEntryRemover:
             self.positioner.placement_manager.pictograph.main_widget.parent_directory,
             f"{orientation_key}/{letter}_placements.json",
         )
-
         if os.path.exists(file_path):
             data = self.data_updater.json_handler.load_json_data(file_path)
             if letter in data:
@@ -38,21 +37,17 @@ class SpecialPlacementEntryRemover:
                 turns_tuple = (
                     self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
                 )
-
-                # Remove the primary entry
-                self._remove_turn_data_entry(letter_data, turns_tuple, arrow)
-
-                # Handle mirrored entry for Type 1 and Type 4 letters
+                self._remove_turn_data_entry(letter_data, turns_tuple, arrow, arrow.color)
                 letter_type = LetterType.get_letter_type(letter)
                 if letter_type in [Type1, Type4]:
                     mirrored_turns_tuple = self._generate_mirrored_tuple(
                         arrow, letter_type
                     )
                     if mirrored_turns_tuple:
+                        other_color = RED if arrow.color == BLUE else BLUE
                         self._remove_turn_data_entry(
-                            letter_data, mirrored_turns_tuple, arrow
+                            letter_data, mirrored_turns_tuple, arrow, other_color
                         )
-
                 self.data_updater.json_handler.write_json_data(data, file_path)
             arrow.pictograph.main_widget.refresh_placements()
 
@@ -75,7 +70,7 @@ class SpecialPlacementEntryRemover:
         return None
 
     def _remove_turn_data_entry(
-        self, letter_data: dict, turns_tuple: str, arrow: Arrow, color: str = None
+        self, letter_data: dict, turns_tuple: str, arrow: Arrow, color: str
     ) -> None:
         turn_data = letter_data.get(turns_tuple, {})
         if arrow.motion.lead_state in turn_data:

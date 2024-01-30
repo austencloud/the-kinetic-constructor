@@ -173,9 +173,9 @@ class ArrowRotAngleCalculator:
                     },
                 },
             }
-        return direction_map[self.arrow.motion.motion_type][self.arrow.motion.prop_rot_dir].get(
-            self.arrow.loc, 0
-        )
+        return direction_map[self.arrow.motion.motion_type][
+            self.arrow.motion.prop_rot_dir
+        ].get(self.arrow.loc, 0)
 
     def _get_motion_specific_angle(self) -> int:
         motion_type = self.arrow.motion.motion_type
@@ -189,7 +189,9 @@ class ArrowRotAngleCalculator:
 
     def _get_static_angle(self) -> int:
         direction_map = self._get_static_direction_map()
-        return direction_map.get(self.arrow.motion.prop_rot_dir, {}).get(self.arrow.loc, 0)
+        return direction_map.get(self.arrow.motion.prop_rot_dir, {}).get(
+            self.arrow.loc, 0
+        )
 
     def _get_static_direction_map(
         self,
