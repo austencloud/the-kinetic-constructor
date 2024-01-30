@@ -29,49 +29,27 @@ class SpecialPlacementEntryRemover:
             data = self.data_updater.json_handler.load_json_data(file_path)
             if letter in data:
                 letter_data = data[letter]
-                turns_tuple = (
-                    self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
-                )
-                self._remove_turn_data_entry(
-                    letter_data, turns_tuple, arrow, arrow.color
-                )
+                turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
+                self._remove_turn_data_entry(letter_data, turns_tuple, arrow, arrow.color)
 
                 letter_type = LetterType.get_letter_type(letter)
                 mirrored_turns_tuple = self._generate_mirrored_tuple(arrow, letter_type)
                 if mirrored_turns_tuple:
-                    other_color = self._get_other_color(arrow.color)
-                    self._remove_turn_data_entry(
-                        letter_data, mirrored_turns_tuple, arrow, other_color
-                    )
+                    other_arrow = arrow.pictograph.get.other_arrow(arrow)
+                    color_for_removal = arrow.color
 
-                    if letter_type == Type5 and (
-                        arrow.turns > 0
-                        or arrow.pictograph.get.other_arrow(arrow).turns > 0
-                    ):
-                        turns_tuple = (
-                            self.positioner.turns_tuple_generator.generate_turns_tuple(
-                                arrow.pictograph.letter
-                            )
-                        )
-                        if (
-                            arrow.turns > 0
-                            or arrow.pictograph.get.other_arrow(arrow).turns > 0
-                        ):
-                            prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
-                            turns = turns_tuple[turns_tuple.find(",") + 2 : -1]
-                            second_mirrored_turns_tuple = f"({prop_rotation}, {turns})"
+                    # Check if it's the special Type 5 edge case
+                    if letter_type == Type5 and (arrow.turns > 0 or other_arrow.turns > 0):
+                        if not (arrow.turns > 0 and other_arrow.turns > 0):
+                            # If one arrow has turns and the other doesn't, keep the same color
+                            color_for_removal = arrow.color
+                    else:
+                        color_for_removal = self._get_other_color(arrow.color)
 
-                        if second_mirrored_turns_tuple:
-                            self._remove_turn_data_entry(
-                                letter_data,
-                                second_mirrored_turns_tuple,
-                                arrow,
-                                arrow.color,
-                            )
+                    self._remove_turn_data_entry(letter_data, mirrored_turns_tuple, arrow, color_for_removal)
 
                 self.data_updater.json_handler.write_json_data(data, file_path)
             arrow.pictograph.main_widget.refresh_placements()
-
 
     def _get_other_color(self, color: Colors) -> Colors:
         return RED if color == BLUE else BLUE
@@ -79,27 +57,26 @@ class SpecialPlacementEntryRemover:
     def _generate_mirrored_tuple(
         self, arrow: Arrow, letter_type: LetterType
     ) -> Union[str, None]:
-        if letter_type == Type1:
-            turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(
-                arrow.pictograph.letter
-            )
+        turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(
+            arrow.pictograph.letter
+        )
+
+        if letter_type in [Type1, Type4]:
             items = turns_tuple.strip("()").split(", ")
-            return f"({items[1]}, {items[0]})"
-        elif letter_type == Type4:
-            turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(
-                arrow.pictograph.letter
-            )
             prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
-            turns = turns_tuple[turns_tuple.find(",") + 2 :]
-            return f"({prop_rotation}, {turns}"
+            return f"({prop_rotation}, {items[1]})" if letter_type == Type4 else f"({items[1]}, {items[0]})"
+
         elif letter_type == Type5:
-            turns_tuple = (
-                self.data_updater.positioner.turns_tuple_generator.generate_turns_tuple(
-                    arrow.pictograph.letter
-                )
-            )
+            other_arrow = arrow.pictograph.get.other_arrow(arrow)
             items = turns_tuple.strip("()").split(", ")
-            return f"({items[0]}, {items[2]}, {items[1]})"
+            # Check if one arrow has turns and the other does not
+            if arrow.turns > 0 and other_arrow.turns > 0:
+                return f"({items[0]}, {items[2]}, {items[1]})"
+            elif arrow.turns > 0 or other_arrow.turns > 0:
+                prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
+                turns = turns_tuple[turns_tuple.find(",") + 2 : -1]
+                return f"({prop_rotation}, {turns})"
+
         return None
 
     def _remove_turn_data_entry(
