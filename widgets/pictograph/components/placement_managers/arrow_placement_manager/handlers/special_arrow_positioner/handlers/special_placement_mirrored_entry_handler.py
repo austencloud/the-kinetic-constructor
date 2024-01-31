@@ -1,16 +1,10 @@
-import os
-import logging
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Optional, Union
 from Enums import LetterType
-from constants import IN, OUT, Type1, Type4, Type5, Type6
+from constants import Type1, Type4, Type5, Type6
 from objects.arrow.arrow import Arrow
-from utilities.TypeChecking.TypeChecking import Letters
-from utilities.TypeChecking.letter_lists import Type1_non_hybrid_letters
 
 if TYPE_CHECKING:
-    from widgets.pictograph.components.placement_managers.arrow_placement_manager.handlers.special_arrow_positioner.handlers.special_placement_data_updater import (
-        SpecialPlacementDataUpdater,
-    )
+    from .special_placement_data_updater import SpecialPlacementDataUpdater
 
 
 class SpecialPlacementMirroredEntryHandler:
@@ -31,7 +25,7 @@ class SpecialPlacementMirroredEntryHandler:
     ) -> None:
         if letter_type in [Type1, Type4, Type5, Type6]:
             mirrored_color = "blue" if arrow.color == "red" else "red"
-            mirrored_turns_tuple = self._generate_mirrored_tuple(arrow, mirrored_color)
+            mirrored_turns_tuple = self._generate_mirrored_tuple(arrow)
             if mirrored_turns_tuple:
                 self._create_or_update_mirrored_entry(
                     arrow.pictograph.letter,
@@ -41,9 +35,7 @@ class SpecialPlacementMirroredEntryHandler:
                     mirrored_color,
                 )
 
-    def _generate_mirrored_tuple(
-        self, arrow: "Arrow", mirrored_color: str = None
-    ) -> Union[str, None]:
+    def _generate_mirrored_tuple(self, arrow: "Arrow") -> Union[str, None]:
         turns_tuple = self._generate_turns_tuple(arrow)
         letter_type = LetterType.get_letter_type(arrow.pictograph.letter)
         other_arrow = arrow.pictograph.get.other_arrow(arrow)
@@ -86,38 +78,58 @@ class SpecialPlacementMirroredEntryHandler:
         original_turn_data: dict = letter_data.get(original_turns_tuple)
         mirrored_turn_data = {}
 
-        default_adjustment = self.data_updater.positioner.placement_manager.default_positioner.get_default_adjustment(arrow)
+        default_adjustment = self.data_updater.positioner.placement_manager.default_positioner.get_default_adjustment(
+            arrow
+        )
 
         if LetterType.get_letter_type(arrow.pictograph.letter) in [Type5, Type6]:
             other_arrow = arrow.pictograph.get.other_arrow(arrow)
             if arrow.turns > 0 and other_arrow.turns > 0:
                 other_color = "blue" if arrow.color == "red" else "red"
-                # Replace only the color-specific entries
                 for key in list(original_turn_data.keys()):
                     if arrow.color in key:
                         new_key = key.replace(arrow.color, other_color)
                         mirrored_turn_data[other_color] = default_adjustment
-                # Set the mirrored adjustment for the other color
                 mirrored_turn_data[other_color] = original_turn_data.get(
                     arrow.color, self.data_updater._get_default_adjustment(arrow)
                 )
-            elif arrow.turns > 0 or other_arrow.turns > 0:  # One has turns and the other one doesn't
-                # Maintain the same color for the mirrored entry
+            elif (
+                arrow.turns > 0 or other_arrow.turns > 0
+            ):  # One has turns and the other one doesn't
                 mirrored_turn_data[arrow.color] = original_turn_data.get(
                     arrow.color, self.data_updater._get_default_adjustment(arrow)
                 )
         else:
-            # For other types, use the provided color or default to arrow's color
             entry_color = color if color else arrow.color
             mirrored_turn_data[entry_color] = mirrored_turn_data.get(
                 entry_color, adjustment
             )
-        
+
         if not mirrored_turns_tuple in letter_data:
             letter_data[mirrored_turns_tuple] = mirrored_turn_data
         else:
-            letter_data[mirrored_turns_tuple][other_color] = mirrored_turn_data[other_color]
+            letter_data[mirrored_turns_tuple][other_color] = mirrored_turn_data[
+                other_color
+            ]
+
+        rotation_angle_override = self._check_for_rotation_angle_override(
+            original_turn_data
+        )
+        if rotation_angle_override is not None:
+            mirrored_turn_data[f"{other_color}_rot_angle"] = rotation_angle_override
+        else:
+            default_adjustment = self.data_updater.positioner.placement_manager.default_positioner.get_default_adjustment(
+                arrow
+            )
+            mirrored_turn_data[color] = default_adjustment
+
         self.data_updater.update_specific_entry_in_json(letter, letter_data, arrow)
+
+    def _check_for_rotation_angle_override(self, turn_data: dict) -> Optional[int]:
+        for key in turn_data.keys():
+            if "rot_angle" in key:
+                return turn_data[key]
+        return None
 
     def _update_pictographs_in_section(self, letter_type: LetterType) -> None:
         for (

@@ -1,21 +1,8 @@
 from typing import TYPE_CHECKING, Optional
 from Enums import LetterType
-from constants import (
-    BLUE,
-    IN,
-    OUT,
-    RED,
-    STATIC,
-    DASH,
-    Type2,
-    Type3,
-    Type4,
-    Type5,
-    Type6,
-)
+from constants import IN, OUT, STATIC, DASH, Type5, Type6
 from PyQt6.QtCore import Qt
 from objects.arrow.arrow import Arrow
-from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
     from ..wasd_adjustment_manager.wasd_adjustment_manager import WASD_AdjustmentManager
