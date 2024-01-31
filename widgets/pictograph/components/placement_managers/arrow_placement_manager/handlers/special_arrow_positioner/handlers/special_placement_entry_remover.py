@@ -22,35 +22,53 @@ class SpecialPlacementEntryRemover:
 
     def remove_special_placement_entry(self, letter: str, arrow: Arrow) -> None:
         ori_key = self.data_updater._get_ori_key(arrow.motion)
-        file_path = os.path.join(
-            self.positioner.placement_manager.pictograph.main_widget.parent_directory,
-            f"{ori_key}/{letter}_placements.json",
-        )
+        file_path = self._generate_file_path(ori_key, letter)
+
         if os.path.exists(file_path):
             data = self.data_updater.json_handler.load_json_data(file_path)
             if letter in data:
                 letter_data = data[letter]
                 turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
-                self._remove_turn_data_entry(letter_data, turns_tuple, arrow, arrow.color)
+                key = self._generate_key_for_removal(arrow)
+                self._remove_turn_data_entry(letter_data, turns_tuple, key)
 
-                letter_type = LetterType.get_letter_type(letter)
-                mirrored_turns_tuple = self._generate_mirrored_tuple(arrow, letter_type)
-                if mirrored_turns_tuple:
-                    other_arrow = arrow.pictograph.get.other_arrow(arrow)
-                    color_for_removal = arrow.color
+                if arrow.pictograph.check.starts_from_mixed_orientation():
+                    other_ori_key = self.data_updater.get_other_layer3_ori_key(ori_key)
+                    other_file_path = self._generate_file_path(other_ori_key, letter)
+                    other_data = self.data_updater.json_handler.load_json_data(other_file_path)
+                    other_letter_data = other_data.get(letter, {})
 
-                    # Check if it's the special Type 5 edge case
-                    if letter_type == Type5 and (arrow.turns > 0 or other_arrow.turns > 0):
-                        if not (arrow.turns > 0 and other_arrow.turns > 0):
-                            # If one arrow has turns and the other doesn't, keep the same color
-                            color_for_removal = arrow.color
-                    else:
-                        color_for_removal = self._get_other_color(arrow.color)
+                    if key == BLUE:
+                        new_key = RED
+                    elif key == RED:
+                        new_key = BLUE
 
-                    self._remove_turn_data_entry(letter_data, mirrored_turns_tuple, arrow, color_for_removal)
+                    if other_letter_data != letter_data:
+                        other_data[letter] = letter_data
+                        self.data_updater.json_handler.write_json_data(other_data, other_file_path)
+                    new_turns_tuple = self._generate_mirrored_tuple(arrow, LetterType.get_letter_type(letter))
+                    self._remove_turn_data_entry(other_letter_data, new_turns_tuple, new_key)
 
+
+                # Write changes to the original file
+                data[letter] = letter_data
                 self.data_updater.json_handler.write_json_data(data, file_path)
+
             arrow.pictograph.main_widget.refresh_placements()
+
+    def _generate_file_path(self, ori_key: str, letter: str) -> str:
+        return os.path.join(
+            self.positioner.placement_manager.pictograph.main_widget.parent_directory,
+            f"{ori_key}/{letter}_placements.json"
+        )
+
+    def _generate_key_for_removal(self, arrow: Arrow) -> str:
+        if arrow.pictograph.check.starts_from_mixed_orientation():
+            layer = "layer1" if arrow.motion.start_ori in [IN, OUT] else "layer2"
+            return f"{arrow.motion.motion_type}_from_{layer}"
+        elif arrow.pictograph.letter in Type1_hybrid_letters:
+            return arrow.motion.motion_type
+        return arrow.color
 
     def _get_other_color(self, color: Colors) -> Colors:
         return RED if color == BLUE else BLUE
@@ -80,8 +98,7 @@ class SpecialPlacementEntryRemover:
 
         return None
 
-    def _remove_turn_data_entry(self, letter_data: dict, turns_tuple: str, arrow: Arrow, color: str) -> None:
-        key = self._generate_key_for_removal(arrow)
+    def _remove_turn_data_entry(self, letter_data: dict, turns_tuple: str, key) -> None:
         turn_data = letter_data.get(turns_tuple, {})
         if key in turn_data:
             del turn_data[key]
@@ -90,11 +107,14 @@ class SpecialPlacementEntryRemover:
 
     def _generate_key_for_removal(self, arrow: Arrow) -> str:
         if arrow.pictograph.check.starts_from_mixed_orientation():
-            if arrow.motion.start_ori in [IN, OUT]:
-                layer = "layer1" 
-            elif arrow.motion.start_ori in [CLOCK, COUNTER]:
-                layer = "layer2"
-            return f"{arrow.motion.motion_type}_from_{layer}"
+            if arrow.pictograph.check.has_hybrid_motions():
+                if arrow.motion.start_ori in [IN, OUT]:
+                    layer = "layer1" 
+                elif arrow.motion.start_ori in [CLOCK, COUNTER]:
+                    layer = "layer2"
+                return f"{arrow.motion.motion_type}_from_{layer}"
+            elif not arrow.pictograph.check.has_hybrid_motions():
+                return arrow.color
         elif arrow.pictograph.letter in Type1_hybrid_letters:
             return arrow.motion.motion_type
         return arrow.color

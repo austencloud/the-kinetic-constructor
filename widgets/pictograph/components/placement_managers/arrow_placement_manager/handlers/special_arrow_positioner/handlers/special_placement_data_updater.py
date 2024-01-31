@@ -44,7 +44,7 @@ class SpecialPlacementDataUpdater:
         turn_data = letter_data.get(turns_tuple, {})
         key = self.positioner.motion_key_generator.generate_motion_key(arrow)
 
-        if key in turn_data:
+        if key in turn_data and turn_data[key] != {}:
             turn_data[key][0] += adjustment[0]
             turn_data[key][1] += adjustment[1]
         else:

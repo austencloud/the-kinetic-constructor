@@ -81,7 +81,7 @@ class SpecialPlacementMirroredEntryHandler:
         arrow: Arrow,
     ) -> None:
         ori_key = self.data_updater._get_ori_key(arrow.motion)
-        letter_data = self._get_or_create_letter_data(ori_key, letter)
+        letter_data = self._get_letter_data(ori_key, letter)
 
         original_turns_tuple = self._generate_turns_tuple(arrow)
         original_turn_data: dict = letter_data.get(original_turns_tuple)
@@ -113,7 +113,7 @@ class SpecialPlacementMirroredEntryHandler:
                 other_ori_key = self.data_updater.get_other_layer3_ori_key(
                     ori_key
                 )
-                other_letter_data = self._get_or_create_letter_data(
+                other_letter_data = self._get_letter_data(
                     other_ori_key, letter
                 )
                 if arrow.pictograph.check.has_hybrid_motions():
@@ -149,7 +149,7 @@ class SpecialPlacementMirroredEntryHandler:
         for pictograph in section.pictographs.values():
             pictograph.arrow_placement_manager.update_arrow_placements()
 
-    def _get_or_create_letter_data(self, ori_key: str, letter: str) -> dict:
+    def _get_letter_data(self, ori_key: str, letter: str) -> dict:
         return self.data_updater.positioner.placement_manager.pictograph.main_widget.special_placements.get(
             ori_key, {}
         ).get(
