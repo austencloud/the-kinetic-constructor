@@ -66,3 +66,21 @@ class PictographChecker:
             "red_turns",
         ]
         return all(key in pictograph_dict for key in required_keys)
+
+    def starts_from_hybrid_orientation(self) -> bool:
+        if (
+            self.p.red_motion.start_ori in [CLOCK, COUNTER]
+            and self.p.blue_motion.start_ori in [OUT, IN]
+            or self.p.red_motion.start_ori in [OUT, IN]
+            and self.p.blue_motion.start_ori in [CLOCK, COUNTER]
+        ):
+            return True
+        elif (
+            self.p.red_motion.start_ori in [CLOCK, COUNTER]
+            and self.p.blue_motion.start_ori in [CLOCK, COUNTER]
+            or self.p.red_motion.start_ori in [OUT, IN]
+            and self.p.blue_motion.start_ori in [OUT, IN]
+        ):
+            return False
+        
+    

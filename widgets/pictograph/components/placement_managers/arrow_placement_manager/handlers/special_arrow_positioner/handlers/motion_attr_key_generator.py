@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from constants import CLOCK, COUNTER, IN, OUT
 from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.letter_lists import non_hybrid_letters
 
@@ -15,6 +16,11 @@ class MotionAttrKeyGenerator:
             return arrow.motion.lead_state
         elif self.positioner.pictograph.letter in non_hybrid_letters:
             return arrow.color
+        elif arrow.pictograph.check.starts_from_hybrid_orientation():
+            if arrow.motion.start_ori in [IN, OUT]:
+                return f"{arrow.motion.motion_type}_from_layer1"
+            elif arrow.motion.start_ori in [CLOCK, COUNTER]:
+                return f"{arrow.motion.motion_type}_from_layer2"
         else:
             return arrow.motion.motion_type
 

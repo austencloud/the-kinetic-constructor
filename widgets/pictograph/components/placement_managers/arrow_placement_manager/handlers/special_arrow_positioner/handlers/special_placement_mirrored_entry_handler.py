@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Optional, Union
 from Enums import LetterType
 from constants import Type1, Type4, Type5, Type6
 from objects.arrow.arrow import Arrow
+from utilities.TypeChecking.MotionAttributes import Colors, MotionTypes
 
 if TYPE_CHECKING:
     from .special_placement_data_updater import SpecialPlacementDataUpdater
@@ -23,7 +24,21 @@ class SpecialPlacementMirroredEntryHandler:
     def _mirror_entry(
         self, adjustment: tuple[int, int], arrow: "Arrow", letter_type: LetterType
     ) -> None:
-        if letter_type in [Type1, Type4, Type5, Type6]:
+        if letter_type == Type1 and arrow.motion.motion_type != arrow.pictograph.get.other_motion(
+            arrow.motion
+        ).motion_type:
+            mirrored_motion_type = arrow.motion.motion_type
+            mirrored_turns_tuple = self._generate_mirrored_tuple(arrow)
+            if mirrored_turns_tuple:
+                self._create_or_update_mirrored_entry(
+                    arrow.pictograph.letter,
+                    mirrored_turns_tuple,
+                    adjustment,
+                    arrow,
+                    mirrored_motion_type,
+                )
+            
+        elif letter_type in [Type1, Type4, Type5, Type6]:
             mirrored_color = "blue" if arrow.color == "red" else "red"
             mirrored_turns_tuple = self._generate_mirrored_tuple(arrow)
             if mirrored_turns_tuple:
@@ -40,16 +55,18 @@ class SpecialPlacementMirroredEntryHandler:
         letter_type = LetterType.get_letter_type(arrow.pictograph.letter)
         other_arrow = arrow.pictograph.get.other_arrow(arrow)
         if arrow.turns == other_arrow.turns:
-            return
+            return None
 
-        if letter_type == Type1:
+        if letter_type == Type1 and arrow.motion.motion_type == arrow.pictograph.get.other_motion(
+            arrow.motion
+        ).motion_type:
             items = turns_tuple.strip("()").split(", ")
             return f"({items[1]}, {items[0]})"
         elif letter_type == Type4:
             prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
             turns = turns_tuple[turns_tuple.find(",") + 2 :]
             return (
-                f"({prop_rotation}, {turns}"
+                f"({prop_rotation}, {turns})"
                 if "cw" in turns_tuple or "ccw" in turns_tuple
                 else None
             )
@@ -69,7 +86,7 @@ class SpecialPlacementMirroredEntryHandler:
         mirrored_turns_tuple: str,
         adjustment: tuple[int, int],
         arrow: Arrow,
-        color: str = None,
+        motion_attr: Union[Colors, MotionTypes]
     ) -> None:
         orientation_key = self.data_updater._get_orientation_key(arrow.motion)
         letter_data = self._get_letter_data(orientation_key, letter)
@@ -100,7 +117,7 @@ class SpecialPlacementMirroredEntryHandler:
                     arrow.color, self.data_updater._get_default_adjustment(arrow)
                 )
         else:
-            entry_color = color if color else arrow.color
+            entry_color = motion_attr if motion_attr else arrow.color
             mirrored_turn_data[entry_color] = mirrored_turn_data.get(
                 entry_color, adjustment
             )
@@ -108,8 +125,8 @@ class SpecialPlacementMirroredEntryHandler:
         if not mirrored_turns_tuple in letter_data:
             letter_data[mirrored_turns_tuple] = mirrored_turn_data
         else:
-            letter_data[mirrored_turns_tuple][other_color] = mirrored_turn_data[
-                other_color
+            letter_data[mirrored_turns_tuple][arrow.motion.motion_type] = mirrored_turn_data[
+                arrow.motion.motion_type
             ]
 
         rotation_angle_override = self._check_for_rotation_angle_override(
@@ -121,7 +138,7 @@ class SpecialPlacementMirroredEntryHandler:
             default_adjustment = self.data_updater.positioner.placement_manager.default_positioner.get_default_adjustment(
                 arrow
             )
-            mirrored_turn_data[color] = default_adjustment
+            mirrored_turn_data[motion_attr] = default_adjustment
 
         self.data_updater.update_specific_entry_in_json(letter, letter_data, arrow)
 
@@ -132,11 +149,10 @@ class SpecialPlacementMirroredEntryHandler:
         return None
 
     def _update_pictographs_in_section(self, letter_type: LetterType) -> None:
-        for (
-            pictograph
-        ) in self.data_updater.positioner.pictograph.scroll_area.sections_manager.get_section(
+        section = self.data_updater.positioner.pictograph.scroll_area.sections_manager.get_section(
             letter_type
-        ).pictographs.values():
+        )
+        for pictograph in section.pictographs.values():
             pictograph.arrow_placement_manager.update_arrow_placements()
 
     def _get_letter_data(self, orientation_key: str, letter: str) -> dict:

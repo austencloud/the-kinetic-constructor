@@ -63,35 +63,39 @@ class ArrowAdjustmentCalculator:
     def get_adjustment_for_letter(
         self, letter: str, arrow: Arrow, turns_tuple: str, orientation_key: str
     ) -> Optional[tuple[int, int]]:
-        if turns_tuple is None:
-            turns_tuple = (
-                self.pm.special_positioner.turns_tuple_generator.generate_turns_tuple(
-                    letter
-                )
-            )
-        self.special_placements: dict[
-            str, dict
-        ] = self.pm.pictograph.main_widget.special_placements[orientation_key]
-
-        letter_adjustments: dict = self.special_placements.get(letter, {}).get(
+        self.special_placements = self.pm.pictograph.main_widget.special_placements[
+            orientation_key
+        ]
+        letter_adjustments = self.special_placements.get(letter, {}).get(
             turns_tuple, {}
         )
-        adjustment_map = {
-            "S": letter_adjustments.get(arrow.motion.lead_state),
-            "T": letter_adjustments.get(arrow.motion.lead_state),
-            **{
-                letter: letter_adjustments.get(arrow.motion.motion_type)
-                for letter in Type1_hybrid_letters
-            },
-            **{
-                letter: letter_adjustments.get(arrow.color)
-                for letter in non_hybrid_letters
-                if letter not in ["S", "T"]
-            },
-            **{
-                letter: letter_adjustments.get(arrow.motion.motion_type)
-                for letter in Type2_letters + Type3_letters + Type4_letters
-            },
-        }
 
-        return adjustment_map.get(letter)
+        if self.pm.pictograph.check.starts_from_hybrid_orientation():
+            # Use a different key for hybrid orientation scenarios
+            key = f"{arrow.motion.motion_type}_from_layer"
+            if arrow.motion.start_ori in [IN, OUT]:
+                key += "1"
+            elif arrow.motion.start_ori in [CLOCK, COUNTER]:
+                key += "2"
+        else:
+            # Standard case as before
+            adjustment_map = {
+                "S": letter_adjustments.get(arrow.motion.lead_state),
+                "T": letter_adjustments.get(arrow.motion.lead_state),
+                **{
+                    l: letter_adjustments.get(arrow.motion.motion_type)
+                    for l in Type1_hybrid_letters
+                },
+                **{
+                    l: letter_adjustments.get(arrow.color)
+                    for l in non_hybrid_letters
+                    if l not in ["S", "T"]
+                },
+                **{
+                    l: letter_adjustments.get(arrow.motion.motion_type)
+                    for l in Type2_letters + Type3_letters + Type4_letters
+                },
+            }
+            key = adjustment_map.get(letter)
+
+        return letter_adjustments.get(key)
