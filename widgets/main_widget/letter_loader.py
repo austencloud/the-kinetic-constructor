@@ -3,7 +3,6 @@ import pandas as pd
 from constants import (
     BLUE_START_ORI,
     BLUE_TURNS,
-    CLOCK,
     COUNTER,
     END_POS,
     IN,
@@ -34,6 +33,6 @@ class LetterLoader:
     def add_turns_and_ori_to_pictograph_dict(self, pictograph_dict) -> pd.DataFrame:
         pictograph_dict[BLUE_TURNS] = 0
         pictograph_dict[RED_TURNS] = 0
-        pictograph_dict[BLUE_START_ORI] = COUNTER
+        pictograph_dict[BLUE_START_ORI] = IN
         pictograph_dict[RED_START_ORI] = COUNTER
         return pictograph_dict
