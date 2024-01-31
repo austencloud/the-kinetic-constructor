@@ -28,9 +28,9 @@ class ArrowMovementManager:
         self.pictograph.arrow_placement_manager.special_positioner.data_updater.update_arrow_adjustments_in_json(
             adjustment, self.pictograph.selected_arrow
         )
-        
+
         self.pictograph.arrow_placement_manager.special_positioner.data_updater.mirrored_entry_handler.update_mirrored_entry_in_json(
-            adjustment, self.pictograph.selected_arrow
+            self.pictograph.selected_arrow
         )
         for pictograph in self.pictograph.scroll_area.sections_manager.get_section(
             LetterType.get_letter_type(self.pictograph.letter)

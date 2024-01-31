@@ -1,0 +1,52 @@
+{
+  "S": {
+    "(0, 0.5)": {
+      "trailing_from_layer1": [25, 45],
+      "leading_from_layer2": [0, 35]
+    },
+    "(0, 1.5)": {
+      "leading_from_layer2": [20, 5]
+    },
+    "(0, 2.5)": {
+      "trailing_from_layer1": [0, 10],
+      "leading_from_layer2": [20, 25]
+    },
+    "(0.5, 1)": {
+      "trailing_from_layer1": [-15, 0]
+    },
+    "(0.5, 2)": {
+      "leading_from_layer2": [-90, 55],
+      "trailing_from_layer1": [55, -55]
+    },
+    "(1, 1.5)": {
+      "leading_from_layer1": [-10, 0]
+    },
+    "(1, 2.5)": {
+      "trailing_from_layer1": [60, 50]
+    },
+    "(1.5, 1.5)": {
+      "leading_from_layer1": [20, 35],
+      "trailing_from_layer2": [-80, 120],
+      "trailing_from_layer1": [0, 15]
+    },
+    "(2, 0.5)": {
+      "trailing_from_layer1": [40, 50]
+    },
+    "(2, 1)": {
+      "leading_from_layer2": [-70, 55]
+    },
+    "(2, 2.5)": {
+      "trailing_from_layer1": [40, 45],
+      "leading_from_layer2": [-70, 35]
+    },
+    "(2.5, 3)": {
+      "trailing_from_layer1": [-90, -15]
+    },
+    "(3, 0.5)": {
+      "trailing_from_layer1": [-25, 20]
+    },
+    "(3, 2.5)": {
+      "trailing_from_layer1": [-5, 45]
+    }
+  }
+}

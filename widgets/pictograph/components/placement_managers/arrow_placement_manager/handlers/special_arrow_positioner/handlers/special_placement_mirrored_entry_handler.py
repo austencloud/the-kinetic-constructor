@@ -1,6 +1,18 @@
+import logging
 from typing import TYPE_CHECKING, Optional, Union
 from Enums import LetterType
-from constants import BLUE, DASH, RED, STATIC, Type1, Type4, Type5, Type6
+from constants import (
+    BLUE,
+    DASH,
+    LEADING,
+    RED,
+    STATIC,
+    TRAILING,
+    Type1,
+    Type4,
+    Type5,
+    Type6,
+)
 from objects.arrow.arrow import Arrow
 
 if TYPE_CHECKING:
@@ -13,9 +25,7 @@ class SpecialPlacementMirroredEntryHandler:
     def __init__(self, data_updater: "SpecialPlacementDataUpdater") -> None:
         self.data_updater = data_updater
 
-    def update_mirrored_entry_in_json(
-        self, adjustment: tuple[int, int], arrow: "Arrow"
-    ) -> None:
+    def update_mirrored_entry_in_json(self, arrow: "Arrow") -> None:
         letter_type = LetterType.get_letter_type(arrow.pictograph.letter)
         if letter_type in [Type1, Type4, Type5, Type6]:
             mirrored_turns_tuple = self._generate_mirrored_tuple(arrow)
@@ -31,17 +41,17 @@ class SpecialPlacementMirroredEntryHandler:
         if (
             letter_type == Type1
             and arrow.motion.motion_type
+            != arrow.pictograph.get.other_motion(arrow.motion).motion_type
+        ) or arrow.pictograph.letter in ["S", "T"]:
+            items = turns_tuple.strip("()").split(", ")
+            return f"({items[0]}, {items[1]})"
+        elif (
+            letter_type == Type1
+            and arrow.motion.motion_type
             == arrow.pictograph.get.other_motion(arrow.motion).motion_type
         ):
             items = turns_tuple.strip("()").split(", ")
             return f"({items[1]}, {items[0]})"
-        elif (
-            letter_type == Type1
-            and arrow.motion.motion_type
-            != arrow.pictograph.get.other_motion(arrow.motion).motion_type
-        ):
-            items = turns_tuple.strip("()").split(", ")
-            return f"({items[0]}, {items[1]})"
         elif letter_type == Type4:
             prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
             turns = turns_tuple[turns_tuple.find(",") + 2 :]
@@ -82,8 +92,11 @@ class SpecialPlacementMirroredEntryHandler:
                 letter, arrow, ori_key
             )
             mirrored_turns_tuple = self._generate_mirrored_tuple(arrow)
-            if arrow.pictograph.check.has_hybrid_motions():
-                attr = self.data_updater.positioner.motion_key_generator.generate_motion_key(
+            if (
+                arrow.pictograph.letter in ["S", "T"]
+                or arrow.pictograph.check.has_hybrid_motions()
+            ):
+                attr = self.data_updater.positioner.motion_key_generator.get_key(
                     arrow
                 )
                 if mirrored_turns_tuple not in other_letter_data:
@@ -91,7 +104,9 @@ class SpecialPlacementMirroredEntryHandler:
                 if attr not in original_turn_data:
                     original_turn_data[attr] = {}
                 other_letter_data[mirrored_turns_tuple][attr] = original_turn_data[attr]
+
             elif not arrow.pictograph.check.has_hybrid_motions():
+
                 attr = "blue" if arrow.color == "red" else "red"
                 if mirrored_turns_tuple not in other_letter_data:
                     other_letter_data[mirrored_turns_tuple] = {}

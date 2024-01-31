@@ -11,9 +11,12 @@ class MotionAttrKeyGenerator:
     def __init__(self, positioner: "SpecialArrowPositioner") -> None:
         self.positioner = positioner
 
-    def determine_key(self, arrow: "Arrow") -> str:
+    def get_key(self, arrow: "Arrow") -> str:
         if self.positioner.pictograph.letter in ["S", "T"]:
-            return arrow.motion.lead_state
+            if arrow.motion.start_ori in [IN, OUT]:
+                return f"{arrow.motion.lead_state}_from_layer1"
+            elif arrow.motion.start_ori in [CLOCK, COUNTER]:
+                return f"{arrow.motion.lead_state}_from_layer2"
         elif arrow.pictograph.check.starts_from_mixed_orientation():
             if arrow.pictograph.check.has_hybrid_motions():
                 if arrow.motion.start_ori in [IN, OUT]:
@@ -27,19 +30,3 @@ class MotionAttrKeyGenerator:
         else:
             return arrow.motion.motion_type
 
-    def _get_other_key(self, arrow: "Arrow") -> str:
-        other_arrow = (
-            self.positioner.pictograph.blue_arrow
-            if arrow == self.positioner.pictograph.red_arrow
-            else self.positioner.pictograph.red_arrow
-        )
-        if self.positioner.pictograph.letter in ["S", "T"]:
-            return other_arrow.motion.lead_state
-        elif self.positioner.pictograph.letter in non_hybrid_letters:
-            return other_arrow.color
-        else:
-            return other_arrow.motion.motion_type
-
-    def generate_motion_key(self, arrow: Arrow) -> str:
-        key = self.determine_key(arrow)
-        return key

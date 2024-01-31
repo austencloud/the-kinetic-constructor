@@ -25,12 +25,8 @@ class ArrowAdjustmentCalculator:
         turns_tuple = self.pm.key_generator.generate_turns_tuple(
             self.pm.pictograph.letter
         )
-        ori_key = self.pm.special_positioner.data_updater._get_ori_key(
-            arrow.motion
-        )
-        special_placements = self.pm.pictograph.main_widget.special_placements[
-            ori_key
-        ]
+        ori_key = self.pm.special_positioner.data_updater._get_ori_key(arrow.motion)
+        special_placements = self.pm.pictograph.main_widget.special_placements[ori_key]
 
         if self.pm.pictograph.letter in special_placements:
             special_adjustment = self.get_adjustment_for_letter(
@@ -63,15 +59,21 @@ class ArrowAdjustmentCalculator:
     def get_adjustment_for_letter(
         self, letter: str, arrow: Arrow, turns_tuple: str, ori_key: str
     ) -> Optional[tuple[int, int]]:
-        self.special_placements = self.pm.pictograph.main_widget.special_placements[
-            ori_key
-        ]
-        letter_adjustments = self.special_placements.get(letter, {}).get(
-            turns_tuple, {}
+        self.special_placements: dict[str, dict] = (
+            self.pm.pictograph.main_widget.special_placements[ori_key]
         )
+        letter_adjustments: dict[str, dict[str, list]] = self.special_placements.get(
+            letter
+        ).get(turns_tuple, {})
 
         if self.pm.pictograph.check.starts_from_mixed_orientation():
-            if self.pm.pictograph.check.has_hybrid_motions():
+            if self.pm.pictograph.letter in ["S", "T"]:
+                key = f"{arrow.motion.lead_state}_from_layer"
+                if arrow.motion.start_ori in [IN, OUT]:
+                    key += "1"
+                elif arrow.motion.start_ori in [CLOCK, COUNTER]:
+                    key += "2"
+            elif self.pm.pictograph.check.has_hybrid_motions():
                 key = f"{arrow.motion.motion_type}_from_layer"
                 if arrow.motion.start_ori in [IN, OUT]:
                     key += "1"
@@ -79,9 +81,8 @@ class ArrowAdjustmentCalculator:
                     key += "2"
             elif not self.pm.pictograph.check.has_hybrid_motions():
                 key = arrow.motion.color
-                
+
         else:
-            # Standard case as before
             adjustment_map = {
                 "S": letter_adjustments.get(arrow.motion.lead_state),
                 "T": letter_adjustments.get(arrow.motion.lead_state),

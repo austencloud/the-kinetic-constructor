@@ -31,7 +31,7 @@ class SpecialPlacementEntryRemover:
                 turns_tuple = (
                     self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
                 )
-                key = self._generate_key_for_removal(arrow)
+                key = self.data_updater.positioner.motion_key_generator.get_key(arrow)
                 self._remove_turn_data_entry(letter_data, turns_tuple, key)
 
                 if arrow.pictograph.check.starts_from_mixed_orientation():
@@ -61,7 +61,6 @@ class SpecialPlacementEntryRemover:
                                     letter_data[turns_tuple][key]
                                 )
                         if turns_tuple not in letter_data:
-
                             del other_data[letter][mirrored_tuple]
 
                         elif key not in letter_data[turns_tuple]:
@@ -76,7 +75,6 @@ class SpecialPlacementEntryRemover:
                         other_letter_data, new_turns_tuple, new_key
                     )
 
-                # Write changes to the original file
                 data[letter] = letter_data
                 self.data_updater.json_handler.write_json_data(data, file_path)
 
@@ -88,13 +86,7 @@ class SpecialPlacementEntryRemover:
             f"{ori_key}/{letter}_placements.json",
         )
 
-    def _generate_key_for_removal(self, arrow: Arrow) -> str:
-        if arrow.pictograph.check.starts_from_mixed_orientation():
-            layer = "layer1" if arrow.motion.start_ori in [IN, OUT] else "layer2"
-            return f"{arrow.motion.motion_type}_from_{layer}"
-        elif arrow.pictograph.letter in Type1_hybrid_letters:
-            return arrow.motion.motion_type
-        return arrow.color
+
 
     def _get_other_color(self, color: Colors) -> Colors:
         return RED if color == BLUE else BLUE
@@ -106,16 +98,3 @@ class SpecialPlacementEntryRemover:
             if not turn_data:
                 del letter_data[turns_tuple]
 
-    def _generate_key_for_removal(self, arrow: Arrow) -> str:
-        if arrow.pictograph.check.starts_from_mixed_orientation():
-            if arrow.pictograph.check.has_hybrid_motions():
-                if arrow.motion.start_ori in [IN, OUT]:
-                    layer = "layer1"
-                elif arrow.motion.start_ori in [CLOCK, COUNTER]:
-                    layer = "layer2"
-                return f"{arrow.motion.motion_type}_from_{layer}"
-            elif not arrow.pictograph.check.has_hybrid_motions():
-                return arrow.color
-        elif arrow.pictograph.letter in Type1_hybrid_letters:
-            return arrow.motion.motion_type
-        return arrow.color
