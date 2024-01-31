@@ -2,7 +2,7 @@ import os
 import logging
 from typing import TYPE_CHECKING, Union
 from Enums import LetterType
-from constants import IN, OUT, Type1, Type4, Type5
+from constants import IN, OUT, Type1, Type4, Type5, Type6
 from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.TypeChecking import Letters
 from utilities.TypeChecking.letter_lists import Type1_non_hybrid_letters
@@ -29,14 +29,8 @@ class SpecialPlacementMirroredEntryHandler:
     def _mirror_entry(
         self, adjustment: tuple[int, int], arrow: "Arrow", letter_type: LetterType
     ) -> None:
-        if letter_type in [Type1, Type4, Type5]:
-            mirrored_color = (
-                "blue"
-                if arrow.color == "red"
-                else "red"
-                if letter_type == Type1
-                else None
-            )
+        if letter_type in [Type1, Type4, Type5, Type6]:
+            mirrored_color = "blue" if arrow.color == "red" else "red"
             mirrored_turns_tuple = self._generate_mirrored_tuple(arrow, mirrored_color)
             if mirrored_turns_tuple:
                 self._create_or_update_mirrored_entry(
@@ -67,7 +61,7 @@ class SpecialPlacementMirroredEntryHandler:
                 if "cw" in turns_tuple or "ccw" in turns_tuple
                 else None
             )
-        elif letter_type == Type5:
+        elif letter_type in [Type5, Type6]:
             if arrow.turns > 0 and other_arrow.turns > 0:
                 items = turns_tuple.strip("()").split(", ")
                 return f"({items[0]}, {items[2]}, {items[1]})"
@@ -90,24 +84,24 @@ class SpecialPlacementMirroredEntryHandler:
 
         original_turns_tuple = self._generate_turns_tuple(arrow)
         original_turn_data: dict = letter_data.get(original_turns_tuple)
-        mirrored_turn_data: dict = letter_data.get(
-            mirrored_turns_tuple, original_turn_data.copy()
-        )
+        mirrored_turn_data = {}
 
-        if LetterType.get_letter_type(arrow.pictograph.letter) == Type5:
+        default_adjustment = self.data_updater.positioner.placement_manager.default_positioner.get_default_adjustment(arrow)
+
+        if LetterType.get_letter_type(arrow.pictograph.letter) in [Type5, Type6]:
             other_arrow = arrow.pictograph.get.other_arrow(arrow)
             if arrow.turns > 0 and other_arrow.turns > 0:
                 other_color = "blue" if arrow.color == "red" else "red"
                 # Replace only the color-specific entries
-                for key in list(mirrored_turn_data.keys()):
+                for key in list(original_turn_data.keys()):
                     if arrow.color in key:
                         new_key = key.replace(arrow.color, other_color)
-                        mirrored_turn_data[new_key] = mirrored_turn_data.pop(key)
+                        mirrored_turn_data[other_color] = default_adjustment
                 # Set the mirrored adjustment for the other color
                 mirrored_turn_data[other_color] = original_turn_data.get(
                     arrow.color, self.data_updater._get_default_adjustment(arrow)
                 )
-            elif arrow.turns > 0 or other_arrow.turns > 0:  # Special Case for Type 5
+            elif arrow.turns > 0 or other_arrow.turns > 0:  # One has turns and the other one doesn't
                 # Maintain the same color for the mirrored entry
                 mirrored_turn_data[arrow.color] = original_turn_data.get(
                     arrow.color, self.data_updater._get_default_adjustment(arrow)
@@ -118,8 +112,11 @@ class SpecialPlacementMirroredEntryHandler:
             mirrored_turn_data[entry_color] = mirrored_turn_data.get(
                 entry_color, adjustment
             )
-
-        letter_data[mirrored_turns_tuple] = mirrored_turn_data
+        
+        if not mirrored_turns_tuple in letter_data:
+            letter_data[mirrored_turns_tuple] = mirrored_turn_data
+        else:
+            letter_data[mirrored_turns_tuple][other_color] = mirrored_turn_data[other_color]
         self.data_updater.update_specific_entry_in_json(letter, letter_data, arrow)
 
     def _update_pictographs_in_section(self, letter_type: LetterType) -> None:

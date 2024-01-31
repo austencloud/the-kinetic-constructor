@@ -40,8 +40,21 @@ class SwapBetaHandler:
             self._handle_type4_swap()
         elif letter_type == Type5:
             self._handle_type5_swap()
+        elif letter_type == Type6:
+            self._handle_type6_swap()
 
     def _handle_type1_swap(self) -> None:
+        red_direction = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
+        blue_direction = self.ppm.dir_calculator.get_dir(self.pictograph.blue_motion)
+
+        self._swap_props(
+            self.pictograph.red_prop,
+            self.pictograph.blue_prop,
+            blue_direction,
+            red_direction,
+        )
+
+    def _handle_type6_swap(self) -> None:
         red_direction = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
         blue_direction = self.ppm.dir_calculator.get_dir(self.pictograph.blue_motion)
 
