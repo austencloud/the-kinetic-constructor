@@ -78,11 +78,7 @@ class ArrowAdjustmentCalculator:
                 elif arrow.motion.start_ori in [CLOCK, COUNTER]:
                     key += "2"
             elif not self.pm.pictograph.check.has_hybrid_motions():
-                key = f"{arrow.motion.color}_from_layer"
-                if arrow.motion.start_ori in [IN, OUT]:
-                    key += "1"
-                elif arrow.motion.start_ori in [CLOCK, COUNTER]:
-                    key += "2"
+                key = arrow.motion.color
                 
         else:
             # Standard case as before
