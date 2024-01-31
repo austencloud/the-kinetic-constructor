@@ -62,7 +62,7 @@ class SpecialPlacementDataUpdater:
         return default_mgr.get_default_adjustment(arrow)
 
     def _get_orientation_key(self, motion_start_ori) -> str:
-        return "from_radial" if motion_start_ori in [IN, OUT] else "from_nonradial"
+        return "from_layer1" if motion_start_ori in [IN, OUT] else "fraom_layer2"
 
     def _update_placement_json_data(
         self, letter: str, letter_data: dict, orientation_key: str
