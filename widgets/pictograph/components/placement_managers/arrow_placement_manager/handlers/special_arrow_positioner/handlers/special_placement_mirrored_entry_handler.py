@@ -27,27 +27,21 @@ class SpecialPlacementMirroredEntryHandler:
         if letter_type == Type1 and arrow.motion.motion_type != arrow.pictograph.get.other_motion(
             arrow.motion
         ).motion_type:
-            mirrored_motion_type = arrow.motion.motion_type
             mirrored_turns_tuple = self._generate_mirrored_tuple(arrow)
             if mirrored_turns_tuple:
                 self._create_or_update_mirrored_entry(
                     arrow.pictograph.letter,
                     mirrored_turns_tuple,
-                    adjustment,
                     arrow,
-                    mirrored_motion_type,
                 )
             
         elif letter_type in [Type1, Type4, Type5, Type6]:
-            mirrored_color = "blue" if arrow.color == "red" else "red"
             mirrored_turns_tuple = self._generate_mirrored_tuple(arrow)
             if mirrored_turns_tuple:
                 self._create_or_update_mirrored_entry(
                     arrow.pictograph.letter,
                     mirrored_turns_tuple,
-                    adjustment,
                     arrow,
-                    mirrored_color,
                 )
 
     def _generate_mirrored_tuple(self, arrow: "Arrow") -> Union[str, None]:
@@ -84,12 +78,10 @@ class SpecialPlacementMirroredEntryHandler:
         self,
         letter: str,
         mirrored_turns_tuple: str,
-        adjustment: tuple[int, int],
         arrow: Arrow,
-        motion_attr: Union[Colors, MotionTypes]
     ) -> None:
-        orientation_key = self.data_updater._get_orientation_key(arrow.motion)
-        letter_data = self._get_or_create_letter_data(orientation_key, letter)
+        ori_key = self.data_updater._get_ori_key(arrow.motion)
+        letter_data = self._get_or_create_letter_data(ori_key, letter)
 
         original_turns_tuple = self._generate_turns_tuple(arrow)
         original_turn_data: dict = letter_data.get(original_turns_tuple)
@@ -118,14 +110,22 @@ class SpecialPlacementMirroredEntryHandler:
                 )
         else:
             if arrow.pictograph.check.starts_from_mixed_orientation():
+                other_ori_key = self.data_updater.get_other_layer3_ori_key(
+                    ori_key
+                )
+                other_letter_data = self._get_or_create_letter_data(
+                    other_ori_key, letter
+                )
                 if arrow.pictograph.check.has_hybrid_motions():
                     for key in list(original_turn_data.keys()):
                         mirrored_turn_data[key] = default_adjustment
                 elif not arrow.pictograph.check.has_hybrid_motions():
                     key = RED if arrow.color == BLUE else BLUE
-                    mirrored_turn_data[key] = original_turn_data[key]
+                    mirrored_turn_data[key] = original_turn_data[arrow.color]
 
-            letter_data[mirrored_turns_tuple] = mirrored_turn_data
+            other_letter_data[mirrored_turns_tuple] = mirrored_turn_data
+            self.data_updater.update_specific_entry_in_json(letter, other_letter_data, other_ori_key)
+            return
 
 
         rotation_angle_override = self._check_for_rotation_angle_override(
@@ -134,7 +134,7 @@ class SpecialPlacementMirroredEntryHandler:
         if rotation_angle_override is not None:
             mirrored_turn_data[f"{other_color}_rot_angle"] = rotation_angle_override
 
-        self.data_updater.update_specific_entry_in_json(letter, letter_data, arrow)
+        self.data_updater.update_specific_entry_in_json(letter, letter_data, ori_key)
 
     def _check_for_rotation_angle_override(self, turn_data: dict) -> Optional[int]:
         for key in turn_data.keys():
@@ -149,9 +149,9 @@ class SpecialPlacementMirroredEntryHandler:
         for pictograph in section.pictographs.values():
             pictograph.arrow_placement_manager.update_arrow_placements()
 
-    def _get_or_create_letter_data(self, orientation_key: str, letter: str) -> dict:
+    def _get_or_create_letter_data(self, ori_key: str, letter: str) -> dict:
         return self.data_updater.positioner.placement_manager.pictograph.main_widget.special_placements.get(
-            orientation_key, {}
+            ori_key, {}
         ).get(
             letter, {}
         )

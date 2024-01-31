@@ -30,12 +30,12 @@ class PropPlacementOverrideManager:
 
         if self.pictograph.check.ends_in_beta():
             adjustment_key_str = self._generate_adjustment_key_str(letter)
-            orientation_key = self.special_positioner.data_updater._get_orientation_key(
+            ori_key = self.special_positioner.data_updater._get_ori_key(
                 self.pictograph.blue_motion
             )
             override_key = self._generate_override_key(beta_state)
 
-            letter_data = self._get_letter_data(orientation_key, letter)
+            letter_data = self._get_letter_data(ori_key, letter)
             turn_data = self._get_turn_data(letter_data, adjustment_key_str)
 
             if override_key in turn_data:
@@ -44,7 +44,7 @@ class PropPlacementOverrideManager:
                 turn_data[override_key] = True
 
             letter_data[adjustment_key_str] = turn_data
-            special_placements[orientation_key][letter] = letter_data
+            special_placements[ori_key][letter] = letter_data
             self._update_json_entry(letter, letter_data)
             self.pictograph.updater.update_pictograph()
 
@@ -60,8 +60,8 @@ class PropPlacementOverrideManager:
             f"red_{self.pictograph.red_motion.motion_type}_{self.pictograph.red_arrow.loc}"
         )
 
-    def _get_letter_data(self, orientation_key, letter) -> dict:
-        return self.pictograph.main_widget.special_placements[orientation_key].get(
+    def _get_letter_data(self, ori_key, letter) -> dict:
+        return self.pictograph.main_widget.special_placements[ori_key].get(
             letter, {}
         )
 
@@ -69,6 +69,9 @@ class PropPlacementOverrideManager:
         return letter_data.get(adjustment_key_str, {})
 
     def _update_json_entry(self, letter, letter_data) -> None:
+        ori_key = self.special_positioner.data_updater._get_ori_key(
+            self.pictograph.blue_motion
+        )
         self.special_positioner.data_updater.update_specific_entry_in_json(
-            letter, letter_data, self.pictograph.blue_prop
+            letter, letter_data, ori_key
         )

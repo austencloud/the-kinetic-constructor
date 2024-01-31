@@ -28,7 +28,7 @@ class RotationAngleOverrideManager:
         if not self._is_valid_for_override():
             return
 
-        ori_key = self.special_positioner.data_updater._get_orientation_key(
+        ori_key = self.special_positioner.data_updater._get_ori_key(
             self.pictograph.selected_arrow.motion
         )
         data = self.pictograph.main_widget.load_special_placements()
@@ -79,7 +79,7 @@ class RotationAngleOverrideManager:
         letter_data[turns_tuple] = turn_data
         data[ori_key][letter] = letter_data
         self.special_positioner.data_updater.update_specific_entry_in_json(
-            letter, letter_data, self.pictograph.selected_arrow
+            letter, letter_data, ori_key
         )
 
     def _generate_hybrid_key_if_needed(self, arrow: Arrow, rot_angle_key: str) -> str:
@@ -94,7 +94,7 @@ class RotationAngleOverrideManager:
         placements = (
             self.special_positioner.placement_manager.pictograph.main_widget.special_placements
         )
-        ori_key = self.special_positioner.data_updater._get_orientation_key(
+        ori_key = self.special_positioner.data_updater._get_ori_key(
             arrow.motion
         )
         letter = arrow.scene.letter

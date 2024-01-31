@@ -27,10 +27,10 @@ class SpecialPlacementDataUpdater:
         self.entry_remover = SpecialPlacementEntryRemover(self)
         self.mirrored_entry_handler = SpecialPlacementMirroredEntryHandler(self)
 
-    def _get_letter_data(self, letter: str, orientation_key: str) -> dict:
+    def _get_letter_data(self, letter: str, ori_key: str) -> dict:
         return (
             self.positioner.placement_manager.pictograph.main_widget.special_placements[
-                orientation_key
+                ori_key
             ].get(letter, {})
         )
 
@@ -62,7 +62,7 @@ class SpecialPlacementDataUpdater:
         )
         return default_mgr.get_default_adjustment(arrow)
 
-    def _get_orientation_key(self, motion: Motion) -> str:
+    def _get_ori_key(self, motion: Motion) -> str:
         other_motion = self.positioner.pictograph.get.other_motion(motion)
         if motion.start_ori in [IN, OUT] and other_motion.start_ori in [IN, OUT]:
             return "from_layer1"
@@ -96,12 +96,18 @@ class SpecialPlacementDataUpdater:
         ):
             return "from_layer3_blue2_red1"
 
+    def get_other_layer3_ori_key(self, ori_key: str) -> str:
+        if ori_key == "from_layer3_blue1_red2":
+            return "from_layer3_blue2_red1"
+        elif ori_key == "from_layer3_blue2_red1":
+            return "from_layer3_blue1_red2"
+
     def _update_placement_json_data(
-        self, letter: str, letter_data: dict, orientation_key: str
+        self, letter: str, letter_data: dict, ori_key: str
     ) -> None:
         file_path = os.path.join(
             self.positioner.placement_manager.pictograph.main_widget.parent_directory,
-            orientation_key,
+            ori_key,
             f"{letter}_placements.json",
         )
         existing_data = self.json_handler.load_json_data(file_path)
@@ -116,21 +122,20 @@ class SpecialPlacementDataUpdater:
 
         letter = self.positioner.pictograph.letter
         turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
-        orientation_key = self._get_orientation_key(arrow.motion)
+        ori_key = self._get_ori_key(arrow.motion)
 
-        letter_data = self._get_letter_data(letter, orientation_key)
+        letter_data = self._get_letter_data(letter, ori_key)
         self._update_or_create_turn_data(letter_data, turns_tuple, arrow, adjustment)
-        self._update_placement_json_data(letter, letter_data, orientation_key)
+        self._update_placement_json_data(letter, letter_data, ori_key)
 
         logging.info(
-            f"Updated {letter} in {orientation_key} at {turns_tuple} with adjustment {adjustment}. Current values: {letter_data.get(turns_tuple)}"
+            f"Updated {letter} in {ori_key} at {turns_tuple} with adjustment {adjustment}. Current values: {letter_data.get(turns_tuple)}"
         )
 
     def update_specific_entry_in_json(
-        self, letter: Letters, letter_data: dict, object: Union[Arrow, Prop]
+        self, letter: Letters, letter_data: dict, ori_key
     ) -> None:
         try:
-            orientation_key = self._get_orientation_key(object.motion)
-            self._update_placement_json_data(letter, letter_data, orientation_key)
+            self._update_placement_json_data(letter, letter_data, ori_key)
         except Exception as e:
             logging.error(f"Error in update_specific_entry_in_json: {e}")

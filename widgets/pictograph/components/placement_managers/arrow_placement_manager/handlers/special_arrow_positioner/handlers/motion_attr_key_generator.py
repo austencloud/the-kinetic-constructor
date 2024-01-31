@@ -21,10 +21,7 @@ class MotionAttrKeyGenerator:
                 elif arrow.motion.start_ori in [CLOCK, COUNTER]:
                     return f"{arrow.motion.motion_type}_from_layer2"
             else:
-                if arrow.motion.start_ori in [IN, OUT]:
-                    return f"{arrow.color}_from_layer1"
-                elif arrow.motion.start_ori in [CLOCK, COUNTER]:
-                    return f"{arrow.color}_from_layer2"
+                return arrow.motion.color
         elif self.positioner.pictograph.letter in non_hybrid_letters:
             return arrow.color
         else:

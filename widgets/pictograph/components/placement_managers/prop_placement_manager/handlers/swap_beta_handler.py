@@ -117,7 +117,7 @@ class SwapBetaHandler:
         return override_key
 
     def swap_beta_if_needed(self) -> None:
-        ori_key = self.pictograph.arrow_placement_manager.special_positioner.data_updater._get_orientation_key(
+        ori_key = self.pictograph.arrow_placement_manager.special_positioner.data_updater._get_ori_key(
             self.pictograph.blue_motion
         )
 

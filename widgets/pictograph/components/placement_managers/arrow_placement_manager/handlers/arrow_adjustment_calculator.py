@@ -25,16 +25,16 @@ class ArrowAdjustmentCalculator:
         turns_tuple = self.pm.key_generator.generate_turns_tuple(
             self.pm.pictograph.letter
         )
-        orientation_key = self.pm.special_positioner.data_updater._get_orientation_key(
+        ori_key = self.pm.special_positioner.data_updater._get_ori_key(
             arrow.motion
         )
         special_placements = self.pm.pictograph.main_widget.special_placements[
-            orientation_key
+            ori_key
         ]
 
         if self.pm.pictograph.letter in special_placements:
             special_adjustment = self.get_adjustment_for_letter(
-                self.pm.pictograph.letter, arrow, turns_tuple, orientation_key
+                self.pm.pictograph.letter, arrow, turns_tuple, ori_key
             )
             (
                 x,
@@ -61,10 +61,10 @@ class ArrowAdjustmentCalculator:
         return None
 
     def get_adjustment_for_letter(
-        self, letter: str, arrow: Arrow, turns_tuple: str, orientation_key: str
+        self, letter: str, arrow: Arrow, turns_tuple: str, ori_key: str
     ) -> Optional[tuple[int, int]]:
         self.special_placements = self.pm.pictograph.main_widget.special_placements[
-            orientation_key
+            ori_key
         ]
         letter_adjustments = self.special_placements.get(letter, {}).get(
             turns_tuple, {}
