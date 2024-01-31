@@ -1,10 +1,9 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QComboBox, QLabel
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton
 from PyQt6.QtCore import Qt
 
 from widgets.menu_bar.prop_type_selector import PropTypeSelector
 from .pictograph_size_adjuster import PictographSizeAdjuster
-from utilities.TypeChecking.prop_types import *
 
 if TYPE_CHECKING:
     from main import MainWindow

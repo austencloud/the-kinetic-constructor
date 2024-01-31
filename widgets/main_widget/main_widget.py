@@ -6,7 +6,7 @@ from PyQt6.QtCore import Qt
 
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Letters, TYPE_CHECKING
-from constants import CLUB, DIAMOND, STAFF, TRIAD
+from constants import DIAMOND, STAFF
 from utilities.TypeChecking.prop_types import PropTypes
 from widgets.pictograph.pictograph import Pictograph
 from ..image_cache_manager import ImageCacheManager

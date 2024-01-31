@@ -1,4 +1,3 @@
-from tkinter.tix import COLUMN
 from typing import TYPE_CHECKING
 from widgets.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.letter_lists import all_letters

@@ -1,8 +1,7 @@
 import os
 import logging
 from typing import TYPE_CHECKING, Union
-from Enums import LetterType
-from constants import IN, OUT, Type1
+from constants import IN, OUT
 from objects.arrow.arrow import Arrow
 from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import Letters

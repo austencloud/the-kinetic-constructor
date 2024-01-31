@@ -1,9 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from Enums import LetterType
-from constants import Type1
 
-from utilities.TypeChecking.letter_lists import Type1_non_hybrid_letters
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
