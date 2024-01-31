@@ -65,6 +65,7 @@ class SpecialPlacementMirroredEntryHandler:
         letter_data, original_turn_data = (
             self._fetch_letter_data_and_original_turn_data(ori_key, letter, arrow)
         )
+
         mirrored_turn_data = self._prepare_mirrored_turn_data(arrow, original_turn_data)
 
         if self._should_handle_rotation_angle(arrow):
@@ -85,9 +86,19 @@ class SpecialPlacementMirroredEntryHandler:
                 attr = self.data_updater.positioner.motion_key_generator.generate_motion_key(
                     arrow
                 )
+                if mirrored_turns_tuple not in other_letter_data:
+                    other_letter_data[mirrored_turns_tuple] = {}
+                if attr not in original_turn_data:
+                    original_turn_data[attr] = {}
                 other_letter_data[mirrored_turns_tuple][attr] = original_turn_data[attr]
             elif not arrow.pictograph.check.has_hybrid_motions():
                 attr = "blue" if arrow.color == "red" else "red"
+                if mirrored_turns_tuple not in other_letter_data:
+                    other_letter_data[mirrored_turns_tuple] = {}
+                if attr not in other_letter_data[mirrored_turns_tuple]:
+                    other_letter_data[mirrored_turns_tuple][attr] = {}
+                if arrow.color not in original_turn_data:
+                    original_turn_data[arrow.color] = {}
                 other_letter_data[mirrored_turns_tuple][attr] = original_turn_data[
                     arrow.color
                 ]

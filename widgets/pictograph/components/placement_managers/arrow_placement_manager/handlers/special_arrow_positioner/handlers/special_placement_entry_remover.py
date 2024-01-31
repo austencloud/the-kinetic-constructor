@@ -28,16 +28,22 @@ class SpecialPlacementEntryRemover:
             data = self.data_updater.json_handler.load_json_data(file_path)
             if letter in data:
                 letter_data = data[letter]
-                turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
+                turns_tuple = (
+                    self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
+                )
                 key = self._generate_key_for_removal(arrow)
                 self._remove_turn_data_entry(letter_data, turns_tuple, key)
 
                 if arrow.pictograph.check.starts_from_mixed_orientation():
                     other_ori_key = self.data_updater.get_other_layer3_ori_key(ori_key)
                     other_file_path = self._generate_file_path(other_ori_key, letter)
-                    other_data = self.data_updater.json_handler.load_json_data(other_file_path)
+                    other_data = self.data_updater.json_handler.load_json_data(
+                        other_file_path
+                    )
                     other_letter_data = other_data.get(letter, {})
-                    mirrored_tuple = self._generate_mirrored_tuple(arrow, LetterType.get_letter_type(letter))
+                    mirrored_tuple = self.data_updater.mirrored_entry_handler._generate_mirrored_tuple(
+                        arrow
+                    )
                     if key == BLUE:
                         new_key = RED
                     elif key == RED:
@@ -49,17 +55,26 @@ class SpecialPlacementEntryRemover:
                             other_letter_data[mirrored_tuple] = {}
                         if new_key not in other_letter_data[mirrored_tuple]:
                             if turns_tuple in letter_data:
-                                other_letter_data[mirrored_tuple][new_key] = letter_data[turns_tuple][key]
+                                if key not in letter_data[turns_tuple]:
+                                    letter_data[turns_tuple][key] = {}
+                                other_letter_data[mirrored_tuple][new_key] = (
+                                    letter_data[turns_tuple][key]
+                                )
                         if turns_tuple not in letter_data:
 
                             del other_data[letter][mirrored_tuple]
 
                         elif key not in letter_data[turns_tuple]:
                             del other_data[letter][mirrored_tuple][new_key]
-                        self.data_updater.json_handler.write_json_data(other_data, other_file_path)
-                    new_turns_tuple = self._generate_mirrored_tuple(arrow, LetterType.get_letter_type(letter))
-                    self._remove_turn_data_entry(other_letter_data, new_turns_tuple, new_key)
-
+                        self.data_updater.json_handler.write_json_data(
+                            other_data, other_file_path
+                        )
+                    new_turns_tuple = self.data_updater.mirrored_entry_handler._generate_mirrored_tuple(
+                        arrow
+                    )
+                    self._remove_turn_data_entry(
+                        other_letter_data, new_turns_tuple, new_key
+                    )
 
                 # Write changes to the original file
                 data[letter] = letter_data
@@ -70,7 +85,7 @@ class SpecialPlacementEntryRemover:
     def _generate_file_path(self, ori_key: str, letter: str) -> str:
         return os.path.join(
             self.positioner.placement_manager.pictograph.main_widget.parent_directory,
-            f"{ori_key}/{letter}_placements.json"
+            f"{ori_key}/{letter}_placements.json",
         )
 
     def _generate_key_for_removal(self, arrow: Arrow) -> str:
@@ -84,30 +99,6 @@ class SpecialPlacementEntryRemover:
     def _get_other_color(self, color: Colors) -> Colors:
         return RED if color == BLUE else BLUE
 
-    def _generate_mirrored_tuple(
-        self, arrow: Arrow, letter_type: LetterType
-    ) -> Union[str, None]:
-        turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(
-            arrow.pictograph.letter
-        )
-
-        if letter_type in [Type1, Type4]:
-            items = turns_tuple.strip("()").split(", ")
-            prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
-            return f"({prop_rotation}, {items[1]})" if letter_type == Type4 else f"({items[1]}, {items[0]})"
-
-        elif letter_type == Type5:
-            other_arrow = arrow.pictograph.get.other_arrow(arrow)
-            items = turns_tuple.strip("()").split(", ")
-            if arrow.turns > 0 and other_arrow.turns > 0:
-                return f"({items[0]}, {items[2]}, {items[1]})"
-            elif arrow.turns > 0 or other_arrow.turns > 0:
-                prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
-                turns = turns_tuple[turns_tuple.find(",") + 2 : -1]
-                return f"({prop_rotation}, {turns})"
-
-        return None
-
     def _remove_turn_data_entry(self, letter_data: dict, turns_tuple: str, key) -> None:
         turn_data = letter_data.get(turns_tuple, {})
         if key in turn_data:
@@ -119,7 +110,7 @@ class SpecialPlacementEntryRemover:
         if arrow.pictograph.check.starts_from_mixed_orientation():
             if arrow.pictograph.check.has_hybrid_motions():
                 if arrow.motion.start_ori in [IN, OUT]:
-                    layer = "layer1" 
+                    layer = "layer1"
                 elif arrow.motion.start_ori in [CLOCK, COUNTER]:
                     layer = "layer2"
                 return f"{arrow.motion.motion_type}_from_{layer}"
