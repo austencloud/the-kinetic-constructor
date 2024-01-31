@@ -37,14 +37,25 @@ class SpecialPlacementEntryRemover:
                     other_file_path = self._generate_file_path(other_ori_key, letter)
                     other_data = self.data_updater.json_handler.load_json_data(other_file_path)
                     other_letter_data = other_data.get(letter, {})
-
+                    mirrored_tuple = self._generate_mirrored_tuple(arrow, LetterType.get_letter_type(letter))
                     if key == BLUE:
                         new_key = RED
                     elif key == RED:
                         new_key = BLUE
-
+                    else:
+                        new_key = key
                     if other_letter_data != letter_data:
-                        other_data[letter] = letter_data
+                        if mirrored_tuple not in other_letter_data:
+                            other_letter_data[mirrored_tuple] = {}
+                        if new_key not in other_letter_data[mirrored_tuple]:
+                            if turns_tuple in letter_data:
+                                other_letter_data[mirrored_tuple][new_key] = letter_data[turns_tuple][key]
+                        if turns_tuple not in letter_data:
+
+                            del other_data[letter][mirrored_tuple]
+
+                        elif key not in letter_data[turns_tuple]:
+                            del other_data[letter][mirrored_tuple][new_key]
                         self.data_updater.json_handler.write_json_data(other_data, other_file_path)
                     new_turns_tuple = self._generate_mirrored_tuple(arrow, LetterType.get_letter_type(letter))
                     self._remove_turn_data_entry(other_letter_data, new_turns_tuple, new_key)
@@ -88,7 +99,6 @@ class SpecialPlacementEntryRemover:
         elif letter_type == Type5:
             other_arrow = arrow.pictograph.get.other_arrow(arrow)
             items = turns_tuple.strip("()").split(", ")
-            # Check if one arrow has turns and the other does not
             if arrow.turns > 0 and other_arrow.turns > 0:
                 return f"({items[0]}, {items[2]}, {items[1]})"
             elif arrow.turns > 0 or other_arrow.turns > 0:

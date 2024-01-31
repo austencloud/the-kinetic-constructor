@@ -86,7 +86,7 @@ class SpecialPlacementMirroredEntryHandler:
         original_turns_tuple = self._generate_turns_tuple(arrow)
         original_turn_data: dict = letter_data.get(original_turns_tuple)
         mirrored_turn_data = {}
-
+            
         default_adjustment = self.data_updater.positioner.placement_manager.default_positioner.get_default_adjustment(
             arrow
         )
@@ -122,8 +122,11 @@ class SpecialPlacementMirroredEntryHandler:
                 elif not arrow.pictograph.check.has_hybrid_motions():
                     key = RED if arrow.color == BLUE else BLUE
                     mirrored_turn_data[key] = original_turn_data[arrow.color]
-
-            other_letter_data[mirrored_turns_tuple] = mirrored_turn_data
+            if mirrored_turns_tuple not in other_letter_data:
+                other_letter_data[mirrored_turns_tuple] = {}
+            if key not in  other_letter_data[mirrored_turns_tuple]:
+                 other_letter_data[mirrored_turns_tuple][key] = {}
+            other_letter_data[mirrored_turns_tuple][key] = mirrored_turn_data[key]
             self.data_updater.update_specific_entry_in_json(letter, other_letter_data, other_ori_key)
             return
 
