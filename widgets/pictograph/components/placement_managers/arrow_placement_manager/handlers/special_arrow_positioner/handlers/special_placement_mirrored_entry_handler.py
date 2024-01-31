@@ -35,6 +35,13 @@ class SpecialPlacementMirroredEntryHandler:
         ):
             items = turns_tuple.strip("()").split(", ")
             return f"({items[1]}, {items[0]})"
+        elif (
+            letter_type == Type1
+            and arrow.motion.motion_type
+            != arrow.pictograph.get.other_motion(arrow.motion).motion_type
+        ):
+            items = turns_tuple.strip("()").split(", ")
+            return f"({items[0]}, {items[1]})"
         elif letter_type == Type4:
             prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
             turns = turns_tuple[turns_tuple.find(",") + 2 :]
@@ -69,25 +76,27 @@ class SpecialPlacementMirroredEntryHandler:
                     mirrored_turn_data, rotation_angle_override, arrow
                 )
 
-        # Handle the case for mixed start orientations
         if arrow.pictograph.check.starts_from_mixed_orientation():
             other_ori_key, other_letter_data = self._get_keys_for_mixed_start_ori(
                 letter, arrow, ori_key
             )
-            if arrow.pictograph.check.has_hybrid_motions():
-                attr = arrow.motion.motion_type
-            elif not arrow.pictograph.check.has_hybrid_motions():
-                attr = arrow.color
             mirrored_turns_tuple = self._generate_mirrored_tuple(arrow)
+            if arrow.pictograph.check.has_hybrid_motions():
+                attr = self.data_updater.positioner.motion_key_generator.generate_motion_key(
+                    arrow
+                )
+                other_letter_data[mirrored_turns_tuple][attr] = original_turn_data[attr]
+            elif not arrow.pictograph.check.has_hybrid_motions():
+                attr = "blue" if arrow.color == "red" else "red"
+                other_letter_data[mirrored_turns_tuple][attr] = original_turn_data[
+                    arrow.color
+                ]
 
-            # Initialize and update the mirrored data in the other file
             self.initialize_dicts(mirrored_turns_tuple, other_letter_data, attr)
-            other_letter_data[mirrored_turns_tuple] = mirrored_turn_data
             self.data_updater.update_specific_entry_in_json(
                 letter, other_letter_data, other_ori_key
             )
 
-        # Update the original entry
         self.data_updater.update_specific_entry_in_json(letter, letter_data, ori_key)
 
     def initialize_dicts(self, mirrored_turns_tuple, other_letter_data, attr):
