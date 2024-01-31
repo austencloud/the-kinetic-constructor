@@ -18,12 +18,6 @@ class WASD_AdjustmentManager:
         self.rotation_angle_override_manager = RotationAngleOverrideManager(self)
         self.prop_placement_override_manager = PropPlacementOverrideManager(self)
 
-
-
-
-
-
-
     def handle_special_placement_removal(self) -> None:
         if not self.pictograph.selected_arrow:
             return

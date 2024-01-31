@@ -1,8 +1,7 @@
 from typing import TYPE_CHECKING, Optional, Union
 from Enums import LetterType
-from constants import BLUE, RED, Type1, Type4, Type5, Type6
+from constants import BLUE, DASH, RED, STATIC, Type1, Type4, Type5, Type6
 from objects.arrow.arrow import Arrow
-from utilities.TypeChecking.MotionAttributes import Colors, MotionTypes
 
 if TYPE_CHECKING:
     from .special_placement_data_updater import SpecialPlacementDataUpdater
@@ -18,42 +17,22 @@ class SpecialPlacementMirroredEntryHandler:
         self, adjustment: tuple[int, int], arrow: "Arrow"
     ) -> None:
         letter_type = LetterType.get_letter_type(arrow.pictograph.letter)
-        self._mirror_entry(adjustment, arrow, letter_type)
-        self._update_pictographs_in_section(letter_type)
-
-    def _mirror_entry(
-        self, adjustment: tuple[int, int], arrow: "Arrow", letter_type: LetterType
-    ) -> None:
-        if letter_type == Type1 and arrow.motion.motion_type != arrow.pictograph.get.other_motion(
-            arrow.motion
-        ).motion_type:
+        if letter_type in [Type1, Type4, Type5, Type6]:
             mirrored_turns_tuple = self._generate_mirrored_tuple(arrow)
             if mirrored_turns_tuple:
-                self._create_or_update_mirrored_entry(
-                    arrow.pictograph.letter,
-                    mirrored_turns_tuple,
-                    arrow,
-                )
-            
-        elif letter_type in [Type1, Type4, Type5, Type6]:
-            mirrored_turns_tuple = self._generate_mirrored_tuple(arrow)
-            if mirrored_turns_tuple:
-                self._create_or_update_mirrored_entry(
-                    arrow.pictograph.letter,
-                    mirrored_turns_tuple,
-                    arrow,
-                )
+                self._create_or_update_mirrored_entry(arrow.pictograph.letter, arrow)
+            self._update_pictographs_in_section(letter_type)
 
     def _generate_mirrored_tuple(self, arrow: "Arrow") -> Union[str, None]:
         turns_tuple = self._generate_turns_tuple(arrow)
         letter_type = LetterType.get_letter_type(arrow.pictograph.letter)
         other_arrow = arrow.pictograph.get.other_arrow(arrow)
-        if arrow.turns == other_arrow.turns:
-            return None
 
-        if letter_type == Type1 and arrow.motion.motion_type == arrow.pictograph.get.other_motion(
-            arrow.motion
-        ).motion_type:
+        if (
+            letter_type == Type1
+            and arrow.motion.motion_type
+            == arrow.pictograph.get.other_motion(arrow.motion).motion_type
+        ):
             items = turns_tuple.strip("()").split(", ")
             return f"({items[1]}, {items[0]})"
         elif letter_type == Type4:
@@ -74,85 +53,112 @@ class SpecialPlacementMirroredEntryHandler:
                 return f"({prop_rotation}, {turns})"
         return None
 
-    def _create_or_update_mirrored_entry(
-        self,
-        letter: str,
-        mirrored_turns_tuple: str,
-        arrow: Arrow 
-    ) -> None:
+    def _create_or_update_mirrored_entry(self, letter: str, arrow: Arrow) -> None:
         ori_key = self.data_updater._get_ori_key(arrow.motion)
-        letter_data = self._get_letter_data(ori_key, letter)
-
-        original_turns_tuple = self._generate_turns_tuple(arrow)
-        original_turn_data: dict = letter_data.get(original_turns_tuple) 
-
-
-   
-
-        mirrored_turn_data = {}
-            
-        default_adjustment = self.data_updater.positioner.placement_manager.default_positioner.get_default_adjustment(arrow)
-        other_color = "blue" if arrow.color == "red" else "red"
-
-        if LetterType.get_letter_type(arrow.pictograph.letter) in [Type5, Type6]:
-            self.create_mirrored_Type5_Type6_entry(arrow, original_turn_data, mirrored_turn_data, default_adjustment, other_color)
-        else:
-            other_ori_key, other_letter_data, key = self._get_keys_for_mixed_start_ori(letter, arrow, ori_key, original_turn_data, mirrored_turn_data, default_adjustment)
-            self.initialize_dicts(mirrored_turns_tuple, other_letter_data, key)
-            other_letter_data[mirrored_turns_tuple][key] = mirrored_turn_data[key]
-            self.data_updater.update_specific_entry_in_json(letter, other_letter_data, other_ori_key)
-            return
-
-
-        rotation_angle_override = self._check_for_rotation_angle_override(
-            original_turn_data
+        letter_data, original_turn_data = (
+            self._fetch_letter_data_and_original_turn_data(ori_key, letter, arrow)
         )
-        if rotation_angle_override is not None:
-            mirrored_turn_data[f"{other_color}_rot_angle"] = rotation_angle_override
+        mirrored_turn_data = self._prepare_mirrored_turn_data(arrow, original_turn_data)
 
+        if self._should_handle_rotation_angle(arrow):
+            rotation_angle_override = self._check_for_rotation_angle_override(
+                original_turn_data
+            )
+            if rotation_angle_override is not None:
+                self._apply_rotation_angle_override(
+                    mirrored_turn_data, rotation_angle_override, arrow
+                )
+
+        # Handle the case for mixed start orientations
+        if arrow.pictograph.check.starts_from_mixed_orientation():
+            other_ori_key, other_letter_data = self._get_keys_for_mixed_start_ori(
+                letter, arrow, ori_key
+            )
+            if arrow.pictograph.check.has_hybrid_motions():
+                attr = arrow.motion.motion_type
+            elif not arrow.pictograph.check.has_hybrid_motions():
+                attr = arrow.color
+            mirrored_turns_tuple = self._generate_mirrored_tuple(arrow)
+
+            # Initialize and update the mirrored data in the other file
+            self.initialize_dicts(mirrored_turns_tuple, other_letter_data, attr)
+            other_letter_data[mirrored_turns_tuple] = mirrored_turn_data
+            self.data_updater.update_specific_entry_in_json(
+                letter, other_letter_data, other_ori_key
+            )
+
+        # Update the original entry
         self.data_updater.update_specific_entry_in_json(letter, letter_data, ori_key)
 
-    def _get_keys_for_mixed_start_ori(self, letter, arrow:Arrow, ori_key, original_turn_data, mirrored_turn_data, default_adjustment):
-        if arrow.pictograph.check.starts_from_mixed_orientation():
-            other_ori_key = self.data_updater.get_other_layer3_ori_key(
-                    ori_key
-                )
-            other_letter_data = self._get_letter_data(
-                    other_ori_key, letter
-                )
-            if arrow.pictograph.check.has_hybrid_motions():
-                for key in list(original_turn_data.keys()):
-                    mirrored_turn_data[key] = default_adjustment
-            elif not arrow.pictograph.check.has_hybrid_motions():
-                key = RED if arrow.color == BLUE else BLUE
-                mirrored_turn_data[key] = original_turn_data[arrow.color]
-        return other_ori_key,other_letter_data,key
-
-    def initialize_dicts(self, mirrored_turns_tuple, other_letter_data, key):
+    def initialize_dicts(self, mirrored_turns_tuple, other_letter_data, attr):
         if mirrored_turns_tuple not in other_letter_data:
             other_letter_data[mirrored_turns_tuple] = {}
-        if key not in  other_letter_data[mirrored_turns_tuple]:
-             other_letter_data[mirrored_turns_tuple][key] = {}
+        if attr not in other_letter_data[mirrored_turns_tuple]:
+            other_letter_data[mirrored_turns_tuple][attr] = {}
 
-    def create_mirrored_Type5_Type6_entry(self, arrow, original_turn_data, mirrored_turn_data, default_adjustment, other_color):
-        other_arrow = arrow.pictograph.get.other_arrow(arrow)
-        if arrow.turns > 0 and other_arrow.turns > 0:
-            for key in list(original_turn_data.keys()):
-                if arrow.color in key:
-                    new_key = key.replace(arrow.color, other_color)
-                    mirrored_turn_data[other_color] = default_adjustment
-            mirrored_turn_data[other_color] = original_turn_data.get(
-                    arrow.color, self.data_updater._get_default_adjustment(arrow)
+    def _get_keys_for_mixed_start_ori(
+        self, letter, arrow: Arrow, ori_key
+    ) -> tuple[str, dict]:
+        other_ori_key = self.data_updater.get_other_layer3_ori_key(ori_key)
+        other_letter_data = self._get_letter_data(other_ori_key, letter)
+        return other_ori_key, other_letter_data
+
+    def _fetch_letter_data_and_original_turn_data(
+        self, ori_key, letter, arrow
+    ) -> tuple[dict, dict]:
+        letter_data = self._get_letter_data(ori_key, letter)
+        original_turns_tuple = self._generate_turns_tuple(arrow)
+        return letter_data, letter_data.get(original_turns_tuple, {})
+
+    def _prepare_mirrored_turn_data(
+        self, arrow: Arrow, original_turn_data: dict
+    ) -> dict:
+        mirrored_turn_data = {}
+        letter_type = LetterType.get_letter_type(arrow.pictograph.letter)
+        default_adjustment = self.data_updater.positioner.placement_manager.default_positioner.get_default_adjustment(
+            arrow
+        )
+
+        if letter_type in [Type5, Type6]:
+            other_arrow = arrow.pictograph.get.other_arrow(arrow)
+            if arrow.turns > 0 and other_arrow.turns > 0:
+                other_color = "blue" if arrow.color == "red" else "red"
+                for key in list(original_turn_data.keys()):
+                    if arrow.color in key:
+                        new_key = key.replace(arrow.color, other_color)
+                        mirrored_turn_data[new_key] = default_adjustment
+                mirrored_turn_data[other_color] = original_turn_data.get(
+                    arrow.color, default_adjustment
                 )
-        elif (
-                arrow.turns > 0 or other_arrow.turns > 0
-            ): 
-            mirrored_turn_data[arrow.color] = original_turn_data.get(
-                    arrow.color, self.data_updater._get_default_adjustment(arrow)
+            elif arrow.turns > 0 or other_arrow.turns > 0:
+                mirrored_turn_data[arrow.color] = original_turn_data.get(
+                    arrow.color, default_adjustment
                 )
+        else:
+            if arrow.pictograph.check.starts_from_mixed_orientation():
+                if arrow.pictograph.check.has_hybrid_motions():
+                    for key in original_turn_data:
+                        mirrored_turn_data[key] = default_adjustment
+                else:
+                    color_key = RED if arrow.color == BLUE else BLUE
+                    mirrored_turn_data[color_key] = original_turn_data.get(
+                        arrow.color, default_adjustment
+                    )
+
+        return mirrored_turn_data
+
+    def _should_handle_rotation_angle(self, arrow: Arrow) -> bool:
+        # Example condition: only handle rotation angle for certain motion types
+        return arrow.motion.motion_type in [STATIC, DASH]
+
+    def _apply_rotation_angle_override(
+        self, mirrored_turn_data, rotation_angle_override, arrow
+    ):
+        other_color = "blue" if arrow.color == "red" else "red"
+        mirrored_turn_data[f"{other_color}_rot_angle"] = rotation_angle_override
 
     def _check_for_rotation_angle_override(self, turn_data: dict) -> Optional[int]:
-        for key in turn_data.keys():
+        for key in turn_data:
             if "rot_angle" in key:
                 return turn_data[key]
         return None
