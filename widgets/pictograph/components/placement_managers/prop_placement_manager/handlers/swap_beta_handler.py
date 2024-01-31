@@ -107,13 +107,6 @@ class SwapBetaHandler:
             red_direction,
         )
 
-    def _generate_ori_key(self) -> str:
-        if self.pictograph.blue_prop.motion.start_ori in [IN, OUT]:
-            ori_key = "from_radial"
-        elif self.pictograph.blue_prop.motion.start_ori in [CLOCK, COUNTER]:
-            ori_key = "from_nonradial"
-        return ori_key
-
     def _generate_override_key(self, prop_loc, beta_ori) -> str:
         override_key = (
             f"swap_beta_{prop_loc}_{beta_ori}_"
@@ -124,7 +117,9 @@ class SwapBetaHandler:
         return override_key
 
     def swap_beta_if_needed(self) -> None:
-        ori_key = self._generate_ori_key()
+        ori_key = self.pictograph.arrow_placement_manager.special_positioner.data_updater._get_orientation_key(
+            self.pictograph.blue_motion
+        )
 
         if ori_key:
             letter_data: dict = self.pictograph.main_widget.special_placements[

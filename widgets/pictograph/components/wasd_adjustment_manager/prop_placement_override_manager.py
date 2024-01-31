@@ -30,7 +30,9 @@ class PropPlacementOverrideManager:
 
         if self.pictograph.check.has_props_in_beta():
             adjustment_key_str = self._generate_adjustment_key_str(letter)
-            orientation_key = self._determine_orientation_key()
+            orientation_key = self.special_positioner.data_updater._get_orientation_key(
+                self.pictograph.blue_motion
+            )
             override_key = self._generate_override_key(beta_state)
 
             letter_data = self._get_letter_data(orientation_key, letter)
@@ -50,12 +52,6 @@ class PropPlacementOverrideManager:
         return self.special_positioner.turns_tuple_generator.generate_turns_tuple(
             letter
         )
-
-    def _determine_orientation_key(self) -> str:
-        if self.pictograph.blue_prop.motion.start_ori in [IN, OUT]:
-            return "from_radial"
-        else:
-            return "from_nonradial"
 
     def _generate_override_key(self, beta_state) -> str:
         return (

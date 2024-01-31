@@ -28,7 +28,9 @@ class RotationAngleOverrideManager:
         if not self._is_valid_for_override():
             return
 
-        ori_key = self._get_orientation_key()
+        ori_key = self.special_positioner.data_updater._get_orientation_key(
+            self.pictograph.selected_arrow.motion
+        )
         data = self.pictograph.main_widget.load_special_placements()
         letter = self.pictograph.letter
 
@@ -41,10 +43,6 @@ class RotationAngleOverrideManager:
             self.pictograph.selected_arrow
             and self.pictograph.selected_arrow.motion.motion_type in [STATIC, DASH]
         )
-
-    def _get_orientation_key(self) -> str:
-        start_ori = self.pictograph.selected_arrow.motion.start_ori
-        return "from_radial" if start_ori in [IN, OUT] else "from_nonradial"
 
     def _apply_override_if_needed(self, letter: str, data: dict, ori_key: str) -> None:
         letter_type = LetterType.get_letter_type(letter)
@@ -88,8 +86,8 @@ class RotationAngleOverrideManager:
         placements = (
             self.special_positioner.placement_manager.pictograph.main_widget.special_placements
         )
-        ori_key = (
-            "from_radial" if arrow.motion.start_ori in [IN, OUT] else "from_nonradial"
+        ori_key = self.special_positioner.data_updater._get_orientation_key(
+            arrow.motion
         )
         letter = arrow.scene.letter
         letter_data = placements[ori_key].get(letter, {})

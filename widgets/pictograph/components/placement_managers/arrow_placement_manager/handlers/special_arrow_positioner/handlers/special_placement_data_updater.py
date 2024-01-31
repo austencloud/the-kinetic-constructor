@@ -1,8 +1,9 @@
 import os
 import logging
 from typing import TYPE_CHECKING, Union
-from constants import IN, OUT
+from constants import BLUE, CLOCK, COUNTER, IN, OUT, RED
 from objects.arrow.arrow import Arrow
+from objects.motion.motion import Motion
 from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import Letters
 from .special_placement_entry_remover import SpecialPlacementEntryRemover
@@ -61,8 +62,39 @@ class SpecialPlacementDataUpdater:
         )
         return default_mgr.get_default_adjustment(arrow)
 
-    def _get_orientation_key(self, motion_start_ori) -> str:
-        return "from_layer1" if motion_start_ori in [IN, OUT] else "fraom_layer2"
+    def _get_orientation_key(self, motion: Motion) -> str:
+        other_motion = self.positioner.pictograph.get.other_motion(motion)
+        if motion.start_ori in [IN, OUT] and other_motion.start_ori in [IN, OUT]:
+            return "from_layer1"
+        elif motion.start_ori in [CLOCK, COUNTER] and other_motion.start_ori in [
+            CLOCK,
+            COUNTER,
+        ]:
+            return "from_layer2"
+        elif (
+            motion.color == RED
+            and motion.start_ori in [IN, OUT]
+            and other_motion.start_ori in [CLOCK, COUNTER]
+        ):
+            return "from_layer3_blue2_red1"
+        elif (
+            motion.color == RED
+            and motion.start_ori in [CLOCK, COUNTER]
+            and other_motion.start_ori in [IN, OUT]
+        ):
+            return "from_layer3_blue1_red2"
+        elif (
+            motion.color == BLUE
+            and motion.start_ori in [IN, OUT]
+            and other_motion.start_ori in [CLOCK, COUNTER]
+        ):
+            return "from_layer3_blue1_red2"
+        elif (
+            motion.color == BLUE
+            and motion.start_ori in [CLOCK, COUNTER]
+            and other_motion.start_ori in [IN, OUT]
+        ):
+            return "from_layer3_blue2_red1"
 
     def _update_placement_json_data(
         self, letter: str, letter_data: dict, orientation_key: str
@@ -84,7 +116,7 @@ class SpecialPlacementDataUpdater:
 
         letter = self.positioner.pictograph.letter
         turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
-        orientation_key = self._get_orientation_key(arrow.motion.start_ori)
+        orientation_key = self._get_orientation_key(arrow.motion)
 
         letter_data = self._get_letter_data(letter, orientation_key)
         self._update_or_create_turn_data(letter_data, turns_tuple, arrow, adjustment)
@@ -98,7 +130,7 @@ class SpecialPlacementDataUpdater:
         self, letter: Letters, letter_data: dict, object: Union[Arrow, Prop]
     ) -> None:
         try:
-            orientation_key = self._get_orientation_key(object.motion.start_ori)
+            orientation_key = self._get_orientation_key(object.motion)
             self._update_placement_json_data(letter, letter_data, orientation_key)
         except Exception as e:
             logging.error(f"Error in update_specific_entry_in_json: {e}")

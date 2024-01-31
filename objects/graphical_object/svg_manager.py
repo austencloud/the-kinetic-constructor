@@ -51,7 +51,7 @@ class SvgManager:
         return svg_data.encode("utf-8")
 
     def setup_svg_renderer(self, svg_file: str) -> None:
-        self.object.renderer: QSvgRenderer = QSvgRenderer(svg_file)
+        self.object.renderer = QSvgRenderer(svg_file)
         self.object.setSharedRenderer(self.object.renderer)
 
     def update_color(self) -> None:

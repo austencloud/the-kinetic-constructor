@@ -71,7 +71,7 @@ class SpecialPlacementMirroredEntryHandler:
         arrow: Arrow,
         color: str = None,
     ) -> None:
-        orientation_key = self.data_updater._get_orientation_key(arrow.motion.start_ori)
+        orientation_key = self.data_updater._get_orientation_key(arrow.motion)
         letter_data = self._get_letter_data(orientation_key, letter)
 
         original_turns_tuple = self._generate_turns_tuple(arrow)

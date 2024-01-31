@@ -1,6 +1,6 @@
 import re
 from PyQt6.QtCore import QPointF
-from constants import IN, OUT
+from constants import CLOCK, COUNTER, IN, OUT
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Optional
 
@@ -25,13 +25,9 @@ class ArrowAdjustmentCalculator:
         turns_tuple = self.pm.key_generator.generate_turns_tuple(
             self.pm.pictograph.letter
         )
-
-        # Determine the orientation key ('from_radial' or 'from_nonradial') based on the arrow's motion
-        orientation_key = (
-            "from_radial" if arrow.motion.start_ori in [IN, OUT] else "from_nonradial"
+        orientation_key = self.pm.special_positioner.data_updater._get_orientation_key(
+            arrow.motion
         )
-
-        # Access the correct placements data based on the orientation
         special_placements = self.pm.pictograph.main_widget.special_placements[
             orientation_key
         ]

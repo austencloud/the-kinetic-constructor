@@ -32,9 +32,9 @@ class MainWidget(QWidget):
 
     def load_special_placements(self) -> None:
         """Loads the special placements for arrows from radial and nonradial directories."""
-        self.special_placements = {"from_radial": {}, "from_nonradial": {}}
+        self.special_placements = {"from_layer1": {}, "from_layer2": {}, "from_layer3_blue2_red1" : {}, "from_layer3_blue1_red2" : {}}
 
-        for subfolder in ["from_radial", "from_nonradial"]:
+        for subfolder in ["from_layer1", "from_layer2", "from_layer3_blue2_red1", "from_layer3_blue1_red2"]:
             self.parent_directory = os.path.join("data/arrow_placement/special/")
             self.directory = os.path.join("data/arrow_placement/special/", subfolder)
             for file_name in os.listdir(self.directory):

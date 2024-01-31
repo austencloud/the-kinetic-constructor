@@ -20,7 +20,7 @@ class SpecialPlacementEntryRemover:
         self.data_updater = data_updater
 
     def remove_special_placement_entry(self, letter: str, arrow: Arrow) -> None:
-        orientation_key = self.data_updater._get_orientation_key(arrow.motion.start_ori)
+        orientation_key = self.data_updater._get_orientation_key(arrow.motion)
         file_path = os.path.join(
             self.positioner.placement_manager.pictograph.main_widget.parent_directory,
             f"{orientation_key}/{letter}_placements.json",
