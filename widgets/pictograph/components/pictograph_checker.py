@@ -10,29 +10,29 @@ class PictographChecker:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.p = pictograph
 
-    def has_props_in_beta(self) -> bool:
+    def ends_in_beta(self) -> bool:
         return self.p.letter in beta_ending_letters
 
-    def has_props_in_alpha(self) -> bool:
+    def ends_in_alpha(self) -> bool:
         return self.p.letter in alpha_ending_letters
 
-    def has_props_in_gamma(self) -> bool:
+    def ends_in_gamma(self) -> bool:
         return self.p.letter in gamma_ending_letters
 
-    def has_hybrid_orientations(self) -> bool:
+    def ends_in_hybrid_ori(self) -> bool:
         red_prop, blue_prop = self.p.props[RED], self.p.props[BLUE]
         return red_prop.check.is_radial() != blue_prop.check.is_radial()
 
-    def has_non_hybrid_orientations(self) -> bool:
+    def ends_in_non_hybrid_ori(self) -> bool:
         red_prop, blue_prop = self.p.props[RED], self.p.props[BLUE]
         return (red_prop.check.is_radial() == blue_prop.check.is_radial()) or (
             red_prop.check.is_nonradial() and blue_prop.check.is_nonradial()
         )
 
-    def has_all_radial_props(self) -> bool:
+    def ends_in_radial_ori(self) -> bool:
         return all(prop.check.is_radial() for prop in self.p.props.values())
 
-    def has_all_nonradial_props(self) -> bool:
+    def ends_in_nonradial_ori(self) -> bool:
         return all(prop.check.is_nonradial() for prop in self.p.props.values())
 
     def has_a_dash(self) -> bool:
@@ -67,7 +67,7 @@ class PictographChecker:
         ]
         return all(key in pictograph_dict for key in required_keys)
 
-    def starts_from_hybrid_orientation(self) -> bool:
+    def starts_from_mixed_orientation(self) -> bool:
         if (
             self.p.red_motion.start_ori in [CLOCK, COUNTER]
             and self.p.blue_motion.start_ori in [OUT, IN]
@@ -82,5 +82,6 @@ class PictographChecker:
             and self.p.blue_motion.start_ori in [OUT, IN]
         ):
             return False
-        
-    
+
+    def has_hybrid_motions(self) -> bool:
+        return self.p.red_motion.motion_type != self.p.blue_motion.motion_type

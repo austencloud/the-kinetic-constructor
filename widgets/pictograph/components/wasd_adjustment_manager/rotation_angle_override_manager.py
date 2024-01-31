@@ -62,23 +62,31 @@ class RotationAngleOverrideManager:
         letter: str,
         data: dict,
         ori_key: str,
-        adjustment_key_str: str,
+        turns_tuple: str,
         rot_angle_key: str,
     ) -> None:
         letter_data = data[ori_key].get(letter, {})
-        turn_data = letter_data.get(adjustment_key_str, {})
+        turn_data = letter_data.get(turns_tuple, {})
 
-        if rot_angle_key in turn_data:
-            del turn_data[rot_angle_key]
+        hybrid_key = self._generate_hybrid_key_if_needed(
+            self.pictograph.selected_arrow, rot_angle_key
+        )
+        if hybrid_key in turn_data:
+            del turn_data[hybrid_key]
         else:
-            turn_data[rot_angle_key] = 0
+            turn_data[hybrid_key] = 0
 
-        letter_data[adjustment_key_str] = turn_data
+        letter_data[turns_tuple] = turn_data
         data[ori_key][letter] = letter_data
-
         self.special_positioner.data_updater.update_specific_entry_in_json(
             letter, letter_data, self.pictograph.selected_arrow
         )
+
+    def _generate_hybrid_key_if_needed(self, arrow: Arrow, rot_angle_key: str) -> str:
+        if arrow.pictograph.check.starts_from_mixed_orientation():
+            layer = "layer1" if arrow.motion.start_ori in [IN, OUT] else "layer2"
+            return f"{rot_angle_key}_from_{layer}"
+        return rot_angle_key
 
     def get_rot_angle_override_from_placements_dict(
         self, arrow: Arrow

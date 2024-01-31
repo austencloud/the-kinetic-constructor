@@ -27,12 +27,12 @@ class BetaPropDirectionCalculator:
         """Determine the translation direction based on the motion type, start location, end location, and end layer."""
         if (
             motion.pictograph.letter == "I"
-            and motion.pictograph.check.has_all_radial_props()
+            and motion.pictograph.check.ends_in_radial_ori()
         ):
             return self.get_direction_for_radial_I(motion)
         elif (
             motion.pictograph.letter == "I"
-            and motion.pictograph.check.has_all_nonradial_props()
+            and motion.pictograph.check.ends_in_nonradial_ori()
         ):
             return self.get_direction_for_nonradial_I(motion)
         if motion.check.is_shift():

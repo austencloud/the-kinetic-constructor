@@ -11,7 +11,7 @@ class BigPropPositioner:
         self.pictograph = beta_prop_positioner.pictograph
 
     def reposition(self) -> None:
-        if self.pictograph.check.has_non_hybrid_orientations():
+        if self.pictograph.check.ends_in_non_hybrid_ori():
             for prop in self.beta_prop_positioner.classifier.big_props:
                 self.ppm.default_positioner.set_prop_to_default_loc(prop)
                 (

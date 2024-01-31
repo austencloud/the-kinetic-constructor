@@ -70,13 +70,20 @@ class ArrowAdjustmentCalculator:
             turns_tuple, {}
         )
 
-        if self.pm.pictograph.check.starts_from_hybrid_orientation():
-            # Use a different key for hybrid orientation scenarios
-            key = f"{arrow.motion.motion_type}_from_layer"
-            if arrow.motion.start_ori in [IN, OUT]:
-                key += "1"
-            elif arrow.motion.start_ori in [CLOCK, COUNTER]:
-                key += "2"
+        if self.pm.pictograph.check.starts_from_mixed_orientation():
+            if self.pm.pictograph.check.has_hybrid_motions():
+                key = f"{arrow.motion.motion_type}_from_layer"
+                if arrow.motion.start_ori in [IN, OUT]:
+                    key += "1"
+                elif arrow.motion.start_ori in [CLOCK, COUNTER]:
+                    key += "2"
+            elif not self.pm.pictograph.check.has_hybrid_motions():
+                key = f"{arrow.motion.color}_from_layer"
+                if arrow.motion.start_ori in [IN, OUT]:
+                    key += "1"
+                elif arrow.motion.start_ori in [CLOCK, COUNTER]:
+                    key += "2"
+                
         else:
             # Standard case as before
             adjustment_map = {

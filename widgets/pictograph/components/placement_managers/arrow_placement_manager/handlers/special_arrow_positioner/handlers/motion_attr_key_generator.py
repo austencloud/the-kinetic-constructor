@@ -14,13 +14,19 @@ class MotionAttrKeyGenerator:
     def determine_key(self, arrow: "Arrow") -> str:
         if self.positioner.pictograph.letter in ["S", "T"]:
             return arrow.motion.lead_state
+        elif arrow.pictograph.check.starts_from_mixed_orientation():
+            if arrow.pictograph.check.has_hybrid_motions():
+                if arrow.motion.start_ori in [IN, OUT]:
+                    return f"{arrow.motion.motion_type}_from_layer1"
+                elif arrow.motion.start_ori in [CLOCK, COUNTER]:
+                    return f"{arrow.motion.motion_type}_from_layer2"
+            else:
+                if arrow.motion.start_ori in [IN, OUT]:
+                    return f"{arrow.color}_from_layer1"
+                elif arrow.motion.start_ori in [CLOCK, COUNTER]:
+                    return f"{arrow.color}_from_layer2"
         elif self.positioner.pictograph.letter in non_hybrid_letters:
             return arrow.color
-        elif arrow.pictograph.check.starts_from_hybrid_orientation():
-            if arrow.motion.start_ori in [IN, OUT]:
-                return f"{arrow.motion.motion_type}_from_layer1"
-            elif arrow.motion.start_ori in [CLOCK, COUNTER]:
-                return f"{arrow.motion.motion_type}_from_layer2"
         else:
             return arrow.motion.motion_type
 

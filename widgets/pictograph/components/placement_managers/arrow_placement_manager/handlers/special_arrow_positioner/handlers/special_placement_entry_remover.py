@@ -1,9 +1,10 @@
 import os
 from typing import TYPE_CHECKING, Union
 from Enums import LetterType
-from constants import BLUE, RED, Type1, Type4, Type5
+from constants import BLUE, CLOCK, COUNTER, IN, OUT, RED, Type1, Type4, Type5
 from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.MotionAttributes import Colors
+from utilities.TypeChecking.letter_lists import Type1_hybrid_letters
 
 if TYPE_CHECKING:
     from .special_placement_data_updater import SpecialPlacementDataUpdater
@@ -79,19 +80,21 @@ class SpecialPlacementEntryRemover:
 
         return None
 
-    def _remove_turn_data_entry(
-        self, letter_data: dict, turns_tuple: str, arrow: Arrow, color: str
-    ) -> None:
+    def _remove_turn_data_entry(self, letter_data: dict, turns_tuple: str, arrow: Arrow, color: str) -> None:
+        key = self._generate_key_for_removal(arrow)
         turn_data = letter_data.get(turns_tuple, {})
-        if arrow.motion.lead_state in turn_data:
-            del turn_data[arrow.motion.lead_state]
+        if key in turn_data:
+            del turn_data[key]
             if not turn_data:
                 del letter_data[turns_tuple]
-        elif arrow.motion.motion_type in turn_data:
-            del turn_data[arrow.motion.motion_type]
-            if not turn_data:
-                del letter_data[turns_tuple]
-        elif color in turn_data:
-            del turn_data[color]
-            if not turn_data:
-                del letter_data[turns_tuple]
+
+    def _generate_key_for_removal(self, arrow: Arrow) -> str:
+        if arrow.pictograph.check.starts_from_mixed_orientation():
+            if arrow.motion.start_ori in [IN, OUT]:
+                layer = "layer1" 
+            elif arrow.motion.start_ori in [CLOCK, COUNTER]:
+                layer = "layer2"
+            return f"{arrow.motion.motion_type}_from_{layer}"
+        elif arrow.pictograph.letter in Type1_hybrid_letters:
+            return arrow.motion.motion_type
+        return arrow.color

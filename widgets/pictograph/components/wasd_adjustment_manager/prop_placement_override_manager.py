@@ -15,20 +15,20 @@ class PropPlacementOverrideManager:
 
     def handle_prop_placement_override(self, key) -> None:
         if not (
-            self.pictograph.check.has_all_nonradial_props()
-            or self.pictograph.check.has_all_radial_props()
+            self.pictograph.check.ends_in_nonradial_ori()
+            or self.pictograph.check.ends_in_radial_ori()
         ):
             return
 
         special_placements = self.pictograph.main_widget.special_placements
 
         letter = self.pictograph.letter
-        if self.pictograph.check.has_all_nonradial_props():
+        if self.pictograph.check.ends_in_nonradial_ori():
             beta_state = "nonradial"
-        elif self.pictograph.check.has_all_radial_props():
+        elif self.pictograph.check.ends_in_radial_ori():
             beta_state = "radial"
 
-        if self.pictograph.check.has_props_in_beta():
+        if self.pictograph.check.ends_in_beta():
             adjustment_key_str = self._generate_adjustment_key_str(letter)
             orientation_key = self.special_positioner.data_updater._get_orientation_key(
                 self.pictograph.blue_motion

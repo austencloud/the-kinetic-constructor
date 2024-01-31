@@ -130,9 +130,9 @@ class SwapBetaHandler:
             self.pictograph.letter
         )
         prop_loc = self.pictograph.blue_prop.loc
-        if self.pictograph.check.has_all_radial_props():
+        if self.pictograph.check.ends_in_radial_ori():
             beta_ori = "radial"
-        elif self.pictograph.check.has_all_nonradial_props():
+        elif self.pictograph.check.ends_in_nonradial_ori():
             beta_ori = "nonradial"
         else:
             return
