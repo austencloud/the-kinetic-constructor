@@ -197,28 +197,23 @@ class ArrowRotAngleCalculator:
         self,
     ) -> dict[Orientations, dict[PropRotDirs, dict[Locations, int]]]:
         orientation_map = {
-            IN: {
-                CLOCKWISE: {NORTH: 180, EAST: 270, SOUTH: 0, WEST: 90},
-                COUNTER_CLOCKWISE: {NORTH: 180, EAST: 90, SOUTH: 0, WEST: 270},
-                NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
-            },
-            OUT: {
+
+            RADIAL: {
                 CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
-                COUNTER_CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
+                COUNTER_CLOCKWISE: {NORTH: 0, EAST: 270, SOUTH: 180, WEST: 90},
                 NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
             },
-            CLOCK: {
+            NONRADIAL: {
                 CLOCKWISE: {NORTH: 180, EAST: 270, SOUTH: 0, WEST: 90},
                 COUNTER_CLOCKWISE: {NORTH: 180, EAST: 90, SOUTH: 0, WEST: 270},
                 NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
             },
-            COUNTER: {
-                CLOCKWISE: {NORTH: 180, EAST: 270, SOUTH: 0, WEST: 90},
-                COUNTER_CLOCKWISE: {NORTH: 180, EAST: 90, SOUTH: 0, WEST: 270},
-                NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
-            },
+
         }
-        return orientation_map.get(self.arrow.motion.start_ori, {})
+        if self.arrow.motion.start_ori in [IN, OUT]:
+            return orientation_map.get(RADIAL)
+        elif self.arrow.motion.start_ori in [CLOCK, COUNTER]:
+            return orientation_map.get(NONRADIAL)
 
     def _get_shift_angle(self) -> int:
         if self.arrow.motion.motion_type == PRO:

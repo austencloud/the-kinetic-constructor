@@ -83,5 +83,17 @@ class PictographChecker:
         ):
             return False
 
+    def starts_from_radial_orientation(self) -> bool:
+        return self.p.red_motion.start_ori in [
+            IN,
+            OUT,
+        ] and self.p.blue_motion.start_ori in [IN, OUT]
+
+    def starts_from_nonradial_orientation(self) -> bool:
+        return self.p.red_motion.start_ori in [
+            CLOCK,
+            COUNTER,
+        ] and self.p.blue_motion.start_ori in [CLOCK, COUNTER]
+
     def has_hybrid_motions(self) -> bool:
         return self.p.red_motion.motion_type != self.p.blue_motion.motion_type

@@ -1,6 +1,7 @@
 import re
 from PyQt6.QtCore import QPointF
-from constants import CLOCK, COUNTER, IN, OUT
+from Enums import LetterType
+from constants import CLOCK, COUNTER, IN, OUT, Type1, Type2
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Optional
 
@@ -81,25 +82,15 @@ class ArrowAdjustmentCalculator:
                     key += "2"
             elif not self.pm.pictograph.check.has_hybrid_motions():
                 key = arrow.motion.color
-
         else:
-            adjustment_map = {
-                "S": letter_adjustments.get(arrow.motion.lead_state),
-                "T": letter_adjustments.get(arrow.motion.lead_state),
-                **{
-                    l: letter_adjustments.get(arrow.motion.motion_type)
-                    for l in Type1_hybrid_letters
-                },
-                **{
-                    l: letter_adjustments.get(arrow.color)
-                    for l in non_hybrid_letters
-                    if l not in ["S", "T"]
-                },
-                **{
-                    l: letter_adjustments.get(arrow.motion.motion_type)
-                    for l in Type2_letters + Type3_letters + Type4_letters
-                },
-            }
-            key = adjustment_map.get(letter)
+            if self.pm.pictograph.letter in ["S", "T"]:
+                key = arrow.motion.lead_state
+            elif (
+                arrow.motion.motion_type
+                == arrow.pictograph.get.other_motion(arrow.motion).motion_type
+            ):
+                key = arrow.color
+            else:
+                key = arrow.motion.motion_type
 
         return letter_adjustments.get(key)
