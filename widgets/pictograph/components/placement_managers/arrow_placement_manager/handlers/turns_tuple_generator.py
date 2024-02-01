@@ -12,6 +12,7 @@ from utilities.TypeChecking.letter_lists import (
     Type2_letters,
 )
 from constants import *
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..arrow_placement_manager import ArrowPlacementManager
@@ -19,51 +20,50 @@ from .turns_tuple_generators import *
 
 
 class TurnsTupleGenerator:
-    def __init__(self, placement_manager: "ArrowPlacementManager") -> None:
-        self.p = placement_manager.pictograph
+    def __init__(self) -> None:
         self.generators = {
-            'Type1_hybrid': Type1HybridTurnsTupleGenerator(self.p),
-            'Type2': Type2TurnsTupleGenerator(self.p),
-            'Type3': Type3TurnsTupleGenerator(self.p),
-            'Type4': Type4TurnsTupleGenerator(self.p),
-            'Type56': Type56TurnsTupleGenerator(self.p),
-            'Color': ColorTurnsTupleGenerator(self.p),
-            'LeadState': LeadStateTurnsTupleGenerator(self.p),
-            'Lambda': LambdaTurnsTupleGenerator(self.p),
-            'LambdaDash': LambdaDashTurnsTupleGenerator(self.p),
-            'Gamma': GammaTurnsTupleGenerator(self.p),
+            "Type1_hybrid": Type1HybridTurnsTupleGenerator(),
+            "Type2": Type2TurnsTupleGenerator(),
+            "Type3": Type3TurnsTupleGenerator(),
+            "Type4": Type4TurnsTupleGenerator(),
+            "Type56": Type56TurnsTupleGenerator(),
+            "Color": ColorTurnsTupleGenerator(),
+            "LeadState": LeadStateTurnsTupleGenerator(),
+            "Lambda": LambdaTurnsTupleGenerator(),
+            "LambdaDash": LambdaDashTurnsTupleGenerator(),
+            "Gamma": GammaTurnsTupleGenerator(),
         }
         self.key_map = self._create_key_map()
 
     def _create_key_map(self):
         key_map = {
-            "Λ": 'Lambda',
-            "Λ-": 'LambdaDash',
-            "Γ": 'Gamma',
-            ("S", "T"): 'LeadState',
+            "Λ": "Lambda",
+            "Λ-": "LambdaDash",
+            "Γ": "Gamma",
+            ("S", "T"): "LeadState",
         }
         for letter in Type1_hybrid_letters:
-            key_map[letter] = 'Type1_hybrid'
+            key_map[letter] = "Type1_hybrid"
         for letter in Type1_non_hybrid_letters:
-            key_map[letter] = 'Color'
+            key_map[letter] = "Color"
         for letter in Type2_letters:
-            key_map[letter] = 'Type2'
+            key_map[letter] = "Type2"
         for letter in Type3_letters:
-            key_map[letter] = 'Type3'
+            key_map[letter] = "Type3"
         for letter in Type4_letters:
-            key_map[letter] = 'Type4'
+            key_map[letter] = "Type4"
         for letter in Type5_letters + Type6_letters:
-            key_map[letter] = 'Type56'
+            key_map[letter] = "Type56"
         return key_map
 
-    def generate_turns_tuple(self, letter: Letters) -> str:
-        generator_key = self.key_map.get(letter)
+    def generate_turns_tuple(self, pictograph: "Pictograph") -> str:
+        generator_key = self.key_map.get(pictograph.letter)
         if generator_key:
-            return self.generators[generator_key].generate_key()
+            return self.generators[generator_key].generate_key(pictograph)
         return ""
 
     def generate_mirrored_tuple(self, arrow: "Arrow") -> Union[str, None]:
-        turns_tuple = self.generate_turns_tuple(arrow.pictograph.letter)
+        turns_tuple = self.generate_turns_tuple(arrow.pictograph)
         letter_type = LetterType.get_letter_type(arrow.pictograph.letter)
 
         mirrored_logic = {

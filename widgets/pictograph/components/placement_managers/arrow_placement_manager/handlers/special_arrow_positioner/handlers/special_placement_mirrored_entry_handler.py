@@ -42,7 +42,9 @@ class SpecialPlacementMirroredEntryHandler:
             other_ori_key, other_letter_data = self._get_keys_for_mixed_start_ori(
                 letter, ori_key
             )
-            mirrored_turns_tuple = self._generate_mirrored_tuple(arrow)
+            mirrored_turns_tuple = self.turns_tuple_generator.generate_mirrored_tuple(
+                arrow
+            )
             if (
                 arrow.pictograph.letter in ["S", "T"]
                 or arrow.pictograph.check.has_hybrid_motions()
@@ -95,11 +97,10 @@ class SpecialPlacementMirroredEntryHandler:
         self, letter: str, arrow: Arrow, rot_angle_key: str
     ) -> None:
         ori_key = self.data_updater._get_ori_key(arrow.motion)
-        letter_data, original_turn_data = (
-            self._fetch_letter_data_and_original_turn_data(ori_key, letter, arrow)
+        _, original_turn_data = self._fetch_letter_data_and_original_turn_data(
+            ori_key, letter, arrow
         )
 
-        # Check if rotation angle needs to be updated in the mirrored entry
         if self._should_handle_rotation_angle(arrow):
             rotation_angle_override = self._check_for_rotation_angle_override(
                 original_turn_data
@@ -135,7 +136,6 @@ class SpecialPlacementMirroredEntryHandler:
             )
 
             if hybrid_key in other_letter_data.get(mirrored_turns_tuple, {}):
-                # Remove the rotation angle override from the mirrored entry
                 del other_letter_data[mirrored_turns_tuple][hybrid_key]
 
             self.data_updater.update_specific_entry_in_json(
@@ -213,7 +213,6 @@ class SpecialPlacementMirroredEntryHandler:
         return mirrored_turn_data
 
     def _should_handle_rotation_angle(self, arrow: Arrow) -> bool:
-        # Example condition: only handle rotation angle for certain motion types
         return arrow.motion.motion_type in [STATIC, DASH]
 
     def _apply_rotation_angle_override(
@@ -243,4 +242,4 @@ class SpecialPlacementMirroredEntryHandler:
         )
 
     def _generate_turns_tuple(self, arrow: "Arrow") -> str:
-        return self.turns_tuple_generator.generate_turns_tuple(arrow.pictograph.letter)
+        return self.turns_tuple_generator.generate_turns_tuple(arrow.pictograph)

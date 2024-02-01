@@ -47,7 +47,7 @@ class RotationAngleOverrideManager:
     def _apply_override_if_needed(self, letter: str, data: dict, ori_key: str) -> None:
         letter_type = LetterType.get_letter_type(letter)
         rot_angle_key = self._determine_rot_angle_key(letter_type)
-        turns_tuple = self.turns_tuple_generator.generate_turns_tuple(letter)
+        turns_tuple = self.turns_tuple_generator.generate_turns_tuple(self.pictograph)
         self._apply_rotation_override(letter, data, ori_key, turns_tuple, rot_angle_key)
 
     def _determine_rot_angle_key(self, letter_type: LetterType) -> str:
@@ -134,7 +134,7 @@ class RotationAngleOverrideManager:
         letter = arrow.scene.letter
         letter_data = placements[ori_key].get(letter, {})
         turns_tuple = (
-            self.turns_tuple_generator.generate_turns_tuple(letter)
+            self.turns_tuple_generator.generate_turns_tuple(self.pictograph)
         )
         letter_type = LetterType.get_letter_type(letter)
 

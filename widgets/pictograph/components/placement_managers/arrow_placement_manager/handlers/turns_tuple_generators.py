@@ -7,17 +7,18 @@ if TYPE_CHECKING:
 
 
 class BaseTurnsTupleGenerator:
-    def __init__(self, pictograph: "Pictograph"):
+    def _normalize_turns(self, arrow: Arrow) -> int:
+        return int(arrow.turns) if arrow.turns in {0.0, 1.0, 2.0, 3.0} else arrow.turns
+
+    def set_pictograph(self, pictograph: "Pictograph"):
         self.p = pictograph
         self.blue_arrow = self.p.arrows.get(BLUE)
         self.red_arrow = self.p.arrows.get(RED)
 
-    def _normalize_turns(self, arrow: Arrow) -> int:
-        return int(arrow.turns) if arrow.turns in {0.0, 1.0, 2.0, 3.0} else arrow.turns
-
 
 class Type1HybridTurnsTupleGenerator(BaseTurnsTupleGenerator):
-    def generate_key(self) -> str:
+    def generate_key(self, pictograph) -> str:
+        super().set_pictograph(pictograph)
         pro_arrow = (
             self.blue_arrow
             if self.blue_arrow.motion.motion_type == PRO
@@ -32,7 +33,8 @@ class Type1HybridTurnsTupleGenerator(BaseTurnsTupleGenerator):
 
 
 class Type2TurnsTupleGenerator(BaseTurnsTupleGenerator):
-    def generate_key(self) -> str:
+    def generate_key(self, pictograph) -> str:
+        super().set_pictograph(pictograph)
         shift = (
             self.red_arrow
             if self.red_arrow.motion.check.is_shift()
@@ -53,7 +55,8 @@ class Type2TurnsTupleGenerator(BaseTurnsTupleGenerator):
 
 
 class Type3TurnsTupleGenerator(BaseTurnsTupleGenerator):
-    def generate_key(self) -> str:
+    def generate_key(self, pictograph) -> str:
+        super().set_pictograph(pictograph)
         shift = self.p.get.shift()
         dash = self.p.get.dash()
         if dash.turns > 0 and shift.turns > 0:
@@ -67,7 +70,8 @@ class Type3TurnsTupleGenerator(BaseTurnsTupleGenerator):
 
 
 class Type4TurnsTupleGenerator(BaseTurnsTupleGenerator):
-    def generate_key(self) -> str:
+    def generate_key(self, pictograph) -> str:
+        super().set_pictograph(pictograph)
         dash = self.p.get.dash()
         static = self.p.get.static()
         if dash.turns == 0 and static.turns == 0:
@@ -81,7 +85,8 @@ class Type4TurnsTupleGenerator(BaseTurnsTupleGenerator):
 
 
 class Type56TurnsTupleGenerator(BaseTurnsTupleGenerator):
-    def generate_key(self) -> str:
+    def generate_key(self, pictograph) -> str:
+        super().set_pictograph(pictograph)
         if self.blue_arrow.turns == 0 and self.red_arrow.turns == 0:
             return f"({self._normalize_turns(self.blue_arrow)}, {self._normalize_turns(self.red_arrow)})"
         elif self.blue_arrow.motion.turns == 0 or self.red_arrow.motion.turns == 0:
@@ -102,12 +107,14 @@ class Type56TurnsTupleGenerator(BaseTurnsTupleGenerator):
 
 
 class ColorTurnsTupleGenerator(BaseTurnsTupleGenerator):
-    def generate_key(self) -> str:
+    def generate_key(self, pictograph) -> str:
+        super().set_pictograph(pictograph)
         return f"({self._normalize_turns(self.blue_arrow)}, {self._normalize_turns(self.red_arrow)})"
 
 
 class LeadStateTurnsTupleGenerator(BaseTurnsTupleGenerator):
-    def generate_key(self) -> str:
+    def generate_key(self, pictograph) -> str:
+        super().set_pictograph(pictograph)
         leading_motion = self.p.get.leading_motion()
         trailing_motion = self.p.get.trailing_motion()
         if leading_motion:
@@ -117,7 +124,8 @@ class LeadStateTurnsTupleGenerator(BaseTurnsTupleGenerator):
 
 
 class LambdaTurnsTupleGenerator(BaseTurnsTupleGenerator):
-    def generate_key(self) -> str:
+    def generate_key(self, pictograph) -> str:
+        super().set_pictograph(pictograph)
         dash = self.p.get.dash()
         static = self.p.get.static()
         dash_direction_map, static_direction_map = self._get_direction_maps()
@@ -185,7 +193,8 @@ class LambdaTurnsTupleGenerator(BaseTurnsTupleGenerator):
 
 
 class LambdaDashTurnsTupleGenerator(BaseTurnsTupleGenerator):
-    def generate_key(self) -> str:
+    def generate_key(self, pictograph) -> str:
+        super().set_pictograph(pictograph)
         blue_dash = self.p.blue_motion
         red_dash = self.p.red_motion
         blue_dash_map, red_dash_map = self._get_direction_maps()
@@ -254,7 +263,8 @@ class LambdaDashTurnsTupleGenerator(BaseTurnsTupleGenerator):
 
 
 class GammaTurnsTupleGenerator(BaseTurnsTupleGenerator):
-    def generate_key(self) -> str:
+    def generate_key(self, pictograph) -> str:
+        super().set_pictograph(pictograph)
         blue_static = self.p.blue_motion
         red_static = self.p.red_motion
         blue_static_map, red_static_map = self._get_direction_maps()

@@ -30,7 +30,7 @@ class SpecialPlacementEntryRemover:
             if letter in data:
                 letter_data = data[letter]
                 turns_tuple = self.turns_tuple_generator.generate_turns_tuple(
-                    letter
+                    self.positioner.placement_manager.pictograph
                 )
                 key = self.data_updater.positioner.motion_key_generator.get_key(arrow)
                 self._remove_turn_data_entry(letter_data, turns_tuple, key)

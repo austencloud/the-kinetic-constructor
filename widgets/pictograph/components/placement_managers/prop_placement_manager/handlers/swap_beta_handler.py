@@ -146,7 +146,7 @@ class SwapBetaHandler:
 
         turns_tuple = (
             self.pictograph.main_widget.turns_tuple_generator.generate_turns_tuple(
-                self.pictograph.letter
+                self.pictograph
             )
         )
         prop_loc = self.pictograph.blue_prop.loc

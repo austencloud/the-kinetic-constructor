@@ -24,7 +24,7 @@ class ArrowAdjustmentCalculator:
 
     def get_adjustment(self, arrow: Arrow) -> QPointF:
         turns_tuple = arrow.pictograph.main_widget.turns_tuple_generator.generate_turns_tuple(
-            self.pm.pictograph.letter
+            self.pm.pictograph
         )
         ori_key = self.pm.special_positioner.data_updater._get_ori_key(arrow.motion)
         special_placements = self.pm.pictograph.main_widget.special_placements[ori_key]

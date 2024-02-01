@@ -51,7 +51,7 @@ class PropPlacementOverrideManager:
 
     def _generate_adjustment_key_str(self, letter) -> str:
         return self.turns_tuple_generator.generate_turns_tuple(
-            letter
+            self.pictograph
         )
 
     def _generate_override_key(self, beta_state) -> str:
