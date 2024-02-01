@@ -246,7 +246,6 @@
       "swap_beta_w_nonradial_blue_pro_nw_red_static_w": true
     },
     "(o, 0, 1)": {
-      "static_rot_angle_override": true,
       "static": [0, -95],
       "swap_beta_n_nonradial_blue_pro_nw_red_static_n": true,
       "swap_beta_w_nonradial_blue_static_w_red_pro_nw": true,
@@ -468,8 +467,9 @@
       "swap_beta_n_nonradial_blue_pro_nw_red_static_n": true
     },
     "(s, 0, 0.5)": {
-      "static": [100, -100],
-      "static_rot_angle_override": true
+      "static_rot_angle": true,
+      "static_rot_angle_override": true,
+      "static": [100, 80]
     }
   }
 }

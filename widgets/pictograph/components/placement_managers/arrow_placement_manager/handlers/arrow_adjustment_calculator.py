@@ -61,30 +61,6 @@ class ArrowAdjustmentCalculator:
             letter
         ).get(turns_tuple, {})
 
-        if self.pm.pictograph.check.starts_from_mixed_orientation():
-            if self.pm.pictograph.letter in ["S", "T"]:
-                key = f"{arrow.motion.lead_state}_from_layer"
-                if arrow.motion.start_ori in [IN, OUT]:
-                    key += "1"
-                elif arrow.motion.start_ori in [CLOCK, COUNTER]:
-                    key += "2"
-            elif self.pm.pictograph.check.has_hybrid_motions():
-                key = f"{arrow.motion.motion_type}_from_layer"
-                if arrow.motion.start_ori in [IN, OUT]:
-                    key += "1"
-                elif arrow.motion.start_ori in [CLOCK, COUNTER]:
-                    key += "2"
-            elif not self.pm.pictograph.check.has_hybrid_motions():
-                key = arrow.motion.color
-        else:
-            if self.pm.pictograph.letter in ["S", "T"]:
-                key = arrow.motion.lead_state
-            elif (
-                arrow.motion.motion_type
-                == arrow.pictograph.get.other_motion(arrow.motion).motion_type
-            ):
-                key = arrow.color
-            else:
-                key = arrow.motion.motion_type
+        key = self.pm.special_positioner.attr_key_generator.get_key(arrow)
 
         return letter_adjustments.get(key)

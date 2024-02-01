@@ -1,75 +1,130 @@
 {
   "S": {
-    "(1, 0)": {
-      "blue": [0, -20],
-      "trailing": [25, 5]
+    "(0, 0.5)": {
+      "red_leading": [-85, 35]
     },
     "(0, 1)": {
-      "leading": [20, -15]
-    },
-    "(0.5, 0)": {
-      "leading": [-45, 15],
-      "trailing": [20, -15]
+      "blue_trailing": [40, -15],
+      "blue_leading": [40, -15]
     },
     "(0, 1.5)": {
-      "leading": [10, -10]
+      "blue_leading": [40, -15]
     },
     "(0, 3)": {
-      "leading": [20, -35]
+      "blue_trailing": [35, -5],
+      "blue_leading": [40, -25]
+    },
+    "(0.5, 0)": {
+      "blue_leading": [-50, 35],
+      "red_trailing": [40, -15]
     },
     "(0.5, 1)": {
-      "trailing": [-55, 80]
+      "blue_trailing": [-60, 35],
+      "red_trailing": [-65, 80],
+      "blue_leading": [-80, 35]
+    },
+    "(0.5, 1.5)": {
+      "blue_trailing": [-80, 25]
     },
     "(0.5, 2)": {
-      "trailing": [-40, 15]
+      "blue_trailing": [-65, 10],
+      "red_trailing": [-30, 15],
+      "blue_leading": [-60, 35]
+    },
+    "(0.5, 2.5)": {
+      "blue_trailing": [-55, 25]
     },
     "(0.5, 3)": {
-      "trailing": [-45, 50]
+      "blue_trailing": [-60, 15],
+      "red_trailing": [-30, 65],
+      "blue_leading": [-80, 35]
     },
-    "(1, 3)": {
-      "trailing": [-35, 65],
-      "leading": [-50, 95]
+    "(1, 0)": {
+      "red_leading": [20, -35],
+      "red_trailing": [40, -15]
     },
-    "(1, 2.5)": {
-      "leading": [-85, 100],
-      "trailing": [-80, 60]
+    "(1, 0.5)": {
+      "blue_trailing": [-65, 100],
+      "red_leading": [-70, 35],
+      "red_trailing": [-60, 30]
     },
     "(1, 1)": {
-      "trailing": [-50, 130],
-      "leading": [-85, 95]
+      "blue_trailing": [-25, 80],
+      "red_trailing": [-30, 50]
     },
     "(1, 2)": {
-      "trailing": [-40, -25]
+      "blue_trailing": [-50, 85],
+      "red_leading": [-40, 40],
+      "blue_leading": [-80, 80],
+      "red_trailing": [-35, 15]
     },
-    "(2, 3)": {
-      "trailing": [-80, 50],
-      "leading": [-70, 0]
+    "(1, 2.5)": {
+      "red_trailing": [-65, 45]
     },
-    "(2, 2.5)": {
-      "leading": [-70, 55],
-      "trailing": [-85, 65]
+    "(1, 3)": {
+      "red_leading": [-50, 65],
+      "red_trailing": [-20, 65]
+    },
+    "(1.5, 0)": {
+      "red_leading": [25, -25]
+    },
+    "(1.5, 1.5)": {
+      "blue_trailing": [-110, 120],
+      "red_leading": [-100, 120]
+    },
+    "(1.5, 2.5)": {
+      "red_leading": [-30, 40]
+    },
+    "(2, 0.5)": {
+      "blue_trailing": [-50, 20],
+      "red_leading": [-70, 40],
+      "red_trailing": [-65, 25]
     },
     "(2, 1)": {
-      "leading": [-70, 0],
-      "trailing": [-85, 80]
+      "blue_trailing": [-35, -10]
     },
-    "(2, 0)": {
-      "trailing": [35, 0]
+    "(2, 2)": {
+      "blue_trailing": [-30, -5],
+      "red_trailing": [-30, 15]
+    },
+    "(2, 2.5)": {
+      "red_trailing": [-65, 45]
+    },
+    "(2, 3)": {
+      "blue_trailing": [-30, -25],
+      "red_trailing": [-30, 65],
+      "blue_leading": [-70, 35]
+    },
+    "(2.5, 1)": {
+      "blue_trailing": [-65, 40]
     },
     "(2.5, 1.5)": {
-      "leading": [-25, 60],
-      "trailing": [-105, 120]
+      "red_trailing": [-35, 130]
     },
-    "(3, 2.5)": {
-      "leading": [-35, 75],
-      "trailing": [-70, 55]
+    "(2.5, 2)": {
+      "blue_trailing": [-65, 45]
     },
-    "(3, 2)": {
-      "trailing": [-70, 55],
-      "leading": [-70, 35]
+    "(2.5, 3)": {
+      "blue_trailing": [-45, 45]
     },
     "(3, 0)": {
-      "trailing": [40, -15]
+      "red_leading": [40, -35],
+      "red_trailing": [40, -15]
+    },
+    "(3, 0.5)": {
+      "red_leading": [-80, 35],
+      "blue_trailing": [-50, 65],
+      "red_trailing": [-45, 25]
+    },
+    "(3, 1)": {
+      "blue_trailing": [-15, 65]
+    },
+    "(3, 2)": {
+      "blue_trailing": [-30, 85],
+      "red_leading": [-70, 40]
+    },
+    "(3, 2.5)": {
+      "red_trailing": [-55, 30]
     }
   }
 }

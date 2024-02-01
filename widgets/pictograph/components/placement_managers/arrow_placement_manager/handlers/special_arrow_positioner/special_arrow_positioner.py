@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from .managers.motion_attr_key_generator import MotionAttrKeyGenerator
+from .managers.motion_attr_key_generator import AttrKeyGenerator
 from .managers.special_placement_data_updater import SpecialPlacementDataUpdater
 
 if TYPE_CHECKING:
@@ -14,4 +14,4 @@ class SpecialArrowPositioner:
         self.data_loader = self
 
         self.data_updater = SpecialPlacementDataUpdater(self)
-        self.motion_key_generator = MotionAttrKeyGenerator(self)
+        self.attr_key_generator = AttrKeyGenerator(self)

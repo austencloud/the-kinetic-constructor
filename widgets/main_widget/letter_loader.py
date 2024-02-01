@@ -23,6 +23,6 @@ class LetterLoader:
     def add_turns_and_ori_to_pictograph_dict(self, pictograph_dict) -> pd.DataFrame:
         pictograph_dict[BLUE_TURNS] = 0
         pictograph_dict[RED_TURNS] = 0
-        pictograph_dict[BLUE_START_ORI] = IN
-        pictograph_dict[RED_START_ORI] = CLOCK
+        pictograph_dict[BLUE_START_ORI] = CLOCK
+        pictograph_dict[RED_START_ORI] = IN
         return pictograph_dict

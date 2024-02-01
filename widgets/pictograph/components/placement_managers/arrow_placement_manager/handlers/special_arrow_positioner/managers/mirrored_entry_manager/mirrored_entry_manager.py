@@ -20,6 +20,7 @@ class SpecialPlacementMirroredEntryManager:
 
     def update_mirrored_entry_in_json(self, arrow: "Arrow") -> None:
         letter_type = LetterType.get_letter_type(arrow.pictograph.letter)
+        
         mirrored_turns_tuple = self.turns_tuple_generator.generate_mirrored_tuple(arrow)
 
         if mirrored_turns_tuple:
@@ -28,7 +29,7 @@ class SpecialPlacementMirroredEntryManager:
             else:
                 self.mirrored_entry_updater.update_entry(arrow.pictograph.letter, arrow)
 
-        self._update_pictographs_in_section(letter_type)
+        self.update_pictographs_in_section(letter_type)
 
     def _is_new_entry_needed(self, arrow: "Arrow") -> bool:
         ori_key = self.data_updater._get_ori_key(arrow.motion)
@@ -93,9 +94,11 @@ class SpecialPlacementMirroredEntryManager:
             )
 
     def _get_keys_for_mixed_start_ori(self, letter, ori_key) -> tuple[str, dict]:
-        other_ori_key = self.data_updater.get_other_layer3_ori_key(ori_key)
-        other_letter_data = self._get_letter_data(other_ori_key, letter)
-        return other_ori_key, other_letter_data
+        if self.data_updater.positioner.pictograph.check.starts_from_mixed_orientation():
+            other_ori_key = self.data_updater.get_other_layer3_ori_key(ori_key)
+            other_letter_data = self._get_letter_data(other_ori_key, letter)
+            return other_ori_key, other_letter_data
+        return ori_key, self._get_letter_data(ori_key, letter)
 
     def _fetch_letter_data_and_original_turn_data(
         self, ori_key, letter, arrow
@@ -113,7 +116,7 @@ class SpecialPlacementMirroredEntryManager:
                 return turn_data[key]
         return None
 
-    def _update_pictographs_in_section(self, letter_type: LetterType) -> None:
+    def update_pictographs_in_section(self, letter_type: LetterType) -> None:
         section = self.data_updater.positioner.pictograph.scroll_area.sections_manager.get_section(
             letter_type
         )

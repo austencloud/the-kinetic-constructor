@@ -41,7 +41,7 @@ class SpecialPlacementDataUpdater:
         adjustment: tuple[int, int],
     ) -> None:
         turn_data = letter_data.get(turns_tuple, {})
-        key = self.positioner.motion_key_generator.get_key(arrow)
+        key = self.positioner.attr_key_generator.get_key(arrow)
 
         if key in turn_data and turn_data[key] != {}:
             turn_data[key][0] += adjustment[0]

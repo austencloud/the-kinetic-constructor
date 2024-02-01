@@ -83,6 +83,16 @@ class PictographChecker:
         ):
             return False
 
+    def starts_from_standard_orientation(self) -> bool:
+        # return true if they're both radial or they're both nonradial start oris
+        return (
+            self.p.red_motion.start_ori in [IN, OUT]
+            and self.p.blue_motion.start_ori in [IN, OUT]
+        ) or (
+            self.p.red_motion.start_ori in [CLOCK, COUNTER]
+            and self.p.blue_motion.start_ori in [CLOCK, COUNTER]
+        )
+
     def starts_from_radial_orientation(self) -> bool:
         return self.p.red_motion.start_ori in [
             IN,

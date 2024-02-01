@@ -25,7 +25,7 @@ class ArrowMouseEventHandler:
 
     def handle_mouse_release(self, event) -> None:
         self.arrow.scene.arrows[self.arrow.color] = self.arrow
-        self.arrow.scene.updater.update_pictograph()
+        # self.arrow.scene.updater.update_pictograph()
         self.arrow.ghost.hide()
 
     def set_drag_pos(self, new_pos: QPointF) -> None:

@@ -32,7 +32,7 @@ class MirroredEntryCreator:
                 arrow
             )
 
-            attr = self.data_updater.positioner.motion_key_generator.get_key(arrow)
+            attr = self.data_updater.positioner.attr_key_generator.get_key(arrow)
             if mirrored_turns_tuple not in other_letter_data:
                 other_letter_data[mirrored_turns_tuple] = {}
             if attr not in letter_data:

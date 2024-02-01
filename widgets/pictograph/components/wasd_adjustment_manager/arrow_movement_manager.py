@@ -28,7 +28,6 @@ class ArrowMovementManager:
         self.pictograph.arrow_placement_manager.special_positioner.data_updater.update_arrow_adjustments_in_json(
             adjustment, self.pictograph.selected_arrow
         )
-
         self.pictograph.arrow_placement_manager.special_positioner.data_updater.mirrored_entry_manager.update_mirrored_entry_in_json(
             self.pictograph.selected_arrow
         )

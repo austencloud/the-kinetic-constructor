@@ -26,60 +26,89 @@ class SpecialPlacementEntryRemover:
         file_path = self._generate_file_path(ori_key, letter)
 
         if os.path.exists(file_path):
-            data = self.data_updater.json_handler.load_json_data(file_path)
-            if letter in data:
-                letter_data = data[letter]
-                turns_tuple = self.turns_tuple_generator.generate_turns_tuple(
-                    self.positioner.placement_manager.pictograph
-                )
-                key = self.data_updater.positioner.motion_key_generator.get_key(arrow)
-                self._remove_turn_data_entry(letter_data, turns_tuple, key)
-
-                if arrow.pictograph.check.starts_from_mixed_orientation():
-                    other_ori_key = self.data_updater.get_other_layer3_ori_key(ori_key)
-                    other_file_path = self._generate_file_path(other_ori_key, letter)
-                    other_data = self.data_updater.json_handler.load_json_data(
-                        other_file_path
-                    )
-                    other_letter_data = other_data.get(letter, {})
-                    mirrored_tuple = self.turns_tuple_generator.generate_mirrored_tuple(
-                        arrow
-                    )
-                    if key == BLUE:
-                        new_key = RED
-                    elif key == RED:
-                        new_key = BLUE
-                    else:
-                        new_key = key
-                    if other_letter_data != letter_data:
-                        if mirrored_tuple not in other_letter_data:
-                            other_letter_data[mirrored_tuple] = {}
-                        if new_key not in other_letter_data[mirrored_tuple]:
-                            if turns_tuple in letter_data:
-                                if key not in letter_data[turns_tuple]:
-                                    letter_data[turns_tuple][key] = {}
-                                other_letter_data[mirrored_tuple][new_key] = (
-                                    letter_data[turns_tuple][key]
-                                )
-                        if turns_tuple not in letter_data:
-                            del other_data[letter][mirrored_tuple]
-
-                        elif key not in letter_data[turns_tuple]:
-                            del other_data[letter][mirrored_tuple][new_key]
-                        self.data_updater.json_handler.write_json_data(
-                            other_data, other_file_path
-                        )
-                    new_turns_tuple = (
-                        self.turns_tuple_generator.generate_mirrored_tuple(arrow)
-                    )
-                    self._remove_turn_data_entry(
-                        other_letter_data, new_turns_tuple, new_key
-                    )
-
-                data[letter] = letter_data
-                self.data_updater.json_handler.write_json_data(data, file_path)
-
+            data = self.load_data(file_path)
+            self._process_removal(letter, arrow, ori_key, file_path, data)
             arrow.pictograph.main_widget.special_placement_loader.refresh_placements()
+
+    def _process_removal(self, letter, arrow: Arrow, ori_key, file_path, data):
+        self.turns_tuple = self.turns_tuple_generator.generate_turns_tuple(
+            self.positioner.placement_manager.pictograph
+        )
+        if letter in data:
+            letter_data = data[letter]
+
+            key = self.data_updater.positioner.attr_key_generator.get_key(arrow)
+            self._remove_turn_data_entry(letter_data, self.turns_tuple, key)
+
+            if arrow.pictograph.check.starts_from_mixed_orientation():
+                self._handle_mixed_start_ori_mirrored_entry_removal(
+                    letter, arrow, ori_key, letter_data, key
+                )
+            elif arrow.pictograph.check.starts_from_standard_orientation():
+                self._handle_standard_start_ori_mirrored_entry_removal(
+                    letter, arrow, ori_key, letter_data, key
+                )
+            data[letter] = letter_data
+            self.data_updater.json_handler.write_json_data(data, file_path)
+
+    def _handle_standard_start_ori_mirrored_entry_removal(
+        self, letter, arrow: Arrow, ori_key, letter_data, key
+    ):
+        if arrow.turns == arrow.pictograph.get.other_arrow(arrow).turns or arrow.motion.motion_type != arrow.pictograph.get.other_arrow(
+            arrow
+        ).motion.motion_type or letter in ["S", "T"]:
+            return
+
+        mirrored_tuple = self.turns_tuple_generator.generate_mirrored_tuple(arrow)
+
+        if key == BLUE:
+            new_key = RED
+        elif key == RED:
+            new_key = BLUE
+        else:
+            new_key = key
+
+        if letter_data[mirrored_tuple][new_key]:
+            del letter_data[mirrored_tuple][new_key]
+            if not letter_data[mirrored_tuple]:
+                del letter_data[mirrored_tuple]
+
+    def _handle_mixed_start_ori_mirrored_entry_removal(
+        self, letter, arrow, ori_key, letter_data, key
+    ):
+
+        other_ori_key = self.data_updater.get_other_layer3_ori_key(ori_key)
+        other_file_path = self._generate_file_path(other_ori_key, letter)
+        other_data = self.data_updater.json_handler.load_json_data(other_file_path)
+        other_letter_data = other_data.get(letter, {})
+        mirrored_tuple = self.turns_tuple_generator.generate_mirrored_tuple(arrow)
+        if key == BLUE:
+            new_key = RED
+        elif key == RED:
+            new_key = BLUE
+        else:
+            new_key = key
+        if other_letter_data != letter_data:
+            if mirrored_tuple not in other_letter_data:
+                other_letter_data[mirrored_tuple] = {}
+            if new_key not in other_letter_data[mirrored_tuple]:
+                if self.turns_tuple in letter_data:
+                    if key not in letter_data[self.turns_tuple]:
+                        letter_data[self.turns_tuple][key] = {}
+                    other_letter_data[mirrored_tuple][new_key] = letter_data[
+                        self.turns_tuple
+                    ][key]
+            if self.turns_tuple not in letter_data:
+                del other_data[letter][mirrored_tuple]
+
+            elif key not in letter_data[self.turns_tuple]:
+                del other_data[letter][mirrored_tuple][new_key]
+            self.data_updater.json_handler.write_json_data(other_data, other_file_path)
+        new_turns_tuple = self.turns_tuple_generator.generate_mirrored_tuple(arrow)
+        self._remove_turn_data_entry(other_letter_data, new_turns_tuple, new_key)
+
+    def load_data(self, file_path):
+        return self.data_updater.json_handler.load_json_data(file_path)
 
     def _generate_file_path(self, ori_key: str, letter: str) -> str:
         return os.path.join(

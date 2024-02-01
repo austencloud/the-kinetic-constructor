@@ -4,9 +4,14 @@
       "static_from_layer2": [125, -100],
       "static_rot_angle_from_layer2": true
     },
-    "(s, 0, 1)": {
-      "pro_from_layer2": [0, -75],
-      "static_rot_angle_from_layer1": true
-    }
+    "(s, 0, 1.5)": {
+      "static_from_layer1": [0, -20],
+      "swap_beta_w_nonradial_blue_static_w_red_pro_nw": true,
+      "swap_beta_e_nonradial_blue_static_e_red_pro_se": true,
+      "swap_beta_s_nonradial_blue_static_s_red_pro_se": true,
+      "swap_beta_n_nonradial_blue_static_n_red_pro_nw": true,
+      "static_from_layer2": {}
+    },
+    "(s, 0, 2)": {}
   }
 }
