@@ -36,7 +36,7 @@ class MainWidget(QWidget):
         self._setup_components()
         self._setup_layouts()
         self.special_placement_loader = SpecialPlacementLoader(self)
-        self.special_placements = self.special_placement_loader.load_special_placements()
+        self.special_placements: dict[str,dict[str,dict[str,dict[str,list[int]]]]] = self.special_placement_loader.load_special_placements()
 
     def _setup_components(self) -> None:
         self.turns_tuple_generator = TurnsTupleGenerator()

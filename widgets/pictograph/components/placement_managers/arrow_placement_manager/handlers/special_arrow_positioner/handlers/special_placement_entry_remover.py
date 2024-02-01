@@ -17,7 +17,9 @@ class SpecialPlacementEntryRemover:
     ) -> None:
         self.positioner = data_updater.positioner
         self.data_updater = data_updater
-        self.turns_tuple_generator = self.positioner.placement_manager.pictograph.main_widget.turns_tuple_generator
+        self.turns_tuple_generator = (
+            self.positioner.placement_manager.pictograph.main_widget.turns_tuple_generator
+        )
 
     def remove_special_placement_entry(self, letter: str, arrow: Arrow) -> None:
         ori_key = self.data_updater._get_ori_key(arrow.motion)
@@ -67,8 +69,8 @@ class SpecialPlacementEntryRemover:
                         self.data_updater.json_handler.write_json_data(
                             other_data, other_file_path
                         )
-                    new_turns_tuple = self.turns_tuple_generator.generate_mirrored_tuple(
-                        arrow
+                    new_turns_tuple = (
+                        self.turns_tuple_generator.generate_mirrored_tuple(arrow)
                     )
                     self._remove_turn_data_entry(
                         other_letter_data, new_turns_tuple, new_key
@@ -77,7 +79,7 @@ class SpecialPlacementEntryRemover:
                 data[letter] = letter_data
                 self.data_updater.json_handler.write_json_data(data, file_path)
 
-            arrow.pictograph.main_widget.refresh_placements()
+            arrow.pictograph.main_widget.special_placement_loader.refresh_placements()
 
     def _generate_file_path(self, ori_key: str, letter: str) -> str:
         return os.path.join(

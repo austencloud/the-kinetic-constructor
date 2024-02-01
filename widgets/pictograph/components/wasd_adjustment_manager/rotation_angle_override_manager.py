@@ -31,7 +31,9 @@ class RotationAngleOverrideManager:
         ori_key = self.special_positioner.data_updater._get_ori_key(
             self.pictograph.selected_arrow.motion
         )
-        data = self.pictograph.main_widget.load_special_placements()
+        data = (
+            self.pictograph.main_widget.special_placement_loader.load_special_placements()
+        )
         letter = self.pictograph.letter
 
         self._apply_override_if_needed(letter, data, ori_key)
@@ -83,7 +85,7 @@ class RotationAngleOverrideManager:
         else:
             turn_data[hybrid_key] = True
             self._update_mirrored_entry_with_rotation_override(
-                letter, self.pictograph.selected_arrow, rot_angle_key
+                letter, self.pictograph.selected_arrow
             )
 
         letter_data[turns_tuple] = turn_data
@@ -92,7 +94,7 @@ class RotationAngleOverrideManager:
             letter, letter_data, ori_key
         )
 
-    def _handle_mirrored_rotation_angle_override(
+    def handle_mirrored_rotation_angle_override(
         self, other_letter_data, arrow, rotation_angle_override, mirrored_turns_tuple
     ):
         """
@@ -104,7 +106,7 @@ class RotationAngleOverrideManager:
         other_letter_data[mirrored_turns_tuple][rot_angle_key] = rotation_angle_override
 
     def _update_mirrored_entry_with_rotation_override(
-        self, letter: str, arrow: Arrow, rot_angle_key: str
+        self, letter: str, arrow: Arrow
     ):
         """
         Updates the mirrored entry to reflect a new rotation angle override.
@@ -114,7 +116,7 @@ class RotationAngleOverrideManager:
         )
         if mirrored_entry_handler:
             mirrored_entry_handler.update_rotation_angle_in_mirrored_entry(
-                letter, arrow, rot_angle_key
+                letter, arrow
             )
 
     def _update_mirrored_entry_with_rotation_override_removal(

@@ -1,25 +1,36 @@
 from typing import TYPE_CHECKING
 from objects.arrow.arrow import Arrow
-if TYPE_CHECKING:
-    from widgets.pictograph.components.placement_managers.arrow_placement_manager.handlers.special_arrow_positioner.handlers.special_placement_data_updater import SpecialPlacementDataUpdater
-    from widgets.pictograph.components.placement_managers.arrow_placement_manager.handlers.turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
 
+if TYPE_CHECKING:
+    from .special_placement_mirrored_entry_manager import (
+        SpecialPlacementMirroredEntryManager,
+    )
+    from .special_placement_data_updater import SpecialPlacementDataUpdater
+    from ...turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
 
 
 class MirroredEntryCreator:
-    def __init__(self, data_updater: "SpecialPlacementDataUpdater", turns_tuple_generator: "TurnsTupleGenerator"):
-        self.data_updater = data_updater
-        self.turns_tuple_generator = turns_tuple_generator
+    def __init__(self, mirrored_entry_manager: "SpecialPlacementMirroredEntryManager"):
+        self.data_updater: SpecialPlacementDataUpdater = (
+            mirrored_entry_manager.data_updater
+        )
+        self.turns_tuple_generator: TurnsTupleGenerator = (
+            mirrored_entry_manager.turns_tuple_generator
+        )
 
     def create_entry(self, letter: str, arrow: Arrow):
-        # Logic to create a new mirrored entry
         ori_key = self.data_updater._get_ori_key(arrow.motion)
-        letter_data, _ = self._fetch_letter_data_and_original_turn_data(ori_key, letter, arrow)
+        letter_data, _ = self._fetch_letter_data_and_original_turn_data(
+            ori_key, letter, arrow
+        )
 
-        # Check for mixed orientation and apply logic accordingly
         if arrow.pictograph.check.starts_from_mixed_orientation():
-            other_ori_key, other_letter_data = self._get_keys_for_mixed_start_ori(letter, ori_key)
-            mirrored_turns_tuple = self.turns_tuple_generator.generate_mirrored_tuple(arrow)
+            other_ori_key, other_letter_data = self._get_keys_for_mixed_start_ori(
+                letter, ori_key
+            )
+            mirrored_turns_tuple = self.turns_tuple_generator.generate_mirrored_tuple(
+                arrow
+            )
 
             attr = self.data_updater.positioner.motion_key_generator.get_key(arrow)
             if mirrored_turns_tuple not in other_letter_data:
@@ -29,9 +40,9 @@ class MirroredEntryCreator:
             other_letter_data[mirrored_turns_tuple][attr] = letter_data[attr]
 
             self._initialize_dicts(mirrored_turns_tuple, other_letter_data, attr)
-            self.data_updater.update_specific_entry_in_json(letter, other_letter_data, other_ori_key)
-
-        # Additional creation logic goes here
+            self.data_updater.update_specific_entry_in_json(
+                letter, other_letter_data, other_ori_key
+            )
 
     def _initialize_dicts(self, mirrored_turns_tuple, other_letter_data, attr):
         if mirrored_turns_tuple not in other_letter_data:
@@ -39,12 +50,26 @@ class MirroredEntryCreator:
         if attr not in other_letter_data[mirrored_turns_tuple]:
             other_letter_data[mirrored_turns_tuple][attr] = {}
 
-    def _fetch_letter_data_and_original_turn_data(self, ori_key, letter, arrow: Arrow) -> tuple[dict, dict]:
-        letter_data:dict = self.data_updater.positioner.placement_manager.pictograph.main_widget.special_placements.get(ori_key, {}).get(letter, {})
-        original_turns_tuple = self.turns_tuple_generator.generate_turns_tuple(arrow.pictograph)
+    def _fetch_letter_data_and_original_turn_data(
+        self, ori_key, letter, arrow: Arrow
+    ) -> tuple[dict, dict]:
+        letter_data: dict = (
+            self.data_updater.positioner.placement_manager.pictograph.main_widget.special_placements.get(
+                ori_key, {}
+            ).get(
+                letter, {}
+            )
+        )
+        original_turns_tuple = self.turns_tuple_generator.generate_turns_tuple(
+            arrow.pictograph
+        )
         return letter_data, letter_data.get(original_turns_tuple, {})
 
     def _get_keys_for_mixed_start_ori(self, letter, ori_key) -> tuple[str, dict]:
         other_ori_key = self.data_updater.get_other_layer3_ori_key(ori_key)
-        other_letter_data = self.data_updater.positioner.placement_manager.pictograph.main_widget.special_placements.get(other_ori_key, {}).get(letter, {})
+        other_letter_data = self.data_updater.positioner.placement_manager.pictograph.main_widget.special_placements.get(
+            other_ori_key, {}
+        ).get(
+            letter, {}
+        )
         return other_ori_key, other_letter_data

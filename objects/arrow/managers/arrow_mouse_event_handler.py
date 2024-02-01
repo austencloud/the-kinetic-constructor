@@ -2,7 +2,6 @@ from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 from constants import *
-
 from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
 
 
@@ -20,7 +19,7 @@ class ArrowMouseEventHandler:
         self.arrow.setSelected(True)
         if hasattr(self.arrow, GHOST) and self.arrow.ghost:
             self.arrow.ghost.show()
-        self.arrow.scene.updater.update_pictograph()
+        # self.arrow.scene.updater.update_pictograph()
 
 
 
