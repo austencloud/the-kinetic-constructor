@@ -41,7 +41,7 @@ class ArrowRotAngleCalculator:
                 return self._get_rot_angle_override_according_to_loc(rotation_override)
         return None
 
-    def _get_rot_angle_override_according_to_loc(self, rotation_override: int) -> int:
+    def _get_rot_angle_override_according_to_loc(self, rotation_override) -> int:
         static_angle_override_map = {
             NORTH: 0,
             EAST: {CLOCKWISE: 90, COUNTER_CLOCKWISE: 270},
@@ -55,13 +55,14 @@ class ArrowRotAngleCalculator:
             WEST: {CLOCKWISE: 180, COUNTER_CLOCKWISE: 0},
         }
         if self.arrow.motion.motion_type == DASH:
-            if rotation_override == 0:
+            if rotation_override == True:
                 loc_angle = dash_angle_override_map.get(self.arrow.loc)
                 if isinstance(loc_angle, dict):
                     return loc_angle.get(self.arrow.motion.prop_rot_dir, 0)
                 return loc_angle
+            
         elif self.arrow.motion.motion_type == STATIC:
-            if rotation_override == 0:
+            if rotation_override == True:
                 loc_angle = static_angle_override_map.get(self.arrow.loc)
                 if isinstance(loc_angle, dict):
                     return loc_angle.get(self.arrow.motion.prop_rot_dir, 0)

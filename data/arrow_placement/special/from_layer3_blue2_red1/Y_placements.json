@@ -1,9 +1,8 @@
 {
   "Y": {
     "(s, 0, 0.5)": {
-      "static_from_layer2": [125, -100],
-      "static_rot_angle_from_layer2": true,
-      "static_rot_angle_from_layer1": true
+      "static_from_layer2": [120, -100],
+      "static_rot_angle_from_layer2": true
     }
   }
 }

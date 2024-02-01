@@ -61,12 +61,7 @@ class RotationAngleOverrideManager:
             return f"{self.pictograph.selected_arrow.motion.motion_type}_rot_angle_override"
 
     def _apply_rotation_override(
-        self,
-        letter: str,
-        data: dict,
-        ori_key: str,
-        turns_tuple: str,
-        rot_angle_key: str,
+        self, letter: str, data: dict, ori_key: str, turns_tuple: str, rot_angle_key: str
     ) -> None:
         letter_data = data[ori_key].get(letter, {})
         turn_data = letter_data.get(turns_tuple, {})
@@ -74,19 +69,27 @@ class RotationAngleOverrideManager:
         hybrid_key = self._generate_hybrid_key_if_needed(
             self.pictograph.selected_arrow, rot_angle_key
         )
+
+        # If the key exists, remove the override, otherwise set it to True
         if hybrid_key in turn_data:
+            # Remove the override
             del turn_data[hybrid_key]
+            # Update the mirrored entry to reflect the removal
+            self._update_mirrored_entry_with_rotation_override_removal(
+                letter, self.pictograph.selected_arrow, hybrid_key
+            )
         else:
-            turn_data[hybrid_key] = True  # Set to True instead of 0
+            # Set the override
+            turn_data[hybrid_key] = True
+            # Update the mirrored entry to reflect the new override
+            self._update_mirrored_entry_with_rotation_override(
+                letter, self.pictograph.selected_arrow, rot_angle_key
+            )
 
         letter_data[turns_tuple] = turn_data
         data[ori_key][letter] = letter_data
         self.special_positioner.data_updater.update_specific_entry_in_json(
             letter, letter_data, ori_key
-        )
-
-        self._update_mirrored_entry_with_rotation_override(
-            letter, self.pictograph.selected_arrow, rot_angle_key
         )
 
     def _update_mirrored_entry_with_rotation_override(
@@ -98,6 +101,18 @@ class RotationAngleOverrideManager:
         if mirrored_entry_handler:
             mirrored_entry_handler.data_updater.mirrored_entry_handler.update_rotation_angle_in_mirrored_entry(
                 letter, arrow, rot_angle_key
+            )
+
+
+    def _update_mirrored_entry_with_rotation_override_removal(
+        self, letter: str, arrow: Arrow, hybrid_key: str
+    ) -> None:
+        mirrored_entry_handler = (
+            self.special_positioner.data_updater.mirrored_entry_handler
+        )
+        if mirrored_entry_handler:
+            mirrored_entry_handler.remove_rotation_angle_in_mirrored_entry(
+                letter, arrow, hybrid_key
             )
 
     def _generate_hybrid_key_if_needed(self, arrow: Arrow, rot_angle_key: str) -> str:
