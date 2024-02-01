@@ -144,8 +144,10 @@ class SwapBetaHandler:
                 ori_key
             ].get(self.pictograph.letter)
 
-        turns_tuple = self.pictograph.arrow_placement_manager.special_positioner.turns_tuple_generator.generate_turns_tuple(
-            self.pictograph.letter
+        turns_tuple = (
+            self.pictograph.main_widget.turns_tuple_generator.generate_turns_tuple(
+                self.pictograph.letter
+            )
         )
         prop_loc = self.pictograph.blue_prop.loc
         if self.pictograph.check.ends_in_radial_ori():

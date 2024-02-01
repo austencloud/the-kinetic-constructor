@@ -22,7 +22,7 @@ class RotationAngleOverrideManager:
         self.special_positioner = (
             self.pictograph.arrow_placement_manager.special_positioner
         )
-        self.turns_tuple_generator = self.special_positioner.turns_tuple_generator
+        self.turns_tuple_generator = self.pictograph.main_widget.turns_tuple_generator
 
     def handle_rotation_angle_override(self, key: Qt.Key) -> None:
         if not self._is_valid_for_override():
@@ -134,7 +134,7 @@ class RotationAngleOverrideManager:
         letter = arrow.scene.letter
         letter_data = placements[ori_key].get(letter, {})
         turns_tuple = (
-            self.special_positioner.turns_tuple_generator.generate_turns_tuple(letter)
+            self.turns_tuple_generator.generate_turns_tuple(letter)
         )
         letter_type = LetterType.get_letter_type(letter)
 

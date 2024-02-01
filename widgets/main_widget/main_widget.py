@@ -8,6 +8,7 @@ from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Letters, TYPE_CHECKING
 from constants import DIAMOND, STAFF
 from utilities.TypeChecking.prop_types import PropTypes
+from widgets.pictograph.components.placement_managers.arrow_placement_manager.handlers.turns_tuple_generator import TurnsTupleGenerator
 from widgets.pictograph.pictograph import Pictograph
 from ..image_cache_manager import ImageCacheManager
 from ..main_tab_widget.main_tab_widget import MainTabWidget
@@ -59,6 +60,7 @@ class MainWidget(QWidget):
         self.main_sequence_widget = MainSequenceWidget(self)
         self.main_tab_widget = MainTabWidget(self)
         self.image_cache_manager = ImageCacheManager(self)
+        self.turns_tuple_generator = TurnsTupleGenerator(self)
 
     def _setup_layouts(self) -> None:
         self.layout_manager = MainWidgetLayoutManager(self)

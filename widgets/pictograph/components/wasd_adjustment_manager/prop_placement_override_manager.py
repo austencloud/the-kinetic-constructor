@@ -12,6 +12,7 @@ class PropPlacementOverrideManager:
         self.special_positioner = (
             self.pictograph.arrow_placement_manager.special_positioner
         )
+        self.turns_tuple_generator = self.pictograph.main_widget.turns_tuple_generator
 
     def handle_prop_placement_override(self, key) -> None:
         if not (
@@ -49,7 +50,7 @@ class PropPlacementOverrideManager:
             self.pictograph.updater.update_pictograph()
 
     def _generate_adjustment_key_str(self, letter) -> str:
-        return self.special_positioner.turns_tuple_generator.generate_turns_tuple(
+        return self.turns_tuple_generator.generate_turns_tuple(
             letter
         )
 

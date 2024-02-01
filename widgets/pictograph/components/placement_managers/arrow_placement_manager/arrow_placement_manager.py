@@ -24,7 +24,6 @@ class ArrowPlacementManager:
 
         self.initial_pos_calculator = ArrowInitialPosCalculator(self)
         self.adjustment_calculator = ArrowAdjustmentCalculator(self)
-        self.key_generator = TurnsTupleGenerator(self)
         self.quadrant_index_handler = QuadrantIndexHandler(self)
 
     def update_arrow_placements(self) -> None:

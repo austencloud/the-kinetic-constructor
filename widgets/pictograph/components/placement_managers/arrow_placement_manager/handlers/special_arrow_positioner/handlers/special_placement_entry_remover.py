@@ -19,6 +19,7 @@ class SpecialPlacementEntryRemover:
     ) -> None:
         self.positioner = data_updater.positioner
         self.data_updater = data_updater
+        self.turns_tuple_generator = self.positioner.placement_manager.pictograph.main_widget.turns_tuple_generator
 
     def remove_special_placement_entry(self, letter: str, arrow: Arrow) -> None:
         ori_key = self.data_updater._get_ori_key(arrow.motion)
@@ -28,8 +29,8 @@ class SpecialPlacementEntryRemover:
             data = self.data_updater.json_handler.load_json_data(file_path)
             if letter in data:
                 letter_data = data[letter]
-                turns_tuple = (
-                    self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
+                turns_tuple = self.turns_tuple_generator.generate_turns_tuple(
+                    letter
                 )
                 key = self.data_updater.positioner.motion_key_generator.get_key(arrow)
                 self._remove_turn_data_entry(letter_data, turns_tuple, key)
@@ -41,7 +42,7 @@ class SpecialPlacementEntryRemover:
                         other_file_path
                     )
                     other_letter_data = other_data.get(letter, {})
-                    mirrored_tuple = self.data_updater.mirrored_entry_handler._generate_mirrored_tuple(
+                    mirrored_tuple = self.turns_tuple_generator.generate_mirrored_tuple(
                         arrow
                     )
                     if key == BLUE:
@@ -68,7 +69,7 @@ class SpecialPlacementEntryRemover:
                         self.data_updater.json_handler.write_json_data(
                             other_data, other_file_path
                         )
-                    new_turns_tuple = self.data_updater.mirrored_entry_handler._generate_mirrored_tuple(
+                    new_turns_tuple = self.turns_tuple_generator.generate_mirrored_tuple(
                         arrow
                     )
                     self._remove_turn_data_entry(
@@ -86,8 +87,6 @@ class SpecialPlacementEntryRemover:
             f"{ori_key}/{letter}_placements.json",
         )
 
-
-
     def _get_other_color(self, color: Colors) -> Colors:
         return RED if color == BLUE else BLUE
 
@@ -97,4 +96,3 @@ class SpecialPlacementEntryRemover:
             del turn_data[key]
             if not turn_data:
                 del letter_data[turns_tuple]
-
