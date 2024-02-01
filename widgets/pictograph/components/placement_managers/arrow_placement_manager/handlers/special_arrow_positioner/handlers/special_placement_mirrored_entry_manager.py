@@ -16,9 +16,7 @@ if TYPE_CHECKING:
     from .special_placement_data_updater import SpecialPlacementDataUpdater
 
 
-class SpecialPlacementMirroredEntryHandler:
-    """Handles mirrored special placement entries for Type 1 and Type 4 letters."""
-
+class SpecialPlacementMirroredEntryManager:
     def __init__(self, data_updater: "SpecialPlacementDataUpdater") -> None:
         self.data_updater = data_updater
         self.turns_tuple_generator = (
@@ -96,6 +94,10 @@ class SpecialPlacementMirroredEntryHandler:
     def update_rotation_angle_in_mirrored_entry(
         self, letter: str, arrow: Arrow, rot_angle_key: str
     ) -> None:
+        self.rot_angle_override_manager = (
+            self.data_updater.positioner.placement_manager.pictograph.wasd_manager.rotation_angle_override_manager
+        )
+
         ori_key = self.data_updater._get_ori_key(arrow.motion)
         _, original_turn_data = self._fetch_letter_data_and_original_turn_data(
             ori_key, letter, arrow
@@ -112,7 +114,7 @@ class SpecialPlacementMirroredEntryHandler:
                 mirrored_turns_tuple = (
                     self.turns_tuple_generator.generate_mirrored_tuple(arrow)
                 )
-                self._handle_mirrored_rotation_angle_override(
+                self.rot_angle_override_manager._handle_mirrored_rotation_angle_override(
                     other_letter_data,
                     arrow,
                     rotation_angle_override,
@@ -141,21 +143,6 @@ class SpecialPlacementMirroredEntryHandler:
             self.data_updater.update_specific_entry_in_json(
                 letter, other_letter_data, other_ori_key
             )
-
-    def _handle_mirrored_rotation_angle_override(
-        self, other_letter_data, arrow, rotation_angle_override, mirrored_turns_tuple
-    ):
-        rot_angle_key = self._generate_rotation_angle_key(arrow)
-        if mirrored_turns_tuple not in other_letter_data:
-            other_letter_data[mirrored_turns_tuple] = {}
-        other_letter_data[mirrored_turns_tuple][rot_angle_key] = rotation_angle_override
-
-    def _generate_rotation_angle_key(self, arrow: Arrow) -> str:
-        motion_type = arrow.motion.motion_type
-        if arrow.pictograph.check.starts_from_mixed_orientation():
-            layer = "layer1" if arrow.motion.start_ori in [IN, OUT] else "layer2"
-            return f"{motion_type}_rot_angle_from_{layer}"
-        return f"{motion_type}_rot_angle"
 
     def initialize_dicts(self, mirrored_turns_tuple, other_letter_data, attr):
         if mirrored_turns_tuple not in other_letter_data:

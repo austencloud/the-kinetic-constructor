@@ -1,6 +1,6 @@
 import os
 from typing import TYPE_CHECKING
-from constants import BLUE, RED
+from constants import BLUE, special_placements_parent_directory, RED
 from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.MotionAttributes import Colors
 
@@ -81,7 +81,7 @@ class SpecialPlacementEntryRemover:
 
     def _generate_file_path(self, ori_key: str, letter: str) -> str:
         return os.path.join(
-            self.positioner.placement_manager.pictograph.main_widget.parent_directory,
+            special_placements_parent_directory,
             f"{ori_key}/{letter}_placements.json",
         )
 

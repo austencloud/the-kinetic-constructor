@@ -24,10 +24,6 @@ class ScrollArea(QScrollArea):
         self._setup_ui()
         self._setup_managers()
 
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.main_widget.refresh_placements)
-        # self.timer.start(200)
-
     def _setup_managers(self) -> None:
         self.display_manager = ScrollAreaDisplayManager(self)
         self.sections_manager = ScrollAreaSectionManager(self)

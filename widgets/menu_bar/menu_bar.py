@@ -26,7 +26,9 @@ class MainWindowMenuBar(QMenuBar):
 
     def _setup_menu(self) -> None:
         refresh_action = QAction("Refresh Placements", self)
-        refresh_action.triggered.connect(self.main_widget.refresh_placements)
+        refresh_action.triggered.connect(
+            self.main_widget.special_placement_loader.refresh_placements
+        )
         self.addAction(refresh_action)
 
         # Optionally, other menu items and actions can be added here.

@@ -1,14 +1,14 @@
 import os
 import logging
 from typing import TYPE_CHECKING
-from constants import BLUE, CLOCK, COUNTER, IN, OUT, RED
+from constants import BLUE, CLOCK, COUNTER, IN, OUT, RED, special_placements_parent_directory
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import Letters
 from .special_placement_entry_remover import SpecialPlacementEntryRemover
 from .special_placement_json_handler import SpecialPlacementJsonHandler
-from .special_placement_mirrored_entry_handler import (
-    SpecialPlacementMirroredEntryHandler,
+from .special_placement_mirrored_entry_manager import (
+    SpecialPlacementMirroredEntryManager,
 )
 
 if TYPE_CHECKING:
@@ -24,7 +24,7 @@ class SpecialPlacementDataUpdater:
         self.positioner = positioner
         self.json_handler = SpecialPlacementJsonHandler()
         self.entry_remover = SpecialPlacementEntryRemover(self)
-        self.mirrored_entry_handler = SpecialPlacementMirroredEntryHandler(self)
+        self.mirrored_entry_manager = SpecialPlacementMirroredEntryManager(self)
 
     def _get_letter_data(self, letter: str, ori_key: str) -> dict:
         return (
@@ -105,7 +105,7 @@ class SpecialPlacementDataUpdater:
         self, letter: str, letter_data: dict, ori_key: str
     ) -> None:
         file_path = os.path.join(
-            self.positioner.placement_manager.pictograph.main_widget.parent_directory,
+            special_placements_parent_directory,
             ori_key,
             f"{letter}_placements.json",
         )
@@ -120,7 +120,9 @@ class SpecialPlacementDataUpdater:
             return
 
         letter = self.positioner.pictograph.letter
-        turns_tuple = self.positioner.turns_tuple_generator.generate_turns_tuple(letter)
+        turns_tuple = self.positioner.pictograph.main_widget.turns_tuple_generator.generate_turns_tuple(
+            self.positioner.pictograph
+        )
         ori_key = self._get_ori_key(arrow.motion)
 
         letter_data = self._get_letter_data(letter, ori_key)

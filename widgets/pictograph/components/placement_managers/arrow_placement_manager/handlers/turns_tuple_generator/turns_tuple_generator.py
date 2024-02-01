@@ -1,5 +1,4 @@
 from typing import Union
-from Enums import LetterType
 from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.letter_lists import (
     Type1_hybrid_letters,
@@ -11,14 +10,31 @@ from utilities.TypeChecking.letter_lists import (
     Type2_letters,
 )
 from constants import *
-from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    pass
+from widgets.pictograph.components.placement_managers.arrow_placement_manager.handlers.turns_tuple_generator.mirrored_turns_tuple_generator import (
+    MirroredTurnsTupleGenerator,
+)
 from .turns_tuple_generators import *
 
 
 class TurnsTupleGenerator:
+    """
+    Manages the generation of turn tuples for different letter types in a pictograph. 
+    It delegates to specific generator classes based on letter type.
+
+    Attributes:
+        generators (dict): Maps generator keys to specialized generator instances for various letter types.
+        key_map (dict): Maps letters to generator keys, with special handling for 'S', 'T', 'Λ', 'Λ-', and 'Γ'.
+        mirrored_generator (MirroredTurnsTupleGenerator): Handles mirrored turn tuple generation.
+
+    Methods:
+        _create_key_map(): Initializes the letter-to-generator key mapping.
+        generate_turns_tuple(pictograph: "Pictograph") -> str: Returns turn tuple for a pictograph based on its letter.
+        generate_mirrored_tuple(arrow: "Arrow") -> Union[str, None]: Returns mirrored turn tuple for an arrow.
+
+    The class ensures accurate and efficient generation of turn tuples, prioritizing special cases like 'S' and 'T'.
+    """
+
     def __init__(self) -> None:
         self.generators = {
             "Type1_hybrid": Type1HybridTurnsTupleGenerator(),
@@ -33,13 +49,15 @@ class TurnsTupleGenerator:
             "Gamma": GammaTurnsTupleGenerator(),
         }
         self.key_map = self._create_key_map()
+        self.mirrored_generator = MirroredTurnsTupleGenerator(self)
 
     def _create_key_map(self):
         key_map = {
+            "S": "LeadState",
+            "T": "LeadState",
             "Λ": "Lambda",
             "Λ-": "LambdaDash",
             "Γ": "Gamma",
-            ("S", "T"): "LeadState",
         }
         for letter in Type1_hybrid_letters:
             key_map[letter] = "Type1_hybrid"
@@ -62,34 +80,4 @@ class TurnsTupleGenerator:
         return ""
 
     def generate_mirrored_tuple(self, arrow: "Arrow") -> Union[str, None]:
-        turns_tuple = self.generate_turns_tuple(arrow.pictograph)
-        letter_type = LetterType.get_letter_type(arrow.pictograph.letter)
-
-        mirrored_logic = {
-            "Type1": self._handle_type1_mirroring,
-            "Type4": self._handle_type4_mirroring,
-            "Type56": self._handle_type56_mirroring,
-        }
-
-        return mirrored_logic.get(letter_type, lambda x: None)(turns_tuple)
-
-    def _handle_type1_mirroring(self, turns_tuple):
-        items = turns_tuple.strip("()").split(", ")
-        return f"({items[1]}, {items[0]})"
-
-    def _handle_type4_mirroring(self, turns_tuple):
-        prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
-        turns = turns_tuple[turns_tuple.find(",") + 2 :]
-        return (
-            f"({prop_rotation}, {turns})"
-            if "cw" in turns_tuple or "ccw" in turns_tuple
-            else None
-        )
-
-    def _handle_type56_mirroring(self, turns_tuple):
-        items = turns_tuple.strip("()").split(", ")
-        if len(items) == 3:
-            return f"({items[0]}, {items[2]}, {items[1]})"
-        prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
-        turns = turns_tuple[turns_tuple.find(",") + 2 : -1]
-        return f"({prop_rotation}, {turns})"
+        return self.mirrored_generator.generate(arrow)
