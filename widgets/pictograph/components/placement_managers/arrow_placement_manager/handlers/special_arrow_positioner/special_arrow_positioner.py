@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
-from .handlers.motion_attr_key_generator import MotionAttrKeyGenerator
-from .handlers.special_placement_data_updater import SpecialPlacementDataUpdater
+from .managers.motion_attr_key_generator import MotionAttrKeyGenerator
+from .managers.special_placement_data_updater import SpecialPlacementDataUpdater
 
 if TYPE_CHECKING:
     from ...arrow_placement_manager import ArrowPlacementManager

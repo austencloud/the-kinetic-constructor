@@ -7,7 +7,7 @@ from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import Letters
 from .special_placement_entry_remover import SpecialPlacementEntryRemover
 from .special_placement_json_handler import SpecialPlacementJsonHandler
-from .special_placement_mirrored_entry_manager import (
+from .mirrored_entry_manager.mirrored_entry_manager import (
     SpecialPlacementMirroredEntryManager,
 )
 

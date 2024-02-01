@@ -2,11 +2,11 @@ from typing import TYPE_CHECKING
 from objects.arrow.arrow import Arrow
 
 if TYPE_CHECKING:
-    from .special_placement_mirrored_entry_manager import (
+    from .mirrored_entry_manager import (
         SpecialPlacementMirroredEntryManager,
     )
-    from .special_placement_data_updater import SpecialPlacementDataUpdater
-    from ...turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
+    from ..special_placement_data_updater import SpecialPlacementDataUpdater
+    from ....turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
 
 
 class MirroredEntryCreator:
