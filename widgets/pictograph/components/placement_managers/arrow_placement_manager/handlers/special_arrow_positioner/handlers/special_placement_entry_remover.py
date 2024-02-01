@@ -1,10 +1,8 @@
 import os
-from typing import TYPE_CHECKING, Union
-from Enums import LetterType
-from constants import BLUE, CLOCK, COUNTER, IN, OUT, RED, Type1, Type4, Type5
+from typing import TYPE_CHECKING
+from constants import BLUE, RED
 from objects.arrow.arrow import Arrow
 from utilities.TypeChecking.MotionAttributes import Colors
-from utilities.TypeChecking.letter_lists import Type1_hybrid_letters
 
 if TYPE_CHECKING:
     from .special_placement_data_updater import SpecialPlacementDataUpdater

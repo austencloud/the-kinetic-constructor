@@ -1,17 +1,9 @@
 import re
 from PyQt6.QtCore import QPointF
-from Enums import LetterType
-from constants import CLOCK, COUNTER, IN, OUT, Type1, Type2
+from constants import CLOCK, COUNTER, IN, OUT
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Optional
 
-from utilities.TypeChecking.letter_lists import (
-    Type1_hybrid_letters,
-    Type2_letters,
-    Type3_letters,
-    Type4_letters,
-    non_hybrid_letters,
-)
 from .directional_tuple_generator import DirectionalTupleGenerator
 
 if TYPE_CHECKING:

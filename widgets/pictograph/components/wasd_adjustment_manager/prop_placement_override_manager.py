@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 
-from constants import IN, OUT
 
 if TYPE_CHECKING:
     from .wasd_adjustment_manager import WASD_AdjustmentManager

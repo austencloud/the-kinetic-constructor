@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from ..turns_tuple_generator import TurnsTupleGenerator
 from .handlers.motion_attr_key_generator import MotionAttrKeyGenerator
 from .handlers.special_placement_data_updater import SpecialPlacementDataUpdater
 

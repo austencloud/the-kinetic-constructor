@@ -1,10 +1,9 @@
 import os
 import logging
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from constants import BLUE, CLOCK, COUNTER, IN, OUT, RED
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
-from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import Letters
 from .special_placement_entry_remover import SpecialPlacementEntryRemover
 from .special_placement_json_handler import SpecialPlacementJsonHandler

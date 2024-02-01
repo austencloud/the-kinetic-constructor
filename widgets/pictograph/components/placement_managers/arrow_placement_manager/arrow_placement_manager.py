@@ -2,7 +2,6 @@ from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
 
 from .handlers.arrow_adjustment_calculator import ArrowAdjustmentCalculator
-from .handlers.turns_tuple_generator import TurnsTupleGenerator
 from .handlers.arrow_initial_pos_calculator import ArrowInitialPosCalculator
 from .handlers.quadrant_index_handler import QuadrantIndexHandler
 from .handlers.default_arrow_positioner import DefaultArrowPositioner

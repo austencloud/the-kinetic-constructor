@@ -1,7 +1,6 @@
 from typing import Union
 from Enums import LetterType
 from objects.arrow.arrow import Arrow
-from utilities.TypeChecking.TypeChecking import Letters
 from utilities.TypeChecking.letter_lists import (
     Type1_hybrid_letters,
     Type1_non_hybrid_letters,
@@ -15,7 +14,7 @@ from constants import *
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..arrow_placement_manager import ArrowPlacementManager
+    pass
 from .turns_tuple_generators import *
 
 
