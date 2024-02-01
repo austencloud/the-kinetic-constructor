@@ -132,6 +132,20 @@ class SpecialPlacementMirroredEntryHandler:
 
         self.data_updater.update_specific_entry_in_json(letter, letter_data, ori_key)
 
+    def update_rotation_angle_in_mirrored_entry(self, letter: str, arrow: Arrow, rot_angle_key: str) -> None:
+        ori_key = self.data_updater._get_ori_key(arrow.motion)
+        letter_data, original_turn_data = self._fetch_letter_data_and_original_turn_data(ori_key, letter, arrow)
+        
+        # Check if rotation angle needs to be updated in the mirrored entry
+        if self._should_handle_rotation_angle(arrow):
+            rotation_angle_override = self._check_for_rotation_angle_override(original_turn_data)
+            if rotation_angle_override is not None:
+                other_ori_key, other_letter_data = self._get_keys_for_mixed_start_ori(letter, arrow, ori_key)
+                mirrored_turns_tuple = self._generate_mirrored_tuple(arrow)
+                self._handle_mirrored_rotation_angle_override(other_letter_data, arrow, rotation_angle_override, mirrored_turns_tuple)
+                self.data_updater.update_specific_entry_in_json(letter, other_letter_data, other_ori_key)
+
+
     def _handle_mirrored_rotation_angle_override(
         self, other_letter_data, arrow, rotation_angle_override, mirrored_turns_tuple
     ):

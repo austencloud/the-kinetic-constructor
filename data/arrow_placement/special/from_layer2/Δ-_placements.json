@@ -13,7 +13,7 @@
     },
     "(s, 1.5, 3)": {
       "dash": [0, -135],
-      "dash_rot_angle": 0
+      "dash_rot_angle_override": true
     },
     "(cw, 0, 0.5)": {
       "anti": [35, -55]
@@ -34,11 +34,11 @@
     "(o, 1.5, 3)": {
       "anti": [-70, 110],
       "dash": [10, -155],
-      "dash_rot_angle": 0
+      "dash_rot_angle_override": true
     },
     "(o, 2.5, 3)": {
       "dash": [10, -170],
-      "dash_rot_angle": 0,
+      "dash_rot_angle_override": true,
       "anti": [-70, 65]
     }
   }

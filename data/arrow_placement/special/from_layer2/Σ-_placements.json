@@ -1,13 +1,13 @@
 {
   "Σ-": {
     "(cw, 0, 1)": {
-      "dash_rot_angle": 0
+      "dash_rot_angle_override": true
     },
     "(ccw, 0, 1)": {
-      "dash_rot_angle": 0
+      "dash_rot_angle_override": true
     },
     "(s, 0.5, 1)": {
-      "dash_rot_angle": 0
+      "dash_rot_angle_override": true
     },
     "(s, 0.5, 3)": {
       "dash": [-25, -170]
@@ -32,15 +32,15 @@
       "pro": [-80, 120]
     },
     "(s, 2.5, 3)": {
-      "dash_rot_angle": 0,
+      "dash_rot_angle_override": true,
       "dash": [0, -165],
       "pro": [-80, 55]
     },
     "(o, 1, 1)": {
-      "dash_rot_angle": 0
+      "dash_rot_angle_override": true
     },
     "(o, 1.5, 1)": {
-      "dash_rot_angle": 0,
+      "dash_rot_angle_override": true,
       "dash": [-20, -145]
     },
     "(o, 1.5, 1.5)": {
@@ -50,20 +50,20 @@
       "dash": [0, -30]
     },
     "(o, 1.5, 3)": {
-      "dash_rot_angle": 0,
+      "dash_rot_angle_override": true,
       "dash": [-10, -125]
     },
     "(o, 2, 1)": {
-      "dash_rot_angle": 0
+      "dash_rot_angle_override": true
     },
     "(o, 2, 3)": {
-      "dash_rot_angle": 0
+      "dash_rot_angle_override": true
     },
     "(o, 3, 1)": {
-      "dash_rot_angle": 0
+      "dash_rot_angle_override": true
     },
     "(o, 3, 3)": {
-      "dash_rot_angle": 0
+      "dash_rot_angle_override": true
     }
   }
 }

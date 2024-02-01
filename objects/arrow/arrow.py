@@ -3,7 +3,7 @@ from objects.arrow.managers.arrow_mouse_event_handler import ArrowMouseEventHand
 from objects.arrow.managers.arrow_updater import ArrowUpdater
 from objects.arrow.managers.arrow_attr_handler import ArrowAttrHandler
 from .managers.arrow_location_manager import ArrowLocationCalculator
-from .managers.arrow_rot_angle_manager import ArrowRotAngleCalculator
+from .managers.arrow_rot_angle_calculator import ArrowRotAngleCalculator
 from ..graphical_object.graphical_object import GraphicalObject
 from utilities.TypeChecking.TypeChecking import (
     Colors,

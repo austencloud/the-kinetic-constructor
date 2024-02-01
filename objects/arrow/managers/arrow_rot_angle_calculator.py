@@ -37,7 +37,7 @@ class ArrowRotAngleCalculator:
             rotation_override = self.arrow.scene.wasd_manager.rotation_angle_override_manager.get_rot_angle_override_from_placements_dict(
                 self.arrow
             )
-            if rotation_override == 0 or rotation_override:
+            if rotation_override is True:
                 return self._get_rot_angle_override_according_to_loc(rotation_override)
         return None
 

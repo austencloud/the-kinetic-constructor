@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Optional
 from Enums import LetterType
-from constants import IN, OUT, STATIC, DASH, Type5, Type6
+from constants import CLOCK, COUNTER, IN, OUT, STATIC, DASH, Type5, Type6
 from PyQt6.QtCore import Qt
 from objects.arrow.arrow import Arrow
 
@@ -51,11 +51,14 @@ class RotationAngleOverrideManager:
         self._apply_rotation_override(letter, data, ori_key, turns_tuple, rot_angle_key)
 
     def _determine_rot_angle_key(self, letter_type: LetterType) -> str:
-        if letter_type in [Type5, Type6]:
-            return f"{self.pictograph.selected_arrow.color}_rot_angle"
+        if self.pictograph.check.starts_from_mixed_orientation():
+            if self.pictograph.check.has_hybrid_motions():
+                return f"{self.pictograph.selected_arrow.motion.motion_type}_rot_angle"
 
+        elif letter_type in [Type5, Type6]:
+            return f"{self.pictograph.selected_arrow.color}_rot_angle_override"
         else:
-            return f"{self.pictograph.selected_arrow.motion.motion_type}_rot_angle"
+            return f"{self.pictograph.selected_arrow.motion.motion_type}_rot_angle_override"
 
     def _apply_rotation_override(
         self,
@@ -74,7 +77,7 @@ class RotationAngleOverrideManager:
         if hybrid_key in turn_data:
             del turn_data[hybrid_key]
         else:
-            turn_data[hybrid_key] = 0
+            turn_data[hybrid_key] = True  # Set to True instead of 0
 
         letter_data[turns_tuple] = turn_data
         data[ori_key][letter] = letter_data
@@ -82,9 +85,27 @@ class RotationAngleOverrideManager:
             letter, letter_data, ori_key
         )
 
+        self._update_mirrored_entry_with_rotation_override(
+            letter, self.pictograph.selected_arrow, rot_angle_key
+        )
+
+    def _update_mirrored_entry_with_rotation_override(
+        self, letter: str, arrow: Arrow, rot_angle_key: str
+    ) -> None:
+        mirrored_entry_handler = (
+            self.special_positioner.data_updater.mirrored_entry_handler
+        )
+        if mirrored_entry_handler:
+            mirrored_entry_handler.data_updater.mirrored_entry_handler.update_rotation_angle_in_mirrored_entry(
+                letter, arrow, rot_angle_key
+            )
+
     def _generate_hybrid_key_if_needed(self, arrow: Arrow, rot_angle_key: str) -> str:
         if arrow.pictograph.check.starts_from_mixed_orientation():
-            layer = "layer1" if arrow.motion.start_ori in [IN, OUT] else "layer2"
+            if self.pictograph.selected_arrow.motion.start_ori in [IN, OUT]:
+                layer = "layer1"
+            elif self.pictograph.selected_arrow.motion.start_ori in [CLOCK, COUNTER]:
+                layer = "layer2"
             return f"{rot_angle_key}_from_{layer}"
         return rot_angle_key
 
@@ -102,24 +123,18 @@ class RotationAngleOverrideManager:
         )
         letter_type = LetterType.get_letter_type(letter)
 
-        if (
-            letter_data.get(turns_tuple, {}).get(
-                f"{arrow.motion.motion_type}_rot_angle_from_layer1"
-            )
-            == 0
-        ):
-            return letter_data[turns_tuple][
-                f"{arrow.motion.motion_type}_rot_angle_from_layer1"
-            ]
-        elif (
-            letter_data.get(turns_tuple, {}).get(
-                f"{arrow.motion.motion_type}_rot_angle_from_layer2"
-            )
-            == 0
-        ):
-            return letter_data[turns_tuple][
-                f"{arrow.motion.motion_type}_rot_angle_from_layer2"
-            ]
+        if arrow.motion.start_ori in [IN, OUT]:
+            layer = "layer1"
+        elif arrow.motion.start_ori in [CLOCK, COUNTER]:
+            layer = "layer2"
+
+        if self.pictograph.check.starts_from_mixed_orientation():
+            if self.pictograph.check.has_hybrid_motions():
+                if turns_tuple not in letter_data:
+                    return None
+                return letter_data[turns_tuple].get(
+                    f"{arrow.motion.motion_type}_rot_angle_from_{layer}"
+                )
         else:
             return letter_data.get(turns_tuple, {}).get(
                 f"{arrow.color}_rot_angle"
