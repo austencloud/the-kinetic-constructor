@@ -4,11 +4,14 @@ from Enums import LetterType
 from constants import (
     BLUE,
     DASH,
+    IN,
     LEADING,
+    OUT,
     RED,
     STATIC,
     TRAILING,
     Type1,
+    Type2,
     Type4,
     Type5,
     Type6,
@@ -27,11 +30,10 @@ class SpecialPlacementMirroredEntryHandler:
 
     def update_mirrored_entry_in_json(self, arrow: "Arrow") -> None:
         letter_type = LetterType.get_letter_type(arrow.pictograph.letter)
-        if letter_type in [Type1, Type4, Type5, Type6]:
-            mirrored_turns_tuple = self._generate_mirrored_tuple(arrow)
-            if mirrored_turns_tuple:
-                self._create_or_update_mirrored_entry(arrow.pictograph.letter, arrow)
-            self._update_pictographs_in_section(letter_type)
+        mirrored_turns_tuple = self._generate_mirrored_tuple(arrow)
+        if mirrored_turns_tuple:
+            self._create_or_update_mirrored_entry(arrow.pictograph.letter, arrow)
+        self._update_pictographs_in_section(letter_type)
 
     def _generate_mirrored_tuple(self, arrow: "Arrow") -> Union[str, None]:
         turns_tuple = self._generate_turns_tuple(arrow)
@@ -43,8 +45,7 @@ class SpecialPlacementMirroredEntryHandler:
             and arrow.motion.motion_type
             != arrow.pictograph.get.other_motion(arrow.motion).motion_type
         ) or arrow.pictograph.letter in ["S", "T"]:
-            items = turns_tuple.strip("()").split(", ")
-            return f"({items[0]}, {items[1]})"
+            return turns_tuple
         elif (
             letter_type == Type1
             and arrow.motion.motion_type
@@ -52,6 +53,8 @@ class SpecialPlacementMirroredEntryHandler:
         ):
             items = turns_tuple.strip("()").split(", ")
             return f"({items[1]}, {items[0]})"
+        elif letter_type == Type2:
+            return turns_tuple
         elif letter_type == Type4:
             prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
             turns = turns_tuple[turns_tuple.find(",") + 2 :]
@@ -76,16 +79,6 @@ class SpecialPlacementMirroredEntryHandler:
             self._fetch_letter_data_and_original_turn_data(ori_key, letter, arrow)
         )
 
-        mirrored_turn_data = self._prepare_mirrored_turn_data(arrow, original_turn_data)
-
-        if self._should_handle_rotation_angle(arrow):
-            rotation_angle_override = self._check_for_rotation_angle_override(
-                original_turn_data
-            )
-            if rotation_angle_override is not None:
-                self._apply_rotation_angle_override(
-                    mirrored_turn_data, rotation_angle_override, arrow
-                )
 
         if arrow.pictograph.check.starts_from_mixed_orientation():
             other_ori_key, other_letter_data = self._get_keys_for_mixed_start_ori(
@@ -96,9 +89,7 @@ class SpecialPlacementMirroredEntryHandler:
                 arrow.pictograph.letter in ["S", "T"]
                 or arrow.pictograph.check.has_hybrid_motions()
             ):
-                attr = self.data_updater.positioner.motion_key_generator.get_key(
-                    arrow
-                )
+                attr = self.data_updater.positioner.motion_key_generator.get_key(arrow)
                 if mirrored_turns_tuple not in other_letter_data:
                     other_letter_data[mirrored_turns_tuple] = {}
                 if attr not in original_turn_data:
@@ -122,8 +113,39 @@ class SpecialPlacementMirroredEntryHandler:
             self.data_updater.update_specific_entry_in_json(
                 letter, other_letter_data, other_ori_key
             )
+            mirrored_turn_data = self._prepare_mirrored_turn_data(arrow, original_turn_data)
+            if self._should_handle_rotation_angle(arrow):
+                rotation_angle_override = self._check_for_rotation_angle_override(
+                    original_turn_data
+                )
+                if rotation_angle_override is not None:
+                    self._apply_rotation_angle_override(
+                        mirrored_turn_data, rotation_angle_override, arrow
+                    )
+                    # Handle rotation angle override for the mirrored entry in the other JSON
+                    self._handle_mirrored_rotation_angle_override(
+                        other_letter_data,
+                        arrow,
+                        rotation_angle_override,
+                        mirrored_turns_tuple,
+                    )
 
         self.data_updater.update_specific_entry_in_json(letter, letter_data, ori_key)
+
+    def _handle_mirrored_rotation_angle_override(
+        self, other_letter_data, arrow, rotation_angle_override, mirrored_turns_tuple
+    ):
+        rot_angle_key = self._generate_rotation_angle_key(arrow)
+        if mirrored_turns_tuple not in other_letter_data:
+            other_letter_data[mirrored_turns_tuple] = {}
+        other_letter_data[mirrored_turns_tuple][rot_angle_key] = rotation_angle_override
+
+    def _generate_rotation_angle_key(self, arrow: Arrow) -> str:
+        motion_type = arrow.motion.motion_type
+        if arrow.pictograph.check.starts_from_mixed_orientation():
+            layer = "layer1" if arrow.motion.start_ori in [IN, OUT] else "layer2"
+            return f"{motion_type}_rot_angle_from_{layer}"
+        return f"{motion_type}_rot_angle"
 
     def initialize_dicts(self, mirrored_turns_tuple, other_letter_data, attr):
         if mirrored_turns_tuple not in other_letter_data:

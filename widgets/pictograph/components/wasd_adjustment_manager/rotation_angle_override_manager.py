@@ -94,17 +94,35 @@ class RotationAngleOverrideManager:
         placements = (
             self.special_positioner.placement_manager.pictograph.main_widget.special_placements
         )
-        ori_key = self.special_positioner.data_updater._get_ori_key(
-            arrow.motion
-        )
+        ori_key = self.special_positioner.data_updater._get_ori_key(arrow.motion)
         letter = arrow.scene.letter
         letter_data = placements[ori_key].get(letter, {})
         turns_tuple = (
             self.special_positioner.turns_tuple_generator.generate_turns_tuple(letter)
         )
         letter_type = LetterType.get_letter_type(letter)
-        return letter_data.get(turns_tuple, {}).get(
-            f"{arrow.color}_rot_angle"
-            if letter_type in [Type5, Type6]
-            else f"{arrow.motion.motion_type}_rot_angle"
-        )
+
+        if (
+            letter_data.get(turns_tuple, {}).get(
+                f"{arrow.motion.motion_type}_rot_angle_from_layer1"
+            )
+            == 0
+        ):
+            return letter_data[turns_tuple][
+                f"{arrow.motion.motion_type}_rot_angle_from_layer1"
+            ]
+        elif (
+            letter_data.get(turns_tuple, {}).get(
+                f"{arrow.motion.motion_type}_rot_angle_from_layer2"
+            )
+            == 0
+        ):
+            return letter_data[turns_tuple][
+                f"{arrow.motion.motion_type}_rot_angle_from_layer2"
+            ]
+        else:
+            return letter_data.get(turns_tuple, {}).get(
+                f"{arrow.color}_rot_angle"
+                if letter_type in [Type5, Type6]
+                else f"{arrow.motion.motion_type}_rot_angle"
+            )
