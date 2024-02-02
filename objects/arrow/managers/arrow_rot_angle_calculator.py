@@ -273,28 +273,16 @@ class ArrowRotAngleCalculator:
     ) -> dict[Orientations, dict[PropRotDirs, dict[Locations, int]]]:
         if self.arrow.motion.prop_rot_dir == NO_ROT:
             orientation_map = {
-                RADIAL: {
-                    (NORTH, SOUTH): 0,
-                    (EAST, WEST): 90,
-                    (SOUTH, NORTH): 180,
-                    (WEST, EAST): 270,
-                },
-                NONRADIAL: {
-                    (NORTH, SOUTH): 90,
-                    (EAST, WEST): 180,
-                    (SOUTH, NORTH): 270,
-                    (WEST, EAST): 0,
-                },
+                (NORTH, SOUTH): 90,
+                (EAST, WEST): 180,
+                (SOUTH, NORTH): 270,
+                (WEST, EAST): 0,
             }
 
-            if self.arrow.motion.start_ori in [IN, OUT]:
-                return orientation_map.get(RADIAL).get(
-                    (self.arrow.motion.start_loc, self.arrow.motion.end_loc)
-                )
-            elif self.arrow.motion.start_ori in [CLOCK, COUNTER]:
-                return orientation_map.get(NONRADIAL).get(
-                    (self.arrow.motion.start_loc, self.arrow.motion.end_loc)
-                )
+            return orientation_map.get(
+                (self.arrow.motion.start_loc, self.arrow.motion.end_loc)
+            )
+
         elif self.arrow.motion.prop_rot_dir in [CLOCKWISE, COUNTER_CLOCKWISE]:
             orientation_map = {
                 IN: {

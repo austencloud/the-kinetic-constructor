@@ -74,9 +74,9 @@ class OptionPickerScrollArea(ScrollArea):
                 if not os.path.exists(image_path):
                     option.image_renderer.render_and_cache_image()
                 else:
-                    self.main_widget.image_cache_manager.image_cache[
-                        image_path
-                    ] = QPixmap(image_path)
+                    self.main_widget.image_cache_manager.image_cache[image_path] = (
+                        QPixmap(image_path)
+                    )
 
             if not option.pixmap:
                 option.pixmap = option.addPixmap(
@@ -150,6 +150,9 @@ class OptionPickerScrollArea(ScrollArea):
                 key=lambda x: custom_order_dict.get(x[1].letter, float("inf")),
             )
         )
+
+
+
 
     def _add_sorted_options_to_layout(self) -> None:
         for _, option in self.pictographs.items():
