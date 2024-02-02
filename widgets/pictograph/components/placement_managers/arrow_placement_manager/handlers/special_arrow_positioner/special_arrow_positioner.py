@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from .managers.motion_attr_key_generator import AttrKeyGenerator
+from .managers.attr_key_generator import AttrKeyGenerator
 from .managers.special_placement_data_updater import SpecialPlacementDataUpdater
 
 if TYPE_CHECKING:

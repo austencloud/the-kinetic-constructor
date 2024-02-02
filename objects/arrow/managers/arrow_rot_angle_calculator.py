@@ -38,12 +38,11 @@ class ArrowRotAngleCalculator:
                 self.arrow
             )
             if rotation_override is True:
-                return self._get_rot_angle_override_according_to_loc(rotation_override)
+                return self._get_rot_angle_override_according_to_loc()
         return None
 
-    def _get_rot_angle_override_according_to_loc(self, rotation_override) -> int:
-        
-        if not self.arrow.pictograph.check.starts_from_mixed_orientation():
+    def _get_rot_angle_override_according_to_loc(self) -> int:
+        if self.arrow.motion.start_ori in [CLOCK, COUNTER]:
             static_angle_override_map = {
                 NORTH: 0,
                 EAST: {CLOCKWISE: 90, COUNTER_CLOCKWISE: 270},
@@ -57,19 +56,32 @@ class ArrowRotAngleCalculator:
                 SOUTH: 90,
                 WEST: {CLOCKWISE: 180, COUNTER_CLOCKWISE: 0},
             }
-            if self.arrow.motion.motion_type == DASH:
-                    loc_angle = dash_angle_override_map.get(self.arrow.loc)
-                    if isinstance(loc_angle, dict):
-                        return loc_angle.get(self.arrow.motion.prop_rot_dir, 0)
-                    return loc_angle
-                
-            elif self.arrow.motion.motion_type == STATIC:
-                    loc_angle = static_angle_override_map.get(self.arrow.loc)
-                    if isinstance(loc_angle, dict):
-                        return loc_angle.get(self.arrow.motion.prop_rot_dir, 0)
-                    return loc_angle
+        elif self.arrow.motion.start_ori in [IN, OUT]:
+            static_angle_override_map = {
+                NORTH: 180,
+                EAST: {CLOCKWISE: 270, COUNTER_CLOCKWISE: 90},
+                SOUTH: 0,
+                WEST: {CLOCKWISE: 90, COUNTER_CLOCKWISE: 270},
+            }
 
-            return rotation_override
+            dash_angle_override_map = {
+                NORTH: 270,
+                EAST: {CLOCKWISE: 0, COUNTER_CLOCKWISE: 180},
+                SOUTH: 90,
+                WEST: {CLOCKWISE: 180, COUNTER_CLOCKWISE: 0},
+            }
+
+        if self.arrow.motion.motion_type == DASH:
+            loc_angle = dash_angle_override_map.get(self.arrow.loc)
+            if isinstance(loc_angle, dict):
+                return loc_angle.get(self.arrow.motion.prop_rot_dir, 0)
+            return loc_angle
+
+        elif self.arrow.motion.motion_type == STATIC:
+            loc_angle = static_angle_override_map.get(self.arrow.loc)
+            if isinstance(loc_angle, dict):
+                return loc_angle.get(self.arrow.motion.prop_rot_dir, 0)
+            return loc_angle
 
     def _apply_rotation(self, angle: int) -> None:
         self.arrow.setTransformOriginPoint(self.arrow.boundingRect().center())
@@ -199,7 +211,6 @@ class ArrowRotAngleCalculator:
         self,
     ) -> dict[Orientations, dict[PropRotDirs, dict[Locations, int]]]:
         orientation_map = {
-
             RADIAL: {
                 CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
                 COUNTER_CLOCKWISE: {NORTH: 0, EAST: 270, SOUTH: 180, WEST: 90},
@@ -210,7 +221,6 @@ class ArrowRotAngleCalculator:
                 COUNTER_CLOCKWISE: {NORTH: 180, EAST: 90, SOUTH: 0, WEST: 270},
                 NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
             },
-
         }
         if self.arrow.motion.start_ori in [IN, OUT]:
             return orientation_map.get(RADIAL)

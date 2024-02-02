@@ -14,10 +14,7 @@ class AttrKeyGenerator:
     def get_key(self, arrow: "Arrow") -> str:
         if arrow.pictograph.check.starts_from_mixed_orientation():
             if self.positioner.pictograph.letter in ["S", "T"]:
-                if arrow.motion.start_ori in [IN, OUT]:
-                    return f"{arrow.motion.lead_state}_from_layer1"
-                elif arrow.motion.start_ori in [CLOCK, COUNTER]:
-                    return f"{arrow.motion.lead_state}_from_layer2"
+                return f"{arrow.color}_{arrow.motion.lead_state}"
             elif arrow.pictograph.check.starts_from_mixed_orientation():
                 if arrow.pictograph.check.has_hybrid_motions():
                     if arrow.motion.start_ori in [IN, OUT]:
