@@ -59,11 +59,10 @@ class Type3TurnsTupleGenerator(BaseTurnsTupleGenerator):
         super().set_pictograph(pictograph)
         shift = self.p.get.shift()
         dash = self.p.get.dash()
+        direction = "s" if dash.prop_rot_dir == shift.prop_rot_dir else "o"
         if dash.turns > 0 and shift.turns > 0:
-            direction = "s" if dash.prop_rot_dir == shift.prop_rot_dir else "o"
             return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
         elif dash.turns > 0:
-            direction = dash.prop_rot_dir.lower()
             return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
         else:
             return f"({self._normalize_turns(shift)}, {self._normalize_turns(dash)})"

@@ -60,8 +60,6 @@ class DirectionalTupleGenerator:
                 return self._pro_vs_no_rot_dash(x, y)
             elif self.other_motion.motion_type == ANTI:
                 return self._anti_vs_no_rot_dash(x, y)
-            elif self.other_motion.motion_type == DASH:
-                return self._no_rot_dash_vs_dash(x, y)
             elif self.other_motion.motion_type == STATIC:
                 return self._no_rot_dash_vs_static(x, y)
         elif self.motion.motion_type == DASH:
@@ -88,14 +86,12 @@ class DirectionalTupleGenerator:
             else [(x, y), (-y, x), (-x, -y), (y, -x)]
         )
 
-    def _no_rot_dash_vs_dash(self, x: int, y: int) -> list[tuple[int, int]]:
-        return {
-            RED: [(x, y), (-y, x), (-x, -y), (y, -x)],
-            BLUE: [(-x, y), (-y, -x), (x, -y), (y, x)],
-        }.get(self.motion.color, [])
-
     def _no_rot_dash_vs_static(self, x: int, y: int) -> list[tuple[int, int]]:
-        return [(x, y), (-y, x), (-x, -y), (y, -x)]
+        return (
+            [(x, y), (-y, x), (-x, -y), (y, -x)]
+            if self.other_motion.prop_rot_dir == CLOCKWISE
+            else [(-x, y), (-y, -x), (x, -y), (y, x)]
+        )
 
     def _dash(self, x: int, y: int) -> list[tuple[int, int]]:
         return {
@@ -114,14 +110,14 @@ class DirectionalTupleGenerator:
 
     def _type5_zero_turns(self, x: int, y: int) -> list[tuple[int, int]]:
         Type5_zero_turns_directional_tuples = {
-            (BLUE, (NORTH, SOUTH)): [(x, y), (-y, x), (-x, -y), (y, x)],
-            (BLUE, (EAST, WEST)): [(-x, y), (-y, -x), (-x, -y), (y, x)],
-            (BLUE, (SOUTH, NORTH)): [(x, y), (-y, -x), (-x, -y), (y, -x)],
-            (BLUE, (WEST, EAST)): [(x, y), (-y, -x), (x, -y), (-y, x)],
-            (RED, (NORTH, SOUTH)): [(-x, y), (-y, x), (x, -y), (y, x)],
-            (RED, (EAST, WEST)): [(-x, y), (-y, x), (-x, -y), (y, x)],
-            (RED, (SOUTH, NORTH)): [(-x, y), (-y, -x), (x, -y), (y, -x)],
-            (RED, (WEST, EAST)): [(x, y), (-y, x), (x, -y), (y, x)],
+            (BLUE, (NORTH, SOUTH)): [(x, y), (-y, x), (-x, -y), (y, -x)],
+            (BLUE, (EAST, WEST)): [(x, y), (-y, -x), (-x, -y), (y, x)],
+            (BLUE, (SOUTH, NORTH)): [(x, y), (-y, x), (-x, -y), (y, -x)],
+            (BLUE, (WEST, EAST)): [(x, y), (-y, -x), (-x, -y), (-y, x)],
+            (RED, (NORTH, SOUTH)): [(x, y), (-y, -x), (-x, -y), (y, -x)],
+            (RED, (EAST, WEST)): [(x, y), (-y, -x), (-x, -y), (y, -x)],
+            (RED, (SOUTH, NORTH)): [(x, y), (-y, x), (-x, -y), (y, -x)],
+            (RED, (WEST, EAST)): [(-x, y), (-y, -x), (-x, -y), (y, x)],
         }
         return Type5_zero_turns_directional_tuples.get(
             (self.motion.color, (self.motion.start_loc, self.motion.end_loc)), []
