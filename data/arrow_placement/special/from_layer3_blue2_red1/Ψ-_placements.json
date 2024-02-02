@@ -31,7 +31,8 @@
       "blue": [45, -55]
     },
     "(cw, 1, 0)": {
-      "blue": [0, -145]
+      "blue": [5, -145],
+      "dash_from_layer2_rot_angle_override": true
     }
   }
 }

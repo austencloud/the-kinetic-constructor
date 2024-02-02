@@ -32,6 +32,10 @@
     },
     "(cw, 1, 0)": {
       "red": [0, -145]
+    },
+    "(ccw, 1, 0)": {
+      "red": [5, -145],
+      "dash_from_layer2_rot_angle_override": true
     }
   }
 }

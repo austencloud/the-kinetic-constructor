@@ -136,7 +136,7 @@ class RotationAngleOverrideManager:
             layer = "layer2"
 
         if self.pictograph.check.starts_from_mixed_orientation():
-            if self.pictograph.check.has_hybrid_motions():
+            if self.pictograph.check.has_hybrid_motions() or letter_type in [Type5, Type6]:
                 if turns_tuple not in letter_data:
                     letter_data[turns_tuple] = {}
                 return letter_data[turns_tuple].get(

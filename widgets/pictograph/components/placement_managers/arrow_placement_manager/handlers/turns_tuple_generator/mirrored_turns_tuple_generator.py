@@ -28,7 +28,8 @@ class MirroredTurnsTupleGenerator:
         mirrored_logic = {
             "Type1": self._handle_type1,
             "Type4": self._handle_type4,
-            "Type56": self._handle_type56,
+            "Type5": self._handle_type56,
+            "Type6": self._handle_type56,
         }
 
         return mirrored_logic.get(letter_type, lambda x: None)(arrow)
