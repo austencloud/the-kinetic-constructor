@@ -74,7 +74,7 @@ class RotationAngleOverrideManager:
         else:
             turn_data[rot_angle_key] = True
             self._update_mirrored_entry_with_rotation_override(
-                letter, self.pictograph.selected_arrow
+                letter, self.pictograph.selected_arrow, updated_turn_data=turn_data
             )
 
         letter_data[turns_tuple] = turn_data
@@ -84,20 +84,20 @@ class RotationAngleOverrideManager:
         )
 
     def handle_mirrored_rotation_angle_override(
-        self, other_letter_data, arrow, rotation_angle_override, mirrored_turns_tuple
+        self, other_letter_data, rotation_angle_override, mirrored_turns_tuple
     ):
         rot_angle_key = self.key_generator.generate_rotation_angle_override_key()
         if mirrored_turns_tuple not in other_letter_data:
             other_letter_data[mirrored_turns_tuple] = {}
         other_letter_data[mirrored_turns_tuple][rot_angle_key] = rotation_angle_override
 
-    def _update_mirrored_entry_with_rotation_override(self, letter: str, arrow: Arrow):
+    def _update_mirrored_entry_with_rotation_override(self, letter: str, arrow: Arrow, updated_turn_data: dict):
         mirrored_entry_handler = (
             self.wasd_manager.pictograph.arrow_placement_manager.special_positioner.data_updater.mirrored_entry_manager
         )
         if mirrored_entry_handler:
             mirrored_entry_handler.update_rotation_angle_in_mirrored_entry(
-                letter, arrow
+                letter, arrow, updated_turn_data
             )
 
     def _update_mirrored_entry_with_rotation_override_removal(
@@ -144,7 +144,7 @@ class RotationAngleOverrideManager:
                 )
         else:
             return letter_data.get(turns_tuple, {}).get(
-                f"{arrow.color}_rot_angle"
+                f"{arrow.color}_rot_angle_override"
                 if letter_type in [Type5, Type6]
-                else f"{arrow.motion.motion_type}_rot_angle"
+                else f"{arrow.motion.motion_type}_rot_angle_override"
             )
