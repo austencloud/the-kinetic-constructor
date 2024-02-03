@@ -6,17 +6,17 @@ if TYPE_CHECKING:
 
 class MotionTurnsManager:
     def __init__(self, motion: "Motion") -> None:
-        self.m = motion
+        self.motion = motion
 
     def adjust_turns(self, adjustment: float) -> None:
         """Adjust the turns of a given motion object"""
-        new_turns = MotionTurnsManager.clamp_turns(self.m.turns + adjustment)
-        self.m.turns_manager.set_motion_turns(new_turns)
+        new_turns = MotionTurnsManager.clamp_turns(self.motion.turns + adjustment)
+        self.motion.turns_manager.set_motion_turns(new_turns)
 
     def set_turns(self, new_turns: Turns) -> None:
         """set the turns for a given motion object"""
         clamped_turns = MotionTurnsManager.clamp_turns(new_turns)
-        self.m.turns_manager.set_motion_turns(clamped_turns)
+        self.motion.turns_manager.set_motion_turns(clamped_turns)
 
     @staticmethod
     def clamp_turns(turns: Turns) -> Turns:
@@ -30,22 +30,23 @@ class MotionTurnsManager:
 
     def add_half_turn(self) -> None:
         """Add half a turn to the motion"""
-        self.adjust_turns(self.m, 0.5)
+        self.adjust_turns(self.motion, 0.5)
 
     def subtract_half_turn(self) -> None:
         """Subtract half a turn from the motion"""
-        self.adjust_turns(self.m, -0.5)
+        self.adjust_turns(self.motion, -0.5)
 
     def add_turn(self) -> None:
         """Add a full turn to the motion"""
-        self.adjust_turns(self.m, 1)
+        self.adjust_turns(self.motion, 1)
 
     def subtract_turn(self) -> None:
         """Subtract a full turn from the motion"""
-        self.adjust_turns(self.m, -1)
+        self.adjust_turns(self.motion, -1)
 
     def set_motion_turns(self, turns: Turns) -> None:
-        self.m.turns = turns
-        self.m.arrow.turns = turns
+        self.motion.turns = turns
+        self.motion.arrow.turns = turns
         # self.m.arrow.ghost.turns = turns
-        self.m.updater.update_motion()
+        self.motion.updater.update_motion()
+        self.motion.arrow.updater.update_arrow()
