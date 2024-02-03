@@ -3,7 +3,7 @@ from .base_rot_angle_calculator import BaseRotAngleCalculator
 
 
 class AntiRotAngleCalculator(BaseRotAngleCalculator):
-    def calculate_angle(self):
+    def _calculate_angle_impl(self):
         if self.arrow.motion.start_ori in [IN, OUT]:
             direction_map = {
                 CLOCKWISE: {

@@ -3,7 +3,7 @@ from .base_rot_angle_calculator import BaseRotAngleCalculator
 
 
 class StaticRotAngleCalculator(BaseRotAngleCalculator):
-    def calculate_angle(self):
+    def _calculate_angle_impl(self):
         if self.arrow.motion.start_ori in [IN, OUT]:
             direction_map = self._radial_static_direction_map()
         elif self.arrow.motion.start_ori in [CLOCK, COUNTER]:
@@ -11,6 +11,7 @@ class StaticRotAngleCalculator(BaseRotAngleCalculator):
 
         prop_rot_dir = self.arrow.motion.prop_rot_dir
         loc = self.arrow.loc
+
         return direction_map.get(prop_rot_dir).get(loc, 0)
 
     def _radial_static_direction_map(self) -> dict[str, dict[str, int]]:

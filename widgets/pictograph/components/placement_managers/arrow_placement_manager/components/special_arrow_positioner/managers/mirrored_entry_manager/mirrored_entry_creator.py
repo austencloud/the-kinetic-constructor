@@ -19,7 +19,7 @@ class MirroredEntryCreator:
         )
 
     def create_entry(self, letter: str, arrow: Arrow):
-        ori_key = self.data_updater._get_ori_key(arrow.motion)
+        ori_key = self.data_updater.get_ori_key(arrow.motion)
         letter_data, _ = self._fetch_letter_data_and_original_turn_data(
             ori_key, letter, arrow
         )

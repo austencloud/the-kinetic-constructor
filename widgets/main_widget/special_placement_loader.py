@@ -9,14 +9,14 @@ if TYPE_CHECKING:
 class SpecialPlacementLoader:
     def __init__(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
-        self.special_placements = {
+        self.special_placements: dict[str, dict[str, dict[str, dict[str, int]]]] = {
             "from_layer1": {},
             "from_layer2": {},
             "from_layer3_blue2_red1": {},
             "from_layer3_blue1_red2": {},
         }
 
-    def load_special_placements(self) -> None:
+    def load_special_placements(self) -> dict[ str, dict[str, dict[str, dict[str, int]]]]:
         """Loads the special placements for arrows from radial and nonradial directories."""
         for subfolder in [
             "from_layer1",
@@ -37,7 +37,7 @@ class SpecialPlacementLoader:
     
     def refresh_placements(self) -> None:
         """Refreshes the special placements and updates all pictographs."""
-        self.load_special_placements()
+        self.main_widget.special_placements = self.load_special_placements()
 
         # Iterate over all pictographs and update them
         for _, pictographs in self.main_widget.all_pictographs.items():

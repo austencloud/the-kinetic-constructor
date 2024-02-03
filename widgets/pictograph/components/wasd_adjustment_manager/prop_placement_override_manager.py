@@ -30,7 +30,7 @@ class PropPlacementOverrideManager:
 
         if self.pictograph.check.ends_in_beta():
             adjustment_key_str = self._generate_adjustment_key_str(letter)
-            ori_key = self.special_positioner.data_updater._get_ori_key(
+            ori_key = self.special_positioner.data_updater.get_ori_key(
                 self.pictograph.blue_motion
             )
             override_key = self._generate_override_key(beta_state)
@@ -69,7 +69,7 @@ class PropPlacementOverrideManager:
         return letter_data.get(adjustment_key_str, {})
 
     def _update_json_entry(self, letter, letter_data) -> None:
-        ori_key = self.special_positioner.data_updater._get_ori_key(
+        ori_key = self.special_positioner.data_updater.get_ori_key(
             self.pictograph.blue_motion
         )
         self.special_positioner.data_updater.update_specific_entry_in_json(

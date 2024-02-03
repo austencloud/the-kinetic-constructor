@@ -3,7 +3,7 @@ from .base_rot_angle_calculator import BaseRotAngleCalculator
 
 
 class ProRotAngleCalculator(BaseRotAngleCalculator):
-    def calculate_angle(self):
+    def _calculate_angle_impl(self):
         direction_map = self._pro_direction_map()
         prop_rot_dir = self.arrow.motion.prop_rot_dir
         loc = self.arrow.loc

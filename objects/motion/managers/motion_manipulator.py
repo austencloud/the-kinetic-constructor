@@ -161,7 +161,7 @@ class MotionManipulator:
         """
         Refresh the arrow and prop, and update the pictograph.
         """
-        self.motion.arrow.scene.updater.update_pictograph()
+        self.motion.arrow.pictograph.updater.update_pictograph()
 
     def delete_prop(self) -> None:
         self.motion.prop.scene.removeItem(self.motion.prop)

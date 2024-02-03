@@ -32,7 +32,7 @@ class Arrow(GraphicalObject):
     def __init__(self, pictograph, arrow_dict) -> None:
         super().__init__(pictograph)
         self.arrow_dict = arrow_dict
-        self.scene: Pictograph = pictograph
+        self.pictograph: Pictograph = pictograph
 
     def setup_components(self):
         self.location_calculator = ArrowLocationManager(self)

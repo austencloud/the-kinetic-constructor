@@ -21,7 +21,7 @@ class ArrowAdjustmentCalculator:
                 self.pm.pictograph
             )
         )
-        ori_key = self.pm.special_positioner.data_updater._get_ori_key(arrow.motion)
+        ori_key = self.pm.special_positioner.data_updater.get_ori_key(arrow.motion)
         special_placements = self.pm.pictograph.main_widget.special_placements[ori_key]
 
         if not self.pm.pictograph.letter in special_placements:

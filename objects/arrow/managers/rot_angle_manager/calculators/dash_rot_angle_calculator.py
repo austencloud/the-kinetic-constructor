@@ -3,12 +3,12 @@ from .base_rot_angle_calculator import BaseRotAngleCalculator
 
 
 class DashRotAngleCalculator(BaseRotAngleCalculator):
-    def calculate_angle(self):
+    def _calculate_angle_impl(self):
         if self.arrow.motion.prop_rot_dir == NO_ROT:
             return self._handle_no_rotation()
 
         return self._handle_orientation_based_rotation()
-
+        
     def _handle_no_rotation(self):
         no_rotation_map = {
             (NORTH, SOUTH): 90,

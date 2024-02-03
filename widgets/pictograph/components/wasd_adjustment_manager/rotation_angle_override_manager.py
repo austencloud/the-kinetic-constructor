@@ -32,17 +32,15 @@ class RotationAngleOverrideManager:
         if not self._is_valid_for_override():
             return
 
-        ori_key = self.special_positioner.data_updater._get_ori_key(
+        ori_key = self.special_positioner.data_updater.get_ori_key(
             self.pictograph.selected_arrow.motion
         )
-        data = (
-            self.pictograph.main_widget.special_placement_loader.load_special_placements()
-        )
+        data = self.pictograph.main_widget.special_placements
         letter = self.pictograph.letter
 
         self._apply_override_if_needed(letter, data, ori_key)
         for pictograph in self.pictograph.scroll_area.pictographs.values():
-            pictograph.arrow_placement_manager.update_arrow_placements()
+            pictograph.updater.update_pictograph()
 
     def _is_valid_for_override(self) -> bool:
         return (
@@ -51,7 +49,9 @@ class RotationAngleOverrideManager:
         )
 
     def _apply_override_if_needed(self, letter: str, data: dict, ori_key: str) -> None:
-        rot_angle_key = self.key_generator.generate_rotation_angle_override_key()
+        rot_angle_key = self.key_generator.generate_rotation_angle_override_key(
+            self.pictograph.selected_arrow
+        )
         turns_tuple = self.turns_tuple_generator.generate_turns_tuple(self.pictograph)
         self._apply_rotation_override(letter, data, ori_key, turns_tuple, rot_angle_key)
 
@@ -66,22 +66,18 @@ class RotationAngleOverrideManager:
         letter_data = data[ori_key].get(letter, {})
         turn_data = letter_data.get(turns_tuple, {})
 
-        if rot_angle_key in turn_data:
-            del turn_data[rot_angle_key]
-            self._update_mirrored_entry_with_rotation_override_removal(
-                letter, self.pictograph.selected_arrow, rot_angle_key
-            )
-        else:
-            turn_data[rot_angle_key] = True
-            self._update_mirrored_entry_with_rotation_override(
-                letter, self.pictograph.selected_arrow, updated_turn_data=turn_data
-            )
-
         letter_data[turns_tuple] = turn_data
         data[ori_key][letter] = letter_data
+        if rot_angle_key in turn_data:
+            del turn_data[rot_angle_key]
+            self._update_mirrored_entry_with_rotation_override_removal(rot_angle_key)
+        else:
+            turn_data[rot_angle_key] = True
+            self._update_mirrored_entry_with_rotation_override(turn_data)
         self.special_positioner.data_updater.update_specific_entry_in_json(
             letter, letter_data, ori_key
         )
+        self.pictograph.updater.update_pictograph()
 
     def handle_mirrored_rotation_angle_override(
         self, other_letter_data, rotation_angle_override, mirrored_turns_tuple
@@ -91,32 +87,29 @@ class RotationAngleOverrideManager:
             other_letter_data[mirrored_turns_tuple] = {}
         other_letter_data[mirrored_turns_tuple][rot_angle_key] = rotation_angle_override
 
-    def _update_mirrored_entry_with_rotation_override(self, letter: str, arrow: Arrow, updated_turn_data: dict):
-        mirrored_entry_handler = (
+    def _update_mirrored_entry_with_rotation_override(self, updated_turn_data: dict):
+        mirrored_entry_manager = (
             self.wasd_manager.pictograph.arrow_placement_manager.special_positioner.data_updater.mirrored_entry_manager
         )
-        if mirrored_entry_handler:
-            mirrored_entry_handler.update_rotation_angle_in_mirrored_entry(
-                letter, arrow, updated_turn_data
-            )
+        mirrored_entry_manager.rot_angle_manager.update_rotation_angle_in_mirrored_entry(
+            self.pictograph.selected_arrow, updated_turn_data
+        )
 
-    def _update_mirrored_entry_with_rotation_override_removal(
-        self, letter: str, arrow: Arrow, hybrid_key: str
-    ):
+    def _update_mirrored_entry_with_rotation_override_removal(self, hybrid_key: str):
         mirrored_entry_handler = (
             self.wasd_manager.pictograph.arrow_placement_manager.special_positioner.data_updater.mirrored_entry_manager
         )
         if mirrored_entry_handler:
-            mirrored_entry_handler.remove_rotation_angle_in_mirrored_entry(
-                letter, arrow, hybrid_key
+            mirrored_entry_handler.rot_angle_manager.remove_rotation_angle_in_mirrored_entry(
+                self.pictograph.selected_arrow, hybrid_key
             )
 
     def _generate_rotation_angle_key(self, arrow: Arrow) -> str:
         motion_type = arrow.motion.motion_type
         if arrow.pictograph.check.starts_from_mixed_orientation():
             layer = "layer1" if arrow.motion.start_ori in [IN, OUT] else "layer2"
-            return f"{motion_type}_rot_angle_from_{layer}"
-        return f"{motion_type}_rot_angle"
+            return f"{motion_type}_from_{layer}_rot_angle_override"
+        return f"{motion_type}_rot_angle_override"
 
     def get_rot_angle_override_from_placements_dict(
         self, arrow: Arrow
@@ -124,27 +117,13 @@ class RotationAngleOverrideManager:
         placements = (
             self.special_positioner.placement_manager.pictograph.main_widget.special_placements
         )
-        ori_key = self.special_positioner.data_updater._get_ori_key(arrow.motion)
-        letter = arrow.scene.letter
+        ori_key = self.special_positioner.data_updater.get_ori_key(arrow.motion)
+        letter = arrow.pictograph.letter
         letter_data = placements[ori_key].get(letter, {})
         turns_tuple = self.turns_tuple_generator.generate_turns_tuple(self.pictograph)
-        letter_type = LetterType.get_letter_type(letter)
 
-        if arrow.motion.start_ori in [IN, OUT]:
-            layer = "layer1"
-        elif arrow.motion.start_ori in [CLOCK, COUNTER]:
-            layer = "layer2"
+        key = self._generate_rotation_angle_key(arrow)
 
-        if self.pictograph.check.starts_from_mixed_orientation():
-            if self.pictograph.check.has_hybrid_motions() or letter_type in [Type5, Type6]:
-                if turns_tuple not in letter_data:
-                    letter_data[turns_tuple] = {}
-                return letter_data[turns_tuple].get(
-                    f"{arrow.motion.motion_type}_from_{layer}_rot_angle_override"
-                )
-        else:
-            return letter_data.get(turns_tuple, {}).get(
-                f"{arrow.color}_rot_angle_override"
-                if letter_type in [Type5, Type6]
-                else f"{arrow.motion.motion_type}_rot_angle_override"
-            )
+        if turns_tuple not in letter_data:
+            letter_data[turns_tuple] = {}
+        return letter_data[turns_tuple].get(key)

@@ -5,9 +5,7 @@ from typing import TYPE_CHECKING
 from utilities.TypeChecking.letter_lists import hybrid_letters
 
 if TYPE_CHECKING:
-    from widgets.pictograph.components.placement_managers.arrow_placement_manager.handlers.special_arrow_positioner.managers.mirrored_entry_manager.mirrored_entry_updater import (
-        MirroredEntryUpdater,
-    )
+    from .mirrored_entry_updater import MirroredEntryUpdater
 
 
 class MirroredEntryUpdaterBase:
@@ -39,7 +37,7 @@ class StandardOrientationUpdater(MirroredEntryUpdaterBase):
     ):
         if letter in ["S", "T"] or letter in hybrid_letters:
             return
-        ori_key = self.mirrored_entry_updater.manager.data_updater._get_ori_key(
+        ori_key = self.mirrored_entry_updater.manager.data_updater.get_ori_key(
             self.arrow.motion
         )
 
@@ -91,7 +89,7 @@ class MixedOrientationUpdater(MirroredEntryUpdaterBase):
         other_ori_key, other_letter_data = (
             self.mirrored_entry_updater._get_keys_for_mixed_start_ori(
                 letter,
-                self.mirrored_entry_updater.manager.data_updater._get_ori_key(
+                self.mirrored_entry_updater.manager.data_updater.get_ori_key(
                     self.arrow.motion
                 ),
             )

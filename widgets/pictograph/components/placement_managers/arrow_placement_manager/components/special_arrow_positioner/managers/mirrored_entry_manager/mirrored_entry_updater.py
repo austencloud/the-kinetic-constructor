@@ -26,10 +26,13 @@ class MirroredEntryUpdater:
         else:
             return StandardOrientationUpdater(self, arrow)
 
-    def update_entry(self, letter: str, arrow: Arrow):
-        ori_key = self.manager.data_updater._get_ori_key(arrow.motion)
+    def update_entry(self, arrow: Arrow):
+        ori_key = self.manager.data_updater.get_ori_key(arrow.motion)
+        letter = arrow.pictograph.letter
         letter_data, original_turn_data = (
-            self._fetch_letter_data_and_original_turn_data(ori_key, letter, arrow)
+            self.manager.data_prep._fetch_letter_data_and_original_turn_data(
+                ori_key, letter, arrow
+            )
         )
 
         updater = self._get_updater(arrow)
