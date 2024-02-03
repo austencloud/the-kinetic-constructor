@@ -67,7 +67,7 @@ class SvgManager:
 
     def get_svg_file(self) -> str:
         if self.object.__class__.__name__ in ["Arrow", "GhostArrow"]:
-            return self._arrow_svg_file(self.object.motion.motion_type, self.object.turns)
+            return self._arrow_svg_file(self.object.motion.motion_type, self.object.motion.turns)
         elif "Prop" in [base.__name__ for base in self.object.__class__.__bases__]:
             return self._prop_svg_file(self.object.prop_type)
         else:

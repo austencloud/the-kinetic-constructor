@@ -57,10 +57,10 @@ class MirroredTurnsTupleGenerator:
     def _handle_type56(self, arrow: Arrow):
         turns_tuple = self.turns_tuple_generator.generate_turns_tuple(arrow.pictograph)
         other_arrow = arrow.pictograph.get.other_arrow(arrow)
-        if arrow.turns > 0 and other_arrow.turns > 0:
+        if arrow.motion.turns > 0 and other_arrow.motion.turns > 0:
             items = turns_tuple.strip("()").split(", ")
             return f"({items[0]}, {items[2]}, {items[1]})"
-        elif arrow.turns > 0 or other_arrow.turns > 0:
+        elif arrow.motion.turns > 0 or other_arrow.motion.turns > 0:
             prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
             turns = turns_tuple[turns_tuple.find(",") + 2 : -1]
             return f"({prop_rotation}, {turns})"

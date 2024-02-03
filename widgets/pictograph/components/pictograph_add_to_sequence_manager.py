@@ -85,7 +85,7 @@ class AddToSequenceManager:
             motion_dict[ARROW] = new_arrow
             motion_dict[PROP] = new_prop
             motion_dict[MOTION_TYPE] = new_arrow.motion.motion_type
-            new_arrow.turns = motion_dict[TURNS]
+            new_arrow.motion.turns = motion_dict[TURNS]
             new_arrow.motion.updater.update_motion(motion_dict)
 
             new_arrow.setTransformOriginPoint(new_arrow.boundingRect().center())

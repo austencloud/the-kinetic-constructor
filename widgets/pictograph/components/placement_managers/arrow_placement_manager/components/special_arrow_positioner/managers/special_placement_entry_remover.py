@@ -54,7 +54,7 @@ class SpecialPlacementEntryRemover:
     def _handle_standard_start_ori_mirrored_entry_removal(
         self, letter, arrow: Arrow, ori_key, letter_data, key
     ):
-        if arrow.turns == arrow.pictograph.get.other_arrow(arrow).turns or arrow.motion.motion_type != arrow.pictograph.get.other_arrow(
+        if arrow.motion.turns == arrow.pictograph.get.other_arrow(arrow).turns or arrow.motion.motion_type != arrow.pictograph.get.other_arrow(
             arrow
         ).motion.motion_type or letter in ["S", "T"]:
             return

@@ -43,13 +43,16 @@ class TurnsUpdater:
 
     def _handle_static_dash_motion(self, motion: "Motion", new_turns: Turns) -> None:
         """Handle specific logic for static or dash motion types."""
+        if motion.turns == 0 and new_turns == 0:
+            return
+        
         if new_turns == 0:
             motion.prop_rot_dir = NO_ROT
             self.turns_widget.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.unpress_vtg_buttons()
             if hasattr(self.turns_box, "prop_rot_dir_button_manager"):
                 self.turns_widget.turns_box.prop_rot_dir_button_manager.unpress_prop_rot_dir_buttons()
 
-        elif motion.turns == 0:
+        elif motion.turns == 0 and new_turns > 0:
             self._set_prop_rot_dir(motion)
 
     def _set_prop_rot_dir(self, motion: "Motion") -> None:

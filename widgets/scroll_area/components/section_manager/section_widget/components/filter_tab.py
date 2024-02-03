@@ -163,44 +163,41 @@ class FilterTab(QTabWidget):
 
     def apply_turns_to_pictograph(self, pictograph: "Pictograph") -> None:
         turns_values = self.get_current_turns_values()
+        motion_types = turns_values[MOTION_TYPE]
+        colors = turns_values[COLOR]
+        lead_states = turns_values[LEAD_STATE]
+
         for motion in pictograph.motions.values():
             motion_type = motion.motion_type
-            if motion_type in turns_values[MOTION_TYPE]:
-                motion.turns_manager.set_turns(turns_values[MOTION_TYPE][motion_type])
+            color = motion.color
+            lead_state = motion.lead_state if hasattr(motion, "lead_state") else None
 
-            if motion.color in turns_values[COLOR]:
+            if motion_type in motion_types:
+                motion.turns_manager.set_turns(motion_types[motion_type])
+
+            if color in colors:
                 if motion.motion_type in [DASH, STATIC]:
-                    if motion.color == BLUE:
-                        if self.color_turns_panel.boxes[0].prop_rot_dir_btn_state[
-                            CLOCKWISE
-                        ]:
-                            motion.prop_rot_dir = CLOCKWISE
-                        elif self.color_turns_panel.boxes[0].prop_rot_dir_btn_state[
-                            COUNTER_CLOCKWISE
-                        ]:
-                            motion.prop_rot_dir = COUNTER_CLOCKWISE
-                        else:
-                            motion.prop_rot_dir = NO_ROT
-                    elif motion.color == RED:
-                        if self.color_turns_panel.boxes[1].prop_rot_dir_btn_state[
-                            CLOCKWISE
-                        ]:
-                            motion.prop_rot_dir = CLOCKWISE
-                        elif self.color_turns_panel.boxes[1].prop_rot_dir_btn_state[
-                            COUNTER_CLOCKWISE
-                        ]:
-                            motion.prop_rot_dir = COUNTER_CLOCKWISE
-                        else:
-                            motion.prop_rot_dir = NO_ROT
-                motion.turns_manager.set_turns(turns_values[COLOR][motion.color])
+                    if motion.turns != 0:
+                        if color == BLUE:
+                            prop_rot_dir_btn_state = self.color_turns_panel.boxes[
+                                0
+                            ].prop_rot_dir_btn_state
+                        elif color == RED:
+                            prop_rot_dir_btn_state = self.color_turns_panel.boxes[
+                                1
+                            ].prop_rot_dir_btn_state
 
-            if (
-                hasattr(motion, "lead_state")
-                and motion.lead_state in turns_values[LEAD_STATE]
-            ):
-                motion.turns_manager.set_turns(
-                    turns_values[LEAD_STATE][motion.lead_state]
-                )
+                        if prop_rot_dir_btn_state[CLOCKWISE]:
+                            motion.prop_rot_dir = CLOCKWISE
+                        elif prop_rot_dir_btn_state[COUNTER_CLOCKWISE]:
+                            motion.prop_rot_dir = COUNTER_CLOCKWISE
+                    else:
+                        motion.prop_rot_dir = NO_ROT
+
+                motion.turns_manager.set_turns(colors[color])
+
+            if lead_state in lead_states:
+                motion.turns_manager.set_turns(lead_states[lead_state])
 
     def resize_filter_tab(self) -> None:
         for panel in self.panels:

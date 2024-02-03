@@ -57,7 +57,7 @@ class StandardOrientationUpdater(MirroredEntryUpdaterBase):
             letter, letter_data, ori_key
         )
         if (
-            not self.arrow.turns
+            not self.arrow.motion.turns
             == self.arrow.pictograph.get.other_arrow(self.arrow).turns
         ):
             if mirrored_turns_tuple not in letter_data:

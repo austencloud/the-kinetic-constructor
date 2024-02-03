@@ -49,7 +49,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
         self.motion_type = target_arrow.motion.motion_type
         self.color = target_arrow.color
         self.arrow_location = target_arrow.loc
-        self.turns = target_arrow.turns
+        self.turns = target_arrow.motion.turns
         self.target_arrow_rotation_angle = self._get_arrow_drag_rotation_angle(
             self.target_arrow
         )
@@ -65,7 +65,7 @@ class ArrowBoxDrag(BaseObjectBoxDrag):
         self.arrow_location: Locations = target_arrow.loc
         self.rot_dir: PropRotDirs = target_arrow.motion.prop_rot_dir
 
-        self.turns: Turns = target_arrow.turns
+        self.turns: Turns = target_arrow.motion.turns
 
         self.ghost = self.pictograph.ghost_arrows[self.color]
         self.ghost.target_arrow = target_arrow

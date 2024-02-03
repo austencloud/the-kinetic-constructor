@@ -43,6 +43,5 @@ class PropRotAngleManager:
 
     def update_prop_rot_angle(self) -> None:
         prop_rotation_angle = self.get_rotation_angle()
-        if self.prop.ghost:
-            self.prop.ghost.setRotation(prop_rotation_angle)
+
         self.prop.setRotation(prop_rotation_angle)

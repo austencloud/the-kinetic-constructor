@@ -21,7 +21,7 @@ class AntiRotAngleCalculator(BaseRotAngleCalculator):
             }
         elif self.arrow.motion.start_ori in [CLOCK, COUNTER]:
 
-            if self.arrow.turns in [0.5, 1.5, 2.5]:
+            if self.arrow.motion.turns in [0.5, 1.5, 2.5]:
                 direction_map = {
                     CLOCKWISE: {
                         NORTHEAST: 270, 

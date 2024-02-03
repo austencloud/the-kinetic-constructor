@@ -67,7 +67,7 @@ class ArrowBox(BaseObjectBox):
     def on_turns_changed(self, turns: str) -> None:
         """Update turns for all arrows when the selected value in the combo box changes."""
         for arrow in self.arrows:
-            arrow.turns = int(turns)
+            arrow.motion.turns = int(turns)
             arrow.updater.update_arrow()  # Update the appearance of the arrow based on the new turns
 
     def create_arrows(self) -> None:

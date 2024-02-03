@@ -94,10 +94,10 @@ class DefaultArrowPositioner:
 
         if (
             adjustment_key in motion_type_placements
-            and str(arrow.turns) in motion_type_placements[adjustment_key]
+            and str(arrow.motion.turns) in motion_type_placements[adjustment_key]
         ):
-            return motion_type_placements[adjustment_key][str(arrow.turns)]
+            return motion_type_placements[adjustment_key][str(arrow.motion.turns)]
         else:
             return motion_type_placements.get(arrow.motion.motion_type, {}).get(
-                str(arrow.turns), (0, 0)
+                str(arrow.motion.turns), (0, 0)
             )

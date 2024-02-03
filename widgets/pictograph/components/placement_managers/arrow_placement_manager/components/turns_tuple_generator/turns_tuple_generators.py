@@ -7,8 +7,8 @@ if TYPE_CHECKING:
 
 
 class BaseTurnsTupleGenerator:
-    def _normalize_turns(self, arrow: Arrow) -> int:
-        return int(arrow.turns) if arrow.turns in {0.0, 1.0, 2.0, 3.0} else arrow.turns
+    def _normalize_turns(self, motion: Arrow) -> int:
+        return int(motion.turns) if motion.turns in {0.0, 1.0, 2.0, 3.0} else motion.turns
 
     def set_pictograph(self, pictograph: "Pictograph"):
         self.p = pictograph
@@ -29,7 +29,7 @@ class Type1HybridTurnsTupleGenerator(BaseTurnsTupleGenerator):
             if self.blue_arrow.motion.motion_type == ANTI
             else self.red_arrow
         )
-        return f"({pro_arrow.turns}, {anti_arrow.turns})"
+        return f"({pro_arrow.motion.turns}, {anti_arrow.motion.turns})"
 
 
 class Type2TurnsTupleGenerator(BaseTurnsTupleGenerator):
@@ -86,7 +86,7 @@ class Type4TurnsTupleGenerator(BaseTurnsTupleGenerator):
 class Type56TurnsTupleGenerator(BaseTurnsTupleGenerator):
     def generate_key(self, pictograph) -> str:
         super().set_pictograph(pictograph)
-        if self.blue_arrow.turns == 0 and self.red_arrow.turns == 0:
+        if self.blue_arrow.motion.turns == 0 and self.red_arrow.motion.turns == 0:
             return f"({self._normalize_turns(self.blue_arrow)}, {self._normalize_turns(self.red_arrow)})"
         elif self.blue_arrow.motion.turns == 0 or self.red_arrow.motion.turns == 0:
             turning_motion = (
