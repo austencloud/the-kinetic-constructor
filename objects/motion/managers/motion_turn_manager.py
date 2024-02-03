@@ -48,5 +48,5 @@ class MotionTurnsManager:
     def set_motion_turns(self, turns: Turns) -> None:
         self.m.turns = turns
         self.m.arrow.turns = turns
-        self.m.arrow.ghost.turns = turns
+        # self.m.arrow.ghost.turns = turns
         self.m.updater.update_motion()

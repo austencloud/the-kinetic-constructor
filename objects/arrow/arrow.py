@@ -1,9 +1,10 @@
-from objects.arrow.managers.arrow_mirror_handler import ArrowMirrorHandler
-from objects.arrow.managers.arrow_mouse_event_handler import ArrowMouseEventHandler
-from objects.arrow.managers.arrow_updater import ArrowUpdater
-from objects.arrow.managers.arrow_attr_handler import ArrowAttrHandler
-from .managers.arrow_location_manager import ArrowLocationCalculator
-from .managers.arrow_rot_angle_calculator import ArrowRotAngleCalculator
+from .managers.arrow_location_manager import ArrowLocationManager
+from .managers.arrow_mirror_handler import ArrowMirrorHandler
+from .managers.arrow_mouse_event_handler import ArrowMouseEventHandler
+from .managers.arrow_updater import ArrowUpdater
+from .managers.arrow_attr_handler import ArrowAttrHandler
+from .managers.rot_angle_manager.arrow_rot_angle_manager import ArrowRotAngleManager
+
 from ..graphical_object.graphical_object import GraphicalObject
 from utilities.TypeChecking.TypeChecking import (
     Colors,
@@ -14,7 +15,6 @@ from utilities.TypeChecking.TypeChecking import (
 
 if TYPE_CHECKING:
     from ..motion.motion import Motion
-    from .ghost_arrow import GhostArrow
     from widgets.pictograph.pictograph import Pictograph
 
 
@@ -26,19 +26,22 @@ class Arrow(GraphicalObject):
     location: Locations
     loc: Locations
     is_svg_mirrored: bool
+    loc: Locations = None
+    initialized: bool = False
 
     def __init__(self, pictograph, arrow_dict) -> None:
         super().__init__(pictograph)
         self.arrow_dict = arrow_dict
         self.scene: Pictograph = pictograph
+
+    def setup_components(self):
+        self.location_calculator = ArrowLocationManager(self)
         self.mouse_event_handler = ArrowMouseEventHandler(self)
-        self.rot_angle_calculator = ArrowRotAngleCalculator(self)
-        self.location_calculator = ArrowLocationCalculator(self)
+        self.rot_angle_calculator = ArrowRotAngleManager(self)
         self.mirror_manager = ArrowMirrorHandler(self)
         self.attr_manager = ArrowAttrHandler(self)
         self.updater = ArrowUpdater(self)
-        self.ghost: "GhostArrow" = None
-        self.loc = None
+        self.initialized = True
 
     ### MOUSE EVENTS ###
 

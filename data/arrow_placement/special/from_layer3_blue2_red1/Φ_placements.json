@@ -1,7 +1,8 @@
 {
   "Φ": {
     "(0, 0)": {
-      "dash_from_layer1": [55, 40]
+      "dash_from_layer1": [55, 40],
+      "dash_from_layer2": [0, 0]
     },
     "(cw, 0, 1)": {
       "static_from_layer1_rot_angle_override": true,

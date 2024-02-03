@@ -10,10 +10,11 @@ class MotionUpdater:
         self.motion = motion
 
     def update_motion(self, motion_dict=None) -> None:
+        if not self.motion.arrow.initialized:
+            self.motion.arrow.setup_components()
         if motion_dict:
             self.motion.attr_manager.update_attributes(motion_dict)
         arrow_dict = {
-            LOC: self.motion.arrow.location_calculator.get_arrow_location(),
             MOTION_TYPE: self.motion.motion_type,
             TURNS: self.motion.turns,
         }
@@ -24,5 +25,4 @@ class MotionUpdater:
         self.motion.end_ori = self.motion.ori_calculator.get_end_ori()
         self.motion.arrow.updater.update_arrow(arrow_dict)
         self.motion.prop.updater.update_prop(prop_dict)
-        self.motion.arrow.ghost.updater.update_arrow(arrow_dict)
-        # self.motion.prop.ghost.updater.update_prop(prop_dict)
+

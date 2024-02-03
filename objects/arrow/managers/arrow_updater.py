@@ -11,12 +11,8 @@ class ArrowUpdater:
     def update_arrow(self, arrow_dict=None) -> None:
         if arrow_dict:
             self.arrow.attr_manager.update_attributes(arrow_dict)
-            if not self.arrow.is_ghost and self.arrow.ghost:
-                self.arrow.ghost.attr_manager.update_attributes(arrow_dict)
-        if not self.arrow.is_ghost:
-            self.arrow.ghost.transform = self.arrow.transform
+        self.arrow.location_calculator.update_location()
         self.arrow.svg_manager.update_svg()
         self.arrow.mirror_manager.update_mirror()
         self.arrow.svg_manager.update_color()
-        self.arrow.location_calculator.update_location()
         self.arrow.rot_angle_calculator.update_rotation()

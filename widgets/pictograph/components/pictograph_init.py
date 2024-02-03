@@ -36,15 +36,13 @@ class PictographInit:
         self.p.dragged_prop = None
         self.p.dragged_arrow = None
 
-        self.p.grid: Grid = self.init_grid()
-        self.p.locations: dict[
-            Locations, tuple[int, int, int, int]
-        ] = self.init_quadrant_boundaries(self.p.grid)
+        self.p.grid = self.init_grid()
+        self.p.locations = self.init_quadrant_boundaries(self.p.grid)
 
-        self.p.motions: dict[Colors, Motion] = self.init_motions()
+        self.p.motions = self.init_motions()
         self.p.arrows, self.p.ghost_arrows = self.init_arrows()
         self.p.props, self.p.ghost_props = self.init_props()
-        self.p.letter_item: LetterItem = self.init_letter_item()
+        self.p.letter_item = self.init_letter_item()
 
     def init_grid(self) -> Grid:
         grid = Grid(self.p)
@@ -71,7 +69,7 @@ class PictographInit:
         arrows = {}
         ghost_arrows = {}
         for color in [BLUE, RED]:
-            arrows[color], ghost_arrows[color] = self._create_arrow(color, None)
+            arrows[color] = self._create_arrow(color, None)
         self.p.red_arrow, self.p.blue_arrow = (arrows[RED], arrows[BLUE])
         return arrows, ghost_arrows
 
@@ -93,8 +91,12 @@ class PictographInit:
             initial_prop = initial_prop_class(self.p, initial_prop_attributes, None)
 
             # Use the factory to create the actual prop
-            props[color] = self.prop_factory.create_prop_of_type(initial_prop, prop_type)
-            ghost_props[color] = GhostProp(self.p, initial_prop_attributes, self.p.motions[color])
+            props[color] = self.prop_factory.create_prop_of_type(
+                initial_prop, prop_type
+            )
+            ghost_props[color] = GhostProp(
+                self.p, initial_prop_attributes, self.p.motions[color]
+            )
 
             self.p.motions[color].prop = props[color]
             props[color].motion = self.p.motions[color]
@@ -159,15 +161,15 @@ class PictographInit:
             TURNS: 0,
         }
         arrow = Arrow(self.p, arrow_attributes)
-        ghost_arrow = GhostArrow(self.p, arrow_attributes)
-        arrow.ghost = ghost_arrow
+        # ghost_arrow = GhostArrow(self.p, arrow_attributes)
+        # arrow.ghost = ghost_arrow
         self.p.motions[color].arrow = arrow
         arrow.motion = self.p.motions[color]
-        ghost_arrow.motion = self.p.motions[color]
-        arrow.ghost = ghost_arrow
+        # ghost_arrow.motion = self.p.motions[color]
+        # arrow.ghost = ghost_arrow
         self.p.addItem(arrow)
         arrow.hide()
-        return arrow, ghost_arrow
+        return arrow
 
     def _create_prop(
         self, color: Colors, prop_type: PropTypes
