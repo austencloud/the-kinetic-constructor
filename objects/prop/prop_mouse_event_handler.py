@@ -19,17 +19,6 @@ class PropMouseEventHandler:
     def handle_mouse_press(self) -> None:
         self.p.setSelected(True)
         if isinstance(self.p.scene, self.p.scene.__class__):
-            if not self.p.ghost:
-                self.p.ghost = self.p.scene.ghost_props[self.p.color]
-            self.p.ghost.color = self.p.color
-            self.p.ghost.loc = self.p.loc
-            self.p.ghost.ori = self.p.ori
-            self.p.ghost.updater.update_prop()
-            self.p.ghost.show()
-            self.p.scene.props[self.p.ghost.color] = self.p.ghost
-            self.p.scene.props[self.p.color] = self.p.ghost
-            self.p.scene.updater.update_pictograph()
-            self.p.scene.props[self.p.color] = self.p
             for item in self.p.scene.items():
                 if item != self.p:
                     item.setSelected(False)
@@ -38,9 +27,6 @@ class PropMouseEventHandler:
     def handle_mouse_move(self, event: QGraphicsSceneMouseEvent) -> None:
         if event.buttons() == Qt.MouseButton.LeftButton:
             new_pos = event.scenePos() - self.p.get_center()
-            self.set_drag_pos(new_pos)
-            self.update_ghost_prop_location_during_drag(event.scenePos())
-            self.update_arrow_location_during_prop_drag(self.p.loc)
 
     def handle_mouse_release(self, event: QGraphicsSceneMouseEvent) -> None:
         if isinstance(self.p.scene, self.p.scene.__class__):
@@ -78,7 +64,7 @@ class PropMouseEventHandler:
     ) -> None:
         if self.p.motion.motion_type in [PRO, ANTI]:
             shift_location_map: dict[
-                tuple(Locations, PropRotDirs, MotionTypes),
+                tuple[Locations, PropRotDirs, MotionTypes],
                 dict[Locations, Locations],
             ] = {
                 ### ISO ###

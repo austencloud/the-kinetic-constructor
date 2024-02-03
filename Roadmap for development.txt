@@ -14,3 +14,7 @@ Rebuild sequence constructor interface
 Build kinetic encyclopedia/library for browsing sequences
 Create automatic sequence completion
 Build system for tracking/applying turn patterns
+
+
+Users should be able to use the number pin pad on the right of their keyboard to choose what 
+location the hands go to and construct a sequence this way.

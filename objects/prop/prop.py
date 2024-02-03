@@ -1,12 +1,12 @@
 from typing import TYPE_CHECKING
 
-from objects.graphical_object.graphical_object import GraphicalObject
-from objects.prop.prop_attr_manager import PropAttrManager
-from objects.prop.prop_checker import PropChecker
-from objects.prop.prop_mouse_event_handler import PropMouseEventHandler
-from objects.prop.prop_offset_calculator import PropOffsetCalculator
-from objects.prop.prop_rot_angle_manager import PropRotAngleManager
-from objects.prop.prop_updater import PropUpdater
+from ..graphical_object.graphical_object import GraphicalObject
+from .prop_attr_manager import PropAttrManager
+from .prop_checker import PropChecker
+from .prop_mouse_event_handler import PropMouseEventHandler
+from .prop_offset_calculator import PropOffsetCalculator
+from .prop_rot_angle_manager import PropRotAngleManager
+from .prop_updater import PropUpdater
 from utilities.TypeChecking.MotionAttributes import Locations, Orientations
 from utilities.TypeChecking.TypeChecking import Axes
 from utilities.TypeChecking.prop_types import PropTypes
@@ -29,8 +29,6 @@ class Prop(GraphicalObject):
         self.motion = motion
         self.scene: Pictograph = scene
         self.arrow: Arrow
-        self.ghost: Prop = None
-        self.is_ghost: bool = False
         self.previous_location: Locations
         self.prop_dict = prop_dict
         self.attr_manager = PropAttrManager(self)
