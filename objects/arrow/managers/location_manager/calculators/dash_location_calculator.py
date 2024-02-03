@@ -1,4 +1,5 @@
 from constants import *
+from objects.motion.motion import Motion
 from utilities.TypeChecking.MotionAttributes import Locations
 from .base_location_calculator import BaseLocationCalculator
 from typing import TYPE_CHECKING
@@ -9,11 +10,9 @@ if TYPE_CHECKING:
 
 class DashLocationCalculator(BaseLocationCalculator):
     def calculate_location(self) -> str:
-        if self.arrow.pictograph.letter in ["Φ-", "Ψ-"]:
+        if self.pictograph.letter in ["Φ-", "Ψ-"]:
             return self._get_Φ_dash_Ψ_dash_location()
-        elif (
-            self.arrow.pictograph.letter in ["Λ", "Λ-"] and self.arrow.motion.turns == 0
-        ):
+        elif self.pictograph.letter in ["Λ", "Λ-"] and self.arrow.motion.turns == 0:
             return self._get_Λ_zero_turns_location()
         elif self.arrow.motion.turns == 0:
             return self._default_zero_turns_dash_location()
@@ -21,8 +20,8 @@ class DashLocationCalculator(BaseLocationCalculator):
             return self._dash_location_non_zero_turns()
 
     def _get_Φ_dash_Ψ_dash_location(self) -> Locations:
-        self.other_motion = self.arrow.pictograph.get.other_motion(self.arrow.motion)
-        if self.arrow.motion.turns == 0 and self.other_motion.turns == 0:
+        self.other_motion = self.pictograph.get.other_motion(self.arrow.motion)
+        if self.arrow.motion.turns == 0 and self.other_motion.arrow.turns == 0:
             location_map = {
                 (RED, (NORTH, SOUTH)): EAST,
                 (RED, (EAST, WEST)): NORTH,
@@ -42,11 +41,11 @@ class DashLocationCalculator(BaseLocationCalculator):
             return arrow_location
 
         elif self.arrow.motion.turns == 0:
-            return self.arrow.pictograph.get.opposite_location(
-                self._dash_location_non_zero_turns(self.other_motion.arrow)
+            return self.pictograph.get.opposite_location(
+                self._dash_location_non_zero_turns(self.other_motion)
             )
         elif self.arrow.motion.turns != 0:
-            return self._dash_location_non_zero_turns(self.arrow)
+            return self._dash_location_non_zero_turns(self.arrow.motion)
 
     def _get_Λ_zero_turns_location(self) -> Locations:
         loc_map = {
@@ -78,15 +77,16 @@ class DashLocationCalculator(BaseLocationCalculator):
             (self.arrow.motion.start_loc, self.arrow.motion.end_loc), ""
         )
 
-    def _dash_location_non_zero_turns(self, arrow: "Arrow") -> str:
+    def _dash_location_non_zero_turns(self, motion: Motion = None) -> Locations:
+        motion = motion if motion else self.arrow.motion
         loc_map = {
             CLOCKWISE: {NORTH: EAST, EAST: SOUTH, SOUTH: WEST, WEST: NORTH},
             COUNTER_CLOCKWISE: {NORTH: WEST, EAST: NORTH, SOUTH: EAST, WEST: SOUTH},
         }
-        return loc_map[self.arrow.motion.prop_rot_dir].get(arrow.motion.start_loc, "")
+        return loc_map[motion.prop_rot_dir][motion.start_loc]
 
     def _calculate_dash_location_based_on_shift(self) -> str:
-        shift_arrow = self.arrow.pictograph.get.other_motion(self.arrow.motion).arrow
+        shift_arrow = self.pictograph.get.other_motion(self.arrow.motion).arrow
         shift_location = shift_arrow.loc
         dash_location_map = {
             (NORTH, NORTHWEST): EAST,

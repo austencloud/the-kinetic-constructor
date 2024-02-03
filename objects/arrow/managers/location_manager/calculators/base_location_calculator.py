@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 class BaseLocationCalculator:
     def __init__(self, arrow: "Arrow"):
         self.arrow = arrow
-
+        self.pictograph = arrow.pictograph
     def calculate_location(self) -> str:
         raise NotImplementedError(
             "Each calculator must implement its own location calculation method."

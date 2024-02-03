@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from utilities.TypeChecking.MotionAttributes import Turns
+
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
 
@@ -49,4 +50,3 @@ class MotionTurnsManager:
         self.motion.arrow.turns = turns
         # self.m.arrow.ghost.turns = turns
         self.motion.updater.update_motion()
-        self.motion.arrow.updater.update_arrow()
