@@ -1,10 +1,11 @@
 import re
 from PyQt6.QtCore import QPointF
-from constants import CLOCK, COUNTER, IN, OUT
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Optional
 
-from .directional_tuple_generator import DirectionalTupleGenerator
+from .directional_tuple_manager.directional_tuple_manager import DirectionalTupleManager
+
+
 
 if TYPE_CHECKING:
     from ..arrow_placement_manager import ArrowPlacementManager
@@ -15,8 +16,10 @@ class ArrowAdjustmentCalculator:
         self.pm = placement_manager
 
     def get_adjustment(self, arrow: Arrow) -> QPointF:
-        turns_tuple = arrow.pictograph.main_widget.turns_tuple_generator.generate_turns_tuple(
-            self.pm.pictograph
+        turns_tuple = (
+            arrow.pictograph.main_widget.turns_tuple_generator.generate_turns_tuple(
+                self.pm.pictograph
+            )
         )
         ori_key = self.pm.special_positioner.data_updater._get_ori_key(arrow.motion)
         special_placements = self.pm.pictograph.main_widget.special_placements[ori_key]
@@ -36,10 +39,8 @@ class ArrowAdjustmentCalculator:
         else:
             x, y = self.pm.default_positioner.get_default_adjustment(arrow)
 
-        directional_generator = DirectionalTupleGenerator(
-            arrow.motion, arrow.pictograph.get.other_motion(arrow.motion)
-        )
-        directional_adjustments = directional_generator.generate_directional_tuples(
+        directional_tuple_manager = DirectionalTupleManager(arrow.motion)
+        directional_adjustments = directional_tuple_manager.generate_directional_tuples(
             x, y
         )
         quadrant_index = self.pm.quadrant_index_handler.get_quadrant_index(arrow)

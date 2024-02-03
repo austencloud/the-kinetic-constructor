@@ -156,6 +156,9 @@
     },
     "(o, 3, 3)": {
       "dash_from_layer2_rot_angle_override": true
+    },
+    "null": {
+      "blue": {}
     }
   }
 }

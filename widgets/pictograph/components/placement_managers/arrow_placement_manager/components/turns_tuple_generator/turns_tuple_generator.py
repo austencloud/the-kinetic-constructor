@@ -10,10 +10,11 @@ from utilities.TypeChecking.letter_lists import (
     Type2_letters,
 )
 from constants import *
-
-from widgets.pictograph.components.placement_managers.arrow_placement_manager.handlers.turns_tuple_generator.mirrored_turns_tuple_generator import (
+from widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.mirrored_turns_tuple_generator import (
     MirroredTurnsTupleGenerator,
 )
+
+
 from .turns_tuple_generators import *
 
 

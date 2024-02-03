@@ -9,9 +9,8 @@ from utilities.TypeChecking.TypeChecking import Letters, TYPE_CHECKING
 from constants import DIAMOND, STAFF
 from utilities.TypeChecking.prop_types import PropTypes
 from widgets.main_widget.special_placement_loader import SpecialPlacementLoader
-from widgets.pictograph.components.placement_managers.arrow_placement_manager.handlers.turns_tuple_generator.turns_tuple_generator import (
-    TurnsTupleGenerator,
-)
+from widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
+
 from widgets.pictograph.pictograph import Pictograph
 from ..image_cache_manager import ImageCacheManager
 from ..main_tab_widget.main_tab_widget import MainTabWidget

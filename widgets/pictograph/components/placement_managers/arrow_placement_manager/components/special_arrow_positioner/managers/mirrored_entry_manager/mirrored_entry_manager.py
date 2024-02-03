@@ -2,12 +2,8 @@ from typing import TYPE_CHECKING, Optional
 from Enums import LetterType
 from constants import DASH, STATIC
 from objects.arrow.arrow import Arrow
-from widgets.pictograph.components.placement_managers.arrow_placement_manager.handlers.special_arrow_positioner.managers.mirrored_entry_manager.mirrored_entry_creator import (
-    MirroredEntryCreator,
-)
-from widgets.pictograph.components.placement_managers.arrow_placement_manager.handlers.special_arrow_positioner.managers.mirrored_entry_manager.mirrored_entry_updater import (
-    MirroredEntryUpdater,
-)
+from .mirrored_entry_creator import MirroredEntryCreator
+from .mirrored_entry_updater import MirroredEntryUpdater
 
 if TYPE_CHECKING:
     from ..special_placement_data_updater import SpecialPlacementDataUpdater

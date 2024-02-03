@@ -8,9 +8,6 @@ if TYPE_CHECKING:
     from widgets.pictograph.components.placement_managers.arrow_placement_manager.handlers.special_arrow_positioner.managers.mirrored_entry_manager.mirrored_entry_updater import (
         MirroredEntryUpdater,
     )
-    from widgets.pictograph.components.placement_managers.arrow_placement_manager.handlers.special_arrow_positioner.managers.mirrored_entry_manager.mirrored_entry_manager import (
-        SpecialPlacementMirroredEntryManager,
-    )
 
 
 class MirroredEntryUpdaterBase:

@@ -1,13 +1,14 @@
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
+from .components.arrow_adjustment_calculator import ArrowAdjustmentCalculator
+from .components.arrow_initial_pos_calculator import ArrowInitialPosCalculator
 
-from .handlers.arrow_adjustment_calculator import ArrowAdjustmentCalculator
-from .handlers.arrow_initial_pos_calculator import ArrowInitialPosCalculator
-from .handlers.quadrant_index_handler import QuadrantIndexHandler
-from .handlers.default_arrow_positioner import DefaultArrowPositioner
-from .handlers.special_arrow_positioner.special_arrow_positioner import (
+from .components.default_arrow_positioner import DefaultArrowPositioner
+from .components.quadrant_index_handler import QuadrantIndexHandler
+from .components.special_arrow_positioner.special_arrow_positioner import (
     SpecialArrowPositioner,
 )
+
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
