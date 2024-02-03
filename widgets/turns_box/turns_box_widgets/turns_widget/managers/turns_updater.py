@@ -1,9 +1,7 @@
 from typing import TYPE_CHECKING
 from constants import *
-from utilities.TypeChecking.TypeChecking import (
-    PropRotDirs,
-    Turns,
-)
+from utilities.TypeChecking.MotionAttributes import Turns, PropRotDirs
+
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph

@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING, Literal
 from PyQt6.QtCore import Qt, QEvent, pyqtSignal
 from PyQt6.QtWidgets import QGraphicsView
 from constants import OPTION
-from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:

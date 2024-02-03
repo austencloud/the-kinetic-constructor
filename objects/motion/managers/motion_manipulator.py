@@ -2,14 +2,10 @@ from typing import Callable
 
 from constants import *
 from data.start_end_loc_map import get_start_end_locs
-from utilities.TypeChecking.TypeChecking import (
-    TYPE_CHECKING,
-    Directions,
-    Handpaths,
-    Locations,
-)
+from utilities.TypeChecking.TypeChecking import Directions, Handpaths
 
-
+from typing import TYPE_CHECKING
+from utilities.TypeChecking.MotionAttributes import Locations
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
 

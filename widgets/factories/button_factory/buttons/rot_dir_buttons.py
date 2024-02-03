@@ -1,5 +1,7 @@
 from PyQt6.QtWidgets import QPushButton
-from utilities.TypeChecking.TypeChecking import VtgDirections, PropRotDirs
+from utilities.TypeChecking.MotionAttributes import PropRotDirs
+from utilities.TypeChecking.TypeChecking import VtgDirections
+
 
 
 class RotDirButton(QPushButton):

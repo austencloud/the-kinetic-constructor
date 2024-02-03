@@ -1,8 +1,7 @@
 from typing import TYPE_CHECKING
 from constants import *
 from objects.motion.motion import Motion
-from utilities.TypeChecking.TypeChecking import Colors
-
+from utilities.TypeChecking.MotionAttributes import Colors, Locations, MotionTypes, Turns
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 

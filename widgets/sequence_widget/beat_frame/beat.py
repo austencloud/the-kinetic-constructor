@@ -1,6 +1,4 @@
-from utilities.TypeChecking.TypeChecking import (
-    TYPE_CHECKING,
-)
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QPushButton
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon

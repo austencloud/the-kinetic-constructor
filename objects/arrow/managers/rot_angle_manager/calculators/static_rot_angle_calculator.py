@@ -3,7 +3,10 @@ from .base_rot_angle_calculator import BaseRotAngleCalculator
 
 
 class StaticRotAngleCalculator(BaseRotAngleCalculator):
-    def _calculate_angle_impl(self):
+    def calculate_angle(self) -> int:
+        rotation_override = self.has_rotation_angle_override()
+        if rotation_override:
+            return self._get_rot_angle_override_according_to_loc(rotation_override)
         if self.arrow.motion.start_ori in [IN, OUT]:
             direction_map = self._radial_static_direction_map()
         elif self.arrow.motion.start_ori in [CLOCK, COUNTER]:
@@ -27,3 +30,18 @@ class StaticRotAngleCalculator(BaseRotAngleCalculator):
             COUNTER_CLOCKWISE: {NORTH: 180, EAST: 90, SOUTH: 0, WEST: 270},
             NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
         }
+
+
+    def _get_rot_angle_override_according_to_loc(self, rotation_override: int) -> int:
+        static_angle_override_map = {
+            NORTH: 0,
+            EAST: {CLOCKWISE: 90, COUNTER_CLOCKWISE: 270},
+            SOUTH: 180,
+            WEST: {CLOCKWISE: 270, COUNTER_CLOCKWISE: 90},
+        }
+        if rotation_override:
+            loc_angle = static_angle_override_map.get(self.arrow.loc)
+            if isinstance(loc_angle, dict):
+                return loc_angle.get(self.arrow.motion.prop_rot_dir, 0)
+            return loc_angle
+        return None

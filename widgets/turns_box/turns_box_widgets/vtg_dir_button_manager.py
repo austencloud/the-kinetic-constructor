@@ -9,8 +9,13 @@ from constants import (
     PROP_ROT_DIR,
     SAME,
 )
-from utilities.TypeChecking.MotionAttributes import Colors, MotionTypes, PropRotDirs
-from utilities.TypeChecking.TypeChecking import LeadStates, VtgDirections
+from utilities.TypeChecking.MotionAttributes import (
+    Colors,
+    LeadStates,
+    MotionTypes,
+    PropRotDirs,
+)
+from utilities.TypeChecking.TypeChecking import VtgDirections
 from ...factories.button_factory.button_factory import ButtonFactory
 from ...factories.button_factory.buttons.rot_dir_buttons import VtgDirButton
 

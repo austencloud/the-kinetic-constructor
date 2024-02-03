@@ -3,9 +3,9 @@ import os
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtGui import QResizeEvent, QKeyEvent
 from PyQt6.QtCore import Qt
-
+from typing import TYPE_CHECKING
 from utilities.TypeChecking.letter_lists import all_letters
-from utilities.TypeChecking.TypeChecking import Letters, TYPE_CHECKING
+from utilities.TypeChecking.TypeChecking import Letters
 from constants import DIAMOND, STAFF
 from utilities.TypeChecking.prop_types import PropTypes
 from widgets.main_widget.special_placement_loader import SpecialPlacementLoader

@@ -1,18 +1,15 @@
-from typing import Union
+from typing import Union, TYPE_CHECKING
 
 from constants import *
 
-from utilities.TypeChecking.TypeChecking import (
+if TYPE_CHECKING:
+    from objects.arrow.arrow import Arrow
+from utilities.TypeChecking.MotionAttributes import (
     Colors,
     Locations,
     MotionTypes,
     Turns,
-    TYPE_CHECKING,
 )
-
-
-if TYPE_CHECKING:
-    from objects.arrow.arrow import Arrow
 
 
 class ArrowAttrHandler:

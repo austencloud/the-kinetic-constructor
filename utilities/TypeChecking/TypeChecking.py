@@ -1,128 +1,225 @@
-from typing import Union, Literal
-from typing import *
-from utilities.TypeChecking.MotionAttributes import *
+from enum import Enum
 
 
-ParallelCombinationsSet = set[tuple[str, str, str, str]]
-Handpaths = Literal["dash_handpath", "static_handpath", "cw_handpath", "ccw_handpath"]
-RotationAngles = Literal[0, 90, 180, 270]
-OptimalLocationEntries = dict[Literal["x", "y"], float]
-StartEndLocationTuple = tuple[Locations]
-OptimalLocationDicts = dict[str, OptimalLocationEntries]
-Positions = Literal["alpha", "beta", "gamma"]
-SpecificPositions = Literal[
-    "alpha1",
-    "alpha2",
-    "alpha3",
-    "alpha4",
-    "beta1",
-    "beta2",
-    "beta3",
-    "beta4",
-    "gamma1",
-    "gamma2",
-    "gamma3",
-    "gamma4",
-    "gamma5",
-    "gamma6",
-    "gamma7",
-    "gamma8",
-]
-ShiftHandpaths = Literal["cw_handpath", "ccw_handpath"]
-Handpaths = Literal["dash_handpath", "static_handpath", "cw_handpath", "ccw_handpath"]
-HexColors = Literal["#ED1C24", "#2E3192"]
-Directions = Literal["left", "right", "up", "down"]
-GridModes = Literal["diamond", "box"]
-RadialOrientations = Literal["in", "out"]
-NonRadialOrientations = Literal["clock", "counter"]
-OrientationTypes = Literal["radial", "nonradial"]
-Axes = Literal["horizontal", "vertical"]
-MotionTypeCombinations = Literal[
-    "pro_vs_pro",
-    "anti_vs_anti",
-    "static_vs_static",
-    "pro_vs_anti",
-    "static_vs_pro",
-    "static_vs_anti",
-    "dash_vs_pro",
-    "dash_vs_anti",
-    "dash_vs_static",
-    "dash_vs_dash",
-]
-LeadStates = Literal["leading", "trailing"]
-VtgTimings = Literal["split", "together"]
-VtgDirections = Literal["same", "opp"]
-OpenCloseStates = Literal["open", "close"]
-Letters = Literal[
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "W",
-    "X",
-    "Y",
-    "Z",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-    "Σ",
-    "Δ",
-    "θ",
-    "Ω",
-    "W-",
-    "X-",
-    "Y-",
-    "Z-",
-    "Σ-",
-    "Δ-",
-    "θ-",
-    "Ω-",
-    "Φ",
-    "Ψ",
-    "Λ",
-    "Φ-",
-    "Ψ-",
-    "Λ-",
-    "α",
-    "β",
-    "Γ",
-]
-AdjustmentStrs = Literal["-1", "-0.5", "+1", "+0.5"]
-AdjustmentNums = Union[float, int]
-LetterTypes = Literal["Type1", "Type2", "Type3", "Type4", "Type5", "Type6"]
-LetterTypeDescriptions = Literal[
-    "Dual-Shift", "Shift", "Cross-Shift", "Dash", "Dual-Dash", "Static"
-]
-MotionAttributes = Literal[
-    "color",
-    "arrow",
-    "prop",
-    "motion_type",
-    "prop_rot_dir",
-    "turns",
-    "start_loc",
-    "start_ori",
-    "end_loc",
-    "end_ori",
-    "lead_state",
-]
-Pictograph_Key = str
+class ParallelCombinationsSet(Enum):
+    SET = "set"
+
+
+class Handpaths(Enum):
+    DASH_HANDPATH = "dash_handpath"
+    STATIC_HANDPATH = "static_handpath"
+    CW_HANDPATH = "cw_handpath"
+    CCW_HANDPATH = "ccw_handpath"
+
+
+class RotationAngles(Enum):
+    ANGLE_0 = 0
+    ANGLE_90 = 90
+    ANGLE_180 = 180
+    ANGLE_270 = 270
+
+
+class OptimalLocationEntries(Enum):
+    X = "x"
+    Y = "y"
+
+
+class StartEndLocationTuple(Enum):
+    LOCATIONS = "Locations"
+
+
+class OptimalLocationDicts(Enum):
+    DICT = "dict"
+
+
+class Positions(Enum):
+    ALPHA = "alpha"
+    BETA = "beta"
+    GAMMA = "gamma"
+
+
+class SpecificPositions(Enum):
+    ALPHA1 = "alpha1"
+    ALPHA2 = "alpha2"
+    ALPHA3 = "alpha3"
+    ALPHA4 = "alpha4"
+    BETA1 = "beta1"
+    BETA2 = "beta2"
+    BETA3 = "beta3"
+    BETA4 = "beta4"
+    GAMMA1 = "gamma1"
+    GAMMA2 = "gamma2"
+    GAMMA3 = "gamma3"
+    GAMMA4 = "gamma4"
+    GAMMA5 = "gamma5"
+    GAMMA6 = "gamma6"
+    GAMMA7 = "gamma7"
+    GAMMA8 = "gamma8"
+
+
+class ShiftHandpaths(Enum):
+    CW_HANDPATH = "cw_handpath"
+    CCW_HANDPATH = "ccw_handpath"
+
+
+class HexColors(Enum):
+    COLOR_1 = "#ED1C24"
+    COLOR_2 = "#2E3192"
+
+
+class Directions(Enum):
+    LEFT = "left"
+    RIGHT = "right"
+    UP = "up"
+    DOWN = "down"
+
+
+class GridModes(Enum):
+    DIAMOND = "diamond"
+    BOX = "box"
+
+
+class RadialOrientations(Enum):
+    IN = "in"
+    OUT = "out"
+
+
+class NonRadialOrientations(Enum):
+    CLOCK = "clock"
+    COUNTER = "counter"
+
+
+class OrientationTypes(Enum):
+    RADIAL = "radial"
+    NONRADIAL = "nonradial"
+
+
+class Axes(Enum):
+    HORIZONTAL = "horizontal"
+    VERTICAL = "vertical"
+
+
+class MotionTypeCombinations(Enum):
+    PRO_VS_PRO = "pro_vs_pro"
+    ANTI_VS_ANTI = "anti_vs_anti"
+    STATIC_VS_STATIC = "static_vs_static"
+    PRO_VS_ANTI = "pro_vs_anti"
+    STATIC_VS_PRO = "static_vs_pro"
+    STATIC_VS_ANTI = "static_vs_anti"
+    DASH_VS_PRO = "dash_vs_pro"
+    DASH_VS_ANTI = "dash_vs_anti"
+    DASH_VS_STATIC = "dash_vs_static"
+    DASH_VS_DASH = "dash_vs_dash"
+
+
+class VtgTimings(Enum):
+    SPLIT = "split"
+    TOGETHER = "together"
+
+
+class VtgDirections(Enum):
+    SAME = "same"
+    OPP = "opp"
+
+
+class OpenCloseStates(Enum):
+    OPEN = "open"
+    CLOSE = "close"
+
+
+class Letters(Enum):
+    A = "A"
+    B = "B"
+    C = "C"
+    D = "D"
+    E = "E"
+    F = "F"
+    G = "G"
+    H = "H"
+    I = "I"
+    J = "J"
+    K = "K"
+    L = "L"
+    M = "M"
+    N = "N"
+    O = "O"
+    P = "P"
+    Q = "Q"
+    R = "R"
+    S = "S"
+    T = "T"
+    U = "U"
+    V = "V"
+    W = "W"
+    X = "X"
+    Y = "Y"
+    Z = "Z"
+    SIGMA = "Σ"
+    DELTA = "Δ"
+    THETA = "θ"
+    OMEGA = "Ω"
+    W_MINUS = "W-"
+    X_MINUS = "X-"
+    Y_MINUS = "Y-"
+    Z_MINUS = "Z-"
+    SIGMA_MINUS = "Σ-"
+    DELTA_MINUS = "Δ-"
+    THETA_MINUS = "θ-"
+    OMEGA_MINUS = "Ω-"
+    PHI = "Φ"
+    PSI = "Ψ"
+    LAMBDA = "Λ"
+    PHI_MINUS = "Φ-"
+    PSI_MINUS = "Ψ-"
+    LAMBDA_MINUS = "Λ-"
+    ALPHA = "α"
+    BETA = "β"
+    GAMMA_CAP = "Γ"
+
+
+class AdjustmentStrs(Enum):
+    MINUS_1 = "-1"
+    MINUS_0_5 = "-0.5"
+    PLUS_1 = "+1"
+    PLUS_0_5 = "+0.5"
+
+
+class AdjustmentNums(Enum):
+    FLOAT = float
+    INT = int
+
+
+class LetterTypes(Enum):
+    TYPE_1 = "Type1"
+    TYPE_2 = "Type2"
+    TYPE_3 = "Type3"
+    TYPE_4 = "Type4"
+    TYPE_5 = "Type5"
+    TYPE_6 = "Type6"
+
+
+class LetterTypeDescriptions(Enum):
+    DUAL_SHIFT = "Dual-Shift"
+    SHIFT = "Shift"
+    CROSS_SHIFT = "Cross-Shift"
+    DASH = "Dash"
+    DUAL_DASH = "Dual-Dash"
+    STATIC = "Static"
+
+
+class MotionAttributes(Enum):
+    COLOR = "color"
+    ARROW = "arrow"
+    PROP = "prop"
+    MOTION_TYPE = "motion_type"
+    PROP_ROT_DIR = "prop_rot_dir"
+    TURNS = "turns"
+    START_LOC = "start_loc"
+    START_ORI = "start_ori"
+    END_LOC = "end_loc"
+    END_ORI = "end_ori"
+    LEAD_STATE = "lead_state"
+
+
+class Pictograph_Key(Enum):
+    KEY = str

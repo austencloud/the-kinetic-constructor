@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING, Literal
 from objects.arrow.arrow import Arrow
-from utilities.TypeChecking.TypeChecking import Locations
 from constants import (
     DIAMOND,
     NORTHEAST,
@@ -16,6 +15,7 @@ from constants import (
     STATIC,
     DASH,
 )
+from utilities.TypeChecking.MotionAttributes import Locations
 
 if TYPE_CHECKING:
     from ...arrow_placement_manager.arrow_placement_manager import ArrowPlacementManager

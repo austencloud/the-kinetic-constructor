@@ -1,14 +1,11 @@
 from typing import TYPE_CHECKING, Optional
-from Enums import LetterType
+from Enums import Letter, LetterType
 
 from constants import *
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
-from utilities.TypeChecking.MotionAttributes import Locations
-from utilities.TypeChecking.letter_lists import all_letters
-from utilities.TypeChecking.TypeChecking import (
-    MotionTypes,
-)
+from utilities.TypeChecking.MotionAttributes import Locations, MotionTypes
+
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -18,7 +15,7 @@ class PictographGetter:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.p = pictograph
 
-    def letter_type(self, letter: all_letters) -> Optional[str]:
+    def letter_type(self, letter: Letter) -> Optional[str]:
         for letter_type in LetterType:
             if letter in letter_type.letters:
                 return letter_type.description

@@ -1,5 +1,6 @@
 from constants import ANTI, DASH, PRO, STATIC
-from utilities.TypeChecking.TypeChecking import LetterTypes, MotionTypes
+from utilities.TypeChecking.MotionAttributes import MotionTypes
+from utilities.TypeChecking.TypeChecking import LetterTypes
 
 
 motion_type_letter_groups = {

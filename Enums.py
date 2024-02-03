@@ -1,17 +1,67 @@
 from typing import TypedDict
 from enum import Enum
-from utilities.TypeChecking.TypeChecking import (
-    Colors,
-    Locations,
-    MotionTypes,
-    Orientations,
-    PropRotDirs,
-    SpecificPositions,
-    Turns,
-)
+from utilities.TypeChecking.MotionAttributes import Colors, Locations, MotionTypes, PropRotDirs, Turns, Orientations
+from utilities.TypeChecking.TypeChecking import SpecificPositions
 from utilities.TypeChecking.prop_types import PropTypes
 from utilities.TypeChecking.letter_lists import all_letters
 
+class Letter(Enum):
+    A = "A"
+    B = "B"
+    C = "C"
+    D = "D"
+    E = "E"
+    F = "F"
+    G = "G"
+    H = "H"
+    I = "I"
+    J = "J"
+    K = "K"
+    L = "L"
+    M = "M"
+    N = "N"
+    O = "O"
+    P = "P"
+    Q = "Q"
+    R = "R"
+    S = "S"
+    T = "T"
+    U = "U"
+    V = "V"
+    W = "W"
+    X = "X"
+    Y = "Y"
+    Z = "Z"
+    Σ = "Σ"
+    Δ = "Δ"
+    θ = "θ"
+    Ω = "Ω"
+    W_DASH = "W-"
+    X_DASH = "X-"
+    Y_DASH = "Y-"
+    Z_DASH = "Z-"
+    Σ_DASH = "Σ-"
+    Δ_DASH = "Δ-"
+    θ_DASH = "θ-"
+    Ω_DASH = "Ω-"
+    Φ = "Φ"
+    Ψ = "Ψ"
+    Λ = "Λ"
+    Φ_DASH = "Φ-"
+    Ψ_DASH = "Ψ-"
+    Λ_DASH = "Λ-"
+    α = "α"
+    β = "β"
+    Γ = "Γ"
+
+    def __str__(self):
+        return self.name
+
+    @staticmethod
+    def get_letter(str: str) -> str | None:
+        if str in all_letters:
+            return str
+        return None
 
 class LetterType(Enum):
     Type1 = (
@@ -227,7 +277,7 @@ class TKAHandpathMode(Enum):
 
 
 class PictographAttributesDict(TypedDict):
-    letter: all_letters
+    letter: Letter
     start_pos: SpecificPositions
     end_pos: SpecificPositions
     blue_motion_type: MotionTypes

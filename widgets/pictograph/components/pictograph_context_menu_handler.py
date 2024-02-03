@@ -1,8 +1,6 @@
 from objects.arrow.arrow import Arrow
 from objects.prop.prop import Prop
-from utilities.TypeChecking.TypeChecking import (
-    TYPE_CHECKING,
-)
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph

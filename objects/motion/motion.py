@@ -5,13 +5,13 @@ from .managers.motion_manipulator import MotionManipulator
 from .managers.motion_ori_calculator import MotionOriCalculator
 from .managers.motion_updater import MotionUpdater
 from .managers.motion_turn_manager import MotionTurnsManager
-from utilities.TypeChecking.TypeChecking import (
+from utilities.TypeChecking.MotionAttributes import (
     Colors,
-    LeadStates,
     Locations,
-    MotionTypes,
     Orientations,
+    MotionTypes,
     PropRotDirs,
+    LeadStates,
     Turns,
 )
 

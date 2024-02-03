@@ -11,13 +11,8 @@ from constants import (
     MOTION_TYPE,
     RED,
 )
-from utilities.TypeChecking.TypeChecking import (
-    Colors,
-    LeadStates,
-    MotionAttributes,
-    MotionTypes,
-)
-
+from utilities.TypeChecking.MotionAttributes import MotionTypes, Colors, LeadStates
+from utilities.TypeChecking.TypeChecking import MotionAttributes
 from widgets.header_widget import HeaderWidget
 from widgets.turns_box.turns_box_widgets.prop_rot_dir_button_manager import (
     PropRotDirButtonManager,

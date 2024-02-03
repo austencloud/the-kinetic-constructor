@@ -1,27 +1,5 @@
 from typing import TYPE_CHECKING, Union
-from constants import (
-    BLUE,
-    CLOCKWISE,
-    COLOR,
-    COUNTER_CLOCKWISE,
-    DASH,
-    END_LOC,
-    END_ORI,
-    LEADING,
-    MOTION_TYPE,
-    NO_ROT,
-    OPP,
-    PROP,
-    PROP_ROT_DIR,
-    RED,
-    SAME,
-    START_LOC,
-    START_ORI,
-    STATIC,
-    TRAILING,
-    TURNS,
-)
-from utilities.TypeChecking.TypeChecking import Colors, Orientations, Turns
+from constants import *
 from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab import (
     FilterTab,
 )
@@ -34,8 +12,8 @@ if TYPE_CHECKING:
 class MotionAttrManager:
     def __init__(self, motion: "Motion") -> None:
         self.m = motion
-        self.m.color: Colors = self.m.motion_dict.get(COLOR)
-        self.m.turns: Turns = self.m.motion_dict.get(TURNS)
+        self.m.color = self.m.motion_dict.get(COLOR)
+        self.m.turns = self.m.motion_dict.get(TURNS)
         self.m.start_loc = None
         self.m.end_loc = None
         self.m.motion_type = None
@@ -46,7 +24,7 @@ class MotionAttrManager:
                 setattr(self.m, attribute, value)
 
         if self.m.motion_type:
-            self.m.end_ori: Orientations = self.m.ori_calculator.get_end_ori()
+            self.m.end_ori = self.m.ori_calculator.get_end_ori()
 
         if self.m.pictograph.letter in ["S", "T", "U", "V"]:
             self.assign_lead_states()

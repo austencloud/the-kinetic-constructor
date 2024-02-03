@@ -1,11 +1,8 @@
 from constants import *
 from typing import TYPE_CHECKING
+from utilities.TypeChecking.MotionAttributes import Orientations, Locations, MotionTypes, Turns
 from utilities.TypeChecking.TypeChecking import (
-    Handpaths,
-    Locations,
-    MotionTypes,
-    Orientations,
-    Turns,
+    Handpaths
 )
 
 

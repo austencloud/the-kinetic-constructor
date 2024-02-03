@@ -11,11 +11,7 @@ from objects.prop.prop_classes import *
 
 from utilities.TypeChecking.prop_types import PropTypes
 from utilities.letter_item import LetterItem
-from utilities.TypeChecking.TypeChecking import (
-    Colors,
-    Locations,
-    MotionTypes,
-)
+from utilities.TypeChecking.MotionAttributes import Colors, Locations, MotionTypes
 from constants import *
 from widgets.factories.prop_factory import PropFactory
 

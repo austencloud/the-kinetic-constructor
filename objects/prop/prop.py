@@ -7,11 +7,8 @@ from objects.prop.prop_mouse_event_handler import PropMouseEventHandler
 from objects.prop.prop_offset_calculator import PropOffsetCalculator
 from objects.prop.prop_rot_angle_manager import PropRotAngleManager
 from objects.prop.prop_updater import PropUpdater
-from utilities.TypeChecking.TypeChecking import (
-    Axes,
-    Locations,
-    Orientations,
-)
+from utilities.TypeChecking.MotionAttributes import Locations, Orientations
+from utilities.TypeChecking.TypeChecking import Axes
 from utilities.TypeChecking.prop_types import PropTypes
 
 

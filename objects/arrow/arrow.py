@@ -6,13 +6,9 @@ from .managers.arrow_attr_handler import ArrowAttrHandler
 from .managers.rot_angle_manager.arrow_rot_angle_manager import ArrowRotAngleManager
 
 from ..graphical_object.graphical_object import GraphicalObject
-from utilities.TypeChecking.TypeChecking import (
-    Colors,
-    Locations,
-    Turns,
-    TYPE_CHECKING,
-)
-
+from utilities.TypeChecking.MotionAttributes import Colors, Locations, Turns
+from utilities.TypeChecking.TypeChecking import Handpaths
+from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ..motion.motion import Motion
     from widgets.pictograph.pictograph import Pictograph

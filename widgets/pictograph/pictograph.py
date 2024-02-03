@@ -13,15 +13,15 @@ from objects.prop.ghost_prop import GhostProp
 from objects.prop.prop import Prop
 
 from utilities.TypeChecking.TypeChecking import (
-    Colors,
     LetterTypes,
     Letters,
-    Locations,
     OpenCloseStates,
     SpecificPositions,
     VtgDirections,
     VtgTimings,
 )
+from utilities.TypeChecking.MotionAttributes import Colors, Locations
+
 from .components.pictograph_attr_manager import PictographAttrManager
 from .components.pictograph_checker import PictographChecker
 from .components.pictograph_getter import PictographGetter

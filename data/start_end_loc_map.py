@@ -1,10 +1,6 @@
 from constants import *
-from utilities.TypeChecking.TypeChecking import (
-    Locations,
-    MotionTypes,
-    PropRotDirs,
-    StartEndLocationTuple,
-)
+from utilities.TypeChecking.MotionAttributes import MotionTypes, Locations, PropRotDirs
+from utilities.TypeChecking.TypeChecking import StartEndLocationTuple
 
 
 start_end_loc_map = {

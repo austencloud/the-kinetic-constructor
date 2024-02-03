@@ -1,8 +1,9 @@
 from PyQt6.QtCore import QPointF
-from utilities.TypeChecking.TypeChecking import TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
+
 
 class ArrowMouseEventHandler:
     def __init__(self, arrow: "Arrow") -> None:

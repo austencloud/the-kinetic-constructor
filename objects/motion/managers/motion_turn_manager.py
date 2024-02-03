@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
-from utilities.TypeChecking.TypeChecking import Turns
-
+from utilities.TypeChecking.MotionAttributes import Turns
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
 
