@@ -1,4 +1,4 @@
-from .managers.arrow_location_manager import ArrowLocationManager
+from .managers.location_manager.arrow_location_manager import ArrowLocationManager
 from .managers.arrow_mirror_handler import ArrowMirrorHandler
 from .managers.arrow_mouse_event_handler import ArrowMouseEventHandler
 from .managers.arrow_updater import ArrowUpdater
