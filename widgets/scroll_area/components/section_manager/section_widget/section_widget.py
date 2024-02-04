@@ -2,12 +2,10 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QGroupBox
 from constants import OPP, SAME
 from utilities.TypeChecking.TypeChecking import LetterTypes
-from widgets.scroll_area.components.section_manager.section_widget.components.section_header import (
-    SectionHeader,
-)
+from .components.filter_tab.filter_tab import FilterTab
+from .components.section_header import SectionHeader
 from .....pictograph.pictograph import Pictograph
 from .....turns_box.turns_box_widgets.vtg_dir_button_manager import VtgDirButtonManager
-from .components.filter_tab import FilterTab
 from .components.pictograph_frame import ScrollAreaSectionPictographFrame
 
 if TYPE_CHECKING:
@@ -17,7 +15,9 @@ if TYPE_CHECKING:
 class SectionWidget(QGroupBox):
     SCROLLBAR_WIDTH = 20
 
-    def __init__(self, letter_type: LetterTypes, scroll_area: "CodexScrollArea") -> None:
+    def __init__(
+        self, letter_type: LetterTypes, scroll_area: "CodexScrollArea"
+    ) -> None:
         super().__init__(None)
         self.scroll_area = scroll_area
         self.letter_type = letter_type
@@ -45,7 +45,7 @@ class SectionWidget(QGroupBox):
 
         self.header.type_label.setMinimumHeight(self.width() // 20)
         self.header.type_label.setMaximumHeight(self.width() // 20)
-        self.filter_tab.resize_filter_tab()
+        self.filter_tab.visibility_handler.resize_filter_tab()
 
     def toggle_section(self) -> None:
         self.layout.setEnabled(False)

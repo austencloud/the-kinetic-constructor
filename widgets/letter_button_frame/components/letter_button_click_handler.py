@@ -2,9 +2,8 @@ from Enums import LetterType
 from typing import TYPE_CHECKING
 
 from Enums import LetterType
-from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab import (
-    FilterTab,
-)
+from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import FilterTab
+
 
 if TYPE_CHECKING:
     from widgets.letter_button_frame.components.letter_button_manager import (
@@ -32,10 +31,10 @@ class LetterButtonClickHandler:
         if letter in self.button_panel.codex.selected_letters:
             letter_type = LetterType.get_letter_type(letter)
             self.section_manager.create_section_if_needed(letter_type)
-            
+
         for section in self.section_manager.sections.values():
             if section.letter_type == LetterType.get_letter_type(letter):
-                section.filter_tab.show_tabs_based_on_chosen_letters()
+                section.filter_tab.visibility_handler.update_visibility_based_on_selected_letters()
 
         button.setFlat(not is_selected)
 
@@ -63,5 +62,5 @@ class LetterButtonClickHandler:
         p_factory = self.button_panel.codex.scroll_area.pictograph_factory
         pictograph_key = p_factory.generate_pictograph_key_from_dict(pictograph_dict)
         pictograph = p_factory.get_or_create_pictograph(pictograph_key, pictograph_dict)
-        filter_tab.apply_turns_to_pictograph(pictograph)
+        filter_tab.visibility_handler.apply_turns_from_turns_boxes_to_pictograph(pictograph)
         pictograph.updater.update_pictograph()

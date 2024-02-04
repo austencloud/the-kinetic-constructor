@@ -1,8 +1,7 @@
 from typing import TYPE_CHECKING, Union
 from constants import *
-from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab import (
-    FilterTab,
-)
+from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import FilterTab
+
 
 if TYPE_CHECKING:
     from widgets.turns_box.turns_box import TurnsBox
