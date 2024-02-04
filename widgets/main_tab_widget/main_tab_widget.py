@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import (
 )
 
 from widgets.codex.codex import Codex
+from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
 
 if TYPE_CHECKING:
@@ -15,11 +16,12 @@ class MainTabWidget(QTabWidget):
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.setStyleSheet(self.get_main_tab_stylesheet())
-        self.codex = Codex(self)
+        self.codex = Codex(main_widget)
+        self.sequence_builder = SequenceBuilder(main_widget)
         self.tabs = [self.codex]
         self.addTab(self.codex, "Codex")
+        self.addTab(self.sequence_builder, "Sequence Builder")
         # self.addTab(graph_editor_tab, "Graph Editor")
-        # self.addTab(option_picker_tab, "Option Picker")
 
     def get_main_tab_stylesheet(self) -> str:
         return """

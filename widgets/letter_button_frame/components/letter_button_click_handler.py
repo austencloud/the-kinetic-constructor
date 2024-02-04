@@ -52,7 +52,7 @@ class LetterButtonClickHandler:
     def process_pictographs_for_letter(self, letter: str) -> None:
         letter_type = LetterType.get_letter_type(letter)
         section_manager = self.button_panel.codex.scroll_area.sections_manager
-        main_widget = self.button_panel.codex.main_tab_widget.main_widget
+        main_widget = self.button_panel.codex.main_widget
         section = section_manager.sections[letter_type]
         pictograph_dicts = main_widget.letters.get(letter, [])
         for pictograph_dict in pictograph_dicts:

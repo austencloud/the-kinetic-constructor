@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING, Literal
 from Enums import LetterType
 from constants import CODEX_PICTOGRAPH, OPTION
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.option_picker_tab.option import Option
 
 
 from constants import (
@@ -21,11 +20,11 @@ from constants import (
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.scroll_area.scroll_area import ScrollArea
+    from widgets.scroll_area.scroll_area import CodexScrollArea
 
 
 class ScrollAreaPictographFactory:
-    def __init__(self, scroll_area: "ScrollArea") -> None:
+    def __init__(self, scroll_area: "CodexScrollArea") -> None:
         self.scroll_area = scroll_area
 
     def get_or_create_pictograph(
@@ -96,12 +95,9 @@ class ScrollAreaPictographFactory:
     def create_pictograph(
         self,
         graph_type: Literal["option", "codex_pictograph"],
-    ) -> Option | Pictograph:
+    ) -> Pictograph:
         if graph_type == OPTION:
-            pictograph = Option(
-                self.scroll_area.main_widget,
-                self.scroll_area,
-            )
+            pass
         elif graph_type == CODEX_PICTOGRAPH:
             pictograph = Pictograph(
                 self.scroll_area.main_widget,

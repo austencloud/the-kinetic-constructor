@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 
 from PyQt6.QtWidgets import QGridLayout, QFrame, QSizePolicy
 from PyQt6.QtCore import Qt, pyqtSignal
-from widgets.option_picker_tab.option import Option
 from widgets.sequence_widget.beat_frame.beat import Beat
 from widgets.sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 from widgets.sequence_widget.beat_frame.start_pos_beat import StartPositionBeatView
@@ -17,7 +16,7 @@ from widgets.sequence_widget.beat_frame.beat import BeatView
 
 
 class BeatFrame(QFrame):
-    picker_updater = pyqtSignal(Option, dict)
+    picker_updater = pyqtSignal(Pictograph, dict)
     COLUMN_COUNT = 5
     ROW_COUNT = 4
 

@@ -7,14 +7,14 @@ from widgets.scroll_area.components.section_manager.section_widget.section_widge
 )
 
 if TYPE_CHECKING:
-    from ..scroll_area import ScrollArea
+    from ..scroll_area import CodexScrollArea
 
 
 class ScrollAreaDisplayManager:
     SPACING = 5
     COLUMN_COUNT = 8
     
-    def __init__(self, scroll_area: "ScrollArea") -> None:
+    def __init__(self, scroll_area: "CodexScrollArea") -> None:
 
         self.scroll_area = scroll_area
 

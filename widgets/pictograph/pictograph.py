@@ -45,12 +45,12 @@ from utilities.letter_item import LetterItem
 from utilities.letter_calculator import LetterCalculator
 
 if TYPE_CHECKING:
-    from widgets.scroll_area.scroll_area import ScrollArea
+    from widgets.scroll_area.scroll_area import CodexScrollArea
     from widgets.main_widget.main_widget import MainWidget
 
 
 class Pictograph(QGraphicsScene):
-    def __init__(self, main_widget: "MainWidget", scroll_area: "ScrollArea") -> None:
+    def __init__(self, main_widget: "MainWidget", scroll_area: "CodexScrollArea") -> None:
         super().__init__()
         self.main_widget = main_widget
         self.scroll_area = scroll_area

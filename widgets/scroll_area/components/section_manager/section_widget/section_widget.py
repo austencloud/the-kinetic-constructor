@@ -11,13 +11,13 @@ from .components.filter_tab import FilterTab
 from .components.pictograph_frame import ScrollAreaSectionPictographFrame
 
 if TYPE_CHECKING:
-    from ....scroll_area import ScrollArea
+    from ....scroll_area import CodexScrollArea
 
 
 class SectionWidget(QGroupBox):
     SCROLLBAR_WIDTH = 20
 
-    def __init__(self, letter_type: LetterTypes, scroll_area: "ScrollArea") -> None:
+    def __init__(self, letter_type: LetterTypes, scroll_area: "CodexScrollArea") -> None:
         super().__init__(None)
         self.scroll_area = scroll_area
         self.letter_type = letter_type

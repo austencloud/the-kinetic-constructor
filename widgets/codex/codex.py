@@ -4,9 +4,10 @@ from PyQt6.QtCore import pyqtSignal
 from utilities.TypeChecking.TypeChecking import Letters
 from ..codex.codex_button_panel import CodexButtonPanel
 from ..codex.codex_image_generator import CodexImageGenerator
-from ..scroll_area.scroll_area import ScrollArea
+from ..scroll_area.scroll_area import CodexScrollArea
 
 if TYPE_CHECKING:
+    from widgets.main_widget.main_widget import MainWidget
     from ..main_tab_widget.main_tab_widget import MainTabWidget
 
 
@@ -14,12 +15,12 @@ class Codex(QWidget):
     imageGenerated = pyqtSignal(str)
     selected_letters: list[Letters] = []
 
-    def __init__(self, main_tab_widget: "MainTabWidget") -> None:
-        super().__init__(main_tab_widget)
-        self.main_tab_widget = main_tab_widget
-        self.letters_dict = self.main_tab_widget.main_widget.letters
+    def __init__(self, main_widget: "MainWidget") -> None:
+        super().__init__(main_widget)
+        self.main_widget = main_widget
+        self.letters_dict = self.main_widget.letters
 
-        self.scroll_area = ScrollArea(self)
+        self.scroll_area = CodexScrollArea(self)
         self.image_generator = CodexImageGenerator(self)
         self.button_panel = CodexButtonPanel(self)
 

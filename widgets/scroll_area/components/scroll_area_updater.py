@@ -4,11 +4,11 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from widgets.scroll_area.scroll_area import ScrollArea
+    from widgets.scroll_area.scroll_area import CodexScrollArea
 
 
 class ScrollAreaUpdater:
-    def __init__(self, scroll_area: "ScrollArea") -> None:
+    def __init__(self, scroll_area: "CodexScrollArea") -> None:
         self.scroll_area = scroll_area
 
     def update_pictographs(self) -> None:

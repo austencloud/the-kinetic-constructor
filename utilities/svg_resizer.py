@@ -103,7 +103,7 @@ class SvgResizer(QMainWindow):
         file_dialog.setFileMode(
             QFileDialog.FileMode.Directory
         )  # set file mode to select a directory
-        file_dialog.setOption(QFileDialog.Option.ShowDirsOnly)  # Show only directories
+        file_dialog.setPictograph(QFileDialog.Pictograph.ShowDirsOnly)  # Show only directories
         file_dialog.setDirectory("images/letters/")  # set the default directory
         if file_dialog.exec():
             directory = file_dialog.selectedFiles()[0]  # Get the selected directory

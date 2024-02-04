@@ -13,10 +13,10 @@ if TYPE_CHECKING:
     from ..codex.codex import Codex
 
 
-class ScrollArea(QScrollArea):
+class CodexScrollArea(QScrollArea):
     def __init__(self, codex: "Codex") -> None:
         super().__init__(codex)
-        self.main_widget = codex.main_tab_widget.main_widget
+        self.main_widget = codex.main_widget
         self.codex = codex
         self.letters = self.main_widget.letters
         self.pictographs: dict[Letters, Pictograph] = {}

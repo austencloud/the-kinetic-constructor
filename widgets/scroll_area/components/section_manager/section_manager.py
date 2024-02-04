@@ -6,7 +6,7 @@ from .section_widget.section_widget import SectionWidget
 from PyQt6.QtWidgets import QGridLayout, QLabel
 
 if TYPE_CHECKING:
-    from ...scroll_area import ScrollArea
+    from ...scroll_area import CodexScrollArea
 
 
 class ScrollAreaSectionManager:
@@ -14,7 +14,7 @@ class ScrollAreaSectionManager:
 
     SECTION_ORDER = ["Type1", "Type2", "Type3", "Type4", "Type5", "Type6"]
 
-    def __init__(self, scroll_area: "ScrollArea") -> None:
+    def __init__(self, scroll_area: "CodexScrollArea") -> None:
         self.scroll_area = scroll_area
         self.sections: dict[LetterTypes, SectionWidget] = {}
         self.filter_tabs_cache: dict[LetterTypes, FilterTab] = {}
