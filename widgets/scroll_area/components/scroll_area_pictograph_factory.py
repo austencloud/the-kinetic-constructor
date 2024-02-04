@@ -37,7 +37,7 @@ class ScrollAreaPictographFactory:
             return all_pictographs[letter][pictograph_key]
 
         if pictograph_dict is not None:
-            pictograph = self.create_pictograph(CODEX_PICTOGRAPH)
+            pictograph = self.create_pictograph()
             pictograph.updater.update_pictograph(pictograph_dict)
 
             if letter not in all_pictographs:
@@ -92,20 +92,11 @@ class ScrollAreaPictographFactory:
     def get_pictograph(self, pictograph_key) -> Pictograph:
         return self.scroll_area.pictographs[pictograph_key]
 
-    def create_pictograph(
-        self,
-        graph_type: Literal["option", "codex_pictograph"],
-    ) -> Pictograph:
-        if graph_type == OPTION:
-            pictograph = Pictograph(
-                self.scroll_area.main_widget,
-                self.scroll_area,
-            )
-        elif graph_type == CODEX_PICTOGRAPH:
-            pictograph = Pictograph(
-                self.scroll_area.main_widget,
-                self.scroll_area,
-            )
+    def create_pictograph(self) -> Pictograph:
+        pictograph = Pictograph(
+            self.scroll_area.main_widget,
+            self.scroll_area,
+        )
         return pictograph
 
     def generate_pictograph_key_from_dict(self, pictograph_dict) -> str:

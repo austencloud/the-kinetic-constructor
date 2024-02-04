@@ -33,3 +33,6 @@ class SequenceBuilder(QFrame):
         except Exception as e:
             print(f"Error loading data: {e}")
             return pd.DataFrame()  # Return an empty DataFrame in case of error
+
+    def resize_sequence_builder(self) -> None:
+        self.scroll_area.resize_sequence_builder_scroll_area()

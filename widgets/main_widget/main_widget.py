@@ -35,17 +35,20 @@ class MainWidget(QWidget):
         self._setup_letters()
         self._setup_components()
         self._setup_layouts()
+
+    def _setup_components(self) -> None:
+        self._setup_special_placements()
+        self.svg_manager = GraphicalObjectSvgManager()
+        self.turns_tuple_generator = TurnsTupleGenerator()
+        self.sequence_widget = MainSequenceWidget(self)
+        self.main_tab_widget = MainTabWidget(self)
+        self.image_cache_manager = ImageCacheManager(self)
+
+    def _setup_special_placements(self):
         self.special_placement_loader = SpecialPlacementLoader(self)
         self.special_placements: dict[
             str, dict[str, dict[str, dict[str, list[int]]]]
         ] = self.special_placement_loader.load_special_placements()
-
-    def _setup_components(self) -> None:
-        self.svg_manager = GraphicalObjectSvgManager()
-        self.turns_tuple_generator = TurnsTupleGenerator()
-        self.main_sequence_widget = MainSequenceWidget(self)
-        self.main_tab_widget = MainTabWidget(self)
-        self.image_cache_manager = ImageCacheManager(self)
 
     def _setup_layouts(self) -> None:
         self.layout_manager = MainWidgetLayoutManager(self)
@@ -65,7 +68,7 @@ class MainWidget(QWidget):
 
     def showEvent(self, event) -> None:
         super().showEvent(event)
-        self.main_sequence_widget.resize_sequence_widget()
+        self.sequence_widget.resize_sequence_widget()
         self.main_tab_widget.codex.resize_codex()
 
     layout: QHBoxLayout
@@ -77,20 +80,17 @@ class MainWidget(QWidget):
             super().keyPressEvent(event)
 
     def toggle_main_sequence_widget(self):
-        if self.main_sequence_widget.isHidden():
-            self.main_sequence_widget.show()
+        if self.sequence_widget.isHidden():
+            self.sequence_widget.show()
         else:
-            self.main_sequence_widget.hide()
+            self.sequence_widget.hide()
             self.main_tab_widget.setGeometry(0, 0, self.width(), self.height())
 
     def resize_sequence_widget(self):
-        if not self.main_sequence_widget.isHidden():
-            self.main_sequence_widget.setGeometry(
-                0, 0, self.width() // 2, self.height()
-            )
+        self.sequence_widget.resize_sequence_widget()
 
     def resize_codex(self):
-        if not self.main_sequence_widget.isHidden():
+        if not self.sequence_widget.isHidden():
             self.main_tab_widget.setGeometry(
                 self.width() // 2, 0, self.width() // 2, self.height()
             )

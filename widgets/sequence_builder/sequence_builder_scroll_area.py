@@ -93,7 +93,7 @@ class SequenceBuilderScrollArea(QScrollArea):
     ### SETUP ###
 
     def _connect_signals(self) -> None:
-        self.main_widget.main_sequence_widget.beat_frame.picker_updater.connect(
+        self.main_widget.sequence_widget.beat_frame.picker_updater.connect(
             self.update_options
         )
 
@@ -109,22 +109,31 @@ class SequenceBuilderScrollArea(QScrollArea):
     def _add_start_pos_option(self, position_key: str, column: int) -> None:
         """Adds an option for the specified start position."""
         start_pos, end_pos = position_key.split("_")
+        self.start_options: dict[str, Pictograph] = {}
         for letter, pictograph_dicts in self.letters.items():
             for pictograph_dict in pictograph_dicts:
                 if (
                     pictograph_dict[START_POS] == start_pos
                     and pictograph_dict[END_POS] == end_pos
                 ):
-                    start_option = self.pictograph_factory.create_pictograph(OPTION)
+                    start_option = self.pictograph_factory.create_pictograph()
+                    self.start_options[letter] = start_option
                     start_option.letter = letter
                     start_option.start_pos = start_pos
                     start_option.end_pos = end_pos
-                    self._add_option_to_layout(start_option, 0, column, True)
-                    break
+                    self._add_option_to_layout(start_option, True)
+                    start_option.updater.update_pictograph(pictograph_dict)
 
-    def _add_option_to_layout(
-        self, option: Pictograph, row: int, col: int, is_start_pos: bool
-    ) -> None:
+    def resize_start_options(self, options: list[Pictograph]) -> None:
+        for option in options:
+            option.view.setMinimumWidth(
+                self.width() // len(options) - self.display_manager.SPACING
+            )
+            option.view.setMaximumWidth(
+                self.width() // len(options) - self.display_manager.SPACING
+            )
+
+    def _add_option_to_layout(self, option: Pictograph, is_start_pos: bool) -> None:
         option.view.mousePressEvent = self._get_click_handler(option, is_start_pos)
         self.layout.addWidget(option.view)
 
@@ -244,14 +253,17 @@ class SequenceBuilderScrollArea(QScrollArea):
     ### EVENT HANDLERS ###
 
     def _on_start_pos_clicked(self, start_pos: "Pictograph", attributes) -> None:
-        self.main_widget.main_sequence_widget.beat_frame.start_pos_view.set_start_pos(
+        self.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
             start_pos
         )
-        self.main_widget.main_sequence_widget.beat_frame.picker_updater.emit(
+        self.main_widget.sequence_widget.beat_frame.picker_updater.emit(
             start_pos, attributes
         )
 
     def _on_option_clicked(self, clicked_option: "Pictograph") -> None:
         self._update_pictographs(clicked_option)
         new_beat = clicked_option.add_to_sequence_manager.create_new_beat()
-        self.main_widget.main_sequence_widget.beat_frame.add_scene_to_sequence(new_beat)
+        self.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(new_beat)
+
+    def resize_sequence_builder_scroll_area(self) -> None:
+        self.resize_start_options(list(self.start_options.values()))

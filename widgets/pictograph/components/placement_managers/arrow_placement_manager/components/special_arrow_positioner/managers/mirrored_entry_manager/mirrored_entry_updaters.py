@@ -30,7 +30,7 @@ class StandardOrientationUpdater(MirroredEntryUpdaterBase):
         self._mirror_entry(
             mirrored_turns_tuple, letter, motion_attr, original_turn_data
         )
-        self.mirrored_entry_updater.manager.update_pictographs_in_section(letter_type)
+        self.mirrored_entry_updater.manager.section_updater.update_pictographs_in_section(letter_type)
 
     def _mirror_entry(
         self, mirrored_turns_tuple, letter, motion_attr, original_turn_data

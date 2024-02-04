@@ -122,7 +122,10 @@ class GraphicalObjectSvgManager:
     def _generate_cache_key(self, object: Union["Arrow", "Prop"]) -> str:
         """Generates a unique key for caching based on object properties."""
         if self.is_arrow(object):
-            return f"{object.motion.motion_type}_{float(object.motion.turns)}_{object.motion.start_ori}"
+            if object.motion.start_ori in [IN, OUT]:
+                return f"{object.motion.motion_type}_{float(object.motion.turns)}_radial"
+            elif object.motion.start_ori in [CLOCK, COUNTER]:
+                return f"{object.motion.motion_type}_{float(object.motion.turns)}_nonradial"
         elif self.is_prop(object):
             return f"prop_{object.prop_type}"
         else:
