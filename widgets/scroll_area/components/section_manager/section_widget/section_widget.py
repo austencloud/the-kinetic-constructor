@@ -63,3 +63,14 @@ class SectionWidget(QGroupBox):
             self.vtg_dir_button_manager.hide_vtg_dir_buttons()
         self.layout.setEnabled(True)
         self.layout.activate()
+
+    def reset_section(self, index: int) -> None:
+        for pictograph in self.pictographs.values():
+            for motion in pictograph.motions.values():
+                motion.turns_manager.set_turns(0)
+            pictograph.updater.update_pictograph()
+        for panel in self.filter_tab.panels:
+            for box in panel.boxes:
+                box.turns_widget.display_manager.update_turns_display("0")
+                box.prop_rot_dir_button_manager.hide_prop_rot_dir_buttons()
+        self.vtg_dir_button_manager.hide_vtg_dir_buttons()

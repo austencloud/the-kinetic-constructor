@@ -32,6 +32,8 @@ class FilterTab(QTabWidget):
         self.visibility_handler = FilterTabVisibilityHandler(self)
         self.turns_updater = FilterTabTurnsUpdater(self)
 
+        self.currentChanged.connect(self.section.reset_section)
+
     def apply_turns_to_pictographs(self, pictograph: "Pictograph"):
         self.turns_updater.apply_turns(pictograph)
 
@@ -43,7 +45,10 @@ class FilterTab(QTabWidget):
             self.lead_state_turns_panel,
         ]:
             for box in panel.boxes:
-                turns_values[box.attribute_type] = (
+                if box.attribute_type not in turns_values:
+                    turns_values[box.attribute_type] = {}
+                turns_values[box.attribute_type][box.attribute_value] = (
                     box.turns_widget.display_manager.get_current_turns_value()
                 )
         return turns_values
+
