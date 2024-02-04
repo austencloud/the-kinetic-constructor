@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums import LetterType
+from constants import BLUE_TURNS, RED_TURNS
 from utilities.TypeChecking.TypeChecking import LetterTypes, Letters
 from .section_widget.components.filter_tab import FilterTab
 from .section_widget.section_widget import SectionWidget
@@ -19,9 +20,9 @@ class ScrollAreaSectionManager:
         self.sections: dict[LetterTypes, SectionWidget] = {}
         self.filter_tabs_cache: dict[LetterTypes, FilterTab] = {}
         self.pictograph_cache: dict[Letters, list[LetterTypes]] = {}
-        self.letters_by_type: dict[
-            LetterTypes, list[Letters]
-        ] = self.setup_letters_by_type()
+        self.letters_by_type: dict[LetterTypes, list[Letters]] = (
+            self.setup_letters_by_type()
+        )
         self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
         self.ordered_section_types = []
 
@@ -97,14 +98,30 @@ class ScrollAreaSectionManager:
             section.filter_tab = self.filter_tabs_cache[letter_type]
 
     def update_sections_based_on_letters(self, selected_letters: list[Letters]) -> None:
-        for section in self.sections.values():
-            section.hide()
+        sections_to_show = self.get_sections_to_show_from_selected_letters(
+            selected_letters
+        )
 
+        for section in self.sections.values():
+            if section.letter_type in sections_to_show:
+                if section.isHidden():
+                    section.show()
+            else:
+                section.hide()
+                for pictograph in section.pictographs.values():
+                    pictograph.updater.update_pictograph({RED_TURNS: 0, BLUE_TURNS: 0})
+
+        self.scroll_area.fix_stretch()
+
+    def get_sections_to_show_from_selected_letters(
+        self, selected_letters: list[Letters]
+    ) -> list[LetterTypes]:
+        sections_to_show = []
         for letter in selected_letters:
             letter_type = LetterType.get_letter_type(letter)
-            if letter_type in self.sections:
-                self.sections[letter_type].show()
-        self.scroll_area.fix_stretch()
+            if letter_type not in sections_to_show:
+                sections_to_show.append(letter_type)
+        return sections_to_show
 
     def create_or_get_filter_tab(self, section: SectionWidget) -> FilterTab:
         if not section.filter_tab:

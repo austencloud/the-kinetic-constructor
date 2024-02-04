@@ -32,6 +32,7 @@ class LetterButtonClickHandler:
         if letter in self.button_panel.codex.selected_letters:
             letter_type = LetterType.get_letter_type(letter)
             self.section_manager.create_section_if_needed(letter_type)
+            
         for section in self.section_manager.sections.values():
             if section.letter_type == LetterType.get_letter_type(letter):
                 section.filter_tab.show_tabs_based_on_chosen_letters()

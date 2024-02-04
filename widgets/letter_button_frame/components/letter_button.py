@@ -43,3 +43,8 @@ class LetterButton(QPushButton):
 
     def release(self) -> None:
         self.setStyleSheet(self.get_button_style(pressed=False))
+
+    def is_pressed(self) -> bool:
+        return self.styleSheet() == self.get_button_style(pressed=True)
+    
+    

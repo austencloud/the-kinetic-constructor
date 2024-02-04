@@ -3,7 +3,9 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 import pandas as pd
 
 from constants import END_POS, START_POS
-from widgets.sequence_builder.sequence_builder_scroll_area import SequenceBuilderScrollArea
+from widgets.sequence_builder.sequence_builder_scroll_area import (
+    SequenceBuilderScrollArea,
+)
 
 if TYPE_CHECKING:
     from widgets.main_tab_widget.main_tab_widget import MainTabWidget

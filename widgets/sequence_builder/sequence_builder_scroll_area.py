@@ -15,6 +15,9 @@ from widgets.scroll_area.components.section_manager.section_manager import (
     ScrollAreaSectionManager,
 )
 from constants import *
+from widgets.scroll_area.components.sequence_builder_display_manager import (
+    SequenceBuilderDisplayManager,
+)
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.sequence_builder import SequenceBuilder
@@ -29,6 +32,8 @@ class SequenceBuilderScrollArea(QScrollArea):
         self.letters = self.main_widget.letters
         self.pictographs: dict[Letters, Pictograph] = {}
         self.stretch_index = -1
+        self.start_options: dict[str, Pictograph] = {}
+
         self._setup_ui()
         self._setup_managers()
         self._show_start_pos()
@@ -37,7 +42,7 @@ class SequenceBuilderScrollArea(QScrollArea):
         self.setWidgetResizable(True)
         self.container = QWidget()
         self.layout: QHBoxLayout = QHBoxLayout(self.container)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.container.setStyleSheet("background-color: #f2f2f2;")
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -46,7 +51,7 @@ class SequenceBuilderScrollArea(QScrollArea):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
     def _setup_managers(self) -> None:
-        self.display_manager = ScrollAreaDisplayManager(self)
+        self.display_manager = SequenceBuilderDisplayManager(self)
         self.sections_manager = ScrollAreaSectionManager(self)
         self.pictograph_factory = ScrollAreaPictographFactory(self)
 
@@ -109,7 +114,6 @@ class SequenceBuilderScrollArea(QScrollArea):
     def _add_start_pos_option(self, position_key: str, column: int) -> None:
         """Adds an option for the specified start position."""
         start_pos, end_pos = position_key.split("_")
-        self.start_options: dict[str, Pictograph] = {}
         for letter, pictograph_dicts in self.letters.items():
             for pictograph_dict in pictograph_dicts:
                 if (
@@ -124,14 +128,9 @@ class SequenceBuilderScrollArea(QScrollArea):
                     self._add_option_to_layout(start_option, True)
                     start_option.updater.update_pictograph(pictograph_dict)
 
-    def resize_start_options(self, options: list[Pictograph]) -> None:
-        for option in options:
-            option.view.setMinimumWidth(
-                self.width() // len(options) - self.display_manager.SPACING
-            )
-            option.view.setMaximumWidth(
-                self.width() // len(options) - self.display_manager.SPACING
-            )
+    def resize_start_options(self, start_options: list[Pictograph]) -> None:
+        for start_option in start_options:
+            start_option.view.resize_for_scroll_area()
 
     def _add_option_to_layout(self, option: Pictograph, is_start_pos: bool) -> None:
         option.view.mousePressEvent = self._get_click_handler(option, is_start_pos)
