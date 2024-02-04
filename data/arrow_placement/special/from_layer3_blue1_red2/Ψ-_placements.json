@@ -152,13 +152,20 @@
       "dash_from_layer2_rot_angle_override": true
     },
     "null": {},
-    "(s, 3, 1)": {},
+    "(s, 3, 1)": {
+      "dash_from_layer2_rot_angle_override": true,
+      "red": [0, -165],
+      "blue": [0, -60]
+    },
     "(ccw, 1, 0)": {
       "red": [-10, -130]
     },
     "(s, 1.5, 1)": {
       "blue": {},
       "red": {}
+    },
+    "(s, 3, 2)": {
+      "blue": [5, -40]
     }
   }
 }
