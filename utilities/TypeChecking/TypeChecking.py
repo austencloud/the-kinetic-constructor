@@ -112,6 +112,7 @@ class MotionTypeCombinations(Enum):
     DASH_VS_DASH = "dash_vs_dash"
 
 
+
 class VtgTimings(Enum):
     SPLIT = "split"
     TOGETHER = "together"

@@ -20,14 +20,14 @@ if TYPE_CHECKING:
 
 class Prop(GraphicalObject):
     loc: Locations
-    ori: Orientations
+    ori: Orientations = None
     axis: Axes
     prop_type: PropTypes
 
-    def __init__(self, scene, prop_dict: dict, motion: "Motion") -> None:
-        super().__init__(scene)
+    def __init__(self, pictograph, prop_dict: dict, motion: "Motion") -> None:
+        super().__init__(pictograph)
         self.motion = motion
-        self.scene: Pictograph = scene
+        self.scene: Pictograph = pictograph
         self.arrow: Arrow
         self.previous_location: Locations
         self.prop_dict = prop_dict

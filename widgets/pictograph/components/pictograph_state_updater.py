@@ -29,8 +29,8 @@ class PictographStateUpdater:
             motion.updater.update_motion()
         for arrow in self.p.arrows.values():
             arrow.updater.update_arrow()
-        for prop in self.p.props.values():
-            prop.updater.update_prop()
+        # for prop in self.p.props.values():
+        #     prop.updater.update_prop()
         if self.p.letter in ["S", "T", "U", "V"]:
             self.p.get.leading_motion().lead_state = LEADING
             self.p.get.trailing_motion().lead_state = TRAILING
@@ -40,7 +40,7 @@ class PictographStateUpdater:
 
     def show_graphical_objects(self, color: Colors) -> None:
         self.p.props[color].show()
-        self.p.ghost_props[color].show()
+        # self.p.ghost_props[color].show()
         self.p.arrows[color].show()
 
     def override_motion_type_if_necessary(

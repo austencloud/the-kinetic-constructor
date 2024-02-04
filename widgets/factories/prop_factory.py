@@ -27,10 +27,10 @@ class PropFactory:
         }
 
     def create_prop_of_type(
-        self, existing_prop: Prop, target_prop_type: PropTypes
+        self, existing_prop: Prop, target_prop_type: str
     ) -> Prop:
-        if target_prop_type in self.prop_classes:
-            return self.prop_classes[target_prop_type](
+        if target_prop_type.lower() in self.prop_classes:
+            return self.prop_classes[target_prop_type.lower()](
                 existing_prop.pictograph, existing_prop.prop_dict, existing_prop.motion
             )
         else:

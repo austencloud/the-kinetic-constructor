@@ -36,8 +36,8 @@ class PictographInit:
         self.p.locations = self.init_quadrant_boundaries(self.p.grid)
 
         self.p.motions = self.init_motions()
-        self.p.arrows, self.p.ghost_arrows = self.init_arrows()
-        self.p.props, self.p.ghost_props = self.init_props()
+        self.p.arrows = self.init_arrows()
+        self.p.props = self.init_props()
         self.p.letter_item = self.init_letter_item()
 
     def init_grid(self) -> Grid:
@@ -55,56 +55,40 @@ class PictographInit:
         self.p.red_motion, self.p.blue_motion = (motions[RED], motions[BLUE])
         return motions
 
-    def init_objects(self, prop_type: PropTypes) -> None:
-        self.init_grid()
-        self.p.motions = self.init_motions()
-        self.p.arrows, self.p.ghost_arrows = self.init_arrows()
-        self.p.props, self.p.ghost_props = self.init_props(prop_type)
-
-    def init_arrows(self) -> tuple[dict[Colors, Arrow], dict[Colors, GhostArrow]]:
+    def init_arrows(self) -> dict[Colors, Arrow]:
         arrows = {}
-        ghost_arrows = {}
         for color in [BLUE, RED]:
-            arrows[color] = self._create_arrow(color, None)
+            arrows[color] = self._create_arrow(color)
         self.p.red_arrow, self.p.blue_arrow = (arrows[RED], arrows[BLUE])
-        return arrows, ghost_arrows
+        return arrows
 
-    def init_props(self) -> None:
+    def init_props(self) -> dict[Colors, Prop]:
         props: dict[Colors, Prop] = {}
-        ghost_props: dict[Colors, GhostProp] = {}
         prop_type = self.p.main_widget.prop_type
         for color in [RED, BLUE]:
-            # Create a temporary initial prop
             initial_prop_attributes = {
                 COLOR: color,
                 PROP_TYPE: prop_type,
                 LOC: None,
                 ORI: None,
             }
-            initial_prop_class = prop_class_mapping.get(prop_type)
+            initial_prop_class = prop_class_mapping.get(prop_type.lower())
             if initial_prop_class is None:
                 raise ValueError(f"Invalid prop_type: {prop_type}")
             initial_prop = initial_prop_class(self.p, initial_prop_attributes, None)
-
-            # Use the factory to create the actual prop
             props[color] = self.prop_factory.create_prop_of_type(
                 initial_prop, prop_type
             )
-            ghost_props[color] = GhostProp(
-                self.p, initial_prop_attributes, self.p.motions[color]
-            )
-
             self.p.motions[color].prop = props[color]
             props[color].motion = self.p.motions[color]
-            ghost_props[color].motion = self.p.motions[color]
-            props[color].ghost = ghost_props[color]
+
             props[color].arrow = self.p.motions[color].arrow
             self.p.motions[color].arrow.motion.prop = props[color]
             self.p.addItem(props[color])
             props[color].hide()
 
         self.p.red_prop, self.p.blue_prop = (props[RED], props[BLUE])
-        return props, ghost_props
+        return props
 
     def init_letter_item(self) -> LetterItem:
         letter_item = LetterItem(self.p)
@@ -114,7 +98,6 @@ class PictographInit:
     def init_quadrant_boundaries(
         self, grid: Grid
     ) -> dict[Locations, tuple[int, int, int, int]]:
-        # Use cached coordinates directly
         grid_center: QPoint = grid.grid_data.center_point.coordinates.toPoint()
 
         grid_center_x = grid_center.x()
@@ -149,27 +132,19 @@ class PictographInit:
 
     ### CREATE ###
 
-    def _create_arrow(
-        self, color: Colors, motion_type: MotionTypes
-    ) -> tuple[Arrow, GhostArrow]:
+    def _create_arrow(self, color: Colors) -> Arrow:
         arrow_attributes = {
             COLOR: color,
             TURNS: 0,
         }
         arrow = Arrow(self.p, arrow_attributes)
-        # ghost_arrow = GhostArrow(self.p, arrow_attributes)
-        # arrow.ghost = ghost_arrow
         self.p.motions[color].arrow = arrow
         arrow.motion = self.p.motions[color]
-        # ghost_arrow.motion = self.p.motions[color]
-        # arrow.ghost = ghost_arrow
         self.p.addItem(arrow)
         arrow.hide()
         return arrow
 
-    def _create_prop(
-        self, color: Colors, prop_type: PropTypes
-    ) -> tuple[Prop, GhostProp]:
+    def _create_prop(self, color: Colors, prop_type: PropTypes) -> Prop:
         prop_class = prop_class_mapping.get(prop_type)
         if prop_class is None:
             raise ValueError(f"Invalid prop_type: {prop_type}")
@@ -180,16 +155,11 @@ class PictographInit:
             ORI: None,
         }
         prop: Prop = prop_class(self.p, prop_attributes, None)
-        ghost_prop = GhostProp(self.p, prop_attributes, self.p.motions[color])
         self.p.motions[color].prop = prop
         prop.motion = self.p.motions[color]
-        ghost_prop.motion = self.p.motions[color]
-        prop.ghost = ghost_prop
-        prop.arrow = self.p.motions[color].arrow
-        self.p.motions[color].arrow.prop = prop
         self.p.addItem(prop)
         prop.hide()
-        return prop, ghost_prop
+        return prop
 
     def _create_motion(self, color: Colors) -> Motion:
         motion_dict = {

@@ -36,7 +36,7 @@ class PropRotAngleManager:
                 EAST: 270,
             },
         }
-
+        
         key = self.prop.ori
         rotation_angle = angle_map.get(key, {}).get(self.prop.loc, 0)
         return rotation_angle

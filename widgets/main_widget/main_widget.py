@@ -4,12 +4,15 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtGui import QResizeEvent, QKeyEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
+from widgets.graphical_object_svg_manager import GraphicalObjectSvgManager
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Letters
 from constants import DIAMOND, STAFF
 from utilities.TypeChecking.prop_types import PropTypes
 from widgets.main_widget.special_placement_loader import SpecialPlacementLoader
-from widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
+from widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
+    TurnsTupleGenerator,
+)
 
 from widgets.pictograph.pictograph import Pictograph
 from ..image_cache_manager import ImageCacheManager
@@ -20,8 +23,6 @@ from ..sequence_widget.sequence_widget import MainSequenceWidget
 
 if TYPE_CHECKING:
     from main import MainWindow
-
-
 
 
 class MainWidget(QWidget):
@@ -35,9 +36,12 @@ class MainWidget(QWidget):
         self._setup_components()
         self._setup_layouts()
         self.special_placement_loader = SpecialPlacementLoader(self)
-        self.special_placements: dict[str,dict[str,dict[str,dict[str,list[int]]]]] = self.special_placement_loader.load_special_placements()
+        self.special_placements: dict[
+            str, dict[str, dict[str, dict[str, list[int]]]]
+        ] = self.special_placement_loader.load_special_placements()
 
     def _setup_components(self) -> None:
+        self.svg_manager = GraphicalObjectSvgManager()
         self.turns_tuple_generator = TurnsTupleGenerator()
         self.main_sequence_widget = MainSequenceWidget(self)
         self.main_tab_widget = MainTabWidget(self)

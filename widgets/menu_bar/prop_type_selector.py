@@ -18,19 +18,19 @@ class PropTypeSelector(QGroupBox):
         self.prop_type_combobox = QComboBox()
         self.prop_type_combobox.addItems(
             [
-                STAFF,
-                BIGSTAFF,
-                CLUB,
-                BUUGENG,
-                FAN,
-                TRIAD,
-                MINIHOOP,
-                BIGHOOP,
-                DOUBLESTAR,
-                QUIAD,
-                SWORD,
-                GUITAR,
-                UKULELE,
+                PropTypes.Staff.name,
+                PropTypes.Bigstaff.name,
+                PropTypes.Club.name,
+                PropTypes.Buugeng.name,
+                PropTypes.Fan.name,
+                PropTypes.Triad.name,
+                PropTypes.Minihoop.name,
+                PropTypes.Bighoop.name,
+                PropTypes.Doublestar.name,
+                PropTypes.Quiad.name,
+                PropTypes.Sword.name,
+                PropTypes.Guitar.name,
+                PropTypes.Ukulele.name,
             ]
         )
         self.prop_type_combobox.currentIndexChanged.connect(self.prop_type_changed)
