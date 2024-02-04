@@ -51,7 +51,6 @@ class SectionTypeLabel(QLabel):
         self.setText(styled_text)
         self.adjust_label_size()
 
-
     def adjust_label_size(self) -> None:
         font_size = self.section.scroll_area.width() // 34
         self.setStyleSheet(f"font-size: {font_size}px; font-weight: bold;")

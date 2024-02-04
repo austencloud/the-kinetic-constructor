@@ -38,24 +38,15 @@ class SectionHeader(QWidget):
         self.right_frame = QWidget()
 
         self._setup_frames()
+        self._set_contents_margins()
 
     def _setup_frames(self) -> None:
-        left_layout = QHBoxLayout(self.left_frame)
-        left_layout.setContentsMargins(0, 0, 0, 0)
-        left_layout.addWidget(self.section.vtg_dir_button_manager.opp_button)
-
-        middle_layout = QHBoxLayout(self.middle_frame)
-        middle_layout.setContentsMargins(0, 0, 0, 0)
-        middle_layout.addWidget(self.type_label)
-        middle_layout.addStretch(2)
-        middle_layout.addWidget(self.arrow_label)
-
-        right_layout = QHBoxLayout(self.right_frame)
-        right_layout.setContentsMargins(0, 0, 0, 0)
-        right_layout.addWidget(self.section.vtg_dir_button_manager.same_button)
+        self._setup_left_frame()
+        self._setup_middle_frame()
+        self._setup_right_frame()
 
         main_frame = QFrame()
-        main_frame.layout: QHBoxLayout = QHBoxLayout(main_frame)
+        main_frame.layout = QHBoxLayout(main_frame)
         main_frame.layout.addStretch(10)
         main_frame.layout.addWidget(self.left_frame)
         main_frame.layout.addStretch(1)
@@ -63,12 +54,38 @@ class SectionHeader(QWidget):
         main_frame.layout.addStretch(1)
         main_frame.layout.addWidget(self.right_frame)
         main_frame.layout.addStretch(10)
+        main_frame.setContentsMargins(0, 0, 0, 0)
+        main_frame.layout.setContentsMargins(0, 0, 0, 0)
+
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.addWidget(main_frame)
-
+        self.layout.setContentsMargins(0, 0, 0, 0)
         button_size = self.section.scroll_area.width() // 20
         self.left_frame.setFixedWidth(button_size)
+        self.left_frame.setFixedHeight(button_size)
         self.right_frame.setFixedWidth(button_size)
+        self.right_frame.setFixedHeight(button_size)
+        self.setMaximumHeight(button_size)
+
+    def _setup_left_frame(self) -> None:
+        left_layout = QHBoxLayout(self.left_frame)
+        left_layout.setContentsMargins(0, 0, 0, 0)
+        left_layout.addWidget(self.section.vtg_dir_button_manager.opp_button)
+
+    def _setup_middle_frame(self) -> None:
+        middle_layout = QHBoxLayout(self.middle_frame)
+        middle_layout.setContentsMargins(0, 0, 0, 0)
+        middle_layout.addWidget(self.type_label)
+        middle_layout.addStretch(2)
+        middle_layout.addWidget(self.arrow_label)
+
+    def _setup_right_frame(self) -> None:
+        right_layout = QHBoxLayout(self.right_frame)
+        right_layout.setContentsMargins(0, 0, 0, 0)
+        right_layout.addWidget(self.section.vtg_dir_button_manager.same_button)
+
+    def _set_contents_margins(self) -> None:
+        self.setContentsMargins(0, 0, 0, 0)
 
     def load_and_resize_pixmap(self, path: str) -> QPixmap:
         pixmap = QPixmap(path)

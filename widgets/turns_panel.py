@@ -13,7 +13,9 @@ from utilities.TypeChecking.letter_lists import (
 )
 
 if TYPE_CHECKING:
-    from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import FilterTab
+    from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
+        FilterTab,
+    )
 
 
 class TurnsPanel(QFrame):
@@ -69,3 +71,9 @@ class TurnsPanel(QFrame):
     def resize_turns_panel(self) -> None:
         for box in self.boxes:
             box.resize_turns_box()
+        # self.filter_tab.section.header.type_label.setMinimumHeight(
+        #     self.filter_tab.section.vtg_dir_button_manager.opp_button.height()
+        # )
+        # self.filter_tab.section.header.type_label.setMaximumHeight(
+        #     self.filter_tab.section.vtg_dir_button_manager.opp_button.height()
+        # )
