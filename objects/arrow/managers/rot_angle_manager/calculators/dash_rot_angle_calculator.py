@@ -51,9 +51,9 @@ class DashRotAngleCalculator(BaseRotAngleCalculator):
     def _get_rot_angle_override_according_to_loc(self, rotation_override: int) -> int:
         dash_angle_override_map = {
             NORTH: 90,
-            EAST: {CLOCKWISE: 180, COUNTER_CLOCKWISE: 0},
+            EAST: {CLOCKWISE: 0, COUNTER_CLOCKWISE: 180},
             SOUTH: 270,
-            WEST: {CLOCKWISE: 0, COUNTER_CLOCKWISE: 180},
+            WEST: {CLOCKWISE: 180, COUNTER_CLOCKWISE: 0},
         }
         if rotation_override:
             loc_angle = dash_angle_override_map.get(self.arrow.loc)

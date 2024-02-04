@@ -34,20 +34,13 @@
     "(cw, 1, 0)": {
       "red": [0, -145]
     },
-    "(ccw, 1, 0)": {
-      "red": [-35, -105],
-      "dash_from_layer2_rot_angle_override": true
-    },
     "(s, 1, 1)": {
-      "blue": [0, -25],
-      "dash_from_layer2_rot_angle_override": true
+      "blue": [0, -25]
     },
     "(s, 2, 1)": {
       "blue": [-85, -25]
     },
     "(s, 2.5, 1)": {
-      "red": [-35, -175],
-      "dash_from_layer2_rot_angle_override": true,
       "blue": [-120, -25]
     },
     "(s, 3, 1.5)": {
@@ -157,9 +150,10 @@
     "(o, 3, 3)": {
       "dash_from_layer2_rot_angle_override": true
     },
-    "null": {
-      "blue": {}
-    },
-    "null": {}
+    "null": {},
+    "(s, 3, 1)": {},
+    "(ccw, 1, 0)": {
+      "red": [-10, -130]
+    }
   }
 }

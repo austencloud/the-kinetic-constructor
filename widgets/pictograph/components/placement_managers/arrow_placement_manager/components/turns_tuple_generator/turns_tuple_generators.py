@@ -12,42 +12,42 @@ class BaseTurnsTupleGenerator:
 
     def set_pictograph(self, pictograph: "Pictograph"):
         self.p = pictograph
-        self.blue_arrow = self.p.arrows.get(BLUE)
-        self.red_arrow = self.p.arrows.get(RED)
 
+        self.blue_motion = self.p.motions.get(BLUE)
+        self.red_motion = self.p.motions.get(RED)
 
 class Type1HybridTurnsTupleGenerator(BaseTurnsTupleGenerator):
     def generate_key(self, pictograph) -> str:
         super().set_pictograph(pictograph)
-        pro_arrow = (
-            self.blue_arrow
-            if self.blue_arrow.motion.motion_type == PRO
-            else self.red_arrow
+        pro_motion = (
+            self.blue_motion
+            if self.blue_motion.motion_type == PRO
+            else self.red_motion
         )
-        anti_arrow = (
-            self.blue_arrow
-            if self.blue_arrow.motion.motion_type == ANTI
-            else self.red_arrow
+        anti_motion = (
+            self.blue_motion
+            if self.blue_motion.motion_type == ANTI
+            else self.red_motion
         )
-        return f"({pro_arrow.motion.turns}, {anti_arrow.motion.turns})"
+        return f"({pro_motion.turns}, {anti_motion.turns})"
 
 
 class Type2TurnsTupleGenerator(BaseTurnsTupleGenerator):
     def generate_key(self, pictograph) -> str:
         super().set_pictograph(pictograph)
         shift = (
-            self.red_arrow
-            if self.red_arrow.motion.check.is_shift()
-            else self.blue_arrow
+            self.red_motion
+            if self.red_motion.check.is_shift()
+            else self.blue_motion
         )
         static = (
-            self.red_arrow
-            if self.red_arrow.motion.check.is_static()
-            else self.blue_arrow
+            self.red_motion
+            if self.red_motion.check.is_static()
+            else self.blue_motion
         )
-        if static.turns != 0 and static.motion.prop_rot_dir != NO_ROT:
+        if static.turns != 0 and static.prop_rot_dir != NO_ROT:
             direction = (
-                "s" if static.motion.prop_rot_dir == shift.motion.prop_rot_dir else "o"
+                "s" if static.prop_rot_dir == shift.prop_rot_dir else "o"
             )
             return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(static)})"
         else:
@@ -86,29 +86,29 @@ class Type4TurnsTupleGenerator(BaseTurnsTupleGenerator):
 class Type56TurnsTupleGenerator(BaseTurnsTupleGenerator):
     def generate_key(self, pictograph) -> str:
         super().set_pictograph(pictograph)
-        if self.blue_arrow.motion.turns == 0 and self.red_arrow.motion.turns == 0:
-            return f"({self._normalize_turns(self.blue_arrow)}, {self._normalize_turns(self.red_arrow)})"
-        elif self.blue_arrow.motion.turns == 0 or self.red_arrow.motion.turns == 0:
+        if self.blue_motion.turns == 0 and self.red_motion.turns == 0:
+            return f"({self._normalize_turns(self.blue_motion)}, {self._normalize_turns(self.red_motion)})"
+        elif self.blue_motion.turns == 0 or self.red_motion.turns == 0:
             turning_motion = (
-                self.blue_arrow.motion
-                if self.blue_arrow.motion.turns != 0
-                else self.red_arrow.motion
+                self.blue_motion
+                if self.blue_motion.turns != 0
+                else self.red_motion
             )
-            return f"({turning_motion.prop_rot_dir}, {self._normalize_turns(self.blue_arrow.motion)}, {self._normalize_turns(self.red_arrow.motion)})"
+            return f"({turning_motion.prop_rot_dir}, {self._normalize_turns(self.blue_motion)}, {self._normalize_turns(self.red_motion)})"
         else:
             direction = (
                 "s"
-                if self.blue_arrow.motion.prop_rot_dir
-                == self.red_arrow.motion.prop_rot_dir
+                if self.blue_motion.prop_rot_dir
+                == self.red_motion.prop_rot_dir
                 else "o"
             )
-            return f"({direction}, {self._normalize_turns(self.blue_arrow)}, {self._normalize_turns(self.red_arrow)})"
+            return f"({direction}, {self._normalize_turns(self.blue_motion)}, {self._normalize_turns(self.red_motion)})"
 
 
 class ColorTurnsTupleGenerator(BaseTurnsTupleGenerator):
     def generate_key(self, pictograph) -> str:
         super().set_pictograph(pictograph)
-        return f"({self._normalize_turns(self.blue_arrow)}, {self._normalize_turns(self.red_arrow)})"
+        return f"({self._normalize_turns(self.blue_motion)}, {self._normalize_turns(self.red_motion)})"
 
 
 class LeadStateTurnsTupleGenerator(BaseTurnsTupleGenerator):
@@ -119,7 +119,7 @@ class LeadStateTurnsTupleGenerator(BaseTurnsTupleGenerator):
         if leading_motion:
             return f"({leading_motion.turns}, {trailing_motion.turns})"
         else:
-            return f"({self._normalize_turns(self.blue_arrow)}, {self._normalize_turns(self.red_arrow)})"
+            return f"({self._normalize_turns(self.blue_motion)}, {self._normalize_turns(self.red_motion)})"
 
 
 class LambdaTurnsTupleGenerator(BaseTurnsTupleGenerator):
