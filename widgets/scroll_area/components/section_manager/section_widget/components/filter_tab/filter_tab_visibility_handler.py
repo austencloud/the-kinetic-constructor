@@ -13,6 +13,22 @@ if TYPE_CHECKING:
 
 
 class FilterTabVisibilityHandler:
+    """
+    Manages the visibility of filter tabs based on selected letters within a section. 
+    Dynamically updates which filter tabs are visible 
+    Applies turns to newly added pictographs based on filters.
+
+    Attributes:
+        filter_tab (FilterTab): The parent filter tab.
+        section (SectionWidget): The parent section widget.
+        tabs (dict[TabName, QWidget]): The filter tabs to manage.
+
+    Methods:
+        update_visibility_based_on_selected_letters()
+        apply_turns_from_turns_boxes_to_pictograph(pictograph)
+        resize_filter_tab()
+    """
+
     def __init__(self, filter_tab: "FilterTab"):
         self.filter_tab = filter_tab
         self.section = self.filter_tab.section
@@ -58,7 +74,6 @@ class FilterTabVisibilityHandler:
 
     def _update_tabs_visibility(self, tabs_to_show: List[TabName]):
         for tab_key, panel in self.tabs.items():
-            # Convert the enum to a user-friendly string for the tab label
             tab_label = tab_key.name.replace("_", " ").title()
 
             if tab_key in tabs_to_show and self.filter_tab.indexOf(panel) == -1:
@@ -66,16 +81,15 @@ class FilterTabVisibilityHandler:
             elif tab_key not in tabs_to_show and self.filter_tab.indexOf(panel) != -1:
                 self.filter_tab.removeTab(self.filter_tab.indexOf(panel))
 
-        # Update the logic for showing motion type boxes as well, if needed
         if TabName.MOTION_TYPE in tabs_to_show:
             selected_letters = self.section.scroll_area.codex.selected_letters
-            self.tabs[TabName.MOTION_TYPE].show_motion_type_boxes_based_on_chosen_letters(selected_letters)
-
+            self.tabs[
+                TabName.MOTION_TYPE
+            ].show_motion_type_boxes_based_on_chosen_letters(selected_letters)
 
     def apply_turns_from_turns_boxes_to_pictograph(self, pictograph: "Pictograph"):
         turns_values = self.filter_tab.get_current_turns_values()
 
-        # Adjust the keys to use TabName enums instead of strings
         attribute_to_property_and_values = {
             TabName.MOTION_TYPE: (
                 "motion_type",
