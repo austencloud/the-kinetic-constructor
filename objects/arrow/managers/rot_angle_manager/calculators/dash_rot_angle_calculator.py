@@ -6,7 +6,7 @@ class DashRotAngleCalculator(BaseRotAngleCalculator):
     def calculate_angle(self) -> int:
         rotation_override = self.has_rotation_angle_override()
         if rotation_override:
-            return self._get_rot_angle_override_according_to_loc(rotation_override)
+            return self._get_rot_angle_override_according_to_loc()
         if self.arrow.motion.prop_rot_dir == NO_ROT:
             return self._handle_no_rotation()
         return self._handle_orientation_based_rotation()
@@ -48,15 +48,18 @@ class DashRotAngleCalculator(BaseRotAngleCalculator):
             },
         }
 
-    def _get_rot_angle_override_according_to_loc(self, rotation_override: int) -> int:
-        dash_angle_override_map = {
-            NORTH: 90,
-            EAST: {CLOCKWISE: 0, COUNTER_CLOCKWISE: 180},
-            SOUTH: 270,
-            WEST: {CLOCKWISE: 180, COUNTER_CLOCKWISE: 0},
-        }
-        if rotation_override:
-            loc_angle = dash_angle_override_map.get(self.arrow.loc)
+    def _get_rot_angle_override_according_to_loc(self) -> int:
+        cw_dash_angle_override_map = {NORTH: 270, EAST: 0, SOUTH: 90, WEST: 180}
+        ccw_dash_angle_override_map = {NORTH: 270, EAST: 180, SOUTH: 90, WEST: 0}
+
+        if self.arrow.motion.prop_rot_dir == CLOCKWISE:
+            loc_angle = cw_dash_angle_override_map.get(self.arrow.loc)
+            if isinstance(loc_angle, dict):
+                return loc_angle.get(self.arrow.motion.prop_rot_dir, 0)
+            return loc_angle
+
+        if self.arrow.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+            loc_angle = ccw_dash_angle_override_map.get(self.arrow.loc)
             if isinstance(loc_angle, dict):
                 return loc_angle.get(self.arrow.motion.prop_rot_dir, 0)
             return loc_angle
