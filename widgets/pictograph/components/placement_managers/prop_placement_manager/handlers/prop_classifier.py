@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from utilities.TypeChecking.prop_types import (
+    PropTypes,
     big_unilateral_prop_types,
     small_unilateral_prop_types,
     small_bilateral_prop_types,
@@ -9,6 +10,30 @@ from utilities.TypeChecking.prop_types import (
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 
+
+string_to_enum_map = {
+    "staff": PropTypes.Staff,
+    "bigstaff": PropTypes.Bigstaff,
+    "club": PropTypes.Club,
+    "buugeng": PropTypes.Buugeng,
+    "bigbuugeng": PropTypes.Bigbuugeng,
+    "fractalgeng": PropTypes.Fractalgeng,
+    "fan": PropTypes.Fan,
+    "bigfan": PropTypes.Bigfan,
+    "triad": PropTypes.Triad,
+    "bigtriad": PropTypes.Bigtriad,
+    "minihoop": PropTypes.Minihoop,
+    "bighoop": PropTypes.Bighoop,
+    "doublestar": PropTypes.Doublestar,
+    "bigdoublestar": PropTypes.Bigdoublestar,
+    "quiad": PropTypes.Quiad,
+    "sword": PropTypes.Sword,
+    "guitar": PropTypes.Guitar,
+    "ukulele": PropTypes.Ukulele,
+    "chicken": PropTypes.Chicken,
+
+    # Add mappings for the rest of your prop types
+}
 
 class PropClassifier:
     def __init__(self, pictograph: "Pictograph") -> None:
@@ -22,13 +47,18 @@ class PropClassifier:
         self.big_bi = []
 
         for prop in self.pictograph.props.values():
-            if prop.prop_type in big_unilateral_prop_types:
+            # Convert string prop_type to enum member
+            enum_prop_type = string_to_enum_map.get(prop.prop_type)  # Use .lower() to handle case differences
+            if not enum_prop_type:
+                continue  # Skip if prop_type is not recognized
+
+            if enum_prop_type in big_unilateral_prop_types:
                 self.big_uni.append(prop)
-            elif prop.prop_type in small_unilateral_prop_types:
+            elif enum_prop_type in small_unilateral_prop_types:
                 self.small_uni.append(prop)
-            elif prop.prop_type in small_bilateral_prop_types:
+            elif enum_prop_type in small_bilateral_prop_types:
                 self.small_bi.append(prop)
-            elif prop.prop_type in big_bilateral_prop_types:
+            elif enum_prop_type in big_bilateral_prop_types:
                 self.big_bi.append(prop)
 
         self.big_props = self.big_uni + self.big_bi

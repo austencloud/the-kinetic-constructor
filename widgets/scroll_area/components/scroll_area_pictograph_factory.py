@@ -97,7 +97,10 @@ class ScrollAreaPictographFactory:
         graph_type: Literal["option", "codex_pictograph"],
     ) -> Pictograph:
         if graph_type == OPTION:
-            pass
+            pictograph = Pictograph(
+                self.scroll_area.main_widget,
+                self.scroll_area,
+            )
         elif graph_type == CODEX_PICTOGRAPH:
             pictograph = Pictograph(
                 self.scroll_area.main_widget,

@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QApplication
+from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QApplication, QHBoxLayout
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QPixmap
 from utilities.TypeChecking.TypeChecking import Letters
@@ -28,19 +28,15 @@ class SequenceBuilderScrollArea(QScrollArea):
         self.sequence_builder = sequence_builder
         self.letters = self.main_widget.letters
         self.pictographs: dict[Letters, Pictograph] = {}
-        self.stretch_index = -1  # Initialize stretch index
+        self.stretch_index = -1
         self._setup_ui()
         self._setup_managers()
-
-    def _setup_managers(self) -> None:
-        self.display_manager = ScrollAreaDisplayManager(self)
-        self.sections_manager = ScrollAreaSectionManager(self)
-        self.pictograph_factory = ScrollAreaPictographFactory(self)
+        self._show_start_pos()
 
     def _setup_ui(self) -> None:
         self.setWidgetResizable(True)
         self.container = QWidget()
-        self.layout: QVBoxLayout = QVBoxLayout(self.container)
+        self.layout: QHBoxLayout = QHBoxLayout(self.container)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.container.setStyleSheet("background-color: #f2f2f2;")
         self.setContentsMargins(0, 0, 0, 0)
@@ -48,6 +44,11 @@ class SequenceBuilderScrollArea(QScrollArea):
         self.setWidget(self.container)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+
+    def _setup_managers(self) -> None:
+        self.display_manager = ScrollAreaDisplayManager(self)
+        self.sections_manager = ScrollAreaSectionManager(self)
+        self.pictograph_factory = ScrollAreaPictographFactory(self)
 
     def fix_stretch(self):
         if self.stretch_index >= 0:
@@ -101,8 +102,8 @@ class SequenceBuilderScrollArea(QScrollArea):
     def _show_start_pos(self) -> None:
         """Shows options for the starting position."""
         self.clear()
-        start_poss = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
-        for i, position_key in enumerate(start_poss):
+        start_pos = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
+        for i, position_key in enumerate(start_pos):
             self._add_start_pos_option(position_key, i)
 
     def _add_start_pos_option(self, position_key: str, column: int) -> None:
@@ -254,5 +255,3 @@ class SequenceBuilderScrollArea(QScrollArea):
         self._update_pictographs(clicked_option)
         new_beat = clicked_option.add_to_sequence_manager.create_new_beat()
         self.main_widget.main_sequence_widget.beat_frame.add_scene_to_sequence(new_beat)
-
-    ### RESIZE ###
