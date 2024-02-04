@@ -8,7 +8,6 @@ if TYPE_CHECKING:
 from objects.motion.motion import Motion
 from objects.arrow.arrow import Arrow
 from objects.prop.prop import Prop
-from objects.arrow.ghost_arrow import GhostArrow
 from objects.prop.ghost_prop import GhostProp
 
 
@@ -39,11 +38,7 @@ class AddToSequenceManager:
                 new_beat, motion.prop.get_attributes(), new_beat.motions[motion.color]
             )
 
-            new_ghost_arrow = GhostArrow(
-                new_beat,
-                motion.arrow.get_arrow_attributes(),
-                new_beat.motions[motion.color],
-            )
+
 
             new_ghost_prop = GhostProp(
                 new_beat, motion.prop.get_attributes(), new_beat.motions[motion.color]
@@ -54,31 +49,24 @@ class AddToSequenceManager:
 
             new_beat.motions[motion.color].arrow = new_arrow
             new_beat.motions[motion.color].prop = new_prop
-            new_beat.motions[motion.color].arrow.ghost = new_ghost_arrow
             new_beat.motions[motion.color].prop.ghost = new_ghost_prop
 
             new_beat.arrows[motion.color] = new_arrow
             new_beat.props[motion.color] = new_prop
-            new_beat.ghost_arrows[motion.color] = new_ghost_arrow
             new_beat.ghost_props[motion.color] = new_ghost_prop
 
             if new_arrow.loc:
                 new_arrow.updater.update_arrow()
-                new_ghost_arrow.updater.update_arrow()
 
             if new_prop.loc:
                 new_prop.updater.update_prop()
-                new_ghost_prop.updater.update_prop()
 
-            new_arrow.ghost = new_ghost_arrow
             new_prop.ghost = new_ghost_prop
 
             new_arrow.motion = new_beat.motions[motion.color]
             new_prop.motion = new_beat.motions[motion.color]
-            new_ghost_arrow.motion = new_beat.motions[motion.color]
             new_ghost_prop.motion = new_beat.motions[motion.color]
 
-            new_ghost_arrow.hide()
             new_ghost_prop.hide()
 
             motion_dict = self.pictograph.motions[motion.color].get_attributes()

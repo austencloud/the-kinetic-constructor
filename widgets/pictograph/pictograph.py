@@ -6,7 +6,6 @@ from PyQt6.QtWidgets import (
 )
 
 from objects.arrow.arrow import Arrow
-from objects.arrow.ghost_arrow import GhostArrow
 from objects.grid import Grid
 from objects.motion.motion import Motion
 from objects.prop.ghost_prop import GhostProp
@@ -88,8 +87,6 @@ class Pictograph(QGraphicsScene):
     view: PictographView
     arrows: dict[Colors, Arrow]
     props: dict[Colors, Prop]
-    ghost_arrows: dict[Colors, GhostArrow]
-    ghost_props: dict[Colors, GhostProp]
     motions: dict[Colors, Motion]
     letter: Letters
     letter_type: LetterTypes

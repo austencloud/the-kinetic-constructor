@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import QPointF, QPoint, Qt
 
 from objects.arrow.arrow import Arrow
-from objects.arrow.ghost_arrow import GhostArrow
 from objects.grid import Grid
 from objects.motion.motion import Motion
 from objects.prop.ghost_prop import GhostProp

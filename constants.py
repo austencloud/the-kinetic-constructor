@@ -100,9 +100,7 @@ VTG_TIMING = "vtg_timing"
 LEAD_STATE = "lead_state"
 COLOR = "color"
 ARROW = "arrow"
-GHOST_ARROW = "ghost_arrow"
 PROP = "prop"
-GHOST_PROP = "ghost_prop"
 LETTER_ITEM = "letter_item"
 LOC = "loc"
 MOTION_TYPE = "motion_type"
@@ -134,7 +132,6 @@ ICON_DIR = "images/icons/"
 GRID_DIR = "images/grid/"
 
 
-GHOST = "ghost"
 
 STAFF = "staff"
 BIGSTAFF = "bigstaff"
