@@ -17,7 +17,7 @@ class FilterTab(QTabWidget):
         super().__init__()
         self.section = section
 
-        # Instantiate panels
+        # Create panels
         self.motion_type_turns_panel = TurnsPanel(self, MOTION_TYPE)
         self.color_turns_panel = TurnsPanel(self, COLOR)
         self.lead_state_turns_panel = TurnsPanel(self, LEAD_STATE)
@@ -28,7 +28,7 @@ class FilterTab(QTabWidget):
             self.lead_state_turns_panel,
         ]
 
-        # Setup managers
+        # Setup handlers
         self.visibility_handler = FilterTabVisibilityHandler(self)
         self.turns_updater = FilterTabTurnsUpdater(self)
 

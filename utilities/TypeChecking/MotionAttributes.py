@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 
 
 class Turns(Enum):
@@ -46,3 +46,4 @@ class PropRotDirs(Enum):
 class LeadStates(Enum):
     LEADING = "leading"
     TRAILING = "trailing"
+

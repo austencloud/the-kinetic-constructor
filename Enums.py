@@ -1,5 +1,5 @@
 from typing import TypedDict
-from enum import Enum
+from enum import Enum, auto
 from utilities.TypeChecking.MotionAttributes import Colors, Locations, MotionTypes, PropRotDirs, Turns, Orientations
 from utilities.TypeChecking.TypeChecking import SpecificPositions
 from utilities.TypeChecking.prop_types import PropTypes
@@ -336,3 +336,9 @@ class LetterGroupsByMotionType(Enum):
     X_Z_Δ_Ω_ = "X-Z-Δ-Ω-"
     ΦΨΛ = "ΦΨΛ"
     Φ_Ψ_Λ_ = "Φ-Ψ-Λ-"
+
+
+class TabName(Enum):
+    MOTION_TYPE = auto()
+    COLOR = auto()
+    LEAD_STATE = auto()

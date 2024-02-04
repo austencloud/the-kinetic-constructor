@@ -1,21 +1,9 @@
 from typing import List
-from Enums import LetterType
-from constants import (
-    BLUE,
-    LEADING,
-    PRO,
-    ANTI,
-    DASH,
-    RED,
-    STATIC,
-    TRAILING,
-)
+from Enums import LetterType, TabName
+from constants import PRO, ANTI, DASH, STATIC
 from data.letter_engine_data import motion_type_letter_combinations
-
 from typing import List
 from typing import TYPE_CHECKING
-
-from utilities.TypeChecking.MotionAttributes import Turns
 
 
 if TYPE_CHECKING:
@@ -30,9 +18,9 @@ class FilterTabVisibilityHandler:
         self.section = self.filter_tab.section
 
         self.tabs = {
-            "Motion Type": self.filter_tab.motion_type_turns_panel,
-            "Color": self.filter_tab.color_turns_panel,
-            "Lead State": self.filter_tab.lead_state_turns_panel,
+            TabName.MOTION_TYPE: self.filter_tab.motion_type_turns_panel,
+            TabName.COLOR: self.filter_tab.color_turns_panel,
+            TabName.LEAD_STATE: self.filter_tab.lead_state_turns_panel,
         }
 
     def update_visibility_based_on_selected_letters(self):
@@ -44,89 +32,78 @@ class FilterTabVisibilityHandler:
 
     def _determine_tabs_to_show_based_on_selected_letters(
         self, selected_letters: List[str]
-    ) -> List[str]:
-        tabs_to_show = []
-        motion_types_present = set()
+    ) -> List[TabName]:
+        motion_types_present = {
+            motion_type
+            for letter in selected_letters
+            if LetterType.get_letter_type(letter) == self.section.letter_type
+            for motion_type in self._get_motion_types_from_letter(letter)
+        }
 
-        for letter in selected_letters:
-            letter_type = LetterType.get_letter_type(letter)
-            if letter_type == self.section.letter_type:
-                motion_types_present.update(self._get_motion_types_from_letter(letter))
+        tabs_to_show = set()
 
-        if {PRO, ANTI, DASH, STATIC}.intersection(motion_types_present):
-            tabs_to_show.append("Color")
+        if motion_types_present.intersection({PRO, ANTI, DASH, STATIC}):
+            tabs_to_show.add(TabName.COLOR)
 
         if len(motion_types_present) > 1:
-            tabs_to_show.extend(["Motion Type", "Color"])
+            tabs_to_show.add(TabName.MOTION_TYPE)
 
         if any(letter in {"S", "T", "U", "V"} for letter in selected_letters):
-            tabs_to_show.append("Lead State")
+            tabs_to_show.add(TabName.LEAD_STATE)
 
-        return tabs_to_show
+        return list(tabs_to_show)
 
     def _get_motion_types_from_letter(self, letter: str) -> List[str]:
         return motion_type_letter_combinations.get(letter, [])
 
-    def _update_tabs_visibility(self, tabs_to_show: List[str]):
+    def _update_tabs_visibility(self, tabs_to_show: List[TabName]):
         for tab_key, panel in self.tabs.items():
-            # Use the friendly name for tab display
+            # Convert the enum to a user-friendly string for the tab label
+            tab_label = tab_key.name.replace("_", " ").title()
+
             if tab_key in tabs_to_show and self.filter_tab.indexOf(panel) == -1:
-                self.filter_tab.addTab(
-                    panel, tab_key
-                )  # Use tab_key which is now user-friendly
+                self.filter_tab.addTab(panel, tab_label)
             elif tab_key not in tabs_to_show and self.filter_tab.indexOf(panel) != -1:
                 self.filter_tab.removeTab(self.filter_tab.indexOf(panel))
 
-        if "Motion Type" in tabs_to_show:
+        # Update the logic for showing motion type boxes as well, if needed
+        if TabName.MOTION_TYPE in tabs_to_show:
             selected_letters = self.section.scroll_area.codex.selected_letters
-            self.tabs["Motion Type"].show_motion_type_boxes_based_on_chosen_letters(
-                selected_letters
-            )
+            self.tabs[TabName.MOTION_TYPE].show_motion_type_boxes_based_on_chosen_letters(selected_letters)
+
 
     def apply_turns_from_turns_boxes_to_pictograph(self, pictograph: "Pictograph"):
         turns_values = self.filter_tab.get_current_turns_values()
 
+        # Adjust the keys to use TabName enums instead of strings
+        attribute_to_property_and_values = {
+            TabName.MOTION_TYPE: (
+                "motion_type",
+                turns_values.get(TabName.MOTION_TYPE.name.lower(), {}),
+            ),
+            TabName.COLOR: ("color", turns_values.get(TabName.COLOR.name.lower(), {})),
+            TabName.LEAD_STATE: (
+                "lead_state",
+                turns_values.get(TabName.LEAD_STATE.name.lower(), {}),
+            ),
+        }
+
         for motion in pictograph.motions.values():
-            motion_type, color, lead_state = (
-                motion.motion_type,
-                motion.color,
-                getattr(motion, "Lead State", None),
-            )
-            # if the motion type tab is visible:
-            if self.tabs["Motion Type"].isVisible():
-                self._apply_turns_if_applicable(
-                    motion, motion_type, turns_values.get("motion_type", {})
-                )
-            elif self.tabs["Color"].isVisible():
-                self._apply_turns_if_applicable(
-                    motion, color, turns_values.get("color", {})
-                )
-            elif self.tabs["Lead State"].isVisible():
-                self._apply_turns_if_applicable(
-                    motion, lead_state, turns_values.get("lead_state", {})
-                )
+            for tab_key, (
+                motion_attribute,
+                attribute_turns,
+            ) in attribute_to_property_and_values.items():
+                if self.tabs[tab_key].isVisible():
+                    self._apply_turns_if_applicable(
+                        motion, motion_attribute, attribute_turns
+                    )
 
     def _apply_turns_if_applicable(
-        self,
-        motion: "Motion",
-        attribute_value,
-        filter_tab_turn_values_dict: dict[str, int],
+        self, motion: "Motion", motion_attribute, attribute_turns
     ):
-        if attribute_value in [PRO, ANTI, DASH, STATIC]:
-            if motion.motion_type == attribute_value:
-                motion.turns_manager.set_turns(
-                    filter_tab_turn_values_dict[attribute_value]
-                )
-        elif attribute_value in [RED, BLUE]:
-            if motion.color == attribute_value:
-                motion.turns_manager.set_turns(
-                    filter_tab_turn_values_dict[attribute_value]
-                )
-        elif attribute_value in [LEADING, TRAILING]:
-            if motion.lead_state == attribute_value:
-                motion.turns_manager.set_turns(
-                    filter_tab_turn_values_dict[attribute_value]
-                )
+        attribute_value = getattr(motion, motion_attribute, None)
+        if attribute_value in attribute_turns:
+            motion.turns_manager.set_turns(attribute_turns[attribute_value])
 
     def resize_filter_tab(self) -> None:
         for panel in self.filter_tab.panels:
