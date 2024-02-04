@@ -17,62 +17,60 @@ class SectionHeader(QWidget):
     EXPAND_ARROW_PATH = "images/icons/dropdown/expand.png"
     COLLAPSE_ARROW_PATH = "images/icons/dropdown/collapse.png"
 
-    def __init__(self, section_widget: "SectionWidget") -> None:
+    def __init__(self, section: "SectionWidget") -> None:
         super().__init__()
-        self.section = section_widget
-        self.type_label = SectionTypeLabel(section_widget)
+        self.section = section
+        self.type_label = SectionTypeLabel(section)
+        self._setup_arrow_label()
+        self._setup_frames()
+        self._setup_layout()
+
+    def _setup_layout(self):
+        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.layout.addWidget(self.main_frame)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.setContentsMargins(0, 0, 0, 0)
+
+    def _setup_arrow_label(self):
         self.arrow_label = QLabel()
         self.arrow_label.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
         self.arrow_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
         self.expand_arrow_pixmap = self.load_and_resize_pixmap(self.EXPAND_ARROW_PATH)
         self.collapse_arrow_pixmap = self.load_and_resize_pixmap(
             self.COLLAPSE_ARROW_PATH
         )
         self.toggle_dropdown_arrow(False)
 
-        self.left_frame = QWidget()
-        self.middle_frame = QWidget()
-        self.right_frame = QWidget()
-
-        self._setup_frames()
-        self._set_contents_margins()
-
     def _setup_frames(self) -> None:
         self._setup_left_frame()
         self._setup_middle_frame()
         self._setup_right_frame()
+        self._setup_main_frame()
+        self._set_frame_sizes()
 
-        main_frame = QFrame()
-        main_frame.layout = QHBoxLayout(main_frame)
-        main_frame.layout.addStretch(10)
-        main_frame.layout.addWidget(self.left_frame)
-        main_frame.layout.addStretch(1)
-        main_frame.layout.addWidget(self.middle_frame)
-        main_frame.layout.addStretch(1)
-        main_frame.layout.addWidget(self.right_frame)
-        main_frame.layout.addStretch(10)
-        main_frame.setContentsMargins(0, 0, 0, 0)
-        main_frame.layout.setContentsMargins(0, 0, 0, 0)
-
-        self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.layout.addWidget(main_frame)
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        button_size = self.section.scroll_area.width() // 20
-        self.left_frame.setFixedWidth(button_size)
-        self.left_frame.setFixedHeight(button_size)
-        self.right_frame.setFixedWidth(button_size)
-        self.right_frame.setFixedHeight(button_size)
-        self.setMaximumHeight(button_size)
+    def _setup_main_frame(self):
+        self.main_frame = QFrame()
+        self.main_frame.layout = QHBoxLayout(self.main_frame)
+        self.main_frame.layout.addStretch(10)
+        self.main_frame.layout.addWidget(self.left_frame)
+        self.main_frame.layout.addStretch(1)
+        self.main_frame.layout.addWidget(self.middle_frame)
+        self.main_frame.layout.addStretch(1)
+        self.main_frame.layout.addWidget(self.right_frame)
+        self.main_frame.layout.addStretch(10)
+        self.main_frame.setContentsMargins(0, 0, 0, 0)
+        self.main_frame.layout.setContentsMargins(0, 0, 0, 0)
 
     def _setup_left_frame(self) -> None:
+        self.left_frame = QWidget()
         left_layout = QHBoxLayout(self.left_frame)
         left_layout.setContentsMargins(0, 0, 0, 0)
         left_layout.addWidget(self.section.vtg_dir_button_manager.opp_button)
 
     def _setup_middle_frame(self) -> None:
+        self.middle_frame = QWidget()
         middle_layout = QHBoxLayout(self.middle_frame)
         middle_layout.setContentsMargins(0, 0, 0, 0)
         middle_layout.addWidget(self.type_label)
@@ -80,12 +78,18 @@ class SectionHeader(QWidget):
         middle_layout.addWidget(self.arrow_label)
 
     def _setup_right_frame(self) -> None:
+        self.right_frame = QWidget()
         right_layout = QHBoxLayout(self.right_frame)
         right_layout.setContentsMargins(0, 0, 0, 0)
         right_layout.addWidget(self.section.vtg_dir_button_manager.same_button)
 
-    def _set_contents_margins(self) -> None:
-        self.setContentsMargins(0, 0, 0, 0)
+    def _set_frame_sizes(self) -> None:
+        button_size = self.section.scroll_area.width() // 20
+        self.left_frame.setFixedWidth(button_size)
+        self.left_frame.setFixedHeight(button_size)
+        self.right_frame.setFixedWidth(button_size)
+        self.right_frame.setFixedHeight(button_size)
+        self.setMaximumHeight(button_size)
 
     def load_and_resize_pixmap(self, path: str) -> QPixmap:
         pixmap = QPixmap(path)
