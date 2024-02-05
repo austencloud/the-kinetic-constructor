@@ -1,6 +1,6 @@
 from typing import List
 from Enums import LetterType, TabName
-from constants import PRO, ANTI, DASH, STATIC
+from constants import CLOCKWISE, COUNTER_CLOCKWISE, PRO, ANTI, DASH, STATIC
 from data.letter_engine_data import motion_type_letter_combinations
 from typing import List
 from typing import TYPE_CHECKING
@@ -14,8 +14,8 @@ if TYPE_CHECKING:
 
 class FilterTabVisibilityHandler:
     """
-    Manages the visibility of filter tabs based on selected letters within a section. 
-    Dynamically updates which filter tabs are visible 
+    Manages the visibility of filter tabs based on selected letters within a section.
+    Dynamically updates which filter tabs are visible
     Applies turns to newly added pictographs based on filters.
 
     Attributes:
@@ -118,6 +118,25 @@ class FilterTabVisibilityHandler:
         attribute_value = getattr(motion, motion_attribute, None)
         if attribute_value in attribute_turns:
             motion.turns_manager.set_turns(attribute_turns[attribute_value])
+            if attribute_turns[attribute_value] > 0:
+                self.set_motion_prop_rot_dir_to_match_the_buttons_currently_pressed(
+                    motion
+                )
+
+    def set_motion_prop_rot_dir_to_match_the_buttons_currently_pressed(
+        self, motion: "Motion"
+    ) -> None:
+        if self.filter_tab.section.vtg_dir_button_manager.same_button.is_pressed():
+            motion.prop_rot_dir = motion.pictograph.get.other_motion(
+                motion
+            ).prop_rot_dir
+        elif self.filter_tab.section.vtg_dir_button_manager.opp_button.is_pressed():
+            motion.prop_rot_dir = (
+                CLOCKWISE
+                if motion.pictograph.get.other_motion(motion).prop_rot_dir
+                == COUNTER_CLOCKWISE
+                else COUNTER_CLOCKWISE
+            )
 
     def resize_filter_tab(self) -> None:
         for panel in self.filter_tab.panels:

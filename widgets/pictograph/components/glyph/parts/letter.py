@@ -37,16 +37,8 @@ class Letter:
         self.renderer = QSvgRenderer(svg_path)
         if self.renderer.isValid():
             self.letter_item.setSharedRenderer(self.renderer)
-            self.add_outline()
 
-    def add_outline(self) -> None:
-        rect = self.letter_item.boundingRect()
-        outline = QGraphicsRectItem(QRectF(rect), self.letter_item)
-        outline.setPen(QPen(Qt.GlobalColor.black, 2, Qt.PenStyle.SolidLine))
-        outline.setBrush(Qt.GlobalColor.transparent)
-        outline.setToolTip("Outline for Letter")
-
-    def position_item(self) -> None:
+    def position_letter(self) -> None:
         x = int(self.letter_item.boundingRect().height() / 2)
         y = int(
             self.glyph.pictograph.height()

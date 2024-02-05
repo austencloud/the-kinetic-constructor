@@ -35,7 +35,7 @@ class Dot:
             return dot_item
         return None
 
-    def position_dots(self, dir: VtgDirections):
+    def toggle_dots(self, dir: VtgDirections):
         padding = 5
         letter_scene_rect = self.glyph.letter.letter_item.sceneBoundingRect()
         letter_scene_center = letter_scene_rect.center()
