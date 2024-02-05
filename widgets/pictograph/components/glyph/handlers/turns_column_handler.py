@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QGraphicsItemGroup
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF, QRectF
 from PyQt6.QtSvg import QSvgRenderer
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from widgets.pictograph.components.glyph.glyph import GlyphManager
@@ -15,9 +15,9 @@ class TurnsColumnHandler(QGraphicsItemGroup):
         self.top_number_item = None
         self.bottom_number_item = None
         self.svg_path_prefix = "images/numbers/"
-        self.blank_svg_path = "images/blank.svg"  # Use for zero turns
+        self.blank_svg_path = "images/blank.svg"
 
-    def load_number_svg(self, number: float) -> QGraphicsSvgItem:
+    def load_number_svg(self, number: Union[int, float]) -> QGraphicsSvgItem:
         svg_path = (
             self.blank_svg_path
             if number == 0
@@ -30,7 +30,12 @@ class TurnsColumnHandler(QGraphicsItemGroup):
             return number_item
         return None
 
-    def set_number(self, number: float, is_top: bool):
+    def convert_number_to_int_if_it_is_a_whole_number(
+        self, number: Union[int, float]
+    ) -> int:
+        return int(number) if number == int(number) else number
+
+    def set_number(self, number: Union[int, float], is_top: bool):
         new_item = self.load_number_svg(number)
         old_item = self.top_number_item if is_top else self.bottom_number_item
 
@@ -40,6 +45,7 @@ class TurnsColumnHandler(QGraphicsItemGroup):
 
         if new_item:
             self.addToGroup(new_item)
+            new_item.show()
             if is_top:
                 self.top_number_item = new_item
             else:
@@ -53,12 +59,9 @@ class TurnsColumnHandler(QGraphicsItemGroup):
         )
         letter_scene_rect = self.glyph.letter_handler.letter_item.sceneBoundingRect()
 
-        base_pos_x = (
-            reference_rect.right() + 15
-        )  # Fixed padding from the reference point
+        base_pos_x = reference_rect.right() + 15
 
-        # Specific high and low Y positions
-        high_pos_y = letter_scene_rect.top() - 5  # Move high number up by 10 pixels
+        high_pos_y = letter_scene_rect.top() - 5
         low_pos_y = (
             letter_scene_rect.bottom()
             - (
@@ -67,19 +70,16 @@ class TurnsColumnHandler(QGraphicsItemGroup):
                 else 0
             )
             + 5
-        )  # Move low number down by 10 pixels
+        )
 
         if self.top_number_item:
             self.top_number_item.setPos(base_pos_x, high_pos_y)
 
         if self.bottom_number_item:
-            # Adjust low position based on the presence of a top number to maintain vertical spacing
-            adjusted_low_pos_y = (
-                low_pos_y if self.top_number_item else high_pos_y + 20
-            )  # Example spacing if only one number
+            adjusted_low_pos_y = low_pos_y if self.top_number_item else high_pos_y + 20
             self.bottom_number_item.setPos(base_pos_x, adjusted_low_pos_y)
 
-    def update_turns(self, top_turn: float, bottom_turn: float):
+    def update_turns(self, top_turn: Union[int, float], bottom_turn: Union[int, float]):
         self.set_number(top_turn, is_top=True)
         self.set_number(bottom_turn, is_top=False)
         self.position_turns()

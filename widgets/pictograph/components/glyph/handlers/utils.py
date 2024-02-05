@@ -10,8 +10,3 @@ def load_svg_item(svg_path: str) -> QGraphicsSvgItem:
         return item
     return None
 
-def add_item_to_group(group, item, position=None):
-    if item:
-        group.addToGroup(item)
-        if position:
-            item.setPos(position)

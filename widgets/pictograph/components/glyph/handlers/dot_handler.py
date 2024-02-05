@@ -17,6 +17,7 @@ class DotHandler:
         self.glyph = glyph
         self.same_dot_item = None
         self.opp_dot_item = None
+        self.add_dots("images/same_opp_dot.svg", "images/same_opp_dot.svg")
 
     def add_dots(self, same_dot_path: str, opp_dot_path: str):
         self.same_dot_item = self.create_dot(same_dot_path)
@@ -30,7 +31,7 @@ class DotHandler:
     def create_dot(self, dot_path: str) -> QGraphicsSvgItem:
         return load_svg_item(dot_path)
 
-    def toggle_dots(self, dir: VtgDirections):
+    def update_dots(self, dir: VtgDirections):
         padding = 5
         letter_scene_rect = self.glyph.letter_handler.letter_item.sceneBoundingRect()
         letter_scene_center = letter_scene_rect.center()

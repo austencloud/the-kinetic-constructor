@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 class PictographGetter:
     def __init__(self, pictograph: "Pictograph") -> None:
-        self.p = pictograph
+        self.pictograph = pictograph
 
     def letter_type(self, letter: LetterString) -> Optional[str]:
         for letter_type in LetterType:
@@ -24,46 +24,76 @@ class PictographGetter:
     def motions_by_type(self, motion_type: MotionTypes) -> list[Motion]:
         return [
             motion
-            for motion in self.p.motions.values()
+            for motion in self.pictograph.motions.values()
             if motion.motion_type == motion_type
         ]
 
     def leading_motion(self) -> Motion:
-        if self.p.red_motion.start_loc and self.p.blue_motion.start_loc:
-            if self.p.red_motion.start_loc == self.p.blue_motion.end_loc:
-                return self.p.red_motion
-            elif self.p.blue_motion.start_loc == self.p.red_motion.end_loc:
-                return self.p.blue_motion
+        if (
+            self.pictograph.red_motion.start_loc
+            and self.pictograph.blue_motion.start_loc
+        ):
+            if (
+                self.pictograph.red_motion.start_loc
+                == self.pictograph.blue_motion.end_loc
+            ):
+                return self.pictograph.red_motion
+            elif (
+                self.pictograph.blue_motion.start_loc
+                == self.pictograph.red_motion.end_loc
+            ):
+                return self.pictograph.blue_motion
         else:
             return None
 
     def trailing_motion(self) -> Motion:
-        if self.p.red_motion.start_loc == self.p.blue_motion.end_loc:
-            return self.p.blue_motion
-        elif self.p.blue_motion.start_loc == self.p.red_motion.end_loc:
-            return self.p.red_motion
+        if self.pictograph.red_motion.start_loc == self.pictograph.blue_motion.end_loc:
+            return self.pictograph.blue_motion
+        elif (
+            self.pictograph.blue_motion.start_loc == self.pictograph.red_motion.end_loc
+        ):
+            return self.pictograph.red_motion
 
     def other_motion(self, motion: Motion) -> Motion:
         if motion.color == RED:
-            return self.p.blue_motion
+            return self.pictograph.blue_motion
         elif motion.color == BLUE:
-            return self.p.red_motion
+            return self.pictograph.red_motion
 
     def other_arrow(self, arrow: Arrow) -> Arrow:
         if arrow.color == RED:
-            return self.p.blue_arrow
+            return self.pictograph.blue_arrow
         elif arrow.color == BLUE:
-            return self.p.red_arrow
+            return self.pictograph.red_arrow
 
     def dash(self) -> Motion:
-        return self.p.motions[RED if self.p.red_motion.check.is_dash() else BLUE]
+        return self.pictograph.motions[
+            RED if self.pictograph.red_motion.check.is_dash() else BLUE
+        ]
 
     def shift(self) -> Motion:
-        return self.p.motions[RED if self.p.red_motion.check.is_shift() else BLUE]
+        return self.pictograph.motions[
+            RED if self.pictograph.red_motion.check.is_shift() else BLUE
+        ]
 
     def static(self) -> Motion:
-        return self.p.motions[RED if self.p.red_motion.check.is_static() else BLUE]
+        return self.pictograph.motions[
+            RED if self.pictograph.red_motion.check.is_static() else BLUE
+        ]
 
     def opposite_location(self, loc: Locations) -> Locations:
         opposite_locations = {NORTH: SOUTH, SOUTH: NORTH, EAST: WEST, WEST: EAST}
         return opposite_locations.get(loc)
+
+    def current_state(self) -> tuple[str, tuple[int, int]]:
+        return (
+            self.pictograph.letter,
+            self.pictograph.main_widget.turns_tuple_generator.generate_turns_tuple(
+                self.pictograph
+            ),
+        )
+
+    def turns_tuple(self) -> tuple[int, int, int]:
+        return self.pictograph.main_widget.turns_tuple_generator.generate_turns_tuple(
+            self.pictograph
+        )

@@ -3,6 +3,9 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsRectItem
 from PyQt6.QtGui import QPen
+
+from Enums import LetterType
+from constants import Type3, Type5
 from .utils import load_svg_item
 from typing import TYPE_CHECKING
 
@@ -32,3 +35,7 @@ class DashHandler:
                 - self.dash_item.boundingRect().height() / 2
             )
             self.dash_item.setPos(dash_x, dash_y)
+
+    def update_dash(self):
+        self.add_dash()
+        self.position_dash()
