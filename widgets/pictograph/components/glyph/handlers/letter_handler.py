@@ -1,9 +1,5 @@
-from PyQt6.QtCore import QRectF, Qt
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
-from PyQt6.QtWidgets import QGraphicsRectItem
-from PyQt6.QtGui import QPen
-from .utils import load_svg_item
 
 from Enums import LetterType
 from typing import TYPE_CHECKING

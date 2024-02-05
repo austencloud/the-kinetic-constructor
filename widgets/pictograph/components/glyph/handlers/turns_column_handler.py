@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import QGraphicsItemGroup
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtCore import QPointF, QRectF
 from PyQt6.QtSvg import QSvgRenderer
 from typing import TYPE_CHECKING, Union
 

@@ -1,8 +1,5 @@
-from PyQt6.QtCore import QPointF, QRectF, Qt
+from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtSvg import QSvgRenderer
-from PyQt6.QtWidgets import QGraphicsItem
-from PyQt6.QtGui import QPen
 from typing import TYPE_CHECKING
 from .utils import load_svg_item
 
