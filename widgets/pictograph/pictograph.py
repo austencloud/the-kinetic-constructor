@@ -20,7 +20,7 @@ from utilities.TypeChecking.TypeChecking import (
     VtgTimings,
 )
 from utilities.TypeChecking.MotionAttributes import Colors, Locations
-from widgets.pictograph.components.glyph.glyph import Glyph
+from widgets.pictograph.components.glyph.glyph import GlyphManager
 
 from .components.pictograph_attr_manager import PictographAttrManager
 from .components.pictograph_checker import PictographChecker
@@ -71,7 +71,7 @@ class Pictograph(QGraphicsScene):
     open_close_state: OpenCloseStates
     dragged_arrow: Arrow
     dragged_prop: Prop
-    glyph: Glyph
+    glyph: GlyphManager
     grid: Grid
     locations: dict[Locations, tuple[int, int, int, int]]
     red_motion: Motion

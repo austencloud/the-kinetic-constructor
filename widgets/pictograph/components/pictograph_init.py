@@ -12,7 +12,7 @@ from utilities.TypeChecking.prop_types import PropTypes
 from utilities.TypeChecking.MotionAttributes import Colors, Locations, MotionTypes
 from constants import *
 from widgets.factories.prop_factory import PropFactory
-from widgets.pictograph.components.glyph.glyph import Glyph
+from widgets.pictograph.components.glyph.glyph import GlyphManager
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -89,8 +89,8 @@ class PictographInit:
         self.pictograph.red_prop, self.pictograph.blue_prop = (props[RED], props[BLUE])
         return props
 
-    def init_letter_item(self) -> Glyph:
-        glyph = Glyph(self.pictograph)
+    def init_letter_item(self) -> GlyphManager:
+        glyph = GlyphManager(self.pictograph)
         self.pictograph.addItem(glyph)
         return glyph
 

@@ -4,40 +4,35 @@ from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QGraphicsItem
 from PyQt6.QtGui import QPen
 from typing import TYPE_CHECKING
+from .utils import load_svg_item
 
 from utilities.TypeChecking.TypeChecking import VtgDirections
 
 if TYPE_CHECKING:
-    from ..glyph import Glyph
+    from ..glyph import GlyphManager
 
 
-class Dot:
-    def __init__(self, glyph: "Glyph") -> None:
+class DotHandler:
+    def __init__(self, glyph: "GlyphManager") -> None:
         self.glyph = glyph
         self.same_dot_item = None
         self.opp_dot_item = None
 
     def add_dots(self, same_dot_path: str, opp_dot_path: str):
-        self.same_dot_item = self.create_dot(same_dot_path, "Same")
+        self.same_dot_item = self.create_dot(same_dot_path)
         if self.same_dot_item:
             self.glyph.addToGroup(self.same_dot_item)
 
-        self.opp_dot_item = self.create_dot(opp_dot_path, "Opp")
+        self.opp_dot_item = self.create_dot(opp_dot_path)
         if self.opp_dot_item:
             self.glyph.addToGroup(self.opp_dot_item)
 
-    def create_dot(self, dot_path: str, label: str) -> QGraphicsSvgItem:
-        renderer = QSvgRenderer(dot_path)
-        if renderer.isValid():
-            dot_item = QGraphicsSvgItem()
-            dot_item.setSharedRenderer(renderer)
-            dot_item.setToolTip(f"Outline for Dot {label}")
-            return dot_item
-        return None
+    def create_dot(self, dot_path: str) -> QGraphicsSvgItem:
+        return load_svg_item(dot_path)
 
     def toggle_dots(self, dir: VtgDirections):
         padding = 5
-        letter_scene_rect = self.glyph.letter.letter_item.sceneBoundingRect()
+        letter_scene_rect = self.glyph.letter_handler.letter_item.sceneBoundingRect()
         letter_scene_center = letter_scene_rect.center()
 
         if self.same_dot_item:

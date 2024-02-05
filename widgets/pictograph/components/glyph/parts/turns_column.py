@@ -5,11 +5,11 @@ from PyQt6.QtSvg import QSvgRenderer
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.pictograph.components.glyph.glyph import Glyph
+    from widgets.pictograph.components.glyph.glyph import GlyphManager
 
 
-class TurnsColumn(QGraphicsItemGroup):
-    def __init__(self, glyph: "Glyph"):
+class TurnsColumnHandler(QGraphicsItemGroup):
+    def __init__(self, glyph: "GlyphManager"):
         super().__init__()
         self.glyph = glyph
         self.top_number_item = None
@@ -47,11 +47,11 @@ class TurnsColumn(QGraphicsItemGroup):
 
     def position_turns(self):
         reference_rect = (
-            self.glyph.dash.dash_item.sceneBoundingRect()
-            if self.glyph.dash.dash_item
-            else self.glyph.letter.letter_item.sceneBoundingRect()
+            self.glyph.dash_handler.dash_item.sceneBoundingRect()
+            if self.glyph.dash_handler.dash_item
+            else self.glyph.letter_handler.letter_item.sceneBoundingRect()
         )
-        letter_scene_rect = self.glyph.letter.letter_item.sceneBoundingRect()
+        letter_scene_rect = self.glyph.letter_handler.letter_item.sceneBoundingRect()
 
         base_pos_x = (
             reference_rect.right() + 15
