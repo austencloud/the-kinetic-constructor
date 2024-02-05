@@ -10,7 +10,7 @@ from utilities.TypeChecking.letter_lists import (
     gamma_starting_letters,
 )
 
-from Enums import Letter
+from Enums import LetterString
 
 from data.letter_engine_data import (
     motion_type_combinations,
@@ -57,7 +57,7 @@ class LetterCalculator:
         self.cached_parallel = None
         self.cached_handpath = None
 
-    def get_current_letter(self) -> Letter:
+    def get_current_letter(self) -> LetterString:
         self.red_motion = self.get_motion(RED)
         self.blue_motion = self.get_motion(BLUE)
 
@@ -103,8 +103,8 @@ class LetterCalculator:
                 return None
 
     def filter_by_start_pos(
-        self, start_pos: Positions, motion_letter_set: set[Letter]
-    ) -> set[Letter]:
+        self, start_pos: Positions, motion_letter_set: set[LetterString]
+    ) -> set[LetterString]:
         if start_pos == ALPHA:
             filtered_letter_group = list(alpha_starting_letters)
         elif start_pos == BETA:
@@ -120,7 +120,7 @@ class LetterCalculator:
 
         return filtered_letter_group
 
-    def filter_by_end_pos(self, end_pos, motion_letter_set) -> set[Letter]:
+    def filter_by_end_pos(self, end_pos, motion_letter_set) -> set[LetterString]:
         if end_pos == ALPHA:
             filtered_letter_group = list(alpha_ending_letters)
         elif end_pos == BETA:

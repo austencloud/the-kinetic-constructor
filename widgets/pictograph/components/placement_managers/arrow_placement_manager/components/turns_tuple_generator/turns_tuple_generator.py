@@ -50,10 +50,7 @@ class TurnsTupleGenerator:
         self.mirrored_generator = MirroredTurnsTupleGenerator(self)
 
     def generate_turns_tuple(self, pictograph: "Pictograph") -> str:
-        if pictograph.letter in ["S", "T", "Λ", "Λ-", "Γ"]:
-            generator_key = self._get_special_generator_key(pictograph.letter)
-        else:
-            generator_key = self._get_general_generator_key(pictograph.letter)
+        generator_key = self._get_generator_key(pictograph.letter)
         if generator_key:
             return self.generators[generator_key].generate_key(pictograph)
         return ""
@@ -61,26 +58,24 @@ class TurnsTupleGenerator:
     def generate_mirrored_tuple(self, arrow: "Arrow") -> Union[str, None]:
         return self.mirrored_generator.generate(arrow)
 
-    def _get_special_generator_key(self, letter: str) -> str:
-        if letter == "S" or letter == "T":
-            return "LeadState"
-        elif letter == "Λ":
-            return "Lambda"
-        elif letter == "Λ-":
-            return "LambdaDash"
-        elif letter == "Γ":
-            return "Gamma"
-
-    def _get_general_generator_key(self, letter: str) -> str:
-        if letter in Type1_hybrid_letters:
-            return "Type1_hybrid"
-        elif letter in Type1_non_hybrid_letters:
-            return "Color"
-        elif letter in Type2_letters:
-            return "Type2"
-        elif letter in Type3_letters:
-            return "Type3"
-        elif letter in Type4_letters:
-            return "Type4"
-        elif letter in Type5_letters + Type6_letters:
-            return "Type56"
+    def _get_generator_key(self, letter: str) -> str:
+        special_generators = {
+            "S": "LeadState",
+            "T": "LeadState",
+            "Λ": "Lambda",
+            "Λ-": "LambdaDash",
+            "Γ": "Gamma",
+        }
+        general_generators = {
+            letter: generator_key
+            for generator_key, letters in {
+                "Type1_hybrid": Type1_hybrid_letters,
+                "Color": Type1_non_hybrid_letters,
+                "Type2": Type2_letters,
+                "Type3": Type3_letters,
+                "Type4": Type4_letters,
+                "Type56": Type5_letters + Type6_letters,
+            }.items()
+            for letter in letters
+        }
+        return special_generators.get(letter, general_generators.get(letter, ""))

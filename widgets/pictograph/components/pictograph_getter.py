@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Optional
-from Enums import Letter, LetterType
+from Enums import LetterString, LetterType
 
 from constants import *
 from objects.arrow.arrow import Arrow
@@ -15,7 +15,7 @@ class PictographGetter:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.p = pictograph
 
-    def letter_type(self, letter: Letter) -> Optional[str]:
+    def letter_type(self, letter: LetterString) -> Optional[str]:
         for letter_type in LetterType:
             if letter in letter_type.letters:
                 return letter_type.description

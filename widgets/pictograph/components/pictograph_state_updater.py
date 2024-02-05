@@ -1,47 +1,58 @@
 from typing import TYPE_CHECKING
+from Enums import LetterType
 from constants import *
 from objects.motion.motion import Motion
-from utilities.TypeChecking.MotionAttributes import Colors, Locations, MotionTypes, Turns
+from utilities.TypeChecking.MotionAttributes import (
+    Colors,
+    Locations,
+    MotionTypes,
+    Turns,
+)
+
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 
 
 class PictographStateUpdater:
     def __init__(self, pictograph: "Pictograph") -> None:
-        self.p = pictograph
+        self.pictograph = pictograph
 
     def update_pictograph(self, pictograph_dict: dict = None) -> None:
         if pictograph_dict:
-            if self.p.check.is_pictograph_dict_complete(pictograph_dict):
-                self.p.pictograph_dict = pictograph_dict
+            if self.pictograph.check.is_pictograph_dict_complete(pictograph_dict):
+                self.pictograph.pictograph_dict = pictograph_dict
             self._update_from_pictograph_dict(pictograph_dict)
 
-        self.p.letter_item.update_letter()
+        self.pictograph.glyph.update_glyph()
         self._position_objects()
 
     def _update_from_pictograph_dict(self, pictograph_dict: dict) -> None:
-        self.p.attr_manager.update_attributes(pictograph_dict)
+        self.pictograph.attr_manager.update_attributes(pictograph_dict)
         self.update_motion_attrs_from_pictograph_dict(pictograph_dict)
-        for motion in self.p.motions.values():
+        for motion in self.pictograph.motions.values():
             self.override_motion_type_if_necessary(pictograph_dict, motion)
             if pictograph_dict.get(f"{motion.color}_motion_type"):
                 self.show_graphical_objects(motion.color)
             motion.updater.update_motion()
-        for arrow in self.p.arrows.values():
-            arrow.updater.update_arrow()
-        # for prop in self.p.props.values():
-        #     prop.updater.update_prop()
-        if self.p.letter in ["S", "T", "U", "V"]:
-            self.p.get.leading_motion().lead_state = LEADING
-            self.p.get.trailing_motion().lead_state = TRAILING
+        letter_type = LetterType.get_letter_type(self.pictograph.letter)
+
+        if letter_type == Type3:
+            self.pictograph.get.shift().arrow.updater.update_arrow()
+            self.pictograph.get.dash().arrow.updater.update_arrow()
         else:
-            for motion in self.p.motions.values():
+            for arrow in self.pictograph.arrows.values():
+                arrow.updater.update_arrow()
+        if self.pictograph.letter in ["S", "T", "U", "V"]:
+            self.pictograph.get.leading_motion().lead_state = LEADING
+            self.pictograph.get.trailing_motion().lead_state = TRAILING
+        else:
+            for motion in self.pictograph.motions.values():
                 motion.lead_state = None
 
     def show_graphical_objects(self, color: Colors) -> None:
-        self.p.props[color].show()
+        self.pictograph.props[color].show()
         # self.p.ghost_props[color].show()
-        self.p.arrows[color].show()
+        self.pictograph.arrows[color].show()
 
     def override_motion_type_if_necessary(
         self, pictograph_dict: dict, motion: Motion
@@ -70,11 +81,11 @@ class PictographStateUpdater:
         for attribute_key, attribute_name in motion_attributes.items():
             if attribute_value := pictograph_dict.get(attribute_key):
                 setattr(
-                    self.p.motions[attribute_key.split("_")[0]],
+                    self.pictograph.motions[attribute_key.split("_")[0]],
                     attribute_name,
                     attribute_value,
                 )
 
     def _position_objects(self) -> None:
-        self.p.prop_placement_manager.update_prop_positions()
-        self.p.arrow_placement_manager.update_arrow_placements()
+        self.pictograph.prop_placement_manager.update_prop_positions()
+        self.pictograph.arrow_placement_manager.update_arrow_placements()

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import (
     QGraphicsScene,
     QGraphicsPixmapItem,
@@ -20,6 +20,7 @@ from utilities.TypeChecking.TypeChecking import (
     VtgTimings,
 )
 from utilities.TypeChecking.MotionAttributes import Colors, Locations
+from widgets.pictograph.components.glyph.glyph import Glyph
 
 from .components.pictograph_attr_manager import PictographAttrManager
 from .components.pictograph_checker import PictographChecker
@@ -41,16 +42,51 @@ from .components.pictograph_state_updater import PictographStateUpdater
 from .components.pictograph_event_handler import PictographMouseEventHandler
 from .components.pictograph_init import PictographInit
 
-from utilities.letter_item import LetterItem
 from utilities.letter_calculator import LetterCalculator
 
 if TYPE_CHECKING:
+    from widgets.sequence_builder.sequence_builder_scroll_area import (
+        SequenceBuilderScrollArea,
+    )
     from widgets.scroll_area.scroll_area import CodexScrollArea
     from widgets.main_widget.main_widget import MainWidget
 
 
 class Pictograph(QGraphicsScene):
-    def __init__(self, main_widget: "MainWidget", scroll_area: "CodexScrollArea") -> None:
+    view: PictographView
+    arrows: dict[Colors, Arrow]
+    props: dict[Colors, Prop]
+    motions: dict[Colors, Motion]
+    letter: Letters = None
+    letter_type: LetterTypes
+    pictograph_dict: dict
+    motion_dict_list: list[dict]
+    start_pos: SpecificPositions
+    end_pos: SpecificPositions
+    image_loaded: bool
+    pixmap: QGraphicsPixmapItem
+    arrow_turns: int
+    vtg_timing: VtgTimings
+    vtg_dir: VtgDirections
+    open_close_state: OpenCloseStates
+    dragged_arrow: Arrow
+    dragged_prop: Prop
+    glyph: Glyph
+    grid: Grid
+    locations: dict[Locations, tuple[int, int, int, int]]
+    red_motion: Motion
+    blue_motion: Motion
+    red_arrow: Arrow
+    blue_arrow: Arrow
+    red_prop: Prop
+    blue_prop: Prop
+    selected_arrow: Arrow = None
+
+    def __init__(
+        self,
+        main_widget: "MainWidget",
+        scroll_area: Union["CodexScrollArea", "SequenceBuilderScrollArea"] = None,
+    ) -> None:
         super().__init__()
         self.main_widget = main_widget
         self.scroll_area = scroll_area
@@ -83,32 +119,3 @@ class Pictograph(QGraphicsScene):
 
     def contextMenuEvent(self, event: "QGraphicsSceneMouseEvent") -> None:
         self.context_menu_handler.handle_context_menu(event)
-
-    view: PictographView
-    arrows: dict[Colors, Arrow]
-    props: dict[Colors, Prop]
-    motions: dict[Colors, Motion]
-    letter: Letters
-    letter_type: LetterTypes
-    pictograph_dict: dict
-    motion_dict_list: list[dict]
-    start_pos: SpecificPositions
-    end_pos: SpecificPositions
-    image_loaded: bool
-    pixmap: QGraphicsPixmapItem
-    arrow_turns: int
-    vtg_timing: VtgTimings
-    vtg_dir: VtgDirections
-    open_close_state: OpenCloseStates
-    dragged_arrow: Arrow
-    dragged_prop: Prop
-    letter_item: LetterItem
-    grid: Grid
-    locations: dict[Locations, tuple[int, int, int, int]]
-    red_motion: Motion
-    blue_motion: Motion
-    red_arrow: Arrow
-    blue_arrow: Arrow
-    red_prop: Prop
-    blue_prop: Prop
-    selected_arrow: Arrow = None

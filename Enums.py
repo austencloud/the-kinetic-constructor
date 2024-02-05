@@ -1,11 +1,19 @@
 from typing import TypedDict
 from enum import Enum, auto
-from utilities.TypeChecking.MotionAttributes import Colors, Locations, MotionTypes, PropRotDirs, Turns, Orientations
+from utilities.TypeChecking.MotionAttributes import (
+    Colors,
+    Locations,
+    MotionTypes,
+    PropRotDirs,
+    Turns,
+    Orientations,
+)
 from utilities.TypeChecking.TypeChecking import SpecificPositions
 from utilities.TypeChecking.prop_types import PropTypes
 from utilities.TypeChecking.letter_lists import all_letters
 
-class Letter(Enum):
+
+class LetterString(Enum):
     A = "A"
     B = "B"
     C = "C"
@@ -62,6 +70,7 @@ class Letter(Enum):
         if str in all_letters:
             return str
         return None
+
 
 class LetterType(Enum):
     Type1 = (
@@ -277,7 +286,7 @@ class TKAHandpathMode(Enum):
 
 
 class PictographAttributesDict(TypedDict):
-    letter: Letter
+    letter: LetterString
     start_pos: SpecificPositions
     end_pos: SpecificPositions
     blue_motion_type: MotionTypes

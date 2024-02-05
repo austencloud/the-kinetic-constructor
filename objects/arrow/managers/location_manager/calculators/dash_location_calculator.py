@@ -1,3 +1,4 @@
+from Enums import LetterType
 from constants import *
 from objects.motion.motion import Motion
 from utilities.TypeChecking.MotionAttributes import Locations
@@ -21,6 +22,7 @@ class DashLocationCalculator(BaseLocationCalculator):
 
     def _get_Φ_dash_Ψ_dash_location(self) -> Locations:
         self.other_motion = self.pictograph.get.other_motion(self.arrow.motion)
+
         if self.arrow.motion.turns == 0 and self.other_motion.arrow.motion.turns == 0:
             location_map = {
                 (RED, (NORTH, SOUTH)): EAST,
@@ -68,6 +70,9 @@ class DashLocationCalculator(BaseLocationCalculator):
         return arrow_location
 
     def _default_zero_turns_dash_location(self) -> str:
+        if LetterType.get_letter_type(self.arrow.pictograph.letter) == Type3:
+            return self._calculate_dash_location_based_on_shift()
+
         location_map = {
             (NORTH, SOUTH): EAST,
             (EAST, WEST): SOUTH,
@@ -87,7 +92,8 @@ class DashLocationCalculator(BaseLocationCalculator):
         return loc_map[motion.prop_rot_dir][motion.start_loc]
 
     def _calculate_dash_location_based_on_shift(self) -> str:
-        shift_arrow = self.pictograph.get.other_motion(self.arrow.motion).arrow
+        shift_arrow = self.pictograph.get.shift().arrow
+
         shift_location = shift_arrow.loc
         dash_location_map = {
             (NORTH, NORTHWEST): EAST,
@@ -107,4 +113,4 @@ class DashLocationCalculator(BaseLocationCalculator):
             (WEST, SOUTHEAST): NORTH,
             (WEST, SOUTHWEST): NORTH,
         }
-        return dash_location_map.get((self.arrow.motion.start_loc, shift_location), "")
+        return dash_location_map.get((self.arrow.motion.start_loc, shift_location))
