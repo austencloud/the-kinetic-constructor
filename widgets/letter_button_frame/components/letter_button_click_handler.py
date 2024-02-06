@@ -20,6 +20,7 @@ class LetterButtonClickHandler:
     def on_letter_button_clicked(self, letter: str) -> None:
         button = self.letter_button_frame.button_manager.buttons[letter]
         is_selected = letter in self.button_panel.codex.selected_letters
+        letter_type = LetterType.get_letter_type(letter)
 
         if is_selected:
             self.button_panel.codex.selected_letters.remove(letter)
@@ -29,11 +30,11 @@ class LetterButtonClickHandler:
             button.press()
 
         if letter in self.button_panel.codex.selected_letters:
-            letter_type = LetterType.get_letter_type(letter)
+            letter_type = letter_type
             self.section_manager.create_section_if_needed(letter_type)
 
         for section in self.section_manager.sections.values():
-            if section.letter_type == LetterType.get_letter_type(letter):
+            if section.letter_type == letter_type:
                 section.filter_tab.visibility_handler.update_visibility_based_on_selected_letters()
 
         button.setFlat(not is_selected)
@@ -41,9 +42,9 @@ class LetterButtonClickHandler:
         if letter in self.button_panel.codex.selected_letters:
             self.process_pictographs_for_letter(letter)
             
-        self.button_panel.codex.scroll_area.update_pictographs()
+        self.button_panel.codex.scroll_area.update_pictographs(letter_type)
         for section in self.section_manager.sections.values():
-            if section.letter_type == LetterType.get_letter_type(letter):
+            if section.letter_type == letter_type:
                 section.resize_section()
         self.section_manager.update_sections_based_on_letters(
             self.button_panel.codex.selected_letters

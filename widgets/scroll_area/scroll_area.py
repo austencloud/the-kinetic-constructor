@@ -6,7 +6,7 @@ from PyQt6.QtCore import Qt, QTimer
 from .components.scroll_area_pictograph_factory import ScrollAreaPictographFactory
 from .components.section_manager.section_manager import ScrollAreaSectionManager
 from .components.scroll_area_display_manager import ScrollAreaDisplayManager
-from utilities.TypeChecking.TypeChecking import Letters
+from utilities.TypeChecking.TypeChecking import LetterTypes, Letters
 from ..pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
@@ -51,7 +51,7 @@ class CodexScrollArea(QScrollArea):
     def insert_widget_at_index(self, widget: QWidget, index: int) -> None:
         self.layout.insertWidget(index, widget)
 
-    def update_pictographs(self) -> None:
+    def update_pictographs(self, letter_type: LetterTypes = None) -> None:
         deselected_letters = self.pictograph_factory.get_deselected_letters()
         selected_letters = set(self.codex.selected_letters)
 
@@ -62,7 +62,8 @@ class CodexScrollArea(QScrollArea):
             for letter in deselected_letters:
                 self.pictograph_factory.remove_deselected_letter_pictographs(letter)
             self.pictograph_factory.process_selected_letters()
-        self.display_manager.order_and_display_pictographs()
+        if letter_type:
+            self.display_manager.order_and_display_pictographs(letter_type)
 
     def _only_deselection_occurred(self, deselected_letters, selected_letters) -> bool:
         if not deselected_letters:

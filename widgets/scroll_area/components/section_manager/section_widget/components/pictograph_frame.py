@@ -1,16 +1,9 @@
-# Import necessary components
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import (
-    QFrame,
-    QGridLayout,
-)
+from PyQt6.QtWidgets import QFrame, QGridLayout
 from PyQt6.QtCore import Qt
 
-
 if TYPE_CHECKING:
-    from widgets.scroll_area.components.section_manager.section_widget.section_widget import (
-        SectionWidget,
-    )
+    from ..section_widget import SectionWidget
 
 
 class ScrollAreaSectionPictographFrame(QFrame):

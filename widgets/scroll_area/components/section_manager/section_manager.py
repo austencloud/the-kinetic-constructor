@@ -45,6 +45,8 @@ class ScrollAreaSectionManager:
             self.ordered_section_types.append(letter_type)
             self.scroll_area.fix_stretch()
             section.setup_components()
+            self.sections[letter_type] = section
+
         return self.sections[letter_type]
 
     def get_correct_index_for_section(self, letter_type: LetterTypes) -> int:

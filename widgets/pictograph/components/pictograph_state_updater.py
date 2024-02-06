@@ -2,12 +2,7 @@ from typing import TYPE_CHECKING
 from Enums import LetterType
 from constants import *
 from objects.motion.motion import Motion
-from utilities.TypeChecking.MotionAttributes import (
-    Colors,
-    Locations,
-    MotionTypes,
-    Turns,
-)
+from utilities.TypeChecking.MotionAttributes import Colors
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -21,6 +16,7 @@ class PictographStateUpdater:
         if pictograph_dict:
             if self.pictograph.check.is_pictograph_dict_complete(pictograph_dict):
                 self.pictograph.pictograph_dict = pictograph_dict
+                self.pictograph.get.initiallize_getter()
             self._update_from_pictograph_dict(pictograph_dict)
 
         self.pictograph.glyph.update_glyph()
@@ -51,7 +47,6 @@ class PictographStateUpdater:
 
     def show_graphical_objects(self, color: Colors) -> None:
         self.pictograph.props[color].show()
-        # self.p.ghost_props[color].show()
         self.pictograph.arrows[color].show()
 
     def override_motion_type_if_necessary(
