@@ -1,6 +1,6 @@
 from typing import List
 from Enums import LetterType, TabName
-from constants import CLOCKWISE, COUNTER_CLOCKWISE, PRO, ANTI, DASH, STATIC
+from constants import CLOCKWISE, COUNTER_CLOCKWISE, PRO, ANTI, DASH, STATIC, Type1
 from data.letter_engine_data import motion_type_letter_combinations
 from typing import List
 from typing import TYPE_CHECKING
@@ -63,9 +63,9 @@ class FilterTabVisibilityHandler:
 
         if len(motion_types_present) > 1:
             tabs_to_show.add(TabName.MOTION_TYPE)
-
-        if any(letter in {"S", "T", "U", "V"} for letter in selected_letters):
-            tabs_to_show.add(TabName.LEAD_STATE)
+        if self.section.letter_type == Type1:
+            if any(letter in {"S", "T", "U", "V"} for letter in selected_letters):
+                tabs_to_show.add(TabName.LEAD_STATE)
 
         return list(tabs_to_show)
 

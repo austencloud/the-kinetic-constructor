@@ -136,31 +136,7 @@ class SequenceBuilderScrollArea(QScrollArea):
         option.view.mousePressEvent = self._get_click_handler(option, is_start_pos)
         self.layout.addWidget(option.view)
 
-    def load_image_if_visible(self, option: "Pictograph") -> None:
-        """Loads the image for an option if it is visible."""
-        if not option.image_loaded:
-            image_path = self.main_widget.image_cache_manager.generate_image_path(
-                option
-            )
 
-            if image_path not in self.main_widget.image_cache_manager.image_cache:
-                if not os.path.exists(image_path):
-                    option.image_renderer.render_and_cache_image()
-                else:
-                    self.main_widget.image_cache_manager.image_cache[image_path] = (
-                        QPixmap(image_path)
-                    )
-
-            if not option.pixmap:
-                option.pixmap = option.addPixmap(
-                    self.main_widget.image_cache_manager.image_cache[image_path]
-                )
-            else:
-                option.pixmap.setPixmap(
-                    self.main_widget.image_cache_manager.image_cache[image_path]
-                )
-
-            option.image_loaded = True
 
     def update_options(self, clicked_option) -> None:
         """Updates the options based on the clicked option."""
@@ -169,17 +145,6 @@ class SequenceBuilderScrollArea(QScrollArea):
         except KeyError as e:
             print(f"Motion key missing: {e}")
 
-    @staticmethod
-    def _update_option(option: "Pictograph") -> None:
-        for arrow in option.arrows.values():
-            prop = option.props[arrow.color]
-            prop.motion = option.motions[arrow.color]
-            prop.motion.attr_manager.update_prop_ori()
-            prop.updater.update_prop()
-            arrow.loc = arrow.location_calculator.get_arrow_location(
-                arrow.motion.start_loc, arrow.motion.end_loc, arrow.motion.motion_type
-            )
-        option.updater.update_pictograph()
 
     def clear(self) -> None:
         while self.layout.count():
@@ -194,7 +159,6 @@ class SequenceBuilderScrollArea(QScrollArea):
         next_possible_letters = get_next_letters(current_letter)
         specific_end_pos = clicked_option.end_pos
 
-        # Filter the DataFrame correctly
         filtered_data = [
             motion_dict
             for motion_dict_collection in self.main_widget.letters.values()
@@ -244,7 +208,7 @@ class SequenceBuilderScrollArea(QScrollArea):
         """
         if is_start_pos:
             return lambda event: self._on_start_pos_clicked(
-                option, self.filter_tab_manager.filters
+                option, self.sequence_builder.filter_tab_manager.filters
             )
         else:
             return lambda event: self._on_option_clicked(option)
