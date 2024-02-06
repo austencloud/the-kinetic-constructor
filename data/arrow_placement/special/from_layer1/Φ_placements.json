@@ -145,15 +145,11 @@
       "static_rot_angle_override": true,
       "static": [90, -10]
     },
-    "(cw, 0, 0.5)": {
-      "static": [-100, -100]
-    },
+    "(cw, 0, 0.5)": {},
     "(ccw, 0, 0.5)": {
-      "static_rot_angle_override": true,
       "static": [100, 100]
     },
     "(ccw, 0, 1)": {
-      "static_rot_angle_override": true,
       "static": [90, -10]
     },
     "(ccw, 0, 2.5)": {
