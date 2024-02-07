@@ -69,7 +69,6 @@ class MainWidget(QWidget):
         self.sequence_widget.resize_sequence_widget()
         self.main_tab_widget.resize_main_tab_widget()
 
-
     layout: QHBoxLayout
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
@@ -85,8 +84,8 @@ class MainWidget(QWidget):
             self.sequence_widget.hide()
             self.main_tab_widget.setGeometry(0, 0, self.width(), self.height())
 
-
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.main_window.window_manager.set_dimensions()
         self.sequence_widget.resize_sequence_widget()
         self.main_tab_widget.codex.resize_codex()
+        self.main_tab_widget.sequence_builder.resize_sequence_builder()

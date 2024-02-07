@@ -26,7 +26,6 @@ class SequenceBuilderScrollArea(QScrollArea):
         self.pictographs: dict[Letters, Pictograph] = {}
         self.stretch_index = -1
         self._setup_ui()
-        self._show_start_pos()
 
     def _setup_ui(self) -> None:
         self.setWidgetResizable(True)
@@ -40,10 +39,6 @@ class SequenceBuilderScrollArea(QScrollArea):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
-    def _show_start_pos(self) -> None:
-        start_position_handler = StartPositionHandler(self)
-        start_position_handler.setup_start_position()
-
     def clear(self) -> None:
         while self.layout.count():
             child = self.layout.takeAt(0)
@@ -51,12 +46,13 @@ class SequenceBuilderScrollArea(QScrollArea):
                 child.widget().hide()
 
     def _add_option_to_layout(self, option: Pictograph, is_start_pos: bool) -> None:
-        option.view.mousePressEvent = self.clickable_option_handler._get_click_handler(option, is_start_pos)
+        option.view.mousePressEvent = self.clickable_option_handler._get_click_handler(
+            option, is_start_pos
+        )
         self.layout.addWidget(option.view)
 
     def resize_sequence_builder_scroll_area(self) -> None:
-        start_position_handler = StartPositionHandler(self)
-        start_position_handler.resize_start_options()
+        self.sequence_builder.start_position_handler.resize_start_options()
 
     def _update_pictographs(self, clicked_option: "Pictograph") -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
