@@ -1,10 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
-
 from utilities.TypeChecking.letter_lists import EIGHT_VARIATIONS, FOUR_VARIATIONS, SIXTEEN_VARIATIONS
-
-
 from .components.scroll_area_pictograph_factory import ScrollAreaPictographFactory
 from .components.section_manager.section_manager import ScrollAreaSectionManager
 from .components.scroll_area_display_manager import ScrollAreaDisplayManager

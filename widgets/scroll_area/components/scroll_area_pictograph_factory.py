@@ -19,7 +19,7 @@ from constants import (
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.scroll_area.scroll_area import CodexScrollArea
+    from widgets.scroll_area.codex_scroll_area import CodexScrollArea
 
 
 class ScrollAreaPictographFactory:

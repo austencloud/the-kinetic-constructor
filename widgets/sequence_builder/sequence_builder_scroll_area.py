@@ -1,19 +1,13 @@
 from typing import TYPE_CHECKING
+from constants import LETTER
 from PyQt6.QtWidgets import QScrollArea, QWidget, QApplication, QHBoxLayout
 from PyQt6.QtCore import Qt
-from constants import END_POS, LETTER, START_POS
+from PyQt6.QtWidgets import QScrollArea, QWidget, QHBoxLayout
+from PyQt6.QtCore import Qt
 from utilities.TypeChecking.TypeChecking import Letters
+from ..sequence_builder.start_position_handler import StartPositionHandler
 from ..pictograph.pictograph import Pictograph
 from data.rules import get_next_letters
-from ..scroll_area.components.scroll_area_pictograph_factory import (
-    ScrollAreaPictographFactory,
-)
-from ..scroll_area.components.section_manager.section_manager import (
-    ScrollAreaSectionManager,
-)
-from ..scroll_area.components.sequence_builder_display_manager import (
-    SequenceBuilderDisplayManager,
-)
 
 if TYPE_CHECKING:
     from ..sequence_builder.sequence_builder import SequenceBuilder
@@ -24,13 +18,14 @@ class SequenceBuilderScrollArea(QScrollArea):
         super().__init__(sequence_builder)
         self.main_widget = sequence_builder.main_widget
         self.sequence_builder = sequence_builder
+        self.clickable_option_handler = sequence_builder.clickable_option_handler
+        self.display_manager = sequence_builder.display_manager
+        self.sections_manager = sequence_builder.sections_manager
+        self.pictograph_factory = sequence_builder.pictograph_factory
         self.letters = self.main_widget.letters
         self.pictographs: dict[Letters, Pictograph] = {}
         self.stretch_index = -1
-        self.start_options: dict[str, Pictograph] = {}
-
         self._setup_ui()
-        self._setup_managers()
         self._show_start_pos()
 
     def _setup_ui(self) -> None:
@@ -45,58 +40,23 @@ class SequenceBuilderScrollArea(QScrollArea):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
-    def _setup_managers(self) -> None:
-        self.display_manager = SequenceBuilderDisplayManager(self)
-        self.sections_manager = ScrollAreaSectionManager(self)
-        self.pictograph_factory = ScrollAreaPictographFactory(self)
-
-
-    ### HELPERS ###
-
     def _show_start_pos(self) -> None:
-        """Shows options for the starting position."""
-        self.clear()
-        start_pos = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
-        for i, position_key in enumerate(start_pos):
-            self._add_start_pos_option(position_key, i)
-
-    def _add_start_pos_option(self, position_key: str, column: int) -> None:
-        """Adds an option for the specified start position."""
-        start_pos, end_pos = position_key.split("_")
-        for letter, pictograph_dicts in self.letters.items():
-            for pictograph_dict in pictograph_dicts:
-                if (
-                    pictograph_dict[START_POS] == start_pos
-                    and pictograph_dict[END_POS] == end_pos
-                ):
-                    start_option = self.pictograph_factory.create_pictograph()
-                    self.start_options[letter] = start_option
-                    start_option.letter = letter
-                    start_option.start_pos = start_pos
-                    start_option.end_pos = end_pos
-                    self._add_option_to_layout(start_option, True)
-                    start_option.updater.update_pictograph(pictograph_dict)
-
-    def resize_start_options(self, start_options: list[Pictograph]) -> None:
-        for start_option in start_options:
-            start_option.view.resize_for_scroll_area()
-
-    def _add_option_to_layout(self, option: Pictograph, is_start_pos: bool) -> None:
-        option.view.mousePressEvent = self._get_click_handler(option, is_start_pos)
-        self.layout.addWidget(option.view)
-
-    def update_options(self, clicked_option) -> None:
-        """Updates the options based on the clicked option."""
-        try:
-            self._update_pictographs(clicked_option)
-        except KeyError as e:
-            print(f"Motion key missing: {e}")
+        start_position_handler = StartPositionHandler(self)
+        start_position_handler.setup_start_position()
 
     def clear(self) -> None:
         while self.layout.count():
             child = self.layout.takeAt(0)
             if child.widget():
                 child.widget().hide()
+
+    def _add_option_to_layout(self, option: Pictograph, is_start_pos: bool) -> None:
+        option.view.mousePressEvent = self.clickable_option_handler._get_click_handler(option, is_start_pos)
+        self.layout.addWidget(option.view)
+
+    def resize_sequence_builder_scroll_area(self) -> None:
+        start_position_handler = StartPositionHandler(self)
+        start_position_handler.resize_start_options()
 
     def _update_pictographs(self, clicked_option: "Pictograph") -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
@@ -119,7 +79,7 @@ class SequenceBuilderScrollArea(QScrollArea):
             option = self.pictograph_factory.create_pictograph()
             self.pictographs[motion_dict[LETTER]] = option
         self._sort_options()
-        self._add_sorted_options_to_layout()
+        self._add_sorted_pictographs_to_scroll_area()
         QApplication.restoreOverrideCursor()
 
     def _sort_options(self):
@@ -134,7 +94,7 @@ class SequenceBuilderScrollArea(QScrollArea):
             )
         )
 
-    def _add_sorted_options_to_layout(self) -> None:
+    def _add_sorted_pictographs_to_scroll_area(self) -> None:
         for _, option in self.pictographs.items():
             option.view.resize_for_scroll_area()
 
@@ -144,35 +104,3 @@ class SequenceBuilderScrollArea(QScrollArea):
                 col=len(self.pictographs) % self.display_manager.COLUMN_COUNT,
                 is_start_pos=False,
             )
-
-    ### GETTERS ###
-
-    def _get_click_handler(self, option: "Pictograph", is_start_pos: bool) -> callable:
-        """
-        Returns a click event handler for an option. This handler updates
-        the picker state based on the selected option's attributes.
-        """
-        if is_start_pos:
-            return lambda event: self._on_start_pos_clicked(
-                option, self.sequence_builder.filter_tab_manager.filters
-            )
-        else:
-            return lambda event: self._on_option_clicked(option)
-
-    ### EVENT HANDLERS ###
-
-    def _on_start_pos_clicked(self, start_pos: "Pictograph", attributes) -> None:
-        self.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
-            start_pos
-        )
-        self.main_widget.sequence_widget.beat_frame.picker_updater.emit(
-            start_pos, attributes
-        )
-
-    def _on_option_clicked(self, clicked_option: "Pictograph") -> None:
-        self._update_pictographs(clicked_option)
-        new_beat = clicked_option.add_to_sequence_manager.create_new_beat()
-        self.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(new_beat)
-
-    def resize_sequence_builder_scroll_area(self) -> None:
-        self.resize_start_options(list(self.start_options.values()))

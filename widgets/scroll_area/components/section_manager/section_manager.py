@@ -7,7 +7,7 @@ from .section_widget.section_widget import SectionWidget
 from PyQt6.QtWidgets import QGridLayout, QLabel
 
 if TYPE_CHECKING:
-    from ...scroll_area import CodexScrollArea
+    from ...codex_scroll_area import CodexScrollArea
 
 
 class ScrollAreaSectionManager:

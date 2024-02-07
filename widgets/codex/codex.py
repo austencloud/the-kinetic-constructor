@@ -4,7 +4,7 @@ from PyQt6.QtCore import pyqtSignal
 from utilities.TypeChecking.TypeChecking import Letters
 from ..codex.codex_button_panel import CodexButtonPanel
 from ..codex.codex_image_generator import CodexImageGenerator
-from ..scroll_area.scroll_area import CodexScrollArea
+from ..scroll_area.codex_scroll_area import CodexScrollArea
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget

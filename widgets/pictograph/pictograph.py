@@ -47,7 +47,7 @@ if TYPE_CHECKING:
     from widgets.sequence_builder.sequence_builder_scroll_area import (
         SequenceBuilderScrollArea,
     )
-    from widgets.scroll_area.scroll_area import CodexScrollArea
+    from widgets.scroll_area.codex_scroll_area import CodexScrollArea
     from widgets.main_widget.main_widget import MainWidget
 
 

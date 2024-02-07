@@ -67,13 +67,8 @@ class MainWidget(QWidget):
     def showEvent(self, event) -> None:
         super().showEvent(event)
         self.sequence_widget.resize_sequence_widget()
-        self.resize_man_tab_widget()
+        self.main_tab_widget.resize_main_tab_widget()
 
-    def resize_man_tab_widget(self):
-        if self.main_tab_widget.codex.isVisible():
-            self.main_tab_widget.codex.resize_codex()
-        elif self.main_tab_widget.sequence_builder.isVisible():
-            self.main_tab_widget.sequence_builder.resize_sequence_builder()
 
     layout: QHBoxLayout
 
@@ -90,16 +85,8 @@ class MainWidget(QWidget):
             self.sequence_widget.hide()
             self.main_tab_widget.setGeometry(0, 0, self.width(), self.height())
 
-    def resize_sequence_widget(self):
-        self.sequence_widget.resize_sequence_widget()
-
-    def resize_codex(self):
-        if not self.sequence_widget.isHidden():
-            self.main_tab_widget.setGeometry(
-                self.width() // 2, 0, self.width() // 2, self.height()
-            )
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.main_window.window_manager.set_dimensions()
-        # self.resize_sequence_widget()
-        self.resize_codex()
+        self.sequence_widget.resize_sequence_widget()
+        self.main_tab_widget.codex.resize_codex()

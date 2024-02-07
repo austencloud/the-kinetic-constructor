@@ -9,7 +9,7 @@ from .....turns_box.turns_box_widgets.vtg_dir_button_manager import VtgDirButton
 from .components.pictograph_frame import ScrollAreaSectionPictographFrame
 
 if TYPE_CHECKING:
-    from ....scroll_area import CodexScrollArea
+    from ....codex_scroll_area import CodexScrollArea
 
 
 class SectionWidget(QGroupBox):

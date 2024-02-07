@@ -13,7 +13,7 @@ from widgets.scroll_area.components.section_manager.section_widget.section_widge
 )
 
 if TYPE_CHECKING:
-    from ..scroll_area import CodexScrollArea
+    from ..codex_scroll_area import CodexScrollArea
 logging.basicConfig(level=logging.DEBUG)
 
 
