@@ -8,7 +8,6 @@ from PyQt6.QtWidgets import (
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from objects.motion.motion import Motion
-from objects.prop.ghost_prop import GhostProp
 from objects.prop.prop import Prop
 
 from utilities.TypeChecking.TypeChecking import (

@@ -1,5 +1,3 @@
-import json
-import os
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtGui import QResizeEvent, QKeyEvent
 from PyQt6.QtCore import Qt

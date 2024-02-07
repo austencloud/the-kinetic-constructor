@@ -4,12 +4,11 @@ from PyQt6.QtCore import QPointF, QPoint, Qt
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from objects.motion.motion import Motion
-from objects.prop.ghost_prop import GhostProp
 from objects.prop.prop import Prop
 from objects.prop.prop_classes import *
 
 from utilities.TypeChecking.prop_types import PropTypes
-from utilities.TypeChecking.MotionAttributes import Colors, Locations, MotionTypes
+from utilities.TypeChecking.MotionAttributes import Colors, Locations
 from constants import *
 from widgets.factories.prop_factory import PropFactory
 from widgets.pictograph.components.glyph.glyph import GlyphManager

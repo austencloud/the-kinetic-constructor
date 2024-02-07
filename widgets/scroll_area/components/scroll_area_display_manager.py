@@ -11,7 +11,6 @@ from utilities.TypeChecking.TypeChecking import Letters
 from widgets.scroll_area.components.section_manager.section_widget.section_widget import (
     SectionWidget,
 )
-from PyQt6.QtWidgets import QGridLayout
 
 if TYPE_CHECKING:
     from ..scroll_area import CodexScrollArea

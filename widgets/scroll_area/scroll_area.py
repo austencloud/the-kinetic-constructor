@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout
-from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtCore import Qt
 
 from utilities.TypeChecking.letter_lists import EIGHT_VARIATIONS, FOUR_VARIATIONS, SIXTEEN_VARIATIONS
 

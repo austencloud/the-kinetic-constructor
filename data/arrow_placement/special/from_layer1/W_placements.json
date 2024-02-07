@@ -2,11 +2,9 @@
   "W": {
     "(s, 3, 3)": {},
     "(o, 1, 0.5)": {
-      "static_rot_angle_override": true,
       "static": [100, 100]
     },
     "(o, 1.5, 0.5)": {
-      "static_rot_angle_override": true,
       "static": [100, 100]
     },
     "(o, 0, 0.5)": {
@@ -16,15 +14,12 @@
       "static": [100, 100]
     },
     "(o, 2, 0.5)": {
-      "static_rot_angle_override": true,
       "static": [100, 100]
     },
     "(o, 2.5, 0.5)": {
-      "static_rot_angle_override": true,
       "static": [100, 100]
     },
     "(o, 3, 0.5)": {
-      "static_rot_angle_override": true,
       "static": [100, 100]
     }
   }

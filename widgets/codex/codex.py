@@ -8,7 +8,6 @@ from ..scroll_area.scroll_area import CodexScrollArea
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
-    from ..main_tab_widget.main_tab_widget import MainTabWidget
 
 
 class Codex(QWidget):

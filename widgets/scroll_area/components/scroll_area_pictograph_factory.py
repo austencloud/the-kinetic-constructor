@@ -1,6 +1,5 @@
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING
 from Enums import LetterType
-from constants import CODEX_PICTOGRAPH, OPTION
 from utilities.TypeChecking.TypeChecking import Letters
 
 

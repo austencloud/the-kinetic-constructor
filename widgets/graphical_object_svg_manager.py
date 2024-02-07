@@ -24,7 +24,6 @@ from utilities.TypeChecking.MotionAttributes import MotionTypes, Turns
 from utilities.TypeChecking.prop_types import PropTypes, PropTypeslist
 
 if TYPE_CHECKING:
-    from widgets.main_widget.main_widget import MainWidget
     from objects.arrow.arrow import Arrow
     from objects.prop.prop import Prop
 
@@ -108,7 +107,6 @@ class GraphicalObjectSvgManager:
             )
         elif self.is_prop(object):
             return self._prop_svg_file(object.prop_type)
-        pass
 
     def get_svg_file(self, object: Union["Arrow", "Prop"]) -> str:
         cache_key = self._generate_cache_key(object)

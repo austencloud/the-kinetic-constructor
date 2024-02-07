@@ -1,5 +1,4 @@
 from objects.prop.prop_classes import *
-from utilities.TypeChecking.prop_types import PropTypes
 
 
 class PropFactory:

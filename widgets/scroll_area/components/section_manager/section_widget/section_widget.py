@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QGroupBox, QGridLayout
+from PyQt6.QtWidgets import QVBoxLayout, QGroupBox
 from constants import OPP, SAME
 from utilities.TypeChecking.TypeChecking import LetterTypes
 from .components.filter_tab.filter_tab import FilterTab

@@ -3,6 +3,7 @@ from PyQt6.QtGui import QPixmap, QPainter, QTransform
 from PyQt6.QtSvg import QSvgRenderer
 
 from objects.prop.prop import Prop
+from utilities.TypeChecking.MotionAttributes import Colors, Locations, Orientations
 from utilities.TypeChecking.TypeChecking import *
 from typing import TYPE_CHECKING
 from utilities.TypeChecking.prop_types import PropTypes
@@ -43,8 +44,6 @@ class PropBoxDrag(BaseObjectBoxDrag):
         self.location: Locations = target_prop.loc
         self.orientation: Orientations = target_prop.ori
 
-        self.ghost = self.pictograph.ghost_props[self.color]
-        self.ghost.target_prop = target_prop
 
     def place_prop_on_pictograph(self) -> None:
         self.placed_prop = Prop(

@@ -1,27 +1,22 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QApplication, QHBoxLayout
-from PyQt6.QtCore import Qt, QTimer
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtWidgets import QScrollArea, QWidget, QApplication, QHBoxLayout
+from PyQt6.QtCore import Qt
+from constants import END_POS, LETTER, START_POS
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.pictograph.pictograph import Pictograph
-from widgets.scroll_area.components.scroll_area_display_manager import (
-    ScrollAreaDisplayManager,
-)
+from ..pictograph.pictograph import Pictograph
 from data.rules import get_next_letters
-from widgets.scroll_area.components.scroll_area_pictograph_factory import (
+from ..scroll_area.components.scroll_area_pictograph_factory import (
     ScrollAreaPictographFactory,
 )
-from widgets.scroll_area.components.section_manager.section_manager import (
+from ..scroll_area.components.section_manager.section_manager import (
     ScrollAreaSectionManager,
 )
-from constants import *
-from widgets.scroll_area.components.sequence_builder_display_manager import (
+from ..scroll_area.components.sequence_builder_display_manager import (
     SequenceBuilderDisplayManager,
 )
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.sequence_builder import SequenceBuilder
-    from widgets.main_widget.main_widget import MainWidget
+    from ..sequence_builder.sequence_builder import SequenceBuilder
 
 
 class SequenceBuilderScrollArea(QScrollArea):
@@ -55,52 +50,6 @@ class SequenceBuilderScrollArea(QScrollArea):
         self.sections_manager = ScrollAreaSectionManager(self)
         self.pictograph_factory = ScrollAreaPictographFactory(self)
 
-    def fix_stretch(self):
-        if self.stretch_index >= 0:
-            item = self.layout.takeAt(self.stretch_index)
-            del item
-        self.layout.addStretch(1)
-        self.stretch_index = self.layout.count()
-
-    def insert_widget_at_index(self, widget: QWidget, index: int) -> None:
-        self.layout.insertWidget(index, widget)
-
-    def update_pictographs(self) -> None:
-        deselected_letters = self.pictograph_factory.get_deselected_letters()
-        selected_letters = set(self.sequence_builder.selected_letters)
-
-        if self._only_deselection_occurred(deselected_letters, selected_letters):
-            for letter in deselected_letters:
-                self.pictograph_factory.remove_deselected_letter_pictographs(letter)
-        else:
-            for letter in deselected_letters:
-                self.pictograph_factory.remove_deselected_letter_pictographs(letter)
-            self.pictograph_factory.process_selected_letters()
-        self.display_manager.order_and_display_pictographs()
-
-    def _only_deselection_occurred(self, deselected_letters, selected_letters) -> bool:
-        if not deselected_letters:
-            return False
-        if not selected_letters:
-            return True
-
-        current_pictograph_letters = {key.split("_")[0] for key in self.pictographs}
-
-        return (
-            len(deselected_letters) > 0
-            and len(selected_letters) == len(current_pictograph_letters) - 1
-        )
-
-    def update_arrow_placements(self) -> None:
-        for pictograph in self.pictographs.values():
-            pictograph.arrow_placement_manager.update_arrow_placements()
-
-    ### SETUP ###
-
-    def _connect_signals(self) -> None:
-        self.main_widget.sequence_widget.beat_frame.picker_updater.connect(
-            self.update_options
-        )
 
     ### HELPERS ###
 
@@ -136,15 +85,12 @@ class SequenceBuilderScrollArea(QScrollArea):
         option.view.mousePressEvent = self._get_click_handler(option, is_start_pos)
         self.layout.addWidget(option.view)
 
-
-
     def update_options(self, clicked_option) -> None:
         """Updates the options based on the clicked option."""
         try:
             self._update_pictographs(clicked_option)
         except KeyError as e:
             print(f"Motion key missing: {e}")
-
 
     def clear(self) -> None:
         while self.layout.count():
@@ -170,7 +116,7 @@ class SequenceBuilderScrollArea(QScrollArea):
         self.pictographs.clear()
         self.clear()
         for motion_dict in filtered_data:
-            option = self.pictograph_factory.create_pictograph(OPTION)
+            option = self.pictograph_factory.create_pictograph()
             self.pictographs[motion_dict[LETTER]] = option
         self._sort_options()
         self._add_sorted_options_to_layout()
