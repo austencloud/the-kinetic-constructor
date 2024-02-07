@@ -2,7 +2,7 @@ from ..pictograph.pictograph import Pictograph
 from ..sequence_builder.sequence_builder_scroll_area import SequenceBuilderScrollArea
 
 
-class ClickableOptionHandler:
+class SequenceBuilderClickableOptionHandler:
     def __init__(self, sequence_builder: "SequenceBuilderScrollArea") -> None:
         self.sequence_builder = sequence_builder
 
