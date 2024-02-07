@@ -2,6 +2,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt, QTimer
 
+from utilities.TypeChecking.letter_lists import EIGHT_VARIATIONS, FOUR_VARIATIONS, SIXTEEN_VARIATIONS
+
 
 from .components.scroll_area_pictograph_factory import ScrollAreaPictographFactory
 from .components.section_manager.section_manager import ScrollAreaSectionManager
@@ -81,3 +83,32 @@ class CodexScrollArea(QScrollArea):
     def update_arrow_placements(self) -> None:
         for pictograph in self.pictographs.values():
             pictograph.arrow_placement_manager.update_arrow_placements()
+
+    def calculate_section_indices(self, letter_type: str) -> None:
+        selected_letters = [
+            letter
+            for letter in self.codex.selected_letters
+            if self.sections_manager.get_pictograph_letter_type(letter)
+            == letter_type
+        ]
+
+        total_variations = sum(
+            (
+                8
+                if letter in EIGHT_VARIATIONS
+                else (
+                    16
+                    if letter in SIXTEEN_VARIATIONS
+                    else 4 if letter in FOUR_VARIATIONS else 0
+                )
+            )
+            for letter in selected_letters
+        )
+
+        # Reset the row and column indices for the section
+        self.display_manager.section_indices[letter_type] = (0, 0)
+
+        # Calculate row and column for each pictograph
+        for i in range(total_variations):
+            row, col = divmod(i, self.display_manager.COLUMN_COUNT)
+            self.display_manager.section_indices[letter_type] = (row, col)

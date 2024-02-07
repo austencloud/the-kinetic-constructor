@@ -52,6 +52,35 @@ all_letters = [
     "Γ",
 ]
 ### TYPE 1 LETTERS ###
+
+EIGHT_VARIATIONS = ["A", "B", "D", "E", "G", "H", "J", "K", "M", "N", "P", "Q"]
+SIXTEEN_VARIATIONS = [
+    "C",
+    "F",
+    "I",
+    "L",
+    "O",
+    "R",
+    "U",
+    "V",
+    "S",
+    "T",
+    "W",
+    "X",
+    "Y",
+    "Z",
+    "Σ",
+    "Δ",
+    "θ",
+    "Ω",
+    "Σ-",
+    "Δ-",
+    "θ-",
+    "Ω-",
+]
+FOUR_VARIATIONS = ["Φ", "Ψ", "Λ", "Φ-", "Ψ-", "Λ-", "α", "β", "Γ"]
+
+
 Type1_alpha_to_alpha_letters = ["A", "B", "C"]
 Type1_beta_to_alpha_letters = ["D", "E", "F"]
 Type1_beta_to_beta_letters = ["G", "H", "I"]
