@@ -1,7 +1,11 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
-from utilities.TypeChecking.letter_lists import EIGHT_VARIATIONS, FOUR_VARIATIONS, SIXTEEN_VARIATIONS
+from utilities.TypeChecking.letter_lists import (
+    EIGHT_VARIATIONS,
+    FOUR_VARIATIONS,
+    SIXTEEN_VARIATIONS,
+)
 from .components.scroll_area_pictograph_factory import ScrollAreaPictographFactory
 from .components.section_manager.section_manager import ScrollAreaSectionManager
 from .components.scroll_area_display_manager import ScrollAreaDisplayManager
@@ -19,7 +23,7 @@ class CodexScrollArea(QScrollArea):
         self.codex = codex
         self.letters = self.main_widget.letters
         self.pictographs: dict[Letters, Pictograph] = {}
-        self.stretch_index = -1  # Initialize stretch index
+        self.stretch_index = -1
         self._setup_ui()
         self._setup_managers()
 
@@ -34,8 +38,7 @@ class CodexScrollArea(QScrollArea):
         self.layout: QVBoxLayout = QVBoxLayout(self.container)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.container.setStyleSheet("background-color: #f2f2f2;")
-        self.setContentsMargins(0, 0, 0, 0)
-        self.layout.setContentsMargins(0, 0, 0, 0)
+
         self.setWidget(self.container)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -85,8 +88,7 @@ class CodexScrollArea(QScrollArea):
         selected_letters = [
             letter
             for letter in self.codex.selected_letters
-            if self.sections_manager.get_pictograph_letter_type(letter)
-            == letter_type
+            if self.sections_manager.get_pictograph_letter_type(letter) == letter_type
         ]
 
         total_variations = sum(
@@ -102,10 +104,7 @@ class CodexScrollArea(QScrollArea):
             for letter in selected_letters
         )
 
-        # Reset the row and column indices for the section
         self.display_manager.section_indices[letter_type] = (0, 0)
-
-        # Calculate row and column for each pictograph
         for i in range(total_variations):
             row, col = divmod(i, self.display_manager.COLUMN_COUNT)
             self.display_manager.section_indices[letter_type] = (row, col)

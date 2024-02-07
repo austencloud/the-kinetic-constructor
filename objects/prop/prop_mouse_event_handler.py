@@ -30,7 +30,6 @@ class PropMouseEventHandler:
 
     def handle_mouse_release(self, event: QGraphicsSceneMouseEvent) -> None:
         if isinstance(self.p.scene, self.p.scene.__class__):
-            self.p.ghost.hide()
             self.p.scene.updater.update_pictograph()
             self.finalize_prop_drop(event)
 

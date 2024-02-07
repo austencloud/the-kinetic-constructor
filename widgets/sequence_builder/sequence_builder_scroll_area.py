@@ -5,7 +5,6 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QScrollArea, QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt
 from utilities.TypeChecking.TypeChecking import Letters
-from ..sequence_builder.start_position_handler import StartPositionHandler
 from ..pictograph.pictograph import Pictograph
 from data.rules import get_next_letters
 

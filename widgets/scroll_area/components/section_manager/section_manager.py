@@ -43,7 +43,6 @@ class ScrollAreaSectionManager:
             self.scroll_area.insert_widget_at_index(section, correct_index)
             self.sections[letter_type] = section
             self.ordered_section_types.append(letter_type)
-            self.scroll_area.fix_stretch()
             section.setup_components()
             self.sections[letter_type] = section
 
