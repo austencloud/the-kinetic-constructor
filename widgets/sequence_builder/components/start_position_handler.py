@@ -20,13 +20,11 @@ class StartPositionHandler:
             self._add_start_pos_option(position_key, i)
 
     def _on_start_pos_clicked(self, start_pos: "Pictograph") -> None:
-        # Update the BeatFrame to show the selected start position
         self.sequence_builder.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
             start_pos
         )
-        self.sequence_builder.transition_to_sequence_building()
+        self.sequence_builder.transition_to_sequence_building(start_pos)
 
-        # Additional logic to transition to showing next options...
 
 
     def _add_start_pos_option(self, position_key: str, column: int) -> None:
