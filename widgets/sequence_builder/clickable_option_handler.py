@@ -1,9 +1,11 @@
+from typing import TYPE_CHECKING
 from ..pictograph.pictograph import Pictograph
-from ..sequence_builder.sequence_builder_scroll_area import SequenceBuilderScrollArea
-
+if TYPE_CHECKING:
+    from widgets.sequence_builder.sequence_builder import SequenceBuilder
+from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
 class SequenceBuilderClickableOptionHandler:
-    def __init__(self, sequence_builder: "SequenceBuilderScrollArea") -> None:
+    def __init__(self, sequence_builder: "SequenceBuilder") -> None:
         self.sequence_builder = sequence_builder
 
     def _get_click_handler(self, option: "Pictograph", is_start_pos: bool) -> callable:
@@ -14,7 +16,7 @@ class SequenceBuilderClickableOptionHandler:
         if is_start_pos:
             return lambda event: self._on_start_pos_clicked(
                 option,
-                self.sequence_builder.sequence_builder.filter_tab_manager.filters,
+                self.sequence_builder.filter_tab_manager.filters,
             )
         else:
             return lambda event: self._on_option_clicked(option)

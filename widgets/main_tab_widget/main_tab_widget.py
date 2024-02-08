@@ -99,7 +99,5 @@ class MainTabWidget(QTabWidget):
             """
 
     def resize_main_tab_widget(self):
-        if self.codex.isVisible():
-            self.codex.resize_codex()
-        elif self.sequence_builder.isVisible():
-            self.sequence_builder.resize_sequence_builder()
+        self.codex.resize_codex()
+        self.sequence_builder.resize_sequence_builder()

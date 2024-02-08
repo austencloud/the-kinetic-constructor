@@ -4,7 +4,6 @@ from ..pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.sequence_builder import SequenceBuilder
-    from .sequence_builder_scroll_area import SequenceBuilderScrollArea
 
 
 class StartPositionHandler:
@@ -33,7 +32,7 @@ class StartPositionHandler:
                     and pictograph_dict[END_POS] == end_pos
                 ):
                     start_option = (
-                        self.sequence_builder.scroll_area.pictograph_factory.create_pictograph()
+                        self.sequence_builder.scroll_area.sequence_builder.pictograph_factory.create_pictograph()
                     )
                     self.start_options[letter] = start_option
                     start_option.letter = letter

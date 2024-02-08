@@ -1,7 +1,5 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
-import pandas as pd
-from constants import END_POS, START_POS
 
 from ..sequence_builder.sequence_builder_scroll_area import SequenceBuilderScrollArea
 from ..sequence_builder.clickable_option_handler import SequenceBuilderClickableOptionHandler
@@ -35,8 +33,8 @@ class SequenceBuilder(QFrame):
         self.clickable_option_handler = SequenceBuilderClickableOptionHandler(self)
         self.display_manager = SequenceBuilderDisplayManager(self)
         self.sections_manager = ScrollAreaSectionManager(self)
-        self.pictograph_factory = ScrollAreaPictographFactory(self)
         self.scroll_area = SequenceBuilderScrollArea(self)
+        self.pictograph_factory = ScrollAreaPictographFactory(self.scroll_area)
         self.start_position_handler = StartPositionHandler(self)
 
     def resize_sequence_builder(self) -> None:

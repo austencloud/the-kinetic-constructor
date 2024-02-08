@@ -20,7 +20,6 @@ class SequenceBuilderScrollArea(QScrollArea):
         self.clickable_option_handler = sequence_builder.clickable_option_handler
         self.display_manager = sequence_builder.display_manager
         self.sections_manager = sequence_builder.sections_manager
-        self.pictograph_factory = sequence_builder.pictograph_factory
         self.letters = self.main_widget.letters
         self.pictographs: dict[Letters, Pictograph] = {}
         self.stretch_index = -1
@@ -51,6 +50,7 @@ class SequenceBuilderScrollArea(QScrollArea):
         self.layout.addWidget(option.view)
 
     def resize_sequence_builder_scroll_area(self) -> None:
+        self.setMinimumWidth(self.main_widget.main_tab_widget.width())
         self.sequence_builder.start_position_handler.resize_start_options()
 
     def _update_pictographs(self, clicked_option: "Pictograph") -> None:
@@ -71,7 +71,7 @@ class SequenceBuilderScrollArea(QScrollArea):
         self.pictographs.clear()
         self.clear()
         for motion_dict in filtered_data:
-            option = self.pictograph_factory.create_pictograph()
+            option = self.sequence_builder.pictograph_factory.create_pictograph()
             self.pictographs[motion_dict[LETTER]] = option
         self._sort_options()
         self._add_sorted_pictographs_to_scroll_area()
