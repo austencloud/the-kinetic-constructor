@@ -11,13 +11,14 @@ from widgets.letter_button_frame.components.letter_button_manager import (
 from .components.letter_button_frame_layout_styler import LetterButtonFrameLayoutStyler
 
 if TYPE_CHECKING:
+    from widgets.codex.codex import Codex
     from ..codex.codex_button_panel import CodexButtonPanel
 
 
 class LetterButtonFrame(QFrame):
-    def __init__(self, button_panel: "CodexButtonPanel") -> None:
+    def __init__(self, codex: "Codex") -> None:
         super().__init__()
-        self.button_panel = button_panel
+        self.codex = codex
         self.spacing = 5
         self.outer_frames: dict[str, QFrame] = {}
         self.letter_rows = self._define_letter_rows()
@@ -73,4 +74,4 @@ class LetterButtonFrame(QFrame):
         self.button_manager.connect_letter_buttons()
 
     def resize_letter_button_frame(self) -> None:
-        self.button_manager.resize_buttons(self.button_panel.codex.height())
+        self.button_manager.resize_buttons(self.codex.height())
