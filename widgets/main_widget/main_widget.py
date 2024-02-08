@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 
 
 class MainWidget(QWidget):
-    prop_type: PropTypes = STAFF
+    prop_type: PropTypes = PropTypes.Staff
 
     def __init__(self, main_window: "MainWindow") -> None:
         super().__init__(main_window)

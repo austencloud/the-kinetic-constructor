@@ -50,32 +50,47 @@ class PictographInit:
         motions = {}
         for color in [RED, BLUE]:
             motions[color] = self._create_motion(color)
-        self.pictograph.red_motion, self.pictograph.blue_motion = (motions[RED], motions[BLUE])
+        self.pictograph.red_motion, self.pictograph.blue_motion = (
+            motions[RED],
+            motions[BLUE],
+        )
         return motions
 
     def init_arrows(self) -> dict[Colors, Arrow]:
         arrows = {}
         for color in [BLUE, RED]:
             arrows[color] = self._create_arrow(color)
-        self.pictograph.red_arrow, self.pictograph.blue_arrow = (arrows[RED], arrows[BLUE])
+        self.pictograph.red_arrow, self.pictograph.blue_arrow = (
+            arrows[RED],
+            arrows[BLUE],
+        )
         return arrows
 
     def init_props(self) -> dict[Colors, Prop]:
         props: dict[Colors, Prop] = {}
-        prop_type = self.pictograph.main_widget.prop_type
+        # if self.pictograph.main_widget.prop_type is a string, then use it as is. If it's an enum, then convert it to a string
+        prop_type_str = (
+            self.pictograph.main_widget.prop_type
+            if isinstance(self.pictograph.main_widget.prop_type, str)
+            else self.pictograph.main_widget.prop_type.name
+        )
+
+
         for color in [RED, BLUE]:
             initial_prop_attributes = {
                 COLOR: color,
-                PROP_TYPE: prop_type,
+                PROP_TYPE: prop_type_str,
                 LOC: None,
                 ORI: None,
             }
-            initial_prop_class = prop_class_mapping.get(prop_type.lower())
+            initial_prop_class = prop_class_mapping.get(prop_type_str)
             if initial_prop_class is None:
-                raise ValueError(f"Invalid prop_type: {prop_type}")
-            initial_prop = initial_prop_class(self.pictograph, initial_prop_attributes, None)
+                raise ValueError(f"Invalid prop_type: {prop_type_str}")
+            initial_prop = initial_prop_class(
+                self.pictograph, initial_prop_attributes, None
+            )
             props[color] = self.prop_factory.create_prop_of_type(
-                initial_prop, prop_type
+                initial_prop, prop_type_str
             )
             self.pictograph.motions[color].prop = props[color]
             props[color].motion = self.pictograph.motions[color]
@@ -175,23 +190,23 @@ class PictographInit:
 
 
 prop_class_mapping = {
-    STAFF: Staff,
-    BIGSTAFF: BigStaff,
-    CLUB: Club,
-    FAN: Fan,
-    BIGFAN: BigFan,
-    MINIHOOP: MiniHoop,
-    BUUGENG: Buugeng,
-    BIGBUUGENG: BigBuugeng,
-    FRACTALGENG: Fractalgeng,
-    TRIAD: Triad,
-    BIGTRIAD: BigTriad,
-    DOUBLESTAR: DoubleStar,
-    BIGHOOP: BigHoop,
-    BIGDOUBLESTAR: BigDoubleStar,
-    QUIAD: Quiad,
-    SWORD: Sword,
-    GUITAR: Guitar,
-    UKULELE: Ukulele,
-    CHICKEN: Chicken,
+    "Staff": Staff,
+    "BigStaff": BigStaff,
+    "Club": Club,
+    "Fan": Fan,
+    "BigFan": BigFan,
+    "MiniHoop": MiniHoop,
+    "Buugeng": Buugeng,
+    "BigBuugeng": BigBuugeng,
+    "Fractalgeng": Fractalgeng,
+    "Triad": Triad,
+    "BigTriad": BigTriad,
+    "DoubleStar": DoubleStar,
+    "BigHoop": BigHoop,
+    "BigDoubleStar": BigDoubleStar,
+    "Quiad": Quiad,
+    "Sword": Sword,
+    "Guitar": Guitar,
+    "Ukulele": Ukulele,
+    "Chicken": Chicken,
 }

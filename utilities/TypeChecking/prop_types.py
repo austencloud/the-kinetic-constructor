@@ -2,19 +2,19 @@ from enum import Enum, auto
 
 class PropTypes(Enum):
     Staff = auto()
-    Bigstaff = auto()
+    BigStaff = auto()
     Club = auto()
     Buugeng = auto()
-    Bigbuugeng = auto()
+    BigBuugeng = auto()
     Fractalgeng = auto()
     Fan = auto()
-    Bigfan = auto()
+    BigFan = auto()
     Triad = auto()
-    Bigtriad = auto()
-    Minihoop = auto()
-    Bighoop = auto()
-    Doublestar = auto()
-    Bigdoublestar = auto()
+    BigTriad = auto()
+    MiniHoop = auto()
+    BigHoop = auto()
+    DoubleStar = auto()
+    BigDoubleStar = auto()
     Quiad = auto()
     Sword = auto()
     Guitar = auto()
@@ -22,9 +22,9 @@ class PropTypes(Enum):
     Chicken = auto()
 
 big_unilateral_prop_types = [
-    PropTypes.Bighoop,
-    PropTypes.Bigfan,
-    PropTypes.Bigtriad,
+    PropTypes.BigHoop,
+    PropTypes.BigFan,
+    PropTypes.BigTriad,
     PropTypes.Guitar,
     PropTypes.Sword,
     PropTypes.Chicken,
@@ -32,29 +32,29 @@ big_unilateral_prop_types = [
 small_unilateral_prop_types = [
     PropTypes.Fan,
     PropTypes.Club,
-    PropTypes.Minihoop,
+    PropTypes.MiniHoop,
     PropTypes.Triad,
     PropTypes.Ukulele,
 ]
 big_bilateral_prop_types = [
-    PropTypes.Bigstaff,
-    PropTypes.Bigbuugeng,
-    PropTypes.Bigdoublestar,
+    PropTypes.BigStaff,
+    PropTypes.BigBuugeng,
+    PropTypes.BigDoubleStar,
 ]
 small_bilateral_prop_types = [
     PropTypes.Staff,
     PropTypes.Buugeng,
-    PropTypes.Doublestar,
+    PropTypes.DoubleStar,
     PropTypes.Quiad,
     PropTypes.Fractalgeng,
 ]
 non_strictly_placed_props = [
     PropTypes.Staff,
     PropTypes.Fan,
-    PropTypes.Bigfan,
+    PropTypes.BigFan,
     PropTypes.Club,
     PropTypes.Buugeng,
-    PropTypes.Minihoop,
+    PropTypes.MiniHoop,
     PropTypes.Triad,
     PropTypes.Quiad,
     PropTypes.Ukulele,
@@ -62,31 +62,31 @@ non_strictly_placed_props = [
     PropTypes.Fractalgeng,
 ]
 strictly_placed_props = [
-    PropTypes.Bighoop,
-    PropTypes.Doublestar,
-    PropTypes.Bigtriad,
-    PropTypes.Bigfan,
-    PropTypes.Bigbuugeng,
-    PropTypes.Bigdoublestar,
+    PropTypes.BigHoop,
+    PropTypes.DoubleStar,
+    PropTypes.BigTriad,
+    PropTypes.BigFan,
+    PropTypes.BigBuugeng,
+    PropTypes.BigDoubleStar,
 ]
 
 ### LISTS FOR ITERATION ###
 
 PropTypeslist = [
     PropTypes.Staff,
-    PropTypes.Bigstaff,
+    PropTypes.BigStaff,
     PropTypes.Club,
     PropTypes.Buugeng,
-    PropTypes.Bigbuugeng,
+    PropTypes.BigBuugeng,
     PropTypes.Fractalgeng,
     PropTypes.Fan,
-    PropTypes.Bigfan,
+    PropTypes.BigFan,
     PropTypes.Triad,
-    PropTypes.Bigtriad,
-    PropTypes.Minihoop,
-    PropTypes.Bighoop,
-    PropTypes.Doublestar,
-    PropTypes.Bigdoublestar,
+    PropTypes.BigTriad,
+    PropTypes.MiniHoop,
+    PropTypes.BigHoop,
+    PropTypes.DoubleStar,
+    PropTypes.BigDoubleStar,
     PropTypes.Quiad,
     PropTypes.Sword,
     PropTypes.Guitar,

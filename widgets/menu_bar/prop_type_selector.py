@@ -19,14 +19,14 @@ class PropTypeSelector(QGroupBox):
         self.prop_type_combobox.addItems(
             [
                 PropTypes.Staff.name,
-                PropTypes.Bigstaff.name,
+                PropTypes.BigStaff.name,
                 PropTypes.Club.name,
                 PropTypes.Buugeng.name,
                 PropTypes.Fan.name,
                 PropTypes.Triad.name,
-                PropTypes.Minihoop.name,
-                PropTypes.Bighoop.name,
-                PropTypes.Doublestar.name,
+                PropTypes.MiniHoop.name,
+                PropTypes.BigHoop.name,
+                PropTypes.DoubleStar.name,
                 PropTypes.Quiad.name,
                 PropTypes.Sword.name,
                 PropTypes.Guitar.name,
