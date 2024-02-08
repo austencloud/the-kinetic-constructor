@@ -59,13 +59,4 @@ class PropAttrManager:
         prop_attributes = [attr.value for attr in PropAttribute]
         return {attr: getattr(self, attr) for attr in prop_attributes}
 
-    def update_prop_type(self, prop_type: PropTypes) -> None:
-        self.prop_type = prop_type
-        self.p.svg_manager.update_svg()
-        self.p.updater.update_prop()
 
-    def set_prop_type(self, prop_type: PropTypes) -> None:
-        self.prop_type = prop_type
-        self.p.svg_manager.update_svg()
-        self.p.updater.update_prop()
-        self.p.pictograph.updater.update_pictograph()

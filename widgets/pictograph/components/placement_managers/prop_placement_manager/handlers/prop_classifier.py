@@ -31,9 +31,8 @@ string_to_enum_map = {
     "guitar": PropTypes.Guitar,
     "ukulele": PropTypes.Ukulele,
     "chicken": PropTypes.Chicken,
-
-    # Add mappings for the rest of your prop types
 }
+
 
 class PropClassifier:
     def __init__(self, pictograph: "Pictograph") -> None:
@@ -47,18 +46,15 @@ class PropClassifier:
         self.big_bi = []
 
         for prop in self.pictograph.props.values():
-            # Convert string prop_type to enum member
-            enum_prop_type = string_to_enum_map.get(prop.prop_type)  # Use .lower() to handle case differences
-            if not enum_prop_type:
-                continue  # Skip if prop_type is not recognized
+            prop_type_enum = string_to_enum_map[prop.prop_type]
 
-            if enum_prop_type in big_unilateral_prop_types:
+            if prop_type_enum in big_unilateral_prop_types:
                 self.big_uni.append(prop)
-            elif enum_prop_type in small_unilateral_prop_types:
+            elif prop_type_enum in small_unilateral_prop_types:
                 self.small_uni.append(prop)
-            elif enum_prop_type in small_bilateral_prop_types:
+            elif prop_type_enum in small_bilateral_prop_types:
                 self.small_bi.append(prop)
-            elif enum_prop_type in big_bilateral_prop_types:
+            elif prop_type_enum in big_bilateral_prop_types:
                 self.big_bi.append(prop)
 
         self.big_props = self.big_uni + self.big_bi

@@ -3,6 +3,8 @@ from math import pi
 import os
 from typing import TYPE_CHECKING
 
+from utilities.TypeChecking.prop_types import PropTypes
+
 if TYPE_CHECKING:
     from main import MainWindow
 
@@ -31,9 +33,12 @@ class SettingsManager:
     def get_setting(self, key, default=None) -> any:
         return self.settings.get(key, default)
 
-    def get_prop_type(self) -> str:
-        return self.get_setting("prop_type")  # Default to STAFF
-
+    def get_prop_type(self) -> PropTypes:
+        prop_type = self.get_setting("prop_type")
+        for prop_type_enum in PropTypes:
+            if str(prop_type_enum.name) == prop_type:
+                return prop_type_enum
+            
     def set_prop_type(self, prop_type: str) -> None:
         self.set_setting("prop_type", prop_type)
 

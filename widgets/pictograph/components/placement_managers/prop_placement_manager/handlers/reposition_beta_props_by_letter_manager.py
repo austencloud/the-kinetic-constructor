@@ -113,7 +113,9 @@ class RepositionBetaByLetterHandler:
             )
 
     def reposition_Ψ(self) -> None:
-        if self.red_prop.prop_type in non_strictly_placed_props:
+
+        prop_type = self.red_prop.pictograph.main_widget.prop_type
+        if prop_type in non_strictly_placed_props:
             direction = self.ppm.dir_calculator.get_dir_for_non_shift(self.red_prop)
             if direction:
                 self.move_prop(self.red_prop, direction)
@@ -122,11 +124,13 @@ class RepositionBetaByLetterHandler:
                     self.ppm.dir_calculator.get_opposite_dir(direction),
                 )
 
-        elif self.red_prop.prop_type in strictly_placed_props:
+        elif prop_type in strictly_placed_props:
             self.ppm.default_positioner.set_prop_to_default_loc(self.red_prop)
 
     def reposition_Ψ_dash(self) -> None:
-        if self.red_prop.prop_type in non_strictly_placed_props:
+        prop_type = self.red_prop.pictograph.main_widget.prop_type
+
+        if prop_type in non_strictly_placed_props:
             direction = self.ppm.dir_calculator.get_dir_for_non_shift(self.red_prop)
             if direction:
                 self.move_prop(self.red_prop, direction)
@@ -135,11 +139,13 @@ class RepositionBetaByLetterHandler:
                     self.ppm.dir_calculator.get_opposite_dir(direction),
                 )
 
-        elif self.red_prop.prop_type in strictly_placed_props:
+        elif prop_type in strictly_placed_props:
             self.ppm.default_positioner.set_prop_to_default_loc()(self.red_prop)
 
     def reposition_β(self) -> None:
-        if self.red_prop.prop_type in non_strictly_placed_props:
+        prop_type = self.red_prop.pictograph.main_widget.prop_type
+
+        if prop_type in non_strictly_placed_props:
             direction = self.ppm.dir_calculator.get_dir_for_non_shift(self.red_prop)
             if direction:
                 self.move_prop(self.red_prop, direction)
@@ -148,7 +154,7 @@ class RepositionBetaByLetterHandler:
                     self.ppm.dir_calculator.get_opposite_dir(direction),
                 )
 
-        elif self.red_prop.prop_type in strictly_placed_props:
+        elif prop_type in strictly_placed_props:
             self.ppm.default_positioner.set_prop_to_default_loc(self.red_prop)
 
     def move_prop(self, prop: Prop, direction: Directions) -> None:

@@ -68,29 +68,25 @@ class PictographInit:
 
     def init_props(self) -> dict[Colors, Prop]:
         props: dict[Colors, Prop] = {}
-        # if self.pictograph.main_widget.prop_type is a string, then use it as is. If it's an enum, then convert it to a string
-        prop_type_str = (
-            self.pictograph.main_widget.prop_type
-            if isinstance(self.pictograph.main_widget.prop_type, str)
-            else self.pictograph.main_widget.prop_type.name
-        )
+        prop_type = self.pictograph.main_widget.prop_type
+
 
 
         for color in [RED, BLUE]:
             initial_prop_attributes = {
                 COLOR: color,
-                PROP_TYPE: prop_type_str,
+                PROP_TYPE: prop_type,
                 LOC: None,
                 ORI: None,
             }
-            initial_prop_class = prop_class_mapping.get(prop_type_str)
+            initial_prop_class = prop_class_mapping.get(prop_type)
             if initial_prop_class is None:
-                raise ValueError(f"Invalid prop_type: {prop_type_str}")
+                raise ValueError(f"Invalid prop_type: {prop_type}")
             initial_prop = initial_prop_class(
                 self.pictograph, initial_prop_attributes, None
             )
             props[color] = self.prop_factory.create_prop_of_type(
-                initial_prop, prop_type_str
+                initial_prop, prop_type
             )
             self.pictograph.motions[color].prop = props[color]
             props[color].motion = self.pictograph.motions[color]
@@ -190,23 +186,23 @@ class PictographInit:
 
 
 prop_class_mapping = {
-    "Staff": Staff,
-    "BigStaff": BigStaff,
-    "Club": Club,
-    "Fan": Fan,
-    "BigFan": BigFan,
-    "MiniHoop": MiniHoop,
-    "Buugeng": Buugeng,
-    "BigBuugeng": BigBuugeng,
-    "Fractalgeng": Fractalgeng,
-    "Triad": Triad,
-    "BigTriad": BigTriad,
-    "DoubleStar": DoubleStar,
-    "BigHoop": BigHoop,
-    "BigDoubleStar": BigDoubleStar,
-    "Quiad": Quiad,
-    "Sword": Sword,
-    "Guitar": Guitar,
-    "Ukulele": Ukulele,
-    "Chicken": Chicken,
+    PropTypes.Staff: Staff,
+    PropTypes.BigStaff: BigStaff,
+    PropTypes.Club: Club,
+    PropTypes.Fan: Fan,
+    PropTypes.BigFan: BigFan,
+    PropTypes.MiniHoop: MiniHoop,
+    PropTypes.Buugeng: Buugeng,
+    PropTypes.BigBuugeng: BigBuugeng,
+    PropTypes.Fractalgeng: Fractalgeng,
+    PropTypes.Triad: Triad,
+    PropTypes.BigTriad: BigTriad,
+    PropTypes.DoubleStar: DoubleStar,
+    PropTypes.BigHoop: BigHoop,
+    PropTypes.BigDoubleStar: BigDoubleStar,
+    PropTypes.Quiad: Quiad,
+    PropTypes.Sword: Sword,
+    PropTypes.Guitar: Guitar,
+    PropTypes.Ukulele: Ukulele,
+    PropTypes.Chicken: Chicken,
 }

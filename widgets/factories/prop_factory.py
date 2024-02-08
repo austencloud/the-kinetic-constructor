@@ -5,31 +5,30 @@ from utilities.TypeChecking.prop_types import PropTypes
 class PropFactory:
     def __init__(self):
         self.prop_classes = {
-            STAFF: Staff,
-            BIGSTAFF: BigStaff,
-            TRIAD: Triad,
-            BIGTRIAD: BigTriad,
-            MINIHOOP: MiniHoop,
-            FAN: Fan,
-            BIGFAN: BigFan,
-            CLUB: Club,
-            BUUGENG: Buugeng,
-            BIGBUUGENG: BigBuugeng,
-            FRACTALGENG: Fractalgeng,
-            DOUBLESTAR: DoubleStar,
-            BIGHOOP: BigHoop,
-            BIGDOUBLESTAR: BigDoubleStar,
-            QUIAD: Quiad,
-            SWORD: Sword,
-            GUITAR: Guitar,
-            UKULELE: Ukulele,
-            CHICKEN: Chicken,
+            PropTypes.Staff.name.lower(): Staff,
+            PropTypes.BigStaff.name.lower(): BigStaff,
+            PropTypes.Triad.name.lower(): Triad,
+            PropTypes.BigTriad.name.lower(): BigTriad,
+            PropTypes.MiniHoop.name.lower(): MiniHoop,
+            PropTypes.Fan.name.lower(): Fan,
+            PropTypes.BigFan.name.lower(): BigFan,
+            PropTypes.Club.name.lower(): Club,
+            PropTypes.Buugeng.name.lower(): Buugeng,
+            PropTypes.BigBuugeng.name.lower(): BigBuugeng,
+            PropTypes.Fractalgeng.name.lower(): Fractalgeng,
+            PropTypes.DoubleStar.name.lower(): DoubleStar,
+            PropTypes.BigHoop.name.lower(): BigHoop,
+            PropTypes.BigDoubleStar.name.lower(): BigDoubleStar,
+            PropTypes.Quiad.name.lower(): Quiad,
+            PropTypes.Sword.name.lower(): Sword,
+            PropTypes.Guitar.name.lower(): Guitar,
+            PropTypes.Ukulele.name.lower(): Ukulele,
+            PropTypes.Chicken.name.lower(): Chicken,
         }
 
     def create_prop_of_type(
         self, existing_prop: Prop, target_prop_type: PropTypes
     ) -> Prop:
-        # if the prop type is a str, use it If it's an enum use the name
         if isinstance(target_prop_type, str):
             target_prop_type = PropTypes[target_prop_type]
         elif isinstance(target_prop_type, PropTypes):
