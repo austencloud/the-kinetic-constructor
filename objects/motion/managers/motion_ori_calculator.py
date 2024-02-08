@@ -14,26 +14,26 @@ class MotionOriCalculator:
     """Calculates the end orientation of a motion."""
 
     def __init__(self, motion: "Motion") -> None:
-        self.m = motion
+        self.motion = motion
 
     def get_end_ori(self) -> Orientations:
-        if self.m.motion_type == FLOAT:
+        if self.motion.motion_type == FLOAT:
             handpath_direction = self.get_handpath_direction(
-                self.m.start_loc, self.m.end_loc
+                self.motion.start_loc, self.motion.end_loc
             )
             return self.calculate_float_orientation(
-                self.m.start_ori, handpath_direction
+                self.motion.start_ori, handpath_direction
             )
 
         valid_turns = [0, 0.5, 1, 1.5, 2, 2.5, 3]
-        if self.m.turns in valid_turns:
-            if self.m.turns in [0, 1, 2, 3]:
+        if self.motion.turns in valid_turns:
+            if self.motion.turns in [0, 1, 2, 3]:
                 return self.calculate_whole_turn_orientation(
-                    self.m.motion_type, self.m.turns, self.m.start_ori
+                    self.motion.motion_type, self.motion.turns, self.motion.start_ori
                 )
-            elif self.m.turns in [0.5, 1.5, 2.5]:
+            elif self.motion.turns in [0.5, 1.5, 2.5]:
                 return self.calculate_half_turn_orientation(
-                    self.m.motion_type, self.m.turns, self.m.start_ori
+                    self.motion.motion_type, self.motion.turns, self.motion.start_ori
                 )
 
     def switch_orientation(self, ori: Orientations) -> Orientations:
@@ -73,7 +73,7 @@ class MotionOriCalculator:
                 (COUNTER, COUNTER_CLOCKWISE): (IN if turns % 2 == 0.5 else OUT),
             }
 
-        return orientation_map.get((start_ori, self.m.prop_rot_dir))
+        return orientation_map.get((start_ori, self.motion.prop_rot_dir))
 
     def calculate_float_orientation(
         self, start_ori: Orientations, handpath_direction: Handpaths
