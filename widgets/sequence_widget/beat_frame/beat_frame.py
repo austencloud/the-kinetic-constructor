@@ -10,7 +10,7 @@ from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
-    from widgets.sequence_widget.sequence_widget import MainSequenceWidget
+    from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 from widgets.sequence_widget.beat_frame.beat import BeatView
 
@@ -23,7 +23,7 @@ class BeatFrame(QFrame):
     def __init__(
         self,
         main_widget: "MainWidget",
-        sequence_widget: "MainSequenceWidget",
+        sequence_widget: "SequenceWidget",
     ) -> None:
         super().__init__()
         self.main_widget = main_widget

@@ -7,7 +7,7 @@ from widgets.scroll_area.components.section_manager.section_widget.section_widge
 )
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.sequence_builder_scroll_area import (
+    from widgets.sequence_builder.components.sequence_builder_scroll_area import (
         SequenceBuilderScrollArea,
     )
 

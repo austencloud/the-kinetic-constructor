@@ -20,7 +20,6 @@ class Codex(QWidget):
         self.letters_dict = self.main_widget.letters
 
         self.scroll_area = CodexScrollArea(self)
-        self.image_generator = CodexImageGenerator(self)
         self.button_panel = CodexButtonPanel(self)
 
         self.layout: QHBoxLayout = QHBoxLayout(self)

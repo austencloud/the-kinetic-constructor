@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from constants import END_POS, START_POS
-from ..pictograph.pictograph import Pictograph
+from ...pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.sequence_builder import SequenceBuilder
@@ -18,6 +18,16 @@ class StartPositionHandler:
         start_pos = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
         for i, position_key in enumerate(start_pos):
             self._add_start_pos_option(position_key, i)
+
+    def _on_start_pos_clicked(self, start_pos: "Pictograph") -> None:
+        # Update the BeatFrame to show the selected start position
+        self.sequence_builder.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
+            start_pos
+        )
+        self.sequence_builder.transition_to_sequence_building()
+
+        # Additional logic to transition to showing next options...
+
 
     def _add_start_pos_option(self, position_key: str, column: int) -> None:
         """Adds an option for the specified start position."""

@@ -17,7 +17,7 @@ from ..image_cache_manager import ImageCacheManager
 from ..main_tab_widget.main_tab_widget import MainTabWidget
 from .main_widget_layout_manager import MainWidgetLayoutManager
 from .letter_loader import LetterLoader
-from ..sequence_widget.sequence_widget import MainSequenceWidget
+from ..sequence_widget.sequence_widget import SequenceWidget
 
 if TYPE_CHECKING:
     from main import MainWindow
@@ -38,7 +38,7 @@ class MainWidget(QWidget):
         self._setup_special_placements()
         self.svg_manager = GraphicalObjectSvgManager()
         self.turns_tuple_generator = TurnsTupleGenerator()
-        self.sequence_widget = MainSequenceWidget(self)
+        self.sequence_widget = SequenceWidget(self)
         self.main_tab_widget = MainTabWidget(self)
         self.image_cache_manager = ImageCacheManager(self)
 

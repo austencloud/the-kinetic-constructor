@@ -2,15 +2,15 @@ from typing import TYPE_CHECKING
 from Enums import LetterType
 from constants import BLUE_TURNS, RED_TURNS
 from utilities.TypeChecking.TypeChecking import LetterTypes, Letters
-from .section_widget.components.filter_tab.filter_tab import FilterTab
-from .section_widget.section_widget import SectionWidget
+from ...scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import FilterTab
+from ...scroll_area.components.section_manager.section_widget.section_widget import SectionWidget
 from PyQt6.QtWidgets import QGridLayout, QLabel
 
 if TYPE_CHECKING:
-    from ...codex_scroll_area import CodexScrollArea
+    from ...scroll_area.codex_scroll_area import CodexScrollArea
 
 
-class CodexSectionManager:
+class SequenceBuilderSectionManager:
     """Manages all of the sections in the scroll area. Individual sections are managed by the SectionWidget class."""
 
     SECTION_ORDER = ["Type1", "Type2", "Type3", "Type4", "Type5", "Type6"]

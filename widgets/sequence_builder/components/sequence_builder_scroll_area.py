@@ -5,11 +5,11 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QScrollArea, QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt
 from utilities.TypeChecking.TypeChecking import Letters
-from ..pictograph.pictograph import Pictograph
+from ...pictograph.pictograph import Pictograph
 from data.rules import get_next_letters
 
 if TYPE_CHECKING:
-    from ..sequence_builder.sequence_builder import SequenceBuilder
+    from ..sequence_builder import SequenceBuilder
 
 
 class SequenceBuilderScrollArea(QScrollArea):

@@ -7,7 +7,7 @@ from utilities.TypeChecking.letter_lists import (
     SIXTEEN_VARIATIONS,
 )
 from .components.scroll_area_pictograph_factory import ScrollAreaPictographFactory
-from .components.section_manager.section_manager import ScrollAreaSectionManager
+from .components.section_manager.section_manager import CodexSectionManager
 from .components.scroll_area_display_manager import ScrollAreaDisplayManager
 from utilities.TypeChecking.TypeChecking import LetterTypes, Letters
 from ..pictograph.pictograph import Pictograph
@@ -29,7 +29,7 @@ class CodexScrollArea(QScrollArea):
 
     def _setup_managers(self) -> None:
         self.display_manager = ScrollAreaDisplayManager(self)
-        self.sections_manager = ScrollAreaSectionManager(self)
+        self.sections_manager = CodexSectionManager(self)
         self.pictograph_factory = ScrollAreaPictographFactory(self)
 
     def _setup_ui(self) -> None:

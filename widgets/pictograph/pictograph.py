@@ -44,7 +44,7 @@ from .components.pictograph_init import PictographInit
 from utilities.letter_calculator import LetterCalculator
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.sequence_builder_scroll_area import (
+    from widgets.sequence_builder.components.sequence_builder_scroll_area import (
         SequenceBuilderScrollArea,
     )
     from widgets.scroll_area.codex_scroll_area import CodexScrollArea
