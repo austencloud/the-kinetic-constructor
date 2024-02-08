@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QFrame
 from PyQt6.QtCore import Qt
-from ..letter_button_frame.letter_button_frame import LetterButtonFrame
+from ..letter_button_frame.letter_button_frame import CodexLetterButtonFrame
 
 if TYPE_CHECKING:
     from widgets.codex.codex import Codex
@@ -11,7 +11,7 @@ class CodexButtonPanel(QFrame):
     def __init__(self, codex: "Codex") -> None:
         super().__init__(codex)
         self.codex = codex
-        self.letter_btn_frame = LetterButtonFrame(self)
+        self.letter_btn_frame = CodexLetterButtonFrame(self)
         self._setup_layout()
 
     def _setup_layout(self) -> QFrame:

@@ -15,11 +15,11 @@ from widgets.letter_button_frame.components.letter_button_styler import (
 from .letter_button import LetterButton
 
 if TYPE_CHECKING:
-    from widgets.letter_button_frame.letter_button_frame import LetterButtonFrame
+    from widgets.letter_button_frame.letter_button_frame import CodexLetterButtonFrame
 
 
 class LetterButtonManager:
-    def __init__(self, letter_button_frame: "LetterButtonFrame") -> None:
+    def __init__(self, letter_button_frame: "CodexLetterButtonFrame") -> None:
         self.letter_rows = letter_button_frame.letter_rows
         self.icon_dir = LETTER_BTN_ICON_DIR
         self.buttons: dict[Letters, LetterButton] = {}

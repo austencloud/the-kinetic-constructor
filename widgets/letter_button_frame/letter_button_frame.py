@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from ..codex.codex_button_panel import CodexButtonPanel
 
 
-class LetterButtonFrame(QFrame):
+class CodexLetterButtonFrame(QFrame):
     def __init__(self, codex: "Codex") -> None:
         super().__init__()
         self.codex = codex
