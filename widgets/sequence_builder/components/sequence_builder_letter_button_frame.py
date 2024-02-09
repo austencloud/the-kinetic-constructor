@@ -3,26 +3,32 @@ from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.letter_button_frame.components.letter_button_manager import (
-    LetterButtonManager,
+from widgets.letter_button_frame.components.codex_letter_button_manager import (
+    CodexLetterButtonManager,
+)
+from widgets.letter_button_frame.components.sequence_builder_letter_button_manager import (
+    OptionPickerLetterButtonManager,
 )
 
 
-from ...letter_button_frame.components.letter_button_frame_layout_styler import LetterButtonFrameLayoutStyler
+from ...letter_button_frame.components.letter_button_frame_layout_styler import (
+    LetterButtonFrameLayoutStyler,
+)
 
 if TYPE_CHECKING:
+    from widgets.sequence_builder.sequence_builder import SequenceBuilder
     from widgets.codex.codex import Codex
 
 
-class SequenceBuilderLetterButtonFrame(QFrame):
-    def __init__(self, codex: "Codex") -> None:
+class OptionPickerLetterButtonFrame(QFrame):
+    def __init__(self, sequence_builder: "SequenceBuilder") -> None:
         super().__init__()
-        self.codex = codex
+        self.codex = sequence_builder
         self.spacing = 5
         self.outer_frames: dict[str, QFrame] = {}
         self.letter_rows = self._define_letter_rows()
         self.layout_styler = LetterButtonFrameLayoutStyler(self)
-        self.button_manager = LetterButtonManager(self)
+        self.button_manager = OptionPickerLetterButtonManager(self)
         self.button_manager.create_buttons()
         self._init_letter_buttons_layout()
 
@@ -72,5 +78,5 @@ class SequenceBuilderLetterButtonFrame(QFrame):
         self.layout_styler.add_frames_to_layout(self.layout, frame_tuples)
         self.button_manager.connect_letter_buttons()
 
-    def resize_sequence_builder_letter_button_frame(self) -> None:
+    def resize_option_picker_letter_button_frame(self) -> None:
         self.button_manager.resize_buttons(self.codex.main_widget.height() * 0.6)

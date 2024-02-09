@@ -3,8 +3,8 @@ from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.letter_button_frame.components.letter_button_manager import (
-    LetterButtonManager,
+from widgets.letter_button_frame.components.codex_letter_button_manager import (
+    CodexLetterButtonManager,
 )
 
 
@@ -22,7 +22,7 @@ class CodexLetterButtonFrame(QFrame):
         self.outer_frames: dict[str, QFrame] = {}
         self.letter_rows = self._define_letter_rows()
         self.layout_styler = LetterButtonFrameLayoutStyler(self)
-        self.button_manager = LetterButtonManager(self)
+        self.button_manager = CodexLetterButtonManager(self)
         self.button_manager.create_buttons()
         self._init_letter_buttons_layout()
 

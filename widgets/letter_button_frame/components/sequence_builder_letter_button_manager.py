@@ -6,35 +6,31 @@ from PyQt6.QtCore import QSize, Qt
 from Enums import LetterType
 from constants import LETTER_BTN_ICON_DIR
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.letter_button_frame.components.letter_button_click_handler import (
-    LetterButtonClickHandler,
-)
+
 from widgets.letter_button_frame.components.letter_button_styler import (
     LetterButtonStyler,
+)
+from widgets.letter_button_frame.components.sequence_builder_letter_button_click_handler import (
+    OptionPickerLetterButtonClickHandler,
 )
 from .letter_button import LetterButton
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.components.sequence_builder_letter_button_frame import (
-        SequenceBuilderLetterButtonFrame,
-    )
-    from widgets.letter_button_frame.codex_letter_button_frame import (
-        CodexLetterButtonFrame,
+        OptionPickerLetterButtonFrame,
     )
 
 
-class LetterButtonManager:
+class OptionPickerLetterButtonManager:
     def __init__(
         self,
-        letter_button_frame: Union[
-            "CodexLetterButtonFrame", "SequenceBuilderLetterButtonFrame"
-        ],
+        letter_button_frame: "OptionPickerLetterButtonFrame",
     ) -> None:
         self.letter_rows = letter_button_frame.letter_rows
         self.icon_dir = LETTER_BTN_ICON_DIR
         self.buttons: dict[Letters, LetterButton] = {}
         self.letter_button_frame = letter_button_frame
-        self.click_handler = LetterButtonClickHandler(self)
+        self.click_handler = OptionPickerLetterButtonClickHandler(self)
 
     def create_buttons(self) -> None:
         for type_name, rows in self.letter_rows.items():

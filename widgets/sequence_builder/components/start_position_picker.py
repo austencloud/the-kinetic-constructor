@@ -1,0 +1,72 @@
+from PyQt6.QtWidgets import QWidget
+from PyQt6.QtCore import pyqtSignal
+from constants import END_POS, START_POS
+from widgets.scroll_area.components.scroll_area_pictograph_factory import (
+    ScrollAreaPictographFactory,
+)
+
+from widgets.sequence_builder.components.start_pos_picker_scroll_area import (
+    StartPosPickerScrollArea,
+)
+from ...pictograph.pictograph import Pictograph
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ...sequence_builder.sequence_builder import SequenceBuilder
+
+
+class StartPosPicker(QWidget):
+    position_selected = pyqtSignal(str)  # Signal to emit the selected position
+
+    def __init__(self, sequence_builder: "SequenceBuilder", parent=None):
+        super().__init__(parent)
+        self.sequence_builder = sequence_builder
+        self.main_widget = sequence_builder.main_widget
+        self.start_options: dict[str, Pictograph] = {}
+        self.scroll_area = StartPosPickerScrollArea(self)
+        self.pictograph_factory = ScrollAreaPictographFactory(self.scroll_area)
+        self.setup_start_positions()
+
+    def setup_start_positions(self) -> None:
+        """Shows options for the starting position."""
+        start_pos = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
+        for i, position_key in enumerate(start_pos):
+            self._add_start_pos_option(position_key, i)
+
+    def on_start_pos_clicked(self, start_pos: "Pictograph") -> None:
+        self.sequence_builder.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
+            start_pos
+        )
+        self.sequence_builder.current_pictograph = start_pos
+        self.sequence_builder.transition_to_sequence_building(start_pos)
+
+    def hide_start_positions(self):
+        for start_position_pictograph in self.start_options.values():
+            start_position_pictograph.view.hide()
+
+    def _add_start_pos_option(self, position_key: str, column: int) -> None:
+        """Adds an option for the specified start position."""
+        start_pos, end_pos = position_key.split("_")
+        for (
+            letter,
+            pictograph_dicts,
+        ) in self.sequence_builder.main_widget.letters.items():
+            for pictograph_dict in pictograph_dicts:
+                if (
+                    pictograph_dict[START_POS] == start_pos
+                    and pictograph_dict[END_POS] == end_pos
+                ):
+                    start_option = self.pictograph_factory.create_pictograph()
+                    self.start_options[letter] = start_option
+                    start_option.letter = letter
+                    start_option.start_pos = start_pos
+                    start_option.end_pos = end_pos
+                    self.scroll_area._add_option_to_layout(start_option, True)
+                    start_option.updater.update_pictograph(pictograph_dict)
+
+    def resize_start_options(self) -> None:
+        for start_option in self.start_options.values():
+            start_option.view.resize_for_scroll_area()
+
+    def on_position_selected(self, position):
+        self.position_selected.emit(position)

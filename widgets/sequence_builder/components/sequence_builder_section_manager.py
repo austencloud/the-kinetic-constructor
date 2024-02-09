@@ -52,15 +52,18 @@ class SequenceBuilderSectionsManager:
 
     def create_section(self, letter_type: LetterType) -> SectionWidget:
         if letter_type not in self.sections:
-            correct_index = self.get_correct_index_for_section(letter_type)
             section = SectionWidget(letter_type, self.scroll_area)
-            self.scroll_area.add_widget_to_layout(section, correct_index)
             self.sections[letter_type] = section
             self.ordered_section_types.append(letter_type)
             self.sections[letter_type] = section
             section.setup_components()
-
         return self.sections[letter_type]
+
+    def add_sections_to_layout(self) -> None:
+        for section in self.sections.values():
+            letter_type = section.letter_type
+            correct_index = self.get_correct_index_for_section(letter_type)
+            self.scroll_area.add_widget_to_layout(section, correct_index)
 
     def get_correct_index_for_section(self, letter_type: LetterType) -> int:
         desired_position = self.SECTION_ORDER.index(letter_type)
@@ -107,7 +110,9 @@ class SequenceBuilderSectionsManager:
         return section.filter_tab
 
     def show_all_sections(self) -> None:
+        self.add_sections_to_layout()
         for section in self.sections.values():
-            self.sequence_builder.scroll_area.container_layout.addWidget(section)
-            section.show()
+            self.sequence_builder.option_picker.scroll_area.container_layout.addWidget(section)
             section.resize_section()
+        for section in self.sections.values():
+            section.show()

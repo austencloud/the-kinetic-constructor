@@ -17,7 +17,7 @@ class SequenceBuilderClickableOptionHandler:
         the picker state based on the selected option's attributes.
         """
         if is_start_pos:
-            return lambda event: self.sequence_builder.start_position_handler._on_start_pos_clicked(
+            return lambda event: self.sequence_builder.start_position_picker.on_start_pos_clicked(
                 start_pos
             )
         else:

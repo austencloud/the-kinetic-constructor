@@ -2,20 +2,21 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication, QVBoxLayout
 from PyQt6.QtCore import Qt
 from data.rules import get_next_letters
-from widgets.scroll_area.base_scroll_area import BasePictographScrollArea
-from .sequence_builder_section_manager import SequenceBuilderSectionsManager
+from widgets.sequence_builder.components.sequence_builder_section_manager import SequenceBuilderSectionsManager
+
 from ...pictograph.pictograph import Pictograph
-
+from widgets.scroll_area.base_scroll_area import BasePictographScrollArea
 if TYPE_CHECKING:
-    from ..sequence_builder import SequenceBuilder
+    from widgets.sequence_builder.components.start_position_picker import StartPosPicker
 
 
-class SequenceBuilderScrollArea(BasePictographScrollArea):
-    def __init__(self, sequence_builder: "SequenceBuilder"):
-        super().__init__(sequence_builder)
-        self.sequence_builder = sequence_builder
-        self.clickable_option_handler = sequence_builder.clickable_option_handler
-        self.display_manager = sequence_builder.display_manager
+class StartPosPickerScrollArea(BasePictographScrollArea):
+    def __init__(self, start_pos_picker: "StartPosPicker"):
+        super().__init__(start_pos_picker)
+        self.start_pos_picker = start_pos_picker
+        self.sequence_builder = start_pos_picker.sequence_builder
+        self.clickable_option_handler = self.sequence_builder.clickable_option_handler
+        self.display_manager = self.sequence_builder.display_manager
         self.letters = self.sequence_builder.main_widget.letters
         self.pictographs = {}
         self.set_layout("HBox")
@@ -53,7 +54,7 @@ class SequenceBuilderScrollArea(BasePictographScrollArea):
         pictograph_key = f"{motion_dict['letter']}_{motion_dict['start_pos']}→{motion_dict['end_pos']}"
         if pictograph_key not in self.pictographs:
             pictograph: Pictograph = (
-                self.sequence_builder.pictograph_factory.create_pictograph(motion_dict)
+                self.start_pos_picker.pictograph_factory.create_pictograph(motion_dict)
             )
             self.pictographs[pictograph_key] = pictograph
             pictograph.view.mousePressEvent = (
@@ -65,7 +66,7 @@ class SequenceBuilderScrollArea(BasePictographScrollArea):
         """Initialize scroll area with options after a start pictograph is selected."""
         self.replace_layout_with_vbox()
         self.sections_manager.show_all_sections()
-        start_pictograph = self.sequence_builder.current_pictograph
+        start_pictograph = self.start_pos_picker.sequence_builder.current_pictograph
         end_pos, end_red_ori, end_blue_ori = (
             start_pictograph.end_pos,
             start_pictograph.red_motion.end_ori,
@@ -108,9 +109,9 @@ class SequenceBuilderScrollArea(BasePictographScrollArea):
         )
         self.container_layout.addWidget(option.view)
 
-    def resize_sequence_builder_scroll_area(self) -> None:
+    def resize_start_pos_picker_scroll_area(self) -> None:
         self.setMinimumWidth(self.main_widget.main_tab_widget.width())
-        self.sequence_builder.start_position_picker.resize_start_options()
+        self.start_pos_picker.resize_start_options()
 
     def replace_hbox_with_vbox(self):
         self.container_layout.removeItem(self.container_layout)

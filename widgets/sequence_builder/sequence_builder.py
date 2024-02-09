@@ -2,9 +2,13 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout
 import pandas as pd
 from constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
+from widgets.sequence_builder.components.option_picker import OptionPicker
+from widgets.sequence_builder.components.start_position_picker import (
+    StartPosPicker,
+)
 from ..pictograph.pictograph import Pictograph
 from ..sequence_builder.components.sequence_builder_letter_button_frame import (
-    SequenceBuilderLetterButtonFrame,
+    OptionPickerLetterButtonFrame,
 )
 
 from .components.sequence_builder_scroll_area import SequenceBuilderScrollArea
@@ -25,28 +29,30 @@ class SequenceBuilder(QFrame):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
-        self.current_pictograph: Pictograph = (
-            None  
-        )
+        self.current_pictograph: Pictograph = None
         self.df = pd.read_csv("PictographDataframe.csv")  # Load the dataframe
         self.sections_manager_loaded = False
+        self.selected_letters = None
         self._setup_components()
-        self._setup_layout()
 
-    def _setup_layout(self):
-        self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.left_layout = QVBoxLayout()
-        self.right_layout = QVBoxLayout()
-
-        self.left_layout.addWidget(self.scroll_area)
-        self.layout.addLayout(self.left_layout)
-        self.letter_button_frame.hide()
+        self.start_position_picker = StartPosPicker(self)
+        self.option_picker = OptionPicker(self)
+        self.start_position_picker.position_selected.connect(
+            self.on_start_position_selected
+        )
 
     def update_current_pictograph(self, pictograph: Pictograph):
         self.current_pictograph = pictograph
         self.current_end_red_ori = pictograph.red_motion.end_ori
         self.current_end_blue_ori = pictograph.blue_motion.end_ori
         self.get_next_options(pictograph.end_pos)
+
+    def on_start_position_selected(self, position: str):
+        # Logic to initialize option_picker based on selected start position
+        self.option_picker.scroll_area.initialize_with_options()
+
+        options = self.get_next_options(position)
+        self.option_picker.update_options(options)
 
     def get_next_options(self, end_pos):
         """Fetches and renders next options based on the end position."""
@@ -59,27 +65,12 @@ class SequenceBuilder(QFrame):
     def _setup_components(self):
         self.clickable_option_handler = SequenceBuilderClickableOptionHandler(self)
         self.display_manager = SequenceBuilderDisplayManager(self)
-        self.scroll_area = SequenceBuilderScrollArea(self)
-        self.pictograph_factory = ScrollAreaPictographFactory(self.scroll_area)
-        self.start_position_handler = StartPositionHandler(self)
-        self.letter_button_frame = SequenceBuilderLetterButtonFrame(self)
 
     def transition_to_sequence_building(self, start_pictograph: Pictograph):
-        self.start_position_handler.hide_start_positions()
-        self.layout.addWidget(
-            self.letter_button_frame
-        ) 
+        self.start_position_picker.hide_start_positions()
         self.update_current_pictograph(start_pictograph)
-        for item in self.layout.children():
-            self.layout.removeItem(item)
-        self.right_layout.addWidget(self.letter_button_frame)
-        self.letter_button_frame.show()
-        self.layout.addLayout(self.left_layout, 5)
-        self.layout.addLayout(self.right_layout, 1)
-
-        self.scroll_area.initialize_with_options() 
-        # for section in self.scroll_area.sections_manager.sections.values():
-        #     section.header.type_label.resize_type_label()
+        self.start_position_picker.hide()
+        self.option_picker.show()
 
     def render_and_store_pictograph(self, pictograph_data: pd.Series):
         pictograph_key = f"{pictograph_data['letter']}_{pictograph_data['start_pos']}→{pictograph_data['end_pos']}"
@@ -102,5 +93,5 @@ class SequenceBuilder(QFrame):
             ] = new_pictograph
 
     def resize_sequence_builder(self) -> None:
-        self.scroll_area.resize_sequence_builder_scroll_area()
-        self.letter_button_frame.resize_sequence_builder_letter_button_frame()
+        self.option_picker.scroll_area.resize_option_picker_scroll_area()
+        self.option_picker.letter_button_frame.resize_option_picker_letter_button_frame()
