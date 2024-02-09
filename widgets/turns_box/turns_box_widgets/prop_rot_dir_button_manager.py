@@ -149,7 +149,7 @@ class PropRotDirButtonManager:
         self.ccw_button.unpress()
 
     def update_visibility_based_on_motion(
-        self, letter_type, new_turns, attribute_value
+        self, new_turns
     ) -> None:
         if self.turns_box.turns_panel.filter_tab.section.letter_type in [
             Type4,

@@ -103,7 +103,6 @@ class VtgDirButtonManager:
 
     def update_visibility_based_on_motion(
         self,
-        letter_type,
         new_turns,
         attribute_value: Union[Colors, MotionTypes, LeadStates],
     ) -> None:
