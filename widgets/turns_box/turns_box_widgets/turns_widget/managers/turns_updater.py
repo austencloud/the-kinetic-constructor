@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from Enums import LetterType
 from constants import *
 from utilities.TypeChecking.MotionAttributes import Turns, PropRotDirs
 
@@ -45,7 +46,7 @@ class TurnsUpdater:
         """Handle specific logic for static or dash motion types."""
         if motion.turns == 0 and new_turns == 0:
             return
-        
+
         if new_turns == 0:
             motion.prop_rot_dir = NO_ROT
             self.turns_widget.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.unpress_vtg_buttons()
@@ -58,14 +59,17 @@ class TurnsUpdater:
     def _set_prop_rot_dir(self, motion: "Motion") -> None:
         """set the rotation direction of the motion based on the vtg directional relationship."""
         other_motion = motion.pictograph.get.other_motion(motion)
-        if self.turns_box.turns_panel.filter_tab.section.letter_type in [Type2, Type3]:
+        if self.turns_box.turns_panel.filter_tab.section.letter_type in [
+            LetterType.Type2,
+            LetterType.Type3,
+        ]:
             motion.prop_rot_dir = self._determine_prop_rot_dir_for_type2_type3(
                 other_motion
             )
         elif self.turns_box.turns_panel.filter_tab.section.letter_type in [
-            Type4,
-            Type5,
-            Type6,
+            LetterType.Type4,
+            LetterType.Type5,
+            LetterType.Type6,
         ]:
             if self.turns_box.prop_rot_dir_btn_state[CLOCKWISE]:
                 motion.prop_rot_dir = CLOCKWISE

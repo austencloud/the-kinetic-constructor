@@ -70,7 +70,7 @@ class DashLocationCalculator(BaseLocationCalculator):
         return arrow_location
 
     def _default_zero_turns_dash_location(self) -> str:
-        if LetterType.get_letter_type(self.arrow.pictograph.letter) == Type3:
+        if self.pictograph.letter_type == LetterType.Type3:
             return self._calculate_dash_location_based_on_shift()
 
         location_map = {

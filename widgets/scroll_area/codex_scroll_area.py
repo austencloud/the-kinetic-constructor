@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout
+from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QApplication
 from PyQt6.QtCore import Qt
 from Enums import LetterType
 from utilities.TypeChecking.letter_lists import (
@@ -12,6 +12,7 @@ from .components.section_manager.codex_section_manager import CodexSectionManage
 from .components.scroll_area_display_manager import ScrollAreaDisplayManager
 from utilities.TypeChecking.TypeChecking import Letters
 from ..pictograph.pictograph import Pictograph
+from PyQt6.QtGui import QWheelEvent
 
 if TYPE_CHECKING:
     from ..codex.codex import Codex
@@ -109,3 +110,32 @@ class CodexScrollArea(QScrollArea):
         for i in range(total_variations):
             row, col = divmod(i, self.display_manager.COLUMN_COUNT)
             self.display_manager.section_indices[letter_type] = (row, col)
+
+    def wheelEvent(self, event: QWheelEvent) -> None:
+        modifiers = QApplication.keyboardModifiers()
+        if modifiers == Qt.KeyboardModifier.ControlModifier:
+            delta = event.angleDelta().y()
+            if delta > 0:
+                self.change_pictograph_size(increase=True)
+            elif delta < 0:
+                self.change_pictograph_size(increase=False)
+            event.accept()
+        else:
+            super().wheelEvent(event)  # Call the parent class's wheel event
+
+    def change_pictograph_size(self, increase: bool) -> None:
+        MAX_COLUMN_COUNT = 8
+        MIN_COLUMN_COUNT = 3
+        current_size = self.display_manager.COLUMN_COUNT
+
+        if increase and current_size > MIN_COLUMN_COUNT:
+            self.display_manager.COLUMN_COUNT -= 1
+        elif not increase and current_size < MAX_COLUMN_COUNT:
+            self.display_manager.COLUMN_COUNT += 1
+        self.update_all_pictograph_sizes()
+
+    def update_all_pictograph_sizes(self):
+        for letter_type in LetterType:
+            self.display_manager.order_and_display_pictographs(
+                letter_type
+            )

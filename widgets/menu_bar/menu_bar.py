@@ -21,8 +21,8 @@ class MainWindowMenuBar(QMenuBar):
         self.addAction(settings_action)
 
     def open_preferences_dialog(self) -> None:
-        preferences_dialog = PreferencesDialog(self.main_widget.main_window)
-        preferences_dialog.exec()
+        self.preferences_dialog = PreferencesDialog(self.main_widget.main_window)
+        self.preferences_dialog.exec()
 
     def _setup_menu(self) -> None:
         refresh_action = QAction("Refresh Placements", self)

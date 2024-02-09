@@ -30,9 +30,9 @@ class PictographStateUpdater:
             if pictograph_dict.get(f"{motion.color}_motion_type"):
                 self.show_graphical_objects(motion.color)
             motion.updater.update_motion()
-        letter_type = LetterType.get_letter_type(self.pictograph.letter)
+        self.pictograph.letter_type = LetterType.get_letter_type(self.pictograph.letter)
 
-        if letter_type == Type3:
+        if self.pictograph.letter_type == LetterType.Type3:
             self.pictograph.get.shift().arrow.updater.update_arrow()
             self.pictograph.get.dash().arrow.updater.update_arrow()
         else:

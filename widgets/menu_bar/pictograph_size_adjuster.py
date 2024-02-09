@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel, QGroupBox, QFormLayout, QSlider
 from PyQt6.QtCore import Qt
+from Enums import LetterType
 from widgets.clickable_slider import ClickableSlider
 
 if TYPE_CHECKING:
@@ -36,9 +37,13 @@ class PictographSizeAdjuster(QGroupBox):
         column_count = max(
             self.MIN_COLUMN_COUNT, min(inverted_value, self.MAX_COLUMN_COUNT)
         )
-        self.preferences_dialog.scroll_area.display_manager.COLUMN_COUNT = column_count
-        self.preferences_dialog.scroll_area.update_pictographs()
+        self.preferences_dialog.codex_scroll_area.display_manager.COLUMN_COUNT = (
+            column_count
+        )
+        self.preferences_dialog.codex_scroll_area.update_all_pictograph_sizes()
         self.preferences_dialog.apply_button.setEnabled(True)
+
+
 
     def load_initial_settings(self) -> None:
         initial_size = self.preferences_dialog.settings_manager.get_setting(

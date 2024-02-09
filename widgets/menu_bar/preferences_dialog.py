@@ -14,7 +14,7 @@ class PreferencesDialog(QDialog):
         super().__init__(main_window)
         self.main_window = main_window
         self.settings_manager = main_window.settings_manager
-        self.scroll_area = (
+        self.codex_scroll_area = (
             self.main_window.main_widget.main_tab_widget.codex.scroll_area
         )
         self.setWindowTitle("Preferences")

@@ -1,5 +1,5 @@
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from Enums import LetterType
 from widgets.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.letter_lists import (
@@ -14,6 +14,7 @@ from widgets.scroll_area.components.section_manager.section_widget.section_widge
 )
 
 if TYPE_CHECKING:
+    from widgets.sequence_builder.components.sequence_builder_scroll_area import SequenceBuilderScrollArea
     from ..codex_scroll_area import CodexScrollArea
 logging.basicConfig(level=logging.DEBUG)
 
@@ -22,7 +23,7 @@ class ScrollAreaDisplayManager:
     SPACING = 5
     COLUMN_COUNT = 8
 
-    def __init__(self, scroll_area: "CodexScrollArea") -> None:
+    def __init__(self, scroll_area: Union["CodexScrollArea", "SequenceBuilderScrollArea"]) -> None:
         self.scroll_area = scroll_area
         self.section_indices = {}  # Track indices for each section's grid layout
 
