@@ -12,7 +12,6 @@ from .components.letter_button_frame_layout_styler import LetterButtonFrameLayou
 
 if TYPE_CHECKING:
     from widgets.codex.codex import Codex
-    from ..codex.codex_button_panel import CodexButtonPanel
 
 
 class CodexLetterButtonFrame(QFrame):

@@ -1,12 +1,9 @@
 from typing import TYPE_CHECKING
 from Enums import LetterType
-from constants import BLUE_TURNS, RED_TURNS
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.pictograph.pictograph import Pictograph
 from ...scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
     FilterTab,
 )
-from PyQt6.QtWidgets import QGridLayout, QLabel
 from ...scroll_area.components.section_manager.section_widget.section_widget import (
     SectionWidget,
 )

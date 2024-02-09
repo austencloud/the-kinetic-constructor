@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel, QGroupBox, QFormLayout, QSlider
 from PyQt6.QtCore import Qt
-from Enums import LetterType
 from widgets.clickable_slider import ClickableSlider
 
 if TYPE_CHECKING:

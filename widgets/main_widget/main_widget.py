@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from widgets.graphical_object_svg_manager import GraphicalObjectSvgManager
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Letters
-from constants import DIAMOND, STAFF
+from constants import DIAMOND
 from utilities.TypeChecking.prop_types import PropTypes
 from widgets.main_widget.special_placement_loader import SpecialPlacementLoader
 from widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (

@@ -6,7 +6,6 @@ from PyQt6.QtWidgets import (
     QWidget,
     QApplication,
     QHBoxLayout,
-    QSizePolicy,
     QVBoxLayout,
 )
 from PyQt6.QtCore import Qt

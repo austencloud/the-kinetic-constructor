@@ -4,7 +4,6 @@ from PyQt6.QtSvg import QSvgRenderer
 from Enums import LetterType
 from typing import TYPE_CHECKING
 
-from constants import Type1, Type2, Type3, Type4, Type5, Type6
 
 if TYPE_CHECKING:
     from ..glyph import GlyphManager
