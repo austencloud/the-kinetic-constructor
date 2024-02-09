@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QApplication, QVBoxLayout
+from PyQt6.QtWidgets import QApplication, QVBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
 from data.rules import get_next_letters
 from widgets.sequence_builder.components.option_picker.option_picker_section_manager import (
@@ -10,7 +10,9 @@ from ....pictograph.pictograph import Pictograph
 from widgets.scroll_area.base_scroll_area import BasePictographScrollArea
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.start_position_picker.start_position_picker import StartPosPicker
+    from widgets.sequence_builder.components.start_position_picker.start_position_picker import (
+        StartPosPicker,
+    )
 
 
 class StartPosPickerScrollArea(BasePictographScrollArea):
@@ -24,6 +26,7 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
         self.pictographs = {}
         self.set_layout("HBox")
         self.sections_manager = OptionPickerSectionsManager(self)
+        # self.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
 
     def _update_pictographs(self, clicked_option: "Pictograph"):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
@@ -81,19 +84,16 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
             self.add_pictograph(option_data)
 
     def replace_layout_with_vbox(self):
-        # Create a new QVBoxLayout
         new_layout = QVBoxLayout()
         new_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         new_layout.setContentsMargins(0, 0, 0, 0)
 
-        # Transfer widgets from the old layout to the new layout
         old_layout = self.container.layout()
         while old_layout and old_layout.count():
             item = old_layout.takeAt(0)
             if item.widget():
                 new_layout.addWidget(item.widget())
 
-        # Set the new layout on the container
         self.container.setLayout(new_layout)
         self.container_layout = new_layout
 
@@ -104,7 +104,7 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
     def adjust_sections_size(self):
         """Adjust the size of sections, specific to sequence builder."""
         for section in self.sections_manager.sections.values():
-            section.adjust_size()  # Assuming adjust_size is implemented in section
+            section.adjust_size()
 
     def _add_option_to_layout(self, option: Pictograph, is_start_pos: bool) -> None:
         option.view.mousePressEvent = self.clickable_option_handler.get_click_handler(
@@ -113,8 +113,10 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
         self.container_layout.addWidget(option.view)
 
     def resize_start_pos_picker_scroll_area(self) -> None:
-        self.setMinimumWidth(self.main_widget.main_tab_widget.width())
-        self.start_pos_picker.resize_start_options()
+        self.setMinimumSize(
+            self.sequence_builder.width(), self.sequence_builder.height()
+        )
+        self.start_pos_picker.resize_start_positions()
 
     def replace_hbox_with_vbox(self):
         self.container_layout.removeItem(self.container_layout)

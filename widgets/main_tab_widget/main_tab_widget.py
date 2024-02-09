@@ -95,5 +95,7 @@ class MainTabWidget(QTabWidget):
             """
 
     def resize_main_tab_widget(self):
+        self.setFixedHeight(self.main_widget.height())  # Ensure the tab widget takes up the full height of the main_widget
+
         self.codex.resize_codex()
         self.sequence_builder.resize_sequence_builder()

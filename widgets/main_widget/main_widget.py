@@ -63,27 +63,18 @@ class MainWidget(QWidget):
         self.letters: dict[Letters, list[dict]] = self.letter_loader.load_all_letters()
 
     ### EVENT HANDLERS ###
-
-    def showEvent(self, event) -> None:
-        super().showEvent(event)
-        self.main_window.window_manager.set_dimensions()
-        self.sequence_widget.resize_sequence_widget()
-        self.main_tab_widget.resize_main_tab_widget()
-
-    layout: QHBoxLayout
-
+        
     def keyPressEvent(self, event: QKeyEvent) -> None:
         if event.key() == Qt.Key.Key_Q or event.key() == Qt.Key.Key_F5:
             self.special_placement_loader.refresh_placements()
         else:
             super().keyPressEvent(event)
 
-    def toggle_main_sequence_widget(self):
-        if self.sequence_widget.isHidden():
-            self.sequence_widget.show()
-        else:
-            self.sequence_widget.hide()
-            self.main_tab_widget.setGeometry(0, 0, self.width(), self.height())
+    def showEvent(self, event) -> None:
+        super().showEvent(event)
+        self.main_window.window_manager.set_dimensions()
+        self.sequence_widget.resize_sequence_widget()
+        self.main_tab_widget.resize_main_tab_widget()
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.main_window.window_manager.set_dimensions()

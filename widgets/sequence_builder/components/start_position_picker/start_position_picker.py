@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget, QSizePolicy, QVBoxLayout
 from PyQt6.QtCore import pyqtSignal
 from constants import END_POS, START_POS
 from widgets.scroll_area.components.scroll_area_pictograph_factory import (
@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 class StartPosPicker(QWidget):
-    position_selected = pyqtSignal(str)  # Signal to emit the selected position
+    start_position_selected = pyqtSignal(str)  # Signal to emit the selected position
 
     def __init__(self, sequence_builder: "SequenceBuilder", parent=None):
         super().__init__(parent)
@@ -25,6 +25,11 @@ class StartPosPicker(QWidget):
         self.start_options: dict[str, Pictograph] = {}
         self.scroll_area = StartPosPickerScrollArea(self)
         self.pictograph_factory = ScrollAreaPictographFactory(self.scroll_area)
+        self.layout = QVBoxLayout(self)  # Ensure the layout is a QVBoxLayout
+        self.setLayout(self.layout)
+        # Add your start position widgets to self.layout here
+        self.layout.addStretch(1)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.setup_start_positions()
 
     def setup_start_positions(self) -> None:
@@ -64,9 +69,9 @@ class StartPosPicker(QWidget):
                     self.scroll_area._add_option_to_layout(start_option, True)
                     start_option.updater.update_pictograph(pictograph_dict)
 
-    def resize_start_options(self) -> None:
+    def resize_start_positions(self) -> None:
         for start_option in self.start_options.values():
             start_option.view.resize_for_scroll_area()
 
-    def on_position_selected(self, position):
-        self.position_selected.emit(position)
+    def on_start_position_selected(self, position):
+        self.start_position_selected.emit(position)

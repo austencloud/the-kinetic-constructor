@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame
+from PyQt6.QtWidgets import QFrame, QHBoxLayout
 import pandas as pd
 from constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
 from widgets.sequence_builder.components.option_picker.option_picker import OptionPicker
@@ -8,7 +8,9 @@ from widgets.sequence_builder.components.start_position_picker.start_position_pi
 )
 from ..pictograph.pictograph import Pictograph
 
-from .components.option_picker.option_picker_click_handler import OptionPickerClickHandler
+from .components.option_picker.option_picker_click_handler import (
+    OptionPickerClickHandler,
+)
 from ..scroll_area.components.sequence_builder_display_manager import (
     SequenceBuilderDisplayManager,
 )
@@ -25,11 +27,18 @@ class SequenceBuilder(QFrame):
         self.df = pd.read_csv("PictographDataframe.csv")  # Load the dataframe
         self.sections_manager_loaded = False
         self.selected_letters = None
+        self.start_position_picked = False
         self._setup_components()
 
         self.start_position_picker = StartPosPicker(self)
         self.option_picker = OptionPicker(self)
-        self.start_position_picker.position_selected.connect(
+        self.setLayout(QHBoxLayout())
+        self.layout().addWidget(self.start_position_picker)
+        self.layout().setStretchFactor(
+            self.start_position_picker, 1
+        )  # Allow it to expand
+
+        self.start_position_picker.start_position_selected.connect(
             self.on_start_position_selected
         )
 
@@ -41,7 +50,6 @@ class SequenceBuilder(QFrame):
 
     def on_start_position_selected(self, position: str):
         self.option_picker.scroll_area.initialize_with_options()
-
         options = self.get_next_options(position)
         self.option_picker.update_options(options)
 
@@ -60,6 +68,7 @@ class SequenceBuilder(QFrame):
     def transition_to_sequence_building(self, start_pictograph: Pictograph):
         self.start_position_picker.hide_start_positions()
         self.update_current_pictograph(start_pictograph)
+        self.start_position_picked = True
         self.start_position_picker.hide()
         self.option_picker.show()
 
@@ -72,7 +81,7 @@ class SequenceBuilder(QFrame):
         pictograph_dict[RED_TURNS] = 0
         pictograph_dict[BLUE_TURNS] = 0
 
-        new_pictograph = self.pictograph_factory.get_or_create_pictograph(
+        new_pictograph = self.option_picker.pictograph_factory.get_or_create_pictograph(
             pictograph_key, pictograph_dict
         )
 
@@ -84,5 +93,7 @@ class SequenceBuilder(QFrame):
             ] = new_pictograph
 
     def resize_sequence_builder(self) -> None:
+        self.setMinimumWidth(int(self.main_widget.width() * 3 / 5))
+        self.start_position_picker.scroll_area.resize_start_pos_picker_scroll_area()
         self.option_picker.scroll_area.resize_option_picker_scroll_area()
         self.option_picker.letter_button_frame.resize_option_picker_letter_button_frame()
