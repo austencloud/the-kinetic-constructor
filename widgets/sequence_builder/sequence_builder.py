@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QHBoxLayout
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QSizePolicy
 import pandas as pd
 from constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
 from widgets.sequence_builder.components.option_picker.option_picker import OptionPicker
@@ -34,13 +34,12 @@ class SequenceBuilder(QFrame):
         self.option_picker = OptionPicker(self)
         self.setLayout(QHBoxLayout())
         self.layout().addWidget(self.start_position_picker)
-        self.layout().setStretchFactor(
-            self.start_position_picker, 1
-        )  # Allow it to expand
-
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.start_position_picker.start_position_selected.connect(
             self.on_start_position_selected
         )
+        # add black borders to everything
+        self.setStyleSheet("QFrame {border: 1px solid black;}")
 
     def update_current_pictograph(self, pictograph: Pictograph):
         self.current_pictograph = pictograph
@@ -94,6 +93,6 @@ class SequenceBuilder(QFrame):
 
     def resize_sequence_builder(self) -> None:
         self.setMinimumWidth(int(self.main_widget.width() * 3 / 5))
-        self.start_position_picker.scroll_area.resize_start_pos_picker_scroll_area()
+        self.start_position_picker.resize_start_position_picker()
         self.option_picker.scroll_area.resize_option_picker_scroll_area()
         self.option_picker.letter_button_frame.resize_option_picker_letter_button_frame()

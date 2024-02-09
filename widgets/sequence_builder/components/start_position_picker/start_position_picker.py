@@ -25,12 +25,11 @@ class StartPosPicker(QWidget):
         self.start_options: dict[str, Pictograph] = {}
         self.scroll_area = StartPosPickerScrollArea(self)
         self.pictograph_factory = ScrollAreaPictographFactory(self.scroll_area)
-        self.layout = QVBoxLayout(self)  # Ensure the layout is a QVBoxLayout
+        self.layout: QVBoxLayout = QVBoxLayout(self)
         self.setLayout(self.layout)
-        # Add your start position widgets to self.layout here
-        self.layout.addStretch(1)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.setup_start_positions()
+        self.setStyleSheet("border: 1px solid black;")
 
     def setup_start_positions(self) -> None:
         """Shows options for the starting position."""
@@ -69,9 +68,28 @@ class StartPosPicker(QWidget):
                     self.scroll_area._add_option_to_layout(start_option, True)
                     start_option.updater.update_pictograph(pictograph_dict)
 
-    def resize_start_positions(self) -> None:
+    def resize_start_position_picker(self) -> None:
+        self.scroll_area.resize_start_pos_picker_scroll_area()
+        self._resize_start_position_pictographs()
+
+    def _resize_start_position_pictographs(self):
         for start_option in self.start_options.values():
-            start_option.view.resize_for_scroll_area()
+            view = start_option.view
+            view_width = int(
+                (
+                    view.pictograph.scroll_area.width()
+                    / view.pictograph.scroll_area.COLUMN_COUNT
+                )
+                - view.pictograph.scroll_area.display_manager.SPACING
+            )
+            view.setMinimumWidth(view_width)
+            view.setMaximumWidth(view_width)
+            view.setMinimumHeight(view_width)
+            view.setMaximumHeight(view_width)
+
+            view.view_scale = view_width / view.pictograph.width()
+            view.resetTransform()
+            view.scale(view.view_scale, view.view_scale)
 
     def on_start_position_selected(self, position):
         self.start_position_selected.emit(position)

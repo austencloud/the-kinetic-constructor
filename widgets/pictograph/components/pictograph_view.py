@@ -15,7 +15,6 @@ class PictographView(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
-        # set horizontal size policy to Expanding
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 
     def resize_for_scroll_area(self) -> None:
@@ -32,7 +31,6 @@ class PictographView(QGraphicsView):
         self.setMaximumHeight(view_width)
 
         self.view_scale = view_width / self.pictograph.width()
-
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
 

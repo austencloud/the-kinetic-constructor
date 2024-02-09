@@ -19,8 +19,8 @@ from utilities.TypeChecking.TypeChecking import (
     VtgTimings,
 )
 from utilities.TypeChecking.MotionAttributes import Colors, Locations
-from widgets.pictograph.components.glyph.glyph import GlyphManager
 
+from .components.glyph.glyph import GlyphManager
 from .components.pictograph_attr_manager import PictographAttrManager
 from .components.pictograph_checker import PictographChecker
 from .components.pictograph_getter import PictographGetter
@@ -44,11 +44,14 @@ from .components.pictograph_init import PictographInit
 from utilities.letter_calculator import LetterCalculator
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.sequence_builder_scroll_area import (
-        SequenceBuilderScrollArea,
+    from ..sequence_builder.components.start_position_picker.start_pos_picker_scroll_area import (
+        StartPosPickerScrollArea,
     )
-    from widgets.scroll_area.codex_scroll_area import CodexScrollArea
-    from widgets.main_widget.main_widget import MainWidget
+    from ..sequence_builder.components.option_picker.option_picker_scroll_area import (
+        OptionPickerScrollArea,
+    )
+    from ..scroll_area.codex_scroll_area import CodexScrollArea
+    from ..main_widget.main_widget import MainWidget
 
 
 class Pictograph(QGraphicsScene):
@@ -84,11 +87,13 @@ class Pictograph(QGraphicsScene):
     def __init__(
         self,
         main_widget: "MainWidget",
-        scroll_area: Union["CodexScrollArea", "SequenceBuilderScrollArea"] = None,
+        scroll_area=None,
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.scroll_area = scroll_area
+        self.scroll_area: Union[
+            CodexScrollArea, OptionPickerScrollArea, StartPosPickerScrollArea
+        ] = scroll_area
         self.initializer = PictographInit(self)
         self.mouse_event_handler = PictographMouseEventHandler(self)
         self.context_menu_handler = PictographContextMenuHandler(self)

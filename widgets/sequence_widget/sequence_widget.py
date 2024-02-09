@@ -28,7 +28,6 @@ class SequenceWidget(QWidget):
         self.layout.addWidget(self.button_frame)
 
     def resize_sequence_widget(self) -> None:
-
         beat_view_height = int(self.height() * 0.9 / self.beat_frame.ROW_COUNT)
         beat_view_width = beat_view_height
         for beat_view in self.beat_frame.beats:

@@ -12,11 +12,10 @@ from utilities.TypeChecking.TypeChecking import Letters
 from widgets.scroll_area.components.section_manager.section_widget.section_widget import (
     SectionWidget,
 )
+from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import OptionPickerScrollArea
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.sequence_builder_scroll_area import (
-        SequenceBuilderScrollArea,
-    )
+
     from ..codex_scroll_area import CodexScrollArea
 logging.basicConfig(level=logging.DEBUG)
 
@@ -26,7 +25,7 @@ class ScrollAreaDisplayManager:
     COLUMN_COUNT = 8
 
     def __init__(
-        self, scroll_area: Union["CodexScrollArea", "SequenceBuilderScrollArea"]
+        self, scroll_area: Union["CodexScrollArea", "OptionPickerScrollArea"]
     ) -> None:
         self.scroll_area = scroll_area
         self.section_indices = {}  # Track indices for each section's grid layout
@@ -74,10 +73,7 @@ class ScrollAreaDisplayManager:
             for letter in selected_letters
         )
 
-        # Reset the row and column indices for the section
         self.section_indices[letter_type] = (0, 0)
-
-        # Calculate row and column for each pictograph
         for i in range(total_variations):
             row, col = divmod(i, self.COLUMN_COUNT)
             self.section_indices[letter_type] = (row, col)

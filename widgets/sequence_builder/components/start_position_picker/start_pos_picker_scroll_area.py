@@ -2,6 +2,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication, QVBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
 from data.rules import get_next_letters
+from widgets.scroll_area.components.scroll_area_display_manager import (
+    ScrollAreaDisplayManager,
+)
 from widgets.sequence_builder.components.option_picker.option_picker_section_manager import (
     OptionPickerSectionsManager,
 )
@@ -26,7 +29,7 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
         self.pictographs = {}
         self.set_layout("HBox")
         self.sections_manager = OptionPickerSectionsManager(self)
-        # self.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+        self.COLUMN_COUNT = 5
 
     def _update_pictographs(self, clicked_option: "Pictograph"):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
@@ -113,10 +116,8 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
         self.container_layout.addWidget(option.view)
 
     def resize_start_pos_picker_scroll_area(self) -> None:
-        self.setMinimumSize(
-            self.sequence_builder.width(), self.sequence_builder.height()
-        )
-        self.start_pos_picker.resize_start_positions()
+        self.setMinimumHeight(self.start_pos_picker.height())
+        self.setMinimumWidth(self.start_pos_picker.width())
 
     def replace_hbox_with_vbox(self):
         self.container_layout.removeItem(self.container_layout)
