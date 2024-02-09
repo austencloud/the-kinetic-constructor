@@ -23,6 +23,7 @@ class StartPositionHandler:
         self.sequence_builder.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
             start_pos
         )
+        self.sequence_builder.current_pictograph = start_pos
         self.sequence_builder.transition_to_sequence_building(start_pos)
 
     def hide_start_positions(self):

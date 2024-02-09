@@ -1,12 +1,13 @@
 from typing import TYPE_CHECKING
+from Enums import LetterType
 from constants import LETTER
-from PyQt6.QtWidgets import QScrollArea, QWidget, QApplication, QHBoxLayout
+from PyQt6.QtWidgets import QScrollArea, QWidget, QApplication, QHBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QScrollArea, QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt
 from utilities.TypeChecking.TypeChecking import Letters
 from widgets.sequence_builder.components.sequence_builder_section_manager import (
-    SequenceBuilderScrollAreaSectionsManager,
+    SequenceBuilderSectionsManager,
 )
 from ...pictograph.pictograph import Pictograph
 from data.rules import get_next_letters
@@ -26,7 +27,7 @@ class SequenceBuilderScrollArea(QScrollArea):
         self.pictographs: dict[Letters, Pictograph] = {}
         self.stretch_index = -1
         self._setup_ui()
-        self.sections_manager = SequenceBuilderScrollAreaSectionsManager(self)
+        self.sections_manager = SequenceBuilderSectionsManager(self)
 
     def insert_widget_at_index(self, widget: QWidget, index: int) -> None:
         self.layout.insertWidget(index, widget)
@@ -57,6 +58,7 @@ class SequenceBuilderScrollArea(QScrollArea):
 
     def resize_sequence_builder_scroll_area(self) -> None:
         self.setMinimumWidth(self.main_widget.main_tab_widget.width())
+        self.setMaximumWidth(self.main_widget.main_tab_widget.width())
         self.sequence_builder.start_position_handler.resize_start_options()
 
     def _update_pictographs(self, clicked_option: "Pictograph") -> None:
@@ -106,7 +108,6 @@ class SequenceBuilderScrollArea(QScrollArea):
                 is_start_pos=False,
             )
 
-
     def fix_stretch(self):
         if self.stretch_index >= 0:
             item = self.layout.takeAt(self.stretch_index)
@@ -115,4 +116,46 @@ class SequenceBuilderScrollArea(QScrollArea):
         self.stretch_index = self.layout.count()
 
     def initialize_with_options(self):
-        pass
+        # Clear existing options
+        self.clear()
+
+        # Fetch the next possible options based on the end position and orientation of the start pictograph
+        start_pictograph = self.sequence_builder.current_pictograph
+        next_options = self.get_next_options(
+            start_pictograph.end_pos,
+            start_pictograph.red_motion.end_ori,
+            start_pictograph.blue_motion.end_ori,
+        )
+
+        # Populate each section with the new options
+        for letter_type in LetterType:
+            section = self.sections_manager.get_section(letter_type)
+            section.clear_pictographs()  # Clear existing pictographs in the section
+            for option_data in next_options:
+                if LetterType.get_letter_type(option_data["letter"]) == letter_type:
+                    new_pictograph = (
+                        self.sequence_builder.pictograph_factory.create_pictograph(
+                            option_data
+                        )
+                    )
+                    section.add_pictograph(
+                        new_pictograph
+                    )  # Add pictographs to the section
+
+        # Ensure all sections are visible and properly sized
+        self.sections_manager.show_all_sections()
+        self.adjust_sections_size()
+
+    def get_next_options(self, end_pos, end_red_ori, end_blue_ori):
+        # This function should return a list of dictionaries with data for each next possible option.
+        # This data should match the required data to create a pictograph.
+        # The logic for fetching the next options should compare the end positions and orientations
+        # with the available pictographs' starting positions and orientations.
+        # For now, it's a placeholder that returns an empty list.
+        return []
+
+    def adjust_sections_size(self):
+        for section in self.sections_manager.sections.values():
+            section.set_size_policy(
+                QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+            )

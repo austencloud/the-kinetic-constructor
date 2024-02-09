@@ -15,8 +15,8 @@ class MainTabWidget(QTabWidget):
         self.codex = Codex(main_widget)
         self.sequence_builder = SequenceBuilder(main_widget)
         self.tabs = [self.codex]
-        self.addTab(self.codex, "Codex")
         self.addTab(self.sequence_builder, "Sequence Builder")
+        self.addTab(self.codex, "Codex")
         # self.addTab(graph_editor_tab, "Graph Editor")
         # self.currentChanged.connect(self.resize_main_tab_widget)
 
