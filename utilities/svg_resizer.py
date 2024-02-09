@@ -24,7 +24,6 @@ from PyQt6.QtWidgets import (
     QGraphicsRectItem,
 )
 import xml.etree.ElementTree as ET
-import svg.path
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
 import xml.etree.ElementTree as ET

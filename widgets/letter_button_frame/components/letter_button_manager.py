@@ -15,7 +15,7 @@ from widgets.letter_button_frame.components.letter_button_styler import (
 from .letter_button import LetterButton
 
 if TYPE_CHECKING:
-    from widgets.letter_button_frame.letter_button_frame import CodexLetterButtonFrame
+    from widgets.letter_button_frame.codex_letter_button_frame import CodexLetterButtonFrame
 
 
 class LetterButtonManager:

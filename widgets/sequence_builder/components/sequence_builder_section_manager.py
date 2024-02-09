@@ -2,20 +2,28 @@ from typing import TYPE_CHECKING
 from Enums import LetterType
 from constants import BLUE_TURNS, RED_TURNS
 from utilities.TypeChecking.TypeChecking import LetterTypes, Letters
-from ...scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import FilterTab
-from ...scroll_area.components.section_manager.section_widget.section_widget import SectionWidget
+from widgets.pictograph.pictograph import Pictograph
+from ...scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
+    FilterTab,
+)
+from ...scroll_area.components.section_manager.section_widget.section_widget import (
+    SectionWidget,
+)
 from PyQt6.QtWidgets import QGridLayout, QLabel
 
 if TYPE_CHECKING:
-    from ...scroll_area.codex_scroll_area import CodexScrollArea
+    from widgets.sequence_builder.sequence_builder import SequenceBuilder
+    from widgets.sequence_builder.components.sequence_builder_scroll_area import (
+        SequenceBuilderScrollArea,
+    )
 
 
-class SequenceBuilderSectionManager:
+class SequenceBuilderScrollAreaSectionsManager:
     """Manages all of the sections in the scroll area. Individual sections are managed by the SectionWidget class."""
 
     SECTION_ORDER = ["Type1", "Type2", "Type3", "Type4", "Type5", "Type6"]
 
-    def __init__(self, scroll_area: "CodexScrollArea") -> None:
+    def __init__(self, scroll_area: "SequenceBuilderScrollArea") -> None:
         self.scroll_area = scroll_area
         self.sections: dict[LetterTypes, SectionWidget] = {}
         self.filter_tabs_cache: dict[LetterTypes, FilterTab] = {}
@@ -25,6 +33,7 @@ class SequenceBuilderSectionManager:
         )
         self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
         self.ordered_section_types = []
+        self.initialize_sections()
 
     def setup_letters_by_type(self) -> dict[LetterTypes, list[Letters]]:
         letters_by_type = {}
@@ -33,18 +42,18 @@ class SequenceBuilderSectionManager:
         return letters_by_type
 
     def initialize_sections(self) -> None:
-        for letter_type in self.letters_by_type:
+        # Create a section for each letter type upfront
+        for letter_type in LetterType:
             self.create_section(letter_type)
 
     def create_section(self, letter_type: LetterTypes) -> SectionWidget:
+        # Check if section already exists to avoid duplication
         if letter_type not in self.sections:
-            correct_index = self.get_correct_index_for_section(letter_type)
             section = SectionWidget(letter_type, self.scroll_area)
-            self.scroll_area.insert_widget_at_index(section, correct_index)
+            # Add the section widget to the scroll area layout directly
+            self.scroll_area.layout.addWidget(section)
             self.sections[letter_type] = section
-            self.ordered_section_types.append(letter_type)
-            section.setup_components()
-            self.sections[letter_type] = section
+            section.hide()  # Ensure the section is visible
 
         return self.sections[letter_type]
 
@@ -60,7 +69,7 @@ class SequenceBuilderSectionManager:
         return len(self.ordered_section_types)
 
     def get_section(self, letter_type: LetterTypes) -> SectionWidget:
-        return self.create_section(letter_type)
+        return self.create_section_if_needed(letter_type)
 
     def get_pictograph_letter_type(self, pictograph_key: str) -> str:
         letter = pictograph_key.split("_")[0]
@@ -84,9 +93,6 @@ class SequenceBuilderSectionManager:
         section_layout.addWidget(
             section_label, 0, 0, 1, self.scroll_area.display_manager.COLUMN_COUNT
         )
-
-    def get_section(self, letter_type: LetterTypes) -> SectionWidget:
-        return self.sections.get(letter_type)
 
     def create_section_if_needed(self, letter_type: LetterTypes) -> None:
         if letter_type not in self.sections:
@@ -129,3 +135,19 @@ class SequenceBuilderSectionManager:
             section.filter_tab = FilterTab(section)
             section.layout.insertWidget(1, section.filter_tab)
         return section.filter_tab
+
+    def update_sections_for_sequence_context(self, end_pos: str):
+        # Filter pictographs for each section based on `end_pos`
+        for letter_type, section in self.sections.items():
+            valid_pictographs = self._filter_pictographs_for_next_step(
+                end_pos, letter_type
+            )
+            section.update_with_pictographs(valid_pictographs)
+
+    def _filter_pictographs_for_next_step(self, end_pos: str, letter_type: str):
+        valid_pictographs = []
+        # Example logic to select pictographs based on end_pos and specific rules
+        for pictograph in self.available_pictographs[letter_type]:
+            if pictograph.start_pos == end_pos:  # Simplified check
+                valid_pictographs.append(pictograph)
+        return valid_pictographs

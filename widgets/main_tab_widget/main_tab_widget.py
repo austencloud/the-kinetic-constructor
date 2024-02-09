@@ -1,14 +1,10 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import (
-    QTabWidget,
-)
-
-from widgets.codex.codex import Codex
-from widgets.sequence_builder.sequence_builder import SequenceBuilder
-
+from PyQt6.QtWidgets import QTabWidget
+from ..codex.codex import Codex
+from ..sequence_builder.sequence_builder import SequenceBuilder
 
 if TYPE_CHECKING:
-    from widgets.main_widget.main_widget import MainWidget
+    from ..main_widget.main_widget import MainWidget
 
 
 class MainTabWidget(QTabWidget):
@@ -19,8 +15,8 @@ class MainTabWidget(QTabWidget):
         self.codex = Codex(main_widget)
         self.sequence_builder = SequenceBuilder(main_widget)
         self.tabs = [self.codex]
-        self.addTab(self.codex, "Codex")
         self.addTab(self.sequence_builder, "Sequence Builder")
+        self.addTab(self.codex, "Codex")
         # self.addTab(graph_editor_tab, "Graph Editor")
         # self.currentChanged.connect(self.resize_main_tab_widget)
 

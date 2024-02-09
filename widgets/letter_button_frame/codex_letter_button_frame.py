@@ -73,5 +73,5 @@ class CodexLetterButtonFrame(QFrame):
         self.layout_styler.add_frames_to_layout(self.layout, frame_tuples)
         self.button_manager.connect_letter_buttons()
 
-    def resize_letter_button_frame(self) -> None:
-        self.button_manager.resize_buttons(self.codex.height())
+    def resize_codex_letter_button_frame(self) -> None:
+        self.button_manager.resize_buttons(self.codex.main_widget.height() * 0.6)

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QFrame
 from PyQt6.QtCore import Qt
-from ..letter_button_frame.letter_button_frame import CodexLetterButtonFrame
+from ..letter_button_frame.codex_letter_button_frame import CodexLetterButtonFrame
 
 if TYPE_CHECKING:
     from widgets.codex.codex import Codex

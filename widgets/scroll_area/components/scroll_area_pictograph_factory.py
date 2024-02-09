@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from Enums import LetterType
 from utilities.TypeChecking.TypeChecking import Letters
 
@@ -19,11 +19,17 @@ from constants import (
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
+
     from widgets.scroll_area.codex_scroll_area import CodexScrollArea
+    from widgets.sequence_builder.components.sequence_builder_scroll_area import (
+        SequenceBuilderScrollArea,
+    )
 
 
 class ScrollAreaPictographFactory:
-    def __init__(self, scroll_area: "CodexScrollArea") -> None:
+    def __init__(
+        self, scroll_area: Union["CodexScrollArea", "SequenceBuilderScrollArea"]
+    ) -> None:
         self.scroll_area = scroll_area
 
     def get_or_create_pictograph(
@@ -43,7 +49,6 @@ class ScrollAreaPictographFactory:
                 all_pictographs[letter] = {}
             all_pictographs[letter][pictograph_key] = pictograph
 
-            # Add pictograph to the specific section
             letter_type = LetterType.get_letter_type(letter)
             section = self.scroll_area.sections_manager.get_section(letter_type)
             section.pictographs[pictograph_key] = pictograph

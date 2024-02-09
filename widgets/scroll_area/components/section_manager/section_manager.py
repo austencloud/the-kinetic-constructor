@@ -59,8 +59,7 @@ class CodexSectionManager:
                 return i
         return len(self.ordered_section_types)
 
-    def get_section(self, letter_type: LetterTypes) -> SectionWidget:
-        return self.create_section(letter_type)
+
 
     def get_pictograph_letter_type(self, pictograph_key: str) -> str:
         letter = pictograph_key.split("_")[0]

@@ -5,6 +5,9 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QScrollArea, QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt
 from utilities.TypeChecking.TypeChecking import Letters
+from widgets.sequence_builder.components.sequence_builder_section_manager import (
+    SequenceBuilderScrollAreaSectionsManager,
+)
 from ...pictograph.pictograph import Pictograph
 from data.rules import get_next_letters
 
@@ -19,11 +22,11 @@ class SequenceBuilderScrollArea(QScrollArea):
         self.sequence_builder = sequence_builder
         self.clickable_option_handler = sequence_builder.clickable_option_handler
         self.display_manager = sequence_builder.display_manager
-        self.sections_manager = sequence_builder.sections_manager
         self.letters = self.main_widget.letters
         self.pictographs: dict[Letters, Pictograph] = {}
         self.stretch_index = -1
         self._setup_ui()
+        self.sections_manager = SequenceBuilderScrollAreaSectionsManager(self)
 
     def _setup_ui(self) -> None:
         self.setWidgetResizable(True)

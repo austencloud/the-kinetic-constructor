@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.letter_button_frame.letter_button_frame import CodexLetterButtonFrame
+from widgets.letter_button_frame.codex_letter_button_frame import CodexLetterButtonFrame
 from ..codex.codex_button_panel import CodexButtonPanel
 from ..codex.codex_image_generator import CodexImageGenerator
 from ..scroll_area.codex_scroll_area import CodexScrollArea
@@ -34,4 +34,4 @@ class Codex(QWidget):
 
     def resize_codex(self) -> None:
         self.scroll_area.update_pictographs()
-        self.letter_button_frame.resize_letter_button_frame()
+        self.letter_button_frame.resize_codex_letter_button_frame()
