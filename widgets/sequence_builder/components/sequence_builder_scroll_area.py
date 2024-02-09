@@ -1,7 +1,14 @@
 from typing import TYPE_CHECKING
 from Enums import LetterType
 from constants import LETTER
-from PyQt6.QtWidgets import QScrollArea, QWidget, QApplication, QHBoxLayout, QSizePolicy
+from PyQt6.QtWidgets import (
+    QScrollArea,
+    QWidget,
+    QApplication,
+    QHBoxLayout,
+    QSizePolicy,
+    QVBoxLayout,
+)
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QScrollArea, QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt
@@ -58,7 +65,7 @@ class SequenceBuilderScrollArea(QScrollArea):
 
     def resize_sequence_builder_scroll_area(self) -> None:
         self.setMinimumWidth(self.main_widget.main_tab_widget.width())
-        self.setMaximumWidth(self.main_widget.main_tab_widget.width())
+
         self.sequence_builder.start_position_handler.resize_start_options()
 
     def _update_pictographs(self, clicked_option: "Pictograph") -> None:
@@ -119,6 +126,9 @@ class SequenceBuilderScrollArea(QScrollArea):
         # Clear existing options
         self.clear()
 
+        # remove the hbox layout and replace it with a vbox layout
+        # Remove the hbox layout and replace it with a vbox layout
+        
         # Fetch the next possible options based on the end position and orientation of the start pictograph
         start_pictograph = self.sequence_builder.current_pictograph
         next_options = self.get_next_options(
@@ -145,6 +155,14 @@ class SequenceBuilderScrollArea(QScrollArea):
         # Ensure all sections are visible and properly sized
         self.sections_manager.show_all_sections()
         self.adjust_sections_size()
+
+    def replace_hbox_with_vbox(self):
+        self.layout.removeItem(self.layout)
+
+        vbox = QVBoxLayout(self.container)
+        vbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        vbox.setContentsMargins(0, 0, 0, 0)
+        self.layout = vbox
 
     def get_next_options(self, end_pos, end_red_ori, end_blue_ori):
         # This function should return a list of dictionaries with data for each next possible option.

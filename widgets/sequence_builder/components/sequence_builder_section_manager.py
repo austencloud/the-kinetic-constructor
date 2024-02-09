@@ -103,9 +103,10 @@ class SequenceBuilderSectionsManager:
         return section.filter_tab
 
     def show_all_sections(self) -> None:
+        self.scroll_area.replace_hbox_with_vbox()
         for section in self.sections.values():
             # section.setup_components()
-            section.setup_header()
+            self.sequence_builder.scroll_area.layout.addWidget(section)
             section.show()
             section.resize_section()
-            self.sequence_builder.left_layout.addWidget(section)
+            # section.header.type_label.adjust_label_size()

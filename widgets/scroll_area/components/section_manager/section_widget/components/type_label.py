@@ -13,7 +13,6 @@ from PyQt6.QtCore import pyqtSignal
 class SectionTypeLabel(QLabel):
     clicked = pyqtSignal()
 
-
     TYPE_MAP = {
         LetterType.Type1: "Dual-Shift",
         LetterType.Type2: "Shift",
@@ -53,9 +52,9 @@ class SectionTypeLabel(QLabel):
 
         styled_text = f"{letter_type_str[0:4]} {letter_type_str[4]}: {styled_type_name}"
         self.setText(styled_text)
-        self.adjust_label_size()
+        self.resize_type_label()
 
-    def adjust_label_size(self) -> None:
+    def resize_type_label(self) -> None:
         font_size = self.section.scroll_area.width() // 34
         self.setStyleSheet(f"font-size: {font_size}px; font-weight: bold;")
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)

@@ -39,7 +39,6 @@ class SequenceBuilder(QFrame):
         self.right_layout = QVBoxLayout()
 
         self.left_layout.addWidget(self.scroll_area)
-
         self.layout.addLayout(self.left_layout)
         self.letter_button_frame.hide()
 
@@ -71,14 +70,16 @@ class SequenceBuilder(QFrame):
             self.letter_button_frame
         ) 
         self.update_current_pictograph(start_pictograph)
-        self.layout.removeItem(self.left_layout)
+        for item in self.layout.children():
+            self.layout.removeItem(item)
         self.right_layout.addWidget(self.letter_button_frame)
         self.letter_button_frame.show()
         self.layout.addLayout(self.left_layout, 5)
         self.layout.addLayout(self.right_layout, 1)
 
         self.scroll_area.initialize_with_options() 
-
+        # for section in self.scroll_area.sections_manager.sections.values():
+        #     section.header.type_label.resize_type_label()
 
     def render_and_store_pictograph(self, pictograph_data: pd.Series):
         pictograph_key = f"{pictograph_data['letter']}_{pictograph_data['start_pos']}→{pictograph_data['end_pos']}"

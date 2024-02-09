@@ -132,8 +132,9 @@ class CodexScrollArea(QScrollArea):
             self.display_manager.COLUMN_COUNT -= 1
         elif not increase and current_size < MAX_COLUMN_COUNT:
             self.display_manager.COLUMN_COUNT += 1
-        self.update_all_pictograph_sizes()
 
+        self.update_all_pictograph_sizes()
+        
     def update_all_pictograph_sizes(self):
         for letter_type in LetterType:
             self.display_manager.order_and_display_pictographs(
