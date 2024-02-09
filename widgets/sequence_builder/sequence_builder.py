@@ -42,10 +42,12 @@ class SequenceBuilder(QFrame):
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.left_layout = QVBoxLayout()
         self.right_layout = QVBoxLayout()
-        self.left_layout.addWidget(self.scroll_area, 5)
-        self.right_layout.addWidget(self.letter_button_frame, 1)
-        self.layout.addLayout(self.left_layout, 5)
-        self.layout.addLayout(self.right_layout, 1)
+
+        self.left_layout.addWidget(self.scroll_area)
+
+        self.layout.addLayout(self.left_layout)
+        # self.layout.addLayout(self.right_layout)
+        self.letter_button_frame.hide()
 
     # Assuming Pictograph class has methods or attributes like end_red_ori and end_blue_ori
     def update_current_pictograph(self, pictograph: Pictograph):
@@ -70,16 +72,23 @@ class SequenceBuilder(QFrame):
         self.start_position_handler = StartPositionHandler(self)
         self.letter_button_frame = SequenceBuilderLetterButtonFrame(self)
 
-
-
     def transition_to_sequence_building(self, start_pictograph: Pictograph):
         # Hide start positions and show letter button frame in the correct layout
         self.start_position_handler.hide_start_positions()
-        self.layout.addWidget(self.letter_button_frame)  # Add button frame to the main layout
+        self.layout.addWidget(
+            self.letter_button_frame
+        )  # Add button frame to the main layout
         self.scroll_area.initialize_with_options()  # Initialize scroll area with the available options
 
         self.update_current_pictograph(start_pictograph)
-        self.scroll_area.show()
+        self.layout.removeItem(self.left_layout)
+        self.right_layout.addWidget(self.letter_button_frame)
+        # show it
+        self.letter_button_frame.show()
+        self.layout.addLayout(self.left_layout, 5)
+        self.layout.addLayout(self.right_layout, 1)
+
+        # self.letter_button_frame.show()
 
     def render_and_store_pictograph(self, pictograph_data: pd.Series):
         pictograph_key = f"{pictograph_data['letter']}_{pictograph_data['start_pos']}→{pictograph_data['end_pos']}"
