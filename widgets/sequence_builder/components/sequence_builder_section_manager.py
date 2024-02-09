@@ -54,7 +54,7 @@ class SequenceBuilderSectionsManager:
         if letter_type not in self.sections:
             correct_index = self.get_correct_index_for_section(letter_type)
             section = SectionWidget(letter_type, self.scroll_area)
-            self.scroll_area.insert_widget_at_index(section, correct_index)
+            self.scroll_area.add_widget_to_layout(section, correct_index)
             self.sections[letter_type] = section
             self.ordered_section_types.append(letter_type)
             self.sections[letter_type] = section
@@ -94,8 +94,8 @@ class SequenceBuilderSectionsManager:
 
     def clear_sections(self) -> None:
         """Clears all sections from the layout."""
-        while self.scroll_area.layout.count():
-            layout_item = self.scroll_area.layout.takeAt(0)
+        while self.scroll_area.container_layout.count():
+            layout_item = self.scroll_area.container_layout.takeAt(0)
             if layout_item.widget():
                 layout_item.widget().hide()
         self.sections.clear()
@@ -107,10 +107,7 @@ class SequenceBuilderSectionsManager:
         return section.filter_tab
 
     def show_all_sections(self) -> None:
-        self.scroll_area.replace_hbox_with_vbox()
         for section in self.sections.values():
-            # section.setup_components()
-            self.sequence_builder.scroll_area.layout.addWidget(section)
+            self.sequence_builder.scroll_area.container_layout.addWidget(section)
             section.show()
             section.resize_section()
-            # section.header.type_label.adjust_label_size()

@@ -60,8 +60,8 @@ class CodexSectionManager:
 
     def clear_sections(self) -> None:
         """Clears all sections from the layout."""
-        while self.scroll_area.layout.count():
-            layout_item = self.scroll_area.layout.takeAt(0)
+        while self.scroll_area.container_layout.count():
+            layout_item = self.scroll_area.container_layout.takeAt(0)
             if layout_item.widget():
                 layout_item.widget().hide()
         self.sections.clear()

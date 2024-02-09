@@ -9,7 +9,7 @@ class SequenceBuilderClickableOptionHandler:
     def __init__(self, sequence_builder: "SequenceBuilder") -> None:
         self.sequence_builder = sequence_builder
 
-    def _get_click_handler(
+    def get_click_handler(
         self, start_pos: "Pictograph", is_start_pos: bool
     ) -> callable:
         """

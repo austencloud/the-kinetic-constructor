@@ -14,7 +14,7 @@ class StartPositionHandler:
 
     def setup_start_positions(self) -> None:
         """Shows options for the starting position."""
-        self.sequence_builder.scroll_area.clear()
+        self.sequence_builder.scroll_area.clear_layout()
         start_pos = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
         for i, position_key in enumerate(start_pos):
             self._add_start_pos_option(position_key, i)

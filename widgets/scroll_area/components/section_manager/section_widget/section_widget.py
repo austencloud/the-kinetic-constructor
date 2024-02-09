@@ -94,3 +94,8 @@ class SectionWidget(QGroupBox):
         self.setSizePolicy(size_policy)
         for pictograph in self.pictographs.values():
             pictograph.view.setSizePolicy(size_policy)
+
+    def adjust_size(self):
+        self.resize_section()
+        self.resize_header()
+        self.filter_tab.visibility_handler.resize_filter_tab()
