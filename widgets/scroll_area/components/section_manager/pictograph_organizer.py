@@ -1,12 +1,12 @@
 from typing import dict, list
 from Enums import LetterType
-from utilities.TypeChecking.TypeChecking import LetterTypes
+from utilities.TypeChecking.TypeChecking import LetterType
 from widgets.pictograph.pictograph import Pictograph
 
 
 class PictographOrganizer:
     def __init__(self):
-        self.pictographs_by_type: dict[LetterTypes, list[Pictograph]] = {}
+        self.pictographs_by_type: dict[LetterType, list[Pictograph]] = {}
 
     def organize_pictographs_by_type(self, pictographs: dict[str, Pictograph]):
         for key, pictograph in pictographs.items():

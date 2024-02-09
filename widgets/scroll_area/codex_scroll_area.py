@@ -1,15 +1,16 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
+from Enums import LetterType
 from utilities.TypeChecking.letter_lists import (
     EIGHT_VARIATIONS,
     FOUR_VARIATIONS,
     SIXTEEN_VARIATIONS,
 )
 from .components.scroll_area_pictograph_factory import ScrollAreaPictographFactory
-from .components.section_manager.section_manager import CodexSectionManager
+from .components.section_manager.codex_section_manager import CodexSectionManager
 from .components.scroll_area_display_manager import ScrollAreaDisplayManager
-from utilities.TypeChecking.TypeChecking import LetterTypes, Letters
+from utilities.TypeChecking.TypeChecking import Letters
 from ..pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
@@ -53,7 +54,7 @@ class CodexScrollArea(QScrollArea):
     def insert_widget_at_index(self, widget: QWidget, index: int) -> None:
         self.layout.insertWidget(index, widget)
 
-    def update_pictographs(self, letter_type: LetterTypes = None) -> None:
+    def update_pictographs(self, letter_type: LetterType = None) -> None:
         deselected_letters = self.pictograph_factory.get_deselected_letters()
         selected_letters = set(self.codex.selected_letters)
 

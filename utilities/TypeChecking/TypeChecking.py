@@ -190,13 +190,6 @@ class AdjustmentNums(Enum):
     INT = int
 
 
-class LetterTypes(Enum):
-    TYPE_1 = "Type1"
-    TYPE_2 = "Type2"
-    TYPE_3 = "Type3"
-    TYPE_4 = "Type4"
-    TYPE_5 = "Type5"
-    TYPE_6 = "Type6"
 
 
 class LetterTypeDescriptions(Enum):

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QGroupBox
+from Enums import LetterType
 from constants import OPP, SAME
-from utilities.TypeChecking.TypeChecking import LetterTypes
 from .components.filter_tab.filter_tab import FilterTab
 from .components.section_header import SectionHeader
 from .....pictograph.pictograph import Pictograph
@@ -15,9 +15,7 @@ if TYPE_CHECKING:
 class SectionWidget(QGroupBox):
     SCROLLBAR_WIDTH = 20
 
-    def __init__(
-        self, letter_type: LetterTypes, scroll_area: "CodexScrollArea"
-    ) -> None:
+    def __init__(self, letter_type: LetterType, scroll_area: "CodexScrollArea") -> None:
         super().__init__(None)
         self.scroll_area = scroll_area
         self.letter_type = letter_type
@@ -42,7 +40,6 @@ class SectionWidget(QGroupBox):
     def resize_section(self) -> None:
         self.setMinimumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
         self.setMaximumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
-
 
         self.filter_tab.visibility_handler.resize_filter_tab()
 

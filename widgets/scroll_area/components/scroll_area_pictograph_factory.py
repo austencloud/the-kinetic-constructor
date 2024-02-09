@@ -50,6 +50,10 @@ class ScrollAreaPictographFactory:
             all_pictographs[letter][pictograph_key] = pictograph
 
             letter_type = LetterType.get_letter_type(letter)
+            for letter_type in LetterType:
+                if letter in letter_type.letters:
+                    letter_type = letter_type
+                    break
             section = self.scroll_area.sections_manager.get_section(letter_type)
             section.pictographs[pictograph_key] = pictograph
 

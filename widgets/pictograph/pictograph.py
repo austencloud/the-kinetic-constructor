@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import (
     QGraphicsPixmapItem,
     QGraphicsSceneMouseEvent,
 )
+from Enums import LetterType
 
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
@@ -11,7 +12,6 @@ from objects.motion.motion import Motion
 from objects.prop.prop import Prop
 
 from utilities.TypeChecking.TypeChecking import (
-    LetterTypes,
     Letters,
     OpenCloseStates,
     SpecificPositions,
@@ -57,7 +57,7 @@ class Pictograph(QGraphicsScene):
     props: dict[Colors, Prop]
     motions: dict[Colors, Motion]
     letter: Letters = None
-    letter_type: LetterTypes
+    letter_type: LetterType
     pictograph_dict: dict
     motion_dict_list: list[dict]
     start_pos: SpecificPositions

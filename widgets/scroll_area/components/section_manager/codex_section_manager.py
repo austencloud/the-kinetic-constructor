@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from Enums import LetterType
 from constants import BLUE_TURNS, RED_TURNS
-from utilities.TypeChecking.TypeChecking import LetterTypes, Letters
+from utilities.TypeChecking.TypeChecking import Letters
 from .section_widget.components.filter_tab.filter_tab import FilterTab
 from .section_widget.section_widget import SectionWidget
 from PyQt6.QtWidgets import QGridLayout, QLabel
@@ -17,16 +17,16 @@ class CodexSectionManager:
 
     def __init__(self, scroll_area: "CodexScrollArea") -> None:
         self.scroll_area = scroll_area
-        self.sections: dict[LetterTypes, SectionWidget] = {}
-        self.filter_tabs_cache: dict[LetterTypes, FilterTab] = {}
-        self.pictograph_cache: dict[Letters, list[LetterTypes]] = {}
-        self.letters_by_type: dict[LetterTypes, list[Letters]] = (
+        self.sections: dict[LetterType, SectionWidget] = {}
+        self.filter_tabs_cache: dict[LetterType, FilterTab] = {}
+        self.pictograph_cache: dict[Letters, list[LetterType]] = {}
+        self.letters_by_type: dict[LetterType, list[Letters]] = (
             self.setup_letters_by_type()
         )
         self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
         self.ordered_section_types = []
 
-    def setup_letters_by_type(self) -> dict[LetterTypes, list[Letters]]:
+    def setup_letters_by_type(self) -> dict[LetterType, list[Letters]]:
         letters_by_type = {}
         for letter_type in LetterType:
             letters_by_type[letter_type.description] = letter_type.letters
@@ -36,7 +36,7 @@ class CodexSectionManager:
         for letter_type in self.letters_by_type:
             self.create_section(letter_type)
 
-    def create_section(self, letter_type: LetterTypes) -> SectionWidget:
+    def create_section(self, letter_type: LetterType) -> SectionWidget:
         if letter_type not in self.sections:
             correct_index = self.get_correct_index_for_section(letter_type)
             section = SectionWidget(letter_type, self.scroll_area)
@@ -48,7 +48,7 @@ class CodexSectionManager:
 
         return self.sections[letter_type]
 
-    def get_correct_index_for_section(self, letter_type: LetterTypes) -> int:
+    def get_correct_index_for_section(self, letter_type: LetterType) -> int:
         desired_position = self.SECTION_ORDER.index(letter_type)
         current_positions = [
             self.SECTION_ORDER.index(typ) for typ in self.ordered_section_types
@@ -84,10 +84,10 @@ class CodexSectionManager:
             section_label, 0, 0, 1, self.scroll_area.display_manager.COLUMN_COUNT
         )
 
-    def get_section(self, letter_type: LetterTypes) -> SectionWidget:
+    def get_section(self, letter_type: LetterType) -> SectionWidget:
         return self.sections.get(letter_type)
 
-    def create_section_if_needed(self, letter_type: LetterTypes) -> None:
+    def create_section_if_needed(self, letter_type: LetterType) -> None:
         if letter_type not in self.sections:
             self.create_section(letter_type)
         section = self.sections[letter_type]
@@ -115,7 +115,7 @@ class CodexSectionManager:
 
     def get_sections_to_show_from_selected_letters(
         self, selected_letters: list[Letters]
-    ) -> list[LetterTypes]:
+    ) -> list[LetterType]:
         sections_to_show = []
         for letter in selected_letters:
             letter_type = LetterType.get_letter_type(letter)

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from Enums import LetterType
 from constants import BLUE_TURNS, RED_TURNS
-from utilities.TypeChecking.TypeChecking import LetterTypes, Letters
+from utilities.TypeChecking.TypeChecking import Letters
 from widgets.pictograph.pictograph import Pictograph
 from ...scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
     FilterTab,
@@ -25,17 +25,17 @@ class SequenceBuilderScrollAreaSectionsManager:
 
     def __init__(self, scroll_area: "SequenceBuilderScrollArea") -> None:
         self.scroll_area = scroll_area
-        self.sections: dict[LetterTypes, SectionWidget] = {}
-        self.filter_tabs_cache: dict[LetterTypes, FilterTab] = {}
-        self.pictograph_cache: dict[Letters, list[LetterTypes]] = {}
-        self.letters_by_type: dict[LetterTypes, list[Letters]] = (
+        self.sections: dict[LetterType, SectionWidget] = {}
+        self.filter_tabs_cache: dict[LetterType, FilterTab] = {}
+        self.pictograph_cache: dict[Letters, list[LetterType]] = {}
+        self.letters_by_type: dict[LetterType, list[Letters]] = (
             self.setup_letters_by_type()
         )
         self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
-        self.ordered_section_types = []
+        self.ordered_section_types: list[LetterType] = []
         self.initialize_sections()
 
-    def setup_letters_by_type(self) -> dict[LetterTypes, list[Letters]]:
+    def setup_letters_by_type(self) -> dict[LetterType, list[Letters]]:
         letters_by_type = {}
         for letter_type in LetterType:
             letters_by_type[letter_type.description] = letter_type.letters
@@ -46,21 +46,22 @@ class SequenceBuilderScrollAreaSectionsManager:
         for letter_type in LetterType:
             self.create_section(letter_type)
 
-    def create_section(self, letter_type: LetterTypes) -> SectionWidget:
-        # Check if section already exists to avoid duplication
+    def create_section(self, letter_type: LetterType) -> SectionWidget:
         if letter_type not in self.sections:
+            correct_index = self.get_correct_index_for_section(letter_type)
             section = SectionWidget(letter_type, self.scroll_area)
-            # Add the section widget to the scroll area layout directly
-            self.scroll_area.layout.addWidget(section)
+            self.scroll_area.insert_widget_at_index(section, correct_index)
             self.sections[letter_type] = section
-            section.hide()  # Ensure the section is visible
+            self.ordered_section_types.append(letter_type)
+            section.setup_components()
+            self.sections[letter_type] = section
 
         return self.sections[letter_type]
 
-    def get_correct_index_for_section(self, letter_type: LetterTypes) -> int:
-        desired_position = self.SECTION_ORDER.index(letter_type)
+    def get_correct_index_for_section(self, letter_type: LetterType) -> int:
+        desired_position = self.SECTION_ORDER.index(letter_type.name)
         current_positions = [
-            self.SECTION_ORDER.index(typ) for typ in self.ordered_section_types
+            self.SECTION_ORDER.index(typ.name) for typ in self.ordered_section_types
         ]
         current_positions.sort()
         for i, pos in enumerate(current_positions):
@@ -68,7 +69,7 @@ class SequenceBuilderScrollAreaSectionsManager:
                 return i
         return len(self.ordered_section_types)
 
-    def get_section(self, letter_type: LetterTypes) -> SectionWidget:
+    def get_section(self, letter_type: LetterType) -> SectionWidget:
         return self.create_section_if_needed(letter_type)
 
     def get_pictograph_letter_type(self, pictograph_key: str) -> str:
@@ -94,7 +95,7 @@ class SequenceBuilderScrollAreaSectionsManager:
             section_label, 0, 0, 1, self.scroll_area.display_manager.COLUMN_COUNT
         )
 
-    def create_section_if_needed(self, letter_type: LetterTypes) -> None:
+    def create_section_if_needed(self, letter_type: LetterType) -> None:
         if letter_type not in self.sections:
             self.create_section(letter_type)
         section = self.sections[letter_type]
@@ -122,7 +123,7 @@ class SequenceBuilderScrollAreaSectionsManager:
 
     def get_sections_to_show_from_selected_letters(
         self, selected_letters: list[Letters]
-    ) -> list[LetterTypes]:
+    ) -> list[LetterType]:
         sections_to_show = []
         for letter in selected_letters:
             letter_type = LetterType.get_letter_type(letter)

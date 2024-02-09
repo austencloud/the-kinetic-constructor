@@ -28,6 +28,9 @@ class SequenceBuilderScrollArea(QScrollArea):
         self._setup_ui()
         self.sections_manager = SequenceBuilderScrollAreaSectionsManager(self)
 
+    def insert_widget_at_index(self, widget: QWidget, index: int) -> None:
+        self.layout.insertWidget(index, widget)
+
     def _setup_ui(self) -> None:
         self.setWidgetResizable(True)
         self.container = QWidget()

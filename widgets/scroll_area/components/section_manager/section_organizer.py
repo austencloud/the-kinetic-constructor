@@ -1,12 +1,12 @@
 from typing import list
-from utilities.TypeChecking.TypeChecking import LetterTypes
+from utilities.TypeChecking.TypeChecking import LetterType
 
 
 class SectionOrganizer:
     SECTION_ORDER = ["Type1", "Type2", "Type3", "Type4", "Type5", "Type6"]
 
     def get_correct_index_for_section(
-        self, letter_type: LetterTypes, ordered_section_types: list[str]
+        self, letter_type: LetterType, ordered_section_types: list[str]
     ) -> int:
         try:
             desired_position = self.SECTION_ORDER.index(letter_type)

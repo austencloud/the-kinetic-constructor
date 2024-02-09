@@ -1,6 +1,6 @@
+from Enums import LetterType
 from constants import ANTI, DASH, PRO, STATIC
 from utilities.TypeChecking.MotionAttributes import MotionTypes
-from utilities.TypeChecking.TypeChecking import LetterTypes
 
 
 motion_type_letter_groups = {
@@ -100,7 +100,7 @@ motion_type_letter_combinations = {
     "Γ": (STATIC, STATIC),
 }
 
-letter_type_motion_type_map: dict[LetterTypes, list[MotionTypes]] = {
+letter_type_motion_type_map: dict[LetterType, list[MotionTypes]] = {
     "Type1": [PRO, ANTI],
     "Type2": [PRO, ANTI, STATIC],
     "Type3": [PRO, ANTI, DASH],

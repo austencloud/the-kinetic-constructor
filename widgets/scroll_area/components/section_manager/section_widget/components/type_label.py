@@ -2,6 +2,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import Qt
 
+from Enums import LetterType
+
+
 if TYPE_CHECKING:
     from ..section_widget import SectionWidget
 from PyQt6.QtCore import pyqtSignal
@@ -33,9 +36,9 @@ class SectionTypeLabel(QLabel):
         self.section = section_widget
         self.set_styled_text(section_widget.letter_type)
 
-    def set_styled_text(self, letter_type: str) -> None:
+    def set_styled_text(self, letter_type: LetterType) -> None:
         type_words = self.TYPE_MAP.get(letter_type, "").split("-")
-
+        letter_type_str = letter_type.name
         styled_words = [
             f"<span style='color: {self.COLORS.get(word, 'black')};'>{word}</span>"
             for word in type_words
@@ -47,7 +50,7 @@ class SectionTypeLabel(QLabel):
             else "".join(styled_words)
         )
 
-        styled_text = f"{letter_type[0:4]} {letter_type[4]}: {styled_type_name}"
+        styled_text = f"{letter_type_str[0:4]} {letter_type_str[4]}: {styled_type_name}"
         self.setText(styled_text)
         self.adjust_label_size()
 
