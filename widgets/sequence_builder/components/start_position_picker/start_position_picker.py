@@ -5,14 +5,14 @@ from widgets.scroll_area.components.scroll_area_pictograph_factory import (
     ScrollAreaPictographFactory,
 )
 
-from widgets.sequence_builder.components.start_pos_picker_scroll_area import (
+from widgets.sequence_builder.components.start_position_picker.start_pos_picker_scroll_area import (
     StartPosPickerScrollArea,
 )
-from ...pictograph.pictograph import Pictograph
+from ....pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ...sequence_builder.sequence_builder import SequenceBuilder
+    from ...sequence_builder import SequenceBuilder
 
 
 class StartPosPicker(QWidget):

@@ -1,21 +1,21 @@
 from typing import TYPE_CHECKING
 from Enums import LetterType
 from utilities.TypeChecking.TypeChecking import Letters
-from ...scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
+from ....scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
     FilterTab,
 )
-from ...scroll_area.components.section_manager.section_widget.section_widget import (
+from ....scroll_area.components.section_manager.section_widget.section_widget import (
     SectionWidget,
 )
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.sequence_builder import SequenceBuilder
-    from widgets.sequence_builder.components.sequence_builder_scroll_area import (
-        SequenceBuilderScrollArea,
+    from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (
+        OptionPickerScrollArea,
     )
+    from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
 
-class SequenceBuilderSectionsManager:
+class OptionPickerSectionsManager:
     """Manages all of the sections in the scroll area. Individual sections are managed by the SectionWidget class."""
 
     SECTION_ORDER = [
@@ -27,7 +27,7 @@ class SequenceBuilderSectionsManager:
         LetterType.Type6,
     ]
 
-    def __init__(self, scroll_area: "SequenceBuilderScrollArea") -> None:
+    def __init__(self, scroll_area: "OptionPickerScrollArea") -> None:
         self.scroll_area = scroll_area
         self.sequence_builder: "SequenceBuilder" = scroll_area.sequence_builder
         self.sections: dict[LetterType, SectionWidget] = {}
@@ -112,7 +112,9 @@ class SequenceBuilderSectionsManager:
     def show_all_sections(self) -> None:
         self.add_sections_to_layout()
         for section in self.sections.values():
-            self.sequence_builder.option_picker.scroll_area.container_layout.addWidget(section)
+            self.sequence_builder.option_picker.scroll_area.container_layout.addWidget(
+                section
+            )
             section.resize_section()
         for section in self.sections.values():
             section.show()

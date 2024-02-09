@@ -15,7 +15,7 @@ from widgets.letter_button_frame.components.letter_button_styler import (
 from .letter_button import LetterButton
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.sequence_builder_letter_button_frame import (
+    from widgets.sequence_builder.components.option_picker.option_picker_letter_button_frame import (
         OptionPickerLetterButtonFrame,
     )
     from widgets.letter_button_frame.codex_letter_button_frame import (

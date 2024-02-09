@@ -2,13 +2,13 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame
 import pandas as pd
 from constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
-from widgets.sequence_builder.components.option_picker import OptionPicker
-from widgets.sequence_builder.components.start_position_picker import (
+from widgets.sequence_builder.components.option_picker.option_picker import OptionPicker
+from widgets.sequence_builder.components.start_position_picker.start_position_picker import (
     StartPosPicker,
 )
 from ..pictograph.pictograph import Pictograph
 
-from .components.click_handler import SequenceBuilderClickHandler
+from .components.option_picker.option_picker_click_handler import OptionPickerClickHandler
 from ..scroll_area.components.sequence_builder_display_manager import (
     SequenceBuilderDisplayManager,
 )
@@ -54,7 +54,7 @@ class SequenceBuilder(QFrame):
                 self.render_and_store_pictograph(row)
 
     def _setup_components(self):
-        self.clickable_option_handler = SequenceBuilderClickHandler(self)
+        self.clickable_option_handler = OptionPickerClickHandler(self)
         self.display_manager = SequenceBuilderDisplayManager(self)
 
     def transition_to_sequence_building(self, start_pictograph: Pictograph):

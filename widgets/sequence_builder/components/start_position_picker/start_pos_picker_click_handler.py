@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
-from ...pictograph.pictograph import Pictograph
+from ....pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
 
-class SequenceBuilderClickHandler:
+class StartPosPickerClickHandler:
     def __init__(self, sequence_builder: "SequenceBuilder") -> None:
         self.sequence_builder = sequence_builder
 

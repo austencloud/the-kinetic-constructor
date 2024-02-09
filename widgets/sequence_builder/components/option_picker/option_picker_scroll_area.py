@@ -2,14 +2,14 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication, QVBoxLayout
 from PyQt6.QtCore import Qt
 from data.rules import get_next_letters
-from ...pictograph.pictograph import Pictograph
-from ...sequence_builder.components.sequence_builder_section_manager import (
-    SequenceBuilderSectionsManager,
+from ....pictograph.pictograph import Pictograph
+from .option_picker_section_manager import (
+    OptionPickerSectionsManager,
 )
-from ...scroll_area.base_scroll_area import BasePictographScrollArea
+from ....scroll_area.base_scroll_area import BasePictographScrollArea
 
 if TYPE_CHECKING:
-    from ...sequence_builder.components.option_picker import OptionPicker
+    from .option_picker import OptionPicker
 
 
 class OptionPickerScrollArea(BasePictographScrollArea):
@@ -22,7 +22,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.letters = self.sequence_builder.main_widget.letters
         self.pictographs = {}
         self.set_layout("HBox")
-        self.sections_manager = SequenceBuilderSectionsManager(self)
+        self.sections_manager = OptionPickerSectionsManager(self)
 
     def update_pictographs(self, clicked_option: "Pictograph"):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)

@@ -1,19 +1,15 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
-from ...scroll_area.components.scroll_area_pictograph_factory import (
+from ....scroll_area.components.scroll_area_pictograph_factory import (
     ScrollAreaPictographFactory,
 )
-from ...sequence_builder.components.option_picker_scroll_area import (
-    OptionPickerScrollArea,
-)
-from ...sequence_builder.components.sequence_builder_letter_button_frame import (
-    OptionPickerLetterButtonFrame,
-)
+from .option_picker_scroll_area import OptionPickerScrollArea
+from .option_picker_letter_button_frame import OptionPickerLetterButtonFrame
 
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ...sequence_builder.sequence_builder import SequenceBuilder
+    from ...sequence_builder import SequenceBuilder
 
 
 class OptionPicker(QWidget):
@@ -40,11 +36,10 @@ class OptionPicker(QWidget):
 
         self.left_layout.addWidget(self.scroll_area)
         self.right_layout.addWidget(self.letter_button_frame)
-        
+
         self.layout.addLayout(self.left_layout, 5)
         self.layout.addLayout(self.right_layout, 1)
         self.letter_button_frame.hide()
-        # self.letter_button_frame.show()
 
     def update_options(self, options):
         while self.layout.count():

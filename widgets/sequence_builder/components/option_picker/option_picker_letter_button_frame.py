@@ -2,14 +2,14 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from utilities.TypeChecking.TypeChecking import Letters
-from ...letter_button_frame.components.sequence_builder_letter_button_manager import (
+from ....letter_button_frame.components.sequence_builder_letter_button_manager import (
     OptionPickerLetterButtonManager,
 )
-from ...letter_button_frame.components.letter_button_frame_layout_styler import (
+from ....letter_button_frame.components.letter_button_frame_layout_styler import (
     LetterButtonFrameLayoutStyler,
 )
 if TYPE_CHECKING:
-    from ...sequence_builder.sequence_builder import SequenceBuilder
+    from ...sequence_builder import SequenceBuilder
 
 
 class OptionPickerLetterButtonFrame(QFrame):

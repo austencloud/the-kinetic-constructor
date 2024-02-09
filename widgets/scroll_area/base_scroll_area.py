@@ -5,8 +5,8 @@ from PyQt6.QtCore import Qt
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.start_position_picker import StartPosPicker
-    from widgets.sequence_builder.components.option_picker import OptionPicker
+    from widgets.sequence_builder.components.start_position_picker.start_position_picker import StartPosPicker
+    from widgets.sequence_builder.components.option_picker.option_picker import OptionPicker
     from widgets.codex.codex import Codex
     from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
