@@ -137,19 +137,3 @@ class SequenceBuilderScrollAreaSectionsManager:
             section.filter_tab = FilterTab(section)
             section.layout.insertWidget(1, section.filter_tab)
         return section.filter_tab
-
-    def update_sections_for_sequence_context(self, end_pos: str):
-        # Filter pictographs for each section based on `end_pos`
-        for letter_type, section in self.sections.items():
-            valid_pictographs = self._filter_pictographs_for_next_step(
-                end_pos, letter_type
-            )
-            section.update_with_pictographs(valid_pictographs)
-
-    def _filter_pictographs_for_next_step(self, end_pos: str, letter_type: str):
-        valid_pictographs = []
-        # Example logic to select pictographs based on end_pos and specific rules
-        for pictograph in self.available_pictographs[letter_type]:
-            if pictograph.start_pos == end_pos:  # Simplified check
-                valid_pictographs.append(pictograph)
-        return valid_pictographs

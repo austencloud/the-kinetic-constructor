@@ -24,7 +24,7 @@ class SequenceBuilderClickableOptionHandler:
             return lambda event: self._on_option_clicked(start_pos)
 
     def _on_option_clicked(self, clicked_option: "Pictograph") -> None:
-        self.sequence_builder._update_pictographs(clicked_option)
+        self.sequence_builder.scroll_area._update_pictographs(clicked_option)
         new_beat = clicked_option.add_to_sequence_manager.create_new_beat()
         self.sequence_builder.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(
             new_beat

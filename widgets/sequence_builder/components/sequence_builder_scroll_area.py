@@ -105,3 +105,14 @@ class SequenceBuilderScrollArea(QScrollArea):
                 col=len(self.pictographs) % self.display_manager.COLUMN_COUNT,
                 is_start_pos=False,
             )
+
+
+    def fix_stretch(self):
+        if self.stretch_index >= 0:
+            item = self.layout.takeAt(self.stretch_index)
+            del item
+        self.layout.addStretch(1)
+        self.stretch_index = self.layout.count()
+
+    def initialize_with_options(self):
+        pass

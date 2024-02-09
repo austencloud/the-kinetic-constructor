@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QVBoxLayout
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout
 import pandas as pd
 from constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
 from widgets.pictograph.pictograph import Pictograph
@@ -39,8 +39,13 @@ class SequenceBuilder(QFrame):
         self._setup_layout()
 
     def _setup_layout(self):
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addWidget(self.scroll_area)
+        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.left_layout = QVBoxLayout()
+        self.right_layout = QVBoxLayout()
+        self.left_layout.addWidget(self.scroll_area, 5)
+        self.right_layout.addWidget(self.letter_button_frame, 1)
+        self.layout.addLayout(self.left_layout, 5)
+        self.layout.addLayout(self.right_layout, 1)
 
     # Assuming Pictograph class has methods or attributes like end_red_ori and end_blue_ori
     def update_current_pictograph(self, pictograph: Pictograph):
@@ -65,12 +70,15 @@ class SequenceBuilder(QFrame):
         self.start_position_handler = StartPositionHandler(self)
         self.letter_button_frame = SequenceBuilderLetterButtonFrame(self)
 
-    def resize_sequence_builder(self) -> None:
-        self.scroll_area.resize_sequence_builder_scroll_area()
+
 
     def transition_to_sequence_building(self, start_pictograph: Pictograph):
+        # Hide start positions and show letter button frame in the correct layout
+        self.start_position_handler.hide_start_positions()
+        self.layout.addWidget(self.letter_button_frame)  # Add button frame to the main layout
+        self.scroll_area.initialize_with_options()  # Initialize scroll area with the available options
+
         self.update_current_pictograph(start_pictograph)
-        self.letter_button_frame.show()
         self.scroll_area.show()
 
     def render_and_store_pictograph(self, pictograph_data: pd.Series):
@@ -93,3 +101,7 @@ class SequenceBuilder(QFrame):
             self.main_widget.all_pictographs[pictograph_data["letter"]][
                 pictograph_key
             ] = new_pictograph
+
+    def resize_sequence_builder(self) -> None:
+        self.scroll_area.resize_sequence_builder_scroll_area()
+        self.letter_button_frame.resize_sequence_builder_letter_button_frame()

@@ -25,7 +25,9 @@ class StartPositionHandler:
         )
         self.sequence_builder.transition_to_sequence_building(start_pos)
 
-
+    def hide_start_positions(self):
+        for start_position_pictograph in self.start_options.values():
+            start_position_pictograph.view.hide()
 
     def _add_start_pos_option(self, position_key: str, column: int) -> None:
         """Adds an option for the specified start position."""
