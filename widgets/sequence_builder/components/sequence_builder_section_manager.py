@@ -104,7 +104,8 @@ class SequenceBuilderScrollAreaSectionsManager:
                 filter_tab = self.create_or_get_filter_tab(section)
                 self.filter_tabs_cache[letter_type] = filter_tab
             section.filter_tab = self.filter_tabs_cache[letter_type]
-
+        return section
+    
     def update_sections_based_on_letters(self, selected_letters: list[Letters]) -> None:
         sections_to_show = self.get_sections_to_show_from_selected_letters(
             selected_letters
