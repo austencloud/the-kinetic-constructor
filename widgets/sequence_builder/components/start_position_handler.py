@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from constants import END_POS, START_POS
 from ...pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:

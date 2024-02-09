@@ -2,16 +2,14 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication, QVBoxLayout
 from PyQt6.QtCore import Qt
 from data.rules import get_next_letters
-from widgets.pictograph.pictograph import Pictograph
-from widgets.sequence_builder.components.sequence_builder_section_manager import (
+from ...pictograph.pictograph import Pictograph
+from ...sequence_builder.components.sequence_builder_section_manager import (
     SequenceBuilderSectionsManager,
 )
-
-from widgets.scroll_area.base_scroll_area import BasePictographScrollArea
+from ...scroll_area.base_scroll_area import BasePictographScrollArea
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker import OptionPicker
-    from widgets.sequence_builder.components.start_position_picker import StartPosPicker
+    from ...sequence_builder.components.option_picker import OptionPicker
 
 
 class OptionPickerScrollArea(BasePictographScrollArea):
@@ -26,7 +24,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.set_layout("HBox")
         self.sections_manager = SequenceBuilderSectionsManager(self)
 
-    def _update_pictographs(self, clicked_option: "Pictograph"):
+    def update_pictographs(self, clicked_option: "Pictograph"):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         current_letter = clicked_option.letter
         next_possible_letters = get_next_letters(current_letter)
@@ -87,7 +85,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         new_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         new_layout.setContentsMargins(0, 0, 0, 0)
 
-        # Transfer widgets from the old layout to the new layout
+        # Transfer .. from the old layout to the new layout
         old_layout = self.container.layout()
         while old_layout and old_layout.count():
             item = old_layout.takeAt(0)

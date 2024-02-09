@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QFrame
 import pandas as pd
 from constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
 from widgets.sequence_builder.components.option_picker import OptionPicker
@@ -7,18 +7,10 @@ from widgets.sequence_builder.components.start_position_picker import (
     StartPosPicker,
 )
 from ..pictograph.pictograph import Pictograph
-from ..sequence_builder.components.sequence_builder_letter_button_frame import (
-    OptionPickerLetterButtonFrame,
-)
 
-from .components.sequence_builder_scroll_area import SequenceBuilderScrollArea
-from .components.clickable_option_handler import SequenceBuilderClickableOptionHandler
-from .components.start_position_handler import StartPositionHandler
+from .components.click_handler import SequenceBuilderClickHandler
 from ..scroll_area.components.sequence_builder_display_manager import (
     SequenceBuilderDisplayManager,
-)
-from ..scroll_area.components.scroll_area_pictograph_factory import (
-    ScrollAreaPictographFactory,
 )
 
 if TYPE_CHECKING:
@@ -48,7 +40,6 @@ class SequenceBuilder(QFrame):
         self.get_next_options(pictograph.end_pos)
 
     def on_start_position_selected(self, position: str):
-        # Logic to initialize option_picker based on selected start position
         self.option_picker.scroll_area.initialize_with_options()
 
         options = self.get_next_options(position)
@@ -63,7 +54,7 @@ class SequenceBuilder(QFrame):
                 self.render_and_store_pictograph(row)
 
     def _setup_components(self):
-        self.clickable_option_handler = SequenceBuilderClickableOptionHandler(self)
+        self.clickable_option_handler = SequenceBuilderClickHandler(self)
         self.display_manager = SequenceBuilderDisplayManager(self)
 
     def transition_to_sequence_building(self, start_pictograph: Pictograph):
