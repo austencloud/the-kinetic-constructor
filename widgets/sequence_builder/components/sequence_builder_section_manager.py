@@ -21,7 +21,14 @@ if TYPE_CHECKING:
 class SequenceBuilderSectionsManager:
     """Manages all of the sections in the scroll area. Individual sections are managed by the SectionWidget class."""
 
-    SECTION_ORDER = ["Type1", "Type2", "Type3", "Type4", "Type5", "Type6"]
+    SECTION_ORDER = [
+        LetterType.Type1,
+        LetterType.Type2,
+        LetterType.Type3,
+        LetterType.Type4,
+        LetterType.Type5,
+        LetterType.Type6,
+    ]
 
     def __init__(self, scroll_area: "SequenceBuilderScrollArea") -> None:
         self.scroll_area = scroll_area
@@ -59,9 +66,9 @@ class SequenceBuilderSectionsManager:
         return self.sections[letter_type]
 
     def get_correct_index_for_section(self, letter_type: LetterType) -> int:
-        desired_position = self.SECTION_ORDER.index(letter_type.name)
+        desired_position = self.SECTION_ORDER.index(letter_type)
         current_positions = [
-            self.SECTION_ORDER.index(typ.name) for typ in self.ordered_section_types
+            self.SECTION_ORDER.index(typ) for typ in self.ordered_section_types
         ]
         current_positions.sort()
         for i, pos in enumerate(current_positions):

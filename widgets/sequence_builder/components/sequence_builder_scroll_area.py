@@ -128,7 +128,8 @@ class SequenceBuilderScrollArea(QScrollArea):
 
         # remove the hbox layout and replace it with a vbox layout
         # Remove the hbox layout and replace it with a vbox layout
-        
+        self.replace_hbox_with_vbox()
+
         # Fetch the next possible options based on the end position and orientation of the start pictograph
         start_pictograph = self.sequence_builder.current_pictograph
         next_options = self.get_next_options(
@@ -174,6 +175,7 @@ class SequenceBuilderScrollArea(QScrollArea):
 
     def adjust_sections_size(self):
         for section in self.sections_manager.sections.values():
-            section.set_size_policy(
-                QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
-            )
+            # section.set_size_policy(
+            #     QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+            # )
+            pass
