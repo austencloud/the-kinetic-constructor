@@ -1,5 +1,5 @@
 from Enums import LetterType
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 from PyQt6.QtWidgets import QHBoxLayout, QSizePolicy
 from PyQt6.QtCore import QSize, Qt
@@ -15,11 +15,21 @@ from widgets.letter_button_frame.components.letter_button_styler import (
 from .letter_button import LetterButton
 
 if TYPE_CHECKING:
-    from widgets.letter_button_frame.codex_letter_button_frame import CodexLetterButtonFrame
+    from widgets.sequence_builder.components.sequence_builder_letter_button_frame import (
+        SequenceBuilderLetterButtonFrame,
+    )
+    from widgets.letter_button_frame.codex_letter_button_frame import (
+        CodexLetterButtonFrame,
+    )
 
 
 class LetterButtonManager:
-    def __init__(self, letter_button_frame: "CodexLetterButtonFrame") -> None:
+    def __init__(
+        self,
+        letter_button_frame: Union[
+            "CodexLetterButtonFrame", "SequenceBuilderLetterButtonFrame"
+        ],
+    ) -> None:
         self.letter_rows = letter_button_frame.letter_rows
         self.icon_dir = LETTER_BTN_ICON_DIR
         self.buttons: dict[Letters, LetterButton] = {}
