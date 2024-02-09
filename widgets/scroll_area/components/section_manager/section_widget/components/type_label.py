@@ -13,13 +13,14 @@ from PyQt6.QtCore import pyqtSignal
 class SectionTypeLabel(QLabel):
     clicked = pyqtSignal()
 
+
     TYPE_MAP = {
-        "Type1": "Dual-Shift",
-        "Type2": "Shift",
-        "Type3": "Cross-Shift",
-        "Type4": "Dash",
-        "Type5": "Dual-Dash",
-        "Type6": "Static",
+        LetterType.Type1: "Dual-Shift",
+        LetterType.Type2: "Shift",
+        LetterType.Type3: "Cross-Shift",
+        LetterType.Type4: "Dash",
+        LetterType.Type5: "Dual-Dash",
+        LetterType.Type6: "Static",
     }
 
     COLORS = {

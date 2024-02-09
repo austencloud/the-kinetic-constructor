@@ -31,7 +31,7 @@ class LetterButtonManager:
             for row in rows:
                 for letter_str in row:
                     letter_type = LetterType.get_letter_type(letter_str)
-                    icon_path = f"{self.icon_dir}/{letter_type}/{letter_str}.svg"
+                    icon_path = f"{self.icon_dir}/{letter_type.name}/{letter_str}.svg"
                     button = self._create_letter_button(icon_path, letter_str)
                     self.buttons[letter_str] = button
 

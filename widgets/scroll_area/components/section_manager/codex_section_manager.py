@@ -13,28 +13,23 @@ if TYPE_CHECKING:
 class CodexSectionManager:
     """Manages all of the sections in the scroll area. Individual sections are managed by the SectionWidget class."""
 
-    SECTION_ORDER = ["Type1", "Type2", "Type3", "Type4", "Type5", "Type6"]
+    SECTION_ORDER = [
+        LetterType.Type1,
+        LetterType.Type2,
+        LetterType.Type3,
+        LetterType.Type4,
+        LetterType.Type5,
+        LetterType.Type6,
+    ]
 
     def __init__(self, scroll_area: "CodexScrollArea") -> None:
         self.scroll_area = scroll_area
         self.sections: dict[LetterType, SectionWidget] = {}
         self.filter_tabs_cache: dict[LetterType, FilterTab] = {}
         self.pictograph_cache: dict[Letters, list[LetterType]] = {}
-        self.letters_by_type: dict[LetterType, list[Letters]] = (
-            self.setup_letters_by_type()
-        )
-        self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
-        self.ordered_section_types = []
 
-    def setup_letters_by_type(self) -> dict[LetterType, list[Letters]]:
-        letters_by_type = {}
-        for letter_type in LetterType:
-            letters_by_type[letter_type.description] = letter_type.letters
-        return letters_by_type
-
-    def initialize_sections(self) -> None:
-        for letter_type in self.letters_by_type:
-            self.create_section(letter_type)
+        self.pictographs_by_type = {type: [] for type in LetterType}
+        self.ordered_section_types: list[LetterType] = []
 
     def create_section(self, letter_type: LetterType) -> SectionWidget:
         if letter_type not in self.sections:
@@ -59,14 +54,9 @@ class CodexSectionManager:
                 return i
         return len(self.ordered_section_types)
 
-
-
-    def get_pictograph_letter_type(self, pictograph_key: str) -> str:
+    def get_pictograph_letter_type(self, pictograph_key: str) -> LetterType:
         letter = pictograph_key.split("_")[0]
-        for letter_type, letters in self.letters_by_type.items():
-            if letter in letters:
-                return letter_type
-        return "Unknown"
+        return LetterType.get_letter_type(letter)
 
     def clear_sections(self) -> None:
         """Clears all sections from the layout."""

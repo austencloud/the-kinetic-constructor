@@ -1,5 +1,6 @@
 import logging
 from typing import TYPE_CHECKING
+from Enums import LetterType
 from widgets.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.letter_lists import (
     EIGHT_VARIATIONS,
@@ -25,14 +26,9 @@ class ScrollAreaDisplayManager:
         self.scroll_area = scroll_area
         self.section_indices = {}  # Track indices for each section's grid layout
 
-    def order_and_display_pictographs(self, letter_type: str) -> None:
-        # Calculate the indices for the current section based on the selected letters.
+    def order_and_display_pictographs(self, letter_type: LetterType) -> None:
         self.calculate_section_indices(letter_type)
-        
-        # Get the ordered pictographs for the current section.
         ordered_pictographs = self.get_ordered_pictographs_for_section(letter_type)
-        
-        # Add each pictograph to the layout.
         for index, (key, pictograph) in enumerate(ordered_pictographs.items()):
             self.add_pictograph_to_layout(pictograph, index)
 
@@ -45,19 +41,11 @@ class ScrollAreaDisplayManager:
         )
 
         if section:
-            # Calculate the row and column based on the index.
             row, col = divmod(index, self.COLUMN_COUNT)
-
             logging.debug(f"Adding {pictograph.letter} at position: ({row}, {col})")
-
-            # Add the pictograph to the layout at the calculated position.
             section.pictograph_frame.layout.addWidget(pictograph.view, row, col)
-
-            # Update the next available index for this section.
             next_index = index + 1
             self.section_indices[letter_type] = divmod(next_index, self.COLUMN_COUNT)
-
-            # Resize the pictograph view as necessary.
             pictograph.view.resize_for_scroll_area()
 
 
@@ -119,9 +107,8 @@ class ScrollAreaDisplayManager:
         ]
 
     def get_ordered_pictographs_for_section(
-        self, letter_type: str
+        self, letter_type: LetterType
     ) -> dict[Letters, Pictograph]:
-        # Filter the pictographs for the current section based on the letter type.
         return {
             k: v
             for k, v in sorted(

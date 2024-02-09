@@ -119,12 +119,11 @@ class LetterType(Enum):
         return self._description
 
     @staticmethod
-    def get_letter_type(str: str) -> str | None:
+    def get_letter_type(str: str) -> "LetterType":
         for letter_type in LetterType:
             if str in letter_type.letters:
-                return letter_type.name.replace("_", "").lower().capitalize()
-        return None
-
+                return letter_type
+                
 
 class MotionCombinationType(Enum):
     DUAL_SHIFT = "Dual-Shift"

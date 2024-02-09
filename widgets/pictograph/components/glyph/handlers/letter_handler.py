@@ -10,12 +10,12 @@ if TYPE_CHECKING:
     from ..glyph import GlyphManager
 
 SVG_PATHS = {
-    Type1: "Type1/{letter}.svg",
-    Type2: "Type2/{letter}.svg",
-    Type3: "Type2/{letter[0]}.svg",
-    Type4: "Type4/{letter}.svg",
-    Type5: "Type4/{letter[0]}.svg",
-    Type6: "Type6/{letter}.svg",
+    LetterType.Type1: "Type1/{letter}.svg",
+    LetterType.Type2: "Type2/{letter}.svg",
+    LetterType.Type3: "Type2/{letter[0]}.svg",
+    LetterType.Type4: "Type4/{letter}.svg",
+    LetterType.Type5: "Type4/{letter[0]}.svg",
+    LetterType.Type6: "Type6/{letter}.svg",
 }
 
 SVG_BASE_PATH = "images/letters_trimmed"

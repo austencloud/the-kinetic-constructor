@@ -33,7 +33,6 @@ class LetterButtonClickHandler:
             button.press()
 
         if letter in self.codex.selected_letters:
-            letter_type = letter_type
             self.section_manager.create_section_if_needed(letter_type)
 
         for section in self.section_manager.sections.values():
