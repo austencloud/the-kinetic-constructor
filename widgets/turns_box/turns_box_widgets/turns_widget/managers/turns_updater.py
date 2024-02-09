@@ -1,7 +1,7 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from Enums import LetterType
 from constants import *
-from utilities.TypeChecking.MotionAttributes import Turns, PropRotDirs
+from utilities.TypeChecking.MotionAttributes import Colors, LeadStates, MotionTypes, Turns, PropRotDirs
 
 
 if TYPE_CHECKING:
@@ -97,7 +97,7 @@ class TurnsUpdater:
         """Determine the property rotation direction."""
 
         self.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.show_vtg_dir_buttons()
-        # self.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.same_button.press()
+        self.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.same_button.press()
         if (
             not self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[SAME]
             and not self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[OPP]
@@ -130,3 +130,4 @@ class TurnsUpdater:
     def _clamp_turns(self, turns: Turns) -> Turns:
         """Clamp the turns value to be within allowable range."""
         return max(0, min(3, turns))
+
