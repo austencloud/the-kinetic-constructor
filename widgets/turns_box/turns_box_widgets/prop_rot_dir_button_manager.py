@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING, Union
+from Enums import LetterType
 from constants import (
     BLUE,
     CLOCKWISE,
@@ -16,7 +17,12 @@ from constants import (
     Type5,
     Type6,
 )
-from utilities.TypeChecking.MotionAttributes import PropRotDirs
+from utilities.TypeChecking.MotionAttributes import (
+    Colors,
+    LeadStates,
+    MotionTypes,
+    PropRotDirs,
+)
 from utilities.TypeChecking.TypeChecking import VtgDirections
 from widgets.factories.button_factory.button_factory import ButtonFactory
 from ...factories.button_factory.buttons.rot_dir_buttons import (
@@ -35,9 +41,9 @@ class PropRotDirButtonManager:
     def __init__(self, turns_box: "TurnsBox") -> None:
         self.turns_box = turns_box
         self.previous_turns = 0
-        self.prop_rot_dir_buttons: list[
-            PropRotDirButton
-        ] = self._setup_prop_rot_dir_buttons()
+        self.prop_rot_dir_buttons: list[PropRotDirButton] = (
+            self._setup_prop_rot_dir_buttons()
+        )
         self.buttons = self.prop_rot_dir_buttons
 
     def _setup_prop_rot_dir_buttons(self) -> list[QPushButton]:
@@ -149,12 +155,12 @@ class PropRotDirButtonManager:
         self.ccw_button.unpress()
 
     def update_visibility_based_on_motion(
-        self, new_turns
+        self, new_turns, attribute_value: Union[Colors, MotionTypes, LeadStates]
     ) -> None:
         if self.turns_box.turns_panel.filter_tab.section.letter_type in [
-            Type4,
-            Type5,
-            Type6,
+            LetterType.Type4,
+            LetterType.Type5,
+            LetterType.Type6,
         ]:
             if new_turns > 0:
                 if self.previous_turns == 0:
