@@ -9,9 +9,10 @@ from .....turns_box.turns_box_widgets.vtg_dir_button_manager import VtgDirButton
 from .components.pictograph_frame import ScrollAreaSectionPictographFrame
 
 if TYPE_CHECKING:
-    from .....sequence_builder.components.sequence_builder_scroll_area import (
-        SequenceBuilderScrollArea,
+    from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (
+        OptionPickerScrollArea,
     )
+
     from ....codex_scroll_area import CodexScrollArea
 
 
@@ -21,7 +22,7 @@ class SectionWidget(QGroupBox):
     def __init__(
         self,
         letter_type: LetterType,
-        scroll_area: Union["CodexScrollArea", "SequenceBuilderScrollArea"],
+        scroll_area: Union["CodexScrollArea", "OptionPickerScrollArea"],
     ) -> None:
         super().__init__(None)
         self.scroll_area = scroll_area
@@ -53,7 +54,7 @@ class SectionWidget(QGroupBox):
     def resize_section(self) -> None:
         self.setMinimumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
         self.setMaximumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
-        self.filter_tab.visibility_handler.resize_filter_tab()
+        # self.filter_tab.visibility_handler.resize_filter_tab()
         # self.resize_header()
 
     def toggle_section(self) -> None:

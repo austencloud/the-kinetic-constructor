@@ -16,7 +16,6 @@ if TYPE_CHECKING:
 
 
 class StartPosPicker(QWidget):
-    start_position_selected = pyqtSignal(str)  # Signal to emit the selected position
 
     def __init__(self, sequence_builder: "SequenceBuilder", parent=None):
         super().__init__(parent)
@@ -60,13 +59,24 @@ class StartPosPicker(QWidget):
                     pictograph_dict[START_POS] == start_pos
                     and pictograph_dict[END_POS] == end_pos
                 ):
-                    start_option = self.pictograph_factory.create_pictograph()
-                    self.start_options[letter] = start_option
-                    start_option.letter = letter
-                    start_option.start_pos = start_pos
-                    start_option.end_pos = end_pos
-                    self.scroll_area._add_option_to_layout(start_option, True)
-                    start_option.updater.update_pictograph(pictograph_dict)
+                    start_position_pictograph = (
+                        self.pictograph_factory.create_pictograph()
+                    )
+                    self.start_options[letter] = start_position_pictograph
+                    start_position_pictograph.letter = letter
+                    start_position_pictograph.start_pos = start_pos
+                    start_position_pictograph.end_pos = end_pos
+                    self.scroll_area._add_option_to_layout(
+                        start_position_pictograph, True
+                    )
+                    start_position_pictograph.updater.update_pictograph(pictograph_dict)
+
+                    # connect to on_start_pos_clicked
+                    start_position_pictograph.view.mousePressEvent = (
+                        lambda event: self.on_start_pos_clicked(
+                            start_position_pictograph
+                        )
+                    )
 
     def resize_start_position_picker(self) -> None:
         self.scroll_area.resize_start_pos_picker_scroll_area()
@@ -90,6 +100,3 @@ class StartPosPicker(QWidget):
             view.view_scale = view_width / view.pictograph.width()
             view.resetTransform()
             view.scale(view.view_scale, view.view_scale)
-
-    def on_start_position_selected(self, position):
-        self.start_position_selected.emit(position)

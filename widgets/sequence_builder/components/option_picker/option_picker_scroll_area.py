@@ -80,19 +80,16 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             self.add_pictograph(option_data)
 
     def replace_layout_with_vbox(self):
-        # Create a new QVBoxLayout
         new_layout = QVBoxLayout()
         new_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         new_layout.setContentsMargins(0, 0, 0, 0)
 
-        # Transfer .. from the old layout to the new layout
         old_layout = self.container.layout()
         while old_layout and old_layout.count():
             item = old_layout.takeAt(0)
             if item.widget():
                 new_layout.addWidget(item.widget())
 
-        # Set the new layout on the container
         self.container.setLayout(new_layout)
         self.container_layout = new_layout
 

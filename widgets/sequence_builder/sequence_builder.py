@@ -25,32 +25,19 @@ class SequenceBuilder(QFrame):
         self.main_widget = main_widget
         self.current_pictograph: Pictograph = None
         self.df = pd.read_csv("PictographDataframe.csv")  # Load the dataframe
-        self.sections_manager_loaded = False
         self.selected_letters = None
         self.start_position_picked = False
         self._setup_components()
-
         self.start_position_picker = StartPosPicker(self)
         self.option_picker = OptionPicker(self)
         self.setLayout(QHBoxLayout())
         self.layout().addWidget(self.start_position_picker)
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.start_position_picker.start_position_selected.connect(
-            self.on_start_position_selected
-        )
-        # add black borders to everything
-        self.setStyleSheet("QFrame {border: 1px solid black;}")
 
     def update_current_pictograph(self, pictograph: Pictograph):
         self.current_pictograph = pictograph
         self.current_end_red_ori = pictograph.red_motion.end_ori
         self.current_end_blue_ori = pictograph.blue_motion.end_ori
         self.get_next_options(pictograph.end_pos)
-
-    def on_start_position_selected(self, position: str):
-        self.option_picker.scroll_area.initialize_with_options()
-        options = self.get_next_options(position)
-        self.option_picker.update_options(options)
 
     def get_next_options(self, end_pos):
         """Fetches and renders next options based on the end position."""
@@ -68,8 +55,10 @@ class SequenceBuilder(QFrame):
         self.start_position_picker.hide_start_positions()
         self.update_current_pictograph(start_pictograph)
         self.start_position_picked = True
-        self.start_position_picker.hide()
+        self.layout().removeWidget(self.start_position_picker)
+        self.layout().addWidget(self.option_picker)
         self.option_picker.show()
+        # self.option_picker.scroll_area.initialize_with_options()
 
     def render_and_store_pictograph(self, pictograph_data: pd.Series):
         pictograph_key = f"{pictograph_data['letter']}_{pictograph_data['start_pos']}→{pictograph_data['end_pos']}"
