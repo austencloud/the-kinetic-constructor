@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QPointF, QPoint, Qt
-
+from data.prop_class_mapping import prop_class_mapping
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from objects.motion.motion import Motion
@@ -183,26 +183,3 @@ class PictographInit:
             START_ORI: None,
         }
         return Motion(self.pictograph, motion_dict)
-
-
-prop_class_mapping = {
-    PropTypes.Staff: Staff,
-    PropTypes.BigStaff: BigStaff,
-    PropTypes.Club: Club,
-    PropTypes.Fan: Fan,
-    PropTypes.BigFan: BigFan,
-    PropTypes.MiniHoop: MiniHoop,
-    PropTypes.Buugeng: Buugeng,
-    PropTypes.BigBuugeng: BigBuugeng,
-    PropTypes.Fractalgeng: Fractalgeng,
-    PropTypes.Triad: Triad,
-    PropTypes.BigTriad: BigTriad,
-    PropTypes.DoubleStar: DoubleStar,
-    PropTypes.BigHoop: BigHoop,
-    PropTypes.BigDoubleStar: BigDoubleStar,
-    PropTypes.Quiad: Quiad,
-    PropTypes.Sword: Sword,
-    PropTypes.Guitar: Guitar,
-    PropTypes.Ukulele: Ukulele,
-    PropTypes.Chicken: Chicken,
-}

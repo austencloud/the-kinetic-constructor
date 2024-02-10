@@ -145,7 +145,6 @@ class PropAttribute(Enum):
     COLOR = "color"
     PROP_TYPE = "prop_type"
     LOC = "loc"
-    AXIS = "axis"
     ORI = "ori"
 
 

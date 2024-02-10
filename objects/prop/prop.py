@@ -19,6 +19,20 @@ if TYPE_CHECKING:
 
 
 class Prop(GraphicalObject):
+    """
+    A prop object that can be added to a pictograph.
+
+    Parameters
+    ----------
+    pictograph : Pictograph
+        The pictograph to which the prop belongs.
+    prop_dict : dict
+        A dictionary containing the prop's attributes.
+    motion : Motion
+        The motion to which the prop belongs.
+    """
+
+
     loc: Locations
     ori: Orientations = None
     axis: Axes

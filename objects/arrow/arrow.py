@@ -9,12 +9,25 @@ from ..graphical_object.graphical_object import GraphicalObject
 from utilities.TypeChecking.MotionAttributes import Colors, Locations, Turns
 from utilities.TypeChecking.TypeChecking import Handpaths
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from ..motion.motion import Motion
     from widgets.pictograph.pictograph import Pictograph
 
 
 class Arrow(GraphicalObject):
+    """
+    An arrow object that can be added to a pictograph.
+
+    Parameters
+    ----------
+    pictograph : Pictograph
+        The pictograph to which the arrow belongs.
+    arrow_dict : dict
+        A dictionary containing the arrow's attributes.
+
+    """
+
     svg_cache = {}
     turns: Turns
     motion: "Motion"

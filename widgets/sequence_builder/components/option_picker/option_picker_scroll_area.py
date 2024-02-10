@@ -43,10 +43,10 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.layout.addStretch(1)
         self.stretch_index = self.layout.count()
 
-    def initialize_with_options(self):
+    def update_pictographs(self):
         """Initialize scroll area with options after a start pictograph is selected."""
-        start_pictograph = self.option_picker.sequence_builder.current_pictograph
-        next_options = self.get_next_options(start_pictograph)
+        current_pictograph = self.option_picker.sequence_builder.current_pictograph
+        next_options = self.get_next_options(current_pictograph)
         for option_dict in next_options:
             self.sequence_builder.render_and_store_pictograph(option_dict)
 
@@ -104,3 +104,4 @@ class OptionPickerScrollArea(BasePictographScrollArea):
     def update_all_pictograph_sizes(self):
         for letter_type in LetterType:
             self.display_manager.order_and_display_pictographs(letter_type)
+

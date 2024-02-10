@@ -16,6 +16,7 @@ from ..scroll_area.components.option_picker_display_manager import (
 )
 
 from widgets.sequence_builder.components.option_picker.option_picker import OptionPicker
+
 if TYPE_CHECKING:
     from ..main_widget.main_widget import MainWidget
 
@@ -66,7 +67,7 @@ class SequenceBuilder(QFrame):
         self.option_picker.show()
         self.option_picker.scroll_area.resize_option_picker_scroll_area()
         self.option_picker.scroll_area.sections_manager.show_all_sections()
-        self.option_picker.scroll_area.initialize_with_options()
+        self.option_picker.scroll_area.update_pictographs()
         for letter_type in LetterType:
             self.option_picker.scroll_area.display_manager.order_and_display_pictographs(
                 letter_type

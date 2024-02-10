@@ -24,9 +24,8 @@ class OptionPickerClickHandler:
             return lambda event: self.on_option_clicked(start_pos)
 
     def on_option_clicked(self, clicked_option: "Pictograph") -> None:
-        self.sequence_builder.option_picker.scroll_area.update_pictographs(
-            clicked_option
-        )
+        self.sequence_builder.current_pictograph = clicked_option
+        self.sequence_builder.option_picker.scroll_area.update_pictographs()
         new_beat = clicked_option.add_to_sequence_manager.create_new_beat()
         self.sequence_builder.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(
             new_beat
