@@ -9,7 +9,7 @@ from utilities.TypeChecking.letter_lists import (
 )
 from .components.scroll_area_pictograph_factory import ScrollAreaPictographFactory
 from .components.section_manager.codex_section_manager import CodexSectionManager
-from .components.scroll_area_display_manager import ScrollAreaDisplayManager
+from .components.scroll_area_display_manager import CodexDisplayManager
 from utilities.TypeChecking.TypeChecking import Letters
 from ..pictograph.pictograph import Pictograph
 from PyQt6.QtGui import QWheelEvent
@@ -30,7 +30,7 @@ class CodexScrollArea(QScrollArea):
         self._setup_managers()
 
     def _setup_managers(self) -> None:
-        self.display_manager = ScrollAreaDisplayManager(self)
+        self.display_manager = CodexDisplayManager(self)
         self.sections_manager = CodexSectionManager(self)
         self.pictograph_factory = ScrollAreaPictographFactory(self)
 

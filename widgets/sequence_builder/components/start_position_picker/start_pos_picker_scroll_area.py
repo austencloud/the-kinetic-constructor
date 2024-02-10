@@ -2,12 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication, QVBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
 from data.rules import get_next_letters
-from widgets.scroll_area.components.scroll_area_display_manager import (
-    ScrollAreaDisplayManager,
-)
-from widgets.sequence_builder.components.option_picker.option_picker_section_manager import (
-    OptionPickerSectionsManager,
-)
+
 
 from ....pictograph.pictograph import Pictograph
 from widgets.scroll_area.base_scroll_area import BasePictographScrollArea

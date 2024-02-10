@@ -33,10 +33,7 @@ class OptionPickerSectionsManager:
         self.sections: dict[LetterType, SectionWidget] = {}
         self.filter_tabs_cache: dict[LetterType, FilterTab] = {}
         self.pictograph_cache: dict[Letters, list[LetterType]] = {}
-
         self.ordered_section_types: list[LetterType] = []
-
-
 
     def initialize_sections(self) -> None:
         for letter_type in LetterType:

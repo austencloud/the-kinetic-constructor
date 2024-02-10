@@ -65,7 +65,8 @@ class SequenceBuilder(QFrame):
         self.option_picker.scroll_area.resize_option_picker_scroll_area()
         self.option_picker.scroll_area.sections_manager.show_all_sections()
         self.option_picker.scroll_area.initialize_with_options()
-        self.option_picker.scroll_area.display_manager.order_and_display_pictographs()
+        for letter_type in LetterType:
+            self.option_picker.scroll_area.display_manager.order_and_display_pictographs(letter_type)
 
     def render_and_store_pictograph(self, pictograph_df: pd.Series):
         pictograph_dict = pictograph_df.to_dict()

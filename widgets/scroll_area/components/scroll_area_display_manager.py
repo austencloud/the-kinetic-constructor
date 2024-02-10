@@ -22,13 +22,11 @@ if TYPE_CHECKING:
 logging.basicConfig(level=logging.DEBUG)
 
 
-class ScrollAreaDisplayManager:
+class CodexDisplayManager:
     SPACING = 5
     COLUMN_COUNT = 8
 
-    def __init__(
-        self, scroll_area: Union["CodexScrollArea", "OptionPickerScrollArea"]
-    ) -> None:
+    def __init__(self, scroll_area: "CodexScrollArea") -> None:
         self.scroll_area = scroll_area
         self.section_indices = {}  # Track indices for each section's grid layout
 

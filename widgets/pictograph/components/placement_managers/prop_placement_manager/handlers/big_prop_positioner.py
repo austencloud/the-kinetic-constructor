@@ -14,10 +14,12 @@ class BigPropPositioner:
         if self.pictograph.check.ends_in_non_hybrid_ori():
             for prop in self.beta_prop_positioner.classifier.big_props:
                 self.ppm.default_positioner.set_prop_to_default_loc(prop)
-                (
-                    red_direction,
-                    blue_direction,
-                ) = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
+                red_direction = self.ppm.dir_calculator.get_dir(
+                    self.pictograph.red_motion
+                )
+                blue_direction = self.ppm.dir_calculator.get_dir(
+                    self.pictograph.blue_motion
+                )
                 self.beta_prop_positioner.move_prop(
                     self.pictograph.red_prop, red_direction
                 )

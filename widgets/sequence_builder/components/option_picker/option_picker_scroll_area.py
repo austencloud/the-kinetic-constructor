@@ -28,7 +28,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.sequence_builder = option_picker.sequence_builder
         self.clickable_option_handler = self.sequence_builder.clickable_option_handler
         self.letters = self.sequence_builder.letters
-        self.pictographs = {}
+        self.pictographs: dict[str, Pictograph] = {}
         self.stretch_index = -1
 
         self.set_layout("VBox")
@@ -108,4 +108,4 @@ class OptionPickerScrollArea(BasePictographScrollArea):
 
     def update_all_pictograph_sizes(self):
         for letter_type in LetterType:
-            self.display_manager.order_and_display_pictographs()
+            self.display_manager.order_and_display_pictographs(letter_type)

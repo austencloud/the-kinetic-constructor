@@ -58,14 +58,6 @@ class CodexSectionManager:
         letter = pictograph_key.split("_")[0]
         return LetterType.get_letter_type(letter)
 
-    def clear_sections(self) -> None:
-        """Clears all sections from the layout."""
-        while self.scroll_area.container_layout.count():
-            layout_item = self.scroll_area.container_layout.takeAt(0)
-            if layout_item.widget():
-                layout_item.widget().hide()
-        self.sections.clear()
-
     def add_section_label_to_layout(
         self, section_label: QLabel, section_layout: QGridLayout
     ) -> None:
