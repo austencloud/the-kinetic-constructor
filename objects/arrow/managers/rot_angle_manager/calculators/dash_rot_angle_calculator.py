@@ -63,4 +63,8 @@ class DashRotAngleCalculator(BaseRotAngleCalculator):
             if isinstance(loc_angle, dict):
                 return loc_angle.get(self.arrow.motion.prop_rot_dir, 0)
             return loc_angle
+        
+        elif self.arrow.motion.prop_rot_dir == NO_ROT:
+            return self._handle_no_rotation()
+        
         return None

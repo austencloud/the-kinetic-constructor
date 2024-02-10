@@ -27,7 +27,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.option_picker = option_picker
         self.sequence_builder = option_picker.sequence_builder
         self.clickable_option_handler = self.sequence_builder.clickable_option_handler
-        self.letters = self.sequence_builder.letters
+        self.letters = self.sequence_builder.letters_df
         self.pictographs: dict[str, Pictograph] = {}
         self.stretch_index = -1
 

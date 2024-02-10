@@ -25,7 +25,7 @@ class SequenceBuilder(QFrame):
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.current_pictograph: Pictograph = None
-        self.letters = pd.read_csv("PictographDataframe.csv")  # Load the dataframe
+        self.letters_df = pd.read_csv("PictographDataframe.csv")  # Load the dataframe
         self.selected_letters = None
         self.start_position_picked = False
         self._setup_components()
@@ -45,7 +45,9 @@ class SequenceBuilder(QFrame):
 
     def render_next_options(self, end_pos):
         """Fetches and renders next options based on the end position."""
-        matching_rows: pd.DataFrame = self.letters[self.letters["start_pos"] == end_pos]
+        matching_rows: pd.DataFrame = self.letters_df[
+            self.letters_df["start_pos"] == end_pos
+        ]
         for _, row in matching_rows.iterrows():
             pictograph_key = f"{row['letter']}_{row['start_pos']}→{row['end_pos']}"
             if pictograph_key not in self.main_widget.all_pictographs:
@@ -66,7 +68,9 @@ class SequenceBuilder(QFrame):
         self.option_picker.scroll_area.sections_manager.show_all_sections()
         self.option_picker.scroll_area.initialize_with_options()
         for letter_type in LetterType:
-            self.option_picker.scroll_area.display_manager.order_and_display_pictographs(letter_type)
+            self.option_picker.scroll_area.display_manager.order_and_display_pictographs(
+                letter_type
+            )
 
     def render_and_store_pictograph(self, pictograph_df: pd.Series):
         pictograph_dict = pictograph_df.to_dict()

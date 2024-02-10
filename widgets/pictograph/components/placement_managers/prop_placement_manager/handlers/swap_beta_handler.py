@@ -29,17 +29,17 @@ class SwapBetaHandler:
     def swap_beta(self) -> None:
         letter_type = LetterType.get_letter_type(self.pictograph.letter)
 
-        if letter_type == Type1:
+        if letter_type == LetterType.Type1:
             self._handle_type1_swap()
-        elif letter_type == Type2:
+        elif letter_type == LetterType.Type2:
             self._handle_type2_swap()
-        elif letter_type == Type3:
+        elif letter_type == LetterType.Type3:
             self._handle_type3_swap()
-        elif letter_type == Type4:
+        elif letter_type == LetterType.Type4:
             self._handle_type4_swap()
-        elif letter_type == Type5:
+        elif letter_type == LetterType.Type5:
             self._handle_type5_swap()
-        elif letter_type == Type6:
+        elif letter_type == LetterType.Type6:
             self._handle_type6_swap()
 
     def _handle_type1_swap(self) -> None:
