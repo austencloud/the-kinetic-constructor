@@ -74,7 +74,6 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
     def initialize_with_options(self):
         """Initialize scroll area with options after a start pictograph is selected."""
         self.replace_layout_with_vbox()
-        self.sections_manager.show_all_sections()
         start_pictograph = self.start_pos_picker.sequence_builder.current_pictograph
         end_pos, end_red_ori, end_blue_ori = (
             start_pictograph.end_pos,

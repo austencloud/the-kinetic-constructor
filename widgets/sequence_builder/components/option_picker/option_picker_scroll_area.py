@@ -2,6 +2,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication, QVBoxLayout
 from PyQt6.QtCore import Qt
 from data.rules import get_next_letters
+from widgets.scroll_area.components.section_manager.section_widget.section_widget import (
+    SectionWidget,
+)
 from ....pictograph.pictograph import Pictograph
 from .option_picker_section_manager import (
     OptionPickerSectionsManager,
@@ -66,8 +69,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
 
     def initialize_with_options(self):
         """Initialize scroll area with options after a start pictograph is selected."""
-        self.replace_layout_with_vbox()
-        self.sections_manager.show_all_sections()
         start_pictograph = self.option_picker.sequence_builder.current_pictograph
         end_pos, end_red_ori, end_blue_ori = (
             start_pictograph.end_pos,
@@ -79,38 +80,12 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         for option_data in next_options:
             self.add_pictograph(option_data)
 
-    def replace_layout_with_vbox(self):
-        new_layout = QVBoxLayout()
-        new_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        new_layout.setContentsMargins(0, 0, 0, 0)
-
-        old_layout = self.container.layout()
-        while old_layout and old_layout.count():
-            item = old_layout.takeAt(0)
-            if item.widget():
-                new_layout.addWidget(item.widget())
-
-        self.container.setLayout(new_layout)
-        self.container_layout = new_layout
-
     def get_next_options(self, end_pos, end_red_ori, end_blue_ori):
         """Fetch next options logic specific to sequence builder's needs."""
         return []
 
-    def adjust_sections_size(self):
-        """Adjust the size of sections, specific to sequence builder."""
-        for section in self.sections_manager.sections.values():
-            section.adjust_size()  # Assuming adjust_size is implemented in section
 
-    def _add_option_to_layout(self, option: Pictograph, is_start_pos: bool) -> None:
-        option.view.mousePressEvent = self.clickable_option_handler.get_click_handler(
-            option, is_start_pos
-        )
-        self.container_layout.addWidget(option.view)
 
     def resize_option_picker_scroll_area(self) -> None:
         self.setMinimumWidth(self.main_widget.main_tab_widget.width())
 
-    def replace_hbox_with_vbox(self):
-        self.container_layout.removeItem(self.container_layout)
-        self.set_layout("VBox")

@@ -51,7 +51,8 @@ class BasePictographScrollArea(QScrollArea):
             # del self.container_layout
 
     def add_widget_to_layout(self, widget: QWidget, section_index: int = None):
-        if section_index >= 0:  # widget is a section
+        if section_index == 0 or section_index:  # widget is a section
             self.container_layout.insertWidget(section_index, widget)
         else:  # widget is a start pos pictograph
             self.container_layout.addWidget(widget)
+        

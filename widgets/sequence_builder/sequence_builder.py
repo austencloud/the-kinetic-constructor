@@ -58,7 +58,9 @@ class SequenceBuilder(QFrame):
         self.layout().removeWidget(self.start_position_picker)
         self.layout().addWidget(self.option_picker)
         self.option_picker.show()
-        # self.option_picker.scroll_area.initialize_with_options()
+        self.option_picker.scroll_area.sections_manager.show_all_sections()
+        self.option_picker.setup_layout()
+        self.option_picker.scroll_area.initialize_with_options()
 
     def render_and_store_pictograph(self, pictograph_data: pd.Series):
         pictograph_key = f"{pictograph_data['letter']}_{pictograph_data['start_pos']}→{pictograph_data['end_pos']}"
