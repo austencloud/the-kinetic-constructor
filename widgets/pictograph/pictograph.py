@@ -123,3 +123,4 @@ class Pictograph(QGraphicsScene):
 
     def contextMenuEvent(self, event: "QGraphicsSceneMouseEvent") -> None:
         self.context_menu_handler.handle_context_menu(event)
+

@@ -107,3 +107,8 @@ class PictographChecker:
 
     def has_hybrid_motions(self) -> bool:
         return self.p.red_motion.motion_type != self.p.blue_motion.motion_type
+
+    def is_in_sequence_builder(self) -> bool:
+        # This method should return True if the application is in sequence builder mode.
+        # Implement the logic based on your application's state management.
+        return hasattr(self.p.scroll_area, "sequence_builder")

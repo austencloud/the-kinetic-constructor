@@ -9,45 +9,56 @@ from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 class PictographMouseEventHandler:
     def __init__(self, pictograph: "Pictograph") -> None:
-        self.p = pictograph
+        self.pictograph = pictograph
 
     def handle_mouse_press(self, event: "QGraphicsSceneMouseEvent") -> None:
+        if self.pictograph.check.is_in_sequence_builder():
+            # Check if the click is not on an arrow or prop.
+            if not any(
+                isinstance(item, (Arrow, Prop))
+                for item in self.pictograph.items(event.scenePos())
+            ):
+                # Trigger the sequence builder's click handler and return to avoid further processing.
+                self.pictograph.scroll_area.sequence_builder.clickable_option_handler.on_option_clicked(
+                    self.pictograph
+                )
+                return
         scene_pos = event.scenePos()
-        items_at_pos = self.p.items(scene_pos)
+        items_at_pos = self.pictograph.items(scene_pos)
 
         arrow = next((item for item in items_at_pos if isinstance(item, Arrow)), None)
         if arrow:
-            self.p.selected_arrow = arrow
-            self.p.dragged_arrow = arrow
-            self.p.dragged_arrow.mousePressEvent(event)
+            self.pictograph.selected_arrow = arrow
+            self.pictograph.dragged_arrow = arrow
+            self.pictograph.dragged_arrow.mousePressEvent(event)
             arrow.setSelected(True)  # set the arrow as selected
-            self.p.update()
+            self.pictograph.update()
         else:
             prop = next((item for item in items_at_pos if isinstance(item, Prop)), None)
             if prop:
-                self.p.dragged_prop = prop
-                self.p.dragged_prop.mousePressEvent(event)
+                self.pictograph.dragged_prop = prop
+                self.pictograph.dragged_prop.mousePressEvent(event)
             else:
                 self.clear_selections()
 
     def handle_mouse_move(self, event) -> None:
-        if self.p.dragged_prop:
-            self.p.dragged_prop.mouseMoveEvent(event)
-        elif self.p.dragged_arrow:
-            self.p.dragged_arrow.mouseMoveEvent(event)
+        if self.pictograph.dragged_prop:
+            self.pictograph.dragged_prop.mouseMoveEvent(event)
+        elif self.pictograph.dragged_arrow:
+            self.pictograph.dragged_arrow.mouseMoveEvent(event)
 
     def handle_mouse_release(self, event) -> None:
-        if self.p.dragged_prop:
-            self.p.dragged_prop.mouseReleaseEvent(event)
-            self.p.dragged_prop = None
-        elif self.p.dragged_arrow:
-            self.p.dragged_arrow.mouseReleaseEvent(event)
-            self.p.dragged_arrow = None
+        if self.pictograph.dragged_prop:
+            self.pictograph.dragged_prop.mouseReleaseEvent(event)
+            self.pictograph.dragged_prop = None
+        elif self.pictograph.dragged_arrow:
+            self.pictograph.dragged_arrow.mouseReleaseEvent(event)
+            self.pictograph.dragged_arrow = None
 
     def clear_selections(self) -> None:
-        for arrow in self.p.arrows.values():
+        for arrow in self.pictograph.arrows.values():
             arrow.setSelected(False)
-        for prop in self.p.props.values():
+        for prop in self.pictograph.props.values():
             prop.setSelected(False)
         self.dragged_prop = None
         self.dragged_arrow = None

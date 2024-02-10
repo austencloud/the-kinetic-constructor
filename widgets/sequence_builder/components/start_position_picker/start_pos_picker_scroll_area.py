@@ -24,37 +24,6 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
         self.set_layout("HBox")
         self.COLUMN_COUNT = 5
 
-    def filter_next_options(
-        letters_data: dict[str, list[dict]],
-        next_possible_letters: list[str],
-        specific_end_pos: str,
-    ) -> list[dict]:
-        return [
-            motion_dict
-            for letter, motion_dicts in letters_data.items()
-            if letter in next_possible_letters
-            for motion_dict in motion_dicts
-            if motion_dict["end_pos"] == specific_end_pos
-        ]
-
-    def replace_layout_with_vbox(self):
-        new_layout = QVBoxLayout()
-        new_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        new_layout.setContentsMargins(0, 0, 0, 0)
-
-        old_layout = self.container.layout()
-        while old_layout and old_layout.count():
-            item = old_layout.takeAt(0)
-            if item.widget():
-                new_layout.addWidget(item.widget())
-
-        self.container.setLayout(new_layout)
-        self.layout = new_layout
-
-    def get_next_options(self, end_pos, end_red_ori, end_blue_ori):
-        """Fetch next options logic specific to sequence builder's needs."""
-        return []
-
     def _add_option_to_layout(self, option: Pictograph, is_start_pos: bool) -> None:
         option.view.mousePressEvent = self.clickable_option_handler.get_click_handler(
             option, is_start_pos

@@ -21,9 +21,9 @@ class OptionPickerClickHandler:
                 start_pos
             )
         else:
-            return lambda event: self._on_option_clicked(start_pos)
+            return lambda event: self.on_option_clicked(start_pos)
 
-    def _on_option_clicked(self, clicked_option: "Pictograph") -> None:
+    def on_option_clicked(self, clicked_option: "Pictograph") -> None:
         self.sequence_builder.option_picker.scroll_area.update_pictographs(
             clicked_option
         )

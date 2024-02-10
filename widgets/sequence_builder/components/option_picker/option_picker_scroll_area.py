@@ -19,13 +19,14 @@ from ....scroll_area.base_scroll_area import BasePictographScrollArea
 
 if TYPE_CHECKING:
     from .option_picker import OptionPicker
+    from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
 
 class OptionPickerScrollArea(BasePictographScrollArea):
     def __init__(self, option_picker: "OptionPicker"):
         super().__init__(option_picker)
         self.option_picker = option_picker
-        self.sequence_builder = option_picker.sequence_builder
+        self.sequence_builder: "SequenceBuilder" = option_picker.sequence_builder
         self.clickable_option_handler = self.sequence_builder.clickable_option_handler
         self.letters = self.sequence_builder.letters_df
         self.pictographs: dict[str, Pictograph] = {}

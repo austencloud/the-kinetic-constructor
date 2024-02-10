@@ -73,7 +73,6 @@ class StartPosPicker(QWidget):
                     )
                     start_position_pictograph.updater.update_pictograph(pictograph_dict)
 
-                    # connect to on_start_pos_clicked
                     start_position_pictograph.view.mousePressEvent = (
                         lambda event: self.on_start_pos_clicked(
                             start_position_pictograph
