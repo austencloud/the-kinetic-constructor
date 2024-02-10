@@ -18,7 +18,6 @@ if TYPE_CHECKING:
 class StartPosPicker(QWidget):
     start_position_selected = pyqtSignal(Pictograph)
 
-
     def __init__(self, sequence_builder: "SequenceBuilder", parent=None):
         super().__init__(parent)
         self.sequence_builder = sequence_builder
@@ -43,7 +42,7 @@ class StartPosPicker(QWidget):
             start_pos
         )
         self.sequence_builder.current_pictograph = start_pos
-        self.sequence_builder.transition_to_sequence_building(start_pos)
+        self.start_position_selected.emit(start_pos)
 
     def hide_start_positions(self):
         for start_position_pictograph in self.start_options.values():
@@ -79,13 +78,7 @@ class StartPosPicker(QWidget):
                             start_position_pictograph
                         )
                     )
-                    #connect to start_position_selected
-                    start_position_pictograph.view.mousePressEvent = (
-                        lambda event: self.start_position_selected.emit(
-                            start_position_pictograph
-                        )
-                    )
-                    
+
     def resize_start_position_picker(self) -> None:
         self.scroll_area.resize_start_pos_picker_scroll_area()
         self._resize_start_position_pictographs()

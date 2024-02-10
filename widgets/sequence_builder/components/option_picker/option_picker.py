@@ -23,12 +23,15 @@ class OptionPicker(QWidget):
         self.letter_button_frame = OptionPickerLetterButtonFrame(sequence_builder)
         self.pictograph_factory = ScrollAreaPictographFactory(self.scroll_area)
         self.setup_layout()
+        self.hide()
 
     def setup_layout(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.left_layout = QVBoxLayout()
         self.right_layout = QVBoxLayout()
-
+        self.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.left_layout.addWidget(self.scroll_area)
         self.right_layout.addWidget(self.letter_button_frame)
 

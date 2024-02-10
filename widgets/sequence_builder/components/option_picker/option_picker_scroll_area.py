@@ -86,11 +86,12 @@ class OptionPickerScrollArea(BasePictographScrollArea):
 
     def adjust_sections_size(self):
         """Adjust the size of sections, specific to sequence builder."""
-        
+
         for section in self.sections_manager.sections.values():
             section.adjust_size()
 
-
     def resize_option_picker_scroll_area(self) -> None:
-        self.setMinimumWidth(self.main_widget.main_tab_widget.width())
-
+        self.setMinimumWidth(
+            self.option_picker.sequence_builder.width()
+            - self.option_picker.letter_button_frame.width()
+        )

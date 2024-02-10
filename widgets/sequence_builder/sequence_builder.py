@@ -55,14 +55,14 @@ class SequenceBuilder(QFrame):
         self.display_manager = SequenceBuilderDisplayManager(self)
 
     def transition_to_sequence_building(self, start_pictograph: Pictograph):
-        # self.start_position_picAlexa, how much time?ker.hide_start_positions()
-        self.update_current_pictograph(start_pictograph)
         self.start_position_picked = True
-        self.layout().removeWidget(self.start_position_picker)
         self.start_position_picker.hide()
+        self.update_current_pictograph(start_pictograph)
+        self.layout().removeWidget(self.start_position_picker)
         self.layout().addWidget(self.option_picker)
 
         self.option_picker.show()
+        self.option_picker.scroll_area.resize_option_picker_scroll_area()
         self.option_picker.scroll_area.sections_manager.show_all_sections()
         self.option_picker.scroll_area.initialize_with_options()
 
