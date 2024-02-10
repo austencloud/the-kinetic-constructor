@@ -57,6 +57,9 @@ class StartPosManager(QObject):
             start_pos
         )
         self.sequence_builder.current_pictograph = start_pos
+        self.start_position_selected.connect(
+            self.sequence_builder.transition_to_sequence_building
+        )
         self.start_position_selected.emit(start_pos)
 
     def hide_start_positions(self):

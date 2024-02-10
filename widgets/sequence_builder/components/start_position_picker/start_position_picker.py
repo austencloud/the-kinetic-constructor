@@ -16,7 +16,6 @@ if TYPE_CHECKING:
 
 
 class StartPosPicker(QWidget):
-    start_position_selected = pyqtSignal(Pictograph)
     SPACING = 10
 
     def __init__(self, sequence_builder: "SequenceBuilder", parent=None):
@@ -26,9 +25,7 @@ class StartPosPicker(QWidget):
         self.start_options: dict[str, Pictograph] = {}
         self.scroll_area = StartPosPickerScrollArea(self)
         self.start_pos_manager = StartPosManager(self)
-        self.start_pos_manager.start_position_selected.connect(
-            self.start_position_selected
-        )
+
 
         self.setup_layout()
 
