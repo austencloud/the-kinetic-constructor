@@ -74,13 +74,16 @@ class SequenceBuilder(QFrame):
 
     def render_and_store_pictograph(self, pictograph_df: pd.Series):
         pictograph_dict = pictograph_df.to_dict()
-        pictograph_key = f"{pictograph_dict['letter']}_{pictograph_dict['start_pos']}→{pictograph_dict['end_pos']}"
 
         pictograph_dict[RED_START_ORI] = self.current_end_red_ori
         pictograph_dict[BLUE_START_ORI] = self.current_end_blue_ori
         pictograph_dict[RED_TURNS] = 0
         pictograph_dict[BLUE_TURNS] = 0
-
+        pictograph_key = (
+            f"{pictograph_dict['letter']}_{pictograph_dict['start_pos']}→{pictograph_dict['end_pos']}"
+            f"_red_{pictograph_dict['red_motion_type']}_{pictograph_dict['red_start_loc']}→{pictograph_dict['red_end_loc']}"
+            f"_blue_{pictograph_dict['blue_motion_type']}_{pictograph_dict['blue_start_loc']}→{pictograph_dict['blue_end_loc']}"
+        )
         new_pictograph = self.option_picker.pictograph_factory.get_or_create_pictograph(
             pictograph_key, pictograph_dict
         )

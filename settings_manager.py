@@ -1,9 +1,13 @@
 import json
 from math import pi
 import os
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 from utilities.TypeChecking.prop_types import PropTypes
+from widgets.pictograph.pictograph import Pictograph
+from widgets.scroll_area.codex_scroll_area import CodexScrollArea
+from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import OptionPickerScrollArea
+from widgets.sequence_builder.components.start_position_picker.start_pos_picker_scroll_area import StartPosPickerScrollArea
 
 if TYPE_CHECKING:
     from main import MainWindow
@@ -38,7 +42,7 @@ class SettingsManager:
         for prop_type_enum in PropTypes:
             if str(prop_type_enum.name) == prop_type:
                 return prop_type_enum
-            
+
     def set_prop_type(self, prop_type: str) -> None:
         self.set_setting("prop_type", prop_type)
 
@@ -58,23 +62,28 @@ class SettingsManager:
         self.update_props_to_type(prop_type)
 
     def update_props_to_type(self, new_prop_type) -> None:
-        for (
-            pictograph
-        ) in (
-            self.main_window.main_widget.main_tab_widget.codex.scroll_area.pictographs.values()
-        ):
-            for color, prop in pictograph.props.items():
-                new_prop = pictograph.initializer.prop_factory.create_prop_of_type(
-                    prop, new_prop_type
-                )
-                pictograph.props[color].deleteLater()
-                pictograph.props[color].hide()
-                pictograph.props[color] = new_prop
-                pictograph.addItem(new_prop)
-                pictograph.motions[color].prop = pictograph.props[color]
-                pictograph.props[color].motion.attr_manager.update_prop_ori()
-                pictograph.props[color].updater.update_prop()
-                pictograph.updater.update_pictograph()
+        scroll_areas: list[Union[CodexScrollArea, OptionPickerScrollArea, StartPosPickerScrollArea]] = [
+            self.main_window.main_widget.main_tab_widget.codex.scroll_area,
+            self.main_window.main_widget.main_tab_widget.sequence_builder.option_picker.scroll_area,
+            self.main_window.main_widget.main_tab_widget.sequence_builder.start_position_picker.scroll_area
+        ]
+        for scroll_area in scroll_areas:
+            for pictograph in scroll_area.pictographs.values():
+                self.replace_props(new_prop_type, pictograph)
+
+    def replace_props(self, new_prop_type, pictograph: Pictograph):
+        for color, prop in pictograph.props.items():
+            new_prop = pictograph.initializer.prop_factory.create_prop_of_type(
+                prop, new_prop_type
+            )
+            pictograph.props[color].deleteLater()
+            pictograph.props[color].hide()
+            pictograph.props[color] = new_prop
+            pictograph.addItem(new_prop)
+            pictograph.motions[color].prop = pictograph.props[color]
+            pictograph.props[color].motion.attr_manager.update_prop_ori()
+            pictograph.props[color].updater.update_prop()
+            pictograph.updater.update_pictograph()
 
     def _apply_pictograph_size(self) -> None:
         pictograph_size = self.get_setting("pictograph_size", 1)
