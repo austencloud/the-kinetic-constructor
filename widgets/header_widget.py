@@ -2,6 +2,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel, QHBoxLayout, QFrame
 from PyQt6.QtCore import Qt
 
+from Enums import LetterType
+
 from .turns_box.turns_box_widgets.base_attr_box_widget import TurnsBoxWidget
 
 if TYPE_CHECKING:
@@ -48,7 +50,7 @@ class HeaderWidget(TurnsBoxWidget):
         return layout
 
     def _add_widgets(self, layout: QHBoxLayout) -> None:
-        if self.turns_box.turns_panel.filter_tab.section.letter_type == Type1:
+        if self.turns_box.turns_panel.filter_tab.section.letter_type == LetterType.Type1:
             layout.addStretch(1)
             layout.addWidget(self.header_label)
             layout.addStretch(1)

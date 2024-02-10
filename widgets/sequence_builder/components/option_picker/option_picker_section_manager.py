@@ -38,7 +38,6 @@ class OptionPickerSectionsManager:
         )
         self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
         self.ordered_section_types: list[LetterType] = []
-        self.initialize_sections()
 
     def setup_letters_by_type(self) -> dict[LetterType, list[Letters]]:
         letters_by_type = {}
@@ -55,7 +54,6 @@ class OptionPickerSectionsManager:
             section = SectionWidget(letter_type, self.scroll_area)
             self.sections[letter_type] = section
             self.ordered_section_types.append(letter_type)
-            self.sections[letter_type] = section
             section.setup_components()
             # section.hide()
         return self.sections[letter_type]
@@ -102,6 +100,7 @@ class OptionPickerSectionsManager:
         return section.filter_tab
 
     def show_all_sections(self) -> None:
+        self.initialize_sections()
         self.add_sections_to_layout()
         for section in self.sections.values():
             section.show()

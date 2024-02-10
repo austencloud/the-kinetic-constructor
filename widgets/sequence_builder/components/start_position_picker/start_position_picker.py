@@ -17,7 +17,8 @@ if TYPE_CHECKING:
 
 class StartPosPicker(QWidget):
     start_position_selected = pyqtSignal(Pictograph)
-
+    SPACING = 10
+    
     def __init__(self, sequence_builder: "SequenceBuilder", parent=None):
         super().__init__(parent)
         self.sequence_builder = sequence_builder
@@ -91,7 +92,7 @@ class StartPosPicker(QWidget):
                     view.pictograph.scroll_area.width()
                     / view.pictograph.scroll_area.COLUMN_COUNT
                 )
-                - view.pictograph.scroll_area.display_manager.SPACING
+                - self.SPACING
             )
             view.setMinimumWidth(view_width)
             view.setMaximumWidth(view_width)

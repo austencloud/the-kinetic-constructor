@@ -1,10 +1,12 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication, QVBoxLayout
 from PyQt6.QtCore import Qt
+import pandas as pd
 from data.rules import get_next_letters
 from widgets.scroll_area.components.section_manager.section_widget.section_widget import (
     SectionWidget,
 )
+from widgets.scroll_area.components.option_picker_display_manager import OptionPickerDisplayManager
 from ....pictograph.pictograph import Pictograph
 from .option_picker_section_manager import (
     OptionPickerSectionsManager,
@@ -21,51 +23,12 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.option_picker = option_picker
         self.sequence_builder = option_picker.sequence_builder
         self.clickable_option_handler = self.sequence_builder.clickable_option_handler
-        self.display_manager = self.sequence_builder.display_manager
-        self.letters = self.sequence_builder.main_widget.letters
+        self.letters = self.sequence_builder.letters
         self.pictographs = {}
         self.set_layout("VBox")
         self.sections_manager = OptionPickerSectionsManager(self)
+        self.display_manager = OptionPickerDisplayManager(self)
 
-    def update_pictographs(self, clicked_option: "Pictograph"):
-        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        current_letter = clicked_option.letter
-        next_possible_letters = get_next_letters(current_letter)
-        specific_end_pos = clicked_option.end_pos
-
-        filtered_data = self.filter_next_options(
-            next_possible_letters, specific_end_pos
-        )
-        # self.clear_layout()
-        for motion_dict in filtered_data:
-            self.add_pictograph(motion_dict)
-        QApplication.restoreOverrideCursor()
-
-    def filter_next_options(
-        letters_data: dict[str, list[dict]],
-        next_possible_letters: list[str],
-        specific_end_pos: str,
-    ) -> list[dict]:
-        return [
-            motion_dict
-            for letter, motion_dicts in letters_data.items()
-            if letter in next_possible_letters
-            for motion_dict in motion_dicts
-            if motion_dict["end_pos"] == specific_end_pos
-        ]
-
-    def add_pictograph(self, motion_dict):
-        """Create and add pictograph widget to layout based on motion_dict."""
-        pictograph_key = f"{motion_dict['letter']}_{motion_dict['start_pos']}→{motion_dict['end_pos']}"
-        if pictograph_key not in self.pictographs:
-            pictograph: Pictograph = (
-                self.option_picker.pictograph_factory.create_pictograph(motion_dict)
-            )
-            self.pictographs[pictograph_key] = pictograph
-            pictograph.view.mousePressEvent = (
-                self.clickable_option_handler.get_click_handler(pictograph)
-            )
-            self.add_widget_to_layout(pictograph.view)
 
     def initialize_with_options(self):
         """Initialize scroll area with options after a start pictograph is selected."""
@@ -75,14 +38,22 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             start_pictograph.red_motion.end_ori,
             start_pictograph.blue_motion.end_ori,
         )
-        next_options = self.get_next_options(end_pos, end_red_ori, end_blue_ori)
+        next_options = self.get_next_options(start_pictograph)
 
-        for option_data in next_options:
-            self.add_pictograph(option_data)
+        for option_dict in next_options:
+            self.sequence_builder.render_and_store_pictograph(option_dict)
 
-    def get_next_options(self, end_pos, end_red_ori, end_blue_ori):
+    def get_next_options(self, pictograph: Pictograph) -> list[pd.Series]:
         """Fetch next options logic specific to sequence builder's needs."""
-        return []
+        matching_rows: pd.DataFrame = self.letters[
+            self.letters["start_pos"] == pictograph.end_pos
+        ]
+        next_options = []
+        for _, row in matching_rows.iterrows():
+            pictograph_key = f"{row['letter']}_{row['start_pos']}→{row['end_pos']}"
+            if pictograph_key not in self.option_picker.sequence_builder.main_widget.all_pictographs:
+                next_options.append(row)
+        return next_options
 
     def adjust_sections_size(self):
         """Adjust the size of sections, specific to sequence builder."""

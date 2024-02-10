@@ -7,23 +7,21 @@ from widgets.scroll_area.components.section_manager.section_widget.section_widge
 )
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.sequence_builder_scroll_area import (
-        SequenceBuilderScrollArea,
-    )
+    from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import OptionPickerScrollArea
 
 
-class SequenceBuilderDisplayManager:
+class OptionPickerDisplayManager:
     SPACING = 5
     COLUMN_COUNT = 4
 
-    def __init__(self, scroll_area: "SequenceBuilderScrollArea") -> None:
+    def __init__(self, scroll_area: "OptionPickerScrollArea") -> None:
 
         self.scroll_area = scroll_area
 
     def order_and_display_pictographs(self) -> None:
         ordered_pictographs = self.get_ordered_pictographs()
-        for index, (key, codex_pictograph) in enumerate(ordered_pictographs.items()):
-            self.add_pictograph_to_layout(codex_pictograph, index)
+        for index, (key, pictograph) in enumerate(ordered_pictographs.items()):
+            self.add_pictograph_to_layout(pictograph, index)
 
     def get_ordered_pictographs(self) -> dict[Letters, Pictograph]:
         return {
@@ -38,21 +36,18 @@ class SequenceBuilderDisplayManager:
         }
 
     def add_pictograph_to_layout(
-        self, codex_pictograph: Pictograph, index: int
+        self, pictograph: Pictograph, index: int
     ) -> None:
         letter_type = self.scroll_area.sections_manager.get_pictograph_letter_type(
-            codex_pictograph.letter
+            pictograph.letter
         )
         section: SectionWidget = self.scroll_area.sections_manager.sections.get(
             letter_type
         )
-        if section:
-            row = index // self.COLUMN_COUNT + 1
-            col = index % self.COLUMN_COUNT
-            section.pictograph_frame.layout.addWidget(codex_pictograph.view, row, col)
-            codex_pictograph.view.resize_for_scroll_area()
-        else:
-            self.scroll_area.sections_manager.create_section_if_needed(letter_type)
+        row = index // self.COLUMN_COUNT + 1
+        col = index % self.COLUMN_COUNT
+        section.pictograph_frame.layout.addWidget(pictograph.view, row, col)
+        pictograph.view.resize_for_scroll_area()
 
     def remove_pictograph(self, pictograph_key: str) -> None:
         pictograph_to_remove: Pictograph = self.scroll_area.pictographs.pop(

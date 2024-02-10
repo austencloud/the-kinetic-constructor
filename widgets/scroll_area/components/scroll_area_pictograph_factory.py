@@ -16,19 +16,19 @@ from constants import (
     RED_START_LOC,
     START_POS,
 )
+
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-
-    from widgets.scroll_area.codex_scroll_area import CodexScrollArea
-    from widgets.sequence_builder.components.sequence_builder_scroll_area import (
-        SequenceBuilderScrollArea,
+    from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (
+        OptionPickerScrollArea,
     )
+    from widgets.scroll_area.codex_scroll_area import CodexScrollArea
 
 
 class ScrollAreaPictographFactory:
     def __init__(
-        self, scroll_area: Union["CodexScrollArea", "SequenceBuilderScrollArea"]
+        self, scroll_area: Union["CodexScrollArea", "OptionPickerScrollArea"]
     ) -> None:
         self.scroll_area = scroll_area
 

@@ -13,8 +13,3 @@ class ScrollAreaSectionPictographFrame(QFrame):
         self.layout: QGridLayout = QGridLayout(self)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.layout.setContentsMargins(0, 0, 0, 0)
-
-    def add_pictograph(self, pictograph) -> None:
-        self.layout.addWidget(pictograph, 0, 0)
-        self.section.resize_section()
-        self.section.scroll_area.resize_sequence_builder_scroll_area()
