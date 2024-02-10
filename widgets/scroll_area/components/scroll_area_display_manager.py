@@ -12,7 +12,9 @@ from utilities.TypeChecking.TypeChecking import Letters
 from widgets.scroll_area.components.section_manager.section_widget.section_widget import (
     SectionWidget,
 )
-from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import OptionPickerScrollArea
+from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (
+    OptionPickerScrollArea,
+)
 
 if TYPE_CHECKING:
 
@@ -83,11 +85,11 @@ class ScrollAreaDisplayManager:
             pictograph_key, None
         )
         if pictograph_to_remove:
-            self.scroll_area.container_layout.removeWidget(pictograph_to_remove.view)
+            self.scroll_area.layout.removeWidget(pictograph_to_remove.view)
 
     def clear_layout(self) -> None:
-        while self.scroll_area.container_layout.count():
-            widget = self.scroll_area.container_layout.takeAt(0).widget()
+        while self.scroll_area.layout.count():
+            widget = self.scroll_area.layout.takeAt(0).widget()
             if widget is not None:
                 widget.setParent(None)
 

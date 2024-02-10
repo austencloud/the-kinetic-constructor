@@ -54,7 +54,7 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
                 new_layout.addWidget(item.widget())
 
         self.container.setLayout(new_layout)
-        self.container_layout = new_layout
+        self.layout = new_layout
 
     def get_next_options(self, end_pos, end_red_ori, end_blue_ori):
         """Fetch next options logic specific to sequence builder's needs."""
@@ -64,12 +64,12 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
         option.view.mousePressEvent = self.clickable_option_handler.get_click_handler(
             option, is_start_pos
         )
-        self.container_layout.addWidget(option.view)
+        self.layout.addWidget(option.view)
 
     def resize_start_pos_picker_scroll_area(self) -> None:
         self.setMinimumHeight(self.start_pos_picker.height())
         self.setMinimumWidth(self.start_pos_picker.width())
 
     def replace_hbox_with_vbox(self):
-        self.container_layout.removeItem(self.container_layout)
+        self.layout.removeItem(self.layout)
         self.set_layout("VBox")

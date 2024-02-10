@@ -5,8 +5,12 @@ from PyQt6.QtCore import Qt
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.start_position_picker.start_position_picker import StartPosPicker
-    from widgets.sequence_builder.components.option_picker.option_picker import OptionPicker
+    from widgets.sequence_builder.components.start_position_picker.start_position_picker import (
+        StartPosPicker,
+    )
+    from widgets.sequence_builder.components.option_picker.option_picker import (
+        OptionPicker,
+    )
     from widgets.codex.codex import Codex
     from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
@@ -18,7 +22,7 @@ class BasePictographScrollArea(QScrollArea):
         super().__init__(parent)
         self.container = QWidget()
         self.main_widget = parent.main_widget
-        self.container_layout = None
+        self.layout: Union[QVBoxLayout, QHBoxLayout] = None
         self.setWidgetResizable(True)
         self.setup_ui()
 
@@ -36,13 +40,13 @@ class BasePictographScrollArea(QScrollArea):
         else:
             raise ValueError("Invalid layout type specified.")
 
-        self.container_layout = new_layout
-        self.container.setLayout(self.container_layout)
+        self.layout = new_layout
+        self.container.setLayout(self.layout)
 
     def clear_layout(self):
-        if self.container_layout:
-            while self.container_layout.count():
-                child = self.container_layout.takeAt(0)
+        if self.layout:
+            while self.layout.count():
+                child = self.layout.takeAt(0)
                 if child.widget():
                     child.widget().hide()
 
@@ -50,6 +54,6 @@ class BasePictographScrollArea(QScrollArea):
 
     def add_widget_to_layout(self, widget: QWidget, section_index: int = None):
         if section_index == 0 or section_index:  # widget is a section
-            self.container_layout.insertWidget(section_index, widget)
+            self.layout.insertWidget(section_index, widget)
         else:  # widget is a start pos pictograph
-            self.container_layout.addWidget(widget)
+            self.layout.addWidget(widget)

@@ -7,12 +7,14 @@ from widgets.scroll_area.components.section_manager.section_widget.section_widge
 )
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import OptionPickerScrollArea
+    from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (
+        OptionPickerScrollArea,
+    )
 
 
 class OptionPickerDisplayManager:
     SPACING = 5
-    COLUMN_COUNT = 4
+    COLUMN_COUNT = 8
 
     def __init__(self, scroll_area: "OptionPickerScrollArea") -> None:
 
@@ -35,9 +37,7 @@ class OptionPickerDisplayManager:
             )
         }
 
-    def add_pictograph_to_layout(
-        self, pictograph: Pictograph, index: int
-    ) -> None:
+    def add_pictograph_to_layout(self, pictograph: Pictograph, index: int) -> None:
         letter_type = self.scroll_area.sections_manager.get_pictograph_letter_type(
             pictograph.letter
         )
@@ -54,11 +54,11 @@ class OptionPickerDisplayManager:
             pictograph_key, None
         )
         if pictograph_to_remove:
-            self.scroll_area.container_layout.removeWidget(pictograph_to_remove.view)
+            self.scroll_area.layout.removeWidget(pictograph_to_remove.view)
 
     def clear_layout(self) -> None:
-        while self.scroll_area.container_layout.count():
-            widget = self.scroll_area.container_layout.takeAt(0).widget()
+        while self.scroll_area.layout.count():
+            widget = self.scroll_area.layout.takeAt(0).widget()
             if widget is not None:
                 widget.setParent(None)
 
