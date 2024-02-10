@@ -1,21 +1,14 @@
+from PyQt6.QtWidgets import QFrame, QHBoxLayout
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QSizePolicy
-import pandas as pd
 from Enums import LetterType
+import pandas as pd
 from constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
-from widgets.sequence_builder.components.start_position_picker.start_position_picker import (
-    StartPosPicker,
-)
+from .components.start_position_picker.start_position_picker import StartPosPicker
 from ..pictograph.pictograph import Pictograph
-
 from .components.option_picker.option_picker_click_handler import (
     OptionPickerClickHandler,
 )
-from ..scroll_area.components.option_picker_display_manager import (
-    OptionPickerDisplayManager,
-)
-
-from widgets.sequence_builder.components.option_picker.option_picker import OptionPicker
+from .components.option_picker.option_picker import OptionPicker
 
 if TYPE_CHECKING:
     from ..main_widget.main_widget import MainWidget

@@ -1,5 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
+
+from widgets.pictograph.pictograph import Pictograph
 from ....scroll_area.components.scroll_area_pictograph_factory import (
     ScrollAreaPictographFactory,
 )
@@ -19,6 +21,7 @@ class OptionPicker(QWidget):
         super().__init__(sequence_builder)
         self.sequence_builder = sequence_builder
         self.main_widget = sequence_builder.main_widget
+        self.options: dict[str, Pictograph] = {}
         self.scroll_area = OptionPickerScrollArea(self)
         self.letter_button_frame = OptionPickerLetterButtonFrame(sequence_builder)
         self.pictograph_factory = ScrollAreaPictographFactory(self.scroll_area)

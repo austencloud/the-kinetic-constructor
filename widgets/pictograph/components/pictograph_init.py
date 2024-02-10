@@ -69,9 +69,6 @@ class PictographInit:
     def init_props(self) -> dict[Colors, Prop]:
         props: dict[Colors, Prop] = {}
         prop_type = self.pictograph.main_widget.prop_type
-
-
-
         for color in [RED, BLUE]:
             initial_prop_attributes = {
                 COLOR: color,
@@ -153,22 +150,6 @@ class PictographInit:
         arrow.hide()
         return arrow
 
-    def _create_prop(self, color: Colors, prop_type: PropTypes) -> Prop:
-        prop_class = prop_class_mapping.get(prop_type)
-        if prop_class is None:
-            raise ValueError(f"Invalid prop_type: {prop_type}")
-        prop_attributes = {
-            COLOR: color,
-            PROP_TYPE: prop_type,
-            LOC: None,
-            ORI: None,
-        }
-        prop: Prop = prop_class(self.pictograph, prop_attributes, None)
-        self.pictograph.motions[color].prop = prop
-        prop.motion = self.pictograph.motions[color]
-        self.pictograph.addItem(prop)
-        prop.hide()
-        return prop
 
     def _create_motion(self, color: Colors) -> Motion:
         motion_dict = {

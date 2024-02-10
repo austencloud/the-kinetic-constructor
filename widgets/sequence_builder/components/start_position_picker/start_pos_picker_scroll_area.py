@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication, QVBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
 from data.rules import get_next_letters
+from widgets.scroll_area.components.scroll_area_pictograph_factory import ScrollAreaPictographFactory
 
 
 from ....pictograph.pictograph import Pictograph
@@ -20,6 +21,8 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
         self.sequence_builder = start_pos_picker.sequence_builder
         self.clickable_option_handler = self.sequence_builder.clickable_option_handler
         self.letters = self.sequence_builder.main_widget.letters
+        self.pictograph_factory = ScrollAreaPictographFactory(self)
+
         self.pictographs = {}
         self.set_layout("HBox")
         self.COLUMN_COUNT = 5

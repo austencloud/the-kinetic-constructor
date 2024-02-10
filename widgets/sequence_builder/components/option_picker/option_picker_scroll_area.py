@@ -4,17 +4,11 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QWheelEvent
 import pandas as pd
 from Enums import LetterType
-from data.rules import get_next_letters
-from widgets.scroll_area.components.section_manager.section_widget.section_widget import (
-    SectionWidget,
-)
-from widgets.scroll_area.components.option_picker_display_manager import (
+from ....scroll_area.components.option_picker_display_manager import (
     OptionPickerDisplayManager,
 )
 from ....pictograph.pictograph import Pictograph
-from .option_picker_section_manager import (
-    OptionPickerSectionsManager,
-)
+from .option_picker_section_manager import OptionPickerSectionsManager
 from ....scroll_area.base_scroll_area import BasePictographScrollArea
 
 if TYPE_CHECKING:
@@ -104,4 +98,3 @@ class OptionPickerScrollArea(BasePictographScrollArea):
     def update_all_pictograph_sizes(self):
         for letter_type in LetterType:
             self.display_manager.order_and_display_pictographs(letter_type)
-
