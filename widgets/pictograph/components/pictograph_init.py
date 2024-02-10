@@ -64,6 +64,7 @@ class PictographInit:
             arrows[RED],
             arrows[BLUE],
         )
+
         return arrows
 
     def init_props(self) -> dict[Colors, Prop]:
