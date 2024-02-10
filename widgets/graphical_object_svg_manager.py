@@ -1,4 +1,3 @@
-
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtSvg import QSvgRenderer
 import re
@@ -42,7 +41,9 @@ class GraphicalObjectSvgManager:
         for motion_type in motion_types:
             for turn in turns:
                 for orientation in start_orientations:
-                    GraphicalObjectSvgManager._preload_arrow_svg(motion_type, turn, orientation)
+                    GraphicalObjectSvgManager._preload_arrow_svg(
+                        motion_type, turn, orientation
+                    )
 
         prop_types = [p for p in PropTypeslist]
         for prop_type in prop_types:
@@ -59,7 +60,7 @@ class GraphicalObjectSvgManager:
     @staticmethod
     def _preload_prop_svg_path(prop_type):
         cache_key = f"prop_{prop_type}"
-        file_path = f"images/props/{prop_type}.svg"  
+        file_path = f"images/props/{prop_type}.svg"
         GraphicalObjectSvgManager.svg_cache[cache_key] = file_path
 
     def set_svg_color(self, new_color: str, object: Union["Arrow", "Prop"]) -> bytes:
@@ -121,11 +122,13 @@ class GraphicalObjectSvgManager:
         """Generates a unique key for caching based on object properties."""
         if self.is_arrow(object):
             if object.motion.start_ori in [IN, OUT]:
-                return f"{object.motion.motion_type}_{float(object.motion.turns)}_radial"
+                return (
+                    f"{object.motion.motion_type}_{float(object.motion.turns)}_radial"
+                )
             elif object.motion.start_ori in [CLOCK, COUNTER]:
                 return f"{object.motion.motion_type}_{float(object.motion.turns)}_nonradial"
         elif self.is_prop(object):
-            return f"prop_{object.prop_type}"
+            return f"prop_{object.prop_type.name.lower()}"
         else:
             raise ValueError(
                 f"Unsupported graphical object type: {object.__class__.__name__}"
@@ -161,7 +164,8 @@ class GraphicalObjectSvgManager:
         return object.svg_cache[cache_key]
 
     def _prop_svg_file(self, prop_type: PropTypes) -> str:
-        svg_file = f"{PROP_DIR}{prop_type}.svg"
+        prop_type_str = prop_type.name.lower()
+        svg_file = f"{PROP_DIR}{prop_type_str}.svg"
         return svg_file
 
 

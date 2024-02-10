@@ -42,6 +42,8 @@ class BasePictographScrollArea(QScrollArea):
 
         self.layout = new_layout
         self.container.setLayout(self.layout)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.setContentsMargins(0, 0, 0, 0)
 
     def clear_layout(self):
         if self.layout:
@@ -49,8 +51,6 @@ class BasePictographScrollArea(QScrollArea):
                 child = self.layout.takeAt(0)
                 if child.widget():
                     child.widget().hide()
-
-            # del self.container_layout
 
     def add_widget_to_layout(self, widget: QWidget, section_index: int = None):
         if section_index == 0 or section_index:  # widget is a section

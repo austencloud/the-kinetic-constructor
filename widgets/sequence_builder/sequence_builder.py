@@ -65,7 +65,7 @@ class SequenceBuilder(QFrame):
                 letter_type
             )
         QApplication.restoreOverrideCursor()
-        
+
     def render_and_store_pictograph(self, pictograph_df: pd.Series):
         pictograph_dict = pictograph_df.to_dict()
 
@@ -78,8 +78,10 @@ class SequenceBuilder(QFrame):
             f"_red_{pictograph_dict['red_motion_type']}_{pictograph_dict['red_start_loc']}→{pictograph_dict['red_end_loc']}"
             f"_blue_{pictograph_dict['blue_motion_type']}_{pictograph_dict['blue_start_loc']}→{pictograph_dict['blue_end_loc']}"
         )
-        new_pictograph = self.option_picker.pictograph_factory.get_or_create_pictograph(
-            pictograph_key, pictograph_dict
+        new_pictograph = (
+            self.option_picker.scroll_area.pictograph_factory.get_or_create_pictograph(
+                pictograph_key, pictograph_dict
+            )
         )
         self.option_picker.scroll_area.pictographs[pictograph_key] = new_pictograph
         if pictograph_key not in self.main_widget.all_pictographs.get(
@@ -97,4 +99,3 @@ class SequenceBuilder(QFrame):
         self.setMinimumWidth(int(self.main_widget.width() * 3 / 5))
         self.start_position_picker.resize_start_position_picker()
         self.option_picker.scroll_area.resize_option_picker_scroll_area()
-        self.option_picker.letter_button_frame.resize_option_picker_letter_button_frame()

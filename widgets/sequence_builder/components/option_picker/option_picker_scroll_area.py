@@ -4,6 +4,9 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QWheelEvent
 import pandas as pd
 from Enums import LetterType
+from widgets.scroll_area.components.scroll_area_pictograph_factory import (
+    ScrollAreaPictographFactory,
+)
 from ....scroll_area.components.option_picker_display_manager import (
     OptionPickerDisplayManager,
 )
@@ -29,6 +32,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.set_layout("VBox")
         self.sections_manager = OptionPickerSectionsManager(self)
         self.display_manager = OptionPickerDisplayManager(self)
+        self.pictograph_factory = ScrollAreaPictographFactory(self)
 
     def fix_stretch(self):
         if self.stretch_index >= 0:
@@ -66,10 +70,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             section.adjust_size()
 
     def resize_option_picker_scroll_area(self) -> None:
-        self.setMinimumWidth(
-            self.option_picker.sequence_builder.width()
-            - self.option_picker.letter_button_frame.width()
-        )
+        self.setMinimumWidth(self.option_picker.sequence_builder.width())
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         modifiers = QApplication.keyboardModifiers()

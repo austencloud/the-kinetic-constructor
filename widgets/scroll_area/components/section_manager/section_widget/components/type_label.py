@@ -55,7 +55,14 @@ class SectionTypeLabel(QLabel):
         self.resize_type_label()
 
     def resize_type_label(self) -> None:
-        font_size = self.section.scroll_area.width() // 34
+        base_class_name = type(self.section.scroll_area).__name__
+        if base_class_name == "CodexScrollArea":
+            font_size = self.section.scroll_area.width() // 40
+        elif base_class_name == "OptionPickerScrollArea":
+            font_size = self.section.scroll_area.width() // 50
+        else:
+            font_size = 12
+
         self.setStyleSheet(f"font-size: {font_size}px; font-weight: bold;")
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
 

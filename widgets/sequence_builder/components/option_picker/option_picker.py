@@ -23,8 +23,6 @@ class OptionPicker(QWidget):
         self.main_widget = sequence_builder.main_widget
         self.options: dict[str, Pictograph] = {}
         self.scroll_area = OptionPickerScrollArea(self)
-        self.letter_button_frame = OptionPickerLetterButtonFrame(sequence_builder)
-        self.pictograph_factory = ScrollAreaPictographFactory(self.scroll_area)
         self.setup_layout()
         self.hide()
 

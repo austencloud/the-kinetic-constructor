@@ -84,7 +84,7 @@ class SectionHeader(QWidget):
         right_layout.addWidget(self.section.vtg_dir_button_manager.same_button)
 
     def _set_frame_sizes(self) -> None:
-        button_size = self.section.scroll_area.width() // 20
+        button_size = self.section.scroll_area.width() // 30
         self.left_frame.setFixedWidth(button_size)
         self.left_frame.setFixedHeight(button_size)
         self.right_frame.setFixedWidth(button_size)

@@ -34,6 +34,7 @@ class PropFactory:
             target_prop_type = PropTypes[target_prop_type]
         elif isinstance(target_prop_type, PropTypes):
             target_prop_type = target_prop_type
+            
         if target_prop_type.name.lower() in self.prop_classes:
             return self.prop_classes[target_prop_type.name.lower()](
                 existing_prop.pictograph, existing_prop.prop_dict, existing_prop.motion

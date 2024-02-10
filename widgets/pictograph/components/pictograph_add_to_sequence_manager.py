@@ -5,6 +5,7 @@ from data.prop_class_mapping import prop_class_mapping
 from constants import *
 from utilities.TypeChecking.MotionAttributes import Colors
 from utilities.TypeChecking.prop_types import PropTypes
+from widgets.factories.prop_factory import PropFactory
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -38,8 +39,9 @@ class AddToSequenceManager:
                 motion.arrow.attr_manager.get_arrow_attributes(),
             )
 
-            new_prop = self._create_prop(motion.color, motion.prop.prop_type)
-
+            new_prop = PropFactory().create_prop_of_type(
+                motion.prop, motion.prop.prop_type
+            )
             new_beat.arrows[new_arrow.color] = new_arrow
             new_beat.props[new_prop.color] = new_prop
 
