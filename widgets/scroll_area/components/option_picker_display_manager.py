@@ -28,11 +28,12 @@ class OptionPickerDisplayManager:
         self.scroll_area = scroll_area
         self.section_indices = {}  # Track indices for each section's grid layout
 
-    def order_and_display_pictographs(self, letter_type: LetterType) -> None:
-        self.calculate_section_indices(letter_type)
-        ordered_pictographs = self.get_ordered_pictographs_for_section(letter_type)
-        for index, (key, pictograph) in enumerate(ordered_pictographs.items()):
-            self.add_pictograph_to_layout(pictograph, index)
+    def order_and_display_pictographs(self) -> None:
+        for letter_type in LetterType:
+            self.calculate_section_indices(letter_type)
+            ordered_pictographs = self.get_ordered_pictographs_for_section(letter_type)
+            for index, (key, pictograph) in enumerate(ordered_pictographs.items()):
+                self.add_pictograph_to_layout(pictograph, index)
 
     def add_pictograph_to_layout(self, pictograph: Pictograph, index: int) -> None:
         letter_type = self.scroll_area.sections_manager.get_pictograph_letter_type(

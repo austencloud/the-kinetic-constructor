@@ -89,3 +89,6 @@ class PictographGetter:
 
     def turns_tuple(self) -> tuple[int, int, int]:
         return self.turns_tuple_generator.generate_turns_tuple(self.pictograph)
+
+    def pictograph_dict(self) -> dict:
+        return self.pictograph.pictograph_dict

@@ -16,7 +16,6 @@ from widgets.sequence_widget.beat_frame.beat import BeatView
 
 
 class BeatFrame(QFrame):
-    picker_updater = pyqtSignal(Pictograph, dict)
     COLUMN_COUNT = 5
     ROW_COUNT = 4
 

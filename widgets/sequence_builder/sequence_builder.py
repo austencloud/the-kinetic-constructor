@@ -4,7 +4,9 @@ from typing import TYPE_CHECKING
 from Enums import LetterType
 import pandas as pd
 from constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
-from widgets.pictograph.components.pictograph_add_to_sequence_manager import AddToSequenceManager
+from widgets.pictograph.components.pictograph_add_to_sequence_manager import (
+    AddToSequenceManager,
+)
 from .components.start_position_picker.start_position_picker import StartPosPicker
 from ..pictograph.pictograph import Pictograph
 from .components.option_picker.option_picker_click_handler import (
@@ -63,10 +65,7 @@ class SequenceBuilder(QFrame):
         self.option_picker.scroll_area.resize_option_picker_scroll_area()
         self.option_picker.scroll_area.sections_manager.show_all_sections()
         self.option_picker.scroll_area.update_pictographs()
-        for letter_type in LetterType:
-            self.option_picker.scroll_area.display_manager.order_and_display_pictographs(
-                letter_type
-            )
+        self.option_picker.scroll_area.display_manager.order_and_display_pictographs()
         QApplication.restoreOverrideCursor()
 
     def render_and_store_pictograph(self, pictograph_df: pd.Series):

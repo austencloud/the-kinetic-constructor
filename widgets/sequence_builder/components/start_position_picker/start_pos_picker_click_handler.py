@@ -12,7 +12,7 @@ class StartPosPickerClickHandler:
     def get_click_handler(
         self, start_pos: "Pictograph", is_start_pos: bool
     ) -> callable:
-        """
+        """Achieve it.
         Returns a click event handler for an option. This handler updates
         the picker state based on the selected option's attributes.
         """
@@ -27,7 +27,9 @@ class StartPosPickerClickHandler:
         self.sequence_builder.option_picker.scroll_area.update_pictographs(
             clicked_option
         )
-        new_beat = self.sequence_builder.add_to_sequence_manager.create_new_beat()
+        new_beat = self.sequence_builder.add_to_sequence_manager.create_new_beat(
+            clicked_option
+        )
         self.sequence_builder.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(
             new_beat
         )

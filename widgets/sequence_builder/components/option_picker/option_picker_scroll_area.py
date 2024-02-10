@@ -97,5 +97,4 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.update_all_pictograph_sizes()
 
     def update_all_pictograph_sizes(self):
-        for letter_type in LetterType:
-            self.display_manager.order_and_display_pictographs(letter_type)
+        self.display_manager.order_and_display_pictographs()
