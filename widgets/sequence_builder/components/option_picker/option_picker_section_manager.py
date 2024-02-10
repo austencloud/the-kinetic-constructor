@@ -57,7 +57,7 @@ class OptionPickerSectionsManager:
             self.ordered_section_types.append(letter_type)
             self.sections[letter_type] = section
             section.setup_components()
-            section.hide()
+            # section.hide()
         return self.sections[letter_type]
 
     def add_sections_to_layout(self) -> None:
@@ -95,14 +95,6 @@ class OptionPickerSectionsManager:
                 return letter_type
         return "Unknown"
 
-    def clear_sections(self) -> None:
-        """Clears all sections from the layout."""
-        while self.scroll_area.container_layout.count():
-            layout_item = self.scroll_area.container_layout.takeAt(0)
-            if layout_item.widget():
-                layout_item.widget().hide()
-        self.sections.clear()
-
     def create_or_get_filter_tab(self, section: SectionWidget) -> FilterTab:
         if not section.filter_tab:
             section.filter_tab = FilterTab(section)
@@ -112,5 +104,6 @@ class OptionPickerSectionsManager:
     def show_all_sections(self) -> None:
         self.add_sections_to_layout()
         for section in self.sections.values():
-            section.resize_section()
             section.show()
+            section.resize_section()
+            self.scroll_area.adjust_sections_size()

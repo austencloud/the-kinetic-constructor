@@ -29,7 +29,6 @@ class BasePictographScrollArea(QScrollArea):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
     def set_layout(self, layout_type: str):
-        # Assign new layout based on type
         if layout_type == "VBox":
             new_layout = QVBoxLayout()
         elif layout_type == "HBox":
@@ -41,7 +40,6 @@ class BasePictographScrollArea(QScrollArea):
         self.container.setLayout(self.container_layout)
 
     def clear_layout(self):
-        # disattach the container from its layout
         if self.container_layout:
             while self.container_layout.count():
                 child = self.container_layout.takeAt(0)
@@ -55,4 +53,3 @@ class BasePictographScrollArea(QScrollArea):
             self.container_layout.insertWidget(section_index, widget)
         else:  # widget is a start pos pictograph
             self.container_layout.addWidget(widget)
-        

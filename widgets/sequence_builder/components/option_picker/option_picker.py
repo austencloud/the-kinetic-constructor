@@ -22,6 +22,7 @@ class OptionPicker(QWidget):
         self.scroll_area = OptionPickerScrollArea(self)
         self.letter_button_frame = OptionPickerLetterButtonFrame(sequence_builder)
         self.pictograph_factory = ScrollAreaPictographFactory(self.scroll_area)
+        self.setup_layout()
 
     def setup_layout(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)
@@ -33,4 +34,3 @@ class OptionPicker(QWidget):
 
         self.layout.addLayout(self.left_layout, 5)
         self.layout.addLayout(self.right_layout, 1)
-

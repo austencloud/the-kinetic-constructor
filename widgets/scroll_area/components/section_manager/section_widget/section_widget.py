@@ -54,7 +54,7 @@ class SectionWidget(QGroupBox):
     def resize_section(self) -> None:
         self.setMinimumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
         self.setMaximumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
-        # self.filter_tab.visibility_handler.resize_filter_tab()
+        self.filter_tab.visibility_handler.resize_filter_tab()
         # self.resize_header()
 
     def toggle_section(self) -> None:

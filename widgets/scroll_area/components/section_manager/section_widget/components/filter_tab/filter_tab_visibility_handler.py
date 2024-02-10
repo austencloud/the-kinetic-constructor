@@ -63,7 +63,7 @@ class FilterTabVisibilityHandler:
 
         if len(motion_types_present) > 1:
             tabs_to_show.add(TabName.MOTION_TYPE)
-        if self.section.letter_type == Type1:
+        if self.section.letter_type == LetterType.Type1:
             if any(letter in {"S", "T", "U", "V"} for letter in selected_letters):
                 tabs_to_show.add(TabName.LEAD_STATE)
 

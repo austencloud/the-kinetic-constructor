@@ -29,6 +29,9 @@ class SequenceBuilder(QFrame):
         self.start_position_picked = False
         self._setup_components()
         self.start_position_picker = StartPosPicker(self)
+        self.start_position_picker.start_position_selected.connect(
+            self.transition_to_sequence_building
+        )
         self.option_picker = OptionPicker(self)
         self.setLayout(QHBoxLayout())
         self.layout().addWidget(self.start_position_picker)
@@ -52,14 +55,15 @@ class SequenceBuilder(QFrame):
         self.display_manager = SequenceBuilderDisplayManager(self)
 
     def transition_to_sequence_building(self, start_pictograph: Pictograph):
-        self.start_position_picker.hide_start_positions()
+        # self.start_position_picAlexa, how much time?ker.hide_start_positions()
         self.update_current_pictograph(start_pictograph)
         self.start_position_picked = True
         self.layout().removeWidget(self.start_position_picker)
+        self.start_position_picker.hide()
         self.layout().addWidget(self.option_picker)
+
         self.option_picker.show()
         self.option_picker.scroll_area.sections_manager.show_all_sections()
-        self.option_picker.setup_layout()
         self.option_picker.scroll_area.initialize_with_options()
 
     def render_and_store_pictograph(self, pictograph_data: pd.Series):

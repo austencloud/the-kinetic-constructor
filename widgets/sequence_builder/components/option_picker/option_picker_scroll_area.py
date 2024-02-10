@@ -24,7 +24,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.display_manager = self.sequence_builder.display_manager
         self.letters = self.sequence_builder.main_widget.letters
         self.pictographs = {}
-        self.set_layout("HBox")
+        self.set_layout("VBox")
         self.sections_manager = OptionPickerSectionsManager(self)
 
     def update_pictographs(self, clicked_option: "Pictograph"):
@@ -36,7 +36,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         filtered_data = self.filter_next_options(
             next_possible_letters, specific_end_pos
         )
-        self.clear_layout()
+        # self.clear_layout()
         for motion_dict in filtered_data:
             self.add_pictograph(motion_dict)
         QApplication.restoreOverrideCursor()
@@ -84,6 +84,11 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         """Fetch next options logic specific to sequence builder's needs."""
         return []
 
+    def adjust_sections_size(self):
+        """Adjust the size of sections, specific to sequence builder."""
+        
+        for section in self.sections_manager.sections.values():
+            section.adjust_size()
 
 
     def resize_option_picker_scroll_area(self) -> None:

@@ -28,7 +28,6 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
         self.letters = self.sequence_builder.main_widget.letters
         self.pictographs = {}
         self.set_layout("HBox")
-        self.sections_manager = OptionPickerSectionsManager(self)
         self.COLUMN_COUNT = 5
 
     def _update_pictographs(self, clicked_option: "Pictograph"):
@@ -103,10 +102,6 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
         """Fetch next options logic specific to sequence builder's needs."""
         return []
 
-    def adjust_sections_size(self):
-        """Adjust the size of sections, specific to sequence builder."""
-        for section in self.sections_manager.sections.values():
-            section.adjust_size()
 
     def _add_option_to_layout(self, option: Pictograph, is_start_pos: bool) -> None:
         option.view.mousePressEvent = self.clickable_option_handler.get_click_handler(
