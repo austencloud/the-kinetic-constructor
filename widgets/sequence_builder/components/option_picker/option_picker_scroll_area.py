@@ -26,7 +26,9 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.sequence_builder: "SequenceBuilder" = option_picker.sequence_builder
         self.clickable_option_handler = self.sequence_builder.clickable_option_handler
         self.letters = self.sequence_builder.letters_df
-        self.pictographs: dict[str, Pictograph] = {}
+        self.pictographs: dict[str, (Pictograph, bool)] = (
+            {}
+        ) 
         self.stretch_index = -1
 
         self.set_layout("VBox")
@@ -42,11 +44,25 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.stretch_index = self.layout.count()
 
     def update_pictographs(self):
-        """Initialize scroll area with options after a start pictograph is selected."""
+        """Only show pictographs that can follow the current pictograph."""
+        for pictograph, _ in self.pictographs.values():
+            pictograph.view.hide()
+
+        # Determine which pictographs should be visible and show them
         current_pictograph = self.option_picker.sequence_builder.current_pictograph
         next_options = self.get_next_options(current_pictograph)
         for option_dict in next_options:
-            self.sequence_builder.render_and_store_pictograph(option_dict)
+            pictograph_key = f"{option_dict['letter']}_{option_dict['start_pos']}→{option_dict['end_pos']}"
+            if pictograph_key in self.pictographs:
+                pictograph, _ = self.pictographs[pictograph_key]
+                pictograph.view.show()
+            else:
+                # If not in cache, create, store, and show
+                new_pictograph = self.sequence_builder.render_and_store_pictograph(
+                    option_dict
+                )
+                self.pictographs[pictograph_key] = (new_pictograph, True)
+                new_pictograph.view.show()
 
     def get_next_options(self, pictograph: Pictograph) -> list[pd.Series]:
         """Fetch next options logic specific to sequence builder's needs."""

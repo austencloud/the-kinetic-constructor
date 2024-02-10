@@ -80,6 +80,10 @@ class SequenceBuilder(QFrame):
             f"_red_{pictograph_dict['red_motion_type']}_{pictograph_dict['red_start_loc']}→{pictograph_dict['red_end_loc']}"
             f"_blue_{pictograph_dict['blue_motion_type']}_{pictograph_dict['blue_start_loc']}→{pictograph_dict['blue_end_loc']}"
         )
+        # Check if exists in cache and return it
+        if pictograph_key in self.option_picker.scroll_area.pictographs:
+            return self.option_picker.scroll_area.pictographs[pictograph_key][0]
+
         new_pictograph = (
             self.option_picker.scroll_area.pictograph_factory.get_or_create_pictograph(
                 pictograph_key, pictograph_dict
@@ -96,6 +100,8 @@ class SequenceBuilder(QFrame):
             LetterType.get_letter_type(pictograph_dict["letter"])
         )
         section.pictographs[pictograph_key] = new_pictograph
+        self.option_picker.scroll_area.pictographs[pictograph_key] = (new_pictograph, True)
+        return new_pictograph
 
     def resize_sequence_builder(self) -> None:
         self.setMinimumWidth(int(self.main_widget.width() * 3 / 5))
