@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QVBoxLayout, QGraphicsSceneMouseEvent, QComboBox
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from objects.prop.prop import *
-from objects.prop.prop_classes import BigTriad
+from objects.prop.prop_classes import BigTriad, EightRings
 from utilities.TypeChecking.prop_types import PropTypeslist
 from widgets.graph_editor_tab.graph_editor_object_panel.base_objectbox.base_objectbox import (
     BaseObjectBox,
@@ -74,6 +74,7 @@ class PropBox(BaseObjectBox):
             Buugeng,
             BigBuugeng,
             Fractalgeng,
+            EightRings,
             Fan,
             BigFan,
             Triad,
@@ -95,6 +96,7 @@ class PropBox(BaseObjectBox):
             BUUGENG: Buugeng,
             BIGBUUGENG: BigBuugeng,
             FRACTALGENG: Fractalgeng,
+            EIGHTRINGS: EightRings,
             FAN: Fan,
             BIGFAN: BigFan,
             TRIAD: Triad,

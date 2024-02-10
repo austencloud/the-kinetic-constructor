@@ -24,7 +24,7 @@ class AddToSequenceManager:
         )
 
     def create_new_beat(self) -> QGraphicsScene:
-        from widgets.sequence_widget.beat_frame.beat import Beat
+        from widgets.pictograph.pictograph import Pictograph
 
         new_beat = Pictograph(self.pictograph.main_widget)
         new_beat.setSceneRect(self.pictograph.sceneRect())

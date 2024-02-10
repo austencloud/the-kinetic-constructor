@@ -10,22 +10,22 @@ if TYPE_CHECKING:
 
 class MotionAttrManager:
     def __init__(self, motion: "Motion") -> None:
-        self.m = motion
-        self.m.color = self.m.motion_dict.get(COLOR)
-        self.m.turns = self.m.motion_dict.get(TURNS)
-        self.m.start_loc = None
-        self.m.end_loc = None
-        self.m.motion_type = None
+        self.motion = motion
+        self.motion.color = self.motion.motion_dict.get(COLOR)
+        self.motion.turns = self.motion.motion_dict.get(TURNS)
+        self.motion.start_loc = None
+        self.motion.end_loc = None
+        self.motion.motion_type = None
 
     def update_attributes(self, motion_dict: dict[str, str]) -> None:
         for attribute, value in motion_dict.items():
             if value is not None:
-                setattr(self.m, attribute, value)
+                setattr(self.motion, attribute, value)
 
-        if self.m.motion_type:
-            self.m.end_ori = self.m.ori_calculator.get_end_ori()
+        if self.motion.motion_type:
+            self.motion.end_ori = self.motion.ori_calculator.get_end_ori()
 
-        if self.m.pictograph.letter in ["S", "T", "U", "V"]:
+        if self.motion.pictograph.letter in ["S", "T", "U", "V"]:
             self.assign_lead_states()
 
     def update_motion_attributes_from_filter_tab(
@@ -35,7 +35,7 @@ class MotionAttrManager:
             if (
                 box.attribute_type == MOTION_TYPE
                 and box.motion_type
-                == pictograph_dict.get(f"{self.m.color}_{MOTION_TYPE}")
+                == pictograph_dict.get(f"{self.motion.color}_{MOTION_TYPE}")
             ):
                 self.set_motion_attributes_from_attr_box(box, pictograph_dict)
 
@@ -58,53 +58,53 @@ class MotionAttrManager:
         elif box.turns_panel.filter_tab.section.vtg_dir_btn_state[OPP]:
             self.set_opposite_direction_turns_from_attr_box(box, pictograph_dict, turns)
 
-        if turns == 0 and pictograph_dict[self.m.color + "_" + MOTION_TYPE] in [
+        if turns == 0 and pictograph_dict[self.motion.color + "_" + MOTION_TYPE] in [
             DASH,
             STATIC,
         ]:
-            pictograph_dict[self.m.color + "_" + PROP_ROT_DIR] = NO_ROT
+            pictograph_dict[self.motion.color + "_" + PROP_ROT_DIR] = NO_ROT
 
     def set_same_direction_turns_from_attr_box(
         self, box: "TurnsBox", pictograph_dict: dict, turns: Union[int, float]
     ) -> None:
-        other_color = RED if self.m.color == BLUE else BLUE
-        if pictograph_dict[self.m.color + "_" + MOTION_TYPE] == box.motion_type:
-            pictograph_dict[self.m.color + "_" + PROP_ROT_DIR] = pictograph_dict[
+        other_color = RED if self.motion.color == BLUE else BLUE
+        if pictograph_dict[self.motion.color + "_" + MOTION_TYPE] == box.motion_type:
+            pictograph_dict[self.motion.color + "_" + PROP_ROT_DIR] = pictograph_dict[
                 other_color + "_" + PROP_ROT_DIR
             ]
-            pictograph_dict[self.m.color + "_" + TURNS] = turns
+            pictograph_dict[self.motion.color + "_" + TURNS] = turns
 
     def set_opposite_direction_turns_from_attr_box(
         self, box: "TurnsBox", pictograph_dict: dict, turns: Union[int, float]
     ) -> None:
-        other_color = RED if self.m.color == BLUE else BLUE
+        other_color = RED if self.motion.color == BLUE else BLUE
         opposite_dir = (
             COUNTER_CLOCKWISE
             if pictograph_dict[other_color + "_" + PROP_ROT_DIR] == CLOCKWISE
             else CLOCKWISE
         )
-        if pictograph_dict[self.m.color + "_" + MOTION_TYPE] == box.motion_type:
-            pictograph_dict[self.m.color + "_" + PROP_ROT_DIR] = opposite_dir
-            pictograph_dict[self.m.color + "_" + TURNS] = turns
+        if pictograph_dict[self.motion.color + "_" + MOTION_TYPE] == box.motion_type:
+            pictograph_dict[self.motion.color + "_" + PROP_ROT_DIR] = opposite_dir
+            pictograph_dict[self.motion.color + "_" + TURNS] = turns
 
     def update_prop_ori(self) -> None:
-        if hasattr(self.m, PROP) and self.m.prop:
-            if not self.m.end_ori:
-                self.m.end_ori = self.m.ori_calculator.get_end_ori()
-            self.m.prop.ori = self.m.end_ori
-            self.m.prop.loc = self.m.end_loc
-            self.m.prop.axis = self.m.prop.attr_manager.get_axis_from_ori()
+        if hasattr(self.motion, PROP) and self.motion.prop:
+            if not self.motion.end_ori:
+                self.motion.end_ori = self.motion.ori_calculator.get_end_ori()
+            self.motion.prop.ori = self.motion.end_ori
+            self.motion.prop.loc = self.motion.end_loc
+            self.motion.prop.axis = self.motion.prop.attr_manager.get_axis_from_ori()
 
     def get_attributes(self) -> dict[str, str]:
         return {
-            COLOR: self.m.color,
-            MOTION_TYPE: self.m.motion_type,
-            TURNS: self.m.turns,
-            PROP_ROT_DIR: self.m.prop_rot_dir,
-            START_LOC: self.m.start_loc,
-            END_LOC: self.m.end_loc,
-            START_ORI: self.m.start_ori,
-            END_ORI: self.m.end_ori,
+            COLOR: self.motion.color,
+            MOTION_TYPE: self.motion.motion_type,
+            TURNS: self.motion.turns,
+            PROP_ROT_DIR: self.motion.prop_rot_dir,
+            START_LOC: self.motion.start_loc,
+            END_LOC: self.motion.end_loc,
+            START_ORI: self.motion.start_ori,
+            END_ORI: self.motion.end_ori,
         }
 
     def _change_motion_attributes_to_static(self) -> None:
@@ -112,15 +112,15 @@ class MotionAttrManager:
             MOTION_TYPE: STATIC,
             TURNS: 0,
             PROP_ROT_DIR: NO_ROT,
-            START_LOC: self.m.prop.loc,
-            END_LOC: self.m.prop.loc,
+            START_LOC: self.motion.prop.loc,
+            END_LOC: self.motion.prop.loc,
         }
-        self.m.updater.update_motion(motion_dict)
-        self.m.arrow.loc = self.m.prop.loc
+        self.motion.updater.update_motion(motion_dict)
+        self.motion.arrow.loc = self.motion.prop.loc
 
     def assign_lead_states(self) -> None:
-        leading_motion = self.m.pictograph.get.leading_motion()
-        trailing_motion = self.m.pictograph.get.trailing_motion()
-        if self.m.pictograph.get.leading_motion():
+        leading_motion = self.motion.pictograph.get.leading_motion()
+        trailing_motion = self.motion.pictograph.get.trailing_motion()
+        if self.motion.pictograph.get.leading_motion():
             leading_motion.arrow.motion.lead_state = LEADING
             trailing_motion.arrow.motion.lead_state = TRAILING

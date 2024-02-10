@@ -22,6 +22,7 @@ class PropTypeSelector(QGroupBox):
                 PropTypes.BigStaff.name,
                 PropTypes.Club.name,
                 PropTypes.Buugeng.name,
+                PropTypes.EightRings.name,
                 PropTypes.Fan.name,
                 PropTypes.Triad.name,
                 PropTypes.MiniHoop.name,

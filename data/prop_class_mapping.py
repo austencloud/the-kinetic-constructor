@@ -12,6 +12,7 @@ prop_class_mapping = {
     PropTypes.Buugeng: Buugeng,
     PropTypes.BigBuugeng: BigBuugeng,
     PropTypes.Fractalgeng: Fractalgeng,
+    PropTypes.EightRings: EightRings,
     PropTypes.Triad: Triad,
     PropTypes.BigTriad: BigTriad,
     PropTypes.DoubleStar: DoubleStar,

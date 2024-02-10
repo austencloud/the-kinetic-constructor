@@ -18,6 +18,7 @@ string_to_enum_map = {
     "buugeng": PropTypes.Buugeng,
     "bigbuugeng": PropTypes.BigBuugeng,
     "fractalgeng": PropTypes.Fractalgeng,
+    "eightrings": PropTypes.EightRings,
     "fan": PropTypes.Fan,
     "bigfan": PropTypes.BigFan,
     "triad": PropTypes.Triad,

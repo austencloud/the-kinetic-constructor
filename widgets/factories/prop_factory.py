@@ -16,6 +16,7 @@ class PropFactory:
             PropTypes.Buugeng.name.lower(): Buugeng,
             PropTypes.BigBuugeng.name.lower(): BigBuugeng,
             PropTypes.Fractalgeng.name.lower(): Fractalgeng,
+            PropTypes.EightRings.name.lower(): EightRings,
             PropTypes.DoubleStar.name.lower(): DoubleStar,
             PropTypes.BigHoop.name.lower(): BigHoop,
             PropTypes.BigDoubleStar.name.lower(): BigDoubleStar,
