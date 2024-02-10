@@ -33,17 +33,10 @@ class OptionPickerSectionsManager:
         self.sections: dict[LetterType, SectionWidget] = {}
         self.filter_tabs_cache: dict[LetterType, FilterTab] = {}
         self.pictograph_cache: dict[Letters, list[LetterType]] = {}
-        self.letters_by_type: dict[LetterType, list[Letters]] = (
-            self.setup_letters_by_type()
-        )
-        self.pictographs_by_type = {type: [] for type in self.letters_by_type.keys()}
+
         self.ordered_section_types: list[LetterType] = []
 
-    def setup_letters_by_type(self) -> dict[LetterType, list[Letters]]:
-        letters_by_type = {}
-        for letter_type in LetterType:
-            letters_by_type[letter_type.description] = letter_type.letters
-        return letters_by_type
+
 
     def initialize_sections(self) -> None:
         for letter_type in LetterType:
@@ -88,8 +81,8 @@ class OptionPickerSectionsManager:
 
     def get_pictograph_letter_type(self, pictograph_key: str) -> str:
         letter = pictograph_key.split("_")[0]
-        for letter_type, letters in self.letters_by_type.items():
-            if letter in letters:
+        for letter_type in LetterType:
+            if letter in letter_type.value[0]:
                 return letter_type
         return "Unknown"
 

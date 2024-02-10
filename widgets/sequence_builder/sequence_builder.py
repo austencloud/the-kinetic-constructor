@@ -79,7 +79,7 @@ class SequenceBuilder(QFrame):
         new_pictograph = self.option_picker.pictograph_factory.get_or_create_pictograph(
             pictograph_key, pictograph_dict
         )
-
+        self.option_picker.scroll_area.pictographs[pictograph_key] = new_pictograph
         if pictograph_key not in self.main_widget.all_pictographs.get(
             pictograph_dict["letter"], {}
         ):
