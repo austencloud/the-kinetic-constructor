@@ -1,4 +1,5 @@
-from PyQt6.QtWidgets import QFrame, QHBoxLayout
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
+from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums import LetterType
 import pandas as pd
@@ -24,9 +25,6 @@ class SequenceBuilder(QFrame):
         self.start_position_picked = False
         self._setup_components()
         self.start_position_picker = StartPosPicker(self)
-        self.start_position_picker.start_position_selected.connect(
-            self.transition_to_sequence_building
-        )
         self.option_picker = OptionPicker(self)
         self.setLayout(QHBoxLayout())
         self.layout().addWidget(self.start_position_picker)
@@ -51,6 +49,7 @@ class SequenceBuilder(QFrame):
         self.clickable_option_handler = OptionPickerClickHandler(self)
 
     def transition_to_sequence_building(self, start_pictograph: Pictograph):
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.start_position_picked = True
         self.start_position_picker.hide()
         self.update_current_pictograph(start_pictograph)
@@ -65,7 +64,8 @@ class SequenceBuilder(QFrame):
             self.option_picker.scroll_area.display_manager.order_and_display_pictographs(
                 letter_type
             )
-
+        QApplication.restoreOverrideCursor()
+        
     def render_and_store_pictograph(self, pictograph_df: pd.Series):
         pictograph_dict = pictograph_df.to_dict()
 

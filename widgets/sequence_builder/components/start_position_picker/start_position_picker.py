@@ -25,8 +25,6 @@ class StartPosPicker(QWidget):
         self.start_options: dict[str, Pictograph] = {}
         self.scroll_area = StartPosPickerScrollArea(self)
         self.start_pos_manager = StartPosManager(self)
-
-
         self.setup_layout()
 
     def setup_layout(self):
