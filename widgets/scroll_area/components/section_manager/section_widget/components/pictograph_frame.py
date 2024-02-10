@@ -11,5 +11,5 @@ class ScrollAreaSectionPictographFrame(QFrame):
         super().__init__()
         self.section = section
         self.layout: QGridLayout = QGridLayout(self)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.setContentsMargins(0, 0, 0, 0)

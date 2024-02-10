@@ -1,12 +1,14 @@
 from typing import TYPE_CHECKING
 from Enums import LetterType
 from utilities.TypeChecking.TypeChecking import Letters
+from widgets.scroll_area.components.section_manager.section_widget.section_group_widget import (
+    SectionGroupWidget,
+)
+from widgets.sequence_builder.components.option_picker.option_picker_section_widget import OptionPickerSectionWidget
 from ....scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
     FilterTab,
 )
-from ....scroll_area.components.section_manager.section_widget.section_widget import (
-    SectionWidget,
-)
+
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (
@@ -16,7 +18,7 @@ if TYPE_CHECKING:
 
 
 class OptionPickerSectionsManager:
-    """Manages all of the sections in the scroll area. Individual sections are managed by the SectionWidget class."""
+    """Manages all of the sections in the scroll area. Individual sections are managed by the OptionPickerSectionWidget class."""
 
     SECTION_ORDER = [
         LetterType.Type1,
@@ -30,7 +32,7 @@ class OptionPickerSectionsManager:
     def __init__(self, scroll_area: "OptionPickerScrollArea") -> None:
         self.scroll_area = scroll_area
         self.sequence_builder: "SequenceBuilder" = scroll_area.sequence_builder
-        self.sections: dict[LetterType, SectionWidget] = {}
+        self.sections: dict[LetterType, OptionPickerSectionWidget] = {}
         self.filter_tabs_cache: dict[LetterType, FilterTab] = {}
         self.pictograph_cache: dict[Letters, list[LetterType]] = {}
         self.ordered_section_types: list[LetterType] = []
@@ -39,9 +41,9 @@ class OptionPickerSectionsManager:
         for letter_type in LetterType:
             self.get_section(letter_type)
 
-    def create_section(self, letter_type: LetterType) -> SectionWidget:
+    def create_section(self, letter_type: LetterType) -> OptionPickerSectionWidget:
         if letter_type not in self.sections:
-            section = SectionWidget(letter_type, self.scroll_area)
+            section = OptionPickerSectionWidget(letter_type, self.scroll_area)
             self.sections[letter_type] = section
             self.ordered_section_types.append(letter_type)
             section.setup_components()
@@ -49,10 +51,26 @@ class OptionPickerSectionsManager:
         return self.sections[letter_type]
 
     def add_sections_to_layout(self) -> None:
-        for section in self.sections.values():
-            letter_type = section.letter_type
-            correct_index = self.get_correct_index_for_section(letter_type)
-            self.scroll_area.add_widget_to_layout(section, correct_index)
+        grouped_sections = [LetterType.Type4, LetterType.Type5, LetterType.Type6]
+        group_widget = None
+
+        for section_type in self.SECTION_ORDER:
+            section = self.sections.get(section_type)
+            if section:
+                # Group specified sections together
+                if section_type in grouped_sections:
+                    if group_widget is None:
+                        group_widget = SectionGroupWidget()
+                        correct_index = self.get_correct_index_for_section(
+                            grouped_sections[0]
+                        )
+                        self.scroll_area.add_widget_to_layout(
+                            group_widget, correct_index
+                        )
+                    group_widget.add_section_widget(section)
+                else:
+                    correct_index = self.get_correct_index_for_section(section_type)
+                    self.scroll_area.add_widget_to_layout(section, correct_index)
 
     def get_correct_index_for_section(self, letter_type: LetterType) -> int:
         desired_position = self.SECTION_ORDER.index(letter_type)
@@ -65,7 +83,7 @@ class OptionPickerSectionsManager:
                 return i
         return len(self.ordered_section_types)
 
-    def get_section(self, letter_type: LetterType) -> SectionWidget:
+    def get_section(self, letter_type: LetterType) -> OptionPickerSectionWidget:
         if letter_type not in self.sections:
             self.create_section(letter_type)
         section = self.sections[letter_type]
@@ -83,7 +101,7 @@ class OptionPickerSectionsManager:
                 return letter_type
         return "Unknown"
 
-    def create_or_get_filter_tab(self, section: SectionWidget) -> FilterTab:
+    def create_or_get_filter_tab(self, section: OptionPickerSectionWidget) -> FilterTab:
         if not section.filter_tab:
             section.filter_tab = FilterTab(section)
             section.layout.insertWidget(1, section.filter_tab)

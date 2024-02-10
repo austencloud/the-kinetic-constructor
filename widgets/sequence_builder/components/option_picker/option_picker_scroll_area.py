@@ -45,13 +45,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
     def initialize_with_options(self):
         """Initialize scroll area with options after a start pictograph is selected."""
         start_pictograph = self.option_picker.sequence_builder.current_pictograph
-        end_pos, end_red_ori, end_blue_ori = (
-            start_pictograph.end_pos,
-            start_pictograph.red_motion.end_ori,
-            start_pictograph.blue_motion.end_ori,
-        )
         next_options = self.get_next_options(start_pictograph)
-
         for option_dict in next_options:
             self.sequence_builder.render_and_store_pictograph(option_dict)
 

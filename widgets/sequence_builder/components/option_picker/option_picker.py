@@ -27,13 +27,7 @@ class OptionPicker(QWidget):
 
     def setup_layout(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.left_layout = QVBoxLayout()
-        self.right_layout = QVBoxLayout()
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.left_layout.addWidget(self.scroll_area)
-        self.right_layout.addWidget(self.letter_button_frame)
-
-        self.layout.addLayout(self.left_layout, 5)
-        self.layout.addLayout(self.right_layout, 1)
+        self.layout.addWidget(self.scroll_area)
