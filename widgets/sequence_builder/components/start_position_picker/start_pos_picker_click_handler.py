@@ -27,7 +27,7 @@ class StartPosPickerClickHandler:
         self.sequence_builder.option_picker.scroll_area.update_pictographs(
             clicked_option
         )
-        new_beat = clicked_option.add_to_sequence_manager.create_new_beat()
+        new_beat = self.sequence_builder.add_to_sequence_manager.create_new_beat()
         self.sequence_builder.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(
             new_beat
         )

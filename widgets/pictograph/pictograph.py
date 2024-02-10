@@ -99,7 +99,6 @@ class Pictograph(QGraphicsScene):
         self.context_menu_handler = PictographContextMenuHandler(self)
         self.updater = PictographStateUpdater(self)
         self.image_renderer = PictographImageRenderer(self)
-        self.add_to_sequence_manager = AddToSequenceManager(self)
         self.get = PictographGetter(self)
         self.check = PictographChecker(self)
         self.view = PictographView(self)

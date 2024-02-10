@@ -17,7 +17,7 @@ from objects.prop.prop import Prop
 class AddToSequenceManager:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
-
+        
     def add_to_sequence_callback(self) -> None:
         new_beat = self.create_new_beat()
         self.pictograph.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(
@@ -29,7 +29,15 @@ class AddToSequenceManager:
 
         new_beat = Pictograph(self.pictograph.main_widget)
         new_beat.setSceneRect(self.pictograph.sceneRect())
-        new_beat.updater.update_pictograph({LETTER: self.pictograph.letter})
+
+        pictograph_dict = {
+            LETTER: self.pictograph.letter,
+            RED_START_ORI: self.pictograph.motions[RED].end_ori,
+            BLUE_START_ORI: self.pictograph.motions[BLUE].end_ori,
+            RED_TURNS: 0,
+            BLUE_TURNS: 0,
+        }
+        new_beat.updater.update_pictograph(pictograph_dict)
 
         return new_beat
 

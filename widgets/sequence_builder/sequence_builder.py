@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 from Enums import LetterType
 import pandas as pd
 from constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
+from widgets.pictograph.components.pictograph_add_to_sequence_manager import AddToSequenceManager
 from .components.start_position_picker.start_position_picker import StartPosPicker
 from ..pictograph.pictograph import Pictograph
 from .components.option_picker.option_picker_click_handler import (
@@ -26,6 +27,8 @@ class SequenceBuilder(QFrame):
         self._setup_components()
         self.start_position_picker = StartPosPicker(self)
         self.option_picker = OptionPicker(self)
+        self.add_to_sequence_manager = AddToSequenceManager(self)
+
         self.setLayout(QHBoxLayout())
         self.layout().addWidget(self.start_position_picker)
 
@@ -37,21 +40,21 @@ class SequenceBuilder(QFrame):
 
     def render_next_options(self, end_pos):
         """Fetches and renders next options based on the end position."""
-        matching_rows: pd.DataFrame = self.letters_df[
+        pictograph_dfs: pd.DataFrame = self.letters_df[
             self.letters_df["start_pos"] == end_pos
         ]
-        for _, row in matching_rows.iterrows():
-            pictograph_key = f"{row['letter']}_{row['start_pos']}→{row['end_pos']}"
+        for _, pictograph_df in pictograph_dfs.iterrows():
+            pictograph_key = f"{pictograph_df['letter']}_{pictograph_df['start_pos']}→{pictograph_df['end_pos']}"
             if pictograph_key not in self.main_widget.all_pictographs:
-                self.render_and_store_pictograph(row)
+                self.render_and_store_pictograph(pictograph_df)
 
     def _setup_components(self):
         self.clickable_option_handler = OptionPickerClickHandler(self)
 
     def transition_to_sequence_building(self, start_pictograph: Pictograph):
-        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.start_position_picked = True
         self.start_position_picker.hide()
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.update_current_pictograph(start_pictograph)
         self.layout().removeWidget(self.start_position_picker)
         self.layout().addWidget(self.option_picker)
