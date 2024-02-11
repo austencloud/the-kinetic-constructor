@@ -92,9 +92,6 @@ class ScrollAreaPictographFactory:
         ]
         for key in keys_to_remove:
             pictograph = self.scroll_area.pictographs.pop(key)
-            section_widget = self.scroll_area.sections_manager.get_section(
-                LetterType.get_letter_type(pictograph.letter)
-            )
             pictograph.view.setParent(None)
 
     def get_pictograph(self, pictograph_key) -> Pictograph:

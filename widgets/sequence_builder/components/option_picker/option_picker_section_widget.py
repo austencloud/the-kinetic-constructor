@@ -2,6 +2,9 @@ from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QVBoxLayout, QGroupBox, QSizePolicy
 from Enums import LetterType
 from constants import OPP, SAME
+from widgets.scroll_area.components.scroll_area_pictograph_factory import (
+    ScrollAreaPictographFactory,
+)
 from ....scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
     FilterTab,
 )
@@ -117,3 +120,14 @@ class OptionPickerSectionWidget(QGroupBox):
     def adjust_size(self):
         self.resize_section()
         # self.filter_tab.visibility_handler.resize_filter_tab()
+
+    def add_pictograph(self, pictograph: Pictograph):
+        """Add a pictograph widget to the section layout."""
+        self.pictographs[
+            self.scroll_area.pictograph_factory.generate_pictograph_key_from_dict(
+                pictograph.get.pictograph_dict()
+            )
+        ] = pictograph
+        self.pictograph_frame.layout.addWidget(pictograph.view)
+        pictograph.view.resize_for_scroll_area()
+        pictograph.view.show()

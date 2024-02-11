@@ -74,7 +74,7 @@ class SequenceBuilder(QFrame):
         pictograph_key = self.generate_pictograph_key(pictograph_dict)
 
         if pictograph_key in self.option_picker.scroll_area.pictographs:
-            return self.option_picker.scroll_area.pictographs[pictograph_key][0]
+            return self.option_picker.scroll_area.pictographs[pictograph_key]
 
         new_pictograph = (
             self.option_picker.scroll_area.pictograph_factory.get_or_create_pictograph(
@@ -92,10 +92,7 @@ class SequenceBuilder(QFrame):
             LetterType.get_letter_type(pictograph_dict["letter"])
         )
         section.pictographs[pictograph_key] = new_pictograph
-        self.option_picker.scroll_area.pictographs[pictograph_key] = (
-            new_pictograph,
-            True,
-        )
+        self.option_picker.scroll_area.pictographs[pictograph_key] = new_pictograph
         return new_pictograph
 
     def _add_turns_and_start_ori(self, pictograph_dict):

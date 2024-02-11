@@ -26,7 +26,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.sequence_builder: "SequenceBuilder" = option_picker.sequence_builder
         self.clickable_option_handler = self.sequence_builder.clickable_option_handler
         self.letters = self.sequence_builder.letters_df
-        self.pictographs: dict[str, (Pictograph, bool)] = {}
+        self.pictographs: dict[str, Pictograph] = {}
         self.stretch_index = -1
 
         self.set_layout("VBox")
@@ -46,19 +46,28 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         current_pictograph = self.option_picker.sequence_builder.current_pictograph
         next_options = self.get_next_options(current_pictograph)
 
-        for pictograph, _ in self.pictographs.values():
+        # Hide all pictographs initially
+        for pictograph in self.pictographs.values():
             pictograph.view.hide()
 
+        # Clear all section layouts
+        self.display_manager.clear_all_section_layouts()
+
+        # Populate the layout with next options only
         for option_dict in next_options:
             pictograph_key = self.sequence_builder.generate_pictograph_key(option_dict)
-            pictograph, _ = self.pictographs.get(pictograph_key, (None, False))
+            pictograph = self.pictographs.get(pictograph_key)
 
             if not pictograph:
                 pictograph = self.sequence_builder.render_and_store_pictograph(
                     option_dict
                 )
-                self.pictographs[pictograph_key] = (pictograph, True)
-#
+                self.pictographs[pictograph_key] = pictograph
+
+            # Add pictograph to layout without specifying index
+            self.display_manager.add_pictograph_to_section_layout(pictograph)
+
+        # Order and display pictographs in the layout
         self.display_manager.order_and_display_pictographs()
 
     def get_next_options(self, pictograph: Pictograph) -> list[pd.Series]:

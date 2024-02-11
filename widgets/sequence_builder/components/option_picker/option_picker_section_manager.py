@@ -49,7 +49,6 @@ class OptionPickerSectionsManager:
             self.sections[letter_type] = section
             self.ordered_section_types.append(letter_type)
             section.setup_components()
-            # section.hide()
         return self.sections[letter_type]
 
     def add_sections_to_layout(self) -> None:
@@ -59,7 +58,6 @@ class OptionPickerSectionsManager:
         for section_type in self.SECTION_ORDER:
             section = self.sections.get(section_type)
             if section:
-                # Group specified sections together
                 if section_type in grouped_sections:
                     if group_widget is None:
                         group_widget = SectionGroupWidget()
@@ -89,11 +87,6 @@ class OptionPickerSectionsManager:
         if letter_type not in self.sections:
             self.create_section(letter_type)
         section = self.sections[letter_type]
-        # if not section.filter_tab:
-        #     if letter_type not in self.filter_tabs_cache:
-        #         filter_tab = self.create_or_get_filter_tab(section)
-        #         self.filter_tabs_cache[letter_type] = filter_tab
-        #     section.filter_tab = self.filter_tabs_cache[letter_type]
         return section
 
     def get_pictograph_letter_type(self, pictograph_key: str) -> str:

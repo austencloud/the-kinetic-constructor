@@ -93,7 +93,11 @@ class SectionHeader(QWidget):
 
     def load_and_resize_pixmap(self, path: str) -> QPixmap:
         pixmap = QPixmap(path)
-        height = self.section.scroll_area.width() // 40
+        base_class_name = type(self.section.scroll_area).__name__
+        if base_class_name == "CodexScrollArea":
+            height = self.section.scroll_area.width() // 45
+        elif base_class_name == "OptionPickerScrollArea":
+            height = self.section.scroll_area.width() // 60
         return pixmap.scaledToHeight(height, Qt.TransformationMode.SmoothTransformation)
 
     def mousePressEvent(self, event) -> None:
