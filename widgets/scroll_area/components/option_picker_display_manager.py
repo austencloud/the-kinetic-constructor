@@ -23,33 +23,32 @@ class OptionPickerDisplayManager:
     SPACING = 5
     COLUMN_COUNT = 8
 
-    def __init__(self, scroll_area: "OptionPickerScrollArea") -> None:
-
+    def __init__(self, scroll_area: "OptionPickerScrollArea"):
         self.scroll_area = scroll_area
-        self.section_indices = {}  # Track indices for each section's grid layout
+        self.section_indices = {}
+        self.pictograph_count = 0
 
-    def order_and_display_pictographs(self) -> None:
+    def order_and_display_pictographs(self):
         for letter_type in LetterType:
             self.calculate_section_indices(letter_type)
             ordered_pictographs = self.get_ordered_pictographs_for_section(letter_type)
-            for index, (key, pictograph_tuple) in enumerate(ordered_pictographs.items()):
+            for index, (key, pictograph_tuple) in enumerate(
+                ordered_pictographs.items()
+            ):
                 self.add_pictograph_to_layout(pictograph_tuple[0], index)
 
-    def add_pictograph_to_layout(self, pictograph: Pictograph, index: int) -> None:
+    def add_pictograph_to_layout(self, pictograph: Pictograph, index: int):
+        row, col = divmod(index, self.COLUMN_COUNT)
         letter_type = self.scroll_area.sections_manager.get_pictograph_letter_type(
             pictograph.letter
         )
         section: SectionWidget = self.scroll_area.sections_manager.get_section(
             letter_type
         )
-
         if section:
-            row, col = divmod(index, self.COLUMN_COUNT)
-            logging.debug(f"Adding {pictograph.letter} at position: ({row}, {col})")
             section.pictograph_frame.layout.addWidget(pictograph.view, row, col)
-            next_index = index + 1
-            self.section_indices[letter_type] = divmod(next_index, self.COLUMN_COUNT)
             pictograph.view.resize_for_scroll_area()
+            pictograph.view.show()
 
     def calculate_section_indices(self, letter_type: str) -> None:
 
@@ -77,12 +76,6 @@ class OptionPickerDisplayManager:
         )
         if pictograph_to_remove:
             self.scroll_area.layout.removeWidget(pictograph_to_remove.view)
-
-    def clear_layout(self) -> None:
-        while self.scroll_area.layout.count():
-            widget = self.scroll_area.layout.takeAt(0).widget()
-            if widget is not None:
-                widget.setParent(None)
 
     def get_ordered_pictographs(self) -> dict[Letters, Pictograph]:
         return {

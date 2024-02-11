@@ -70,17 +70,9 @@ class SequenceBuilder(QFrame):
 
     def render_and_store_pictograph(self, pictograph_df: pd.Series):
         pictograph_dict = pictograph_df.to_dict()
+        pictograph_dict = self._add_turns_and_start_ori(pictograph_dict)
+        pictograph_key = self.generate_pictograph_key(pictograph_dict)
 
-        pictograph_dict[RED_START_ORI] = self.current_end_red_ori
-        pictograph_dict[BLUE_START_ORI] = self.current_end_blue_ori
-        pictograph_dict[RED_TURNS] = 0
-        pictograph_dict[BLUE_TURNS] = 0
-        pictograph_key = (
-            f"{pictograph_dict['letter']}_{pictograph_dict['start_pos']}→{pictograph_dict['end_pos']}"
-            f"_red_{pictograph_dict['red_motion_type']}_{pictograph_dict['red_start_loc']}→{pictograph_dict['red_end_loc']}"
-            f"_blue_{pictograph_dict['blue_motion_type']}_{pictograph_dict['blue_start_loc']}→{pictograph_dict['blue_end_loc']}"
-        )
-        # Check if exists in cache and return it
         if pictograph_key in self.option_picker.scroll_area.pictographs:
             return self.option_picker.scroll_area.pictographs[pictograph_key][0]
 
@@ -100,8 +92,25 @@ class SequenceBuilder(QFrame):
             LetterType.get_letter_type(pictograph_dict["letter"])
         )
         section.pictographs[pictograph_key] = new_pictograph
-        self.option_picker.scroll_area.pictographs[pictograph_key] = (new_pictograph, True)
+        self.option_picker.scroll_area.pictographs[pictograph_key] = (
+            new_pictograph,
+            True,
+        )
         return new_pictograph
+
+    def _add_turns_and_start_ori(self, pictograph_dict):
+        pictograph_dict[RED_START_ORI] = self.current_end_red_ori
+        pictograph_dict[BLUE_START_ORI] = self.current_end_blue_ori
+        pictograph_dict[RED_TURNS] = 0
+        pictograph_dict[BLUE_TURNS] = 0
+        return pictograph_dict
+
+    def generate_pictograph_key(self, pictograph_dict):
+        return (
+            f"{pictograph_dict['letter']}_{pictograph_dict['start_pos']}→{pictograph_dict['end_pos']}"
+            f"_red_{pictograph_dict['red_motion_type']}_{pictograph_dict['red_start_loc']}→{pictograph_dict['red_end_loc']}"
+            f"_blue_{pictograph_dict['blue_motion_type']}_{pictograph_dict['blue_start_loc']}→{pictograph_dict['blue_end_loc']}"
+        )
 
     def resize_sequence_builder(self) -> None:
         self.setMinimumWidth(int(self.main_widget.width() * 3 / 5))

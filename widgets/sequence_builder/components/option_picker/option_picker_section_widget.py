@@ -68,12 +68,12 @@ class OptionPickerSectionWidget(QGroupBox):
             LetterType.Type6,
         ]:
             self.setMinimumWidth(
-                int((self.scroll_area.width()- self.SCROLLBAR_WIDTH) / 3)
+                int((self.scroll_area.width() - self.SCROLLBAR_WIDTH) / 3)
             )
             self.setMaximumWidth(
                 int((self.scroll_area.width() - self.SCROLLBAR_WIDTH) / 3)
             )
-        self.filter_tab.visibility_handler.resize_filter_tab()
+        # self.filter_tab.visibility_handler.resize_filter_tab()
 
     def toggle_section(self) -> None:
         self.layout.setEnabled(False)
@@ -116,4 +116,4 @@ class OptionPickerSectionWidget(QGroupBox):
 
     def adjust_size(self):
         self.resize_section()
-        self.filter_tab.visibility_handler.resize_filter_tab()
+        # self.filter_tab.visibility_handler.resize_filter_tab()

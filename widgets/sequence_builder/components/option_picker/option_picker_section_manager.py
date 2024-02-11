@@ -4,7 +4,9 @@ from utilities.TypeChecking.TypeChecking import Letters
 from widgets.scroll_area.components.section_manager.section_widget.section_group_widget import (
     SectionGroupWidget,
 )
-from widgets.sequence_builder.components.option_picker.option_picker_section_widget import OptionPickerSectionWidget
+from widgets.sequence_builder.components.option_picker.option_picker_section_widget import (
+    OptionPickerSectionWidget,
+)
 from ....scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
     FilterTab,
 )
@@ -87,11 +89,11 @@ class OptionPickerSectionsManager:
         if letter_type not in self.sections:
             self.create_section(letter_type)
         section = self.sections[letter_type]
-        if not section.filter_tab:
-            if letter_type not in self.filter_tabs_cache:
-                filter_tab = self.create_or_get_filter_tab(section)
-                self.filter_tabs_cache[letter_type] = filter_tab
-            section.filter_tab = self.filter_tabs_cache[letter_type]
+        # if not section.filter_tab:
+        #     if letter_type not in self.filter_tabs_cache:
+        #         filter_tab = self.create_or_get_filter_tab(section)
+        #         self.filter_tabs_cache[letter_type] = filter_tab
+        #     section.filter_tab = self.filter_tabs_cache[letter_type]
         return section
 
     def get_pictograph_letter_type(self, pictograph_key: str) -> str:
