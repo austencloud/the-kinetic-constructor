@@ -48,7 +48,7 @@ class OptionPickerDisplayManager:
         )
         if section:
             section.pictograph_frame.layout.addWidget(pictograph.view, row, col)
-            pictograph.view.resize_for_scroll_area()
+            pictograph.view.resize_pictograph_view()
             pictograph.view.show()
 
     def calculate_section_indices(self, letter_type: str) -> None:
@@ -63,7 +63,7 @@ class OptionPickerDisplayManager:
                     else 4 if pictograph.letter in FOUR_VARIATIONS else 0
                 )
             )
-            for pictograph in self.scroll_area.pictograph_cache.values()
+            for pictograph in self.scroll_area.pictographs.values()
         )
 
         self.section_indices[letter_type] = (0, 0)
@@ -72,7 +72,7 @@ class OptionPickerDisplayManager:
             self.section_indices[letter_type] = (row, col)
 
     def remove_pictograph(self, pictograph_key: str) -> None:
-        pictograph_to_remove: Pictograph = self.scroll_area.pictograph_cache.pop(
+        pictograph_to_remove: Pictograph = self.scroll_area.pictographs.pop(
             pictograph_key, None
         )
         if pictograph_to_remove:
@@ -82,7 +82,7 @@ class OptionPickerDisplayManager:
         return {
             k: v
             for k, v in sorted(
-                self.scroll_area.pictograph_cache.items(),
+                self.scroll_area.pictographs.items(),
                 key=lambda item: (
                     all_letters.index(item[1].letter),
                     item[1].start_pos,
@@ -98,7 +98,7 @@ class OptionPickerDisplayManager:
         current_pictograph = self.scroll_area.sequence_builder.current_pictograph
         relevant_pictographs = {}
 
-        for key, pictograph in self.scroll_area.pictograph_cache.items():
+        for key, pictograph in self.scroll_area.pictographs.items():
             if self.is_pictograph_relevant(pictograph, current_pictograph):
                 if (
                     self.scroll_area.sections_manager.get_pictograph_letter_type(key)

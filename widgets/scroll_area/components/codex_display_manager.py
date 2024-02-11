@@ -50,7 +50,7 @@ class CodexDisplayManager:
             section.pictograph_frame.layout.addWidget(pictograph.view, row, col)
             next_index = index + 1
             self.section_indices[letter_type] = divmod(next_index, self.COLUMN_COUNT)
-            pictograph.view.resize_for_scroll_area()
+            pictograph.view.resize_pictograph_view()
 
     def calculate_section_indices(self, letter_type: str) -> None:
         selected_letters = [

@@ -31,7 +31,7 @@ class PictographUpdater:
                 self.show_graphical_objects(motion.color)
             motion.updater.update_motion(motion_dicts[motion.color])
         self.pictograph.letter_type = LetterType.get_letter_type(self.pictograph.letter)
-        self.pictograph.frame_styler.update_view_border()
+        self.pictograph.container.update_borders()
 
         if self.pictograph.letter_type == LetterType.Type3:
             self.pictograph.get.shift().arrow.updater.update_arrow()

@@ -13,12 +13,13 @@ class PictographView(QGraphicsView):
     def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__(pictograph)
         self.pictograph = pictograph
+        self.original_style = ""
         self.setScene(self.pictograph)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 
-    def resize_for_scroll_area(self) -> None:
+    def resize_pictograph_view(self) -> None:
         view_width = self.get_view_vidth()
         self.setMinimumWidth(view_width)
         self.setMaximumWidth(view_width)
@@ -28,25 +29,30 @@ class PictographView(QGraphicsView):
         self.view_scale = view_width / self.pictograph.width()
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
+        self.pictograph.container.styled_border_overlay.resize_styled_border_overlay()
 
     def get_view_vidth(self):
+        COLUMN_COUNT = self.pictograph.scroll_area.display_manager.COLUMN_COUNT
         return int(
-            (
-                self.pictograph.scroll_area.width()
-                / self.pictograph.scroll_area.display_manager.COLUMN_COUNT
+            (self.pictograph.scroll_area.width() / COLUMN_COUNT)
+            - (
+                (
+                    self.pictograph.scroll_area.sections_manager.sections[
+                        self.pictograph.letter_type
+                    ].pictograph_frame.spacing
+                )
+                + self.pictograph.container.styled_border_overlay.primary_border_width
             )
-            - self.pictograph.scroll_area.display_manager.SPACING
         )
 
     def wheelEvent(self, event) -> None:
         self.pictograph.scroll_area.wheelEvent(event)
 
     def enterEvent(self, event: QEvent) -> None:
-        # When the mouse enters the view, add a border to highlight it
         self.setStyleSheet("border: 4px solid gold;")
 
     def leaveEvent(self, event: QEvent) -> None:
-        # When the mouse leaves the view, reset the border to the original style
+        # Revert to the original style that includes the borders
         self.setStyleSheet(self.original_style)
 
     def keyPressEvent(self, event) -> None:

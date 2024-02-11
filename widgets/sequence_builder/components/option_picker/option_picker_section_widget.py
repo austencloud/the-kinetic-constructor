@@ -49,7 +49,7 @@ class OptionPickerSectionWidget(QGroupBox):
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
-        self.setContentsMargins(0, 0, 0, 0)
+        self.layout.setContentsMargins(0, 15, 0, 15)
         self.setup_header()
         self.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -134,5 +134,5 @@ class OptionPickerSectionWidget(QGroupBox):
             )
         ] = pictograph
         self.pictograph_frame.layout.addWidget(pictograph.view)
-        pictograph.view.resize_for_scroll_area()
+        pictograph.view.resize_pictograph_view()
         pictograph.view.show()

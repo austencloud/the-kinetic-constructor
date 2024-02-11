@@ -10,7 +10,8 @@ class ScrollAreaSectionPictographFrame(QFrame):
     def __init__(self, section: "SectionWidget") -> None:
         super().__init__()
         self.section = section
+        self.spacing = 5
         self.layout: QGridLayout = QGridLayout(self)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        # self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(5)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(self.spacing)

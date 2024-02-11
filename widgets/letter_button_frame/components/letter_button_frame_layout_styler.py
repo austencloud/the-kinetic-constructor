@@ -3,7 +3,9 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QSizePolicy, QLabe
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from widgets.letter_button_frame.codex_letter_button_frame import CodexLetterButtonFrame
+    from widgets.letter_button_frame.codex_letter_button_frame import (
+        CodexLetterButtonFrame,
+    )
 
 
 class LetterButtonFrameLayoutStyler:
@@ -27,42 +29,52 @@ class LetterButtonFrameLayoutStyler:
 
     def create_layout(self, type_name: str, row_layouts: list[QHBoxLayout]) -> QFrame:
         border_colors = self.get_colors(type_name)
+        outer_frame, outer_layout = self._setup_outer_frame(border_colors)
+        inner_frame, inner_layout = self._setup_inner_frame(border_colors)
+        type_label_frame = self._setup_type_label_frame(type_name, inner_frame)
+        self._add_frames_to_layout(
+            row_layouts, outer_layout, inner_frame, inner_layout, type_label_frame
+        )
+        return outer_frame, outer_layout
 
-        # Create the outer frame with the primary border color
+    def _add_frames_to_layout(
+        self,
+        row_layouts,
+        outer_layout: QVBoxLayout,
+        inner_frame,
+        inner_layout: QVBoxLayout,
+        type_label_frame,
+    ):
+        inner_layout.addWidget(type_label_frame, 0)
+        for row_layout in row_layouts:
+            inner_layout.addLayout(row_layout)
+        outer_layout.addWidget(inner_frame, 1)
+
+    def _setup_outer_frame(self, border_colors):
         outer_frame = self.create_styled_frame(border_colors[0], 4)
         outer_layout = QVBoxLayout(outer_frame)
         outer_layout.setContentsMargins(0, 0, 0, 0)
         outer_layout.setSpacing(0)
+        return outer_frame, outer_layout
 
-        # Create the inner frame with the secondary border color
+    def _setup_inner_frame(self, border_colors):
         inner_frame = self.create_styled_frame(border_colors[1], 4)
         inner_layout = QVBoxLayout(inner_frame)
         inner_layout.setContentsMargins(5, 5, 5, 5)
         inner_layout.setSpacing(self.spacing)
+        return inner_frame, inner_layout
 
-        # Create the type number label frame with a fixed height
+    def _setup_type_label_frame(self, type_name, inner_frame):
         type_label = self.create_type_label(type_name[-1])
         type_label_frame = QFrame(inner_frame)
-        # override the styling to make the type label frame have no border
         type_label_frame.setStyleSheet("border: none;")
+        type_label_frame.setMaximumHeight(16)
         type_label_layout = QVBoxLayout(type_label_frame)
         type_label_layout.addWidget(type_label)
         type_label_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         type_label_layout.setContentsMargins(0, 0, 0, 0)
         type_label_layout.setSpacing(0)
-        type_label_frame.setMaximumHeight(16)
-
-        # Add the type number label frame to the inner layout
-        inner_layout.addWidget(type_label_frame, 0)
-
-        # Add the row layouts for the buttons to the inner layout
-        for row_layout in row_layouts:
-            inner_layout.addLayout(row_layout)
-
-        # Add the inner frame to the outer layout and set it to expand to fill space
-        outer_layout.addWidget(inner_frame, 1)
-
-        return outer_frame, outer_layout
+        return type_label_frame
 
     def add_label_and_buttons_to_main_frame(
         self, main_layout: QVBoxLayout, type_num_frame, buttons_frame

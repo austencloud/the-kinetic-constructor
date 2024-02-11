@@ -22,6 +22,7 @@ from utilities.TypeChecking.TypeChecking import (
 )
 from utilities.TypeChecking.MotionAttributes import Colors, Locations
 from widgets.pictograph.components.pictograph_frame_styler import PictographFrameStyler
+from widgets.sequence_widget.beat_frame.pictograph_container import PictographContainer
 
 from .components.glyph.glyph import GlyphManager
 from .components.pictograph_attr_manager import PictographAttrManager
@@ -104,14 +105,13 @@ class Pictograph(QGraphicsScene):
         self.image_renderer = PictographImageRenderer(self)
         self.get = PictographGetter(self)
         self.check = PictographChecker(self)
-        self.view = PictographView(self)
+        self.container = PictographContainer(self)
+        self.view = self.container.view
         self.initializer.init_all_components()
         self.arrow_placement_manager = ArrowPlacementManager(self)
         self.prop_placement_manager = PropPlacementManager(self)
         self.wasd_manager = WASD_AdjustmentManager(self)
         self.attr_manager = PictographAttrManager(self)
-        self.frame_styler = PictographFrameStyler(self)
-
 
     ### EVENT HANDLERS ###
 

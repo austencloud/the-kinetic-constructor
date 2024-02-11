@@ -28,7 +28,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.sequence_builder: "SequenceBuilder" = option_picker.sequence_builder
         self.clickable_option_handler = self.sequence_builder.clickable_option_handler
         self.letters: pd.DataFrame = self.sequence_builder.letters_df
-        self.pictograph_cache: dict[str, Pictograph] = {}
+        self.pictographs: dict[str, Pictograph] = {}
         self.stretch_index: int = -1
 
         self.set_layout("VBox")
@@ -61,10 +61,10 @@ class OptionPickerScrollArea(BasePictographScrollArea):
     def _get_or_create_pictograph(
         self, pictograph_key: str, option_dict: pd.Series
     ) -> Pictograph:
-        pictograph = self.pictograph_cache.get(pictograph_key)
+        pictograph = self.pictographs.get(pictograph_key)
         if not pictograph:
             pictograph = self.sequence_builder.render_and_store_pictograph(option_dict)
-            self.pictograph_cache[pictograph_key] = pictograph
+            self.pictographs[pictograph_key] = pictograph
         return pictograph
 
     def get_next_options(self, pictograph: Pictograph) -> list[pd.Series]:
@@ -78,7 +78,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         ]
 
     def _hide_all_pictographs(self):
-        for pictograph in self.pictograph_cache.values():
+        for pictograph in self.pictographs.values():
             pictograph.view.hide()
 
     def get_next_options(self, pictograph: Pictograph) -> list[pd.Series]:
