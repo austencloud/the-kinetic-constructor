@@ -1,13 +1,8 @@
-from PyQt6.QtWidgets import QWidget, QHBoxLayout
-from widgets.sequence_builder.components.start_position_picker.start_pos_manager import (
-    StartPosManager,
-)
-
-from .start_pos_picker_scroll_area import (
-    StartPosPickerScrollArea,
-)
-from ....pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QWidget, QHBoxLayout
+from .start_pos_manager import StartPosManager
+from .start_pos_picker_scroll_area import StartPosPickerScrollArea
+from ....pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from ...sequence_builder import SequenceBuilder
@@ -16,8 +11,8 @@ if TYPE_CHECKING:
 class StartPosPicker(QWidget):
     SPACING = 10
 
-    def __init__(self, sequence_builder: "SequenceBuilder", parent=None):
-        super().__init__(parent)
+    def __init__(self, sequence_builder: "SequenceBuilder"):
+        super().__init__(sequence_builder)
         self.sequence_builder = sequence_builder
         self.main_widget = sequence_builder.main_widget
         self.start_options: dict[str, Pictograph] = {}

@@ -79,3 +79,4 @@ class StartPosManager(QObject):
             start_option.view.scale(
                 start_option.view.view_scale, start_option.view.view_scale
             )
+            start_option.container.styled_border_overlay.resize_styled_border_overlay()
