@@ -66,7 +66,13 @@ class StyledBorderOverlay(QWidget):
     def set_gold_border(self):
         self.saved_primary_color = self.primary_color
         self.saved_secondary_color = self.secondary_color
-        self.update_border_colors("gold", "gold")
+        # check the base class of the pictograph.scroll_area. If it's a codex, we want to just set it to the colors it already is set to instead of gold.
+        if self.view.pictograph.scroll_area.__class__.__name__ == "CodexScrollArea":
+            self.update_border_colors(
+                self.saved_primary_color, self.saved_secondary_color
+            )
+        else:
+            self.update_border_colors("gold", "gold")
 
     def reset_border(self):
         self.update_border_colors(self.saved_primary_color, self.saved_secondary_color)

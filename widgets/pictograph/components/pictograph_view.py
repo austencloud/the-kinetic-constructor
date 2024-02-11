@@ -49,9 +49,8 @@ class PictographView(QGraphicsView):
         self.pictograph.scroll_area.wheelEvent(event)
 
     def enterEvent(self, event: QEvent) -> None:
-        self.pictograph.container.styled_border_overlay.set_gold_border()
 
-        # self.setStyleSheet("border: 4px solid gold;")
+        self.pictograph.container.styled_border_overlay.set_gold_border()
 
     def leaveEvent(self, event: QEvent) -> None:
         self.setStyleSheet("")
