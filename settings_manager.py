@@ -1,5 +1,4 @@
 import json
-from math import pi
 import os
 from typing import TYPE_CHECKING, Union
 from constants import BLUE, RED
@@ -18,6 +17,27 @@ if TYPE_CHECKING:
     from main import MainWindow
 
 
+class PropTypeChanger:
+    def __init__(self, main_window: "MainWindow"):
+        self.main_window = main_window
+
+    def replace_props(self, new_prop_type, pictograph: Pictograph):
+        for color, prop in pictograph.props.items():
+            new_prop = pictograph.initializer.prop_factory.create_prop_of_type(
+                prop, new_prop_type
+            )
+            pictograph.props[color].deleteLater()
+            pictograph.props[color].hide()
+            pictograph.props[color] = new_prop
+            pictograph.addItem(new_prop)
+            pictograph.motions[color].prop = pictograph.props[color]
+            pictograph.props[color].motion.attr_manager.update_prop_ori()
+            pictograph.props[color].updater.update_prop()
+        pictograph.red_prop = pictograph.props[RED]
+        pictograph.blue_prop = pictograph.props[BLUE]
+        pictograph.updater.update_pictograph()
+
+
 class SettingsManager:
     MAX_COLUMN_COUNT = 8
     MIN_COLUMN_COUNT = 3
@@ -26,6 +46,7 @@ class SettingsManager:
         self.settings_file = settings_file
         self.main_window = main_window
         self.settings = self.load_settings()
+        self.prop_type_changer = PropTypeChanger(main_window)
         # self.apply_settings()
 
     def load_settings(self) -> dict:
@@ -76,28 +97,12 @@ class SettingsManager:
         ]
         for scroll_area in scroll_areas:
             for pictograph in scroll_area.pictographs.values():
-                self.replace_props(new_prop_type, pictograph)
+                self.prop_type_changer.replace_props(new_prop_type, pictograph)
                 pictograph.updater.update_pictograph()
         for beat_view in self.main_window.main_widget.sequence_widget.beats:
             if beat_view.is_filled:
-                self.replace_props(new_prop_type, beat_view.beat)
+                self.prop_type_changer.replace_props(new_prop_type, beat_view.beat)
                 beat_view.beat.updater.update_pictograph()
-
-    def replace_props(self, new_prop_type, pictograph: Pictograph):
-        for color, prop in pictograph.props.items():
-            new_prop = pictograph.initializer.prop_factory.create_prop_of_type(
-                prop, new_prop_type
-            )
-            pictograph.props[color].deleteLater()
-            pictograph.props[color].hide()
-            pictograph.props[color] = new_prop
-            pictograph.addItem(new_prop)
-            pictograph.motions[color].prop = pictograph.props[color]
-            pictograph.props[color].motion.attr_manager.update_prop_ori()
-            pictograph.props[color].updater.update_prop()
-        pictograph.red_prop = pictograph.props[RED]
-        pictograph.blue_prop = pictograph.props[BLUE]
-        pictograph.updater.update_pictograph()
 
     def _apply_pictograph_size(self) -> None:
         pictograph_size = self.get_setting("pictograph_size", 1)
