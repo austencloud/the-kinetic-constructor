@@ -77,27 +77,27 @@ class ScrollAreaPictographFactory:
                 pictograph_key,
                 pictograph,
             ) in self.scroll_area.codex.pictograph_cache[letter].items():
-                self.scroll_area.pictographs[pictograph_key] = pictograph
+                self.scroll_area.pictograph_cache[pictograph_key] = pictograph
 
     def get_deselected_letters(self) -> set[Letters]:
         selected_letters = set(self.scroll_area.codex.selected_letters)
         existing_letters = {
-            key.split("_")[0] for key in self.scroll_area.pictographs.keys()
+            key.split("_")[0] for key in self.scroll_area.pictograph_cache.keys()
         }
         return existing_letters - selected_letters
 
     def remove_deselected_letter_pictographs(self, deselected_letter) -> None:
         keys_to_remove = [
             key
-            for key in self.scroll_area.pictographs
+            for key in self.scroll_area.pictograph_cache
             if key.startswith(deselected_letter + "_")
         ]
         for key in keys_to_remove:
-            pictograph = self.scroll_area.pictographs.pop(key)
+            pictograph = self.scroll_area.pictograph_cache.pop(key)
             pictograph.view.setParent(None)
 
     def get_pictograph(self, pictograph_key) -> Pictograph:
-        return self.scroll_area.pictographs[pictograph_key]
+        return self.scroll_area.pictograph_cache[pictograph_key]
 
     def create_pictograph(self) -> Pictograph:
         pictograph = Pictograph(

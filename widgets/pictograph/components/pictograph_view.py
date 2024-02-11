@@ -8,13 +8,14 @@ if TYPE_CHECKING:
 
 
 class PictographView(QGraphicsView):
+    original_style: str
+
     def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__(pictograph)
         self.pictograph = pictograph
         self.setScene(self.pictograph)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 
     def resize_for_scroll_area(self) -> None:
@@ -40,14 +41,13 @@ class PictographView(QGraphicsView):
     def wheelEvent(self, event) -> None:
         self.pictograph.scroll_area.wheelEvent(event)
 
-
     def enterEvent(self, event: QEvent) -> None:
         # When the mouse enters the view, add a border to highlight it
-        self.setStyleSheet("border: 2px solid red;")
+        self.setStyleSheet("border: 4px solid gold;")
 
     def leaveEvent(self, event: QEvent) -> None:
-        # When the mouse leaves the view, remove the border
-        self.setStyleSheet("")
+        # When the mouse leaves the view, reset the border to the original style
+        self.setStyleSheet(self.original_style)
 
     def keyPressEvent(self, event) -> None:
         shift_held = event.modifiers() & Qt.KeyboardModifier.ShiftModifier

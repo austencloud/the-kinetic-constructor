@@ -23,7 +23,7 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
         self.sequence_builder = start_pos_picker.sequence_builder
         self.clickable_option_handler = self.sequence_builder.clickable_option_handler
         self.letters = self.sequence_builder.main_widget.letters
-        self.pictograph_cache = {}
+        self.pictograph_cache: dict[str, Pictograph] = {}
         self.pictograph_factory = ScrollAreaPictographFactory(
             self, self.pictograph_cache
         )

@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 
 
-class PictographStateUpdater:
+class PictographUpdater:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
 
@@ -31,6 +31,7 @@ class PictographStateUpdater:
                 self.show_graphical_objects(motion.color)
             motion.updater.update_motion(motion_dicts[motion.color])
         self.pictograph.letter_type = LetterType.get_letter_type(self.pictograph.letter)
+        self.pictograph.frame_styler.update_view_border()
 
         if self.pictograph.letter_type == LetterType.Type3:
             self.pictograph.get.shift().arrow.updater.update_arrow()

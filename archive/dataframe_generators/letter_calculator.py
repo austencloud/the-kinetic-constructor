@@ -48,6 +48,16 @@ if TYPE_CHECKING:
 
 
 class LetterCalculator:
+    """ 
+    This class has been archived. 
+    It was previously a part of the graph editor class, which was discontinued. 
+    However, its logic could potentially be useful for determining the letter in 
+    as few steps as possible from a given number of variables.
+
+    Please do not delete this class until you are sure that it's not needed anymore.
+    """
+
+
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
         self.letters = pictograph.main_widget.letters

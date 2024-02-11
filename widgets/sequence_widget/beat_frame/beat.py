@@ -19,6 +19,8 @@ class Beat(Pictograph):
 
 
 class BeatView(QGraphicsView):
+    original_style: str
+
     def __init__(self, beat_frame: "BeatFrame") -> None:
         super().__init__(beat_frame)
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
@@ -27,9 +29,9 @@ class BeatView(QGraphicsView):
         self.beat: "Beat" = None
         self.is_filled = False
 
-    def set_pictograph(self, beat: "Beat") -> None:
-        self.beat = beat
-        beat.view = self
+    def set_pictograph(self, new_beat: "Beat") -> None:
+        self.beat = new_beat
+        new_beat.view = self
         self.setScene(self.beat)
         view_width = self.height()
         self.view_scale = view_width / self.beat.width()

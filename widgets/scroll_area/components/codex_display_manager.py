@@ -79,7 +79,7 @@ class CodexDisplayManager:
             self.section_indices[letter_type] = (row, col)
 
     def remove_pictograph(self, pictograph_key: str) -> None:
-        pictograph_to_remove: Pictograph = self.scroll_area.pictographs.pop(
+        pictograph_to_remove: Pictograph = self.scroll_area.pictograph_cache.pop(
             pictograph_key, None
         )
         if pictograph_to_remove:
@@ -102,7 +102,7 @@ class CodexDisplayManager:
         }
         return [
             key
-            for key in self.scroll_area.pictographs
+            for key in self.scroll_area.pictograph_cache
             if key.split("_")[0] not in selected_letters
         ]
 
@@ -112,7 +112,7 @@ class CodexDisplayManager:
         return {
             k: v
             for k, v in sorted(
-                self.scroll_area.pictographs.items(),
+                self.scroll_area.pictograph_cache.items(),
                 key=lambda item: (
                     all_letters.index(item[1].letter),
                     item[1].start_pos,

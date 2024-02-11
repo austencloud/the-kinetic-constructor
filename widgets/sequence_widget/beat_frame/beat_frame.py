@@ -56,10 +56,11 @@ class BeatFrame(QFrame):
     def add_start_pos(self, start_pos: "StartPositionBeat") -> None:
         self.start_pos_view.set_start_pos(start_pos)
 
-    def add_scene_to_sequence(self, clicked_option: "Pictograph") -> None:
+    def add_scene_to_sequence(self, new_beat: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
-            self.beats[next_beat_index].set_pictograph(clicked_option)
+            self.beats[next_beat_index].set_pictograph(new_beat)
+
             
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):

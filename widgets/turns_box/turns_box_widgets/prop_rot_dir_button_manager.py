@@ -71,7 +71,7 @@ class PropRotDirButtonManager:
         for (
             pictograph
         ) in (
-            self.turns_box.turns_panel.filter_tab.section.scroll_area.pictographs.values()
+            self.turns_box.turns_panel.filter_tab.section.scroll_area.pictograph_cache.values()
         ):
             for motion in pictograph.motions.values():
                 other_motion = pictograph.motions[RED if motion.color == BLUE else BLUE]
@@ -94,7 +94,7 @@ class PropRotDirButtonManager:
         for (
             pictograph
         ) in (
-            self.turns_box.turns_panel.filter_tab.section.scroll_area.pictographs.values()
+            self.turns_box.turns_panel.filter_tab.section.scroll_area.pictograph_cache.values()
         ):
             for motion in pictograph.motions.values():
                 if motion.motion_type in [DASH, STATIC]:

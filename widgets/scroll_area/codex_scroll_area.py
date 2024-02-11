@@ -24,7 +24,7 @@ class CodexScrollArea(QScrollArea):
         self.main_widget = codex.main_widget
         self.codex = codex
         self.letters = self.main_widget.letters
-        self.pictographs: dict[Letters, Pictograph] = {}
+        self.pictograph_cache: dict[Letters, Pictograph] = {}
         self.stretch_index = -1
         self._setup_ui()
         self._setup_managers()
@@ -77,7 +77,9 @@ class CodexScrollArea(QScrollArea):
         if not selected_letters:
             return True
 
-        current_pictograph_letters = {key.split("_")[0] for key in self.pictographs}
+        current_pictograph_letters = {
+            key.split("_")[0] for key in self.pictograph_cache
+        }
 
         return (
             len(deselected_letters) > 0
@@ -85,7 +87,7 @@ class CodexScrollArea(QScrollArea):
         )
 
     def update_arrow_placements(self) -> None:
-        for pictograph in self.pictographs.values():
+        for pictograph in self.pictograph_cache.values():
             pictograph.arrow_placement_manager.update_arrow_placements()
 
     def calculate_section_indices(self, letter_type: str) -> None:

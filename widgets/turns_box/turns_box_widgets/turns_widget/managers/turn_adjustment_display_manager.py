@@ -40,7 +40,7 @@ class TurnsAdjustmentManager:
 
     def _get_pictographs(self) -> list["Pictograph"]:
         return (
-            self.turns_widget.turns_box.turns_panel.filter_tab.section.scroll_area.pictographs.values()
+            self.turns_widget.turns_box.turns_panel.filter_tab.section.scroll_area.pictograph_cache.values()
         )
 
     def _get_turns(self) -> Turns:

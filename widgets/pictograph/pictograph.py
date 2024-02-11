@@ -3,7 +3,9 @@ from PyQt6.QtWidgets import (
     QGraphicsScene,
     QGraphicsPixmapItem,
     QGraphicsSceneMouseEvent,
+    QGraphicsDropShadowEffect,
 )
+from PyQt6.QtGui import QColor
 from Enums import LetterType
 
 from objects.arrow.arrow import Arrow
@@ -19,6 +21,7 @@ from utilities.TypeChecking.TypeChecking import (
     VtgTimings,
 )
 from utilities.TypeChecking.MotionAttributes import Colors, Locations
+from widgets.pictograph.components.pictograph_frame_styler import PictographFrameStyler
 
 from .components.glyph.glyph import GlyphManager
 from .components.pictograph_attr_manager import PictographAttrManager
@@ -37,11 +40,11 @@ from .components.wasd_adjustment_manager.wasd_adjustment_manager import (
 from .components.add_to_sequence_manager import AddToSequenceManager
 from .components.pictograph_context_menu_handler import PictographContextMenuHandler
 from .components.pictograph_image_renderer import PictographImageRenderer
-from .components.pictograph_state_updater import PictographStateUpdater
+from .components.pictograph_updater import PictographUpdater
 from .components.pictograph_event_handler import PictographMouseEventHandler
 from .components.pictograph_init import PictographInit
 
-from utilities.letter_calculator import LetterCalculator
+from archive.dataframe_generators.letter_calculator import LetterCalculator
 
 if TYPE_CHECKING:
     from ..sequence_builder.components.start_position_picker.start_pos_picker_scroll_area import (
@@ -97,7 +100,7 @@ class Pictograph(QGraphicsScene):
         self.initializer = PictographInit(self)
         self.mouse_event_handler = PictographMouseEventHandler(self)
         self.context_menu_handler = PictographContextMenuHandler(self)
-        self.updater = PictographStateUpdater(self)
+        self.updater = PictographUpdater(self)
         self.image_renderer = PictographImageRenderer(self)
         self.get = PictographGetter(self)
         self.check = PictographChecker(self)
@@ -106,8 +109,9 @@ class Pictograph(QGraphicsScene):
         self.arrow_placement_manager = ArrowPlacementManager(self)
         self.prop_placement_manager = PropPlacementManager(self)
         self.wasd_manager = WASD_AdjustmentManager(self)
-        self.letter_calculator = LetterCalculator(self)
         self.attr_manager = PictographAttrManager(self)
+        self.frame_styler = PictographFrameStyler(self)
+
 
     ### EVENT HANDLERS ###
 
@@ -122,4 +126,3 @@ class Pictograph(QGraphicsScene):
 
     def contextMenuEvent(self, event: "QGraphicsSceneMouseEvent") -> None:
         self.context_menu_handler.handle_context_menu(event)
-

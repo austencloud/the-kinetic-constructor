@@ -22,9 +22,10 @@ class AddToSequenceManager:
 
     def create_new_beat(self, clicked_option: "Pictograph") -> "Beat":
         from widgets.sequence_widget.beat_frame.beat import Beat
+
         new_beat = Beat(clicked_option.main_widget)
         new_beat.setSceneRect(clicked_option.sceneRect())
-        pictograph_dict = clicked_option.get.pictograph_dict()
-        new_beat.updater.update_pictograph(pictograph_dict)
+        # pictograph_dict = clicked_option.get.pictograph_dict()
+        # new_beat.updater.update_pictograph(pictograph_dict)
         self.sequence_builder.current_pictograph = new_beat
         return new_beat
