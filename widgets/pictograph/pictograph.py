@@ -34,7 +34,7 @@ from .components.pictograph_view import PictographView
 from .components.wasd_adjustment_manager.wasd_adjustment_manager import (
     WASD_AdjustmentManager,
 )
-from .components.pictograph_add_to_sequence_manager import AddToSequenceManager
+from .components.add_to_sequence_manager import AddToSequenceManager
 from .components.pictograph_context_menu_handler import PictographContextMenuHandler
 from .components.pictograph_image_renderer import PictographImageRenderer
 from .components.pictograph_state_updater import PictographStateUpdater

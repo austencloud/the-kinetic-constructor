@@ -34,7 +34,6 @@ class PropTypeSelector(QGroupBox):
                 PropTypes.Ukulele.name,
             ]
         )
-        self.prop_type_combobox.currentIndexChanged.connect(self.prop_type_changed)
 
     def prop_type_changed(self) -> None:
         new_prop_type = self.prop_type_combobox.currentText()
@@ -50,3 +49,4 @@ class PropTypeSelector(QGroupBox):
     def load_initial_settings(self) -> None:
         initial_prop_type = self.preferences_dialog.settings_manager.get_prop_type()
         self.prop_type_combobox.setCurrentText(initial_prop_type.name)
+        self.prop_type_combobox.currentIndexChanged.connect(self.prop_type_changed)

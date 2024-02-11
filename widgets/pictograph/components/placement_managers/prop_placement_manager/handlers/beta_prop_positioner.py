@@ -24,6 +24,7 @@ class BetaPropPositioner:
         self.swap_beta_handler = SwapBetaHandler(self)
 
     def reposition_beta_props(self) -> None:
+        self.classifier.classify_props()
         if len(self.classifier.big_props) == 2:
             self.big_prop_positioner.reposition()
         elif len(self.classifier.small_props) == 2:

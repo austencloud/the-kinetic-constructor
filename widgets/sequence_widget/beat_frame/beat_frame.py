@@ -60,7 +60,7 @@ class BeatFrame(QFrame):
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
             self.beats[next_beat_index].set_pictograph(clicked_option)
-
+            
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):
             if beat.scene() is None or beat.scene().items() == []:

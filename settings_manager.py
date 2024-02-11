@@ -2,6 +2,7 @@ import json
 from math import pi
 import os
 from typing import TYPE_CHECKING, Union
+from constants import BLUE, RED
 
 from utilities.TypeChecking.prop_types import PropTypes
 from widgets.pictograph.pictograph import Pictograph
@@ -76,6 +77,11 @@ class SettingsManager:
         for scroll_area in scroll_areas:
             for pictograph in scroll_area.pictographs.values():
                 self.replace_props(new_prop_type, pictograph)
+                pictograph.updater.update_pictograph()
+        for beat_view in self.main_window.main_widget.sequence_widget.beats:
+            if beat_view.is_filled:
+                self.replace_props(new_prop_type, beat_view.beat)
+                beat_view.beat.updater.update_pictograph()
 
     def replace_props(self, new_prop_type, pictograph: Pictograph):
         for color, prop in pictograph.props.items():
@@ -89,7 +95,9 @@ class SettingsManager:
             pictograph.motions[color].prop = pictograph.props[color]
             pictograph.props[color].motion.attr_manager.update_prop_ori()
             pictograph.props[color].updater.update_prop()
-            pictograph.updater.update_pictograph()
+        pictograph.red_prop = pictograph.props[RED]
+        pictograph.blue_prop = pictograph.props[BLUE]
+        pictograph.updater.update_pictograph()
 
     def _apply_pictograph_size(self) -> None:
         pictograph_size = self.get_setting("pictograph_size", 1)

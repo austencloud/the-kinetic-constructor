@@ -6,7 +6,6 @@ from PyQt6.QtCore import pyqtSignal, QObject
 from widgets.pictograph.pictograph import Pictograph
 
 
-
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
     from widgets.sequence_widget.beat_frame.beat_frame import BeatFrame
@@ -14,8 +13,9 @@ if TYPE_CHECKING:
 
 class Beat(Pictograph):
     def __init__(self, main_widget: "MainWidget") -> None:
-        super().__init__(main_widget, "beat")
+        super().__init__(main_widget)
         self.main_widget = main_widget
+        self.view: "BeatView" = None
 
 
 class BeatView(QGraphicsView):
@@ -24,14 +24,15 @@ class BeatView(QGraphicsView):
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.pictograph: "Pictograph" = None
-        self.beat: Beat = None
+        self.beat: "Beat" = None
+        self.is_filled = False
 
-    def set_pictograph(self, pictograph: "Pictograph") -> None:
-        self.pictograph = pictograph
-        self.setScene(self.pictograph)
+    def set_pictograph(self, beat: "Beat") -> None:
+        self.beat = beat
+        beat.view = self
+        self.setScene(self.beat)
         view_width = self.height()
-        self.view_scale = view_width / self.pictograph.width()
+        self.view_scale = view_width / self.beat.width()
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
 
@@ -39,6 +40,3 @@ class BeatView(QGraphicsView):
         button = QPushButton(QIcon(icon_path), "", self)
         button.clicked.connect(action)
         return button
-
-    class BeatSignal(QObject):
-        signal = pyqtSignal(Pictograph)
