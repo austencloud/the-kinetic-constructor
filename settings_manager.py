@@ -96,7 +96,7 @@ class SettingsManager:
             self.main_window.main_widget.main_tab_widget.sequence_builder.start_position_picker.scroll_area,
         ]
         for scroll_area in scroll_areas:
-            for pictograph in scroll_area.pictographs.values():
+            for pictograph in scroll_area.pictograph_cache.values():
                 self.prop_type_changer.replace_props(new_prop_type, pictograph)
                 pictograph.updater.update_pictograph()
         for beat_view in self.main_window.main_widget.sequence_widget.beats:

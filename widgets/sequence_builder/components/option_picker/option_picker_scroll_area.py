@@ -28,11 +28,13 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.letters = self.sequence_builder.letters_df
         self.pictographs: dict[str, Pictograph] = {}
         self.stretch_index = -1
-        
+
         self.set_layout("VBox")
         self.sections_manager = OptionPickerSectionsManager(self)
         self.display_manager = OptionPickerDisplayManager(self)
-        self.pictograph_factory = ScrollAreaPictographFactory(self)
+        self.pictograph_factory = ScrollAreaPictographFactory(
+            self, self.sequence_builder.pictograph_cache
+        )
 
     def fix_stretch(self):
         if self.stretch_index >= 0:
@@ -46,14 +48,9 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         current_pictograph = self.option_picker.sequence_builder.current_pictograph
         next_options = self.get_next_options(current_pictograph)
 
-        # Hide all pictographs initially
         for pictograph in self.pictographs.values():
             pictograph.view.hide()
 
-        # Clear all section layouts
-        # self.display_manager.clear_all_section_layouts()
-
-        # Populate the layout with next options only
         for option_dict in next_options:
             pictograph_key = self.sequence_builder.generate_pictograph_key(option_dict)
             pictograph = self.pictographs.get(pictograph_key)
@@ -64,10 +61,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
                 )
                 self.pictographs[pictograph_key] = pictograph
 
-            # Add pictograph to layout without specifying index
             self.display_manager.add_pictograph_to_section_layout(pictograph)
-
-        # Order and display pictographs in the layout
         self.display_manager.order_and_display_pictographs()
 
     def get_next_options(self, pictograph: Pictograph) -> list[pd.Series]:
@@ -80,7 +74,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             pictograph_key = f"{row['letter']}_{row['start_pos']}→{row['end_pos']}"
             if (
                 pictograph_key
-                not in self.option_picker.sequence_builder.main_widget.all_pictographs
+                not in self.option_picker.sequence_builder.pictograph_cache
             ):
                 next_options.append(row)
         return next_options

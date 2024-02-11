@@ -38,7 +38,7 @@ class RotationAngleOverrideManager:
         letter = self.pictograph.letter
 
         self._apply_override_if_needed(letter, data, ori_key)
-        for pictograph in self.pictograph.scroll_area.pictographs.values():
+        for pictograph in self.pictograph.scroll_area.pictograph_cache.values():
             pictograph.updater.update_pictograph()
 
     def _is_valid_for_override(self) -> bool:

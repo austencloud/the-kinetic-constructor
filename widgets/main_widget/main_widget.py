@@ -24,19 +24,20 @@ if TYPE_CHECKING:
 
 
 class MainWidget(QWidget):
-    # Instead of assigning a prop type directly to staff, we want to look inside the user settings json File. user_settings.json. There will be a "prop_type" key that will have a value. We need to get that value and convert it to an actual Enum. Its name should match the enum.name.
-    with open("user_settings.json", "r") as file:
-        user_settings: dict = json.load(file)
-    prop_type_value = user_settings.get("prop_type")
-    prop_type = PropTypes.get_prop_type(prop_type_value)
-
     def __init__(self, main_window: "MainWindow") -> None:
         super().__init__(main_window)
         self.main_window = main_window
+        self._set_prop_type()
         self._setup_default_modes()
         self._setup_letters()
         self._setup_components()
         self._setup_layouts()
+
+    def _set_prop_type(self):
+        with open("user_settings.json", "r") as file:
+            user_settings: dict = json.load(file)
+        prop_type_value = user_settings.get("prop_type")
+        self.prop_type = PropTypes.get_prop_type(prop_type_value)
 
     def _setup_components(self) -> None:
         self._setup_special_placements()
@@ -60,9 +61,6 @@ class MainWidget(QWidget):
         self.grid_mode = DIAMOND
 
     def _setup_letters(self) -> None:
-        self.all_pictographs: dict[Letters, dict[str, Pictograph]] = {
-            letter: {} for letter in all_letters
-        }
         self.letter_loader = LetterLoader(self)
         self.letters: dict[Letters, list[dict]] = self.letter_loader.load_all_letters()
 

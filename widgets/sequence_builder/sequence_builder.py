@@ -2,8 +2,10 @@ from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums import LetterType
+from utilities.TypeChecking.letter_lists import all_letters
 import pandas as pd
 from constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
+from utilities.TypeChecking.TypeChecking import Letters
 from widgets.pictograph.components.add_to_sequence_manager import (
     AddToSequenceManager,
 )
@@ -27,10 +29,12 @@ class SequenceBuilder(QFrame):
         self.selected_letters = None
         self.start_position_picked = False
         self._setup_components()
+        self.pictograph_cache: dict[Letters, dict[str, Pictograph]] = {
+            letter: {} for letter in all_letters
+        }
         self.start_position_picker = StartPosPicker(self)
         self.option_picker = OptionPicker(self)
         self.add_to_sequence_manager = AddToSequenceManager(self)
-
         self.setLayout(QHBoxLayout())
         self.layout().addWidget(self.start_position_picker)
 
@@ -47,7 +51,7 @@ class SequenceBuilder(QFrame):
         ]
         for _, pictograph_df in pictograph_dfs.iterrows():
             pictograph_key = f"{pictograph_df['letter']}_{pictograph_df['start_pos']}→{pictograph_df['end_pos']}"
-            if pictograph_key not in self.main_widget.all_pictographs:
+            if pictograph_key not in self.pictograph_cache[pictograph_df["letter"]]:
                 self.render_and_store_pictograph(pictograph_df)
 
     def _setup_components(self):
@@ -82,10 +86,8 @@ class SequenceBuilder(QFrame):
             )
         )
         self.option_picker.scroll_area.pictographs[pictograph_key] = new_pictograph
-        if pictograph_key not in self.main_widget.all_pictographs.get(
-            pictograph_dict["letter"], {}
-        ):
-            self.main_widget.all_pictographs[pictograph_dict["letter"]][
+        if pictograph_key not in self.pictograph_cache[pictograph_dict["letter"]]:
+            self.pictograph_cache[pictograph_dict["letter"]][
                 pictograph_key
             ] = new_pictograph
         section = self.option_picker.scroll_area.sections_manager.get_section(

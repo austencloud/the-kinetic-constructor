@@ -23,9 +23,10 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
         self.sequence_builder = start_pos_picker.sequence_builder
         self.clickable_option_handler = self.sequence_builder.clickable_option_handler
         self.letters = self.sequence_builder.main_widget.letters
-        self.pictograph_factory = ScrollAreaPictographFactory(self)
-
-        self.pictographs = {}
+        self.pictograph_cache = {}
+        self.pictograph_factory = ScrollAreaPictographFactory(
+            self, self.pictograph_cache
+        )
         self.set_layout("HBox")
         self.COLUMN_COUNT = 5
 
@@ -36,7 +37,7 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
             self.clickable_option_handler.get_click_handler(start_pos, is_start_pos)
         )
         self.layout.addWidget(start_pos.view)
-        self.pictographs[start_pos.letter] = start_pos
+        self.pictograph_cache[start_pos.letter] = start_pos
 
     def resize_start_pos_picker_scroll_area(self) -> None:
         self.setMinimumHeight(self.start_pos_picker.height())

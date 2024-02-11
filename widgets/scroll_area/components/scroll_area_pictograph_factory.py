@@ -28,26 +28,28 @@ if TYPE_CHECKING:
 
 class ScrollAreaPictographFactory:
     def __init__(
-        self, scroll_area: Union["CodexScrollArea", "OptionPickerScrollArea"]
+        self,
+        scroll_area: Union["CodexScrollArea", "OptionPickerScrollArea"],
+        pictograph_cache: dict[str, Pictograph],
     ) -> None:
         self.scroll_area = scroll_area
+        self.pictograph_cache = pictograph_cache
 
     def get_or_create_pictograph(
         self, pictograph_key: str, pictograph_dict=None
     ) -> Pictograph:
         letter = pictograph_key.split("_")[0]
-        all_pictographs = self.scroll_area.main_widget.all_pictographs
 
-        if pictograph_key in all_pictographs.get(letter, {}):
-            return all_pictographs[letter][pictograph_key]
+        if pictograph_key in self.pictograph_cache.get(letter, {}):
+            return self.pictograph_cache[letter][pictograph_key]
 
         if pictograph_dict is not None:
             pictograph = self.create_pictograph()
             pictograph.updater.update_pictograph(pictograph_dict)
 
-            if letter not in all_pictographs:
-                all_pictographs[letter] = {}
-            all_pictographs[letter][pictograph_key] = pictograph
+            if letter not in self.pictograph_cache:
+                self.pictograph_cache[letter] = {}
+            self.pictograph_cache[letter][pictograph_key] = pictograph
 
             letter_type = LetterType.get_letter_type(letter)
             for letter_type in LetterType:
@@ -64,7 +66,7 @@ class ScrollAreaPictographFactory:
     def process_selected_letters(self) -> None:
         selected_letters = set(self.scroll_area.codex.selected_letters)
         for letter in selected_letters:
-            if str(letter) not in self.scroll_area.main_widget.all_pictographs:
+            if str(letter) not in self.scroll_area.codex.pictograph_cache:
                 pictograph_dicts = self.scroll_area.letters.get(letter, [])
                 for pictograph_dict in pictograph_dicts:
                     pictograph_key = self.generate_pictograph_key_from_dict(
@@ -74,7 +76,7 @@ class ScrollAreaPictographFactory:
             for (
                 pictograph_key,
                 pictograph,
-            ) in self.scroll_area.main_widget.all_pictographs.get(str(letter)).items():
+            ) in self.scroll_area.codex.pictograph_cache[letter].items():
                 self.scroll_area.pictographs[pictograph_key] = pictograph
 
     def get_deselected_letters(self) -> set[Letters]:
