@@ -1,9 +1,8 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QApplication, QVBoxLayout, QScrollArea
+from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QWheelEvent
 import pandas as pd
-from Enums import LetterType
 from widgets.scroll_area.components.scroll_area_pictograph_factory import (
     ScrollAreaPictographFactory,
 )
@@ -20,14 +19,17 @@ if TYPE_CHECKING:
 
 
 class OptionPickerScrollArea(BasePictographScrollArea):
+    MAX_COLUMN_COUNT: int = 8
+    MIN_COLUMN_COUNT: int = 3
+
     def __init__(self, option_picker: "OptionPicker"):
         super().__init__(option_picker)
-        self.option_picker = option_picker
+        self.option_picker: "OptionPicker" = option_picker
         self.sequence_builder: "SequenceBuilder" = option_picker.sequence_builder
         self.clickable_option_handler = self.sequence_builder.clickable_option_handler
-        self.letters = self.sequence_builder.letters_df
+        self.letters: pd.DataFrame = self.sequence_builder.letters_df
         self.pictographs: dict[str, Pictograph] = {}
-        self.stretch_index = -1
+        self.stretch_index: int = -1
 
         self.set_layout("VBox")
         self.sections_manager = OptionPickerSectionsManager(self)
@@ -44,25 +46,40 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.stretch_index = self.layout.count()
 
     def update_pictographs(self):
-        """Update the display with only the relevant pictographs."""
         current_pictograph = self.option_picker.sequence_builder.current_pictograph
         next_options = self.get_next_options(current_pictograph)
+        self._hide_all_pictographs()
+        self._add_and_display_relevant_pictographs(next_options)
 
-        for pictograph in self.pictographs.values():
-            pictograph.view.hide()
-
+    def _add_and_display_relevant_pictographs(self, next_options: list[pd.Series]):
         for option_dict in next_options:
             pictograph_key = self.sequence_builder.generate_pictograph_key(option_dict)
-            pictograph = self.pictographs.get(pictograph_key)
-
-            if not pictograph:
-                pictograph = self.sequence_builder.render_and_store_pictograph(
-                    option_dict
-                )
-                self.pictographs[pictograph_key] = pictograph
-
+            pictograph = self._get_or_create_pictograph(pictograph_key, option_dict)
             self.display_manager.add_pictograph_to_section_layout(pictograph)
         self.display_manager.order_and_display_pictographs()
+
+    def _get_or_create_pictograph(
+        self, pictograph_key: str, option_dict: pd.Series
+    ) -> Pictograph:
+        pictograph = self.pictographs.get(pictograph_key)
+        if not pictograph:
+            pictograph = self.sequence_builder.render_and_store_pictograph(option_dict)
+            self.pictographs[pictograph_key] = pictograph
+        return pictograph
+
+    def get_next_options(self, pictograph: Pictograph) -> list[pd.Series]:
+        return [
+            row
+            for _, row in self.letters[
+                self.letters["start_pos"] == pictograph.end_pos
+            ].iterrows()
+            if f"{row['letter']}_{row['start_pos']}→{row['end_pos']}"
+            not in self.option_picker.sequence_builder.pictograph_cache
+        ]
+
+    def _hide_all_pictographs(self):
+        for pictograph in self.pictographs.values():
+            pictograph.view.hide()
 
     def get_next_options(self, pictograph: Pictograph) -> list[pd.Series]:
         """Fetch next options logic specific to sequence builder's needs."""
@@ -97,7 +114,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
                 self.change_pictograph_size(increase=False)
             event.accept()
         else:
-            super().wheelEvent(event)  # Call the parent class's wheel event
+            super().wheelEvent(event)
 
     def change_pictograph_size(self, increase: bool) -> None:
         MAX_COLUMN_COUNT = 8

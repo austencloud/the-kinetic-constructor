@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QSizePolicy
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QEvent
 
 
 if TYPE_CHECKING:
@@ -18,13 +18,7 @@ class PictographView(QGraphicsView):
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 
     def resize_for_scroll_area(self) -> None:
-        view_width = int(
-            (
-                self.pictograph.scroll_area.width()
-                / self.pictograph.scroll_area.display_manager.COLUMN_COUNT
-            )
-            - self.pictograph.scroll_area.display_manager.SPACING
-        )
+        view_width = self.get_view_vidth()
         self.setMinimumWidth(view_width)
         self.setMaximumWidth(view_width)
         self.setMinimumHeight(view_width)
@@ -34,8 +28,26 @@ class PictographView(QGraphicsView):
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
 
+    def get_view_vidth(self):
+        return int(
+            (
+                self.pictograph.scroll_area.width()
+                / self.pictograph.scroll_area.display_manager.COLUMN_COUNT
+            )
+            - self.pictograph.scroll_area.display_manager.SPACING
+        )
+
     def wheelEvent(self, event) -> None:
         self.pictograph.scroll_area.wheelEvent(event)
+
+
+    def enterEvent(self, event: QEvent) -> None:
+        # When the mouse enters the view, add a border to highlight it
+        self.setStyleSheet("border: 2px solid red;")
+
+    def leaveEvent(self, event: QEvent) -> None:
+        # When the mouse leaves the view, remove the border
+        self.setStyleSheet("")
 
     def keyPressEvent(self, event) -> None:
         shift_held = event.modifiers() & Qt.KeyboardModifier.ShiftModifier
