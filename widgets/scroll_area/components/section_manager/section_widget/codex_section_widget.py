@@ -16,14 +16,10 @@ if TYPE_CHECKING:
     from ....codex_scroll_area import CodexScrollArea
 
 
-class SectionWidget(QGroupBox):
+class CodexSectionWidget(QGroupBox):
     SCROLLBAR_WIDTH = 20
 
-    def __init__(
-        self,
-        letter_type: LetterType,
-        scroll_area: Union["CodexScrollArea", "OptionPickerScrollArea"],
-    ) -> None:
+    def __init__(self, letter_type: LetterType, scroll_area: "CodexScrollArea") -> None:
         super().__init__(None)
         self.scroll_area = scroll_area
         self.letter_type = letter_type
@@ -39,7 +35,7 @@ class SectionWidget(QGroupBox):
 
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.setSpacing(0)
+        self.layout.setSpacing(3)
         self.setContentsMargins(0, 0, 0, 0)
         self.setup_header()
 

@@ -7,8 +7,8 @@ from widgets.scroll_area.components.section_manager.section_widget.components.ty
 )
 
 if TYPE_CHECKING:
-    from widgets.scroll_area.components.section_manager.section_widget.section_widget import (
-        SectionWidget,
+    from widgets.scroll_area.components.section_manager.section_widget.codex_section_widget import (
+        CodexSectionWidget,
     )
 
 
@@ -17,7 +17,7 @@ class SectionHeader(QWidget):
     EXPAND_ARROW_PATH = "images/icons/dropdown/expand.png"
     COLLAPSE_ARROW_PATH = "images/icons/dropdown/collapse.png"
 
-    def __init__(self, section: "SectionWidget") -> None:
+    def __init__(self, section: "CodexSectionWidget") -> None:
         super().__init__()
         self.section = section
         self.type_label = SectionTypeLabel(section)

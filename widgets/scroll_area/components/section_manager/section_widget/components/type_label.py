@@ -6,7 +6,7 @@ from Enums import LetterType
 
 
 if TYPE_CHECKING:
-    from ..section_widget import SectionWidget
+    from ..codex_section_widget import CodexSectionWidget
 from PyQt6.QtCore import pyqtSignal
 
 
@@ -31,7 +31,7 @@ class SectionTypeLabel(QLabel):
         "-": "#000000",  # black
     }
 
-    def __init__(self, section_widget: "SectionWidget") -> None:
+    def __init__(self, section_widget: "CodexSectionWidget") -> None:
         super().__init__()
         self.section = section_widget
         self.set_styled_text(section_widget.letter_type)

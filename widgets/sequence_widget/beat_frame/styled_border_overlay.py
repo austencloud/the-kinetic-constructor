@@ -20,16 +20,16 @@ class StyledBorderOverlay(QWidget):
 
     def update_border_colors(self, primary_color, secondary_color):
         self.primary_color = primary_color
-        self.secondary_color = secondary_color if primary_color != secondary_color else "transparent"
+        self.secondary_color = (
+            secondary_color if primary_color != secondary_color else "transparent"
+        )
         self.update()  # Call this to trigger a repaint
-
 
     def resize_styled_border_overlay(self):
         self.setFixedSize(
             self.view.size().width(),
             self.view.size().height(),
         )
-
 
     def paintEvent(self, event):
         if self.primary_color and self.secondary_color:
@@ -52,7 +52,9 @@ class StyledBorderOverlay(QWidget):
             pen.setColor(QColor(self.secondary_color))
             pen.setWidth(self.secondary_border_width)
             painter.setPen(pen)
-            inner_offset = self.primary_border_width - (self.secondary_border_width // 2)
+            inner_offset = self.primary_border_width - (
+                self.secondary_border_width // 2
+            )
             inner_rect = outer_rect.adjusted(
                 inner_offset,
                 inner_offset,

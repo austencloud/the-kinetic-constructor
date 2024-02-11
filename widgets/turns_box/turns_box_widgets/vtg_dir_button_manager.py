@@ -22,14 +22,14 @@ from ...factories.button_factory.buttons.rot_dir_buttons import VtgDirButton
 from PyQt6.QtWidgets import QPushButton
 
 if TYPE_CHECKING:
-    from ...scroll_area.components.section_manager.section_widget.section_widget import (
-        SectionWidget,
+    from ...scroll_area.components.section_manager.section_widget.codex_section_widget import (
+        CodexSectionWidget,
     )
     from objects.motion.motion import Motion
 
 
 class VtgDirButtonManager:
-    def __init__(self, section_widget: "SectionWidget") -> None:
+    def __init__(self, section_widget: "CodexSectionWidget") -> None:
         self.section = section_widget
         self.previous_turns = 0
 

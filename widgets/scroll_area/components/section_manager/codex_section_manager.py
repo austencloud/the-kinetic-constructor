@@ -3,7 +3,7 @@ from Enums import LetterType
 from constants import BLUE_TURNS, RED_TURNS
 from utilities.TypeChecking.TypeChecking import Letters
 from .section_widget.components.filter_tab.filter_tab import FilterTab
-from .section_widget.section_widget import SectionWidget
+from .section_widget.codex_section_widget import CodexSectionWidget
 from PyQt6.QtWidgets import QGridLayout, QLabel
 
 if TYPE_CHECKING:
@@ -24,17 +24,17 @@ class CodexSectionManager:
 
     def __init__(self, scroll_area: "CodexScrollArea") -> None:
         self.scroll_area = scroll_area
-        self.sections: dict[LetterType, SectionWidget] = {}
+        self.sections: dict[LetterType, CodexSectionWidget] = {}
         self.filter_tabs_cache: dict[LetterType, FilterTab] = {}
         self.pictograph_cache: dict[Letters, list[LetterType]] = {}
 
         self.pictographs_by_type = {type: [] for type in LetterType}
         self.ordered_section_types: list[LetterType] = []
 
-    def create_section(self, letter_type: LetterType) -> SectionWidget:
+    def create_section(self, letter_type: LetterType) -> CodexSectionWidget:
         if letter_type not in self.sections:
             correct_index = self.get_correct_index_for_section(letter_type)
-            section = SectionWidget(letter_type, self.scroll_area)
+            section = CodexSectionWidget(letter_type, self.scroll_area)
             self.scroll_area.insert_widget_at_index(section, correct_index)
             self.sections[letter_type] = section
             self.ordered_section_types.append(letter_type)
@@ -66,7 +66,7 @@ class CodexSectionManager:
             section_label, 0, 0, 1, self.scroll_area.display_manager.COLUMN_COUNT
         )
 
-    def get_section(self, letter_type: LetterType) -> SectionWidget:
+    def get_section(self, letter_type: LetterType) -> CodexSectionWidget:
         return self.sections.get(letter_type)
 
     def create_section_if_needed(self, letter_type: LetterType) -> None:
@@ -105,7 +105,7 @@ class CodexSectionManager:
                 sections_to_show.append(letter_type)
         return sections_to_show
 
-    def create_or_get_filter_tab(self, section: SectionWidget) -> FilterTab:
+    def create_or_get_filter_tab(self, section: CodexSectionWidget) -> FilterTab:
         if not section.filter_tab:
             section.filter_tab = FilterTab(section)
             section.layout.insertWidget(1, section.filter_tab)

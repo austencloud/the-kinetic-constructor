@@ -3,14 +3,14 @@ from PyQt6.QtWidgets import QFrame, QGridLayout
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from ..section_widget import SectionWidget
+    from ..codex_section_widget import CodexSectionWidget
 
 
 class ScrollAreaSectionPictographFrame(QFrame):
-    def __init__(self, section: "SectionWidget") -> None:
+    def __init__(self, section: "CodexSectionWidget") -> None:
         super().__init__()
         self.section = section
-        self.spacing = 5
+        self.spacing = 3
         self.layout: QGridLayout = QGridLayout(self)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.setContentsMargins(0, 0, 0, 0)

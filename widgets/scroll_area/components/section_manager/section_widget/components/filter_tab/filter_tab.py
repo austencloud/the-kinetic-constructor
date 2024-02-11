@@ -7,13 +7,13 @@ from widgets.turns_panel import TurnsPanel
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
-    from widgets.scroll_area.components.section_manager.section_widget.section_widget import (
-        SectionWidget,
+    from widgets.scroll_area.components.section_manager.section_widget.codex_section_widget import (
+        CodexSectionWidget,
     )
 
 
 class FilterTab(QTabWidget):
-    def __init__(self, section: "SectionWidget"):
+    def __init__(self, section: "CodexSectionWidget"):
         super().__init__()
         self.section = section
 
@@ -47,8 +47,7 @@ class FilterTab(QTabWidget):
             for box in panel.boxes:
                 if box.attribute_type not in turns_values:
                     turns_values[box.attribute_type] = {}
-                turns_values[box.attribute_type][box.attribute_value] = (
-                    box.turns_widget.display_manager.get_current_turns_value()
-                )
+                turns_values[box.attribute_type][
+                    box.attribute_value
+                ] = box.turns_widget.display_manager.get_current_turns_value()
         return turns_values
-

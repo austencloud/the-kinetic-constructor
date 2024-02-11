@@ -9,8 +9,8 @@ from utilities.TypeChecking.letter_lists import (
     all_letters,
 )
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.scroll_area.components.section_manager.section_widget.section_widget import (
-    SectionWidget,
+from widgets.scroll_area.components.section_manager.section_widget.codex_section_widget import (
+    CodexSectionWidget,
 )
 from widgets.sequence_builder.components.option_picker.option_picker_section_widget import (
     OptionPickerSectionWidget,
@@ -43,7 +43,7 @@ class OptionPickerDisplayManager:
         letter_type = self.scroll_area.sections_manager.get_pictograph_letter_type(
             pictograph.letter
         )
-        section: SectionWidget = self.scroll_area.sections_manager.get_section(
+        section: CodexSectionWidget = self.scroll_area.sections_manager.get_section(
             letter_type
         )
         if section:
