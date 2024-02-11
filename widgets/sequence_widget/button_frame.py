@@ -4,14 +4,14 @@ from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
-    from widgets.sequence_widget.beat_frame.beat_frame import BeatFrame
+    from widgets.sequence_widget.beat_frame.beat_frame import SequenceBeatFrame
 
 
-class ButtonFrame(QFrame):
+class SequenceButtonFrame(QFrame):
     def __init__(
         self,
         main_widget: "MainWidget",
-        beat_frame: "BeatFrame",
+        beat_frame: "SequenceBeatFrame",
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -29,4 +29,3 @@ class ButtonFrame(QFrame):
         self.buttons.append(self.clear_sequence_button)
 
         self.layout.addWidget(self.clear_sequence_button)
-

@@ -40,6 +40,7 @@ class PropTypeSelector(QGroupBox):
         self.preferences_dialog.settings_manager.set_prop_type(new_prop_type)
         self.preferences_dialog.settings_manager.save_settings()
         self.preferences_dialog.settings_manager.apply_settings()
+        self.preferences_dialog.apply_button.setEnabled(True)
 
     def _setup_layout(self) -> None:
         layout = QFormLayout()

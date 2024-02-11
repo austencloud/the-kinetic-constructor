@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 from widgets.sequence_widget.beat_frame.beat import BeatView
 
 
-class BeatFrame(QFrame):
+class SequenceBeatFrame(QFrame):
     COLUMN_COUNT = 5
     ROW_COUNT = 4
 
@@ -61,7 +61,6 @@ class BeatFrame(QFrame):
         if next_beat_index is not None:
             self.beats[next_beat_index].set_pictograph(new_beat)
 
-            
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):
             if beat.scene() is None or beat.scene().items() == []:

@@ -7,7 +7,7 @@ from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
-    from widgets.sequence_widget.beat_frame.beat_frame import BeatFrame
+    from widgets.sequence_widget.beat_frame.beat_frame import SequenceBeatFrame
 
 
 class Beat(Pictograph):
@@ -20,7 +20,7 @@ class Beat(Pictograph):
 class BeatView(QGraphicsView):
     original_style: str
 
-    def __init__(self, beat_frame: "BeatFrame") -> None:
+    def __init__(self, beat_frame: "SequenceBeatFrame") -> None:
         super().__init__(beat_frame)
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
