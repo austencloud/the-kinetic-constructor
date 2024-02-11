@@ -21,7 +21,6 @@ class OptionPicker(QWidget):
         super().__init__(sequence_builder)
         self.sequence_builder = sequence_builder
         self.main_widget = sequence_builder.main_widget
-        self.options: dict[str, Pictograph] = {}
         self.scroll_area = OptionPickerScrollArea(self)
 
         self.setup_layout()

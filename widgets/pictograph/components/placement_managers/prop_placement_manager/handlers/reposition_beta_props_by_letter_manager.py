@@ -120,72 +120,42 @@ class RepositionBetaByLetterHandler:
             )
 
     def reposition_Ψ(self) -> None:
-
-        prop_type = self.pictograph.red_prop.pictograph.main_widget.prop_type
-        if prop_type in non_strictly_placed_props:
-            direction = (
-                self.prop_placement_manager.dir_calculator.get_dir_for_non_shift(
-                    self.pictograph.red_prop
-                )
-            )
-            if direction:
-                self.move_prop(self.pictograph.red_prop, direction)
-                self.move_prop(
-                    self.pictograph.blue_prop,
-                    self.prop_placement_manager.dir_calculator.get_opposite_dir(
-                        direction
-                    ),
-                )
-
-        elif prop_type in strictly_placed_props:
-            self.prop_placement_manager.default_positioner.set_prop_to_default_loc(
+        direction = (
+            self.prop_placement_manager.dir_calculator.get_dir_for_non_shift(
                 self.pictograph.red_prop
             )
+        )
+        if direction:
+            self.move_prop(self.pictograph.red_prop, direction)
+            self.move_prop(
+                self.pictograph.blue_prop,
+                self.prop_placement_manager.dir_calculator.get_opposite_dir(
+                    direction
+                ),
+            )
+
 
     def reposition_Ψ_dash(self) -> None:
-        prop_type = self.pictograph.red_prop.pictograph.main_widget.prop_type
 
-        if prop_type in non_strictly_placed_props:
-            direction = (
-                self.prop_placement_manager.dir_calculator.get_dir_for_non_shift(
-                    self.pictograph.red_prop
-                )
-            )
-            if direction:
-                self.move_prop(self.pictograph.red_prop, direction)
-                self.move_prop(
-                    self.pictograph.blue_prop,
-                    self.prop_placement_manager.dir_calculator.get_opposite_dir(
-                        direction
-                    ),
-                )
-
-        elif prop_type in strictly_placed_props:
-            self.prop_placement_manager.default_positioner.set_prop_to_default_loc()(
-                self.pictograph.red_prop
+        direction = self.prop_placement_manager.dir_calculator.get_dir_for_non_shift(
+            self.pictograph.red_prop
+        )
+        if direction:
+            self.move_prop(self.pictograph.red_prop, direction)
+            self.move_prop(
+                self.pictograph.blue_prop,
+                self.prop_placement_manager.dir_calculator.get_opposite_dir(direction),
             )
 
     def reposition_β(self) -> None:
-        prop_type = self.pictograph.red_prop.pictograph.main_widget.prop_type
-
-        if prop_type in non_strictly_placed_props:
-            direction = (
-                self.prop_placement_manager.dir_calculator.get_dir_for_non_shift(
-                    self.pictograph.red_prop
-                )
-            )
-            if direction:
-                self.move_prop(self.pictograph.red_prop, direction)
-                self.move_prop(
-                    self.pictograph.blue_prop,
-                    self.prop_placement_manager.dir_calculator.get_opposite_dir(
-                        direction
-                    ),
-                )
-
-        elif prop_type in strictly_placed_props:
-            self.prop_placement_manager.default_positioner.set_prop_to_default_loc(
-                self.pictograph.red_prop
+        direction = self.prop_placement_manager.dir_calculator.get_dir_for_non_shift(
+            self.pictograph.red_prop
+        )
+        if direction:
+            self.move_prop(self.pictograph.red_prop, direction)
+            self.move_prop(
+                self.pictograph.blue_prop,
+                self.prop_placement_manager.dir_calculator.get_opposite_dir(direction),
             )
 
     def move_prop(self, prop: Prop, direction: Directions) -> None:

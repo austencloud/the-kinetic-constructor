@@ -62,3 +62,14 @@ class StyledBorderOverlay(QWidget):
                 -inner_offset,
             )
             painter.drawRect(inner_rect)
+
+    def set_gold_border(self):
+        # Save the current border colors to restore them later
+        self.saved_primary_color = self.primary_color
+        self.saved_secondary_color = self.secondary_color
+        # Set the new temporary 'gold' color for the border
+        self.update_border_colors("gold", "gold")
+
+    def reset_border(self):
+        # Restore the original border colors
+        self.update_border_colors(self.saved_primary_color, self.saved_secondary_color)

@@ -49,11 +49,13 @@ class PictographView(QGraphicsView):
         self.pictograph.scroll_area.wheelEvent(event)
 
     def enterEvent(self, event: QEvent) -> None:
-        self.setStyleSheet("border: 4px solid gold;")
+        self.pictograph.container.styled_border_overlay.set_gold_border()
+
+        # self.setStyleSheet("border: 4px solid gold;")
 
     def leaveEvent(self, event: QEvent) -> None:
-        # Revert to the original style that includes the borders
-        self.setStyleSheet(self.original_style)
+        self.setStyleSheet("")
+        self.pictograph.container.styled_border_overlay.reset_border()
 
     def keyPressEvent(self, event) -> None:
         shift_held = event.modifiers() & Qt.KeyboardModifier.ShiftModifier
