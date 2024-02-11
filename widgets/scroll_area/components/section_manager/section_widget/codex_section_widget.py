@@ -75,7 +75,7 @@ class CodexSectionWidget(QGroupBox):
                 box.turns_widget.display_manager.update_turns_display("0")
                 box.prop_rot_dir_button_manager.hide_prop_rot_dir_buttons()
         self.vtg_dir_button_manager.hide_vtg_dir_buttons()
-
+        
     def clear_pictographs(self):
         for pictograph_key in list(self.pictographs.keys()):
             pictograph = self.pictographs.pop(pictograph_key)

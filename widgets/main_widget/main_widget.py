@@ -3,6 +3,8 @@ from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QResizeEvent, QKeyEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
+
+from widgets.pictograph.pictograph import Pictograph
 from ..graphical_object_svg_manager import GraphicalObjectSvgManager
 from utilities.TypeChecking.TypeChecking import Letters
 from utilities.TypeChecking.prop_types import PropTypes
@@ -25,6 +27,7 @@ class MainWidget(QWidget):
     def __init__(self, main_window: "MainWindow") -> None:
         super().__init__(main_window)
         self.main_window = main_window
+        self.all_pictographs: dict[Letters, dict[str, "Pictograph"]] = {}
         self._set_prop_type()
         self._setup_default_modes()
         self._setup_letters()

@@ -71,25 +71,26 @@ class TurnsUpdater:
             LetterType.Type5,
             LetterType.Type6,
         ]:
-            if self.turns_box.prop_rot_dir_btn_state[CLOCKWISE]:
-                motion.prop_rot_dir = CLOCKWISE
-            elif self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE]:
-                motion.prop_rot_dir = COUNTER_CLOCKWISE
-            elif (
-                not self.turns_box.prop_rot_dir_btn_state[CLOCKWISE]
-                and not self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE]
-            ):
-                motion.prop_rot_dir = (
-                    self._get_default_prop_rot_dir_for_type4_type5_type6()
-                )
-            if motion.prop_rot_dir == CLOCKWISE:
-                self.turns_box.prop_rot_dir_button_manager.cw_button.press()
-                self.turns_box.prop_rot_dir_btn_state[CLOCKWISE] = True
-                self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE] = False
-            elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                self.turns_box.prop_rot_dir_button_manager.ccw_button.press()
-                self.turns_box.prop_rot_dir_btn_state[CLOCKWISE] = False
-                self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE] = True
+            self._determine_prop_rot_dir_for_type4_5_6(motion)
+
+    def _determine_prop_rot_dir_for_type4_5_6(self, motion: "Motion"):
+        if self.turns_box.prop_rot_dir_btn_state[CLOCKWISE]:
+            motion.prop_rot_dir = CLOCKWISE
+        elif self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE]:
+            motion.prop_rot_dir = COUNTER_CLOCKWISE
+        elif (
+            not self.turns_box.prop_rot_dir_btn_state[CLOCKWISE]
+            and not self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE]
+        ):
+            motion.prop_rot_dir = self._get_default_prop_rot_dir_for_type4_5_6()
+        if motion.prop_rot_dir == CLOCKWISE:
+            self.turns_box.prop_rot_dir_button_manager.cw_button.press()
+            self.turns_box.prop_rot_dir_btn_state[CLOCKWISE] = True
+            self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE] = False
+        elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
+            self.turns_box.prop_rot_dir_button_manager.ccw_button.press()
+            self.turns_box.prop_rot_dir_btn_state[CLOCKWISE] = False
+            self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE] = True
 
     def _determine_prop_rot_dir_for_type2_type3(
         self, other_motion: "Motion"
@@ -97,7 +98,7 @@ class TurnsUpdater:
         """Determine the property rotation direction."""
 
         self.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.show_vtg_dir_buttons()
-        self.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.same_button.press()
+        # self.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.same_button.press()
         if (
             not self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[SAME]
             and not self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[OPP]
@@ -111,7 +112,7 @@ class TurnsUpdater:
             elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
                 return CLOCKWISE
 
-    def _get_default_prop_rot_dir_for_type4_type5_type6(self) -> PropRotDirs:
+    def _get_default_prop_rot_dir_for_type4_5_6(self) -> PropRotDirs:
         self._set_prop_rot_dir_state_default()
         self.turns_box.prop_rot_dir_button_manager.show_prop_rot_dir_buttons()
         self.turns_box.prop_rot_dir_button_manager.cw_button.press()
@@ -130,4 +131,3 @@ class TurnsUpdater:
     def _clamp_turns(self, turns: Turns) -> Turns:
         """Clamp the turns value to be within allowable range."""
         return max(0, min(3, turns))
-

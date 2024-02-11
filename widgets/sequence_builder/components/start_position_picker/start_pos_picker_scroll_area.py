@@ -35,6 +35,8 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
         )
         self.layout.addWidget(start_pos.view)
         self.pictograph_cache[start_pos.letter] = start_pos
+        key = f"{start_pos.letter}_{start_pos.start_pos}_{start_pos.end_pos}"
+        self.main_widget.all_pictographs[key] = start_pos
 
     def resize_start_pos_picker_scroll_area(self) -> None:
         self.setMinimumHeight(self.start_pos_picker.height())

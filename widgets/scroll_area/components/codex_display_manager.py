@@ -43,7 +43,6 @@ class CodexDisplayManager:
 
         if section:
             row, col = divmod(index, self.COLUMN_COUNT)
-            logging.debug(f"Adding {pictograph.letter} at position: ({row}, {col})")
             section.pictograph_frame.layout.addWidget(pictograph.view, row, col)
             next_index = index + 1
             self.section_indices[letter_type] = divmod(next_index, self.COLUMN_COUNT)

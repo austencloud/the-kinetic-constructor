@@ -65,6 +65,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         if not pictograph:
             pictograph = self.sequence_builder.render_and_store_pictograph(option_dict)
             self.pictograph_cache[pictograph_key] = pictograph
+            self.main_widget.all_pictographs[pictograph_key] = pictograph
         return pictograph
 
     def get_next_options(self, pictograph: Pictograph) -> list[pd.Series]:

@@ -44,6 +44,8 @@ class VtgDirButtonManager:
         self.opp_button.hide()
         self.same_button.hide()
 
+
+
     def _setup_vtg_dir_buttons(self) -> list[QPushButton]:
         self.same_button: VtgDirButton = ButtonFactory.create_vtg_dir_button(
             f"{ICON_DIR}same_direction.png", lambda: self._set_vtg_dir(SAME), SAME

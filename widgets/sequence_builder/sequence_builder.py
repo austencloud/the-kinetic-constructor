@@ -86,6 +86,7 @@ class SequenceBuilder(QFrame):
             )
         )
         self.option_picker.scroll_area.pictograph_cache[pictograph_key] = new_pictograph
+        self.main_widget.all_pictographs[pictograph_key] = new_pictograph
         if pictograph_key not in self.pictograph_cache[pictograph_dict["letter"]]:
             self.pictograph_cache[pictograph_dict["letter"]][
                 pictograph_key
@@ -95,6 +96,7 @@ class SequenceBuilder(QFrame):
         )
         section.pictographs[pictograph_key] = new_pictograph
         self.option_picker.scroll_area.pictograph_cache[pictograph_key] = new_pictograph
+        self.main_widget.all_pictographs[pictograph_key] = new_pictograph
         return new_pictograph
 
     def _add_turns_and_start_ori(self, pictograph_dict):

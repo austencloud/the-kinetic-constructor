@@ -11,6 +11,16 @@ class TurnsAdjustmentManager:
     def __init__(self, turns_widget: "TurnsWidget") -> None:
         self.turns_widget = turns_widget
         self.pictographs = self._get_pictographs()
+        self.letter_type = (
+            self.turns_widget.turns_box.turns_panel.filter_tab.section.letter_type
+        )
+
+        self.vtg_button_manager = (
+            self.turns_widget.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager
+        )
+        self.prop_rot_dir_manager = (
+            self.turns_widget.turns_box.prop_rot_dir_button_manager
+        )
 
     def adjust_turns(self, adjustment: Turns) -> None:
         turns = self._get_turns()
@@ -34,8 +44,6 @@ class TurnsAdjustmentManager:
 
     def get_current_turns_value(self) -> Turns:
         return self._get_turns()
-
-    # Private methods
 
     def _get_pictographs(self) -> list["Pictograph"]:
         return (
@@ -64,16 +72,10 @@ class TurnsAdjustmentManager:
         self.turns_widget.display_manager.update_turns_display(str(turns))
 
     def _update_visibility_based_on_motion(self, turns: Turns) -> None:
-        letter_type = (
-            self.turns_widget.turns_box.turns_panel.filter_tab.section.letter_type
-        )
         button_manager = (
-            (
-                self.turns_widget.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager
-            )
-            if self.turns_widget.turns_box.turns_panel.filter_tab.section.letter_type
-            in [LetterType.Type2, LetterType.Type3]
-            else (self.turns_widget.turns_box.prop_rot_dir_button_manager)
+            self.vtg_button_manager
+            if self.letter_type in [LetterType.Type2, LetterType.Type3]
+            else (self.prop_rot_dir_manager)
         )
         button_manager.update_visibility_based_on_motion(
             turns, self.turns_widget.turns_box.attribute_value
