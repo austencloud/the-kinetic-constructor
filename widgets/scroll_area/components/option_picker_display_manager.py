@@ -35,9 +35,7 @@ class OptionPickerDisplayManager:
         for letter_type in LetterType:
             self.calculate_section_indices(letter_type)
             ordered_pictographs = self.get_ordered_pictographs_for_section(letter_type)
-            for index, (key, pictograph) in enumerate(
-                ordered_pictographs.items()
-            ):
+            for index, (key, pictograph) in enumerate(ordered_pictographs.items()):
                 self.add_pictograph_to_layout(pictograph, index)
 
     def add_pictograph_to_layout(self, pictograph: Pictograph, index: int):
@@ -94,19 +92,43 @@ class OptionPickerDisplayManager:
 
     def get_ordered_pictographs_for_section(
         self, letter_type: LetterType
-    ) -> dict[Letters, Pictograph]:
+    ) -> dict[str, Pictograph]:
+        """Returns pictographs ordered by their letter and start position for a given section type,
+        but only if they are relevant to the current_pictograph's end position."""
+        current_pictograph = self.scroll_area.sequence_builder.current_pictograph
+        relevant_pictographs = {}
+
+        for key, pictograph in self.scroll_area.pictographs.items():
+            if self.is_pictograph_relevant(pictograph, current_pictograph):
+                if (
+                    self.scroll_area.sections_manager.get_pictograph_letter_type(key)
+                    == letter_type
+                ):
+                    relevant_pictographs[key] = pictograph
+
         return {
             k: v
             for k, v in sorted(
-                self.scroll_area.pictographs.items(),
+                relevant_pictographs.items(),
                 key=lambda item: (
                     all_letters.index(item[1].letter),
                     item[1].start_pos,
                 ),
             )
-            if self.scroll_area.sections_manager.get_pictograph_letter_type(k)
-            == letter_type
         }
+
+    def is_pictograph_relevant(
+        self, pictograph: Pictograph, current_pictograph: Pictograph
+    ) -> bool:
+        """Check if a pictograph is a valid next option based on the current_pictograph."""
+
+        if (
+            current_pictograph.end_pos == pictograph.start_pos
+            and current_pictograph.red_motion.end_ori == pictograph.red_motion.start_ori
+            and current_pictograph.blue_motion.end_ori
+            == pictograph.blue_motion.start_ori
+        ):
+            return True
 
     def clear_all_section_layouts(self):
         """Clears all widgets from all section layouts."""

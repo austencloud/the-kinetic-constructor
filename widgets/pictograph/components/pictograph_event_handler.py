@@ -13,16 +13,10 @@ class PictographMouseEventHandler:
 
     def handle_mouse_press(self, event: "QGraphicsSceneMouseEvent") -> None:
         if self.pictograph.check.is_in_sequence_builder():
-            # Check if the click is not on an arrow or prop.
-            if not any(
-                isinstance(item, (Arrow, Prop))
-                for item in self.pictograph.items(event.scenePos())
-            ):
-                # Trigger the sequence builder's click handler and return to avoid further processing.
-                self.pictograph.scroll_area.sequence_builder.clickable_option_handler.on_option_clicked(
-                    self.pictograph
-                )
-                return
+            self.pictograph.scroll_area.sequence_builder.clickable_option_handler.on_option_clicked(
+                self.pictograph
+            )
+            return
         scene_pos = event.scenePos()
         items_at_pos = self.pictograph.items(scene_pos)
 

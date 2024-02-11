@@ -5,6 +5,7 @@ from constants import OPP, SAME
 from widgets.scroll_area.components.scroll_area_pictograph_factory import (
     ScrollAreaPictographFactory,
 )
+from PyQt6.QtCore import Qt
 from ....scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
     FilterTab,
 )
@@ -29,9 +30,7 @@ class OptionPickerSectionWidget(QGroupBox):
     SCROLLBAR_WIDTH = 20
 
     def __init__(
-        self,
-        letter_type: LetterType,
-        scroll_area: Union["CodexScrollArea", "OptionPickerScrollArea"],
+        self, letter_type: LetterType, scroll_area: "OptionPickerScrollArea"
     ) -> None:
         super().__init__(None)
         self.scroll_area = scroll_area
@@ -45,12 +44,15 @@ class OptionPickerSectionWidget(QGroupBox):
         self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
         self.pictographs: dict[str, Pictograph] = {}
         self.layout.addWidget(self.pictograph_frame)
+        self.setStyleSheet("QGroupBox {border: 1px solid black;}")
 
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
         self.setup_header()
+        self.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
     def setup_header(self):
         self.header = SectionHeader(self)
@@ -76,10 +78,10 @@ class OptionPickerSectionWidget(QGroupBox):
             self.setMaximumWidth(
                 int((self.scroll_area.width() - self.SCROLLBAR_WIDTH) / 3)
             )
-        # self.filter_tab.visibility_handler.resize_filter_tab()
 
     def toggle_section(self) -> None:
         self.layout.setEnabled(False)
+
         is_visible = not self.pictograph_frame.isVisible()
         self.pictograph_frame.setVisible(is_visible)
         if self.filter_tab:
@@ -92,7 +94,9 @@ class OptionPickerSectionWidget(QGroupBox):
                 self.vtg_dir_button_manager.show_vtg_dir_buttons()
         else:
             self.vtg_dir_button_manager.hide_vtg_dir_buttons()
+
         self.layout.setEnabled(True)
+
         self.layout.activate()
 
     def reset_section(self, index: int) -> None:
@@ -110,6 +114,7 @@ class OptionPickerSectionWidget(QGroupBox):
         for pictograph_key in list(self.pictographs.keys()):
             pictograph = self.pictographs.pop(pictograph_key)
             pictograph.view.setParent(None)
+            pictograph.view.hide()
 
     def set_size_policy(self, horizontal, vertical):
         size_policy = QSizePolicy(horizontal, vertical)

@@ -44,6 +44,7 @@ class BasePictographScrollArea(QScrollArea):
         self.container.setLayout(self.layout)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
 
     def clear_layout(self):
         if self.layout:

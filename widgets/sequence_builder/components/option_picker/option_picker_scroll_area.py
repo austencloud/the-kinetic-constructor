@@ -28,7 +28,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.letters = self.sequence_builder.letters_df
         self.pictographs: dict[str, Pictograph] = {}
         self.stretch_index = -1
-
+        
         self.set_layout("VBox")
         self.sections_manager = OptionPickerSectionsManager(self)
         self.display_manager = OptionPickerDisplayManager(self)
@@ -51,7 +51,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             pictograph.view.hide()
 
         # Clear all section layouts
-        self.display_manager.clear_all_section_layouts()
+        # self.display_manager.clear_all_section_layouts()
 
         # Populate the layout with next options only
         for option_dict in next_options:
@@ -87,7 +87,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
 
     def adjust_sections_size(self):
         """Adjust the size of sections, specific to sequence builder."""
-
         for section in self.sections_manager.sections.values():
             section.adjust_size()
 
@@ -115,10 +114,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             self.display_manager.COLUMN_COUNT -= 1
         elif not increase and current_size < MAX_COLUMN_COUNT:
             self.display_manager.COLUMN_COUNT += 1
-
-        self.update_all_pictograph_sizes()
-
-    def update_all_pictograph_sizes(self):
         self.display_manager.order_and_display_pictographs()
 
     def clear_layout(self):
