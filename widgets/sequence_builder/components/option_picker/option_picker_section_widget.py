@@ -1,10 +1,7 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QGroupBox, QSizePolicy
 from Enums import LetterType
 from constants import OPP, SAME
-from widgets.scroll_area.components.scroll_area_pictograph_factory import (
-    ScrollAreaPictographFactory,
-)
 from PyQt6.QtCore import Qt
 from ....scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
     FilterTab,
@@ -23,7 +20,6 @@ if TYPE_CHECKING:
         OptionPickerScrollArea,
     )
 
-    from ....scroll_area.codex_scroll_area import CodexScrollArea
 
 
 class OptionPickerSectionWidget(QGroupBox):

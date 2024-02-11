@@ -1,7 +1,7 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from Enums import LetterType
 from constants import *
-from utilities.TypeChecking.MotionAttributes import Colors, LeadStates, MotionTypes, Turns, PropRotDirs
+from utilities.TypeChecking.MotionAttributes import Turns, PropRotDirs
 
 
 if TYPE_CHECKING:

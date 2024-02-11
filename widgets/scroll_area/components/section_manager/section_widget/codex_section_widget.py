@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QGroupBox, QSizePolicy
 from Enums import LetterType
 from constants import OPP, SAME
@@ -9,9 +9,7 @@ from .....turns_box.turns_box_widgets.vtg_dir_button_manager import VtgDirButton
 from .components.pictograph_frame import ScrollAreaSectionPictographFrame
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (
-        OptionPickerScrollArea,
-    )
+    pass
 
     from ....codex_scroll_area import CodexScrollArea
 

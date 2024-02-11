@@ -1,19 +1,10 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsScene
-from data.prop_class_mapping import prop_class_mapping
 
-from constants import *
-from utilities.TypeChecking.MotionAttributes import Colors
-from utilities.TypeChecking.prop_types import PropTypes
-from widgets.factories.prop_factory import PropFactory
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.beat_frame.beat import Beat
     from widgets.pictograph.pictograph import Pictograph
     from widgets.sequence_builder.sequence_builder import SequenceBuilder
-from objects.motion.motion import Motion
-from objects.arrow.arrow import Arrow
-from objects.prop.prop import Prop
 
 
 class AddToSequenceManager:

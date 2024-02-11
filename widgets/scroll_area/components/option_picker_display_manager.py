@@ -1,4 +1,3 @@
-import logging
 from typing import TYPE_CHECKING
 from Enums import LetterType
 from widgets.pictograph.pictograph import Pictograph

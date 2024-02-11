@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from Enums import LetterType
-from constants import Type1, Type2, Type3, Type4, Type5, Type6
 from objects.prop.prop import Prop
 
 

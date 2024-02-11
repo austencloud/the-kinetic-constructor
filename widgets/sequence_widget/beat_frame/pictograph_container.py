@@ -1,5 +1,5 @@
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QGraphicsView
-from PyQt6.QtCore import Qt, QRect, QEvent
+from PyQt6.QtWidgets import QFrame, QVBoxLayout
+from PyQt6.QtCore import QEvent
 from PyQt6.QtGui import QPainter, QPen, QColor
 from typing import TYPE_CHECKING
 

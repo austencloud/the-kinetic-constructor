@@ -9,7 +9,7 @@ from .turns_box.turns_box_widgets.base_attr_box_widget import TurnsBoxWidget
 if TYPE_CHECKING:
     from widgets.turns_box.turns_box import TurnsBox
 
-from constants import BLUE, COLOR, LEAD_STATE, MOTION_TYPE, Type1
+from constants import BLUE, COLOR, LEAD_STATE, MOTION_TYPE
 
 
 class HeaderWidget(TurnsBoxWidget):

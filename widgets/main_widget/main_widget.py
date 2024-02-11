@@ -1,10 +1,9 @@
 import json
-from PyQt6.QtWidgets import QWidget, QHBoxLayout
+from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QResizeEvent, QKeyEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from ..graphical_object_svg_manager import GraphicalObjectSvgManager
-from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Letters
 from utilities.TypeChecking.prop_types import PropTypes
 from constants import DIAMOND
@@ -12,7 +11,6 @@ from ..main_widget.special_placement_loader import SpecialPlacementLoader
 from ..pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
     TurnsTupleGenerator,
 )
-from ..pictograph.pictograph import Pictograph
 from ..image_cache_manager import ImageCacheManager
 from ..main_tab_widget.main_tab_widget import MainTabWidget
 from .main_widget_layout_manager import MainWidgetLayoutManager

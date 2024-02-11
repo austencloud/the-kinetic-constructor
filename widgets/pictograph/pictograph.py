@@ -3,9 +3,7 @@ from PyQt6.QtWidgets import (
     QGraphicsScene,
     QGraphicsPixmapItem,
     QGraphicsSceneMouseEvent,
-    QGraphicsDropShadowEffect,
 )
-from PyQt6.QtGui import QColor
 from Enums import LetterType
 
 from objects.arrow.arrow import Arrow
@@ -21,7 +19,6 @@ from utilities.TypeChecking.TypeChecking import (
     VtgTimings,
 )
 from utilities.TypeChecking.MotionAttributes import Colors, Locations
-from widgets.pictograph.components.pictograph_frame_styler import PictographFrameStyler
 from widgets.sequence_widget.beat_frame.pictograph_container import PictographContainer
 
 from .components.glyph.glyph import GlyphManager
@@ -38,14 +35,12 @@ from .components.pictograph_view import PictographView
 from .components.wasd_adjustment_manager.wasd_adjustment_manager import (
     WASD_AdjustmentManager,
 )
-from .components.add_to_sequence_manager import AddToSequenceManager
 from .components.pictograph_context_menu_handler import PictographContextMenuHandler
 from .components.pictograph_image_renderer import PictographImageRenderer
 from .components.pictograph_updater import PictographUpdater
 from .components.pictograph_event_handler import PictographMouseEventHandler
 from .components.pictograph_init import PictographInit
 
-from archive.dataframe_generators.letter_calculator import LetterCalculator
 
 if TYPE_CHECKING:
     from ..sequence_builder.components.start_position_picker.start_pos_picker_scroll_area import (

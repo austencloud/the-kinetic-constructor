@@ -1,6 +1,4 @@
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
-from PyQt6.QtCore import pyqtSignal
-from constants import END_POS, START_POS
 from widgets.sequence_builder.components.start_position_picker.start_pos_manager import (
     StartPosManager,
 )

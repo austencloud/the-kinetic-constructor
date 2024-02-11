@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 from constants import ANTI, PRO
 from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import Directions
-from utilities.TypeChecking.prop_types import *
 
 if TYPE_CHECKING:
     from .beta_prop_positioner import BetaPropPositioner

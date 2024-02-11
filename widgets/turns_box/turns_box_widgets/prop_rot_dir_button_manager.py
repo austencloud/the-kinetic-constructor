@@ -13,9 +13,6 @@ from constants import (
     RED,
     SAME,
     STATIC,
-    Type4,
-    Type5,
-    Type6,
 )
 from utilities.TypeChecking.MotionAttributes import (
     Colors,

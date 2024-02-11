@@ -1,6 +1,6 @@
 from typing import List
 from Enums import LetterType, TabName
-from constants import CLOCKWISE, COUNTER_CLOCKWISE, PRO, ANTI, DASH, STATIC, Type1
+from constants import CLOCKWISE, COUNTER_CLOCKWISE, PRO, ANTI, DASH, STATIC
 from data.letter_engine_data import motion_type_letter_combinations
 from typing import List
 from typing import TYPE_CHECKING

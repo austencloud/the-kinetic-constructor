@@ -1,5 +1,5 @@
 import logging
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from Enums import LetterType
 from widgets.pictograph.pictograph import Pictograph
 from utilities.TypeChecking.letter_lists import (
@@ -11,9 +11,6 @@ from utilities.TypeChecking.letter_lists import (
 from utilities.TypeChecking.TypeChecking import Letters
 from widgets.scroll_area.components.section_manager.section_widget.codex_section_widget import (
     CodexSectionWidget,
-)
-from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (
-    OptionPickerScrollArea,
 )
 
 if TYPE_CHECKING:

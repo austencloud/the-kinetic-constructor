@@ -1,6 +1,4 @@
 from typing import TYPE_CHECKING
-from .small_bilateral_prop_positioner import SmallBilateralPropPositioner
-from .small_unilateral_prop_positioner import SmallUnilateralPropPositioner
 
 if TYPE_CHECKING:
     from .beta_prop_positioner import BetaPropPositioner

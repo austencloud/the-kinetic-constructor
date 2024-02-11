@@ -1,12 +1,7 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
 
-from widgets.pictograph.pictograph import Pictograph
-from ....scroll_area.components.scroll_area_pictograph_factory import (
-    ScrollAreaPictographFactory,
-)
 from .option_picker_scroll_area import OptionPickerScrollArea
-from .option_picker_letter_button_frame import OptionPickerLetterButtonFrame
 
 from typing import TYPE_CHECKING
 

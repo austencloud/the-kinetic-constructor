@@ -2,7 +2,6 @@ from typing import Union, TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import Qt
 
-from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.components.start_position_picker.start_pos_picker import (
@@ -12,7 +11,6 @@ if TYPE_CHECKING:
         OptionPicker,
     )
     from widgets.codex.codex import Codex
-    from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
 
 class BasePictographScrollArea(QScrollArea):

@@ -1,7 +1,4 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QApplication, QVBoxLayout, QSizePolicy
-from PyQt6.QtCore import Qt
-from data.rules import get_next_letters
 from widgets.scroll_area.components.scroll_area_pictograph_factory import (
     ScrollAreaPictographFactory,
 )

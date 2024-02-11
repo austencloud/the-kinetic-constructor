@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING, Union
 from Enums import LetterType
-from constants import Type2, Type3
 from utilities.TypeChecking.MotionAttributes import Turns
 
 if TYPE_CHECKING:

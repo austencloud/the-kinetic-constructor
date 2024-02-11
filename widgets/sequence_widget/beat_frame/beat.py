@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QPushButton
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
-from PyQt6.QtCore import pyqtSignal, QObject
 from widgets.pictograph.pictograph import Pictograph
 
 

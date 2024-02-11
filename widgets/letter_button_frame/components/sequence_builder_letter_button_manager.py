@@ -1,5 +1,5 @@
 from Enums import LetterType
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 
 from PyQt6.QtWidgets import QHBoxLayout, QSizePolicy
 from PyQt6.QtCore import QSize, Qt

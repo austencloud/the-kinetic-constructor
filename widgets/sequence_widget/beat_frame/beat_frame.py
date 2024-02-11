@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from PyQt6.QtWidgets import QGridLayout, QFrame, QSizePolicy
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtCore import Qt
 from widgets.sequence_widget.beat_frame.beat import Beat
 from widgets.sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 from widgets.sequence_widget.beat_frame.start_pos_beat import StartPositionBeatView
