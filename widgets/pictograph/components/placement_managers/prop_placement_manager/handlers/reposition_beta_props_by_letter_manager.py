@@ -1,21 +1,18 @@
 from typing import TYPE_CHECKING
 from constants import ANTI, PRO
-
 from objects.prop.prop import Prop
 from utilities.TypeChecking.TypeChecking import Directions
 from utilities.TypeChecking.prop_types import *
 
 if TYPE_CHECKING:
-    from widgets.pictograph.components.placement_managers.prop_placement_manager.handlers.beta_prop_positioner import (
-        BetaPropPositioner,
-    )
+    from .beta_prop_positioner import BetaPropPositioner
 
 
 class RepositionBetaByLetterHandler:
     def __init__(self, beta_prop_positioner: "BetaPropPositioner") -> None:
         self.pictograph = beta_prop_positioner.pictograph
-
         self.prop_placement_manager = beta_prop_positioner.prop_placement_manager
+        self.beta_prop_positioner = beta_prop_positioner
 
     def reposition_G_H(self) -> None:
         further_direction = self.prop_placement_manager.dir_calculator.get_dir(
@@ -47,6 +44,7 @@ class RepositionBetaByLetterHandler:
         self.move_prop(anti_prop, anti_direction)
 
     def reposition_J_K_L(self) -> None:
+
         red_dir = self.prop_placement_manager.dir_calculator.get_dir(
             self.pictograph.red_motion
         )
@@ -59,6 +57,7 @@ class RepositionBetaByLetterHandler:
             self.move_prop(self.pictograph.blue_prop, blue_dir)
 
     def reposition_Y_Z(self) -> None:
+
         shift = (
             self.pictograph.red_motion
             if self.pictograph.red_motion.check.is_shift()

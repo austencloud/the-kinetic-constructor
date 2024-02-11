@@ -8,41 +8,58 @@ if TYPE_CHECKING:
 
 class PictographChecker:
     def __init__(self, pictograph: "Pictograph") -> None:
-        self.p = pictograph
+        self.pictograph = pictograph
 
-    def ends_in_beta(self) -> bool:
-        return self.p.letter in beta_ending_letters
+    def ends_with_beta(self) -> bool:
+        return self.pictograph.letter in beta_ending_letters
 
-    def ends_in_alpha(self) -> bool:
-        return self.p.letter in alpha_ending_letters
+    def ends_with_alpha(self) -> bool:
+        return self.pictograph.letter in alpha_ending_letters
 
-    def ends_in_gamma(self) -> bool:
-        return self.p.letter in gamma_ending_letters
+    def ends_with_gamma(self) -> bool:
+        return self.pictograph.letter in gamma_ending_letters
 
-    def ends_in_hybrid_ori(self) -> bool:
-        red_prop, blue_prop = self.p.props[RED], self.p.props[BLUE]
+    def ends_with_layer1(self) -> bool:
+        red_prop, blue_prop = self.pictograph.props[RED], self.pictograph.props[BLUE]
+        return red_prop.check.is_radial() == blue_prop.check.is_radial()
+
+    def ends_with_layer2(self) -> bool:
+        red_prop, blue_prop = self.pictograph.props[RED], self.pictograph.props[BLUE]
+        return red_prop.check.is_nonradial() and blue_prop.check.is_nonradial()
+
+    def ends_with_layer3(self) -> bool:
+        red_prop, blue_prop = self.pictograph.props[RED], self.pictograph.props[BLUE]
         return red_prop.check.is_radial() != blue_prop.check.is_radial()
 
-    def ends_in_non_hybrid_ori(self) -> bool:
-        red_prop, blue_prop = self.p.props[RED], self.p.props[BLUE]
-        return (red_prop.check.is_radial() == blue_prop.check.is_radial()) or (
-            red_prop.check.is_nonradial() and blue_prop.check.is_nonradial()
+    def ends_with_non_hybrid_ori(self) -> bool:
+        return self.ends_with_layer1() or self.ends_with_layer2()
+
+    def ends_with_in_out_ori(self) -> bool:
+        red_prop, blue_prop = self.pictograph.props[RED], self.pictograph.props[BLUE]
+        return (red_prop.ori in [IN] and blue_prop.ori in [OUT]) or (
+            red_prop.ori in [OUT] and blue_prop.ori in [IN]
         )
 
-    def ends_in_radial_ori(self) -> bool:
-        return all(prop.check.is_radial() for prop in self.p.props.values())
+    def ends_with_clock_counter_ori(self) -> bool:
+        red_prop, blue_prop = self.pictograph.props[RED], self.pictograph.props[BLUE]
+        return (red_prop.ori in [CLOCK] and blue_prop.ori in [COUNTER]) or (
+            red_prop.ori in [COUNTER] and blue_prop.ori in [CLOCK]
+        )
 
-    def ends_in_nonradial_ori(self) -> bool:
-        return all(prop.check.is_nonradial() for prop in self.p.props.values())
+    def ends_with_radial_ori(self) -> bool:
+        return all(prop.check.is_radial() for prop in self.pictograph.props.values())
+
+    def ends_with_nonradial_ori(self) -> bool:
+        return all(prop.check.is_nonradial() for prop in self.pictograph.props.values())
 
     def has_a_dash(self) -> bool:
-        for motion in self.p.motions.values():
+        for motion in self.pictograph.motions.values():
             if motion.motion_type == DASH:
                 return True
         return False
 
     def has_a_static_motion(self) -> bool:
-        for motion in self.p.motions.values():
+        for motion in self.pictograph.motions.values():
             if motion.motion_type == STATIC:
                 return True
         return False
@@ -69,46 +86,49 @@ class PictographChecker:
 
     def starts_from_mixed_orientation(self) -> bool:
         if (
-            self.p.red_motion.start_ori in [CLOCK, COUNTER]
-            and self.p.blue_motion.start_ori in [OUT, IN]
-            or self.p.red_motion.start_ori in [OUT, IN]
-            and self.p.blue_motion.start_ori in [CLOCK, COUNTER]
+            self.pictograph.red_motion.start_ori in [CLOCK, COUNTER]
+            and self.pictograph.blue_motion.start_ori in [OUT, IN]
+            or self.pictograph.red_motion.start_ori in [OUT, IN]
+            and self.pictograph.blue_motion.start_ori in [CLOCK, COUNTER]
         ):
             return True
         elif (
-            self.p.red_motion.start_ori in [CLOCK, COUNTER]
-            and self.p.blue_motion.start_ori in [CLOCK, COUNTER]
-            or self.p.red_motion.start_ori in [OUT, IN]
-            and self.p.blue_motion.start_ori in [OUT, IN]
+            self.pictograph.red_motion.start_ori in [CLOCK, COUNTER]
+            and self.pictograph.blue_motion.start_ori in [CLOCK, COUNTER]
+            or self.pictograph.red_motion.start_ori in [OUT, IN]
+            and self.pictograph.blue_motion.start_ori in [OUT, IN]
         ):
             return False
 
     def starts_from_standard_orientation(self) -> bool:
         # return true if they're both radial or they're both nonradial start oris
         return (
-            self.p.red_motion.start_ori in [IN, OUT]
-            and self.p.blue_motion.start_ori in [IN, OUT]
+            self.pictograph.red_motion.start_ori in [IN, OUT]
+            and self.pictograph.blue_motion.start_ori in [IN, OUT]
         ) or (
-            self.p.red_motion.start_ori in [CLOCK, COUNTER]
-            and self.p.blue_motion.start_ori in [CLOCK, COUNTER]
+            self.pictograph.red_motion.start_ori in [CLOCK, COUNTER]
+            and self.pictograph.blue_motion.start_ori in [CLOCK, COUNTER]
         )
 
     def starts_from_radial_orientation(self) -> bool:
-        return self.p.red_motion.start_ori in [
+        return self.pictograph.red_motion.start_ori in [
             IN,
             OUT,
-        ] and self.p.blue_motion.start_ori in [IN, OUT]
+        ] and self.pictograph.blue_motion.start_ori in [IN, OUT]
 
     def starts_from_nonradial_orientation(self) -> bool:
-        return self.p.red_motion.start_ori in [
+        return self.pictograph.red_motion.start_ori in [
             CLOCK,
             COUNTER,
-        ] and self.p.blue_motion.start_ori in [CLOCK, COUNTER]
+        ] and self.pictograph.blue_motion.start_ori in [CLOCK, COUNTER]
 
     def has_hybrid_motions(self) -> bool:
-        return self.p.red_motion.motion_type != self.p.blue_motion.motion_type
+        return (
+            self.pictograph.red_motion.motion_type
+            != self.pictograph.blue_motion.motion_type
+        )
 
     def is_in_sequence_builder(self) -> bool:
         # This method should return True if the application is in sequence builder mode.
         # Implement the logic based on your application's state management.
-        return hasattr(self.p.scroll_area, "sequence_builder")
+        return hasattr(self.pictograph.scroll_area, "sequence_builder")

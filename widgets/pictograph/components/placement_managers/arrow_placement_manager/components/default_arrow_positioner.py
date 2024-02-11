@@ -40,12 +40,12 @@ class DefaultArrowPositioner:
             return json.load(file)
 
     def _get_adjustment_key(self, arrow: Arrow) -> str:
-        has_beta_props = arrow.pictograph.check.ends_in_beta()
-        has_alpha_props = arrow.pictograph.check.ends_in_alpha()
-        has_gamma_props = arrow.pictograph.check.ends_in_gamma()
-        has_hybrid_orientation = arrow.pictograph.check.ends_in_hybrid_ori()
-        has_radial_props = arrow.pictograph.check.ends_in_radial_ori()
-        has_nonradial_props = arrow.pictograph.check.ends_in_nonradial_ori()
+        has_beta_props = arrow.pictograph.check.ends_with_beta()
+        has_alpha_props = arrow.pictograph.check.ends_with_alpha()
+        has_gamma_props = arrow.pictograph.check.ends_with_gamma()
+        has_hybrid_orientation = arrow.pictograph.check.ends_with_layer3()
+        has_radial_props = arrow.pictograph.check.ends_with_radial_ori()
+        has_nonradial_props = arrow.pictograph.check.ends_with_nonradial_ori()
         motion_end_ori = arrow.motion.end_ori
 
         key_suffix = "_to_"

@@ -16,3 +16,15 @@ class PropChecker:
 
     def is_nonradial(self) -> bool:
         return self.prop.ori in [CLOCK, COUNTER]
+
+    def has_out_ori(self) -> bool:
+        return self.prop.ori == OUT
+
+    def has_in_ori(self) -> bool:
+        return self.prop.ori == IN
+
+    def has_clock_ori(self) -> bool:
+        return self.prop.ori == CLOCK
+    
+    def has_counter_ori(self) -> bool:
+        return self.prop.ori == COUNTER

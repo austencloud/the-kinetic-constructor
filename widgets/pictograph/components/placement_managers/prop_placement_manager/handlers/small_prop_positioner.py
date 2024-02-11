@@ -12,7 +12,31 @@ class SmallPropPositioner:
         self.pictograph = beta_prop_positioner.pictograph
 
     def reposition(self) -> None:
-        if len(self.beta_prop_positioner.classifier.small_uni) == 2:
-            SmallUnilateralPropPositioner(self.beta_prop_positioner).reposition()
-        elif len(self.beta_prop_positioner.classifier.small_bi) == 2:
-            SmallBilateralPropPositioner(self.beta_prop_positioner).reposition()
+        letter_handler = self.beta_prop_positioner.reposition_beta_by_letter_handler
+        if self.pictograph.check.ends_with_layer3():
+            for prop in self.pictograph.props.values():
+                self.beta_prop_positioner.prop_placement_manager.default_positioner.set_prop_to_default_loc(
+                    prop
+                )
+        if (
+            self.pictograph.check.ends_with_in_out_ori()
+            or self.pictograph.check.ends_with_clock_counter_ori()
+        ) and len(self.beta_prop_positioner.classifier.small_uni) == 2:
+            return
+        else:
+            if self.pictograph.letter in ["G", "H"]:
+                letter_handler.reposition_G_H()
+            elif self.pictograph.letter == "I":
+                letter_handler.reposition_I()
+            elif self.pictograph.letter in ["J", "K", "L"]:
+                letter_handler.reposition_J_K_L()
+            elif self.pictograph.letter in ["Y", "Z"]:
+                letter_handler.reposition_Y_Z()
+            elif self.pictograph.letter == "β":
+                letter_handler.reposition_β()
+            elif self.pictograph.letter in ["Y-", "Z-"]:
+                letter_handler.reposition_Y_dash_Z_dash()
+            elif self.pictograph.letter == "Ψ":
+                letter_handler.reposition_Ψ()
+            elif self.pictograph.letter == "Ψ-":
+                letter_handler.reposition_Ψ_dash()

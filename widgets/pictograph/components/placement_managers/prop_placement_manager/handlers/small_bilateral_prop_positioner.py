@@ -14,24 +14,25 @@ class SmallBilateralPropPositioner:
         self.pictograph = beta_prop_positioner.pictograph
 
     def reposition(self) -> None:
-        if self.pictograph.check.ends_in_hybrid_ori():
+        letter_handler = self.beta_prop_positioner.reposition_beta_by_letter_handler
+        if self.pictograph.check.ends_with_layer3():
             for prop in self.pictograph.props.values():
                 self.ppm.default_positioner.set_prop_to_default_loc(prop)
 
         else:
             if self.pictograph.letter in ["G", "H"]:
-                self.beta_prop_positioner.reposition_beta_by_letter_handler.reposition_G_H()
+                letter_handler.reposition_G_H()
             elif self.pictograph.letter == "I":
-                self.beta_prop_positioner.reposition_beta_by_letter_handler.reposition_I()
+                letter_handler.reposition_I()
             elif self.pictograph.letter in ["J", "K", "L"]:
-                self.beta_prop_positioner.reposition_beta_by_letter_handler.reposition_J_K_L()
+                letter_handler.reposition_J_K_L()
             elif self.pictograph.letter in ["Y", "Z"]:
-                self.beta_prop_positioner.reposition_beta_by_letter_handler.reposition_Y_Z()
+                letter_handler.reposition_Y_Z()
             elif self.pictograph.letter == "β":
-                self.beta_prop_positioner.reposition_beta_by_letter_handler.reposition_β()
+                letter_handler.reposition_β()
             elif self.pictograph.letter in ["Y-", "Z-"]:
-                self.beta_prop_positioner.reposition_beta_by_letter_handler.reposition_Y_dash_Z_dash()
+                letter_handler.reposition_Y_dash_Z_dash()
             elif self.pictograph.letter == "Ψ":
-                self.beta_prop_positioner.reposition_beta_by_letter_handler.reposition_Ψ()
+                letter_handler.reposition_Ψ()
             elif self.pictograph.letter == "Ψ-":
-                self.beta_prop_positioner.reposition_beta_by_letter_handler.reposition_Ψ_dash()
+                letter_handler.reposition_Ψ_dash()
