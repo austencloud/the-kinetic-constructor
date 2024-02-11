@@ -5,7 +5,7 @@ from widgets.sequence_builder.components.start_position_picker.start_pos_manager
     StartPosManager,
 )
 
-from ....sequence_builder.components.start_position_picker.start_pos_picker_scroll_area import (
+from .start_pos_picker_scroll_area import (
     StartPosPickerScrollArea,
 )
 from ....pictograph.pictograph import Pictograph

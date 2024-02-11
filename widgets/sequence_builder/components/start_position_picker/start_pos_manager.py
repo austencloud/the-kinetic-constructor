@@ -4,7 +4,7 @@ from ....pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .start_position_picker import StartPosPicker
+    from .start_pos_picker import StartPosPicker
 
 
 class StartPosManager(QObject):

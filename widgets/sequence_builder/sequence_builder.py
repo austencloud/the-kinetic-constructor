@@ -9,7 +9,7 @@ from utilities.TypeChecking.TypeChecking import Letters
 from widgets.pictograph.components.add_to_sequence_manager import (
     AddToSequenceManager,
 )
-from .components.start_position_picker.start_position_picker import StartPosPicker
+from .components.start_position_picker.start_pos_picker import StartPosPicker
 from ..pictograph.pictograph import Pictograph
 from .components.option_picker.option_picker_click_handler import (
     OptionPickerClickHandler,
