@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 class SmallBilateralPropPositioner:
     def __init__(self, beta_prop_positioner: "BetaPropPositioner") -> None:
         self.beta_prop_positioner = beta_prop_positioner
-        self.ppm = beta_prop_positioner.ppm
+        self.ppm = beta_prop_positioner.prop_placement_manager
         self.pictograph = beta_prop_positioner.pictograph
 
     def reposition(self) -> None:

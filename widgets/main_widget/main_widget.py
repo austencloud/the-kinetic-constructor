@@ -1,18 +1,18 @@
+import json
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtGui import QResizeEvent, QKeyEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
-from widgets.graphical_object_svg_manager import GraphicalObjectSvgManager
+from ..graphical_object_svg_manager import GraphicalObjectSvgManager
 from utilities.TypeChecking.letter_lists import all_letters
 from utilities.TypeChecking.TypeChecking import Letters
-from constants import DIAMOND
 from utilities.TypeChecking.prop_types import PropTypes
-from widgets.main_widget.special_placement_loader import SpecialPlacementLoader
-from widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
+from constants import DIAMOND
+from ..main_widget.special_placement_loader import SpecialPlacementLoader
+from ..pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
     TurnsTupleGenerator,
 )
-
-from widgets.pictograph.pictograph import Pictograph
+from ..pictograph.pictograph import Pictograph
 from ..image_cache_manager import ImageCacheManager
 from ..main_tab_widget.main_tab_widget import MainTabWidget
 from .main_widget_layout_manager import MainWidgetLayoutManager
@@ -24,7 +24,11 @@ if TYPE_CHECKING:
 
 
 class MainWidget(QWidget):
-    prop_type: PropTypes = PropTypes.Staff
+    # Instead of assigning a prop type directly to staff, we want to look inside the user settings json File. user_settings.json. There will be a "prop_type" key that will have a value. We need to get that value and convert it to an actual Enum. Its name should match the enum.name.
+    with open("user_settings.json", "r") as file:
+        user_settings: dict = json.load(file)
+    prop_type_value = user_settings.get("prop_type")
+    prop_type = PropTypes.get_prop_type(prop_type_value)
 
     def __init__(self, main_window: "MainWindow") -> None:
         super().__init__(main_window)
@@ -63,7 +67,7 @@ class MainWidget(QWidget):
         self.letters: dict[Letters, list[dict]] = self.letter_loader.load_all_letters()
 
     ### EVENT HANDLERS ###
-        
+
     def keyPressEvent(self, event: QKeyEvent) -> None:
         if event.key() == Qt.Key.Key_Q or event.key() == Qt.Key.Key_F5:
             self.special_placement_loader.refresh_placements()

@@ -13,9 +13,9 @@ if TYPE_CHECKING:
 
 
 class BetaPropPositioner:
-    def __init__(self, ppm: "PropPlacementManager") -> None:
-        self.pictograph: "Pictograph" = ppm.pictograph
-        self.ppm = ppm
+    def __init__(self, prop_placement_manager: "PropPlacementManager") -> None:
+        self.pictograph: "Pictograph" = prop_placement_manager.pictograph
+        self.prop_placement_manager = prop_placement_manager
 
         self.classifier = PropClassifier(self.pictograph)
         self.small_prop_positioner = SmallPropPositioner(self)
@@ -31,7 +31,8 @@ class BetaPropPositioner:
         self.swap_beta_handler.swap_beta_if_needed()
 
     def move_prop(self, prop: Prop, direction: Directions) -> None:
-        offset = self.ppm.offset_calculator.calculate_new_position_with_offset(
+        offset_calculator = self.prop_placement_manager.offset_calculator
+        offset = offset_calculator.calculate_new_position_with_offset(
             prop.pos(), direction
         )
         prop.setPos(offset)

@@ -15,7 +15,7 @@ class RepositionBetaByLetterHandler:
     def __init__(self, beta_prop_positioner: "BetaPropPositioner") -> None:
         self.pictograph = beta_prop_positioner.pictograph
 
-        self.ppm = beta_prop_positioner.ppm
+        self.ppm = beta_prop_positioner.prop_placement_manager
         self.red_prop = self.pictograph.red_prop
         self.blue_prop = self.pictograph.blue_prop
 

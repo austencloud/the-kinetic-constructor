@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from objects.prop.prop import Prop
 from utilities.TypeChecking.prop_types import (
     PropTypes,
     big_unilateral_prop_types,
@@ -41,10 +42,10 @@ class PropClassifier:
         self.classify_props()
 
     def classify_props(self) -> None:
-        self.big_uni = []
-        self.small_uni = []
-        self.small_bi = []
-        self.big_bi = []
+        self.big_uni: list[Prop] = []
+        self.small_uni: list[Prop] = []
+        self.small_bi: list[Prop] = []
+        self.big_bi: list[Prop] = []
 
         for prop in self.pictograph.props.values():
 

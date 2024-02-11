@@ -14,7 +14,7 @@ class SwapBetaHandler:
     def __init__(self, beta_prop_positioner: "BetaPropPositioner") -> None:
         self.beta_prop_positioner = beta_prop_positioner
         self.pictograph = beta_prop_positioner.pictograph
-        self.ppm = beta_prop_positioner.ppm
+        self.ppm = beta_prop_positioner.prop_placement_manager
         self.blue_prop = self.pictograph.blue_prop
         self.red_prop = self.pictograph.red_prop
 

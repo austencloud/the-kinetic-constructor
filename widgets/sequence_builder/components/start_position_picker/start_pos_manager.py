@@ -2,6 +2,7 @@ from PyQt6.QtCore import QObject, pyqtSignal
 from constants import END_POS, START_POS
 from ....pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from .start_position_picker import StartPosPicker
 
@@ -41,7 +42,7 @@ class StartPosManager(QObject):
                     start_position_pictograph.letter = letter
                     start_position_pictograph.start_pos = start_pos
                     start_position_pictograph.end_pos = end_pos
-                    self.scroll_area._add_option_to_layout(
+                    self.scroll_area._add_start_pos_to_layout(
                         start_position_pictograph, True
                     )
                     start_position_pictograph.updater.update_pictograph(pictograph_dict)

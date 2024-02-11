@@ -6,8 +6,12 @@ from typing import TYPE_CHECKING, Union
 from utilities.TypeChecking.prop_types import PropTypes
 from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.codex_scroll_area import CodexScrollArea
-from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import OptionPickerScrollArea
-from widgets.sequence_builder.components.start_position_picker.start_pos_picker_scroll_area import StartPosPickerScrollArea
+from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (
+    OptionPickerScrollArea,
+)
+from widgets.sequence_builder.components.start_position_picker.start_pos_picker_scroll_area import (
+    StartPosPickerScrollArea,
+)
 
 if TYPE_CHECKING:
     from main import MainWindow
@@ -21,7 +25,7 @@ class SettingsManager:
         self.settings_file = settings_file
         self.main_window = main_window
         self.settings = self.load_settings()
-        self.apply_settings()
+        # self.apply_settings()
 
     def load_settings(self) -> dict:
         if os.path.exists(self.settings_file):
@@ -62,10 +66,12 @@ class SettingsManager:
         self.update_props_to_type(prop_type)
 
     def update_props_to_type(self, new_prop_type) -> None:
-        scroll_areas: list[Union[CodexScrollArea, OptionPickerScrollArea, StartPosPickerScrollArea]] = [
+        scroll_areas: list[
+            Union[CodexScrollArea, OptionPickerScrollArea, StartPosPickerScrollArea]
+        ] = [
             self.main_window.main_widget.main_tab_widget.codex.scroll_area,
             self.main_window.main_widget.main_tab_widget.sequence_builder.option_picker.scroll_area,
-            self.main_window.main_widget.main_tab_widget.sequence_builder.start_position_picker.scroll_area
+            self.main_window.main_widget.main_tab_widget.sequence_builder.start_position_picker.scroll_area,
         ]
         for scroll_area in scroll_areas:
             for pictograph in scroll_area.pictographs.values():

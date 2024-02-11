@@ -2,7 +2,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication, QVBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
 from data.rules import get_next_letters
-from widgets.scroll_area.components.scroll_area_pictograph_factory import ScrollAreaPictographFactory
+from widgets.scroll_area.components.scroll_area_pictograph_factory import (
+    ScrollAreaPictographFactory,
+)
 
 
 from ....pictograph.pictograph import Pictograph
@@ -27,11 +29,14 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
         self.set_layout("HBox")
         self.COLUMN_COUNT = 5
 
-    def _add_option_to_layout(self, option: Pictograph, is_start_pos: bool) -> None:
-        option.view.mousePressEvent = self.clickable_option_handler.get_click_handler(
-            option, is_start_pos
+    def _add_start_pos_to_layout(
+        self, start_pos: Pictograph, is_start_pos: bool
+    ) -> None:
+        start_pos.view.mousePressEvent = (
+            self.clickable_option_handler.get_click_handler(start_pos, is_start_pos)
         )
-        self.layout.addWidget(option.view)
+        self.layout.addWidget(start_pos.view)
+        self.pictographs[start_pos.letter] = start_pos
 
     def resize_start_pos_picker_scroll_area(self) -> None:
         self.setMinimumHeight(self.start_pos_picker.height())

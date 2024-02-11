@@ -23,6 +23,11 @@ class PropTypes(Enum):
     Ukulele = auto()
     Chicken = auto()
 
+    def get_prop_type(prop_type_value):
+        for prop_type_enum in PropTypes:
+            if str(prop_type_enum.name) == prop_type_value:
+                return prop_type_enum
+
 big_unilateral_prop_types = [
     PropTypes.BigHoop,
     PropTypes.BigFan,
