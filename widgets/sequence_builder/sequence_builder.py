@@ -43,7 +43,7 @@ class SequenceBuilder(QFrame):
         self.current_end_red_ori = pictograph.red_motion.end_ori
         self.current_end_blue_ori = pictograph.blue_motion.end_ori
         self.render_next_options(pictograph.end_pos)
-
+        
     def render_next_options(self, end_pos):
         """Fetches and renders next options based on the end position."""
         pictograph_dfs: pd.DataFrame = self.letters_df[

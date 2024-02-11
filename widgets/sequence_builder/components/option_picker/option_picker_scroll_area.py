@@ -70,15 +70,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             self.main_widget.all_pictographs[pictograph_key] = pictograph
         return pictograph
 
-    def get_next_options(self, pictograph: Pictograph) -> list[pd.Series]:
-        return [
-            row
-            for _, row in self.letters[
-                self.letters["start_pos"] == pictograph.end_pos
-            ].iterrows()
-            if f"{row['letter']}_{row['start_pos']}→{row['end_pos']}"
-            not in self.option_picker.sequence_builder.pictograph_cache
-        ]
 
     def _hide_all_pictographs(self):
         for pictograph in self.pictograph_cache.values():
