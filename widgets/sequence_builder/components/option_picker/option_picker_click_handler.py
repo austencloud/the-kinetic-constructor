@@ -26,5 +26,4 @@ class OptionPickerClickHandler:
         pictograph_dict = clicked_option.get.pictograph_dict()
         new_beat.updater.update_pictograph(pictograph_dict)
         new_beat.view.is_filled = True
-        self.sequence_builder.option_picker.scroll_area.update_pictographs()
         self.sequence_builder.option_picker.scroll_area.display_manager.order_and_display_pictographs()
