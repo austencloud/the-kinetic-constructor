@@ -109,3 +109,11 @@ class SectionHeader(QWidget):
             self.expand_arrow_pixmap if is_expanded else self.collapse_arrow_pixmap
         )
         self.arrow_label.setPixmap(arrow_pixmap)
+
+    def resize_section_header(self):
+        for button in [
+            self.section.vtg_dir_button_manager.opp_button,
+            self.section.vtg_dir_button_manager.same_button,
+        ]:
+            button.setMaximumSize(int(self.height()), int(self.height()))
+            button.setIconSize(button.size() * 0.9)

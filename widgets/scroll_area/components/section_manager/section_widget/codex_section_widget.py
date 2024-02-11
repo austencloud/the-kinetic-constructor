@@ -45,6 +45,7 @@ class CodexSectionWidget(QGroupBox):
     def resize_section(self) -> None:
         self.setMinimumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
         self.setMaximumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
+        self.header.resize_section_header()
         self.filter_tab.visibility_handler.resize_filter_tab()
 
     def toggle_section(self) -> None:

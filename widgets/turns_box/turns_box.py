@@ -110,7 +110,7 @@ class TurnsBox(QFrame):
 
         for button in (
             self.header_widget.turns_box.prop_rot_dir_button_manager.prop_rot_dir_buttons
-            + self.turns_panel.filter_tab.section.vtg_dir_button_manager.vtg_dir_buttons
+            
         ):
             button.setMinimumSize(button_size, button_size)
             button.setMaximumSize(button_size, button_size)

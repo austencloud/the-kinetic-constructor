@@ -82,3 +82,4 @@ class HeaderWidget(TurnsBoxWidget):
         label.setMaximumHeight(font_size * 2)
         self.adjustSize()
         return label
+
