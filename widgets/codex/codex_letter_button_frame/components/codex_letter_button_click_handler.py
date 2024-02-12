@@ -8,7 +8,7 @@ from widgets.scroll_area.components.section_manager.section_widget.components.fi
 
 
 if TYPE_CHECKING:
-    from widgets.letter_button_frame.components.codex_letter_button_manager import (
+    from widgets.codex.codex_letter_button_frame.components.codex_letter_button_manager import (
         CodexLetterButtonManager,
     )
 

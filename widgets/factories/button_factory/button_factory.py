@@ -4,7 +4,7 @@ from widgets.factories.button_factory.buttons.rot_dir_buttons import (
     PropRotDirButton,
     VtgDirButton,
 )
-from widgets.letter_button_frame.components.letter_button import LetterButton
+from widgets.codex.codex_letter_button_frame.components.letter_button import LetterButton
 
 
 class ButtonFactory:

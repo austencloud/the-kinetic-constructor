@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QTabWidget
 
-from widgets.main_tab_widget.library import Library
+from widgets.library.library import Library
 from ..codex.codex import Codex
 from ..sequence_builder.sequence_builder import SequenceBuilder
 

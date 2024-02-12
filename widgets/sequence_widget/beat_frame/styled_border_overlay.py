@@ -39,6 +39,9 @@ class StyledBorderOverlay(QWidget):
             # Outer border
             pen.setColor(QColor(self.primary_color))
             pen.setWidth(self.outer_border_width)
+            pen.setJoinStyle(
+                Qt.PenJoinStyle.MiterJoin
+            )  # Set the join style to MiterJoin
             painter.setPen(pen)
             outer_rect = self.rect().adjusted(
                 self.outer_border_width // 2,
@@ -51,6 +54,9 @@ class StyledBorderOverlay(QWidget):
             # Inner border
             pen.setColor(QColor(self.secondary_color))
             pen.setWidth(self.inner_border_width)
+            pen.setJoinStyle(
+                Qt.PenJoinStyle.MiterJoin
+            )  # Set the join style to MiterJoin
             painter.setPen(pen)
             inner_offset = self.outer_border_width - (
                 self.outer_border_width - self.inner_border_width

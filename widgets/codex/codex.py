@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.letter_button_frame.codex_letter_button_frame import CodexLetterButtonFrame
+from widgets.codex.codex_letter_button_frame.codex_letter_button_frame import CodexLetterButtonFrame
 from widgets.pictograph.pictograph import Pictograph
 from ..scroll_area.codex_scroll_area import CodexScrollArea
 from utilities.TypeChecking.letter_lists import all_letters

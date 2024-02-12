@@ -6,10 +6,10 @@ from PyQt6.QtCore import QSize, Qt
 from Enums import LetterType
 from constants import LETTER_BTN_ICON_DIR
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.letter_button_frame.components.codex_letter_button_click_handler import (
+from widgets.codex.codex_letter_button_frame.components.codex_letter_button_click_handler import (
     CodexLetterButtonClickHandler,
 )
-from widgets.letter_button_frame.components.letter_button_styler import (
+from widgets.codex.codex_letter_button_frame.components.letter_button_styler import (
     LetterButtonStyler,
 )
 from .letter_button import LetterButton
@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from widgets.sequence_builder.components.option_picker.option_picker_letter_button_frame import (
         OptionPickerLetterButtonFrame,
     )
-    from widgets.letter_button_frame.codex_letter_button_frame import (
+    from widgets.codex.codex_letter_button_frame.codex_letter_button_frame import (
         CodexLetterButtonFrame,
     )
 

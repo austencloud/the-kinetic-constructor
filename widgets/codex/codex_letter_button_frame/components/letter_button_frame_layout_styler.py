@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QSizePolicy, QLabe
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from widgets.letter_button_frame.codex_letter_button_frame import (
+    from widgets.codex.codex_letter_button_frame.codex_letter_button_frame import (
         CodexLetterButtonFrame,
     )
 

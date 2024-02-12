@@ -5,7 +5,7 @@ from utilities.TypeChecking.TypeChecking import Letters
 from ....letter_button_frame.components.sequence_builder_letter_button_manager import (
     OptionPickerLetterButtonManager,
 )
-from ....letter_button_frame.components.letter_button_frame_layout_styler import (
+from ....codex.codex_letter_button_frame.components.letter_button_frame_layout_styler import (
     LetterButtonFrameLayoutStyler,
 )
 if TYPE_CHECKING:
