@@ -113,6 +113,14 @@ class SequenceBuilder(QFrame):
             f"_blue_{pictograph_dict['blue_motion_type']}_{pictograph_dict['blue_start_loc']}→{pictograph_dict['blue_end_loc']}"
         )
 
+    def reset_to_start_pos_picker(self):
+        self.start_position_picked = False
+        self.option_picker.hide()
+        self.layout().removeWidget(self.option_picker)
+        self.layout().addWidget(self.start_position_picker)
+        self.start_position_picker.show()
+        self.start_position_picker.resize_start_position_picker()
+
     def resize_sequence_builder(self) -> None:
         self.setMinimumWidth(int(self.main_widget.width() * 3 / 5))
         self.start_position_picker.resize_start_position_picker()

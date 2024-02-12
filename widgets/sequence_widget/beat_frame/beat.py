@@ -27,6 +27,7 @@ class BeatView(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.beat: "Beat" = None
         self.is_filled = False
+        self.beat_frame = beat_frame
 
     def set_pictograph(self, new_beat: "Beat") -> None:
         self.beat = new_beat
@@ -41,3 +42,13 @@ class BeatView(QGraphicsView):
         button = QPushButton(QIcon(icon_path), "", self)
         button.clicked.connect(action)
         return button
+
+    def clear(self):
+        # remove the pictograph from the scene
+        self.setScene(None)
+        self.beat_frame.start_pos_view.setScene(None)
+        sequence_builder = self.beat.main_widget.main_tab_widget.sequence_builder
+        sequence_builder.current_pictograph = (
+            self.beat_frame.sequence_widget.beat_frame.start_pos
+        )
+        sequence_builder.reset_to_start_pos_picker()

@@ -17,7 +17,7 @@ class SequenceWidget(QWidget):
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
 
         self.beat_frame = SequenceBeatFrame(self.main_widget, self)
-        self.button_frame = SequenceButtonFrame(self.main_widget, self)
+        self.button_frame = SequenceButtonFrame(self)
         self.beats = self.beat_frame.beats
 
         self.layout: QVBoxLayout = QVBoxLayout(self)

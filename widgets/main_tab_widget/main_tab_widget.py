@@ -14,9 +14,11 @@ class MainTabWidget(QTabWidget):
         self.setStyleSheet(self.get_main_tab_stylesheet())
         self.codex = Codex(main_widget)
         self.sequence_builder = SequenceBuilder(main_widget)
+        # self.library = Library(main_widget)
         self.tabs = [self.codex]
         self.addTab(self.sequence_builder, "Sequence Builder")
         self.addTab(self.codex, "Codex")
+        # self.addTab(self.library, "Library")
         # self.addTab(graph_editor_tab, "Graph Editor")
         # self.currentChanged.connect(self.resize_main_tab_widget)
 
@@ -95,7 +97,9 @@ class MainTabWidget(QTabWidget):
             """
 
     def resize_main_tab_widget(self):
-        self.setFixedHeight(self.main_widget.height())  # Ensure the tab widget takes up the full height of the main_widget
+        self.setFixedHeight(
+            self.main_widget.height()
+        )  # Ensure the tab widget takes up the full height of the main_widget
 
         self.codex.resize_codex()
         self.sequence_builder.resize_sequence_builder()
