@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QTabWidget
+
+from widgets.main_tab_widget.library import Library
 from ..codex.codex import Codex
 from ..sequence_builder.sequence_builder import SequenceBuilder
 
@@ -14,11 +16,11 @@ class MainTabWidget(QTabWidget):
         self.setStyleSheet(self.get_main_tab_stylesheet())
         self.codex = Codex(main_widget)
         self.sequence_builder = SequenceBuilder(main_widget)
-        # self.library = Library(main_widget)
+        self.library = Library(main_widget)
         self.tabs = [self.codex]
         self.addTab(self.sequence_builder, "Sequence Builder")
         self.addTab(self.codex, "Codex")
-        # self.addTab(self.library, "Library")
+        self.addTab(self.library, "Library")
 
     def get_main_tab_stylesheet(self) -> str:
         return """

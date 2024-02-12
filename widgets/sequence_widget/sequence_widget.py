@@ -34,6 +34,11 @@ class SequenceWidget(QWidget):
         with open(filename, "w") as file:
             json.dump(sequence_data, file, indent=4)
 
+    def populate_sequence(self, pictograph_dict: dict) -> None:
+        pictograph = Pictograph(self.main_widget)
+        self.beat_frame.add_scene_to_sequence(pictograph)
+        pictograph.updater.update_pictograph(pictograph_dict)
+
     def resize_sequence_widget(self) -> None:
         beat_view_height = int(self.height() * 0.9 / self.beat_frame.ROW_COUNT)
         beat_view_width = beat_view_height

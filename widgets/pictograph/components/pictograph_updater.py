@@ -17,7 +17,10 @@ class PictographUpdater:
             if self.pictograph.check.is_pictograph_dict_complete(pictograph_dict):
                 self.pictograph.pictograph_dict = pictograph_dict
                 self.pictograph.get.initiallize_getter()
-            self._update_from_pictograph_dict(pictograph_dict)
+                self._update_from_pictograph_dict(pictograph_dict)
+                self.pictograph.turns_tuple = self.pictograph.get.turns_tuple()
+            else:
+                self._update_from_pictograph_dict(pictograph_dict)
 
         self.pictograph.glyph.update_glyph()
         self._position_objects()

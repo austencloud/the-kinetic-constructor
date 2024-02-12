@@ -1,5 +1,6 @@
 import json
 import codecs
+import os
 from PyQt6.QtWidgets import QPushButton, QHBoxLayout, QFrame
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFileDialog
@@ -33,15 +34,13 @@ class SequenceButtonFrame(QFrame):
             for beat_view in self.sequence_widget.beat_frame.beats
             if hasattr(beat_view.beat, "pictograph_dict")
         ]
-
-        # Prompt user to select file location and name
-        filename, _ = QFileDialog.getSaveFileName(
-            self, "Save Sequence", "", "JSON Files (*.json)"
-        )
-        if filename:
-            with codecs.open(filename, "w", encoding="utf-8") as file:
-                json.dump(sequence_data, file, indent=4, ensure_ascii=False)
-            print(f"Sequence saved to {filename}.")
+        sequence_name = "".join([pictograph["letter"] for pictograph in sequence_data])
+        library_folder = os.path.join(os.getcwd(), "library")
+        os.makedirs(library_folder, exist_ok=True)
+        filename = os.path.join(library_folder, f"{sequence_name}.json")
+        with codecs.open(filename, "w", encoding="utf-8") as file:
+            json.dump(sequence_data, file, indent=4, ensure_ascii=False)
+        print(f"Sequence saved to {filename}.")
 
     def clear_sequence(self):
         # Logic to clear the current sequence goes here

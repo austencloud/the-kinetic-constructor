@@ -82,6 +82,7 @@ class Pictograph(QGraphicsScene):
     red_prop: Prop
     blue_prop: Prop
     selected_arrow: Arrow = None
+    turns_tuple: str = None
 
     def __init__(
         self,

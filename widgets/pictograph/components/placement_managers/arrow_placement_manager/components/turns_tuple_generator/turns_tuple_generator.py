@@ -35,7 +35,7 @@ class TurnsTupleGenerator:
     """
 
     def __init__(self) -> None:
-        self.generators = {
+        self.generators: dict[str,BaseTurnsTupleGenerator] = {
             "Type1_hybrid": Type1HybridTurnsTupleGenerator(),
             "Type2": Type2TurnsTupleGenerator(),
             "Type3": Type3TurnsTupleGenerator(),
@@ -50,9 +50,12 @@ class TurnsTupleGenerator:
         self.mirrored_generator = MirroredTurnsTupleGenerator(self)
 
     def generate_turns_tuple(self, pictograph: "Pictograph") -> str:
+
         generator_key = self._get_generator_key(pictograph.letter)
         if generator_key:
-            return self.generators[generator_key].generate_key(pictograph)
+            turns_tuple = self.generators[generator_key].generate_turns_tuple(pictograph)
+            pictograph.turns_tuple = turns_tuple
+            return turns_tuple
         return ""
 
     def generate_mirrored_tuple(self, arrow: "Arrow") -> Union[str, None]:
