@@ -12,9 +12,10 @@ from constants import (
     START_POS,
 )
 
+
 class PictographKeyGenerator:
     @staticmethod
-    def generate_pictograph_key(pictograph_dict) -> str:
+    def generate_pictograph_key(pictograph_dict: dict) -> str:
         return (
             f"{pictograph_dict[LETTER]}_"
             f"{pictograph_dict[START_POS]}→{pictograph_dict[END_POS]}_"

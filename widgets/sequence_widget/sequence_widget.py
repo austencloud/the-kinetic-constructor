@@ -1,6 +1,9 @@
 import json
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
+from widgets.orientation_correction_engine.sequence_validation_engine import (
+    SequenceValidationEngine,
+)
 from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.components.sequence_widget_pictograph_factory import (
     SequenceWidgetPictographFactory,
@@ -34,6 +37,11 @@ class SequenceWidget(QWidget):
         )
         self.layout.addWidget(self.beat_frame)
         self.layout.addWidget(self.button_frame)
+        self.sequence_validation_engine = SequenceValidationEngine()
+
+    def update_sequence_after_modification(self):
+        """Call this method after any modification to the sequence."""
+        self.sequence_validation_engine.run_correction_engine()
 
     def save_sequence(sequence: list[Pictograph], filename: str) -> None:
         sequence_data = [pictograph.get.pictograph_dict() for pictograph in sequence]

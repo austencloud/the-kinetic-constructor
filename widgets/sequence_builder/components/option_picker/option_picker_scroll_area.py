@@ -1,8 +1,10 @@
+import json
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QWheelEvent
 import pandas as pd
+from constants import END_POS, LETTER, START_POS
 from widgets.scroll_area.components.scroll_area_pictograph_factory import (
     ScrollAreaPictographFactory,
 )
@@ -27,7 +29,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.option_picker: "OptionPicker" = option_picker
         self.sequence_builder: "SequenceBuilder" = option_picker.sequence_builder
         self.clickable_option_handler = self.sequence_builder.clickable_option_handler
-        self.letters: pd.DataFrame = self.sequence_builder.letters_df
         self.pictograph_cache: dict[str, Pictograph] = {}
         self.stretch_index: int = -1
 
@@ -46,12 +47,26 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.stretch_index = self.layout.count()
 
     def update_pictographs(self):
-        current_pictograph = self.option_picker.sequence_builder.current_pictograph
-        next_options = self.get_next_options(current_pictograph)
-        self._hide_all_pictographs()
-        self._add_and_display_relevant_pictographs(next_options)
+        # Load the current sequence from the JSON file
+        try:
+            with open(
+                self.sequence_builder.orientation_correction_engine.sequence_file,
+                "r",
+                encoding="utf-8",
+            ) as file:
+                sequence = json.load(file)
+        except Exception as e:
+            print(f"Failed to load sequence: {str(e)}")
+            return
 
-    def _add_and_display_relevant_pictographs(self, next_options: list[pd.Series]):
+        # Determine the last pictograph in the sequence for next options
+        if sequence:
+            last_pictograph = sequence[-1]
+            next_options:dict  = self.get_next_options(last_pictograph)
+            self._hide_all_pictographs()
+            self._add_and_display_relevant_pictographs(next_options)
+
+    def _add_and_display_relevant_pictographs(self, next_options: list[dict]) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         for option_dict in next_options:
             pictograph_key = self.sequence_builder.main_widget.pictograph_key_generator.generate_pictograph_key(
@@ -72,24 +87,18 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             self.main_widget.all_pictographs[pictograph_key] = pictograph
         return pictograph
 
-
     def _hide_all_pictographs(self):
         for pictograph in self.pictograph_cache.values():
             pictograph.view.hide()
 
-    def get_next_options(self, pictograph: Pictograph) -> list[pd.Series]:
-        """Fetch next options logic specific to sequence builder's needs."""
-        matching_rows: pd.DataFrame = self.letters[
-            self.letters["start_pos"] == pictograph.end_pos
-        ]
+    def get_next_options(self, pictograph_dict: dict) -> list[dict]:
         next_options = []
-        for _, row in matching_rows.iterrows():
-            pictograph_key = f"{row['letter']}_{row['start_pos']}→{row['end_pos']}"
-            if (
-                pictograph_key
-                not in self.option_picker.sequence_builder.pictograph_cache
-            ):
-                next_options.append(row)
+        for _, dict_list in self.main_widget.letters.items():
+            for dict in dict_list:
+                if dict[START_POS] == pictograph_dict[END_POS]:
+                    next_options.append(dict)
+
+
         return next_options
 
     def adjust_sections_size(self):

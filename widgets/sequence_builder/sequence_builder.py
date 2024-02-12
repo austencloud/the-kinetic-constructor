@@ -7,6 +7,7 @@ from utilities.TypeChecking.letter_lists import all_letters
 import pandas as pd
 from constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
 from utilities.TypeChecking.TypeChecking import Letters
+
 from widgets.pictograph.components.add_to_sequence_manager import (
     AddToSequenceManager,
 )
@@ -25,6 +26,9 @@ class SequenceBuilder(QFrame):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
+        self.orientation_correction_engine = (
+            self.main_widget.sequence_widget.sequence_validation_engine
+        )
         self.current_pictograph: Pictograph = None
         self.letters_df = pd.read_csv("PictographDataframe.csv")  # Load the dataframe
         self.selected_letters = None
@@ -39,26 +43,6 @@ class SequenceBuilder(QFrame):
         self.setLayout(QHBoxLayout())
         self.layout().addWidget(self.start_position_picker)
 
-    def update_current_pictograph(self, pictograph: Pictograph):
-        self.current_pictograph = pictograph
-        self.current_end_red_ori = pictograph.red_motion.end_ori
-        self.current_end_blue_ori = pictograph.blue_motion.end_ori
-        self.render_next_options(pictograph.end_pos)
-
-    def render_next_options(self, end_pos):
-        """Fetches and renders next options based on the end position."""
-        pictograph_dfs: pd.DataFrame = self.letters_df[
-            self.letters_df["start_pos"] == end_pos
-        ]
-        for _, pictograph_df in pictograph_dfs.iterrows():
-            pictograph_key = (
-                self.main_widget.pictograph_key_generator.generate_pictograph_key(
-                    pictograph_df.to_dict()
-                )
-            )
-            if pictograph_key not in self.pictograph_cache[pictograph_df["letter"]]:
-                self.render_and_store_pictograph(pictograph_df)
-
     def _setup_components(self):
         self.clickable_option_handler = OptionPickerClickHandler(self)
 
@@ -66,10 +50,9 @@ class SequenceBuilder(QFrame):
         self.start_position_picked = True
         self.start_position_picker.hide()
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        self.update_current_pictograph(start_pictograph)
         self.layout().removeWidget(self.start_position_picker)
         self.layout().addWidget(self.option_picker)
-
+        # self.clear_current_sequence_json()
         self.option_picker.show()
         self.option_picker.scroll_area.resize_option_picker_scroll_area()
         self.option_picker.scroll_area.sections_manager.show_all_sections()
@@ -77,8 +60,13 @@ class SequenceBuilder(QFrame):
         self.option_picker.scroll_area.display_manager.order_and_display_pictographs()
         QApplication.restoreOverrideCursor()
 
-    def render_and_store_pictograph(self, pictograph_df: pd.Series):
-        pictograph_dict = pictograph_df.to_dict()
+    def clear_current_sequence_json(self):
+        with open(
+            self.orientation_correction_engine.sequence_file, "w", encoding="utf-8"
+        ) as file:
+            json.dump([], file, indent=4)
+
+    def render_and_store_pictograph(self, pictograph_dict: dict) -> Pictograph:
         pictograph_dict = self._add_turns_and_start_ori(pictograph_dict)
         letter_type = LetterType.get_letter_type(pictograph_dict["letter"])
         pictograph_key = (
@@ -110,6 +98,12 @@ class SequenceBuilder(QFrame):
         return new_pictograph
 
     def _add_turns_and_start_ori(self, pictograph_dict):
+        # get the red and blue end oris from the last entry in the sequence
+        self.current_end_red_ori = self.orientation_correction_engine.get_red_end_ori()
+        self.current_end_blue_ori = (
+            self.orientation_correction_engine.get_blue_end_ori()
+        )
+
         pictograph_dict[RED_START_ORI] = self.current_end_red_ori
         pictograph_dict[BLUE_START_ORI] = self.current_end_blue_ori
         pictograph_dict[RED_TURNS] = 0
