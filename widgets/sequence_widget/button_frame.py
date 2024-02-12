@@ -1,5 +1,8 @@
+import json
+import codecs
 from PyQt6.QtWidgets import QPushButton, QHBoxLayout, QFrame
 from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QFileDialog
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
@@ -25,8 +28,20 @@ class SequenceButtonFrame(QFrame):
         self.setLayout(self.layout)
 
     def save_sequence(self):
-        # Logic to save the current sequence goes here
-        pass
+        sequence_data = [
+            beat_view.beat.get.pictograph_dict()
+            for beat_view in self.sequence_widget.beat_frame.beats
+            if hasattr(beat_view.beat, "pictograph_dict")
+        ]
+
+        # Prompt user to select file location and name
+        filename, _ = QFileDialog.getSaveFileName(
+            self, "Save Sequence", "", "JSON Files (*.json)"
+        )
+        if filename:
+            with codecs.open(filename, "w", encoding="utf-8") as file:
+                json.dump(sequence_data, file, indent=4, ensure_ascii=False)
+            print(f"Sequence saved to {filename}.")
 
     def clear_sequence(self):
         # Logic to clear the current sequence goes here
