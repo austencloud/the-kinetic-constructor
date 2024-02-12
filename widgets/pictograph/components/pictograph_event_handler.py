@@ -13,7 +13,7 @@ class PictographMouseEventHandler:
 
     def handle_mouse_press(self, event: "QGraphicsSceneMouseEvent") -> None:
         if self.pictograph.check.is_in_sequence_builder():
-            self.pictograph.scroll_area.sequence_builder.clickable_option_handler.on_option_clicked(
+            self.pictograph.scroll_area.sequence_builder.option_click_handler.on_option_clicked(
                 self.pictograph
             )
             return

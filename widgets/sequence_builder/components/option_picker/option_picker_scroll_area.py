@@ -4,7 +4,6 @@ from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QWheelEvent
 import pandas as pd
-from constants import END_POS, LETTER, START_POS
 from widgets.scroll_area.components.scroll_area_pictograph_factory import (
     ScrollAreaPictographFactory,
 )
@@ -28,7 +27,8 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         super().__init__(option_picker)
         self.option_picker: "OptionPicker" = option_picker
         self.sequence_builder: "SequenceBuilder" = option_picker.sequence_builder
-        self.clickable_option_handler = self.sequence_builder.clickable_option_handler
+        self.option_manager = self.option_picker.option_manager
+        self.option_click_handler = self.sequence_builder.option_click_handler
         self.pictograph_cache: dict[str, Pictograph] = {}
         self.stretch_index: int = -1
 
@@ -46,23 +46,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.layout.addStretch(1)
         self.stretch_index = self.layout.count()
 
-    def update_pictographs(self):
-        try:
-            with open(
-                self.sequence_builder.orientation_correction_engine.sequence_file,
-                "r",
-                encoding="utf-8",
-            ) as file:
-                sequence = json.load(file)
-        except Exception as e:
-            print(f"Failed to load sequence: {str(e)}")
-            return
-
-        if sequence:
-            last_pictograph = sequence[-1]
-            next_options:dict  = self.get_next_options(last_pictograph)
-            self._hide_all_pictographs()
-            self._add_and_display_relevant_pictographs(next_options)
 
     def _add_and_display_relevant_pictographs(self, next_options: list[dict]) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
@@ -88,21 +71,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
     def _hide_all_pictographs(self):
         for pictograph in self.pictograph_cache.values():
             pictograph.view.hide()
-
-    def get_next_options(self, pictograph_dict: dict) -> list[dict]:
-        next_options = []
-        for _, dict_list in self.main_widget.letters.items():
-            for dict in dict_list:
-                if dict[START_POS] == pictograph_dict[END_POS]:
-                    next_options.append(dict)
-
-
-        return next_options
-
-    def adjust_sections_size(self):
-        """Adjust the size of sections, specific to sequence builder."""
-        for section in self.sections_manager.sections.values():
-            section.adjust_size()
 
     def resize_option_picker_scroll_area(self) -> None:
         self.setMinimumWidth(self.option_picker.sequence_builder.width())

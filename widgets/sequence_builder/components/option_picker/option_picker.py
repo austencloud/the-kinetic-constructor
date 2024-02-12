@@ -1,5 +1,10 @@
+import json
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
+
+from widgets.sequence_builder.components.option_picker.option_manager import (
+    OptionManager,
+)
 
 from .option_picker_scroll_area import OptionPickerScrollArea
 
@@ -16,8 +21,8 @@ class OptionPicker(QWidget):
         super().__init__(sequence_builder)
         self.sequence_builder = sequence_builder
         self.main_widget = sequence_builder.main_widget
+        self.option_manager = OptionManager(self)
         self.scroll_area = OptionPickerScrollArea(self)
-
         self.setup_layout()
         self.hide()
 
@@ -27,3 +32,21 @@ class OptionPicker(QWidget):
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.scroll_area)
+
+    def update_pictographs(self):
+        try:
+            with open(
+                self.sequence_builder.orientation_correction_engine.sequence_file,
+                "r",
+                encoding="utf-8",
+            ) as file:
+                sequence = json.load(file)
+        except Exception as e:
+            print(f"Failed to load sequence: {str(e)}")
+            return
+
+        if sequence:
+            last_pictograph = sequence[-1]
+            next_options: dict = self.option_manager.get_next_options(last_pictograph)
+            self.scroll_area._hide_all_pictographs()
+            self.scroll_area._add_and_display_relevant_pictographs(next_options)

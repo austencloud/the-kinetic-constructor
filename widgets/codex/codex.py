@@ -1,8 +1,11 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
+from Enums import LetterType
 from utilities.TypeChecking.TypeChecking import Letters
-from widgets.codex.codex_letter_button_frame.codex_letter_button_frame import CodexLetterButtonFrame
+from widgets.codex.codex_letter_button_frame.codex_letter_button_frame import (
+    CodexLetterButtonFrame,
+)
 from widgets.pictograph.pictograph import Pictograph
 from ..scroll_area.codex_scroll_area import CodexScrollArea
 from utilities.TypeChecking.letter_lists import all_letters
@@ -36,5 +39,27 @@ class Codex(QWidget):
         self.layout.addLayout(self.right_layout, 1)
 
     def resize_codex(self) -> None:
-        self.scroll_area.update_pictographs()
+        # self.update_pictographs()
         self.letter_button_frame.resize_codex_letter_button_frame()
+
+    def update_pictographs(self, letter_type: LetterType = None) -> None:
+        deselected_letters = (
+            self.scroll_area.pictograph_factory.get_deselected_letters()
+        )
+        selected_letters = set(self.selected_letters)
+
+        if self.scroll_area._only_deselection_occurred(
+            deselected_letters, selected_letters
+        ):
+            for letter in deselected_letters:
+                self.scroll_area.pictograph_factory.remove_deselected_letter_pictographs(
+                    letter
+                )
+        else:
+            for letter in deselected_letters:
+                self.scroll_area.pictograph_factory.remove_deselected_letter_pictographs(
+                    letter
+                )
+            self.scroll_area.pictograph_factory.process_selected_letters()
+        if letter_type:
+            self.scroll_area.display_manager.order_and_display_pictographs(letter_type)

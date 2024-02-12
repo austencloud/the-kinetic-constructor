@@ -57,19 +57,6 @@ class CodexScrollArea(QScrollArea):
     def insert_widget_at_index(self, widget: QWidget, index: int) -> None:
         self.layout.insertWidget(index, widget)
 
-    def update_pictographs(self, letter_type: LetterType = None) -> None:
-        deselected_letters = self.pictograph_factory.get_deselected_letters()
-        selected_letters = set(self.codex.selected_letters)
-
-        if self._only_deselection_occurred(deselected_letters, selected_letters):
-            for letter in deselected_letters:
-                self.pictograph_factory.remove_deselected_letter_pictographs(letter)
-        else:
-            for letter in deselected_letters:
-                self.pictograph_factory.remove_deselected_letter_pictographs(letter)
-            self.pictograph_factory.process_selected_letters()
-        if letter_type:
-            self.display_manager.order_and_display_pictographs(letter_type)
 
     def _only_deselection_occurred(self, deselected_letters, selected_letters) -> bool:
         if not deselected_letters:

@@ -80,7 +80,7 @@ class SettingsManager:
         """Apply user settings to the application."""
         self._apply_pictograph_size()
         self._apply_prop_type()
-        self.main_window.main_widget.main_tab_widget.codex.scroll_area.update_pictographs()
+        self.main_window.main_widget.main_tab_widget.codex.update_pictographs()
 
     def _apply_prop_type(self) -> None:
         prop_type = self.get_prop_type()

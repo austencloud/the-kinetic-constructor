@@ -108,5 +108,6 @@ class OptionPickerSectionsManager:
         for section in self.sections.values():
             section.show()
             section.resize_section()
-            self.scroll_area.adjust_sections_size()
+            for section in self.sections.values():
+                section.adjust_size()
         self.scroll_area.fix_stretch()

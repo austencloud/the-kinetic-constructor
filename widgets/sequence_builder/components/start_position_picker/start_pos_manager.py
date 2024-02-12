@@ -11,7 +11,7 @@ class StartPosManager(QObject):
     start_position_selected = pyqtSignal(Pictograph)
 
     def __init__(self, start_pos_picker: "StartPosPicker"):
-        super().__init__()  # Initialize the QObject base class
+        super().__init__() 
         self.sequence_builder = start_pos_picker.sequence_builder
         self.scroll_area = start_pos_picker.scroll_area
         self.start_options: dict[str, Pictograph] = {}
@@ -21,9 +21,9 @@ class StartPosManager(QObject):
         """Shows options for the starting position."""
         start_pos = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
         for i, position_key in enumerate(start_pos):
-            self._add_start_pos_option(position_key)
+            self._add_start_position(position_key)
 
-    def _add_start_pos_option(self, position_key: str) -> None:
+    def _add_start_position(self, position_key: str) -> None:
         """Adds an option for the specified start position."""
         start_pos, end_pos = position_key.split("_")
         for (
