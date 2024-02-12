@@ -17,10 +17,15 @@ class SmallPropPositioner:
                     prop
                 )
         if (
-            self.pictograph.check.ends_with_in_out_ori()
-            or self.pictograph.check.ends_with_clock_counter_ori()
-        ) and len(self.beta_prop_positioner.classifier.small_uni) == 2:
+            ((
+                self.pictograph.check.ends_with_in_out_ori()
+                or self.pictograph.check.ends_with_clock_counter_ori()
+            )
+            and len(self.beta_prop_positioner.classifier.small_uni) == 2)
+            or self.pictograph.check.ends_with_layer3()
+        ):
             return
+
         else:
             if self.pictograph.letter in ["G", "H"]:
                 letter_handler.reposition_G_H()

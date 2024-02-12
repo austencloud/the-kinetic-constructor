@@ -41,7 +41,7 @@ class PictographView(QGraphicsView):
                         self.pictograph.letter_type
                     ].pictograph_frame.spacing
                 )
-                + self.pictograph.container.styled_border_overlay.primary_border_width
+                + self.pictograph.container.styled_border_overlay.outer_border_width
             )
         )
 

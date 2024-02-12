@@ -13,8 +13,8 @@ class StyledBorderOverlay(QWidget):
         self.view = view
         self.primary_color = None
         self.secondary_color = None
-        self.primary_border_width = 3
-        self.secondary_border_width = 2
+        self.outer_border_width = 3
+        self.inner_border_width = 3
         self.setFixedSize(view.size())
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
 
@@ -38,22 +38,22 @@ class StyledBorderOverlay(QWidget):
 
             # Outer border
             pen.setColor(QColor(self.primary_color))
-            pen.setWidth(self.primary_border_width)
+            pen.setWidth(self.outer_border_width)
             painter.setPen(pen)
             outer_rect = self.rect().adjusted(
-                self.primary_border_width // 2,
-                self.primary_border_width // 2,
-                -(self.primary_border_width // 2),
-                -(self.primary_border_width // 2),
+                self.outer_border_width // 2,
+                self.outer_border_width // 2,
+                -(self.outer_border_width // 2),
+                -(self.outer_border_width // 2),
             )
             painter.drawRect(outer_rect)
 
             # Inner border
             pen.setColor(QColor(self.secondary_color))
-            pen.setWidth(self.secondary_border_width)
+            pen.setWidth(self.inner_border_width)
             painter.setPen(pen)
-            inner_offset = self.primary_border_width - (
-                self.secondary_border_width // 2
+            inner_offset = self.outer_border_width - (
+                self.outer_border_width - self.inner_border_width
             )
             inner_rect = outer_rect.adjusted(
                 inner_offset,

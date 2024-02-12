@@ -26,28 +26,15 @@ class PictographContainer(QFrame):
 
     def _get_border_colors_map(self):
         border_colors_map = {
-            LetterType.Type1: ("#6F2DA8", "#00b3ff"),  # Purple, Cyan
+            LetterType.Type1: ("#36c3ff", "#6F2DA8"),  # Cyan, Purple
             LetterType.Type2: ("#6F2DA8", "#6F2DA8"),  # Purple, Purple
-            LetterType.Type3: ("#6F2DA8", "#26e600"),  # Purple, Green
+            LetterType.Type3: ("#26e600", "#6F2DA8"),  # Green, Purple
             LetterType.Type4: ("#26e600", "#26e600"),  # Green, Green
-            LetterType.Type5: ("#26e600", "#00b3ff"),  # Green, Cyan
+            LetterType.Type5: ("#00b3ff", "#26e600"),  # Cyan, Green
             LetterType.Type6: ("#eb7d00", "#eb7d00"),  # Orange, Orange
         }
         return border_colors_map
 
-    def paintEvent(self, event: QEvent) -> None:
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        primary_color, secondary_color = self.get_border_colors()
-
-        outer_border_rect = self.rect()
-        inner_border_rect = outer_border_rect.adjusted(4, 4, -4, -4)
-
-        painter.setPen(QPen(QColor(primary_color), 4))
-        painter.drawRect(outer_border_rect)
-
-        painter.setPen(QPen(QColor(secondary_color), 2))
-        painter.drawRect(inner_border_rect)
 
     def get_border_colors(self) -> tuple[str, str]:
         letter_type = self.pictograph.letter_type

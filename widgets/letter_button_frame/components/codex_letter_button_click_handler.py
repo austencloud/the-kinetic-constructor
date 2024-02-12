@@ -63,8 +63,12 @@ class CodexLetterButtonClickHandler:
 
     def apply_turns_to_pictograph(self, pictograph_dict, filter_tab: FilterTab) -> None:
         pictograph_factory = self.codex.scroll_area.pictograph_factory
-        pictograph_key = pictograph_factory.generate_pictograph_key_from_dict(pictograph_dict)
-        pictograph = pictograph_factory.get_or_create_pictograph(pictograph_key, pictograph_dict)
+        pictograph_key = self.codex.scroll_area.main_widget.pictograph_key_generator.generate_pictograph_key(
+            pictograph_dict
+        )
+        pictograph = pictograph_factory.get_or_create_pictograph(
+            pictograph_key, pictograph_dict
+        )
         filter_tab.visibility_handler.apply_turns_from_turns_boxes_to_pictograph(
             pictograph
         )

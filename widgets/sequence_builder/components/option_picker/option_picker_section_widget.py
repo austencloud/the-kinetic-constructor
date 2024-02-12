@@ -21,7 +21,6 @@ if TYPE_CHECKING:
     )
 
 
-
 class OptionPickerSectionWidget(QGroupBox):
     SCROLLBAR_WIDTH = 20
 
@@ -56,44 +55,28 @@ class OptionPickerSectionWidget(QGroupBox):
         self.layout.addWidget(self.header)
 
     def resize_section(self) -> None:
-        if self.letter_type in [
-            LetterType.Type1,
-            LetterType.Type2,
-            LetterType.Type3,
-        ]:
-            self.setMinimumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
-            self.setMaximumWidth(self.scroll_area.width() - self.SCROLLBAR_WIDTH)
-        elif self.letter_type in [
-            LetterType.Type4,
-            LetterType.Type5,
-            LetterType.Type6,
-        ]:
-            self.setMinimumWidth(
-                int((self.scroll_area.width() - self.SCROLLBAR_WIDTH) / 3)
-            )
-            self.setMaximumWidth(
-                int((self.scroll_area.width() - self.SCROLLBAR_WIDTH) / 3)
-            )
+        section_width = int((self.scroll_area.width() - self.SCROLLBAR_WIDTH))
+        if self.letter_type in [LetterType.Type1, LetterType.Type2, LetterType.Type3]:
+            self.setMinimumWidth(section_width)
+            self.setMaximumWidth(section_width)
+        elif self.letter_type in [LetterType.Type4, LetterType.Type5, LetterType.Type6]:
+            self.setMinimumWidth(int(section_width / 3))
+            self.setMaximumWidth(int(section_width / 3))
 
     def toggle_section(self) -> None:
-        self.layout.setEnabled(False)
-
+        # self.layout.setEnabled(False)
         is_visible = not self.pictograph_frame.isVisible()
         self.pictograph_frame.setVisible(is_visible)
         if self.filter_tab:
             self.filter_tab.setVisible(is_visible)
-
         self.header.toggle_dropdown_arrow(not is_visible)
-
         if is_visible:
             if self.vtg_dir_btn_state[SAME] or self.vtg_dir_btn_state[OPP]:
                 self.vtg_dir_button_manager.show_vtg_dir_buttons()
         else:
             self.vtg_dir_button_manager.hide_vtg_dir_buttons()
-
-        self.layout.setEnabled(True)
-
-        self.layout.activate()
+        # self.layout.setEnabled(True)
+        # self.layout.activate()
 
     def reset_section(self, index: int) -> None:
         for pictograph in self.pictographs.values():
@@ -120,13 +103,12 @@ class OptionPickerSectionWidget(QGroupBox):
 
     def adjust_size(self):
         self.resize_section()
-        # self.filter_tab.visibility_handler.resize_filter_tab()
 
     def add_pictograph(self, pictograph: Pictograph):
         """Add a pictograph widget to the section layout."""
         self.pictographs[
-            self.scroll_area.pictograph_factory.generate_pictograph_key_from_dict(
-                pictograph.get.pictograph_dict()
+            self.scroll_area.main_widget.pictograph_key_generator.generate_pictograph_key(
+                pictograph.pictograph_dict
             )
         ] = pictograph
         self.pictograph_frame.layout.addWidget(pictograph.view)
