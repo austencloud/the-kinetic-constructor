@@ -46,7 +46,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.layout.addStretch(1)
         self.stretch_index = self.layout.count()
 
-
     def _add_and_display_relevant_pictographs(self, next_options: list[dict]) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         for option_dict in next_options:
@@ -65,7 +64,9 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         if not pictograph:
             pictograph = self.sequence_builder.render_and_store_pictograph(option_dict)
             self.pictograph_cache[pictograph_key] = pictograph
-            self.main_widget.all_pictographs[pictograph_key] = pictograph
+            self.main_widget.all_pictographs[pictograph.letter][
+                pictograph_key
+            ] = pictograph
         return pictograph
 
     def _hide_all_pictographs(self):

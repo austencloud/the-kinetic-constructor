@@ -42,7 +42,7 @@ class LetterHandler:
             self.position_letter()
 
     def position_letter(self) -> None:
-        x = int(self.letter_item.boundingRect().height() / 2)
+        x = int(self.letter_item.boundingRect().height() / 1.5)
         y = int(
             self.glyph.pictograph.height()
             - (self.letter_item.boundingRect().height() * 1.7)

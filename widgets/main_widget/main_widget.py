@@ -5,7 +5,9 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 from widgets.pictograph.pictograph import Pictograph
-from widgets.scroll_area.components.pictograph_key_generator import PictographKeyGenerator
+from widgets.scroll_area.components.pictograph_key_generator import (
+    PictographKeyGenerator,
+)
 from ..graphical_object_svg_manager import GraphicalObjectSvgManager
 from utilities.TypeChecking.TypeChecking import Letters
 from utilities.TypeChecking.prop_types import PropTypes
@@ -28,12 +30,17 @@ class MainWidget(QWidget):
     def __init__(self, main_window: "MainWindow") -> None:
         super().__init__(main_window)
         self.main_window = main_window
-        self.all_pictographs: dict[str, "Pictograph"] = {}
+        self._setup_pictograph_cache()
         self._set_prop_type()
         self._setup_default_modes()
         self._setup_letters()
         self._setup_components()
         self._setup_layouts()
+
+    def _setup_pictograph_cache(self):
+        self.all_pictographs: dict[Letters, dict[str, "Pictograph"]] = {}
+        for letter in Letters:
+            self.all_pictographs[letter.value] = {}
 
     def _set_prop_type(self):
         with open("user_settings.json", "r") as file:

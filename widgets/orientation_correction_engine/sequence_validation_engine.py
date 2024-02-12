@@ -14,7 +14,13 @@ class SequenceValidationEngine:
         self.sequence_file = sequence_file
         self.motion_ori_calculator = motion_ori_calculator
         self.logger = logging.getLogger(__name__)
+        self.empty_sequence()
 
+    def empty_sequence(self):
+        """Empties the sequence file."""
+        with open(self.sequence_file, "w") as file:
+            file.write("[]")
+    
     def load_sequence(self):
         """Loads the sequence from the JSON file with UTF-8 encoding."""
         try:

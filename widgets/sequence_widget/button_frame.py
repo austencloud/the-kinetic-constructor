@@ -46,4 +46,8 @@ class SequenceButtonFrame(QFrame):
         # Logic to clear the current sequence goes here
         for beat_view in self.sequence_widget.beat_frame.beats:
             beat_view.clear()
-        # Additional cleanup as necessary
+        # empty the sequence json file too
+        with open(
+            self.sequence_widget.sequence_validation_engine.sequence_file, "w"
+        ) as file:
+            file.write("[]")
