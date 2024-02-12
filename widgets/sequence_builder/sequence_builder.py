@@ -1,3 +1,4 @@
+import json
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
@@ -43,7 +44,7 @@ class SequenceBuilder(QFrame):
         self.current_end_red_ori = pictograph.red_motion.end_ori
         self.current_end_blue_ori = pictograph.blue_motion.end_ori
         self.render_next_options(pictograph.end_pos)
-        
+
     def render_next_options(self, end_pos):
         """Fetches and renders next options based on the end position."""
         pictograph_dfs: pd.DataFrame = self.letters_df[
@@ -125,3 +126,4 @@ class SequenceBuilder(QFrame):
         self.setMinimumWidth(int(self.main_widget.width() * 3 / 5))
         self.start_position_picker.resize_start_position_picker()
         self.option_picker.scroll_area.resize_option_picker_scroll_area()
+

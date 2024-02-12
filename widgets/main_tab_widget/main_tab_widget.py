@@ -19,8 +19,6 @@ class MainTabWidget(QTabWidget):
         self.addTab(self.sequence_builder, "Sequence Builder")
         self.addTab(self.codex, "Codex")
         # self.addTab(self.library, "Library")
-        # self.addTab(graph_editor_tab, "Graph Editor")
-        # self.currentChanged.connect(self.resize_main_tab_widget)
 
     def get_main_tab_stylesheet(self) -> str:
         return """

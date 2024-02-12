@@ -1,3 +1,4 @@
+import json
 from typing import TYPE_CHECKING
 
 from PyQt6.QtWidgets import QGridLayout, QFrame, QSizePolicy
@@ -60,6 +61,7 @@ class SequenceBeatFrame(QFrame):
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
             self.beats[next_beat_index].set_pictograph(new_beat)
+        self.update_temporary_sequence_file()
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):
@@ -72,3 +74,17 @@ class SequenceBeatFrame(QFrame):
             if beat.scene() is not None and beat.scene().items() != []:
                 return beat
         return self.beats[0]
+
+    def update_temporary_sequence_file(self):
+        """Updates the temporary JSON file with the current sequence."""
+        temp_filename = "temporary_sequence.json"
+        sequence_data = [
+            beat_view.beat.get.pictograph_dict()
+            for beat_view in self.beats
+            if hasattr(beat_view.beat, "pictograph_dict")
+        ]
+
+        with open(temp_filename, "w", encoding="utf-8") as file:
+            json.dump(sequence_data, file, indent=4, ensure_ascii=False)
+
+        print(f"Temporary sequence updated: {temp_filename}")
