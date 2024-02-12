@@ -2,6 +2,9 @@ import json
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
 from widgets.pictograph.pictograph import Pictograph
+from widgets.scroll_area.components.sequence_widget_pictograph_factory import (
+    SequenceWidgetPictographFactory,
+)
 from widgets.sequence_widget.beat_frame.beat_frame import SequenceBeatFrame
 from widgets.sequence_widget.button_frame import SequenceButtonFrame
 from PyQt6.QtCore import Qt
@@ -15,9 +18,12 @@ class SequenceWidget(QWidget):
         super().__init__()
         self.main_widget = main_widget
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-
+        self.pictograph_cache: dict[str, Pictograph] = {}
         self.beat_frame = SequenceBeatFrame(self.main_widget, self)
         self.button_frame = SequenceButtonFrame(self)
+        self.pictograph_factory = SequenceWidgetPictographFactory(
+            self, self.pictograph_cache
+        )
         self.beats = self.beat_frame.beats
 
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -38,6 +44,12 @@ class SequenceWidget(QWidget):
         pictograph = Pictograph(self.main_widget)
         self.beat_frame.add_scene_to_sequence(pictograph)
         pictograph.updater.update_pictograph(pictograph_dict)
+        pictograph_key = (
+            pictograph.main_widget.pictograph_key_generator.generate_pictograph_key(
+                pictograph_dict
+            )
+        )
+        self.pictograph_cache[pictograph_key] = pictograph
 
     def resize_sequence_widget(self) -> None:
         beat_view_height = int(self.height() * 0.9 / self.beat_frame.ROW_COUNT)

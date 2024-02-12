@@ -108,7 +108,7 @@ class Pictograph(QGraphicsScene):
         self.prop_placement_manager = PropPlacementManager(self)
         self.wasd_manager = WASD_AdjustmentManager(self)
         self.attr_manager = PictographAttrManager(self)
-
+        
     ### EVENT HANDLERS ###
 
     def mousePressEvent(self, event: "QGraphicsSceneMouseEvent") -> None:

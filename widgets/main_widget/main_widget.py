@@ -5,6 +5,7 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 from widgets.pictograph.pictograph import Pictograph
+from widgets.scroll_area.components.pictograph_key_generator import PictographKeyGenerator
 from ..graphical_object_svg_manager import GraphicalObjectSvgManager
 from utilities.TypeChecking.TypeChecking import Letters
 from utilities.TypeChecking.prop_types import PropTypes
@@ -44,6 +45,7 @@ class MainWidget(QWidget):
         self._setup_special_placements()
         self.svg_manager = GraphicalObjectSvgManager()
         self.turns_tuple_generator = TurnsTupleGenerator()
+        self.pictograph_key_generator = PictographKeyGenerator()
         self.sequence_widget = SequenceWidget(self)
         self.main_tab_widget = MainTabWidget(self)
         self.image_cache_manager = ImageCacheManager(self)

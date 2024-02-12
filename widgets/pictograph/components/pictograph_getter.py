@@ -24,6 +24,7 @@ class PictographGetter:
         self.red_arrow = self.pictograph.red_arrow
         self.turns_tuple_generator = self.pictograph.main_widget.turns_tuple_generator
 
+
     def letter_type(self, letter: LetterString) -> Optional[str]:
         letter_type_map = {
             letter: letter_type.description

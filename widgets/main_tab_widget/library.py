@@ -5,8 +5,12 @@ from PyQt6.QtGui import QFileSystemModel
 from PyQt6.QtCore import QDir, QModelIndex
 from typing import TYPE_CHECKING
 
+from widgets.pictograph.pictograph import Pictograph
+from widgets.sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
+
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
+from widgets.sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 
 
 class Library(QWidget):
@@ -53,10 +57,43 @@ class Library(QWidget):
             QMessageBox.critical(self, "Error", f"Failed to load sequence: {str(e)}")
 
     def populate_sequence(self, sequence_data):
-        # Assuming self.main_widget points to MainWidget
+        if not sequence_data:
+            return  # Handle empty sequence case
+
         # Clear the existing sequence
         self.main_widget.sequence_widget.button_frame.clear_sequence()
-        # Populate the sequence
+
+        # Extract the start position key from the first item
+        start_pos_key = sequence_data[0]["start_pos"]
+
+        # Retrieve or create the start position pictograph
+        start_position_pictograph = self.get_start_position_pictograph(start_pos_key)
+
+        # Set the start position in the beat frame
+        if start_position_pictograph:
+            self.main_widget.sequence_widget.beat_frame.set_start_position(
+                start_position_pictograph
+            )
+
+        # Populate the sequence with the remaining pictographs
         for pictograph_dict in sequence_data:
             self.main_widget.sequence_widget.populate_sequence(pictograph_dict)
-        # Trigger any necessary updates or refreshes here
+
+    def get_start_position_pictograph(self, start_pos_key):
+        # Assuming 'letters' is accessible via main_widget and contains start position definitions
+        start_position_definitions = self.main_widget.letters.get(start_pos_key)
+
+        if start_position_definitions:
+            # Assuming the definitions contain exactly what's needed to create a pictograph
+            start_pos_def = start_position_definitions[
+                0
+            ]  # Assuming only one definition per start_pos_key
+            pictograph_factory = self.main_widget.sequence_widget.pictograph_factory
+            pictograph_key = pictograph_factory.generate_pictograph_key_from_dict(
+                start_pos_def
+            )
+            return pictograph_factory.get_or_create_pictograph(
+                pictograph_key, start_pos_def
+            )
+
+        return None
