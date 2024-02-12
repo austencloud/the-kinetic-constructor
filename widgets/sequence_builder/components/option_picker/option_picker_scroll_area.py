@@ -54,7 +54,9 @@ class OptionPickerScrollArea(BasePictographScrollArea):
     def _add_and_display_relevant_pictographs(self, next_options: list[pd.Series]):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         for option_dict in next_options:
-            pictograph_key = self.sequence_builder.generate_pictograph_key(option_dict)
+            pictograph_key = self.sequence_builder.main_widget.pictograph_key_generator.generate_pictograph_key(
+                option_dict
+            )
             pictograph = self._get_or_create_pictograph(pictograph_key, option_dict)
             self.display_manager.add_pictograph_to_section_layout(pictograph)
         self.display_manager.order_and_display_pictographs()
@@ -69,7 +71,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             self.pictograph_cache[pictograph_key] = pictograph
             self.main_widget.all_pictographs[pictograph_key] = pictograph
         return pictograph
-
 
     def _hide_all_pictographs(self):
         for pictograph in self.pictograph_cache.values():

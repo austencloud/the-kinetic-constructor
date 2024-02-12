@@ -3,18 +3,16 @@ from Enums import LetterType
 from utilities.TypeChecking.TypeChecking import Letters
 
 
-
 from widgets.pictograph.pictograph import Pictograph
-from widgets.scroll_area.components.pictograph_key_generator import PictographKeyGenerator
+from widgets.scroll_area.components.pictograph_key_generator import (
+    PictographKeyGenerator,
+)
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (
         OptionPickerScrollArea,
     )
     from widgets.scroll_area.codex_scroll_area import CodexScrollArea
-
-
-
 
 
 class ScrollAreaPictographFactory:
@@ -25,7 +23,6 @@ class ScrollAreaPictographFactory:
     ) -> None:
         self.scroll_area = scroll_area
         self.pictograph_cache = pictograph_cache
-        self.key_generator = PictographKeyGenerator()
 
     def get_or_create_pictograph(
         self, pictograph_key: str, pictograph_dict=None
@@ -61,7 +58,9 @@ class ScrollAreaPictographFactory:
             if str(letter) not in self.scroll_area.codex.pictograph_cache:
                 pictograph_dicts = self.scroll_area.letters.get(letter, [])
                 for pictograph_dict in pictograph_dicts:
-                    pictograph_key = self.key_generator.generate_pictograph_key(pictograph_dict)
+                    pictograph_key = self.scroll_area.main_widget.pictograph_key_generator.generate_pictograph_key(
+                        pictograph_dict
+                    )
                     self.get_or_create_pictograph(pictograph_key, pictograph_dict)
             for (
                 pictograph_key,

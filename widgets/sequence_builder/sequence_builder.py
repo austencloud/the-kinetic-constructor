@@ -51,7 +51,11 @@ class SequenceBuilder(QFrame):
             self.letters_df["start_pos"] == end_pos
         ]
         for _, pictograph_df in pictograph_dfs.iterrows():
-            pictograph_key = f"{pictograph_df['letter']}_{pictograph_df['start_pos']}→{pictograph_df['end_pos']}"
+            pictograph_key = (
+                self.main_widget.pictograph_key_generator.generate_pictograph_key(
+                    pictograph_df.to_dict()
+                )
+            )
             if pictograph_key not in self.pictograph_cache[pictograph_df["letter"]]:
                 self.render_and_store_pictograph(pictograph_df)
 
@@ -76,7 +80,12 @@ class SequenceBuilder(QFrame):
     def render_and_store_pictograph(self, pictograph_df: pd.Series):
         pictograph_dict = pictograph_df.to_dict()
         pictograph_dict = self._add_turns_and_start_ori(pictograph_dict)
-        pictograph_key = self.generate_pictograph_key(pictograph_dict)
+        letter_type = LetterType.get_letter_type(pictograph_dict["letter"])
+        pictograph_key = (
+            self.main_widget.pictograph_key_generator.generate_pictograph_key(
+                pictograph_dict
+            )
+        )
 
         if pictograph_key in self.option_picker.scroll_area.pictograph_cache:
             return self.option_picker.scroll_area.pictograph_cache[pictograph_key]
@@ -93,7 +102,7 @@ class SequenceBuilder(QFrame):
                 pictograph_key
             ] = new_pictograph
         section = self.option_picker.scroll_area.sections_manager.get_section(
-            LetterType.get_letter_type(pictograph_dict["letter"])
+            letter_type
         )
         section.pictographs[pictograph_key] = new_pictograph
         self.option_picker.scroll_area.pictograph_cache[pictograph_key] = new_pictograph
@@ -107,13 +116,6 @@ class SequenceBuilder(QFrame):
         pictograph_dict[BLUE_TURNS] = 0
         return pictograph_dict
 
-    def generate_pictograph_key(self, pictograph_dict):
-        return (
-            f"{pictograph_dict['letter']}_{pictograph_dict['start_pos']}→{pictograph_dict['end_pos']}"
-            f"_red_{pictograph_dict['red_motion_type']}_{pictograph_dict['red_start_loc']}→{pictograph_dict['red_end_loc']}"
-            f"_blue_{pictograph_dict['blue_motion_type']}_{pictograph_dict['blue_start_loc']}→{pictograph_dict['blue_end_loc']}"
-        )
-
     def reset_to_start_pos_picker(self):
         self.start_position_picked = False
         self.option_picker.hide()
@@ -126,4 +128,3 @@ class SequenceBuilder(QFrame):
         self.setMinimumWidth(int(self.main_widget.width() * 3 / 5))
         self.start_position_picker.resize_start_position_picker()
         self.option_picker.scroll_area.resize_option_picker_scroll_area()
-
