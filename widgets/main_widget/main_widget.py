@@ -38,7 +38,7 @@ class MainWidget(QWidget):
         self._setup_layouts()
 
     def _setup_pictograph_cache(self):
-        self.all_pictographs: dict[Letters, dict[str, "Pictograph"]] = {}
+        self.all_pictographs: dict[str, dict[str, "Pictograph"]] = {}
         for letter in Letters:
             self.all_pictographs[letter.value] = {}
 

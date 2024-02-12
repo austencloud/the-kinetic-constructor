@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Optional
-from Enums import LetterString, LetterType
+from Enums import Letters, LetterType
 
 from constants import *
 from objects.arrow.arrow import Arrow
@@ -25,7 +25,7 @@ class PictographGetter:
         self.turns_tuple_generator = self.pictograph.main_widget.turns_tuple_generator
 
 
-    def letter_type(self, letter: LetterString) -> Optional[str]:
+    def letter_type(self, letter: Letters) -> Optional[str]:
         letter_type_map = {
             letter: letter_type.description
             for letter_type in LetterType

@@ -8,68 +8,9 @@ from utilities.TypeChecking.MotionAttributes import (
     Turns,
     Orientations,
 )
-from utilities.TypeChecking.TypeChecking import SpecificPositions
+from utilities.TypeChecking.TypeChecking import Letters, SpecificPositions
 from utilities.TypeChecking.prop_types import PropTypes
 from utilities.TypeChecking.letter_lists import all_letters
-
-
-class LetterString(Enum):
-    A = "A"
-    B = "B"
-    C = "C"
-    D = "D"
-    E = "E"
-    F = "F"
-    G = "G"
-    H = "H"
-    I = "I"
-    J = "J"
-    K = "K"
-    L = "L"
-    M = "M"
-    N = "N"
-    O = "O"
-    P = "P"
-    Q = "Q"
-    R = "R"
-    S = "S"
-    T = "T"
-    U = "U"
-    V = "V"
-    W = "W"
-    X = "X"
-    Y = "Y"
-    Z = "Z"
-    Σ = "Σ"
-    Δ = "Δ"
-    θ = "θ"
-    Ω = "Ω"
-    W_DASH = "W-"
-    X_DASH = "X-"
-    Y_DASH = "Y-"
-    Z_DASH = "Z-"
-    Σ_DASH = "Σ-"
-    Δ_DASH = "Δ-"
-    θ_DASH = "θ-"
-    Ω_DASH = "Ω-"
-    Φ = "Φ"
-    Ψ = "Ψ"
-    Λ = "Λ"
-    Φ_DASH = "Φ-"
-    Ψ_DASH = "Ψ-"
-    Λ_DASH = "Λ-"
-    α = "α"
-    β = "β"
-    Γ = "Γ"
-
-    def __str__(self):
-        return self.name
-
-    @staticmethod
-    def get_letter(str: str) -> str | None:
-        if str in all_letters:
-            return str
-        return None
 
 
 class LetterType(Enum):
@@ -123,7 +64,7 @@ class LetterType(Enum):
         for letter_type in LetterType:
             if str in letter_type.letters:
                 return letter_type
-                
+
 
 class MotionCombinationType(Enum):
     DUAL_SHIFT = "Dual-Shift"
@@ -284,7 +225,7 @@ class TKAHandpathMode(Enum):
 
 
 class PictographAttributesDict(TypedDict):
-    letter: LetterString
+    letter: Letters
     start_pos: SpecificPositions
     end_pos: SpecificPositions
     blue_motion_type: MotionTypes
