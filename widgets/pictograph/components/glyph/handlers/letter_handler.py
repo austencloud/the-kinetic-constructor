@@ -45,6 +45,6 @@ class LetterHandler:
         x = int(self.letter_item.boundingRect().height() / 2)
         y = int(
             self.glyph.pictograph.height()
-            - (self.letter_item.boundingRect().height() * 1.5)
+            - (self.letter_item.boundingRect().height() * 1.7)
         )
         self.letter_item.setPos(x, y)

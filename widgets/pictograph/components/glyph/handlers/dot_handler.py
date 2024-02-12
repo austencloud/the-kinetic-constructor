@@ -14,14 +14,14 @@ class DotHandler:
         self.glyph = glyph
         self.same_dot_item = None
         self.opp_dot_item = None
-        self.add_dots("images/same_opp_dot.svg", "images/same_opp_dot.svg")
+        self.add_dots("images/same_opp_dot.svg")
 
-    def add_dots(self, same_dot_path: str, opp_dot_path: str):
-        self.same_dot_item = self.create_dot(same_dot_path)
+    def add_dots(self, dot_path: str):
+        self.same_dot_item = self.create_dot(dot_path)
         if self.same_dot_item:
             self.glyph.addToGroup(self.same_dot_item)
 
-        self.opp_dot_item = self.create_dot(opp_dot_path)
+        self.opp_dot_item = self.create_dot(dot_path)
         if self.opp_dot_item:
             self.glyph.addToGroup(self.opp_dot_item)
 
@@ -29,7 +29,7 @@ class DotHandler:
         return load_svg_item(dot_path)
 
     def update_dots(self, dir: VtgDirections):
-        padding = 5
+        padding = 0
         letter_scene_rect = self.glyph.letter_handler.letter_item.sceneBoundingRect()
         letter_scene_center = letter_scene_rect.center()
 

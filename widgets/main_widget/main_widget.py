@@ -28,7 +28,7 @@ class MainWidget(QWidget):
     def __init__(self, main_window: "MainWindow") -> None:
         super().__init__(main_window)
         self.main_window = main_window
-        self.all_pictographs: dict[Letters, dict[str, "Pictograph"]] = {}
+        self.all_pictographs: dict[str, "Pictograph"] = {}
         self._set_prop_type()
         self._setup_default_modes()
         self._setup_letters()
