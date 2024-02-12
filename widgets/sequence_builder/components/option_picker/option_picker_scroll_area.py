@@ -72,6 +72,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             self.main_widget.all_pictographs[pictograph_key] = pictograph
         return pictograph
 
+
     def _hide_all_pictographs(self):
         for pictograph in self.pictograph_cache.values():
             pictograph.view.hide()
