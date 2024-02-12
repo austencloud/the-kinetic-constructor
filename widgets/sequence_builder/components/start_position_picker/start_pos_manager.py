@@ -21,9 +21,9 @@ class StartPosManager(QObject):
         """Shows options for the starting position."""
         start_pos = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
         for i, position_key in enumerate(start_pos):
-            self._add_start_pos_option(position_key, i)
+            self._add_start_pos_option(position_key)
 
-    def _add_start_pos_option(self, position_key: str, column: int) -> None:
+    def _add_start_pos_option(self, position_key: str) -> None:
         """Adds an option for the specified start position."""
         start_pos, end_pos = position_key.split("_")
         for (
@@ -53,15 +53,15 @@ class StartPosManager(QObject):
                         )
                     )
 
-    def on_start_pos_clicked(self, start_pos: Pictograph):
+    def on_start_pos_clicked(self, start_position_pictograph: Pictograph):
         self.sequence_builder.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
-            start_pos
+            start_position_pictograph
         )
-        self.sequence_builder.current_pictograph = start_pos
+        self.sequence_builder.current_pictograph = start_position_pictograph
         self.start_position_selected.connect(
             self.sequence_builder.transition_to_sequence_building
         )
-        self.start_position_selected.emit(start_pos)
+        self.start_position_selected.emit(start_position_pictograph)
 
     def hide_start_positions(self):
         for start_position_pictograph in self.start_options.values():

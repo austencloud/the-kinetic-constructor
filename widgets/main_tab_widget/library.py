@@ -19,20 +19,15 @@ class Library(QWidget):
         self.main_widget = main_widget
         layout = QVBoxLayout(self)
 
-        # File system model
         self.model = QFileSystemModel()
         self.model.setRootPath(QDir.currentPath() + "/library")
 
-        # File tree view
         self.tree_view = QTreeView()
         self.tree_view.setModel(self.model)
         self.tree_view.setRootIndex(self.model.index(QDir.currentPath() + "/library"))
-        self.tree_view.doubleClicked.connect(
-            self.on_double_clicked
-        )  # Connect the doubleClicked signal
+        self.tree_view.doubleClicked.connect(self.on_double_clicked)
         layout.addWidget(self.tree_view)
 
-        # Placeholder for preview area
         self.preview_area = QWidget()
         self.preview_area.setStyleSheet("background-color: gray;")
         layout.addWidget(self.preview_area)
@@ -58,42 +53,47 @@ class Library(QWidget):
 
     def populate_sequence(self, sequence_data):
         if not sequence_data:
-            return  # Handle empty sequence case
-
-        # Clear the existing sequence
+            return
         self.main_widget.sequence_widget.button_frame.clear_sequence()
 
-        # Extract the start position key from the first item
-        start_pos_key = sequence_data[0]["start_pos"]
+        start_position_pictograph = self.get_start_position_pictograph(sequence_data)
+        self.main_widget.main_tab_widget.sequence_builder.current_pictograph = (
+            start_position_pictograph
+        )
 
-        # Retrieve or create the start position pictograph
-        start_position_pictograph = self.get_start_position_pictograph(start_pos_key)
-
-        # Set the start position in the beat frame
-        if start_position_pictograph:
-            self.main_widget.sequence_widget.beat_frame.set_start_position(
-                start_position_pictograph
-            )
-
-        # Populate the sequence with the remaining pictographs
+        self.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
+            start_position_pictograph
+        )
         for pictograph_dict in sequence_data:
             self.main_widget.sequence_widget.populate_sequence(pictograph_dict)
 
-    def get_start_position_pictograph(self, start_pos_key):
-        # Assuming 'letters' is accessible via main_widget and contains start position definitions
-        start_position_definitions = self.main_widget.letters.get(start_pos_key)
+    def get_start_position_pictograph(self, sequence_data):
+        start_pos_key: str = sequence_data[0]["start_pos"]
+        # Determine the letter for the start position based on start_pos_key prefix
+        if start_pos_key.startswith("alpha"):
+            start_pos_letter = "α"
+        elif start_pos_key.startswith("beta"):
+            start_pos_letter = "β"
+        elif start_pos_key.startswith("gamma"):
+            start_pos_letter = "Γ"
+        else:
+            return None  # or handle the unexpected case
 
-        if start_position_definitions:
-            # Assuming the definitions contain exactly what's needed to create a pictograph
-            start_pos_def = start_position_definitions[
-                0
-            ]  # Assuming only one definition per start_pos_key
-            pictograph_factory = self.main_widget.sequence_widget.pictograph_factory
-            pictograph_key = pictograph_factory.generate_pictograph_key_from_dict(
-                start_pos_def
-            )
-            return pictograph_factory.get_or_create_pictograph(
-                pictograph_key, start_pos_def
-            )
+        # Retrieve all pictographs for the start position letter
+        matching_letter_pictographs = self.main_widget.letters.get(start_pos_letter, [])
 
+        # Find the specific pictograph that matches the start_pos_key
+        for pictograph_dict in matching_letter_pictographs:
+            if pictograph_dict["start_pos"] == start_pos_key:
+                # Use the SequenceWidgetPictographFactory to get or create the pictograph
+                pictograph_factory = self.main_widget.sequence_widget.pictograph_factory
+                pictograph_key = pictograph_factory.generate_pictograph_key_from_dict(
+                    pictograph_dict
+                )
+                return pictograph_factory.get_or_create_pictograph(
+                    pictograph_key, pictograph_dict
+                )
+
+        # If we reach here, no matching start position was found
+        print(f"No matching start position found for key: {start_pos_key}")
         return None
