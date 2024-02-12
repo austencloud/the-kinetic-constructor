@@ -47,7 +47,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.stretch_index = self.layout.count()
 
     def update_pictographs(self):
-        # Load the current sequence from the JSON file
         try:
             with open(
                 self.sequence_builder.orientation_correction_engine.sequence_file,
@@ -59,7 +58,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             print(f"Failed to load sequence: {str(e)}")
             return
 
-        # Determine the last pictograph in the sequence for next options
         if sequence:
             last_pictograph = sequence[-1]
             next_options:dict  = self.get_next_options(last_pictograph)

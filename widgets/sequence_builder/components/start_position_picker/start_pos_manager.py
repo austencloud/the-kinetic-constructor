@@ -42,9 +42,7 @@ class StartPosManager(QObject):
                     start_position_pictograph.letter = letter
                     start_position_pictograph.start_pos = start_pos
                     start_position_pictograph.end_pos = end_pos
-                    self.scroll_area._add_start_pos_to_layout(
-                        start_position_pictograph, True
-                    )
+                    self.scroll_area._add_start_pos_to_layout(start_position_pictograph)
                     start_position_pictograph.updater.update_pictograph(pictograph_dict)
 
                     start_position_pictograph.view.mousePressEvent = (

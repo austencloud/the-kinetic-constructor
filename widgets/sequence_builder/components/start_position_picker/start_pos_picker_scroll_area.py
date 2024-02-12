@@ -27,11 +27,9 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
         self.set_layout("HBox")
         self.COLUMN_COUNT = 5
 
-    def _add_start_pos_to_layout(
-        self, start_pos: Pictograph, is_start_pos: bool
-    ) -> None:
+    def _add_start_pos_to_layout(self, start_pos: Pictograph) -> None:
         start_pos.view.mousePressEvent = (
-            self.clickable_option_handler.get_click_handler(start_pos, is_start_pos)
+            self.clickable_option_handler.get_click_handler(start_pos)
         )
         self.layout.addWidget(start_pos.view)
         self.pictograph_cache[start_pos.letter] = start_pos

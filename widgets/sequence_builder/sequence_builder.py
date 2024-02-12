@@ -52,7 +52,6 @@ class SequenceBuilder(QFrame):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.layout().removeWidget(self.start_position_picker)
         self.layout().addWidget(self.option_picker)
-        # self.clear_current_sequence_json()
         self.option_picker.show()
         self.option_picker.scroll_area.resize_option_picker_scroll_area()
         self.option_picker.scroll_area.sections_manager.show_all_sections()
