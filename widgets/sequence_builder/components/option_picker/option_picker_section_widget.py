@@ -44,7 +44,7 @@ class OptionPickerSectionWidget(QGroupBox):
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
-        self.layout.setContentsMargins(0, 15, 0, 15)
+        self.layout.setContentsMargins(0, 15, 0, 0)
         self.setup_header()
         self.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
