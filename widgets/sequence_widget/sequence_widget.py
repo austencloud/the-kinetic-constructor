@@ -36,8 +36,6 @@ class SequenceWidget(QWidget):
         self.layout.addWidget(self.beat_frame)
         self.layout.addWidget(self.button_frame)
 
-
-
     def save_sequence(sequence: list[Pictograph], filename: str) -> None:
         sequence_data = [pictograph.get.pictograph_dict() for pictograph in sequence]
         with open(filename, "w") as file:
@@ -55,7 +53,12 @@ class SequenceWidget(QWidget):
         self.pictograph_cache[pictograph_key] = pictograph
 
     def resize_sequence_widget(self) -> None:
-        beat_view_height = int(self.height() * 0.9 / self.beat_frame.ROW_COUNT)
+        width = int(self.main_widget.width() * 2 / 5)
+        height = int(self.main_widget.height())
+        self.setFixedWidth(width)
+        self.setFixedHeight(height)
+
+        beat_view_height = int(self.height() * 0.6 / self.beat_frame.ROW_COUNT)
         beat_view_width = beat_view_height
         for beat_view in self.beat_frame.beats:
             beat_view.setMaximumSize(beat_view_width, beat_view_height)
@@ -63,5 +66,3 @@ class SequenceWidget(QWidget):
         self.beat_frame.start_pos_view.setMinimumSize(beat_view_width, beat_view_height)
         self.beat_frame.start_pos_view.setMaximumSize(beat_view_width, beat_view_height)
         self.layout.update()
-        minimum_width = int(self.main_widget.width() * 2 / 5)
-        self.setMinimumWidth(minimum_width)
