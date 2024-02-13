@@ -29,12 +29,13 @@ class SequenceWidget(QWidget):
 
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
+        self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setAlignment(
-            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTop
-        )
+        # self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.addWidget(self.beat_frame)
         self.layout.addWidget(self.button_frame)
+        # add black borders
+        # self.setStyleSheet("QWidget {border: 1px solid black;}")
 
     def save_sequence(sequence: list[Pictograph], filename: str) -> None:
         sequence_data = [pictograph.get.pictograph_dict() for pictograph in sequence]
@@ -53,7 +54,8 @@ class SequenceWidget(QWidget):
         self.pictograph_cache[pictograph_key] = pictograph
 
     def resize_sequence_widget(self) -> None:
-        beat_view_width = int(self.width() / self.beat_frame.ROW_COUNT)
+        self.setMinimumWidth(int(self.main_widget.width() * 3 / 8))
+        beat_view_width = int(self.width() / self.beat_frame.COLUMN_COUNT)
         for beat_view in self.beat_frame.beats:
             beat_view.setMaximumWidth(beat_view_width)
             beat_view.setMaximumHeight(beat_view_width)

@@ -30,10 +30,12 @@ class SequenceBeatFrame(QFrame):
         self.sequence_widget = sequence_widget
         self.beats: list[BeatView] = []
         self.layout: QGridLayout = QGridLayout(self)
+        self.layout.setSpacing(0)
+        self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.layout.setAlignment(
-            Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight
+            Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop
         )
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.start_pos_view = StartPositionBeatView(self)
@@ -46,6 +48,7 @@ class SequenceBeatFrame(QFrame):
         for j in range(1, 4):
             for i in range(1, self.COLUMN_COUNT):
                 self._add_beat_to_layout(j, i)
+        # self.setStyleSheet("QFrame {border: 1px solid black;}")
 
     def _add_beat_to_layout(self, row: int, col: int) -> None:
         beat_view = BeatView(self)
@@ -71,7 +74,6 @@ class SequenceBeatFrame(QFrame):
             if beat.scene() is not None and beat.scene().items() != []:
                 return beat
         return self.beats[0]
-
 
     def load_sequence(self) -> list[dict]:
         with open("current_sequence.json", "r", encoding="utf-8") as file:
