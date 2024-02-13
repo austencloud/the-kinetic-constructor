@@ -28,7 +28,7 @@ SVG_PATHS = {
 class VTG_Glyph:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
-        self.letter_item = QGraphicsSvgItem(self.glyph)
+        # self.letter_item = QGraphicsSvgItem(self.glyph)
         self.renderer = None
 
     def set_vtg_mode(self):

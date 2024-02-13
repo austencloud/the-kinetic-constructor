@@ -15,12 +15,7 @@ from utilities.TypeChecking.prop_types import (
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.graph_editor_object_panel.arrowbox.arrowbox import (
-        ArrowBox,
-    )
-    from widgets.graph_editor_tab.graph_editor_object_panel.propbox.propbox import (
-        PropBox,
-    )
+
     from widgets.pictograph.pictograph import Pictograph
 
 
@@ -89,7 +84,7 @@ class GridData:
 
 
 class Grid:
-    def __init__(self, scene: Union["ArrowBox", "PropBox", "Pictograph"]) -> None:
+    def __init__(self, scene: Union["Pictograph"]) -> None:
         self.scene = scene
         self.items: dict[GridModes, GridItem] = {}
         self.grid_mode = DIAMOND
@@ -99,7 +94,7 @@ class Grid:
 
     def _load_grid_data(self) -> GridData:
         with open(
-            "F:\\CODE\\tka-app\\tka-sequence-constructor\\data\\circle_coords.json", "r"
+            "data\\circle_coords.json", "r"
         ) as file:
             data = json.load(file)
         return GridData(data)

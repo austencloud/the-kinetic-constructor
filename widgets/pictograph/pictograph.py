@@ -20,9 +20,7 @@ from utilities.TypeChecking.TypeChecking import (
 )
 from utilities.TypeChecking.MotionAttributes import Colors, Locations
 from widgets.pictograph.components.tka_glyph.tka_glyph import TKA_Glyph
-from widgets.pictograph.components.vtg_glyph.vtg_glyph import (
-    VTGGlyph,
-)
+from widgets.pictograph.components.vtg_glyph.vtg_glyph import VTG_Glyph
 from widgets.sequence_widget.beat_frame.pictograph_container import PictographContainer
 
 from .components.pictograph_attr_manager import PictographAttrManager
@@ -76,7 +74,7 @@ class Pictograph(QGraphicsScene):
     dragged_arrow: Arrow
     dragged_prop: Prop
     tka_glyph: TKA_Glyph
-    vtg_glyph: VTGGlyph
+    vtg_glyph: VTG_Glyph
     grid: Grid
     locations: dict[Locations, tuple[int, int, int, int]]
     red_motion: Motion
