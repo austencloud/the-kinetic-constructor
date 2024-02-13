@@ -1,19 +1,23 @@
 import json
 import logging
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from widgets.main_widget.main_widget import MainWidget
+
 from widgets.pictograph.pictograph import Pictograph
 from .motion_orientation_json_calculator import (
-    MotionOrientationJsonCalculator,
+    SequenceValidationOriCalculator,
 )
 
 
 class SequenceValidationEngine:
-    def __init__(
-        self, sequence_file="current_sequence.json", motion_ori_calculator=None
-    ):
-        self.sequence_file = sequence_file
-        self.motion_ori_calculator = motion_ori_calculator
+    def __init__(self, main_widget: "MainWidget") -> None:
+        self.main_widget = main_widget
+        self.sequence_file = "current_sequence.json"
         self.logger = logging.getLogger(__name__)
+        self.motion_ori_calculator = SequenceValidationOriCalculator(main_widget)
         self.empty_sequence()
 
     def empty_sequence(self):
@@ -48,12 +52,12 @@ class SequenceValidationEngine:
             )
 
             current_pictograph["red_end_ori"] = (
-                MotionOrientationJsonCalculator.calculate_end_orientation(
+                self.motion_ori_calculator.calculate_end_orientation(
                     current_pictograph, "red"
                 )
             )
             current_pictograph["blue_end_ori"] = (
-                MotionOrientationJsonCalculator.calculate_end_orientation(
+                self.motion_ori_calculator.calculate_end_orientation(
                     current_pictograph, "blue"
                 )
             )
@@ -101,7 +105,9 @@ class SequenceValidationEngine:
         blue_start_ori = start_pos_graph.pictograph_dict["blue_start_ori"]
         sequence = self.load_sequence()
         start_position_dict = {
-            "sequence_start_position": start_pos_graph.end_pos[:-1],  # Cut off the final character
+            "sequence_start_position": start_pos_graph.end_pos[
+                :-1
+            ],  # Cut off the final character
             "red_end_ori": red_start_ori,
             "blue_end_ori": blue_start_ori,
             "end_pos": start_pos_graph.end_pos,

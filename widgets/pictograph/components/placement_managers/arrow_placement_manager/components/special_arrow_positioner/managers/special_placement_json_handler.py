@@ -5,10 +5,10 @@ import re
 
 
 class SpecialPlacementJsonHandler:
-    """Handles read/write JSON file operations."""
+    def __init__(self, main_widget):
+        self.main_widget = main_widget
 
-    @staticmethod
-    def load_json_data(file_path) -> dict:
+    def load_json_data(self, file_path) -> dict:
         try:
             if os.path.exists(file_path):
                 with open(file_path, "r", encoding="utf-8") as file:
@@ -18,8 +18,7 @@ class SpecialPlacementJsonHandler:
             logging.error(f"Error loading JSON data from {file_path}: {e}")
             return {}
 
-    @staticmethod
-    def write_json_data(data, file_path) -> None:
+    def write_json_data(self, data, file_path) -> None:
         """Write JSON data to a file with specific formatting."""
         try:
             with open(file_path, "w", encoding="utf-8") as file:

@@ -3,6 +3,8 @@ from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QResizeEvent, QKeyEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
+from widgets.json_manager import JSON_Manager
+from widgets.orientation_correction_engine.sequence_validation_engine import SequenceValidationEngine
 
 from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.components.pictograph_key_generator import (
@@ -50,7 +52,9 @@ class MainWidget(QWidget):
 
     def _setup_components(self) -> None:
         self._setup_special_placements()
+        self.json_manager = JSON_Manager(self)
         self.svg_manager = GraphicalObjectSvgManager()
+        self.sequence_validation_engine = SequenceValidationEngine(self)
         self.turns_tuple_generator = TurnsTupleGenerator()
         self.pictograph_key_generator = PictographKeyGenerator()
         self.sequence_widget = SequenceWidget(self)

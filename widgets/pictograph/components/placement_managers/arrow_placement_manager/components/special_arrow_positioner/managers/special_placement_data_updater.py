@@ -1,12 +1,19 @@
 import os
 import logging
 from typing import TYPE_CHECKING
-from constants import BLUE, CLOCK, COUNTER, IN, OUT, RED, special_placements_parent_directory
+from constants import (
+    BLUE,
+    CLOCK,
+    COUNTER,
+    IN,
+    OUT,
+    RED,
+    special_placements_parent_directory,
+)
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
 from utilities.TypeChecking.TypeChecking import Letters
 from .special_placement_entry_remover import SpecialPlacementEntryRemover
-from .special_placement_json_handler import SpecialPlacementJsonHandler
 from .mirrored_entry_manager.mirrored_entry_manager import (
     SpecialPlacementMirroredEntryManager,
 )
@@ -22,7 +29,9 @@ logging.basicConfig(
 class SpecialPlacementDataUpdater:
     def __init__(self, positioner: "SpecialArrowPositioner") -> None:
         self.positioner = positioner
-        self.json_handler = SpecialPlacementJsonHandler()
+        self.json_handler = (
+            positioner.pictograph.main_widget.json_manager.special_placement_handler
+        )
         self.entry_remover = SpecialPlacementEntryRemover(self)
         self.mirrored_entry_manager = SpecialPlacementMirroredEntryManager(self)
 
