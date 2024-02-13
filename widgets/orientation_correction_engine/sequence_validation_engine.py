@@ -8,36 +8,21 @@ if TYPE_CHECKING:
 
 from widgets.pictograph.pictograph import Pictograph
 from .motion_orientation_json_calculator import (
-    SequenceValidationOriCalculator,
+    CurrentSequenceJsonOriCalculator,
 )
 
 
 class SequenceValidationEngine:
     def __init__(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
-        self.sequence_file = "current_sequence.json"
+        self.current_sequence_json = "current_sequence.json"
         self.logger = logging.getLogger(__name__)
-        self.motion_ori_calculator = SequenceValidationOriCalculator(main_widget)
         self.empty_sequence()
 
     def empty_sequence(self):
         """Empties the sequence file."""
-        with open(self.sequence_file, "w") as file:
+        with open(self.current_sequence_json, "w") as file:
             file.write("[]")
-
-    def load_sequence(self) -> list[dict]:
-        """Loads the sequence from the JSON file with UTF-8 encoding."""
-        try:
-            with open(self.sequence_file, "r", encoding="utf-8") as file:
-                sequence = json.load(file)
-            return sequence
-        except FileNotFoundError:
-            return []
-
-    def save_sequence(self, sequence):
-        """Saves the corrected sequence back to the JSON file with UTF-8 encoding."""
-        with open(self.sequence_file, "w", encoding="utf-8") as file:
-            json.dump(sequence, file, indent=4, ensure_ascii=False)
 
     def correct_sequence_orientations(self, sequence):
         for i in range(1, len(sequence)):
@@ -77,20 +62,6 @@ class SequenceValidationEngine:
             corrected_sequence = self.correct_sequence_orientations(sequence)
             self.save_sequence(corrected_sequence)
 
-    def get_red_end_ori(self):
-        """Get the red end orientation from the last pictograph in the sequence."""
-        sequence = self.load_sequence()
-        if sequence:
-            return sequence[-1]["red_end_ori"]
-        return 0
-
-    def get_blue_end_ori(self):
-        """Get the blue end orientation from the last pictograph in the sequence."""
-        sequence = self.load_sequence()
-        if sequence:
-            return sequence[-1]["blue_end_ori"]
-        return 0
-
     def add_to_sequence(self, pictograph: Pictograph):
         """Adds the pictograph to the sequence."""
         sequence = self.load_sequence()
@@ -99,23 +70,3 @@ class SequenceValidationEngine:
         self.logger.info(
             f"Added pictograph to the sequence: {pictograph.get.pictograph_dict()}"
         )
-
-    def set_start_position(self, start_pos_graph: Pictograph):
-        red_start_ori = start_pos_graph.pictograph_dict["red_start_ori"]
-        blue_start_ori = start_pos_graph.pictograph_dict["blue_start_ori"]
-        sequence = self.load_sequence()
-        start_position_dict = {
-            "sequence_start_position": start_pos_graph.end_pos[
-                :-1
-            ],  # Cut off the final character
-            "red_end_ori": red_start_ori,
-            "blue_end_ori": blue_start_ori,
-            "end_pos": start_pos_graph.end_pos,
-        }
-        # Check if the sequence already has a start position dictionary and update it,
-        # otherwise, insert it at the beginning
-        if sequence and "sequence_start_position" in sequence[0]:
-            sequence[0] = start_position_dict
-        else:
-            sequence.insert(0, start_position_dict)
-        self.save_sequence(sequence)

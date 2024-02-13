@@ -35,10 +35,8 @@ class SequenceWidget(QWidget):
         )
         self.layout.addWidget(self.beat_frame)
         self.layout.addWidget(self.button_frame)
-        self.sequence_validation_engine = self.main_widget.sequence_validation_engine
 
-    def update_sequence_after_modification(self):
-        self.sequence_validation_engine.run_correction_engine()
+
 
     def save_sequence(sequence: list[Pictograph], filename: str) -> None:
         sequence_data = [pictograph.get.pictograph_dict() for pictograph in sequence]

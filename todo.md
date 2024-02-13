@@ -21,3 +21,6 @@
 - Introduce a tracking mechanism which checks if the end position of a sequence matches its start positions.
 
 - Add more VTG terminology. Add mode in bottom right corner - SO,SS,TO,TS,QTS,QTO. Allow the user to toggle both vtg and kinetic alphabet letters On or off. That's a really good idea.
+
+- Allow the user to delete a specific entry in the sequence If the user deletes a specific entry, then the program should give the user the choice to delete all of the following entries or not. If the user does not want to delete all of the following entries, then they must pick a pictograph which can be a valid interpolator between the pictographs. The program should generate and display to the user the valid options.
+

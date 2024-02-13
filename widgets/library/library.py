@@ -65,7 +65,6 @@ class Library(QWidget):
 
     def get_start_position_pictograph(self, sequence_data):
         start_pos_key: str = sequence_data[0]["end_pos"]
-        # Determine the letter for the start position based on start_pos_key prefix
         if start_pos_key.startswith("alpha"):
             start_pos_letter = "α"
         elif start_pos_key.startswith("beta"):
@@ -75,13 +74,9 @@ class Library(QWidget):
         else:
             return None  # or handle the unexpected case
 
-        # Retrieve all pictographs for the start position letter
         matching_letter_pictographs = self.main_widget.letters.get(start_pos_letter, [])
-
-        # Find the specific pictograph that matches the start_pos_key
         for pictograph_dict in matching_letter_pictographs:
             if pictograph_dict["start_pos"] == start_pos_key:
-                # Use the SequenceWidgetPictographFactory to get or create the pictograph
                 pictograph_factory = self.main_widget.sequence_widget.pictograph_factory
                 pictograph_key = pictograph_factory.generate_pictograph_key_from_dict(
                     pictograph_dict

@@ -21,10 +21,9 @@ class OptionManager(QObject):
 
     def get_next_options(self) -> list[dict]:
         sequence = (
-            self.sequence_builder.main_widget.sequence_widget.sequence_validation_engine.load_sequence()
+            self.main_widget.json_manager.current_sequence_json_handler.load_sequence()
         )
         next_options = []
-
 
         last_pictograph_dict = sequence[-1]
         start_pos = last_pictograph_dict[END_POS]

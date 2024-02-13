@@ -59,7 +59,6 @@ class SequenceBeatFrame(QFrame):
         if next_beat_index is not None:
             self.beats[next_beat_index].set_pictograph(new_beat)
         self.update_current_sequence_file()
-        self.sequence_widget.update_sequence_after_modification()
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):

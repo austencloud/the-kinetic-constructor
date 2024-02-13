@@ -1,3 +1,4 @@
+import json
 from PyQt6.QtCore import QObject, pyqtSignal
 from constants import END_POS, START_POS
 from ....pictograph.pictograph import Pictograph
@@ -11,7 +12,7 @@ class StartPosManager(QObject):
     start_position_selected = pyqtSignal(Pictograph)
 
     def __init__(self, start_pos_picker: "StartPosPicker"):
-        super().__init__() 
+        super().__init__()
         self.sequence_builder = start_pos_picker.sequence_builder
         self.scroll_area = start_pos_picker.scroll_area
         self.start_options: dict[str, Pictograph] = {}
@@ -60,7 +61,7 @@ class StartPosManager(QObject):
         self.start_position_selected.connect(
             self.sequence_builder.transition_to_sequence_building
         )
-        self.sequence_builder.main_widget.sequence_widget.sequence_validation_engine.set_start_position(
+        self.sequence_builder.main_widget.json_manager.current_sequence_json_handler.set_start_position(
             start_position_pictograph
         )
         self.start_position_selected.emit(start_position_pictograph)

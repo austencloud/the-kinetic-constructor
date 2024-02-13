@@ -58,6 +58,7 @@ class SequenceButtonFrame(QFrame):
             beat_view.clear()
         # empty the sequence json file too
         with open(
-            self.sequence_widget.sequence_validation_engine.sequence_file, "w"
+            self.main_widget.json_manager.current_sequence_json_handler.current_sequence_json,
+            "w",
         ) as file:
             file.write("[]")

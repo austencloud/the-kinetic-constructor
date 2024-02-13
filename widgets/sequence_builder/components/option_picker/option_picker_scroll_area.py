@@ -63,14 +63,13 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         last_pictograph = self.sequence_builder.get_last_added_pictograph()
         option_dict["red_start_ori"] = last_pictograph["red_end_ori"]
         option_dict["blue_start_ori"] = last_pictograph["blue_end_ori"]
-        # use the motion ori caldulator to determine the end ori
         option_dict["red_end_ori"] = (
-            self.sequence_builder.sequence_validation_engine.motion_ori_calculator.calculate_end_orientation(
+            self.main_widget.json_manager.current_sequence_json_handler.ori_calculator.calculate_end_orientation(
                 option_dict, "red"
             )
         )
         option_dict["blue_end_ori"] = (
-            self.sequence_builder.sequence_validation_engine.motion_ori_calculator.calculate_end_orientation(
+            self.main_widget.json_manager.current_sequence_json_handler.ori_calculator.calculate_end_orientation(
                 option_dict, "blue"
             )
         )
