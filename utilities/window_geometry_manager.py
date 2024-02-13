@@ -13,12 +13,13 @@ class WindowGeometryManager:
         screens = QGuiApplication.screens()
         screen = screens[1] if len(screens) > 1 else QGuiApplication.primaryScreen()
         available_geometry = screen.availableGeometry()
-        window_width = int(available_geometry.width() * 0.9)
-        window_height = int(available_geometry.height() * 0.9)
+        scale_factor = screen.devicePixelRatio()
+        window_width = int((available_geometry.width()) / scale_factor)
+        window_height = int((available_geometry.height()) / scale_factor)
         x = available_geometry.x() + int(
-            (available_geometry.width() - window_width) / 2
+            (available_geometry.width() - window_width * scale_factor) / 2
         )
         y = available_geometry.y() + int(
-            (available_geometry.height() - window_height) / 2
+            (available_geometry.height() - window_height * scale_factor) / 2
         )
         self.window.setGeometry(x, y, window_width, window_height)
