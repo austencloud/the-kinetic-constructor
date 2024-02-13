@@ -34,7 +34,7 @@ class VTG_Glyph(QGraphicsSvgItem):
             return
         letter_type = LetterType.get_letter_type(self.pictograph.letter)
         self.pictograph.letter_type = letter_type
-        svg_path: str = SVG_PATHS.get(letter_type, "")
+        # svg_path: str = SVG_PATHS.get(letter_type, "")
         svg_path = svg_path.format(letter=self.pictograph.letter)
         self.renderer = QSvgRenderer(svg_path)
         if self.renderer.isValid():
