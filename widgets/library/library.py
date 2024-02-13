@@ -64,11 +64,11 @@ class Library(QWidget):
         self.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
             start_position_pictograph
         )
-        for pictograph_dict in sequence_data:
+        for pictograph_dict in sequence_data[1:]:
             self.main_widget.sequence_widget.populate_sequence(pictograph_dict)
 
     def get_start_position_pictograph(self, sequence_data):
-        start_pos_key: str = sequence_data[0]["start_pos"]
+        start_pos_key: str = sequence_data[0]["end_pos"]
         # Determine the letter for the start position based on start_pos_key prefix
         if start_pos_key.startswith("alpha"):
             start_pos_letter = "α"

@@ -69,9 +69,10 @@ class SequenceBeatFrame(QFrame):
 
     def get_last_beat(self) -> BeatView:
         for beat in reversed(self.beats):
-            if beat.is_filled:
+            if beat.scene() is not None and beat.scene().items() != []:
                 return beat
         return self.beats[0]
+
 
     def load_sequence(self) -> list[dict]:
         with open("current_sequence.json", "r", encoding="utf-8") as file:
@@ -84,7 +85,7 @@ class SequenceBeatFrame(QFrame):
         last_beat_view = self.get_last_beat()
         if (
             hasattr(last_beat_view.beat.get, "pictograph_dict")
-            and last_beat_view.beat.get.pictograph_dict()
+            and last_beat_view.is_filled
         ):
             last_pictograph_dict = last_beat_view.beat.get.pictograph_dict()
             if all(last_pictograph_dict != pictograph for pictograph in sequence_data):

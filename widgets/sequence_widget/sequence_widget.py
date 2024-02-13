@@ -8,6 +8,7 @@ from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.components.sequence_widget_pictograph_factory import (
     SequenceWidgetPictographFactory,
 )
+from widgets.sequence_widget.beat_frame.beat import Beat
 from widgets.sequence_widget.beat_frame.beat_frame import SequenceBeatFrame
 from widgets.sequence_widget.button_frame import SequenceButtonFrame
 from PyQt6.QtCore import Qt
@@ -48,9 +49,9 @@ class SequenceWidget(QWidget):
             json.dump(sequence_data, file, indent=4)
 
     def populate_sequence(self, pictograph_dict: dict) -> None:
-        pictograph = Pictograph(self.main_widget)
-        self.beat_frame.add_scene_to_sequence(pictograph)
+        pictograph = Beat(self.main_widget)
         pictograph.updater.update_pictograph(pictograph_dict)
+        self.beat_frame.add_scene_to_sequence(pictograph)
         pictograph_key = (
             pictograph.main_widget.pictograph_key_generator.generate_pictograph_key(
                 pictograph_dict

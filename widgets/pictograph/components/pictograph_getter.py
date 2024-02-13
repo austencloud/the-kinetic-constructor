@@ -1,10 +1,11 @@
 from typing import TYPE_CHECKING, Optional
-from Enums import Letters, LetterType
+from Enums import LetterType
 
 from constants import *
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
 from utilities.TypeChecking.MotionAttributes import Locations, MotionTypes
+from utilities.TypeChecking.TypeChecking import Letters
 
 
 if TYPE_CHECKING:
@@ -23,7 +24,6 @@ class PictographGetter:
         self.blue_arrow = self.pictograph.blue_arrow
         self.red_arrow = self.pictograph.red_arrow
         self.turns_tuple_generator = self.pictograph.main_widget.turns_tuple_generator
-
 
     def letter_type(self, letter: Letters) -> Optional[str]:
         letter_type_map = {

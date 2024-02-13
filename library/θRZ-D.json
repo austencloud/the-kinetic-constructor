@@ -1,5 +1,11 @@
 [
     {
+        "sequence_start_position": "beta",
+        "red_end_ori": "in",
+        "blue_end_ori": "in",
+        "end_pos": "beta3"
+    },
+    {
         "letter": "θ",
         "start_pos": "beta3",
         "end_pos": "gamma7",

@@ -21,7 +21,7 @@ class SequenceValidationEngine:
         with open(self.sequence_file, "w") as file:
             file.write("[]")
 
-    def load_sequence(self):
+    def load_sequence(self) -> list[dict]:
         """Loads the sequence from the JSON file with UTF-8 encoding."""
         try:
             with open(self.sequence_file, "r", encoding="utf-8") as file:
@@ -101,7 +101,7 @@ class SequenceValidationEngine:
         blue_start_ori = start_pos_graph.pictograph_dict["blue_start_ori"]
         sequence = self.load_sequence()
         start_position_dict = {
-            "sequence_start_position": start_pos_graph.end_pos,
+            "sequence_start_position": start_pos_graph.end_pos[:-1],  # Cut off the final character
             "red_end_ori": red_start_ori,
             "blue_end_ori": blue_start_ori,
             "end_pos": start_pos_graph.end_pos,
