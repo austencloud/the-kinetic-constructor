@@ -19,9 +19,12 @@ from utilities.TypeChecking.TypeChecking import (
     VtgTimings,
 )
 from utilities.TypeChecking.MotionAttributes import Colors, Locations
+from widgets.pictograph.components.tka_glyph.tka_glyph import TKA_Glyph
+from widgets.pictograph.components.vtg_glyph.vtg_glyph import (
+    VTGGlyph,
+)
 from widgets.sequence_widget.beat_frame.pictograph_container import PictographContainer
 
-from .components.glyph.glyph import GlyphManager
 from .components.pictograph_attr_manager import PictographAttrManager
 from .components.pictograph_checker import PictographChecker
 from .components.pictograph_getter import PictographGetter
@@ -72,7 +75,8 @@ class Pictograph(QGraphicsScene):
     open_close_state: OpenCloseStates
     dragged_arrow: Arrow
     dragged_prop: Prop
-    glyph: GlyphManager
+    tka_glyph: TKA_Glyph
+    vtg_glyph: VTGGlyph
     grid: Grid
     locations: dict[Locations, tuple[int, int, int, int]]
     red_motion: Motion
@@ -108,7 +112,7 @@ class Pictograph(QGraphicsScene):
         self.prop_placement_manager = PropPlacementManager(self)
         self.wasd_manager = WASD_AdjustmentManager(self)
         self.attr_manager = PictographAttrManager(self)
-        
+
     ### EVENT HANDLERS ###
 
     def mousePressEvent(self, event: "QGraphicsSceneMouseEvent") -> None:

@@ -6,11 +6,11 @@ from .utils import load_svg_item
 from utilities.TypeChecking.TypeChecking import VtgDirections
 
 if TYPE_CHECKING:
-    from ..glyph import GlyphManager
+    from ..tka_glyph import TKA_Glyph
 
 
 class DotHandler:
-    def __init__(self, glyph: "GlyphManager") -> None:
+    def __init__(self, glyph: "TKA_Glyph") -> None:
         self.glyph = glyph
         self.same_dot_item = None
         self.opp_dot_item = None

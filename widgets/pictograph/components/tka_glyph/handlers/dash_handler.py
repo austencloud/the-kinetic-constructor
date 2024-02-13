@@ -1,13 +1,12 @@
-
 from .utils import load_svg_item
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..glyph import GlyphManager
+    from ..tka_glyph import TKA_Glyph
 
 
 class DashHandler:
-    def __init__(self, glyph: "GlyphManager") -> None:
+    def __init__(self, glyph: "TKA_Glyph") -> None:
         self.glyph = glyph
         self.dash_item = None
 

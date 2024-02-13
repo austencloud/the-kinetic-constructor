@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsItemGroup
 
-from .handlers.letter_handler import LetterHandler
+from .handlers.tka_letter_handler import TKALetterHandler
 from .handlers.dash_handler import DashHandler
 from .handlers.dot_handler import DotHandler
 from .handlers.turns_column_handler import TurnsColumnHandler
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 
 
-class GlyphManager(QGraphicsItemGroup):
+class TKA_Glyph(QGraphicsItemGroup):
     def __init__(self, pictograph: "Pictograph"):
         super().__init__()
         self.pictograph = pictograph
@@ -19,7 +19,7 @@ class GlyphManager(QGraphicsItemGroup):
         self.init_handlers()
 
     def init_handlers(self):
-        self.letter_handler = LetterHandler(self)
+        self.letter_handler = TKALetterHandler(self)
         self.dash_handler = DashHandler(self)
         self.dot_handler = DotHandler(self)
         self.turns_column_handler = TurnsColumnHandler(self)

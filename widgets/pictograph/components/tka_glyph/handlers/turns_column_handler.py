@@ -4,11 +4,11 @@ from PyQt6.QtSvg import QSvgRenderer
 from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from widgets.pictograph.components.glyph.glyph import GlyphManager
+    from widgets.pictograph.components.glyph.tka_glyph_manager import TKAGlyphManager
 
 
 class TurnsColumnHandler(QGraphicsItemGroup):
-    def __init__(self, glyph: "GlyphManager"):
+    def __init__(self, glyph: "TKAGlyphManager"):
         super().__init__()
         self.glyph = glyph
         self.top_number_item = None

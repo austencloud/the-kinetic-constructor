@@ -5,8 +5,10 @@ from Enums import LetterType
 from typing import TYPE_CHECKING
 
 
+
 if TYPE_CHECKING:
-    from ..glyph import GlyphManager
+    from widgets.pictograph.pictograph import Pictograph
+
 
 SVG_PATHS = {
     LetterType.Type1: "Type1/{letter}.svg",
@@ -23,17 +25,21 @@ SVG_PATHS = {
 }
 
 
-class LetterHandler:
-    def __init__(self, glyph: "GlyphManager") -> None:
-        self.glyph = glyph
+class VTG_Glyph:
+    def __init__(self, pictograph: "Pictograph") -> None:
+        self.pictograph = pictograph
         self.letter_item = QGraphicsSvgItem(self.glyph)
         self.renderer = None
 
+    def set_vtg_mode(self):
+        self.mode = self.pictograph.vtg_mode
+        self.set_letter()
+
     def set_letter(self) -> None:
-        if not self.glyph.pictograph.letter:
+        if not self.pictograph.vtg_mode:
             return
         letter_type = LetterType.get_letter_type(self.glyph.pictograph.letter)
-        self.glyph.pictograph.letter_type = letter_type
+        self.pictograph.letter_type = letter_type
         svg_path: str = SVG_PATHS.get(letter_type, "")
         svg_path = svg_path.format(letter=self.glyph.pictograph.letter)
         self.renderer = QSvgRenderer(svg_path)
@@ -44,7 +50,6 @@ class LetterHandler:
     def position_letter(self) -> None:
         x = int(self.letter_item.boundingRect().height() / 1.5)
         y = int(
-            self.glyph.pictograph.height()
-            - (self.letter_item.boundingRect().height() * 1.7)
+            self.pictograph.height() - (self.letter_item.boundingRect().height() * 1.7)
         )
         self.letter_item.setPos(x, y)

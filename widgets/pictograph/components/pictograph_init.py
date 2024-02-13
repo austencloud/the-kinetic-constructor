@@ -11,7 +11,11 @@ from utilities.TypeChecking.prop_types import PropTypes
 from utilities.TypeChecking.MotionAttributes import Colors, Locations
 from constants import *
 from widgets.factories.prop_factory import PropFactory
-from widgets.pictograph.components.glyph.glyph import GlyphManager
+from widgets.pictograph.components.tka_glyph.tka_glyph import TKA_Glyph
+
+from widgets.pictograph.components.vtg_glyph.vtg_glyph import (
+    VTG_Glyph,
+)
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -36,7 +40,8 @@ class PictographInit:
         self.pictograph.motions = self.init_motions()
         self.pictograph.arrows = self.init_arrows()
         self.pictograph.props = self.init_props()
-        self.pictograph.glyph = self.init_letter_item()
+        self.pictograph.tka_glyph = self.init_tka_glyph()
+        self.pictograph.vtg_glyph = self.init_vtg_glyph()
 
     def init_grid(self) -> Grid:
         grid = Grid(self.pictograph)
@@ -97,10 +102,15 @@ class PictographInit:
         self.pictograph.red_prop, self.pictograph.blue_prop = (props[RED], props[BLUE])
         return props
 
-    def init_letter_item(self) -> GlyphManager:
-        glyph = GlyphManager(self.pictograph)
-        self.pictograph.addItem(glyph)
-        return glyph
+    def init_tka_glyph(self) -> TKA_Glyph:
+        tka_glyph = TKA_Glyph(self.pictograph)
+        self.pictograph.addItem(tka_glyph)
+        return tka_glyph
+
+    def init_vtg_glyph(self) -> VTG_Glyph:
+        tka_glyph = VTG_Glyph(self.pictograph)
+        self.pictograph.addItem(tka_glyph)
+        return tka_glyph
 
     def init_quadrant_boundaries(
         self, grid: Grid
@@ -150,7 +160,6 @@ class PictographInit:
         self.pictograph.addItem(arrow)
         arrow.hide()
         return arrow
-
 
     def _create_motion(self, color: Colors) -> Motion:
         motion_dict = {

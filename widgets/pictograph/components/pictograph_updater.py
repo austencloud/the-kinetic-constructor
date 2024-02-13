@@ -22,7 +22,7 @@ class PictographUpdater:
             else:
                 self._update_from_pictograph_dict(pictograph_dict)
 
-        self.pictograph.glyph.update_glyph()
+        self.pictograph.tka_glyph.update_glyph()
         self._position_objects()
 
     def _update_from_pictograph_dict(self, pictograph_dict: dict) -> None:
