@@ -32,7 +32,7 @@ class OptionPickerDisplayManager:
 
     def order_and_display_pictographs(self):
         for letter_type in LetterType:
-            self.calculate_section_indices(letter_type)
+            # self.calculate_section_indices(letter_type)
             ordered_pictographs = self.get_ordered_pictographs_for_section(letter_type)
             for index, (key, pictograph) in enumerate(ordered_pictographs.items()):
                 self.add_pictograph_to_layout(pictograph, index)
@@ -51,7 +51,6 @@ class OptionPickerDisplayManager:
             pictograph.view.show()
 
     def calculate_section_indices(self, letter_type: str) -> None:
-
         total_variations = sum(
             (
                 8
