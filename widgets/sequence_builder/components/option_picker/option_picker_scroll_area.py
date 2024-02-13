@@ -59,7 +59,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         QApplication.restoreOverrideCursor()
 
     def _get_or_create_pictograph(self, option_dict: dict) -> Pictograph:
-
         last_pictograph = self.sequence_builder.get_last_added_pictograph()
         option_dict["red_start_ori"] = last_pictograph["red_end_ori"]
         option_dict["blue_start_ori"] = last_pictograph["blue_end_ori"]

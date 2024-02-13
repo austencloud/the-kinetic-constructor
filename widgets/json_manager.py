@@ -1,7 +1,7 @@
 import logging
 from typing import TYPE_CHECKING
+from widgets.current_sequence_json_handler.current_sequence_json_handler import CurrentSequenceJsonHandler
 
-from widgets.sequence_builder.components.start_position_picker.current_sequence_json_handler import CurrentSequenceJsonHandler
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget

@@ -1,7 +1,5 @@
 import json
-from widgets.orientation_correction_engine.motion_orientation_json_calculator import (
-    CurrentSequenceJsonOriCalculator,
-)
+from .motion_orientation_json_calculator import CurrentSequenceJsonOriCalculator
 from widgets.pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING
 
@@ -14,6 +12,12 @@ class CurrentSequenceJsonHandler:
         self.current_sequence_json = "current_sequence.json"
         self.main_widget = main_widget
         self.ori_calculator = CurrentSequenceJsonOriCalculator(main_widget)
+        self.empty_sequence()
+
+    def empty_sequence(self):
+        """Empties the sequence file."""
+        with open(self.current_sequence_json, "w") as file:
+            file.write("[]")
 
     def set_start_position(self, start_pos_graph: Pictograph):
         red_start_ori = start_pos_graph.pictograph_dict["red_start_ori"]
