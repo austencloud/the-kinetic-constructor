@@ -45,26 +45,31 @@ class Library(QWidget):
                 sequence_data = json.load(file)
                 self.populate_sequence(sequence_data)
         except Exception as e:
-            QMessageBox.critical(self, "Error", f"Failed to load sequeOh my god.nce: {str(e)}")
+            QMessageBox.critical(
+                self, "Error", f"Failed to load sequeOh my god.nce: {str(e)}"
+            )
 
     def populate_sequence(self, sequence_data):
         if not sequence_data:
             return
         self.main_widget.sequence_widget.button_frame.clear_sequence()
 
-        start_position_pictograph = self.get_start_position_pictograph(sequence_data)
-        self.main_widget.main_tab_widget.sequence_builder.current_pictograph = (
-            start_position_pictograph
-        )
+        start_position_pictograph = self.get_start_position_pictograph(sequence_data[0])
+        if start_position_pictograph:
+            self.main_widget.json_manager.current_sequence_json_handler.set_start_position(
+                start_position_pictograph
+            )
+            self.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
+                start_position_pictograph
+            )
 
-        self.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
-            start_position_pictograph
-        )
-        for pictograph_dict in sequence_data[1:]:
+        for pictograph_dict in sequence_data:
+            if pictograph_dict.get("sequence_start_position"):
+                continue
             self.main_widget.sequence_widget.populate_sequence(pictograph_dict)
 
-    def get_start_position_pictograph(self, sequence_data):
-        start_pos_key: str = sequence_data[0]["end_pos"]
+    def get_start_position_pictograph(self, start_pos_data):
+        start_pos_key: str = start_pos_data["end_pos"]
         if start_pos_key.startswith("alpha"):
             start_pos_letter = "α"
         elif start_pos_key.startswith("beta"):
@@ -85,6 +90,5 @@ class Library(QWidget):
                     pictograph_key, pictograph_dict
                 )
 
-        # If we reach here, no matching start position was found
         print(f"No matching start position found for key: {start_pos_key}")
         return None

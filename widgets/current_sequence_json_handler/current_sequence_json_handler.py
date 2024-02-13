@@ -24,15 +24,12 @@ class CurrentSequenceJsonHandler:
         blue_start_ori = start_pos_graph.pictograph_dict["blue_start_ori"]
         sequence = self.load_sequence()
         start_position_dict = {
-            "sequence_start_position": start_pos_graph.end_pos[
-                :-1
-            ],  # Cut off the final character
+            "sequence_start_position": start_pos_graph.end_pos[:-1],
             "red_end_ori": red_start_ori,
             "blue_end_ori": blue_start_ori,
             "end_pos": start_pos_graph.end_pos,
         }
-        # Check if the sequence already has a start position dictionary and update it,
-        # otherwise, insert it at the beginning
+
         if sequence and "sequence_start_position" in sequence[0]:
             sequence[0] = start_position_dict
         else:
