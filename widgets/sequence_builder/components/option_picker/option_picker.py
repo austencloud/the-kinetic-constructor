@@ -36,7 +36,7 @@ class OptionPicker(QWidget):
     def update_pictographs(self):
         try:
             with open(
-                self.sequence_builder.orientation_correction_engine.sequence_file,
+                self.sequence_builder.sequence_validation_engine.sequence_file,
                 "r",
                 encoding="utf-8",
             ) as file:

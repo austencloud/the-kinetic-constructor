@@ -26,7 +26,7 @@ class SequenceBuilder(QFrame):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
-        self.orientation_correction_engine = (
+        self.sequence_validation_engine = (
             self.main_widget.sequence_widget.sequence_validation_engine
         )
         self.current_pictograph: Pictograph = None
@@ -61,7 +61,7 @@ class SequenceBuilder(QFrame):
 
     def clear_current_sequence_json(self):
         with open(
-            self.orientation_correction_engine.sequence_file, "w", encoding="utf-8"
+            self.sequence_validation_engine.sequence_file, "w", encoding="utf-8"
         ) as file:
             json.dump([], file, indent=4)
 
@@ -102,10 +102,8 @@ class SequenceBuilder(QFrame):
 
     def _add_turns_and_start_ori(self, pictograph_dict):
         # get the red and blue end oris from the last entry in the sequence
-        self.current_end_red_ori = self.orientation_correction_engine.get_red_end_ori()
-        self.current_end_blue_ori = (
-            self.orientation_correction_engine.get_blue_end_ori()
-        )
+        self.current_end_red_ori = self.sequence_validation_engine.get_red_end_ori()
+        self.current_end_blue_ori = self.sequence_validation_engine.get_blue_end_ori()
 
         pictograph_dict[RED_START_ORI] = self.current_end_red_ori
         pictograph_dict[BLUE_START_ORI] = self.current_end_blue_ori
@@ -125,3 +123,6 @@ class SequenceBuilder(QFrame):
         self.setMinimumWidth(int(self.main_widget.width() * 3 / 5))
         self.start_position_picker.resize_start_position_picker()
         self.option_picker.scroll_area.resize_option_picker_scroll_area()
+
+    def get_last_added_pictograph(self):
+        return self.sequence_validation_engine.load_sequence()[-1]

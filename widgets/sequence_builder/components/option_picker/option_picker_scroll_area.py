@@ -48,24 +48,45 @@ class OptionPickerScrollArea(BasePictographScrollArea):
 
     def _add_and_display_relevant_pictographs(self, next_options: list[dict]) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        valid_next_options = []
+
         for option_dict in next_options:
-            pictograph_key = self.sequence_builder.main_widget.pictograph_key_generator.generate_pictograph_key(
-                option_dict
-            )
-            pictograph = self._get_or_create_pictograph(pictograph_key, option_dict)
+            valid_next_options.append(option_dict)
+
+        for option_dict in valid_next_options:
+            pictograph = self._get_or_create_pictograph(option_dict)
             self.display_manager.add_pictograph_to_section_layout(pictograph)
+
         self.display_manager.order_and_display_pictographs()
         QApplication.restoreOverrideCursor()
 
-    def _get_or_create_pictograph(
-        self, pictograph_key: str, option_dict: pd.Series
-    ) -> Pictograph:
-        pictograph = self.pictograph_cache.get(pictograph_key)
-        if not pictograph:
+    def _get_or_create_pictograph(self, option_dict: dict) -> Pictograph:
+
+        last_pictograph = self.sequence_builder.get_last_added_pictograph()
+        option_dict["red_start_ori"] = last_pictograph["red_end_ori"]
+        option_dict["blue_start_ori"] = last_pictograph["blue_end_ori"]
+        # use the motion ori caldulator to determine the end ori
+        option_dict["red_end_ori"] = (
+            self.sequence_builder.sequence_validation_engine.motion_ori_calculator.calculate_end_orientation(
+                option_dict, "red"
+            )
+        )
+        option_dict["blue_end_ori"] = (
+            self.sequence_builder.sequence_validation_engine.motion_ori_calculator.calculate_end_orientation(
+                option_dict, "blue"
+            )
+        )
+
+        modified_key = self.sequence_builder.main_widget.pictograph_key_generator.generate_pictograph_key(
+            option_dict
+        )
+        if modified_key in self.pictograph_cache:
+            return self.pictograph_cache[modified_key]
+        else:
             pictograph = self.sequence_builder.render_and_store_pictograph(option_dict)
-            self.pictograph_cache[pictograph_key] = pictograph
+            self.pictograph_cache[modified_key] = pictograph
             self.main_widget.all_pictographs[pictograph.letter][
-                pictograph_key
+                modified_key
             ] = pictograph
         return pictograph
 

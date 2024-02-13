@@ -55,7 +55,7 @@ BLUE_PROP_ROT_DIR = "blue_prop_rot_dir"
 BLUE_START_LOC = "blue_start_loc"
 BLUE_END_LOC = "blue_end_loc"
 BLUE_START_ORI = "blue_start_ori"
-BLUE_END_ORI = "blue_end_or"
+BLUE_END_ORI = "blue_end_ori"
 BLUE_TURNS = "blue_turns"
 
 RED_MOTION_TYPE = "red_motion_type"
@@ -63,7 +63,7 @@ RED_PROP_ROT_DIR = "red_prop_rot_dir"
 RED_START_LOC = "red_start_loc"
 RED_END_LOC = "red_end_loc"
 RED_START_ORI = "red_start_ori"
-RED_END_ORI = "red_end_or"
+RED_END_ORI = "red_end_ori"
 RED_TURNS = "red_turns"
 
 
@@ -130,7 +130,6 @@ LETTER_BTN_ICON_DIR = "images/letter_button_icons"
 LETTERS_TRIMMED_SVG_DIR = "images/letters_trimmed/"
 ICON_DIR = "images/icons/"
 GRID_DIR = "images/grid/"
-
 
 
 STAFF = "staff"

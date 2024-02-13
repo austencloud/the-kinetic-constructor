@@ -8,12 +8,12 @@ class SequenceValidationOriCalculator:
     def __init__(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
 
-    def calculate_end_orientation(self, entry, color):
+    def calculate_end_orientation(self, pictograph_dict, color):
         """Calculate the end orientation based on the JSON entry data."""
-        motion_type = entry[f"{color}_motion_type"]
-        turns = float(entry[f"{color}_turns"])
-        start_ori = entry[f"{color}_start_ori"]
-        prop_rot_dir = entry.get(
+        motion_type = pictograph_dict[f"{color}_motion_type"]
+        turns = float(pictograph_dict[f"{color}_turns"])
+        start_ori = pictograph_dict[f"{color}_start_ori"]
+        prop_rot_dir = pictograph_dict.get(
             f"{color}_prop_rot_dir", "cw"
         )  # Assuming 'cw' as default
 
