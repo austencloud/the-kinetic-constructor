@@ -99,4 +99,7 @@ class Library(QWidget):
             "beta": "β",
             "gamma": "Γ"
         }
-        return mapping.get(start_pos_key, None)
+        for key in mapping:
+            if start_pos_key.startswith(key):
+                return mapping[key]
+        return None
