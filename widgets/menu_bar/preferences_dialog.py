@@ -6,7 +6,7 @@ from .pictograph_size_adjuster import PictographSizeAdjuster
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
-    from main_window import MainWindow
+    from main import MainWindow
 
 
 class PreferencesDialog(QDialog):
