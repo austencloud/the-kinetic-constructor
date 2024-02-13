@@ -60,7 +60,7 @@ class StartPosManager(QObject):
         self.start_position_selected.connect(
             self.sequence_builder.transition_to_sequence_building
         )
-        self.sequence_builder.main_widget.sequence_widget.sequence_validation_engine.add_to_sequence(
+        self.sequence_builder.main_widget.sequence_widget.sequence_validation_engine.set_start_position(
             start_position_pictograph
         )
         self.start_position_selected.emit(start_position_pictograph)

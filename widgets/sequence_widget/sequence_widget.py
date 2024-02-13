@@ -40,7 +40,6 @@ class SequenceWidget(QWidget):
         self.sequence_validation_engine = SequenceValidationEngine()
 
     def update_sequence_after_modification(self):
-        """Call this method after any modification to the sequence."""
         self.sequence_validation_engine.run_correction_engine()
 
     def save_sequence(sequence: list[Pictograph], filename: str) -> None:

@@ -19,12 +19,22 @@ class OptionManager(QObject):
         self.main_widget = option_picker.main_widget
         self.start_options: dict[str, Pictograph] = {}
 
-    def get_next_options(self, pictograph_dict: dict) -> list[dict]:
+    def get_next_options(self) -> list[dict]:
+        sequence = (
+            self.sequence_builder.main_widget.sequence_widget.sequence_validation_engine.load_sequence()
+        )
         next_options = []
-        for _, dict_list in self.main_widget.letters.items():
-            for dict in dict_list:
-                if dict[START_POS] == pictograph_dict[END_POS]:
-                    next_options.append(dict)
+
+
+        last_pictograph_dict = sequence[-1]
+        start_pos = last_pictograph_dict[END_POS]
+
+        if start_pos:
+            for dict_list in self.main_widget.letters.values():
+                for dict in dict_list:
+                    if dict[START_POS] == start_pos:
+                        next_options.append(dict)
+
         return next_options
 
     def on_option_clicked(self, clicked_option: "Pictograph") -> None:

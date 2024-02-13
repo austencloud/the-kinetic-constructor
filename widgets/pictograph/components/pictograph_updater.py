@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums import LetterType
-from constants import *
+from constants import LEADING, TRAILING, RED, BLUE
 from objects.motion.motion import Motion
 from utilities.TypeChecking.MotionAttributes import Colors
 

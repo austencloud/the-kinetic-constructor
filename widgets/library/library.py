@@ -49,7 +49,7 @@ class Library(QWidget):
                 sequence_data = json.load(file)
                 self.populate_sequence(sequence_data)
         except Exception as e:
-            QMessageBox.critical(self, "Error", f"Failed to load sequence: {str(e)}")
+            QMessageBox.critical(self, "Error", f"Failed to load sequeOh my god.nce: {str(e)}")
 
     def populate_sequence(self, sequence_data):
         if not sequence_data:

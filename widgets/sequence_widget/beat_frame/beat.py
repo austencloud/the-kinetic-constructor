@@ -32,6 +32,7 @@ class BeatView(QGraphicsView):
     def set_pictograph(self, new_beat: "Beat") -> None:
         self.beat = new_beat
         new_beat.view = self
+        new_beat.view.is_filled = True
         self.setScene(self.beat)
         view_width = self.height()
         self.view_scale = view_width / self.beat.width()

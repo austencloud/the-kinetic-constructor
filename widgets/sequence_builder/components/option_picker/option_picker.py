@@ -46,7 +46,6 @@ class OptionPicker(QWidget):
             return
 
         if sequence:
-            last_pictograph = sequence[-1]
-            next_options: dict = self.option_manager.get_next_options(last_pictograph)
+            next_options: dict = self.option_manager.get_next_options()
             self.scroll_area._hide_all_pictographs()
             self.scroll_area._add_and_display_relevant_pictographs(next_options)

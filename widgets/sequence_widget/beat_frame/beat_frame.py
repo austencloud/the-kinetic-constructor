@@ -69,17 +69,25 @@ class SequenceBeatFrame(QFrame):
 
     def get_last_beat(self) -> BeatView:
         for beat in reversed(self.beats):
-            if beat.scene() is not None and beat.scene().items() != []:
+            if beat.is_filled:
                 return beat
         return self.beats[0]
 
+    def load_sequence(self) -> list[dict]:
+        with open("current_sequence.json", "r", encoding="utf-8") as file:
+            sequence_data = json.load(file)
+        return sequence_data
+
     def update_current_sequence_file(self):
         temp_filename = "current_sequence.json"
-        sequence_data = [
-            beat_view.beat.get.pictograph_dict()
-            for beat_view in self.beats
-            if hasattr(beat_view.beat, "pictograph_dict")
-        ]
-
+        sequence_data = self.load_sequence()
+        last_beat_view = self.get_last_beat()
+        if (
+            hasattr(last_beat_view.beat.get, "pictograph_dict")
+            and last_beat_view.beat.get.pictograph_dict()
+        ):
+            last_pictograph_dict = last_beat_view.beat.get.pictograph_dict()
+            if all(last_pictograph_dict != pictograph for pictograph in sequence_data):
+                sequence_data.append(last_pictograph_dict)
         with open(temp_filename, "w", encoding="utf-8") as file:
             json.dump(sequence_data, file, indent=4, ensure_ascii=False)

@@ -46,9 +46,9 @@ class MotionOrientationJsonCalculator:
     @staticmethod
     def calculate_anti_dash_orientation(start_ori, turns, prop_rot_dir):
         """Calculates the end orientation for 'anti' and 'dash' motions."""
-        # Similar to 'pro/static', but potentially different rules for 'anti' and 'dash'
-        # Assuming 'anti' and 'dash' might invert orientation more directly than 'pro'/'static'
-        if turns % 2 == 0:
+        if turns == 0:
+            return MotionOrientationJsonCalculator.switch_orientation(start_ori)
+        elif turns % 2 == 0:
             return MotionOrientationJsonCalculator.switch_orientation(start_ori)
         else:
             # For half turns, adjust based on rotation direction, this is a placeholder

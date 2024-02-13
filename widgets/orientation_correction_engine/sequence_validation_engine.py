@@ -20,7 +20,7 @@ class SequenceValidationEngine:
         """Empties the sequence file."""
         with open(self.sequence_file, "w") as file:
             file.write("[]")
-    
+
     def load_sequence(self):
         """Loads the sequence from the JSON file with UTF-8 encoding."""
         try:
@@ -95,3 +95,21 @@ class SequenceValidationEngine:
         self.logger.info(
             f"Added pictograph to the sequence: {pictograph.get.pictograph_dict()}"
         )
+
+    def set_start_position(self, start_pos_graph: Pictograph):
+        red_start_ori = start_pos_graph.pictograph_dict["red_start_ori"]
+        blue_start_ori = start_pos_graph.pictograph_dict["blue_start_ori"]
+        sequence = self.load_sequence()
+        start_position_dict = {
+            "sequence_start_position": start_pos_graph.end_pos,
+            "red_end_ori": red_start_ori,
+            "blue_end_ori": blue_start_ori,
+            "end_pos": start_pos_graph.end_pos,
+        }
+        # Check if the sequence already has a start position dictionary and update it,
+        # otherwise, insert it at the beginning
+        if sequence and "sequence_start_position" in sequence[0]:
+            sequence[0] = start_position_dict
+        else:
+            sequence.insert(0, start_position_dict)
+        self.save_sequence(sequence)
