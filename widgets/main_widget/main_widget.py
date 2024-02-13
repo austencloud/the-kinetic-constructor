@@ -27,7 +27,7 @@ from .letter_loader import LetterLoader
 from ..sequence_widget.sequence_widget import SequenceWidget
 
 if TYPE_CHECKING:
-    from main import MainWindow
+    from main_window import MainWindow
 
 
 class MainWidget(QWidget):

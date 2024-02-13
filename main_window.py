@@ -3,7 +3,7 @@ import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow
 from profiler import Profiler
 from settings_manager import SettingsManager
-from utilities.window_manager import WindowGeometryManager
+from utilities.window_geometry_manager import WindowGeometryManager
 from widgets.main_widget.main_widget import MainWidget
 from widgets.menu_bar.menu_bar import MainWindowMenuBar
 

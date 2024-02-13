@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QGuiApplication
 
 if TYPE_CHECKING:
-    from main import MainWindow
+    from main_window import MainWindow
 
 
 class WindowGeometryManager:

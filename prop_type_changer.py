@@ -14,7 +14,7 @@ from widgets.sequence_builder.components.start_position_picker.start_pos_picker_
 )
 
 if TYPE_CHECKING:
-    from main import MainWindow
+    from main_window import MainWindow
 
 
 
