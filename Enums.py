@@ -200,7 +200,7 @@ class MotionTypeLetterGroups(Enum):
     DASH_VS_DASH = "Φ-Ψ-Λ-"
 
 
-class VTGHandpathMode(Enum):
+class VTG_Mode(Enum):
     TOG_SAME = "TS"
     TOG_OPPOSITE = "TO"
     SPLIT_SAME = "SS"
