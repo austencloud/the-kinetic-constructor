@@ -202,11 +202,11 @@ class MotionTypeLetterGroups(Enum):
 
 class VTG_Mode(Enum):
     TOG_SAME = "TS"
-    TOG_OPPOSITE = "TO"
+    TOG_OPP = "TO"
     SPLIT_SAME = "SS"
-    SPLIT_OPPOSITE = "SO"
+    SPLIT_OPP = "SO"
     QUARTER_TIME_SAME = "QTS"
-    QUARTER_TIME_OPPOSITE = "QTO"
+    QUARTER_TIME_OPP = "QTO"
 
 
 class TKAHandpathMode(Enum):
@@ -252,13 +252,6 @@ class PictographType(Enum):
     CODEX_PICTOGRAPH = "codex_pictograph"
 
 
-class Mode(Enum):
-    TOG_SAME = "TS"
-    TOG_OPPOSITE = "TO"
-    SPLIT_SAME = "SS"
-    SPLIT_OPPOSITE = "SO"
-    QUARTER_TIME_SAME = "QTS"
-    QUARTER_TIME_OPPOSITE = "QTO"
 
 
 class MotionTypeCombination(Enum):
