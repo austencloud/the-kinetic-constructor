@@ -48,7 +48,7 @@ class MainWindowMenuBar(QMenuBar):
 
     def set_prop_type(self, prop_type: PropTypes):
         # Set the prop type in main_widget or settings_manager
-        self.main_widget.prop_type_selector.prop_type_changed(prop_type)
+        self.main_widget.prop_type_selector.prop_type_changed(prop_type.name)
         # Refresh the UI or specific components as needed
         # For example, re-rendering pictographs, updating settings, etc.
         print(f"Prop type set to: {prop_type.name}")
