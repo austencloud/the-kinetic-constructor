@@ -26,9 +26,7 @@ class PictographKeyGenerator:
             f"{pictograph_dict[BLUE_MOTION_TYPE]}_"
             f"{pictograph_dict[BLUE_PROP_ROT_DIR]}_"
             f"{pictograph_dict[BLUE_START_LOC]}→{pictograph_dict[BLUE_END_LOC]}_"
-            f"{pictograph_dict[BLUE_START_ORI]}→{pictograph_dict[BLUE_END_ORI]}_"
             f"{pictograph_dict[RED_MOTION_TYPE]}_"
             f"{pictograph_dict[RED_PROP_ROT_DIR]}_"
             f"{pictograph_dict[RED_START_LOC]}→{pictograph_dict[RED_END_LOC]}"
-            f"_{pictograph_dict[RED_START_ORI]}→{pictograph_dict[RED_END_ORI]}"
         )

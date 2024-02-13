@@ -2,6 +2,7 @@ import json
 import os
 from typing import TYPE_CHECKING, Union
 from constants import BLUE, RED
+from prop_type_changer import PropTypeChanger
 
 from utilities.TypeChecking.prop_types import PropTypes
 from widgets.pictograph.pictograph import Pictograph
@@ -17,27 +18,6 @@ if TYPE_CHECKING:
     from main import MainWindow
 
 
-class PropTypeChanger:
-    def __init__(self, main_window: "MainWindow"):
-        self.main_window = main_window
-
-    def replace_props(self, new_prop_type, pictograph: Pictograph):
-        for color, prop in pictograph.props.items():
-            new_prop = pictograph.initializer.prop_factory.create_prop_of_type(
-                prop, new_prop_type
-            )
-            pictograph.props[color].deleteLater()
-            pictograph.props[color].hide()
-            pictograph.props[color] = new_prop
-            pictograph.addItem(new_prop)
-            pictograph.motions[color].prop = pictograph.props[color]
-            pictograph.props[color].motion.attr_manager.update_prop_ori()
-            pictograph.props[color].updater.update_prop()
-        pictograph.red_prop = pictograph.props[RED]
-        pictograph.blue_prop = pictograph.props[BLUE]
-        pictograph.updater.update_pictograph()
-
-
 class SettingsManager:
     MAX_COLUMN_COUNT = 8
     MIN_COLUMN_COUNT = 3
@@ -47,7 +27,6 @@ class SettingsManager:
         self.main_window = main_window
         self.settings = self.load_settings()
         self.prop_type_changer = PropTypeChanger(main_window)
-        # self.apply_settings()
 
     def load_settings(self) -> dict:
         if os.path.exists(self.settings_file):
@@ -88,17 +67,9 @@ class SettingsManager:
         self.update_props_to_type(prop_type)
 
     def update_props_to_type(self, new_prop_type) -> None:
-        scroll_areas: list[
-            Union[CodexScrollArea, OptionPickerScrollArea, StartPosPickerScrollArea]
-        ] = [
-            self.main_window.main_widget.main_tab_widget.codex.scroll_area,
-            self.main_window.main_widget.main_tab_widget.sequence_builder.option_picker.scroll_area,
-            self.main_window.main_widget.main_tab_widget.sequence_builder.start_position_picker.scroll_area,
-        ]
-        for scroll_area in scroll_areas:
-            for pictograph in scroll_area.pictograph_cache.values():
+        for pictograph_list in self.main_window.main_widget.all_pictographs.values():
+            for pictograph in pictograph_list.values():
                 self.prop_type_changer.replace_props(new_prop_type, pictograph)
-                pictograph.updater.update_pictograph()
         for beat_view in self.main_window.main_widget.sequence_widget.beats:
             if beat_view.is_filled:
                 self.prop_type_changer.replace_props(new_prop_type, beat_view.beat)
