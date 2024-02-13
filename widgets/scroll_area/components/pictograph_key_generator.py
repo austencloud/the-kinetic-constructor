@@ -1,18 +1,14 @@
 from constants import (
     BLUE_END_LOC,
-    BLUE_END_ORI,
     BLUE_MOTION_TYPE,
     BLUE_PROP_ROT_DIR,
     BLUE_START_LOC,
-    BLUE_START_ORI,
     END_POS,
     LETTER,
     RED_END_LOC,
-    RED_END_ORI,
     RED_MOTION_TYPE,
     RED_PROP_ROT_DIR,
     RED_START_LOC,
-    RED_START_ORI,
     START_POS,
 )
 

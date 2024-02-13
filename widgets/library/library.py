@@ -1,16 +1,12 @@
 import json
-import os
 from PyQt6.QtWidgets import QTreeView, QVBoxLayout, QWidget, QMessageBox
 from PyQt6.QtGui import QFileSystemModel
 from PyQt6.QtCore import QDir, QModelIndex
 from typing import TYPE_CHECKING
 
-from widgets.pictograph.pictograph import Pictograph
-from widgets.sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
-from widgets.sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 
 
 class Library(QWidget):

@@ -1,9 +1,6 @@
 import json
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
-from widgets.orientation_correction_engine.sequence_validation_engine import (
-    SequenceValidationEngine,
-)
 from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.components.sequence_widget_pictograph_factory import (
     SequenceWidgetPictographFactory,

@@ -1,9 +1,7 @@
 import json
-import codecs
 import os
 from PyQt6.QtWidgets import QPushButton, QHBoxLayout, QFrame
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFileDialog
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget

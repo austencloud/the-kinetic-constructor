@@ -4,9 +4,6 @@ from utilities.TypeChecking.TypeChecking import Letters
 
 
 from widgets.pictograph.pictograph import Pictograph
-from widgets.scroll_area.components.pictograph_key_generator import (
-    PictographKeyGenerator,
-)
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (

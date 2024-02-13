@@ -1,9 +1,7 @@
-import json
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QWheelEvent
-import pandas as pd
 from widgets.scroll_area.components.scroll_area_pictograph_factory import (
     ScrollAreaPictographFactory,
 )
