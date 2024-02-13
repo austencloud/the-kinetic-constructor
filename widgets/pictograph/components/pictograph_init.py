@@ -41,7 +41,7 @@ class PictographInit:
         self.pictograph.arrows = self.init_arrows()
         self.pictograph.props = self.init_props()
         self.pictograph.tka_glyph = self.init_tka_glyph()
-        self.pictograph.vtg_glyph = self.init_vtg_glyph()
+        # self.pictograph.vtg_glyph = self.init_vtg_glyph()
 
     def init_grid(self) -> Grid:
         grid = Grid(self.pictograph)
@@ -108,9 +108,9 @@ class PictographInit:
         return tka_glyph
 
     def init_vtg_glyph(self) -> VTG_Glyph:
-        tka_glyph = VTG_Glyph(self.pictograph)
-        self.pictograph.addItem(tka_glyph)
-        return tka_glyph
+        vtg_glyph = VTG_Glyph(self.pictograph)
+        self.pictograph.addItem(vtg_glyph)
+        return vtg_glyph
 
     def init_quadrant_boundaries(
         self, grid: Grid
