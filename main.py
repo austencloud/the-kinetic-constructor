@@ -12,8 +12,10 @@ class MainWindow(QMainWindow):
     def __init__(self, profiler: Profiler) -> None:
         super().__init__()
         self.profiler = profiler
-        self.main_widget = MainWidget(self)
         self.settings_manager = SettingsManager(self)
+        self.main_widget = MainWidget(self)
+        self.main_widget.preferences_dialog.load_initial_settings()
+
         self.window_manager = WindowGeometryManager(self)
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Sequence Constructor")

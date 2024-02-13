@@ -7,6 +7,7 @@ from objects.motion.motion import Motion
 from objects.prop.prop import Prop
 from objects.prop.prop_classes import *
 
+from utilities.TypeChecking.prop_types import PropTypes
 from utilities.TypeChecking.MotionAttributes import Colors, Locations
 from constants import *
 from widgets.factories.prop_factory import PropFactory

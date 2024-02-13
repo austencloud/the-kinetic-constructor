@@ -1,7 +1,8 @@
 # MenuBar.py
-from PyQt6.QtWidgets import QMenuBar
+from PyQt6.QtWidgets import QMenuBar, QMenu
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QAction
+from PyQt6.QtGui import QAction, QActionGroup
+from utilities.TypeChecking.prop_types import PropTypes
 from widgets.menu_bar.preferences_dialog import PreferencesDialog
 
 if TYPE_CHECKING:
@@ -16,12 +17,46 @@ class MainWindowMenuBar(QMenuBar):
         self._setup_settings_menu()
 
     def _setup_settings_menu(self) -> None:
-        settings_action = QAction("Settings", self)
-        settings_action.triggered.connect(self.open_preferences_dialog)
-        self.addAction(settings_action)
+        # Create the settings menu
+        settings_menu = self.addMenu("Settings")
+
+        # Create the action for opening the preferences dialog
+        preferences_action = QAction("Preferences", self)
+        preferences_action.triggered.connect(self.open_preferences_dialog)
+        settings_menu.addAction(preferences_action)
+
+        # Create a submenu for prop types
+        prop_type_menu = QMenu("Set Prop Type", self)
+        settings_menu.addMenu(prop_type_menu)
+
+        # Create action group for prop types to ensure exclusivity
+        prop_type_action_group = QActionGroup(self)
+        prop_type_action_group.setExclusive(True)
+
+        # Populate the prop type submenu
+        for prop_type in PropTypes:
+            action = QAction(prop_type.name, self, checkable=True)
+            action.triggered.connect(
+                lambda checked, pt=prop_type: self.set_prop_type(pt)
+            )
+            prop_type_menu.addAction(action)
+            prop_type_action_group.addAction(action)
+
+            # Check the action if it matches current settings
+            if self.main_widget.prop_type == prop_type:
+                action.setChecked(True)
+
+    def set_prop_type(self, prop_type: PropTypes):
+        # Set the prop type in main_widget or settings_manager
+        self.main_widget.prop_type_selector.prop_type_changed(prop_type)
+        # Refresh the UI or specific components as needed
+        # For example, re-rendering pictographs, updating settings, etc.
+        print(f"Prop type set to: {prop_type.name}")
 
     def open_preferences_dialog(self) -> None:
-        self.preferences_dialog = PreferencesDialog(self.main_widget.main_window)
+        self.preferences_dialog = self.main_widget.preferences_dialog
+        self.preferences_dialog.setup_layout()
+        self.preferences_dialog.load_initial_settings()
         self.preferences_dialog.exec()
 
     def _setup_menu(self) -> None:

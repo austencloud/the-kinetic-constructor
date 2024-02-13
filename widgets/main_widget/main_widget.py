@@ -4,7 +4,11 @@ from PyQt6.QtGui import QResizeEvent, QKeyEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from widgets.json_manager import JSON_Manager
-from widgets.orientation_correction_engine.sequence_validation_engine import SequenceValidationEngine
+from widgets.menu_bar.preferences_dialog import PreferencesDialog
+from widgets.menu_bar.prop_type_selector import PropTypeSelector
+from widgets.orientation_correction_engine.sequence_validation_engine import (
+    SequenceValidationEngine,
+)
 
 from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.components.pictograph_key_generator import (
@@ -54,11 +58,15 @@ class MainWidget(QWidget):
         self._setup_special_placements()
         self.json_manager = JSON_Manager(self)
         self.svg_manager = GraphicalObjectSvgManager()
+        self.prop_type_selector = PropTypeSelector(self)
         self.sequence_validation_engine = SequenceValidationEngine(self)
         self.turns_tuple_generator = TurnsTupleGenerator()
         self.pictograph_key_generator = PictographKeyGenerator()
         self.sequence_widget = SequenceWidget(self)
         self.main_tab_widget = MainTabWidget(self)
+        self.preferences_dialog = PreferencesDialog(self)
+        # self.preferences_dialog.load_initial_settings()
+
         self.image_cache_manager = ImageCacheManager(self)
 
     def _setup_special_placements(self):

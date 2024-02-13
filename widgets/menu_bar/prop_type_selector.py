@@ -4,13 +4,14 @@ from PyQt6.QtWidgets import QLabel, QGroupBox, QFormLayout, QComboBox
 from utilities.TypeChecking.prop_types import *
 
 if TYPE_CHECKING:
+    from widgets.main_widget.main_widget import MainWidget
     from widgets.menu_bar.preferences_dialog import PreferencesDialog
 
 
 class PropTypeSelector(QGroupBox):
-    def __init__(self, preferences_dialog: "PreferencesDialog") -> None:
+    def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__("Prop Type Selector")
-        self.preferences_dialog = preferences_dialog
+        self.main_widget = main_widget
         self._setup_prop_type_combobox()
         self._setup_layout()
 
@@ -35,12 +36,11 @@ class PropTypeSelector(QGroupBox):
             ]
         )
 
-    def prop_type_changed(self) -> None:
-        new_prop_type = self.prop_type_combobox.currentText()
-        self.preferences_dialog.settings_manager.set_prop_type(new_prop_type)
-        self.preferences_dialog.settings_manager.save_settings()
-        self.preferences_dialog.settings_manager.apply_settings()
-        self.preferences_dialog.apply_button.setEnabled(True)
+    def prop_type_changed(self, new_prop_type: PropTypes) -> None:
+        new_prop_type = new_prop_type or self.prop_type_combobox.currentText()
+        self.main_widget.main_window.settings_manager.set_prop_type(new_prop_type.name)
+        self.main_widget.main_window.settings_manager.save_settings()
+        self.main_widget.main_window.settings_manager.apply_settings()
 
     def _setup_layout(self) -> None:
         layout = QFormLayout()
@@ -48,6 +48,6 @@ class PropTypeSelector(QGroupBox):
         self.setLayout(layout)
 
     def load_initial_settings(self) -> None:
-        initial_prop_type = self.preferences_dialog.settings_manager.get_prop_type()
+        initial_prop_type = self.main_widget.main_window.settings_manager.get_prop_type()
         self.prop_type_combobox.setCurrentText(initial_prop_type.name)
         self.prop_type_combobox.currentIndexChanged.connect(self.prop_type_changed)
