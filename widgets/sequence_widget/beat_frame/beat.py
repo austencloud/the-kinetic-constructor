@@ -45,7 +45,6 @@ class BeatView(QGraphicsView):
         return button
 
     def clear(self):
-        # remove the pictograph from the scene
         self.setScene(None)
         self.beat_frame.start_pos_view.setScene(None)
         sequence_builder = self.beat.main_widget.main_tab_widget.sequence_builder

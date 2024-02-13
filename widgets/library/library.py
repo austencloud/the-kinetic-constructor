@@ -70,7 +70,7 @@ class Library(QWidget):
 
         for pictograph_dict in sequence_data:
             if pictograph_dict.get("sequence_start_position"):
-                continue  # Skip the start position entry when repopulating the sequence
+                continue
             self.main_widget.sequence_widget.populate_sequence(pictograph_dict)
 
     def get_start_position_pictograph(self, start_pos_data):

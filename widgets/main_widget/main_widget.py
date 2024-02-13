@@ -62,9 +62,9 @@ class MainWidget(QWidget):
         self.sequence_widget = SequenceWidget(self)
         self.main_tab_widget = MainTabWidget(self)
         self.preferences_dialog = PreferencesDialog(self)
-        # self.preferences_dialog.load_initial_settings()
-
         self.image_cache_manager = ImageCacheManager(self)
+        self.sequence_widget.resize_sequence_widget()
+        self.main_tab_widget.resize_main_tab_widget()
 
     def _setup_special_placements(self):
         self.special_placement_loader = SpecialPlacementLoader(self)
@@ -95,7 +95,6 @@ class MainWidget(QWidget):
         super().showEvent(event)
         self.main_window.window_manager.set_dimensions()
         self.main_tab_widget.resize_main_tab_widget()
-        self.sequence_widget.resize_sequence_widget()
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.main_window.window_manager.set_dimensions()

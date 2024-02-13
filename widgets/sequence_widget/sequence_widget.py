@@ -53,12 +53,7 @@ class SequenceWidget(QWidget):
         self.pictograph_cache[pictograph_key] = pictograph
 
     def resize_sequence_widget(self) -> None:
-        width = int(self.main_widget.width() * 2 / 5)
-        height = int(self.main_widget.height())
-        self.setFixedWidth(width)
-        self.setFixedHeight(height)
-
-        beat_view_height = int(self.height() * 0.6 / self.beat_frame.ROW_COUNT)
+        beat_view_height = int(self.width() / self.beat_frame.ROW_COUNT)
         beat_view_width = beat_view_height
         for beat_view in self.beat_frame.beats:
             beat_view.setMaximumSize(beat_view_width, beat_view_height)

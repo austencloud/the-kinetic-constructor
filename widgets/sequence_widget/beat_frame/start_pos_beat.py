@@ -35,11 +35,3 @@ class StartPositionBeatView(QGraphicsView):
         self.view_scale = view_width / self.start_pos.width()
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
-
-    def resizeEvent(self, event) -> None:
-        view_width = self.height()
-        self.setMaximumWidth(view_width)
-        if self.start_pos:
-            self.view_scale = view_width / self.start_pos.width()
-            self.resetTransform()
-            self.scale(self.view_scale, self.view_scale)
