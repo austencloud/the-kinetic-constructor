@@ -21,8 +21,8 @@
         "red_turns": 3,
         "blue_start_ori": "in",
         "red_start_ori": "in",
-        "red_end_ori": "out",
-        "blue_end_ori": "out"
+        "red_end_ori": "in",
+        "blue_end_ori": "in"
     },
     {
         "letter": "B",
