@@ -192,8 +192,8 @@ class VTG_Modes(Enum):
     TOG_OPP = "TO"
     SPLIT_SAME = "SS"
     SPLIT_OPP = "SO"
-    QUARTER_TIME_SAME = "QTS"
-    QUARTER_TIME_OPP = "QTO"
+    QUARTER_SAME = "QTS"
+    QUARTER_OPP = "QTO"
 
 
 class TKAHandpathMode(Enum):

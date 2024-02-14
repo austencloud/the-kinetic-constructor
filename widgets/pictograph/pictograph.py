@@ -70,7 +70,7 @@ class Pictograph(QGraphicsScene):
     image_loaded: bool
     pixmap: QGraphicsPixmapItem
     arrow_turns: int
-    vtg_mode: VTG_Modes
+    vtg_mode: VTG_Modes = None
     vtg_timing: VTG_Timings
     vtg_dir: VTG_Directions
     vtg_glyph: VTG_Glyph

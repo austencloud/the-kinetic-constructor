@@ -23,7 +23,7 @@ class PictographUpdater:
             else:
                 self._update_from_pictograph_dict(pictograph_dict)
 
-        self.pictograph.tka_glyph.update_tka_glyph() # keep this to update turns
+        self.pictograph.tka_glyph.update_tka_glyph()  # keep this to update turns
         self._position_objects()
 
     def _update_from_pictograph_dict(self, pictograph_dict: dict) -> None:
