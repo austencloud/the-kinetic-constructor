@@ -1,5 +1,5 @@
 from objects.prop.prop_classes import *
-from utilities.TypeChecking.prop_types import PropTypes
+from Enums.PropTypes import PropTypes
 
 
 prop_class_mapping = {

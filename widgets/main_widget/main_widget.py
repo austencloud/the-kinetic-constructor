@@ -3,6 +3,8 @@ from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QResizeEvent, QKeyEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
+from Enums.Enums import Letters
+from Enums.PropTypes import PropTypes
 from widgets.json_manager import JSON_Manager
 from widgets.menu_bar.preferences_dialog import PreferencesDialog
 from widgets.menu_bar.prop_type_selector import PropTypeSelector
@@ -13,8 +15,7 @@ from widgets.scroll_area.components.pictograph_key_generator import (
     PictographKeyGenerator,
 )
 from ..graphical_object_svg_manager import GraphicalObjectSvgManager
-from utilities.TypeChecking.TypeChecking import Letters
-from utilities.TypeChecking.prop_types import PropTypes
+
 from constants import DIAMOND
 from ..main_widget.special_placement_loader import SpecialPlacementLoader
 from ..pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (

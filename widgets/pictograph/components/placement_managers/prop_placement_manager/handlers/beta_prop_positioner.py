@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from objects.prop.prop import Prop
-from utilities.TypeChecking.TypeChecking import Directions
+from Enums.Enums import Directions
 from .big_prop_positioner import BigPropPositioner
 from .prop_classifier import PropClassifier
 from .reposition_beta_props_by_letter_manager import RepositionBetaByLetterHandler

@@ -1,5 +1,5 @@
 from typing import list
-from utilities.TypeChecking.TypeChecking import LetterType
+from Enums.Enums import LetterType
 
 
 class SectionOrganizer:

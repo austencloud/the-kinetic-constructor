@@ -1,9 +1,7 @@
 from constants import *
 from typing import TYPE_CHECKING
-from utilities.TypeChecking.MotionAttributes import Orientations, Locations, MotionTypes, Turns
-from utilities.TypeChecking.TypeChecking import (
-    Handpaths
-)
+from Enums.MotionAttributes import Orientations, Locations, MotionTypes, Turns
+from Enums.Enums import Handpaths
 
 
 if TYPE_CHECKING:

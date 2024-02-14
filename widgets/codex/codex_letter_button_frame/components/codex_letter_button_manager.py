@@ -1,11 +1,15 @@
-from Enums import LetterType
+from Enums.Enums import LetterType, Letters
+
 from typing import TYPE_CHECKING, Union
 
 from PyQt6.QtWidgets import QHBoxLayout, QSizePolicy
 from PyQt6.QtCore import QSize, Qt
-from Enums import LetterType
+from Enums.Enums import LetterType
+
 from constants import LETTER_BTN_ICON_DIR
-from utilities.TypeChecking.TypeChecking import Letters
+from Enums.Enums import LetterType
+
+
 from widgets.codex.codex_letter_button_frame.components.codex_letter_button_click_handler import (
     CodexLetterButtonClickHandler,
 )

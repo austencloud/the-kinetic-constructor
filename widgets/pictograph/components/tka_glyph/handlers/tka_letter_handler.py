@@ -1,7 +1,8 @@
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 
-from Enums import LetterType
+from Enums.Enums import LetterType
+
 from typing import TYPE_CHECKING
 
 

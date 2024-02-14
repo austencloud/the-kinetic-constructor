@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QPointF, QPoint, Qt
+from Enums.MotionAttributes import Colors, Locations
 from data.prop_class_mapping import prop_class_mapping
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
@@ -7,8 +8,6 @@ from objects.motion.motion import Motion
 from objects.prop.prop import Prop
 from objects.prop.prop_classes import *
 
-from utilities.TypeChecking.prop_types import PropTypes
-from utilities.TypeChecking.MotionAttributes import Colors, Locations
 from constants import *
 from widgets.factories.prop_factory import PropFactory
 from widgets.pictograph.components.tka_glyph.tka_glyph import TKA_Glyph
@@ -41,7 +40,7 @@ class PictographInit:
         self.pictograph.arrows = self.init_arrows()
         self.pictograph.props = self.init_props()
         self.pictograph.tka_glyph = self.init_tka_glyph()
-        # self.pictograph.vtg_glyph = self.init_vtg_glyph()
+        self.pictograph.vtg_glyph = self.init_vtg_glyph()
 
     def init_grid(self) -> Grid:
         grid = Grid(self.pictograph)
@@ -109,7 +108,7 @@ class PictographInit:
 
     def init_vtg_glyph(self) -> VTG_Glyph:
         vtg_glyph = VTG_Glyph(self.pictograph)
-        self.pictograph.addItem(vtg_glyph)
+        # self.pictograph.addItem(vtg_glyph)
         return vtg_glyph
 
     def init_quadrant_boundaries(

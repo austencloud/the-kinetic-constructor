@@ -16,7 +16,7 @@ from constants import (
 
 from objects.motion.motion import Motion
 from objects.prop.prop import Prop
-from utilities.TypeChecking.TypeChecking import Directions
+from Enums.Enums import Directions
 
 if TYPE_CHECKING:
     pass

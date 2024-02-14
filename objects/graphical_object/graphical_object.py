@@ -9,7 +9,7 @@ from constants import BLUE, RED
 from widgets.graphical_object_svg_manager import (
     GraphicalObjectSvgManager,
 )
-from utilities.TypeChecking.MotionAttributes import Colors
+from Enums.MotionAttributes import Colors
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph

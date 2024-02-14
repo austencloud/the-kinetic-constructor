@@ -9,8 +9,8 @@ from constants import (
     DIAMOND,
     GRID_DIR,
 )
-from utilities.TypeChecking.TypeChecking import GridModes
-from utilities.TypeChecking.prop_types import (
+from Enums.Enums import GridModes
+from Enums.PropTypes import (
     strictly_placed_props,
 )
 
@@ -93,9 +93,7 @@ class Grid:
         self.center = self.grid_data.center_point.coordinates
 
     def _load_grid_data(self) -> GridData:
-        with open(
-            "data\\circle_coords.json", "r"
-        ) as file:
+        with open("data\\circle_coords.json", "r") as file:
             data = json.load(file)
         return GridData(data)
 

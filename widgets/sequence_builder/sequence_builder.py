@@ -2,11 +2,12 @@ import json
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
-from Enums import LetterType
-from utilities.TypeChecking.letter_lists import all_letters
+from Enums.Enums import LetterType, Letters
+
 import pandas as pd
 from constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
-from utilities.TypeChecking.TypeChecking import Letters
+from Enums.Enums import LetterType
+
 
 from widgets.pictograph.components.add_to_sequence_manager import (
     AddToSequenceManager,
@@ -23,17 +24,16 @@ if TYPE_CHECKING:
 
 
 class SequenceBuilder(QFrame):
-    def __init__(self, main_widget: "MainWidget") -> None:
+    def __init__(self, main_widget: "MainWidget"):
         super().__init__(main_widget)
         self.main_widget = main_widget
-
         self.current_pictograph: Pictograph = None
-        self.letters_df = pd.read_csv("PictographDataframe.csv")  # Load the dataframe
-        self.selected_letters = None
+        self.letters_df = pd.read_csv("PictographDataframe.csv")
         self.start_position_picked = False
         self._setup_components()
+        # Initialize pictograph cache using Letters enum
         self.pictograph_cache: dict[Letters, dict[str, Pictograph]] = {
-            letter: {} for letter in all_letters
+            letter: {} for letter in Letters
         }
         self.start_position_picker = StartPosPicker(self)
         self.option_picker = OptionPicker(self)
@@ -119,7 +119,7 @@ class SequenceBuilder(QFrame):
         self.layout().removeWidget(self.option_picker)
         self.layout().addWidget(self.start_position_picker)
         self.start_position_picker.show()
-        self.start_position_picker.resize_start_position_picker()
+        # self.start_position_picker.resize_start_position_picker()
 
     def resize_sequence_builder(self) -> None:
         self.setMinimumWidth(int(self.main_widget.width() * 3 / 5))

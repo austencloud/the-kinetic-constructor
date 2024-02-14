@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Union
-from Enums import LetterType
-from utilities.TypeChecking.TypeChecking import Letters
+from Enums.Enums import LetterType, Letters
+
+from Enums.Enums import LetterType
 
 
 from widgets.pictograph.pictograph import Pictograph
@@ -36,7 +37,9 @@ class ScrollAreaPictographFactory:
             if letter not in self.pictograph_cache:
                 self.pictograph_cache[letter] = {}
             self.pictograph_cache[letter][pictograph_key] = pictograph
-            self.scroll_area.main_widget.all_pictographs[letter][pictograph_key] = pictograph
+            self.scroll_area.main_widget.all_pictographs[letter][
+                pictograph_key
+            ] = pictograph
             letter_type = LetterType.get_letter_type(letter)
             for letter_type in LetterType:
                 if letter in letter_type.letters:

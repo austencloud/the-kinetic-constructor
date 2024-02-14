@@ -1,16 +1,15 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QApplication
 from PyQt6.QtCore import Qt
-from Enums import LetterType
-from utilities.TypeChecking.letter_lists import (
-    EIGHT_VARIATIONS,
-    FOUR_VARIATIONS,
-    SIXTEEN_VARIATIONS,
-)
+from Enums.Enums import LetterType, Letters
+
+
 from .components.scroll_area_pictograph_factory import ScrollAreaPictographFactory
 from .components.section_manager.codex_section_manager import CodexSectionManager
 from .components.codex_display_manager import CodexDisplayManager
-from utilities.TypeChecking.TypeChecking import Letters
+from Enums.Enums import LetterType
+
+
 from ..pictograph.pictograph import Pictograph
 from PyQt6.QtGui import QWheelEvent
 
@@ -57,7 +56,6 @@ class CodexScrollArea(QScrollArea):
     def insert_widget_at_index(self, widget: QWidget, index: int) -> None:
         self.layout.insertWidget(index, widget)
 
-
     def _only_deselection_occurred(self, deselected_letters, selected_letters) -> bool:
         if not deselected_letters:
             return False
@@ -77,30 +75,7 @@ class CodexScrollArea(QScrollArea):
         for pictograph in self.pictograph_cache.values():
             pictograph.arrow_placement_manager.update_arrow_placements()
 
-    def calculate_section_indices(self, letter_type: str) -> None:
-        selected_letters = [
-            letter
-            for letter in self.codex.selected_letters
-            if self.sections_manager.get_pictograph_letter_type(letter) == letter_type
-        ]
 
-        total_variations = sum(
-            (
-                8
-                if letter in EIGHT_VARIATIONS
-                else (
-                    16
-                    if letter in SIXTEEN_VARIATIONS
-                    else 4 if letter in FOUR_VARIATIONS else 0
-                )
-            )
-            for letter in selected_letters
-        )
-
-        self.display_manager.section_indices[letter_type] = (0, 0)
-        for i in range(total_variations):
-            row, col = divmod(i, self.display_manager.COLUMN_COUNT)
-            self.display_manager.section_indices[letter_type] = (row, col)
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         modifiers = QApplication.keyboardModifiers()

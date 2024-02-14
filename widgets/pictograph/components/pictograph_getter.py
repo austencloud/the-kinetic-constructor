@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING, Optional
-from Enums import LetterType
+from Enums.Enums import LetterType, Letters
+
 
 from constants import *
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
-from utilities.TypeChecking.MotionAttributes import Locations, MotionTypes
-from utilities.TypeChecking.TypeChecking import Letters
+from Enums.MotionAttributes import Locations, MotionTypes
 
 
 if TYPE_CHECKING:

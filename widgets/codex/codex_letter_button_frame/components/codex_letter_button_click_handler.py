@@ -1,7 +1,9 @@
-from Enums import LetterType
+from Enums.Enums import LetterType
+
 from typing import TYPE_CHECKING
 
-from Enums import LetterType
+from Enums.Enums import LetterType
+
 from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
     FilterTab,
 )

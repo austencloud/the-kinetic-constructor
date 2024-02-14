@@ -1,3 +1,4 @@
+from Enums.Enums import LetterType
 from constants import (
     BLUE,
     CLOCKWISE,
@@ -13,13 +14,15 @@ from constants import (
     STATIC,
     WEST,
 )
-from utilities.TypeChecking.letter_lists import Type5_letters
 from .base_directional_tuple_generator import BaseDirectionalGenerator
 
 
 class DashDirectionalGenerator(BaseDirectionalGenerator):
     def generate_directional_tuples(self, x: int, y: int) -> list[tuple[int, int]]:
-        if self.motion.pictograph.letter in Type5_letters and self.motion.turns == 0:
+        if (
+            self.motion.pictograph.letter_type == LetterType.Type5
+            and self.motion.turns == 0
+        ):
             return self._handle_type5_zero_turns(x, y)
 
         elif self.motion.prop_rot_dir == NO_ROT:
@@ -72,7 +75,3 @@ class DashDirectionalGenerator(BaseDirectionalGenerator):
         return Type5_zero_turns_directional_tuples.get(
             (self.motion.color, (self.motion.start_loc, self.motion.end_loc)), []
         )
-
-
-
-

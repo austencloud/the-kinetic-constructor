@@ -1,4 +1,4 @@
-from utilities.TypeChecking.TypeChecking import Positions
+from Enums.Enums import Positions
 
 
 # Define the letter groups

@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from constants import ICON_DIR, SWAP_ICON
-from utilities.TypeChecking.TypeChecking import Locations
+from Enums.Enums import Locations
 from .base_attr_box_widget import TurnsBoxWidget
 
 

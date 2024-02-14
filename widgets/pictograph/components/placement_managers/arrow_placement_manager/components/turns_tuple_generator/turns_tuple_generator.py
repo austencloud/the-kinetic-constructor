@@ -1,14 +1,7 @@
 from typing import Union
-from objects.arrow.arrow import Arrow
-from utilities.TypeChecking.letter_lists import (
-    Type1_hybrid_letters,
-    Type1_non_hybrid_letters,
-    Type3_letters,
-    Type4_letters,
-    Type5_letters,
-    Type6_letters,
-    Type2_letters,
-)
+from Enums.Enums import LetterType
+from Enums.letter_lists import Type1HybridLetters, Type1NonHybridLetters
+
 from constants import *
 from widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.mirrored_turns_tuple_generator import (
     MirroredTurnsTupleGenerator,
@@ -34,14 +27,16 @@ class TurnsTupleGenerator:
     The class ensures accurate and efficient generation of turn tuples, prioritizing special cases like S, T, Λ, Λ-, and Γ.
     """
 
-    def __init__(self) -> None:
-        self.generators: dict[str,BaseTurnsTupleGenerator] = {
-            "Type1_hybrid": Type1HybridTurnsTupleGenerator(),
-            "Type2": Type2TurnsTupleGenerator(),
-            "Type3": Type3TurnsTupleGenerator(),
-            "Type4": Type4TurnsTupleGenerator(),
-            "Type56": Type56TurnsTupleGenerator(),
-            "Color": ColorTurnsTupleGenerator(),
+    def __init__(self):
+        self.generators: list[BaseTurnsTupleGenerator] = {
+            "Type1Hybrid": Type1HybridTurnsTupleGenerator(),
+            "Type1NonHybrid": ColorTurnsTupleGenerator(),
+            LetterType.Type2: Type2TurnsTupleGenerator(),
+            LetterType.Type3: Type3TurnsTupleGenerator(),
+            LetterType.Type4: Type4TurnsTupleGenerator(),
+            LetterType.Type5: ColorTurnsTupleGenerator(),
+            LetterType.Type6: ColorTurnsTupleGenerator(),
+            # Add other types as needed
             "LeadState": LeadStateTurnsTupleGenerator(),
             "Lambda": LambdaTurnsTupleGenerator(),
             "LambdaDash": LambdaDashTurnsTupleGenerator(),
@@ -50,35 +45,32 @@ class TurnsTupleGenerator:
         self.mirrored_generator = MirroredTurnsTupleGenerator(self)
 
     def generate_turns_tuple(self, pictograph: "Pictograph") -> str:
-
         generator_key = self._get_generator_key(pictograph.letter)
-        if generator_key:
-            turns_tuple = self.generators[generator_key].generate_turns_tuple(pictograph)
-            pictograph.turns_tuple = turns_tuple
-            return turns_tuple
+        if generator_key and generator_key in self.generators:
+            generator = self.generators[generator_key]
+            return generator.generate_turns_tuple(pictograph)
         return ""
 
-    def generate_mirrored_tuple(self, arrow: "Arrow") -> Union[str, None]:
+    def generate_mirrored_tuple(self, arrow: Arrow) -> Union[str, None]:
         return self.mirrored_generator.generate(arrow)
 
     def _get_generator_key(self, letter: str) -> str:
-        special_generators = {
+        if letter in [letter.value for letter in Type1HybridLetters]:
+            return "Type1Hybrid"
+        elif letter in [letter.value for letter in Type1NonHybridLetters]:
+            return "Type1NonHybrid"
+        special_cases = {
             "S": "LeadState",
             "T": "LeadState",
             "Λ": "Lambda",
             "Λ-": "LambdaDash",
             "Γ": "Gamma",
         }
-        general_generators = {
-            letter: generator_key
-            for generator_key, letters in {
-                "Type1_hybrid": Type1_hybrid_letters,
-                "Color": Type1_non_hybrid_letters,
-                "Type2": Type2_letters,
-                "Type3": Type3_letters,
-                "Type4": Type4_letters,
-                "Type56": Type5_letters + Type6_letters,
-            }.items()
-            for letter in letters
-        }
-        return special_generators.get(letter, general_generators.get(letter, ""))
+        if letter in special_cases:
+            return special_cases[letter]
+
+        for letter_type in LetterType:
+            if letter in letter_type.value[0]:
+                return letter_type
+
+        return None

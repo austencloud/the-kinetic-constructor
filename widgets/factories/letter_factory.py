@@ -1,4 +1,4 @@
-from utilities.TypeChecking.TypeChecking import Letters
+from Enums.Enums import LetterType
 
 
 class LetterFactory:

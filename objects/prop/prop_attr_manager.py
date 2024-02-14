@@ -1,16 +1,15 @@
 from typing import TYPE_CHECKING, Union
-from Enums import PropAttribute
 
 from constants import *
-from utilities.TypeChecking.MotionAttributes import (
+from Enums.MotionAttributes import (
     Colors,
     Locations,
     Orientations,
     Turns,
     MotionTypes,
 )
-from utilities.TypeChecking.TypeChecking import Axes
-from utilities.TypeChecking.prop_types import PropTypes
+from Enums.Enums import Axes, PropAttribute
+from Enums.PropTypes import PropTypes
 
 
 if TYPE_CHECKING:

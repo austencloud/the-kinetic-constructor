@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 from typing import TYPE_CHECKING
-from utilities.TypeChecking.TypeChecking import AdjustmentNums, AdjustmentStrs
+from Enums.Enums import AdjustmentNums, AdjustmentStrs
 from widgets.factories.button_factory.buttons.adjust_turns_button import (
     AdjustTurnsButton,
 )

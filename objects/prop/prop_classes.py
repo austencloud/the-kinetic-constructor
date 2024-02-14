@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from constants import *
-from utilities.TypeChecking.prop_types import PropTypes
+from Enums.PropTypes import PropTypes
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion

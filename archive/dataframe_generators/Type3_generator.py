@@ -3,7 +3,7 @@ import pandas as pd
 from .base_dataframe_generator import BaseDataFrameGenerator
 from constants import *
 from utilities.TypeChecking.letter_lists import Type3_letters
-from utilities.TypeChecking.TypeChecking import Locations
+from Enums.Enums import Locations
 
 
 class Type3Generator(BaseDataFrameGenerator):

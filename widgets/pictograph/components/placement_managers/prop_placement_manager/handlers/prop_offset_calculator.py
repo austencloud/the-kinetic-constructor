@@ -15,7 +15,7 @@ from constants import (
 from PyQt6.QtCore import QPointF
 from typing import TYPE_CHECKING
 from objects.prop.prop import Prop
-from utilities.TypeChecking.TypeChecking import Directions
+from Enums.Enums import Directions
 
 if TYPE_CHECKING:
     from ..prop_placement_manager import PropPlacementManager

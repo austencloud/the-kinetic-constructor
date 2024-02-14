@@ -1,7 +1,8 @@
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from typing import TYPE_CHECKING
 
-from Enums import LetterType
+from Enums.Enums import LetterType
+
 from widgets.pictograph.components.pictograph_view import PictographView
 from widgets.sequence_widget.beat_frame.styled_border_overlay import StyledBorderOverlay
 
@@ -32,7 +33,6 @@ class PictographContainer(QFrame):
             LetterType.Type6: ("#eb7d00", "#eb7d00"),  # Orange, Orange
         }
         return border_colors_map
-
 
     def get_border_colors(self) -> tuple[str, str]:
         letter_type = self.pictograph.letter_type

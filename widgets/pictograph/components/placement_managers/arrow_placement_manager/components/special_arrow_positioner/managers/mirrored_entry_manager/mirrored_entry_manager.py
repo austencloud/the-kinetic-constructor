@@ -1,8 +1,11 @@
 from typing import TYPE_CHECKING
-from Enums import LetterType
+from Enums.Enums import LetterType
+
 from objects.arrow.arrow import Arrow
 from .mirrored_entry_data_prep import MirroredEntryDataPrep
-from .mirrored_entry_pictograph_section_updater import MirroredEntryPictographSectionUpdater
+from .mirrored_entry_pictograph_section_updater import (
+    MirroredEntryPictographSectionUpdater,
+)
 from .mirrored_entry_rot_angle_manager import MirroredEntryRotAngleManager
 from .mirrored_entry_creator import MirroredEntryCreator
 from .mirrored_entry_updater import MirroredEntryUpdater
@@ -31,7 +34,6 @@ class SpecialPlacementMirroredEntryManager:
         self.section_updater.update_pictographs_in_section(
             LetterType.get_letter_type(arrow.pictograph.letter)
         )
-
 
 
 # class SpecialPlacementMirroredEntryManager:

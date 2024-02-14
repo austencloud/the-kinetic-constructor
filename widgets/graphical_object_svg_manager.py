@@ -19,8 +19,8 @@ from constants import (
     RED,
     STATIC,
 )
-from utilities.TypeChecking.MotionAttributes import MotionTypes, Turns
-from utilities.TypeChecking.prop_types import PropTypes, PropTypeslist
+from Enums.MotionAttributes import MotionTypes, Turns
+from Enums.PropTypes import PropTypes, PropTypeslist
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow

@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
-from Enums import LetterType
+from Enums.Enums import LetterType
+from Enums.MotionAttributes import Colors
 from constants import LEADING, TRAILING, RED, BLUE
 from objects.motion.motion import Motion
-from utilities.TypeChecking.MotionAttributes import Colors
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -19,10 +19,11 @@ class PictographUpdater:
                 self.pictograph.get.initiallize_getter()
                 self._update_from_pictograph_dict(pictograph_dict)
                 self.pictograph.turns_tuple = self.pictograph.get.turns_tuple()
+                self.pictograph.vtg_glyph.set_vtg_mode()
             else:
                 self._update_from_pictograph_dict(pictograph_dict)
 
-        self.pictograph.tka_glyph.update_glyph()
+        self.pictograph.tka_glyph.update_tka_glyph() # keep this to update turns
         self._position_objects()
 
     def _update_from_pictograph_dict(self, pictograph_dict: dict) -> None:

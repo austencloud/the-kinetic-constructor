@@ -2,7 +2,9 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING
-from utilities.TypeChecking.TypeChecking import Letters
+from Enums.Enums import LetterType, Letters
+
+
 from widgets.codex.codex_letter_button_frame.components.codex_letter_button_manager import (
     CodexLetterButtonManager,
 )

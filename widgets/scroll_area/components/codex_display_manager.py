@@ -1,14 +1,13 @@
 import logging
 from typing import TYPE_CHECKING
-from Enums import LetterType
+from Enums.Enums import LetterType, Letters
+from Enums.letter_lists import EightVariations, SixteenVariations, FourVariations
+
 from widgets.pictograph.pictograph import Pictograph
-from utilities.TypeChecking.letter_lists import (
-    EIGHT_VARIATIONS,
-    FOUR_VARIATIONS,
-    SIXTEEN_VARIATIONS,
-    all_letters,
-)
-from utilities.TypeChecking.TypeChecking import Letters
+
+from Enums.Enums import LetterType
+
+
 from widgets.scroll_area.components.section_manager.section_widget.codex_section_widget import (
     CodexSectionWidget,
 )
@@ -59,11 +58,11 @@ class CodexDisplayManager:
         total_variations = sum(
             (
                 8
-                if letter in EIGHT_VARIATIONS
+                if letter in EightVariations
                 else (
                     16
-                    if letter in SIXTEEN_VARIATIONS
-                    else 4 if letter in FOUR_VARIATIONS else 0
+                    if letter in SixteenVariations
+                    else 4 if letter in FourVariations else 0
                 )
             )
             for letter in selected_letters
@@ -104,16 +103,19 @@ class CodexDisplayManager:
 
     def get_ordered_pictographs_for_section(
         self, letter_type: LetterType
-    ) -> dict[Letters, Pictograph]:
-        return {
+    ) -> dict[str, Pictograph]:
+        ordered_pictographs = {
             k: v
             for k, v in sorted(
                 self.scroll_area.pictograph_cache.items(),
                 key=lambda item: (
-                    all_letters.index(item[1].letter),
+                    list(Letters).index(
+                        Letters[item[1].letter]
+                    ),  # Use the Letters enum for sorting
                     item[1].start_pos,
                 ),
             )
             if self.scroll_area.sections_manager.get_pictograph_letter_type(k)
             == letter_type
         }
+        return ordered_pictographs

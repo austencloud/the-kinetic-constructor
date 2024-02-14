@@ -1,7 +1,10 @@
 from typing import TYPE_CHECKING
-from Enums import LetterType
+from Enums.Enums import LetterType, Letters
+
 from constants import BLUE_TURNS, RED_TURNS
-from utilities.TypeChecking.TypeChecking import Letters
+from Enums.Enums import LetterType
+
+
 from .section_widget.components.filter_tab.filter_tab import FilterTab
 from .section_widget.codex_section_widget import CodexSectionWidget
 from PyQt6.QtWidgets import QGridLayout, QLabel

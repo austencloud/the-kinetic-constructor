@@ -12,7 +12,8 @@ from constants import (
 )
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
-from utilities.TypeChecking.TypeChecking import Letters
+from Enums.Enums import LetterType, Letters
+
 from .special_placement_entry_remover import SpecialPlacementEntryRemover
 from .mirrored_entry_manager.mirrored_entry_manager import (
     SpecialPlacementMirroredEntryManager,

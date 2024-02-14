@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from Enums import LetterType
+from Enums.Enums import LetterType
 
 
 from constants import (

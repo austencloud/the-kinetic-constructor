@@ -1,4 +1,5 @@
 import json
+from Enums.letter_lists import DashLetters
 from constants import (
     ANTI,
     NONRADIAL,
@@ -13,8 +14,7 @@ from constants import (
 )
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
-from utilities.TypeChecking.letter_lists import dash_letters
-from utilities.TypeChecking.TypeChecking import OrientationTypes
+from Enums.Enums import OrientationTypes
 
 if TYPE_CHECKING:
     from ..arrow_placement_manager import ArrowPlacementManager
@@ -56,7 +56,7 @@ class DefaultArrowPositioner:
             elif motion_end_ori in [CLOCK, COUNTER]:
                 motion_end_ori_key = f"{NONRADIAL}_"
         letter_suffix = ""
-        if arrow.pictograph.letter and arrow.pictograph.letter in dash_letters:
+        if arrow.pictograph.letter and arrow.pictograph.letter in DashLetters:
             char = arrow.pictograph.letter[:-1]
             letter_suffix = f"_{char}_dash"
         elif arrow.pictograph.letter:

@@ -1,7 +1,7 @@
-from Enums import LetterType
+from Enums.Enums import LetterType
+from Enums.MotionAttributes import Locations
 from constants import *
 from objects.motion.motion import Motion
-from utilities.TypeChecking.MotionAttributes import Locations
 from .base_location_calculator import BaseLocationCalculator
 from typing import TYPE_CHECKING
 

@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from constants import ICON_DIR
-from utilities.TypeChecking.TypeChecking import Orientations
+from Enums.Enums import Orientations
 from widgets.turns_box.turns_box_widgets.base_attr_box_widget import TurnsBoxWidget
 
 

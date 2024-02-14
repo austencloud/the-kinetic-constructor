@@ -1,8 +1,10 @@
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 
-from Enums import LetterType
 from typing import TYPE_CHECKING
+
+from Enums.Enums import LetterType, VTG_Modes
+from constants import SpecificPositions as SP
 
 
 if TYPE_CHECKING:
@@ -22,24 +24,33 @@ if TYPE_CHECKING:
 class VTG_Glyph(QGraphicsSvgItem):
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
-        self.letter_item = QGraphicsSvgItem(self.glyph)
         self.renderer = None
 
     def set_vtg_mode(self):
-        self.mode = self.pictograph.vtg_mode
-        self.set_letter()
-
-    def set_letter(self) -> None:
-        if not self.pictograph.vtg_mode:
+        if not self.pictograph.letter_type in [LetterType.Type1]:
             return
+        if self.pictograph.letter in ["A", "B", "C"]:
+            self.pictograph.vtg_mode = VTG_Modes.SPLIT_SAME.value
+        elif self.pictograph.letter in ["D", "E", "F"]:
+            if self.pictograph.start_pos in [SP.BETA2.value, SP.BETA4.value]:
+                self.pictograph.vtg_mode = VTG_Modes.SPLIT_OPP.value
+            elif self.pictograph.start_pos in [SP.BETA1.value, SP.BETA3.value]:
+                self.pictograph.vtg_mode = VTG_Modes.TOG_OPP.value
+        elif self.pictograph.letter in ["G", "H", "I"]:
+            self.pictograph.vtg_mode = VTG_Modes.TOG_SAME.value
+        elif self.pictograph.letter in ["J", "K", "L"]:
+            if self.pictograph.start_pos in [SP.ALPHA1.value, SP.ALPHA3.value]:
+                self.pictograph.vtg_mode = VTG_Modes.SPLIT_OPP.value
+            elif self.pictograph.start_pos in [SP.ALPHA2.value, SP.ALPHA4.value]:
+                self.pictograph.vtg_mode = VTG_Modes.TOG_OPP.value
+        elif self.pictograph.letter in ["M", "N", "O", "P", "Q", "R"]:
+            self.pictograph.vtg_mode = VTG_Modes.QUARTER_TIME_OPP.value
+        elif self.pictograph.letter in ["S", "T", "U", "V"]:
+            self.pictograph.vtg_mode = VTG_Modes.QUARTER_TIME_SAME.value
+
+        self.vtg_mode = self.pictograph.vtg_mode
         letter_type = LetterType.get_letter_type(self.pictograph.letter)
         self.pictograph.letter_type = letter_type
-        # svg_path: str = SVG_PATHS.get(letter_type, "")
-        svg_path = svg_path.format(letter=self.pictograph.letter)
-        self.renderer = QSvgRenderer(svg_path)
-        if self.renderer.isValid():
-            self.setSharedRenderer(self.renderer)
-            self.position_letter()
 
     def position_letter(self) -> None:
         x = int(self.boundingRect().height() / 1.5)

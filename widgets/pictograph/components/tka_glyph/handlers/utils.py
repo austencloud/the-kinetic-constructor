@@ -2,7 +2,8 @@
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 
-from utilities.TypeChecking.TypeChecking import VtgDirections
+from Enums.Enums import VTG_Directions
+
 
 def load_svg_item(svg_path: str) -> QGraphicsSvgItem:
     renderer = QSvgRenderer(svg_path)
@@ -24,9 +25,9 @@ def parse_turns_tuple_string(turns_str: str) -> tuple:
         elif item in ["0", "1", "2", "3"]:
             item = int(item)
         elif item == "s":
-            item = VtgDirections.SAME
+            item = VTG_Directions.SAME
         elif item == "o":
-            item = VtgDirections.OPP
+            item = VTG_Directions.OPP
         turns_list.append(item)
     if len(turns_list) == 3:
         return turns_list[0], turns_list[1], turns_list[2]

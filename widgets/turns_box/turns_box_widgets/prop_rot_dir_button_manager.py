@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Union
-from Enums import LetterType
+from Enums.Enums import LetterType, VTG_Directions
+
 from constants import (
     BLUE,
     CLOCKWISE,
@@ -14,13 +15,12 @@ from constants import (
     SAME,
     STATIC,
 )
-from utilities.TypeChecking.MotionAttributes import (
+from Enums.MotionAttributes import (
     Colors,
     LeadStates,
     MotionTypes,
     PropRotDirs,
 )
-from utilities.TypeChecking.TypeChecking import VtgDirections
 from widgets.factories.button_factory.button_factory import ButtonFactory
 from ...factories.button_factory.buttons.rot_dir_buttons import (
     VtgDirButton,
@@ -64,7 +64,7 @@ class PropRotDirButtonManager:
         self._update_pictographs_prop_rot_dir(prop_rot_dir)
         self._update_button_states(self.prop_rot_dir_buttons, prop_rot_dir)
 
-    def _update_pictographs_vtg_dir(self, vtg_dir: VtgDirections) -> None:
+    def _update_pictographs_vtg_dir(self, vtg_dir: VTG_Directions) -> None:
         for (
             pictograph
         ) in (
@@ -103,7 +103,7 @@ class PropRotDirButtonManager:
                             self._update_pictograph_prop_rot_dir(motion, prop_rot_dir)
 
     def _update_pictograph_vtg_dir(
-        self, motion: "Motion", vtg_dir: VtgDirections
+        self, motion: "Motion", vtg_dir: VTG_Directions
     ) -> None:
         motion.prop_rot_dir = vtg_dir
         pictograph_dict = {
@@ -123,7 +123,7 @@ class PropRotDirButtonManager:
     def _update_button_states(
         self,
         buttons: list[Union[PropRotDirButton, VtgDirButton]],
-        active_direction: VtgDirections,
+        active_direction: VTG_Directions,
     ) -> None:
         for button in buttons:
             if button.prop_rot_dir == active_direction:

@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 from typing import TYPE_CHECKING
 
 from constants import *
-from utilities.TypeChecking.MotionAttributes import Locations, MotionTypes, PropRotDirs
+from Enums.MotionAttributes import Locations, MotionTypes, PropRotDirs
 
 if TYPE_CHECKING:
     from objects.prop.prop import Prop

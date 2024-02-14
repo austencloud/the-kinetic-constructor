@@ -2,7 +2,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel, QHBoxLayout, QFrame
 from PyQt6.QtCore import Qt
 
-from Enums import LetterType
+from Enums.Enums import LetterType
+
 
 from .turns_box.turns_box_widgets.base_attr_box_widget import TurnsBoxWidget
 
@@ -50,11 +51,14 @@ class HeaderWidget(TurnsBoxWidget):
         return layout
 
     def _add_widgets(self, layout: QHBoxLayout) -> None:
-        if self.turns_box.turns_panel.filter_tab.section.letter_type == LetterType.Type1:
+        if (
+            self.turns_box.turns_panel.filter_tab.section.letter_type
+            == LetterType.Type1
+        ):
             layout.addStretch(1)
             layout.addWidget(self.header_label)
             layout.addStretch(1)
-        else  :
+        else:
             layout.addStretch(5)
             layout.addWidget(self.turns_box.prop_rot_dir_button_manager.ccw_button)
             layout.addStretch(1)
@@ -68,9 +72,7 @@ class HeaderWidget(TurnsBoxWidget):
         font_color = (
             "#000000"
             if text not in ["Left", "Right"]
-            else "#2E3192"
-            if text == "Left"
-            else "#ED1C24"
+            else "#2E3192" if text == "Left" else "#ED1C24"
         )
         font_size = self.turns_box.width() // 4
         font_weight = "bold"
@@ -82,4 +84,3 @@ class HeaderWidget(TurnsBoxWidget):
         label.setMaximumHeight(font_size * 2)
         self.adjustSize()
         return label
-

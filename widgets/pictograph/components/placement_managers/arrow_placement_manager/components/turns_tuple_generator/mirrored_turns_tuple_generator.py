@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Union
-from Enums import LetterType
+from Enums.Enums import LetterType
+
 from constants import Type2
 from objects.arrow.arrow import Arrow
 

@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QPushButton
-from utilities.TypeChecking.MotionAttributes import PropRotDirs
-from utilities.TypeChecking.TypeChecking import VtgDirections
+from Enums.Enums import VTG_Directions
+from Enums.MotionAttributes import PropRotDirs
+
 
 class RotDirButton(QPushButton):
     def __init__(self, direction) -> None:
@@ -28,7 +29,7 @@ class RotDirButton(QPushButton):
                 }
             """
 
-    def update_state_dict(self, state_dict: dict, value:bool) -> None:
+    def update_state_dict(self, state_dict: dict, value: bool) -> None:
         state_dict[self.direction] = value
 
     def press(self) -> None:
@@ -40,15 +41,18 @@ class RotDirButton(QPushButton):
     def is_pressed(self) -> bool:
         return self.styleSheet() == self.get_button_style(pressed=True)
 
+
 class OpenCloseButton(RotDirButton):
-    def __init__(self, open_close_state: VtgDirections) -> None:
+    def __init__(self, open_close_state: VTG_Directions) -> None:
         super().__init__(open_close_state)
         self.open_close_dir = open_close_state
 
+
 class VtgDirButton(RotDirButton):
-    def __init__(self, vtg_dir: VtgDirections) -> None:
+    def __init__(self, vtg_dir: VTG_Directions) -> None:
         super().__init__(vtg_dir)
         self.vtg_dir = vtg_dir
+
 
 class PropRotDirButton(RotDirButton):
     def __init__(self, prop_rot_dir: PropRotDirs) -> None:

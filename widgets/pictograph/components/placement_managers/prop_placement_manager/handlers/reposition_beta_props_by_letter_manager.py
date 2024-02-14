@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from constants import ANTI, PRO
 from objects.prop.prop import Prop
-from utilities.TypeChecking.TypeChecking import Directions
+from Enums.Enums import Directions
 
 if TYPE_CHECKING:
     from .beta_prop_positioner import BetaPropPositioner
@@ -119,20 +119,15 @@ class RepositionBetaByLetterHandler:
             )
 
     def reposition_Ψ(self) -> None:
-        direction = (
-            self.prop_placement_manager.dir_calculator.get_dir_for_non_shift(
-                self.pictograph.red_prop
-            )
+        direction = self.prop_placement_manager.dir_calculator.get_dir_for_non_shift(
+            self.pictograph.red_prop
         )
         if direction:
             self.move_prop(self.pictograph.red_prop, direction)
             self.move_prop(
                 self.pictograph.blue_prop,
-                self.prop_placement_manager.dir_calculator.get_opposite_dir(
-                    direction
-                ),
+                self.prop_placement_manager.dir_calculator.get_opposite_dir(direction),
             )
-
 
     def reposition_Ψ_dash(self) -> None:
 

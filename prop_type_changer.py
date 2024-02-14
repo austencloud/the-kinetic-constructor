@@ -1,17 +1,8 @@
-import json
-import os
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from constants import BLUE, RED
 
-from utilities.TypeChecking.prop_types import PropTypes
 from widgets.pictograph.pictograph import Pictograph
-from widgets.scroll_area.codex_scroll_area import CodexScrollArea
-from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (
-    OptionPickerScrollArea,
-)
-from widgets.sequence_builder.components.start_position_picker.start_pos_picker_scroll_area import (
-    StartPosPickerScrollArea,
-)
+
 
 if TYPE_CHECKING:
     from main import MainWindow

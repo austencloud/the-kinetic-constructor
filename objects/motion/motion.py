@@ -5,7 +5,7 @@ from .managers.motion_manipulator import MotionManipulator
 from .managers.motion_ori_calculator import MotionOriCalculator
 from .managers.motion_updater import MotionUpdater
 from .managers.motion_turn_manager import MotionTurnsManager
-from utilities.TypeChecking.MotionAttributes import (
+from Enums.MotionAttributes import (
     Colors,
     Locations,
     Orientations,

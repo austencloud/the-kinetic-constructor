@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from objects.prop.prop import Prop
-from utilities.TypeChecking.prop_types import (
+from Enums.PropTypes import (
     PropTypes,
     big_unilateral_prop_types,
     small_unilateral_prop_types,

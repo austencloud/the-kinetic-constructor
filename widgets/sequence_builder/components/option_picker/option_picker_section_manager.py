@@ -1,6 +1,9 @@
 from typing import TYPE_CHECKING
-from Enums import LetterType
-from utilities.TypeChecking.TypeChecking import Letters
+from Enums.Enums import LetterType
+
+from Enums.Enums import LetterType
+
+
 from widgets.scroll_area.components.section_manager.section_widget.section_group_widget import (
     SectionGroupWidget,
 )

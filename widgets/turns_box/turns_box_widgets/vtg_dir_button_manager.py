@@ -9,13 +9,13 @@ from constants import (
     PROP_ROT_DIR,
     SAME,
 )
-from utilities.TypeChecking.MotionAttributes import (
+from Enums.MotionAttributes import (
     Colors,
     LeadStates,
     MotionTypes,
     PropRotDirs,
 )
-from utilities.TypeChecking.TypeChecking import VtgDirections
+from Enums.Enums import VTG_Directions
 from ...factories.button_factory.button_factory import ButtonFactory
 from ...factories.button_factory.buttons.rot_dir_buttons import VtgDirButton
 
@@ -44,8 +44,6 @@ class VtgDirButtonManager:
         self.opp_button.hide()
         self.same_button.hide()
 
-
-
     def _setup_vtg_dir_buttons(self) -> list[QPushButton]:
         self.same_button: VtgDirButton = ButtonFactory.create_vtg_dir_button(
             f"{ICON_DIR}same_direction.png", lambda: self._set_vtg_dir(SAME), SAME
@@ -58,11 +56,11 @@ class VtgDirButtonManager:
 
         return [self.same_button, self.opp_button]
 
-    def _set_vtg_dir(self, vtg_dir: VtgDirections) -> None:
+    def _set_vtg_dir(self, vtg_dir: VTG_Directions) -> None:
         self._update_pictographs_vtg_dir(vtg_dir)
         self._update_button_states(self.vtg_dir_buttons, vtg_dir)
 
-    def _update_pictographs_vtg_dir(self, vtg_dir: VtgDirections) -> None:
+    def _update_pictographs_vtg_dir(self, vtg_dir: VTG_Directions) -> None:
         for pictograph in self.section.pictographs.values():
             for motion in pictograph.motions.values():
                 other_motion = pictograph.get.other_motion(motion)
@@ -87,7 +85,7 @@ class VtgDirButtonManager:
         motion.pictograph.updater.update_pictograph(pictograph_dict)
 
     def _update_button_states(
-        self, buttons: list[VtgDirButton], active_direction: VtgDirections
+        self, buttons: list[VtgDirButton], active_direction: VTG_Directions
     ) -> None:
         for button in buttons:
             if button.direction == active_direction:

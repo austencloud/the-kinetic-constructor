@@ -1,6 +1,6 @@
-from Enums import LetterType
+from Enums.Enums import LetterType
+from Enums.MotionAttributes import MotionTypes
 from constants import ANTI, DASH, PRO, STATIC
-from utilities.TypeChecking.MotionAttributes import MotionTypes
 
 
 motion_type_letter_groups = {

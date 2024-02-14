@@ -1,6 +1,6 @@
 from constants import *
-from utilities.TypeChecking.MotionAttributes import MotionTypes, Locations, PropRotDirs
-from utilities.TypeChecking.TypeChecking import StartEndLocationTuple
+from Enums.MotionAttributes import MotionTypes, Locations, PropRotDirs
+from Enums.Enums import StartEndLocationTuple
 
 
 start_end_loc_map = {

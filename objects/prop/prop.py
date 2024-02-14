@@ -7,9 +7,9 @@ from .prop_mouse_event_handler import PropMouseEventHandler
 from .prop_offset_calculator import PropOffsetCalculator
 from .prop_rot_angle_manager import PropRotAngleManager
 from .prop_updater import PropUpdater
-from utilities.TypeChecking.MotionAttributes import Locations, Orientations
-from utilities.TypeChecking.TypeChecking import Axes
-from utilities.TypeChecking.prop_types import PropTypes
+from Enums.MotionAttributes import Locations, Orientations
+from Enums.Enums import Axes
+from Enums.PropTypes import PropTypes
 
 
 if TYPE_CHECKING:
@@ -31,7 +31,6 @@ class Prop(GraphicalObject):
     motion : Motion
         The motion to which the prop belongs.
     """
-
 
     loc: Locations
     ori: Orientations = None

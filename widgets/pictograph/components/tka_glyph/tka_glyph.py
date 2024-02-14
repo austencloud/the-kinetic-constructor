@@ -25,7 +25,7 @@ class TKA_Glyph(QGraphicsItemGroup):
         self.turns_column_handler = TurnsColumnHandler(self)
         self.addToGroup(self.turns_column_handler)
 
-    def update_glyph(self):
+    def update_tka_glyph(self):
         if not self.letter:
             self.setup_base_letter()
         turns_tuple = self.pictograph.get.turns_tuple()

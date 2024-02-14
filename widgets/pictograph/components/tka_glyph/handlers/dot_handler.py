@@ -3,7 +3,7 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from typing import TYPE_CHECKING
 from .utils import load_svg_item
 
-from utilities.TypeChecking.TypeChecking import VtgDirections
+from Enums.Enums import VTG_Directions
 
 if TYPE_CHECKING:
     from ..tka_glyph import TKA_Glyph
@@ -28,7 +28,7 @@ class DotHandler:
     def create_dot(self, dot_path: str) -> QGraphicsSvgItem:
         return load_svg_item(dot_path)
 
-    def update_dots(self, dir: VtgDirections):
+    def update_dots(self, dir: VTG_Directions):
         padding = 0
         letter_scene_rect = self.glyph.letter_handler.letter_item.sceneBoundingRect()
         letter_scene_center = letter_scene_rect.center()
@@ -53,10 +53,10 @@ class DotHandler:
                 opp_dot_center - self.opp_dot_item.boundingRect().center()
             )
 
-        if dir == VtgDirections.SAME:
+        if dir == VTG_Directions.SAME:
             self.same_dot_item.show()
             self.opp_dot_item.hide()
-        elif dir == VtgDirections.OPP:
+        elif dir == VTG_Directions.OPP:
             self.same_dot_item.hide()
             self.opp_dot_item.show()
         else:

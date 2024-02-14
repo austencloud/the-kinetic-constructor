@@ -1,5 +1,5 @@
 import logging
-from utilities.TypeChecking.MotionAttributes import MotionTypes
+from Enums.MotionAttributes import MotionTypes
 
 from utilities.TypeChecking.letter_lists import (
     alpha_ending_letters,
@@ -10,7 +10,7 @@ from utilities.TypeChecking.letter_lists import (
     gamma_starting_letters,
 )
 
-from Enums import LetterString
+from Enums.Enums import LetterString
 
 from data.letter_engine_data import (
     motion_type_combinations,
@@ -29,13 +29,13 @@ from constants import (
     PRO,
     RED,
 )
-from utilities.TypeChecking.TypeChecking import (
+from Enums.Enums import (
     Letters,
     MotionTypeCombinations,
     Positions,
     SpecificPositions,
 )
-from utilities.TypeChecking.MotionAttributes import Colors, PropRotDirs
+from Enums.MotionAttributes import Colors, PropRotDirs
 
 logging.basicConfig(
     level=logging.INFO,
@@ -48,15 +48,14 @@ if TYPE_CHECKING:
 
 
 class LetterCalculator:
-    """ 
-    This class has been archived. 
-    It was previously a part of the graph editor class, which was discontinued. 
-    However, its logic could potentially be useful for determining the letter in 
+    """
+    This class has been archived.
+    It was previously a part of the graph editor class, which was discontinued.
+    However, its logic could potentially be useful for determining the letter in
     as few steps as possible from a given number of variables.
 
     Please do not delete this class until you are sure that it's not needed anymore.
     """
-
 
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph

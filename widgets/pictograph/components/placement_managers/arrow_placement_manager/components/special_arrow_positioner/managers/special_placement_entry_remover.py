@@ -2,7 +2,7 @@ import os
 from typing import TYPE_CHECKING
 from constants import BLUE, special_placements_parent_directory, RED
 from objects.arrow.arrow import Arrow
-from utilities.TypeChecking.MotionAttributes import Colors
+from Enums.MotionAttributes import Colors
 
 if TYPE_CHECKING:
     from .special_placement_data_updater import SpecialPlacementDataUpdater

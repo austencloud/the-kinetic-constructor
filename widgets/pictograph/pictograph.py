@@ -4,21 +4,23 @@ from PyQt6.QtWidgets import (
     QGraphicsPixmapItem,
     QGraphicsSceneMouseEvent,
 )
-from Enums import LetterType
+from Enums.Enums import (
+    LetterType,
+    Letters,
+    OpenCloseStates,
+    SpecificPositions,
+    VTG_Directions,
+    VTG_Modes,
+    VTG_Timings,
+)
+from Enums.MotionAttributes import Colors, Locations
 
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from objects.motion.motion import Motion
 from objects.prop.prop import Prop
 
-from utilities.TypeChecking.TypeChecking import (
-    Letters,
-    OpenCloseStates,
-    SpecificPositions,
-    VtgDirections,
-    VtgTimings,
-)
-from utilities.TypeChecking.MotionAttributes import Colors, Locations
+
 from widgets.pictograph.components.tka_glyph.tka_glyph import TKA_Glyph
 from widgets.pictograph.components.vtg_glyph.vtg_glyph import VTG_Glyph
 from widgets.sequence_widget.beat_frame.pictograph_container import PictographContainer
@@ -68,13 +70,14 @@ class Pictograph(QGraphicsScene):
     image_loaded: bool
     pixmap: QGraphicsPixmapItem
     arrow_turns: int
-    vtg_timing: VtgTimings
-    vtg_dir: VtgDirections
+    vtg_mode: VTG_Modes
+    vtg_timing: VTG_Timings
+    vtg_dir: VTG_Directions
+    vtg_glyph: VTG_Glyph
     open_close_state: OpenCloseStates
     dragged_arrow: Arrow
     dragged_prop: Prop
     tka_glyph: TKA_Glyph
-    vtg_glyph: VTG_Glyph
     grid: Grid
     locations: dict[Locations, tuple[int, int, int, int]]
     red_motion: Motion

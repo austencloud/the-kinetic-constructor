@@ -4,7 +4,7 @@ from constants import *
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
-from utilities.TypeChecking.MotionAttributes import (
+from Enums.MotionAttributes import (
     Colors,
     Locations,
     MotionTypes,

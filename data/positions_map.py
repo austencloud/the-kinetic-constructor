@@ -1,7 +1,7 @@
 from objects.motion.motion import Motion
 from constants import *
-from utilities.TypeChecking.MotionAttributes import Locations
-from utilities.TypeChecking.TypeChecking import SpecificPositions
+from Enums.MotionAttributes import Locations
+from Enums.Enums import SpecificPositions
 
 positions_map: dict[tuple[Locations], SpecificPositions] = {
     # (blue_loc, red_loc): position

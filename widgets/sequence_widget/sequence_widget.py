@@ -31,11 +31,8 @@ class SequenceWidget(QWidget):
         self.layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        # self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.addWidget(self.beat_frame)
         self.layout.addWidget(self.button_frame)
-        # add black borders
-        # self.setStyleSheet("QWidget {border: 1px solid black;}")
 
     def save_sequence(sequence: list[Pictograph], filename: str) -> None:
         sequence_data = [pictograph.get.pictograph_dict() for pictograph in sequence]

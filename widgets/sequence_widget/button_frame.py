@@ -49,8 +49,15 @@ class SequenceButtonFrame(QFrame):
 
     def clear_sequence(self):
         for beat_view in self.sequence_widget.beat_frame.beats:
-            beat_view.clear()
+            beat_view.setScene(None)
+            beat_view.is_filled = False
 
+        self.sequence_widget.beat_frame.start_pos_view.setScene(None)
+        self.sequence_widget.beat_frame.start_pos_view.is_filled = False
+        self.main_widget.main_tab_widget.sequence_builder.reset_to_start_pos_picker()
+        self.main_widget.main_tab_widget.sequence_builder.current_pictograph = (
+            self.sequence_widget.beat_frame.start_pos
+        )
         with open(
             self.main_widget.json_manager.current_sequence_json_handler.current_sequence_json,
             "w",

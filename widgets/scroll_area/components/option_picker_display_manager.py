@@ -1,13 +1,11 @@
 from typing import TYPE_CHECKING
-from Enums import LetterType
+from Enums.Enums import LetterType, Letters
+
 from widgets.pictograph.pictograph import Pictograph
-from utilities.TypeChecking.letter_lists import (
-    EIGHT_VARIATIONS,
-    FOUR_VARIATIONS,
-    SIXTEEN_VARIATIONS,
-    all_letters,
-)
-from utilities.TypeChecking.TypeChecking import Letters
+
+from Enums.Enums import LetterType
+
+
 from widgets.scroll_area.components.section_manager.section_widget.codex_section_widget import (
     CodexSectionWidget,
 )
@@ -50,25 +48,6 @@ class OptionPickerDisplayManager:
             pictograph.view.resize_pictograph_view()
             pictograph.view.show()
 
-    def calculate_section_indices(self, letter_type: str) -> None:
-        total_variations = sum(
-            (
-                8
-                if pictograph.letter in EIGHT_VARIATIONS
-                else (
-                    16
-                    if pictograph.letter in SIXTEEN_VARIATIONS
-                    else 4 if pictograph.letter in FOUR_VARIATIONS else 0
-                )
-            )
-            for pictograph in self.scroll_area.pictograph_cache.values()
-        )
-
-        self.section_indices[letter_type] = (0, 0)
-        for i in range(total_variations):
-            row, col = divmod(i, self.COLUMN_COUNT)
-            self.section_indices[letter_type] = (row, col)
-
     def remove_pictograph(self, pictograph_key: str) -> None:
         pictograph_to_remove: Pictograph = self.scroll_area.pictograph_cache.pop(
             pictograph_key, None
@@ -76,32 +55,20 @@ class OptionPickerDisplayManager:
         if pictograph_to_remove:
             self.scroll_area.layout.removeWidget(pictograph_to_remove.view)
 
-    def get_ordered_pictographs(self) -> dict[Letters, Pictograph]:
-        return {
-            k: v
-            for k, v in sorted(
-                self.scroll_area.pictograph_cache.items(),
-                key=lambda item: (
-                    all_letters.index(item[1].letter),
-                    item[1].start_pos,
-                ),
-            )
-        }
-
     def get_ordered_pictographs_for_section(
         self, letter_type: LetterType
     ) -> dict[str, Pictograph]:
-        """Returns pictographs ordered by their letter and start position for a given section type,
-        but only if they are relevant to the current_pictograph's end position."""
         current_pictograph = self.scroll_area.sequence_builder.current_pictograph
-        relevant_pictographs = {}
+        relevant_pictographs: dict[str, Pictograph] = {}
 
         for key, pictograph in self.scroll_area.pictograph_cache.items():
             if self.is_pictograph_relevant(pictograph, current_pictograph):
-                if (
-                    self.scroll_area.sections_manager.get_pictograph_letter_type(key)
-                    == letter_type
-                ):
+                pictograph_letter_type = (
+                    self.scroll_area.sections_manager.get_pictograph_letter_type(
+                        pictograph.letter
+                    )
+                )
+                if pictograph_letter_type == letter_type:
                     relevant_pictographs[key] = pictograph
 
         return {
@@ -109,7 +76,7 @@ class OptionPickerDisplayManager:
             for k, v in sorted(
                 relevant_pictographs.items(),
                 key=lambda item: (
-                    all_letters.index(item[1].letter),
+                    list(Letters).index(Letters(item[1].letter)),
                     item[1].start_pos,
                 ),
             )

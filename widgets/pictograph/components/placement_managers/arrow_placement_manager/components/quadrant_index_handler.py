@@ -15,7 +15,7 @@ from constants import (
     STATIC,
     DASH,
 )
-from utilities.TypeChecking.MotionAttributes import Locations
+from Enums.MotionAttributes import Locations
 
 if TYPE_CHECKING:
     from ...arrow_placement_manager.arrow_placement_manager import ArrowPlacementManager

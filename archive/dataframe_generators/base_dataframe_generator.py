@@ -4,7 +4,7 @@ from constants import *
 from data.positions_map import positions_map
 import os
 
-from utilities.TypeChecking.TypeChecking import (
+from Enums.Enums import (
     Locations,
     PropRotDirs,
     ShiftHandpaths,

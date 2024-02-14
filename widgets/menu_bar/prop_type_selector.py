@@ -1,7 +1,7 @@
 # PropTypeSelector.py
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel, QGroupBox, QFormLayout, QComboBox
-from utilities.TypeChecking.prop_types import *
+from Enums.PropTypes import *
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
@@ -42,7 +42,9 @@ class PropTypeSelector(QGroupBox):
         self.main_widget.main_window.settings_manager.save_settings()
         self.main_widget.main_window.settings_manager.apply_settings()
         if hasattr(self.main_widget.main_window.menu_bar, "preferences_dialog"):
-            self.main_widget.main_window.menu_bar.preferences_dialog.apply_button.setEnabled(True)
+            self.main_widget.main_window.menu_bar.preferences_dialog.apply_button.setEnabled(
+                True
+            )
 
     def _setup_layout(self) -> None:
         layout = QFormLayout()
@@ -50,7 +52,9 @@ class PropTypeSelector(QGroupBox):
         self.setLayout(layout)
 
     def load_initial_settings(self) -> None:
-        initial_prop_type = self.main_widget.main_window.settings_manager.get_prop_type()
+        initial_prop_type = (
+            self.main_widget.main_window.settings_manager.get_prop_type()
+        )
         self.prop_type_combobox.setCurrentText(initial_prop_type.name)
         self.prop_type_combobox.currentTextChanged.connect(self.prop_type_changed)
         # activate the apply button

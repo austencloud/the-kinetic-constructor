@@ -1,8 +1,9 @@
-from Enums import LetterType
+from Enums.Enums import LetterType
+from Enums.letter_lists import HybridLetters
+
 from constants import *
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
-from utilities.TypeChecking.letter_lists import hybrid_letters
 
 if TYPE_CHECKING:
     from .mirrored_entry_updater import MirroredEntryUpdater
@@ -30,12 +31,14 @@ class StandardOrientationUpdater(MirroredEntryUpdaterBase):
         self._mirror_entry(
             mirrored_turns_tuple, letter, motion_attr, original_turn_data
         )
-        self.mirrored_entry_updater.manager.section_updater.update_pictographs_in_section(letter_type)
+        self.mirrored_entry_updater.manager.section_updater.update_pictographs_in_section(
+            letter_type
+        )
 
     def _mirror_entry(
         self, mirrored_turns_tuple, letter, motion_attr, original_turn_data
     ):
-        if letter in ["S", "T"] or letter in hybrid_letters:
+        if letter in ["S", "T"] or letter in HybridLetters:
             return
         ori_key = self.mirrored_entry_updater.manager.data_updater.get_ori_key(
             self.arrow.motion

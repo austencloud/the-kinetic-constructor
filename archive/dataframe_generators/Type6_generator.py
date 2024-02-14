@@ -1,7 +1,7 @@
 from typing import dict, list, tuple
 
 import pandas as pd
-from utilities.TypeChecking.TypeChecking import Locations
+from Enums.Enums import Locations
 from utilities.dataframe_generators.base_dataframe_generator import (
     BaseDataFrameGenerator,
 )
