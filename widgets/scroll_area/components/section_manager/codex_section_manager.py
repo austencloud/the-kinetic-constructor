@@ -57,9 +57,9 @@ class CodexSectionManager:
                 return i
         return len(self.ordered_section_types)
 
-    def get_pictograph_letter_type(self, pictograph_key: str) -> LetterType:
-        letter = pictograph_key.split("_")[0]
-        return LetterType.get_letter_type(letter)
+    def get_pictograph_letter_type(self, letter: Letters) -> LetterType:
+        letter_str = Letters.get_letter(letter)
+        return LetterType.get_letter_type(letter_str)
 
     def add_section_label_to_layout(
         self, section_label: QLabel, section_layout: QGridLayout
@@ -70,7 +70,10 @@ class CodexSectionManager:
         )
 
     def get_section(self, letter_type: LetterType) -> CodexSectionWidget:
-        return self.sections.get(letter_type)
+        if letter_type not in self.sections:
+            self.create_section(letter_type)
+        section = self.sections[letter_type]
+        return section
 
     def create_section_if_needed(self, letter_type: LetterType) -> None:
         if letter_type not in self.sections:

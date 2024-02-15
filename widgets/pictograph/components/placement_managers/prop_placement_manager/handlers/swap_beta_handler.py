@@ -142,7 +142,7 @@ class SwapBetaHandler:
         if ori_key:
             letter_data: dict = self.pictograph.main_widget.special_placements[
                 ori_key
-            ].get(self.pictograph.letter)
+            ].get(self.pictograph.letter.value)
 
         turns_tuple = (
             self.pictograph.main_widget.turns_tuple_generator.generate_turns_tuple(

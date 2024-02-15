@@ -120,11 +120,11 @@ class CodexDisplayManager:
             for k, v in sorted(
                 self.scroll_area.pictograph_cache.items(),
                 key=lambda item: (
-                    list(Letters).index(Letters[item[1].letter]),
+                    list(Letters).index(item[1].letter),  # Directly use the enum value
                     item[1].start_pos,
                 ),
             )
-            if self.scroll_area.sections_manager.get_pictograph_letter_type(k)
+            if self.scroll_area.sections_manager.get_pictograph_letter_type(v.letter)
             == letter_type
         }
         return ordered_pictographs

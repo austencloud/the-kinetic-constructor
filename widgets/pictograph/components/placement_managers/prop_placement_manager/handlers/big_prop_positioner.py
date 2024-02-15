@@ -26,19 +26,19 @@ class BigPropPositioner:
         ):
             return
         else:
-            if self.pictograph.letter in ["G", "H"]:
+            if self.pictograph.letter.value in ["G", "H"]:
                 letter_handler.reposition_G_H()
-            elif self.pictograph.letter == "I":
+            elif self.pictograph.letter.value == "I":
                 letter_handler.reposition_I()
-            elif self.pictograph.letter in ["J", "K", "L"]:
+            elif self.pictograph.letter.value in ["J", "K", "L"]:
                 letter_handler.reposition_J_K_L()
-            elif self.pictograph.letter in ["Y", "Z"]:
+            elif self.pictograph.letter.value in ["Y", "Z"]:
                 letter_handler.reposition_Y_Z()
-            elif self.pictograph.letter == "β":
+            elif self.pictograph.letter.value == "β":
                 letter_handler.reposition_β()
-            elif self.pictograph.letter in ["Y-", "Z-"]:
+            elif self.pictograph.letter.value in ["Y-", "Z-"]:
                 letter_handler.reposition_Y_dash_Z_dash()
-            elif self.pictograph.letter == "Ψ":
+            elif self.pictograph.letter.value == "Ψ":
                 letter_handler.reposition_Ψ()
-            elif self.pictograph.letter == "Ψ-":
+            elif self.pictograph.letter.value == "Ψ-":
                 letter_handler.reposition_Ψ_dash()

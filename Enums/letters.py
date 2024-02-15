@@ -1,7 +1,6 @@
 from enum import Enum
 
 
-
 class LetterConditions(Enum):
     PRO = "pro"
     ANTI = "anti"
@@ -20,6 +19,7 @@ class LetterConditions(Enum):
     NON_HYBRID = "non_hybrid"
     TYPE1_HYBRID = "type1_hybrids"
     TYPE1_NON_HYBRID = "type1_non_hybrids"
+
 
 class Letters(Enum):
     A = "A"
@@ -384,15 +384,20 @@ class Letters(Enum):
     @classmethod
     def from_string(cls, letter_str: str):
         """
-        Returns the enum member corresponding to the given string.
+        Convert a string to the corresponding enum member, including handling dashes.
         """
-        for name, member in cls.__members__.items():
-            if member.value == letter_str:
-                return member
-        # Handle dash letters specifically if not found directly
-        if letter_str in ["W-", "X-", "Y-", "Z-", "Φ-", "Ψ-", "Λ-"]:
-            return cls[letter_str.replace("-", "_DASH")]
-        raise ValueError(f"{letter_str} is not a valid Letters enum member.")
+        # Attempt to find a direct match first
+        for letter in cls:
+            if letter.value == letter_str:
+                return letter
+
+        # If no direct match, try to convert dash-containing names
+        normalized_str = letter_str.replace("-", "_DASH")
+        if normalized_str in cls.__members__:
+            return cls.__members__[normalized_str]
+
+        # Raise an error if no match is found
+        raise ValueError(f"No matching enum member for string: {letter_str}")
 
     def get_letter(letter_str: str) -> "Letters":
         return Letters(letter_str)
@@ -450,4 +455,3 @@ class LetterType(Enum):
         for letter_type in LetterType:
             if letter_str in letter_type.letters:
                 return letter_type
-
