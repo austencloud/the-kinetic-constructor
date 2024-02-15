@@ -44,10 +44,11 @@ class CodexLetterButtonManager:
         for type_name, rows in self.letter_rows.items():
             for row in rows:
                 for letter_str in row:
-                    letter_type = LetterType.get_letter_type(letter_str)
+                    letter = Letters.get_letter(letter_str)
+                    letter_type = LetterType.get_letter_type(letter)
                     icon_path = f"{self.icon_dir}/{letter_type.name}/{letter_str}.svg"
                     button = self._create_letter_button(icon_path, letter_str)
-                    self.buttons[letter_str] = button
+                    self.buttons[letter] = button
 
     def _create_letter_button(self, icon_path: str, letter_str: str) -> LetterButton:
         button = LetterButton(icon_path, letter_str)
@@ -69,7 +70,8 @@ class CodexLetterButtonManager:
         row_layout.setContentsMargins(0, 0, 0, 0)
         row_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         for letter_str in row:
-            button = self.buttons[letter_str]
+            letter = Letters.get_letter(letter_str)
+            button = self.buttons[letter]
             button.setSizePolicy(
                 QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred
             )  # Ensure buttons can expand

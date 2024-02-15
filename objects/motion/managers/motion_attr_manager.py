@@ -1,6 +1,9 @@
 from typing import TYPE_CHECKING, Union
+from Enums.Enums import Letters
 from constants import *
-from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import FilterTab
+from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
+    FilterTab,
+)
 
 
 if TYPE_CHECKING:
@@ -25,7 +28,12 @@ class MotionAttrManager:
         if self.motion.motion_type:
             self.motion.end_ori = self.motion.ori_calculator.get_end_ori()
 
-        if self.motion.pictograph.letter in ["S", "T", "U", "V"]:
+        if self.motion.pictograph.letter in [
+            Letters.S,
+            Letters.T,
+            Letters.U,
+            Letters.V,
+        ]:
             self.assign_lead_states()
 
     def update_motion_attributes_from_filter_tab(

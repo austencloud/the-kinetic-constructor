@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from Enums.Enums import LetterType
+from Enums.Enums import LetterType, Letters
 
 from Enums.Enums import LetterType
 
@@ -92,10 +92,10 @@ class OptionPickerSectionsManager:
         section = self.sections[letter_type]
         return section
 
-    def get_pictograph_letter_type(self, pictograph_key: str) -> str:
-        letter = pictograph_key.split("_")[0]
+    def get_pictograph_letter_type(self, letter_str: Letters) -> LetterType:
+        letter_str = letter_str.value
         for letter_type in LetterType:
-            if letter in letter_type.value[0]:
+            if letter_str in letter_type.value[0]:
                 return letter_type
         return "Unknown"
 

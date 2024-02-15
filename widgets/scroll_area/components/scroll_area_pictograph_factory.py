@@ -25,7 +25,8 @@ class ScrollAreaPictographFactory:
     def get_or_create_pictograph(
         self, pictograph_key: str, pictograph_dict=None
     ) -> Pictograph:
-        letter = pictograph_key.split("_")[0]
+        letter_str = pictograph_key.split("_")[0]
+        letter = Letters.get_letter(letter_str)
 
         if pictograph_key in self.pictograph_cache.get(letter, {}):
             return self.pictograph_cache[letter][pictograph_key]

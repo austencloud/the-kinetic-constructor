@@ -36,7 +36,7 @@ class TKALetterHandler:
         letter_type = LetterType.get_letter_type(self.glyph.pictograph.letter)
         self.glyph.pictograph.letter_type = letter_type
         svg_path: str = SVG_PATHS.get(letter_type, "")
-        svg_path = svg_path.format(letter=self.glyph.pictograph.letter)
+        svg_path = svg_path.format(letter=self.glyph.pictograph.letter.value)
         self.renderer = QSvgRenderer(svg_path)
         if self.renderer.isValid():
             self.letter_item.setSharedRenderer(self.renderer)

@@ -57,15 +57,11 @@ class SequenceBuilder(QFrame):
         self.option_picker.scroll_area.display_manager.order_and_display_pictographs()
         QApplication.restoreOverrideCursor()
 
-    def clear_current_sequence_json(self):
-        with open(
-            self.sequence_validation_engine.current_sequence_json, "w", encoding="utf-8"
-        ) as file:
-            json.dump([], file, indent=4)
-
     def render_and_store_pictograph(self, pictograph_dict: dict) -> Pictograph:
         pictograph_dict = self._add_turns_and_start_ori(pictograph_dict)
-        letter_type = LetterType.get_letter_type(pictograph_dict["letter"])
+        letter_str = pictograph_dict["letter"]
+        letter = Letters.get_letter(letter_str)
+        letter_type = LetterType.get_letter_type(letter)
         pictograph_key = (
             self.main_widget.pictograph_key_generator.generate_pictograph_key(
                 pictograph_dict
@@ -84,10 +80,8 @@ class SequenceBuilder(QFrame):
         self.main_widget.all_pictographs[new_pictograph.letter][
             pictograph_key
         ] = new_pictograph
-        if pictograph_key not in self.pictograph_cache[pictograph_dict["letter"]]:
-            self.pictograph_cache[pictograph_dict["letter"]][
-                pictograph_key
-            ] = new_pictograph
+        if pictograph_key not in self.pictograph_cache[letter]:
+            self.pictograph_cache[letter][pictograph_key] = new_pictograph
         section = self.option_picker.scroll_area.sections_manager.get_section(
             letter_type
         )

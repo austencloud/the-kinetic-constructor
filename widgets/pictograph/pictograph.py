@@ -5,7 +5,6 @@ from PyQt6.QtWidgets import (
     QGraphicsSceneMouseEvent,
 )
 from Enums.Enums import (
-    LetterType,
     Letters,
     OpenCloseStates,
     SpecificPositions,
@@ -16,6 +15,7 @@ from Enums.Enums import (
 from Enums.MotionAttributes import Colors, Locations
 
 from Enums.PropTypes import PropTypes
+from Enums.letters import LetterType
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from objects.motion.motion import Motion

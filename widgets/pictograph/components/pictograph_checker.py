@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropTypes
+from Enums.letters import Letters
 from constants import *
-from data.rules import beta_ending_letters, alpha_ending_letters, gamma_ending_letters
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -12,13 +12,17 @@ class PictographChecker:
         self.pictograph = pictograph
 
     def ends_with_beta(self) -> bool:
-        return self.pictograph.letter in beta_ending_letters
+        return self.pictograph.letter in Letters.get_letters_by_condition("beta_ending")
 
     def ends_with_alpha(self) -> bool:
-        return self.pictograph.letter in alpha_ending_letters
+        return self.pictograph.letter in Letters.get_letters_by_condition(
+            "alpha_ending"
+        )
 
     def ends_with_gamma(self) -> bool:
-        return self.pictograph.letter in gamma_ending_letters
+        return self.pictograph.letter in Letters.get_letters_by_condition(
+            "gamma_ending"
+        )
 
     def ends_with_layer1(self) -> bool:
         red_prop, blue_prop = self.pictograph.props[RED], self.pictograph.props[BLUE]
@@ -132,8 +136,10 @@ class PictographChecker:
         return hasattr(self.pictograph.scroll_area, "sequence_builder")
 
     def has_all_props_of_type(self, prop_type: PropTypes) -> bool:
-        return all(prop.prop_type == prop_type for prop in self.pictograph.props.values())
-    
+        return all(
+            prop.prop_type == prop_type for prop in self.pictograph.props.values()
+        )
+
     def has_strictly_placed_props(self) -> bool:
         strict_props = [
             PropTypes.BigDoubleStar,

@@ -1,5 +1,6 @@
-from Enums.Enums import LetterType
+from Enums.Enums import Letters
 from Enums.MotionAttributes import Locations
+from Enums.letters import LetterType
 from constants import *
 from objects.motion.motion import Motion
 from .base_location_calculator import BaseLocationCalculator
@@ -11,9 +12,12 @@ if TYPE_CHECKING:
 
 class DashLocationCalculator(BaseLocationCalculator):
     def calculate_location(self) -> str:
-        if self.pictograph.letter in ["Φ-", "Ψ-"]:
+        if self.pictograph.letter in [Letters.Φ_DASH, Letters.Ψ_DASH]:
             return self._get_Φ_dash_Ψ_dash_location()
-        elif self.pictograph.letter in ["Λ", "Λ-"] and self.arrow.motion.turns == 0:
+        elif (
+            self.pictograph.letter in [Letters.Λ, Letters.Λ_DASH]
+            and self.arrow.motion.turns == 0
+        ):
             return self._get_Λ_zero_turns_location()
         elif self.arrow.motion.turns == 0:
             return self._default_zero_turns_dash_location()

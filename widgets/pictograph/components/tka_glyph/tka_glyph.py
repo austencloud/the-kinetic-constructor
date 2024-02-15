@@ -40,7 +40,7 @@ class TKA_Glyph(QGraphicsItemGroup):
     def setup_base_letter(self):
         self.letter = self.pictograph.letter
         self.letter_handler.set_letter()
-        if "-" in self.pictograph.letter:
+        if "-" in self.pictograph.letter.value:
             self.dash_handler.update_dash()
 
     def convert_to_ints(self, top_turn):

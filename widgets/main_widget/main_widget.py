@@ -45,7 +45,7 @@ class MainWidget(QWidget):
     def _setup_pictograph_cache(self):
         self.all_pictographs: dict[str, dict[str, "Pictograph"]] = {}
         for letter in Letters:
-            self.all_pictographs[letter.value] = {}
+            self.all_pictographs[letter] = {}
 
     def _set_prop_type(self):
         with open("user_settings.json", "r") as file:
