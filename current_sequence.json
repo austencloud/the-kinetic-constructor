@@ -1,1 +1,27 @@
-[]
+[
+    {
+        "sequence_start_position": "alpha",
+        "red_end_ori": "in",
+        "blue_end_ori": "in",
+        "end_pos": "alpha1"
+    },
+    {
+        "letter": "A",
+        "start_pos": "alpha1",
+        "end_pos": "alpha2",
+        "blue_motion_type": "pro",
+        "blue_prop_rot_dir": "cw",
+        "blue_start_loc": "s",
+        "blue_end_loc": "w",
+        "red_motion_type": "pro",
+        "red_prop_rot_dir": "cw",
+        "red_start_loc": "n",
+        "red_end_loc": "e",
+        "blue_turns": 0,
+        "red_turns": 0,
+        "blue_start_ori": "in",
+        "red_start_ori": "in",
+        "red_end_ori": "in",
+        "blue_end_ori": "in"
+    }
+]
