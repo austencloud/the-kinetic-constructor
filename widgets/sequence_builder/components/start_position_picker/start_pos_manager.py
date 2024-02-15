@@ -56,6 +56,7 @@ class StartPosManager(QObject):
         self.sequence_builder.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
             start_position_pictograph
         )
+
         self.sequence_builder.current_pictograph = start_position_pictograph
 
         self.start_position_selected.connect(

@@ -30,6 +30,8 @@ class StartPositionBeatView(BeatView):
 
     def set_start_pos(self, start_pos: "StartPositionBeat") -> None:
         self.start_pos = start_pos
+        self.is_filled = True
+        self.start_pos.view = self
         self.setScene(self.start_pos)
         view_width = self.height()
         self.view_scale = view_width / self.start_pos.width()
