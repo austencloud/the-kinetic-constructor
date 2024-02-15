@@ -133,3 +133,11 @@ class PictographChecker:
 
     def has_all_props_of_type(self, prop_type: PropTypes) -> bool:
         return all(prop.prop_type == prop_type for prop in self.pictograph.props.values())
+    
+    def has_strictly_placed_props(self) -> bool:
+        strict_props = [
+            PropTypes.BigDoubleStar,
+            PropTypes.BigHoop,
+            PropTypes.BigBuugeng,
+            PropTypes.BigFan,
+        ]

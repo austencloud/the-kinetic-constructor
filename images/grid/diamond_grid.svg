@@ -25,16 +25,16 @@
 		<circle id="nw_diamond_layer2_point"  cx="331.9" cy="331.9" r="8.8"/>
 	</g>
 	<g>
-		<circle id="strict_ne_diamond_layer2_point" class="st0" cx="625" cy="325" r="8.8"/>
-		<circle id="strict_se_diamond_layer2_point" class="st0" cx="625" cy="625" r="8.8"/>
-		<circle id="strict_sw_diamond_layer2_point" class="st0" cx="325" cy="625" r="8.8"/>
-		<circle id="strict_nw_diamond_layer2_point" class="st0" cx="325" cy="325" r="8.8"/>
+		<circle id="ne_diamond_layer2_point_strict" class="st0" cx="625" cy="325" r="8.8"/>
+		<circle id="se_diamond_layer2_point_strict" class="st0" cx="625" cy="625" r="8.8"/>
+		<circle id="sw_diamond_layer2_point_strict" class="st0" cx="325" cy="625" r="8.8"/>
+		<circle id="nw_diamond_layer2_point_strict" class="st0" cx="325" cy="325" r="8.8"/>
 	</g>
 	<g>
-		<circle id="strict_e_diamond_hand_point" class="st0" cx="625" cy="475" r="4.7"/>
-		<circle id="strict_s_diamond_hand_point" class="st0" cx="475" cy="625" r="4.7"/>
-		<circle id="strict_w_diamond_hand_point" class="st0" cx="325" cy="475" r="4.7"/>
-		<circle id="strict_n_diamond_hand_point" class="st0" cx="475" cy="325" r="4.7"/>
+		<circle id="n_diamond_hand_point_strict" class="st0" cx="475" cy="325" r="4.7"/>
+		<circle id="e_diamond_hand_point_strict" class="st0" cx="625" cy="475" r="4.7"/>
+		<circle id="s_diamond_hand_point_strict" class="st0" cx="475" cy="625" r="4.7"/>
+		<circle id="w_diamond_hand_point_strict" class="st0" cx="325" cy="475" r="4.7"/>
 	</g>
 	<circle id="center_point" cx="475" cy="475" r="12"/>
 </svg>

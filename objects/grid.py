@@ -108,9 +108,7 @@ class Grid:
         return closest_point.name, closest_point.coordinates
 
     def get_closest_layer2_point(self, pos: QPointF) -> tuple[str, QPointF]:
-        layer = (
-            self.grid_data.layer2_points_normal
-        )  # or layer2_points_strict based on some condition
+        layer = self.grid_data.layer2_points_normal
         closest_point = self.grid_data.get_point(layer, pos)
         return closest_point.name, closest_point.coordinates
 

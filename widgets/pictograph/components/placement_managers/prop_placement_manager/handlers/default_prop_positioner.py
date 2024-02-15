@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from Enums.PropTypes import PropTypes
 from objects.grid import GridPoint
 from objects.prop.prop import Prop
 
@@ -13,17 +14,20 @@ class DefaultPropPositioner:
         self.prop_placement_manager = prop_placement_manager
         self.location_points_cache = {}
 
-    def set_prop_to_default_loc(self, prop: Prop, strict: bool = False) -> None:
+    def set_prop_to_default_loc(self, prop: Prop) -> None:
         position_offsets = (
             self.prop_placement_manager.offset_calculator.get_or_calculate_offsets(prop)
         )
         key = (prop.ori, prop.loc)
         offset = position_offsets.get(key)
         prop.setTransformOriginPoint(0, 0)
-        location_points = self.get_location_points(strict)
+        if self.pictograph.check.has_all_props_of_type(PropTypes.BigDoubleStar):
+            location_points = self.get_location_points(True)
+        else:
+            location_points = self.get_location_points(False)
 
         for location, location_point in location_points.items():
-            if prop.loc == location[0]:
+            if prop.loc == location[0]: # will need to upgrade for box mode
                 new_position = location_point.coordinates + offset
                 prop.setPos(new_position)
                 return
