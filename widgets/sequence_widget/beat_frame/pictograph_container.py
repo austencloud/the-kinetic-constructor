@@ -18,7 +18,7 @@ class PictographContainer(QFrame):
         self.layout().setContentsMargins(0, 0, 0, 0)
         self.layout().setSpacing(0)
 
-        self.view = PictographView(pictograph)
+        self.view = pictograph.view
         self.layout().addWidget(self.view)
         self.border_colors_map = self._get_border_colors_map()
         self.styled_border_overlay = StyledBorderOverlay(self.view)

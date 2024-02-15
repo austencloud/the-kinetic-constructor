@@ -5,12 +5,14 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.pictograph.components.pictograph_view import PictographView
+import math
 
 
 class StyledBorderOverlay(QWidget):
     def __init__(self, view: "PictographView"):
         super().__init__(view)
         self.view = view
+        self.is_set = False
         self.primary_color = None
         self.secondary_color = None
         self.outer_border_width = 3
@@ -19,13 +21,13 @@ class StyledBorderOverlay(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
 
     def resize_styled_border_overlay(self):
-        self.setFixedSize(self.view.size().width(), self.view.size().height())
+        self.setFixedSize(self.view.width(), self.view.height())
         self.update_border_widths()
 
     def update_border_widths(self):
         view_width = self.view.size().width()
-        self.outer_border_width = max(1, int(view_width * 0.015))
-        self.inner_border_width = max(1, int(view_width * 0.015))
+        self.outer_border_width = max(1, math.ceil(view_width * 0.013))
+        self.inner_border_width = max(1, math.ceil(view_width * 0.013))
         self.update()
 
     def update_border_colors(self, primary_color, secondary_color):
@@ -34,6 +36,7 @@ class StyledBorderOverlay(QWidget):
         self.secondary_color = (
             secondary_color if primary_color != secondary_color else "transparent"
         )
+        self.is_set = True
         self.update()
 
     def paintEvent(self, event):

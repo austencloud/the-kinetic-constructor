@@ -1,3 +1,4 @@
+import math
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QSizePolicy
 from PyQt6.QtCore import Qt, QEvent
@@ -20,30 +21,29 @@ class PictographView(QGraphicsView):
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
 
     def resize_pictograph_view(self) -> None:
-        view_width = self.get_view_vidth()
+        view_width = self.calculate_view_width()
+        self.pictograph.container.styled_border_overlay.update_border_widths()
         self.setMinimumWidth(view_width)
         self.setMaximumWidth(view_width)
         self.setMinimumHeight(view_width)
         self.setMaximumHeight(view_width)
-
         self.view_scale = view_width / self.pictograph.width()
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
         self.pictograph.container.styled_border_overlay.resize_styled_border_overlay()
 
-    def get_view_vidth(self):
+    def calculate_view_width(self):
         COLUMN_COUNT = self.pictograph.scroll_area.display_manager.COLUMN_COUNT
-        return int(
+        sections = self.pictograph.scroll_area.sections_manager.sections
+        letter_type = self.pictograph.letter_type
+        view_width = int(
             (self.pictograph.scroll_area.width() / COLUMN_COUNT)
-            - (
-                (
-                    self.pictograph.scroll_area.sections_manager.sections[
-                        self.pictograph.letter_type
-                    ].pictograph_frame.spacing
-                )
-                + self.pictograph.container.styled_border_overlay.outer_border_width
-            )
+            - ((sections[letter_type].pictograph_frame.spacing))
         )
+        outer_border_width = max(1, int(view_width * 0.015))
+        inner_border_width = max(1, int(view_width * 0.015))
+        view_width = view_width - (outer_border_width) - (inner_border_width)
+        return view_width
 
     def wheelEvent(self, event) -> None:
         self.pictograph.scroll_area.wheelEvent(event)

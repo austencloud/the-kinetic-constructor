@@ -53,6 +53,7 @@ class CodexLetterButtonClickHandler:
         self.section_manager.update_sections_based_on_letters(
             self.codex.selected_letters
         )
+        
 
     def process_pictographs_for_letter(self, letter: str) -> None:
         letter_type = LetterType.get_letter_type(letter)

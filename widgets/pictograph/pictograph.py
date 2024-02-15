@@ -106,8 +106,8 @@ class Pictograph(QGraphicsScene):
         self.image_renderer = PictographImageRenderer(self)
         self.get = PictographGetter(self)
         self.check = PictographChecker(self)
+        self.view = PictographView(self)
         self.container = PictographContainer(self)
-        self.view = self.container.view
         self.initializer.init_all_components()
         self.arrow_placement_manager = ArrowPlacementManager(self)
         self.prop_placement_manager = PropPlacementManager(self)
