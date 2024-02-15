@@ -10,6 +10,7 @@ from objects.prop.prop_classes import *
 
 from constants import *
 from widgets.factories.prop_factory import PropFactory
+from widgets.pictograph.components.elemental_glyph.elemental_glyph import ElementalGlyph
 from widgets.pictograph.components.tka_glyph.tka_glyph import TKA_Glyph
 
 from widgets.pictograph.components.vtg_glyph.vtg_glyph import (
@@ -41,6 +42,7 @@ class PictographInit:
         self.pictograph.props = self.init_props()
         self.pictograph.tka_glyph = self.init_tka_glyph()
         self.pictograph.vtg_glyph = self.init_vtg_glyph()
+        self.pictograph.elemental_glyph = self.init_elemental_glyph()
 
     def init_grid(self) -> Grid:
         grid = Grid(self.pictograph)
@@ -108,8 +110,11 @@ class PictographInit:
 
     def init_vtg_glyph(self) -> VTG_Glyph:
         vtg_glyph = VTG_Glyph(self.pictograph)
-        # self.pictograph.addItem(vtg_glyph)
         return vtg_glyph
+
+    def init_elemental_glyph(self) -> ElementalGlyph:
+        elemental_glyph = ElementalGlyph(self.pictograph)
+        return elemental_glyph
 
     def init_quadrant_boundaries(
         self, grid: Grid
