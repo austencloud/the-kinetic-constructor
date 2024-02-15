@@ -2,6 +2,7 @@ import logging
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letters
 
+from Enums.letters import LetterConditions
 from widgets.pictograph.pictograph import Pictograph
 
 from Enums.Enums import LetterType
@@ -57,13 +58,20 @@ class CodexDisplayManager:
         total_variations = sum(
             (
                 8
-                if letter in Letters.get_letters_by_condition("eight_variations")
+                if letter
+                in Letters.get_letters_by_condition(LetterConditions.EIGHT_VARIATIONS)
                 else (
                     16
-                    if letter in Letters.get_letters_by_condition("sixteen_variations")
+                    if letter
+                    in Letters.get_letters_by_condition(
+                        LetterConditions.SIXTEEN_VARIATIONS
+                    )
                     else (
                         4
-                        if letter in Letters.get_letters_by_condition("four_variations")
+                        if letter
+                        in Letters.get_letters_by_condition(
+                            LetterConditions.FOUR_VARIATIONS
+                        )
                         else 0
                     )
                 )

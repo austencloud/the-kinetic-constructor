@@ -1,6 +1,7 @@
 from typing import Union
 from Enums.Enums import LetterType, Letters
 
+from Enums.letters import LetterConditions
 from constants import *
 from widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.mirrored_turns_tuple_generator import (
     MirroredTurnsTupleGenerator,
@@ -55,12 +56,17 @@ class TurnsTupleGenerator:
 
     def _get_generator_key(self, letter: Letters) -> str:
         if letter.value in [
-            letter.value for letter in Letters.get_letters_by_condition("type1_hybrids")
+            letter.value
+            for letter in Letters.get_letters_by_condition(
+                LetterConditions.TYPE1_HYBRID
+            )
         ]:
             return "Type1Hybrid"
         elif letter.value in [
             letter.value
-            for letter in Letters.get_letters_by_condition("type1_non_hybrids")
+            for letter in Letters.get_letters_by_condition(
+                LetterConditions.TYPE1_NON_HYBRID
+            )
         ]:
             return "Type1NonHybrid"
         special_cases = {

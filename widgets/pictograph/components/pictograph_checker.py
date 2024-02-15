@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropTypes
-from Enums.letters import Letters
+from Enums.letters import LetterConditions, Letters
 from constants import *
 
 if TYPE_CHECKING:
@@ -12,16 +12,18 @@ class PictographChecker:
         self.pictograph = pictograph
 
     def ends_with_beta(self) -> bool:
-        return self.pictograph.letter in Letters.get_letters_by_condition("beta_ending")
+        return self.pictograph.letter in Letters.get_letters_by_condition(
+            LetterConditions.BETA_ENDING
+        )
 
     def ends_with_alpha(self) -> bool:
         return self.pictograph.letter in Letters.get_letters_by_condition(
-            "alpha_ending"
+            LetterConditions.ALPHA_ENDING
         )
 
     def ends_with_gamma(self) -> bool:
         return self.pictograph.letter in Letters.get_letters_by_condition(
-            "gamma_ending"
+            LetterConditions.GAMMA_ENDING
         )
 
     def ends_with_layer1(self) -> bool:

@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from Enums.letters import Letters
+from Enums.letters import LetterConditions, Letters
 from constants import CLOCK, COUNTER, IN, OUT
 from objects.arrow.arrow import Arrow
 
@@ -23,7 +23,7 @@ class AttrKeyGenerator:
                         return f"{arrow.motion.motion_type}_from_layer2"
                 else:
                     return arrow.motion.color
-            elif self.positioner.pictograph.letter in Letters.get_letters_by_condition("non_hybrid"):
+            elif self.positioner.pictograph.letter in Letters.get_letters_by_condition(LetterConditions.NON_HYBRID):
                 return arrow.color
             else:
                 return arrow.motion.motion_type

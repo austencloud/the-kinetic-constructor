@@ -1,6 +1,26 @@
 from enum import Enum
 
 
+
+class LetterConditions(Enum):
+    PRO = "pro"
+    ANTI = "anti"
+    DASH = "dash"
+    STATIC = "static"
+    ALPHA_ENDING = "alpha_ending"
+    BETA_ENDING = "beta_ending"
+    GAMMA_ENDING = "gamma_ending"
+    ALPHA_STARTING = "alpha_starting"
+    BETA_STARTING = "beta_starting"
+    GAMMA_STARTING = "gamma_starting"
+    FOUR_VARIATIONS = "four_variations"
+    EIGHT_VARIATIONS = "eight_variations"
+    SIXTEEN_VARIATIONS = "sixteen_variations"
+    HYBRID = "hybrid"
+    NON_HYBRID = "non_hybrid"
+    TYPE1_HYBRID = "type1_hybrids"
+    TYPE1_NON_HYBRID = "type1_non_hybrids"
+
 class Letters(Enum):
     A = "A"
     B = "B"
@@ -51,12 +71,12 @@ class Letters(Enum):
     Γ = "Γ"
 
     @staticmethod
-    def get_letters_by_condition(condition: str) -> list:
+    def get_letters_by_condition(condition: LetterConditions) -> list:
         """
         Returns a list of letter enums based on a given condition.
         """
         condition_mappings = {
-            "pro": [
+            LetterConditions.PRO: [
                 Letters.A,
                 Letters.D,
                 Letters.G,
@@ -73,7 +93,7 @@ class Letters(Enum):
                 Letters.θ,
                 Letters.θ_DASH,
             ],
-            "anti": [
+            LetterConditions.ANTI: [
                 Letters.B,
                 Letters.E,
                 Letters.H,
@@ -90,7 +110,7 @@ class Letters(Enum):
                 Letters.Ω,
                 Letters.Ω_DASH,
             ],
-            "dash": [
+            LetterConditions.DASH: [
                 Letters.W_DASH,
                 Letters.X_DASH,
                 Letters.Y_DASH,
@@ -106,7 +126,7 @@ class Letters(Enum):
                 Letters.Ψ_DASH,
                 Letters.Λ_DASH,
             ],
-            "static": [
+            LetterConditions.STATIC: [
                 Letters.W,
                 Letters.X,
                 Letters.Y,
@@ -122,7 +142,7 @@ class Letters(Enum):
                 Letters.β,
                 Letters.Γ,
             ],
-            "alpha_ending": [
+            LetterConditions.ALPHA_ENDING: [
                 Letters.A,
                 Letters.B,
                 Letters.C,
@@ -137,7 +157,7 @@ class Letters(Enum):
                 Letters.Φ_DASH,
                 Letters.α,
             ],
-            "beta_ending": [
+            LetterConditions.BETA_ENDING: [
                 Letters.G,
                 Letters.H,
                 Letters.I,
@@ -152,7 +172,7 @@ class Letters(Enum):
                 Letters.Ψ_DASH,
                 Letters.β,
             ],
-            "gamma_ending": [
+            LetterConditions.GAMMA_ENDING: [
                 Letters.M,
                 Letters.N,
                 Letters.O,
@@ -175,7 +195,7 @@ class Letters(Enum):
                 Letters.Λ_DASH,
                 Letters.Γ,
             ],
-            "alpha_starting": [
+            LetterConditions.ALPHA_STARTING: [
                 Letters.A,
                 Letters.B,
                 Letters.C,
@@ -190,7 +210,7 @@ class Letters(Enum):
                 Letters.Φ_DASH,
                 Letters.α,
             ],
-            "beta_starting": [
+            LetterConditions.BETA_STARTING: [
                 Letters.G,
                 Letters.H,
                 Letters.I,
@@ -205,7 +225,7 @@ class Letters(Enum):
                 Letters.Ψ_DASH,
                 Letters.β,
             ],
-            "gamma_starting": [
+            LetterConditions.GAMMA_STARTING: [
                 Letters.M,
                 Letters.N,
                 Letters.O,
@@ -228,7 +248,7 @@ class Letters(Enum):
                 Letters.Λ_DASH,
                 Letters.Γ,
             ],
-            "four_variations": [
+            LetterConditions.FOUR_VARIATIONS: [
                 Letters.Φ,
                 Letters.Ψ,
                 Letters.Λ,
@@ -239,7 +259,7 @@ class Letters(Enum):
                 Letters.β,
                 Letters.Γ,
             ],
-            "eight_variations": [
+            LetterConditions.EIGHT_VARIATIONS: [
                 Letters.A,
                 Letters.B,
                 Letters.D,
@@ -253,7 +273,7 @@ class Letters(Enum):
                 Letters.P,
                 Letters.Q,
             ],
-            "sixteen_variations": [
+            LetterConditions.SIXTEEN_VARIATIONS: [
                 Letters.C,
                 Letters.F,
                 Letters.I,
@@ -281,7 +301,7 @@ class Letters(Enum):
                 Letters.θ_DASH,
                 Letters.Ω_DASH,
             ],
-            "hybrid": [
+            LetterConditions.HYBRID: [
                 Letters.C,
                 Letters.F,
                 Letters.I,
@@ -310,7 +330,7 @@ class Letters(Enum):
                 Letters.Ψ,
                 Letters.Λ,
             ],
-            "non_hybrid": [
+            LetterConditions.NON_HYBRID: [
                 Letters.A,
                 Letters.B,
                 Letters.D,
@@ -332,7 +352,7 @@ class Letters(Enum):
                 Letters.β,
                 Letters.Γ,
             ],
-            "type1_hybrids": [
+            LetterConditions.TYPE1_HYBRID: [
                 Letters.C,
                 Letters.F,
                 Letters.I,
@@ -342,7 +362,7 @@ class Letters(Enum):
                 Letters.U,
                 Letters.V,
             ],
-            "type1_non_hybrids": [
+            LetterConditions.TYPE1_NON_HYBRID: [
                 Letters.A,
                 Letters.B,
                 Letters.D,
@@ -430,3 +450,4 @@ class LetterType(Enum):
         for letter_type in LetterType:
             if letter_str in letter_type.letters:
                 return letter_type
+

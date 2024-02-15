@@ -1,5 +1,5 @@
 import json
-from Enums.letters import Letters
+from Enums.letters import LetterConditions, Letters
 from constants import (
     ANTI,
     NONRADIAL,
@@ -58,7 +58,8 @@ class DefaultArrowPositioner:
         letter_suffix = ""
         if (
             arrow.pictograph.letter.value
-            and arrow.pictograph.letter in Letters.get_letters_by_condition("dash")
+            and arrow.pictograph.letter
+            in Letters.get_letters_by_condition(LetterConditions.DASH)
         ):
             char = arrow.pictograph.letter.value[:-1]
             letter_suffix = f"_{char}_dash"
