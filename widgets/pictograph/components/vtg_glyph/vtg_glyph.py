@@ -29,6 +29,7 @@ class VTG_Glyph(QGraphicsSvgItem):
     def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__()
         self.pictograph = pictograph
+        self.setZValue(1)  # Set the ZValue to a higher value
 
     def set_vtg_mode(self):
         if not self.pictograph.letter_type in [LetterType.Type1]:
@@ -71,4 +72,5 @@ class VTG_Glyph(QGraphicsSvgItem):
         x = int(self.boundingRect().height() / 1.5)
         y = int(self.pictograph.height() - (self.boundingRect().height() * 1.7))
         self.setPos(x, y)
-        print (f"VTG_Glyph position: {x}, {y}")
+
+        print(f"VTG_Glyph position: {x}, {y}")

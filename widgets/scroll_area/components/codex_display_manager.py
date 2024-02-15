@@ -109,9 +109,7 @@ class CodexDisplayManager:
             for k, v in sorted(
                 self.scroll_area.pictograph_cache.items(),
                 key=lambda item: (
-                    list(Letters).index(
-                        Letters[item[1].letter]
-                    ),  # Use the Letters enum for sorting
+                    list(Letters).index(Letters[item[1].letter]),
                     item[1].start_pos,
                 ),
             )

@@ -3,12 +3,13 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 from typing import TYPE_CHECKING, Union
 
+
 if TYPE_CHECKING:
-    from widgets.pictograph.components.glyph.tka_glyph_manager import TKAGlyphManager
+    from widgets.pictograph.components.tka_glyph.tka_glyph import TKA_Glyph
 
 
 class TurnsColumnHandler(QGraphicsItemGroup):
-    def __init__(self, glyph: "TKAGlyphManager"):
+    def __init__(self, glyph: "TKA_Glyph"):
         super().__init__()
         self.glyph = glyph
         self.top_number_item = None

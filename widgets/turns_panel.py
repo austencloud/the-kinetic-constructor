@@ -41,10 +41,10 @@ class TurnsPanel(QFrame):
                 relevant_selected_letters.append(letter)
 
         motion_type_mapping = {
-            PRO: ProLetters,
-            ANTI: AntiLetters,
-            DASH: DashLetters,
-            STATIC: StaticLetters,
+            PRO: [letter.value for letter in ProLetters],
+            ANTI: [letter.value for letter in AntiLetters],
+            DASH: [letter.value for letter in DashLetters],
+            STATIC: [letter.value for letter in StaticLetters]
         }
 
         for box in self.boxes:
