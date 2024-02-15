@@ -1,3 +1,4 @@
+from Enums.PropTypes import PropTypes
 from constants import (
     IN,
     OUT,
@@ -25,6 +26,7 @@ class PropOffsetCalculator:
     def __init__(self, prop_placement_manager: "PropPlacementManager") -> None:
         self.position_offsets_cache: dict[Prop, dict[tuple[str, str], QPointF]] = {}
         self.prop_placement_manager = prop_placement_manager
+        self.pictograph = prop_placement_manager.pictograph
 
     def get_or_calculate_offsets(self, prop: Prop) -> dict[tuple[str, str], QPointF]:
         if prop not in self.position_offsets_cache:
@@ -60,7 +62,10 @@ class PropOffsetCalculator:
     def calculate_new_position_with_offset(
         self, current_position: QPointF, direction: Directions
     ) -> QPointF:
-        self.beta_offset = self.prop_placement_manager.pictograph.width() / 38
+        if self.pictograph.check.has_all_props_of_type(PropTypes.Club):
+            self.beta_offset = self.prop_placement_manager.pictograph.width() / 60
+        else:
+            self.beta_offset = self.prop_placement_manager.pictograph.width() / 38
 
         offset_map = {
             LEFT: QPointF(-self.beta_offset, 0),

@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from Enums.PropTypes import PropTypes
 from constants import *
 from data.rules import beta_ending_letters, alpha_ending_letters, gamma_ending_letters
 
@@ -101,7 +102,6 @@ class PictographChecker:
             return False
 
     def starts_from_standard_orientation(self) -> bool:
-        # return true if they're both radial or they're both nonradial start oris
         return (
             self.pictograph.red_motion.start_ori in [IN, OUT]
             and self.pictograph.blue_motion.start_ori in [IN, OUT]
@@ -129,6 +129,7 @@ class PictographChecker:
         )
 
     def is_in_sequence_builder(self) -> bool:
-        # This method should return True if the application is in sequence builder mode.
-        # Implement the logic based on your application's state management.
         return hasattr(self.pictograph.scroll_area, "sequence_builder")
+
+    def has_all_props_of_type(self, prop_type: PropTypes) -> bool:
+        return all(prop.prop_type == prop_type for prop in self.pictograph.props.values())
