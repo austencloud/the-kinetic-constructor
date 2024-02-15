@@ -21,13 +21,13 @@ class DefaultPropPositioner:
         key = (prop.ori, prop.loc)
         offset = position_offsets.get(key)
         prop.setTransformOriginPoint(0, 0)
-        if self.pictograph.check.has_all_props_of_type(PropTypes.BigDoubleStar):
+        if self.pictograph.check.has_strictly_placed_props():
             location_points = self.get_location_points(True)
         else:
             location_points = self.get_location_points(False)
 
         for location, location_point in location_points.items():
-            if prop.loc == location[0]: # will need to upgrade for box mode
+            if prop.loc == location[0]:  # will need to upgrade for box mode
                 new_position = location_point.coordinates + offset
                 prop.setPos(new_position)
                 return
