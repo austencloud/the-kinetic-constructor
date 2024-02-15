@@ -12,15 +12,18 @@ class DashRotAngleCalculator(BaseRotAngleCalculator):
         return self._handle_orientation_based_rotation()
 
     def _handle_no_rotation(self) -> int:
-        no_rotation_map = {
+        no_rotation_map = self._no_rotation_map()
+        return no_rotation_map.get(
+            (self.arrow.motion.start_loc, self.arrow.motion.end_loc), 0
+        )
+
+    def _no_rotation_map(self):
+        return {
             (NORTH, SOUTH): 90,
             (EAST, WEST): 180,
             (SOUTH, NORTH): 270,
             (WEST, EAST): 0,
         }
-        return no_rotation_map.get(
-            (self.arrow.motion.start_loc, self.arrow.motion.end_loc), 0
-        )
 
     def _handle_orientation_based_rotation(self) -> int:
         orientation_rotation_map = self._dash_orientation_rotation_map()
@@ -63,8 +66,8 @@ class DashRotAngleCalculator(BaseRotAngleCalculator):
             if isinstance(loc_angle, dict):
                 return loc_angle.get(self.arrow.motion.prop_rot_dir, 0)
             return loc_angle
-        
+
         elif self.arrow.motion.prop_rot_dir == NO_ROT:
             return self._handle_no_rotation()
-        
+
         return None
