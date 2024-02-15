@@ -8,8 +8,6 @@ if TYPE_CHECKING:
     from main import MainWindow
 
 
-
-
 class PropTypeChanger:
     def __init__(self, main_window: "MainWindow"):
         self.main_window = main_window
@@ -29,3 +27,25 @@ class PropTypeChanger:
         pictograph.red_prop = pictograph.props[RED]
         pictograph.blue_prop = pictograph.props[BLUE]
         pictograph.updater.update_pictograph()
+
+    def apply_prop_type(self) -> None:
+        prop_type = self.main_window.settings_manager.get_prop_type()
+        self.main_window.main_widget.prop_type = prop_type
+        self.update_props_to_type(prop_type)
+
+    def update_props_to_type(self, new_prop_type) -> None:
+        for pictograph_list in self.main_window.main_widget.all_pictographs.values():
+            for pictograph in pictograph_list.values():
+                if pictograph.view.isVisible():
+                    self.replace_props(new_prop_type, pictograph)
+
+        for beat_view in self.main_window.main_widget.sequence_widget.beats:
+            if beat_view.is_filled:
+                self.replace_props(new_prop_type, beat_view.beat)
+                beat_view.beat.updater.update_pictograph()
+
+        start_pos = (
+            self.main_window.main_widget.sequence_widget.beat_frame.start_pos_view.start_pos
+        )
+        if start_pos.view.is_filled:
+            self.replace_props(new_prop_type, start_pos)

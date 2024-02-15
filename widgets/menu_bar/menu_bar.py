@@ -15,6 +15,7 @@ class MainWindowMenuBar(QMenuBar):
         self.main_widget = main_widget
         self._setup_menu()
         self._setup_settings_menu()
+        self._setup_glyph_visibility_menu()
 
     def _setup_settings_menu(self) -> None:
         settings_menu = self.addMenu("Settings")
@@ -35,6 +36,26 @@ class MainWindowMenuBar(QMenuBar):
 
             if self.main_widget.prop_type == prop_type:
                 action.setChecked(True)
+
+    def _setup_glyph_visibility_menu(self):
+        glyph_visibility_menu = self.addMenu("Glyph Visibility")
+        for glyph_type in ["VTG", "TKA", "Elemental"]:
+            action = QAction(f"{glyph_type} Glyph", self, checkable=True)
+            action.setChecked(
+                self.main_widget.main_window.settings_manager.get_glyph_visibility(
+                    glyph_type
+                )
+            )
+            action.triggered.connect(
+                lambda checked, gt=glyph_type: self.toggle_glyph_visibility(gt, checked)
+            )
+            glyph_visibility_menu.addAction(action)
+
+    def toggle_glyph_visibility(self, glyph_type: str, visible: bool):
+        self.main_widget.main_window.settings_manager.set_glyph_visibility(
+            glyph_type, visible
+        )
+        self.main_widget.main_window.settings_manager._apply_glyph_visibility()
 
     def set_prop_type(self, prop_type: PropTypes):
         self.main_widget.prop_type_selector.prop_type_changed(prop_type.name)

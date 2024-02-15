@@ -41,6 +41,11 @@ class VTG_Glyph(QGraphicsSvgItem):
             self.setSharedRenderer(self.renderer)
             self.pictograph.addItem(self)
             self.position_vtg_glyph()
+            visibility_manager = (
+                self.pictograph.main_widget.main_window.settings_manager.glyph_visibility_manager
+            )
+            self.setVisible(visibility_manager.should_glyph_be_visible("VTG"))
+
         print(f"SVG path: {svg_path}")  # Add this line for debug output
 
     def determine_vtg_mode(self):

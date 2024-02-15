@@ -89,3 +89,6 @@ class PictographView(QGraphicsView):
             settings_manager.prop_type_changer.replace_props(
                 current_prop_type, self.pictograph
             )
+        settings_manager.glyph_visibility_manager.apply_current_visibility_settings(
+            self.pictograph
+        )

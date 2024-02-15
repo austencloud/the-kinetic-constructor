@@ -32,6 +32,10 @@ class TKA_Glyph(QGraphicsItemGroup):
         direction, top_turn, bottom_turn = parse_turns_tuple_string(turns_tuple)
         self.dot_handler.update_dots(direction)
         self.turns_column_handler.update_turns(top_turn, bottom_turn)
+        visibility_manager = (
+            self.pictograph.main_widget.main_window.settings_manager.glyph_visibility_manager
+        )
+        self.setVisible(visibility_manager.should_glyph_be_visible("TKA"))
 
     def setup_base_letter(self):
         self.letter = self.pictograph.letter
