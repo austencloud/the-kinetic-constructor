@@ -2,7 +2,7 @@ import json
 import os
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropTypes
-from widgets.menu_bar.glyph_visibility_manager import GlyphVisibilityToggler
+from widgets.menu_bar.glyph_visibility_manager import GlyphVisibilityManager
 from prop_type_changer import PropTypeChanger
 
 
@@ -19,9 +19,11 @@ class SettingsManager:
         self.main_window = main_window
         self.settings = self.load_settings()
         self.prop_type_changer = PropTypeChanger(main_window)
-        self.glyph_visibility_manager = GlyphVisibilityToggler(main_window)
+        self.glyph_visibility_manager = GlyphVisibilityManager(main_window)
 
-    def load_settings(self) -> dict:
+    def load_settings(
+        self,
+    ) -> dict[str, int | str, str | str, dict[str, bool]]:
         if os.path.exists(self.settings_file):
             with open(self.settings_file, "r") as file:
                 return json.load(file)
@@ -52,7 +54,7 @@ class SettingsManager:
         """Apply user settings to the application."""
         self._apply_pictograph_size()
         self.prop_type_changer.apply_prop_type()
-        self.glyph_visibility_manager.toggle_visibility()
+        self.glyph_visibility_manager.apply_current_visibility_settings()
         self.main_window.main_widget.main_tab_widget.codex.update_pictographs()
 
     def _apply_pictograph_size(self) -> None:
@@ -64,21 +66,3 @@ class SettingsManager:
         self.main_window.main_widget.main_tab_widget.codex.scroll_area.display_manager.COLUMN_COUNT = (
             column_count
         )
-
-    def get_glyph_visibility(self, glyph_type: str) -> bool:
-        return self.settings.get("glyph_visibility", {}).get(glyph_type, True)
-
-    def set_glyph_visibility(self, glyph_type: str, visible: bool) -> None:
-        if "glyph_visibility" not in self.settings:
-            self.settings["glyph_visibility"] = {}
-        self.settings["glyph_visibility"][glyph_type] = visible
-        self.save_settings()
-        self._apply_glyph_visibility()
-
-    def _apply_glyph_visibility(self):
-        for pictograph_list in self.main_window.main_widget.all_pictographs.values():
-            for pictograph in pictograph_list.values():
-                if pictograph.view.isVisible():
-                    self.glyph_visibility_manager.apply_current_visibility_settings(
-                        pictograph
-                    )

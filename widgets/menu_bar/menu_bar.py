@@ -42,7 +42,7 @@ class MainWindowMenuBar(QMenuBar):
         for glyph_type in ["VTG", "TKA", "Elemental"]:
             action = QAction(f"{glyph_type} Glyph", self, checkable=True)
             action.setChecked(
-                self.main_widget.main_window.settings_manager.get_glyph_visibility(
+                self.main_widget.main_window.settings_manager.glyph_visibility_manager.get_glyph_visibility(
                     glyph_type
                 )
             )
@@ -52,10 +52,10 @@ class MainWindowMenuBar(QMenuBar):
             glyph_visibility_menu.addAction(action)
 
     def toggle_glyph_visibility(self, glyph_type: str, visible: bool):
-        self.main_widget.main_window.settings_manager.set_glyph_visibility(
+        self.main_widget.main_window.settings_manager.glyph_visibility_manager.set_glyph_visibility(
             glyph_type, visible
         )
-        self.main_widget.main_window.settings_manager._apply_glyph_visibility()
+        self.main_widget.main_window.settings_manager.glyph_visibility_manager.apply_glyph_visibility()
 
     def set_prop_type(self, prop_type: PropTypes):
         self.main_widget.prop_type_selector.prop_type_changed(prop_type.name)

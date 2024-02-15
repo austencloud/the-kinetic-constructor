@@ -43,8 +43,6 @@ class ElementalGlyph(QGraphicsSvgItem):
             )
             self.setVisible(visibility_manager.should_glyph_be_visible("Elemental"))
 
-        print(f"SVG path: {svg_path}")  # Add this line for debug output
-
     def position_elemental_glyph(self) -> None:
         pictograph_width = self.pictograph.width()
         pictograph_height = self.pictograph.height()
@@ -60,5 +58,3 @@ class ElementalGlyph(QGraphicsSvgItem):
         y = offset_height
         self.setPos(x, y)
         self.setTransformOriginPoint(width / 2, height / 2)
-
-        print(f"ElementalGlyph positioned: {x}, {y}")

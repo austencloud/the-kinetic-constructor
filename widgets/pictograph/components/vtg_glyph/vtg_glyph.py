@@ -46,8 +46,6 @@ class VTG_Glyph(QGraphicsSvgItem):
             )
             self.setVisible(visibility_manager.should_glyph_be_visible("VTG"))
 
-        print(f"SVG path: {svg_path}")  # Add this line for debug output
-
     def determine_vtg_mode(self):
         letter = self.pictograph.letter
         mode = self.pictograph.vtg_mode
@@ -112,5 +110,3 @@ class VTG_Glyph(QGraphicsSvgItem):
 
         self.setPos(x, y)
         self.setTransformOriginPoint(scaled_width / 2, scaled_height / 2)
-
-        print(f"VTG_Glyph positioned with additional inner margin: {x}, {y}")
