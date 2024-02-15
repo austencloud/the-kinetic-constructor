@@ -20,6 +20,7 @@ class PictographUpdater:
                 self._update_from_pictograph_dict(pictograph_dict)
                 self.pictograph.turns_tuple = self.pictograph.get.turns_tuple()
                 self.pictograph.vtg_glyph.set_vtg_mode()
+                self.pictograph.container.update_borders()
             else:
                 self._update_from_pictograph_dict(pictograph_dict)
 

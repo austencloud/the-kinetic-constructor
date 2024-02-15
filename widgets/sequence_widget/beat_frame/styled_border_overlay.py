@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QPainter, QPen, QColor
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QRect
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -18,61 +18,67 @@ class StyledBorderOverlay(QWidget):
         self.setFixedSize(view.size())
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
 
+    def resize_styled_border_overlay(self):
+        self.setFixedSize(self.view.size().width(), self.view.size().height())
+        self.update_border_widths()
+
+    def update_border_widths(self):
+        view_width = self.view.size().width()
+        self.outer_border_width = max(1, int(view_width * 0.015))
+        self.inner_border_width = max(1, int(view_width * 0.015))
+        self.update()
+
     def update_border_colors(self, primary_color, secondary_color):
+        self.update_border_widths()
         self.primary_color = primary_color
         self.secondary_color = (
             secondary_color if primary_color != secondary_color else "transparent"
         )
-        self.update()  # Call this to trigger a repaint
-
-    def resize_styled_border_overlay(self):
-        self.setFixedSize(
-            self.view.size().width(),
-            self.view.size().height(),
-        )
+        self.update()
 
     def paintEvent(self, event):
         if self.primary_color and self.secondary_color:
-            painter = QPainter(self)
-            pen = QPen()
+            self._draw_borders()
 
-            # Outer border
-            pen.setColor(QColor(self.primary_color))
-            pen.setWidth(self.outer_border_width)
-            pen.setJoinStyle(
-                Qt.PenJoinStyle.MiterJoin
-            )  # Set the join style to MiterJoin
-            painter.setPen(pen)
-            outer_rect = self.rect().adjusted(
-                self.outer_border_width // 2,
-                self.outer_border_width // 2,
-                -(self.outer_border_width // 2),
-                -(self.outer_border_width // 2),
-            )
-            painter.drawRect(outer_rect)
+    def _draw_borders(self):
+        painter = QPainter(self)
+        pen = QPen()
+        outer_border = self._draw_outer_border(painter, pen)
+        self._draw_inner_border(painter, pen, outer_border)
 
-            # Inner border
-            pen.setColor(QColor(self.secondary_color))
-            pen.setWidth(self.inner_border_width)
-            pen.setJoinStyle(
-                Qt.PenJoinStyle.MiterJoin
-            )  # Set the join style to MiterJoin
-            painter.setPen(pen)
-            inner_offset = self.outer_border_width - (
-                self.outer_border_width - self.inner_border_width
-            )
-            inner_rect = outer_rect.adjusted(
-                inner_offset,
-                inner_offset,
-                -inner_offset,
-                -inner_offset,
-            )
-            painter.drawRect(inner_rect)
+    def _draw_inner_border(self, painter: QPainter, pen: QPen, outer_rect: QRect):
+        pen.setColor(QColor(self.secondary_color))
+        pen.setWidth(self.inner_border_width)
+        pen.setJoinStyle(Qt.PenJoinStyle.MiterJoin)
+        painter.setPen(pen)
+        inner_offset = self.outer_border_width - (
+            self.outer_border_width - self.inner_border_width
+        )
+        inner_rect = outer_rect.adjusted(
+            inner_offset,
+            inner_offset,
+            -inner_offset,
+            -inner_offset,
+        )
+        painter.drawRect(inner_rect)
+
+    def _draw_outer_border(self, painter: QPainter, pen: QPen):
+        pen.setColor(QColor(self.primary_color))
+        pen.setWidth(self.outer_border_width)
+        pen.setJoinStyle(Qt.PenJoinStyle.MiterJoin)
+        painter.setPen(pen)
+        outer_rect = self.rect().adjusted(
+            self.outer_border_width // 2,
+            self.outer_border_width // 2,
+            -(self.outer_border_width // 2),
+            -(self.outer_border_width // 2),
+        )
+        painter.drawRect(outer_rect)
+        return outer_rect
 
     def set_gold_border(self):
         self.saved_primary_color = self.primary_color
         self.saved_secondary_color = self.secondary_color
-        # check the base class of the pictograph.scroll_area. If it's a codex, we want to just set it to the colors it already is set to instead of gold.
         if self.view.pictograph.scroll_area.__class__.__name__ == "CodexScrollArea":
             self.update_border_colors(
                 self.saved_primary_color, self.saved_secondary_color

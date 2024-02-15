@@ -29,7 +29,6 @@ class VTG_Glyph(QGraphicsSvgItem):
     def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__()
         self.pictograph = pictograph
-        self.setZValue(1)  # Set the ZValue to a higher value
 
     def set_vtg_mode(self):
         if not self.pictograph.letter_type in [LetterType.Type1]:
@@ -40,7 +39,9 @@ class VTG_Glyph(QGraphicsSvgItem):
         self.renderer = QSvgRenderer(svg_path)
         if self.renderer.isValid():
             self.setSharedRenderer(self.renderer)
+            self.pictograph.addItem(self)
             self.position_vtg_glyph()
+        print(f"SVG path: {svg_path}")  # Add this line for debug output
 
     def determine_vtg_mode(self):
         letter = self.pictograph.letter
@@ -69,8 +70,42 @@ class VTG_Glyph(QGraphicsSvgItem):
         return mode
 
     def position_vtg_glyph(self) -> None:
-        x = int(self.boundingRect().height() / 1.5)
-        y = int(self.pictograph.height() - (self.boundingRect().height() * 1.7))
-        self.setPos(x, y)
+        pictograph_width = self.pictograph.width()
+        pictograph_height = self.pictograph.height()
 
-        print(f"VTG_Glyph position: {x}, {y}")
+        scale_factor = 0.7
+        self.setScale(scale_factor)
+
+        border_percentage = 0.03
+        additional_margin_percentage = 0.03
+
+        border_offset_width = pictograph_width * border_percentage
+        border_offset_height = pictograph_height * border_percentage
+        additional_margin_width = pictograph_width * additional_margin_percentage
+        additional_margin_height = pictograph_height * additional_margin_percentage
+
+        effective_pictograph_width = pictograph_width - 2 * (
+            border_offset_width + additional_margin_width
+        )
+        effective_pictograph_height = pictograph_height - 2 * (
+            border_offset_height + additional_margin_height
+        )
+
+        scaled_width = self.boundingRect().width() * scale_factor
+        scaled_height = self.boundingRect().height() * scale_factor
+
+        x = (
+            effective_pictograph_width
+            - scaled_width
+            + (border_offset_width + additional_margin_width)
+        )
+        y = (
+            effective_pictograph_height
+            - scaled_height
+            + (border_offset_height + additional_margin_height)
+        )
+
+        self.setPos(x, y)
+        self.setTransformOriginPoint(scaled_width / 2, scaled_height / 2)
+
+        print(f"VTG_Glyph positioned with additional inner margin: {x}, {y}")
