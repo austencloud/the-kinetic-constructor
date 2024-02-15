@@ -60,7 +60,9 @@ class SettingsManager:
     def update_props_to_type(self, new_prop_type) -> None:
         for pictograph_list in self.main_window.main_widget.all_pictographs.values():
             for pictograph in pictograph_list.values():
-                self.prop_type_changer.replace_props(new_prop_type, pictograph)
+                if pictograph.view.isVisible():  # Check if the pictograph is currently visible
+                    self.prop_type_changer.replace_props(new_prop_type, pictograph)
+        # Assuming beat views are always visible or have a similar visibility check
         for beat_view in self.main_window.main_widget.sequence_widget.beats:
             if beat_view.is_filled:
                 self.prop_type_changer.replace_props(new_prop_type, beat_view.beat)

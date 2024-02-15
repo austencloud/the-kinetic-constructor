@@ -80,3 +80,12 @@ class PictographView(QGraphicsView):
             )
         else:
             super().keyPressEvent(event)
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        settings_manager = self.pictograph.main_widget.main_window.settings_manager
+        current_prop_type = settings_manager.get_prop_type()
+        if self.pictograph.prop_type != current_prop_type:
+            settings_manager.prop_type_changer.replace_props(
+                current_prop_type, self.pictograph
+            )

@@ -15,6 +15,7 @@ from Enums.Enums import (
 )
 from Enums.MotionAttributes import Colors, Locations
 
+from Enums.PropTypes import PropTypes
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from objects.motion.motion import Motion
@@ -90,7 +91,8 @@ class Pictograph(QGraphicsScene):
     blue_prop: Prop
     selected_arrow: Arrow = None
     turns_tuple: str = None
-
+    prop_type: PropTypes = None
+    
     def __init__(
         self,
         main_widget: "MainWidget",
