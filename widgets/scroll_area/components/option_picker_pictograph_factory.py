@@ -13,10 +13,10 @@ if TYPE_CHECKING:
     from widgets.scroll_area.codex_scroll_area import CodexScrollArea
 
 
-class ScrollAreaPictographFactory:
+class OptionPickerPictographFactory:
     def __init__(
         self,
-        scroll_area: Union["CodexScrollArea", "OptionPickerScrollArea"],
+        scroll_area: "OptionPickerScrollArea",
         pictograph_cache: dict[str, Pictograph],
     ) -> None:
         self.scroll_area = scroll_area
@@ -46,6 +46,7 @@ class ScrollAreaPictographFactory:
                 if letter in letter_type.letters:
                     letter_type = letter_type
                     break
+
             section = self.scroll_area.sections_manager.get_section(letter_type)
             section.pictographs[pictograph_key] = pictograph
 

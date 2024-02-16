@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, TurnsTabAttributeType
 
-from constants import COLOR, LEAD_STATE, MOTION_TYPE
 
 if TYPE_CHECKING:
     from widgets.turns_box.turns_box import TurnsBox

@@ -1,6 +1,7 @@
 from enum import Enum
 
 
+
 class LetterConditions(Enum):
     PRO = "pro"
     ANTI = "anti"
@@ -19,6 +20,12 @@ class LetterConditions(Enum):
     NON_HYBRID = "non_hybrid"
     TYPE1_HYBRID = "type1_hybrids"
     TYPE1_NON_HYBRID = "type1_non_hybrids"
+    TYPE1 = "type1"
+    TYPE2 = "type2"
+    TYPE3 = "type3"
+    TYPE4 = "type4"
+    TYPE5 = "type5"
+    TYPE6 = "type6"
 
 
 class Letters(Enum):
@@ -78,36 +85,52 @@ class Letters(Enum):
         condition_mappings = {
             LetterConditions.PRO: [
                 Letters.A,
+                Letters.C,
                 Letters.D,
+                Letters.F,
                 Letters.G,
+                Letters.I,
                 Letters.J,
+                Letters.L,
                 Letters.M,
+                Letters.O,
                 Letters.P,
+                Letters.R,
                 Letters.S,
+                Letters.U,
+                Letters.V,
                 Letters.W,
-                Letters.W_DASH,
                 Letters.Y,
-                Letters.Y_DASH,
                 Letters.Σ,
-                Letters.Σ_DASH,
                 Letters.θ,
+                Letters.W_DASH,
+                Letters.Y_DASH,
+                Letters.Σ_DASH,
                 Letters.θ_DASH,
             ],
             LetterConditions.ANTI: [
                 Letters.B,
+                Letters.C,
                 Letters.E,
+                Letters.F,
                 Letters.H,
+                Letters.I,
                 Letters.K,
+                Letters.L,
                 Letters.N,
+                Letters.O,
                 Letters.Q,
+                Letters.R,
                 Letters.T,
+                Letters.U,
+                Letters.V,
                 Letters.X,
-                Letters.X_DASH,
                 Letters.Z,
-                Letters.Z_DASH,
                 Letters.Δ,
-                Letters.Δ_DASH,
                 Letters.Ω,
+                Letters.X_DASH,
+                Letters.Z_DASH,
+                Letters.Δ_DASH,
                 Letters.Ω_DASH,
             ],
             LetterConditions.DASH: [
@@ -378,6 +401,53 @@ class Letters(Enum):
                 Letters.S,
                 Letters.T,
             ],
+            LetterConditions.TYPE1: [
+                Letters.A,
+                Letters.B,
+                Letters.D,
+                Letters.E,
+                Letters.G,
+                Letters.H,
+                Letters.J,
+                Letters.K,
+                Letters.M,
+                Letters.N,
+                Letters.P,
+                Letters.Q,
+                Letters.S,
+                Letters.T,
+                Letters.C,
+                Letters.F,
+                Letters.I,
+                Letters.L,
+                Letters.O,
+                Letters.R,
+                Letters.U,
+                Letters.V,
+            ],
+            LetterConditions.TYPE2: [
+                Letters.W,
+                Letters.X,
+                Letters.Y,
+                Letters.Z,
+                Letters.Σ,
+                Letters.Δ,
+                Letters.θ,
+                Letters.Ω,
+            ],
+            LetterConditions.TYPE3: [
+                Letters.W_DASH,
+                Letters.X_DASH,
+                Letters.Y_DASH,
+                Letters.Z_DASH,
+                Letters.Σ_DASH,
+                Letters.Δ_DASH,
+                Letters.θ_DASH,
+                Letters.Ω_DASH,
+            ],
+            LetterConditions.TYPE4: [Letters.Φ, Letters.Ψ, Letters.Λ],
+            LetterConditions.TYPE5: [Letters.Φ_DASH, Letters.Ψ_DASH, Letters.Λ_DASH],
+            LetterConditions.TYPE6: [Letters.α, Letters.β, Letters.Γ],
         }
         return condition_mappings.get(condition, [])
 
@@ -402,6 +472,8 @@ class Letters(Enum):
     def get_letter(letter_str: str) -> "Letters":
         return Letters(letter_str)
 
+    def get_letter_type(self) -> "LetterType":
+        return LetterType.get_letter_type(self)
 
 class LetterType(Enum):
     Type1 = (

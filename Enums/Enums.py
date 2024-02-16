@@ -197,9 +197,6 @@ class TurnsTabAttributeType(Enum):
     LEAD_STATE = auto()
 
 
-from enum import Enum
-
-
 class ParallelCombinationsSet(Enum):
     SET = "set"
 

@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from Enums.Enums import LetterType, Letters
 
 
-from .components.scroll_area_pictograph_factory import ScrollAreaPictographFactory
+from .components.codex_pictograph_factory import CodexPictographFactory
 from .components.section_manager.codex_section_manager import CodexSectionManager
 from .components.codex_display_manager import CodexDisplayManager
 from Enums.Enums import LetterType
@@ -31,7 +31,7 @@ class CodexScrollArea(QScrollArea):
     def _setup_managers(self) -> None:
         self.display_manager = CodexDisplayManager(self)
         self.sections_manager = CodexSectionManager(self)
-        self.pictograph_factory = ScrollAreaPictographFactory(
+        self.pictograph_factory = CodexPictographFactory(
             self, self.codex.pictograph_cache
         )
 

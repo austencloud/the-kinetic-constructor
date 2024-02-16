@@ -28,7 +28,7 @@ class CodexSectionManager:
     def __init__(self, scroll_area: "CodexScrollArea") -> None:
         self.scroll_area = scroll_area
         self.sections: dict[LetterType, CodexSectionWidget] = {}
-        self.turns_tabs_cache: dict[LetterType, TurnsTab] = {}
+        self.filter_tabs_cache: dict[LetterType, TurnsTab] = {}
         self.pictograph_cache: dict[Letters, list[LetterType]] = {}
 
         self.pictographs_by_type = {type: [] for type in LetterType}
@@ -57,9 +57,9 @@ class CodexSectionManager:
                 return i
         return len(self.ordered_section_types)
 
-    def get_pictograph_letter_type(self, letter: Letters) -> LetterType:
-        letter_str = Letters.get_letter(letter)
-        return LetterType.get_letter_type(letter_str)
+    def get_pictograph_letter_type(self, pictograph_key: str) -> LetterType:
+        letter = pictograph_key.split("_")[0]
+        return LetterType.get_letter_type(letter)
 
     def add_section_label_to_layout(
         self, section_label: QLabel, section_layout: QGridLayout
@@ -70,20 +70,17 @@ class CodexSectionManager:
         )
 
     def get_section(self, letter_type: LetterType) -> CodexSectionWidget:
-        if letter_type not in self.sections:
-            self.create_section(letter_type)
-        section = self.sections[letter_type]
-        return section
+        return self.sections.get(letter_type)
 
     def create_section_if_needed(self, letter_type: LetterType) -> None:
         if letter_type not in self.sections:
             self.create_section(letter_type)
         section = self.sections[letter_type]
         if not section.turns_tab:
-            if letter_type not in self.turns_tabs_cache:
-                turns_tab = self.create_or_get_turns_tab(section)
-                self.turns_tabs_cache[letter_type] = turns_tab
-            section.turns_tab = self.turns_tabs_cache[letter_type]
+            if letter_type not in self.filter_tabs_cache:
+                turns_tab = self.create_or_get_filter_tab(section)
+                self.filter_tabs_cache[letter_type] = turns_tab
+            section.turns_tab = self.filter_tabs_cache[letter_type]
 
     def update_sections_based_on_letters(self, selected_letters: list[Letters]) -> None:
         sections_to_show = self.get_sections_to_show_from_selected_letters(
@@ -111,7 +108,7 @@ class CodexSectionManager:
                 sections_to_show.append(letter_type)
         return sections_to_show
 
-    def create_or_get_turns_tab(self, section: CodexSectionWidget) -> TurnsTab:
+    def create_or_get_filter_tab(self, section: CodexSectionWidget) -> TurnsTab:
         if not section.turns_tab:
             section.turns_tab = TurnsTab(section)
             section.layout.insertWidget(1, section.turns_tab)

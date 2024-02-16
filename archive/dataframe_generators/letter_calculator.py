@@ -1,14 +1,6 @@
 import logging
 from Enums.MotionAttributes import MotionTypes
 
-from utilities.TypeChecking.letter_lists import (
-    alpha_ending_letters,
-    alpha_starting_letters,
-    beta_ending_letters,
-    beta_starting_letters,
-    gamma_ending_letters,
-    gamma_starting_letters,
-)
 
 from Enums.Enums import LetterString
 

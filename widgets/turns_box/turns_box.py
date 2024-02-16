@@ -1,20 +1,12 @@
-from typing import TYPE_CHECKING, Union, cast
+from typing import TYPE_CHECKING, cast
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
-from Enums.Enums import MotionAttributes, TurnsTabAttributeType
+from Enums.Enums import TurnsTabAttributeType
 from Enums.MotionAttributes import Colors, LeadStates, MotionTypes
 
-from constants import (
-    BLUE,
-    CLOCKWISE,
-    COLOR,
-    COUNTER_CLOCKWISE,
-    LEAD_STATE,
-    MOTION_TYPE,
-    RED,
-)
-from widgets.header_widget import HeaderWidget
-from widgets.turns_box.turns_box_widgets.prop_rot_dir_button_manager import (
+from constants import BLUE, CLOCKWISE, COLOR, COUNTER_CLOCKWISE, RED
+from ..header_widget import HeaderWidget
+from ..turns_box.turns_box_widgets.prop_rot_dir_button_manager import (
     PropRotDirButtonManager,
 )
 from .turns_box_widgets.turns_widget.turns_widget import (

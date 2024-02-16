@@ -2,14 +2,16 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QWheelEvent
-from widgets.scroll_area.components.scroll_area_pictograph_factory import (
-    ScrollAreaPictographFactory,
+
+from widgets.scroll_area.components.option_picker_pictograph_factory import (
+    OptionPickerPictographFactory,
 )
+from widgets.sequence_builder.components.option_picker.option_picker_section_manager import OptionPickerSectionsManager
+
 from ....scroll_area.components.option_picker_display_manager import (
     OptionPickerDisplayManager,
 )
 from ....pictograph.pictograph import Pictograph
-from .option_picker_section_manager import OptionPickerSectionsManager
 from ....scroll_area.base_scroll_area import BasePictographScrollArea
 
 if TYPE_CHECKING:
@@ -33,7 +35,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.set_layout("VBox")
         self.sections_manager = OptionPickerSectionsManager(self)
         self.display_manager = OptionPickerDisplayManager(self)
-        self.pictograph_factory = ScrollAreaPictographFactory(
+        self.pictograph_factory = OptionPickerPictographFactory(
             self, self.sequence_builder.pictograph_cache
         )
 

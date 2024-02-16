@@ -32,7 +32,7 @@ class LetterLoader:
 
     @staticmethod
     def get_letter_enum_by_value(letter_value: str) -> Letters:
-        for letter in Letters:
+        for letter in Letters.__members__.values():
             if letter.value == letter_value:
                 return letter
         raise ValueError(f"No matching Letters enum for value: {letter_value}")

@@ -33,6 +33,8 @@ class ElementalGlyph(QGraphicsSvgItem):
             return
         vtg_mode = self.pictograph.vtg_mode
         svg_path: str = SVG_PATHS.get(vtg_mode, "")
+        if not svg_path:
+            return
         self.renderer = QSvgRenderer(svg_path)
         if self.renderer.isValid():
             self.setSharedRenderer(self.renderer)
