@@ -67,6 +67,8 @@ class SequenceWidget(QWidget):
         self.beat_frame.start_pos_view.setMaximumHeight(beat_view_width)
         self.layout.update()
 
+    # TODO: Implement the following methods
+
     def delete_selected_pictograph(self):
         # This method assumes you have a way to track the currently selected pictograph.
         # Let's assume selected_beat is the variable holding the currently selected BeatView.

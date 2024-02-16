@@ -37,7 +37,6 @@ class SequenceBeatFrame(QFrame):
         self.layout.setAlignment(
             Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop
         )
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(main_widget, self)
         self.layout.addWidget(self.start_pos_view, 0, 0)
@@ -52,9 +51,9 @@ class SequenceBeatFrame(QFrame):
 
     def set_selected_beat(self, beat_view: "BeatView"):
         if self.selected_beat_view:
-            self.selected_beat_view.deselect() 
+            self.selected_beat_view.deselect()
         self.selected_beat_view = beat_view
-        beat_view.select() 
+        beat_view.select()
 
     def deselect_current_beat(self):
         if self.selected_beat_view:
@@ -107,4 +106,3 @@ class SequenceBeatFrame(QFrame):
 
     def is_full(self) -> bool:
         return all(beat.is_filled for beat in self.beats)
-        
