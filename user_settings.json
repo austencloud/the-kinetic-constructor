@@ -4,6 +4,6 @@
     "glyph_visibility": {
         "VTG": true,
         "TKA": true,
-        "Elemental": true
+        "Elemental": false
     }
 }
