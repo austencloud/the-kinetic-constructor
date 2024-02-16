@@ -21,36 +21,61 @@ class SequenceButtonFrame(QFrame):
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
         self.main_widget = sequence_widget.main_widget
-
-        # Use QVBoxLayout to stack buttons vertically and include the indicator at the top
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-
-        # Indicator label setup
-        self.indicator_label = QLabel("Status: Ready")  # Initial placeholder text
-        self.indicator_label.setStyleSheet("font-size: 16px; color: green;")
-        self.layout.addWidget(self.indicator_label)  # Add the label to the layout
-
-        # Save sequence button setup
+        self.font_size = self.sequence_widget.width() // 45
+        self.setup_save_sequence_button()
+        self.setup_clear_sequence_button()
+        self.setup_indicator_label()
+        self.setup_layout()
+        # Initialize the timer
+        self.timer = QTimer(self)
+        self.timer.setSingleShot(True)
+        self.timer.timeout.connect(self.hide_indicator)
+    def setup_save_sequence_button(self):
         self.save_sequence_button = QPushButton("Save Sequence")
         self.save_sequence_button.clicked.connect(self.save_sequence)
-        self.save_sequence_button.setStyleSheet("font-size: 16px;")
-        self.layout.addWidget(self.save_sequence_button)
+        self.save_sequence_button.setFixedHeight(40)
+        font = self.save_sequence_button.font()
+        font.setPointSize(self.font_size)
+        self.save_sequence_button.setFont(font)
 
-        # Clear sequence button setup
+    def setup_clear_sequence_button(self):
         self.clear_sequence_button = QPushButton("Clear Sequence")
         self.clear_sequence_button.clicked.connect(self.clear_sequence)
-        self.clear_sequence_button.setStyleSheet("font-size: 16px;")
-        self.layout.addWidget(self.clear_sequence_button)
+        self.clear_sequence_button.setFixedHeight(40)
+        font = self.clear_sequence_button.font()
+        font.setPointSize(self.font_size)
+        self.clear_sequence_button.setFont(font)
 
+    def setup_indicator_label(self):
+        self.indicator_label = QLabel("")
+        self.indicator_label.setStyleSheet("font-size: 16px; color: green;")
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-    def resizeEvent(self, event):
-        # Set button width relative to parent's width for responsive design
-        button_width = self.width() // 3
+    def setup_layout(self):
+        # Create a QHBoxLayout for the buttons
+        buttons_layout = QHBoxLayout()
+        buttons_layout.addWidget(self.save_sequence_button)
+        buttons_layout.addWidget(self.clear_sequence_button)
+        buttons_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Align buttons to the center
+
+        # Create a QHBoxLayout for the indicator label
+        label_layout = QHBoxLayout()
+        label_layout.addWidget(self.indicator_label)
+        label_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Align label to the center
+
+        # Create a QVBoxLayout as the master layout
+        master_layout = QVBoxLayout(self)
+        master_layout.addLayout(buttons_layout)
+        master_layout.addLayout(label_layout)
+        master_layout.setAlignment(Qt.AlignmentFlag.AlignTop)  # Align master layout to the top
+        self.setLayout(master_layout)  # Set the master layout to the frame
+
+    def resize_event(self, event):
+        button_width = self.width() // 6
         self.save_sequence_button.setFixedWidth(button_width)
         self.clear_sequence_button.setFixedWidth(button_width)
-        super().resizeEvent(event)
+        super().resize_event(event)
+
 
     def save_sequence(self):
         sequence_data = (
@@ -91,13 +116,10 @@ class SequenceButtonFrame(QFrame):
     def show_indicator(self, text):
         self.indicator_label.setText(text)
         self.indicator_label.show()
-
-        # Hide the indicator after 5 seconds
-        timer = QTimer(self)
-        timer.setSingleShot(True)
-        timer.timeout.connect(self.hide_indicator)
-        timer.start(5000)  # 5000 milliseconds = 5 seconds
+        # Check if the timer is running and restart it
+        if self.timer.isActive():
+            self.timer.stop()  # Stop the running timer
+        self.timer.start(5000)  # Restart the timer for 5 seconds
 
     def hide_indicator(self):
-        self.indicator_label.hide()
-        # Optionally adjust layout or perform other actions when hiding the label
+        self.indicator_label.clear() 
