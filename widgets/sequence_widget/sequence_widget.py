@@ -8,7 +8,6 @@ from widgets.scroll_area.components.sequence_widget_pictograph_factory import (
 from widgets.sequence_widget.beat_frame.beat import Beat
 from widgets.sequence_widget.beat_frame.beat_frame import SequenceBeatFrame
 from widgets.sequence_widget.button_frame import SequenceButtonFrame
-from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget

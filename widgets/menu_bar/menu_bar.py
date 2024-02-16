@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import QMenuBar, QMenu
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QAction, QActionGroup
 from Enums.PropTypes import PropTypes
-from widgets.menu_bar.preferences_dialog import PreferencesDialog
 
 if TYPE_CHECKING:
     from ..main_widget.main_widget import MainWidget

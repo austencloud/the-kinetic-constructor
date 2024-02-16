@@ -5,7 +5,6 @@ from Enums.PropTypes import *
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
-    from widgets.menu_bar.preferences_dialog import PreferencesDialog
 
 
 class PropTypeSelector(QGroupBox):

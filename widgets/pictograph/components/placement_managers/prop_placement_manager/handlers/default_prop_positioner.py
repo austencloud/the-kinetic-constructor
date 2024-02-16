@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from Enums.PropTypes import PropTypes
 from objects.grid import GridPoint
 from objects.prop.prop import Prop
 

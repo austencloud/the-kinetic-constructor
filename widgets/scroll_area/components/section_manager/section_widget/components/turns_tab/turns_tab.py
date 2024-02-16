@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import QTabWidget
 from Enums.Enums import TurnsTabAttribute
 from .turns_tab_visibility_handler import TurnsTabVisibilityHandler
 from typing import TYPE_CHECKING
-from constants import MOTION_TYPE, COLOR, LEAD_STATE
 from .turns_tab_turns_updater import TurnsTabUpdater
 from widgets.turns_panel import TurnsPanel
 

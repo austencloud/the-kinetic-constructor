@@ -1,4 +1,3 @@
-import json
 from PyQt6.QtCore import QObject, pyqtSignal
 from constants import END_POS, START_POS
 from ....pictograph.pictograph import Pictograph

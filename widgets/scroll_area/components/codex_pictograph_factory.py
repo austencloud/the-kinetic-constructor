@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letters
 
 from Enums.Enums import LetterType
@@ -7,9 +7,6 @@ from Enums.Enums import LetterType
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (
-        OptionPickerScrollArea,
-    )
     from widgets.scroll_area.codex_scroll_area import CodexScrollArea
 
 

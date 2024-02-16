@@ -1,9 +1,6 @@
 from typing import TYPE_CHECKING
 
 from PyQt6.QtGui import QMouseEvent
-from widgets.pictograph.pictograph import Pictograph
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QGraphicsView
 
 from widgets.sequence_widget.beat_frame.beat import Beat, BeatView
 
