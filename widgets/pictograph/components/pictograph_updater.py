@@ -13,6 +13,16 @@ class PictographUpdater:
         self.pictograph = pictograph
 
     def update_pictograph(self, pictograph_dict: dict = None) -> None:
+        """
+        Updates the pictograph with the given pictograph_dict.
+
+        If the dict is complete, it will be assigned to the pictograph's pictograph_dict attribute.
+
+        If the dict is incomplete, it will be used to update the pictograph's attributes.
+
+        If there is no dict, the pictograph will update its children without reference to a dict.
+        """
+
         if pictograph_dict:
             if self.pictograph.check.is_pictograph_dict_complete(pictograph_dict):
                 self.pictograph.pictograph_dict = pictograph_dict

@@ -1,5 +1,6 @@
 import os
 from typing import TYPE_CHECKING
+from Enums.letters import Letter
 from constants import BLUE, special_placements_parent_directory, RED
 from objects.arrow.arrow import Arrow
 from Enums.MotionAttributes import Color
@@ -21,9 +22,9 @@ class SpecialPlacementEntryRemover:
             self.positioner.placement_manager.pictograph.main_widget.turns_tuple_generator
         )
 
-    def remove_special_placement_entry(self, letter: str, arrow: Arrow) -> None:
+    def remove_special_placement_entry(self, letter: Letter, arrow: Arrow) -> None:
         ori_key = self.data_updater.get_ori_key(arrow.motion)
-        file_path = self._generate_file_path(ori_key, letter)
+        file_path = self._generate_file_path(ori_key, letter.value)
 
         if os.path.exists(file_path):
             data = self.load_data(file_path)

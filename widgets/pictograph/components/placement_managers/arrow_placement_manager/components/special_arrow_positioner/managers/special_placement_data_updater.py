@@ -1,13 +1,12 @@
 import os
 import logging
 from typing import TYPE_CHECKING
+from Enums.MotionAttributes import Color
 from constants import (
-    BLUE,
     CLOCK,
     COUNTER,
     IN,
     OUT,
-    RED,
     special_placements_parent_directory,
 )
 from objects.arrow.arrow import Arrow
@@ -36,12 +35,15 @@ class SpecialPlacementDataUpdater:
         self.entry_remover = SpecialPlacementEntryRemover(self)
         self.mirrored_entry_manager = SpecialPlacementMirroredEntryManager(self)
 
-    def _get_letter_data(self, letter: str, ori_key: str) -> dict:
-        return (
+    def _get_letter_data(self, letter: Letter, ori_key: str) -> dict:
+
+        letter_data = (
             self.positioner.placement_manager.pictograph.main_widget.special_placements[
                 ori_key
-            ].get(letter, {})
+            ].get(letter.value, {})
         )
+        # TODO: fix the letterdata so it converts the Color Enum to a string.
+        return letter_data
 
     def _update_or_create_turn_data(
         self,
@@ -81,25 +83,25 @@ class SpecialPlacementDataUpdater:
         ]:
             return "from_layer2"
         elif (
-            motion.color == RED
+            motion.color == Color.RED
             and motion.start_ori in [IN, OUT]
             and other_motion.start_ori in [CLOCK, COUNTER]
         ):
             return "from_layer3_blue2_red1"
         elif (
-            motion.color == RED
+            motion.color == Color.RED
             and motion.start_ori in [CLOCK, COUNTER]
             and other_motion.start_ori in [IN, OUT]
         ):
             return "from_layer3_blue1_red2"
         elif (
-            motion.color == BLUE
+            motion.color == Color.BLUE
             and motion.start_ori in [IN, OUT]
             and other_motion.start_ori in [CLOCK, COUNTER]
         ):
             return "from_layer3_blue1_red2"
         elif (
-            motion.color == BLUE
+            motion.color == Color.BLUE
             and motion.start_ori in [CLOCK, COUNTER]
             and other_motion.start_ori in [IN, OUT]
         ):
@@ -112,15 +114,15 @@ class SpecialPlacementDataUpdater:
             return "from_layer3_blue1_red2"
 
     def _update_placement_json_data(
-        self, letter: str, letter_data: dict, ori_key: str
+        self, letter: Letter, letter_data: dict, ori_key: str
     ) -> None:
         file_path = os.path.join(
             special_placements_parent_directory,
             ori_key,
-            f"{letter}_placements.json",
+            f"{letter.value}_placements.json",
         )
         existing_data = self.json_handler.load_json_data(file_path)
-        existing_data[letter] = letter_data
+        existing_data[letter.value] = letter_data
         self.json_handler.write_json_data(existing_data, file_path)
 
     def update_arrow_adjustments_in_json(
