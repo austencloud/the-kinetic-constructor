@@ -30,6 +30,7 @@ class PropAttrManager:
             value = prop_dict.get(attr)
             if value is not None:
                 setattr(self.prop, attr, value)
+        self.prop.set_z_value_based_on_color()
 
     def clear_attributes(self) -> None:
         prop_attributes = [COLOR, LOC, LAYER, ORI, MOTION, PROP_TYPE]

@@ -29,6 +29,16 @@ class SwapBetaHandler:
     def swap_beta(self) -> None:
         letter_type = LetterType.get_letter_type(self.pictograph.letter)
 
+        if (
+            ((
+                self.pictograph.check.ends_with_in_out_ori()
+                or self.pictograph.check.ends_with_clock_counter_ori()
+            )
+            and len(self.beta_prop_positioner.classifier.small_uni) == 2)
+            or self.pictograph.check.ends_with_layer3()
+        ):
+            return
+
         if letter_type == LetterType.Type1:
             self._handle_type1_swap()
         elif letter_type == LetterType.Type2:
@@ -111,15 +121,7 @@ class SwapBetaHandler:
 
         dash_direction = self.ppm.dir_calculator.get_dir(dash)
         static_direction = self.ppm.dir_calculator.get_opposite_dir(dash_direction)
-        if (
-            ((
-                self.pictograph.check.ends_with_in_out_ori()
-                or self.pictograph.check.ends_with_clock_counter_ori()
-            )
-            and len(self.beta_prop_positioner.classifier.small_uni) == 2)
-            or self.pictograph.check.ends_with_layer3()
-        ):
-            return
+
         self._swap_props(dash.prop, static.prop, static_direction, dash_direction)
 
     def _handle_type5_swap(self) -> None:
