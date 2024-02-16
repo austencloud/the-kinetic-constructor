@@ -54,7 +54,7 @@ class CodexPictographFactory:
     def process_selected_letters(self) -> None:
         selected_letters = set(self.scroll_area.codex.selected_letters)
         for letter in selected_letters:
-            if str(letter) not in self.scroll_area.codex.pictograph_cache:
+            if letter not in self.scroll_area.codex.pictograph_cache:
                 pictograph_dicts = self.scroll_area.letters.get(letter, [])
                 for pictograph_dict in pictograph_dicts:
                     pictograph_key = self.scroll_area.main_widget.pictograph_key_generator.generate_pictograph_key(

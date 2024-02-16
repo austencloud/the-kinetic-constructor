@@ -39,7 +39,7 @@ class Codex(QWidget):
     def resize_codex(self) -> None:
         self.letter_button_frame.resize_codex_letter_button_frame()
 
-    def update_pictographs(self, letter_type: LetterType = None) -> None:
+    def update_pictographs(self) -> None:
         deselected_letters = (
             self.scroll_area.pictograph_factory.get_deselected_letters()
         )
@@ -58,5 +58,5 @@ class Codex(QWidget):
                     letter
                 )
             self.scroll_area.pictograph_factory.process_selected_letters()
-        if letter_type:
+        for letter_type in LetterType:
             self.scroll_area.display_manager.order_and_display_pictographs(letter_type)

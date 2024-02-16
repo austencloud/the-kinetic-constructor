@@ -84,34 +84,6 @@ class CodexDisplayManager:
             row, col = divmod(i, self.COLUMN_COUNT)
             self.section_indices[letter_type] = (row, col)
 
-    def remove_pictograph(self, pictograph_key: str) -> None:
-        pictograph_to_remove: Pictograph = self.scroll_area.pictograph_cache.pop(
-            pictograph_key, None
-        )
-        if pictograph_to_remove:
-            self.scroll_area.layout.removeWidget(pictograph_to_remove.view)
-
-    def clear_layout(self) -> None:
-        while self.scroll_area.layout.count():
-            widget = self.scroll_area.layout.takeAt(0).widget()
-            if widget is not None:
-                widget.setParent(None)
-
-    def cleanup_unused_pictographs(self) -> None:
-        keys_to_remove = self.get_keys_to_remove()
-        for key in keys_to_remove:
-            self.remove_pictograph(key)
-
-    def get_keys_to_remove(self) -> list[str]:
-        selected_letters = {
-            letter.split("_")[0] for letter in self.scroll_area.codex.selected_letters
-        }
-        return [
-            key
-            for key in self.scroll_area.pictograph_cache
-            if key.split("_")[0] not in selected_letters
-        ]
-
     def get_ordered_pictographs_for_section(
         self, letter_type: LetterType
     ) -> dict[str, Pictograph]:
@@ -120,7 +92,7 @@ class CodexDisplayManager:
             for k, v in sorted(
                 self.scroll_area.pictograph_cache.items(),
                 key=lambda item: (
-                    list(Letters).index(item[1].letter),  # Directly use the enum value
+                    list(Letters).index(item[1].letter),
                     item[1].start_pos,
                 ),
             )

@@ -46,8 +46,8 @@ class CodexLetterButtonClickHandler:
         if letter in self.codex.selected_letters:
             self.process_pictographs_for_letter(letter)
 
-        self.codex.update_pictographs(letter_type)
-        
+        self.codex.update_pictographs()
+
         for section in self.section_manager.sections.values():
             if section.letter_type == letter_type:
                 section.resize_section()

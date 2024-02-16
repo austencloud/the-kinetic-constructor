@@ -76,7 +76,7 @@ class CodexSectionManager:
         section = self.sections[letter_type]
         if not section.turns_tab:
             if letter_type not in self.filter_tabs_cache:
-                turns_tab = self.create_or_get_filter_tab(section)
+                turns_tab = self.create_or_get_turns_tab(section)
                 self.filter_tabs_cache[letter_type] = turns_tab
             section.turns_tab = self.filter_tabs_cache[letter_type]
 
@@ -106,7 +106,7 @@ class CodexSectionManager:
                 sections_to_show.append(letter_type)
         return sections_to_show
 
-    def create_or_get_filter_tab(self, section: CodexSectionWidget) -> TurnsTab:
+    def create_or_get_turns_tab(self, section: CodexSectionWidget) -> TurnsTab:
         if not section.turns_tab:
             section.turns_tab = TurnsTab(section)
             section.layout.insertWidget(1, section.turns_tab)
