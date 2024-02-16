@@ -2,6 +2,8 @@ from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QPainter, QPen, QColor
 from PyQt6.QtCore import QRect, Qt
 from typing import TYPE_CHECKING, Optional
+
+from widgets.sequence_widget.beat_frame.beat import BeatView
 if TYPE_CHECKING:
 
     from widgets.sequence_widget.sequence_widget import SequenceWidget
@@ -16,7 +18,7 @@ class BeatSelectionOverlay(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         self.hide() 
 
-    def select_beat(self, beat_view: QWidget):
+    def select_beat(self, beat_view: BeatView):
         if self.selected_beat_view is not beat_view:
             self.selected_beat_view = beat_view
             self.update_overlay_position()
@@ -41,7 +43,6 @@ class BeatSelectionOverlay(QWidget):
         pen.setJoinStyle(Qt.PenJoinStyle.MiterJoin)
         painter.setPen(pen)
 
-        # Adjust rect to ensure border is drawn inside the widget, accounting for border width
         rect = self.rect().adjusted(
             self.border_width // 2,
             self.border_width // 2,

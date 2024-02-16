@@ -66,6 +66,8 @@ class PropOffsetCalculator:
             self.beta_offset = self.prop_placement_manager.pictograph.width() / 60
         elif self.pictograph.check.has_all_props_of_type(PropTypes.EightRings):
             self.beta_offset = self.prop_placement_manager.pictograph.width() / 60
+        elif self.pictograph.check.has_all_props_of_type(PropTypes.DoubleStar):
+            self.beta_offset = self.prop_placement_manager.pictograph.width() / 55
         else:
             self.beta_offset = self.prop_placement_manager.pictograph.width() / 38
 

@@ -36,4 +36,5 @@ class StartPositionBeatView(BeatView):
         self.scale(self.view_scale, self.view_scale)
 
     def mousePressEvent(self, event: QMouseEvent | None) -> None:
-        pass  # overrides the base class to prevent re-adding the beat to the beat frame upon mouse click
+        self.selection_overlay.select_beat(self)
+        self.viewport().update()  # Force the viewport to update
