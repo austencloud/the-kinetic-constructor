@@ -1,6 +1,7 @@
 import json
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
+from widgets.indicator_label import IndicatorLabel
 from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.components.sequence_widget_pictograph_factory import (
     SequenceWidgetPictographFactory,
@@ -22,6 +23,7 @@ class SequenceWidget(QWidget):
         self.main_widget = main_widget
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         self.pictograph_cache: dict[str, Pictograph] = {}
+        self.indicator_label = IndicatorLabel(self)
         self.beat_selection_overlay = BeatSelectionOverlay(self)
         self.beat_frame = SequenceBeatFrame(self.main_widget, self)
         self.button_frame = SequenceButtonFrame(self)
@@ -29,14 +31,13 @@ class SequenceWidget(QWidget):
             self, self.pictograph_cache
         )
         self.beats = self.beat_frame.beats
-
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.beat_frame)
         self.layout.addWidget(self.button_frame)
-
+        
     def save_sequence(sequence: list[Pictograph], filename: str) -> None:
         sequence_data = [pictograph.get.pictograph_dict() for pictograph in sequence]
         with open(filename, "w") as file:
@@ -66,6 +67,8 @@ class SequenceWidget(QWidget):
         self.beat_frame.start_pos_view.setMaximumWidth(beat_view_width)
         self.beat_frame.start_pos_view.setMaximumHeight(beat_view_width)
         self.layout.update()
+
+
 
     # TODO: Implement the following methods
 
