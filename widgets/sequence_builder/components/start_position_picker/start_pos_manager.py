@@ -1,5 +1,10 @@
+from copy import deepcopy
 from PyQt6.QtCore import QObject, pyqtSignal
 from constants import END_POS, START_POS
+from widgets.sequence_widget.beat_frame.start_pos_beat import (
+    StartPositionBeatView,
+    StartPositionBeat,
+)
 from ....pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING
 
@@ -51,20 +56,29 @@ class StartPosManager(QObject):
                         )
                     )
 
-    def on_start_pos_clicked(self, start_position_pictograph: Pictograph):
-        self.sequence_builder.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos_beat(
-            start_position_pictograph
+    def on_start_pos_clicked(self, clicked_start_option: Pictograph):
+        start_position_beat = StartPositionBeat(
+            self.sequence_builder.main_widget,
+            self.sequence_builder.main_widget.sequence_widget.beat_frame,
+        )
+        start_position_beat.updater.update_pictograph(
+            deepcopy(clicked_start_option.pictograph_dict)
         )
 
-        self.sequence_builder.current_pictograph = start_position_pictograph
+        self.sequence_builder.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos_beat(
+            start_position_beat
+        )
+
+        self.sequence_builder.current_pictograph = start_position_beat
 
         self.start_position_selected.connect(
             self.sequence_builder.transition_to_sequence_building
         )
         self.sequence_builder.main_widget.json_manager.current_sequence_json_handler.set_start_position_data(
-            start_position_pictograph
+            start_position_beat
         )
-        self.start_position_selected.emit(start_position_pictograph)
+        self.start_position_selected.emit(start_position_beat)
+        # start_position_beat.add_start_text()
 
     def hide_start_positions(self):
         for start_position_pictograph in self.start_options.values():

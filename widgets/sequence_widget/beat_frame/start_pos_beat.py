@@ -1,7 +1,8 @@
 from typing import TYPE_CHECKING
 
-from PyQt6.QtGui import QMouseEvent
-
+from PyQt6.QtGui import QMouseEvent, QFont
+from PyQt6.QtWidgets import QGraphicsTextItem
+from PyQt6.QtCore import QPointF
 from widgets.sequence_widget.beat_frame.beat import Beat, BeatView
 
 if TYPE_CHECKING:
@@ -17,6 +18,21 @@ class StartPositionBeat(Beat):
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.beat_frame = beat_frame
+
+    def add_start_text(self) -> None:
+        start_text_item = QGraphicsTextItem("Start")
+        start_text_item.setFont(
+            QFont("Georgia", 60, QFont.Weight.DemiBold)
+        )  # Set the font size and weight here
+
+        start_text_item.setPos(
+            QPointF(
+                (self.width() // 2) - start_text_item.boundingRect().width() // 2,
+                self.height() // 28,
+            )
+        )
+        if self.view and self.view.scene():
+            self.view.scene().addItem(start_text_item)
 
 
 class StartPositionBeatView(BeatView):
@@ -34,6 +50,7 @@ class StartPositionBeatView(BeatView):
         self.view_scale = view_width / self.start_pos.width()
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
+        self.start_pos.add_start_text()
 
     def mousePressEvent(self, event: QMouseEvent | None) -> None:
         self.selection_overlay.select_beat(self)
