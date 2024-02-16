@@ -56,9 +56,13 @@ class PictographChecker:
             self.pictograph.props[Color.RED],
             self.pictograph.props[Color.BLUE],
         )
-        return (red_prop.ori in [IN] and blue_prop.ori in [OUT]) or (
-            red_prop.ori in [OUT] and blue_prop.ori in [IN]
-        )
+        if red_prop.ori == IN and blue_prop.ori == OUT:
+            return True
+        elif red_prop.ori == OUT and blue_prop.ori == IN:
+            return True
+        return False
+        
+
 
     def ends_with_clock_counter_ori(self) -> bool:
         red_prop, blue_prop = (
