@@ -39,7 +39,6 @@ class PictographContainer(QFrame):
         return self.border_colors_map.get(letter_type, ("black", "black"))
 
     def update_borders(self):
-        # Update border colors based on the letter type
         primary_color, secondary_color = self.get_border_colors()
         self.styled_border_overlay.update_border_colors(primary_color, secondary_color)
-        self.styled_border_overlay.update()  # Trigger a repaint of the over
+        self.styled_border_overlay.update()

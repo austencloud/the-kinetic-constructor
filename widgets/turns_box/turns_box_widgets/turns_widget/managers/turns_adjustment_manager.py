@@ -5,7 +5,7 @@ from Enums.MotionAttributes import Turns
 
 if TYPE_CHECKING:
     from .....pictograph.pictograph import Pictograph
-    from ....turns_box_widgets.turns_widget.turns_widget import TurnsWidget
+    from ..turns_widget import TurnsWidget
 
 
 class TurnsAdjustmentManager:
