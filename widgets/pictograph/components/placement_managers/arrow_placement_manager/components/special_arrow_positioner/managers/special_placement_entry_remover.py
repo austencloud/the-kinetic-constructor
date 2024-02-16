@@ -31,12 +31,14 @@ class SpecialPlacementEntryRemover:
             self._process_removal(letter, arrow, ori_key, file_path, data)
             arrow.pictograph.main_widget.special_placement_loader.refresh_placements()
 
-    def _process_removal(self, letter, arrow: Arrow, ori_key, file_path, data):
+    def _process_removal(
+        self, letter: Letter, arrow: Arrow, ori_key: str, file_path: str, data: dict
+    ):
         self.turns_tuple = self.turns_tuple_generator.generate_turns_tuple(
             self.positioner.placement_manager.pictograph
         )
-        if letter in data:
-            letter_data = data[letter]
+        if letter.value in data:
+            letter_data = data[letter.value]
 
             key = self.data_updater.positioner.attr_key_generator.get_key(arrow)
             self._remove_turn_data_entry(letter_data, self.turns_tuple, key)
@@ -49,7 +51,7 @@ class SpecialPlacementEntryRemover:
                 self._handle_standard_start_ori_mirrored_entry_removal(
                     letter, arrow, ori_key, letter_data, key
                 )
-            data[letter] = letter_data
+            data[letter.value] = letter_data
             self.data_updater.json_handler.write_json_data(data, file_path)
 
     def _handle_standard_start_ori_mirrored_entry_removal(
