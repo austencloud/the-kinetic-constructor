@@ -59,8 +59,9 @@ class BeatView(QGraphicsView):
         sequence_builder.reset_to_start_pos_picker()
 
     def mousePressEvent(self, event):
-        self.selection_overlay.select_beat(self)
-        self.viewport().update()  # Force the viewport to update
+        if self.is_filled:
+            self.selection_overlay.select_beat(self)
+            self.viewport().update() 
 
     def paintEvent(self, event):
         super().paintEvent(event)
