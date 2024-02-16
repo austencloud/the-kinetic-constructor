@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from Enums.Enums import LetterType
 
 
+from Enums.letters import Letter
 from constants import (
     BLUE_END_LOC,
     BLUE_MOTION_TYPE,
@@ -34,8 +35,8 @@ class SequenceWidgetPictographFactory:
     def get_or_create_pictograph(
         self, pictograph_key: str, pictograph_dict=None
     ) -> Pictograph:
-        letter = pictograph_key.split("_")[0]
-
+        letter_str = pictograph_key.split("_")[0]
+        letter = Letter.get_letter(letter_str)
         if pictograph_key in self.pictograph_cache.get(letter, {}):
             return self.pictograph_cache[letter][pictograph_key]
 

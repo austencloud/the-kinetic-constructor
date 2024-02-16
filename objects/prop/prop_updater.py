@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Union
 
-from Enums.MotionAttributes import Colors, Locations, Orientations
+from Enums.MotionAttributes import Color, Locations, Orientations
 
 if TYPE_CHECKING:
     from objects.prop.prop import Prop
@@ -12,7 +12,7 @@ class PropUpdater:
         self.svg_file = self.prop.pictograph.main_widget.svg_manager.get_svg_file(prop)
 
     def update_prop(
-        self, prop_dict: dict[str, Union[Colors, Locations, Orientations]] = None
+        self, prop_dict: dict[str, Union[Color, Locations, Orientations]] = None
     ) -> None:
 
         if prop_dict:

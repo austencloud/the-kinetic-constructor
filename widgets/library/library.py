@@ -4,6 +4,8 @@ from PyQt6.QtCore import QDir, QModelIndex
 import json
 from typing import TYPE_CHECKING
 
+from Enums.letters import Letter
+
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
@@ -77,9 +79,9 @@ class Library(QWidget):
         if not start_pos_data:
             return None
         start_pos_key = start_pos_data["end_pos"]
-        start_pos_letter = self.start_pos_key_to_letter(start_pos_key)
-
-        matching_letter_pictographs = self.main_widget.letters.get(start_pos_letter, [])
+        letter_str = self.start_pos_key_to_letter(start_pos_key)
+        letter = Letter(letter_str)
+        matching_letter_pictographs = self.main_widget.letters.get(letter, [])
         for pictograph_dict in matching_letter_pictographs:
             if pictograph_dict["start_pos"] == start_pos_key:
                 pictograph_factory = self.main_widget.sequence_widget.pictograph_factory

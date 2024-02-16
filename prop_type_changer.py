@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
-from constants import BLUE, RED
-
+from Enums.MotionAttributes import Color
 from widgets.pictograph.pictograph import Pictograph
 
 
@@ -24,8 +23,8 @@ class PropTypeChanger:
             pictograph.motions[color].prop = pictograph.props[color]
             pictograph.props[color].motion.attr_manager.update_prop_ori()
             pictograph.props[color].updater.update_prop()
-        pictograph.red_prop = pictograph.props[RED]
-        pictograph.blue_prop = pictograph.props[BLUE]
+        pictograph.red_prop = pictograph.props[Color.RED]
+        pictograph.blue_prop = pictograph.props[Color.BLUE]
         pictograph.updater.update_pictograph()
 
     def apply_prop_type(self) -> None:

@@ -96,15 +96,15 @@ class TurnsTabVisibilityHandler:
         attribute_to_property_and_values = {
             TurnsTabAttribute.MOTION_TYPE: (
                 "motion_type",
-                turns_values.get(TurnsTabAttribute.MOTION_TYPE.name.lower(), {}),
+                turns_values.get(TurnsTabAttribute.MOTION_TYPE),
             ),
             TurnsTabAttribute.COLOR: (
                 "color",
-                turns_values.get(TurnsTabAttribute.COLOR.name.lower(), {}),
+                turns_values.get(TurnsTabAttribute.COLOR),
             ),
             TurnsTabAttribute.LEAD_STATE: (
                 "lead_state",
-                turns_values.get(TurnsTabAttribute.LEAD_STATE.name.lower(), {}),
+                turns_values.get(TurnsTabAttribute.LEAD_STATE),
             ),
         }
 

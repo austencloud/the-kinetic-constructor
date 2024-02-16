@@ -10,7 +10,7 @@ from constants import (
     SAME,
 )
 from Enums.MotionAttributes import (
-    Colors,
+    Color,
     LeadStates,
     MotionTypes,
     PropRotDirs,
@@ -81,7 +81,7 @@ class VtgDirButtonManager:
         self, motion: "Motion", prop_rot_dir: PropRotDirs
     ) -> None:
         motion.prop_rot_dir = prop_rot_dir
-        pictograph_dict = {motion.color + "_" + PROP_ROT_DIR: prop_rot_dir}
+        pictograph_dict = {motion.color.value + "_" + PROP_ROT_DIR: prop_rot_dir}
         motion.pictograph.updater.update_pictograph(pictograph_dict)
 
     def _update_button_states(
@@ -104,7 +104,7 @@ class VtgDirButtonManager:
     def update_visibility_based_on_motion(
         self,
         new_turns,
-        attribute_value: Union[Colors, MotionTypes, LeadStates],
+        attribute_value: Union[Color, MotionTypes, LeadStates],
     ) -> None:
         if attribute_value in [PRO, ANTI]:
             return

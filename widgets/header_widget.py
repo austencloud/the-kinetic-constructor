@@ -3,14 +3,13 @@ from PyQt6.QtWidgets import QLabel, QHBoxLayout, QFrame
 from PyQt6.QtCore import Qt
 
 from Enums.Enums import LetterType, TurnsTabAttribute
-from Enums.MotionAttributes import Colors
+from Enums.MotionAttributes import Color
 
 
 from .turns_box.turns_box_widgets.base_attr_box_widget import TurnsBoxWidget
 
 if TYPE_CHECKING:
     from widgets.turns_box.turns_box import TurnsBox
-
 
 
 class TurnsBoxHeaderWidget(TurnsBoxWidget):
@@ -23,9 +22,9 @@ class TurnsBoxHeaderWidget(TurnsBoxWidget):
 
     def _setup_header(self) -> None:
         if self.turns_box.attribute_type == TurnsTabAttribute.COLOR:
-            if self.turns_box.color == Colors.BLUE:
+            if self.turns_box.color == Color.BLUE:
                 text = "Left"
-            elif self.turns_box.color == Colors.RED:
+            elif self.turns_box.color == Color.RED:
                 text = "Right"
             header_label = self._setup_header_label(text)
 

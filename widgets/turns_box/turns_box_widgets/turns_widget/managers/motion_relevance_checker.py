@@ -24,7 +24,7 @@ class MotionRelevanceChecker:
         if attr_type == TurnsTabAttribute.MOTION_TYPE:
             return motion.motion_type == self.turns_box.motion_type.value
         elif attr_type == TurnsTabAttribute.COLOR:
-            return motion.color == self.turns_box.color.value
+            return motion.color == self.turns_box.color
         elif attr_type == TurnsTabAttribute.LEAD_STATE:
             return motion.lead_state == self.turns_box.lead_state
 

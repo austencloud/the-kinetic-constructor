@@ -1,4 +1,4 @@
-from Enums.Enums import LetterType, Letters
+from Enums.Enums import LetterType, Letter
 
 from typing import TYPE_CHECKING, Union
 
@@ -36,7 +36,7 @@ class CodexLetterButtonManager:
     ) -> None:
         self.letter_rows = letter_button_frame.letter_rows
         self.icon_dir = LETTER_BTN_ICON_DIR
-        self.buttons: dict[Letters, LetterButton] = {}
+        self.buttons: dict[Letter, LetterButton] = {}
         self.letter_button_frame = letter_button_frame
         self.click_handler = CodexLetterButtonClickHandler(self)
 
@@ -44,7 +44,7 @@ class CodexLetterButtonManager:
         for type_name, rows in self.letter_rows.items():
             for row in rows:
                 for letter_str in row:
-                    letter = Letters.get_letter(letter_str)
+                    letter = Letter.get_letter(letter_str)
                     letter_type = LetterType.get_letter_type(letter)
                     icon_path = f"{self.icon_dir}/{letter_type.name}/{letter_str}.svg"
                     button = self._create_letter_button(icon_path, letter_str)
@@ -65,12 +65,12 @@ class CodexLetterButtonManager:
             button.setMaximumSize(QSize(button_size, button_size))
             button.setIconSize(QSize(icon_size, icon_size))
 
-    def get_buttons_row_layout(self, row: list[Letters]) -> QHBoxLayout:
+    def get_buttons_row_layout(self, row: list[Letter]) -> QHBoxLayout:
         row_layout = QHBoxLayout()
         row_layout.setContentsMargins(0, 0, 0, 0)
         row_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         for letter_str in row:
-            letter = Letters.get_letter(letter_str)
+            letter = Letter.get_letter(letter_str)
             button = self.buttons[letter]
             button.setSizePolicy(
                 QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred

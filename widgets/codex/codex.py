@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
-from Enums.Enums import LetterType, Letters
+from Enums.Enums import Letter
 from .codex_letter_button_frame.codex_letter_button_frame import (
     CodexLetterButtonFrame,
 )
@@ -14,15 +14,15 @@ if TYPE_CHECKING:
 
 class Codex(QWidget):
     imageGenerated = pyqtSignal(str)
-    selected_letters: list[Letters] = []
+    selected_letters: list[Letter] = []
 
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.letters_dict = self.main_widget.letters
 
-        self.pictograph_cache: dict[Letters, dict[str, Pictograph]] = {
-            letter: {} for letter in Letters
+        self.pictograph_cache: dict[Letter, dict[str, Pictograph]] = {
+            letter: {} for letter in Letter
         }
         self.scroll_area = CodexScrollArea(self)
         self.letter_button_frame = CodexLetterButtonFrame(self)
@@ -58,5 +58,5 @@ class Codex(QWidget):
                     letter
                 )
             self.scroll_area.pictograph_factory.process_selected_letters()
-        for letter_type in LetterType:
-            self.scroll_area.display_manager.order_and_display_pictographs(letter_type)
+        for section in self.scroll_area.sections_manager.sections.values():
+            self.scroll_area.display_manager.order_and_display_pictographs(section)

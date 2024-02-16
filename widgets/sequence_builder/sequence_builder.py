@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
-from Enums.Enums import LetterType, Letters
+from Enums.Enums import LetterType, Letter
 
 import pandas as pd
 from constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
@@ -31,8 +31,8 @@ class SequenceBuilder(QFrame):
         self.start_position_picked = False
         self._setup_components()
         # Initialize pictograph cache using Letters enum
-        self.pictograph_cache: dict[Letters, dict[str, Pictograph]] = {
-            letter: {} for letter in Letters
+        self.pictograph_cache: dict[Letter, dict[str, Pictograph]] = {
+            letter: {} for letter in Letter
         }
         self.start_position_picker = StartPosPicker(self)
         self.option_picker = OptionPicker(self)
@@ -59,7 +59,7 @@ class SequenceBuilder(QFrame):
     def render_and_store_pictograph(self, pictograph_dict: dict) -> Pictograph:
         pictograph_dict = self._add_turns_and_start_ori(pictograph_dict)
         letter_str = pictograph_dict["letter"]
-        letter = Letters.get_letter(letter_str)
+        letter = Letter.get_letter(letter_str)
         letter_type = LetterType.get_letter_type(letter)
         pictograph_key = (
             self.main_widget.pictograph_key_generator.generate_pictograph_key(

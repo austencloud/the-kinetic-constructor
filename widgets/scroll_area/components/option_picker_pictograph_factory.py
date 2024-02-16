@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from Enums.Enums import LetterType, Letters
+from Enums.Enums import LetterType, Letter
 
 from Enums.Enums import LetterType
 
@@ -25,7 +25,7 @@ class OptionPickerPictographFactory:
         self, pictograph_key: str, pictograph_dict=None
     ) -> Pictograph:
         letter_str = pictograph_key.split("_")[0]
-        letter = Letters.get_letter(letter_str)
+        letter = Letter.get_letter(letter_str)
 
         if pictograph_key in self.pictograph_cache.get(letter, {}):
             return self.pictograph_cache[letter][pictograph_key]
@@ -69,7 +69,7 @@ class OptionPickerPictographFactory:
             ) in self.scroll_area.codex.pictograph_cache[letter].items():
                 self.scroll_area.pictograph_cache[pictograph_key] = pictograph
 
-    def get_deselected_letters(self) -> set[Letters]:
+    def get_deselected_letters(self) -> set[Letter]:
         selected_letters = set(self.scroll_area.codex.selected_letters)
         existing_letters = {
             key.split("_")[0] for key in self.scroll_area.pictograph_cache.keys()

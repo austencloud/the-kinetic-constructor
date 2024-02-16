@@ -1,6 +1,6 @@
 import re
 from PyQt6.QtCore import QPointF
-from Enums.letters import Letters
+from Enums.letters import Letter
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Optional
 
@@ -64,7 +64,7 @@ class ArrowAdjustmentCalculator:
         return None
 
     def get_adjustment_for_letter(
-        self, letter: Letters, arrow: Arrow, turns_tuple: str, ori_key: str
+        self, letter: Letter, arrow: Arrow, turns_tuple: str, ori_key: str
     ) -> Optional[tuple[int, int]]:
         self.special_placements: dict[str, dict] = (
             self.placement_manager.pictograph.main_widget.special_placements[ori_key]

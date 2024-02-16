@@ -1,11 +1,9 @@
 import logging
 from typing import TYPE_CHECKING
-from Enums.Enums import LetterType, Letters
+from Enums.Enums import Letter
 
 from Enums.letters import LetterConditions
 from widgets.pictograph.pictograph import Pictograph
-
-from Enums.Enums import LetterType
 
 
 from widgets.scroll_area.components.section_manager.section_widget.codex_section_widget import (
@@ -26,16 +24,14 @@ class CodexDisplayManager:
         self.scroll_area = scroll_area
         self.section_indices = {}  # Track indices for each section's grid layout
 
-    def order_and_display_pictographs(self, letter_type: LetterType) -> None:
-        self.calculate_section_indices(letter_type)
-        ordered_pictographs = self.get_ordered_pictographs_for_section(letter_type)
+    def order_and_display_pictographs(self, section: CodexSectionWidget) -> None:
+        self.calculate_section_indices(section)
+        ordered_pictographs = self.get_ordered_pictographs_for_section(section)
         for index, (key, pictograph) in enumerate(ordered_pictographs.items()):
             self.add_pictograph_to_layout(pictograph, index)
 
     def add_pictograph_to_layout(self, pictograph: Pictograph, index: int) -> None:
-        letter_type = self.scroll_area.sections_manager.get_pictograph_letter_type(
-            pictograph.letter
-        )
+        letter_type = pictograph.letter_type
         section: CodexSectionWidget = self.scroll_area.sections_manager.get_section(
             letter_type
         )
@@ -47,7 +43,8 @@ class CodexDisplayManager:
             self.section_indices[letter_type] = divmod(next_index, self.COLUMN_COUNT)
             pictograph.view.resize_pictograph_view()
 
-    def calculate_section_indices(self, letter_type: str) -> None:
+    def calculate_section_indices(self, section: CodexSectionWidget) -> None:
+        letter_type = section.letter_type
         selected_letters = [
             letter
             for letter in self.scroll_area.codex.selected_letters
@@ -59,17 +56,17 @@ class CodexDisplayManager:
             (
                 8
                 if letter
-                in Letters.get_letters_by_condition(LetterConditions.EIGHT_VARIATIONS)
+                in Letter.get_letters_by_condition(LetterConditions.EIGHT_VARIATIONS)
                 else (
                     16
                     if letter
-                    in Letters.get_letters_by_condition(
+                    in Letter.get_letters_by_condition(
                         LetterConditions.SIXTEEN_VARIATIONS
                     )
                     else (
                         4
                         if letter
-                        in Letters.get_letters_by_condition(
+                        in Letter.get_letters_by_condition(
                             LetterConditions.FOUR_VARIATIONS
                         )
                         else 0
@@ -85,18 +82,18 @@ class CodexDisplayManager:
             self.section_indices[letter_type] = (row, col)
 
     def get_ordered_pictographs_for_section(
-        self, letter_type: LetterType
+        self, section: CodexSectionWidget
     ) -> dict[str, Pictograph]:
         ordered_pictographs = {
             k: v
             for k, v in sorted(
                 self.scroll_area.pictograph_cache.items(),
                 key=lambda item: (
-                    list(Letters).index(item[1].letter),
+                    list(Letter).index(item[1].letter),
                     item[1].start_pos,
                 ),
             )
             if self.scroll_area.sections_manager.get_pictograph_letter_type(v.letter)
-            == letter_type
+            == section.letter_type
         }
         return ordered_pictographs

@@ -9,7 +9,7 @@ from constants import BLUE, RED
 from widgets.graphical_object_svg_manager import (
     GraphicalObjectSvgManager,
 )
-from Enums.MotionAttributes import Colors
+from Enums.MotionAttributes import Color
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -22,7 +22,7 @@ class GraphicalObject(QGraphicsSvgItem):
     self: Union["Arrow", "Prop"]
     ghost: Union["Arrow", "Prop"]
     is_ghost: bool = None
-    color: Colors
+    color: Color
     renderer: QSvgRenderer
 
     def __init__(self, pictograph: "Pictograph") -> None:

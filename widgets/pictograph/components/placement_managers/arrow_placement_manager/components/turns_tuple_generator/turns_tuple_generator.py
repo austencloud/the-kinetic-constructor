@@ -1,5 +1,5 @@
 from typing import Union
-from Enums.Enums import LetterType, Letters
+from Enums.Enums import LetterType, Letter
 
 from Enums.letters import LetterConditions
 from constants import *
@@ -54,17 +54,15 @@ class TurnsTupleGenerator:
     def generate_mirrored_tuple(self, arrow: Arrow) -> Union[str, None]:
         return self.mirrored_generator.generate(arrow)
 
-    def _get_generator_key(self, letter: Letters) -> str:
+    def _get_generator_key(self, letter: Letter) -> str:
         if letter.value in [
             letter.value
-            for letter in Letters.get_letters_by_condition(
-                LetterConditions.TYPE1_HYBRID
-            )
+            for letter in Letter.get_letters_by_condition(LetterConditions.TYPE1_HYBRID)
         ]:
             return "Type1Hybrid"
         elif letter.value in [
             letter.value
-            for letter in Letters.get_letters_by_condition(
+            for letter in Letter.get_letters_by_condition(
                 LetterConditions.TYPE1_NON_HYBRID
             )
         ]:

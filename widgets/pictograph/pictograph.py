@@ -5,14 +5,14 @@ from PyQt6.QtWidgets import (
     QGraphicsSceneMouseEvent,
 )
 from Enums.Enums import (
-    Letters,
+    Letter,
     OpenCloseStates,
     SpecificPositions,
     VTG_Directions,
     VTG_Modes,
     VTG_Timings,
 )
-from Enums.MotionAttributes import Colors, Locations
+from Enums.MotionAttributes import Color, Locations
 
 from Enums.PropTypes import PropTypes
 from Enums.letters import LetterType
@@ -60,10 +60,10 @@ if TYPE_CHECKING:
 
 class Pictograph(QGraphicsScene):
     view: PictographView
-    arrows: dict[Colors, Arrow]
-    props: dict[Colors, Prop]
-    motions: dict[Colors, Motion]
-    letter: Letters = None
+    arrows: dict[Color, Arrow]
+    props: dict[Color, Prop]
+    motions: dict[Color, Motion]
+    letter: Letter = None
     letter_type: LetterType
     pictograph_dict: dict
     motion_dict_list: list[dict]

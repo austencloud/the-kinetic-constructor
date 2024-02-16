@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Literal
 
 
 class Turns(Enum):
@@ -25,9 +26,13 @@ class Locations(Enum):
     NW = "nw"
 
 
-class Colors(Enum):
+class Color(Enum):
     BLUE = "blue"
     RED = "red"
+
+    def __str__(self, str: Literal["blue", "red"]):
+        # return the item whose value matches the string
+        return self[str]
 
 
 class Orientations(Enum):
@@ -46,4 +51,3 @@ class PropRotDirs(Enum):
 class LeadStates(Enum):
     LEADING = "leading"
     TRAILING = "trailing"
-

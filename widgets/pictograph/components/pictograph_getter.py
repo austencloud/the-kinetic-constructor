@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING, Optional
-from Enums.Enums import LetterType, Letters
+from Enums.Enums import LetterType, Letter
 
 
 from constants import *
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
-from Enums.MotionAttributes import Locations, MotionTypes
+from Enums.MotionAttributes import Color, Locations, MotionTypes
 
 
 if TYPE_CHECKING:
@@ -25,7 +25,7 @@ class PictographGetter:
         self.red_arrow = self.pictograph.red_arrow
         self.turns_tuple_generator = self.pictograph.main_widget.turns_tuple_generator
 
-    def letter_type(self, letter: Letters) -> Optional[str]:
+    def letter_type(self, letter: Letter) -> Optional[str]:
         letter_type_map = {
             letter: letter_type.description
             for letter_type in LetterType
@@ -65,11 +65,11 @@ class PictographGetter:
         return motion_map.get((self.red_motion.start_loc, self.blue_motion.end_loc))
 
     def other_motion(self, motion: Motion) -> Motion:
-        other_motion_map = {RED: self.blue_motion, BLUE: self.red_motion}
+        other_motion_map = {Color.RED: self.blue_motion, Color.BLUE: self.red_motion}
         return other_motion_map.get(motion.color)
 
     def other_arrow(self, arrow: Arrow) -> Arrow:
-        other_arrow_map = {RED: self.blue_arrow, BLUE: self.red_arrow}
+        other_arrow_map = {Color.RED: self.blue_arrow, Color.BLUE: self.red_arrow}
         return other_arrow_map.get(arrow.color)
 
     def dash(self) -> Motion:

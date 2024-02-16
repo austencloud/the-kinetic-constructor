@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from Enums.Enums import LetterType, Letters
+from Enums.Enums import LetterType, Letter
 
 from widgets.pictograph.pictograph import Pictograph
 
@@ -76,7 +76,7 @@ class OptionPickerDisplayManager:
             for k, v in sorted(
                 relevant_pictographs.items(),
                 key=lambda item: (
-                    list(Letters).index(Letters(item[1].letter)),
+                    list(Letter).index(Letter(item[1].letter)),
                     item[1].start_pos,
                 ),
             )

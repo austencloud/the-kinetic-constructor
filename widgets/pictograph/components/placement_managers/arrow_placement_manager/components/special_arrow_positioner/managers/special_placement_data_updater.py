@@ -12,7 +12,7 @@ from constants import (
 )
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
-from Enums.Enums import Letters
+from Enums.Enums import Letter
 
 from .special_placement_entry_remover import SpecialPlacementEntryRemover
 from .mirrored_entry_manager.mirrored_entry_manager import (
@@ -144,7 +144,7 @@ class SpecialPlacementDataUpdater:
         )
 
     def update_specific_entry_in_json(
-        self, letter: Letters, letter_data: dict, ori_key
+        self, letter: Letter, letter_data: dict, ori_key
     ) -> None:
         try:
             self._update_placement_json_data(letter, letter_data, ori_key)

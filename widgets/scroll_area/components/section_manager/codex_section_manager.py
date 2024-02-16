@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from Enums.Enums import LetterType, Letters
+from Enums.Enums import LetterType, Letter
 
 from constants import BLUE_TURNS, RED_TURNS
 from Enums.Enums import LetterType
@@ -29,7 +29,7 @@ class CodexSectionManager:
         self.scroll_area = scroll_area
         self.sections: dict[LetterType, CodexSectionWidget] = {}
         self.filter_tabs_cache: dict[LetterType, TurnsTab] = {}
-        self.pictograph_cache: dict[Letters, list[LetterType]] = {}
+        self.pictograph_cache: dict[Letter, list[LetterType]] = {}
 
         self.pictographs_by_type = {type: [] for type in LetterType}
         self.ordered_section_types: list[LetterType] = []
@@ -57,8 +57,8 @@ class CodexSectionManager:
                 return i
         return len(self.ordered_section_types)
 
-    def get_pictograph_letter_type(self, letter: Letters) -> LetterType:
-        letter_str = Letters.get_letter(letter)
+    def get_pictograph_letter_type(self, letter: Letter) -> LetterType:
+        letter_str = Letter.get_letter(letter)
         return LetterType.get_letter_type(letter_str)
 
     def add_section_label_to_layout(
@@ -80,7 +80,7 @@ class CodexSectionManager:
                 self.filter_tabs_cache[letter_type] = turns_tab
             section.turns_tab = self.filter_tabs_cache[letter_type]
 
-    def update_sections_based_on_letters(self, selected_letters: list[Letters]) -> None:
+    def update_sections_based_on_letters(self, selected_letters: list[Letter]) -> None:
         sections_to_show = self.get_sections_to_show_from_selected_letters(
             selected_letters
         )
@@ -97,7 +97,7 @@ class CodexSectionManager:
         self.scroll_area.fix_stretch()
 
     def get_sections_to_show_from_selected_letters(
-        self, selected_letters: list[Letters]
+        self, selected_letters: list[Letter]
     ) -> list[LetterType]:
         sections_to_show = []
         for letter in selected_letters:

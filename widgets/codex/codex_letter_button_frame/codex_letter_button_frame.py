@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING
-from Enums.Enums import LetterType, Letters
+from Enums.Enums import LetterType, Letter
 
 
 from widgets.codex.codex_letter_button_frame.components.codex_letter_button_manager import (
@@ -28,7 +28,7 @@ class CodexLetterButtonFrame(QFrame):
         self.button_manager.create_buttons()
         self._init_letter_buttons_layout()
 
-    def _define_letter_rows(self) -> dict[str, list[list[Letters]]]:
+    def _define_letter_rows(self) -> dict[str, list[list[Letter]]]:
         return {
             LetterType.Type1: [
                 ["A", "B", "C"],

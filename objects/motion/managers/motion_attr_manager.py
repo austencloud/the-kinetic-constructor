@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Union
-from Enums.Enums import Letters
+from Enums.Enums import Letter
 from constants import *
 from widgets.scroll_area.components.section_manager.section_widget.components.turns_tab.turns_tab import (
     TurnsTab,
@@ -29,71 +29,12 @@ class MotionAttrManager:
             self.motion.end_ori = self.motion.ori_calculator.get_end_ori()
 
         if self.motion.pictograph.letter in [
-            Letters.S,
-            Letters.T,
-            Letters.U,
-            Letters.V,
+            Letter.S,
+            Letter.T,
+            Letter.U,
+            Letter.V,
         ]:
             self.assign_lead_states()
-
-    def update_motion_attributes_from_turns_tab(
-        self, turns_tab: "TurnsTab", pictograph_dict: dict
-    ) -> None:
-        for box in turns_tab.motion_type_turns_panel.boxes:
-            if (
-                box.attribute_type == MOTION_TYPE
-                and box.motion_type
-                == pictograph_dict.get(f"{self.motion.color}_{MOTION_TYPE}")
-            ):
-                self.set_motion_attributes_from_attr_box(box, pictograph_dict)
-
-    def set_motion_attributes_from_attr_box(
-        self, box: "TurnsBox", pictograph_dict: dict
-    ) -> None:
-        box_text = box.turns_widget.display_manager.turns_display.text()
-        turns = float(box_text) if "." in box_text else int(box_text)
-
-        if box.motion_type in [DASH, STATIC]:
-            self.set_motion_turns_and_direction_from_attr_box(
-                box, pictograph_dict, turns
-            )
-
-    def set_motion_turns_and_direction_from_attr_box(
-        self, box: "TurnsBox", pictograph_dict: dict, turns: Union[int, float]
-    ) -> None:
-        if box.turns_panel.turns_tab.section.vtg_dir_btn_state[SAME]:
-            self.set_same_direction_turns_from_attr_box(box, pictograph_dict, turns)
-        elif box.turns_panel.turns_tab.section.vtg_dir_btn_state[OPP]:
-            self.set_opposite_direction_turns_from_attr_box(box, pictograph_dict, turns)
-
-        if turns == 0 and pictograph_dict[self.motion.color + "_" + MOTION_TYPE] in [
-            DASH,
-            STATIC,
-        ]:
-            pictograph_dict[self.motion.color + "_" + PROP_ROT_DIR] = NO_ROT
-
-    def set_same_direction_turns_from_attr_box(
-        self, box: "TurnsBox", pictograph_dict: dict, turns: Union[int, float]
-    ) -> None:
-        other_color = RED if self.motion.color == BLUE else BLUE
-        if pictograph_dict[self.motion.color + "_" + MOTION_TYPE] == box.motion_type:
-            pictograph_dict[self.motion.color + "_" + PROP_ROT_DIR] = pictograph_dict[
-                other_color + "_" + PROP_ROT_DIR
-            ]
-            pictograph_dict[self.motion.color + "_" + TURNS] = turns
-
-    def set_opposite_direction_turns_from_attr_box(
-        self, box: "TurnsBox", pictograph_dict: dict, turns: Union[int, float]
-    ) -> None:
-        other_color = RED if self.motion.color == BLUE else BLUE
-        opposite_dir = (
-            COUNTER_CLOCKWISE
-            if pictograph_dict[other_color + "_" + PROP_ROT_DIR] == CLOCKWISE
-            else CLOCKWISE
-        )
-        if pictograph_dict[self.motion.color + "_" + MOTION_TYPE] == box.motion_type:
-            pictograph_dict[self.motion.color + "_" + PROP_ROT_DIR] = opposite_dir
-            pictograph_dict[self.motion.color + "_" + TURNS] = turns
 
     def update_prop_ori(self) -> None:
         if hasattr(self.motion, PROP) and self.motion.prop:

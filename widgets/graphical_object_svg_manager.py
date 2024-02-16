@@ -19,7 +19,7 @@ from constants import (
     RED,
     STATIC,
 )
-from Enums.MotionAttributes import MotionTypes, Turns
+from Enums.MotionAttributes import Color, MotionTypes, Turns
 from Enums.PropTypes import PropTypes, PropTypeslist
 
 if TYPE_CHECKING:
@@ -70,7 +70,7 @@ class GraphicalObjectSvgManager:
         def replace_fill_color(match: re.Match) -> str:
             return match.group(1) + new_hex_color + match.group(3)
 
-        COLOR_MAP = {RED: HEX_RED, BLUE: HEX_BLUE}
+        COLOR_MAP = {Color.RED: HEX_RED, Color.BLUE: HEX_BLUE}
         new_hex_color = COLOR_MAP.get(new_color)
         with open(object.svg_file, "r") as f:
             svg_data = f.read()

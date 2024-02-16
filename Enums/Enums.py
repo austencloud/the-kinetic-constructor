@@ -80,32 +80,6 @@ class OrientationCombination(Enum):
     COUNTER_IN_VS_COUNTER_IN = "counter-in_vs_counter-in"
 
 
-### MOTION ATTRIBUTES ###
-class MotionAttributesDicts(TypedDict):
-    color: Colors
-    motion_type: MotionTypes
-    prop_rot_dir: PropRotDirs
-    loc: Locations
-    turns: Turns
-    start_loc: Locations
-    start_ori: Orientations
-    end_loc: Locations
-    end_ori: Orientations
-
-
-class ArrowAttributesDicts(TypedDict):
-    color: Colors
-    motion_type: MotionTypes
-    location: Locations
-    turns: Turns
-
-
-class PropAttributesDicts(TypedDict):
-    color: Colors
-    prop_type: PropTypes
-    loc: Locations
-    ori: Orientations
-
 
 ### LETTER GROUPS ###
 class MotionTypeCombination(Enum):
@@ -363,7 +337,7 @@ class Pictograph_Key(Enum):
 
 
 class PictographAttributesDict(TypedDict):
-    letter: Letters
+    letter: Letter
     start_pos: SpecificPositions
     end_pos: SpecificPositions
     blue_motion_type: MotionTypes

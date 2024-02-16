@@ -6,7 +6,7 @@ from .managers.motion_ori_calculator import MotionOriCalculator
 from .managers.motion_updater import MotionUpdater
 from .managers.motion_turn_manager import MotionTurnsManager
 from Enums.MotionAttributes import (
-    Colors,
+    Color,
     Locations,
     Orientations,
     MotionTypes,
@@ -33,7 +33,7 @@ class Motion:
         self.check = MotionChecker(self)
 
     pictograph: "Pictograph"
-    color: Colors
+    color: Color
     turns: Turns
     arrow: "Arrow"
     prop: "Prop"

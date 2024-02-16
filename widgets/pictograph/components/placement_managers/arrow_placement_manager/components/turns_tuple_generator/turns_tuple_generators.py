@@ -1,13 +1,15 @@
 from typing import TYPE_CHECKING
+from Enums.MotionAttributes import Color
 from objects.arrow.arrow import Arrow
 from constants import *
+from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 
 
 class BaseTurnsTupleGenerator:
-    def _normalize_turns(self, motion: Arrow) -> int:
+    def _normalize_turns(self, motion: Motion) -> int:
         return (
             int(motion.turns) if motion.turns in {0.0, 1.0, 2.0, 3.0} else motion.turns
         )
@@ -15,11 +17,11 @@ class BaseTurnsTupleGenerator:
     def set_pictograph(self, pictograph: "Pictograph"):
         self.p = pictograph
 
-        self.blue_motion = self.p.motions.get(BLUE)
-        self.red_motion = self.p.motions.get(RED)
+        self.blue_motion = self.p.motions.get(Color.BLUE)
+        self.red_motion = self.p.motions.get(Color.RED)
 
     def generate_turns_tuple(self, pictograph) -> str:
-        pass
+        pass  # implemented in subclasses
 
 
 class Type1HybridTurnsTupleGenerator(BaseTurnsTupleGenerator):
