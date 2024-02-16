@@ -3,8 +3,8 @@ from PyQt6.QtWidgets import QVBoxLayout, QGroupBox, QSizePolicy
 from Enums.Enums import LetterType
 from constants import OPP, SAME
 from PyQt6.QtCore import Qt
-from ....scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
-    FilterTab,
+from ....scroll_area.components.section_manager.section_widget.components.turns_tab.turns_tab import (
+    TurnsTab,
 )
 from ....scroll_area.components.section_manager.section_widget.components.section_header import (
     SectionHeader,
@@ -31,7 +31,7 @@ class OptionPickerSectionWidget(QGroupBox):
         self.scroll_area = scroll_area
         self.letter_type = letter_type
         self.vtg_dir_btn_state: dict[str, bool] = {SAME: False, OPP: False}
-        self.filter_tab: FilterTab = None
+        self.turns_tab: TurnsTab = None
 
     def setup_components(self) -> None:
         self.vtg_dir_button_manager = VtgDirButtonManager(self)
@@ -67,8 +67,8 @@ class OptionPickerSectionWidget(QGroupBox):
         # self.layout.setEnabled(False)
         is_visible = not self.pictograph_frame.isVisible()
         self.pictograph_frame.setVisible(is_visible)
-        if self.filter_tab:
-            self.filter_tab.setVisible(is_visible)
+        if self.turns_tab:
+            self.turns_tab.setVisible(is_visible)
         self.header.toggle_dropdown_arrow(not is_visible)
         if is_visible:
             if self.vtg_dir_btn_state[SAME] or self.vtg_dir_btn_state[OPP]:
@@ -83,7 +83,7 @@ class OptionPickerSectionWidget(QGroupBox):
             for motion in pictograph.motions.values():
                 motion.turns_manager.set_turns(0)
             pictograph.updater.update_pictograph()
-        for panel in self.filter_tab.panels:
+        for panel in self.turns_tab.panels:
             for box in panel.boxes:
                 box.turns_widget.display_manager.update_turns_display("0")
                 box.prop_rot_dir_button_manager.hide_prop_rot_dir_buttons()

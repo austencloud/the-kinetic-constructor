@@ -51,10 +51,7 @@ class HeaderWidget(TurnsBoxWidget):
         return layout
 
     def _add_widgets(self, layout: QHBoxLayout) -> None:
-        if (
-            self.turns_box.turns_panel.filter_tab.section.letter_type
-            == LetterType.Type1
-        ):
+        if self.turns_box.turns_panel.turns_tab.section.letter_type == LetterType.Type1:
             layout.addStretch(1)
             layout.addWidget(self.header_label)
             layout.addStretch(1)

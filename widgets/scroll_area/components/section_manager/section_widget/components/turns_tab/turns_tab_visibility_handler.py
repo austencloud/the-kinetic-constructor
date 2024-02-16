@@ -9,34 +9,34 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
     from widgets.pictograph.pictograph import Pictograph
-    from .filter_tab import FilterTab
+    from .turns_tab import TurnsTab
 
 
-class FilterTabVisibilityHandler:
+class TurnsTabVisibilityHandler:
     """
     Manages the visibility of filter tabs based on selected letters within a section.
     Dynamically updates which filter tabs are visible
     Applies turns to newly added pictographs based on filters.
 
     Attributes:
-        filter_tab (FilterTab): The parent filter tab.
+        turns_tab (FilterTab): The parent filter tab.
         section (SectionWidget): The parent section widget.
         tabs (dict[TabName, QWidget]): The filter tabs to manage.
 
     Methods:
         update_visibility_based_on_selected_letters()
         apply_turns_from_turns_boxes_to_pictograph(pictograph)
-        resize_filter_tab()
+        resize_turns_tab()
     """
 
-    def __init__(self, filter_tab: "FilterTab"):
-        self.filter_tab = filter_tab
-        self.section = self.filter_tab.section
+    def __init__(self, turns_tab: "TurnsTab"):
+        self.turns_tab = turns_tab
+        self.section = self.turns_tab.section
 
         self.tabs = {
-            TurnsTabType.MOTION_TYPE: self.filter_tab.motion_type_turns_panel,
-            TurnsTabType.COLOR: self.filter_tab.color_turns_panel,
-            TurnsTabType.LEAD_STATE: self.filter_tab.lead_state_turns_panel,
+            TurnsTabType.MOTION_TYPE: self.turns_tab.motion_type_turns_panel,
+            TurnsTabType.COLOR: self.turns_tab.color_turns_panel,
+            TurnsTabType.LEAD_STATE: self.turns_tab.lead_state_turns_panel,
         }
 
     def update_visibility_based_on_selected_letters(self):
@@ -76,10 +76,10 @@ class FilterTabVisibilityHandler:
         for tab_key, panel in self.tabs.items():
             tab_label = tab_key.name.replace("_", " ").title()
 
-            if tab_key in tabs_to_show and self.filter_tab.indexOf(panel) == -1:
-                self.filter_tab.addTab(panel, tab_label)
-            elif tab_key not in tabs_to_show and self.filter_tab.indexOf(panel) != -1:
-                self.filter_tab.removeTab(self.filter_tab.indexOf(panel))
+            if tab_key in tabs_to_show and self.turns_tab.indexOf(panel) == -1:
+                self.turns_tab.addTab(panel, tab_label)
+            elif tab_key not in tabs_to_show and self.turns_tab.indexOf(panel) != -1:
+                self.turns_tab.removeTab(self.turns_tab.indexOf(panel))
 
         if TurnsTabType.MOTION_TYPE in tabs_to_show:
             selected_letters = self.section.scroll_area.codex.selected_letters
@@ -88,7 +88,7 @@ class FilterTabVisibilityHandler:
             ].show_motion_type_boxes_based_on_chosen_letters(selected_letters)
 
     def apply_turns_from_turns_boxes_to_pictograph(self, pictograph: "Pictograph"):
-        turns_values = self.filter_tab.get_current_turns_values()
+        turns_values = self.turns_tab.get_current_turns_values()
 
         attribute_to_property_and_values = {
             TurnsTabType.MOTION_TYPE: (
@@ -129,11 +129,11 @@ class FilterTabVisibilityHandler:
     def set_motion_prop_rot_dir_to_match_the_buttons_currently_pressed(
         self, motion: "Motion"
     ) -> None:
-        if self.filter_tab.section.vtg_dir_button_manager.same_button.is_pressed():
+        if self.turns_tab.section.vtg_dir_button_manager.same_button.is_pressed():
             motion.prop_rot_dir = motion.pictograph.get.other_motion(
                 motion
             ).prop_rot_dir
-        elif self.filter_tab.section.vtg_dir_button_manager.opp_button.is_pressed():
+        elif self.turns_tab.section.vtg_dir_button_manager.opp_button.is_pressed():
             motion.prop_rot_dir = (
                 CLOCKWISE
                 if motion.pictograph.get.other_motion(motion).prop_rot_dir
@@ -141,6 +141,6 @@ class FilterTabVisibilityHandler:
                 else COUNTER_CLOCKWISE
             )
 
-    def resize_filter_tab(self) -> None:
-        for panel in self.filter_tab.panels:
+    def resize_turns_tab(self) -> None:
+        for panel in self.turns_tab.panels:
             panel.resize_turns_panel()

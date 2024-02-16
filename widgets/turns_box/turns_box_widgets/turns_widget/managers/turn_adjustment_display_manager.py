@@ -13,11 +13,11 @@ class TurnsAdjustmentManager:
         self.turns_widget = turns_widget
         self.pictographs = self._get_pictographs()
         self.letter_type = (
-            self.turns_widget.turns_box.turns_panel.filter_tab.section.letter_type
+            self.turns_widget.turns_box.turns_panel.turns_tab.section.letter_type
         )
 
         self.vtg_button_manager = (
-            self.turns_widget.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager
+            self.turns_widget.turns_box.turns_panel.turns_tab.section.vtg_dir_button_manager
         )
         self.prop_rot_dir_manager = (
             self.turns_widget.turns_box.prop_rot_dir_button_manager
@@ -48,7 +48,7 @@ class TurnsAdjustmentManager:
 
     def _get_pictographs(self) -> list["Pictograph"]:
         return (
-            self.turns_widget.turns_box.turns_panel.filter_tab.section.scroll_area.pictograph_cache.values()
+            self.turns_widget.turns_box.turns_panel.turns_tab.section.scroll_area.pictograph_cache.values()
         )
 
     def _get_turns(self) -> Turns:
@@ -85,7 +85,7 @@ class TurnsAdjustmentManager:
     def _is_relevant_letter_type(self, pictograph: "Pictograph") -> bool:
         return (
             LetterType.get_letter_type(pictograph.letter)
-            == self.turns_widget.turns_box.turns_panel.filter_tab.section.letter_type
+            == self.turns_widget.turns_box.turns_panel.turns_tab.section.letter_type
         )
 
     def _adjust_turns_for_pictograph(self, pictograph, adjustment) -> None:

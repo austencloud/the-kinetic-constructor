@@ -50,7 +50,7 @@ class TurnsUpdater:
 
         if new_turns == 0:
             motion.prop_rot_dir = NO_ROT
-            self.turns_widget.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.unpress_vtg_buttons()
+            self.turns_widget.turns_box.turns_panel.turns_tab.section.vtg_dir_button_manager.unpress_vtg_buttons()
             if hasattr(self.turns_box, "prop_rot_dir_button_manager"):
                 self.turns_widget.turns_box.prop_rot_dir_button_manager.unpress_prop_rot_dir_buttons()
 
@@ -60,14 +60,14 @@ class TurnsUpdater:
     def _set_prop_rot_dir(self, motion: "Motion") -> None:
         """set the rotation direction of the motion based on the vtg directional relationship."""
         other_motion = motion.pictograph.get.other_motion(motion)
-        if self.turns_box.turns_panel.filter_tab.section.letter_type in [
+        if self.turns_box.turns_panel.turns_tab.section.letter_type in [
             LetterType.Type2,
             LetterType.Type3,
         ]:
             motion.prop_rot_dir = self._determine_prop_rot_dir_for_type2_type3(
                 other_motion
             )
-        elif self.turns_box.turns_panel.filter_tab.section.letter_type in [
+        elif self.turns_box.turns_panel.turns_tab.section.letter_type in [
             LetterType.Type4,
             LetterType.Type5,
             LetterType.Type6,
@@ -98,16 +98,16 @@ class TurnsUpdater:
     ) -> PropRotDirs:
         """Determine the property rotation direction."""
 
-        self.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.show_vtg_dir_buttons()
-        # self.turns_box.turns_panel.filter_tab.section.vtg_dir_button_manager.same_button.press()
+        self.turns_box.turns_panel.turns_tab.section.vtg_dir_button_manager.show_vtg_dir_buttons()
+        # self.turns_box.turns_panel.turns_tab.section.vtg_dir_button_manager.same_button.press()
         if (
-            not self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[SAME]
-            and not self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[OPP]
+            not self.turns_box.turns_panel.turns_tab.section.vtg_dir_btn_state[SAME]
+            and not self.turns_box.turns_panel.turns_tab.section.vtg_dir_btn_state[OPP]
         ):
             self._set_vtg_dir_state_default()
-        if self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[SAME]:
+        if self.turns_box.turns_panel.turns_tab.section.vtg_dir_btn_state[SAME]:
             return other_motion.prop_rot_dir
-        elif self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[OPP]:
+        elif self.turns_box.turns_panel.turns_tab.section.vtg_dir_btn_state[OPP]:
             if other_motion.prop_rot_dir == CLOCKWISE:
                 return COUNTER_CLOCKWISE
             elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
@@ -121,8 +121,8 @@ class TurnsUpdater:
 
     def _set_vtg_dir_state_default(self) -> None:
         """set the vtg direction state to default."""
-        self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[SAME] = True
-        self.turns_box.turns_panel.filter_tab.section.vtg_dir_btn_state[OPP] = False
+        self.turns_box.turns_panel.turns_tab.section.vtg_dir_btn_state[SAME] = True
+        self.turns_box.turns_panel.turns_tab.section.vtg_dir_btn_state[OPP] = False
 
     def _set_prop_rot_dir_state_default(self) -> None:
         """set the vtg direction state to default."""

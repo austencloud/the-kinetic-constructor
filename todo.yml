@@ -18,12 +18,6 @@
 
 - Allow easy selection of the sequence length.
 
-- Implement a tracking mechanism to check if the end position matches the start position.
-
-- Add more VTG terminology and a mode indicator in the bottom right corner.
-
-- Enable toggling VTG and kinetic alphabet letters on or off.
-
 - Allow deleting a specific entry in the sequence with options to delete following entries.
 
 - Update the sequence builder to reflect the last pictograph when loading a sequence from the library.

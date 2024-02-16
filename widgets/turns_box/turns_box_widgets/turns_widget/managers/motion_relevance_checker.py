@@ -15,7 +15,7 @@ class MotionRelevanceChecker:
     def is_motion_relevant(self, motion: "Motion") -> bool:
         attr_type = self.turns_box.attribute_type
         is_same_letter_type = (
-            self.turns_box.turns_panel.filter_tab.section.letter_type
+            self.turns_box.turns_panel.turns_tab.section.letter_type
             == LetterType.get_letter_type(motion.pictograph.letter)
         )
 

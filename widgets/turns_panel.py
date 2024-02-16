@@ -8,15 +8,15 @@ from widgets.turns_box.turns_box import TurnsBox
 from widgets.factories.attr_box_factory import TurnsBoxFactory
 
 if TYPE_CHECKING:
-    from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
-        FilterTab,
+    from widgets.scroll_area.components.section_manager.section_widget.components.turns_tab.turns_tab import (
+        TurnsTab,
     )
 
 
 class TurnsPanel(QFrame):
-    def __init__(self, filter_tab: "FilterTab", attribute_type) -> None:
+    def __init__(self, turns_tab: "TurnsTab", attribute_type) -> None:
         super().__init__()
-        self.filter_tab = filter_tab
+        self.turns_tab = turns_tab
         self.attribute_type = attribute_type
         self.turns_box_factory = TurnsBoxFactory(self)
         self.boxes: list[TurnsBox] = self.turns_box_factory.create_boxes()
@@ -38,14 +38,26 @@ class TurnsPanel(QFrame):
         relevant_selected_letters = []
         for letter in selected_letters:
             letter_type = LetterType.get_letter_type(letter)
-            if letter_type == self.filter_tab.section.letter_type:
+            if letter_type == self.turns_tab.section.letter_type:
                 relevant_selected_letters.append(letter)
 
         motion_type_mapping = {
-            PRO: [letter.value for letter in Letters.get_letters_by_condition(LetterConditions.PRO)],
-            ANTI: [letter.value for letter in Letters.get_letters_by_condition(LetterConditions.ANTI)],
-            DASH: [letter.value for letter in Letters.get_letters_by_condition(LetterConditions.DASH)],
-            STATIC: [letter.value for letter in Letters.get_letters_by_condition(LetterConditions.STATIC)],
+            PRO: [
+                letter.value
+                for letter in Letters.get_letters_by_condition(LetterConditions.PRO)
+            ],
+            ANTI: [
+                letter.value
+                for letter in Letters.get_letters_by_condition(LetterConditions.ANTI)
+            ],
+            DASH: [
+                letter.value
+                for letter in Letters.get_letters_by_condition(LetterConditions.DASH)
+            ],
+            STATIC: [
+                letter.value
+                for letter in Letters.get_letters_by_condition(LetterConditions.STATIC)
+            ],
         }
 
         for box in self.boxes:

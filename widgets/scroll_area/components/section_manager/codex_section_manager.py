@@ -5,7 +5,7 @@ from constants import BLUE_TURNS, RED_TURNS
 from Enums.Enums import LetterType
 
 
-from .section_widget.components.filter_tab.filter_tab import FilterTab
+from .section_widget.components.turns_tab.turns_tab import TurnsTab
 from .section_widget.codex_section_widget import CodexSectionWidget
 from PyQt6.QtWidgets import QGridLayout, QLabel
 
@@ -28,7 +28,7 @@ class CodexSectionManager:
     def __init__(self, scroll_area: "CodexScrollArea") -> None:
         self.scroll_area = scroll_area
         self.sections: dict[LetterType, CodexSectionWidget] = {}
-        self.filter_tabs_cache: dict[LetterType, FilterTab] = {}
+        self.turns_tabs_cache: dict[LetterType, TurnsTab] = {}
         self.pictograph_cache: dict[Letters, list[LetterType]] = {}
 
         self.pictographs_by_type = {type: [] for type in LetterType}
@@ -79,11 +79,11 @@ class CodexSectionManager:
         if letter_type not in self.sections:
             self.create_section(letter_type)
         section = self.sections[letter_type]
-        if not section.filter_tab:
-            if letter_type not in self.filter_tabs_cache:
-                filter_tab = self.create_or_get_filter_tab(section)
-                self.filter_tabs_cache[letter_type] = filter_tab
-            section.filter_tab = self.filter_tabs_cache[letter_type]
+        if not section.turns_tab:
+            if letter_type not in self.turns_tabs_cache:
+                turns_tab = self.create_or_get_turns_tab(section)
+                self.turns_tabs_cache[letter_type] = turns_tab
+            section.turns_tab = self.turns_tabs_cache[letter_type]
 
     def update_sections_based_on_letters(self, selected_letters: list[Letters]) -> None:
         sections_to_show = self.get_sections_to_show_from_selected_letters(
@@ -111,8 +111,8 @@ class CodexSectionManager:
                 sections_to_show.append(letter_type)
         return sections_to_show
 
-    def create_or_get_filter_tab(self, section: CodexSectionWidget) -> FilterTab:
-        if not section.filter_tab:
-            section.filter_tab = FilterTab(section)
-            section.layout.insertWidget(1, section.filter_tab)
-        return section.filter_tab
+    def create_or_get_turns_tab(self, section: CodexSectionWidget) -> TurnsTab:
+        if not section.turns_tab:
+            section.turns_tab = TurnsTab(section)
+            section.layout.insertWidget(1, section.turns_tab)
+        return section.turns_tab

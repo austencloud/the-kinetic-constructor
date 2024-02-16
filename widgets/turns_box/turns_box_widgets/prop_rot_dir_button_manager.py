@@ -68,7 +68,7 @@ class PropRotDirButtonManager:
         for (
             pictograph
         ) in (
-            self.turns_box.turns_panel.filter_tab.section.scroll_area.pictograph_cache.values()
+            self.turns_box.turns_panel.turns_tab.section.scroll_area.pictograph_cache.values()
         ):
             for motion in pictograph.motions.values():
                 other_motion = pictograph.motions[RED if motion.color == BLUE else BLUE]
@@ -91,7 +91,7 @@ class PropRotDirButtonManager:
         for (
             pictograph
         ) in (
-            self.turns_box.turns_panel.filter_tab.section.scroll_area.pictograph_cache.values()
+            self.turns_box.turns_panel.turns_tab.section.scroll_area.pictograph_cache.values()
         ):
             for motion in pictograph.motions.values():
                 if motion.motion_type in [DASH, STATIC]:
@@ -154,7 +154,7 @@ class PropRotDirButtonManager:
     def update_visibility_based_on_motion(
         self, new_turns, attribute_value: Union[Colors, MotionTypes, LeadStates]
     ) -> None:
-        if self.turns_box.turns_panel.filter_tab.section.letter_type in [
+        if self.turns_box.turns_panel.turns_tab.section.letter_type in [
             LetterType.Type4,
             LetterType.Type5,
             LetterType.Type6,

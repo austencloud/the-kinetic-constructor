@@ -28,7 +28,7 @@ class TurnsButtonManager:
         self.left_spacer_frame = QFrame()
         self.right_spacer_frame = QFrame()
         spacer_height = int(
-            self.turns_widget.turns_box.turns_panel.filter_tab.section.width() / 28
+            self.turns_widget.turns_box.turns_panel.turns_tab.section.width() / 28
         )
         self.left_spacer_frame.setMinimumHeight(spacer_height)
         self.right_spacer_frame.setMinimumHeight(spacer_height)

@@ -10,8 +10,8 @@ from widgets.scroll_area.components.section_manager.section_widget.section_group
 from widgets.sequence_builder.components.option_picker.option_picker_section_widget import (
     OptionPickerSectionWidget,
 )
-from ....scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
-    FilterTab,
+from ....scroll_area.components.section_manager.section_widget.components.turns_tab.turns_tab import (
+    TurnsTab,
 )
 
 
@@ -38,7 +38,7 @@ class OptionPickerSectionsManager:
         self.scroll_area = scroll_area
         self.sequence_builder: "SequenceBuilder" = scroll_area.sequence_builder
         self.sections: dict[LetterType, OptionPickerSectionWidget] = {}
-        self.filter_tabs_cache: dict[LetterType, FilterTab] = {}
+        self.turns_tabs_cache: dict[LetterType, TurnsTab] = {}
         self.pictograph_cache: dict[Letters, list[LetterType]] = {}
         self.ordered_section_types: list[LetterType] = []
 
@@ -99,11 +99,11 @@ class OptionPickerSectionsManager:
                 return letter_type
         return "Unknown"
 
-    def create_or_get_filter_tab(self, section: OptionPickerSectionWidget) -> FilterTab:
-        if not section.filter_tab:
-            section.filter_tab = FilterTab(section)
-            section.layout.insertWidget(1, section.filter_tab)
-        return section.filter_tab
+    def create_or_get_turns_tab(self, section: OptionPickerSectionWidget) -> TurnsTab:
+        if not section.turns_tab:
+            section.turns_tab = TurnsTab(section)
+            section.layout.insertWidget(1, section.turns_tab)
+        return section.turns_tab
 
     def show_all_sections(self) -> None:
         self.initialize_sections()

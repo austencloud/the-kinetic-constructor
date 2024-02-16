@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 
 from Enums.Enums import LetterType
 
-from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
-    FilterTab,
+from widgets.scroll_area.components.section_manager.section_widget.components.turns_tab.turns_tab import (
+    TurnsTab,
 )
 
 
@@ -39,7 +39,7 @@ class CodexLetterButtonClickHandler:
 
         for section in self.section_manager.sections.values():
             if section.letter_type == letter_type:
-                section.filter_tab.visibility_handler.update_visibility_based_on_selected_letters()
+                section.turns_tab.visibility_handler.update_visibility_based_on_selected_letters()
 
         button.setFlat(not is_selected)
 
@@ -53,7 +53,6 @@ class CodexLetterButtonClickHandler:
         self.section_manager.update_sections_based_on_letters(
             self.codex.selected_letters
         )
-        
 
     def process_pictographs_for_letter(self, letter: str) -> None:
         letter_type = LetterType.get_letter_type(letter)
@@ -62,9 +61,9 @@ class CodexLetterButtonClickHandler:
         section = section_manager.sections[letter_type]
         pictograph_dicts = main_widget.letters.get(letter, [])
         for pictograph_dict in pictograph_dicts:
-            self.apply_turns_to_pictograph(pictograph_dict, section.filter_tab)
+            self.apply_turns_to_pictograph(pictograph_dict, section.turns_tab)
 
-    def apply_turns_to_pictograph(self, pictograph_dict, filter_tab: FilterTab) -> None:
+    def apply_turns_to_pictograph(self, pictograph_dict, turns_tab: TurnsTab) -> None:
         pictograph_factory = self.codex.scroll_area.pictograph_factory
         pictograph_key = self.codex.scroll_area.main_widget.pictograph_key_generator.generate_pictograph_key(
             pictograph_dict
@@ -72,7 +71,7 @@ class CodexLetterButtonClickHandler:
         pictograph = pictograph_factory.get_or_create_pictograph(
             pictograph_key, pictograph_dict
         )
-        filter_tab.visibility_handler.apply_turns_from_turns_boxes_to_pictograph(
+        turns_tab.visibility_handler.apply_turns_from_turns_boxes_to_pictograph(
             pictograph
         )
         pictograph.updater.update_pictograph()
