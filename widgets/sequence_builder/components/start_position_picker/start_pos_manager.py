@@ -52,7 +52,7 @@ class StartPosManager(QObject):
                     )
 
     def on_start_pos_clicked(self, start_position_pictograph: Pictograph):
-        self.sequence_builder.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
+        self.sequence_builder.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos_beat(
             start_position_pictograph
         )
 
@@ -61,7 +61,7 @@ class StartPosManager(QObject):
         self.start_position_selected.connect(
             self.sequence_builder.transition_to_sequence_building
         )
-        self.sequence_builder.main_widget.json_manager.current_sequence_json_handler.set_start_position(
+        self.sequence_builder.main_widget.json_manager.current_sequence_json_handler.set_start_position_data(
             start_position_pictograph
         )
         self.start_position_selected.emit(start_position_pictograph)

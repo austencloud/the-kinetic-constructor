@@ -43,7 +43,7 @@ class SequenceBuilder(QFrame):
     def _setup_components(self):
         self.option_click_handler = OptionPickerClickHandler(self)
 
-    def transition_to_sequence_building(self, start_pictograph: Pictograph):
+    def transition_to_sequence_building(self):
         self.start_position_picked = True
         self.start_position_picker.hide()
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)

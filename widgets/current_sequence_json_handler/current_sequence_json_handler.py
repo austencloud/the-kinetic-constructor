@@ -19,7 +19,7 @@ class CurrentSequenceJsonHandler:
         with open(self.current_sequence_json, "w") as file:
             file.write("[]")
 
-    def set_start_position(self, start_pos_graph: Pictograph):
+    def set_start_position_data(self, start_pos_graph: Pictograph):
         red_start_ori = start_pos_graph.pictograph_dict["red_start_ori"]
         blue_start_ori = start_pos_graph.pictograph_dict["blue_start_ori"]
         sequence = self.load_sequence()

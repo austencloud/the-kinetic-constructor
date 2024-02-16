@@ -62,18 +62,27 @@ class Library(QWidget):
         start_position_pictograph = self.get_start_position_pictograph(
             sequence_data[0] if sequence_data else None
         )
-        if start_position_pictograph:
-            self.main_widget.json_manager.current_sequence_json_handler.set_start_position(
-                start_position_pictograph
-            )
-            self.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
-                start_position_pictograph
-            )
+        self.main_widget.json_manager.current_sequence_json_handler.set_start_position_data(
+            start_position_pictograph
+        )
+        self.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos_beat(
+            start_position_pictograph
+        )
 
         for pictograph_dict in sequence_data:
             if pictograph_dict.get("sequence_start_position"):
                 continue
             self.main_widget.sequence_widget.populate_sequence(pictograph_dict)
+
+        self.main_widget.main_tab_widget.sequence_builder.current_pictograph = (
+            self.main_widget.sequence_widget.beat_frame.get_last_beat().beat
+        )
+
+        self.main_widget.main_tab_widget.sequence_builder.option_picker.scroll_area._add_and_display_relevant_pictographs(
+            self.main_widget.main_tab_widget.sequence_builder.option_picker.option_manager.get_next_options()
+        )
+        # transition the start pos picker to the the option picker
+        self.main_widget.main_tab_widget.sequence_builder.transition_to_sequence_building()
 
     def get_start_position_pictograph(self, start_pos_data):
         if not start_pos_data:
@@ -96,11 +105,7 @@ class Library(QWidget):
         return None
 
     def start_pos_key_to_letter(self, start_pos_key: str):
-        mapping = {
-            "alpha": "α",
-            "beta": "β",
-            "gamma": "Γ"
-        }
+        mapping = {"alpha": "α", "beta": "β", "gamma": "Γ"}
         for key in mapping:
             if start_pos_key.startswith(key):
                 return mapping[key]

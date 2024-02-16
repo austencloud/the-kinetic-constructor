@@ -76,5 +76,9 @@ class ArrowAdjustmentCalculator:
         key = self.placement_manager.special_positioner.attr_key_generator.get_key(
             arrow
         )
+        # check if the key is a str
+        if isinstance(key, str):
 
-        return letter_adjustments.get(key)
+            return letter_adjustments.get(key)
+        else:
+            return letter_adjustments.get(key.value)

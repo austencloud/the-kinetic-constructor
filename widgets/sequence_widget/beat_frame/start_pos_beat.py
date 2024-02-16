@@ -25,7 +25,7 @@ class StartPositionBeatView(BeatView):
         self.beat_frame = beat_frame
         self.is_filled = False
 
-    def set_start_pos(self, start_pos: "StartPositionBeat") -> None:
+    def set_start_pos_beat(self, start_pos: "StartPositionBeat") -> None:
         self.start_pos = start_pos
         self.is_filled = True
         self.start_pos.view = self

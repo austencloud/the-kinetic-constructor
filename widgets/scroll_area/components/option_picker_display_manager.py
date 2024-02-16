@@ -12,6 +12,7 @@ from widgets.scroll_area.components.section_manager.section_widget.codex_section
 from widgets.sequence_builder.components.option_picker.option_picker_section_widget import (
     OptionPickerSectionWidget,
 )
+from widgets.sequence_widget.beat_frame.beat import Beat
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (
@@ -30,7 +31,6 @@ class OptionPickerDisplayManager:
 
     def order_and_display_pictographs(self):
         for letter_type in LetterType:
-            # self.calculate_section_indices(letter_type)
             ordered_pictographs = self.get_ordered_pictographs_for_section(letter_type)
             for index, (key, pictograph) in enumerate(ordered_pictographs.items()):
                 self.add_pictograph_to_layout(pictograph, index)
@@ -83,14 +83,14 @@ class OptionPickerDisplayManager:
         }
 
     def is_pictograph_relevant(
-        self, pictograph: Pictograph, current_pictograph: Pictograph
+        self, pictograph: Pictograph, current_beat: Beat
     ) -> bool:
         """Check if a pictograph is a valid next option based on the current_pictograph."""
 
         if (
-            current_pictograph.end_pos == pictograph.start_pos
-            and current_pictograph.red_motion.end_ori == pictograph.red_motion.start_ori
-            and current_pictograph.blue_motion.end_ori
+            current_beat.end_pos == pictograph.start_pos
+            and current_beat.red_motion.end_ori == pictograph.red_motion.start_ori
+            and current_beat.blue_motion.end_ori
             == pictograph.blue_motion.start_ori
         ):
             return True

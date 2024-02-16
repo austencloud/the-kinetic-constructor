@@ -93,3 +93,7 @@ class SequenceBeatFrame(QFrame):
                 sequence_data.append(last_pictograph_dict)
         with open(temp_filename, "w", encoding="utf-8") as file:
             json.dump(sequence_data, file, indent=4, ensure_ascii=False)
+
+    def is_full(self) -> bool:
+        return all(beat.is_filled for beat in self.beats)
+        
