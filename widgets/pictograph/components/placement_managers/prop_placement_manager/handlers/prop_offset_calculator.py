@@ -64,6 +64,8 @@ class PropOffsetCalculator:
     ) -> QPointF:
         if self.pictograph.check.has_all_props_of_type(PropTypes.Club):
             self.beta_offset = self.prop_placement_manager.pictograph.width() / 60
+        elif self.pictograph.check.has_all_props_of_type(PropTypes.EightRings):
+            self.beta_offset = self.prop_placement_manager.pictograph.width() / 60
         else:
             self.beta_offset = self.prop_placement_manager.pictograph.width() / 38
 

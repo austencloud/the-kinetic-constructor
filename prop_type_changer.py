@@ -43,8 +43,10 @@ class PropTypeChanger:
                 self.replace_props(new_prop_type, beat_view.beat)
                 beat_view.beat.updater.update_pictograph()
 
-        start_pos = (
-            self.main_window.main_widget.sequence_widget.beat_frame.start_pos_view.start_pos
+        start_pos_view = (
+            self.main_window.main_widget.sequence_widget.beat_frame.start_pos_view
         )
-        if start_pos.view.is_filled:
-            self.replace_props(new_prop_type, start_pos)
+        if hasattr(start_pos_view, "start_pos"):
+            start_pos = start_pos_view.start_pos
+            if start_pos.view.is_filled:
+                self.replace_props(new_prop_type, start_pos)

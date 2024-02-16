@@ -11,6 +11,7 @@ class PropTypeSelector(QGroupBox):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__("Prop Type Selector")
         self.main_widget = main_widget
+        self.prop_type_changer = self.main_widget.main_window.settings_manager.prop_type_changer
         self._setup_prop_type_combobox()
         self._setup_layout()
 
@@ -39,7 +40,7 @@ class PropTypeSelector(QGroupBox):
         new_prop_type = new_prop_type or self.prop_type_combobox.currentText()
         self.main_widget.main_window.settings_manager.set_prop_type(new_prop_type)
         self.main_widget.main_window.settings_manager.save_settings()
-        self.main_widget.main_window.settings_manager.apply_settings()
+        self.prop_type_changer.apply_prop_type()
         if hasattr(self.main_widget.main_window.menu_bar, "preferences_dialog"):
             self.main_widget.main_window.menu_bar.preferences_dialog.apply_button.setEnabled(
                 True

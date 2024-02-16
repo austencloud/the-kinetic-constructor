@@ -54,7 +54,6 @@ class SettingsManager:
         """Apply user settings to the application."""
         self._apply_pictograph_size()
         self.prop_type_changer.apply_prop_type()
-        self.glyph_visibility_manager.apply_current_visibility_settings()
         self.main_window.main_widget.main_tab_widget.codex.update_pictographs()
 
     def _apply_pictograph_size(self) -> None:
