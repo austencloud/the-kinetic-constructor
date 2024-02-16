@@ -15,8 +15,6 @@ class StyledBorderOverlay(QWidget):
         self.is_set = False
         self.primary_color = None
         self.secondary_color = None
-        self.outer_border_width = 3
-        self.inner_border_width = 3
         self.setFixedSize(view.size())
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
 

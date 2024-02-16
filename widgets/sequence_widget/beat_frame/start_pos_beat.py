@@ -21,8 +21,8 @@ class StartPositionBeat(Beat):
 
 class StartPositionBeatView(BeatView):
     def __init__(self, beat_frame: "SequenceBeatFrame") -> None:
-        super().__init__(beat_frame)
         self.beat_frame = beat_frame
+        super().__init__(beat_frame)
         self.is_filled = False
 
     def set_start_pos_beat(self, start_pos: "StartPositionBeat") -> None:

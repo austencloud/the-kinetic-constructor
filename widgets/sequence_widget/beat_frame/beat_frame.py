@@ -48,7 +48,18 @@ class SequenceBeatFrame(QFrame):
         for j in range(1, 4):
             for i in range(1, self.COLUMN_COUNT):
                 self._add_beat_to_layout(j, i)
-        # self.setStyleSheet("QFrame {border: 1px solid black;}")
+        self.selected_beat_view = None  # Track the currently selected beat view
+
+    def set_selected_beat(self, beat_view: "BeatView"):
+        if self.selected_beat_view:
+            self.selected_beat_view.deselect() 
+        self.selected_beat_view = beat_view
+        beat_view.select() 
+
+    def deselect_current_beat(self):
+        if self.selected_beat_view:
+            self.selected_beat_view.deselect()
+            self.selected_beat_view = None
 
     def _add_beat_to_layout(self, row: int, col: int) -> None:
         beat_view = BeatView(self)
