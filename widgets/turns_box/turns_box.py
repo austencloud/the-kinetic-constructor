@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING, cast
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
-from Enums.Enums import TurnsTabAttributeType
+from Enums.Enums import TurnsTabAttribute
 from Enums.MotionAttributes import Colors, LeadStates, MotionTypes
 
 from constants import BLUE, CLOCKWISE, COLOR, COUNTER_CLOCKWISE, RED
-from ..header_widget import HeaderWidget
+from ..header_widget import TurnsBoxHeaderWidget
 from ..turns_box.turns_box_widgets.prop_rot_dir_button_manager import (
     PropRotDirButtonManager,
 )
@@ -23,11 +23,11 @@ class TurnsBox(QFrame):
     def __init__(
         self,
         turns_panel,
-        attribute_type: TurnsTabAttributeType,
-        attribute: TurnsTabAttributeType,
+        attribute_type: TurnsTabAttribute,
+        attribute: TurnsTabAttribute,
     ) -> None:
         super().__init__(turns_panel)
-        self.attribute_type: TurnsTabAttributeType = attribute_type
+        self.attribute_type: TurnsTabAttribute = attribute_type
         self.attribute_value = attribute
         self.turns_panel: "TurnsPanel" = turns_panel
 
@@ -38,25 +38,25 @@ class TurnsBox(QFrame):
             COUNTER_CLOCKWISE: False,
         }
 
-        self.motion_type: TurnsTabAttributeType
-        self.color: TurnsTabAttributeType
-        self.lead_state: TurnsTabAttributeType
+        self.motion_type: TurnsTabAttribute
+        self.color: TurnsTabAttribute
+        self.lead_state: TurnsTabAttribute
 
         self._setup_attribute_type()
         self._setup_widgets()
         self._setup_layouts()
 
     def _setup_attribute_type(self) -> None:
-        if self.attribute_type == TurnsTabAttributeType.MOTION_TYPE:
+        if self.attribute_type == TurnsTabAttribute.MOTION_TYPE:
             self.motion_type = cast(MotionTypes, self.attribute_value)
-        elif self.attribute_type == TurnsTabAttributeType.COLOR:
+        elif self.attribute_type == TurnsTabAttribute.COLOR:
             self.color = cast(Colors, self.attribute_value)
-        elif self.attribute_type == TurnsTabAttributeType.LEAD_STATE:
+        elif self.attribute_type == TurnsTabAttribute.LEAD_STATE:
             self.lead_state = cast(LeadStates, self.attribute_value)
 
     def _setup_widgets(self) -> None:
         self.prop_rot_dir_button_manager = PropRotDirButtonManager(self)
-        self.header_widget = HeaderWidget(self)
+        self.header_widget = TurnsBoxHeaderWidget(self)
         self.turns_widget = TurnsWidget(self)
 
         if self.attribute_type == COLOR:

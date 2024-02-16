@@ -191,10 +191,10 @@ class LetterGroupsByMotionType(Enum):
     Φ_Ψ_Λ_ = "Φ-Ψ-Λ-"
 
 
-class TurnsTabAttributeType(Enum):
-    MOTION_TYPE = auto()
-    COLOR = auto()
-    LEAD_STATE = auto()
+class TurnsTabAttribute(Enum):
+    MOTION_TYPE = "motion_type"
+    COLOR = "color"
+    LEAD_STATE = "lead_state"
 
 
 class ParallelCombinationsSet(Enum):

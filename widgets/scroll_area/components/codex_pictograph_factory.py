@@ -43,7 +43,7 @@ class CodexPictographFactory:
             ] = pictograph
             letter_type = LetterType.get_letter_type(letter)
             for letter_type in LetterType:
-                if letter in letter_type.letters:
+                if letter.value in letter_type.letters:
                     letter_type = letter_type
                     break
 

@@ -2,7 +2,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel, QHBoxLayout, QFrame
 from PyQt6.QtCore import Qt
 
-from Enums.Enums import LetterType, TurnsTabAttributeType
+from Enums.Enums import LetterType, TurnsTabAttribute
+from Enums.MotionAttributes import Colors
 
 
 from .turns_box.turns_box_widgets.base_attr_box_widget import TurnsBoxWidget
@@ -13,7 +14,7 @@ if TYPE_CHECKING:
 from constants import BLUE, COLOR, LEAD_STATE, MOTION_TYPE
 
 
-class HeaderWidget(TurnsBoxWidget):
+class TurnsBoxHeaderWidget(TurnsBoxWidget):
     def __init__(self, turns_box: "TurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box
@@ -22,15 +23,18 @@ class HeaderWidget(TurnsBoxWidget):
         self.layout: QHBoxLayout = self._setup_layout()
 
     def _setup_header(self) -> None:
-        if self.turns_box.attribute_type == TurnsTabAttributeType.COLOR:
-            text = "Left" if self.turns_box.color == BLUE else "Right"
+        if self.turns_box.attribute_type == TurnsTabAttribute.COLOR:
+            if self.turns_box.color == Colors.BLUE:
+                text = "Left"
+            elif self.turns_box.color == Colors.RED:
+                text = "Right"
             header_label = self._setup_header_label(text)
 
-        elif self.turns_box.attribute_type == TurnsTabAttributeType.LEAD_STATE:
+        elif self.turns_box.attribute_type == TurnsTabAttribute.LEAD_STATE:
             text = self.turns_box.lead_state.value.capitalize()
             header_label = self._setup_header_label(text)
 
-        elif self.turns_box.attribute_type == TurnsTabAttributeType.MOTION_TYPE:
+        elif self.turns_box.attribute_type == TurnsTabAttribute.MOTION_TYPE:
             text = self.turns_box.motion_type.value.capitalize()
             header_label = self._setup_header_label(text)
 

@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QTabWidget
 
-from Enums.Enums import TurnsTabAttributeType
+from Enums.Enums import TurnsTabAttribute
 from .turns_tab_visibility_handler import TurnsTabVisibilityHandler
 from typing import TYPE_CHECKING
 from constants import MOTION_TYPE, COLOR, LEAD_STATE
@@ -28,11 +28,9 @@ class TurnsTab(QTabWidget):
         self.updater = TurnsTabUpdater(self)
 
     def _setup_panels(self):
-        self.motion_type_turns_panel = TurnsPanel(
-            self, TurnsTabAttributeType.MOTION_TYPE
-        )
-        self.color_turns_panel = TurnsPanel(self, TurnsTabAttributeType.COLOR)
-        self.lead_state_turns_panel = TurnsPanel(self, TurnsTabAttributeType.LEAD_STATE)
+        self.motion_type_turns_panel = TurnsPanel(self, TurnsTabAttribute.MOTION_TYPE)
+        self.color_turns_panel = TurnsPanel(self, TurnsTabAttribute.COLOR)
+        self.lead_state_turns_panel = TurnsPanel(self, TurnsTabAttribute.LEAD_STATE)
 
         self.panels = [
             self.motion_type_turns_panel,
