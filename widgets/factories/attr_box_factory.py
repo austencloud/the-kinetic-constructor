@@ -1,18 +1,7 @@
 from typing import TYPE_CHECKING
 
-from constants import (
-    ANTI,
-    BLUE,
-    COLOR,
-    DASH,
-    LEAD_STATE,
-    LEADING,
-    MOTION_TYPE,
-    PRO,
-    RED,
-    STATIC,
-    TRAILING,
-)
+from Enums.Enums import TurnsTabAttributeType
+from Enums.MotionAttributes import Colors, LeadStates, MotionTypes
 from widgets.turns_box.turns_box import TurnsBox
 
 
@@ -26,15 +15,22 @@ class TurnsBoxFactory:
 
     def create_boxes(self) -> list[TurnsBox]:
         attributes = []
-        if self.turns_panel.attribute_type == MOTION_TYPE:
+        if self.turns_panel.attribute_type == TurnsTabAttributeType.MOTION_TYPE:
             return [
-                TurnsBox(self.turns_panel, MOTION_TYPE, motion_type)
-                for motion_type in [PRO, ANTI, DASH, STATIC]
+                TurnsBox(
+                    self.turns_panel, TurnsTabAttributeType.MOTION_TYPE, motion_type
+                )
+                for motion_type in [
+                    MotionTypes.PRO,
+                    MotionTypes.ANTI,
+                    MotionTypes.DASH,
+                    MotionTypes.STATIC,
+                ]
             ]
-        elif self.turns_panel.attribute_type == COLOR:
-            attributes = [BLUE, RED]
-        elif self.turns_panel.attribute_type == LEAD_STATE:
-            attributes = [LEADING, TRAILING]
+        elif self.turns_panel.attribute_type == TurnsTabAttributeType.COLOR:
+            attributes = [Colors.BLUE, Colors.RED]
+        elif self.turns_panel.attribute_type == TurnsTabAttributeType.LEAD_STATE:
+            attributes = [LeadStates.LEADING, LeadStates.TRAILING]
 
         return [
             TurnsBox(self.turns_panel, self.turns_panel.attribute_type, attribute)

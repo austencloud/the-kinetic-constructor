@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from Enums.Enums import LetterType
+from Enums.Enums import LetterType, TurnsTabAttributeType
 
 from constants import COLOR, LEAD_STATE, MOTION_TYPE
 
@@ -22,11 +22,11 @@ class MotionRelevanceChecker:
         if not is_same_letter_type:
             return False
 
-        if attr_type == MOTION_TYPE:
-            return motion.motion_type == self.turns_box.motion_type
-        elif attr_type == COLOR:
+        if attr_type == TurnsTabAttributeType.MOTION_TYPE:
+            return motion.motion_type == self.turns_box.motion_type.value
+        elif attr_type == TurnsTabAttributeType.COLOR:
             return motion.color == self.turns_box.color
-        elif attr_type == LEAD_STATE:
+        elif attr_type == TurnsTabAttributeType.LEAD_STATE:
             return motion.lead_state == self.turns_box.lead_state
 
         return False  # Default case if none of the conditions match

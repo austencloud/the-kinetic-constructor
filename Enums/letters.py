@@ -71,7 +71,7 @@ class Letters(Enum):
     Γ = "Γ"
 
     @staticmethod
-    def get_letters_by_condition(condition: LetterConditions) -> list:
+    def get_letters_by_condition(condition: LetterConditions) -> list["Letters"]:
         """
         Returns a list of letter enums based on a given condition.
         """

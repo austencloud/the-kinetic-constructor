@@ -1,9 +1,8 @@
 from PyQt6.QtWidgets import QHBoxLayout, QFrame
 from typing import TYPE_CHECKING
-from Enums.Enums import LetterType, Letters
+from Enums.Enums import LetterType, Letters, TurnsTabAttributeType
 from Enums.MotionAttributes import MotionTypes
 from Enums.letters import LetterConditions
-from constants import ANTI, DASH, MOTION_TYPE, PRO, STATIC
 from widgets.turns_box.turns_box import TurnsBox
 from widgets.factories.attr_box_factory import TurnsBoxFactory
 
@@ -14,7 +13,9 @@ if TYPE_CHECKING:
 
 
 class TurnsPanel(QFrame):
-    def __init__(self, turns_tab: "TurnsTab", attribute_type) -> None:
+    def __init__(
+        self, turns_tab: "TurnsTab", attribute_type: TurnsTabAttributeType
+    ) -> None:
         super().__init__()
         self.turns_tab = turns_tab
         self.attribute_type = attribute_type
@@ -42,26 +43,26 @@ class TurnsPanel(QFrame):
                 relevant_selected_letters.append(letter)
 
         motion_type_mapping = {
-            PRO: [
-                letter.value
+            MotionTypes.PRO: [
+                letter
                 for letter in Letters.get_letters_by_condition(LetterConditions.PRO)
             ],
-            ANTI: [
-                letter.value
+            MotionTypes.ANTI: [
+                letter
                 for letter in Letters.get_letters_by_condition(LetterConditions.ANTI)
             ],
-            DASH: [
-                letter.value
+            MotionTypes.DASH: [
+                letter
                 for letter in Letters.get_letters_by_condition(LetterConditions.DASH)
             ],
-            STATIC: [
-                letter.value
+            MotionTypes.STATIC: [
+                letter
                 for letter in Letters.get_letters_by_condition(LetterConditions.STATIC)
             ],
         }
 
         for box in self.boxes:
-            if box.attribute_type == MOTION_TYPE:
+            if box.attribute_type == TurnsTabAttributeType.MOTION_TYPE:
                 show_box = any(
                     letter in relevant_selected_letters
                     for letter in motion_type_mapping[box.motion_type]

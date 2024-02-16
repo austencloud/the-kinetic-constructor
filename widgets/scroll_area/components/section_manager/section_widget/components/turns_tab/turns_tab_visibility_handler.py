@@ -1,5 +1,5 @@
 from typing import List
-from Enums.Enums import LetterType, TurnsTabType
+from Enums.Enums import LetterType, TurnsTabAttributeType
 from constants import CLOCKWISE, COUNTER_CLOCKWISE, PRO, ANTI, DASH, STATIC
 from data.letter_engine_data import motion_type_letter_combinations
 from typing import List
@@ -34,9 +34,9 @@ class TurnsTabVisibilityHandler:
         self.section = self.turns_tab.section
 
         self.tabs = {
-            TurnsTabType.MOTION_TYPE: self.turns_tab.motion_type_turns_panel,
-            TurnsTabType.COLOR: self.turns_tab.color_turns_panel,
-            TurnsTabType.LEAD_STATE: self.turns_tab.lead_state_turns_panel,
+            TurnsTabAttributeType.MOTION_TYPE: self.turns_tab.motion_type_turns_panel,
+            TurnsTabAttributeType.COLOR: self.turns_tab.color_turns_panel,
+            TurnsTabAttributeType.LEAD_STATE: self.turns_tab.lead_state_turns_panel,
         }
 
     def update_visibility_based_on_selected_letters(self):
@@ -48,7 +48,7 @@ class TurnsTabVisibilityHandler:
 
     def _determine_tabs_to_show_based_on_selected_letters(
         self, selected_letters: List[str]
-    ) -> List[TurnsTabType]:
+    ) -> List[TurnsTabAttributeType]:
         motion_types_present = {
             motion_type
             for letter in selected_letters
@@ -59,20 +59,20 @@ class TurnsTabVisibilityHandler:
         tabs_to_show = set()
 
         if motion_types_present.intersection({PRO, ANTI, DASH, STATIC}):
-            tabs_to_show.add(TurnsTabType.COLOR)
+            tabs_to_show.add(TurnsTabAttributeType.COLOR)
 
         if len(motion_types_present) > 1:
-            tabs_to_show.add(TurnsTabType.MOTION_TYPE)
+            tabs_to_show.add(TurnsTabAttributeType.MOTION_TYPE)
         if self.section.letter_type == LetterType.Type1:
             if any(letter in {"S", "T", "U", "V"} for letter in selected_letters):
-                tabs_to_show.add(TurnsTabType.LEAD_STATE)
+                tabs_to_show.add(TurnsTabAttributeType.LEAD_STATE)
 
         return list(tabs_to_show)
 
     def _get_motion_types_from_letter(self, letter: str) -> List[str]:
         return motion_type_letter_combinations.get(letter, [])
 
-    def _update_tabs_visibility(self, tabs_to_show: List[TurnsTabType]):
+    def _update_tabs_visibility(self, tabs_to_show: List[TurnsTabAttributeType]):
         for tab_key, panel in self.tabs.items():
             tab_label = tab_key.name.replace("_", " ").title()
 
@@ -81,27 +81,27 @@ class TurnsTabVisibilityHandler:
             elif tab_key not in tabs_to_show and self.turns_tab.indexOf(panel) != -1:
                 self.turns_tab.removeTab(self.turns_tab.indexOf(panel))
 
-        if TurnsTabType.MOTION_TYPE in tabs_to_show:
+        if TurnsTabAttributeType.MOTION_TYPE in tabs_to_show:
             selected_letters = self.section.scroll_area.codex.selected_letters
             self.tabs[
-                TurnsTabType.MOTION_TYPE
+                TurnsTabAttributeType.MOTION_TYPE
             ].show_motion_type_boxes_based_on_chosen_letters(selected_letters)
 
     def apply_turns_from_turns_boxes_to_pictograph(self, pictograph: "Pictograph"):
         turns_values = self.turns_tab.get_current_turns_values()
 
         attribute_to_property_and_values = {
-            TurnsTabType.MOTION_TYPE: (
+            TurnsTabAttributeType.MOTION_TYPE: (
                 "motion_type",
-                turns_values.get(TurnsTabType.MOTION_TYPE.name.lower(), {}),
+                turns_values.get(TurnsTabAttributeType.MOTION_TYPE.name.lower(), {}),
             ),
-            TurnsTabType.COLOR: (
+            TurnsTabAttributeType.COLOR: (
                 "color",
-                turns_values.get(TurnsTabType.COLOR.name.lower(), {}),
+                turns_values.get(TurnsTabAttributeType.COLOR.name.lower(), {}),
             ),
-            TurnsTabType.LEAD_STATE: (
+            TurnsTabAttributeType.LEAD_STATE: (
                 "lead_state",
-                turns_values.get(TurnsTabType.LEAD_STATE.name.lower(), {}),
+                turns_values.get(TurnsTabAttributeType.LEAD_STATE.name.lower(), {}),
             ),
         }
 

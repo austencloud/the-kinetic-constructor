@@ -191,7 +191,7 @@ class LetterGroupsByMotionType(Enum):
     Φ_Ψ_Λ_ = "Φ-Ψ-Λ-"
 
 
-class TurnsTabType(Enum):
+class TurnsTabAttributeType(Enum):
     MOTION_TYPE = auto()
     COLOR = auto()
     LEAD_STATE = auto()

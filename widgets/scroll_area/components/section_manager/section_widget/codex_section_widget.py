@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QGroupBox, QSizePolicy
 from Enums.Enums import LetterType
 
+from Enums.letters import Letters
 from constants import OPP, SAME
 from .components.turns_tab.turns_tab import TurnsTab
 from .components.section_header import SectionHeader
@@ -29,7 +30,7 @@ class CodexSectionWidget(QGroupBox):
         self.vtg_dir_button_manager = VtgDirButtonManager(self)
         self._setup_layout()
         self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
-        self.pictographs: dict[str, Pictograph] = {}
+        self.pictographs: dict[Letters, Pictograph] = {}
         self.layout.addWidget(self.pictograph_frame)
 
     def _setup_layout(self) -> None:

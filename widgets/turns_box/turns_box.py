@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Union, cast
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
-from Enums.Enums import MotionAttributes
+from Enums.Enums import MotionAttributes, TurnsTabAttributeType
 from Enums.MotionAttributes import Colors, LeadStates, MotionTypes
 
 from constants import (
@@ -31,11 +31,11 @@ class TurnsBox(QFrame):
     def __init__(
         self,
         turns_panel,
-        attribute_type: MotionAttributes,
-        attribute: Union[MotionTypes, Colors, LeadStates],
+        attribute_type: TurnsTabAttributeType,
+        attribute: TurnsTabAttributeType,
     ) -> None:
         super().__init__(turns_panel)
-        self.attribute_type: MotionAttributes = attribute_type
+        self.attribute_type: TurnsTabAttributeType = attribute_type
         self.attribute_value = attribute
         self.turns_panel: "TurnsPanel" = turns_panel
 
@@ -46,20 +46,20 @@ class TurnsBox(QFrame):
             COUNTER_CLOCKWISE: False,
         }
 
-        self.motion_type: MotionTypes
-        self.color: Colors
-        self.lead_state: LeadStates
+        self.motion_type: TurnsTabAttributeType
+        self.color: TurnsTabAttributeType
+        self.lead_state: TurnsTabAttributeType
 
         self._setup_attribute_type()
         self._setup_widgets()
         self._setup_layouts()
 
     def _setup_attribute_type(self) -> None:
-        if self.attribute_type == MOTION_TYPE:
+        if self.attribute_type == TurnsTabAttributeType.MOTION_TYPE:
             self.motion_type = cast(MotionTypes, self.attribute_value)
-        elif self.attribute_type == COLOR:
+        elif self.attribute_type == TurnsTabAttributeType.COLOR:
             self.color = cast(Colors, self.attribute_value)
-        elif self.attribute_type == LEAD_STATE:
+        elif self.attribute_type == TurnsTabAttributeType.LEAD_STATE:
             self.lead_state = cast(LeadStates, self.attribute_value)
 
     def _setup_widgets(self) -> None:
