@@ -1,1 +1,8 @@
-[]
+[
+    {
+        "sequence_start_position": "alpha",
+        "red_end_ori": "out",
+        "blue_end_ori": "in",
+        "end_pos": "alpha1"
+    }
+]

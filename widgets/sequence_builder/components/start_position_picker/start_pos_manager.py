@@ -18,7 +18,8 @@ class StartPosManager(QObject):
     def __init__(self, start_pos_picker: "StartPosPicker"):
         super().__init__()
         self.sequence_builder = start_pos_picker.sequence_builder
-        self.scroll_area = start_pos_picker.scroll_area
+        self.start_pos_picker = start_pos_picker
+        self.start_pos_frame = start_pos_picker.pictograph_frame
         self.start_options: dict[str, Pictograph] = {}
         self.setup_start_positions()
 
@@ -27,6 +28,8 @@ class StartPosManager(QObject):
         start_pos = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
         for i, position_key in enumerate(start_pos):
             self._add_start_position(position_key)
+            # add teh exciting label
+            # self.start_pos_picker.show_exciting_label()
 
     def _add_start_position(self, position_key: str) -> None:
         """Adds an option for the specified start position."""
@@ -41,13 +44,15 @@ class StartPosManager(QObject):
                     and pictograph_dict[END_POS] == end_pos
                 ):
                     start_position_pictograph = (
-                        self.scroll_area.pictograph_factory.create_pictograph()
+                        self.start_pos_picker.pictograph_factory.create_pictograph()
                     )
                     self.start_options[letter] = start_position_pictograph
                     start_position_pictograph.letter = letter
                     start_position_pictograph.start_pos = start_pos
                     start_position_pictograph.end_pos = end_pos
-                    self.scroll_area._add_start_pos_to_layout(start_position_pictograph)
+                    self.start_pos_frame._add_start_pos_to_layout(
+                        start_position_pictograph
+                    )
                     start_position_pictograph.updater.update_pictograph(pictograph_dict)
 
                     start_position_pictograph.view.mousePressEvent = (
@@ -87,9 +92,7 @@ class StartPosManager(QObject):
     def resize_start_position_pictographs(self):
         spacing = 10
         for start_option in self.start_options.values():
-            view_width = int(
-                (self.scroll_area.width() / self.scroll_area.COLUMN_COUNT) - spacing
-            )
+            view_width = int((self.start_pos_frame.width() // 6) - spacing)
             start_option.view.setFixedSize(view_width, view_width)
             start_option.view.view_scale = view_width / start_option.width()
             start_option.view.resetTransform()

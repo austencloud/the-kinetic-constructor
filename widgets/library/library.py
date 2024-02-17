@@ -3,7 +3,7 @@ from PyQt6.QtGui import QFileSystemModel
 from PyQt6.QtCore import QDir, QModelIndex
 import json
 from typing import TYPE_CHECKING
-
+from widgets.sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 from Enums.letters import Letter
 
 if TYPE_CHECKING:
@@ -62,11 +62,18 @@ class Library(QWidget):
         start_position_pictograph = self.get_start_position_pictograph(
             sequence_data[0] if sequence_data else None
         )
+        start_pos_beat = StartPositionBeat(
+            self.main_widget, self.main_widget.sequence_widget.beat_frame
+        )
+        start_pos_beat.updater.update_pictograph(
+            start_position_pictograph.pictograph_dict
+        )
+
         self.main_widget.json_manager.current_sequence_json_handler.set_start_position_data(
-            start_position_pictograph
+            start_pos_beat
         )
         self.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos_beat(
-            start_position_pictograph
+            start_pos_beat
         )
 
         for pictograph_dict in sequence_data:
