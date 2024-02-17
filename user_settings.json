@@ -1,8 +1,8 @@
 {
     "pictograph_size": 1,
-    "prop_type": "Staff",
+    "prop_type": "Club",
     "glyph_visibility": {
-        "VTG": true,
+        "VTG": false,
         "TKA": true,
         "Elemental": true
     }

@@ -66,5 +66,6 @@ class GlyphVisibilityManager:
             )
             else None
         )
-        if start_pos.view.is_filled:
-            self.apply_current_visibility_settings(start_pos)
+        if start_pos:
+            if start_pos.view.is_filled:
+                self.apply_current_visibility_settings(start_pos)

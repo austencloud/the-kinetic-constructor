@@ -47,6 +47,8 @@ class PropPlacementOverrideManager:
             special_placements[ori_key][letter] = letter_data
             self._update_json_entry(letter, letter_data)
             self.pictograph.updater.update_pictograph()
+        # refresh all pictographs
+        self.pictograph.main_widget.special_placement_loader.refresh_placements()
 
     def _generate_adjustment_key_str(self, letter) -> str:
         return self.turns_tuple_generator.generate_turns_tuple(self.pictograph)
