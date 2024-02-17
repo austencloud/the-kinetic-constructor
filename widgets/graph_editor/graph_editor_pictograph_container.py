@@ -22,9 +22,9 @@ class GraphEditorPictographContainer(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
 
     def resize_GE_pictograph_container(self):
-        self.setMaximumHeight(self.graph_editor.height())
-        self.setMaximumWidth(self.graph_editor.height())
         self.GE_pictograph_view.resize_GE_pictograph_view()
+        self.setMaximumHeight(self.GE_pictograph_view.height())
+        self.setMaximumWidth(self.GE_pictograph_view.height())
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.setLayout(self.layout)

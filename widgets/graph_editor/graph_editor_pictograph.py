@@ -34,6 +34,6 @@ class GraphEditorPictographView(PictographView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
     def resize_GE_pictograph_view(self):
-        self.setMaximumHeight(self.GE.height())
+        self.setMinimumHeight(self.GE.height())
         if self.scene():
             self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)

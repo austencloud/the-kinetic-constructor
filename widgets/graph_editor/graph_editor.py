@@ -9,7 +9,7 @@ from widgets.graph_editor.graph_editor_pictograph import (
 )
 
 
-from widgets.graph_editor.graph_editor_pictograph_widget import (
+from widgets.graph_editor.graph_editor_pictograph_container import (
     GraphEditorPictographContainer,
 )
 
