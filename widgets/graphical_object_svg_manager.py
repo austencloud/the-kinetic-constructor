@@ -19,7 +19,7 @@ from constants import (
     RED,
     STATIC,
 )
-from Enums.MotionAttributes import Color, MotionTypes, Turns
+from Enums.MotionAttributes import Color, MotionType, Turns
 from Enums.PropTypes import PropTypes, PropTypeslist
 
 if TYPE_CHECKING:
@@ -141,7 +141,7 @@ class GraphicalObjectSvgManager:
         return "Prop" in [base.__name__ for base in object.__class__.__bases__]
 
     def _arrow_svg_file(
-        self, motion_type: MotionTypes, turns: Turns, object: Union["Arrow", "Prop"]
+        self, motion_type: MotionType, turns: Turns, object: Union["Arrow", "Prop"]
     ) -> str:
         start_ori = object.motion.start_ori
         cache_key = f"{motion_type}_{float(turns)}_{start_ori}"  # Include start orientation in the cache key

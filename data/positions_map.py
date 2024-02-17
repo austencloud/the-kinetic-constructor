@@ -1,9 +1,9 @@
 from objects.motion.motion import Motion
 from constants import *
-from Enums.MotionAttributes import Locations
+from Enums.MotionAttributes import Location
 from Enums.Enums import SpecificPositions
 
-positions_map: dict[tuple[Locations], SpecificPositions] = {
+positions_map: dict[tuple[Location], SpecificPositions] = {
     # (blue_loc, red_loc): position
     (SOUTH, NORTH): ALPHA1,
     (WEST, EAST): ALPHA2,

@@ -1,7 +1,7 @@
 from typing import dict, list, tuple
 
 import pandas as pd
-from Enums.Enums import Locations
+from Enums.Enums import Location
 from utilities.dataframe_generators.base_dataframe_generator import (
     BaseDataFrameGenerator,
 )
@@ -129,9 +129,7 @@ class Type5Generator(BaseDataFrameGenerator):
             RED_END_LOC: red_end_loc,
         }
 
-    def get_blue_locations(
-        self, letter, red_start_loc, red_end_loc
-    ) -> tuple[Locations]:
+    def get_blue_locations(self, letter, red_start_loc, red_end_loc) -> tuple[Location]:
         if letter == "Φ-":
             blue_start_loc, blue_end_loc = red_end_loc, red_start_loc
         elif letter == "Ψ-":

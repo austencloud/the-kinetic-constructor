@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, cast
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from Enums.Enums import TurnsTabAttribute
-from Enums.MotionAttributes import Color, LeadStates, MotionTypes
+from Enums.MotionAttributes import Color, LeadStates, MotionType
 
 from constants import BLUE, CLOCKWISE, COLOR, COUNTER_CLOCKWISE, RED
 from ..header_widget import TurnsBoxHeaderWidget
@@ -48,7 +48,7 @@ class TurnsBox(QFrame):
 
     def _setup_attribute_type(self) -> None:
         if self.attribute_type == TurnsTabAttribute.MOTION_TYPE:
-            self.motion_type = cast(MotionTypes, self.attribute_value)
+            self.motion_type = cast(MotionType, self.attribute_value)
         elif self.attribute_type == TurnsTabAttribute.COLOR:
             self.color = cast(Color, self.attribute_value)
         elif self.attribute_type == TurnsTabAttribute.LEAD_STATE:

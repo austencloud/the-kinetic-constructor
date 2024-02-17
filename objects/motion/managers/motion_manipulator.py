@@ -5,7 +5,7 @@ from data.start_end_loc_map import get_start_end_locs
 from Enums.Enums import Directions, Handpaths
 
 from typing import TYPE_CHECKING
-from Enums.MotionAttributes import Locations
+from Enums.MotionAttributes import Location
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
@@ -125,7 +125,7 @@ class MotionManipulator:
             ),
         }
 
-    def _rotate_arrow(self, handpath, locations: list[Locations]) -> None:
+    def _rotate_arrow(self, handpath, locations: list[Location]) -> None:
         """
         Generic method to rotate arrows based on the handpath and locations.
         """

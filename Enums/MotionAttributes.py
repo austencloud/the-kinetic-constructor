@@ -7,7 +7,7 @@ class Turns(Enum):
     FLOAT = "float"
 
 
-class MotionTypes(Enum):
+class MotionType(Enum):
     PRO = "pro"
     ANTI = "anti"
     FLOAT = "float"
@@ -15,7 +15,7 @@ class MotionTypes(Enum):
     STATIC = "static"
 
 
-class Locations(Enum):
+class Location(Enum):
     N = "n"
     NE = "ne"
     E = "e"
@@ -42,7 +42,7 @@ class Orientations(Enum):
     COUNTER = "counter"
 
 
-class PropRotDirs(Enum):
+class PropRotDir(Enum):
     CW = "cw"
     CCW = "ccw"
     NO_ROT = "no_rot"

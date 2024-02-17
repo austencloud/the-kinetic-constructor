@@ -12,8 +12,8 @@ from constants import (
 from Enums.MotionAttributes import (
     Color,
     LeadStates,
-    MotionTypes,
-    PropRotDirs,
+    MotionType,
+    PropRotDir,
 )
 from Enums.Enums import VTG_Directions
 from ...factories.button_factory.button_factory import ButtonFactory
@@ -78,7 +78,7 @@ class VtgDirButtonManager:
                             )
 
     def _update_pictograph_prop_rot_dir_from_vtg_dir_setting(
-        self, motion: "Motion", prop_rot_dir: PropRotDirs
+        self, motion: "Motion", prop_rot_dir: PropRotDir
     ) -> None:
         motion.prop_rot_dir = prop_rot_dir
         pictograph_dict = {motion.color.value + "_" + PROP_ROT_DIR: prop_rot_dir}
@@ -95,7 +95,7 @@ class VtgDirButtonManager:
                 button.unpress()
                 self.section.vtg_dir_btn_state[button.direction] = False
 
-    def _opposite_prop_rot_dir(self, prop_rot_dir: PropRotDirs) -> PropRotDirs:
+    def _opposite_prop_rot_dir(self, prop_rot_dir: PropRotDir) -> PropRotDir:
         return {
             CLOCKWISE: COUNTER_CLOCKWISE,
             COUNTER_CLOCKWISE: CLOCKWISE,
@@ -104,7 +104,7 @@ class VtgDirButtonManager:
     def update_visibility_based_on_motion(
         self,
         new_turns,
-        attribute_value: Union[Color, MotionTypes, LeadStates],
+        attribute_value: Union[Color, MotionType, LeadStates],
     ) -> None:
         if attribute_value in [PRO, ANTI]:
             return

@@ -1,5 +1,5 @@
 from constants import *
-from Enums.MotionAttributes import MotionTypes, Locations, PropRotDirs
+from Enums.MotionAttributes import MotionType, Location, PropRotDir
 from Enums.Enums import StartEndLocationTuple
 
 
@@ -48,7 +48,7 @@ start_end_loc_map = {
 
 
 def get_start_end_locs(
-    motion_type: MotionTypes, rot_dir: PropRotDirs, arrow_location: Locations
+    motion_type: MotionType, rot_dir: PropRotDir, arrow_location: Location
 ) -> StartEndLocationTuple:
     return (
         start_end_loc_map.get(arrow_location, {})

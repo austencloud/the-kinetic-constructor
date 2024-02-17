@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, list
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QHBoxLayout,
     QVBoxLayout,
@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from constants import ICON_DIR, SWAP_ICON
-from Enums.Enums import Locations
+from Enums.Enums import Location
 from .base_attr_box_widget import TurnsBoxWidget
 
 
@@ -136,7 +136,7 @@ class StartEndLocWidget(TurnsBoxWidget):
             self.update_start_end_loc_boxes(motion.start_loc, motion.end_loc)
 
     def update_start_end_loc_boxes(
-        self, start_loc: Locations, end_loc: Locations
+        self, start_loc: Location, end_loc: Location
     ) -> None:
         if start_loc and end_loc:
             self.start_loc_box.setCurrentText(start_loc.upper())

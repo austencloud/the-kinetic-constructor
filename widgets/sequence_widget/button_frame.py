@@ -25,11 +25,8 @@ class SequenceButtonFrame(QFrame):
         self.font_size = self.sequence_widget.width() // 45
         self.setup_save_sequence_button()
         self.setup_clear_sequence_button()
-
         self.setup_layout()
-        self.timer = QTimer(self)
-        self.timer.setSingleShot(True)
-        self.timer.timeout.connect(self.hide_indicator)
+
 
     def setup_save_sequence_button(self):
         self.save_sequence_button = QPushButton("Save Sequence")
@@ -56,7 +53,6 @@ class SequenceButtonFrame(QFrame):
         buttons_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         label_layout = QHBoxLayout()
-        label_layout.addWidget(self.indicator_label)
         label_layout.setAlignment(
             Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop
         )
@@ -119,8 +115,4 @@ class SequenceButtonFrame(QFrame):
             self.sequence_widget.indicator_label.show_indicator("Sequence cleared")
         self.sequence_widget.beat_selection_overlay.deselect_beat()
 
-    def show_indicator(self, text):
-        self.sequence_widget.indicator_label.show_indicator(text)
 
-    def hide_indicator(self):
-        self.sequence_widget.indicator_label.hide_indicator()

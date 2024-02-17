@@ -12,7 +12,7 @@ from Enums.Enums import (
     VTG_Modes,
     VTG_Timings,
 )
-from Enums.MotionAttributes import Color, Locations
+from Enums.MotionAttributes import Color, Location
 
 from Enums.PropTypes import PropTypes
 from Enums.letters import LetterType
@@ -82,7 +82,7 @@ class Pictograph(QGraphicsScene):
     dragged_prop: Prop
     tka_glyph: TKA_Glyph
     grid: Grid
-    locations: dict[Locations, tuple[int, int, int, int]]
+    locations: dict[Location, tuple[int, int, int, int]]
     red_motion: Motion
     blue_motion: Motion
     red_arrow: Arrow

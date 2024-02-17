@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from Enums.Enums import LetterType
 
 from constants import *
-from Enums.MotionAttributes import Turns, PropRotDirs
+from Enums.MotionAttributes import Turns, PropRotDir
 
 
 if TYPE_CHECKING:
@@ -95,7 +95,7 @@ class TurnsUpdater:
 
     def _determine_prop_rot_dir_for_type2_type3(
         self, other_motion: "Motion"
-    ) -> PropRotDirs:
+    ) -> PropRotDir:
         """Determine the property rotation direction."""
 
         self.turns_box.turns_panel.turns_tab.section.vtg_dir_button_manager.show_vtg_dir_buttons()
@@ -113,7 +113,7 @@ class TurnsUpdater:
             elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
                 return CLOCKWISE
 
-    def _get_default_prop_rot_dir_for_type4_5_6(self) -> PropRotDirs:
+    def _get_default_prop_rot_dir_for_type4_5_6(self) -> PropRotDir:
         self._set_prop_rot_dir_state_default()
         self.turns_box.prop_rot_dir_button_manager.show_prop_rot_dir_buttons()
         self.turns_box.prop_rot_dir_button_manager.cw_button.press()

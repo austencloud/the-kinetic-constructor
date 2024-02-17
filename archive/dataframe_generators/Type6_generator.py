@@ -1,7 +1,7 @@
 from typing import dict, list, tuple
 
 import pandas as pd
-from Enums.Enums import Locations
+from Enums.Enums import Location
 from utilities.dataframe_generators.base_dataframe_generator import (
     BaseDataFrameGenerator,
 )
@@ -92,7 +92,7 @@ class Type6Generator(BaseDataFrameGenerator):
 
     def get_blue_loc_tuples_for_Λ_dash(
         self, red_start_loc, red_end_loc
-    ) -> list[tuple[Locations]]:
+    ) -> list[tuple[Location]]:
         blue_location_map = {
             (NORTH, NORTH): [(EAST, EAST), (WEST, WEST)],
             (EAST, EAST): [(SOUTH, SOUTH), (NORTH, NORTH)],
@@ -128,9 +128,7 @@ class Type6Generator(BaseDataFrameGenerator):
             RED_END_LOC: red_end_loc,
         }
 
-    def get_blue_locations(
-        self, letter, red_start_loc, red_end_loc
-    ) -> tuple[Locations]:
+    def get_blue_locations(self, letter, red_start_loc, red_end_loc) -> tuple[Location]:
         if letter == "α":
             blue_start_loc, blue_end_loc = self.get_opposite_loc_tuple(
                 (red_start_loc, red_end_loc)

@@ -1,7 +1,7 @@
 from typing import dict, list, tuple
 
 import pandas as pd
-from Enums.Enums import Locations
+from Enums.Enums import Location
 from utilities.dataframe_generators.base_dataframe_generator import (
     BaseDataFrameGenerator,
 )
@@ -154,7 +154,7 @@ class Type4Generator(BaseDataFrameGenerator):
 
     def get_static_locations(
         self, letter, dash_start_loc, dash_end_loc
-    ) -> tuple[Locations]:
+    ) -> tuple[Location]:
         if letter == "Φ":
             static_start_loc, static_end_loc = dash_start_loc, dash_start_loc
         elif letter == "Ψ":

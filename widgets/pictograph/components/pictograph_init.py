@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QPointF, QPoint, Qt
-from Enums.MotionAttributes import Color, Locations
+from Enums.MotionAttributes import Color, Location
 from data.prop_class_mapping import prop_class_mapping
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
@@ -121,7 +121,7 @@ class PictographInit:
 
     def init_quadrant_boundaries(
         self, grid: Grid
-    ) -> dict[Locations, tuple[int, int, int, int]]:
+    ) -> dict[Location, tuple[int, int, int, int]]:
         grid_center: QPoint = grid.grid_data.center_point.coordinates.toPoint()
 
         grid_center_x = grid_center.x()

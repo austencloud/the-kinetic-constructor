@@ -3,7 +3,7 @@ import pandas as pd
 from .base_dataframe_generator import BaseDataFrameGenerator
 from constants import *
 from utilities.TypeChecking.letter_lists import Type2_letters
-from Enums.Enums import Locations
+from Enums.Enums import Location
 
 
 class Type2Generator(BaseDataFrameGenerator):
@@ -83,7 +83,7 @@ class Type2Generator(BaseDataFrameGenerator):
 
     def get_static_locations(
         self, letter, shift_start_loc, shift_end_loc
-    ) -> tuple[Locations]:
+    ) -> tuple[Location]:
         if letter in ["W", "X"]:  # Static starts at shift_end_loc
             static_start_loc, static_end_loc = self.get_opposite_location(
                 shift_end_loc

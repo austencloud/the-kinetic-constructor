@@ -5,7 +5,7 @@ from Enums.Enums import LetterType, Letter
 from constants import *
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
-from Enums.MotionAttributes import Color, Locations, MotionTypes
+from Enums.MotionAttributes import Color, Location, MotionType
 
 
 if TYPE_CHECKING:
@@ -33,7 +33,7 @@ class PictographGetter:
         }
         return letter_type_map.get(letter)
 
-    def motions_by_type(self, motion_type: MotionTypes) -> list[Motion]:
+    def motions_by_type(self, motion_type: MotionType) -> list[Motion]:
         return [
             motion
             for motion in self.pictograph.motions.values()
@@ -84,7 +84,7 @@ class PictographGetter:
         static_map = {True: self.red_motion, False: self.blue_motion}
         return static_map.get(self.red_motion.check.is_static())
 
-    def opposite_location(self, loc: Locations) -> Locations:
+    def opposite_location(self, loc: Location) -> Location:
         opposite_locations = {NORTH: SOUTH, SOUTH: NORTH, EAST: WEST, WEST: EAST}
         return opposite_locations.get(loc)
 

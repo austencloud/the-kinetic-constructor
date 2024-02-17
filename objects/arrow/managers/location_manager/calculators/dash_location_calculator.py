@@ -1,5 +1,5 @@
 from Enums.Enums import Letter
-from Enums.MotionAttributes import Color, Locations
+from Enums.MotionAttributes import Color, Location
 from Enums.letters import LetterType
 from constants import *
 from objects.motion.motion import Motion
@@ -24,7 +24,7 @@ class DashLocationCalculator(BaseLocationCalculator):
         else:
             return self._dash_location_non_zero_turns()
 
-    def _get_Φ_dash_Ψ_dash_location(self) -> Locations:
+    def _get_Φ_dash_Ψ_dash_location(self) -> Location:
         self.other_motion = self.pictograph.get.other_motion(self.arrow.motion)
 
         if self.arrow.motion.turns == 0 and self.other_motion.arrow.motion.turns == 0:
@@ -53,7 +53,7 @@ class DashLocationCalculator(BaseLocationCalculator):
         elif self.arrow.motion.turns != 0:
             return self._dash_location_non_zero_turns(self.arrow.motion)
 
-    def _get_Λ_zero_turns_location(self) -> Locations:
+    def _get_Λ_zero_turns_location(self) -> Location:
         self.other_motion = self.pictograph.get.other_motion(self.arrow.motion)
         loc_map = {
             ((NORTH, SOUTH), WEST): EAST,
@@ -87,7 +87,7 @@ class DashLocationCalculator(BaseLocationCalculator):
             (self.arrow.motion.start_loc, self.arrow.motion.end_loc), ""
         )
 
-    def _dash_location_non_zero_turns(self, motion: Motion = None) -> Locations:
+    def _dash_location_non_zero_turns(self, motion: Motion = None) -> Location:
         motion = motion if motion else self.arrow.motion
         loc_map = {
             CLOCKWISE: {NORTH: EAST, EAST: SOUTH, SOUTH: WEST, WEST: NORTH},

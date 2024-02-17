@@ -2,7 +2,7 @@
     "pictograph_size": 1,
     "prop_type": "Triad",
     "glyph_visibility": {
-        "VTG": true,
+        "VTG": false,
         "TKA": true,
         "Elemental": true
     }

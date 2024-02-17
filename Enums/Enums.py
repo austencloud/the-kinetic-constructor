@@ -80,7 +80,6 @@ class OrientationCombination(Enum):
     COUNTER_IN_VS_COUNTER_IN = "counter-in_vs_counter-in"
 
 
-
 ### LETTER GROUPS ###
 class MotionTypeCombination(Enum):
     PRO_VS_PRO = "pro_vs_pro"
@@ -340,17 +339,17 @@ class PictographAttributesDict(TypedDict):
     letter: Letter
     start_pos: SpecificPositions
     end_pos: SpecificPositions
-    blue_motion_type: MotionTypes
-    blue_prop_rot_dir: PropRotDirs
-    blue_start_loc: Locations
-    blue_end_loc: Locations
+    blue_motion_type: MotionType
+    blue_prop_rot_dir: PropRotDir
+    blue_start_loc: Location
+    blue_end_loc: Location
     blue_turns: Turns
     blue_start_ori: Orientations
     blue_end_ori: Orientations
-    red_motion_type: MotionTypes
-    red_prop_rot_dir: PropRotDirs
-    red_start_loc: Locations
-    red_end_loc: Locations
+    red_motion_type: MotionType
+    red_prop_rot_dir: PropRotDir
+    red_start_loc: Location
+    red_end_loc: Location
     red_turns: Turns
     red_start_ori: Orientations
     red_end_ori: Orientations

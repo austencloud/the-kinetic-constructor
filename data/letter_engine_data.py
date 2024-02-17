@@ -1,5 +1,5 @@
 from Enums.Enums import LetterType
-from Enums.MotionAttributes import MotionTypes
+from Enums.MotionAttributes import MotionType
 from Enums.letters import Letter
 from constants import ANTI, DASH, PRO, STATIC
 
@@ -102,7 +102,7 @@ motion_type_letter_combinations = {
 }
 
 
-letter_type_motion_type_map: dict[LetterType, list[MotionTypes]] = {
+letter_type_motion_type_map: dict[LetterType, list[MotionType]] = {
     "Type1": [PRO, ANTI],
     "Type2": [PRO, ANTI, STATIC],
     "Type3": [PRO, ANTI, DASH],

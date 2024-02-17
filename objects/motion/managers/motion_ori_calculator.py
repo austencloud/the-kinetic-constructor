@@ -1,6 +1,6 @@
 from constants import *
 from typing import TYPE_CHECKING
-from Enums.MotionAttributes import Orientations, Locations, MotionTypes, Turns
+from Enums.MotionAttributes import Orientations, Location, MotionType, Turns
 from Enums.Enums import Handpaths
 
 
@@ -38,7 +38,7 @@ class MotionOriCalculator:
         return {IN: OUT, OUT: IN, CLOCK: COUNTER, COUNTER: CLOCK}.get(ori, ori)
 
     def calculate_whole_turn_orientation(
-        self, motion_type: MotionTypes, turns: Turns, start_ori: Orientations
+        self, motion_type: MotionType, turns: Turns, start_ori: Orientations
     ) -> Orientations:
         if motion_type in [PRO, STATIC]:
             return start_ori if turns % 2 == 0 else self.switch_orientation(start_ori)
@@ -46,7 +46,7 @@ class MotionOriCalculator:
             return self.switch_orientation(start_ori) if turns % 2 == 0 else start_ori
 
     def calculate_half_turn_orientation(
-        self, motion_type: MotionTypes, turns: Turns, start_ori: Orientations
+        self, motion_type: MotionType, turns: Turns, start_ori: Orientations
     ) -> Orientations:
         if motion_type in [ANTI, DASH]:
             orientation_map = {
@@ -89,7 +89,7 @@ class MotionOriCalculator:
         return orientation_map.get((start_ori, handpath_direction))
 
     def get_handpath_direction(
-        self, start_loc: Locations, end_loc: Locations
+        self, start_loc: Location, end_loc: Location
     ) -> Handpaths:
         handpaths = {
             (NORTH, EAST): CW_HANDPATH,

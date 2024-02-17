@@ -18,8 +18,8 @@ from constants import (
 from Enums.MotionAttributes import (
     Color,
     LeadStates,
-    MotionTypes,
-    PropRotDirs,
+    MotionType,
+    PropRotDir,
 )
 from widgets.factories.button_factory.button_factory import ButtonFactory
 from ...factories.button_factory.buttons.rot_dir_buttons import (
@@ -60,7 +60,7 @@ class PropRotDirButtonManager:
         self.ccw_button.hide()
         return [self.cw_button, self.ccw_button]
 
-    def _set_prop_rot_dir(self, prop_rot_dir: PropRotDirs) -> None:
+    def _set_prop_rot_dir(self, prop_rot_dir: PropRotDir) -> None:
         self._update_pictographs_prop_rot_dir(prop_rot_dir)
         self._update_button_states(self.prop_rot_dir_buttons, prop_rot_dir)
 
@@ -89,7 +89,7 @@ class PropRotDirButtonManager:
                                     ),
                                 )
 
-    def _update_pictographs_prop_rot_dir(self, prop_rot_dir: PropRotDirs) -> None:
+    def _update_pictographs_prop_rot_dir(self, prop_rot_dir: PropRotDir) -> None:
         for (
             pictograph
         ) in (
@@ -114,7 +114,7 @@ class PropRotDirButtonManager:
         motion.pictograph.updater.update_pictograph(pictograph_dict)
 
     def _update_pictograph_prop_rot_dir(
-        self, motion: "Motion", prop_rot_dir: PropRotDirs
+        self, motion: "Motion", prop_rot_dir: PropRotDir
     ) -> None:
         motion.prop_rot_dir = prop_rot_dir
         pictograph_dict = {
@@ -143,7 +143,7 @@ class PropRotDirButtonManager:
         for button in self.prop_rot_dir_buttons:
             button.hide()
 
-    def _opposite_prop_rot_dir(self, prop_rot_dir: PropRotDirs) -> PropRotDirs:
+    def _opposite_prop_rot_dir(self, prop_rot_dir: PropRotDir) -> PropRotDir:
         return {
             CLOCKWISE: COUNTER_CLOCKWISE,
             COUNTER_CLOCKWISE: CLOCKWISE,
@@ -154,7 +154,7 @@ class PropRotDirButtonManager:
         self.ccw_button.unpress()
 
     def update_visibility_based_on_motion(
-        self, new_turns, attribute_value: Union[Color, MotionTypes, LeadStates]
+        self, new_turns, attribute_value: Union[Color, MotionType, LeadStates]
     ) -> None:
         if self.turns_box.turns_panel.turns_tab.section.letter_type in [
             LetterType.Type4,

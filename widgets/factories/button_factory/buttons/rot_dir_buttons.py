@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QPushButton
 from Enums.Enums import VTG_Directions
-from Enums.MotionAttributes import PropRotDirs
+from Enums.MotionAttributes import PropRotDir
 
 
 class RotDirButton(QPushButton):
@@ -55,6 +55,6 @@ class VtgDirButton(RotDirButton):
 
 
 class PropRotDirButton(RotDirButton):
-    def __init__(self, prop_rot_dir: PropRotDirs) -> None:
+    def __init__(self, prop_rot_dir: PropRotDir) -> None:
         super().__init__(prop_rot_dir)
         self.prop_rot_dir = prop_rot_dir

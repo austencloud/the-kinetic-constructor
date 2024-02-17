@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from Enums.Enums import TurnsTabAttribute
-from Enums.MotionAttributes import Color, LeadStates, MotionTypes
+from Enums.MotionAttributes import Color, LeadStates, MotionType
 from widgets.turns_box.turns_box import TurnsBox
 
 
@@ -19,10 +19,10 @@ class TurnsBoxFactory:
             return [
                 TurnsBox(self.turns_panel, TurnsTabAttribute.MOTION_TYPE, motion_type)
                 for motion_type in [
-                    MotionTypes.PRO,
-                    MotionTypes.ANTI,
-                    MotionTypes.DASH,
-                    MotionTypes.STATIC,
+                    MotionType.PRO,
+                    MotionType.ANTI,
+                    MotionType.DASH,
+                    MotionType.STATIC,
                 ]
             ]
         elif self.turns_panel.attribute_type == TurnsTabAttribute.COLOR:

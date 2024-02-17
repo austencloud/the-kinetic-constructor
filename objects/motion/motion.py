@@ -7,10 +7,10 @@ from .managers.motion_updater import MotionUpdater
 from .managers.motion_turn_manager import MotionTurnsManager
 from Enums.MotionAttributes import (
     Color,
-    Locations,
+    Location,
     Orientations,
-    MotionTypes,
-    PropRotDirs,
+    MotionType,
+    PropRotDir,
     LeadStates,
     Turns,
 )
@@ -37,10 +37,10 @@ class Motion:
     turns: Turns
     arrow: "Arrow"
     prop: "Prop"
-    motion_type: MotionTypes
-    start_loc: Locations
+    motion_type: MotionType
+    start_loc: Location
     start_ori: Orientations
-    end_loc: Locations
+    end_loc: Location
     end_ori: Orientations
-    prop_rot_dir: PropRotDirs
+    prop_rot_dir: PropRotDir
     lead_state: LeadStates = None

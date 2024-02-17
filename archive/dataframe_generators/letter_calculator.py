@@ -1,5 +1,5 @@
 import logging
-from Enums.MotionAttributes import MotionTypes
+from Enums.MotionAttributes import MotionType
 
 
 from Enums.Enums import LetterString
@@ -27,7 +27,7 @@ from Enums.Enums import (
     Positions,
     SpecificPositions,
 )
-from Enums.MotionAttributes import Color, PropRotDirs
+from Enums.MotionAttributes import Color, PropRotDir
 
 logging.basicConfig(
     level=logging.INFO,
@@ -183,7 +183,7 @@ class LetterCalculator:
     def determine_handpath_direction_relationship(self) -> Literal["same", "opp", None]:
         clockwise = ["n", "e", "s", "w"]
 
-        def calculate_direction(start, end) -> PropRotDirs:
+        def calculate_direction(start, end) -> PropRotDir:
             return (clockwise.index(end) - clockwise.index(start)) % len(clockwise)
 
         arrow_locations = [
@@ -267,7 +267,7 @@ class LetterCalculator:
 
     def determine_leading_motion_for_U_V(
         self, pro_start, pro_end, anti_start, anti_end
-    ) -> MotionTypes:
+    ) -> MotionType:
         if pro_start == anti_end:
             return "pro"
         elif anti_start == pro_end:

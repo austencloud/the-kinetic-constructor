@@ -7,7 +7,7 @@ from .prop_mouse_event_handler import PropMouseEventHandler
 from .prop_offset_calculator import PropOffsetCalculator
 from .prop_rot_angle_manager import PropRotAngleManager
 from .prop_updater import PropUpdater
-from Enums.MotionAttributes import Locations, Orientations
+from Enums.MotionAttributes import Location, Orientations
 from Enums.Enums import Axes
 from Enums.PropTypes import PropTypes
 
@@ -32,7 +32,7 @@ class Prop(GraphicalObject):
         The motion to which the prop belongs.
     """
 
-    loc: Locations
+    loc: Location
     ori: Orientations = None
     axis: Axes
     prop_type: PropTypes
@@ -42,7 +42,7 @@ class Prop(GraphicalObject):
         self.motion = motion
         self.scene: Pictograph = pictograph
         self.arrow: Arrow
-        self.previous_location: Locations
+        self.previous_location: Location
         self.prop_dict = prop_dict
         self.attr_manager = PropAttrManager(self)
         self.rot_angle_manager = PropRotAngleManager(self)
