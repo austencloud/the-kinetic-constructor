@@ -23,8 +23,8 @@ class GraphEditorPictographContainer(QWidget):
 
     def showEvent(self, event) -> None:
         super().showEvent(event)
-        self.setMinimumWidth(self.main_pictograph_view.width())
-        self.setMaximumWidth(self.main_pictograph_view.width())
+        # self.setMinimumWidth(self.main_pictograph_view.width())
+        # self.setMaximumWidth(self.main_pictograph_view.width())
 
-        self.setMinimumHeight(self.main_pictograph_view.height())
-        self.setMaximumHeight(self.main_pictograph_view.height())
+        # self.setMinimumHeight(self.main_pictograph_view.height())
+        # self.setMaximumHeight(self.main_pictograph_view.height())

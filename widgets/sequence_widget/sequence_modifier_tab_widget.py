@@ -13,6 +13,3 @@ class SequenceModifierTabWidget(BaseTabWidget):
         self.sequence_widget = sequence_widget
         self.graph_editor = GraphEditor(sequence_widget.main_widget)
         self.addTab(self.graph_editor, "Graph Editor")
-
-    def resize_sequence_modifier_tab_widget(self):
-        self.setMaximumHeight(self.sequence_widget.height() // 3)
