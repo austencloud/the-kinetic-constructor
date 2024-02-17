@@ -12,6 +12,7 @@ from .beat_frame.beat_selection_overlay import BeatSelectionOverlay
 from .button_frame import SequenceButtonFrame
 from .sequence_modifier_tab_widget import SequenceModifier
 from PyQt6.QtCore import Qt
+
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
@@ -39,6 +40,8 @@ class SequenceWidget(QWidget):
         self.layout.addWidget(self.button_frame)
         self.layout.addWidget(self.indicator_label)
         self.layout.addWidget(self.sequence_modifier)
+        # add a stretch
+        self.layout.addStretch(1)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
     def save_sequence(sequence: list[Pictograph], filename: str) -> None:

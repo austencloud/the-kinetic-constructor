@@ -94,6 +94,4 @@ class MainWidget(QWidget):
         super().showEvent(event)
         self.main_window.window_manager.set_dimensions()
         self.main_tab_widget.resize_main_tab_widget()
-
-    def resizeEvent(self, event: QResizeEvent) -> None:
         self.sequence_widget.resize_sequence_widget()

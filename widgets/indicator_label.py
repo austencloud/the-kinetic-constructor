@@ -20,6 +20,8 @@ class IndicatorLabel(QLabel):
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(self.clear)
         self.setContentsMargins(0, 0, 0, 0)
+        # add black border
+        # self.setStyleSheet("border: 1px solid black;")
 
     def show_indicator(self, text):
         self.setText(text)
@@ -27,3 +29,9 @@ class IndicatorLabel(QLabel):
 
     def clear(self):
         self.setText(" ")
+
+    def resize_indicator_label(self):
+        self.adjustSize()
+        height = self.font_size  # Set a fixed height based on font size
+        self.setFixedHeight(height)
+        self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)

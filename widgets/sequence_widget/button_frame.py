@@ -26,7 +26,8 @@ class SequenceButtonFrame(QFrame):
         self.setup_save_sequence_button()
         self.setup_clear_sequence_button()
         self.setup_layout()
-
+        # add black borders
+        # self.setStyleSheet("border: 1px solid black;")
 
     def setup_save_sequence_button(self):
         self.save_sequence_button = QPushButton("Save Sequence")
@@ -60,7 +61,6 @@ class SequenceButtonFrame(QFrame):
         master_layout = QVBoxLayout(self)
         master_layout.addLayout(buttons_layout)
         master_layout.addLayout(label_layout)
-        master_layout.addStretch(1)
         master_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.setLayout(master_layout)
@@ -114,5 +114,3 @@ class SequenceButtonFrame(QFrame):
         if show_indicator:
             self.sequence_widget.indicator_label.show_indicator("Sequence cleared")
         self.sequence_widget.beat_selection_overlay.deselect_beat()
-
-
