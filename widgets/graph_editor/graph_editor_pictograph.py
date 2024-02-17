@@ -20,7 +20,6 @@ class GraphEditorPictograph(Pictograph):
         self.graph_editor = graph_editor
         self.get.initiallize_getter()
 
-
 class GraphEditorPictographView(PictographView):
     def __init__(
         self, GE: "GraphEditor", GE_pictograph: "GraphEditorPictograph"
@@ -29,11 +28,7 @@ class GraphEditorPictographView(PictographView):
         self.GE = GE
         self.main_widget = GE.main_widget
         self.setScene(GE_pictograph)
-        self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
     def resize_GE_pictograph_view(self):
-        self.setMinimumHeight(self.GE.height())
         if self.scene():
             self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)

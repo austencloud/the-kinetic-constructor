@@ -48,9 +48,8 @@ class GraphEditor(QFrame):
         self.pictograph_layout = QVBoxLayout()
         self.pictograph_layout.addWidget(self.GE_pictograph_container)
         self.layout.addLayout(self.pictograph_layout)
-        self.layout.setAlignment(self.main_widget, Qt.AlignmentFlag.AlignLeft)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.setLayout(self.layout)
 
     def resize_graph_editor(self):
-        self.setMinimumHeight(self.sequence_modifier.height())
         self.GE_pictograph_container.resize_GE_pictograph_container()

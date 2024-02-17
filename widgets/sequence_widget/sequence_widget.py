@@ -61,7 +61,6 @@ class SequenceWidget(QWidget):
         self.pictograph_cache[pictograph_key] = pictograph
 
     def resize_sequence_widget(self) -> None:
-        self.setMinimumWidth(int(self.main_widget.width() * 3 / 8))
         self.beat_frame.resize_beat_frame()
         self.sequence_modifier.resize_sequence_modifier()
 

@@ -16,11 +16,4 @@ class SequenceModifier(BaseTabWidget):
         self.addTab(self.graph_editor, "Graph Editor")
 
     def resize_sequence_modifier(self):
-        # set the height yo the remainder of the height left after adding the beat frame, buttons, and indicator
-        self.setMinimumHeight(
-            self.sequence_widget.height()
-            - self.sequence_widget.beat_frame.height()
-            - self.sequence_widget.button_frame.height()
-            - self.sequence_widget.indicator_label.height()
-        )
         self.graph_editor.resize_graph_editor()
