@@ -18,6 +18,7 @@ class PictographView(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        self.setAttribute(Qt.WidgetAttribute.WA_AcceptTouchEvents, True)
 
     def resize_pictograph_view(self) -> None:
         view_width = self.calculate_view_width()
@@ -92,8 +93,25 @@ class PictographView(QGraphicsView):
             self.pictograph
         )
 
-    def touchEvent(self, event: QTouchEvent):
-        if event.isBeginEvent():
-            self.pictograph.container.styled_border_overlay.set_gold_border()
-        elif event.isEndEvent():
-            self.pictograph.container.styled_border_overlay.reset_border()
+    def touchEvent(self, event):
+        touch_points = event.touchPoints()
+        for point in touch_points:
+            pos = point.pos()
+            if event.type() == QEvent.Type.TouchBegin:
+                self.update_border_for_touch_position(pos)
+            elif event.type() == QEvent.Type.TouchUpdate:
+                self.update_border_for_touch_position(pos)
+            elif event.type() == QEvent.Type.TouchEnd:
+                self.trigger_pictograph_action(pos)
+
+    def update_border_for_touch_position(self, pos):
+        # Convert touch point position to view coordinates
+        local_pos = self.mapFromGlobal(pos.toPoint())
+        # Implement logic to find and highlight the pictograph under the touch position
+        pass
+
+    def trigger_pictograph_action(self, pos):
+        # Convert touch point position to view coordinates
+        local_pos = self.mapFromGlobal(pos.toPoint())
+        # Implement logic to determine which pictograph is under 'pos' and trigger its action
+        pass
