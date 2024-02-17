@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (
 from Enums.Enums import (
     Letter,
     OpenCloseStates,
-    SpecificPositions,
+    SpecificPosition,
     VTG_Directions,
     VTG_Modes,
     VTG_Timings,
@@ -67,8 +67,8 @@ class Pictograph(QGraphicsScene):
     letter_type: LetterType
     pictograph_dict: dict
     motion_dict_list: list[dict]
-    start_pos: SpecificPositions
-    end_pos: SpecificPositions
+    start_pos: SpecificPosition
+    end_pos: SpecificPosition
     image_loaded: bool
     pixmap: QGraphicsPixmapItem
     arrow_turns: int

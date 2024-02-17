@@ -1,32 +1,31 @@
 from objects.motion.motion import Motion
 from constants import *
 from Enums.MotionAttributes import Location
-from Enums.Enums import SpecificPositions
+from Enums.Enums import SpecificPosition
 
-positions_map: dict[tuple[Location], SpecificPositions] = {
-    # (blue_loc, red_loc): position
-    (SOUTH, NORTH): ALPHA1,
-    (WEST, EAST): ALPHA2,
-    (NORTH, SOUTH): ALPHA3,
-    (EAST, WEST): ALPHA4,
-    (NORTH, NORTH): BETA1,
-    (EAST, EAST): BETA2,
-    (SOUTH, SOUTH): BETA3,
-    (WEST, WEST): BETA4,
-    (WEST, NORTH): GAMMA1,
-    (NORTH, EAST): GAMMA2,
-    (EAST, SOUTH): GAMMA3,
-    (SOUTH, WEST): GAMMA4,
-    (EAST, NORTH): GAMMA5,
-    (SOUTH, EAST): GAMMA6,
-    (WEST, SOUTH): GAMMA7,
-    (NORTH, WEST): GAMMA8,
+positions_map: dict[tuple[Location], SpecificPosition] = {
+    (SOUTH, NORTH): SpecificPosition.ALPHA1,
+    (WEST, EAST): SpecificPosition.ALPHA2,
+    (NORTH, SOUTH): SpecificPosition.ALPHA3,
+    (EAST, WEST): SpecificPosition.ALPHA4,
+    (NORTH, NORTH): SpecificPosition.BETA1,
+    (EAST, EAST): SpecificPosition.BETA2,
+    (SOUTH, SOUTH): SpecificPosition.BETA3,
+    (WEST, WEST): SpecificPosition.BETA4,
+    (WEST, NORTH): SpecificPosition.GAMMA1,
+    (NORTH, EAST): SpecificPosition.GAMMA2,
+    (EAST, SOUTH): SpecificPosition.GAMMA3,
+    (SOUTH, WEST): SpecificPosition.GAMMA4,
+    (EAST, NORTH): SpecificPosition.GAMMA5,
+    (SOUTH, EAST): SpecificPosition.GAMMA6,
+    (WEST, SOUTH): SpecificPosition.GAMMA7,
+    (NORTH, WEST): SpecificPosition.GAMMA8,
 }
 
 
 def get_specific_start_end_pos(
     blue_motion: Motion, red_motion: Motion
-) -> dict[str, SpecificPositions]:
+) -> dict[str, SpecificPosition]:
     start_locs = (
         blue_motion.start_loc,
         red_motion.start_loc,

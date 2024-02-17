@@ -25,7 +25,7 @@ from Enums.Enums import (
     Letter,
     MotionTypeCombinations,
     Positions,
-    SpecificPositions,
+    SpecificPosition,
 )
 from Enums.MotionAttributes import Color, PropRotDir
 
@@ -73,7 +73,7 @@ class LetterCalculator:
             else self.pictograph.motions[RED]
         )
 
-        specific_position: dict[str, SpecificPositions] = get_specific_start_end_pos(
+        specific_position: dict[str, SpecificPosition] = get_specific_start_end_pos(
             self.get_motion(BLUE), self.get_motion(RED)
         )
         if specific_position:
@@ -253,7 +253,7 @@ class LetterCalculator:
         return filtered_letter_group
 
     def get_overall_position(
-        self, specific_positions: dict[str, SpecificPositions]
+        self, specific_positions: dict[str, SpecificPosition]
     ) -> Positions:
         return {position: value[:-1] for position, value in specific_positions.items()}
 

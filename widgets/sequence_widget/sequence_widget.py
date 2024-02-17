@@ -13,7 +13,7 @@ from widgets.sequence_widget.beat_frame.beat_selection_overlay import (
 )
 from widgets.sequence_widget.button_frame import SequenceButtonFrame
 from widgets.sequence_widget.sequence_modifier_tab_widget import (
-    SequenceModifierTabWidget,
+    SequenceModifier,
 )
 
 if TYPE_CHECKING:
@@ -33,7 +33,7 @@ class SequenceWidget(QWidget):
         self.pictograph_factory = SequenceWidgetPictographFactory(
             self, self.pictograph_cache
         )
-        self.sequence_modifier_tab_widget = SequenceModifierTabWidget(self)
+        self.sequence_modifier = SequenceModifier(self)
         self.beats = self.beat_frame.beats
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
@@ -42,7 +42,7 @@ class SequenceWidget(QWidget):
         self.layout.addWidget(self.beat_frame)
         self.layout.addWidget(self.button_frame)
         self.layout.addWidget(self.indicator_label)
-        self.layout.addWidget(self.sequence_modifier_tab_widget, 5)
+        self.layout.addWidget(self.sequence_modifier, 5)
 
     def save_sequence(sequence: list[Pictograph], filename: str) -> None:
         sequence_data = [pictograph.get.pictograph_dict() for pictograph in sequence]
@@ -73,4 +73,4 @@ class SequenceWidget(QWidget):
         self.beat_frame.start_pos_view.setMaximumWidth(beat_view_width)
         self.beat_frame.start_pos_view.setMaximumHeight(beat_view_width)
         self.layout.update()
-
+        self.sequence_modifier.resize_sequence_modifier()

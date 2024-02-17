@@ -8,7 +8,7 @@ from Enums.Enums import (
     Location,
     PropRotDir,
     ShiftHandpaths,
-    SpecificPositions,
+    SpecificPosition,
 )
 
 
@@ -103,7 +103,7 @@ class BaseDataFrameGenerator:
 
     def get_Type1_start_and_end_pos(
         self, red_start_loc, red_end_loc, blue_start_loc, blue_end_loc
-    ) -> tuple[SpecificPositions]:
+    ) -> tuple[SpecificPosition]:
         start_key = (blue_start_loc, red_start_loc)
         end_key = (blue_end_loc, red_end_loc)
         start_pos = positions_map.get(start_key)

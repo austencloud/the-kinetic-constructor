@@ -207,7 +207,7 @@ class Positions(Enum):
     GAMMA = "gamma"
 
 
-class SpecificPositions(Enum):
+class SpecificPosition(Enum):
     ALPHA1 = "alpha1"
     ALPHA2 = "alpha2"
     ALPHA3 = "alpha3"
@@ -337,8 +337,8 @@ class Pictograph_Key(Enum):
 
 class PictographAttributesDict(TypedDict):
     letter: Letter
-    start_pos: SpecificPositions
-    end_pos: SpecificPositions
+    start_pos: SpecificPosition
+    end_pos: SpecificPosition
     blue_motion_type: MotionType
     blue_prop_rot_dir: PropRotDir
     blue_start_loc: Location

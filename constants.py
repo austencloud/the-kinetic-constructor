@@ -169,7 +169,8 @@ GAMMA = "gamma"
 
 from enum import Enum
 
-class SpecificPositions(Enum):
+
+class SpecificPosition(Enum):
     ALPHA1 = "alpha1"
     ALPHA2 = "alpha2"
     ALPHA3 = "alpha3"
@@ -186,6 +187,7 @@ class SpecificPositions(Enum):
     GAMMA6 = "gamma6"
     GAMMA7 = "gamma7"
     GAMMA8 = "gamma8"
+
 
 PRO_TURNS = "pro_turns"
 ANTI_TURNS = "anti_turns"

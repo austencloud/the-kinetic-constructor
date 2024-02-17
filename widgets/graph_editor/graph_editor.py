@@ -14,14 +14,14 @@ from widgets.graph_editor.graph_editor_pictograph_widget import (
 )
 
 if TYPE_CHECKING:
+    from widgets.sequence_widget.sequence_modifier_tab_widget import SequenceModifier
     from widgets.main_widget.main_widget import MainWidget
 
 
 class GraphEditor(QFrame):
-    def __init__(self, main_widget: "MainWidget") -> None:
+    def __init__(self, sequence_modifier: "SequenceModifier") -> None:
         super().__init__()
-        self.main_widget = main_widget
-        self.main_window = main_widget.main_window
+        self.main_widget = sequence_modifier.main_widget
 
         self._setup_graph_editor_pictograph()
         self._setup_main_layout()
@@ -50,3 +50,6 @@ class GraphEditor(QFrame):
         self.layout.addLayout(self.pictograph_layout)
         self.layout.setAlignment(self.main_widget, Qt.AlignmentFlag.AlignLeft)
         self.setLayout(self.layout)
+
+    def resize_graph_editor(self):
+        self.GE_pictograph_view.resize_graph_editor_pictograph_view

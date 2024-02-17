@@ -4,7 +4,7 @@ from PyQt6.QtSvg import QSvgRenderer
 from typing import TYPE_CHECKING
 
 from Enums.Enums import LetterType, VTG_Modes
-from constants import SpecificPositions as SP
+from constants import SpecificPosition as SP
 
 
 if TYPE_CHECKING:
