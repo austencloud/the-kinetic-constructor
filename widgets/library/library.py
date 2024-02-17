@@ -57,7 +57,7 @@ class Library(QWidget):
     def populate_sequence(self, sequence_data: list[dict[str, str]]):
         if not sequence_data:
             return
-        self.main_widget.sequence_widget.button_frame.clear_sequence()
+        self.main_widget.sequence_widget.button_frame.clear_sequence(show_indicator=False)
 
         start_position_pictograph = self.get_start_position_pictograph(
             sequence_data[0] if sequence_data else None

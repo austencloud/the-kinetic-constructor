@@ -41,7 +41,7 @@ class SequenceButtonFrame(QFrame):
 
     def setup_clear_sequence_button(self):
         self.clear_sequence_button = QPushButton("Clear Sequence")
-        self.clear_sequence_button.clicked.connect(self.clear_sequence)
+        self.clear_sequence_button.clicked.connect(lambda: self.clear_sequence(show_indicator=True))
         self.clear_sequence_button.setFixedHeight(40)
         font = self.clear_sequence_button.font()
         font.setPointSize(self.font_size)
@@ -98,7 +98,8 @@ class SequenceButtonFrame(QFrame):
         )
         print(f"Sequence saved to {filename}.")
 
-    def clear_sequence(self):
+
+    def clear_sequence(self, show_indicator=True):
         for beat_view in self.sequence_widget.beat_frame.beats:
             beat_view.setScene(None)
             beat_view.is_filled = False
@@ -113,7 +114,8 @@ class SequenceButtonFrame(QFrame):
             "w",
         ) as file:
             file.write("[]")
-        self.sequence_widget.indicator_label.show_indicator("Sequence cleared")
+        if show_indicator:
+            self.sequence_widget.indicator_label.show_indicator("Sequence cleared")
 
     def show_indicator(self, text):
         self.sequence_widget.indicator_label.show_indicator(text)

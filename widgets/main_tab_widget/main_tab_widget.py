@@ -43,12 +43,11 @@ class MainTabWidget(QTabWidget):
             QTabBar::tab {
                 border: 1px solid black;
                 background: silver;
-                font: 12pt "Calibri";
-                color: black; 
+                font: 16pt "Calibri"; /* Keep font size consistent */
+                color: black;
             }
             QTabBar::tab:selected {
                 background: white;
-                font: 14pt "Calibri"; 
             }
             QTabBar::tab:!selected:hover {
                 background: #999;
