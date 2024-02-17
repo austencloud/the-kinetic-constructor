@@ -1,8 +1,7 @@
-from PyQt6.QtWidgets import QTabWidget
 from typing import TYPE_CHECKING
 
 from widgets.base_tab_widget import BaseTabWidget
-from widgets.graph_editor_tab.graph_editor_frame import GraphEditor
+from widgets.graph_editor.graph_editor import GraphEditor
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
@@ -14,3 +13,6 @@ class SequenceModifierTabWidget(BaseTabWidget):
         self.sequence_widget = sequence_widget
         self.graph_editor = GraphEditor(sequence_widget.main_widget)
         self.addTab(self.graph_editor, "Graph Editor")
+
+    def resize_sequence_modifier_tab_widget(self):
+        self.setMaximumHeight(self.sequence_widget.height() // 3)

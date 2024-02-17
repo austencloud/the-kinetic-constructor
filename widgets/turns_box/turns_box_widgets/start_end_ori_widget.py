@@ -14,7 +14,7 @@ from widgets.turns_box.turns_box_widgets.base_attr_box_widget import TurnsBoxWid
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.graph_editor_attr_box import GraphEditorTurnsBox
+    from widgets.graph_editor.graph_editor_attr_box import GraphEditorTurnsBox
 
 
 class StartEndOriWidget(TurnsBoxWidget):

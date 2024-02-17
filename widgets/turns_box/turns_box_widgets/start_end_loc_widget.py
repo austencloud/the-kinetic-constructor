@@ -16,7 +16,7 @@ from .base_attr_box_widget import TurnsBoxWidget
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.graph_editor_attr_box import (
+    from widgets.graph_editor.graph_editor_attr_box import (
         GraphEditorTurnsBox,
     )
 

@@ -8,8 +8,8 @@ from ..turns_box.turns_box import TurnsBox
 from ..turns_panel import TurnsPanel
 from ..factories.button_factory.buttons.adjust_turns_button import AdjustTurnsButton
 
-from ..graph_editor_tab.graph_editor_header_widget import GraphEditorHeaderWidget
-from ..graph_editor_tab.graph_editor_turns_widget import GraphEditorTurnsWidget
+from ..graph_editor.graph_editor_header_widget import GraphEditorHeaderWidget
+from ..graph_editor.graph_editor_turns_widget import GraphEditorTurnsWidget
 
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
 

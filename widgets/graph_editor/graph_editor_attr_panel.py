@@ -3,10 +3,10 @@ from typing import TYPE_CHECKING
 from objects.motion.motion import Motion
 from widgets.turns_panel import TurnsPanel
 from PyQt6.QtWidgets import QFrame
-from ..graph_editor_tab.graph_editor_attr_box import GraphEditorTurnsBox
+from ..graph_editor.graph_editor_attr_box import GraphEditorTurnsBox
 
 if TYPE_CHECKING:
-    from ..graph_editor_tab.graph_editor_frame import GraphEditor
+    from .graph_editor import GraphEditor
 
 
 class GraphEditorAttrPanel(QFrame):
@@ -17,10 +17,10 @@ class GraphEditorAttrPanel(QFrame):
 
     def _setup_attr_boxes(self) -> None:
         self.blue_attr_box: GraphEditorTurnsBox = GraphEditorTurnsBox(
-            self, self.graph_editor.graph_editor_pictograph, BLUE
+            self, self.graph_editor.GE_pictograph, BLUE
         )
         self.red_attr_box: GraphEditorTurnsBox = GraphEditorTurnsBox(
-            self, self.graph_editor.graph_editor_pictograph, RED
+            self, self.graph_editor.GE_pictograph, RED
         )
         self.boxes = [self.blue_attr_box, self.red_attr_box]
 

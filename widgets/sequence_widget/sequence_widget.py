@@ -39,10 +39,10 @@ class SequenceWidget(QWidget):
         self.layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.addWidget(self.beat_frame)
-        self.layout.addWidget(self.button_frame)
-        self.layout.addWidget(self.indicator_label)
-        self.layout.addWidget(self.sequence_modifier_tab_widget)
+        self.layout.addWidget(self.beat_frame, 8)
+        self.layout.addWidget(self.button_frame, 1)
+        self.layout.addWidget(self.indicator_label, 1)
+        self.layout.addWidget(self.sequence_modifier_tab_widget, 3)
 
     def save_sequence(sequence: list[Pictograph], filename: str) -> None:
         sequence_data = [pictograph.get.pictograph_dict() for pictograph in sequence]
@@ -72,20 +72,23 @@ class SequenceWidget(QWidget):
             beat_view.beat.container.styled_border_overlay.resize_styled_border_overlay()
         self.beat_frame.start_pos_view.setMaximumWidth(beat_view_width)
         self.beat_frame.start_pos_view.setMaximumHeight(beat_view_width)
+        self.sequence_modifier_tab_widget.resize_sequence_modifier_tab_widget()
         self.layout.update()
+
+
 
     # TODO: Implement the following methods
 
-    def delete_selected_pictograph(self):
-        # This method assumes you have a way to track the currently selected pictograph.
-        # Let's assume selected_beat is the variable holding the currently selected BeatView.
-        selected_index = self.beats.index(self.selected_beat)
-        for beat_view in self.beats[selected_index:]:
-            beat_view.clear()  # You might need to implement this method to clear the beat view.
-        self.update_option_picker()
+    # def delete_selected_pictograph(self):
+    #     # This method assumes you have a way to track the currently selected pictograph.
+    #     # Let's assume selected_beat is the variable holding the currently selected BeatView.
+    #     selected_index = self.beats.index(self.selected_beat)
+    #     for beat_view in self.beats[selected_index:]:
+    #         beat_view.clear()  # You might need to implement this method to clear the beat view.
+    #     self.update_option_picker()
 
-    def update_option_picker(self):
-        # This method will refresh the option picker to reflect the current state of the sequence.
-        # Assuming you have a method in OptionPicker that updates its state.
-        last_filled_beat = self.beat_frame.get_last_beat()
-        self.main_widget.option_picker.update_based_on_last_beat(last_filled_beat)
+    # def update_option_picker(self):
+    #     # This method will refresh the option picker to reflect the current state of the sequence.
+    #     # Assuming you have a method in OptionPicker that updates its state.
+    #     last_filled_beat = self.beat_frame.get_last_beat()
+    #     self.main_widget.option_picker.update_based_on_last_beat(last_filled_beat)

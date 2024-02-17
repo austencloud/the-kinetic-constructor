@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Callable
 from widgets.sequence_widget.header_widget import HeaderWidget
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.graph_editor_attr_box import (
+    from widgets.graph_editor.graph_editor_attr_box import (
         GraphEditorTurnsBox,
     )
 from constants import BLUE, CCW_HANDPATH, CW_HANDPATH, HEX_BLUE, HEX_RED, ICON_DIR, RED

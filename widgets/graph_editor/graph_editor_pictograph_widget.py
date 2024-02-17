@@ -3,11 +3,11 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor_tab.graph_editor_frame import GraphEditor
-    from widgets.graph_editor_tab.graph_editor_pictograph import GraphEditorPictographView
+    from widgets.graph_editor.graph_editor import GraphEditor
+    from widgets.graph_editor.graph_editor_pictograph import GraphEditorPictographView
 
 
-class GraphEditorPictographWidget(QWidget):
+class GraphEditorPictographContainer(QWidget):
     def __init__(
         self,
         graph_editor: "GraphEditor",

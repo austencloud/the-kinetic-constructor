@@ -16,7 +16,7 @@ from ..turns_box.turns_box_widgets.turns_widget.turns_widget import (
 
 
 if TYPE_CHECKING:
-    from ..graph_editor_tab.graph_editor_attr_box import GraphEditorTurnsBox
+    from ..graph_editor.graph_editor_attr_box import GraphEditorTurnsBox
 
 
 class GraphEditorTurnsWidget(TurnsWidget):
