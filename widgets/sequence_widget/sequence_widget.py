@@ -1,14 +1,17 @@
 import json
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
+from widgets.indicator_label import IndicatorLabel
 from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.components.sequence_widget_pictograph_factory import (
     SequenceWidgetPictographFactory,
 )
 from widgets.sequence_widget.beat_frame.beat import Beat
 from widgets.sequence_widget.beat_frame.beat_frame import SequenceBeatFrame
+from widgets.sequence_widget.beat_frame.beat_selection_overlay import (
+    BeatSelectionOverlay,
+)
 from widgets.sequence_widget.button_frame import SequenceButtonFrame
-from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
@@ -20,20 +23,21 @@ class SequenceWidget(QWidget):
         self.main_widget = main_widget
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         self.pictograph_cache: dict[str, Pictograph] = {}
+        self.indicator_label = IndicatorLabel(self)
+        self.beat_selection_overlay = BeatSelectionOverlay(self)
         self.beat_frame = SequenceBeatFrame(self.main_widget, self)
         self.button_frame = SequenceButtonFrame(self)
         self.pictograph_factory = SequenceWidgetPictographFactory(
             self, self.pictograph_cache
         )
         self.beats = self.beat_frame.beats
-
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.beat_frame)
         self.layout.addWidget(self.button_frame)
-
+        
     def save_sequence(sequence: list[Pictograph], filename: str) -> None:
         sequence_data = [pictograph.get.pictograph_dict() for pictograph in sequence]
         with open(filename, "w") as file:
@@ -56,6 +60,28 @@ class SequenceWidget(QWidget):
         for beat_view in self.beat_frame.beats:
             beat_view.setMaximumWidth(beat_view_width)
             beat_view.setMaximumHeight(beat_view_width)
+            beat_view.view_scale = beat_view_width / beat_view.beat.width()
+            beat_view.resetTransform()
+            beat_view.scale(beat_view.view_scale, beat_view.view_scale)
+            beat_view.beat.container.styled_border_overlay.resize_styled_border_overlay()
         self.beat_frame.start_pos_view.setMaximumWidth(beat_view_width)
         self.beat_frame.start_pos_view.setMaximumHeight(beat_view_width)
         self.layout.update()
+
+
+
+    # TODO: Implement the following methods
+
+    def delete_selected_pictograph(self):
+        # This method assumes you have a way to track the currently selected pictograph.
+        # Let's assume selected_beat is the variable holding the currently selected BeatView.
+        selected_index = self.beats.index(self.selected_beat)
+        for beat_view in self.beats[selected_index:]:
+            beat_view.clear()  # You might need to implement this method to clear the beat view.
+        self.update_option_picker()
+
+    def update_option_picker(self):
+        # This method will refresh the option picker to reflect the current state of the sequence.
+        # Assuming you have a method in OptionPicker that updates its state.
+        last_filled_beat = self.beat_frame.get_last_beat()
+        self.main_widget.option_picker.update_based_on_last_beat(last_filled_beat)

@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QPushButton
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QPainter, QPen, QColor, QIcon
 from widgets.pictograph.pictograph import Pictograph
+from PyQt6.QtCore import QRectF
 
 
 if TYPE_CHECKING:
@@ -25,9 +26,13 @@ class BeatView(QGraphicsView):
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.beat_frame = beat_frame
+        self.selection_overlay = self.beat_frame.sequence_widget.beat_selection_overlay
         self.beat: "Beat" = None
         self.is_filled = False
-        self.beat_frame = beat_frame
+        self.is_selected = False
+        self.setContentsMargins(0, 0, 0, 0)
+        # self.layout().setContentsMargins(0, 0, 0, 0)
 
     def set_pictograph(self, new_beat: "Beat") -> None:
         self.beat = new_beat
@@ -52,3 +57,11 @@ class BeatView(QGraphicsView):
             self.beat_frame.sequence_widget.beat_frame.start_pos
         )
         sequence_builder.reset_to_start_pos_picker()
+
+    def mousePressEvent(self, event):
+        if self.is_filled:
+            self.selection_overlay.select_beat(self)
+            self.viewport().update() 
+
+    def paintEvent(self, event):
+        super().paintEvent(event)

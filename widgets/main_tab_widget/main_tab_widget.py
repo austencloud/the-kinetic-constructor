@@ -42,12 +42,12 @@ class MainTabWidget(QTabWidget):
             }
             QTabBar::tab {
                 border: 1px solid black;
+                background: silver;
+                font: 16pt "Calibri"; /* Keep font size consistent */
+                color: black;
             }
             QTabBar::tab:selected {
                 background: white;
-            }
-            QTabBar::tab:!selected {
-                background: silver;
             }
             QTabBar::tab:!selected:hover {
                 background: #999;
@@ -69,10 +69,6 @@ class MainTabWidget(QTabWidget):
             QTabBar::tab:bottom:selected {
                 border-top-color: none;
             }
-            QTabBar::tab:top:last, QTabBar::tab:bottom:last,
-            QTabBar::tab:top:only-one, QTabBar::tab:bottom:only-one {
-                margin-right: 0;
-            }
             QTabBar::tab:left:!selected {
                 margin-right: 3px;
             }
@@ -89,10 +85,6 @@ class MainTabWidget(QTabWidget):
             }
             QTabBar::tab:right:selected {
                 border-right-color: none;
-            }
-            QTabBar::tab:left:last, QTabBar::tab:right:last,
-            QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
-                margin-bottom: 0;
             }
             """
 

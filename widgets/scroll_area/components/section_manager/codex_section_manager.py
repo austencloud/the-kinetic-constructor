@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
-from Enums.Enums import LetterType, Letters
+from Enums.Enums import LetterType, Letter
 
 from constants import BLUE_TURNS, RED_TURNS
 from Enums.Enums import LetterType
 
 
-from .section_widget.components.filter_tab.filter_tab import FilterTab
+from .section_widget.components.turns_tab.turns_tab import TurnsTab
 from .section_widget.codex_section_widget import CodexSectionWidget
 from PyQt6.QtWidgets import QGridLayout, QLabel
 
@@ -28,8 +28,8 @@ class CodexSectionManager:
     def __init__(self, scroll_area: "CodexScrollArea") -> None:
         self.scroll_area = scroll_area
         self.sections: dict[LetterType, CodexSectionWidget] = {}
-        self.filter_tabs_cache: dict[LetterType, FilterTab] = {}
-        self.pictograph_cache: dict[Letters, list[LetterType]] = {}
+        self.filter_tabs_cache: dict[LetterType, TurnsTab] = {}
+        self.pictograph_cache: dict[Letter, list[LetterType]] = {}
 
         self.pictographs_by_type = {type: [] for type in LetterType}
         self.ordered_section_types: list[LetterType] = []
@@ -57,17 +57,15 @@ class CodexSectionManager:
                 return i
         return len(self.ordered_section_types)
 
-    def get_pictograph_letter_type(self, pictograph_key: str) -> LetterType:
-        letter = pictograph_key.split("_")[0]
-        return LetterType.get_letter_type(letter)
+    def get_pictograph_letter_type(self, letter: Letter) -> LetterType:
+        letter_str = Letter.get_letter(letter)
+        return LetterType.get_letter_type(letter_str)
 
     def add_section_label_to_layout(
         self, section_label: QLabel, section_layout: QGridLayout
     ) -> None:
-        """Adds the section label to the section layout."""
-        section_layout.addWidget(
-            section_label, 0, 0, 1, self.scroll_area.display_manager.COLUMN_COUNT
-        )
+        column_count = self.scroll_area.display_manager.COLUMN_COUNT
+        section_layout.addWidget(section_label, 0, 0, 1, column_count)
 
     def get_section(self, letter_type: LetterType) -> CodexSectionWidget:
         return self.sections.get(letter_type)
@@ -76,13 +74,13 @@ class CodexSectionManager:
         if letter_type not in self.sections:
             self.create_section(letter_type)
         section = self.sections[letter_type]
-        if not section.filter_tab:
+        if not section.turns_tab:
             if letter_type not in self.filter_tabs_cache:
-                filter_tab = self.create_or_get_filter_tab(section)
-                self.filter_tabs_cache[letter_type] = filter_tab
-            section.filter_tab = self.filter_tabs_cache[letter_type]
+                turns_tab = self.create_or_get_turns_tab(section)
+                self.filter_tabs_cache[letter_type] = turns_tab
+            section.turns_tab = self.filter_tabs_cache[letter_type]
 
-    def update_sections_based_on_letters(self, selected_letters: list[Letters]) -> None:
+    def update_sections_based_on_letters(self, selected_letters: list[Letter]) -> None:
         sections_to_show = self.get_sections_to_show_from_selected_letters(
             selected_letters
         )
@@ -99,7 +97,7 @@ class CodexSectionManager:
         self.scroll_area.fix_stretch()
 
     def get_sections_to_show_from_selected_letters(
-        self, selected_letters: list[Letters]
+        self, selected_letters: list[Letter]
     ) -> list[LetterType]:
         sections_to_show = []
         for letter in selected_letters:
@@ -108,8 +106,8 @@ class CodexSectionManager:
                 sections_to_show.append(letter_type)
         return sections_to_show
 
-    def create_or_get_filter_tab(self, section: CodexSectionWidget) -> FilterTab:
-        if not section.filter_tab:
-            section.filter_tab = FilterTab(section)
-            section.layout.insertWidget(1, section.filter_tab)
-        return section.filter_tab
+    def create_or_get_turns_tab(self, section: CodexSectionWidget) -> TurnsTab:
+        if not section.turns_tab:
+            section.turns_tab = TurnsTab(section)
+            section.layout.insertWidget(1, section.turns_tab)
+        return section.turns_tab

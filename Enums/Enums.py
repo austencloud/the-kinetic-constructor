@@ -1,61 +1,8 @@
 from typing import TypedDict
 from enum import Enum, auto
-
 from Enums.MotionAttributes import *
 from Enums.PropTypes import PropTypes
-
-
-class LetterType(Enum):
-    Type1 = (
-        [
-            "A",
-            "B",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "I",
-            "J",
-            "K",
-            "L",
-            "M",
-            "N",
-            "O",
-            "P",
-            "Q",
-            "R",
-            "S",
-            "T",
-            "U",
-            "V",
-        ],
-        "Type1",
-    )
-    Type2 = (["W", "X", "Y", "Z", "Σ", "Δ", "θ", "Ω"], "Type2")
-    Type3 = (["W-", "X-", "Y-", "Z-", "Σ-", "Δ-", "θ-", "Ω-"], "Type3")
-    Type4 = (["Φ", "Ψ", "Λ"], "Type4")
-    Type5 = (["Φ-", "Ψ-", "Λ-"], "Type5")
-    Type6 = (["α", "β", "Γ"], "Type6")
-
-    def __init__(self, letters, description):
-        self._letters = letters
-        self._description = description
-
-    @property
-    def letters(self):
-        return self._letters
-
-    @property
-    def description(self):
-        return self._description
-
-    @staticmethod
-    def get_letter_type(str: str) -> "LetterType":
-        for letter_type in LetterType:
-            if str in letter_type.letters:
-                return letter_type
+from Enums.letters import *
 
 
 class MotionCombinationType(Enum):
@@ -132,32 +79,6 @@ class OrientationCombination(Enum):
     COUNTER_VS_COUNTER_IN = "counter_vs_counter-in"
     COUNTER_IN_VS_COUNTER_IN = "counter-in_vs_counter-in"
 
-
-### MOTION ATTRIBUTES ###
-class MotionAttributesDicts(TypedDict):
-    color: Colors
-    motion_type: MotionTypes
-    prop_rot_dir: PropRotDirs
-    loc: Locations
-    turns: Turns
-    start_loc: Locations
-    start_ori: Orientations
-    end_loc: Locations
-    end_ori: Orientations
-
-
-class ArrowAttributesDicts(TypedDict):
-    color: Colors
-    motion_type: MotionTypes
-    location: Locations
-    turns: Turns
-
-
-class PropAttributesDicts(TypedDict):
-    color: Colors
-    prop_type: PropTypes
-    loc: Locations
-    ori: Orientations
 
 
 ### LETTER GROUPS ###
@@ -244,13 +165,10 @@ class LetterGroupsByMotionType(Enum):
     Φ_Ψ_Λ_ = "Φ-Ψ-Λ-"
 
 
-class TurnsTabType(Enum):
-    MOTION_TYPE = auto()
-    COLOR = auto()
-    LEAD_STATE = auto()
-
-
-from enum import Enum
+class TurnsTabAttribute(Enum):
+    MOTION_TYPE = "motion_type"
+    COLOR = "color"
+    LEAD_STATE = "lead_state"
 
 
 class ParallelCombinationsSet(Enum):
@@ -379,56 +297,6 @@ class OpenCloseStates(Enum):
     CLOSE = "close"
 
 
-class Letters(Enum):
-    A = "A"
-    B = "B"
-    C = "C"
-    D = "D"
-    E = "E"
-    F = "F"
-    G = "G"
-    H = "H"
-    I = "I"
-    J = "J"
-    K = "K"
-    L = "L"
-    M = "M"
-    N = "N"
-    O = "O"
-    P = "P"
-    Q = "Q"
-    R = "R"
-    S = "S"
-    T = "T"
-    U = "U"
-    V = "V"
-    W = "W"
-    X = "X"
-    Y = "Y"
-    Z = "Z"
-    Σ = "Σ"
-    Δ = "Δ"
-    θ = "θ"
-    Ω = "Ω"
-    W_DASH = "W-"
-    X_DASH = "X-"
-    Y_DASH = "Y-"
-    Z_DASH = "Z-"
-    Σ_DASH = "Σ-"
-    Δ_DASH = "Δ-"
-    θ_DASH = "θ-"
-    Ω_DASH = "Ω-"
-    Φ = "Φ"
-    Ψ = "Ψ"
-    Λ = "Λ"
-    Φ_DASH = "Φ-"
-    Ψ_DASH = "Ψ-"
-    Λ_DASH = "Λ-"
-    α = "α"
-    β = "β"
-    Γ = "Γ"
-
-
 class AdjustmentStrs(Enum):
     MINUS_1 = "-1"
     MINUS_0_5 = "-0.5"
@@ -469,7 +337,7 @@ class Pictograph_Key(Enum):
 
 
 class PictographAttributesDict(TypedDict):
-    letter: Letters
+    letter: Letter
     start_pos: SpecificPositions
     end_pos: SpecificPositions
     blue_motion_type: MotionTypes

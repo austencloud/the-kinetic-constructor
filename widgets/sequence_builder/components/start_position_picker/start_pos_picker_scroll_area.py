@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
-from widgets.scroll_area.components.scroll_area_pictograph_factory import (
-    ScrollAreaPictographFactory,
+
+from widgets.scroll_area.components.option_picker_pictograph_factory import (
+    OptionPickerPictographFactory,
 )
 
 
@@ -21,7 +22,7 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
         self.clickable_option_handler = self.sequence_builder.option_click_handler
         self.letters = self.sequence_builder.main_widget.letters
         self.pictograph_cache: dict[str, Pictograph] = {}
-        self.pictograph_factory = ScrollAreaPictographFactory(
+        self.pictograph_factory = OptionPickerPictographFactory(
             self, self.pictograph_cache
         )
         self.set_layout("HBox")

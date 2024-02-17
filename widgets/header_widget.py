@@ -2,7 +2,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel, QHBoxLayout, QFrame
 from PyQt6.QtCore import Qt
 
-from Enums.Enums import LetterType
+from Enums.Enums import LetterType, TurnsTabAttribute
+from Enums.MotionAttributes import Color
 
 
 from .turns_box.turns_box_widgets.base_attr_box_widget import TurnsBoxWidget
@@ -10,10 +11,8 @@ from .turns_box.turns_box_widgets.base_attr_box_widget import TurnsBoxWidget
 if TYPE_CHECKING:
     from widgets.turns_box.turns_box import TurnsBox
 
-from constants import BLUE, COLOR, LEAD_STATE, MOTION_TYPE
 
-
-class HeaderWidget(TurnsBoxWidget):
+class TurnsBoxHeaderWidget(TurnsBoxWidget):
     def __init__(self, turns_box: "TurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box
@@ -22,16 +21,19 @@ class HeaderWidget(TurnsBoxWidget):
         self.layout: QHBoxLayout = self._setup_layout()
 
     def _setup_header(self) -> None:
-        if self.turns_box.attribute_type == COLOR:
-            text = "Left" if self.turns_box.color == BLUE else "Right"
+        if self.turns_box.attribute_type == TurnsTabAttribute.COLOR:
+            if self.turns_box.color == Color.BLUE:
+                text = "Left"
+            elif self.turns_box.color == Color.RED:
+                text = "Right"
             header_label = self._setup_header_label(text)
 
-        elif self.turns_box.attribute_type == LEAD_STATE:
-            text = self.turns_box.lead_state.capitalize()
+        elif self.turns_box.attribute_type == TurnsTabAttribute.LEAD_STATE:
+            text = self.turns_box.lead_state.value.capitalize()
             header_label = self._setup_header_label(text)
 
-        elif self.turns_box.attribute_type == MOTION_TYPE:
-            text = self.turns_box.motion_type.capitalize()
+        elif self.turns_box.attribute_type == TurnsTabAttribute.MOTION_TYPE:
+            text = self.turns_box.motion_type.value.capitalize()
             header_label = self._setup_header_label(text)
 
         return header_label
@@ -51,10 +53,7 @@ class HeaderWidget(TurnsBoxWidget):
         return layout
 
     def _add_widgets(self, layout: QHBoxLayout) -> None:
-        if (
-            self.turns_box.turns_panel.filter_tab.section.letter_type
-            == LetterType.Type1
-        ):
+        if self.turns_box.turns_panel.turns_tab.section.letter_type == LetterType.Type1:
             layout.addStretch(1)
             layout.addWidget(self.header_label)
             layout.addStretch(1)

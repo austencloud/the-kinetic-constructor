@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING
-from Enums.Enums import LetterType, Letters
+from Enums.Enums import LetterType, Letter
 
 
 from widgets.codex.codex_letter_button_frame.components.codex_letter_button_manager import (
@@ -28,9 +28,9 @@ class CodexLetterButtonFrame(QFrame):
         self.button_manager.create_buttons()
         self._init_letter_buttons_layout()
 
-    def _define_letter_rows(self) -> dict[str, list[list[Letters]]]:
+    def _define_letter_rows(self) -> dict[str, list[list[Letter]]]:
         return {
-            "Type1": [
+            LetterType.Type1: [
                 ["A", "B", "C"],
                 ["D", "E", "F"],
                 ["G", "H", "I"],
@@ -39,11 +39,11 @@ class CodexLetterButtonFrame(QFrame):
                 ["P", "Q", "R"],
                 ["S", "T", "U", "V"],
             ],
-            "Type2": [["W", "X", "Y", "Z"], ["Σ", "Δ", "θ", "Ω"]],
-            "Type3": [["W-", "X-", "Y-", "Z-"], ["Σ-", "Δ-", "θ-", "Ω-"]],
-            "Type4": [["Φ", "Ψ", "Λ"]],
-            "Type5": [["Φ-", "Ψ-", "Λ-"]],
-            "Type6": [["α", "β", "Γ"]],
+            LetterType.Type2: [["W", "X", "Y", "Z"], ["Σ", "Δ", "θ", "Ω"]],
+            LetterType.Type3: [["W-", "X-", "Y-", "Z-"], ["Σ-", "Δ-", "θ-", "Ω-"]],
+            LetterType.Type4: [["Φ", "Ψ", "Λ"]],
+            LetterType.Type5: [["Φ-", "Ψ-", "Λ-"]],
+            LetterType.Type6: [["α", "β", "Γ"]],
         }
 
     def _init_letter_buttons_layout(self) -> None:
@@ -53,12 +53,12 @@ class CodexLetterButtonFrame(QFrame):
         self.layout.setSpacing(0)
         frame_tuples = []
         stretch_factors = {
-            "Type1": 100,
-            "Type2": 32,
-            "Type3": 32,
-            "Type4": 16,
-            "Type5": 19,
-            "Type6": 16,
+            LetterType.Type1: 100,
+            LetterType.Type2: 32,
+            LetterType.Type3: 32,
+            LetterType.Type4: 16,
+            LetterType.Type5: 19,
+            LetterType.Type6: 16,
         }
         for type_name, rows in self.letter_rows.items():
             buttons_row_layouts = [

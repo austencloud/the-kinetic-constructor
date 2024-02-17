@@ -1,7 +1,7 @@
 from typing import Union
-from Enums.Enums import LetterType
-from Enums.letter_lists import Type1HybridLetters, Type1NonHybridLetters
+from Enums.Enums import LetterType, Letter
 
+from Enums.letters import LetterConditions
 from constants import *
 from widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.mirrored_turns_tuple_generator import (
     MirroredTurnsTupleGenerator,
@@ -54,10 +54,18 @@ class TurnsTupleGenerator:
     def generate_mirrored_tuple(self, arrow: Arrow) -> Union[str, None]:
         return self.mirrored_generator.generate(arrow)
 
-    def _get_generator_key(self, letter: str) -> str:
-        if letter in [letter.value for letter in Type1HybridLetters]:
+    def _get_generator_key(self, letter: Letter) -> str:
+        if letter.value in [
+            letter.value
+            for letter in Letter.get_letters_by_condition(LetterConditions.TYPE1_HYBRID)
+        ]:
             return "Type1Hybrid"
-        elif letter in [letter.value for letter in Type1NonHybridLetters]:
+        elif letter.value in [
+            letter.value
+            for letter in Letter.get_letters_by_condition(
+                LetterConditions.TYPE1_NON_HYBRID
+            )
+        ]:
             return "Type1NonHybrid"
         special_cases = {
             "S": "LeadState",
@@ -66,11 +74,11 @@ class TurnsTupleGenerator:
             "Λ-": "LambdaDash",
             "Γ": "Gamma",
         }
-        if letter in special_cases:
-            return special_cases[letter]
+        if letter.value in special_cases:
+            return special_cases[letter.value]
 
         for letter_type in LetterType:
-            if letter in letter_type.value[0]:
+            if letter.value in letter_type.value[0]:
                 return letter_type
 
         return None

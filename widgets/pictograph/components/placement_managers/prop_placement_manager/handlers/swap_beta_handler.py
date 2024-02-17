@@ -29,6 +29,16 @@ class SwapBetaHandler:
     def swap_beta(self) -> None:
         letter_type = LetterType.get_letter_type(self.pictograph.letter)
 
+        if (
+            ((
+                self.pictograph.check.ends_with_in_out_ori()
+                or self.pictograph.check.ends_with_clock_counter_ori()
+            )
+            and len(self.beta_prop_positioner.classifier.small_uni) == 2)
+            or self.pictograph.check.ends_with_layer3()
+        ):
+            return
+
         if letter_type == LetterType.Type1:
             self._handle_type1_swap()
         elif letter_type == LetterType.Type2:
@@ -142,7 +152,7 @@ class SwapBetaHandler:
         if ori_key:
             letter_data: dict = self.pictograph.main_widget.special_placements[
                 ori_key
-            ].get(self.pictograph.letter)
+            ].get(self.pictograph.letter.value)
 
         turns_tuple = (
             self.pictograph.main_widget.turns_tuple_generator.generate_turns_tuple(

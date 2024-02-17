@@ -1,8 +1,9 @@
 import os
 from typing import TYPE_CHECKING
+from Enums.letters import Letter
 from constants import BLUE, special_placements_parent_directory, RED
 from objects.arrow.arrow import Arrow
-from Enums.MotionAttributes import Colors
+from Enums.MotionAttributes import Color
 
 if TYPE_CHECKING:
     from .special_placement_data_updater import SpecialPlacementDataUpdater
@@ -21,21 +22,23 @@ class SpecialPlacementEntryRemover:
             self.positioner.placement_manager.pictograph.main_widget.turns_tuple_generator
         )
 
-    def remove_special_placement_entry(self, letter: str, arrow: Arrow) -> None:
+    def remove_special_placement_entry(self, letter: Letter, arrow: Arrow) -> None:
         ori_key = self.data_updater.get_ori_key(arrow.motion)
-        file_path = self._generate_file_path(ori_key, letter)
+        file_path = self._generate_file_path(ori_key, letter.value)
 
         if os.path.exists(file_path):
             data = self.load_data(file_path)
             self._process_removal(letter, arrow, ori_key, file_path, data)
             arrow.pictograph.main_widget.special_placement_loader.refresh_placements()
 
-    def _process_removal(self, letter, arrow: Arrow, ori_key, file_path, data):
+    def _process_removal(
+        self, letter: Letter, arrow: Arrow, ori_key: str, file_path: str, data: dict
+    ):
         self.turns_tuple = self.turns_tuple_generator.generate_turns_tuple(
             self.positioner.placement_manager.pictograph
         )
-        if letter in data:
-            letter_data = data[letter]
+        if letter.value in data:
+            letter_data = data[letter.value]
 
             key = self.data_updater.positioner.attr_key_generator.get_key(arrow)
             self._remove_turn_data_entry(letter_data, self.turns_tuple, key)
@@ -48,7 +51,7 @@ class SpecialPlacementEntryRemover:
                 self._handle_standard_start_ori_mirrored_entry_removal(
                     letter, arrow, ori_key, letter_data, key
                 )
-            data[letter] = letter_data
+            data[letter.value] = letter_data
             self.data_updater.json_handler.write_json_data(data, file_path)
 
     def _handle_standard_start_ori_mirrored_entry_removal(
@@ -119,7 +122,7 @@ class SpecialPlacementEntryRemover:
             f"{ori_key}/{letter}_placements.json",
         )
 
-    def _get_other_color(self, color: Colors) -> Colors:
+    def _get_other_color(self, color: Color) -> Color:
         return RED if color == BLUE else BLUE
 
     def _remove_turn_data_entry(self, letter_data: dict, turns_tuple: str, key) -> None:

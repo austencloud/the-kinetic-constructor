@@ -4,14 +4,12 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
     from objects.motion.motion import Motion
-    from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
-        FilterTab,
-    )
+    from .turns_tab import TurnsTab
 
 
-class FilterTabTurnsUpdater:
-    def __init__(self, filter_tab_manager: "FilterTab"):
-        self.manager = filter_tab_manager
+class TurnsTabUpdater:
+    def __init__(self, turns_tab_manager: "TurnsTab"):
+        self.manager = turns_tab_manager
 
     def apply_turns(self, pictograph: "Pictograph"):
         turns_values = self.manager.get_current_turns_values()

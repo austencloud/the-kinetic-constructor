@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING, Optional
-from Enums.Enums import LetterType, Letters
+from Enums.Enums import LetterType, Letter
 
 
 from constants import *
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
-from Enums.MotionAttributes import Locations, MotionTypes
+from Enums.MotionAttributes import Color, Locations, MotionTypes
 
 
 if TYPE_CHECKING:
@@ -25,7 +25,7 @@ class PictographGetter:
         self.red_arrow = self.pictograph.red_arrow
         self.turns_tuple_generator = self.pictograph.main_widget.turns_tuple_generator
 
-    def letter_type(self, letter: Letters) -> Optional[str]:
+    def letter_type(self, letter: Letter) -> Optional[str]:
         letter_type_map = {
             letter: letter_type.description
             for letter_type in LetterType
@@ -65,11 +65,11 @@ class PictographGetter:
         return motion_map.get((self.red_motion.start_loc, self.blue_motion.end_loc))
 
     def other_motion(self, motion: Motion) -> Motion:
-        other_motion_map = {RED: self.blue_motion, BLUE: self.red_motion}
+        other_motion_map = {Color.RED: self.blue_motion, Color.BLUE: self.red_motion}
         return other_motion_map.get(motion.color)
 
     def other_arrow(self, arrow: Arrow) -> Arrow:
-        other_arrow_map = {RED: self.blue_arrow, BLUE: self.red_arrow}
+        other_arrow_map = {Color.RED: self.blue_arrow, Color.BLUE: self.red_arrow}
         return other_arrow_map.get(arrow.color)
 
     def dash(self) -> Motion:
@@ -92,4 +92,22 @@ class PictographGetter:
         return self.turns_tuple_generator.generate_turns_tuple(self.pictograph)
 
     def pictograph_dict(self) -> dict:
-        return self.pictograph.pictograph_dict
+        return {
+            "letter": self.pictograph.letter.value,
+            "start_pos": self.pictograph.start_pos,
+            "end_pos": self.pictograph.end_pos,
+            "blue_motion_type": self.blue_motion.motion_type,
+            "blue_start_ori": self.blue_motion.start_ori,
+            "blue_prop_rot_dir": self.blue_motion.prop_rot_dir,
+            "blue_start_loc": self.blue_motion.start_loc,
+            "blue_end_loc": self.blue_motion.end_loc,
+            "red_motion_type": self.red_motion.motion_type,
+            "red_start_ori": self.red_motion.start_ori,
+            "red_prop_rot_dir": self.red_motion.prop_rot_dir,
+            "red_start_loc": self.red_motion.start_loc,
+            "red_end_loc": self.red_motion.end_loc,
+            "blue_turns": self.blue_motion.turns,
+            "red_turns": self.red_motion.turns,
+            "blue_end_ori": self.blue_motion.end_ori,
+            "red_end_ori": self.red_motion.end_ori,
+        }

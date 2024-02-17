@@ -1,21 +1,23 @@
 from PyQt6.QtWidgets import QHBoxLayout, QFrame
 from typing import TYPE_CHECKING
-from Enums.Enums import LetterType, Letters
-from Enums.letter_lists import AntiLetters, DashLetters, ProLetters, StaticLetters
-from constants import ANTI, DASH, MOTION_TYPE, PRO, STATIC
+from Enums.Enums import LetterType, Letter, TurnsTabAttribute
+from Enums.MotionAttributes import MotionTypes
+from Enums.letters import LetterConditions
 from widgets.turns_box.turns_box import TurnsBox
 from widgets.factories.attr_box_factory import TurnsBoxFactory
 
 if TYPE_CHECKING:
-    from widgets.scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
-        FilterTab,
+    from widgets.scroll_area.components.section_manager.section_widget.components.turns_tab.turns_tab import (
+        TurnsTab,
     )
 
 
 class TurnsPanel(QFrame):
-    def __init__(self, filter_tab: "FilterTab", attribute_type) -> None:
+    def __init__(
+        self, turns_tab: "TurnsTab", attribute_type: TurnsTabAttribute
+    ) -> None:
         super().__init__()
-        self.filter_tab = filter_tab
+        self.turns_tab = turns_tab
         self.attribute_type = attribute_type
         self.turns_box_factory = TurnsBoxFactory(self)
         self.boxes: list[TurnsBox] = self.turns_box_factory.create_boxes()
@@ -32,23 +34,35 @@ class TurnsPanel(QFrame):
             box.setObjectName("TurnsBox")
 
     def show_motion_type_boxes_based_on_chosen_letters(
-        self, selected_letters: list[Letters]
+        self, selected_letters: list[Letter]
     ) -> None:
         relevant_selected_letters = []
         for letter in selected_letters:
             letter_type = LetterType.get_letter_type(letter)
-            if letter_type == self.filter_tab.section.letter_type:
+            if letter_type == self.turns_tab.section.letter_type:
                 relevant_selected_letters.append(letter)
 
         motion_type_mapping = {
-            PRO: [letter.value for letter in ProLetters],
-            ANTI: [letter.value for letter in AntiLetters],
-            DASH: [letter.value for letter in DashLetters],
-            STATIC: [letter.value for letter in StaticLetters]
+            MotionTypes.PRO: [
+                letter
+                for letter in Letter.get_letters_by_condition(LetterConditions.PRO)
+            ],
+            MotionTypes.ANTI: [
+                letter
+                for letter in Letter.get_letters_by_condition(LetterConditions.ANTI)
+            ],
+            MotionTypes.DASH: [
+                letter
+                for letter in Letter.get_letters_by_condition(LetterConditions.DASH)
+            ],
+            MotionTypes.STATIC: [
+                letter
+                for letter in Letter.get_letters_by_condition(LetterConditions.STATIC)
+            ],
         }
 
         for box in self.boxes:
-            if box.attribute_type == MOTION_TYPE:
+            if box.attribute_type == TurnsTabAttribute.MOTION_TYPE:
                 show_box = any(
                     letter in relevant_selected_letters
                     for letter in motion_type_mapping[box.motion_type]

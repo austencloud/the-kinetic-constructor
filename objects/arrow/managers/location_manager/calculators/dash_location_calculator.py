@@ -1,5 +1,6 @@
-from Enums.Enums import LetterType
-from Enums.MotionAttributes import Locations
+from Enums.Enums import Letter
+from Enums.MotionAttributes import Color, Locations
+from Enums.letters import LetterType
 from constants import *
 from objects.motion.motion import Motion
 from .base_location_calculator import BaseLocationCalculator
@@ -11,9 +12,12 @@ if TYPE_CHECKING:
 
 class DashLocationCalculator(BaseLocationCalculator):
     def calculate_location(self) -> str:
-        if self.pictograph.letter in ["Φ-", "Ψ-"]:
+        if self.pictograph.letter in [Letter.Φ_DASH, Letter.Ψ_DASH]:
             return self._get_Φ_dash_Ψ_dash_location()
-        elif self.pictograph.letter in ["Λ", "Λ-"] and self.arrow.motion.turns == 0:
+        elif (
+            self.pictograph.letter in [Letter.Λ, Letter.Λ_DASH]
+            and self.arrow.motion.turns == 0
+        ):
             return self._get_Λ_zero_turns_location()
         elif self.arrow.motion.turns == 0:
             return self._default_zero_turns_dash_location()
@@ -25,14 +29,14 @@ class DashLocationCalculator(BaseLocationCalculator):
 
         if self.arrow.motion.turns == 0 and self.other_motion.arrow.motion.turns == 0:
             location_map = {
-                (RED, (NORTH, SOUTH)): EAST,
-                (RED, (EAST, WEST)): NORTH,
-                (RED, (SOUTH, NORTH)): EAST,
-                (RED, (WEST, EAST)): NORTH,
-                (BLUE, (NORTH, SOUTH)): WEST,
-                (BLUE, (EAST, WEST)): SOUTH,
-                (BLUE, (SOUTH, NORTH)): WEST,
-                (BLUE, (WEST, EAST)): SOUTH,
+                (Color.RED, (NORTH, SOUTH)): EAST,
+                (Color.RED, (EAST, WEST)): NORTH,
+                (Color.RED, (SOUTH, NORTH)): EAST,
+                (Color.RED, (WEST, EAST)): NORTH,
+                (Color.BLUE, (NORTH, SOUTH)): WEST,
+                (Color.BLUE, (EAST, WEST)): SOUTH,
+                (Color.BLUE, (SOUTH, NORTH)): WEST,
+                (Color.BLUE, (WEST, EAST)): SOUTH,
             }
             arrow_location = location_map.get(
                 (

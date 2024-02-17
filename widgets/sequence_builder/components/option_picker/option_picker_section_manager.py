@@ -4,14 +4,15 @@ from Enums.Enums import LetterType, Letters
 from Enums.Enums import LetterType
 
 
+from Enums.letters import Letter
+from widgets.scroll_area.components.section_manager.section_widget.components.turns_tab.turns_tab import (
+    TurnsTab,
+)
 from widgets.scroll_area.components.section_manager.section_widget.section_group_widget import (
     SectionGroupWidget,
 )
 from widgets.sequence_builder.components.option_picker.option_picker_section_widget import (
     OptionPickerSectionWidget,
-)
-from ....scroll_area.components.section_manager.section_widget.components.filter_tab.filter_tab import (
-    FilterTab,
 )
 
 
@@ -38,8 +39,8 @@ class OptionPickerSectionsManager:
         self.scroll_area = scroll_area
         self.sequence_builder: "SequenceBuilder" = scroll_area.sequence_builder
         self.sections: dict[LetterType, OptionPickerSectionWidget] = {}
-        self.filter_tabs_cache: dict[LetterType, FilterTab] = {}
-        self.pictograph_cache: dict[Letters, list[LetterType]] = {}
+        self.filter_tabs_cache: dict[LetterType, TurnsTab] = {}
+        self.pictograph_cache: dict[Letter, list[LetterType]] = {}
         self.ordered_section_types: list[LetterType] = []
 
     def initialize_sections(self) -> None:
@@ -92,18 +93,18 @@ class OptionPickerSectionsManager:
         section = self.sections[letter_type]
         return section
 
-    def get_pictograph_letter_type(self, pictograph_key: str) -> str:
-        letter = pictograph_key.split("_")[0]
+    def get_pictograph_letter_type(self, letter: Letter) -> str:
+        letter_str = letter.value
         for letter_type in LetterType:
-            if letter in letter_type.value[0]:
+            if letter_str in letter_type.value[0]:
                 return letter_type
         return "Unknown"
 
-    def create_or_get_filter_tab(self, section: OptionPickerSectionWidget) -> FilterTab:
-        if not section.filter_tab:
-            section.filter_tab = FilterTab(section)
-            section.layout.insertWidget(1, section.filter_tab)
-        return section.filter_tab
+    def create_or_get_filter_tab(self, section: OptionPickerSectionWidget) -> TurnsTab:
+        if not section.turns_tab:
+            section.turns_tab = TurnsTab(section)
+            section.layout.insertWidget(1, section.turns_tab)
+        return section.turns_tab
 
     def show_all_sections(self) -> None:
         self.initialize_sections()

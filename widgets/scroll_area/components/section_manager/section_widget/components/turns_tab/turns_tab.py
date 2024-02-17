@@ -1,8 +1,9 @@
 from PyQt6.QtWidgets import QTabWidget
-from .filter_tab_visibility_handler import FilterTabVisibilityHandler
+
+from Enums.Enums import TurnsTabAttribute
+from .turns_tab_visibility_handler import TurnsTabVisibilityHandler
 from typing import TYPE_CHECKING
-from constants import MOTION_TYPE, COLOR, LEAD_STATE
-from .filter_tab_turns_updater import FilterTabTurnsUpdater
+from .turns_tab_turns_updater import TurnsTabUpdater
 from widgets.turns_panel import TurnsPanel
 
 if TYPE_CHECKING:
@@ -12,15 +13,23 @@ if TYPE_CHECKING:
     )
 
 
-class FilterTab(QTabWidget):
+class TurnsTab(QTabWidget):
     def __init__(self, section: "CodexSectionWidget"):
         super().__init__()
         self.section = section
 
-        # Create panels
-        self.motion_type_turns_panel = TurnsPanel(self, MOTION_TYPE)
-        self.color_turns_panel = TurnsPanel(self, COLOR)
-        self.lead_state_turns_panel = TurnsPanel(self, LEAD_STATE)
+        self._setup_panels()
+        self._setup_handlers()
+        self.currentChanged.connect(self.section.reset_section)
+
+    def _setup_handlers(self):
+        self.visibility_handler = TurnsTabVisibilityHandler(self)
+        self.updater = TurnsTabUpdater(self)
+
+    def _setup_panels(self):
+        self.motion_type_turns_panel = TurnsPanel(self, TurnsTabAttribute.MOTION_TYPE)
+        self.color_turns_panel = TurnsPanel(self, TurnsTabAttribute.COLOR)
+        self.lead_state_turns_panel = TurnsPanel(self, TurnsTabAttribute.LEAD_STATE)
 
         self.panels = [
             self.motion_type_turns_panel,
@@ -28,14 +37,8 @@ class FilterTab(QTabWidget):
             self.lead_state_turns_panel,
         ]
 
-        # Setup handlers
-        self.visibility_handler = FilterTabVisibilityHandler(self)
-        self.turns_updater = FilterTabTurnsUpdater(self)
-
-        self.currentChanged.connect(self.section.reset_section)
-
     def apply_turns_to_pictographs(self, pictograph: "Pictograph"):
-        self.turns_updater.apply_turns(pictograph)
+        self.updater.apply_turns(pictograph)
 
     def get_current_turns_values(self) -> dict[str, dict[str, int]]:
         turns_values = {}

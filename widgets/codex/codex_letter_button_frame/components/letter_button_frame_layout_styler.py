@@ -2,6 +2,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QSizePolicy, QLabel
 from PyQt6.QtCore import Qt
 
+from Enums.letters import LetterType
+
 if TYPE_CHECKING:
     from widgets.codex.codex_letter_button_frame.codex_letter_button_frame import (
         CodexLetterButtonFrame,
@@ -13,12 +15,12 @@ class LetterButtonFrameLayoutStyler:
         self.spacing = letter_button_frame.spacing
         self.letter_button_frame = letter_button_frame
         self.border_colors = {
-            "Type1": ("#6F2DA8", "#00b3ff"),  # Purple, Cyan
-            "Type2": ("#6F2DA8", "#6F2DA8"),  # Purple, Purple
-            "Type3": ("#6F2DA8", "#26e600"),  # Purple, Green
-            "Type4": ("#26e600", "#26e600"),  # Green, Green
-            "Type5": ("#26e600", "#00b3ff"),  # Green, Cyan
-            "Type6": ("#eb7d00", "#eb7d00"),  # Orange, Orange
+            LetterType.Type1: ("#6F2DA8", "#00b3ff"),  # Purple, Cyan
+            LetterType.Type2: ("#6F2DA8", "#6F2DA8"),  # Purple, Purple
+            LetterType.Type3: ("#6F2DA8", "#26e600"),  # Purple, Green
+            LetterType.Type4: ("#26e600", "#26e600"),  # Green, Green
+            LetterType.Type5: ("#26e600", "#00b3ff"),  # Green, Cyan
+            LetterType.Type6: ("#eb7d00", "#eb7d00"),  # Orange, Orange
         }
 
     def get_colors(self, type_name: str) -> tuple[str, str]:
@@ -64,8 +66,8 @@ class LetterButtonFrameLayoutStyler:
         inner_layout.setSpacing(self.spacing)
         return inner_frame, inner_layout
 
-    def _setup_type_label_frame(self, type_name, inner_frame):
-        type_label = self.create_type_label(type_name[-1])
+    def _setup_type_label_frame(self, letter_type: LetterType, inner_frame):
+        type_label = self.create_type_label(letter_type.value[-1][-1])
         type_label_frame = QFrame(inner_frame)
         type_label_frame.setStyleSheet("border: none;")
         type_label_frame.setMaximumHeight(16)

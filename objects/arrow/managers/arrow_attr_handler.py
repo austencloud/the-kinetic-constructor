@@ -5,7 +5,7 @@ from constants import *
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
 from Enums.MotionAttributes import (
-    Colors,
+    Color,
     Locations,
     MotionTypes,
     Turns,
@@ -19,7 +19,7 @@ class ArrowAttrHandler:
         self.arrow.turns = self.arrow.arrow_dict[TURNS]
 
     def update_attributes(
-        self, arrow_dict: dict[str, Union[Colors, Locations, MotionTypes, Turns]]
+        self, arrow_dict: dict[str, Union[Color, Locations, MotionTypes, Turns]]
     ) -> None:
         arrow_attributes = [COLOR, LOC, MOTION_TYPE, TURNS]
         for attr in arrow_attributes:
@@ -32,6 +32,6 @@ class ArrowAttrHandler:
         for attr in arrow_attributes:
             setattr(self.arrow, attr, None)
 
-    def get_arrow_attributes(self) -> dict[str, Union[Colors, Locations, MotionTypes]]:
+    def get_arrow_attributes(self) -> dict[str, Union[Color, Locations, MotionTypes]]:
         arrow_attributes = [COLOR, LOC]
         return {attr: getattr(self.arrow, attr) for attr in arrow_attributes}

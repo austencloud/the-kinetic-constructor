@@ -9,7 +9,7 @@ from constants import BLUE, RED
 from widgets.graphical_object_svg_manager import (
     GraphicalObjectSvgManager,
 )
-from Enums.MotionAttributes import Colors
+from Enums.MotionAttributes import Color
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -22,7 +22,7 @@ class GraphicalObject(QGraphicsSvgItem):
     self: Union["Arrow", "Prop"]
     ghost: Union["Arrow", "Prop"]
     is_ghost: bool = None
-    color: Colors
+    color: Color
     renderer: QSvgRenderer
 
     def __init__(self, pictograph: "Pictograph") -> None:
@@ -31,10 +31,10 @@ class GraphicalObject(QGraphicsSvgItem):
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
 
     def set_z_value_based_on_color(self) -> None:
-        if self.color == RED:
-            self.setZValue(1)  # Higher Z value for red props
-        elif self.color == BLUE:
-            self.setZValue(0)  # Lower Z value for blue props
+        if self.color == Color.RED:
+            self.setZValue(5)  # Higher Z value for red props
+        elif self.color == Color.BLUE:
+            self.setZValue(4)  # Lower Z value for blue props
 
     ### GETTERS ###
 

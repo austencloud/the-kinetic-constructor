@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     )
 
 
-class TurnDirectSetManager:
+class TurnsDirectSetManager:
     def __init__(self, turns_widget: "TurnsWidget") -> None:
         self.turns_widget = turns_widget
 

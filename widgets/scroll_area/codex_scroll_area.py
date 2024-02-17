@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QApplication
 from PyQt6.QtCore import Qt
-from Enums.Enums import LetterType, Letters
+from Enums.Enums import LetterType, Letter
 
 
-from .components.scroll_area_pictograph_factory import ScrollAreaPictographFactory
+from .components.codex_pictograph_factory import CodexPictographFactory
 from .components.section_manager.codex_section_manager import CodexSectionManager
 from .components.codex_display_manager import CodexDisplayManager
 from Enums.Enums import LetterType
@@ -23,7 +23,7 @@ class CodexScrollArea(QScrollArea):
         self.main_widget = codex.main_widget
         self.codex = codex
         self.letters = self.main_widget.letters
-        self.pictograph_cache: dict[Letters, Pictograph] = {}
+        self.pictograph_cache: dict[str, Pictograph] = {} 
         self.stretch_index = -1
         self._setup_ui()
         self._setup_managers()
@@ -31,7 +31,7 @@ class CodexScrollArea(QScrollArea):
     def _setup_managers(self) -> None:
         self.display_manager = CodexDisplayManager(self)
         self.sections_manager = CodexSectionManager(self)
-        self.pictograph_factory = ScrollAreaPictographFactory(
+        self.pictograph_factory = CodexPictographFactory(
             self, self.codex.pictograph_cache
         )
 
@@ -74,8 +74,6 @@ class CodexScrollArea(QScrollArea):
     def update_arrow_placements(self) -> None:
         for pictograph in self.pictograph_cache.values():
             pictograph.arrow_placement_manager.update_arrow_placements()
-
-
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         modifiers = QApplication.keyboardModifiers()

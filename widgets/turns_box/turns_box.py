@@ -1,20 +1,12 @@
-from typing import TYPE_CHECKING, Union, cast
+from typing import TYPE_CHECKING, cast
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
-from Enums.Enums import MotionAttributes
-from Enums.MotionAttributes import Colors, LeadStates, MotionTypes
+from Enums.Enums import TurnsTabAttribute
+from Enums.MotionAttributes import Color, LeadStates, MotionTypes
 
-from constants import (
-    BLUE,
-    CLOCKWISE,
-    COLOR,
-    COUNTER_CLOCKWISE,
-    LEAD_STATE,
-    MOTION_TYPE,
-    RED,
-)
-from widgets.header_widget import HeaderWidget
-from widgets.turns_box.turns_box_widgets.prop_rot_dir_button_manager import (
+from constants import BLUE, CLOCKWISE, COLOR, COUNTER_CLOCKWISE, RED
+from ..header_widget import TurnsBoxHeaderWidget
+from ..turns_box.turns_box_widgets.prop_rot_dir_button_manager import (
     PropRotDirButtonManager,
 )
 from .turns_box_widgets.turns_widget.turns_widget import (
@@ -31,11 +23,11 @@ class TurnsBox(QFrame):
     def __init__(
         self,
         turns_panel,
-        attribute_type: MotionAttributes,
-        attribute: Union[MotionTypes, Colors, LeadStates],
+        attribute_type: TurnsTabAttribute,
+        attribute: TurnsTabAttribute,
     ) -> None:
         super().__init__(turns_panel)
-        self.attribute_type: MotionAttributes = attribute_type
+        self.attribute_type: TurnsTabAttribute = attribute_type
         self.attribute_value = attribute
         self.turns_panel: "TurnsPanel" = turns_panel
 
@@ -46,25 +38,25 @@ class TurnsBox(QFrame):
             COUNTER_CLOCKWISE: False,
         }
 
-        self.motion_type: MotionTypes
-        self.color: Colors
-        self.lead_state: LeadStates
+        self.motion_type: TurnsTabAttribute
+        self.color: TurnsTabAttribute
+        self.lead_state: TurnsTabAttribute
 
         self._setup_attribute_type()
         self._setup_widgets()
         self._setup_layouts()
 
     def _setup_attribute_type(self) -> None:
-        if self.attribute_type == MOTION_TYPE:
+        if self.attribute_type == TurnsTabAttribute.MOTION_TYPE:
             self.motion_type = cast(MotionTypes, self.attribute_value)
-        elif self.attribute_type == COLOR:
-            self.color = cast(Colors, self.attribute_value)
-        elif self.attribute_type == LEAD_STATE:
+        elif self.attribute_type == TurnsTabAttribute.COLOR:
+            self.color = cast(Color, self.attribute_value)
+        elif self.attribute_type == TurnsTabAttribute.LEAD_STATE:
             self.lead_state = cast(LeadStates, self.attribute_value)
 
     def _setup_widgets(self) -> None:
         self.prop_rot_dir_button_manager = PropRotDirButtonManager(self)
-        self.header_widget = HeaderWidget(self)
+        self.header_widget = TurnsBoxHeaderWidget(self)
         self.turns_widget = TurnsWidget(self)
 
         if self.attribute_type == COLOR:
@@ -106,11 +98,12 @@ class TurnsBox(QFrame):
     ### CREATE LABELS ###
 
     def resize_turns_box(self) -> None:
-        button_size = self.turns_panel.filter_tab.section.width() // 20
+        button_size = self.turns_panel.turns_tab.section.width() // 20
 
-        for button in (
+        for (
+            button
+        ) in (
             self.header_widget.turns_box.prop_rot_dir_button_manager.prop_rot_dir_buttons
-            
         ):
             button.setMinimumSize(button_size, button_size)
             button.setMaximumSize(button_size, button_size)

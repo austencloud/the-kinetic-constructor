@@ -1,7 +1,8 @@
 from typing import TYPE_CHECKING
+from Enums.MotionAttributes import Color
 from Enums.PropTypes import PropTypes
+from Enums.letters import LetterConditions, Letter
 from constants import *
-from data.rules import beta_ending_letters, alpha_ending_letters, gamma_ending_letters
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -12,37 +13,62 @@ class PictographChecker:
         self.pictograph = pictograph
 
     def ends_with_beta(self) -> bool:
-        return self.pictograph.letter in beta_ending_letters
+        return self.pictograph.letter in Letter.get_letters_by_condition(
+            LetterConditions.BETA_ENDING
+        )
 
     def ends_with_alpha(self) -> bool:
-        return self.pictograph.letter in alpha_ending_letters
+        return self.pictograph.letter in Letter.get_letters_by_condition(
+            LetterConditions.ALPHA_ENDING
+        )
 
     def ends_with_gamma(self) -> bool:
-        return self.pictograph.letter in gamma_ending_letters
+        return self.pictograph.letter in Letter.get_letters_by_condition(
+            LetterConditions.GAMMA_ENDING
+        )
 
     def ends_with_layer1(self) -> bool:
-        red_prop, blue_prop = self.pictograph.props[RED], self.pictograph.props[BLUE]
+        red_prop, blue_prop = (
+            self.pictograph.props[Color.RED],
+            self.pictograph.props[Color.BLUE],
+        )
         return red_prop.check.is_radial() == blue_prop.check.is_radial()
 
     def ends_with_layer2(self) -> bool:
-        red_prop, blue_prop = self.pictograph.props[RED], self.pictograph.props[BLUE]
+        red_prop, blue_prop = (
+            self.pictograph.props[Color.RED],
+            self.pictograph.props[Color.BLUE],
+        )
         return red_prop.check.is_nonradial() and blue_prop.check.is_nonradial()
 
     def ends_with_layer3(self) -> bool:
-        red_prop, blue_prop = self.pictograph.props[RED], self.pictograph.props[BLUE]
+        red_prop, blue_prop = (
+            self.pictograph.props[Color.RED],
+            self.pictograph.props[Color.BLUE],
+        )
         return red_prop.check.is_radial() != blue_prop.check.is_radial()
 
     def ends_with_non_hybrid_ori(self) -> bool:
         return self.ends_with_layer1() or self.ends_with_layer2()
 
     def ends_with_in_out_ori(self) -> bool:
-        red_prop, blue_prop = self.pictograph.props[RED], self.pictograph.props[BLUE]
-        return (red_prop.ori in [IN] and blue_prop.ori in [OUT]) or (
-            red_prop.ori in [OUT] and blue_prop.ori in [IN]
+        red_prop, blue_prop = (
+            self.pictograph.props[Color.RED],
+            self.pictograph.props[Color.BLUE],
         )
+        if red_prop.ori == IN and blue_prop.ori == OUT:
+            return True
+        elif red_prop.ori == OUT and blue_prop.ori == IN:
+            return True
+        return False
+        
+
 
     def ends_with_clock_counter_ori(self) -> bool:
-        red_prop, blue_prop = self.pictograph.props[RED], self.pictograph.props[BLUE]
+        red_prop, blue_prop = (
+            self.pictograph.props[Color.RED],
+            self.pictograph.props[Color.BLUE],
+        )
         return (red_prop.ori in [CLOCK] and blue_prop.ori in [COUNTER]) or (
             red_prop.ori in [COUNTER] and blue_prop.ori in [CLOCK]
         )
@@ -132,8 +158,10 @@ class PictographChecker:
         return hasattr(self.pictograph.scroll_area, "sequence_builder")
 
     def has_all_props_of_type(self, prop_type: PropTypes) -> bool:
-        return all(prop.prop_type == prop_type for prop in self.pictograph.props.values())
-    
+        return all(
+            prop.prop_type == prop_type for prop in self.pictograph.props.values()
+        )
+
     def has_strictly_placed_props(self) -> bool:
         strict_props = [
             PropTypes.BigDoubleStar,

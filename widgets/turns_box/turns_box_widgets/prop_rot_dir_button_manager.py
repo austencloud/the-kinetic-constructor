@@ -16,7 +16,7 @@ from constants import (
     STATIC,
 )
 from Enums.MotionAttributes import (
-    Colors,
+    Color,
     LeadStates,
     MotionTypes,
     PropRotDirs,
@@ -68,10 +68,12 @@ class PropRotDirButtonManager:
         for (
             pictograph
         ) in (
-            self.turns_box.turns_panel.filter_tab.section.scroll_area.pictograph_cache.values()
+            self.turns_box.turns_panel.turns_tab.section.scroll_area.pictograph_cache.values()
         ):
             for motion in pictograph.motions.values():
-                other_motion = pictograph.motions[RED if motion.color == BLUE else BLUE]
+                other_motion = pictograph.motions[
+                    Color.RED if motion.color == Color.BLUE else Color.BLUE
+                ]
                 if motion.check.is_dash() or motion.check.is_static():
                     if other_motion.check.is_shift():
                         if motion.motion_type == self.turns_box.motion_type:
@@ -91,7 +93,7 @@ class PropRotDirButtonManager:
         for (
             pictograph
         ) in (
-            self.turns_box.turns_panel.filter_tab.section.scroll_area.pictograph_cache.values()
+            self.turns_box.turns_panel.turns_tab.section.scroll_area.pictograph_cache.values()
         ):
             for motion in pictograph.motions.values():
                 if motion.motion_type in [DASH, STATIC]:
@@ -152,9 +154,9 @@ class PropRotDirButtonManager:
         self.ccw_button.unpress()
 
     def update_visibility_based_on_motion(
-        self, new_turns, attribute_value: Union[Colors, MotionTypes, LeadStates]
+        self, new_turns, attribute_value: Union[Color, MotionTypes, LeadStates]
     ) -> None:
-        if self.turns_box.turns_panel.filter_tab.section.letter_type in [
+        if self.turns_box.turns_panel.turns_tab.section.letter_type in [
             LetterType.Type4,
             LetterType.Type5,
             LetterType.Type6,

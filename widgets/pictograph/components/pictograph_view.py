@@ -1,4 +1,3 @@
-import math
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QSizePolicy
 from PyQt6.QtCore import Qt, QEvent
@@ -89,3 +88,6 @@ class PictographView(QGraphicsView):
             settings_manager.prop_type_changer.replace_props(
                 current_prop_type, self.pictograph
             )
+        settings_manager.glyph_visibility_manager.apply_current_visibility_settings(
+            self.pictograph
+        )

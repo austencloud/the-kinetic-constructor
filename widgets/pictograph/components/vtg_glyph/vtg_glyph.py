@@ -41,30 +41,33 @@ class VTG_Glyph(QGraphicsSvgItem):
             self.setSharedRenderer(self.renderer)
             self.pictograph.addItem(self)
             self.position_vtg_glyph()
-        print(f"SVG path: {svg_path}")  # Add this line for debug output
+            visibility_manager = (
+                self.pictograph.main_widget.main_window.settings_manager.glyph_visibility_manager
+            )
+            self.setVisible(visibility_manager.should_glyph_be_visible("VTG"))
 
     def determine_vtg_mode(self):
-        letter = self.pictograph.letter
+        letter_str = self.pictograph.letter.value
         mode = self.pictograph.vtg_mode
         start_pos = self.pictograph.start_pos
 
-        if letter in ["A", "B", "C"]:
+        if letter_str in ["A", "B", "C"]:
             mode = VTG_Modes.SPLIT_SAME
-        elif letter in ["D", "E", "F"]:
+        elif letter_str in ["D", "E", "F"]:
             if start_pos in [SP.BETA2.value, SP.BETA4.value]:
                 mode = VTG_Modes.SPLIT_OPP
             elif start_pos in [SP.BETA1.value, SP.BETA3.value]:
                 mode = VTG_Modes.TOG_OPP
-        elif letter in ["G", "H", "I"]:
+        elif letter_str in ["G", "H", "I"]:
             mode = VTG_Modes.TOG_SAME
-        elif letter in ["J", "K", "L"]:
+        elif letter_str in ["J", "K", "L"]:
             if start_pos in [SP.ALPHA1.value, SP.ALPHA3.value]:
                 mode = VTG_Modes.SPLIT_OPP
             elif start_pos in [SP.ALPHA2.value, SP.ALPHA4.value]:
                 mode = VTG_Modes.TOG_OPP
-        elif letter in ["M", "N", "O", "P", "Q", "R"]:
+        elif letter_str in ["M", "N", "O", "P", "Q", "R"]:
             mode = VTG_Modes.QUARTER_OPP
-        elif letter in ["S", "T", "U", "V"]:
+        elif letter_str in ["S", "T", "U", "V"]:
             mode = VTG_Modes.QUARTER_SAME
 
         return mode
@@ -107,5 +110,3 @@ class VTG_Glyph(QGraphicsSvgItem):
 
         self.setPos(x, y)
         self.setTransformOriginPoint(scaled_width / 2, scaled_height / 2)
-
-        print(f"VTG_Glyph positioned with additional inner margin: {x}, {y}")

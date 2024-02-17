@@ -1,4 +1,3 @@
-from Enums.Enums import LetterType
 
 
 class LetterFactory:

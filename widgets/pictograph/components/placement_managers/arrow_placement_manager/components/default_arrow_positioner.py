@@ -1,5 +1,5 @@
 import json
-from Enums.letter_lists import DashLetters
+from Enums.letters import LetterConditions, Letter
 from constants import (
     ANTI,
     NONRADIAL,
@@ -56,8 +56,12 @@ class DefaultArrowPositioner:
             elif motion_end_ori in [CLOCK, COUNTER]:
                 motion_end_ori_key = f"{NONRADIAL}_"
         letter_suffix = ""
-        if arrow.pictograph.letter and arrow.pictograph.letter in DashLetters:
-            char = arrow.pictograph.letter[:-1]
+        if (
+            arrow.pictograph.letter.value
+            and arrow.pictograph.letter
+            in Letter.get_letters_by_condition(LetterConditions.DASH)
+        ):
+            char = arrow.pictograph.letter.value[:-1]
             letter_suffix = f"_{char}_dash"
         elif arrow.pictograph.letter:
             letter_suffix = f"_{arrow.pictograph.letter}"

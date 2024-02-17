@@ -1,3 +1,4 @@
+from Enums.letters import Letter
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
 
@@ -44,10 +45,10 @@ class MirroredEntryDataPrep:
         )
 
     def _fetch_letter_data_and_original_turn_data(
-        self, ori_key: str, letter: str, arrow: Arrow
+        self, ori_key: str, letter: Letter, arrow: Arrow
     ) -> tuple[dict, dict]:
         """Fetches letter data and the original turns tuple for the given arrow."""
-        letter_data = self._get_letter_data(ori_key, letter)
+        letter_data = self._get_letter_data(ori_key, letter.value)
         original_turns_tuple = self.manager.turns_tuple_generator.generate_turns_tuple(
             arrow.pictograph
         )

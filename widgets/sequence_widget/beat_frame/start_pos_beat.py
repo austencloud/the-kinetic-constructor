@@ -1,10 +1,8 @@
 from typing import TYPE_CHECKING
 
-from PyQt6.QtGui import QMouseEvent
-from widgets.pictograph.pictograph import Pictograph
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QGraphicsView
-
+from PyQt6.QtGui import QMouseEvent, QFont
+from PyQt6.QtWidgets import QGraphicsTextItem
+from PyQt6.QtCore import QPointF
 from widgets.sequence_widget.beat_frame.beat import Beat, BeatView
 
 if TYPE_CHECKING:
@@ -21,20 +19,39 @@ class StartPositionBeat(Beat):
         self.main_widget = main_widget
         self.beat_frame = beat_frame
 
+    def add_start_text(self) -> None:
+        start_text_item = QGraphicsTextItem("Start")
+        start_text_item.setFont(
+            QFont("Georgia", 60, QFont.Weight.DemiBold)
+        )  # Set the font size and weight here
+
+        start_text_item.setPos(
+            QPointF(
+                (self.width() // 2) - start_text_item.boundingRect().width() // 2,
+                self.height() // 28,
+            )
+        )
+        if self.view and self.view.scene():
+            self.view.scene().addItem(start_text_item)
+
 
 class StartPositionBeatView(BeatView):
     def __init__(self, beat_frame: "SequenceBeatFrame") -> None:
-        super().__init__(beat_frame)
         self.beat_frame = beat_frame
+        super().__init__(beat_frame)
         self.is_filled = False
 
-    def set_start_pos(self, start_pos: "StartPositionBeat") -> None:
+    def set_start_pos_beat(self, start_pos: "StartPositionBeat") -> None:
         self.start_pos = start_pos
+        self.is_filled = True
+        self.start_pos.view = self
         self.setScene(self.start_pos)
         view_width = self.height()
         self.view_scale = view_width / self.start_pos.width()
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
+        self.start_pos.add_start_text()
 
     def mousePressEvent(self, event: QMouseEvent | None) -> None:
-        pass  # overrides the base class to prevent re-adding the beat to the beat frame upon mouse click
+        self.selection_overlay.select_beat(self)
+        self.viewport().update()  # Force the viewport to update

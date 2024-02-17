@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QResizeEvent, QKeyEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
-from Enums.Enums import Letters
+from Enums.Enums import Letter
 from Enums.PropTypes import PropTypes
 from widgets.json_manager import JSON_Manager
 from widgets.menu_bar.preferences_dialog import PreferencesDialog
@@ -44,8 +44,8 @@ class MainWidget(QWidget):
 
     def _setup_pictograph_cache(self):
         self.all_pictographs: dict[str, dict[str, "Pictograph"]] = {}
-        for letter in Letters:
-            self.all_pictographs[letter.value] = {}
+        for letter in Letter:
+            self.all_pictographs[letter] = {}
 
     def _set_prop_type(self):
         with open("user_settings.json", "r") as file:
@@ -80,7 +80,7 @@ class MainWidget(QWidget):
 
     def _setup_letters(self) -> None:
         self.letter_loader = LetterLoader(self)
-        self.letters: dict[Letters, list[dict]] = self.letter_loader.load_all_letters()
+        self.letters: dict[Letter, list[dict]] = self.letter_loader.load_all_letters()
 
     ### EVENT HANDLERS ###
 

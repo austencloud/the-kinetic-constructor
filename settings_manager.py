@@ -2,6 +2,7 @@ import json
 import os
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropTypes
+from widgets.menu_bar.glyph_visibility_manager import GlyphVisibilityManager
 from prop_type_changer import PropTypeChanger
 
 
@@ -18,8 +19,11 @@ class SettingsManager:
         self.main_window = main_window
         self.settings = self.load_settings()
         self.prop_type_changer = PropTypeChanger(main_window)
+        self.glyph_visibility_manager = GlyphVisibilityManager(main_window)
 
-    def load_settings(self) -> dict:
+    def load_settings(
+        self,
+    ) -> dict[str, int | str, str | str, dict[str, bool]]:
         if os.path.exists(self.settings_file):
             with open(self.settings_file, "r") as file:
                 return json.load(file)
@@ -49,24 +53,8 @@ class SettingsManager:
     def apply_settings(self) -> None:
         """Apply user settings to the application."""
         self._apply_pictograph_size()
-        self._apply_prop_type()
+        self.prop_type_changer.apply_prop_type()
         self.main_window.main_widget.main_tab_widget.codex.update_pictographs()
-
-    def _apply_prop_type(self) -> None:
-        prop_type = self.get_prop_type()
-        self.main_window.main_widget.prop_type = prop_type
-        self.update_props_to_type(prop_type)
-
-    def update_props_to_type(self, new_prop_type) -> None:
-        for pictograph_list in self.main_window.main_widget.all_pictographs.values():
-            for pictograph in pictograph_list.values():
-                if pictograph.view.isVisible():  # Check if the pictograph is currently visible
-                    self.prop_type_changer.replace_props(new_prop_type, pictograph)
-        # Assuming beat views are always visible or have a similar visibility check
-        for beat_view in self.main_window.main_widget.sequence_widget.beats:
-            if beat_view.is_filled:
-                self.prop_type_changer.replace_props(new_prop_type, beat_view.beat)
-                beat_view.beat.updater.update_pictograph()
 
     def _apply_pictograph_size(self) -> None:
         pictograph_size = self.get_setting("pictograph_size", 1)

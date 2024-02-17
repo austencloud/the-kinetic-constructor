@@ -1,42 +1,44 @@
 from typing import List
-from Enums.Enums import LetterType, TurnsTabType
+from Enums.Enums import LetterType, TurnsTabAttribute
 from constants import CLOCKWISE, COUNTER_CLOCKWISE, PRO, ANTI, DASH, STATIC
 from data.letter_engine_data import motion_type_letter_combinations
 from typing import List
 from typing import TYPE_CHECKING
 
+from widgets.turns_panel import TurnsPanel
+
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
     from widgets.pictograph.pictograph import Pictograph
-    from .filter_tab import FilterTab
+    from .turns_tab import TurnsTab
 
 
-class FilterTabVisibilityHandler:
+class TurnsTabVisibilityHandler:
     """
     Manages the visibility of filter tabs based on selected letters within a section.
     Dynamically updates which filter tabs are visible
     Applies turns to newly added pictographs based on filters.
 
     Attributes:
-        filter_tab (FilterTab): The parent filter tab.
+        turns_tab (FilterTab): The parent filter tab.
         section (SectionWidget): The parent section widget.
         tabs (dict[TabName, QWidget]): The filter tabs to manage.
 
     Methods:
         update_visibility_based_on_selected_letters()
         apply_turns_from_turns_boxes_to_pictograph(pictograph)
-        resize_filter_tab()
+        resize_turns_tab()
     """
 
-    def __init__(self, filter_tab: "FilterTab"):
-        self.filter_tab = filter_tab
-        self.section = self.filter_tab.section
+    def __init__(self, turns_tab: "TurnsTab"):
+        self.turns_tab = turns_tab
+        self.section = self.turns_tab.section
 
-        self.tabs = {
-            TurnsTabType.MOTION_TYPE: self.filter_tab.motion_type_turns_panel,
-            TurnsTabType.COLOR: self.filter_tab.color_turns_panel,
-            TurnsTabType.LEAD_STATE: self.filter_tab.lead_state_turns_panel,
+        self.turns_panels: dict[TurnsTabAttribute, TurnsPanel] = {
+            TurnsTabAttribute.MOTION_TYPE: self.turns_tab.motion_type_turns_panel,
+            TurnsTabAttribute.COLOR: self.turns_tab.color_turns_panel,
+            TurnsTabAttribute.LEAD_STATE: self.turns_tab.lead_state_turns_panel,
         }
 
     def update_visibility_based_on_selected_letters(self):
@@ -48,7 +50,7 @@ class FilterTabVisibilityHandler:
 
     def _determine_tabs_to_show_based_on_selected_letters(
         self, selected_letters: List[str]
-    ) -> List[TurnsTabType]:
+    ) -> List[TurnsTabAttribute]:
         motion_types_present = {
             motion_type
             for letter in selected_letters
@@ -57,51 +59,52 @@ class FilterTabVisibilityHandler:
         }
 
         tabs_to_show = set()
-
         if motion_types_present.intersection({PRO, ANTI, DASH, STATIC}):
-            tabs_to_show.add(TurnsTabType.COLOR)
-
+            tabs_to_show.add(TurnsTabAttribute.COLOR)
         if len(motion_types_present) > 1:
-            tabs_to_show.add(TurnsTabType.MOTION_TYPE)
+            tabs_to_show.add(TurnsTabAttribute.MOTION_TYPE)
         if self.section.letter_type == LetterType.Type1:
             if any(letter in {"S", "T", "U", "V"} for letter in selected_letters):
-                tabs_to_show.add(TurnsTabType.LEAD_STATE)
+                tabs_to_show.add(TurnsTabAttribute.LEAD_STATE)
 
         return list(tabs_to_show)
 
     def _get_motion_types_from_letter(self, letter: str) -> List[str]:
         return motion_type_letter_combinations.get(letter, [])
 
-    def _update_tabs_visibility(self, tabs_to_show: List[TurnsTabType]):
-        for tab_key, panel in self.tabs.items():
-            tab_label = tab_key.name.replace("_", " ").title()
+    def _update_tabs_visibility(self, tabs_to_show: List[TurnsTabAttribute]):
+        for attribute, turns_panel in self.turns_panels.items():
+            tab_label = attribute.name.replace("_", " ").title()
 
-            if tab_key in tabs_to_show and self.filter_tab.indexOf(panel) == -1:
-                self.filter_tab.addTab(panel, tab_label)
-            elif tab_key not in tabs_to_show and self.filter_tab.indexOf(panel) != -1:
-                self.filter_tab.removeTab(self.filter_tab.indexOf(panel))
+            if attribute in tabs_to_show and self.turns_tab.indexOf(turns_panel) == -1:
+                self.turns_tab.addTab(turns_panel, tab_label)
+            elif (
+                attribute not in tabs_to_show
+                and self.turns_tab.indexOf(turns_panel) != -1
+            ):
+                self.turns_tab.removeTab(self.turns_tab.indexOf(turns_panel))
 
-        if TurnsTabType.MOTION_TYPE in tabs_to_show:
+        if TurnsTabAttribute.MOTION_TYPE in tabs_to_show:
             selected_letters = self.section.scroll_area.codex.selected_letters
-            self.tabs[
-                TurnsTabType.MOTION_TYPE
+            self.turns_panels[
+                TurnsTabAttribute.MOTION_TYPE
             ].show_motion_type_boxes_based_on_chosen_letters(selected_letters)
 
     def apply_turns_from_turns_boxes_to_pictograph(self, pictograph: "Pictograph"):
-        turns_values = self.filter_tab.get_current_turns_values()
+        turns_values = self.turns_tab.get_current_turns_values()
 
         attribute_to_property_and_values = {
-            TurnsTabType.MOTION_TYPE: (
+            TurnsTabAttribute.MOTION_TYPE: (
                 "motion_type",
-                turns_values.get(TurnsTabType.MOTION_TYPE.name.lower(), {}),
+                turns_values.get(TurnsTabAttribute.MOTION_TYPE),
             ),
-            TurnsTabType.COLOR: (
+            TurnsTabAttribute.COLOR: (
                 "color",
-                turns_values.get(TurnsTabType.COLOR.name.lower(), {}),
+                turns_values.get(TurnsTabAttribute.COLOR),
             ),
-            TurnsTabType.LEAD_STATE: (
+            TurnsTabAttribute.LEAD_STATE: (
                 "lead_state",
-                turns_values.get(TurnsTabType.LEAD_STATE.name.lower(), {}),
+                turns_values.get(TurnsTabAttribute.LEAD_STATE),
             ),
         }
 
@@ -110,7 +113,7 @@ class FilterTabVisibilityHandler:
                 motion_attribute,
                 attribute_turns,
             ) in attribute_to_property_and_values.items():
-                if self.tabs[tab_key].isVisible():
+                if self.turns_panels[tab_key].isVisible():
                     self._apply_turns_if_applicable(
                         motion, motion_attribute, attribute_turns
                     )
@@ -129,11 +132,11 @@ class FilterTabVisibilityHandler:
     def set_motion_prop_rot_dir_to_match_the_buttons_currently_pressed(
         self, motion: "Motion"
     ) -> None:
-        if self.filter_tab.section.vtg_dir_button_manager.same_button.is_pressed():
+        if self.turns_tab.section.vtg_dir_button_manager.same_button.is_pressed():
             motion.prop_rot_dir = motion.pictograph.get.other_motion(
                 motion
             ).prop_rot_dir
-        elif self.filter_tab.section.vtg_dir_button_manager.opp_button.is_pressed():
+        elif self.turns_tab.section.vtg_dir_button_manager.opp_button.is_pressed():
             motion.prop_rot_dir = (
                 CLOCKWISE
                 if motion.pictograph.get.other_motion(motion).prop_rot_dir
@@ -141,6 +144,6 @@ class FilterTabVisibilityHandler:
                 else COUNTER_CLOCKWISE
             )
 
-    def resize_filter_tab(self) -> None:
-        for panel in self.filter_tab.panels:
+    def resize_turns_tab(self) -> None:
+        for panel in self.turns_tab.panels:
             panel.resize_turns_panel()

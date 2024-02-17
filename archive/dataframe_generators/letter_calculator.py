@@ -1,14 +1,6 @@
 import logging
 from Enums.MotionAttributes import MotionTypes
 
-from utilities.TypeChecking.letter_lists import (
-    alpha_ending_letters,
-    alpha_starting_letters,
-    beta_ending_letters,
-    beta_starting_letters,
-    gamma_ending_letters,
-    gamma_starting_letters,
-)
 
 from Enums.Enums import LetterString
 
@@ -30,12 +22,12 @@ from constants import (
     RED,
 )
 from Enums.Enums import (
-    Letters,
+    Letter,
     MotionTypeCombinations,
     Positions,
     SpecificPositions,
 )
-from Enums.MotionAttributes import Colors, PropRotDirs
+from Enums.MotionAttributes import Color, PropRotDirs
 
 logging.basicConfig(
     level=logging.INFO,
@@ -145,7 +137,7 @@ class LetterCalculator:
 
         return filtered_letter_group
 
-    def get_motion(self, color: Colors) -> Motion | None:
+    def get_motion(self, color: Color) -> Motion | None:
         return next(
             (
                 motion
@@ -230,7 +222,7 @@ class LetterCalculator:
         else:
             return "PQR"  # Return antiparallel group
 
-    def filter_gamma_letters(self, letter_group) -> set[Letters]:
+    def filter_gamma_letters(self, letter_group) -> set[Letter]:
         gamma_handpath_letters = set(self.get_gamma_handpath_group())
         filtered_letter_group = {
             letter for letter in letter_group if letter in gamma_handpath_letters
@@ -267,7 +259,7 @@ class LetterCalculator:
 
     def determine_leading_motion_for_T(
         self, red_start, red_end, blue_start, blue_end
-    ) -> Colors:
+    ) -> Color:
         if red_start == blue_end:
             return "red"
         elif blue_start == red_end:

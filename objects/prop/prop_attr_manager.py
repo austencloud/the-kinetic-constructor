@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Union
 
 from constants import *
 from Enums.MotionAttributes import (
-    Colors,
+    Color,
     Locations,
     Orientations,
     Turns,
@@ -23,13 +23,14 @@ class PropAttrManager:
         self.prop.set_z_value_based_on_color()
 
     def update_attributes(
-        self, prop_dict: dict[str, Union[Colors, Locations, MotionTypes, Turns]]
+        self, prop_dict: dict[str, Union[Color, Locations, MotionTypes, Turns]]
     ) -> None:
         prop_attributes = [COLOR, LOC, LAYER, ORI, MOTION, PROP_TYPE]
         for attr in prop_attributes:
             value = prop_dict.get(attr)
             if value is not None:
                 setattr(self.prop, attr, value)
+        self.prop.set_z_value_based_on_color()
 
     def clear_attributes(self) -> None:
         prop_attributes = [COLOR, LOC, LAYER, ORI, MOTION, PROP_TYPE]
@@ -54,6 +55,6 @@ class PropAttrManager:
         }
         self.ori = ori_map[self.ori]
 
-    def get_attributes(self) -> dict[str, Union[Colors, Locations, Orientations]]:
+    def get_attributes(self) -> dict[str, Union[Color, Locations, Orientations]]:
         prop_attributes = [attr.value for attr in PropAttribute]
         return {attr: getattr(self.prop, attr) for attr in prop_attributes}

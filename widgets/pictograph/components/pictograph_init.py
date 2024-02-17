@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QPointF, QPoint, Qt
-from Enums.MotionAttributes import Colors, Locations
+from Enums.MotionAttributes import Color, Locations
 from data.prop_class_mapping import prop_class_mapping
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
@@ -52,31 +52,31 @@ class PictographInit:
         self.pictograph.grid = grid
         return grid
 
-    def init_motions(self) -> dict[Colors, Motion]:
+    def init_motions(self) -> dict[Color, Motion]:
         motions = {}
-        for color in [RED, BLUE]:
+        for color in [Color.RED, Color.BLUE]:
             motions[color] = self._create_motion(color)
         self.pictograph.red_motion, self.pictograph.blue_motion = (
-            motions[RED],
-            motions[BLUE],
+            motions[Color.RED],
+            motions[Color.BLUE],
         )
         return motions
 
-    def init_arrows(self) -> dict[Colors, Arrow]:
+    def init_arrows(self) -> dict[Color, Arrow]:
         arrows = {}
-        for color in [BLUE, RED]:
+        for color in [Color.BLUE, Color.RED]:
             arrows[color] = self._create_arrow(color)
         self.pictograph.red_arrow, self.pictograph.blue_arrow = (
-            arrows[RED],
-            arrows[BLUE],
+            arrows[Color.RED],
+            arrows[Color.BLUE],
         )
 
         return arrows
 
-    def init_props(self) -> dict[Colors, Prop]:
-        props: dict[Colors, Prop] = {}
+    def init_props(self) -> dict[Color, Prop]:
+        props: dict[Color, Prop] = {}
         prop_type = self.pictograph.main_widget.prop_type
-        for color in [RED, BLUE]:
+        for color in [Color.RED, Color.BLUE]:
             initial_prop_attributes = {
                 COLOR: color,
                 PROP_TYPE: prop_type,
@@ -100,7 +100,10 @@ class PictographInit:
             self.pictograph.addItem(props[color])
             props[color].hide()
 
-        self.pictograph.red_prop, self.pictograph.blue_prop = (props[RED], props[BLUE])
+        self.pictograph.red_prop, self.pictograph.blue_prop = (
+            props[Color.RED],
+            props[Color.BLUE],
+        )
         return props
 
     def init_tka_glyph(self) -> TKA_Glyph:
@@ -153,7 +156,7 @@ class PictographInit:
 
     ### CREATE ###
 
-    def _create_arrow(self, color: Colors) -> Arrow:
+    def _create_arrow(self, color: Color) -> Arrow:
         arrow_attributes = {
             COLOR: color,
             TURNS: 0,
@@ -165,7 +168,7 @@ class PictographInit:
         arrow.hide()
         return arrow
 
-    def _create_motion(self, color: Colors) -> Motion:
+    def _create_motion(self, color: Color) -> Motion:
         motion_dict = {
             COLOR: color,
             ARROW: None,

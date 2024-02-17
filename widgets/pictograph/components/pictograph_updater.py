@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType
-from Enums.MotionAttributes import Colors
+from Enums.MotionAttributes import Color
 from constants import LEADING, TRAILING, RED, BLUE
 from objects.motion.motion import Motion
 
@@ -13,6 +13,16 @@ class PictographUpdater:
         self.pictograph = pictograph
 
     def update_pictograph(self, pictograph_dict: dict = None) -> None:
+        """
+        Updates the pictograph with the given pictograph_dict.
+
+        If the dict is complete, it will be assigned to the pictograph's pictograph_dict attribute.
+
+        If the dict is incomplete, it will be used to update the pictograph's attributes.
+
+        If there is no dict, the pictograph will update its children without reference to a dict.
+        """
+
         if pictograph_dict:
             if self.pictograph.check.is_pictograph_dict_complete(pictograph_dict):
                 self.pictograph.pictograph_dict = pictograph_dict
@@ -33,7 +43,7 @@ class PictographUpdater:
         motion_dicts = self.get_motion_dicts_from_pictograph_dict(pictograph_dict)
         for motion in self.pictograph.motions.values():
             self.override_motion_type_if_necessary(pictograph_dict, motion)
-            if pictograph_dict.get(f"{motion.color}_motion_type"):
+            if pictograph_dict.get(f"{motion.color.value}_motion_type"):
                 self.show_graphical_objects(motion.color)
             motion.updater.update_motion(motion_dicts[motion.color])
         self.pictograph.letter_type = LetterType.get_letter_type(self.pictograph.letter)
@@ -52,7 +62,7 @@ class PictographUpdater:
             for motion in self.pictograph.motions.values():
                 motion.lead_state = None
 
-    def show_graphical_objects(self, color: Colors) -> None:
+    def show_graphical_objects(self, color: Color) -> None:
         self.pictograph.props[color].show()
         self.pictograph.arrows[color].show()
 
@@ -80,10 +90,10 @@ class PictographUpdater:
             f"{BLUE}_prop_rot_dir": "prop_rot_dir",
         }
         motion_dicts = {}
-        for color in [RED, BLUE]:
+        for color in [Color.RED, Color.BLUE]:
             motion_dict = {}
             for key, value in motion_attributes.items():
-                if color in key and key in pictograph_dict:
+                if color.value in key and key in pictograph_dict:
                     motion_dict[key.split("_", 1)[1]] = pictograph_dict[key]
             motion_dicts[color] = motion_dict
         return motion_dicts
