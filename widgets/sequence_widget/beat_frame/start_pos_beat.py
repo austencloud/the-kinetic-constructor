@@ -21,10 +21,7 @@ class StartPositionBeat(Beat):
 
     def add_start_text(self) -> None:
         start_text_item = QGraphicsTextItem("Start")
-        start_text_item.setFont(
-            QFont("Georgia", 60, QFont.Weight.DemiBold)
-        )  # Set the font size and weight here
-
+        start_text_item.setFont(QFont("Georgia", 60, QFont.Weight.DemiBold))
         start_text_item.setPos(
             QPointF(
                 (self.width() // 2) - start_text_item.boundingRect().width() // 2,
@@ -54,4 +51,4 @@ class StartPositionBeatView(BeatView):
 
     def mousePressEvent(self, event: QMouseEvent | None) -> None:
         self.selection_overlay.select_beat(self)
-        self.viewport().update()  # Force the viewport to update
+        self.viewport().update()
