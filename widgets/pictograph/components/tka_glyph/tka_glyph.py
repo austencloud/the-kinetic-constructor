@@ -28,6 +28,8 @@ class TKA_Glyph(QGraphicsItemGroup):
     def update_tka_glyph(self):
         if not self.letter:
             self.setup_base_letter()
+        if not self.letter:
+            return
         turns_tuple = self.pictograph.get.turns_tuple()
         direction, top_turn, bottom_turn = parse_turns_tuple_string(turns_tuple)
         self.dot_handler.update_dots(direction)
@@ -40,8 +42,9 @@ class TKA_Glyph(QGraphicsItemGroup):
     def setup_base_letter(self):
         self.letter = self.pictograph.letter
         self.letter_handler.set_letter()
-        if "-" in self.pictograph.letter.value:
-            self.dash_handler.update_dash()
+        if self.letter:
+            if "-" in self.pictograph.letter.value:
+                self.dash_handler.update_dash()
 
     def convert_to_ints(self, top_turn):
         top_turn = int(top_turn) if top_turn == int(top_turn) else top_turn

@@ -12,6 +12,7 @@ from ..graph_editor_tab.graph_editor_header_widget import GraphEditorHeaderWidge
 from ..graph_editor_tab.graph_editor_turns_widget import GraphEditorTurnsWidget
 
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
+
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 
@@ -32,7 +33,7 @@ class GraphEditorTurnsBox(QFrame):
         self.motion_type_widget = MotionTypeWidget(self)
         self.header_widget = GraphEditorHeaderWidget(self)
         self.start_end_loc_widget = StartEndLocWidget(self)
-        self.turns_widget = GraphEditorTurnsWidget(self)
+        # self.turns_widget = GraphEditorTurnsWidget(self)
 
     ### CREATE LABELS ###
 
@@ -59,11 +60,11 @@ class GraphEditorTurnsBox(QFrame):
         turns_widget_height = int(available_height * (2 / ratio_total))
         self.header_widget.setMaximumHeight(header_height)
         self.start_end_loc_widget.setMaximumHeight(start_end_height)
-        self.turns_widget.setMaximumHeight(turns_widget_height)
+        # self.turns_widget.setMaximumHeight(turns_widget_height)
 
-        self.motion_type_widget.resize_motion_type_widget()
-        self.turns_widget.resize_turns_widget()
-        self.start_end_loc_widget.resize_start_end_widget()
+        # self.motion_type_widget.resize_motion_type_widget()
+        # self.turns_widget.resize_turns_widget()
+        # self.start_end_loc_widget.resize_start_end_widget()
 
         self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))
 

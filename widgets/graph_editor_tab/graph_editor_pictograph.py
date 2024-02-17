@@ -17,3 +17,4 @@ class GraphEditorPictograph(Pictograph):
         self.main_widget = main_widget
         self.graph_editor = graph_editor
         self.view: GraphEditorPictographView
+        self.get.initiallize_getter()

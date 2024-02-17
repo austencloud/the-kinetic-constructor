@@ -20,7 +20,7 @@ class TurnsBoxWidget(QWidget):
         self, text: str, align: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter
     ) -> QLabel:
         attr_label = QLabel(text, self)
-        attr_label.setFont(QFont("Arial", self.turns_box.font_size))
+        attr_label.setFont(QFont("Arial"))
         attr_label.setAlignment(align)
         attr_label.setContentsMargins(0, 0, 0, 0)
         return attr_label

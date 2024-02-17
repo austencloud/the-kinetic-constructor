@@ -30,13 +30,11 @@ class GraphEditorHeaderWidget(HeaderWidget):
         header_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         header_layout.setSpacing(0)
         header_layout.addStretch(1)
-        header_layout.addWidget(self.header_label)
+        # header_layout.addWidget(self.header_label)
         header_layout.addStretch(1)
         self.separator = self.create_separator()
-        self.layout.addLayout(header_layout)
-        self.layout.addWidget(self.separator)
-
-
+        # self.layout.addLayout(header_layout)
+        # self.layout.addWidget(self.separator)
 
     def _setup_header_label(self) -> QLabel:
         text = "Left" if self.turns_box.color == BLUE else "Right"
@@ -45,4 +43,3 @@ class GraphEditorHeaderWidget(HeaderWidget):
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label.setStyleSheet(f"color: {color_hex}; font-weight: bold;")
         return label
-

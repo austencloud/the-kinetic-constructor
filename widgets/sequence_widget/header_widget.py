@@ -16,7 +16,7 @@ class HeaderWidget(TurnsBoxWidget):
         super().__init__(turns_box)
         self.turns_box = turns_box
         self.separator: QFrame = self.create_separator()
-        self.header_label: QLabel = self._setup_header()
+        # self.header_label: QLabel = self._setup_header()
         self.layout: QHBoxLayout = self._setup_layout()
 
     def _setup_header(self) -> None:
@@ -45,7 +45,7 @@ class HeaderWidget(TurnsBoxWidget):
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
-        self._add_widgets(layout)
+        # self._add_widgets(layout)
         return layout
 
     def _add_widgets(self, layout: QHBoxLayout) -> None:

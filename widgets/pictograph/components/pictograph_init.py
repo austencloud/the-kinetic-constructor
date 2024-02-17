@@ -53,13 +53,16 @@ class PictographInit:
         return grid
 
     def init_motions(self) -> dict[Color, Motion]:
-        motions = {}
+        motions: dict[Color, Motion] = {}
         for color in [Color.RED, Color.BLUE]:
             motions[color] = self._create_motion(color)
         self.pictograph.red_motion, self.pictograph.blue_motion = (
             motions[Color.RED],
             motions[Color.BLUE],
         )
+        for motion in motions.values():
+            motion.start_ori = None
+            motion.end_ori = None
         return motions
 
     def init_arrows(self) -> dict[Color, Arrow]:

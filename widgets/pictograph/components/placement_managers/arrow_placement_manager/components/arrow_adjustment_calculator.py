@@ -16,6 +16,9 @@ class ArrowAdjustmentCalculator:
         self.placement_manager = placement_manager
 
     def get_adjustment(self, arrow: Arrow) -> QPointF:
+        
+        if not arrow.motion.pictograph.letter:
+            return
         turns_tuple = (
             arrow.pictograph.main_widget.turns_tuple_generator.generate_turns_tuple(
                 self.placement_manager.pictograph
