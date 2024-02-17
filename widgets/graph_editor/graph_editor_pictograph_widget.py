@@ -11,20 +11,20 @@ class GraphEditorPictographContainer(QWidget):
     def __init__(
         self,
         graph_editor: "GraphEditor",
-        graph_editor_pictograph_view: "GraphEditorPictographView",
+        GE_pictograph_view: "GraphEditorPictographView",
     ) -> None:
         super().__init__(graph_editor)
         self.graph_editor = graph_editor
-        self.main_pictograph_view = graph_editor_pictograph_view
+        self.GE_pictograph_view = GE_pictograph_view
 
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addWidget(graph_editor_pictograph_view)
+        self.layout.addWidget(GE_pictograph_view)
         self.layout.setContentsMargins(0, 0, 0, 0)
 
-    def showEvent(self, event) -> None:
-        super().showEvent(event)
-        # self.setMinimumWidth(self.main_pictograph_view.width())
-        # self.setMaximumWidth(self.main_pictograph_view.width())
-
-        # self.setMinimumHeight(self.main_pictograph_view.height())
-        # self.setMaximumHeight(self.main_pictograph_view.height())
+    def resize_GE_pictograph_container(self):
+        self.setMaximumHeight(self.graph_editor.height())
+        self.setMaximumWidth(self.graph_editor.height())
+        self.GE_pictograph_view.resize_GE_pictograph_view()
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
+        self.setLayout(self.layout)

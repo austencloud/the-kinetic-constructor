@@ -23,7 +23,7 @@ class CodexScrollArea(QScrollArea):
         self.main_widget = codex.main_widget
         self.codex = codex
         self.letters = self.main_widget.letters
-        self.pictograph_cache: dict[str, Pictograph] = {} 
+        self.pictograph_cache: dict[str, Pictograph] = {}
         self.stretch_index = -1
         self._setup_ui()
         self._setup_managers()
@@ -100,5 +100,5 @@ class CodexScrollArea(QScrollArea):
         self.update_all_pictograph_sizes()
 
     def update_all_pictograph_sizes(self):
-        for letter_type in LetterType:
-            self.display_manager.order_and_display_pictographs(letter_type)
+        for section in self.sections_manager.sections.values():
+            self.display_manager.order_and_display_pictographs(section)

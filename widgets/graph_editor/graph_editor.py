@@ -21,8 +21,8 @@ if TYPE_CHECKING:
 class GraphEditor(QFrame):
     def __init__(self, sequence_modifier: "SequenceModifier") -> None:
         super().__init__()
+        self.sequence_modifier = sequence_modifier
         self.main_widget = sequence_modifier.main_widget
-
         self._setup_graph_editor_pictograph()
         self._setup_main_layout()
 
@@ -31,7 +31,7 @@ class GraphEditor(QFrame):
         self.GE_pictograph = GraphEditorPictograph(self)
         self.GE_pictograph_view = GraphEditorPictographView(self, self.GE_pictograph)
         self.GE_pictograph_container = GraphEditorPictographContainer(
-            self, self.GE_pictograph.view
+            self, self.GE_pictograph_view
         )
 
     def _setup_frame_style(self) -> None:
@@ -52,4 +52,5 @@ class GraphEditor(QFrame):
         self.setLayout(self.layout)
 
     def resize_graph_editor(self):
-        self.GE_pictograph_view.resize_graph_editor_pictograph_view
+        self.setMinimumHeight(self.sequence_modifier.height())
+        self.GE_pictograph_container.resize_GE_pictograph_container()
