@@ -41,7 +41,7 @@ class SequenceWidget(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.beat_frame)
         self.layout.addWidget(self.button_frame)
-        # self.layout.addWidget(self.indicator_label)
+        self.layout.addWidget(self.indicator_label)
         self.layout.addWidget(self.sequence_modifier_tab_widget)
 
     def save_sequence(sequence: list[Pictograph], filename: str) -> None:

@@ -3,7 +3,7 @@ from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
 from widgets.graph_editor_tab.graph_editor_attr_panel import GraphEditorAttrPanel
-from widgets.graph_editor_tab.graph_editor_pictograph import GraphEditorPictograph
+from widgets.graph_editor_tab.graph_editor_pictograph import GraphEditorPictograph, GraphEditorPictographView
 
 
 from widgets.graph_editor_tab.graph_editor_pictograph_widget import (
@@ -12,21 +12,25 @@ from widgets.graph_editor_tab.graph_editor_pictograph_widget import (
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
-    from widgets.graph_editor_tab.graph_editor_tab import GraphEditorTab
 
 
-class GraphEditorFrame(QFrame):
+class GraphEditor(QFrame):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
-        self._setup_main_widget_attributes(main_widget)
-        self._create_children(main_widget)
-        self._setup_main_layout()
-        self._apply_layout()
-        self._setup_size_policy()
-
-    def _setup_main_widget_attributes(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
         self.main_window = main_widget.main_window
+
+        self._setup_graph_editor_pictograph(main_widget)
+
+        self.pictograph_widget = GraphEditorPictographWidget(
+            self, self.graph_editor_pictograph.view
+        )
+        self._setup_main_layout()
+
+    def _setup_graph_editor_pictograph(self, main_widget):
+        self.graph_editor_pictograph = GraphEditorPictograph(main_widget, self)
+        self.graph_editor_pictograph_view = GraphEditorPictographView(self)
+        self.graph_editor_pictograph_view.setScene(self.graph_editor_pictograph)
 
     def _setup_frame_style(self) -> None:
         self.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
@@ -39,35 +43,9 @@ class GraphEditorFrame(QFrame):
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-
-        self.objectbox_layout = QVBoxLayout()
         self.pictograph_layout = QVBoxLayout()
-        self.turns_panel_layout = QVBoxLayout()
-
         self.pictograph_layout.addWidget(self.pictograph_widget)
-        self.turns_panel_layout.addWidget(self.turns_panel)
-
-        self.layout.addStretch(1)
-        self.layout.addLayout(self.objectbox_layout)
         self.layout.addLayout(self.pictograph_layout)
-        self.layout.addLayout(self.turns_panel_layout)
-        self.layout.addStretch(1)
-
-        self.objectbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.setAlignment(self.main_widget, Qt.AlignmentFlag.AlignLeft)
-
         self.setLayout(self.layout)
 
-    def _create_children(self, main_widget: "MainWidget") -> None:
-        self.main_pictograph = GraphEditorPictograph(main_widget, self)
-        self.turns_panel = GraphEditorAttrPanel(self)
-
-        self.pictograph_widget = GraphEditorPictographWidget(
-            self, self.main_pictograph.view
-        )
-
-    def _apply_layout(self) -> None:
-        self.setLayout(self.layout)
-
-    def _setup_size_policy(self) -> None:
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
