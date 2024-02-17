@@ -15,6 +15,8 @@ class StyledBorderOverlay(QWidget):
         self.is_set = False
         self.primary_color = None
         self.secondary_color = None
+        self.saved_primary_color = None  # Initialize saved colors
+        self.saved_secondary_color = None
         self.setFixedSize(view.size())
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
 
@@ -88,4 +90,5 @@ class StyledBorderOverlay(QWidget):
             self.update_border_colors("gold", "gold")
 
     def reset_border(self):
-        self.update_border_colors(self.saved_primary_color, self.saved_secondary_color)
+        if self.saved_primary_color and self.saved_secondary_color:
+            self.update_border_colors(self.saved_primary_color, self.saved_secondary_color)

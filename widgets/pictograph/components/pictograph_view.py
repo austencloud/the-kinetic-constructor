@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QSizePolicy
 from PyQt6.QtCore import Qt, QEvent
-
+from PyQt6.QtGui import QTouchEvent
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -91,3 +91,9 @@ class PictographView(QGraphicsView):
         settings_manager.glyph_visibility_manager.apply_current_visibility_settings(
             self.pictograph
         )
+
+    def touchEvent(self, event: QTouchEvent):
+        if event.isBeginEvent():
+            self.pictograph.container.styled_border_overlay.set_gold_border()
+        elif event.isEndEvent():
+            self.pictograph.container.styled_border_overlay.reset_border()
