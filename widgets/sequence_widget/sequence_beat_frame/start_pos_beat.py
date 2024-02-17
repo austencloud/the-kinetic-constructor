@@ -3,12 +3,16 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QMouseEvent, QFont
 from PyQt6.QtWidgets import QGraphicsTextItem
 from PyQt6.QtCore import QPointF
-from widgets.sequence_widget.beat_frame.beat import Beat, BeatView
+from widgets.sequence_widget.sequence_beat_frame.beat import Beat, BeatView
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
-    from widgets.sequence_widget.beat_frame.beat_frame import SequenceBeatFrame
-    from widgets.sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
+    from widgets.sequence_widget.sequence_beat_frame.sequence_beat_frame import (
+        SequenceBeatFrame,
+    )
+    from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
+        StartPositionBeat,
+    )
 
 
 class StartPositionBeat(Beat):

@@ -3,7 +3,7 @@ from PyQt6.QtGui import QPainter, QPen, QColor
 from PyQt6.QtCore import QRect, Qt
 from typing import TYPE_CHECKING, Optional
 
-from widgets.sequence_widget.beat_frame.beat import BeatView
+from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
 if TYPE_CHECKING:
 
     from widgets.sequence_widget.sequence_widget import SequenceWidget
@@ -19,8 +19,13 @@ class BeatSelectionOverlay(QWidget):
         self.hide() 
 
     def select_beat(self, beat_view: BeatView):
-        if self.selected_beat_view is not beat_view:
+        if self.selected_beat_view == beat_view:
+            self.deselect_beat()  # Deselect if the same beat is clicked again
+        else:
+            if self.selected_beat_view:
+                self.selected_beat_view.deselect()
             self.selected_beat_view = beat_view
+            beat_view.select()
             self.update_overlay_position()
             self.show()
 

@@ -3,7 +3,7 @@ from PyQt6.QtGui import QFileSystemModel
 from PyQt6.QtCore import QDir, QModelIndex
 import json
 from typing import TYPE_CHECKING
-from widgets.sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
+from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import StartPositionBeat
 from Enums.letters import Letter
 
 if TYPE_CHECKING:
@@ -57,7 +57,9 @@ class Library(QWidget):
     def populate_sequence(self, sequence_data: list[dict[str, str]]):
         if not sequence_data:
             return
-        self.main_widget.sequence_widget.button_frame.clear_sequence(show_indicator=False)
+        self.main_widget.sequence_widget.button_frame.clear_sequence(
+            show_indicator=False
+        )
 
         start_position_pictograph = self.get_start_position_pictograph(
             sequence_data[0] if sequence_data else None

@@ -6,9 +6,9 @@ from ..pictograph.pictograph import Pictograph
 from ..scroll_area.components.sequence_widget_pictograph_factory import (
     SequenceWidgetPictographFactory,
 )
-from .beat_frame.beat import Beat
-from .beat_frame.beat_frame import SequenceBeatFrame
-from .beat_frame.beat_selection_overlay import BeatSelectionOverlay
+from .sequence_beat_frame.beat import Beat
+from .sequence_beat_frame.sequence_beat_frame import SequenceBeatFrame
+from .sequence_beat_frame.beat_selection_overlay import BeatSelectionOverlay
 from .button_frame import SequenceButtonFrame
 from .sequence_modifier_tab_widget import SequenceModifier
 from PyQt6.QtCore import Qt

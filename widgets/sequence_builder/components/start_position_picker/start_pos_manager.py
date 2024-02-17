@@ -1,7 +1,7 @@
 from copy import deepcopy
 from PyQt6.QtCore import QObject, pyqtSignal
 from constants import END_POS, START_POS
-from widgets.sequence_widget.beat_frame.start_pos_beat import (
+from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
     StartPositionBeatView,
     StartPositionBeat,
 )
@@ -28,8 +28,6 @@ class StartPosManager(QObject):
         start_pos = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
         for i, position_key in enumerate(start_pos):
             self._add_start_position(position_key)
-            # add teh exciting label
-            # self.start_pos_picker.show_exciting_label()
 
     def _add_start_position(self, position_key: str) -> None:
         """Adds an option for the specified start position."""

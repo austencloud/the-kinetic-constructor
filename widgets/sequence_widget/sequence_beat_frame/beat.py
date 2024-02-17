@@ -8,7 +8,9 @@ from PyQt6.QtCore import QRectF
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
-    from widgets.sequence_widget.beat_frame.beat_frame import SequenceBeatFrame
+    from widgets.sequence_widget.sequence_beat_frame.sequence_beat_frame import (
+        SequenceBeatFrame,
+    )
 
 
 class Beat(Pictograph):
@@ -61,7 +63,7 @@ class BeatView(QGraphicsView):
     def mousePressEvent(self, event):
         if self.is_filled:
             self.selection_overlay.select_beat(self)
-            self.viewport().update() 
+            self.viewport().update()
 
     def paintEvent(self, event):
         super().paintEvent(event)

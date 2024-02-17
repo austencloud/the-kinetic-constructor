@@ -12,7 +12,7 @@ from widgets.scroll_area.components.section_manager.section_widget.codex_section
 from widgets.sequence_builder.components.option_picker.option_picker_section_widget import (
     OptionPickerSectionWidget,
 )
-from widgets.sequence_widget.beat_frame.beat import Beat
+from widgets.sequence_widget.sequence_beat_frame.beat import Beat
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (
@@ -90,8 +90,7 @@ class OptionPickerDisplayManager:
         if (
             current_beat.end_pos == pictograph.start_pos
             and current_beat.red_motion.end_ori == pictograph.red_motion.start_ori
-            and current_beat.blue_motion.end_ori
-            == pictograph.blue_motion.start_ori
+            and current_beat.blue_motion.end_ori == pictograph.blue_motion.start_ori
         ):
             return True
 

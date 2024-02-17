@@ -3,7 +3,9 @@ from typing import TYPE_CHECKING
 
 from Enums.Enums import LetterType
 
-from widgets.sequence_widget.beat_frame.styled_border_overlay import StyledBorderOverlay
+from widgets.sequence_widget.sequence_beat_frame.styled_border_overlay import (
+    StyledBorderOverlay,
+)
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
