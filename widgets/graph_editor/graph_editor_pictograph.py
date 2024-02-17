@@ -20,6 +20,7 @@ class GraphEditorPictograph(Pictograph):
         self.graph_editor = graph_editor
         self.get.initiallize_getter()
 
+
 class GraphEditorPictographView(PictographView):
     def __init__(
         self, GE: "GraphEditor", GE_pictograph: "GraphEditorPictograph"
@@ -30,5 +31,7 @@ class GraphEditorPictographView(PictographView):
         self.setScene(GE_pictograph)
 
     def resize_GE_pictograph_view(self):
+        self.setMinimumHeight(self.GE.height())
+        self.setMinimumWidth(self.GE.height())
         if self.scene():
             self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)

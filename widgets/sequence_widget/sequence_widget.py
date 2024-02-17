@@ -1,21 +1,17 @@
 import json
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
-from widgets.indicator_label import IndicatorLabel
-from widgets.pictograph.pictograph import Pictograph
-from widgets.scroll_area.components.sequence_widget_pictograph_factory import (
+from ..indicator_label import IndicatorLabel
+from ..pictograph.pictograph import Pictograph
+from ..scroll_area.components.sequence_widget_pictograph_factory import (
     SequenceWidgetPictographFactory,
 )
-from widgets.sequence_widget.beat_frame.beat import Beat
-from widgets.sequence_widget.beat_frame.beat_frame import SequenceBeatFrame
-from widgets.sequence_widget.beat_frame.beat_selection_overlay import (
-    BeatSelectionOverlay,
-)
-from widgets.sequence_widget.button_frame import SequenceButtonFrame
-from widgets.sequence_widget.sequence_modifier_tab_widget import (
-    SequenceModifier,
-)
-
+from .beat_frame.beat import Beat
+from .beat_frame.beat_frame import SequenceBeatFrame
+from .beat_frame.beat_selection_overlay import BeatSelectionOverlay
+from .button_frame import SequenceButtonFrame
+from .sequence_modifier_tab_widget import SequenceModifier
+from PyQt6.QtCore import Qt
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
@@ -42,7 +38,8 @@ class SequenceWidget(QWidget):
         self.layout.addWidget(self.beat_frame)
         self.layout.addWidget(self.button_frame)
         self.layout.addWidget(self.indicator_label)
-        self.layout.addWidget(self.sequence_modifier, 5)
+        self.layout.addWidget(self.sequence_modifier)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
     def save_sequence(sequence: list[Pictograph], filename: str) -> None:
         sequence_data = [pictograph.get.pictograph_dict() for pictograph in sequence]
@@ -63,4 +60,3 @@ class SequenceWidget(QWidget):
     def resize_sequence_widget(self) -> None:
         self.beat_frame.resize_beat_frame()
         self.sequence_modifier.resize_sequence_modifier()
-
