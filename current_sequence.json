@@ -1,11 +1,5 @@
 [
     {
-<<<<<<< HEAD
-        "sequence_start_position": "beta",
-        "red_end_ori": "out",
-        "blue_end_ori": "in",
-        "end_pos": "beta3"
-=======
         "sequence_start_position": "alpha",
         "red_end_ori": "in",
         "blue_end_ori": "out",
@@ -314,6 +308,5 @@
         "red_turns": 0,
         "blue_end_ori": "out",
         "red_end_ori": "in"
->>>>>>> 2d6f6872148820b571e09d658a0f21dffdf77b46
     }
 ]
