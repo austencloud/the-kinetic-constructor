@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGridLayout, QFrame, QSizePolicy
 from PyQt6.QtCore import Qt
 from widgets.sequence_widget.sequence_beat_frame.beat import Beat
+from widgets.sequence_widget.sequence_beat_frame.beat_selection_overlay import BeatSelectionOverlay
 from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import StartPositionBeat
 from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
     StartPositionBeatView,
@@ -39,6 +40,7 @@ class SequenceBeatFrame(QFrame):
         self.layout.setAlignment(
             Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop
         )
+        self.beat_selection_overlay = BeatSelectionOverlay(self)
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(main_widget, self)
         self.layout.addWidget(self.start_pos_view, 0, 0)
@@ -65,6 +67,7 @@ class SequenceBeatFrame(QFrame):
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
             self.beats[next_beat_index].set_pictograph(new_beat)
+            self.beat_selection_overlay.select_beat(self.beats[next_beat_index])
         self.update_current_sequence_file()
 
     def find_next_available_beat(self) -> int:

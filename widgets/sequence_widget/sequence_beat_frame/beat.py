@@ -29,7 +29,7 @@ class BeatView(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.beat_frame = beat_frame
-        self.selection_overlay = self.beat_frame.sequence_widget.beat_selection_overlay
+        self.selection_overlay = self.beat_frame.beat_selection_overlay
         self.beat: "Beat" = None
         self.is_filled = False
         self.is_selected = False

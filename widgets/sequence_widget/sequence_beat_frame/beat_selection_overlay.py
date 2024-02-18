@@ -38,7 +38,7 @@ class BeatSelectionOverlay(QWidget):
     def update_overlay_position(self):
         if self.selected_beat_view:
             self.setGeometry(self.selected_beat_view.geometry())
-            self.raise_()  # Ensure the overlay is above the selected beat view
+            self.raise_()
             self.update()
 
     def paintEvent(self, event):

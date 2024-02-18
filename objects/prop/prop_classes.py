@@ -27,11 +27,6 @@ class Triad(Prop):
         super().__init__(pictograph, attributes, motion)
 
 
-class BigTriad(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
-        attributes[PROP_TYPE] = PropTypes.BigTriad
-        super().__init__(pictograph, attributes, motion)
-
 
 class MiniHoop(Prop):
     def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
@@ -45,10 +40,6 @@ class Fan(Prop):
         super().__init__(pictograph, attributes, motion)
 
 
-class BigFan(Prop):
-    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
-        attributes[PROP_TYPE] = PropTypes.BigFan
-        super().__init__(pictograph, attributes, motion)
 
 
 class Club(Prop):

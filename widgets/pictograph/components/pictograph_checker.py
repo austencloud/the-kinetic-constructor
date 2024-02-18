@@ -167,6 +167,5 @@ class PictographChecker:
             PropTypes.BigDoubleStar,
             PropTypes.BigHoop,
             PropTypes.BigBuugeng,
-            PropTypes.BigFan,
         ]
         return any(self.has_all_props_of_type(prop_type) for prop_type in strict_props)
