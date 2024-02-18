@@ -15,7 +15,7 @@ from widgets.graph_editor.graph_editor_pictograph_container import (
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.sequence_modifier_tab_widget import SequenceModifier
+    from widgets.sequence_widget.sequence_modifier import SequenceModifier
     from widgets.main_widget.main_widget import MainWidget
 
 
@@ -24,15 +24,26 @@ class GraphEditor(QFrame):
         super().__init__()
         self.sequence_modifier = sequence_modifier
         self.main_widget = sequence_modifier.main_widget
+
+
         self._setup_graph_editor_pictograph()
+        self._setup_turns_boxes()
         self._setup_main_layout()
 
     def _setup_graph_editor_pictograph(self):
-
         self.GE_pictograph = GraphEditorBlankPictograph(self)
         self.GE_pictograph_view = GraphEditorPictographView(self, self.GE_pictograph)
         self.GE_pictograph_container = GraphEditorPictographContainer(
             self, self.GE_pictograph_view
+        )
+
+    def _setup_turns_boxes(self):
+        self.turns_box = GraphEditorAttrPanel(self, "Turns")
+        self.turns_box.setFixedWidth(100)
+        self.turns_box.setFixedHeight(100)
+        self.turns_box.setContentsMargins(0, 0, 0, 0)
+        self.turns_box.setSizePolicy(
+            QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed
         )
 
     def _setup_frame_style(self) -> None:
@@ -48,6 +59,7 @@ class GraphEditor(QFrame):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.pictograph_layout = QVBoxLayout()
         self.pictograph_layout.addWidget(self.GE_pictograph_container)
+        
         self.layout.addLayout(self.pictograph_layout)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.setLayout(self.layout)

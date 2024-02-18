@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QTreeView, QVBoxLayout, QWidget, QMessageBox
 from PyQt6.QtGui import QFileSystemModel
-from PyQt6.QtCore import QDir, QModelIndex
+from PyQt6.QtCore import QDir, QModelIndex, Qt
 import json
 from typing import TYPE_CHECKING
 from widgets.pictograph.pictograph import Pictograph
@@ -32,6 +32,8 @@ class Library(QWidget):
         self.tree_view.setRootIndex(self.model.index(QDir.currentPath() + "/library"))
         self.tree_view.doubleClicked.connect(self.on_double_clicked)
         layout.addWidget(self.tree_view)
+        self.tree_view.setSortingEnabled(True)
+        self.tree_view.sortByColumn(0, Qt.SortOrder.AscendingOrder)
 
     def setup_preview_area(self, layout: QVBoxLayout):
         self.preview_area = QWidget()

@@ -12,7 +12,7 @@ from .sequence_beat_frame.beat import Beat
 from .sequence_beat_frame.sequence_beat_frame import SequenceBeatFrame
 from .sequence_beat_frame.beat_selection_overlay import BeatSelectionManager
 from .button_frame import SequenceButtonFrame
-from .sequence_modifier_tab_widget import SequenceModifier
+from .sequence_modifier import SequenceModifier
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
