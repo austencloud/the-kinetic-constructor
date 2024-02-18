@@ -8,13 +8,13 @@ from Enums.MotionAttributes import Turns, PropRotDir
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
     from objects.motion.motion import Motion
-    from widgets.turns_box.turns_box_widgets.turns_widget.turns_widget import (
-        TurnsWidget,
+    from widgets.codex.codex_turns_widget import (
+        CodexTurnsWidget,
     )
 
 
 class TurnsUpdater:
-    def __init__(self, turns_widget: "TurnsWidget") -> None:
+    def __init__(self, turns_widget: "CodexTurnsWidget") -> None:
         self.turns_box = turns_widget.turns_box
         self.turns_widget = turns_widget
 

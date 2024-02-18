@@ -6,13 +6,13 @@ from widgets.factories.button_factory.buttons.adjust_turns_button import (
 )
 
 if TYPE_CHECKING:
-    from widgets.turns_box.turns_box_widgets.turns_widget.turns_widget import (
-        TurnsWidget,
+    from widgets.codex.codex_turns_widget import (
+        CodexTurnsWidget,
     )
 
 
 class TurnsButtonManager:
-    def __init__(self, turns_widget: "TurnsWidget") -> None:
+    def __init__(self, turns_widget: "CodexTurnsWidget") -> None:
         self.turns_widget = turns_widget
         self.adjustments = [(-1, "-1"), (-0.5, "-0.5"), (0.5, "+0.5"), (1, "+1")]
         self.adjust_turns_buttons: list[AdjustTurnsButton] = []

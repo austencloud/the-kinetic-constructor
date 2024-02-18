@@ -10,8 +10,8 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 from typing import TYPE_CHECKING
 from constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON
-from ...turns_box.turns_box_widgets.turns_widget.turns_widget import (
-    TurnsWidget,
+from ...codex.codex_turns_widget import (
+    CodexTurnsWidget,
 )
 
 
@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from .GE_turns_box import GE_TurnsBox
 
 
-class GE_TurnsWidget(TurnsWidget):
+class GE_TurnsWidget(CodexTurnsWidget):
     def __init__(self, turns_box: "GE_TurnsBox") -> None:
         super().__init__(turns_box)
         self.clockwise_pixmap = self._create_clock_pixmap(CLOCKWISE_ICON)

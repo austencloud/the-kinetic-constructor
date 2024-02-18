@@ -10,15 +10,17 @@ if TYPE_CHECKING:
     from widgets.turns_box.turns_box_widgets.start_end_loc_widget import (
         StartEndLocWidget,
     )
-    from widgets.turns_box.turns_box_widgets.turns_widget.turns_widget import (
-        TurnsWidget,
+    from widgets.codex.codex_turns_widget import (
+        CodexTurnsWidget,
     )
 
 
 class SwapButton(QPushButton):
     def __init__(
         self,
-        parent_widget: Union["StartEndLocWidget", "TurnsWidget", "GE_MotionTypeWidget"],
+        parent_widget: Union[
+            "StartEndLocWidget", "CodexTurnsWidget", "GE_MotionTypeWidget"
+        ],
         text=None,
     ) -> None:
         super().__init__(text, parent_widget)

@@ -4,13 +4,13 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from ....turns_box.turns_box_widgets.turns_widget.turns_widget import (
-        TurnsWidget,
+    from ....codex.codex_turns_widget import (
+        CodexTurnsWidget,
     )
 
 
 class AdjustTurnsButton(QPushButton):
-    def __init__(self, parent_widget: "TurnsWidget") -> None:
+    def __init__(self, parent_widget: "CodexTurnsWidget") -> None:
         super().__init__(parent_widget)
         self.parent_widget = parent_widget
 

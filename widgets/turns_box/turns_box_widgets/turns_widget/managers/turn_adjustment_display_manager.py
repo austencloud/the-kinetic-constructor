@@ -5,11 +5,11 @@ from utilities.TypeChecking.TypeChecking import Turns
 
 if TYPE_CHECKING:
     from .....pictograph.pictograph import Pictograph
-    from ....turns_box_widgets.turns_widget.turns_widget import TurnsWidget
+    from .....codex.codex_turns_widget import CodexTurnsWidget
 
 
 class TurnsAdjustmentManager:
-    def __init__(self, turns_widget: "TurnsWidget") -> None:
+    def __init__(self, turns_widget: "CodexTurnsWidget") -> None:
         self.turns_widget = turns_widget
         self.pictographs = self._get_pictographs()
 

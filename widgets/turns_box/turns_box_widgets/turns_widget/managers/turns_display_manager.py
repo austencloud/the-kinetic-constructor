@@ -6,11 +6,11 @@ from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from widgets.turns_box.turns_box import TurnsBox
-    from ..turns_widget import TurnsWidget
+    from .....codex.codex_turns_widget import CodexTurnsWidget
 
 
 class TurnDisplayManager:
-    def __init__(self, turns_widget: "TurnsWidget") -> None:
+    def __init__(self, turns_widget: "CodexTurnsWidget") -> None:
         self.turns_widget = turns_widget
         self.turns_box: TurnsBox = turns_widget.turns_box
 

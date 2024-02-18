@@ -3,13 +3,13 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.turns_box.turns_box_widgets.turns_widget.turns_widget import (
-        TurnsWidget,
+    from widgets.codex.codex_turns_widget import (
+        CodexTurnsWidget,
     )
 
 
 class TurnDirectSetManager:
-    def __init__(self, turns_widget: "TurnsWidget") -> None:
+    def __init__(self, turns_widget: "CodexTurnsWidget") -> None:
         self.turns_widget = turns_widget
 
     def setup_direct_set_buttons(self) -> None:
