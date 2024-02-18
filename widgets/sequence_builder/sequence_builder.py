@@ -66,32 +66,28 @@ class SequenceBuilder(QFrame):
             )
         )
 
-        if pictograph_key in self.option_picker.scroll_area.pictograph_cache:
-            return self.option_picker.scroll_area.pictograph_cache[pictograph_key]
+        scroll_area = self.option_picker.scroll_area
+        if pictograph_key in scroll_area.pictograph_cache:
+            return scroll_area.pictograph_cache[pictograph_key]
 
-        new_pictograph = (
-            self.option_picker.scroll_area.pictograph_factory.get_or_create_pictograph(
-                pictograph_key, pictograph_dict
-            )
+        new_pictograph = scroll_area.pictograph_factory.get_or_create_pictograph(
+            pictograph_key, pictograph_dict
         )
-        self.option_picker.scroll_area.pictograph_cache[pictograph_key] = new_pictograph
+        scroll_area.pictograph_cache[pictograph_key] = new_pictograph
         self.main_widget.all_pictographs[new_pictograph.letter][
             pictograph_key
         ] = new_pictograph
         if pictograph_key not in self.pictograph_cache[letter]:
             self.pictograph_cache[letter][pictograph_key] = new_pictograph
-        section = self.option_picker.scroll_area.sections_manager.get_section(
-            letter_type
-        )
+        section = scroll_area.sections_manager.get_section(letter_type)
         section.pictographs[pictograph_key] = new_pictograph
-        self.option_picker.scroll_area.pictograph_cache[pictograph_key] = new_pictograph
+        scroll_area.pictograph_cache[pictograph_key] = new_pictograph
         self.main_widget.all_pictographs[new_pictograph.letter][
             pictograph_key
         ] = new_pictograph
         return new_pictograph
 
     def _add_turns_and_start_ori(self, pictograph_dict):
-        # get the red and blue end oris from the last entry in the sequence
         self.current_end_red_ori = (
             self.main_widget.json_manager.current_sequence_json_handler.get_red_end_ori()
         )
@@ -111,7 +107,6 @@ class SequenceBuilder(QFrame):
         self.layout().removeWidget(self.option_picker)
         self.layout().addWidget(self.start_position_picker)
         self.start_position_picker.show()
-        # self.start_position_picker.resize_start_position_picker()
 
     def resize_sequence_builder(self) -> None:
         self.setMinimumWidth(int(self.main_widget.width() * 3 / 5))

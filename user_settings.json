@@ -1,9 +1,9 @@
 {
     "pictograph_size": 1,
-    "prop_type": "Triad",
+    "prop_type": "Staff",
     "glyph_visibility": {
         "VTG": false,
-        "TKA": false,
-        "Elemental": false
+        "TKA": true,
+        "Elemental": true
     }
 }

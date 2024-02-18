@@ -289,24 +289,5 @@
         "red_turns": 0,
         "blue_end_ori": "out",
         "red_end_ori": "out"
-    },
-    {
-        "letter": "X-",
-        "start_pos": "gamma4",
-        "end_pos": "alpha3",
-        "blue_motion_type": "dash",
-        "blue_start_ori": "out",
-        "blue_prop_rot_dir": "no_rot",
-        "blue_start_loc": "s",
-        "blue_end_loc": "n",
-        "red_motion_type": "anti",
-        "red_start_ori": "out",
-        "red_prop_rot_dir": "cw",
-        "red_start_loc": "w",
-        "red_end_loc": "s",
-        "blue_turns": 0,
-        "red_turns": 0,
-        "blue_end_ori": "in",
-        "red_end_ori": "in"
     }
 ]

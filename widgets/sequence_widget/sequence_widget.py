@@ -62,6 +62,9 @@ class SequenceWidget(QWidget):
             )
         )
         self.pictograph_cache[pictograph_key] = pictograph
+        # deselect all beats
+        self.beat_frame.selection_manager.deselect_beat()
+        self.sequence_modifier.graph_editor.GE_pictograph_view.set_to_blank_grid()
 
     def resize_sequence_widget(self) -> None:
         self.my_sequence_label.resize_my_sequence_label()

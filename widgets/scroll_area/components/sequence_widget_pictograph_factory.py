@@ -30,7 +30,7 @@ class SequenceWidgetPictographFactory:
         pictograph_cache: dict[str, Pictograph],
     ) -> None:
         self.sequence_widget = sequence_widget
-        self.pictograph_cache = pictograph_cache
+        self.pictograph_cache: dict[Letter, dict[str, Pictograph]] = pictograph_cache
 
     def get_or_create_pictograph(
         self, pictograph_key: str, pictograph_dict=None
@@ -38,7 +38,9 @@ class SequenceWidgetPictographFactory:
         letter_str = pictograph_key.split("_")[0]
         letter = Letter.get_letter(letter_str)
         if pictograph_key in self.pictograph_cache.get(letter, {}):
-            return self.pictograph_cache[letter][pictograph_key]
+            cached_pictograph = self.pictograph_cache[letter][pictograph_key]
+            cached_pictograph.updater.update_pictograph(pictograph_dict)
+            return cached_pictograph
 
         if pictograph_dict is not None:
             pictograph = self.create_pictograph()
