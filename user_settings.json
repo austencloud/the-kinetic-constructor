@@ -3,7 +3,7 @@
     "prop_type": "Staff",
     "glyph_visibility": {
         "VTG": false,
-        "TKA": false,
-        "Elemental": false
+        "TKA": true,
+        "Elemental": true
     }
 }

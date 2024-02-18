@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 class Arrow(GraphicalObject):
     """
-    An arrow object that can be added to a pictograph.
+    An arrow graphical object that can be added to a pictograph as part of a motion.
 
     Parameters
     ----------

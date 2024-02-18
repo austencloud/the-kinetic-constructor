@@ -60,13 +60,11 @@ class BeatView(QGraphicsView):
         )
         sequence_builder.reset_to_start_pos_picker()
 
-    #ignore double click events, treat them as single clicks instead
     def mouseDoubleClickEvent(self, event: QMouseEvent):
         self.mousePressEvent(event)
 
     def mousePressEvent(self, event: QMouseEvent):
         if event.button() == Qt.MouseButton.LeftButton and self.is_filled:
-            # Toggle the selection status of the current beat
             if self.is_selected:
                 self.selection_overlay.deselect_beat()
             else:
@@ -77,13 +75,12 @@ class BeatView(QGraphicsView):
         super().paintEvent(event)
 
     def select(self):
-        # Add logic to add a gold frame or highlight the beat
         self.is_selected = True
-        # You might want to visually update the beat to indicate selection
+        self.beat_frame.sequence_widget.sequence_modifier.graph_editor.GE_pictograph_view.setScene(
+            self.beat
+        )
         self.update()
 
     def deselect(self):
-        # Remove the gold frame or selection highlight
         self.is_selected = False
-        # Visually update the beat to indicate deselection
         self.update()

@@ -43,7 +43,7 @@ class StartPositionBeatView(BeatView):
         self.is_filled = False
 
     def set_start_pos_beat(self, start_pos: "StartPositionBeat") -> None:
-        self.start_pos = start_pos
+        self.start_pos = self.beat = start_pos
         self.is_filled = True
         self.start_pos.view = self
         self.setScene(self.start_pos)
@@ -53,6 +53,6 @@ class StartPositionBeatView(BeatView):
         self.scale(self.view_scale, self.view_scale)
         self.start_pos.add_start_text()
 
-    def mousePressEvent(self, event: QMouseEvent | None) -> None:
-        self.selection_overlay.select_beat(self)
-        self.viewport().update()
+    # def mousePressEvent(self, event: QMouseEvent | None) -> None:
+    #     super().mousePressEvent(event)
+    #     # self.viewport().update()
