@@ -30,7 +30,6 @@ class SequenceBuilder(QFrame):
         self.letters_df = pd.read_csv("PictographDataframe.csv")
         self.start_position_picked = False
         self._setup_components()
-        # Initialize pictograph cache using Letters enum
         self.pictograph_cache: dict[Letter, dict[str, Pictograph]] = {
             letter: {} for letter in Letter
         }

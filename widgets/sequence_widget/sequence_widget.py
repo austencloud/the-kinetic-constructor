@@ -1,6 +1,8 @@
 import json
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
+
+from widgets.sequence_widget.my_sequence_label import MySequenceLabel
 from ..indicator_label import IndicatorLabel
 from ..pictograph.pictograph import Pictograph
 from ..scroll_area.components.sequence_widget_pictograph_factory import (
@@ -31,11 +33,13 @@ class SequenceWidget(QWidget):
             self, self.pictograph_cache
         )
         self.sequence_modifier = SequenceModifier(self)
+        self.my_sequence_label = MySequenceLabel(self)
         self.beats = self.beat_frame.beats
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.addWidget(self.my_sequence_label)
         self.layout.addWidget(self.beat_frame)
         self.layout.addWidget(self.button_frame)
         self.layout.addWidget(self.indicator_label)
@@ -61,5 +65,6 @@ class SequenceWidget(QWidget):
         self.pictograph_cache[pictograph_key] = pictograph
 
     def resize_sequence_widget(self) -> None:
+        self.my_sequence_label.resize_my_sequence_label()
         self.beat_frame.resize_beat_frame()
         self.sequence_modifier.resize_sequence_modifier()

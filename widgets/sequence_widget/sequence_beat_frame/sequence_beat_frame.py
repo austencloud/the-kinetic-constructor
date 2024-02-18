@@ -93,8 +93,7 @@ class SequenceBeatFrame(QFrame):
             and last_beat_view.is_filled
         ):
             last_pictograph_dict = last_beat_view.beat.get.pictograph_dict()
-            if all(last_pictograph_dict != pictograph for pictograph in sequence_data):
-                sequence_data.append(last_pictograph_dict)
+            sequence_data.append(last_pictograph_dict)
         with open(temp_filename, "w", encoding="utf-8") as file:
             json.dump(sequence_data, file, indent=4, ensure_ascii=False)
 
