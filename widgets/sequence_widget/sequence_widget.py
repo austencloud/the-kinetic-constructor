@@ -33,7 +33,7 @@ class SequenceWidget(QWidget):
             self, self.pictograph_cache
         )
         self.my_sequence_label = MySequenceLabel(self)
-        self.beats = self.beat_frame.beats
+        self.beats = self.beat_frame.beat_views
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)

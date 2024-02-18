@@ -96,7 +96,7 @@ class SequenceButtonFrame(QFrame):
         print(f"Sequence saved to {filename}.")
 
     def clear_sequence(self, show_indicator=True):
-        for beat_view in self.sequence_widget.beat_frame.beats:
+        for beat_view in self.sequence_widget.beat_frame.beat_views:
             beat_view.setScene(None)
             beat_view.is_filled = False
         self.sequence_widget.beat_frame.start_pos_view.setScene(None)

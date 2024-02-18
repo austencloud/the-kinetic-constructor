@@ -84,7 +84,7 @@ class Library(QWidget):
             self.main_widget.sequence_widget.populate_sequence(pictograph_dict)
 
         self.main_widget.main_tab_widget.sequence_builder.current_pictograph = (
-            self.main_widget.sequence_widget.beat_frame.get_last_beat().beat
+            self.main_widget.sequence_widget.beat_frame.get_last_filled_beat().beat
         )
 
         self.main_widget.main_tab_widget.sequence_builder.option_picker.scroll_area._add_and_display_relevant_pictographs(
