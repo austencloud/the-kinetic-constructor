@@ -4,14 +4,14 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout
 
 if TYPE_CHECKING:
     from widgets.graph_editor.graph_editor import GraphEditor
-    from widgets.graph_editor.graph_editor_pictograph import GraphEditorPictographView
+    from widgets.graph_editor.GE_pictograph import GE_PictographView
 
 
-class GraphEditorPictographContainer(QWidget):
+class GE_PictographContainer(QWidget):
     def __init__(
         self,
         graph_editor: "GraphEditor",
-        GE_pictograph_view: "GraphEditorPictographView",
+        GE_pictograph_view: "GE_PictographView",
     ) -> None:
         super().__init__(graph_editor)
         self.graph_editor = graph_editor

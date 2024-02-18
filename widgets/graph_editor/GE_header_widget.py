@@ -2,22 +2,21 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QLabel,
 )
-from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt
 
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 from widgets.sequence_widget.header_widget import HeaderWidget
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graph_editor_attr_box import (
-        GraphEditorTurnsBox,
+    from widgets.graph_editor.GE_adjustment_box import (
+        GE_AdjustmentBox,
     )
-from constants import BLUE, CCW_HANDPATH, CW_HANDPATH, HEX_BLUE, HEX_RED, ICON_DIR, RED
+from constants import BLUE, HEX_BLUE, HEX_RED, RED
 
 
-class GraphEditorHeaderWidget(HeaderWidget):
-    def __init__(self, turns_box: "GraphEditorTurnsBox") -> None:
+class GE_HeaderWidget(HeaderWidget):
+    def __init__(self, turns_box: "GE_AdjustmentBox") -> None:
         super().__init__(turns_box)
         self.header_label = self._setup_header_label()
 

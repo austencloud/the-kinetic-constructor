@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 
 
-class KeyEventHandler:
+class GE_KeyEventHandler:
     """
     Handles key events for the graph editor.
 

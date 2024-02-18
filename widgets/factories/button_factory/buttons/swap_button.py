@@ -4,7 +4,9 @@ from PyQt6.QtGui import QFont
 from typing import Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.turns_box.turns_box_widgets.motion_types_widget import MotionTypeWidget
+    from widgets.graph_editor.GE_motion_types_widget import (
+        GE_MotionTypeWidget,
+    )
     from widgets.turns_box.turns_box_widgets.start_end_loc_widget import (
         StartEndLocWidget,
     )
@@ -16,7 +18,7 @@ if TYPE_CHECKING:
 class SwapButton(QPushButton):
     def __init__(
         self,
-        parent_widget: Union["StartEndLocWidget", "TurnsWidget", "MotionTypeWidget"],
+        parent_widget: Union["StartEndLocWidget", "TurnsWidget", "GE_MotionTypeWidget"],
         text=None,
     ) -> None:
         super().__init__(text, parent_widget)

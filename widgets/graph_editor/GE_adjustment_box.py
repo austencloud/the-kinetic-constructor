@@ -1,17 +1,14 @@
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Color
-from constants import HEX_BLUE, HEX_RED, RED
 from objects.motion.motion import Motion
-from ..turns_box.turns_box_widgets.motion_types_widget import MotionTypeWidget
-from ..turns_box.turns_box_widgets.start_end_loc_widget import StartEndLocWidget
-from ..turns_box.turns_box import TurnsBox
-from ..turns_panel import TurnsPanel
+from .GE_motion_types_widget import GE_MotionTypeWidget
+from ..turns_panel import GraphEditorAdjustmentPanel
 from ..factories.button_factory.buttons.adjust_turns_button import AdjustTurnsButton
 
-from ..graph_editor.graph_editor_header_widget import GraphEditorHeaderWidget
-from ..graph_editor.graph_editor_turns_widget import GraphEditorTurnsWidget
+from .GE_header_widget import GE_HeaderWidget
+from .GE_turns_widget import GE_TurnsWidget
 
-from PyQt6.QtWidgets import QFrame, QHBoxLayout
+from PyQt6.QtWidgets import QFrame
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -20,20 +17,23 @@ if TYPE_CHECKING:
 from PyQt6.QtGui import QFont
 
 
-class GraphEditorTurnsBox(QFrame):
+class GE_AdjustmentBox(QFrame):
     def __init__(
-        self, turns_panel: "TurnsPanel", pictograph: "Pictograph", color: Color
+        self,
+        adjustment_panel: "GraphEditorAdjustmentPanel",
+        pictograph: "Pictograph",
+        color: Color,
     ) -> None:
-        super().__init__(turns_panel)
+        super().__init__(adjustment_panel)
         self.color = color
         self.pictograph = pictograph
-        self._setup_widgets()
+        # self._setup_widgets()
 
     def _setup_widgets(self) -> None:
-        self.motion_type_widget = MotionTypeWidget(self)
-        self.header_widget = GraphEditorHeaderWidget(self)
-        self.start_end_loc_widget = StartEndLocWidget(self)
-        # self.turns_widget = GraphEditorTurnsWidget(self)
+        self.motion_type_widget = GE_MotionTypeWidget(self)
+        self.header_widget = GE_HeaderWidget(self)
+        # self.start_end_loc_widget = StartEndLocWidget(self)
+        self.turns_widget = GE_TurnsWidget(self)
 
     ### CREATE LABELS ###
 
@@ -59,17 +59,17 @@ class GraphEditorTurnsBox(QFrame):
         start_end_height = int(available_height * (1 / ratio_total))
         turns_widget_height = int(available_height * (2 / ratio_total))
         self.header_widget.setMaximumHeight(header_height)
-        self.start_end_loc_widget.setMaximumHeight(start_end_height)
-        # self.turns_widget.setMaximumHeight(turns_widget_height)
+        # self.start_end_loc_widget.setMaximumHeight(start_end_height)
+        self.turns_widget.setMaximumHeight(turns_widget_height)
 
-        # self.motion_type_widget.resize_motion_type_widget()
-        # self.turns_widget.resize_turns_widget()
+        self.motion_type_widget.resize_motion_type_widget()
+        self.turns_widget.resize_turns_widget()
         # self.start_end_loc_widget.resize_start_end_widget()
 
         self.header_widget.header_label.setFont(QFont("Arial", int(self.width() / 10)))
 
     def update_attr_box(self, motion: Motion) -> None:
-        self.start_end_loc_widget.update_start_end_loc_boxes(
-            motion.start_loc, motion.end_loc
-        )
+        # self.start_end_loc_widget.update_start_end_loc_boxes(
+        #     motion.start_loc, motion.end_loc
+        # )
         self.motion_type_widget.update_motion_type_box(motion.motion_type)

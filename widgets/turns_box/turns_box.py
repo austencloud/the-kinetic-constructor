@@ -6,7 +6,7 @@ from Enums.MotionAttributes import Color, LeadStates, MotionType
 
 from constants import BLUE, CLOCKWISE, COLOR, COUNTER_CLOCKWISE, RED
 from ..header_widget import TurnsBoxHeaderWidget
-from ..turns_box.turns_box_widgets.prop_rot_dir_button_manager import (
+from .turns_box_widgets.prop_rot_dir_button_manager import (
     PropRotDirButtonManager,
 )
 from .turns_box_widgets.turns_widget.turns_widget import (
@@ -14,7 +14,7 @@ from .turns_box_widgets.turns_widget.turns_widget import (
 )
 
 if TYPE_CHECKING:
-    from ..turns_panel import TurnsPanel
+    from ..turns_panel import GraphEditorAdjustmentPanel
 
 
 class TurnsBox(QFrame):
@@ -29,7 +29,7 @@ class TurnsBox(QFrame):
         super().__init__(turns_panel)
         self.attribute_type: TurnsTabAttribute = attribute_type
         self.attribute_value = attribute
-        self.turns_panel: "TurnsPanel" = turns_panel
+        self.turns_panel: "GraphEditorAdjustmentPanel" = turns_panel
 
         self.font_size = self.turns_panel.width() // 20
         self.turn_display_border = 2

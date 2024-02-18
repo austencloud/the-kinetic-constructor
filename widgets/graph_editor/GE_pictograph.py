@@ -1,29 +1,24 @@
 from typing import TYPE_CHECKING
 from widgets.pictograph.components.pictograph_view import PictographView
 from widgets.pictograph.pictograph import Pictograph
-from PyQt6.QtWidgets import QGraphicsView, QFrame
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from widgets.main_widget.main_widget import MainWidget
     from widgets.graph_editor.graph_editor import GraphEditor
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graph_editor_pictograph import GraphEditorBlankPictograph
+    from widgets.graph_editor.GE_pictograph import GE_BlankPictograph
 
 
-class GraphEditorBlankPictograph(Pictograph):
+class GE_BlankPictograph(Pictograph):
     def __init__(self, graph_editor: "GraphEditor") -> None:
         super().__init__(graph_editor.main_widget)
-        self.main_widget = graph_editor.main_widget
-        self.graph_editor = graph_editor
-        # self.get.initiallize_getter()
 
 
-class GraphEditorPictographView(PictographView):
+class GE_PictographView(PictographView):
     def __init__(
-        self, GE: "GraphEditor", blank_pictograph: "GraphEditorBlankPictograph"
+        self, GE: "GraphEditor", blank_pictograph: "GE_BlankPictograph"
     ) -> None:
         super().__init__(blank_pictograph)
         self.GE = GE
