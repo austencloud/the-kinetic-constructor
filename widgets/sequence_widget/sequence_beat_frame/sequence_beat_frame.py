@@ -91,12 +91,11 @@ class SequenceBeatFrame(QFrame):
                 sequence_builder.current_pictograph = self.start_pos_view.beat
             else:
                 self.delete_beat(selected_beat)
-                last_beat = self.get_last_beat()
-                self.beat_selection_manager.select_beat(last_beat)
                 for i in range(self.beats.index(selected_beat), len(self.beats)):
                     self.delete_beat(self.beats[i])
-                sequence_builder.current_pictograph = last_beat.beat
+                last_beat = self.get_last_beat()
                 self.beat_selection_manager.select_beat(last_beat)
+                sequence_builder.current_pictograph = last_beat.beat
             self.update_current_sequence_file()
             sequence_builder.option_picker.update_option_picker()
 
