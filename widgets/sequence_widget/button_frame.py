@@ -26,7 +26,6 @@ class SequenceButtonFrame(QFrame):
         self.setup_save_sequence_button()
         self.setup_clear_sequence_button()
         self.setup_layout()
-        # add black borders
         # self.setStyleSheet("border: 1px solid black;")
 
     def setup_save_sequence_button(self):
@@ -114,3 +113,4 @@ class SequenceButtonFrame(QFrame):
         if show_indicator:
             self.sequence_widget.indicator_label.show_indicator("Sequence cleared")
         self.sequence_widget.beat_selection_overlay.deselect_beat()
+        self.sequence_widget.sequence_modifier.graph_editor.GE_pictograph_view.set_to_blank_grid()

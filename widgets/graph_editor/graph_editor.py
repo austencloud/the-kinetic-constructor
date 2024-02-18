@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
 from widgets.graph_editor.graph_editor_attr_panel import GraphEditorAttrPanel
 from widgets.graph_editor.graph_editor_pictograph import (
-    GraphEditorPictograph,
+    GraphEditorBlankPictograph,
     GraphEditorPictographView,
 )
 
@@ -29,7 +29,7 @@ class GraphEditor(QFrame):
 
     def _setup_graph_editor_pictograph(self):
 
-        self.GE_pictograph = GraphEditorPictograph(self)
+        self.GE_pictograph = GraphEditorBlankPictograph(self)
         self.GE_pictograph_view = GraphEditorPictographView(self, self.GE_pictograph)
         self.GE_pictograph_container = GraphEditorPictographContainer(
             self, self.GE_pictograph_view

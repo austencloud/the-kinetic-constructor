@@ -88,7 +88,7 @@ class PictographView(QGraphicsView):
 
         if (
             self.pictograph.prop_type != current_prop_type
-            and self.pictograph.__class__.__name__ != "GraphEditorPictograph"
+            and self.pictograph.__class__.__name__ != "GraphEditorBlankPictograph"
         ):
             settings_manager.prop_type_changer.replace_props(
                 current_prop_type, self.pictograph

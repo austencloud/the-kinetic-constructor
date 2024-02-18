@@ -10,10 +10,10 @@ if TYPE_CHECKING:
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graph_editor_pictograph import GraphEditorPictograph
+    from widgets.graph_editor.graph_editor_pictograph import GraphEditorBlankPictograph
 
 
-class GraphEditorPictograph(Pictograph):
+class GraphEditorBlankPictograph(Pictograph):
     def __init__(self, graph_editor: "GraphEditor") -> None:
         super().__init__(graph_editor.main_widget)
         self.main_widget = graph_editor.main_widget
@@ -23,10 +23,11 @@ class GraphEditorPictograph(Pictograph):
 
 class GraphEditorPictographView(PictographView):
     def __init__(
-        self, GE: "GraphEditor", GE_pictograph: "GraphEditorPictograph"
+        self, GE: "GraphEditor", GE_pictograph: "GraphEditorBlankPictograph"
     ) -> None:
         super().__init__(GE_pictograph)
         self.GE = GE
+        self.GE_pictograph = GE_pictograph
         self.main_widget = GE.main_widget
         self.setScene(GE_pictograph)
 
@@ -35,3 +36,6 @@ class GraphEditorPictographView(PictographView):
         self.setMinimumWidth(self.GE.height())
         if self.scene():
             self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
+
+    def set_to_blank_grid(self):
+        self.setScene(self.GE_pictograph)

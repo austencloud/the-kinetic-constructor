@@ -15,6 +15,7 @@ class DotHandler:
         self.same_dot_item = None
         self.opp_dot_item = None
         self.add_dots("images/same_opp_dot.svg")
+        self.hide_dots()
 
     def add_dots(self, dot_path: str):
         self.same_dot_item = self.create_dot(dot_path)
@@ -24,6 +25,10 @@ class DotHandler:
         self.opp_dot_item = self.create_dot(dot_path)
         if self.opp_dot_item:
             self.glyph.addToGroup(self.opp_dot_item)
+
+    def hide_dots(self):
+        self.same_dot_item.hide()
+        self.opp_dot_item.hide()
 
     def create_dot(self, dot_path: str) -> QGraphicsSvgItem:
         return load_svg_item(dot_path)
@@ -56,9 +61,11 @@ class DotHandler:
         if dir == VTG_Directions.SAME:
             self.same_dot_item.show()
             self.opp_dot_item.hide()
+            
         elif dir == VTG_Directions.OPP:
             self.same_dot_item.hide()
             self.opp_dot_item.show()
+
         else:
             self.same_dot_item.hide()
             self.opp_dot_item.hide()
