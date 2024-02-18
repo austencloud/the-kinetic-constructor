@@ -4,7 +4,9 @@ from widgets.factories.button_factory.buttons.rot_dir_buttons import (
     PropRotDirButton,
     VtgDirButton,
 )
-from widgets.codex.codex_letter_button_frame.components.letter_button import LetterButton
+from widgets.codex.codex_letter_button_frame.components.codex_letter_button import (
+    CodexLetterButton,
+)
 
 
 class ButtonFactory:
@@ -35,6 +37,6 @@ class ButtonFactory:
     @staticmethod
     def create_letter_button(
         icon_path, letter_str: str, letter_type: str
-    ) -> LetterButton:
-        button = LetterButton(icon_path, letter_str)
+    ) -> CodexLetterButton:
+        button = CodexLetterButton(icon_path, letter_str)
         return button

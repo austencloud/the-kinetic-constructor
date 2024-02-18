@@ -9,14 +9,14 @@ from typing import TYPE_CHECKING
 from widgets.sequence_widget.header_widget import HeaderWidget
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_adjustment_box import (
-        GE_AdjustmentBox,
+    from widgets.graph_editor.components.GE_turns_box import (
+        GE_TurnsBox,
     )
 from constants import BLUE, HEX_BLUE, HEX_RED, RED
 
 
 class GE_HeaderWidget(HeaderWidget):
-    def __init__(self, turns_box: "GE_AdjustmentBox") -> None:
+    def __init__(self, turns_box: "GE_TurnsBox") -> None:
         super().__init__(turns_box)
         self.header_label = self._setup_header_label()
 

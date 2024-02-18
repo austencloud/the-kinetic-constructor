@@ -3,19 +3,18 @@ from PyQt6.QtGui import QIcon
 from typing import TYPE_CHECKING
 
 
-
 if TYPE_CHECKING:
     pass
 
 
-class LetterButton(QPushButton):
+class CodexLetterButton(QPushButton):
     def __init__(self, icon_path: str, letter_str: str) -> None:
         super().__init__()
         self.setIcon(QIcon(icon_path))
         self.setFlat(True)
         self.setStyleSheet(self.get_button_style(False))
         self.letter = letter_str
-        
+
     def get_button_style(self, pressed: bool) -> str:
         if pressed:
             return """
@@ -37,7 +36,6 @@ class LetterButton(QPushButton):
                 }
             """
 
-
     def press(self) -> None:
         self.setStyleSheet(self.get_button_style(pressed=True))
 
@@ -46,5 +44,3 @@ class LetterButton(QPushButton):
 
     def is_pressed(self) -> bool:
         return self.styleSheet() == self.get_button_style(pressed=True)
-    
-    

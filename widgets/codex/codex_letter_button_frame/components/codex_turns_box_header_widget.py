@@ -6,13 +6,15 @@ from Enums.Enums import LetterType, TurnsTabAttribute
 from Enums.MotionAttributes import Color
 
 
-from .graph_editor.components.GE_TurnsBoxWidget import GE_TurnsBoxWidget
+from .codex_turns_box_widget import (
+    CodexTurnsBoxWidget,
+)
 
 if TYPE_CHECKING:
     from widgets.turns_box.turns_box import TurnsBox
 
 
-class TurnsBoxHeaderWidget(GE_TurnsBoxWidget):
+class CodexTurnsBoxHeaderWidget(CodexTurnsBoxWidget):
     def __init__(self, turns_box: "TurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box

@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     )
 
 
-class LetterButtonFrameLayoutStyler:
+class CodexButtonFrameStyler:
     def __init__(self, letter_button_frame: "CodexLetterButtonFrame") -> None:
         self.spacing = letter_button_frame.spacing
         self.letter_button_frame = letter_button_frame

@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QPushButton
 
 
-class LetterButtonStyler:
+class CodexLetterButtonStyler:
     DEFAULT_STYLE = """
         QPushButton {
             background-color: white;
@@ -19,5 +19,4 @@ class LetterButtonStyler:
 
     @staticmethod
     def apply_default_style(button: QPushButton):
-        button.setStyleSheet(LetterButtonStyler.DEFAULT_STYLE)
-
+        button.setStyleSheet(CodexLetterButtonStyler.DEFAULT_STYLE)

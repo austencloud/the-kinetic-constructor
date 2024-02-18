@@ -1,42 +1,24 @@
 from Enums.Enums import LetterType, Letter
-
-from typing import TYPE_CHECKING, Union
-
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QHBoxLayout, QSizePolicy
 from PyQt6.QtCore import QSize, Qt
-from Enums.Enums import LetterType
-
 from constants import LETTER_BTN_ICON_DIR
-from Enums.Enums import LetterType
-
-
-from widgets.codex.codex_letter_button_frame.components.codex_letter_button_click_handler import (
-    CodexLetterButtonClickHandler,
-)
-from widgets.codex.codex_letter_button_frame.components.letter_button_styler import (
-    LetterButtonStyler,
-)
-from .letter_button import LetterButton
+from .codex_letter_button_click_handler import CodexLetterButtonClickHandler
+from .codex_letter_button_styler import CodexLetterButtonStyler
+from .codex_letter_button import CodexLetterButton
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker.option_picker_letter_button_frame import (
-        OptionPickerLetterButtonFrame,
-    )
-    from widgets.codex.codex_letter_button_frame.codex_letter_button_frame import (
-        CodexLetterButtonFrame,
-    )
+    from ..codex_letter_button_frame import CodexLetterButtonFrame
 
 
 class CodexLetterButtonManager:
     def __init__(
         self,
-        letter_button_frame: Union[
-            "CodexLetterButtonFrame", "OptionPickerLetterButtonFrame"
-        ],
+        letter_button_frame: "CodexLetterButtonFrame",
     ) -> None:
         self.letter_rows = letter_button_frame.letter_rows
         self.icon_dir = LETTER_BTN_ICON_DIR
-        self.buttons: dict[Letter, LetterButton] = {}
+        self.buttons: dict[Letter, CodexLetterButton] = {}
         self.letter_button_frame = letter_button_frame
         self.click_handler = CodexLetterButtonClickHandler(self)
 
@@ -50,9 +32,11 @@ class CodexLetterButtonManager:
                     button = self._create_letter_button(icon_path, letter_str)
                     self.buttons[letter] = button
 
-    def _create_letter_button(self, icon_path: str, letter_str: str) -> LetterButton:
-        button = LetterButton(icon_path, letter_str)
-        LetterButtonStyler.apply_default_style(button)
+    def _create_letter_button(
+        self, icon_path: str, letter_str: str
+    ) -> CodexLetterButton:
+        button = CodexLetterButton(icon_path, letter_str)
+        CodexLetterButtonStyler.apply_default_style(button)
         return button
 
     def resize_buttons(self, button_panel_height: int) -> None:

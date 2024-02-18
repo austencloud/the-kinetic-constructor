@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel, QHBoxLayout, QFrame
 from PyQt6.QtCore import Qt
 
-from widgets.graph_editor.components.GE_TurnsBoxWidget import GE_TurnsBoxWidget
+from widgets.codex.codex_letter_button_frame.components.codex_turns_box_widget import CodexTurnsBoxWidget
 
 
 if TYPE_CHECKING:
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 from constants import BLUE, COLOR, LEAD_STATE, MOTION_TYPE, Type1
 
 
-class HeaderWidget(GE_TurnsBoxWidget):
+class HeaderWidget(CodexTurnsBoxWidget):
     def __init__(self, turns_box: "TurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box

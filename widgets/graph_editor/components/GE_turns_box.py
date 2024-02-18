@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 from PyQt6.QtGui import QFont
 
 
-class GE_AdjustmentBox(QFrame):
+class GE_TurnsBox(QFrame):
     def __init__(
         self,
         adjustment_panel: "GraphEditorAdjustmentPanel",
@@ -27,7 +27,7 @@ class GE_AdjustmentBox(QFrame):
         super().__init__(adjustment_panel)
         self.color = color
         self.pictograph = pictograph
-        # self._setup_widgets()
+        self._setup_widgets()
 
     def _setup_widgets(self) -> None:
         self.motion_type_widget = GE_MotionTypeWidget(self)

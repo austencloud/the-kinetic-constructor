@@ -16,11 +16,11 @@ from ...turns_box.turns_box_widgets.turns_widget.turns_widget import (
 
 
 if TYPE_CHECKING:
-    from .GE_adjustment_box import GE_AdjustmentBox
+    from .GE_turns_box import GE_TurnsBox
 
 
 class GE_TurnsWidget(TurnsWidget):
-    def __init__(self, turns_box: "GE_AdjustmentBox") -> None:
+    def __init__(self, turns_box: "GE_TurnsBox") -> None:
         super().__init__(turns_box)
         self.clockwise_pixmap = self._create_clock_pixmap(CLOCKWISE_ICON)
         self.counter_clockwise_pixmap = self._create_clock_pixmap(

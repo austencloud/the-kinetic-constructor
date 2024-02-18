@@ -6,14 +6,14 @@ from .managers.turns_adjustment_manager import TurnsAdjustmentManager
 from .managers.turns_updater import TurnsUpdater
 from .managers.turns_display_manager import TurnDisplayManager
 from .managers.turns_direct_set_manager import TurnsDirectSetManager
-from ....graph_editor.components.GE_TurnsBoxWidget import GE_TurnsBoxWidget
-from ....graph_editor.components.GE_TurnsBoxWidget import GE_TurnsBoxWidget
+from ....codex.codex_letter_button_frame.components.codex_turns_box_widget import CodexTurnsBoxWidget
+from ....codex.codex_letter_button_frame.components.codex_turns_box_widget import CodexTurnsBoxWidget
 
 if TYPE_CHECKING:
     from turns_box.turns_box import TurnsBox
 
 
-class TurnsWidget(GE_TurnsBoxWidget):
+class TurnsWidget(CodexTurnsBoxWidget):
     def __init__(self, turns_box: "TurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box

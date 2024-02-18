@@ -3,8 +3,10 @@ from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Callable, Union
 
+from widgets.factories.button_factory.buttons.adjust_turns_button import (
+    AdjustTurnsButton,
+)
 from widgets.factories.button_factory.buttons.swap_button import SwapButton
-from ...factories.button_factory.buttons.adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
     from widgets.turns_box.turns_box import TurnsBox
@@ -40,15 +42,3 @@ class GE_TurnsBoxWidget(QWidget):
         button = AdjustTurnsButton(self)
         button.setText(text)
         return button
-
-    def _turns_added(self, initial_turns, new_turns) -> bool:
-        return initial_turns == 0 and new_turns > 0
-
-    def update_pictograph_dict(
-        self, motion: "Motion", new_turns: Union[int, float]
-    ) -> None:
-        """Update the pictograph dictionary with new turns."""
-        pictograph_dict = {
-            f"{motion.color}_turns": new_turns,
-        }
-        motion.pictograph.updater.update_pictograph(pictograph_dict)

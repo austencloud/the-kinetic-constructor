@@ -5,7 +5,7 @@ from Enums.Enums import TurnsTabAttribute
 from Enums.MotionAttributes import Color, LeadStates, MotionType
 
 from constants import BLUE, CLOCKWISE, COLOR, COUNTER_CLOCKWISE, RED
-from ..header_widget import TurnsBoxHeaderWidget
+from ..codex.codex_letter_button_frame.components.codex_turns_box_header_widget import CodexTurnsBoxHeaderWidget
 from .turns_box_widgets.prop_rot_dir_button_manager import (
     PropRotDirButtonManager,
 )
@@ -56,7 +56,7 @@ class TurnsBox(QFrame):
 
     def _setup_widgets(self) -> None:
         self.prop_rot_dir_button_manager = PropRotDirButtonManager(self)
-        self.header_widget = TurnsBoxHeaderWidget(self)
+        self.header_widget = CodexTurnsBoxHeaderWidget(self)
         self.turns_widget = TurnsWidget(self)
 
         if self.attribute_type == COLOR:

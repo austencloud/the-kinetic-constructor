@@ -10,7 +10,7 @@ from widgets.codex.codex_letter_button_frame.components.codex_letter_button_mana
 )
 
 
-from .components.letter_button_frame_layout_styler import LetterButtonFrameLayoutStyler
+from .components.codex_button_frame_styler import CodexButtonFrameStyler
 
 if TYPE_CHECKING:
     from widgets.codex.codex import Codex
@@ -23,7 +23,7 @@ class CodexLetterButtonFrame(QFrame):
         self.spacing = 5
         self.outer_frames: dict[str, QFrame] = {}
         self.letter_rows = self._define_letter_rows()
-        self.layout_styler = LetterButtonFrameLayoutStyler(self)
+        self.layout_styler = CodexButtonFrameStyler(self)
         self.button_manager = CodexLetterButtonManager(self)
         self.button_manager.create_buttons()
         self._init_letter_buttons_layout()

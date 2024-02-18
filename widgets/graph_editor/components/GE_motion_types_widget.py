@@ -10,15 +10,17 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from constants import ICON_DIR, SWAP_ICON
-from .GE_TurnsBoxWidget import GE_TurnsBoxWidget
+from ...codex.codex_letter_button_frame.components.codex_turns_box_widget import (
+    CodexTurnsBoxWidget,
+)
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_adjustment_box import GE_AdjustmentBox
+    from widgets.graph_editor.components.GE_turns_box import GE_TurnsBox
 
 
-class GE_MotionTypeWidget(GE_TurnsBoxWidget):
-    def __init__(self, turns_box: "GE_AdjustmentBox") -> None:
+class GE_MotionTypeWidget(CodexTurnsBoxWidget):
+    def __init__(self, turns_box: "GE_TurnsBox") -> None:
         super().__init__(turns_box)
 
         self.header_label = self.create_attr_header_label("Type")
