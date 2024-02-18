@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
 from widgets.scroll_area.components.start_pos_picker_pictograph_factory import (
     StartPosPickerPictographFactory,
 )
-from widgets.sequence_builder.components.start_position_picker.choose_your_start_position_label import (
+from widgets.sequence_builder.components.start_position_picker.choose_your_next_pictograph_label import (
     ChooseYourNextPictographLabel,
 )
 from widgets.sequence_builder.components.start_position_picker.start_pos_frame import (

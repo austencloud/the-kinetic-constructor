@@ -66,6 +66,10 @@ class SequenceBeatFrame(QFrame):
 
     def delete_selected_beat(self):
         selected_beat = self.beat_selection_manager.selected_beat_view
+        sequence_builder = (
+            self.sequence_widget.main_widget.main_tab_widget.sequence_builder
+        )
+
         if selected_beat.__class__ == StartPositionBeatView:
             self.start_pos_view.setScene(None)
             self.start_pos_view.is_filled = False
@@ -73,27 +77,28 @@ class SequenceBeatFrame(QFrame):
             for beat in self.beats:
                 self.delete_beat(beat)
             self.beat_selection_manager.deselect_beat()
-            # set the start pos picker in the sequence builder to show and hide the option picker
             sequence_builder = (
                 self.sequence_widget.main_widget.main_tab_widget.sequence_builder
             )
             sequence_builder.current_pictograph = None
+            self.clear_current_sequence_file()
             sequence_builder.reset_to_start_pos_picker()
 
         elif selected_beat:
-            self.delete_beat(selected_beat)
-            for i in range(self.beats.index(selected_beat), len(self.beats)):
-                self.delete_beat(self.beats[i])
-                # set the last pictograph in the sequence builder to the current pictograph
-            sequence_builder = (
-                self.sequence_widget.main_widget.main_tab_widget.sequence_builder
-            )
-            last_beat = self.get_last_beat().beat
-            sequence_builder.current_pictograph = last_beat
-            # update the option picker to show the options for the curReally weird.rent pictograph
+            if selected_beat == self.beats[0]:
+                self.beat_selection_manager.select_beat(self.start_pos_view)
+                last_beat = self.start_pos_view
+                sequence_builder.current_pictograph = self.start_pos_view.beat
+            else:
+                self.delete_beat(selected_beat)
+                last_beat = self.get_last_beat()
+                self.beat_selection_manager.select_beat(last_beat)
+                for i in range(self.beats.index(selected_beat), len(self.beats)):
+                    self.delete_beat(self.beats[i])
+                sequence_builder.current_pictograph = last_beat.beat
+                self.beat_selection_manager.select_beat(last_beat)
             self.update_current_sequence_file()
             sequence_builder.option_picker.update_option_picker()
-            # update the sequence file
 
     def _add_beat_to_layout(self, row: int, col: int) -> None:
         beat_view = BeatView(self)
@@ -138,6 +143,10 @@ class SequenceBeatFrame(QFrame):
             sequence_data.append(last_pictograph_dict)
         with open(temp_filename, "w", encoding="utf-8") as file:
             json.dump(sequence_data, file, indent=4, ensure_ascii=False)
+
+    def clear_current_sequence_file(self):
+        with open("current_sequence.json", "w", encoding="utf-8") as file:
+            file.write("[]")
 
     def is_full(self) -> bool:
         return all(beat.is_filled for beat in self.beats)

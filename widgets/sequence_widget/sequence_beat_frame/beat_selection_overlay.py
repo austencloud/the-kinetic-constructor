@@ -4,7 +4,9 @@ from PyQt6.QtCore import QRect, Qt
 from typing import TYPE_CHECKING, Optional
 
 from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
-from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import StartPositionBeatView
+from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
+    StartPositionBeatView,
+)
 
 if TYPE_CHECKING:
 
@@ -22,7 +24,7 @@ class BeatSelectionManager(QWidget):
 
     def select_beat(self, beat_view: BeatView):
         if self.selected_beat_view == beat_view:
-            self.deselect_beat()
+            return
         else:
             if self.selected_beat_view:
                 self.selected_beat_view.deselect()

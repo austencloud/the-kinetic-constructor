@@ -2,8 +2,8 @@
     "pictograph_size": 1,
     "prop_type": "Club",
     "glyph_visibility": {
-        "VTG": true,
-        "TKA": false,
+        "VTG": false,
+        "TKA": true,
         "Elemental": true
     }
 }

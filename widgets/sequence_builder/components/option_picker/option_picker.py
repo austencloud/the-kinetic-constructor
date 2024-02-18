@@ -5,7 +5,7 @@ from PyQt6.QtCore import pyqtSignal
 from widgets.sequence_builder.components.option_picker.option_manager import (
     OptionManager,
 )
-from widgets.sequence_builder.components.start_position_picker.choose_your_start_position_label import (
+from widgets.sequence_builder.components.start_position_picker.choose_your_next_pictograph_label import (
     ChooseYourNextPictographLabel,
 )
 
@@ -60,10 +60,3 @@ class OptionPicker(QWidget):
             next_options: dict = self.option_manager.get_next_options()
             self.scroll_area._hide_all_pictographs()
             self.scroll_area._add_and_display_relevant_pictographs(next_options)
-
-    def update_based_on_last_beat(self, last_filled_beat):
-        # This method will use information from the last filled beat to determine
-        # which pictographs should be available in the option picker.
-        # You'll likely need to access some sort of mapping or logic that determines
-        # which pictographs are valid next options based on the last pictograph's state.
-        pass
