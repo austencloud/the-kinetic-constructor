@@ -51,7 +51,7 @@ class SequenceBuilder(QFrame):
         self.option_picker.show()
         self.option_picker.scroll_area.resize_option_picker_scroll_area()
         self.option_picker.scroll_area.sections_manager.show_all_sections()
-        self.option_picker.update_pictographs()
+        self.option_picker.update_option_picker()
         self.option_picker.scroll_area.display_manager.order_and_display_pictographs()
         QApplication.restoreOverrideCursor()
 

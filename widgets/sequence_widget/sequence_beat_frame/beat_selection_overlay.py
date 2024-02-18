@@ -4,15 +4,17 @@ from PyQt6.QtCore import QRect, Qt
 from typing import TYPE_CHECKING, Optional
 
 from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
+from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import StartPositionBeatView
+
 if TYPE_CHECKING:
 
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 
-class BeatSelectionOverlay(QWidget):
+class BeatSelectionManager(QWidget):
     def __init__(self, sequence_widget: "SequenceWidget"):
         super().__init__(sequence_widget)
-        self.selected_beat_view: Optional[BeatView] = None
+        self.selected_beat_view: Optional[BeatView | StartPositionBeatView] = None
         self.border_color = QColor("gold")
         self.border_width = 4  # Adjust as needed
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)

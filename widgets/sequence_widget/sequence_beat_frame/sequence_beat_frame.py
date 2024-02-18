@@ -3,8 +3,11 @@ from typing import TYPE_CHECKING
 
 from PyQt6.QtWidgets import QGridLayout, QFrame, QSizePolicy
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QKeyEvent
 from widgets.sequence_widget.sequence_beat_frame.beat import Beat
-from widgets.sequence_widget.sequence_beat_frame.beat_selection_overlay import BeatSelectionOverlay
+from widgets.sequence_widget.sequence_beat_frame.beat_selection_overlay import (
+    BeatSelectionManager,
+)
 from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import StartPositionBeat
 from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
     StartPositionBeatView,
@@ -40,7 +43,7 @@ class SequenceBeatFrame(QFrame):
         self.layout.setAlignment(
             Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop
         )
-        self.beat_selection_overlay = BeatSelectionOverlay(self)
+        self.beat_selection_manager = BeatSelectionManager(self)
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(main_widget, self)
         self.layout.addWidget(self.start_pos_view, 0, 0)
@@ -53,8 +56,44 @@ class SequenceBeatFrame(QFrame):
                 self._add_beat_to_layout(j, i)
         self.selected_beat_view = None
 
-        # add black borders
-        # self.setStyleSheet("border: 1px solid black;")
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+
+    def keyPressEvent(self, event: "QKeyEvent") -> None:
+        if event.key() == Qt.Key.Key_Delete:
+            self.delete_selected_beat()
+        else:
+            super().keyPressEvent(event)
+
+    def delete_selected_beat(self):
+        selected_beat = self.beat_selection_manager.selected_beat_view
+        if selected_beat.__class__ == StartPositionBeatView:
+            self.start_pos_view.setScene(None)
+            self.start_pos_view.is_filled = False
+            self.sequence_widget.sequence_modifier.graph_editor.GE_pictograph_view.set_to_blank_grid()
+            for beat in self.beats:
+                self.delete_beat(beat)
+            self.beat_selection_manager.deselect_beat()
+            # set the start pos picker in the sequence builder to show and hide the option picker
+            sequence_builder = (
+                self.sequence_widget.main_widget.main_tab_widget.sequence_builder
+            )
+            sequence_builder.current_pictograph = None
+            sequence_builder.reset_to_start_pos_picker()
+
+        elif selected_beat:
+            self.delete_beat(selected_beat)
+            for i in range(self.beats.index(selected_beat), len(self.beats)):
+                self.delete_beat(self.beats[i])
+                # set the last pictograph in the sequence builder to the current pictograph
+            sequence_builder = (
+                self.sequence_widget.main_widget.main_tab_widget.sequence_builder
+            )
+            last_beat = self.get_last_beat().beat
+            sequence_builder.current_pictograph = last_beat
+            # update the option picker to show the options for the curReally weird.rent pictograph
+            self.update_current_sequence_file()
+            sequence_builder.option_picker.update_option_picker()
+            # update the sequence file
 
     def _add_beat_to_layout(self, row: int, col: int) -> None:
         beat_view = BeatView(self)
@@ -67,7 +106,7 @@ class SequenceBeatFrame(QFrame):
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
             self.beats[next_beat_index].set_pictograph(new_beat)
-            self.beat_selection_overlay.select_beat(self.beats[next_beat_index])
+            self.beat_selection_manager.select_beat(self.beats[next_beat_index])
         self.update_current_sequence_file()
 
     def find_next_available_beat(self) -> int:
@@ -103,10 +142,12 @@ class SequenceBeatFrame(QFrame):
     def is_full(self) -> bool:
         return all(beat.is_filled for beat in self.beats)
 
+    def delete_beat(self, beat_view: BeatView) -> None:
+        beat_view.setScene(None)
+        beat_view.is_filled = False
+
     def resize_beat_frame(self):
-
         beat_view_width = int(self.width() / self.COLUMN_COUNT)
-
         for beat_view in self.beats:
             beat_view.setMaximumWidth(beat_view_width)
             beat_view.setMaximumHeight(beat_view_width)
@@ -117,6 +158,4 @@ class SequenceBeatFrame(QFrame):
 
         self.start_pos_view.setMaximumWidth(beat_view_width)
         self.start_pos_view.setMaximumHeight(beat_view_width)
-
-        # set self.height() to match the combined height of the beat views
         self.setMaximumHeight(beat_view_width * self.ROW_COUNT)

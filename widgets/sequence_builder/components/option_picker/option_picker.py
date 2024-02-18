@@ -44,7 +44,7 @@ class OptionPicker(QWidget):
         self.layout.addLayout(start_label_layout)
         self.layout.addWidget(self.scroll_area)
 
-    def update_pictographs(self):
+    def update_option_picker(self):
         try:
             with open(
                 self.main_widget.json_manager.current_sequence_json_handler.current_sequence_json,

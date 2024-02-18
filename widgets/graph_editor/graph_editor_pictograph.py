@@ -18,18 +18,18 @@ class GraphEditorBlankPictograph(Pictograph):
         super().__init__(graph_editor.main_widget)
         self.main_widget = graph_editor.main_widget
         self.graph_editor = graph_editor
-        self.get.initiallize_getter()
+        # self.get.initiallize_getter()
 
 
 class GraphEditorPictographView(PictographView):
     def __init__(
-        self, GE: "GraphEditor", GE_pictograph: "GraphEditorBlankPictograph"
+        self, GE: "GraphEditor", blank_pictograph: "GraphEditorBlankPictograph"
     ) -> None:
-        super().__init__(GE_pictograph)
+        super().__init__(blank_pictograph)
         self.GE = GE
-        self.GE_pictograph = GE_pictograph
+        self.GE_pictograph = blank_pictograph
         self.main_widget = GE.main_widget
-        self.setScene(GE_pictograph)
+        self.setScene(blank_pictograph)
 
     def resize_GE_pictograph_view(self):
         self.setMinimumHeight(self.GE.height())

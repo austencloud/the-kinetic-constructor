@@ -22,7 +22,7 @@ class StartPositionBeat(Beat):
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.beat_frame = beat_frame
-
+        
     def add_start_text(self) -> None:
         start_text_item = QGraphicsTextItem("Start")
         start_text_item.setFont(QFont("Georgia", 60, QFont.Weight.DemiBold))
@@ -41,6 +41,7 @@ class StartPositionBeatView(BeatView):
         self.beat_frame = beat_frame
         super().__init__(beat_frame)
         self.is_filled = False
+        self.is_start_pos = True
 
     def set_start_pos_beat(self, start_pos: "StartPositionBeat") -> None:
         self.start_pos = self.beat = start_pos

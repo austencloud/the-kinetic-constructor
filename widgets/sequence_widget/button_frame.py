@@ -112,5 +112,5 @@ class SequenceButtonFrame(QFrame):
             file.write("[]")
         if show_indicator:
             self.sequence_widget.indicator_label.show_indicator("Sequence cleared")
-        self.sequence_widget.beat_frame.beat_selection_overlay.deselect_beat()
+        self.sequence_widget.beat_frame.beat_selection_manager.deselect_beat()
         self.sequence_widget.sequence_modifier.graph_editor.GE_pictograph_view.set_to_blank_grid()
