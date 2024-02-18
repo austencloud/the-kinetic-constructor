@@ -4,7 +4,7 @@ from Enums.Enums import LetterType, Letter, TurnsTabAttribute
 from Enums.MotionAttributes import MotionType
 from Enums.letters import LetterConditions
 from widgets.turns_box.turns_box import TurnsBox
-from widgets.factories.attr_box_factory import TurnsBoxFactory
+from widgets.factories.turns_box_factory import TurnsBoxFactory
 
 if TYPE_CHECKING:
     from widgets.scroll_area.components.section_manager.section_widget.components.turns_tab.turns_tab import (

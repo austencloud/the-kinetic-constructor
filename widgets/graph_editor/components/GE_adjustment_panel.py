@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import QFrame
 from .GE_adjustment_box import GE_AdjustmentBox
 
 if TYPE_CHECKING:
-    from .graph_editor import GraphEditor
+    from ..graph_editor import GraphEditor
 
 
 class GE_AdjustmentPanel(QFrame):

@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Callable, Union
 
 from widgets.factories.button_factory.buttons.swap_button import SwapButton
-from ..factories.button_factory.buttons.adjust_turns_button import AdjustTurnsButton
+from ...factories.button_factory.buttons.adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
     from widgets.turns_box.turns_box import TurnsBox

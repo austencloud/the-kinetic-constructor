@@ -4,7 +4,7 @@ from PyQt6.QtGui import QFont
 from typing import Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.GE_motion_types_widget import (
+    from widgets.graph_editor.components.GE_motion_types_widget import (
         GE_MotionTypeWidget,
     )
     from widgets.turns_box.turns_box_widgets.start_end_loc_widget import (

@@ -6,8 +6,8 @@ from .managers.turns_adjustment_manager import TurnsAdjustmentManager
 from .managers.turns_updater import TurnsUpdater
 from .managers.turns_display_manager import TurnDisplayManager
 from .managers.turns_direct_set_manager import TurnsDirectSetManager
-from ....graph_editor.GE_TurnsBoxWidget import GE_TurnsBoxWidget
-from ....graph_editor.GE_TurnsBoxWidget import GE_TurnsBoxWidget
+from ....graph_editor.components.GE_TurnsBoxWidget import GE_TurnsBoxWidget
+from ....graph_editor.components.GE_TurnsBoxWidget import GE_TurnsBoxWidget
 
 if TYPE_CHECKING:
     from turns_box.turns_box import TurnsBox

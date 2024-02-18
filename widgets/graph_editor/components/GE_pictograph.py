@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.GE_pictograph import GE_BlankPictograph
+    from widgets.graph_editor.components.GE_pictograph import GE_BlankPictograph
 
 
 class GE_BlankPictograph(Pictograph):

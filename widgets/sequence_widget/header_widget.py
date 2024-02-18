@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel, QHBoxLayout, QFrame
 from PyQt6.QtCore import Qt
 
-from widgets.graph_editor.GE_TurnsBoxWidget import GE_TurnsBoxWidget
+from widgets.graph_editor.components.GE_TurnsBoxWidget import GE_TurnsBoxWidget
 
 
 if TYPE_CHECKING:

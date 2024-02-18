@@ -6,7 +6,7 @@ from Enums.Enums import LetterType, TurnsTabAttribute
 from Enums.MotionAttributes import Color
 
 
-from .graph_editor.GE_TurnsBoxWidget import GE_TurnsBoxWidget
+from .graph_editor.components.GE_TurnsBoxWidget import GE_TurnsBoxWidget
 
 if TYPE_CHECKING:
     from widgets.turns_box.turns_box import TurnsBox

@@ -10,7 +10,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 from typing import TYPE_CHECKING
 from constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON
-from ..turns_box.turns_box_widgets.turns_widget.turns_widget import (
+from ...turns_box.turns_box_widgets.turns_widget.turns_widget import (
     TurnsWidget,
 )
 

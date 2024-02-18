@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 from widgets.sequence_widget.header_widget import HeaderWidget
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.GE_adjustment_box import (
+    from widgets.graph_editor.components.GE_adjustment_box import (
         GE_AdjustmentBox,
     )
 from constants import BLUE, HEX_BLUE, HEX_RED, RED

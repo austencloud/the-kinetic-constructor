@@ -14,7 +14,7 @@ from .GE_TurnsBoxWidget import GE_TurnsBoxWidget
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.GE_adjustment_box import GE_AdjustmentBox
+    from widgets.graph_editor.components.GE_adjustment_box import GE_AdjustmentBox
 
 
 class GE_MotionTypeWidget(GE_TurnsBoxWidget):

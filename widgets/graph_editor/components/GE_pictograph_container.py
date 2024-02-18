@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout
 
 if TYPE_CHECKING:
     from widgets.graph_editor.graph_editor import GraphEditor
-    from widgets.graph_editor.GE_pictograph import GE_PictographView
+    from widgets.graph_editor.components.GE_pictograph import GE_PictographView
 
 
 class GE_PictographContainer(QWidget):
