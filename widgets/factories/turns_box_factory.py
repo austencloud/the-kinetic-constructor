@@ -6,11 +6,11 @@ from widgets.turns_box.turns_box import TurnsBox
 
 
 if TYPE_CHECKING:
-    from widgets.turns_panel import GraphEditorAdjustmentPanel
+    from widgets.turns_panel import GE_AdjustmentPanel
 
 
 class TurnsBoxFactory:
-    def __init__(self, turns_panel: "GraphEditorAdjustmentPanel") -> None:
+    def __init__(self, turns_panel: "GE_AdjustmentPanel") -> None:
         self.turns_panel = turns_panel
 
     def create_boxes(self) -> list[TurnsBox]:

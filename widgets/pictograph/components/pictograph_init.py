@@ -36,7 +36,6 @@ class PictographInit:
 
         self.pictograph.grid = self.init_grid()
         self.pictograph.locations = self.init_quadrant_boundaries(self.pictograph.grid)
-
         self.pictograph.motions = self.init_motions()
         self.pictograph.arrows = self.init_arrows()
         self.pictograph.props = self.init_props()
@@ -48,7 +47,6 @@ class PictographInit:
         grid = Grid(self.pictograph)
         grid_position = QPointF(0, 0)
         grid.setPos(grid_position)
-
         self.pictograph.grid = grid
         return grid
 
@@ -73,7 +71,6 @@ class PictographInit:
             arrows[Color.RED],
             arrows[Color.BLUE],
         )
-
         return arrows
 
     def init_props(self) -> dict[Color, Prop]:

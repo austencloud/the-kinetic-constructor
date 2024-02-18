@@ -16,7 +16,7 @@ from ..codex.codex_turns_widget import (
 )
 
 if TYPE_CHECKING:
-    from ..turns_panel import GraphEditorAdjustmentPanel
+    from ..turns_panel import GE_AdjustmentPanel
 
 
 class TurnsBox(QFrame):
@@ -31,7 +31,7 @@ class TurnsBox(QFrame):
         super().__init__(turns_panel)
         self.attribute_type: TurnsTabAttribute = attribute_type
         self.attribute_value = attribute
-        self.turns_panel: "GraphEditorAdjustmentPanel" = turns_panel
+        self.turns_panel: "GE_AdjustmentPanel" = turns_panel
 
         self.font_size = self.turns_panel.width() // 20
         self.turn_display_border = 2

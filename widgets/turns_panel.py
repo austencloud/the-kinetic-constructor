@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     )
 
 
-class GraphEditorAdjustmentPanel(QFrame):
+class GE_AdjustmentPanel(QFrame):
     def __init__(
         self, turns_tab: "TurnsTab", attribute_type: TurnsTabAttribute
     ) -> None:
