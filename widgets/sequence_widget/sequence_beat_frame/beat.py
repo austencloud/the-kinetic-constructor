@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QPushButton
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPainter, QPen, QColor, QIcon
+from PyQt6.QtGui import QPainter, QPen, QColor, QIcon, QMouseEvent
 from widgets.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import QRectF
 
@@ -60,10 +60,30 @@ class BeatView(QGraphicsView):
         )
         sequence_builder.reset_to_start_pos_picker()
 
-    def mousePressEvent(self, event):
-        if self.is_filled:
-            self.selection_overlay.select_beat(self)
+    #ignore double click events, treat them as single clicks instead
+    def mouseDoubleClickEvent(self, event: QMouseEvent):
+        self.mousePressEvent(event)
+
+    def mousePressEvent(self, event: QMouseEvent):
+        if event.button() == Qt.MouseButton.LeftButton and self.is_filled:
+            # Toggle the selection status of the current beat
+            if self.is_selected:
+                self.selection_overlay.deselect_beat()
+            else:
+                self.selection_overlay.select_beat(self)
             self.viewport().update()
 
     def paintEvent(self, event):
         super().paintEvent(event)
+
+    def select(self):
+        # Add logic to add a gold frame or highlight the beat
+        self.is_selected = True
+        # You might want to visually update the beat to indicate selection
+        self.update()
+
+    def deselect(self):
+        # Remove the gold frame or selection highlight
+        self.is_selected = False
+        # Visually update the beat to indicate deselection
+        self.update()

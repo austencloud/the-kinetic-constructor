@@ -12,6 +12,7 @@ from widgets.graph_editor.graph_editor_pictograph import (
 from widgets.graph_editor.graph_editor_pictograph_container import (
     GraphEditorPictographContainer,
 )
+from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_modifier_tab_widget import SequenceModifier
@@ -50,6 +51,9 @@ class GraphEditor(QFrame):
         self.layout.addLayout(self.pictograph_layout)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.setLayout(self.layout)
+
+    def render_pictograph(self, pictograph: Pictograph) -> None:
+        self.GE_pictograph.view.setScene(pictograph)
 
     def resize_graph_editor(self):
         self.GE_pictograph_container.resize_GE_pictograph_container()

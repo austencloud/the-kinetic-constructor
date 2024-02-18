@@ -1,9 +1,12 @@
 import json
-from PyQt6.QtWidgets import QWidget, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
 from PyQt6.QtCore import pyqtSignal
 
 from widgets.sequence_builder.components.option_picker.option_manager import (
     OptionManager,
+)
+from widgets.sequence_builder.components.start_position_picker.choose_your_start_position_label import (
+    ChooseYourStartPosLabel,
 )
 
 from .option_picker_scroll_area import OptionPickerScrollArea
@@ -23,14 +26,20 @@ class OptionPicker(QWidget):
         self.main_widget = sequence_builder.main_widget
         self.option_manager = OptionManager(self)
         self.scroll_area = OptionPickerScrollArea(self)
+        self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)
+
         self.setup_layout()
         self.hide()
 
     def setup_layout(self):
-        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.layout: QVBoxLayout = QVBoxLayout(self)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
+        start_label_layout = QHBoxLayout()
+        start_label_layout.addWidget(self.choose_your_start_pos_label)
+        self.choose_your_start_pos_label.show()
+        self.layout.addLayout(start_label_layout)
         self.layout.addWidget(self.scroll_area)
 
     def update_pictographs(self):

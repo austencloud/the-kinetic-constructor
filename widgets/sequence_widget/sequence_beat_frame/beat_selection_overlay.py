@@ -12,15 +12,15 @@ if TYPE_CHECKING:
 class BeatSelectionOverlay(QWidget):
     def __init__(self, sequence_widget: "SequenceWidget"):
         super().__init__(sequence_widget)
-        self.selected_beat_view: Optional[QWidget] = None
+        self.selected_beat_view: Optional[BeatView] = None
         self.border_color = QColor("gold")
         self.border_width = 4  # Adjust as needed
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-        self.hide() 
+        self.hide()
 
     def select_beat(self, beat_view: BeatView):
         if self.selected_beat_view == beat_view:
-            self.deselect_beat()  # Deselect if the same beat is clicked again
+            self.deselect_beat()
         else:
             if self.selected_beat_view:
                 self.selected_beat_view.deselect()
@@ -30,6 +30,8 @@ class BeatSelectionOverlay(QWidget):
             self.show()
 
     def deselect_beat(self):
+        if self.selected_beat_view:
+            self.selected_beat_view.deselect()
         self.selected_beat_view = None
         self.hide()
 
