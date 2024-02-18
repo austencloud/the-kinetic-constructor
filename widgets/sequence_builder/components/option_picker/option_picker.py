@@ -6,7 +6,7 @@ from widgets.sequence_builder.components.option_picker.option_manager import (
     OptionManager,
 )
 from widgets.sequence_builder.components.start_position_picker.choose_your_start_position_label import (
-    ChooseYourStartPosLabel,
+    ChooseYourNextPictographLabel,
 )
 
 from .option_picker_scroll_area import OptionPickerScrollArea
@@ -26,7 +26,9 @@ class OptionPicker(QWidget):
         self.main_widget = sequence_builder.main_widget
         self.option_manager = OptionManager(self)
         self.scroll_area = OptionPickerScrollArea(self)
-        self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)
+        self.choose_your_start_pos_label = ChooseYourNextPictographLabel(
+            self, "Choose Your Next Option!"
+        )
 
         self.setup_layout()
         self.hide()

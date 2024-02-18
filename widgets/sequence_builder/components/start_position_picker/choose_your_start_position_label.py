@@ -9,18 +9,18 @@ if TYPE_CHECKING:
     )
 
 
-class ChooseYourStartPosLabel(QLabel):
-    def __init__(self, start_pos_picker: "StartPosPicker"):
+class ChooseYourNextPictographLabel(QLabel):
+    def __init__(self, start_pos_picker: "StartPosPicker", text: str) -> None:
         super().__init__(start_pos_picker)
         self.start_pos_picker = start_pos_picker
-        self.setText("Choose Your Start Position!")
+        self.setText(text)
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setGeometry(0, 0, self.start_pos_picker.width(), 50)
         self.hide()
-        
+
     def set_stylesheet(self) -> None:
         width = self.start_pos_picker.width()
-        font_size = int(0.03 * width)  # Adjust the multiplier as needed
+        font_size = int(0.03 * width)
         self.setFont(QFont("Monotype Corsiva", font_size))
         self.setStyleSheet("QLabel { border: 1px solid black; }")
         self.show()
