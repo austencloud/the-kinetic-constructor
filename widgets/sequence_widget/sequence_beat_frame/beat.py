@@ -29,7 +29,7 @@ class BeatView(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.beat_frame = beat_frame
-        self.selection_overlay = self.beat_frame.beat_selection_manager
+        self.selection_manager = self.beat_frame.selection_manager
         self.beat: "Beat" = None
         self.is_filled = False
         self.is_selected = False
@@ -65,7 +65,7 @@ class BeatView(QGraphicsView):
 
     def mousePressEvent(self, event: QMouseEvent):
         if event.button() == Qt.MouseButton.LeftButton and self.is_filled:
-            self.selection_overlay.select_beat(self)
+            self.selection_manager.select_beat(self)
 
     def paintEvent(self, event):
         super().paintEvent(event)

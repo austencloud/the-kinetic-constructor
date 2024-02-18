@@ -60,8 +60,8 @@ class MainWidget(QWidget):
         self.prop_type_selector = PropTypeSelector(self)
         self.turns_tuple_generator = TurnsTupleGenerator()
         self.pictograph_key_generator = PictographKeyGenerator()
-        self.sequence_widget = SequenceWidget(self)
         self.main_tab_widget = MainTabWidget(self)
+        self.sequence_widget = SequenceWidget(self)
         self.preferences_dialog = PreferencesDialog(self)
         self.image_cache_manager = ImageCacheManager(self)
 

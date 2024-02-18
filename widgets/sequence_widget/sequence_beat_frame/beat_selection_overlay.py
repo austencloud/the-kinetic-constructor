@@ -45,6 +45,9 @@ class BeatSelectionManager(QWidget):
             self.raise_()
             self.update()
 
+    def get_selected_beat(self) -> Optional[BeatView]:
+        return self.selected_beat_view
+
     def paintEvent(self, event):
         if not self.selected_beat_view:
             return

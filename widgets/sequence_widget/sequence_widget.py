@@ -26,12 +26,12 @@ class SequenceWidget(QWidget):
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         self.pictograph_cache: dict[str, Pictograph] = {}
         self.indicator_label = IndicatorLabel(self)
+        self.sequence_modifier = SequenceModifier(self)
         self.beat_frame = SequenceBeatFrame(self.main_widget, self)
         self.button_frame = SequenceButtonFrame(self)
         self.pictograph_factory = SequenceWidgetPictographFactory(
             self, self.pictograph_cache
         )
-        self.sequence_modifier = SequenceModifier(self)
         self.my_sequence_label = MySequenceLabel(self)
         self.beats = self.beat_frame.beats
         self.layout: QVBoxLayout = QVBoxLayout(self)

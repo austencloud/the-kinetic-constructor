@@ -22,7 +22,7 @@ class StartPositionBeat(Beat):
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.beat_frame = beat_frame
-        
+
     def add_start_text(self) -> None:
         start_text_item = QGraphicsTextItem("Start")
         start_text_item.setFont(QFont("Georgia", 60, QFont.Weight.DemiBold))
@@ -53,7 +53,4 @@ class StartPositionBeatView(BeatView):
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
         self.start_pos.add_start_text()
-
-    # def mousePressEvent(self, event: QMouseEvent | None) -> None:
-    #     super().mousePressEvent(event)
-    #     # self.viewport().update()
+        self.beat_frame.selection_manager.select_beat(self)
