@@ -5,14 +5,14 @@ from typing import TYPE_CHECKING, Union
 
 
 if TYPE_CHECKING:
-    from widgets.turns_box.turns_box import TurnsBox
+    from widgets.turns_box.codex_turns_box import CodexTurnsBox
     from .....codex.codex_turns_widget import CodexTurnsWidget
 
 
 class TurnDisplayManager:
     def __init__(self, turns_widget: "CodexTurnsWidget") -> None:
         self.turns_widget = turns_widget
-        self.turns_box: TurnsBox = turns_widget.turns_box
+        self.turns_box: CodexTurnsBox = turns_widget.turns_box
 
     def setup_display_components(self) -> None:
         self.setup_turns_display()

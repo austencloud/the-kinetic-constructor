@@ -30,12 +30,12 @@ from ...factories.button_factory.buttons.rot_dir_buttons import (
 from PyQt6.QtWidgets import QPushButton
 
 if TYPE_CHECKING:
-    from widgets.turns_box.turns_box import TurnsBox
+    from widgets.turns_box.codex_turns_box import CodexTurnsBox
     from objects.motion.motion import Motion
 
 
 class PropRotDirButtonManager:
-    def __init__(self, turns_box: "TurnsBox") -> None:
+    def __init__(self, turns_box: "CodexTurnsBox") -> None:
         self.turns_box = turns_box
         self.previous_turns = 0
         self.prop_rot_dir_buttons: list[PropRotDirButton] = (

@@ -11,11 +11,11 @@ from .codex_turns_box_widget import (
 )
 
 if TYPE_CHECKING:
-    from widgets.turns_box.turns_box import TurnsBox
+    from widgets.turns_box.codex_turns_box import CodexTurnsBox
 
 
 class CodexTurnsBoxHeaderWidget(CodexTurnsBoxWidget):
-    def __init__(self, turns_box: "TurnsBox") -> None:
+    def __init__(self, turns_box: "CodexTurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box
         self.separator: QFrame = self.create_separator()

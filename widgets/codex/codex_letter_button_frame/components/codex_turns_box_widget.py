@@ -7,14 +7,14 @@ from widgets.factories.button_factory.buttons.swap_button import SwapButton
 from ....factories.button_factory.buttons.adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
-    from widgets.turns_box.turns_box import TurnsBox
+    from widgets.turns_box.codex_turns_box import CodexTurnsBox
     from objects.motion.motion import Motion
 
 
 class CodexTurnsBoxWidget(QWidget):
     def __init__(self, turns_box) -> None:
         super().__init__(turns_box)
-        self.turns_box: "TurnsBox" = turns_box
+        self.turns_box: "CodexTurnsBox" = turns_box
 
     def create_attr_header_label(
         self, text: str, align: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter

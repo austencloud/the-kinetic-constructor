@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from ..turns_panel import GE_AdjustmentPanel
 
 
-class TurnsBox(QFrame):
+class CodexTurnsBox(QFrame):
     turns_widget: CodexTurnsWidget
 
     def __init__(

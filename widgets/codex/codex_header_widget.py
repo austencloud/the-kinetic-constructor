@@ -8,13 +8,13 @@ from widgets.codex.codex_letter_button_frame.components.codex_turns_box_widget i
 
 
 if TYPE_CHECKING:
-    from widgets.turns_box.turns_box import TurnsBox
+    from widgets.turns_box.codex_turns_box import CodexTurnsBox
 
 from constants import BLUE, COLOR, LEAD_STATE, MOTION_TYPE, Type1
 
 
 class CodexHeaderWidget(CodexTurnsBoxWidget):
-    def __init__(self, turns_box: "TurnsBox") -> None:
+    def __init__(self, turns_box: "CodexTurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box
         self.separator: QFrame = self.create_separator()

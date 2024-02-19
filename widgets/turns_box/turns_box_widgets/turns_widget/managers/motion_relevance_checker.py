@@ -3,12 +3,12 @@ from Enums.Enums import LetterType, TurnsTabAttribute
 
 
 if TYPE_CHECKING:
-    from widgets.turns_box.turns_box import TurnsBox
+    from widgets.turns_box.codex_turns_box import CodexTurnsBox
     from objects.motion.motion import Motion
 
 
 class MotionRelevanceChecker:
-    def __init__(self, turns_box: "TurnsBox") -> None:
+    def __init__(self, turns_box: "CodexTurnsBox") -> None:
         self.turns_box = turns_box
 
     def is_motion_relevant(self, motion: "Motion") -> bool:

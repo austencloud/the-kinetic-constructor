@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter, TurnsTabAttribute
 from Enums.MotionAttributes import MotionType
 from Enums.letters import LetterConditions
-from widgets.turns_box.turns_box import TurnsBox
+from widgets.turns_box.codex_turns_box import CodexTurnsBox
 from widgets.factories.turns_box_factory import TurnsBoxFactory
 
 if TYPE_CHECKING:
@@ -20,9 +20,9 @@ class GE_AdjustmentPanel(QFrame):
         self.turns_tab = turns_tab
         self.attribute_type = attribute_type
         self.turns_box_factory = TurnsBoxFactory(self)
-        self.boxes: list[TurnsBox] = self.turns_box_factory.create_boxes()
+        self.boxes: list[CodexTurnsBox] = self.turns_box_factory.create_boxes()
         self.setup_layouts()
-        self.visible_boxes: list[TurnsBox] = []
+        self.visible_boxes: list[CodexTurnsBox] = []
 
     def setup_layouts(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
