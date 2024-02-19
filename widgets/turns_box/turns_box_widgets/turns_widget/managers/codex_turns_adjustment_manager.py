@@ -1,14 +1,14 @@
 from typing import TYPE_CHECKING, Union
-from Enums import LetterType
+from Enums.MotionAttributes import Turns
+from Enums.letters import LetterType
 from constants import Type2, Type3
-from utilities.TypeChecking.TypeChecking import Turns
 
 if TYPE_CHECKING:
     from .....pictograph.pictograph import Pictograph
     from .....codex.codex_turns_widget import CodexTurnsWidget
 
 
-class TurnsAdjustmentManager:
+class CodexTurnsAdjustmentManager:
     def __init__(self, turns_widget: "CodexTurnsWidget") -> None:
         self.turns_widget = turns_widget
         self.pictographs = self._get_pictographs()

@@ -5,7 +5,7 @@ from data.letter_engine_data import motion_type_letter_combinations
 from typing import List
 from typing import TYPE_CHECKING
 
-from widgets.turns_panel import GE_AdjustmentPanel
+from widgets.codex_turns_panel import CodexTurnsPanel
 
 
 if TYPE_CHECKING:
@@ -35,7 +35,7 @@ class TurnsTabVisibilityHandler:
         self.turns_tab = turns_tab
         self.section = self.turns_tab.section
 
-        self.turns_panels: dict[TurnsTabAttribute, GE_AdjustmentPanel] = {
+        self.turns_panels: dict[TurnsTabAttribute, CodexTurnsPanel] = {
             TurnsTabAttribute.MOTION_TYPE: self.turns_tab.motion_type_turns_panel,
             TurnsTabAttribute.COLOR: self.turns_tab.color_turns_panel,
             TurnsTabAttribute.LEAD_STATE: self.turns_tab.lead_state_turns_panel,

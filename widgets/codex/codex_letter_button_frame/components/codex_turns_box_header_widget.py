@@ -4,17 +4,15 @@ from PyQt6.QtCore import Qt
 
 from Enums.Enums import LetterType, TurnsTabAttribute
 from Enums.MotionAttributes import Color
+from widgets.codex.codex_turns_box_widget import CodexWidget
 
 
-from .codex_turns_box_widget import (
-    CodexTurnsBoxWidget,
-)
 
 if TYPE_CHECKING:
     from widgets.turns_box.codex_turns_box import CodexTurnsBox
 
 
-class CodexTurnsBoxHeaderWidget(CodexTurnsBoxWidget):
+class CodexTurnsBoxHeaderWidget(CodexWidget):
     def __init__(self, turns_box: "CodexTurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box

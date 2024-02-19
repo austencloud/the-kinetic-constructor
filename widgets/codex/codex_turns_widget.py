@@ -4,7 +4,7 @@ from ..turns_box.turns_box_widgets.turns_widget.managers.motion_relevance_checke
     MotionRelevanceChecker,
 )
 from ..turns_box.turns_box_widgets.turns_widget.managers.turns_button_manager import (
-    TurnsButtonManager,
+    CodexTurnsButtonManager,
 )
 from ..turns_box.turns_box_widgets.turns_widget.managers.turns_adjustment_manager import (
     TurnsAdjustmentManager,
@@ -18,18 +18,18 @@ from ..turns_box.turns_box_widgets.turns_widget.managers.turns_display_manager i
 from ..turns_box.turns_box_widgets.turns_widget.managers.turns_direct_set_manager import (
     TurnsDirectSetManager,
 )
-from .codex_letter_button_frame.components.codex_turns_box_widget import (
-    CodexTurnsBoxWidget,
+from .codex_turns_box_widget import (
+    CodexWidget,
 )
-from .codex_letter_button_frame.components.codex_turns_box_widget import (
-    CodexTurnsBoxWidget,
+from .codex_turns_box_widget import (
+    CodexWidget,
 )
 
 if TYPE_CHECKING:
     from widgets.turns_box.codex_turns_box import CodexTurnsBox
 
 
-class CodexTurnsWidget(CodexTurnsBoxWidget):
+class CodexTurnsWidget(CodexWidget):
     def __init__(self, turns_box: "CodexTurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box
@@ -39,7 +39,7 @@ class CodexTurnsWidget(CodexTurnsBoxWidget):
         self.layout.setSpacing(0)
         self.direct_set_manager = TurnsDirectSetManager(self)
         self.display_manager = TurnDisplayManager(self)
-        self.button_manager = TurnsButtonManager(self)
+        self.button_manager = CodexTurnsButtonManager(self)
         self.relevance_checker = MotionRelevanceChecker(turns_box)
         self.adjustment_manager = TurnsAdjustmentManager(self)
         self.updater = TurnsUpdater(self)

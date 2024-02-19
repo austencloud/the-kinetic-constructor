@@ -1,28 +1,27 @@
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Color
-from ...turns_panel import GE_AdjustmentPanel
-
+from widgets.graph_editor.components.GE_pictograph import GE_PictographView
 from .GE_header_widget import GE_HeaderWidget
 from .GE_turns_widget import GE_TurnsWidget
-
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 if TYPE_CHECKING:
+    from widgets.graph_editor.components.GE_turns_panel import GE_TurnsPanel
     from widgets.pictograph.pictograph import Pictograph
-
-
 
 
 class GE_TurnsBox(QFrame):
     def __init__(
         self,
-        adjustment_panel: "GE_AdjustmentPanel",
+        turns_panel: "GE_TurnsPanel",
         pictograph: "Pictograph",
         color: Color,
     ) -> None:
-        super().__init__(adjustment_panel)
+        super().__init__(turns_panel)
+        self.turns_panel = turns_panel
         self.color = color
         self.pictograph = pictograph
+        self.graph_editor = self.turns_panel.graph_editor
         self._setup_widgets()
         self._setup_layout()
 
@@ -35,8 +34,6 @@ class GE_TurnsBox(QFrame):
         self.layout.addWidget(self.header_widget)
         self.layout.addWidget(self.turns_widget)
         self.setLayout(self.layout)
-
-    ### CREATE LABELS ###
 
     def calculate_button_size(self) -> int:
         return int((self.pictograph.view.height() // 8))

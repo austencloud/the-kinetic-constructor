@@ -1,10 +1,10 @@
 from PyQt6.QtWidgets import QTabWidget
 
 from Enums.Enums import TurnsTabAttribute
+from widgets.codex_turns_panel import CodexTurnsPanel
 from .turns_tab_visibility_handler import TurnsTabVisibilityHandler
 from typing import TYPE_CHECKING
 from .turns_tab_turns_updater import TurnsTabUpdater
-from widgets.turns_panel import GE_AdjustmentPanel
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -27,11 +27,11 @@ class TurnsTab(QTabWidget):
         self.updater = TurnsTabUpdater(self)
 
     def _setup_panels(self):
-        self.motion_type_turns_panel = GE_AdjustmentPanel(
+        self.motion_type_turns_panel = CodexTurnsPanel(
             self, TurnsTabAttribute.MOTION_TYPE
         )
-        self.color_turns_panel = GE_AdjustmentPanel(self, TurnsTabAttribute.COLOR)
-        self.lead_state_turns_panel = GE_AdjustmentPanel(
+        self.color_turns_panel = CodexTurnsPanel(self, TurnsTabAttribute.COLOR)
+        self.lead_state_turns_panel = CodexTurnsPanel(
             self, TurnsTabAttribute.LEAD_STATE
         )
 

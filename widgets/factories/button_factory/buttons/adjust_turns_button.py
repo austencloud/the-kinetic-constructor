@@ -10,9 +10,8 @@ if TYPE_CHECKING:
 
 
 class AdjustTurnsButton(QPushButton):
-    def __init__(self, parent_widget: "CodexTurnsWidget") -> None:
-        super().__init__(parent_widget)
-        self.parent_widget = parent_widget
+    def __init__(self) -> None:
+        super().__init__()
 
     def update_adjust_turns_button_size(self, button_size) -> None:
         self.button_size = button_size

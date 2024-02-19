@@ -1,15 +1,14 @@
 from PyQt6.QtGui import QIcon
+from widgets.factories.button_factory.buttons.adjust_turns_button import AdjustTurnsButton
 from widgets.factories.button_factory.buttons.rot_dir_buttons import (
-    OpenCloseButton,
     PropRotDirButton,
     VtgDirButton,
 )
-from widgets.codex.codex_letter_button_frame.components.codex_letter_button import (
-    CodexLetterButton,
-)
+from widgets.factories.button_factory.buttons.swap_button import SwapButton
 
 
 class ButtonFactory:
+
     @staticmethod
     def create_vtg_dir_button(icon_path: str, callback, vtg_dir) -> VtgDirButton:
         button = VtgDirButton(vtg_dir)
@@ -26,17 +25,15 @@ class ButtonFactory:
         button.clicked.connect(callback)
         return button
 
-    def create_open_close_button(
-        icon_path: str, callback, open_close_state
-    ) -> OpenCloseButton:
-        button = OpenCloseButton(open_close_state)
+    @staticmethod
+    def create_swap_button(icon_path: str, callback: callable) -> "SwapButton":
+        button = SwapButton(icon_path)
         button.setIcon(QIcon(icon_path))
         button.clicked.connect(callback)
         return button
-
+    
     @staticmethod
-    def create_letter_button(
-        icon_path, letter_str: str, letter_type: str
-    ) -> CodexLetterButton:
-        button = CodexLetterButton(icon_path, letter_str)
+    def create_adjust_turns_button(text: str) -> AdjustTurnsButton:
+        button = AdjustTurnsButton()
+        button.setText(text)
         return button

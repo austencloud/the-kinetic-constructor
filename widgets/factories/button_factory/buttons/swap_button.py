@@ -7,24 +7,15 @@ if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_motion_types_widget import (
         GE_MotionTypeWidget,
     )
-    from widgets.turns_box.turns_box_widgets.start_end_loc_widget import (
-        StartEndLocWidget,
-    )
+
     from widgets.codex.codex_turns_widget import (
         CodexTurnsWidget,
     )
 
 
 class SwapButton(QPushButton):
-    def __init__(
-        self,
-        parent_widget: Union[
-            "StartEndLocWidget", "CodexTurnsWidget", "GE_MotionTypeWidget"
-        ],
-        text=None,
-    ) -> None:
-        super().__init__(text, parent_widget)
-        self.parent_widget = parent_widget
+    def __init__(self) -> None:
+        super().__init__()
 
     def update_attr_box_adjust_turns_button_size(self, button_size) -> None:
         self.button_size = button_size

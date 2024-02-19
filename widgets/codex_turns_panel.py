@@ -3,8 +3,9 @@ from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter, TurnsTabAttribute
 from Enums.MotionAttributes import MotionType
 from Enums.letters import LetterConditions
+from widgets.factories.turns_box_factory import CodexTurnsBoxFactory
 from widgets.turns_box.codex_turns_box import CodexTurnsBox
-from widgets.factories.turns_box_factory import TurnsBoxFactory
+
 
 if TYPE_CHECKING:
     from widgets.scroll_area.components.section_manager.section_widget.components.turns_tab.turns_tab import (
@@ -12,14 +13,14 @@ if TYPE_CHECKING:
     )
 
 
-class GE_AdjustmentPanel(QFrame):
+class CodexTurnsPanel(QFrame):
     def __init__(
         self, turns_tab: "TurnsTab", attribute_type: TurnsTabAttribute
     ) -> None:
         super().__init__()
         self.turns_tab = turns_tab
         self.attribute_type = attribute_type
-        self.turns_box_factory = TurnsBoxFactory(self)
+        self.turns_box_factory = CodexTurnsBoxFactory(self)
         self.boxes: list[CodexTurnsBox] = self.turns_box_factory.create_boxes()
         self.setup_layouts()
         self.visible_boxes: list[CodexTurnsBox] = []
@@ -31,7 +32,7 @@ class GE_AdjustmentPanel(QFrame):
         self.layout.setSpacing(0)
         for box in self.boxes:
             self.layout.addWidget(box)
-            box.setObjectName("TurnsBox")
+            box.setObjectName("CodexTurnsBox")
 
     def show_motion_type_boxes_based_on_chosen_letters(
         self, selected_letters: list[Letter]

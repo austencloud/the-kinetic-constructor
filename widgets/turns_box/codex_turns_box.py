@@ -5,9 +5,10 @@ from Enums.Enums import TurnsTabAttribute
 from Enums.MotionAttributes import Color, LeadStates, MotionType
 
 from constants import BLUE, CLOCKWISE, COLOR, COUNTER_CLOCKWISE, RED
-from ..codex.codex_letter_button_frame.components.codex_turns_box_header_widget import (
+from widgets.codex.codex_letter_button_frame.components.codex_turns_box_header_widget import (
     CodexTurnsBoxHeaderWidget,
 )
+
 from .turns_box_widgets.prop_rot_dir_button_manager import (
     PropRotDirButtonManager,
 )
@@ -16,7 +17,7 @@ from ..codex.codex_turns_widget import (
 )
 
 if TYPE_CHECKING:
-    from ..turns_panel import GE_AdjustmentPanel
+    from widgets.codex_turns_panel import CodexTurnsBoxPanel
 
 
 class CodexTurnsBox(QFrame):
@@ -31,7 +32,7 @@ class CodexTurnsBox(QFrame):
         super().__init__(turns_panel)
         self.attribute_type: TurnsTabAttribute = attribute_type
         self.attribute_value = attribute
-        self.turns_panel: "GE_AdjustmentPanel" = turns_panel
+        self.turns_panel: "CodexTurnsBoxPanel" = turns_panel
 
         self.font_size = self.turns_panel.width() // 20
         self.turn_display_border = 2

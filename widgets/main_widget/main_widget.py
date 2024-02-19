@@ -5,6 +5,7 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from Enums.PropTypes import PropTypes
+from widgets.factories.button_factory.button_factory import ButtonFactory
 from widgets.json_manager import JSON_Manager
 from widgets.menu_bar.preferences_dialog import PreferencesDialog
 from widgets.menu_bar.prop_type_selector import PropTypeSelector
@@ -55,6 +56,7 @@ class MainWidget(QWidget):
 
     def _setup_components(self) -> None:
         self._setup_special_placements()
+        self.button_factory = ButtonFactory()
         self.json_manager = JSON_Manager(self)
         self.svg_manager = GraphicalObjectSvgManager()
         self.prop_type_selector = PropTypeSelector(self)

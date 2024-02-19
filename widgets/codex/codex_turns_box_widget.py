@@ -4,13 +4,13 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Callable
 
 from widgets.factories.button_factory.buttons.swap_button import SwapButton
-from ....factories.button_factory.buttons.adjust_turns_button import AdjustTurnsButton
+from ..factories.button_factory.buttons.adjust_turns_button import AdjustTurnsButton
 
 if TYPE_CHECKING:
     from widgets.turns_box.codex_turns_box import CodexTurnsBox
 
 
-class CodexTurnsBoxWidget(QWidget):
+class CodexWidget(QWidget):
     def __init__(self, turns_box) -> None:
         super().__init__(turns_box)
         self.turns_box: "CodexTurnsBox" = turns_box
@@ -29,13 +29,3 @@ class CodexTurnsBoxWidget(QWidget):
         frame.setLayout(layout)
         return frame
 
-    def create_swap_button(self, icon_path: str, callback: Callable) -> "SwapButton":
-        button = SwapButton(self.turns_box, icon_path)
-        button.setIcon(QIcon(icon_path))
-        button.clicked.connect(callback)
-        return button
-
-    def create_adjust_turns_button(self, text: str) -> AdjustTurnsButton:
-        button = AdjustTurnsButton(self)
-        button.setText(text)
-        return button

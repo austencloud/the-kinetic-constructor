@@ -6,16 +6,20 @@ from widgets.factories.button_factory.buttons.adjust_turns_button import (
 )
 
 if TYPE_CHECKING:
+    from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
     from widgets.codex.codex_turns_widget import (
         CodexTurnsWidget,
     )
 
 
-class CodexTurnsButtonManager:
-    def __init__(self, turns_widget: "CodexTurnsWidget") -> None:
+class GE_TurnsButtonManager:
+    def __init__(self, turns_widget: "GE_TurnsWidget") -> None:
         self.turns_widget = turns_widget
         self.adjustments = [(-1, "-1"), (-0.5, "-0.5"), (0.5, "+0.5"), (1, "+1")]
         self.adjust_turns_buttons: list[AdjustTurnsButton] = []
+        self.button_factory = (
+            self.turns_widget.turns_box.graph_editor.main_widget.button_factory
+        )
 
     def setup_adjust_turns_buttons(self) -> None:
         """Create and setup adjustment buttons."""
@@ -27,11 +31,6 @@ class CodexTurnsButtonManager:
     def _setup_button_frames(self) -> None:
         self.left_spacer_frame = QFrame()
         self.right_spacer_frame = QFrame()
-        spacer_height = int(
-            self.turns_widget.turns_box.turns_panel.turns_tab.section.width() / 28
-        )
-        self.left_spacer_frame.setMinimumHeight(spacer_height)
-        self.right_spacer_frame.setMinimumHeight(spacer_height)
 
         self.negative_buttons_frame = QFrame()
         self.negative_buttons_container = QVBoxLayout(self.negative_buttons_frame)
@@ -47,7 +46,7 @@ class CodexTurnsButtonManager:
         self, adjustment: AdjustmentNums, text: AdjustmentStrs
     ) -> AdjustTurnsButton:
         """Create an adjust turns button and add it to the appropriate layout."""
-        button: AdjustTurnsButton = self.turns_widget.create_adjust_turns_button(text)
+        button: AdjustTurnsButton = self.button_factory.create_adjust_turns_button(text)
         button.setContentsMargins(0, 0, 0, 0)
         button.clicked.connect(
             lambda _, adj=adjustment: self.turns_widget.adjustment_manager.adjust_turns(

@@ -6,11 +6,11 @@ from widgets.turns_box.codex_turns_box import CodexTurnsBox
 
 
 if TYPE_CHECKING:
-    from widgets.turns_panel import GE_AdjustmentPanel
+    from widgets.codex_turns_panel import CodexTurnsBoxPanel
 
 
-class TurnsBoxFactory:
-    def __init__(self, turns_panel: "GE_AdjustmentPanel") -> None:
+class CodexTurnsBoxFactory:
+    def __init__(self, turns_panel: "CodexTurnsBoxPanel") -> None:
         self.turns_panel = turns_panel
 
     def create_boxes(self) -> list[CodexTurnsBox]:

@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from ..graph_editor import GraphEditor
 
 
-class GE_AdjustmentPanel(QFrame):
+class GE_TurnsPanel(QFrame):
     def __init__(self, graph_editor: "GraphEditor") -> None:
         self.graph_editor = graph_editor
         super().__init__(graph_editor)

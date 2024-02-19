@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
-from widgets.graph_editor.components.GE_turns_panel import GE_AdjustmentPanel
+from widgets.graph_editor.components.GE_turns_panel import GE_TurnsPanel
 from widgets.graph_editor.components.GE_pictograph import (
     GE_BlankPictograph,
     GE_PictographView,
@@ -16,6 +16,7 @@ from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_modifier import SequenceModifier
+
 
 class GraphEditor(QFrame):
     def __init__(self, sequence_modifier: "SequenceModifier") -> None:
@@ -35,8 +36,8 @@ class GraphEditor(QFrame):
         )
 
     def _setup_adjustment_panel(self):
-        self.adjustment_panel = GE_AdjustmentPanel(self)
-        self.adjustment_panel.setContentsMargins(0, 0, 0, 0)
+        self.turns_panel = GE_TurnsPanel(self)
+        self.turns_panel.setContentsMargins(0, 0, 0, 0)
 
     def _setup_frame_style(self) -> None:
         self.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
@@ -56,7 +57,7 @@ class GraphEditor(QFrame):
         self.layout.addLayout(self.pictograph_layout)
 
         self.adjustment_panel_layout = QVBoxLayout()
-        self.adjustment_panel_layout.addWidget(self.adjustment_panel)
+        self.adjustment_panel_layout.addWidget(self.turns_panel)
         self.layout.addLayout(self.adjustment_panel_layout)
 
         self.setLayout(self.layout)
@@ -66,4 +67,4 @@ class GraphEditor(QFrame):
 
     def resize_graph_editor(self):
         self.GE_pictograph_container.resize_GE_pictograph_container()
-        self.adjustment_panel.resize_GE_adjustment_panel()
+        self.turns_panel.resize_GE_adjustment_panel()
