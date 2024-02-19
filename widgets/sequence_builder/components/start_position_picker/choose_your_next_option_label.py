@@ -9,11 +9,11 @@ if TYPE_CHECKING:
     )
 
 
-class ChooseYourStartPositionLabel(QLabel):
+class ChooseYourNextOptionLabel(QLabel):
     def __init__(self, start_pos_picker: "StartPosPicker") -> None:
         super().__init__(start_pos_picker)
         self.start_pos_picker = start_pos_picker
-        self.setText("Choose your start position!")
+        self.setText("Choose your next option!")
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setGeometry(0, 0, self.start_pos_picker.width(), 50)
         self.hide()

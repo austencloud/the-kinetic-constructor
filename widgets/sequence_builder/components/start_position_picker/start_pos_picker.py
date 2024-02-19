@@ -5,7 +5,7 @@ from widgets.scroll_area.components.start_pos_picker_pictograph_factory import (
     StartPosPickerPictographFactory,
 )
 from widgets.sequence_builder.components.start_position_picker.choose_your_next_pictograph_label import (
-    ChooseYourNextPictographLabel,
+    ChooseYourStartPositionLabel,
 )
 from widgets.sequence_builder.components.start_position_picker.start_pos_frame import (
     StartPosPickerPictographFrame,
@@ -30,9 +30,7 @@ class StartPosPicker(QWidget):
         )
         self.pictograph_frame = StartPosPickerPictographFrame(self)
         self.start_pos_manager = StartPosManager(self)
-        self.choose_your_start_pos_label = ChooseYourNextPictographLabel(
-            self, "Choose Your Start Position!"
-        )
+        self.choose_your_start_pos_label = ChooseYourStartPositionLabel(self)
 
         self.pictograph_frame._setup_choose_your_start_pos_label()
         self.setup_layout()
