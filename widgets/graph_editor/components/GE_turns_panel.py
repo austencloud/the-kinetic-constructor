@@ -1,3 +1,4 @@
+from Enums.MotionAttributes import Color
 from constants import BLUE, RED
 from typing import TYPE_CHECKING
 from objects.motion.motion import Motion
@@ -16,10 +17,10 @@ class GE_AdjustmentPanel(QFrame):
 
     def _setup_attr_boxes(self) -> None:
         self.blue_adjustment_box: GE_TurnsBox = GE_TurnsBox(
-            self, self.graph_editor.GE_pictograph, BLUE
+            self, self.graph_editor.GE_pictograph, Color.BLUE
         )
         self.red_adjustment_box: GE_TurnsBox = GE_TurnsBox(
-            self, self.graph_editor.GE_pictograph, RED
+            self, self.graph_editor.GE_pictograph, Color.RED
         )
         self.boxes = [self.blue_adjustment_box, self.red_adjustment_box]
 

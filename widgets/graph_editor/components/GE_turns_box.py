@@ -8,7 +8,7 @@ from ...factories.button_factory.buttons.adjust_turns_button import AdjustTurnsB
 from .GE_header_widget import GE_HeaderWidget
 from .GE_turns_widget import GE_TurnsWidget
 
-from PyQt6.QtWidgets import QFrame
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -28,17 +28,22 @@ class GE_TurnsBox(QFrame):
         self.color = color
         self.pictograph = pictograph
         self._setup_widgets()
-        # add black borders
-        self.setStyleSheet("border: 1px solid black;")
+        self._setup_layout()
 
     def _setup_widgets(self) -> None:
         self.header_widget = GE_HeaderWidget(self)
         self.turns_widget = GE_TurnsWidget(self)
 
+    def _setup_layout(self) -> None:
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.layout.addWidget(self.header_widget)
+        self.layout.addWidget(self.turns_widget)
+        self.setLayout(self.layout)
+
     ### CREATE LABELS ###
 
     def calculate_button_size(self) -> int:
-        return int((self.pictograph.view.height() // 2 // 4) * 1)
+        return int((self.pictograph.view.height() // 8))
 
     def resize_GE_turns_box(self) -> None:
         self.setMinimumHeight(self.pictograph.view.height())
