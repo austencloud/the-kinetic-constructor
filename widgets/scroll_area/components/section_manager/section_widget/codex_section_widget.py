@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QVBoxLayout, QGroupBox, QSizePolicy
 from Enums.Enums import LetterType
 
 from Enums.letters import Letter
-from constants import OPP, SAME
+from constants import DASH, NO_ROT, OPP, SAME, STATIC
 from .components.turns_tab.turns_tab import TurnsTab
 from .components.section_header import SectionHeader
 from .....pictograph.pictograph import Pictograph
@@ -68,9 +68,15 @@ class CodexSectionWidget(QGroupBox):
         self.layout.activate()
 
     def reset_section(self, index: int) -> None:
+
+    # Need to fix this so the dash arrows don't show up the wrong way
+
         for pictograph in self.pictographs.values():
             for motion in pictograph.motions.values():
                 motion.turns_manager.set_turns(0)
+                if motion.motion_type in [DASH, STATIC]:
+                    motion.prop_rot_dir = NO_ROT
+
             pictograph.updater.update_pictograph()
         for panel in self.turns_tab.panels:
             for box in panel.boxes:

@@ -57,6 +57,4 @@ class Animator(QFrame):
         self.animated_pictograph.view.setScene(pictograph)
 
     def resize_animator(self):
-        self.setMinimumHeight(self.sequence_modifier.height())
-        self.setMaximumHeight(self.sequence_modifier.height())
         self.animated_pictograph_container.resize_animated_pictograph_container()
