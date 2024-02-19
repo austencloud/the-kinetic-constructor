@@ -24,9 +24,6 @@ class AnimatedPictographContainer(QWidget):
         self.setStyleSheet("border: 1px solid black;")
 
     def resize_animated_pictograph_container(self):
-        self.setMinimumHeight(self.animator.height())
-        self.setMinimumWidth(self.animator.height())
-        
         self.setMaximumHeight(self.animator.height())
         self.setMaximumWidth(self.animator.height())
         self.animated_pictograph_view.resize_animated_pictograph_view()

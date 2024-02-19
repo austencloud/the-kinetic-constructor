@@ -62,9 +62,6 @@ class AnimatedPictographView(QGraphicsView):
     def resize_animated_pictograph_view(self):
         self.setMinimumHeight(self.animator.height())
         self.setMinimumWidth(self.animator.height())
-        self.setMaximumHeight(self.animator.height())
-        self.setMaximumWidth(self.animator.height())
-
         if self.scene():
             self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
 

@@ -28,9 +28,9 @@ class GE_TurnsBox(QFrame):
         self.color = color
         self.pictograph = pictograph
         self._setup_widgets()
-        # add black borders 
+        # add black borders
         self.setStyleSheet("border: 1px solid black;")
-        
+
     def _setup_widgets(self) -> None:
         self.header_widget = GE_HeaderWidget(self)
         self.turns_widget = GE_TurnsWidget(self)
@@ -41,7 +41,4 @@ class GE_TurnsBox(QFrame):
         return int((self.pictograph.view.height() // 2 // 4) * 1)
 
     def resize_GE_turns_box(self) -> None:
-        self.setMinimumWidth(int(self.pictograph.view.width() * 0.85))
-        self.setMaximumWidth(int(self.pictograph.view.width() * 0.85))
         self.setMinimumHeight(self.pictograph.view.height())
-        self.setMaximumHeight(self.pictograph.view.height())
