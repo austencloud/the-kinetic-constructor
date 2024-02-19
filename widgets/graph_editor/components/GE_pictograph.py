@@ -25,10 +25,13 @@ class GE_PictographView(PictographView):
         self.GE_pictograph = blank_pictograph
         self.main_widget = GE.main_widget
         self.setScene(blank_pictograph)
+        # add black border
+        self.setStyleSheet("border: 1px solid black;")
 
     def resize_GE_pictograph_view(self):
         self.setMinimumHeight(self.GE.height())
         self.setMinimumWidth(self.GE.height())
+        
         if self.scene():
             self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
 

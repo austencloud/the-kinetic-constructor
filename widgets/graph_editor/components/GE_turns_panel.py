@@ -29,7 +29,6 @@ class GE_TurnsPanel(QFrame):
             self.layout.addWidget(box)
 
     def resize_GE_adjustment_panel(self):
-
         for box in self.boxes:
             box.resize_GE_turns_box()
         self.layout.setContentsMargins(0, 0, 0, 0)

@@ -50,6 +50,7 @@ class GraphEditor(QFrame):
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
+        self.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.pictograph_layout = QVBoxLayout()

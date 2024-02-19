@@ -3,7 +3,7 @@
     "prop_type": "Club",
     "glyph_visibility": {
         "VTG": true,
-        "TKA": false,
+        "TKA": true,
         "Elemental": false
     }
 }
