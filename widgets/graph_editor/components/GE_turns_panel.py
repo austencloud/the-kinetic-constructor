@@ -1,7 +1,7 @@
 from constants import BLUE, RED
 from typing import TYPE_CHECKING
 from objects.motion.motion import Motion
-from PyQt6.QtWidgets import QFrame
+from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from .GE_turns_box import GE_TurnsBox
 
 if TYPE_CHECKING:
@@ -24,6 +24,7 @@ class GE_AdjustmentPanel(QFrame):
         self.boxes = [self.blue_adjustment_box, self.red_adjustment_box]
 
     def setup_layouts(self) -> None:
+        self.layout:QVBoxLayout = QVBoxLayout(self)
         self._setup_attr_boxes()
 
     def update_turns_panel(self, motion: Motion) -> None:
@@ -37,3 +38,12 @@ class GE_AdjustmentPanel(QFrame):
                 self.blue_adjustment_box.clear_attr_box()
             elif motion.color == RED:
                 self.red_adjustment_box.clear_attr_box()
+
+    def resize_GE_adjustment_panel(self):
+        self.setMaximumHeight(self.graph_editor.height())
+        self.setMaximumWidth(self.graph_editor.width())
+        for box in self.boxes:
+            box.resize_GE_turns_box()
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
+        self.setLayout(self.layout)

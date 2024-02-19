@@ -24,11 +24,11 @@ class GraphEditor(QFrame):
         self.sequence_modifier = sequence_modifier
         self.main_widget = sequence_modifier.main_widget
 
-        self._setup_GE_pictograph()
+        self._setup_pictograph()
         self._setup_adjustment_panel()
         self._setup_layout()
 
-    def _setup_GE_pictograph(self):
+    def _setup_pictograph(self):
         self.GE_pictograph = GE_BlankPictograph(self)
         self.GE_pictograph_view = GE_PictographView(self, self.GE_pictograph)
         self.GE_pictograph_container = GE_PictographContainer(
@@ -36,8 +36,8 @@ class GraphEditor(QFrame):
         )
 
     def _setup_adjustment_panel(self):
-        self.turns_panel = GE_AdjustmentPanel(self)
-        self.turns_panel.setContentsMargins(0, 0, 0, 0)
+        self.adjustment_panel = GE_AdjustmentPanel(self)
+        self.adjustment_panel.setContentsMargins(0, 0, 0, 0)
 
     def _setup_frame_style(self) -> None:
         self.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
@@ -56,9 +56,9 @@ class GraphEditor(QFrame):
         self.pictograph_layout.addWidget(self.GE_pictograph_container)
         self.layout.addLayout(self.pictograph_layout)
 
-        self.turns_panel_layout = QVBoxLayout()
-        self.turns_panel_layout.addWidget(self.turns_panel)
-        self.layout.addLayout(self.turns_panel_layout)
+        self.adjustment_panel_layout = QVBoxLayout()
+        self.adjustment_panel_layout.addWidget(self.adjustment_panel)
+        self.layout.addLayout(self.adjustment_panel_layout)
 
         self.setLayout(self.layout)
 
