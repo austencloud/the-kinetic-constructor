@@ -25,7 +25,9 @@ from objects.prop.prop import Prop
 from widgets.pictograph.components.elemental_glyph.elemental_glyph import ElementalGlyph
 from widgets.pictograph.components.tka_glyph.tka_glyph import TKA_Glyph
 from widgets.pictograph.components.vtg_glyph.vtg_glyph import VTG_Glyph
-from widgets.sequence_widget.sequence_beat_frame.pictograph_container import PictographContainer
+from widgets.sequence_widget.sequence_beat_frame.pictograph_container import (
+    PictographContainer,
+)
 
 from .components.pictograph_attr_manager import PictographAttrManager
 from .components.pictograph_checker import PictographChecker
@@ -44,7 +46,7 @@ from .components.pictograph_context_menu_handler import PictographContextMenuHan
 from .components.pictograph_image_renderer import PictographImageRenderer
 from .components.pictograph_updater import PictographUpdater
 from .components.pictograph_event_handler import PictographMouseEventHandler
-from .components.pictograph_init import PictographInit
+from .components.pictograph_initializer import PictographInitializer
 
 
 if TYPE_CHECKING:
@@ -103,7 +105,7 @@ class Pictograph(QGraphicsScene):
         self.scroll_area: Union[
             CodexScrollArea, OptionPickerScrollArea, StartPosPickerScrollArea
         ] = scroll_area
-        self.initializer = PictographInit(self)
+        self.initializer = PictographInitializer(self)
         self.mouse_event_handler = PictographMouseEventHandler(self)
         self.context_menu_handler = PictographContextMenuHandler(self)
         self.updater = PictographUpdater(self)

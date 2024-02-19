@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 
 
-class PictographInit:
+class PictographInitializer:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
         self.pictograph.setSceneRect(0, 0, 950, 950)

@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget, QTabWidget
+from PyQt6.QtCore import QPointF
 from widgets.base_tab_widget import BaseTabWidget
+from widgets.graph_editor.animator import Animator
 from widgets.graph_editor.graph_editor import GraphEditor
 
 if TYPE_CHECKING:
@@ -13,12 +15,17 @@ class SequenceModifier(BaseTabWidget):
         self.main_widget = sequence_widget.main_widget
         self.sequence_widget = sequence_widget
         self.graph_editor = GraphEditor(self)
-        self.animator = QWidget(self)
+        self.animator = Animator(self)
         self.prop_changer = QWidget(self)
         self.addTab(self.graph_editor, "Graph Editor")
         self.addTab(self.animator, "Animator")
         self.addTab(self.prop_changer, "Prop Changer")
 
+        # Connect the currentChanged signal to the resize_sequence_modifier slot
+        self.currentChanged.connect(self.resize_sequence_modifier)
+
     def resize_sequence_modifier(self):
+        # Perform the resizing logic here
         self.setMaximumHeight(self.sequence_widget.beat_frame.width() // 2)
         self.graph_editor.resize_graph_editor()
+        self.animator.resize_animator()
