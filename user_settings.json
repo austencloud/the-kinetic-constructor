@@ -1,0 +1,9 @@
+{
+    "pictograph_size": 1,
+    "prop_type": "Staff",
+    "glyph_visibility": {
+        "VTG": true,
+        "TKA": true,
+        "Elemental": false
+    }
+}
