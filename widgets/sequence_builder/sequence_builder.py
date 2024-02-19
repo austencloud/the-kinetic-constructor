@@ -109,7 +109,7 @@ class SequenceBuilder(QFrame):
         self.start_position_picker.show()
 
     def resize_sequence_builder(self) -> None:
-        self.setMinimumWidth(int(self.main_widget.width() * 3 / 5))
+        # self.setMinimumWidth(int(self.main_widget.width() * 3 / 5))
         self.start_position_picker.resize_start_position_picker()
         self.option_picker.scroll_area.resize_option_picker_scroll_area()
 

@@ -45,7 +45,8 @@ class PictographView(QGraphicsView):
         return view_width
 
     def wheelEvent(self, event) -> None:
-        self.pictograph.scroll_area.wheelEvent(event)
+        if self.pictograph.scroll_area:
+            self.pictograph.scroll_area.wheelEvent(event)
 
     def enterEvent(self, event: QEvent) -> None:
 

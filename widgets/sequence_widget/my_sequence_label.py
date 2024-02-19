@@ -15,8 +15,10 @@ class MySequenceLabel(QLabel):
         self.setAcceptDrops(True)
         self.setLineWidth(2)
         self.setScaledContents(True)
-        self.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setText("My Sequence:")
+        padding = self.height() // 4
+        self.setContentsMargins(0, 0, 0, padding)
 
     def resize_my_sequence_label(self):
         size = self.sequence_widget.width() // 35

@@ -22,7 +22,7 @@ class SequenceModifier(BaseTabWidget):
         self.currentChanged.connect(self.resize_sequence_modifier)
 
     def resize_sequence_modifier(self):
-        self.setMaximumHeight(self.sequence_widget.beat_frame.width() // 2)
+        # self.setMaximumHeight(self.sequence_widget.beat_frame.width() // 2)
         self.setMaximumWidth(self.sequence_widget.beat_frame.width())
         current_widget = self.currentWidget()
         if current_widget == self.graph_editor:

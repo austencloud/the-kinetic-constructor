@@ -9,7 +9,6 @@ if TYPE_CHECKING:
     from ..main_widget.main_widget import MainWidget
 
 
-
 class MainTabWidget(BaseTabWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
@@ -22,5 +21,10 @@ class MainTabWidget(BaseTabWidget):
         self.addTab(self.library, "Library")
 
     def resize_main_tab_widget(self):
-        self.codex.resize_codex()
-        self.sequence_builder.resize_sequence_builder()
+        current_tab = self.currentWidget()
+        if current_tab == self.codex:
+            self.codex.resize_codex()
+        elif current_tab == self.sequence_builder:
+            self.sequence_builder.resize_sequence_builder()
+        # elif current_tab == self.library:
+        #     self.library.resize_library()
