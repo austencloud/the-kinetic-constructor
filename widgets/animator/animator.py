@@ -1,32 +1,26 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
-from widgets.animated_pictograph.animated_pictograph import (
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
+
+from widgets.animator.components.animated_pictograph import (
     AnimatedPictograph,
     AnimatedPictographView,
 )
-from widgets.graph_editor.components.GE_turns_panel import GE_AdjustmentPanel
-from widgets.graph_editor.components.GE_pictograph import (
-    GE_BlankPictograph,
-    GE_PictographView,
-)
-
-
-from widgets.graph_editor.components.GE_pictograph_container import (
-    GE_PictographContainer,
-)
-from widgets.animated_pictograph.animated_pictograph_container import (
+from widgets.animator.components.animated_pictograph_container import (
     AnimatedPictographContainer,
 )
+from widgets.graph_editor.components.GE_turns_panel import GE_AdjustmentPanel
+
+
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.sequence_modifier import SequenceModifier
+    from widgets.sequence_widget.sequence_modifier import SequenceModifierTab
 
 
 class Animator(QFrame):
-    def __init__(self, sequence_modifier: "SequenceModifier") -> None:
+    def __init__(self, sequence_modifier: "SequenceModifierTab") -> None:
         super().__init__()
         self.sequence_modifier = sequence_modifier
         self.main_widget = sequence_modifier.main_widget

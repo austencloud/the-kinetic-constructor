@@ -1,14 +1,16 @@
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsView
 from PyQt6.QtCore import QSequentialAnimationGroup, QPointF, QPropertyAnimation, Qt
 
-from widgets.animated_pictograph.animated_pictograph_initializer import (
-    AnimatedPictographInitializer,
-)
+
 from typing import TYPE_CHECKING
 
+from widgets.animator.components.animated_pictograph_initializer import (
+    AnimatedPictographInitializer,
+)
+
 if TYPE_CHECKING:
-    from widgets.graph_editor.animator import Animator
-    from widgets.sequence_widget.sequence_modifier import SequenceModifier
+    from widgets.animator.animator import Animator
+    from widgets.sequence_widget.sequence_modifier import SequenceModifierTab
 
 
 class AnimatedPictograph(QGraphicsScene):

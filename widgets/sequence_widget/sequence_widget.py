@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
 
 from widgets.sequence_widget.my_sequence_label import MySequenceLabel
+from widgets.sequence_widget.sequence_modifier import SequenceModifier
 from ..indicator_label import IndicatorLabel
 from ..pictograph.pictograph import Pictograph
 from ..scroll_area.components.sequence_widget_pictograph_factory import (
@@ -10,9 +11,7 @@ from ..scroll_area.components.sequence_widget_pictograph_factory import (
 )
 from .sequence_beat_frame.beat import Beat
 from .sequence_beat_frame.sequence_beat_frame import SequenceBeatFrame
-from .sequence_beat_frame.beat_selection_overlay import BeatSelectionManager
 from .button_frame import SequenceButtonFrame
-from .sequence_modifier import SequenceModifier
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:

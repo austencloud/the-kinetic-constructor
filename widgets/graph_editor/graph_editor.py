@@ -15,11 +15,11 @@ from widgets.graph_editor.components.GE_pictograph_container import (
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.sequence_modifier import SequenceModifier
+    from widgets.sequence_widget.sequence_modifier import SequenceModifierTab
 
 
 class GraphEditor(QFrame):
-    def __init__(self, sequence_modifier: "SequenceModifier") -> None:
+    def __init__(self, sequence_modifier: "SequenceModifierTab") -> None:
         super().__init__()
         self.sequence_modifier = sequence_modifier
         self.main_widget = sequence_modifier.main_widget
