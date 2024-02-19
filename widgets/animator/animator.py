@@ -10,7 +10,6 @@ from widgets.animator.components.animated_pictograph import (
 from widgets.animator.components.animated_pictograph_container import (
     AnimatedPictographContainer,
 )
-from widgets.graph_editor.components.GE_turns_panel import GE_AdjustmentPanel
 
 
 from widgets.pictograph.pictograph import Pictograph

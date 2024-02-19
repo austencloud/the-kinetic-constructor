@@ -1,9 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QTabWidget
 
-from widgets.codex.codex import Codex
-from widgets.library.library import Library
-from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget

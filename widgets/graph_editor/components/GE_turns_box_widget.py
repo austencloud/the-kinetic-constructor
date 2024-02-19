@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFrame, QLabel
 from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import Qt
-from typing import TYPE_CHECKING, Callable, Union
+from typing import TYPE_CHECKING, Callable
 
 from widgets.factories.button_factory.buttons.adjust_turns_button import (
     AdjustTurnsButton,
@@ -10,7 +10,6 @@ from widgets.factories.button_factory.buttons.swap_button import SwapButton
 
 if TYPE_CHECKING:
     from widgets.turns_box.codex_turns_box import CodexTurnsBox
-    from objects.motion.motion import Motion
 
 
 class GE_TurnsBoxWidget(QWidget):

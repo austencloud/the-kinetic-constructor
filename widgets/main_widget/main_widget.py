@@ -1,6 +1,6 @@
 import json
 from PyQt6.QtWidgets import QWidget
-from PyQt6.QtGui import QResizeEvent, QKeyEvent
+from PyQt6.QtGui import QKeyEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter

@@ -1,20 +1,16 @@
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Color
-from objects.motion.motion import Motion
-from .GE_motion_types_widget import GE_MotionTypeWidget
 from ...turns_panel import GE_AdjustmentPanel
-from ...factories.button_factory.buttons.adjust_turns_button import AdjustTurnsButton
 
 from .GE_header_widget import GE_HeaderWidget
 from .GE_turns_widget import GE_TurnsWidget
 
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QSizePolicy
+from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 
 
-from PyQt6.QtGui import QFont
 
 
 class GE_TurnsBox(QFrame):

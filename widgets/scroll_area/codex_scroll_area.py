@@ -1,13 +1,11 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QApplication
 from PyQt6.QtCore import Qt
-from Enums.Enums import LetterType, Letter
 
 
 from .components.codex_pictograph_factory import CodexPictographFactory
 from .components.section_manager.codex_section_manager import CodexSectionManager
 from .components.codex_display_manager import CodexDisplayManager
-from Enums.Enums import LetterType
 
 
 from ..pictograph.pictograph import Pictograph

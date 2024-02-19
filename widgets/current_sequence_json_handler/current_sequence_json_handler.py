@@ -1,6 +1,6 @@
 import json
 
-from widgets.sequence_widget.sequence_beat_frame.beat import Beat, BeatView
+from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
 from .motion_orientation_json_calculator import CurrentSequenceJsonOriCalculator
 from widgets.pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING

@@ -7,9 +7,7 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPixmap
 from typing import TYPE_CHECKING
-from constants import CLOCKWISE_ICON, COUNTER_CLOCKWISE_ICON
 
 
 if TYPE_CHECKING:

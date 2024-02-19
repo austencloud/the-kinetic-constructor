@@ -1,7 +1,6 @@
-import json
 from typing import TYPE_CHECKING
 
-from PyQt6.QtWidgets import QGridLayout, QFrame, QSizePolicy
+from PyQt6.QtWidgets import QGridLayout, QFrame
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
 from widgets.sequence_widget.sequence_beat_frame.beat import Beat

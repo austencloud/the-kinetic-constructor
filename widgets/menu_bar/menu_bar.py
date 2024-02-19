@@ -1,5 +1,5 @@
 # MenuBar.py
-from PyQt6.QtWidgets import QMenuBar, QMenu
+from PyQt6.QtWidgets import QMenuBar
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QAction, QActionGroup
 from Enums.PropTypes import PropTypes

@@ -2,7 +2,6 @@ from copy import deepcopy
 from PyQt6.QtCore import QObject, pyqtSignal
 from constants import END_POS, START_POS
 from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
-    StartPositionBeatView,
     StartPositionBeat,
 )
 from ....pictograph.pictograph import Pictograph

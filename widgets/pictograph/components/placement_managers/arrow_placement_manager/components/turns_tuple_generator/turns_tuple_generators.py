@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Color
-from objects.arrow.arrow import Arrow
 from constants import *
 from objects.motion.motion import Motion
 

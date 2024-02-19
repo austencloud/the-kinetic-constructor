@@ -1,9 +1,8 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QPushButton
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPainter, QPen, QColor, QIcon, QMouseEvent
+from PyQt6.QtGui import QIcon, QMouseEvent
 from widgets.pictograph.pictograph import Pictograph
-from PyQt6.QtCore import QRectF
 
 
 if TYPE_CHECKING:

@@ -11,7 +11,6 @@ from widgets.sequence_builder.components.start_position_picker.start_pos_frame i
     StartPosPickerPictographFrame,
 )
 from .start_pos_manager import StartPosManager
-from .start_pos_picker_scroll_area import StartPosPickerScrollArea
 from ....pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:

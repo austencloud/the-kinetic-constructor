@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QSizePolicy
 from PyQt6.QtCore import Qt, QEvent
-from PyQt6.QtGui import QTouchEvent
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -112,10 +111,8 @@ class PictographView(QGraphicsView):
         # Convert touch point position to view coordinates
         local_pos = self.mapFromGlobal(pos.toPoint())
         # Implement logic to find and highlight the pictograph under the touch position
-        pass
 
     def trigger_pictograph_action(self, pos):
         # Convert touch point position to view coordinates
         local_pos = self.mapFromGlobal(pos.toPoint())
         # Implement logic to determine which pictograph is under 'pos' and trigger its action
-        pass

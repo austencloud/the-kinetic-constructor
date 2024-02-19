@@ -4,7 +4,6 @@ import re
 
 from constants import (
     ANTI,
-    BLUE,
     CLOCK,
     COUNTER,
     DASH,
@@ -16,7 +15,6 @@ from constants import (
     PRO,
     PROP_DIR,
     RADIAL,
-    RED,
     STATIC,
 )
 from Enums.MotionAttributes import Color, MotionType, Turns

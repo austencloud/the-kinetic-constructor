@@ -1,7 +1,5 @@
 from Enums.MotionAttributes import Color
-from constants import BLUE, RED
 from typing import TYPE_CHECKING
-from objects.motion.motion import Motion
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
 from .GE_turns_box import GE_TurnsBox
 

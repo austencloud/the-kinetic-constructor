@@ -10,9 +10,6 @@ if TYPE_CHECKING:
     from widgets.sequence_builder.components.start_position_picker.start_pos_picker import (
         StartPosPicker,
     )
-    from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (
-        OptionPickerScrollArea,
-    )
 
 
 class StartPosPickerPictographFactory:

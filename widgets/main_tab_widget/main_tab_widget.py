@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QTabWidget
 
 from widgets.base_tab_widget import BaseTabWidget
 from widgets.codex.codex import Codex

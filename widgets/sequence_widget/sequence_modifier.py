@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QTabWidget
-from PyQt6.QtCore import QPointF
+from PyQt6.QtWidgets import QWidget
 from widgets.base_tab_widget import BaseTabWidget
 from widgets.animator.animator import Animator
 from widgets.graph_editor.graph_editor import GraphEditor

@@ -2,14 +2,11 @@ import json
 import os
 from PyQt6.QtWidgets import (
     QPushButton,
-    QSizePolicy,
     QHBoxLayout,
     QFrame,
-    QLabel,
-    QApplication,
     QVBoxLayout,
 )
-from PyQt6.QtCore import QTimer, Qt
+from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:

@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QPainter, QPen, QColor
-from PyQt6.QtCore import QRect, Qt
+from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Optional
 
 from widgets.sequence_widget.sequence_beat_frame.beat import BeatView

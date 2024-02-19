@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING, Union
 from Enums.Enums import LetterType, VTG_Directions
 
 from constants import (
-    BLUE,
     CLOCKWISE,
     COLOR,
     COUNTER_CLOCKWISE,
@@ -11,7 +10,6 @@ from constants import (
     MOTION_TYPE,
     OPP,
     PROP_ROT_DIR,
-    RED,
     SAME,
     STATIC,
 )
