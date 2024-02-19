@@ -1,9 +1,9 @@
 {
     "pictograph_size": 1,
-    "prop_type": "Hand",
+    "prop_type": "Club",
     "glyph_visibility": {
         "VTG": true,
-        "TKA": true,
-        "Elemental": true
+        "TKA": false,
+        "Elemental": false
     }
 }

@@ -7,17 +7,17 @@ from widgets.scroll_area.components.section_manager.section_widget.components.ty
 )
 
 if TYPE_CHECKING:
-    from widgets.scroll_area.components.section_manager.section_widget.codex_section_widget import (
-        CodexSectionWidget,
+    from widgets.sequence_builder.components.option_picker.option_picker_section_widget import (
+        OptionPickerSectionWidget,
     )
 
 
-class SectionHeader(QWidget):
+class OptionPickerSectionHeader(QWidget):
     clicked = pyqtSignal()
     EXPAND_ARROW_PATH = "images/icons/dropdown/expand.png"
     COLLAPSE_ARROW_PATH = "images/icons/dropdown/collapse.png"
 
-    def __init__(self, section: "CodexSectionWidget") -> None:
+    def __init__(self, section: "OptionPickerSectionWidget") -> None:
         super().__init__()
         self.section = section
         self.type_label = SectionTypeLabel(section)
@@ -67,7 +67,6 @@ class SectionHeader(QWidget):
         self.left_frame = QWidget()
         left_layout = QHBoxLayout(self.left_frame)
         left_layout.setContentsMargins(0, 0, 0, 0)
-        left_layout.addWidget(self.section.vtg_dir_button_manager.opp_button)
 
     def _setup_middle_frame(self) -> None:
         self.middle_frame = QWidget()
@@ -81,7 +80,7 @@ class SectionHeader(QWidget):
         self.right_frame = QWidget()
         right_layout = QHBoxLayout(self.right_frame)
         right_layout.setContentsMargins(0, 0, 0, 0)
-        right_layout.addWidget(self.section.vtg_dir_button_manager.same_button)
+        # right_layout.addWidget(self.section.vtg_dir_button_manager.same_button)
 
     def _set_frame_sizes(self) -> None:
         button_size = self.section.scroll_area.width() // 30
@@ -93,11 +92,7 @@ class SectionHeader(QWidget):
 
     def load_and_resize_pixmap(self, path: str) -> QPixmap:
         pixmap = QPixmap(path)
-        base_class_name = type(self.section.scroll_area).__name__
-        if base_class_name == "CodexScrollArea":
-            height = self.section.scroll_area.width() // 45
-        elif base_class_name == "OptionPickerScrollArea":
-            height = self.section.scroll_area.width() // 60
+        height = self.section.scroll_area.width() // 60
         return pixmap.scaledToHeight(height, Qt.TransformationMode.SmoothTransformation)
 
     def mousePressEvent(self, event) -> None:
@@ -110,10 +105,10 @@ class SectionHeader(QWidget):
         )
         self.arrow_label.setPixmap(arrow_pixmap)
 
-    def resize_section_header(self):
-        for button in [
-            self.section.vtg_dir_button_manager.opp_button,
-            self.section.vtg_dir_button_manager.same_button,
-        ]:
-            button.setMaximumSize(int(self.height()), int(self.height()))
-            button.setIconSize(button.size() * 0.9)
+    # def resize_section_header(self):
+    #     for button in [
+    #         self.section.vtg_dir_button_manager.opp_button,
+    #         self.section.vtg_dir_button_manager.same_button,
+    #     ]:
+    #         button.setMaximumSize(int(self.height()), int(self.height()))
+    #         button.setIconSize(button.size() * 0.9)

@@ -19,7 +19,6 @@ from Enums.MotionAttributes import (
     MotionType,
     PropRotDir,
 )
-from widgets.factories.button_factory.button_factory import ButtonFactory
 from ...factories.button_factory.buttons.rot_dir_buttons import (
     VtgDirButton,
     PropRotDirButton,
@@ -42,12 +41,15 @@ class PropRotDirButtonManager:
         self.buttons = self.prop_rot_dir_buttons
 
     def _setup_prop_rot_dir_buttons(self) -> list[QPushButton]:
-        self.cw_button: PropRotDirButton = ButtonFactory.create_prop_rot_dir_button(
+        button_factory = (
+            self.turns_box.turns_panel.turns_tab.section.scroll_area.codex.main_widget.button_factory
+        )
+        self.cw_button: PropRotDirButton = button_factory.create_prop_rot_dir_button(
             f"{ICON_DIR}clock/clockwise.png",
             lambda: self._set_prop_rot_dir(CLOCKWISE),
             CLOCKWISE,
         )
-        self.ccw_button: PropRotDirButton = ButtonFactory.create_prop_rot_dir_button(
+        self.ccw_button: PropRotDirButton = button_factory.create_prop_rot_dir_button(
             f"{ICON_DIR}clock/counter_clockwise.png",
             lambda: self._set_prop_rot_dir(COUNTER_CLOCKWISE),
             COUNTER_CLOCKWISE,

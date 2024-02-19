@@ -5,9 +5,11 @@ from Enums.Enums import LetterType
 from Enums.letters import Letter
 from constants import DASH, NO_ROT, OPP, SAME, STATIC
 from .components.turns_tab.turns_tab import TurnsTab
-from .components.section_header import SectionHeader
+from .components.codex_section_header import CodexSectionHeader
 from .....pictograph.pictograph import Pictograph
-from .....turns_box.turns_box_widgets.vtg_dir_button_manager import VtgDirButtonManager
+from .....turns_box.turns_box_widgets.vtg_dir_button_manager import (
+    CodexVtgDirButtonManager,
+)
 from .components.pictograph_frame import ScrollAreaSectionPictographFrame
 
 if TYPE_CHECKING:
@@ -27,7 +29,7 @@ class CodexSectionWidget(QGroupBox):
         self.turns_tab: TurnsTab = None
 
     def setup_components(self) -> None:
-        self.vtg_dir_button_manager = VtgDirButtonManager(self)
+        self.vtg_dir_button_manager = CodexVtgDirButtonManager(self)
         self._setup_layout()
         self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
         self.pictographs: dict[Letter, Pictograph] = {}
@@ -40,7 +42,7 @@ class CodexSectionWidget(QGroupBox):
         self.setup_header()
 
     def setup_header(self):
-        self.header = SectionHeader(self)
+        self.header = CodexSectionHeader(self)
         self.header.clicked.connect(self.toggle_section)
         self.layout.addWidget(self.header)
 
@@ -69,7 +71,7 @@ class CodexSectionWidget(QGroupBox):
 
     def reset_section(self, index: int) -> None:
 
-    # Need to fix this so the dash arrows don't show up the wrong way
+        # Need to fix this so the dash arrows don't show up the wrong way
 
         for pictograph in self.pictographs.values():
             for motion in pictograph.motions.values():

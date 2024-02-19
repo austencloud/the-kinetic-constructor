@@ -63,7 +63,7 @@ class GE_TurnsWidgetDisplayManager:
 
     def set_turn_display_styles(self) -> None:
         self.turns_display_font_size = int(
-            self.turns_box.turns_panel.turns_tab.section.width() / 36
+            self.turns_box.turns_panel.graph_editor.width() / 36
         )
         self.turns_display.setFont(
             QFont("Arial", self.turns_display_font_size, QFont.Weight.Bold)
@@ -71,10 +71,11 @@ class GE_TurnsWidgetDisplayManager:
         border_radius = (
             min(self.turns_display.width(), self.turns_display.height()) * 0.25
         )
+        turn_display_border = int(self.turns_display.width() / 20)
         self.turns_display.setStyleSheet(
             f"""
             QLabel {{
-                border: {self.turns_box.turn_display_border}px solid black;
+                border: {turn_display_border}px solid black;
                 border-radius: {border_radius}px;
                 background-color: white;
                 padding-left: 2px; /* add some padding on the left for the text */
@@ -85,16 +86,16 @@ class GE_TurnsWidgetDisplayManager:
 
     def resize_turn_display(self) -> None:
         self.turns_display.setMinimumHeight(
-            int(self.turns_box.turns_panel.turns_tab.section.width() / 18)
+            int(self.turns_box.turns_panel.graph_editor.width() / 18)
         )
         self.turns_display.setMaximumHeight(
-            int(self.turns_box.turns_panel.turns_tab.section.width() / 18)
+            int(self.turns_box.turns_panel.graph_editor.width() / 18)
         )
         self.turns_display.setMinimumWidth(
-            int(self.turns_box.turns_panel.turns_tab.section.width() / 14)
+            int(self.turns_box.turns_panel.graph_editor.width() / 14)
         )
         self.turns_display.setMaximumWidth(
-            int(self.turns_box.turns_panel.turns_tab.section.width() / 14)
+            int(self.turns_box.turns_panel.graph_editor.width() / 14)
         )
 
     def update_adjust_turns_button_size(self) -> None:
@@ -117,7 +118,7 @@ class GE_TurnsWidgetDisplayManager:
         self.turns_widget.layout.addWidget(self.turn_display_with_buttons_frame)
 
     def calculate_adjust_turns_button_size(self) -> int:
-        return int(self.turns_box.turns_panel.turns_tab.section.width() / 25)
+        return int(self.turns_box.turns_panel.graph_editor.width() / 25)
 
     def get_current_turns_value(self) -> int:
         return (

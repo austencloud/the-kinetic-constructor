@@ -8,7 +8,6 @@ from widgets.factories.button_factory.buttons.swap_button import SwapButton
 
 
 class ButtonFactory:
-
     @staticmethod
     def create_vtg_dir_button(icon_path: str, callback, vtg_dir) -> VtgDirButton:
         button = VtgDirButton(vtg_dir)

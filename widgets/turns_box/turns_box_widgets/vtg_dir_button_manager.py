@@ -16,7 +16,6 @@ from Enums.MotionAttributes import (
     PropRotDir,
 )
 from Enums.Enums import VTG_Directions
-from ...factories.button_factory.button_factory import ButtonFactory
 from ...factories.button_factory.buttons.rot_dir_buttons import VtgDirButton
 
 from PyQt6.QtWidgets import QPushButton
@@ -28,7 +27,7 @@ if TYPE_CHECKING:
     from objects.motion.motion import Motion
 
 
-class VtgDirButtonManager:
+class CodexVtgDirButtonManager:
     def __init__(self, section_widget: "CodexSectionWidget") -> None:
         self.section = section_widget
         self.previous_turns = 0
@@ -45,10 +44,11 @@ class VtgDirButtonManager:
         self.same_button.hide()
 
     def _setup_vtg_dir_buttons(self) -> list[QPushButton]:
-        self.same_button: VtgDirButton = ButtonFactory.create_vtg_dir_button(
+        button_factory = self.section.scroll_area.codex.main_widget.button_factory
+        self.same_button: VtgDirButton = button_factory.create_vtg_dir_button(
             f"{ICON_DIR}same_direction.png", lambda: self._set_vtg_dir(SAME), SAME
         )
-        self.opp_button: VtgDirButton = ButtonFactory.create_vtg_dir_button(
+        self.opp_button: VtgDirButton = button_factory.create_vtg_dir_button(
             f"{ICON_DIR}opp_direction.png", lambda: self._set_vtg_dir(OPP), OPP
         )
         self.same_button.unpress()

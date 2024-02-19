@@ -3,14 +3,12 @@ from PyQt6.QtWidgets import QVBoxLayout, QGroupBox, QSizePolicy
 from Enums.Enums import LetterType
 from constants import OPP, SAME
 from PyQt6.QtCore import Qt
+
+from widgets.scroll_area.components.section_manager.section_widget.components.option_picker_section_header import OptionPickerSectionHeader
 from ....scroll_area.components.section_manager.section_widget.components.turns_tab.turns_tab import (
     TurnsTab,
 )
-from ....scroll_area.components.section_manager.section_widget.components.section_header import (
-    SectionHeader,
-)
 from ....pictograph.pictograph import Pictograph
-from ....turns_box.turns_box_widgets.vtg_dir_button_manager import VtgDirButtonManager
 from ....scroll_area.components.section_manager.section_widget.components.pictograph_frame import (
     ScrollAreaSectionPictographFrame,
 )
@@ -34,7 +32,7 @@ class OptionPickerSectionWidget(QGroupBox):
         self.turns_tab: TurnsTab = None
 
     def setup_components(self) -> None:
-        self.vtg_dir_button_manager = VtgDirButtonManager(self)
+        # self.vtg_dir_button_manager = CodexVtgDirButtonManager(self)
         self._setup_layout()
         self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
         self.pictographs: dict[str, Pictograph] = {}
@@ -50,7 +48,7 @@ class OptionPickerSectionWidget(QGroupBox):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
     def setup_header(self):
-        self.header = SectionHeader(self)
+        self.header = OptionPickerSectionHeader(self)
         self.header.clicked.connect(self.toggle_section)
         self.layout.addWidget(self.header)
 
@@ -64,19 +62,12 @@ class OptionPickerSectionWidget(QGroupBox):
             self.setMaximumWidth(int(section_width / 3))
 
     def toggle_section(self) -> None:
-        # self.layout.setEnabled(False)
         is_visible = not self.pictograph_frame.isVisible()
         self.pictograph_frame.setVisible(is_visible)
         if self.turns_tab:
             self.turns_tab.setVisible(is_visible)
         self.header.toggle_dropdown_arrow(not is_visible)
-        if is_visible:
-            if self.vtg_dir_btn_state[SAME] or self.vtg_dir_btn_state[OPP]:
-                self.vtg_dir_button_manager.show_vtg_dir_buttons()
-        else:
-            self.vtg_dir_button_manager.hide_vtg_dir_buttons()
-        # self.layout.setEnabled(True)
-        # self.layout.activate()
+
 
     def reset_section(self, index: int) -> None:
         for pictograph in self.pictographs.values():
@@ -87,7 +78,6 @@ class OptionPickerSectionWidget(QGroupBox):
             for box in panel.boxes:
                 box.turns_widget.display_manager.update_turns_display("0")
                 box.prop_rot_dir_button_manager.hide_prop_rot_dir_buttons()
-        self.vtg_dir_button_manager.hide_vtg_dir_buttons()
 
     def clear_pictographs(self):
         for pictograph_key in list(self.pictographs.keys()):

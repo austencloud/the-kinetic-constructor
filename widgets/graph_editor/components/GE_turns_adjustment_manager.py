@@ -65,7 +65,7 @@ class GE_TurnsAdjustmentManager:
 
     def _update_visibility_based_on_motion(self, turns: Turns) -> None:
         letter_type = (
-            self.turns_widget.turns_box.turns_panel.filter_tab.section.letter_type
+            self.turns_widget.turns_box.turns_panel.graph_editor.GE_pictograph.letter_type
         )
         button_manager = (
             (

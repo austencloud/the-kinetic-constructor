@@ -1,12 +1,7 @@
 from PyQt6.QtWidgets import (
-    QLabel,
     QVBoxLayout,
-    QFrame,
-    QSizePolicy,
-    QHBoxLayout,
     QWidget,
 )
-from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 from widgets.graph_editor.GE_turns_button_manager import GE_TurnsButtonManager
