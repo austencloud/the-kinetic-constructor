@@ -45,6 +45,7 @@ class PropClassifier:
         self.small_uni: list[Prop] = []
         self.small_bi: list[Prop] = []
         self.big_bi: list[Prop] = []
+        self.hands: list[Prop] = []
 
         for prop in self.pictograph.props.values():
 
@@ -57,7 +58,7 @@ class PropClassifier:
             elif prop.prop_type in big_bilateral_prop_types:
                 self.big_bi.append(prop)
             elif prop.prop_type == PropType.Hand:
-                self.hand = prop
+                self.hands.append(prop)
                 
         self.big_props = self.big_uni + self.big_bi
         self.small_props = self.small_uni + self.small_bi

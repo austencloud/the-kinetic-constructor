@@ -35,7 +35,7 @@ class BetaPropPositioner:
                 self.big_prop_positioner.reposition()
             elif len(self.classifier.small_props) == 2:
                 self.small_prop_positioner.reposition()
-            elif hasattr(self.classifier, "hand"):
+            elif self.classifier.hands:
                 self.hand_positioner.reposition_beta_hands()
             self.swap_beta_handler.swap_beta_if_needed()
 

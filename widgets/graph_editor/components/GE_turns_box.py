@@ -32,6 +32,7 @@ class GE_TurnsBox(QFrame):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addWidget(self.header_widget)
         self.layout.addWidget(self.turns_widget)
+        self.layout.addStretch(1)
         self.setLayout(self.layout)
 
     def calculate_button_size(self) -> int:

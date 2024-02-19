@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 from typing import TYPE_CHECKING
-
+from PyQt6.QtCore import Qt
 from widgets.graph_editor.GE_turns_button_manager import GE_TurnsButtonManager
 from widgets.graph_editor.GE_turns_widget_display_manager import (
     GE_TurnsWidgetDisplayManager,
@@ -33,6 +33,7 @@ class GE_TurnsWidget(QWidget):
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.layout.setContentsMargins(0, 4, 0, 0)
         self.layout.setSpacing(0)
 
