@@ -11,7 +11,9 @@ class PropTypeSelector(QGroupBox):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__("Prop Type Selector")
         self.main_widget = main_widget
-        self.prop_type_changer = self.main_widget.main_window.settings_manager.prop_type_changer
+        self.prop_type_changer = (
+            self.main_widget.main_window.settings_manager.prop_type_changer
+        )
         self._setup_prop_type_combobox()
         self._setup_layout()
 
@@ -19,20 +21,21 @@ class PropTypeSelector(QGroupBox):
         self.prop_type_combobox = QComboBox()
         self.prop_type_combobox.addItems(
             [
-                PropTypes.Staff.name,
-                PropTypes.BigStaff.name,
-                PropTypes.Club.name,
-                PropTypes.Buugeng.name,
-                PropTypes.EightRings.name,
-                PropTypes.Fan.name,
-                PropTypes.Triad.name,
-                PropTypes.MiniHoop.name,
-                PropTypes.BigHoop.name,
-                PropTypes.DoubleStar.name,
-                PropTypes.Quiad.name,
-                PropTypes.Sword.name,
-                PropTypes.Guitar.name,
-                PropTypes.Ukulele.name,
+                PropType.Hand.name,
+                PropType.Staff.name,
+                PropType.BigStaff.name,
+                PropType.Club.name,
+                PropType.Buugeng.name,
+                PropType.EightRings.name,
+                PropType.Fan.name,
+                PropType.Triad.name,
+                PropType.MiniHoop.name,
+                PropType.BigHoop.name,
+                PropType.DoubleStar.name,
+                PropType.Quiad.name,
+                PropType.Sword.name,
+                PropType.Guitar.name,
+                PropType.Ukulele.name,
             ]
         )
 

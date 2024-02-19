@@ -18,7 +18,7 @@ from constants import (
     STATIC,
 )
 from Enums.MotionAttributes import Color, MotionType, Turns
-from Enums.PropTypes import PropTypes, PropTypeslist
+from Enums.PropTypes import PropType, PropTypeslist
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
@@ -161,7 +161,7 @@ class GraphicalObjectSvgManager:
 
         return object.svg_cache[cache_key]
 
-    def _prop_svg_file(self, prop_type: PropTypes) -> str:
+    def _prop_svg_file(self, prop_type: PropType) -> str:
         prop_type_str = prop_type.name.lower()
         svg_file = f"{PROP_DIR}{prop_type_str}.svg"
         return svg_file

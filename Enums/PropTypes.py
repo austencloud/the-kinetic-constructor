@@ -1,7 +1,9 @@
 from enum import Enum, auto
 from enum import Enum
 
-class PropTypes(Enum):
+
+class PropType(Enum):
+    Hand = auto()
     Staff = auto()
     BigStaff = auto()
     Club = auto()
@@ -22,74 +24,75 @@ class PropTypes(Enum):
     Chicken = auto()
 
     def get_prop_type(prop_type_value):
-        for prop_type_enum in PropTypes:
+        for prop_type_enum in PropType:
             if str(prop_type_enum.name) == prop_type_value:
                 return prop_type_enum
 
+
 big_unilateral_prop_types = [
-    PropTypes.BigHoop,
-    PropTypes.Guitar,
-    PropTypes.Sword,
-    PropTypes.Chicken,
+    PropType.BigHoop,
+    PropType.Guitar,
+    PropType.Sword,
+    PropType.Chicken,
 ]
 small_unilateral_prop_types = [
-    PropTypes.Fan,
-    PropTypes.Club,
-    PropTypes.MiniHoop,
-    PropTypes.Triad,
-    PropTypes.Ukulele,
+    PropType.Fan,
+    PropType.Club,
+    PropType.MiniHoop,
+    PropType.Triad,
+    PropType.Ukulele,
 ]
 big_bilateral_prop_types = [
-    PropTypes.BigStaff,
-    PropTypes.BigBuugeng,
-    PropTypes.BigDoubleStar,
+    PropType.BigStaff,
+    PropType.BigBuugeng,
+    PropType.BigDoubleStar,
 ]
 small_bilateral_prop_types = [
-    PropTypes.Staff,
-    PropTypes.Buugeng,
-    PropTypes.DoubleStar,
-    PropTypes.Quiad,
-    PropTypes.Fractalgeng,
-    PropTypes.EightRings,
+    PropType.Staff,
+    PropType.Buugeng,
+    PropType.DoubleStar,
+    PropType.Quiad,
+    PropType.Fractalgeng,
+    PropType.EightRings,
 ]
 non_strictly_placed_props = [
-    PropTypes.Staff,
-    PropTypes.Fan,
-    PropTypes.Club,
-    PropTypes.Buugeng,
-    PropTypes.MiniHoop,
-    PropTypes.Triad,
-    PropTypes.Quiad,
-    PropTypes.Ukulele,
-    PropTypes.Chicken,
-    PropTypes.Fractalgeng,
-    PropTypes.EightRings,
+    PropType.Staff,
+    PropType.Fan,
+    PropType.Club,
+    PropType.Buugeng,
+    PropType.MiniHoop,
+    PropType.Triad,
+    PropType.Quiad,
+    PropType.Ukulele,
+    PropType.Chicken,
+    PropType.Fractalgeng,
+    PropType.EightRings,
 ]
 strictly_placed_props = [
-    PropTypes.BigHoop,
-    PropTypes.DoubleStar,
-    PropTypes.BigBuugeng,
-    PropTypes.BigDoubleStar,
+    PropType.BigHoop,
+    PropType.DoubleStar,
+    PropType.BigBuugeng,
+    PropType.BigDoubleStar,
 ]
 
 ### LISTS FOR ITERATION ###
 
 PropTypeslist = [
-    PropTypes.Staff,
-    PropTypes.BigStaff,
-    PropTypes.Club,
-    PropTypes.Buugeng,
-    PropTypes.BigBuugeng,
-    PropTypes.Fractalgeng,
-    PropTypes.Fan,
-    PropTypes.Triad,
-    PropTypes.MiniHoop,
-    PropTypes.BigHoop,
-    PropTypes.DoubleStar,
-    PropTypes.BigDoubleStar,
-    PropTypes.Quiad,
-    PropTypes.Sword,
-    PropTypes.Guitar,
-    PropTypes.Ukulele,
-    PropTypes.Chicken,
+    PropType.Staff,
+    PropType.BigStaff,
+    PropType.Club,
+    PropType.Buugeng,
+    PropType.BigBuugeng,
+    PropType.Fractalgeng,
+    PropType.Fan,
+    PropType.Triad,
+    PropType.MiniHoop,
+    PropType.BigHoop,
+    PropType.DoubleStar,
+    PropType.BigDoubleStar,
+    PropType.Quiad,
+    PropType.Sword,
+    PropType.Guitar,
+    PropType.Ukulele,
+    PropType.Chicken,
 ]

@@ -9,7 +9,7 @@ from .prop_rot_angle_manager import PropRotAngleManager
 from .prop_updater import PropUpdater
 from Enums.MotionAttributes import Location, Orientations
 from Enums.Enums import Axes
-from Enums.PropTypes import PropTypes
+from Enums.PropTypes import PropType
 
 
 if TYPE_CHECKING:
@@ -35,7 +35,7 @@ class Prop(GraphicalObject):
     loc: Location
     ori: Orientations = None
     axis: Axes
-    prop_type: PropTypes
+    prop_type: PropType
 
     def __init__(self, pictograph, prop_dict: dict, motion: "Motion") -> None:
         super().__init__(pictograph)

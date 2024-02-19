@@ -9,7 +9,7 @@ from Enums.MotionAttributes import (
     MotionType,
 )
 from Enums.Enums import Axes, PropAttribute
-from Enums.PropTypes import PropTypes
+from Enums.PropTypes import PropType
 
 
 if TYPE_CHECKING:

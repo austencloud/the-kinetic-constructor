@@ -1,8 +1,8 @@
 {
     "pictograph_size": 1,
-    "prop_type": "Staff",
+    "prop_type": "Hand",
     "glyph_visibility": {
-        "VTG": false,
+        "VTG": true,
         "TKA": true,
         "Elemental": true
     }

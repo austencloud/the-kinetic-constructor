@@ -37,12 +37,14 @@ class PropTypeChanger:
             for pictograph in pictograph_list.values():
                 if pictograph.view.isVisible():
                     self.replace_props(new_prop_type, pictograph)
+                    pictograph.prop_type = new_prop_type
 
         for beat_view in self.main_window.main_widget.sequence_widget.beats:
             if beat_view.is_filled:
                 self.replace_props(new_prop_type, beat_view.beat)
                 beat_view.beat.updater.update_pictograph()
-
+                beat_view.beat.prop_type = new_prop_type
+                
         start_pos_view = (
             self.main_window.main_widget.sequence_widget.beat_frame.start_pos_view
         )

@@ -57,4 +57,5 @@ class GE_TurnsButtonManager:
             else self.positive_buttons_hbox_layout
         )
         layout.addWidget(button)
+        button.setMaximumWidth(int(self.turns_widget.turns_box.width() / 4))
         return button

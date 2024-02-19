@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from Enums.PropTypes import PropType
 from constants import IN, OUT, CLOCK, COUNTER, NORTH, SOUTH, WEST, EAST
 
 if TYPE_CHECKING:
@@ -19,7 +20,7 @@ class PropRotAngleManager:
 
         key = self.prop.ori
         rotation_angle = angle_map.get(key, {}).get(self.prop.loc, 0)
-        return rotation_angle
+        return rotation_angle if self.prop.prop_type != PropType.Hand else 0
 
     def update_prop_rot_angle(self) -> None:
         prop_rotation_angle = self.get_rotation_angle()

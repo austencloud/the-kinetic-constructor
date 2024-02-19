@@ -1,4 +1,4 @@
-from Enums.PropTypes import PropTypes
+from Enums.PropTypes import PropType
 from constants import (
     IN,
     OUT,
@@ -24,14 +24,14 @@ if TYPE_CHECKING:
 
 class PropOffsetCalculator:
     def __init__(self, prop_placement_manager: "PropPlacementManager") -> None:
-        self.position_offsets_cache: dict[Prop, dict[tuple[str, str], QPointF]] = {}
+        self.position_offsets_cache: dict[PropType, dict[tuple[str, str], QPointF]] = {}
         self.prop_placement_manager = prop_placement_manager
         self.pictograph = prop_placement_manager.pictograph
 
     def get_or_calculate_offsets(self, prop: Prop) -> dict[tuple[str, str], QPointF]:
-        if prop not in self.position_offsets_cache:
-            self.position_offsets_cache[prop] = self.calculate_offsets(prop)
-        return self.position_offsets_cache[prop]
+        if prop.prop_type not in self.position_offsets_cache:
+            self.position_offsets_cache[prop.prop_type] = self.calculate_offsets(prop)
+        return self.position_offsets_cache[prop.prop_type]
 
     def calculate_offsets(self, prop: Prop) -> dict[tuple[str, str], QPointF]:
         prop_length = prop.boundingRect().width()
@@ -40,7 +40,7 @@ class PropOffsetCalculator:
         x = prop_width / 2
         y = prop_length / 2
 
-        return {
+        non_hand_offsets = {
             (IN, NORTH): QPointF(x, -y),
             (IN, SOUTH): QPointF(-x, y),
             (IN, EAST): QPointF(y, x),
@@ -59,16 +59,37 @@ class PropOffsetCalculator:
             (COUNTER, WEST): QPointF(x, -y),
         }
 
+        hand_offsets = {
+            (IN, NORTH): QPointF(-y, -x),
+            (IN, SOUTH): QPointF(-y, -x),
+            (IN, EAST): QPointF(-y, -x),
+            (IN, WEST): QPointF(-y, -x),
+            (OUT, NORTH): QPointF(-y, -x),
+            (OUT, SOUTH): QPointF(-y, -x),
+            (OUT, EAST): QPointF(-y, -x),
+            (OUT, WEST): QPointF(-y, -x),
+            (CLOCK, NORTH): QPointF(-y, -x),
+            (CLOCK, SOUTH): QPointF(-y, -x),
+            (CLOCK, EAST): QPointF(-y, -x),
+            (CLOCK, WEST): QPointF(-y, -x),
+            (COUNTER, NORTH): QPointF(-y, -x),
+            (COUNTER, SOUTH): QPointF(-y, -x),
+            (COUNTER, EAST): QPointF(-y, -x),
+            (COUNTER, WEST): QPointF(-y, -x),
+        }
+
+        return non_hand_offsets if prop.prop_type != PropType.Hand else hand_offsets
+
     def calculate_new_position_with_offset(
         self, current_position: QPointF, direction: Directions
     ) -> QPointF:
-        if self.pictograph.check.has_all_props_of_type(PropTypes.Club):
+        if self.pictograph.check.has_all_props_of_type(PropType.Club):
             self.beta_offset = self.prop_placement_manager.pictograph.width() / 60
-        elif self.pictograph.check.has_all_props_of_type(PropTypes.EightRings):
+        elif self.pictograph.check.has_all_props_of_type(PropType.EightRings):
             self.beta_offset = self.prop_placement_manager.pictograph.width() / 60
-        elif self.pictograph.check.has_all_props_of_type(PropTypes.DoubleStar):
+        elif self.pictograph.check.has_all_props_of_type(PropType.DoubleStar):
             self.beta_offset = self.prop_placement_manager.pictograph.width() / 50
-        elif self.pictograph.check.has_all_props_of_type(PropTypes.BigDoubleStar):
+        elif self.pictograph.check.has_all_props_of_type(PropType.BigDoubleStar):
             self.beta_offset = self.prop_placement_manager.pictograph.width() / 50
         else:
             self.beta_offset = self.prop_placement_manager.pictograph.width() / 38

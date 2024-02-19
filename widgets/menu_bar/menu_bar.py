@@ -2,7 +2,7 @@
 from PyQt6.QtWidgets import QMenuBar
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QAction, QActionGroup
-from Enums.PropTypes import PropTypes
+from Enums.PropTypes import PropType
 
 if TYPE_CHECKING:
     from ..main_widget.main_widget import MainWidget
@@ -22,7 +22,7 @@ class MainWindowMenuBar(QMenuBar):
         prop_type_action_group = QActionGroup(self)
         prop_type_action_group.setExclusive(True)
 
-        for prop_type in PropTypes:
+        for prop_type in PropType:
             action = QAction(prop_type.name, self, checkable=True)
             action.triggered.connect(
                 lambda checked, pt=prop_type: self.set_prop_type(pt)
@@ -59,7 +59,7 @@ class MainWindowMenuBar(QMenuBar):
         )
         self.main_widget.main_window.settings_manager.glyph_visibility_manager.apply_glyph_visibility()
 
-    def set_prop_type(self, prop_type: PropTypes):
+    def set_prop_type(self, prop_type: PropType):
         self.main_widget.prop_type_selector.prop_type_changed(prop_type.name)
 
         print(f"Prop type set to: {prop_type.name}")

@@ -152,6 +152,8 @@ class RepositionBetaByLetterHandler:
                 self.prop_placement_manager.dir_calculator.get_opposite_dir(direction),
             )
 
+
+
     def move_prop(self, prop: Prop, direction: Directions) -> None:
         offset = self.prop_placement_manager.offset_calculator.calculate_new_position_with_offset(
             prop.pos(), direction

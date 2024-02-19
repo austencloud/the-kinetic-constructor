@@ -4,7 +4,7 @@ from PyQt6.QtGui import QKeyEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
-from Enums.PropTypes import PropTypes
+from Enums.PropTypes import PropType
 from widgets.factories.button_factory.button_factory import ButtonFactory
 from widgets.json_manager import JSON_Manager
 from widgets.menu_bar.preferences_dialog import PreferencesDialog
@@ -52,7 +52,7 @@ class MainWidget(QWidget):
         with open("user_settings.json", "r") as file:
             user_settings: dict = json.load(file)
         prop_type_value = user_settings.get("prop_type")
-        self.prop_type = PropTypes.get_prop_type(prop_type_value)
+        self.prop_type = PropType.get_prop_type(prop_type_value)
 
     def _setup_components(self) -> None:
         self._setup_special_placements()

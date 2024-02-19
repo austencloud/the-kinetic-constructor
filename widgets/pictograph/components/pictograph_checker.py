@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Color
-from Enums.PropTypes import PropTypes
+from Enums.PropTypes import PropType
 from Enums.letters import LetterConditions, Letter
 from constants import *
 
@@ -61,8 +61,6 @@ class PictographChecker:
         elif red_prop.ori == OUT and blue_prop.ori == IN:
             return True
         return False
-        
-
 
     def ends_with_clock_counter_ori(self) -> bool:
         red_prop, blue_prop = (
@@ -157,15 +155,15 @@ class PictographChecker:
     def is_in_sequence_builder(self) -> bool:
         return hasattr(self.pictograph.scroll_area, "sequence_builder")
 
-    def has_all_props_of_type(self, prop_type: PropTypes) -> bool:
+    def has_all_props_of_type(self, prop_type: PropType) -> bool:
         return all(
             prop.prop_type == prop_type for prop in self.pictograph.props.values()
         )
 
     def has_strictly_placed_props(self) -> bool:
         strict_props = [
-            PropTypes.BigDoubleStar,
-            PropTypes.BigHoop,
-            PropTypes.BigBuugeng,
+            PropType.BigDoubleStar,
+            PropType.BigHoop,
+            PropType.BigBuugeng,
         ]
         return any(self.has_all_props_of_type(prop_type) for prop_type in strict_props)

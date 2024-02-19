@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from objects.prop.prop import Prop
 from Enums.PropTypes import (
-    PropTypes,
+    PropType,
     big_unilateral_prop_types,
     small_unilateral_prop_types,
     small_bilateral_prop_types,
@@ -13,24 +13,25 @@ if TYPE_CHECKING:
 
 
 string_to_enum_map = {
-    "staff": PropTypes.Staff,
-    "bigstaff": PropTypes.BigStaff,
-    "club": PropTypes.Club,
-    "buugeng": PropTypes.Buugeng,
-    "bigbuugeng": PropTypes.BigBuugeng,
-    "fractalgeng": PropTypes.Fractalgeng,
-    "eightrings": PropTypes.EightRings,
-    "fan": PropTypes.Fan,
-    "triad": PropTypes.Triad,
-    "minihoop": PropTypes.MiniHoop,
-    "bighoop": PropTypes.BigHoop,
-    "doublestar": PropTypes.DoubleStar,
-    "bigdoublestar": PropTypes.BigDoubleStar,
-    "quiad": PropTypes.Quiad,
-    "sword": PropTypes.Sword,
-    "guitar": PropTypes.Guitar,
-    "ukulele": PropTypes.Ukulele,
-    "chicken": PropTypes.Chicken,
+    "hand": PropType.Hand,
+    "staff": PropType.Staff,
+    "bigstaff": PropType.BigStaff,
+    "club": PropType.Club,
+    "buugeng": PropType.Buugeng,
+    "bigbuugeng": PropType.BigBuugeng,
+    "fractalgeng": PropType.Fractalgeng,
+    "eightrings": PropType.EightRings,
+    "fan": PropType.Fan,
+    "triad": PropType.Triad,
+    "minihoop": PropType.MiniHoop,
+    "bighoop": PropType.BigHoop,
+    "doublestar": PropType.DoubleStar,
+    "bigdoublestar": PropType.BigDoubleStar,
+    "quiad": PropType.Quiad,
+    "sword": PropType.Sword,
+    "guitar": PropType.Guitar,
+    "ukulele": PropType.Ukulele,
+    "chicken": PropType.Chicken,
 }
 
 
@@ -55,6 +56,8 @@ class PropClassifier:
                 self.small_bi.append(prop)
             elif prop.prop_type in big_bilateral_prop_types:
                 self.big_bi.append(prop)
-
+            elif prop.prop_type == PropType.Hand:
+                self.hand = prop
+                
         self.big_props = self.big_uni + self.big_bi
         self.small_props = self.small_uni + self.small_bi

@@ -1,7 +1,7 @@
 import json
 import os
 from typing import TYPE_CHECKING
-from Enums.PropTypes import PropTypes
+from Enums.PropTypes import PropType
 from widgets.menu_bar.glyph_visibility_manager import GlyphVisibilityManager
 from prop_type_changer import PropTypeChanger
 
@@ -37,9 +37,9 @@ class SettingsManager:
     def get_setting(self, key, default=None) -> any:
         return self.settings.get(key, default)
 
-    def get_prop_type(self) -> PropTypes:
+    def get_prop_type(self) -> PropType:
         prop_type = self.get_setting("prop_type")
-        for prop_type_enum in PropTypes:
+        for prop_type_enum in PropType:
             if str(prop_type_enum.name) == prop_type:
                 return prop_type_enum
 
