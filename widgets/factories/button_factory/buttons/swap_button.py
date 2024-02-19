@@ -1,16 +1,11 @@
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QFont
-from typing import Union, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_motion_types_widget import (
-        GE_MotionTypeWidget,
-    )
+    pass
 
-    from widgets.codex.codex_turns_widget import (
-        CodexTurnsWidget,
-    )
 
 
 class SwapButton(QPushButton):

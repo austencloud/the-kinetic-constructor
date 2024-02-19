@@ -4,9 +4,7 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from ....codex.codex_turns_widget import (
-        CodexTurnsWidget,
-    )
+    pass
 
 
 class AdjustTurnsButton(QPushButton):

@@ -6,7 +6,6 @@ from constants import Type2, Type3
 if TYPE_CHECKING:
     from .....pictograph.pictograph import Pictograph
     from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
-    from .....codex.codex_turns_widget import CodexTurnsWidget
 
 
 class GE_TurnsAdjustmentManager:

@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Color
-from widgets.graph_editor.components.GE_pictograph import GE_PictographView
 from .GE_header_widget import GE_HeaderWidget
 from .GE_turns_widget import GE_TurnsWidget
 from PyQt6.QtWidgets import QFrame, QVBoxLayout

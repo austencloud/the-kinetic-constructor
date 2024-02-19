@@ -7,9 +7,6 @@ from widgets.factories.button_factory.buttons.adjust_turns_button import (
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
-    from widgets.codex.codex_turns_widget import (
-        CodexTurnsWidget,
-    )
 
 
 class GE_TurnsButtonManager:

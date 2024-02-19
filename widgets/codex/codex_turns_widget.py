@@ -18,12 +18,6 @@ from ..turns_box.turns_box_widgets.turns_widget.managers.codex_turns_widget_disp
 from ..turns_box.turns_box_widgets.turns_widget.managers.turns_direct_set_manager import (
     TurnsDirectSetManager,
 )
-from .codex_turns_box_widget import (
-    CodexWidget,
-)
-from .codex_turns_box_widget import (
-    CodexWidget,
-)
 
 if TYPE_CHECKING:
     from widgets.turns_box.codex_turns_box import CodexTurnsBox

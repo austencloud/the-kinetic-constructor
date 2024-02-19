@@ -3,7 +3,6 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
 
-from widgets.codex.codex_turns_widget import CodexTurnsWidget
 
 
 if TYPE_CHECKING:
