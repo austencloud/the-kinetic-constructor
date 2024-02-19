@@ -3,16 +3,18 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
 
+from widgets.codex.codex_turns_widget import CodexTurnsWidget
+
 
 if TYPE_CHECKING:
-    from widgets.turns_box.codex_turns_box import CodexTurnsBox
-    from .....codex.codex_turns_widget import CodexTurnsWidget
+    from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
+    from widgets.graph_editor.components.GE_turns_box import GE_TurnsBox
 
 
-class TurnDisplayManager:
-    def __init__(self, turns_widget: "CodexTurnsWidget") -> None:
+class GE_TurnsWidgetDisplayManager:
+    def __init__(self, turns_widget: "GE_TurnsWidget") -> None:
         self.turns_widget = turns_widget
-        self.turns_box: CodexTurnsBox = turns_widget.turns_box
+        self.turns_box: "GE_TurnsBox" = turns_widget.turns_box
 
     def setup_display_components(self) -> None:
         self.setup_turns_display()

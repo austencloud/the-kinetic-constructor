@@ -17,7 +17,7 @@ from ..codex.codex_turns_widget import (
 )
 
 if TYPE_CHECKING:
-    from widgets.codex_turns_panel import CodexTurnsBoxPanel
+    from widgets.codex_turns_panel import CodexTurnsPanel
 
 
 class CodexTurnsBox(QFrame):
@@ -32,7 +32,7 @@ class CodexTurnsBox(QFrame):
         super().__init__(turns_panel)
         self.attribute_type: TurnsTabAttribute = attribute_type
         self.attribute_value = attribute
-        self.turns_panel: "CodexTurnsBoxPanel" = turns_panel
+        self.turns_panel: "CodexTurnsPanel" = turns_panel
 
         self.font_size = self.turns_panel.width() // 20
         self.turn_display_border = 2

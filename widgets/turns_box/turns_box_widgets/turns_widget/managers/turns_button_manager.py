@@ -47,7 +47,10 @@ class CodexTurnsButtonManager:
         self, adjustment: AdjustmentNums, text: AdjustmentStrs
     ) -> AdjustTurnsButton:
         """Create an adjust turns button and add it to the appropriate layout."""
-        button: AdjustTurnsButton = self.turns_widget.create_adjust_turns_button(text)
+        button_factory = (
+            self.turns_widget.turns_box.turns_panel.turns_tab.section.scroll_area.codex.main_widget.button_factory
+        )
+        button: AdjustTurnsButton = button_factory.create_adjust_turns_button(text)
         button.setContentsMargins(0, 0, 0, 0)
         button.clicked.connect(
             lambda _, adj=adjustment: self.turns_widget.adjustment_manager.adjust_turns(

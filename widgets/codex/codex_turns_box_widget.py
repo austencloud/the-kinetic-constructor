@@ -15,17 +15,4 @@ class CodexWidget(QWidget):
         super().__init__(turns_box)
         self.turns_box: "CodexTurnsBox" = turns_box
 
-    def create_attr_header_label(
-        self, text: str, align: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter
-    ) -> QLabel:
-        attr_label = QLabel(text, self)
-        attr_label.setFont(QFont("Arial"))
-        attr_label.setAlignment(align)
-        attr_label.setContentsMargins(0, 0, 0, 0)
-        return attr_label
-
-    def create_header_frame(self, layout: QHBoxLayout | QVBoxLayout) -> QFrame:
-        frame = QFrame(self)
-        frame.setLayout(layout)
-        return frame
 
