@@ -18,7 +18,7 @@ class AnimatedPictograph(QGraphicsScene):
         super().__init__(animator)
         self.main_widget = animator.main_widget
         self.animation_group = QSequentialAnimationGroup()
-        self.view = None
+        self.view: AnimatedPictographView = None
         self.initializer = AnimatedPictographInitializer(self)
         self.initializer.init_all_components()
 
@@ -62,6 +62,9 @@ class AnimatedPictographView(QGraphicsView):
     def resize_animated_pictograph_view(self):
         self.setMinimumHeight(self.animator.height())
         self.setMinimumWidth(self.animator.height())
+        self.setMaximumHeight(self.animator.height())
+        self.setMaximumWidth(self.animator.height())
+
         if self.scene():
             self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
 

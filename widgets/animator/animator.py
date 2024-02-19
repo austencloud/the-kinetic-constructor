@@ -16,17 +16,15 @@ from widgets.graph_editor.components.GE_turns_panel import GE_AdjustmentPanel
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.sequence_modifier import SequenceModifierTab
+    from widgets.sequence_widget.sequence_modifier import SequenceModifier
 
 
 class Animator(QFrame):
-    def __init__(self, sequence_modifier: "SequenceModifierTab") -> None:
+    def __init__(self, sequence_modifier: "SequenceModifier") -> None:
         super().__init__()
         self.sequence_modifier = sequence_modifier
         self.main_widget = sequence_modifier.main_widget
-
         self._setup_animated_pictograph()
-        # self._setup_adjustment_panel()
         self._setup_layout()
 
     def _setup_animated_pictograph(self):
@@ -37,10 +35,6 @@ class Animator(QFrame):
         self.animated_pictograph_container = AnimatedPictographContainer(
             self, self.animated_pictograph_view
         )
-
-    def _setup_adjustment_panel(self):
-        self.turns_panel = GE_AdjustmentPanel(self)
-        self.turns_panel.setContentsMargins(0, 0, 0, 0)
 
     def _setup_frame_style(self) -> None:
         self.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Plain)
@@ -54,19 +48,15 @@ class Animator(QFrame):
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
-
         self.pictograph_layout = QVBoxLayout()
         self.pictograph_layout.addWidget(self.animated_pictograph.view)
         self.layout.addLayout(self.pictograph_layout)
-
-        # self.turns_panel_layout = QVBoxLayout()
-        # self.turns_panel_layout.addWidget(self.turns_panel)
-        # self.layout.addLayout(self.turns_panel_layout)
-
         self.setLayout(self.layout)
 
     def render_pictograph(self, pictograph: Pictograph) -> None:
         self.animated_pictograph.view.setScene(pictograph)
 
     def resize_animator(self):
+        self.setMinimumHeight(self.sequence_modifier.height())
+        self.setMaximumHeight(self.sequence_modifier.height())
         self.animated_pictograph_container.resize_animated_pictograph_container()

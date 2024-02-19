@@ -27,18 +27,6 @@ class GE_AdjustmentPanel(QFrame):
         self.layout:QVBoxLayout = QVBoxLayout(self)
         self._setup_attr_boxes()
 
-    def update_turns_panel(self, motion: Motion) -> None:
-        if motion.motion_type:
-            if motion.color == BLUE:
-                self.blue_adjustment_box.update_attr_box(motion)
-            elif motion.color == RED:
-                self.red_adjustment_box.update_attr_box(motion)
-        else:
-            if motion.color == BLUE:
-                self.blue_adjustment_box.clear_attr_box()
-            elif motion.color == RED:
-                self.red_adjustment_box.clear_attr_box()
-
     def resize_GE_adjustment_panel(self):
         self.setMaximumHeight(self.graph_editor.height())
         self.setMaximumWidth(self.graph_editor.width())
