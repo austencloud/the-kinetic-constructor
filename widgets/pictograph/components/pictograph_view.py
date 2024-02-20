@@ -13,7 +13,6 @@ class PictographView(QGraphicsView):
         super().__init__(pictograph)
         self.pictograph = pictograph
         self.original_style = ""
-        self.setScene(self.pictograph)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)

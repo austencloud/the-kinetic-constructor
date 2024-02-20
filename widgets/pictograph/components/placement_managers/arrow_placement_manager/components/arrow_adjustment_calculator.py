@@ -1,3 +1,4 @@
+from functools import lru_cache
 import re
 from PyQt6.QtCore import QPointF
 from Enums.letters import Letter
@@ -15,6 +16,7 @@ class ArrowAdjustmentCalculator:
     def __init__(self, placement_manager: "ArrowPlacementManager") -> None:
         self.placement_manager = placement_manager
 
+    @lru_cache
     def get_adjustment(self, arrow: Arrow) -> QPointF:
         
         if not arrow.motion.pictograph.letter:

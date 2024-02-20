@@ -1,9 +1,9 @@
 # utils.py
+from functools import lru_cache
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 
 from Enums.Enums import VTG_Directions
-
 
 def load_svg_item(svg_path: str) -> QGraphicsSvgItem:
     renderer = QSvgRenderer(svg_path)

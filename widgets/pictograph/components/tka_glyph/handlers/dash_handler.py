@@ -1,5 +1,6 @@
-from .utils import load_svg_item
 from typing import TYPE_CHECKING
+from PyQt6.QtSvg import QSvgRenderer
+from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
 if TYPE_CHECKING:
     from ..tka_glyph import TKA_Glyph
@@ -12,8 +13,16 @@ class DashHandler:
 
     def add_dash(self):
         dash_path = "images/dash.svg"
-        self.dash_item = load_svg_item(dash_path)
+        self.dash_item = self.create_dash(dash_path)
         self.glyph.addToGroup(self.dash_item)
+
+    def create_dash(self, dash_path: str) -> QGraphicsSvgItem:
+        renderer = QSvgRenderer(dash_path)
+        if renderer.isValid():
+            item = QGraphicsSvgItem()
+            item.setSharedRenderer(renderer)
+            return item
+        return None
 
     def position_dash(self):
         padding = 5

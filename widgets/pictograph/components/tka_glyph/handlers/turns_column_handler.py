@@ -1,3 +1,4 @@
+from functools import lru_cache
 from PyQt6.QtWidgets import QGraphicsItemGroup
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
@@ -17,6 +18,7 @@ class TurnsColumnHandler(QGraphicsItemGroup):
         self.svg_path_prefix = "images/numbers/"
         self.blank_svg_path = "images/blank.svg"
 
+    @lru_cache
     def load_number_svg(self, number: Union[int, float]) -> QGraphicsSvgItem:
         svg_path = (
             self.blank_svg_path

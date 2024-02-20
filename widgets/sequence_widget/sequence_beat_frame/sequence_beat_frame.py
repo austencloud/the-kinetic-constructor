@@ -80,8 +80,6 @@ class SequenceBeatFrame(QFrame):
 
     def _add_beat_to_layout(self, row: int, col: int) -> None:
         beat_view = BeatView(self)
-        beat = Beat(self.main_widget)
-        beat_view.beat = beat
         self.layout.addWidget(beat_view, row, col)
         self.beat_views.append(beat_view)
 
@@ -108,14 +106,8 @@ class SequenceBeatFrame(QFrame):
 
     def resize_beat_frame(self):
         beat_view_size = int(self.width() / (self.COLUMN_COUNT + 2))
-        for beat_view in self.beat_views:
-            beat_view.setMaximumWidth(beat_view_size)
-            beat_view.setMinimumHeight(beat_view_size)
-            beat_view.view_scale = beat_view_size / beat_view.beat.width()
-            beat_view.resetTransform()
-            beat_view.scale(beat_view.view_scale, beat_view.view_scale)
-            beat_view.beat.container.styled_border_overlay.resize_styled_border_overlay()
+        for view in self.beat_views + [self.start_pos_view]:
+            view.setMaximumWidth(beat_view_size)
+            view.setMinimumHeight(beat_view_size)
+            view.resetTransform()
 
-        self.start_pos_view.setMaximumWidth(beat_view_size)
-        self.start_pos_view.setMaximumHeight(beat_view_size)
-        # self.setMaximumHeight(beat_view_size * self.ROW_COUNT)

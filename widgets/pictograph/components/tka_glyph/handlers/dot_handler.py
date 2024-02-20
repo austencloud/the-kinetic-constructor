@@ -1,4 +1,5 @@
 from PyQt6.QtCore import QPointF
+from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from typing import TYPE_CHECKING
 from .utils import load_svg_item
@@ -31,7 +32,11 @@ class DotHandler:
         self.opp_dot_item.hide()
 
     def create_dot(self, dot_path: str) -> QGraphicsSvgItem:
-        return load_svg_item(dot_path)
+        renderer = QSvgRenderer(dot_path)
+        if renderer.isValid():
+            item = QGraphicsSvgItem()
+            item.setSharedRenderer(renderer)
+            return item
 
     def update_dots(self, dir: VTG_Directions):
         padding = 0

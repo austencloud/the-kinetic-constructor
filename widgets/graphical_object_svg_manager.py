@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtSvg import QSvgRenderer
 import re
@@ -153,6 +154,7 @@ class GraphicalObjectSvgManager:
         GraphicalObjectSvgManager.svg_cache[cache_key] = svg_file
         return svg_file
 
+    @lru_cache
     def _generate_cache_key(self, object: Union["Arrow", "Prop"]) -> str:
         """Generates a unique key for caching based on object properties."""
         if self.is_arrow(object):

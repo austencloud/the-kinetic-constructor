@@ -33,7 +33,6 @@ class BeatView(QGraphicsView):
         self.is_filled = False
         self.is_selected = False
         self.setContentsMargins(0, 0, 0, 0)
-        # self.layout().setContentsMargins(0, 0, 0, 0)
 
     def set_pictograph(self, new_beat: "Beat") -> None:
         self.beat = new_beat
