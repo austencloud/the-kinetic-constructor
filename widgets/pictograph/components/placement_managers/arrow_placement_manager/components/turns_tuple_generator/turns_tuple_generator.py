@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import Union
 from Enums.Enums import LetterType, Letter
 
@@ -55,6 +56,7 @@ class TurnsTupleGenerator:
     def generate_mirrored_tuple(self, arrow: Arrow) -> Union[str, None]:
         return self.mirrored_generator.generate(arrow)
 
+    @lru_cache(maxsize=128)
     def _get_generator_key(self, letter: Letter) -> str:
         if letter.value in [
             letter.value
