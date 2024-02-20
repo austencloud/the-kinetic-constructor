@@ -176,3 +176,4 @@ class PictographView(QGraphicsView):
 
     def _reset_mouse_ignore_flag(self):
         self._ignoreMouseEvents = False
+ 
