@@ -22,7 +22,7 @@ class StartPosPickerPictographFrame(QWidget):
         self.layout.addWidget(self.label)
 
     def resize_start_pos_picker_pictograph_frame(self) -> None:
-        self.setMinimumHeight(self.start_pos_picker.height())
+        # self.setMinimumHeight(self.start_pos_picker.height())
         self.setMinimumWidth(self.start_pos_picker.width())
         self.start_pos_picker.choose_your_start_pos_label.set_stylesheet()
 

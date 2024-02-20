@@ -68,10 +68,8 @@ class GE_TurnsWidgetDisplayManager:
         self.turns_display.setFont(
             QFont("Arial", self.turns_display_font_size, QFont.Weight.Bold)
         )
-        border_radius = (
-            min(self.turns_display.width(), self.turns_display.height()) * 0.25
-        )
-        turn_display_border = int(self.turns_display.width() / 20)
+        border_radius = min(self.turns_display.width(), self.turns_display.height()) / 4
+        turn_display_border = int(self.turns_display.width() / 28)
         self.turns_display.setStyleSheet(
             f"""
             QLabel {{

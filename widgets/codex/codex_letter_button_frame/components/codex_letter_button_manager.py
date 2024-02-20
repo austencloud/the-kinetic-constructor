@@ -21,6 +21,7 @@ class CodexLetterButtonManager:
         self.buttons: dict[Letter, CodexLetterButton] = {}
         self.letter_button_frame = letter_button_frame
         self.click_handler = CodexLetterButtonClickHandler(self)
+        self.letter_button_styler = CodexLetterButtonStyler()
 
     def create_buttons(self) -> None:
         for type_name, rows in self.letter_rows.items():
@@ -36,7 +37,7 @@ class CodexLetterButtonManager:
         self, icon_path: str, letter_str: str
     ) -> CodexLetterButton:
         button = CodexLetterButton(icon_path, letter_str)
-        CodexLetterButtonStyler.apply_default_style(button)
+        self.letter_button_styler.apply_default_style(button)
         return button
 
     def resize_buttons(self, button_panel_height: int) -> None:
@@ -58,7 +59,7 @@ class CodexLetterButtonManager:
             button = self.buttons[letter]
             button.setSizePolicy(
                 QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred
-            )  # Ensure buttons can expand
+            )
             row_layout.addWidget(button)
         return row_layout
 

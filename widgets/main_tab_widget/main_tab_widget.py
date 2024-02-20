@@ -19,6 +19,7 @@ class MainTabWidget(BaseTabWidget):
         self.addTab(self.sequence_builder, "Sequence Builder")
         self.addTab(self.codex, "Codex")
         self.addTab(self.library, "Library")
+        self.currentChanged.connect(self.resize_main_tab_widget)
 
     def resize_main_tab_widget(self):
         current_tab = self.currentWidget()

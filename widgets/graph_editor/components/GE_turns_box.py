@@ -17,12 +17,14 @@ class GE_TurnsBox(QFrame):
         color: Color,
     ) -> None:
         super().__init__(turns_panel)
+        self.setObjectName("GE_TurnsBox")  # Assign a unique object name
         self.turns_panel = turns_panel
         self.color = color
         self.pictograph = pictograph
         self.graph_editor = self.turns_panel.graph_editor
         self._setup_widgets()
         self._setup_layout()
+        self._set_border_color()
 
     def _setup_widgets(self) -> None:
         self.header_widget = GE_HeaderWidget(self)
@@ -34,6 +36,12 @@ class GE_TurnsBox(QFrame):
         self.layout.addWidget(self.turns_widget)
         self.layout.addStretch(1)
         self.setLayout(self.layout)
+
+    def _set_border_color(self) -> None:
+        border_width = self.width() // 40
+        self.setStyleSheet(
+            f"#GE_TurnsBox {{ border: {border_width}px solid {self.color.name}; }}"
+        )
 
     def calculate_button_size(self) -> int:
         return int((self.pictograph.view.height() // 8))

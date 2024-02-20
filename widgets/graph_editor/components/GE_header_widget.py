@@ -19,9 +19,9 @@ class GE_HeaderWidget(QWidget):
         super().__init__(turns_box)
         self.turns_box: "GE_TurnsBox" = turns_box
         self.header_label = self._setup_header_label()
-        self.setStyleSheet("border: 1px solid black;")
-        self.layout: QHBoxLayout = self._setup_layout()
+        self.layout: QVBoxLayout = self._setup_layout()
         self.layout.addWidget(self.header_label)
+        self.layout.addWidget(self.create_separator())
 
     def create_separator(self) -> QFrame:
         separator = QFrame(self)
@@ -30,13 +30,13 @@ class GE_HeaderWidget(QWidget):
         separator.setStyleSheet("color: #000000;")
         return separator
 
-    def _setup_layout(self) -> QHBoxLayout:
-        layout = QHBoxLayout(self)
+    def _setup_layout(self) -> QVBoxLayout:
+        layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         return layout
-    
+
     def _setup_header_label(self) -> QLabel:
         color = self.turns_box.color
         text = ""

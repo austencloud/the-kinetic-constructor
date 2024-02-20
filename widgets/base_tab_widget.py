@@ -10,9 +10,9 @@ class BaseTabWidget(QTabWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
-        self.setStyleSheet(self.get_main_tab_stylesheet())
+        self.setStyleSheet(self.get_tab_stylesheet())
 
-    def get_main_tab_stylesheet(self) -> str:
+    def get_tab_stylesheet(self) -> str:
         return """
             QTabWidget::pane {
                 border: 1px solid black;
