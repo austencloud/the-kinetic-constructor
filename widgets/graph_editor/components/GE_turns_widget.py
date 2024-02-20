@@ -11,8 +11,9 @@ from widgets.graph_editor.GE_turns_widget_display_manager import (
 from widgets.graph_editor.components.GE_turns_adjustment_manager import (
     GE_TurnsAdjustmentManager,
 )
-from widgets.turns_box.turns_box_widgets.turns_widget.managers.turn_direct_set_manager import (
-    TurnDirectSetManager,
+from widgets.turns_box.turns_box_widgets.turns_widget.managers.GE_turns_direct_set_manager import GE_TurnsDirectSetManager
+from widgets.turns_box.turns_box_widgets.turns_widget.managers.codex_turns_direct_set_manager import (
+    CodexTurnsDirectSetManager,
 )
 from widgets.turns_box.turns_box_widgets.turns_widget.managers.turns_updater import (
     TurnsUpdater,
@@ -38,7 +39,7 @@ class GE_TurnsWidget(QWidget):
         self.layout.setSpacing(0)
 
     def _setup_components(self):
-        self.direct_set_manager = TurnDirectSetManager(self)
+        self.direct_set_manager = GE_TurnsDirectSetManager(self)
         self.display_manager = GE_TurnsWidgetDisplayManager(self)
         self.button_manager = GE_TurnsButtonManager(self)
         self.adjustment_manager = GE_TurnsAdjustmentManager(self)

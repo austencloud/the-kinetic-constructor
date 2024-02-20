@@ -1,5 +1,9 @@
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QWidget
 from typing import TYPE_CHECKING, Union
+
+from widgets.turns_box.turns_box_widgets.turns_widget.managers.codex_turns_direct_set_manager import CodexTurnsDirectSetManager
+
+
 from ..turns_box.turns_box_widgets.turns_widget.managers.motion_relevance_checker import (
     MotionRelevanceChecker,
 )
@@ -15,9 +19,7 @@ from ..turns_box.turns_box_widgets.turns_widget.managers.turns_updater import (
 from ..turns_box.turns_box_widgets.turns_widget.managers.codex_turns_widget_display_manager import (
     CodexTurnsWidgetDisplayManager,
 )
-from ..turns_box.turns_box_widgets.turns_widget.managers.turns_direct_set_manager import (
-    TurnsDirectSetManager,
-)
+
 
 if TYPE_CHECKING:
     from widgets.turns_box.codex_turns_box import CodexTurnsBox
@@ -38,7 +40,7 @@ class CodexTurnsWidget(QWidget):
         self.layout.setSpacing(0)
 
     def _setup_components(self, turns_box):
-        self.direct_set_manager = TurnsDirectSetManager(self)
+        self.direct_set_manager = CodexTurnsDirectSetManager(self)
         self.display_manager = CodexTurnsWidgetDisplayManager(self)
         self.button_manager = CodexTurnsButtonManager(self)
         self.relevance_checker = MotionRelevanceChecker(turns_box)
