@@ -2,11 +2,11 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QGraphicsView,
     QSizePolicy,
-    QGraphicsSceneMouseEvent,
+    QGraphicsSceneMouseEvent, 
     QGestureEvent,
 )
-from PyQt6.QtCore import Qt, QEvent
-from PyQt6.QtGui import QTouchEvent
+from PyQt6.QtCore import Qt, QEvent, QTimer
+from PyQt6.QtGui import QTouchEvent, QMouseEvent
 
 from widgets.pictograph.components.pictograph_context_menu_handler import (
     PictographContextMenuHandler,
@@ -33,7 +33,11 @@ class PictographView(QGraphicsView):
         self.grabGesture(Qt.GestureType.TapAndHoldGesture)
         self.mouse_event_handler = PictographViewMouseEventHandler(self)
         self.context_menu_handler = PictographContextMenuHandler(self)
-        self._isGestureActive = False  # Flag to track gesture activity
+        self._ignoreNextMousePress = False
+        self._touchTimeout = QTimer(self)
+        self._touchTimeout.setSingleShot(True)
+        self._touchTimeout.timeout.connect(self._resetTouchState)
+        self._touchTimeout.setInterval(100)  # Adjust as needed
 
     def resize_pictograph_view(self) -> None:
         view_width = self.calculate_view_width()
@@ -115,9 +119,12 @@ class PictographView(QGraphicsView):
         )
 
 
-    def mousePressEvent(self, event: "QGraphicsSceneMouseEvent") -> None:
-        if self._isGestureActive:
-            # Ignore mouse press events if a gesture is active
+    def _resetTouchState(self):
+        self._ignoreNextMousePress = False
+
+    def mousePressEvent(self, event: QMouseEvent):
+        if self._ignoreNextMousePress:
+            self._ignoreNextMousePress = False
             event.ignore()
             return
         if event.button() == Qt.MouseButton.LeftButton:
@@ -151,5 +158,9 @@ class PictographView(QGraphicsView):
             if tapAndHoldGesture.state() == Qt.GestureState.GestureFinished:
                 self.pictograph.container.styled_border_overlay.set_gold_border()
         self._isGestureActive = False
+
+        if tapGesture or tapAndHoldGesture:
+            self._ignoreNextMousePress = True
+            self._touchTimeout.start()
 
         return True
