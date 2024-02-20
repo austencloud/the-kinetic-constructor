@@ -33,7 +33,8 @@ class PictographView(QGraphicsView):
         self.grabGesture(Qt.GestureType.TapAndHoldGesture)
         self.mouse_event_handler = PictographViewMouseEventHandler(self)
         self.context_menu_handler = PictographContextMenuHandler(self)
-        self._ignoreNextMousePress = False
+        self._gestureInProgress = False
+        self._ignoreMouseEvents = False
         self._touchTimeout = QTimer(self)
         self._touchTimeout.setSingleShot(True)
         self._touchTimeout.timeout.connect(self._resetTouchState)
@@ -123,8 +124,7 @@ class PictographView(QGraphicsView):
         self._ignoreNextMousePress = False
 
     def mousePressEvent(self, event: QMouseEvent):
-        if self._ignoreNextMousePress:
-            self._ignoreNextMousePress = False
+        if self._ignoreMouseEvents:
             event.ignore()
             return
         if event.button() == Qt.MouseButton.LeftButton:
@@ -162,5 +162,15 @@ class PictographView(QGraphicsView):
         if tapGesture or tapAndHoldGesture:
             self._ignoreNextMousePress = True
             self._touchTimeout.start()
+        self._gestureInProgress = True
+        QTimer.singleShot(100, self._reset_gesture_flag)  # Adjust delay as needed
 
         return True
+
+    def _reset_gesture_flag(self):
+        self._gestureInProgress = False
+        self._ignoreMouseEvents = True
+        QTimer.singleShot(50, self._reset_mouse_ignore_flag)  # Short delay to ignore subsequent mouse events
+
+    def _reset_mouse_ignore_flag(self):
+        self._ignoreMouseEvents = False
