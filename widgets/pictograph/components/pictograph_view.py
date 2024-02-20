@@ -33,6 +33,7 @@ class PictographView(QGraphicsView):
         self.grabGesture(Qt.GestureType.TapAndHoldGesture)
         self.mouse_event_handler = PictographViewMouseEventHandler(self)
         self.context_menu_handler = PictographContextMenuHandler(self)
+        self._isGestureActive = False  # Flag to track gesture activity
 
     def resize_pictograph_view(self) -> None:
         view_width = self.calculate_view_width()
@@ -113,18 +114,12 @@ class PictographView(QGraphicsView):
             self.pictograph
         )
 
-    def touchEvent(self, event: QTouchEvent):
-        if event.type() in [
-            QEvent.Type.TouchBegin,
-            QEvent.Type.TouchUpdate,
-            QEvent.Type.TouchEnd,
-        ]:
-            event.accept()
-        self.pictograph.main_widget.pictograph_view_touch_event_handler.handle_touch_event(
-            event
-        )
 
     def mousePressEvent(self, event: "QGraphicsSceneMouseEvent") -> None:
+        if self._isGestureActive:
+            # Ignore mouse press events if a gesture is active
+            event.ignore()
+            return
         if event.button() == Qt.MouseButton.LeftButton:
             self.mouse_event_handler.handle_mouse_press(event)
 
@@ -143,6 +138,8 @@ class PictographView(QGraphicsView):
         return super().event(event)
 
     def gestureEvent(self, event: QGestureEvent):
+        self._isGestureActive = True  # Gesture started
+
         if tapGesture := event.gesture(Qt.GestureType.TapGesture):
             if tapGesture.state() == Qt.GestureState.GestureStarted:
 
@@ -152,6 +149,7 @@ class PictographView(QGraphicsView):
                     )
         if tapAndHoldGesture := event.gesture(Qt.GestureType.TapAndHoldGesture):
             if tapAndHoldGesture.state() == Qt.GestureState.GestureFinished:
-                # This is equivalent to tap-and-hold; you could show the gold border here.
                 self.pictograph.container.styled_border_overlay.set_gold_border()
+        self._isGestureActive = False
+
         return True

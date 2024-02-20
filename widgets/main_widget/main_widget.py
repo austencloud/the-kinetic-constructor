@@ -11,7 +11,6 @@ from widgets.menu_bar.preferences_dialog import PreferencesDialog
 from widgets.menu_bar.prop_type_selector import PropTypeSelector
 
 
-from widgets.pictograph.components.pictograph_view_touch_event_handler import PictographViewTouchEventHandler
 from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.components.pictograph_key_generator import (
     PictographKeyGenerator,
@@ -67,7 +66,6 @@ class MainWidget(QWidget):
         self.sequence_widget = SequenceWidget(self)
         self.preferences_dialog = PreferencesDialog(self)
         self.image_cache_manager = ImageCacheManager(self)
-        self.pictograph_view_touch_event_handler = PictographViewTouchEventHandler(self)
 
     def _setup_special_placements(self):
         self.special_placement_loader = SpecialPlacementLoader(self)
