@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QWidget
 from widgets.base_tab_widget import BaseTabWidget
 from widgets.animator.animator import Animator
 from widgets.graph_editor.graph_editor import GraphEditor
+from widgets.library.library import Library
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
@@ -16,9 +17,13 @@ class SequenceModifier(BaseTabWidget):
         self.graph_editor = GraphEditor(self)
         self.animator = Animator(self)
         self.prop_changer = QWidget(self)
+        self.library = Library(self)
         self.addTab(self.graph_editor, "Graph Editor")
         self.addTab(self.animator, "Animator")
         self.addTab(self.prop_changer, "Prop Changer")
+
+        self.addTab(self.library, "Library")
+
         self.currentChanged.connect(self.resize_sequence_modifier)
 
     def resize_sequence_modifier(self):

@@ -41,6 +41,7 @@ class OptionPickerSectionsManager:
         self.filter_tabs_cache: dict[LetterType, TurnsTab] = {}
         self.pictograph_cache: dict[Letter, list[LetterType]] = {}
         self.ordered_section_types: list[LetterType] = []
+        self.initialized = False
 
     def initialize_sections(self) -> None:
         for letter_type in LetterType:
@@ -106,10 +107,10 @@ class OptionPickerSectionsManager:
         return section.turns_tab
 
     def show_all_sections(self) -> None:
-        self.initialize_sections()
-        self.add_sections_to_layout()
+        if not self.initialized:
+            self.initialize_sections()
+            self.add_sections_to_layout()
+            self.initialized = True
         for section in self.sections.values():
             section.show()
             section.resize_section()
-            for section in self.sections.values():
-                section.adjust_size()

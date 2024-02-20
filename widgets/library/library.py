@@ -8,13 +8,14 @@ from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import StartPosi
 from Enums.letters import Letter
 
 if TYPE_CHECKING:
+    from widgets.sequence_widget.sequence_modifier import SequenceModifier
     from widgets.main_widget.main_widget import MainWidget
 
 
 class Library(QWidget):
-    def __init__(self, main_widget: "MainWidget") -> None:
-        super().__init__(main_widget)
-        self.main_widget = main_widget
+    def __init__(self, sequence_modifier: "SequenceModifier") -> None:
+        super().__init__(sequence_modifier)
+        self.main_widget = sequence_modifier.main_widget
         self.setup_ui()
 
     def setup_ui(self):
@@ -64,7 +65,9 @@ class Library(QWidget):
         start_pos_view = self.main_widget.sequence_widget.beat_frame.start_pos_view
 
         sequence_widget = self.main_widget.sequence_widget
-        sequence_widget.button_frame.clear_sequence(show_indicator=False)
+        sequence_widget.button_frame.clear_sequence(
+            show_indicator=False, reset_to_start_pos_picker=False
+        )
 
         start_pos_beat = self._convert_pictograph_to_start_pos_beat(sequence_data)
         json_handler.set_start_position_data(start_pos_beat)
@@ -81,7 +84,6 @@ class Library(QWidget):
         sequence_builder.option_picker.scroll_area._add_and_display_relevant_pictographs(
             sequence_builder.option_picker.option_manager.get_next_options()
         )
-        sequence_builder.transition_to_sequence_building()
 
     def _convert_pictograph_to_start_pos_beat(self, sequence_data):
         start_position_pictograph = self.get_start_pos_pictograph(

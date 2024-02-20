@@ -6,7 +6,9 @@ from PyQt6.QtGui import QWheelEvent
 from widgets.scroll_area.components.option_picker_pictograph_factory import (
     OptionPickerPictographFactory,
 )
-from widgets.sequence_builder.components.option_picker.option_picker_section_manager import OptionPickerSectionsManager
+from widgets.sequence_builder.components.option_picker.option_picker_section_manager import (
+    OptionPickerSectionsManager,
+)
 
 from ....scroll_area.components.option_picker_display_manager import (
     OptionPickerDisplayManager,
@@ -105,7 +107,8 @@ class OptionPickerScrollArea(BasePictographScrollArea):
                 self.change_pictograph_size(increase=False)
             event.accept()
         else:
-            super().wheelEvent(event)
+            # ignore
+            event.ignore()
 
     def change_pictograph_size(self, increase: bool) -> None:
         MAX_COLUMN_COUNT = 8

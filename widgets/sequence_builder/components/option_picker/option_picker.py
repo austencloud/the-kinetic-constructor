@@ -39,11 +39,10 @@ class OptionPicker(QWidget):
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        start_label_layout = QHBoxLayout()
-        start_label_layout.addWidget(self.choose_your_next_option_label)
+
         self.choose_your_next_option_label.show()
-        self.layout.addLayout(start_label_layout)
-        self.layout.addWidget(self.scroll_area)
+        self.layout.addWidget(self.choose_your_next_option_label, 1)
+        self.layout.addWidget(self.scroll_area, 10)
 
     def update_option_picker(self):
         try:
@@ -61,3 +60,4 @@ class OptionPicker(QWidget):
             next_options: dict = self.option_manager.get_next_options()
             self.scroll_area._hide_all_pictographs()
             self.scroll_area._add_and_display_relevant_pictographs(next_options)
+        self.choose_your_next_option_label.set_stylesheet()
