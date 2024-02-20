@@ -13,6 +13,6 @@ class ArrowUpdater:
             self.arrow.attr_manager.update_attributes(arrow_dict)
         self.arrow.pictograph.main_widget.svg_manager.update_svg(self.arrow)
         self.arrow.mirror_manager.update_mirror()
-        self.arrow.pictograph.main_widget.svg_manager.update_color(self.arrow)
+        # self.arrow.pictograph.main_widget.svg_manager.update_color(self.arrow)
         self.arrow.rot_angle_calculator.update_rotation()
         self.arrow.location_calculator.update_location()

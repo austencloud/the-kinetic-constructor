@@ -27,6 +27,8 @@ if TYPE_CHECKING:
 
 class GraphicalObjectSvgManager:
     svg_cache = {}
+    renderer_cache = {}  # Cache for QSvgRenderer instances based on SVG content key
+    svg_content_cache = {}  # Cache for SVG content based on file path
 
     def __init__(self) -> None:
         self.renderer = None
@@ -61,42 +63,77 @@ class GraphicalObjectSvgManager:
         file_path = f"images/props/{prop_type}.svg"
         GraphicalObjectSvgManager.svg_cache[cache_key] = file_path
 
-    def set_svg_color(self, new_color: str, object: Union["Arrow", "Prop"]) -> bytes:
-        def replace_class_color(match: re.Match) -> str:
-            return match.group(1) + new_hex_color + match.group(3)
-
-        def replace_fill_color(match: re.Match) -> str:
-            return match.group(1) + new_hex_color + match.group(3)
-
+    def set_svg_color(self, svg_data: str, new_color: str) -> bytes:
+        # Apply color transformations directly to SVG data and return the modified SVG content
         COLOR_MAP = {Color.RED: HEX_RED, Color.BLUE: HEX_BLUE}
         new_hex_color = COLOR_MAP.get(new_color)
-        with open(object.svg_file, "r") as f:
-            svg_data = f.read()
+
+        # Apply color transformations
+        svg_data = self._apply_color_transformations(svg_data, new_hex_color)
+        return svg_data.encode("utf-8")
+
+    def _generate_cache_key_with_color(
+        self, object: Union["Arrow", "Prop"], color: Color
+    ) -> str:
+        # Generate a cache key that includes the object type, its properties, and the color
+        base_key = self._generate_cache_key(object)
+        color_key = f"{color.value}"
+        return f"{base_key}_{color_key}"
+
+    def _apply_color_transformations(self, svg_data: str, new_hex_color: str) -> str:
         class_color_pattern = re.compile(
             r"(\.st0\s*\{.*?fill:\s*)(#[a-fA-F0-9]{6})(.*?\})"
         )
-        svg_data = class_color_pattern.sub(replace_class_color, svg_data)
         fill_pattern = re.compile(r'(fill=")(#[a-fA-F0-9]{6})(")')
-        svg_data = fill_pattern.sub(replace_fill_color, svg_data)
-        return svg_data.encode("utf-8")
+
+        def replace_color(match):
+            return match.group(1) + new_hex_color + match.group(3)
+
+        svg_data = class_color_pattern.sub(replace_color, svg_data)
+        svg_data = fill_pattern.sub(replace_color, svg_data)
+        return svg_data
+
+    def update_color(self, object: Union["Arrow", "Prop"]) -> None:
+        svg_data = self.set_svg_color(object.color, object)
+        object.renderer.load(svg_data.encode("utf-8"))
 
     def setup_svg_renderer(self, svg_file: str, object: Union["Arrow", "Prop"]) -> None:
         object.renderer = QSvgRenderer(svg_file)
         object.setSharedRenderer(object.renderer)
 
     def update_color(self, object: Union["Arrow", "Prop"]) -> None:
-        new_svg_data = self.set_svg_color(object.color, object)
+        new_svg_data = self.set_svg_color(object.renderer.toString(), object.color)
         object.renderer.load(new_svg_data)
         object.setSharedRenderer(object.renderer)
 
-    def update_svg(self, object: Union["Arrow", "Prop"]) -> None:
+    def get_svg_data(self, object: Union["Arrow", "Prop"]) -> str:
+        """Retrieves the original SVG data from file or cache."""
         svg_file = self.get_svg_file(object)
-        if object.svg_file != svg_file or not object.renderer:
-            object.svg_file = svg_file
-            self.set_svg_color(object.color, object)
-            self.setup_svg_renderer(svg_file, object)
+        # If SVG content is already in the content cache, return it
+        if svg_file in self.svg_content_cache:
+            return self.svg_content_cache[svg_file]
+        # Otherwise, load it from the file, store it in the cache, and return it
+        with open(svg_file, "r") as file:
+            svg_data = file.read()
+        self.svg_content_cache[svg_file] = svg_data
+        return svg_data
+
+    def get_or_create_renderer(self, svg_data: bytes, cache_key: str) -> QSvgRenderer:
+        if cache_key in self.renderer_cache:
+            return self.renderer_cache[cache_key]
         else:
-            self.update_color(object)
+            renderer = QSvgRenderer()
+            renderer.load(svg_data)  # Load SVG content into the renderer directly as bytes
+            self.renderer_cache[cache_key] = renderer  # Cache it
+            return renderer
+
+
+    def update_svg(self, object: Union["Arrow", "Prop"]) -> None:
+        svg_data = self.get_svg_data(object)
+        colored_svg_data = self.set_svg_color(svg_data, object.color)
+        cache_key = self._generate_cache_key_with_color(object, object.color)
+        object.renderer = self.get_or_create_renderer(colored_svg_data, cache_key)
+        object.setSharedRenderer(object.renderer)
 
     def _determine_svg_file(self, object: Union["Arrow", "Prop"]) -> str:
         """Determines the SVG file path based on object properties, without using cache."""

@@ -45,11 +45,11 @@ class Profiler:
             app_root = os.path.normpath(app_root)
 
             with open(file_path, "w", encoding="utf-8") as f:
-                f.write("Organized by number of calls:\n\n")
-                self._write_stats_section(f, stats, "calls", app_root)
-                f.write("\n\n")
                 f.write("Organized by total time:\n\n")
                 self._write_stats_section(f, stats, "time", app_root)
+                f.write("\n\n")
+                f.write("Organized by number of calls:\n\n")
+                self._write_stats_section(f, stats, "calls", app_root)
                 f.write("\n\n")
                 f.write("Organized by cumulative time:\n\n")
                 self._write_stats_section(f, stats, "cumulative", app_root)

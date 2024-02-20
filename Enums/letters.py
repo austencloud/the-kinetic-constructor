@@ -1,4 +1,5 @@
 from enum import Enum
+from functools import lru_cache
 
 
 class LetterConditions(Enum):
@@ -77,6 +78,7 @@ class Letter(Enum):
     Γ = "Γ"
 
     @staticmethod
+    @lru_cache(maxsize=None)  # Cache all unique callsFucking shit.
     def get_letters_by_condition(condition: LetterConditions) -> list["Letter"]:
         """
         Returns a list of letter enums based on a given condition.
