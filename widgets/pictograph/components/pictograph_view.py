@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsView, QSizePolicy, QGraphicsSceneMouseEvent
+from PyQt6.QtWidgets import QGraphicsView, QSizePolicy, QGraphicsSceneMouseEvent, QGestureEvent
 from PyQt6.QtCore import Qt, QEvent
 from PyQt6.QtGui import QTouchEvent
 
@@ -8,9 +8,6 @@ from widgets.pictograph.components.pictograph_context_menu_handler import (
 )
 from widgets.pictograph.components.pictograph_view_mouse_event_handler import (
     PictographViewMouseEventHandler,
-)
-from widgets.pictograph.components.pictograph_view_touch_event_handler import (
-    PictographViewTouchEventHandler,
 )
 
 if TYPE_CHECKING:
@@ -134,13 +131,18 @@ class PictographView(QGraphicsView):
     #     self.context_menu_handler.handle_context_menu(event)
 
     def event(self, event):
-        if event.type() == QEvent.Type.TouchBegin:
-            # Handle touch begin
-            return True
-        elif event.type() == QEvent.Type.TouchUpdate:
-            # Handle touch move
-            return True
-        elif event.type() == QEvent.Type.TouchEnd:
-            # Handle touch end
-            return True
+        if event.type() == QEvent.Type.Gesture:
+            return self.gestureEvent(event)
         return super().event(event)
+    
+    def gestureEvent(self, event: QGestureEvent):
+        if tapGesture := event.gesture(Qt.GestureType.TapGesture):
+            if tapGesture.state() == Qt.GestureState.GestureStarted:
+                # This is equivalent to a tap action; you might trigger the same
+                # action as a mouse click here.
+                self.mouse_event_handler.handle_mouse_press(tapGesture)
+        if tapAndHoldGesture := event.gesture(Qt.GestureType.TapAndHoldGesture):
+            if tapAndHoldGesture.state() == Qt.GestureState.GestureFinished:
+                # This is equivalent to tap-and-hold; you could show the gold border here.
+                self.pictograph.container.styled_border_overlay.set_gold_border()
+        return True
