@@ -25,7 +25,6 @@ class CodexDisplayManager:
         self.section_indices = {}  # Track indices for each section's grid layout
 
     def order_and_display_pictographs(self, section: CodexSectionWidget) -> None:
-        self.calculate_section_indices(section)
         ordered_pictographs = self.get_ordered_pictographs_for_section(section)
         for index, (key, pictograph) in enumerate(ordered_pictographs.items()):
             self.add_pictograph_to_layout(pictograph, index)
@@ -43,43 +42,6 @@ class CodexDisplayManager:
             self.section_indices[letter_type] = divmod(next_index, self.COLUMN_COUNT)
             pictograph.view.resize_pictograph_view()
 
-    def calculate_section_indices(self, section: CodexSectionWidget) -> None:
-        letter_type = section.letter_type
-        selected_letters = [
-            letter
-            for letter in self.scroll_area.codex.selected_letters
-            if self.scroll_area.sections_manager.get_pictograph_letter_type(letter)
-            == letter_type
-        ]
-
-        total_variations = sum(
-            (
-                8
-                if letter
-                in Letter.get_letters_by_condition(LetterConditions.EIGHT_VARIATIONS)
-                else (
-                    16
-                    if letter
-                    in Letter.get_letters_by_condition(
-                        LetterConditions.SIXTEEN_VARIATIONS
-                    )
-                    else (
-                        4
-                        if letter
-                        in Letter.get_letters_by_condition(
-                            LetterConditions.FOUR_VARIATIONS
-                        )
-                        else 0
-                    )
-                )
-            )
-            for letter in selected_letters
-        )
-
-        self.section_indices[letter_type] = (0, 0)
-        for i in range(total_variations):
-            row, col = divmod(i, self.COLUMN_COUNT)
-            self.section_indices[letter_type] = (row, col)
 
     def get_ordered_pictographs_for_section(
         self, section: CodexSectionWidget

@@ -58,12 +58,12 @@ class TurnsTupleGenerator:
     def _get_generator_key(self, letter: Letter) -> str:
         if letter.value in [
             letter.value
-            for letter in Letter.get_letters_by_condition(LetterConditions.TYPE1_HYBRID)
+            for letter in letter.get_letters_by_condition(LetterConditions.TYPE1_HYBRID)
         ]:
             return "Type1Hybrid"
         elif letter.value in [
             letter.value
-            for letter in Letter.get_letters_by_condition(
+            for letter in letter.get_letters_by_condition(
                 LetterConditions.TYPE1_NON_HYBRID
             )
         ]:

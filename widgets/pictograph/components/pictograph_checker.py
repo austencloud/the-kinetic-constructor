@@ -13,17 +13,18 @@ class PictographChecker:
         self.pictograph = pictograph
 
     def ends_with_beta(self) -> bool:
-        return self.pictograph.letter in Letter.get_letters_by_condition(
+
+        return self.pictograph.letter in self.pictograph.letter.get_letters_by_condition(
             LetterConditions.BETA_ENDING
         )
 
     def ends_with_alpha(self) -> bool:
-        return self.pictograph.letter in Letter.get_letters_by_condition(
+        return self.pictograph.letter in self.pictograph.letter.get_letters_by_condition(
             LetterConditions.ALPHA_ENDING
         )
 
     def ends_with_gamma(self) -> bool:
-        return self.pictograph.letter in Letter.get_letters_by_condition(
+        return self.pictograph.letter in self.pictograph.letter.get_letters_by_condition(
             LetterConditions.GAMMA_ENDING
         )
 

@@ -59,7 +59,7 @@ class DefaultArrowPositioner:
         if (
             arrow.pictograph.letter.value
             and arrow.pictograph.letter
-            in Letter.get_letters_by_condition(LetterConditions.DASH)
+            in arrow.pictograph.letter.get_letters_by_condition(LetterConditions.DASH)
         ):
             char = arrow.pictograph.letter.value[:-1]
             letter_suffix = f"_{char}_dash"

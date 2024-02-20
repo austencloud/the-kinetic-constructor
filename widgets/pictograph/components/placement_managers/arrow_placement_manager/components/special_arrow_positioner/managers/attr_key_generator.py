@@ -23,8 +23,11 @@ class AttrKeyGenerator:
                         return f"{arrow.motion.motion_type}_from_layer2"
                 else:
                     return arrow.motion.color.value
-            elif self.positioner.pictograph.letter in Letter.get_letters_by_condition(
-                LetterConditions.NON_HYBRID
+            elif (
+                self.positioner.pictograph.letter
+                in self.positioner.pictograph.letter.get_letters_by_condition(
+                    LetterConditions.NON_HYBRID
+                )
             ):
                 return arrow.color.value
             else:

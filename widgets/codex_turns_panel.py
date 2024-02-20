@@ -46,19 +46,19 @@ class CodexTurnsPanel(QFrame):
         motion_type_mapping = {
             MotionType.PRO: [
                 letter
-                for letter in Letter.get_letters_by_condition(LetterConditions.PRO)
+                for letter in letter.get_letters_by_condition(LetterConditions.PRO)
             ],
             MotionType.ANTI: [
                 letter
-                for letter in Letter.get_letters_by_condition(LetterConditions.ANTI)
+                for letter in letter.get_letters_by_condition(LetterConditions.ANTI)
             ],
             MotionType.DASH: [
                 letter
-                for letter in Letter.get_letters_by_condition(LetterConditions.DASH)
+                for letter in letter.get_letters_by_condition(LetterConditions.DASH)
             ],
             MotionType.STATIC: [
                 letter
-                for letter in Letter.get_letters_by_condition(LetterConditions.STATIC)
+                for letter in letter.get_letters_by_condition(LetterConditions.STATIC)
             ],
         }
 
