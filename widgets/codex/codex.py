@@ -2,9 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal
 from Enums.Enums import Letter
-from widgets.pictograph.components.pictograph_view_touch_event_handler import (
-    PictographViewTouchEventHandler,
-)
+
 from .codex_letter_button_frame.codex_letter_button_frame import (
     CodexLetterButtonFrame,
 )
