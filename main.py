@@ -1,6 +1,7 @@
 import os
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtCore import Qt
 from profiler import Profiler
 from settings_manager import SettingsManager
 from utilities.window_geometry_manager import WindowGeometryManager
@@ -15,7 +16,7 @@ class MainWindow(QMainWindow):
         self.settings_manager = SettingsManager(self)
         self.main_widget = MainWidget(self)
         self.main_widget.preferences_dialog.load_initial_settings()
-
+        self.setAttribute(Qt.WidgetAttribute.WA_AcceptTouchEvents, True)
         self.window_manager = WindowGeometryManager(self)
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Sequence Constructor")
