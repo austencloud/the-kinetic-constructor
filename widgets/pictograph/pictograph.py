@@ -45,7 +45,6 @@ from .components.wasd_adjustment_manager.wasd_adjustment_manager import (
 from .components.pictograph_context_menu_handler import PictographContextMenuHandler
 from .components.pictograph_image_renderer import PictographImageRenderer
 from .components.pictograph_updater import PictographUpdater
-from .components.pictograph_event_handler import PictographMouseEventHandler
 from .components.pictograph_initializer import PictographInitializer
 
 
@@ -106,8 +105,6 @@ class Pictograph(QGraphicsScene):
             CodexScrollArea, OptionPickerScrollArea, StartPosPickerScrollArea
         ] = scroll_area
         self.initializer = PictographInitializer(self)
-        self.mouse_event_handler = PictographMouseEventHandler(self)
-        self.context_menu_handler = PictographContextMenuHandler(self)
         self.updater = PictographUpdater(self)
         self.image_renderer = PictographImageRenderer(self)
         self.get = PictographGetter(self)
@@ -119,17 +116,3 @@ class Pictograph(QGraphicsScene):
         self.prop_placement_manager = PropPlacementManager(self)
         self.wasd_manager = WASD_AdjustmentManager(self)
         self.attr_manager = PictographAttrManager(self)
-
-    ### EVENT HANDLERS ###
-
-    def mousePressEvent(self, event: "QGraphicsSceneMouseEvent") -> None:
-        self.mouse_event_handler.handle_mouse_press(event)
-
-    def mouseMoveEvent(self, event) -> None:
-        self.mouse_event_handler.handle_mouse_move(event)
-
-    def mouseReleaseEvent(self, event) -> None:
-        self.mouse_event_handler.handle_mouse_release(event)
-
-    def contextMenuEvent(self, event: "QGraphicsSceneMouseEvent") -> None:
-        self.context_menu_handler.handle_context_menu(event)

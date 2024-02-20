@@ -1,15 +1,19 @@
 from objects.arrow.arrow import Arrow
 from objects.prop.prop import Prop
 from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
+from PyQt6.QtGui import QTouchEvent
+from PyQt6.QtCore import QEvent
 
 if TYPE_CHECKING:
+    from widgets.pictograph.components.pictograph_view import PictographView
     from widgets.pictograph.pictograph import Pictograph
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 
-class PictographMouseEventHandler:
-    def __init__(self, pictograph: "Pictograph") -> None:
-        self.pictograph = pictograph
+class PictographViewMouseEventHandler:
+    def __init__(self, pictograph_view: "PictographView") -> None:
+        self.pictograph = pictograph_view.pictograph
 
     def handle_mouse_press(self, event: "QGraphicsSceneMouseEvent") -> None:
         if self.pictograph.check.is_in_sequence_builder():
@@ -25,7 +29,7 @@ class PictographMouseEventHandler:
             self.pictograph.selected_arrow = arrow
             self.pictograph.dragged_arrow = arrow
             self.pictograph.dragged_arrow.mousePressEvent(event)
-            arrow.setSelected(True)  # set the arrow as selected
+            arrow.setSelected(True)
             self.pictograph.update()
         else:
             prop = next((item for item in items_at_pos if isinstance(item, Prop)), None)
@@ -56,3 +60,5 @@ class PictographMouseEventHandler:
             prop.setSelected(False)
         self.dragged_prop = None
         self.dragged_arrow = None
+
+

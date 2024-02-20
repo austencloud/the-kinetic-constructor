@@ -1,6 +1,17 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsView, QSizePolicy
+from PyQt6.QtWidgets import QGraphicsView, QSizePolicy, QGraphicsSceneMouseEvent
 from PyQt6.QtCore import Qt, QEvent
+from PyQt6.QtGui import QTouchEvent
+
+from widgets.pictograph.components.pictograph_context_menu_handler import (
+    PictographContextMenuHandler,
+)
+from widgets.pictograph.components.pictograph_view_mouse_event_handler import (
+    PictographViewMouseEventHandler,
+)
+from widgets.pictograph.components.pictograph_view_touch_event_handler import (
+    PictographViewTouchEventHandler,
+)
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -17,6 +28,8 @@ class PictographView(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         self.setAttribute(Qt.WidgetAttribute.WA_AcceptTouchEvents, True)
+        self.mouse_event_handler = PictographViewMouseEventHandler(self)
+        self.context_menu_handler = PictographContextMenuHandler(self)
 
     def resize_pictograph_view(self) -> None:
         view_width = self.calculate_view_width()
@@ -43,12 +56,13 @@ class PictographView(QGraphicsView):
         view_width = view_width - (outer_border_width) - (inner_border_width)
         return view_width
 
+    ### EVENTS ###
+
     def wheelEvent(self, event) -> None:
         if self.pictograph.scroll_area:
             self.pictograph.scroll_area.wheelEvent(event)
 
     def enterEvent(self, event: QEvent) -> None:
-
         self.pictograph.container.styled_border_overlay.set_gold_border()
 
     def leaveEvent(self, event: QEvent) -> None:
@@ -96,23 +110,17 @@ class PictographView(QGraphicsView):
             self.pictograph
         )
 
-    def touchEvent(self, event):
-        touch_points = event.touchPoints()
-        for point in touch_points:
-            pos = point.pos()
-            if event.type() == QEvent.Type.TouchBegin:
-                self.update_border_for_touch_position(pos)
-            elif event.type() == QEvent.Type.TouchUpdate:
-                self.update_border_for_touch_position(pos)
-            elif event.type() == QEvent.Type.TouchEnd:
-                self.trigger_pictograph_action(pos)
+    def touchEvent(self, event: QTouchEvent):
+        self.touch_event_handler.handle_touch_event(event)
 
-    def update_border_for_touch_position(self, pos):
-        # Convert touch point position to view coordinates
-        local_pos = self.mapFromGlobal(pos.toPoint())
-        # Implement logic to find and highlight the pictograph under the touch position
+    def mousePressEvent(self, event: "QGraphicsSceneMouseEvent") -> None:
+        self.mouse_event_handler.handle_mouse_press(event)
 
-    def trigger_pictograph_action(self, pos):
-        # Convert touch point position to view coordinates
-        local_pos = self.mapFromGlobal(pos.toPoint())
-        # Implement logic to determine which pictograph is under 'pos' and trigger its action
+    def mouseMoveEvent(self, event) -> None:
+        self.mouse_event_handler.handle_mouse_move(event)
+
+    def mouseReleaseEvent(self, event) -> None:
+        self.mouse_event_handler.handle_mouse_release(event)
+
+    def contextMenuEvent(self, event: "QGraphicsSceneMouseEvent") -> None:
+        self.context_menu_handler.handle_context_menu(event)
