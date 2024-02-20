@@ -125,7 +125,8 @@ class PictographView(QGraphicsView):
         )
 
     def mousePressEvent(self, event: "QGraphicsSceneMouseEvent") -> None:
-        self.mouse_event_handler.handle_mouse_press(event)
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.mouse_event_handler.handle_mouse_press(event)
 
     def mouseMoveEvent(self, event) -> None:
         self.mouse_event_handler.handle_mouse_move(event)
@@ -144,9 +145,11 @@ class PictographView(QGraphicsView):
     def gestureEvent(self, event: QGestureEvent):
         if tapGesture := event.gesture(Qt.GestureType.TapGesture):
             if tapGesture.state() == Qt.GestureState.GestureStarted:
-                # This is equivalent to a tap action; you might trigger the same
-                # action as a mouse click here.
-                self.mouse_event_handler.handle_mouse_press(tapGesture)
+
+                if self.pictograph.check.is_in_sequence_builder():
+                    self.pictograph.scroll_area.sequence_builder.option_click_handler.on_option_clicked(
+                        self.pictograph
+                    )
         if tapAndHoldGesture := event.gesture(Qt.GestureType.TapAndHoldGesture):
             if tapAndHoldGesture.state() == Qt.GestureState.GestureFinished:
                 # This is equivalent to tap-and-hold; you could show the gold border here.
