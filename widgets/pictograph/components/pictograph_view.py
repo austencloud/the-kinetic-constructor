@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QGraphicsView,
     QSizePolicy,
-    QGraphicsSceneMouseEvent, 
+    QGraphicsSceneMouseEvent,
     QGestureEvent,
 )
 from PyQt6.QtCore import Qt, QEvent, QTimer
@@ -35,6 +35,7 @@ class PictographView(QGraphicsView):
         self.context_menu_handler = PictographContextMenuHandler(self)
         self._gestureInProgress = False
         self._ignoreMouseEvents = False
+        self._ignoreNextMousePress = False
         self._touchTimeout = QTimer(self)
         self._touchTimeout.setSingleShot(True)
         self._touchTimeout.timeout.connect(self._resetTouchState)
@@ -119,12 +120,11 @@ class PictographView(QGraphicsView):
             self.pictograph
         )
 
-
     def _resetTouchState(self):
         self._ignoreNextMousePress = False
 
     def mousePressEvent(self, event: QMouseEvent):
-        if self._ignoreMouseEvents:
+        if self._ignoreMouseEvents or self._ignoreNextMousePress:
             event.ignore()
             return
         elif event.button() == Qt.MouseButton.LeftButton:
@@ -170,7 +170,9 @@ class PictographView(QGraphicsView):
     def _reset_gesture_flag(self):
         self._gestureInProgress = False
         self._ignoreMouseEvents = True
-        QTimer.singleShot(50, self._reset_mouse_ignore_flag)  # Short delay to ignore subsequent mouse events
+        QTimer.singleShot(
+            50, self._reset_mouse_ignore_flag
+        )  # Short delay to ignore subsequent mouse events
 
     def _reset_mouse_ignore_flag(self):
         self._ignoreMouseEvents = False
