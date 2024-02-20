@@ -1,5 +1,10 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsView, QSizePolicy, QGraphicsSceneMouseEvent, QGestureEvent
+from PyQt6.QtWidgets import (
+    QGraphicsView,
+    QSizePolicy,
+    QGraphicsSceneMouseEvent,
+    QGestureEvent,
+)
 from PyQt6.QtCore import Qt, QEvent
 from PyQt6.QtGui import QTouchEvent
 
@@ -24,7 +29,8 @@ class PictographView(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        self.setAttribute(Qt.WidgetAttribute.WA_AcceptTouchEvents, True)
+        self.grabGesture(Qt.GestureType.TapGesture)
+        self.grabGesture(Qt.GestureType.TapAndHoldGesture)
         self.mouse_event_handler = PictographViewMouseEventHandler(self)
         self.context_menu_handler = PictographContextMenuHandler(self)
 
@@ -134,7 +140,7 @@ class PictographView(QGraphicsView):
         if event.type() == QEvent.Type.Gesture:
             return self.gestureEvent(event)
         return super().event(event)
-    
+
     def gestureEvent(self, event: QGestureEvent):
         if tapGesture := event.gesture(Qt.GestureType.TapGesture):
             if tapGesture.state() == Qt.GestureState.GestureStarted:
