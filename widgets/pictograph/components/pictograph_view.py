@@ -127,7 +127,7 @@ class PictographView(QGraphicsView):
         if self._ignoreMouseEvents:
             event.ignore()
             return
-        if event.button() == Qt.MouseButton.LeftButton:
+        elif event.button() == Qt.MouseButton.LeftButton:
             self.mouse_event_handler.handle_mouse_press(event)
 
     def mouseMoveEvent(self, event) -> None:
