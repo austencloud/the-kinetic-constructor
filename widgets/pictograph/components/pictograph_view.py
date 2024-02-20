@@ -111,6 +111,12 @@ class PictographView(QGraphicsView):
         )
 
     def touchEvent(self, event: QTouchEvent):
+        if event.type() in [
+            QEvent.Type.TouchBegin,
+            QEvent.Type.TouchUpdate,
+            QEvent.Type.TouchEnd,
+        ]:
+            event.accept()
         self.pictograph.main_widget.pictograph_view_touch_event_handler.handle_touch_event(
             event
         )
@@ -124,5 +130,17 @@ class PictographView(QGraphicsView):
     def mouseReleaseEvent(self, event) -> None:
         self.mouse_event_handler.handle_mouse_release(event)
 
-    def contextMenuEvent(self, event: "QGraphicsSceneMouseEvent") -> None:
-        self.context_menu_handler.handle_context_menu(event)
+    # def contextMenuEvent(self, event: "QGraphicsSceneMouseEvent") -> None:
+    #     self.context_menu_handler.handle_context_menu(event)
+
+    def event(self, event):
+        if event.type() == QEvent.Type.TouchBegin:
+            # Handle touch begin
+            return True
+        elif event.type() == QEvent.Type.TouchUpdate:
+            # Handle touch move
+            return True
+        elif event.type() == QEvent.Type.TouchEnd:
+            # Handle touch end
+            return True
+        return super().event(event)
