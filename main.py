@@ -33,14 +33,20 @@ class MainWindow(QMainWindow):
         self.settings_manager.save_settings()
         super().closeEvent(event)
 
+
 def main() -> None:
     app = QApplication(sys.argv)
+    app.setAttribute(
+        Qt.ApplicationAttribute.AA_SynthesizeMouseForUnhandledTouchEvents, False
+    )
+
     profiler = Profiler()
     main_window = MainWindow(profiler)
     exit_code = main_window.exec_with_profiling(app)
     root_directory = os.path.dirname(os.path.abspath(__file__))
     profiler.write_profiling_stats_to_file("main_profiling_stats.txt", root_directory)
     sys.exit(exit_code)
+
 
 if __name__ == "__main__":
     main()
