@@ -111,7 +111,9 @@ class PictographView(QGraphicsView):
         )
 
     def touchEvent(self, event: QTouchEvent):
-        self.touch_event_handler.handle_touch_event(event)
+        self.pictograph.main_widget.pictograph_view_touch_event_handler.handle_touch_event(
+            event
+        )
 
     def mousePressEvent(self, event: "QGraphicsSceneMouseEvent") -> None:
         self.mouse_event_handler.handle_mouse_press(event)
