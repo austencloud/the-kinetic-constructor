@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from objects.motion.motion import Motion
 
 
-class MotionRelevanceChecker:
+class CodexMotionRelevanceChecker:
     def __init__(self, turns_box: "CodexTurnsBox") -> None:
         self.turns_box = turns_box
 

@@ -124,10 +124,11 @@ class GraphicalObjectSvgManager:
             return self.renderer_cache[cache_key]
         else:
             renderer = QSvgRenderer()
-            renderer.load(svg_data)  # Load SVG content into the renderer directly as bytes
+            renderer.load(
+                svg_data
+            )  # Load SVG content into the renderer directly as bytes
             self.renderer_cache[cache_key] = renderer  # Cache it
             return renderer
-
 
     def update_svg(self, object: Union["Arrow", "Prop"]) -> None:
         svg_data = self.get_svg_data(object)
@@ -154,7 +155,6 @@ class GraphicalObjectSvgManager:
         GraphicalObjectSvgManager.svg_cache[cache_key] = svg_file
         return svg_file
 
-    @lru_cache
     def _generate_cache_key(self, object: Union["Arrow", "Prop"]) -> str:
         """Generates a unique key for caching based on object properties."""
         if self.is_arrow(object):

@@ -2,9 +2,9 @@ from typing import TYPE_CHECKING
 from Enums.Enums import LetterType
 from Enums.MotionAttributes import Turns, PropRotDir
 from constants import *
-from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
 
 if TYPE_CHECKING:
+    from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
     from widgets.pictograph.pictograph import Pictograph
     from objects.motion.motion import Motion
 
@@ -24,7 +24,7 @@ class GE_TurnsUpdater:
     ) -> None:
         """Adjust turns for each relevant motion in the pictograph."""
         for motion in pictograph.motions.values():
-            if self.turns_widget.relevance_checker.is_motion_relevant(motion):
+            if motion.color == self.turns_box.color:
                 new_turns = self._calculate_new_turns(motion.turns, adjustment)
                 self.set_motion_turns(motion, new_turns)
 
@@ -56,14 +56,17 @@ class GE_TurnsUpdater:
     def _set_prop_rot_dir(self, motion: "Motion") -> None:
         """set the rotation direction of the motion based on the vtg directional relationship."""
         other_motion = motion.pictograph.get.other_motion(motion)
-        if self.turns_box.turns_panel.turns_tab.section.letter_type in [
+        GE_pictograph = (
+            self.turns_box.turns_panel.graph_editor.GE_pictograph_view.get_current_pictograph()
+        )
+        if GE_pictograph.letter_type in [
             LetterType.Type2,
             LetterType.Type3,
         ]:
             motion.prop_rot_dir = self._determine_prop_rot_dir_for_type2_type3(
                 other_motion
             )
-        elif self.turns_box.turns_panel.turns_tab.section.letter_type in [
+        elif GE_pictograph.letter_type in [
             LetterType.Type4,
             LetterType.Type5,
             LetterType.Type6,

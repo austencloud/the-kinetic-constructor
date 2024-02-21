@@ -7,7 +7,7 @@ from widgets.turns_box.turns_box_widgets.turns_widget.managers.codex_turns_direc
 
 
 from ..turns_box.turns_box_widgets.turns_widget.managers.motion_relevance_checker import (
-    MotionRelevanceChecker,
+    CodexMotionRelevanceChecker,
 )
 from ..turns_box.turns_box_widgets.turns_widget.managers.turns_button_manager import (
     CodexTurnsButtonManager,
@@ -45,7 +45,7 @@ class CodexTurnsWidget(QWidget):
         self.direct_set_manager = CodexTurnsDirectSetManager(self)
         self.display_manager = CodexTurnsWidgetDisplayManager(self)
         self.button_manager = CodexTurnsButtonManager(self)
-        self.relevance_checker = MotionRelevanceChecker(turns_box)
+        self.relevance_checker = CodexMotionRelevanceChecker(turns_box)
         self.adjustment_manager = TurnsAdjustmentManager(self)
         self.updater = CodexTurnsUpdater(self)
 

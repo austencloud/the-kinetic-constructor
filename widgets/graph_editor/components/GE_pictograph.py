@@ -23,7 +23,7 @@ class GE_PictographView(PictographView):
     ) -> None:
         super().__init__(blank_pictograph)
         self.GE = GE
-        self.GE_pictograph = blank_pictograph
+        self.blank_pictograph = blank_pictograph
         self.main_widget = GE.main_widget
         self.setScene(blank_pictograph)
 
@@ -38,7 +38,7 @@ class GE_PictographView(PictographView):
             self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
 
     def set_to_blank_grid(self):
-        self.setScene(self.GE_pictograph)
+        self.setScene(self.blank_pictograph)
 
     def paintEvent(self, event):
         super().paintEvent(event)
@@ -48,3 +48,6 @@ class GE_PictographView(PictographView):
 
         right_edge = self.viewport().width() - 1
         painter.drawLine(right_edge, 0, right_edge, self.viewport().height())
+
+    def get_current_pictograph(self) -> Pictograph:
+        return self.scene()

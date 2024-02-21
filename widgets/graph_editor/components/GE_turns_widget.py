@@ -15,6 +15,9 @@ from widgets.graph_editor.components.GE_turns_direct_set_manager import (
     GE_TurnsDirectSetManager,
 )
 from widgets.graph_editor.components.GE_turns_updater import GE_TurnsUpdater
+from widgets.turns_box.turns_box_widgets.turns_widget.managers.motion_relevance_checker import (
+    CodexMotionRelevanceChecker,
+)
 
 
 if TYPE_CHECKING:
