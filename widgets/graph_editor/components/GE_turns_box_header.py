@@ -35,7 +35,6 @@ class GE_TurnsBoxHeader(QWidget):
 
     def update_turns_box_header(self) -> None:
         """This is called every time the GE pictograph scene is updated in order to display the correct buttons."""
-        # If the pictographs letter type is type 1 then we want to hide the buttons
         letter_type = self.turns_box.pictograph.letter_type
         if letter_type == LetterType.Type1 or letter_type == None:
             self.turns_box.prop_rot_dir_button_manager.hide_prop_rot_dir_buttons()
