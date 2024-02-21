@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtSvg import QSvgRenderer
 import re
@@ -75,7 +76,6 @@ class GraphicalObjectSvgManager:
     def _generate_cache_key_with_color(
         self, object: Union["Arrow", "Prop"], color: Color
     ) -> str:
-        # Generate a cache key that includes the object type, its properties, and the color
         base_key = self._generate_cache_key(object)
         color_key = f"{color.value}"
         return f"{base_key}_{color_key}"

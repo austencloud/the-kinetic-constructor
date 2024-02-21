@@ -11,7 +11,9 @@ class ArrowUpdater:
     def update_arrow(self, arrow_dict=None) -> None:
         if arrow_dict:
             self.arrow.attr_manager.update_attributes(arrow_dict)
-        self.arrow.pictograph.main_widget.svg_manager.update_svg(self.arrow)
+        self.arrow.pictograph.main_widget.graphical_object_svg_manager.update_svg(
+            self.arrow
+        )
         self.arrow.mirror_manager.update_mirror()
         # self.arrow.pictograph.main_widget.svg_manager.update_color(self.arrow)
         self.arrow.rot_angle_calculator.update_rotation()

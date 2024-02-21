@@ -58,7 +58,7 @@ class MainWidget(QWidget):
         self._setup_special_placements()
         self.button_factory = ButtonFactory()
         self.json_manager = JSON_Manager(self)
-        self.svg_manager = GraphicalObjectSvgManager()
+        self.graphical_object_svg_manager = GraphicalObjectSvgManager()
         self.prop_type_selector = PropTypeSelector(self)
         self.turns_tuple_generator = TurnsTupleGenerator()
         self.pictograph_key_generator = PictographKeyGenerator()
