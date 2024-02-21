@@ -68,12 +68,7 @@ class BeatView(QGraphicsView):
     def paintEvent(self, event):
         super().paintEvent(event)
 
-    def select(self):
-        self.is_selected = True
-        self.beat_frame.sequence_widget.sequence_modifier.graph_editor.GE_pictograph_view.setScene(
-            self.beat
-        )
-        self.update()
+
 
     def deselect(self):
         self.is_selected = False

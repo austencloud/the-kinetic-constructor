@@ -29,8 +29,15 @@ class BeatSelectionManager(QWidget):
             if self.selected_beat_view:
                 self.selected_beat_view.deselect()
             self.selected_beat_view = beat_view
-            beat_view.select()
+            self.selected_beat_view.is_selected = True
+            self.selected_beat_view.beat_frame.sequence_widget.sequence_modifier.graph_editor.GE_pictograph_view.setScene(
+                self.selected_beat_view.beat
+            )
+            self.update()
             self.update_overlay_position()
+            self.selected_beat_view.beat_frame.sequence_widget.sequence_modifier.graph_editor.turns_panel.set_turns(
+                self.selected_beat_view.beat.blue_motion.turns, self.selected_beat_view.beat.red_motion.turns
+            )
             self.show()
 
     def deselect_beat(self):

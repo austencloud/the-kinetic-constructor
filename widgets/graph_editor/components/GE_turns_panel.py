@@ -13,6 +13,14 @@ class GE_TurnsPanel(QFrame):
         super().__init__(graph_editor)
         self.setup_layouts()
 
+    def set_turns(self, blue_turns: int, red_turns: int) -> None:
+        self.blue_adjustment_box.turns_widget.display_manager.update_turns_display(
+            blue_turns
+        )
+        self.red_adjustment_box.turns_widget.display_manager.update_turns_display(
+            red_turns
+        )
+
     def _setup_attr_boxes(self) -> None:
         self.blue_adjustment_box: GE_TurnsBox = GE_TurnsBox(
             self, self.graph_editor.GE_pictograph, Color.BLUE

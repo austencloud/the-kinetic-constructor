@@ -26,6 +26,8 @@ class GE_TurnsBox(QFrame):
         self._setup_layout()
         self._set_border_color()
 
+    
+
     def _setup_widgets(self) -> None:
         self.header_widget = GE_HeaderWidget(self)
         self.turns_widget = GE_TurnsWidget(self)

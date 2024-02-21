@@ -6,7 +6,7 @@ from PyQt6.QtGui import QKeyEvent
 from widgets.sequence_widget.sequence_beat_frame.beat_deletion_manager import (
     BeatDeletionManager,
 )
-from widgets.sequence_widget.sequence_beat_frame.beat_selection_overlay import (
+from widgets.sequence_widget.sequence_beat_frame.beat_selection_manager import (
     BeatSelectionManager,
 )
 from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import StartPositionBeat
