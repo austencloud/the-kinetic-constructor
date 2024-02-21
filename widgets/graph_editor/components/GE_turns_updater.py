@@ -27,7 +27,7 @@ class GE_TurnsUpdater:
             if motion.color == self.turns_box.color:
                 new_turns = self._calculate_new_turns(motion.turns, adjustment)
                 self.set_motion_turns(motion, new_turns)
-        
+
     def _calculate_new_turns(self, current_turns: Turns, adjustment: Turns) -> Turns:
         """Calculate new turns value based on adjustment."""
         new_turns = max(0, min(3, current_turns + adjustment))
@@ -41,7 +41,7 @@ class GE_TurnsUpdater:
 
     def _handle_static_dash_motion(self, motion: "Motion", new_turns: Turns) -> None:
         """Handle specific logic for static or dash motion types."""
-        vtg_dir_button_manager = self.turns_widget.turns_box.header_widget.vtg_dir_button_manager
+        vtg_dir_button_manager = self.turns_widget.turns_box.vtg_dir_button_manager
 
         if motion.turns == 0 and new_turns == 0:
             return
@@ -50,7 +50,7 @@ class GE_TurnsUpdater:
             motion.prop_rot_dir = NO_ROT
             vtg_dir_button_manager.unpress_vtg_buttons()
             if hasattr(self.turns_box, "prop_rot_dir_button_manager"):
-                self.turns_widget.turns_box.header_widget.prop_rot_dir_button_manager.unpress_prop_rot_dir_buttons()
+                self.turns_widget.turns_box.prop_rot_dir_button_manager.unpress_prop_rot_dir_buttons()
 
         elif motion.turns == 0 and new_turns > 0:
             self._set_prop_rot_dir(motion)
@@ -98,17 +98,13 @@ class GE_TurnsUpdater:
         self, other_motion: "Motion"
     ) -> PropRotDir:
         """Determine the property rotation direction."""
-
-        self.turns_box.turns_panel.turns_tab.section.vtg_dir_button_manager.show_vtg_dir_buttons()
-        # self.turns_box.turns_panel.turns_tab.section.vtg_dir_button_manager.same_button.press()
-        if (
-            not self.turns_box.turns_panel.turns_tab.section.vtg_dir_btn_state[SAME]
-            and not self.turns_box.turns_panel.turns_tab.section.vtg_dir_btn_state[OPP]
-        ):
+        vtg_state = self.turns_box.vtg_dir_btn_state
+        self.turns_box.vtg_dir_button_manager.show_vtg_dir_buttons()
+        if not vtg_state[SAME] and not vtg_state[OPP]:
             self._set_vtg_dir_state_default()
-        if self.turns_box.turns_panel.turns_tab.section.vtg_dir_btn_state[SAME]:
+        if vtg_state[SAME]:
             return other_motion.prop_rot_dir
-        elif self.turns_box.turns_panel.turns_tab.section.vtg_dir_btn_state[OPP]:
+        elif vtg_state[OPP]:
             if other_motion.prop_rot_dir == CLOCKWISE:
                 return COUNTER_CLOCKWISE
             elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
@@ -122,8 +118,8 @@ class GE_TurnsUpdater:
 
     def _set_vtg_dir_state_default(self) -> None:
         """set the vtg direction state to default."""
-        self.turns_box.turns_panel.turns_tab.section.vtg_dir_btn_state[SAME] = True
-        self.turns_box.turns_panel.turns_tab.section.vtg_dir_btn_state[OPP] = False
+        self.turns_box.vtg_dir_btn_state[SAME] = True
+        self.turns_box.vtg_dir_btn_state[OPP] = False
 
     def _set_prop_rot_dir_state_default(self) -> None:
         """set the vtg direction state to default."""

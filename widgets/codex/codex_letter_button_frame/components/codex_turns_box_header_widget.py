@@ -7,20 +7,22 @@ from Enums.MotionAttributes import Color
 from widgets.codex.codex_turns_box_widget import CodexWidget
 
 
-
 if TYPE_CHECKING:
-    from widgets.codex.codex_letter_button_frame.components.codex_turns_box import CodexTurnsBox
+    from widgets.codex.codex_letter_button_frame.components.codex_turns_box import (
+        CodexTurnsBox,
+    )
 
 
-class CodexTurnsBoxHeaderWidget(CodexWidget):
+class CodexTurnsBoxHeader(CodexWidget):
     def __init__(self, turns_box: "CodexTurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box
+
         self.separator: QFrame = self.create_separator()
-        self.header_label: QLabel = self._setup_header()
+        self.header_label: QLabel = self._setup_header_label()
         self.layout: QHBoxLayout = self._setup_layout()
 
-    def _setup_header(self) -> None:
+    def _setup_header_label(self) -> None:
         if self.turns_box.attribute_type == TurnsTabAttribute.COLOR:
             if self.turns_box.color == Color.BLUE:
                 text = "Left"
@@ -49,23 +51,23 @@ class CodexTurnsBoxHeaderWidget(CodexWidget):
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
-        self._add_widgets(layout)
+        self._add_widgets()
         return layout
 
-    def _add_widgets(self, layout: QHBoxLayout) -> None:
+    def _add_widgets(self) -> None:
         if self.turns_box.turns_panel.turns_tab.section.letter_type == LetterType.Type1:
-            layout.addStretch(1)
-            layout.addWidget(self.header_label)
-            layout.addStretch(1)
+            self.layout.addStretch(1)
+            self.layout.addWidget(self.header_label)
+            self.layout.addStretch(1)
         else:
-            layout.addStretch(5)
-            layout.addWidget(self.turns_box.prop_rot_dir_button_manager.ccw_button)
-            layout.addStretch(1)
-            layout.addWidget(self.header_label)
-            layout.addStretch(1)
-            layout.addWidget(self.turns_box.prop_rot_dir_button_manager.cw_button)
-            layout.addStretch(5)
-            layout.addWidget(self.separator)
+            self.layout.addStretch(5)
+            self.layout.addWidget(self.turns_box.prop_rot_dir_button_manager.ccw_button)
+            self.layout.addStretch(1)
+            self.layout.addWidget(self.header_label)
+            self.layout.addStretch(1)
+            self.layout.addWidget(self.turns_box.prop_rot_dir_button_manager.cw_button)
+            self.layout.addStretch(5)
+            self.layout.addWidget(self.separator)
 
     def _setup_header_label(self, text: str) -> QLabel:
         font_color = (

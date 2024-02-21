@@ -30,8 +30,10 @@ if TYPE_CHECKING:
 
 class GE_VtgDirButtonManager:
     def __init__(self, turns_box: "GE_TurnsBox") -> None:
+        self.turns_box = turns_box
         self.graph_editor = turns_box.graph_editor
         self.previous_turns = 0
+        self.vtg_state = self.turns_box.vtg_dir_btn_state
 
         self.vtg_dir_buttons: list[VtgDirButton] = self._setup_vtg_dir_buttons()
         self.hide_vtg_dir_buttons()
@@ -91,10 +93,10 @@ class GE_VtgDirButtonManager:
         for button in buttons:
             if button.direction == active_direction:
                 button.press()
-                self.graph_editor.vtg_dir_btn_state[button.direction] = True
+                self.vtg_state[button.direction] = True
             else:
                 button.unpress()
-                self.graph_editor.vtg_dir_btn_state[button.direction] = False
+                self.vtg_state[button.direction] = False
 
     def _opposite_prop_rot_dir(self, prop_rot_dir: PropRotDir) -> PropRotDir:
         return {
@@ -112,25 +114,16 @@ class GE_VtgDirButtonManager:
         if new_turns > 0:
             if self.previous_turns == 0:
                 self.show_vtg_dir_buttons()
-                if (
-                    not self.graph_editor.vtg_dir_btn_state[SAME]
-                    and not self.graph_editor.vtg_dir_btn_state[OPP]
-                ):
-                    self.graph_editor.vtg_dir_btn_state[SAME] = True
+                if not self.vtg_state[SAME] and not self.vtg_state[OPP]:
+                    self.vtg_state[SAME] = True
                     self.same_button.press()
-                    self.same_button.update_state_dict(
-                        self.graph_editor.vtg_dir_btn_state, True
-                    )
-                if self.graph_editor.vtg_dir_btn_state[SAME]:
+                    self.same_button.update_state_dict(self.vtg_state, True)
+                if self.vtg_state[SAME]:
                     self.same_button.press()
-                    self.same_button.update_state_dict(
-                        self.graph_editor.vtg_dir_btn_state, True
-                    )
-                elif self.graph_editor.vtg_dir_btn_state[OPP]:
+                    self.same_button.update_state_dict(self.vtg_state, True)
+                elif self.vtg_state[OPP]:
                     self.opp_button.press()
-                    self.opp_button.update_state_dict(
-                        self.graph_editor.vtg_dir_btn_state, True
-                    )
+                    self.opp_button.update_state_dict(self.vtg_state, True)
                 self.previous_turns = new_turns
         elif new_turns == 0:
             self.previous_turns = 0

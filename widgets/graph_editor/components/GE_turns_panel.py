@@ -42,3 +42,9 @@ class GE_TurnsPanel(QFrame):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.setLayout(self.layout)
+
+    def update_turns_panel(self, blue_turns: int, red_turns: int) -> None:
+        self.set_turns(blue_turns, red_turns)
+        self.resize_GE_adjustment_panel()
+        for box in self.boxes:
+            box.header_widget.update_turns_box_header()

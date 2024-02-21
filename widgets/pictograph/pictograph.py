@@ -63,7 +63,7 @@ class Pictograph(QGraphicsScene):
     props: dict[Color, Prop]
     motions: dict[Color, Motion]
     letter: Letter = None
-    letter_type: LetterType
+    letter_type: LetterType = None
     pictograph_dict: dict
     motion_dict_list: list[dict]
     start_pos: SpecificPosition
