@@ -1,4 +1,3 @@
-from functools import lru_cache
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtSvg import QSvgRenderer
 import re

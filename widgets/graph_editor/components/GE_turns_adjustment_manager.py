@@ -1,10 +1,7 @@
 from typing import TYPE_CHECKING, Union
 from Enums.MotionAttributes import Turns
-from Enums.letters import LetterType
-from constants import Type2, Type3
 
 if TYPE_CHECKING:
-    from ...pictograph.pictograph import Pictograph
     from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
 
 

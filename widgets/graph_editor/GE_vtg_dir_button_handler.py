@@ -24,7 +24,6 @@ from widgets.factories.button_factory.buttons.rot_dir_buttons import VtgDirButto
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_turns_box import GE_TurnsBox
-    from widgets.graph_editor.graph_editor import GraphEditor
 
     from objects.motion.motion import Motion
 
