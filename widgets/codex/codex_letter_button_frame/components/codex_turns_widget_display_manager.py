@@ -5,8 +5,8 @@ from typing import TYPE_CHECKING, Union
 
 
 if TYPE_CHECKING:
-    from widgets.turns_box.codex_turns_box import CodexTurnsBox
-    from .....codex.codex_turns_widget import CodexTurnsWidget
+    from widgets.codex.codex_letter_button_frame.components.codex_turns_box import CodexTurnsBox
+    from ...codex_turns_widget import CodexTurnsWidget
 
 
 class CodexTurnsWidgetDisplayManager:

@@ -4,7 +4,7 @@ from Enums.Enums import LetterType, Letter, TurnsTabAttribute
 from Enums.MotionAttributes import MotionType
 from Enums.letters import LetterConditions
 from widgets.factories.turns_box_factory import CodexTurnsBoxFactory
-from widgets.turns_box.codex_turns_box import CodexTurnsBox
+from widgets.codex.codex_letter_button_frame.components.codex_turns_box import CodexTurnsBox
 
 
 if TYPE_CHECKING:

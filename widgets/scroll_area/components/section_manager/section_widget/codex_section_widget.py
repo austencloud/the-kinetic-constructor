@@ -7,7 +7,7 @@ from constants import DASH, NO_ROT, OPP, SAME, STATIC
 from .components.turns_tab.turns_tab import TurnsTab
 from .components.codex_section_header import CodexSectionHeader
 from .....pictograph.pictograph import Pictograph
-from .....turns_box.turns_box_widgets.vtg_dir_button_manager import (
+from .....codex.codex_letter_button_frame.components.codex_vtg_dir_button_manager import (
     CodexVtgDirButtonManager,
 )
 from .components.pictograph_frame import ScrollAreaSectionPictographFrame

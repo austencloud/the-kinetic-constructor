@@ -7,6 +7,7 @@ from Enums.MotionAttributes import Color
 from widgets.factories.button_factory.buttons.adjust_turns_button import (
     AdjustTurnsButton,
 )
+from widgets.graph_editor.GE_vtg_dir_button_handler import GE_VtgDirButtonManager
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_turns_box import (
@@ -14,12 +15,15 @@ if TYPE_CHECKING:
     )
 
 
-class GE_HeaderWidget(QWidget):
+class GE_TurnsBoxHeader(QWidget):
     def __init__(self, turns_box: "GE_TurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box: "GE_TurnsBox" = turns_box
         self.header_label = self._setup_header_label()
         self.layout: QVBoxLayout = self._setup_layout()
+        self.hbox = QHBoxLayout()
+        self.vtg_dir_button_manager = GE_VtgDirButtonManager(self.turns_box)
+
         self.layout.addWidget(self.header_label)
         self.layout.addWidget(self.create_separator())
 

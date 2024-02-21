@@ -27,7 +27,7 @@ class GE_TurnsUpdater:
             if motion.color == self.turns_box.color:
                 new_turns = self._calculate_new_turns(motion.turns, adjustment)
                 self.set_motion_turns(motion, new_turns)
-
+        
     def _calculate_new_turns(self, current_turns: Turns, adjustment: Turns) -> Turns:
         """Calculate new turns value based on adjustment."""
         new_turns = max(0, min(3, current_turns + adjustment))

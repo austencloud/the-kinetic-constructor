@@ -9,10 +9,10 @@ from widgets.codex.codex_letter_button_frame.components.codex_turns_box_header_w
     CodexTurnsBoxHeaderWidget,
 )
 
-from .turns_box_widgets.prop_rot_dir_button_manager import (
-    PropRotDirButtonManager,
+from .codex_prop_rot_dir_button_manager import (
+    CodexPropRotDirButtonManager,
 )
-from ..codex.codex_turns_widget import (
+from ...codex_turns_widget import (
     CodexTurnsWidget,
 )
 
@@ -58,7 +58,7 @@ class CodexTurnsBox(QFrame):
             self.lead_state = cast(LeadStates, self.attribute_value)
 
     def _setup_widgets(self) -> None:
-        self.prop_rot_dir_button_manager = PropRotDirButtonManager(self)
+        self.prop_rot_dir_button_manager = CodexPropRotDirButtonManager(self)
         self.header_widget = CodexTurnsBoxHeaderWidget(self)
         self.turns_widget = CodexTurnsWidget(self)
 

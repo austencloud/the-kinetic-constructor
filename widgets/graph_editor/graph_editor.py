@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
+from constants import OPP, SAME
 from widgets.graph_editor.components.GE_turns_panel import GE_TurnsPanel
 from widgets.graph_editor.components.GE_pictograph import (
     GE_BlankPictograph,
@@ -23,7 +24,7 @@ class GraphEditor(QFrame):
         super().__init__()
         self.sequence_modifier = sequence_modifier
         self.main_widget = sequence_modifier.main_widget
-
+        self.vtg_dir_btn_state: dict[str, bool] = {SAME: False, OPP: False}
         self._setup_pictograph()
         self._setup_adjustment_panel()
         self._setup_layout()

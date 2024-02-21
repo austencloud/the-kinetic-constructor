@@ -16,20 +16,22 @@ from Enums.MotionAttributes import (
     PropRotDir,
 )
 from Enums.Enums import VTG_Directions
-from ...factories.button_factory.buttons.rot_dir_buttons import VtgDirButton
 
 from PyQt6.QtWidgets import QPushButton
 
+from widgets.factories.button_factory.buttons.rot_dir_buttons import VtgDirButton
+
+
 if TYPE_CHECKING:
-    from ...scroll_area.components.section_manager.section_widget.codex_section_widget import (
-        CodexSectionWidget,
-    )
+    from widgets.graph_editor.components.GE_turns_box import GE_TurnsBox
+    from widgets.graph_editor.graph_editor import GraphEditor
+
     from objects.motion.motion import Motion
 
 
-class CodexVtgDirButtonManager:
-    def __init__(self, section_widget: "CodexSectionWidget") -> None:
-        self.section = section_widget
+class GE_VtgDirButtonManager:
+    def __init__(self, turns_box: "GE_TurnsBox") -> None:
+        self.graph_editor = turns_box.graph_editor
         self.previous_turns = 0
 
         self.vtg_dir_buttons: list[VtgDirButton] = self._setup_vtg_dir_buttons()
@@ -44,7 +46,7 @@ class CodexVtgDirButtonManager:
         self.same_button.hide()
 
     def _setup_vtg_dir_buttons(self) -> list[QPushButton]:
-        button_factory = self.section.scroll_area.codex.main_widget.button_factory
+        button_factory = self.graph_editor.main_widget.button_factory
         self.same_button: VtgDirButton = button_factory.create_vtg_dir_button(
             f"{ICON_DIR}same_direction.png", lambda: self._set_vtg_dir(SAME), SAME
         )
@@ -61,21 +63,21 @@ class CodexVtgDirButtonManager:
         self._update_button_states(self.vtg_dir_buttons, vtg_dir)
 
     def _update_pictographs_vtg_dir(self, vtg_dir: VTG_Directions) -> None:
-        for pictograph in self.section.pictographs.values():
-            for motion in pictograph.motions.values():
-                other_motion = pictograph.get.other_motion(motion)
-                if motion.check.is_dash() or motion.check.is_static():
-                    if other_motion.check.is_shift():
-                        pictograph.vtg_dir = vtg_dir
-                        if vtg_dir == SAME:
-                            self._update_pictograph_prop_rot_dir_from_vtg_dir_setting(
-                                motion, other_motion.prop_rot_dir
-                            )
-                        elif vtg_dir == OPP:
-                            self._update_pictograph_prop_rot_dir_from_vtg_dir_setting(
-                                motion,
-                                self._opposite_prop_rot_dir(other_motion.prop_rot_dir),
-                            )
+        pictograph = self.graph_editor.GE_pictograph_view.get_current_pictograph()
+        for motion in pictograph.motions.values():
+            other_motion = pictograph.get.other_motion(motion)
+            if motion.check.is_dash() or motion.check.is_static():
+                if other_motion.check.is_shift():
+                    pictograph.vtg_dir = vtg_dir
+                    if vtg_dir == SAME:
+                        self._update_pictograph_prop_rot_dir_from_vtg_dir_setting(
+                            motion, other_motion.prop_rot_dir
+                        )
+                    elif vtg_dir == OPP:
+                        self._update_pictograph_prop_rot_dir_from_vtg_dir_setting(
+                            motion,
+                            self._opposite_prop_rot_dir(other_motion.prop_rot_dir),
+                        )
 
     def _update_pictograph_prop_rot_dir_from_vtg_dir_setting(
         self, motion: "Motion", prop_rot_dir: PropRotDir
@@ -90,10 +92,10 @@ class CodexVtgDirButtonManager:
         for button in buttons:
             if button.direction == active_direction:
                 button.press()
-                self.section.vtg_dir_btn_state[button.direction] = True
+                self.graph_editor.vtg_dir_btn_state[button.direction] = True
             else:
                 button.unpress()
-                self.section.vtg_dir_btn_state[button.direction] = False
+                self.graph_editor.vtg_dir_btn_state[button.direction] = False
 
     def _opposite_prop_rot_dir(self, prop_rot_dir: PropRotDir) -> PropRotDir:
         return {
@@ -112,23 +114,23 @@ class CodexVtgDirButtonManager:
             if self.previous_turns == 0:
                 self.show_vtg_dir_buttons()
                 if (
-                    not self.section.vtg_dir_btn_state[SAME]
-                    and not self.section.vtg_dir_btn_state[OPP]
+                    not self.graph_editor.vtg_dir_btn_state[SAME]
+                    and not self.graph_editor.vtg_dir_btn_state[OPP]
                 ):
-                    self.section.vtg_dir_btn_state[SAME] = True
+                    self.graph_editor.vtg_dir_btn_state[SAME] = True
                     self.same_button.press()
                     self.same_button.update_state_dict(
-                        self.section.vtg_dir_btn_state, True
+                        self.graph_editor.vtg_dir_btn_state, True
                     )
-                if self.section.vtg_dir_btn_state[SAME]:
+                if self.graph_editor.vtg_dir_btn_state[SAME]:
                     self.same_button.press()
                     self.same_button.update_state_dict(
-                        self.section.vtg_dir_btn_state, True
+                        self.graph_editor.vtg_dir_btn_state, True
                     )
-                elif self.section.vtg_dir_btn_state[OPP]:
+                elif self.graph_editor.vtg_dir_btn_state[OPP]:
                     self.opp_button.press()
                     self.opp_button.update_state_dict(
-                        self.section.vtg_dir_btn_state, True
+                        self.graph_editor.vtg_dir_btn_state, True
                     )
                 self.previous_turns = new_turns
         elif new_turns == 0:

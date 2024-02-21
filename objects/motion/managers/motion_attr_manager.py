@@ -7,7 +7,7 @@ from widgets.scroll_area.components.section_manager.section_widget.components.tu
 
 
 if TYPE_CHECKING:
-    from widgets.turns_box.codex_turns_box import CodexTurnsBox
+    from widgets.codex.codex_letter_button_frame.components.codex_turns_box import CodexTurnsBox
     from objects.motion.motion import Motion
 
 

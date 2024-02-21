@@ -97,13 +97,17 @@ class GE_TurnsWidgetDisplayManager:
         )
 
     def update_adjust_turns_button_size(self) -> None:
-        for button in self.turns_widget.button_manager.adjust_turns_buttons:
+        for button in self.turns_widget.turns_button_manager.adjust_turns_buttons:
             button_size = self.calculate_adjust_turns_button_size()
             button.update_adjust_turns_button_size(button_size)
 
     def add_turns_display_to_layout(self) -> None:
-        negative_buttons_frame = self.turns_widget.button_manager.negative_buttons_frame
-        positive_buttons_frame = self.turns_widget.button_manager.positive_buttons_frame
+        negative_buttons_frame = (
+            self.turns_widget.turns_button_manager.negative_buttons_frame
+        )
+        positive_buttons_frame = (
+            self.turns_widget.turns_button_manager.positive_buttons_frame
+        )
         self.hbox_with_turn_display_and_buttons.setContentsMargins(0, 0, 0, 0)
         self.hbox_with_turn_display_and_buttons.setSpacing(0)
         self.hbox_with_turn_display_and_buttons.setAlignment(

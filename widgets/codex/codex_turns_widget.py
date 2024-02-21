@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QWidget
 from typing import TYPE_CHECKING, Union
 
-from widgets.turns_box.turns_box_widgets.turns_widget.managers.codex_turns_direct_set_manager import (
+from widgets.codex.codex_letter_button_frame.components.codex_turns_direct_set_manager import (
     CodexTurnsDirectSetManager,
 )
 
@@ -18,13 +18,13 @@ from ..turns_box.turns_box_widgets.turns_widget.managers.turns_adjustment_manage
 from ..turns_box.turns_box_widgets.turns_widget.managers.turns_updater import (
     CodexTurnsUpdater,
 )
-from ..turns_box.turns_box_widgets.turns_widget.managers.codex_turns_widget_display_manager import (
+from .codex_letter_button_frame.components.codex_turns_widget_display_manager import (
     CodexTurnsWidgetDisplayManager,
 )
 
 
 if TYPE_CHECKING:
-    from widgets.turns_box.codex_turns_box import CodexTurnsBox
+    from widgets.codex.codex_letter_button_frame.components.codex_turns_box import CodexTurnsBox
 
 
 class CodexTurnsWidget(QWidget):

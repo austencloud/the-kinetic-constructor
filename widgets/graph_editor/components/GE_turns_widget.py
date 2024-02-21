@@ -42,11 +42,11 @@ class GE_TurnsWidget(QWidget):
         self.adjustment_manager = GE_TurnsAdjustmentManager(self)
         self.direct_set_manager = GE_TurnsDirectSetManager(self)
         self.display_manager = GE_TurnsWidgetDisplayManager(self)
-        self.button_manager = GE_TurnsButtonManager(self)
+        self.turns_button_manager = GE_TurnsButtonManager(self)
         self.updater = GE_TurnsUpdater(self)
 
     def _setup_ui(self) -> None:
-        self.button_manager.setup_adjust_turns_buttons()
+        self.turns_button_manager.setup_adjust_turns_buttons()
         self.display_manager.setup_display_components()
         self.direct_set_manager.setup_direct_set_buttons()
 

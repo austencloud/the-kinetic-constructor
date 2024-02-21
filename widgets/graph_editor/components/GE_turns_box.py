@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Color
-from .GE_header_widget import GE_HeaderWidget
+from .GE_turns_box_header import GE_TurnsBoxHeader
 from .GE_turns_widget import GE_TurnsWidget
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
@@ -26,10 +26,8 @@ class GE_TurnsBox(QFrame):
         self._setup_layout()
         self._set_border_color()
 
-    
-
     def _setup_widgets(self) -> None:
-        self.header_widget = GE_HeaderWidget(self)
+        self.header_widget = GE_TurnsBoxHeader(self)
         self.turns_widget = GE_TurnsWidget(self)
 
     def _setup_layout(self) -> None:

@@ -9,7 +9,7 @@ from widgets.factories.button_factory.buttons.adjust_turns_button import (
 from widgets.factories.button_factory.buttons.swap_button import SwapButton
 
 if TYPE_CHECKING:
-    from widgets.turns_box.codex_turns_box import CodexTurnsBox
+    from widgets.codex.codex_letter_button_frame.components.codex_turns_box import CodexTurnsBox
 
 
 class GE_TurnsBoxWidget(QWidget):

@@ -19,7 +19,7 @@ from Enums.MotionAttributes import (
     MotionType,
     PropRotDir,
 )
-from ...factories.button_factory.buttons.rot_dir_buttons import (
+from ....factories.button_factory.buttons.rot_dir_buttons import (
     VtgDirButton,
     PropRotDirButton,
 )
@@ -27,11 +27,11 @@ from ...factories.button_factory.buttons.rot_dir_buttons import (
 from PyQt6.QtWidgets import QPushButton
 
 if TYPE_CHECKING:
-    from widgets.turns_box.codex_turns_box import CodexTurnsBox
+    from widgets.codex.codex_letter_button_frame.components.codex_turns_box import CodexTurnsBox
     from objects.motion.motion import Motion
 
 
-class PropRotDirButtonManager:
+class CodexPropRotDirButtonManager:
     def __init__(self, turns_box: "CodexTurnsBox") -> None:
         self.turns_box = turns_box
         self.previous_turns = 0
