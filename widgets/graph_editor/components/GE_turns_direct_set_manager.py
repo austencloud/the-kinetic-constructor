@@ -3,9 +3,7 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.codex.codex_turns_widget import (
-        CodexTurnsWidget,
-    )
+    from widgets.codex.codex_turns_widget import CodexTurnsWidget
 
 
 class GE_TurnsDirectSetManager:

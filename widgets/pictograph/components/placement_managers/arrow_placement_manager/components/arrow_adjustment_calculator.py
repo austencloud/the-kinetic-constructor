@@ -1,4 +1,3 @@
-from functools import lru_cache
 import re
 from PyQt6.QtCore import QPointF
 from Enums.letters import Letter

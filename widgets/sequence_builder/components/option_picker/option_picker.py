@@ -1,5 +1,5 @@
 import json
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
+from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import pyqtSignal
 
 from widgets.sequence_builder.components.option_picker.option_manager import (
@@ -7,9 +7,6 @@ from widgets.sequence_builder.components.option_picker.option_manager import (
 )
 from widgets.sequence_builder.components.start_position_picker.choose_your_next_option_label import (
     ChooseYourNextOptionLabel,
-)
-from widgets.sequence_builder.components.start_position_picker.choose_your_next_pictograph_label import (
-    ChooseYourStartPositionLabel,
 )
 
 from .option_picker_scroll_area import OptionPickerScrollArea

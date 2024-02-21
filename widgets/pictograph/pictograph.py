@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import (
     QGraphicsScene,
     QGraphicsPixmapItem,
-    QGraphicsSceneMouseEvent,
 )
 from Enums.Enums import (
     Letter,
@@ -42,7 +41,6 @@ from .components.pictograph_view import PictographView
 from .components.wasd_adjustment_manager.wasd_adjustment_manager import (
     WASD_AdjustmentManager,
 )
-from .components.pictograph_context_menu_handler import PictographContextMenuHandler
 from .components.pictograph_image_renderer import PictographImageRenderer
 from .components.pictograph_updater import PictographUpdater
 from .components.pictograph_initializer import PictographInitializer

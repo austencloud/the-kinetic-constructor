@@ -1,20 +1,16 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType
-
-from constants import *
 from Enums.MotionAttributes import Turns, PropRotDir
-
+from constants import *
+from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
     from objects.motion.motion import Motion
-    from widgets.codex.codex_turns_widget import (
-        CodexTurnsWidget,
-    )
 
 
-class CodexTurnsUpdater:
-    def __init__(self, turns_widget: "CodexTurnsWidget") -> None:
+class GE_TurnsUpdater:
+    def __init__(self, turns_widget: "GE_TurnsWidget") -> None:
         self.turns_box = turns_widget.turns_box
         self.turns_widget = turns_widget
 

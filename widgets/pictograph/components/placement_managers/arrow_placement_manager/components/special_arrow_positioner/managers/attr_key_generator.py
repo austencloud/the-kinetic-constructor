@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from Enums.letters import LetterConditions, Letter
+from Enums.letters import LetterConditions
 from constants import CLOCK, COUNTER, IN, OUT
 from objects.arrow.arrow import Arrow
 

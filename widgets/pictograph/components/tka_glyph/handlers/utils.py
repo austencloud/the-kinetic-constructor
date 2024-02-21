@@ -1,5 +1,4 @@
 # utils.py
-from functools import lru_cache
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 

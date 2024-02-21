@@ -2,11 +2,10 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QGraphicsView,
     QSizePolicy,
-    QGraphicsSceneMouseEvent,
     QGestureEvent,
 )
 from PyQt6.QtCore import Qt, QEvent, QTimer
-from PyQt6.QtGui import QTouchEvent, QMouseEvent
+from PyQt6.QtGui import QMouseEvent
 
 from widgets.pictograph.components.pictograph_context_menu_handler import (
     PictographContextMenuHandler,

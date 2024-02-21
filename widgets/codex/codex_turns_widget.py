@@ -1,7 +1,9 @@
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QWidget
 from typing import TYPE_CHECKING, Union
 
-from widgets.turns_box.turns_box_widgets.turns_widget.managers.codex_turns_direct_set_manager import CodexTurnsDirectSetManager
+from widgets.turns_box.turns_box_widgets.turns_widget.managers.codex_turns_direct_set_manager import (
+    CodexTurnsDirectSetManager,
+)
 
 
 from ..turns_box.turns_box_widgets.turns_widget.managers.motion_relevance_checker import (
@@ -14,7 +16,7 @@ from ..turns_box.turns_box_widgets.turns_widget.managers.turns_adjustment_manage
     TurnsAdjustmentManager,
 )
 from ..turns_box.turns_box_widgets.turns_widget.managers.turns_updater import (
-    TurnsUpdater,
+    CodexTurnsUpdater,
 )
 from ..turns_box.turns_box_widgets.turns_widget.managers.codex_turns_widget_display_manager import (
     CodexTurnsWidgetDisplayManager,
@@ -45,7 +47,7 @@ class CodexTurnsWidget(QWidget):
         self.button_manager = CodexTurnsButtonManager(self)
         self.relevance_checker = MotionRelevanceChecker(turns_box)
         self.adjustment_manager = TurnsAdjustmentManager(self)
-        self.updater = TurnsUpdater(self)
+        self.updater = CodexTurnsUpdater(self)
 
     def _setup_ui(self) -> None:
         self.button_manager.setup_adjust_turns_buttons()

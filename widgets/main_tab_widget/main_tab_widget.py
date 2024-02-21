@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 
 from widgets.base_tab_widget import BaseTabWidget
 from widgets.codex.codex import Codex
-from widgets.library.library import Library
 from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
 if TYPE_CHECKING:

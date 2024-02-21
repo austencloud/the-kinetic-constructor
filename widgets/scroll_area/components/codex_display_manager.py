@@ -2,7 +2,6 @@ import logging
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 
-from Enums.letters import LetterConditions
 from widgets.pictograph.pictograph import Pictograph
 
 

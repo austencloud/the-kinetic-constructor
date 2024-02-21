@@ -2,7 +2,6 @@ from PyQt6.QtCore import QPointF
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from typing import TYPE_CHECKING
-from .utils import load_svg_item
 
 from Enums.Enums import VTG_Directions
 

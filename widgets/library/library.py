@@ -9,7 +9,6 @@ from Enums.letters import Letter
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_modifier import SequenceModifier
-    from widgets.main_widget.main_widget import MainWidget
 
 
 class Library(QWidget):

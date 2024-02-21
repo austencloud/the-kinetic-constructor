@@ -1,5 +1,5 @@
 import json
-from Enums.letters import LetterConditions, Letter
+from Enums.letters import LetterConditions
 from constants import (
     ANTI,
     NONRADIAL,

@@ -1,13 +1,10 @@
 from objects.arrow.arrow import Arrow
 from objects.prop.prop import Prop
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsSceneMouseEvent, QTapGesture
-from PyQt6.QtGui import QTouchEvent
-from PyQt6.QtCore import QEvent
+from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 if TYPE_CHECKING:
     from widgets.pictograph.components.pictograph_view import PictographView
-    from widgets.pictograph.pictograph import Pictograph
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 
