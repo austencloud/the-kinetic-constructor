@@ -32,12 +32,10 @@ class GE_PropRotDirButtonManager:
     def __init__(self, turns_box: "GE_TurnsBox") -> None:
         self.turns_box = turns_box
         self.previous_turns = 0
-        self.prop_rot_dir_buttons: list[PropRotDirButton] = (
-            self._setup_prop_rot_dir_buttons()
-        )
+        self.prop_rot_dir_buttons = self._setup_prop_rot_dir_buttons()
         self.buttons = self.prop_rot_dir_buttons
 
-    def _setup_prop_rot_dir_buttons(self) -> list[QPushButton]:
+    def _setup_prop_rot_dir_buttons(self) -> list[PropRotDirButton]:
         button_factory = (
             self.turns_box.turns_panel.graph_editor.main_widget.button_factory
         )

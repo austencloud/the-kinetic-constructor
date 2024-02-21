@@ -55,9 +55,11 @@ class GE_TurnsBoxHeader(QWidget):
     def _add_widgets(self):
         self.top_hbox.addStretch(5)
         self.top_hbox.addWidget(self.turns_box.prop_rot_dir_button_manager.ccw_button)
+        self.top_hbox.addWidget(self.turns_box.vtg_dir_button_manager.opp_button)
         self.top_hbox.addStretch(1)
         self.top_hbox.addWidget(self.header_label)
         self.top_hbox.addStretch(1)
+        self.top_hbox.addWidget(self.turns_box.vtg_dir_button_manager.same_button)
         self.top_hbox.addWidget(self.turns_box.prop_rot_dir_button_manager.cw_button)
         self.top_hbox.addStretch(5)
         self.bottom_hbox.addWidget(self.separator)

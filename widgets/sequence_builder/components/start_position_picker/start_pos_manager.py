@@ -6,6 +6,7 @@ from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
 )
 from ....pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from .start_pos_picker import StartPosPicker
@@ -72,6 +73,8 @@ class StartPosManager(QObject):
         )
 
         self.sequence_builder.current_pictograph = start_position_beat
+
+        QApplication.processEvents()  # Force the UI to update
 
         self.start_position_selected.connect(
             self.sequence_builder.transition_to_sequence_building

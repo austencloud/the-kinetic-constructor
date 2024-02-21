@@ -1,9 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import (
-    QGraphicsView,
-    QSizePolicy,
-    QGestureEvent,
-)
+from PyQt6.QtWidgets import QGraphicsView, QSizePolicy, QGestureEvent
 from PyQt6.QtCore import Qt, QEvent, QTimer
 from PyQt6.QtGui import QMouseEvent
 
@@ -175,4 +171,3 @@ class PictographView(QGraphicsView):
 
     def _reset_mouse_ignore_flag(self):
         self._ignoreMouseEvents = False
- 

@@ -18,7 +18,6 @@ class TurnsColumnHandler(QGraphicsItemGroup):
         self.svg_path_prefix = "images/numbers/"
         self.blank_svg_path = "images/blank.svg"
 
-    @lru_cache
     def load_number_svg(self, number: Union[int, float]) -> QGraphicsSvgItem:
         svg_path = (
             self.blank_svg_path
