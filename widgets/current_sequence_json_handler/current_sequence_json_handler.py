@@ -11,7 +11,6 @@ from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from widgets.json_manager import JSON_Manager
-    from widgets.main_widget.main_widget import MainWidget
 
 
 class CurrentSequenceJsonHandler:

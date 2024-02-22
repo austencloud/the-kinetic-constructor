@@ -3,9 +3,6 @@ from PyQt6.QtGui import QFileSystemModel
 from PyQt6.QtCore import QDir, QModelIndex, Qt
 import json
 from typing import TYPE_CHECKING
-from widgets.pictograph.pictograph import Pictograph
-from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import StartPositionBeat
-from Enums.letters import Letter
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_modifier import SequenceModifier
