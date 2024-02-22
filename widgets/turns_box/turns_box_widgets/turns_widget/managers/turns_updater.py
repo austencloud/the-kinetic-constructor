@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
-from Enums.Enums import LetterType
+from Enums.Enums import LetterType, Turns
 
 from constants import *
-from Enums.MotionAttributes import Turns, PropRotDir
+from Enums.MotionAttributes import PropRotDir
 
 
 if TYPE_CHECKING:

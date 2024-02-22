@@ -2,9 +2,6 @@ from enum import Enum
 from typing import Literal
 
 
-class Turns(Enum):
-    INT = "int"
-    FLOAT = "float"
 
 
 class MotionType(Enum):

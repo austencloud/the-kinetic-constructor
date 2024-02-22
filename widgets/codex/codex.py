@@ -14,7 +14,6 @@ if TYPE_CHECKING:
 
 
 class Codex(QWidget):
-    imageGenerated = pyqtSignal(str)
     selected_letters: list[Letter] = []
 
     def __init__(self, main_widget: "MainWidget") -> None:

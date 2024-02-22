@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Union
 from PyQt6.QtSvg import QSvgRenderer
 import re
 
+from Enums.Enums import Turns
 from constants import (
     ANTI,
     CLOCK,
@@ -18,7 +19,7 @@ from constants import (
     RADIAL,
     STATIC,
 )
-from Enums.MotionAttributes import Color, MotionType, Turns
+from Enums.MotionAttributes import Color, MotionType
 from Enums.PropTypes import PropType, PropTypeslist
 
 if TYPE_CHECKING:

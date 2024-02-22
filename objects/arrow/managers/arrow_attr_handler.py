@@ -1,5 +1,6 @@
 from typing import Union, TYPE_CHECKING
 
+from Enums.Enums import Turns
 from constants import *
 
 if TYPE_CHECKING:
@@ -8,7 +9,6 @@ from Enums.MotionAttributes import (
     Color,
     Location,
     MotionType,
-    Turns,
 )
 
 

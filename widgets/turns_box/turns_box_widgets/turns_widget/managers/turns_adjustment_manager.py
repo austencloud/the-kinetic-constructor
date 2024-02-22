@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING, Union
-from Enums.Enums import LetterType
+from Enums.Enums import LetterType, Turns
 
-from Enums.MotionAttributes import Turns
 
 if TYPE_CHECKING:
     from .....pictograph.pictograph import Pictograph

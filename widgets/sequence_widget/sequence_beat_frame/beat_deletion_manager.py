@@ -22,9 +22,6 @@ class BeatDeletionManager:
         self.beat_frame = sequence_beat_frame
         self.beats = sequence_beat_frame.beat_views
         self.start_pos_view = self.beat_frame.start_pos_view
-        self.GR_pictograph_view = (
-            self.beat_frame.sequence_widget.sequence_modifier.graph_editor.GE_pictograph_view
-        )
         self.sequence_builder = (
             self.beat_frame.sequence_widget.main_widget.main_tab_widget.sequence_builder
         )
@@ -34,12 +31,15 @@ class BeatDeletionManager:
         )
 
     def delete_selected_beat(self):
+        GE_pictograph_view = (
+            self.beat_frame.sequence_widget.sequence_modifier.graph_editor.GE_pictograph_view
+        )
         selected_beat = self.beat_frame.selection_manager.get_selected_beat()
 
         if selected_beat.__class__ == StartPositionBeatView:
             self.start_pos_view.setScene(None)
             self.start_pos_view.is_filled = False
-            self.GR_pictograph_view.set_to_blank_grid()
+            GE_pictograph_view.set_to_blank_grid()
             for beat in self.beats:
                 self.delete_beat(beat)
             self.selection_manager.deselect_beat()

@@ -1,16 +1,30 @@
 from typing import TYPE_CHECKING, Union
-from Enums.MotionAttributes import Turns
+from PyQt6.QtCore import QObject
+
+from Enums.Enums import Turns
+
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
 
 
-class GE_TurnsAdjustmentManager:
+from PyQt6.QtCore import pyqtSignal
+
+
+class GE_TurnsAdjustmentManager(QObject):
+    turns_adjusted = pyqtSignal(float)
+
     def __init__(self, turns_widget: "GE_TurnsWidget") -> None:
+        super().__init__(turns_widget)
         self.turns_widget = turns_widget
         self.graph_editor = self.turns_widget.turns_box.graph_editor
+        self.turns_adjusted.connect(
+            self.graph_editor.sequence_modifier.sequence_widget.beat_frame.on_turns_adjusted
+        )
 
-    def adjust_turns(self, adjustment: Turns) -> None:
+    def adjust_turns(
+        self, adjustment: Union[int, float]
+    ) -> None:  # Updated argument type
         self.pictograph = self.graph_editor.GE_pictograph_view.get_current_pictograph()
         turns = self._get_turns()
         turns = self._clamp_turns(turns + adjustment)
@@ -19,6 +33,7 @@ class GE_TurnsAdjustmentManager:
         self.turns_widget.updater._adjust_turns_for_pictograph(
             self.pictograph, adjustment
         )
+        self.turns_adjusted.emit(turns)
 
     def set_turns(self, new_turns: Turns) -> None:
         self.pictograph = self.graph_editor.GE_pictograph_view.get_current_pictograph()

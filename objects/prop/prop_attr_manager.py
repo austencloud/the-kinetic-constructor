@@ -5,10 +5,9 @@ from Enums.MotionAttributes import (
     Color,
     Location,
     Orientations,
-    Turns,
     MotionType,
 )
-from Enums.Enums import Axes, PropAttribute
+from Enums.Enums import Axes, PropAttribute, Turns
 from Enums.PropTypes import PropType
 
 

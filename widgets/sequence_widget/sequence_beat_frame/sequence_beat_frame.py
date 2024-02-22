@@ -38,6 +38,7 @@ class SequenceBeatFrame(QFrame):
         self.current_sequence_json_handler = (
             self.main_widget.json_manager.current_sequence_json_handler
         )
+
         self.beat_views: list[BeatView] = []
         self._setup_components(main_widget)
         self._setup_layout()
@@ -102,6 +103,9 @@ class SequenceBeatFrame(QFrame):
             if beat_view.is_filled:
                 return beat_view
         return self.beat_views[0]
+
+    def on_turns_adjusted(self):
+        print("Turns adjusted")
 
     def resize_beat_frame(self):
         beat_view_size = int(self.width() / (self.COLUMN_COUNT + 2))

@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
-from Enums.MotionAttributes import Turns
+
+from Enums.Enums import Turns
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion

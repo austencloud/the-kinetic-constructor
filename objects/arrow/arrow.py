@@ -6,8 +6,8 @@ from .managers.arrow_attr_handler import ArrowAttrHandler
 from .managers.rot_angle_manager.arrow_rot_angle_manager import ArrowRotAngleManager
 
 from ..graphical_object.graphical_object import GraphicalObject
-from Enums.MotionAttributes import Color, Location, Turns
-from Enums.Enums import Handpaths
+from Enums.MotionAttributes import Color, Location
+from Enums.Enums import Handpaths, Turns
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 

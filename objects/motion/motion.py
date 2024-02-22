@@ -1,4 +1,6 @@
 from typing import TYPE_CHECKING
+
+from Enums.Enums import Turns
 from .managers.motion_checker import MotionChecker
 from .managers.motion_attr_manager import MotionAttrManager
 from .managers.motion_manipulator import MotionManipulator
@@ -12,7 +14,6 @@ from Enums.MotionAttributes import (
     MotionType,
     PropRotDir,
     LeadStates,
-    Turns,
 )
 
 if TYPE_CHECKING:

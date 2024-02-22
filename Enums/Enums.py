@@ -5,6 +5,16 @@ from Enums.PropTypes import PropType
 from Enums.letters import *
 
 
+class Turns(Enum):
+    ZERO = 0
+    ZERO_POINT_FIVE = 0.5
+    ONE = 1
+    ONE_POINT_FIVE = 1.5
+    TWO = 2
+    TWO_POINT_FIVE = 2.5
+    THREE = 3
+    
+
 class MotionCombinationType(Enum):
     DUAL_SHIFT = "Dual-Shift"
     SHIFT = "Shift"
