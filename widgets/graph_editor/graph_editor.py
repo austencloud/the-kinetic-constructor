@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
-from widgets.graph_editor.components.GE_turns_panel import GE_TurnsPanel
+from widgets.graph_editor.components.GE_turns_panel import GE_AdjustmentPanel
 from widgets.graph_editor.components.GE_pictograph import (
     GE_BlankPictograph,
     GE_PictographView,
@@ -35,7 +35,7 @@ class GraphEditor(QFrame):
         )
 
     def _setup_adjustment_panel(self):
-        self.turns_panel = GE_TurnsPanel(self)
+        self.turns_panel = GE_AdjustmentPanel(self)
 
         self.turns_panel.setContentsMargins(0, 0, 0, 0)
 

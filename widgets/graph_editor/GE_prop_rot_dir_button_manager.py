@@ -17,7 +17,6 @@ from Enums.MotionAttributes import (
 )
 from PyQt6.QtCore import QSize
 
-from PyQt6.QtWidgets import QPushButton
 
 from widgets.factories.button_factory.buttons.rot_dir_buttons import (
     PropRotDirButton,
