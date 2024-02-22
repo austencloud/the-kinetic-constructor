@@ -114,7 +114,7 @@ class SequenceBeatFrame(QFrame):
             else:
                 if self.beat_views[i-1].beat != None:
                     if self.beat_views[i-1].beat.pictograph_dict != entry:
-                        self.beat_views[i-1].beat.updater._update_from_pictograph_dict(entry)
+                        self.beat_views[i-1].beat.updater.update_pictograph(entry)
                         QApplication.processEvents()
 
     def update_start_pos_from_current_sequence_json(self, entry: dict):

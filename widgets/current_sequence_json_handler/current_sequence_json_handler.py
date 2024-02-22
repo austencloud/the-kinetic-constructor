@@ -120,4 +120,8 @@ class CurrentSequenceJsonHandler:
     ):
         sequence = self.load_current_sequence_json()
         sequence[index][f"{color.value}_turns"] = turns
+        end_ori = self.ori_calculator.calculate_end_orientation(sequence[index], color)
+        sequence[index][f"{color.value}_end_ori"] = end_ori
+
+
         self.save_sequence(sequence)
