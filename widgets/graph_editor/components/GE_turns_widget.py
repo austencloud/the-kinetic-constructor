@@ -4,8 +4,8 @@ from PyQt6.QtWidgets import (
 )
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from widgets.graph_editor.GE_turns_button_manager import GE_TurnsButtonManager
-from widgets.graph_editor.GE_turns_widget_display_manager import (
+from widgets.graph_editor.components.GE_turns_button_manager import GE_TurnsButtonManager
+from widgets.graph_editor.components.GE_turns_widget_display_manager import (
     GE_TurnsWidgetDisplayManager,
 )
 from widgets.graph_editor.components.GE_turns_adjustment_manager import (

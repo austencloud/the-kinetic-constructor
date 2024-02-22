@@ -59,4 +59,3 @@ class GE_StartPosOriPickerBox(QFrame):
 
     def resize_GE_turns_box(self) -> None:
         self.ori_picker_widget.resize_GE_ori_picker_widget()
-        self.header_widget.resize_dir_buttons()

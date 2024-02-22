@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
 )
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from widgets.graph_editor.GE_ori_picker_button_manager import (
+from widgets.graph_editor.components.GE_ori_picker_button_manager import (
     GE_StartPosOriPickerButtonManager,
 )
 from widgets.graph_editor.components.GE_ori_picker_display_manager import (
