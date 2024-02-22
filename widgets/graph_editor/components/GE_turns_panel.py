@@ -60,6 +60,14 @@ class GE_AdjustmentPanel(QFrame):
         self.layout.setSpacing(0)
         self.setLayout(self.layout)
 
+    def update_adjustment_panel_based_on_selected_pictograph(self) -> None:
+        # if the pictograph is a start pos pictograph, hide the turns boxes and show the start pos ori pickers
+        if self.graph_editor.GE_pictograph.view.is_start_pos:
+            for box in self.boxes:
+                box.hide()
+            for picker in self.start_pos_ori_pickers:
+                picker.show()
+
     def update_turns_panel(self, blue_turns: int, red_turns: int) -> None:
         self.set_turns(blue_turns, red_turns)
         for box in self.boxes:

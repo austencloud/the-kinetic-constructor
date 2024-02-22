@@ -12,22 +12,16 @@ if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_pictograph import GE_BlankPictograph
 
 
-class GE_BlankPictograph(Pictograph):
-    def __init__(self, graph_editor: "GraphEditor") -> None:
-        super().__init__(graph_editor.main_widget)
-
-
 class GE_PictographView(PictographView):
     def __init__(
         self, GE: "GraphEditor", blank_pictograph: "GE_BlankPictograph"
     ) -> None:
         super().__init__(blank_pictograph)
         self.GE = GE
+        self.is_start_pos = False
         self.blank_pictograph = blank_pictograph
         self.main_widget = GE.main_widget
         self.setScene(blank_pictograph)
-
-        # Set the frame shape to NoFrame
         self.setFrameShape(PictographView.Shape.Box)
 
     def resize_GE_pictograph_view(self):
@@ -48,7 +42,6 @@ class GE_PictographView(PictographView):
 
         right_edge = self.viewport().width() - 1
         painter.drawLine(right_edge, 0, right_edge, self.viewport().height())
-        # Draw the gold overlay rectangle
         overlay_color = QColor("gold")
         overlay_pen = QPen(overlay_color, 4)
         overlay_pen.setJoinStyle(Qt.PenJoinStyle.MiterJoin)
@@ -63,8 +56,13 @@ class GE_PictographView(PictographView):
         painter.drawRect(overlay_rect)
 
     def get_current_pictograph(self) -> Pictograph:
-        return self.scene()
+        return self.scene() 
     
+    def set_scene(self, beat_view: "BeatView"):
+        self.setScene(beat_view)
+        if beat_view.is_start_pos:
+            self.is_start_pos = True
+        
 
 
 from PyQt6.QtWidgets import QWidget
@@ -141,3 +139,8 @@ class BeatSelectionManager(QWidget):
             -self.border_width // 2,
         )
         painter.drawRect(rect)
+
+
+class GE_BlankPictograph(Pictograph):
+    def __init__(self, graph_editor: "GraphEditor") -> None:
+        super().__init__(graph_editor.main_widget)

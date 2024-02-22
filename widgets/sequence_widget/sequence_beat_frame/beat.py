@@ -30,6 +30,7 @@ class BeatView(QGraphicsView):
         self.beat_frame = beat_frame
         self.selection_manager = self.beat_frame.selection_manager
         self.beat: "Beat" = None
+        self.is_start_pos = False
         self.is_filled = False
         self.is_selected = False
         self.setContentsMargins(0, 0, 0, 0)
@@ -67,8 +68,6 @@ class BeatView(QGraphicsView):
 
     def paintEvent(self, event):
         super().paintEvent(event)
-
-
 
     def deselect(self):
         self.is_selected = False
