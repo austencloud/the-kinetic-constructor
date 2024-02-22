@@ -52,8 +52,8 @@ class MotionOriCalculator:
             orientation_map = {
                 (IN, CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
                 (IN, COUNTER_CLOCKWISE): (COUNTER if turns % 2 == 0.5 else CLOCK),
-                (OUT, CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
-                (OUT, COUNTER_CLOCKWISE): (COUNTER if turns % 2 == 0.5 else CLOCK),
+                (OUT, CLOCKWISE): (COUNTER if turns % 2 == 0.5 else CLOCK),
+                (OUT, COUNTER_CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
                 (CLOCK, CLOCKWISE): (OUT if turns % 2 == 0.5 else IN),
                 (CLOCK, COUNTER_CLOCKWISE): (IN if turns % 2 == 0.5 else OUT),
                 (COUNTER, CLOCKWISE): (IN if turns % 2 == 0.5 else OUT),
