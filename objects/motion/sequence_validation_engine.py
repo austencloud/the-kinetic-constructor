@@ -2,14 +2,16 @@ from typing import TYPE_CHECKING
 from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
+    from widgets.current_sequence_json_handler.current_sequence_json_handler import (
+        CurrentSequenceJsonHandler,
+    )
     from widgets.main_widget.main_widget import MainWidget
 
 
 class CurrentSequenceJsonValidationEngine:
-    def __init__(self, main_widget: "MainWidget"):
-        self.main_widget = main_widget
-        self.json_handler = main_widget.json_manager.current_sequence_json_handler
-        self.sequence_json = self.json_handler.load_sequence()
+    def __init__(self, current_sequence_json_handler: "CurrentSequenceJsonHandler"):
+        self.json_handler = current_sequence_json_handler
+        self.sequence_json = self.json_handler.load_current_sequence_json()
 
     def validate_and_update_sequence_json(self):
         """Iterates through the sequence, updating start and end orientations to ensure continuity."""

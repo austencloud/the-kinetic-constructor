@@ -1,4 +1,5 @@
 import sys
+import svg.path
 import xml.etree.ElementTree as ET
 from typing import list
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem

@@ -1,12 +1,14 @@
 from typing import TYPE_CHECKING
 
+
 if TYPE_CHECKING:
+    from widgets.current_sequence_json_handler.current_sequence_json_handler import CurrentSequenceJsonHandler
     from widgets.main_widget.main_widget import MainWidget
 
 
 class CurrentSequenceJsonOriCalculator:
-    def __init__(self, main_widget: "MainWidget") -> None:
-        self.main_widget = main_widget
+    def __init__(self, current_sequence_json_handler: "CurrentSequenceJsonHandler"):
+        self.main_widget = current_sequence_json_handler.main_widget
 
     def calculate_end_orientation(self, pictograph_dict, color):
         """Calculate the end orientation based on the JSON entry data."""

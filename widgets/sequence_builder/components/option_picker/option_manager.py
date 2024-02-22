@@ -21,7 +21,7 @@ class OptionManager(QObject):
 
     def get_next_options(self) -> list[dict]:
         sequence = (
-            self.main_widget.json_manager.current_sequence_json_handler.load_sequence()
+            self.main_widget.json_manager.current_sequence_json_handler.load_current_sequence_json()
         )
         next_options = []
 

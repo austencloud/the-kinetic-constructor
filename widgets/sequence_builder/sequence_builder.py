@@ -113,8 +113,6 @@ class SequenceBuilder(QFrame):
         # self.option_picker.scroll_area.resize_option_picker_scroll_area()
 
     def get_last_added_pictograph(self):
-        return (
-            self.main_widget.json_manager.current_sequence_json_handler.load_sequence()[
-                -1
-            ]
-        )
+        return self.main_widget.json_manager.current_sequence_json_handler.load_current_sequence_json()[
+            -1
+        ]

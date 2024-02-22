@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from PyQt6.QtWidgets import QGridLayout, QFrame
+from PyQt6.QtWidgets import QGridLayout, QFrame, QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
 from widgets.sequence_widget.sequence_beat_frame.beat_deletion_manager import (
@@ -105,7 +105,25 @@ class SequenceBeatFrame(QFrame):
         return self.beat_views[0]
 
     def on_turns_adjusted(self):
-        print("Turns adjusted")
+        current_sequence = self.current_sequence_json_handler.load_current_sequence_json()
+        for i, entry in enumerate(current_sequence):
+            if i == 0:
+                self.update_start_pos_from_current_sequence_json(entry)
+            else:
+                beat_view = self.map_current_sequence_entry_to_beat_in_beat_frame(entry, i)
+                if beat_view:
+                    beat_view.beat.updater.update_pictograph(entry)
+                    QApplication.processEvents()  # Ensure UI updates are processed immediately
+
+    def map_current_sequence_entry_to_beat_in_beat_frame(self, entry: dict, index: str) -> BeatView:
+        if index < len(self.beat_views):
+            beat_view = self.beat_views[index]
+            if beat_view.is_filled:
+                return beat_view
+        return None
+
+    def update_start_pos_from_current_sequence_json(self, entry: dict):
+        self.start_pos_view.start_pos.updater.update_pictograph(entry)
 
     def resize_beat_frame(self):
         beat_view_size = int(self.width() / (self.COLUMN_COUNT + 2))
@@ -113,4 +131,3 @@ class SequenceBeatFrame(QFrame):
             view.setMaximumWidth(beat_view_size)
             view.setMinimumHeight(beat_view_size)
             view.resetTransform()
-

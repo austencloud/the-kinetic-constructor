@@ -1,5 +1,6 @@
 from copy import deepcopy
 from PyQt6.QtCore import QObject, pyqtSignal
+from Enums.letters import Letter
 from constants import END_POS, START_POS
 from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
     StartPositionBeat,
@@ -20,6 +21,7 @@ class StartPosManager(QObject):
         self.sequence_builder = start_pos_picker.sequence_builder
         self.start_pos_picker = start_pos_picker
         self.start_pos_frame = start_pos_picker.pictograph_frame
+        self.main_widget = start_pos_picker.sequence_builder.main_widget
         self.start_options: dict[str, Pictograph] = {}
         self.setup_start_positions()
 
@@ -100,3 +102,51 @@ class StartPosManager(QObject):
                 start_option.view.view_scale, start_option.view.view_scale
             )
             start_option.container.styled_border_overlay.resize_styled_border_overlay()
+
+    def _convert_current_sequence_json_entry_to_start_pos_pictograph(
+        self, start_pos_entry
+    ):
+        start_position_pictograph = self.get_start_pos_pictograph(
+            start_pos_entry[0] if start_pos_entry else None
+        )
+        start_pos_beat = StartPositionBeat(
+            self.main_widget, self.main_widget.sequence_widget.beat_frame
+        )
+        start_pos_beat.updater.update_pictograph(
+            start_position_pictograph.pictograph_dict
+        )
+
+        return start_pos_beat
+
+    def get_start_pos_pictograph(self, start_pos_data) -> "Pictograph":
+        if not start_pos_data:
+            return None
+        start_pos_key = start_pos_data["end_pos"]
+        letter_str = self.start_pos_key_to_letter(start_pos_key)
+        letter = Letter(letter_str)
+        matching_letter_pictographs = self.main_widget.letters.get(letter, [])
+        for pictograph_dict in matching_letter_pictographs:
+            if pictograph_dict["start_pos"] == start_pos_key:
+
+                pictograph_dict["blue_start_ori"] = start_pos_data["blue_end_ori"]
+                pictograph_dict["red_start_ori"] = start_pos_data["red_end_ori"]
+                pictograph_dict["blue_end_ori"] = start_pos_data["blue_end_ori"]
+                pictograph_dict["red_end_ori"] = start_pos_data["red_end_ori"]
+
+                pictograph_factory = self.main_widget.sequence_widget.pictograph_factory
+                pictograph_key = pictograph_factory.generate_pictograph_key_from_dict(
+                    pictograph_dict
+                )
+                return pictograph_factory.get_or_create_pictograph(
+                    pictograph_key, pictograph_dict
+                )
+
+        print(f"No matching start position found for key: {start_pos_key}")
+        return None
+
+    def start_pos_key_to_letter(self, start_pos_key: str):
+        mapping = {"alpha": "α", "beta": "β", "gamma": "Γ"}
+        for key in mapping:
+            if start_pos_key.startswith(key):
+                return mapping[key]
+        return None

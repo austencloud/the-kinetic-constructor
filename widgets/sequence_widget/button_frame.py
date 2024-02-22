@@ -68,7 +68,7 @@ class SequenceButtonFrame(QFrame):
 
     def save_sequence(self):
         sequence_data = (
-            self.main_widget.json_manager.current_sequence_json_handler.load_sequence()
+            self.main_widget.json_manager.current_sequence_json_handler.load_current_sequence_json()
         )
         if not sequence_data:
             self.sequence_widget.indicator_label.show_indicator(
@@ -113,4 +113,3 @@ class SequenceButtonFrame(QFrame):
         self.sequence_widget.beat_frame.selection_manager.deselect_beat()
         self.sequence_widget.sequence_modifier.graph_editor.GE_pictograph_view.set_to_blank_grid()
         self.sequence_widget.sequence_modifier.graph_editor.turns_panel.set_turns(0, 0)
-

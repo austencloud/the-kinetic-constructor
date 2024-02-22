@@ -14,5 +14,6 @@ from widgets.pictograph.components.placement_managers.arrow_placement_manager.co
 class JSON_Manager:
     def __init__(self, main_widget: "MainWidget") -> None:
         self.logger = logging.getLogger(__name__)
-        self.special_placement_handler = SpecialPlacementJsonHandler(main_widget)
-        self.current_sequence_json_handler = CurrentSequenceJsonHandler(main_widget)
+        self.main_widget = main_widget
+        self.special_placement_handler = SpecialPlacementJsonHandler()
+        self.current_sequence_json_handler = CurrentSequenceJsonHandler(self)

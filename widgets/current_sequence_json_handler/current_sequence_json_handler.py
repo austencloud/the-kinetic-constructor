@@ -1,21 +1,24 @@
 import json
 
-from objects.motion.sequence_validation_engine import CurrentSequenceJsonValidationEngine
+from objects.motion.sequence_validation_engine import (
+    CurrentSequenceJsonValidationEngine,
+)
 from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
 from .motion_orientation_json_calculator import CurrentSequenceJsonOriCalculator
 from widgets.pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from widgets.json_manager import JSON_Manager
     from widgets.main_widget.main_widget import MainWidget
 
 
 class CurrentSequenceJsonHandler:
-    def __init__(self, main_widget: "MainWidget") -> None:
+    def __init__(self, json_manager: "JSON_Manager"):
         self.current_sequence_json = "current_sequence.json"
-        self.main_widget = main_widget
-        self.ori_calculator = CurrentSequenceJsonOriCalculator(main_widget)
-        self.validation_engine = CurrentSequenceJsonValidationEngine(main_widget)
+        self.main_widget = json_manager.main_widget
+        self.ori_calculator = CurrentSequenceJsonOriCalculator(self)
+        self.validation_engine = CurrentSequenceJsonValidationEngine(self)
         self.empty_sequence()
 
     def empty_sequence(self):
@@ -26,7 +29,7 @@ class CurrentSequenceJsonHandler:
     def set_start_position_data(self, start_pos_pictograph: Pictograph):
         red_start_ori = start_pos_pictograph.pictograph_dict["red_start_ori"]
         blue_start_ori = start_pos_pictograph.pictograph_dict["blue_start_ori"]
-        sequence = self.load_sequence()
+        sequence = self.load_current_sequence_json()
         start_position_dict = {
             "sequence_start_position": start_pos_pictograph.end_pos[:-1],
             "red_end_ori": red_start_ori,
@@ -40,7 +43,7 @@ class CurrentSequenceJsonHandler:
             sequence.insert(0, start_position_dict)
         self.save_sequence(sequence)
 
-    def load_sequence(self) -> list[dict]:
+    def load_current_sequence_json(self) -> list[dict]:
         """Loads the sequence from the JSON file with UTF-8 encoding."""
         try:
             with open(self.current_sequence_json, "r", encoding="utf-8") as file:
@@ -56,21 +59,21 @@ class CurrentSequenceJsonHandler:
 
     def get_red_end_ori(self):
         """Get the red end orientation from the last pictograph in the sequence."""
-        sequence = self.load_sequence()
+        sequence = self.load_current_sequence_json()
         if sequence:
             return sequence[-1]["red_end_ori"]
         return 0
 
     def get_blue_end_ori(self):
         """Get the blue end orientation from the last pictograph in the sequence."""
-        sequence = self.load_sequence()
+        sequence = self.load_current_sequence_json()
         if sequence:
             return sequence[-1]["blue_end_ori"]
         return 0
 
     def update_current_sequence_file(self):
         temp_filename = "current_sequence.json"
-        sequence_data = self.load_sequence()
+        sequence_data = self.load_current_sequence_json()
         last_beat_view = (
             self.main_widget.sequence_widget.beat_frame.get_last_filled_beat()
         )
@@ -88,7 +91,7 @@ class CurrentSequenceJsonHandler:
             file.write("[]")
 
     def update_current_sequence_file_with_beat(self, beat_view: BeatView):
-        sequence_data = self.load_sequence()
+        sequence_data = self.load_current_sequence_json()
         sequence_data.append(beat_view.beat.get.pictograph_dict())
         with open("current_sequence.json", "w", encoding="utf-8") as file:
             json.dump(sequence_data, file, indent=4, ensure_ascii=False)
