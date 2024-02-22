@@ -19,10 +19,11 @@ class CodexTurnsBoxHeader(CodexWidget):
         self.turns_box = turns_box
 
         self.separator: QFrame = self.create_separator()
-        self.header_label: QLabel = self._setup_header_label()
+        self.header_label: QLabel = self._setup_header()
         self.layout: QHBoxLayout = self._setup_layout()
+        self._add_widgets()
 
-    def _setup_header_label(self) -> None:
+    def _setup_header(self) -> None:
         if self.turns_box.attribute_type == TurnsTabAttribute.COLOR:
             if self.turns_box.color == Color.BLUE:
                 text = "Left"
@@ -51,7 +52,6 @@ class CodexTurnsBoxHeader(CodexWidget):
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
-        self._add_widgets()
         return layout
 
     def _add_widgets(self) -> None:

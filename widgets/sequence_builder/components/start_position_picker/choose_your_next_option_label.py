@@ -14,9 +14,15 @@ class ChooseYourNextOptionLabel(QLabel):
     def __init__(self, option_picker: "OptionPicker") -> None:
         super().__init__(option_picker)
         self.option_picker = option_picker
-        self.setText("Choose your next option!")
+        self.set_default_text()
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.hide()
+
+    def set_default_text(self):
+        self.setText("Choose your next option!")
+
+    def set_text_to_loading(self):
+        self.setText("Loading...")
 
     def set_stylesheet(self) -> None:
         width = self.option_picker.width()
