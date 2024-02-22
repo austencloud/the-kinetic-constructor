@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+from Enums.MotionAttributes import Color
+
 
 if TYPE_CHECKING:
     from widgets.current_sequence_json_handler.current_sequence_json_handler import CurrentSequenceJsonHandler
@@ -10,14 +12,14 @@ class CurrentSequenceJsonOriCalculator:
     def __init__(self, current_sequence_json_handler: "CurrentSequenceJsonHandler"):
         self.main_widget = current_sequence_json_handler.main_widget
 
-    def calculate_end_orientation(self, pictograph_dict, color):
+    def calculate_end_orientation(self, pictograph_dict, color:Color):
         """Calculate the end orientation based on the JSON entry data."""
-        motion_type = pictograph_dict[f"{color}_motion_type"]
-        turns = float(pictograph_dict[f"{color}_turns"])
-        start_ori = pictograph_dict[f"{color}_start_ori"]
+        motion_type = pictograph_dict[f"{color.value}_motion_type"]
+        turns = float(pictograph_dict[f"{color.value}_turns"])
+        start_ori = pictograph_dict[f"{color.value}_start_ori"]
         prop_rot_dir = pictograph_dict.get(
-            f"{color}_prop_rot_dir", "cw"
-        )  # Assuming 'cw' as default
+            f"{color.value}_prop_rot_dir", "cw"
+        )
 
         if motion_type in ["pro", "static"]:
             return self.calculate_pro_static_orientation(start_ori, turns, prop_rot_dir)

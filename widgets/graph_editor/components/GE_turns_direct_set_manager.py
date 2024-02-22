@@ -2,12 +2,14 @@ from PyQt6.QtWidgets import QHBoxLayout, QPushButton, QFrame
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
+
 if TYPE_CHECKING:
+    from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
     from widgets.codex.codex_turns_widget import CodexTurnsWidget
 
 
 class GE_TurnsDirectSetManager:
-    def __init__(self, turns_widget: "CodexTurnsWidget") -> None:
+    def __init__(self, turns_widget: "GE_TurnsWidget") -> None:
         self.turns_widget = turns_widget
 
     def setup_direct_set_buttons(self) -> None:

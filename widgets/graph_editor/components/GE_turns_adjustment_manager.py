@@ -26,10 +26,10 @@ class GE_TurnsAdjustmentManager(QObject):
         self, adjustment: Union[int, float]
     ) -> None:  # Updated argument type
         self.pictograph = self.graph_editor.GE_pictograph_view.get_current_pictograph()
-        turns = self._get_turns()
-        turns = self._clamp_turns(turns + adjustment)
-        turns = self.convert_turn_floats_to_ints(turns)
-        self._update_turns_display(turns)
+        new_turns = self._get_turns()
+        new_turns = self._clamp_turns(new_turns + adjustment)
+        new_turns = self.convert_turn_floats_to_ints(new_turns)
+        self._update_turns_display(new_turns)
         self.turns_widget.updater._adjust_turns_for_pictograph(
             self.pictograph, adjustment
         )
@@ -40,17 +40,28 @@ class GE_TurnsAdjustmentManager(QObject):
             self.graph_editor.sequence_modifier.sequence_widget.beat_frame.get_index_of_currently_selected_beat()
         )
         current_sequence_json_handler.update_turns_in_json_at_index(
-            pictograph_index + 1, self.turns_widget.turns_box.color, turns
+            pictograph_index + 1, self.turns_widget.turns_box.color, new_turns
         )
-        self.turns_adjusted.emit(turns)
+        self.graph_editor.main_widget.json_manager.current_sequence_json_handler.validation_engine.run()
+        self.turns_adjusted.emit(new_turns)
 
-    def set_turns(self, new_turns: Turns) -> None:
+    def direct_set_turns(self, new_turns: Turns) -> None:
         self.pictograph = self.graph_editor.GE_pictograph_view.get_current_pictograph()
         self._update_motion_properties(new_turns)
-        turns = self._get_turns()
-        turns = self.convert_turn_floats_to_ints(turns)
+
+        current_sequence_json_handler = (
+            self.graph_editor.main_widget.json_manager.current_sequence_json_handler
+        )
+        pictograph_index = (
+            self.graph_editor.sequence_modifier.sequence_widget.beat_frame.get_index_of_currently_selected_beat()
+        )
+        current_sequence_json_handler.update_turns_in_json_at_index(
+            pictograph_index + 1, self.turns_widget.turns_box.color, new_turns
+        )
 
         self._update_turns_display(new_turns)
+        self.graph_editor.main_widget.json_manager.current_sequence_json_handler.validation_engine.run()
+        self.turns_adjusted.emit(new_turns)
 
     def get_current_turns_value(self) -> Turns:
         return self._get_turns()
