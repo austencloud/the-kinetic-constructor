@@ -19,6 +19,7 @@ class CurrentSequenceJsonValidationEngine:
         for i, _ in enumerate(self.sequence_json):
             if i > 0:
                 self.update_json_entry_start_orientation(i)
+                self.update_json_entry_end_orientation(i)
         self.json_handler.save_sequence(self.sequence_json)
 
     def update_json_entry_start_orientation(self, index):
@@ -35,8 +36,7 @@ class CurrentSequenceJsonValidationEngine:
             end_ori = self.json_handler.ori_calculator.calculate_end_orientation(
                 pictograph_dict, color
             )
-            pictograph_dict[f"{color}_end_ori"] = end_ori
-
+            pictograph_dict[f"{color.value}_end_ori"] = end_ori
 
     def run(self):
         """Public method to run the sequence validation and update process."""
