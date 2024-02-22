@@ -1,5 +1,6 @@
 import json
 
+from objects.motion.sequence_validation_engine import CurrentSequenceJsonValidationEngine
 from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
 from .motion_orientation_json_calculator import CurrentSequenceJsonOriCalculator
 from widgets.pictograph.pictograph import Pictograph
@@ -14,6 +15,7 @@ class CurrentSequenceJsonHandler:
         self.current_sequence_json = "current_sequence.json"
         self.main_widget = main_widget
         self.ori_calculator = CurrentSequenceJsonOriCalculator(main_widget)
+        self.validation_engine = CurrentSequenceJsonValidationEngine(main_widget)
         self.empty_sequence()
 
     def empty_sequence(self):

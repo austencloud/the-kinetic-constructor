@@ -30,7 +30,6 @@ class CurrentSequenceJsonOriCalculator:
         if turns % 2 == 0:
             return start_ori  # No change for an even number of full turns
         else:
-            # For half turns, the orientation changes based on the prop rotation direction
             if prop_rot_dir == "cw":
                 return {
                     "in": "clock",
