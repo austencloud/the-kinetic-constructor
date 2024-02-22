@@ -18,7 +18,7 @@ from Enums.MotionAttributes import (
 from Enums.Enums import VTG_Directions
 
 from PyQt6.QtWidgets import QPushButton
-
+from PyQt6.QtCore import QSize
 from widgets.factories.button_factory.buttons.rot_dir_buttons import VtgDirButton
 
 
@@ -132,3 +132,12 @@ class GE_VtgDirButtonManager:
     def unpress_vtg_buttons(self) -> None:
         self.same_button.unpress()
         self.opp_button.unpress()
+
+    def resize_vtg_dir_buttons(self) -> None:
+        header_height = self.turns_box.header_widget.header_label.height()
+        for button in self.vtg_dir_buttons:
+            button_height = header_height
+            button_width = button_height
+            button.setFixedSize(button_width, button_height)
+            icon_size = int(button_height * 0.8)
+            button.setIconSize(QSize(icon_size, icon_size))

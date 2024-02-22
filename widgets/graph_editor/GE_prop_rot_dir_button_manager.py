@@ -15,7 +15,7 @@ from Enums.MotionAttributes import (
     Color,
     PropRotDir,
 )
-
+from PyQt6.QtCore import QSize
 
 from PyQt6.QtWidgets import QPushButton
 
@@ -99,7 +99,7 @@ class GE_PropRotDirButtonManager:
     ) -> None:
         motion.prop_rot_dir = prop_rot_dir
         pictograph_dict = {
-            motion.color + "_" + PROP_ROT_DIR: prop_rot_dir,
+            motion.color.value + "_" + PROP_ROT_DIR: prop_rot_dir,
         }
         motion.pictograph.updater.update_pictograph(pictograph_dict)
 
@@ -133,3 +133,12 @@ class GE_PropRotDirButtonManager:
     def unpress_prop_rot_dir_buttons(self) -> None:
         self.cw_button.unpress()
         self.ccw_button.unpress()
+
+    def resize_prop_rot_dir_buttons(self) -> None:
+        header_height = self.turns_box.header_widget.header_label.height()
+        for button in self.prop_rot_dir_buttons:
+            button_height = header_height
+            button_width = button_height 
+            button.setFixedSize(button_width, button_height)
+            icon_size = int(button_height * 0.8)
+            button.setIconSize(QSize(icon_size, icon_size))
