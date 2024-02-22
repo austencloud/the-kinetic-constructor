@@ -33,6 +33,15 @@ class GE_TurnsAdjustmentManager(QObject):
         self.turns_widget.updater._adjust_turns_for_pictograph(
             self.pictograph, adjustment
         )
+        current_sequence_json_handler = (
+            self.graph_editor.main_widget.json_manager.current_sequence_json_handler
+        )
+        pictograph_index = (
+            self.graph_editor.sequence_modifier.sequence_widget.beat_frame.get_index_of_currently_selected_beat()
+        )
+        current_sequence_json_handler.update_turns_in_json_at_index(
+            pictograph_index + 1, self.turns_widget.turns_box.color, turns
+        )
         self.turns_adjusted.emit(turns)
 
     def set_turns(self, new_turns: Turns) -> None:

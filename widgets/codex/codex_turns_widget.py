@@ -12,8 +12,8 @@ from ..turns_box.turns_box_widgets.turns_widget.managers.motion_relevance_checke
 from ..turns_box.turns_box_widgets.turns_widget.managers.turns_button_manager import (
     CodexTurnsButtonManager,
 )
-from ..turns_box.turns_box_widgets.turns_widget.managers.turns_adjustment_manager import (
-    TurnsAdjustmentManager,
+from ..turns_box.turns_box_widgets.turns_widget.managers.codex_turns_adjustment_manager import (
+    CodexTurnsAdjustmentManager,
 )
 from ..turns_box.turns_box_widgets.turns_widget.managers.turns_updater import (
     CodexTurnsUpdater,
@@ -24,7 +24,9 @@ from .codex_letter_button_frame.components.codex_turns_widget_display_manager im
 
 
 if TYPE_CHECKING:
-    from widgets.codex.codex_letter_button_frame.components.codex_turns_box import CodexTurnsBox
+    from widgets.codex.codex_letter_button_frame.components.codex_turns_box import (
+        CodexTurnsBox,
+    )
 
 
 class CodexTurnsWidget(QWidget):
@@ -46,7 +48,7 @@ class CodexTurnsWidget(QWidget):
         self.display_manager = CodexTurnsWidgetDisplayManager(self)
         self.button_manager = CodexTurnsButtonManager(self)
         self.relevance_checker = CodexMotionRelevanceChecker(turns_box)
-        self.adjustment_manager = TurnsAdjustmentManager(self)
+        self.adjustment_manager = CodexTurnsAdjustmentManager(self)
         self.updater = CodexTurnsUpdater(self)
 
     def _setup_ui(self) -> None:

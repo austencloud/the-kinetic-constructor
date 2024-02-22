@@ -41,7 +41,7 @@ class GE_TurnsDirectSetManager:
             """
             )
             button.clicked.connect(
-                lambda _, v=value: self.turns_widget.adjustment_manager.set_turns(
+                lambda _, v=value: self.turns_widget.adjustment_manager.direct_set_turns(
                     float(v) if v in ["0.5", "1.5", "2.5"] else int(v)
                 )
             )

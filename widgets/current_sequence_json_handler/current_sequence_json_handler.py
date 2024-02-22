@@ -1,12 +1,13 @@
 import json
 
+from Enums.MotionAttributes import Color
 from objects.motion.sequence_validation_engine import (
     CurrentSequenceJsonValidationEngine,
 )
 from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
 from .motion_orientation_json_calculator import CurrentSequenceJsonOriCalculator
 from widgets.pictograph.pictograph import Pictograph
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from widgets.json_manager import JSON_Manager
@@ -106,3 +107,17 @@ class CurrentSequenceJsonHandler:
         for beat_view in beat_views:
             if beat_view.is_filled:
                 self.update_current_sequence_file_with_beat(beat_view)
+
+    def get_index_for_pictograph(self, pictograph: Pictograph):
+        sequence = self.load_current_sequence_json()
+        for i, entry in enumerate(sequence):
+            if entry == pictograph.pictograph_dict:
+                return i
+        return -1
+
+    def update_turns_in_json_at_index(
+        self, index: int, color: Color, turns: Union[int | float]
+    ):
+        sequence = self.load_current_sequence_json()
+        sequence[index][f"{color.value}_turns"] = turns
+        self.save_sequence(sequence)

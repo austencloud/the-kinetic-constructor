@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from .....codex.codex_turns_widget import CodexTurnsWidget
 
 
-class TurnsAdjustmentManager:
+class CodexTurnsAdjustmentManager:
     def __init__(self, turns_widget: "CodexTurnsWidget") -> None:
         self.turns_widget = turns_widget
         self.pictographs = self._get_pictographs()
@@ -32,7 +32,7 @@ class TurnsAdjustmentManager:
             if self._is_relevant_letter_type(pictograph):
                 self._adjust_turns_for_pictograph(pictograph, adjustment)
 
-    def set_turns(self, new_turns: Turns) -> None:
+    def direct_set_turns(self, new_turns: Turns) -> None:
         turns = self._get_turns()
         turns = self.convert_turn_floats_to_ints(turns)
         self._update_turns_display(new_turns)

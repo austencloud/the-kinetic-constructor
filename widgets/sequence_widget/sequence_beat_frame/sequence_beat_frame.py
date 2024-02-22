@@ -105,25 +105,26 @@ class SequenceBeatFrame(QFrame):
         return self.beat_views[0]
 
     def on_turns_adjusted(self):
-        current_sequence = self.current_sequence_json_handler.load_current_sequence_json()
-        for i, entry in enumerate(current_sequence):
+        current_sequence_json = (
+            self.current_sequence_json_handler.load_current_sequence_json()
+        )
+        for i, entry in enumerate(current_sequence_json):
             if i == 0:
                 self.update_start_pos_from_current_sequence_json(entry)
             else:
-                beat_view = self.map_current_sequence_entry_to_beat_in_beat_frame(entry, i)
-                if beat_view:
-                    beat_view.beat.updater.update_pictograph(entry)
-                    QApplication.processEvents()  # Ensure UI updates are processed immediately
-
-    def map_current_sequence_entry_to_beat_in_beat_frame(self, entry: dict, index: str) -> BeatView:
-        if index < len(self.beat_views):
-            beat_view = self.beat_views[index]
-            if beat_view.is_filled:
-                return beat_view
-        return None
+                if self.beat_views[i-1].beat != None:
+                    if self.beat_views[i-1].beat.pictograph_dict != entry:
+                        self.beat_views[i-1].beat.updater._update_from_pictograph_dict(entry)
+                        QApplication.processEvents()
 
     def update_start_pos_from_current_sequence_json(self, entry: dict):
         self.start_pos_view.start_pos.updater.update_pictograph(entry)
+
+    def get_index_of_currently_selected_beat(self) -> int:
+        for i, beat in enumerate(self.beat_views):
+            if beat.is_selected:
+                return i
+        return 0
 
     def resize_beat_frame(self):
         beat_view_size = int(self.width() / (self.COLUMN_COUNT + 2))
