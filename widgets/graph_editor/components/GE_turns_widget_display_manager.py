@@ -58,7 +58,7 @@ class GE_TurnsWidgetDisplayManager:
 
     def update_turn_display(self) -> None:
         """Update the size of the turns display for motion type."""
-        self.resize_turn_display()
+        # self.resize_turn_display()
         self.set_turn_display_styles()
 
     def set_turn_display_styles(self) -> None:
@@ -99,7 +99,8 @@ class GE_TurnsWidgetDisplayManager:
     def update_adjust_turns_button_size(self) -> None:
         for button in self.turns_widget.turns_button_manager.adjust_turns_buttons:
             button_size = self.calculate_adjust_turns_button_size()
-            button.update_adjust_turns_button_size(button_size)
+            if button.isVisible():
+                button.update_adjust_turns_button_size(button_size)
 
     def add_turns_display_to_layout(self) -> None:
         negative_buttons_frame = (
@@ -120,7 +121,7 @@ class GE_TurnsWidgetDisplayManager:
         self.turns_widget.layout.addWidget(self.turn_display_with_buttons_frame)
 
     def calculate_adjust_turns_button_size(self) -> int:
-        return int(self.turns_box.turns_panel.graph_editor.width() / 25)
+        return int(self.turns_box.turns_panel.graph_editor.width() / 40)
 
     def get_current_turns_value(self) -> int:
         return (

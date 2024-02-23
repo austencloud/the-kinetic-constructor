@@ -60,5 +60,5 @@ class GE_TurnsBox(QFrame):
         return int((self.pictograph.view.height() // 8))
 
     def resize_GE_turns_box(self) -> None:
-        self.turns_widget.resize_GE_turns_widget()
         self.header_widget.resize_dir_buttons()
+        self.turns_widget.resize_GE_turns_widget()

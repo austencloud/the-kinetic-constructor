@@ -33,7 +33,7 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.ori_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def _set_ori_label_font_size(self):
-        ori_label_font_size = self.ori_picker_box.width() // 20
+        ori_label_font_size = self.ori_picker_box.graph_editor.width() // 50
         font = QFont("Cambria", ori_label_font_size, QFont.Weight.Bold)
         font.setUnderline(True)
         self.ori_label.setFont(font)
@@ -89,7 +89,7 @@ class GE_StartPosOriPickerWidget(QWidget):
         )
 
     def resize_GE_start_pos_ori_picker_widget(self):
-        self.current_orientation_display.setFixedWidth(self.ori_picker_box.width() // 3)
+        # self.current_orientation_display.setFixedWidth(self.ori_picker_box.width() // 3)
         button_size = int(self.ori_picker_box.calculate_button_size())
         icon_size = int(button_size * 0.6)
         for button in [self.ccw_button, self.cw_button]:

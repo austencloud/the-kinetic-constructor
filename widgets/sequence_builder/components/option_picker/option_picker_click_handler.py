@@ -20,7 +20,6 @@ class OptionPickerClickHandler:
         self.sequence_builder.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(
             new_beat
         )
-        # set the choose your next option label text to "updating..."
         self.sequence_builder.option_picker.choose_your_next_option_label.set_text_to_loading()
         QApplication.processEvents()
 
