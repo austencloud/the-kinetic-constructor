@@ -57,5 +57,5 @@ class GE_StartPosOriPickerBox(QFrame):
     def calculate_button_size(self) -> int:
         return int((self.start_pos.view.height() // 8))
 
-    def resize_GE_turns_box(self) -> None:
+    def resize_GE_ori_picker_box(self) -> None:
         self.ori_picker_widget.resize_GE_start_pos_ori_picker_widget()

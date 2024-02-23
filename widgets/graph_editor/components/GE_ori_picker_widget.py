@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout
 from PyQt6.QtGui import QIcon, QFont
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QSize
 from constants import IN, OUT, CLOCK, COUNTER
 from typing import TYPE_CHECKING
 
@@ -18,22 +18,29 @@ class GE_StartPosOriPickerWidget(QWidget):
             0  # Assuming 0 is the default orientation index
         )
         self.orientations = [IN, OUT, CLOCK, COUNTER]
-        self.setup_ui()
+        self._setup_orientation_label()
+        self._setup_orientation_control_layout()
+        self._setup_layout()
 
-    def setup_ui(self):
+    def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout()
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        self.setup_orientation_label()
-        self.setup_orientation_control_layout()
+        self.layout.addWidget(self.ori_label, 1)
+        self.layout.addLayout(self.orientation_control_layout, 4)
+        self.layout.addStretch(1)
         self.setLayout(self.layout)
 
-    def setup_orientation_label(self):
-        self.orientation_label = QLabel("Start Orientation")
-        self.orientation_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.orientation_label.setFont(QFont("Cambria", 16, QFont.Weight.Bold))
-        self.layout.addWidget(self.orientation_label)
+    def _setup_orientation_label(self):
+        self.ori_label = QLabel("Start Orientation")
+        self.ori_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-    def setup_orientation_control_layout(self):
+    def _set_ori_label_font_size(self):
+        ori_label_font_size = self.ori_picker_box.width() // 20
+        font = QFont("Cambria", ori_label_font_size, QFont.Weight.Bold)
+        font.setUnderline(True)
+        self.ori_label.setFont(font)
+
+    def _setup_orientation_control_layout(self):
         path = "images/icons"
         self.ccw_button = self.setup_button(f"{path}/rotate_ccw.png", self.rotate_ccw)
         self.current_orientation_display = self.setup_current_orientation_display()
@@ -47,7 +54,6 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.orientation_control_layout.addStretch(1)
         self.orientation_control_layout.addWidget(self.cw_button)
         self.orientation_control_layout.addStretch(5)
-        self.layout.addLayout(self.orientation_control_layout)
 
     def setup_button(self, icon_path, click_function):
         button = QPushButton()
@@ -86,8 +92,9 @@ class GE_StartPosOriPickerWidget(QWidget):
 
     def resize_GE_start_pos_ori_picker_widget(self):
         self.current_orientation_display.setFixedWidth(self.ori_picker_box.width() // 3)
+        button_size = int(self.ori_picker_box.calculate_button_size())
+        icon_size = int(button_size * 0.6)
         for button in [self.ccw_button, self.cw_button]:
-            button.setFixedSize(self.ori_picker_box.calculate_button_size())
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
-        self.setLayout(self.layout)
+            button.setFixedSize(QSize(button_size, button_size))
+            button.setIconSize(QSize(icon_size, icon_size))
+        self._set_ori_label_font_size()

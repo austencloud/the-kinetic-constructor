@@ -28,7 +28,7 @@ class GE_AdjustmentPanel(QFrame):
         for ori_picker in self.start_pos_ori_pickers:
             self.layout.addWidget(ori_picker)
         self.layout.addWidget(self.placeholder_widget)
-        self.update_adjustment_panel()
+        # self.update_adjustment_panel()
 
     def set_turns(self, blue_turns: int, red_turns: int) -> None:
         self.blue_turns_box.turns_widget.display_manager.update_turns_display(
@@ -60,32 +60,48 @@ class GE_AdjustmentPanel(QFrame):
             self.red_start_pos_ori_picker,
         ]
 
-    def resize_GE_adjustment_panel(self):
-        for box in self.turns_boxes:
-            box.resize_GE_turns_box()
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
-        self.setLayout(self.layout)
-        self.placeholder_widget.set_stylesheet()
 
     def update_adjustment_panel(self) -> None:
-        if self.graph_editor.GE_pictograph_view.get_current_pictograph().is_blank:
-            for picker in self.start_pos_ori_pickers:
-                picker.hide()
-            for turns_box in self.turns_boxes:
-                turns_box.hide()
-            self.placeholder_widget.show()
+        pictograph = self.graph_editor.GE_pictograph_view.get_current_pictograph()
+        if pictograph.is_blank:
+            self.show_placeholder_widget()
+            self.hide_start_pos_ori_pickers()
+            self.hide_turns_boxes()
         elif self.graph_editor.GE_pictograph_view.is_start_pos:
-            self.placeholder_widget.hide()
-            for turns_box in self.turns_boxes:
-                turns_box.hide()
-            for picker in self.start_pos_ori_pickers:
-                picker.show()
+            self.hide_placeholder_widget()
+            self.hide_turns_boxes()
+            self.show_start_pos_ori_pickers()
         else:
-            self.placeholder_widget.hide()
-            for picker in self.start_pos_ori_pickers:
+            self.hide_placeholder_widget()
+            self.hide_start_pos_ori_pickers()
+            self.show_turns_boxes()
+
+    def hide_start_pos_ori_pickers(self) -> None:
+        for picker in self.start_pos_ori_pickers:
+            if picker.isVisible():
                 picker.hide()
-            for turns_box in self.turns_boxes:
+
+    def hide_turns_boxes(self) -> None:
+        for turns_box in self.turns_boxes:
+            if turns_box.isVisible():
+                turns_box.hide()
+
+    def show_placeholder_widget(self) -> None:
+        if not self.placeholder_widget.isVisible():
+            self.placeholder_widget.show()
+
+    def hide_placeholder_widget(self) -> None:
+        if self.placeholder_widget.isVisible():
+            self.placeholder_widget.hide()
+
+    def show_start_pos_ori_pickers(self) -> None:
+        for picker in self.start_pos_ori_pickers:
+            if not picker.isVisible():
+                picker.show()
+
+    def show_turns_boxes(self) -> None:
+        for turns_box in self.turns_boxes:
+            if not turns_box.isVisible():
                 turns_box.show()
 
     def update_turns_panel(self, blue_turns: int, red_turns: int) -> None:
@@ -93,3 +109,17 @@ class GE_AdjustmentPanel(QFrame):
         for box in self.turns_boxes:
             box.header_widget.update_turns_box_header()
         self.resize_GE_adjustment_panel()
+
+
+
+    def resize_GE_adjustment_panel(self):
+        for box in self.turns_boxes:
+            box.resize_GE_turns_box()
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
+        self.setLayout(self.layout)
+        self.placeholder_widget.set_stylesheet()
+        self.update_adjustment_panel()
+        for ori_picker_box in self.start_pos_ori_pickers:
+            ori_picker_box.resize_GE_ori_picker_box()
+            
