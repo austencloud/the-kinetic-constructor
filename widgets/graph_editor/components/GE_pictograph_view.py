@@ -68,8 +68,11 @@ class GE_PictographView(PictographView):
         self.setScene(beat)
         if beat.view.is_start_pos:
             self.is_start_pos = True
+        else:
+            self.is_start_pos = False
 
 
 class GE_BlankPictograph(Pictograph):
     def __init__(self, graph_editor: "GraphEditor") -> None:
         super().__init__(graph_editor.main_widget)
+        self.is_blank = True

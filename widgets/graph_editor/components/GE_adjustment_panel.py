@@ -1,7 +1,7 @@
 from Enums.MotionAttributes import Color
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QHBoxLayout
-
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel
+from PyQt6.QtCore import Qt
 from widgets.graph_editor.components.GE_start_pos_ori_picker import (
     GE_StartPosOriPickerBox,
 )
@@ -20,26 +20,33 @@ class GE_AdjustmentPanel(QFrame):
     def setup_layouts(self) -> None:
         self._setup_turns_boxes()
         self._setup_start_pos_ori_pickers()
+        self._setup_placeholder_widget()
         self.layout: QHBoxLayout = QHBoxLayout(self)
-        for box in self.boxes:
+        for box in self.turns_boxes:
             self.layout.addWidget(box)
+        for ori_picker in self.start_pos_ori_pickers:
+            self.layout.addWidget(ori_picker)
+        self.layout.addWidget(self.placeholder_widget)
+        self.update_adjustment_panel()
 
     def set_turns(self, blue_turns: int, red_turns: int) -> None:
-        self.blue_adjustment_box.turns_widget.display_manager.update_turns_display(
+        self.blue_turns_box.turns_widget.display_manager.update_turns_display(
             blue_turns
         )
-        self.red_adjustment_box.turns_widget.display_manager.update_turns_display(
-            red_turns
-        )
+        self.red_turns_box.turns_widget.display_manager.update_turns_display(red_turns)
+
+    def _setup_placeholder_widget(self) -> None:
+        self.placeholder_widget = QLabel(self)
+        self.placeholder_widget.setText("Choose your start position -->")
 
     def _setup_turns_boxes(self) -> None:
-        self.blue_adjustment_box: GE_TurnsBox = GE_TurnsBox(
+        self.blue_turns_box: GE_TurnsBox = GE_TurnsBox(
             self, self.graph_editor.GE_pictograph, Color.BLUE
         )
-        self.red_adjustment_box: GE_TurnsBox = GE_TurnsBox(
+        self.red_turns_box: GE_TurnsBox = GE_TurnsBox(
             self, self.graph_editor.GE_pictograph, Color.RED
         )
-        self.boxes = [self.blue_adjustment_box, self.red_adjustment_box]
+        self.turns_boxes = [self.blue_turns_box, self.red_turns_box]
 
     def _setup_start_pos_ori_pickers(self) -> None:
         self.blue_start_pos_ori_picker = GE_StartPosOriPickerBox(
@@ -54,21 +61,33 @@ class GE_AdjustmentPanel(QFrame):
         ]
 
     def resize_GE_adjustment_panel(self):
-        for box in self.boxes:
+        for box in self.turns_boxes:
             box.resize_GE_turns_box()
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.setLayout(self.layout)
 
-    def update_adjustment_panel_based_on_selected_pictograph(self) -> None:
-        # if the pictograph is a start pos pictograph, hide the turns boxes and show the start pos ori pickers
-        if self.graph_editor.GE_pictograph.view.is_start_pos:
-            for box in self.boxes:
-                box.hide()
+    def update_adjustment_panel(self) -> None:
+        if self.graph_editor.GE_pictograph_view.get_current_pictograph().is_blank:
+            for picker in self.start_pos_ori_pickers:
+                picker.hide()
+            for turns_box in self.turns_boxes:
+                turns_box.hide()
+            self.placeholder_widget.show()
+        elif self.graph_editor.GE_pictograph_view.is_start_pos:
+            self.placeholder_widget.hide()
+            for turns_box in self.turns_boxes:
+                turns_box.hide()
             for picker in self.start_pos_ori_pickers:
                 picker.show()
+        else:
+            for picker in self.start_pos_ori_pickers:
+                picker.hide()
+            self.placeholder_widget.hide()
+            for turns_box in self.turns_boxes:
+                turns_box.show()
 
     def update_turns_panel(self, blue_turns: int, red_turns: int) -> None:
         self.set_turns(blue_turns, red_turns)
-        for box in self.boxes:
+        for box in self.turns_boxes:
             box.header_widget.update_turns_box_header()

@@ -36,7 +36,9 @@ class BeatSelectionManager(QWidget):
                 self.selected_beat_view.beat_frame.sequence_widget.sequence_modifier.graph_editor
             )
             graph_editor.update_GE_pictgraph(self.selected_beat_view.beat)
-            graph_editor.turns_panel.update_turns_panel(blue_turns, red_turns)
+
+            graph_editor.adjustment_panel.update_turns_panel(blue_turns, red_turns)
+            graph_editor.adjustment_panel.update_adjustment_panel()
             self.update()
             self.update_overlay_position()
             self.show()
