@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
-from widgets.graph_editor.components.GE_turns_panel import GE_AdjustmentPanel
-from widgets.graph_editor.components.GE_pictograph import (
+from widgets.graph_editor.components.GE_adjustment_panel import GE_AdjustmentPanel
+from widgets.graph_editor.components.GE_pictograph_view import (
     GE_BlankPictograph,
     GE_PictographView,
 )

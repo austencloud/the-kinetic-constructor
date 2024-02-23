@@ -10,7 +10,7 @@ from .GE_turns_widget import GE_TurnsWidget
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_turns_panel import GE_AdjustmentPanel
+    from widgets.graph_editor.components.GE_adjustment_panel import GE_AdjustmentPanel
     from widgets.pictograph.pictograph import Pictograph
 
 
