@@ -1,13 +1,12 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
-
-from widgets.scroll_area.components.start_pos_picker_pictograph_factory import (
+from ....scroll_area.components.start_pos_picker_pictograph_factory import (
     StartPosPickerPictographFactory,
 )
-from widgets.sequence_builder.components.start_position_picker.choose_your_next_pictograph_label import (
+from ..start_position_picker.choose_your_next_pictograph_label import (
     ChooseYourStartPositionLabel,
 )
-from widgets.sequence_builder.components.start_position_picker.start_pos_frame import (
+from ..start_position_picker.start_pos_frame import (
     StartPosPickerPictographFrame,
 )
 from .start_pos_manager import StartPosManager

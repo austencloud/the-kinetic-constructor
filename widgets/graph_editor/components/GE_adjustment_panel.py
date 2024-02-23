@@ -2,6 +2,7 @@ from Enums.MotionAttributes import Color
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel
 from PyQt6.QtCore import Qt
+from widgets.graph_editor.components.GE_placeholder_text import GE_PlaceHolderText
 from widgets.graph_editor.components.GE_start_pos_ori_picker import (
     GE_StartPosOriPickerBox,
 )
@@ -36,8 +37,7 @@ class GE_AdjustmentPanel(QFrame):
         self.red_turns_box.turns_widget.display_manager.update_turns_display(red_turns)
 
     def _setup_placeholder_widget(self) -> None:
-        self.placeholder_widget = QLabel(self)
-        self.placeholder_widget.setText("Choose your start position -->")
+        self.placeholder_widget = GE_PlaceHolderText(self)
 
     def _setup_turns_boxes(self) -> None:
         self.blue_turns_box: GE_TurnsBox = GE_TurnsBox(
@@ -74,6 +74,7 @@ class GE_AdjustmentPanel(QFrame):
             for turns_box in self.turns_boxes:
                 turns_box.hide()
             self.placeholder_widget.show()
+            self.placeholder_widget.set_stylesheet()
         elif self.graph_editor.GE_pictograph_view.is_start_pos:
             self.placeholder_widget.hide()
             for turns_box in self.turns_boxes:
