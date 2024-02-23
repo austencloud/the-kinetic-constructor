@@ -4,7 +4,9 @@ from Enums.Enums import LetterType
 from constants import OPP, SAME
 from PyQt6.QtCore import Qt
 
-from widgets.scroll_area.components.section_manager.section_widget.components.option_picker_section_header import OptionPickerSectionHeader
+from widgets.scroll_area.components.section_manager.section_widget.components.option_picker_section_header import (
+    OptionPickerSectionHeader,
+)
 from ....scroll_area.components.section_manager.section_widget.components.turns_tab.turns_tab import (
     TurnsTab,
 )
@@ -52,22 +54,12 @@ class OptionPickerSectionWidget(QGroupBox):
         self.header.clicked.connect(self.toggle_section)
         self.layout.addWidget(self.header)
 
-    def resize_section(self) -> None:
-        section_width = int((self.scroll_area.width() - self.SCROLLBAR_WIDTH))
-        if self.letter_type in [LetterType.Type1, LetterType.Type2, LetterType.Type3]:
-            self.setMinimumWidth(section_width)
-            self.setMaximumWidth(section_width)
-        elif self.letter_type in [LetterType.Type4, LetterType.Type5, LetterType.Type6]:
-            self.setMinimumWidth(int(section_width / 3))
-            self.setMaximumWidth(int(section_width / 3))
-
     def toggle_section(self) -> None:
         is_visible = not self.pictograph_frame.isVisible()
         self.pictograph_frame.setVisible(is_visible)
         if self.turns_tab:
             self.turns_tab.setVisible(is_visible)
         self.header.toggle_dropdown_arrow(not is_visible)
-
 
     def reset_section(self, index: int) -> None:
         for pictograph in self.pictographs.values():
@@ -91,9 +83,6 @@ class OptionPickerSectionWidget(QGroupBox):
         for pictograph in self.pictographs.values():
             pictograph.view.setSizePolicy(size_policy)
 
-    def adjust_size(self):
-        self.resize_section()
-
     def add_pictograph(self, pictograph: Pictograph):
         """Add a pictograph widget to the section layout."""
         self.pictographs[
@@ -104,3 +93,12 @@ class OptionPickerSectionWidget(QGroupBox):
         self.pictograph_frame.layout.addWidget(pictograph.view)
         pictograph.view.resize_pictograph_view()
         pictograph.view.show()
+
+    def resize_option_picker_section_widget(self) -> None:
+        section_width = int((self.scroll_area.width()))
+        if self.letter_type in [LetterType.Type1, LetterType.Type2, LetterType.Type3]:
+            self.setMinimumWidth(section_width)
+            self.setMaximumWidth(section_width)
+        elif self.letter_type in [LetterType.Type4, LetterType.Type5, LetterType.Type6]:
+            self.setMinimumWidth(int(section_width / 3))
+            self.setMaximumWidth(int(section_width / 3))

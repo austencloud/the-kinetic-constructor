@@ -113,4 +113,4 @@ class OptionPickerSectionsManager:
             self.initialized = True
         for section in self.sections.values():
             section.show()
-            section.resize_section()
+            section.resize_option_picker_section_widget()
