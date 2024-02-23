@@ -23,7 +23,6 @@ class GE_StartPosOriPickerButtonManager:
         """Create and setup adjustment buttons."""
         self._setup_button_frames()
 
-
     def _setup_button_frames(self) -> None:
         self.left_spacer_frame = QFrame()
         self.right_spacer_frame = QFrame()
@@ -37,4 +36,3 @@ class GE_StartPosOriPickerButtonManager:
         self.positive_buttons_container = QVBoxLayout(self.positive_buttons_frame)
         self.positive_buttons_hbox_layout = QHBoxLayout()
         self.positive_buttons_container.addLayout(self.positive_buttons_hbox_layout)
-

@@ -16,12 +16,12 @@ from widgets.factories.button_factory.buttons.adjust_turns_button import (
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_start_pos_ori_picker import (
+    from widgets.graph_editor.components.GE_start_pos_ori_picker_box import (
         GE_StartPosOriPickerBox,
     )
 
 
-class GE_StartPosOriPickerHeader(QWidget):
+class GE_StartPosOriPickerBoxHeader(QWidget):
     def __init__(self, turns_box: "GE_StartPosOriPickerBox") -> None:
         super().__init__(turns_box)
 

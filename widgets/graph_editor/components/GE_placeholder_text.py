@@ -2,11 +2,12 @@ from PyQt6.QtWidgets import QLabel
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from .GE_adjustment_panel import GE_AdjustmentPanel
 
 
-class GE_PlaceHolderText(QLabel):
+class GE_PlaceHolderTextLabel(QLabel):
     def __init__(self, adjustment_panel: "GE_AdjustmentPanel") -> None:
         super().__init__(adjustment_panel)
         self.option_picker = adjustment_panel
@@ -24,6 +25,6 @@ class GE_PlaceHolderText(QLabel):
 
     def set_stylesheet(self) -> None:
         width = self.option_picker.width()
-        font_size = int(0.15 * width)
+        font_size = int(0.075 * width)
         self.setFont(QFont("Cambria", font_size))
         self.show()
