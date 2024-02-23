@@ -1,6 +1,6 @@
 from Enums.MotionAttributes import Color
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel, QVBoxLayout, QApplication
 from PyQt6.QtCore import Qt
 from widgets.graph_editor.components.GE_placeholder_text import GE_PlaceHolderTextLabel
 from widgets.graph_editor.components.GE_start_pos_ori_picker_box import (
@@ -60,21 +60,23 @@ class GE_AdjustmentPanel(QFrame):
             self.red_start_pos_ori_picker,
         ]
 
-
     def update_adjustment_panel(self) -> None:
         pictograph = self.graph_editor.GE_pictograph_view.get_current_pictograph()
         if pictograph.is_blank:
             self.show_placeholder_widget()
             self.hide_start_pos_ori_pickers()
             self.hide_turns_boxes()
+            QApplication.processEvents()
         elif self.graph_editor.GE_pictograph_view.is_start_pos:
             self.hide_placeholder_widget()
             self.hide_turns_boxes()
             self.show_start_pos_ori_pickers()
+            QApplication.processEvents()
         else:
             self.hide_placeholder_widget()
             self.hide_start_pos_ori_pickers()
             self.show_turns_boxes()
+            QApplication.processEvents()
 
     def hide_start_pos_ori_pickers(self) -> None:
         for picker in self.start_pos_ori_pickers:
@@ -110,8 +112,6 @@ class GE_AdjustmentPanel(QFrame):
             box.header_widget.update_turns_box_header()
         self.resize_GE_adjustment_panel()
 
-
-
     def resize_GE_adjustment_panel(self):
         for box in self.turns_boxes:
             box.resize_GE_turns_box()
@@ -122,4 +122,3 @@ class GE_AdjustmentPanel(QFrame):
         self.update_adjustment_panel()
         for ori_picker_box in self.start_pos_ori_pickers:
             ori_picker_box.resize_GE_ori_picker_box()
-            

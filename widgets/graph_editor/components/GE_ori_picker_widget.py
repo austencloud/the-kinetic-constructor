@@ -14,9 +14,7 @@ class GE_StartPosOriPickerWidget(QWidget):
     def __init__(self, ori_picker_box: "GE_StartPosOriPickerBox"):
         super().__init__()
         self.ori_picker_box = ori_picker_box
-        self.current_orientation_index = (
-            0  # Assuming 0 is the default orientation index
-        )
+        self.current_orientation_index = 0
         self.orientations = [IN, OUT, CLOCK, COUNTER]
         self._setup_orientation_label()
         self._setup_orientation_control_layout()

@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import (
     QFrame,
     QHBoxLayout,
     QVBoxLayout,
+    QApplication,
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
@@ -43,6 +44,7 @@ class GE_TurnsBoxHeader(QWidget):
         else:
             self.turns_box.prop_rot_dir_button_manager.show_prop_rot_dir_buttons()
             self.turns_box.vtg_dir_button_manager.show_vtg_dir_buttons()
+        QApplication.processEvents()
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
