@@ -1,5 +1,5 @@
-from PyQt6.QtCore import Qt, QRectF, QRect
-from PyQt6.QtGui import QFont, QPainter, QIcon, QPixmap
+from PyQt6.QtCore import Qt, QRectF, QRect, QPoint
+from PyQt6.QtGui import QFont, QPainter, QIcon, QPixmap, QScreen
 from typing import TYPE_CHECKING, Union
 from Enums.MotionAttributes import Color
 
@@ -10,7 +10,11 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QPushButton,
     QAbstractButton,
+    QWidget,
+    QApplication,
 )
+
+from widgets.graph_editor.components.GE_turns_box_label import GE_TurnsBoxLabel
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
@@ -21,6 +25,9 @@ class GE_TurnsWidgetDisplayManager:
         self.turns_widget = turns_widget
         self.turns_box = turns_widget.turns_box
         self.setup_display_components()
+        self.turns_display_label.clicked.connect(
+            self.on_turns_label_clicked
+        )  # Connect click event
 
     def setup_display_components(self) -> None:
         self.layout = QVBoxLayout()
@@ -44,11 +51,59 @@ class GE_TurnsWidgetDisplayManager:
         return turns_display_frame
 
     def _setup_turns_display_label(self):
-        turns_display_label = QLabel("0", self.turns_widget)
+        turns_display_label = GE_TurnsBoxLabel("0", self.turns_widget)
         turns_display_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         turns_display_label.setFont(QFont("Arial", 24))  # Larger font size
 
         return turns_display_label
+
+    def on_turns_label_clicked(self):
+        self.show_turns_selection_popup()
+
+    def show_turns_selection_popup(self):
+        popup = QWidget(flags=Qt.WindowType.Popup)
+        popup_layout = QVBoxLayout(popup)
+        popup_layout.setContentsMargins(0, 0, 0, 0)
+        popup.setStyleSheet("background-color: red;")
+
+        turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
+        for value in turns_values:
+            button = QPushButton(value, popup)
+            button.setMaximumSize(self.turns_display_label.size())
+            button.clicked.connect(
+                lambda _, v=value: self.turns_widget.adjustment_manager.direct_set_turns(
+                    float(v) if "." in v else int(v)
+                )
+            )
+            popup_layout.addWidget(button)
+
+        # Find the screen where the application window is located
+        screen = QApplication.screenAt(
+            self.turns_widget.mapToGlobal(self.turns_widget.pos())
+        )
+        if not screen:
+            screen = QApplication.primaryScreen()
+
+        # Calculate position within the screen
+        widget_pos = self.turns_widget.mapToGlobal(self.turns_display_label.pos())
+        screen_geometry = screen.geometry()
+        x_pos = widget_pos.x() - screen_geometry.x()
+        y_pos = widget_pos.y() - screen_geometry.y() + self.turns_display_label.height()
+
+        # Ensure the popup is positioned within the screen bounds
+        x_pos = max(x_pos, screen_geometry.x())
+        y_pos = max(y_pos, screen_geometry.y())
+        x_pos = min(
+            x_pos, screen_geometry.x() + screen_geometry.width() - popup.width()
+        )
+        y_pos = min(
+            y_pos, screen_geometry.y() + screen_geometry.height() - popup.height()
+        )
+
+        global_pos = self.turns_display_label.mapToGlobal(
+            QPoint(0, self.turns_display_label.height())
+        )
+        popup.move(global_pos)
 
     def setup_adjust_buttons_frame(self):
         adjust_buttons_frame = QFrame(self.turns_widget)
@@ -100,7 +155,7 @@ class GE_TurnsWidgetDisplayManager:
 
     def set_turn_display_styles(self) -> None:
         self.turns_display_font_size = int(
-            self.turns_box.turns_panel.graph_editor.width() / 26
+            self.turns_box.turns_panel.graph_editor.width() / 20
         )
         self.turns_display_label.setFont(
             QFont("Arial", self.turns_display_font_size, QFont.Weight.Bold)
@@ -108,7 +163,7 @@ class GE_TurnsWidgetDisplayManager:
         border_radius = (
             min(self.turns_display_label.width(), self.turns_display_label.height()) / 4
         )
-        turn_display_border = int(self.turns_display_label.width() / 26)
+        turn_display_border = int(self.turns_display_label.width() / 20)
 
         # Determine the appropriate color based on the turns box color
         turns_box_color = self.turns_box.color
@@ -138,7 +193,7 @@ class GE_TurnsWidgetDisplayManager:
         )
 
     def set_button_styles(self) -> None:
-        button_size = int(self.turns_box.width() / 2)
+        button_size = int(self.turns_box.width() * 0.45)
 
         for button in self.adjust_buttons:
             button.setMinimumHeight(button_size)
