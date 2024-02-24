@@ -21,16 +21,11 @@ class SequenceModifier(BaseTabWidget):
         self.addTab(self.graph_editor, "Graph Editor")
         self.addTab(self.animator, "Animator")
         self.addTab(self.prop_changer, "Prop Changer")
-
         self.addTab(self.library, "Library")
-
         self.currentChanged.connect(self.resize_sequence_modifier)
 
     def resize_sequence_modifier(self):
-        # self.setMaximumHeight(self.sequence_widget.beat_frame.width() // 2)
         self.setMaximumWidth(self.sequence_widget.beat_frame.width())
         current_widget = self.currentWidget()
-        if current_widget == self.graph_editor:
-            self.graph_editor.resize_graph_editor()
-        elif current_widget == self.animator:
-            self.animator.resize_animator()
+        self.graph_editor.resize_graph_editor()
+        self.animator.resize_animator()
