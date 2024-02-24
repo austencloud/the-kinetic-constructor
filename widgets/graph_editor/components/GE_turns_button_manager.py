@@ -1,8 +1,8 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 from typing import TYPE_CHECKING
 from Enums.Enums import AdjustmentNums, AdjustmentStrs
-from widgets.factories.button_factory.buttons.adjust_turns_button import (
-    AdjustTurnsButton,
+from widgets.factories.button_factory.buttons.codex_adjust_turns_button import (
+    CodexAdjustTurnsButton,
 )
 
 if TYPE_CHECKING:
@@ -13,7 +13,7 @@ class GE_TurnsButtonManager:
     def __init__(self, turns_widget: "GE_TurnsWidget") -> None:
         self.turns_widget = turns_widget
         self.adjustments = [(-1, "-1"), (-0.5, "-0.5"), (0.5, "+0.5"), (1, "+1")]
-        self.adjust_turns_buttons: list[AdjustTurnsButton] = []
+        self.adjust_turns_buttons: list[CodexAdjustTurnsButton] = []
         self.button_factory = (
             self.turns_widget.turns_box.graph_editor.main_widget.button_factory
         )
@@ -41,9 +41,11 @@ class GE_TurnsButtonManager:
 
     def _create_and_add_button(
         self, adjustment: AdjustmentNums, text: AdjustmentStrs
-    ) -> AdjustTurnsButton:
+    ) -> CodexAdjustTurnsButton:
         """Create an adjust turns button and add it to the appropriate layout."""
-        button: AdjustTurnsButton = self.button_factory.create_adjust_turns_button(text)
+        button: CodexAdjustTurnsButton = self.button_factory.create_adjust_turns_button(
+            text
+        )
         button.setContentsMargins(0, 0, 0, 0)
         button.clicked.connect(
             lambda _, adj=adjustment: self.turns_widget.adjustment_manager.adjust_turns(

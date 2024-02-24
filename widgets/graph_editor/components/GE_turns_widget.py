@@ -1,12 +1,7 @@
-from PyQt6.QtWidgets import (
-    QVBoxLayout,
-    QWidget,
-)
+from PyQt6.QtWidgets import QVBoxLayout, QWidget
+from PyQt6.QtCore import QEvent
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from widgets.graph_editor.components.GE_turns_button_manager import (
-    GE_TurnsButtonManager,
-)
 from widgets.graph_editor.components.GE_turns_widget_display_manager import (
     GE_TurnsWidgetDisplayManager,
 )
@@ -53,3 +48,4 @@ class GE_TurnsWidget(QWidget):
     def resize_GE_turns_widget(self) -> None:
         self.display_manager.set_turn_display_styles()
         self.display_manager.set_button_styles()
+

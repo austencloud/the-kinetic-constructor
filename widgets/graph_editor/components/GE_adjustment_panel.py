@@ -1,7 +1,6 @@
 from Enums.MotionAttributes import Color
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel, QVBoxLayout, QApplication
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
 from widgets.graph_editor.components.GE_placeholder_text import GE_PlaceHolderTextLabel
 from widgets.graph_editor.components.GE_start_pos_ori_picker_box import (
     GE_StartPosOriPickerBox,

@@ -11,8 +11,8 @@ from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 
 from Enums.MotionAttributes import Color
-from widgets.factories.button_factory.buttons.adjust_turns_button import (
-    AdjustTurnsButton,
+from widgets.factories.button_factory.buttons.codex_adjust_turns_button import (
+    CodexAdjustTurnsButton,
 )
 
 if TYPE_CHECKING:
@@ -92,7 +92,7 @@ class GE_StartPosOriPickerBoxHeader(QWidget):
         frame.setLayout(layout)
         return frame
 
-    def create_adjust_turns_button(self, text: str) -> AdjustTurnsButton:
-        button = AdjustTurnsButton(self)
+    def create_adjust_turns_button(self, text: str) -> CodexAdjustTurnsButton:
+        button = CodexAdjustTurnsButton(self)
         button.setText(text)
         return button

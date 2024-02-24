@@ -1,19 +1,18 @@
-from PyQt6.QtCore import Qt, QRectF, QRect, QPoint
-from PyQt6.QtGui import QFont, QPainter, QIcon, QPixmap, QScreen, QGuiApplication
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
 from Enums.MotionAttributes import Color
 
 from PyQt6.QtWidgets import (
     QFrame,
-    QLabel,
     QHBoxLayout,
     QVBoxLayout,
     QPushButton,
-    QAbstractButton,
-    QWidget,
-    QApplication,
 )
 
+from widgets.graph_editor.components.GE_adjust_turns_button import (
+    GE_AdjustTurnsButton,
+)
 from widgets.graph_editor.components.GE_turns_box_label import GE_TurnsBoxLabel
 from widgets.graph_editor.components.GE_turns_widget_turns_selection_dialog import (
     GE_TurnsSelectionDialog,
@@ -62,29 +61,30 @@ class GE_TurnsWidgetDisplayManager:
         self.show_turns_selection_dialog()
 
     def show_turns_selection_dialog(self):
-        dialog = GE_TurnsSelectionDialog(self.turns_widget)
-        # Calculate and adjust the position to center the dialog under the turns label
+        self.turns_selection_dialog = GE_TurnsSelectionDialog(self.turns_widget)
         label_rect = self.turns_display_label.geometry()
-        dialog_width = dialog.width()
+        dialog_width = self.turns_selection_dialog.width()
 
-        global_label_pos = self.turns_display_label.mapToGlobal(self.turns_display_label.pos())
+        global_label_pos = self.turns_display_label.mapToGlobal(
+            self.turns_display_label.pos()
+        )
         dialog_x = global_label_pos.x() + (label_rect.width() - dialog_width) / 2
         dialog_y = global_label_pos.y() + label_rect.height()
 
-        dialog.move(int(dialog_x), int(dialog_y))
-        dialog.exec()
+        self.turns_selection_dialog.move(int(dialog_x), int(dialog_y))
+        self.turns_selection_dialog.exec()
 
     def setup_adjust_buttons_frame(self):
         adjust_buttons_frame = QFrame(self.turns_widget)
         self.adjust_buttons_hbox_layout = QHBoxLayout(adjust_buttons_frame)
         self.adjust_buttons_hbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.adjust_buttons_hbox_layout.setContentsMargins(0, 0, 0, 0)
-        self.increment_button = SquareAdjustButton(
+        self.increment_button = GE_AdjustTurnsButton(
             "images/icons/plus.png",
             "images/icons/plus_disabled.png",
             self.turns_widget.turns_box,
         )
-        self.decrement_button = SquareAdjustButton(
+        self.decrement_button = GE_AdjustTurnsButton(
             "images/icons/minus.png",
             "images/icons/minus_disabled.png",
             self.turns_widget.turns_box,
@@ -172,53 +172,3 @@ class GE_TurnsWidgetDisplayManager:
 
     def update_turns_display(self, turns: Union[int, float]) -> None:
         self.turns_display_label.setText(str(turns))
-
-
-class SquareAdjustButton(QAbstractButton):
-    def __init__(self, icon_path, disabled_icon_path, parent=None):
-        super().__init__(parent)
-        self.icon_pixmap = QPixmap(icon_path)
-        self.disabled_icon_pixmap = QPixmap(disabled_icon_path)
-        self.hovered = False
-        self.enabled = True  # Initially enabled
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-
-        current_pixmap = self.icon_pixmap if self.enabled else self.disabled_icon_pixmap
-
-        button_color = (
-            Qt.GlobalColor.gray
-            if not self.enabled
-            else (Qt.GlobalColor.lightGray if self.hovered else Qt.GlobalColor.white)
-        )
-        painter.setBrush(button_color)
-
-        rect = QRect(0, 0, self.width(), self.height())
-        painter.fillRect(rect, painter.brush())
-
-        # Calculate the pixmap size and position
-        icon_size = int(
-            min(self.width(), self.height()) * 0.6
-        )  # Assuming a square button for simplicity
-        x = int((self.width() - icon_size) / 2)
-        y = int((self.height() - icon_size) / 2)
-        icon_rect = QRect(x, y, icon_size, icon_size)
-
-        # Ensure using QRect for the target rectangle
-        painter.drawPixmap(icon_rect, current_pixmap)
-
-    def enterEvent(self, event):
-        if self.enabled:
-            self.hovered = True
-            self.update()
-
-    def leaveEvent(self, event):
-        self.hovered = False
-        self.update()
-
-    def setEnabled(self, enabled):
-        super().setEnabled(enabled)
-        self.enabled = enabled
-        self.update()

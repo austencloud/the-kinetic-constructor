@@ -1,7 +1,7 @@
 import os
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QEvent
 from profiler import Profiler
 from settings_manager import SettingsManager
 from utilities.window_geometry_manager import WindowGeometryManager
@@ -32,6 +32,9 @@ class MainWindow(QMainWindow):
     def closeEvent(self, event):
         self.settings_manager.save_settings()
         super().closeEvent(event)
+        QApplication.instance().installEventFilter(self)
+
+
 
 
 def main() -> None:

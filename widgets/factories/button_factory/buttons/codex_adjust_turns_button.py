@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     pass
 
 
-class AdjustTurnsButton(QPushButton):
+class CodexAdjustTurnsButton(QPushButton):
     def __init__(self) -> None:
         super().__init__()
 
