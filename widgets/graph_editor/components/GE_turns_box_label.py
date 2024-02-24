@@ -1,10 +1,9 @@
-from PyQt6.QtWidgets import QLabel, QWidget, QVBoxLayout, QPushButton, QFrame
-from PyQt6.QtCore import pyqtSignal, Qt, QRect
-from PyQt6.QtGui import QFont, QPainter, QIcon, QPixmap
-from typing import TYPE_CHECKING, Union
+from PyQt6.QtWidgets import QLabel
+from PyQt6.QtCore import pyqtSignal
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
+    pass
 
 
 class GE_TurnsBoxLabel(QLabel):

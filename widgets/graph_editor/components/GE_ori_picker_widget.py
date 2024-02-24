@@ -22,8 +22,11 @@ class GE_StartPosOriPickerWidget(QWidget):
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout()
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.layout.setAlignment(
+            Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter
+        )
         self.layout.addWidget(self.ori_label, 1)
+        self.layout.addWidget(self.current_orientation_display, 1)
         self.layout.addLayout(self.orientation_control_layout, 4)
         self.layout.addStretch(1)
         self.setLayout(self.layout)
@@ -43,13 +46,9 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.ccw_button = self.setup_button(f"{path}/rotate_ccw.png", self.rotate_ccw)
         self.current_orientation_display = self.setup_current_orientation_display()
         self.cw_button = self.setup_button(f"{path}/rotate_cw.png", self.rotate_cw)
-
         self.orientation_control_layout = QHBoxLayout()
         self.orientation_control_layout.addStretch(5)
         self.orientation_control_layout.addWidget(self.ccw_button)
-        self.orientation_control_layout.addStretch(1)
-        self.orientation_control_layout.addWidget(self.current_orientation_display)
-        self.orientation_control_layout.addStretch(1)
         self.orientation_control_layout.addWidget(self.cw_button)
         self.orientation_control_layout.addStretch(5)
 
@@ -68,8 +67,6 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.current_orientation_display.setFont(
             QFont("Cambria", 20, QFont.Weight.Bold)
         )
-        # set fixed width to 1/3 the width of ori picker box
-        self.current_orientation_display.setFixedWidth(self.ori_picker_box.width() // 3)
         return self.current_orientation_display
 
     def rotate_cw(self):

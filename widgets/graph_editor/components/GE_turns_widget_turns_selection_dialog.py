@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QDialog, QHBoxLayout, QPushButton
-from PyQt6.QtCore import Qt, QRect, QSize
-from PyQt6.QtGui import QFont, QWindow, QGuiApplication
+from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Color
 from constants import HEX_BLUE, HEX_RED
@@ -64,6 +64,5 @@ class GE_TurnsSelectionDialog(QDialog):
         self.adjustSize()
 
     def select_turns(self, value):
-        print(f"Selected turns: {value}")
-        # Implement the logic to handle turn selection
+        self.turns_widget.adjustment_manager.direct_set_turns(value)
         self.accept()
