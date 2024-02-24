@@ -26,6 +26,5 @@ class SequenceModifier(BaseTabWidget):
 
     def resize_sequence_modifier(self):
         self.setMaximumWidth(self.sequence_widget.beat_frame.width())
-        current_widget = self.currentWidget()
         self.graph_editor.resize_graph_editor()
         self.animator.resize_animator()

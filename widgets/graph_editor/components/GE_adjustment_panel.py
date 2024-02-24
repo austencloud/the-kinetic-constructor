@@ -110,15 +110,13 @@ class GE_AdjustmentPanel(QFrame):
         self.set_turns(blue_turns, red_turns)
         for box in self.turns_boxes:
             box.header_widget.update_turns_box_header()
-        # if the ori picker is visible, update the ori picker
-        # for ori_picker_box in self.start_pos_ori_pickers:
-        #     if ori_picker_box.isVisible():
-        #         ori_picker_box.header._setup_header_label()
 
     def resize_GE_adjustment_panel(self):
         self.setMinimumWidth(self.blue_turns_box.width() + self.red_turns_box.width())
-
         for box in self.turns_boxes:
+            box.setMinimumWidth(
+                int((self.graph_editor.width() - self.graph_editor.GE_pictograph_view.width()) / 2)
+            )
             box.resize_GE_turns_box()
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)

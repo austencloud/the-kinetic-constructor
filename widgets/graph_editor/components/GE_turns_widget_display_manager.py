@@ -1,19 +1,19 @@
-from PyQt6.QtWidgets import QFrame, QLabel, QHBoxLayout, QVBoxLayout
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
+from PyQt6.QtCore import Qt, QRectF, QRect
+from PyQt6.QtGui import QFont, QPainter, QIcon, QPixmap
 from typing import TYPE_CHECKING, Union
-
 from Enums.MotionAttributes import Color
 
+from PyQt6.QtWidgets import (
+    QFrame,
+    QLabel,
+    QHBoxLayout,
+    QVBoxLayout,
+    QPushButton,
+    QAbstractButton,
+)
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
-    from widgets.graph_editor.components.GE_turns_box import GE_TurnsBox
-
-from PyQt6.QtWidgets import QLabel, QVBoxLayout, QPushButton, QHBoxLayout, QFrame
-from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QAbstractButton
 
 
 class GE_TurnsWidgetDisplayManager:
@@ -33,8 +33,8 @@ class GE_TurnsWidgetDisplayManager:
         self.toggle_switch = self.setup_toggle_switch()
 
         self.layout.addWidget(self.turns_display_frame)
-        self.layout.addWidget(self.toggle_switch)
         self.layout.addWidget(self.adjust_buttons_frame)
+        self.layout.addWidget(self.toggle_switch)
 
     def setup_turns_display_frame(self):
         turns_display_frame = QFrame(self.turns_widget)
@@ -55,8 +55,16 @@ class GE_TurnsWidgetDisplayManager:
         self.adjust_buttons_hbox_layout = QHBoxLayout(adjust_buttons_frame)
         self.adjust_buttons_hbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.adjust_buttons_hbox_layout.setContentsMargins(0, 0, 0, 0)
-        self.increment_button = RoundAdjustButton("+1", self.turns_widget.turns_box)
-        self.decrement_button = RoundAdjustButton("-1", self.turns_widget.turns_box)
+        self.increment_button = SquareAdjustButton(
+            "images/icons/plus.png",
+            "images/icons/plus_disabled.png",
+            self.turns_widget.turns_box,
+        )
+        self.decrement_button = SquareAdjustButton(
+            "images/icons/minus.png",
+            "images/icons/minus_disabled.png",
+            self.turns_widget.turns_box,
+        )
 
         self.adjust_buttons_hbox_layout.addWidget(self.decrement_button)
         self.adjust_buttons_hbox_layout.addWidget(self.increment_button)
@@ -82,8 +90,6 @@ class GE_TurnsWidgetDisplayManager:
         self.toggle_switch.setText(
             "Toggle to Whole Turns" if is_half_turns else "Toggle to Half Turns"
         )
-        self.increment_button.set_text("+0.5" if is_half_turns else "+1")
-        self.decrement_button.set_text("-0.5" if is_half_turns else "-1")
 
     def get_current_turns_value(self) -> int:
         return (
@@ -132,7 +138,7 @@ class GE_TurnsWidgetDisplayManager:
         )
 
     def set_button_styles(self) -> None:
-        button_size = int(self.turns_box.turns_panel.width() / 5)
+        button_size = int(self.turns_box.width() / 2)
 
         for button in self.adjust_buttons:
             button.setMinimumHeight(button_size)
@@ -144,64 +150,51 @@ class GE_TurnsWidgetDisplayManager:
         self.turns_display_label.setText(str(turns))
 
 
-from PyQt6.QtWidgets import QAbstractButton
-from PyQt6.QtGui import QPainter, QColor, QBrush, QPen, QFont
-from PyQt6.QtCore import Qt, QRectF
-
-
-class RoundAdjustButton(QAbstractButton):
-    def __init__(self, text, turns_box: "GE_TurnsBox"):
-        super().__init__(turns_box)
-        self.text = text
-        self.turns_box = turns_box
-        self.hovered = False  # Track hover state
-
-    def set_hovered(self, state):
-        self.hovered = state
-        self.update()  # Trigger a repaint when the hover state changes
+class SquareAdjustButton(QAbstractButton):
+    def __init__(self, icon_path, disabled_icon_path, parent=None):
+        super().__init__(parent)
+        self.icon_pixmap = QPixmap(icon_path)
+        self.disabled_icon_pixmap = QPixmap(disabled_icon_path)
+        self.hovered = False
+        self.enabled = True  # Initially enabled
 
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
-        # Set the button color based on hover state
-        button_color = QColor(220, 220, 220) if self.hovered else QColor(255, 255, 255)
-        border_color = self.get_border_color()
+        current_pixmap = self.icon_pixmap if self.enabled else self.disabled_icon_pixmap
+
+        button_color = (
+            Qt.GlobalColor.gray
+            if not self.enabled
+            else (Qt.GlobalColor.lightGray if self.hovered else Qt.GlobalColor.white)
+        )
         painter.setBrush(button_color)
-        painter.setPen(QPen(border_color, 2))  # Border thickness
 
-        # Draw the button as a circle
-        painter.drawEllipse(
-            0, 0, self.width() - 1, self.height() - 1
-        )  # Subtract 1 to ensure the border is fully visible
+        rect = QRect(0, 0, self.width(), self.height())
+        painter.fillRect(rect, painter.brush())
 
-        # Set text color and font
-        painter.setPen(Qt.GlobalColor.black)
-        painter.setFont(QFont("Arial", 12))
+        # Calculate the pixmap size and position
+        icon_size = int(
+            min(self.width(), self.height()) * 0.75
+        )  # Assuming a square button for simplicity
+        x = int((self.width() - icon_size) / 2)
+        y = int((self.height() - icon_size) / 2)
+        icon_rect = QRect(x, y, icon_size, icon_size)
 
-        # Draw text in the center
-        painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, self.text)
-
-    def set_text(self, text):
-        self.text = text
-        self.update()
-
-    def sizeHint(self):
-        return QSize(40, 40)  # Provide a default size hint for layout purposes
+        # Ensure using QRect for the target rectangle
+        painter.drawPixmap(icon_rect, current_pixmap)
 
     def enterEvent(self, event):
-        self.hovered = True
-        self.update()  # Trigger repaint
+        if self.enabled:
+            self.hovered = True
+            self.update()
 
     def leaveEvent(self, event):
         self.hovered = False
-        self.update()  # Trigger repaint
+        self.update()
 
-    def get_border_color(self):
-        turns_box_color = self.turns_box.color
-        if turns_box_color == Color.RED:
-            return QColor("#ED1C24")
-        elif turns_box_color == Color.BLUE:
-            return QColor("#2E3192")
-        else:
-            return QColor(0, 0, 0)
+    def setEnabled(self, enabled):
+        super().setEnabled(enabled)
+        self.enabled = enabled
+        self.update()
