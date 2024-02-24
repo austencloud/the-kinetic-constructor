@@ -3,6 +3,8 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
 
+from Enums.MotionAttributes import Color
+
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
@@ -45,17 +47,7 @@ class GE_TurnsWidgetDisplayManager:
         turns_display_label = QLabel("0", self.turns_widget)
         turns_display_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         turns_display_label.setFont(QFont("Arial", 24))  # Larger font size
-        turns_display_label.setStyleSheet(
-            """
-            QLabel {
-                background-color: #ffffff;
-                border: 2px solid #000000;
-                border-radius: 10px;
-                padding: 10px;
-                font-weight: bold;
-            }
-        """
-        )
+
         return turns_display_label
 
     def setup_adjust_buttons_frame(self):
@@ -63,8 +55,8 @@ class GE_TurnsWidgetDisplayManager:
         self.adjust_buttons_hbox_layout = QHBoxLayout(adjust_buttons_frame)
         self.adjust_buttons_hbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.adjust_buttons_hbox_layout.setContentsMargins(0, 0, 0, 0)
-        self.increment_button = RoundButton("+1 Turn", self.turns_widget)
-        self.decrement_button = RoundButton("-1 Turn", self.turns_widget)
+        self.increment_button = RoundAdjustButton("+1", self.turns_widget.turns_box)
+        self.decrement_button = RoundAdjustButton("-1", self.turns_widget.turns_box)
 
         self.adjust_buttons_hbox_layout.addWidget(self.decrement_button)
         self.adjust_buttons_hbox_layout.addWidget(self.increment_button)
@@ -90,8 +82,8 @@ class GE_TurnsWidgetDisplayManager:
         self.toggle_switch.setText(
             "Toggle to Whole Turns" if is_half_turns else "Toggle to Half Turns"
         )
-        self.increment_button.setText("+0.5 Turn" if is_half_turns else "+1 Turn")
-        self.decrement_button.setText("-0.5 Turn" if is_half_turns else "-1 Turn")
+        self.increment_button.set_text("+0.5" if is_half_turns else "+1")
+        self.decrement_button.set_text("-0.5" if is_half_turns else "-1")
 
     def get_current_turns_value(self) -> int:
         return (
@@ -111,10 +103,20 @@ class GE_TurnsWidgetDisplayManager:
             min(self.turns_display_label.width(), self.turns_display_label.height()) / 4
         )
         turn_display_border = int(self.turns_display_label.width() / 26)
+
+        # Determine the appropriate color based on the turns box color
+        turns_box_color = self.turns_box.color
+        if turns_box_color == Color.RED:
+            border_color = "#ED1C24"
+        elif turns_box_color == Color.BLUE:
+            border_color = "#2E3192"
+        else:
+            border_color = "black"
+
         self.turns_display_label.setStyleSheet(
             f"""
             QLabel {{
-                border: {turn_display_border}px solid black;
+                border: {turn_display_border}px solid {border_color};
                 border-radius: {border_radius}px;
                 background-color: white;
                 padding-left: 2px; /* add some padding on the left for the text */
@@ -130,8 +132,7 @@ class GE_TurnsWidgetDisplayManager:
         )
 
     def set_button_styles(self) -> None:
-        # each button should be 40% of the width of the turns box and equal height
-        button_size = int(self.turns_box.turns_panel.width() / 4)
+        button_size = int(self.turns_box.turns_panel.width() / 5)
 
         for button in self.adjust_buttons:
             button.setMinimumHeight(button_size)
@@ -148,10 +149,11 @@ from PyQt6.QtGui import QPainter, QColor, QBrush, QPen, QFont
 from PyQt6.QtCore import Qt, QRectF
 
 
-class RoundButton(QAbstractButton):
-    def __init__(self, text, parent=None):
-        super().__init__(parent)
+class RoundAdjustButton(QAbstractButton):
+    def __init__(self, text, turns_box: "GE_TurnsBox"):
+        super().__init__(turns_box)
         self.text = text
+        self.turns_box = turns_box
         self.hovered = False  # Track hover state
 
     def set_hovered(self, state):
@@ -164,7 +166,7 @@ class RoundButton(QAbstractButton):
 
         # Set the button color based on hover state
         button_color = QColor(220, 220, 220) if self.hovered else QColor(255, 255, 255)
-        border_color = QColor(0, 0, 0)
+        border_color = self.get_border_color()
         painter.setBrush(button_color)
         painter.setPen(QPen(border_color, 2))  # Border thickness
 
@@ -180,6 +182,10 @@ class RoundButton(QAbstractButton):
         # Draw text in the center
         painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, self.text)
 
+    def set_text(self, text):
+        self.text = text
+        self.update()
+
     def sizeHint(self):
         return QSize(40, 40)  # Provide a default size hint for layout purposes
 
@@ -190,3 +196,12 @@ class RoundButton(QAbstractButton):
     def leaveEvent(self, event):
         self.hovered = False
         self.update()  # Trigger repaint
+
+    def get_border_color(self):
+        turns_box_color = self.turns_box.color
+        if turns_box_color == Color.RED:
+            return QColor("#ED1C24")
+        elif turns_box_color == Color.BLUE:
+            return QColor("#2E3192")
+        else:
+            return QColor(0, 0, 0)
