@@ -89,7 +89,6 @@ class GE_StartPosOriPickerWidget(QWidget):
         )
 
     def resize_GE_start_pos_ori_picker_widget(self):
-        # self.current_orientation_display.setFixedWidth(self.ori_picker_box.width() // 3)
         button_size = int(self.ori_picker_box.calculate_button_size())
         icon_size = int(button_size * 0.6)
         for button in [self.ccw_button, self.cw_button]:
