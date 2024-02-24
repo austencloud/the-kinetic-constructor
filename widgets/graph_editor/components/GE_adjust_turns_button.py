@@ -3,7 +3,7 @@ from PyQt6.QtGui import QPainter, QPixmap
 from PyQt6.QtWidgets import QAbstractButton
 
 
-class GE_DirectSetTurnsButton(QAbstractButton):
+class GE_AdjustTurnsButton(QAbstractButton):
     def __init__(self, icon_path, disabled_icon_path, parent=None):
         super().__init__(parent)
         self.icon_pixmap = QPixmap(icon_path)

@@ -10,7 +10,9 @@ from PyQt6.QtWidgets import (
     QPushButton,
 )
 
-from widgets.graph_editor.components.GE_direct_set_turns_button import GE_DirectSetTurnsButton
+from widgets.graph_editor.components.GE_adjust_turns_button import (
+    GE_AdjustTurnsButton,
+)
 from widgets.graph_editor.components.GE_turns_box_label import GE_TurnsBoxLabel
 from widgets.graph_editor.components.GE_turns_widget_turns_selection_dialog import (
     GE_TurnsSelectionDialog,
@@ -77,12 +79,12 @@ class GE_TurnsWidgetDisplayManager:
         self.adjust_buttons_hbox_layout = QHBoxLayout(adjust_buttons_frame)
         self.adjust_buttons_hbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.adjust_buttons_hbox_layout.setContentsMargins(0, 0, 0, 0)
-        self.increment_button = GE_DirectSetTurnsButton(
+        self.increment_button = GE_AdjustTurnsButton(
             "images/icons/plus.png",
             "images/icons/plus_disabled.png",
             self.turns_widget.turns_box,
         )
-        self.decrement_button = GE_DirectSetTurnsButton(
+        self.decrement_button = GE_AdjustTurnsButton(
             "images/icons/minus.png",
             "images/icons/minus_disabled.png",
             self.turns_widget.turns_box,
@@ -170,5 +172,3 @@ class GE_TurnsWidgetDisplayManager:
 
     def update_turns_display(self, turns: Union[int, float]) -> None:
         self.turns_display_label.setText(str(turns))
-
-
