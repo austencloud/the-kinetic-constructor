@@ -39,7 +39,9 @@ class BeatSelectionManager(QWidget):
 
             graph_editor.adjustment_panel.update_turns_panel(blue_turns, red_turns)
             graph_editor.adjustment_panel.update_adjustment_panel()
+            self.update()
             self.update_overlay_position()
+            self.show()
 
     def deselect_beat(self):
         if self.selected_beat_view:
