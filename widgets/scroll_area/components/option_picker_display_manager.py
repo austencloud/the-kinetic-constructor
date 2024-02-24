@@ -1,7 +1,8 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
 
-from widgets.pictograph.pictograph import Pictograph
+from widgets.pictograph.pictograph import Pictograph, PictographView
+from PyQt6.QtWidgets import QApplication
 
 from Enums.Enums import LetterType
 
@@ -34,7 +35,6 @@ class OptionPickerDisplayManager:
             ordered_pictographs = self.get_ordered_pictographs_for_section(letter_type)
             for index, (key, pictograph) in enumerate(ordered_pictographs.items()):
                 self.add_pictograph_to_layout(pictograph, index)
-
     def add_pictograph_to_layout(self, pictograph: Pictograph, index: int):
         row, col = divmod(index, self.COLUMN_COUNT)
         letter_type = self.scroll_area.sections_manager.get_pictograph_letter_type(
