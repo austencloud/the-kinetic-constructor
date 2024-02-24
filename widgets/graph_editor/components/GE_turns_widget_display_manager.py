@@ -1,5 +1,5 @@
 from PyQt6.QtCore import Qt, QRectF, QRect, QPoint
-from PyQt6.QtGui import QFont, QPainter, QIcon, QPixmap, QScreen
+from PyQt6.QtGui import QFont, QPainter, QIcon, QPixmap, QScreen, QGuiApplication
 from typing import TYPE_CHECKING, Union
 from Enums.MotionAttributes import Color
 
@@ -15,6 +15,9 @@ from PyQt6.QtWidgets import (
 )
 
 from widgets.graph_editor.components.GE_turns_box_label import GE_TurnsBoxLabel
+from widgets.graph_editor.components.GE_turns_widget_turns_selection_dialog import (
+    GE_TurnsSelectionDialog,
+)
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
@@ -25,9 +28,7 @@ class GE_TurnsWidgetDisplayManager:
         self.turns_widget = turns_widget
         self.turns_box = turns_widget.turns_box
         self.setup_display_components()
-        self.turns_display_label.clicked.connect(
-            self.on_turns_label_clicked
-        )  # Connect click event
+        self.turns_display_label.clicked.connect(self.on_turns_label_clicked)
 
     def setup_display_components(self) -> None:
         self.layout = QVBoxLayout()
@@ -58,52 +59,20 @@ class GE_TurnsWidgetDisplayManager:
         return turns_display_label
 
     def on_turns_label_clicked(self):
-        self.show_turns_selection_popup()
+        self.show_turns_selection_dialog()
 
-    def show_turns_selection_popup(self):
-        popup = QWidget(flags=Qt.WindowType.Popup)
-        popup_layout = QVBoxLayout(popup)
-        popup_layout.setContentsMargins(0, 0, 0, 0)
-        popup.setStyleSheet("background-color: red;")
+    def show_turns_selection_dialog(self):
+        dialog = GE_TurnsSelectionDialog(self.turns_widget)
+        # Calculate and adjust the position to center the dialog under the turns label
+        label_rect = self.turns_display_label.geometry()
+        dialog_width = dialog.width()
 
-        turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
-        for value in turns_values:
-            button = QPushButton(value, popup)
-            button.setMaximumSize(self.turns_display_label.size())
-            button.clicked.connect(
-                lambda _, v=value: self.turns_widget.adjustment_manager.direct_set_turns(
-                    float(v) if "." in v else int(v)
-                )
-            )
-            popup_layout.addWidget(button)
+        global_label_pos = self.turns_display_label.mapToGlobal(self.turns_display_label.pos())
+        dialog_x = global_label_pos.x() + (label_rect.width() - dialog_width) / 2
+        dialog_y = global_label_pos.y() + label_rect.height()
 
-        # Find the screen where the application window is located
-        screen = QApplication.screenAt(
-            self.turns_widget.mapToGlobal(self.turns_widget.pos())
-        )
-        if not screen:
-            screen = QApplication.primaryScreen()
-
-        # Calculate position within the screen
-        widget_pos = self.turns_widget.mapToGlobal(self.turns_display_label.pos())
-        screen_geometry = screen.geometry()
-        x_pos = widget_pos.x() - screen_geometry.x()
-        y_pos = widget_pos.y() - screen_geometry.y() + self.turns_display_label.height()
-
-        # Ensure the popup is positioned within the screen bounds
-        x_pos = max(x_pos, screen_geometry.x())
-        y_pos = max(y_pos, screen_geometry.y())
-        x_pos = min(
-            x_pos, screen_geometry.x() + screen_geometry.width() - popup.width()
-        )
-        y_pos = min(
-            y_pos, screen_geometry.y() + screen_geometry.height() - popup.height()
-        )
-
-        global_pos = self.turns_display_label.mapToGlobal(
-            QPoint(0, self.turns_display_label.height())
-        )
-        popup.move(global_pos)
+        dialog.move(int(dialog_x), int(dialog_y))
+        dialog.exec()
 
     def setup_adjust_buttons_frame(self):
         adjust_buttons_frame = QFrame(self.turns_widget)
@@ -231,7 +200,7 @@ class SquareAdjustButton(QAbstractButton):
 
         # Calculate the pixmap size and position
         icon_size = int(
-            min(self.width(), self.height()) * 0.75
+            min(self.width(), self.height()) * 0.6
         )  # Assuming a square button for simplicity
         x = int((self.width() - icon_size) / 2)
         y = int((self.height() - icon_size) / 2)
