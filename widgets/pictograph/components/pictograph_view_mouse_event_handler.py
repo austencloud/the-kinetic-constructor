@@ -1,8 +1,8 @@
 from objects.arrow.arrow import Arrow
 from objects.prop.prop import Prop
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
-
+from PyQt6.QtWidgets import QGraphicsSceneMouseEvent, QGraphicsScene
+from PyQt6.QtGui import QMouseEvent
 if TYPE_CHECKING:
     from widgets.pictograph.components.pictograph_view import PictographView
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
@@ -10,22 +10,26 @@ from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 class PictographViewMouseEventHandler:
     def __init__(self, pictograph_view: "PictographView") -> None:
+        self.pictograph_view = pictograph_view
         self.pictograph = pictograph_view.pictograph
 
-    def handle_mouse_press(self, event: "QGraphicsSceneMouseEvent") -> None:
+    def handle_mouse_press(self, event: "QMouseEvent") -> None:
         if self.pictograph.check.is_in_sequence_builder():
             self.pictograph.scroll_area.sequence_builder.option_click_handler.on_option_clicked(
                 self.pictograph
             )
             return
-        scene_pos = event.scenePos()
-        items_at_pos = self.pictograph.items(scene_pos)
+        widget_pos = event.pos()
+        scene_pos = self.pictograph_view.mapToScene(
+            widget_pos
+        )  # Convert widget coordinates to scene coordinates
+        items_at_pos = self.pictograph_view.scene().items(scene_pos)
 
         arrow = next((item for item in items_at_pos if isinstance(item, Arrow)), None)
         if arrow:
             self.pictograph.selected_arrow = arrow
-            self.pictograph.dragged_arrow = arrow
-            self.pictograph.dragged_arrow.mousePressEvent(event)
+            # self.pictograph.dragged_arrow = arrow
+            # self.pictograph.dragged_arrow.mousePressEvent(event)
             arrow.setSelected(True)
             self.pictograph.update()
         else:
@@ -57,5 +61,3 @@ class PictographViewMouseEventHandler:
             prop.setSelected(False)
         self.dragged_prop = None
         self.dragged_arrow = None
-
-
