@@ -56,17 +56,12 @@ class GE_TurnsBoxHeader(QWidget):
         self.layout.setSpacing(0)
 
     def _add_widgets(self):
-        self.top_hbox.addStretch(3)
-
+        self.top_hbox.addStretch(1)
         self.top_hbox.addWidget(self.header_label)
-
-        self.top_hbox.addStretch(3)
+        self.top_hbox.addStretch(1)
         self.bottom_hbox.addWidget(self.separator)
 
-    def resize_dir_buttons(self) -> None:
-        """This method sets the button size to the same size as the header label."""
-        self.turns_box.prop_rot_dir_button_manager.resize_prop_rot_dir_buttons()
-        self.turns_box.vtg_dir_button_manager.resize_vtg_dir_buttons()
+
 
     def create_separator(self) -> QFrame:
         separator = QFrame(self)

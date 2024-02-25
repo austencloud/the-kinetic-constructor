@@ -47,3 +47,4 @@ class GE_TurnsWidget(QWidget):
     def resize_GE_turns_widget(self) -> None:
         self.display_manager.set_turn_display_styles()
         self.display_manager.set_button_styles()
+        self.display_manager.resize_dir_buttons()

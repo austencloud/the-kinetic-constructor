@@ -162,6 +162,7 @@ class GE_TurnsWidgetDisplayManager:
         self.turns_display_label.setMaximumWidth(
             int(self.turns_box.turns_panel.width() / 6)
         )
+        
 
     def set_button_styles(self) -> None:
         button_size = int(self.turns_box.width() * 0.45)
@@ -174,3 +175,8 @@ class GE_TurnsWidgetDisplayManager:
 
     def update_turns_display(self, turns: Union[int, float]) -> None:
         self.turns_display_label.setText(str(turns))
+
+    def resize_dir_buttons(self) -> None:
+        """This method sets the button size to the same size as the header label."""
+        self.turns_box.prop_rot_dir_button_manager.resize_prop_rot_dir_buttons()
+        self.turns_box.vtg_dir_button_manager.resize_vtg_dir_buttons()
