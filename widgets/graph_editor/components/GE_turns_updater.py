@@ -65,9 +65,8 @@ class GE_TurnsUpdater:
             LetterType.Type2,
             LetterType.Type3,
         ]:
-            motion.prop_rot_dir = self._determine_prop_rot_dir_for_type2_type3(
-                other_motion
-            )
+            prop_rot_dir = self._determine_prop_rot_dir_for_type2_type3(other_motion)
+            motion.prop_rot_dir = prop_rot_dir
         elif GE_pictograph.letter_type in [
             LetterType.Type4,
             LetterType.Type5,
