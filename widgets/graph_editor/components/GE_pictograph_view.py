@@ -27,8 +27,10 @@ class GE_PictographView(PictographView):
         self.setFrameShape(PictographView.Shape.Box)
 
     def resize_GE_pictograph_view(self):
-        self.setMinimumHeight(int(self.GE.height() * 0.99))
-        self.setMinimumWidth(int(self.GE.height() * 0.99))
+        container_height = self.GE.GE_pictograph_container.height()
+        # This is not the most elegant way to do this.
+        self.setMinimumHeight(int(container_height * 0.99)) 
+        self.setMinimumWidth(int(container_height * 0.99))
 
         if self.scene():
             self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)

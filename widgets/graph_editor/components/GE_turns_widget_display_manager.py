@@ -30,18 +30,14 @@ class GE_TurnsWidgetDisplayManager:
         self.turns_display_label.clicked.connect(self.on_turns_label_clicked)
 
     def setup_display_components(self) -> None:
-        self.layout = QVBoxLayout()
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.turns_widget.setLayout(self.layout)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.turns_display_frame = self.setup_turns_display_frame()
         self.adjust_buttons_frame = self.setup_adjust_buttons_frame()
         self.toggle_switch = self.setup_toggle_switch()
 
-        self.layout.addWidget(self.turns_display_frame)
-        self.layout.addWidget(self.adjust_buttons_frame)
-        self.layout.addWidget(self.toggle_switch)
+        self.turns_widget.layout.addWidget(self.turns_display_frame)
+        self.turns_widget.layout.addWidget(self.adjust_buttons_frame)
+        self.turns_widget.layout.addWidget(self.toggle_switch)
 
     def setup_turns_display_frame(self):
         turns_display_frame = QFrame(self.turns_widget)
@@ -80,13 +76,11 @@ class GE_TurnsWidgetDisplayManager:
         self.adjust_buttons_hbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.adjust_buttons_hbox_layout.setContentsMargins(0, 0, 0, 0)
         self.increment_button = GE_AdjustTurnsButton(
-            "images/icons/plus.png",
-            "images/icons/plus_disabled.png",
+            "images/icons/plus.svg",
             self.turns_widget.turns_box,
         )
         self.decrement_button = GE_AdjustTurnsButton(
-            "images/icons/minus.png",
-            "images/icons/minus_disabled.png",
+            "images/icons/minus.svg",
             self.turns_widget.turns_box,
         )
 

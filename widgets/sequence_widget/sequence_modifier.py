@@ -25,6 +25,9 @@ class SequenceModifier(BaseTabWidget):
         self.currentChanged.connect(self.resize_sequence_modifier)
 
     def resize_sequence_modifier(self):
-        self.setMaximumWidth(self.sequence_widget.beat_frame.width())
-        self.graph_editor.resize_graph_editor()
-        self.animator.resize_animator()
+        current_widget = self.currentWidget()
+        if current_widget == self.graph_editor:
+            self.graph_editor.resize_graph_editor()
+        elif current_widget == self.animator:
+            self.animator.resize_animator()
+        # Add more conditions for other tabs if needed
