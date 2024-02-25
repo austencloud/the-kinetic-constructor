@@ -39,7 +39,6 @@ class GE_TurnsWidget(QWidget):
         self.updater = GE_TurnsUpdater(self)
 
     def _setup_ui(self) -> None:
-        # self.display_manager.setup_display_components()
         self.direct_set_manager.setup_direct_set_buttons()
 
     ### WIDGETS ###
