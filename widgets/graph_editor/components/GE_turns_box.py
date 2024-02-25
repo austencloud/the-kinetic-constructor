@@ -72,5 +72,4 @@ class GE_TurnsBox(QFrame):
                 / 2
             )
         )
-        self.turns_widget.display_manager.resize_dir_buttons()
         self.turns_widget.resize_GE_turns_widget()

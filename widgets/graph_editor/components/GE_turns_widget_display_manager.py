@@ -51,7 +51,7 @@ class GE_TurnsWidgetDisplayManager:
         turns_display_frame_layout.addWidget(self.turns_box.vtg_dir_button_manager.same_button)
         turns_display_frame_layout.addWidget(self.turns_box.prop_rot_dir_button_manager.cw_button)
         turns_display_frame_layout.addStretch(3)
-
+        
         return turns_display_frame
 
     def _setup_turns_display_label(self):
