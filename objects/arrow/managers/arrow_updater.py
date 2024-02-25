@@ -15,6 +15,5 @@ class ArrowUpdater:
             self.arrow
         )
         self.arrow.mirror_manager.update_mirror()
-        # self.arrow.pictograph.main_widget.svg_manager.update_color(self.arrow)
         self.arrow.rot_angle_calculator.update_rotation()
         self.arrow.location_calculator.update_location()

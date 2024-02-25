@@ -28,7 +28,6 @@ class GE_TurnsWidget(QWidget):
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
@@ -39,7 +38,6 @@ class GE_TurnsWidget(QWidget):
         self.updater = GE_TurnsUpdater(self)
 
     def _setup_ui(self) -> None:
-        # self.display_manager.setup_display_components()
         self.direct_set_manager.setup_direct_set_buttons()
 
     ### WIDGETS ###

@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-
 from ..graphical_object.graphical_object import GraphicalObject
 from .prop_attr_manager import PropAttrManager
 from .prop_checker import PropChecker

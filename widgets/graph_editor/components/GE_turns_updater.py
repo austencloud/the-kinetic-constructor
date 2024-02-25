@@ -65,9 +65,8 @@ class GE_TurnsUpdater:
             LetterType.Type2,
             LetterType.Type3,
         ]:
-            motion.prop_rot_dir = self._determine_prop_rot_dir_for_type2_type3(
-                other_motion
-            )
+            prop_rot_dir = self._determine_prop_rot_dir_for_type2_type3(other_motion)
+            motion.prop_rot_dir = prop_rot_dir
         elif GE_pictograph.letter_type in [
             LetterType.Type4,
             LetterType.Type5,
@@ -104,14 +103,15 @@ class GE_TurnsUpdater:
             self._set_vtg_dir_state_default()
             
         if vtg_state[SAME]:
+            # if the button isn't pressed, press it
             same_button = self.turns_box.vtg_dir_button_manager.same_button
             if not same_button.is_pressed():
                 same_button.press()
             return other_motion.prop_rot_dir
         elif vtg_state[OPP]:
-            opp_button = self.turns_box.vtg_dir_button_manager.opp_button
-            if not opp_button.is_pressed():
-                opp_button.press()
+            opposite_button = self.turns_box.vtg_dir_button_manager.opp_button
+            if not opposite_button.is_pressed():
+                opposite_button.press()
             if other_motion.prop_rot_dir == CLOCKWISE:
                 return COUNTER_CLOCKWISE
             elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
