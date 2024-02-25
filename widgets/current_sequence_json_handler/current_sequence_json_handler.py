@@ -122,5 +122,7 @@ class CurrentSequenceJsonHandler:
         end_ori = self.ori_calculator.calculate_end_orientation(sequence[index], color)
         sequence[index][f"{color.value}_end_ori"] = end_ori
 
+        # we need to set the prop_rot_dir of the motion to no longer be no_rot if the new turns are greater than 0.
+        # We can look at 
 
         self.save_sequence(sequence)

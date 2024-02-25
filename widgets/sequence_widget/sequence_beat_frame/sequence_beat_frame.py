@@ -115,7 +115,6 @@ class SequenceBeatFrame(QFrame):
                 beat = self.beat_views[i - 1].beat
                 if beat != None:
                     if beat.pictograph_dict != entry:
-                        beat.updater._update_from_pictograph_dict(entry)
                         beat.updater.update_pictograph()
                         QApplication.processEvents()
 
