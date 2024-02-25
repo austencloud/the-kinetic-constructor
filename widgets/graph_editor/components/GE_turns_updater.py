@@ -102,9 +102,16 @@ class GE_TurnsUpdater:
         self.turns_box.vtg_dir_button_manager.show_vtg_dir_buttons()
         if not vtg_state[SAME] and not vtg_state[OPP]:
             self._set_vtg_dir_state_default()
+            
         if vtg_state[SAME]:
+            same_button = self.turns_box.vtg_dir_button_manager.same_button
+            if not same_button.is_pressed():
+                same_button.press()
             return other_motion.prop_rot_dir
         elif vtg_state[OPP]:
+            opp_button = self.turns_box.vtg_dir_button_manager.opp_button
+            if not opp_button.is_pressed():
+                opp_button.press()
             if other_motion.prop_rot_dir == CLOCKWISE:
                 return COUNTER_CLOCKWISE
             elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:

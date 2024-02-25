@@ -30,7 +30,6 @@ class GE_TurnsWidgetDisplayManager:
         self.turns_display_label.clicked.connect(self.on_turns_label_clicked)
 
     def setup_display_components(self) -> None:
-
         self.turns_display_frame = self.setup_turns_display_frame()
         self.adjust_buttons_frame = self.setup_adjust_buttons_frame()
         self.toggle_switch = self.setup_toggle_switch()
@@ -43,7 +42,16 @@ class GE_TurnsWidgetDisplayManager:
         turns_display_frame = QFrame(self.turns_widget)
         turns_display_frame_layout = QHBoxLayout(turns_display_frame)
         self.turns_display_label = self._setup_turns_display_label()
+        turns_display_frame_layout.addStretch(3)
+        turns_display_frame_layout.addWidget(self.turns_box.prop_rot_dir_button_manager.ccw_button)
+        turns_display_frame_layout.addWidget(self.turns_box.vtg_dir_button_manager.opp_button)
+        turns_display_frame_layout.addStretch(1)
         turns_display_frame_layout.addWidget(self.turns_display_label)
+        turns_display_frame_layout.addStretch(1)
+        turns_display_frame_layout.addWidget(self.turns_box.vtg_dir_button_manager.same_button)
+        turns_display_frame_layout.addWidget(self.turns_box.prop_rot_dir_button_manager.cw_button)
+        turns_display_frame_layout.addStretch(3)
+
         return turns_display_frame
 
     def _setup_turns_display_label(self):

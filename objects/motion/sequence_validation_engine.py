@@ -38,6 +38,8 @@ class CurrentSequenceJsonValidationEngine:
             )
             pictograph_dict[f"{color.value}_end_ori"] = end_ori
 
+    
+
     def run(self):
         """Public method to run the sequence validation and update process."""
         self.sequence_json = self.json_handler.load_current_sequence_json()

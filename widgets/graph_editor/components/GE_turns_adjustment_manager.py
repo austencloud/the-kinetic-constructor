@@ -42,6 +42,7 @@ class GE_TurnsAdjustmentManager(QObject):
         current_sequence_json_handler.update_turns_in_json_at_index(
             pictograph_index + 1, self.turns_widget.turns_box.color, new_turns
         )
+        
         self.graph_editor.main_widget.json_manager.current_sequence_json_handler.validation_engine.run()
         self.turns_adjusted.emit(new_turns)
 
