@@ -1,18 +1,17 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
 from widgets.graph_editor.components.GE_adjustment_panel import GE_AdjustmentPanel
+from widgets.pictograph.pictograph import Pictograph
+
 from widgets.graph_editor.components.GE_pictograph_view import (
     GE_BlankPictograph,
     GE_PictographView,
 )
-
-
 from widgets.graph_editor.components.GE_pictograph_container import (
     GE_PictographContainer,
 )
-from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_modifier import SequenceModifier
@@ -36,7 +35,6 @@ class GraphEditor(QFrame):
 
     def _setup_adjustment_panel(self):
         self.adjustment_panel = GE_AdjustmentPanel(self)
-
         self.adjustment_panel.setContentsMargins(0, 0, 0, 0)
 
     def _setup_frame_style(self) -> None:
@@ -55,13 +53,22 @@ class GraphEditor(QFrame):
 
         self.pictograph_layout = QVBoxLayout()
         self.pictograph_layout.addWidget(self.GE_pictograph_container)
-        self.layout.addLayout(self.pictograph_layout)
+        self.pictograph_layout.setContentsMargins(0, 0, 0, 0)
+        self.pictograph_layout.setSpacing(0)
+        self.pictograph_layout.setStretch(1, 1)  # Expand vertically
 
         self.adjustment_panel_layout = QVBoxLayout()
         self.adjustment_panel_layout.addWidget(self.adjustment_panel)
+        self.adjustment_panel_layout.setContentsMargins(0, 0, 0, 0)
+        self.adjustment_panel_layout.setSpacing(0)
+
+        self.layout.addLayout(self.pictograph_layout)
         self.layout.addLayout(self.adjustment_panel_layout)
 
         self.setLayout(self.layout)
+
+        # Set size policy to expanding
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
     def resize_graph_editor(self):
         self.GE_pictograph_container.resize_GE_pictograph_container()

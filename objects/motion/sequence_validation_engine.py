@@ -42,4 +42,3 @@ class CurrentSequenceJsonValidationEngine:
         """Public method to run the sequence validation and update process."""
         self.sequence_json = self.json_handler.load_current_sequence_json()
         self.validate_and_update_sequence_json()
-        self.json_handler.save_sequence(self.sequence_json)

@@ -1,6 +1,7 @@
 import json
 
 from Enums.MotionAttributes import Color
+from constants import DASH, NO_ROT, STATIC
 from objects.motion.sequence_validation_engine import (
     CurrentSequenceJsonValidationEngine,
 )
@@ -122,5 +123,18 @@ class CurrentSequenceJsonHandler:
         end_ori = self.ori_calculator.calculate_end_orientation(sequence[index], color)
         sequence[index][f"{color.value}_end_ori"] = end_ori
 
+        if sequence[index][f"{color.value}_turns"] > 0:
+            pictograph = self.main_widget.sequence_widget.beat_frame.beat_views[
+                index - 1
+            ].beat
+            if pictograph:
+                motion = pictograph.get.motion_by_color(color)
+                prop_rot_dir = motion.prop_rot_dir
+                sequence[index][f"{color.value}_prop_rot_dir"] = prop_rot_dir
+                
+        if sequence[index][f"{color.value}_motion_type"] in [DASH, STATIC]:
+            if sequence[index][f"{color.value}_turns"] == 0:
+                prop_rot_dir = NO_ROT
+                sequence[index][f"{color.value}_prop_rot_dir"] = prop_rot_dir
 
         self.save_sequence(sequence)

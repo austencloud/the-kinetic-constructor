@@ -118,6 +118,8 @@ class SequenceBeatFrame(QFrame):
                         beat.updater._update_from_pictograph_dict(entry)
                         beat.updater.update_pictograph()
                         QApplication.processEvents()
+        # update the option picker
+        self.main_widget.main_tab_widget.sequence_builder.option_picker.update_option_picker()
 
     def update_start_pos_from_current_sequence_json(self, entry: dict):
         self.start_pos_view.start_pos.updater.update_pictograph(entry)

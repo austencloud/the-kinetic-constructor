@@ -20,11 +20,12 @@ class GE_PictographContainer(QWidget):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addWidget(GE_pictograph_view)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        # self.setStyleSheet("border: 1px solid black;")
+        self.layout.setSpacing(0)
+
 
     def resize_GE_pictograph_container(self):
-        # self.setMaximumHeight(self.graph_editor.height())
         self.setMaximumWidth(self.graph_editor.height())
+        self.setMaximumHeight(self.graph_editor.height())
         self.GE_pictograph_view.resize_GE_pictograph_view()
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)

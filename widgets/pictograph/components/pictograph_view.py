@@ -77,6 +77,7 @@ class PictographView(QGraphicsView):
     def keyPressEvent(self, event) -> None:
         shift_held = event.modifiers() & Qt.KeyboardModifier.ShiftModifier
         ctrl_held = event.modifiers() & Qt.KeyboardModifier.ControlModifier
+
         if event.key() in [Qt.Key.Key_W, Qt.Key.Key_A, Qt.Key.Key_S, Qt.Key.Key_D]:
             self.pictograph.wasd_manager.movement_manager.handle_arrow_movement(
                 event.key(), shift_held, ctrl_held
