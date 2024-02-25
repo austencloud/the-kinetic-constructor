@@ -22,8 +22,8 @@ class GE_TurnsWidget(QWidget):
     def __init__(self, turns_box: "GE_TurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box
-        self._setup_components()
         self._setup_layout()
+        self._setup_components()
         self._setup_ui()
 
     def _setup_layout(self):
@@ -31,7 +31,6 @@ class GE_TurnsWidget(QWidget):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
-        self.layout.addLayout(self.layout)
 
     def _setup_components(self):
         self.adjustment_manager = GE_TurnsAdjustmentManager(self)
@@ -48,4 +47,3 @@ class GE_TurnsWidget(QWidget):
     def resize_GE_turns_widget(self) -> None:
         self.display_manager.set_turn_display_styles()
         self.display_manager.set_button_styles()
-
