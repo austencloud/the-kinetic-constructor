@@ -28,8 +28,7 @@ class PictographViewMouseEventHandler:
         arrow = next((item for item in items_at_pos if isinstance(item, Arrow)), None)
         if arrow:
             self.pictograph.selected_arrow = arrow
-            # self.pictograph.dragged_arrow = arrow
-            # self.pictograph.dragged_arrow.mousePressEvent(event)
+
             arrow.setSelected(True)
             self.pictograph.update()
         else:

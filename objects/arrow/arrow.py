@@ -9,7 +9,6 @@ from ..graphical_object.graphical_object import GraphicalObject
 from Enums.MotionAttributes import Color, Location
 from Enums.Enums import Handpaths, Turns
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from ..motion.motion import Motion
@@ -51,7 +50,7 @@ class Arrow(GraphicalObject):
         self.attr_manager = ArrowAttrHandler(self)
         self.updater = ArrowUpdater(self)
         self.initialized = True
-        # make it unselectable
+        # self.setFlag(self.GraphicsItemFlag.ItemIsSelectable, True)
 
     ### MOUSE EVENTS ###
 

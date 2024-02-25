@@ -28,7 +28,6 @@ class GE_TurnsWidget(QWidget):
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
