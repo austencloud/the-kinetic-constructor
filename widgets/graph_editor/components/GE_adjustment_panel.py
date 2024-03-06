@@ -108,7 +108,7 @@ class GE_AdjustmentPanel(QFrame):
     def update_turns_panel(self, blue_turns: int, red_turns: int) -> None:
         self.set_turns(blue_turns, red_turns)
         for box in self.turns_boxes:
-            box.header_widget.update_turns_box_header()
+            box.header.update_turns_box_header()
 
     def resize_GE_adjustment_panel(self):
         self.setMinimumWidth(self.blue_turns_box.width() + self.red_turns_box.width())

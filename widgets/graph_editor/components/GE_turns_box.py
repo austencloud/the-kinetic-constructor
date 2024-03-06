@@ -42,14 +42,14 @@ class GE_TurnsBox(QFrame):
     def _setup_widgets(self) -> None:
         self.vtg_dir_button_manager = GE_VtgDirButtonManager(self)
         self.prop_rot_dir_button_manager = GE_PropRotDirButtonManager(self)
-        self.header_widget = GE_TurnsBoxHeader(self)
+        self.header = GE_TurnsBoxHeader(self)
         self.turns_widget = GE_TurnsWidget(self)
 
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
 
-        self.layout.addWidget(self.header_widget)
+        self.layout.addWidget(self.header)
         self.layout.addWidget(self.turns_widget)
         self.setLayout(self.layout)
 
@@ -60,8 +60,6 @@ class GE_TurnsBox(QFrame):
         )
 
     def resize_GE_turns_box(self) -> None:
-        self.header_widget.setFixedHeight(self.height() // 4)
-        # self.turns_widget.setFixedHeight(int(self.height() * 0.75))
         self.setMinimumWidth(
             int(
                 (
@@ -71,4 +69,5 @@ class GE_TurnsBox(QFrame):
                 / 2
             )
         )
+        self.header.resize_GE_turns_box_header()
         self.turns_widget.resize_GE_turns_widget()

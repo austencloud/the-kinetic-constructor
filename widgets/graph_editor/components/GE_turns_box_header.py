@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
     QSizePolicy,
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
+from PyQt6.QtGui import QFont, QColor
 from typing import TYPE_CHECKING
 
 from Enums.MotionAttributes import Color
@@ -27,8 +27,9 @@ if TYPE_CHECKING:
 class GE_TurnsBoxHeader(QWidget):
     def __init__(self, turns_box: "GE_TurnsBox") -> None:
         super().__init__(turns_box)
-
         self.turns_box = turns_box
+        self.graph_editor = self.turns_box.turns_panel.graph_editor
+        self.main_widget = self.graph_editor.main_widget
         self.separator: QFrame = self.create_separator()
         self.header_label: QLabel = self._setup_header_label()
         self._setup_layout()
@@ -79,27 +80,30 @@ class GE_TurnsBoxHeader(QWidget):
         return separator
 
     def _setup_header_label(self) -> QLabel:
+        self.header_label = QLabel(self)
         color = self.turns_box.color
         text = ""
-        font_color = "#000000"
 
         if color == Color.RED:
             text = "Right"
-            font_color = "#ED1C24"
+            font_color = QColor("#ED1C24")
         elif color == Color.BLUE:
             text = "Left"
-            font_color = "#2E3192"
+            font_color = QColor("#2E3192")
 
-        font_size = self.turns_box.width() // 3
-        font_weight = "bold"
+        self.header_label_font = QFont("Arial")
+        self.header_label_font.setBold(True)
+        self.header_label.setFont(self.header_label_font)
+        self.header_label.setText(text)
+        self.header_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.header_label.setStyleSheet(f"color: {font_color.name()};")
+        return self.header_label
 
-        label = QLabel(text, self)
-        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        label.setStyleSheet(
-            f"color: {font_color}; font-size: {font_size}px; font-weight: {font_weight};"
-        )
-
-        return label
+    def _resize_header_label(self) -> None:
+        font_size = self.graph_editor.width() // 40
+        self.header_label_font.setPointSize(font_size)
+        self.header_label.setFont(self.header_label_font)
+        self.header_label.repaint()
 
     def create_attr_header_label(
         self, text: str, align: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter
@@ -119,3 +123,7 @@ class GE_TurnsBoxHeader(QWidget):
         button = CodexAdjustTurnsButton(self)
         button.setText(text)
         return button
+
+    def resize_GE_turns_box_header(self) -> None:
+        self.setFixedHeight(self.turns_box.height() // 4)
+        self._resize_header_label()
