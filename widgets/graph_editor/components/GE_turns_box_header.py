@@ -57,7 +57,7 @@ class GE_TurnsBoxHeader(QWidget):
         self.layout.setSpacing(0)
 
         # Set size policy to Fixed
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        # self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
     def _add_widgets(self) -> None:
         self.top_hbox.addStretch(1)
