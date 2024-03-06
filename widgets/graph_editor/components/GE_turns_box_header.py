@@ -46,7 +46,7 @@ class GE_TurnsBoxHeader(QWidget):
             self.turns_box.vtg_dir_button_manager.show_vtg_dir_buttons()
         QApplication.processEvents()
 
-    def _setup_layout(self):
+    def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.top_hbox = QHBoxLayout()
         self.bottom_hbox = QHBoxLayout()
@@ -55,13 +55,17 @@ class GE_TurnsBoxHeader(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
-    def _add_widgets(self):
+    def _add_widgets(self) -> None:
+        self.top_hbox.addStretch(1)
+        self.top_hbox.addWidget(self.turns_box.prop_rot_dir_button_manager.ccw_button)
+        self.top_hbox.addWidget(self.turns_box.vtg_dir_button_manager.opp_button)
         self.top_hbox.addStretch(1)
         self.top_hbox.addWidget(self.header_label)
         self.top_hbox.addStretch(1)
+        self.top_hbox.addWidget(self.turns_box.vtg_dir_button_manager.same_button)
+        self.top_hbox.addWidget(self.turns_box.prop_rot_dir_button_manager.cw_button)
+        self.top_hbox.addStretch(1)
         self.bottom_hbox.addWidget(self.separator)
-
-
 
     def create_separator(self) -> QFrame:
         separator = QFrame(self)
@@ -82,7 +86,7 @@ class GE_TurnsBoxHeader(QWidget):
             text = "Left"
             font_color = "#2E3192"
 
-        font_size = self.turns_box.width() // 4
+        font_size = self.turns_box.width() // 3
         font_weight = "bold"
 
         label = QLabel(text, self)

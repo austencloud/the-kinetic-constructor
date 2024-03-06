@@ -49,8 +49,8 @@ class GE_TurnsBox(QFrame):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.header_widget, 1)
-        self.layout.addWidget(self.turns_widget, 4)
-        self.layout.addStretch(1)
+        self.layout.addWidget(self.turns_widget, 3)
+        # self.layout.addStretch(1)
         self.setLayout(self.layout)
 
     def _set_border_color(self) -> None:
@@ -58,9 +58,6 @@ class GE_TurnsBox(QFrame):
         self.setStyleSheet(
             f"#GE_TurnsBox {{ border: {border_width}px solid {self.color.name}; }}"
         )
-
-    def calculate_button_size(self) -> int:
-        return int((self.pictograph.view.height() // 8))
 
     def resize_GE_turns_box(self) -> None:
         self.setMinimumWidth(

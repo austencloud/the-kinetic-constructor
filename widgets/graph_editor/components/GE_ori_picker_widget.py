@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 class GE_StartPosOriPickerWidget(QWidget):
-    def __init__(self, ori_picker_box: "GE_StartPosOriPickerBox"):
+    def __init__(self, ori_picker_box: "GE_StartPosOriPickerBox") -> None:
         super().__init__()
         self.ori_picker_box = ori_picker_box
         self.current_orientation_index = 0
@@ -20,7 +20,7 @@ class GE_StartPosOriPickerWidget(QWidget):
         self._setup_orientation_control_layout()
         self._setup_layout()
 
-    def _setup_layout(self):
+    def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout()
         self.layout.setAlignment(
             Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter
@@ -31,17 +31,17 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.layout.addStretch(1)
         self.setLayout(self.layout)
 
-    def _setup_orientation_label(self):
+    def _setup_orientation_label(self) -> None:
         self.ori_label = QLabel("Start Orientation")
         self.ori_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-    def _set_ori_label_font_size(self):
+    def _set_ori_label_font_size(self) -> None:
         ori_label_font_size = self.ori_picker_box.graph_editor.width() // 50
         font = QFont("Cambria", ori_label_font_size, QFont.Weight.Bold)
         font.setUnderline(True)
         self.ori_label.setFont(font)
 
-    def _setup_orientation_control_layout(self):
+    def _setup_orientation_control_layout(self) -> None:
         path = "images/icons"
         self.ccw_button = self.setup_button(f"{path}/rotate_ccw.png", self.rotate_ccw)
         self.current_orientation_display = self.setup_current_orientation_display()
@@ -52,14 +52,14 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.orientation_control_layout.addWidget(self.cw_button)
         self.orientation_control_layout.addStretch(5)
 
-    def setup_button(self, icon_path, click_function):
+    def setup_button(self, icon_path, click_function) -> QPushButton:
         button = QPushButton()
         button.setIcon(QIcon(icon_path))
         button.clicked.connect(click_function)
         button.setFixedSize(40, 40)
         return button
 
-    def setup_current_orientation_display(self):
+    def setup_current_orientation_display(self) -> QLabel:
         self.current_orientation_display = QLabel(
             self.orientations[self.current_orientation_index]
         )
@@ -69,7 +69,7 @@ class GE_StartPosOriPickerWidget(QWidget):
         )
         return self.current_orientation_display
 
-    def rotate_cw(self):
+    def rotate_cw(self) -> None:
         self.current_orientation_index = (self.current_orientation_index + 1) % len(
             self.orientations
         )
@@ -77,7 +77,7 @@ class GE_StartPosOriPickerWidget(QWidget):
             self.orientations[self.current_orientation_index]
         )
 
-    def rotate_ccw(self):
+    def rotate_ccw(self) -> None:
         self.current_orientation_index = (self.current_orientation_index - 1) % len(
             self.orientations
         )

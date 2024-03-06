@@ -134,7 +134,7 @@ class GE_VtgDirButtonManager:
         self.opp_button.unpress()
 
     def resize_vtg_dir_buttons(self) -> None:
-        button_size = self.turns_box.height() // 4
+        button_size = int(self.turns_box.header_widget.height() * 0.8)
         icon_size = int(button_size * 0.8)
         for button in self.vtg_dir_buttons:
             button.setFixedSize(button_size, button_size)

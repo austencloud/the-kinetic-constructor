@@ -30,6 +30,11 @@ class GE_TurnsAdjustmentManager(QObject):
         new_turns = self._clamp_turns(new_turns + adjustment)
         new_turns = self.convert_turn_floats_to_ints(new_turns)
         self._update_turns_display(new_turns)
+        vtg_dir_button_manager = self.turns_widget.turns_box.vtg_dir_button_manager
+        if new_turns == 0:
+            vtg_dir_button_manager.hide_vtg_dir_buttons()
+        # else:
+        #     vtg_dir_button_manager.show_vtg_dir_buttons()
         self.turns_widget.updater._adjust_turns_for_pictograph(
             self.pictograph, adjustment
         )

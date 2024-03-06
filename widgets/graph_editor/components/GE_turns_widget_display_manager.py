@@ -29,13 +29,13 @@ class GE_TurnsWidgetDisplayManager:
         self.setup_display_components()
 
     def setup_display_components(self) -> None:
+        # self.adjust_buttons_frame = self.setup_adjust_buttons_frame()
         self.turns_display_frame = self.setup_turns_display_frame()
-        self.adjust_buttons_frame = self.setup_adjust_buttons_frame()
 
         self.turns_widget.layout.addWidget(self.turns_display_frame)
-        self.turns_widget.layout.addWidget(self.adjust_buttons_frame)
+        # self.turns_widget.layout.addWidget(self.adjust_buttons_frame)
 
-    def setup_turns_display_frame(self):
+    def setup_turns_display_frame(self) -> QFrame:
         turns_display_frame = QFrame(self.turns_widget)
         turns_display_frame_layout = QHBoxLayout(turns_display_frame)
         self.turns_display_label = self._setup_turns_display_label()
@@ -47,21 +47,38 @@ class GE_TurnsWidgetDisplayManager:
         #     self.turns_box.vtg_dir_button_manager.opp_button
         # )
         # turns_display_frame_layout.addStretch(1)
-        turns_display_frame_layout.addWidget(self.turns_display_label)
+        self.increment_button = GE_AdjustTurnsButton(
+            "images/icons/plus.svg",
+            self.turns_widget.turns_box,
+        )
+        self.decrement_button = GE_AdjustTurnsButton(
+            "images/icons/minus.svg",
+            self.turns_widget.turns_box,
+        )
+
+        self.increment_button.clicked.connect(
+            lambda: self.turns_widget.adjustment_manager.adjust_turns(1)
+        )
+        self.decrement_button.clicked.connect(
+            lambda: self.turns_widget.adjustment_manager.adjust_turns(-1)
+        )
+        turns_display_frame_layout.addWidget(self.decrement_button, 1)
+        turns_display_frame_layout.addWidget(self.turns_display_label, 1)
+        turns_display_frame_layout.addWidget(self.increment_button, 1)
         self.turns_display_label.clicked.connect(self.on_turns_label_clicked)
         return turns_display_frame
 
-    def _setup_turns_display_label(self):
+    def _setup_turns_display_label(self) -> GE_TurnsBoxLabel:
         turns_display_label = GE_TurnsBoxLabel("0", self.turns_widget)
         turns_display_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         turns_display_label.setFont(QFont("Arial", 24))  # Larger font size
 
         return turns_display_label
 
-    def on_turns_label_clicked(self):
+    def on_turns_label_clicked(self) -> None:
         self.show_turns_selection_dialog()
 
-    def show_turns_selection_dialog(self):
+    def show_turns_selection_dialog(self) -> None:
         self.turns_selection_dialog = GE_TurnsSelectionDialog(self.turns_widget)
         label_rect = self.turns_display_label.geometry()
         dialog_width = self.turns_selection_dialog.width()
@@ -75,31 +92,6 @@ class GE_TurnsWidgetDisplayManager:
         self.turns_selection_dialog.move(int(dialog_x), int(dialog_y))
         self.turns_selection_dialog.exec()
 
-    def setup_adjust_buttons_frame(self):
-        adjust_buttons_frame = QFrame(self.turns_widget)
-        self.adjust_buttons_hbox_layout = QHBoxLayout(adjust_buttons_frame)
-        self.adjust_buttons_hbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.adjust_buttons_hbox_layout.setContentsMargins(0, 0, 0, 0)
-        self.increment_button = GE_AdjustTurnsButton(
-            "images/icons/plus.svg",
-            self.turns_widget.turns_box,
-        )
-        self.decrement_button = GE_AdjustTurnsButton(
-            "images/icons/minus.svg",
-            self.turns_widget.turns_box,
-        )
-
-        self.adjust_buttons_hbox_layout.addWidget(self.decrement_button)
-        self.adjust_buttons_hbox_layout.addWidget(self.increment_button)
-
-        self.increment_button.clicked.connect(
-            lambda: self.turns_widget.adjustment_manager.adjust_turns(1)
-        )
-        self.decrement_button.clicked.connect(
-            lambda: self.turns_widget.adjustment_manager.adjust_turns(-1)
-        )
-        self.adjust_buttons = [self.increment_button, self.decrement_button]
-        return adjust_buttons_frame
 
     def get_current_turns_value(self) -> int:
         return (
@@ -150,9 +142,7 @@ class GE_TurnsWidgetDisplayManager:
     def set_button_styles(self) -> None:
         button_size = int(self.turns_box.width() * 0.45)
 
-        for button in self.adjust_buttons:
-            button.setMinimumHeight(button_size)
-            button.setMinimumWidth(button_size)
+        for button in [self.increment_button, self.decrement_button]:
             button.setMaximumWidth(button_size)
             button.setMaximumHeight(button_size)
 

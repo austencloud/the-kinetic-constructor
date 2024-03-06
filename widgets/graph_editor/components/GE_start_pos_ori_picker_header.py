@@ -31,7 +31,7 @@ class GE_StartPosOriPickerBoxHeader(QWidget):
         self._setup_layout()
         self._add_widgets()
 
-    def _setup_layout(self):
+    def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.top_hbox = QHBoxLayout()
         self.bottom_hbox = QHBoxLayout()
@@ -40,7 +40,7 @@ class GE_StartPosOriPickerBoxHeader(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
-    def _add_widgets(self):
+    def _add_widgets(self) -> None:
         self.top_hbox.addStretch(3)
         self.top_hbox.addStretch(1)
         self.top_hbox.addWidget(self.header_label)
@@ -67,7 +67,7 @@ class GE_StartPosOriPickerBoxHeader(QWidget):
             text = "Left"
             font_color = "#2E3192"
 
-        font_size = self.turns_box.width() // 4
+        font_size = self.turns_box.width() // 3
         font_weight = "bold"
 
         label = QLabel(text, self)

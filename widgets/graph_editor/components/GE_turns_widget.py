@@ -26,12 +26,12 @@ class GE_TurnsWidget(QWidget):
         self._setup_components()
         self._setup_ui()
 
-    def _setup_layout(self):
+    def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
-    def _setup_components(self):
+    def _setup_components(self) -> None:
         self.adjustment_manager = GE_TurnsAdjustmentManager(self)
         self.direct_set_manager = GE_TurnsDirectSetManager(self)
         self.display_manager = GE_TurnsWidgetDisplayManager(self)
