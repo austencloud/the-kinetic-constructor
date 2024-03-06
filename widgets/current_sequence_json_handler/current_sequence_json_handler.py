@@ -118,6 +118,7 @@ class CurrentSequenceJsonHandler:
     def update_turns_in_json_at_index(
         self, index: int, color: Color, turns: Union[int | float]
     ) -> None:
+
         sequence = self.load_current_sequence_json()
         sequence[index][f"{color.value}_turns"] = turns
         end_ori = self.ori_calculator.calculate_end_orientation(sequence[index], color)
@@ -137,4 +138,11 @@ class CurrentSequenceJsonHandler:
                 prop_rot_dir = NO_ROT
                 sequence[index][f"{color.value}_prop_rot_dir"] = prop_rot_dir
 
+        self.save_sequence(sequence)
+
+    def update_rot_dir_in_json_at_index(
+        self, index: int, color: Color, prop_rot_dir: str
+    ) -> None:
+        sequence = self.load_current_sequence_json()
+        sequence[index][f"{color.value}_prop_rot_dir"] = prop_rot_dir
         self.save_sequence(sequence)

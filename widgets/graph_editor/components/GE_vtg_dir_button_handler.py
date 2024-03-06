@@ -34,7 +34,11 @@ class GE_VtgDirButtonManager:
         self.graph_editor = turns_box.graph_editor
         self.previous_turns = 0
         self.vtg_state = self.turns_box.vtg_dir_btn_state
-
+        self.beat_frame = self.graph_editor.sequence_modifier.sequence_widget.beat_frame
+        self.current_sequence_json_handler = (
+            self.graph_editor.main_widget.json_manager.current_sequence_json_handler
+        )
+        self.color = self.turns_box.color
         self.vtg_dir_buttons: list[VtgDirButton] = self._setup_vtg_dir_buttons()
         self.hide_vtg_dir_buttons()
 
@@ -65,19 +69,31 @@ class GE_VtgDirButtonManager:
 
     def _update_pictographs_vtg_dir(self, vtg_dir: VTG_Directions) -> None:
         pictograph = self.graph_editor.GE_pictograph_view.get_current_pictograph()
+        pictograph_index = (
+            self.beat_frame.get_index_of_currently_selected_beat()
+        )
         for motion in pictograph.motions.values():
             other_motion = pictograph.get.other_motion(motion)
             if motion.check.is_dash() or motion.check.is_static():
                 if other_motion.check.is_shift():
                     pictograph.vtg_dir = vtg_dir
                     if vtg_dir == SAME:
+                        prop_rot_dir = other_motion.prop_rot_dir
                         self._update_pictograph_prop_rot_dir_from_vtg_dir_setting(
-                            motion, other_motion.prop_rot_dir
+                            motion, prop_rot_dir
+                        )
+                        self.current_sequence_json_handler.update_rot_dir_in_json_at_index(
+                            pictograph_index + 1, self.color, prop_rot_dir
                         )
                     elif vtg_dir == OPP:
+                        prop_rot_dir = self._opposite_prop_rot_dir(
+                            other_motion.prop_rot_dir
+                        )
                         self._update_pictograph_prop_rot_dir_from_vtg_dir_setting(
-                            motion,
-                            self._opposite_prop_rot_dir(other_motion.prop_rot_dir),
+                            motion, prop_rot_dir
+                        )
+                        self.current_sequence_json_handler.update_rot_dir_in_json_at_index(
+                            pictograph_index + 1, self.color, prop_rot_dir
                         )
 
     def _update_pictograph_prop_rot_dir_from_vtg_dir_setting(

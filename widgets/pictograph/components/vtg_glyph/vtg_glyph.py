@@ -1,22 +1,22 @@
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 from Enums.Enums import LetterType, VTG_Modes
-from constants import SpecificPosition as SP
+from constants import ALPHA1, ALPHA2, ALPHA3, ALPHA4, BETA1, BETA2, BETA3, BETA4, QUARTER_OPP, QUARTER_SAME, SPLIT_OPP, SPLIT_SAME, TOG_OPP, TOG_SAME
 
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 
 SVG_PATHS = {
-    VTG_Modes.SPLIT_SAME: "SS.svg",
-    VTG_Modes.SPLIT_OPP: "SO.svg",
-    VTG_Modes.TOG_SAME: "TS.svg",
-    VTG_Modes.TOG_OPP: "TO.svg",
-    VTG_Modes.QUARTER_SAME: "QS.svg",
-    VTG_Modes.QUARTER_OPP: "QO.svg",
+    SPLIT_SAME: "SS.svg",
+    SPLIT_OPP: "SO.svg",
+    TOG_SAME: "TS.svg",
+    TOG_OPP: "TO.svg",
+    QUARTER_SAME: "QS.svg",
+    QUARTER_OPP: "QO.svg",
 }
 
 SVG_BASE_PATH = "images/vtg_glyphs"
@@ -30,7 +30,7 @@ class VTG_Glyph(QGraphicsSvgItem):
         super().__init__()
         self.pictograph = pictograph
 
-    def set_vtg_mode(self):
+    def set_vtg_mode(self) -> None:
         if not self.pictograph.letter_type in [LetterType.Type1]:
             return
         vtg_mode = self.determine_vtg_mode()
@@ -39,36 +39,38 @@ class VTG_Glyph(QGraphicsSvgItem):
         self.renderer = QSvgRenderer(svg_path)
         if self.renderer.isValid():
             self.setSharedRenderer(self.renderer)
-            self.pictograph.addItem(self)
+            # if self isn't already in self.pictograph, then add it
+            if not self.scene():            
+                self.pictograph.addItem(self)
             self.position_vtg_glyph()
             visibility_manager = (
                 self.pictograph.main_widget.main_window.settings_manager.glyph_visibility_manager
             )
             self.setVisible(visibility_manager.should_glyph_be_visible("VTG"))
 
-    def determine_vtg_mode(self):
+    def determine_vtg_mode(self) -> Literal["SS", "SO", "TS", "TO", "QS", "QO"]:
         letter_str = self.pictograph.letter.value
         mode = self.pictograph.vtg_mode
         start_pos = self.pictograph.start_pos
 
         if letter_str in ["A", "B", "C"]:
-            mode = VTG_Modes.SPLIT_SAME
+            mode = SPLIT_SAME
         elif letter_str in ["D", "E", "F"]:
-            if start_pos in [SP.BETA2.value, SP.BETA4.value]:
-                mode = VTG_Modes.SPLIT_OPP
-            elif start_pos in [SP.BETA1.value, SP.BETA3.value]:
-                mode = VTG_Modes.TOG_OPP
+            if start_pos in [BETA2, BETA4]:
+                mode = SPLIT_OPP
+            elif start_pos in [BETA1, BETA3]:
+                mode = TOG_OPP
         elif letter_str in ["G", "H", "I"]:
-            mode = VTG_Modes.TOG_SAME
+            mode = TOG_SAME
         elif letter_str in ["J", "K", "L"]:
-            if start_pos in [SP.ALPHA1.value, SP.ALPHA3.value]:
-                mode = VTG_Modes.SPLIT_OPP
-            elif start_pos in [SP.ALPHA2.value, SP.ALPHA4.value]:
-                mode = VTG_Modes.TOG_OPP
+            if start_pos in [ALPHA1, ALPHA3]:
+                mode = SPLIT_OPP
+            elif start_pos in [ALPHA2, ALPHA4]:
+                mode = TOG_OPP
         elif letter_str in ["M", "N", "O", "P", "Q", "R"]:
-            mode = VTG_Modes.QUARTER_OPP
+            mode = QUARTER_OPP
         elif letter_str in ["S", "T", "U", "V"]:
-            mode = VTG_Modes.QUARTER_SAME
+            mode = QUARTER_SAME
 
         return mode
 

@@ -3,7 +3,7 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 
 from Enums.Enums import VTG_Directions
-from constants import OPP, SAME
+from constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
 
 
 def load_svg_item(svg_path: str) -> QGraphicsSvgItem:
@@ -31,7 +31,7 @@ def parse_turns_tuple_string(turns_str: str) -> tuple:
         elif item == "o":
             item = OPP
         turns_list.append(item)
-    if len(turns_list) >= 3 and turns_list[0] in [SAME, OPP]:
+    if len(turns_list) >= 3 and turns_list[0] in [SAME, OPP, CLOCKWISE, COUNTER_CLOCKWISE]:
         return turns_list[0], turns_list[1], turns_list[2]
     else:
         return None, turns_list[0], turns_list[1]

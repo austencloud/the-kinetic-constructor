@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 class TurnsColumnHandler(QGraphicsItemGroup):
-    def __init__(self, glyph: "TKA_Glyph"):
+    def __init__(self, glyph: "TKA_Glyph") -> None:
         super().__init__()
         self.glyph = glyph
         self.top_number_item = None
