@@ -117,7 +117,7 @@ class CurrentSequenceJsonHandler:
 
     def update_turns_in_json_at_index(
         self, index: int, color: Color, turns: Union[int | float]
-    ):
+    ) -> None:
         sequence = self.load_current_sequence_json()
         sequence[index][f"{color.value}_turns"] = turns
         end_ori = self.ori_calculator.calculate_end_orientation(sequence[index], color)

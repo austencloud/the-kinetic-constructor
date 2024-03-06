@@ -44,7 +44,7 @@ class SequenceBeatFrame(QFrame):
         self._setup_layout()
         self._populate_beat_frame()
 
-    def _populate_beat_frame(self):
+    def _populate_beat_frame(self) -> None:
         for i in range(1, self.COLUMN_COUNT):
             self._add_beat_to_layout(0, i)
 
@@ -52,13 +52,13 @@ class SequenceBeatFrame(QFrame):
             for i in range(1, self.COLUMN_COUNT):
                 self._add_beat_to_layout(j, i)
 
-    def _setup_components(self, main_widget):
+    def _setup_components(self, main_widget) -> None:
         self.selection_manager = BeatSelectionManager(self)
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(main_widget, self)
         self.beat_deletion_manager = BeatDeletionManager(self)
 
-    def _setup_layout(self):
+    def _setup_layout(self) -> None:
         self.layout: QGridLayout = QGridLayout(self)
         self.layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
@@ -75,7 +75,7 @@ class SequenceBeatFrame(QFrame):
         else:
             super().keyPressEvent(event)
 
-    def delete_selected_beat(self):
+    def delete_selected_beat(self) -> None:
         self.beat_deletion_manager.delete_selected_beat()
 
     def _add_beat_to_layout(self, row: int, col: int) -> None:
@@ -104,24 +104,25 @@ class SequenceBeatFrame(QFrame):
                 return beat_view
         return self.beat_views[0]
 
-    def on_turns_adjusted(self):
+    def on_turns_adjusted(self) -> None:
         current_sequence_json = (
             self.current_sequence_json_handler.load_current_sequence_json()
         )
+        self.propogate_turn_adjustment(current_sequence_json)
+        self.main_widget.main_tab_widget.sequence_builder.option_picker.update_option_picker()
+
+    def propogate_turn_adjustment(self, current_sequence_json) -> None:
         for i, entry in enumerate(current_sequence_json):
             if i == 0:
                 self.update_start_pos_from_current_sequence_json(entry)
             else:
                 beat = self.beat_views[i - 1].beat
-                if beat != None:
+                if beat:
                     if beat.pictograph_dict != entry:
-                        # beat.updater._update_from_pictograph_dict(entry)
-                        beat.updater.update_pictograph()
+                        beat.updater.update_pictograph(entry)
                         QApplication.processEvents()
-        # update the option picker
-        self.main_widget.main_tab_widget.sequence_builder.option_picker.update_option_picker()
 
-    def update_start_pos_from_current_sequence_json(self, entry: dict):
+    def update_start_pos_from_current_sequence_json(self, entry: dict) -> None:
         self.start_pos_view.start_pos.updater.update_pictograph(entry)
 
     def get_index_of_currently_selected_beat(self) -> int:
@@ -130,7 +131,7 @@ class SequenceBeatFrame(QFrame):
                 return i
         return 0
 
-    def resize_beat_frame(self):
+    def resize_beat_frame(self) -> None:
         beat_view_size = int(self.width() / (self.COLUMN_COUNT + 2))
         for view in self.beat_views + [self.start_pos_view]:
             view.setMinimumWidth(beat_view_size)
