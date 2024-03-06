@@ -133,6 +133,8 @@ class SequenceBeatFrame(QFrame):
     def resize_beat_frame(self):
         beat_view_size = int(self.width() / (self.COLUMN_COUNT + 2))
         for view in self.beat_views + [self.start_pos_view]:
+            view.setMinimumWidth(beat_view_size)
             view.setMaximumWidth(beat_view_size)
             view.setMinimumHeight(beat_view_size)
+            view.setMaximumHeight(beat_view_size)
             view.resetTransform()
