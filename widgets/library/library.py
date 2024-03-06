@@ -81,6 +81,11 @@ class Library(QWidget):
         sequence_builder = self.main_widget.main_tab_widget.sequence_builder
         last_beat = sequence_widget.beat_frame.get_last_filled_beat().beat
         sequence_builder.current_pictograph = last_beat
+        
+        # if the start pos picker is visible, transition to sequence building
+        if sequence_builder.start_position_picker.isVisible():
+            sequence_builder.transition_to_sequence_building()
+        
         sequence_builder.option_picker.scroll_area._add_and_display_relevant_pictographs(
             sequence_builder.option_picker.option_manager.get_next_options()
         )
