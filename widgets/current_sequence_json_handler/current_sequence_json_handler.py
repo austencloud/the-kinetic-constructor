@@ -2,7 +2,7 @@ import json
 
 from Enums.MotionAttributes import Color
 from constants import DASH, NO_ROT, STATIC
-from objects.motion.sequence_validation_engine import (
+from objects.motion.current_sequence_json_validation_engine import (
     CurrentSequenceJsonValidationEngine,
 )
 from widgets.sequence_widget.sequence_beat_frame.beat import BeatView

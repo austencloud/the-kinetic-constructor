@@ -10,11 +10,11 @@ if TYPE_CHECKING:
 
 
 class CurrentSequenceJsonValidationEngine:
-    def __init__(self, current_sequence_json_handler: "CurrentSequenceJsonHandler"):
+    def __init__(self, current_sequence_json_handler: "CurrentSequenceJsonHandler") -> None:
         self.json_handler = current_sequence_json_handler
         self.sequence_json = self.json_handler.load_current_sequence_json()
 
-    def validate_and_update_sequence_json(self):
+    def validate_and_update_sequence_json(self) -> None:
         """Iterates through the sequence, updating start and end orientations to ensure continuity."""
         for i, _ in enumerate(self.sequence_json):
             if i > 0:
@@ -22,14 +22,14 @@ class CurrentSequenceJsonValidationEngine:
                 self.update_json_entry_end_orientation(i)
         self.json_handler.save_sequence(self.sequence_json)
 
-    def update_json_entry_start_orientation(self, index):
+    def update_json_entry_start_orientation(self, index) -> None:
         """Updates the start orientation of the current pictograph based on the previous one's end orientation."""
         current_pictograph = self.sequence_json[index]
         previous_pictograph = self.sequence_json[index - 1]
         current_pictograph["red_start_ori"] = previous_pictograph["red_end_ori"]
         current_pictograph["blue_start_ori"] = previous_pictograph["blue_end_ori"]
 
-    def update_json_entry_end_orientation(self, index):
+    def update_json_entry_end_orientation(self, index) -> None:
         """Recalculates and updates the end orientation of the current pictograph."""
         pictograph_dict = self.sequence_json[index]
         for color in [Color.RED, Color.BLUE]:
@@ -40,7 +40,7 @@ class CurrentSequenceJsonValidationEngine:
 
     
 
-    def run(self):
+    def run(self) -> None:
         """Public method to run the sequence validation and update process."""
         self.sequence_json = self.json_handler.load_current_sequence_json()
         self.validate_and_update_sequence_json()
