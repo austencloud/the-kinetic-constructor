@@ -60,8 +60,8 @@ class GE_TurnsBox(QFrame):
         )
 
     def resize_GE_turns_box(self) -> None:
-        self.header_widget.setFixedHeight(self.height() // 4)
-        self.turns_widget.setFixedHeight(int(self.height() * 0.75))
+        # self.header_widget.setFixedHeight(self.height() // 4)
+        # self.turns_widget.setFixedHeight(int(self.height() * 0.75))
         self.setMinimumWidth(
             int(
                 (
