@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtCore import QObject
+from PyQt6.QtWidgets import QApplication
 
 from Enums.Enums import Turns
 
@@ -29,15 +30,23 @@ class GE_TurnsAdjustmentManager(QObject):
         new_turns = self._get_turns()
         new_turns = self._clamp_turns(new_turns + adjustment)
         new_turns = self.convert_turn_floats_to_ints(new_turns)
+        QApplication.processEvents()
         self._update_turns_display(new_turns)
+        QApplication.processEvents()
         vtg_dir_button_manager = self.turns_widget.turns_box.vtg_dir_button_manager
-        if new_turns == 0:
-            vtg_dir_button_manager.hide_vtg_dir_buttons()
+        prop_rot_dir_button_manager = (
+            self.turns_widget.turns_box.prop_rot_dir_button_manager
+        )
+        # if new_turns == 0:
+        #     vtg_dir_button_manager.hide_vtg_dir_buttons()
+        # prop_rot_dir_button_manager.hide_prop_rot_dir_buttons()
         # else:
         #     vtg_dir_button_manager.show_vtg_dir_buttons()
+        QApplication.processEvents()
         self.turns_widget.updater._adjust_turns_for_pictograph(
             self.pictograph, adjustment
         )
+        QApplication.processEvents()
         current_sequence_json_handler = (
             self.graph_editor.main_widget.json_manager.current_sequence_json_handler
         )
@@ -47,7 +56,8 @@ class GE_TurnsAdjustmentManager(QObject):
         current_sequence_json_handler.update_turns_in_json_at_index(
             pictograph_index + 1, self.turns_widget.turns_box.color, new_turns
         )
-        
+        QApplication.processEvents()
+
         self.graph_editor.main_widget.json_manager.current_sequence_json_handler.validation_engine.run()
         self.turns_adjusted.emit(new_turns)
 

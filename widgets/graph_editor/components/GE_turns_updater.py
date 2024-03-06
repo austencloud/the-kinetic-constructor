@@ -43,15 +43,19 @@ class GE_TurnsUpdater:
         """Handle specific logic for static or dash motion types."""
         vtg_dir_button_manager = self.turns_widget.turns_box.vtg_dir_button_manager
 
-        if motion.turns == 0 and new_turns == 0:
-            return
+        # if motion.turns == 0 and new_turns == 0:
+        #     return
 
         if new_turns == 0:
             motion.prop_rot_dir = NO_ROT
             vtg_dir_button_manager.unpress_vtg_buttons()
             if hasattr(self.turns_box, "prop_rot_dir_button_manager"):
                 self.turns_widget.turns_box.prop_rot_dir_button_manager.unpress_prop_rot_dir_buttons()
-
+            # if the prop rot dir butons are visible, hide them
+            if self.turns_box.prop_rot_dir_button_manager.cw_button.isVisible():
+                self.turns_box.prop_rot_dir_button_manager.hide_prop_rot_dir_buttons()
+            if self.turns_box.vtg_dir_button_manager.same_button.isVisible():
+                self.turns_box.vtg_dir_button_manager.hide_vtg_dir_buttons()
         elif motion.turns == 0 and new_turns > 0:
             self._set_prop_rot_dir(motion)
 
@@ -67,14 +71,20 @@ class GE_TurnsUpdater:
         ]:
             prop_rot_dir = self._determine_prop_rot_dir_for_type2_type3(other_motion)
             motion.prop_rot_dir = prop_rot_dir
+            # if the buttons aren't visible, show them
+            if not self.turns_box.vtg_dir_button_manager.same_button.isVisible():
+                self.turns_box.vtg_dir_button_manager.show_vtg_dir_buttons()
         elif GE_pictograph.letter_type in [
             LetterType.Type4,
             LetterType.Type5,
             LetterType.Type6,
         ]:
-            self._determine_prop_rot_dir_for_type4_5_6(motion)
+            # if the buttons aren't visible, show them
+            if not self.turns_box.prop_rot_dir_button_manager.cw_button.isVisible():
+                self.turns_box.prop_rot_dir_button_manager.show_prop_rot_dir_buttons()
+            self._set_prop_rot_dir_for_type4_5_6(motion)
 
-    def _determine_prop_rot_dir_for_type4_5_6(self, motion: "Motion"):
+    def _set_prop_rot_dir_for_type4_5_6(self, motion: "Motion"):
         if self.turns_box.prop_rot_dir_btn_state[CLOCKWISE]:
             motion.prop_rot_dir = CLOCKWISE
         elif self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE]:
@@ -101,7 +111,7 @@ class GE_TurnsUpdater:
         self.turns_box.vtg_dir_button_manager.show_vtg_dir_buttons()
         if not vtg_state[SAME] and not vtg_state[OPP]:
             self._set_vtg_dir_state_default()
-            
+
         if vtg_state[SAME]:
             # if the button isn't pressed, press it
             same_button = self.turns_box.vtg_dir_button_manager.same_button
@@ -130,8 +140,8 @@ class GE_TurnsUpdater:
 
     def _set_prop_rot_dir_state_default(self) -> None:
         """set the vtg direction state to default."""
-        self.turns_box.prop_rot_dir_btn_state[SAME] = True
-        self.turns_box.prop_rot_dir_btn_state[OPP] = False
+        self.turns_box.prop_rot_dir_btn_state[CLOCKWISE] = True
+        self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE] = False
 
     def _clamp_turns(self, turns: Turns) -> Turns:
         """Clamp the turns value to be within allowable range."""

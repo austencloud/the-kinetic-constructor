@@ -33,6 +33,8 @@ class GE_TurnsWidgetDisplayManager:
         self.turns_display_frame = self.setup_turns_display_frame()
 
         self.turns_widget.layout.addWidget(self.turns_display_frame)
+        # add stretch
+        self.turns_widget.layout.addStretch(1)
         # self.turns_widget.layout.addWidget(self.adjust_buttons_frame)
 
     def setup_turns_display_frame(self) -> QFrame:
@@ -72,7 +74,6 @@ class GE_TurnsWidgetDisplayManager:
         turns_display_label = GE_TurnsBoxLabel("0", self.turns_widget)
         turns_display_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         turns_display_label.setFont(QFont("Arial", 24))  # Larger font size
-
         return turns_display_label
 
     def on_turns_label_clicked(self) -> None:
@@ -92,7 +93,6 @@ class GE_TurnsWidgetDisplayManager:
         self.turns_selection_dialog.move(int(dialog_x), int(dialog_y))
         self.turns_selection_dialog.exec()
 
-
     def get_current_turns_value(self) -> int:
         return (
             int(self.turns_display_label.text())
@@ -111,7 +111,9 @@ class GE_TurnsWidgetDisplayManager:
             min(self.turns_display_label.width(), self.turns_display_label.height()) / 4
         )
         turn_display_border = int(self.turns_display_label.width() / 20)
-
+        self.turns_display_label.setMaximumHeight(
+            int(self.turns_box.turns_panel.height() / 4)
+        )
         # Determine the appropriate color based on the turns box color
         turns_box_color = self.turns_box.color
         if turns_box_color == Color.RED:

@@ -3,6 +3,7 @@ from PyQt6.QtCore import Qt, QRect, QRectF
 from PyQt6.QtGui import QPainter
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QAbstractButton
+
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
 
@@ -31,7 +32,7 @@ class GE_AdjustTurnsButton(QAbstractButton):
         rect = QRect(0, 0, self.width(), self.height())
         painter.fillRect(rect, painter.brush())
 
-        icon_size = int(min(self.width(), self.height()) * 0.6)
+        icon_size = int(min(self.width(), self.height()) * 0.8)
         x = int((self.width() - icon_size) / 2)
         y = int((self.height() - icon_size) / 2)
         icon_rect = QRectF(x, y, icon_size, icon_size)
