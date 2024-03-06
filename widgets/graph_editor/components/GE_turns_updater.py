@@ -71,7 +71,6 @@ class GE_TurnsUpdater:
         ]:
             prop_rot_dir = self._determine_prop_rot_dir_for_type2_type3(other_motion)
             motion.prop_rot_dir = prop_rot_dir
-            # if the buttons aren't visible, show them
             if not self.turns_box.vtg_dir_button_manager.same_button.isVisible():
                 self.turns_box.vtg_dir_button_manager.show_vtg_dir_buttons()
         elif GE_pictograph.letter_type in [
@@ -79,7 +78,6 @@ class GE_TurnsUpdater:
             LetterType.Type5,
             LetterType.Type6,
         ]:
-            # if the buttons aren't visible, show them
             if not self.turns_box.prop_rot_dir_button_manager.cw_button.isVisible():
                 self.turns_box.prop_rot_dir_button_manager.show_prop_rot_dir_buttons()
             self._set_prop_rot_dir_for_type4_5_6(motion)

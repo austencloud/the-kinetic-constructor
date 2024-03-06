@@ -29,26 +29,15 @@ class GE_TurnsWidgetDisplayManager:
         self.setup_display_components()
 
     def setup_display_components(self) -> None:
-        # self.adjust_buttons_frame = self.setup_adjust_buttons_frame()
         self.turns_display_frame = self.setup_turns_display_frame()
-
         self.turns_widget.layout.addWidget(self.turns_display_frame)
-        # add stretch
         self.turns_widget.layout.addStretch(1)
-        # self.turns_widget.layout.addWidget(self.adjust_buttons_frame)
 
     def setup_turns_display_frame(self) -> QFrame:
         turns_display_frame = QFrame(self.turns_widget)
         turns_display_frame_layout = QHBoxLayout(turns_display_frame)
         self.turns_display_label = self._setup_turns_display_label()
-        # turns_display_frame_layout.addStretch(3)
-        # turns_display_frame_layout.addWidget(
-        #     self.turns_box.prop_rot_dir_button_manager.ccw_button
-        # )
-        # turns_display_frame_layout.addWidget(
-        #     self.turns_box.vtg_dir_button_manager.opp_button
-        # )
-        # turns_display_frame_layout.addStretch(1)
+
         self.increment_button = GE_AdjustTurnsButton(
             "images/icons/plus.svg",
             self.turns_widget.turns_box,
@@ -107,9 +96,14 @@ class GE_TurnsWidgetDisplayManager:
         self.turns_display_label.setFont(
             QFont("Arial", self.turns_display_font_size, QFont.Weight.Bold)
         )
-        border_radius = (
-            min(self.turns_display_label.width(), self.turns_display_label.height()) / 4
+        self.turns_display_label.setMinimumWidth(
+            int(self.turns_box.turns_panel.width() / 6)
         )
+        self.turns_display_label.setMaximumWidth(
+            int(self.turns_box.turns_panel.width() / 6)
+        )
+        border_radius = self.turns_display_label.width() // 4
+
         turn_display_border = int(self.turns_display_label.width() / 20)
         self.turns_display_label.setMaximumHeight(
             int(self.turns_box.turns_panel.height() / 4)
@@ -133,12 +127,6 @@ class GE_TurnsWidgetDisplayManager:
                 padding-right: 2px; /* add some padding on the right for symmetry */
             }}
             """
-        )
-        self.turns_display_label.setMinimumWidth(
-            int(self.turns_box.turns_panel.width() / 6)
-        )
-        self.turns_display_label.setMaximumWidth(
-            int(self.turns_box.turns_panel.width() / 6)
         )
 
     def set_button_styles(self) -> None:

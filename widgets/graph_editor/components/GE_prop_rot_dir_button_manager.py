@@ -134,7 +134,7 @@ class GE_PropRotDirButtonManager:
         self.ccw_button.unpress()
 
     def resize_prop_rot_dir_buttons(self) -> None:
-        button_size = int(self.turns_box.header_widget.height() * 0.8)
+        button_size = int(self.turns_box.header_widget.height())
         icon_size = int(button_size * 0.8)
         for button in self.prop_rot_dir_buttons:
             button.setFixedSize(button_size, button_size)

@@ -95,6 +95,7 @@ class GE_TurnsBoxHeader(QWidget):
             f"color: {font_color}; font-size: {font_size}px; font-weight: {font_weight};"
         )
 
+
         return label
 
     def create_attr_header_label(
