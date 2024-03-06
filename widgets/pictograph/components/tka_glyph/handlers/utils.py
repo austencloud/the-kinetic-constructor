@@ -3,6 +3,8 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 
 from Enums.Enums import VTG_Directions
+from constants import OPP, SAME
+
 
 def load_svg_item(svg_path: str) -> QGraphicsSvgItem:
     renderer = QSvgRenderer(svg_path)
@@ -14,6 +16,7 @@ def load_svg_item(svg_path: str) -> QGraphicsSvgItem:
 
 
 def parse_turns_tuple_string(turns_str: str) -> tuple:
+    """Returns a tuple of direction, top turn, and bottom turn"""
     parts = turns_str.strip("()").split(",")
     turns_list = []
 
@@ -24,11 +27,11 @@ def parse_turns_tuple_string(turns_str: str) -> tuple:
         elif item in ["0", "1", "2", "3"]:
             item = int(item)
         elif item == "s":
-            item = VTG_Directions.SAME
+            item = SAME
         elif item == "o":
-            item = VTG_Directions.OPP
+            item = OPP
         turns_list.append(item)
-    if len(turns_list) == 3:
+    if len(turns_list) >= 3 and turns_list[0] in [SAME, OPP]:
         return turns_list[0], turns_list[1], turns_list[2]
     else:
         return None, turns_list[0], turns_list[1]

@@ -4,6 +4,7 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from typing import TYPE_CHECKING
 
 from Enums.Enums import VTG_Directions
+from constants import OPP, SAME
 
 if TYPE_CHECKING:
     from ..tka_glyph import TKA_Glyph
@@ -17,7 +18,7 @@ class DotHandler:
         self.add_dots("images/same_opp_dot.svg")
         self.hide_dots()
 
-    def add_dots(self, dot_path: str):
+    def add_dots(self, dot_path: str) -> None:
         self.same_dot_item = self.create_dot(dot_path)
         if self.same_dot_item:
             self.glyph.addToGroup(self.same_dot_item)
@@ -26,7 +27,7 @@ class DotHandler:
         if self.opp_dot_item:
             self.glyph.addToGroup(self.opp_dot_item)
 
-    def hide_dots(self):
+    def hide_dots(self) -> None:
         self.same_dot_item.hide()
         self.opp_dot_item.hide()
 
@@ -37,7 +38,7 @@ class DotHandler:
             item.setSharedRenderer(renderer)
             return item
 
-    def update_dots(self, dir: VTG_Directions):
+    def update_dots(self, dir: VTG_Directions) -> None:
         padding = 10
         letter_scene_rect = self.glyph.letter_handler.letter_item.sceneBoundingRect()
         letter_scene_center = letter_scene_rect.center()
@@ -62,11 +63,11 @@ class DotHandler:
                 opp_dot_center - self.opp_dot_item.boundingRect().center()
             )
 
-        if dir == VTG_Directions.SAME:
+        if dir == SAME:
             self.same_dot_item.show()
             self.opp_dot_item.hide()
 
-        elif dir == VTG_Directions.OPP:
+        elif dir == OPP:
             self.same_dot_item.hide()
             self.opp_dot_item.show()
 

@@ -12,20 +12,20 @@ if TYPE_CHECKING:
 
 
 class TKA_Glyph(QGraphicsItemGroup):
-    def __init__(self, pictograph: "Pictograph"):
+    def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__()
         self.pictograph = pictograph
         self.letter = None
         self.init_handlers()
 
-    def init_handlers(self):
+    def init_handlers(self) -> None:
         self.letter_handler = TKALetterHandler(self)
         self.dash_handler = DashHandler(self)
         self.dot_handler = DotHandler(self)
         self.turns_column_handler = TurnsColumnHandler(self)
         self.addToGroup(self.turns_column_handler)
 
-    def update_tka_glyph(self):
+    def update_tka_glyph(self) -> None:
         if not self.letter:
             self.setup_base_letter()
         if not self.letter:
@@ -39,14 +39,14 @@ class TKA_Glyph(QGraphicsItemGroup):
         )
         self.setVisible(visibility_manager.should_glyph_be_visible("TKA"))
 
-    def setup_base_letter(self):
+    def setup_base_letter(self) -> None:
         self.letter = self.pictograph.letter
         self.letter_handler.set_letter()
         if self.letter:
             if "-" in self.pictograph.letter.value:
                 self.dash_handler.update_dash()
 
-    def convert_to_ints(self, top_turn):
+    def convert_to_ints(self, top_turn) -> int:
         top_turn = int(top_turn) if top_turn == int(top_turn) else top_turn
         bottom_turn = (
             int(bottom_turn) if bottom_turn == int(bottom_turn) else bottom_turn

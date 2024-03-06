@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import (
     QFrame,
     QHBoxLayout,
     QVBoxLayout,
-    QApplication,
+    QApplication, QSizePolicy
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
@@ -52,8 +52,11 @@ class GE_TurnsBoxHeader(QWidget):
         self.bottom_hbox = QHBoxLayout()
         self.layout.addLayout(self.top_hbox)
         self.layout.addLayout(self.bottom_hbox)
-        self.layout.setContentsMargins(0, 0, 0, 0)
+        # self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
+
+        # Set size policy to Fixed
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
     def _add_widgets(self) -> None:
         self.top_hbox.addStretch(1)
