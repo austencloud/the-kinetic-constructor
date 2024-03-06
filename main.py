@@ -19,7 +19,7 @@ class MainWindow(QMainWindow):
         self.setAttribute(Qt.WidgetAttribute.WA_AcceptTouchEvents, True)
         self.window_manager = WindowGeometryManager(self)
         self.setCentralWidget(self.main_widget)
-        self.setWindowTitle("Sequence Constructor")
+        self.setWindowTitle("Kinetic Constructor")
         self.menu_bar = MainWindowMenuBar(self.main_widget)
         self.setMenuBar(self.menu_bar)
         self.show()

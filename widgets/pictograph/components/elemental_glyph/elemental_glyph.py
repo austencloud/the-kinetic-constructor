@@ -14,6 +14,8 @@ SVG_PATHS = {
     VTG_Modes.SPLIT_OPP: "fire.svg",
     VTG_Modes.TOG_SAME: "earth.svg",
     VTG_Modes.TOG_OPP: "air.svg",
+    VTG_Modes.QUARTER_SAME: "sun.svg",
+    
 }
 
 SVG_BASE_PATH = "images/elements"
