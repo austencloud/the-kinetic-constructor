@@ -53,7 +53,7 @@ class GE_TurnsBoxHeader(QWidget):
         self.bottom_hbox = QHBoxLayout()
         self.layout.addLayout(self.top_hbox)
         self.layout.addLayout(self.bottom_hbox)
-        # self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
         # Set size policy to Fixed
