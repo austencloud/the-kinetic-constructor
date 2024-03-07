@@ -77,7 +77,7 @@ class StartPosManager(QObject):
         beat_frame = self.sequence_builder.main_widget.sequence_widget.beat_frame
         start_pos_view = beat_frame.start_pos_view
         beat_frame.selection_manager.select_beat(start_pos_view)
-        
+
         QApplication.processEvents()  # Force the UI to update
         self.start_position_selected.connect(
             self.sequence_builder.transition_to_sequence_building
@@ -94,7 +94,7 @@ class StartPosManager(QObject):
     def resize_start_position_pictographs(self) -> None:
         spacing = 10
         for start_option in self.start_options.values():
-            view_width = int((self.start_pos_frame.width() // 6) - spacing)
+            view_width = int((self.start_pos_frame.width() // 4) - spacing)
             start_option.view.setFixedSize(view_width, view_width)
             start_option.view.view_scale = view_width / start_option.width()
             start_option.view.resetTransform()
