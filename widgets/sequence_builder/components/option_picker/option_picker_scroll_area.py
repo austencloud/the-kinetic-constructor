@@ -19,7 +19,7 @@ from ....scroll_area.base_scroll_area import BasePictographScrollArea
 
 if TYPE_CHECKING:
     from .option_picker import OptionPicker
-    from widgets.sequence_builder.sequence_builder import SequenceBuilder
+    from widgets.sequence_builder.sequence_builder import SequenceConstructor
 
 
 class OptionPickerScrollArea(BasePictographScrollArea):
@@ -29,7 +29,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
     def __init__(self, option_picker: "OptionPicker"):
         super().__init__(option_picker)
         self.option_picker: "OptionPicker" = option_picker
-        self.sequence_builder: "SequenceBuilder" = option_picker.sequence_builder
+        self.sequence_builder: "SequenceConstructor" = option_picker.sequence_builder
         self.option_manager = self.option_picker.option_manager
         self.option_click_handler = self.sequence_builder.option_click_handler
         self.ori_calculator = (

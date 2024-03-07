@@ -99,8 +99,8 @@ class SequenceButtonFrame(QFrame):
         self.sequence_widget.beat_frame.start_pos_view.setScene(None)
         self.sequence_widget.beat_frame.start_pos_view.is_filled = False
         if reset_to_start_pos_picker:
-            self.main_widget.main_tab_widget.sequence_builder.reset_to_start_pos_picker()
-        self.main_widget.main_tab_widget.sequence_builder.current_pictograph = (
+            self.main_widget.main_tab_widget.sequence_constructor.reset_to_start_pos_picker()
+        self.main_widget.main_tab_widget.sequence_constructor.current_pictograph = (
             self.sequence_widget.beat_frame.start_pos
         )
         with open(

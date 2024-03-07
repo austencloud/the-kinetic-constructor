@@ -25,6 +25,6 @@ class GE_PlaceHolderTextLabel(QLabel):
 
     def set_stylesheet(self) -> None:
         width = self.adjustment_panel.width()
-        font_size = int(0.04 * width)
+        font_size = int(0.02 * width)
         self.setFont(QFont("Cambria", font_size))
         self.show()

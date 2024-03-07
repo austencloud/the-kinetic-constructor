@@ -27,7 +27,9 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.current_sequence_json_handler = (
             self.ori_picker_box.graph_editor.main_widget.json_manager.current_sequence_json_handler
         )
-        self.option_picker = self.ori_picker_box.graph_editor.main_widget.main_tab_widget.sequence_builder.option_picker
+        self.option_picker = (
+            self.ori_picker_box.graph_editor.main_widget.main_tab_widget.sequence_constructor.option_picker
+        )
         self.current_orientation_index = 0
         self.orientations = [IN, COUNTER, OUT, CLOCK]
         self._setup_orientation_label()
@@ -93,15 +95,13 @@ class GE_StartPosOriPickerWidget(QWidget):
         current_pictograph = (
             self.ori_picker_box.graph_editor.GE_pictograph_view.pictograph
         )
-        self.current_sequence_json_handler.update_start_pos_ori(
-            self.color, new_ori
-        )
+        self.current_sequence_json_handler.update_start_pos_ori(self.color, new_ori)
         self.json_validation_engine.run()
         self.ori_adjusted.emit(new_ori)
         self.option_picker.update_option_picker()
         current_pictograph.props[self.color].updater.update_prop({ORI: new_ori})
         current_pictograph.updater.update_pictograph()
-        
+
     def rotate_ccw(self) -> None:
         self.current_orientation_index = (self.current_orientation_index - 1) % len(
             self.orientations
@@ -112,9 +112,7 @@ class GE_StartPosOriPickerWidget(QWidget):
             self.ori_picker_box.graph_editor.GE_pictograph_view.pictograph
         )
         current_pictograph.updater.update_pictograph()
-        self.current_sequence_json_handler.update_start_pos_ori(
-            self.color, new_ori
-        )
+        self.current_sequence_json_handler.update_start_pos_ori(self.color, new_ori)
         self.json_validation_engine.run()
         self.ori_adjusted.emit(new_ori)
         self.option_picker.update_option_picker()

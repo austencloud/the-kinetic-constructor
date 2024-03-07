@@ -21,7 +21,7 @@ class MotionUpdater:
         }
         self.motion.prop.updater.update_prop(prop_dict)
 
-    def update_end_ori(self):
+    def update_end_ori(self) -> None:
         self.motion.end_ori = self.motion.ori_calculator.get_end_ori()
         self.motion.pictograph.pictograph_dict[f"{self.motion.color.value}_end_ori"] = (
             self.motion.end_ori

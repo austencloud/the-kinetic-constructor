@@ -23,7 +23,7 @@ class BeatDeletionManager:
         self.beats = sequence_beat_frame.beat_views
         self.start_pos_view = self.beat_frame.start_pos_view
         self.sequence_builder = (
-            self.beat_frame.sequence_widget.main_widget.main_tab_widget.sequence_builder
+            self.beat_frame.sequence_widget.main_widget.main_tab_widget.sequence_constructor
         )
         self.selection_manager = self.beat_frame.selection_manager
         self.current_sequence_json_handler = (

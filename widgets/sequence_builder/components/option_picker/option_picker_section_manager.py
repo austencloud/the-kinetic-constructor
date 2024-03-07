@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (
         OptionPickerScrollArea,
     )
-    from widgets.sequence_builder.sequence_builder import SequenceBuilder
+    from widgets.sequence_builder.sequence_builder import SequenceConstructor
 
 
 class OptionPickerSectionsManager:
@@ -36,7 +36,7 @@ class OptionPickerSectionsManager:
 
     def __init__(self, scroll_area: "OptionPickerScrollArea") -> None:
         self.scroll_area = scroll_area
-        self.sequence_builder: "SequenceBuilder" = scroll_area.sequence_builder
+        self.sequence_builder: "SequenceConstructor" = scroll_area.sequence_builder
         self.sections: dict[LetterType, OptionPickerSectionWidget] = {}
         self.filter_tabs_cache: dict[LetterType, TurnsTab] = {}
         self.pictograph_cache: dict[Letter, list[LetterType]] = {}

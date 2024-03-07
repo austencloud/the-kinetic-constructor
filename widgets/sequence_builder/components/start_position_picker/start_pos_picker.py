@@ -13,13 +13,13 @@ from .start_pos_manager import StartPosManager
 from ....pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from ...sequence_builder import SequenceBuilder
+    from ...sequence_builder import SequenceConstructor
 
 
 class StartPosPicker(QWidget):
     SPACING = 10
 
-    def __init__(self, sequence_builder: "SequenceBuilder"):
+    def __init__(self, sequence_builder: "SequenceConstructor"):
         super().__init__(sequence_builder)
         self.sequence_builder = sequence_builder
         self.main_widget = sequence_builder.main_widget

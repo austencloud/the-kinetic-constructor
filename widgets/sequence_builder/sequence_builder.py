@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     from ..main_widget.main_widget import MainWidget
 
 
-class SequenceBuilder(QFrame):
+class SequenceConstructor(QFrame):
     def __init__(self, main_widget: "MainWidget"):
         super().__init__(main_widget)
         self.main_widget = main_widget

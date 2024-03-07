@@ -109,7 +109,7 @@ class SequenceBeatFrame(QFrame):
             self.current_sequence_json_handler.load_current_sequence_json()
         )
         self.propogate_turn_adjustment(current_sequence_json)
-        self.main_widget.main_tab_widget.sequence_builder.option_picker.update_option_picker()
+        self.main_widget.main_tab_widget.sequence_constructor.option_picker.update_option_picker()
 
     def propogate_turn_adjustment(self, current_sequence_json) -> None:
         for i, entry in enumerate(current_sequence_json):
@@ -123,6 +123,10 @@ class SequenceBeatFrame(QFrame):
                         QApplication.processEvents()
 
     def update_start_pos_from_current_sequence_json(self, entry: dict) -> None:
+        entry["red_start_ori"] = entry["red_end_ori"]
+        entry["blue_start_ori"] = entry["blue_end_ori"]
+        entry["start_pos"] = entry["end_pos"]
+        del entry["sequence_start_position"]
         self.start_pos_view.start_pos.updater.update_pictograph(entry)
 
     def get_index_of_currently_selected_beat(self) -> int:

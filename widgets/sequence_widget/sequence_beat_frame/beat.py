@@ -53,7 +53,7 @@ class BeatView(QGraphicsView):
     def clear(self):
         self.setScene(None)
         self.beat_frame.start_pos_view.setScene(None)
-        sequence_builder = self.beat.main_widget.main_tab_widget.sequence_builder
+        sequence_builder = self.beat.main_widget.main_tab_widget.sequence_constructor
         sequence_builder.current_pictograph = (
             self.beat_frame.sequence_widget.beat_frame.start_pos
         )

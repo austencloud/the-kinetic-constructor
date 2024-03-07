@@ -4,11 +4,11 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_beat_frame.beat import Beat
     from widgets.pictograph.pictograph import Pictograph
-    from widgets.sequence_builder.sequence_builder import SequenceBuilder
+    from widgets.sequence_builder.sequence_builder import SequenceConstructor
 
 
 class AddToSequenceManager:
-    def __init__(self, sequence_builder: "SequenceBuilder") -> None:
+    def __init__(self, sequence_builder: "SequenceConstructor") -> None:
         self.sequence_builder = sequence_builder
 
     def create_new_beat(self, clicked_option: "Pictograph") -> "Beat":
