@@ -44,7 +44,7 @@ class GE_StartPosOriPickerWidget(QWidget):
         )
         self.layout.addWidget(self.ori_label, 1)
         self.layout.addWidget(self.current_orientation_display, 1)
-        self.layout.addStretch(2)
+        self.layout.addStretch(3)
         self.layout.addLayout(self.orientation_control_layout, 1)
         self.layout.addStretch(1)
         self.setLayout(self.layout)
@@ -83,10 +83,14 @@ class GE_StartPosOriPickerWidget(QWidget):
             self.orientations[self.current_orientation_index]
         )
         self.current_orientation_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.current_orientation_display.setFont(
-            QFont("Cambria", 20, QFont.Weight.Bold)
-        )
         return self.current_orientation_display
+
+    def set_current_orientation_display_font(self) -> None:
+        font = QFont("Cambria")
+        font_size = self.ori_picker_box.graph_editor.width() // 30
+        font.setPointSize(font_size)
+        font.setWeight(QFont.Weight.Bold)
+        self.current_orientation_display.setFont(font)
 
     def rotate_cw(self) -> None:
         self.current_orientation_index = (self.current_orientation_index + 1) % len(
@@ -128,3 +132,4 @@ class GE_StartPosOriPickerWidget(QWidget):
             button.setFixedSize(QSize(button_size, button_size))
             button.setIconSize(QSize(icon_size, icon_size))
         self._set_ori_label_font_size()
+        self.set_current_orientation_display_font()

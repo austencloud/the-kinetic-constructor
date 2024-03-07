@@ -48,7 +48,7 @@ class MainWidget(QWidget):
         for letter in Letter:
             self.all_pictographs[letter] = {}
 
-    def _set_prop_type(self):
+    def _set_prop_type(self) -> None:
         with open("user_settings.json", "r") as file:
             user_settings: dict = json.load(file)
         prop_type_value = user_settings.get("prop_type")
@@ -67,7 +67,7 @@ class MainWidget(QWidget):
         self.preferences_dialog = PreferencesDialog(self)
         self.image_cache_manager = ImageCacheManager(self)
 
-    def _setup_special_placements(self):
+    def _setup_special_placements(self) -> None:
         self.special_placement_loader = SpecialPlacementLoader(self)
         self.special_placements: dict[
             str, dict[str, dict[str, dict[str, list[int]]]]
