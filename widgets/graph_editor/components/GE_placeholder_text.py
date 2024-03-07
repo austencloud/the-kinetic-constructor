@@ -10,21 +10,21 @@ if TYPE_CHECKING:
 class GE_PlaceHolderTextLabel(QLabel):
     def __init__(self, adjustment_panel: "GE_AdjustmentPanel") -> None:
         super().__init__(adjustment_panel)
-        self.option_picker = adjustment_panel
+        self.adjustment_panel = adjustment_panel
         self.set_default_text()
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.hide()
 
-    def set_default_text(self):
+    def set_default_text(self) -> None:
         self.setText(
             "This is where you'll modify each pictograph.\nSelect a start position to begin!\n--->"
         )
 
-    def set_text_to_loading(self):
+    def set_text_to_loading(self) -> None:
         self.setText("Loading...")
 
     def set_stylesheet(self) -> None:
-        width = self.option_picker.width()
-        font_size = int(0.02 * width)
+        width = self.adjustment_panel.width()
+        font_size = int(0.04 * width)
         self.setFont(QFont("Cambria", font_size))
         self.show()
