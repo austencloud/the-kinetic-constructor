@@ -31,33 +31,26 @@ class StartPosPicker(QWidget):
         self.start_pos_manager = StartPosManager(self)
         self.choose_your_start_pos_label = ChooseYourStartPositionLabel(self)
 
-        self.pictograph_frame._setup_choose_your_start_pos_label()
         self.setup_layout()
 
-    def setup_layout(self):
+    def setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
 
         start_label_layout = QHBoxLayout()
-        start_label_layout.addWidget(self.choose_your_start_pos_label)
-        self.layout.addLayout(start_label_layout)
-
         pictograph_layout = QHBoxLayout()
+
+        start_label_layout.addWidget(self.choose_your_start_pos_label)
         pictograph_layout.addWidget(self.pictograph_frame)
-        self.layout.addLayout(pictograph_layout)
+
+        self.layout.addLayout(start_label_layout, 1)
+        self.layout.addLayout(pictograph_layout, 4)
 
     def resize_start_position_picker(self) -> None:
         self.pictograph_frame.resize_start_pos_picker_pictograph_frame()
         self.start_pos_manager.resize_start_position_pictographs()
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.choose_your_start_pos_label.show()
-
-    def show_exciting_label(self):
-        self.choose_your_start_pos_label.show()
-
-    def hide_exciting_label(self):
-        self.choose_your_start_pos_label.hide()

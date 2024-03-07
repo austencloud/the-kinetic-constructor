@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 class StartPosManager(QObject):
     start_position_selected = pyqtSignal(Pictograph)
 
-    def __init__(self, start_pos_picker: "StartPosPicker"):
+    def __init__(self, start_pos_picker: "StartPosPicker") -> None:
         super().__init__()
         self.sequence_builder = start_pos_picker.sequence_builder
         self.start_pos_picker = start_pos_picker
@@ -61,7 +61,7 @@ class StartPosManager(QObject):
                         )
                     )
 
-    def on_start_pos_clicked(self, clicked_start_option: Pictograph):
+    def on_start_pos_clicked(self, clicked_start_option: Pictograph) -> None:
         start_position_beat = StartPositionBeat(
             self.sequence_builder.main_widget,
             self.sequence_builder.main_widget.sequence_widget.beat_frame,
@@ -87,11 +87,11 @@ class StartPosManager(QObject):
         self.start_position_selected.emit(start_position_beat)
         # start_position_beat.add_start_text()
 
-    def hide_start_positions(self):
+    def hide_start_positions(self) -> None:
         for start_position_pictograph in self.start_options.values():
             start_position_pictograph.view.hide()
 
-    def resize_start_position_pictographs(self):
+    def resize_start_position_pictographs(self) -> None:
         spacing = 10
         for start_option in self.start_options.values():
             view_width = int((self.start_pos_frame.width() // 6) - spacing)
@@ -105,7 +105,7 @@ class StartPosManager(QObject):
 
     def _convert_current_sequence_json_entry_to_start_pos_pictograph(
         self, start_pos_entry
-    ):
+    ) -> StartPositionBeat:
         start_position_pictograph = self.get_start_pos_pictograph(
             start_pos_entry[0] if start_pos_entry else None
         )
@@ -144,7 +144,7 @@ class StartPosManager(QObject):
         print(f"No matching start position found for key: {start_pos_key}")
         return None
 
-    def start_pos_key_to_letter(self, start_pos_key: str):
+    def start_pos_key_to_letter(self, start_pos_key: str) -> str:
         mapping = {"alpha": "α", "beta": "β", "gamma": "Γ"}
         for key in mapping:
             if start_pos_key.startswith(key):

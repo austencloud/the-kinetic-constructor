@@ -22,5 +22,5 @@ class ChooseYourStartPositionLabel(QLabel):
         width = self.start_pos_picker.width()
         font_size = int(0.03 * width)
         self.setFont(QFont("Monotype Corsiva", font_size))
-        self.setStyleSheet("QLabel { border: 1px solid black; }")
+        # self.setStyleSheet("QLabel { border: 1px solid black; }")
         self.show()

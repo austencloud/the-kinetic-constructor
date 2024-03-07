@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 
 class StartPosPickerPictographFrame(QWidget):
-    def __init__(self, start_pos_picker: "StartPosPicker"):
+    def __init__(self, start_pos_picker: "StartPosPicker") -> None:
         super().__init__(start_pos_picker)
         self.start_pos_picker = start_pos_picker
         self.clickable_option_handler = (
@@ -17,12 +17,8 @@ class StartPosPickerPictographFrame(QWidget):
         self.pictographs_layout = QHBoxLayout()
         self.layout.addLayout(self.pictographs_layout)
 
-    def _setup_choose_your_start_pos_label(self):
-        self.label = self.start_pos_picker.choose_your_start_pos_label
-        self.layout.addWidget(self.label)
 
     def resize_start_pos_picker_pictograph_frame(self) -> None:
-        # self.setMinimumHeight(self.start_pos_picker.height())
         self.setMinimumWidth(self.start_pos_picker.width())
         self.start_pos_picker.choose_your_start_pos_label.set_stylesheet()
 
