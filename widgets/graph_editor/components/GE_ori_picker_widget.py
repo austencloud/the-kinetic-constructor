@@ -1,7 +1,8 @@
 from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout
 from PyQt6.QtGui import QIcon, QFont
-from PyQt6.QtCore import Qt, QSize
-from constants import IN, OUT, CLOCK, COUNTER
+
+from PyQt6.QtCore import Qt, QSize, pyqtSignal
+from constants import IN, ORI, OUT, CLOCK, COUNTER
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -11,14 +12,28 @@ if TYPE_CHECKING:
 
 
 class GE_StartPosOriPickerWidget(QWidget):
+    ori_adjusted = pyqtSignal(str)
+
     def __init__(self, ori_picker_box: "GE_StartPosOriPickerBox") -> None:
         super().__init__()
         self.ori_picker_box = ori_picker_box
+        self.color = self.ori_picker_box.color
+        self.json_validation_engine = (
+            self.ori_picker_box.graph_editor.main_widget.json_manager.current_sequence_json_handler.validation_engine
+        )
+        self.beat_frame = (
+            self.ori_picker_box.graph_editor.sequence_modifier.sequence_widget.beat_frame
+        )
+        self.current_sequence_json_handler = (
+            self.ori_picker_box.graph_editor.main_widget.json_manager.current_sequence_json_handler
+        )
+        self.option_picker = self.ori_picker_box.graph_editor.main_widget.main_tab_widget.sequence_builder.option_picker
         self.current_orientation_index = 0
-        self.orientations = [IN, OUT, CLOCK, COUNTER]
+        self.orientations = [IN, COUNTER, OUT, CLOCK]
         self._setup_orientation_label()
         self._setup_orientation_control_layout()
         self._setup_layout()
+        self.ori_adjusted.connect(self.beat_frame.on_beat_adjusted)
 
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout()
@@ -52,7 +67,7 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.orientation_control_layout.addWidget(self.cw_button)
         self.orientation_control_layout.addStretch(5)
 
-    def setup_button(self, icon_path, click_function) -> QPushButton:
+    def setup_button(self, icon_path, click_function: callable) -> QPushButton:
         button = QPushButton()
         button.setIcon(QIcon(icon_path))
         button.clicked.connect(click_function)
@@ -73,17 +88,38 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.current_orientation_index = (self.current_orientation_index + 1) % len(
             self.orientations
         )
-        self.current_orientation_display.setText(
-            self.orientations[self.current_orientation_index]
+        new_ori = self.orientations[self.current_orientation_index]
+        self.current_orientation_display.setText(new_ori)
+        current_pictograph = (
+            self.ori_picker_box.graph_editor.GE_pictograph_view.pictograph
         )
-
+        self.current_sequence_json_handler.update_start_pos_ori(
+            self.color, new_ori
+        )
+        self.json_validation_engine.run()
+        self.ori_adjusted.emit(new_ori)
+        self.option_picker.update_option_picker()
+        current_pictograph.props[self.color].updater.update_prop({ORI: new_ori})
+        current_pictograph.updater.update_pictograph()
+        
     def rotate_ccw(self) -> None:
         self.current_orientation_index = (self.current_orientation_index - 1) % len(
             self.orientations
         )
-        self.current_orientation_display.setText(
-            self.orientations[self.current_orientation_index]
+        new_ori = self.orientations[self.current_orientation_index]
+        self.current_orientation_display.setText(new_ori)
+        current_pictograph = (
+            self.ori_picker_box.graph_editor.GE_pictograph_view.pictograph
         )
+        current_pictograph.updater.update_pictograph()
+        self.current_sequence_json_handler.update_start_pos_ori(
+            self.color, new_ori
+        )
+        self.json_validation_engine.run()
+        self.ori_adjusted.emit(new_ori)
+        self.option_picker.update_option_picker()
+        current_pictograph.props[self.color].updater.update_prop({ORI: new_ori})
+        current_pictograph.updater.update_pictograph()
 
     def resize_GE_start_pos_ori_picker_widget(self):
         button_size = int(self.ori_picker_box.calculate_button_size())

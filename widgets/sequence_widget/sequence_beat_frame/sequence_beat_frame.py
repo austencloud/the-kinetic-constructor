@@ -104,7 +104,7 @@ class SequenceBeatFrame(QFrame):
                 return beat_view
         return self.beat_views[0]
 
-    def on_turns_adjusted(self) -> None:
+    def on_beat_adjusted(self) -> None:
         current_sequence_json = (
             self.current_sequence_json_handler.load_current_sequence_json()
         )

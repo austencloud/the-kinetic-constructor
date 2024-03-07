@@ -27,7 +27,7 @@ class GE_TurnsAdjustmentManager(QObject):
             self.graph_editor.main_widget.json_manager.current_sequence_json_handler
         )
         self.color = self.turns_widget.turns_box.color
-        self.turns_adjusted.connect(self.beat_frame.on_turns_adjusted)
+        self.turns_adjusted.connect(self.beat_frame.on_beat_adjusted)
 
     def adjust_turns(self, adjustment: Union[int, float]) -> None:
         self.pictograph = self.graph_editor.GE_pictograph_view.get_current_pictograph()

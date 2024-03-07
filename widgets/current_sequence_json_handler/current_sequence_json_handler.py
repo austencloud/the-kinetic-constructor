@@ -140,6 +140,11 @@ class CurrentSequenceJsonHandler:
 
         self.save_sequence(sequence)
 
+    def update_start_pos_ori(self, color: Color, ori: int) -> None:
+        sequence = self.load_current_sequence_json()
+        sequence[0][f"{color.value}_end_ori"] = ori
+        self.save_sequence(sequence)
+
     def update_rot_dir_in_json_at_index(
         self, index: int, color: Color, prop_rot_dir: str
     ) -> None:
