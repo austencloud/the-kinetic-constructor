@@ -53,4 +53,3 @@ class StartPositionBeatView(BeatView):
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
         self.start_pos.add_start_text()
-        self.beat_frame.selection_manager.select_beat(self)

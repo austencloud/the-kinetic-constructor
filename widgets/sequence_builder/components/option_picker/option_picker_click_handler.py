@@ -14,14 +14,15 @@ class OptionPickerClickHandler:
         return lambda event: self.on_option_clicked(start_pos)
 
     def on_option_clicked(self, clicked_option: "Pictograph") -> None:
+        beat_frame = self.sequence_builder.main_widget.sequence_widget.beat_frame
         new_beat = self.sequence_builder.add_to_sequence_manager.create_new_beat(
             clicked_option
         )
-        self.sequence_builder.main_widget.sequence_widget.beat_frame.add_scene_to_sequence(
-            new_beat
-        )
-
+        beat_frame.add_scene_to_sequence(new_beat)
         self.sequence_builder.option_picker.choose_your_next_option_label.set_text_to_loading()
+        selection_manager = beat_frame.selection_manager
+        selection_manager.select_beat(new_beat.view)
+
         QApplication.processEvents()
 
         self.sequence_builder.option_picker.update_option_picker()

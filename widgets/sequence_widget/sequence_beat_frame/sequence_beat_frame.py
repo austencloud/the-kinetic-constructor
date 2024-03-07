@@ -87,7 +87,6 @@ class SequenceBeatFrame(QFrame):
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
             self.beat_views[next_beat_index].set_pictograph(new_beat)
-            self.selection_manager.select_beat(self.beat_views[next_beat_index])
             self.current_sequence_json_handler.update_current_sequence_file_with_beat(
                 self.beat_views[next_beat_index]
             )

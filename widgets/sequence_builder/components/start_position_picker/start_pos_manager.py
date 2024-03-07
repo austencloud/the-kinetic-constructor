@@ -73,11 +73,12 @@ class StartPosManager(QObject):
         self.sequence_builder.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos_beat(
             start_position_beat
         )
-
         self.sequence_builder.current_pictograph = start_position_beat
-
+        beat_frame = self.sequence_builder.main_widget.sequence_widget.beat_frame
+        start_pos_view = beat_frame.start_pos_view
+        beat_frame.selection_manager.select_beat(start_pos_view)
+        
         QApplication.processEvents()  # Force the UI to update
-
         self.start_position_selected.connect(
             self.sequence_builder.transition_to_sequence_building
         )
@@ -85,7 +86,6 @@ class StartPosManager(QObject):
             start_position_beat
         )
         self.start_position_selected.emit(start_position_beat)
-        # start_position_beat.add_start_text()
 
     def hide_start_positions(self) -> None:
         for start_position_pictograph in self.start_options.values():
