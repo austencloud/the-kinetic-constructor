@@ -11,11 +11,11 @@ from ....codex.codex_letter_button_frame.components.codex_button_frame_styler im
 )
 
 if TYPE_CHECKING:
-    from ...sequence_builder import SequenceConstructor
+    from ...sequence_builder import SequenceBuilder
 
 
 class OptionPickerLetterButtonFrame(QFrame):
-    def __init__(self, sequence_builder: "SequenceConstructor") -> None:
+    def __init__(self, sequence_builder: "SequenceBuilder") -> None:
         super().__init__()
         self.codex = sequence_builder
         self.spacing = 5

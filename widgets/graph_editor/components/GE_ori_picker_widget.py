@@ -44,7 +44,8 @@ class GE_StartPosOriPickerWidget(QWidget):
         )
         self.layout.addWidget(self.ori_label, 1)
         self.layout.addWidget(self.current_orientation_display, 1)
-        self.layout.addLayout(self.orientation_control_layout, 4)
+        self.layout.addStretch(2)
+        self.layout.addLayout(self.orientation_control_layout, 1)
         self.layout.addStretch(1)
         self.setLayout(self.layout)
 
@@ -66,6 +67,7 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.orientation_control_layout = QHBoxLayout()
         self.orientation_control_layout.addStretch(5)
         self.orientation_control_layout.addWidget(self.ccw_button)
+        self.orientation_control_layout.addStretch(3)
         self.orientation_control_layout.addWidget(self.cw_button)
         self.orientation_control_layout.addStretch(5)
 
@@ -119,8 +121,8 @@ class GE_StartPosOriPickerWidget(QWidget):
         current_pictograph.props[self.color].updater.update_prop({ORI: new_ori})
         current_pictograph.updater.update_pictograph()
 
-    def resize_GE_start_pos_ori_picker_widget(self):
-        button_size = int(self.ori_picker_box.calculate_button_size())
+    def resize_GE_start_pos_ori_picker_widget(self) -> None:
+        button_size = int(self.ori_picker_box.height() // 4)
         icon_size = int(button_size * 0.6)
         for button in [self.ccw_button, self.cw_button]:
             button.setFixedSize(QSize(button_size, button_size))

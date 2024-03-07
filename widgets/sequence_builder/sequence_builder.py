@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     from ..main_widget.main_widget import MainWidget
 
 
-class SequenceConstructor(QFrame):
+class SequenceBuilder(QFrame):
     def __init__(self, main_widget: "MainWidget"):
         super().__init__(main_widget)
         self.main_widget = main_widget
@@ -39,7 +39,7 @@ class SequenceConstructor(QFrame):
         self.setLayout(QHBoxLayout())
         self.layout().addWidget(self.start_position_picker)
 
-    def _setup_components(self):
+    def _setup_components(self) -> None:
         self.option_click_handler = OptionPickerClickHandler(self)
 
     def transition_to_sequence_building(self):

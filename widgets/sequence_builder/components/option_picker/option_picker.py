@@ -14,13 +14,13 @@ from .option_picker_scroll_area import OptionPickerScrollArea
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ...sequence_builder import SequenceConstructor
+    from ...sequence_builder import SequenceBuilder
 
 
 class OptionPicker(QWidget):
     option_selected = pyqtSignal(str)  # Signal to emit the selected option
 
-    def __init__(self, sequence_builder: "SequenceConstructor"):
+    def __init__(self, sequence_builder: "SequenceBuilder"):
         super().__init__(sequence_builder)
         self.sequence_builder = sequence_builder
         self.main_widget = sequence_builder.main_widget

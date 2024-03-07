@@ -35,7 +35,6 @@ class GE_StartPosOriPickerBox(QFrame):
         }
         self._setup_widgets()
         self._setup_layout()
-        self._set_border_color()
 
     def _setup_widgets(self) -> None:
         self.header = GE_StartPosOriPickerBoxHeader(self)
@@ -58,4 +57,5 @@ class GE_StartPosOriPickerBox(QFrame):
         return int((self.start_pos.view.height() // 8))
 
     def resize_GE_ori_picker_box(self) -> None:
+        self._set_border_color()
         self.ori_picker_widget.resize_GE_start_pos_ori_picker_widget()

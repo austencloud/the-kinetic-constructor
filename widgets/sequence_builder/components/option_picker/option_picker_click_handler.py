@@ -3,11 +3,11 @@ from ....pictograph.pictograph import Pictograph
 from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.sequence_builder import SequenceConstructor
+    from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
 
 class OptionPickerClickHandler:
-    def __init__(self, sequence_builder: "SequenceConstructor") -> None:
+    def __init__(self, sequence_builder: "SequenceBuilder") -> None:
         self.sequence_builder = sequence_builder
 
     def get_click_handler(self, start_pos: "Pictograph") -> callable:

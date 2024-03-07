@@ -37,7 +37,6 @@ class GE_TurnsBox(QFrame):
         }
         self._setup_widgets()
         self._setup_layout()
-        self._set_border_color()
 
     def _setup_widgets(self) -> None:
         self.vtg_dir_button_manager = GE_VtgDirButtonManager(self)
@@ -60,6 +59,7 @@ class GE_TurnsBox(QFrame):
         )
 
     def resize_GE_turns_box(self) -> None:
+        self._set_border_color()
         self.setMinimumWidth(
             int(
                 (
