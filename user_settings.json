@@ -1,13 +1,13 @@
 {
     "pictograph_size": 1,
-    "prop_type": "Club",
+    "prop_type": "Staff",
     "glyph_visibility": {
         "VTG": false,
-        "TKA": false,
+        "TKA": true,
         "Elemental": false
     },
     "default_left_orientation": "in",
     "default_right_orientation": "in",
-    "default_left_orientation_Hand": "in",
+    "default_left_orientation_Hand": "counter",
     "default_right_orientation_Hand": "in"
 }

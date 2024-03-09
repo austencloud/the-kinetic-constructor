@@ -4,18 +4,19 @@ from PyQt6.QtSvg import QSvgRenderer
 from typing import TYPE_CHECKING
 
 from Enums.Enums import LetterType, VTG_Modes
+from constants import QUARTER_OPP, QUARTER_SAME, SPLIT_OPP, SPLIT_SAME, TOG_OPP, TOG_SAME
 
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 
 SVG_PATHS = {
-    VTG_Modes.SPLIT_SAME: "water.svg",
-    VTG_Modes.SPLIT_OPP: "fire.svg",
-    VTG_Modes.TOG_SAME: "earth.svg",
-    VTG_Modes.TOG_OPP: "air.svg",
-    VTG_Modes.QUARTER_SAME: "sun.svg",
-    VTG_Modes.QUARTER_OPP: "moon.svg",
+    SPLIT_SAME: "water.svg",
+    SPLIT_OPP: "fire.svg",
+    TOG_SAME: "earth.svg",
+    TOG_OPP: "air.svg",
+    QUARTER_SAME: "sun.svg",
+    QUARTER_OPP: "moon.svg",
 }
 
 SVG_BASE_PATH = "images/elements"
