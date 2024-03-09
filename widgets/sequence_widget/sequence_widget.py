@@ -42,7 +42,6 @@ class SequenceWidget(QWidget):
         self.layout.addWidget(self.button_frame, 1)
         self.layout.addWidget(self.indicator_label, 1)
         self.layout.addWidget(self.sequence_modifier, 10)
-        # add a stretch
         self.layout.addStretch(1)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 

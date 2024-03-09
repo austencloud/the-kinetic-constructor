@@ -66,7 +66,7 @@ class Library(QWidget):
         )
         sequence_widget = self.main_widget.sequence_widget
         sequence_widget.button_frame.clear_sequence(
-            show_indicator=False, reset_to_start_pos_picker=False
+            show_indicator=False, should_reset_to_start_pos_picker=False
         )
 
         start_pos_beat = start_pos_manager._convert_current_sequence_json_entry_to_start_pos_pictograph(

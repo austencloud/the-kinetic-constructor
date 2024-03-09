@@ -14,18 +14,23 @@ if TYPE_CHECKING:
 
 
 class SequenceButtonFrame(QFrame):
-    def __init__(self, sequence_widget: "SequenceWidget"):
+    def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
         self.main_widget = sequence_widget.main_widget
+        self.json_handler = self.main_widget.json_manager.current_sequence_json_handler
+        self.sequence_constructor = (
+            self.main_widget.main_tab_widget.sequence_constructor
+        )
+        self.graph_editor = self.sequence_widget.sequence_modifier.graph_editor
+        self.beat_frame = self.sequence_widget.beat_frame
         self.indicator_label = sequence_widget.indicator_label
         self.font_size = self.sequence_widget.width() // 45
         self.setup_save_sequence_button()
         self.setup_clear_sequence_button()
         self.setup_layout()
-        # self.setStyleSheet("border: 1px solid black;")
 
-    def setup_save_sequence_button(self):
+    def setup_save_sequence_button(self) -> None:
         self.save_sequence_button = QPushButton("Save Sequence")
         self.save_sequence_button.clicked.connect(self.save_sequence)
         self.save_sequence_button.setFixedHeight(40)
@@ -33,7 +38,7 @@ class SequenceButtonFrame(QFrame):
         font.setPointSize(self.font_size)
         self.save_sequence_button.setFont(font)
 
-    def setup_clear_sequence_button(self):
+    def setup_clear_sequence_button(self) -> None:
         self.clear_sequence_button = QPushButton("Clear Sequence")
         self.clear_sequence_button.clicked.connect(
             lambda: self.clear_sequence(show_indicator=True)
@@ -43,7 +48,7 @@ class SequenceButtonFrame(QFrame):
         font.setPointSize(self.font_size)
         self.clear_sequence_button.setFont(font)
 
-    def setup_layout(self):
+    def setup_layout(self) -> None:
         buttons_layout = QHBoxLayout()
         buttons_layout.addWidget(self.save_sequence_button)
         buttons_layout.addWidget(self.clear_sequence_button)
@@ -61,12 +66,12 @@ class SequenceButtonFrame(QFrame):
 
         self.setLayout(master_layout)
 
-    def resize_event(self, event):
+    def resize_event(self, event) -> None:
         button_width = self.width() // 6
         self.save_sequence_button.setFixedWidth(button_width)
         self.clear_sequence_button.setFixedWidth(button_width)
 
-    def save_sequence(self):
+    def save_sequence(self) -> None:
         sequence_data = (
             self.main_widget.json_manager.current_sequence_json_handler.load_current_sequence_json()
         )
@@ -92,27 +97,27 @@ class SequenceButtonFrame(QFrame):
         )
         print(f"Sequence saved to {filename}.")
 
-    def clear_sequence(self, show_indicator=True, reset_to_start_pos_picker=True):
-        for beat_view in self.sequence_widget.beat_frame.beat_views:
-            beat_view.setScene(None)
-            beat_view.is_filled = False
-        self.sequence_widget.beat_frame.start_pos_view.setScene(None)
-        self.sequence_widget.beat_frame.start_pos_view.is_filled = False
-        if reset_to_start_pos_picker:
-            self.main_widget.main_tab_widget.sequence_constructor.reset_to_start_pos_picker()
-        self.main_widget.main_tab_widget.sequence_constructor.current_pictograph = (
-            self.sequence_widget.beat_frame.start_pos
-        )
-        with open(
-            self.main_widget.json_manager.current_sequence_json_handler.current_sequence_json,
-            "w",
-        ) as file:
-            file.write("[]")
+    def clear_sequence(
+        self, show_indicator=True, should_reset_to_start_pos_picker=True
+    ) -> None:
+        self._reset_beat_frame()
+        if should_reset_to_start_pos_picker:
+            self.sequence_constructor.reset_to_start_pos_picker()
+        self.sequence_constructor.current_pictograph = self.beat_frame.start_pos
+        self.json_handler.clear_current_sequence_file()
         if show_indicator:
             self.sequence_widget.indicator_label.show_indicator("Sequence cleared")
-        self.sequence_widget.beat_frame.selection_manager.deselect_beat()
-        self.sequence_widget.sequence_modifier.graph_editor.GE_pictograph_view.set_to_blank_grid()
-        self.sequence_widget.sequence_modifier.graph_editor.adjustment_panel.set_turns(
-            0, 0
-        )
-        self.sequence_widget.sequence_modifier.graph_editor.adjustment_panel.update_adjustment_panel()
+        self._clear_graph_editor()
+
+    def _reset_beat_frame(self) -> None:
+        for beat_view in self.beat_frame.beat_views:
+            beat_view.setScene(None)
+            beat_view.is_filled = False
+        self.beat_frame.start_pos_view.setScene(None)
+        self.beat_frame.start_pos_view.is_filled = False
+        self.beat_frame.selection_manager.deselect_beat()
+
+    def _clear_graph_editor(self) -> None:
+        self.graph_editor.GE_pictograph_view.set_to_blank_grid()
+        self.graph_editor.adjustment_panel.set_turns(0, 0)
+        self.graph_editor.adjustment_panel.update_adjustment_panel()

@@ -20,12 +20,7 @@ class CurrentSequenceJsonHandler:
         self.main_widget = json_manager.main_widget
         self.ori_calculator = CurrentSequenceJsonOriCalculator(self)
         self.validation_engine = CurrentSequenceJsonValidationEngine(self)
-        self.empty_sequence()
-
-    def empty_sequence(self):
-        """Empties the sequence file."""
-        with open(self.current_sequence_json, "w") as file:
-            file.write("[]")
+        self.clear_current_sequence_file()
 
     def set_start_position_data(self, start_pos_pictograph: Pictograph):
         red_start_ori = start_pos_pictograph.pictograph_dict["red_start_ori"]
