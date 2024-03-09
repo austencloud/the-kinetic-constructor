@@ -1,4 +1,3 @@
-from Enums.MotionAttributes import Color
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
 from constants import BLUE, RED

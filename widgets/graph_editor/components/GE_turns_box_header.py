@@ -6,13 +6,11 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QVBoxLayout,
     QApplication,
-    QSizePolicy,
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QColor
 from typing import TYPE_CHECKING
 
-from Enums.MotionAttributes import Color
 from Enums.letters import LetterType
 from constants import BLUE, RED
 from widgets.factories.button_factory.buttons.codex_adjust_turns_button import (

@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from constants import LOC, MOTION_TYPE, ORI, TURNS
+from constants import LOC, ORI
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion

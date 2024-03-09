@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from Enums.MotionAttributes import Color
 from Enums.PropTypes import PropType
 from Enums.letters import LetterConditions
 from constants import *

@@ -1,6 +1,5 @@
-from PyQt6.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QGridLayout
 
-from widgets.pictograph.components.pictograph_view import PictographView
 from ....pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING
 

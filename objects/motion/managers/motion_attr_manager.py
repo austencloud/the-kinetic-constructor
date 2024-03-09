@@ -1,13 +1,9 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from constants import *
-from widgets.scroll_area.components.section_manager.section_widget.components.turns_tab.turns_tab import (
-    TurnsTab,
-)
 
 
 if TYPE_CHECKING:
-    from widgets.codex.codex_letter_button_frame.components.codex_turns_box import CodexTurnsBox
     from objects.motion.motion import Motion
 
 

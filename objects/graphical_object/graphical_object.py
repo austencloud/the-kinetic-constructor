@@ -6,9 +6,6 @@ from PyQt6.QtWidgets import QGraphicsItem
 from constants import BLUE, RED
 
 
-from widgets.graphical_object_svg_manager import (
-    GraphicalObjectSvgManager,
-)
 from Enums.MotionAttributes import Color
 
 if TYPE_CHECKING:

@@ -1,13 +1,10 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
-from Enums.MotionAttributes import Color
 
 from PyQt6.QtWidgets import (
     QFrame,
     QHBoxLayout,
-    QVBoxLayout,
-    QPushButton,
 )
 from constants import BLUE, RED
 

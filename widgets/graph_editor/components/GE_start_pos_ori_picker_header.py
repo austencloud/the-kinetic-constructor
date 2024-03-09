@@ -10,7 +10,6 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 
-from Enums.MotionAttributes import Color
 from constants import BLUE, RED
 from widgets.factories.button_factory.buttons.codex_adjust_turns_button import (
     CodexAdjustTurnsButton,

@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QWheelEvent
 
-from Enums.MotionAttributes import Color
 from constants import BLUE, RED
 from widgets.scroll_area.components.option_picker_pictograph_factory import (
     OptionPickerPictographFactory,

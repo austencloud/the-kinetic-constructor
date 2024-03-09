@@ -1,13 +1,10 @@
 from typing import TYPE_CHECKING
-from Enums.MotionAttributes import Color
 from constants import BLUE, RED
-from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
     from widgets.current_sequence_json_handler.current_sequence_json_handler import (
         CurrentSequenceJsonHandler,
     )
-    from widgets.main_widget.main_widget import MainWidget
 
 
 class CurrentSequenceJsonValidationEngine:

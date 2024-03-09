@@ -1,5 +1,5 @@
 from Enums.Enums import Letter
-from Enums.MotionAttributes import Color, Location
+from Enums.MotionAttributes import Location
 from Enums.letters import LetterType
 from constants import *
 from objects.motion.motion import Motion
@@ -7,7 +7,7 @@ from .base_location_calculator import BaseLocationCalculator
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from objects.arrow.arrow import Arrow
+    pass
 
 
 class DashLocationCalculator(BaseLocationCalculator):

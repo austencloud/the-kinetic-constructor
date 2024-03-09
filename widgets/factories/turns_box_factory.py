@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from Enums.Enums import TurnsTabAttribute
-from Enums.MotionAttributes import Color, LeadStates, MotionType
+from Enums.MotionAttributes import LeadStates, MotionType
 from widgets.codex.codex_letter_button_frame.components.codex_turns_box import (
     CodexTurnsBox,
 )

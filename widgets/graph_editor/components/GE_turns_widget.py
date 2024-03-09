@@ -1,7 +1,5 @@
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
-from PyQt6.QtCore import QEvent
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt
 from widgets.graph_editor.components.GE_turns_widget_display_manager import (
     GE_TurnsWidgetDisplayManager,
 )

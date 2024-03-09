@@ -1,5 +1,4 @@
 from Enums.Enums import LetterType
-from Enums.MotionAttributes import Color
 from constants import (
     BLUE,
     CLOCKWISE,

@@ -2,7 +2,6 @@
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 
-from Enums.Enums import VTG_Directions
 from constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
 
 

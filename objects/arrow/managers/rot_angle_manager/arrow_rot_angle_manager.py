@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 from constants import *
 from .calculators.pro_rot_angle_calculator import ProRotAngleCalculator
 from .calculators.anti_rot_angle_calculator import AntiRotAngleCalculator

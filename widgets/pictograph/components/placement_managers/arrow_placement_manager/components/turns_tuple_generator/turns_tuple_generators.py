@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from Enums.MotionAttributes import Color
 from constants import *
 from objects.motion.motion import Motion
 

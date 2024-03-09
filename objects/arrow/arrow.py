@@ -7,7 +7,7 @@ from .managers.rot_angle_manager.arrow_rot_angle_manager import ArrowRotAngleMan
 
 from ..graphical_object.graphical_object import GraphicalObject
 from Enums.MotionAttributes import Color, Location
-from Enums.Enums import Handpaths, Turns
+from Enums.Enums import Turns
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:

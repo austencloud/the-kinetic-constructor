@@ -1,7 +1,6 @@
 from typing import TypedDict
-from enum import Enum, auto
+from enum import Enum
 from Enums.MotionAttributes import *
-from Enums.PropTypes import PropType
 from Enums.letters import *
 
 

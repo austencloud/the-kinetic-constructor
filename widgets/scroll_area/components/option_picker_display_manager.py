@@ -1,8 +1,7 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
 
-from widgets.pictograph.pictograph import Pictograph, PictographView
-from PyQt6.QtWidgets import QApplication
+from widgets.pictograph.pictograph import Pictograph
 
 from Enums.Enums import LetterType
 

@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtCore import QObject
-from PyQt6.QtWidgets import QApplication
 
 from Enums.Enums import Turns
 

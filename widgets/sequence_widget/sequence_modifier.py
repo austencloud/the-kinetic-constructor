@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import QWidget
 from widgets.base_tab_widget import BaseTabWidget
 from widgets.animator.animator import Animator
 from widgets.graph_editor.graph_editor import GraphEditor
-from widgets.library.library import Library
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget

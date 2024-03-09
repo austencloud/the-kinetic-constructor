@@ -1,11 +1,9 @@
 from objects.arrow.arrow import Arrow
 from objects.prop.prop import Prop
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsSceneMouseEvent, QGraphicsScene
 from PyQt6.QtGui import QMouseEvent
 if TYPE_CHECKING:
     from widgets.pictograph.components.pictograph_view import PictographView
-from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 
 
 class PictographViewMouseEventHandler:

@@ -12,7 +12,6 @@ from constants import (
     STATIC,
 )
 from Enums.MotionAttributes import (
-    Color,
     PropRotDir,
 )
 from PyQt6.QtCore import QSize
