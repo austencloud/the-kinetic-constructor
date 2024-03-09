@@ -49,6 +49,18 @@ class StartPosPicker(QWidget):
         self.layout.addLayout(start_label_layout, 1)
         self.layout.addLayout(pictograph_layout, 4)
 
+    def get_variations(self, position: str) -> list[Pictograph]:
+        variations = []
+        for pictograph_dict in self.main_widget.letters[position]:
+            pictograph = self.create_pictograph_from_dict(pictograph_dict)
+            variations.append(pictograph)
+        return variations
+
+    def create_pictograph_from_dict(self, pictograph_dict: dict) -> Pictograph:
+        pictograph = Pictograph(self.main_widget)
+        pictograph.updater.update_pictograph(pictograph_dict)
+        return pictograph
+
     def resize_start_position_picker(self) -> None:
         self.pictograph_frame.resize_start_pos_picker_pictograph_frame()
         self.start_pos_manager.resize_start_position_pictographs()
@@ -58,6 +70,7 @@ class StartPosPicker(QWidget):
         self.choose_your_start_pos_label.show()
 
     def show_variation_dialog(self, position: str) -> None:
+        self.variation_dialog.resize_start_pos_variation_dialog()
         self.variation_dialog.load_variations(position)
         if self.variation_dialog.exec():
             selected_variation = self.variation_dialog.get_selected_variation()

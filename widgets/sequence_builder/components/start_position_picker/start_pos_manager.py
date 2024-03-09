@@ -150,3 +150,15 @@ class StartPosManager(QObject):
             if start_pos_key.startswith(key):
                 return mapping[key]
         return None
+
+    def get_variations(self, start_pos_letter: str) -> list[Pictograph]:
+        variations = []
+        for pictograph_dict in self.main_widget.letters[start_pos_letter]:
+            pictograph = self.create_pictograph_from_dict(pictograph_dict)
+            variations.append(pictograph)
+        return variations
+
+    def create_pictograph_from_dict(self, pictograph_dict: dict) -> Pictograph:
+        pictograph = Pictograph(self.main_widget)
+        pictograph.updater.update_pictograph(pictograph_dict)
+        return pictograph

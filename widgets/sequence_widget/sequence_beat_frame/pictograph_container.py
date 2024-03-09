@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class PictographContainer(QFrame):
-    def __init__(self, pictograph: "Pictograph"):
+    def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__()
         self.pictograph = pictograph
         self.setLayout(QVBoxLayout())
@@ -24,7 +24,7 @@ class PictographContainer(QFrame):
         self.border_colors_map = self._get_border_colors_map()
         self.styled_border_overlay = StyledBorderOverlay(self.view)
 
-    def _get_border_colors_map(self):
+    def _get_border_colors_map(self) -> dict[LetterType, tuple[str, str]]:
         border_colors_map = {
             LetterType.Type1: ("#36c3ff", "#6F2DA8"),  # Cyan, Purple
             LetterType.Type2: ("#6F2DA8", "#6F2DA8"),  # Purple, Purple
@@ -39,7 +39,9 @@ class PictographContainer(QFrame):
         letter_type = self.pictograph.letter_type
         return self.border_colors_map.get(letter_type, ("black", "black"))
 
-    def update_borders(self):
+    def update_borders(self) -> None:
         primary_color, secondary_color = self.get_border_colors()
-        self.styled_border_overlay.update_border_colors(primary_color, secondary_color)
+        self.styled_border_overlay.update_border_color_and_width(
+            primary_color, secondary_color
+        )
         self.styled_border_overlay.update()

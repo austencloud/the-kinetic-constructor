@@ -9,28 +9,28 @@ import math
 
 
 class StyledBorderOverlay(QWidget):
-    def __init__(self, view: "PictographView"):
+    def __init__(self, view: "PictographView") -> None:
         super().__init__(view)
         self.view = view
         self.is_set = False
         self.primary_color = None
         self.secondary_color = None
-        self.saved_primary_color = None  # Initialize saved colors
+        self.saved_primary_color = None
         self.saved_secondary_color = None
         self.setFixedSize(view.size())
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
 
-    def resize_styled_border_overlay(self):
+    def resize_styled_border_overlay(self) -> None:
         self.setFixedSize(self.view.width(), self.view.height())
         self.update_border_widths()
 
-    def update_border_widths(self):
+    def update_border_widths(self) -> None:
         view_width = self.view.size().width()
         self.outer_border_width = max(1, math.ceil(view_width * 0.013))
         self.inner_border_width = max(1, math.ceil(view_width * 0.013))
         self.update()
 
-    def update_border_colors(self, primary_color, secondary_color):
+    def update_border_color_and_width(self, primary_color, secondary_color) -> None:
         self.update_border_widths()
         self.primary_color = primary_color
         self.secondary_color = (
@@ -39,17 +39,19 @@ class StyledBorderOverlay(QWidget):
         self.is_set = True
         self.update()
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         if self.primary_color and self.secondary_color:
             self._draw_borders()
 
-    def _draw_borders(self):
+    def _draw_borders(self) -> None:
         painter = QPainter(self)
         pen = QPen()
         outer_border = self._draw_outer_border(painter, pen)
         self._draw_inner_border(painter, pen, outer_border)
 
-    def _draw_inner_border(self, painter: QPainter, pen: QPen, outer_rect: QRect):
+    def _draw_inner_border(
+        self, painter: QPainter, pen: QPen, outer_rect: QRect
+    ) -> None:
         pen.setColor(QColor(self.secondary_color))
         pen.setWidth(self.inner_border_width)
         pen.setJoinStyle(Qt.PenJoinStyle.MiterJoin)
@@ -65,7 +67,7 @@ class StyledBorderOverlay(QWidget):
         )
         painter.drawRect(inner_rect)
 
-    def _draw_outer_border(self, painter: QPainter, pen: QPen):
+    def _draw_outer_border(self, painter: QPainter, pen: QPen) -> QRect:
         pen.setColor(QColor(self.primary_color))
         pen.setWidth(self.outer_border_width)
         pen.setJoinStyle(Qt.PenJoinStyle.MiterJoin)
@@ -79,16 +81,18 @@ class StyledBorderOverlay(QWidget):
         painter.drawRect(outer_rect)
         return outer_rect
 
-    def set_gold_border(self):
+    def set_gold_border(self) -> None:
         self.saved_primary_color = self.primary_color
         self.saved_secondary_color = self.secondary_color
         if self.view.pictograph.scroll_area.__class__.__name__ == "CodexScrollArea":
-            self.update_border_colors(
+            self.update_border_color_and_width(
                 self.saved_primary_color, self.saved_secondary_color
             )
         else:
-            self.update_border_colors("gold", "gold")
+            self.update_border_color_and_width("gold", "gold")
 
-    def reset_border(self):
+    def reset_border(self) -> None:
         if self.saved_primary_color and self.saved_secondary_color:
-            self.update_border_colors(self.saved_primary_color, self.saved_secondary_color)
+            self.update_border_color_and_width(
+                self.saved_primary_color, self.saved_secondary_color
+            )
