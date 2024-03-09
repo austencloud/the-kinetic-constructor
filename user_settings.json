@@ -1,10 +1,10 @@
 {
     "pictograph_size": 1,
-    "prop_type": "Buugeng",
+    "prop_type": "Club",
     "glyph_visibility": {
-        "VTG": true,
-        "TKA": true,
-        "Elemental": true
+        "VTG": false,
+        "TKA": false,
+        "Elemental": false
     },
     "default_left_orientation": "in",
     "default_right_orientation": "in",

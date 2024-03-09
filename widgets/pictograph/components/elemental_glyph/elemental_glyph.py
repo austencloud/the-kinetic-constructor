@@ -29,7 +29,7 @@ class ElementalGlyph(QGraphicsSvgItem):
         super().__init__()
         self.pictograph = pictograph
 
-    def set_elemental_glyph(self):
+    def set_elemental_glyph(self) -> None:
         if not self.pictograph.letter_type in [LetterType.Type1]:
             return
         vtg_mode = self.pictograph.vtg_mode
