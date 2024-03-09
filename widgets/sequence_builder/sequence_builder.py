@@ -33,26 +33,32 @@ class SequenceBuilder(QFrame):
         self.pictograph_cache: dict[Letter, dict[str, Pictograph]] = {
             letter: {} for letter in Letter
         }
-        self.start_position_picker = StartPosPicker(self)
+        self.start_pos_picker = StartPosPicker(self)
         self.option_picker = OptionPicker(self)
         self.add_to_sequence_manager = AddToSequenceManager(self)
         self.setLayout(QHBoxLayout())
-        self.layout().addWidget(self.start_position_picker)
+        self.layout().addWidget(self.start_pos_picker)
 
     def _setup_components(self) -> None:
         self.option_click_handler = OptionPickerClickHandler(self)
 
     def transition_to_sequence_building(self):
         self.start_position_picked = True
-        self.start_position_picker.hide()
+        self._hide_start_pos_picker()
+        self._show_option_picker()
+        QApplication.restoreOverrideCursor()
+
+    def _hide_start_pos_picker(self):
+        self.start_pos_picker.hide()
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        self.layout().removeWidget(self.start_position_picker)
+        self.layout().removeWidget(self.start_pos_picker)
+
+    def _show_option_picker(self):
         self.layout().addWidget(self.option_picker)
         self.option_picker.show()
         self.option_picker.scroll_area.sections_manager.show_all_sections()
         self.option_picker.update_option_picker()
         self.option_picker.scroll_area.display_manager.order_and_display_pictographs()
-        QApplication.restoreOverrideCursor()
 
     def render_and_store_pictograph(self, pictograph_dict: dict) -> Pictograph:
         pictograph_dict = self._add_turns_and_start_ori(pictograph_dict)
@@ -104,12 +110,12 @@ class SequenceBuilder(QFrame):
         self.start_position_picked = False
         self.option_picker.hide()
         self.layout().removeWidget(self.option_picker)
-        self.layout().addWidget(self.start_position_picker)
-        self.start_position_picker.show()
+        self.layout().addWidget(self.start_pos_picker)
+        self.start_pos_picker.show()
 
     def resize_sequence_builder(self) -> None:
         self.setMinimumWidth(int(self.main_widget.width() / 2))
-        self.start_position_picker.resize_start_position_picker()
+        self.start_pos_picker.resize_start_position_picker()
         # self.option_picker.scroll_area.resize_option_picker_scroll_area()
 
     def get_last_added_pictograph(self):

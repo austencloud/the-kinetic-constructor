@@ -4,7 +4,7 @@ from constants import *
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_ori_picker_widget import (
+    from widgets.graph_editor.components.GE_start_pos_ori_picker_widget import (
         GE_StartPosOriPickerWidget,
     )
     from widgets.pictograph.pictograph import Pictograph

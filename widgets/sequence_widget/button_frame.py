@@ -23,12 +23,12 @@ class SequenceButtonFrame(QFrame):
         self.sequence_widget = sequence_widget
         self.main_widget = sequence_widget.main_widget
         self.json_handler = self.main_widget.json_manager.current_sequence_json_handler
-        self.sequence_constructor = (
-            self.main_widget.main_tab_widget.sequence_constructor
-        )
+        self.sequence_constructor = self.main_widget.main_tab_widget.sequence_builder
         self.graph_editor = self.sequence_widget.sequence_modifier.graph_editor
         self.beat_frame = self.sequence_widget.beat_frame
         self.indicator_label = sequence_widget.indicator_label
+        self.orientations = ["in", "counter", "out", "clock"]
+
         self.font_size = self.sequence_widget.width() // 45
         self.setup_save_sequence_button()
         self.setup_clear_sequence_button()
@@ -118,20 +118,24 @@ class SequenceButtonFrame(QFrame):
         start_pos_letters = [Letter.α, Letter.β, Letter.Γ]
         for letter in start_pos_letters:
             if letter in self.main_widget.all_pictographs:
-                for pictograph_key, pictograph in self.main_widget.all_pictographs[letter].items():
+                for pictograph_key, pictograph in self.main_widget.all_pictographs[
+                    letter
+                ].items():
                     self._reset_pictograph_prop_orientations(pictograph)
 
     def _reset_pictograph_prop_orientations(self, pictograph: Pictograph) -> None:
-        pictograph.pictograph_dict["red_start_ori"] = "in"
-        pictograph.pictograph_dict["blue_start_ori"] = "in"
-        pictograph.props[RED].updater.update_prop(
-            {"start_ori": "in"}
-        )
-        pictograph.props[BLUE].updater.update_prop(
-            {"start_ori": "in"}
-        )
+        default_left_orientation = self.orientations[
+            self.sequence_constructor.start_pos_picker.default_ori_picker.current_left_orientation_index
+        ]
+        default_right_orientation = self.orientations[
+            self.sequence_constructor.start_pos_picker.default_ori_picker.current_right_orientation_index
+        ]
+        pictograph.pictograph_dict["red_start_ori"] = default_right_orientation
+        pictograph.pictograph_dict["blue_start_ori"] = default_left_orientation
+        pictograph.props[RED].updater.update_prop({"start_ori": default_right_orientation})
+        pictograph.props[BLUE].updater.update_prop({"start_ori": default_left_orientation})
         pictograph.updater.update_pictograph(pictograph.pictograph_dict)
-        
+
     def _reset_beat_frame(self) -> None:
         for beat_view in self.beat_frame.beat_views:
             beat_view.setScene(None)

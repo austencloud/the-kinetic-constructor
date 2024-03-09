@@ -26,6 +26,7 @@ class StartPosVariationDialog(QDialog):
         self.selected_variation: Pictograph = None
 
         self.setup_layout()
+        self.load_default_orientations()  # Add this line
 
     def setup_layout(self) -> None:
         layout = QVBoxLayout(self)
@@ -67,3 +68,13 @@ class StartPosVariationDialog(QDialog):
             int(self.start_pos_picker.width()),
             int(self.start_pos_picker.height() // 2),
         )
+
+    def load_default_orientations(self) -> None:
+        default_left_orientation = self.start_pos_picker.default_ori_picker.orientations[
+            self.start_pos_picker.default_ori_picker.current_left_orientation_index
+        ]
+        default_right_orientation = self.start_pos_picker.default_ori_picker.orientations[
+            self.start_pos_picker.default_ori_picker.current_right_orientation_index
+        ]
+        self.ori_changer.set_orientation(BLUE, default_left_orientation)
+        self.ori_changer.set_orientation(RED, default_right_orientation)

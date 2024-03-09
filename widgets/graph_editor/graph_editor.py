@@ -26,14 +26,14 @@ class GraphEditor(QFrame):
         self._setup_adjustment_panel()
         self._setup_layout()
 
-    def _setup_pictograph(self):
+    def _setup_pictograph(self) -> None:
         self.GE_pictograph = GE_BlankPictograph(self)
         self.GE_pictograph_view = GE_PictographView(self, self.GE_pictograph)
         self.GE_pictograph_container = GE_PictographContainer(
             self, self.GE_pictograph_view
         )
 
-    def _setup_adjustment_panel(self):
+    def _setup_adjustment_panel(self) -> None:
         self.adjustment_panel = GE_AdjustmentPanel(self)
         self.adjustment_panel.setContentsMargins(0, 0, 0, 0)
 
@@ -45,35 +45,36 @@ class GraphEditor(QFrame):
         self.setPalette(palette)
 
     def _setup_layout(self) -> None:
+        self._setup_pictograph_layout()
+        self._setup_adjustment_panel_layout()
+
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        self.pictograph_layout = QVBoxLayout()
-        self.pictograph_layout.addWidget(self.GE_pictograph_container)
-        self.pictograph_layout.setContentsMargins(0, 0, 0, 0)
-        self.pictograph_layout.setSpacing(0)
-        self.pictograph_layout.setStretch(1, 1)  # Expand vertically
+        self.layout.addLayout(self.pictograph_layout)
+        self.layout.addLayout(self.adjustment_panel_layout)
 
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
+    def _setup_adjustment_panel_layout(self) -> None:
         self.adjustment_panel_layout = QVBoxLayout()
         self.adjustment_panel_layout.addWidget(self.adjustment_panel)
         self.adjustment_panel_layout.setContentsMargins(0, 0, 0, 0)
         self.adjustment_panel_layout.setSpacing(0)
 
-        self.layout.addLayout(self.pictograph_layout)
-        self.layout.addLayout(self.adjustment_panel_layout)
+    def _setup_pictograph_layout(self) -> None:
+        self.pictograph_layout = QVBoxLayout()
+        self.pictograph_layout.addWidget(self.GE_pictograph_container)
+        self.pictograph_layout.setContentsMargins(0, 0, 0, 0)
+        self.pictograph_layout.setSpacing(0)
+        self.pictograph_layout.setStretch(1, 1)
 
-        self.setLayout(self.layout)
-
-        # Set size policy to expanding
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-
-    def resize_graph_editor(self):
+    def resize_graph_editor(self) -> None:
         self.GE_pictograph_container.resize_GE_pictograph_container()
         self.adjustment_panel.resize_GE_adjustment_panel()
 
-    def update_GE_pictgraph(self, pictograph: Pictograph):
+    def update_GE_pictgraph(self, pictograph: Pictograph) -> None:
         self.GE_pictograph_view.set_scene(pictograph)
         self.GE_pictograph = pictograph

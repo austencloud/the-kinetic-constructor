@@ -61,7 +61,7 @@ class Library(QWidget):
         json_handler = self.main_widget.json_manager.current_sequence_json_handler
         start_pos_view = self.main_widget.sequence_widget.beat_frame.start_pos_view
         start_pos_manager = (
-            self.main_widget.main_tab_widget.sequence_constructor.start_position_picker.start_pos_manager
+            self.main_widget.main_tab_widget.sequence_builder.start_pos_picker.start_pos_manager
         )
         sequence_widget = self.main_widget.sequence_widget
         sequence_widget.button_frame.clear_sequence(
@@ -79,11 +79,11 @@ class Library(QWidget):
                 continue
             sequence_widget.populate_sequence(pictograph_dict)
 
-        sequence_builder = self.main_widget.main_tab_widget.sequence_constructor
+        sequence_builder = self.main_widget.main_tab_widget.sequence_builder
         last_beat = sequence_widget.beat_frame.get_last_filled_beat().beat
         sequence_builder.current_pictograph = last_beat
 
-        if sequence_builder.start_position_picker.isVisible():
+        if sequence_builder.start_pos_picker.isVisible():
             sequence_builder.transition_to_sequence_building()
 
         sequence_builder.option_picker.scroll_area._add_and_display_relevant_pictographs(

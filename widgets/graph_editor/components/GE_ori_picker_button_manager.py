@@ -5,7 +5,7 @@ from widgets.factories.button_factory.buttons.codex_adjust_turns_button import (
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_ori_picker_widget import (
+    from widgets.graph_editor.components.GE_start_pos_ori_picker_widget import (
         GE_StartPosOriPickerWidget,
     )
 

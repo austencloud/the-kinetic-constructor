@@ -162,3 +162,17 @@ class StartPosManager(QObject):
         pictograph = Pictograph(self.main_widget)
         pictograph.updater.update_pictograph(pictograph_dict)
         return pictograph
+
+    def update_start_pos_pictographs(self):
+        ori_picker = self.start_pos_picker.default_ori_picker
+        default_left_orientation = ori_picker.orientations[
+            ori_picker.current_left_orientation_index
+        ]
+        default_right_orientation = ori_picker.orientations[
+            ori_picker.current_right_orientation_index
+        ]
+
+        for start_option in self.start_options.values():
+            start_option.pictograph_dict["red_start_ori"] = default_right_orientation
+            start_option.pictograph_dict["blue_start_ori"] = default_left_orientation
+            start_option.updater.update_pictograph(start_option.pictograph_dict)

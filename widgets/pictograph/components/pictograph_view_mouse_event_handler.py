@@ -2,6 +2,7 @@ from objects.arrow.arrow import Arrow
 from objects.prop.prop import Prop
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QMouseEvent
+
 if TYPE_CHECKING:
     from widgets.pictograph.components.pictograph_view import PictographView
 
@@ -18,15 +19,12 @@ class PictographViewMouseEventHandler:
             )
             return
         widget_pos = event.pos()
-        scene_pos = self.pictograph_view.mapToScene(
-            widget_pos
-        )  # Convert widget coordinates to scene coordinates
+        scene_pos = self.pictograph_view.mapToScene(widget_pos)
         items_at_pos = self.pictograph_view.scene().items(scene_pos)
-
         arrow = next((item for item in items_at_pos if isinstance(item, Arrow)), None)
+        
         if arrow:
             self.pictograph.selected_arrow = arrow
-
             arrow.setSelected(True)
             self.pictograph.update()
         else:

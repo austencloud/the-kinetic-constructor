@@ -39,6 +39,20 @@ class BeatSelectionManager(QWidget):
 
             graph_editor.adjustment_panel.update_turns_panel(blue_turns, red_turns)
             graph_editor.adjustment_panel.update_adjustment_panel()
+
+            # Set the orientations in the graph editor's orientation changer
+            if isinstance(beat_view, StartPositionBeatView):
+                start_pos_pictograph = beat_view.beat
+                blue_start_pos_ori_picker = graph_editor.adjustment_panel.blue_start_pos_ori_picker
+                red_start_pos_ori_picker = graph_editor.adjustment_panel.red_start_pos_ori_picker
+
+                blue_start_pos_ori_picker.ori_picker_widget.set_initial_orientation(
+                    start_pos_pictograph, "blue"
+                )
+                red_start_pos_ori_picker.ori_picker_widget.set_initial_orientation(
+                    start_pos_pictograph, "red"
+                )
+
             self.update()
             self.update_overlay_position()
             self.show()

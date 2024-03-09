@@ -2,8 +2,10 @@ from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayo
 from PyQt6.QtGui import QIcon, QFont
 
 from PyQt6.QtCore import Qt, QSize, pyqtSignal
-from constants import IN, ORI, OUT, CLOCK, COUNTER
+from constants import BLUE, IN, ORI, OUT, CLOCK, COUNTER
 from typing import TYPE_CHECKING
+
+from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_start_pos_ori_picker_box import (
@@ -28,7 +30,7 @@ class GE_StartPosOriPickerWidget(QWidget):
             self.ori_picker_box.graph_editor.main_widget.json_manager.current_sequence_json_handler
         )
         self.option_picker = (
-            self.ori_picker_box.graph_editor.main_widget.main_tab_widget.sequence_constructor.option_picker
+            self.ori_picker_box.graph_editor.main_widget.main_tab_widget.sequence_builder.option_picker
         )
         self.current_orientation_index = 0
         self.orientations = [IN, COUNTER, OUT, CLOCK]
@@ -133,3 +135,11 @@ class GE_StartPosOriPickerWidget(QWidget):
             button.setIconSize(QSize(icon_size, icon_size))
         self._set_ori_label_font_size()
         self.set_current_orientation_display_font()
+
+    def set_initial_orientation(self, start_pos_pictograph: Pictograph, color: str) -> None:
+        if color == "blue":
+            initial_orientation = start_pos_pictograph.pictograph_dict["blue_start_ori"]
+        else:
+            initial_orientation = start_pos_pictograph.pictograph_dict["red_start_ori"]
+        self.current_orientation_index = self.orientations.index(initial_orientation)
+        self.current_orientation_display.setText(initial_orientation)

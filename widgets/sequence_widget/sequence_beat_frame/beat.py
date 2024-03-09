@@ -53,22 +53,22 @@ class BeatView(QGraphicsView):
     def clear(self):
         self.setScene(None)
         self.beat_frame.start_pos_view.setScene(None)
-        sequence_builder = self.beat.main_widget.main_tab_widget.sequence_constructor
+        sequence_builder = self.beat.main_widget.main_tab_widget.sequence_builder
         sequence_builder.current_pictograph = (
             self.beat_frame.sequence_widget.beat_frame.start_pos
         )
         sequence_builder.reset_to_start_pos_picker()
 
-    def mouseDoubleClickEvent(self, event: QMouseEvent):
+    def mouseDoubleClickEvent(self, event: QMouseEvent) -> None:
         self.mousePressEvent(event)
 
     def mousePressEvent(self, event: QMouseEvent):
         if event.button() == Qt.MouseButton.LeftButton and self.is_filled:
             self.selection_manager.select_beat(self)
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         super().paintEvent(event)
 
-    def deselect(self):
+    def deselect(self) -> None:
         self.is_selected = False
         self.update()

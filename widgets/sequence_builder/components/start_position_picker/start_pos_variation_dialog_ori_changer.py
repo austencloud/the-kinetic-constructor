@@ -76,3 +76,7 @@ class StartPosVariationDialogOriChanger(QWidget):
         else:
             self.right_current_ori_display.setText(new_ori)
         self.ori_changed.emit(new_ori, color)
+
+    def set_orientation(self, color: Color, orientation: str) -> None:
+        self.current_ori_index[color] = self.orientations.index(orientation)
+        self.update_display(color)

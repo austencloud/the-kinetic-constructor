@@ -1,9 +1,11 @@
 {
     "pictograph_size": 1,
-    "prop_type": "Fan",
+    "prop_type": "Triad",
     "glyph_visibility": {
         "VTG": false,
         "TKA": true,
         "Elemental": false
-    }
+    },
+    "default_left_orientation": "counter",
+    "default_right_orientation": "counter"
 }
