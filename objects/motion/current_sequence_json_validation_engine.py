@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Color
+from constants import BLUE, RED
 from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
@@ -10,7 +11,9 @@ if TYPE_CHECKING:
 
 
 class CurrentSequenceJsonValidationEngine:
-    def __init__(self, current_sequence_json_handler: "CurrentSequenceJsonHandler") -> None:
+    def __init__(
+        self, current_sequence_json_handler: "CurrentSequenceJsonHandler"
+    ) -> None:
         self.json_handler = current_sequence_json_handler
         self.sequence_json = self.json_handler.load_current_sequence_json()
 
@@ -32,13 +35,11 @@ class CurrentSequenceJsonValidationEngine:
     def update_json_entry_end_orientation(self, index) -> None:
         """Recalculates and updates the end orientation of the current pictograph."""
         pictograph_dict = self.sequence_json[index]
-        for color in [Color.RED, Color.BLUE]:
+        for color in [RED, BLUE]:
             end_ori = self.json_handler.ori_calculator.calculate_end_orientation(
                 pictograph_dict, color
             )
-            pictograph_dict[f"{color.value}_end_ori"] = end_ori
-
-    
+            pictograph_dict[f"{color}_end_ori"] = end_ori
 
     def run(self) -> None:
         """Public method to run the sequence validation and update process."""

@@ -11,6 +11,7 @@ from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 
 from Enums.MotionAttributes import Color
+from constants import BLUE, RED
 from widgets.factories.button_factory.buttons.codex_adjust_turns_button import (
     CodexAdjustTurnsButton,
 )
@@ -60,10 +61,10 @@ class GE_StartPosOriPickerBoxHeader(QWidget):
         text = ""
         font_color = "#000000"
 
-        if color == Color.RED:
+        if color == RED:
             text = "Right"
             font_color = "#ED1C24"
-        elif color == Color.BLUE:
+        elif color == BLUE:
             text = "Left"
             font_color = "#2E3192"
 

@@ -1,6 +1,7 @@
 from Enums.MotionAttributes import Color
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
+from constants import BLUE, RED
 from widgets.graph_editor.components.GE_placeholder_text import GE_PlaceHolderTextLabel
 from widgets.graph_editor.components.GE_start_pos_ori_picker_box import (
     GE_StartPosOriPickerBox,
@@ -39,19 +40,19 @@ class GE_AdjustmentPanel(QFrame):
 
     def _setup_turns_boxes(self) -> None:
         self.blue_turns_box: GE_TurnsBox = GE_TurnsBox(
-            self, self.graph_editor.GE_pictograph, Color.BLUE
+            self, self.graph_editor.GE_pictograph, BLUE
         )
         self.red_turns_box: GE_TurnsBox = GE_TurnsBox(
-            self, self.graph_editor.GE_pictograph, Color.RED
+            self, self.graph_editor.GE_pictograph, RED
         )
         self.turns_boxes = [self.blue_turns_box, self.red_turns_box]
 
     def _setup_start_pos_ori_pickers(self) -> None:
         self.blue_start_pos_ori_picker = GE_StartPosOriPickerBox(
-            self, self.graph_editor.GE_pictograph, Color.BLUE
+            self, self.graph_editor.GE_pictograph, BLUE
         )
         self.red_start_pos_ori_picker = GE_StartPosOriPickerBox(
-            self, self.graph_editor.GE_pictograph, Color.RED
+            self, self.graph_editor.GE_pictograph, RED
         )
         self.start_pos_ori_pickers = [
             self.blue_start_pos_ori_picker,

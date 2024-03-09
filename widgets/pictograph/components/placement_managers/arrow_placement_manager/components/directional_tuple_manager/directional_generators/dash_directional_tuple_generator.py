@@ -1,6 +1,7 @@
 from Enums.Enums import LetterType
 from Enums.MotionAttributes import Color
 from constants import (
+    BLUE,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     DASH,
@@ -9,6 +10,7 @@ from constants import (
     NORTH,
     PRO,
     ANTI,
+    RED,
     SOUTH,
     STATIC,
     WEST,
@@ -62,14 +64,14 @@ class DashDirectionalGenerator(BaseDirectionalGenerator):
 
     def _handle_type5_zero_turns(self, x: int, y: int) -> list[tuple[int, int]]:
         Type5_zero_turns_directional_tuples = {
-            (Color.BLUE, (NORTH, SOUTH)): [(x, y), (-y, x), (-x, -y), (y, -x)],
-            (Color.BLUE, (EAST, WEST)): [(x, y), (-y, -x), (-x, -y), (y, x)],
-            (Color.BLUE, (SOUTH, NORTH)): [(x, y), (-y, x), (-x, -y), (y, -x)],
-            (Color.BLUE, (WEST, EAST)): [(x, y), (-y, -x), (-x, -y), (-y, x)],
-            (Color.RED, (NORTH, SOUTH)): [(x, y), (-y, -x), (-x, -y), (y, -x)],
-            (Color.RED, (EAST, WEST)): [(x, y), (-y, -x), (-x, -y), (y, -x)],
-            (Color.RED, (SOUTH, NORTH)): [(x, y), (-y, x), (-x, -y), (y, -x)],
-            (Color.RED, (WEST, EAST)): [(-x, y), (-y, -x), (-x, -y), (y, x)],
+            (BLUE, (NORTH, SOUTH)): [(x, y), (-y, x), (-x, -y), (y, -x)],
+            (BLUE, (EAST, WEST)): [(x, y), (-y, -x), (-x, -y), (y, x)],
+            (BLUE, (SOUTH, NORTH)): [(x, y), (-y, x), (-x, -y), (y, -x)],
+            (BLUE, (WEST, EAST)): [(x, y), (-y, -x), (-x, -y), (-y, x)],
+            (RED, (NORTH, SOUTH)): [(x, y), (-y, -x), (-x, -y), (y, -x)],
+            (RED, (EAST, WEST)): [(x, y), (-y, -x), (-x, -y), (y, -x)],
+            (RED, (SOUTH, NORTH)): [(x, y), (-y, x), (-x, -y), (y, -x)],
+            (RED, (WEST, EAST)): [(-x, y), (-y, -x), (-x, -y), (y, x)],
         }
         return Type5_zero_turns_directional_tuples.get(
             (self.motion.color, (self.motion.start_loc, self.motion.end_loc)), []

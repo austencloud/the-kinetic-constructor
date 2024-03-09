@@ -16,8 +16,8 @@ class BaseTurnsTupleGenerator:
     def set_pictograph(self, pictograph: "Pictograph"):
         self.p = pictograph
 
-        self.blue_motion = self.p.motions.get(Color.BLUE)
-        self.red_motion = self.p.motions.get(Color.RED)
+        self.blue_motion = self.p.motions.get(BLUE)
+        self.red_motion = self.p.motions.get(RED)
 
     def generate_turns_tuple(self, pictograph) -> str:
         pass  # implemented in subclasses

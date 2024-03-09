@@ -27,7 +27,9 @@ from ....factories.button_factory.buttons.rot_dir_buttons import (
 from PyQt6.QtWidgets import QPushButton
 
 if TYPE_CHECKING:
-    from widgets.codex.codex_letter_button_frame.components.codex_turns_box import CodexTurnsBox
+    from widgets.codex.codex_letter_button_frame.components.codex_turns_box import (
+        CodexTurnsBox,
+    )
     from objects.motion.motion import Motion
 
 
@@ -71,9 +73,7 @@ class CodexPropRotDirButtonManager:
             self.turns_box.turns_panel.turns_tab.section.scroll_area.pictograph_cache.values()
         ):
             for motion in pictograph.motions.values():
-                other_motion = pictograph.motions[
-                    Color.RED if motion.color == Color.BLUE else Color.BLUE
-                ]
+                other_motion = pictograph.motions[RED if motion.color == BLUE else BLUE]
                 if motion.check.is_dash() or motion.check.is_static():
                     if other_motion.check.is_shift():
                         if motion.motion_type == self.turns_box.motion_type:

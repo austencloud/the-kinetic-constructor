@@ -25,9 +25,9 @@ class CodexTurnsBoxHeader(CodexWidget):
 
     def _setup_header(self) -> None:
         if self.turns_box.attribute_type == TurnsTabAttribute.COLOR:
-            if self.turns_box.color == Color.BLUE:
+            if self.turns_box.color == BLUE:
                 text = "Left"
-            elif self.turns_box.color == Color.RED:
+            elif self.turns_box.color == RED:
                 text = "Right"
             header_label = self._setup_header_label(text)
 

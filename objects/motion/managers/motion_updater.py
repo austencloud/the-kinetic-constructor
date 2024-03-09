@@ -23,6 +23,6 @@ class MotionUpdater:
 
     def update_end_ori(self) -> None:
         self.motion.end_ori = self.motion.ori_calculator.get_end_ori()
-        self.motion.pictograph.pictograph_dict[f"{self.motion.color.value}_end_ori"] = (
+        self.motion.pictograph.pictograph_dict[f"{self.motion.color}_end_ori"] = (
             self.motion.end_ori
         )

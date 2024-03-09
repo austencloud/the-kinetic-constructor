@@ -16,7 +16,7 @@ class GE_TurnsUpdater:
 
     def set_motion_turns(self, motion: "Motion", new_turns: Turns) -> None:
         self._update_turns_and_rotation(motion, new_turns)
-        pictograph_dict = {f"{motion.color.value}_turns": new_turns}
+        pictograph_dict = {f"{motion.color}_turns": new_turns}
         motion.pictograph.updater.update_pictograph(pictograph_dict)
 
     def _adjust_turns_for_pictograph(

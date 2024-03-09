@@ -5,6 +5,7 @@ import re
 from Enums.Enums import Turns
 from constants import (
     ANTI,
+    BLUE,
     CLOCK,
     COUNTER,
     DASH,
@@ -16,6 +17,7 @@ from constants import (
     PRO,
     PROP_DIR,
     RADIAL,
+    RED,
     STATIC,
 )
 from Enums.MotionAttributes import Color, MotionType
@@ -66,7 +68,7 @@ class GraphicalObjectSvgManager:
 
     def set_svg_color(self, svg_data: str, new_color: str) -> bytes:
         # Apply color transformations directly to SVG data and return the modified SVG content
-        COLOR_MAP = {Color.RED: HEX_RED, Color.BLUE: HEX_BLUE}
+        COLOR_MAP = {RED: HEX_RED, BLUE: HEX_BLUE}
         new_hex_color = COLOR_MAP.get(new_color)
 
         # Apply color transformations
@@ -77,7 +79,7 @@ class GraphicalObjectSvgManager:
         self, object: Union["Arrow", "Prop"], color: Color
     ) -> str:
         base_key = self._generate_cache_key(object)
-        color_key = f"{color.value}"
+        color_key = f"{color}"
         return f"{base_key}_{color_key}"
 
     def _apply_color_transformations(self, svg_data: str, new_hex_color: str) -> str:

@@ -3,10 +3,12 @@ import logging
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Color
 from constants import (
+    BLUE,
     CLOCK,
     COUNTER,
     IN,
     OUT,
+    RED,
     special_placements_parent_directory,
 )
 from objects.arrow.arrow import Arrow
@@ -83,25 +85,25 @@ class SpecialPlacementDataUpdater:
         ]:
             return "from_layer2"
         elif (
-            motion.color == Color.RED
+            motion.color == RED
             and motion.start_ori in [IN, OUT]
             and other_motion.start_ori in [CLOCK, COUNTER]
         ):
             return "from_layer3_blue2_red1"
         elif (
-            motion.color == Color.RED
+            motion.color == RED
             and motion.start_ori in [CLOCK, COUNTER]
             and other_motion.start_ori in [IN, OUT]
         ):
             return "from_layer3_blue1_red2"
         elif (
-            motion.color == Color.BLUE
+            motion.color == BLUE
             and motion.start_ori in [IN, OUT]
             and other_motion.start_ori in [CLOCK, COUNTER]
         ):
             return "from_layer3_blue1_red2"
         elif (
-            motion.color == Color.BLUE
+            motion.color == BLUE
             and motion.start_ori in [CLOCK, COUNTER]
             and other_motion.start_ori in [IN, OUT]
         ):

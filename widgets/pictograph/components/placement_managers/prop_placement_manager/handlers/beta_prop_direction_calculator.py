@@ -1,10 +1,12 @@
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Color
 from constants import (
+    BLUE,
     NONRADIAL,
     EAST,
     NORTH,
     RADIAL,
+    RED,
     SOUTH,
     WEST,
     LEFT,
@@ -44,27 +46,27 @@ class BetaPropDirectionCalculator:
 
     def get_direction_for_nonradial_I(self, motion: Motion) -> Directions:
         direction_map = {
-            (NORTH, Color.RED): UP,
-            (NORTH, Color.BLUE): DOWN,
-            (EAST, Color.RED): RIGHT,
-            (EAST, Color.BLUE): LEFT,
-            (SOUTH, Color.RED): DOWN,
-            (SOUTH, Color.BLUE): UP,
-            (WEST, Color.BLUE): LEFT,
-            (WEST, Color.RED): RIGHT,
+            (NORTH, RED): UP,
+            (NORTH, BLUE): DOWN,
+            (EAST, RED): RIGHT,
+            (EAST, BLUE): LEFT,
+            (SOUTH, RED): DOWN,
+            (SOUTH, BLUE): UP,
+            (WEST, BLUE): LEFT,
+            (WEST, RED): RIGHT,
         }
         return direction_map.get((motion.end_loc, motion.prop.color))
 
     def get_direction_for_radial_I(self, motion: Motion) -> Directions:
         direction_map = {
-            (NORTH, Color.RED): RIGHT,
-            (NORTH, Color.BLUE): LEFT,
-            (EAST, Color.RED): DOWN,
-            (EAST, Color.BLUE): UP,
-            (SOUTH, Color.RED): LEFT,
-            (SOUTH, Color.BLUE): RIGHT,
-            (WEST, Color.BLUE): UP,
-            (WEST, Color.RED): DOWN,
+            (NORTH, RED): RIGHT,
+            (NORTH, BLUE): LEFT,
+            (EAST, RED): DOWN,
+            (EAST, BLUE): UP,
+            (SOUTH, RED): LEFT,
+            (SOUTH, BLUE): RIGHT,
+            (WEST, BLUE): UP,
+            (WEST, RED): DOWN,
         }
         return direction_map.get((motion.end_loc, motion.prop.color))
 
@@ -97,24 +99,24 @@ class BetaPropDirectionCalculator:
     def get_dir_for_non_shift(self, prop: Prop) -> Directions:
         layer_reposition_map = {
             RADIAL: {
-                (NORTH, Color.RED): RIGHT,
-                (NORTH, Color.BLUE): LEFT,
-                (SOUTH, Color.RED): LEFT,
-                (SOUTH, Color.BLUE): RIGHT,
-                (EAST, Color.RED): DOWN,
-                (WEST, Color.BLUE): DOWN,
-                (WEST, Color.RED): UP,
-                (EAST, Color.BLUE): UP,
+                (NORTH, RED): RIGHT,
+                (NORTH, BLUE): LEFT,
+                (SOUTH, RED): LEFT,
+                (SOUTH, BLUE): RIGHT,
+                (EAST, RED): DOWN,
+                (WEST, BLUE): DOWN,
+                (WEST, RED): UP,
+                (EAST, BLUE): UP,
             },
             NONRADIAL: {
-                (NORTH, Color.RED): UP,
-                (NORTH, Color.BLUE): DOWN,
-                (SOUTH, Color.RED): UP,
-                (SOUTH, Color.BLUE): DOWN,
-                (EAST, Color.RED): RIGHT,
-                (WEST, Color.BLUE): LEFT,
-                (WEST, Color.RED): RIGHT,
-                (EAST, Color.BLUE): LEFT,
+                (NORTH, RED): UP,
+                (NORTH, BLUE): DOWN,
+                (SOUTH, RED): UP,
+                (SOUTH, BLUE): DOWN,
+                (EAST, RED): RIGHT,
+                (WEST, BLUE): LEFT,
+                (WEST, RED): RIGHT,
+                (EAST, BLUE): LEFT,
             },
         }
         if prop.check.is_radial():

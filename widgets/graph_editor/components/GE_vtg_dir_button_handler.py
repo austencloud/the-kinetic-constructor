@@ -69,9 +69,7 @@ class GE_VtgDirButtonManager:
 
     def _update_pictographs_vtg_dir(self, vtg_dir: VTG_Directions) -> None:
         pictograph = self.graph_editor.GE_pictograph_view.get_current_pictograph()
-        pictograph_index = (
-            self.beat_frame.get_index_of_currently_selected_beat()
-        )
+        pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
         for motion in pictograph.motions.values():
             other_motion = pictograph.get.other_motion(motion)
             if motion.check.is_dash() or motion.check.is_static():
@@ -100,7 +98,7 @@ class GE_VtgDirButtonManager:
         self, motion: "Motion", prop_rot_dir: PropRotDir
     ) -> None:
         motion.prop_rot_dir = prop_rot_dir
-        pictograph_dict = {motion.color.value + "_" + PROP_ROT_DIR: prop_rot_dir}
+        pictograph_dict = {motion.color + "_" + PROP_ROT_DIR: prop_rot_dir}
         motion.pictograph.updater.update_pictograph(pictograph_dict)
 
     def _update_button_states(

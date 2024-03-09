@@ -2,7 +2,9 @@ from typing import TYPE_CHECKING
 
 from Enums.Enums import TurnsTabAttribute
 from Enums.MotionAttributes import Color, LeadStates, MotionType
-from widgets.codex.codex_letter_button_frame.components.codex_turns_box import CodexTurnsBox
+from widgets.codex.codex_letter_button_frame.components.codex_turns_box import (
+    CodexTurnsBox,
+)
 
 
 if TYPE_CHECKING:
@@ -28,7 +30,7 @@ class CodexTurnsBoxFactory:
                 ]
             ]
         elif self.turns_panel.attribute_type == TurnsTabAttribute.COLOR:
-            attributes = [Color.BLUE, Color.RED]
+            attributes = [BLUE, RED]
         elif self.turns_panel.attribute_type == TurnsTabAttribute.LEAD_STATE:
             attributes = [LeadStates.LEADING, LeadStates.TRAILING]
 

@@ -9,6 +9,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QPushButton,
 )
+from constants import BLUE, RED
 
 from widgets.graph_editor.components.GE_adjust_turns_button import (
     GE_AdjustTurnsButton,
@@ -110,9 +111,9 @@ class GE_TurnsWidgetDisplayManager:
         )
         # Determine the appropriate color based on the turns box color
         turns_box_color = self.turns_box.color
-        if turns_box_color == Color.RED:
+        if turns_box_color == RED:
             border_color = "#ED1C24"
-        elif turns_box_color == Color.BLUE:
+        elif turns_box_color == BLUE:
             border_color = "#2E3192"
         else:
             border_color = "black"

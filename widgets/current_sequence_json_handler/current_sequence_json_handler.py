@@ -115,34 +115,34 @@ class CurrentSequenceJsonHandler:
     ) -> None:
 
         sequence = self.load_current_sequence_json()
-        sequence[index][f"{color.value}_turns"] = turns
+        sequence[index][f"{color}_turns"] = turns
         end_ori = self.ori_calculator.calculate_end_orientation(sequence[index], color)
-        sequence[index][f"{color.value}_end_ori"] = end_ori
+        sequence[index][f"{color}_end_ori"] = end_ori
 
-        if sequence[index][f"{color.value}_turns"] > 0:
+        if sequence[index][f"{color}_turns"] > 0:
             pictograph = self.main_widget.sequence_widget.beat_frame.beat_views[
                 index - 1
             ].beat
             if pictograph:
                 motion = pictograph.get.motion_by_color(color)
                 prop_rot_dir = motion.prop_rot_dir
-                sequence[index][f"{color.value}_prop_rot_dir"] = prop_rot_dir
-                
-        if sequence[index][f"{color.value}_motion_type"] in [DASH, STATIC]:
-            if sequence[index][f"{color.value}_turns"] == 0:
+                sequence[index][f"{color}_prop_rot_dir"] = prop_rot_dir
+
+        if sequence[index][f"{color}_motion_type"] in [DASH, STATIC]:
+            if sequence[index][f"{color}_turns"] == 0:
                 prop_rot_dir = NO_ROT
-                sequence[index][f"{color.value}_prop_rot_dir"] = prop_rot_dir
+                sequence[index][f"{color}_prop_rot_dir"] = prop_rot_dir
 
         self.save_sequence(sequence)
 
     def update_start_pos_ori(self, color: Color, ori: int) -> None:
         sequence = self.load_current_sequence_json()
-        sequence[0][f"{color.value}_end_ori"] = ori
+        sequence[0][f"{color}_end_ori"] = ori
         self.save_sequence(sequence)
 
     def update_rot_dir_in_json_at_index(
         self, index: int, color: Color, prop_rot_dir: str
     ) -> None:
         sequence = self.load_current_sequence_json()
-        sequence[index][f"{color.value}_prop_rot_dir"] = prop_rot_dir
+        sequence[index][f"{color}_prop_rot_dir"] = prop_rot_dir
         self.save_sequence(sequence)

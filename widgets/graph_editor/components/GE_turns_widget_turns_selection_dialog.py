@@ -20,7 +20,7 @@ class GE_TurnsSelectionDialog(QDialog):
         self.setStyleSheet(
             f"""
             QDialog {{
-                border: 2px solid {HEX_BLUE if self.turns_box.color == Color.BLUE else HEX_RED};
+                border: 2px solid {HEX_BLUE if self.turns_box.color == BLUE else HEX_RED};
                 border-radius: 5px;
             }}
         """
@@ -47,7 +47,7 @@ class GE_TurnsSelectionDialog(QDialog):
             button.setStyleSheet(
                 f"""
                 QPushButton {{
-                    border: 2px solid {HEX_BLUE if self.turns_box.color == Color.BLUE else HEX_RED};
+                    border: 2px solid {HEX_BLUE if self.turns_box.color == BLUE else HEX_RED};
                     border-radius: {button_size // 2}px;
                     background-color: white;
                 }}

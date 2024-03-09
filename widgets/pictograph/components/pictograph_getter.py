@@ -68,11 +68,11 @@ class PictographGetter:
         return motion_map.get((self.red_motion.start_loc, self.blue_motion.end_loc))
 
     def other_motion(self, motion: Motion) -> Motion:
-        other_motion_map = {Color.RED: self.blue_motion, Color.BLUE: self.red_motion}
+        other_motion_map = {RED: self.blue_motion, BLUE: self.red_motion}
         return other_motion_map.get(motion.color)
 
     def other_arrow(self, arrow: Arrow) -> Arrow:
-        other_arrow_map = {Color.RED: self.blue_arrow, Color.BLUE: self.red_arrow}
+        other_arrow_map = {RED: self.blue_arrow, BLUE: self.red_arrow}
         return other_arrow_map.get(arrow.color)
 
     def dash(self) -> Motion:

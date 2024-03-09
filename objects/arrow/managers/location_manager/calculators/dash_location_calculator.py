@@ -29,14 +29,14 @@ class DashLocationCalculator(BaseLocationCalculator):
 
         if self.arrow.motion.turns == 0 and self.other_motion.arrow.motion.turns == 0:
             location_map = {
-                (Color.RED, (NORTH, SOUTH)): EAST,
-                (Color.RED, (EAST, WEST)): NORTH,
-                (Color.RED, (SOUTH, NORTH)): EAST,
-                (Color.RED, (WEST, EAST)): NORTH,
-                (Color.BLUE, (NORTH, SOUTH)): WEST,
-                (Color.BLUE, (EAST, WEST)): SOUTH,
-                (Color.BLUE, (SOUTH, NORTH)): WEST,
-                (Color.BLUE, (WEST, EAST)): SOUTH,
+                (RED, (NORTH, SOUTH)): EAST,
+                (RED, (EAST, WEST)): NORTH,
+                (RED, (SOUTH, NORTH)): EAST,
+                (RED, (WEST, EAST)): NORTH,
+                (BLUE, (NORTH, SOUTH)): WEST,
+                (BLUE, (EAST, WEST)): SOUTH,
+                (BLUE, (SOUTH, NORTH)): WEST,
+                (BLUE, (WEST, EAST)): SOUTH,
             }
             arrow_location = location_map.get(
                 (

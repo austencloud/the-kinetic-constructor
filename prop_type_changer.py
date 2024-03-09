@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Color
+from constants import BLUE, RED
 from widgets.pictograph.pictograph import Pictograph
 
 
@@ -23,8 +24,8 @@ class PropTypeChanger:
             pictograph.motions[color].prop = pictograph.props[color]
             pictograph.props[color].motion.attr_manager.update_prop_ori()
             pictograph.props[color].updater.update_prop()
-        pictograph.red_prop = pictograph.props[Color.RED]
-        pictograph.blue_prop = pictograph.props[Color.BLUE]
+        pictograph.red_prop = pictograph.props[RED]
+        pictograph.blue_prop = pictograph.props[BLUE]
         pictograph.updater.update_pictograph()
 
     def apply_prop_type(self) -> None:
@@ -44,7 +45,7 @@ class PropTypeChanger:
                 self.replace_props(new_prop_type, beat_view.beat)
                 beat_view.beat.updater.update_pictograph()
                 beat_view.beat.prop_type = new_prop_type
-                
+
         start_pos_view = (
             self.main_window.main_widget.sequence_widget.beat_frame.start_pos_view
         )

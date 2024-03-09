@@ -61,9 +61,7 @@ class GE_PropRotDirButtonManager:
     def _update_pictographs_vtg_dir(self, vtg_dir: VTG_Directions) -> None:
         pictograph = self.turns_box.graph_editor.GE_pictograph
         for motion in pictograph.motions.values():
-            other_motion = pictograph.motions[
-                Color.RED if motion.color == Color.BLUE else Color.BLUE
-            ]
+            other_motion = pictograph.motions[RED if motion.color == BLUE else BLUE]
             if motion.check.is_dash() or motion.check.is_static():
                 if other_motion.check.is_shift():
                     if motion.color == self.turns_box.color:
@@ -98,7 +96,7 @@ class GE_PropRotDirButtonManager:
     ) -> None:
         motion.prop_rot_dir = prop_rot_dir
         pictograph_dict = {
-            motion.color.value + "_" + PROP_ROT_DIR: prop_rot_dir,
+            motion.color + "_" + PROP_ROT_DIR: prop_rot_dir,
         }
         motion.pictograph.updater.update_pictograph(pictograph_dict)
 

@@ -50,7 +50,7 @@ class GE_StartPosOriPickerBox(QFrame):
     def _set_border_color(self) -> None:
         border_width = self.width() // 40
         self.setStyleSheet(
-            f"#GE_StartPosOriPickerBox {{ border: {border_width}px solid {self.color.name}; }}"
+            f"#GE_StartPosOriPickerBox {{ border: {border_width}px solid {self.color}; }}"
         )
 
     def calculate_button_size(self) -> int:

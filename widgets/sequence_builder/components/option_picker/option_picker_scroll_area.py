@@ -4,6 +4,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QWheelEvent
 
 from Enums.MotionAttributes import Color
+from constants import BLUE, RED
 from widgets.scroll_area.components.option_picker_pictograph_factory import (
     OptionPickerPictographFactory,
 )
@@ -73,10 +74,10 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         pictograph_dict["red_start_ori"] = last_pictograph["red_end_ori"]
         pictograph_dict["blue_start_ori"] = last_pictograph["blue_end_ori"]
         pictograph_dict["red_end_ori"] = self.ori_calculator.calculate_end_orientation(
-            pictograph_dict, Color.RED
+            pictograph_dict, RED
         )
         pictograph_dict["blue_end_ori"] = self.ori_calculator.calculate_end_orientation(
-            pictograph_dict, Color.BLUE
+            pictograph_dict, BLUE
         )
 
     def _get_or_create_pictograph(self, pictograph_dict: dict) -> Pictograph:

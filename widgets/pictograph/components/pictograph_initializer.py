@@ -52,11 +52,11 @@ class PictographInitializer:
 
     def init_motions(self) -> dict[Color, Motion]:
         motions: dict[Color, Motion] = {}
-        for color in [Color.RED, Color.BLUE]:
+        for color in [RED, BLUE]:
             motions[color] = self._create_motion(color)
         self.pictograph.red_motion, self.pictograph.blue_motion = (
-            motions[Color.RED],
-            motions[Color.BLUE],
+            motions[RED],
+            motions[BLUE],
         )
         for motion in motions.values():
             motion.start_ori = None
@@ -65,18 +65,18 @@ class PictographInitializer:
 
     def init_arrows(self) -> dict[Color, Arrow]:
         arrows = {}
-        for color in [Color.BLUE, Color.RED]:
+        for color in [BLUE, RED]:
             arrows[color] = self._create_arrow(color)
         self.pictograph.red_arrow, self.pictograph.blue_arrow = (
-            arrows[Color.RED],
-            arrows[Color.BLUE],
+            arrows[RED],
+            arrows[BLUE],
         )
         return arrows
 
     def init_props(self) -> dict[Color, Prop]:
         props: dict[Color, Prop] = {}
         prop_type = self.pictograph.main_widget.prop_type
-        for color in [Color.RED, Color.BLUE]:
+        for color in [RED, BLUE]:
             initial_prop_attributes = {
                 COLOR: color,
                 PROP_TYPE: prop_type,
@@ -101,8 +101,8 @@ class PictographInitializer:
             props[color].hide()
 
         self.pictograph.red_prop, self.pictograph.blue_prop = (
-            props[Color.RED],
-            props[Color.BLUE],
+            props[RED],
+            props[BLUE],
         )
         return props
 

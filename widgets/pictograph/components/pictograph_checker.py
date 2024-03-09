@@ -14,38 +14,47 @@ class PictographChecker:
 
     def ends_with_beta(self) -> bool:
 
-        return self.pictograph.letter in self.pictograph.letter.get_letters_by_condition(
-            LetterConditions.BETA_ENDING
+        return (
+            self.pictograph.letter
+            in self.pictograph.letter.get_letters_by_condition(
+                LetterConditions.BETA_ENDING
+            )
         )
 
     def ends_with_alpha(self) -> bool:
-        return self.pictograph.letter in self.pictograph.letter.get_letters_by_condition(
-            LetterConditions.ALPHA_ENDING
+        return (
+            self.pictograph.letter
+            in self.pictograph.letter.get_letters_by_condition(
+                LetterConditions.ALPHA_ENDING
+            )
         )
 
     def ends_with_gamma(self) -> bool:
-        return self.pictograph.letter in self.pictograph.letter.get_letters_by_condition(
-            LetterConditions.GAMMA_ENDING
+        return (
+            self.pictograph.letter
+            in self.pictograph.letter.get_letters_by_condition(
+                LetterConditions.GAMMA_ENDING
+            )
         )
 
     def ends_with_layer1(self) -> bool:
         red_prop, blue_prop = (
-            self.pictograph.props[Color.RED],
-            self.pictograph.props[Color.BLUE],
+            self.pictograph.props[RED],
+            self.pictograph.props[BLUE],
         )
         return red_prop.check.is_radial() == blue_prop.check.is_radial()
 
     def ends_with_layer2(self) -> bool:
         red_prop, blue_prop = (
-            self.pictograph.props[Color.RED],
-            self.pictograph.props[Color.BLUE],
+            self.pictograph.props[RED],
+            self.pictograph.props[BLUE],
         )
         return red_prop.check.is_nonradial() and blue_prop.check.is_nonradial()
 
     def ends_with_layer3(self) -> bool:
         red_prop, blue_prop = (
-            self.pictograph.props[Color.RED],
-            self.pictograph.props[Color.BLUE],
+            self.pictograph.props[RED],
+            self.pictograph.props[BLUE],
         )
         return red_prop.check.is_radial() != blue_prop.check.is_radial()
 
@@ -54,8 +63,8 @@ class PictographChecker:
 
     def ends_with_in_out_ori(self) -> bool:
         red_prop, blue_prop = (
-            self.pictograph.props[Color.RED],
-            self.pictograph.props[Color.BLUE],
+            self.pictograph.props[RED],
+            self.pictograph.props[BLUE],
         )
         if red_prop.ori == IN and blue_prop.ori == OUT:
             return True
@@ -65,8 +74,8 @@ class PictographChecker:
 
     def ends_with_clock_counter_ori(self) -> bool:
         red_prop, blue_prop = (
-            self.pictograph.props[Color.RED],
-            self.pictograph.props[Color.BLUE],
+            self.pictograph.props[RED],
+            self.pictograph.props[BLUE],
         )
         return (red_prop.ori in [CLOCK] and blue_prop.ori in [COUNTER]) or (
             red_prop.ori in [COUNTER] and blue_prop.ori in [CLOCK]

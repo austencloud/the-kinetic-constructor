@@ -8,6 +8,10 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
+from Enums.letters import Letter
+from constants import BLUE, RED
+
+from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
@@ -108,7 +112,26 @@ class SequenceButtonFrame(QFrame):
         if show_indicator:
             self.sequence_widget.indicator_label.show_indicator("Sequence cleared")
         self._clear_graph_editor()
+        self._reset_start_pos_pictograph_orientations()
 
+    def _reset_start_pos_pictograph_orientations(self) -> None:
+        start_pos_letters = [Letter.α, Letter.β, Letter.Γ]
+        for letter in start_pos_letters:
+            if letter in self.main_widget.all_pictographs:
+                for pictograph_key, pictograph in self.main_widget.all_pictographs[letter].items():
+                    self._reset_pictograph_prop_orientations(pictograph)
+
+    def _reset_pictograph_prop_orientations(self, pictograph: Pictograph) -> None:
+        pictograph.pictograph_dict["red_start_ori"] = "in"
+        pictograph.pictograph_dict["blue_start_ori"] = "in"
+        pictograph.props[RED].updater.update_prop(
+            {"start_ori": "in"}
+        )
+        pictograph.props[BLUE].updater.update_prop(
+            {"start_ori": "in"}
+        )
+        pictograph.updater.update_pictograph(pictograph.pictograph_dict)
+        
     def _reset_beat_frame(self) -> None:
         for beat_view in self.beat_frame.beat_views:
             beat_view.setScene(None)
