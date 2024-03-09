@@ -23,7 +23,6 @@ class PropTypeSelector(QGroupBox):
             [
                 PropType.Hand.name,
                 PropType.Staff.name,
-                PropType.BigStaff.name,
                 PropType.Club.name,
                 PropType.Buugeng.name,
                 PropType.EightRings.name,

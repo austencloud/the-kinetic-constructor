@@ -66,7 +66,6 @@ class MainWindowMenuBar(QMenuBar):
 
     def open_preferences_dialog(self) -> None:
         self.preferences_dialog = self.main_widget.preferences_dialog
-        self.preferences_dialog.setup_layout()
         self.preferences_dialog.load_initial_settings()
         self.preferences_dialog.exec()
 

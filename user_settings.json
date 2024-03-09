@@ -1,11 +1,11 @@
 {
     "pictograph_size": 1,
-    "prop_type": "Triad",
+    "prop_type": "Staff",
     "glyph_visibility": {
         "VTG": false,
         "TKA": true,
         "Elemental": false
     },
-    "default_left_orientation": "counter",
-    "default_right_orientation": "counter"
+    "default_left_orientation": "in",
+    "default_right_orientation": "in"
 }
