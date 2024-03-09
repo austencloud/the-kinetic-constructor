@@ -60,12 +60,13 @@ class MainWindowMenuBar(QMenuBar):
         self.main_widget.main_window.settings_manager.glyph_visibility_manager.apply_glyph_visibility()
 
     def set_prop_type(self, prop_type: PropType):
-        self.main_widget.prop_type_selector.prop_type_changed(prop_type.name)
+        self.main_widget.prop_type_selector.on_prop_type_changed(prop_type.name)
 
         print(f"Prop type set to: {prop_type.name}")
 
     def open_preferences_dialog(self) -> None:
         self.preferences_dialog = self.main_widget.preferences_dialog
+        # self.preferences_dialog.setup_layout()
         self.preferences_dialog.load_initial_settings()
         self.preferences_dialog.exec()
 

@@ -25,9 +25,12 @@ class PreferencesDialog(QDialog):
         self.default_orientation_selector = DefaultOrientationSelector(self.main_widget)
         self.apply_button = QPushButton("Apply")
         self.apply_button.clicked.connect(self.apply_settings)
-
+        self.cancel_button = QPushButton("Cancel")
+        self.cancel_button.clicked.connect(self.cancel_settings)
+        self.reset_button = QPushButton("Reset to Defaults")
+        self.reset_button.clicked.connect(self.reset_settings)
+        
     def _setup_layout(self) -> None:
-        main_layout = QHBoxLayout(self)
 
         self.sections_list = QListWidget()
         self.sections_list.addItems(["Prop Type", "Glyph Visibility", "Default Orientations"])
@@ -38,18 +41,20 @@ class PreferencesDialog(QDialog):
         self.pages_widget.addWidget(self.glyph_visibility_widget)
         self.pages_widget.addWidget(self.default_orientation_selector)
 
+        main_layout = QHBoxLayout()
         main_layout.addWidget(self.sections_list, 1)
         main_layout.addWidget(self.pages_widget, 3)
 
         button_layout = QHBoxLayout()
         button_layout.addStretch(1)
+        button_layout.addWidget(self.reset_button)
+        button_layout.addWidget(self.cancel_button)
         button_layout.addWidget(self.apply_button)
 
-        layout = QVBoxLayout()
+        layout = QVBoxLayout(self)
         layout.addLayout(main_layout)
         layout.addLayout(button_layout)
 
-        self.setLayout(layout)
 
     def change_section(self, index: int) -> None:
         self.pages_widget.setCurrentIndex(index)
@@ -60,6 +65,14 @@ class PreferencesDialog(QDialog):
         self.default_orientation_selector.apply_settings()
         self.settings_manager.save_settings()
         self.close()
+
+    def cancel_settings(self) -> None:
+        self.close()
+
+    def reset_settings(self) -> None:
+        self.prop_type_selector.reset_settings()
+        self.glyph_visibility_widget.reset_settings()
+        self.default_orientation_selector.reset_settings()
 
     def load_initial_settings(self) -> None:
         self.prop_type_selector.load_initial_settings()

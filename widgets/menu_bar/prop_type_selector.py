@@ -1,15 +1,22 @@
 # PropTypeSelector.py
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QLabel, QGroupBox, QFormLayout, QComboBox
+from PyQt6.QtWidgets import (
+    QLabel,
+    QGroupBox,
+    QFormLayout,
+    QComboBox,
+    QWidget,
+    QVBoxLayout,
+)
 from Enums.PropTypes import *
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
 
-class PropTypeSelector(QGroupBox):
+class PropTypeSelector(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
-        super().__init__("Prop Type Selector")
+        super().__init__()
         self.main_widget = main_widget
         self.prop_type_changer = (
             self.main_widget.main_window.settings_manager.prop_type_changer
@@ -19,27 +26,25 @@ class PropTypeSelector(QGroupBox):
 
     def _setup_prop_type_combobox(self) -> None:
         self.prop_type_combobox = QComboBox()
-        self.prop_type_combobox.addItems(
-            [
-                PropType.Hand.name,
-                PropType.Staff.name,
-                PropType.Club.name,
-                PropType.Buugeng.name,
-                PropType.EightRings.name,
-                PropType.Fan.name,
-                PropType.Triad.name,
-                PropType.MiniHoop.name,
-                PropType.BigHoop.name,
-                PropType.DoubleStar.name,
-                PropType.Quiad.name,
-                PropType.Sword.name,
-                PropType.Guitar.name,
-                PropType.Ukulele.name,
-            ]
-        )
+        self.prop_type_combobox.addItems([prop_type.name for prop_type in PropType])
 
-    def prop_type_changed(self, new_prop_type: str) -> None:
-        new_prop_type = new_prop_type or self.prop_type_combobox.currentText()
+    def _setup_layout(self) -> None:
+        layout = QVBoxLayout()
+        layout.addWidget(QLabel("Select Prop Type:"))
+        layout.addWidget(self.prop_type_combobox)
+        self.setLayout(layout)
+
+    def load_initial_settings(self) -> None:
+        initial_prop_type = (
+            self.main_widget.main_window.settings_manager.get_prop_type()
+        )
+        self.prop_type_combobox.setCurrentText(initial_prop_type.name)
+
+    def apply_settings(self) -> None:
+        new_prop_type = self.prop_type_combobox.currentText()
+        self.on_prop_type_changed(new_prop_type)
+
+    def on_prop_type_changed(self, new_prop_type: str) -> None:
         self.main_widget.main_window.settings_manager.set_prop_type(new_prop_type)
         self.main_widget.main_window.settings_manager.save_settings()
         self.prop_type_changer.apply_prop_type()
@@ -48,15 +53,6 @@ class PropTypeSelector(QGroupBox):
                 True
             )
 
-    def _setup_layout(self) -> None:
-        layout = QFormLayout()
-        layout.addRow(QLabel("Select Prop Type:"), self.prop_type_combobox)
-        self.setLayout(layout)
-
-    def load_initial_settings(self) -> None:
-        initial_prop_type = (
-            self.main_widget.main_window.settings_manager.get_prop_type()
-        )
-        self.prop_type_combobox.setCurrentText(initial_prop_type.name)
-        self.prop_type_combobox.currentTextChanged.connect(self.prop_type_changed)
-        # activate the apply button
+    def reset_settings(self) -> None:
+        initial_prop_type = PropType.Hand.name
+        self.prop_type_combobox.setCurrentText(initial_prop_type)

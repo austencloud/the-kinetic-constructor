@@ -75,3 +75,9 @@ class SettingsManager:
         self.main_window.main_widget.main_tab_widget.codex.scroll_area.display_manager.COLUMN_COUNT = (
             column_count
         )
+
+    def get_default_orientation(self, prop_type: str, hand: str) -> str:
+        return self.get_setting(f"default_{hand}_orientation_{prop_type}", "in")
+
+    def set_default_orientation(self, prop_type: str, hand: str, orientation: str) -> None:
+        self.set_setting(f"default_{hand}_orientation_{prop_type}", orientation)
