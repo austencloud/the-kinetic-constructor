@@ -15,14 +15,14 @@ if TYPE_CHECKING:
 
 
 class CurrentSequenceJsonHandler:
-    def __init__(self, json_manager: "JSON_Manager"):
+    def __init__(self, json_manager: "JSON_Manager") -> None:
         self.current_sequence_json = "current_sequence.json"
         self.main_widget = json_manager.main_widget
         self.ori_calculator = CurrentSequenceJsonOriCalculator(self)
         self.validation_engine = CurrentSequenceJsonValidationEngine(self)
         self.clear_current_sequence_file()
 
-    def set_start_position_data(self, start_pos_pictograph: Pictograph):
+    def set_start_position_data(self, start_pos_pictograph: Pictograph) -> None:
         red_start_ori = start_pos_pictograph.pictograph_dict["red_start_ori"]
         blue_start_ori = start_pos_pictograph.pictograph_dict["blue_start_ori"]
         sequence = self.load_current_sequence_json()

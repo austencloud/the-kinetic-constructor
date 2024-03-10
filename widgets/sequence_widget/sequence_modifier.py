@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QWidget
 from widgets.base_tab_widget import BaseTabWidget
 from widgets.animator.animator import Animator
 from widgets.graph_editor.graph_editor import GraphEditor
+from widgets.turn_pattern_widget import TurnPatternWidget
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
@@ -16,6 +17,8 @@ class SequenceModifier(BaseTabWidget):
         self.graph_editor = GraphEditor(self)
         self.animator = Animator(self)
         self.prop_changer = QWidget(self)
+        self.turn_pattern_widget = TurnPatternWidget(self)
+        self.addTab(self.turn_pattern_widget, "Turn Patterns")
         self.addTab(self.graph_editor, "Graph Editor")
         self.addTab(self.animator, "Animator")
         self.addTab(self.prop_changer, "Prop Changer")
@@ -27,4 +30,3 @@ class SequenceModifier(BaseTabWidget):
             self.graph_editor.resize_graph_editor()
         elif current_widget == self.animator:
             self.animator.resize_animator()
-        # Add more conditions for other tabs if needed

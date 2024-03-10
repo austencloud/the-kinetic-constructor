@@ -11,7 +11,7 @@ from ..scroll_area.components.sequence_widget_pictograph_factory import (
 )
 from .sequence_beat_frame.beat import Beat
 from .sequence_beat_frame.sequence_beat_frame import SequenceBeatFrame
-from .button_frame import SequenceButtonFrame
+from .sequence_widget_button_frame import SequenceWidgetButtonFrame
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
@@ -27,7 +27,7 @@ class SequenceWidget(QWidget):
         self.indicator_label = IndicatorLabel(self)
         self.beat_frame = SequenceBeatFrame(self.main_widget, self)
         self.sequence_modifier = SequenceModifier(self)
-        self.button_frame = SequenceButtonFrame(self)
+        self.button_frame = SequenceWidgetButtonFrame(self)
         self.pictograph_factory = SequenceWidgetPictographFactory(
             self, self.pictograph_cache
         )

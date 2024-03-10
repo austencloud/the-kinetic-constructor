@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 
-class SequenceButtonFrame(QFrame):
+class SequenceWidgetButtonFrame(QFrame):
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
@@ -132,8 +132,12 @@ class SequenceButtonFrame(QFrame):
         ]
         pictograph.pictograph_dict["red_start_ori"] = default_right_orientation
         pictograph.pictograph_dict["blue_start_ori"] = default_left_orientation
-        pictograph.props[RED].updater.update_prop({"start_ori": default_right_orientation})
-        pictograph.props[BLUE].updater.update_prop({"start_ori": default_left_orientation})
+        pictograph.props[RED].updater.update_prop(
+            {"start_ori": default_right_orientation}
+        )
+        pictograph.props[BLUE].updater.update_prop(
+            {"start_ori": default_left_orientation}
+        )
         pictograph.updater.update_pictograph(pictograph.pictograph_dict)
 
     def _reset_beat_frame(self) -> None:
