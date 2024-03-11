@@ -31,8 +31,8 @@ class SpecialPlacementMirroredEntryManager:
             self.mirrored_entry_creator.create_entry(arrow)
         else:
             self.mirrored_entry_updater.update_entry(arrow)
-        self.section_updater.update_pictographs_in_section(
-            LetterType.get_letter_type(arrow.pictograph.letter)
-        )
+        # self.section_updater.update_pictographs_in_section(
+        #     LetterType.get_letter_type(arrow.pictograph.letter)
+        # )
 
 

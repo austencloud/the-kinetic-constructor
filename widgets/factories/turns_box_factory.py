@@ -2,17 +2,18 @@ from typing import TYPE_CHECKING
 
 from Enums.Enums import TurnsTabAttribute
 from Enums.MotionAttributes import LeadStates, MotionType
+from constants import BLUE, RED
 from widgets.codex.codex_letter_button_frame.components.codex_turns_box import (
     CodexTurnsBox,
 )
 
 
 if TYPE_CHECKING:
-    from widgets.codex_turns_panel import CodexTurnsBoxPanel
+    from widgets.codex_turns_panel import CodexTurnsPanel
 
 
 class CodexTurnsBoxFactory:
-    def __init__(self, turns_panel: "CodexTurnsBoxPanel") -> None:
+    def __init__(self, turns_panel: "CodexTurnsPanel") -> None:
         self.turns_panel = turns_panel
 
     def create_boxes(self) -> list[CodexTurnsBox]:

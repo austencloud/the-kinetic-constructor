@@ -14,6 +14,9 @@ if TYPE_CHECKING:
 class WASD_AdjustmentManager:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
+        self.entry_remover = (
+            self.pictograph.arrow_placement_manager.special_positioner.data_updater.entry_remover
+        )
         self.movement_manager = ArrowMovementManager(pictograph)
         self.rotation_angle_override_manager = RotationAngleOverrideManager(self)
         self.prop_placement_override_manager = PropPlacementOverrideManager(self)
@@ -21,9 +24,8 @@ class WASD_AdjustmentManager:
     def handle_special_placement_removal(self) -> None:
         if not self.pictograph.selected_arrow:
             return
-
         letter = self.pictograph.letter
-        self.pictograph.arrow_placement_manager.special_positioner.data_updater.entry_remover.remove_special_placement_entry(
+        self.entry_remover.remove_special_placement_entry(
             letter, self.pictograph.selected_arrow
         )
         self.pictograph.updater.update_pictograph()

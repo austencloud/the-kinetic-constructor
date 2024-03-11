@@ -12,29 +12,32 @@ from PyQt6.QtCore import Qt
 class ArrowMovementManager:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
+        self.data_updater = (
+            self.pictograph.arrow_placement_manager.special_positioner.data_updater
+        )
 
-    def handle_arrow_movement(self, pictograph, key, shift_held, ctrl_held) -> None:
-        if not self.pictograph.selected_arrow:
+    def handle_arrow_movement(self, pictograph: "Pictograph", key, shift_held, ctrl_held) -> None:
+        if not pictograph.selected_arrow:
             return
 
+        adjustment_increment = 5
+        if shift_held:
+            adjustment_increment = 20
         if shift_held and ctrl_held:
             adjustment_increment = 200
-        elif shift_held:
-            adjustment_increment = 20
-        else:
-            adjustment_increment = 5
+
         adjustment = self.get_adjustment(key, adjustment_increment)
 
-        self.pictograph.arrow_placement_manager.special_positioner.data_updater.update_arrow_adjustments_in_json(
+        self.data_updater.update_arrow_adjustments_in_json(
             adjustment, self.pictograph.selected_arrow
         )
-        self.pictograph.arrow_placement_manager.special_positioner.data_updater.mirrored_entry_manager.update_mirrored_entry_in_json(
+        self.data_updater.mirrored_entry_manager.update_mirrored_entry_in_json(
             self.pictograph.selected_arrow
         )
-        for pictograph in self.pictograph.scroll_area.sections_manager.get_section(
-            LetterType.get_letter_type(self.pictograph.letter)
-        ).pictographs.values():
-            pictograph.arrow_placement_manager.update_arrow_placements()
+        # for pictograph in self.pictograph.scroll_area.sections_manager.get_section(
+        #     LetterType.get_letter_type(self.pictograph.letter)
+        # ).pictographs.values():
+        #     pictograph.arrow_placement_manager.update_arrow_placements()
 
     def get_adjustment(self, key, increment) -> tuple[int, int]:
         direction_map = {

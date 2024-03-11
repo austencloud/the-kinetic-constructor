@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QLabel, QHBoxLayout, QFrame
 from PyQt6.QtCore import Qt
 
 from Enums.Enums import LetterType, TurnsTabAttribute
+from constants import BLUE, RED
 from widgets.codex.codex_turns_box_widget import CodexWidget
 
 
