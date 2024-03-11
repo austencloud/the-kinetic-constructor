@@ -1,5 +1,5 @@
 import os
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QModelIndex
 import json
 from typing import TYPE_CHECKING
 
@@ -31,7 +31,7 @@ class DictionaryFavoritesTree:
             QHeaderView.ResizeMode.ResizeToContents
         )
         self.favorites_view.doubleClicked.connect(
-            self.dictionary.on_favorite_double_clicked
+            self.on_favorite_double_clicked
         )
         self.favorites_view.setAcceptDrops(True)
         self.favorites_view.setDragEnabled(True)
@@ -41,7 +41,7 @@ class DictionaryFavoritesTree:
         self.favorites_view.setDropIndicatorShown(True)
         self.favorites_view.setRootIsDecorated(False)
         self.favorites_view.header().sectionClicked.connect(
-            self.dictionary.sort_favorites
+            self.dictionary.sort_manager.sort_favorites
         )
         layout.addWidget(self.favorites_view)
 
@@ -65,3 +65,16 @@ class DictionaryFavoritesTree:
             favorites.append(favorite)
         with open(self.favorites_file, "w") as file:
             json.dump(favorites, file)
+
+    def on_favorite_double_clicked(self, index: QModelIndex) -> None:
+        item = self.favorites_model.itemFromIndex(index)
+        file_path = item.data(Qt.ItemDataRole.UserRole)
+        self.dictionary.sequence_populator.load_sequence_from_file(file_path)
+
+    def add_to_favorites(self, file_path: str) -> None:
+        file_name = os.path.basename(file_path)
+        item = QStandardItem(file_name)
+        item.setData(file_path, Qt.ItemDataRole.UserRole)
+        self.favorites_model.appendRow(item)
+        self.save_favorites()
+

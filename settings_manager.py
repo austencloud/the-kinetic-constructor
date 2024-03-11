@@ -63,12 +63,21 @@ class SettingsManager:
     def get_default_orientation(self, prop_type: str, hand: str) -> str:
         return self.get_setting(f"default_{hand}_orientation_{prop_type}", "in")
 
-    def set_default_orientation(self, prop_type: str, hand: str, orientation: str) -> None:
+    def set_default_orientation(
+        self, prop_type: str, hand: str, orientation: str
+    ) -> None:
         self.set_setting(f"default_{hand}_orientation_{prop_type}", orientation)
-        
+
     def get_word_length_visibility(self) -> dict:
         # Returns a dictionary with lengths as keys and visibility (True/False) as values
-        return self.get_setting("word_length_visibility", {2: True, 3: True, 4: True, 5: True, 6: True, 7: True, 8: True})
+        return self.get_setting(
+            "word_length_visibility",
+            {2: True, 3: True, 4: True, 5: False, 6: False, 7: False, 8: False},
+        )
 
     def set_word_length_visibility(self, lengths_visibility: dict) -> None:
-        self.set_setting("word_length_visibility", lengths_visibility)
+        # Ensure keys are strings for JSON compatibility
+        corrected_visibility = {
+            str(key): value for key, value in lengths_visibility.items()
+        }
+        self.set_setting("word_length_visibility", corrected_visibility)

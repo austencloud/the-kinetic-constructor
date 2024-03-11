@@ -19,7 +19,7 @@ class DictionaryWordsTree:
     def __init__(self, dictionary: "Dictionary") -> None:
         self.dictionary = dictionary
         self.model = DictionaryFileSystemModel()
-        self.proxy_model = DictionarySortProxyModel()
+        self.proxy_model = DictionarySortProxyModel(dictionary)
         self.tree_view = QTreeView()
 
     def setup_ui(self, layout: QVBoxLayout) -> None:

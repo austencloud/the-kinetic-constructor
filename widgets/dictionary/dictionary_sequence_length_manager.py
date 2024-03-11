@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from widgets.dictionary.dictionary import Dictionary
 
 
-class DictionarySortByLengthManager:
+class DictionarySortByLengthHandler:
     def __init__(self, dictionary: "Dictionary") -> None:
         self.dictionary = dictionary
 
@@ -27,19 +27,7 @@ class DictionarySortByLengthManager:
         for length, name, item in sequences:
             self.dictionary.model.appendRow(item)
 
-    @staticmethod
-    def compute_display_length(name: str) -> int:
-        count = 0
-        skip_next = False
-        for i, char in enumerate(name):
-            if skip_next:
-                skip_next = False
-                continue
-            if char == "-" and i + 1 < len(name):
-                count += 1
-                skip_next = True
-            else:
-                count += 1
+
 
     @staticmethod
     def extract_items(model: QStandardItemModel) -> list[QStandardItem]:
@@ -49,6 +37,15 @@ class DictionarySortByLengthManager:
         return items
 
     def filter_sequences_by_length(self):
-        # Implement the logic to filter sequences based on the updated visibility settings
-        # This could involve iterating through the items in your tree model and hiding/showing based on length
-        pass
+        visibility_settings = (
+            self.dictionary.main_widget.main_window.settings_manager.get_word_length_visibility()
+        )
+        model = self.dictionary.words_tree.model
+
+        for i in range(model.rowCount()):
+            item = model.item(i)
+            if item:  # Safety check
+                sequence_name = item.text()
+                sequence_length = self.compute_display_length(sequence_name)
+                should_be_visible = visibility_settings.get(sequence_length, False)
+                item.setHidden(not should_be_visible)

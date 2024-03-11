@@ -1,42 +1,44 @@
+from typing import TYPE_CHECKING
 from PyQt6.QtCore import QSortFilterProxyModel, QModelIndex
+
+if TYPE_CHECKING:
+    from widgets.dictionary.dictionary import Dictionary
 
 
 class DictionarySortProxyModel(QSortFilterProxyModel):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, dictionary: "Dictionary") -> None:
+        super().__init__(dictionary)
+        self.dictionary = dictionary
         self._lengthSortingEnabled = False
+        self.visibility_settings = {}
 
     @property
-    def lengthSortingEnabled(self):
+    def lengthSortingEnabled(self) -> bool:
         return self._lengthSortingEnabled
 
     @lengthSortingEnabled.setter
-    def lengthSortingEnabled(self, value):
+    def lengthSortingEnabled(self, value) -> None:
         self._lengthSortingEnabled = value
-        self.invalidate()  # Optionally invalidate the sorting/filtering
+        self.invalidate()
 
+    def filterAcceptsRow(self, source_row: int, source_parent: QModelIndex) -> bool:
+        self.sort_manager = self.dictionary.sort_manager
+        self.source_model = self.dictionary.words_tree.model
+        if not self.visibility_settings:
+            return True
+
+        index = self.source_model.index(source_row, 0, source_parent)
+        filename = self.source_model.fileName(index)
+        word_length = self.sort_manager.compute_display_length(filename)
+
+        return self.visibility_settings.get(str(word_length), False)
 
     def lessThan(self, left: QModelIndex, right: QModelIndex) -> bool:
         if self.lengthSortingEnabled:
-            leftData = self.sourceModel().fileName(left)
-            rightData = self.sourceModel().fileName(right)
-            leftLength = self.compute_display_length(leftData)
-            rightLength = self.compute_display_length(rightData)
+            leftData = self.source_model.fileName(left)
+            rightData = self.source_model.fileName(right)
+            leftLength = self.sort_manager.compute_display_length(leftData)
+            rightLength = self.sort_manager.compute_display_length(rightData)
             return leftLength < rightLength
         else:
             return super().lessThan(left, right)
-
-    @staticmethod
-    def compute_display_length(name: str) -> int:
-        count = 0
-        skip_next = False
-        for i, char in enumerate(name):
-            if skip_next:
-                skip_next = False
-                continue
-            if char == "-" and i + 1 < len(name):
-                count += 1
-                skip_next = True
-            else:
-                count += 1
-        return count

@@ -18,7 +18,9 @@ class DictionarySearchSortBar:
         self.search_bar = QLineEdit()
         self.sort_combo = QComboBox()
         self.sort_combo.addItems(["Name", "Length", "Start Position"])
-        self.sort_combo.currentTextChanged.connect(self.dictionary.sort_sequences)
+        self.sort_combo.currentTextChanged.connect(
+            self.dictionary.sort_manager.sort_sequences
+        )
 
     def setup_ui(self, layout: QVBoxLayout) -> None:
         search_layout = QHBoxLayout()
