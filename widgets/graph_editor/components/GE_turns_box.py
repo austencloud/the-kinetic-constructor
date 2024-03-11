@@ -1,4 +1,6 @@
 from typing import TYPE_CHECKING
+
+from PyQt6.QtGui import QPaintEvent
 from Enums.MotionAttributes import Color
 from constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
 from widgets.graph_editor.components.GE_prop_rot_dir_button_manager import (
@@ -9,7 +11,7 @@ from widgets.graph_editor.components.GE_vtg_dir_button_handler import (
 )
 from .GE_turns_box_header import GE_TurnsBoxHeader
 from .GE_turns_widget import GE_TurnsWidget
-from PyQt6.QtWidgets import QFrame, QVBoxLayout
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QApplication
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_adjustment_panel import GE_AdjustmentPanel
@@ -29,6 +31,7 @@ class GE_TurnsBox(QFrame):
         self.color = color
         self.pictograph = pictograph
         self.graph_editor = self.turns_panel.graph_editor
+        self.border_width = self.graph_editor.width() // 100
 
         self.vtg_dir_btn_state: dict[str, bool] = {SAME: False, OPP: False}
         self.prop_rot_dir_btn_state: dict[str, bool] = {
@@ -52,14 +55,12 @@ class GE_TurnsBox(QFrame):
         self.layout.addWidget(self.turns_widget)
         self.setLayout(self.layout)
 
-    def _set_border_color(self) -> None:
-        border_width = self.width() // 40
+    def update_styled_border(self) -> None:
         self.setStyleSheet(
-            f"#GE_TurnsBox {{ border: {border_width}px solid {self.color}; }}"
+            f"#GE_TurnsBox {{ border: {self.border_width}px solid {self.color}; }}"
         )
 
     def resize_GE_turns_box(self) -> None:
-        self._set_border_color()
         self.setMinimumWidth(
             int(
                 (
@@ -71,3 +72,10 @@ class GE_TurnsBox(QFrame):
         )
         self.header.resize_GE_turns_box_header()
         self.turns_widget.resize_GE_turns_widget()
+
+    # def paintEvent(self, a0: QPaintEvent | None) -> None:
+
+    #     # super().paintEvent(a0)
+    #     # self._set_border_color()
+    #     QApplication.processEvents()
+    #     print("paintEvent executed")

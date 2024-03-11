@@ -27,6 +27,7 @@ class GE_StartPosOriPickerBox(QFrame):
         self.color = color
         self.start_pos = start_pos
         self.graph_editor = self.adjustment_panel.graph_editor
+        self.border_width = self.graph_editor.width() // 100
 
         self.vtg_dir_btn_state: dict[str, bool] = {SAME: False, OPP: False}
         self.prop_rot_dir_btn_state: dict[str, bool] = {
@@ -47,15 +48,13 @@ class GE_StartPosOriPickerBox(QFrame):
         self.layout.addStretch(1)
         self.setLayout(self.layout)
 
-    def _set_border_color(self) -> None:
-        border_width = self.width() // 40
+    def update_styled_border(self) -> None:
         self.setStyleSheet(
-            f"#GE_StartPosOriPickerBox {{ border: {border_width}px solid {self.color}; }}"
+            f"#GE_StartPosOriPickerBox {{ border: {self.border_width}px solid {self.color}; }}"
         )
 
     def calculate_button_size(self) -> int:
         return int((self.start_pos.view.height() // 8))
 
     def resize_GE_ori_picker_box(self) -> None:
-        self._set_border_color()
         self.ori_picker_widget.resize_GE_start_pos_ori_picker_widget()

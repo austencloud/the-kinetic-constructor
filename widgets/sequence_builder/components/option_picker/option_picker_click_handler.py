@@ -19,8 +19,11 @@ class OptionPickerClickHandler:
             clicked_option
         )
         beat_frame.add_scene_to_sequence(new_beat)
+        QApplication.processEvents()
         self.sequence_builder.option_picker.choose_your_next_option_label.set_text_to_loading()
+        QApplication.processEvents()
         selection_manager = beat_frame.selection_manager
+        QApplication.processEvents()
         selection_manager.select_beat(new_beat.view)
 
         QApplication.processEvents()

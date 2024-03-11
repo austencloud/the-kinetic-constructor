@@ -40,7 +40,9 @@ class ElementalGlyph(QGraphicsSvgItem):
         self.renderer = QSvgRenderer(svg_path)
         if self.renderer.isValid():
             self.setSharedRenderer(self.renderer)
-            self.pictograph.addItem(self)
+            # if the item isn't already in the scene, add it
+            if not self.scene():
+                self.pictograph.addItem(self)
             self.position_elemental_glyph()
             visibility_manager = (
                 self.pictograph.main_widget.main_window.settings_manager.glyph_visibility_manager

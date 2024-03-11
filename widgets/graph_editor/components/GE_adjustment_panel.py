@@ -97,12 +97,15 @@ class GE_AdjustmentPanel(QFrame):
         for picker in self.start_pos_ori_pickers:
             if not picker.isVisible():
                 picker.show()
+                picker.resize_GE_ori_picker_box()
+                picker.update_styled_border()
 
     def show_turns_boxes(self) -> None:
         for turns_box in self.turns_boxes:
             if not turns_box.isVisible():
-
                 turns_box.show()
+                turns_box.resize_GE_turns_box()
+                turns_box.update_styled_border()
 
     def update_turns_panel(self, blue_turns: int, red_turns: int) -> None:
         self.set_turns(blue_turns, red_turns)
