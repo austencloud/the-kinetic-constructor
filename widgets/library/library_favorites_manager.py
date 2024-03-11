@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from widgets.library.library import Library
 
 
-class LibraryFavoritesManager:
+class LibraryFavoritesTree:
     def __init__(self, library: "Library") -> None:
         self.library = library
         self.favorites_model = QStandardItemModel()

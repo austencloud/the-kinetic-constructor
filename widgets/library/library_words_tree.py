@@ -1,4 +1,5 @@
 from PyQt6.QtCore import QDir
+from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 from widgets.library.custom_file_system_model import CustomFileSystemModel
 from widgets.library.custom_sort_proxy_model import CustomSortProxyModel
@@ -8,15 +9,12 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHeaderView,
 )
+
 if TYPE_CHECKING:
     from widgets.library.library import Library
 
 
-
-
-
-
-class LibrarySequenceLoader:
+class LibraryWordsTree:
     def __init__(self, library: "Library") -> None:
         self.library = library
         self.model = CustomFileSystemModel()
@@ -35,4 +33,16 @@ class LibrarySequenceLoader:
         self.tree_view.header().setSectionResizeMode(
             QHeaderView.ResizeMode.ResizeToContents
         )
+        self._set_font_size()
+
         layout.addWidget(self.tree_view)
+
+    def _set_font_size(self) -> None:
+        font_size = int(self.library.width() * 0.02)
+        font = QFont("Arial", font_size)
+        self.tree_view.setFont(font)
+        self.tree_view.setUniformRowHeights(True)
+        self.tree_view.setStyleSheet("QTreeView::item { height: 40px; }")
+
+    def resize_library_words_tree(self):
+        self._set_font_size()

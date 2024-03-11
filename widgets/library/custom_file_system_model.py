@@ -1,5 +1,5 @@
 from PyQt6.QtGui import QFileSystemModel
-from PyQt6.QtCore import QDateTime, Qt
+from PyQt6.QtCore import QDateTime, Qt, QFileInfo
 
 class CustomFileSystemModel(QFileSystemModel):
     def columnCount(self, parent=None) -> int:
@@ -19,7 +19,8 @@ class CustomFileSystemModel(QFileSystemModel):
                 if isinstance(date_time, QDateTime):
                     return date_time.toString("d/M/yy")
             elif index.column() == 0:
-                return super().data(index, role)
+                file_info = QFileInfo(super().filePath(index))
+                return file_info.baseName()  # Get the file name without extension
         elif role == Qt.ItemDataRole.DecorationRole and index.column() == 0:
             return super().data(index, role)
         return None

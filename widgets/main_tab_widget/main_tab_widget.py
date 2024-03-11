@@ -39,3 +39,5 @@ class MainTabWidget(BaseTabWidget):
             self.codex.resize_codex()
         elif current_tab == self.sequence_builder:
             self.sequence_builder.resize_sequence_builder()
+        elif current_tab == self.library:
+            self.library.resize_library()
