@@ -1,12 +1,18 @@
 from PyQt6.QtGui import QFileSystemModel
 from PyQt6.QtCore import QDateTime, Qt, QFileInfo
 
-class CustomFileSystemModel(QFileSystemModel):
+
+class DictionaryFileSystemModel(QFileSystemModel):
     def columnCount(self, parent=None) -> int:
         return 1
 
-    def headerData(self, section: int, orientation, role=Qt.ItemDataRole.DisplayRole) -> str:
-        if orientation == Qt.Orientation.Horizontal and role == Qt.ItemDataRole.DisplayRole:
+    def headerData(
+        self, section: int, orientation, role=Qt.ItemDataRole.DisplayRole
+    ) -> str:
+        if (
+            orientation == Qt.Orientation.Horizontal
+            and role == Qt.ItemDataRole.DisplayRole
+        ):
             if section == 0:
                 return "Word"
 

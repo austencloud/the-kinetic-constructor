@@ -1,21 +1,28 @@
 import os
 import json
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QMessageBox, QTreeView, QHBoxLayout
+from PyQt6.QtWidgets import (
+    QVBoxLayout,
+    QWidget,
+    QMessageBox,
+    QTreeView,
+    QHBoxLayout,
+    QPushButton,
+)
 from PyQt6.QtCore import QModelIndex, Qt
 from PyQt6.QtGui import QStandardItem, QDragEnterEvent, QDropEvent
 from Enums.letters import Letter, LetterConditions
-from widgets.library.library_sequence_populator import LibrarySequencePopulator
-from .library_favorites_manager import LibraryFavoritesTree
-from .library_search_sort_bar import LibrarySearchSortBar
-from .library_sequence_length_manager import LibrarySequenceLengthManager
-from .library_words_tree import LibraryWordsTree
+from widgets.dictionary.dictionary_sequence_populator import DictionarySequencePopulator
+from .dictionary_favorites_manager import DictionaryFavoritesTree
+from .dictionary_search_sort_bar import DictionarySearchSortBar
+from .dictionary_sequence_length_manager import DictionarySortByLengthManager
+from .dictionary_words_tree import DictionaryWordsTree
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
 
-class Library(QWidget):
+class Dictionary(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
@@ -32,19 +39,54 @@ class Library(QWidget):
         self.sequence_builder = self.main_widget.main_tab_widget.sequence_builder
 
     def setup_ui(self) -> None:
-        self.search_sort_bar = LibrarySearchSortBar(self)
-        self.favorites_tree = LibraryFavoritesTree(self)
-        self.words_tree = LibraryWordsTree(self)
-        self.sequence_length_manager = LibrarySequenceLengthManager(self)
-        self.sequence_populator = LibrarySequencePopulator(self)
+        self.search_sort_bar = DictionarySearchSortBar(self)
+        self.favorites_tree = DictionaryFavoritesTree(self)
+        self.words_tree = DictionaryWordsTree(self)
+        self.sequence_length_manager = DictionarySortByLengthManager(self)
+        self.sequence_populator = DictionarySequencePopulator(self)
 
-        main_layout = QVBoxLayout(self)
+        self.layout: QVBoxLayout = QVBoxLayout(self)
         tree_layout = QHBoxLayout()
-        self.search_sort_bar.setup_ui(main_layout)
-        self.words_tree.setup_ui(main_layout)
+        self.setup_length_filter_buttons()
+        self.search_sort_bar.setup_ui(self.layout)
+        self.words_tree.setup_ui(self.layout)
         self.favorites_tree.setup_ui(tree_layout)
         self.setup_preview_area(tree_layout)
-        self.setLayout(main_layout)
+        self.setLayout(self.layout)
+        self.sort_sequences("Length")
+
+    def setup_length_filter_buttons(self):
+        self.length_buttons_layout = QHBoxLayout()
+        word_lengths = [2, 3, 4, 5, 6, 7, 8]
+        visibility_settings = (
+            self.main_widget.main_window.settings_manager.get_word_length_visibility()
+        )
+
+        for length in word_lengths:
+            button = QPushButton(f"{length} letters")
+            button.setCheckable(True)
+            button.setChecked(visibility_settings.get(length, False))
+            button.toggled.connect(
+                lambda checked, length=length: self.toggle_word_length_visibility(
+                    length, checked
+                )
+            )
+            self.length_buttons_layout.addWidget(button)
+
+        self.layout.addLayout(self.length_buttons_layout)
+
+    def toggle_word_length_visibility(self, length, visible):
+        # Implement the logic to show/hide words of the given length
+        # This might involve filtering items in your `words_tree` model
+        # Don't forget to update the user's settings with the new visibility
+        visibility_settings = (
+            self.main_widget.main_window.settings_manager.get_word_length_visibility()
+        )
+        visibility_settings[length] = visible
+        self.main_widget.main_window.settings_manager.set_word_length_visibility(
+            visibility_settings
+        )
+        self.filter_sequences_by_length()
 
     def filter_sequences(self, text: str) -> None:
         search_text = text.lower()
@@ -55,11 +97,13 @@ class Library(QWidget):
 
     def sort_sequences(self, criteria: str) -> None:
         if criteria == "Name":
-            self.words_tree.proxy_model.sort(0)
             self.words_tree.proxy_model.lengthSortingEnabled = False
         elif criteria == "Length":
             self.words_tree.proxy_model.lengthSortingEnabled = True
-            self.words_tree.proxy_model.invalidate()
+        self.words_tree.proxy_model.invalidate()
+        self.words_tree.proxy_model.sort(
+            0, Qt.SortOrder.AscendingOrder
+        )  # Ensure the model is sorted right away
 
     def sort_sequences_by_start_position(self) -> None:
         sequences = []
@@ -133,5 +177,5 @@ class Library(QWidget):
         )
         self.favorites_tree.favorites_model.sort(column, newOrder)
 
-    def resize_library(self) -> None:
-        self.words_tree.resize_library_words_tree()
+    def resize_dictionary(self) -> None:
+        self.words_tree.resize_dictionary_words_tree()

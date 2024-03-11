@@ -9,5 +9,14 @@
     "default_left_orientation": "in",
     "default_right_orientation": "in",
     "default_left_orientation_Hand": "out",
-    "default_right_orientation_Hand": "in"
+    "default_right_orientation_Hand": "in",
+    "word_length_visibility": {
+        "2": true,
+        "3": false,
+        "4": true,
+        "5": true,
+        "6": true,
+        "7": true,
+        "8": true
+    }
 }

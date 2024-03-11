@@ -50,22 +50,6 @@ class SettingsManager:
         self.settings[key] = value
         self.save_settings()
 
-    def apply_settings(self) -> None:
-        """Apply user settings to the application."""
-        self._apply_pictograph_size()
-        self.prop_type_changer.apply_prop_type()
-        self.main_window.main_widget.main_tab_widget.codex.update_pictographs()
-        self._apply_default_start_orientation()
-
-    def _apply_default_start_orientation(self):
-        default_left_orientation = self.get_setting("default_left_orientation", "in")
-        default_right_orientation = self.get_setting("default_right_orientation", "in")
-        ori_picker = (
-            self.main_window.main_widget.main_tab_widget.sequence_builder.start_pos_picker.default_ori_picker
-        )
-        ori_picker.left_orientation_combo_box.setCurrentText(default_left_orientation)
-        ori_picker.right_orientation_combo_box.setCurrentText(default_right_orientation)
-
     def _apply_pictograph_size(self) -> None:
         pictograph_size = self.get_setting("pictograph_size", 1)
         inverted_value = self.MAX_COLUMN_COUNT - (pictograph_size - 1)
@@ -81,3 +65,10 @@ class SettingsManager:
 
     def set_default_orientation(self, prop_type: str, hand: str, orientation: str) -> None:
         self.set_setting(f"default_{hand}_orientation_{prop_type}", orientation)
+        
+    def get_word_length_visibility(self) -> dict:
+        # Returns a dictionary with lengths as keys and visibility (True/False) as values
+        return self.get_setting("word_length_visibility", {2: True, 3: True, 4: True, 5: True, 6: True, 7: True, 8: True})
+
+    def set_word_length_visibility(self, lengths_visibility: dict) -> None:
+        self.set_setting("word_length_visibility", lengths_visibility)

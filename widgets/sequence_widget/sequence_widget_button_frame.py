@@ -55,12 +55,13 @@ class SequenceWidgetButtonFrame(QFrame):
     def setup_save_turn_pattern_button(self) -> None:
         self.save_turn_pattern_button = QPushButton("Save Current Turn Pattern")
         turn_pattern_widget = self.sequence_widget.sequence_modifier.turn_pattern_widget
-        self.save_turn_pattern_button.clicked.connect(turn_pattern_widget.save_turn_pattern)
+        self.save_turn_pattern_button.clicked.connect(
+            turn_pattern_widget.save_turn_pattern
+        )
         self.save_turn_pattern_button.setFixedHeight(40)
         font = self.save_turn_pattern_button.font()
         font.setPointSize(self.font_size)
         self.save_turn_pattern_button.setFont(font)
-
 
     def setup_layout(self) -> None:
         buttons_layout = QHBoxLayout()
@@ -101,9 +102,9 @@ class SequenceWidgetButtonFrame(QFrame):
                 if "letter" in pictograph
             ]
         )
-        library_folder = os.path.join(os.getcwd(), "library")
-        os.makedirs(library_folder, exist_ok=True)
-        filename = os.path.join(library_folder, f"{sequence_name}.json")
+        dictionary_folder = os.path.join(os.getcwd(), "dictionary")
+        os.makedirs(dictionary_folder, exist_ok=True)
+        filename = os.path.join(dictionary_folder, f"{sequence_name}.json")
         with open(filename, "w", encoding="utf-8") as file:
             json.dump(sequence_data, file, indent=4, ensure_ascii=False)
         self.sequence_widget.indicator_label.show_indicator(

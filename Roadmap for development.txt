@@ -11,7 +11,7 @@ Create a finite list of permutation options to apply (rotational, mirrored, swap
 Analyze videos of spinners to detect positions and motions, reconstruct sequences
 Complete rotation button implementation
 Rebuild sequence constructor interface
-Build kinetic encyclopedia/library for browsing sequences
+Build kinetic encyclopedia/dictionary for browsing sequences
 Create automatic sequence completion
 Build system for tracking/applying turn patterns
 

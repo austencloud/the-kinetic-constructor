@@ -20,6 +20,6 @@
 
 - Allow deleting a specific entry in the sequence with options to delete following entries.
 
-- Update the sequence builder to reflect the last pictograph when loading a sequence from the library.
+- Update the sequence builder to reflect the last pictograph when loading a sequence from the dictionary.
 
 - Add the word start above the start position pictograph.

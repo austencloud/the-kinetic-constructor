@@ -4,13 +4,14 @@ from PyQt6.QtGui import (
     QStandardItemModel,
     QStandardItem,
 )
+
 if TYPE_CHECKING:
-    from widgets.library.library import Library
+    from widgets.dictionary.dictionary import Dictionary
 
 
-class LibrarySequenceLengthManager:
-    def __init__(self, library: "Library") -> None:
-        self.library = library
+class DictionarySortByLengthManager:
+    def __init__(self, dictionary: "Dictionary") -> None:
+        self.dictionary = dictionary
 
     def sort_sequences_by_length(self) -> None:
         sequences = [
@@ -19,12 +20,12 @@ class LibrarySequenceLengthManager:
                 item.text().replace(".json", ""),
                 item,
             )
-            for item in self.extract_items(self.library.model)
+            for item in self.extract_items(self.dictionary.model)
         ]
         sequences.sort(key=lambda x: x[0])
-        self.library.model.clear()
+        self.dictionary.model.clear()
         for length, name, item in sequences:
-            self.library.model.appendRow(item)
+            self.dictionary.model.appendRow(item)
 
     @staticmethod
     def compute_display_length(name: str) -> int:
@@ -46,3 +47,8 @@ class LibrarySequenceLengthManager:
         for row in range(model.rowCount()):
             items.append(model.item(row))
         return items
+
+    def filter_sequences_by_length(self):
+        # Implement the logic to filter sequences based on the updated visibility settings
+        # This could involve iterating through the items in your tree model and hiding/showing based on length
+        pass

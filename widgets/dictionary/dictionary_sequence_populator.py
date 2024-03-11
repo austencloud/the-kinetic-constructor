@@ -5,14 +5,14 @@ from PyQt6.QtCore import Qt
 
 
 if TYPE_CHECKING:
-    from widgets.library.library import Library
+    from widgets.dictionary.dictionary import Dictionary
     from widgets.main_widget.main_widget import MainWidget
 
 
-class LibrarySequencePopulator:
-    def __init__(self, library: "Library"):
-        self.library = library
-        self.main_widget = library.main_widget
+class DictionarySequencePopulator:
+    def __init__(self, dictionary: "Dictionary"):
+        self.dictionary = dictionary
+        self.main_widget = dictionary.main_widget
         self.initialized = False
 
     def _init_references(self) -> None:

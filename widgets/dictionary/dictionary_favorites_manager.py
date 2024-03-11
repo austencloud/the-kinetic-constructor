@@ -14,12 +14,12 @@ from PyQt6.QtGui import (
 )
 
 if TYPE_CHECKING:
-    from widgets.library.library import Library
+    from widgets.dictionary.dictionary import Dictionary
 
 
-class LibraryFavoritesTree:
-    def __init__(self, library: "Library") -> None:
-        self.library = library
+class DictionaryFavoritesTree:
+    def __init__(self, dictionary: "Dictionary") -> None:
+        self.dictionary = dictionary
         self.favorites_model = QStandardItemModel()
         self.favorites_view = QTreeView()
         self.favorites_file = "favorites.json"
@@ -31,7 +31,7 @@ class LibraryFavoritesTree:
             QHeaderView.ResizeMode.ResizeToContents
         )
         self.favorites_view.doubleClicked.connect(
-            self.library.on_favorite_double_clicked
+            self.dictionary.on_favorite_double_clicked
         )
         self.favorites_view.setAcceptDrops(True)
         self.favorites_view.setDragEnabled(True)
@@ -40,7 +40,9 @@ class LibraryFavoritesTree:
         self.favorites_view.setSelectionBehavior(QTreeView.SelectionBehavior.SelectRows)
         self.favorites_view.setDropIndicatorShown(True)
         self.favorites_view.setRootIsDecorated(False)
-        self.favorites_view.header().sectionClicked.connect(self.library.sort_favorites)
+        self.favorites_view.header().sectionClicked.connect(
+            self.dictionary.sort_favorites
+        )
         layout.addWidget(self.favorites_view)
 
     def load_favorites(self) -> None:

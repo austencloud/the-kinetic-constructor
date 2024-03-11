@@ -1,10 +1,20 @@
 from PyQt6.QtCore import QSortFilterProxyModel, QModelIndex
 
 
-class CustomSortProxyModel(QSortFilterProxyModel):
+class DictionarySortProxyModel(QSortFilterProxyModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.lengthSortingEnabled = False
+        self._lengthSortingEnabled = False
+
+    @property
+    def lengthSortingEnabled(self):
+        return self._lengthSortingEnabled
+
+    @lengthSortingEnabled.setter
+    def lengthSortingEnabled(self, value):
+        self._lengthSortingEnabled = value
+        self.invalidate()  # Optionally invalidate the sorting/filtering
+
 
     def lessThan(self, left: QModelIndex, right: QModelIndex) -> bool:
         if self.lengthSortingEnabled:

@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from widgets.base_tab_widget import BaseTabWidget
 from widgets.codex.codex import Codex
-from widgets.library.library import Library
+from widgets.dictionary.dictionary import Dictionary
 from widgets.sequence_builder.sequence_builder import SequenceBuilder
 from widgets.turn_pattern_widget import TurnPatternWidget
 
@@ -15,12 +15,12 @@ class MainTabWidget(BaseTabWidget):
         super().__init__(main_widget)
         self.codex = Codex(main_widget)
         self.sequence_builder = SequenceBuilder(main_widget)
-        self.library = Library(main_widget)
+        self.dictionary = Dictionary(main_widget)
         self.turn_pattern_widget = TurnPatternWidget(self)
         self.tabs = [self.codex]
         self.addTab(self.sequence_builder, "Builder")
         self.addTab(self.codex, "LetterBook")
-        self.addTab(self.library, "My Library")
+        self.addTab(self.dictionary, "Dictionary")
         self.addTab(self.turn_pattern_widget, "Turn Patterns")
         self.currentChanged.connect(self.on_tab_changed)
 
@@ -39,5 +39,5 @@ class MainTabWidget(BaseTabWidget):
             self.codex.resize_codex()
         elif current_tab == self.sequence_builder:
             self.sequence_builder.resize_sequence_builder()
-        elif current_tab == self.library:
-            self.library.resize_library()
+        elif current_tab == self.dictionary:
+            self.dictionary.resize_dictionary()
