@@ -1,27 +1,14 @@
 import os
-from PyQt6.QtWidgets import (
-    QTreeView,
-    QVBoxLayout,
-    QWidget,
-    QMessageBox,
-    QLineEdit,
-    QHBoxLayout,
-    QLabel,
-    QComboBox,
-    QHeaderView,
-)
-from PyQt6.QtGui import (
-    QFileSystemModel,
-    QStandardItemModel,
-    QStandardItem,
-    QDragEnterEvent,
-    QDropEvent,
-)
-from PyQt6.QtCore import QDir, QModelIndex, Qt, QItemSelectionModel
 import json
 from typing import TYPE_CHECKING
-
-from widgets.library.custom_file_system_model import CustomFileSystemModel
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QMessageBox, QTreeView, QHBoxLayout
+from PyQt6.QtCore import QModelIndex, Qt
+from PyQt6.QtGui import QStandardItem, QDragEnterEvent, QDropEvent
+from Enums.letters import Letter, LetterConditions
+from .library_favorites_manager import LibraryFavoritesManager
+from .library_search_sort_bar import LibrarySearchSortBar
+from .library_sequence_length_manager import LibrarySequenceLengthManager
+from .library_sequence_loader import LibrarySequenceLoader
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
@@ -31,78 +18,69 @@ class Library(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
-        self.favorites_file = "favorites.json"
+
         self.setup_ui()
 
+    def _init_references(self):
+        self.json_handler = self.main_widget.json_manager.current_sequence_json_handler
+        self.start_pos_view = self.main_widget.sequence_widget.beat_frame.start_pos_view
+        self.start_pos_manager = (
+            self.main_widget.main_tab_widget.sequence_builder.start_pos_picker.start_pos_manager
+        )
+        self.sequence_widget = self.main_widget.sequence_widget
+        self.sequence_builder = self.main_widget.main_tab_widget.sequence_builder
+
     def setup_ui(self) -> None:
-        layout = QVBoxLayout(self)
-        self.setup_search_bar(layout)
-        self.setup_tree_views(layout)
-        self.setup_preview_area(layout)
-        self.setLayout(layout)
-
-    def setup_search_bar(self, layout: QVBoxLayout) -> None:
-        search_layout = QHBoxLayout()
-        self.search_bar = QLineEdit()
-        self.search_bar.setPlaceholderText("Search sequences...")
-        self.search_bar.textChanged.connect(self.filter_sequences)
-        search_layout.addWidget(QLabel("Search:"))
-        search_layout.addWidget(self.search_bar)
-
-        self.sort_combo = QComboBox()
-        self.sort_combo.addItems(["Name", "Start Position", "Difficulty"])
-        self.sort_combo.currentTextChanged.connect(self.sort_sequences)
-        search_layout.addWidget(QLabel("Sort by:"))
-        search_layout.addWidget(self.sort_combo)
-
-        layout.addLayout(search_layout)
-
-    def setup_tree_views(self, layout: QVBoxLayout) -> None:
+        main_layout = QVBoxLayout(self)
         tree_layout = QHBoxLayout()
+        self.search_sort_bar = LibrarySearchSortBar(self)
+        self.favorites_manager = LibraryFavoritesManager(self)
+        self.sequence_loading = LibrarySequenceLoader(self)
+        self.sequence_length_management = LibrarySequenceLengthManager(self)
+        self.search_sort_bar.setup_ui(main_layout)
+        self.sequence_loading.setup_ui(main_layout)
+        self.favorites_manager.setup_ui(tree_layout)
+        self.setup_preview_area(tree_layout)
+        self.setLayout(main_layout)
 
-        # Favorites view setup
-        self.favorites_model = QStandardItemModel()
-        self.favorites_view = QTreeView()
-        self.favorites_view.setModel(self.favorites_model)
-        self.favorites_view.setHeaderHidden(False)
-        self.favorites_view.header().setSectionResizeMode(
-            QHeaderView.ResizeMode.ResizeToContents
-        )
-        self.favorites_view.doubleClicked.connect(self.on_favorite_double_clicked)
-        self.favorites_view.setAcceptDrops(True)
-        self.favorites_view.setDragEnabled(True)
-        self.favorites_view.setDragDropMode(QTreeView.DragDropMode.DropOnly)
-        self.favorites_view.setSelectionMode(QTreeView.SelectionMode.ExtendedSelection)
-        self.favorites_view.setSelectionBehavior(QTreeView.SelectionBehavior.SelectRows)
-        self.favorites_view.setDropIndicatorShown(True)
-        self.favorites_view.setRootIsDecorated(False)
-        self.favorites_view.header().sectionClicked.connect(self.sort_favorites)
+    def filter_sequences(self, text: str) -> None:
+        search_text = text.lower()
+        for i in range(self.sequence_loading.model.rowCount()):
+            item = self.sequence_loading.model.item(i)
+            file_name = item.text().lower()
+            item.setHidden(search_text not in file_name)
 
-        # File system view setup
-        self.model = CustomFileSystemModel()
-        self.model.setRootPath(QDir.currentPath() + "/library")
-        self.tree_view = QTreeView()
-        self.tree_view.setModel(self.model)
-        self.tree_view.setRootIndex(self.model.index(QDir.currentPath() + "/library"))
-        self.tree_view.doubleClicked.connect(self.on_double_clicked)
-        self.tree_view.setHeaderHidden(False)
-        self.tree_view.header().setSectionResizeMode(
-            QHeaderView.ResizeMode.ResizeToContents
-        )
-        tree_layout.addWidget(self.tree_view)
-        tree_layout.addWidget(self.favorites_view)
+    def sort_sequences(self, criteria: str) -> None:
+        if criteria == "Name":
+            self.sequence_loading.proxy_model.sort(0)
+            self.sequence_loading.proxy_model.lengthSortingEnabled = False
+        elif criteria == "Length":
+            self.sequence_loading.proxy_model.lengthSortingEnabled = True
+            self.sequence_loading.proxy_model.invalidate()
 
-        layout.addLayout(tree_layout)
+    def sort_sequences_by_start_position(self) -> None:
+        sequences = []
+        for item in self.sequence_loading.extract_items(self.sequence_loading.model):
+            file_name = item.text().replace(".json", "")
+            start_letter_enum = self.get_starting_position_from_sequence_name(file_name)
+            sequences.append((start_letter_enum, file_name, item))
+        sequences.sort(key=lambda x: (x[0].name, x[1]))
+        self.sequence_loading.model.clear()
+        for _, name, item in sequences:
+            self.sequence_loading.model.appendRow(item)
 
-    def sort_favorites(self, column: int) -> None:
-        # Toggle sorting order between ascending and descending
-        currentOrder = self.favorites_model.sortOrder()
-        newOrder = (
-            Qt.SortOrder.DescendingOrder
-            if currentOrder == Qt.SortOrder.AscendingOrder
-            else Qt.SortOrder.AscendingOrder
-        )
-        self.favorites_model.sort(column, newOrder)
+    @staticmethod
+    def get_starting_position_from_sequence_name(name: str) -> Letter:
+        for letter in Letter:
+            if (
+                name.startswith(letter.value)
+                and letter
+                in LetterConditions.ALPHA_STARTING.value
+                + LetterConditions.BETA_STARTING.value
+                + LetterConditions.GAMMA_STARTING.value
+            ):
+                return letter
+        return Letter.A
 
     def setup_preview_area(self, layout: QVBoxLayout) -> None:
         self.preview_area = QWidget()
@@ -110,7 +88,7 @@ class Library(QWidget):
         layout.addWidget(self.preview_area)
 
     def on_double_clicked(self, index: QModelIndex) -> None:
-        file_path = self.model.filePath(index)
+        file_path = self.sequence_loading.model.filePath(index)
         if file_path.endswith(".json"):
             self.load_sequence_from_file(file_path)
         else:
@@ -119,7 +97,7 @@ class Library(QWidget):
             )
 
     def on_favorite_double_clicked(self, index: QModelIndex) -> None:
-        item = self.favorites_model.itemFromIndex(index)
+        item = self.favorites_manager.favorites_model.itemFromIndex(index)
         file_path = item.data(Qt.ItemDataRole.UserRole)
         self.load_sequence_from_file(file_path)
 
@@ -132,71 +110,29 @@ class Library(QWidget):
             QMessageBox.critical(self, "Error", f"Failed to load sequence: {str(e)}")
 
     def populate_sequence(self, sequence_data: list[dict[str, str]]) -> None:
+        if not self.json_handler:
+            self._init_references()
         if not sequence_data:
             return
-        json_handler = self.main_widget.json_manager.current_sequence_json_handler
-        start_pos_view = self.main_widget.sequence_widget.beat_frame.start_pos_view
-        start_pos_manager = (
-            self.main_widget.main_tab_widget.sequence_builder.start_pos_picker.start_pos_manager
-        )
-        sequence_widget = self.main_widget.sequence_widget
-        sequence_widget.button_frame.clear_sequence(
+        self.sequence_widget.button_frame.clear_sequence(
             show_indicator=False, should_reset_to_start_pos_picker=False
         )
-
-        start_pos_beat = start_pos_manager._convert_current_sequence_json_entry_to_start_pos_pictograph(
+        start_pos_beat = self.start_pos_manager._convert_current_sequence_json_entry_to_start_pos_pictograph(
             sequence_data
         )
-        json_handler.set_start_position_data(start_pos_beat)
-        start_pos_view.set_start_pos_beat(start_pos_beat)
-
+        self.json_handler.set_start_position_data(start_pos_beat)
+        self.start_pos_view.set_start_pos_beat(start_pos_beat)
         for pictograph_dict in sequence_data:
             if pictograph_dict.get("sequence_start_position"):
                 continue
-            sequence_widget.populate_sequence(pictograph_dict)
-
-        sequence_builder = self.main_widget.main_tab_widget.sequence_builder
-        last_beat = sequence_widget.beat_frame.get_last_filled_beat().beat
-        sequence_builder.current_pictograph = last_beat
-
-        if sequence_builder.start_pos_picker.isVisible():
-            sequence_builder.transition_to_sequence_building()
-
-        sequence_builder.option_picker.scroll_area._add_and_display_relevant_pictographs(
-            sequence_builder.option_picker.option_manager.get_next_options()
+            self.sequence_widget.populate_sequence(pictograph_dict)
+        last_beat = self.sequence_widget.beat_frame.get_last_filled_beat().beat
+        self.sequence_builder.current_pictograph = last_beat
+        if self.sequence_builder.start_pos_picker.isVisible():
+            self.sequence_builder.transition_to_sequence_building()
+        self.sequence_builder.option_picker.scroll_area._add_and_display_relevant_pictographs(
+            self.sequence_builder.option_picker.option_manager.get_next_options()
         )
-
-    def filter_sequences(self, text: str) -> None:
-        # Implement the filtering logic based on the search text
-        # You can use the QFileSystemModel's setNameFilters() and setNameFilterDisables() methods
-        # to filter the displayed files based on the search criteria
-        pass
-
-    def sort_sequences(self, criteria: str) -> None:
-        # Implement the sorting logic based on the selected criteria
-        # You can use the QFileSystemModel's sort() method to sort the displayed files
-        pass
-
-    def load_favorites(self) -> None:
-        if os.path.exists(self.favorites_file):
-            with open(self.favorites_file, "r") as file:
-                favorites = json.load(file)
-                for favorite in favorites:
-                    item = QStandardItem(favorite["name"])
-                    item.setData(favorite["path"], Qt.ItemDataRole.UserRole)
-                    self.favorites_model.appendRow(item)
-
-    def save_favorites(self) -> None:
-        favorites = []
-        for row in range(self.favorites_model.rowCount()):
-            item = self.favorites_model.item(row)
-            favorite = {
-                "name": item.text(),
-                "path": item.data(Qt.ItemDataRole.UserRole),
-            }
-            favorites.append(favorite)
-        with open(self.favorites_file, "w") as file:
-            json.dump(favorites, file)
 
     def dragEnterEvent(self, event: "QDragEnterEvent") -> None:
         if event.mimeData().hasUrls():
@@ -212,5 +148,15 @@ class Library(QWidget):
         file_name = os.path.basename(file_path)
         item = QStandardItem(file_name)
         item.setData(file_path, Qt.ItemDataRole.UserRole)
-        self.favorites_model.appendRow(item)
-        self.save_favorites()
+        self.favorites_manager.favorites_model.appendRow(item)
+        self.favorites_manager.save_favorites()
+
+    def sort_favorites(self, column: int) -> None:
+        # Toggle sorting order between ascending and descending
+        currentOrder = self.favorites_manager.favorites_model.sortOrder()
+        newOrder = (
+            Qt.SortOrder.DescendingOrder
+            if currentOrder == Qt.SortOrder.AscendingOrder
+            else Qt.SortOrder.AscendingOrder
+        )
+        self.favorites_manager.favorites_model.sort(column, newOrder)

@@ -1,7 +1,7 @@
 import json
 
 from Enums.MotionAttributes import Color
-from constants import DASH, NO_ROT, STATIC
+from constants import BLUE, DASH, NO_ROT, RED, STATIC
 from objects.motion.current_sequence_json_validation_engine import (
     CurrentSequenceJsonValidationEngine,
 )
@@ -151,28 +151,51 @@ class CurrentSequenceJsonHandler:
     def apply_pattern_to_current_sequence(self, pattern: list[tuple]) -> None:
         """
         Applies a list of turns (pattern) to the current sequence and validates the sequence.
+        Ensures static and dash motions have the correct prop_rot_dir based on the previous motion.
         """
         sequence = self.load_current_sequence_json()
         min_length = min(len(sequence), len(pattern))
-        for i in range(1, min_length+ 1):
+        for i in range(1, min_length + 1):
+            if i == 17:
+                continue
             blue_turns, red_turns = pattern[i - 1]
             if blue_turns.is_integer():
                 blue_turns = int(blue_turns)
             if red_turns.is_integer():
                 red_turns = int(red_turns)
             entry = sequence[i]
+            previous_entry = sequence[i - 1] if i > 0 else None
             if "blue_turns" in entry:
                 entry["blue_turns"] = blue_turns
+                if entry["blue_motion_type"] in [STATIC, DASH]:
+                    entry["blue_prop_rot_dir"] = self.find_previous_prop_rot_dir(
+                        sequence, i, BLUE
+                    )
+
             if "red_turns" in entry:
                 entry["red_turns"] = red_turns
+                if entry["red_motion_type"] in [STATIC, DASH]:
+                    entry["red_prop_rot_dir"] = self.find_previous_prop_rot_dir(
+                        sequence, i, RED
+                    )
 
+            # Update the pictograph dict for current beat with the new turns
             beat_view = self.main_widget.sequence_widget.beat_frame.beat_views[i - 1]
             if beat_view and beat_view.is_filled:
-                beat_view.beat.get.pictograph_dict().update(
-                    {"blue_turns": blue_turns, "red_turns": red_turns}
-                )
+                beat_view.beat.get.pictograph_dict().update(entry)
+
+        # Save the sequence after applying all turns
         self.save_sequence(sequence)
         self.validation_engine.run()
         sequence = self.load_current_sequence_json()
         self.main_widget.sequence_widget.beat_frame.propogate_turn_adjustment(sequence)
         print("Sequence validated")
+
+    def find_previous_prop_rot_dir(self, sequence, current_index, color) -> str:
+        """
+        Finds the prop_rot_dir of the previous non-static and non-dash motion for the specified color.
+        """
+        for i in range(current_index - 1, -1, -1):
+            if sequence[i][f"{color}_motion_type"] not in [STATIC, DASH]:
+                return sequence[i][f"{color}_prop_rot_dir"]
+        return NO_ROT

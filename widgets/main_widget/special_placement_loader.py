@@ -44,3 +44,4 @@ class SpecialPlacementLoader:
         for _, pictograph_list in self.main_widget.all_pictographs.items():
             for _, pictograph in pictograph_list.items():
                 pictograph.updater.update_pictograph()
+                pictograph.update()

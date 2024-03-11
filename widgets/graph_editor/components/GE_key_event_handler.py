@@ -67,10 +67,7 @@ class GE_KeyEventHandler:
                 selected_motion.manipulator.swap_rot_dir()
             elif event.key() == Qt.Key.Key_F:
                 selected_motion.manipulator.swap_motion_type()
-            elif event.key() == Qt.Key.Key_Q:
-                selected_motion.subtract_half_turn()
-            elif event.key() == Qt.Key.Key_E:
-                selected_motion.add_half_turn()
+
 
         ### SEQEUNCE MANAGEMENT ###
         elif event.key() == Qt.Key.Key_Enter:
