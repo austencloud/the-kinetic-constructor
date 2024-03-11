@@ -52,7 +52,7 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.setLayout(self.layout)
 
     def _setup_orientation_label(self) -> None:
-        self.ori_label = QLabel("Start Orientation")
+        self.ori_label = QLabel("Orientation")
         self.ori_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def _set_ori_label_font_size(self) -> None:
@@ -89,7 +89,7 @@ class GE_StartPosOriPickerWidget(QWidget):
 
     def set_current_orientation_display_font(self) -> None:
         font = QFont("Cambria")
-        font_size = self.ori_picker_box.graph_editor.width() // 30
+        font_size = self.ori_picker_box.graph_editor.width() // 25
         font.setPointSize(font_size)
         font.setWeight(QFont.Weight.Bold)
         self.current_orientation_display.setFont(font)
@@ -136,7 +136,9 @@ class GE_StartPosOriPickerWidget(QWidget):
         self._set_ori_label_font_size()
         self.set_current_orientation_display_font()
 
-    def set_initial_orientation(self, start_pos_pictograph: Pictograph, color: str) -> None:
+    def set_initial_orientation(
+        self, start_pos_pictograph: Pictograph, color: str
+    ) -> None:
         if color == "blue":
             initial_orientation = start_pos_pictograph.pictograph_dict["blue_start_ori"]
         else:

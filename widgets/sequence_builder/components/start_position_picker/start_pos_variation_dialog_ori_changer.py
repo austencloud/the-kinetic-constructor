@@ -20,8 +20,6 @@ class StartPosVariationDialogOriChanger(QWidget):
         self.current_ori_index = {RED: 0, BLUE: 0}
         self.orientations = ["in", "counter", "out", "clock"]
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.left_ori_label = QLabel("Left Start Orientation")
-        self.right_ori_label = QLabel("Right Start Orientation")
         self.left_current_ori_display = QLabel(
             self.orientations[self.current_ori_index[BLUE]]
         )
@@ -36,14 +34,12 @@ class StartPosVariationDialogOriChanger(QWidget):
         self.connect_signals()
 
     def setup_layout(self) -> None:
-        self.layout.addWidget(self.left_ori_label)
         self.layout.addWidget(self.left_current_ori_display)
         left_button_layout = QHBoxLayout()
         left_button_layout.addWidget(self.left_ccw_button)
         left_button_layout.addWidget(self.left_cw_button)
         self.layout.addLayout(left_button_layout)
 
-        self.layout.addWidget(self.right_ori_label)
         self.layout.addWidget(self.right_current_ori_display)
         right_button_layout = QHBoxLayout()
         right_button_layout.addWidget(self.right_ccw_button)
