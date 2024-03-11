@@ -4,7 +4,7 @@
     "glyph_visibility": {
         "VTG": false,
         "TKA": true,
-        "Elemental": true
+        "Elemental": false
     },
     "default_left_orientation": "in",
     "default_right_orientation": "in",

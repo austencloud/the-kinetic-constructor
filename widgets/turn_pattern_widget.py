@@ -48,9 +48,13 @@ class TurnPatternWidget(QWidget):
 
 
     def save_turn_pattern(self) -> None:
-        current_pattern = self.get_current_turn_pattern()  # This method to be implemented as before
+        current_pattern = self.get_current_turn_pattern() 
         pattern_name, ok = QInputDialog.getText(self, 'Save Pattern', 'Enter pattern name:')
-        if ok and pattern_name:  # Ensure the user entered a name
+        if ok:
+            # if the user did not enter a name, then assign one
+            if not pattern_name:
+                pattern_name = "Pattern " + str(self.turn_pattern_list.count() + 1)
+            
             new_pattern = {pattern_name: current_pattern}
             
             patterns = []
@@ -58,14 +62,14 @@ class TurnPatternWidget(QWidget):
                 with open('turn_patterns.json', 'r') as file:
                     patterns = json.load(file)
             except FileNotFoundError:
-                pass  # If file doesn't exist, it will be created
+                pass
             
             patterns.append(new_pattern)
             
             with open('turn_patterns.json', 'w') as file:
                 json.dump(patterns, file, indent=4)
             
-            self.load_turn_patterns()  # Refresh the list
+            self.load_turn_patterns()  
 
     def apply_turn_pattern(self) -> None:
         selected_items = self.turn_pattern_list.selectedItems()

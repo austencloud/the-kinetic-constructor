@@ -91,8 +91,7 @@ class GE_AdjustmentPanel(QFrame):
             self.placeholder_widget.show()
 
     def hide_placeholder_widget(self) -> None:
-        if self.placeholder_widget.isVisible():
-            self.placeholder_widget.hide()
+        self.placeholder_widget.hide()
 
     def show_start_pos_ori_pickers(self) -> None:
         for picker in self.start_pos_ori_pickers:

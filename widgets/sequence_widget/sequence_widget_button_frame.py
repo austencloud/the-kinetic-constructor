@@ -52,6 +52,16 @@ class SequenceWidgetButtonFrame(QFrame):
         font.setPointSize(self.font_size)
         self.clear_sequence_button.setFont(font)
 
+    def setup_save_turn_pattern_button(self) -> None:
+        self.save_turn_pattern_button = QPushButton("Save Current Turn Pattern")
+        turn_pattern_widget = self.sequence_widget.sequence_modifier.turn_pattern_widget
+        self.save_turn_pattern_button.clicked.connect(turn_pattern_widget.save_turn_pattern)
+        self.save_turn_pattern_button.setFixedHeight(40)
+        font = self.save_turn_pattern_button.font()
+        font.setPointSize(self.font_size)
+        self.save_turn_pattern_button.setFont(font)
+
+
     def setup_layout(self) -> None:
         buttons_layout = QHBoxLayout()
         buttons_layout.addWidget(self.save_sequence_button)

@@ -27,4 +27,4 @@ class GE_PlaceHolderTextLabel(QLabel):
         width = self.adjustment_panel.width()
         font_size = int(0.02 * width)
         self.setFont(QFont("Cambria", font_size))
-        self.show()
+        # self.show()

@@ -16,26 +16,26 @@ if TYPE_CHECKING:
 class BeatSelectionManager(QWidget):
     def __init__(self, sequence_widget: "SequenceWidget"):
         super().__init__(sequence_widget)
-        self.selected_beat_view: Optional[BeatView | StartPositionBeatView] = None
+        self.selected_beat: Optional[BeatView | StartPositionBeatView] = None
         self.border_color = QColor("gold")
         self.border_width = 4  # Adjust as needed
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         self.hide()
 
     def select_beat(self, beat_view: BeatView):
-        if self.selected_beat_view == beat_view:
+        if self.selected_beat == beat_view:
             return
         else:
-            if self.selected_beat_view:
-                self.selected_beat_view.deselect()
-            self.selected_beat_view = beat_view
-            blue_turns = self.selected_beat_view.beat.blue_motion.turns
-            red_turns = self.selected_beat_view.beat.red_motion.turns
-            self.selected_beat_view.is_selected = True
+            if self.selected_beat:
+                self.selected_beat.deselect()
+            self.selected_beat = beat_view
+            blue_turns = self.selected_beat.beat.blue_motion.turns
+            red_turns = self.selected_beat.beat.red_motion.turns
+            self.selected_beat.is_selected = True
             graph_editor = (
-                self.selected_beat_view.beat_frame.sequence_widget.sequence_modifier.graph_editor
+                self.selected_beat.beat_frame.sequence_widget.sequence_modifier.graph_editor
             )
-            graph_editor.update_GE_pictgraph(self.selected_beat_view.beat)
+            graph_editor.update_GE_pictgraph(self.selected_beat.beat)
 
             graph_editor.adjustment_panel.update_turns_panel(blue_turns, red_turns)
             graph_editor.adjustment_panel.update_adjustment_panel()
@@ -58,22 +58,22 @@ class BeatSelectionManager(QWidget):
             self.show()
 
     def deselect_beat(self):
-        if self.selected_beat_view:
-            self.selected_beat_view.deselect()
-        self.selected_beat_view = None
+        if self.selected_beat:
+            self.selected_beat.deselect()
+        self.selected_beat = None
         self.hide()
 
     def update_overlay_position(self):
-        if self.selected_beat_view:
-            self.setGeometry(self.selected_beat_view.geometry())
+        if self.selected_beat:
+            self.setGeometry(self.selected_beat.geometry())
             self.raise_()
             self.update()
 
     def get_selected_beat(self) -> Optional[BeatView]:
-        return self.selected_beat_view
+        return self.selected_beat
 
     def paintEvent(self, event):
-        if not self.selected_beat_view:
+        if not self.selected_beat:
             return
 
         painter = QPainter(self)
