@@ -1,15 +1,26 @@
 import logging
 from constants import DASH, FLOAT, PRO, ANTI, STATIC
 from objects.motion.motion import Motion
-from .directional_generators.dash_directional_tuple_generator import DashDirectionalGenerator
-from .directional_generators.shift_directional_tuple_generator import ShiftDirectionalGenerator
-from .directional_generators.static_directional_tuple_generator import StaticDirectionalGenerator
-from .directional_generators.base_directional_tuple_generator import BaseDirectionalGenerator
-
+from .directional_generators.dash_directional_tuple_generator import (
+    DashDirectionalGenerator,
+)
+from .directional_generators.shift_directional_tuple_generator import (
+    ShiftDirectionalGenerator,
+)
+from .directional_generators.static_directional_tuple_generator import (
+    StaticDirectionalGenerator,
+)
+from .directional_generators.base_directional_tuple_generator import (
+    BaseDirectionalGenerator,
+)
 
 
 class DirectionalTupleManager:
-    def __init__(self, motion: Motion):
+    """
+    TODO: Add docstring
+    """
+
+    def __init__(self, motion: Motion) -> None:
         self.generator: BaseDirectionalGenerator = self._select_generator(motion)
 
     def _select_generator(self, motion: Motion) -> "BaseDirectionalGenerator":

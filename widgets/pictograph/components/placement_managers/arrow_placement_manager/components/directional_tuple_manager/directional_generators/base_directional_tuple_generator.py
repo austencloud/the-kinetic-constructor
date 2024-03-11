@@ -2,7 +2,11 @@ from objects.motion.motion import Motion
 
 
 class BaseDirectionalGenerator:
-    def __init__(self, motion: Motion):
+    """
+    TODO: Add docstring
+    """
+    
+    def __init__(self, motion: Motion) -> None:
         self.motion = motion
         self.other_motion = motion.pictograph.get.other_motion(motion)
 

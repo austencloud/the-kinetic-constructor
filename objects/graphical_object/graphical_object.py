@@ -25,7 +25,7 @@ class GraphicalObject(QGraphicsSvgItem):
     def __init__(self, pictograph: "Pictograph") -> None:
         super().__init__()
         self.pictograph = pictograph
-        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, False)
+        self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)
 
     def set_z_value_based_on_color(self) -> None:
         if self.color == RED:

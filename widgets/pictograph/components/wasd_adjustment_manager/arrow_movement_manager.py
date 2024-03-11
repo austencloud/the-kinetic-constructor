@@ -13,7 +13,7 @@ class ArrowMovementManager:
     def __init__(self, pictograph: "Pictograph") -> None:
         self.pictograph = pictograph
 
-    def handle_arrow_movement(self, key, shift_held, ctrl_held) -> None:
+    def handle_arrow_movement(self, pictograph, key, shift_held, ctrl_held) -> None:
         if not self.pictograph.selected_arrow:
             return
 

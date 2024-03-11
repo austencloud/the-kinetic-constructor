@@ -79,7 +79,7 @@ class GE_PictographView(PictographView):
         ctrl_held = event.modifiers() & Qt.KeyboardModifier.ControlModifier
         if event.key() in [Qt.Key.Key_W, Qt.Key.Key_A, Qt.Key.Key_S, Qt.Key.Key_D]:
             self.pictograph.wasd_manager.movement_manager.handle_arrow_movement(
-                event.key(), shift_held, ctrl_held
+                self.get_current_pictograph(), event.key(), shift_held, ctrl_held
             )
 
         elif event.key() == Qt.Key.Key_X:

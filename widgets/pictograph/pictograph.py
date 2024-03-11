@@ -92,7 +92,7 @@ class Pictograph(QGraphicsScene):
     turns_tuple: str = None
     prop_type: PropType = None
     is_blank: bool = False
-    
+
     def __init__(
         self,
         main_widget: "MainWidget",
