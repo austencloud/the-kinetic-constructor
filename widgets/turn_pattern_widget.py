@@ -88,7 +88,7 @@ class TurnPatternWidget(QWidget):
     def get_current_turn_pattern(self) -> str:
         sequence = self.current_sequence_json_handler.load_current_sequence_json()
         pattern = TurnPatternConverter.sequence_to_pattern(sequence)
-        return {"pattern": pattern}
+        return pattern
 
     def apply_turn_pattern(self) -> None:
         selected_items = self.turn_pattern_list.selectedItems()

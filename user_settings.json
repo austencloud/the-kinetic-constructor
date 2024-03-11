@@ -1,10 +1,10 @@
 {
     "pictograph_size": 1,
-    "prop_type": "Fan",
+    "prop_type": "Staff",
     "glyph_visibility": {
-        "VTG": true,
+        "VTG": false,
         "TKA": true,
-        "Elemental": true
+        "Elemental": false
     },
     "default_left_orientation": "out",
     "default_right_orientation": "out",

@@ -1,12 +1,6 @@
 [
+    {},
     {
-        "never": {
-            "pattern": "L0_L1_L0_L1_R2_L1,R3_R2_L1_R2_L2_R2_L0_L1_L0_L0_R1"
-        }
-    },
-    {
-        "gonna": {
-            "pattern": "0_L1_0_L1_R2_L1,R3_R2_L1_R2_L2_R2_0_L1_0_0_R1"
-        }
+        "Pattern 1": "L1_R1_L1_R1"
     }
 ]

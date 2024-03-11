@@ -4,6 +4,7 @@ from widgets.base_tab_widget import BaseTabWidget
 from widgets.codex.codex import Codex
 from widgets.library.library import Library
 from widgets.sequence_builder.sequence_builder import SequenceBuilder
+from widgets.turn_pattern_widget import TurnPatternWidget
 
 if TYPE_CHECKING:
     from ..main_widget.main_widget import MainWidget
@@ -15,10 +16,12 @@ class MainTabWidget(BaseTabWidget):
         self.codex = Codex(main_widget)
         self.sequence_builder = SequenceBuilder(main_widget)
         self.library = Library(main_widget)
+        self.turn_pattern_widget = TurnPatternWidget(self)
         self.tabs = [self.codex]
         self.addTab(self.sequence_builder, "Builder")
         self.addTab(self.codex, "LetterBook")
         self.addTab(self.library, "My Library")
+        self.addTab(self.turn_pattern_widget, "Turn Patterns")
         self.currentChanged.connect(self.on_tab_changed)
 
     def on_tab_changed(self) -> None:

@@ -17,9 +17,7 @@ class SequenceModifier(BaseTabWidget):
         self.graph_editor = GraphEditor(self)
         self.animator = Animator(self)
         self.prop_changer = QWidget(self)
-        self.turn_pattern_widget = TurnPatternWidget(self)
         self.addTab(self.graph_editor, "Graph Editor")
-        self.addTab(self.turn_pattern_widget, "Turn Patterns")
         self.addTab(self.animator, "Animator")
         self.addTab(self.prop_changer, "Prop Changer")
         self.currentChanged.connect(self.resize_sequence_modifier)
@@ -27,13 +25,10 @@ class SequenceModifier(BaseTabWidget):
     def resize_sequence_modifier(self) -> None:
         current_widget = self.currentWidget()
         if current_widget == self.graph_editor:
-            # if there is a selected pictograph in the beat frame, then hide the placeholder
             if self.sequence_widget.beat_frame.selection_manager.selected_beat:
                 self.graph_editor.adjustment_panel.hide_placeholder_widget()
             else:
                 self.graph_editor.adjustment_panel.show_placeholder_widget()
             self.graph_editor.resize_graph_editor()
-            # process events
-            QApplication.processEvents()
         elif current_widget == self.animator:
             self.animator.resize_animator()

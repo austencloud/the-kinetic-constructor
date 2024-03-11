@@ -9,6 +9,7 @@ from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
 from .motion_orientation_json_calculator import CurrentSequenceJsonOriCalculator
 from widgets.pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING, Union
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from widgets.json_manager import JSON_Manager
@@ -146,3 +147,32 @@ class CurrentSequenceJsonHandler:
         sequence = self.load_current_sequence_json()
         sequence[index][f"{color}_prop_rot_dir"] = prop_rot_dir
         self.save_sequence(sequence)
+
+    def apply_pattern_to_current_sequence(self, pattern: list[tuple]) -> None:
+        """
+        Applies a list of turns (pattern) to the current sequence and validates the sequence.
+        """
+        sequence = self.load_current_sequence_json()
+        min_length = min(len(sequence), len(pattern))
+        for i in range(1, min_length+ 1):
+            blue_turns, red_turns = pattern[i - 1]
+            if blue_turns.is_integer():
+                blue_turns = int(blue_turns)
+            if red_turns.is_integer():
+                red_turns = int(red_turns)
+            entry = sequence[i]
+            if "blue_turns" in entry:
+                entry["blue_turns"] = blue_turns
+            if "red_turns" in entry:
+                entry["red_turns"] = red_turns
+
+            beat_view = self.main_widget.sequence_widget.beat_frame.beat_views[i - 1]
+            if beat_view and beat_view.is_filled:
+                beat_view.beat.get.pictograph_dict().update(
+                    {"blue_turns": blue_turns, "red_turns": red_turns}
+                )
+        self.save_sequence(sequence)
+        self.validation_engine.run()
+        sequence = self.load_current_sequence_json()
+        self.main_widget.sequence_widget.beat_frame.propogate_turn_adjustment(sequence)
+        print("Sequence validated")
