@@ -56,10 +56,11 @@ class StartPosPicker(QWidget):
         self.layout.addLayout(start_label_layout)
         self.layout.addStretch(1)
         self.layout.addLayout(pictograph_layout)
-        self.layout.addLayout(self.button_layout, 1)
+        self.layout.addStretch(1)
+        self.layout.addLayout(self.button_layout)
         self.layout.addStretch(1)
 
-    def _setup_variations_button_layout(self):
+    def _setup_variations_button_layout(self) -> QHBoxLayout:
         self.variations_button = QPushButton("Variations", self)
         self.variations_button.setFont(QFont("Times New Roman", 16, QFont.Weight.Bold))
         self.variations_button.setStyleSheet(
