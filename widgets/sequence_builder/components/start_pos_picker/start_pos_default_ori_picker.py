@@ -10,14 +10,18 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
+
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.start_position_picker.start_pos_picker import (
+    from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker import (
+        AdvancedStartPosPicker,
+    )
+    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import (
         StartPosPicker,
     )
 
 
 class StartPosDefaultOriPicker(QWidget):
-    def __init__(self, start_pos_picker: "StartPosPicker"):
+    def __init__(self, start_pos_picker: "AdvancedStartPosPicker"):
         super().__init__(start_pos_picker)
         self.start_pos_picker = start_pos_picker
         self.main_widget = start_pos_picker.main_widget

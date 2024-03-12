@@ -78,7 +78,7 @@ class StartPosManager(QObject):
         start_pos_view = beat_frame.start_pos_view
         beat_frame.selection_manager.select_beat(start_pos_view)
 
-        QApplication.processEvents()  # Force the UI to update
+        QApplication.processEvents()  
         self.start_position_selected.connect(
             self.sequence_builder.transition_to_sequence_building
         )
@@ -150,6 +150,15 @@ class StartPosManager(QObject):
             if start_pos_key.startswith(key):
                 return mapping[key]
         return None
+
+
+    def get_all_start_positions(self) -> list["Pictograph"]:
+        all_start_positions = []
+        valid_letters = [Letter.α, Letter.β, Letter.Γ]
+        for letter in self.main_widget.letters:
+            if letter in valid_letters:
+                all_start_positions.extend(self.get_variations(letter))
+        return all_start_positions
 
     def get_variations(self, start_pos_letter: str) -> list[Pictograph]:
         variations = []

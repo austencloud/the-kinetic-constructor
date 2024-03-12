@@ -11,8 +11,12 @@ from Enums.Enums import LetterType
 from widgets.pictograph.components.add_to_sequence_manager import (
     AddToSequenceManager,
 )
-from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker import AdvancedStartPositionPicker
-from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import StartPosPicker
+from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker import (
+    AdvancedStartPosPicker,
+)
+from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import (
+    StartPosPicker,
+)
 from ..pictograph.pictograph import Pictograph
 from .components.option_picker.option_picker_click_handler import (
     OptionPickerClickHandler,
@@ -33,29 +37,42 @@ class SequenceBuilder(QFrame):
         self.pictograph_cache: dict[Letter, dict[str, Pictograph]] = {
             letter: {} for letter in Letter
         }
+        self.option_click_handler = OptionPickerClickHandler(self)
         self.start_pos_picker = StartPosPicker(self)
         self.option_picker = OptionPicker(self)
         self.add_to_sequence_manager = AddToSequenceManager(self)
-        self.advanced_start_pos_picker = AdvancedStartPositionPicker(self)
-        self.option_click_handler = OptionPickerClickHandler(self)
+        self.advanced_start_pos_picker = AdvancedStartPosPicker(self)
         self.setLayout(QHBoxLayout())
         self.layout().addWidget(self.start_pos_picker)
         self.layout().addWidget(self.advanced_start_pos_picker)
         self.advanced_start_pos_picker.hide()  # Initially hidden
 
-    def get_all_start_position_variations(self):
-        return [self.create_pictograph_from_dict(dict(letter=letter)) for letter in Letter]
-
     def transition_to_sequence_building(self):
         self.start_position_picked = True
         self._hide_start_pos_picker()
+        self._hide_advanced_start_pos_picker()
         self._show_option_picker()
         QApplication.restoreOverrideCursor()
+
+    def transition_to_advanced_start_pos_picker(self):
+        self._hide_start_pos_picker()
+        self.show_advanced_start_pos_picker()
+        QApplication.restoreOverrideCursor()
+
+    def _hide_advanced_start_pos_picker(self):
+        self.advanced_start_pos_picker.hide()
+        self.layout().removeWidget(self.advanced_start_pos_picker)
 
     def _hide_start_pos_picker(self):
         self.start_pos_picker.hide()
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.layout().removeWidget(self.start_pos_picker)
+
+    def show_advanced_start_pos_picker(self):
+        self.start_pos_picker.hide()
+        self.layout().addWidget(self.advanced_start_pos_picker)
+        self.advanced_start_pos_picker.show()
+        self.advanced_start_pos_picker.init_ui()
 
     def _show_option_picker(self):
         self.layout().addWidget(self.option_picker)
@@ -113,6 +130,7 @@ class SequenceBuilder(QFrame):
     def reset_to_start_pos_picker(self):
         self.start_position_picked = False
         self.option_picker.hide()
+        self.advanced_start_pos_picker.hide()
         self.layout().removeWidget(self.option_picker)
         self.layout().addWidget(self.start_pos_picker)
         self.start_pos_picker.show()

@@ -123,7 +123,7 @@ class SequenceWidgetButtonFrame(QFrame):
         if show_indicator:
             self.sequence_widget.indicator_label.show_indicator("Sequence cleared")
         self._clear_graph_editor()
-        self._reset_start_pos_pictograph_orientations()
+        # self._reset_start_pos_pictograph_orientations()
 
     def _reset_start_pos_pictograph_orientations(self) -> None:
         start_pos_letters = [Letter.α, Letter.β, Letter.Γ]

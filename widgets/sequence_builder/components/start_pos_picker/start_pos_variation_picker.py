@@ -1,12 +1,11 @@
 from PyQt6.QtWidgets import QWidget, QGridLayout
 
+
 from ....pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.start_position_picker.start_pos_variation_dialog import (
-        StartPosVariationDialog,
-    )
+    from widgets.sequence_builder.components.start_pos_picker.start_pos_variation_dialog import StartPosVariationDialog
 
 
 class StartPosVariationPicker(QWidget):

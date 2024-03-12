@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton
+from PyQt6.QtGui import QFont
+from PyQt6.QtCore import QSize
 from widgets.sequence_builder.components.start_pos_picker.start_pos_default_ori_picker import (
     StartPosDefaultOriPicker,
 )
@@ -35,10 +37,8 @@ class StartPosPicker(QWidget):
         )
         self.pictograph_frame = StartPosPickerPictographFrame(self)
         self.start_pos_manager = StartPosManager(self)
-        self.default_ori_picker = StartPosDefaultOriPicker(self)  # Add this line
         self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)
-        self.variation_dialog = StartPosVariationDialog(self)
-        self.default_ori_picker.load_default_orientations()  # Add this line
+        self.button_layout = self._setup_variations_button_layout()
         self.setup_layout()
 
     def setup_layout(self) -> None:
@@ -52,14 +52,42 @@ class StartPosPicker(QWidget):
         start_label_layout.addWidget(self.choose_your_start_pos_label)
         pictograph_layout.addWidget(self.pictograph_frame)
 
-        self.layout.addStretch(3)
-        self.layout.addLayout(start_label_layout)
-        self.layout.addStretch(3)
-        self.layout.addLayout(pictograph_layout)
         self.layout.addStretch(1)
-        self.layout.addWidget(self.default_ori_picker)
-        # strech
-        self.layout.addStretch(3)
+        self.layout.addLayout(start_label_layout)
+        self.layout.addStretch(1)
+        self.layout.addLayout(pictograph_layout)
+        self.layout.addLayout(self.button_layout, 1)
+        self.layout.addStretch(1)
+
+    def _setup_variations_button_layout(self):
+        self.variations_button = QPushButton("Variations", self)
+        self.variations_button.setFont(QFont("Times New Roman", 16, QFont.Weight.Bold))
+        self.variations_button.setStyleSheet(
+            """
+            QPushButton {
+                background-color: #446CB3;
+                color: white;
+                border-radius: 10px;
+                padding: 10px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+            QPushButton:hover {
+                background-color: #3D5C99;
+            }
+        """
+        )
+        self.variations_button.setFixedSize(QSize(200, 100))
+
+        self.variations_button.clicked.connect(
+            self.sequence_builder.show_advanced_start_pos_picker
+        )
+
+        button_layout = QHBoxLayout()
+        button_layout.addStretch(1)
+        button_layout.addWidget(self.variations_button)
+        button_layout.addStretch(1)
+        return button_layout
 
     def get_variations(self, position: str) -> list[Pictograph]:
         variations = []
