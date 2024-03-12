@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import QSize
 from widgets.sequence_builder.components.start_pos_picker.start_pos_default_ori_picker import (
-    StartPosDefaultOriPicker,
+    AdvancedStartPosPickerDefaultOriPickerWidget,
 )
 
 from widgets.sequence_builder.components.start_pos_picker.start_pos_pictograph_frame import (

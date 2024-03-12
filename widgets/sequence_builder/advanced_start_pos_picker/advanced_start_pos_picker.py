@@ -2,9 +2,15 @@ from ast import List
 from PyQt6.QtWidgets import QWidget, QGridLayout, QPushButton, QLabel, QVBoxLayout
 from typing import TYPE_CHECKING
 from Enums.letters import Letter
+from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker_pictograph_factory import AdvancedStartPosPickerPictographFactory
+from widgets.sequence_builder.components.start_pos_picker.advanced_start_pos_manager import (
+    AdvancedStartPosManager,
+)
+from widgets.sequence_builder.components.start_pos_picker.advanced_start_pos_picker_pictograph_frame import AdvancedStartPosPickerPictographFrame
+from widgets.sequence_builder.components.start_pos_picker.choose_your_start_pos_label import ChooseYourStartPosLabel
 
 from widgets.sequence_builder.components.start_pos_picker.start_pos_default_ori_picker import (
-    StartPosDefaultOriPicker,
+    AdvancedStartPosPickerDefaultOriPickerWidget,
 )
 
 
@@ -19,11 +25,20 @@ class AdvancedStartPosPicker(QWidget):
         self.sequence_builder = sequence_builder
         self.main_widget = sequence_builder.main_widget
         self.start_pos_picker = self.sequence_builder.start_pos_picker
+        self.start_pos_cache: dict[str, Pictograph] = {}
+        self.default_ori_picker_widget = AdvancedStartPosPickerDefaultOriPickerWidget(
+            self
+        )
+        self.pictograph_frame = AdvancedStartPosPickerPictographFrame(self)
+        self.choose_you_start_pos_label = ChooseYourStartPosLabel(self)
+        self.pictograph_factory = AdvancedStartPosPickerPictographFactory(
+            self, self.start_pos_cache
+        )
+        self.advanced_start_pos_manager = AdvancedStartPosManager(self)
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.grid_layout = QGridLayout()
+        self.layout.addWidget(self.default_ori_picker_widget)
         self.layout.addLayout(self.grid_layout)
-        self.default_ori_picker = StartPosDefaultOriPicker(self)
-        self.default_ori_picker.load_default_orientations()
 
     def display_variations(self, variations: list["Pictograph"]) -> None:
         self.view_width = self.calculate_view_width()
@@ -79,10 +94,3 @@ class AdvancedStartPosPicker(QWidget):
             variation
         )
 
-    def select_variation(self, variation):
-        self.sequence_builder.set_selected_start_position(variation)
-        self.sequence_builder.transition_to_sequence_building()
-
-    def show_variations(self):
-        self.sequence_builder.simple_start_pos_picker.hide()
-        self.show()

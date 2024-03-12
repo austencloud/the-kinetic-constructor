@@ -6,7 +6,7 @@
         "TKA": true,
         "Elemental": true
     },
-    "default_left_orientation": "in",
+    "default_left_orientation": "clock",
     "default_right_orientation": "in",
     "default_left_orientation_Hand": "out",
     "default_right_orientation_Hand": "in",

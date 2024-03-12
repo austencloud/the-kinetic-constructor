@@ -1,15 +1,17 @@
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
+
 
 
 if TYPE_CHECKING:
+    from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker import AdvancedStartPosPicker
     from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import StartPosPicker
 
 
 class ChooseYourStartPosLabel(QLabel):
-    def __init__(self, start_pos_picker: "StartPosPicker") -> None:
+    def __init__(self, start_pos_picker: Union["StartPosPicker", "AdvancedStartPosPicker"]) -> None:
         super().__init__(start_pos_picker)
         self.start_pos_picker = start_pos_picker
         self.setText("Choose your start position!")
@@ -21,5 +23,4 @@ class ChooseYourStartPosLabel(QLabel):
         width = self.start_pos_picker.width()
         font_size = int(0.03 * width)
         self.setFont(QFont("Monotype Corsiva", font_size))
-        # self.setStyleSheet("QLabel { border: 1px solid black; }")
         self.show()
