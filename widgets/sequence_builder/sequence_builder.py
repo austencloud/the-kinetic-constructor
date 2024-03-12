@@ -11,7 +11,8 @@ from Enums.Enums import LetterType
 from widgets.pictograph.components.add_to_sequence_manager import (
     AddToSequenceManager,
 )
-from .components.start_position_picker.start_pos_picker import StartPosPicker
+from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker import AdvancedStartPositionPicker
+from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import StartPosPicker
 from ..pictograph.pictograph import Pictograph
 from .components.option_picker.option_picker_click_handler import (
     OptionPickerClickHandler,
@@ -29,18 +30,21 @@ class SequenceBuilder(QFrame):
         self.current_pictograph: Pictograph = None
         self.letters_df = pd.read_csv("PictographDataframe.csv")
         self.start_position_picked = False
-        self._setup_components()
         self.pictograph_cache: dict[Letter, dict[str, Pictograph]] = {
             letter: {} for letter in Letter
         }
         self.start_pos_picker = StartPosPicker(self)
         self.option_picker = OptionPicker(self)
         self.add_to_sequence_manager = AddToSequenceManager(self)
+        self.advanced_start_pos_picker = AdvancedStartPositionPicker(self)
+        self.option_click_handler = OptionPickerClickHandler(self)
         self.setLayout(QHBoxLayout())
         self.layout().addWidget(self.start_pos_picker)
+        self.layout().addWidget(self.advanced_start_pos_picker)
+        self.advanced_start_pos_picker.hide()  # Initially hidden
 
-    def _setup_components(self) -> None:
-        self.option_click_handler = OptionPickerClickHandler(self)
+    def get_all_start_position_variations(self):
+        return [self.create_pictograph_from_dict(dict(letter=letter)) for letter in Letter]
 
     def transition_to_sequence_building(self):
         self.start_position_picked = True
@@ -115,7 +119,7 @@ class SequenceBuilder(QFrame):
 
     def resize_sequence_builder(self) -> None:
         self.setMinimumWidth(int(self.main_widget.width() / 2))
-        self.start_pos_picker.resize_start_position_picker()
+        self.start_pos_picker.resize_start_pos_picker()
         # self.option_picker.scroll_area.resize_option_picker_scroll_area()
 
     def get_last_added_pictograph(self):

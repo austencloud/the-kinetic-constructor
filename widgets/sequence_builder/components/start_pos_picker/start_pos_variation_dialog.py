@@ -2,20 +2,12 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QPushButton
 from Enums.MotionAttributes import Color
 from constants import BLUE, RED
-
-from widgets.sequence_builder.components.start_position_picker.start_pos_variation_picker import (
-    StartPosVariationPicker,
-)
-from widgets.sequence_builder.components.start_position_picker.start_pos_variation_dialog_ori_changer import (
-    StartPosVariationDialogOriChanger,
-)
-from ....pictograph.pictograph import Pictograph
+from widgets.pictograph.pictograph import Pictograph
+from widgets.sequence_builder.components.start_pos_picker.start_pos_variation_dialog_ori_changer import StartPosVariationDialogOriChanger
+from widgets.sequence_builder.components.start_pos_picker.start_pos_variation_picker import StartPosVariationPicker
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.start_position_picker.start_pos_picker import (
-        StartPosPicker,
-    )
-
+    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import StartPosPicker
 
 class StartPosVariationDialog(QDialog):
     def __init__(self, start_pos_picker: "StartPosPicker") -> None:

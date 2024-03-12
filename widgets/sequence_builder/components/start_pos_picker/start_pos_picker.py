@@ -10,8 +10,8 @@ from widgets.sequence_builder.components.start_pos_picker.start_pos_pictograph_f
 from ....scroll_area.components.start_pos_picker_pictograph_factory import (
     StartPosPickerPictographFactory,
 )
-from ..start_pos_picker.choose_your_next_pictograph_label import (
-    ChooseYourStartPositionLabel,
+from .choose_your_start_pos_label import (
+    ChooseYourStartPosLabel,
 )
 
 from .start_pos_manager import StartPosManager
@@ -36,7 +36,7 @@ class StartPosPicker(QWidget):
         self.pictograph_frame = StartPosPickerPictographFrame(self)
         self.start_pos_manager = StartPosManager(self)
         self.default_ori_picker = StartPosDefaultOriPicker(self)  # Add this line
-        self.choose_your_start_pos_label = ChooseYourStartPositionLabel(self)
+        self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)
         self.variation_dialog = StartPosVariationDialog(self)
         self.default_ori_picker.load_default_orientations()  # Add this line
         self.setup_layout()

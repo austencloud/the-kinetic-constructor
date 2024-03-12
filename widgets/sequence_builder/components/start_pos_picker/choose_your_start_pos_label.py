@@ -3,13 +3,12 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
+
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.start_position_picker.start_pos_picker import (
-        StartPosPicker,
-    )
+    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import StartPosPicker
 
 
-class ChooseYourStartPositionLabel(QLabel):
+class ChooseYourStartPosLabel(QLabel):
     def __init__(self, start_pos_picker: "StartPosPicker") -> None:
         super().__init__(start_pos_picker)
         self.start_pos_picker = start_pos_picker

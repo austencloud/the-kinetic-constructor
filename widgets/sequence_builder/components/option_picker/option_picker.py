@@ -5,7 +5,7 @@ from PyQt6.QtCore import pyqtSignal
 from widgets.sequence_builder.components.option_picker.option_manager import (
     OptionManager,
 )
-from widgets.sequence_builder.components.start_position_picker.choose_your_next_option_label import (
+from widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label import (
     ChooseYourNextOptionLabel,
 )
 
