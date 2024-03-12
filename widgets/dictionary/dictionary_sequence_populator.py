@@ -1,12 +1,10 @@
 import json
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QMessageBox
-from PyQt6.QtCore import Qt
 
 
 if TYPE_CHECKING:
     from widgets.dictionary.dictionary import Dictionary
-    from widgets.main_widget.main_widget import MainWidget
 
 
 class DictionarySequencePopulator:

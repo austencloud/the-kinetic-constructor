@@ -1,9 +1,6 @@
-import os
-import json
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import QModelIndex, Qt
-from PyQt6.QtGui import QStandardItem, QDragEnterEvent, QDropEvent
-from Enums.letters import Letter, LetterConditions
+from PyQt6.QtCore import QModelIndex
+from PyQt6.QtGui import QDragEnterEvent, QDropEvent
 from widgets.dictionary.dictionary_sequence_populator import DictionarySequencePopulator
 from widgets.dictionary.dictionary_sort_manager import DictionarySortManager
 from widgets.dictionary.library_word_length_selector_widget import LibraryWordLengthSelectorWidget
@@ -16,9 +13,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QWidget,
     QMessageBox,
-    QTreeView,
     QHBoxLayout,
-    QPushButton,
 )
 
 if TYPE_CHECKING:

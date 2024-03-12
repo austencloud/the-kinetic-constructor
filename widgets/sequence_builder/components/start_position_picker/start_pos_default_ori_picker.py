@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLayout
-from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.components.start_position_picker.start_pos_picker import (

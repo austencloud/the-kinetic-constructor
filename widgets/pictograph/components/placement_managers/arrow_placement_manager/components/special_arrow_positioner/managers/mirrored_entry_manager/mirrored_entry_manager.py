@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from Enums.Enums import LetterType
 
 from objects.arrow.arrow import Arrow
 from .mirrored_entry_data_prep import MirroredEntryDataPrep

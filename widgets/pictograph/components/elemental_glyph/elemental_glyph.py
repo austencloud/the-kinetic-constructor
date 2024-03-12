@@ -3,7 +3,7 @@ from PyQt6.QtSvg import QSvgRenderer
 
 from typing import TYPE_CHECKING
 
-from Enums.Enums import LetterType, VTG_Modes
+from Enums.Enums import LetterType
 from constants import QUARTER_OPP, QUARTER_SAME, SPLIT_OPP, SPLIT_SAME, TOG_OPP, TOG_SAME
 
 

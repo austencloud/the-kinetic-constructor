@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 
-from PyQt6.QtGui import QPaintEvent
 from Enums.MotionAttributes import Color
 from constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
 from widgets.graph_editor.components.GE_prop_rot_dir_button_manager import (
@@ -11,7 +10,7 @@ from widgets.graph_editor.components.GE_vtg_dir_button_handler import (
 )
 from .GE_turns_box_header import GE_TurnsBoxHeader
 from .GE_turns_widget import GE_TurnsWidget
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QApplication
+from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_adjustment_panel import GE_AdjustmentPanel

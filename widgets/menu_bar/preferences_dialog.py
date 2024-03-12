@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QHBoxLayout, QListWidget, QStackedWidget, QWidget
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QHBoxLayout, QListWidget, QStackedWidget
 
 from .prop_type_selector import PropTypeSelector
 from .glyph_visibility_widget import GlyphVisibilityWidget

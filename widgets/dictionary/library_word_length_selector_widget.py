@@ -1,27 +1,8 @@
-import os
-import json
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import QModelIndex, Qt
-from PyQt6.QtGui import QStandardItem, QDragEnterEvent, QDropEvent
-from Enums.letters import Letter, LetterConditions
-from widgets.dictionary.dictionary_sequence_populator import DictionarySequencePopulator
-from widgets.dictionary.dictionary_sort_manager import DictionarySortManager
-from .dictionary_favorites_manager import DictionaryFavoritesTree
-from .dictionary_search_sort_bar import DictionarySearchSortBar
-from .dictionary_sequence_length_manager import DictionarySortByLengthHandler
-from .dictionary_words_tree import DictionaryWordsTree
 
-from PyQt6.QtWidgets import (
-    QVBoxLayout,
-    QWidget,
-    QMessageBox,
-    QTreeView,
-    QHBoxLayout,
-    QPushButton,
-)
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton
 
 if TYPE_CHECKING:
-    from widgets.main_widget.main_widget import MainWidget
     from widgets.dictionary.dictionary import Dictionary
 
 
@@ -52,7 +33,7 @@ class LibraryWordLengthSelectorWidget(QWidget):
 
         self.setLayout(self.layout)
 
-    def toggle_word_length_visibility(self, length, visible):
+    def toggle_word_length_visibility(self, length, visible) -> None:
         visibility_settings = (
             self.main_widget.main_window.settings_manager.get_word_length_visibility()
         )

@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from Enums.Enums import LetterType
 
 
 if TYPE_CHECKING:

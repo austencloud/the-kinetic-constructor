@@ -1,22 +1,5 @@
-import os
-import json
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import (
-    QVBoxLayout,
-    QWidget,
-    QMessageBox,
-    QTreeView,
-    QHBoxLayout,
-    QPushButton,
-)
-from PyQt6.QtCore import QModelIndex, Qt
-from PyQt6.QtGui import QStandardItem, QDragEnterEvent, QDropEvent
-from Enums.letters import Letter, LetterConditions
-from widgets.dictionary.dictionary_sequence_populator import DictionarySequencePopulator
-from .dictionary_favorites_manager import DictionaryFavoritesTree
-from .dictionary_search_sort_bar import DictionarySearchSortBar
-from .dictionary_sequence_length_manager import DictionarySortByLengthHandler
-from .dictionary_words_tree import DictionaryWordsTree
+from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from widgets.dictionary.dictionary import Dictionary

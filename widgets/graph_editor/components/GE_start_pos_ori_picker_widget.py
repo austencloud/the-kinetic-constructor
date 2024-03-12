@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayo
 from PyQt6.QtGui import QIcon, QFont
 
 from PyQt6.QtCore import Qt, QSize, pyqtSignal
-from constants import BLUE, IN, ORI, OUT, CLOCK, COUNTER
+from constants import IN, ORI, OUT, CLOCK, COUNTER
 from typing import TYPE_CHECKING
 
 from widgets.pictograph.pictograph import Pictograph
