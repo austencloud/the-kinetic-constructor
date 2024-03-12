@@ -25,7 +25,6 @@ class DictionarySearchSortBar:
     def setup_ui(self, layout: QVBoxLayout) -> None:
         search_layout = QHBoxLayout()
         self.search_bar.setPlaceholderText("Search sequences...")
-        # self.search_bar.textChanged.connect(self.dictionary.filter_sequences)
         search_layout.addWidget(QLabel("Search:"))
         search_layout.addWidget(self.search_bar)
         search_layout.addWidget(QLabel("Sort by:"))
