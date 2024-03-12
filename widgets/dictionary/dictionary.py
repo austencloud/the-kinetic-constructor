@@ -34,11 +34,12 @@ class Dictionary(QWidget):
         tree_layout = QHBoxLayout()
         
         self.search_sort_bar.setup_ui(self.layout)
-        self.words_tree.setup_ui(self.layout)
+        self.layout.addWidget(self.word_length_selector)
+        self.words_tree.setup_ui(tree_layout)
         self.favorites_tree.setup_ui(tree_layout)
+        
         self.setup_preview_area(tree_layout)
         self.layout.addLayout(tree_layout)
-        self.layout.addWidget(self.word_length_selector)
         self.setLayout(self.layout)
         self.sort_manager.sort_sequences("Length")
 
