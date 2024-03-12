@@ -1,16 +1,16 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
-from widgets.sequence_builder.components.start_position_picker.start_pos_default_ori_picker import (
+from widgets.sequence_builder.components.start_pos_picker.start_pos_default_ori_picker import (
     StartPosDefaultOriPicker,
 )
 
-from widgets.sequence_builder.components.start_position_picker.start_pos_pictograph_frame import (
+from widgets.sequence_builder.components.start_pos_picker.start_pos_pictograph_frame import (
     StartPosPickerPictographFrame,
 )
 from ....scroll_area.components.start_pos_picker_pictograph_factory import (
     StartPosPickerPictographFactory,
 )
-from ..start_position_picker.choose_your_next_pictograph_label import (
+from ..start_pos_picker.choose_your_next_pictograph_label import (
     ChooseYourStartPositionLabel,
 )
 
@@ -73,7 +73,7 @@ class StartPosPicker(QWidget):
         pictograph.updater.update_pictograph(pictograph_dict)
         return pictograph
 
-    def resize_start_position_picker(self) -> None:
+    def resize_start_pos_picker(self) -> None:
         self.pictograph_frame.resize_start_pos_picker_pictograph_frame()
         self.start_pos_manager.resize_start_position_pictographs()
 

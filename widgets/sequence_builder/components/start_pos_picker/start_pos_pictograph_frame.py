@@ -15,13 +15,10 @@ class StartPosPickerPictographFrame(QWidget):
         )
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.pictographs_layout = QHBoxLayout()
-        self.buttons_layout = QHBoxLayout()
         self.layout.addLayout(self.pictographs_layout)
-        self.layout.addLayout(self.buttons_layout)
         self.variation_buttons: dict[str, QPushButton] = {}
         self.start_positions: dict[str, Pictograph] = {}
-        
-        
+
     def resize_start_pos_picker_pictograph_frame(self) -> None:
         self.setMinimumWidth(self.start_pos_picker.width())
         self.start_pos_picker.choose_your_start_pos_label.set_stylesheet()
@@ -41,13 +38,3 @@ class StartPosPickerPictographFrame(QWidget):
             key
         ] = start_pos
         self.start_positions[start_pos.letter] = start_pos
-        variation_button = self._setup_variation_button(start_pos)
-        self.buttons_layout.addWidget(variation_button)
-
-    def _setup_variation_button(self, start_pos: Pictograph) -> QPushButton:
-        variation_button = QPushButton(f"Select {start_pos.letter} Variation")
-        variation_button.clicked.connect(
-            lambda _, pos=start_pos.letter: self.start_pos_picker.show_variation_dialog(pos)
-        )
-        self.variation_buttons[start_pos.letter] = variation_button
-        return variation_button
