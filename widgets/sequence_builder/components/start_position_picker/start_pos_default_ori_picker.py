@@ -1,5 +1,14 @@
+from PyQt6.QtWidgets import (
+    QWidget,
+    QLabel,
+    QPushButton,
+    QHBoxLayout,
+    QVBoxLayout,
+    QGroupBox,
+    QCheckBox,
+)
+from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLayout
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.components.start_position_picker.start_pos_picker import (
@@ -16,37 +25,66 @@ class StartPosDefaultOriPicker(QWidget):
         self.orientations = ["in", "counter", "out", "clock"]
         self.current_left_orientation_index = 0
         self.current_right_orientation_index = 0
-        self.setup_ui()
+        self.init_ui()
 
-    def setup_ui(self):
-        layout = QVBoxLayout(self)
-        left_layout = QHBoxLayout()
-        right_layout = QHBoxLayout()
+    def init_ui(self):
+        self.collapsible_group_box = QGroupBox("Default Orientation Picker")
+        self.collapsible_group_box.setCheckable(True)
+        self.collapsible_group_box.setChecked(False)
 
+        # Center the title
+        self.collapsible_group_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        # Group box layout
+        self.group_box_layout = QVBoxLayout()
+
+        # Left orientation selector
+        self.left_layout = QHBoxLayout()
         left_label = QLabel("Left Hand (Blue) Orientation:")
         self.left_orientation_display = QLabel()
         self.left_ccw_button = QPushButton("CCW")
         self.left_ccw_button.clicked.connect(self.rotate_left_ccw)
         self.left_cw_button = QPushButton("CW")
         self.left_cw_button.clicked.connect(self.rotate_left_cw)
-        left_layout.addWidget(left_label)
-        left_layout.addWidget(self.left_orientation_display)
-        left_layout.addWidget(self.left_ccw_button)
-        left_layout.addWidget(self.left_cw_button)
+        self.left_layout.addWidget(left_label)
+        self.left_layout.addWidget(self.left_orientation_display)
+        self.left_layout.addWidget(self.left_ccw_button)
+        self.left_layout.addWidget(self.left_cw_button)
 
+        # Right orientation selector
+        self.right_layout = QHBoxLayout()
         right_label = QLabel("Right Hand (Red) Orientation:")
         self.right_orientation_display = QLabel()
         self.right_ccw_button = QPushButton("CCW")
         self.right_ccw_button.clicked.connect(self.rotate_right_ccw)
         self.right_cw_button = QPushButton("CW")
         self.right_cw_button.clicked.connect(self.rotate_right_cw)
-        right_layout.addWidget(right_label)
-        right_layout.addWidget(self.right_orientation_display)
-        right_layout.addWidget(self.right_ccw_button)
-        right_layout.addWidget(self.right_cw_button)
+        self.right_layout.addWidget(right_label)
+        self.right_layout.addWidget(self.right_orientation_display)
+        self.right_layout.addWidget(self.right_ccw_button)
+        self.right_layout.addWidget(self.right_cw_button)
 
-        layout.addLayout(left_layout)
-        layout.addLayout(right_layout)
+        # Add to group box layout
+        self.group_box_layout.addLayout(self.left_layout)
+        self.group_box_layout.addLayout(self.right_layout)
+
+        # Set the layout for group box
+        self.collapsible_group_box.setLayout(self.group_box_layout)
+
+        # Main layout
+        main_layout = QVBoxLayout(self)
+        main_layout.addWidget(
+            self.collapsible_group_box, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+
+        # Connect the toggled signal to the handler function
+        self.collapsible_group_box.toggled.connect(self.handle_collapsed)
+
+    def handle_collapsed(self, checked):
+        if checked:
+            self.group_box_layout.show()  # Show the contents
+        else:
+            self.group_box_layout.hide()  # Hide the contents
 
     def load_default_orientations(self):
         default_left_orientation = self.settings_manager.get_setting(
@@ -55,8 +93,12 @@ class StartPosDefaultOriPicker(QWidget):
         default_right_orientation = self.settings_manager.get_setting(
             "default_right_orientation", "in"
         )
-        self.current_left_orientation_index = self.orientations.index(default_left_orientation)
-        self.current_right_orientation_index = self.orientations.index(default_right_orientation)
+        self.current_left_orientation_index = self.orientations.index(
+            default_left_orientation
+        )
+        self.current_right_orientation_index = self.orientations.index(
+            default_right_orientation
+        )
         self.update_orientation_displays()
 
     def rotate_left_ccw(self):
@@ -82,7 +124,7 @@ class StartPosDefaultOriPicker(QWidget):
             self.current_right_orientation_index + 1
         ) % len(self.orientations)
         self.update_right_orientation()
-        
+
     def update_left_orientation(self):
         orientation = self.orientations[self.current_left_orientation_index]
         self.left_orientation_display.setText(orientation)

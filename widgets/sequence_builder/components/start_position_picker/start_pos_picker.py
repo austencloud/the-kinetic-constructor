@@ -52,9 +52,14 @@ class StartPosPicker(QWidget):
         start_label_layout.addWidget(self.choose_your_start_pos_label)
         pictograph_layout.addWidget(self.pictograph_frame)
 
-        self.layout.addLayout(start_label_layout, 1)
-        self.layout.addWidget(self.default_ori_picker, 1)  # Add this line
-        self.layout.addLayout(pictograph_layout, 4)
+        self.layout.addStretch(3)
+        self.layout.addLayout(start_label_layout)
+        self.layout.addStretch(3)
+        self.layout.addLayout(pictograph_layout)
+        self.layout.addStretch(1)
+        self.layout.addWidget(self.default_ori_picker)
+        # strech
+        self.layout.addStretch(3)
 
     def get_variations(self, position: str) -> list[Pictograph]:
         variations = []
