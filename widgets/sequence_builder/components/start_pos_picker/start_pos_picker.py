@@ -2,9 +2,6 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import QSize
-from widgets.sequence_builder.components.start_pos_picker.start_pos_default_ori_picker import (
-    AdvancedStartPosPickerDefaultOriPickerWidget,
-)
 
 from widgets.sequence_builder.components.start_pos_picker.start_pos_pictograph_frame import (
     StartPosPickerPictographFrame,
@@ -18,7 +15,6 @@ from .choose_your_start_pos_label import (
 
 from .start_pos_manager import StartPosManager
 from ....pictograph.pictograph import Pictograph
-from .start_pos_variation_dialog import StartPosVariationDialog
 
 if TYPE_CHECKING:
     from ...sequence_builder import SequenceBuilder

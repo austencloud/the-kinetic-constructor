@@ -1,8 +1,5 @@
 from copy import deepcopy
-from turtle import st
 from PyQt6.QtCore import QObject, pyqtSignal
-from Enums.letters import Letter
-from constants import END_POS, START_POS
 from widgets.pictograph.pictograph import Pictograph
 from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
     StartPositionBeat,
@@ -13,9 +10,6 @@ from PyQt6.QtWidgets import QApplication
 if TYPE_CHECKING:
     from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker import (
         AdvancedStartPosPicker,
-    )
-    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import (
-        StartPosPicker,
     )
 
 

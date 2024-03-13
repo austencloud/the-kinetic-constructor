@@ -1,5 +1,4 @@
-from ast import List
-from PyQt6.QtWidgets import QWidget, QGridLayout, QPushButton, QLabel, QVBoxLayout
+from PyQt6.QtWidgets import QWidget, QGridLayout, QVBoxLayout
 from typing import TYPE_CHECKING
 from Enums.letters import Letter
 from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker_pictograph_factory import AdvancedStartPosPickerPictographFactory
