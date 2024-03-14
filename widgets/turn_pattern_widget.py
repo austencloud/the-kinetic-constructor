@@ -95,6 +95,6 @@ class TurnPatternWidget(QWidget):
         if not selected_items:
             return
         pattern_str = selected_items[0].data(Qt.ItemDataRole.UserRole)
-        self.current_sequence_json_handler.apply_pattern_to_current_sequence(
+        self.current_sequence_json_handler.apply_turn_pattern_to_current_sequence(
             TurnPatternConverter.pattern_to_sequence(pattern_str)
         )

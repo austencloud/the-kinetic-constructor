@@ -95,6 +95,7 @@ class SequenceWidgetButtonFrame(QFrame):
                 "You must build a sequence before you can save it."
             )
             return
+
         sequence_name = "".join(
             [
                 pictograph.get("letter", "")
@@ -102,13 +103,19 @@ class SequenceWidgetButtonFrame(QFrame):
                 if "letter" in pictograph
             ]
         )
-        dictionary_folder = os.path.join(os.getcwd(), "dictionary")
+        turn_pattern = (
+            self.sequence_widget.main_widget.json_manager.current_sequence_json_handler.get_current_turn_pattern()
+        )
+        dictionary_folder = os.path.join(os.getcwd(), "dictionary", sequence_name)
         os.makedirs(dictionary_folder, exist_ok=True)
-        filename = os.path.join(dictionary_folder, f"{sequence_name}.json")
+
+        # Use the turn pattern in the file name to differentiate variations
+        variation_name = f"{sequence_name}_{turn_pattern}.json"
+        filename = os.path.join(dictionary_folder, variation_name)
         with open(filename, "w", encoding="utf-8") as file:
             json.dump(sequence_data, file, indent=4, ensure_ascii=False)
         self.sequence_widget.indicator_label.show_indicator(
-            "Sequence saved as " + sequence_name
+            f"Sequence variation saved as {variation_name}"
         )
         print(f"Sequence saved to {filename}.")
 

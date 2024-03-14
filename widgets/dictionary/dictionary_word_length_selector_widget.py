@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from widgets.dictionary.dictionary import Dictionary
 
 
-class LibraryWordLengthSelectorWidget(QWidget):
+class DictionaryWordLengthSelectorWidget(QWidget):
     def __init__(self, dictionary: "Dictionary") -> None:
         super().__init__(dictionary)
         self.dictionary = dictionary

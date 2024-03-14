@@ -53,23 +53,16 @@ class AdvancedStartPosManager(QObject):
         for start_position_pictograph in self.start_options.values():
             start_position_pictograph.view.hide()
 
-    def update_start_pos_pictographs(self):
-        default_left_orientation = (
-            self.main_widget.main_window.settings_manager.get_setting(
-                "default_left_orientation"
-            )
-        )
-        default_right_orientation = (
-            self.main_widget.main_window.settings_manager.get_setting(
-                "default_right_orientation"
-            )
-        )
-
+    def update_left_default_ori(self, left_ori: str):
         for start_option in self.start_options.values():
-            start_option.pictograph_dict["blue_start_ori"] = default_left_orientation
-            start_option.pictograph_dict["blue_end_ori"] = default_left_orientation
-            start_option.pictograph_dict["red_start_ori"] = default_right_orientation
-            start_option.pictograph_dict["red_end_ori"] = default_right_orientation
+            start_option.pictograph_dict["blue_start_ori"] = left_ori
+            start_option.pictograph_dict["blue_end_ori"] = left_ori
+            start_option.updater.update_pictograph(start_option.pictograph_dict)
+
+    def update_start_pos_pictograph_orientations(self, right_ori: str):
+        for start_option in self.start_options.values():
+            start_option.pictograph_dict["red_start_ori"] = right_ori
+            start_option.pictograph_dict["red_end_ori"] = right_ori
             start_option.updater.update_pictograph(start_option.pictograph_dict)
 
     def resize_start_position_pictographs(self) -> None:

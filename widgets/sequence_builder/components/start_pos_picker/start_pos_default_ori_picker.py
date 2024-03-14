@@ -52,10 +52,12 @@ class AdvancedStartPosPickerDefaultOriPickerWidget(QWidget):
 
         self.group_box_layout.addLayout(layout)
 
-    def set_left_orientation(self, orientation: str):
-        self.settings_manager.set_setting("default_left_orientation", orientation)
-        self.advanced_start_pos_picker.advanced_start_pos_manager.update_start_pos_pictographs()
+    
 
-    def set_right_orientation(self, orientation: str):
-        self.settings_manager.set_setting("default_right_orientation", orientation)
-        self.advanced_start_pos_picker.advanced_start_pos_manager.update_start_pos_pictographs()
+    def set_left_orientation(self, ori: str):
+        self.settings_manager.set_setting("default_left_orientation", ori)
+        self.advanced_start_pos_picker.advanced_start_pos_manager.update_start_pos_pictograph_orientations(ori)
+
+    def set_right_orientation(self, ori: str):
+        self.settings_manager.set_setting("default_right_orientation", ori)
+        self.advanced_start_pos_picker.advanced_start_pos_manager.update_start_pos_pictograph_orientations(ori)

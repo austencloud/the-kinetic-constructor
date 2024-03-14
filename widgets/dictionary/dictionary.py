@@ -1,9 +1,11 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QDragEnterEvent, QDropEvent
 
+from widgets.dictionary.dictionary_variation_manager import DictionaryVariationManager
+
 from .dictionary_sequence_populator import DictionarySequencePopulator
 from .dictionary_sort_manager import DictionarySortManager
-from .dictionary_word_length_selector_widget import LibraryWordLengthSelectorWidget
+from .dictionary_word_length_selector_widget import DictionaryWordLengthSelectorWidget
 from .dictionary_favorites_manager import DictionaryFavoritesTree
 from .dictionary_search_sort_bar import DictionarySearchSortBar
 from .dictionary_sequence_length_manager import DictionarySortByLengthHandler
@@ -28,25 +30,19 @@ class Dictionary(QWidget):
         self.favorites_tree = DictionaryFavoritesTree(self)
         self.sequence_length_manager = DictionarySortByLengthHandler(self)
         self.sequence_populator = DictionarySequencePopulator(self)
-        self.word_length_selector = LibraryWordLengthSelectorWidget(self)
-
+        self.word_length_selector = DictionaryWordLengthSelectorWidget(self)
+        self.variation_manager = DictionaryVariationManager(self)
         self.layout: QVBoxLayout = QVBoxLayout(self)
         tree_layout = QHBoxLayout()
-        
+
         self.search_sort_bar.setup_ui(self.layout)
         self.layout.addWidget(self.word_length_selector)
         self.words_tree.setup_ui(tree_layout)
         self.favorites_tree.setup_ui(tree_layout)
-        
-        self.setup_preview_area(tree_layout)
+
         self.layout.addLayout(tree_layout)
         self.setLayout(self.layout)
         self.sort_manager.sort_sequences("Length")
-
-    def setup_preview_area(self, layout: QVBoxLayout) -> None:
-        self.preview_area = QWidget()
-        self.preview_area.setStyleSheet("background-color: gray;")
-        layout.addWidget(self.preview_area)
 
     def dragEnterEvent(self, event: "QDragEnterEvent") -> None:
         if event.mimeData().hasUrls():

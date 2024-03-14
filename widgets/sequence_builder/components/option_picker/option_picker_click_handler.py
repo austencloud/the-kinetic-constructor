@@ -25,7 +25,6 @@ class OptionPickerClickHandler:
         selection_manager = beat_frame.selection_manager
         QApplication.processEvents()
         selection_manager.select_beat(new_beat.view)
-
         QApplication.processEvents()
 
         self.sequence_builder.option_picker.update_option_picker()

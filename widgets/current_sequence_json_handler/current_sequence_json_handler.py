@@ -147,7 +147,7 @@ class CurrentSequenceJsonHandler:
         sequence[index][f"{color}_prop_rot_dir"] = prop_rot_dir
         self.save_sequence(sequence)
 
-    def apply_pattern_to_current_sequence(self, pattern: list[tuple]) -> None:
+    def apply_turn_pattern_to_current_sequence(self, pattern: list[tuple]) -> None:
         """
         Applies a list of turns (pattern) to the current sequence and validates the sequence.
         Ensures static and dash motions have the correct prop_rot_dir based on the previous motion.
@@ -189,6 +189,28 @@ class CurrentSequenceJsonHandler:
         sequence = self.load_current_sequence_json()
         self.main_widget.sequence_widget.beat_frame.propogate_turn_adjustment(sequence)
         print("Sequence validated")
+
+    def get_current_turn_pattern(self) -> str:
+        """Returns the current turn pattern as a string."""
+        sequence = self.load_current_sequence_json()
+        turn_pattern = ""
+        for i in range(1, len(sequence)):
+            if i == 17:
+                continue
+            blue_turns = sequence[i]["blue_turns"]
+            red_turns = sequence[i]["red_turns"]
+            
+            if blue_turns == red_turns:
+                turn_pattern += f"{blue_turns}_"
+            elif blue_turns > 0 and red_turns > 0:
+                turn_pattern += f"L{blue_turns},R{red_turns}_"
+            elif blue_turns > 0:
+                turn_pattern += f"L{blue_turns}_"
+            elif red_turns > 0:
+                turn_pattern += f"R{red_turns}_"
+
+        turn_pattern = turn_pattern[:-1]
+        return "(" + turn_pattern + ")"
 
     def find_previous_prop_rot_dir(self, sequence, current_index, color) -> str:
         """
