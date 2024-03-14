@@ -78,12 +78,7 @@ class TurnPatternWidget(QWidget):
 
             self.load_turn_patterns()
 
-    def apply_turn_pattern(self) -> None:
-        selected_items = self.turn_pattern_list.selectedItems()
-        if not selected_items:
-            return
-        pattern = selected_items[0].data(Qt.ItemDataRole.UserRole)
-        self.apply_turn_pattern(pattern)
+
 
     def get_current_turn_pattern(self) -> str:
         sequence = self.current_sequence_json_handler.load_current_sequence_json()

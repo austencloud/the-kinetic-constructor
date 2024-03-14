@@ -132,3 +132,53 @@ class DictionaryVariationManager:
                     )
                     child.setData(0, Qt.ItemDataRole.UserRole, new_file_path)
                     return
+                
+    def save_structural_variation(self, sequence_data: dict, base_pattern: str):
+        # Ensure the base dictionary folder exists
+        os.makedirs(self.base_dictionary_folder, exist_ok=True)
+
+        # Create or ensure the base pattern folder exists
+        pattern_folder = os.path.join(self.base_dictionary_folder, base_pattern)
+        os.makedirs(pattern_folder, exist_ok=True)
+
+        # Generate a timestamped filename for the new variation
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        variation_name = f"{base_pattern}_{timestamp}"
+        variation_filename = f"{variation_name}.json"
+
+        # Save the sequence data as a new variation file
+        variation_filepath = os.path.join(pattern_folder, variation_filename)
+        with open(variation_filepath, "w", encoding='utf-8') as file:
+            json.dump(sequence_data, file, indent=4, ensure_ascii=False)
+
+        # Add the new variation to the UI
+        self.add_variation_to_ui(base_pattern, variation_name)
+
+    def display_structural_variations(self, base_pattern: str):
+        # Find or create the base pattern item in the tree
+        base_pattern_item = self.find_base_pattern_item(base_pattern)
+        if not base_pattern_item:
+            base_pattern_item = QTreeWidgetItem(self.dictionary.words_tree.tree_view)
+            base_pattern_item.setText(0, base_pattern)
+            self.dictionary.words_tree.tree_view.addTopLevelItem(base_pattern_item)
+
+        # Clear previous variations under this base pattern
+        base_pattern_item.takeChildren()
+
+        # List all structural variations from the folder and add them to the UI
+        pattern_folder = os.path.join(self.base_dictionary_folder, base_pattern)
+        for variation_filename in os.listdir(pattern_folder):
+            if variation_filename.endswith('.json'):
+                variation_name = variation_filename[:-5]  # Remove '.json'
+                self.add_variation_to_ui(base_pattern, variation_name)
+
+        base_pattern_item.setExpanded(True)
+
+    def select_structural_variation(self, variation_name: str):
+        base_pattern = variation_name.split('_')[0]
+        # Load the selected structural variation into the sequence widget
+        sequence_file_path = os.path.join(self.base_dictionary_folder, base_pattern, f"{variation_name}.json")
+        self.dictionary.sequence_populator.load_sequence_from_file(sequence_file_path)
+
+        # Display turn patterns for the selected structural variation
+        

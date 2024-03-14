@@ -45,10 +45,7 @@ class SequenceWidget(QWidget):
         self.layout.addStretch(1)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-    def save_sequence(sequence: list[Pictograph], filename: str) -> None:
-        sequence_data = [pictograph.get.pictograph_dict() for pictograph in sequence]
-        with open(filename, "w") as file:
-            json.dump(sequence_data, file, indent=4)
+
 
     def populate_sequence(self, pictograph_dict: dict) -> None:
         pictograph = Beat(self.main_widget)

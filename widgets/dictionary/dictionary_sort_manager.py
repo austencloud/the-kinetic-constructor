@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from widgets.dictionary.dictionary import Dictionary
-    
+
 
 class DictionarySortManager:
     def __init__(self, dictionary: "Dictionary"):
@@ -25,14 +25,13 @@ class DictionarySortManager:
         self.proxy_model.sort(0, Qt.SortOrder.AscendingOrder)
 
     def sort_favorites(self, column: int) -> None:
-        currentOrder = self.dictionary.favorites_tree.favorites_model.sortOrder()
+        currentOrder = self.dictionary.turn_variation_tree.favorites_model.sortOrder()
         newOrder = (
             Qt.SortOrder.DescendingOrder
             if currentOrder == Qt.SortOrder.AscendingOrder
             else Qt.SortOrder.AscendingOrder
         )
-        self.dictionary.favorites_tree.favorites_model.sort(column, newOrder)
-
+        self.dictionary.turn_variation_tree.favorites_model.sort(column, newOrder)
 
     def filter_sequences_by_length(self):
         visibility_settings = (

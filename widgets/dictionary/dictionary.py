@@ -6,7 +6,7 @@ from widgets.dictionary.dictionary_variation_manager import DictionaryVariationM
 from .dictionary_sequence_populator import DictionarySequencePopulator
 from .dictionary_sort_manager import DictionarySortManager
 from .dictionary_word_length_selector_widget import DictionaryWordLengthSelectorWidget
-from .dictionary_favorites_manager import DictionaryFavoritesTree
+from .dictionary_favorites_manager import DictionaryTurnPatternTree
 from .dictionary_search_sort_bar import DictionarySearchSortBar
 from .dictionary_sequence_length_manager import DictionarySortByLengthHandler
 from .dictionary_words_tree import DictionaryWordsTree
@@ -27,7 +27,7 @@ class Dictionary(QWidget):
         self.words_tree = DictionaryWordsTree(self)
         self.sort_manager = DictionarySortManager(self)
         self.search_sort_bar = DictionarySearchSortBar(self)
-        self.favorites_tree = DictionaryFavoritesTree(self)
+        self.turn_variation_tree = DictionaryTurnPatternTree(self)
         self.sequence_length_manager = DictionarySortByLengthHandler(self)
         self.sequence_populator = DictionarySequencePopulator(self)
         self.word_length_selector = DictionaryWordLengthSelectorWidget(self)
@@ -38,7 +38,7 @@ class Dictionary(QWidget):
         self.search_sort_bar.setup_ui(self.layout)
         self.layout.addWidget(self.word_length_selector)
         self.words_tree.setup_ui(tree_layout)
-        self.favorites_tree.setup_ui(tree_layout)
+        self.turn_variation_tree.setup_ui(tree_layout)
 
         self.layout.addLayout(tree_layout)
         self.setLayout(self.layout)

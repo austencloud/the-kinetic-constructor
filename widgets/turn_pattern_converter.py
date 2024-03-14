@@ -48,13 +48,11 @@ class TurnPatternConverter:
         for part in parts:
             blue_turns, red_turns = 0, 0
             if "L" in part:
-                # Extract blue turns, handling tuple format
                 blue_part = part[
                     part.index("L") + 1 : part.index(",") if "," in part else None
                 ]
                 blue_turns = float(blue_part) if blue_part else 0
             if "R" in part:
-                # Extract red turns, handling tuple format
                 red_part = (
                     part[part.index("R") + 1 :]
                     if "R" in part
