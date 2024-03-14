@@ -24,6 +24,8 @@ class Dictionary(QWidget):
         self.setup_ui()
 
     def setup_ui(self) -> None:
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+        tree_layout = QHBoxLayout()
         self.words_tree = DictionaryWordsTree(self)
         self.sort_manager = DictionarySortManager(self)
         self.search_sort_bar = DictionarySearchSortBar(self)
@@ -32,8 +34,6 @@ class Dictionary(QWidget):
         self.sequence_populator = DictionarySequencePopulator(self)
         self.word_length_selector = DictionaryWordLengthSelectorWidget(self)
         self.variation_manager = DictionaryVariationManager(self)
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        tree_layout = QHBoxLayout()
 
         self.search_sort_bar.setup_ui(self.layout)
         self.layout.addWidget(self.word_length_selector)
