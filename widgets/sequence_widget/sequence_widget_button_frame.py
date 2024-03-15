@@ -93,7 +93,6 @@ class SequenceWidgetButtonFrame(QFrame):
         self.variation_manager.save_structural_variation(current_json_data, base_pattern)
         self.indicator_label.show_indicator(f"Structural variation saved for {base_pattern}")
 
-    # In the SequenceWidgetButtonFrame class
 
     def save_sequence(self) -> None:
         sequence_data = (
@@ -106,12 +105,12 @@ class SequenceWidgetButtonFrame(QFrame):
             return
 
         base_pattern = "".join(pictograph.get("letter", "") for pictograph in sequence_data if "letter" in pictograph)
-        # This will only save the structural variation.
         self.save_structural_variation(base_pattern)
         self.sequence_widget.indicator_label.show_indicator(
             f"Structural variation saved for {base_pattern}"
         )
-
+        #reload the dictionary tab
+        self.main_widget.main_tab_widget.dictionary.reload_dictionary_tab()
 
     def clear_sequence(
         self, show_indicator=True, should_reset_to_start_pos_picker=True

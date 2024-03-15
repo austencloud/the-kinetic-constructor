@@ -46,7 +46,8 @@ class DictionaryWordsTree(QTreeView):
         self.installEventFilter(self)
         layout.addWidget(self)
         self.update_sort_order_from_settings()
-
+        self.selected_structural_variation = None
+        
     def eventFilter(self, obj, event) -> bool:
         if obj == self and event.type() == QEvent.Type.KeyPress:
             key_event = event
@@ -130,16 +131,14 @@ class DictionaryWordsTree(QTreeView):
                 self.collapse(index)
             else:
                 self.expand(index)
-                # Load the turn patterns for the selected structural variation.
                 base_pattern = self.model.fileName(source_index)
                 self.dictionary.turn_variation_tree.display_turn_patterns_for_variation(base_pattern, base_pattern)
         elif file_path.endswith(".json"):
             self.dictionary.sequence_populator.load_sequence_from_file(file_path)
-            # Assuming the filename without the extension is the structural variation name.
             structural_variation_name = os.path.splitext(self.model.fileName(source_index))[0]
             base_pattern = structural_variation_name.split('_')[0]
-            # Display the turn patterns related to the selected structural variation.
             self.dictionary.turn_variation_tree.display_turn_patterns_for_variation(base_pattern, structural_variation_name)
+            self.selected_structural_variation = structural_variation_name
         else:
             QMessageBox.information(
                 self,
@@ -149,3 +148,14 @@ class DictionaryWordsTree(QTreeView):
 
     def resize_dictionary_words_tree(self):
         self._set_font_size()
+
+    def reload_dictionary_words_tree(self):
+        self.model.setRootPath(QDir.currentPath() + "/dictionary")
+        self.proxy_model.setSourceModel(self.model)
+        self.proxy_model.invalidate()
+        self.proxy_model.sort(0, Qt.SortOrder.AscendingOrder)
+        dictionary_index = self.model.index(QDir.currentPath() + "/dictionary")
+        proxy_dictionary_index = self.proxy_model.mapFromSource(dictionary_index)
+        self.setRootIndex(proxy_dictionary_index)
+        self.update_sort_order_from_settings()
+        self._set_font_size

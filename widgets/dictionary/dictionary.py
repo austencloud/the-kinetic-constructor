@@ -56,3 +56,7 @@ class Dictionary(QWidget):
 
     def resize_dictionary(self) -> None:
         self.words_tree.resize_dictionary_words_tree()
+
+    def reload_dictionary_tab(self) -> None:
+        self.words_tree.reload_dictionary_words_tree()
+        self.turn_variation_tree.reload_dictionary_turn_pattern_tree()
