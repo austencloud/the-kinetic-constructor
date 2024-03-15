@@ -101,3 +101,7 @@ class PictographUpdater:
     def _position_objects(self) -> None:
         self.pictograph.prop_placement_manager.update_prop_positions()
         self.pictograph.arrow_placement_manager.update_arrow_placements()
+
+    def update_dict_from_attributes(self) -> dict:
+        pictograph_dict = self.pictograph.get.pictograph_dict()
+        self.pictograph.pictograph_dict = pictograph_dict

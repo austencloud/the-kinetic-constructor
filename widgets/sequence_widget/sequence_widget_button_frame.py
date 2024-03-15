@@ -124,33 +124,7 @@ class SequenceWidgetButtonFrame(QFrame):
         if show_indicator:
             self.sequence_widget.indicator_label.show_indicator("Sequence cleared")
         self._clear_graph_editor()
-        # self._reset_start_pos_pictograph_orientations()
 
-    def _reset_start_pos_pictograph_orientations(self) -> None:
-        start_pos_letters = [Letter.α, Letter.β, Letter.Γ]
-        for letter in start_pos_letters:
-            if letter in self.main_widget.all_pictographs:
-                for pictograph_key, pictograph in self.main_widget.all_pictographs[
-                    letter
-                ].items():
-                    self._reset_pictograph_prop_orientations(pictograph)
-
-    def _reset_pictograph_prop_orientations(self, pictograph: Pictograph) -> None:
-        default_left_orientation = self.orientations[
-            self.sequence_constructor.start_pos_picker.default_ori_picker.current_left_orientation_index
-        ]
-        default_right_orientation = self.orientations[
-            self.sequence_constructor.start_pos_picker.default_ori_picker.current_right_orientation_index
-        ]
-        pictograph.pictograph_dict["red_start_ori"] = default_right_orientation
-        pictograph.pictograph_dict["blue_start_ori"] = default_left_orientation
-        pictograph.props[RED].updater.update_prop(
-            {"start_ori": default_right_orientation}
-        )
-        pictograph.props[BLUE].updater.update_prop(
-            {"start_ori": default_left_orientation}
-        )
-        pictograph.updater.update_pictograph(pictograph.pictograph_dict)
 
     def _reset_beat_frame(self) -> None:
         for beat_view in self.beat_frame.beat_views:

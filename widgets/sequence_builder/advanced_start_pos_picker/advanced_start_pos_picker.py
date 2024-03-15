@@ -1,12 +1,18 @@
 from PyQt6.QtWidgets import QWidget, QGridLayout, QVBoxLayout
 from typing import TYPE_CHECKING
 from Enums.letters import Letter
-from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker_pictograph_factory import AdvancedStartPosPickerPictographFactory
+from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker_pictograph_factory import (
+    AdvancedStartPosPickerPictographFactory,
+)
 from widgets.sequence_builder.components.start_pos_picker.advanced_start_pos_manager import (
     AdvancedStartPosManager,
 )
-from widgets.sequence_builder.components.start_pos_picker.advanced_start_pos_picker_pictograph_frame import AdvancedStartPosPickerPictographFrame
-from widgets.sequence_builder.components.start_pos_picker.choose_your_start_pos_label import ChooseYourStartPosLabel
+from widgets.sequence_builder.components.start_pos_picker.advanced_start_pos_picker_pictograph_frame import (
+    AdvancedStartPosPickerPictographFrame,
+)
+from widgets.sequence_builder.components.start_pos_picker.choose_your_start_pos_label import (
+    ChooseYourStartPosLabel,
+)
 
 from widgets.sequence_builder.components.start_pos_picker.start_pos_default_ori_picker import (
     AdvancedStartPosPickerDefaultOriPickerWidget,
@@ -24,7 +30,7 @@ class AdvancedStartPosPicker(QWidget):
         self.sequence_builder = sequence_builder
         self.main_widget = sequence_builder.main_widget
         self.start_pos_picker = self.sequence_builder.start_pos_picker
-        self.start_pos_cache: dict[str, Pictograph] = {}
+        self.start_pos_cache: dict[str, list[Pictograph]] = {}
         self.default_ori_picker_widget = AdvancedStartPosPickerDefaultOriPickerWidget(
             self
         )
@@ -52,7 +58,11 @@ class AdvancedStartPosPicker(QWidget):
                 beta_variations.append(variation)
             elif variation.letter == Letter.Γ:
                 gamma_variations.append(variation)
-
+        self.start_pos_cache = {
+            "α": alpha_variations,
+            "β": beta_variations,
+            "Γ": gamma_variations,
+        }
         all_variations: list["Pictograph"] = (
             alpha_variations + beta_variations + gamma_variations
         )
@@ -92,4 +102,3 @@ class AdvancedStartPosPicker(QWidget):
         self.sequence_builder.start_pos_picker.start_pos_manager.on_start_pos_clicked(
             variation
         )
-

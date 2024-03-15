@@ -66,6 +66,7 @@ class StartPosManager(QObject):
             self.sequence_builder.main_widget,
             self.sequence_builder.main_widget.sequence_widget.beat_frame,
         )
+        clicked_start_option.updater.update_dict_from_attributes()
         start_position_beat.updater.update_pictograph(
             deepcopy(clicked_start_option.pictograph_dict)
         )

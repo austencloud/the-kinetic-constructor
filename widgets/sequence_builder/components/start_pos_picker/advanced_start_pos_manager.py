@@ -22,7 +22,7 @@ class AdvancedStartPosManager(QObject):
         self.advanced_start_pos_picker = advanced_start_pos_picker
         self.pictograph_frame = advanced_start_pos_picker.pictograph_frame
         self.main_widget = advanced_start_pos_picker.sequence_builder.main_widget
-        self.start_options: dict[str, Pictograph] = {}
+        self.start_pos_cache = advanced_start_pos_picker.start_pos_cache
 
     def on_start_pos_clicked(self, clicked_start_option: Pictograph) -> None:
         start_position_beat = StartPositionBeat(
@@ -50,29 +50,23 @@ class AdvancedStartPosManager(QObject):
         self.start_position_selected.emit(start_position_beat)
 
     def hide_start_positions(self) -> None:
-        for start_position_pictograph in self.start_options.values():
+        for start_position_pictograph in self.start_pos_cache.values():
             start_position_pictograph.view.hide()
 
     def update_left_default_ori(self, left_ori: str):
-        for start_option in self.start_options.values():
-            start_option.pictograph_dict["blue_start_ori"] = left_ori
-            start_option.pictograph_dict["blue_end_ori"] = left_ori
-            start_option.updater.update_pictograph(start_option.pictograph_dict)
+        for (
+            start_pos_pictographs_by_letter
+        ) in self.advanced_start_pos_picker.start_pos_cache.values():
+            for pictograph in start_pos_pictographs_by_letter:
+                pictograph.pictograph_dict["blue_start_ori"] = left_ori
+                pictograph.pictograph_dict["blue_end_ori"] = left_ori
+                pictograph.updater.update_pictograph(pictograph.pictograph_dict)
 
-    def update_start_pos_pictograph_orientations(self, right_ori: str):
-        for start_option in self.start_options.values():
-            start_option.pictograph_dict["red_start_ori"] = right_ori
-            start_option.pictograph_dict["red_end_ori"] = right_ori
-            start_option.updater.update_pictograph(start_option.pictograph_dict)
-
-    def resize_start_position_pictographs(self) -> None:
-        spacing = 10
-        for start_option in self.start_options.values():
-            view_width = int((self.pictograph_frame.width() // 4) - spacing)
-            start_option.view.setFixedSize(view_width, view_width)
-            start_option.view.view_scale = view_width / start_option.width()
-            start_option.view.resetTransform()
-            start_option.view.scale(
-                start_option.view.view_scale, start_option.view.view_scale
-            )
-            start_option.container.styled_border_overlay.resize_styled_border_overlay()
+    def update_right_default_ori(self, right_ori: str):
+        for (
+            start_pos_pictographs_by_letter
+        ) in self.advanced_start_pos_picker.start_pos_cache.values():
+            for pictograph in start_pos_pictographs_by_letter:
+                pictograph.pictograph_dict["red_start_ori"] = right_ori
+                pictograph.pictograph_dict["red_end_ori"] = right_ori
+                pictograph.updater.update_pictograph(pictograph.pictograph_dict)
