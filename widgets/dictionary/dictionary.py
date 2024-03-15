@@ -6,7 +6,7 @@ from widgets.dictionary.dictionary_variation_manager import DictionaryVariationM
 from .dictionary_sequence_populator import DictionarySequencePopulator
 from .dictionary_sort_manager import DictionarySortManager
 from .dictionary_word_length_selector_widget import DictionaryWordLengthSelectorWidget
-from .dictionary_favorites_manager import DictionaryTurnPatternTree
+from .dictionary_turn_pattern_tree import DictionaryTurnPatternTree
 from .dictionary_search_sort_bar import DictionarySearchSortBar
 from .dictionary_sequence_length_manager import DictionarySortByLengthHandler
 from .dictionary_words_tree import DictionaryWordsTree

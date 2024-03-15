@@ -24,7 +24,6 @@ class DictionaryVariationManager:
 
         with open(variation_filepath, "w", encoding="utf-8") as file:
             json.dump(sequence_data, file, indent=4, ensure_ascii=False)
-        # The UI updates automatically as the model observes filesystem changes.
 
     def rename_variation(self, base_pattern: str, current_variation_name: str) -> None:
         pattern_folder = os.path.join(self.base_dictionary_folder, base_pattern)
@@ -36,9 +35,7 @@ class DictionaryVariationManager:
             self.dictionary,
             "Rename Variation",
             "Enter new variation name:",
-            text=current_variation_name[
-                :-5
-            ],  # Exclude .json extension for initial value
+            text=current_variation_name[:-5],
         )
 
         if ok and new_variation_name and new_variation_name != current_variation_name:
@@ -89,27 +86,16 @@ class DictionaryVariationManager:
         This might involve creating a new variation file or updating an existing one.
         The exact implementation can vary based on application needs.
         """
-        # This example mirrors create_variation. Adapt as necessary for your specific requirements.
         pattern_folder = os.path.join(self.base_dictionary_folder, base_pattern)
         os.makedirs(pattern_folder, exist_ok=True)
 
-        # Here you might want to handle naming or updating differently. 
-        # For simplicity, we'll use a timestamped name as in create_variation.
-        # only include the last two numbers of the year, like 94 for 1994
         year = datetime.now().strftime("%y")
-        # if the month is a single digit like 03, then remove the 0
         month = datetime.now().strftime("%m").lstrip("0")
-        #same with the day
         day = datetime.now().strftime("%d").lstrip("0")
+        
         timestamp = datetime.now().strftime(f"{month}-{day}-{year}")
         variation_name = f"{base_pattern}_{timestamp}.json"
         variation_filepath = os.path.join(pattern_folder, variation_name)
 
         with open(variation_filepath, "w", encoding="utf-8") as file:
             json.dump(sequence_data, file, indent=4, ensure_ascii=False)
-        # Notify user/UI about the update
-        # QMessageBox.information(
-        #     self.dictionary,
-        #     "Variation Saved",
-        #     f"Structural variation '{variation_name}' has been saved successfully."
-        # )

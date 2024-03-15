@@ -6,27 +6,20 @@ class TurnPatternConverter:
         """
         pattern_parts = []
         for item in sequence:
-            if (
-                "blue_turns" in item or "red_turns" in item
-            ):  # Ensure there are turn values
+            if "blue_turns" in item or "red_turns" in item:
                 blue_turns = item.get("blue_turns", 0)
                 red_turns = item.get("red_turns", 0)
 
-                # Determine how to format each part based on the presence and value of turns
                 if blue_turns and red_turns:
-                    # If both turns are present and not equal, format as a tuple
                     pattern_part = (
                         f"L{blue_turns},R{red_turns}"
                         if blue_turns != red_turns
                         else f"L{blue_turns}_R{red_turns}"
                     )
                 elif blue_turns:
-                    # Only blue turns are present
                     pattern_part = f"L{blue_turns}"
                 elif red_turns:
-                    # Only red turns are present
                     pattern_part = f"R{red_turns}"
-                # if both turns are present and they are equal, return a single value
                 elif blue_turns == red_turns:
                     pattern_part = f"{blue_turns}"
                 else:

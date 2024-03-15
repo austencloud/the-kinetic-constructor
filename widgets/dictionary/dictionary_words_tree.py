@@ -1,4 +1,5 @@
 from email.mime import base
+import os
 from PyQt6.QtCore import QDir, Qt, QModelIndex, QEvent
 from PyQt6.QtGui import QFont
 
@@ -129,8 +130,16 @@ class DictionaryWordsTree(QTreeView):
                 self.collapse(index)
             else:
                 self.expand(index)
+                # Load the turn patterns for the selected structural variation.
+                base_pattern = self.model.fileName(source_index)
+                self.dictionary.turn_variation_tree.display_turn_patterns_for_variation(base_pattern, base_pattern)
         elif file_path.endswith(".json"):
             self.dictionary.sequence_populator.load_sequence_from_file(file_path)
+            # Assuming the filename without the extension is the structural variation name.
+            structural_variation_name = os.path.splitext(self.model.fileName(source_index))[0]
+            base_pattern = structural_variation_name.split('_')[0]
+            # Display the turn patterns related to the selected structural variation.
+            self.dictionary.turn_variation_tree.display_turn_patterns_for_variation(base_pattern, structural_variation_name)
         else:
             QMessageBox.information(
                 self,

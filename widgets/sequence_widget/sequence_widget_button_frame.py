@@ -93,6 +93,8 @@ class SequenceWidgetButtonFrame(QFrame):
         self.variation_manager.save_structural_variation(current_json_data, base_pattern)
         self.indicator_label.show_indicator(f"Structural variation saved for {base_pattern}")
 
+    # In the SequenceWidgetButtonFrame class
+
     def save_sequence(self) -> None:
         sequence_data = (
             self.main_widget.json_manager.current_sequence_json_handler.load_current_sequence_json()
@@ -104,30 +106,12 @@ class SequenceWidgetButtonFrame(QFrame):
             return
 
         base_pattern = "".join(pictograph.get("letter", "") for pictograph in sequence_data if "letter" in pictograph)
+        # This will only save the structural variation.
         self.save_structural_variation(base_pattern)
-
-        sequence_name = "".join(
-            [
-                pictograph.get("letter", "")
-                for pictograph in sequence_data
-                if "letter" in pictograph
-            ]
-        )
-        turn_pattern = (
-            self.sequence_widget.main_widget.json_manager.current_sequence_json_handler.get_current_turn_pattern()
-        )
-        dictionary_folder = os.path.join(os.getcwd(), "dictionary", sequence_name)
-        os.makedirs(dictionary_folder, exist_ok=True)
-
-        # Use the turn pattern in the file name to differentiate variations
-        variation_name = f"{sequence_name}_{turn_pattern}.json"
-        filename = os.path.join(dictionary_folder, variation_name)
-        with open(filename, "w", encoding="utf-8") as file:
-            json.dump(sequence_data, file, indent=4, ensure_ascii=False)
         self.sequence_widget.indicator_label.show_indicator(
-            f"Sequence variation saved as {variation_name}"
+            f"Structural variation saved for {base_pattern}"
         )
-        print(f"Sequence saved to {filename}.")
+
 
     def clear_sequence(
         self, show_indicator=True, should_reset_to_start_pos_picker=True
