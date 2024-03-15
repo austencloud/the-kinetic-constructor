@@ -39,17 +39,16 @@ class ArrowMovementManager:
         )
         pictograph.arrow_placement_manager.update_arrow_placements()
         QApplication.processEvents()
-        visible_pictographs = self.get_visible_pictographs_in_entire_program()
+        visible_pictographs = self.get_visible_pictographs()
         for pictograph in visible_pictographs:
             pictograph.arrow_placement_manager.update_arrow_placements()
 
-    def get_visible_pictographs_in_entire_program(self) -> list["Pictograph"]:
+    def get_visible_pictographs(self) -> list["Pictograph"]:
         visible_pictographs = []
         for pictograph_list in self.pictograph.main_widget.all_pictographs.values():
             for pictograph in pictograph_list.values():
                 if pictograph.view.isVisible():
                     visible_pictographs.append(pictograph)
-
         return visible_pictographs
 
     def get_adjustment(self, key, increment) -> tuple[int, int]:

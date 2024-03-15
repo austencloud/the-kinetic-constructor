@@ -116,18 +116,12 @@ class PictographView(QGraphicsView):
             self.pictograph
         )
 
-    def _resetTouchState(self):
+    def _resetTouchState(self) -> None:
         self._ignoreNextMousePress = False
 
-    def mousePressEvent(self, event: QMouseEvent):
+    def mousePressEvent(self, event: QMouseEvent) -> None:
         if self._ignoreMouseEvents or self._ignoreNextMousePress:
             event.ignore()
             return
         elif event.button() == Qt.MouseButton.LeftButton:
             self.mouse_event_handler.handle_mouse_press(event)
-
-    def mouseMoveEvent(self, event) -> None:
-        self.mouse_event_handler.handle_mouse_move(event)
-
-    def mouseReleaseEvent(self, event) -> None:
-        self.mouse_event_handler.handle_mouse_release(event)

@@ -6,7 +6,7 @@ from .mirrored_entry_updaters import (
     MixedOrientationUpdater,
     StandardOrientationUpdater,
 )
-
+from PyQt6.QtWidgets import QApplication
 if TYPE_CHECKING:
     from .mirrored_entry_manager import SpecialPlacementMirroredEntryManager
 
@@ -37,7 +37,7 @@ class MirroredEntryUpdater:
 
         updater = self._get_updater(arrow)
         updater.update_entry(letter, original_turn_data)
-
+        QApplication.processEvents()
         self.manager.data_updater.update_specific_entry_in_json(
             letter, letter_data, ori_key
         )

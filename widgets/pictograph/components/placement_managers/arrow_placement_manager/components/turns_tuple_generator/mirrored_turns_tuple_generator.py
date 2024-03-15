@@ -5,7 +5,7 @@ from constants import Type2
 from objects.arrow.arrow import Arrow
 
 if TYPE_CHECKING:
-    from widgets.pictograph.components.placement_managers.arrow_placement_manager.handlers.turns_tuple_generator.turns_tuple_generator import (
+    from widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
         TurnsTupleGenerator,
     )
 
@@ -21,16 +21,16 @@ class MirroredTurnsTupleGenerator:
         if (
             arrow.motion.motion_type
             != arrow.pictograph.get.other_motion(arrow.motion).motion_type
-            or letter in ["S", "T"]
-            or letter_type == Type2
+            or letter.value in ["S", "T"]
+            or letter_type == LetterType.Type2
         ):
             return self.turns_tuple_generator.generate_turns_tuple(arrow.pictograph)
 
         mirrored_logic = {
-            "Type1": self._handle_type1,
-            "Type4": self._handle_type4,
-            "Type5": self._handle_type56,
-            "Type6": self._handle_type56,
+            LetterType.Type1: self._handle_type1,
+            LetterType.Type4: self._handle_type4,
+            LetterType.Type5: self._handle_type56,
+            LetterType.Type6: self._handle_type56,
         }
 
         return mirrored_logic.get(letter_type, lambda x: None)(arrow)

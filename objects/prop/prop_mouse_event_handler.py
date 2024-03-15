@@ -31,7 +31,7 @@ class PropMouseEventHandler:
     def handle_mouse_release(self, event: QGraphicsSceneMouseEvent) -> None:
         if isinstance(self.p.scene, self.p.scene.__class__):
             self.p.scene.updater.update_pictograph()
-            self.finalize_prop_drop(event)
+            # self.finalize_prop_drop(event)
 
     def update_ghost_prop_location_during_drag(self, new_pos: QPointF) -> None:
         new_location = self.p.pictograph.grid.get_closest_hand_point(new_pos)[0][0]

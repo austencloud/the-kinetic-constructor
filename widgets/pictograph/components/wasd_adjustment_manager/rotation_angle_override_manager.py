@@ -5,8 +5,10 @@ from objects.arrow.arrow import Arrow
 from widgets.pictograph.components.wasd_adjustment_manager.rotation_angle_override_key_generator import (
     RotationAngleOverrideKeyGenerator,
 )
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
+    from widgets.pictograph.pictograph import Pictograph
     from ..wasd_adjustment_manager.wasd_adjustment_manager import WASD_AdjustmentManager
 
 
@@ -38,8 +40,19 @@ class RotationAngleOverrideManager:
         letter = self.pictograph.letter
 
         self._apply_override_if_needed(letter, data, ori_key)
-        for pictograph in self.pictograph.scroll_area.pictograph_cache.values():
-            pictograph.updater.update_pictograph()
+        self.pictograph.arrow_placement_manager.update_arrow_placements()
+        QApplication.processEvents()
+        visible_pictographs = self.get_visible_pictographs()
+        for pictograph in visible_pictographs:
+            pictograph.arrow_placement_manager.update_arrow_placements()
+
+    def get_visible_pictographs(self) -> list["Pictograph"]:
+        visible_pictographs = []
+        for pictograph_list in self.pictograph.main_widget.all_pictographs.values():
+            for pictograph in pictograph_list.values():
+                if pictograph.view.isVisible():
+                    visible_pictographs.append(pictograph)
+        return visible_pictographs
 
     def _is_valid_for_override(self) -> bool:
         return (

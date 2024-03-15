@@ -14,6 +14,7 @@ class PropUpdater:
                 prop
             )
         )
+        self.prop.setFlag(self.prop.GraphicsItemFlag.ItemIsSelectable, False)
 
     def update_prop(
         self, prop_dict: dict[str, Union[Color, Location, Orientations]] = None

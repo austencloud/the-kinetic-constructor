@@ -46,18 +46,17 @@ class Prop(GraphicalObject):
         self.attr_manager = PropAttrManager(self)
         self.rot_angle_manager = PropRotAngleManager(self)
         self.mouse_event_handler = PropMouseEventHandler(self)
-        self.prop_updater = PropUpdater(self)
         self.check = PropChecker(self)
         self.offest_calculator = PropOffsetCalculator(self)
         self.updater = PropUpdater(self)
 
     ### MOUSE EVENTS ###
 
-    def mousePressEvent(self, event) -> None:
-        self.mouse_event_handler.handle_mouse_press()
+    # def mousePressEvent(self, event) -> None:
+    #     self.mouse_event_handler.handle_mouse_press()
 
-    def mouseMoveEvent(self, event) -> None:
-        self.mouse_event_handler.handle_mouse_move(event)
+    # def mouseMoveEvent(self, event) -> None:
+    #     self.mouse_event_handler.handle_mouse_move(event)
 
-    def mouseReleaseEvent(self, event) -> None:
-        self.mouse_event_handler.handle_mouse_release(event)
+    # def mouseReleaseEvent(self, event) -> None:
+    #     self.mouse_event_handler.handle_mouse_release(event)

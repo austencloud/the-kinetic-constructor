@@ -22,32 +22,25 @@ class PictographViewMouseEventHandler:
         scene_pos = self.pictograph_view.mapToScene(widget_pos)
         items_at_pos = self.pictograph_view.scene().items(scene_pos)
         arrow = next((item for item in items_at_pos if isinstance(item, Arrow)), None)
-        
+
         if arrow:
-            self.pictograph_view.pictograph.selected_arrow = arrow
-            arrow.setSelected(True)
+            if self.pictograph_view.pictograph.selected_arrow == arrow:
+                # Clicked on the same arrow, deselect it
+                self.pictograph_view.pictograph.selected_arrow.setSelected(False)
+                self.pictograph_view.pictograph.selected_arrow = None
+            else:
+                # Clicked on a different arrow, switch the selection
+                if self.pictograph_view.pictograph.selected_arrow:
+                    self.pictograph_view.pictograph.selected_arrow.setSelected(False)
+                self.pictograph_view.pictograph.selected_arrow = arrow
+                arrow.setSelected(True)
             self.pictograph.update()
         else:
-            prop = next((item for item in items_at_pos if isinstance(item, Prop)), None)
-            if prop:
-                self.pictograph.dragged_prop = prop
-                self.pictograph.dragged_prop.mousePressEvent(event)
-            else:
-                self.clear_selections()
-
-    def handle_mouse_move(self, event) -> None:
-        if self.pictograph.dragged_prop:
-            self.pictograph.dragged_prop.mouseMoveEvent(event)
-        elif self.pictograph.dragged_arrow:
-            self.pictograph.dragged_arrow.mouseMoveEvent(event)
-
-    def handle_mouse_release(self, event) -> None:
-        if self.pictograph.dragged_prop:
-            self.pictograph.dragged_prop.mouseReleaseEvent(event)
-            self.pictograph.dragged_prop = None
-        elif self.pictograph.dragged_arrow:
-            self.pictograph.dragged_arrow.mouseReleaseEvent(event)
-            self.pictograph.dragged_arrow = None
+            # Clicked on an empty space, deselect any selected arrow
+            if self.pictograph_view.pictograph.selected_arrow:
+                self.pictograph_view.pictograph.selected_arrow.setSelected(False)
+                self.pictograph_view.pictograph.selected_arrow = None
+            self.pictograph.update()
 
     def clear_selections(self) -> None:
         for arrow in self.pictograph.arrows.values():

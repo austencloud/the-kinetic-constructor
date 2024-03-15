@@ -14,13 +14,13 @@ class MirroredEntryUpdaterBase:
         self.mirrored_entry_updater = mirrored_entry_updater
         self.arrow = arrow
 
-    def update_entry(self, letter: str, original_turn_data: dict):
+    def update_entry(self, letter: Letter, original_turn_data: dict):
         # Common update logic
         pass
 
 
 class StandardOrientationUpdater(MirroredEntryUpdaterBase):
-    def update_entry(self, letter: str, original_turn_data: dict):
+    def update_entry(self, letter: Letter, original_turn_data: dict):
         letter_type = LetterType.get_letter_type(letter)
         mirrored_turns_tuple = (
             self.mirrored_entry_updater.turns_tuple_generator.generate_mirrored_tuple(
@@ -33,7 +33,7 @@ class StandardOrientationUpdater(MirroredEntryUpdaterBase):
         # )
 
     def _mirror_entry(self, mirrored_turns_tuple, letter: Letter):
-        if letter in ["S", "T"] or letter in Letter.get_letters_by_condition(
+        if letter.value in ["S", "T"] or letter in Letter.get_letters_by_condition(
             LetterConditions.HYBRID
         ):
             return
@@ -80,7 +80,7 @@ class StandardOrientationUpdater(MirroredEntryUpdaterBase):
 
 
 class MixedOrientationUpdater(MirroredEntryUpdaterBase):
-    def update_entry(self, letter: str, original_turn_data: dict):
+    def update_entry(self, letter: Letter, original_turn_data: dict):
         mirrored_turns_tuple = (
             self.mirrored_entry_updater.turns_tuple_generator.generate_mirrored_tuple(
                 self.arrow
