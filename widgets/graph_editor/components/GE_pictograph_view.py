@@ -77,25 +77,25 @@ class GE_PictographView(PictographView):
     def keyPressEvent(self, event: "QKeyEvent") -> None:
         shift_held = event.modifiers() & Qt.KeyboardModifier.ShiftModifier
         ctrl_held = event.modifiers() & Qt.KeyboardModifier.ControlModifier
-        if event.key() in [Qt.Key.Key_W, Qt.Key.Key_A, Qt.Key.Key_S, Qt.Key.Key_D]:
-            self.pictograph.wasd_manager.movement_manager.handle_arrow_movement(
-                self.pictograph, event.key(), shift_held, ctrl_held
-            )
+        # if event.key() in [Qt.Key.Key_W, Qt.Key.Key_A, Qt.Key.Key_S, Qt.Key.Key_D]:
+        #     self.pictograph.wasd_manager.movement_manager.handle_arrow_movement(
+        #         self.pictograph, event.key(), shift_held, ctrl_held
+        #     )
 
-        elif event.key() == Qt.Key.Key_X:
-            self.pictograph.wasd_manager.rotation_angle_override_manager.handle_rotation_angle_override(
-                event.key()
-            )
-        elif event.key() == Qt.Key.Key_Z:
-            self.pictograph.wasd_manager.handle_special_placement_removal()
+        # elif event.key() == Qt.Key.Key_X:
+        #     self.pictograph.wasd_manager.rotation_angle_override_manager.handle_rotation_angle_override(
+        #         event.key()
+        #     )
+        # elif event.key() == Qt.Key.Key_Z:
+        #     self.pictograph.wasd_manager.handle_special_placement_removal()
 
-        elif event.key() == Qt.Key.Key_Q or event.key() == Qt.Key.Key_F5:
-            self.pictograph.main_widget.special_placement_loader.refresh_placements()
+        # elif event.key() == Qt.Key.Key_Q or event.key() == Qt.Key.Key_F5:
+        #     self.pictograph.main_widget.special_placement_loader.refresh_placements()
 
-        elif event.key() == Qt.Key.Key_C:
-            self.pictograph.wasd_manager.prop_placement_override_manager.handle_prop_placement_override(
-                event.key()
-            )
+        # elif event.key() == Qt.Key.Key_C:
+        #     self.pictograph.wasd_manager.prop_placement_override_manager.handle_prop_placement_override(
+        #         event.key()
+        #     )
         super().keyPressEvent(event)
 
 

@@ -32,7 +32,7 @@ class StandardOrientationUpdater(MirroredEntryUpdaterBase):
         #     letter_type
         # )
 
-    def _mirror_entry(self, mirrored_turns_tuple, letter):
+    def _mirror_entry(self, mirrored_turns_tuple, letter: Letter):
         if letter in ["S", "T"] or letter in Letter.get_letters_by_condition(
             LetterConditions.HYBRID
         ):
@@ -45,7 +45,7 @@ class StandardOrientationUpdater(MirroredEntryUpdaterBase):
             ori_key,
             {},
         ).get(
-            letter, {}
+            letter.value, {}
         )
         turns_tuple = (
             self.mirrored_entry_updater.turns_tuple_generator.generate_turns_tuple(

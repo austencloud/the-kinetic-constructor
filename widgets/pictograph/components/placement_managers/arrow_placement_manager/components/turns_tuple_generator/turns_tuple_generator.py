@@ -36,9 +36,8 @@ class TurnsTupleGenerator:
             LetterType.Type2: Type2TurnsTupleGenerator(),
             LetterType.Type3: Type3TurnsTupleGenerator(),
             LetterType.Type4: Type4TurnsTupleGenerator(),
-            LetterType.Type5: ColorTurnsTupleGenerator(),
-            LetterType.Type6: ColorTurnsTupleGenerator(),
-            # Add other types as needed
+            LetterType.Type5: Type56TurnsTupleGenerator(),
+            LetterType.Type6: Type56TurnsTupleGenerator(),
             "LeadState": LeadStateTurnsTupleGenerator(),
             "Lambda": LambdaTurnsTupleGenerator(),
             "LambdaDash": LambdaDashTurnsTupleGenerator(),

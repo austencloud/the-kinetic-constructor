@@ -108,9 +108,6 @@ class SequenceBuilder(QFrame):
         section = scroll_area.sections_manager.get_section(letter_type)
         section.pictographs[pictograph_key] = new_pictograph
         scroll_area.pictograph_cache[pictograph_key] = new_pictograph
-        self.main_widget.all_pictographs[new_pictograph.letter][
-            pictograph_key
-        ] = new_pictograph
         return new_pictograph
 
     def _add_turns_and_start_ori(self, pictograph_dict):

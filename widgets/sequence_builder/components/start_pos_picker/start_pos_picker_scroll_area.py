@@ -9,9 +9,8 @@ from ....pictograph.pictograph import Pictograph
 from widgets.scroll_area.base_scroll_area import BasePictographScrollArea
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.start_position_picker.start_pos_picker import (
-        StartPosPicker,
-    )
+    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import StartPosPicker
+
 
 
 class StartPosPickerScrollArea(BasePictographScrollArea):

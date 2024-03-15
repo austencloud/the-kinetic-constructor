@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-
+from PyQt6.QtWidgets import QApplication
 from Enums.letters import LetterType
 
 
@@ -17,7 +17,9 @@ class ArrowMovementManager:
             self.pictograph.arrow_placement_manager.special_positioner.data_updater
         )
 
-    def handle_arrow_movement(self, pictograph: "Pictograph", key, shift_held, ctrl_held) -> None:
+    def handle_arrow_movement(
+        self, pictograph: "Pictograph", key, shift_held, ctrl_held
+    ) -> None:
         if not pictograph.selected_arrow:
             return
 
@@ -35,10 +37,20 @@ class ArrowMovementManager:
         self.data_updater.mirrored_entry_manager.update_mirrored_entry_in_json(
             self.pictograph.selected_arrow
         )
-        for pictograph in self.pictograph.scroll_area.sections_manager.get_section(
-            LetterType.get_letter_type(self.pictograph.letter)
-        ).pictographs.values():
+        pictograph.arrow_placement_manager.update_arrow_placements()
+        QApplication.processEvents()
+        visible_pictographs = self.get_visible_pictographs_in_entire_program()
+        for pictograph in visible_pictographs:
             pictograph.arrow_placement_manager.update_arrow_placements()
+
+    def get_visible_pictographs_in_entire_program(self) -> list["Pictograph"]:
+        visible_pictographs = []
+        for pictograph_list in self.pictograph.main_widget.all_pictographs.values():
+            for pictograph in pictograph_list.values():
+                if pictograph.view.isVisible():
+                    visible_pictographs.append(pictograph)
+
+        return visible_pictographs
 
     def get_adjustment(self, key, increment) -> tuple[int, int]:
         direction_map = {
