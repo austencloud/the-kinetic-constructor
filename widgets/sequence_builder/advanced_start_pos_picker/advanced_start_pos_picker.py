@@ -15,7 +15,7 @@ from widgets.sequence_builder.components.start_pos_picker.choose_your_start_pos_
 )
 
 from widgets.sequence_builder.components.start_pos_picker.start_pos_default_ori_picker import (
-    AdvancedStartPosPickerDefaultOriPickerWidget,
+    AdvancedStartPosPickerDefaultOriWidget,
 )
 
 
@@ -31,9 +31,7 @@ class AdvancedStartPosPicker(QWidget):
         self.main_widget = sequence_builder.main_widget
         self.start_pos_picker = self.sequence_builder.start_pos_picker
         self.start_pos_cache: dict[str, list[Pictograph]] = {}
-        self.default_ori_picker_widget = AdvancedStartPosPickerDefaultOriPickerWidget(
-            self
-        )
+        self.default_ori_widget = AdvancedStartPosPickerDefaultOriWidget(self)
         self.pictograph_frame = AdvancedStartPosPickerPictographFrame(self)
         self.choose_you_start_pos_label = ChooseYourStartPosLabel(self)
         self.pictograph_factory = AdvancedStartPosPickerPictographFactory(
@@ -42,7 +40,7 @@ class AdvancedStartPosPicker(QWidget):
         self.advanced_start_pos_manager = AdvancedStartPosManager(self)
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.grid_layout = QGridLayout()
-        self.layout.addWidget(self.default_ori_picker_widget)
+        self.layout.addWidget(self.default_ori_widget)
         self.layout.addLayout(self.grid_layout)
 
     def display_variations(self, variations: list["Pictograph"]) -> None:

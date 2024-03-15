@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     )
 
 
-class AdvancedStartPosPickerDefaultOriPickerWidget(QWidget):
+class AdvancedStartPosPickerDefaultOriWidget(QWidget):
     def __init__(self, advanced_start_pos_picker: "AdvancedStartPosPicker"):
         super().__init__(advanced_start_pos_picker)
         self.advanced_start_pos_picker = advanced_start_pos_picker

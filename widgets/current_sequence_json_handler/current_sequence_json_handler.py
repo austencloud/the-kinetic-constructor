@@ -23,7 +23,6 @@ class CurrentSequenceJsonHandler:
         self.clear_current_sequence_file()
 
     def set_start_position_data(self, start_pos_pictograph: Pictograph) -> None:
-        # Retrieve the starting orientations from the pictograph dictionary
         red_start_ori = start_pos_pictograph.pictograph_dict["red_attributes"][
             "start_ori"
         ]
@@ -33,7 +32,6 @@ class CurrentSequenceJsonHandler:
 
         sequence = self.load_current_sequence_json()
 
-        # Construct the start position dictionary with nested orientations
         start_position_dict = {
             "sequence_start_position": start_pos_pictograph.end_pos[:-1],
             "end_pos": start_pos_pictograph.end_pos,
@@ -47,7 +45,6 @@ class CurrentSequenceJsonHandler:
             },
         }
 
-        # Update or insert the start position entry in the sequence
         if sequence and "sequence_start_position" in sequence[0]:
             sequence[0] = start_position_dict
         else:
