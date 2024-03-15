@@ -47,9 +47,7 @@ from .components.pictograph_initializer import PictographInitializer
 
 
 if TYPE_CHECKING:
-    from ..sequence_builder.components.start_position_picker.start_pos_picker_scroll_area import (
-        StartPosPickerScrollArea,
-    )
+
     from ..sequence_builder.components.option_picker.option_picker_scroll_area import (
         OptionPickerScrollArea,
     )
@@ -101,7 +99,7 @@ class Pictograph(QGraphicsScene):
         super().__init__()
         self.main_widget = main_widget
         self.scroll_area: Union[
-            CodexScrollArea, OptionPickerScrollArea, StartPosPickerScrollArea
+            CodexScrollArea, OptionPickerScrollArea
         ] = scroll_area
         self.initializer = PictographInitializer(self)
         self.updater = PictographUpdater(self)

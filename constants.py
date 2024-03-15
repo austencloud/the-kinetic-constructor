@@ -20,6 +20,14 @@ SOUTHEAST = "se"
 SOUTHWEST = "sw"
 NORTHWEST = "nw"
 
+SPLIT = "split"
+TOG = "tog"
+QUARTER = "quarter"
+
+SAME = "same"
+OPP = "opp"
+
+
 
 SPLIT_SAME = "SS"
 SPLIT_OPP = "SO"

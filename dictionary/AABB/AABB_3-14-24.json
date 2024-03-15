@@ -28,6 +28,8 @@
         "letter": "A",
         "start_pos": "alpha1",
         "end_pos": "alpha2",
+        "timing": "split",
+        "direction": "same",
         "blue_attributes": {
             "motion_type": "pro",
             "start_ori": "in",
