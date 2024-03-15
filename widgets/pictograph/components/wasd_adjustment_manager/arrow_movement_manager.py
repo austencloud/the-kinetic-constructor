@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 
+from Enums.letters import LetterType
+
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -33,10 +35,10 @@ class ArrowMovementManager:
         self.data_updater.mirrored_entry_manager.update_mirrored_entry_in_json(
             self.pictograph.selected_arrow
         )
-        # for pictograph in self.pictograph.scroll_area.sections_manager.get_section(
-        #     LetterType.get_letter_type(self.pictograph.letter)
-        # ).pictographs.values():
-        #     pictograph.arrow_placement_manager.update_arrow_placements()
+        for pictograph in self.pictograph.scroll_area.sections_manager.get_section(
+            LetterType.get_letter_type(self.pictograph.letter)
+        ).pictographs.values():
+            pictograph.arrow_placement_manager.update_arrow_placements()
 
     def get_adjustment(self, key, increment) -> tuple[int, int]:
         direction_map = {
