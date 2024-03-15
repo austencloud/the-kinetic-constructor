@@ -70,13 +70,17 @@ class OptionPickerScrollArea(BasePictographScrollArea):
 
     def set_pictograph_orientations(self, pictograph_dict: dict) -> None:
         last_pictograph = self.sequence_builder.get_last_added_pictograph()
-        pictograph_dict["red_start_ori"] = last_pictograph["red_end_ori"]
-        pictograph_dict["blue_start_ori"] = last_pictograph["blue_end_ori"]
-        pictograph_dict["red_end_ori"] = self.ori_calculator.calculate_end_orientation(
-            pictograph_dict, RED
+        pictograph_dict["red_attributes"]["start_ori"] = last_pictograph[
+            "red_attributes"
+        ]["end_ori"]
+        pictograph_dict["blue_attributes"]["start_ori"] = last_pictograph[
+            "blue_attributes"
+        ]["end_ori"]
+        pictograph_dict["red_attributes"]["end_ori"] = (
+            self.ori_calculator.calculate_end_orientation(pictograph_dict, RED)
         )
-        pictograph_dict["blue_end_ori"] = self.ori_calculator.calculate_end_orientation(
-            pictograph_dict, BLUE
+        pictograph_dict["red_attributes"]["blue_ori"] = (
+            self.ori_calculator.calculate_end_orientation(pictograph_dict, BLUE)
         )
 
     def _get_or_create_pictograph(self, pictograph_dict: dict) -> Pictograph:

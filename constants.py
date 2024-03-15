@@ -27,7 +27,8 @@ QUARTER = "quarter"
 SAME = "same"
 OPP = "opp"
 
-
+TIMING = "timing"
+DIRECTION = "direction"
 
 SPLIT_SAME = "SS"
 SPLIT_OPP = "SO"

@@ -105,10 +105,3 @@ class StartPosPicker(QWidget):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.choose_your_start_pos_label.show()
-
-    def show_variation_dialog(self, position: str) -> None:
-        self.variation_dialog.resize_start_pos_variation_dialog()
-        self.variation_dialog.load_variations(position)
-        if self.variation_dialog.exec():
-            selected_variation = self.variation_dialog.get_selected_variation()
-            self.start_pos_manager.on_start_pos_clicked(selected_variation)

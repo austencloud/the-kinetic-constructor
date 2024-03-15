@@ -43,7 +43,10 @@ class PictographUpdater:
         motion_dicts = self.get_motion_dicts_from_pictograph_dict(pictograph_dict)
         for motion in self.pictograph.motions.values():
             self.override_motion_type_if_necessary(pictograph_dict, motion)
-            if pictograph_dict.get(f"{motion.color}_motion_type"):
+            if pictograph_dict.get(
+                f"{motion.color}_attributes"
+            ) is not None and motion_dicts.get(motion.color) is not None:
+            
                 self.show_graphical_objects(motion.color)
             motion.updater.update_motion(motion_dicts[motion.color])
         self.pictograph.letter_type = LetterType.get_letter_type(self.pictograph.letter)
@@ -75,27 +78,30 @@ class PictographUpdater:
             motion.turns = pictograph_dict[turns_key]
 
     def get_motion_dicts_from_pictograph_dict(self, pictograph_dict: dict) -> dict:
-        motion_attributes = {
-            f"{RED}_motion_type": "motion_type",
-            f"{RED}_start_loc": "start_loc",
-            f"{RED}_end_loc": "end_loc",
-            f"{RED}_turns": "turns",
-            f"{RED}_start_ori": "start_ori",
-            f"{RED}_prop_rot_dir": "prop_rot_dir",
-            f"{BLUE}_motion_type": "motion_type",
-            f"{BLUE}_start_loc": "start_loc",
-            f"{BLUE}_end_loc": "end_loc",
-            f"{BLUE}_turns": "turns",
-            f"{BLUE}_start_ori": "start_ori",
-            f"{BLUE}_prop_rot_dir": "prop_rot_dir",
-        }
+        # Define which attributes we're interested in for each motion
+        motion_attributes = [
+            "motion_type",
+            "start_loc",
+            "end_loc",
+            "turns",
+            "start_ori",
+            "prop_rot_dir",
+        ]
+
         motion_dicts = {}
-        for color in [RED, BLUE]:
-            motion_dict = {}
-            for key, value in motion_attributes.items():
-                if color in key and key in pictograph_dict:
-                    motion_dict[key.split("_", 1)[1]] = pictograph_dict[key]
-            motion_dicts[color] = motion_dict
+        for color in [
+            RED,
+            BLUE,
+        ]:  # Assuming RED and BLUE are defined constants for color keys
+            # Extract the nested motion dictionary for the current color
+            motion_dict = pictograph_dict.get(f"{color}_attributes", {})
+            # Filter out the motion attributes to only include the ones we're interested in
+            motion_dicts[color] = {
+                attr: motion_dict.get(attr)
+                for attr in motion_attributes
+                if attr in motion_dict
+            }
+
         return motion_dicts
 
     def _position_objects(self) -> None:

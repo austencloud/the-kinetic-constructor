@@ -122,8 +122,8 @@ class SequenceBeatFrame(QFrame):
                         QApplication.processEvents()
 
     def update_start_pos_from_current_sequence_json(self, entry: dict) -> None:
-        entry["red_start_ori"] = entry["red_end_ori"]
-        entry["blue_start_ori"] = entry["blue_end_ori"]
+        entry["red_attributes"]["start_ori"] = entry["red_attributes"]["end_ori"]
+        entry["blue_attributes"]["start_ori"] = entry["blue_attributes"]["end_ori"]
         entry["start_pos"] = entry["end_pos"]
         # del entry["sequence_start_position"]
         self.start_pos_view.start_pos.updater.update_pictograph(entry)

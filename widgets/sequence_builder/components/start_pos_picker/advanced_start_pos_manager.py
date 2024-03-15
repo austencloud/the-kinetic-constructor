@@ -59,7 +59,7 @@ class AdvancedStartPosManager(QObject):
         ) in self.advanced_start_pos_picker.start_pos_cache.values():
             for pictograph in start_pos_pictographs_by_letter:
                 pictograph.pictograph_dict["blue_start_ori"] = left_ori
-                pictograph.pictograph_dict["blue_end_ori"] = left_ori
+                pictograph.pictograph_dict["red_attributes"]["blue_ori"] = left_ori
                 pictograph.updater.update_pictograph(pictograph.pictograph_dict)
 
     def update_right_default_ori(self, right_ori: str):
@@ -68,5 +68,5 @@ class AdvancedStartPosManager(QObject):
         ) in self.advanced_start_pos_picker.start_pos_cache.values():
             for pictograph in start_pos_pictographs_by_letter:
                 pictograph.pictograph_dict["red_start_ori"] = right_ori
-                pictograph.pictograph_dict["red_end_ori"] = right_ori
+                pictograph.pictograph_dict["red_attributes"]["end_ori"] = right_ori
                 pictograph.updater.update_pictograph(pictograph.pictograph_dict)

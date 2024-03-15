@@ -26,8 +26,12 @@ class CurrentSequenceJsonValidationEngine:
         """Updates the start orientation of the current pictograph based on the previous one's end orientation."""
         current_pictograph = self.sequence_json[index]
         previous_pictograph = self.sequence_json[index - 1]
-        current_pictograph["red_start_ori"] = previous_pictograph["red_end_ori"]
-        current_pictograph["blue_start_ori"] = previous_pictograph["blue_end_ori"]
+        current_pictograph["red_attributes"]["start_ori"] = previous_pictograph[
+            "red_attributes"
+        ]["end_ori"]
+        current_pictograph["blue_attributes"]["start_ori"] = previous_pictograph[
+            "blue_attributes"
+        ]["end_ori"]
 
     def update_json_entry_end_orientation(self, index) -> None:
         """Recalculates and updates the end orientation of the current pictograph."""
@@ -36,7 +40,7 @@ class CurrentSequenceJsonValidationEngine:
             end_ori = self.json_handler.ori_calculator.calculate_end_orientation(
                 pictograph_dict, color
             )
-            pictograph_dict[f"{color}_end_ori"] = end_ori
+            pictograph_dict[f"{color}_attributes"]["end_ori"] = end_ori
 
     def run(self) -> None:
         """Public method to run the sequence validation and update process."""

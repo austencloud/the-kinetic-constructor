@@ -140,8 +140,8 @@ class GE_StartPosOriPickerWidget(QWidget):
         self, start_pos_pictograph: Pictograph, color: str
     ) -> None:
         if color == "blue":
-            initial_orientation = start_pos_pictograph.pictograph_dict["blue_start_ori"]
+            initial_orientation = start_pos_pictograph.pictograph_dict["blue_attributes"]["start_ori"]
         else:
-            initial_orientation = start_pos_pictograph.pictograph_dict["red_start_ori"]
+            initial_orientation = start_pos_pictograph.pictograph_dict["red_attributes"]["start_ori"]
         self.current_orientation_index = self.orientations.index(initial_orientation)
         self.current_orientation_display.setText(initial_orientation)

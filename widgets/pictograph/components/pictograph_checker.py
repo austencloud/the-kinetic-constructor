@@ -103,20 +103,37 @@ class PictographChecker:
             "letter",
             "start_pos",
             "end_pos",
-            "blue_motion_type",
-            "blue_prop_rot_dir",
-            "blue_start_loc",
-            "blue_end_loc",
-            "blue_start_ori",
-            "blue_turns",
-            "red_motion_type",
-            "red_prop_rot_dir",
-            "red_start_loc",
-            "red_end_loc",
-            "red_start_ori",
-            "red_turns",
+            "timing",
+            "direction",
+            "blue_attributes",
+            "red_attributes",
         ]
-        return all(key in pictograph_dict for key in required_keys)
+        nested_blue_required_keys = [
+            "motion_type",
+            "prop_rot_dir",
+            "start_loc",
+            "end_loc",
+            "start_ori",
+            "turns",
+        ]
+        nested_red_required_keys = (
+            nested_blue_required_keys.copy()
+        )  # Assuming the same structure for red
+
+        # Check top-level keys
+        if not all(key in pictograph_dict for key in required_keys):
+            return False
+
+        # Check nested keys for blue and red attributes
+        for key in nested_blue_required_keys:
+            if key not in pictograph_dict["blue_attributes"]:
+                return False
+
+        for key in nested_red_required_keys:
+            if key not in pictograph_dict["red_attributes"]:
+                return False
+
+        return True
 
     def starts_from_mixed_orientation(self) -> bool:
         if (

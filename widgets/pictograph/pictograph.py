@@ -70,8 +70,8 @@ class Pictograph(QGraphicsScene):
     pixmap: QGraphicsPixmapItem
     arrow_turns: int
     vtg_mode: VTG_Modes = None
-    vtg_timing: VTG_Timings
-    vtg_dir: VTG_Directions
+    timing: str
+    direction: str
     vtg_glyph: VTG_Glyph
     elemental_glyph: ElementalGlyph
     open_close_state: OpenCloseStates
@@ -98,9 +98,7 @@ class Pictograph(QGraphicsScene):
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.scroll_area: Union[
-            CodexScrollArea, OptionPickerScrollArea
-        ] = scroll_area
+        self.scroll_area: Union[CodexScrollArea, OptionPickerScrollArea] = scroll_area
         self.initializer = PictographInitializer(self)
         self.updater = PictographUpdater(self)
         self.image_renderer = PictographImageRenderer(self)

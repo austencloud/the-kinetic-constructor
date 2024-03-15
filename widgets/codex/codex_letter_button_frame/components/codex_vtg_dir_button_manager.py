@@ -66,7 +66,7 @@ class CodexVtgDirButtonManager:
                 other_motion = pictograph.get.other_motion(motion)
                 if motion.check.is_dash() or motion.check.is_static():
                     if other_motion.check.is_shift():
-                        pictograph.vtg_dir = vtg_dir
+                        pictograph.direction = vtg_dir
                         if vtg_dir == SAME:
                             self._update_pictograph_prop_rot_dir_from_vtg_dir_setting(
                                 motion, other_motion.prop_rot_dir

@@ -31,9 +31,9 @@ class DirectionalTupleGenerator:
 
         if motion_type == DASH and self.motion.turns > 0:
             if self.motion.prop_rot_dir == self.other_motion.prop_rot_dir:
-                self.motion.pictograph.vtg_timing = SAME
+                self.motion.pictograph.timing = SAME
             elif self.motion.prop_rot_dir != self.other_motion.prop_rot_dir:
-                self.motion.pictograph.vtg_timing = OPP
+                self.motion.pictograph.timing = OPP
 
         shift_directional_tuples = {
             (PRO, CLOCKWISE): [(x, y), (-y, x), (-x, -y), (y, -x)],

@@ -79,7 +79,7 @@ class StartPosManager(QObject):
         start_pos_view = beat_frame.start_pos_view
         beat_frame.selection_manager.select_beat(start_pos_view)
 
-        QApplication.processEvents()  
+        QApplication.processEvents()
         self.start_position_selected.connect(
             self.sequence_builder.transition_to_sequence_building
         )
@@ -131,8 +131,12 @@ class StartPosManager(QObject):
 
                 pictograph_dict["blue_start_ori"] = start_pos_data["blue_end_ori"]
                 pictograph_dict["red_start_ori"] = start_pos_data["red_end_ori"]
-                pictograph_dict["blue_end_ori"] = start_pos_data["blue_end_ori"]
-                pictograph_dict["red_end_ori"] = start_pos_data["red_end_ori"]
+                pictograph_dict["red_attributes"]["blue_ori"] = start_pos_data[
+                    "blue_end_ori"
+                ]
+                pictograph_dict["red_attributes"]["end_ori"] = start_pos_data[
+                    "red_end_ori"
+                ]
 
                 pictograph_factory = self.main_widget.sequence_widget.pictograph_factory
                 pictograph_key = pictograph_factory.generate_pictograph_key_from_dict(
@@ -151,7 +155,6 @@ class StartPosManager(QObject):
             if start_pos_key.startswith(key):
                 return mapping[key]
         return None
-
 
     def get_all_start_positions(self) -> list["Pictograph"]:
         all_start_positions = []

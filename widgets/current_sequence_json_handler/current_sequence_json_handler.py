@@ -23,20 +23,34 @@ class CurrentSequenceJsonHandler:
         self.clear_current_sequence_file()
 
     def set_start_position_data(self, start_pos_pictograph: Pictograph) -> None:
-        red_start_ori = start_pos_pictograph.pictograph_dict["red_start_ori"]
-        blue_start_ori = start_pos_pictograph.pictograph_dict["blue_start_ori"]
+        # Retrieve the starting orientations from the pictograph dictionary
+        red_start_ori = start_pos_pictograph.pictograph_dict["red_attributes"][
+            "start_ori"
+        ]
+        blue_start_ori = start_pos_pictograph.pictograph_dict["blue_attributes"][
+            "start_ori"
+        ]
+
         sequence = self.load_current_sequence_json()
+
+        # Construct the start position dictionary with nested orientations
         start_position_dict = {
             "sequence_start_position": start_pos_pictograph.end_pos[:-1],
-            "red_end_ori": red_start_ori,
-            "blue_end_ori": blue_start_ori,
             "end_pos": start_pos_pictograph.end_pos,
+            "red_attributes": {
+                "end_ori": red_start_ori,  # Nest red end orientation
+            },
+            "blue_attributes": {
+                "end_ori": blue_start_ori,  # Nest blue end orientation
+            },
         }
 
+        # Update or insert the start position entry in the sequence
         if sequence and "sequence_start_position" in sequence[0]:
             sequence[0] = start_position_dict
         else:
             sequence.insert(0, start_position_dict)
+
         self.save_sequence(sequence)
 
     def load_current_sequence_json(self) -> list[dict]:
@@ -57,14 +71,14 @@ class CurrentSequenceJsonHandler:
         """Get the red end orientation from the last pictograph in the sequence."""
         sequence = self.load_current_sequence_json()
         if sequence:
-            return sequence[-1]["red_end_ori"]
+            return sequence[-1]["red_attributes"]["end_ori"]
         return 0
 
     def get_blue_end_ori(self):
         """Get the blue end orientation from the last pictograph in the sequence."""
         sequence = self.load_current_sequence_json()
         if sequence:
-            return sequence[-1]["blue_end_ori"]
+            return sequence[-1]["blue_attributes"]["end_ori"]
         return 0
 
     def update_current_sequence_file(self):
@@ -111,79 +125,76 @@ class CurrentSequenceJsonHandler:
         return -1
 
     def update_turns_in_json_at_index(
-        self, index: int, color: Color, turns: Union[int | float]
+        self, index: int, color: Color, turns: Union[int, float]
     ) -> None:
-
         sequence = self.load_current_sequence_json()
-        sequence[index][f"{color}_turns"] = turns
+        # Ensure the nested structure is properly accessed and modified
+        sequence[index][f"{color}_attributes"]["turns"] = turns
         end_ori = self.ori_calculator.calculate_end_orientation(sequence[index], color)
-        sequence[index][f"{color}_end_ori"] = end_ori
+        sequence[index][f"{color}_attributes"]["end_ori"] = end_ori
 
-        if sequence[index][f"{color}_turns"] > 0:
+        if sequence[index][f"{color}_attributes"]["turns"] > 0:
             pictograph = self.main_widget.sequence_widget.beat_frame.beat_views[
                 index - 1
             ].beat
             if pictograph:
                 motion = pictograph.get.motion_by_color(color)
                 prop_rot_dir = motion.prop_rot_dir
-                sequence[index][f"{color}_prop_rot_dir"] = prop_rot_dir
+                sequence[index][f"{color}_attributes"]["prop_rot_dir"] = prop_rot_dir
 
-        if sequence[index][f"{color}_motion_type"] in [DASH, STATIC]:
-            if sequence[index][f"{color}_turns"] == 0:
+        if sequence[index][f"{color}_attributes"]["motion_type"] in [DASH, STATIC]:
+            if sequence[index][f"{color}_attributes"]["turns"] == 0:
                 prop_rot_dir = NO_ROT
-                sequence[index][f"{color}_prop_rot_dir"] = prop_rot_dir
+                sequence[index][f"{color}_attributes"]["prop_rot_dir"] = prop_rot_dir
 
         self.save_sequence(sequence)
 
     def update_start_pos_ori(self, color: Color, ori: int) -> None:
         sequence = self.load_current_sequence_json()
-        sequence[0][f"{color}_end_ori"] = ori
-        self.save_sequence(sequence)
+        # Correctly updating the start position's end orientation within the nested attributes
+        if sequence:  # Check if there is a start position entry to update
+            sequence[0][f"{color}_attributes"]["end_ori"] = ori
+            self.save_sequence(sequence)
 
     def update_rot_dir_in_json_at_index(
         self, index: int, color: Color, prop_rot_dir: str
     ) -> None:
         sequence = self.load_current_sequence_json()
-        sequence[index][f"{color}_prop_rot_dir"] = prop_rot_dir
+        # Update prop rotation direction within the nested attributes
+        sequence[index][f"{color}_attributes"]["prop_rot_dir"] = prop_rot_dir
         self.save_sequence(sequence)
 
     def apply_turn_pattern_to_current_sequence(self, pattern: list[tuple]) -> None:
-        """
-        Applies a list of turns (pattern) to the current sequence and validates the sequence.
-        Ensures static and dash motions have the correct prop_rot_dir based on the previous motion.
-        """
         sequence = self.load_current_sequence_json()
         min_length = min(len(sequence), len(pattern))
         for i in range(1, min_length + 1):
             if i == 17:
                 continue
             blue_turns, red_turns = pattern[i - 1]
-            if blue_turns.is_integer():
-                blue_turns = int(blue_turns)
-            if red_turns.is_integer():
-                red_turns = int(red_turns)
+            blue_turns = int(blue_turns) if blue_turns.is_integer() else blue_turns
+            red_turns = int(red_turns) if red_turns.is_integer() else red_turns
+
             entry = sequence[i]
-            previous_entry = sequence[i - 1] if i > 0 else None
-            if "blue_turns" in entry:
-                entry["blue_turns"] = blue_turns
-                if entry["blue_motion_type"] in [STATIC, DASH]:
-                    entry["blue_prop_rot_dir"] = self.find_previous_prop_rot_dir(
-                        sequence, i, BLUE
-                    )
+            # Update turns directly in the nested attributes
+            entry["blue_attributes"]["turns"] = blue_turns
+            entry["red_attributes"]["turns"] = red_turns
 
-            if "red_turns" in entry:
-                entry["red_turns"] = red_turns
-                if entry["red_motion_type"] in [STATIC, DASH]:
-                    entry["red_prop_rot_dir"] = self.find_previous_prop_rot_dir(
-                        sequence, i, RED
-                    )
+            # Static and dash motion adjustments
+            if entry["blue_attributes"]["motion_type"] in [STATIC, DASH]:
+                entry["blue_attributes"]["prop_rot_dir"] = (
+                    self.find_previous_prop_rot_dir(sequence, i, BLUE)
+                )
+            if entry["red_attributes"]["motion_type"] in [STATIC, DASH]:
+                entry["red_attributes"]["prop_rot_dir"] = (
+                    self.find_previous_prop_rot_dir(sequence, i, RED)
+                )
 
-            # Update the pictograph dict for current beat with the new turns
+            # Save the updated pictograph dict for the current beat
             beat_view = self.main_widget.sequence_widget.beat_frame.beat_views[i - 1]
             if beat_view and beat_view.is_filled:
                 beat_view.beat.get.pictograph_dict().update(entry)
 
-        # Save the sequence after applying all turns
+        # After applying all the updates, save the sequence back
         self.save_sequence(sequence)
         self.validation_engine.run()
         sequence = self.load_current_sequence_json()
@@ -197,9 +208,9 @@ class CurrentSequenceJsonHandler:
         for i in range(1, len(sequence)):
             if i == 17:
                 continue
-            blue_turns = sequence[i]["blue_turns"]
-            red_turns = sequence[i]["red_turns"]
-            
+            blue_turns = sequence[i]["blue_attributes"]["turns"]
+            red_turns = sequence[i]["red_attributes"]["turns"]
+
             if blue_turns == red_turns:
                 turn_pattern += f"{blue_turns}_"
             elif blue_turns > 0 and red_turns > 0:
@@ -217,6 +228,6 @@ class CurrentSequenceJsonHandler:
         Finds the prop_rot_dir of the previous non-static and non-dash motion for the specified color.
         """
         for i in range(current_index - 1, -1, -1):
-            if sequence[i][f"{color}_motion_type"] not in [STATIC, DASH]:
-                return sequence[i][f"{color}_prop_rot_dir"]
+            if sequence[i][f"{color}_attributes"]["motion_type"] not in [STATIC, DASH]:
+                return sequence[i][f"{color}_attributes"]["prop_rot_dir"]
         return NO_ROT

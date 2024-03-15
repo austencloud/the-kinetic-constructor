@@ -27,15 +27,15 @@ class CurrentSequenceJsonOriCalculator:
         self.main_widget = main_widget
 
     def calculate_end_orientation(self, pictograph_dict, color: Color):
-        motion_type = pictograph_dict[f"{color}_motion_type"]
-        turns = float(pictograph_dict[f"{color}_turns"])
-        start_ori = pictograph_dict[f"{color}_start_ori"]
-        prop_rot_dir = pictograph_dict.get(f"{color}_prop_rot_dir", "cw")
+        motion_type = pictograph_dict[f"{color}_attributes"]["motion_type"]
+        turns = float(pictograph_dict[f"{color}_attributes"]["turns"])
+        start_ori = pictograph_dict[f"{color}_attributes"]["start_ori"]
+        prop_rot_dir = pictograph_dict[f"{color}_attributes"]["prop_rot_dir"]
 
         if motion_type == "float":
             handpath_direction = self.get_handpath_direction(
-                pictograph_dict[f"{color}_start_loc"],
-                pictograph_dict[f"{color}_end_loc"],
+                pictograph_dict[f"{color}_attributes"]["start_loc"],
+                pictograph_dict[f"{color}_attributes"]["end_loc"],
             )
             return self.calculate_float_orientation(start_ori, handpath_direction)
         else:
