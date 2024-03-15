@@ -6,28 +6,30 @@ class TurnPatternConverter:
         """
         pattern_parts = []
         for item in sequence:
-            if "blue_turns" in item or "red_turns" in item:
-                blue_turns = item.get("blue_turns", 0)
-                red_turns = item.get("red_turns", 0)
+            # if it has a "sequence_start_pos" key, skip it
+            if "sequence_start_position" in item:
+                continue
+            blue_attributes: dict = item["blue_attributes"]
+            red_attributes: dict = item["red_attributes"]
+            blue_turns = blue_attributes.get("turns", 0)
+            red_turns = red_attributes.get("turns", 0)
 
-                if blue_turns and red_turns:
-                    pattern_part = (
-                        f"L{blue_turns},R{red_turns}"
-                        if blue_turns != red_turns
-                        else f"L{blue_turns}_R{red_turns}"
-                    )
-                elif blue_turns:
-                    pattern_part = f"L{blue_turns}"
-                elif red_turns:
-                    pattern_part = f"R{red_turns}"
-                elif blue_turns == red_turns:
-                    pattern_part = f"{blue_turns}"
-                else:
-                    print(
-                        "That's not right, turns aren't equal and neither is present."
-                    )
+            if blue_turns and red_turns:
+                pattern_part = (
+                    f"L{blue_turns},R{red_turns}"
+                    if blue_turns != red_turns
+                    else f"L{blue_turns}_R{red_turns}"
+                )
+            elif blue_turns:
+                pattern_part = f"L{blue_turns}"
+            elif red_turns:
+                pattern_part = f"R{red_turns}"
+            elif blue_turns == red_turns:
+                pattern_part = f"{blue_turns}"
+            else:
+                print("That's not right, turns aren't equal and neither is present.")
 
-                pattern_parts.append(pattern_part)
+            pattern_parts.append(pattern_part)
         return "_".join(pattern_parts)
 
     @staticmethod

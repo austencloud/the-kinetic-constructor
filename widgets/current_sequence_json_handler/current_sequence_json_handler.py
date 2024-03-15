@@ -37,11 +37,13 @@ class CurrentSequenceJsonHandler:
         start_position_dict = {
             "sequence_start_position": start_pos_pictograph.end_pos[:-1],
             "end_pos": start_pos_pictograph.end_pos,
-            "red_attributes": {
-                "end_ori": red_start_ori,  # Nest red end orientation
-            },
             "blue_attributes": {
+                "end_loc": start_pos_pictograph.blue_motion.end_loc,
                 "end_ori": blue_start_ori,  # Nest blue end orientation
+            },
+            "red_attributes": {
+                "end_loc": start_pos_pictograph.red_motion.end_loc,
+                "end_ori": red_start_ori,  # Nest red end orientation
             },
         }
 

@@ -45,7 +45,7 @@ class DictionaryTurnPatternTree(QTreeView):
         )
 
         if os.path.exists(self.structural_variation_path):
-            with open(self.structural_variation_path, "r") as file:
+            with open(self.structural_variation_path, "r", encoding="utf-8") as file:
                 sequence_data = json.load(file)
                 turn_pattern = TurnPatternConverter.sequence_to_pattern(sequence_data)
                 item = QStandardItem(turn_pattern)
@@ -54,7 +54,7 @@ class DictionaryTurnPatternTree(QTreeView):
 
     def on_turn_pattern_double_clicked(self, index: QModelIndex) -> None:
         if os.path.exists(self.structural_variation_path):
-            with open(self.structural_variation_path, "r") as file:
+            with open(self.structural_variation_path, "r", encoding="utf-8") as file:
                 sequence_data = json.load(file)
                 self.dictionary.sequence_populator.populate_sequence(sequence_data)
 

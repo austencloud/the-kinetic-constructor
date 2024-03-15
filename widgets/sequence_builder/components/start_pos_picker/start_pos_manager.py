@@ -129,17 +129,14 @@ class StartPosManager(QObject):
         for pictograph_dict in matching_letter_pictographs:
             if pictograph_dict["start_pos"] == start_pos_key:
 
-                pictograph_dict["blue_start_ori"] = start_pos_data["blue_end_ori"]
-                pictograph_dict["red_start_ori"] = start_pos_data["red_end_ori"]
-                pictograph_dict["red_attributes"]["blue_ori"] = start_pos_data[
-                    "blue_end_ori"
-                ]
-                pictograph_dict["red_attributes"]["end_ori"] = start_pos_data[
-                    "red_end_ori"
-                ]
-
+                pictograph_dict["blue_attributes"]["start_ori"] = start_pos_data[
+                    "blue_attributes"
+                ]["end_ori"]
+                pictograph_dict["red_attributes"]["start_ori"] = start_pos_data[
+                    "red_attributes"
+                ]["end_ori"]
                 pictograph_factory = self.main_widget.sequence_widget.pictograph_factory
-                pictograph_key = pictograph_factory.generate_pictograph_key_from_dict(
+                pictograph_key = self.main_widget.pictograph_key_generator.generate_pictograph_key(
                     pictograph_dict
                 )
                 return pictograph_factory.get_or_create_pictograph(
