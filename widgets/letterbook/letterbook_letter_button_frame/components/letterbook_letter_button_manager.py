@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QHBoxLayout, QSizePolicy
 from PyQt6.QtCore import QSize, Qt
 from constants import LETTER_BTN_ICON_DIR
-from path_helpers import resource_path
+from path_helpers import get_images_and_data_path
 from .letterbook_letter_button_click_handler import LetterBookLetterButtonClickHandler
 from .letterbook_letter_button_styler import LetterBookLetterButtonStyler
 from .letterbook_letter_button import LetterBookLetterButton
@@ -30,7 +30,7 @@ class LetterBookLetterButtonManager:
                 for letter_str in row:
                     letter = Letter.get_letter(letter_str)
                     letter_type = LetterType.get_letter_type(letter)
-                    icon_path = resource_path(
+                    icon_path = get_images_and_data_path(
                         f"{self.icon_dir}/{letter_type.name}/{letter_str}.svg"
                     )
                     button = self._create_letter_button(icon_path, letter_str)

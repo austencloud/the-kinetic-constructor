@@ -19,7 +19,7 @@ from Enums.Enums import VTG_Directions
 
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtCore import QSize
-from path_helpers import resource_path
+from path_helpers import get_images_and_data_path
 from widgets.factories.button_factory.buttons.rot_dir_buttons import VtgDirButton
 
 
@@ -53,8 +53,8 @@ class GE_VtgDirButtonManager:
 
     def _setup_vtg_dir_buttons(self) -> list[QPushButton]:
         button_factory = self.graph_editor.main_widget.button_factory
-        same_path = resource_path(f"{ICON_DIR}same_direction.png")
-        opp_path = resource_path(f"{ICON_DIR}opp_direction.png")
+        same_path = get_images_and_data_path(f"{ICON_DIR}same_direction.png")
+        opp_path = get_images_and_data_path(f"{ICON_DIR}opp_direction.png")
         self.same_button: VtgDirButton = button_factory.create_vtg_dir_button(
             same_path, lambda: self._set_vtg_dir(SAME), SAME
         )

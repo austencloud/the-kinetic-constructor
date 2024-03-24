@@ -3,7 +3,7 @@ import os
 import sys
 from Enums.MotionAttributes import Color
 from constants import BLUE, DASH, NO_ROT, RED, STATIC
-from path_helpers import app_data_path, dev_path, resource_path
+from path_helpers import app_data_path, dev_path, get_user_editable_resource_path
 from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
 from .motion_orientation_json_calculator import CurrentSequenceJsonOriCalculator
 from widgets.pictograph.pictograph import Pictograph
@@ -21,12 +21,7 @@ class CurrentSequenceJsonHandler:
     def __init__(self, json_manager: "JSON_Manager") -> None:
         self.main_widget = json_manager.main_widget
 
-        if getattr(sys, "frozen", False):
-            print("Running as a PyInstaller bundle")
-            self.current_sequence_json = app_data_path("current_sequence.json")
-        else:
-            print("Running in a development environment")
-            self.current_sequence_json = dev_path("current_sequence.json")
+        self.current_sequence_json = get_user_editable_resource_path("current_sequence.json")
 
         self.ori_calculator = CurrentSequenceJsonOriCalculator(self)
         self.validation_engine = CurrentSequenceJsonValidationEngine(self)

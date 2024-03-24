@@ -173,6 +173,9 @@
     "(s, 3, 1)": {
       "static_rot_angle_override": true,
       "static": [80, -20]
+    },
+    "(0, 0)": {
+      "anti": [35, -40]
     }
   }
 }

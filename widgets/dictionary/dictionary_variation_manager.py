@@ -97,7 +97,7 @@ class DictionaryVariationManager:
         day = datetime.now().strftime("%d").lstrip("0")
         
         timestamp = datetime.now().strftime(f"{month}-{day}-{year}")
-        variation_name = f"{base_pattern}_{timestamp}.json"
+        variation_name = f"{base_pattern}_{timestamp}"
         variation_filepath = self.get_variation_filepath(base_pattern, variation_name)
 
         with open(variation_filepath, "w", encoding="utf-8") as file:

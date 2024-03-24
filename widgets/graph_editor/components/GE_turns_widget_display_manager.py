@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
 )
 from constants import BLUE, RED
 
-from path_helpers import resource_path
+from path_helpers import get_images_and_data_path
 from widgets.graph_editor.components.GE_adjust_turns_button import (
     GE_AdjustTurnsButton,
 )
@@ -37,12 +37,12 @@ class GE_TurnsWidgetDisplayManager:
         turns_display_frame_layout = QHBoxLayout(turns_display_frame)
         self.turns_display_label = self._setup_turns_display_label()
 
-        plus_path = resource_path("images/icons/plus.svg")
+        plus_path = get_images_and_data_path("images/icons/plus.svg")
         self.increment_button = GE_AdjustTurnsButton(
             plus_path,
             self.turns_widget.turns_box,
         )
-        minus_path = resource_path("images/icons/minus.svg")
+        minus_path = get_images_and_data_path("images/icons/minus.svg")
         self.decrement_button = GE_AdjustTurnsButton(
             minus_path,
             self.turns_widget.turns_box,

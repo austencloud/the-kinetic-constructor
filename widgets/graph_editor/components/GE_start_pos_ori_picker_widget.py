@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt, QSize, pyqtSignal
 from constants import IN, ORI, OUT, CLOCK, COUNTER
 from typing import TYPE_CHECKING
 
-from path_helpers import resource_path
+from path_helpers import get_images_and_data_path
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
@@ -63,7 +63,7 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.ori_label.setFont(font)
 
     def _setup_orientation_control_layout(self) -> None:
-        path = resource_path("images/icons")
+        path = get_images_and_data_path("images/icons")
         self.ccw_button = self.setup_button(f"{path}/rotate_ccw.png", self.rotate_ccw)
         self.current_orientation_display = self.setup_current_orientation_display()
         self.cw_button = self.setup_button(f"{path}/rotate_cw.png", self.rotate_cw)
@@ -141,8 +141,12 @@ class GE_StartPosOriPickerWidget(QWidget):
         self, start_pos_pictograph: Pictograph, color: str
     ) -> None:
         if color == "blue":
-            initial_orientation = start_pos_pictograph.pictograph_dict["blue_attributes"]["start_ori"]
+            initial_orientation = start_pos_pictograph.pictograph_dict[
+                "blue_attributes"
+            ]["start_ori"]
         else:
-            initial_orientation = start_pos_pictograph.pictograph_dict["red_attributes"]["start_ori"]
+            initial_orientation = start_pos_pictograph.pictograph_dict[
+                "red_attributes"
+            ]["start_ori"]
         self.current_orientation_index = self.orientations.index(initial_orientation)
         self.current_orientation_display.setText(initial_orientation)

@@ -3,7 +3,7 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 from typing import TYPE_CHECKING, Union
 
-from path_helpers import resource_path
+from path_helpers import get_images_and_data_path
 
 
 if TYPE_CHECKING:
@@ -16,8 +16,8 @@ class TurnsColumnHandler(QGraphicsItemGroup):
         self.glyph = glyph
         self.top_number_item = None
         self.bottom_number_item = None
-        self.svg_path_prefix = resource_path("images/numbers/")
-        self.blank_svg_path = resource_path("images/blank.svg")
+        self.svg_path_prefix = get_images_and_data_path("images/numbers/")
+        self.blank_svg_path = get_images_and_data_path("images/blank.svg")
 
     def load_number_svg(self, number: Union[int, float]) -> QGraphicsSvgItem:
         svg_path = (
@@ -81,7 +81,9 @@ class TurnsColumnHandler(QGraphicsItemGroup):
             adjusted_low_pos_y = low_pos_y if self.top_number_item else high_pos_y + 20
             self.bottom_number_item.setPos(base_pos_x, adjusted_low_pos_y)
 
-    def update_turns(self, top_turn: Union[int, float], bottom_turn: Union[int, float]) -> None:
+    def update_turns(
+        self, top_turn: Union[int, float], bottom_turn: Union[int, float]
+    ) -> None:
         self.set_number(top_turn, is_top=True)
         self.set_number(bottom_turn, is_top=False)
         self.position_turns()

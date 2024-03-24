@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
-from path_helpers import resource_path
+from path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
     from ..tka_glyph import TKA_Glyph
@@ -14,7 +14,7 @@ class DashHandler:
         self.dash_item = None
 
     def add_dash(self) -> None:
-        dash_path = resource_path("images/dash.svg")
+        dash_path = get_images_and_data_path("images/dash.svg")
         self.dash_item = self.create_dash(dash_path)
         self.glyph.addToGroup(self.dash_item)
 

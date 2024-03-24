@@ -15,7 +15,7 @@ from constants import (
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
 from Enums.Enums import OrientationTypes
-from path_helpers import resource_path
+from path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
     from ..arrow_placement_manager import ArrowPlacementManager
@@ -36,7 +36,9 @@ class DefaultArrowPositioner:
         self, motion_type: str
     ) -> dict[str, dict[str, list[int]]]:
         json_filename = self.motion_type_files.get(motion_type)
-        json_path = resource_path(f"data/arrow_placement/default/{json_filename}")
+        json_path = get_images_and_data_path(
+            f"data/arrow_placement/default/{json_filename}"
+        )
         with codecs.open(json_path, "r", encoding="utf-8") as file:
             return json.load(file)
 

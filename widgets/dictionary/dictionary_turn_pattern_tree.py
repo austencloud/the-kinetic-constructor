@@ -6,6 +6,7 @@ from PyQt6.QtCore import Qt, QModelIndex, QDir
 from PyQt6.QtWidgets import QTreeView, QVBoxLayout, QHeaderView
 from PyQt6.QtGui import QStandardItemModel, QStandardItem, QFont
 
+from path_helpers import get_dictionary_path
 from widgets.turn_pattern_converter import TurnPatternConverter
 
 if TYPE_CHECKING:
@@ -37,20 +38,10 @@ class DictionaryTurnPatternTree(QTreeView):
     ) -> None:
         self.turn_pattern_model.clear()
         self._set_font_size()
-        
-        
-    
-        if getattr(sys, 'frozen', False):
-            dictionary_path = os.path.join(os.getenv('LOCALAPPDATA'), 'The Kinetic Alphabet', 'dictionary')
-        else:
-            dictionary_path = os.path.join(QDir.currentPath(), "dictionary")
 
-        os.makedirs(dictionary_path, exist_ok=True)
-        
-        
-        self.pattern_folder = os.path.join(
-            dictionary_path, base_pattern
-        )
+        dictionary_path = get_dictionary_path()
+
+        self.pattern_folder = os.path.join(dictionary_path, base_pattern)
         self.structural_variation_path = os.path.join(
             self.pattern_folder, f"{structural_variation}.json"
         )
@@ -70,7 +61,9 @@ class DictionaryTurnPatternTree(QTreeView):
                 self.dictionary.sequence_populator.populate_sequence(sequence_data)
 
     def reload_dictionary_turn_pattern_tree(self) -> None:
-        selected_structural_variation = self.dictionary.words_tree.selected_structural_variation
+        selected_structural_variation = (
+            self.dictionary.words_tree.selected_structural_variation
+        )
         if selected_structural_variation:
             base_pattern = selected_structural_variation.split("_")[0]
             self.display_turn_patterns_for_variation(

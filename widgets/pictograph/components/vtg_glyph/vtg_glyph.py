@@ -4,8 +4,23 @@ from PyQt6.QtSvg import QSvgRenderer
 from typing import TYPE_CHECKING, Literal
 
 from Enums.Enums import LetterType
-from constants import ALPHA1, ALPHA2, ALPHA3, ALPHA4, BETA1, BETA2, BETA3, BETA4, QUARTER_OPP, QUARTER_SAME, SPLIT_OPP, SPLIT_SAME, TOG_OPP, TOG_SAME
-from path_helpers import resource_path
+from constants import (
+    ALPHA1,
+    ALPHA2,
+    ALPHA3,
+    ALPHA4,
+    BETA1,
+    BETA2,
+    BETA3,
+    BETA4,
+    QUARTER_OPP,
+    QUARTER_SAME,
+    SPLIT_OPP,
+    SPLIT_SAME,
+    TOG_OPP,
+    TOG_SAME,
+)
+from path_helpers import get_images_and_data_path
 
 
 if TYPE_CHECKING:
@@ -20,7 +35,7 @@ SVG_PATHS = {
     QUARTER_OPP: "QO.svg",
 }
 
-SVG_BASE_PATH = resource_path("images/vtg_glyphs")
+SVG_BASE_PATH = get_images_and_data_path("images/vtg_glyphs")
 SVG_PATHS = {
     vtg_mode: f"{SVG_BASE_PATH}/{path}" for vtg_mode, path in SVG_PATHS.items()
 }
@@ -41,7 +56,7 @@ class VTG_Glyph(QGraphicsSvgItem):
         if self.renderer.isValid():
             self.setSharedRenderer(self.renderer)
             # if self isn't already in self.pictograph, then add it
-            if not self.scene():            
+            if not self.scene():
                 self.pictograph.addItem(self)
             self.position_vtg_glyph()
             visibility_manager = (

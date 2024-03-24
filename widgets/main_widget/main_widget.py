@@ -7,6 +7,7 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from Enums.PropTypes import PropType
+from path_helpers import get_images_and_data_path
 from widgets.factories.button_factory.button_factory import ButtonFactory
 from widgets.json_manager import JSON_Manager
 from widgets.menu_bar.preferences_dialog import PreferencesDialog
@@ -51,14 +52,9 @@ class MainWidget(QWidget):
             self.all_pictographs[letter] = {}
 
     def _set_prop_type(self) -> None:
-        if getattr(sys, "frozen", False):
-            base_dir = sys._MEIPASS
-        else:
-            base_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+        user_settings_path = get_images_and_data_path("user_settings.json")
 
-        user_settings_path = os.path.join(base_dir, "user_settings.json")
-
-        with open(user_settings_path, "r") as file:
+        with open(user_settings_path, "r", encoding="utf-8") as file:
             user_settings: dict = json.load(file)
 
         prop_type_value = user_settings.get("prop_type")

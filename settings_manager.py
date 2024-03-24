@@ -2,7 +2,7 @@ import json
 import os
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
-from path_helpers import resource_path
+from path_helpers import get_images_and_data_path
 from widgets.menu_bar.glyph_visibility_manager import GlyphVisibilityManager
 from prop_type_changer import PropTypeChanger
 
@@ -19,7 +19,7 @@ class SettingsManager:
         self,
         main_window: "MainWindow",
     ):
-        self.settings_file = resource_path("user_settings.json")
+        self.settings_file = get_images_and_data_path("user_settings.json")
         self.main_window = main_window
         self.settings = self.load_settings()
         self.prop_type_changer = PropTypeChanger(main_window)

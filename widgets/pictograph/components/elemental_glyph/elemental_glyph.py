@@ -12,7 +12,7 @@ from constants import (
     TOG_OPP,
     TOG_SAME,
 )
-from path_helpers import resource_path
+from path_helpers import get_images_and_data_path
 
 
 if TYPE_CHECKING:
@@ -27,7 +27,7 @@ SVG_PATHS = {
     QUARTER_OPP: "moon.svg",
 }
 
-SVG_BASE_PATH = resource_path("images/elements")
+SVG_BASE_PATH = get_images_and_data_path("images/elements")
 SVG_PATHS = {
     vtg_mode: f"{SVG_BASE_PATH}/{path}" for vtg_mode, path in SVG_PATHS.items()
 }

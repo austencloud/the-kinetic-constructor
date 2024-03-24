@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QInputDialog
 
-from path_helpers import resource_path
+from path_helpers import get_images_and_data_path
 from widgets.turn_pattern_converter import TurnPatternConverter
 
 if TYPE_CHECKING:
@@ -41,7 +41,7 @@ class TurnPatternWidget(QWidget):
         self.turn_pattern_list.itemDoubleClicked.connect(self.apply_turn_pattern)
 
     def load_turn_patterns(self) -> None:
-        turn_patterns_path = resource_path("turn_patterns.json")
+        turn_patterns_path = get_images_and_data_path("turn_patterns.json")
         try:
             with open(turn_patterns_path, "r") as file:
                 patterns = json.load(file)
@@ -79,8 +79,6 @@ class TurnPatternWidget(QWidget):
                 json.dump(patterns, file, indent=4)
 
             self.load_turn_patterns()
-
-
 
     def get_current_turn_pattern(self) -> str:
         sequence = self.current_sequence_json_handler.load_current_sequence_json()

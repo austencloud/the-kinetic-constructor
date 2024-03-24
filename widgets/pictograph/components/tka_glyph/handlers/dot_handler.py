@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from Enums.Enums import VTG_Directions
 from constants import OPP, SAME
-from path_helpers import resource_path
+from path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
     from ..tka_glyph import TKA_Glyph
@@ -16,7 +16,7 @@ class DotHandler:
         self.glyph = glyph
         self.same_dot_item = None
         self.opp_dot_item = None
-        self.add_dots(resource_path("images/same_opp_dot.svg"))
+        self.add_dots(get_images_and_data_path("images/same_opp_dot.svg"))
         self.hide_dots()
 
     def add_dots(self, dot_path: str) -> None:

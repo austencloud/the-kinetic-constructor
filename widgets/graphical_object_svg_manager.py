@@ -22,7 +22,7 @@ from constants import (
 )
 from Enums.MotionAttributes import Color, MotionType
 from Enums.PropTypes import PropType, PropTypeslist
-from path_helpers import resource_path
+from path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
@@ -56,7 +56,7 @@ class GraphicalObjectSvgManager:
     @staticmethod
     def _preload_arrow_svg(motion_type, turns, start_ori):
         cache_key = f"{motion_type}_{turns}_{start_ori}"
-        file_path = resource_path(
+        file_path = get_images_and_data_path(
             f"images/arrows/{motion_type}/from_{start_ori}/{motion_type}_{turns}.svg"
         )
         GraphicalObjectSvgManager.svg_cache[cache_key] = file_path
@@ -64,9 +64,8 @@ class GraphicalObjectSvgManager:
     @staticmethod
     def _preload_prop_svg_path(prop_type):
         cache_key = f"prop_{prop_type}"
-        file_path = resource_path(f"images/props/{prop_type}.svg")
+        file_path = get_images_and_data_path(f"images/props/{prop_type}.svg")
         GraphicalObjectSvgManager.svg_cache[cache_key] = file_path
-
 
     def set_svg_color(self, svg_data: str, new_color: str) -> bytes:
         # Apply color transformations directly to SVG data and return the modified SVG content
@@ -114,11 +113,10 @@ class GraphicalObjectSvgManager:
         svg_file = self.get_svg_file(object)
         if svg_file in self.svg_content_cache:
             return self.svg_content_cache[svg_file]
-        with open(resource_path(svg_file), "r") as file:
+        with open(get_images_and_data_path(svg_file), "r") as file:
             svg_data = file.read()
         self.svg_content_cache[svg_file] = svg_data
         return svg_data
-
 
     def get_or_create_renderer(self, svg_data: bytes, cache_key: str) -> QSvgRenderer:
         if cache_key in self.renderer_cache:

@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLabel, QSizePolicy, QFrame
 from PyQt6.QtCore import pyqtSignal, Qt
 from PyQt6.QtGui import QPixmap
-from path_helpers import resource_path
+from path_helpers import get_images_and_data_path
 from widgets.scroll_area.components.section_manager.section_widget.components.type_label import (
     SectionTypeLabel,
 )
@@ -36,8 +36,12 @@ class LetterBookSectionHeader(QWidget):
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
         )
         self.arrow_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.EXPAND_ARROW_PATH = resource_path("images/icons/dropdown/expand.png")
-        self.COLLAPSE_ARROW_PATH = resource_path("images/icons/dropdown/collapse.png")
+        self.EXPAND_ARROW_PATH = get_images_and_data_path(
+            "images/icons/dropdown/expand.png"
+        )
+        self.COLLAPSE_ARROW_PATH = get_images_and_data_path(
+            "images/icons/dropdown/collapse.png"
+        )
         self.expand_arrow_pixmap = self.load_and_resize_pixmap(self.EXPAND_ARROW_PATH)
         self.collapse_arrow_pixmap = self.load_and_resize_pixmap(
             self.COLLAPSE_ARROW_PATH

@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 import pandas as pd
 from Enums.letters import Letter
 from constants import END_POS, IN, LETTER, START_POS
+from path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
@@ -14,14 +15,7 @@ class LetterLoader:
         self.main_widget = main_widget
 
     def load_all_letters(self) -> dict[Letter, list[dict]]:
-        if getattr(sys, "frozen", False):
-            # The application is frozen
-            base_dir = sys._MEIPASS
-        else:
-            # The application is running as a script
-            base_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
-        
-        csv_path = os.path.join(base_dir, "PictographDataframe.csv")
+        csv_path = get_images_and_data_path("PictographDataframe.csv")
         df = pd.read_csv(csv_path)
         df = df.sort_values(by=[LETTER, START_POS, END_POS])
         df = self.add_turns_and_ori_to_pictograph_dict(df)

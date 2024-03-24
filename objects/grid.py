@@ -15,7 +15,7 @@ from Enums.Enums import GridModes
 from Enums.PropTypes import (
     strictly_placed_props,
 )
-from path_helpers import resource_path
+from path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
 
@@ -96,14 +96,7 @@ class Grid:
         self.center = self.grid_data.center_point.coordinates
 
     def _load_grid_data(self) -> GridData:
-        if getattr(sys, "frozen", False):
-            # The application is frozen
-            base_dir = sys._MEIPASS
-        else:
-            # The application is running as a script
-            base_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
-        
-        json_path = os.path.join(base_dir, "data/circle_coords.json")
+        json_path = get_images_and_data_path("data/circle_coords.json")
         with open(json_path, "r") as file:
             data = json.load(file)
         return GridData(data)
@@ -130,7 +123,7 @@ class Grid:
         }
 
         for mode, path in paths.items():
-            item = GridItem(resource_path(path))
+            item = GridItem(get_images_and_data_path(path))
             grid_scene.addItem(item)
             self.items[mode] = item
             item.setVisible(mode == self.grid_mode)
