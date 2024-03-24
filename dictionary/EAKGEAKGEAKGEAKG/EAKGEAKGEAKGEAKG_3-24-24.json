@@ -23,7 +23,7 @@
             "prop_rot_dir": "ccw",
             "start_loc": "s",
             "end_loc": "w",
-            "turns": 2,
+            "turns": 0,
             "end_ori": "out"
         },
         "red_attributes": {
@@ -157,7 +157,7 @@
             "prop_rot_dir": "ccw",
             "start_loc": "e",
             "end_loc": "n",
-            "turns": 2,
+            "turns": 0,
             "end_ori": "out"
         }
     },
@@ -248,8 +248,8 @@
             "prop_rot_dir": "ccw",
             "start_loc": "w",
             "end_loc": "s",
-            "turns": 1,
-            "end_ori": "in"
+            "turns": 0,
+            "end_ori": "out"
         },
         "red_attributes": {
             "motion_type": "pro",
@@ -269,12 +269,12 @@
         "direction": "opp",
         "blue_attributes": {
             "motion_type": "anti",
-            "start_ori": "in",
+            "start_ori": "out",
             "prop_rot_dir": "cw",
             "start_loc": "s",
             "end_loc": "e",
             "turns": 0,
-            "end_ori": "out"
+            "end_ori": "in"
         },
         "red_attributes": {
             "motion_type": "anti",
@@ -282,7 +282,7 @@
             "prop_rot_dir": "ccw",
             "start_loc": "n",
             "end_loc": "e",
-            "turns": 2,
+            "turns": 0,
             "end_ori": "in"
         }
     },
@@ -294,12 +294,12 @@
         "direction": "same",
         "blue_attributes": {
             "motion_type": "pro",
-            "start_ori": "out",
+            "start_ori": "in",
             "prop_rot_dir": "ccw",
             "start_loc": "e",
             "end_loc": "n",
             "turns": 0,
-            "end_ori": "out"
+            "end_ori": "in"
         },
         "red_attributes": {
             "motion_type": "pro",
@@ -319,12 +319,12 @@
         "direction": "opp",
         "blue_attributes": {
             "motion_type": "anti",
-            "start_ori": "out",
+            "start_ori": "in",
             "prop_rot_dir": "cw",
             "start_loc": "n",
             "end_loc": "w",
-            "turns": 0.5,
-            "end_ori": "counter"
+            "turns": 0,
+            "end_ori": "out"
         },
         "red_attributes": {
             "motion_type": "anti",
@@ -344,12 +344,12 @@
         "direction": "same",
         "blue_attributes": {
             "motion_type": "pro",
-            "start_ori": "counter",
+            "start_ori": "out",
             "prop_rot_dir": "cw",
             "start_loc": "w",
             "end_loc": "n",
             "turns": 0,
-            "end_ori": "counter"
+            "end_ori": "out"
         },
         "red_attributes": {
             "motion_type": "pro",
@@ -369,11 +369,11 @@
         "direction": "opp",
         "blue_attributes": {
             "motion_type": "anti",
-            "start_ori": "counter",
+            "start_ori": "out",
             "prop_rot_dir": "cw",
             "start_loc": "n",
             "end_loc": "w",
-            "turns": 2.5,
+            "turns": 0,
             "end_ori": "in"
         },
         "red_attributes": {

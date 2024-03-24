@@ -27,6 +27,7 @@ class TurnPatternWidget(QWidget):
         self.current_sequence_json_handler = (
             self.sequence_modifier.main_widget.json_manager.current_sequence_json_handler
         )
+        self.turn_patterns_path = get_user_editable_resource_path("turn_patterns.json")
         self._setup_ui()
         self.ensure_turn_patterns_file_exists()
         self.load_turn_patterns()
@@ -58,9 +59,8 @@ class TurnPatternWidget(QWidget):
         self.turn_pattern_list.itemDoubleClicked.connect(self.apply_turn_pattern)
 
     def load_turn_patterns(self) -> None:
-        turn_patterns_path = get_user_editable_resource_path("turn_patterns.json")
         try:
-            with open(turn_patterns_path, "r") as file:
+            with open(self.turn_patterns_path, "r") as file:
                 patterns = json.load(file)
                 self.turn_pattern_list.clear()
                 for pattern_dict in patterns:
@@ -85,14 +85,14 @@ class TurnPatternWidget(QWidget):
 
             patterns = []
             try:
-                with open("turn_patterns.json", "r") as file:
+                with open(self.turn_patterns_path, "r") as file:
                     patterns = json.load(file)
             except FileNotFoundError:
                 pass
 
             patterns.append(new_pattern)
 
-            with open("turn_patterns.json", "w") as file:
+            with open(self.turn_patterns_path, "w") as file:
                 json.dump(patterns, file, indent=4)
 
             self.load_turn_patterns()

@@ -1,4 +1,11 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import (
+    QWidget,
+    QLabel,
+    QPushButton,
+    QVBoxLayout,
+    QHBoxLayout,
+    QApplication,
+)
 from PyQt6.QtGui import QIcon, QFont
 
 from PyQt6.QtCore import Qt, QSize, pyqtSignal
@@ -107,9 +114,10 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.current_sequence_json_handler.update_start_pos_ori(self.color, new_ori)
         self.json_validation_engine.run()
         self.ori_adjusted.emit(new_ori)
-        self.option_picker.update_option_picker()
         current_pictograph.props[self.color].updater.update_prop({ORI: new_ori})
         current_pictograph.updater.update_pictograph()
+        QApplication.processEvents()
+        self.option_picker.update_option_picker()
 
     def rotate_ccw(self) -> None:
         self.current_orientation_index = (self.current_orientation_index - 1) % len(
@@ -124,9 +132,10 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.current_sequence_json_handler.update_start_pos_ori(self.color, new_ori)
         self.json_validation_engine.run()
         self.ori_adjusted.emit(new_ori)
-        self.option_picker.update_option_picker()
         current_pictograph.props[self.color].updater.update_prop({ORI: new_ori})
         current_pictograph.updater.update_pictograph()
+        QApplication.processEvents()
+        self.option_picker.update_option_picker()
 
     def resize_GE_start_pos_ori_picker_widget(self) -> None:
         button_size = int(self.ori_picker_box.height() // 4)

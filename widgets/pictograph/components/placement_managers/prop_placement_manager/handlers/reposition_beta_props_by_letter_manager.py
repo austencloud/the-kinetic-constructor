@@ -130,7 +130,6 @@ class RepositionBetaByLetterHandler:
             )
 
     def reposition_Ψ_dash(self) -> None:
-
         direction = self.prop_placement_manager.dir_calculator.get_dir_for_non_shift(
             self.pictograph.red_prop
         )
