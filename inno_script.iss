@@ -30,7 +30,7 @@ OutputBaseFilename=TKA_Setup
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
-PrivilegesRequired=admin
+PrivilegesRequired=lowest
 
 
 [Languages]
