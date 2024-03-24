@@ -11,7 +11,7 @@ def get_images_and_data_path(filename) -> str:
     return os.path.join(base_dir, filename)
 
 
-def app_data_path(filename) -> str:
+def get_app_data_path(filename) -> str:
     """
     For use in a Windows environment, this will return the path to the appdata directory.
 
@@ -25,7 +25,7 @@ def app_data_path(filename) -> str:
     return os.path.join(appdata_dir, filename)
 
 
-def dev_path(filename) -> str:
+def get_dev_path(filename) -> str:
     """
     For use in a development environment, this will return the path to the current working directory.
 
@@ -36,17 +36,21 @@ def dev_path(filename) -> str:
     """
 
     base_path = os.path.abspath(".")
+    os.makedirs(base_path, exist_ok=True)  # Make sure the directory exists
     return os.path.join(base_path, filename)
 
 
 def get_user_editable_resource_path(filename) -> str:
     if getattr(sys, "frozen", False):
         print("Running as a PyInstaller bundle")
-        path = app_data_path(filename)
+        path = get_app_data_path(filename)
     else:
         print("Running in a development environment")
-        path = dev_path(filename)  # Clears or initializes the file at the new location
+        path = get_dev_path(
+            filename
+        )  # Clears or initializes the file at the new location
     return path
+
 
 def get_dictionary_path() -> str:
     if getattr(sys, "frozen", False):

@@ -1,4 +1,6 @@
 import json
+import os
+import shutil
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QWidget,
@@ -10,7 +12,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QInputDialog
 
-from path_helpers import get_images_and_data_path
+from path_helpers import get_images_and_data_path, get_user_editable_resource_path
 from widgets.turn_pattern_converter import TurnPatternConverter
 
 if TYPE_CHECKING:
@@ -26,9 +28,24 @@ class TurnPatternWidget(QWidget):
             self.sequence_modifier.main_widget.json_manager.current_sequence_json_handler
         )
         self._setup_ui()
+        self.ensure_turn_patterns_file_exists()
         self.load_turn_patterns()
         self.apply_button.clicked.connect(self.apply_turn_pattern)
         self.save_button.clicked.connect(self.save_turn_pattern)
+
+    def ensure_turn_patterns_file_exists(self):
+        """
+        Ensures that the turn_patterns.json file exists in the user's editable resource path.
+        If the file does not exist, it is either copied from the bundled resources or initialized with an empty list.
+        """
+        user_editable_path = get_user_editable_resource_path("turn_patterns.json")
+        if not os.path.exists(user_editable_path):
+            bundled_path = get_images_and_data_path("turn_patterns.json")
+            if os.path.exists(bundled_path):
+                shutil.copy(bundled_path, user_editable_path)
+            else:
+                with open(user_editable_path, "w") as file:
+                    json.dump([], file)
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)
@@ -41,7 +58,7 @@ class TurnPatternWidget(QWidget):
         self.turn_pattern_list.itemDoubleClicked.connect(self.apply_turn_pattern)
 
     def load_turn_patterns(self) -> None:
-        turn_patterns_path = get_images_and_data_path("turn_patterns.json")
+        turn_patterns_path = get_user_editable_resource_path("turn_patterns.json")
         try:
             with open(turn_patterns_path, "r") as file:
                 patterns = json.load(file)

@@ -2,7 +2,7 @@ import json
 import os
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
-from path_helpers import get_images_and_data_path
+from path_helpers import get_user_editable_resource_path
 from widgets.menu_bar.glyph_visibility_manager import GlyphVisibilityManager
 from prop_type_changer import PropTypeChanger
 
@@ -14,29 +14,48 @@ if TYPE_CHECKING:
 class SettingsManager:
     MAX_COLUMN_COUNT = 8
     MIN_COLUMN_COUNT = 3
-
-    def __init__(
-        self,
-        main_window: "MainWindow",
-    ):
-        self.settings_file = get_images_and_data_path("user_settings.json")
+    DEFAULT_SETTINGS = {
+        "pictograph_size": 1,
+        "prop_type": "Staff",
+        "glyph_visibility": {
+            "VTG": False,
+            "TKA": True,
+            "Elemental": True
+        },
+        "default_left_orientation": "out",
+        "default_right_orientation": "out",
+        "default_left_orientation_Hand": "out",
+        "default_right_orientation_Hand": "in",
+        "word_length_visibility": {
+            "2": False,
+            "3": False,
+            "4": False,
+            "5": False,
+            "6": False,
+            "7": False,
+            "8": False
+        }
+    }
+    def __init__(self, main_window: "MainWindow") -> None:
+        self.settings_json = get_user_editable_resource_path("user_settings.json")
         self.main_window = main_window
         self.settings = self.load_settings()
         self.prop_type_changer = PropTypeChanger(main_window)
         self.glyph_visibility_manager = GlyphVisibilityManager(main_window)
-
-    def load_settings(
-        self,
-    ) -> dict[str, int | str, str | str, dict[str, bool]]:
-        if os.path.exists(self.settings_file):
-            with open(self.settings_file, "r") as file:
+    
+    def load_settings(self) -> dict:
+        if os.path.exists(self.settings_json):
+            with open(self.settings_json, "r") as file:
                 return json.load(file)
         else:
-            return {}
-
-    def save_settings(self) -> None:
-        with open(self.settings_file, "w") as file:
-            json.dump(self.settings, file, indent=4)
+            self.save_settings(self.DEFAULT_SETTINGS)
+            return self.DEFAULT_SETTINGS
+    
+    def save_settings(self, settings=None) -> None:
+        if settings is None:
+            settings = self.settings
+        with open(self.settings_json, "w") as file:
+            json.dump(settings, file, indent=4)
 
     def get_setting(self, key, default=None) -> any:
         return self.settings.get(key, default)
