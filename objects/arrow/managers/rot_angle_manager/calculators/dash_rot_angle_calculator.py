@@ -39,7 +39,7 @@ class DashRotAngleCalculator(BaseRotAngleCalculator):
             },
             OUT: {
                 CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
-                COUNTER_CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
+                COUNTER_CLOCKWISE: {NORTH: 0, EAST: 270, SOUTH: 180, WEST: 90},
             },
             CLOCK: {
                 CLOCKWISE: {NORTH: 0, EAST: 90, SOUTH: 180, WEST: 270},
