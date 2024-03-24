@@ -88,11 +88,7 @@ class DictionaryVariationManager:
             )
 
     def save_structural_variation(self, sequence_data: dict, base_pattern: str) -> None:
-        """
-        Saves or updates a structural variation for a given base pattern.
-        This might involve creating a new variation file or updating an existing one.
-        The exact implementation can vary based on application needs.
-        """
+        """Saves or updates a structural variation for a given base pattern."""
         pattern_folder = os.path.join(self.base_dictionary_folder, base_pattern)
         os.makedirs(pattern_folder, exist_ok=True)
 
@@ -111,8 +107,6 @@ class DictionaryVariationManager:
 
     def get_variation_filepath(self, base_pattern: str, variation_name: str) -> str:
         if getattr(sys, 'frozen', False):
-            # Running in a PyInstaller bundle
             return os.path.join(os.getenv('LOCALAPPDATA'), 'The Kinetic Alphabet', 'dictionary', base_pattern, f"{variation_name}.json")
         else:
-            # Running in a development environment
             return os.path.join(os.getcwd(), 'dictionary', base_pattern, f"{variation_name}.json")

@@ -31,13 +31,10 @@ class DictionaryWordsTree(QTreeView):
     def setup_ui(self, layout: QVBoxLayout) -> None:
         # Determine whether the application is running in frozen mode
         if getattr(sys, 'frozen', False):
-            # Application is running as a PyInstaller bundle
             dictionary_path = os.path.join(os.getenv('LOCALAPPDATA'), 'The Kinetic Alphabet', 'dictionary')
         else:
-            # Application is running in a development environment
             dictionary_path = os.path.join(QDir.currentPath(), "dictionary")
 
-        # Make sure the dictionary directory exists
         os.makedirs(dictionary_path, exist_ok=True)
 
         self.model.setRootPath(dictionary_path)

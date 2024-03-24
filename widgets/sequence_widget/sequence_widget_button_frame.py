@@ -89,12 +89,6 @@ class SequenceWidgetButtonFrame(QFrame):
         self.save_sequence_button.setFixedWidth(button_width)
         self.clear_sequence_button.setFixedWidth(button_width)
 
-    def save_structural_variation(self, base_pattern: str) -> None:
-        self.variation_manager.save_structural_variation(self.sequence, base_pattern)
-        self.indicator_label.show_indicator(
-            f"Structural variation saved for {base_pattern}"
-        )
-
     def save_sequence(self) -> None:
         self.sequence = self.json_handler.load_current_sequence_json()
         if not self.sequence:
@@ -108,7 +102,10 @@ class SequenceWidgetButtonFrame(QFrame):
             for pictograph in self.sequence
             if "letter" in pictograph
         )
-        self.save_structural_variation(base_pattern)
+        self.variation_manager.save_structural_variation(self.sequence, base_pattern)
+        self.indicator_label.show_indicator(
+            f"Structural variation saved for {base_pattern}"
+        )
 
         self.main_widget.main_tab_widget.dictionary.reload_dictionary_tab()
 

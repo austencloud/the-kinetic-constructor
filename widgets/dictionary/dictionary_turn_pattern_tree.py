@@ -1,7 +1,8 @@
 import os
 import json
+import sys
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt, QModelIndex
+from PyQt6.QtCore import Qt, QModelIndex, QDir
 from PyQt6.QtWidgets import QTreeView, QVBoxLayout, QHeaderView
 from PyQt6.QtGui import QStandardItemModel, QStandardItem, QFont
 
@@ -34,11 +35,21 @@ class DictionaryTurnPatternTree(QTreeView):
     def display_turn_patterns_for_variation(
         self, base_pattern: str, structural_variation: str
     ) -> None:
-        self.turn_pattern_model.clear()  # Clear the existing list
+        self.turn_pattern_model.clear()
         self._set_font_size()
+        
+        
+    
+        if getattr(sys, 'frozen', False):
+            dictionary_path = os.path.join(os.getenv('LOCALAPPDATA'), 'The Kinetic Alphabet', 'dictionary')
+        else:
+            dictionary_path = os.path.join(QDir.currentPath(), "dictionary")
 
+        os.makedirs(dictionary_path, exist_ok=True)
+        
+        
         self.pattern_folder = os.path.join(
-            self.dictionary.variation_manager.base_dictionary_folder, base_pattern
+            dictionary_path, base_pattern
         )
         self.structural_variation_path = os.path.join(
             self.pattern_folder, f"{structural_variation}.json"
