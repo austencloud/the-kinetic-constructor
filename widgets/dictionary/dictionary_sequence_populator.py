@@ -54,6 +54,7 @@ class DictionarySequencePopulator:
         self.sequence_builder.current_pictograph = last_beat
         if self.sequence_builder.start_pos_picker.isVisible():
             self.sequence_builder.transition_to_sequence_building()
+        sequence = self.json_handler.sequence
         self.sequence_builder.option_picker.scroll_area._add_and_display_relevant_pictographs(
-            self.sequence_builder.option_picker.option_manager.get_next_options()
+            self.sequence_builder.option_picker.option_manager.get_next_options(sequence)
         )

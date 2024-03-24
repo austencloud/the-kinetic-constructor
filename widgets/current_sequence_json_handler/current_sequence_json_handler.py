@@ -61,7 +61,7 @@ class CurrentSequenceJsonHandler:
         else:
             self.sequence.insert(0, start_position_dict)
 
-        self.save_sequence(self.sequence)
+        self.save_current_sequence(self.sequence)
 
     def load_current_sequence_json(self) -> list[dict]:
         print("Loading current sequence json")
@@ -73,7 +73,7 @@ class CurrentSequenceJsonHandler:
             print("Current sequence json not found")
             return []
 
-    def save_sequence(self, sequence):
+    def save_current_sequence(self, sequence):
         print(
             "Saving sequence at current_sequence.json located at ",
             self.current_sequence_json,
@@ -92,7 +92,6 @@ class CurrentSequenceJsonHandler:
         return 0
 
     def update_current_sequence_file(self):
-        temp_filename = "current_sequence.json"
         sequence_data = self.load_current_sequence_json()
         last_beat_view = (
             self.main_widget.sequence_widget.beat_frame.get_last_filled_beat()
@@ -103,17 +102,17 @@ class CurrentSequenceJsonHandler:
         ):
             last_pictograph_dict = last_beat_view.beat.get.pictograph_dict()
             sequence_data.append(last_pictograph_dict)
-        with open(temp_filename, "w", encoding="utf-8") as file:
+        with open(self.current_sequence_json, "w", encoding="utf-8") as file:
             json.dump(sequence_data, file, indent=4, ensure_ascii=False)
 
     def clear_current_sequence_file(self):
-        with open("current_sequence.json", "w", encoding="utf-8") as file:
+        with open(self.current_sequence_json, "w", encoding="utf-8") as file:
             file.write("[]")
 
     def update_current_sequence_file_with_beat(self, beat_view: BeatView):
         sequence_data = self.sequence
         sequence_data.append(beat_view.beat.get.pictograph_dict())
-        with open("current_sequence.json", "w", encoding="utf-8") as file:
+        with open(self.current_sequence_json, "w", encoding="utf-8") as file:
             json.dump(sequence_data, file, indent=4, ensure_ascii=False)
 
     def clear_and_repopulate_the_current_sequence(self):
@@ -156,20 +155,20 @@ class CurrentSequenceJsonHandler:
                 prop_rot_dir = NO_ROT
                 sequence[index][f"{color}_attributes"]["prop_rot_dir"] = prop_rot_dir
 
-        self.save_sequence(sequence)
+        self.save_current_sequence(sequence)
 
     def update_start_pos_ori(self, color: Color, ori: int) -> None:
         sequence = self.load_current_sequence_json()
         if sequence:
             sequence[0][f"{color}_attributes"]["end_ori"] = ori
-            self.save_sequence(sequence)
+            self.save_current_sequence(sequence)
 
     def update_rot_dir_in_json_at_index(
         self, index: int, color: Color, prop_rot_dir: str
     ) -> None:
         sequence = self.load_current_sequence_json()
         sequence[index][f"{color}_attributes"]["prop_rot_dir"] = prop_rot_dir
-        self.save_sequence(sequence)
+        self.save_current_sequence(sequence)
 
     def apply_turn_pattern_to_current_sequence(self, pattern: list[tuple]) -> None:
         sequence = self.load_current_sequence_json()
@@ -198,7 +197,7 @@ class CurrentSequenceJsonHandler:
             if beat_view and beat_view.is_filled:
                 beat_view.beat.get.pictograph_dict().update(entry)
 
-        self.save_sequence(sequence)
+        self.save_current_sequence(sequence)
         self.validation_engine.run()
         sequence = self.load_current_sequence_json()
         self.main_widget.sequence_widget.beat_frame.propogate_turn_adjustment(sequence)

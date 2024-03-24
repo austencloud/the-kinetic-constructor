@@ -1,7 +1,8 @@
 from email.mime import base
 import os
+import sys
 from PyQt6.QtCore import QDir, Qt, QModelIndex, QEvent
-from PyQt6.QtGui import QFont
+from PyQt6.QtGui import QFont, QFileSystemModel
 
 from typing import TYPE_CHECKING
 from widgets.dictionary.dictionary_file_system_model import DictionaryFileSystemModel
@@ -24,18 +25,29 @@ class DictionaryWordsTree(QTreeView):
     def __init__(self, dictionary: "Dictionary") -> None:
         super().__init__(dictionary)
         self.dictionary = dictionary
-        self.model = DictionaryFileSystemModel()
+        self.model: QFileSystemModel = DictionaryFileSystemModel()
         self.proxy_model = DictionarySortProxyModel(dictionary)
 
     def setup_ui(self, layout: QVBoxLayout) -> None:
-        self.model.setRootPath(QDir.currentPath() + "/dictionary")
+        # Determine whether the application is running in frozen mode
+        if getattr(sys, 'frozen', False):
+            # Application is running as a PyInstaller bundle
+            dictionary_path = os.path.join(os.getenv('LOCALAPPDATA'), 'The Kinetic Alphabet', 'dictionary')
+        else:
+            # Application is running in a development environment
+            dictionary_path = os.path.join(QDir.currentPath(), "dictionary")
+
+        # Make sure the dictionary directory exists
+        os.makedirs(dictionary_path, exist_ok=True)
+
+        self.model.setRootPath(dictionary_path)
         self.proxy_model.setSourceModel(self.model)
         self.setModel(self.proxy_model)
         self.proxy_model.lengthSortingEnabled = True
         self.proxy_model.setSortRole(Qt.ItemDataRole.UserRole)
         self.proxy_model.sort(0, Qt.SortOrder.AscendingOrder)
 
-        dictionary_index = self.model.index(QDir.currentPath() + "/dictionary")
+        dictionary_index = self.model.index(dictionary_path)
         proxy_dictionary_index = self.proxy_model.mapFromSource(dictionary_index)
         self.setRootIndex(proxy_dictionary_index)
         self.doubleClicked.connect(self.on_double_clicked)
@@ -150,11 +162,22 @@ class DictionaryWordsTree(QTreeView):
         self._set_font_size()
 
     def reload_dictionary_words_tree(self):
-        self.model.setRootPath(QDir.currentPath() + "/dictionary")
+        # Determine whether the application is running in frozen mode
+        if getattr(sys, 'frozen', False):
+            # Application is running as a PyInstaller bundle
+            dictionary_path = os.path.join(os.getenv('LOCALAPPDATA'), 'The Kinetic Alphabet', 'dictionary')
+        else:
+            # Application is running in a development environment
+            dictionary_path = os.path.join(QDir.currentPath(), "dictionary")
+
+        # Ensure the dictionary directory exists (this may not be necessary if the directory is not expected to be deleted or moved)
+        os.makedirs(dictionary_path, exist_ok=True)
+
+        self.model.setRootPath(dictionary_path)
         self.proxy_model.setSourceModel(self.model)
-        self.proxy_model.invalidate()
-        self.proxy_model.sort(0, Qt.SortOrder.AscendingOrder)
-        dictionary_index = self.model.index(QDir.currentPath() + "/dictionary")
+        self.proxy_model.invalidate()  # Refresh the model to reflect any changes
+        self.proxy_model.sort(0, Qt.SortOrder.AscendingOrder)  # Reapply the sorting order
+        dictionary_index = self.model.index(dictionary_path)
         proxy_dictionary_index = self.proxy_model.mapFromSource(dictionary_index)
         self.setRootIndex(proxy_dictionary_index)
         self.update_sort_order_from_settings()

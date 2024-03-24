@@ -47,7 +47,7 @@ def main() -> None:
     main_window = MainWindow(profiler)
     exit_code = main_window.exec_with_profiling(app)
     root_directory = os.path.dirname(os.path.abspath(__file__))
-    profiler.write_profiling_stats_to_file("main_profiling_stats.txt", root_directory)
+    # profiler.write_profiling_stats_to_file("main_profiling_stats.txt", root_directory)
     sys.exit(exit_code)
 
 

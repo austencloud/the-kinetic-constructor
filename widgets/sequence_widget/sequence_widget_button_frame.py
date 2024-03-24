@@ -25,6 +25,9 @@ class SequenceWidgetButtonFrame(QFrame):
         self.json_handler = self.main_widget.json_manager.current_sequence_json_handler
         self.sequence_constructor = self.main_widget.main_tab_widget.sequence_builder
         self.graph_editor = self.sequence_widget.sequence_modifier.graph_editor
+        self.variation_manager = (
+            self.main_widget.main_tab_widget.dictionary.variation_manager
+        )
         self.beat_frame = self.sequence_widget.beat_frame
         self.indicator_label = sequence_widget.indicator_label
         self.orientations = ["in", "counter", "out", "clock"]
@@ -86,30 +89,29 @@ class SequenceWidgetButtonFrame(QFrame):
         self.save_sequence_button.setFixedWidth(button_width)
         self.clear_sequence_button.setFixedWidth(button_width)
 
-
     def save_structural_variation(self, base_pattern: str) -> None:
-        current_json_data = self.main_widget.json_manager.current_sequence_json_handler.load_current_sequence_json()
-        self.variation_manager = self.main_widget.main_tab_widget.dictionary.variation_manager
-        self.variation_manager.save_structural_variation(current_json_data, base_pattern)
-        self.indicator_label.show_indicator(f"Structural variation saved for {base_pattern}")
-
+        self.variation_manager.save_structural_variation(self.sequence, base_pattern)
+        self.indicator_label.show_indicator(
+            f"Structural variation saved for {base_pattern}"
+        )
 
     def save_sequence(self) -> None:
-        sequence_data = (
-            self.main_widget.json_manager.current_sequence_json_handler.load_current_sequence_json()
-        )
-        if not sequence_data:
+        self.sequence = self.json_handler.load_current_sequence_json()
+        if not self.sequence:
             self.sequence_widget.indicator_label.show_indicator(
                 "You must build a sequence before you can save it."
             )
             return
 
-        base_pattern = "".join(pictograph.get("letter", "") for pictograph in sequence_data if "letter" in pictograph)
+        base_pattern = "".join(
+            pictograph.get("letter", "")
+            for pictograph in self.sequence
+            if "letter" in pictograph
+        )
         self.save_structural_variation(base_pattern)
         self.sequence_widget.indicator_label.show_indicator(
             f"Structural variation saved for {base_pattern}"
         )
-        #reload the dictionary tab
         self.main_widget.main_tab_widget.dictionary.reload_dictionary_tab()
 
     def clear_sequence(
@@ -123,7 +125,6 @@ class SequenceWidgetButtonFrame(QFrame):
         if show_indicator:
             self.sequence_widget.indicator_label.show_indicator("Sequence cleared")
         self._clear_graph_editor()
-
 
     def _reset_beat_frame(self) -> None:
         for beat_view in self.beat_frame.beat_views:

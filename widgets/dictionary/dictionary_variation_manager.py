@@ -1,6 +1,7 @@
 import os
 import json
 from datetime import datetime
+import sys
 from PyQt6.QtWidgets import QInputDialog, QMessageBox
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
@@ -9,10 +10,16 @@ if TYPE_CHECKING:
     from widgets.dictionary.dictionary import Dictionary
 
 
+
 class DictionaryVariationManager:
     def __init__(self, dictionary: "Dictionary") -> None:
         self.dictionary = dictionary
-        self.base_dictionary_folder = os.path.join(os.getcwd(), "dictionary")
+        if getattr(sys, 'frozen', False):
+            # Running in a PyInstaller bundle
+            self.base_dictionary_folder = os.path.join(os.getenv('LOCALAPPDATA'), 'The Kinetic Alphabet', 'dictionary')
+        else:
+            # Running in a development environment
+            self.base_dictionary_folder = os.path.join(os.getcwd(), 'dictionary')
 
     def create_variation(self, sequence_data: dict, base_pattern: str) -> None:
         pattern_folder = os.path.join(self.base_dictionary_folder, base_pattern)
@@ -95,7 +102,17 @@ class DictionaryVariationManager:
         
         timestamp = datetime.now().strftime(f"{month}-{day}-{year}")
         variation_name = f"{base_pattern}_{timestamp}.json"
-        variation_filepath = os.path.join(pattern_folder, variation_name)
+        variation_filepath = self.get_variation_filepath(base_pattern, variation_name)
 
         with open(variation_filepath, "w", encoding="utf-8") as file:
             json.dump(sequence_data, file, indent=4, ensure_ascii=False)
+
+
+
+    def get_variation_filepath(self, base_pattern: str, variation_name: str) -> str:
+        if getattr(sys, 'frozen', False):
+            # Running in a PyInstaller bundle
+            return os.path.join(os.getenv('LOCALAPPDATA'), 'The Kinetic Alphabet', 'dictionary', base_pattern, f"{variation_name}.json")
+        else:
+            # Running in a development environment
+            return os.path.join(os.getcwd(), 'dictionary', base_pattern, f"{variation_name}.json")

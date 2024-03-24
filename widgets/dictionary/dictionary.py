@@ -22,7 +22,7 @@ class Dictionary(QWidget):
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.setup_ui()
-
+        
     def setup_ui(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         tree_layout = QHBoxLayout()
