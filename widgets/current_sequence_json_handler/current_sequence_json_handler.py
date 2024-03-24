@@ -64,7 +64,6 @@ class CurrentSequenceJsonHandler:
         self.save_current_sequence(self.sequence)
 
     def load_current_sequence_json(self) -> list[dict]:
-        print("Loading current sequence json")
         try:
             with open(self.current_sequence_json, "r", encoding="utf-8") as file:
                 sequence = json.load(file)

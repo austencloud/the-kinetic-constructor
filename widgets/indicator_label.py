@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 
 class IndicatorLabel(QLabel):
-    def __init__(self, sequence_widget: "SequenceWidget"):
+    def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)
         self.font_size = sequence_widget.width() // 50
         font = self.font()
@@ -20,18 +20,17 @@ class IndicatorLabel(QLabel):
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(self.clear)
         self.setContentsMargins(0, 0, 0, 0)
-        # add black border
-        # self.setStyleSheet("border: 1px solid black;")
 
-    def show_indicator(self, text):
+    def show_indicator(self, text) -> None:
         self.setText(text)
-        self.timer.start(5000)  # 5000 milliseconds = 5 seconds
+        print(text)
+        self.timer.start(5000)
 
-    def clear(self):
+    def clear(self) -> None:
         self.setText(" ")
 
-    def resize_indicator_label(self):
+    def resize_indicator_label(self) -> None:
         self.adjustSize()
-        height = self.font_size  # Set a fixed height based on font size
+        height = self.font_size
         self.setFixedHeight(height)
         self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)

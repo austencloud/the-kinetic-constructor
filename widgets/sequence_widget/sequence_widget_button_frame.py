@@ -109,9 +109,7 @@ class SequenceWidgetButtonFrame(QFrame):
             if "letter" in pictograph
         )
         self.save_structural_variation(base_pattern)
-        self.sequence_widget.indicator_label.show_indicator(
-            f"Structural variation saved for {base_pattern}"
-        )
+
         self.main_widget.main_tab_widget.dictionary.reload_dictionary_tab()
 
     def clear_sequence(
