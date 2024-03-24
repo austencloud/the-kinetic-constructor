@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from widgets.base_tab_widget import BaseTabWidget
-from widgets.codex.codex import Codex
+from widgets.letterbook.letterbook import LetterBook
 from widgets.dictionary.dictionary import Dictionary
 from widgets.sequence_builder.sequence_builder import SequenceBuilder
 from widgets.turn_pattern_widget import TurnPatternWidget
@@ -13,13 +13,13 @@ if TYPE_CHECKING:
 class MainTabWidget(BaseTabWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
-        self.codex = Codex(main_widget)
+        self.letterbook = LetterBook(main_widget)
         self.sequence_builder = SequenceBuilder(main_widget)
         self.dictionary = Dictionary(main_widget)
         self.turn_pattern_widget = TurnPatternWidget(self)
-        self.tabs = [self.codex]
+        self.tabs = [self.letterbook]
         self.addTab(self.sequence_builder, "Builder")
-        self.addTab(self.codex, "LetterBook")
+        self.addTab(self.letterbook, "LetterBook")
         self.addTab(self.dictionary, "Dictionary")
         self.addTab(self.turn_pattern_widget, "Turn Patterns")
         self.currentChanged.connect(self.on_tab_changed)
@@ -35,8 +35,8 @@ class MainTabWidget(BaseTabWidget):
         self.resize_current_tab(current_tab)
 
     def resize_current_tab(self, current_tab) -> None:
-        if current_tab == self.codex:
-            self.codex.resize_codex()
+        if current_tab == self.letterbook:
+            self.letterbook.resize_letterbook()
         elif current_tab == self.sequence_builder:
             self.sequence_builder.resize_sequence_builder()
         elif current_tab == self.dictionary:

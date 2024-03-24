@@ -10,12 +10,12 @@ if TYPE_CHECKING:
     from widgets.sequence_builder.components.option_picker.option_picker import (
         OptionPicker,
     )
-    from widgets.codex.codex import Codex
+    from widgets.letterbook.letterbook import LetterBook
 
 
 class BasePictographScrollArea(QScrollArea):
     def __init__(
-        self, parent: Union["StartPosPicker", "OptionPicker", "Codex"]
+        self, parent: Union["StartPosPicker", "OptionPicker", "LetterBook"]
     ) -> None:
         super().__init__(parent)
         self.container = QWidget()

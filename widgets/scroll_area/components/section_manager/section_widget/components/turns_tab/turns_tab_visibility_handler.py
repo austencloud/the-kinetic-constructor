@@ -5,7 +5,7 @@ from data.letter_engine_data import motion_type_letter_combinations
 from typing import List
 from typing import TYPE_CHECKING
 
-from widgets.codex_turns_panel import CodexTurnsPanel
+from widgets.letterbook_turns_panel import LetterBookTurnsPanel
 
 
 if TYPE_CHECKING:
@@ -35,14 +35,14 @@ class TurnsTabVisibilityHandler:
         self.turns_tab = turns_tab
         self.section = self.turns_tab.section
 
-        self.turns_panels: dict[TurnsTabAttribute, CodexTurnsPanel] = {
+        self.turns_panels: dict[TurnsTabAttribute, LetterBookTurnsPanel] = {
             TurnsTabAttribute.MOTION_TYPE: self.turns_tab.motion_type_turns_panel,
             TurnsTabAttribute.COLOR: self.turns_tab.color_turns_panel,
             TurnsTabAttribute.LEAD_STATE: self.turns_tab.lead_state_turns_panel,
         }
 
     def update_visibility_based_on_selected_letters(self):
-        selected_letters = self.section.scroll_area.codex.selected_letters
+        selected_letters = self.section.scroll_area.letterbook.selected_letters
         tabs_to_show = self._determine_tabs_to_show_based_on_selected_letters(
             selected_letters
         )
@@ -85,7 +85,7 @@ class TurnsTabVisibilityHandler:
                 self.turns_tab.removeTab(self.turns_tab.indexOf(turns_panel))
 
         if TurnsTabAttribute.MOTION_TYPE in tabs_to_show:
-            selected_letters = self.section.scroll_area.codex.selected_letters
+            selected_letters = self.section.scroll_area.letterbook.selected_letters
             self.turns_panels[
                 TurnsTabAttribute.MOTION_TYPE
             ].show_motion_type_boxes_based_on_chosen_letters(selected_letters)

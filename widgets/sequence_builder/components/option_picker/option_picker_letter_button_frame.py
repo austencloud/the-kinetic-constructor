@@ -6,8 +6,8 @@ from typing import TYPE_CHECKING
 from ....letter_button_frame.components.sequence_builder_letter_button_manager import (
     OptionPickerLetterButtonManager,
 )
-from ....codex.codex_letter_button_frame.components.codex_button_frame_styler import (
-    CodexButtonFrameStyler,
+from ....letterbook.letterbook_letter_button_frame.components.letterbook_button_frame_styler import (
+    LetterBookButtonFrameStyler,
 )
 
 if TYPE_CHECKING:
@@ -17,11 +17,11 @@ if TYPE_CHECKING:
 class OptionPickerLetterButtonFrame(QFrame):
     def __init__(self, sequence_builder: "SequenceBuilder") -> None:
         super().__init__()
-        self.codex = sequence_builder
+        self.letterbook = sequence_builder
         self.spacing = 5
         self.outer_frames: dict[str, QFrame] = {}
         self.letter_rows = self._define_letter_rows()
-        self.layout_styler = CodexButtonFrameStyler(self)
+        self.layout_styler = LetterBookButtonFrameStyler(self)
         self.button_manager = OptionPickerLetterButtonManager(self)
         self.button_manager.create_buttons()
         self._init_letter_buttons_layout()
@@ -73,4 +73,4 @@ class OptionPickerLetterButtonFrame(QFrame):
         self.button_manager.connect_letter_buttons()
 
     def resize_option_picker_letter_button_frame(self) -> None:
-        self.button_manager.resize_buttons(self.codex.main_widget.height() * 0.6)
+        self.button_manager.resize_buttons(self.letterbook.main_widget.height() * 0.6)

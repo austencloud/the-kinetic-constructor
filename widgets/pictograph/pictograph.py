@@ -51,7 +51,7 @@ if TYPE_CHECKING:
     from ..sequence_builder.components.option_picker.option_picker_scroll_area import (
         OptionPickerScrollArea,
     )
-    from ..scroll_area.codex_scroll_area import CodexScrollArea
+    from ..scroll_area.letterbook_scroll_area import LetterBookScrollArea
     from ..main_widget.main_widget import MainWidget
 
 
@@ -98,7 +98,9 @@ class Pictograph(QGraphicsScene):
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.scroll_area: Union[CodexScrollArea, OptionPickerScrollArea] = scroll_area
+        self.scroll_area: Union[LetterBookScrollArea, OptionPickerScrollArea] = (
+            scroll_area
+        )
         self.initializer = PictographInitializer(self)
         self.updater = PictographUpdater(self)
         self.image_renderer = PictographImageRenderer(self)

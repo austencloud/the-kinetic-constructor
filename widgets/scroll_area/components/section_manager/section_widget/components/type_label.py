@@ -6,7 +6,7 @@ from Enums.Enums import LetterType
 
 
 if TYPE_CHECKING:
-    from ..codex_section_widget import CodexSectionWidget
+    from ..letterbook_section_widget import LetterBookSectionWidget
 from PyQt6.QtCore import pyqtSignal
 
 
@@ -31,7 +31,7 @@ class SectionTypeLabel(QLabel):
         "-": "#000000",  # black
     }
 
-    def __init__(self, section_widget: "CodexSectionWidget") -> None:
+    def __init__(self, section_widget: "LetterBookSectionWidget") -> None:
         super().__init__()
         self.section = section_widget
         self.set_styled_text(section_widget.letter_type)
@@ -56,7 +56,7 @@ class SectionTypeLabel(QLabel):
 
     def resize_type_label(self) -> None:
         base_class_name = type(self.section.scroll_area).__name__
-        if base_class_name == "CodexScrollArea":
+        if base_class_name == "LetterBookScrollArea":
             font_size = self.section.scroll_area.width() // 40
         elif base_class_name == "OptionPickerScrollArea":
             font_size = self.section.scroll_area.width() // 50

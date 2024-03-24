@@ -3,11 +3,11 @@ from PyQt6.QtWidgets import QFrame, QGridLayout
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from ..codex_section_widget import CodexSectionWidget
+    from ..letterbook_section_widget import LetterBookSectionWidget
 
 
 class ScrollAreaSectionPictographFrame(QFrame):
-    def __init__(self, section: "CodexSectionWidget") -> None:
+    def __init__(self, section: "LetterBookSectionWidget") -> None:
         super().__init__()
         self.section = section
         self.spacing = 3

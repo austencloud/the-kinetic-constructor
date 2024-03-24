@@ -174,7 +174,7 @@ MAIN = "main"
 OPTION = "option"
 BEAT = "beat"
 START_POS_BEAT = "start_pos_beat"
-CODEX_PICTOGRAPH = "codex_pictograph"
+CODEX_PICTOGRAPH = "letterbook_pictograph"
 
 DIAMOND = "diamond"
 BOX = "box"

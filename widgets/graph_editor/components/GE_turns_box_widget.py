@@ -3,21 +3,21 @@ from PyQt6.QtGui import QFont, QIcon
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Callable
 
-from widgets.factories.button_factory.buttons.codex_adjust_turns_button import (
-    CodexAdjustTurnsButton,
+from widgets.factories.button_factory.buttons.letterbook_adjust_turns_button import (
+    LetterBookAdjustTurnsButton,
 )
 from widgets.factories.button_factory.buttons.swap_button import SwapButton
 
 if TYPE_CHECKING:
-    from widgets.codex.codex_letter_button_frame.components.codex_turns_box import (
-        CodexTurnsBox,
+    from widgets.letterbook.letterbook_letter_button_frame.components.letterbook_turns_box import (
+        LetterBookTurnsBox,
     )
 
 
 class GE_TurnsBoxWidget(QWidget):
     def __init__(self, turns_box) -> None:
         super().__init__(turns_box)
-        self.turns_box: "CodexTurnsBox" = turns_box
+        self.turns_box: "LetterBookTurnsBox" = turns_box
 
     def create_attr_header_label(
         self, text: str, align: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter
@@ -39,7 +39,7 @@ class GE_TurnsBoxWidget(QWidget):
         button.clicked.connect(callback)
         return button
 
-    def create_adjust_turns_button(self, text: str) -> CodexAdjustTurnsButton:
-        button = CodexAdjustTurnsButton(self)
+    def create_adjust_turns_button(self, text: str) -> LetterBookAdjustTurnsButton:
+        button = LetterBookAdjustTurnsButton(self)
         button.setText(text)
         return button

@@ -34,7 +34,7 @@ class OptionPickerSectionWidget(QGroupBox):
         self.turns_tab: TurnsTab = None
 
     def setup_components(self) -> None:
-        # self.vtg_dir_button_manager = CodexVtgDirButtonManager(self)
+        # self.vtg_dir_button_manager = LetterBookVtgDirButtonManager(self)
         self._setup_layout()
         self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
         self.pictographs: dict[str, Pictograph] = {}

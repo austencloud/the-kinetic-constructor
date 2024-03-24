@@ -6,8 +6,8 @@ from widgets.pictograph.pictograph import Pictograph
 from Enums.Enums import LetterType
 
 
-from widgets.scroll_area.components.section_manager.section_widget.codex_section_widget import (
-    CodexSectionWidget,
+from widgets.scroll_area.components.section_manager.section_widget.letterbook_section_widget import (
+    LetterBookSectionWidget,
 )
 from widgets.sequence_builder.components.option_picker.option_picker_section_widget import (
     OptionPickerSectionWidget,
@@ -34,13 +34,14 @@ class OptionPickerDisplayManager:
             ordered_pictographs = self.get_ordered_pictographs_for_section(letter_type)
             for index, (key, pictograph) in enumerate(ordered_pictographs.items()):
                 self.add_pictograph_to_layout(pictograph, index)
+
     def add_pictograph_to_layout(self, pictograph: Pictograph, index: int):
         row, col = divmod(index, self.COLUMN_COUNT)
         letter_type = self.scroll_area.sections_manager.get_pictograph_letter_type(
             pictograph.letter
         )
-        section: CodexSectionWidget = self.scroll_area.sections_manager.get_section(
-            letter_type
+        section: LetterBookSectionWidget = (
+            self.scroll_area.sections_manager.get_section(letter_type)
         )
         if section:
             section.pictograph_frame.layout.addWidget(pictograph.view, row, col)

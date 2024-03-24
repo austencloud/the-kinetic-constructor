@@ -84,7 +84,10 @@ class StyledBorderOverlay(QWidget):
     def set_gold_border(self) -> None:
         self.saved_primary_color = self.primary_color
         self.saved_secondary_color = self.secondary_color
-        if self.view.pictograph.scroll_area.__class__.__name__ == "CodexScrollArea":
+        if (
+            self.view.pictograph.scroll_area.__class__.__name__
+            == "LetterBookScrollArea"
+        ):
             self.update_border_color_and_width(
                 self.saved_primary_color, self.saved_secondary_color
             )

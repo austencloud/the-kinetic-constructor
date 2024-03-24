@@ -12,7 +12,7 @@ class Turns(Enum):
     TWO = 2
     TWO_POINT_FIVE = 2.5
     THREE = 3
-    
+
 
 class MotionCombinationType(Enum):
     DUAL_SHIFT = "Dual-Shift"
@@ -145,7 +145,7 @@ class PictographType(Enum):
     OPTION = "option"
     BEAT = "beat"
     START_POS = "start_pos"
-    CODEX_PICTOGRAPH = "codex_pictograph"
+    CODEX_PICTOGRAPH = "letterbook_pictograph"
 
 
 class MotionTypeCombination(Enum):

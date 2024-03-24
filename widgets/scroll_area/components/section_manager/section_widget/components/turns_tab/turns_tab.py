@@ -1,20 +1,20 @@
 from PyQt6.QtWidgets import QTabWidget
 
 from Enums.Enums import TurnsTabAttribute
-from widgets.codex_turns_panel import CodexTurnsPanel
+from widgets.letterbook_turns_panel import LetterBookTurnsPanel
 from .turns_tab_visibility_handler import TurnsTabVisibilityHandler
 from typing import TYPE_CHECKING
 from .turns_tab_turns_updater import TurnsTabUpdater
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
-    from widgets.scroll_area.components.section_manager.section_widget.codex_section_widget import (
-        CodexSectionWidget,
+    from widgets.scroll_area.components.section_manager.section_widget.letterbook_section_widget import (
+        LetterBookSectionWidget,
     )
 
 
 class TurnsTab(QTabWidget):
-    def __init__(self, section: "CodexSectionWidget"):
+    def __init__(self, section: "LetterBookSectionWidget"):
         super().__init__()
         self.section = section
 
@@ -27,11 +27,11 @@ class TurnsTab(QTabWidget):
         self.updater = TurnsTabUpdater(self)
 
     def _setup_panels(self):
-        self.motion_type_turns_panel = CodexTurnsPanel(
+        self.motion_type_turns_panel = LetterBookTurnsPanel(
             self, TurnsTabAttribute.MOTION_TYPE
         )
-        self.color_turns_panel = CodexTurnsPanel(self, TurnsTabAttribute.COLOR)
-        self.lead_state_turns_panel = CodexTurnsPanel(
+        self.color_turns_panel = LetterBookTurnsPanel(self, TurnsTabAttribute.COLOR)
+        self.lead_state_turns_panel = LetterBookTurnsPanel(
             self, TurnsTabAttribute.LEAD_STATE
         )
 

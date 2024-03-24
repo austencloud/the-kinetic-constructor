@@ -15,7 +15,10 @@ class SettingsManager:
     MAX_COLUMN_COUNT = 8
     MIN_COLUMN_COUNT = 3
 
-    def __init__(self, main_window: "MainWindow", ):
+    def __init__(
+        self,
+        main_window: "MainWindow",
+    ):
         self.settings_file = resource_path("user_settings.json")
         self.main_window = main_window
         self.settings = self.load_settings()
@@ -57,7 +60,7 @@ class SettingsManager:
         column_count = max(
             self.MIN_COLUMN_COUNT, min(inverted_value, self.MAX_COLUMN_COUNT)
         )
-        self.main_window.main_widget.main_tab_widget.codex.scroll_area.display_manager.COLUMN_COUNT = (
+        self.main_window.main_widget.main_tab_widget.letterbook.scroll_area.display_manager.COLUMN_COUNT = (
             column_count
         )
 

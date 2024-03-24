@@ -3,24 +3,24 @@ from typing import TYPE_CHECKING
 from Enums.Enums import TurnsTabAttribute
 from Enums.MotionAttributes import LeadStates, MotionType
 from constants import BLUE, RED
-from widgets.codex.codex_letter_button_frame.components.codex_turns_box import (
-    CodexTurnsBox,
+from widgets.letterbook.letterbook_letter_button_frame.components.letterbook_turns_box import (
+    LetterBookTurnsBox,
 )
 
 
 if TYPE_CHECKING:
-    from widgets.codex_turns_panel import CodexTurnsPanel
+    from widgets.letterbook_turns_panel import LetterBookTurnsPanel
 
 
-class CodexTurnsBoxFactory:
-    def __init__(self, turns_panel: "CodexTurnsPanel") -> None:
+class LetterBookTurnsBoxFactory:
+    def __init__(self, turns_panel: "LetterBookTurnsPanel") -> None:
         self.turns_panel = turns_panel
 
-    def create_boxes(self) -> list[CodexTurnsBox]:
+    def create_boxes(self) -> list[LetterBookTurnsBox]:
         attributes = []
         if self.turns_panel.attribute_type == TurnsTabAttribute.MOTION_TYPE:
             return [
-                CodexTurnsBox(
+                LetterBookTurnsBox(
                     self.turns_panel, TurnsTabAttribute.MOTION_TYPE, motion_type
                 )
                 for motion_type in [
@@ -36,6 +36,8 @@ class CodexTurnsBoxFactory:
             attributes = [LeadStates.LEADING, LeadStates.TRAILING]
 
         return [
-            CodexTurnsBox(self.turns_panel, self.turns_panel.attribute_type, attribute)
+            LetterBookTurnsBox(
+                self.turns_panel, self.turns_panel.attribute_type, attribute
+            )
             for attribute in attributes
         ]

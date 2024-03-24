@@ -1,6 +1,6 @@
 from PyQt6.QtGui import QIcon
-from widgets.factories.button_factory.buttons.codex_adjust_turns_button import (
-    CodexAdjustTurnsButton,
+from widgets.factories.button_factory.buttons.letterbook_adjust_turns_button import (
+    LetterBookAdjustTurnsButton,
 )
 from widgets.factories.button_factory.buttons.rot_dir_buttons import (
     PropRotDirButton,
@@ -34,7 +34,7 @@ class ButtonFactory:
         return button
 
     @staticmethod
-    def create_adjust_turns_button(text: str) -> CodexAdjustTurnsButton:
-        button = CodexAdjustTurnsButton()
+    def create_adjust_turns_button(text: str) -> LetterBookAdjustTurnsButton:
+        button = LetterBookAdjustTurnsButton()
         button.setText(text)
         return button
