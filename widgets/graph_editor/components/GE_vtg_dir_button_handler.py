@@ -19,6 +19,7 @@ from Enums.Enums import VTG_Directions
 
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtCore import QSize
+from resource_path import resource_path
 from widgets.factories.button_factory.buttons.rot_dir_buttons import VtgDirButton
 
 
@@ -52,11 +53,13 @@ class GE_VtgDirButtonManager:
 
     def _setup_vtg_dir_buttons(self) -> list[QPushButton]:
         button_factory = self.graph_editor.main_widget.button_factory
+        same_path = resource_path(f"{ICON_DIR}same_direction.png")
+        opp_path = resource_path(f"{ICON_DIR}opp_direction.png")
         self.same_button: VtgDirButton = button_factory.create_vtg_dir_button(
-            f"{ICON_DIR}same_direction.png", lambda: self._set_vtg_dir(SAME), SAME
+            same_path, lambda: self._set_vtg_dir(SAME), SAME
         )
         self.opp_button: VtgDirButton = button_factory.create_vtg_dir_button(
-            f"{ICON_DIR}opp_direction.png", lambda: self._set_vtg_dir(OPP), OPP
+            opp_path, lambda: self._set_vtg_dir(OPP), OPP
         )
         self.same_button.unpress()
         self.opp_button.unpress()

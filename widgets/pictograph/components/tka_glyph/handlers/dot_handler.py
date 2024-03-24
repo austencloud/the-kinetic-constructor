@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 from Enums.Enums import VTG_Directions
 from constants import OPP, SAME
+from resource_path import resource_path
 
 if TYPE_CHECKING:
     from ..tka_glyph import TKA_Glyph
@@ -15,7 +16,7 @@ class DotHandler:
         self.glyph = glyph
         self.same_dot_item = None
         self.opp_dot_item = None
-        self.add_dots("images/same_opp_dot.svg")
+        self.add_dots(resource_path("images/same_opp_dot.svg"))
         self.hide_dots()
 
     def add_dots(self, dot_path: str) -> None:
@@ -37,6 +38,10 @@ class DotHandler:
             item = QGraphicsSvgItem()
             item.setSharedRenderer(renderer)
             return item
+        else:
+            # Handle the error or log a warning that the renderer could not be created
+            print(f"Warning: Renderer for {dot_path} is not valid.")
+            return None
 
     def update_dots(self, dir: VTG_Directions) -> None:
         padding = 10

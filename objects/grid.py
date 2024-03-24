@@ -1,4 +1,6 @@
 import json
+import os
+import sys
 from typing import TYPE_CHECKING, NamedTuple, Union, Literal
 from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
@@ -13,6 +15,7 @@ from Enums.Enums import GridModes
 from Enums.PropTypes import (
     strictly_placed_props,
 )
+from resource_path import resource_path
 
 if TYPE_CHECKING:
 
@@ -84,7 +87,7 @@ class GridData:
 
 
 class Grid:
-    def __init__(self, scene: Union["Pictograph"]) -> None:
+    def __init__(self, scene: "Pictograph") -> None:
         self.scene = scene
         self.items: dict[GridModes, GridItem] = {}
         self.grid_mode = DIAMOND
@@ -93,7 +96,15 @@ class Grid:
         self.center = self.grid_data.center_point.coordinates
 
     def _load_grid_data(self) -> GridData:
-        with open("data/circle_coords.json", "r") as file:
+        if getattr(sys, "frozen", False):
+            # The application is frozen
+            base_dir = sys._MEIPASS
+        else:
+            # The application is running as a script
+            base_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+        
+        json_path = os.path.join(base_dir, "data/circle_coords.json")
+        with open(json_path, "r") as file:
             data = json.load(file)
         return GridData(data)
 
@@ -119,7 +130,7 @@ class Grid:
         }
 
         for mode, path in paths.items():
-            item = GridItem(path)
+            item = GridItem(resource_path(path))
             grid_scene.addItem(item)
             self.items[mode] = item
             item.setVisible(mode == self.grid_mode)

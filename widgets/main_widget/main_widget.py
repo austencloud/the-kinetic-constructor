@@ -1,4 +1,6 @@
 import json
+import os
+import sys
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QKeyEvent
 from PyQt6.QtCore import Qt
@@ -49,10 +51,19 @@ class MainWidget(QWidget):
             self.all_pictographs[letter] = {}
 
     def _set_prop_type(self) -> None:
-        with open("user_settings.json", "r") as file:
+        if getattr(sys, "frozen", False):
+            base_dir = sys._MEIPASS
+        else:
+            base_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+
+        user_settings_path = os.path.join(base_dir, "user_settings.json")
+
+        with open(user_settings_path, "r") as file:
             user_settings: dict = json.load(file)
+
         prop_type_value = user_settings.get("prop_type")
         self.prop_type = PropType.get_prop_type(prop_type_value)
+
 
     def _setup_components(self) -> None:
         self._setup_special_placements()

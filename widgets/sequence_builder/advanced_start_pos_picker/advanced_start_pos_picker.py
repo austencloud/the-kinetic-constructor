@@ -14,7 +14,7 @@ from widgets.sequence_builder.components.start_pos_picker.choose_your_start_pos_
     ChooseYourStartPosLabel,
 )
 
-from widgets.sequence_builder.components.start_pos_picker.start_pos_default_ori_picker import (
+from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_default_ori_picker import (
     AdvancedStartPosPickerDefaultOriWidget,
 )
 

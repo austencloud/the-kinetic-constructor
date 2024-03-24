@@ -1,0 +1,69 @@
+{
+  "hand_points": {
+    "diamond": {
+      "normal": {
+        "n_diamond_hand_point": "(475.0, 331.9)",
+        "e_diamond_hand_point": "(618.1, 475.0)",
+        "s_diamond_hand_point": "(475.0, 618.1)",
+        "w_diamond_hand_point": "(331.9, 475.0)"
+      },
+      "strict": {
+        "n_diamond_hand_point_strict": "(475.0, 325.0)",
+        "e_diamond_hand_point_strict": "(625.0, 475.0)",
+        "s_diamond_hand_point_strict": "(475.0, 625.0)",
+        "w_diamond_hand_point_strict": "(325.0, 475.0)"
+      }
+    },
+    "box": {
+      "normal": {
+        "ne_box_hand_point": "(476.2, 273.8)",
+        "se_box_hand_point": "(476.2, 476.2)",
+        "sw_box_hand_point": "(273.8, 476.2)",
+        "nw_box_hand_point": "(273.8, 273.8)"
+      },
+      "strict": {
+        "ne_box_hand_point_strict": "(481.1, 268.9)",
+        "se_box_hand_point_strict": "(481.1, 481.1)",
+        "sw_box_hand_point_strict": "(268.9, 481.1)",
+        "nw_box_hand_point_strict": "(268.9, 268.9)"
+      }
+    }
+  },
+  "layer2_points": {
+    "diamond": {
+      "normal": {
+        "ne_diamond_layer2_point": "(618.1, 331.9)",
+        "se_diamond_layer2_point": "(618.1, 618.1)",
+        "sw_diamond_layer2_point": "(331.9, 618.1)",
+        "nw_diamond_layer2_point": "(331.9, 331.9)"
+      },
+      "strict": {
+        "ne_diamond_layer2_point_strict": "(625.0, 325.0)",
+        "se_diamond_layer2_point_strict": "(625.0, 625.0)",
+        "sw_diamond_layer2_point_strict": "(325.0, 625.0)",
+        "nw_diamond_layer2_point_strict": "(325.0, 325.0)"
+      }
+    },
+    "box": {
+      "normal": {
+        "n_box_layer2_point": "(375.0, 172.6)",
+        "e_box_layer2_point": "(577.4, 375.0)",
+        "s_box_layer2_point": "(375.0, 577.4)",
+        "w_box_layer2_point": "(172.6, 375.0)"
+      },
+      "strict": {
+        "n_box_layer2_point_strict": "(375.0, 162.9)",
+        "e_box_layer2_point_strict": "(587.1, 375.0)",
+        "s_box_layer2_point_strict": "(375.0, 587.1)",
+        "w_box_layer2_point_strict": "(162.9, 375.0)"
+      }
+    }
+  },
+  "outer_points": {
+    "n_outer_point": "None",
+    "e_outer_point": "None",
+    "s_outer_point": "None",
+    "w_outer_point": "None"
+  },
+  "center_point": "(475.0, 475.0)"
+}

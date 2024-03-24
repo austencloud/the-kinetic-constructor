@@ -1,3 +1,5 @@
+import os
+import sys
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
@@ -32,7 +34,15 @@ class SequenceBuilder(QFrame):
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.current_pictograph: Pictograph = None
-        self.letters_df = pd.read_csv("PictographDataframe.csv")
+        if getattr(sys, "frozen", False):
+            # The application is frozen
+            base_dir = sys._MEIPASS
+        else:
+            # The application is running as a script
+            base_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+        
+        csv_path = os.path.join(base_dir, "PictographDataframe.csv")
+        self.letters_df = pd.read_csv(csv_path)
         self.start_position_picked = False
         self.pictograph_cache: dict[Letter, dict[str, Pictograph]] = {
             letter: {} for letter in Letter

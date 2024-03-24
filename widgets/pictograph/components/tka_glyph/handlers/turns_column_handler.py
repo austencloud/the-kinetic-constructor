@@ -3,6 +3,8 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 from typing import TYPE_CHECKING, Union
 
+from resource_path import resource_path
+
 
 if TYPE_CHECKING:
     from widgets.pictograph.components.tka_glyph.tka_glyph import TKA_Glyph
@@ -14,8 +16,8 @@ class TurnsColumnHandler(QGraphicsItemGroup):
         self.glyph = glyph
         self.top_number_item = None
         self.bottom_number_item = None
-        self.svg_path_prefix = "images/numbers/"
-        self.blank_svg_path = "images/blank.svg"
+        self.svg_path_prefix = resource_path("images/numbers/")
+        self.blank_svg_path = resource_path("images/blank.svg")
 
     def load_number_svg(self, number: Union[int, float]) -> QGraphicsSvgItem:
         svg_path = (

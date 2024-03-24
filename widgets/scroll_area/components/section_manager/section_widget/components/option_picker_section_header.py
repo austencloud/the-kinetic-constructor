@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLabel, QSizePolicy, QFrame
 from PyQt6.QtCore import pyqtSignal, Qt
 from PyQt6.QtGui import QPixmap
+from resource_path import resource_path
 from widgets.scroll_area.components.section_manager.section_widget.components.type_label import (
     SectionTypeLabel,
 )
@@ -14,8 +15,8 @@ if TYPE_CHECKING:
 
 class OptionPickerSectionHeader(QWidget):
     clicked = pyqtSignal()
-    EXPAND_ARROW_PATH = "images/icons/dropdown/expand.png"
-    COLLAPSE_ARROW_PATH = "images/icons/dropdown/collapse.png"
+    EXPAND_ARROW_PATH = resource_path("images/icons/dropdown/expand.png")
+    COLLAPSE_ARROW_PATH = resource_path("images/icons/dropdown/collapse.png")
 
     def __init__(self, section: "OptionPickerSectionWidget") -> None:
         super().__init__()

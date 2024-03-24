@@ -2,6 +2,7 @@ import json
 import os
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
+from resource_path import resource_path
 from widgets.menu_bar.glyph_visibility_manager import GlyphVisibilityManager
 from prop_type_changer import PropTypeChanger
 
@@ -14,8 +15,8 @@ class SettingsManager:
     MAX_COLUMN_COUNT = 8
     MIN_COLUMN_COUNT = 3
 
-    def __init__(self, main_window: "MainWindow", settings_file="user_settings.json"):
-        self.settings_file = settings_file
+    def __init__(self, main_window: "MainWindow", ):
+        self.settings_file = resource_path("user_settings.json")
         self.main_window = main_window
         self.settings = self.load_settings()
         self.prop_type_changer = PropTypeChanger(main_window)

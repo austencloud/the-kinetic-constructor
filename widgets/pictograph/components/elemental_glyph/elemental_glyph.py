@@ -4,7 +4,15 @@ from PyQt6.QtSvg import QSvgRenderer
 from typing import TYPE_CHECKING
 
 from Enums.Enums import LetterType
-from constants import QUARTER_OPP, QUARTER_SAME, SPLIT_OPP, SPLIT_SAME, TOG_OPP, TOG_SAME
+from constants import (
+    QUARTER_OPP,
+    QUARTER_SAME,
+    SPLIT_OPP,
+    SPLIT_SAME,
+    TOG_OPP,
+    TOG_SAME,
+)
+from resource_path import resource_path
 
 
 if TYPE_CHECKING:
@@ -19,7 +27,7 @@ SVG_PATHS = {
     QUARTER_OPP: "moon.svg",
 }
 
-SVG_BASE_PATH = "images/elements"
+SVG_BASE_PATH = resource_path("images/elements")
 SVG_PATHS = {
     vtg_mode: f"{SVG_BASE_PATH}/{path}" for vtg_mode, path in SVG_PATHS.items()
 }

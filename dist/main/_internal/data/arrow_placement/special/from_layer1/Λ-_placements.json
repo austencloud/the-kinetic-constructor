@@ -1,0 +1,16 @@
+{
+  "Λ-": {
+    "(0, 1, op)": {
+      "dash_rot_angle_override": true
+    },
+    "(ccw, 1, op)": {
+      "dash_rot_angle_override": true
+    },
+    "(1, 0, op)": {
+      "blue": [-10, -20]
+    },
+    "(ccw, 0, op)": {
+      "red": [-10, -20]
+    }
+  }
+}

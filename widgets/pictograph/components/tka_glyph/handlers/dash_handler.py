@@ -2,6 +2,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
+from resource_path import resource_path
+
 if TYPE_CHECKING:
     from ..tka_glyph import TKA_Glyph
 
@@ -11,8 +13,8 @@ class DashHandler:
         self.glyph = glyph
         self.dash_item = None
 
-    def add_dash(self):
-        dash_path = "images/dash.svg"
+    def add_dash(self) -> None:
+        dash_path = resource_path("images/dash.svg")
         self.dash_item = self.create_dash(dash_path)
         self.glyph.addToGroup(self.dash_item)
 
@@ -24,7 +26,7 @@ class DashHandler:
             return item
         return None
 
-    def position_dash(self):
+    def position_dash(self) -> None:
         padding = 5
         if self.dash_item:
             letter_scene_rect = (
@@ -37,6 +39,6 @@ class DashHandler:
             )
             self.dash_item.setPos(dash_x, dash_y)
 
-    def update_dash(self):
+    def update_dash(self) -> None:
         self.add_dash()
         self.position_dash()

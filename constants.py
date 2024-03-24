@@ -144,7 +144,6 @@ PICTOGRAPH_DIR = "images/pictographs/"
 ARROW_DIR = "images/arrows/"
 PROP_DIR = "images/props/"
 LETTER_BTN_ICON_DIR = "images/letter_button_icons"
-LETTERS_TRIMMED_SVG_DIR = "images/letters_trimmed/"
 ICON_DIR = "images/icons/"
 GRID_DIR = "images/grid/"
 

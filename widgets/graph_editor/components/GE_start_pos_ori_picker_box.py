@@ -22,7 +22,7 @@ class GE_StartPosOriPickerBox(QFrame):
         color: Color,
     ) -> None:
         super().__init__(adjustment_panel)
-        self.setObjectName("GE_StartPosOriPickerBox")  # Assign a unique object name
+        self.setObjectName("GE_StartPosOriPickerBox")
         self.adjustment_panel = adjustment_panel
         self.color = color
         self.start_pos = start_pos

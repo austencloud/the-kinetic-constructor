@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QHBoxLayout, QSizePolicy
 from PyQt6.QtCore import QSize, Qt
 from constants import LETTER_BTN_ICON_DIR
+from resource_path import resource_path
 from .codex_letter_button_click_handler import CodexLetterButtonClickHandler
 from .codex_letter_button_styler import CodexLetterButtonStyler
 from .codex_letter_button import CodexLetterButton
@@ -29,7 +30,7 @@ class CodexLetterButtonManager:
                 for letter_str in row:
                     letter = Letter.get_letter(letter_str)
                     letter_type = LetterType.get_letter_type(letter)
-                    icon_path = f"{self.icon_dir}/{letter_type.name}/{letter_str}.svg"
+                    icon_path = resource_path(f"{self.icon_dir}/{letter_type.name}/{letter_str}.svg")
                     button = self._create_letter_button(icon_path, letter_str)
                     self.buttons[letter] = button
 

@@ -22,6 +22,7 @@ from constants import (
 )
 from Enums.MotionAttributes import Color, MotionType
 from Enums.PropTypes import PropType, PropTypeslist
+from resource_path import resource_path
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
@@ -37,7 +38,7 @@ class GraphicalObjectSvgManager:
         self.renderer = None
 
     @staticmethod
-    def preload_svg_cache():
+    def preload_svg_cache() -> None:
         turns = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0]
         motion_types = [ANTI, PRO, DASH, STATIC]
         start_orientations = [RADIAL, NONRADIAL]
@@ -55,7 +56,7 @@ class GraphicalObjectSvgManager:
     @staticmethod
     def _preload_arrow_svg(motion_type, turns, start_ori):
         cache_key = f"{motion_type}_{turns}_{start_ori}"
-        file_path = (
+        file_path = resource_path(
             f"images/arrows/{motion_type}/from_{start_ori}/{motion_type}_{turns}.svg"
         )
         GraphicalObjectSvgManager.svg_cache[cache_key] = file_path
@@ -63,8 +64,9 @@ class GraphicalObjectSvgManager:
     @staticmethod
     def _preload_prop_svg_path(prop_type):
         cache_key = f"prop_{prop_type}"
-        file_path = f"images/props/{prop_type}.svg"
+        file_path = resource_path(f"images/props/{prop_type}.svg")
         GraphicalObjectSvgManager.svg_cache[cache_key] = file_path
+
 
     def set_svg_color(self, svg_data: str, new_color: str) -> bytes:
         # Apply color transformations directly to SVG data and return the modified SVG content
@@ -109,16 +111,14 @@ class GraphicalObjectSvgManager:
         object.setSharedRenderer(object.renderer)
 
     def get_svg_data(self, object: Union["Arrow", "Prop"]) -> str:
-        """Retrieves the original SVG data from file or cache."""
         svg_file = self.get_svg_file(object)
-        # If SVG content is already in the content cache, return it
         if svg_file in self.svg_content_cache:
             return self.svg_content_cache[svg_file]
-        # Otherwise, load it from the file, store it in the cache, and return it
-        with open(svg_file, "r") as file:
+        with open(resource_path(svg_file), "r") as file:
             svg_data = file.read()
         self.svg_content_cache[svg_file] = svg_data
         return svg_data
+
 
     def get_or_create_renderer(self, svg_data: bytes, cache_key: str) -> QSvgRenderer:
         if cache_key in self.renderer_cache:

@@ -5,6 +5,7 @@ from PyQt6.QtCore import Qt, QSize, pyqtSignal
 from constants import IN, ORI, OUT, CLOCK, COUNTER
 from typing import TYPE_CHECKING
 
+from resource_path import resource_path
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
@@ -62,7 +63,7 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.ori_label.setFont(font)
 
     def _setup_orientation_control_layout(self) -> None:
-        path = "images/icons"
+        path = resource_path("images/icons")
         self.ccw_button = self.setup_button(f"{path}/rotate_ccw.png", self.rotate_ccw)
         self.current_orientation_display = self.setup_current_orientation_display()
         self.cw_button = self.setup_button(f"{path}/rotate_cw.png", self.rotate_cw)

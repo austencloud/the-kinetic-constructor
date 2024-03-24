@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -16,18 +17,21 @@ class SpecialPlacementLoader:
             "from_layer3_blue1_red2": {},
         }
 
-    def load_special_placements(
-        self,
-    ) -> dict[str, dict[str, dict[str, dict[str, int]]]]:
-        """Loads the special placements for arrows from radial and nonradial directories."""
+    def load_special_placements(self) -> dict[str, dict[str, dict[str, dict[str, int]]]]:
+        if getattr(sys, "frozen", False):
+            # The application is frozen
+            base_dir = sys._MEIPASS
+        else:
+            # The application is running as a script
+            base_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+
         for subfolder in [
             "from_layer1",
             "from_layer2",
             "from_layer3_blue2_red1",
             "from_layer3_blue1_red2",
         ]:
-
-            directory = os.path.join("data/arrow_placement/special/", subfolder)
+            directory = os.path.join(base_dir, "data/arrow_placement/special/", subfolder)
             for file_name in os.listdir(directory):
                 if file_name.endswith("_placements.json"):
                     with open(
