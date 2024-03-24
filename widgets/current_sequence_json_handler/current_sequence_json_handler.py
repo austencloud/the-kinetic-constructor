@@ -1,6 +1,9 @@
 import json
+import os
+import sys
 from Enums.MotionAttributes import Color
 from constants import BLUE, DASH, NO_ROT, RED, STATIC
+from path_helpers import app_data_path, dev_path, resource_path
 from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
 from .motion_orientation_json_calculator import CurrentSequenceJsonOriCalculator
 from widgets.pictograph.pictograph import Pictograph
@@ -16,11 +19,19 @@ if TYPE_CHECKING:
 
 class CurrentSequenceJsonHandler:
     def __init__(self, json_manager: "JSON_Manager") -> None:
-        self.current_sequence_json = "current_sequence.json"
         self.main_widget = json_manager.main_widget
+
+        if getattr(sys, "frozen", False):
+            print("Running as a PyInstaller bundle")
+            self.current_sequence_json = app_data_path("current_sequence.json")
+        else:
+            print("Running in a development environment")
+            self.current_sequence_json = dev_path("current_sequence.json")
+
         self.ori_calculator = CurrentSequenceJsonOriCalculator(self)
         self.validation_engine = CurrentSequenceJsonValidationEngine(self)
-        self.clear_current_sequence_file()
+
+        self.clear_current_sequence_file()  # Clears or initializes the file at the new location
 
     def set_start_position_data(self, start_pos_pictograph: Pictograph) -> None:
         red_start_ori = start_pos_pictograph.pictograph_dict["red_attributes"][
@@ -30,7 +41,7 @@ class CurrentSequenceJsonHandler:
             "start_ori"
         ]
 
-        sequence = self.load_current_sequence_json()
+        self.sequence = self.load_current_sequence_json()
 
         start_position_dict = {
             "sequence_start_position": start_pos_pictograph.end_pos[:-1],
@@ -45,33 +56,37 @@ class CurrentSequenceJsonHandler:
             },
         }
 
-        if sequence and "sequence_start_position" in sequence[0]:
-            sequence[0] = start_position_dict
+        if self.sequence and "sequence_start_position" in self.sequence[0]:
+            self.sequence[0] = start_position_dict
         else:
-            sequence.insert(0, start_position_dict)
+            self.sequence.insert(0, start_position_dict)
 
-        self.save_sequence(sequence)
+        self.save_sequence(self.sequence)
 
     def load_current_sequence_json(self) -> list[dict]:
+        print("Loading current sequence json")
         try:
             with open(self.current_sequence_json, "r", encoding="utf-8") as file:
                 sequence = json.load(file)
             return sequence
         except FileNotFoundError:
+            print("Current sequence json not found")
             return []
 
     def save_sequence(self, sequence):
+        print(
+            "Saving sequence at current_sequence.json located at ",
+            self.current_sequence_json,
+        )
         with open(self.current_sequence_json, "w", encoding="utf-8") as file:
             json.dump(sequence, file, indent=4, ensure_ascii=False)
 
-    def get_red_end_ori(self):
-        sequence = self.load_current_sequence_json()
+    def get_red_end_ori(self, sequence):
         if sequence:
             return sequence[-1]["red_attributes"]["end_ori"]
         return 0
 
-    def get_blue_end_ori(self):
-        sequence = self.load_current_sequence_json()
+    def get_blue_end_ori(self, sequence):
         if sequence:
             return sequence[-1]["blue_attributes"]["end_ori"]
         return 0
@@ -96,7 +111,7 @@ class CurrentSequenceJsonHandler:
             file.write("[]")
 
     def update_current_sequence_file_with_beat(self, beat_view: BeatView):
-        sequence_data = self.load_current_sequence_json()
+        sequence_data = self.sequence
         sequence_data.append(beat_view.beat.get.pictograph_dict())
         with open("current_sequence.json", "w", encoding="utf-8") as file:
             json.dump(sequence_data, file, indent=4, ensure_ascii=False)

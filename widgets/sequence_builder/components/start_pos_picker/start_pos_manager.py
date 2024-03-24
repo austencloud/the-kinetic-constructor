@@ -83,6 +83,7 @@ class StartPosManager(QObject):
         self.start_position_selected.connect(
             self.sequence_builder.transition_to_sequence_building
         )
+        
         self.sequence_builder.main_widget.json_manager.current_sequence_json_handler.set_start_position_data(
             start_position_beat
         )

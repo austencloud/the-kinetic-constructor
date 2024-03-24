@@ -15,7 +15,7 @@ from Enums.Enums import GridModes
 from Enums.PropTypes import (
     strictly_placed_props,
 )
-from resource_path import resource_path
+from path_helpers import resource_path
 
 if TYPE_CHECKING:
 

@@ -3,7 +3,7 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 from typing import TYPE_CHECKING, Union
 
-from resource_path import resource_path
+from path_helpers import resource_path
 
 
 if TYPE_CHECKING:

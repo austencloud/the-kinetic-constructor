@@ -1,3 +1,4 @@
+from calendar import c
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
@@ -56,20 +57,23 @@ class OptionPickerScrollArea(BasePictographScrollArea):
     def _add_and_display_relevant_pictographs(self, next_options: list[dict]) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         valid_next_options = []
-
+        current_sequence_json_handler = (
+            self.main_widget.json_manager.current_sequence_json_handler
+        )
+        sequence = current_sequence_json_handler.load_current_sequence_json()
         for pictograph_dict in next_options:
             valid_next_options.append(pictograph_dict)
 
         for pictograph_dict in valid_next_options:
-            self.set_pictograph_orientations(pictograph_dict)
-            pictograph = self._get_or_create_pictograph(pictograph_dict)
+            self.set_pictograph_orientations(pictograph_dict, sequence)
+            pictograph = self._get_or_create_pictograph(pictograph_dict, sequence)
             pictograph.updater._update_from_pictograph_dict(pictograph_dict)
             self.display_manager.add_pictograph_to_section_layout(pictograph)
         self.display_manager.order_and_display_pictographs()
         QApplication.restoreOverrideCursor()
 
-    def set_pictograph_orientations(self, pictograph_dict: dict) -> None:
-        last_pictograph = self.sequence_builder.get_last_added_pictograph()
+    def set_pictograph_orientations(self, pictograph_dict: dict, sequence) -> None:
+        last_pictograph = self.sequence_builder.get_last_added_pictograph(sequence)
         pictograph_dict["red_attributes"]["start_ori"] = last_pictograph[
             "red_attributes"
         ]["end_ori"]
@@ -83,7 +87,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             self.ori_calculator.calculate_end_orientation(pictograph_dict, BLUE)
         )
 
-    def _get_or_create_pictograph(self, pictograph_dict: dict) -> Pictograph:
+    def _get_or_create_pictograph(self, pictograph_dict: dict, sequence) -> Pictograph:
         modified_key = self.sequence_builder.main_widget.pictograph_key_generator.generate_pictograph_key(
             pictograph_dict
         )
@@ -91,7 +95,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             return self.pictograph_cache[modified_key]
         else:
             pictograph = self.sequence_builder.render_and_store_pictograph(
-                pictograph_dict
+                pictograph_dict, sequence
             )
             self.pictograph_cache[modified_key] = pictograph
             self.main_widget.all_pictographs[pictograph.letter][

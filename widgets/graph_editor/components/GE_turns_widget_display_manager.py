@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
 )
 from constants import BLUE, RED
 
-from resource_path import resource_path
+from path_helpers import resource_path
 from widgets.graph_editor.components.GE_adjust_turns_button import (
     GE_AdjustTurnsButton,
 )

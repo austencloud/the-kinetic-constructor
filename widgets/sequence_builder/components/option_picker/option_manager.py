@@ -19,10 +19,7 @@ class OptionManager(QObject):
         self.main_widget = option_picker.main_widget
         self.start_options: dict[str, Pictograph] = {}
 
-    def get_next_options(self) -> list[dict]:
-        sequence = (
-            self.main_widget.json_manager.current_sequence_json_handler.load_current_sequence_json()
-        )
+    def get_next_options(self, sequence) -> list[dict]:
         next_options = []
 
         last_pictograph_dict = sequence[-1]

@@ -40,7 +40,7 @@ class SequenceBuilder(QFrame):
         else:
             # The application is running as a script
             base_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
-        
+
         csv_path = os.path.join(base_dir, "PictographDataframe.csv")
         self.letters_df = pd.read_csv(csv_path)
         self.start_position_picked = False
@@ -91,8 +91,10 @@ class SequenceBuilder(QFrame):
         self.option_picker.update_option_picker()
         self.option_picker.scroll_area.display_manager.order_and_display_pictographs()
 
-    def render_and_store_pictograph(self, pictograph_dict: dict) -> Pictograph:
-        pictograph_dict = self._add_turns_and_start_ori(pictograph_dict)
+    def render_and_store_pictograph(
+        self, pictograph_dict: dict, sequence
+    ) -> Pictograph:
+        pictograph_dict = self._add_turns_and_start_ori(pictograph_dict, sequence)
         letter_str = pictograph_dict["letter"]
         letter = Letter.get_letter(letter_str)
         letter_type = LetterType.get_letter_type(letter)
@@ -120,13 +122,10 @@ class SequenceBuilder(QFrame):
         scroll_area.pictograph_cache[pictograph_key] = new_pictograph
         return new_pictograph
 
-    def _add_turns_and_start_ori(self, pictograph_dict):
-        self.current_end_red_ori = (
-            self.main_widget.json_manager.current_sequence_json_handler.get_red_end_ori()
-        )
-        self.current_end_blue_ori = (
-            self.main_widget.json_manager.current_sequence_json_handler.get_blue_end_ori()
-        )
+    def _add_turns_and_start_ori(self, pictograph_dict, sequence):
+        json_handler = self.main_widget.json_manager.current_sequence_json_handler
+        self.current_end_red_ori = json_handler.get_red_end_ori(sequence)
+        self.current_end_blue_ori = json_handler.get_blue_end_ori(sequence)
 
         pictograph_dict[RED_START_ORI] = self.current_end_red_ori
         pictograph_dict[BLUE_START_ORI] = self.current_end_blue_ori
@@ -147,7 +146,5 @@ class SequenceBuilder(QFrame):
         self.start_pos_picker.resize_start_pos_picker()
         # self.option_picker.scroll_area.resize_option_picker_scroll_area()
 
-    def get_last_added_pictograph(self):
-        return self.main_widget.json_manager.current_sequence_json_handler.load_current_sequence_json()[
-            -1
-        ]
+    def get_last_added_pictograph(self, sequence):
+        return sequence[-1]

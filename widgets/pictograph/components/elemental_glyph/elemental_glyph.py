@@ -12,7 +12,7 @@ from constants import (
     TOG_OPP,
     TOG_SAME,
 )
-from resource_path import resource_path
+from path_helpers import resource_path
 
 
 if TYPE_CHECKING:

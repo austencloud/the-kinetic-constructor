@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QHBoxLayout, QSizePolicy
 from PyQt6.QtCore import QSize, Qt
 from constants import LETTER_BTN_ICON_DIR
-from resource_path import resource_path
+from path_helpers import resource_path
 from .letterbook_letter_button_click_handler import LetterBookLetterButtonClickHandler
 from .letterbook_letter_button_styler import LetterBookLetterButtonStyler
 from .letterbook_letter_button import LetterBookLetterButton

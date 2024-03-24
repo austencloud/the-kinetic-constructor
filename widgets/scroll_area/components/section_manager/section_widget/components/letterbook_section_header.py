@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLabel, QSizePolicy, QFrame
 from PyQt6.QtCore import pyqtSignal, Qt
 from PyQt6.QtGui import QPixmap
-from resource_path import resource_path
+from path_helpers import resource_path
 from widgets.scroll_area.components.section_manager.section_widget.components.type_label import (
     SectionTypeLabel,
 )

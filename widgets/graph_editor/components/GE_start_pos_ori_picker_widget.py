@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt, QSize, pyqtSignal
 from constants import IN, ORI, OUT, CLOCK, COUNTER
 from typing import TYPE_CHECKING
 
-from resource_path import resource_path
+from path_helpers import resource_path
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:

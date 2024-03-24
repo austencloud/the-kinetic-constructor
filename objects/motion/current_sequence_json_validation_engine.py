@@ -12,7 +12,7 @@ class CurrentSequenceJsonValidationEngine:
         self, current_sequence_json_handler: "CurrentSequenceJsonHandler"
     ) -> None:
         self.json_handler = current_sequence_json_handler
-        self.sequence_json = self.json_handler.load_current_sequence_json()
+        self.sequence_json = []
 
     def validate_and_update_sequence_json(self) -> None:
         """Iterates through the sequence, updating start and end orientations to ensure continuity."""

@@ -15,7 +15,7 @@ from constants import (
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
 from Enums.Enums import OrientationTypes
-from resource_path import resource_path
+from path_helpers import resource_path
 
 if TYPE_CHECKING:
     from ..arrow_placement_manager import ArrowPlacementManager

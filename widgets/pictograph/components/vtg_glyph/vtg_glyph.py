@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Literal
 
 from Enums.Enums import LetterType
 from constants import ALPHA1, ALPHA2, ALPHA3, ALPHA4, BETA1, BETA2, BETA3, BETA4, QUARTER_OPP, QUARTER_SAME, SPLIT_OPP, SPLIT_SAME, TOG_OPP, TOG_SAME
-from resource_path import resource_path
+from path_helpers import resource_path
 
 
 if TYPE_CHECKING:

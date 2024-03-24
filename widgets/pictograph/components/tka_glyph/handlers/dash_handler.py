@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 
-from resource_path import resource_path
+from path_helpers import resource_path
 
 if TYPE_CHECKING:
     from ..tka_glyph import TKA_Glyph

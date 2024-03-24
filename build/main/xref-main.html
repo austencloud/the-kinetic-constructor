@@ -19114,7 +19114,7 @@ imports:
  &#8226;   <a href="#json">json</a>
  &#8226;   <a href="#objects">objects</a>
  &#8226;   <a href="#os">os</a>
- &#8226;   <a href="#resource_path">resource_path</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#sys">sys</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets.pictograph.pictograph">widgets.pictograph.pictograph</a>
@@ -19876,6 +19876,7 @@ imported by:
  &#8226;   <a href="#pandas.util._exceptions">pandas.util._exceptions</a>
  &#8226;   <a href="#pandas.util._print_versions">pandas.util._print_versions</a>
  &#8226;   <a href="#pandas.util._tester">pandas.util._tester</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#pathlib">pathlib</a>
  &#8226;   <a href="#pdb">pdb</a>
  &#8226;   <a href="#pkg_resources">pkg_resources</a>
@@ -19920,7 +19921,6 @@ imported by:
  &#8226;   <a href="#pyi_rth_pyqt6.py">pyi_rth_pyqt6.py</a>
  &#8226;   <a href="#pyi_rth_setuptools.py">pyi_rth_setuptools.py</a>
  &#8226;   <a href="#random">random</a>
- &#8226;   <a href="#resource_path">resource_path</a>
  &#8226;   <a href="#runpy">runpy</a>
  &#8226;   <a href="#settings_manager">settings_manager</a>
  &#8226;   <a href="#setuptools">setuptools</a>
@@ -20007,6 +20007,7 @@ imported by:
  &#8226;   <a href="#urllib.request">urllib.request</a>
  &#8226;   <a href="#uuid">uuid</a>
  &#8226;   <a href="#webbrowser">webbrowser</a>
+ &#8226;   <a href="#widgets.current_sequence_json_handler.current_sequence_json_handler">widgets.current_sequence_json_handler.current_sequence_json_handler</a>
  &#8226;   <a href="#widgets.dictionary.dictionary_turn_pattern_tree">widgets.dictionary.dictionary_turn_pattern_tree</a>
  &#8226;   <a href="#widgets.dictionary.dictionary_variation_manager">widgets.dictionary.dictionary_variation_manager</a>
  &#8226;   <a href="#widgets.dictionary.dictionary_words_tree">widgets.dictionary.dictionary_words_tree</a>
@@ -32596,6 +32597,40 @@ imported by:
 </div>
 
 <div class="node">
+  <a name="path_helpers"></a>
+  <a target="code" href="///F:/CODE/tka-app/tka-sequence-constructor/path_helpers.py" type="text/plain"><tt>path_helpers</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#os">os</a>
+ &#8226;   <a href="#sys">sys</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#objects.grid">objects.grid</a>
+ &#8226;   <a href="#settings_manager">settings_manager</a>
+ &#8226;   <a href="#widgets.current_sequence_json_handler.current_sequence_json_handler">widgets.current_sequence_json_handler.current_sequence_json_handler</a>
+ &#8226;   <a href="#widgets.graph_editor.components.GE_start_pos_ori_picker_widget">widgets.graph_editor.components.GE_start_pos_ori_picker_widget</a>
+ &#8226;   <a href="#widgets.graph_editor.components.GE_turns_widget_display_manager">widgets.graph_editor.components.GE_turns_widget_display_manager</a>
+ &#8226;   <a href="#widgets.graph_editor.components.GE_vtg_dir_button_handler">widgets.graph_editor.components.GE_vtg_dir_button_handler</a>
+ &#8226;   <a href="#widgets.graphical_object_svg_manager">widgets.graphical_object_svg_manager</a>
+ &#8226;   <a href="#widgets.letterbook.letterbook_letter_button_frame.components.letterbook_letter_button_manager">widgets.letterbook.letterbook_letter_button_frame.components.letterbook_letter_button_manager</a>
+ &#8226;   <a href="#widgets.pictograph.components.elemental_glyph.elemental_glyph">widgets.pictograph.components.elemental_glyph.elemental_glyph</a>
+ &#8226;   <a href="#widgets.pictograph.components.placement_managers.arrow_placement_manager.components.default_arrow_positioner">widgets.pictograph.components.placement_managers.arrow_placement_manager.components.default_arrow_positioner</a>
+ &#8226;   <a href="#widgets.pictograph.components.tka_glyph.handlers.dash_handler">widgets.pictograph.components.tka_glyph.handlers.dash_handler</a>
+ &#8226;   <a href="#widgets.pictograph.components.tka_glyph.handlers.dot_handler">widgets.pictograph.components.tka_glyph.handlers.dot_handler</a>
+ &#8226;   <a href="#widgets.pictograph.components.tka_glyph.handlers.tka_letter_handler">widgets.pictograph.components.tka_glyph.handlers.tka_letter_handler</a>
+ &#8226;   <a href="#widgets.pictograph.components.tka_glyph.handlers.turns_column_handler">widgets.pictograph.components.tka_glyph.handlers.turns_column_handler</a>
+ &#8226;   <a href="#widgets.pictograph.components.vtg_glyph.vtg_glyph">widgets.pictograph.components.vtg_glyph.vtg_glyph</a>
+ &#8226;   <a href="#widgets.scroll_area.components.section_manager.section_widget.components.letterbook_section_header">widgets.scroll_area.components.section_manager.section_widget.components.letterbook_section_header</a>
+ &#8226;   <a href="#widgets.scroll_area.components.section_manager.section_widget.components.option_picker_section_header">widgets.scroll_area.components.section_manager.section_widget.components.option_picker_section_header</a>
+ &#8226;   <a href="#widgets.turn_pattern_widget">widgets.turn_pattern_widget</a>
+
+  </div>
+
+</div>
+
+<div class="node">
   <a name="pathlib"></a>
   <a target="code" href="///C:/Python312/Lib/pathlib.py" type="text/plain"><tt>pathlib</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
@@ -36574,39 +36609,6 @@ imported by:
 </div>
 
 <div class="node">
-  <a name="resource_path"></a>
-  <a target="code" href="///F:/CODE/tka-app/tka-sequence-constructor/resource_path.py" type="text/plain"><tt>resource_path</tt></a>
-<span class="moduletype">SourceModule</span>  <div class="import">
-imports:
-    <a href="#os">os</a>
- &#8226;   <a href="#sys">sys</a>
-
-  </div>
-  <div class="import">
-imported by:
-    <a href="#objects.grid">objects.grid</a>
- &#8226;   <a href="#settings_manager">settings_manager</a>
- &#8226;   <a href="#widgets.graph_editor.components.GE_start_pos_ori_picker_widget">widgets.graph_editor.components.GE_start_pos_ori_picker_widget</a>
- &#8226;   <a href="#widgets.graph_editor.components.GE_turns_widget_display_manager">widgets.graph_editor.components.GE_turns_widget_display_manager</a>
- &#8226;   <a href="#widgets.graph_editor.components.GE_vtg_dir_button_handler">widgets.graph_editor.components.GE_vtg_dir_button_handler</a>
- &#8226;   <a href="#widgets.graphical_object_svg_manager">widgets.graphical_object_svg_manager</a>
- &#8226;   <a href="#widgets.letterbook.letterbook_letter_button_frame.components.letterbook_letter_button_manager">widgets.letterbook.letterbook_letter_button_frame.components.letterbook_letter_button_manager</a>
- &#8226;   <a href="#widgets.pictograph.components.elemental_glyph.elemental_glyph">widgets.pictograph.components.elemental_glyph.elemental_glyph</a>
- &#8226;   <a href="#widgets.pictograph.components.placement_managers.arrow_placement_manager.components.default_arrow_positioner">widgets.pictograph.components.placement_managers.arrow_placement_manager.components.default_arrow_positioner</a>
- &#8226;   <a href="#widgets.pictograph.components.tka_glyph.handlers.dash_handler">widgets.pictograph.components.tka_glyph.handlers.dash_handler</a>
- &#8226;   <a href="#widgets.pictograph.components.tka_glyph.handlers.dot_handler">widgets.pictograph.components.tka_glyph.handlers.dot_handler</a>
- &#8226;   <a href="#widgets.pictograph.components.tka_glyph.handlers.tka_letter_handler">widgets.pictograph.components.tka_glyph.handlers.tka_letter_handler</a>
- &#8226;   <a href="#widgets.pictograph.components.tka_glyph.handlers.turns_column_handler">widgets.pictograph.components.tka_glyph.handlers.turns_column_handler</a>
- &#8226;   <a href="#widgets.pictograph.components.vtg_glyph.vtg_glyph">widgets.pictograph.components.vtg_glyph.vtg_glyph</a>
- &#8226;   <a href="#widgets.scroll_area.components.section_manager.section_widget.components.letterbook_section_header">widgets.scroll_area.components.section_manager.section_widget.components.letterbook_section_header</a>
- &#8226;   <a href="#widgets.scroll_area.components.section_manager.section_widget.components.option_picker_section_header">widgets.scroll_area.components.section_manager.section_widget.components.option_picker_section_header</a>
- &#8226;   <a href="#widgets.turn_pattern_widget">widgets.turn_pattern_widget</a>
-
-  </div>
-
-</div>
-
-<div class="node">
   <a name="rlcompleter"></a>
   <a target="code" href="///C:/Python312/Lib/rlcompleter.py" type="text/plain"><tt>rlcompleter</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
@@ -36742,8 +36744,8 @@ imports:
  &#8226;   <a href="#json">json</a>
  &#8226;   <a href="#main">main</a>
  &#8226;   <a href="#os">os</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#prop_type_changer">prop_type_changer</a>
- &#8226;   <a href="#resource_path">resource_path</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets.menu_bar.glyph_visibility_manager">widgets.menu_bar.glyph_visibility_manager</a>
 
@@ -41720,6 +41722,7 @@ imported by:
  &#8226;   <a href="#pandas.io.stata">pandas.io.stata</a>
  &#8226;   <a href="#pandas.util._print_versions">pandas.util._print_versions</a>
  &#8226;   <a href="#pandas.util._tester">pandas.util._tester</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#pathlib">pathlib</a>
  &#8226;   <a href="#pdb">pdb</a>
  &#8226;   <a href="#pickle">pickle</a>
@@ -41771,7 +41774,6 @@ imported by:
  &#8226;   <a href="#pytz">pytz</a>
  &#8226;   <a href="#quopri">quopri</a>
  &#8226;   <a href="#re._compiler">re._compiler</a>
- &#8226;   <a href="#resource_path">resource_path</a>
  &#8226;   <a href="#runpy">runpy</a>
  &#8226;   <a href="#selectors">selectors</a>
  &#8226;   <a href="#setuptools._distutils">setuptools._distutils</a>
@@ -41856,6 +41858,7 @@ imported by:
  &#8226;   <a href="#warnings">warnings</a>
  &#8226;   <a href="#weakref">weakref</a>
  &#8226;   <a href="#webbrowser">webbrowser</a>
+ &#8226;   <a href="#widgets.current_sequence_json_handler.current_sequence_json_handler">widgets.current_sequence_json_handler.current_sequence_json_handler</a>
  &#8226;   <a href="#widgets.main_widget.letter_loader">widgets.main_widget.letter_loader</a>
  &#8226;   <a href="#widgets.main_widget.main_widget">widgets.main_widget.main_widget</a>
  &#8226;   <a href="#widgets.main_widget.special_placement_loader">widgets.main_widget.special_placement_loader</a>
@@ -44277,6 +44280,9 @@ imports:
  &#8226;   <a href="#constants">constants</a>
  &#8226;   <a href="#json">json</a>
  &#8226;   <a href="#objects.motion.current_sequence_json_validation_engine">objects.motion.current_sequence_json_validation_engine</a>
+ &#8226;   <a href="#os">os</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
+ &#8226;   <a href="#sys">sys</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets.current_sequence_json_handler">widgets.current_sequence_json_handler</a>
  &#8226;   <a href="#widgets.current_sequence_json_handler.motion_orientation_json_calculator">widgets.current_sequence_json_handler.motion_orientation_json_calculator</a>
@@ -45009,7 +45015,7 @@ imports:
  &#8226;   <a href="#PyQt6.QtGui">PyQt6.QtGui</a>
  &#8226;   <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a>
  &#8226;   <a href="#constants">constants</a>
- &#8226;   <a href="#resource_path">resource_path</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets.graph_editor.components">widgets.graph_editor.components</a>
  &#8226;   <a href="#widgets.graph_editor.components.GE_start_pos_ori_picker_box">widgets.graph_editor.components.GE_start_pos_ori_picker_box</a>
@@ -45198,7 +45204,7 @@ imports:
  &#8226;   <a href="#PyQt6.QtGui">PyQt6.QtGui</a>
  &#8226;   <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a>
  &#8226;   <a href="#constants">constants</a>
- &#8226;   <a href="#resource_path">resource_path</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets.graph_editor.components">widgets.graph_editor.components</a>
  &#8226;   <a href="#widgets.graph_editor.components.GE_adjust_turns_button">widgets.graph_editor.components.GE_adjust_turns_button</a>
@@ -45248,7 +45254,7 @@ imports:
  &#8226;   <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a>
  &#8226;   <a href="#constants">constants</a>
  &#8226;   <a href="#objects.motion.motion">objects.motion.motion</a>
- &#8226;   <a href="#resource_path">resource_path</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets.factories.button_factory.buttons.rot_dir_buttons">widgets.factories.button_factory.buttons.rot_dir_buttons</a>
  &#8226;   <a href="#widgets.graph_editor.components">widgets.graph_editor.components</a>
@@ -45303,8 +45309,8 @@ imports:
  &#8226;   <a href="#constants">constants</a>
  &#8226;   <a href="#objects.arrow.arrow">objects.arrow.arrow</a>
  &#8226;   <a href="#objects.prop.prop">objects.prop.prop</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#re">re</a>
- &#8226;   <a href="#resource_path">resource_path</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets">widgets</a>
 
@@ -45538,7 +45544,7 @@ imports:
  &#8226;   <a href="#PyQt6.QtCore">PyQt6.QtCore</a>
  &#8226;   <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a>
  &#8226;   <a href="#constants">constants</a>
- &#8226;   <a href="#resource_path">resource_path</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets.letterbook.letterbook_letter_button_frame.components">widgets.letterbook.letterbook_letter_button_frame.components</a>
  &#8226;   <a href="#widgets.letterbook.letterbook_letter_button_frame.components.letterbook_letter_button">widgets.letterbook.letterbook_letter_button_frame.components.letterbook_letter_button</a>
@@ -46239,7 +46245,7 @@ imports:
  &#8226;   <a href="#PyQt6.QtSvg">PyQt6.QtSvg</a>
  &#8226;   <a href="#PyQt6.QtSvgWidgets">PyQt6.QtSvgWidgets</a>
  &#8226;   <a href="#constants">constants</a>
- &#8226;   <a href="#resource_path">resource_path</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets.pictograph.components.elemental_glyph">widgets.pictograph.components.elemental_glyph</a>
  &#8226;   <a href="#widgets.pictograph.pictograph">widgets.pictograph.pictograph</a>
@@ -46603,7 +46609,7 @@ imports:
  &#8226;   <a href="#constants">constants</a>
  &#8226;   <a href="#json">json</a>
  &#8226;   <a href="#objects.arrow.arrow">objects.arrow.arrow</a>
- &#8226;   <a href="#resource_path">resource_path</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets.pictograph.components.placement_managers.arrow_placement_manager.arrow_placement_manager">widgets.pictograph.components.placement_managers.arrow_placement_manager.arrow_placement_manager</a>
  &#8226;   <a href="#widgets.pictograph.components.placement_managers.arrow_placement_manager.components">widgets.pictograph.components.placement_managers.arrow_placement_manager.components</a>
@@ -47491,7 +47497,7 @@ imported by:
 imports:
     <a href="#PyQt6.QtSvg">PyQt6.QtSvg</a>
  &#8226;   <a href="#PyQt6.QtSvgWidgets">PyQt6.QtSvgWidgets</a>
- &#8226;   <a href="#resource_path">resource_path</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets.pictograph.components.tka_glyph.handlers">widgets.pictograph.components.tka_glyph.handlers</a>
  &#8226;   <a href="#widgets.pictograph.components.tka_glyph.tka_glyph">widgets.pictograph.components.tka_glyph.tka_glyph</a>
@@ -47515,7 +47521,7 @@ imports:
  &#8226;   <a href="#PyQt6.QtSvg">PyQt6.QtSvg</a>
  &#8226;   <a href="#PyQt6.QtSvgWidgets">PyQt6.QtSvgWidgets</a>
  &#8226;   <a href="#constants">constants</a>
- &#8226;   <a href="#resource_path">resource_path</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets.pictograph.components.tka_glyph.handlers">widgets.pictograph.components.tka_glyph.handlers</a>
  &#8226;   <a href="#widgets.pictograph.components.tka_glyph.tka_glyph">widgets.pictograph.components.tka_glyph.tka_glyph</a>
@@ -47537,7 +47543,7 @@ imports:
     <a href="#Enums.Enums">Enums.Enums</a>
  &#8226;   <a href="#PyQt6.QtSvg">PyQt6.QtSvg</a>
  &#8226;   <a href="#PyQt6.QtSvgWidgets">PyQt6.QtSvgWidgets</a>
- &#8226;   <a href="#resource_path">resource_path</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets.pictograph.components.tka_glyph.handlers">widgets.pictograph.components.tka_glyph.handlers</a>
  &#8226;   <a href="#widgets.pictograph.components.tka_glyph.tka_glyph">widgets.pictograph.components.tka_glyph.tka_glyph</a>
@@ -47559,7 +47565,7 @@ imports:
     <a href="#PyQt6.QtSvg">PyQt6.QtSvg</a>
  &#8226;   <a href="#PyQt6.QtSvgWidgets">PyQt6.QtSvgWidgets</a>
  &#8226;   <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a>
- &#8226;   <a href="#resource_path">resource_path</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets.pictograph.components.tka_glyph.handlers">widgets.pictograph.components.tka_glyph.handlers</a>
  &#8226;   <a href="#widgets.pictograph.components.tka_glyph.tka_glyph">widgets.pictograph.components.tka_glyph.tka_glyph</a>
@@ -47647,7 +47653,7 @@ imports:
  &#8226;   <a href="#PyQt6.QtSvg">PyQt6.QtSvg</a>
  &#8226;   <a href="#PyQt6.QtSvgWidgets">PyQt6.QtSvgWidgets</a>
  &#8226;   <a href="#constants">constants</a>
- &#8226;   <a href="#resource_path">resource_path</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets.pictograph.components.vtg_glyph">widgets.pictograph.components.vtg_glyph</a>
  &#8226;   <a href="#widgets.pictograph.pictograph">widgets.pictograph.pictograph</a>
@@ -48155,7 +48161,7 @@ imports:
     <a href="#PyQt6.QtCore">PyQt6.QtCore</a>
  &#8226;   <a href="#PyQt6.QtGui">PyQt6.QtGui</a>
  &#8226;   <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a>
- &#8226;   <a href="#resource_path">resource_path</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets.scroll_area.components.section_manager.section_widget.components">widgets.scroll_area.components.section_manager.section_widget.components</a>
  &#8226;   <a href="#widgets.scroll_area.components.section_manager.section_widget.components.type_label">widgets.scroll_area.components.section_manager.section_widget.components.type_label</a>
@@ -48178,7 +48184,7 @@ imports:
     <a href="#PyQt6.QtCore">PyQt6.QtCore</a>
  &#8226;   <a href="#PyQt6.QtGui">PyQt6.QtGui</a>
  &#8226;   <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a>
- &#8226;   <a href="#resource_path">resource_path</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets.scroll_area.components.section_manager.section_widget.components">widgets.scroll_area.components.section_manager.section_widget.components</a>
  &#8226;   <a href="#widgets.scroll_area.components.section_manager.section_widget.components.type_label">widgets.scroll_area.components.section_manager.section_widget.components.type_label</a>
@@ -49326,7 +49332,7 @@ imports:
     <a href="#PyQt6.QtCore">PyQt6.QtCore</a>
  &#8226;   <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a>
  &#8226;   <a href="#json">json</a>
- &#8226;   <a href="#resource_path">resource_path</a>
+ &#8226;   <a href="#path_helpers">path_helpers</a>
  &#8226;   <a href="#typing">typing</a>
  &#8226;   <a href="#widgets">widgets</a>
  &#8226;   <a href="#widgets.sequence_widget.sequence_modifier">widgets.sequence_widget.sequence_modifier</a>

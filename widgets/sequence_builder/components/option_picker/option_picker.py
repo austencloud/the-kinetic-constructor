@@ -42,19 +42,13 @@ class OptionPicker(QWidget):
         self.layout.addWidget(self.scroll_area, 10)
 
     def update_option_picker(self):
-        try:
-            with open(
-                self.main_widget.json_manager.current_sequence_json_handler.current_sequence_json,
-                "r",
-                encoding="utf-8",
-            ) as file:
-                sequence = json.load(file)
-        except Exception as e:
-            print(f"Failed to load sequence: {str(e)}")
-            return
+        current_sequence_json_handler = (
+            self.main_widget.json_manager.current_sequence_json_handler
+        )
+        sequence = current_sequence_json_handler.sequence
 
         if sequence:
-            next_options: dict = self.option_manager.get_next_options()
+            next_options: dict = self.option_manager.get_next_options(sequence)
             self.scroll_area._hide_all_pictographs()
             self.scroll_area._add_and_display_relevant_pictographs(next_options)
         self.choose_your_next_option_label.set_stylesheet()

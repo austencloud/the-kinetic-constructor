@@ -22,7 +22,7 @@ from constants import (
 )
 from Enums.MotionAttributes import Color, MotionType
 from Enums.PropTypes import PropType, PropTypeslist
-from resource_path import resource_path
+from path_helpers import resource_path
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
