@@ -70,10 +70,6 @@ class CurrentSequenceJsonHandler:
             return []
 
     def save_current_sequence(self, sequence):
-        print(
-            "Saving sequence at current_sequence.json located at ",
-            self.current_sequence_json,
-        )
         with open(self.current_sequence_json, "w", encoding="utf-8") as file:
             json.dump(sequence, file, indent=4, ensure_ascii=False)
 
@@ -106,7 +102,7 @@ class CurrentSequenceJsonHandler:
             file.write("[]")
 
     def update_current_sequence_file_with_beat(self, beat_view: BeatView):
-        sequence_data = self.sequence
+        sequence_data = self.load_current_sequence_json()
         sequence_data.append(beat_view.beat.get.pictograph_dict())
         with open(self.current_sequence_json, "w", encoding="utf-8") as file:
             json.dump(sequence_data, file, indent=4, ensure_ascii=False)

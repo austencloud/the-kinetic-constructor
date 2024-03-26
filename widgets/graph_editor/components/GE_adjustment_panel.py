@@ -28,7 +28,7 @@ class GE_AdjustmentPanel(QFrame):
             self.layout.addWidget(ori_picker)
         self.layout.addWidget(self.placeholder_widget)
 
-    def set_turns(self, blue_turns: int, red_turns: int) -> None:
+    def update_turns_displays(self, blue_turns: int, red_turns: int) -> None:
         self.blue_turns_box.turns_widget.display_manager.update_turns_display(
             blue_turns
         )
@@ -108,7 +108,7 @@ class GE_AdjustmentPanel(QFrame):
                 turns_box.update_styled_border()
 
     def update_turns_panel(self, blue_turns: int, red_turns: int) -> None:
-        self.set_turns(blue_turns, red_turns)
+        self.update_turns_displays(blue_turns, red_turns)
         for box in self.turns_boxes:
             box.header.update_turns_box_header()
 

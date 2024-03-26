@@ -45,7 +45,7 @@ class OptionPicker(QWidget):
         current_sequence_json_handler = (
             self.main_widget.json_manager.current_sequence_json_handler
         )
-        sequence = current_sequence_json_handler.sequence
+        sequence = current_sequence_json_handler.load_current_sequence_json()
 
         if sequence:
             next_options: dict = self.option_manager.get_next_options(sequence)

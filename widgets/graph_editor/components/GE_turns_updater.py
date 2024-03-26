@@ -43,9 +43,6 @@ class GE_TurnsUpdater:
         """Handle specific logic for static or dash motion types."""
         vtg_dir_button_manager = self.turns_widget.turns_box.vtg_dir_button_manager
 
-        # if motion.turns == 0 and new_turns == 0:
-        #     return
-
         if new_turns == 0:
             motion.prop_rot_dir = NO_ROT
             vtg_dir_button_manager.unpress_vtg_buttons()

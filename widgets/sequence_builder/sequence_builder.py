@@ -1,5 +1,6 @@
 import os
 import sys
+import traceback
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
@@ -143,4 +144,8 @@ class SequenceBuilder(QFrame):
         # self.option_picker.scroll_area.resize_option_picker_scroll_area()
 
     def get_last_added_pictograph(self, sequence):
+        """ Returns the last pictograph in the sequence. Assumes the sequence is not empty."""
+        if not sequence:
+            print(traceback.print_stack())
+            print("Sequence is empty. Can't get last pictograph.")
         return sequence[-1]

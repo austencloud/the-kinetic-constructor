@@ -34,7 +34,6 @@ class MainWindow(QMainWindow):
         super().closeEvent(event)
         QApplication.instance().installEventFilter(self)
 
-
 def main() -> None:
     app = QApplication(sys.argv)
     app.setAttribute(

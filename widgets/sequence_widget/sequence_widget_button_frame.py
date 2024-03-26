@@ -133,5 +133,5 @@ class SequenceWidgetButtonFrame(QFrame):
 
     def _clear_graph_editor(self) -> None:
         self.graph_editor.GE_pictograph_view.set_to_blank_grid()
-        self.graph_editor.adjustment_panel.set_turns(0, 0)
+        self.graph_editor.adjustment_panel.update_turns_displays(0, 0)
         self.graph_editor.adjustment_panel.update_adjustment_panel()
