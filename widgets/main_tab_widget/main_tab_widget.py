@@ -15,21 +15,15 @@ if TYPE_CHECKING:
 class MainBuilderWidget(BaseTabWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
-        self.letterbook = LetterBook(main_widget)
         self.sequence_builder = SequenceBuilder(main_widget)
         self.dictionary = Dictionary(main_widget)
         self.turn_pattern_widget = TurnPatternWidget(self)
-        # self.video_container_widget = VideoRecorderContainer(main_widget)
-        self.tabs = [self.letterbook]
         self.addTab(self.sequence_builder, "Builder")
-        self.addTab(self.letterbook, "LetterBook")
         self.addTab(self.dictionary, "Dictionary")
         self.addTab(self.turn_pattern_widget, "Turn Patterns")
-        # self.addTab(self.video_container_widget, "Recorder")
         self.currentChanged.connect(self.on_tab_changed)
 
     def on_tab_changed(self) -> None:
-
         current_tab = self.currentWidget()
         beat_frame = self.main_widget.sequence_widget.beat_frame
         if current_tab == self.sequence_builder:
@@ -39,9 +33,7 @@ class MainBuilderWidget(BaseTabWidget):
         self.resize_current_tab(current_tab)
 
     def resize_current_tab(self, current_tab) -> None:
-        if current_tab == self.letterbook:
-            self.letterbook.resize_letterbook()
-        elif current_tab == self.sequence_builder:
+        if current_tab == self.sequence_builder:
             self.sequence_builder.resize_sequence_builder()
         elif current_tab == self.dictionary:
             self.dictionary.resize_dictionary()

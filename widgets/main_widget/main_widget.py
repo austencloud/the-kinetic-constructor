@@ -6,8 +6,10 @@ from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from Enums.PropTypes import PropType
 from path_helpers import get_images_and_data_path
+from widgets.base_tab_widget import BaseTabWidget
 from widgets.factories.button_factory.button_factory import ButtonFactory
 from widgets.json_manager import JSON_Manager
+from widgets.letterbook.letterbook import LetterBook
 from widgets.main_tab_widget.video_recorder_container import VideoRecorderContainer
 from widgets.main_widget.letter_loader import LetterLoader
 from widgets.menu_bar.preferences_dialog import PreferencesDialog
@@ -30,7 +32,7 @@ if TYPE_CHECKING:
     from main import MainWindow
 
 
-class MainWidget(QTabWidget):
+class MainWidget(BaseTabWidget):
     def __init__(self, main_window: "MainWindow") -> None:
         super().__init__(main_window)
         self.main_window = main_window
@@ -68,12 +70,14 @@ class MainWidget(QTabWidget):
         builder_layout = QHBoxLayout(builder_widget)
         self.main_builder_widget = MainBuilderWidget(self)
         self.sequence_widget = SequenceWidget(self)
+        self.letterbook = LetterBook(self)
         builder_layout.addWidget(self.sequence_widget, 1)
         builder_layout.addWidget(self.main_builder_widget, 1)
         self.addTab(builder_widget, "Builder")
 
         self.video_recorder_container = VideoRecorderContainer(self)
         self.addTab(self.video_recorder_container, "Recorder")
+        self.addTab(self.letterbook, "LetterBook")
 
     def _setup_special_placements(self) -> None:
         self.special_placements: dict[

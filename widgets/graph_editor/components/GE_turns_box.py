@@ -19,13 +19,10 @@ if TYPE_CHECKING:
 
 class GE_TurnsBox(QFrame):
     def __init__(
-        self,
-        turns_panel: "GE_AdjustmentPanel",
-        pictograph: "Pictograph",
-        color: Color,
+        self, turns_panel: "GE_AdjustmentPanel", pictograph: "Pictograph", color: Color
     ) -> None:
         super().__init__(turns_panel)
-        self.setObjectName("GE_TurnsBox")  # Assign a unique object name
+        self.setObjectName("GE_TurnsBox")
         self.turns_panel = turns_panel
         self.color = color
         self.pictograph = pictograph
@@ -73,7 +70,6 @@ class GE_TurnsBox(QFrame):
         self.turns_widget.resize_GE_turns_widget()
 
     # def paintEvent(self, a0: QPaintEvent | None) -> None:
-
     #     # super().paintEvent(a0)
     #     # self._set_border_color()
     #     QApplication.processEvents()
