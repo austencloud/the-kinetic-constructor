@@ -10,7 +10,7 @@ from widgets.base_tab_widget import BaseTabWidget
 from widgets.factories.button_factory.button_factory import ButtonFactory
 from widgets.json_manager import JSON_Manager
 from widgets.letterbook.letterbook import LetterBook
-from widgets.main_tab_widget.video_recorder_container import VideoRecorderContainer
+from widgets.main_builder_widget.video_recorder_container import VideoRecorderContainer
 from widgets.main_widget.letter_loader import LetterLoader
 from widgets.menu_bar.preferences_dialog import PreferencesDialog
 from widgets.menu_bar.prop_type_selector import PropTypeSelector
@@ -25,7 +25,7 @@ from ..pictograph.components.placement_managers.arrow_placement_manager.componen
     TurnsTupleGenerator,
 )
 from ..image_cache_manager import ImageCacheManager
-from ..main_tab_widget.main_tab_widget import MainBuilderWidget
+from ..main_builder_widget.main_builder_widget import MainBuilderWidget
 from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 if TYPE_CHECKING:
@@ -41,6 +41,7 @@ class MainWidget(BaseTabWidget):
         self._setup_default_modes()
         self._setup_letters()
         self._setup_components()
+        self.currentChanged.connect(self.on_tab_changed)
 
     def _setup_pictograph_cache(self) -> None:
         self.all_pictographs: dict[str, dict[str, "Pictograph"]] = {}
@@ -99,8 +100,19 @@ class MainWidget(BaseTabWidget):
         else:
             super().keyPressEvent(event)
 
+    def on_tab_changed(self) -> None:
+        self.resize_visible_tab()
+
+    def resize_visible_tab(self) -> None:
+        current_widget = self.currentWidget()
+        if current_widget == self.sequence_widget:
+            self.sequence_widget.resize_sequence_widget()
+        elif current_widget == self.video_recorder_container:
+            self.video_recorder_container.sequence_recorder_widget.resize_sequence_recorder_widget()
+
     def showEvent(self, event) -> None:
         super().showEvent(event)
         self.main_window.window_manager.set_dimensions()
         self.main_builder_widget.on_tab_changed()
         self.sequence_widget.resize_sequence_widget()
+        self.video_recorder_container.sequence_recorder_widget.resize_sequence_recorder_widget()

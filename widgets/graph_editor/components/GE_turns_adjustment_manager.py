@@ -19,13 +19,16 @@ class GE_TurnsAdjustmentManager(QObject):
         self.turns_widget = turns_widget
         self.graph_editor = self.turns_widget.turns_box.graph_editor
         self.beat_frame = self.graph_editor.sequence_modifier.sequence_widget.beat_frame
-        self.json_validation_engine = (
-            self.graph_editor.main_widget.json_manager.current_sequence_json_handler.validation_engine
-        )
+        self.main_widget = self.graph_editor.main_widget
+        self.json_manager = self.main_widget.json_manager
         self.current_sequence_json_handler = (
-            self.graph_editor.main_widget.json_manager.current_sequence_json_handler
+            self.json_manager.current_sequence_json_handler
+        )
+        self.json_validation_engine = (
+            self.current_sequence_json_handler.validation_engine
         )
         self.color = self.turns_widget.turns_box.color
+
         self.turns_adjusted.connect(self.beat_frame.on_beat_adjusted)
 
     def adjust_turns(self, adjustment: Union[int, float]) -> None:
@@ -58,6 +61,8 @@ class GE_TurnsAdjustmentManager(QObject):
 
         self._update_turns_display(new_turns)
         self.json_validation_engine.run()
+        # update option picker
+        self.main_widget.main_builder_widget.sequence_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
 
     def get_current_turns_value(self) -> Turns:
