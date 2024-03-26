@@ -16,7 +16,6 @@ class BaseTabWidget(QTabWidget):
         return """
             QTabWidget::pane {
                 border: 1px solid black;
-                background: white;
             }
             QTabWidget::tab-bar:top {
                 top: 1px;
@@ -76,4 +75,5 @@ class BaseTabWidget(QTabWidget):
             QTabBar::tab:right:selected {
                 border-right-color: none;
             }
+
             """

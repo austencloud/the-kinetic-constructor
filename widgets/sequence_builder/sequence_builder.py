@@ -1,15 +1,11 @@
-import os
-import sys
 import traceback
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
-
 import pandas as pd
 from constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
 from Enums.Enums import LetterType
-
 
 from path_helpers import get_images_and_data_path
 from widgets.pictograph.components.add_to_sequence_manager import (
@@ -141,7 +137,6 @@ class SequenceBuilder(QFrame):
     def resize_sequence_builder(self) -> None:
         self.setMinimumWidth(int(self.main_widget.width() / 2))
         self.start_pos_picker.resize_start_pos_picker()
-        # self.option_picker.scroll_area.resize_option_picker_scroll_area()
 
     def get_last_added_pictograph(self, sequence):
         """ Returns the last pictograph in the sequence. Assumes the sequence is not empty."""

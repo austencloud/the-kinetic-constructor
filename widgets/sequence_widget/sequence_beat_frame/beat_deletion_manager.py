@@ -32,7 +32,7 @@ class BeatDeletionManager:
 
     def delete_selected_beat(self) -> None:
         self.GE_pictograph_view = (
-            self.beat_frame.sequence_widget.sequence_modifier.graph_editor.GE_pictograph_view
+            self.beat_frame.main_widget.sequence_widget.sequence_modifier.graph_editor.GE_pictograph_view
         )
         selected_beat = self.beat_frame.selection_manager.get_selected_beat()
 

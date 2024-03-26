@@ -2,33 +2,30 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
-    QPushButton,
-    QLabel,
-    QSlider,
-    QInputDialog,
-    QFileDialog,
     QMessageBox,
     QHBoxLayout,
-    QComboBox,
 )
-from PyQt6.QtCore import QTimer, Qt
-from PyQt6.QtGui import QImage, QPixmap
+from PyQt6.QtCore import QTimer
 import cv2
-import numpy as np
-import os
 
 
-from widgets.sequence_recorder_widget.sequence_recorder_beat_frame import SequenceRecorderBeatFrame
-from widgets.sequence_recorder_widget.sequence_recorder_video_controls import SequenceRecorderVideoControls
-from widgets.sequence_recorder_widget.sequence_recorder_video_display import SequenceRecorderVideoDisplay
-from widgets.sequence_widget.sequence_widget import SequenceWidget
+from widgets.sequence_recorder_widget.recording_frame import RecordingFrame
+from widgets.sequence_recorder_widget.sequence_recorder_beat_frame import (
+    SequenceRecorderBeatFrame,
+)
+from widgets.sequence_recorder_widget.sequence_recorder_video_controls import (
+    SequenceRecorderVideoControls,
+)
+from widgets.sequence_recorder_widget.sequence_recorder_video_display import (
+    SequenceRecorderVideoDisplay,
+)
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
 
 class SequenceRecorderWidget(QWidget):
-    def __init__(self, main_widget: "MainWidget") -> None:
+    def __init__(self, main_widget: "MainWidget"):
         super().__init__()
         self.main_widget = main_widget
         self.video_frame_rate = 30
@@ -37,27 +34,33 @@ class SequenceRecorderWidget(QWidget):
         self.recording_frames = []
         QTimer.singleShot(0, self.init_webcam)
 
+        self.sequence_beat_frame = SequenceRecorderBeatFrame(self.main_widget)
+        self.video_display = SequenceRecorderVideoDisplay()
+        self.video_controls = SequenceRecorderVideoControls()
+        self.recording_frame = RecordingFrame(
+            self.sequence_beat_frame, self.video_display
+        )
+
         self.init_ui()
 
-    def init_ui(self) -> None:
-        self._setup_sequence_beat_frame()
-        self.videoDisplay = SequenceRecorderVideoDisplay()
-        self.videoControls = SequenceRecorderVideoControls()
-        self.videoControls.webcam_selector.currentIndexChanged.connect(
-            lambda: self.init_webcam(self.videoControls.webcam_selector.currentData())
-        )
-        self._setup_layout()
+    def init_ui(self):
+        layout = QVBoxLayout()
+
+        layout.addWidget(self.recording_frame)
+        layout.addWidget(self.video_controls)
+
+        self.setLayout(layout)
 
     def _setup_layout(self) -> None:
         self.left_layout = QVBoxLayout()
         self.right_layout = QVBoxLayout()
         self.layout: QHBoxLayout = QHBoxLayout(self)
-        
+
         self.left_layout.addWidget(self.sequence_beat_frame)
-        
-        self.right_layout.addWidget(self.videoDisplay)
-        self.right_layout.addWidget(self.videoControls)
-        
+
+        self.right_layout.addWidget(self.video_display)
+        self.right_layout.addWidget(self.video_controls)
+
         self.layout.addLayout(self.left_layout, 1)
         self.layout.addLayout(self.right_layout, 1)
 
@@ -82,12 +85,11 @@ class SequenceRecorderWidget(QWidget):
             frame = cv2.flip(frame, 1)
             if self.record:
                 self.recording_frames.append(frame)
-            self.videoDisplay.display_frame(frame)  # Use the display_frame method of VideoDisplay
+            self.video_display.display_frame(frame)
 
     def update_timer_interval(self):
         interval = int(1000 / self.video_frame_rate)
         self.video_timer.start(interval)
-
 
     def close_event(self, event):
         self.capture.release()
@@ -111,3 +113,4 @@ class SequenceRecorderWidget(QWidget):
         self.video_display_width = width
         self.video_display_height = height
         self.update_video_feed()
+        self.sequence_beat_frame.resize_beat_frame()

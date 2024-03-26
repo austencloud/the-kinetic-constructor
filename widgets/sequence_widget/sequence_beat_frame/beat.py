@@ -34,6 +34,11 @@ class BeatView(QGraphicsView):
         self.is_filled = False
         self.is_selected = False
         self.setContentsMargins(0, 0, 0, 0)
+        # self.add_black_borders()
+
+    def add_black_borders(self) -> None:
+        self.original_style = self.styleSheet()
+        # self.viewport().setStyleSheet("border: 1px solid black;")
 
     def set_pictograph(self, new_beat: "Beat") -> None:
         self.beat = new_beat
@@ -54,9 +59,7 @@ class BeatView(QGraphicsView):
         self.setScene(None)
         self.beat_frame.start_pos_view.setScene(None)
         sequence_builder = self.beat.main_widget.main_builder_widget.sequence_builder
-        sequence_builder.current_pictograph = (
-            self.beat_frame.sequence_widget.beat_frame.start_pos
-        )
+        sequence_builder.current_pictograph = self.beat_frame.start_pos
         sequence_builder.reset_to_start_pos_picker()
 
     def mouseDoubleClickEvent(self, event: QMouseEvent) -> None:

@@ -58,9 +58,7 @@ class SequenceBuilderBeatFrame(QFrame):
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
-        self.layout.setAlignment(
-            Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop
-        )
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.addWidget(self.start_pos_view, 0, 0)
 
     def keyPressEvent(self, event: "QKeyEvent") -> None:

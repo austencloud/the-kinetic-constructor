@@ -36,9 +36,6 @@ class MainWindow(QMainWindow):
 
 def main() -> None:
     app = QApplication(sys.argv)
-    app.setAttribute(
-        Qt.ApplicationAttribute.AA_SynthesizeMouseForUnhandledTouchEvents, False
-    )
     profiler = Profiler()
     main_window = MainWindow(profiler)
     exit_code = main_window.exec_with_profiling(app)

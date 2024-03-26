@@ -60,7 +60,7 @@ class SequenceRecorderBeatFrame(QFrame):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.layout.setAlignment(
-            Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignCenter
         )
         self.layout.addWidget(self.start_pos_view, 0, 0)
 
