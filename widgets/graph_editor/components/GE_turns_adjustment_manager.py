@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtCore import QObject
-
+from PyQt6.QtWidgets import QApplication
 from Enums.Enums import Turns
 
 
@@ -34,14 +34,18 @@ class GE_TurnsAdjustmentManager(QObject):
         new_turns = self._clamp_turns(new_turns + adjustment)
         new_turns = self.convert_turn_floats_to_ints(new_turns)
         self._update_turns_display(new_turns)
+        QApplication.processEvents()
         self.turns_widget.updater._adjust_turns_for_pictograph(
             self.pictograph, adjustment
         )
         pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
+        QApplication.processEvents()
         self.current_sequence_json_handler.update_turns_in_json_at_index(
             pictograph_index + 1, self.color, new_turns
         )
+        QApplication.processEvents()
         self.json_validation_engine.run()
+        QApplication.processEvents()
         self.turns_adjusted.emit(new_turns)
 
     def direct_set_turns(self, new_turns: Turns) -> None:

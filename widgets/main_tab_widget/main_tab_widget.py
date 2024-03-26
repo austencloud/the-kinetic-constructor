@@ -3,6 +3,8 @@ from typing import TYPE_CHECKING
 from widgets.base_tab_widget import BaseTabWidget
 from widgets.letterbook.letterbook import LetterBook
 from widgets.dictionary.dictionary import Dictionary
+from widgets.main_tab_widget.sequence_recorder_widget import VideoRecorderWidget
+from widgets.main_tab_widget.video_container_widget import VideoRecorderContainer
 from widgets.sequence_builder.sequence_builder import SequenceBuilder
 from widgets.turn_pattern_widget import TurnPatternWidget
 
@@ -17,11 +19,13 @@ class MainTabWidget(BaseTabWidget):
         self.sequence_builder = SequenceBuilder(main_widget)
         self.dictionary = Dictionary(main_widget)
         self.turn_pattern_widget = TurnPatternWidget(self)
+        self.video_container_widget = VideoRecorderContainer(main_widget)
         self.tabs = [self.letterbook]
         self.addTab(self.sequence_builder, "Builder")
         self.addTab(self.letterbook, "LetterBook")
         self.addTab(self.dictionary, "Dictionary")
         self.addTab(self.turn_pattern_widget, "Turn Patterns")
+        self.addTab(self.video_container_widget, "Recorder")
         self.currentChanged.connect(self.on_tab_changed)
 
     def on_tab_changed(self) -> None:
@@ -41,3 +45,5 @@ class MainTabWidget(BaseTabWidget):
             self.sequence_builder.resize_sequence_builder()
         elif current_tab == self.dictionary:
             self.dictionary.resize_dictionary()
+        elif current_tab == self.video_container_widget:
+            self.video_container_widget.resize_video_container()

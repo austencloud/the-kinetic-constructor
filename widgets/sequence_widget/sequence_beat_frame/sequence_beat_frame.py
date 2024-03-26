@@ -125,7 +125,6 @@ class SequenceBeatFrame(QFrame):
         entry["red_attributes"]["start_ori"] = entry["red_attributes"]["end_ori"]
         entry["blue_attributes"]["start_ori"] = entry["blue_attributes"]["end_ori"]
         entry["start_pos"] = entry["end_pos"]
-        # del entry["sequence_start_position"]
         self.start_pos_view.start_pos.updater.update_pictograph(entry)
 
     def get_index_of_currently_selected_beat(self) -> int:
