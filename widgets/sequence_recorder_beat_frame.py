@@ -23,18 +23,13 @@ if TYPE_CHECKING:
 from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
 
 
-class SequenceBeatFrame(QFrame):
+class SequenceRecorderBeatFrame(QFrame):
     COLUMN_COUNT = 5
     ROW_COUNT = 4
 
-    def __init__(
-        self,
-        main_widget: "MainWidget",
-        sequence_widget: "SequenceWidget",
-    ) -> None:
+    def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.sequence_widget = sequence_widget
         self.current_sequence_json_handler = (
             self.main_widget.json_manager.current_sequence_json_handler
         )

@@ -10,7 +10,7 @@ from ..scroll_area.components.sequence_widget_pictograph_factory import (
     SequenceWidgetPictographFactory,
 )
 from .sequence_beat_frame.beat import Beat
-from .sequence_beat_frame.sequence_beat_frame import SequenceBeatFrame
+from .sequence_beat_frame.sequence_builder_beat_frame import SequenceBuilderBeatFrame
 from .sequence_widget_button_frame import SequenceWidgetButtonFrame
 from PyQt6.QtCore import Qt
 
@@ -25,7 +25,7 @@ class SequenceWidget(QWidget):
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         self.pictograph_cache: dict[str, Pictograph] = {}
         self.indicator_label = IndicatorLabel(self)
-        self.beat_frame = SequenceBeatFrame(self.main_widget, self)
+        self.beat_frame = SequenceBuilderBeatFrame(self.main_widget)
         self.sequence_modifier = SequenceModifier(self)
         self.button_frame = SequenceWidgetButtonFrame(self)
         self.pictograph_factory = SequenceWidgetPictographFactory(
@@ -44,8 +44,6 @@ class SequenceWidget(QWidget):
         self.layout.addWidget(self.sequence_modifier, 10)
         self.layout.addStretch(1)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-
-
 
     def populate_sequence(self, pictograph_dict: dict) -> None:
         pictograph = Beat(self.main_widget)

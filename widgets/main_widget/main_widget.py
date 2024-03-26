@@ -10,7 +10,9 @@ from widgets.base_tab_widget import BaseTabWidget
 from widgets.factories.button_factory.button_factory import ButtonFactory
 from widgets.json_manager import JSON_Manager
 from widgets.letterbook.letterbook import LetterBook
-from widgets.main_builder_widget.video_recorder_container import VideoRecorderContainer
+from widgets.main_builder_widget.sequence_recorder_container import (
+    SequenceRecorderContainer,
+)
 from widgets.main_widget.letter_loader import LetterLoader
 from widgets.menu_bar.preferences_dialog import PreferencesDialog
 from widgets.menu_bar.prop_type_selector import PropTypeSelector
@@ -76,8 +78,8 @@ class MainWidget(BaseTabWidget):
         builder_layout.addWidget(self.main_builder_widget, 1)
         self.addTab(builder_widget, "Builder")
 
-        self.video_recorder_container = VideoRecorderContainer(self)
-        self.addTab(self.video_recorder_container, "Recorder")
+        self.sequence_recorder_container = SequenceRecorderContainer(self)
+        self.addTab(self.sequence_recorder_container, "Recorder")
         self.addTab(self.letterbook, "LetterBook")
 
     def _setup_special_placements(self) -> None:
@@ -107,12 +109,11 @@ class MainWidget(BaseTabWidget):
         current_widget = self.currentWidget()
         if current_widget == self.sequence_widget:
             self.sequence_widget.resize_sequence_widget()
-        elif current_widget == self.video_recorder_container:
-            self.video_recorder_container.sequence_recorder_widget.resize_sequence_recorder_widget()
+        elif current_widget == self.sequence_recorder_container:
+            self.sequence_recorder_container.sequence_recorder_widget.resize_sequence_recorder_widget()
 
     def showEvent(self, event) -> None:
         super().showEvent(event)
         self.main_window.window_manager.set_dimensions()
         self.main_builder_widget.on_tab_changed()
         self.sequence_widget.resize_sequence_widget()
-        self.video_recorder_container.sequence_recorder_widget.resize_sequence_recorder_widget()

@@ -3,8 +3,10 @@ from typing import TYPE_CHECKING
 from widgets.base_tab_widget import BaseTabWidget
 from widgets.letterbook.letterbook import LetterBook
 from widgets.dictionary.dictionary import Dictionary
-from widgets.main_builder_widget.sequence_recorder_widget import VideoRecorderWidget
-from widgets.main_builder_widget.video_recorder_container import VideoRecorderContainer
+from widgets.main_builder_widget.sequence_recorder_widget import SequenceRecorderWidget
+from widgets.main_builder_widget.sequence_recorder_container import (
+    SequenceRecorderContainer,
+)
 from widgets.sequence_builder.sequence_builder import SequenceBuilder
 from widgets.turn_pattern_widget import TurnPatternWidget
 

@@ -16,11 +16,16 @@ from PyQt6.QtGui import QImage, QPixmap
 import cv2
 import numpy as np
 import os
+
+
+from widgets.sequence_recorder_beat_frame import SequenceRecorderBeatFrame
+from widgets.sequence_widget.sequence_widget import SequenceWidget
+
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
 
-class VideoRecorderWidget(QWidget):
+class SequenceRecorderWidget(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -38,9 +43,8 @@ class VideoRecorderWidget(QWidget):
         self._setup_video_display()
         self._setup_control_buttons()
         self._setup_speed_slider()
+        self._setup_sequence_beat_frame()
         self._setup_layout()
-
-
 
     def _setup_webcam_selector(self):
         self.webcam_selector = QComboBox()
@@ -57,7 +61,6 @@ class VideoRecorderWidget(QWidget):
         for i in range(max_check):
             cap = cv2.VideoCapture(i, cv2.CAP_DSHOW)
             if cap.isOpened():
-                # Assuming no direct method to get camera names, use index as name
                 available_cameras[i] = f"Camera {i}"
                 cap.release()
         return available_cameras
@@ -67,12 +70,20 @@ class VideoRecorderWidget(QWidget):
         self.video_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def _setup_layout(self) -> None:
-        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.left_layout = QVBoxLayout()
+        self.right_layout = QVBoxLayout()
+        self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.layout.addWidget(self.video_display)
-        self.layout.addWidget(self.webcam_selector)
-        self.layout.addLayout(self.control_layout)
-        self.layout.addWidget(self.speed_slider)
+        self.left_layout.addWidget(self.sequence_beat_frame)
+        self.right_layout.addWidget(self.video_display)
+        self.right_layout.addWidget(self.webcam_selector)
+        self.right_layout.addLayout(self.control_layout)
+        self.right_layout.addWidget(self.speed_slider)
+        self.layout.addLayout(self.left_layout, 1)
+        self.layout.addLayout(self.right_layout, 1)
+
+    def _setup_sequence_beat_frame(self):
+        self.sequence_beat_frame = SequenceRecorderBeatFrame(self.main_widget)
 
     def _setup_control_buttons(self):
         self.control_layout = QHBoxLayout()
@@ -96,7 +107,6 @@ class VideoRecorderWidget(QWidget):
     def init_webcam(self, camera_index: int):
         if self.capture:
             self.capture.release()
-        # Try using CAP_MSMF for Windows as an alternative to CAP_DSHOW
         self.capture = cv2.VideoCapture(camera_index, cv2.CAP_MSMF)
         if not self.capture.isOpened():
             QMessageBox.warning(self, "Webcam Error", "Unable to access the webcam.")
@@ -105,7 +115,6 @@ class VideoRecorderWidget(QWidget):
         self.video_timer.timeout.connect(self.update_video_feed)
         self.update_timer_interval()
         self.video_timer.start()
-
 
     def update_video_feed(self):
         ret, frame = self.capture.read()
@@ -156,7 +165,6 @@ class VideoRecorderWidget(QWidget):
             self, "Save Video", "", "Video Files (*.avi)"
         )
         if filepath:
-            # Assuming 30 FPS for saved video
             height, width, layers = self.recording_frames[0].shape
             size = (width, height)
             out = cv2.VideoWriter(filepath, cv2.VideoWriter_fourcc(*"DIVX"), 30, size)
@@ -169,7 +177,6 @@ class VideoRecorderWidget(QWidget):
             )
 
     def update_speed(self):
-        # Adjusting frame rate based on speed selection
         speed = self.speed_slider.value()
         self.video_frame_rate = 30 * speed  # Adjusting frame rate
         self.update_timer_interval()
@@ -181,12 +188,10 @@ class VideoRecorderWidget(QWidget):
     def close_event(self, event):
         self.capture.release()
 
-
     def get_aspect_ratio(self):
         return self.capture.get(cv2.CAP_PROP_FRAME_WIDTH) / self.capture.get(
             cv2.CAP_PROP_FRAME_HEIGHT
         )
-
 
     def resize_sequence_recorder_widget(self):
         main_widget_size = self.main_widget.size()
