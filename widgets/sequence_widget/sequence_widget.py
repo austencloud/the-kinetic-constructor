@@ -25,7 +25,7 @@ class SequenceWidget(QWidget):
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         self.pictograph_cache: dict[str, Pictograph] = {}
         self.indicator_label = IndicatorLabel(self)
-        self.beat_frame = SequenceBuilderBeatFrame(self.main_widget)
+        self.beat_frame = SequenceBuilderBeatFrame(self)
         self.sequence_modifier = SequenceModifier(self)
         self.button_frame = SequenceWidgetButtonFrame(self)
         self.pictograph_factory = SequenceWidgetPictographFactory(

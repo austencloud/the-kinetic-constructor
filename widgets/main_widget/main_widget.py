@@ -10,7 +10,7 @@ from widgets.base_tab_widget import BaseTabWidget
 from widgets.factories.button_factory.button_factory import ButtonFactory
 from widgets.json_manager import JSON_Manager
 from widgets.letterbook.letterbook import LetterBook
-from widgets.main_builder_widget.sequence_recorder_container import (
+from widgets.sequence_recorder_widget.sequence_recorder_container import (
     SequenceRecorderContainer,
 )
 from widgets.main_widget.letter_loader import LetterLoader

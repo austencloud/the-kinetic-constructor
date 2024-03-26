@@ -27,15 +27,14 @@ class SequenceBuilderBeatFrame(QFrame):
     COLUMN_COUNT = 5
     ROW_COUNT = 4
 
-    def __init__(self, main_widget: "MainWidget") -> None:
+    def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__()
-        self.main_widget = main_widget
+        self.main_widget = sequence_widget.main_widget
         self.current_sequence_json_handler = (
             self.main_widget.json_manager.current_sequence_json_handler
         )
-
         self.beat_views: list[BeatView] = []
-        self._setup_components(main_widget)
+        self._setup_components(self.main_widget)
         self._setup_layout()
         self._populate_beat_frame()
 

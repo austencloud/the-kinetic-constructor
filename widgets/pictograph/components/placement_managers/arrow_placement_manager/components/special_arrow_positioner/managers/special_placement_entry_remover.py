@@ -105,10 +105,12 @@ class SpecialPlacementEntryRemover:
                         self.turns_tuple
                     ][key]
             if self.turns_tuple not in letter_data:
-                del other_data[letter][mirrored_tuple]
+                if other_data:
+                    del other_data[letter][mirrored_tuple]
 
             elif key not in letter_data[self.turns_tuple]:
-                del other_data[letter][mirrored_tuple][new_key]
+                if other_data:
+                    del other_data[letter][mirrored_tuple][new_key]
             self.data_updater.json_handler.write_json_data(other_data, other_file_path)
         new_turns_tuple = self.turns_tuple_generator.generate_mirrored_tuple(arrow)
         self._remove_turn_data_entry(other_letter_data, new_turns_tuple, new_key)

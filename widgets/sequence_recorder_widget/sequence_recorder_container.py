@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy
 from PyQt6.QtCore import QSize, Qt
 
-from widgets.main_builder_widget.sequence_recorder_widget import SequenceRecorderWidget
+from widgets.sequence_recorder_widget.sequence_recorder_widget import SequenceRecorderWidget
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget

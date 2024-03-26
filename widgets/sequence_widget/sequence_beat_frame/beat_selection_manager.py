@@ -9,13 +9,15 @@ from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
 )
 
 if TYPE_CHECKING:
-
+    from widgets.sequence_widget.sequence_beat_frame.sequence_builder_beat_frame import (
+        SequenceBuilderBeatFrame,
+    )
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 
 class BeatSelectionManager(QWidget):
-    def __init__(self, sequence_widget: "SequenceWidget"):
-        super().__init__(sequence_widget)
+    def __init__(self, beat_frame: "SequenceBuilderBeatFrame"):
+        super().__init__(beat_frame)
         self.selected_beat: Optional[BeatView | StartPositionBeatView] = None
         self.border_color = QColor("gold")
         self.border_width = 4  # Adjust as needed
@@ -33,7 +35,7 @@ class BeatSelectionManager(QWidget):
             red_turns = self.selected_beat.beat.red_motion.turns
             self.selected_beat.is_selected = True
             graph_editor = (
-                self.selected_beat.beat_frame.sequence_widget.sequence_modifier.graph_editor
+                self.selected_beat.beat_frame.main_widget.sequence_widget.sequence_modifier.graph_editor
             )
             graph_editor.update_GE_pictgraph(self.selected_beat.beat)
 
@@ -43,8 +45,12 @@ class BeatSelectionManager(QWidget):
             # Set the orientations in the graph editor's orientation changer
             if isinstance(beat_view, StartPositionBeatView):
                 start_pos_pictograph = beat_view.beat
-                blue_start_pos_ori_picker = graph_editor.adjustment_panel.blue_start_pos_ori_picker
-                red_start_pos_ori_picker = graph_editor.adjustment_panel.red_start_pos_ori_picker
+                blue_start_pos_ori_picker = (
+                    graph_editor.adjustment_panel.blue_start_pos_ori_picker
+                )
+                red_start_pos_ori_picker = (
+                    graph_editor.adjustment_panel.red_start_pos_ori_picker
+                )
 
                 blue_start_pos_ori_picker.ori_picker_widget.set_initial_orientation(
                     start_pos_pictograph, "blue"
