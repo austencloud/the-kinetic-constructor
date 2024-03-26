@@ -22,6 +22,6 @@ class VideoRecorderContainer(QWidget):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def resize_video_container(self) -> None:
-        main_tab_widget_width = self.main_widget.main_tab_widget.width()
+        main_tab_widget_width = self.main_widget.main_builder_widget.width()
         self.setMinimumWidth(int(main_tab_widget_width))
         self.setMaximumWidth(int(main_tab_widget_width))

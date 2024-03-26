@@ -23,10 +23,12 @@ class SequenceWidgetButtonFrame(QFrame):
         self.sequence_widget = sequence_widget
         self.main_widget = sequence_widget.main_widget
         self.json_handler = self.main_widget.json_manager.current_sequence_json_handler
-        self.sequence_constructor = self.main_widget.main_tab_widget.sequence_builder
+        self.sequence_constructor = (
+            self.main_widget.main_builder_widget.sequence_builder
+        )
         self.graph_editor = self.sequence_widget.sequence_modifier.graph_editor
         self.variation_manager = (
-            self.main_widget.main_tab_widget.dictionary.variation_manager
+            self.main_widget.main_builder_widget.dictionary.variation_manager
         )
         self.beat_frame = self.sequence_widget.beat_frame
         self.indicator_label = sequence_widget.indicator_label
@@ -107,7 +109,7 @@ class SequenceWidgetButtonFrame(QFrame):
             f"Structural variation saved for {base_pattern}"
         )
 
-        self.main_widget.main_tab_widget.dictionary.reload_dictionary_tab()
+        self.main_widget.main_builder_widget.dictionary.reload_dictionary_tab()
 
     def clear_sequence(
         self, show_indicator=True, should_reset_to_start_pos_picker=True

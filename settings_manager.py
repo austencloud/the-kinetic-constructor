@@ -17,11 +17,7 @@ class SettingsManager:
     DEFAULT_SETTINGS = {
         "pictograph_size": 1,
         "prop_type": "Staff",
-        "glyph_visibility": {
-            "VTG": False,
-            "TKA": True,
-            "Elemental": True
-        },
+        "glyph_visibility": {"VTG": False, "TKA": True, "Elemental": True},
         "default_left_orientation": "out",
         "default_right_orientation": "out",
         "default_left_orientation_Hand": "out",
@@ -33,16 +29,17 @@ class SettingsManager:
             "5": False,
             "6": False,
             "7": False,
-            "8": False
-        }
+            "8": False,
+        },
     }
+
     def __init__(self, main_window: "MainWindow") -> None:
         self.settings_json = get_user_editable_resource_path("user_settings.json")
         self.main_window = main_window
         self.settings = self.load_settings()
         self.prop_type_changer = PropTypeChanger(main_window)
         self.glyph_visibility_manager = GlyphVisibilityManager(main_window)
-    
+
     def load_settings(self) -> dict:
         if os.path.exists(self.settings_json):
             with open(self.settings_json, "r") as file:
@@ -50,7 +47,7 @@ class SettingsManager:
         else:
             self.save_settings(self.DEFAULT_SETTINGS)
             return self.DEFAULT_SETTINGS
-    
+
     def save_settings(self, settings=None) -> None:
         if settings is None:
             settings = self.settings
@@ -79,7 +76,7 @@ class SettingsManager:
         column_count = max(
             self.MIN_COLUMN_COUNT, min(inverted_value, self.MAX_COLUMN_COUNT)
         )
-        self.main_window.main_widget.main_tab_widget.letterbook.scroll_area.display_manager.COLUMN_COUNT = (
+        self.main_window.main_widget.main_builder_widget.letterbook.scroll_area.display_manager.COLUMN_COUNT = (
             column_count
         )
 
