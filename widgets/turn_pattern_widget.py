@@ -19,7 +19,6 @@ if TYPE_CHECKING:
     from widgets.main_builder_widget.builder_toolbar import (
         BuilderToolbar,
     )
-    from widgets.sequence_widget.sequence_modifier import SequenceModifier
 
 
 class TurnPatternWidget(QWidget):

@@ -9,9 +9,7 @@ from widgets.factories.button_factory.buttons.letterbook_adjust_turns_button imp
 from widgets.factories.button_factory.buttons.swap_button import SwapButton
 
 if TYPE_CHECKING:
-    from widgets.letterbook.letterbook_letter_button_frame.components.letterbook_turns_box import (
-        LetterBookTurnsBox,
-    )
+    pass
 
 
 class GE_TurnsBoxWidget(QWidget):

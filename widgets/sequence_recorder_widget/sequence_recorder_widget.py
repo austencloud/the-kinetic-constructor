@@ -3,10 +3,9 @@ from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
     QMessageBox,
-    QHBoxLayout,
 )
 
-from PyQt6.QtCore import QTimer, Qt
+from PyQt6.QtCore import QTimer
 import cv2
 
 

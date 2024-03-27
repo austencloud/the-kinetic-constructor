@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QFrame, QGridLayout
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from ..letterbook_section_widget import LetterBookSectionWidget
+    pass
 
 
 class ScrollAreaSectionPictographFrame(QFrame):

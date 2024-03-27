@@ -5,9 +5,7 @@ from PyQt6.QtWidgets import QLabel, QVBoxLayout, QWidget
 import cv2
 
 if TYPE_CHECKING:
-    from widgets.sequence_recorder_widget.sequence_recorder_widget import (
-        SequenceRecorderWidget,
-    )
+    pass
 
 
 class SequenceRecorderVideoDisplay(QWidget):
