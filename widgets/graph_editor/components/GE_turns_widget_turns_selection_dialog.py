@@ -35,7 +35,7 @@ class GE_TurnsSelectionDialog(QDialog):
         button_size = self.turns_box.width() // 2
 
         turns_display_font_size = int(
-            self.turns_box.turns_panel.graph_editor.width() / 20
+            self.turns_box.adjustment_panel.graph_editor.width() / 20
         )
 
         for value in turns_values:

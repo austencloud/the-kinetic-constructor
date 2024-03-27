@@ -76,7 +76,7 @@ class SettingsManager:
         column_count = max(
             self.MIN_COLUMN_COUNT, min(inverted_value, self.MAX_COLUMN_COUNT)
         )
-        self.main_window.main_widget.main_builder_widget.letterbook.scroll_area.display_manager.COLUMN_COUNT = (
+        self.main_window.main_widget.builder_toolbar.letterbook.scroll_area.display_manager.COLUMN_COUNT = (
             column_count
         )
 

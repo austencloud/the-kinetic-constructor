@@ -35,7 +35,6 @@ class BeatView(QGraphicsView):
         self.is_selected = False
         self.setContentsMargins(0, 0, 0, 0)
 
-
     def set_pictograph(self, new_beat: "Beat") -> None:
         self.beat = new_beat
         new_beat.view = self
@@ -54,7 +53,7 @@ class BeatView(QGraphicsView):
     def clear(self):
         self.setScene(None)
         self.beat_frame.start_pos_view.setScene(None)
-        sequence_builder = self.beat.main_widget.main_builder_widget.sequence_builder
+        sequence_builder = self.beat.main_widget.builder_toolbar.sequence_builder
         sequence_builder.current_pictograph = self.beat_frame.start_pos
         sequence_builder.reset_to_start_pos_picker()
 

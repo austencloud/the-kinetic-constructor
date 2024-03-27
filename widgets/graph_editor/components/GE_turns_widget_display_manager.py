@@ -92,24 +92,23 @@ class GE_TurnsWidgetDisplayManager:
 
     def set_turn_display_styles(self) -> None:
         self.turns_display_font_size = int(
-            self.turns_box.turns_panel.graph_editor.width() / 20
+            self.turns_box.adjustment_panel.graph_editor.width() / 20
         )
         self.turns_display_label.setFont(
             QFont("Arial", self.turns_display_font_size, QFont.Weight.Bold)
         )
         self.turns_display_label.setMinimumWidth(
-            int(self.turns_box.turns_panel.width() / 6)
+            int(self.turns_box.adjustment_panel.width() / 6)
         )
         self.turns_display_label.setMaximumWidth(
-            int(self.turns_box.turns_panel.width() / 6)
+            int(self.turns_box.adjustment_panel.width() / 6)
         )
         border_radius = self.turns_display_label.width() // 4
 
         turn_display_border = int(self.turns_display_label.width() / 20)
         self.turns_display_label.setMaximumHeight(
-            int(self.turns_box.turns_panel.height() / 4)
+            int(self.turns_box.adjustment_panel.height() / 4)
         )
-        # Determine the appropriate color based on the turns box color
         turns_box_color = self.turns_box.color
         if turns_box_color == RED:
             border_color = "#ED1C24"

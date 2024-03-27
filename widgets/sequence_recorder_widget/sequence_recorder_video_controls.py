@@ -19,6 +19,7 @@ class SequenceRecorderVideoControls(QWidget):
         self.main_layout: QHBoxLayout = QHBoxLayout(self)
         self.beat_control_layout: QVBoxLayout = QVBoxLayout()
         self.recording_control_layout: QVBoxLayout = QVBoxLayout()
+        self.recording_control_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.webcam_selector = QComboBox()
         self.populate_webcam_selector()
 
@@ -51,7 +52,7 @@ class SequenceRecorderVideoControls(QWidget):
 
     @staticmethod
     def detect_available_cameras():
-        max_tested = 5
+        max_tested = 2
         devices = {}
         for index in range(max_tested):
             cap = cv2.VideoCapture(index)

@@ -35,7 +35,7 @@ class GE_PropRotDirButtonManager:
 
     def _setup_prop_rot_dir_buttons(self) -> list[PropRotDirButton]:
         button_factory = (
-            self.turns_box.turns_panel.graph_editor.main_widget.button_factory
+            self.turns_box.adjustment_panel.graph_editor.main_widget.button_factory
         )
         self.cw_button: PropRotDirButton = button_factory.create_prop_rot_dir_button(
             f"{ICON_DIR}clock/clockwise.png",

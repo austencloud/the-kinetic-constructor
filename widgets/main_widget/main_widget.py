@@ -5,16 +5,16 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from Enums.PropTypes import PropType
-from objects.graphical_object.graphical_object_svg_manager import GraphicalObjectSvgManager
+from objects.graphical_object.graphical_object_svg_manager import (
+    GraphicalObjectSvgManager,
+)
 from path_helpers import get_images_and_data_path
 from styles.get_tab_stylesheet import get_tab_stylesheet
 from widgets.factories.button_factory.button_factory import ButtonFactory
 from widgets.json_manager import JSON_Manager
 from widgets.letterbook.letterbook import LetterBook
 from widgets.main_widget.top_level_builder_widget import TopLevelBuilderWidget
-from widgets.sequence_recorder_widget.sequence_recorder_container import (
-    SequenceRecorderContainer,
-)
+
 from widgets.main_widget.letter_loader import LetterLoader
 from widgets.menu_bar.preferences_dialog import PreferencesDialog
 from widgets.menu_bar.prop_type_selector import PropTypeSelector
@@ -23,6 +23,9 @@ from widgets.scroll_area.components.pictograph_key_generator import (
     PictographKeyGenerator,
 )
 from constants import DIAMOND
+from widgets.sequence_recorder_widget.sequence_recorder_widget import (
+    SequenceRecorderWidget,
+)
 from ..main_widget.special_placement_loader import SpecialPlacementLoader
 from ..pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
     TurnsTupleGenerator,
@@ -48,6 +51,7 @@ class MainWidget(QTabWidget):
         self._setup_components()
         self.currentChanged.connect(self.on_tab_changed)
         self.setStyleSheet(get_tab_stylesheet())
+        self.webcam_initialized = False  # Add an initialization flag
 
     def _setup_pictograph_cache(self) -> None:
         self.all_pictographs: dict[str, dict[str, "Pictograph"]] = {}
@@ -72,18 +76,19 @@ class MainWidget(QTabWidget):
         self.special_placement_loader = SpecialPlacementLoader(self)
         self._setup_special_placements()
 
-        builder_widget = TopLevelBuilderWidget()
+        self.top_level_builder_widget = TopLevelBuilderWidget()
 
-        builder_layout = QHBoxLayout(builder_widget)
-        self.main_builder_widget = BuilderToolbar(self)
+        builder_layout = QHBoxLayout(self.top_level_builder_widget)
+        self.builder_toolbar = BuilderToolbar(self)
         self.sequence_widget = SequenceWidget(self)
         self.letterbook = LetterBook(self)
-        builder_layout.addWidget(self.sequence_widget, 1)
-        builder_layout.addWidget(self.main_builder_widget, 1)
-        self.addTab(builder_widget, "Builder")
 
-        self.sequence_recorder_container = SequenceRecorderContainer(self)
-        self.addTab(self.sequence_recorder_container, "Recorder")
+        builder_layout.addWidget(self.sequence_widget, 1)
+        builder_layout.addWidget(self.builder_toolbar, 1)
+
+        self.sequence_recorder_widget = SequenceRecorderWidget(self)
+        self.addTab(self.sequence_recorder_widget, "Recorder")
+        self.addTab(self.top_level_builder_widget, "Builder")
         self.addTab(self.letterbook, "LetterBook")
 
     def _setup_special_placements(self) -> None:
@@ -106,18 +111,20 @@ class MainWidget(QTabWidget):
         else:
             super().keyPressEvent(event)
 
-    def on_tab_changed(self) -> None:
-        self.resize_visible_tab()
-
-    def resize_visible_tab(self) -> None:
+    def on_tab_changed(self):
         current_widget = self.currentWidget()
-        if current_widget == self.sequence_widget:
+        if current_widget == self.top_level_builder_widget:
             self.sequence_widget.resize_sequence_widget()
-        elif current_widget == self.sequence_recorder_container:
-            self.sequence_recorder_container.sequence_recorder_widget.resize_sequence_recorder_widget()
+            self.builder_toolbar.resize_current_tab()
+        elif current_widget == self.sequence_recorder_widget:
+            if not self.webcam_initialized:
+                self.sequence_recorder_widget.init_webcam()
+                self.webcam_initialized = True
+            self.sequence_recorder_widget.resize_sequence_recorder_widget()
 
     def showEvent(self, event) -> None:
         super().showEvent(event)
         self.main_window.window_manager.set_dimensions()
-        self.main_builder_widget.on_tab_changed()
-        self.sequence_widget.resize_sequence_widget()
+        self.builder_toolbar.on_tab_changed()
+
+        # self.sequence_widget.resize_sequence_widget()

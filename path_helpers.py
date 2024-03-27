@@ -42,10 +42,8 @@ def get_dev_path(filename) -> str:
 
 def get_user_editable_resource_path(filename) -> str:
     if getattr(sys, "frozen", False):
-        print("Running as a PyInstaller bundle")
         path = get_app_data_path(filename)
     else:
-        print("Running in a development environment")
         path = get_dev_path(
             filename
         )  # Clears or initializes the file at the new location

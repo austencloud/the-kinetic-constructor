@@ -60,7 +60,7 @@ class GE_TurnsUpdater:
         """set the rotation direction of the motion based on the vtg directional relationship."""
         other_motion = motion.pictograph.get.other_motion(motion)
         GE_pictograph = (
-            self.turns_box.turns_panel.graph_editor.GE_pictograph_view.get_current_pictograph()
+            self.turns_box.adjustment_panel.graph_editor.GE_pictograph_view.get_current_pictograph()
         )
         if GE_pictograph.letter_type in [
             LetterType.Type2,

@@ -102,7 +102,7 @@ class SequenceRecorderBeatFrame(QFrame):
             self.current_sequence_json_handler.load_current_sequence_json()
         )
         self.propogate_turn_adjustment(current_sequence_json)
-        self.main_widget.main_builder_widget.sequence_builder.option_picker.update_option_picker()
+        self.main_widget.builder_toolbar.sequence_builder.option_picker.update_option_picker()
 
     def propogate_turn_adjustment(self, current_sequence_json) -> None:
         for i, entry in enumerate(current_sequence_json):

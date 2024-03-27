@@ -19,14 +19,14 @@ if TYPE_CHECKING:
 
 class GE_TurnsBox(QFrame):
     def __init__(
-        self, turns_panel: "GE_AdjustmentPanel", pictograph: "Pictograph", color: Color
+        self, adjustment_panel: "GE_AdjustmentPanel", pictograph: "Pictograph", color: Color
     ) -> None:
-        super().__init__(turns_panel)
+        super().__init__(adjustment_panel)
         self.setObjectName("GE_TurnsBox")
-        self.turns_panel = turns_panel
+        self.adjustment_panel = adjustment_panel
         self.color = color
         self.pictograph = pictograph
-        self.graph_editor = self.turns_panel.graph_editor
+        self.graph_editor = self.adjustment_panel.graph_editor
         self.border_width = self.graph_editor.width() // 100
 
         self.vtg_dir_btn_state: dict[str, bool] = {SAME: False, OPP: False}
@@ -68,4 +68,3 @@ class GE_TurnsBox(QFrame):
         )
         self.header.resize_GE_turns_box_header()
         self.turns_widget.resize_GE_turns_widget()
-

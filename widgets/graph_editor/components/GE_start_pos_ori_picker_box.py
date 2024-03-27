@@ -44,8 +44,7 @@ class GE_StartPosOriPickerBox(QFrame):
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addWidget(self.header, 1)
-        self.layout.addWidget(self.ori_picker_widget, 4)
-        self.layout.addStretch(1)
+        self.layout.addWidget(self.ori_picker_widget, 5)
         self.setLayout(self.layout)
 
     def update_styled_border(self) -> None:

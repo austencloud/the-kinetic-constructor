@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 
-from constants import RED
+from constants import BLUE, RED
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_start_pos_ori_picker_widget import (
@@ -12,47 +12,49 @@ if TYPE_CHECKING:
 
 
 class GE_OriPickerDisplayManager:
-    def __init__(self, ori_picker_widget: "GE_StartPosOriPickerWidget"):
+    def __init__(self, ori_picker_widget: "GE_StartPosOriPickerWidget") -> None:
         self.ori_picker_widget = ori_picker_widget
+        self.ori_picker_box = ori_picker_widget.ori_picker_box
         self.setup_current_orientation_display()
 
-    def setup_current_orientation_display(self):
-        self.ori_picker_widget.current_ori_display = QLabel(
-            self.ori_picker_widget.orientations[
-                self.ori_picker_widget.current_orientation_index
-            ],
-            self.ori_picker_widget,
-        )
-        self.ori_picker_widget.current_ori_display.setAlignment(
-            Qt.AlignmentFlag.AlignCenter
-        )
-        self.ori_picker_widget.current_ori_display.mousePressEvent = (
+    def setup_current_orientation_display(self) -> None:
+        self.ori_display_label = self.ori_picker_widget.ori_display_label
+        self.ori_display_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.ori_display_label.mousePressEvent = (
             self.ori_picker_widget.on_orientation_display_clicked
         )
-        self.set_label_styles(self.ori_picker_widget.current_ori_display)
 
-    def set_label_styles(self, current_ori_display: QLabel):
-        color = self.ori_picker_widget.color
-        border_color = "#ED1C24" if color == RED else "#2E3192"
-        current_ori_display.setStyleSheet(
+    def set_label_styles(self) -> None:
+        self.ori_display_label.setMinimumWidth(
+            int(self.ori_picker_box.adjustment_panel.width() / 4)
+        )
+        self.ori_display_label.setMaximumWidth(
+            int(self.ori_picker_box.adjustment_panel.width() / 4)
+        )
+
+        border_radius = self.ori_display_label.width() // 4
+
+        ori_display_border = int(self.ori_display_label.width() / 25)
+        if self.ori_picker_box.color == RED:
+            border_color = "#ED1C24"
+        elif self.ori_picker_box.color == BLUE:
+            border_color = "#2E3192"
+        else:
+            border_color = "black"
+
+        self.ori_display_label.setStyleSheet(
             f"""
             QLabel {{
-                border: 2px solid {border_color};
-                border-radius: 10px;
-                padding: 5px;
+                border: {ori_display_border}px solid {border_color};
+                border-radius: {border_radius}px;
                 background-color: white;
+
             }}
-        """
+            """
         )
 
-    def resize_current_orientation_display(self):
-        font_size = int(
-            self.ori_picker_widget.ori_picker_box.graph_editor.width() // 40
-        )
-        font = QFont("Arial", font_size)  # Adjust font size as needed
+    def set_ori_display_font_size(self) -> None:
+        font_size = int(self.ori_picker_box.graph_editor.width() // 35)
+        font = QFont("Arial", font_size)
         font.setWeight(QFont.Weight.Bold)
-        self.ori_picker_widget.current_ori_display.setFont(font)
-        # limit the width of the ori display to half the width of the ori picker bo
-        self.ori_picker_widget.current_ori_display.setMaximumWidth(
-            self.ori_picker_widget.ori_picker_box.width() // 2
-        )
+        self.ori_picker_widget.ori_display_label.setFont(font)

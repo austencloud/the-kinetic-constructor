@@ -27,7 +27,7 @@ class GE_TurnsBoxHeader(QWidget):
     def __init__(self, turns_box: "GE_TurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box
-        self.graph_editor = self.turns_box.turns_panel.graph_editor
+        self.graph_editor = self.turns_box.adjustment_panel.graph_editor
         self.main_widget = self.graph_editor.main_widget
         self.separator: QFrame = self.create_separator()
         self.header_label: QLabel = self._setup_header_label()

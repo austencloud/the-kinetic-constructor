@@ -17,10 +17,10 @@ class DictionarySequencePopulator:
         self.json_handler = self.main_widget.json_manager.current_sequence_json_handler
         self.start_pos_view = self.main_widget.sequence_widget.beat_frame.start_pos_view
         self.start_pos_manager = (
-            self.main_widget.main_builder_widget.sequence_builder.start_pos_picker.start_pos_manager
+            self.main_widget.builder_toolbar.sequence_builder.start_pos_picker.start_pos_manager
         )
         self.sequence_widget = self.main_widget.sequence_widget
-        self.sequence_builder = self.main_widget.main_builder_widget.sequence_builder
+        self.sequence_builder = self.main_widget.builder_toolbar.sequence_builder
         self.initialized = True
 
     def load_sequence_from_file(self, file_path: str) -> None:
