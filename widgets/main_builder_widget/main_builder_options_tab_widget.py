@@ -1,17 +1,18 @@
 from typing import TYPE_CHECKING
 
-from widgets.base_tab_widget import BaseTabWidget
+from styles.get_tab_stylesheet import get_tab_stylesheet
 from widgets.dictionary.dictionary import Dictionary
 from widgets.sequence_builder.sequence_builder import SequenceBuilder
 from widgets.turn_pattern_widget import TurnPatternWidget
-
+from PyQt6.QtWidgets import QTabWidget
 if TYPE_CHECKING:
     from ..main_widget.main_widget import MainWidget
 
 
-class BuilderToolbar(BaseTabWidget):
+class BuilderToolbar(QTabWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
+        self.main_widget = main_widget
         self.sequence_builder = SequenceBuilder(main_widget)
         self.dictionary = Dictionary(main_widget)
         self.turn_pattern_widget = TurnPatternWidget(self)
@@ -19,7 +20,8 @@ class BuilderToolbar(BaseTabWidget):
         self.addTab(self.dictionary, "Dictionary")
         self.addTab(self.turn_pattern_widget, "Turn Patterns")
         self.currentChanged.connect(self.on_tab_changed)
-
+        self.setStyleSheet(get_tab_stylesheet())
+        
     def on_tab_changed(self) -> None:
         current_tab = self.currentWidget()
         beat_frame = self.main_widget.sequence_widget.beat_frame

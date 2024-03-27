@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget
-from widgets.base_tab_widget import BaseTabWidget
+from PyQt6.QtWidgets import QWidget, QTabWidget
+from styles.get_tab_stylesheet import get_tab_stylesheet
 from widgets.animator.animator import Animator
 from widgets.graph_editor.graph_editor import GraphEditor
 
@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 
-class SequenceModifier(BaseTabWidget):
+class SequenceModifier(QTabWidget):
     def __init__(self, sequence_widget: "SequenceWidget"):
         super().__init__(sequence_widget.main_widget)
         self.main_widget = sequence_widget.main_widget
@@ -20,6 +20,7 @@ class SequenceModifier(BaseTabWidget):
         self.addTab(self.animator, "Animator")
         self.addTab(self.prop_changer, "Prop Changer")
         self.currentChanged.connect(self.resize_sequence_modifier)
+        self.setStyleSheet(get_tab_stylesheet())
 
     def resize_sequence_modifier(self) -> None:
         current_widget = self.currentWidget()

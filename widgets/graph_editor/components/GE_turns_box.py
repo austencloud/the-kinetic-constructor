@@ -69,8 +69,3 @@ class GE_TurnsBox(QFrame):
         self.header.resize_GE_turns_box_header()
         self.turns_widget.resize_GE_turns_widget()
 
-    # def paintEvent(self, a0: QPaintEvent | None) -> None:
-    #     # super().paintEvent(a0)
-    #     # self._set_border_color()
-    #     QApplication.processEvents()
-    #     print("paintEvent executed")

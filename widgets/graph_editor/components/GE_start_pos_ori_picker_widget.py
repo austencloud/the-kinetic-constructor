@@ -8,11 +8,14 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QIcon, QFont
 
-from PyQt6.QtCore import Qt, QSize, pyqtSignal
+from PyQt6.QtCore import Qt, QSize, pyqtSignal, QPoint
 from constants import IN, ORI, OUT, CLOCK, COUNTER
 from typing import TYPE_CHECKING
 
 from path_helpers import get_images_and_data_path
+from widgets.graph_editor.components.GE_orientation_selection_dialog import (
+    GE_OrientationSelectionDialog,
+)
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
@@ -28,17 +31,18 @@ class GE_StartPosOriPickerWidget(QWidget):
         super().__init__()
         self.ori_picker_box = ori_picker_box
         self.color = self.ori_picker_box.color
+        self.main_widget = self.ori_picker_box.graph_editor.main_widget
         self.json_validation_engine = (
-            self.ori_picker_box.graph_editor.main_widget.json_manager.current_sequence_json_handler.validation_engine
+            self.main_widget.json_manager.current_sequence_json_handler.validation_engine
         )
         self.beat_frame = (
             self.ori_picker_box.graph_editor.sequence_modifier.sequence_widget.beat_frame
         )
         self.current_sequence_json_handler = (
-            self.ori_picker_box.graph_editor.main_widget.json_manager.current_sequence_json_handler
+            self.main_widget.json_manager.current_sequence_json_handler
         )
         self.option_picker = (
-            self.ori_picker_box.graph_editor.main_widget.main_builder_widget.sequence_builder.option_picker
+            self.main_widget.main_builder_widget.sequence_builder.option_picker
         )
         self.current_orientation_index = 0
         self.orientations = [IN, COUNTER, OUT, CLOCK]
@@ -93,7 +97,18 @@ class GE_StartPosOriPickerWidget(QWidget):
             self.orientations[self.current_orientation_index]
         )
         self.current_orientation_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.current_orientation_display.mousePressEvent = (
+            self.on_orientation_display_clicked
+        )
+        self.set_current_orientation_display_font()  # Ensure this method is called to set the font size and style
         return self.current_orientation_display
+
+    def on_orientation_display_clicked(self, event):
+        dialog = GE_OrientationSelectionDialog(self)
+        dialog.move(
+            self.current_orientation_display.mapToGlobal(QPoint(0, 0))
+        )  # Use QPoint here
+        dialog.exec()
 
     def set_current_orientation_display_font(self) -> None:
         font = QFont("Cambria")
@@ -101,6 +116,21 @@ class GE_StartPosOriPickerWidget(QWidget):
         font.setPointSize(font_size)
         font.setWeight(QFont.Weight.Bold)
         self.current_orientation_display.setFont(font)
+
+    def set_orientation(self, orientation):
+        self.current_orientation_index = self.orientations.index(orientation)
+        self.current_orientation_display.setText(orientation)
+        # Update the orientation in your application logic as needed
+        self.current_sequence_json_handler.update_start_pos_ori(self.color, orientation)
+        self.json_validation_engine.run()
+        self.ori_adjusted.emit(orientation)
+        current_pictograph = (
+            self.ori_picker_box.graph_editor.GE_pictograph_view.pictograph
+        )
+        current_pictograph.props[self.color].updater.update_prop({ORI: orientation})
+        current_pictograph.updater.update_pictograph()
+        QApplication.processEvents()
+        self.option_picker.update_option_picker()
 
     def rotate_cw(self) -> None:
         self.current_orientation_index = (self.current_orientation_index + 1) % len(
@@ -144,7 +174,7 @@ class GE_StartPosOriPickerWidget(QWidget):
             button.setFixedSize(QSize(button_size, button_size))
             button.setIconSize(QSize(icon_size, icon_size))
         self._set_ori_label_font_size()
-        self.set_current_orientation_display_font()
+        # self.set_current_orientation_display_font()
 
     def set_initial_orientation(
         self, start_pos_pictograph: Pictograph, color: str

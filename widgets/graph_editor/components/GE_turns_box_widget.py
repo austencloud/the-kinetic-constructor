@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 class GE_TurnsBoxWidget(QWidget):
     def __init__(self, turns_box) -> None:
         super().__init__(turns_box)
-        self.turns_box: "LetterBookTurnsBox" = turns_box
+        self.turns_box = turns_box
 
     def create_attr_header_label(
         self, text: str, align: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter

@@ -34,11 +34,7 @@ class BeatView(QGraphicsView):
         self.is_filled = False
         self.is_selected = False
         self.setContentsMargins(0, 0, 0, 0)
-        # self.add_black_borders()
 
-    def add_black_borders(self) -> None:
-        self.original_style = self.styleSheet()
-        # self.viewport().setStyleSheet("border: 1px solid black;")
 
     def set_pictograph(self, new_beat: "Beat") -> None:
         self.beat = new_beat

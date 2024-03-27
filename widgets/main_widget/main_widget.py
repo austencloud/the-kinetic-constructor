@@ -5,8 +5,9 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from Enums.PropTypes import PropType
+from objects.graphical_object.graphical_object_svg_manager import GraphicalObjectSvgManager
 from path_helpers import get_images_and_data_path
-from widgets.base_tab_widget import BaseTabWidget
+from styles.get_tab_stylesheet import get_tab_stylesheet
 from widgets.factories.button_factory.button_factory import ButtonFactory
 from widgets.json_manager import JSON_Manager
 from widgets.letterbook.letterbook import LetterBook
@@ -21,23 +22,22 @@ from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.components.pictograph_key_generator import (
     PictographKeyGenerator,
 )
-from ..graphical_object_svg_manager import GraphicalObjectSvgManager
 from constants import DIAMOND
 from ..main_widget.special_placement_loader import SpecialPlacementLoader
 from ..pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
     TurnsTupleGenerator,
 )
-from ..image_cache_manager import ImageCacheManager
 from ..main_builder_widget.main_builder_options_tab_widget import (
     BuilderToolbar,
 )
 from widgets.sequence_widget.sequence_widget import SequenceWidget
+from PyQt6.QtWidgets import QTabWidget
 
 if TYPE_CHECKING:
     from main import MainWindow
 
 
-class MainWidget(BaseTabWidget):
+class MainWidget(QTabWidget):
     def __init__(self, main_window: "MainWindow") -> None:
         super().__init__(main_window)
         self.main_window = main_window
@@ -47,6 +47,7 @@ class MainWidget(BaseTabWidget):
         self._setup_letters()
         self._setup_components()
         self.currentChanged.connect(self.on_tab_changed)
+        self.setStyleSheet(get_tab_stylesheet())
 
     def _setup_pictograph_cache(self) -> None:
         self.all_pictographs: dict[str, dict[str, "Pictograph"]] = {}
@@ -67,7 +68,6 @@ class MainWidget(BaseTabWidget):
         self.prop_type_selector = PropTypeSelector(self)
         self.turns_tuple_generator = TurnsTupleGenerator()
         self.pictograph_key_generator = PictographKeyGenerator()
-        self.image_cache_manager = ImageCacheManager(self)
         self.preferences_dialog = PreferencesDialog(self)
         self.special_placement_loader = SpecialPlacementLoader(self)
         self._setup_special_placements()
