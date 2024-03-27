@@ -36,7 +36,7 @@ def get_dev_path(filename) -> str:
     """
 
     base_path = os.path.abspath(".")
-    os.makedirs(base_path, exist_ok=True)  # Make sure the directory exists
+    os.makedirs(base_path, exist_ok=True)
     return os.path.join(base_path, filename)
 
 
@@ -44,9 +44,7 @@ def get_user_editable_resource_path(filename) -> str:
     if getattr(sys, "frozen", False):
         path = get_app_data_path(filename)
     else:
-        path = get_dev_path(
-            filename
-        )  # Clears or initializes the file at the new location
+        path = get_dev_path(filename)
     return path
 
 

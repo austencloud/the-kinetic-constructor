@@ -87,8 +87,8 @@ class MainWidget(QTabWidget):
         builder_layout.addWidget(self.builder_toolbar, 1)
 
         self.sequence_recorder_widget = SequenceRecorderWidget(self)
-        self.addTab(self.sequence_recorder_widget, "Recorder")
         self.addTab(self.top_level_builder_widget, "Builder")
+        self.addTab(self.sequence_recorder_widget, "Recorder")
         self.addTab(self.letterbook, "LetterBook")
 
     def _setup_special_placements(self) -> None:
@@ -118,13 +118,11 @@ class MainWidget(QTabWidget):
             self.builder_toolbar.resize_current_tab()
         elif current_widget == self.sequence_recorder_widget:
             if not self.webcam_initialized:
-                self.sequence_recorder_widget.init_webcam()
+                self.sequence_recorder_widget.video_display.init_webcam()
                 self.webcam_initialized = True
             self.sequence_recorder_widget.resize_sequence_recorder_widget()
 
     def showEvent(self, event) -> None:
         super().showEvent(event)
         self.main_window.window_manager.set_dimensions()
-        self.builder_toolbar.on_tab_changed()
-
-        # self.sequence_widget.resize_sequence_widget()
+        self.on_tab_changed()

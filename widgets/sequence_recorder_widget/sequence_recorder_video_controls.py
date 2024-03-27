@@ -11,11 +11,11 @@ import cv2
 
 
 class SequenceRecorderVideoControls(QWidget):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.init_ui()
 
-    def init_ui(self):
+    def init_ui(self) -> None:
         self.main_layout: QHBoxLayout = QHBoxLayout(self)
         self.beat_control_layout: QVBoxLayout = QVBoxLayout()
         self.recording_control_layout: QVBoxLayout = QVBoxLayout()
@@ -44,14 +44,14 @@ class SequenceRecorderVideoControls(QWidget):
         self.main_layout.addLayout(self.beat_control_layout, 1)
         self.main_layout.addLayout(self.recording_control_layout, 1)
 
-    def populate_webcam_selector(self):
+    def populate_webcam_selector(self) -> None:
         self.webcam_selector.clear()
         devices = self.detect_available_cameras()
         for index, name in devices.items():
             self.webcam_selector.addItem(name, index)
 
     @staticmethod
-    def detect_available_cameras():
+    def detect_available_cameras() -> dict[int, str]:
         max_tested = 2
         devices = {}
         for index in range(max_tested):

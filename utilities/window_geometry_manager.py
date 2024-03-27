@@ -1,5 +1,8 @@
+import sys
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QGuiApplication
+
+from path_helpers import get_app_data_path
 
 if TYPE_CHECKING:
     from main import MainWindow
@@ -11,7 +14,10 @@ class WindowGeometryManager:
 
     def set_dimensions(self) -> None:
         screens = QGuiApplication.screens()
-        screen = screens[1] if len(screens) > 1 else QGuiApplication.primaryScreen()
+        if getattr(sys, "frozen", False):
+            screen = screens[0]
+        else:
+            screen = screens[1] if len(screens) > 1 else QGuiApplication.primaryScreen()
         available_geometry = screen.availableGeometry()
 
         window_width = int((available_geometry.width() * 0.9))

@@ -3,6 +3,9 @@
     "(o, 1, 1, op, op)": {
       "dash_from_layer2_rot_angle_override": true,
       "blue": {}
+    },
+    "(0, 1, op)": {
+      "blue": [40, 55]
     }
   }
 }
