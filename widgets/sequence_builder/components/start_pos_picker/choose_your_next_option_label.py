@@ -26,6 +26,6 @@ class ChooseYourNextOptionLabel(QLabel):
 
     def set_stylesheet(self) -> None:
         width = self.option_picker.width()
-        font_size = int(0.02 * width)
+        font_size = int(0.03 * width)
         self.setFont(QFont("Cambria", font_size))
         self.show()

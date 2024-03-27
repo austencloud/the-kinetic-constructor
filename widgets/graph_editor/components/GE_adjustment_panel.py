@@ -113,7 +113,6 @@ class GE_AdjustmentPanel(QFrame):
             box.header.update_turns_box_header()
 
     def resize_GE_adjustment_panel(self) -> None:
-        self.setMinimumWidth(self.blue_turns_box.width() + self.red_turns_box.width())
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.setLayout(self.layout)

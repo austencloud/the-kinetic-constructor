@@ -57,7 +57,7 @@ class GE_TurnsBox(QFrame):
         )
 
     def resize_GE_turns_box(self) -> None:
-        self.setMinimumWidth(
+        self.setMaximumWidth(
             int(
                 (
                     self.graph_editor.width()
