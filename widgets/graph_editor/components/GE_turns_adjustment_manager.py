@@ -61,7 +61,6 @@ class GE_TurnsAdjustmentManager(QObject):
 
         self._update_turns_display(new_turns)
         self.json_validation_engine.run()
-        # update option picker
         self.main_widget.main_builder_widget.sequence_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
 

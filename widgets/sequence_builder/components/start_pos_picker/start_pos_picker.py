@@ -36,6 +36,8 @@ class StartPosPicker(QWidget):
         self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)
         self.button_layout = self._setup_variations_button_layout()
         self.setup_layout()
+        self.setObjectName("StartPosPicker")
+        self.setStyleSheet("background-color: white;")
 
     def setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)

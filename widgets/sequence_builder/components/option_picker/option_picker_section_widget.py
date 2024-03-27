@@ -34,13 +34,13 @@ class OptionPickerSectionWidget(QGroupBox):
         self.turns_tab: TurnsTab = None
 
     def setup_components(self) -> None:
-        # self.vtg_dir_button_manager = LetterBookVtgDirButtonManager(self)
         self._setup_layout()
         self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
         self.pictographs: dict[str, Pictograph] = {}
         self.layout.addWidget(self.pictograph_frame)
         self.setStyleSheet("QGroupBox {border: 1px solid black;}")
-
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)

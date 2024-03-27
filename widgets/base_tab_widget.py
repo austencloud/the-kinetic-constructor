@@ -17,6 +17,12 @@ class BaseTabWidget(QTabWidget):
             QTabWidget::pane {
                 border: 1px solid black;
             }
+            GE_TurnsBox {
+                background-color: white;
+            }
+            GE_StartPosOriPickerBox {
+                background-color: white;
+            }
             QTabWidget::tab-bar:top {
                 top: 1px;
             }

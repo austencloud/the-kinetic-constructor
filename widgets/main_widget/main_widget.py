@@ -10,6 +10,7 @@ from widgets.base_tab_widget import BaseTabWidget
 from widgets.factories.button_factory.button_factory import ButtonFactory
 from widgets.json_manager import JSON_Manager
 from widgets.letterbook.letterbook import LetterBook
+from widgets.main_widget.top_level_builder_widget import TopLevelBuilderWidget
 from widgets.sequence_recorder_widget.sequence_recorder_container import (
     SequenceRecorderContainer,
 )
@@ -27,7 +28,7 @@ from ..pictograph.components.placement_managers.arrow_placement_manager.componen
     TurnsTupleGenerator,
 )
 from ..image_cache_manager import ImageCacheManager
-from ..main_builder_widget.main_builder_widget import MainBuilderWidget
+from ..main_builder_widget.main_builder_widget import MainBuilderTabWidget
 from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 if TYPE_CHECKING:
@@ -69,9 +70,10 @@ class MainWidget(BaseTabWidget):
         self.special_placement_loader = SpecialPlacementLoader(self)
         self._setup_special_placements()
 
-        builder_widget = QWidget()
+        builder_widget = TopLevelBuilderWidget()
+        
         builder_layout = QHBoxLayout(builder_widget)
-        self.main_builder_widget = MainBuilderWidget(self)
+        self.main_builder_widget = MainBuilderTabWidget(self)
         self.sequence_widget = SequenceWidget(self)
         self.letterbook = LetterBook(self)
         builder_layout.addWidget(self.sequence_widget, 1)
@@ -81,6 +83,8 @@ class MainWidget(BaseTabWidget):
         self.sequence_recorder_container = SequenceRecorderContainer(self)
         self.addTab(self.sequence_recorder_container, "Recorder")
         self.addTab(self.letterbook, "LetterBook")
+
+
 
     def _setup_special_placements(self) -> None:
         self.special_placements: dict[

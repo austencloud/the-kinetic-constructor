@@ -17,10 +17,12 @@ class ChooseYourStartPosLabel(QLabel):
         self.setText("Choose your start position!")
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setGeometry(0, 0, self.start_pos_picker.width(), 50)
+        # set background to transparent
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.hide()
 
     def set_stylesheet(self) -> None:
         width = self.start_pos_picker.width()
-        font_size = int(0.03 * width)
+        font_size = int(0.04 * width)
         self.setFont(QFont("Monotype Corsiva", font_size))
         self.show()

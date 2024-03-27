@@ -1,9 +1,19 @@
 from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton
+from PyQt6.QtGui import QFont
+from PyQt6.QtCore import Qt, QSize
+import math
+import traceback
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication, QWidget
+from PyQt6.QtCore import Qt, QTimer, QRect
+from PyQt6.QtGui import QPainter, QLinearGradient, QColor
 
 from widgets.base_tab_widget import BaseTabWidget
 from widgets.letterbook.letterbook import LetterBook
 from widgets.dictionary.dictionary import Dictionary
-from widgets.sequence_recorder_widget.sequence_recorder_widget import SequenceRecorderWidget
+from widgets.sequence_recorder_widget.sequence_recorder_widget import (
+    SequenceRecorderWidget,
+)
 from widgets.sequence_recorder_widget.sequence_recorder_container import (
     SequenceRecorderContainer,
 )
@@ -14,7 +24,7 @@ if TYPE_CHECKING:
     from ..main_widget.main_widget import MainWidget
 
 
-class MainBuilderWidget(BaseTabWidget):
+class MainBuilderTabWidget(BaseTabWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.sequence_builder = SequenceBuilder(main_widget)
@@ -24,6 +34,7 @@ class MainBuilderWidget(BaseTabWidget):
         self.addTab(self.dictionary, "Dictionary")
         self.addTab(self.turn_pattern_widget, "Turn Patterns")
         self.currentChanged.connect(self.on_tab_changed)
+
 
     def on_tab_changed(self) -> None:
         current_tab = self.currentWidget()

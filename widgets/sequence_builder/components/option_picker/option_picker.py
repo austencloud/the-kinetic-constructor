@@ -1,6 +1,6 @@
 import json
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtCore import pyqtSignal, Qt
 
 from widgets.sequence_builder.components.option_picker.option_manager import (
     OptionManager,
@@ -27,7 +27,8 @@ class OptionPicker(QWidget):
         self.option_manager = OptionManager(self)
         self.scroll_area = OptionPickerScrollArea(self)
         self.choose_your_next_option_label = ChooseYourNextOptionLabel(self)
-
+        # set the background to transparent
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setup_layout()
         self.hide()
 

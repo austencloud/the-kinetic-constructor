@@ -53,7 +53,7 @@ class GE_TurnsBox(QFrame):
 
     def update_styled_border(self) -> None:
         self.setStyleSheet(
-            f"#GE_TurnsBox {{ border: {self.border_width}px solid {self.color}; }}"
+            f"#GE_TurnsBox {{ border: {self.border_width}px solid {self.color};}}"
         )
 
     def resize_GE_turns_box(self) -> None:

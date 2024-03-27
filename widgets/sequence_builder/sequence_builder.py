@@ -1,6 +1,9 @@
+import math
 import traceback
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication, QWidget
+from PyQt6.QtCore import Qt, QTimer, QRect
+from PyQt6.QtGui import QPainter, QLinearGradient, QColor
+
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
 import pandas as pd
@@ -28,11 +31,10 @@ if TYPE_CHECKING:
 
 
 class SequenceBuilder(QFrame):
-    def __init__(self, main_widget: "MainWidget"):
+    def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.current_pictograph: Pictograph = None
-
 
         csv_path = get_images_and_data_path("PictographDataframe.csv")
         self.letters_df = pd.read_csv(csv_path)
@@ -49,35 +51,45 @@ class SequenceBuilder(QFrame):
         self.layout().addWidget(self.start_pos_picker)
         self.layout().addWidget(self.advanced_start_pos_picker)
         self.advanced_start_pos_picker.hide()  # Initially hidden
+        # self.setStyleSheet(
+        #     """
+        #     SequenceBuilder {
+        #         background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+        #                                         stop:0 blue, stop:1 red);
+        #     }
+        # """
+        # )
+        # Animation related attributes
 
-    def transition_to_sequence_building(self):
+
+    def transition_to_sequence_building(self) -> None:
         self.start_position_picked = True
         self._hide_start_pos_picker()
         self._hide_advanced_start_pos_picker()
         self._show_option_picker()
         QApplication.restoreOverrideCursor()
 
-    def transition_to_advanced_start_pos_picker(self):
+    def transition_to_advanced_start_pos_picker(self) -> None:
         self._hide_start_pos_picker()
         self.show_advanced_start_pos_picker()
         QApplication.restoreOverrideCursor()
 
-    def _hide_advanced_start_pos_picker(self):
+    def _hide_advanced_start_pos_picker(self) -> None:
         self.advanced_start_pos_picker.hide()
         self.layout().removeWidget(self.advanced_start_pos_picker)
 
-    def _hide_start_pos_picker(self):
+    def _hide_start_pos_picker(self) -> None:
         self.start_pos_picker.hide()
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.layout().removeWidget(self.start_pos_picker)
 
-    def show_advanced_start_pos_picker(self):
+    def show_advanced_start_pos_picker(self) -> None:
         self.start_pos_picker.hide()
         self.layout().addWidget(self.advanced_start_pos_picker)
         self.advanced_start_pos_picker.show()
         self.advanced_start_pos_picker.init_ui()
 
-    def _show_option_picker(self):
+    def _show_option_picker(self) -> None:
         self.layout().addWidget(self.option_picker)
         self.option_picker.show()
         self.option_picker.scroll_area.sections_manager.show_all_sections()
@@ -126,7 +138,7 @@ class SequenceBuilder(QFrame):
         pictograph_dict[BLUE_TURNS] = 0
         return pictograph_dict
 
-    def reset_to_start_pos_picker(self):
+    def reset_to_start_pos_picker(self) -> None:
         self.start_position_picked = False
         self.option_picker.hide()
         self.advanced_start_pos_picker.hide()
@@ -139,8 +151,5 @@ class SequenceBuilder(QFrame):
         self.start_pos_picker.resize_start_pos_picker()
 
     def get_last_added_pictograph(self, sequence):
-        """ Returns the last pictograph in the sequence. Assumes the sequence is not empty."""
-        if not sequence:
-            print(traceback.print_stack())
-            print("Sequence is empty. Can't get last pictograph.")
+        """Returns the last pictograph in the sequence. Assumes the sequence is not empty."""
         return sequence[-1]
