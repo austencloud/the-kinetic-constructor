@@ -2,10 +2,13 @@ from typing import Union, TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import Qt
 
+from Enums.letters import LetterType
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import StartPosPicker
+    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import (
+        StartPosPicker,
+    )
     from widgets.sequence_builder.components.option_picker.option_picker import (
         OptionPicker,
     )
@@ -52,6 +55,12 @@ class BasePictographScrollArea(QScrollArea):
 
     def add_widget_to_layout(self, widget: QWidget, section_index: int = None):
         if section_index == 0 or section_index:  # widget is a section
-            self.layout.insertWidget(section_index, widget)
+            if widget.__class__.__name__ == "OptionPickerSectionWidget":
+                if widget.letter_type == LetterType.Type1:
+                    self.layout.insertWidget(section_index, widget, 7)
+                else:
+                    self.layout.insertWidget(section_index, widget, 5)
+            elif widget.__class__.__name__ == "SectionGroupWidget":
+                self.layout.insertWidget(section_index, widget)
         else:  # widget is a start pos pictograph
             self.layout.addWidget(widget)

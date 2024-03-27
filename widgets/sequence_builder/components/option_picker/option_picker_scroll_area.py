@@ -45,8 +45,8 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.pictograph_factory = OptionPickerPictographFactory(
             self, self.sequence_builder.pictograph_cache
         )
-        # set background to transparent
-        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        # set stylesheet to white background
+        self.setStyleSheet("background-color: transparent;")
 
     def fix_stretch(self):
         if self.stretch_index >= 0:

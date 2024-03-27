@@ -9,7 +9,9 @@ class SectionGroupWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.layout.setSpacing(10)  # Adjust spacing as needed
+        self.layout.setSpacing(0)  # Adjust spacing as needed
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
 
     def add_section_widget(self, section: LetterBookSectionWidget):

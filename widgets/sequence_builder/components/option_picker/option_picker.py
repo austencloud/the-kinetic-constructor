@@ -26,7 +26,6 @@ class OptionPicker(QWidget):
         self.option_manager = OptionManager(self)
         self.scroll_area = OptionPickerScrollArea(self)
         self.choose_your_next_option_label = ChooseYourNextOptionLabel(self)
-        # set the background to transparent
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setup_layout()
         self.hide()

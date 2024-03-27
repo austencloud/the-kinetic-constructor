@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 
 class ScrollAreaSectionPictographFrame(QFrame):
-    def __init__(self, section: "LetterBookSectionWidget") -> None:
+    def __init__(self, section) -> None:
         super().__init__()
         self.section = section
         self.spacing = 3
@@ -15,3 +15,4 @@ class ScrollAreaSectionPictographFrame(QFrame):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(self.spacing)
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
