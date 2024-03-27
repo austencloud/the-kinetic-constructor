@@ -1,4 +1,3 @@
-from email.mime import base
 import os
 import sys
 from PyQt6.QtCore import QDir, Qt, QModelIndex, QEvent
@@ -14,7 +13,6 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHeaderView,
     QMessageBox,
-    QTreeWidget,
 )
 
 if TYPE_CHECKING:

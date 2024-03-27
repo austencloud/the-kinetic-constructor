@@ -1,9 +1,8 @@
 import os
 import json
-import sys
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt, QModelIndex, QDir
-from PyQt6.QtWidgets import QTreeView, QVBoxLayout, QHeaderView
+from PyQt6.QtCore import Qt, QModelIndex
+from PyQt6.QtWidgets import QTreeView, QVBoxLayout
 from PyQt6.QtGui import QStandardItemModel, QStandardItem, QFont
 
 from path_helpers import get_dictionary_path

@@ -18,7 +18,6 @@ from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
-    from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
 

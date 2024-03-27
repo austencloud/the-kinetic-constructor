@@ -1,5 +1,5 @@
 import json
-from PyQt6.QtWidgets import QTabWidget, QWidget, QHBoxLayout
+from PyQt6.QtWidgets import QHBoxLayout
 from PyQt6.QtGui import QKeyEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING

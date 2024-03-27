@@ -1,5 +1,3 @@
-import json
-import os
 from PyQt6.QtWidgets import (
     QPushButton,
     QHBoxLayout,
@@ -8,10 +6,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
-from Enums.letters import Letter
-from constants import BLUE, RED
 
-from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget

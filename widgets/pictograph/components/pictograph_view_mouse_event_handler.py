@@ -1,5 +1,4 @@
 from objects.arrow.arrow import Arrow
-from objects.prop.prop import Prop
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QMouseEvent
 

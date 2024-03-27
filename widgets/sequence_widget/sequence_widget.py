@@ -1,4 +1,3 @@
-import json
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
 

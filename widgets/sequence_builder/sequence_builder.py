@@ -1,8 +1,5 @@
-import math
-import traceback
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication, QWidget
-from PyQt6.QtCore import Qt, QTimer, QRect
-from PyQt6.QtGui import QPainter, QLinearGradient, QColor
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
+from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter

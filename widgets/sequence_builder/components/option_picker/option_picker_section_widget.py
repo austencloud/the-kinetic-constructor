@@ -49,7 +49,7 @@ class OptionPickerSectionWidget(QGroupBox):
         self.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-    def setup_header(self):
+    def setup_header(self) -> None:
         self.header = OptionPickerSectionHeader(self)
         self.header.clicked.connect(self.toggle_section)
         self.layout.addWidget(self.header)
@@ -77,13 +77,13 @@ class OptionPickerSectionWidget(QGroupBox):
             pictograph.view.setParent(None)
             pictograph.view.hide()
 
-    def set_size_policy(self, horizontal, vertical):
+    def set_size_policy(self, horizontal, vertical) -> None:
         size_policy = QSizePolicy(horizontal, vertical)
         self.setSizePolicy(size_policy)
         for pictograph in self.pictographs.values():
             pictograph.view.setSizePolicy(size_policy)
 
-    def add_pictograph(self, pictograph: Pictograph):
+    def add_pictograph(self, pictograph: Pictograph) -> None:
         """Add a pictograph widget to the section layout."""
         self.pictographs[
             self.scroll_area.main_widget.pictograph_key_generator.generate_pictograph_key(

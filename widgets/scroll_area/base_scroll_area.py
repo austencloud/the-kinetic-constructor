@@ -3,10 +3,9 @@ from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import Qt
 
 
+
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.start_position_picker.start_pos_picker import (
-        StartPosPicker,
-    )
+    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import StartPosPicker
     from widgets.sequence_builder.components.option_picker.option_picker import (
         OptionPicker,
     )
@@ -25,10 +24,10 @@ class BasePictographScrollArea(QScrollArea):
         self.setup_ui()
 
     def setup_ui(self):
-        self.container.setStyleSheet("background-color: #f2f2f2;")
         self.setWidget(self.container)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
     def set_layout(self, layout_type: str):
         if layout_type == "VBox":

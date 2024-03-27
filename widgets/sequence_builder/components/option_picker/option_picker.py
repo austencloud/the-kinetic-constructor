@@ -1,4 +1,3 @@
-import json
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import pyqtSignal, Qt
 

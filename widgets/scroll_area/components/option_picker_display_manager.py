@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
 from widgets.pictograph.pictograph import Pictograph
 from Enums.Enums import LetterType
-from PyQt6.QtWidgets import QApplication
 
 from widgets.scroll_area.components.section_manager.section_widget.letterbook_section_widget import (
     LetterBookSectionWidget,

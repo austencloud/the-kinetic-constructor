@@ -12,7 +12,6 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_beat_frame.sequence_builder_beat_frame import (
         SequenceBuilderBeatFrame,
     )
-    from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 
 class BeatSelectionManager(QWidget):

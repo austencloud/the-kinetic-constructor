@@ -3,7 +3,6 @@ import json
 from datetime import datetime
 import sys
 from PyQt6.QtWidgets import QInputDialog, QMessageBox
-from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:

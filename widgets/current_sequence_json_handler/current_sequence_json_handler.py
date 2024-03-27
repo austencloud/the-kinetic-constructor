@@ -1,6 +1,4 @@
 import json
-import os
-import sys
 from Enums.MotionAttributes import Color
 from constants import BLUE, DASH, NO_ROT, RED, STATIC
 from path_helpers import get_user_editable_resource_path

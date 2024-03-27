@@ -7,9 +7,7 @@ from Enums.Enums import (
     Letter,
     OpenCloseStates,
     SpecificPosition,
-    VTG_Directions,
     VTG_Modes,
-    VTG_Timings,
 )
 from Enums.MotionAttributes import Color, Location
 

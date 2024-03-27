@@ -1,22 +1,7 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton
-from PyQt6.QtGui import QFont
-from PyQt6.QtCore import Qt, QSize
-import math
-import traceback
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication, QWidget
-from PyQt6.QtCore import Qt, QTimer, QRect
-from PyQt6.QtGui import QPainter, QLinearGradient, QColor
 
 from widgets.base_tab_widget import BaseTabWidget
-from widgets.letterbook.letterbook import LetterBook
 from widgets.dictionary.dictionary import Dictionary
-from widgets.sequence_recorder_widget.sequence_recorder_widget import (
-    SequenceRecorderWidget,
-)
-from widgets.sequence_recorder_widget.sequence_recorder_container import (
-    SequenceRecorderContainer,
-)
 from widgets.sequence_builder.sequence_builder import SequenceBuilder
 from widgets.turn_pattern_widget import TurnPatternWidget
 

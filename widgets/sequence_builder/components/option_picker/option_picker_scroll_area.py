@@ -1,4 +1,3 @@
-from calendar import c
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
