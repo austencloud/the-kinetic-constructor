@@ -58,7 +58,7 @@
             "start_loc": "e",
             "end_loc": "e",
             "turns": 0.5,
-            "end_ori": "clock"
+            "end_ori": "counter"
         }
     },
     {
@@ -78,12 +78,12 @@
         },
         "red_attributes": {
             "motion_type": "static",
-            "start_ori": "clock",
+            "start_ori": "counter",
             "prop_rot_dir": "ccw",
             "start_loc": "e",
             "end_loc": "e",
             "turns": 1.5,
-            "end_ori": "in"
+            "end_ori": "out"
         }
     },
     {
@@ -103,12 +103,12 @@
         },
         "red_attributes": {
             "motion_type": "pro",
-            "start_ori": "in",
+            "start_ori": "out",
             "prop_rot_dir": "cw",
             "start_loc": "e",
             "end_loc": "s",
             "turns": 1,
-            "end_ori": "out"
+            "end_ori": "in"
         }
     }
 ]

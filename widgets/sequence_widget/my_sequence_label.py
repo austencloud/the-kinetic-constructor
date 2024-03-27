@@ -21,6 +21,6 @@ class MySequenceLabel(QLabel):
         self.setContentsMargins(0, 0, 0, padding)
 
     def resize_my_sequence_label(self):
-        size = self.sequence_widget.width() // 35
+        size = self.sequence_widget.width() // 30
         font = QFont("Monotype Corsiva", size, QFont.Weight.Bold)
         self.setFont(font)

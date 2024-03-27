@@ -85,8 +85,8 @@ class CurrentSequenceJsonOriCalculator:
             orientation_map = {
                 (IN, CLOCKWISE): (COUNTER if turns % 2 == 0.5 else CLOCK),
                 (IN, COUNTER_CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
-                (OUT, CLOCKWISE): (COUNTER if turns % 2 == 0.5 else CLOCK),
-                (OUT, COUNTER_CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
+                (OUT, CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
+                (OUT, COUNTER_CLOCKWISE): (COUNTER if turns % 2 == 0.5 else CLOCK),
                 (CLOCK, CLOCKWISE): (IN if turns % 2 == 0.5 else OUT),
                 (CLOCK, COUNTER_CLOCKWISE): (OUT if turns % 2 == 0.5 else IN),
                 (COUNTER, CLOCKWISE): (OUT if turns % 2 == 0.5 else IN),
