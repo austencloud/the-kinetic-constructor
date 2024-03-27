@@ -11,21 +11,24 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QInputDialog
-
+from PyQt6.QtGui import QFont
 from path_helpers import get_images_and_data_path, get_user_editable_resource_path
 from widgets.turn_pattern_converter import TurnPatternConverter
 
 if TYPE_CHECKING:
+    from widgets.main_builder_widget.main_builder_options_tab_widget import (
+        BuilderToolbar,
+    )
     from widgets.sequence_widget.sequence_modifier import SequenceModifier
 
 
 class TurnPatternWidget(QWidget):
-    def __init__(self, sequence_modifier: "SequenceModifier"):
+    def __init__(self, builder_toolbar: "BuilderToolbar"):
         super().__init__()
-        self.sequence_modifier = sequence_modifier
-        self.main_widget = sequence_modifier.main_widget
+        self.builder_toolbar = builder_toolbar
+        self.main_widget = builder_toolbar.main_widget
         self.current_sequence_json_handler = (
-            self.sequence_modifier.main_widget.json_manager.current_sequence_json_handler
+            self.builder_toolbar.main_widget.json_manager.current_sequence_json_handler
         )
         self.turn_patterns_path = get_user_editable_resource_path("turn_patterns.json")
         self._setup_ui()
@@ -33,6 +36,19 @@ class TurnPatternWidget(QWidget):
         self.load_turn_patterns()
         self.apply_button.clicked.connect(self.apply_turn_pattern)
         self.save_button.clicked.connect(self.save_turn_pattern)
+
+    def _setup_ui(self):
+        layout = QVBoxLayout(self)
+        self.turn_pattern_list = QListWidget()
+        self.apply_button = QPushButton("Apply Turn Pattern")
+        self.save_button = QPushButton("Save Current Turn Pattern")
+
+        # Increase font size for the widgets
+
+        layout.addWidget(self.turn_pattern_list)
+        layout.addWidget(self.apply_button)
+        layout.addWidget(self.save_button)
+        self.turn_pattern_list.itemDoubleClicked.connect(self.apply_turn_pattern)
 
     def ensure_turn_patterns_file_exists(self):
         """
@@ -47,16 +63,6 @@ class TurnPatternWidget(QWidget):
             else:
                 with open(user_editable_path, "w") as file:
                     json.dump([], file)
-
-    def _setup_ui(self):
-        layout = QVBoxLayout(self)
-        self.turn_pattern_list = QListWidget()
-        self.apply_button = QPushButton("Apply Turn Pattern")
-        self.save_button = QPushButton("Save Current Turn Pattern")
-        layout.addWidget(self.turn_pattern_list)
-        layout.addWidget(self.apply_button)
-        layout.addWidget(self.save_button)
-        self.turn_pattern_list.itemDoubleClicked.connect(self.apply_turn_pattern)
 
     def load_turn_patterns(self) -> None:
         try:
@@ -77,7 +83,6 @@ class TurnPatternWidget(QWidget):
             self, "Save Pattern", "Enter pattern name:"
         )
         if ok:
-            # if the user did not enter a name, then assign one
             if not pattern_name:
                 pattern_name = "Pattern " + str(self.turn_pattern_list.count() + 1)
 
@@ -110,3 +115,14 @@ class TurnPatternWidget(QWidget):
         self.current_sequence_json_handler.apply_turn_pattern_to_current_sequence(
             TurnPatternConverter.pattern_to_sequence(pattern_str)
         )
+
+    def _set_font_size(self):
+        font = QFont()
+        font_size = self.builder_toolbar.width() // 55
+        font.setPointSize(font_size)
+        self.turn_pattern_list.setFont(font)
+        self.apply_button.setFont(font)
+        self.save_button.setFont(font)
+
+    def resize_turn_pattern_widget(self) -> None:
+        self._set_font_size()

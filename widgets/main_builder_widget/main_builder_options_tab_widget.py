@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from ..main_widget.main_widget import MainWidget
 
 
-class MainBuilderTabWidget(BaseTabWidget):
+class BuilderToolbar(BaseTabWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.sequence_builder = SequenceBuilder(main_widget)
@@ -19,7 +19,6 @@ class MainBuilderTabWidget(BaseTabWidget):
         self.addTab(self.dictionary, "Dictionary")
         self.addTab(self.turn_pattern_widget, "Turn Patterns")
         self.currentChanged.connect(self.on_tab_changed)
-
 
     def on_tab_changed(self) -> None:
         current_tab = self.currentWidget()
@@ -35,3 +34,5 @@ class MainBuilderTabWidget(BaseTabWidget):
             self.sequence_builder.resize_sequence_builder()
         elif current_tab == self.dictionary:
             self.dictionary.resize_dictionary()
+        elif current_tab == self.turn_pattern_widget:
+            self.turn_pattern_widget.resize_turn_pattern_widget()

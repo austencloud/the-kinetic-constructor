@@ -28,7 +28,9 @@ from ..pictograph.components.placement_managers.arrow_placement_manager.componen
     TurnsTupleGenerator,
 )
 from ..image_cache_manager import ImageCacheManager
-from ..main_builder_widget.main_builder_widget import MainBuilderTabWidget
+from ..main_builder_widget.main_builder_options_tab_widget import (
+    BuilderToolbar,
+)
 from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 if TYPE_CHECKING:
@@ -71,9 +73,9 @@ class MainWidget(BaseTabWidget):
         self._setup_special_placements()
 
         builder_widget = TopLevelBuilderWidget()
-        
+
         builder_layout = QHBoxLayout(builder_widget)
-        self.main_builder_widget = MainBuilderTabWidget(self)
+        self.main_builder_widget = BuilderToolbar(self)
         self.sequence_widget = SequenceWidget(self)
         self.letterbook = LetterBook(self)
         builder_layout.addWidget(self.sequence_widget, 1)
@@ -83,8 +85,6 @@ class MainWidget(BaseTabWidget):
         self.sequence_recorder_container = SequenceRecorderContainer(self)
         self.addTab(self.sequence_recorder_container, "Recorder")
         self.addTab(self.letterbook, "LetterBook")
-
-
 
     def _setup_special_placements(self) -> None:
         self.special_placements: dict[

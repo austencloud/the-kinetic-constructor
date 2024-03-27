@@ -170,6 +170,9 @@ class CurrentSequenceJsonHandler:
             blue_turns = int(blue_turns) if blue_turns.is_integer() else blue_turns
             red_turns = int(red_turns) if red_turns.is_integer() else red_turns
 
+            if i >= len(sequence):
+                break
+
             entry = sequence[i]
             entry["blue_attributes"]["turns"] = blue_turns
             entry["red_attributes"]["turns"] = red_turns
@@ -191,7 +194,6 @@ class CurrentSequenceJsonHandler:
         self.validation_engine.run()
         sequence = self.load_current_sequence_json()
         self.main_widget.sequence_widget.beat_frame.propogate_turn_adjustment(sequence)
-        print("Sequence validated")
 
     def get_current_turn_pattern(self) -> str:
         sequence = self.load_current_sequence_json()
@@ -216,6 +218,8 @@ class CurrentSequenceJsonHandler:
 
     def find_previous_prop_rot_dir(self, sequence, current_index, color) -> str:
         for i in range(current_index - 1, -1, -1):
+            if i < 0:
+                break
             if sequence[i][f"{color}_attributes"]["motion_type"] not in [STATIC, DASH]:
                 return sequence[i][f"{color}_attributes"]["prop_rot_dir"]
         return NO_ROT
