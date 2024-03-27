@@ -16,7 +16,7 @@ from path_helpers import get_images_and_data_path, get_user_editable_resource_pa
 from widgets.turn_pattern_converter import TurnPatternConverter
 
 if TYPE_CHECKING:
-    from widgets.main_builder_widget.main_builder_options_tab_widget import (
+    from widgets.main_builder_widget.builder_toolbar import (
         BuilderToolbar,
     )
     from widgets.sequence_widget.sequence_modifier import SequenceModifier

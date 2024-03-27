@@ -45,7 +45,11 @@ class SequenceBuilder(QFrame):
         self.add_to_sequence_manager = AddToSequenceManager(self)
         self.advanced_start_pos_picker = AdvancedStartPosPicker(self)
         self.setLayout(QHBoxLayout())
+        self.layout().setContentsMargins(0, 0, 0, 0)
+        self.layout().setSpacing(0)
+        self.setContentsMargins(0, 0, 0, 0)
         self.layout().addWidget(self.start_pos_picker)
+
         self.layout().addWidget(self.advanced_start_pos_picker)
         self.advanced_start_pos_picker.hide()  # Initially hidden
         # self.setStyleSheet(
@@ -57,7 +61,6 @@ class SequenceBuilder(QFrame):
         # """
         # )
         # Animation related attributes
-
 
     def transition_to_sequence_building(self) -> None:
         self.start_position_picked = True

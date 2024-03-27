@@ -47,6 +47,8 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         )
         # set stylesheet to white background
         self.setStyleSheet("background-color: transparent;")
+        self.setContentsMargins(0, 0, 0, 0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
 
     def fix_stretch(self):
         if self.stretch_index >= 0:

@@ -27,7 +27,7 @@ from ..main_widget.special_placement_loader import SpecialPlacementLoader
 from ..pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
     TurnsTupleGenerator,
 )
-from ..main_builder_widget.main_builder_options_tab_widget import (
+from ..main_builder_widget.builder_toolbar import (
     BuilderToolbar,
 )
 from widgets.sequence_widget.sequence_widget import SequenceWidget

@@ -1,3 +1,10 @@
+from PyQt6.QtGui import QIcon, QFont
+from PyQt6.QtCore import Qt, QSize, pyqtSignal, QPoint
+from constants import IN, ORI, OUT, CLOCK, COUNTER
+from typing import TYPE_CHECKING
+from path_helpers import get_images_and_data_path
+from widgets.pictograph.pictograph import Pictograph
+
 from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
@@ -6,17 +13,14 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QApplication,
 )
-from PyQt6.QtGui import QIcon, QFont
 
-from PyQt6.QtCore import Qt, QSize, pyqtSignal, QPoint
-from constants import IN, ORI, OUT, CLOCK, COUNTER
-from typing import TYPE_CHECKING
 
-from path_helpers import get_images_and_data_path
+from widgets.graph_editor.components.GE_ori_picker_display_manager import (
+    GE_OriPickerDisplayManager,
+)
 from widgets.graph_editor.components.GE_orientation_selection_dialog import (
     GE_OrientationSelectionDialog,
 )
-from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_start_pos_ori_picker_box import (
@@ -32,36 +36,40 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.ori_picker_box = ori_picker_box
         self.color = self.ori_picker_box.color
         self.main_widget = self.ori_picker_box.graph_editor.main_widget
-        self.json_validation_engine = (
-            self.main_widget.json_manager.current_sequence_json_handler.validation_engine
+        self.current_orientation_index = 0
+        self.orientations = [IN, COUNTER, OUT, CLOCK]
+        self.current_sequence_json_handler = (
+            self.main_widget.json_manager.current_sequence_json_handler
         )
         self.beat_frame = (
             self.ori_picker_box.graph_editor.sequence_modifier.sequence_widget.beat_frame
         )
-        self.current_sequence_json_handler = (
-            self.main_widget.json_manager.current_sequence_json_handler
+        self.json_validation_engine = (
+            self.main_widget.json_manager.current_sequence_json_handler.validation_engine
         )
         self.option_picker = (
             self.main_widget.main_builder_widget.sequence_builder.option_picker
         )
-        self.current_orientation_index = 0
-        self.orientations = [IN, COUNTER, OUT, CLOCK]
+
         self._setup_orientation_label()
         self._setup_orientation_control_layout()
-        self._setup_layout()
+
+        self.display_manager = GE_OriPickerDisplayManager(self)
         self.ori_adjusted.connect(self.beat_frame.on_beat_adjusted)
+        self._setup_layout()
 
     def _setup_layout(self) -> None:
-        self.layout: QVBoxLayout = QVBoxLayout()
-        self.layout.setAlignment(
-            Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter
-        )
-        self.layout.addWidget(self.ori_label, 1)
-        self.layout.addWidget(self.current_orientation_display, 1)
-        self.layout.addStretch(3)
-        self.layout.addLayout(self.orientation_control_layout, 1)
-        self.layout.addStretch(1)
-        self.setLayout(self.layout)
+        self.main_layout: QVBoxLayout = QVBoxLayout(self)
+        self.main_layout.addWidget(self.ori_label)
+        self.main_layout.addWidget(self.current_ori_display)
+        self.main_layout.addLayout(self.orientation_control_layout)
+
+    def on_orientation_display_clicked(self, event) -> None:
+        dialog = GE_OrientationSelectionDialog(self)
+        dialog.move(self.mapToGlobal(QPoint(0, 0)))
+        if dialog.exec():
+            new_orientation = dialog.selected_orientation
+            self.set_orientation(new_orientation)
 
     def _setup_orientation_label(self) -> None:
         self.ori_label = QLabel("Orientation")
@@ -76,7 +84,7 @@ class GE_StartPosOriPickerWidget(QWidget):
     def _setup_orientation_control_layout(self) -> None:
         path = get_images_and_data_path("images/icons")
         self.ccw_button = self.setup_button(f"{path}/rotate_ccw.png", self.rotate_ccw)
-        self.current_orientation_display = self.setup_current_orientation_display()
+        self.current_ori_display = self.setup_current_orientation_display()
         self.cw_button = self.setup_button(f"{path}/rotate_cw.png", self.rotate_cw)
         self.orientation_control_layout = QHBoxLayout()
         self.orientation_control_layout.addStretch(5)
@@ -93,33 +101,24 @@ class GE_StartPosOriPickerWidget(QWidget):
         return button
 
     def setup_current_orientation_display(self) -> QLabel:
-        self.current_orientation_display = QLabel(
+        self.current_ori_display = QLabel(
             self.orientations[self.current_orientation_index]
         )
-        self.current_orientation_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.current_orientation_display.mousePressEvent = (
-            self.on_orientation_display_clicked
-        )
+        self.current_ori_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.current_ori_display.mousePressEvent = self.on_orientation_display_clicked
         self.set_current_orientation_display_font()  # Ensure this method is called to set the font size and style
-        return self.current_orientation_display
-
-    def on_orientation_display_clicked(self, event):
-        dialog = GE_OrientationSelectionDialog(self)
-        dialog.move(
-            self.current_orientation_display.mapToGlobal(QPoint(0, 0))
-        )  # Use QPoint here
-        dialog.exec()
+        return self.current_ori_display
 
     def set_current_orientation_display_font(self) -> None:
         font = QFont("Cambria")
         font_size = self.ori_picker_box.graph_editor.width() // 25
         font.setPointSize(font_size)
         font.setWeight(QFont.Weight.Bold)
-        self.current_orientation_display.setFont(font)
+        self.current_ori_display.setFont(font)
 
     def set_orientation(self, orientation):
         self.current_orientation_index = self.orientations.index(orientation)
-        self.current_orientation_display.setText(orientation)
+        self.current_ori_display.setText(orientation)
         # Update the orientation in your application logic as needed
         self.current_sequence_json_handler.update_start_pos_ori(self.color, orientation)
         self.json_validation_engine.run()
@@ -137,28 +136,20 @@ class GE_StartPosOriPickerWidget(QWidget):
             self.orientations
         )
         new_ori = self.orientations[self.current_orientation_index]
-        self.current_orientation_display.setText(new_ori)
-        current_pictograph = (
-            self.ori_picker_box.graph_editor.GE_pictograph_view.pictograph
-        )
-        self.current_sequence_json_handler.update_start_pos_ori(self.color, new_ori)
-        self.json_validation_engine.run()
-        self.ori_adjusted.emit(new_ori)
-        current_pictograph.props[self.color].updater.update_prop({ORI: new_ori})
-        current_pictograph.updater.update_pictograph()
-        QApplication.processEvents()
-        self.option_picker.update_option_picker()
+        self._rotate_orientation(new_ori)
 
     def rotate_ccw(self) -> None:
         self.current_orientation_index = (self.current_orientation_index - 1) % len(
             self.orientations
         )
         new_ori = self.orientations[self.current_orientation_index]
-        self.current_orientation_display.setText(new_ori)
+        self._rotate_orientation(new_ori)
+
+    def _rotate_orientation(self, new_ori: str) -> None:
+        self.current_ori_display.setText(new_ori)
         current_pictograph = (
             self.ori_picker_box.graph_editor.GE_pictograph_view.pictograph
         )
-        current_pictograph.updater.update_pictograph()
         self.current_sequence_json_handler.update_start_pos_ori(self.color, new_ori)
         self.json_validation_engine.run()
         self.ori_adjusted.emit(new_ori)
@@ -174,7 +165,7 @@ class GE_StartPosOriPickerWidget(QWidget):
             button.setFixedSize(QSize(button_size, button_size))
             button.setIconSize(QSize(icon_size, icon_size))
         self._set_ori_label_font_size()
-        # self.set_current_orientation_display_font()
+        self.display_manager.resize_current_orientation_display()
 
     def set_initial_orientation(
         self, start_pos_pictograph: Pictograph, color: str
@@ -188,4 +179,4 @@ class GE_StartPosOriPickerWidget(QWidget):
                 "red_attributes"
             ]["start_ori"]
         self.current_orientation_index = self.orientations.index(initial_orientation)
-        self.current_orientation_display.setText(initial_orientation)
+        self.current_ori_display.setText(initial_orientation)

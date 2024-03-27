@@ -16,6 +16,7 @@ class GE_OrientationSelectionDialog(QDialog):
             ori_picker, Qt.WindowType.FramelessWindowHint | Qt.WindowType.Popup
         )
         self.ori_picker = ori_picker
+        self.selected_orientation = None
         self.initUI()
 
     def initUI(self):
@@ -38,4 +39,5 @@ class GE_OrientationSelectionDialog(QDialog):
     def select_orientation(self, orientation):
         # Emit signal or directly set the orientation in parent widget
         self.ori_picker.set_orientation(orientation)
+        self.selected_orientation = orientation
         self.accept()
