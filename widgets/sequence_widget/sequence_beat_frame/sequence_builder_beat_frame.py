@@ -7,7 +7,7 @@ from widgets.sequence_widget.sequence_beat_frame.beat_deletion_manager import (
     BeatDeletionManager,
 )
 from widgets.sequence_widget.sequence_beat_frame.beat_selection_manager import (
-    BeatSelectionManager,
+    SequenceBuilderBeatSelectionManager,
 )
 from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import StartPositionBeat
 from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
@@ -46,7 +46,7 @@ class SequenceBuilderBeatFrame(QFrame):
                 self._add_beat_to_layout(j, i)
 
     def _setup_components(self, main_widget) -> None:
-        self.selection_manager = BeatSelectionManager(self)
+        self.selection_manager = SequenceBuilderBeatSelectionManager(self)
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(main_widget, self)
         self.beat_deletion_manager = BeatDeletionManager(self)

@@ -1,9 +1,11 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QPainter, QPen, QColor
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QUrl
 from typing import TYPE_CHECKING, Optional
-
 from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
+from PyQt6.QtMultimedia import QMediaPlayer
+from PyQt6.QtMultimediaWidgets import QVideoWidget
+
 from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
     StartPositionBeatView,
 )
@@ -14,7 +16,7 @@ if TYPE_CHECKING:
     )
 
 
-class BeatSelectionManager(QWidget):
+class SequenceBuilderBeatSelectionManager(QWidget):
     def __init__(self, beat_frame: "SequenceBuilderBeatFrame"):
         super().__init__(beat_frame)
         self.selected_beat: Optional[BeatView | StartPositionBeatView] = None
@@ -22,6 +24,14 @@ class BeatSelectionManager(QWidget):
         self.border_width = 4  # Adjust as needed
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         self.hide()
+        # Initialize the media player in the __init__ method:
+        self.click_sound_player = QMediaPlayer()
+        self.click_sound_path = "path/to/click_sound.mp3"  # Update this path
+
+    def move_selection(self):
+        # Play click sound
+        self.click_sound_player.setSource(QUrl.fromLocalFile(self.click_sound_path))
+        self.click_sound_player.play()
 
     def select_beat(self, beat_view: BeatView):
         if self.selected_beat == beat_view:

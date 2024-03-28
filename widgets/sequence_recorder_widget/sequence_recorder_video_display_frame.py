@@ -1,9 +1,8 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt, QTimer, QSize
-from PyQt6.QtGui import QImage, QPixmap, QFont
-from PyQt6.QtWidgets import QLabel, QVBoxLayout, QWidget, QMessageBox
 import cv2
-
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QMessageBox, QApplication
+from PyQt6.QtCore import QTimer, Qt
+from PyQt6.QtGui import QImage, QPixmap, QFont
 
 if TYPE_CHECKING:
     from widgets.sequence_recorder_widget.sequence_recorder_capture_frame import (
@@ -12,30 +11,28 @@ if TYPE_CHECKING:
 
 
 class SequenceRecorderVideoDisplayFrame(QWidget):
-    def __init__(self, capture_frame: "SequenceRecorderCaptureFrame") -> None:
+    def __init__(self, capture_frame: "SequenceRecorderCaptureFrame"):
         super().__init__()
         self.capture_frame = capture_frame
         self.sequence_recorder_widget = capture_frame.sequence_recorder_widget
+
+        self.capture = None
+        self.recording = False
+        self.recording_frames = []
+        self.video_frame_rate = 30  # Adjust frame rate as needed
+        self.video_writer = None
         self.init_ui()
 
     def init_ui(self):
         self.video_display = QLabel("Webcam Feed")
-        self.video_display.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        self.video_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.video_display.setFont(QFont("Arial", 12))
         layout = QVBoxLayout(self)
         layout.addWidget(self.video_display)
-        layout.setContentsMargins(0, 0, 0, 0)
-        self.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
-        self.capture = None
-        self.record = False
-        self.recording_frames = []
-        self.video_frame_rate = 60
+        self.init_webcam()
 
-    def init_webcam(self) -> None:
-        if self.capture is not None and self.capture.isOpened():
-            return
-
+    def init_webcam(self):
         available_cameras = self.find_available_cameras()
         if available_cameras:
             self.capture = cv2.VideoCapture(available_cameras[0], cv2.CAP_MSMF)
@@ -47,74 +44,64 @@ class SequenceRecorderVideoDisplayFrame(QWidget):
             self.video_timer = QTimer(self)
             self.video_timer.timeout.connect(self.update_video_feed)
             self.update_timer_interval()
-            self.video_timer.start()
-        else:
-            QMessageBox.warning(self, "Webcam Error", "No available webcams found.")
 
     def find_available_cameras(self):
         available_cameras = []
-        for i in range(1):
+        for i in range(5):  # Check first 5 indices.
             cap = cv2.VideoCapture(i, cv2.CAP_MSMF)
             if cap.isOpened():
                 available_cameras.append(i)
                 cap.release()
         return available_cameras
 
-    def update_timer_interval(self) -> None:
+    def update_timer_interval(self):
         interval = int(1000 / self.video_frame_rate)
         self.video_timer.start(interval)
 
-    def close_event(self, event) -> None:
-        self.capture.release()
-
-    def update_video_feed(self) -> None:
+    def update_video_feed(self):
         ret, frame = self.capture.read()
         if ret:
             frame = cv2.flip(frame, 1)
-            if self.record:
+            if self.recording:
                 self.recording_frames.append(frame)
             self.display_frame(frame)
 
     def display_frame(self, frame):
         rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        h, w, ch = rgb_image.shape
+        bytes_per_line = ch * w
         convert_to_Qt_format = QImage(
-            rgb_image.data,
-            rgb_image.shape[1],
-            rgb_image.shape[0],
-            QImage.Format.Format_RGB888,
+            rgb_image.data, w, h, bytes_per_line, QImage.Format.Format_RGB888
         )
         p = QPixmap.fromImage(convert_to_Qt_format)
-        square_size = min(p.width(), p.height())
-        crop_amount = abs(p.width() - p.height()) // 2
-        p = p.copy(crop_amount, 0, square_size, square_size)
-        p = p.scaled(
-            self.preferred_width,
-            self.preferred_height,
-            Qt.AspectRatioMode.KeepAspectRatio,
-            Qt.TransformationMode.SmoothTransformation,
-        )
         self.video_display.setPixmap(p)
 
-    def calculate_scaled_size(self, current_size: QSize, max_size: QSize) -> QSize:
-        """
-        Calculate the size to scale an image to fit within maximum dimensions
-        while maintaining aspect ratio.
-        """
-        aspect_ratio = current_size.width() / current_size.height()
-        if (
-            current_size.width() > max_size.width()
-            or current_size.height() > max_size.height()
-        ):
-            if (max_size.width() / aspect_ratio) <= max_size.height():
-                return QSize(max_size.width(), int(max_size.width() / aspect_ratio))
-            else:
-                return QSize(int(max_size.height() * aspect_ratio), max_size.height())
-        return current_size
+    def toggle_recording(self):
+        self.recording = not self.recording
+        if self.recording:
+            self.recording_frames = []
+            QApplication.processEvents()  # Process existing events to update UI
+        else:
+            self.save_video()
 
-    def get_aspect_ratio(self) -> float:
-        return self.capture.get(cv2.CAP_PROP_FRAME_WIDTH) / self.capture.get(
-            cv2.CAP_PROP_FRAME_HEIGHT
-        )
+    def save_video(self):
+        if self.recording_frames:
+            # Define the codec and create VideoWriter object
+            fourcc = cv2.VideoWriter_fourcc(*"XVID")
+            out = cv2.VideoWriter(
+                "output.avi", fourcc, self.video_frame_rate, (640, 480)
+            )
+            for frame in self.recording_frames:
+                out.write(frame)
+            out.release()
+            QMessageBox.information(
+                self, "Recording Saved", "The video was saved successfully."
+            )
+        self.recording_frames = []  # Clear the frames after saving
+
+    def closeEvent(self, event):
+        if self.capture is not None:
+            self.capture.release()
 
     def resize_video_display_frame(self):
         if not hasattr(self, "beat_frame"):

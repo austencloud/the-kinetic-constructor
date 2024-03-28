@@ -3,11 +3,12 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGridLayout, QFrame, QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
+from widgets.sequence_recorder_widget.sequence_recorder_beat_selection_manager import SequenceRecorderBeatSelectionManager
 from widgets.sequence_widget.sequence_beat_frame.beat_deletion_manager import (
     BeatDeletionManager,
 )
 from widgets.sequence_widget.sequence_beat_frame.beat_selection_manager import (
-    BeatSelectionManager,
+    SequenceBuilderBeatSelectionManager,
 )
 
 from widgets.pictograph.pictograph import Pictograph
@@ -43,7 +44,7 @@ class SequenceRecorderBeatFrame(QFrame):
                 self._add_beat_to_layout(j, i)
 
     def _setup_components(self) -> None:
-        self.selection_manager = BeatSelectionManager(self)
+        self.selection_manager = SequenceRecorderBeatSelectionManager(self)
         self.beat_deletion_manager = BeatDeletionManager(self)
 
     def _setup_layout(self) -> None:

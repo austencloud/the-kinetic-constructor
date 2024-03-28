@@ -1,28 +1,24 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
+import click
 import cv2
 
 from PyQt6.QtWidgets import (
     QComboBox,
     QPushButton,
-    QSlider,
     QHBoxLayout,
     QWidget,
-    QVBoxLayout,
 )
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_recorder_widget.sequence_recorder_control_frame import (
-        SequenceRecorderControlFrame,
-    )
-    from widgets.sequence_recorder_widget.sequence_recorder_widget import (
-        SequenceRecorderWidget,
+    from widgets.sequence_recorder_widget.sequence_recorder_main_control_frame import (
+        SequenceRecorderMainControlFrame,
     )
 
 
 class SequenceRecorderVideoControlFrame(QWidget):
-    def __init__(self, control_frame: "SequenceRecorderControlFrame") -> None:
+    def __init__(self, control_frame: "SequenceRecorderMainControlFrame") -> None:
         super().__init__(control_frame)
         self.control_frame = control_frame
         self.init_ui()
@@ -53,7 +49,10 @@ class SequenceRecorderVideoControlFrame(QWidget):
     def _setup_controls(self) -> None:
         self.webcam_selector = QComboBox()
         self.play_button = QPushButton("Capture Frame")
-        self.record_button = QPushButton("Record")
+        self.record_button = QPushButton(
+            "Record",
+            clicked=self.control_frame.sequence_recorder_widget.capture_frame.video_display_frame.toggle_recording,
+        )
         self.save_button = QPushButton("Save Video")
         self.save_button.setEnabled(False)
         self.video_controls = [

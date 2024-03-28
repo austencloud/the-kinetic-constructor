@@ -1,14 +1,9 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-import cv2
 
 from PyQt6.QtWidgets import (
-    QComboBox,
-    QPushButton,
-    QSlider,
     QHBoxLayout,
     QWidget,
-    QVBoxLayout,
 )
 
 from widgets.sequence_recorder_widget.sequence_recorder_beat_control_frame import (
@@ -24,7 +19,7 @@ if TYPE_CHECKING:
     )
 
 
-class SequenceRecorderControlFrame(QWidget):
+class SequenceRecorderMainControlFrame(QWidget):
     def __init__(self, sequence_recorder_widget: "SequenceRecorderWidget") -> None:
         super().__init__()
         self.sequence_recorder_widget = sequence_recorder_widget
