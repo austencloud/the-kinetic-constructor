@@ -4,7 +4,7 @@ from PyQt6.QtGui import QPainter, QLinearGradient, QColor
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import QTimer, Qt
 from .sequence_recorder_capture_frame import SequenceRecorderCaptureFrame
-from .sequence_recorder_video_controls import SequenceRecorderVideoControlFrame
+from .sequence_recorder_video_control_frame import SequenceRecorderVideoControlFrame
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget

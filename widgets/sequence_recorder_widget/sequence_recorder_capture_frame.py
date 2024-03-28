@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt
 from widgets.sequence_recorder_widget.sequence_recorder_beat_frame import (
     SequenceRecorderBeatFrame,
 )
-from widgets.sequence_recorder_widget.sequence_recorder_video_display import (
+from widgets.sequence_recorder_widget.sequence_recorder_video_display_frame import (
     SequenceRecorderVideoDisplayFrame,
 )
 

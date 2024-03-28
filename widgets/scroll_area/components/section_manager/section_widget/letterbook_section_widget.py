@@ -15,7 +15,7 @@ from .components.pictograph_frame import ScrollAreaSectionPictographFrame
 if TYPE_CHECKING:
     pass
 
-    from ....letterbook_scroll_area import LetterBookScrollArea
+    from .....letterbook.letterbook_scroll_area import LetterBookScrollArea
 
 
 class LetterBookSectionWidget(QGroupBox):

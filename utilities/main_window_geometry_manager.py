@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from main import MainWindow
 
 
-class WindowGeometryManager:
+class MainWindowGeometryManager:
     def __init__(self, window: "MainWindow") -> None:
         self.window = window
 

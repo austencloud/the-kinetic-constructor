@@ -10,7 +10,7 @@ from .section_widget.letterbook_section_widget import LetterBookSectionWidget
 from PyQt6.QtWidgets import QGridLayout, QLabel
 
 if TYPE_CHECKING:
-    from ...letterbook_scroll_area import LetterBookScrollArea
+    from ....letterbook.letterbook_scroll_area import LetterBookScrollArea
 
 
 class LetterBookSectionManager:

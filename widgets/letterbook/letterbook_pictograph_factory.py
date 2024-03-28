@@ -7,7 +7,7 @@ from Enums.Enums import LetterType
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.scroll_area.letterbook_scroll_area import LetterBookScrollArea
+    from widgets.letterbook.letterbook_scroll_area import LetterBookScrollArea
 
 
 class LetterBookPictographFactory:

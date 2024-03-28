@@ -3,18 +3,18 @@ from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QApplication
 from PyQt6.QtCore import Qt
 
 
-from .components.letterbook_pictograph_factory import LetterBookPictographFactory
-from .components.section_manager.letterbook_section_manager import (
+from .letterbook_pictograph_factory import LetterBookPictographFactory
+from ..scroll_area.components.section_manager.letterbook_section_manager import (
     LetterBookSectionManager,
 )
-from .components.letterbook_display_manager import LetterBookDisplayManager
+from ..scroll_area.components.letterbook_display_manager import LetterBookDisplayManager
 
 
 from ..pictograph.pictograph import Pictograph
 from PyQt6.QtGui import QWheelEvent
 
 if TYPE_CHECKING:
-    from ..letterbook.letterbook import LetterBook
+    from .letterbook import LetterBook
 
 
 class LetterBookScrollArea(QScrollArea):

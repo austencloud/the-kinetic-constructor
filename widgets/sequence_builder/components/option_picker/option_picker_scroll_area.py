@@ -4,14 +4,14 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QWheelEvent
 
 from constants import BLUE, RED
-from widgets.scroll_area.components.option_picker_pictograph_factory import (
+from widgets.sequence_builder.components.option_picker.option_picker_pictograph_factory import (
     OptionPickerPictographFactory,
 )
 from widgets.sequence_builder.components.option_picker.option_picker_section_manager import (
     OptionPickerSectionsManager,
 )
 
-from ....scroll_area.components.option_picker_display_manager import (
+from .option_picker_display_manager import (
     OptionPickerDisplayManager,
 )
 from ....pictograph.pictograph import Pictograph

@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QApplication, QMainWindow
 from PyQt6.QtCore import Qt, QEvent
 from profiler import Profiler
 from settings_manager import SettingsManager
-from utilities.window_geometry_manager import WindowGeometryManager
+from utilities.main_window_geometry_manager import MainWindowGeometryManager
 from widgets.main_widget.main_widget import MainWidget
 from widgets.menu_bar.menu_bar import MainWindowMenuBar
 
@@ -17,7 +17,7 @@ class MainWindow(QMainWindow):
         self.main_widget = MainWidget(self)
         self.main_widget.preferences_dialog.load_initial_settings()
         self.setAttribute(Qt.WidgetAttribute.WA_AcceptTouchEvents, True)
-        self.window_manager = WindowGeometryManager(self)
+        self.window_manager = MainWindowGeometryManager(self)
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Kinetic Constructor")
         self.menu_bar = MainWindowMenuBar(self.main_widget)
@@ -33,6 +33,7 @@ class MainWindow(QMainWindow):
         self.settings_manager.save_settings()
         super().closeEvent(event)
         QApplication.instance().installEventFilter(self)
+
 
 def main() -> None:
     app = QApplication(sys.argv)

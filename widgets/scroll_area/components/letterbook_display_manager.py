@@ -11,7 +11,7 @@ from widgets.scroll_area.components.section_manager.section_widget.letterbook_se
 
 if TYPE_CHECKING:
 
-    from ..letterbook_scroll_area import LetterBookScrollArea
+    from ...letterbook.letterbook_scroll_area import LetterBookScrollArea
 logging.basicConfig(level=logging.DEBUG)
 
 

@@ -5,7 +5,7 @@ from Enums.Enums import Letter
 from .letterbook_letter_button_frame.letterbook_letter_button_frame import (
     LetterBookLetterButtonFrame,
 )
-from ..scroll_area.letterbook_scroll_area import LetterBookScrollArea
+from .letterbook_scroll_area import LetterBookScrollArea
 from ..pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
