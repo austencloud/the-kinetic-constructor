@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtCore import Qt, QTimer, QSize
 from PyQt6.QtGui import QImage, QPixmap, QFont
 from PyQt6.QtWidgets import QLabel, QVBoxLayout, QWidget, QMessageBox
 import cv2
@@ -15,7 +15,12 @@ class SequenceRecorderVideoDisplay(QWidget):
     def __init__(self, sequence_recorder_widget: "SequenceRecorderWidget"):
         super().__init__()
         self.sequence_recorder_widget = sequence_recorder_widget
+        self.fixed_aspect_ratio = 16 / 9  # Example: 16:9 aspect ratio
         self.init_ui()
+        # Initialize with a preferred size that adheres to the aspect ratio
+        self.preferred_width = 640  # Example size, adjust based on your UI requirements
+        self.preferred_height = int(self.preferred_width / self.fixed_aspect_ratio)
+        self.setFixedSize(self.preferred_width, self.preferred_height)
 
     def init_ui(self):
         self.video_display = QLabel("Webcam Feed")
@@ -27,7 +32,7 @@ class SequenceRecorderVideoDisplay(QWidget):
         self.capture = None
         self.record = False
         self.recording_frames = []
-        self.video_frame_rate = 30
+        self.video_frame_rate = 60
 
     def init_webcam(self) -> None:
         if self.capture is not None and self.capture.isOpened():
@@ -73,6 +78,7 @@ class SequenceRecorderVideoDisplay(QWidget):
             self.display_frame(frame)
 
     def display_frame(self, frame):
+        # Convert the frame to an RGB image and scale it according to the fixed aspect ratio
         rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         convert_to_Qt_format = QImage(
             rgb_image.data,
@@ -81,13 +87,28 @@ class SequenceRecorderVideoDisplay(QWidget):
             QImage.Format.Format_RGB888,
         )
         p = QPixmap.fromImage(convert_to_Qt_format)
-        self.video_display.setPixmap(
-            p.scaled(
-                self.video_display.size(),
-                Qt.AspectRatioMode.KeepAspectRatio,
-                Qt.TransformationMode.SmoothTransformation,
-            )
+        # Scale pixmap to fit within the predefined size
+        p = p.scaled(
+            self.preferred_width, self.preferred_height,
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
         )
+        self.video_display.setPixmap(p)
+
+    def calculate_scaled_size(self, current_size: QSize, max_size: QSize) -> QSize:
+        """
+        Calculate the size to scale an image to fit within maximum dimensions while maintaining aspect ratio.
+        """
+        aspect_ratio = current_size.width() / current_size.height()
+        if (
+            current_size.width() > max_size.width()
+            or current_size.height() > max_size.height()
+        ):
+            if (max_size.width() / aspect_ratio) <= max_size.height():
+                return QSize(max_size.width(), int(max_size.width() / aspect_ratio))
+            else:
+                return QSize(int(max_size.height() * aspect_ratio), max_size.height())
+        return current_size
 
     def get_aspect_ratio(self) -> float:
         return self.capture.get(cv2.CAP_PROP_FRAME_WIDTH) / self.capture.get(
@@ -95,17 +116,12 @@ class SequenceRecorderVideoDisplay(QWidget):
         )
 
     def resize_video_display(self):
-        recording_frame_size = self.sequence_recorder_widget.recording_frame.size()
-        aspect_ratio = self.get_aspect_ratio()
+        if not hasattr(self, "beat_frame"):
+            self.beat_frame = (
+                self.sequence_recorder_widget.recording_frame.sequence_beat_frame
+            )
 
-        width = self.sequence_recorder_widget.recording_frame.width()
-        height = int(width / aspect_ratio)
-
-        if height > recording_frame_size.height():
-            height = recording_frame_size.height()
-            width = int(height * aspect_ratio)
-
-        self.video_display_width = width // 2
-        self.video_display_height = height
+        self.max_display_width = self.beat_frame.width()
+        self.max_display_height = self.beat_frame.height()
 
         self.update_video_feed()

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from ....pictograph.pictograph import Pictograph
 from PyQt6.QtWidgets import QApplication
-
+from PyQt6.QtCore import Qt
 if TYPE_CHECKING:
     from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
@@ -14,6 +14,7 @@ class OptionPickerClickHandler:
         return lambda event: self.on_option_clicked(start_pos)
 
     def on_option_clicked(self, clicked_option: "Pictograph") -> None:
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         beat_frame = self.sequence_builder.main_widget.sequence_widget.beat_frame
         new_beat = self.sequence_builder.add_to_sequence_manager.create_new_beat(
             clicked_option
@@ -29,3 +30,6 @@ class OptionPickerClickHandler:
             self.sequence_builder.option_picker.scroll_area.display_manager.order_and_display_pictographs()
 
             self.sequence_builder.option_picker.choose_your_next_option_label.set_default_text()
+        else:
+            # restore the cursor if the beat wasn't added
+            QApplication.restoreOverrideCursor()

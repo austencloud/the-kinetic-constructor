@@ -29,7 +29,7 @@ class SequenceRecorderWidget(QWidget):
         super().__init__()
         self.main_widget = main_widget
 
-        self.sequence_beat_frame = SequenceRecorderBeatFrame(self.main_widget)
+        self.sequence_beat_frame = SequenceRecorderBeatFrame(self)
         self.video_display = SequenceRecorderVideoDisplay(self)
         self.video_controls = SequenceRecorderVideoControls()
         self.recording_frame = RecordingFrame(
@@ -43,5 +43,5 @@ class SequenceRecorderWidget(QWidget):
         self.main_layout.addWidget(self.video_controls)
 
     def resize_sequence_recorder_widget(self) -> None:
-        self.video_display.resize_video_display()
         self.sequence_beat_frame.resize_beat_frame()
+        self.video_display.resize_video_display()

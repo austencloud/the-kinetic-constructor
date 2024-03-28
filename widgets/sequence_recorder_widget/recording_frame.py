@@ -8,14 +8,12 @@ class RecordingFrame(QWidget):
         self.sequence_beat_frame = sequence_beat_frame
         self.video_display = video_display
         self.init_ui()
-        self.setStyleSheet("border: 1px solid black;")
 
     def init_ui(self):
         layout = QHBoxLayout(self)
+        layout.setSpacing(0)
         layout.setAlignment(layout, Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.sequence_beat_frame, 1)
-        layout.addWidget(self.video_display, 1)
+        layout.addWidget(self.sequence_beat_frame)
+        layout.addWidget(self.video_display)
 
-        self.setSizePolicy(
-            QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed
-        )
+        self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)

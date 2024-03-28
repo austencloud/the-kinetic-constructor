@@ -17,7 +17,10 @@ from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.main_widget.main_widget import MainWidget
+    from widgets.sequence_recorder_widget.sequence_recorder_widget import (
+        SequenceRecorderWidget,
+    )
+    from widgets.sequence_recorder_widget.sequence_recorder_widget import MainWidget
 
 from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
 
@@ -26,15 +29,16 @@ class SequenceRecorderBeatFrame(QFrame):
     COLUMN_COUNT = 5
     ROW_COUNT = 4
 
-    def __init__(self, main_widget: "MainWidget") -> None:
+    def __init__(self, sequence_recorder_widget: "SequenceRecorderWidget") -> None:
         super().__init__()
-        self.main_widget = main_widget
+        self.sequence_recorder_widget = sequence_recorder_widget
+        self.main_widget: "MainWidget" = sequence_recorder_widget.main_widget
         self.current_sequence_json_handler = (
             self.main_widget.json_manager.current_sequence_json_handler
         )
 
         self.beat_views: list[BeatView] = []
-        self._setup_components(main_widget)
+        self._setup_components()
         self._setup_layout()
         self._populate_beat_frame()
 
@@ -46,10 +50,10 @@ class SequenceRecorderBeatFrame(QFrame):
             for i in range(1, self.COLUMN_COUNT):
                 self._add_beat_to_layout(j, i)
 
-    def _setup_components(self, main_widget) -> None:
+    def _setup_components(self) -> None:
         self.selection_manager = BeatSelectionManager(self)
         self.start_pos_view = StartPositionBeatView(self)
-        self.start_pos = StartPositionBeat(main_widget, self)
+        self.start_pos = StartPositionBeat(self.main_widget, self)
         self.beat_deletion_manager = BeatDeletionManager(self)
 
     def _setup_layout(self) -> None:

@@ -70,11 +70,8 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.main_layout: QVBoxLayout = QVBoxLayout(self)
         self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.main_layout.addWidget(self.ori_label, 1)
-        # self.main_layout.addStretch(1)
-        self.main_layout.addLayout(self.ori_display_label_layout, 10)
-        # self.main_layout.addStretch(1)
+        self.main_layout.addLayout(self.ori_display_label_layout, 2)
         self.main_layout.addLayout(self.orientation_control_layout, 10)
-        # self.main_layout.addStretch(1)
 
     def on_orientation_display_clicked(self, event) -> None:
         dialog = GE_OrientationSelectionDialog(self)

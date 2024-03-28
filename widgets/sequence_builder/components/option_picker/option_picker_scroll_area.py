@@ -58,7 +58,9 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.stretch_index = self.layout.count()
 
     def _add_and_display_relevant_pictographs(self, next_options: list[dict]) -> None:
-        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        # if the cursor isn't already overridden, override it
+        if QApplication.overrideCursor() is None:
+            QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         valid_next_options = []
         current_sequence_json_handler = (
             self.main_widget.json_manager.current_sequence_json_handler
