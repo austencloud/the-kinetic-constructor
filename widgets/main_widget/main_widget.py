@@ -118,7 +118,7 @@ class MainWidget(QTabWidget):
             self.builder_toolbar.resize_current_tab()
         elif current_widget == self.sequence_recorder_widget:
             if not self.webcam_initialized:
-                self.sequence_recorder_widget.video_display.init_webcam()
+                self.sequence_recorder_widget.capture_frame.video_display_frame.init_webcam()
                 self.webcam_initialized = True
             self.sequence_recorder_widget.resize_sequence_recorder_widget()
 

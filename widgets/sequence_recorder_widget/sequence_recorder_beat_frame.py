@@ -9,10 +9,6 @@ from widgets.sequence_widget.sequence_beat_frame.beat_deletion_manager import (
 from widgets.sequence_widget.sequence_beat_frame.beat_selection_manager import (
     BeatSelectionManager,
 )
-from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import StartPositionBeat
-from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
-    StartPositionBeatView,
-)
 
 from widgets.pictograph.pictograph import Pictograph
 

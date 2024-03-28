@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 class SequenceRecorderBeatSelectionManager:
     def __init__(self, beat_frame: "SequenceRecorderBeatFrame"):
         self.beat_frame = beat_frame
-        self.current_index = 0  # Start at the first beat
+        self.current_index = 0 
         self.timer = QTimer()
         self.timer.timeout.connect(self.move_selection)
 
@@ -16,10 +16,9 @@ class SequenceRecorderBeatSelectionManager:
         self.timer.start(milliseconds_per_beat)
 
     def move_selection(self):
-        # Logic to move selection to the next beat
         self.current_index += 1
         if self.current_index >= len(self.beat_frame.beat_views):
-            self.current_index = 0  # Loop back to the first beat
+            self.current_index = 0 
         self.beat_frame.selection_manager.select_beat(
             self.beat_frame.beat_views[self.current_index]
         )

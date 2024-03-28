@@ -1,26 +1,10 @@
 import math
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QShowEvent, QPainter, QLinearGradient, QColor
-from PyQt6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QMessageBox,
-)
-
-from PyQt6.QtCore import QTimer
-import cv2
-
-
-from widgets.sequence_recorder_widget.recording_frame import RecordingFrame
-from widgets.sequence_recorder_widget.sequence_recorder_beat_frame import (
-    SequenceRecorderBeatFrame,
-)
-from widgets.sequence_recorder_widget.sequence_recorder_video_controls import (
-    SequenceRecorderVideoControls,
-)
-from widgets.sequence_recorder_widget.sequence_recorder_video_display import (
-    SequenceRecorderVideoDisplay,
-)
+from PyQt6.QtGui import QPainter, QLinearGradient, QColor
+from PyQt6.QtWidgets import QWidget, QVBoxLayout
+from PyQt6.QtCore import QTimer, Qt
+from .sequence_recorder_capture_frame import SequenceRecorderCaptureFrame
+from .sequence_recorder_video_controls import SequenceRecorderVideoControlFrame
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
@@ -30,13 +14,8 @@ class SequenceRecorderWidget(QWidget):
     def __init__(self, main_widget: "MainWidget"):
         super().__init__()
         self.main_widget = main_widget
-
-        self.sequence_beat_frame = SequenceRecorderBeatFrame(self)
-        self.video_display = SequenceRecorderVideoDisplay(self)
-        self.video_controls = SequenceRecorderVideoControls()
-        self.recording_frame = RecordingFrame(
-            self.sequence_beat_frame, self.video_display
-        )
+        self.capture_frame = SequenceRecorderCaptureFrame(self)
+        self.video_control_frame = SequenceRecorderVideoControlFrame(self)
         self._setup_layout()
 
         self.gradient_shift = 0
@@ -66,11 +45,10 @@ class SequenceRecorderWidget(QWidget):
 
     def _setup_layout(self) -> None:
         self.main_layout: QVBoxLayout = QVBoxLayout(self)
-        self.main_layout.addWidget(self.recording_frame)
-        self.main_layout.addWidget(self.video_controls)
+        self.main_layout.addWidget(self.capture_frame, 5)
+        self.main_layout.addWidget(self.video_control_frame, 2)
 
     def resize_sequence_recorder_widget(self) -> None:
-        self.recording_frame.resize_recording_frame()
-        self.sequence_beat_frame.populate_beat_frame_scenes_from_json()
-
-    # def showEvent(self, event: QShowEvent) -> None:
+        self.capture_frame.resize_capture_frame()
+        self.video_control_frame.resize_video_control_frame()
+        self.capture_frame.sequence_beat_frame.populate_beat_frame_scenes_from_json()

@@ -6,17 +6,17 @@ import cv2
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_recorder_widget.sequence_recorder_widget import (
-        SequenceRecorderWidget,
+    from widgets.sequence_recorder_widget.sequence_recorder_capture_frame import (
+        SequenceRecorderCaptureFrame,
     )
 
 
-class SequenceRecorderVideoDisplay(QWidget):
-    def __init__(self, sequence_recorder_widget: "SequenceRecorderWidget"):
+class SequenceRecorderVideoDisplayFrame(QWidget):
+    def __init__(self, capture_frame: "SequenceRecorderCaptureFrame") -> None:
         super().__init__()
-        self.sequence_recorder_widget = sequence_recorder_widget
+        self.capture_frame = capture_frame
+        self.sequence_recorder_widget = capture_frame.sequence_recorder_widget
         self.init_ui()
-        # self.setFixedSize(self.preferred_width, self.preferred_height)
 
     def init_ui(self):
         self.video_display = QLabel("Webcam Feed")
@@ -97,7 +97,7 @@ class SequenceRecorderVideoDisplay(QWidget):
 
     def calculate_scaled_size(self, current_size: QSize, max_size: QSize) -> QSize:
         """
-        Calculate the size to scale an image to fit within maximum dimensions 
+        Calculate the size to scale an image to fit within maximum dimensions
         while maintaining aspect ratio.
         """
         aspect_ratio = current_size.width() / current_size.height()
@@ -116,11 +116,9 @@ class SequenceRecorderVideoDisplay(QWidget):
             cv2.CAP_PROP_FRAME_HEIGHT
         )
 
-    def resize_video_display(self):
+    def resize_video_display_frame(self):
         if not hasattr(self, "beat_frame"):
-            self.beat_frame = (
-                self.sequence_recorder_widget.recording_frame.sequence_beat_frame
-            )
+            self.beat_frame = self.capture_frame.sequence_beat_frame
         self.preferred_width = self.beat_frame.width()
         self.preferred_height = self.beat_frame.height()
         self.update_video_feed()

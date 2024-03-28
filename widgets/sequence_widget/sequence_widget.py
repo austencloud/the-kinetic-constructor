@@ -4,7 +4,6 @@ from PyQt6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
 from widgets.sequence_widget.my_sequence_label import MySequenceLabel
 from widgets.sequence_widget.sequence_modifier import SequenceModifier
 from ..indicator_label import IndicatorLabel
-from ..pictograph.pictograph import Pictograph
 from ..scroll_area.components.sequence_widget_pictograph_factory import (
     SequenceWidgetPictographFactory,
 )
