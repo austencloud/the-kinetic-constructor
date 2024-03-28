@@ -15,19 +15,17 @@ class SequenceRecorderVideoDisplay(QWidget):
     def __init__(self, sequence_recorder_widget: "SequenceRecorderWidget"):
         super().__init__()
         self.sequence_recorder_widget = sequence_recorder_widget
-        self.fixed_aspect_ratio = 16 / 9  # Example: 16:9 aspect ratio
         self.init_ui()
-        # Initialize with a preferred size that adheres to the aspect ratio
-        self.preferred_width = 640  # Example size, adjust based on your UI requirements
-        self.preferred_height = int(self.preferred_width / self.fixed_aspect_ratio)
-        self.setFixedSize(self.preferred_width, self.preferred_height)
+        # self.setFixedSize(self.preferred_width, self.preferred_height)
 
     def init_ui(self):
         self.video_display = QLabel("Webcam Feed")
-        self.video_display.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.video_display.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.video_display.setFont(QFont("Arial", 12))
         layout = QVBoxLayout(self)
         layout.addWidget(self.video_display)
+        layout.setContentsMargins(0, 0, 0, 0)
+        self.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
         self.capture = None
         self.record = False
@@ -87,9 +85,20 @@ class SequenceRecorderVideoDisplay(QWidget):
             QImage.Format.Format_RGB888,
         )
         p = QPixmap.fromImage(convert_to_Qt_format)
+
+        # Calculate the square size based on the minimum dimension of the frame
+        square_size = min(p.width(), p.height())
+
+        # Calculate the amount to crop from both sides
+        crop_amount = abs(p.width() - p.height()) // 2
+
+        # Crop the pixmap equally from both sides
+        p = p.copy(crop_amount, 0, square_size, square_size)
+
         # Scale pixmap to fit within the predefined size
         p = p.scaled(
-            self.preferred_width, self.preferred_height,
+            self.preferred_width,
+            self.preferred_height,
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation,
         )
@@ -120,8 +129,6 @@ class SequenceRecorderVideoDisplay(QWidget):
             self.beat_frame = (
                 self.sequence_recorder_widget.recording_frame.sequence_beat_frame
             )
-
-        self.max_display_width = self.beat_frame.width()
-        self.max_display_height = self.beat_frame.height()
-
+        self.preferred_width = self.beat_frame.width()
+        self.preferred_height = self.beat_frame.height()
         self.update_video_feed()

@@ -132,3 +132,8 @@ class SequenceBuilderBeatFrame(QFrame):
             view.setMinimumHeight(beat_view_size)
             view.setMaximumHeight(beat_view_size)
             view.resetTransform()
+            # scale contents to fit
+            if view.scene():
+                view.fitInView(
+                    view.scene().sceneRect(), Qt.AspectRatioMode.KeepAspectRatio
+                )

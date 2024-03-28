@@ -26,7 +26,7 @@ from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
 
 
 class SequenceRecorderBeatFrame(QFrame):
-    COLUMN_COUNT = 5
+    COLUMN_COUNT = 4
     ROW_COUNT = 4
 
     def __init__(self, sequence_recorder_widget: "SequenceRecorderWidget") -> None:
@@ -43,17 +43,13 @@ class SequenceRecorderBeatFrame(QFrame):
         self._populate_beat_frame()
 
     def _populate_beat_frame(self) -> None:
-        for i in range(1, self.COLUMN_COUNT):
-            self._add_beat_to_layout(0, i)
-
-        for j in range(1, 4):
-            for i in range(1, self.COLUMN_COUNT):
+        # Populate the beat frame starting from the first column (0) without a separate start position
+        for j in range(self.ROW_COUNT):
+            for i in range(self.COLUMN_COUNT):
                 self._add_beat_to_layout(j, i)
 
     def _setup_components(self) -> None:
         self.selection_manager = BeatSelectionManager(self)
-        self.start_pos_view = StartPositionBeatView(self)
-        self.start_pos = StartPositionBeat(self.main_widget, self)
         self.beat_deletion_manager = BeatDeletionManager(self)
 
     def _setup_layout(self) -> None:
@@ -65,7 +61,6 @@ class SequenceRecorderBeatFrame(QFrame):
         self.layout.setAlignment(
             Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignCenter
         )
-        self.layout.addWidget(self.start_pos_view, 0, 0)
 
     def keyPressEvent(self, event: "QKeyEvent") -> None:
         if event.key() == Qt.Key.Key_Delete:
@@ -123,7 +118,6 @@ class SequenceRecorderBeatFrame(QFrame):
         entry["red_attributes"]["start_ori"] = entry["red_attributes"]["end_ori"]
         entry["blue_attributes"]["start_ori"] = entry["blue_attributes"]["end_ori"]
         entry["start_pos"] = entry["end_pos"]
-        self.start_pos_view.start_pos.updater.update_pictograph(entry)
 
     def get_index_of_currently_selected_beat(self) -> int:
         for i, beat in enumerate(self.beat_views):
@@ -132,8 +126,8 @@ class SequenceRecorderBeatFrame(QFrame):
         return 0
 
     def resize_beat_frame(self) -> None:
-        beat_view_size = int(self.width() / (self.COLUMN_COUNT + 2))
-        for view in self.beat_views + [self.start_pos_view]:
+        beat_view_size = int(self.width() / (self.COLUMN_COUNT))
+        for view in self.beat_views:
             view.setMinimumWidth(beat_view_size)
             view.setMaximumWidth(beat_view_size)
             view.setMinimumHeight(beat_view_size)

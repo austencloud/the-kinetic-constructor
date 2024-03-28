@@ -18,10 +18,9 @@ if TYPE_CHECKING:
 
 
 class BeatDeletionManager:
-    def __init__(self, sequence_beat_frame: "SequenceBuilderBeatFrame") -> None:
-        self.beat_frame = sequence_beat_frame
-        self.beats = sequence_beat_frame.beat_views
-        self.start_pos_view = self.beat_frame.start_pos_view
+    def __init__(self, sequence_builder_beat_frame: "SequenceBuilderBeatFrame") -> None:
+        self.beat_frame = sequence_builder_beat_frame
+        self.beats = sequence_builder_beat_frame.beat_views
         self.sequence_builder = (
             self.beat_frame.main_widget.builder_toolbar.sequence_builder
         )
@@ -44,6 +43,7 @@ class BeatDeletionManager:
             self._delete_non_first_beat(selected_beat)
 
     def _delete_non_first_beat(self, selected_beat):
+
         self.delete_beat(selected_beat)
         for i in range(self.beats.index(selected_beat), len(self.beats)):
             self.delete_beat(self.beats[i])
@@ -54,6 +54,7 @@ class BeatDeletionManager:
         self.sequence_builder.option_picker.update_option_picker()
 
     def _delete_first_beat(self, selected_beat):
+        self.start_pos_view = self.beat_frame.start_pos_view
         self.selection_manager.select_beat(self.start_pos_view)
         self.sequence_builder.current_pictograph = self.start_pos_view.beat
         self.delete_beat(selected_beat)
@@ -65,6 +66,7 @@ class BeatDeletionManager:
             self.delete_beat(self.beats[i])
 
     def _delete_start_pos(self):
+        self.start_pos_view = self.beat_frame.start_pos_view
         self.start_pos_view.setScene(None)
         self.start_pos_view.is_filled = False
         self.GE_pictograph_view.set_to_blank_grid()
@@ -75,7 +77,9 @@ class BeatDeletionManager:
         self.sequence_builder.current_pictograph = None
         self.sequence_builder.reset_to_start_pos_picker()
         self.sequence_builder.option_picker.update_option_picker()
-        graph_editor = self.beat_frame.sequence_widget.sequence_modifier.graph_editor
+        graph_editor = (
+            self.beat_frame.main_widget.sequence_widget.sequence_modifier.graph_editor
+        )
         graph_editor.adjustment_panel.update_adjustment_panel()
 
     def delete_beat(self, beat_view: BeatView) -> None:

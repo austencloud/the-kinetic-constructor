@@ -43,5 +43,4 @@ class SequenceRecorderWidget(QWidget):
         self.main_layout.addWidget(self.video_controls)
 
     def resize_sequence_recorder_widget(self) -> None:
-        self.sequence_beat_frame.resize_beat_frame()
-        self.video_display.resize_video_display()
+        self.recording_frame.resize_recording_frame()
