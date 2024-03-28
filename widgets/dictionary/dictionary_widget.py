@@ -17,12 +17,12 @@ if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
 
-class Dictionary(QWidget):
+class DictionaryWidget(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
         self.setup_ui()
-        
+
     def setup_ui(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         tree_layout = QHBoxLayout()

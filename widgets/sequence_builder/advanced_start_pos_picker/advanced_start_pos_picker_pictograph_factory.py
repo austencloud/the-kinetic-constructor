@@ -37,7 +37,7 @@ class AdvancedStartPosPickerPictographFactory:
             if letter not in self.advanced_start_pos_cache:
                 self.advanced_start_pos_cache[letter] = {}
             self.advanced_start_pos_cache[letter][pictograph_key] = pictograph
-            self.advanced_start_pos_picker.main_widget.all_pictographs[letter][
+            self.advanced_start_pos_picker.main_widget.pictograph_cache[letter][
                 pictograph_key
             ] = pictograph
             letter_type = LetterType.get_letter_type(letter)

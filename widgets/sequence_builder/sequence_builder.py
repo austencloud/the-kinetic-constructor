@@ -117,7 +117,7 @@ class SequenceBuilder(QFrame):
             pictograph_key, pictograph_dict
         )
         scroll_area.pictograph_cache[pictograph_key] = new_pictograph
-        self.main_widget.all_pictographs[new_pictograph.letter][
+        self.main_widget.pictograph_cache[new_pictograph.letter][
             pictograph_key
         ] = new_pictograph
         if pictograph_key not in self.pictograph_cache[letter]:

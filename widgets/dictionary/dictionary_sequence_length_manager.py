@@ -6,11 +6,11 @@ from PyQt6.QtGui import (
 )
 
 if TYPE_CHECKING:
-    from widgets.dictionary.dictionary import Dictionary
+    from widgets.dictionary.dictionary_widget import DictionaryWidget
 
 
 class DictionarySortByLengthHandler:
-    def __init__(self, dictionary: "Dictionary") -> None:
+    def __init__(self, dictionary: "DictionaryWidget") -> None:
         self.dictionary = dictionary
 
     def sort_sequences_by_length(self) -> None:
@@ -26,8 +26,6 @@ class DictionarySortByLengthHandler:
         self.dictionary.model.clear()
         for length, name, item in sequences:
             self.dictionary.model.appendRow(item)
-
-
 
     @staticmethod
     def extract_items(model: QStandardItemModel) -> list[QStandardItem]:

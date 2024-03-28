@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     )
     from widgets.sequence_recorder_widget.sequence_recorder_widget import MainWidget
 
-from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
+from widgets.sequence_widget.sequence_beat_frame.beat import Beat, BeatView
 
 
 class SequenceRecorderBeatFrame(QFrame):
@@ -36,14 +36,12 @@ class SequenceRecorderBeatFrame(QFrame):
         self.current_sequence_json_handler = (
             self.main_widget.json_manager.current_sequence_json_handler
         )
-
         self.beat_views: list[BeatView] = []
         self._setup_components()
         self._setup_layout()
-        self._populate_beat_frame()
+        self._populate_beat_frame_with_views()
 
-    def _populate_beat_frame(self) -> None:
-        # Populate the beat frame starting from the first column (0) without a separate start position
+    def _populate_beat_frame_with_views(self) -> None:
         for j in range(self.ROW_COUNT):
             for i in range(self.COLUMN_COUNT):
                 self._add_beat_to_layout(j, i)
@@ -133,3 +131,25 @@ class SequenceRecorderBeatFrame(QFrame):
             view.setMinimumHeight(beat_view_size)
             view.setMaximumHeight(beat_view_size)
             view.resetTransform()
+
+    def clear_beat_frame(self) -> None:
+        for beat_view in self.beat_views:
+            beat_view.setScene(None)
+            beat_view.is_filled = False
+
+    def populate_beat_frame_scenes_from_json(self) -> None:
+        sequence_json = self.current_sequence_json_handler.load_current_sequence_json()
+        self.clear_beat_frame()
+        for pictograph_dict in sequence_json:
+            if pictograph_dict.get("sequence_start_position"):
+                continue
+            beat = Beat(self.main_widget)
+            beat.updater.update_pictograph(pictograph_dict)
+            self.add_scene_to_sequence(beat)
+            pictograph_key = (
+                beat.main_widget.pictograph_key_generator.generate_pictograph_key(
+                    pictograph_dict
+                )
+            )
+            self.main_widget.pictograph_cache[pictograph_key] = beat
+            # beat.view.fitInView(beat.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)

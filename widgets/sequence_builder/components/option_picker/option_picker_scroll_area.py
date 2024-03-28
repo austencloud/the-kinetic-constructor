@@ -103,7 +103,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
                 pictograph_dict, sequence
             )
             self.pictograph_cache[modified_key] = pictograph
-            self.main_widget.all_pictographs[pictograph.letter][
+            self.main_widget.pictograph_cache[pictograph.letter][
                 modified_key
             ] = pictograph
         return pictograph

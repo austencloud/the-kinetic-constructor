@@ -16,11 +16,11 @@ from PyQt6.QtWidgets import (
 )
 
 if TYPE_CHECKING:
-    from widgets.dictionary.dictionary import Dictionary
+    from widgets.dictionary.dictionary_widget import DictionaryWidget
 
 
 class DictionaryWordsTree(QTreeView):
-    def __init__(self, dictionary: "Dictionary") -> None:
+    def __init__(self, dictionary: "DictionaryWidget") -> None:
         super().__init__(dictionary)
         self.dictionary = dictionary
         self.model: QFileSystemModel = DictionaryFileSystemModel()
@@ -28,8 +28,10 @@ class DictionaryWordsTree(QTreeView):
 
     def setup_ui(self, layout: QVBoxLayout) -> None:
         # Determine whether the application is running in frozen mode
-        if getattr(sys, 'frozen', False):
-            dictionary_path = os.path.join(os.getenv('LOCALAPPDATA'), 'The Kinetic Alphabet', 'dictionary')
+        if getattr(sys, "frozen", False):
+            dictionary_path = os.path.join(
+                os.getenv("LOCALAPPDATA"), "The Kinetic Alphabet", "dictionary"
+            )
         else:
             dictionary_path = os.path.join(QDir.currentPath(), "dictionary")
 
@@ -54,7 +56,7 @@ class DictionaryWordsTree(QTreeView):
         layout.addWidget(self)
         self.update_sort_order_from_settings()
         self.selected_structural_variation = None
-        
+
     def eventFilter(self, obj, event) -> bool:
         if obj == self and event.type() == QEvent.Type.KeyPress:
             key_event = event
@@ -139,12 +141,18 @@ class DictionaryWordsTree(QTreeView):
             else:
                 self.expand(index)
                 base_pattern = self.model.fileName(source_index)
-                self.dictionary.turn_variation_tree.display_turn_patterns_for_variation(base_pattern, base_pattern)
+                self.dictionary.turn_variation_tree.display_turn_patterns_for_variation(
+                    base_pattern, base_pattern
+                )
         elif file_path.endswith(".json"):
             self.dictionary.sequence_populator.load_sequence_from_file(file_path)
-            structural_variation_name = os.path.splitext(self.model.fileName(source_index))[0]
-            base_pattern = structural_variation_name.split('_')[0]
-            self.dictionary.turn_variation_tree.display_turn_patterns_for_variation(base_pattern, structural_variation_name)
+            structural_variation_name = os.path.splitext(
+                self.model.fileName(source_index)
+            )[0]
+            base_pattern = structural_variation_name.split("_")[0]
+            self.dictionary.turn_variation_tree.display_turn_patterns_for_variation(
+                base_pattern, structural_variation_name
+            )
             self.selected_structural_variation = structural_variation_name
         else:
             QMessageBox.information(
@@ -158,9 +166,11 @@ class DictionaryWordsTree(QTreeView):
 
     def reload_dictionary_words_tree(self):
         # Determine whether the application is running in frozen mode
-        if getattr(sys, 'frozen', False):
+        if getattr(sys, "frozen", False):
             # Application is running as a PyInstaller bundle
-            dictionary_path = os.path.join(os.getenv('LOCALAPPDATA'), 'The Kinetic Alphabet', 'dictionary')
+            dictionary_path = os.path.join(
+                os.getenv("LOCALAPPDATA"), "The Kinetic Alphabet", "dictionary"
+            )
         else:
             # Application is running in a development environment
             dictionary_path = os.path.join(QDir.currentPath(), "dictionary")
@@ -171,7 +181,9 @@ class DictionaryWordsTree(QTreeView):
         self.model.setRootPath(dictionary_path)
         self.proxy_model.setSourceModel(self.model)
         self.proxy_model.invalidate()  # Refresh the model to reflect any changes
-        self.proxy_model.sort(0, Qt.SortOrder.AscendingOrder)  # Reapply the sorting order
+        self.proxy_model.sort(
+            0, Qt.SortOrder.AscendingOrder
+        )  # Reapply the sorting order
         dictionary_index = self.model.index(dictionary_path)
         proxy_dictionary_index = self.proxy_model.mapFromSource(dictionary_index)
         self.setRootIndex(proxy_dictionary_index)

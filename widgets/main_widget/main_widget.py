@@ -54,9 +54,9 @@ class MainWidget(QTabWidget):
         self.webcam_initialized = False  # Add an initialization flag
 
     def _setup_pictograph_cache(self) -> None:
-        self.all_pictographs: dict[str, dict[str, "Pictograph"]] = {}
+        self.pictograph_cache: dict[str, dict[str, "Pictograph"]] = {}
         for letter in Letter:
-            self.all_pictographs[letter] = {}
+            self.pictograph_cache[letter] = {}
 
     def _set_prop_type(self) -> None:
         user_settings_path = get_images_and_data_path("user_settings.json")

@@ -2,11 +2,11 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import QSortFilterProxyModel, QModelIndex
 
 if TYPE_CHECKING:
-    from widgets.dictionary.dictionary import Dictionary
+    from widgets.dictionary.dictionary_widget import DictionaryWidget
 
 
 class DictionarySortProxyModel(QSortFilterProxyModel):
-    def __init__(self, dictionary: "Dictionary") -> None:
+    def __init__(self, dictionary: "DictionaryWidget") -> None:
         super().__init__(dictionary)
         self.dictionary = dictionary
         self._lengthSortingEnabled = False

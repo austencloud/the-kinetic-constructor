@@ -18,14 +18,18 @@ class SpecialPlacementLoader:
             "from_layer3_blue1_red2": {},
         }
 
-    def load_special_placements(self) -> dict[str, dict[str, dict[str, dict[str, int]]]]:
+    def load_special_placements(
+        self,
+    ) -> dict[str, dict[str, dict[str, dict[str, int]]]]:
         for subfolder in [
             "from_layer1",
             "from_layer2",
             "from_layer3_blue2_red1",
             "from_layer3_blue1_red2",
         ]:
-            directory = get_images_and_data_path(f"data/arrow_placement/special/{subfolder}")
+            directory = get_images_and_data_path(
+                f"data/arrow_placement/special/{subfolder}"
+            )
             for file_name in os.listdir(directory):
                 if file_name.endswith("_placements.json"):
                     with open(
@@ -39,7 +43,7 @@ class SpecialPlacementLoader:
         """Refreshes the special placements and updates all pictographs."""
         self.main_widget.special_placements = self.load_special_placements()
 
-        for _, pictograph_list in self.main_widget.all_pictographs.items():
+        for _, pictograph_list in self.main_widget.pictograph_cache.items():
             for _, pictograph in pictograph_list.items():
                 pictograph.updater.update_pictograph()
                 pictograph.update()

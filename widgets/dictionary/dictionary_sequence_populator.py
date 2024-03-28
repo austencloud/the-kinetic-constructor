@@ -4,11 +4,11 @@ from PyQt6.QtWidgets import QMessageBox
 
 
 if TYPE_CHECKING:
-    from widgets.dictionary.dictionary import Dictionary
+    from widgets.dictionary.dictionary_widget import DictionaryWidget
 
 
 class DictionarySequencePopulator:
-    def __init__(self, dictionary: "Dictionary"):
+    def __init__(self, dictionary: "DictionaryWidget"):
         self.dictionary = dictionary
         self.main_widget = dictionary.main_widget
         self.initialized = False
@@ -50,6 +50,7 @@ class DictionarySequencePopulator:
             if pictograph_dict.get("sequence_start_position"):
                 continue
             self.sequence_widget.populate_sequence(pictograph_dict)
+            
         last_beat = self.sequence_widget.beat_frame.get_last_filled_beat().beat
         self.sequence_builder.current_pictograph = last_beat
         if self.sequence_builder.start_pos_picker.isVisible():

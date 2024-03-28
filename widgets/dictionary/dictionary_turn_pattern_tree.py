@@ -9,11 +9,11 @@ from path_helpers import get_dictionary_path
 from widgets.turn_pattern_converter import TurnPatternConverter
 
 if TYPE_CHECKING:
-    from widgets.dictionary.dictionary import Dictionary
+    from widgets.dictionary.dictionary_widget import DictionaryWidget
 
 
 class DictionaryTurnPatternTree(QTreeView):
-    def __init__(self, dictionary: "Dictionary") -> None:
+    def __init__(self, dictionary: "DictionaryWidget") -> None:
         super().__init__(dictionary)
         self.dictionary = dictionary
         self.turn_pattern_model = QStandardItemModel()

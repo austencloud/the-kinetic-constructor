@@ -46,7 +46,7 @@ class GlyphVisibilityManager:
         self.apply_glyph_visibility()
 
     def apply_glyph_visibility(self) -> None:
-        for pictograph_list in self.main_window.main_widget.all_pictographs.values():
+        for pictograph_list in self.main_window.main_widget.pictograph_cache.values():
             for pictograph in pictograph_list.values():
                 if pictograph.view.isVisible():
                     self.apply_current_visibility_settings(pictograph)

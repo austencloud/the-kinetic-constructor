@@ -9,11 +9,11 @@ from PyQt6.QtWidgets import (
 )
 
 if TYPE_CHECKING:
-    from widgets.dictionary.dictionary import Dictionary
+    from widgets.dictionary.dictionary_widget import DictionaryWidget
 
 
 class DictionarySearchSortBar:
-    def __init__(self, dictionary: "Dictionary") -> None:
+    def __init__(self, dictionary: "DictionaryWidget") -> None:
         self.dictionary = dictionary
         self.search_bar = QLineEdit()
         self.sort_combo = QComboBox()

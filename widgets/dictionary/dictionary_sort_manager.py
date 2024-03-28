@@ -2,11 +2,11 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from widgets.dictionary.dictionary import Dictionary
+    from widgets.dictionary.dictionary_widget import DictionaryWidget
 
 
 class DictionarySortManager:
-    def __init__(self, dictionary: "Dictionary"):
+    def __init__(self, dictionary: "DictionaryWidget"):
         self.dictionary = dictionary
         # Assumes proxy_model has visibility_settings and lengthSortingEnabled
         self.proxy_model = self.dictionary.words_tree.proxy_model

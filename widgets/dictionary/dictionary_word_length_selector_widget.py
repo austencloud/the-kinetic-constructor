@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton
 
 if TYPE_CHECKING:
-    from widgets.dictionary.dictionary import Dictionary
+    from widgets.dictionary.dictionary_widget import DictionaryWidget
 
 
 class DictionaryWordLengthSelectorWidget(QWidget):
-    def __init__(self, dictionary: "Dictionary") -> None:
+    def __init__(self, dictionary: "DictionaryWidget") -> None:
         super().__init__(dictionary)
         self.dictionary = dictionary
         self.main_widget = dictionary.main_widget

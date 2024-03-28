@@ -7,7 +7,10 @@ from Enums.Enums import LetterType
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import StartPosPicker
+    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import (
+        StartPosPicker,
+    )
+
 
 class StartPosPickerPictographFactory:
     def __init__(
@@ -34,7 +37,7 @@ class StartPosPickerPictographFactory:
             if letter not in self.start_pos_cache:
                 self.start_pos_cache[letter] = {}
             self.start_pos_cache[letter][pictograph_key] = pictograph
-            self.start_pos_picker.main_widget.all_pictographs[letter][
+            self.start_pos_picker.main_widget.pictograph_cache[letter][
                 pictograph_key
             ] = pictograph
             letter_type = LetterType.get_letter_type(letter)

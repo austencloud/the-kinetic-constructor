@@ -9,8 +9,9 @@ from ....pictograph.pictograph import Pictograph
 from widgets.scroll_area.base_scroll_area import BasePictographScrollArea
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import StartPosPicker
-
+    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import (
+        StartPosPicker,
+    )
 
 
 class StartPosPickerScrollArea(BasePictographScrollArea):
@@ -34,7 +35,7 @@ class StartPosPickerScrollArea(BasePictographScrollArea):
         self.layout.addWidget(start_pos.view)
         self.pictograph_cache[start_pos.letter] = start_pos
         key = f"{start_pos.letter}_{start_pos.start_pos}_{start_pos.end_pos}"
-        self.main_widget.all_pictographs[start_pos.letter][key] = start_pos
+        self.main_widget.pictograph_cache[start_pos.letter][key] = start_pos
 
     def resize_start_pos_picker_scroll_area(self) -> None:
         self.setMinimumHeight(self.start_pos_picker.height())

@@ -35,7 +35,7 @@ class LetterBookPictographFactory:
             if letter not in self.pictograph_cache:
                 self.pictograph_cache[letter] = {}
             self.pictograph_cache[letter][pictograph_key] = pictograph
-            self.scroll_area.main_widget.all_pictographs[letter][
+            self.scroll_area.main_widget.pictograph_cache[letter][
                 pictograph_key
             ] = pictograph
             letter_type = LetterType.get_letter_type(letter)

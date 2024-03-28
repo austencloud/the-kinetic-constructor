@@ -6,19 +6,20 @@ from PyQt6.QtWidgets import QInputDialog, QMessageBox
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.dictionary.dictionary import Dictionary
-
+    from widgets.dictionary.dictionary_widget import DictionaryWidget
 
 
 class DictionaryVariationManager:
-    def __init__(self, dictionary: "Dictionary") -> None:
+    def __init__(self, dictionary: "DictionaryWidget") -> None:
         self.dictionary = dictionary
-        if getattr(sys, 'frozen', False):
+        if getattr(sys, "frozen", False):
             # Running in a PyInstaller bundle
-            self.base_dictionary_folder = os.path.join(os.getenv('LOCALAPPDATA'), 'The Kinetic Alphabet', 'dictionary')
+            self.base_dictionary_folder = os.path.join(
+                os.getenv("LOCALAPPDATA"), "The Kinetic Alphabet", "dictionary"
+            )
         else:
             # Running in a development environment
-            self.base_dictionary_folder = os.path.join(os.getcwd(), 'dictionary')
+            self.base_dictionary_folder = os.path.join(os.getcwd(), "dictionary")
 
     def create_variation(self, sequence_data: dict, base_pattern: str) -> None:
         pattern_folder = os.path.join(self.base_dictionary_folder, base_pattern)
@@ -94,7 +95,7 @@ class DictionaryVariationManager:
         year = datetime.now().strftime("%y")
         month = datetime.now().strftime("%m").lstrip("0")
         day = datetime.now().strftime("%d").lstrip("0")
-        
+
         timestamp = datetime.now().strftime(f"{month}-{day}-{year}")
         variation_name = f"{base_pattern}_{timestamp}"
         variation_filepath = self.get_variation_filepath(base_pattern, variation_name)
@@ -102,10 +103,16 @@ class DictionaryVariationManager:
         with open(variation_filepath, "w", encoding="utf-8") as file:
             json.dump(sequence_data, file, indent=4, ensure_ascii=False)
 
-
-
     def get_variation_filepath(self, base_pattern: str, variation_name: str) -> str:
-        if getattr(sys, 'frozen', False):
-            return os.path.join(os.getenv('LOCALAPPDATA'), 'The Kinetic Alphabet', 'dictionary', base_pattern, f"{variation_name}.json")
+        if getattr(sys, "frozen", False):
+            return os.path.join(
+                os.getenv("LOCALAPPDATA"),
+                "The Kinetic Alphabet",
+                "dictionary",
+                base_pattern,
+                f"{variation_name}.json",
+            )
         else:
-            return os.path.join(os.getcwd(), 'dictionary', base_pattern, f"{variation_name}.json")
+            return os.path.join(
+                os.getcwd(), "dictionary", base_pattern, f"{variation_name}.json"
+            )

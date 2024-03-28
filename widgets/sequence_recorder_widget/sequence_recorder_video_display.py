@@ -76,7 +76,6 @@ class SequenceRecorderVideoDisplay(QWidget):
             self.display_frame(frame)
 
     def display_frame(self, frame):
-        # Convert the frame to an RGB image and scale it according to the fixed aspect ratio
         rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         convert_to_Qt_format = QImage(
             rgb_image.data,
@@ -85,17 +84,9 @@ class SequenceRecorderVideoDisplay(QWidget):
             QImage.Format.Format_RGB888,
         )
         p = QPixmap.fromImage(convert_to_Qt_format)
-
-        # Calculate the square size based on the minimum dimension of the frame
         square_size = min(p.width(), p.height())
-
-        # Calculate the amount to crop from both sides
         crop_amount = abs(p.width() - p.height()) // 2
-
-        # Crop the pixmap equally from both sides
         p = p.copy(crop_amount, 0, square_size, square_size)
-
-        # Scale pixmap to fit within the predefined size
         p = p.scaled(
             self.preferred_width,
             self.preferred_height,
@@ -106,7 +97,8 @@ class SequenceRecorderVideoDisplay(QWidget):
 
     def calculate_scaled_size(self, current_size: QSize, max_size: QSize) -> QSize:
         """
-        Calculate the size to scale an image to fit within maximum dimensions while maintaining aspect ratio.
+        Calculate the size to scale an image to fit within maximum dimensions 
+        while maintaining aspect ratio.
         """
         aspect_ratio = current_size.width() / current_size.height()
         if (
