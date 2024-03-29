@@ -67,12 +67,12 @@ class SequenceBuilder(QFrame):
         self._hide_start_pos_picker()
         self._hide_advanced_start_pos_picker()
         self._show_option_picker()
-        QApplication.restoreOverrideCursor()
+        # QApplication.restoreOverrideCursor()
 
     def transition_to_advanced_start_pos_picker(self) -> None:
         self._hide_start_pos_picker()
         self.show_advanced_start_pos_picker()
-        QApplication.restoreOverrideCursor()
+        # QApplication.restoreOverrideCursor()
 
     def _hide_advanced_start_pos_picker(self) -> None:
         self.advanced_start_pos_picker.hide()

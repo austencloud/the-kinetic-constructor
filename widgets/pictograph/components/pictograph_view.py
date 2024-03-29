@@ -1,8 +1,11 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsView, QSizePolicy
+from PyQt6.QtWidgets import QGraphicsView, QSizePolicy, QApplication
 from PyQt6.QtCore import Qt, QEvent, QTimer
 from PyQt6.QtGui import QMouseEvent, QCursor
 
+from widgets.graph_editor.components.GE_pictograph_container import (
+    GE_PictographContainer,
+)
 from widgets.pictograph.components.pictograph_context_menu_handler import (
     PictographContextMenuHandler,
 )
@@ -112,15 +115,27 @@ class PictographView(QGraphicsView):
         self._ignoreNextMousePress = False
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         if self._ignoreMouseEvents or self._ignoreNextMousePress:
             event.ignore()
             return
         elif event.button() == Qt.MouseButton.LeftButton:
             self.mouse_event_handler.handle_mouse_press(event)
+        QApplication.restoreOverrideCursor()
 
     def enterEvent(self, event: QEvent) -> None:
-        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        if isinstance(self.parent(), GE_PictographContainer):
+            self.handle_pointing_hand_cursor_for_GE_Pictograph()
+        else:
+            self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.pictograph.container.styled_border_overlay.set_gold_border()
+
+    def handle_pointing_hand_cursor_for_GE_Pictograph(self) -> None:
+        # the pointing hnd cursor should appear only when there is an arrow under the cursor
+        if self.mouse_event_handler.is_arrow_under_cursor():
+            self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        else:
+            self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
 
     def leaveEvent(self, event: QEvent) -> None:
         self.setStyleSheet("")

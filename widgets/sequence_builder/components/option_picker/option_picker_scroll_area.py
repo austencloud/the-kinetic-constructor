@@ -62,7 +62,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             pictograph.view.hide()
 
     def add_and_display_relevant_pictographs(self, next_options: list[dict]) -> None:
-        # if the cursor isn't already overridden, override it
         if QApplication.overrideCursor() is None:
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         valid_next_options = []
