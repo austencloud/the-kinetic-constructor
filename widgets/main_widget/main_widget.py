@@ -1,5 +1,5 @@
 import json
-from PyQt6.QtWidgets import QHBoxLayout
+from PyQt6.QtWidgets import QHBoxLayout, QApplication
 from PyQt6.QtGui import QKeyEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
@@ -117,10 +117,11 @@ class MainWidget(QTabWidget):
             self.sequence_widget.resize_sequence_widget()
             self.builder_toolbar.resize_current_tab()
         elif current_widget == self.sequence_recorder:
+            self.sequence_recorder.resize_sequence_recorder()
+            QApplication.processEvents()
             if not self.webcam_initialized:
                 self.sequence_recorder.capture_frame.video_display_frame.init_webcam()
                 self.webcam_initialized = True
-            self.sequence_recorder.resize_sequence_recorder()
 
     def showEvent(self, event) -> None:
         super().showEvent(event)

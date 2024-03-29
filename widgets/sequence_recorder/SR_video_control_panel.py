@@ -1,13 +1,11 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-import click
 import cv2
 
 from PyQt6.QtWidgets import (
     QComboBox,
     QPushButton,
     QHBoxLayout,
-    QWidget,
     QFrame,
 )
 
@@ -112,8 +110,6 @@ class SR_VideoControlPanel(QFrame):
 
     def resize_video_control_frame(self) -> None:
         width = self.capture_frame.video_display_frame.width()
-        height = width // 4
         self.setMinimumWidth(width)
         self.setMaximumWidth(width)
-        self.setMinimumHeight(height)
-        self.setMaximumHeight(height)
+

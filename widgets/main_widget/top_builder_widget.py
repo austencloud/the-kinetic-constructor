@@ -1,6 +1,5 @@
-import random
 from PyQt6.QtWidgets import QWidget
-from PyQt6.QtCore import QTimer, Qt
+from PyQt6.QtCore import QTimer
 from PyQt6.QtGui import QPainter, QLinearGradient, QColor
 import math
 

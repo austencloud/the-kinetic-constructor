@@ -4,8 +4,6 @@ from PyQt6.QtGui import QPainter, QPen, QColor
 from PyQt6.QtCore import Qt, QUrl, QTimer
 from typing import TYPE_CHECKING, Optional
 from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
-from PyQt6.QtMultimedia import QMediaPlayer
-from PyQt6.QtMultimediaWidgets import QVideoWidget
 from PyQt6.QtMultimedia import QAudioOutput, QSoundEffect
 
 from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
@@ -15,9 +13,6 @@ from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
 if TYPE_CHECKING:
     from widgets.sequence_recorder.SR_beat_frame import (
         SR_BeatFrame,
-    )
-    from widgets.sequence_widget.sequence_beat_frame.sequence_builder_beat_frame import (
-        SequenceBuilderBeatFrame,
     )
 
 
@@ -41,9 +36,8 @@ class SR_BeatSelectionManager(QWidget):
         }
         for sound_name, sound_effect in self.metronome_sounds.items():
             file_path = os.path.abspath(f"{path}{sound_name}.wav")
-            print("Loading sound from:", file_path)  # Debugging: print the file path
             sound_effect.setSource(QUrl.fromLocalFile(file_path))
-            sound_effect.setVolume(1.0)  # Ensure the volume is set to 100%
+            sound_effect.setVolume(1.0)
 
         self.selected_metronome_sound = self.metronome_sounds["quartz"]
 

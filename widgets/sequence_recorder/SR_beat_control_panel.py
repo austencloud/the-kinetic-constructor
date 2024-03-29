@@ -3,13 +3,11 @@ from PyQt6.QtCore import Qt
 
 from PyQt6.QtWidgets import (
     QSlider,
-    QWidget,
     QVBoxLayout,
     QFrame,
     QComboBox,
     QPushButton,
     QLabel,
-    QLineEdit,
     QHBoxLayout,
 )
 
@@ -108,5 +106,5 @@ class SR_BeatControlPanel(QFrame):
         height = width // 4
         self.setMinimumWidth(width)
         self.setMaximumWidth(width)
-        self.setMinimumHeight(height)
-        self.setMaximumHeight(height)
+        # self.setMinimumHeight(height)
+        # self.setMaximumHeight(height)

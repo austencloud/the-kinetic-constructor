@@ -1,25 +1,21 @@
 from typing import TYPE_CHECKING
 
 from PyQt6.QtWidgets import QGridLayout, QFrame, QApplication
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QKeyEvent
+from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtGui import QKeyEvent, QPixmap, QImage
+import cv2
+import numpy as np
 from widgets.sequence_recorder.SR_beat_selection_manager import (
     SR_BeatSelectionManager,
 )
 from widgets.sequence_widget.sequence_beat_frame.beat_deletion_manager import (
     BeatDeletionManager,
 )
-from widgets.sequence_widget.sequence_beat_frame.beat_selection_manager import (
-    SequenceBuilderBeatSelectionManager,
-)
 
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.sequence_recorder.SR_capture_frame import SR_CaptureFrame
-    from widgets.sequence_recorder.sequence_recorder import (
-        SequenceRecorder,
-    )
     from widgets.sequence_recorder.sequence_recorder import MainWidget
 
 from widgets.sequence_widget.sequence_beat_frame.beat import Beat, BeatView
@@ -31,6 +27,10 @@ class SR_BeatFrame(QFrame):
 
     def __init__(self, capture_frame: "SR_CaptureFrame") -> None:
         super().__init__()
+        self.capture_timer = QTimer(self)
+        self.capture_timer.timeout.connect(self.capture_frame_state)
+        self.is_recording = False
+        self.frame_captures = []  # Store QPixmap captures here
         self.capture_frame = capture_frame
         self.main_widget: "MainWidget" = capture_frame.main_widget
         self.current_sequence_json_handler = (
@@ -38,9 +38,26 @@ class SR_BeatFrame(QFrame):
         )
         self.pictograph_cache: dict[str, Beat] = {}
         self.beat_views: list[BeatView] = []
+
         self._setup_components()
         self._setup_layout()
         self._populate_beat_frame_with_views()
+
+    def start_recording(self):
+        self.frame_captures.clear()
+        self.is_recording = True
+        self.capture_timer.start(100)  # Adjust as needed for fps
+
+    def stop_recording(self):
+        self.is_recording = False
+        self.capture_timer.stop()
+        self.save_captured_frames_to_video()
+
+    def capture_frame_state(self):
+        if not self.is_recording:
+            return
+        pixmap = self.grab()  # Grab the current state of the widget
+        self.frame_captures.append(pixmap)
 
     def _populate_beat_frame_with_views(self) -> None:
         for j in range(self.ROW_COUNT):
@@ -156,3 +173,36 @@ class SR_BeatFrame(QFrame):
 
         # for beat_view in self.beat_views:
         #     beat_view.setFrameStyle(1)
+
+    @staticmethod
+    def pixmap_to_cvimg(pixmap: QPixmap):
+        """Convert QPixmap to an OpenCV image format."""
+        size = pixmap.size()
+        channels_count = 4
+        image = pixmap.toImage()
+        image = image.convertToFormat(QImage.Format.Format_RGBA8888)
+        ptr = image.bits()
+        ptr.setsize(image.byteCount())
+        arr = np.array(ptr).reshape(size.height(), size.width(), channels_count)
+        return cv2.cvtColor(arr, cv2.COLOR_RGBA2BGR)
+
+    def save_captured_frames_to_video(self):
+        if not self.frame_captures:
+            print("No frames captured.")
+            return
+
+        # Example path, adjust as necessary
+        output_path = "beat_frame_capture.avi"
+        height, width = (
+            self.frame_captures[0].size().height(),
+            self.frame_captures[0].size().width(),
+        )
+        fourcc = cv2.VideoWriter_fourcc(*"XVID")
+        out = cv2.VideoWriter(output_path, fourcc, 10.0, (width, height))
+
+        for pixmap in self.frame_captures:
+            frame = self.pixmap_to_cvimg(pixmap)
+            out.write(frame)
+
+        out.release()
+        print("Video saved.")
