@@ -1,4 +1,6 @@
+from tkinter import font
 from typing import TYPE_CHECKING
+from PyQt6.QtGui import QEnterEvent
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import Qt
 
@@ -34,6 +36,7 @@ class SectionTypeLabel(QLabel):
     def __init__(self, section_widget: "LetterBookSectionWidget") -> None:
         super().__init__()
         self.section = section_widget
+        self.setContentsMargins(0, 0, 0, 0)
         self.set_styled_text(section_widget.letter_type)
 
     def set_styled_text(self, letter_type: LetterType) -> None:
@@ -52,9 +55,9 @@ class SectionTypeLabel(QLabel):
 
         styled_text = f"{letter_type_str[0:4]} {letter_type_str[4]}: {styled_type_name}"
         self.setText(styled_text)
-        self.resize_type_label()
+        self.resize_section_type_label()
 
-    def resize_type_label(self) -> None:
+    def font_size(self):
         base_class_name = type(self.section.scroll_area).__name__
         if base_class_name == "LetterBookScrollArea":
             font_size = self.section.scroll_area.width() // 40
@@ -62,10 +65,42 @@ class SectionTypeLabel(QLabel):
             font_size = self.section.scroll_area.width() // 50
         else:
             font_size = 12
+        return font_size
 
-        self.setStyleSheet(f"font-size: {font_size}px; font-weight: bold;")
-        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    def restore_default_style(self):
+        self.setStyleSheet(
+            "QLabel {{"
+            f"  background-color: white;"
+            f"  border-radius: 50%;"
+            f"  font-size: {self.font_size()}px;"  # Placeholder for font size
+            "  font-weight: bold;"
+            "}}".format(font_size=self.font_size())  # Pass the font size argument
+        )
+
+    def outline_label(self):
+        self.setStyleSheet(
+            "QLabel {"
+            f"  background-color: white;"
+            f"  border-radius: 50%;"
+            f"  font-size: {self.font_size()}px;"  # Placeholder for font size
+            "  font-weight: bold;"
+            "  border: 2px solid black;"  # Add outline
+            "}"
+        )
 
     def mousePressEvent(self, event) -> None:
         self.clicked.emit()
         super().mousePressEvent(event)
+
+    def enterEvent(self, event: QEnterEvent) -> None:
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.outline_label()
+
+    def leaveEvent(self, event: QEnterEvent) -> None:
+        self.setCursor(Qt.CursorShape.ArrowCursor)
+        self.restore_default_style()
+
+    def resize_section_type_label(self) -> None:
+        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.setFixedHeight(self.font_size() * 2)
+        self.restore_default_style()

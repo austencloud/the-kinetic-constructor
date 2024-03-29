@@ -125,17 +125,17 @@ class PictographView(QGraphicsView):
 
     def enterEvent(self, event: QEvent) -> None:
         if isinstance(self.parent(), GE_PictographContainer):
-            self.handle_pointing_hand_cursor_for_GE_Pictograph()
-        else:
-            self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.pictograph.container.styled_border_overlay.set_gold_border()
-
-    def handle_pointing_hand_cursor_for_GE_Pictograph(self) -> None:
-        # the pointing hnd cursor should appear only when there is an arrow under the cursor
-        if self.mouse_event_handler.is_arrow_under_cursor():
-            self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        else:
             self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
+        else:
+            self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.pictograph.container.styled_border_overlay.set_gold_border()   
+
+    def mouseMoveEvent(self, event: QMouseEvent) -> None:
+        if isinstance(self.parent(), GE_PictographContainer):
+            if self.mouse_event_handler.is_arrow_under_cursor(event):
+                self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+            else:
+                self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
 
     def leaveEvent(self, event: QEvent) -> None:
         self.setStyleSheet("")

@@ -24,22 +24,25 @@ class PictographViewMouseEventHandler:
 
         if arrow:
             if self.pictograph_view.pictograph.selected_arrow == arrow:
-                # Clicked on the same arrow, deselect it
                 self.pictograph_view.pictograph.selected_arrow.setSelected(False)
                 self.pictograph_view.pictograph.selected_arrow = None
             else:
-                # Clicked on a different arrow, switch the selection
                 if self.pictograph_view.pictograph.selected_arrow:
                     self.pictograph_view.pictograph.selected_arrow.setSelected(False)
                 self.pictograph_view.pictograph.selected_arrow = arrow
                 arrow.setSelected(True)
             self.pictograph.update()
         else:
-            # Clicked on an empty space, deselect any selected arrow
             if self.pictograph_view.pictograph.selected_arrow:
                 self.pictograph_view.pictograph.selected_arrow.setSelected(False)
                 self.pictograph_view.pictograph.selected_arrow = None
             self.pictograph.update()
+
+    def is_arrow_under_cursor(self, event: "QMouseEvent") -> bool:
+        widget_pos = event.pos()
+        scene_pos = self.pictograph_view.mapToScene(widget_pos)
+        items_at_pos = self.pictograph_view.scene().items(scene_pos)
+        return any(isinstance(item, Arrow) for item in items_at_pos)
 
     def clear_selections(self) -> None:
         for arrow in self.pictograph.arrows.values():

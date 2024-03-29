@@ -6,8 +6,8 @@ from PyQt6.QtGui import QKeyEvent
 from widgets.sequence_widget.sequence_beat_frame.beat_deletion_manager import (
     BeatDeletionManager,
 )
-from widgets.sequence_widget.sequence_beat_frame.beat_selection_manager import (
-    SequenceBuilderBeatSelectionManager,
+from widgets.sequence_widget.sequence_beat_frame.beat_selection_overlay import (
+    SequenceWidgetBeatSelectionOverlay,
 )
 from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import StartPositionBeat
 from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
@@ -56,7 +56,7 @@ class SequenceWidgetBeatFrame(QFrame):
         self.beat_views.append(beat_view)
 
     def _setup_components(self, main_widget) -> None:
-        self.selection_manager = SequenceBuilderBeatSelectionManager(self)
+        self.selection_manager = SequenceWidgetBeatSelectionOverlay(self)
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(main_widget, self)
         self.beat_deletion_manager = BeatDeletionManager(self)
@@ -117,7 +117,6 @@ class SequenceWidgetBeatFrame(QFrame):
                         beat.updater.update_pictograph(entry)
                         QApplication.processEvents()
 
-        
     def update_start_pos_from_current_sequence_json(self, entry: dict) -> None:
         entry["red_attributes"]["start_ori"] = entry["red_attributes"]["end_ori"]
         entry["blue_attributes"]["start_ori"] = entry["blue_attributes"]["end_ori"]

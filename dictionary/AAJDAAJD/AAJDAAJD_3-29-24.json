@@ -32,8 +32,8 @@
             "prop_rot_dir": "ccw",
             "start_loc": "n",
             "end_loc": "w",
-            "turns": 0,
-            "end_ori": "in"
+            "turns": 1,
+            "end_ori": "out"
         }
     },
     {
@@ -53,12 +53,12 @@
         },
         "red_attributes": {
             "motion_type": "pro",
-            "start_ori": "in",
+            "start_ori": "out",
             "prop_rot_dir": "cw",
             "start_loc": "w",
             "end_loc": "n",
             "turns": 1,
-            "end_ori": "out"
+            "end_ori": "in"
         }
     },
     {
@@ -78,12 +78,12 @@
         },
         "red_attributes": {
             "motion_type": "pro",
-            "start_ori": "out",
+            "start_ori": "in",
             "prop_rot_dir": "cw",
             "start_loc": "n",
             "end_loc": "e",
             "turns": 0,
-            "end_ori": "out"
+            "end_ori": "in"
         }
     },
     {
@@ -103,12 +103,12 @@
         },
         "red_attributes": {
             "motion_type": "pro",
-            "start_ori": "out",
+            "start_ori": "in",
             "prop_rot_dir": "cw",
             "start_loc": "e",
             "end_loc": "s",
             "turns": 2,
-            "end_ori": "out"
+            "end_ori": "in"
         }
     },
     {
@@ -128,12 +128,12 @@
         },
         "red_attributes": {
             "motion_type": "pro",
-            "start_ori": "out",
+            "start_ori": "in",
             "prop_rot_dir": "ccw",
             "start_loc": "s",
             "end_loc": "e",
             "turns": 0,
-            "end_ori": "out"
+            "end_ori": "in"
         }
     },
     {
@@ -153,12 +153,12 @@
         },
         "red_attributes": {
             "motion_type": "pro",
-            "start_ori": "out",
+            "start_ori": "in",
             "prop_rot_dir": "cw",
             "start_loc": "e",
             "end_loc": "s",
             "turns": 1,
-            "end_ori": "in"
+            "end_ori": "out"
         }
     },
     {
@@ -178,12 +178,12 @@
         },
         "red_attributes": {
             "motion_type": "pro",
-            "start_ori": "in",
+            "start_ori": "out",
             "prop_rot_dir": "cw",
             "start_loc": "s",
             "end_loc": "w",
             "turns": 0,
-            "end_ori": "in"
+            "end_ori": "out"
         }
     },
     {
@@ -203,12 +203,12 @@
         },
         "red_attributes": {
             "motion_type": "pro",
-            "start_ori": "in",
+            "start_ori": "out",
             "prop_rot_dir": "cw",
             "start_loc": "w",
             "end_loc": "n",
             "turns": 2,
-            "end_ori": "in"
+            "end_ori": "out"
         }
     }
 ]

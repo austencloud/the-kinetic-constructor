@@ -34,34 +34,34 @@ class OptionPickerSectionWidget(QGroupBox):
         self.turns_tab: TurnsTab = None
 
         # remove the default frame styles
-        
 
     def setup_components(self) -> None:
-        self._setup_layout()
         self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
         self.pictographs: dict[str, Pictograph] = {}
-        self.layout.addWidget(self.pictograph_frame)
-        self.pictograph_frame.setStyleSheet("QFrame {border: none;}")  # Add this line to remove the default frame styles
+        self.pictograph_frame.setStyleSheet("QFrame {border: none;}")
+        self._setup_header()
+        self._setup_layout()
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignVCenter)
         self.layout.setSpacing(0)
-        self.layout.setContentsMargins(0, 15, 0, 0)
-        self.setup_header()
-        # self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-
-    def setup_header(self) -> None:
-        self.header = OptionPickerSectionHeader(self)
-        self.header.clicked.connect(self.toggle_section)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.header)
+        self.layout.addWidget(self.pictograph_frame)
+        # add stretch to the bottom of the layout
+        # self.layout.addStretch(1)
+
+    def _setup_header(self) -> None:
+        self.header = OptionPickerSectionHeader(self)
+        self.header.type_label.clicked.connect(self.toggle_section)
 
     def toggle_section(self) -> None:
         is_visible = not self.pictograph_frame.isVisible()
         self.pictograph_frame.setVisible(is_visible)
         if self.turns_tab:
             self.turns_tab.setVisible(is_visible)
-        self.header.toggle_dropdown_arrow(not is_visible)
 
     def reset_section(self, index: int) -> None:
         for pictograph in self.pictographs.values():
@@ -73,7 +73,7 @@ class OptionPickerSectionWidget(QGroupBox):
                 box.turns_widget.display_manager.update_turns_display("0")
                 box.prop_rot_dir_button_manager.hide_prop_rot_dir_buttons()
 
-    def clear_pictographs(self):
+    def clear_pictographs(self) -> None:
         for pictograph_key in list(self.pictographs.keys()):
             pictograph = self.pictographs.pop(pictograph_key)
             pictograph.view.setParent(None)
