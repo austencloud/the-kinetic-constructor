@@ -66,7 +66,6 @@ class SR_BeatFrame(QFrame):
 
     def _setup_components(self) -> None:
         self.selection_manager = SR_BeatSelectionManager(self)
-        self.beat_deletion_manager = BeatDeletionManager(self)
 
     def _setup_layout(self) -> None:
         self.layout: QGridLayout = QGridLayout(self)
@@ -77,15 +76,6 @@ class SR_BeatFrame(QFrame):
         self.layout.setAlignment(
             Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignCenter
         )
-
-    def keyPressEvent(self, event: "QKeyEvent") -> None:
-        if event.key() == Qt.Key.Key_Delete:
-            self.beat_deletion_manager.delete_selected_beat()
-        else:
-            super().keyPressEvent(event)
-
-    def delete_selected_beat(self) -> None:
-        self.beat_deletion_manager.delete_selected_beat()
 
     def _add_beat_to_layout(self, row: int, col: int) -> None:
         beat_view = BeatView(self)

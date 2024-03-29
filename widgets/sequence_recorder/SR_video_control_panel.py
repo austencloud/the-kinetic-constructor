@@ -24,7 +24,7 @@ class SR_VideoControlPanel(QFrame):
         self._setup_outline()
         self._init_ui()
 
-    def _setup_outline(self):
+    def _setup_outline(self) -> None:
         self.setObjectName("video_control_frame")
         self.setStyleSheet("#video_control_frame { border: 1px solid black; }")
 
@@ -33,7 +33,7 @@ class SR_VideoControlPanel(QFrame):
         self._setup_layout()
         self._populate_webcam_selector()
 
-    def _setup_layout(self):
+    def _setup_layout(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         for widget in self.video_controls:
@@ -44,7 +44,7 @@ class SR_VideoControlPanel(QFrame):
         self.play_button = QPushButton("Capture Frame")
         self.record_button = QPushButton(
             "Record",
-            clicked=self.capture_frame.video_display_frame.toggle_recording,
+            clicked=self.capture_frame.video_display_frame.start_recording,
         )
         self.save_button = QPushButton("Save Video")
         self.save_button.setEnabled(False)
@@ -54,7 +54,6 @@ class SR_VideoControlPanel(QFrame):
             self.record_button,
             self.save_button,
         ]
-
 
     def resize_video_control_frame(self) -> None:
         width = self.capture_frame.video_display_frame.width()
@@ -89,10 +88,8 @@ class SR_VideoControlPanel(QFrame):
     def _setup_controls(self) -> None:
         self.webcam_selector = QComboBox()
         self.play_button = QPushButton("Capture Frame")
-        self.record_button = QPushButton(
-            "Record",
-            clicked=self.capture_frame.video_display_frame.toggle_recording,
-        )
+
+        self.record_button = QPushButton("Record", clicked=self.toggle_all_recordings)
         self.save_button = QPushButton("Save Video")
         self.save_button.setEnabled(False)
         self.video_controls = [
@@ -101,6 +98,18 @@ class SR_VideoControlPanel(QFrame):
             self.record_button,
             self.save_button,
         ]
+
+    def toggle_all_recordings(self):
+        if not self.capture_frame.recording:
+            self.record_button.setText("Stop Recording")
+            self.capture_frame.start_recording()
+            self.capture_frame.video_display_frame.start_recording()
+            self.capture_frame.sequence_beat_frame.start_recording()
+        else:
+            self.capture_frame.stop_recording()
+            self.record_button.setText("Record")
+            self.capture_frame.video_display_frame.stop_recording()
+            self.capture_frame.sequence_beat_frame.stop_recording()
 
     def _populate_webcam_selector(self) -> None:
         self.webcam_selector.clear()
@@ -112,4 +121,3 @@ class SR_VideoControlPanel(QFrame):
         width = self.capture_frame.video_display_frame.width()
         self.setMinimumWidth(width)
         self.setMaximumWidth(width)
-

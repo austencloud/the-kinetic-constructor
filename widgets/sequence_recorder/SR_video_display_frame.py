@@ -38,7 +38,6 @@ class SR_VideoDisplayFrame(QFrame):
         layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
-        # self.init_webcam()
 
     def init_webcam(self) -> None:
         available_cameras = self.find_available_cameras()
@@ -92,22 +91,22 @@ class SR_VideoDisplayFrame(QFrame):
             p.scaled(self.video_display.size(), Qt.AspectRatioMode.KeepAspectRatio)
         )
 
-    def toggle_recording(self) -> None:
+    def start_recording(self) -> None:
         self.recording = not self.recording
         if self.recording:
             self.recording_frames = []
-            self.setStyleSheet("border: 2px solid red;")  # Visual indicator for recording
             QApplication.processEvents()  # Update UI
         else:
-            self.setStyleSheet("")  # Remove visual indicator when not recording
-            self.save_video()
+            self.stop_recording()
+
+    def stop_recording(self):
+        self.setStyleSheet("")
+        self.save_video()
 
     def save_video(self) -> None:
         if self.recording_frames:
-            # Use the first frame to determine the video size for saving
             height, width, _ = self.recording_frames[0].shape
 
-            # Define the codec and create VideoWriter object
             fourcc = cv2.VideoWriter_fourcc(*"XVID")
             out = cv2.VideoWriter(
                 "output.avi", fourcc, self.video_frame_rate, (width, height)

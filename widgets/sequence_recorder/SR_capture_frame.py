@@ -22,7 +22,9 @@ class SR_CaptureFrame(QFrame):
         self.sequence_recorder = sequence_recorder
         self.sequence_beat_frame = SR_BeatFrame(self)
         self.video_display_frame = SR_VideoDisplayFrame(self)
+        self.recording = False
         self._setup_layout()
+        
 
     def _setup_layout(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)

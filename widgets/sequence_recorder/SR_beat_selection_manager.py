@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 
 class SR_BeatSelectionManager(QWidget):
-    def __init__(self, beat_frame: "SR_BeatFrame"):
+    def __init__(self, beat_frame: "SR_BeatFrame") -> None:
         super().__init__(beat_frame)
         self.beat_frame = beat_frame
         self.selected_beat: Optional[BeatView] = None
@@ -41,17 +41,19 @@ class SR_BeatSelectionManager(QWidget):
 
         self.selected_metronome_sound = self.metronome_sounds["quartz"]
 
-    def move_selection(self):
-        self.selected_metronome_sound.play()
+    def reset_selection(self) -> None:
+        self.current_index = -1
+        self.deselect_beat()
+        self.move_selection()
 
-    def handle_media_error(self, error):
+    def handle_media_error(self, error) -> None:
         print(f"Error occurred: {error.errorString()}")
 
-    def set_bpm(self, bpm):
+    def set_bpm(self, bpm) -> None:
         milliseconds_per_beat = 60000 / bpm
         self.timer.start(int(milliseconds_per_beat))
 
-    def move_selection(self):
+    def move_selection(self) -> None:
         self.selected_metronome_sound.play()
 
         # Deselect the previous beat
@@ -77,13 +79,19 @@ class SR_BeatSelectionManager(QWidget):
         # Now select the beat at current_index
         self.select_beat(self.beat_frame.beat_views[self.current_index])
 
-    def set_metronome_sound(self, sound_name):
+    def set_metronome_sound(self, sound_name) -> None:
         if sound_name in self.metronome_sounds:
             self.selected_metronome_sound = self.metronome_sounds[sound_name]
         else:
             print("Selected metronome sound does not exist, retaining previous choice.")
 
-    def select_beat(self, beat_view: BeatView):
+    def get_current_bpm(self) -> Optional[int]:
+        if self.timer.isActive():
+            return 60000 / self.timer.interval()
+        else:
+            return None
+
+    def select_beat(self, beat_view: BeatView) -> None:
         if self.selected_beat == beat_view:
             return
         else:
@@ -122,13 +130,13 @@ class SR_BeatSelectionManager(QWidget):
             self.update_overlay_position()
             self.show()
 
-    def deselect_beat(self):
+    def deselect_beat(self) -> None:
         if self.selected_beat:
             self.selected_beat.deselect()
         self.selected_beat = None
         self.hide()
 
-    def update_overlay_position(self):
+    def update_overlay_position(self) -> None:
         if self.selected_beat:
             self.setGeometry(self.selected_beat.geometry())
             self.raise_()
@@ -137,17 +145,17 @@ class SR_BeatSelectionManager(QWidget):
     def get_selected_beat(self) -> Optional[BeatView]:
         return self.selected_beat
 
-    def start_selection_movement(self):
+    def start_selection_movement(self) -> None:
         # Assuming you've already set the BPM using set_bpm method
         # If not, you can set a default BPM here or ensure set_bpm is called before starting
         self.timer.start()
 
-    def stop_selection_movement(self):
+    def stop_selection_movement(self) -> None:
         self.timer.stop()
         # Optionally, you might want to deselect the current beat when stopping
         self.deselect_beat()
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         if not self.selected_beat:
             return
 
