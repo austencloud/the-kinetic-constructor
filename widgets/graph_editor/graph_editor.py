@@ -75,6 +75,6 @@ class GraphEditor(QFrame):
         self.GE_pictograph_container.resize_GE_pictograph_container()
         self.adjustment_panel.resize_GE_adjustment_panel()
 
-    def update_GE_pictgraph(self, pictograph: Pictograph) -> None:
+    def update_GE_pictograph(self, pictograph: Pictograph) -> None:
         self.GE_pictograph_view.set_scene(pictograph)
         self.GE_pictograph = pictograph

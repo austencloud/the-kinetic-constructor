@@ -23,7 +23,7 @@ class SR_CaptureFrame(QWidget):
         self.sequence_beat_frame = SR_BeatFrame(self)
         self.video_display_frame = SR_VideoDisplayFrame(self)
         self._setup_layout()
-        self.setStyleSheet("border: 1px solid black;")
+        # self.setStyleSheet("border: 1px solid black;")
 
     def _setup_layout(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)

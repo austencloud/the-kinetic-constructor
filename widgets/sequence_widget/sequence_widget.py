@@ -21,6 +21,7 @@ class SequenceWidget(QWidget):
         super().__init__()
         self.main_widget = main_widget
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        self.sequence_widget_pictograph_cache: dict[str, Beat] = {}
         self.indicator_label = IndicatorLabel(self)
         self.beat_frame = SequenceBuilderBeatFrame(self)
         self.sequence_modifier = SequenceModifier(self)
@@ -51,7 +52,7 @@ class SequenceWidget(QWidget):
                 pictograph_dict
             )
         )
-        self.main_widget.pictograph_cache[pictograph_key] = pictograph
+        self.sequence_widget_pictograph_cache[pictograph_key] = pictograph
 
     def resize_sequence_widget(self) -> None:
         self.my_sequence_label.resize_my_sequence_label()

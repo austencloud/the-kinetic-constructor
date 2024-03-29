@@ -1,28 +1,13 @@
-from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QHBoxLayout
-from PyQt6.QtCore import QTimer
+import random
+from PyQt6.QtWidgets import QWidget
+from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtGui import QPainter, QLinearGradient, QColor
 import math
 
-from widgets.main_builder_widget.builder_toolbar import BuilderToolbar
-from widgets.sequence_widget.sequence_widget import SequenceWidget
-
-if TYPE_CHECKING:
-    from widgets.main_widget.main_widget import MainWidget
-
 
 class TopBuilderWidget(QWidget):
-    def __init__(self, main_widget: "MainWidget"):
+    def __init__(self):
         super().__init__()
-        self.main_widget = main_widget
-
-        self.builder_toolbar = BuilderToolbar(self)
-        self.sequence_widget = SequenceWidget(self)
-
-        self.builder_layout = QHBoxLayout(self)
-        self.builder_layout.addWidget(self.sequence_widget, 1)
-        self.builder_layout.addWidget(self.builder_toolbar, 1)
-
         self.gradient_shift = 0
         self.color_shift = 0
         self.timer = QTimer(self)
@@ -52,3 +37,4 @@ class TopBuilderWidget(QWidget):
             gradient.setColorAt(clamped_pos, color)
 
         painter.fillRect(self.rect(), gradient)
+

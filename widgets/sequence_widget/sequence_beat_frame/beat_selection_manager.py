@@ -24,14 +24,6 @@ class SequenceBuilderBeatSelectionManager(QWidget):
         self.border_width = 4  # Adjust as needed
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         self.hide()
-        # Initialize the media player in the __init__ method:
-        self.click_sound_player = QMediaPlayer()
-        self.click_sound_path = "path/to/click_sound.mp3"  # Update this path
-
-    def move_selection(self):
-        # Play click sound
-        self.click_sound_player.setSource(QUrl.fromLocalFile(self.click_sound_path))
-        self.click_sound_player.play()
 
     def select_beat(self, beat_view: BeatView):
         if self.selected_beat == beat_view:
@@ -46,12 +38,11 @@ class SequenceBuilderBeatSelectionManager(QWidget):
             graph_editor = (
                 self.selected_beat.beat_frame.main_widget.sequence_widget.sequence_modifier.graph_editor
             )
-            graph_editor.update_GE_pictgraph(self.selected_beat.beat)
+            graph_editor.update_GE_pictograph(self.selected_beat.beat)
 
             graph_editor.adjustment_panel.update_turns_panel(blue_turns, red_turns)
             graph_editor.adjustment_panel.update_adjustment_panel()
 
-            # Set the orientations in the graph editor's orientation changer
             if isinstance(beat_view, StartPositionBeatView):
                 start_pos_pictograph = beat_view.beat
                 blue_start_pos_ori_picker = (

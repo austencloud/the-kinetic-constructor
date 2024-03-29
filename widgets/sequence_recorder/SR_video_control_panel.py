@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     )
 
 
-class SR_VideoControlFrame(QFrame):
+class SR_VideoControlPanel(QFrame):
     def __init__(self, control_frame: "SR_MainControlFrame") -> None:
         super().__init__(control_frame)
         self.control_frame = control_frame

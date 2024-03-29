@@ -35,6 +35,7 @@ class SR_BeatFrame(QFrame):
         self.current_sequence_json_handler = (
             self.main_widget.json_manager.current_sequence_json_handler
         )
+        self.pictograph_cache: dict[str, Beat] = {}
         self.beat_views: list[BeatView] = []
         self._setup_components()
         self._setup_layout()
@@ -150,4 +151,7 @@ class SR_BeatFrame(QFrame):
                     pictograph_dict
                 )
             )
-            self.main_widget.pictograph_cache[pictograph_key] = beat
+            self.pictograph_cache[pictograph_key] = beat
+
+        # for beat_view in self.beat_views:
+        #     beat_view.setFrameStyle(1)

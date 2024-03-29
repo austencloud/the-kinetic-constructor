@@ -6,11 +6,11 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from widgets.sequence_recorder.SR_beat_control_frame import (
-    SR_BeatControlFrame,
+from widgets.sequence_recorder.SR_beat_control_panel import (
+    SR_BeatControlPanel,
 )
-from widgets.sequence_recorder.SR_video_control_frame import (
-    SR_VideoControlFrame,
+from widgets.sequence_recorder.SR_video_control_panel import (
+    SR_VideoControlPanel,
 )
 
 if TYPE_CHECKING:
@@ -32,8 +32,8 @@ class SR_MainControlFrame(QWidget):
     def _setup_layout(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)
 
-        self.video_control_frame = SR_VideoControlFrame(self)
-        self.beat_control_frame = SR_BeatControlFrame(self)
+        self.video_control_frame = SR_VideoControlPanel(self)
+        self.beat_control_frame = SR_BeatControlPanel(self)
 
         self.layout.addWidget(self.beat_control_frame)
         self.layout.addWidget(self.video_control_frame)

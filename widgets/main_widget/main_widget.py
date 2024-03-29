@@ -13,7 +13,7 @@ from styles.get_tab_stylesheet import get_tab_stylesheet
 from widgets.factories.button_factory.button_factory import ButtonFactory
 from widgets.json_manager import JSON_Manager
 from widgets.letterbook.letterbook import LetterBook
-from widgets.main_widget.top_level_builder_widget import TopLevelBuilderWidget
+from widgets.main_widget.top_builder_widget import TopBuilderWidget
 
 from widgets.main_widget.letter_loader import LetterLoader
 from widgets.menu_bar.preferences_dialog import PreferencesDialog
@@ -76,7 +76,7 @@ class MainWidget(QTabWidget):
         self.special_placement_loader = SpecialPlacementLoader(self)
         self._setup_special_placements()
 
-        self.top_level_builder_widget = TopLevelBuilderWidget()
+        self.top_level_builder_widget = TopBuilderWidget()
 
         builder_layout = QHBoxLayout(self.top_level_builder_widget)
         self.builder_toolbar = BuilderToolbar(self)
