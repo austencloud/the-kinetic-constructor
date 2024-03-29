@@ -81,15 +81,15 @@ class MainWidget(QTabWidget):
         builder_layout = QHBoxLayout(self.top_level_builder_widget)
         self.builder_toolbar = BuilderToolbar(self)
         self.sequence_widget = SequenceWidget(self)
-        self.letterbook = LetterBook(self)
+        # self.letterbook = LetterBook(self)
 
         builder_layout.addWidget(self.sequence_widget, 1)
         builder_layout.addWidget(self.builder_toolbar, 1)
 
         self.sequence_recorder = SequenceRecorder(self)
         self.addTab(self.top_level_builder_widget, "Builder")
-        self.addTab(self.sequence_recorder, "Recorder")
-        self.addTab(self.letterbook, "LetterBook")
+        # self.addTab(self.sequence_recorder, "Recorder")
+        # self.addTab(self.letterbook, "LetterBook")
 
     def _setup_special_placements(self) -> None:
         self.special_placements: dict[

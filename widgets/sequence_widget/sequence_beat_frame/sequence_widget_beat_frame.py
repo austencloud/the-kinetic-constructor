@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
 
 
-class SequenceBuilderBeatFrame(QFrame):
+class SequenceWidgetBeatFrame(QFrame):
     COLUMN_COUNT = 5
     ROW_COUNT = 4
 
@@ -38,12 +38,22 @@ class SequenceBuilderBeatFrame(QFrame):
         self._populate_beat_frame()
 
     def _populate_beat_frame(self) -> None:
+        # beat_number = 1
+
         for i in range(1, self.COLUMN_COUNT):
             self._add_beat_to_layout(0, i)
 
         for j in range(1, 4):
-            for i in range(1, self.COLUMN_COUNT):
+            for i in range(
+                1,
+                self.COLUMN_COUNT,
+            ):
                 self._add_beat_to_layout(j, i)
+
+    def _add_beat_to_layout(self, row: int, col: int, number=None) -> None:
+        beat_view = BeatView(self, number)
+        self.layout.addWidget(beat_view, row, col)
+        self.beat_views.append(beat_view)
 
     def _setup_components(self, main_widget) -> None:
         self.selection_manager = SequenceBuilderBeatSelectionManager(self)
@@ -68,11 +78,6 @@ class SequenceBuilderBeatFrame(QFrame):
 
     def delete_selected_beat(self) -> None:
         self.beat_deletion_manager.delete_selected_beat()
-
-    def _add_beat_to_layout(self, row: int, col: int) -> None:
-        beat_view = BeatView(self)
-        self.layout.addWidget(beat_view, row, col)
-        self.beat_views.append(beat_view)
 
     def add_scene_to_sequence(self, new_beat: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()

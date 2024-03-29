@@ -25,7 +25,6 @@ class SR_VideoDisplayFrame(QFrame):
         self.capture = None
         self.recording = False
         self.recording_frames = []
-        self.video_frame_rate = 30  # Adjust frame rate as needed
         self.video_writer = None
         self.init_ui()
 
@@ -48,10 +47,8 @@ class SR_VideoDisplayFrame(QFrame):
                     self, "Webcam Error", "Unable to access the webcam."
                 )
                 return
-            # Set to the maximum resolution
             self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
             self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
-            # Query the actual frame rate
             self.video_frame_rate = self.capture.get(cv2.CAP_PROP_FPS)
 
             self.video_timer = QTimer(self)
@@ -80,7 +77,6 @@ class SR_VideoDisplayFrame(QFrame):
             self.display_frame(frame)
 
     def display_frame(self, frame) -> None:
-        # Crop the frame to a square
         h, w, _ = frame.shape
         startx = w // 2 - h // 2
         cropped_frame = frame[:, startx : startx + h]

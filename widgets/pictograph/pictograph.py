@@ -22,7 +22,7 @@ from objects.prop.prop import Prop
 from widgets.pictograph.components.elemental_glyph.elemental_glyph import ElementalGlyph
 from widgets.pictograph.components.tka_glyph.tka_glyph import TKA_Glyph
 from widgets.pictograph.components.vtg_glyph.vtg_glyph import VTG_Glyph
-from widgets.sequence_widget.sequence_beat_frame.pictograph_container import (
+from widgets.pictograph.components.pictograph_container import (
     PictographContainer,
 )
 

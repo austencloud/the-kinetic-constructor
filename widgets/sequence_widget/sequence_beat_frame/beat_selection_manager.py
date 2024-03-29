@@ -9,13 +9,13 @@ from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
 )
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.sequence_beat_frame.sequence_builder_beat_frame import (
-        SequenceBuilderBeatFrame,
+    from widgets.sequence_widget.sequence_beat_frame.sequence_widget_beat_frame import (
+        SequenceWidgetBeatFrame,
     )
 
 
 class SequenceBuilderBeatSelectionManager(QWidget):
-    def __init__(self, beat_frame: "SequenceBuilderBeatFrame"):
+    def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
         super().__init__(beat_frame)
         self.selected_beat: Optional[BeatView | StartPositionBeatView] = None
         self.border_color = QColor("gold")

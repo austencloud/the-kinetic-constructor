@@ -1,14 +1,14 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsView, QPushButton
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QIcon, QMouseEvent
+from PyQt6.QtWidgets import QGraphicsView, QPushButton, QGraphicsTextItem
+from PyQt6.QtCore import Qt, QPointF, QRect
+from PyQt6.QtGui import QIcon, QMouseEvent, QFont, QPaintEvent, QPainter, QColor
 from widgets.pictograph.pictograph import Pictograph
 
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
-    from widgets.sequence_widget.sequence_beat_frame.sequence_builder_beat_frame import (
-        SequenceBuilderBeatFrame,
+    from widgets.sequence_widget.sequence_beat_frame.sequence_widget_beat_frame import (
+        SequenceWidgetBeatFrame,
     )
 
 
@@ -20,13 +20,10 @@ class Beat(Pictograph):
 
 
 class BeatView(QGraphicsView):
-    original_style: str
-
-    def __init__(self, beat_frame: "SequenceBuilderBeatFrame") -> None:
+    def __init__(self, beat_frame: "SequenceWidgetBeatFrame", number=None):
         super().__init__(beat_frame)
-        self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.number = number  # Beat number to display
+        self._disable_scrollbars()
         self.beat_frame = beat_frame
         self.selection_manager = self.beat_frame.selection_manager
         self.beat: "Beat" = None
@@ -34,6 +31,10 @@ class BeatView(QGraphicsView):
         self.is_filled = False
         self.is_selected = False
         self.setContentsMargins(0, 0, 0, 0)
+
+    def _disable_scrollbars(self) -> None:
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
     def set_pictograph(self, new_beat: "Beat") -> None:
         self.beat = new_beat
@@ -44,11 +45,6 @@ class BeatView(QGraphicsView):
         self.view_scale = view_width / self.beat.width()
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
-
-    def create_button(self, icon_path, action) -> QPushButton:
-        button = QPushButton(QIcon(icon_path), "", self)
-        button.clicked.connect(action)
-        return button
 
     def clear(self):
         self.setScene(None)
@@ -64,9 +60,21 @@ class BeatView(QGraphicsView):
         if event.button() == Qt.MouseButton.LeftButton and self.is_filled:
             self.selection_manager.select_beat(self)
 
-    def paintEvent(self, event) -> None:
-        super().paintEvent(event)
-
     def deselect(self) -> None:
         self.is_selected = False
         self.update()
+
+    # in the paint event, place the number at the top left of the beat view using QPainter
+    def paintEvent(self, event: QPaintEvent):
+        super().paintEvent(event)
+        if self.number is not None:
+            painter = QPainter(self.viewport())
+            painter.setPen(QColor(0, 0, 0))
+            painter.setFont(QFont("Georgia", 20, QFont.Weight.Bold))
+            painter.drawText(QRect(0, 0, 50, 50), Qt.AlignmentFlag.AlignLeft, str(self.number))
+            painter.end()
+        if self.is_selected:
+            painter = QPainter(self.viewport())
+            painter.setPen(QColor(0, 0, 0))
+            painter.drawRect(0, 0, self.width() - 1, self.height() - 1)
+            painter.end()

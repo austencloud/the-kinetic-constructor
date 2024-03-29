@@ -12,13 +12,13 @@ from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.sequence_beat_frame.sequence_builder_beat_frame import (
-        SequenceBuilderBeatFrame,
+    from widgets.sequence_widget.sequence_beat_frame.sequence_widget_beat_frame import (
+        SequenceWidgetBeatFrame,
     )
 
 
 class BeatDeletionManager:
-    def __init__(self, sequence_builder_beat_frame: "SequenceBuilderBeatFrame") -> None:
+    def __init__(self, sequence_builder_beat_frame: "SequenceWidgetBeatFrame") -> None:
         self.beat_frame = sequence_builder_beat_frame
         self.beats = sequence_builder_beat_frame.beat_views
         self.sequence_builder = (

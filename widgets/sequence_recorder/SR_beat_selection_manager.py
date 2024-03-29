@@ -77,7 +77,10 @@ class SR_BeatSelectionManager(QWidget):
             self.current_index = next_index
 
         # Now select the beat at current_index
-        self.select_beat(self.beat_frame.beat_views[self.current_index])
+        
+        current_beat = self.beat_frame.beat_views[self.current_index]
+        if current_beat.scene():
+            self.select_beat(current_beat)
 
     def set_metronome_sound(self, sound_name) -> None:
         if sound_name in self.metronome_sounds:
