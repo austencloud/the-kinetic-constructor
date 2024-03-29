@@ -12,7 +12,6 @@ from path_helpers import get_images_and_data_path
 from styles.get_tab_stylesheet import get_tab_stylesheet
 from widgets.factories.button_factory.button_factory import ButtonFactory
 from widgets.json_manager import JSON_Manager
-from widgets.letterbook.letterbook import LetterBook
 from widgets.main_widget.top_builder_widget import TopBuilderWidget
 
 from widgets.main_widget.letter_loader import LetterLoader

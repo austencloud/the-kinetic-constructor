@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING, Optional
 from Enums.letters import Letter
 from constants import IN, OUT, STATIC, DASH
-from PyQt6.QtCore import Qt
 from objects.arrow.arrow import Arrow
 from widgets.pictograph.components.wasd_adjustment_manager.rotation_angle_override_key_generator import (
     RotationAngleOverrideKeyGenerator,

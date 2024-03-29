@@ -1,8 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLabel, QSizePolicy, QFrame
-from PyQt6.QtCore import pyqtSignal, Qt
-from PyQt6.QtGui import QPixmap
-from path_helpers import get_images_and_data_path
+from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from widgets.scroll_area.components.section_manager.section_widget.components.section_type_label import (
     SectionTypeLabel,
 )

@@ -2,15 +2,11 @@ from typing import TYPE_CHECKING
 from Enums.Enums import VTG_Directions
 
 from constants import (
-    BLUE,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     DASH,
     ICON_DIR,
-    OPP,
     PROP_ROT_DIR,
-    RED,
-    SAME,
     STATIC,
 )
 from Enums.MotionAttributes import (

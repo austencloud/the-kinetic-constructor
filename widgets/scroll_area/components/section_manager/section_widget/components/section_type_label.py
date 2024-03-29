@@ -1,4 +1,3 @@
-from tkinter import font
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QEnterEvent
 from PyQt6.QtWidgets import QLabel

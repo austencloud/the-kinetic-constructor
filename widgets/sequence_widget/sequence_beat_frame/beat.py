@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsView, QPushButton, QGraphicsTextItem
-from PyQt6.QtCore import Qt, QPointF, QRect
-from PyQt6.QtGui import QIcon, QMouseEvent, QFont, QPaintEvent, QPainter, QColor
+from PyQt6.QtWidgets import QGraphicsView
+from PyQt6.QtCore import Qt, QRect
+from PyQt6.QtGui import QMouseEvent, QFont, QPaintEvent, QPainter, QColor
 from widgets.pictograph.pictograph import Pictograph
 
 

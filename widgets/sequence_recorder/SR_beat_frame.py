@@ -2,14 +2,11 @@ from typing import TYPE_CHECKING
 
 from PyQt6.QtWidgets import QGridLayout, QFrame, QApplication
 from PyQt6.QtCore import Qt, QTimer
-from PyQt6.QtGui import QKeyEvent, QPixmap, QImage
+from PyQt6.QtGui import QPixmap, QImage
 import cv2
 import numpy as np
 from widgets.sequence_recorder.SR_beat_selection_manager import (
     SR_BeatSelectionManager,
-)
-from widgets.sequence_widget.sequence_beat_frame.beat_deletion_manager import (
-    BeatDeletionManager,
 )
 
 from widgets.pictograph.pictograph import Pictograph
