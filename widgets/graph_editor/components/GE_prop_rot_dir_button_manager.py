@@ -2,12 +2,14 @@ from typing import TYPE_CHECKING
 from Enums.Enums import VTG_Directions
 
 from constants import (
+    BLUE,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     DASH,
     ICON_DIR,
     OPP,
     PROP_ROT_DIR,
+    RED,
     SAME,
     STATIC,
 )
@@ -17,6 +19,7 @@ from Enums.MotionAttributes import (
 from PyQt6.QtCore import QSize
 
 
+from path_helpers import get_images_and_data_path
 from widgets.factories.button_factory.buttons.rot_dir_buttons import (
     PropRotDirButton,
 )
@@ -37,13 +40,15 @@ class GE_PropRotDirButtonManager:
         button_factory = (
             self.turns_box.adjustment_panel.graph_editor.main_widget.button_factory
         )
+        cw_path = get_images_and_data_path(f"{ICON_DIR}clock/clockwise.png")
+        ccw_path = get_images_and_data_path(f"{ICON_DIR}clock/counter_clockwise.png")
         self.cw_button: PropRotDirButton = button_factory.create_prop_rot_dir_button(
-            f"{ICON_DIR}clock/clockwise.png",
+            cw_path,
             lambda: self._set_prop_rot_dir(CLOCKWISE),
             CLOCKWISE,
         )
         self.ccw_button: PropRotDirButton = button_factory.create_prop_rot_dir_button(
-            f"{ICON_DIR}clock/counter_clockwise.png",
+            ccw_path,
             lambda: self._set_prop_rot_dir(COUNTER_CLOCKWISE),
             COUNTER_CLOCKWISE,
         )
@@ -57,22 +62,6 @@ class GE_PropRotDirButtonManager:
         self._update_pictographs_prop_rot_dir(prop_rot_dir)
         self._update_button_states(self.prop_rot_dir_buttons, prop_rot_dir)
 
-    def _update_pictographs_vtg_dir(self, vtg_dir: VTG_Directions) -> None:
-        pictograph = self.turns_box.graph_editor.GE_pictograph
-        for motion in pictograph.motions.values():
-            other_motion = pictograph.motions[RED if motion.color == BLUE else BLUE]
-            if motion.check.is_dash() or motion.check.is_static():
-                if other_motion.check.is_shift():
-                    if motion.color == self.turns_box.color:
-                        if vtg_dir == SAME:
-                            self._update_pictograph_vtg_dir(
-                                motion, other_motion.prop_rot_dir
-                            )
-                        elif vtg_dir == OPP:
-                            self._update_pictograph_vtg_dir(
-                                motion,
-                                self._opposite_prop_rot_dir(other_motion.prop_rot_dir),
-                            )
 
     def _update_pictographs_prop_rot_dir(self, prop_rot_dir: PropRotDir) -> None:
         pictograph = self.turns_box.graph_editor.GE_pictograph

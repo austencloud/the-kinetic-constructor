@@ -68,13 +68,13 @@ class OptionPickerSectionsManager:
                         correct_index = self.get_correct_index_for_section(
                             grouped_sections[0]
                         )
-                        self.scroll_area.add_widget_to_layout(
+                        self.scroll_area.add_section_to_layout(
                             group_widget, correct_index
                         )
                     group_widget.add_section_widget(section)
                 else:
                     correct_index = self.get_correct_index_for_section(section_type)
-                    self.scroll_area.add_widget_to_layout(section, correct_index)
+                    self.scroll_area.add_section_to_layout(section, correct_index)
 
     def get_correct_index_for_section(self, letter_type: LetterType) -> int:
         desired_position = self.SECTION_ORDER.index(letter_type)
@@ -99,12 +99,6 @@ class OptionPickerSectionsManager:
             if letter_str in letter_type.value[0]:
                 return letter_type
         return "Unknown"
-
-    def create_or_get_filter_tab(self, section: OptionPickerSectionWidget) -> TurnsTab:
-        if not section.turns_tab:
-            section.turns_tab = TurnsTab(section)
-            section.layout.insertWidget(1, section.turns_tab)
-        return section.turns_tab
 
     def show_all_sections(self) -> None:
         if not self.initialized:

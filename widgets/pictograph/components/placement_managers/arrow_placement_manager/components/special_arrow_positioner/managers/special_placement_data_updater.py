@@ -145,8 +145,8 @@ class SpecialPlacementDataUpdater:
         logging.info(
             f"Updated {letter.value} in {ori_key} at {turns_tuple} with adjustment {adjustment}. Current values: {letter_data.get(turns_tuple)}"
         )
-
     def update_specific_entry_in_json(
+
         self, letter: Letter, letter_data: dict, ori_key
     ) -> None:
         try:

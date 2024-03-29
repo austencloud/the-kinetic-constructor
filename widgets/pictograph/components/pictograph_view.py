@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QSizePolicy
 from PyQt6.QtCore import Qt, QEvent, QTimer
-from PyQt6.QtGui import QMouseEvent
+from PyQt6.QtGui import QMouseEvent, QCursor
 
 from widgets.pictograph.components.pictograph_context_menu_handler import (
     PictographContextMenuHandler,
@@ -67,34 +67,26 @@ class PictographView(QGraphicsView):
         if self.pictograph.scroll_area:
             self.pictograph.scroll_area.wheelEvent(event)
 
-    def enterEvent(self, event: QEvent) -> None:
-        self.pictograph.container.styled_border_overlay.set_gold_border()
-
-    def leaveEvent(self, event: QEvent) -> None:
-        self.setStyleSheet("")
-        self.pictograph.container.styled_border_overlay.reset_border()
-
     def keyPressEvent(self, event) -> None:
         shift_held = event.modifiers() & Qt.KeyboardModifier.ShiftModifier
         ctrl_held = event.modifiers() & Qt.KeyboardModifier.ControlModifier
+        wasd_manager = self.pictograph.wasd_manager
 
         if event.key() in [Qt.Key.Key_W, Qt.Key.Key_A, Qt.Key.Key_S, Qt.Key.Key_D]:
-            self.pictograph.wasd_manager.movement_manager.handle_arrow_movement(
+            wasd_manager.movement_manager.handle_arrow_movement(
                 self.pictograph, event.key(), shift_held, ctrl_held
             )
 
         elif event.key() == Qt.Key.Key_X:
-            self.pictograph.wasd_manager.rotation_angle_override_manager.handle_rotation_angle_override(
-                event.key()
-            )
+            wasd_manager.rotation_angle_override_manager.handle_rotation_angle_override()
         elif event.key() == Qt.Key.Key_Z:
-            self.pictograph.wasd_manager.handle_special_placement_removal()
+            wasd_manager.handle_special_placement_removal()
 
         elif event.key() == Qt.Key.Key_Q or event.key() == Qt.Key.Key_F5:
             self.pictograph.main_widget.special_placement_loader.refresh_placements()
 
         elif event.key() == Qt.Key.Key_C:
-            self.pictograph.wasd_manager.prop_placement_override_manager.handle_prop_placement_override(
+            wasd_manager.prop_placement_override_manager.handle_prop_placement_override(
                 event.key()
             )
         else:
@@ -125,3 +117,12 @@ class PictographView(QGraphicsView):
             return
         elif event.button() == Qt.MouseButton.LeftButton:
             self.mouse_event_handler.handle_mouse_press(event)
+
+    def enterEvent(self, event: QEvent) -> None:
+        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.pictograph.container.styled_border_overlay.set_gold_border()
+
+    def leaveEvent(self, event: QEvent) -> None:
+        self.setStyleSheet("")
+        self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
+        self.pictograph.container.styled_border_overlay.reset_border()

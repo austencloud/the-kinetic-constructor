@@ -78,3 +78,11 @@ class BeatView(QGraphicsView):
             painter.setPen(QColor(0, 0, 0))
             painter.drawRect(0, 0, self.width() - 1, self.height() - 1)
             painter.end()
+            
+
+    def enterEvent(self, event):
+        if self.scene() is not None:
+            self.setCursor(Qt.CursorShape.PointingHandCursor)
+        
+    def leaveEvent(self, event):
+        self.setCursor(Qt.CursorShape.ArrowCursor)

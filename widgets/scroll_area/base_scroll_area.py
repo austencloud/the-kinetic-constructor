@@ -45,22 +45,23 @@ class BasePictographScrollArea(QScrollArea):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
+        # setup group widget section at the bottom
 
-    def clear_layout(self):
+    def clear_pictographs(self):
         if self.layout:
             while self.layout.count():
                 child = self.layout.takeAt(0)
                 if child.widget():
                     child.widget().hide()
 
-    def add_widget_to_layout(self, widget: QWidget, section_index: int = None):
+    def add_section_to_layout(self, section: QWidget, section_index: int = None):
         if section_index == 0 or section_index:  # widget is a section
-            if widget.__class__.__name__ == "OptionPickerSectionWidget":
-                if widget.letter_type == LetterType.Type1:
-                    self.layout.insertWidget(section_index, widget, 7)
+            if section.__class__.__name__ == "OptionPickerSectionWidget":
+                if section.letter_type == LetterType.Type1:
+                    self.layout.insertWidget(section_index, section, 6)
                 else:
-                    self.layout.insertWidget(section_index, widget, 5)
-            elif widget.__class__.__name__ == "SectionGroupWidget":
-                self.layout.insertWidget(section_index, widget)
-        else:  # widget is a start pos pictograph
-            self.layout.addWidget(widget)
+                    self.layout.insertWidget(section_index, section, 4)
+            elif section.__class__.__name__ == "SectionGroupWidget":
+                self.layout.insertWidget(
+                    section_index, section, 4
+                )  # Set stretch factor to 4 for group widgets

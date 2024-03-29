@@ -10,20 +10,18 @@ from constants import DASH, STATIC
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
+
 class MirroredEntryRotAngleManager:
     def __init__(self, manager: "SpecialPlacementMirroredEntryManager"):
         self.manager = manager
 
-
     def update_rotation_angle_in_mirrored_entry(
         self, arrow: Arrow, updated_turn_data: dict
-    ):
+    ) -> None:
         if not self._should_handle_rotation_angle(arrow):
             return
 
-        rot_angle_override = self._check_for_rotation_angle_override(
-            updated_turn_data
-        )
+        rot_angle_override = self._check_for_rotation_angle_override(updated_turn_data)
         if rot_angle_override is None:
             return
 
@@ -32,9 +30,6 @@ class MirroredEntryRotAngleManager:
         other_ori_key, other_letter_data = (
             self.manager.data_prep.get_keys_for_mixed_start_ori(letter, ori_key)
         )
-        
-        logging.debug(f"other_ori_key: {other_ori_key}")
-        logging.debug(f"other_letter_data: {other_letter_data}")
 
         mirrored_turns_tuple = (
             self.manager.turns_tuple_generator.generate_mirrored_tuple(arrow)

@@ -139,8 +139,8 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             self.display_manager.COLUMN_COUNT += 1
         self.display_manager.order_and_display_pictographs()
 
-    def clear_layout(self):
-        """Clears all widgets from the layout."""
+    def clear_pictographs(self):
+        """Clears all pictographs from the layout."""
         while self.layout.count():
             item = self.layout.takeAt(0)
             if item.widget():

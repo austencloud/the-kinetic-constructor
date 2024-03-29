@@ -34,6 +34,7 @@ class PictographUpdater:
                 self.pictograph.container.update_borders()
             else:
                 self._update_from_pictograph_dict(pictograph_dict)
+                self.pictograph.turns_tuple = self.pictograph.get.turns_tuple()
 
         self.pictograph.tka_glyph.update_tka_glyph()  # keep this to update turns
         self._position_objects()

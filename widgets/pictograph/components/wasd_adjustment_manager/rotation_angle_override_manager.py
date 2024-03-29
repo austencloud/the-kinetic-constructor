@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING, Optional
+from Enums.letters import Letter
 from constants import IN, OUT, STATIC, DASH
 from PyQt6.QtCore import Qt
 from objects.arrow.arrow import Arrow
@@ -29,7 +30,7 @@ class RotationAngleOverrideManager:
         self.turns_tuple_generator = self.pictograph.main_widget.turns_tuple_generator
         self.key_generator = RotationAngleOverrideKeyGenerator(self)
 
-    def handle_rotation_angle_override(self, key: Qt.Key) -> None:
+    def handle_rotation_angle_override(self) -> None:
         if not self._is_valid_for_override():
             return
 
@@ -44,6 +45,7 @@ class RotationAngleOverrideManager:
         QApplication.processEvents()
         visible_pictographs = self.get_visible_pictographs()
         for pictograph in visible_pictographs:
+            pictograph.updater.update_pictograph()
             pictograph.arrow_placement_manager.update_arrow_placements()
 
     def get_visible_pictographs(self) -> list["Pictograph"]:
@@ -69,13 +71,13 @@ class RotationAngleOverrideManager:
 
     def _apply_rotation_override(
         self,
-        letter: str,
+        letter: Letter,
         data: dict,
         ori_key: str,
         turns_tuple: str,
         rot_angle_key: str,
     ) -> None:
-        letter_data = data[ori_key].get(letter, {})
+        letter_data = data[ori_key].get(letter.value, {})
         turn_data = letter_data.get(turns_tuple, {})
 
         letter_data[turns_tuple] = turn_data
@@ -93,7 +95,7 @@ class RotationAngleOverrideManager:
 
     def handle_mirrored_rotation_angle_override(
         self, other_letter_data, rotation_angle_override, mirrored_turns_tuple
-    ):
+    ) -> None:
         rot_angle_key = self.key_generator.generate_rotation_angle_override_key()
         if mirrored_turns_tuple not in other_letter_data:
             other_letter_data[mirrored_turns_tuple] = {}

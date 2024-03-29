@@ -63,8 +63,7 @@ class OptionPickerSectionHeader(QWidget):
         middle_layout = QHBoxLayout(self.middle_frame)
         middle_layout.setContentsMargins(0, 0, 0, 0)
         middle_layout.addWidget(self.type_label)
-        middle_layout.addStretch(2)
-        middle_layout.addWidget(self.arrow_label)
+
 
     def _set_frame_sizes(self) -> None:
         button_size = self.section.scroll_area.width() // 30

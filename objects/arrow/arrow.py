@@ -50,12 +50,3 @@ class Arrow(GraphicalObject):
         self.attr_manager = ArrowAttrHandler(self)
         self.updater = ArrowUpdater(self)
         self.initialized = True
-        # self.setFlag(self.GraphicsItemFlag.ItemIsSelectable, True)
-
-    ### MOUSE EVENTS ###
-
-    # def mousePressEvent(self, event) -> None:
-    #     self.mouse_event_handler.handle_mouse_press(event)
-
-    # def mouseReleaseEvent(self, event) -> None:
-    #     self.mouse_event_handler.handle_mouse_release(event)

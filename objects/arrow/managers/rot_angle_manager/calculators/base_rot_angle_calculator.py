@@ -34,7 +34,7 @@ class BaseRotAngleCalculator(ABC):
             self.arrow.pictograph.main_widget.special_placement_loader.special_placements
         )
         ori_key = self.data_updater.get_ori_key(self.arrow.motion)
-        letter = self.arrow.pictograph.letter
+        letter = self.arrow.pictograph.letter.value
 
         letter_data = special_placements.get(ori_key, {}).get(letter, {})
         

@@ -33,21 +33,23 @@ class OptionPickerSectionWidget(QGroupBox):
         self.vtg_dir_btn_state: dict[str, bool] = {SAME: False, OPP: False}
         self.turns_tab: TurnsTab = None
 
+        # remove the default frame styles
+        
+
     def setup_components(self) -> None:
         self._setup_layout()
         self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
         self.pictographs: dict[str, Pictograph] = {}
         self.layout.addWidget(self.pictograph_frame)
-        self.setStyleSheet("QGroupBox {border: 1px solid black;}")
+        self.pictograph_frame.setStyleSheet("QFrame {border: none;}")  # Add this line to remove the default frame styles
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-        
+
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 15, 0, 0)
         self.setup_header()
-        self.setAlignment(Qt.AlignmentFlag.AlignTop)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        # self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
     def setup_header(self) -> None:
         self.header = OptionPickerSectionHeader(self)
