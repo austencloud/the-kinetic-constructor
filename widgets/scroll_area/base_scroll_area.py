@@ -47,13 +47,6 @@ class BasePictographScrollArea(QScrollArea):
         self.layout.setSpacing(0)
         # setup group widget section at the bottom
 
-    def clear_pictographs(self):
-        if self.layout:
-            while self.layout.count():
-                child = self.layout.takeAt(0)
-                if child.widget():
-                    child.widget().hide()
-
     def add_section_to_layout(self, section: QWidget, section_index: int = None):
         if section_index == 0 or section_index:  # widget is a section
             if section.__class__.__name__ == "OptionPickerSectionWidget":

@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Union
-from PyQt6.QtCore import QObject
+from PyQt6.QtCore import QObject, Qt
 from PyQt6.QtWidgets import QApplication
 from Enums.Enums import Turns
 
@@ -32,6 +32,9 @@ class GE_TurnsAdjustmentManager(QObject):
         self.turns_adjusted.connect(self.beat_frame.on_beat_adjusted)
 
     def adjust_turns(self, adjustment: Union[int, float]) -> None:
+        #disable the mouse
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        
         self.pictograph = self.graph_editor.GE_pictograph_view.get_current_pictograph()
         new_turns = self._get_turns()
         new_turns = self._clamp_turns(new_turns + adjustment)
@@ -50,7 +53,8 @@ class GE_TurnsAdjustmentManager(QObject):
         self.json_validation_engine.run()
         self.main_widget.builder_toolbar.sequence_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
-
+        QApplication.restoreOverrideCursor()
+        
     def direct_set_turns(self, new_turns: Turns) -> None:
         self.pictograph = self.graph_editor.GE_pictograph_view.get_current_pictograph()
         self._update_motion_properties(new_turns)

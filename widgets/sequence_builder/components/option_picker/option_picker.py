@@ -49,5 +49,5 @@ class OptionPicker(QWidget):
         if sequence:
             next_options: dict = self.option_manager.get_next_options(sequence)
             self.scroll_area._hide_all_pictographs()
-            self.scroll_area._add_and_display_relevant_pictographs(next_options)
+            self.scroll_area.add_and_display_relevant_pictographs(next_options)
         self.choose_your_next_option_label.set_stylesheet()

@@ -57,7 +57,11 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.layout.addStretch(1)
         self.stretch_index = self.layout.count()
 
-    def _add_and_display_relevant_pictographs(self, next_options: list[dict]) -> None:
+    def remove_irrelevant_pictographs(self):
+        for pictograph in self.pictograph_cache.values():
+            pictograph.view.hide()
+
+    def add_and_display_relevant_pictographs(self, next_options: list[dict]) -> None:
         # if the cursor isn't already overridden, override it
         if QApplication.overrideCursor() is None:
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
@@ -138,10 +142,3 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         elif not increase and current_size < MAX_COLUMN_COUNT:
             self.display_manager.COLUMN_COUNT += 1
         self.display_manager.order_and_display_pictographs()
-
-    def clear_pictographs(self):
-        """Clears all pictographs from the layout."""
-        while self.layout.count():
-            item = self.layout.takeAt(0)
-            if item.widget():
-                item.widget().hide()

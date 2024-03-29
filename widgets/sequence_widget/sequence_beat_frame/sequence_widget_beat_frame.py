@@ -116,7 +116,9 @@ class SequenceWidgetBeatFrame(QFrame):
                     if beat.pictograph_dict != entry:
                         beat.updater.update_pictograph(entry)
                         QApplication.processEvents()
-
+        # re enable the mouse
+        # QApplication.restoreOverrideCursor()
+        
     def update_start_pos_from_current_sequence_json(self, entry: dict) -> None:
         entry["red_attributes"]["start_ori"] = entry["red_attributes"]["end_ori"]
         entry["blue_attributes"]["start_ori"] = entry["blue_attributes"]["end_ori"]

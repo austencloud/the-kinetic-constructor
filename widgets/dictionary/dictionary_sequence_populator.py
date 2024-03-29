@@ -50,16 +50,16 @@ class DictionarySequencePopulator:
             if pictograph_dict.get("sequence_start_position"):
                 continue
             self.sequence_widget.populate_sequence(pictograph_dict)
-            
+
         last_beat = self.sequence_widget.beat_frame.get_last_filled_beat().beat
         self.sequence_builder.current_pictograph = last_beat
         if self.sequence_builder.start_pos_picker.isVisible():
             self.sequence_builder.transition_to_sequence_building()
-        else:
-            #clear the option picker's pictographs
-            self.sequence_builder.option_picker.scroll_area.clear_pictographs()
-        sequence = self.json_handler.sequence
-        self.sequence_builder.option_picker.scroll_area._add_and_display_relevant_pictographs(
+        sequence = self.json_handler.load_current_sequence_json()
+
+        scroll_area = self.sequence_builder.option_picker.scroll_area
+        scroll_area.remove_irrelevant_pictographs()
+        scroll_area.add_and_display_relevant_pictographs(
             self.sequence_builder.option_picker.option_manager.get_next_options(
                 sequence
             )
