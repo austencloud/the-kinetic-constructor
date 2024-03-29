@@ -25,6 +25,7 @@ class SR_MainControlFrame(QWidget):
         self.sequence_recorder = sequence_recorder
         self.init_ui()
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.setStyleSheet("background-color: white;")
 
     def init_ui(self) -> None:
         self._setup_layout()

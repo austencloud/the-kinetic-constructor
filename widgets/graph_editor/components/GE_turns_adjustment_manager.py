@@ -48,7 +48,7 @@ class GE_TurnsAdjustmentManager(QObject):
         )
         QApplication.processEvents()
         self.json_validation_engine.run()
-        QApplication.processEvents()
+        self.main_widget.builder_toolbar.sequence_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
 
     def direct_set_turns(self, new_turns: Turns) -> None:

@@ -28,7 +28,7 @@ class SR_BeatControlPanel(QFrame):
         self.init_ui()
         self.setObjectName("SR_BeatControlPanel")
         self.setStyleSheet("#SR_BeatControlPanel { border: 1px solid black; }")
-
+        
     def init_ui(self) -> None:
         self._setup_bpm_slider()
         self._setup_metronome_sound_selector()
@@ -61,7 +61,7 @@ class SR_BeatControlPanel(QFrame):
             self.play_button.setText("Play")
             self.selection_manager.stop_selection_movement()
 
-    
+
 
     def _setup_metronome_sound_selector(self):
         self.metronome_sound_selector = QComboBox()
