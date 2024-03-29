@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSizePolicy
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSizePolicy, QFrame
 from PyQt6.QtCore import Qt
 
 from widgets.sequence_recorder.SR_beat_frame import (
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     )
 
 
-class SR_CaptureFrame(QWidget):
+class SR_CaptureFrame(QFrame):
     def __init__(self, sequence_recorder: "SequenceRecorder") -> None:
         super().__init__()
         self.main_widget = sequence_recorder.main_widget
@@ -23,7 +23,6 @@ class SR_CaptureFrame(QWidget):
         self.sequence_beat_frame = SR_BeatFrame(self)
         self.video_display_frame = SR_VideoDisplayFrame(self)
         self._setup_layout()
-        # self.setStyleSheet("border: 1px solid black;")
 
     def _setup_layout(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)

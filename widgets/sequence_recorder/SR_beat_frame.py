@@ -16,6 +16,7 @@ from widgets.sequence_widget.sequence_beat_frame.beat_selection_manager import (
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
+    from widgets.sequence_recorder.SR_capture_frame import SR_CaptureFrame
     from widgets.sequence_recorder.sequence_recorder import (
         SequenceRecorder,
     )
@@ -28,10 +29,10 @@ class SR_BeatFrame(QFrame):
     COLUMN_COUNT = 4
     ROW_COUNT = 4
 
-    def __init__(self, sequence_recorder: "SequenceRecorder") -> None:
+    def __init__(self, capture_frame: "SR_CaptureFrame") -> None:
         super().__init__()
-        self.sequence_recorder = sequence_recorder
-        self.main_widget: "MainWidget" = sequence_recorder.main_widget
+        self.capture_frame = capture_frame
+        self.main_widget: "MainWidget" = capture_frame.main_widget
         self.current_sequence_json_handler = (
             self.main_widget.json_manager.current_sequence_json_handler
         )

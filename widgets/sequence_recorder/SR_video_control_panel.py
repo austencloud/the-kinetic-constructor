@@ -23,14 +23,17 @@ class SR_VideoControlPanel(QFrame):
         super().__init__(control_frame)
         self.control_frame = control_frame
         self.capture_frame = self.control_frame.sequence_recorder.capture_frame
+        self._setup_outline()
+        self._init_ui()
+
+    def _setup_outline(self):
         self.setObjectName("video_control_frame")
         self.setStyleSheet("#video_control_frame { border: 1px solid black; }")
-        self.init_ui()
 
-    def init_ui(self) -> None:
+    def _init_ui(self) -> None:
         self._setup_controls()
         self._setup_layout()
-        self.populate_webcam_selector()
+        self._populate_webcam_selector()
 
     def _setup_layout(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)
@@ -54,11 +57,6 @@ class SR_VideoControlPanel(QFrame):
             self.save_button,
         ]
 
-    def populate_webcam_selector(self) -> None:
-        self.webcam_selector.clear()
-        devices = self.detect_available_cameras()
-        for index, name in devices.items():
-            self.webcam_selector.addItem(name, index)
 
     def resize_video_control_frame(self) -> None:
         width = self.capture_frame.video_display_frame.width()
@@ -68,10 +66,10 @@ class SR_VideoControlPanel(QFrame):
         self.setMinimumHeight(height)
         self.setMaximumHeight(height)
 
-    def init_ui(self) -> None:
+    def _init_ui(self) -> None:
         self._setup_controls()
         self._setup_layout()
-        self.populate_webcam_selector()
+        self._populate_webcam_selector()
 
     @staticmethod
     def detect_available_cameras() -> dict[int, str]:
@@ -106,7 +104,7 @@ class SR_VideoControlPanel(QFrame):
             self.save_button,
         ]
 
-    def populate_webcam_selector(self) -> None:
+    def _populate_webcam_selector(self) -> None:
         self.webcam_selector.clear()
         devices = self.detect_available_cameras()
         for index, name in devices.items():

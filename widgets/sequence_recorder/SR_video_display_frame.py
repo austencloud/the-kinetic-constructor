@@ -46,10 +46,14 @@ class SR_VideoDisplayFrame(QFrame):
         if available_cameras:
             self.capture = cv2.VideoCapture(available_cameras[0], cv2.CAP_MSMF)
             if not self.capture.isOpened():
-                QMessageBox.warning(
-                    self, "Webcam Error", "Unable to access the webcam."
-                )
+                QMessageBox.warning(self, "Webcam Error", "Unable to access the webcam.")
                 return
+            # Set to the maximum resolution
+            self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+            self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+            # Query the actual frame rate
+            self.video_frame_rate = self.capture.get(cv2.CAP_PROP_FPS)
+            
             self.video_timer = QTimer(self)
             self.video_timer.timeout.connect(self.update_video_feed)
             self.update_timer_interval()
@@ -95,17 +99,20 @@ class SR_VideoDisplayFrame(QFrame):
 
     def save_video(self) -> None:
         if self.recording_frames:
-            # Define the codec and create VideoWriter object
+            # Determine the aspect ratio based on the capture frame size
+            capture_frame_size = self.capture_frame.size()
+            aspect_ratio = capture_frame_size.width() / capture_frame_size.height()
+            video_height = 720  # Choose a base height
+            video_width = int(video_height * aspect_ratio)
+            
+            # Define the codec and create VideoWriter object with dynamic resolution
             fourcc = cv2.VideoWriter_fourcc(*"XVID")
-            out = cv2.VideoWriter(
-                "output.avi", fourcc, self.video_frame_rate, (640, 480)
-            )
+            out = cv2.VideoWriter("output.avi", fourcc, self.video_frame_rate, (video_width, video_height))
             for frame in self.recording_frames:
-                out.write(frame)
+                resized_frame = cv2.resize(frame, (video_width, video_height))
+                out.write(resized_frame)
             out.release()
-            QMessageBox.information(
-                self, "Recording Saved", "The video was saved successfully."
-            )
+            QMessageBox.information(self, "Recording Saved", "The video was saved successfully.")
         self.recording_frames = []  # Clear the frames after saving
 
     def closeEvent(self, event) -> None:
