@@ -48,14 +48,10 @@ class SequenceRecorderWidget(QWidget):
 
     def _setup_layout(self) -> None:
         capture_layout_hbox = QHBoxLayout()
-        capture_layout_hbox.addStretch(1)
         capture_layout_hbox.addWidget(self.capture_frame)
-        capture_layout_hbox.addStretch(1)
 
         video_control_hbox = QHBoxLayout()
-        video_control_hbox.addStretch(1)
         video_control_hbox.addWidget(self.video_control_frame)
-        video_control_hbox.addStretch(1)
 
         self.main_layout: QVBoxLayout = QVBoxLayout(self)
         self.main_layout.addLayout(capture_layout_hbox)

@@ -39,6 +39,5 @@ class SequenceRecorderCaptureFrame(QWidget):
         size = int(self.parentWidget().height() // 1.75)
         self.sequence_beat_frame.setFixedSize(size, size)
         self.sequence_beat_frame.resize_beat_frame()
-        self.video_display_frame.setFixedSize(size, size)
         self.video_display_frame.resize_video_display_frame()
         self.setFixedSize(size * 2, size)

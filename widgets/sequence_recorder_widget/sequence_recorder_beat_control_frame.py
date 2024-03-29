@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import (
     QSlider,
     QWidget,
     QVBoxLayout,
+    QFrame,
 )
 
 if TYPE_CHECKING:
@@ -13,7 +14,7 @@ if TYPE_CHECKING:
     )
 
 
-class SequenceRecorderBeatControlFrame(QWidget):
+class SequenceRecorderBeatControlFrame(QFrame):
     def __init__(self, control_frame: "SequenceRecorderMainControlFrame") -> None:
         super().__init__(control_frame)
         self.control_frame = control_frame
@@ -22,6 +23,7 @@ class SequenceRecorderBeatControlFrame(QWidget):
         self.beat_frame = self.capture_frame.sequence_beat_frame
         self.selection_manager = self.beat_frame.selection_manager
         self.init_ui()
+        self.setStyleSheet("border: 1px solid black;")
 
     def init_ui(self) -> None:
         self._setup_bpm_slider()
@@ -29,11 +31,13 @@ class SequenceRecorderBeatControlFrame(QWidget):
 
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.layout.addWidget(self.bpm_slider)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        self.layout.addWidget(self.bpm_slider)  # Add the frame to the layout
 
     def _setup_bpm_slider(self) -> None:
-        self.bpm_slider = QSlider(Qt.Orientation.Horizontal)
+        self.bpm_slider = QSlider(
+            Qt.Orientation.Horizontal
+        )  # Set the frame as the parent of the slider
         self.bpm_slider.setMinimum(60)
         self.bpm_slider.setMaximum(180)
         self.bpm_slider.valueChanged.connect(self.adjust_bpm)
@@ -42,6 +46,9 @@ class SequenceRecorderBeatControlFrame(QWidget):
         self.selection_manager.set_bpm(bpm)
 
     def resize_beat_control_frame(self) -> None:
-        width = self.control_frame.sequence_recorder_widget.capture_frame.width() // 2
+        width = self.beat_frame.width()
+        height = width // 4
         self.setMinimumWidth(width)
         self.setMaximumWidth(width)
+        self.setMinimumHeight(height)
+        self.setMaximumHeight(height)

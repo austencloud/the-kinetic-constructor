@@ -128,7 +128,7 @@ class SequenceRecorderBeatFrame(QFrame):
             view.setMinimumHeight(beat_view_size)
             view.setMaximumHeight(beat_view_size)
             view.resetTransform()
-
+    
     def clear_beat_frame(self) -> None:
         for beat_view in self.beat_views:
             beat_view.setScene(None)
@@ -149,4 +149,3 @@ class SequenceRecorderBeatFrame(QFrame):
                 )
             )
             self.main_widget.pictograph_cache[pictograph_key] = beat
-            # beat.view.fitInView(beat.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
