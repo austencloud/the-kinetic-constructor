@@ -13,17 +13,17 @@ from PyQt6.QtWidgets import (
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_recorder_widget.sequence_recorder_main_control_frame import (
-        SequenceRecorderMainControlFrame,
+    from widgets.sequence_recorder.SR_main_control_frame import (
+        SR_MainControlFrame,
     )
 
 
-class SequenceRecorderVideoControlFrame(QFrame):
-    def __init__(self, control_frame: "SequenceRecorderMainControlFrame") -> None:
+class SR_VideoControlFrame(QFrame):
+    def __init__(self, control_frame: "SR_MainControlFrame") -> None:
         super().__init__(control_frame)
         self.control_frame = control_frame
-        self.capture_frame = self.control_frame.sequence_recorder_widget.capture_frame
-        self.setObjectName("video_control_frame")  # Set object name for the frame
+        self.capture_frame = self.control_frame.sequence_recorder.capture_frame
+        self.setObjectName("video_control_frame")
         self.setStyleSheet("#video_control_frame { border: 1px solid black; }")
         self.init_ui()
 
@@ -67,7 +67,6 @@ class SequenceRecorderVideoControlFrame(QFrame):
         self.setMaximumWidth(width)
         self.setMinimumHeight(height)
         self.setMaximumHeight(height)
-
 
     def init_ui(self) -> None:
         self._setup_controls()

@@ -12,16 +12,16 @@ from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtGui import QImage, QPixmap, QFont
 
 if TYPE_CHECKING:
-    from widgets.sequence_recorder_widget.sequence_recorder_capture_frame import (
-        SequenceRecorderCaptureFrame,
+    from widgets.sequence_recorder.SR_capture_frame import (
+        SR_CaptureFrame,
     )
 
 
-class SequenceRecorderVideoDisplayFrame(QFrame):
-    def __init__(self, capture_frame: "SequenceRecorderCaptureFrame") -> None:
+class SR_VideoDisplayFrame(QFrame):
+    def __init__(self, capture_frame: "SR_CaptureFrame") -> None:
         super().__init__()
         self.capture_frame = capture_frame
-        self.sequence_recorder_widget = capture_frame.sequence_recorder_widget
+        self.sequence_recorder = capture_frame.sequence_recorder
 
         self.capture = None
         self.recording = False

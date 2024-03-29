@@ -9,17 +9,17 @@ from PyQt6.QtWidgets import (
 )
 
 if TYPE_CHECKING:
-    from widgets.sequence_recorder_widget.sequence_recorder_main_control_frame import (
-        SequenceRecorderMainControlFrame,
+    from widgets.sequence_recorder.SR_main_control_frame import (
+        SR_MainControlFrame,
     )
 
 
-class SequenceRecorderBeatControlFrame(QFrame):
-    def __init__(self, control_frame: "SequenceRecorderMainControlFrame") -> None:
+class SR_BeatControlFrame(QFrame):
+    def __init__(self, control_frame: "SR_MainControlFrame") -> None:
         super().__init__(control_frame)
         self.control_frame = control_frame
-        self.sequence_recorder_widget = self.control_frame.sequence_recorder_widget
-        self.capture_frame = self.sequence_recorder_widget.capture_frame
+        self.sequence_recorder = self.control_frame.sequence_recorder
+        self.capture_frame = self.sequence_recorder.capture_frame
         self.beat_frame = self.capture_frame.sequence_beat_frame
         self.selection_manager = self.beat_frame.selection_manager
         self.init_ui()

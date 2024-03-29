@@ -2,26 +2,26 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
 
-from widgets.sequence_recorder_widget.sequence_recorder_beat_frame import (
-    SequenceRecorderBeatFrame,
+from widgets.sequence_recorder.SR_beat_frame import (
+    SR_BeatFrame,
 )
-from widgets.sequence_recorder_widget.sequence_recorder_video_display_frame import (
-    SequenceRecorderVideoDisplayFrame,
+from widgets.sequence_recorder.SR_video_display_frame import (
+    SR_VideoDisplayFrame,
 )
 
 if TYPE_CHECKING:
-    from widgets.sequence_recorder_widget.sequence_recorder_widget import (
-        SequenceRecorderWidget,
+    from widgets.sequence_recorder.sequence_recorder import (
+        SequenceRecorder,
     )
 
 
-class SequenceRecorderCaptureFrame(QWidget):
-    def __init__(self, sequence_recorder_widget: "SequenceRecorderWidget") -> None:
+class SR_CaptureFrame(QWidget):
+    def __init__(self, sequence_recorder: "SequenceRecorder") -> None:
         super().__init__()
-        self.main_widget = sequence_recorder_widget.main_widget
-        self.sequence_recorder_widget = sequence_recorder_widget
-        self.sequence_beat_frame = SequenceRecorderBeatFrame(self)
-        self.video_display_frame = SequenceRecorderVideoDisplayFrame(self)
+        self.main_widget = sequence_recorder.main_widget
+        self.sequence_recorder = sequence_recorder
+        self.sequence_beat_frame = SR_BeatFrame(self)
+        self.video_display_frame = SR_VideoDisplayFrame(self)
         self._setup_layout()
         self.setStyleSheet("border: 1px solid black;")
 

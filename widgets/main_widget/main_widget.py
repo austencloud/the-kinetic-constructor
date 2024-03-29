@@ -23,8 +23,8 @@ from widgets.scroll_area.components.pictograph_key_generator import (
     PictographKeyGenerator,
 )
 from constants import DIAMOND
-from widgets.sequence_recorder_widget.sequence_recorder_widget import (
-    SequenceRecorderWidget,
+from widgets.sequence_recorder.sequence_recorder import (
+    SequenceRecorder,
 )
 from ..main_widget.special_placement_loader import SpecialPlacementLoader
 from ..pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
@@ -86,9 +86,9 @@ class MainWidget(QTabWidget):
         builder_layout.addWidget(self.sequence_widget, 1)
         builder_layout.addWidget(self.builder_toolbar, 1)
 
-        self.sequence_recorder_widget = SequenceRecorderWidget(self)
+        self.sequence_recorder = SequenceRecorder(self)
         self.addTab(self.top_level_builder_widget, "Builder")
-        self.addTab(self.sequence_recorder_widget, "Recorder")
+        self.addTab(self.sequence_recorder, "Recorder")
         self.addTab(self.letterbook, "LetterBook")
 
     def _setup_special_placements(self) -> None:
@@ -116,11 +116,11 @@ class MainWidget(QTabWidget):
         if current_widget == self.top_level_builder_widget:
             self.sequence_widget.resize_sequence_widget()
             self.builder_toolbar.resize_current_tab()
-        elif current_widget == self.sequence_recorder_widget:
+        elif current_widget == self.sequence_recorder:
             if not self.webcam_initialized:
-                self.sequence_recorder_widget.capture_frame.video_display_frame.init_webcam()
+                self.sequence_recorder.capture_frame.video_display_frame.init_webcam()
                 self.webcam_initialized = True
-            self.sequence_recorder_widget.resize_sequence_recorder_widget()
+            self.sequence_recorder.resize_sequence_recorder()
 
     def showEvent(self, event) -> None:
         super().showEvent(event)

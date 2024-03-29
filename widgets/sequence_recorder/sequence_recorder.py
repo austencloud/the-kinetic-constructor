@@ -3,19 +3,19 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QPainter, QLinearGradient, QColor
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import QTimer
-from .sequence_recorder_capture_frame import SequenceRecorderCaptureFrame
-from .sequence_recorder_main_control_frame import SequenceRecorderMainControlFrame
+from .SR_capture_frame import SR_CaptureFrame
+from .SR_main_control_frame import SR_MainControlFrame
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
 
-class SequenceRecorderWidget(QWidget):
+class SequenceRecorder(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.capture_frame = SequenceRecorderCaptureFrame(self)
-        self.video_control_frame = SequenceRecorderMainControlFrame(self)
+        self.capture_frame = SR_CaptureFrame(self)
+        self.video_control_frame = SR_MainControlFrame(self)
         self._setup_layout()
 
         self.gradient_shift = 0
@@ -58,7 +58,7 @@ class SequenceRecorderWidget(QWidget):
         self.main_layout.addLayout(video_control_hbox)
         self.main_layout.addStretch(1)
 
-    def resize_sequence_recorder_widget(self) -> None:
+    def resize_sequence_recorder(self) -> None:
         self.capture_frame.resize_capture_frame()
         self.video_control_frame.resize_control_frame()
         self.capture_frame.sequence_beat_frame.populate_beat_frame_scenes_from_json()

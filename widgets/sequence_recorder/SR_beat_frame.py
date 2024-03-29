@@ -3,7 +3,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGridLayout, QFrame, QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
-from widgets.sequence_recorder_widget.sequence_recorder_beat_selection_manager import SequenceRecorderBeatSelectionManager
+from widgets.sequence_recorder.SR_beat_selection_manager import (
+    SR_BeatSelectionManager,
+)
 from widgets.sequence_widget.sequence_beat_frame.beat_deletion_manager import (
     BeatDeletionManager,
 )
@@ -14,22 +16,22 @@ from widgets.sequence_widget.sequence_beat_frame.beat_selection_manager import (
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.sequence_recorder_widget.sequence_recorder_widget import (
-        SequenceRecorderWidget,
+    from widgets.sequence_recorder.sequence_recorder import (
+        SequenceRecorder,
     )
-    from widgets.sequence_recorder_widget.sequence_recorder_widget import MainWidget
+    from widgets.sequence_recorder.sequence_recorder import MainWidget
 
 from widgets.sequence_widget.sequence_beat_frame.beat import Beat, BeatView
 
 
-class SequenceRecorderBeatFrame(QFrame):
+class SR_BeatFrame(QFrame):
     COLUMN_COUNT = 4
     ROW_COUNT = 4
 
-    def __init__(self, sequence_recorder_widget: "SequenceRecorderWidget") -> None:
+    def __init__(self, sequence_recorder: "SequenceRecorder") -> None:
         super().__init__()
-        self.sequence_recorder_widget = sequence_recorder_widget
-        self.main_widget: "MainWidget" = sequence_recorder_widget.main_widget
+        self.sequence_recorder = sequence_recorder
+        self.main_widget: "MainWidget" = sequence_recorder.main_widget
         self.current_sequence_json_handler = (
             self.main_widget.json_manager.current_sequence_json_handler
         )
@@ -44,7 +46,7 @@ class SequenceRecorderBeatFrame(QFrame):
                 self._add_beat_to_layout(j, i)
 
     def _setup_components(self) -> None:
-        self.selection_manager = SequenceRecorderBeatSelectionManager(self)
+        self.selection_manager = SR_BeatSelectionManager(self)
         self.beat_deletion_manager = BeatDeletionManager(self)
 
     def _setup_layout(self) -> None:
@@ -128,7 +130,7 @@ class SequenceRecorderBeatFrame(QFrame):
             view.setMinimumHeight(beat_view_size)
             view.setMaximumHeight(beat_view_size)
             view.resetTransform()
-    
+
     def clear_beat_frame(self) -> None:
         for beat_view in self.beat_views:
             beat_view.setScene(None)

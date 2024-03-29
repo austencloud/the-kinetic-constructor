@@ -11,16 +11,16 @@ from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
 )
 
 if TYPE_CHECKING:
-    from widgets.sequence_recorder_widget.sequence_recorder_beat_frame import (
-        SequenceRecorderBeatFrame,
+    from widgets.sequence_recorder.SR_beat_frame import (
+        SR_BeatFrame,
     )
     from widgets.sequence_widget.sequence_beat_frame.sequence_builder_beat_frame import (
         SequenceBuilderBeatFrame,
     )
 
 
-class SequenceRecorderBeatSelectionManager(QWidget):
-    def __init__(self, beat_frame: "SequenceRecorderBeatFrame"):
+class SR_BeatSelectionManager(QWidget):
+    def __init__(self, beat_frame: "SR_BeatFrame"):
         super().__init__(beat_frame)
         self.selected_beat: Optional[BeatView | StartPositionBeatView] = None
         self.border_color = QColor("gold")
