@@ -87,7 +87,7 @@ class MainWidget(QTabWidget):
 
         self.sequence_recorder = SequenceRecorder(self)
         self.addTab(self.top_level_builder_widget, "Builder")
-        # self.addTab(self.sequence_recorder, "Recorder")
+        self.addTab(self.sequence_recorder, "Recorder")
         # self.addTab(self.letterbook, "LetterBook")
 
     def _setup_special_placements(self) -> None:

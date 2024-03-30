@@ -1,0 +1,239 @@
+[
+    {
+        "sequence_start_position": "gamma",
+        "end_pos": "gamma6",
+        "blue_attributes": {
+            "end_loc": "s",
+            "end_ori": "in"
+        },
+        "red_attributes": {
+            "end_loc": "e",
+            "end_ori": "in"
+        }
+    },
+    {
+        "letter": "P",
+        "start_pos": "gamma6",
+        "end_pos": "gamma3",
+        "timing": "quarter",
+        "direction": "opp",
+        "blue_attributes": {
+            "motion_type": "pro",
+            "start_ori": "in",
+            "prop_rot_dir": "ccw",
+            "start_loc": "s",
+            "end_loc": "e",
+            "turns": 0,
+            "end_ori": "in"
+        },
+        "red_attributes": {
+            "motion_type": "pro",
+            "start_ori": "in",
+            "prop_rot_dir": "cw",
+            "start_loc": "e",
+            "end_loc": "s",
+            "turns": 0,
+            "end_ori": "in"
+        }
+    },
+    {
+        "letter": "U",
+        "start_pos": "gamma3",
+        "end_pos": "gamma2",
+        "timing": "quarter",
+        "direction": "same",
+        "blue_attributes": {
+            "motion_type": "pro",
+            "start_ori": "in",
+            "prop_rot_dir": "ccw",
+            "start_loc": "e",
+            "end_loc": "n",
+            "turns": 0,
+            "end_ori": "in"
+        },
+        "red_attributes": {
+            "motion_type": "anti",
+            "start_ori": "in",
+            "prop_rot_dir": "cw",
+            "start_loc": "s",
+            "end_loc": "e",
+            "turns": 0,
+            "end_ori": "out"
+        }
+    },
+    {
+        "letter": "O",
+        "start_pos": "gamma2",
+        "end_pos": "gamma7",
+        "timing": "quarter",
+        "direction": "opp",
+        "blue_attributes": {
+            "motion_type": "pro",
+            "start_ori": "in",
+            "prop_rot_dir": "ccw",
+            "start_loc": "n",
+            "end_loc": "w",
+            "turns": 0,
+            "end_ori": "in"
+        },
+        "red_attributes": {
+            "motion_type": "anti",
+            "start_ori": "out",
+            "prop_rot_dir": "ccw",
+            "start_loc": "e",
+            "end_loc": "s",
+            "turns": 0,
+            "end_ori": "in"
+        }
+    },
+    {
+        "letter": "S",
+        "start_pos": "gamma7",
+        "end_pos": "gamma8",
+        "timing": "quarter",
+        "direction": "same",
+        "blue_attributes": {
+            "motion_type": "pro",
+            "start_ori": "in",
+            "prop_rot_dir": "cw",
+            "start_loc": "w",
+            "end_loc": "n",
+            "turns": 0,
+            "end_ori": "in"
+        },
+        "red_attributes": {
+            "motion_type": "pro",
+            "start_ori": "in",
+            "prop_rot_dir": "cw",
+            "start_loc": "s",
+            "end_loc": "w",
+            "turns": 0,
+            "end_ori": "in"
+        }
+    },
+    {
+        "letter": "Z",
+        "start_pos": "gamma8",
+        "end_pos": "beta1",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "static",
+            "start_ori": "in",
+            "prop_rot_dir": "no_rot",
+            "start_loc": "n",
+            "end_loc": "n",
+            "turns": 0,
+            "end_ori": "in"
+        },
+        "red_attributes": {
+            "motion_type": "anti",
+            "start_ori": "in",
+            "prop_rot_dir": "ccw",
+            "start_loc": "w",
+            "end_loc": "n",
+            "turns": 0,
+            "end_ori": "out"
+        }
+    },
+    {
+        "letter": "Ω",
+        "start_pos": "beta1",
+        "end_pos": "gamma8",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "static",
+            "start_ori": "in",
+            "prop_rot_dir": "no_rot",
+            "start_loc": "n",
+            "end_loc": "n",
+            "turns": 0,
+            "end_ori": "in"
+        },
+        "red_attributes": {
+            "motion_type": "anti",
+            "start_ori": "out",
+            "prop_rot_dir": "cw",
+            "start_loc": "n",
+            "end_loc": "w",
+            "turns": 0,
+            "end_ori": "in"
+        }
+    },
+    {
+        "letter": "X-",
+        "start_pos": "gamma8",
+        "end_pos": "alpha1",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "dash",
+            "start_ori": "in",
+            "prop_rot_dir": "no_rot",
+            "start_loc": "n",
+            "end_loc": "s",
+            "turns": 0,
+            "end_ori": "out"
+        },
+        "red_attributes": {
+            "motion_type": "anti",
+            "start_ori": "in",
+            "prop_rot_dir": "ccw",
+            "start_loc": "w",
+            "end_loc": "n",
+            "turns": 0,
+            "end_ori": "out"
+        }
+    },
+    {
+        "letter": "Φ-",
+        "start_pos": "alpha1",
+        "end_pos": "alpha3",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "dash",
+            "start_ori": "out",
+            "prop_rot_dir": "no_rot",
+            "start_loc": "s",
+            "end_loc": "n",
+            "turns": 0,
+            "end_ori": "in"
+        },
+        "red_attributes": {
+            "motion_type": "dash",
+            "start_ori": "out",
+            "prop_rot_dir": "no_rot",
+            "start_loc": "n",
+            "end_loc": "s",
+            "turns": 0,
+            "end_ori": "in"
+        }
+    },
+    {
+        "letter": "L",
+        "start_pos": "alpha3",
+        "end_pos": "beta2",
+        "timing": "split",
+        "direction": "opp",
+        "blue_attributes": {
+            "motion_type": "anti",
+            "start_ori": "in",
+            "prop_rot_dir": "ccw",
+            "start_loc": "n",
+            "end_loc": "e",
+            "turns": 0,
+            "end_ori": "out"
+        },
+        "red_attributes": {
+            "motion_type": "pro",
+            "start_ori": "in",
+            "prop_rot_dir": "ccw",
+            "start_loc": "s",
+            "end_loc": "e",
+            "turns": 0,
+            "end_ori": "in"
+        }
+    }
+]

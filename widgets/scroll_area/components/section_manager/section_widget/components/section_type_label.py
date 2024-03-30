@@ -7,7 +7,9 @@ from PyQt6.QtCore import pyqtSignal
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker.option_picker_section_widget import OptionPickerSectionWidget
+    from widgets.sequence_builder.components.option_picker.option_picker_section_widget import (
+        OptionPickerSectionWidget,
+    )
     from ..letterbook_section_widget import LetterBookSectionWidget
 
 
@@ -63,24 +65,25 @@ class SectionTypeLabel(QLabel):
         if base_class_name == "LetterBookScrollArea":
             font_size = scroll_area.width() // 40
         elif base_class_name == "OptionPickerScrollArea":
-            font_size = scroll_area.width() // 50
+            font_size = scroll_area.width() // 45
         else:
             font_size = 12
         return font_size
 
     def set_label_style(self, outline=False):
-        oval_height = self.font_size() * 2
-        self.setFixedHeight(oval_height)
+        self.label_height = self.font_size() * 2
+        self.setFixedHeight(self.label_height)
         border_style = "2px solid black" if outline else "none"
         self.setStyleSheet(
             f"QLabel {{"
-            f"  background-color: white;"
-            f"  border-radius: {oval_height // 2}px;"  # This creates the oval shape
+            f"  background-color: rgba(255, 255, 255, 200);"
+            f"  border-radius: {self.label_height // 2}px;"  # Adjust radius to maintain an oval shape
             f"  font-size: {self.font_size()}px;"
             f"  font-weight: bold;"
             f"  border: {border_style};"
             f"}}"
         )
+
 
     def mousePressEvent(self, event) -> None:
         self.clicked.emit()
@@ -99,15 +102,14 @@ class SectionTypeLabel(QLabel):
 
         # Add a buffer for padding/margins that may not be accounted for by QFontMetrics
         padding = 10
+        self.label_height = self.font_size() * 2
+        label_width = self.label_height * 5
 
-        label_height = self.font_size() * 2
-        label_width = label_height * 5
-
-        self.setFixedSize(label_width, label_height)
+        self.setFixedSize(label_width, self.label_height)
         self.setStyleSheet(
             f"QLabel {{"
-            f"  background-color: white;"
-            f"  border-radius: {label_height // 2}px;"  # Adjust radius to maintain an oval shape
+            f"  background-color: rgba(255, 255, 255, 200);"
+            f"  border-radius: {self.label_height // 2}px;"  # Adjust radius to maintain an oval shape
             f"  font-size: {self.font_size()}px;"
             f"  font-weight: bold;"
             f"  padding-left: {padding}px;"

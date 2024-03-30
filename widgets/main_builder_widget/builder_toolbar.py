@@ -1,10 +1,13 @@
 from typing import TYPE_CHECKING
 
+from custom_tab_bar import CustomTabBar
 from styles.get_tab_stylesheet import get_tab_stylesheet
 from widgets.dictionary.dictionary_widget import DictionaryWidget
 from widgets.sequence_builder.sequence_builder import SequenceBuilder
 from widgets.turn_pattern_widget import TurnPatternWidget
 from PyQt6.QtWidgets import QTabWidget
+from PyQt6.QtGui import QCursor
+from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from ..main_widget.main_widget import MainWidget
@@ -17,11 +20,18 @@ class BuilderToolbar(QTabWidget):
         self.sequence_builder = SequenceBuilder(main_widget)
         self.dictionary = DictionaryWidget(main_widget)
         self.turn_pattern_widget = TurnPatternWidget(self)
+
+        self.setTabBar(CustomTabBar())
         self.addTab(self.sequence_builder, "Builder")
         self.addTab(self.dictionary, "Dictionary")
         self.addTab(self.turn_pattern_widget, "Turn Patterns")
         self.currentChanged.connect(self.on_tab_changed)
         self.setStyleSheet(get_tab_stylesheet())
+
+        # Set custom tab bar for handling hover events specifically on tabs
+
+        self.setTabShape(QTabWidget.TabShape.Rounded)
+        self.setTabPosition(QTabWidget.TabPosition.North)
 
     def on_tab_changed(self) -> None:
         current_tab = self.currentWidget()

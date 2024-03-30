@@ -3,6 +3,12 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import QSize
 
+from widgets.sequence_builder.components.start_pos_picker.start_pos_picker_variations_button import (
+    StartPosVariationsButton,
+)
+from .start_pos_manager import StartPosManager
+from ....pictograph.pictograph import Pictograph
+
 from widgets.sequence_builder.components.start_pos_picker.start_pos_pictograph_frame import (
     StartPosPickerPictographFrame,
 )
@@ -13,8 +19,6 @@ from .choose_your_start_pos_label import (
     ChooseYourStartPosLabel,
 )
 
-from .start_pos_manager import StartPosManager
-from ....pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from ...sequence_builder import SequenceBuilder
@@ -59,24 +63,7 @@ class StartPosPicker(QWidget):
         self.layout.addStretch(1)
 
     def _setup_variations_button_layout(self) -> QHBoxLayout:
-        self.variations_button = QPushButton("Variations", self)
-        self.variations_button.setFont(QFont("Times New Roman", 16, QFont.Weight.Bold))
-        self.variations_button.setStyleSheet(
-            """
-            QPushButton {
-                background-color: #446CB3;
-                color: white;
-                border-radius: 10px;
-                padding: 10px;
-                margin-top: 10px;
-                margin-bottom: 10px;
-            }
-            QPushButton:hover {
-                background-color: #3D5C99;
-            }
-        """
-        )
-        self.variations_button.setFixedSize(QSize(200, 100))
+        self.variations_button = StartPosVariationsButton(self)
 
         self.variations_button.clicked.connect(
             self.sequence_builder.show_advanced_start_pos_picker
@@ -103,7 +90,4 @@ class StartPosPicker(QWidget):
     def resize_start_pos_picker(self) -> None:
         self.pictograph_frame.resize_start_pos_picker_pictograph_frame()
         self.start_pos_manager.resize_start_position_pictographs()
-
-    def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
-        self.choose_your_start_pos_label.show()
+        self.variations_button.resize_variations_button()

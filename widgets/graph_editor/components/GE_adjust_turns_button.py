@@ -1,50 +1,91 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt, QRect, QRectF
-from PyQt6.QtGui import QPainter
-from PyQt6.QtSvg import QSvgRenderer
+from PyQt6.QtCore import Qt, QRect, QRectF, QSize, QByteArray
+from PyQt6.QtGui import (
+    QPainter,
+    QColor,
+    QCursor,
+    QPainterPath,
+    QBrush,
+    QLinearGradient,
+    QPen,
+)
 from PyQt6.QtWidgets import QAbstractButton
+from PyQt6.QtSvg import QSvgRenderer
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
 
 
 class GE_AdjustTurnsButton(QAbstractButton):
-    def __init__(self, svg_path, turns_widget: "GE_TurnsWidget"):
+    def __init__(self, svg_path, turns_widget: "GE_TurnsWidget") -> None:
         super().__init__(turns_widget)
+        self.svg_path = svg_path
+        self.turns_widget = turns_widget
         self.svg_renderer = QSvgRenderer(svg_path)
         self.hovered = False
+        self.pressed = False  # Track whether the button is pressed
+        self.setMouseTracking(True)
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
-        current_renderer = (
-            self.svg_renderer if self.isEnabled() else self.disabled_svg_renderer
-        )
+        # Create a gradient effect for the button
+        gradient = QLinearGradient(0, 0, 0, self.height())
+        if self.pressed:
+            gradient.setColorAt(0.0, QColor("#d3d3d3"))
+            gradient.setColorAt(1.0, QColor("#a9a9a9"))
+        else:
+            gradient.setColorAt(0.0, QColor("white"))
+            gradient.setColorAt(1.0, QColor("#f0f0f0"))
 
-        button_color = (
-            Qt.GlobalColor.gray
-            if not self.isEnabled()
-            else (Qt.GlobalColor.lightGray if self.hovered else Qt.GlobalColor.white)
-        )
-        painter.setBrush(button_color)
+        painter.fillRect(self.rect(), QBrush(gradient))
 
-        rect = QRect(0, 0, self.width(), self.height())
-        painter.fillRect(rect, painter.brush())
+        # Adjust the border to simulate a "raised" or "depressed" look
+        if self.hovered or self.pressed:
+            painter.setPen(QPen(QColor(f"{self.turns_widget.turns_box.color}"), 5))
+        else:
+            painter.setPen(QPen(QColor("black"), 2))
 
+        painter.drawRect(self.rect().adjusted(1, 1, -1, -1))
+
+        # Center the icon
         icon_size = int(min(self.width(), self.height()) * 0.8)
-        x = int((self.width() - icon_size) / 2)
-        y = int((self.height() - icon_size) / 2)
+        x = (self.width() - icon_size) / 2
+        y = (self.height() - icon_size) / 2
         icon_rect = QRectF(x, y, icon_size, icon_size)
+        self.svg_renderer.render(painter, icon_rect)
 
-        current_renderer.render(painter, icon_rect)
+    def mousePressEvent(self, event):
+        self.pressed = True
+        self.update()
+        super().mousePressEvent(event)
 
-    def enterEvent(self, event):
+    def mouseReleaseEvent(self, event):
+        self.pressed = False
+        self.update()
+        super().mouseReleaseEvent(event)
+
+    def enterEvent(self, event) -> None:
+        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.hovered = True
         self.update()
-        super().enterEvent(event)
 
-    def leaveEvent(self, event):
+    def leaveEvent(self, event) -> None:
+        self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
         self.hovered = False
         self.update()
-        super().leaveEvent(event)
+
+    def setEnabled(self, enabled) -> None:
+        super().setEnabled(enabled)
+        # Load the original SVG content
+        svgData = QByteArray()
+        with open(self.svg_path, "r") as file:
+            svgData = QByteArray(file.read().encode("utf-8"))
+
+        if not enabled:
+            # Replace black with gray for disabled state
+            svgData.replace(b"black", b"gray")
+
+        self.svg_renderer.load(svgData)
+        self.update()

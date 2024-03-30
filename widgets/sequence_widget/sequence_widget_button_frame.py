@@ -1,15 +1,31 @@
+from PyQt6.QtCore import Qt
+from typing import TYPE_CHECKING
+
 from PyQt6.QtWidgets import (
     QPushButton,
     QHBoxLayout,
     QFrame,
     QVBoxLayout,
 )
-from PyQt6.QtCore import Qt
-from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
+
+
+class SequenceButton(QPushButton):
+    def __init__(self, text: str, font_size: int) -> None:
+        super().__init__(text)
+        self.setFixedHeight(40)
+        font = self.font()
+        font.setPointSize(font_size)
+        self.setFont(font)
+
+    def enterEvent(self, event) -> None:
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
+
+    def leaveEvent(self, event) -> None:
+        self.setCursor(Qt.CursorShape.ArrowCursor)
 
 
 class SequenceWidgetButtonFrame(QFrame):
@@ -33,33 +49,14 @@ class SequenceWidgetButtonFrame(QFrame):
         self.setup_layout()
 
     def setup_save_sequence_button(self) -> None:
-        self.save_sequence_button = QPushButton("Save Sequence")
+        self.save_sequence_button = SequenceButton("Save Sequence", self.font_size)
         self.save_sequence_button.clicked.connect(self.save_sequence)
-        self.save_sequence_button.setFixedHeight(40)
-        font = self.save_sequence_button.font()
-        font.setPointSize(self.font_size)
-        self.save_sequence_button.setFont(font)
 
     def setup_clear_sequence_button(self) -> None:
-        self.clear_sequence_button = QPushButton("Clear Sequence")
+        self.clear_sequence_button = SequenceButton("Clear Sequence", self.font_size)
         self.clear_sequence_button.clicked.connect(
             lambda: self.clear_sequence(show_indicator=True)
         )
-        self.clear_sequence_button.setFixedHeight(40)
-        font = self.clear_sequence_button.font()
-        font.setPointSize(self.font_size)
-        self.clear_sequence_button.setFont(font)
-
-    def setup_save_turn_pattern_button(self) -> None:
-        self.save_turn_pattern_button = QPushButton("Save Current Turn Pattern")
-        turn_pattern_widget = self.sequence_widget.sequence_modifier.turn_pattern_widget
-        self.save_turn_pattern_button.clicked.connect(
-            turn_pattern_widget.save_turn_pattern
-        )
-        self.save_turn_pattern_button.setFixedHeight(40)
-        font = self.save_turn_pattern_button.font()
-        font.setPointSize(self.font_size)
-        self.save_turn_pattern_button.setFont(font)
 
     def setup_layout(self) -> None:
         buttons_layout = QHBoxLayout()

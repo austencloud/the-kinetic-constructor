@@ -71,18 +71,21 @@ class BeatView(QGraphicsView):
             painter = QPainter(self.viewport())
             painter.setPen(QColor(0, 0, 0))
             painter.setFont(QFont("Georgia", 20, QFont.Weight.Bold))
-            painter.drawText(QRect(0, 0, 50, 50), Qt.AlignmentFlag.AlignLeft, str(self.number))
+            painter.drawText(
+                QRect(0, 0, 50, 50), Qt.AlignmentFlag.AlignLeft, str(self.number)
+            )
             painter.end()
         if self.is_selected:
             painter = QPainter(self.viewport())
             painter.setPen(QColor(0, 0, 0))
             painter.drawRect(0, 0, self.width() - 1, self.height() - 1)
             painter.end()
-            
 
     def enterEvent(self, event):
         if self.scene() is not None:
-            self.setCursor(Qt.CursorShape.PointingHandCursor)
-        
+            # if it's not currently selected
+            if not self.is_selected:
+                self.setCursor(Qt.CursorShape.PointingHandCursor)
+
     def leaveEvent(self, event):
         self.setCursor(Qt.CursorShape.ArrowCursor)

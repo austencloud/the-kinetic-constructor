@@ -5,7 +5,7 @@ from widgets.sequence_builder.components.option_picker.option_manager import (
     OptionManager,
 )
 from widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label import (
-    ChooseYourNextOptionLabel,
+    ChooseYourNextPictographLabel,
 )
 
 from .option_picker_scroll_area import OptionPickerScrollArea
@@ -25,21 +25,20 @@ class OptionPicker(QWidget):
         self.main_widget = sequence_builder.main_widget
         self.option_manager = OptionManager(self)
         self.scroll_area = OptionPickerScrollArea(self)
-        self.choose_your_next_option_label = ChooseYourNextOptionLabel(self)
-        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.choose_your_next_pictograph_label = ChooseYourNextPictographLabel(self)
+        self.setStyleSheet("background-color: rgba(0, 0, 0, 200);")
         self.setup_layout()
         self.hide()
-
 
     def setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         # self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.choose_your_next_option_label.show()
+        self.choose_your_next_pictograph_label.show()
 
         header_label_layout = QHBoxLayout()
         header_label_layout.addStretch(1)
-        header_label_layout.addWidget(self.choose_your_next_option_label)
+        header_label_layout.addWidget(self.choose_your_next_pictograph_label)
         header_label_layout.addStretch(1)
         self.layout.addLayout(header_label_layout, 1)
         self.layout.addWidget(self.scroll_area, 14)
@@ -54,8 +53,8 @@ class OptionPicker(QWidget):
             next_options: dict = self.option_manager.get_next_options(sequence)
             self.scroll_area._hide_all_pictographs()
             self.scroll_area.add_and_display_relevant_pictographs(next_options)
-        self.choose_your_next_option_label.set_stylesheet()
+        self.choose_your_next_pictograph_label.set_stylesheet()
 
     def resize_option_picker(self):
-        self.choose_your_next_option_label.resize_choose_your_next_option_label()
+        self.choose_your_next_pictograph_label.resize_choose_your_next_option_label()
         self.scroll_area.resize_option_picker_scroll_area()

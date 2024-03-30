@@ -7,7 +7,7 @@
         "Elemental": true
     },
     "default_left_orientation": "in",
-    "default_right_orientation": "out",
+    "default_right_orientation": "clock",
     "default_left_orientation_Hand": "counter",
     "default_right_orientation_Hand": "in",
     "word_length_visibility": {

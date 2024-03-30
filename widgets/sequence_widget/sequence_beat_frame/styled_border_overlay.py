@@ -26,8 +26,8 @@ class StyledBorderOverlay(QWidget):
 
     def update_border_widths(self) -> None:
         view_width = self.view.size().width()
-        self.outer_border_width = max(1, math.ceil(view_width * 0.013))
-        self.inner_border_width = max(1, math.ceil(view_width * 0.013))
+        self.outer_border_width = max(1, math.ceil(view_width * 0.016))
+        self.inner_border_width = max(1, math.ceil(view_width * 0.016))
         self.update()
 
     def update_border_color_and_width(self, primary_color, secondary_color) -> None:

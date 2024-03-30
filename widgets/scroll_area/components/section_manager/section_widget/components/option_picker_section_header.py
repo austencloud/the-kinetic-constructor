@@ -22,4 +22,4 @@ class OptionPickerSectionHeader(QWidget):
         self.layout.addStretch(1)
         self.layout.addWidget(self.type_label)
         self.layout.addStretch(1)
-        self.setLayout(self.layout)  # Set this layout in the parent widget
+        self.setLayout(self.layout)

@@ -40,12 +40,12 @@ class GE_TurnsWidgetDisplayManager:
         plus_path = get_images_and_data_path("images/icons/plus.svg")
         self.increment_button = GE_AdjustTurnsButton(
             plus_path,
-            self.turns_widget.turns_box,
+            self.turns_widget,
         )
         minus_path = get_images_and_data_path("images/icons/minus.svg")
         self.decrement_button = GE_AdjustTurnsButton(
             minus_path,
-            self.turns_widget.turns_box,
+            self.turns_widget,
         )
 
         self.increment_button.clicked.connect(
@@ -97,6 +97,8 @@ class GE_TurnsWidgetDisplayManager:
 
     def update_turns_display(self, turns: Union[int, float]) -> None:
         self.turns_display.setText(str(turns))
+        # Logic to enable or disable the decrement button
+        self.decrement_button.setEnabled(float(turns) > 0)
 
     def resize_dir_buttons(self) -> None:
         """This method sets the button size to the same size as the header label."""

@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     )
 
 
-class ChooseYourNextOptionLabel(QLabel):
+class ChooseYourNextPictographLabel(QLabel):
     def __init__(self, option_picker: "OptionPicker") -> None:
         super().__init__(option_picker)
         self.option_picker = option_picker
@@ -19,7 +19,7 @@ class ChooseYourNextOptionLabel(QLabel):
         self.hide()
 
     def set_default_text(self):
-        self.setText("Choose your next option!")
+        self.setText("Choose your next pictograph!")
 
     def set_text_to_loading(self):
         self.setText("Loading...")
