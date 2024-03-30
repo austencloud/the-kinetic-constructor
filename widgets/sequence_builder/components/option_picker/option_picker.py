@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal, Qt
 
 from widgets.sequence_builder.components.option_picker.option_manager import (
@@ -30,15 +30,19 @@ class OptionPicker(QWidget):
         self.setup_layout()
         self.hide()
 
-    def setup_layout(self):
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
-        self.layout.setContentsMargins(0, 0, 0, 0)
 
+    def setup_layout(self) -> None:
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+        # self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.choose_your_next_option_label.show()
-        self.layout.addWidget(self.choose_your_next_option_label, 1)
-        self.layout.addWidget(self.scroll_area, 10)
+
+        header_label_layout = QHBoxLayout()
+        header_label_layout.addStretch(1)
+        header_label_layout.addWidget(self.choose_your_next_option_label)
+        header_label_layout.addStretch(1)
+        self.layout.addLayout(header_label_layout, 1)
+        self.layout.addWidget(self.scroll_area, 14)
 
     def update_option_picker(self):
         current_sequence_json_handler = (
@@ -51,3 +55,7 @@ class OptionPicker(QWidget):
             self.scroll_area._hide_all_pictographs()
             self.scroll_area.add_and_display_relevant_pictographs(next_options)
         self.choose_your_next_option_label.set_stylesheet()
+
+    def resize_option_picker(self):
+        self.choose_your_next_option_label.resize_choose_your_next_option_label()
+        self.scroll_area.resize_option_picker_scroll_area()

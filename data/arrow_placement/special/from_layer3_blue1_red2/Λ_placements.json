@@ -145,6 +145,10 @@
     },
     "(o, 3, 3, op, op)": {
       "static_from_layer1_rot_angle_override": true
+    },
+    "(0, 1, cl)": {
+      "static_from_layer1_rot_angle_override": true,
+      "static_from_layer1": [-70, 0]
     }
   }
 }

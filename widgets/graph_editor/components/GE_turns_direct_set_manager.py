@@ -20,7 +20,7 @@ class GE_TurnsDirectSetManager:
         for value in turns_values:
             button = QPushButton(value, self.turns_widget)
             button.setMaximumWidth(
-                int(self.turns_widget.display_manager.turns_display_label.width() / 2)
+                int(self.turns_widget.display_manager.turns_display.width() / 2)
             )
             button.setStyleSheet(
                 """

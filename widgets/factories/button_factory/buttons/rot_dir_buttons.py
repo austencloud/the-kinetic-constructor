@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QPushButton
+from PyQt6.QtCore import Qt
 from Enums.Enums import VTG_Directions
 from Enums.MotionAttributes import PropRotDir
-
 
 class RotDirButton(QPushButton):
     def __init__(self, direction) -> None:
@@ -41,6 +41,11 @@ class RotDirButton(QPushButton):
     def is_pressed(self) -> bool:
         return self.styleSheet() == self.get_button_style(pressed=True)
 
+    def enterEvent(self, event) -> None:
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
+
+    def leaveEvent(self, event) -> None:
+        self.setCursor(Qt.CursorShape.ArrowCursor)
 
 class OpenCloseButton(RotDirButton):
     def __init__(self, open_close_state: VTG_Directions) -> None:

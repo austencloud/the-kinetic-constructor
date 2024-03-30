@@ -178,13 +178,15 @@ class CurrentSequenceJsonHandler:
             entry["red_attributes"]["turns"] = red_turns
 
             if entry["blue_attributes"]["motion_type"] in [STATIC, DASH]:
-                entry["blue_attributes"]["prop_rot_dir"] = (
-                    self.find_previous_prop_rot_dir(sequence, i, BLUE)
-                )
+                if not blue_turns == 0:
+                    entry["blue_attributes"]["prop_rot_dir"] = (
+                        self.find_previous_prop_rot_dir(sequence, i, BLUE)
+                    )
             if entry["red_attributes"]["motion_type"] in [STATIC, DASH]:
-                entry["red_attributes"]["prop_rot_dir"] = (
-                    self.find_previous_prop_rot_dir(sequence, i, RED)
-                )
+                if not red_turns == 0:
+                    entry["red_attributes"]["prop_rot_dir"] = (
+                        self.find_previous_prop_rot_dir(sequence, i, RED)
+                    )
 
             beat_view = self.main_widget.sequence_widget.beat_frame.beat_views[i - 1]
             if beat_view and beat_view.is_filled:
@@ -218,7 +220,7 @@ class CurrentSequenceJsonHandler:
 
     def find_previous_prop_rot_dir(self, sequence, current_index, color) -> str:
         for i in range(current_index - 1, -1, -1):
-            if i < 0:
+            if i < 1:
                 break
             if sequence[i][f"{color}_attributes"]["motion_type"] not in [STATIC, DASH]:
                 return sequence[i][f"{color}_attributes"]["prop_rot_dir"]

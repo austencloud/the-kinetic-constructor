@@ -26,6 +26,18 @@ class ChooseYourNextOptionLabel(QLabel):
 
     def set_stylesheet(self) -> None:
         width = self.option_picker.width()
-        font_size = int(0.03 * width)
-        self.setFont(QFont("Cambria", font_size))
+        self.setStyleSheet(
+            f"QLabel {{"
+            f"  background-color: rgba(255, 255, 255, 200);"
+            f"  border-radius: {self.height() // 2}px;"
+            f"  font-size: {int(0.03 * width)}px;"
+            f"}}"
+        )
         self.show()
+
+    def resize_choose_your_next_option_label(self) -> None:
+        width = self.option_picker.width() // 2
+        height = self.height()
+
+        self.setFixedSize(width, height)
+        self.set_stylesheet()
