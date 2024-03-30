@@ -2,13 +2,13 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QEnterEvent, QFontMetrics
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import Qt
-
 from Enums.Enums import LetterType
+from PyQt6.QtCore import pyqtSignal
 
 
 if TYPE_CHECKING:
+    from widgets.sequence_builder.components.option_picker.option_picker_section_widget import OptionPickerSectionWidget
     from ..letterbook_section_widget import LetterBookSectionWidget
-from PyQt6.QtCore import pyqtSignal
 
 
 class SectionTypeLabel(QLabel):
@@ -32,11 +32,11 @@ class SectionTypeLabel(QLabel):
         "-": "#000000",  # black
     }
 
-    def __init__(self, section: "LetterBookSectionWidget") -> None:
+    def __init__(self, section_widget: "OptionPickerSectionWidget") -> None:
         super().__init__()
-        self.section = section
+        self.section_widget = section_widget
         self.setContentsMargins(0, 0, 0, 0)
-        self.set_styled_text(section.letter_type)
+        self.set_styled_text(section_widget.letter_type)
 
     def set_styled_text(self, letter_type: LetterType) -> None:
         type_words = self.TYPE_MAP.get(letter_type, "").split("-")
@@ -57,7 +57,7 @@ class SectionTypeLabel(QLabel):
         self.resize_section_type_label()
 
     def font_size(self):
-        scroll_area = self.section.scroll_area
+        scroll_area = self.section_widget.scroll_area
         base_class_name = type(scroll_area).__name__
 
         if base_class_name == "LetterBookScrollArea":
@@ -68,30 +68,17 @@ class SectionTypeLabel(QLabel):
             font_size = 12
         return font_size
 
-    def restore_default_style(self):
+    def set_label_style(self, outline=False):
         oval_height = self.font_size() * 2
         self.setFixedHeight(oval_height)
-        # Update the border-radius to half the new height
+        border_style = "2px solid black" if outline else "none"
         self.setStyleSheet(
             f"QLabel {{"
             f"  background-color: white;"
             f"  border-radius: {oval_height // 2}px;"  # This creates the oval shape
             f"  font-size: {self.font_size()}px;"
             f"  font-weight: bold;"
-            f"}}"
-        )
-
-    def outline_label(self):
-        oval_height = self.font_size() * 2
-        self.setFixedHeight(oval_height)
-        # Update the border-radius to half the new height
-        self.setStyleSheet(
-            f"QLabel {{"
-            f"  background-color: white;"
-            f"  border-radius: {oval_height // 2}px;"  # This creates the oval shape
-            f"  font-size: {self.font_size()}px;"
-            f"  font-weight: bold;"
-            f"  border: 2px solid black;"
+            f"  border: {border_style};"
             f"}}"
         )
 
@@ -101,11 +88,11 @@ class SectionTypeLabel(QLabel):
 
     def enterEvent(self, event: QEnterEvent) -> None:
         self.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.outline_label()
+        self.set_label_style(outline=True)
 
     def leaveEvent(self, event: QEnterEvent) -> None:
         self.setCursor(Qt.CursorShape.ArrowCursor)
-        self.restore_default_style()
+        self.set_label_style()
 
     def resize_section_type_label(self) -> None:
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)

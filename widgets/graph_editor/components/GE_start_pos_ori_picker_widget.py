@@ -61,7 +61,6 @@ class GE_StartPosOriPickerWidget(QWidget):
     def _setup_current_ori_display(self) -> None:
         self.ori_display_label = QLabel()
         self.ori_display_label_layout = QHBoxLayout()
-        # add stretch around it to center it
         self.ori_display_label_layout.addStretch(1)
         self.ori_display_label_layout.addWidget(self.ori_display_label)
         self.ori_display_label_layout.addStretch(1)

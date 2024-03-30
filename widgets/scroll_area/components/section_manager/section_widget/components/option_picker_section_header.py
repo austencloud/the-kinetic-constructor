@@ -11,8 +11,6 @@ if TYPE_CHECKING:
 
 
 class OptionPickerSectionHeader(QWidget):
-
-
     def __init__(self, section: "OptionPickerSectionWidget") -> None:
         super().__init__()
         self.section = section
@@ -24,4 +22,3 @@ class OptionPickerSectionHeader(QWidget):
         self.layout.addStretch(1)
         self.layout.addWidget(self.type_label)
         self.layout.addStretch(1)
-        
