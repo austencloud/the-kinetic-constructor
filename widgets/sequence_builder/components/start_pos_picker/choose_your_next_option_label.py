@@ -18,10 +18,10 @@ class ChooseYourNextPictographLabel(QLabel):
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.hide()
 
-    def set_default_text(self):
+    def set_default_text(self) -> None:
         self.setText("Choose your next pictograph!")
 
-    def set_text_to_loading(self):
+    def set_text_to_loading(self) -> None:
         self.setText("Loading...")
 
     def set_stylesheet(self) -> None:

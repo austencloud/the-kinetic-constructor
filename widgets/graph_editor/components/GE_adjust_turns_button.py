@@ -12,6 +12,8 @@ from PyQt6.QtGui import (
 from PyQt6.QtWidgets import QAbstractButton
 from PyQt6.QtSvg import QSvgRenderer
 
+from constants import BLUE, RED
+
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
 
@@ -40,10 +42,18 @@ class GE_AdjustTurnsButton(QAbstractButton):
             gradient.setColorAt(1.0, QColor("#f0f0f0"))
 
         painter.fillRect(self.rect(), QBrush(gradient))
+        turns_box_color = self.turns_widget.turns_box.color
+        if turns_box_color == RED:
+            border_color = "#ED1C24"
+        elif turns_box_color == BLUE:
+            border_color = "#2E3192"
+        else:
+            border_color = "black"
+
 
         # Adjust the border to simulate a "raised" or "depressed" look
         if self.hovered or self.pressed:
-            painter.setPen(QPen(QColor(f"{self.turns_widget.turns_box.color}"), 5))
+            painter.setPen(QPen(QColor(f"{border_color}"), 5))
         else:
             painter.setPen(QPen(QColor("black"), 2))
 

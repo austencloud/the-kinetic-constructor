@@ -117,7 +117,9 @@ class OptionPickerScrollArea(BasePictographScrollArea):
 
     def resize_option_picker_scroll_area(self) -> None:
         self.setMinimumWidth(self.option_picker.sequence_builder.width())
-
+        for section in self.sections_manager.sections.values():
+            section.resize_option_picker_section_widget()
+            
     def wheelEvent(self, event: QWheelEvent) -> None:
         modifiers = QApplication.keyboardModifiers()
         if modifiers == Qt.KeyboardModifier.ControlModifier:
