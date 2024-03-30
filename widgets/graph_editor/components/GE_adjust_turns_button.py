@@ -50,17 +50,16 @@ class GE_AdjustTurnsButton(QAbstractButton):
         else:
             border_color = "black"
 
-
         # Adjust the border to simulate a "raised" or "depressed" look
-        if self.hovered or self.pressed:
-            painter.setPen(QPen(QColor(f"{border_color}"), 5))
-        else:
-            painter.setPen(QPen(QColor("black"), 2))
-
-        painter.drawRect(self.rect().adjusted(1, 1, -1, -1))
+        if self.isEnabled():
+            if self.hovered or self.pressed:
+                painter.setPen(QPen(QColor(f"{border_color}"), 5))
+            else:
+                painter.setPen(QPen(QColor("black"), 2))
+            painter.drawRect(self.rect().adjusted(1, 1, -1, -1))
 
         # Center the icon
-        icon_size = int(min(self.width(), self.height()) * 0.8)
+        icon_size = int(min(self.width(), self.height()) * 0.9)
         x = (self.width() - icon_size) / 2
         y = (self.height() - icon_size) / 2
         icon_rect = QRectF(x, y, icon_size, icon_size)
@@ -95,7 +94,7 @@ class GE_AdjustTurnsButton(QAbstractButton):
 
         if not enabled:
             # Replace black with gray for disabled state
-            svgData.replace(b"black", b"gray")
+            svgData.replace(b"black", b"#b5b5b5")
 
         self.svg_renderer.load(svgData)
         self.update()

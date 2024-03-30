@@ -1,23 +1,26 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
+from constants import BLUE, RED
+from path_helpers import get_images_and_data_path
+from widgets.graph_editor.components.GE_turns_box_label import GE_TurnsDisplay
 
 from PyQt6.QtWidgets import (
     QFrame,
     QHBoxLayout,
+    QMenu,  # Import QMenu for right-click menu
 )
-from constants import BLUE, RED
 
-from path_helpers import get_images_and_data_path
+
 from widgets.graph_editor.components.GE_adjust_turns_button import (
     GE_AdjustTurnsButton,
 )
-from widgets.graph_editor.components.GE_turns_box_label import GE_TurnsDisplay
 from widgets.graph_editor.components.GE_turns_widget_turns_selection_dialog import (
     GE_TurnsSelectionDialog,
 )
 
 if TYPE_CHECKING:
+
     from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
 
 
@@ -54,6 +57,16 @@ class GE_TurnsWidgetDisplayManager:
         self.decrement_button.clicked.connect(
             lambda: self.turns_widget.adjustment_manager.adjust_turns(-1)
         )
+        self.decrement_button.customContextMenuRequested.connect(
+            self.on_decrement_button_right_click
+        )
+        policy = Qt.ContextMenuPolicy.CustomContextMenu
+        self.decrement_button.setContextMenuPolicy(policy)
+        self.increment_button.setContextMenuPolicy(policy)
+        self.increment_button.customContextMenuRequested.connect(
+            self.on_increment_button_right_click
+        )
+
         turns_display_frame_layout.addWidget(self.decrement_button, 1)
         turns_display_frame_layout.addWidget(self.turns_display, 1)
         turns_display_frame_layout.addWidget(self.increment_button, 1)
@@ -104,3 +117,9 @@ class GE_TurnsWidgetDisplayManager:
         """This method sets the button size to the same size as the header label."""
         self.turns_box.prop_rot_dir_button_manager.resize_prop_rot_dir_buttons()
         self.turns_box.vtg_dir_button_manager.resize_vtg_dir_buttons()
+
+    def on_increment_button_right_click(self, pos) -> None:
+        self.turns_widget.adjustment_manager.adjust_turns(0.5)
+
+    def on_decrement_button_right_click(self, pos) -> None:
+        self.turns_widget.adjustment_manager.adjust_turns(-0.5)

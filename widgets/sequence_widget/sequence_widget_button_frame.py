@@ -76,11 +76,6 @@ class SequenceWidgetButtonFrame(QFrame):
 
         self.setLayout(master_layout)
 
-    def resize_event(self, event) -> None:
-        button_width = self.width() // 6
-        self.save_sequence_button.setFixedWidth(button_width)
-        self.clear_sequence_button.setFixedWidth(button_width)
-
     def save_sequence(self) -> None:
         self.sequence = self.json_handler.load_current_sequence_json()
         if not self.sequence:

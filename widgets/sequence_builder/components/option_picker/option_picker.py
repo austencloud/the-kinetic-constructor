@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal, Qt
 
 from widgets.sequence_builder.components.option_picker.option_manager import (
@@ -55,6 +55,6 @@ class OptionPicker(QWidget):
             self.scroll_area.add_and_display_relevant_pictographs(next_options)
         self.choose_your_next_pictograph_label.set_stylesheet()
 
-    def resize_option_picker(self):
+    def resize_option_picker(self) -> None:
         self.choose_your_next_pictograph_label.resize_choose_your_next_option_label()
         self.scroll_area.resize_option_picker_scroll_area()

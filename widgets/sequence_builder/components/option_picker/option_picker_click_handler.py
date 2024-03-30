@@ -27,5 +27,4 @@ class OptionPickerClickHandler:
             self.sequence_builder.option_picker.update_option_picker()
             new_beat.view.is_filled = True
             self.sequence_builder.option_picker.scroll_area.display_manager.order_and_display_pictographs()
-
             self.sequence_builder.option_picker.choose_your_next_pictograph_label.set_default_text()

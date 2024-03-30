@@ -104,5 +104,6 @@ class OptionPickerDisplayManager:
         section: OptionPickerSectionWidget = (
             self.scroll_area.sections_manager.get_section(letter_type)
         )
+
         if section:
             section.add_pictograph(pictograph)
