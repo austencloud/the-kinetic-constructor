@@ -1,0 +1,39 @@
+[
+    {
+        "sequence_start_position": "alpha",
+        "end_pos": "alpha1",
+        "blue_attributes": {
+            "end_loc": "s",
+            "end_ori": "in"
+        },
+        "red_attributes": {
+            "end_loc": "n",
+            "end_ori": "in"
+        }
+    },
+    {
+        "letter": "J",
+        "start_pos": "alpha1",
+        "end_pos": "beta2",
+        "timing": "split",
+        "direction": "opp",
+        "blue_attributes": {
+            "motion_type": "pro",
+            "start_ori": "in",
+            "prop_rot_dir": "ccw",
+            "start_loc": "s",
+            "end_loc": "e",
+            "turns": 1,
+            "end_ori": "out"
+        },
+        "red_attributes": {
+            "motion_type": "pro",
+            "start_ori": "in",
+            "prop_rot_dir": "cw",
+            "start_loc": "n",
+            "end_loc": "e",
+            "turns": 0,
+            "end_ori": "in"
+        }
+    }
+]

@@ -9,11 +9,11 @@ if TYPE_CHECKING:
 class IndicatorLabel(QLabel):
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)
-        self.font_size = sequence_widget.width() // 50
+        self.font_size = sequence_widget.width() // 40
         font = self.font()
         font.setPointSize(self.font_size)
         self.setFont(font)
-        self.setStyleSheet("color: green;")
+        self.setStyleSheet("color: black;")
         self.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop)
         self.clear()
         self.timer = QTimer(self)
@@ -31,6 +31,4 @@ class IndicatorLabel(QLabel):
 
     def resize_indicator_label(self) -> None:
         self.adjustSize()
-        height = self.font_size
-        self.setFixedHeight(height)
         self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)

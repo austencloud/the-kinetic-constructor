@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget, QHBoxLayout
 
 from widgets.sequence_widget.my_sequence_label import MySequenceLabel
 from widgets.sequence_widget.sequence_modifier import SequenceModifier
@@ -33,13 +33,21 @@ class SequenceWidget(QWidget):
         self.layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
+        
+        self.indicator_label_layout = QHBoxLayout()
+        self.indicator_label_layout.addStretch(1)
+        self.indicator_label_layout.addWidget(self.indicator_label)
+        self.indicator_label_layout.addStretch(1)
+        
         self.layout.addWidget(self.my_sequence_label, 1)
         self.layout.addWidget(self.beat_frame, 15)
         self.layout.addWidget(self.button_frame, 1)
-        self.layout.addWidget(self.indicator_label, 1)
+        self.layout.addLayout(self.indicator_label_layout, 1)
         self.layout.addWidget(self.sequence_modifier, 10)
         self.layout.addStretch(1)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.layout.setAlignment(
+            Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignCenter
+        )
 
     def populate_sequence(self, pictograph_dict: dict) -> None:
         pictograph = Beat(self.main_widget)
@@ -56,3 +64,4 @@ class SequenceWidget(QWidget):
         self.my_sequence_label.resize_my_sequence_label()
         self.beat_frame.resize_beat_frame()
         self.sequence_modifier.resize_sequence_modifier()
+        self.indicator_label.resize_indicator_label()
