@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QEnterEvent
+from PyQt6.QtGui import QEnterEvent, QFontMetrics
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import Qt
 
@@ -32,11 +32,11 @@ class SectionTypeLabel(QLabel):
         "-": "#000000",  # black
     }
 
-    def __init__(self, section_widget: "LetterBookSectionWidget") -> None:
+    def __init__(self, section: "LetterBookSectionWidget") -> None:
         super().__init__()
-        self.section = section_widget
+        self.section = section
         self.setContentsMargins(0, 0, 0, 0)
-        self.set_styled_text(section_widget.letter_type)
+        self.set_styled_text(section.letter_type)
 
     def set_styled_text(self, letter_type: LetterType) -> None:
         type_words = self.TYPE_MAP.get(letter_type, "").split("-")
@@ -57,34 +57,42 @@ class SectionTypeLabel(QLabel):
         self.resize_section_type_label()
 
     def font_size(self):
-        base_class_name = type(self.section.scroll_area).__name__
+        scroll_area = self.section.scroll_area
+        base_class_name = type(scroll_area).__name__
+
         if base_class_name == "LetterBookScrollArea":
-            font_size = self.section.scroll_area.width() // 40
+            font_size = scroll_area.width() // 40
         elif base_class_name == "OptionPickerScrollArea":
-            font_size = self.section.scroll_area.width() // 50
+            font_size = scroll_area.width() // 50
         else:
             font_size = 12
         return font_size
 
     def restore_default_style(self):
+        oval_height = self.font_size() * 2
+        self.setFixedHeight(oval_height)
+        # Update the border-radius to half the new height
         self.setStyleSheet(
-            "QLabel {{"
+            f"QLabel {{"
             f"  background-color: white;"
-            f"  border-radius: 50%;"
-            f"  font-size: {self.font_size()}px;"  # Placeholder for font size
-            "  font-weight: bold;"
-            "}}".format(font_size=self.font_size())  # Pass the font size argument
+            f"  border-radius: {oval_height // 2}px;"  # This creates the oval shape
+            f"  font-size: {self.font_size()}px;"
+            f"  font-weight: bold;"
+            f"}}"
         )
 
     def outline_label(self):
+        oval_height = self.font_size() * 2
+        self.setFixedHeight(oval_height)
+        # Update the border-radius to half the new height
         self.setStyleSheet(
-            "QLabel {"
+            f"QLabel {{"
             f"  background-color: white;"
-            f"  border-radius: 50%;"
-            f"  font-size: {self.font_size()}px;"  # Placeholder for font size
-            "  font-weight: bold;"
-            "  border: 2px solid black;"  # Add outline
-            "}"
+            f"  border-radius: {oval_height // 2}px;"  # This creates the oval shape
+            f"  font-size: {self.font_size()}px;"
+            f"  font-weight: bold;"
+            f"  border: 2px solid black;"
+            f"}}"
         )
 
     def mousePressEvent(self, event) -> None:
@@ -101,5 +109,21 @@ class SectionTypeLabel(QLabel):
 
     def resize_section_type_label(self) -> None:
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.setFixedHeight(self.font_size() * 2)
-        self.restore_default_style()
+
+        # Add a buffer for padding/margins that may not be accounted for by QFontMetrics
+        padding = 10
+
+        label_height = self.font_size() * 2
+        label_width = label_height * 5
+
+        self.setFixedSize(label_width, label_height)
+        self.setStyleSheet(
+            f"QLabel {{"
+            f"  background-color: white;"
+            f"  border-radius: {label_height // 2}px;"  # Adjust radius to maintain an oval shape
+            f"  font-size: {self.font_size()}px;"
+            f"  font-weight: bold;"
+            f"  padding-left: {padding}px;"
+            f"  padding-right: {padding}px;"
+            f"}}"
+        )
