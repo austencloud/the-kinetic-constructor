@@ -16,8 +16,8 @@ if TYPE_CHECKING:
     )
 
 
-class AdvancedStartPosPickerDefaultOriWidget(QWidget):
-    def __init__(self, advanced_start_pos_picker: "AdvancedStartPosPicker"):
+class AdvancedStartPosPickerDefaultOriPicker(QWidget):
+    def __init__(self, advanced_start_pos_picker: "AdvancedStartPosPicker") -> None:
         super().__init__(advanced_start_pos_picker)
         self.advanced_start_pos_picker = advanced_start_pos_picker
         self.main_widget = advanced_start_pos_picker.main_widget
@@ -38,7 +38,7 @@ class AdvancedStartPosPickerDefaultOriWidget(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.group_box, alignment=Qt.AlignmentFlag.AlignCenter)
 
-    def setup_orientation_buttons(self, hand_label_text: str, orientation_setter):
+    def setup_orientation_buttons(self, hand_label_text: str, orientation_setter) -> None:
         layout = QHBoxLayout()
         hand_label = QLabel(hand_label_text)
         layout.addWidget(hand_label)
@@ -63,3 +63,7 @@ class AdvancedStartPosPickerDefaultOriWidget(QWidget):
         self.advanced_start_pos_picker.advanced_start_pos_manager.update_right_default_ori(
             ori
         )
+
+    def resize_default_ori_picker(self) -> None:
+        width = self.advanced_start_pos_picker.width() //2
+        self.setFixedWidth(width)

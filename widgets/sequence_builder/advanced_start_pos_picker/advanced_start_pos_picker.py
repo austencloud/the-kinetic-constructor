@@ -15,7 +15,7 @@ from widgets.sequence_builder.components.start_pos_picker.choose_your_start_pos_
 )
 
 from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_default_ori_picker import (
-    AdvancedStartPosPickerDefaultOriWidget,
+    AdvancedStartPosPickerDefaultOriPicker,
 )
 
 
@@ -31,7 +31,7 @@ class AdvancedStartPosPicker(QWidget):
         self.main_widget = sequence_builder.main_widget
         self.start_pos_picker = self.sequence_builder.start_pos_picker
         self.start_pos_cache: dict[str, list[Pictograph]] = {}
-        self.default_ori_widget = AdvancedStartPosPickerDefaultOriWidget(self)
+        self.default_ori_widget = AdvancedStartPosPickerDefaultOriPicker(self)
         self.pictograph_frame = AdvancedStartPosPickerPictographFrame(self)
         self.choose_you_start_pos_label = ChooseYourStartPosLabel(self)
         self.pictograph_factory = AdvancedStartPosPickerPictographFactory(
@@ -40,8 +40,8 @@ class AdvancedStartPosPicker(QWidget):
         self.advanced_start_pos_manager = AdvancedStartPosManager(self)
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.grid_layout = QGridLayout()
-        self.layout.addWidget(self.default_ori_widget)
-        self.layout.addLayout(self.grid_layout)
+        self.layout.addWidget(self.default_ori_widget, 1)
+        self.layout.addLayout(self.grid_layout, 16)
 
     def display_variations(self, variations: list["Pictograph"]) -> None:
         self.view_width = self.calculate_view_width()
@@ -100,3 +100,7 @@ class AdvancedStartPosPicker(QWidget):
         self.sequence_builder.start_pos_picker.start_pos_manager.on_start_pos_clicked(
             variation
         )
+
+    def resize_advanced_start_pos_picker(self) -> None:
+        self.adjustSize()
+        self.default_ori_widget.resize_default_ori_picker()

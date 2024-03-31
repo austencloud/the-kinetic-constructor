@@ -3,6 +3,7 @@ from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 from constants import BLUE, HEX_BLUE, HEX_RED
+from widgets.graph_editor.components.GE_direct_set_adjustment_button import DirectSetAdjustmentButton
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
@@ -32,29 +33,11 @@ class GE_TurnsSelectionDialog(QDialog):
         layout.setSpacing(0)
 
         turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]
-        button_size = self.turns_box.width() // 2
 
-        turns_display_font_size = int(
-            self.turns_box.adjustment_panel.graph_editor.width() / 20
-        )
 
         for value in turns_values:
-            button = QPushButton(value)
-            button.setFixedSize(QSize(button_size, button_size))
-            button.setFont(QFont("Arial", turns_display_font_size, QFont.Weight.Bold))
-            # Set button style to match the turns display label
-            button.setStyleSheet(
-                f"""
-                QPushButton {{
-                    border: 2px solid {HEX_BLUE if self.turns_box.color == BLUE else HEX_RED};
-                    border-radius: {button_size // 2}px;
-                    background-color: white;
-                }}
-                QPushButton:hover {{
-                    background-color: #f0f0f0;
-                }}
-            """
-            )
+            button = DirectSetAdjustmentButton(value, self.turns_widget)
+            button.set_button_styles()
             button.clicked.connect(
                 lambda _, v=value: self.select_turns(float(v) if "." in v else int(v))
             )
@@ -65,3 +48,4 @@ class GE_TurnsSelectionDialog(QDialog):
     def select_turns(self, value):
         self.turns_widget.adjustment_manager.direct_set_turns(value)
         self.accept()
+

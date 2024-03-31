@@ -45,10 +45,7 @@ class SR_BeatFrame(QFrame):
         self.is_recording = True
         self.capture_timer.start(100)  # Adjust as needed for fps
 
-    def stop_recording(self):
-        self.is_recording = False
-        self.capture_timer.stop()
-        self.save_captured_frames_to_video()
+
 
     def capture_frame_state(self):
         if not self.is_recording:
@@ -162,24 +159,29 @@ class SR_BeatFrame(QFrame):
         #     beat_view.setFrameStyle(1)
 
     @staticmethod
-    def pixmap_to_cvimg(pixmap: QPixmap):
+    def pixmap_to_cvimg(pixmap: QPixmap) -> np.ndarray:
         """Convert QPixmap to an OpenCV image format."""
         size = pixmap.size()
         channels_count = 4
         image = pixmap.toImage()
         image = image.convertToFormat(QImage.Format.Format_RGBA8888)
         ptr = image.bits()
-        ptr.setsize(image.byteCount())
+        ptr.setsize(image.sizeInBytes())
         arr = np.array(ptr).reshape(size.height(), size.width(), channels_count)
         return cv2.cvtColor(arr, cv2.COLOR_RGBA2BGR)
 
-    def save_captured_frames_to_video(self):
+    def stop_recording(self) -> str:
+        self.is_recording = False
+        self.capture_timer.stop()
+        return self.save_beat_frame_recording()
+
+    def save_beat_frame_recording(self) -> str:
         if not self.frame_captures:
             print("No frames captured.")
             return
+        output_path = "beat_frame_capture.avi"
 
         # Example path, adjust as necessary
-        output_path = "beat_frame_capture.avi"
         height, width = (
             self.frame_captures[0].size().height(),
             self.frame_captures[0].size().width(),
@@ -192,4 +194,5 @@ class SR_BeatFrame(QFrame):
             out.write(frame)
 
         out.release()
-        print("Video saved.")
+        print("Beat frame recording saved successfully." + output_path)
+        return output_path

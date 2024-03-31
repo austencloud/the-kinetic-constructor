@@ -152,6 +152,8 @@ class SequenceBuilder(QFrame):
         # if the start pos picker is visible, resize it
         if self.start_pos_picker.isVisible():
             self.start_pos_picker.resize_start_pos_picker()
+        elif self.advanced_start_pos_picker.isVisible():
+            self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
         elif self.option_picker.isVisible():
             self.option_picker.resize_option_picker()
 

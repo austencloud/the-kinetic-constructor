@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from widgets.sequence_recorder.sequence_recorder import (
         SequenceRecorder,
     )
+from moviepy.editor import concatenate_videoclips, VideoFileClip
 
 
 class SR_CaptureFrame(QFrame):
@@ -23,8 +24,9 @@ class SR_CaptureFrame(QFrame):
         self.sequence_beat_frame = SR_BeatFrame(self)
         self.video_display_frame = SR_VideoDisplayFrame(self)
         self.recording = False
+        # set the object name
+        self.setObjectName("SR_CaptureFrame")
         self._setup_layout()
-        
 
     def _setup_layout(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
@@ -43,23 +45,37 @@ class SR_CaptureFrame(QFrame):
         self.video_display_frame.resize_video_display_frame()
         self.setFixedSize(size * 2, size)
 
+    def start_recording(self) -> None:
+        # Assuming each frame class has a method to start capturing video
+        self.recording = True
+        self.sequence_beat_frame.start_recording()
+        self.video_display_frame.start_recording()
+        # Feedback for recording
+        self.setStyleSheet("#SR_CaptureFrame { border: 3px solid red; }")
 
-    def toggle_recording(self):
-        self.recording = not self.recording
-        if self.recording:
-            # Apply recording visual feedback to the entire capture frame
-            self.setStyleSheet("border: 3px solid red;")
-            # Start recording both frames
-            self.start_recording()
-        else:
-            self.setStyleSheet("")
-            # Stop recording and process the videos
-            self.stop_recording()
+    def stop_recording(self) -> None:
+        # Stop capturing and save videos to files
+        self.recording = False
+        beat_video_path = self.sequence_beat_frame.stop_recording()
+        video_display_path = self.video_display_frame.stop_recording()
+        # Remove recording feedback
+        self.setStyleSheet("")
+        # Concatenate videos
+        self.concatenate_videos(beat_video_path, video_display_path)
 
-    def start_recording(self):
-        # Placeholder for starting the recording logic
-        pass
+    def concatenate_videos(self, video_path_1, video_path_2):
+        if video_path_1 is None or video_path_2 is None:
+            print("Error: One or both video paths are None. Cannot concatenate.")
+            return
 
-    def stop_recording(self):
-        # Placeholder for stopping the recording logic and processing videos
-        pass
+        if not (isinstance(video_path_1, str) and video_path_1.endswith('.avi')) or not (isinstance(video_path_2, str) and video_path_2.endswith('.avi')):
+            print("Error: Invalid file paths. Make sure the paths are strings and point to '.avi' files.")
+            return
+
+        try:
+            clip1 = VideoFileClip(video_path_1)
+            clip2 = VideoFileClip(video_path_2)
+            final_clip = concatenate_videoclips([clip1, clip2], method="compose")
+            final_clip.write_videofile("combined_video.mp4")
+        except Exception as e:
+            print(f"Failed to concatenate videos: {e}")

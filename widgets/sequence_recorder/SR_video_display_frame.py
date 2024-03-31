@@ -95,25 +95,26 @@ class SR_VideoDisplayFrame(QFrame):
         else:
             self.stop_recording()
 
-    def stop_recording(self):
+    def stop_recording(self)  -> str:
         self.setStyleSheet("")
-        self.save_video()
+        return self.save_video_display_recording()
 
-    def save_video(self) -> None:
+    def save_video_display_recording(self) -> str:
+        output_path = "video_display_capture.avi"
         if self.recording_frames:
             height, width, _ = self.recording_frames[0].shape
 
             fourcc = cv2.VideoWriter_fourcc(*"XVID")
             out = cv2.VideoWriter(
-                "output.avi", fourcc, self.video_frame_rate, (width, height)
+                output_path, fourcc, self.video_frame_rate, (width, height)
             )
             for frame in self.recording_frames:
                 out.write(frame)  # Write at original (maximum) resolution
             out.release()
-            QMessageBox.information(
-                self, "Recording Saved", "The video was saved successfully."
-            )
+            print("Video display recording saved successfully." + output_path)
+            
         self.recording_frames = []  # Clear the frames after saving
+        return output_path
 
     def closeEvent(self, event) -> None:
         if self.capture is not None:

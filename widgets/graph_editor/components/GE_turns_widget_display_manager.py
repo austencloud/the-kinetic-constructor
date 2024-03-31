@@ -110,7 +110,6 @@ class GE_TurnsWidgetDisplayManager:
 
     def update_turns_display(self, turns: Union[int, float]) -> None:
         self.turns_display.setText(str(turns))
-        # Logic to enable or disable the decrement button
         self.decrement_button.setEnabled(float(turns) > 0)
 
     def resize_dir_buttons(self) -> None:
