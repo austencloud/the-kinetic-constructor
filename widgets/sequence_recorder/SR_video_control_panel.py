@@ -31,7 +31,7 @@ class SR_VideoControlPanel(QFrame):
     def _init_ui(self) -> None:
         self._setup_controls()
         self._setup_layout()
-        self._populate_webcam_selector()
+        # self._populate_webcam_selector()
 
     def _setup_layout(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
@@ -63,14 +63,9 @@ class SR_VideoControlPanel(QFrame):
         self.setMinimumHeight(height)
         self.setMaximumHeight(height)
 
-    def _init_ui(self) -> None:
-        self._setup_controls()
-        self._setup_layout()
-        self._populate_webcam_selector()
-
     @staticmethod
     def detect_available_cameras() -> dict[int, str]:
-        max_tested = 2
+        max_tested = 5
         devices = {}
         for index in range(max_tested):
             cap = cv2.VideoCapture(index)
@@ -104,12 +99,12 @@ class SR_VideoControlPanel(QFrame):
             self.record_button.setText("Stop Recording")
             self.capture_frame.start_recording()
             # self.capture_frame.video_display_frame.start_recording()
-            # self.capture_frame.sequence_beat_frame.start_recording()
+            # self.capture_frame.sequence_widget_beat_frame.start_recording()
         else:
             self.capture_frame.stop_recording()
             self.record_button.setText("Record")
             # self.capture_frame.video_display_frame.stop_recording()
-            # self.capture_frame.sequence_beat_frame.stop_recording()
+            # self.capture_frame.sequence_widget_beat_frame.stop_recording()
 
     def _populate_webcam_selector(self) -> None:
         self.webcam_selector.clear()

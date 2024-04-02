@@ -7,8 +7,10 @@ from ..indicator_label import IndicatorLabel
 from ..scroll_area.components.sequence_widget_pictograph_factory import (
     SequenceWidgetPictographFactory,
 )
-from .sequence_beat_frame.beat import Beat
-from .sequence_beat_frame.sequence_widget_beat_frame import SequenceWidgetBeatFrame
+from .sequence_widget_beat_frame.beat import Beat
+from .sequence_widget_beat_frame.sequence_widget_beat_frame import (
+    SequenceWidgetBeatFrame,
+)
 from .sequence_widget_button_frame import SequenceWidgetButtonFrame
 from PyQt6.QtCore import Qt
 
@@ -33,12 +35,12 @@ class SequenceWidget(QWidget):
         self.layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        
+
         self.indicator_label_layout = QHBoxLayout()
         self.indicator_label_layout.addStretch(1)
         self.indicator_label_layout.addWidget(self.indicator_label)
         self.indicator_label_layout.addStretch(1)
-        
+
         self.layout.addWidget(self.my_sequence_label, 1)
         self.layout.addWidget(self.beat_frame, 15)
         self.layout.addWidget(self.button_frame, 1)

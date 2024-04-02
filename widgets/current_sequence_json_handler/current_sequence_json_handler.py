@@ -2,7 +2,7 @@ import json
 from Enums.MotionAttributes import Color
 from constants import BLUE, DASH, NO_ROT, RED, STATIC
 from path_helpers import get_user_editable_resource_path
-from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
+from widgets.sequence_widget.sequence_widget_beat_frame.beat import BeatView
 from .motion_orientation_json_calculator import CurrentSequenceJsonOriCalculator
 from widgets.pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING, Union

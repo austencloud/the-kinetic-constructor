@@ -8,6 +8,8 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
 )
 
+from path_helpers import get_my_photos_path
+
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
@@ -44,13 +46,17 @@ class SequenceWidgetButtonFrame(QFrame):
         self.orientations = ["in", "counter", "out", "clock"]
 
         self.font_size = self.sequence_widget.width() // 45
+        self.export_manager = self.beat_frame.export_manager
         self.setup_save_sequence_button()
         self.setup_clear_sequence_button()
+        self.setup_export_button()
         self.setup_layout()
 
     def setup_save_sequence_button(self) -> None:
-        self.save_sequence_button = SequenceButton("Save Sequence", self.font_size)
-        self.save_sequence_button.clicked.connect(self.save_sequence)
+        self.add_to_dictionary_button = SequenceButton(
+            "Add To Dictionary", self.font_size
+        )
+        self.add_to_dictionary_button.clicked.connect(self.save_sequence)
 
     def setup_clear_sequence_button(self) -> None:
         self.clear_sequence_button = SequenceButton("Clear Sequence", self.font_size)
@@ -58,10 +64,17 @@ class SequenceWidgetButtonFrame(QFrame):
             lambda: self.clear_sequence(show_indicator=True)
         )
 
+    def setup_export_button(self) -> None:
+        self.export_button = SequenceButton("Export Image", self.font_size)
+        self.export_button.clicked.connect(
+            lambda: self.export_manager.export_beat_frame_image()
+        )
+
     def setup_layout(self) -> None:
         buttons_layout = QHBoxLayout()
-        buttons_layout.addWidget(self.save_sequence_button)
+        buttons_layout.addWidget(self.add_to_dictionary_button)
         buttons_layout.addWidget(self.clear_sequence_button)
+        buttons_layout.addWidget(self.export_button)
         buttons_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         label_layout = QHBoxLayout()

@@ -10,6 +10,12 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtGui import QImage, QPixmap, QFont
 
+from path_helpers import (
+    get_images_and_data_path,
+    get_my_videos_path,
+    get_user_editable_resource_path,
+)
+
 if TYPE_CHECKING:
     from widgets.sequence_recorder.SR_capture_frame import (
         SR_CaptureFrame,
@@ -95,12 +101,12 @@ class SR_VideoDisplayFrame(QFrame):
         else:
             self.stop_recording()
 
-    def stop_recording(self)  -> str:
+    def stop_recording(self) -> str:
         self.setStyleSheet("")
         return self.save_video_display_recording()
 
     def save_video_display_recording(self) -> str:
-        output_path = "video_display_capture.avi"
+        output_path = get_my_videos_path("video_display_capture.avi")
         if self.recording_frames:
             height, width, _ = self.recording_frames[0].shape
 
@@ -112,7 +118,7 @@ class SR_VideoDisplayFrame(QFrame):
                 out.write(frame)  # Write at original (maximum) resolution
             out.release()
             print("Video display recording saved successfully." + output_path)
-            
+
         self.recording_frames = []  # Clear the frames after saving
         return output_path
 
@@ -122,7 +128,7 @@ class SR_VideoDisplayFrame(QFrame):
 
     def resize_video_display_frame(self) -> None:
         if not hasattr(self, "beat_frame"):
-            self.beat_frame = self.capture_frame.sequence_beat_frame
+            self.beat_frame = self.capture_frame.sequence_widget_beat_frame
 
         height = self.beat_frame.height()
         self.setFixedHeight(height)

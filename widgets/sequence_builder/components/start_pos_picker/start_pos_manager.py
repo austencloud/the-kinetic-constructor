@@ -2,7 +2,7 @@ from copy import deepcopy
 from PyQt6.QtCore import QObject, pyqtSignal
 from Enums.letters import Letter
 from constants import END_POS, START_POS
-from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
+from widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat import (
     StartPositionBeat,
 )
 from ....pictograph.pictograph import Pictograph
@@ -71,7 +71,7 @@ class StartPosManager(QObject):
             deepcopy(clicked_start_option.pictograph_dict)
         )
 
-        self.sequence_builder.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos_beat(
+        self.sequence_builder.main_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
             start_position_beat
         )
         self.sequence_builder.current_pictograph = start_position_beat
@@ -83,7 +83,7 @@ class StartPosManager(QObject):
         self.start_position_selected.connect(
             self.sequence_builder.transition_to_sequence_building
         )
-        
+
         self.sequence_builder.main_widget.json_manager.current_sequence_json_handler.set_start_position_data(
             start_position_beat
         )
@@ -137,8 +137,10 @@ class StartPosManager(QObject):
                     "red_attributes"
                 ]["end_ori"]
                 pictograph_factory = self.main_widget.sequence_widget.pictograph_factory
-                pictograph_key = self.main_widget.pictograph_key_generator.generate_pictograph_key(
-                    pictograph_dict
+                pictograph_key = (
+                    self.main_widget.pictograph_key_generator.generate_pictograph_key(
+                        pictograph_dict
+                    )
                 )
                 return pictograph_factory.get_or_create_pictograph(
                     pictograph_key, pictograph_dict

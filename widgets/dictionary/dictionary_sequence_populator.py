@@ -45,7 +45,7 @@ class DictionarySequencePopulator:
             sequence_data
         )
         self.json_handler.set_start_position_data(start_pos_beat)
-        self.start_pos_view.set_start_pos_beat(start_pos_beat)
+        self.start_pos_view.set_start_pos(start_pos_beat)
         for pictograph_dict in sequence_data:
             if pictograph_dict.get("sequence_start_position"):
                 continue
@@ -53,10 +53,13 @@ class DictionarySequencePopulator:
 
         last_beat = self.sequence_widget.beat_frame.get_last_filled_beat().beat
         self.sequence_builder.current_pictograph = last_beat
+        last_beat.view.selection_manager.select_beat(last_beat.view)
+        
         if self.sequence_builder.start_pos_picker.isVisible():
             self.sequence_builder.transition_to_sequence_building()
         sequence = self.json_handler.load_current_sequence_json()
 
+        self.sequence_builder.option_picker.resize_option_picker()
         scroll_area = self.sequence_builder.option_picker.scroll_area
         scroll_area.remove_irrelevant_pictographs()
         scroll_area.add_and_display_relevant_pictographs(

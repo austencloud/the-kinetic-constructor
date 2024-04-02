@@ -23,12 +23,12 @@ class SR_BeatControlPanel(QFrame):
         self.control_frame = control_frame
         self.sequence_recorder = self.control_frame.sequence_recorder
         self.capture_frame = self.sequence_recorder.capture_frame
-        self.beat_frame = self.capture_frame.sequence_beat_frame
+        self.beat_frame = self.capture_frame.sequence_widget_beat_frame
         self.selection_manager = self.beat_frame.selection_manager
         self.init_ui()
         self.setObjectName("SR_BeatControlPanel")
         self.setStyleSheet("#SR_BeatControlPanel { border: 1px solid black; }")
-        
+
     def init_ui(self) -> None:
         self._setup_bpm_slider()
         self._setup_metronome_sound_selector()
@@ -45,23 +45,23 @@ class SR_BeatControlPanel(QFrame):
         self.is_playing = not self.is_playing
         if self.is_playing:
             self.play_button.setText("Pause")
-            
+
             # Check if a BPM has been explicitly set; if not, use the slider's value
-            current_bpm = self.selection_manager.get_current_bpm()  # Assuming such a method exists
+            current_bpm = (
+                self.selection_manager.get_current_bpm()
+            )  # Assuming such a method exists
             if not current_bpm:
                 # Default to the slider's value if no BPM is set
                 current_bpm = self.bpm_slider.value()
                 self.selection_manager.set_bpm(current_bpm)
                 self.bpm_display.setText(f"BPM: {current_bpm}")
-            
+
             # Reset the selection manager to the beginning of the array
             self.selection_manager.reset_selection()
             self.selection_manager.start_selection_movement()
         else:
             self.play_button.setText("Play")
             self.selection_manager.stop_selection_movement()
-
-
 
     def _setup_metronome_sound_selector(self):
         self.metronome_sound_selector = QComboBox()

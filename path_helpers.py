@@ -1,5 +1,6 @@
 import sys
 import os
+import winreg
 
 
 def get_images_and_data_path(filename) -> str:
@@ -57,3 +58,73 @@ def get_dictionary_path() -> str:
         dictionary_path = os.path.join(os.getcwd(), "dictionary")
     os.makedirs(dictionary_path, exist_ok=True)
     return dictionary_path
+
+
+def get_win32_special_folder_path(folder_name) -> str:
+    """
+    Returns the path to the user's custom folder on Windows.
+    This folder is set by the user via the Explorer.
+    """
+    if sys.platform == "win32":
+        try:
+            with winreg.OpenKey(
+                winreg.HKEY_CURRENT_USER,
+                r"Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders",
+            ) as key:
+                folder_dir, _ = winreg.QueryValueEx(key, folder_name)
+                folder_dir = os.path.expandvars(folder_dir)
+        except FileNotFoundError as e:
+            raise FileNotFoundError(
+                f"Could not find the {folder_name} path in the registry."
+            ) from e
+    else:
+        raise NotImplementedError("This function is implemented for Windows only.")
+
+    os.makedirs(folder_dir, exist_ok=True)
+    return folder_dir
+
+
+def get_my_special_folder_path(folder_name, filename) -> str:
+    """
+    Returns the full path to a file in the user's custom folder.
+    """
+    folder_dir = get_win32_special_folder_path(folder_name)
+    return os.path.join(folder_dir, filename)
+
+
+def get_win32_videos_path() -> str:
+    """
+    Returns the path to the user's custom videos directory on Windows.
+    This directory is set by the user via the Explorer.I. I.
+    """
+    videos_dir = get_win32_special_folder_path("My Video")
+    tka_dir = os.path.join(videos_dir, "The Kinetic Alphabet")
+    os.makedirs(tka_dir, exist_ok=True)
+    return tka_dir
+
+
+def get_win32_photos_path() -> str:
+    """
+    Returns the path to the user's custom photos directory on Windows.
+    This directory is set by the user via the Explorer.
+    """
+    photos_dir = get_win32_special_folder_path("My Pictures")
+    tka_dir = os.path.join(photos_dir, "The Kinetic Alphabet")
+    os.makedirs(tka_dir, exist_ok=True)
+    return tka_dir
+
+
+def get_my_videos_path(filename) -> str:
+    """
+    Returns the full path to a file in the user's videos directory.
+    """
+    videos_dir = get_win32_videos_path()
+    return os.path.join(videos_dir, filename)
+
+
+def get_my_photos_path(filename) -> str:
+    """
+    Returns the full path to a file in the user's photos directory.
+    """
+    photos_dir = get_win32_photos_path()
+    return os.path.join(photos_dir, filename)

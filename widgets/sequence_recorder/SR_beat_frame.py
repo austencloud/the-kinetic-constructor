@@ -5,6 +5,7 @@ from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QPixmap, QImage
 import cv2
 import numpy as np
+from path_helpers import get_my_videos_path, get_user_editable_resource_path
 from widgets.sequence_recorder.SR_beat_selection_manager import (
     SR_BeatSelectionManager,
 )
@@ -15,7 +16,7 @@ if TYPE_CHECKING:
     from widgets.sequence_recorder.SR_capture_frame import SR_CaptureFrame
     from widgets.sequence_recorder.sequence_recorder import MainWidget
 
-from widgets.sequence_widget.sequence_beat_frame.beat import Beat, BeatView
+from widgets.sequence_widget.sequence_widget_beat_frame.beat import Beat, BeatView
 
 
 class SR_BeatFrame(QFrame):
@@ -44,8 +45,6 @@ class SR_BeatFrame(QFrame):
         self.frame_captures.clear()
         self.is_recording = True
         self.capture_timer.start(100)  # Adjust as needed for fps
-
-
 
     def capture_frame_state(self):
         if not self.is_recording:
@@ -79,7 +78,7 @@ class SR_BeatFrame(QFrame):
     def add_scene_to_sequence(self, new_beat: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
-            self.beat_views[next_beat_index].set_pictograph(new_beat)
+            self.beat_views[next_beat_index].set_beat(new_beat, next_beat_index + 1)
             self.current_sequence_json_handler.update_current_sequence_file_with_beat(
                 self.beat_views[next_beat_index]
             )
@@ -155,9 +154,6 @@ class SR_BeatFrame(QFrame):
             )
             self.pictograph_cache[pictograph_key] = beat
 
-        # for beat_view in self.beat_views:
-        #     beat_view.setFrameStyle(1)
-
     @staticmethod
     def pixmap_to_cvimg(pixmap: QPixmap) -> np.ndarray:
         """Convert QPixmap to an OpenCV image format."""
@@ -179,9 +175,8 @@ class SR_BeatFrame(QFrame):
         if not self.frame_captures:
             print("No frames captured.")
             return
-        output_path = "beat_frame_capture.avi"
+        output_path = get_my_videos_path("beat_frame_capture.avi")
 
-        # Example path, adjust as necessary
         height, width = (
             self.frame_captures[0].size().height(),
             self.frame_captures[0].size().width(),

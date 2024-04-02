@@ -3,10 +3,11 @@ from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QPainter, QPen, QColor
 from PyQt6.QtCore import Qt, QUrl, QTimer
 from typing import TYPE_CHECKING, Optional
-from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
+from path_helpers import get_images_and_data_path
+from widgets.sequence_widget.sequence_widget_beat_frame.beat import BeatView
 from PyQt6.QtMultimedia import QAudioOutput, QSoundEffect
 
-from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
+from widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat import (
     StartPositionBeatView,
 )
 
@@ -28,7 +29,7 @@ class SR_BeatSelectionManager(QWidget):
         self.audio_output.setVolume(1.0)  # Set volume to 100%
         self.border_color = QColor("gold")
         self.border_width = 6
-        path = "audio/metronomes/"
+        path = get_images_and_data_path("audio/metronomes/")
         self.metronome_sounds = {
             "quartz": QSoundEffect(),
             "block": QSoundEffect(),
@@ -77,7 +78,7 @@ class SR_BeatSelectionManager(QWidget):
             self.current_index = next_index
 
         # Now select the beat at current_index
-        
+
         current_beat = self.beat_frame.beat_views[self.current_index]
         if current_beat.scene():
             self.select_beat(current_beat)
