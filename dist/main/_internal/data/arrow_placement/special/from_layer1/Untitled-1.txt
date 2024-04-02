@@ -1,3 +1,0 @@
-TODO:
-
-Fix the special placement entries for Lam-, make sure the mirrored entry is properly calculated
