@@ -1,6 +1,7 @@
 import os
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtWidgets import QApplication, QMainWindow, QSplashScreen
+from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt, QEvent
 from profiler import Profiler
 from settings_manager import SettingsManager
@@ -39,13 +40,53 @@ class MainWindow(QMainWindow):
 
 def main() -> None:
     app = QApplication(sys.argv)
+<<<<<<< HEAD
     app.setAttribute(
         Qt.ApplicationAttribute.AA_SynthesizeMouseForUnhandledTouchEvents, False
     )
 
+=======
+
+    # Create and display the splash screen
+    splash_pix = QPixmap(
+        "path/to/splash_image.jpg"
+    )  # Specify the path to your splash image
+    splash = QSplashScreen(splash_pix, Qt.WindowType.WindowStaysOnTopHint)
+    splash.setWindowFlags(
+        Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.FramelessWindowHint
+    )
+    splash.showMessage(
+        "Loading...",
+        Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignCenter,
+        Qt.GlobalColor.white,
+    )
+    splash.show()
+
+    # Ensure the splash screen is displayed immediately
+    app.processEvents()
+
+    # Initialize your main window here (heavy lifting)
+>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409
     profiler = Profiler()
     main_window = MainWindow(profiler)
+    splash.showMessage(
+        "Setting up the main interface...",
+        Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignCenter,
+        Qt.GlobalColor.white,
+    )
+
+    # Example of updating the splash screen with new messages
+    splash.showMessage(
+        "Loading modules...",
+        Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignCenter,
+        Qt.GlobalColor.white,
+    )
+
+    # Finish splash and show the main window
+    splash.finish(main_window)
     exit_code = main_window.exec_with_profiling(app)
+
+    # Your existing code for profiling and exit
     root_directory = os.path.dirname(os.path.abspath(__file__))
     profiler.write_profiling_stats_to_file("main_profiling_stats.txt", root_directory)
     sys.exit(exit_code)

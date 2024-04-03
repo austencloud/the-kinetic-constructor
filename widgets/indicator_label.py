@@ -23,7 +23,11 @@ class IndicatorLabel(QLabel):
         # add black border
         # self.setStyleSheet("border: 1px solid black;")
 
+<<<<<<< HEAD
     def show_indicator(self, text):
+=======
+    def show_message(self, text) -> None:
+>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409
         self.setText(text)
         self.timer.start(5000)  # 5000 milliseconds = 5 seconds
 

@@ -1,7 +1,8 @@
 {
   "R": {
     "(0, 0)": {
-      "anti_from_layer1": [130, -80]
+      "anti_from_layer1": [10, -10],
+      "pro_from_layer2": [80, -15]
     },
     "(0, 1)": {
       "pro_from_layer1": [100, -75],

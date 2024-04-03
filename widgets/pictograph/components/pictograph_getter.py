@@ -121,3 +121,17 @@ class PictographGetter:
                 "end_ori": self.red_motion.end_ori,  # Assuming end orientation is handled by the Motion object
             },
         }
+
+    def end_pos_letter(self) -> str:
+        """Check the end pos of the pictograph and if the string begins with "beta", return the lowercase beta symbol.
+        If it's "alpha", return the lowercase alpha symbol.
+        If it's "gamma", return the uppercase gamma symbol.
+        """
+        end_pos = self.pictograph.end_pos
+        if end_pos.startswith("beta"):
+            return "β"
+        elif end_pos.startswith("alpha"):
+            return "α"
+        elif end_pos.startswith("gamma"):
+            return "Γ"
+        return end_pos

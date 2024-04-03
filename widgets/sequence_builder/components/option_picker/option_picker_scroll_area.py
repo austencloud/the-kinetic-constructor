@@ -45,6 +45,12 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.pictograph_factory = OptionPickerPictographFactory(
             self, self.sequence_builder.pictograph_cache
         )
+<<<<<<< HEAD
+=======
+        self.setStyleSheet("background-color: transparent; border: none;")
+        self.setContentsMargins(0, 0, 0, 0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409
 
     def fix_stretch(self):
         if self.stretch_index >= 0:
@@ -65,6 +71,10 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             pictograph = self._get_or_create_pictograph(pictograph_dict)
             pictograph.updater._update_from_pictograph_dict(pictograph_dict)
             self.display_manager.add_pictograph_to_section_layout(pictograph)
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409
         self.display_manager.order_and_display_pictographs()
         QApplication.restoreOverrideCursor()
 
@@ -105,6 +115,11 @@ class OptionPickerScrollArea(BasePictographScrollArea):
 
     def resize_option_picker_scroll_area(self) -> None:
         self.setMinimumWidth(self.option_picker.sequence_builder.width())
+<<<<<<< HEAD
+=======
+        for section in self.sections_manager.sections.values():
+            section.resize_option_picker_section_widget()
+>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         modifiers = QApplication.keyboardModifiers()

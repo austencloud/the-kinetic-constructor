@@ -5,8 +5,13 @@ from PyQt6.QtCore import pyqtSignal
 from widgets.sequence_builder.components.option_picker.option_manager import (
     OptionManager,
 )
+<<<<<<< HEAD
 from widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label import (
     ChooseYourNextOptionLabel,
+=======
+from widgets.sequence_builder.components.start_pos_picker.choose_your_next_pictograph_label import (
+    ChooseYourNextPictographLabel,
+>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409
 )
 
 from .option_picker_scroll_area import OptionPickerScrollArea

@@ -1,0 +1,414 @@
+[
+    {
+        "sequence_start_position": "alpha",
+        "end_pos": "alpha1",
+        "blue_attributes": {
+            "end_loc": "s",
+            "end_ori": "in"
+        },
+        "red_attributes": {
+            "end_loc": "n",
+            "end_ori": "in"
+        }
+    },
+    {
+        "letter": "θ-",
+        "start_pos": "alpha1",
+        "end_pos": "gamma2",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "dash",
+            "start_ori": "in",
+            "prop_rot_dir": "cw",
+            "start_loc": "s",
+            "end_loc": "n",
+            "turns": 0.5,
+            "end_ori": "clock"
+        },
+        "red_attributes": {
+            "motion_type": "pro",
+            "start_ori": "in",
+            "prop_rot_dir": "cw",
+            "start_loc": "n",
+            "end_loc": "e",
+            "turns": 0,
+            "end_ori": "in"
+        }
+    },
+    {
+        "letter": "Y",
+        "start_pos": "gamma2",
+        "end_pos": "beta2",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "pro",
+            "start_ori": "clock",
+            "prop_rot_dir": "cw",
+            "start_loc": "n",
+            "end_loc": "e",
+            "turns": 0,
+            "end_ori": "clock"
+        },
+        "red_attributes": {
+            "motion_type": "static",
+            "start_ori": "in",
+            "prop_rot_dir": "no_rot",
+            "start_loc": "e",
+            "end_loc": "e",
+            "turns": 0,
+            "end_ori": "in"
+        }
+    },
+    {
+        "letter": "Δ-",
+        "start_pos": "beta2",
+        "end_pos": "gamma1",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "dash",
+            "start_ori": "clock",
+            "prop_rot_dir": "cw",
+            "start_loc": "e",
+            "end_loc": "w",
+            "turns": 0.5,
+            "end_ori": "out"
+        },
+        "red_attributes": {
+            "motion_type": "anti",
+            "start_ori": "in",
+            "prop_rot_dir": "cw",
+            "start_loc": "e",
+            "end_loc": "n",
+            "turns": 0,
+            "end_ori": "out"
+        }
+    },
+    {
+        "letter": "Λ",
+        "start_pos": "gamma1",
+        "end_pos": "gamma7",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "static",
+            "start_ori": "out",
+            "prop_rot_dir": "cw",
+            "start_loc": "w",
+            "end_loc": "w",
+            "turns": 1,
+            "end_ori": "in"
+        },
+        "red_attributes": {
+            "motion_type": "dash",
+            "start_ori": "out",
+            "prop_rot_dir": "no_rot",
+            "start_loc": "n",
+            "end_loc": "s",
+            "turns": 0,
+            "end_ori": "in"
+        }
+    },
+    {
+        "letter": "W-",
+        "start_pos": "gamma7",
+        "end_pos": "alpha4",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "dash",
+            "start_ori": "in",
+            "prop_rot_dir": "cw",
+            "start_loc": "w",
+            "end_loc": "e",
+            "turns": 0.5,
+            "end_ori": "clock"
+        },
+        "red_attributes": {
+            "motion_type": "pro",
+            "start_ori": "in",
+            "prop_rot_dir": "cw",
+            "start_loc": "s",
+            "end_loc": "w",
+            "turns": 0,
+            "end_ori": "in"
+        }
+    },
+    {
+        "letter": "Σ",
+        "start_pos": "alpha4",
+        "end_pos": "gamma4",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "pro",
+            "start_ori": "clock",
+            "prop_rot_dir": "cw",
+            "start_loc": "e",
+            "end_loc": "s",
+            "turns": 0,
+            "end_ori": "clock"
+        },
+        "red_attributes": {
+            "motion_type": "static",
+            "start_ori": "in",
+            "prop_rot_dir": "no_rot",
+            "start_loc": "w",
+            "end_loc": "w",
+            "turns": 0,
+            "end_ori": "in"
+        }
+    },
+    {
+        "letter": "X-",
+        "start_pos": "gamma4",
+        "end_pos": "alpha3",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "dash",
+            "start_ori": "clock",
+            "prop_rot_dir": "cw",
+            "start_loc": "s",
+            "end_loc": "n",
+            "turns": 0.5,
+            "end_ori": "out"
+        },
+        "red_attributes": {
+            "motion_type": "anti",
+            "start_ori": "in",
+            "prop_rot_dir": "cw",
+            "start_loc": "w",
+            "end_loc": "s",
+            "turns": 0,
+            "end_ori": "out"
+        }
+    },
+    {
+        "letter": "Ψ",
+        "start_pos": "alpha3",
+        "end_pos": "beta1",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "static",
+            "start_ori": "out",
+            "prop_rot_dir": "cw",
+            "start_loc": "n",
+            "end_loc": "n",
+            "turns": 1,
+            "end_ori": "in"
+        },
+        "red_attributes": {
+            "motion_type": "dash",
+            "start_ori": "out",
+            "prop_rot_dir": "no_rot",
+            "start_loc": "s",
+            "end_loc": "n",
+            "turns": 0,
+            "end_ori": "in"
+        }
+    },
+    {
+        "letter": "Δ-",
+        "start_pos": "beta1",
+        "end_pos": "gamma4",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "dash",
+            "start_ori": "in",
+            "prop_rot_dir": "cw",
+            "start_loc": "n",
+            "end_loc": "s",
+            "turns": 0.5,
+            "end_ori": "clock"
+        },
+        "red_attributes": {
+            "motion_type": "anti",
+            "start_ori": "in",
+            "prop_rot_dir": "cw",
+            "start_loc": "n",
+            "end_loc": "w",
+            "turns": 0,
+            "end_ori": "out"
+        }
+    },
+    {
+        "letter": "Y",
+        "start_pos": "gamma4",
+        "end_pos": "beta4",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "pro",
+            "start_ori": "clock",
+            "prop_rot_dir": "cw",
+            "start_loc": "s",
+            "end_loc": "w",
+            "turns": 0,
+            "end_ori": "clock"
+        },
+        "red_attributes": {
+            "motion_type": "static",
+            "start_ori": "out",
+            "prop_rot_dir": "no_rot",
+            "start_loc": "w",
+            "end_loc": "w",
+            "turns": 0,
+            "end_ori": "out"
+        }
+    },
+    {
+        "letter": "Σ-",
+        "start_pos": "beta4",
+        "end_pos": "gamma5",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "dash",
+            "start_ori": "clock",
+            "prop_rot_dir": "cw",
+            "start_loc": "w",
+            "end_loc": "e",
+            "turns": 0.5,
+            "end_ori": "out"
+        },
+        "red_attributes": {
+            "motion_type": "pro",
+            "start_ori": "out",
+            "prop_rot_dir": "cw",
+            "start_loc": "w",
+            "end_loc": "n",
+            "turns": 0,
+            "end_ori": "out"
+        }
+    },
+    {
+        "letter": "Λ",
+        "start_pos": "gamma5",
+        "end_pos": "gamma3",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "static",
+            "start_ori": "out",
+            "prop_rot_dir": "cw",
+            "start_loc": "e",
+            "end_loc": "e",
+            "turns": 1,
+            "end_ori": "in"
+        },
+        "red_attributes": {
+            "motion_type": "dash",
+            "start_ori": "out",
+            "prop_rot_dir": "no_rot",
+            "start_loc": "n",
+            "end_loc": "s",
+            "turns": 0,
+            "end_ori": "in"
+        }
+    },
+    {
+        "letter": "X-",
+        "start_pos": "gamma3",
+        "end_pos": "alpha2",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "dash",
+            "start_ori": "in",
+            "prop_rot_dir": "cw",
+            "start_loc": "e",
+            "end_loc": "w",
+            "turns": 0.5,
+            "end_ori": "clock"
+        },
+        "red_attributes": {
+            "motion_type": "anti",
+            "start_ori": "in",
+            "prop_rot_dir": "cw",
+            "start_loc": "s",
+            "end_loc": "e",
+            "turns": 0,
+            "end_ori": "out"
+        }
+    },
+    {
+        "letter": "Σ",
+        "start_pos": "alpha2",
+        "end_pos": "gamma2",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "pro",
+            "start_ori": "clock",
+            "prop_rot_dir": "cw",
+            "start_loc": "w",
+            "end_loc": "n",
+            "turns": 0,
+            "end_ori": "clock"
+        },
+        "red_attributes": {
+            "motion_type": "static",
+            "start_ori": "out",
+            "prop_rot_dir": "no_rot",
+            "start_loc": "e",
+            "end_loc": "e",
+            "turns": 0,
+            "end_ori": "out"
+        }
+    },
+    {
+        "letter": "Y-",
+        "start_pos": "gamma2",
+        "end_pos": "beta3",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "dash",
+            "start_ori": "clock",
+            "prop_rot_dir": "cw",
+            "start_loc": "n",
+            "end_loc": "s",
+            "turns": 0.5,
+            "end_ori": "out"
+        },
+        "red_attributes": {
+            "motion_type": "pro",
+            "start_ori": "out",
+            "prop_rot_dir": "cw",
+            "start_loc": "e",
+            "end_loc": "s",
+            "turns": 0,
+            "end_ori": "out"
+        }
+    },
+    {
+        "letter": "Φ",
+        "start_pos": "beta3",
+        "end_pos": "alpha1",
+        "timing": "none",
+        "direction": "none",
+        "blue_attributes": {
+            "motion_type": "static",
+            "start_ori": "out",
+            "prop_rot_dir": "cw",
+            "start_loc": "s",
+            "end_loc": "s",
+            "turns": 1,
+            "end_ori": "in"
+        },
+        "red_attributes": {
+            "motion_type": "dash",
+            "start_ori": "out",
+            "prop_rot_dir": "no_rot",
+            "start_loc": "s",
+            "end_loc": "n",
+            "turns": 0,
+            "end_ori": "in"
+        }
+    }
+]

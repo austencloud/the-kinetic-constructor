@@ -9,8 +9,15 @@ from ..pictograph.pictograph import Pictograph
 from ..scroll_area.components.sequence_widget_pictograph_factory import (
     SequenceWidgetPictographFactory,
 )
+<<<<<<< HEAD
 from .sequence_beat_frame.beat import Beat
 from .sequence_beat_frame.sequence_beat_frame import SequenceBeatFrame
+=======
+from .sequence_widget_beat_frame.beat import Beat
+from .sequence_widget_beat_frame.sequence_widget_beat_frame import (
+    SequenceWidgetBeatFrame,
+)
+>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409
 from .sequence_widget_button_frame import SequenceWidgetButtonFrame
 from PyQt6.QtCore import Qt
 
@@ -37,6 +44,15 @@ class SequenceWidget(QWidget):
         self.layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
+<<<<<<< HEAD
+=======
+
+        self.indicator_label_layout = QHBoxLayout()
+        self.indicator_label_layout.addStretch(1)
+        self.indicator_label_layout.addWidget(self.indicator_label)
+        self.indicator_label_layout.addStretch(1)
+
+>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409
         self.layout.addWidget(self.my_sequence_label, 1)
         self.layout.addWidget(self.beat_frame, 15)
         self.layout.addWidget(self.button_frame, 1)

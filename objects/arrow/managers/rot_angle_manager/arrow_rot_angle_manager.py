@@ -25,12 +25,5 @@ class ArrowRotAngleManager:
         return calculator_class_map.get(self.arrow.motion.motion_type)
 
     def update_rotation(self) -> None:
-        if self.calculator_class:
-            calculator: BaseRotAngleCalculator = self.calculator_class(self.arrow)
-            calculator.apply_rotation()
-        else:
-            print(
-                "No rot angle calculator found for the motion type: ",
-                self.arrow.motion.motion_type,
-            )
-
+        calculator: BaseRotAngleCalculator = self.calculator_class(self.arrow)
+        calculator.apply_rotation()

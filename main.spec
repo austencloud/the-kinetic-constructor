@@ -26,8 +26,11 @@ exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
+<<<<<<< HEAD
     upx_exclude=[],
     runtime_tmpdir=None,
+=======
+>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409
     console=True,
     disable_windowed_traceback=False,
     argv_emulation=False,

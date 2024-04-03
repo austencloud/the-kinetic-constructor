@@ -65,7 +65,7 @@ class Pictograph(QGraphicsScene):
     pictograph_dict: dict
     motion_dict_list: list[dict]
     start_pos: SpecificPosition
-    end_pos: SpecificPosition
+    end_pos: str
     image_loaded: bool
     pixmap: QGraphicsPixmapItem
     arrow_turns: int

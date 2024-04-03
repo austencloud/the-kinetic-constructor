@@ -4,7 +4,7 @@ from widgets.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPainter, QPen, QColor, QKeyEvent
 
-from widgets.sequence_widget.sequence_beat_frame.beat import Beat
+from widgets.sequence_widget.sequence_widget_beat_frame.beat import Beat
 
 if TYPE_CHECKING:
     from widgets.graph_editor.graph_editor import GraphEditor

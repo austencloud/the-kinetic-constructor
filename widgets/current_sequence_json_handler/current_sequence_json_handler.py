@@ -2,10 +2,15 @@ import json
 
 from Enums.MotionAttributes import Color
 from constants import BLUE, DASH, NO_ROT, RED, STATIC
+<<<<<<< HEAD
 from objects.motion.current_sequence_json_validation_engine import (
     CurrentSequenceJsonValidationEngine,
 )
 from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
+=======
+from path_helpers import get_user_editable_resource_path
+from widgets.sequence_widget.sequence_widget_beat_frame.beat import BeatView
+>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409
 from .motion_orientation_json_calculator import CurrentSequenceJsonOriCalculator
 from widgets.pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING, Union
