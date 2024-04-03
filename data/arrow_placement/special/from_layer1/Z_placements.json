@@ -1,5 +1,9 @@
 {
   "Z": {
-    "(s, 0, 1)": {}
+    "(s, 0, 1)": {
+      "static_rot_angle_override": true,
+      "static": [-100, 0],
+      "anti": [25, -35]
+    }
   }
 }

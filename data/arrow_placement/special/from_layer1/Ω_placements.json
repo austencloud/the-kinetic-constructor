@@ -12,8 +12,7 @@
       "anti": [90, -95]
     },
     "(s, 0, 1)": {
-      "static_rot_angle_override": true,
-      "static": [80, -15]
+      "static": [75, -15]
     },
     "(s, 0, 1.5)": {
       "anti": [85, -75]
@@ -173,6 +172,9 @@
     "(s, 3, 1)": {
       "static_rot_angle_override": true,
       "static": [80, -20]
+    },
+    "(0, 0)": {
+      "anti": [35, -40]
     }
   }
 }
