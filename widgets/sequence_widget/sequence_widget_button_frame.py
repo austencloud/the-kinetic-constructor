@@ -46,10 +46,11 @@ class SequenceWidgetButtonFrame(QFrame):
         self.orientations = ["in", "counter", "out", "clock"]
 
         self.font_size = self.sequence_widget.width() // 45
-        self.export_manager = self.beat_frame.export_manager
+        self.export_sequence_image_manager = self.beat_frame.export_manager
         self.setup_save_sequence_button()
         self.setup_clear_sequence_button()
-        self.setup_export_button()
+        self.setup_export_image_button()
+        self._setup_print_sequence_button()
         self.setup_layout()
 
     def setup_save_sequence_button(self) -> None:
@@ -64,19 +65,28 @@ class SequenceWidgetButtonFrame(QFrame):
             lambda: self.clear_sequence(show_indicator=True)
         )
 
-    def setup_export_button(self) -> None:
-        self.export_button = SequenceButton("Export Image", self.font_size)
-        self.export_button.clicked.connect(
-            lambda: self.export_manager.export_beat_frame_image()
+    def setup_export_image_button(self) -> None:
+        self.export_image_button = SequenceButton("Export Image", self.font_size)
+        self.export_image_button.clicked.connect(
+            lambda: self.export_sequence_image_manager.export_beat_frame_image()
+        )
+
+    def _setup_print_sequence_button(self):
+        self.print_sequence_manager = self.beat_frame.print_sequence_manager
+        self.print_sequence_button = SequenceButton("Print Sequence", self.font_size)
+        self.print_sequence_button.clicked.connect(
+            lambda: self.print_sequence_manager.print_sequence()
         )
 
     def setup_layout(self) -> None:
         buttons_layout = QHBoxLayout()
         buttons_layout.addWidget(self.add_to_dictionary_button)
         buttons_layout.addWidget(self.clear_sequence_button)
-        buttons_layout.addWidget(self.export_button)
+        buttons_layout.addWidget(self.export_image_button)
+        buttons_layout.addWidget(
+            self.print_sequence_button
+        )  # Add the print button here
         buttons_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
         label_layout = QHBoxLayout()
         label_layout.setAlignment(
             Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop
@@ -92,7 +102,7 @@ class SequenceWidgetButtonFrame(QFrame):
     def save_sequence(self) -> None:
         self.sequence = self.json_handler.load_current_sequence_json()
         if not self.sequence:
-            self.sequence_widget.indicator_label.show_indicator(
+            self.sequence_widget.indicator_label.show_message(
                 "You must build a sequence before you can save it."
             )
             return
@@ -103,7 +113,7 @@ class SequenceWidgetButtonFrame(QFrame):
             if "letter" in pictograph
         )
         self.variation_manager.save_structural_variation(self.sequence, base_pattern)
-        self.indicator_label.show_indicator(
+        self.indicator_label.show_message(
             f"Structural variation saved for {base_pattern}"
         )
 
@@ -118,7 +128,7 @@ class SequenceWidgetButtonFrame(QFrame):
         self.sequence_constructor.current_pictograph = self.beat_frame.start_pos
         self.json_handler.clear_current_sequence_file()
         if show_indicator:
-            self.sequence_widget.indicator_label.show_indicator("Sequence cleared")
+            self.sequence_widget.indicator_label.show_message("Sequence cleared")
         self._clear_graph_editor()
 
     def _reset_beat_frame(self) -> None:

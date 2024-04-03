@@ -13,9 +13,13 @@ if TYPE_CHECKING:
 class BeatFrameImageExportManager:
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame") -> None:
         self.beat_frame = beat_frame
+        self.indicator_label = beat_frame.sequence_widget.indicator_label
 
     def export_beat_frame_image(self) -> None:
         word = self.beat_frame.get_current_word()
+        if word == '':
+            self.indicator_label.show_message("No word to export.")
+            return
         output_path = get_my_photos_path(f"{word}.png")
 
         filled_beats = [beat for beat in self.beat_frame.beat_views if beat.is_filled]
@@ -25,8 +29,8 @@ class BeatFrameImageExportManager:
         self._draw_beats(beat_frame_image, filled_beats, column_count, row_count)
 
         beat_frame_image.save(output_path, "PNG")
-        print(f"Exported image to {output_path}")
-
+        self.indicator_label.show_message(f"Saved sequence to {output_path}")
+        
     def _create_image(self, column_count, row_count):
         self.beat_size = int(self.beat_frame.start_pos_view.beat.width())
 
@@ -35,6 +39,17 @@ class BeatFrameImageExportManager:
         image = QImage(image_width, image_height, QImage.Format.Format_ARGB32)
         image.fill(Qt.GlobalColor.white)
         return image
+
+    def create_beat_frame_image_for_printing(self) -> QImage:
+        word = self.beat_frame.get_current_word()
+
+        filled_beats = [beat for beat in self.beat_frame.beat_views if beat.is_filled]
+        column_count, row_count = self._calculate_layout(len(filled_beats))
+
+        beat_frame_image = self._create_image(column_count, row_count)
+        self._draw_beats(beat_frame_image, filled_beats, column_count, row_count)
+
+        return beat_frame_image
 
     def _draw_beats(self, image, filled_beats, column_count, row_count):
         painter = QPainter(image)
@@ -71,6 +86,22 @@ class BeatFrameImageExportManager:
 
     def _calculate_layout(self, filled_beat_count) -> tuple[int, int]:
         """Calculate the number of columns and rows based on the number of filled beats."""
+        layout_options = self.get_layout_options()
+
+        if filled_beat_count in layout_options:
+            return layout_options[filled_beat_count]
+        else:
+            column_count = min(
+                filled_beat_count // self.beat_frame.ROW_COUNT + 1,
+                self.beat_frame.COLUMN_COUNT,
+            )
+            row_count = min(
+                (filled_beat_count + column_count - 1) // column_count,
+                self.beat_frame.ROW_COUNT,
+            )
+            return column_count, row_count
+
+    def get_layout_options(self):
         layout_options = {
             0: (1, 1),
             1: (2, 1),
@@ -89,16 +120,5 @@ class BeatFrameImageExportManager:
             15: (5, 4),
             16: (5, 4),
         }
-
-        if filled_beat_count in layout_options:
-            return layout_options[filled_beat_count]
-        else:
-            column_count = min(
-                filled_beat_count // self.beat_frame.ROW_COUNT + 1,
-                self.beat_frame.COLUMN_COUNT,
-            )
-            row_count = min(
-                (filled_beat_count + column_count - 1) // column_count,
-                self.beat_frame.ROW_COUNT,
-            )
-            return column_count, row_count
+        
+        return layout_options

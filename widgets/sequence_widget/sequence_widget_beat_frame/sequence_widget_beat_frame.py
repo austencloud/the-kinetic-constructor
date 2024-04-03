@@ -9,6 +9,9 @@ from widgets.sequence_widget.sequence_widget_beat_frame.beat_deletion_manager im
 from widgets.sequence_widget.sequence_widget_beat_frame.beat_frame_image_export_manager import (
     BeatFrameImageExportManager,
 )
+from widgets.sequence_widget.sequence_widget_beat_frame.beat_frame_print_manager import (
+    BeatFramePrintManager,
+)
 from widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay import (
     SequenceWidgetBeatSelectionOverlay,
 )
@@ -37,6 +40,7 @@ class SequenceWidgetBeatFrame(QFrame):
         self.current_sequence_json_handler = (
             self.main_widget.json_manager.current_sequence_json_handler
         )
+        self.sequence_widget = sequence_widget
         self.beat_views: list[BeatView] = []
         self._setup_components(self.main_widget)
         self._setup_layout()
@@ -64,6 +68,7 @@ class SequenceWidgetBeatFrame(QFrame):
         self.start_pos = StartPositionBeat(main_widget, self)
         self.beat_deletion_manager = BeatDeletionManager(self)
         self.export_manager = BeatFrameImageExportManager(self)
+        self.print_sequence_manager = BeatFramePrintManager(self)
 
     def _setup_layout(self) -> None:
         self.layout: QGridLayout = QGridLayout(self)

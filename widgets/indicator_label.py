@@ -21,7 +21,7 @@ class IndicatorLabel(QLabel):
         self.timer.timeout.connect(self.clear)
         self.setContentsMargins(0, 0, 0, 0)
 
-    def show_indicator(self, text) -> None:
+    def show_message(self, text) -> None:
         self.setText(text)
         print(text)
         self.timer.start(5000)
