@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QImage, QPainter
+from PyQt6.QtGui import QImage, QPainter, QPixmap
 from path_helpers import get_my_photos_path
 
 if TYPE_CHECKING:
@@ -15,9 +15,9 @@ class BeatFrameImageExportManager:
         self.beat_frame = beat_frame
         self.indicator_label = beat_frame.sequence_widget.indicator_label
 
-    def export_beat_frame_image(self) -> None:
+    def save_image(self) -> None:
         word = self.beat_frame.get_current_word()
-        if word == '':
+        if word == "":
             self.indicator_label.show_message("Nothing to save.")
             return
         output_path = get_my_photos_path(f"{word}.png")
@@ -32,8 +32,8 @@ class BeatFrameImageExportManager:
         # get the name of the file without the path
         output_path = output_path.split("/")[-1]
         self.indicator_label.show_message(f"Image saved as {output_path}")
-        
-    def _create_image(self, column_count, row_count):
+
+    def _create_image(self, column_count, row_count) -> QImage:
         self.beat_size = int(self.beat_frame.start_pos_view.beat.width())
 
         image_width = column_count * self.beat_size
@@ -53,7 +53,7 @@ class BeatFrameImageExportManager:
 
         return beat_frame_image
 
-    def _draw_beats(self, image, filled_beats, column_count, row_count):
+    def _draw_beats(self, image, filled_beats, column_count, row_count) -> None:
         painter = QPainter(image)
         beat_number = 0
 
@@ -78,7 +78,7 @@ class BeatFrameImageExportManager:
 
         painter.end()
 
-    def _grab_pixmap(self, view: "BeatView", width, height):
+    def _grab_pixmap(self, view: "BeatView", width, height) -> QPixmap:
         return view.grab().scaled(
             width,
             height,
@@ -103,7 +103,7 @@ class BeatFrameImageExportManager:
             )
             return column_count, row_count
 
-    def get_layout_options(self):
+    def get_layout_options(self) -> dict[int, tuple[int, int]]:
         layout_options = {
             0: (1, 1),
             1: (2, 1),
@@ -122,5 +122,5 @@ class BeatFrameImageExportManager:
             15: (5, 4),
             16: (5, 4),
         }
-        
+
         return layout_options

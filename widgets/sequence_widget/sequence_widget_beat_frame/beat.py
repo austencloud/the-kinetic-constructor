@@ -103,11 +103,11 @@ class BeatView(QGraphicsView):
     def leaveEvent(self, event):
         self.setCursor(Qt.CursorShape.ArrowCursor)
 
-    def grab(self, scale_factor: int = 4) -> QPixmap:
+    def grab(self) -> QPixmap:
         # Calculate the required size
         original_size = self.sceneRect().size().toSize()
-        target_width = original_size.width() * scale_factor
-        target_height = original_size.height() * scale_factor
+        target_width = original_size.width()
+        target_height = original_size.height()
 
         # Create a QImage with the specified size and render the scene onto it
         image = QImage(target_width, target_height, QImage.Format.Format_ARGB32)

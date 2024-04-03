@@ -46,7 +46,7 @@ class SequenceWidgetButtonFrame(QFrame):
         self.orientations = ["in", "counter", "out", "clock"]
 
         self.font_size = self.sequence_widget.width() // 45
-        self.export_sequence_image_manager = self.beat_frame.export_manager
+        self.save_image_manager = self.beat_frame.export_manager
         self.setup_save_sequence_button()
         self.setup_clear_sequence_button()
         self.setup_export_image_button()
@@ -66,9 +66,9 @@ class SequenceWidgetButtonFrame(QFrame):
         )
 
     def setup_export_image_button(self) -> None:
-        self.export_image_button = SequenceButton("Save Sequence", self.font_size)
-        self.export_image_button.clicked.connect(
-            lambda: self.export_sequence_image_manager.export_beat_frame_image()
+        self.save_image = SequenceButton("Save Image", self.font_size)
+        self.save_image.clicked.connect(
+            lambda: self.save_image_manager.save_image()
         )
 
     def _setup_print_sequence_button(self) -> None:
@@ -99,7 +99,7 @@ class SequenceWidgetButtonFrame(QFrame):
         buttons_layout = QHBoxLayout()
         buttons_layout.addWidget(self.add_to_dictionary_button)
         buttons_layout.addWidget(self.clear_sequence_button)
-        buttons_layout.addWidget(self.export_image_button)
+        buttons_layout.addWidget(self.save_image)
         buttons_layout.addWidget(self.print_sequence_button)
         buttons_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         return buttons_layout

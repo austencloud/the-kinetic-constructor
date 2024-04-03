@@ -23,10 +23,10 @@ if TYPE_CHECKING:
 
 
 class BeatFramePrintManager:
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame") -> None:
+    def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
         self.beat_frame = beat_frame
-        self.scene = QGraphicsScene()
-        self._setup_printer()
+        self.beat_frame_scene = QGraphicsScene()  # Using the custom scene class
+        self.printer = None
 
     def _setup_printer(self):
         self.printer = QPrinter()
@@ -36,16 +36,28 @@ class BeatFramePrintManager:
             QMarginsF(15, 15, 15, 15), QPageLayout.Unit.Millimeter
         )
 
-    def setup_scene(self) -> None:
-        # Assuming you have a method to get the pixmaps and positions for each beat
-        for beat_view in self.beat_frame.beat_views:
-            if beat_view.is_filled:
-                pixmap = beat_view.grab()  # Grab the pixmap of the beat view
-                # Calculate the position where it should be placed in the scene
-                pos = self.calculate_position(beat_view)
-                item = QGraphicsPixmapItem(pixmap)
-                item.setPos(pos)
-                self.scene.addItem(item)
+    def setup_scene(self):
+        filled_beats = [beat for beat in self.beat_frame.beat_views if beat.is_filled]
+        column_count, row_count = self._calculate_layout(len(filled_beats))
+
+        max_x, max_y = 0, 0  # Track the furthest extents of items added to the scene
+        for beat_index, beat_view in enumerate(filled_beats):
+            pixmap: QPixmap = beat_view.grab()
+            col = beat_index % column_count
+            row = beat_index // column_count
+            beat_size = int(self.beat_frame.start_pos_view.beat.width())
+            x = col * beat_size
+            y = row * beat_size
+
+            item = QGraphicsPixmapItem(pixmap)
+            item.setPos(x, y)
+            self.beat_frame_scene.addItem(item)
+
+            max_x = max(max_x, x + pixmap.width())
+            max_y = max(max_y, y + pixmap.height())
+
+        # Adjust the scene size to ensure it encompasses all items
+        self.beat_frame_scene.setSceneRect(0, 0, max_x, max_y)
 
     def calculate_position(self, beat_view) -> QPointF:
         filled_beats = [beat for beat in self.beat_frame.beat_views if beat.is_filled]
@@ -65,35 +77,25 @@ class BeatFramePrintManager:
 
         return QPointF(x, y)
 
-    def _calculate_layout(self, filled_beat_count) -> tuple[int, int]:
-        """
-        Determines the layout for the beats in the printing preview.
-        """
-        export_manager = self.beat_frame.export_manager
-        layout_options = export_manager.get_layout_options()
-
-        if filled_beat_count in layout_options:
-            return layout_options[filled_beat_count]
-        else:
-            column_count = min(filled_beat_count, self.beat_frame.COLUMN_COUNT)
-            row_count = (filled_beat_count + column_count - 1) // column_count
-            return column_count, row_count
+    def _calculate_layout(self, filled_beat_count):
+        # Use the layout logic from BeatFrameImageExportManager
+        # Here, you could directly access the get_layout_options method or replicate its logic
+        # For simplicity, I'm assuming you have access to that method here
+        return self.beat_frame.export_manager._calculate_layout(filled_beat_count)
 
     def show_preview(self) -> None:
-        view = QGraphicsView(self.scene)
+        view = QGraphicsView(self.beat_frame_scene)
         view.show()
 
     def print_sequence(self):
+
+        self._setup_printer()
+
         self.setup_scene()
 
-        # Debug print to check the size of the scene rect
-        print("Scene rect:", self.scene.sceneRect())
-
-        self.pixmap = QPixmap(self.scene.sceneRect().size().toSize())
-
-        # Fill the pixmap with a transparent color to check if it's being painted
+        print("Scene rect:", self.beat_frame_scene.sceneRect())
+        self.pixmap = QPixmap(self.beat_frame_scene.sceneRect().size().toSize())
         self.pixmap.fill(Qt.GlobalColor.transparent)
-
         print_dialog = CustomPrintDialog(self.pixmap, self.beat_frame)
 
         if print_dialog.exec() == QPrintDialog.DialogCode.Accepted:
@@ -107,13 +109,15 @@ class BeatFramePrintManager:
 
             # Fit the scene rect to the printer page rect to make sure items are within the bounds
             rect = self.printer.pageRect(QPrinter.Unit.Point)
-            self.scene.setSceneRect(rect)
+            self.beat_frame_scene.setSceneRect(rect)
 
             # Debug print to check the size of the page rect
             print("Page rect:", rect)
 
             # Render the scene onto the printer, ensure to pass the page rect
-            self.scene.render(painter, rect, self.scene.sceneRect())
+            self.beat_frame_scene.render(
+                painter, rect, self.beat_frame_scene.sceneRect()
+            )
 
             painter.end()
 

@@ -31,34 +31,47 @@ class CustomPrintDialog(QDialog):
         self.printer = QPrinter()
         self.init_ui()
 
-    def init_ui(self):
+    def init_ui(self) -> None:
         self.setWindowTitle("Print Preview")
 
         preview_layout = self._setup_preview_layout()
         self.controls_layout = self._setup_controls_layout()
 
         main_layout = QHBoxLayout(self)
-        main_layout.addLayout(preview_layout)
-        main_layout.addLayout(self.controls_layout)
+        main_layout.addLayout(preview_layout, 1)
+        main_layout.addLayout(self.controls_layout, 1)
 
-    def _setup_preview_layout(self):
-        current_word = self.beat_frame.get_current_word()
+        self.resize_custom_print_dialog(
+            self.beat_frame.width() + 200, self.beat_frame.height()
+        )
+
+    def _setup_preview_layout(self) -> QVBoxLayout:
         preview_column_layout = QVBoxLayout()
-        self.label_current_word = QLabel(f"Current Word: {current_word}", self)
         self.preview_area = QGraphicsView(self)
+        self.preview_area.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+        )
+        self.preview_area.setVerticalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+        )
         self.scene = QGraphicsScene(self)
         self.preview_area.setScene(self.scene)
         self.update_preview()
-        preview_column_layout.addWidget(self.label_current_word)
         preview_column_layout.addWidget(self.preview_area)
         return preview_column_layout
 
-    def _setup_controls_layout(self):
+    def _setup_controls_layout(self) -> QVBoxLayout:
         controls_layout = QVBoxLayout()
+        controls_layout.setAlignment(
+            Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop
+        )
         copies_layout = QHBoxLayout()
         self.copies_label = QLabel("Copies:", self)
+        current_word = self.beat_frame.get_current_word()
+        self.label_current_word = QLabel(f"Current Word: {current_word}", self)
         self.copies_spinbox = QSpinBox(self)
         self.copies_spinbox.setMinimum(1)
+        controls_layout.addWidget(self.label_current_word)
         copies_layout.addWidget(self.copies_label)
         copies_layout.addWidget(self.copies_spinbox)
         controls_layout.addLayout(copies_layout)
@@ -67,29 +80,28 @@ class CustomPrintDialog(QDialog):
         controls_layout.addWidget(self.print_button)
         return controls_layout
 
-    def update_preview(self):
+    def update_preview(self) -> None:
         self.scene.clear()
         self.preview_pixmap_item = self.scene.addPixmap(self.pixmap)
-        self.preview_area.fitInView(
-            self.scene.itemsBoundingRect(), Qt.AspectRatioMode.KeepAspectRatio
-        )
-        self.scene.setSceneRect(
-            QRectF(self.preview_pixmap_item.pixmap().rect())
-        )  # Fit the scene to the pixmap
+        for item in self.scene.items():
+            print(item)
+        if not self.preview_pixmap_item.pixmap().isNull():
+            self.preview_area.fitInView(
+                self.preview_pixmap_item, Qt.AspectRatioMode.KeepAspectRatio
+            )
+        else:
+            print("Error: Pixmap is null.")
 
-    def print(self):
-        # Set up the printer settings based on the dialog controls
+    def print(self) -> None:
         self.printer.setCopyCount(self.copies_spinbox.value())
 
-        # Prepare to print
         dialog = QPrintDialog(self.printer, self)
         if dialog.exec() == QPrintDialog.DialogCode.Accepted:
             self.perform_print()
 
-    def perform_print(self):
+    def perform_print(self) -> None:
         painter = QPainter(self.printer)
 
-        # Here, adjust the scaling of the pixmap based on the printer's page rect
         rect = self.printer.pageRect(QPrinter.Unit.Point)
         scale_factor = min(
             rect.width() / self.pixmap.width(), rect.height() / self.pixmap.height()
@@ -100,6 +112,8 @@ class CustomPrintDialog(QDialog):
         x = int((rect.width() - scaled_pixmap.width()) / 2)
         y = int((rect.height() - scaled_pixmap.height()) / 2)
 
-        # Draw the pixmap on the page
         painter.drawPixmap(x, y, scaled_pixmap)
         painter.end()
+
+    def resize_custom_print_dialog(self, width: int, height: int) -> None:
+        self.setFixedSize(width, height)
