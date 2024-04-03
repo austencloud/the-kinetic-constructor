@@ -1,7 +1,7 @@
 def get_tab_stylesheet() -> str:
     return """
         QTabWidget::pane {
-            border: 1px solid black;
+            border: none; /* Remove the border */
         }
         GE_TurnsBox {
             background-color: white;
@@ -22,7 +22,7 @@ def get_tab_stylesheet() -> str:
             left: 1px;
         }
         QTabBar::tab {
-            border: 1px solid black;
+            border: none; /* Remove the border */
             background: silver;
             font: 16pt "Calibri"; /* Keep font size consistent */
             color: black;
@@ -67,5 +67,4 @@ def get_tab_stylesheet() -> str:
         QTabBar::tab:right:selected {
             border-right-color: none;
         }
-
-        """
+    """

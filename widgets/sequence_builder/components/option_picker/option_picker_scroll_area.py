@@ -49,14 +49,14 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
 
-    def fix_stretch(self):
+    def fix_stretch(self) -> None:
         if self.stretch_index >= 0:
             item = self.layout.takeAt(self.stretch_index)
             del item
         self.layout.addStretch(1)
         self.stretch_index = self.layout.count()
 
-    def remove_irrelevant_pictographs(self):
+    def remove_irrelevant_pictographs(self) -> None:
         for pictograph in self.pictograph_cache.values():
             pictograph.view.hide()
 
@@ -111,7 +111,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             ] = pictograph
         return pictograph
 
-    def _hide_all_pictographs(self):
+    def _hide_all_pictographs(self) -> None:
         for pictograph in self.pictograph_cache.values():
             pictograph.view.hide()
 
@@ -130,7 +130,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
                 self.change_pictograph_size(increase=False)
             event.accept()
         else:
-            # ignore
             event.ignore()
 
     def change_pictograph_size(self, increase: bool) -> None:
