@@ -71,7 +71,7 @@ class SequenceWidgetButtonFrame(QFrame):
             lambda: self.export_sequence_image_manager.export_beat_frame_image()
         )
 
-    def _setup_print_sequence_button(self):
+    def _setup_print_sequence_button(self) -> None:
         self.print_sequence_manager = self.beat_frame.print_sequence_manager
         self.print_sequence_button = SequenceButton("Print Sequence", self.font_size)
         self.print_sequence_button.clicked.connect(
@@ -79,25 +79,30 @@ class SequenceWidgetButtonFrame(QFrame):
         )
 
     def setup_layout(self) -> None:
+        buttons_layout = self._setup_buttons_layout()
+        indicator_label_layout = self._setup_indicator_label_layout()
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+
+        self.layout.addLayout(buttons_layout)
+        self.layout.addLayout(indicator_label_layout)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+
+    def _setup_indicator_label_layout(self) -> QHBoxLayout:
+        indicator_label_layout = QHBoxLayout()
+        indicator_label_layout.setAlignment(
+            Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop
+        )
+
+        return indicator_label_layout
+
+    def _setup_buttons_layout(self) -> QHBoxLayout:
         buttons_layout = QHBoxLayout()
         buttons_layout.addWidget(self.add_to_dictionary_button)
         buttons_layout.addWidget(self.clear_sequence_button)
         buttons_layout.addWidget(self.export_image_button)
-        buttons_layout.addWidget(
-            self.print_sequence_button
-        )  # Add the print button here
+        buttons_layout.addWidget(self.print_sequence_button)
         buttons_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        label_layout = QHBoxLayout()
-        label_layout.setAlignment(
-            Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop
-        )
-
-        master_layout = QVBoxLayout(self)
-        master_layout.addLayout(buttons_layout)
-        master_layout.addLayout(label_layout)
-        master_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-
-        self.setLayout(master_layout)
+        return buttons_layout
 
     def save_sequence(self) -> None:
         self.sequence = self.json_handler.load_current_sequence_json()
