@@ -45,8 +45,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.pictograph_factory = OptionPickerPictographFactory(
             self, self.sequence_builder.pictograph_cache
         )
-        # set stylesheet to white background
-        self.setStyleSheet("background-color: transparent;")
+        self.setStyleSheet("background-color: transparent; border: none;")
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
 
@@ -77,7 +76,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             pictograph = self._get_or_create_pictograph(pictograph_dict, sequence)
             pictograph.updater.update_pictograph(pictograph_dict)
             self.display_manager.add_pictograph_to_section_layout(pictograph)
-            
+
         self.display_manager.order_and_display_pictographs()
         QApplication.restoreOverrideCursor()
 
@@ -120,7 +119,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.setMinimumWidth(self.option_picker.sequence_builder.width())
         for section in self.sections_manager.sections.values():
             section.resize_option_picker_section_widget()
-            
+
     def wheelEvent(self, event: QWheelEvent) -> None:
         modifiers = QApplication.keyboardModifiers()
         if modifiers == Qt.KeyboardModifier.ControlModifier:
