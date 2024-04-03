@@ -56,6 +56,17 @@ class CustomPrintDialog(QDialog):
         )
         self.scene = QGraphicsScene(self)
         self.preview_area.setScene(self.scene)
+
+        # make sure the scene's view matches the aspect ratio of the pixmap
+        # scale the pixmap to fit the view's limitations
+        self.preview_pixmap_item = self.scene.addPixmap(self.pixmap)
+        self.preview_area.fitInView(
+            self.preview_pixmap_item, Qt.AspectRatioMode.KeepAspectRatio
+        )
+        self.preview_area.setRenderHint(QPainter.RenderHint.Antialiasing)
+        self.preview_area.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+        self.preview_area.setRenderHint(QPainter.RenderHint.TextAntialiasing)
+
         self.update_preview()
         preview_column_layout.addWidget(self.preview_area)
         return preview_column_layout
@@ -117,3 +128,13 @@ class CustomPrintDialog(QDialog):
 
     def resize_custom_print_dialog(self, width: int, height: int) -> None:
         self.setFixedSize(width, height)
+        # set the preview to have a matching aspect ratio to its scene
+        scene_aspect_ratio = (
+            self.preview_area.sceneRect().width()
+            / self.preview_area.sceneRect().height()
+        )
+        self.preview_area.setFixedWidth(int(self.width() // 2))
+        self.preview_area.setFixedHeight(int(self.width() // 2 / scene_aspect_ratio))
+        self.preview_area.fitInView(
+            self.preview_pixmap_item, Qt.AspectRatioMode.KeepAspectRatio
+        )

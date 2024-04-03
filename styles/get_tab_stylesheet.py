@@ -22,9 +22,8 @@ def get_tab_stylesheet() -> str:
             left: 1px;
         }
         QTabBar::tab {
-            border: none; /* Remove the border */
             background: silver;
-            font: 16pt "Calibri"; /* Keep font size consistent */
+            font: 16pt "Calibri"; 
             color: black;
         }
         QTabBar::tab:selected {
