@@ -18,7 +18,7 @@ class BeatFrameImageExportManager:
     def export_beat_frame_image(self) -> None:
         word = self.beat_frame.get_current_word()
         if word == '':
-            self.indicator_label.show_message("No word to export.")
+            self.indicator_label.show_message("Nothing to save.")
             return
         output_path = get_my_photos_path(f"{word}.png")
 
@@ -29,7 +29,9 @@ class BeatFrameImageExportManager:
         self._draw_beats(beat_frame_image, filled_beats, column_count, row_count)
 
         beat_frame_image.save(output_path, "PNG")
-        self.indicator_label.show_message(f"Saved sequence to {output_path}")
+        # get the name of the file without the path
+        output_path = output_path.split("/")[-1]
+        self.indicator_label.show_message(f"Image saved as {output_path}")
         
     def _create_image(self, column_count, row_count):
         self.beat_size = int(self.beat_frame.start_pos_view.beat.width())

@@ -119,7 +119,8 @@ def get_my_videos_path(filename) -> str:
     Returns the full path to a file in the user's videos directory.
     """
     videos_dir = get_win32_videos_path()
-    return os.path.join(videos_dir, filename)
+    full_vid_dir = os.path.join(videos_dir, filename).replace("\\", "/")
+    return full_vid_dir
 
 
 def get_my_photos_path(filename) -> str:
@@ -127,4 +128,5 @@ def get_my_photos_path(filename) -> str:
     Returns the full path to a file in the user's photos directory.
     """
     photos_dir = get_win32_photos_path()
-    return os.path.join(photos_dir, filename)
+    full_photos_dir = os.path.join(photos_dir, filename).replace("\\", "/")
+    return full_photos_dir

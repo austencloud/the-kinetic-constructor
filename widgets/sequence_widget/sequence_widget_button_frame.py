@@ -66,7 +66,7 @@ class SequenceWidgetButtonFrame(QFrame):
         )
 
     def setup_export_image_button(self) -> None:
-        self.export_image_button = SequenceButton("Export Image", self.font_size)
+        self.export_image_button = SequenceButton("Save Sequence", self.font_size)
         self.export_image_button.clicked.connect(
             lambda: self.export_sequence_image_manager.export_beat_frame_image()
         )

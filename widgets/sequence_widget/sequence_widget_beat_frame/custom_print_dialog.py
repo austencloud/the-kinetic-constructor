@@ -33,11 +33,16 @@ class CustomPrintDialog(QDialog):
 
     def init_ui(self):
         self.setWindowTitle("Print Preview")
+
+        preview_layout = self._setup_preview_layout()
+        self.controls_layout = self._setup_controls_layout()
+
         main_layout = QHBoxLayout(self)
+        main_layout.addLayout(preview_layout)
+        main_layout.addLayout(self.controls_layout)
 
+    def _setup_preview_layout(self):
         current_word = self.beat_frame.get_current_word()
-
-        # Preview Column
         preview_column_layout = QVBoxLayout()
         self.label_current_word = QLabel(f"Current Word: {current_word}", self)
         self.preview_area = QGraphicsView(self)
@@ -46,21 +51,21 @@ class CustomPrintDialog(QDialog):
         self.update_preview()
         preview_column_layout.addWidget(self.label_current_word)
         preview_column_layout.addWidget(self.preview_area)
-        main_layout.addLayout(preview_column_layout)
+        return preview_column_layout
 
-        # Controls Column
-        controls_column_layout = QVBoxLayout()
+    def _setup_controls_layout(self):
+        controls_layout = QVBoxLayout()
         copies_layout = QHBoxLayout()
         self.copies_label = QLabel("Copies:", self)
         self.copies_spinbox = QSpinBox(self)
         self.copies_spinbox.setMinimum(1)
         copies_layout.addWidget(self.copies_label)
         copies_layout.addWidget(self.copies_spinbox)
-        controls_column_layout.addLayout(copies_layout)
+        controls_layout.addLayout(copies_layout)
         self.print_button = QPushButton("Print", self)
         self.print_button.clicked.connect(self.print)
-        controls_column_layout.addWidget(self.print_button)
-        main_layout.addLayout(controls_column_layout)
+        controls_layout.addWidget(self.print_button)
+        return controls_layout
 
     def update_preview(self):
         self.scene.clear()
