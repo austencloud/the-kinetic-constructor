@@ -14,7 +14,7 @@ class OptionPickerClickHandler:
         return lambda event: self.on_option_clicked(start_pos)
 
     def on_option_clicked(self, clicked_option: "Pictograph") -> None:
-        beat_frame = self.sequence_builder.main_widget.sequence_widget.beat_frame
+        beat_frame = self.sequence_builder.main_widget.top_builder_widget.sequence_widget.beat_frame
         new_beat = self.sequence_builder.add_to_sequence_manager.create_new_beat(
             clicked_option
         )

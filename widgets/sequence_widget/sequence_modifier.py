@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 class SequenceModifier(QTabWidget):
     def __init__(self, sequence_widget: "SequenceWidget"):
-        super().__init__(sequence_widget.main_widget)
+        super().__init__(sequence_widget)
         self.main_widget = sequence_widget.main_widget
         self.sequence_widget = sequence_widget
         self.graph_editor = GraphEditor(self)

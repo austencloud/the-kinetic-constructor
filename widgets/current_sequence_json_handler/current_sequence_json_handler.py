@@ -84,7 +84,7 @@ class CurrentSequenceJsonHandler:
     def update_current_sequence_file(self):
         sequence_data = self.load_current_sequence_json()
         last_beat_view = (
-            self.main_widget.sequence_widget.beat_frame.get_last_filled_beat()
+            self.main_widget.top_builder_widget.sequence_widget.beat_frame.get_last_filled_beat()
         )
         if (
             hasattr(last_beat_view.beat.get, "pictograph_dict")
@@ -107,7 +107,7 @@ class CurrentSequenceJsonHandler:
 
     def clear_and_repopulate_the_current_sequence(self):
         self.clear_current_sequence_file()
-        beat_frame = self.main_widget.sequence_widget.beat_frame
+        beat_frame = self.main_widget.top_builder_widget.sequence_widget.beat_frame
         beat_views = beat_frame.beat_views
         start_pos = beat_frame.start_pos_view.start_pos
         if start_pos.view.is_filled:
@@ -132,7 +132,7 @@ class CurrentSequenceJsonHandler:
         sequence[index][f"{color}_attributes"]["end_ori"] = end_ori
 
         if sequence[index][f"{color}_attributes"]["turns"] > 0:
-            pictograph = self.main_widget.sequence_widget.beat_frame.beat_views[
+            pictograph = self.main_widget.top_builder_widget.sequence_widget.beat_frame.beat_views[
                 index - 1
             ].beat
             if pictograph:
@@ -180,22 +180,26 @@ class CurrentSequenceJsonHandler:
             if entry["blue_attributes"]["motion_type"] in [STATIC, DASH]:
                 if not blue_turns == 0:
                     entry["blue_attributes"]["prop_rot_dir"] = (
-                        self.find_previous_prop_rot_dir(sequence, i, BLUE)
+                        self._calculate_continuous_prop_rot_dir(sequence, i, BLUE)
                     )
             if entry["red_attributes"]["motion_type"] in [STATIC, DASH]:
                 if not red_turns == 0:
                     entry["red_attributes"]["prop_rot_dir"] = (
-                        self.find_previous_prop_rot_dir(sequence, i, RED)
+                        self._calculate_continuous_prop_rot_dir(sequence, i, RED)
                     )
 
-            beat_view = self.main_widget.sequence_widget.beat_frame.beat_views[i - 1]
+            beat_view = self.main_widget.top_builder_widget.sequence_widget.beat_frame.beat_views[
+                i - 1
+            ]
             if beat_view and beat_view.is_filled:
                 beat_view.beat.get.pictograph_dict().update(entry)
 
         self.save_current_sequence(sequence)
         self.validation_engine.run()
         sequence = self.load_current_sequence_json()
-        self.main_widget.sequence_widget.beat_frame.propogate_turn_adjustment(sequence)
+        self.main_widget.top_builder_widget.sequence_widget.beat_frame.propogate_turn_adjustment(
+            sequence
+        )
 
     def get_current_turn_pattern(self) -> str:
         sequence = self.load_current_sequence_json()
@@ -218,10 +222,20 @@ class CurrentSequenceJsonHandler:
         turn_pattern = turn_pattern[:-1]
         return "(" + turn_pattern + ")"
 
-    def find_previous_prop_rot_dir(self, sequence, current_index, color) -> str:
-        for i in range(current_index - 1, -1, -1):
-            if i < 1:
-                break
-            if sequence[i][f"{color}_attributes"]["motion_type"] not in [STATIC, DASH]:
+    def _calculate_continuous_prop_rot_dir(self, sequence, current_index, color) -> str:
+        # Define motion types that do not contribute to prop rotation direction.
+        ignore_motion_types = [STATIC, DASH]
+
+        # Start from the current_index - 1 and move backwards.
+        for i in range(current_index - 1, max(current_index - 16, -1), -1):
+            # Skip the very first item in the sequence
+            if i == 0:
+                continue
+
+            # Check if the current pictograph's motion type should be ignored.
+            # If not, return its prop rotation direction.
+            if sequence[i][f"{color}_attributes"]["motion_type"] not in ignore_motion_types:
                 return sequence[i][f"{color}_attributes"]["prop_rot_dir"]
+
+        # If no suitable prop rotation direction is found, return NO_ROT.
         return NO_ROT

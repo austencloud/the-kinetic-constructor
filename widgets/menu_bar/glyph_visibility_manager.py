@@ -51,17 +51,19 @@ class GlyphVisibilityManager:
                 if pictograph.view.isVisible():
                     self.apply_current_visibility_settings(pictograph)
 
-        for beat_view in self.main_window.main_widget.sequence_widget.beats:
+        for (
+            beat_view
+        ) in self.main_window.main_widget.top_builder_widget.sequence_widget.beats:
             if beat_view.is_filled:
                 self.apply_current_visibility_settings(beat_view.beat)
                 beat_view.beat.updater.update_pictograph()
 
         start_pos = (
             (
-                self.main_window.main_widget.sequence_widget.beat_frame.start_pos_view.start_pos
+                self.main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_view.start_pos
             )
             if hasattr(
-                self.main_window.main_widget.sequence_widget.beat_frame.start_pos_view,
+                self.main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_view,
                 "start_pos",
             )
             else None

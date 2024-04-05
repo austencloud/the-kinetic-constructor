@@ -26,7 +26,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
     MAX_COLUMN_COUNT: int = 8
     MIN_COLUMN_COUNT: int = 3
 
-    def __init__(self, option_picker: "OptionPicker"):
+    def __init__(self, option_picker: "OptionPicker") -> None:
         super().__init__(option_picker)
         self.option_picker: "OptionPicker" = option_picker
         self.sequence_builder: "SequenceBuilder" = option_picker.sequence_builder

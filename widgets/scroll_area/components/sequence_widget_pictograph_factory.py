@@ -29,7 +29,9 @@ class SequenceWidgetPictographFactory:
         sequence_widget: "SequenceWidget",
     ) -> None:
         self.sequence_widget = sequence_widget
-        self.pictograph_cache: dict[Letter, dict[str, Pictograph]] = self.sequence_widget.main_widget.pictograph_cache
+        self.pictograph_cache: dict[Letter, dict[str, Pictograph]] = (
+            self.sequence_widget.main_widget.pictograph_cache
+        )
 
     def get_or_create_pictograph(
         self, pictograph_key: str, pictograph_dict=None

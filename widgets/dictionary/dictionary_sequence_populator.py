@@ -15,12 +15,16 @@ class DictionarySequencePopulator:
 
     def _init_references(self) -> None:
         self.json_handler = self.main_widget.json_manager.current_sequence_json_handler
-        self.start_pos_view = self.main_widget.sequence_widget.beat_frame.start_pos_view
-        self.start_pos_manager = (
-            self.main_widget.builder_toolbar.sequence_builder.start_pos_picker.start_pos_manager
+        self.start_pos_view = (
+            self.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_view
         )
-        self.sequence_widget = self.main_widget.sequence_widget
-        self.sequence_builder = self.main_widget.builder_toolbar.sequence_builder
+        self.start_pos_manager = (
+            self.main_widget.top_builder_widget.builder_toolbar.sequence_builder.start_pos_picker.start_pos_manager
+        )
+        self.sequence_widget = self.main_widget.top_builder_widget.sequence_widget
+        self.sequence_builder = (
+            self.main_widget.top_builder_widget.builder_toolbar.sequence_builder
+        )
         self.initialized = True
 
     def load_sequence_from_file(self, file_path: str) -> None:
@@ -54,7 +58,7 @@ class DictionarySequencePopulator:
         last_beat = self.sequence_widget.beat_frame.get_last_filled_beat().beat
         self.sequence_builder.current_pictograph = last_beat
         last_beat.view.selection_manager.select_beat(last_beat.view)
-        
+
         if self.sequence_builder.start_pos_picker.isVisible():
             self.sequence_builder.transition_to_sequence_building()
         sequence = self.json_handler.load_current_sequence_json()

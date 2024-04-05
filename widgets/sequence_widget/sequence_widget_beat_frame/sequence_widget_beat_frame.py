@@ -41,8 +41,9 @@ class SequenceWidgetBeatFrame(QFrame):
             self.main_widget.json_manager.current_sequence_json_handler
         )
         self.sequence_widget = sequence_widget
+        self.top_builder_widget = sequence_widget.top_builder_widget
         self.beat_views: list[BeatView] = []
-        self._setup_components(self.main_widget)
+        self._setup_components()
         self._setup_layout()
         self._populate_beat_frame()
 
@@ -62,10 +63,10 @@ class SequenceWidgetBeatFrame(QFrame):
         self.layout.addWidget(beat_view, row, col)
         self.beat_views.append(beat_view)
 
-    def _setup_components(self, main_widget) -> None:
+    def _setup_components(self) -> None:
         self.selection_manager = SequenceWidgetBeatSelectionOverlay(self)
         self.start_pos_view = StartPositionBeatView(self)
-        self.start_pos = StartPositionBeat(main_widget, self)
+        self.start_pos = StartPositionBeat(self.main_widget, self)
         self.beat_deletion_manager = BeatDeletionManager(self)
         self.export_manager = BeatFrameImageExportManager(self)
         self.print_sequence_manager = BeatFramePrintManager(self)
@@ -130,7 +131,7 @@ class SequenceWidgetBeatFrame(QFrame):
             self.current_sequence_json_handler.load_current_sequence_json()
         )
         self.propogate_turn_adjustment(current_sequence_json)
-        # self.main_widget.builder_toolbar.sequence_builder.option_picker.update_option_picker()
+        # self.main_widget.top_builder_widget.builder_toolbar.sequence_builder.option_picker.update_option_picker()
 
     def propogate_turn_adjustment(self, current_sequence_json) -> None:
         for i, entry in enumerate(current_sequence_json):

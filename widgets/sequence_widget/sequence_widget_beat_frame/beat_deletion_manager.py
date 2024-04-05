@@ -22,7 +22,7 @@ class BeatDeletionManager:
         self.beat_frame = sequence_builder_beat_frame
         self.beats = sequence_builder_beat_frame.beat_views
         self.sequence_builder = (
-            self.beat_frame.main_widget.builder_toolbar.sequence_builder
+            sequence_builder_beat_frame.top_builder_widget.builder_toolbar.sequence_builder
         )
         self.selection_manager = self.beat_frame.selection_manager
         self.current_sequence_json_handler = (
@@ -31,7 +31,7 @@ class BeatDeletionManager:
 
     def delete_selected_beat(self) -> None:
         self.GE_pictograph_view = (
-            self.beat_frame.main_widget.sequence_widget.sequence_modifier.graph_editor.GE_pictograph_view
+            self.beat_frame.main_widget.top_builder_widget.sequence_widget.sequence_modifier.graph_editor.GE_pictograph_view
         )
         selected_beat = self.beat_frame.selection_manager.get_selected_beat()
 
@@ -78,7 +78,7 @@ class BeatDeletionManager:
         self.sequence_builder.reset_to_start_pos_picker()
         self.sequence_builder.option_picker.update_option_picker()
         graph_editor = (
-            self.beat_frame.main_widget.sequence_widget.sequence_modifier.graph_editor
+            self.beat_frame.main_widget.top_builder_widget.sequence_widget.sequence_modifier.graph_editor
         )
         graph_editor.adjustment_panel.update_adjustment_panel()
 

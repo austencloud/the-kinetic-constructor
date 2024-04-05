@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
 
 class TurnPatternWidget(QWidget):
-    def __init__(self, builder_toolbar: "BuilderToolbar"):
+    def __init__(self, builder_toolbar: "BuilderToolbar") -> None:
         super().__init__()
         self.builder_toolbar = builder_toolbar
         self.main_widget = builder_toolbar.main_widget

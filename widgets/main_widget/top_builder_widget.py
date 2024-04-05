@@ -1,17 +1,33 @@
-from PyQt6.QtWidgets import QWidget
+from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtCore import QTimer
 from PyQt6.QtGui import QPainter, QLinearGradient, QColor
 import math
 
+from widgets.main_builder_widget.builder_toolbar import BuilderToolbar
+from widgets.sequence_widget.sequence_widget import SequenceWidget
+if TYPE_CHECKING:
+    from widgets.main_widget.main_widget import MainWidget
+
 
 class TopBuilderWidget(QWidget):
-    def __init__(self):
+    def __init__(self, main_widget: "MainWidget"):
         super().__init__()
+        self.main_widget = main_widget
         self.gradient_shift = 0
         self.color_shift = 0
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.animate_background)
         self.timer.start(100)  # Adjust as needed for smoother or faster animation
+        self.builder_toolbar = BuilderToolbar(self)
+        self.sequence_widget = SequenceWidget(self)
+        self._setup_layout()
+
+
+    def _setup_layout(self):
+        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.layout.addWidget(self.sequence_widget, 1)
+        self.layout.addWidget(self.builder_toolbar, 1)
 
     def animate_background(self):
         """Update the gradient and color shift for the animation."""

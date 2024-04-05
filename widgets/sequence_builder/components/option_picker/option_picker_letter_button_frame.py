@@ -73,4 +73,6 @@ class OptionPickerLetterButtonFrame(QFrame):
         self.button_manager.connect_letter_buttons()
 
     def resize_option_picker_letter_button_frame(self) -> None:
-        self.button_manager.resize_buttons(self.letterbook.main_widget.height() * 0.6)
+        self.button_manager.resize_buttons(
+            self.letterbook.builder_toolbar.height() * 0.6
+        )

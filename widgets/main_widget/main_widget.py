@@ -75,18 +75,9 @@ class MainWidget(QTabWidget):
         self.special_placement_loader = SpecialPlacementLoader(self)
         self._setup_special_placements()
 
-        self.top_level_builder_widget = TopBuilderWidget()
-
-        builder_layout = QHBoxLayout(self.top_level_builder_widget)
-        self.builder_toolbar = BuilderToolbar(self)
-        self.sequence_widget = SequenceWidget(self)
-        # self.letterbook = LetterBook(self)
-
-        builder_layout.addWidget(self.sequence_widget, 1)
-        builder_layout.addWidget(self.builder_toolbar, 1)
-
+        self.top_builder_widget = TopBuilderWidget(self)
         self.sequence_recorder = SequenceRecorder(self)
-        self.addTab(self.top_level_builder_widget, "Builder")
+        self.addTab(self.top_builder_widget, "Builder")
         self.addTab(self.sequence_recorder, "Recorder")
         # self.addTab(self.letterbook, "LetterBook")
 
@@ -112,9 +103,9 @@ class MainWidget(QTabWidget):
 
     def on_tab_changed(self):
         current_widget = self.currentWidget()
-        if current_widget == self.top_level_builder_widget:
-            self.sequence_widget.resize_sequence_widget()
-            self.builder_toolbar.resize_current_tab()
+        if current_widget == self.top_builder_widget:
+            self.top_builder_widget.sequence_widget.resize_sequence_widget()
+            self.top_builder_widget.builder_toolbar.resize_current_tab()
         elif current_widget == self.sequence_recorder:
             self.sequence_recorder.resize_sequence_recorder()
             QApplication.processEvents()

@@ -16,12 +16,14 @@ from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
+    from widgets.main_widget.top_builder_widget import TopBuilderWidget
 
 
 class SequenceWidget(QWidget):
-    def __init__(self, main_widget: "MainWidget") -> None:
+    def __init__(self, top_builder_widget: "TopBuilderWidget") -> None:
         super().__init__()
-        self.main_widget = main_widget
+        self.top_builder_widget = top_builder_widget
+        self.main_widget = top_builder_widget.main_widget
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         self.sequence_widget_pictograph_cache: dict[str, Beat] = {}
         self.indicator_label = IndicatorLabel(self)

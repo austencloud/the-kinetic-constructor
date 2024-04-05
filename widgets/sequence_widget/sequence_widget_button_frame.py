@@ -36,11 +36,10 @@ class SequenceWidgetButtonFrame(QFrame):
         self.sequence_widget = sequence_widget
         self.main_widget = sequence_widget.main_widget
         self.json_handler = self.main_widget.json_manager.current_sequence_json_handler
-        self.sequence_constructor = self.main_widget.builder_toolbar.sequence_builder
+        self.builder_toolbar = self.sequence_widget.top_builder_widget.builder_toolbar
+        self.sequence_constructor = self.builder_toolbar.sequence_builder
         self.graph_editor = self.sequence_widget.sequence_modifier.graph_editor
-        self.variation_manager = (
-            self.main_widget.builder_toolbar.dictionary.variation_manager
-        )
+        self.variation_manager = self.builder_toolbar.dictionary.variation_manager
         self.beat_frame = self.sequence_widget.beat_frame
         self.indicator_label = sequence_widget.indicator_label
         self.orientations = ["in", "counter", "out", "clock"]
@@ -67,9 +66,7 @@ class SequenceWidgetButtonFrame(QFrame):
 
     def setup_export_image_button(self) -> None:
         self.save_image = SequenceButton("Save Image", self.font_size)
-        self.save_image.clicked.connect(
-            lambda: self.save_image_manager.save_image()
-        )
+        self.save_image.clicked.connect(lambda: self.save_image_manager.save_image())
 
     def _setup_print_sequence_button(self) -> None:
         self.print_sequence_manager = self.beat_frame.print_sequence_manager
@@ -100,7 +97,7 @@ class SequenceWidgetButtonFrame(QFrame):
         buttons_layout.addWidget(self.add_to_dictionary_button)
         buttons_layout.addWidget(self.clear_sequence_button)
         buttons_layout.addWidget(self.save_image)
-        buttons_layout.addWidget(self.print_sequence_button)
+        # buttons_layout.addWidget(self.print_sequence_button)
         buttons_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         return buttons_layout
 
@@ -122,7 +119,7 @@ class SequenceWidgetButtonFrame(QFrame):
             f"Structural variation saved for {base_pattern}"
         )
 
-        self.main_widget.builder_toolbar.dictionary.reload_dictionary_tab()
+        self.main_widget.top_builder_widget.builder_toolbar.dictionary.reload_dictionary_tab()
 
     def clear_sequence(
         self, show_indicator=True, should_reset_to_start_pos_picker=True

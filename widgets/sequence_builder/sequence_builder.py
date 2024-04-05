@@ -24,13 +24,15 @@ from .components.option_picker.option_picker_click_handler import (
 from .components.option_picker.option_picker import OptionPicker
 
 if TYPE_CHECKING:
+    from widgets.main_builder_widget.builder_toolbar import BuilderToolbar
     from ..main_widget.main_widget import MainWidget
 
 
 class SequenceBuilder(QFrame):
-    def __init__(self, main_widget: "MainWidget") -> None:
-        super().__init__(main_widget)
-        self.main_widget = main_widget
+    def __init__(self, builder_toolbar: "BuilderToolbar"):
+        super().__init__(builder_toolbar)
+        self.builder_toolbar = builder_toolbar
+        self.main_widget: "MainWidget" = builder_toolbar.main_widget
         self.current_pictograph: Pictograph = None
 
         csv_path = get_images_and_data_path("PictographDataframe.csv")
@@ -148,7 +150,7 @@ class SequenceBuilder(QFrame):
         self.start_pos_picker.show()
 
     def resize_sequence_builder(self) -> None:
-        self.setMinimumWidth(int(self.main_widget.width() / 2))
+        self.setMinimumWidth(int(self.builder_toolbar.width() / 2))
         # if the start pos picker is visible, resize it
         if self.start_pos_picker.isVisible():
             self.start_pos_picker.resize_start_pos_picker()

@@ -10,15 +10,17 @@ from PyQt6.QtGui import QCursor
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
+    from widgets.main_widget.top_builder_widget import TopBuilderWidget
     from ..main_widget.main_widget import MainWidget
 
 
 class BuilderToolbar(QTabWidget):
-    def __init__(self, main_widget: "MainWidget") -> None:
-        super().__init__(main_widget)
-        self.main_widget = main_widget
-        self.sequence_builder = SequenceBuilder(main_widget)
-        self.dictionary = DictionaryWidget(main_widget)
+    def __init__(self, top_level_builder_widget: "TopBuilderWidget") -> None:
+        super().__init__()
+        self.top_builder_widget = top_level_builder_widget
+        self.main_widget = top_level_builder_widget.main_widget
+        self.sequence_builder = SequenceBuilder(self)
+        self.dictionary = DictionaryWidget(self)
         self.turn_pattern_widget = TurnPatternWidget(self)
 
         self.setTabBar(CustomTabBar())
@@ -35,7 +37,7 @@ class BuilderToolbar(QTabWidget):
 
     def on_tab_changed(self) -> None:
         current_tab = self.currentWidget()
-        beat_frame = self.main_widget.sequence_widget.beat_frame
+        beat_frame = self.main_widget.top_builder_widget.sequence_widget.beat_frame
         if current_tab == self.sequence_builder:
             if beat_frame.start_pos_view.scene():
                 if not self.sequence_builder.option_picker.isVisible():

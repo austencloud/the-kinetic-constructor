@@ -51,7 +51,7 @@ class GE_TurnsAdjustmentManager(QObject):
         )
         QApplication.processEvents()
         self.json_validation_engine.run()
-        self.main_widget.builder_toolbar.sequence_builder.option_picker.update_option_picker()
+        self.main_widget.top_builder_widget.builder_toolbar.sequence_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
         QApplication.restoreOverrideCursor()
 
@@ -65,7 +65,7 @@ class GE_TurnsAdjustmentManager(QObject):
 
         self._update_turns_display(new_turns)
         self.json_validation_engine.run()
-        self.main_widget.builder_toolbar.sequence_builder.option_picker.update_option_picker()
+        self.main_widget.top_builder_widget.builder_toolbar.sequence_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
 
     def get_current_turns_value(self) -> Turns:

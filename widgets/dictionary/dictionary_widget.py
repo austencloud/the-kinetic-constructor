@@ -14,13 +14,15 @@ from .dictionary_words_tree import DictionaryWordsTree
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout
 
 if TYPE_CHECKING:
+    from widgets.main_widget.top_builder_widget import TopBuilderWidget
     from widgets.main_widget.main_widget import MainWidget
 
 
 class DictionaryWidget(QWidget):
-    def __init__(self, main_widget: "MainWidget") -> None:
-        super().__init__(main_widget)
-        self.main_widget = main_widget
+    def __init__(self, top_level_builder_widget: "TopBuilderWidget") -> None:
+        super().__init__()
+        self.top_level_builder_widget = top_level_builder_widget
+        self.main_widget = top_level_builder_widget.main_widget
         self.setup_ui()
 
     def setup_ui(self) -> None:
