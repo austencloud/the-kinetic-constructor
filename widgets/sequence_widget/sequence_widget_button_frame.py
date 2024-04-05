@@ -63,11 +63,11 @@ class SequenceWidgetButtonFrame(QFrame):
                 "callback": lambda: self.save_image_manager.save_image(),
                 "tooltip": "Save Image",
             },
-            "print_sequence": {
-                "icon_path": "print_sequence.svg",
-                "callback": lambda: self.print_sequence_manager.print_sequence(),
-                "tooltip": "Print Sequence",
-            },
+            # "print_sequence": {
+            #     "icon_path": "print_sequence.svg",
+            #     "callback": lambda: self.print_sequence_manager.print_sequence(),
+            #     "tooltip": "Print Sequence",
+            # },
             "clear_sequence": {
                 "icon_path": "clear.svg",
                 "callback": lambda: self.clear_sequence(show_indicator=True),
