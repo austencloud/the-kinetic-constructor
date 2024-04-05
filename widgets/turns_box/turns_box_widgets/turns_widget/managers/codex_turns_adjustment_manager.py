@@ -4,11 +4,11 @@ from Enums.Enums import LetterType, Turns
 
 if TYPE_CHECKING:
     from .....pictograph.pictograph import Pictograph
-    from .....codex.codex_turns_widget import CodexTurnsWidget
+    from .....letterbook.letterbook_turns_widget import LetterBookTurnsWidget
 
 
-class CodexTurnsAdjustmentManager:
-    def __init__(self, turns_widget: "CodexTurnsWidget") -> None:
+class LetterBookTurnsAdjustmentManager:
+    def __init__(self, turns_widget: "LetterBookTurnsWidget") -> None:
         self.turns_widget = turns_widget
         self.pictographs = self._get_pictographs()
         self.letter_type = (

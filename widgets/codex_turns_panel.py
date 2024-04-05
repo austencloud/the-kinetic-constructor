@@ -3,8 +3,10 @@ from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter, TurnsTabAttribute
 from Enums.MotionAttributes import MotionType
 from Enums.letters import LetterConditions
-from widgets.factories.turns_box_factory import CodexTurnsBoxFactory
-from widgets.codex.codex_letter_button_frame.components.codex_turns_box import CodexTurnsBox
+from widgets.factories.turns_box_factory import LetterBookTurnsBoxFactory
+from widgets.letterbook.letterbook_letter_button_frame.components.letterbook_turns_box import (
+    LetterBookTurnsBox,
+)
 
 
 if TYPE_CHECKING:
@@ -13,17 +15,17 @@ if TYPE_CHECKING:
     )
 
 
-class CodexTurnsPanel(QFrame):
+class LetterBookTurnsPanel(QFrame):
     def __init__(
         self, turns_tab: "TurnsTab", attribute_type: TurnsTabAttribute
     ) -> None:
         super().__init__()
         self.turns_tab = turns_tab
         self.attribute_type = attribute_type
-        self.turns_box_factory = CodexTurnsBoxFactory(self)
-        self.boxes: list[CodexTurnsBox] = self.turns_box_factory.create_boxes()
+        self.turns_box_factory = LetterBookTurnsBoxFactory(self)
+        self.boxes: list[LetterBookTurnsBox] = self.turns_box_factory.create_boxes()
         self.setup_layouts()
-        self.visible_boxes: list[CodexTurnsBox] = []
+        self.visible_boxes: list[LetterBookTurnsBox] = []
 
     def setup_layouts(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
@@ -32,7 +34,7 @@ class CodexTurnsPanel(QFrame):
         self.layout.setSpacing(0)
         for box in self.boxes:
             self.layout.addWidget(box)
-            box.setObjectName("CodexTurnsBox")
+            box.setObjectName("LetterBookTurnsBox")
 
     def show_motion_type_boxes_based_on_chosen_letters(
         self, selected_letters: list[Letter]

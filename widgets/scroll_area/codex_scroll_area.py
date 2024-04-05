@@ -3,23 +3,25 @@ from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QApplication
 from PyQt6.QtCore import Qt
 
 
-from .components.codex_pictograph_factory import CodexPictographFactory
-from .components.section_manager.codex_section_manager import CodexSectionManager
-from .components.codex_display_manager import CodexDisplayManager
+from .components.letterbook_pictograph_factory import LetterBookPictographFactory
+from .components.section_manager.letterbook_section_manager import (
+    LetterBookSectionManager,
+)
+from .components.letterbook_display_manager import LetterBookDisplayManager
 
 
 from ..pictograph.pictograph import Pictograph
 from PyQt6.QtGui import QWheelEvent
 
 if TYPE_CHECKING:
-    from ..codex.codex import Codex
+    from ..letterbook.letterbook import LetterBook
 
 
-class CodexScrollArea(QScrollArea):
-    def __init__(self, codex: "Codex") -> None:
-        super().__init__(codex)
-        self.main_widget = codex.main_widget
-        self.codex = codex
+class LetterBookScrollArea(QScrollArea):
+    def __init__(self, letterbook: "LetterBook") -> None:
+        super().__init__(letterbook)
+        self.main_widget = letterbook.main_widget
+        self.letterbook = letterbook
         self.letters = self.main_widget.letters
         self.pictograph_cache: dict[str, Pictograph] = {}
         self.stretch_index = -1
@@ -27,10 +29,10 @@ class CodexScrollArea(QScrollArea):
         self._setup_managers()
 
     def _setup_managers(self) -> None:
-        self.display_manager = CodexDisplayManager(self)
-        self.sections_manager = CodexSectionManager(self)
-        self.pictograph_factory = CodexPictographFactory(
-            self, self.codex.pictograph_cache
+        self.display_manager = LetterBookDisplayManager(self)
+        self.sections_manager = LetterBookSectionManager(self)
+        self.pictograph_factory = LetterBookPictographFactory(
+            self, self.letterbook.pictograph_cache
         )
 
     def _setup_ui(self) -> None:

@@ -7,17 +7,17 @@ from widgets.scroll_area.components.section_manager.section_widget.components.ty
 )
 
 if TYPE_CHECKING:
-    from widgets.scroll_area.components.section_manager.section_widget.codex_section_widget import (
-        CodexSectionWidget,
+    from widgets.scroll_area.components.section_manager.section_widget.letterbook_section_widget import (
+        LetterBookSectionWidget,
     )
 
 
-class CodexSectionHeader(QWidget):
+class LetterBookSectionHeader(QWidget):
     clicked = pyqtSignal()
     EXPAND_ARROW_PATH = "images/icons/dropdown/expand.png"
     COLLAPSE_ARROW_PATH = "images/icons/dropdown/collapse.png"
 
-    def __init__(self, section: "CodexSectionWidget") -> None:
+    def __init__(self, section: "LetterBookSectionWidget") -> None:
         super().__init__()
         self.section = section
         self.type_label = SectionTypeLabel(section)
@@ -94,7 +94,7 @@ class CodexSectionHeader(QWidget):
     def load_and_resize_pixmap(self, path: str) -> QPixmap:
         pixmap = QPixmap(path)
         base_class_name = type(self.section.scroll_area).__name__
-        if base_class_name == "CodexScrollArea":
+        if base_class_name == "LetterBookScrollArea":
             height = self.section.scroll_area.width() // 45
         elif base_class_name == "OptionPickerScrollArea":
             height = self.section.scroll_area.width() // 60

@@ -42,7 +42,7 @@ class PropTypeChanger:
 
         for (
             beat_view
-        ) in self.main_window.main_widget.top_builder_widget.sequence_widget.beats:
+        ) in self.main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beats:
             if beat_view.is_filled:
                 self.replace_props(new_prop_type, beat_view.beat)
                 beat_view.beat.updater.update_pictograph()

@@ -108,7 +108,7 @@ class CurrentSequenceJsonHandler:
     def clear_and_repopulate_the_current_sequence(self):
         self.clear_current_sequence_file()
         beat_frame = self.main_widget.top_builder_widget.sequence_widget.beat_frame
-        beat_views = beat_frame.beat_views
+        beat_views = beat_frame.beats
         start_pos = beat_frame.start_pos_view.start_pos
         if start_pos.view.is_filled:
             self.set_start_position_data(start_pos)
@@ -132,9 +132,11 @@ class CurrentSequenceJsonHandler:
         sequence[index][f"{color}_attributes"]["end_ori"] = end_ori
 
         if sequence[index][f"{color}_attributes"]["turns"] > 0:
-            pictograph = self.main_widget.top_builder_widget.sequence_widget.beat_frame.beat_views[
-                index - 1
-            ].beat
+            pictograph = (
+                self.main_widget.top_builder_widget.sequence_widget.beat_frame.beats[
+                    index - 1
+                ].beat
+            )
             if pictograph:
                 motion = pictograph.get.motion_by_color(color)
                 prop_rot_dir = motion.prop_rot_dir
@@ -188,9 +190,11 @@ class CurrentSequenceJsonHandler:
                         self._calculate_continuous_prop_rot_dir(sequence, i, RED)
                     )
 
-            beat_view = self.main_widget.top_builder_widget.sequence_widget.beat_frame.beat_views[
-                i - 1
-            ]
+            beat_view = (
+                self.main_widget.top_builder_widget.sequence_widget.beat_frame.beats[
+                    i - 1
+                ]
+            )
             if beat_view and beat_view.is_filled:
                 beat_view.beat.get.pictograph_dict().update(entry)
 
@@ -234,7 +238,10 @@ class CurrentSequenceJsonHandler:
 
             # Check if the current pictograph's motion type should be ignored.
             # If not, return its prop rotation direction.
-            if sequence[i][f"{color}_attributes"]["motion_type"] not in ignore_motion_types:
+            if (
+                sequence[i][f"{color}_attributes"]["motion_type"]
+                not in ignore_motion_types
+            ):
                 return sequence[i][f"{color}_attributes"]["prop_rot_dir"]
 
         # If no suitable prop rotation direction is found, return NO_ROT.

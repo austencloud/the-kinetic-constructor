@@ -37,7 +37,7 @@ class BeatFramePrintManager:
         )
 
     def setup_scene(self):
-        filled_beats = [beat for beat in self.beat_frame.beat_views if beat.is_filled]
+        filled_beats = [beat for beat in self.beat_frame.beats if beat.is_filled]
         column_count, row_count = self._calculate_layout(len(filled_beats))
 
         max_x, max_y = 0, 0  # Track the furthest extents of items added to the scene
@@ -60,7 +60,7 @@ class BeatFramePrintManager:
         self.beat_frame_scene.setSceneRect(0, 0, max_x, max_y)
 
     def calculate_position(self, beat_view) -> QPointF:
-        filled_beats = [beat for beat in self.beat_frame.beat_views if beat.is_filled]
+        filled_beats = [beat for beat in self.beat_frame.beats if beat.is_filled]
         beat_index = filled_beats.index(
             beat_view
         )  # Ensure this is the index in filled_beats

@@ -6,14 +6,14 @@ from Enums.Enums import LetterType
 
 
 from .section_widget.components.turns_tab.turns_tab import TurnsTab
-from .section_widget.codex_section_widget import CodexSectionWidget
+from .section_widget.letterbook_section_widget import LetterBookSectionWidget
 from PyQt6.QtWidgets import QGridLayout, QLabel
 
 if TYPE_CHECKING:
-    from ...codex_scroll_area import CodexScrollArea
+    from ...letterbook_scroll_area import LetterBookScrollArea
 
 
-class CodexSectionManager:
+class LetterBookSectionManager:
     """Manages all of the sections in the scroll area. Individual sections are managed by the SectionWidget class."""
 
     SECTION_ORDER = [
@@ -25,19 +25,19 @@ class CodexSectionManager:
         LetterType.Type6,
     ]
 
-    def __init__(self, scroll_area: "CodexScrollArea") -> None:
+    def __init__(self, scroll_area: "LetterBookScrollArea") -> None:
         self.scroll_area = scroll_area
-        self.sections: dict[LetterType, CodexSectionWidget] = {}
+        self.sections: dict[LetterType, LetterBookSectionWidget] = {}
         self.filter_tabs_cache: dict[LetterType, TurnsTab] = {}
         self.pictograph_cache: dict[Letter, list[LetterType]] = {}
 
         self.pictographs_by_type = {type: [] for type in LetterType}
         self.ordered_section_types: list[LetterType] = []
 
-    def create_section(self, letter_type: LetterType) -> CodexSectionWidget:
+    def create_section(self, letter_type: LetterType) -> LetterBookSectionWidget:
         if letter_type not in self.sections:
             correct_index = self.get_correct_index_for_section(letter_type)
-            section = CodexSectionWidget(letter_type, self.scroll_area)
+            section = LetterBookSectionWidget(letter_type, self.scroll_area)
             self.scroll_area.insert_widget_at_index(section, correct_index)
             self.sections[letter_type] = section
             self.ordered_section_types.append(letter_type)
@@ -67,7 +67,7 @@ class CodexSectionManager:
         column_count = self.scroll_area.display_manager.COLUMN_COUNT
         section_layout.addWidget(section_label, 0, 0, 1, column_count)
 
-    def get_section(self, letter_type: LetterType) -> CodexSectionWidget:
+    def get_section(self, letter_type: LetterType) -> LetterBookSectionWidget:
         return self.sections.get(letter_type)
 
     def create_section_if_needed(self, letter_type: LetterType) -> None:
@@ -106,7 +106,7 @@ class CodexSectionManager:
                 sections_to_show.append(letter_type)
         return sections_to_show
 
-    def create_or_get_turns_tab(self, section: CodexSectionWidget) -> TurnsTab:
+    def create_or_get_turns_tab(self, section: LetterBookSectionWidget) -> TurnsTab:
         if not section.turns_tab:
             section.turns_tab = TurnsTab(section)
             section.layout.insertWidget(1, section.turns_tab)

@@ -38,7 +38,12 @@ class AdvancedStartPosPickerDefaultOriPicker(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.group_box, alignment=Qt.AlignmentFlag.AlignCenter)
 
-    def setup_orientation_buttons(self, hand_label_text: str, orientation_setter) -> None:
+        # Set background color to transparent white
+        self.setStyleSheet("background-color: rgba(255, 255, 255, 0.8);")
+
+    def setup_orientation_buttons(
+        self, hand_label_text: str, orientation_setter
+    ) -> None:
         layout = QHBoxLayout()
         hand_label = QLabel(hand_label_text)
         layout.addWidget(hand_label)
@@ -65,5 +70,5 @@ class AdvancedStartPosPickerDefaultOriPicker(QWidget):
         )
 
     def resize_default_ori_picker(self) -> None:
-        width = self.advanced_start_pos_picker.width() //2
+        width = self.advanced_start_pos_picker.width()
         self.setFixedWidth(width)

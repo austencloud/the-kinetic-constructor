@@ -128,7 +128,6 @@ class CustomPrintDialog(QDialog):
 
     def resize_custom_print_dialog(self, width: int, height: int) -> None:
         self.setFixedSize(width, height)
-        # set the preview to have a matching aspect ratio to its scene
         scene_aspect_ratio = (
             self.preview_area.sceneRect().width()
             / self.preview_area.sceneRect().height()

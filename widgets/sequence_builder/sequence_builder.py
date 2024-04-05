@@ -1,3 +1,4 @@
+from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
 from PyQt6.QtCore import Qt
 
@@ -162,3 +163,4 @@ class SequenceBuilder(QFrame):
     def get_last_added_pictograph(self, sequence):
         """Returns the last pictograph in the sequence. Assumes the sequence is not empty."""
         return sequence[-1]
+

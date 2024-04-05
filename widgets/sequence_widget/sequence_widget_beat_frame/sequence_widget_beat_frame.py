@@ -31,6 +31,7 @@ from widgets.sequence_widget.sequence_widget_beat_frame.beat import BeatView
 
 
 class SequenceWidgetBeatFrame(QFrame):
+
     COLUMN_COUNT = 5
     ROW_COUNT = 4
 
@@ -42,7 +43,7 @@ class SequenceWidgetBeatFrame(QFrame):
         )
         self.sequence_widget = sequence_widget
         self.top_builder_widget = sequence_widget.top_builder_widget
-        self.beat_views: list[BeatView] = []
+        self.beats: list[BeatView] = []
         self._setup_components()
         self._setup_layout()
         self._populate_beat_frame()
@@ -61,7 +62,7 @@ class SequenceWidgetBeatFrame(QFrame):
     def _add_beat_to_layout(self, row: int, col: int, number=None) -> None:
         beat_view = BeatView(self, number)
         self.layout.addWidget(beat_view, row, col)
-        self.beat_views.append(beat_view)
+        self.beats.append(beat_view)
 
     def _setup_components(self) -> None:
         self.selection_manager = SequenceWidgetBeatSelectionOverlay(self)
@@ -91,22 +92,22 @@ class SequenceWidgetBeatFrame(QFrame):
     def add_scene_to_sequence(self, new_beat: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
-            self.beat_views[next_beat_index].set_beat(new_beat, next_beat_index + 1)
+            self.beats[next_beat_index].set_beat(new_beat, next_beat_index + 1)
             self.current_sequence_json_handler.update_current_sequence_file_with_beat(
-                self.beat_views[next_beat_index]
+                self.beats[next_beat_index]
             )
 
     def find_next_available_beat(self) -> int:
-        for i, beat in enumerate(self.beat_views):
+        for i, beat in enumerate(self.beats):
             if beat.scene() is None or beat.scene().items() == []:
                 return i
         return None
 
     def get_last_filled_beat(self) -> BeatView:
-        for beat_view in reversed(self.beat_views):
+        for beat_view in reversed(self.beats):
             if beat_view.is_filled:
                 return beat_view
-        return self.beat_views[0]
+        return self.beats[0]
 
     def get_current_word(self) -> str:
         """
@@ -117,7 +118,7 @@ class SequenceWidgetBeatFrame(QFrame):
         """
 
         word = ""
-        for beat_view in self.beat_views:
+        for beat_view in self.beats:
             if beat_view.is_filled:
                 word += beat_view.beat.letter.value
         # word += "_"
@@ -138,7 +139,7 @@ class SequenceWidgetBeatFrame(QFrame):
             if i == 0:
                 self.update_start_pos_from_current_sequence_json(entry)
             else:
-                beat = self.beat_views[i - 1].beat
+                beat = self.beats[i - 1].beat
                 if beat:
                     if beat.pictograph_dict != entry:
                         beat.updater.update_pictograph(entry)
@@ -151,20 +152,19 @@ class SequenceWidgetBeatFrame(QFrame):
         self.start_pos_view.start_pos.updater.update_pictograph(entry)
 
     def get_index_of_currently_selected_beat(self) -> int:
-        for i, beat in enumerate(self.beat_views):
+        for i, beat in enumerate(self.beats):
             if beat.is_selected:
                 return i
         return 0
 
     def resize_beat_frame(self) -> None:
-        beat_view_size = int(self.width() / (self.COLUMN_COUNT + 2))
-        for view in self.beat_views + [self.start_pos_view]:
+        beat_view_size = int((self.width() // (self.COLUMN_COUNT)) * 0.75)
+        for view in self.beats + [self.start_pos_view]:
             view.setMinimumWidth(beat_view_size)
             view.setMaximumWidth(beat_view_size)
             view.setMinimumHeight(beat_view_size)
             view.setMaximumHeight(beat_view_size)
             view.resetTransform()
-            # scale contents to fit
             if view.scene():
                 view.fitInView(
                     view.scene().sceneRect(), Qt.AspectRatioMode.KeepAspectRatio

@@ -5,23 +5,25 @@ from Enums.Enums import LetterType
 from Enums.letters import Letter
 from constants import DASH, NO_ROT, OPP, SAME, STATIC
 from .components.turns_tab.turns_tab import TurnsTab
-from .components.codex_section_header import CodexSectionHeader
+from .components.letterbook_section_header import LetterBookSectionHeader
 from .....pictograph.pictograph import Pictograph
-from .....codex.codex_letter_button_frame.components.codex_vtg_dir_button_manager import (
-    CodexVtgDirButtonManager,
+from .....letterbook.letterbook_letter_button_frame.components.letterbook_vtg_dir_button_manager import (
+    LetterBookVtgDirButtonManager,
 )
 from .components.pictograph_frame import ScrollAreaSectionPictographFrame
 
 if TYPE_CHECKING:
     pass
 
-    from ....codex_scroll_area import CodexScrollArea
+    from ....letterbook_scroll_area import LetterBookScrollArea
 
 
-class CodexSectionWidget(QGroupBox):
+class LetterBookSectionWidget(QGroupBox):
     SCROLLBAR_WIDTH = 20
 
-    def __init__(self, letter_type: LetterType, scroll_area: "CodexScrollArea") -> None:
+    def __init__(
+        self, letter_type: LetterType, scroll_area: "LetterBookScrollArea"
+    ) -> None:
         super().__init__(None)
         self.scroll_area = scroll_area
         self.letter_type = letter_type
@@ -29,7 +31,7 @@ class CodexSectionWidget(QGroupBox):
         self.turns_tab: TurnsTab = None
 
     def setup_components(self) -> None:
-        self.vtg_dir_button_manager = CodexVtgDirButtonManager(self)
+        self.vtg_dir_button_manager = LetterBookVtgDirButtonManager(self)
         self._setup_layout()
         self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
         self.pictographs: dict[Letter, Pictograph] = {}
@@ -42,7 +44,7 @@ class CodexSectionWidget(QGroupBox):
         self.setup_header()
 
     def setup_header(self):
-        self.header = CodexSectionHeader(self)
+        self.header = LetterBookSectionHeader(self)
         self.header.clicked.connect(self.toggle_section)
         self.layout.addWidget(self.header)
 

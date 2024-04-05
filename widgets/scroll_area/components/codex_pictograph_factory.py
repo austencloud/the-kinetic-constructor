@@ -7,13 +7,13 @@ from Enums.Enums import LetterType
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.scroll_area.codex_scroll_area import CodexScrollArea
+    from widgets.scroll_area.letterbook_scroll_area import LetterBookScrollArea
 
 
-class CodexPictographFactory:
+class LetterBookPictographFactory:
     def __init__(
         self,
-        scroll_area: "CodexScrollArea",
+        scroll_area: "LetterBookScrollArea",
         pictograph_cache: dict[str, Pictograph],
     ) -> None:
         self.scroll_area = scroll_area
@@ -52,9 +52,9 @@ class CodexPictographFactory:
         raise ValueError("Pictograph dict is required for creating a new pictograph.")
 
     def process_selected_letters(self) -> None:
-        selected_letters = set(self.scroll_area.codex.selected_letters)
+        selected_letters = set(self.scroll_area.letterbook.selected_letters)
         for letter in selected_letters:
-            if letter not in self.scroll_area.codex.pictograph_cache:
+            if letter not in self.scroll_area.letterbook.pictograph_cache:
                 pictograph_dicts = self.scroll_area.letters.get(letter, [])
                 for pictograph_dict in pictograph_dicts:
                     pictograph_key = self.scroll_area.main_widget.pictograph_key_generator.generate_pictograph_key(
@@ -64,11 +64,11 @@ class CodexPictographFactory:
             for (
                 pictograph_key,
                 pictograph,
-            ) in self.scroll_area.codex.pictograph_cache[letter].items():
+            ) in self.scroll_area.letterbook.pictograph_cache[letter].items():
                 self.scroll_area.pictograph_cache[pictograph_key] = pictograph
 
     def get_deselected_letters(self) -> set[Letter]:
-        selected_letters = set(self.scroll_area.codex.selected_letters)
+        selected_letters = set(self.scroll_area.letterbook.selected_letters)
         existing_letters = {
             key.split("_")[0] for key in self.scroll_area.pictograph_cache.keys()
         }

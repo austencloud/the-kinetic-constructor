@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 class BeatDeletionManager:
     def __init__(self, sequence_builder_beat_frame: "SequenceWidgetBeatFrame") -> None:
         self.beat_frame = sequence_builder_beat_frame
-        self.beats = sequence_builder_beat_frame.beat_views
+        self.beats = sequence_builder_beat_frame.beats
         self.sequence_builder = (
             sequence_builder_beat_frame.top_builder_widget.builder_toolbar.sequence_builder
         )
