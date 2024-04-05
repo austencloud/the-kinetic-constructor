@@ -9,13 +9,13 @@ from .letterbook_letter_button_styler import LetterBookLetterButtonStyler
 from .letterbook_letter_button import LetterBookLetterButton
 
 if TYPE_CHECKING:
-    from ..letterbook_letter_button_frame import LetterBookLetterButtonFrame
+    from ..letterbook_letter_button_frame import LetterBookButtonFrame
 
 
 class LetterBookLetterButtonManager:
     def __init__(
         self,
-        letter_button_frame: "LetterBookLetterButtonFrame",
+        letter_button_frame: "LetterBookButtonFrame",
     ) -> None:
         self.letter_rows = letter_button_frame.letter_rows
         self.icon_dir = LETTER_BTN_ICON_DIR

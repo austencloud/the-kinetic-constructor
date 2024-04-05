@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from Enums.Enums import Letter
 
 from .letterbook_letter_button_frame.letterbook_letter_button_frame import (
-    LetterBookLetterButtonFrame,
+    LetterBookButtonFrame,
 )
 from .letterbook_scroll_area import LetterBookScrollArea
 from ..pictograph.pictograph import Pictograph
@@ -24,19 +24,19 @@ class LetterBook(QWidget):
             letter: {} for letter in Letter
         }
         self.scroll_area = LetterBookScrollArea(self)
-        self.letter_button_frame = LetterBookLetterButtonFrame(self)
+        self.button_frame = LetterBookButtonFrame(self)
 
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.left_layout = QVBoxLayout()
         self.right_layout = QVBoxLayout()
 
         self.left_layout.addWidget(self.scroll_area, 5)
-        self.right_layout.addWidget(self.letter_button_frame, 1)
+        self.right_layout.addWidget(self.button_frame, 1)
         self.layout.addLayout(self.left_layout, 5)
         self.layout.addLayout(self.right_layout, 1)
 
     def resize_letterbook(self) -> None:
-        self.letter_button_frame.resize_letterbook_letter_button_frame()
+        self.button_frame.resize_letterbook_letter_button_frame()
 
     def update_pictographs(self) -> None:
         deselected_letters = (

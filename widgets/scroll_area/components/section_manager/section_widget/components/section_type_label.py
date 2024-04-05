@@ -60,12 +60,13 @@ class SectionTypeLabel(QLabel):
 
     def font_size(self):
         scroll_area = self.section_widget.scroll_area
+        sequence_builder = scroll_area.sequence_builder
         base_class_name = type(scroll_area).__name__
 
         if base_class_name == "LetterBookScrollArea":
-            font_size = scroll_area.width() // 40
+            font_size = sequence_builder.width() // 40
         elif base_class_name == "OptionPickerScrollArea":
-            font_size = scroll_area.width() // 45
+            font_size = sequence_builder.width() // 45
         else:
             font_size = 12
         return font_size
@@ -84,7 +85,6 @@ class SectionTypeLabel(QLabel):
             f"}}"
         )
 
-
     def mousePressEvent(self, event) -> None:
         self.clicked.emit()
         super().mousePressEvent(event)
@@ -100,19 +100,8 @@ class SectionTypeLabel(QLabel):
     def resize_section_type_label(self) -> None:
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        # Add a buffer for padding/margins that may not be accounted for by QFontMetrics
-        padding = 10
         self.label_height = self.font_size() * 2
         label_width = self.label_height * 5
 
         self.setFixedSize(label_width, self.label_height)
-        self.setStyleSheet(
-            f"QLabel {{"
-            f"  background-color: rgba(255, 255, 255, 200);"
-            f"  border-radius: {self.label_height // 2}px;"  # Adjust radius to maintain an oval shape
-            f"  font-size: {self.font_size()}px;"
-            f"  font-weight: bold;"
-            f"  padding-left: {padding}px;"
-            f"  padding-right: {padding}px;"
-            f"}}"
-        )
+        self.set_label_style()

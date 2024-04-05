@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QFrame
 from PyQt6.QtCore import Qt
 from .letterbook_letter_button_frame.letterbook_letter_button_frame import (
-    LetterBookLetterButtonFrame,
+    LetterBookButtonFrame,
 )
 
 if TYPE_CHECKING:
@@ -13,7 +13,7 @@ class LetterBookButtonPanel(QFrame):
     def __init__(self, letterbook: "LetterBook") -> None:
         super().__init__(letterbook)
         self.letterbook = letterbook
-        self.letter_btn_frame = LetterBookLetterButtonFrame(self)
+        self.letter_btn_frame = LetterBookButtonFrame(self)
         self._setup_layout()
 
     def _setup_layout(self) -> QFrame:

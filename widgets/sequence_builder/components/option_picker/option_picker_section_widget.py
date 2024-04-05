@@ -50,8 +50,7 @@ class OptionPickerSectionWidget(QGroupBox):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.header)
         self.layout.addWidget(self.pictograph_frame)
-        # add stretch to the bottom of the layout
-        # self.layout.addStretch(1)
+
 
     def _setup_header(self) -> None:
         self.header = OptionPickerSectionHeader(self)

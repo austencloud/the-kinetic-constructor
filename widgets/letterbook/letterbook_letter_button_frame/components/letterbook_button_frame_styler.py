@@ -6,12 +6,12 @@ from Enums.letters import LetterType
 
 if TYPE_CHECKING:
     from widgets.letterbook.letterbook_letter_button_frame.letterbook_letter_button_frame import (
-        LetterBookLetterButtonFrame,
+        LetterBookButtonFrame,
     )
 
 
 class LetterBookButtonFrameStyler:
-    def __init__(self, letter_button_frame: "LetterBookLetterButtonFrame") -> None:
+    def __init__(self, letter_button_frame: "LetterBookButtonFrame") -> None:
         self.spacing = letter_button_frame.spacing
         self.letter_button_frame = letter_button_frame
         self.border_colors = {

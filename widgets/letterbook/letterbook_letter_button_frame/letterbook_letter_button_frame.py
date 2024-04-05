@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from widgets.letterbook.letterbook import LetterBook
 
 
-class LetterBookLetterButtonFrame(QFrame):
+class LetterBookButtonFrame(QFrame):
     def __init__(self, letterbook: "LetterBook") -> None:
         super().__init__()
         self.letterbook = letterbook
