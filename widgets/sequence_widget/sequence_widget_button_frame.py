@@ -46,17 +46,17 @@ class SequenceWidgetButtonFrame(QFrame):
 
         self.font_size = self.sequence_widget.width() // 45
         self.save_image_manager = self.beat_frame.export_manager
-        self.setup_save_sequence_button()
+        self.setup_add_to_dictionary_button()
         self.setup_clear_sequence_button()
-        self.setup_export_image_button()
+        self.setup_save_image_button()
         self._setup_print_sequence_button()
         self.setup_layout()
 
-    def setup_save_sequence_button(self) -> None:
+    def setup_add_to_dictionary_button(self) -> None:
         self.add_to_dictionary_button = SequenceButton(
             "Add To Dictionary", self.font_size
         )
-        self.add_to_dictionary_button.clicked.connect(self.save_sequence)
+        self.add_to_dictionary_button.clicked.connect(self.add_to_dictionary)
 
     def setup_clear_sequence_button(self) -> None:
         self.clear_sequence_button = SequenceButton("Clear Sequence", self.font_size)
@@ -64,7 +64,7 @@ class SequenceWidgetButtonFrame(QFrame):
             lambda: self.clear_sequence(show_indicator=True)
         )
 
-    def setup_export_image_button(self) -> None:
+    def setup_save_image_button(self) -> None:
         self.save_image = SequenceButton("Save Image", self.font_size)
         self.save_image.clicked.connect(lambda: self.save_image_manager.save_image())
 
@@ -101,7 +101,7 @@ class SequenceWidgetButtonFrame(QFrame):
         buttons_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         return buttons_layout
 
-    def save_sequence(self) -> None:
+    def add_to_dictionary(self) -> None:
         self.sequence = self.json_handler.load_current_sequence_json()
         if not self.sequence:
             self.sequence_widget.indicator_label.show_message(

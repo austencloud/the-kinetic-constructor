@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QImage, QPainter, QPixmap
+from PyQt6.QtWidgets import QFileDialog
 from path_helpers import get_my_photos_path
 
 if TYPE_CHECKING:
@@ -20,7 +21,24 @@ class BeatFrameImageExportManager:
         if word == "":
             self.indicator_label.show_message("Nothing to save.")
             return
-        output_path = get_my_photos_path(f"{word}.png")
+
+        # Default save path within the 'My Pictures' folder inside the 'The Kinetic Alphabet' subfolder
+        default_save_path = get_my_photos_path(f"{word}.png")
+
+        # Open a file save dialog with the default save path
+        # Removed the options initialization and passing; directly use the method
+        file_name, _ = QFileDialog.getSaveFileName(
+            self.beat_frame,
+            "Save Image",
+            default_save_path,
+            "Images (*.png *.jpeg *.jpg)",
+            # You can add options here if needed, for example:
+            # options=QFileDialog.Option.DontUseNativeDialog
+        )
+
+        if not file_name:
+            # User canceled or closed the dialog
+            return
 
         filled_beats = [beat for beat in self.beat_frame.beat_views if beat.is_filled]
         column_count, row_count = self._calculate_layout(len(filled_beats))
@@ -28,10 +46,9 @@ class BeatFrameImageExportManager:
         beat_frame_image = self._create_image(column_count, row_count)
         self._draw_beats(beat_frame_image, filled_beats, column_count, row_count)
 
-        beat_frame_image.save(output_path, "PNG")
-        # get the name of the file without the path
-        output_path = output_path.split("/")[-1]
-        self.indicator_label.show_message(f"Image saved as {output_path}")
+        beat_frame_image.save(file_name, "PNG")
+        # Show a message with the name of the file where it was saved
+        self.indicator_label.show_message(f"Image saved as {file_name.split('/')[-1]}")
 
     def _create_image(self, column_count, row_count) -> QImage:
         self.beat_size = int(self.beat_frame.start_pos_view.beat.width())
