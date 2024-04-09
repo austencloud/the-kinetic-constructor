@@ -97,7 +97,6 @@ class SequenceBuilder(QFrame):
         self.option_picker.show()
         self.option_picker.scroll_area.sections_manager.show_all_sections()
         self.option_picker.update_option_picker()
-        self.option_picker.scroll_area.display_manager.order_and_display_pictographs()
         self.option_picker.resize_option_picker()
 
     def render_and_store_pictograph(
@@ -163,4 +162,3 @@ class SequenceBuilder(QFrame):
     def get_last_added_pictograph(self, sequence):
         """Returns the last pictograph in the sequence. Assumes the sequence is not empty."""
         return sequence[-1]
-

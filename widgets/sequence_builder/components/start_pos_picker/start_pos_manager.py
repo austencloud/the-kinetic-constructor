@@ -1,4 +1,5 @@
 from copy import deepcopy
+from functools import partial
 from PyQt6.QtCore import QObject, pyqtSignal
 from Enums.letters import Letter
 from constants import END_POS, START_POS
@@ -7,7 +8,7 @@ from widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat import (
 )
 from ....pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication, QWidget
 
 if TYPE_CHECKING:
     from .start_pos_picker import StartPosPicker
@@ -25,6 +26,9 @@ class StartPosManager(QObject):
         self.builder_toolbar = self.sequence_builder.builder_toolbar
         self.start_options: dict[str, Pictograph] = {}
         self.setup_start_positions()
+        self.start_position_selected.connect(
+            self.sequence_builder.transition_to_sequence_building
+        )
 
     def setup_start_positions(self) -> None:
         """Shows options for the starting position."""
@@ -56,13 +60,12 @@ class StartPosManager(QObject):
                     )
                     start_position_pictograph.updater.update_pictograph(pictograph_dict)
 
-                    start_position_pictograph.view.mousePressEvent = (
-                        lambda event: self.on_start_pos_clicked(
-                            start_position_pictograph
-                        )
+                    start_position_pictograph.view.mousePressEvent = partial(
+                        self.on_start_pos_clicked, start_position_pictograph
                     )
 
-    def on_start_pos_clicked(self, clicked_start_option: Pictograph) -> None:
+    def on_start_pos_clicked(self, clicked_start_option: Pictograph, event: QWidget = None) -> None:
+        """Handle the start position click event."""
         start_position_beat = StartPositionBeat(
             self.main_widget,
             self.builder_toolbar.top_builder_widget.sequence_widget.beat_frame,
@@ -83,6 +86,8 @@ class StartPosManager(QObject):
         beat_frame.selection_manager.select_beat(start_pos_view)
 
         QApplication.processEvents()
+        # if it's connected, disconnect it first
+        self.start_position_selected.disconnect()
         self.start_position_selected.connect(
             self.sequence_builder.transition_to_sequence_building
         )

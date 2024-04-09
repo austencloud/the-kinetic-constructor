@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
 from widgets.pictograph.pictograph import Pictograph
 from Enums.Enums import LetterType
-
+from PyQt6.QtWidgets import QApplication
 from widgets.scroll_area.components.section_manager.section_widget.letterbook_section_widget import (
     LetterBookSectionWidget,
 )
@@ -21,18 +21,18 @@ class OptionPickerDisplayManager:
     SPACING = 5
     COLUMN_COUNT = 8
 
-    def __init__(self, scroll_area: "OptionPickerScrollArea"):
+    def __init__(self, scroll_area: "OptionPickerScrollArea") -> None:
         self.scroll_area = scroll_area
         self.section_indices = {}
         self.pictograph_count = 0
 
-    def order_and_display_pictographs(self):
+    def order_and_display_pictographs(self) -> None:
         for letter_type in LetterType:
             ordered_pictographs = self.get_ordered_pictographs_for_section(letter_type)
             for index, (key, pictograph) in enumerate(ordered_pictographs.items()):
                 self.add_pictograph_to_layout(pictograph, index)
 
-    def add_pictograph_to_layout(self, pictograph: Pictograph, index: int):
+    def add_pictograph_to_layout(self, pictograph: Pictograph, index: int) -> None:
         row, col = divmod(index, self.COLUMN_COUNT)
         letter_type = self.scroll_area.sections_manager.get_pictograph_letter_type(
             pictograph.letter
