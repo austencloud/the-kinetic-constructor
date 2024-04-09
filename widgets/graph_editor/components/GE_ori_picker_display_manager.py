@@ -24,33 +24,31 @@ class GE_OriPickerDisplayManager:
         )
 
     def set_label_styles(self) -> None:
-        self.ori_display_label.setMinimumWidth(
-            int(self.ori_picker_box.adjustment_panel.width() / 4)
-        )
-        self.ori_display_label.setMaximumWidth(
-            int(self.ori_picker_box.adjustment_panel.width() / 4)
+        graph_editor_width = self.ori_picker_box.adjustment_panel.graph_editor.width()
+        self.ori_display_label.setFixedWidth(graph_editor_width // 5)
+        ori_display_width = self.ori_display_label.width()
+
+        ori_display_border = int(ori_display_width / 30)
+        border_color = self._get_border_color()
+
+        self.ori_display_label.setStyleSheet(
+            f"""
+            QLabel {{
+                border: {ori_display_border}px solid {border_color};
+                background-color: white;
+
+            }}
+            """
         )
 
-        border_radius = self.ori_display_label.width() // 4
-
-        ori_display_border = int(self.ori_display_label.width() / 25)
+    def _get_border_color(self) -> str:
         if self.ori_picker_box.color == RED:
             border_color = "#ED1C24"
         elif self.ori_picker_box.color == BLUE:
             border_color = "#2E3192"
         else:
             border_color = "black"
-
-        self.ori_display_label.setStyleSheet(
-            f"""
-            QLabel {{
-                border: {ori_display_border}px solid {border_color};
-                border-radius: {border_radius}px;
-                background-color: white;
-
-            }}
-            """
-        )
+        return border_color
 
     def set_ori_display_font_size(self) -> None:
         font_size = int(self.ori_picker_box.graph_editor.width() // 35)

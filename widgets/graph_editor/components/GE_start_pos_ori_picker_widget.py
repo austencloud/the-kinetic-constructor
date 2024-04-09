@@ -150,14 +150,17 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.option_picker.update_option_picker()
 
     def resize_GE_start_pos_ori_picker_widget(self) -> None:
+        self._set_button_size()
+        self._set_ori_label_font_size()
+        self.display_manager.set_ori_display_font_size()
+        self.display_manager.set_label_styles()
+
+    def _set_button_size(self):
         button_size = int(self.ori_picker_box.height() // 4)
         icon_size = int(button_size * 0.6)
         for button in [self.ccw_button, self.cw_button]:
             button.setFixedSize(QSize(button_size, button_size))
             button.setIconSize(QSize(icon_size, icon_size))
-        self._set_ori_label_font_size()
-        self.display_manager.set_ori_display_font_size()
-        self.display_manager.set_label_styles()
 
     def set_initial_orientation(
         self, start_pos_pictograph: Pictograph, color: str

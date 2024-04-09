@@ -33,7 +33,6 @@ class ChooseYourNextPictographLabel(QLabel):
             f"  font-size: {int(0.03 * width)}px;"
             f"}}"
         )
-        self.show()
 
     def resize_choose_your_next_option_label(self) -> None:
         width = self.option_picker.sequence_builder.width() // 2

@@ -42,7 +42,9 @@ class BeatFrameImageExportManager:
 
         filled_beats = [beat for beat in self.beat_frame.beats if beat.is_filled]
         column_count, row_count = self._calculate_layout(len(filled_beats))
-
+        #deselect everything in each of hte beat scenes
+        for beat in filled_beats:
+            beat.scene().clearSelection()
         beat_frame_image = self._create_image(column_count, row_count)
         self._draw_beats(beat_frame_image, filled_beats, column_count, row_count)
 

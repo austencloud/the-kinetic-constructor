@@ -29,5 +29,6 @@ class SequenceModifier(QTabWidget):
             else:
                 self.graph_editor.adjustment_panel.show_placeholder_widget()
             self.graph_editor.resize_graph_editor()
+            self.graph_editor.adjustment_panel.update_adjustment_panel()
         # elif current_widget == self.animator:
         #     self.animator.resize_animator()

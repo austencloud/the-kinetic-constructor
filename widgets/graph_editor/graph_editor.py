@@ -72,6 +72,7 @@ class GraphEditor(QFrame):
         self.pictograph_layout.setStretch(1, 1)
 
     def resize_graph_editor(self) -> None:
+        self.setFixedWidth(self.sequence_modifier.width())
         self.GE_pictograph_container.resize_GE_pictograph_container()
         self.adjustment_panel.resize_GE_adjustment_panel()
 

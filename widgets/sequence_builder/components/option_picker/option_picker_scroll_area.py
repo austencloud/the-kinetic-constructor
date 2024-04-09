@@ -141,4 +141,4 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             self.display_manager.COLUMN_COUNT -= 1
         elif not increase and current_size < MAX_COLUMN_COUNT:
             self.display_manager.COLUMN_COUNT += 1
-        self.display_manager.order_and_display_pictographs()
+        # self.display_manager.order_and_display_pictographs()
