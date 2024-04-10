@@ -101,23 +101,24 @@ class SequenceWidgetButtonFrame(QFrame):
 
     def add_to_dictionary(self) -> None:
         self.sequence = self.json_handler.load_current_sequence_json()
-        if not self.sequence:
-            self.sequence_widget.indicator_label.show_message(
-                "You must build a sequence before you can save it."
-            )
-            return
 
         base_pattern = "".join(
             pictograph.get("letter", "")
             for pictograph in self.sequence
             if "letter" in pictograph
         )
-        self.variation_manager.save_structural_variation(self.sequence, base_pattern)
-        self.indicator_label.show_message(
-            f"Structural variation saved for {base_pattern}"
-        )
+        if base_pattern:
 
-        self.main_widget.top_builder_widget.builder_toolbar.dictionary.reload_dictionary_tab()
+            self.variation_manager.save_structural_variation(
+                self.sequence, base_pattern
+            )
+            self.indicator_label.show_message(f"{base_pattern} added to dictionary!")
+
+            self.main_widget.top_builder_widget.builder_toolbar.dictionary.reload_dictionary_tab()
+        else:
+            self.indicator_label.show_message(
+                "You must build a sequence to add it to your dictionary."
+            )
 
     def clear_sequence(
         self, show_indicator=True, should_reset_to_start_pos_picker=True

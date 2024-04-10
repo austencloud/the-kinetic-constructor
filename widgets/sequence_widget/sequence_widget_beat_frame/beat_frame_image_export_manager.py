@@ -19,25 +19,19 @@ class BeatFrameImageExportManager:
     def save_image(self) -> None:
         word = self.beat_frame.get_current_word()
         if word == "":
-            self.indicator_label.show_message("Nothing to save.")
+            self.indicator_label.show_message("You must build a sequence to save it as an image.")
             return
 
-        # Default save path within the 'My Pictures' folder inside the 'The Kinetic Alphabet' subfolder
         default_save_path = get_my_photos_path(f"{word}.png")
 
-        # Open a file save dialog with the default save path
-        # Removed the options initialization and passing; directly use the method
         file_name, _ = QFileDialog.getSaveFileName(
             self.beat_frame,
             "Save Image",
             default_save_path,
             "Images (*.png *.jpeg *.jpg)",
-            # You can add options here if needed, for example:
-            # options=QFileDialog.Option.DontUseNativeDialog
         )
 
         if not file_name:
-            # User canceled or closed the dialog
             return
 
         filled_beats = [beat for beat in self.beat_frame.beats if beat.is_filled]
