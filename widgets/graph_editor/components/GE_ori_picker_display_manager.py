@@ -51,7 +51,7 @@ class GE_OriPickerDisplayManager:
         return border_color
 
     def set_ori_display_font_size(self) -> None:
-        font_size = int(self.ori_picker_box.graph_editor.width() // 35)
+        font_size = int(self.ori_picker_box.graph_editor.width() // 30)
         font = QFont("Arial", font_size)
         font.setWeight(QFont.Weight.Bold)
         self.ori_picker_widget.ori_display_label.setFont(font)
