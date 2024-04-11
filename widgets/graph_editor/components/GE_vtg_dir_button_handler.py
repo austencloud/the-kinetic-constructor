@@ -121,31 +121,6 @@ class GE_VtgDirButtonManager:
             COUNTER_CLOCKWISE: CLOCKWISE,
         }.get(prop_rot_dir, prop_rot_dir)
 
-    def update_visibility_based_on_motion(
-        self,
-        new_turns,
-        attribute_value: Union[Color, MotionType, LeadStates],
-    ) -> None:
-        if attribute_value in [PRO, ANTI]:
-            return
-        if new_turns > 0:
-            if self.previous_turns == 0:
-                self.show_vtg_dir_buttons()
-                if not self.vtg_state[SAME] and not self.vtg_state[OPP]:
-                    self.vtg_state[SAME] = True
-                    self.same_button.press()
-                    self.same_button.update_state_dict(self.vtg_state, True)
-                if self.vtg_state[SAME]:
-                    self.same_button.press()
-                    self.same_button.update_state_dict(self.vtg_state, True)
-                elif self.vtg_state[OPP]:
-                    self.opp_button.press()
-                    self.opp_button.update_state_dict(self.vtg_state, True)
-                self.previous_turns = new_turns
-        elif new_turns == 0:
-            self.previous_turns = 0
-            self.hide_vtg_dir_buttons()
-
     def unpress_vtg_buttons(self) -> None:
         self.same_button.unpress()
         self.opp_button.unpress()
