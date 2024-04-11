@@ -32,9 +32,7 @@ class TurnsColumnHandler(QGraphicsItemGroup):
             return number_item
         return None
 
-    def convert_number_to_int_if_it_is_a_whole_number(
-        self, number: Union[int, float]
-    ) -> int:
+    def convert_number_to_int_if_whole_number(self, number: Union[int, float]) -> int:
         return int(number) if number == int(number) else number
 
     def set_number(self, number: Union[int, float], is_top: bool) -> None:

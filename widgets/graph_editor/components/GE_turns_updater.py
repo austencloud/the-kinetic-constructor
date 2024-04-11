@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Turns
 from Enums.MotionAttributes import PropRotDir
 from constants import *
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
