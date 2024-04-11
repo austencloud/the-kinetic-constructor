@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QWidget, QApplication
 from PyQt6.QtGui import QPainter, QPen, QColor
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Optional
+from Enums.letters import LetterType
 from widgets.sequence_widget.sequence_widget_beat_frame.beat import BeatView
 
 from widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat import (

@@ -32,6 +32,7 @@ class GE_AdjustmentPanel(QFrame):
         self.blue_turns_box.turns_widget.display_manager.update_turns_display(
             blue_turns
         )
+
         self.red_turns_box.turns_widget.display_manager.update_turns_display(red_turns)
 
     def _setup_placeholder_widget(self) -> None:
@@ -75,7 +76,7 @@ class GE_AdjustmentPanel(QFrame):
             self.hide_start_pos_ori_pickers()
             self.show_turns_boxes()
             QApplication.processEvents()
-            
+
         self.resize_GE_adjustment_panel()
 
     def hide_start_pos_ori_pickers(self) -> None:
@@ -113,7 +114,7 @@ class GE_AdjustmentPanel(QFrame):
         for box in self.turns_boxes:
             box.header.update_turns_box_header()
 
-    def resize_GE_adjustment_panel(self) -> None:   
+    def resize_GE_adjustment_panel(self) -> None:
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.setLayout(self.layout)

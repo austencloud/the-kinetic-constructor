@@ -59,13 +59,6 @@ class BeatView(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
-    def clear(self):
-        self.setScene(None)
-        self.beat_frame.start_pos_view.setScene(None)
-        sequence_builder = self.beat.main_widget.builder_toolbar.sequence_builder
-        sequence_builder.current_pictograph = self.beat_frame.start_pos
-        sequence_builder.reset_to_start_pos_picker()
-
     def mouseDoubleClickEvent(self, event: QMouseEvent) -> None:
         self.mousePressEvent(event)
 

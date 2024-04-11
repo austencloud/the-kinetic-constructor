@@ -38,13 +38,24 @@ class GE_TurnsBoxHeader(QWidget):
 
     def update_turns_box_header(self) -> None:
         """This is called every time the GE pictograph scene is updated in order to display the correct buttons."""
-        letter_type = self.turns_box.pictograph.letter_type
+        pictograph = self.turns_box.graph_editor.GE_pictograph_view.pictograph
+        letter_type = None
+        if pictograph.letter:
+            letter_type = LetterType.get_letter_type(pictograph.letter)
         if letter_type == LetterType.Type1 or letter_type == None:
             self.turns_box.prop_rot_dir_button_manager.hide_prop_rot_dir_buttons()
             self.turns_box.vtg_dir_button_manager.hide_vtg_dir_buttons()
         else:
-            self.turns_box.prop_rot_dir_button_manager.show_prop_rot_dir_buttons()
-            self.turns_box.vtg_dir_button_manager.show_vtg_dir_buttons()
+            if letter_type == LetterType.Type2 or letter_type == LetterType.Type3:
+                if pictograph.get.motion_by_color(self.turns_box.color).turns:
+                    self.turns_box.vtg_dir_button_manager.show_vtg_dir_buttons()
+                else:
+                    self.turns_box.vtg_dir_button_manager.hide_vtg_dir_buttons()
+            else:
+                if pictograph.get.motion_by_color(self.turns_box.color).turns:
+                    self.turns_box.prop_rot_dir_button_manager.show_prop_rot_dir_buttons()
+                else:
+                    self.turns_box.prop_rot_dir_button_manager.hide_prop_rot_dir_buttons()
         QApplication.processEvents()
 
     def _setup_layout(self) -> None:
