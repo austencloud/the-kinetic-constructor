@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
 )
 
-from path_helpers import get_my_photos_path
+from path_helpers import get_images_and_data_path, get_my_photos_path
 
 
 if TYPE_CHECKING:
@@ -75,7 +75,7 @@ class SequenceWidgetButtonFrame(QFrame):
             },
         }
         for button_name, button_data in button_dict.items():
-            icon_path = f"images/icons/sequence_widget_icons/{button_data['icon_path']}"
+            icon_path = get_images_and_data_path(f"images/icons/sequence_widget_icons/{button_data['icon_path']}")
             self._setup_button(
                 button_name,
                 icon_path,
