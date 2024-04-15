@@ -43,13 +43,13 @@ class GE_StartPosOriPickerWidget(QWidget):
         )
         self.sequence_modifier = self.ori_picker_box.graph_editor.sequence_modifier
         self.beat_frame = (
-            self.ori_picker_box.graph_editor.sequence_modifier.SW.beat_frame
+            self.ori_picker_box.graph_editor.sequence_modifier.sequence_widget.beat_frame
         )
         self.json_validation_engine = (
             self.main_widget.json_manager.current_sequence_json_handler.validation_engine
         )
         self.option_picker = (
-            self.sequence_modifier.SW.top_builder_widget.builder_toolbar.sequence_builder.option_picker
+            self.sequence_modifier.sequence_widget.top_builder_widget.builder_toolbar.sequence_builder.option_picker
         )
         self._setup_current_ori_display()
         self._setup_orientation_label()

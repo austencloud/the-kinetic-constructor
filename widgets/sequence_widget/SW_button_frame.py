@@ -28,26 +28,26 @@ class SequenceWidgetButton(QPushButton):
 
 
 class SequenceWidgetButtonFrame(QFrame):
-    def __init__(self, SW: "SequenceWidget") -> None:
-        super().__init__(SW)
-        self.SW = SW
+    def __init__(self, sequence_widget: "SequenceWidget") -> None:
+        super().__init__(sequence_widget)
+        self.sequence_widget = sequence_widget
         self.orientations = ["in", "counter", "out", "clock"]
-        self.font_size = self.SW.width() // 45
+        self.font_size = self.sequence_widget.width() // 45
 
         self._setup_dependencies()
         self._setup_buttons()
         self._setup_layout()
 
     def _setup_dependencies(self):
-        self.main_widget = self.SW.main_widget
+        self.main_widget = self.sequence_widget.main_widget
         self.json_handler = self.main_widget.json_manager.current_sequence_json_handler
-        self.builder_toolbar = self.SW.top_builder_widget.builder_toolbar
+        self.builder_toolbar = self.sequence_widget.top_builder_widget.builder_toolbar
         self.sequence_constructor = self.builder_toolbar.sequence_builder
-        self.graph_editor = self.SW.sequence_modifier.graph_editor
+        self.graph_editor = self.sequence_widget.sequence_modifier.graph_editor
         self.variation_manager = self.builder_toolbar.dictionary.variation_manager
-        self.beat_frame = self.SW.beat_frame
+        self.beat_frame = self.sequence_widget.beat_frame
         self.save_image_manager = self.beat_frame.export_manager
-        self.indicator_label = self.SW.indicator_label
+        self.indicator_label = self.sequence_widget.indicator_label
         self.print_sequence_manager = self.beat_frame.print_sequence_manager
 
     def _setup_buttons(self) -> None:
@@ -131,7 +131,7 @@ class SequenceWidgetButtonFrame(QFrame):
         self.sequence_constructor.current_pictograph = self.beat_frame.start_pos
         self.json_handler.clear_current_sequence_file()
         if show_indicator:
-            self.SW.indicator_label.show_message("Sequence cleared")
+            self.sequence_widget.indicator_label.show_message("Sequence cleared")
         self._clear_graph_editor()
 
     def _reset_beat_frame(self) -> None:

@@ -18,7 +18,7 @@ class GE_TurnsAdjustmentManager(QObject):
         super().__init__(turns_widget)
         self.turns_widget = turns_widget
         self.graph_editor = self.turns_widget.turns_box.graph_editor
-        self.beat_frame = self.graph_editor.sequence_modifier.SW.beat_frame
+        self.beat_frame = self.graph_editor.sequence_modifier.sequence_widget.beat_frame
         self.main_widget = self.graph_editor.main_widget
         self.json_manager = self.main_widget.json_manager
         self.current_sequence_json_handler = (

@@ -20,13 +20,13 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 ========
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
-        SequenceWidgetBeatFrame,
+        SW_Beat_Frame,
     )
 >>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409:widgets/SW/SW_beat_frame/beat_selection_overlay.py
 
 
 class BeatSelectionManager(QWidget):
-    def __init__(self, SW: "SequenceWidget"):
+    def __init__(self, sequence_widget: "SequenceWidget"):
         super().__init__(SW)
         self.selected_beat: Optional[BeatView | StartPositionBeatView] = None
         self.border_color = QColor("gold")
@@ -45,7 +45,7 @@ class BeatSelectionManager(QWidget):
             red_turns = self.selected_beat.beat.red_motion.turns
             self.selected_beat.is_selected = True
             graph_editor = (
-                self.selected_beat.beat_frame.SW.sequence_modifier.graph_editor
+                self.selected_beat.beat_frame.sequence_widget.sequence_modifier.graph_editor
             )
 <<<<<<<< HEAD:widgets/SW/SW_beat_frame/beat_selection_manager.py
             graph_editor.update_GE_pictgraph(self.selected_beat.beat)

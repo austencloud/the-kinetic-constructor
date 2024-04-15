@@ -84,7 +84,7 @@ class CurrentSequenceJsonHandler:
     def update_current_sequence_file(self):
         sequence_data = self.load_current_sequence_json()
         last_beat_view = (
-            self.main_widget.top_builder_widget.SW.beat_frame.get_last_filled_beat()
+            self.main_widget.top_builder_widget.sequence_widget.beat_frame.get_last_filled_beat()
         )
         if (
             hasattr(last_beat_view.beat.get, "pictograph_dict")
@@ -107,7 +107,7 @@ class CurrentSequenceJsonHandler:
 
     def clear_and_repopulate_the_current_sequence(self):
         self.clear_current_sequence_file()
-        beat_frame = self.main_widget.top_builder_widget.SW.beat_frame
+        beat_frame = self.main_widget.top_builder_widget.sequence_widget.beat_frame
         beat_views = beat_frame.beats
         start_pos = beat_frame.start_pos_view.start_pos
         if start_pos.view.is_filled:
@@ -132,9 +132,11 @@ class CurrentSequenceJsonHandler:
         sequence[index][f"{color}_attributes"]["end_ori"] = end_ori
 
         if sequence[index][f"{color}_attributes"]["turns"] > 0:
-            pictograph = self.main_widget.top_builder_widget.SW.beat_frame.beats[
-                index - 1
-            ].beat
+            pictograph = (
+                self.main_widget.top_builder_widget.sequence_widget.beat_frame.beats[
+                    index - 1
+                ].beat
+            )
             if pictograph:
                 motion = pictograph.get.motion_by_color(color)
                 prop_rot_dir = motion.prop_rot_dir
@@ -188,14 +190,18 @@ class CurrentSequenceJsonHandler:
                         self._calculate_continuous_prop_rot_dir(sequence, i, RED)
                     )
 
-            beat_view = self.main_widget.top_builder_widget.SW.beat_frame.beats[i - 1]
+            beat_view = (
+                self.main_widget.top_builder_widget.sequence_widget.beat_frame.beats[
+                    i - 1
+                ]
+            )
             if beat_view and beat_view.is_filled:
                 beat_view.beat.get.pictograph_dict().update(entry)
 
         self.save_current_sequence(sequence)
         self.validation_engine.run()
         sequence = self.load_current_sequence_json()
-        self.main_widget.top_builder_widget.SW.beat_frame.propogate_turn_adjustment(
+        self.main_widget.top_builder_widget.sequence_widget.beat_frame.propogate_turn_adjustment(
             sequence
         )
 

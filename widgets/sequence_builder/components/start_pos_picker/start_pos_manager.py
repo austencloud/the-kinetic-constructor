@@ -69,20 +69,19 @@ class StartPosManager(QObject):
     ) -> None:
         """Handle the start position click event."""
         start_position_beat = StartPositionBeat(
-            self.main_widget,
-            self.builder_toolbar.top_builder_widget.SW.beat_frame,
+            self.builder_toolbar.top_builder_widget.sequence_widget.beat_frame,
         )
         clicked_start_option.updater.update_dict_from_attributes()
         start_position_beat.updater.update_pictograph(
             deepcopy(clicked_start_option.pictograph_dict)
         )
 
-        self.sequence_builder.builder_toolbar.top_builder_widget.SW.beat_frame.start_pos_view.set_start_pos(
+        self.sequence_builder.builder_toolbar.top_builder_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
             start_position_beat
         )
         self.sequence_builder.current_pictograph = start_position_beat
         beat_frame = (
-            self.sequence_builder.builder_toolbar.top_builder_widget.SW.beat_frame
+            self.sequence_builder.builder_toolbar.top_builder_widget.sequence_widget.beat_frame
         )
         start_pos_view = beat_frame.start_pos_view
         beat_frame.selection_manager.select_beat(start_pos_view)
@@ -122,8 +121,7 @@ class StartPosManager(QObject):
             start_pos_entry[0] if start_pos_entry else None
         )
         start_pos_beat = StartPositionBeat(
-            self.main_widget,
-            self.main_widget.top_builder_widget.SW.beat_frame,
+            self.main_widget.top_builder_widget.sequence_widget.beat_frame,
         )
         start_pos_beat.updater.update_pictograph(
             start_position_pictograph.pictograph_dict
@@ -148,7 +146,7 @@ class StartPosManager(QObject):
                     "red_attributes"
                 ]["end_ori"]
                 pictograph_factory = (
-                    self.main_widget.top_builder_widget.SW.pictograph_factory
+                    self.main_widget.top_builder_widget.sequence_widget.pictograph_factory
                 )
                 pictograph_key = (
                     self.main_widget.pictograph_key_generator.generate_pictograph_key(

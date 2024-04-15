@@ -7,14 +7,14 @@ from path_helpers import get_my_photos_path
 if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.beat import BeatView
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
-        SequenceWidgetBeatFrame,
+        SW_Beat_Frame,
     )
 
 
 class BeatFrameImageExportManager:
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame") -> None:
+    def __init__(self, beat_frame: "SW_Beat_Frame") -> None:
         self.beat_frame = beat_frame
-        self.indicator_label = beat_frame.SW.indicator_label
+        self.indicator_label = beat_frame.sequence_widget.indicator_label
 
     def save_image(self) -> None:
         word = self.beat_frame.get_current_word()

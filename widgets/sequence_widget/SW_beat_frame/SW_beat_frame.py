@@ -30,20 +30,21 @@ if TYPE_CHECKING:
 from widgets.sequence_widget.SW_beat_frame.beat import BeatView
 
 
-class SequenceWidgetBeatFrame(QFrame):
+class SW_Beat_Frame(QFrame):
 
     COLUMN_COUNT = 5
     ROW_COUNT = 4
 
-    def __init__(self, SW: "SequenceWidget") -> None:
+    def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__()
-        self.main_widget = SW.main_widget
+        self.main_widget = sequence_widget.main_widget
         self.current_sequence_json_handler = (
             self.main_widget.json_manager.current_sequence_json_handler
         )
-        self.SW = SW
-        self.top_builder_widget = SW.top_builder_widget
+        self.sequence_widget = sequence_widget
+        self.top_builder_widget = sequence_widget.top_builder_widget
         self.beats: list[BeatView] = []
+        self.sequence_changed = False
         self._setup_components()
         self._setup_layout()
         self._populate_beat_frame()
@@ -67,7 +68,7 @@ class SequenceWidgetBeatFrame(QFrame):
     def _setup_components(self) -> None:
         self.selection_manager = SequenceWidgetBeatSelectionOverlay(self)
         self.start_pos_view = StartPositionBeatView(self)
-        self.start_pos = StartPositionBeat(self.main_widget, self)
+        self.start_pos = StartPositionBeat(self)
         self.beat_deletion_manager = BeatDeletionManager(self)
         self.export_manager = BeatFrameImageExportManager(self)
         self.print_sequence_manager = BeatFramePrintManager(self)

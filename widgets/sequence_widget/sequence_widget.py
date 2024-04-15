@@ -5,11 +5,11 @@ from widgets.sequence_widget.my_sequence_label import MySequenceLabel
 from widgets.sequence_widget.sequence_modifier import SequenceModifier
 from ..indicator_label import IndicatorLabel
 from .SW_pictograph_factory import (
-    SequenceWidgetPictographFactory,
+    SW_PictographFactory,
 )
 from .SW_beat_frame.beat import Beat
 from .SW_beat_frame.SW_beat_frame import (
-    SequenceWidgetBeatFrame,
+    SW_Beat_Frame,
 )
 from .SW_button_frame import SequenceWidgetButtonFrame
 from PyQt6.QtCore import Qt
@@ -24,6 +24,7 @@ class SequenceWidget(QWidget):
         super().__init__()
         self.top_builder_widget = top_builder_widget
         self.main_widget = top_builder_widget.main_widget
+
         self._setup_cache()
         self._setup_components()
         self._setup_beat_frame_layout()
@@ -35,14 +36,13 @@ class SequenceWidget(QWidget):
 
     def _setup_components(self):
         self.indicator_label = IndicatorLabel(self)
-        self.beat_frame = SequenceWidgetBeatFrame(self)
+        self.beat_frame = SW_Beat_Frame(self)
         self.sequence_modifier = SequenceModifier(self)
         self.button_frame = SequenceWidgetButtonFrame(self)
-        self.pictograph_factory = SequenceWidgetPictographFactory(self)
+        self.pictograph_factory = SW_PictographFactory(self)
         self.my_sequence_label = MySequenceLabel(self)
 
     def _setup_beat_frame_layout(self) -> None:
-        # hbox with two vboxes inside - beat frame on the left and button frame on the right
         self.beat_frame_layout = QHBoxLayout()
         self.beat_frame_layout.addWidget(self.beat_frame)
         self.beat_frame_layout.addWidget(self.button_frame)
@@ -65,7 +65,7 @@ class SequenceWidget(QWidget):
         self.indicator_label_layout.addStretch(1)
 
     def populate_sequence(self, pictograph_dict: dict) -> None:
-        pictograph = Beat(self.main_widget)
+        pictograph = Beat(self.beat_frame)
         pictograph.updater.update_pictograph(pictograph_dict)
         self.beat_frame.add_scene_to_sequence(pictograph)
         pictograph_key = (

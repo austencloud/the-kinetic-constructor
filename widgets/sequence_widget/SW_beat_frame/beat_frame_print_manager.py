@@ -18,12 +18,12 @@ from widgets.sequence_widget.SW_beat_frame.custom_print_dialog import (
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
-        SequenceWidgetBeatFrame,
+        SW_Beat_Frame,
     )
 
 
 class BeatFramePrintManager:
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
+    def __init__(self, beat_frame: "SW_Beat_Frame"):
         self.beat_frame = beat_frame
         self.beat_frame_scene = QGraphicsScene()  # Using the custom scene class
         self.printer = None

@@ -21,12 +21,12 @@ class TopBuilderWidget(QWidget):
         self.timer.timeout.connect(self.animate_background)
         self.timer.start(100)  # Adjust as needed for smoother or faster animation
         self.builder_toolbar = BuilderToolbar(self)
-        self.SW = SequenceWidget(self)
+        self.sequence_widget = SequenceWidget(self)
         self._setup_layout()
 
     def _setup_layout(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.layout.addWidget(self.SW, 1)
+        self.layout.addWidget(self.sequence_widget, 1)
         self.layout.addWidget(self.builder_toolbar, 1)
 
     def animate_background(self):

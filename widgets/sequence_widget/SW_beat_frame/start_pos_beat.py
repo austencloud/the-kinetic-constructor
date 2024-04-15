@@ -8,7 +8,7 @@ from widgets.sequence_widget.SW_beat_frame.beat import Beat, BeatView
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
-        SequenceWidgetBeatFrame,
+        SW_Beat_Frame,
     )
     from widgets.sequence_widget.SW_beat_frame.start_pos_beat import (
         StartPositionBeat,
@@ -16,11 +16,9 @@ if TYPE_CHECKING:
 
 
 class StartPositionBeat(Beat):
-    def __init__(
-        self, main_widget: "MainWidget", beat_frame: "SequenceWidgetBeatFrame"
-    ) -> None:
-        super().__init__(main_widget)
-        self.main_widget = main_widget
+    def __init__(self,  beat_frame: "SW_Beat_Frame") -> None:
+        super().__init__(beat_frame)
+        self.main_widget = beat_frame.main_widget
         self.beat_frame = beat_frame
 
     def add_start_text(self) -> None:
@@ -37,7 +35,7 @@ class StartPositionBeat(Beat):
 
 
 class StartPositionBeatView(BeatView):
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame") -> None:
+    def __init__(self, beat_frame: "SW_Beat_Frame") -> None:
         self.beat_frame = beat_frame
         super().__init__(beat_frame)
         self.is_filled = False

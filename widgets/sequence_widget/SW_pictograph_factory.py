@@ -23,15 +23,10 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 
-class SequenceWidgetPictographFactory:
-    def __init__(
-        self,
-        SW: "SequenceWidget",
-    ) -> None:
-        self.SW = SW
-        self.pictograph_cache: dict[Letter, dict[str, Pictograph]] = (
-            self.SW.main_widget.pictograph_cache
-        )
+class SW_PictographFactory:
+    def __init__(self, sequence_widget: "SequenceWidget") -> None:
+        self.sequence_widget = sequence_widget
+        self.pictograph_cache = sequence_widget.main_widget.pictograph_cache
 
     def get_or_create_pictograph(
         self, pictograph_key: str, pictograph_dict=None
@@ -61,7 +56,7 @@ class SequenceWidgetPictographFactory:
         raise ValueError("Pictograph dict is required for creating a new pictograph.")
 
     def create_pictograph(self) -> Pictograph:
-        pictograph = Pictograph(self.SW.main_widget)
+        pictograph = Pictograph(self.sequence_widget.main_widget)
         return pictograph
 
     def generate_pictograph_key_from_dict(self, pictograph_dict) -> str:

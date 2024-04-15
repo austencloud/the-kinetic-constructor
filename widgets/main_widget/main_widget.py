@@ -51,6 +51,7 @@ class MainWidget(QTabWidget):
         self.currentChanged.connect(self.on_tab_changed)
         self.setStyleSheet(get_tab_stylesheet())
         self.webcam_initialized = False  # Add an initialization flag
+        self.initialized = False
 
     def _setup_pictograph_cache(self) -> None:
         self.pictograph_cache: dict[str, dict[str, "Pictograph"]] = {}
@@ -80,6 +81,7 @@ class MainWidget(QTabWidget):
         self.addTab(self.top_builder_widget, "Builder")
         self.addTab(self.sequence_recorder, "Recorder")
         # self.addTab(self.letterbook, "LetterBook")
+        self.initialized = True
 
     def _setup_special_placements(self) -> None:
         self.special_placements: dict[
@@ -98,7 +100,7 @@ class MainWidget(QTabWidget):
     def keyPressEvent(self, event: QKeyEvent) -> None:
         if event.key() == Qt.Key.Key_Q or event.key() == Qt.Key.Key_F5:
             self.special_placement_loader.refresh_placements()
-        # if the button is a "`" then switch between the builder and recorder tabs
+
         elif event.key() == 96:
             current_widget = self.currentWidget()
             if current_widget == self.top_builder_widget:
@@ -111,10 +113,23 @@ class MainWidget(QTabWidget):
     def on_tab_changed(self):
         current_widget = self.currentWidget()
         if current_widget == self.top_builder_widget:
-            self.top_builder_widget.SW.resize_sequence_widget()
+            self.top_builder_widget.sequence_widget.resize_sequence_widget()
             self.top_builder_widget.builder_toolbar.resize_current_tab()
         elif current_widget == self.sequence_recorder:
-            self.sequence_recorder.resize_sequence_recorder()
+            if not self.initialized:
+                self.sequence_recorder.resize_sequence_recorder()
+
+            SW_beat_frame = self.top_builder_widget.sequence_widget.beat_frame
+            if SW_beat_frame.sequence_changed:
+                SW_beat_frame.sequence_changed = False
+                self.sequence_recorder.capture_frame.SR_beat_frame.populate_beat_frame_scenes_from_json()
+            else:
+                for view in SW_beat_frame.beats:
+                    # if the beat is filled, then resize the view
+                    if view.is_filled:
+                        view.resize_beat_view()
+                    QApplication.processEvents()
+
             QApplication.processEvents()
             if not self.webcam_initialized:
                 self.sequence_recorder.capture_frame.video_display_frame.init_webcam()

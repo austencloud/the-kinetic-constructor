@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem
 from PyQt6.QtCore import Qt, QRect, QPointF
 from PyQt6.QtGui import (
@@ -15,16 +15,17 @@ from widgets.pictograph.pictograph import Pictograph
 
 
 if TYPE_CHECKING:
+    from widgets.sequence_recorder.SR_beat_frame import SR_BeatFrame
     from widgets.main_widget.main_widget import MainWidget
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
-        SequenceWidgetBeatFrame,
+        SW_Beat_Frame,
     )
 
 
 class Beat(Pictograph):
-    def __init__(self, main_widget: "MainWidget") -> None:
-        super().__init__(main_widget)
-        self.main_widget = main_widget
+    def __init__(self, beat_frame: Union["SW_Beat_Frame", "SR_BeatFrame"]):
+        super().__init__(beat_frame.main_widget)
+        self.main_widget = beat_frame.main_widget
         self.view: "BeatView" = None
 
     def add_beat_number(self, number: int) -> None:
@@ -41,7 +42,7 @@ class Beat(Pictograph):
 
 
 class BeatView(QGraphicsView):
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame", number=None):
+    def __init__(self, beat_frame: "SW_Beat_Frame", number=None):
         super().__init__(beat_frame)
         self.number = number  # Beat number to display
         self._disable_scrollbars()
@@ -136,8 +137,17 @@ class BeatView(QGraphicsView):
         self.is_filled = True
         self.start_pos.view = self
         self.setScene(self.start_pos)
-        view_width = self.height()
-        self.view_scale = view_width / self.start_pos.width()
+        self.resize_beat_view()
+        self.beat.add_beat_number(number)
+
+    def resize_beat_view(self):
+        self.view_scale = (
+            self.height() / self.start_pos.width()
+            if self.start_pos
+            else self.beat.width()
+        )
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
-        self.beat.add_beat_number(number)
+        print(
+            f"View Height: - {self.height()}, Scene height - {self.start_pos.height() if self.start_pos else 'None'}"
+        )

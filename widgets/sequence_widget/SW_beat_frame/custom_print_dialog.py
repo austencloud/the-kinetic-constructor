@@ -18,13 +18,13 @@ from PyQt6.QtWidgets import (
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
-        SequenceWidgetBeatFrame,
+        SW_Beat_Frame,
     )
     from widgets.main_widget.main_widget import MainWidget
 
 
 class CustomPrintDialog(QDialog):
-    def __init__(self, pixmap: QPixmap, beat_frame: "SequenceWidgetBeatFrame") -> None:
+    def __init__(self, pixmap: QPixmap, beat_frame: "SW_Beat_Frame") -> None:
         super().__init__(beat_frame)
         self.pixmap = pixmap
         self.beat_frame = beat_frame

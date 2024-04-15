@@ -47,14 +47,14 @@ class SequenceBeatFrame(QFrame):
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.SW = SW
+        self.sequence_widget = sequence_widget 
         self.current_sequence_json_handler = (
             self.main_widget.json_manager.current_sequence_json_handler
         )
 <<<<<<<< HEAD:widgets/SW/SW_beat_frame/sequence_beat_frame.py
 
 ========
-        self.SW = SW
+        self.sequence_widget = sequence_widget 
 >>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409:widgets/SW/SW_beat_frame/SW_beat_frame.py
         self.beat_views: list[BeatView] = []
         self._setup_components(main_widget)
