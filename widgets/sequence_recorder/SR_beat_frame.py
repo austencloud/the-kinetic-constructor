@@ -79,9 +79,9 @@ class SR_BeatFrame(QFrame):
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
             self.beat_views[next_beat_index].set_beat(new_beat, next_beat_index + 1)
-            self.current_sequence_json_handler.update_current_sequence_file_with_beat(
-                self.beat_views[next_beat_index]
-            )
+            # self.current_sequence_json_handler.update_current_sequence_file_with_beat(
+            #     self.beat_views[next_beat_index]
+            # )
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beat_views):
