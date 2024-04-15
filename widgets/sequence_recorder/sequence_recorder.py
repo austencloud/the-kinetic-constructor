@@ -61,4 +61,4 @@ class SequenceRecorder(QWidget):
     def resize_sequence_recorder(self) -> None:
         self.capture_frame.resize_capture_frame()
         self.video_control_frame.resize_control_frame()
-        self.capture_frame.sequence_widget_beat_frame.populate_beat_frame_scenes_from_json()
+        self.capture_frame.SW_beat_frame.populate_beat_frame_scenes_from_json()

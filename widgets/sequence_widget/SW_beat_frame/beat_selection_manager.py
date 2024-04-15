@@ -2,32 +2,32 @@ from PyQt6.QtWidgets import QWidget, QApplication
 from PyQt6.QtGui import QPainter, QPen, QColor
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Optional
-<<<<<<<< HEAD:widgets/sequence_widget/sequence_widget_beat_frame/beat_selection_manager.py
+<<<<<<<< HEAD:widgets/SW/SW_beat_frame/beat_selection_manager.py
 
 from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
 from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
 ========
-from widgets.sequence_widget.sequence_widget_beat_frame.beat import BeatView
+from widgets.sequence_widget.SW_beat_frame.beat import BeatView
 
-from widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat import (
->>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409:widgets/sequence_widget/sequence_widget_beat_frame/beat_selection_overlay.py
+from widgets.sequence_widget.SW_beat_frame.start_pos_beat import (
+>>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409:widgets/SW/SW_beat_frame/beat_selection_overlay.py
     StartPositionBeatView,
 )
 
 if TYPE_CHECKING:
-<<<<<<<< HEAD:widgets/sequence_widget/sequence_widget_beat_frame/beat_selection_manager.py
+<<<<<<<< HEAD:widgets/SW/SW_beat_frame/beat_selection_manager.py
 
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 ========
-    from widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame import (
+    from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
         SequenceWidgetBeatFrame,
     )
->>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409:widgets/sequence_widget/sequence_widget_beat_frame/beat_selection_overlay.py
+>>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409:widgets/SW/SW_beat_frame/beat_selection_overlay.py
 
 
 class BeatSelectionManager(QWidget):
-    def __init__(self, sequence_widget: "SequenceWidget"):
-        super().__init__(sequence_widget)
+    def __init__(self, SW: "SequenceWidget"):
+        super().__init__(SW)
         self.selected_beat: Optional[BeatView | StartPositionBeatView] = None
         self.border_color = QColor("gold")
         self.border_width = 4  # Adjust as needed
@@ -45,9 +45,9 @@ class BeatSelectionManager(QWidget):
             red_turns = self.selected_beat.beat.red_motion.turns
             self.selected_beat.is_selected = True
             graph_editor = (
-                self.selected_beat.beat_frame.sequence_widget.sequence_modifier.graph_editor
+                self.selected_beat.beat_frame.SW.sequence_modifier.graph_editor
             )
-<<<<<<<< HEAD:widgets/sequence_widget/sequence_widget_beat_frame/beat_selection_manager.py
+<<<<<<<< HEAD:widgets/SW/SW_beat_frame/beat_selection_manager.py
             graph_editor.update_GE_pictgraph(self.selected_beat.beat)
 ========
 
@@ -56,7 +56,7 @@ class BeatSelectionManager(QWidget):
             self.show()
             graph_editor.update_GE_pictograph(self.selected_beat.beat)
             # QApplication.processEvents()
->>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409:widgets/sequence_widget/sequence_widget_beat_frame/beat_selection_overlay.py
+>>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409:widgets/SW/SW_beat_frame/beat_selection_overlay.py
 
             graph_editor.adjustment_panel.update_turns_panel(blue_turns, red_turns)
             graph_editor.adjustment_panel.update_adjustment_panel()

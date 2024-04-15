@@ -4,7 +4,7 @@ from widgets.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPainter, QPen, QColor, QKeyEvent
 
-from widgets.sequence_widget.sequence_widget_beat_frame.beat import Beat
+from widgets.sequence_widget.SW_beat_frame.beat import Beat
 
 if TYPE_CHECKING:
     from widgets.graph_editor.graph_editor import GraphEditor
@@ -28,9 +28,9 @@ class GE_PictographView(PictographView):
 
     def resize_GE_pictograph_view(self):
         container_height = self.GE.GE_pictograph_container.height()
-        # This is not the most elegant way to do this.
-        self.setMinimumHeight(int(container_height * 0.99))
-        self.setMinimumWidth(int(container_height * 0.99))
+
+        # self.setMinimumHeight(int(container_height * 0.99))
+        # self.setMinimumWidth(int(container_height * 0.99))
 
         if self.scene():
             self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)

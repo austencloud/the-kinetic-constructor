@@ -17,7 +17,7 @@ from PyQt6.QtWidgets import (
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame import (
+    from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
         SequenceWidgetBeatFrame,
     )
     from widgets.main_widget.main_widget import MainWidget

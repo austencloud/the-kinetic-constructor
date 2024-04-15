@@ -16,12 +16,12 @@ class DictionarySequencePopulator:
     def _init_references(self) -> None:
         self.json_handler = self.main_widget.json_manager.current_sequence_json_handler
         self.start_pos_view = (
-            self.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_view
+            self.main_widget.top_builder_widget.SW.beat_frame.start_pos_view
         )
         self.start_pos_manager = (
             self.main_widget.top_builder_widget.builder_toolbar.sequence_builder.start_pos_picker.start_pos_manager
         )
-        self.sequence_widget = self.main_widget.top_builder_widget.sequence_widget
+        self.SW = self.main_widget.top_builder_widget.SW
         self.sequence_builder = (
             self.main_widget.top_builder_widget.builder_toolbar.sequence_builder
         )
@@ -42,7 +42,7 @@ class DictionarySequencePopulator:
             self._init_references()
         if not sequence_data:
             return
-        self.sequence_widget.button_frame.clear_sequence(
+        self.SW.button_frame.clear_sequence(
             show_indicator=False, should_reset_to_start_pos_picker=False
         )
         start_pos_beat = self.start_pos_manager._convert_current_sequence_json_entry_to_start_pos_pictograph(
@@ -53,9 +53,9 @@ class DictionarySequencePopulator:
         for pictograph_dict in sequence_data:
             if pictograph_dict.get("sequence_start_position"):
                 continue
-            self.sequence_widget.populate_sequence(pictograph_dict)
+            self.SW.populate_sequence(pictograph_dict)
 
-        last_beat = self.sequence_widget.beat_frame.get_last_filled_beat().beat
+        last_beat = self.SW.beat_frame.get_last_filled_beat().beat
         self.sequence_builder.current_pictograph = last_beat
         last_beat.view.selection_manager.select_beat(last_beat.view)
 

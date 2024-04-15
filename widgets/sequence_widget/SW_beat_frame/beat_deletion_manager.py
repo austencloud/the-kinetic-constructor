@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat import (
+from widgets.sequence_widget.SW_beat_frame.start_pos_beat import (
     StartPositionBeatView,
 )
 
@@ -8,11 +8,11 @@ from widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat import (
 if TYPE_CHECKING:
     pass
 
-from widgets.sequence_widget.sequence_widget_beat_frame.beat import BeatView
+from widgets.sequence_widget.SW_beat_frame.beat import BeatView
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame import (
+    from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
         SequenceWidgetBeatFrame,
     )
 
@@ -31,7 +31,7 @@ class BeatDeletionManager:
 
     def delete_selected_beat(self) -> None:
         self.GE_pictograph_view = (
-            self.beat_frame.main_widget.top_builder_widget.sequence_widget.sequence_modifier.graph_editor.GE_pictograph_view
+            self.beat_frame.main_widget.top_builder_widget.SW.sequence_modifier.graph_editor.GE_pictograph_view
         )
         selected_beat = self.beat_frame.selection_manager.get_selected_beat()
 
@@ -78,7 +78,7 @@ class BeatDeletionManager:
         self.sequence_builder.reset_to_start_pos_picker()
         self.sequence_builder.option_picker.update_option_picker()
         graph_editor = (
-            self.beat_frame.main_widget.top_builder_widget.sequence_widget.sequence_modifier.graph_editor
+            self.beat_frame.main_widget.top_builder_widget.SW.sequence_modifier.graph_editor
         )
         graph_editor.adjustment_panel.update_adjustment_panel()
 

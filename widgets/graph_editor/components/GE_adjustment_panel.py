@@ -75,7 +75,7 @@ class GE_AdjustmentPanel(QFrame):
             self.hide_start_pos_ori_pickers()
             self.show_turns_boxes()
             QApplication.processEvents()
-            
+
         self.resize_GE_adjustment_panel()
 
     def hide_start_pos_ori_pickers(self) -> None:
@@ -113,15 +113,19 @@ class GE_AdjustmentPanel(QFrame):
         for box in self.turns_boxes:
             box.header.update_turns_box_header()
 
-    def resize_GE_adjustment_panel(self) -> None:   
+    def resize_GE_adjustment_panel(self) -> None:
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.setLayout(self.layout)
+
+        # NOT CAUSING RESIZE BUG ###
         for box in self.turns_boxes:
             if box.isVisible():
                 box.resize_GE_turns_box()
+
         for ori_picker_box in self.start_pos_ori_pickers:
             if ori_picker_box.isVisible():
                 ori_picker_box.resize_GE_ori_picker_box()
+        ### NOT CAUSING RESIZE BUG ###
 
         self.placeholder_widget.set_stylesheet()

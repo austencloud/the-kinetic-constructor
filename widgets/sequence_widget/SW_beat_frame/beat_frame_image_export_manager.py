@@ -5,8 +5,8 @@ from PyQt6.QtWidgets import QFileDialog
 from path_helpers import get_my_photos_path
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.sequence_widget_beat_frame.beat import BeatView
-    from widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame import (
+    from widgets.sequence_widget.SW_beat_frame.beat import BeatView
+    from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
         SequenceWidgetBeatFrame,
     )
 
@@ -14,12 +14,14 @@ if TYPE_CHECKING:
 class BeatFrameImageExportManager:
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame") -> None:
         self.beat_frame = beat_frame
-        self.indicator_label = beat_frame.sequence_widget.indicator_label
+        self.indicator_label = beat_frame.SW.indicator_label
 
     def save_image(self) -> None:
         word = self.beat_frame.get_current_word()
         if word == "":
-            self.indicator_label.show_message("You must build a sequence to save it as an image.")
+            self.indicator_label.show_message(
+                "You must build a sequence to save it as an image."
+            )
             return
 
         default_save_path = get_my_photos_path(f"{word}.png")
@@ -36,7 +38,7 @@ class BeatFrameImageExportManager:
 
         filled_beats = [beat for beat in self.beat_frame.beats if beat.is_filled]
         column_count, row_count = self._calculate_layout(len(filled_beats))
-        #deselect everything in each of hte beat scenes
+        # deselect everything in each of hte beat scenes
         for beat in filled_beats:
             beat.scene().clearSelection()
         beat_frame_image = self._create_image(column_count, row_count)

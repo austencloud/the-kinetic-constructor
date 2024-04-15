@@ -1,7 +1,7 @@
 from copy import deepcopy
 from PyQt6.QtCore import QObject, pyqtSignal
 from widgets.pictograph.pictograph import Pictograph
-from widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat import (
+from widgets.sequence_widget.SW_beat_frame.start_pos_beat import (
     StartPositionBeat,
 )
 from typing import TYPE_CHECKING
@@ -27,16 +27,16 @@ class AdvancedStartPosManager(QObject):
     def on_start_pos_clicked(self, clicked_start_option: Pictograph) -> None:
         start_position_beat = StartPositionBeat(
             self.sequence_builder.builder_toolbar,
-            self.sequence_builder.builder_toolbar.sequence_widget.beat_frame,
+            self.sequence_builder.builder_toolbar.SW.beat_frame,
         )
         start_position_beat.updater.update_pictograph(
             deepcopy(clicked_start_option.pictograph_dict)
         )
-        self.sequence_builder.builder_toolbar.sequence_widget.beat_frame.start_pos_view.set_start_pos(
+        self.sequence_builder.builder_toolbar.SW.beat_frame.start_pos_view.set_start_pos(
             start_position_beat
         )
         self.sequence_builder.current_pictograph = start_position_beat
-        beat_frame = self.sequence_builder.builder_toolbar.sequence_widget.beat_frame
+        beat_frame = self.sequence_builder.builder_toolbar.SW.beat_frame
         start_pos_view = beat_frame.start_pos_view
         beat_frame.selection_manager.select_beat(start_pos_view)
 

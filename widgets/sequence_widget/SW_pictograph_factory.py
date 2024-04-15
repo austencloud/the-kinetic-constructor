@@ -26,11 +26,11 @@ if TYPE_CHECKING:
 class SequenceWidgetPictographFactory:
     def __init__(
         self,
-        sequence_widget: "SequenceWidget",
+        SW: "SequenceWidget",
     ) -> None:
-        self.sequence_widget = sequence_widget
+        self.SW = SW
         self.pictograph_cache: dict[Letter, dict[str, Pictograph]] = (
-            self.sequence_widget.main_widget.pictograph_cache
+            self.SW.main_widget.pictograph_cache
         )
 
     def get_or_create_pictograph(
@@ -61,7 +61,7 @@ class SequenceWidgetPictographFactory:
         raise ValueError("Pictograph dict is required for creating a new pictograph.")
 
     def create_pictograph(self) -> Pictograph:
-        pictograph = Pictograph(self.sequence_widget.main_widget)
+        pictograph = Pictograph(self.SW.main_widget)
         return pictograph
 
     def generate_pictograph_key_from_dict(self, pictograph_dict) -> str:

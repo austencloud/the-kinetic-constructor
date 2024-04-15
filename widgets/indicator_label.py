@@ -7,9 +7,9 @@ if TYPE_CHECKING:
 
 
 class IndicatorLabel(QLabel):
-    def __init__(self, sequence_widget: "SequenceWidget") -> None:
-        super().__init__(sequence_widget)
-        self.font_size = sequence_widget.width() // 40
+    def __init__(self, SW: "SequenceWidget") -> None:
+        super().__init__(SW)
+        self.font_size = SW.width() // 40
         font = self.font()
         font.setPointSize(self.font_size)
         self.setFont(font)

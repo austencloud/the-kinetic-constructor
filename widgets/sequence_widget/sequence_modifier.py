@@ -8,27 +8,20 @@ if TYPE_CHECKING:
 
 
 class SequenceModifier(QTabWidget):
-    def __init__(self, sequence_widget: "SequenceWidget"):
-        super().__init__(sequence_widget)
-        self.main_widget = sequence_widget.main_widget
-        self.sequence_widget = sequence_widget
+    def __init__(self, SW: "SequenceWidget"):
+        super().__init__(SW)
+        self.main_widget = SW.main_widget
+        self.SW = SW
         self.graph_editor = GraphEditor(self)
-        # self.animator = Animator(self)
-        # self.prop_changer = QWidget(self)
         self.addTab(self.graph_editor, "Graph Editor")
-        # self.addTab(self.animator, "Animator")
-        # self.addTab(self.prop_changer, "Prop Changer")
-        self.currentChanged.connect(self.resize_sequence_modifier)
         self.setStyleSheet(get_tab_stylesheet())
 
     def resize_sequence_modifier(self) -> None:
         current_widget = self.currentWidget()
         if current_widget == self.graph_editor:
-            if self.sequence_widget.beat_frame.selection_manager.selected_beat:
+            if self.SW.beat_frame.selection_manager.selected_beat:
                 self.graph_editor.adjustment_panel.hide_placeholder_widget()
             else:
                 self.graph_editor.adjustment_panel.show_placeholder_widget()
             self.graph_editor.resize_graph_editor()
             self.graph_editor.adjustment_panel.update_adjustment_panel()
-        # elif current_widget == self.animator:
-        #     self.animator.resize_animator()

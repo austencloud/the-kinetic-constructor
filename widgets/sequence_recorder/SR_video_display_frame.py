@@ -128,7 +128,7 @@ class SR_VideoDisplayFrame(QFrame):
 
     def resize_video_display_frame(self) -> None:
         if not hasattr(self, "beat_frame"):
-            self.beat_frame = self.capture_frame.sequence_widget_beat_frame
+            self.beat_frame = self.capture_frame.SW_beat_frame
 
         height = self.beat_frame.height()
         self.setFixedHeight(height)

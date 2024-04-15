@@ -98,13 +98,20 @@ class MainWidget(QTabWidget):
     def keyPressEvent(self, event: QKeyEvent) -> None:
         if event.key() == Qt.Key.Key_Q or event.key() == Qt.Key.Key_F5:
             self.special_placement_loader.refresh_placements()
+        # if the button is a "`" then switch between the builder and recorder tabs
+        elif event.key() == 96:
+            current_widget = self.currentWidget()
+            if current_widget == self.top_builder_widget:
+                self.setCurrentWidget(self.sequence_recorder)
+            elif current_widget == self.sequence_recorder:
+                self.setCurrentWidget(self.top_builder_widget)
         else:
             super().keyPressEvent(event)
 
     def on_tab_changed(self):
         current_widget = self.currentWidget()
         if current_widget == self.top_builder_widget:
-            self.top_builder_widget.sequence_widget.resize_sequence_widget()
+            self.top_builder_widget.SW.resize_sequence_widget()
             self.top_builder_widget.builder_toolbar.resize_current_tab()
         elif current_widget == self.sequence_recorder:
             self.sequence_recorder.resize_sequence_recorder()

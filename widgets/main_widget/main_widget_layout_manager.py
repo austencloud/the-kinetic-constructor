@@ -32,5 +32,5 @@ class MainWidgetLayoutManager:
     def _setup_left_frame(self) -> QFrame:
         left_frame = QFrame()
         left_layout = QVBoxLayout(left_frame)
-        left_layout.addWidget(self.main_widget.top_builder_widget.sequence_widget)
+        left_layout.addWidget(self.main_widget.top_builder_widget.SW)
         return left_frame

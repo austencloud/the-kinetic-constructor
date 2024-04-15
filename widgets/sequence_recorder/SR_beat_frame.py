@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from widgets.sequence_recorder.SR_capture_frame import SR_CaptureFrame
     from widgets.sequence_recorder.sequence_recorder import MainWidget
 
-from widgets.sequence_widget.sequence_widget_beat_frame.beat import Beat, BeatView
+from widgets.sequence_widget.SW_beat_frame.beat import Beat, BeatView
 
 
 class SR_BeatFrame(QFrame):

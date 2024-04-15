@@ -3,61 +3,48 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGridLayout, QFrame, QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
-from widgets.sequence_widget.sequence_widget_beat_frame.beat_deletion_manager import (
+from widgets.sequence_widget.SW_beat_frame.beat_deletion_manager import (
     BeatDeletionManager,
 )
-<<<<<<<< HEAD:widgets/sequence_widget/sequence_widget_beat_frame/sequence_beat_frame.py
-from widgets.sequence_widget.sequence_beat_frame.beat_selection_manager import (
-    BeatSelectionManager,
-========
-from widgets.sequence_widget.sequence_widget_beat_frame.beat_frame_image_export_manager import (
+from widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager import (
     BeatFrameImageExportManager,
 )
-from widgets.sequence_widget.sequence_widget_beat_frame.beat_frame_print_manager import (
+from widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager import (
     BeatFramePrintManager,
 )
-from widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay import (
+from widgets.sequence_widget.SW_beat_frame.beat_selection_overlay import (
     SequenceWidgetBeatSelectionOverlay,
->>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409:widgets/sequence_widget/sequence_widget_beat_frame/sequence_widget_beat_frame.py
 )
-from widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat import (
+from widgets.sequence_widget.SW_beat_frame.start_pos_beat import (
     StartPositionBeat,
 )
-from widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat import (
+from widgets.sequence_widget.SW_beat_frame.start_pos_beat import (
     StartPositionBeatView,
 )
 
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.main_widget.main_widget import MainWidget
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
-from widgets.sequence_widget.sequence_widget_beat_frame.beat import BeatView
+from widgets.sequence_widget.SW_beat_frame.beat import BeatView
 
 
-class SequenceBeatFrame(QFrame):
+class SequenceWidgetBeatFrame(QFrame):
+
     COLUMN_COUNT = 5
     ROW_COUNT = 4
 
-    def __init__(
-        self,
-        main_widget: "MainWidget",
-        sequence_widget: "SequenceWidget",
-    ) -> None:
+    def __init__(self, SW: "SequenceWidget") -> None:
         super().__init__()
-        self.main_widget = main_widget
-        self.sequence_widget = sequence_widget
+        self.main_widget = SW.main_widget
         self.current_sequence_json_handler = (
             self.main_widget.json_manager.current_sequence_json_handler
         )
-<<<<<<<< HEAD:widgets/sequence_widget/sequence_widget_beat_frame/sequence_beat_frame.py
-
-========
-        self.sequence_widget = sequence_widget
->>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409:widgets/sequence_widget/sequence_widget_beat_frame/sequence_widget_beat_frame.py
-        self.beat_views: list[BeatView] = []
-        self._setup_components(main_widget)
+        self.SW = SW
+        self.top_builder_widget = SW.top_builder_widget
+        self.beats: list[BeatView] = []
+        self._setup_components()
         self._setup_layout()
         self._populate_beat_frame()
 
@@ -66,13 +53,21 @@ class SequenceBeatFrame(QFrame):
             self._add_beat_to_layout(0, i)
 
         for j in range(1, 4):
-            for i in range(1, self.COLUMN_COUNT):
+            for i in range(
+                1,
+                self.COLUMN_COUNT,
+            ):
                 self._add_beat_to_layout(j, i)
 
-    def _setup_components(self, main_widget) -> None:
-        self.selection_manager = BeatSelectionManager(self)
+    def _add_beat_to_layout(self, row: int, col: int, number=None) -> None:
+        beat_view = BeatView(self, number)
+        self.layout.addWidget(beat_view, row, col)
+        self.beats.append(beat_view)
+
+    def _setup_components(self) -> None:
+        self.selection_manager = SequenceWidgetBeatSelectionOverlay(self)
         self.start_pos_view = StartPositionBeatView(self)
-        self.start_pos = StartPositionBeat(main_widget, self)
+        self.start_pos = StartPositionBeat(self.main_widget, self)
         self.beat_deletion_manager = BeatDeletionManager(self)
         self.export_manager = BeatFrameImageExportManager(self)
         self.print_sequence_manager = BeatFramePrintManager(self)
@@ -82,14 +77,7 @@ class SequenceBeatFrame(QFrame):
         self.layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-<<<<<<<< HEAD:widgets/sequence_widget/sequence_widget_beat_frame/sequence_beat_frame.py
-        self.layout.setSpacing(0)
-        self.layout.setAlignment(
-            Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop
-        )
-========
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
->>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409:widgets/sequence_widget/sequence_widget_beat_frame/sequence_widget_beat_frame.py
         self.layout.addWidget(self.start_pos_view, 0, 0)
 
     def keyPressEvent(self, event: "QKeyEvent") -> None:
@@ -101,30 +89,25 @@ class SequenceBeatFrame(QFrame):
     def delete_selected_beat(self) -> None:
         self.beat_deletion_manager.delete_selected_beat()
 
-    def _add_beat_to_layout(self, row: int, col: int) -> None:
-        beat_view = BeatView(self)
-        self.layout.addWidget(beat_view, row, col)
-        self.beat_views.append(beat_view)
-
     def add_scene_to_sequence(self, new_beat: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
-            self.beat_views[next_beat_index].set_beat(new_beat, next_beat_index + 1)
+            self.beats[next_beat_index].set_beat(new_beat, next_beat_index + 1)
             self.current_sequence_json_handler.update_current_sequence_file_with_beat(
-                self.beat_views[next_beat_index]
+                self.beats[next_beat_index]
             )
 
     def find_next_available_beat(self) -> int:
-        for i, beat in enumerate(self.beat_views):
+        for i, beat in enumerate(self.beats):
             if beat.scene() is None or beat.scene().items() == []:
                 return i
         return None
 
     def get_last_filled_beat(self) -> BeatView:
-        for beat_view in reversed(self.beat_views):
+        for beat_view in reversed(self.beats):
             if beat_view.is_filled:
                 return beat_view
-        return self.beat_views[0]
+        return self.beats[0]
 
     def get_current_word(self) -> str:
         """
@@ -135,7 +118,7 @@ class SequenceBeatFrame(QFrame):
         """
 
         word = ""
-        for beat_view in self.beat_views:
+        for beat_view in self.beats:
             if beat_view.is_filled:
                 word += beat_view.beat.letter.value
         # word += "_"
@@ -149,14 +132,14 @@ class SequenceBeatFrame(QFrame):
             self.current_sequence_json_handler.load_current_sequence_json()
         )
         self.propogate_turn_adjustment(current_sequence_json)
-        self.main_widget.main_tab_widget.sequence_builder.option_picker.update_option_picker()
+        # self.main_widget.top_builder_widget.builder_toolbar.sequence_builder.option_picker.update_option_picker()
 
     def propogate_turn_adjustment(self, current_sequence_json) -> None:
         for i, entry in enumerate(current_sequence_json):
             if i == 0:
                 self.update_start_pos_from_current_sequence_json(entry)
             else:
-                beat = self.beat_views[i - 1].beat
+                beat = self.beats[i - 1].beat
                 if beat:
                     if beat.pictograph_dict != entry:
                         beat.updater.update_pictograph(entry)
@@ -166,20 +149,23 @@ class SequenceBeatFrame(QFrame):
         entry["red_attributes"]["start_ori"] = entry["red_attributes"]["end_ori"]
         entry["blue_attributes"]["start_ori"] = entry["blue_attributes"]["end_ori"]
         entry["start_pos"] = entry["end_pos"]
-        # del entry["sequence_start_position"]
         self.start_pos_view.start_pos.updater.update_pictograph(entry)
 
     def get_index_of_currently_selected_beat(self) -> int:
-        for i, beat in enumerate(self.beat_views):
+        for i, beat in enumerate(self.beats):
             if beat.is_selected:
                 return i
         return 0
 
     def resize_beat_frame(self) -> None:
-        beat_view_size = int(self.width() / (self.COLUMN_COUNT + 2))
-        for view in self.beat_views + [self.start_pos_view]:
+        beat_view_size = int((self.width() // (self.COLUMN_COUNT)) * 0.75)
+        for view in self.beats + [self.start_pos_view]:
             view.setMinimumWidth(beat_view_size)
             view.setMaximumWidth(beat_view_size)
             view.setMinimumHeight(beat_view_size)
             view.setMaximumHeight(beat_view_size)
             view.resetTransform()
+            if view.scene():
+                view.fitInView(
+                    view.scene().sceneRect(), Qt.AspectRatioMode.KeepAspectRatio
+                )

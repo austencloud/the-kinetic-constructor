@@ -37,7 +37,7 @@ class BuilderToolbar(QTabWidget):
 
     def on_tab_changed(self) -> None:
         current_tab = self.currentWidget()
-        beat_frame = self.main_widget.top_builder_widget.sequence_widget.beat_frame
+        beat_frame = self.main_widget.top_builder_widget.SW.beat_frame
         if current_tab == self.sequence_builder:
             if beat_frame.start_pos_view.scene():
                 if not self.sequence_builder.option_picker.isVisible():
