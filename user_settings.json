@@ -4,10 +4,10 @@
     "glyph_visibility": {
         "VTG": false,
         "TKA": true,
-        "Elemental": false
+        "Elemental": true
     },
-    "default_left_orientation": "counter",
-    "default_right_orientation": "counter",
+    "default_left_orientation": "in",
+    "default_right_orientation": "in",
     "default_left_orientation_Hand": "counter",
     "default_right_orientation_Hand": "in",
     "word_length_visibility": {

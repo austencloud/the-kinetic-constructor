@@ -1,6 +1,6 @@
 import json
 from PyQt6.QtWidgets import QHBoxLayout, QApplication
-from PyQt6.QtGui import QKeyEvent
+from PyQt6.QtGui import QKeyEvent, QResizeEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
@@ -110,7 +110,7 @@ class MainWidget(QTabWidget):
         else:
             super().keyPressEvent(event)
 
-    def on_tab_changed(self):
+    def on_tab_changed(self) -> None:
         current_widget = self.currentWidget()
         if current_widget == self.top_builder_widget:
             if not self.top_builder_widget.initialized:
@@ -140,3 +140,12 @@ class MainWidget(QTabWidget):
         super().showEvent(event)
         self.main_window.window_manager.set_dimensions()
         self.on_tab_changed()
+
+    def resizeEvent(self, event: QKeyEvent):
+        # resize the scroll area of the builder tab
+        current_widget = self.currentWidget()
+        if current_widget == self.top_builder_widget:
+            self.top_builder_widget.sequence_widget.resize_sequence_widget()
+            self.top_builder_widget.builder_toolbar.resize_current_tab()
+        elif current_widget == self.sequence_recorder:
+            self.sequence_recorder.resize_sequence_recorder()
