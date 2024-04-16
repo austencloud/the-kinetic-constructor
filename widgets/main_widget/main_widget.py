@@ -113,19 +113,20 @@ class MainWidget(QTabWidget):
     def on_tab_changed(self):
         current_widget = self.currentWidget()
         if current_widget == self.top_builder_widget:
-            self.top_builder_widget.sequence_widget.resize_sequence_widget()
-            self.top_builder_widget.builder_toolbar.resize_current_tab()
+            if not self.top_builder_widget.initialized:
+                self.top_builder_widget.initialized = True
+                self.top_builder_widget.sequence_widget.resize_sequence_widget()
+                self.top_builder_widget.builder_toolbar.resize_current_tab()
         elif current_widget == self.sequence_recorder:
-            if not self.initialized:
+            if not self.sequence_recorder.initialized:
                 self.sequence_recorder.resize_sequence_recorder()
-
+                self.initialized = True
             SW_beat_frame = self.top_builder_widget.sequence_widget.beat_frame
             if SW_beat_frame.sequence_changed:
                 SW_beat_frame.sequence_changed = False
                 self.sequence_recorder.capture_frame.SR_beat_frame.populate_beat_frame_scenes_from_json()
             else:
                 for view in SW_beat_frame.beats:
-                    # if the beat is filled, then resize the view
                     if view.is_filled:
                         view.resize_beat_view()
                     QApplication.processEvents()

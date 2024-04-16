@@ -16,6 +16,7 @@ class SequenceRecorder(QWidget):
         self.main_widget = main_widget
         self.capture_frame = SR_CaptureFrame(self)
         self.video_control_frame = SR_MainControlFrame(self)
+        self.initialized = False
         self._setup_layout()
 
         self.gradient_shift = 0

@@ -122,14 +122,6 @@ class SR_BeatFrame(QFrame):
                 return i
         return 0
 
-    def resize_beat_frame(self) -> None:
-        beat_view_size = int(self.width() / (self.COLUMN_COUNT))
-        for view in self.beat_views:
-            view.setMinimumWidth(beat_view_size)
-            view.setMaximumWidth(beat_view_size)
-            view.setMinimumHeight(beat_view_size)
-            view.setMaximumHeight(beat_view_size)
-            view.resetTransform()
 
     def clear_beat_frame(self) -> None:
         for beat_view in self.beat_views:
@@ -189,3 +181,14 @@ class SR_BeatFrame(QFrame):
         out.release()
         print("Beat frame recording saved successfully." + output_path)
         return output_path
+
+    def resize_beat_frame(self) -> None:
+        beat_view_size = int(self.width() / (self.COLUMN_COUNT))
+        for view in self.beat_views:
+            view.setMinimumWidth(beat_view_size)
+            view.setMaximumWidth(beat_view_size)
+            view.setMinimumHeight(beat_view_size)
+            view.setMaximumHeight(beat_view_size)
+            view.resetTransform()
+            if view.scene():
+                view.fitInView(view.scene().sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)

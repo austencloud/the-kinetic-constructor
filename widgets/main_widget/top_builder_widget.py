@@ -22,6 +22,7 @@ class TopBuilderWidget(QWidget):
         self.timer.start(100)  # Adjust as needed for smoother or faster animation
         self.builder_toolbar = BuilderToolbar(self)
         self.sequence_widget = SequenceWidget(self)
+        self.initialized = False
         self._setup_layout()
 
     def _setup_layout(self):
