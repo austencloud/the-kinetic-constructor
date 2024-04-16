@@ -122,10 +122,7 @@ class SW_Beat_Frame(QFrame):
         for beat_view in self.beats:
             if beat_view.is_filled:
                 word += beat_view.beat.letter.value
-        # word += "_"
-        # last_beat = self.get_last_filled_beat()
-        # end_pos = last_beat.beat.get.end_pos_letter()
-        # word += end_pos
+
         return word
 
     def on_beat_adjusted(self) -> None:
@@ -133,7 +130,6 @@ class SW_Beat_Frame(QFrame):
             self.current_sequence_json_handler.load_current_sequence_json()
         )
         self.propogate_turn_adjustment(current_sequence_json)
-        # self.main_widget.top_builder_widget.builder_toolbar.sequence_builder.option_picker.update_option_picker()
 
     def propogate_turn_adjustment(self, current_sequence_json) -> None:
         for i, entry in enumerate(current_sequence_json):

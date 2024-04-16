@@ -30,42 +30,38 @@ if TYPE_CHECKING:
 
 
 class GraphicalObjectSvgManager:
-    svg_cache = {}
-    renderer_cache = {}  # Cache for QSvgRenderer instances based on SVG content key
+    file_path_cache = {}
+    file_path_cache = {}  # Cache for QSvgRenderer instances based on SVG content key
     svg_content_cache = {}  # Cache for SVG content based on file path
 
     def __init__(self) -> None:
         self.renderer = None
+        self.preload_svg_cache()
 
-    @staticmethod
-    def preload_svg_cache() -> None:
+    def preload_svg_cache(self) -> None:
         turns = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0]
         motion_types = [ANTI, PRO, DASH, STATIC]
         start_orientations = [RADIAL, NONRADIAL]
         for motion_type in motion_types:
             for turn in turns:
                 for orientation in start_orientations:
-                    GraphicalObjectSvgManager._preload_arrow_svg(
-                        motion_type, turn, orientation
-                    )
+                    self._preload_arrow_svg(motion_type, turn, orientation)
 
         prop_types = [p for p in PropTypeslist]
         for prop_type in prop_types:
-            GraphicalObjectSvgManager._preload_prop_svg_path(prop_type)
+            self._preload_prop_svg_path(prop_type)
 
-    @staticmethod
-    def _preload_arrow_svg(motion_type, turns, start_ori):
+    def _preload_arrow_svg(self, motion_type, turns, start_ori):
         cache_key = f"{motion_type}_{turns}_{start_ori}"
         file_path = get_images_and_data_path(
             f"images/arrows/{motion_type}/from_{start_ori}/{motion_type}_{turns}.svg"
         )
-        GraphicalObjectSvgManager.svg_cache[cache_key] = file_path
+        self.file_path_cache[cache_key] = file_path
 
-    @staticmethod
-    def _preload_prop_svg_path(prop_type):
+    def _preload_prop_svg_path(self, prop_type):
         cache_key = f"prop_{prop_type}"
         file_path = get_images_and_data_path(f"images/props/{prop_type}.svg")
-        GraphicalObjectSvgManager.svg_cache[cache_key] = file_path
+        self.file_path_cache[cache_key] = file_path
 
     def set_svg_color(self, svg_data: str, new_color: str) -> bytes:
         # Apply color transformations directly to SVG data and return the modified SVG content
@@ -119,14 +115,12 @@ class GraphicalObjectSvgManager:
         return svg_data
 
     def get_or_create_renderer(self, svg_data: bytes, cache_key: str) -> QSvgRenderer:
-        if cache_key in self.renderer_cache:
-            return self.renderer_cache[cache_key]
+        if cache_key in self.file_path_cache:
+            return self.file_path_cache[cache_key]
         else:
             renderer = QSvgRenderer()
-            renderer.load(
-                svg_data
-            )  # Load SVG content into the renderer directly as bytes
-            self.renderer_cache[cache_key] = renderer  # Cache it
+            renderer.load(svg_data)
+            self.file_path_cache[cache_key] = renderer  # Cache it
             return renderer
 
     def update_svg(self, object: Union["Arrow", "Prop"]) -> None:
@@ -147,11 +141,11 @@ class GraphicalObjectSvgManager:
 
     def get_svg_file(self, object: Union["Arrow", "Prop"]) -> str:
         cache_key = self._generate_cache_key(object)
-        if cache_key in GraphicalObjectSvgManager.svg_cache:
-            return GraphicalObjectSvgManager.svg_cache[cache_key]
+        if cache_key in GraphicalObjectSvgManager.file_path_cache:
+            return GraphicalObjectSvgManager.file_path_cache[cache_key]
 
         svg_file = self._determine_svg_file(object)
-        GraphicalObjectSvgManager.svg_cache[cache_key] = svg_file
+        GraphicalObjectSvgManager.file_path_cache[cache_key] = svg_file
         return svg_file
 
     def _generate_cache_key(self, object: Union["Arrow", "Prop"]) -> str:
@@ -203,6 +197,3 @@ class GraphicalObjectSvgManager:
         prop_type_str = prop_type.name.lower()
         svg_file = f"{PROP_DIR}{prop_type_str}.svg"
         return svg_file
-
-
-GraphicalObjectSvgManager.preload_svg_cache()

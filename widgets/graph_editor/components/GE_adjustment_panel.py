@@ -32,6 +32,7 @@ class GE_AdjustmentPanel(QFrame):
         self.blue_turns_box.turns_widget.display_manager.update_turns_display(
             blue_turns
         )
+
         self.red_turns_box.turns_widget.display_manager.update_turns_display(red_turns)
 
     def _setup_placeholder_widget(self) -> None:

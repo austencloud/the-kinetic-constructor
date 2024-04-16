@@ -45,11 +45,9 @@ class GE_TurnsAdjustmentManager(QObject):
             self.pictograph, adjustment
         )
         pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
-        QApplication.processEvents()
         self.current_sequence_json_handler.update_turns_in_json_at_index(
             pictograph_index + 1, self.color, new_turns
         )
-        QApplication.processEvents()
         self.json_validation_engine.run()
         self.main_widget.top_builder_widget.builder_toolbar.sequence_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)

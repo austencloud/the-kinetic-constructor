@@ -12,7 +12,7 @@ from PyQt6.QtGui import QFont, QColor
 from typing import TYPE_CHECKING
 
 from Enums.letters import LetterType
-from constants import BLUE, RED
+from constants import BLUE, CLOCKWISE, COUNTER_CLOCKWISE, RED
 from widgets.factories.button_factory.buttons.letterbook_adjust_turns_button import (
     LetterBookAdjustTurnsButton,
 )
@@ -38,13 +38,39 @@ class GE_TurnsBoxHeader(QWidget):
 
     def update_turns_box_header(self) -> None:
         """This is called every time the GE pictograph scene is updated in order to display the correct buttons."""
-        letter_type = self.turns_box.pictograph.letter_type
+        pictograph = self.turns_box.graph_editor.GE_pictograph_view.pictograph
+        letter_type = None
+        motion = pictograph.get.motion_by_color(self.turns_box.color)
+        turns = motion.turns
+        prop_rot_dir_button_mngr = self.turns_box.prop_rot_dir_button_manager
+        if pictograph.letter:
+            letter_type = LetterType.get_letter_type(pictograph.letter)
         if letter_type == LetterType.Type1 or letter_type == None:
             self.turns_box.prop_rot_dir_button_manager.hide_prop_rot_dir_buttons()
             self.turns_box.vtg_dir_button_manager.hide_vtg_dir_buttons()
         else:
-            self.turns_box.prop_rot_dir_button_manager.show_prop_rot_dir_buttons()
-            self.turns_box.vtg_dir_button_manager.show_vtg_dir_buttons()
+            if letter_type == LetterType.Type2 or letter_type == LetterType.Type3:
+                if turns:
+                    self.turns_box.vtg_dir_button_manager.show_vtg_dir_buttons()
+                    if pictograph.red_motion.turns and pictograph.blue_motion.turns:
+                        if (
+                            pictograph.red_motion.prop_rot_dir
+                            == pictograph.blue_motion.prop_rot_dir
+                        ):
+                            self.turns_box.vtg_dir_button_manager.same_button.press()
+                        else:
+                            self.turns_box.vtg_dir_button_manager.opp_button.press()
+                else:
+                    self.turns_box.vtg_dir_button_manager.hide_vtg_dir_buttons()
+            else:
+                if turns:
+                    prop_rot_dir_button_mngr.show_prop_rot_dir_buttons()
+                    if motion.prop_rot_dir == CLOCKWISE:
+                        prop_rot_dir_button_mngr.cw_button.press()
+                    elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                        prop_rot_dir_button_mngr.ccw_button.press()
+                else:
+                    prop_rot_dir_button_mngr.hide_prop_rot_dir_buttons()
         QApplication.processEvents()
 
     def _setup_layout(self) -> None:

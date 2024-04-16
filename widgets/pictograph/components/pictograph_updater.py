@@ -54,6 +54,7 @@ class PictographUpdater:
         self.pictograph.container.update_borders()
 
         if self.pictograph.letter_type == LetterType.Type3:
+            """ Updates the shift first so that the dash can determine its prop rot dir"""
             self.pictograph.get.shift().arrow.updater.update_arrow()
             self.pictograph.get.dash().arrow.updater.update_arrow()
         else:
