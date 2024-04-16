@@ -6,6 +6,7 @@ import math
 
 from widgets.main_builder_widget.builder_toolbar import BuilderToolbar
 from widgets.sequence_widget.sequence_widget import SequenceWidget
+
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
@@ -21,8 +22,8 @@ class TopBuilderWidget(QWidget):
         self.timer.start(100)  # Adjust as needed for smoother or faster animation
         self.builder_toolbar = BuilderToolbar(self)
         self.sequence_widget = SequenceWidget(self)
+        self.initialized = False
         self._setup_layout()
-
 
     def _setup_layout(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)
@@ -52,4 +53,3 @@ class TopBuilderWidget(QWidget):
             gradient.setColorAt(clamped_pos, color)
 
         painter.fillRect(self.rect(), gradient)
-

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 from Enums.Enums import LetterType
 
-from widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay import (
+from widgets.sequence_widget.SW_beat_frame.styled_border_overlay import (
     StyledBorderOverlay,
 )
 

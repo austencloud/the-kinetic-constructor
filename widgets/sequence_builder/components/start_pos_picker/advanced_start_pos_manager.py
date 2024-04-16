@@ -1,7 +1,7 @@
 from copy import deepcopy
 from PyQt6.QtCore import QObject, pyqtSignal
 from widgets.pictograph.pictograph import Pictograph
-from widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat import (
+from widgets.sequence_widget.SW_beat_frame.start_pos_beat import (
     StartPositionBeat,
 )
 from typing import TYPE_CHECKING

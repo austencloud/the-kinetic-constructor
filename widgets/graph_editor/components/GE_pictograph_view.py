@@ -4,7 +4,7 @@ from widgets.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPainter, QPen, QColor, QKeyEvent
 
-from widgets.sequence_widget.sequence_widget_beat_frame.beat import Beat
+from widgets.sequence_widget.SW_beat_frame.beat import Beat
 
 if TYPE_CHECKING:
     from widgets.graph_editor.graph_editor import GraphEditor
@@ -26,19 +26,14 @@ class GE_PictographView(PictographView):
         self.setScene(blank_pictograph)
         self.setFrameShape(PictographView.Shape.Box)
 
-    def resize_GE_pictograph_view(self):
-        container_height = self.GE.GE_pictograph_container.height()
-        # This is not the most elegant way to do this.
-        self.setMinimumHeight(int(container_height * 0.99))
-        self.setMinimumWidth(int(container_height * 0.99))
-
+    def resize_GE_pictograph_view(self) -> None:
         if self.scene():
             self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
 
-    def set_to_blank_grid(self):
+    def set_to_blank_grid(self) -> None:
         self.setScene(self.blank_pictograph)
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         super().paintEvent(event)
         painter = QPainter(self.viewport())
         pen = QPen(Qt.GlobalColor.black, 0)
@@ -73,30 +68,6 @@ class GE_PictographView(PictographView):
             self.is_start_pos = True
         else:
             self.is_start_pos = False
-
-    def keyPressEvent(self, event: "QKeyEvent") -> None:
-        shift_held = event.modifiers() & Qt.KeyboardModifier.ShiftModifier
-        ctrl_held = event.modifiers() & Qt.KeyboardModifier.ControlModifier
-        # if event.key() in [Qt.Key.Key_W, Qt.Key.Key_A, Qt.Key.Key_S, Qt.Key.Key_D]:
-        #     self.pictograph.wasd_manager.movement_manager.handle_arrow_movement(
-        #         self.pictograph, event.key(), shift_held, ctrl_held
-        #     )
-
-        # elif event.key() == Qt.Key.Key_X:
-        #     self.pictograph.wasd_manager.rotation_angle_override_manager.handle_rotation_angle_override(
-        #         event.key()
-        #     )
-        # elif event.key() == Qt.Key.Key_Z:
-        #     self.pictograph.wasd_manager.handle_special_placement_removal()
-
-        # elif event.key() == Qt.Key.Key_Q or event.key() == Qt.Key.Key_F5:
-        #     self.pictograph.main_widget.special_placement_loader.refresh_placements()
-
-        # elif event.key() == Qt.Key.Key_C:
-        #     self.pictograph.wasd_manager.prop_placement_override_manager.handle_prop_placement_override(
-        #         event.key()
-        #     )
-        super().keyPressEvent(event)
 
 
 class GE_BlankPictograph(Pictograph):

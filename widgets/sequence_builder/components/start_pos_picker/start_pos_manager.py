@@ -3,7 +3,7 @@ from functools import partial
 from PyQt6.QtCore import QObject, pyqtSignal
 from Enums.letters import Letter
 from constants import END_POS, START_POS
-from widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat import (
+from widgets.sequence_widget.SW_beat_frame.start_pos_beat import (
     StartPositionBeat,
 )
 from ....pictograph.pictograph import Pictograph
@@ -64,10 +64,11 @@ class StartPosManager(QObject):
                         self.on_start_pos_clicked, start_position_pictograph
                     )
 
-    def on_start_pos_clicked(self, clicked_start_option: Pictograph, event: QWidget = None) -> None:
+    def on_start_pos_clicked(
+        self, clicked_start_option: Pictograph, event: QWidget = None
+    ) -> None:
         """Handle the start position click event."""
         start_position_beat = StartPositionBeat(
-            self.main_widget,
             self.builder_toolbar.top_builder_widget.sequence_widget.beat_frame,
         )
         clicked_start_option.updater.update_dict_from_attributes()
@@ -120,7 +121,6 @@ class StartPosManager(QObject):
             start_pos_entry[0] if start_pos_entry else None
         )
         start_pos_beat = StartPositionBeat(
-            self.main_widget,
             self.main_widget.top_builder_widget.sequence_widget.beat_frame,
         )
         start_pos_beat.updater.update_pictograph(

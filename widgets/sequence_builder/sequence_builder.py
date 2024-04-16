@@ -150,7 +150,8 @@ class SequenceBuilder(QFrame):
         self.start_pos_picker.show()
 
     def resize_sequence_builder(self) -> None:
-        self.setMinimumWidth(int(self.builder_toolbar.width() / 2))
+        self.setMinimumWidth(int(self.builder_toolbar.width()))
+        # self.setMinimumHeight(int(self.builder_toolbar.height()))
         # if the start pos picker is visible, resize it
         if self.start_pos_picker.isVisible():
             self.start_pos_picker.resize_start_pos_picker()

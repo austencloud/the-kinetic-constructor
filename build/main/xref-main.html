@@ -44,7 +44,8 @@
       <div class="import">
         imports:
         <a href="#PyQt6.QtCore">PyQt6.QtCore</a>
-        &#8226; <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
+        &#8226; <a href="#PyQt6.QtGui">PyQt6.QtGui</a> &#8226;
+        <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
         <a href="#_collections_abc">_collections_abc</a> &#8226;
         <a href="#_weakrefset">_weakrefset</a> &#8226;
         <a href="#abc">abc</a> &#8226; <a href="#codecs">codecs</a> &#8226;
@@ -183,6 +184,7 @@
         <a href="#locale">locale</a> &#8226;
         <a href="#ntpath">ntpath</a> &#8226;
         <a href="#operator">operator</a> &#8226; <a href="#os">os</a> &#8226;
+        <a href="#path_helpers">path_helpers</a> &#8226;
         <a href="#posixpath">posixpath</a> &#8226;
         <a href="#profiler">profiler</a> &#8226;
         <a href="#pyi_rth__tkinter.py">pyi_rth__tkinter.py</a> &#8226;
@@ -1369,9 +1371,8 @@
           >widgets.scroll_area.components.section_manager.section_widget.letterbook_section_widget</a
         >
         &#8226;
-        <a
-          href="#widgets.scroll_area.components.sequence_widget_pictograph_factory"
-          >widgets.scroll_area.components.sequence_widget_pictograph_factory</a
+        <a href="#widgets.scroll_area.components.SW_pictograph_factory"
+          >widgets.scroll_area.components.SW_pictograph_factory</a
         >
         &#8226;
         <a
@@ -1755,9 +1756,8 @@
           >widgets.scroll_area.components.section_manager.section_widget.letterbook_section_widget</a
         >
         &#8226;
-        <a
-          href="#widgets.scroll_area.components.sequence_widget_pictograph_factory"
-          >widgets.scroll_area.components.sequence_widget_pictograph_factory</a
+        <a href="#widgets.scroll_area.components.SW_pictograph_factory"
+          >widgets.scroll_area.components.SW_pictograph_factory</a
         >
         &#8226;
         <a
@@ -4212,6 +4212,7 @@
         &#8226; <a href="#PyQt6.QtGui">PyQt6.QtGui</a> &#8226;
         <a href="#PyQt6.QtMultimedia">PyQt6.QtMultimedia</a> &#8226;
         <a href="#PyQt6.QtNetwork">PyQt6.QtNetwork</a> &#8226;
+        <a href="#PyQt6.QtPrintSupport">PyQt6.QtPrintSupport</a> &#8226;
         <a href="#PyQt6.QtSvg">PyQt6.QtSvg</a> &#8226;
         <a href="#PyQt6.QtSvgWidgets">PyQt6.QtSvgWidgets</a> &#8226;
         <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
@@ -4234,6 +4235,7 @@
         <a href="#PyQt6.QtGui">PyQt6.QtGui</a>
         &#8226; <a href="#PyQt6.QtMultimedia">PyQt6.QtMultimedia</a> &#8226;
         <a href="#PyQt6.QtNetwork">PyQt6.QtNetwork</a> &#8226;
+        <a href="#PyQt6.QtPrintSupport">PyQt6.QtPrintSupport</a> &#8226;
         <a href="#PyQt6.QtSvg">PyQt6.QtSvg</a> &#8226;
         <a href="#PyQt6.QtSvgWidgets">PyQt6.QtSvgWidgets</a> &#8226;
         <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
@@ -4500,8 +4502,8 @@
         >
         &#8226;
         <a
-          href="#widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label"
-          >widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label</a
+          href="#widgets.sequence_builder.components.start_pos_picker.choose_your_next_pictograph_label"
+          >widgets.sequence_builder.components.start_pos_picker.choose_your_next_pictograph_label</a
         >
         &#8226;
         <a
@@ -4564,36 +4566,44 @@
           >widgets.sequence_widget.my_sequence_label</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
         >
         &#8226;
         <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay</a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager</a
         >
         &#8226;
         <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame</a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat_selection_overlay"
+          >widgets.sequence_widget.SW_beat_frame.beat_selection_overlay</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay"
-          >widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.custom_print_dialog"
+          >widgets.sequence_widget.SW_beat_frame.custom_print_dialog</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_button_frame"
-          >widgets.sequence_widget.sequence_widget_button_frame</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.start_pos_beat"
+          >widgets.sequence_widget.SW_beat_frame.start_pos_beat</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.styled_border_overlay"
+          >widgets.sequence_widget.SW_beat_frame.styled_border_overlay</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_button_frame"
+          >widgets.sequence_widget.SW_button_frame</a
         >
         &#8226;
         <a href="#widgets.turn_pattern_widget">widgets.turn_pattern_widget</a>
@@ -4614,10 +4624,12 @@
       <div class="import">
         imported by:
         <a href="#PyQt6.QtMultimedia">PyQt6.QtMultimedia</a>
-        &#8226; <a href="#PyQt6.QtSvg">PyQt6.QtSvg</a> &#8226;
+        &#8226; <a href="#PyQt6.QtPrintSupport">PyQt6.QtPrintSupport</a> &#8226;
+        <a href="#PyQt6.QtSvg">PyQt6.QtSvg</a> &#8226;
         <a href="#PyQt6.QtSvgWidgets">PyQt6.QtSvgWidgets</a> &#8226;
         <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
         <a href="#custom_tab_bar">custom_tab_bar</a> &#8226;
+        <a href="#main">main</a> &#8226; <a href="#main.py">main.py</a> &#8226;
         <a href="#objects.arrow.managers.arrow_mirror_handler"
           >objects.arrow.managers.arrow_mirror_handler</a
         >
@@ -4774,8 +4786,8 @@
         >
         &#8226;
         <a
-          href="#widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label"
-          >widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label</a
+          href="#widgets.sequence_builder.components.start_pos_picker.choose_your_next_pictograph_label"
+          >widgets.sequence_builder.components.start_pos_picker.choose_your_next_pictograph_label</a
         >
         &#8226;
         <a
@@ -4791,6 +4803,10 @@
         <a
           href="#widgets.sequence_builder.components.start_pos_picker.start_pos_picker_variations_button"
           >widgets.sequence_builder.components.start_pos_picker.start_pos_picker_variations_button</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_builder.sequence_builder"
+          >widgets.sequence_builder.sequence_builder</a
         >
         &#8226;
         <a href="#widgets.sequence_recorder.SR_beat_frame"
@@ -4813,28 +4829,42 @@
           >widgets.sequence_widget.my_sequence_label</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
         >
         &#8226;
         <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay</a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager</a
         >
         &#8226;
         <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame</a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat_selection_overlay"
+          >widgets.sequence_widget.SW_beat_frame.beat_selection_overlay</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay"
-          >widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.custom_print_dialog"
+          >widgets.sequence_widget.SW_beat_frame.custom_print_dialog</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.start_pos_beat"
+          >widgets.sequence_widget.SW_beat_frame.start_pos_beat</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.styled_border_overlay"
+          >widgets.sequence_widget.SW_beat_frame.styled_border_overlay</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_button_frame"
+          >widgets.sequence_widget.SW_button_frame</a
         >
         &#8226;
         <a href="#widgets.turn_pattern_widget">widgets.turn_pattern_widget</a>
@@ -4876,6 +4906,32 @@
       <div class="import">
         imported by:
         <a href="#PyQt6.QtMultimedia">PyQt6.QtMultimedia</a>
+      </div>
+    </div>
+
+    <div class="node">
+      <a name="PyQt6.QtPrintSupport"></a>
+      <tt>PyQt6.QtPrintSupport</tt>
+      <span class="moduletype"
+        ><tt>C:\Python312\Lib\site-packages\PyQt6\QtPrintSupport.pyd</tt></span
+      >
+      <div class="import">
+        imports:
+        <a href="#PyQt6">PyQt6</a>
+        &#8226; <a href="#PyQt6.QtCore">PyQt6.QtCore</a> &#8226;
+        <a href="#PyQt6.QtGui">PyQt6.QtGui</a> &#8226;
+        <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a>
+      </div>
+      <div class="import">
+        imported by:
+        <a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.custom_print_dialog"
+          >widgets.sequence_widget.SW_beat_frame.custom_print_dialog</a
+        >
       </div>
     </div>
 
@@ -5005,8 +5061,9 @@
       </div>
       <div class="import">
         imported by:
-        <a href="#PyQt6.QtSvgWidgets">PyQt6.QtSvgWidgets</a>
-        &#8226; <a href="#custom_tab_bar">custom_tab_bar</a> &#8226;
+        <a href="#PyQt6.QtPrintSupport">PyQt6.QtPrintSupport</a>
+        &#8226; <a href="#PyQt6.QtSvgWidgets">PyQt6.QtSvgWidgets</a> &#8226;
+        <a href="#custom_tab_bar">custom_tab_bar</a> &#8226;
         <a href="#main">main</a> &#8226; <a href="#main.py">main.py</a> &#8226;
         <a href="#objects.graphical_object.graphical_object"
           >objects.graphical_object.graphical_object</a
@@ -5354,6 +5411,11 @@
         >
         &#8226;
         <a
+          href="#widgets.sequence_builder.components.option_picker.option_picker_display_manager"
+          >widgets.sequence_builder.components.option_picker.option_picker_display_manager</a
+        >
+        &#8226;
+        <a
           href="#widgets.sequence_builder.components.option_picker.option_picker_scroll_area"
           >widgets.sequence_builder.components.option_picker.option_picker_scroll_area</a
         >
@@ -5374,8 +5436,8 @@
         >
         &#8226;
         <a
-          href="#widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label"
-          >widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label</a
+          href="#widgets.sequence_builder.components.start_pos_picker.choose_your_next_pictograph_label"
+          >widgets.sequence_builder.components.start_pos_picker.choose_your_next_pictograph_label</a
         >
         &#8226;
         <a
@@ -5443,40 +5505,48 @@
           >widgets.sequence_widget.my_sequence_label</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
-        >
-        &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay</a
-        >
-        &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame</a
-        >
-        &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat</a
-        >
-        &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay"
-          >widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay</a
-        >
-        &#8226;
         <a href="#widgets.sequence_widget.sequence_modifier"
           >widgets.sequence_widget.sequence_modifier</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_button_frame"
-          >widgets.sequence_widget.sequence_widget_button_frame</a
+        <a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager</a
+        >
+        &#8226;
+        <a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat_selection_overlay"
+          >widgets.sequence_widget.SW_beat_frame.beat_selection_overlay</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.custom_print_dialog"
+          >widgets.sequence_widget.SW_beat_frame.custom_print_dialog</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.start_pos_beat"
+          >widgets.sequence_widget.SW_beat_frame.start_pos_beat</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.styled_border_overlay"
+          >widgets.sequence_widget.SW_beat_frame.styled_border_overlay</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_button_frame"
+          >widgets.sequence_widget.SW_button_frame</a
         >
         &#8226;
         <a href="#widgets.turn_pattern_widget">widgets.turn_pattern_widget</a>
@@ -11405,9 +11475,8 @@
           >widgets.scroll_area.components.section_manager.section_widget.letterbook_section_widget</a
         >
         &#8226;
-        <a
-          href="#widgets.scroll_area.components.sequence_widget_pictograph_factory"
-          >widgets.scroll_area.components.sequence_widget_pictograph_factory</a
+        <a href="#widgets.scroll_area.components.SW_pictograph_factory"
+          >widgets.scroll_area.components.SW_pictograph_factory</a
         >
         &#8226;
         <a
@@ -14386,7 +14455,10 @@
         <a href="#email.contentmanager">email.contentmanager</a> &#8226;
         <a href="#email.header">email.header</a> &#8226;
         <a href="#email.message">email.message</a> &#8226;
-        <a href="#email.utils">email.utils</a>
+        <a href="#email.utils">email.utils</a> &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.custom_print_dialog"
+          >widgets.sequence_widget.SW_beat_frame.custom_print_dialog</a
+        >
       </div>
     </div>
 
@@ -18214,6 +18286,11 @@
         <a
           href="#widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator"
           >widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator</a
+        >
+        &#8226;
+        <a
+          href="#widgets.sequence_builder.components.start_pos_picker.start_pos_manager"
+          >widgets.sequence_builder.components.start_pos_picker.start_pos_manager</a
         >
         &#8226; <a href="#xmlrpc.server">xmlrpc.server</a>
       </div>
@@ -22068,8 +22145,11 @@
       <div class="import">
         imports:
         <a href="#PyQt6.QtCore">PyQt6.QtCore</a>
-        &#8226; <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
-        <a href="#os">os</a> &#8226; <a href="#profiler">profiler</a> &#8226;
+        &#8226; <a href="#PyQt6.QtGui">PyQt6.QtGui</a> &#8226;
+        <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
+        <a href="#os">os</a> &#8226;
+        <a href="#path_helpers">path_helpers</a> &#8226;
+        <a href="#profiler">profiler</a> &#8226;
         <a href="#settings_manager">settings_manager</a> &#8226;
         <a href="#sys">sys</a> &#8226;
         <a href="#utilities.main_window_geometry_manager"
@@ -22185,9 +22265,8 @@
           >widgets.sequence_recorder.sequence_recorder</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay"
-          >widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.styled_border_overlay"
+          >widgets.sequence_widget.SW_beat_frame.styled_border_overlay</a
         >
       </div>
     </div>
@@ -51518,10 +51597,12 @@
       <div class="import">
         imports:
         <a href="#os">os</a>
-        &#8226; <a href="#sys">sys</a>
+        &#8226; <a href="#sys">sys</a> &#8226; <a href="#winreg">winreg</a>
       </div>
       <div class="import">
         imported by:
+        <a href="#main">main</a>
+        &#8226; <a href="#main.py">main.py</a> &#8226;
         <a href="#objects.graphical_object.graphical_object_svg_manager"
           >objects.graphical_object.graphical_object_svg_manager</a
         >
@@ -51630,6 +51711,15 @@
         &#8226;
         <a href="#widgets.sequence_recorder.SR_video_display_frame"
           >widgets.sequence_recorder.SR_video_display_frame</a
+        >
+        &#8226;
+        <a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_button_frame"
+          >widgets.sequence_widget.SW_button_frame</a
         >
         &#8226;
         <a href="#widgets.turn_pattern_widget">widgets.turn_pattern_widget</a>
@@ -65810,7 +65900,11 @@
         >
         &#8226; <a href="#setuptools.installer">setuptools.installer</a> &#8226;
         <a href="#urllib.request">urllib.request</a> &#8226;
-        <a href="#urllib.response">urllib.response</a>
+        <a href="#urllib.response">urllib.response</a> &#8226;
+        <a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager</a
+        >
       </div>
     </div>
 
@@ -68211,6 +68305,10 @@
           >widgets.main_widget.special_placement_loader</a
         >
         &#8226;
+        <a href="#widgets.main_widget.top_builder_widget"
+          >widgets.main_widget.top_builder_widget</a
+        >
+        &#8226;
         <a href="#widgets.menu_bar.default_orientation_selector"
           >widgets.menu_bar.default_orientation_selector</a
         >
@@ -68535,9 +68633,8 @@
           >widgets.scroll_area.components.section_manager.section_widget.letterbook_section_widget</a
         >
         &#8226;
-        <a
-          href="#widgets.scroll_area.components.sequence_widget_pictograph_factory"
-          >widgets.scroll_area.components.sequence_widget_pictograph_factory</a
+        <a href="#widgets.scroll_area.components.SW_pictograph_factory"
+          >widgets.scroll_area.components.SW_pictograph_factory</a
         >
         &#8226;
         <a
@@ -68611,8 +68708,8 @@
         >
         &#8226;
         <a
-          href="#widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label"
-          >widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label</a
+          href="#widgets.sequence_builder.components.start_pos_picker.choose_your_next_pictograph_label"
+          >widgets.sequence_builder.components.start_pos_picker.choose_your_next_pictograph_label</a
         >
         &#8226;
         <a
@@ -68680,45 +68777,52 @@
           >widgets.sequence_widget.my_sequence_label</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
-        >
-        &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.beat_deletion_manager"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat_deletion_manager</a
-        >
-        &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay</a
-        >
-        &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame</a
-        >
-        &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat</a
-        >
-        &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay"
-          >widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay</a
-        >
-        &#8226;
         <a href="#widgets.sequence_widget.sequence_modifier"
           >widgets.sequence_widget.sequence_modifier</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_button_frame"
-          >widgets.sequence_widget.sequence_widget_button_frame</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat_deletion_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_deletion_manager</a
+        >
+        &#8226;
+        <a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager</a
+        >
+        &#8226;
+        <a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat_selection_overlay"
+          >widgets.sequence_widget.SW_beat_frame.beat_selection_overlay</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.custom_print_dialog"
+          >widgets.sequence_widget.SW_beat_frame.custom_print_dialog</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.start_pos_beat"
+          >widgets.sequence_widget.SW_beat_frame.start_pos_beat</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.styled_border_overlay"
+          >widgets.sequence_widget.SW_beat_frame.styled_border_overlay</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_button_frame"
+          >widgets.sequence_widget.SW_button_frame</a
         >
         &#8226;
         <a href="#widgets.turn_pattern_widget">widgets.turn_pattern_widget</a>
@@ -71188,8 +71292,7 @@
         <a href="#widgets.scroll_area">widgets.scroll_area</a> &#8226;
         <a href="#widgets.sequence_builder">widgets.sequence_builder</a> &#8226;
         <a href="#widgets.sequence_recorder">widgets.sequence_recorder</a>
-        &#8226;
-        <a href="#widgets.sequence_widget">widgets.sequence_widget</a> &#8226;
+        &#8226; <a href="#widgets.SW">widgets.SW</a> &#8226;
         <a href="#widgets.turn_pattern_converter"
           >widgets.turn_pattern_converter</a
         >
@@ -71259,8 +71362,8 @@
           >widgets.pictograph.pictograph</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
         >
       </div>
       <div class="import">
@@ -71627,6 +71730,10 @@
         &#8226;
         <a href="#widgets.main_widget.main_widget"
           >widgets.main_widget.main_widget</a
+        >
+        &#8226;
+        <a href="#widgets.main_widget.top_builder_widget"
+          >widgets.main_widget.top_builder_widget</a
         >
       </div>
       <div class="import">
@@ -72427,8 +72534,8 @@
           >widgets.pictograph.pictograph</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
         >
       </div>
       <div class="import">
@@ -73206,15 +73313,11 @@
         &#8226; <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
         <a href="#typing">typing</a> &#8226;
         <a href="#widgets">widgets</a> &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
-        >
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
       </div>
       <div class="import">
         imported by:
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
-        >
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
       </div>
     </div>
 
@@ -74292,6 +74395,10 @@
           >widgets.main_widget.main_widget</a
         >
         &#8226;
+        <a href="#widgets.main_widget.top_builder_widget"
+          >widgets.main_widget.top_builder_widget</a
+        >
+        &#8226;
         <a href="#widgets.sequence_builder.sequence_builder"
           >widgets.sequence_builder.sequence_builder</a
         >
@@ -74302,6 +74409,14 @@
         imported by:
         <a href="#widgets.main_widget.main_widget"
           >widgets.main_widget.main_widget</a
+        >
+        &#8226;
+        <a href="#widgets.main_widget.top_builder_widget"
+          >widgets.main_widget.top_builder_widget</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_builder.sequence_builder"
+          >widgets.sequence_builder.sequence_builder</a
         >
         &#8226;
         <a href="#widgets.turn_pattern_widget">widgets.turn_pattern_widget</a>
@@ -74436,9 +74551,7 @@
           >widgets.sequence_recorder.sequence_recorder</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
-        >
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
       </div>
       <div class="import">
         imported by:
@@ -74462,6 +74575,10 @@
         &#8226;
         <a href="#widgets.main_widget.special_placement_loader"
           >widgets.main_widget.special_placement_loader</a
+        >
+        &#8226;
+        <a href="#widgets.main_widget.top_builder_widget"
+          >widgets.main_widget.top_builder_widget</a
         >
         &#8226;
         <a href="#widgets.menu_bar.default_orientation_selector"
@@ -74490,17 +74607,18 @@
           >widgets.sequence_recorder.sequence_recorder</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.custom_print_dialog"
+          >widgets.sequence_widget.SW_beat_frame.custom_print_dialog</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.start_pos_beat"
+          >widgets.sequence_widget.SW_beat_frame.start_pos_beat</a
         >
       </div>
     </div>
@@ -74547,14 +74665,32 @@
         <a href="#PyQt6.QtCore">PyQt6.QtCore</a>
         &#8226; <a href="#PyQt6.QtGui">PyQt6.QtGui</a> &#8226;
         <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
-        <a href="#math">math</a> &#8226;
-        <a href="#widgets.main_widget">widgets.main_widget</a>
-      </div>
-      <div class="import">
-        imported by:
+        <a href="#math">math</a> &#8226; <a href="#typing">typing</a> &#8226;
+        <a href="#widgets.main_builder_widget.builder_toolbar"
+          >widgets.main_builder_widget.builder_toolbar</a
+        >
+        &#8226; <a href="#widgets.main_widget">widgets.main_widget</a> &#8226;
         <a href="#widgets.main_widget.main_widget"
           >widgets.main_widget.main_widget</a
         >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
+      </div>
+      <div class="import">
+        imported by:
+        <a href="#widgets.dictionary.dictionary_widget"
+          >widgets.dictionary.dictionary_widget</a
+        >
+        &#8226;
+        <a href="#widgets.main_builder_widget.builder_toolbar"
+          >widgets.main_builder_widget.builder_toolbar</a
+        >
+        &#8226;
+        <a href="#widgets.main_widget.main_widget"
+          >widgets.main_widget.main_widget</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
       </div>
     </div>
 
@@ -74889,8 +75025,8 @@
           >widgets.sequence_builder.sequence_builder</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
         >
       </div>
       <div class="import">
@@ -75045,9 +75181,8 @@
           >widgets.pictograph.pictograph</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay"
-          >widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.styled_border_overlay"
+          >widgets.sequence_widget.SW_beat_frame.styled_border_overlay</a
         >
       </div>
       <div class="import">
@@ -75295,9 +75430,8 @@
           >widgets.pictograph.pictograph</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay"
-          >widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.styled_border_overlay"
+          >widgets.sequence_widget.SW_beat_frame.styled_border_overlay</a
         >
       </div>
     </div>
@@ -78282,9 +78416,8 @@
           >widgets.scroll_area.components.section_manager.section_widget.letterbook_section_widget</a
         >
         &#8226;
-        <a
-          href="#widgets.scroll_area.components.sequence_widget_pictograph_factory"
-          >widgets.scroll_area.components.sequence_widget_pictograph_factory</a
+        <a href="#widgets.scroll_area.components.SW_pictograph_factory"
+          >widgets.scroll_area.components.SW_pictograph_factory</a
         >
         &#8226;
         <a
@@ -78370,13 +78503,12 @@
           >widgets.sequence_recorder.SR_beat_frame</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
         >
         &#8226;
         <a
@@ -78475,9 +78607,8 @@
           >widgets.scroll_area.components.section_manager</a
         >
         &#8226;
-        <a
-          href="#widgets.scroll_area.components.sequence_widget_pictograph_factory"
-          >widgets.scroll_area.components.sequence_widget_pictograph_factory</a
+        <a href="#widgets.scroll_area.components.SW_pictograph_factory"
+          >widgets.scroll_area.components.SW_pictograph_factory</a
         >
         &#8226;
         <a
@@ -79217,16 +79348,12 @@
     </div>
 
     <div class="node">
-      <a
-        name="widgets.scroll_area.components.sequence_widget_pictograph_factory"
-      ></a>
+      <a name="widgets.scroll_area.components.SW_pictograph_factory"></a>
       <a
         target="code"
-        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/scroll_area/components/sequence_widget_pictograph_factory.py"
+        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/scroll_area/components/SW_pictograph_factory.py"
         type="text/plain"
-        ><tt
-          >widgets.scroll_area.components.sequence_widget_pictograph_factory</tt
-        ></a
+        ><tt>widgets.scroll_area.components.SW_pictograph_factory</tt></a
       >
       <span class="moduletype">SourceModule</span>
       <div class="import">
@@ -79243,15 +79370,11 @@
           >widgets.scroll_area.components</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
-        >
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
       </div>
       <div class="import">
         imported by:
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
-        >
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
       </div>
     </div>
 
@@ -79663,8 +79786,8 @@
         >
         &#8226;
         <a
-          href="#widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label"
-          >widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label</a
+          href="#widgets.sequence_builder.components.start_pos_picker.choose_your_next_pictograph_label"
+          >widgets.sequence_builder.components.start_pos_picker.choose_your_next_pictograph_label</a
         >
         &#8226;
         <a href="#widgets.sequence_builder.sequence_builder"
@@ -79688,8 +79811,8 @@
         >
         &#8226;
         <a
-          href="#widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label"
-          >widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label</a
+          href="#widgets.sequence_builder.components.start_pos_picker.choose_your_next_pictograph_label"
+          >widgets.sequence_builder.components.start_pos_picker.choose_your_next_pictograph_label</a
         >
         &#8226;
         <a href="#widgets.sequence_builder.sequence_builder"
@@ -79751,7 +79874,8 @@
       <div class="import">
         imports:
         <a href="#Enums.Enums">Enums.Enums</a>
-        &#8226; <a href="#typing">typing</a> &#8226;
+        &#8226; <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
+        <a href="#typing">typing</a> &#8226;
         <a href="#widgets.pictograph.pictograph"
           >widgets.pictograph.pictograph</a
         >
@@ -79775,8 +79899,8 @@
           >widgets.sequence_builder.components.option_picker.option_picker_section_widget</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
         >
       </div>
       <div class="import">
@@ -80068,8 +80192,8 @@
         >
         &#8226;
         <a
-          href="#widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label"
-          >widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label</a
+          href="#widgets.sequence_builder.components.start_pos_picker.choose_your_next_pictograph_label"
+          >widgets.sequence_builder.components.start_pos_picker.choose_your_next_pictograph_label</a
         >
         &#8226;
         <a
@@ -80130,9 +80254,8 @@
           >widgets.sequence_builder.components.start_pos_picker</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.start_pos_beat"
+          >widgets.sequence_widget.SW_beat_frame.start_pos_beat</a
         >
       </div>
       <div class="import">
@@ -80185,14 +80308,14 @@
 
     <div class="node">
       <a
-        name="widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label"
+        name="widgets.sequence_builder.components.start_pos_picker.choose_your_next_pictograph_label"
       ></a>
       <a
         target="code"
-        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/sequence_builder/components/start_pos_picker/choose_your_next_option_label.py"
+        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/sequence_builder/components/start_pos_picker/choose_your_next_pictograph_label.py"
         type="text/plain"
         ><tt
-          >widgets.sequence_builder.components.start_pos_picker.choose_your_next_option_label</tt
+          >widgets.sequence_builder.components.start_pos_picker.choose_your_next_pictograph_label</tt
         ></a
       >
       <span class="moduletype">SourceModule</span>
@@ -80291,7 +80414,9 @@
         &#8226; <a href="#PyQt6.QtCore">PyQt6.QtCore</a> &#8226;
         <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
         <a href="#constants">constants</a> &#8226;
-        <a href="#copy">copy</a> &#8226; <a href="#typing">typing</a> &#8226;
+        <a href="#copy">copy</a> &#8226;
+        <a href="#functools">functools</a> &#8226;
+        <a href="#typing">typing</a> &#8226;
         <a href="#widgets.pictograph.pictograph"
           >widgets.pictograph.pictograph</a
         >
@@ -80305,9 +80430,8 @@
           >widgets.sequence_builder.components.start_pos_picker.start_pos_picker</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.start_pos_beat"
+          >widgets.sequence_widget.SW_beat_frame.start_pos_beat</a
         >
       </div>
       <div class="import">
@@ -80544,11 +80668,16 @@
         imports:
         <a href="#Enums.Enums">Enums.Enums</a>
         &#8226; <a href="#PyQt6.QtCore">PyQt6.QtCore</a> &#8226;
+        <a href="#PyQt6.QtGui">PyQt6.QtGui</a> &#8226;
         <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
         <a href="#constants">constants</a> &#8226;
         <a href="#pandas">pandas</a> &#8226;
         <a href="#path_helpers">path_helpers</a> &#8226;
         <a href="#typing">typing</a> &#8226;
+        <a href="#widgets.main_builder_widget.builder_toolbar"
+          >widgets.main_builder_widget.builder_toolbar</a
+        >
+        &#8226;
         <a href="#widgets.main_widget.main_widget"
           >widgets.main_widget.main_widget</a
         >
@@ -80742,8 +80871,8 @@
           >widgets.sequence_recorder.sequence_recorder</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
         >
       </div>
       <div class="import">
@@ -80782,13 +80911,12 @@
           >widgets.sequence_recorder.SR_beat_frame</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.start_pos_beat"
+          >widgets.sequence_widget.SW_beat_frame.start_pos_beat</a
         >
       </div>
       <div class="import">
@@ -81026,10 +81154,8 @@
     </div>
 
     <div class="node">
-      <a name="widgets.sequence_widget"></a>
-      <a target="code" href="-" type="text/plain"
-        ><tt>widgets.sequence_widget</tt></a
-      >
+      <a name="widgets.SW"></a>
+      <a target="code" href="-" type="text/plain"><tt>widgets.SW</tt></a>
       <span class="moduletype">NamespacePackage</span>
       <div class="import">
         imports:
@@ -81041,20 +81167,18 @@
           >widgets.sequence_widget.my_sequence_label</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame</a
-        >
-        &#8226;
         <a href="#widgets.sequence_widget.sequence_modifier"
           >widgets.sequence_widget.sequence_modifier</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_button_frame"
-          >widgets.sequence_widget.sequence_widget_button_frame</a
+        <a href="#widgets.sequence_widget.SW_button_frame"
+          >widgets.sequence_widget.SW_button_frame</a
         >
       </div>
     </div>
@@ -81063,7 +81187,7 @@
       <a name="widgets.sequence_widget.my_sequence_label"></a>
       <a
         target="code"
-        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/sequence_widget/my_sequence_label.py"
+        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/SW/my_sequence_label.py"
         type="text/plain"
         ><tt>widgets.sequence_widget.my_sequence_label</tt></a
       >
@@ -81074,69 +81198,186 @@
         &#8226; <a href="#PyQt6.QtGui">PyQt6.QtGui</a> &#8226;
         <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
         <a href="#typing">typing</a> &#8226;
-        <a href="#widgets.sequence_widget">widgets.sequence_widget</a> &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
+        <a href="#widgets.SW">widgets.SW</a> &#8226;
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
+      </div>
+      <div class="import">
+        imported by:
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
+      </div>
+    </div>
+
+    <div class="node">
+      <a name="widgets.sequence_widget.sequence_modifier"></a>
+      <a
+        target="code"
+        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/SW/sequence_modifier.py"
+        type="text/plain"
+        ><tt>widgets.sequence_widget.sequence_modifier</tt></a
+      >
+      <span class="moduletype">SourceModule</span>
+      <div class="import">
+        imports:
+        <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a>
+        &#8226;
+        <a href="#styles.get_tab_stylesheet">styles.get_tab_stylesheet</a>
+        &#8226; <a href="#typing">typing</a> &#8226;
+        <a href="#widgets.graph_editor.graph_editor"
+          >widgets.graph_editor.graph_editor</a
+        >
+        &#8226; <a href="#widgets.SW">widgets.SW</a> &#8226;
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
+      </div>
+      <div class="import">
+        imported by:
+        <a href="#widgets.graph_editor.graph_editor"
+          >widgets.graph_editor.graph_editor</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
+      </div>
+    </div>
+
+    <div class="node">
+      <a name="widgets.sequence_widget.SW"></a>
+      <a
+        target="code"
+        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/SW/SW.py"
+        type="text/plain"
+        ><tt>widgets.sequence_widget.SW</tt></a
+      >
+      <span class="moduletype">SourceModule</span>
+      <div class="import">
+        imports:
+        <a href="#PyQt6.QtCore">PyQt6.QtCore</a>
+        &#8226; <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
+        <a href="#typing">typing</a> &#8226;
+        <a href="#widgets.indicator_label">widgets.indicator_label</a> &#8226;
+        <a href="#widgets.main_widget.main_widget"
+          >widgets.main_widget.main_widget</a
+        >
+        &#8226;
+        <a href="#widgets.main_widget.top_builder_widget"
+          >widgets.main_widget.top_builder_widget</a
+        >
+        &#8226;
+        <a href="#widgets.scroll_area.components.SW_pictograph_factory"
+          >widgets.scroll_area.components.SW_pictograph_factory</a
+        >
+        &#8226; <a href="#widgets.SW">widgets.SW</a> &#8226;
+        <a href="#widgets.sequence_widget.my_sequence_label"
+          >widgets.sequence_widget.my_sequence_label</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.sequence_modifier"
+          >widgets.sequence_widget.sequence_modifier</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_button_frame"
+          >widgets.sequence_widget.SW_button_frame</a
         >
       </div>
       <div class="import">
         imported by:
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
+        <a href="#widgets.indicator_label">widgets.indicator_label</a>
+        &#8226;
+        <a href="#widgets.main_widget.main_widget"
+          >widgets.main_widget.main_widget</a
+        >
+        &#8226;
+        <a href="#widgets.main_widget.top_builder_widget"
+          >widgets.main_widget.top_builder_widget</a
+        >
+        &#8226;
+        <a href="#widgets.scroll_area.components.SW_pictograph_factory"
+          >widgets.scroll_area.components.SW_pictograph_factory</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.my_sequence_label"
+          >widgets.sequence_widget.my_sequence_label</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.sequence_modifier"
+          >widgets.sequence_widget.sequence_modifier</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_button_frame"
+          >widgets.sequence_widget.SW_button_frame</a
         >
       </div>
     </div>
 
     <div class="node">
-      <a name="widgets.sequence_widget.sequence_widget_beat_frame"></a>
+      <a name="widgets.sequence_widget.SW_beat_frame"></a>
       <a target="code" href="-" type="text/plain"
-        ><tt>widgets.sequence_widget.sequence_widget_beat_frame</tt></a
+        ><tt>widgets.sequence_widget.SW_beat_frame</tt></a
       >
       <span class="moduletype">NamespacePackage</span>
       <div class="import">
         imports:
-        <a href="#widgets.sequence_widget">widgets.sequence_widget</a>
+        <a href="#widgets.SW">widgets.SW</a>
       </div>
       <div class="import">
         imported by:
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat_deletion_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_deletion_manager</a
         >
         &#8226;
         <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.beat_deletion_manager"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat_deletion_manager</a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager</a
         >
         &#8226;
         <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay</a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat_selection_overlay"
+          >widgets.sequence_widget.SW_beat_frame.beat_selection_overlay</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.custom_print_dialog"
+          >widgets.sequence_widget.SW_beat_frame.custom_print_dialog</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay"
-          >widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.start_pos_beat"
+          >widgets.sequence_widget.SW_beat_frame.start_pos_beat</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.styled_border_overlay"
+          >widgets.sequence_widget.SW_beat_frame.styled_border_overlay</a
         >
       </div>
     </div>
 
     <div class="node">
-      <a name="widgets.sequence_widget.sequence_widget_beat_frame.beat"></a>
+      <a name="widgets.sequence_widget.SW_beat_frame.beat"></a>
       <a
         target="code"
-        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/sequence_widget/sequence_widget_beat_frame/beat.py"
+        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/SW/SW_beat_frame/beat.py"
         type="text/plain"
-        ><tt>widgets.sequence_widget.sequence_widget_beat_frame.beat</tt></a
+        ><tt>widgets.sequence_widget.SW_beat_frame.beat</tt></a
       >
       <span class="moduletype">SourceModule</span>
       <div class="import">
@@ -81153,13 +81394,12 @@
           >widgets.pictograph.pictograph</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame</a
+        <a href="#widgets.sequence_widget.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
         >
       </div>
       <div class="import">
@@ -81190,86 +81430,159 @@
           >widgets.sequence_recorder.SR_beat_selection_manager</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.beat_deletion_manager"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat_deletion_manager</a
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat_deletion_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_deletion_manager</a
         >
         &#8226;
         <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay</a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat_selection_overlay"
+          >widgets.sequence_widget.SW_beat_frame.beat_selection_overlay</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.start_pos_beat"
+          >widgets.sequence_widget.SW_beat_frame.start_pos_beat</a
         >
       </div>
     </div>
 
     <div class="node">
-      <a
-        name="widgets.sequence_widget.sequence_widget_beat_frame.beat_deletion_manager"
-      ></a>
+      <a name="widgets.sequence_widget.SW_beat_frame.beat_deletion_manager"></a>
       <a
         target="code"
-        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/sequence_widget/sequence_widget_beat_frame/beat_deletion_manager.py"
+        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/SW/SW_beat_frame/beat_deletion_manager.py"
         type="text/plain"
-        ><tt
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat_deletion_manager</tt
-        ></a
+        ><tt>widgets.sequence_widget.SW_beat_frame.beat_deletion_manager</tt></a
       >
       <span class="moduletype">SourceModule</span>
       <div class="import">
         imports:
         <a href="#typing">typing</a>
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame</a
+        <a href="#widgets.sequence_widget.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.start_pos_beat"
+          >widgets.sequence_widget.SW_beat_frame.start_pos_beat</a
         >
       </div>
       <div class="import">
         imported by:
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
         >
       </div>
     </div>
 
     <div class="node">
       <a
-        name="widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay"
+        name="widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager"
       ></a>
       <a
         target="code"
-        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/sequence_widget/sequence_widget_beat_frame/beat_selection_overlay.py"
+        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/SW/SW_beat_frame/beat_frame_image_export_manager.py"
         type="text/plain"
         ><tt
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay</tt
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager</tt
+        ></a
+      >
+      <span class="moduletype">SourceModule</span>
+      <div class="import">
+        imports:
+        <a href="#PyQt6.QtCore">PyQt6.QtCore</a>
+        &#8226; <a href="#PyQt6.QtGui">PyQt6.QtGui</a> &#8226;
+        <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
+        <a href="#path_helpers">path_helpers</a> &#8226;
+        <a href="#typing">typing</a> &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
+        >
+      </div>
+      <div class="import">
+        imported by:
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
+        >
+      </div>
+    </div>
+
+    <div class="node">
+      <a
+        name="widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager"
+      ></a>
+      <a
+        target="code"
+        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/SW/SW_beat_frame/beat_frame_print_manager.py"
+        type="text/plain"
+        ><tt
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager</tt
+        ></a
+      >
+      <span class="moduletype">SourceModule</span>
+      <div class="import">
+        imports:
+        <a href="#PyQt6.QtCore">PyQt6.QtCore</a>
+        &#8226; <a href="#PyQt6.QtGui">PyQt6.QtGui</a> &#8226;
+        <a href="#PyQt6.QtPrintSupport">PyQt6.QtPrintSupport</a> &#8226;
+        <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
+        <a href="#tempfile">tempfile</a> &#8226;
+        <a href="#typing">typing</a> &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.custom_print_dialog"
+          >widgets.sequence_widget.SW_beat_frame.custom_print_dialog</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
+        >
+      </div>
+      <div class="import">
+        imported by:
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
+        >
+      </div>
+    </div>
+
+    <div class="node">
+      <a
+        name="widgets.sequence_widget.SW_beat_frame.beat_selection_overlay"
+      ></a>
+      <a
+        target="code"
+        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/SW/SW_beat_frame/beat_selection_overlay.py"
+        type="text/plain"
+        ><tt
+          >widgets.sequence_widget.SW_beat_frame.beat_selection_overlay</tt
         ></a
       >
       <span class="moduletype">SourceModule</span>
@@ -81279,44 +81592,75 @@
         &#8226; <a href="#PyQt6.QtGui">PyQt6.QtGui</a> &#8226;
         <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
         <a href="#typing">typing</a> &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame</a
+        <a href="#widgets.sequence_widget.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.start_pos_beat"
+          >widgets.sequence_widget.SW_beat_frame.start_pos_beat</a
         >
       </div>
       <div class="import">
         imported by:
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
         >
       </div>
     </div>
 
     <div class="node">
-      <a
-        name="widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame"
-      ></a>
+      <a name="widgets.sequence_widget.SW_beat_frame.custom_print_dialog"></a>
       <a
         target="code"
-        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/sequence_widget/sequence_widget_beat_frame/sequence_widget_beat_frame.py"
+        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/SW/SW_beat_frame/custom_print_dialog.py"
         type="text/plain"
-        ><tt
-          >widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame</tt
-        ></a
+        ><tt>widgets.sequence_widget.SW_beat_frame.custom_print_dialog</tt></a
+      >
+      <span class="moduletype">SourceModule</span>
+      <div class="import">
+        imports:
+        <a href="#PyQt6.QtCore">PyQt6.QtCore</a>
+        &#8226; <a href="#PyQt6.QtGui">PyQt6.QtGui</a> &#8226;
+        <a href="#PyQt6.QtPrintSupport">PyQt6.QtPrintSupport</a> &#8226;
+        <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
+        <a href="#email.charset">email.charset</a> &#8226;
+        <a href="#typing">typing</a> &#8226;
+        <a href="#widgets.main_widget.main_widget"
+          >widgets.main_widget.main_widget</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
+        >
+      </div>
+      <div class="import">
+        imported by:
+        <a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager</a
+        >
+      </div>
+    </div>
+
+    <div class="node">
+      <a name="widgets.sequence_widget.SW_beat_frame.SW_beat_frame"></a>
+      <a
+        target="code"
+        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/SW/SW_beat_frame/SW_beat_frame.py"
+        type="text/plain"
+        ><tt>widgets.sequence_widget.SW_beat_frame.SW_beat_frame</tt></a
       >
       <span class="moduletype">SourceModule</span>
       <div class="import">
@@ -81329,71 +81673,81 @@
           >widgets.pictograph.pictograph</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame</a
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.beat_deletion_manager"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat_deletion_manager</a
-        >
-        &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat_deletion_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_deletion_manager</a
         >
         &#8226;
         <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat</a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
+        <a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat_selection_overlay"
+          >widgets.sequence_widget.SW_beat_frame.beat_selection_overlay</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.start_pos_beat"
+          >widgets.sequence_widget.SW_beat_frame.start_pos_beat</a
         >
       </div>
       <div class="import">
         imported by:
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat_deletion_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_deletion_manager</a
         >
         &#8226;
         <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.beat_deletion_manager"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat_deletion_manager</a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager</a
         >
         &#8226;
         <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay</a
+          href="#widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat_selection_overlay"
+          >widgets.sequence_widget.SW_beat_frame.beat_selection_overlay</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.custom_print_dialog"
+          >widgets.sequence_widget.SW_beat_frame.custom_print_dialog</a
+        >
+        &#8226;
+        <a href="#widgets.sequence_widget.SW_beat_frame.start_pos_beat"
+          >widgets.sequence_widget.SW_beat_frame.start_pos_beat</a
         >
       </div>
     </div>
 
     <div class="node">
-      <a
-        name="widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat"
-      ></a>
+      <a name="widgets.sequence_widget.SW_beat_frame.start_pos_beat"></a>
       <a
         target="code"
-        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/sequence_widget/sequence_widget_beat_frame/start_pos_beat.py"
+        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/SW/SW_beat_frame/start_pos_beat.py"
         type="text/plain"
-        ><tt
-          >widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat</tt
-        ></a
+        ><tt>widgets.sequence_widget.SW_beat_frame.start_pos_beat</tt></a
       >
       <span class="moduletype">SourceModule</span>
       <div class="import">
@@ -81406,22 +81760,20 @@
           >widgets.main_widget.main_widget</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame</a
+        <a href="#widgets.sequence_widget.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat"
+          >widgets.sequence_widget.SW_beat_frame.beat</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.start_pos_beat"
+          >widgets.sequence_widget.SW_beat_frame.start_pos_beat</a
         >
       </div>
       <div class="import">
@@ -81440,39 +81792,31 @@
           >widgets.sequence_recorder.SR_beat_selection_manager</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.beat_deletion_manager"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat_deletion_manager</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat_deletion_manager"
+          >widgets.sequence_widget.SW_beat_frame.beat_deletion_manager</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat_selection_overlay</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.beat_selection_overlay"
+          >widgets.sequence_widget.SW_beat_frame.beat_selection_overlay</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame.SW_beat_frame</a
         >
         &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.start_pos_beat</a
+        <a href="#widgets.sequence_widget.SW_beat_frame.start_pos_beat"
+          >widgets.sequence_widget.SW_beat_frame.start_pos_beat</a
         >
       </div>
     </div>
 
     <div class="node">
-      <a
-        name="widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay"
-      ></a>
+      <a name="widgets.sequence_widget.SW_beat_frame.styled_border_overlay"></a>
       <a
         target="code"
-        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/sequence_widget/sequence_widget_beat_frame/styled_border_overlay.py"
+        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/SW/SW_beat_frame/styled_border_overlay.py"
         type="text/plain"
-        ><tt
-          >widgets.sequence_widget.sequence_widget_beat_frame.styled_border_overlay</tt
-        ></a
+        ><tt>widgets.sequence_widget.SW_beat_frame.styled_border_overlay</tt></a
       >
       <span class="moduletype">SourceModule</span>
       <div class="import">
@@ -81485,8 +81829,8 @@
           >widgets.pictograph.components.pictograph_view</a
         >
         &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame</a
+        <a href="#widgets.sequence_widget.SW_beat_frame"
+          >widgets.sequence_widget.SW_beat_frame</a
         >
       </div>
       <div class="import">
@@ -81498,143 +81842,27 @@
     </div>
 
     <div class="node">
-      <a name="widgets.sequence_widget.sequence_modifier"></a>
+      <a name="widgets.sequence_widget.SW_button_frame"></a>
       <a
         target="code"
-        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/sequence_widget/sequence_modifier.py"
+        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/SW/SW_button_frame.py"
         type="text/plain"
-        ><tt>widgets.sequence_widget.sequence_modifier</tt></a
-      >
-      <span class="moduletype">SourceModule</span>
-      <div class="import">
-        imports:
-        <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a>
-        &#8226;
-        <a href="#styles.get_tab_stylesheet">styles.get_tab_stylesheet</a>
-        &#8226; <a href="#typing">typing</a> &#8226;
-        <a href="#widgets.graph_editor.graph_editor"
-          >widgets.graph_editor.graph_editor</a
-        >
-        &#8226;
-        <a href="#widgets.sequence_widget">widgets.sequence_widget</a> &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
-        >
-      </div>
-      <div class="import">
-        imported by:
-        <a href="#widgets.graph_editor.graph_editor"
-          >widgets.graph_editor.graph_editor</a
-        >
-        &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
-        >
-      </div>
-    </div>
-
-    <div class="node">
-      <a name="widgets.sequence_widget.sequence_widget"></a>
-      <a
-        target="code"
-        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/sequence_widget/sequence_widget.py"
-        type="text/plain"
-        ><tt>widgets.sequence_widget.sequence_widget</tt></a
+        ><tt>widgets.sequence_widget.SW_button_frame</tt></a
       >
       <span class="moduletype">SourceModule</span>
       <div class="import">
         imports:
         <a href="#PyQt6.QtCore">PyQt6.QtCore</a>
-        &#8226; <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
+        &#8226; <a href="#PyQt6.QtGui">PyQt6.QtGui</a> &#8226;
+        <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
+        <a href="#path_helpers">path_helpers</a> &#8226;
         <a href="#typing">typing</a> &#8226;
-        <a href="#widgets.indicator_label">widgets.indicator_label</a> &#8226;
-        <a href="#widgets.main_widget.main_widget"
-          >widgets.main_widget.main_widget</a
-        >
-        &#8226;
-        <a
-          href="#widgets.scroll_area.components.sequence_widget_pictograph_factory"
-          >widgets.scroll_area.components.sequence_widget_pictograph_factory</a
-        >
-        &#8226;
-        <a href="#widgets.sequence_widget">widgets.sequence_widget</a> &#8226;
-        <a href="#widgets.sequence_widget.my_sequence_label"
-          >widgets.sequence_widget.my_sequence_label</a
-        >
-        &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_beat_frame.beat"
-          >widgets.sequence_widget.sequence_widget_beat_frame.beat</a
-        >
-        &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame</a
-        >
-        &#8226;
-        <a href="#widgets.sequence_widget.sequence_modifier"
-          >widgets.sequence_widget.sequence_modifier</a
-        >
-        &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_button_frame"
-          >widgets.sequence_widget.sequence_widget_button_frame</a
-        >
+        <a href="#widgets.SW">widgets.SW</a> &#8226;
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
       </div>
       <div class="import">
         imported by:
-        <a href="#widgets.indicator_label">widgets.indicator_label</a>
-        &#8226;
-        <a href="#widgets.main_widget.main_widget"
-          >widgets.main_widget.main_widget</a
-        >
-        &#8226;
-        <a
-          href="#widgets.scroll_area.components.sequence_widget_pictograph_factory"
-          >widgets.scroll_area.components.sequence_widget_pictograph_factory</a
-        >
-        &#8226;
-        <a href="#widgets.sequence_widget.my_sequence_label"
-          >widgets.sequence_widget.my_sequence_label</a
-        >
-        &#8226;
-        <a
-          href="#widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame"
-          >widgets.sequence_widget.sequence_widget_beat_frame.sequence_widget_beat_frame</a
-        >
-        &#8226;
-        <a href="#widgets.sequence_widget.sequence_modifier"
-          >widgets.sequence_widget.sequence_modifier</a
-        >
-        &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget_button_frame"
-          >widgets.sequence_widget.sequence_widget_button_frame</a
-        >
-      </div>
-    </div>
-
-    <div class="node">
-      <a name="widgets.sequence_widget.sequence_widget_button_frame"></a>
-      <a
-        target="code"
-        href="///F:/CODE/tka-app/tka-sequence-constructor/widgets/sequence_widget/sequence_widget_button_frame.py"
-        type="text/plain"
-        ><tt>widgets.sequence_widget.sequence_widget_button_frame</tt></a
-      >
-      <span class="moduletype">SourceModule</span>
-      <div class="import">
-        imports:
-        <a href="#PyQt6.QtCore">PyQt6.QtCore</a>
-        &#8226; <a href="#PyQt6.QtWidgets">PyQt6.QtWidgets</a> &#8226;
-        <a href="#typing">typing</a> &#8226;
-        <a href="#widgets.sequence_widget">widgets.sequence_widget</a> &#8226;
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
-        >
-      </div>
-      <div class="import">
-        imported by:
-        <a href="#widgets.sequence_widget.sequence_widget"
-          >widgets.sequence_widget.sequence_widget</a
-        >
+        <a href="#widgets.sequence_widget.SW">widgets.sequence_widget.SW</a>
       </div>
     </div>
 
@@ -81998,6 +82226,7 @@
         >
         &#8226; <a href="#mimetypes">mimetypes</a> &#8226;
         <a href="#moviepy.config">moviepy.config</a> &#8226;
+        <a href="#path_helpers">path_helpers</a> &#8226;
         <a href="#pkg_resources._vendor.platformdirs.windows"
           >pkg_resources._vendor.platformdirs.windows</a
         >

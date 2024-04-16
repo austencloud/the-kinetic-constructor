@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from widgets.sequence_recorder.SR_capture_frame import SR_CaptureFrame
     from widgets.sequence_recorder.sequence_recorder import MainWidget
 
-from widgets.sequence_widget.sequence_widget_beat_frame.beat import Beat, BeatView
+from widgets.sequence_widget.SW_beat_frame.beat import Beat, BeatView
 
 
 class SR_BeatFrame(QFrame):
@@ -79,9 +79,7 @@ class SR_BeatFrame(QFrame):
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
             self.beat_views[next_beat_index].set_beat(new_beat, next_beat_index + 1)
-            self.current_sequence_json_handler.update_current_sequence_file_with_beat(
-                self.beat_views[next_beat_index]
-            )
+
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beat_views):
@@ -124,14 +122,6 @@ class SR_BeatFrame(QFrame):
                 return i
         return 0
 
-    def resize_beat_frame(self) -> None:
-        beat_view_size = int(self.width() / (self.COLUMN_COUNT))
-        for view in self.beat_views:
-            view.setMinimumWidth(beat_view_size)
-            view.setMaximumWidth(beat_view_size)
-            view.setMinimumHeight(beat_view_size)
-            view.setMaximumHeight(beat_view_size)
-            view.resetTransform()
 
     def clear_beat_frame(self) -> None:
         for beat_view in self.beat_views:
@@ -144,7 +134,7 @@ class SR_BeatFrame(QFrame):
         for pictograph_dict in sequence_json:
             if pictograph_dict.get("sequence_start_position"):
                 continue
-            beat = Beat(self.main_widget)
+            beat = Beat(self)
             beat.updater.update_pictograph(pictograph_dict)
             self.add_scene_to_sequence(beat)
             pictograph_key = (
@@ -191,3 +181,14 @@ class SR_BeatFrame(QFrame):
         out.release()
         print("Beat frame recording saved successfully." + output_path)
         return output_path
+
+    def resize_beat_frame(self) -> None:
+        beat_view_size = int(self.width() / (self.COLUMN_COUNT))
+        for view in self.beat_views:
+            view.setMinimumWidth(beat_view_size)
+            view.setMaximumWidth(beat_view_size)
+            view.setMinimumHeight(beat_view_size)
+            view.setMaximumHeight(beat_view_size)
+            view.resetTransform()
+            if view.scene():
+                view.fitInView(view.scene().sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)

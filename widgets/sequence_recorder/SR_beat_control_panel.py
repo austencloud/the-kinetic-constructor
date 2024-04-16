@@ -23,7 +23,7 @@ class SR_BeatControlPanel(QFrame):
         self.control_frame = control_frame
         self.sequence_recorder = self.control_frame.sequence_recorder
         self.capture_frame = self.sequence_recorder.capture_frame
-        self.beat_frame = self.capture_frame.sequence_widget_beat_frame
+        self.beat_frame = self.capture_frame.SR_beat_frame
         self.selection_manager = self.beat_frame.selection_manager
         self.init_ui()
         self.setObjectName("SR_BeatControlPanel")
