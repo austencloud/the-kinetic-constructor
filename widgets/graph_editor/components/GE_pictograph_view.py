@@ -26,10 +26,6 @@ class GE_PictographView(PictographView):
         self.setScene(blank_pictograph)
         self.setFrameShape(PictographView.Shape.Box)
 
-    def resize_GE_pictograph_view(self) -> None:
-        if self.scene():
-            self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
-
     def set_to_blank_grid(self) -> None:
         self.setScene(self.blank_pictograph)
 
@@ -61,13 +57,29 @@ class GE_PictographView(PictographView):
     def get_current_pictograph(self) -> Pictograph:
         return self.scene()
 
-    def set_scene(self, beat: "Beat"):
+    def set_scene(self, beat: "Beat") -> None:
         self.setScene(beat)
         self.pictograph = beat
         if beat.view.is_start_pos:
             self.is_start_pos = True
         else:
             self.is_start_pos = False
+
+    def resize_GE_pictograph_view(self) -> None:
+        self.setFixedSize(
+            self.GE.sequence_modifier.height(), self.GE.sequence_modifier.height()
+        )
+        # if self.scene():
+        #     self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
+        # get the size of the scene compared to the size of the view, then scale the view to fit the scene
+        scene_size = self.scene().sceneRect().size()
+        view_size = self.viewport().size()
+        scale_factor = min(
+            view_size.width() / scene_size.width(),
+            view_size.height() / scene_size.height(),
+        )
+        self.resetTransform()
+        self.scale(scale_factor, scale_factor)
 
 
 class GE_BlankPictograph(Pictograph):

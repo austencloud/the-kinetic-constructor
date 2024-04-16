@@ -51,12 +51,15 @@ class SequenceWidget(QWidget):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.addWidget(self.my_sequence_label, 1)
-        self.layout.addLayout(self.beat_frame_layout, 19)
-        self.layout.addLayout(self.indicator_label_layout, 1)
-        self.layout.addWidget(self.sequence_modifier, 10)
-        # self.layout.addStretch(1)
+        self.layout.addWidget(self.my_sequence_label, stretch=1)
+        self.layout.addLayout(self.beat_frame_layout, stretch=18)
+        self.layout.addLayout(self.indicator_label_layout, stretch=1)
+        self.layout.addWidget(self.sequence_modifier, stretch=10)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+    def resizeEvent(self, event):
+        self.layout.update()
+        super().resizeEvent(event)
 
     def _setup_indicator_label_layout(self):
         self.indicator_label_layout = QHBoxLayout()

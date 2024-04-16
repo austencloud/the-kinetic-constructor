@@ -21,7 +21,7 @@ class MainWindow(QMainWindow):
         self.setAttribute(Qt.WidgetAttribute.WA_AcceptTouchEvents, True)
         self.window_manager = MainWindowGeometryManager(self)
         self.setCentralWidget(self.main_widget)
-        self.setWindowTitle("TKA Constructor")
+        self.setWindowTitle("Kinetic Constructor")
         self.menu_bar = MainWindowMenuBar(self.main_widget)
         self.setMenuBar(self.menu_bar)
         self.show()
@@ -88,7 +88,5 @@ def main() -> None:
     sys.exit(exit_code)
 
 
-if __name__ == "__main__":
-    main()
 if __name__ == "__main__":
     main()

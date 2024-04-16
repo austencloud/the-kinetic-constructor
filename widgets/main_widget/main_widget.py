@@ -141,11 +141,3 @@ class MainWidget(QTabWidget):
         self.main_window.window_manager.set_dimensions()
         self.on_tab_changed()
 
-    def resizeEvent(self, event: QKeyEvent):
-        # resize the scroll area of the builder tab
-        current_widget = self.currentWidget()
-        if current_widget == self.top_builder_widget:
-            self.top_builder_widget.sequence_widget.resize_sequence_widget()
-            self.top_builder_widget.builder_toolbar.resize_current_tab()
-        elif current_widget == self.sequence_recorder:
-            self.sequence_recorder.resize_sequence_recorder()
