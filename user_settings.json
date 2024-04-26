@@ -2,9 +2,10 @@
     "pictograph_size": 1,
     "prop_type": "Staff",
     "glyph_visibility": {
-        "VTG": false,
-        "TKA": true,
-        "Elemental": false
+        "VTG": true,
+        "TKA": false,
+        "Elemental": false,
+        "EndPosition": true
     },
     "default_left_orientation": "in",
     "default_right_orientation": "in",

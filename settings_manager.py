@@ -17,7 +17,12 @@ class SettingsManager:
     DEFAULT_SETTINGS = {
         "pictograph_size": 1,
         "prop_type": "Staff",
-        "glyph_visibility": {"VTG": False, "TKA": True, "Elemental": True},
+        "glyph_visibility": {
+            "VTG": False,
+            "TKA": True,
+            "Elemental": True,
+            "EndPosition": True,
+        },
         "default_left_orientation": "out",
         "default_right_orientation": "out",
         "default_left_orientation_Hand": "out",

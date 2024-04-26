@@ -31,6 +31,7 @@ class PictographUpdater:
                 self.pictograph.turns_tuple = self.pictograph.get.turns_tuple()
                 self.pictograph.vtg_glyph.set_vtg_mode()
                 self.pictograph.elemental_glyph.set_elemental_glyph()
+                self.pictograph.end_pos_glyph.update_position(self.get_end_pos())
                 self.pictograph.container.update_borders()
             else:
                 self._update_from_pictograph_dict(pictograph_dict)
@@ -38,6 +39,10 @@ class PictographUpdater:
 
         self.pictograph.tka_glyph.update_tka_glyph()  # keep this to update turns
         self._position_objects()
+
+    def get_end_pos(self) -> str:
+        # get the end pos which looks like alpha1 or beta2, cut off the number and return the string
+        return self.pictograph.end_pos[:-1]
 
     def _update_from_pictograph_dict(self, pictograph_dict: dict) -> None:
         self.pictograph.attr_manager.update_attributes(pictograph_dict)

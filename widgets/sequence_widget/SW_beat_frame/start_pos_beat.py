@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class StartPositionBeat(Beat):
-    def __init__(self,  beat_frame: "SW_Beat_Frame") -> None:
+    def __init__(self, beat_frame: "SW_Beat_Frame") -> None:
         super().__init__(beat_frame)
         self.main_widget = beat_frame.main_widget
         self.beat_frame = beat_frame
@@ -23,12 +23,8 @@ class StartPositionBeat(Beat):
     def add_start_text(self) -> None:
         start_text_item = QGraphicsTextItem("Start")
         start_text_item.setFont(QFont("Georgia", 60, QFont.Weight.DemiBold))
-        start_text_item.setPos(
-            QPointF(
-                (self.width() // 2) - start_text_item.boundingRect().width() // 2,
-                self.height() // 28,
-            )
-        )
+        text_padding = self.height() // 28
+        start_text_item.setPos(QPointF(text_padding, text_padding))
         if self.view and self.view.scene():
             self.view.scene().addItem(start_text_item)
 

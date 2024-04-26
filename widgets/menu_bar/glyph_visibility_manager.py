@@ -23,9 +23,11 @@ class GlyphVisibilityManager:
             pictograph.tka_glyph.setVisible(self.visibility_states[glyph_type])
         elif glyph_type == "Elemental":
             pictograph.elemental_glyph.setVisible(self.visibility_states[glyph_type])
+        elif glyph_type == "EndPosition":
+            pictograph.end_pos_glyph.setVisible(self.visibility_states[glyph_type])
 
     def apply_current_visibility_settings(self, pictograph: "Pictograph"):
-        for glyph_type in ["VTG", "TKA", "Elemental"]:
+        for glyph_type in ["VTG", "TKA", "Elemental", "EndPosition"]:
             visibility = self.get_glyph_visibility(glyph_type)
             self.visibility_states[glyph_type] = visibility
             self.apply_visibility(glyph_type, pictograph)

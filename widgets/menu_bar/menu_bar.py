@@ -41,7 +41,7 @@ class MainWindowMenuBar(QMenuBar):
 
     def _setup_glyph_visibility_menu(self):
         glyph_visibility_menu = self.addMenu("Glyph Visibility")
-        for glyph_type in ["VTG", "TKA", "Elemental"]:
+        for glyph_type in ["VTG", "TKA", "Elemental", "EndPosition"]:
             action = QAction(f"{glyph_type} Glyph", self, checkable=True)
             action.setChecked(
                 self.main_widget.main_window.settings_manager.glyph_visibility_manager.get_glyph_visibility(
