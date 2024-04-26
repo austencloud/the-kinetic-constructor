@@ -6,12 +6,9 @@ from widgets.dictionary.dictionary_widget import DictionaryWidget
 from widgets.sequence_builder.sequence_builder import SequenceBuilder
 from widgets.turn_pattern_widget import TurnPatternWidget
 from PyQt6.QtWidgets import QTabWidget
-from PyQt6.QtGui import QCursor
-from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from widgets.main_widget.top_builder_widget import TopBuilderWidget
-    from ..main_widget.main_widget import MainWidget
 
 
 class BuilderToolbar(QTabWidget):

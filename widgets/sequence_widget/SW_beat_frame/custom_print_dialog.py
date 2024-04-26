@@ -1,8 +1,7 @@
-from email.charset import QP
 from typing import TYPE_CHECKING
 from PyQt6.QtPrintSupport import QPrinter, QPrintDialog
-from PyQt6.QtGui import QPixmap, QTransform, QPainter
-from PyQt6.QtCore import Qt, QRectF
+from PyQt6.QtGui import QPixmap, QPainter
+from PyQt6.QtCore import Qt
 
 from PyQt6.QtWidgets import (
     QDialog,
@@ -20,7 +19,6 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
         SW_Beat_Frame,
     )
-    from widgets.main_widget.main_widget import MainWidget
 
 
 class CustomPrintDialog(QDialog):

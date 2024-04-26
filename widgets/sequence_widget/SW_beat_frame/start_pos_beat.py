@@ -6,7 +6,6 @@ from PyQt6.QtCore import QPointF
 from widgets.sequence_widget.SW_beat_frame.beat import Beat, BeatView
 
 if TYPE_CHECKING:
-    from widgets.main_widget.main_widget import MainWidget
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
         SW_Beat_Frame,
     )

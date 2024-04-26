@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QEnterEvent, QFontMetrics
+from PyQt6.QtGui import QEnterEvent
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import Qt
 from Enums.Enums import LetterType
@@ -10,7 +10,6 @@ if TYPE_CHECKING:
     from widgets.sequence_builder.components.option_picker.option_picker_section_widget import (
         OptionPickerSectionWidget,
     )
-    from ..letterbook_section_widget import LetterBookSectionWidget
 
 
 class SectionTypeLabel(QLabel):

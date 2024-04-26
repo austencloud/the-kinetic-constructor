@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import pyqtSignal, Qt
 
 from widgets.sequence_builder.components.option_picker.option_manager import (

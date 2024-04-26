@@ -1,15 +1,11 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtPrintSupport import QPrintDialog, QPrinter
 from PyQt6.QtGui import QPainter, QPixmap, QPageSize, QPageLayout
-from PyQt6.QtCore import QTemporaryFile, QIODevice, Qt, QPointF, QMarginsF
-import tempfile
+from PyQt6.QtCore import Qt, QPointF, QMarginsF
 from PyQt6.QtWidgets import (
-    QApplication,
     QGraphicsScene,
     QGraphicsPixmapItem,
     QGraphicsView,
-    QDialog,
-    QVBoxLayout,
 )
 
 from widgets.sequence_widget.SW_beat_frame.custom_print_dialog import (

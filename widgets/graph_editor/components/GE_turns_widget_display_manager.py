@@ -1,7 +1,6 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
-from constants import BLUE, RED
 from path_helpers import get_images_and_data_path
 from widgets.graph_editor.components.GE_turns_box_label import GE_TurnsDisplay
 

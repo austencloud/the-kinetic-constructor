@@ -1,7 +1,7 @@
 import json
 import threading
-from PyQt6.QtWidgets import QHBoxLayout, QApplication
-from PyQt6.QtGui import QKeyEvent, QResizeEvent
+from PyQt6.QtWidgets import QApplication
+from PyQt6.QtGui import QKeyEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
@@ -30,10 +30,6 @@ from ..main_widget.special_placement_loader import SpecialPlacementLoader
 from ..pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
     TurnsTupleGenerator,
 )
-from ..main_builder_widget.builder_toolbar import (
-    BuilderToolbar,
-)
-from widgets.sequence_widget.sequence_widget import SequenceWidget
 from PyQt6.QtWidgets import QTabWidget
 
 if TYPE_CHECKING:

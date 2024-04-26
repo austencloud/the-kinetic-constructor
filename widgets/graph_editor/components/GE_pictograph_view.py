@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from widgets.pictograph.components.pictograph_view import PictographView
 from widgets.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPainter, QPen, QColor, QKeyEvent
+from PyQt6.QtGui import QPainter, QPen, QColor
 
 from widgets.sequence_widget.SW_beat_frame.beat import Beat
 

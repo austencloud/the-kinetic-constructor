@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QFileDialog, QCheckBox, QVBoxLayout
+from PyQt6.QtWidgets import QFileDialog, QCheckBox
 
 
 class CustomSaveDialog(QFileDialog):

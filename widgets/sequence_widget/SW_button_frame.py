@@ -3,12 +3,11 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import (
     QPushButton,
-    QHBoxLayout,
     QFrame,
     QVBoxLayout,
 )
 
-from path_helpers import get_images_and_data_path, get_my_photos_path
+from path_helpers import get_images_and_data_path
 
 
 if TYPE_CHECKING:

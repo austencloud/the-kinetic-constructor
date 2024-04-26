@@ -15,7 +15,6 @@ from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout
 
 if TYPE_CHECKING:
     from widgets.main_widget.top_builder_widget import TopBuilderWidget
-    from widgets.main_widget.main_widget import MainWidget
 
 
 class DictionaryWidget(QWidget):

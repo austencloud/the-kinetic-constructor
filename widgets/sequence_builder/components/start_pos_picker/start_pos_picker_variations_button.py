@@ -1,23 +1,11 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QPushButton
+from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtGui import QFont, QEnterEvent
-from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtCore import Qt
 
-from .start_pos_manager import StartPosManager
-from ....pictograph.pictograph import Pictograph
 
-from widgets.sequence_builder.components.start_pos_picker.start_pos_pictograph_frame import (
-    StartPosPickerPictographFrame,
-)
-from ....scroll_area.components.start_pos_picker_pictograph_factory import (
-    StartPosPickerPictographFactory,
-)
-from .choose_your_start_pos_label import (
-    ChooseYourStartPosLabel,
-)
 
 if TYPE_CHECKING:
-    from ...sequence_builder import SequenceBuilder
     from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import (
         StartPosPicker,
     )

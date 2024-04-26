@@ -1,10 +1,9 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt, QRect, QRectF, QSize, QByteArray
+from PyQt6.QtCore import Qt, QRectF, QByteArray
 from PyQt6.QtGui import (
     QPainter,
     QColor,
     QCursor,
-    QPainterPath,
     QBrush,
     QLinearGradient,
     QPen,

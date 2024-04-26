@@ -1,18 +1,13 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from constants import (
-    ANTI,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     ICON_DIR,
     OPP,
-    PRO,
     PROP_ROT_DIR,
     SAME,
 )
 from Enums.MotionAttributes import (
-    Color,
-    LeadStates,
-    MotionType,
     PropRotDir,
 )
 from Enums.Enums import VTG_Directions

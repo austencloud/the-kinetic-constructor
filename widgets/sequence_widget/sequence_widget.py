@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget, QHBoxLayout
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout
 
 from widgets.sequence_widget.my_sequence_label import MySequenceLabel
 from widgets.sequence_widget.sequence_modifier import SequenceModifier
@@ -15,7 +15,6 @@ from .SW_button_frame import SequenceWidgetButtonFrame
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from widgets.main_widget.main_widget import MainWidget
     from widgets.main_widget.top_builder_widget import TopBuilderWidget
 
 

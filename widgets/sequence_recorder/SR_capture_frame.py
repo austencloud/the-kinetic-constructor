@@ -1,9 +1,8 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QHBoxLayout, QSizePolicy, QFrame, QApplication
 from PyQt6.QtCore import Qt
-import cv2
 
-from path_helpers import get_my_videos_path, get_user_editable_resource_path
+from path_helpers import get_my_videos_path
 from widgets.sequence_recorder.SR_beat_frame import (
     SR_BeatFrame,
 )
