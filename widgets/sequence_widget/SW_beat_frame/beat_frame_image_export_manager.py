@@ -12,11 +12,13 @@ if TYPE_CHECKING:
 
 
 class BeatFrameImageExportManager:
+    last_save_directory = None  # Class variable to store the last save directory
+
     def __init__(self, beat_frame: "SW_Beat_Frame") -> None:
         self.beat_frame = beat_frame
         self.indicator_label = beat_frame.sequence_widget.indicator_label
 
-    def save_image(self) -> None:
+    def save_image(self):
         word = self.beat_frame.get_current_word()
         if word == "":
             self.indicator_label.show_message(
@@ -24,28 +26,33 @@ class BeatFrameImageExportManager:
             )
             return
 
-        default_save_path = get_my_photos_path(f"{word}.png")
-
+        # Set the initial directory
+        initial_directory = self.last_save_directory or get_my_photos_path(
+            f"{word}.png"
+        )
         file_name, _ = QFileDialog.getSaveFileName(
             self.beat_frame,
             "Save Image",
-            default_save_path,
+            initial_directory,
             "Images (*.png *.jpeg *.jpg)",
         )
 
         if not file_name:
-            return
+            return  # No file was selected or dialog was canceled
 
+        self.last_save_directory = file_name.rpartition("/")[
+            0
+        ]  # Update the last saved directory
+
+        # Save the image (rest of your existing code to generate the image)
         filled_beats = [beat for beat in self.beat_frame.beats if beat.is_filled]
         column_count, row_count = self._calculate_layout(len(filled_beats))
-        # deselect everything in each of hte beat scenes
         for beat in filled_beats:
             beat.scene().clearSelection()
         beat_frame_image = self._create_image(column_count, row_count)
         self._draw_beats(beat_frame_image, filled_beats, column_count, row_count)
 
         beat_frame_image.save(file_name, "PNG")
-        # Show a message with the name of the file where it was saved
         self.indicator_label.show_message(f"Image saved as {file_name.split('/')[-1]}")
 
     def _create_image(self, column_count, row_count) -> QImage:
@@ -124,7 +131,7 @@ class BeatFrameImageExportManager:
             1: (2, 1),
             2: (3, 1),
             3: (4, 1),
-            4: (3, 2),
+            4: (5, 1),
             5: (4, 2),
             6: (4, 2),
             8: (5, 2),

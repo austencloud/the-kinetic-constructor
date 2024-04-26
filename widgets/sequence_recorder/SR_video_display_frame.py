@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (
     QApplication,
     QFrame,
 )
-from PyQt6.QtCore import QTimer, Qt
+from PyQt6.QtCore import QTimer, Qt, pyqtSignal
 from PyQt6.QtGui import QImage, QPixmap, QFont
 
 from path_helpers import (
@@ -23,6 +23,8 @@ if TYPE_CHECKING:
 
 
 class SR_VideoDisplayFrame(QFrame):
+    init_webcam_requested = pyqtSignal()
+
     def __init__(self, capture_frame: "SR_CaptureFrame") -> None:
         super().__init__()
         self.capture_frame = capture_frame
@@ -33,6 +35,11 @@ class SR_VideoDisplayFrame(QFrame):
         self.recording_frames = []
         self.video_writer = None
         self.init_ui()
+        self.init_webcam_requested.connect(self.init_webcam)
+
+    def request_init_webcam(self):
+        """Emit signal to initialize webcam in a thread-safe manner."""
+        self.init_webcam_requested.emit()
 
     def init_ui(self) -> None:
         self.video_display = QLabel("Webcam Feed")
@@ -60,6 +67,7 @@ class SR_VideoDisplayFrame(QFrame):
             self.video_timer = QTimer(self)
             self.video_timer.timeout.connect(self.update_video_feed)
             self.update_timer_interval()
+        print("Webcam initialized successfully.")
 
     def find_available_cameras(self) -> list[int]:
         available_cameras = []

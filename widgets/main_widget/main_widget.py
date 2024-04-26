@@ -1,4 +1,5 @@
 import json
+import threading
 from PyQt6.QtWidgets import QHBoxLayout, QApplication
 from PyQt6.QtGui import QKeyEvent, QResizeEvent
 from PyQt6.QtCore import Qt
@@ -51,7 +52,19 @@ class MainWidget(QTabWidget):
         self.currentChanged.connect(self.on_tab_changed)
         self.setStyleSheet(get_tab_stylesheet())
         self.webcam_initialized = False  # Add an initialization flag
-        self.initialized = False
+        self.initialize_webcam_async()  # Start webcam initialization
+        self.initialized = True
+
+    def initialize_webcam_async(self):
+        """Start the webcam initialization in a separate thread to avoid blocking the UI."""
+        thread = threading.Thread(target=self.init_webcam, daemon=True)
+        print("Starting webcam initialization thread")
+        thread.start()
+
+    def init_webcam(self):
+        """Method to request webcam initialization via signal."""
+        self.sequence_recorder.capture_frame.video_display_frame.request_init_webcam()
+        print("Webcam initialization requested")
 
     def _setup_pictograph_cache(self) -> None:
         self.pictograph_cache: dict[str, dict[str, "Pictograph"]] = {}
@@ -132,12 +145,11 @@ class MainWidget(QTabWidget):
                     QApplication.processEvents()
 
             QApplication.processEvents()
-            if not self.webcam_initialized:
-                self.sequence_recorder.capture_frame.video_display_frame.init_webcam()
-                self.webcam_initialized = True
+            # if not self.webcam_initialized:
+            #     self.sequence_recorder.capture_frame.video_display_frame.init_webcam()
+            #     self.webcam_initialized = True
 
     def showEvent(self, event) -> None:
         super().showEvent(event)
         self.main_window.window_manager.set_dimensions()
         self.on_tab_changed()
-
