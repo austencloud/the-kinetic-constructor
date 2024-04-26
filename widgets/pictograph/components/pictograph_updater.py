@@ -31,7 +31,7 @@ class PictographUpdater:
                 self.pictograph.turns_tuple = self.pictograph.get.turns_tuple()
                 self.pictograph.vtg_glyph.set_vtg_mode()
                 self.pictograph.elemental_glyph.set_elemental_glyph()
-                self.pictograph.end_pos_glyph.update_position(self.get_end_pos())
+                self.pictograph.start_to_end_pos_glyph.set_start_to_end_pos_glyph()
                 self.pictograph.container.update_borders()
             else:
                 self._update_from_pictograph_dict(pictograph_dict)

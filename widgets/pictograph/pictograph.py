@@ -20,7 +20,7 @@ from objects.prop.prop import Prop
 
 
 from widgets.pictograph.components.elemental_glyph.elemental_glyph import ElementalGlyph
-from widgets.pictograph.components.end_pos_glyph.end_pos_glyph import EndPositionGlyph
+from widgets.pictograph.components.start_to_end_pos_glyph.start_to_end_pos_glyph import StartToEndPosGlyph
 from widgets.pictograph.components.tka_glyph.tka_glyph import TKA_Glyph
 from widgets.pictograph.components.vtg_glyph.vtg_glyph import VTG_Glyph
 from widgets.pictograph.components.pictograph_container import (
@@ -77,7 +77,7 @@ class Pictograph(QGraphicsScene):
     dragged_arrow: Arrow
     dragged_prop: Prop
     tka_glyph: TKA_Glyph
-    end_pos_glyph: EndPositionGlyph
+    start_to_end_pos_glyph: StartToEndPosGlyph
     grid: Grid
     locations: dict[Location, tuple[int, int, int, int]]
     red_motion: Motion

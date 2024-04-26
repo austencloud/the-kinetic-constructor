@@ -11,7 +11,9 @@ from objects.prop.prop_classes import *
 from constants import *
 from widgets.factories.prop_factory import PropFactory
 from widgets.pictograph.components.elemental_glyph.elemental_glyph import ElementalGlyph
-from widgets.pictograph.components.end_pos_glyph.end_pos_glyph import EndPositionGlyph
+from widgets.pictograph.components.start_to_end_pos_glyph.start_to_end_pos_glyph import (
+    StartToEndPosGlyph,
+)
 from widgets.pictograph.components.tka_glyph.tka_glyph import TKA_Glyph
 
 from widgets.pictograph.components.vtg_glyph.vtg_glyph import (
@@ -43,7 +45,7 @@ class PictographInitializer:
         self.pictograph.tka_glyph = self.init_tka_glyph()
         self.pictograph.vtg_glyph = self.init_vtg_glyph()
         self.pictograph.elemental_glyph = self.init_elemental_glyph()
-        self.pictograph.end_pos_glyph = self.init_end_position_glyph()
+        self.pictograph.start_to_end_pos_glyph = self.init_start_to_end_pos_glyph()
 
     def init_grid(self) -> Grid:
         grid = Grid(self.pictograph)
@@ -121,12 +123,11 @@ class PictographInitializer:
         elemental_glyph = ElementalGlyph(self.pictograph)
         return elemental_glyph
 
-    def init_end_position_glyph(self):
-        end_position_glyph = EndPositionGlyph(self.pictograph)
-        end_position_glyph.addToScene()
-        if hasattr(self.pictograph, "end_pos"):
-            end_position_glyph.update_position(self.pictograph.end_pos)
-        return end_position_glyph
+    def init_start_to_end_pos_glyph(self) -> StartToEndPosGlyph:
+        start_to_end_glyph = StartToEndPosGlyph(self.pictograph)
+        self.pictograph.addItem(start_to_end_glyph)  # Make sure it's added to the scene
+        # start_to_end_glyph.set_start_to_end_pos_glyph()  # Set positions and load SVGs
+        return start_to_end_glyph
 
     def init_quadrant_boundaries(
         self, grid: Grid
