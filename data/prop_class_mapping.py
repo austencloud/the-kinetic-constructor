@@ -13,6 +13,7 @@ prop_class_mapping = {
     PropType.BigBuugeng: BigBuugeng,
     PropType.Fractalgeng: Fractalgeng,
     PropType.EightRings: EightRings,
+    PropType.BigEightRings: BigEightRings,
     PropType.Triad: Triad,
     PropType.DoubleStar: DoubleStar,
     PropType.BigHoop: BigHoop,

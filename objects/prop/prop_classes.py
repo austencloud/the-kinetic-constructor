@@ -74,6 +74,10 @@ class EightRings(Prop):
         attributes[PROP_TYPE] = PropType.EightRings
         super().__init__(pictograph, attributes, motion)
 
+class BigEightRings(Prop):
+    def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
+        attributes[PROP_TYPE] = PropType.BigEightRings
+        super().__init__(pictograph, attributes, motion)
 
 class DoubleStar(Prop):
     def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:

@@ -11,6 +11,7 @@ class PropType(Enum):
     BigBuugeng = auto()
     Fractalgeng = auto()
     EightRings = auto()
+    BigEightRings = auto()
     Fan = auto()
     Triad = auto()
     MiniHoop = auto()
@@ -46,6 +47,7 @@ big_bilateral_prop_types = [
     PropType.BigStaff,
     PropType.BigBuugeng,
     PropType.BigDoubleStar,
+    PropType.BigEightRings,
 ]
 small_bilateral_prop_types = [
     PropType.Staff,
@@ -67,6 +69,8 @@ non_strictly_placed_props = [
     PropType.Chicken,
     PropType.Fractalgeng,
     PropType.EightRings,
+    PropType.BigEightRings,
+
 ]
 strictly_placed_props = [
     PropType.BigHoop,
