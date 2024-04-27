@@ -54,27 +54,16 @@ class SequenceBuilder(QFrame):
 
         self.layout().addWidget(self.advanced_start_pos_picker)
         self.advanced_start_pos_picker.hide()  # Initially hidden
-        # self.setStyleSheet(
-        #     """
-        #     SequenceBuilder {
-        #         background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-        #                                         stop:0 blue, stop:1 red);
-        #     }
-        # """
-        # )
-        # Animation related attributes
 
     def transition_to_sequence_building(self) -> None:
         self.start_position_picked = True
         self._hide_start_pos_picker()
         self._hide_advanced_start_pos_picker()
         self._show_option_picker()
-        # QApplication.restoreOverrideCursor()
 
     def transition_to_advanced_start_pos_picker(self) -> None:
         self._hide_start_pos_picker()
         self.show_advanced_start_pos_picker()
-        # QApplication.restoreOverrideCursor()
 
     def _hide_advanced_start_pos_picker(self) -> None:
         self.advanced_start_pos_picker.hide()

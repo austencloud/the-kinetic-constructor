@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+from Enums.letters import Letter
+
 
 if TYPE_CHECKING:
     from main import MainWindow
@@ -32,7 +34,15 @@ class GlyphVisibilityManager:
         for glyph_type in ["VTG", "TKA", "Elemental", "EndPosition"]:
             visibility = self.get_glyph_visibility(glyph_type)
             self.visibility_states[glyph_type] = visibility
+
             self.apply_visibility(glyph_type, pictograph)
+            # if the pictograph is in the start pos picker frame then don't show the start to end pos glyph
+            self.sequence_builder = (
+                self.main_window.main_widget.top_builder_widget.builder_toolbar.sequence_builder
+            )
+            if pictograph.letter in [Letter.α, Letter.β, Letter.Γ]:
+                # hide the start to end pos glyph
+                pictograph.start_to_end_pos_glyph.setVisible(False)
 
     def should_glyph_be_visible(self, glyph_type: str) -> bool:
         return self.get_glyph_visibility(glyph_type)

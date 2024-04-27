@@ -63,6 +63,7 @@ class StartPosManager(QObject):
                     start_position_pictograph.view.mousePressEvent = partial(
                         self.on_start_pos_clicked, start_position_pictograph
                     )
+                    start_position_pictograph.start_to_end_pos_glyph.hide()
 
     def on_start_pos_clicked(
         self, clicked_start_option: Pictograph, event: QWidget = None
@@ -153,9 +154,10 @@ class StartPosManager(QObject):
                         pictograph_dict
                     )
                 )
-                return pictograph_factory.get_or_create_pictograph(
+                start_pos_pictograph = pictograph_factory.get_or_create_pictograph(
                     pictograph_key, pictograph_dict
                 )
+                return start_pos_pictograph
 
         print(f"No matching start position found for key: {start_pos_key}")
         return None

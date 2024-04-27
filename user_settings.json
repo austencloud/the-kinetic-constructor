@@ -1,11 +1,11 @@
 {
     "pictograph_size": 1,
-    "prop_type": "BigEightRings",
+    "prop_type": "Staff",
     "glyph_visibility": {
         "VTG": false,
         "TKA": true,
         "Elemental": false,
-        "EndPosition": true
+        "EndPosition": false
     },
     "default_left_orientation": "in",
     "default_right_orientation": "in",
