@@ -1,28 +1,10 @@
 - The settings panel needs to drop down with various options, rather than open up a dialog every time.
 
-- Incorporate a widget for modifying the turns of pictographs within the sequence widget.
-
-- Adjust the start position picker to allow selecting the orientations of starting pictographs.
-
-- Optimize changing the prop type to only modify visible pictographs.
-
-- Add a setting to remove the colored border in the settings.
-
-- Adjust the thickness of the colored border based on the size of the pictograph.
-
-- Add right-click options to each pictograph for actions like adding turns.
-
-- Enable selecting and modifying turns for specific pictographs in the sequence.
-
 - Integrate a miniature graph to select and modify turns for entire rows or columns.
 
 - Allow easy selection of the sequence length.
-
-- Allow deleting a specific entry in the sequence with options to delete following entries.
 
 - Update the sequence builder to reflect the last pictograph when loading a sequence from the dictionary.
 
 - Add the word start above the start position pictograph.
 
-
-MONGO DB!!!

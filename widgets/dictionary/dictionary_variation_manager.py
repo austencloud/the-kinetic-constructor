@@ -103,7 +103,6 @@ class DictionaryVariationManager:
         pattern_folder_json = os.path.join(self.base_dictionary_folder, base_pattern)
         os.makedirs(pattern_folder_json, exist_ok=True)
 
-        # Ensure the pattern folder for thumbnails exists
         pattern_folder_thumb = os.path.join(thumbnail_path, base_pattern)
         os.makedirs(pattern_folder_thumb, exist_ok=True)
 
