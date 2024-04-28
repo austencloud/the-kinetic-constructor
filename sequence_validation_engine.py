@@ -7,19 +7,22 @@ if TYPE_CHECKING:
     )
 
 
-class CurrentSequenceJsonValidationEngine:
+class SequenceValidationEngine:
     def __init__(
         self, current_sequence_json_handler: "CurrentSequenceJsonHandler"
     ) -> None:
-        self.json_handler = current_sequence_json_handler
-
-    def validate_and_update_sequence_json(self) -> None:
+        self.current_sequence_json_handler = current_sequence_json_handler
+        self.ori_calculator = self.current_sequence_json_handler.ori_calculator
+        
+    def validate_and_update_sequence_json(self,  is_current_sequence=False) -> None:
         """Iterates through the sequence, updating start and end orientations to ensure continuity."""
         for index, _ in enumerate(self.sequence):
             if index > 0:
                 self.update_json_entry_start_orientation(index)
                 self.update_json_entry_end_orientation(index)
-        self.json_handler.save_current_sequence(self.sequence)
+                
+        if is_current_sequence:
+            self.current_sequence_json_handler.save_current_sequence(self.sequence)
 
     def update_json_entry_start_orientation(self, index) -> None:
         """Updates the start orientation of the current pictograph based on the previous one's end orientation."""
@@ -36,12 +39,13 @@ class CurrentSequenceJsonValidationEngine:
         """Recalculates and updates the end orientation of the current pictograph."""
         pictograph_dict = self.sequence[index]
         for color in [RED, BLUE]:
-            end_ori = self.json_handler.ori_calculator.calculate_end_orientation(
+            end_ori = self.ori_calculator.calculate_end_orientation(
                 pictograph_dict, color
             )
             pictograph_dict[f"{color}_attributes"]["end_ori"] = end_ori
-
-    def run(self) -> None:
+            self.sequence[index] = pictograph_dict
+            
+    def run(self, is_current_sequence=False) -> None:
         """Public method to run the sequence validation and update process."""
-        self.sequence = self.json_handler.load_current_sequence_json()
-        self.validate_and_update_sequence_json()
+        self.sequence = self.current_sequence_json_handler.load_current_sequence_json()
+        self.validate_and_update_sequence_json(is_current_sequence)

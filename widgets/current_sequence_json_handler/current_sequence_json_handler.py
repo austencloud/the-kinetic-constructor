@@ -7,8 +7,8 @@ from .motion_orientation_json_calculator import CurrentSequenceJsonOriCalculator
 from widgets.pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING, Union
 
-from objects.motion.current_sequence_json_validation_engine import (
-    CurrentSequenceJsonValidationEngine,
+from sequence_validation_engine import (
+    SequenceValidationEngine,
 )
 
 if TYPE_CHECKING:
@@ -24,7 +24,7 @@ class CurrentSequenceJsonHandler:
         )
 
         self.ori_calculator = CurrentSequenceJsonOriCalculator(self)
-        self.validation_engine = CurrentSequenceJsonValidationEngine(self)
+        self.validation_engine = SequenceValidationEngine(self)
 
         self.clear_current_sequence_file()  # Clears or initializes the file at the new location
 
@@ -40,14 +40,25 @@ class CurrentSequenceJsonHandler:
 
         start_position_dict = {
             "sequence_start_position": start_pos_pictograph.end_pos[:-1],
+            "letter": start_pos_pictograph.letter.name,
             "end_pos": start_pos_pictograph.end_pos,
             "blue_attributes": {
+                "start_loc": start_pos_pictograph.blue_motion.start_loc,
                 "end_loc": start_pos_pictograph.blue_motion.end_loc,
+                "start_ori": blue_start_ori,
                 "end_ori": blue_start_ori,
+                "prop_rot_dir": NO_ROT,
+                "turns": 0,
+                "motion_type": start_pos_pictograph.blue_motion.motion_type,
             },
             "red_attributes": {
+                "start_loc": start_pos_pictograph.red_motion.start_loc,
                 "end_loc": start_pos_pictograph.red_motion.end_loc,
+                "start_ori": red_start_ori,
                 "end_ori": red_start_ori,
+                "prop_rot_dir": NO_ROT,
+                "turns": 0,
+                "motion_type": start_pos_pictograph.red_motion.motion_type,
             },
         }
 
@@ -199,7 +210,7 @@ class CurrentSequenceJsonHandler:
                 beat_view.beat.get.pictograph_dict().update(entry)
 
         self.save_current_sequence(sequence)
-        self.validation_engine.run()
+        self.validation_engine.run(is_current_sequence=True)
         sequence = self.load_current_sequence_json()
         self.main_widget.top_builder_widget.sequence_widget.beat_frame.propogate_turn_adjustment(
             sequence

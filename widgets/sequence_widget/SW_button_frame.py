@@ -1,13 +1,14 @@
+import json
+import os
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import (
-    QPushButton,
-    QFrame,
-    QVBoxLayout,
-)
-
+from PyQt6.QtGui import QIcon, QImage, QPainter
+from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout
+from PIL import Image, PngImagePlugin
+import numpy as np
 from path_helpers import get_images_and_data_path
+from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_Beat_Frame
+from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager
 
 
 if TYPE_CHECKING:
@@ -32,7 +33,7 @@ class SequenceWidgetButtonFrame(QFrame):
         self.sequence_widget = sequence_widget
         self.orientations = ["in", "counter", "out", "clock"]
         self.font_size = self.sequence_widget.width() // 45
-
+        self.add_to_dictionary_manager = AddToDictionaryManager(self.sequence_widget)
         self._setup_dependencies()
         self._setup_buttons()
         self._setup_layout()
@@ -54,7 +55,7 @@ class SequenceWidgetButtonFrame(QFrame):
         button_dict = {
             "add_to_dictionary": {
                 "icon_path": "add_to_dictionary.svg",
-                "callback": self.add_to_dictionary,
+                "callback": self.add_to_dictionary_manager.add_to_dictionary,
                 "tooltip": "Add to Dictionary",
             },
             "save_image": {
@@ -62,11 +63,7 @@ class SequenceWidgetButtonFrame(QFrame):
                 "callback": lambda: self.save_image_manager.save_image(),
                 "tooltip": "Save Image",
             },
-            # "print_sequence": {
-            #     "icon_path": "print_sequence.svg",
-            #     "callback": lambda: self.print_sequence_manager.print_sequence(),
-            #     "tooltip": "Print Sequence",
-            # },
+
             "clear_sequence": {
                 "icon_path": "clear.svg",
                 "callback": lambda: self.clear_sequence(show_indicator=True),
@@ -99,27 +96,6 @@ class SequenceWidgetButtonFrame(QFrame):
         for button in self.buttons:
             self.layout.addWidget(button)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-    def add_to_dictionary(self) -> None:
-        self.sequence = self.json_handler.load_current_sequence_json()
-
-        base_pattern = "".join(
-            pictograph.get("letter", "")
-            for pictograph in self.sequence
-            if "letter" in pictograph
-        )
-        if base_pattern:
-
-            self.variation_manager.save_structural_variation(
-                self.sequence, base_pattern
-            )
-            self.indicator_label.show_message(f"{base_pattern} added to dictionary!")
-
-            self.main_widget.top_builder_widget.builder_toolbar.dictionary.reload_dictionary_tab()
-        else:
-            self.indicator_label.show_message(
-                "You must build a sequence to add it to your dictionary."
-            )
 
     def clear_sequence(
         self, show_indicator=True, should_reset_to_start_pos_picker=True

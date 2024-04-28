@@ -112,7 +112,7 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.current_orientation_index = self.orientations.index(orientation)
         self.ori_display_label.setText(orientation)
         self.current_sequence_json_handler.update_start_pos_ori(self.color, orientation)
-        self.json_validation_engine.run()
+        self.json_validation_engine.run(is_current_sequence=True)
         self.ori_adjusted.emit(orientation)
         current_pictograph = (
             self.ori_picker_box.graph_editor.GE_pictograph_view.pictograph
@@ -142,7 +142,7 @@ class GE_StartPosOriPickerWidget(QWidget):
             self.ori_picker_box.graph_editor.GE_pictograph_view.pictograph
         )
         self.current_sequence_json_handler.update_start_pos_ori(self.color, new_ori)
-        self.json_validation_engine.run()
+        self.json_validation_engine.run(is_current_sequence=True)
         self.ori_adjusted.emit(new_ori)
         current_pictograph.props[self.color].updater.update_prop({ORI: new_ori})
         current_pictograph.updater.update_pictograph()

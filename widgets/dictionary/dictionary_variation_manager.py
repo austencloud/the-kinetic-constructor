@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 import sys
 from PyQt6.QtWidgets import QInputDialog, QMessageBox
+from PyQt6.QtGui import QImage
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -87,21 +88,68 @@ class DictionaryVariationManager:
                 f"The variation '{variation_name}' could not be found.",
             )
 
-    def save_structural_variation(self, sequence_data: dict, base_pattern: str) -> None:
-        """Saves or updates a structural variation for a given base pattern."""
-        pattern_folder = os.path.join(self.base_dictionary_folder, base_pattern)
-        os.makedirs(pattern_folder, exist_ok=True)
+    def _get_next_version_filename(self, base_path, base_name, extension):
+        version = 1
+        while True:
+            versioned_filename = f"{base_name}_v{version}{extension}"
+            if not os.path.exists(os.path.join(base_path, versioned_filename)):
+                return versioned_filename
+            version += 1
 
-        year = datetime.now().strftime("%y")
-        month = datetime.now().strftime("%m").lstrip("0")
-        day = datetime.now().strftime("%d").lstrip("0")
+    def save_structural_variation(
+        self, sequence_data: dict, base_pattern: str, thumbnail_path: str
+    ) -> None:
+        # Ensure the pattern folder for JSON exists
+        pattern_folder_json = os.path.join(self.base_dictionary_folder, base_pattern)
+        os.makedirs(pattern_folder_json, exist_ok=True)
 
-        timestamp = datetime.now().strftime(f"{month}-{day}-{year}")
-        variation_name = f"{base_pattern}_{timestamp}"
-        variation_filepath = self.get_variation_filepath(base_pattern, variation_name)
+        # Ensure the pattern folder for thumbnails exists
+        pattern_folder_thumb = os.path.join(thumbnail_path, base_pattern)
+        os.makedirs(pattern_folder_thumb, exist_ok=True)
 
-        with open(variation_filepath, "w", encoding="utf-8") as file:
+        # Find the next version for JSON
+        existing_json = self._get_existing_variations(pattern_folder_json, base_pattern)
+        json_filename = self._get_next_version_filename(
+            pattern_folder_json, base_pattern, ".json"
+        )
+
+        # Find the next version for thumbnail
+        thumbnail_filename = self._get_next_version_filename(
+            pattern_folder_thumb, base_pattern, ".png"
+        )
+
+        # Save JSON
+        variation_json_path = os.path.join(pattern_folder_json, json_filename)
+        with open(variation_json_path, "w", encoding="utf-8") as file:
             json.dump(sequence_data, file, indent=4, ensure_ascii=False)
+
+        # Save Thumbnail
+        variation_thumb_path = os.path.join(pattern_folder_thumb, thumbnail_filename)
+        thumbnail_image = QImage(
+            thumbnail_path
+        )  # Assuming thumbnail_path is the path to the image in memory
+        thumbnail_image.save(variation_thumb_path, "PNG")
+
+        return variation_json_path, variation_thumb_path
+
+    def _get_existing_variations(self, pattern_folder: str, base_pattern: str) -> list:
+        # List all files in the pattern folder that start with the base pattern
+        return [
+            filename
+            for filename in os.listdir(pattern_folder)
+            if filename.startswith(base_pattern) and filename.endswith(".json")
+        ]
+
+    def _get_next_version_number(self, existing_variations: list) -> int:
+        # Extract version numbers from the existing files
+        version_numbers = [
+            int(filename.split("_v")[-1].split(".json")[0])
+            for filename in existing_variations
+            if "_v" in filename
+        ]
+        if not version_numbers:
+            return 1
+        return max(version_numbers) + 1
 
     def get_variation_filepath(self, base_pattern: str, variation_name: str) -> str:
         if getattr(sys, "frozen", False):

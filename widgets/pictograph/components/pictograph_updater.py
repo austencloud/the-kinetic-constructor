@@ -22,11 +22,11 @@ class PictographUpdater:
 
         If there is no dict, the pictograph will update its children without reference to a dict.
         """
-
+        if not self.pictograph.get.is_initialized:
+            self.pictograph.get.initiallize_getter()
         if pictograph_dict:
             if self.pictograph.check.is_pictograph_dict_complete(pictograph_dict):
                 self.pictograph.pictograph_dict = pictograph_dict
-                self.pictograph.get.initiallize_getter()
                 self._update_from_pictograph_dict(pictograph_dict)
                 self.pictograph.turns_tuple = self.pictograph.get.turns_tuple()
                 self.pictograph.vtg_glyph.set_vtg_mode()

@@ -42,16 +42,18 @@ class BeatDeletionManager:
         else:
             self._delete_non_first_beat(selected_beat)
 
-    def _delete_non_first_beat(self, selected_beat):
+        #update the current sequence json to reflect the changes
+        self.current_sequence_json_handler.clear_and_repopulate_the_current_sequence()
+        self.sequence_builder.option_picker.update_option_picker()
 
+
+    def _delete_non_first_beat(self, selected_beat):
         self.delete_beat(selected_beat)
         for i in range(self.beats.index(selected_beat), len(self.beats)):
             self.delete_beat(self.beats[i])
         last_beat = self.beat_frame.get_last_filled_beat()
         self.selection_manager.select_beat(last_beat)
         self.sequence_builder.current_pictograph = last_beat.beat
-        self.current_sequence_json_handler.clear_and_repopulate_the_current_sequence()
-        self.sequence_builder.option_picker.update_option_picker()
 
     def _delete_first_beat(self, selected_beat):
         self.start_pos_view = self.beat_frame.start_pos_view

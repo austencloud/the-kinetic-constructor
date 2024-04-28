@@ -1,33 +1,20 @@
 from typing import TYPE_CHECKING
-
 from PyQt6.QtWidgets import QGridLayout, QFrame, QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
-from widgets.sequence_widget.SW_beat_frame.beat_deletion_manager import (
-    BeatDeletionManager,
-)
-from widgets.sequence_widget.SW_beat_frame.beat_frame_image_export_manager import (
-    BeatFrameImageExportManager,
-)
-from widgets.sequence_widget.SW_beat_frame.beat_frame_print_manager import (
-    BeatFramePrintManager,
-)
-from widgets.sequence_widget.SW_beat_frame.beat_selection_overlay import (
-    SequenceWidgetBeatSelectionOverlay,
-)
-from widgets.sequence_widget.SW_beat_frame.start_pos_beat import (
-    StartPositionBeat,
-)
-from widgets.sequence_widget.SW_beat_frame.start_pos_beat import (
-    StartPositionBeatView,
-)
 
+from .beat_deletion_manager import BeatDeletionManager
+from .beat_frame_image_export_manager import BeatFrameImageExportManager
+from .beat_frame_print_manager import BeatFramePrintManager
+from .beat_selection_overlay import SequenceWidgetBeatSelectionOverlay
+from .start_pos_beat import StartPositionBeat
+from .start_pos_beat import StartPositionBeatView
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
-from widgets.sequence_widget.SW_beat_frame.beat import BeatView
+from .beat import Beat, BeatView
 
 
 class SW_Beat_Frame(QFrame):
@@ -60,6 +47,37 @@ class SW_Beat_Frame(QFrame):
             ):
                 self._add_beat_to_layout(j, i)
 
+    def set_sequence(self, sequence: list[dict]) -> None:
+        """
+        Sets the sequence in the beat frame by creating/updating beats based on the sequence data.
+        Each dictionary in the sequence represents one beat or start position data.
+        """
+        if not sequence:
+            return
+
+        # Clear existing beats if they are already filled
+        for beat_view in self.beats:
+            if beat_view.is_filled:
+                beat_view.clear_beat()
+
+        # First entry usually sets the start position
+        if "start_pos" in sequence[0]:
+            self.start_pos_view.set_beat(sequence[0])
+            sequence = sequence[1:]  # Remove the start_pos entry if it's dedicated
+
+        # Set up each beat according to the sequence
+        for idx, beat_data in enumerate(sequence):
+            if idx < len(self.beats):
+                new_beat = Beat(self)
+                self.beats[idx].set_beat(new_beat, idx)
+                new_beat.pictograph_dict = beat_data
+                new_beat.updater.update_pictograph(beat_data)
+            else:
+                # If there are more items in the sequence than views, log an error or handle it appropriately
+                print(
+                    f"Error: More sequence items than available beats. Index {idx} is out of range."
+                )
+
     def _add_beat_to_layout(self, row: int, col: int, number=None) -> None:
         beat_view = BeatView(self, number)
         self.layout.addWidget(beat_view, row, col)
@@ -77,7 +95,6 @@ class SW_Beat_Frame(QFrame):
         self.layout: QGridLayout = QGridLayout(self)
         self.layout.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
-        self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.addWidget(self.start_pos_view, 0, 0)
 

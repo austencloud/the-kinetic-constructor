@@ -123,8 +123,8 @@ class SequenceBuilder(QFrame):
         self.current_end_red_ori = json_handler.get_red_end_ori(sequence)
         self.current_end_blue_ori = json_handler.get_blue_end_ori(sequence)
 
-        pictograph_dict[RED_START_ORI] = self.current_end_red_ori
-        pictograph_dict[BLUE_START_ORI] = self.current_end_blue_ori
+        pictograph_dict["red_attributes"][RED_START_ORI] = self.current_end_red_ori
+        pictograph_dict["blue_attributes"][BLUE_START_ORI] = self.current_end_blue_ori
         pictograph_dict[RED_TURNS] = 0
         pictograph_dict[BLUE_TURNS] = 0
         return pictograph_dict

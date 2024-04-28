@@ -1,3 +1,4 @@
+import os
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QImage, QPainter, QPixmap
@@ -27,35 +28,36 @@ class BeatFrameImageExportManager:
             return
 
         # Set the initial directory
-        initial_directory = self.last_save_directory or get_my_photos_path(
-            f"{word}.png"
-        )
-        file_name, _ = QFileDialog.getSaveFileName(
-            self.beat_frame,
-            "Save Image",
-            initial_directory,
-            "Images (*.png *.jpeg *.jpg)",
-        )
+        if not self.last_save_directory:
+            dir = get_my_photos_path(f"{word}.png")
+        else:
+            dir = self.last_save_directory
 
-        if not file_name:
-            return  # No file was selected or dialog was canceled
+        version_number = 1
+        while True:
+            versioned_filename = f"{word}_v{version_number}.png"
+            if not os.path.exists(os.path.join(dir, versioned_filename)):
+                break
+            version_number += 1
 
-        self.last_save_directory = file_name.rpartition("/")[
-            0
-        ]  # Update the last saved directory
+        file_name = f"{dir}/{versioned_filename}"
+
+        self.last_save_directory = os.path.dirname(file_name)
 
         # Save the image (rest of your existing code to generate the image)
         filled_beats = [beat for beat in self.beat_frame.beats if beat.is_filled]
         column_count, row_count = self._calculate_layout(len(filled_beats))
         for beat in filled_beats:
             beat.scene().clearSelection()
-        beat_frame_image = self._create_image(column_count, row_count)
+        beat_frame_image = self.create_image(column_count, row_count)
         self._draw_beats(beat_frame_image, filled_beats, column_count, row_count)
 
         beat_frame_image.save(file_name, "PNG")
         self.indicator_label.show_message(f"Image saved as {file_name.split('/')[-1]}")
+        # return the image
+        return beat_frame_image
 
-    def _create_image(self, column_count, row_count) -> QImage:
+    def create_image(self, column_count, row_count) -> QImage:
         self.beat_size = int(self.beat_frame.start_pos_view.beat.width())
 
         image_width = column_count * self.beat_size
@@ -70,7 +72,7 @@ class BeatFrameImageExportManager:
         filled_beats = [beat for beat in self.beat_frame.beats if beat.is_filled]
         column_count, row_count = self._calculate_layout(len(filled_beats))
 
-        beat_frame_image = self._create_image(column_count, row_count)
+        beat_frame_image = self.create_image(column_count, row_count)
         self._draw_beats(beat_frame_image, filled_beats, column_count, row_count)
 
         return beat_frame_image
