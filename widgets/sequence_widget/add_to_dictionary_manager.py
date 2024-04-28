@@ -1,12 +1,9 @@
 import json
 import os
 from typing import TYPE_CHECKING, Literal
-from PyQt6.QtGui import QImage, QPainter
-from PIL import Image, PngImagePlugin
-import numpy as np
-from path_helpers import get_app_data_path, get_images_and_data_path, get_my_photos_path
+from PIL import Image
+from path_helpers import get_images_and_data_path
 from thumbnail_generator import ThumbnailGenerator
-from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_Beat_Frame
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
@@ -128,7 +125,7 @@ class AddToDictionaryManager:
             base_word = self.get_base_word(new_sequence)
             version_number = 1
             while os.path.exists(
-                os.path.join(thumbnail_dir, f"{base_word}_v{version_number}")
+                os.path.join(thumbnail_dir, f"{base_word}", f"{base_word}_v{version_number}")
             ):
                 version_number += 1
             return False, None, str(version_number)

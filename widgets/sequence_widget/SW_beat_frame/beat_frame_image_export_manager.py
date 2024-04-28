@@ -2,7 +2,6 @@ import os
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QImage, QPainter, QPixmap
-from PyQt6.QtWidgets import QFileDialog
 from path_helpers import get_my_photos_path
 
 if TYPE_CHECKING:

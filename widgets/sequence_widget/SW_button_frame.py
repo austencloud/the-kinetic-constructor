@@ -1,13 +1,8 @@
-import json
-import os
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QIcon, QImage, QPainter
+from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout
-from PIL import Image, PngImagePlugin
-import numpy as np
 from path_helpers import get_images_and_data_path
-from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_Beat_Frame
 from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager
 
 
