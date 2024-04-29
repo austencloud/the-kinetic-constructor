@@ -11,7 +11,7 @@ from objects.graphical_object.graphical_object_svg_manager import (
 )
 from path_helpers import get_images_and_data_path
 from styles.get_tab_stylesheet import get_tab_stylesheet
-from widgets.dictionary.dictionary_widget import DictionaryWidget
+from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
 from widgets.factories.button_factory.button_factory import ButtonFactory
 from widgets.json_manager import JSON_Manager
 from widgets.main_widget.top_builder_widget import TopBuilderWidget
@@ -90,9 +90,16 @@ class MainWidget(QTabWidget):
         self.top_builder_widget = TopBuilderWidget(self)
         self.sequence_recorder = SequenceRecorder(self)
 
-        self.addTab(self.dictionary, "Dictionary")
         self.addTab(self.top_builder_widget, "Builder")
+        self.addTab(self.dictionary, "Dictionary")
         self.addTab(self.sequence_recorder, "Recorder")
+
+        self.builder_tab_index = 0
+        self.dictionary_tab_index = 1
+        self.recorder_tab_index = 2
+
+        # set the tab to the dictionary tab
+        self.setCurrentIndex(self.dictionary_tab_index)
 
         # self.addTab(self.letterbook, "LetterBook")
         self.initialized = True

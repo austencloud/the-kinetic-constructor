@@ -7,7 +7,7 @@ from PyQt6.QtGui import QImage
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.dictionary.dictionary_widget import DictionaryWidget
+    from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
 
 
 class DictionaryVariationManager:

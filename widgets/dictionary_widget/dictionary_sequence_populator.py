@@ -1,10 +1,10 @@
 import json
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QMessageBox
-
+from PIL import Image
 
 if TYPE_CHECKING:
-    from widgets.dictionary.dictionary_widget import DictionaryWidget
+    from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
 
 
 class DictionarySequencePopulator:
@@ -35,6 +35,16 @@ class DictionarySequencePopulator:
         except Exception as e:
             QMessageBox.critical(
                 self.main_widget, "Error", f"Failed to load sequence: {str(e)}"
+            )
+
+    def load_sequence_from_thumbnail(self, metadata: str) -> None:
+        if metadata:
+            self.populate_sequence(metadata)
+        else:
+            QMessageBox.warning(
+                self.dictionary.main_widget,
+                "Error",
+                "No sequence metadata found in the thumbnail.",
             )
 
     def populate_sequence(self, sequence_data: list[dict[str, str]]) -> None:

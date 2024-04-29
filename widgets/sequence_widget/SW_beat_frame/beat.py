@@ -142,9 +142,7 @@ class BeatView(QGraphicsView):
         )
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
-        print(
-            f"View Height: - {self.height()}, Scene height - {self.start_pos.height() if self.start_pos else 'None'}"
-        )
+
 
     def clear_beat(self) -> None:
         self.is_filled = False
