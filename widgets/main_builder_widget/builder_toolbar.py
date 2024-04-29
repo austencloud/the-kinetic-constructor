@@ -17,12 +17,10 @@ class BuilderToolbar(QTabWidget):
         self.top_builder_widget = top_level_builder_widget
         self.main_widget = top_level_builder_widget.main_widget
         self.sequence_builder = SequenceBuilder(self)
-        self.dictionary = DictionaryWidget(self)
         self.turn_pattern_widget = TurnPatternWidget(self)
 
         self.setTabBar(CustomTabBar())
         self.addTab(self.sequence_builder, "Builder")
-        self.addTab(self.dictionary, "Dictionary")
         self.addTab(self.turn_pattern_widget, "Turn Patterns")
         self.currentChanged.connect(self.on_tab_changed)
         self.setStyleSheet(get_tab_stylesheet())

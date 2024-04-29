@@ -39,7 +39,7 @@ class SequenceWidgetButtonFrame(QFrame):
         self.builder_toolbar = self.sequence_widget.top_builder_widget.builder_toolbar
         self.sequence_constructor = self.builder_toolbar.sequence_builder
         self.graph_editor = self.sequence_widget.sequence_modifier.graph_editor
-        self.variation_manager = self.builder_toolbar.dictionary.variation_manager
+        self.variation_manager = self.main_widget.dictionary.variation_manager
         self.beat_frame = self.sequence_widget.beat_frame
         self.save_image_manager = self.beat_frame.export_manager
         self.indicator_label = self.sequence_widget.indicator_label

@@ -67,7 +67,6 @@ class BeatFrameImageExportManager:
         return image
 
     def create_beat_frame_image(self, sequence) -> QImage:
-        # Assuming `sequence` is a list of data that defines what each beat should display
         filled_beats = self.process_sequence_to_beats(sequence)
         column_count, row_count = self._calculate_layout(len(filled_beats))
 
@@ -85,7 +84,7 @@ class BeatFrameImageExportManager:
         self.temp_beat_frame = SW_Beat_Frame(self.sequence_widget)
         filled_beats = []
         for beat_data in sequence[1:]:
-            number = sequence.index(beat_data) + 1
+            number = sequence.index(beat_data)
             beat_view = self.create_beat_view_from_data(beat_data, number)
             filled_beats.append(beat_view)
         return filled_beats
@@ -192,9 +191,10 @@ class BeatFrameImageExportManager:
             1: (2, 1),
             2: (3, 1),
             3: (4, 1),
-            4: (5, 1),
+            4: (3, 2),
             5: (4, 2),
             6: (4, 2),
+            7: (5, 2),
             8: (5, 2),
             9: (4, 3),
             10: (5, 3),
