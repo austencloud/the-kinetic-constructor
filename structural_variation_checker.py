@@ -5,17 +5,14 @@ class StructuralVariationChecker:
     def __init__(self, dictionary_directory):
         self.dictionary_directory = dictionary_directory
 
-    def check_for_structural_variation(self, sequence, get_base_word):
-        base_word = get_base_word(sequence)
+    def check_for_structural_variation(self, sequence, base_word):
         version_number = 1
         while os.path.exists(
-            os.path.join(self.dictionary_directory, f"{base_word}_v{version_number}")
+            os.path.join(self.dictionary_directory, base_word, f"{base_word}_ver{version_number}")
         ):
             version_number += 1
         exists = os.path.exists(
-            os.path.join(
-                self.dictionary_directory, f"{base_word}_v{version_number - 1}"
-            )
+            os.path.join(self.dictionary_directory, base_word, f"{base_word}_ver{version_number}")
         )
         return exists, str(version_number)
 

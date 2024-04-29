@@ -19,19 +19,16 @@ class ThumbnailGenerator:
         self.export_manager = self.beat_frame.export_manager
 
     def generate_and_save_thumbnail(
-        self, sequence, turn_pattern, structural_variation_number=None
+        self, sequence, turn_pattern, structural_variation_number, directory
     ):
         beat_frame_image = self.export_manager.create_beat_frame_image(sequence)
         pil_image = self.qimage_to_pil(beat_frame_image)
         metadata = json.dumps(sequence)
         info = self._create_png_info(metadata)
-        master_dir = self._construct_master_directory(
-            sequence, structural_variation_number
-        )
         image_filename = self._create_image_filename(
             sequence, structural_variation_number, turn_pattern
         )
-        image_path = os.path.join(master_dir, image_filename)
+        image_path = os.path.join(directory, image_filename)
         self._save_image(pil_image, image_path, info)
         return image_path
 
@@ -53,7 +50,7 @@ class ThumbnailGenerator:
         base_word = self.manager.get_base_word(sequence)
         base_dir = get_images_and_data_path(f"dictionary/{base_word}")
         master_dir = os.path.join(
-            base_dir, f"{base_word}_v{structural_variation_number}"
+            base_dir, f"{base_word}_ver{structural_variation_number}"
         )
         os.makedirs(master_dir, exist_ok=True)
         return master_dir
@@ -62,7 +59,7 @@ class ThumbnailGenerator:
         self, sequence, structural_variation_number, turn_pattern
     ):
         base_word = self.manager.get_base_word(sequence)
-        return f"{base_word}_v{structural_variation_number}_{turn_pattern}.png"
+        return f"{base_word}_ver{structural_variation_number}_({turn_pattern}).png"
 
     def _save_image(
         self, pil_image: Image.Image, image_path: str, info: PngImagePlugin.PngInfo

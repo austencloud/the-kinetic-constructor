@@ -164,6 +164,7 @@ class CurrentSequenceJsonHandler:
         sequence = self.load_current_sequence_json()
         if sequence:
             sequence[0][f"{color}_attributes"]["end_ori"] = ori
+            sequence[0][f"{color}_attributes"]["start_ori"] = ori
             self.save_current_sequence(sequence)
 
     def update_rot_dir_in_json_at_index(
