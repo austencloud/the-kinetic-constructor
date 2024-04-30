@@ -36,10 +36,7 @@ class DictionaryWidget(QWidget):
         )
 
     def setup_ui(self):
-        # Using a horizontal layout to split the dictionary and preview area
         h_layout = QHBoxLayout(self)
-
-        # Creating a widget for the dictionary area
         dictionary_area = QWidget()
         dictionary_layout = QVBoxLayout(dictionary_area)
         self.scroll_area = QScrollArea()
@@ -50,36 +47,30 @@ class DictionaryWidget(QWidget):
         self.scroll_layout.setVerticalSpacing(20)
         self.scroll_area.setWidget(self.scroll_content)
         dictionary_layout.addWidget(self.scroll_area)
-        h_layout.addWidget(
-            dictionary_area, 3
-        )  # Dictionary area takes 3 parts of the space
+        h_layout.addWidget(dictionary_area, 3)
 
-        # Creating a widget for the preview area
         preview_area = QWidget()
         preview_layout = QVBoxLayout(preview_area)
         self.preview_label = QLabel("Select a thumbnail to display it here.")
         self.preview_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         preview_layout.addWidget(self.preview_label)
-
-        # Buttons for editing and other actions
-        self.edit_button = QPushButton("Edit Sequence")
-        self.edit_button.clicked.connect(self.edit_sequence)
-        preview_layout.addWidget(self.edit_button)
-
-        # TODO: Implement other buttons as needed and connect their clicked signals
-
-        h_layout.addWidget(preview_area, 2)  # Preview area takes 2 parts of the space
+        # add a button to edit the sequence
+        edit_sequence_button = QPushButton("Edit Sequence")
+        edit_sequence_button.clicked.connect(self.edit_sequence)
+        preview_layout.addWidget(edit_sequence_button)
+        
+        h_layout.addWidget(preview_area, 2)
         self.setLayout(h_layout)
+
         self.load_base_words()
 
     def edit_sequence(self):
         if self.selected_thumbnail:
-            # This now calls the load sequence method from the sequence populator
+            self.main_widget.setCurrentIndex(self.main_widget.builder_tab_index)
             self.sequence_populator.load_sequence_from_thumbnail(
                 self.selected_thumbnail
             )
-            # Switch to the builder tab, assuming you have a way to reference it:
-            self.main_widget.setCurrentIndex(self.main_widget.builder_tab_index)
+            
         else:
             QMessageBox.warning(
                 self, "No Selection", "Please select a thumbnail first."
@@ -101,6 +92,17 @@ class DictionaryWidget(QWidget):
             )
         )
 
+    def clear_layout(self, layout: QVBoxLayout):
+        """Remove all widgets from a layout."""
+        if layout is not None:
+            while layout.count():
+                item = layout.takeAt(0)
+                widget = item.widget()
+                if widget is not None:
+                    widget.deleteLater()
+                elif item.layout() is not None:
+                    self.clear_layout(item.layout())
+
     def load_base_words(self):
         dictionary_dir = get_images_and_data_path("dictionary")
         if not os.path.exists(dictionary_dir):
@@ -111,14 +113,10 @@ class DictionaryWidget(QWidget):
             if os.path.isdir(os.path.join(dictionary_dir, d))
         ]
 
-        # Debug: Check that base_words is not empty
-        print(f"Base words: {base_words}")
+        self.clear_layout(self.scroll_layout)  # Clear existing widgets in the layout
 
         for i, word in enumerate(base_words):
             thumbnails = self.find_thumbnails(os.path.join(dictionary_dir, word))
-            # Debug: Ensure thumbnails have valid image paths
-            print(f"Thumbnails for {word}: {thumbnails}")
-
             if thumbnails:
                 thumbnail_box = ThumbnailBox(self, word, thumbnails)
                 self.scroll_layout.addWidget(thumbnail_box, i // 3, i % 3)
@@ -127,9 +125,10 @@ class DictionaryWidget(QWidget):
                 button.clicked.connect(lambda _, w=word: self.show_variations(w))
                 self.scroll_layout.addWidget(button, i // 3, i % 3)
 
-        # Ensure layout is set after adding widgets
-        self.scroll_content.setLayout(self.scroll_layout)
-        self.update()  # Refresh UI after layout update
+        self.scroll_content.setLayout(
+            self.scroll_layout
+        )  # Ensure the new layout is set
+        self.update()  # Refresh UI after updating the layout
 
     def thumbnail_area_width(self):
         # Get the available width for a single row of thumbnails.
@@ -169,8 +168,7 @@ class DictionaryWidget(QWidget):
         return None
 
     def show_variations(self, base_word):
-        # Placeholder for expanding variations view
         print(f"Show variations for {base_word}")
 
     def reload_dictionary_tab(self):
-        self.load_base_words()
+        self.load_base_words()  # Call load_base_words to refresh the UI

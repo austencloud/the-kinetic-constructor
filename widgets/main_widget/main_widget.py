@@ -153,9 +153,7 @@ class MainWidget(QTabWidget):
                     QApplication.processEvents()
 
             QApplication.processEvents()
-            # if not self.webcam_initialized:
-            #     self.sequence_recorder.capture_frame.video_display_frame.init_webcam()
-            #     self.webcam_initialized = True
+
 
     def showEvent(self, event) -> None:
         super().showEvent(event)
