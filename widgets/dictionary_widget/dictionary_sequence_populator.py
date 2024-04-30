@@ -1,7 +1,6 @@
 import json
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QMessageBox
-from PIL import Image
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_widget import DictionaryWidget

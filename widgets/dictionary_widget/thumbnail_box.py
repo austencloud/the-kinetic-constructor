@@ -8,23 +8,25 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QWidget,
     QHBoxLayout,
-    QApplication, QMessageBox
+    QApplication,
+    QMessageBox,
 )
 
+
 if TYPE_CHECKING:
-    from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
+    from widgets.dictionary_widget.dictionary_browser import DictionaryBrowser
 
 
 class ThumbnailBox(QWidget):
     def __init__(
-        self, dictionary_widget: "DictionaryWidget", base_word, thumbnails, parent=None
+        self, browser: "DictionaryBrowser", base_word, thumbnails, parent=None
     ):
         super().__init__(parent)
         self.base_word = base_word
         self.thumbnails = thumbnails
         self.current_index = 0
-        self.dictionary_widget = dictionary_widget
-        self.main_widget = dictionary_widget.main_widget
+        self.browser = browser
+        self.main_widget = browser.dictionary_widget.main_widget
         self.setup_ui()
 
     def setup_ui(self):
@@ -45,6 +47,8 @@ class ThumbnailBox(QWidget):
         )
         self.layout.addLayout(self.nav_layout)
         self.layout.addWidget(self.variation_number_label)
+        # add stretch
+        self.layout.addStretch()
         self.setLayout(self.layout)
 
     def _setup_variation_number_label(self):
@@ -56,10 +60,14 @@ class ThumbnailBox(QWidget):
         self.nav_layout = QHBoxLayout()
         self.prev_button = QPushButton("<")
         self.prev_button.clicked.connect(self.prev_thumbnail)
+        self.prev_button.setStyleSheet("background-color: white;")
+        self.prev_button.setFont(QFont("Arial", 16, QFont.Weight.Bold))  # Add this line
         self.nav_layout.addWidget(self.prev_button)
 
         self.next_button = QPushButton(">")
         self.next_button.clicked.connect(self.next_thumbnail)
+        self.next_button.setStyleSheet("background-color: white;")
+        self.next_button.setFont(QFont("Arial", 16, QFont.Weight.Bold))  # Add this line
         self.nav_layout.addWidget(self.next_button)
 
     def _setup_slideshow_area(self):
@@ -75,12 +83,14 @@ class ThumbnailBox(QWidget):
     def thumbnail_clicked(self, event):
         # Assuming the first thumbnail is the one to be displayed/edited
         metadata = self.use_pillow_to_extract_metadata_from_file(self.thumbnails[0])
-        self.dictionary_widget.thumbnail_clicked(QPixmap(self.thumbnails[self.current_index]), metadata)
+        self.browser.dictionary_widget.thumbnail_clicked(
+            QPixmap(self.thumbnails[self.current_index]), metadata
+        )
         super().mousePressEvent(event)  # Ensure other mouse press events are handled
 
     def use_pillow_to_extract_metadata_from_file(self, file_path):
         from PIL import Image
-        
+
         try:
             with Image.open(file_path) as img:
                 metadata = img.info.get("metadata")
@@ -88,13 +98,15 @@ class ThumbnailBox(QWidget):
                     return json.loads(metadata)
                 else:
                     QMessageBox.warning(
-                        self.dictionary_widget.main_widget, "Error",
-                        "No sequence metadata found in the thumbnail."
+                        self.browser.main_widget,
+                        "Error",
+                        "No sequence metadata found in the thumbnail.",
                     )
         except Exception as e:
             QMessageBox.critical(
-                self.dictionary_widget.main_widget, "Error",
-                f"Error loading sequence from thumbnail: {e}"
+                self.browser.main_widget,
+                "Error",
+                f"Error loading sequence from thumbnail: {e}",
             )
 
     def showEvent(self, event):
@@ -125,8 +137,8 @@ class ThumbnailBox(QWidget):
 
         # Calculate the size based on the scroll area's width instead of the dictionary widget
         scroll_area_width = (
-            int(self.dictionary_widget.scroll_area.viewport().width())
-            - int(self.dictionary_widget.scroll_layout.horizontalSpacing()) * 4
+            int(self.browser.scroll_area.viewport().width())
+            - int(self.browser.scroll_layout.horizontalSpacing()) * 4
         )  # Account for spacing
 
         thumbnail_width = scroll_area_width // 3
@@ -144,12 +156,16 @@ class ThumbnailBox(QWidget):
             self.thumbnail_label.setStyleSheet("border: 3px solid black")
         return super().eventFilter(obj, event)
 
+    def set_selected(self, selected):
+        self.isSelected = selected
+        self.update_ui()
+
     def update_thumbnail(self):
         if self.thumbnails:
             pixmap = QPixmap(self.thumbnails[self.current_index])
             self.thumbnail_label.setPixmap(
                 pixmap.scaled(
-                    self.thumbnail_label.size(),
+                    self.size(),
                     Qt.AspectRatioMode.KeepAspectRatio,
                     Qt.TransformationMode.SmoothTransformation,
                 )
@@ -158,18 +174,16 @@ class ThumbnailBox(QWidget):
     def next_thumbnail(self):
         self.current_index = (self.current_index + 1) % len(self.thumbnails)
         self.update_thumbnail()
-        self.variation_number_label.setText(f"Variation {self.current_index + 1}")
 
     def prev_thumbnail(self):
         self.current_index = (self.current_index - 1) % len(self.thumbnails)
         self.update_thumbnail()
-        self.variation_number_label.setText(f"Variation {self.current_index + 1}")
 
     def update_thumbnail_size(self):
         # Update the thumbnail size according to the DictionaryWidget's layout.
         if self.thumbnails:
             initial_pixmap = QPixmap(self.thumbnails[0])
-            thumbnail_width = self.dictionary_widget.thumbnail_area_width()
+            thumbnail_width = self.browser.thumbnail_area_width()
             thumbnail_height = max(
                 int(thumbnail_width * initial_pixmap.height() / initial_pixmap.width()),
                 150,

@@ -2,16 +2,16 @@ from typing import TYPE_CHECKING
 
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton
 
+
 if TYPE_CHECKING:
-    from widgets.dictionary.dictionary_widget import DictionaryWidget
+    from widgets.dictionary_widget.dictionary_browser import DictionaryBrowser
 
 
 class DictionaryWordLengthSelectorWidget(QWidget):
-    def __init__(self, dictionary: "DictionaryWidget") -> None:
-        super().__init__(dictionary)
-        self.dictionary = dictionary
-        self.main_widget = dictionary.main_widget
-        self.sort_manager = dictionary.sort_manager
+    def __init__(self, browser: "DictionaryBrowser") -> None:
+        super().__init__(browser)
+        self.browser = browser
+        self.main_widget = browser.dictionary_widget.main_widget
         self.setup_ui()
 
     def setup_ui(self) -> None:
@@ -41,4 +41,3 @@ class DictionaryWordLengthSelectorWidget(QWidget):
         self.main_widget.main_window.settings_manager.set_word_length_visibility(
             visibility_settings
         )
-        self.sort_manager.filter_sequences_by_length()

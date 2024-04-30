@@ -1,20 +1,35 @@
 import os
+import json
 
 
 class StructuralVariationChecker:
     def __init__(self, dictionary_directory):
         self.dictionary_directory = dictionary_directory
 
-    def check_for_structural_variation(self, sequence, base_word):
-        version_number = 1
-        while os.path.exists(
-            os.path.join(self.dictionary_directory, base_word, f"{base_word}_ver{version_number}")
-        ):
-            version_number += 1
-        exists = os.path.exists(
-            os.path.join(self.dictionary_directory, base_word, f"{base_word}_ver{version_number}")
-        )
-        return exists, str(version_number)
+    def check_for_structural_variation(self, current_sequence, base_word):
+        # Path where variations are stored
+        base_path = os.path.join(self.dictionary_directory, base_word)
+        if not os.path.exists(base_path):
+            os.makedirs(base_path, exist_ok=True)
+
+        # Iterate through existing files to check for identical structural variations
+        for filename in os.listdir(base_path):
+            if filename.endswith(".json"):
+                with open(os.path.join(base_path, filename), "r") as file:
+                    try:
+                        existing_sequence = json.load(file)
+                        if self.are_structural_variations_identical(
+                            current_sequence, existing_sequence
+                        ):
+                            return (
+                                True,
+                                filename,
+                            )  # Returns True and the existing filename if match is found
+                    except json.JSONDecodeError:
+                        continue  # In case of a bad file, just skip it
+
+        # No match found
+        return False, None
 
     def are_structural_variations_identical(self, seq1, seq2):
         def structural_variation_matches(b1, b2):

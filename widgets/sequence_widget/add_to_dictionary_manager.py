@@ -91,7 +91,7 @@ class AddToDictionaryManager:
         self.sequence_widget.indicator_label.show_message(message)
 
     def refresh_ui(self):
-        self.sequence_widget.main_widget.dictionary.reload_dictionary_tab()
+        self.sequence_widget.main_widget.dictionary.dictionary_browser.load_base_words()
 
     def get_base_word(self, sequence):
         base_sequence = []

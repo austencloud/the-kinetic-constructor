@@ -19,7 +19,7 @@ class TopBuilderWidget(QWidget):
         self.color_shift = 0
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.animate_background)
-        self.timer.start(100)  # Adjust as needed for smoother or faster animation
+        self.timer.start(75)  # Adjust as needed for smoother or faster animation
         self.builder_toolbar = BuilderToolbar(self)
         self.sequence_widget = SequenceWidget(self)
         self.initialized = False
