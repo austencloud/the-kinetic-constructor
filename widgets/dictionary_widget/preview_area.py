@@ -1,19 +1,52 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
+from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox
 from PyQt6.QtCore import Qt
 
+if TYPE_CHECKING:
+    from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
 
-class PreviewArea(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
+
+class DictionaryPreviewArea(QWidget):
+    def __init__(self, dictionary_widget: "DictionaryWidget") -> None:
+        super().__init__(dictionary_widget)
+        self.main_widget = dictionary_widget.main_widget
+        self.sequence_populator = dictionary_widget.sequence_populator
+        self.selected_thumbnail = None
+
+        self._setup_attributes()
+        self._setup_layout()
+
+    def _setup_attributes(self):
+        self._setup_preview_label()
+        self._setup_buttons()
+
+    def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.preview_label = QLabel("Select a thumbnail to display it here.")
-        self.preview_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.addWidget(self.preview_label)
-        self.edit_sequence_button = QPushButton("Edit Sequence")
         self.layout.addWidget(self.edit_sequence_button)
 
-    def set_preview_pixmap(self, pixmap):
-        self.preview_label.setPixmap(pixmap)
+    def _setup_buttons(self):
+        self.edit_sequence_button = QPushButton("Edit Sequence")
+        self.edit_sequence_button.clicked.connect(self.edit_sequence)
 
-    def set_edit_sequence_callback(self, callback):
-        self.edit_sequence_button.clicked.connect(callback)
+    def _setup_preview_label(self):
+        self.preview_label = QLabel("Select a sequence to display it here.")
+        self.preview_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+    def edit_sequence(self):
+        if self.selected_thumbnail:
+            self.main_widget.setCurrentIndex(self.main_widget.builder_tab_index)
+            self.sequence_populator.load_sequence_from_thumbnail(
+                self.selected_thumbnail
+            )
+
+        else:
+            QMessageBox.warning(
+                self, "No Selection", "Please select a thumbnail first."
+            )
+
+    def showEvent(self, event):
+        font = self.preview_label.font()
+        font.setPointSizeF(self.main_widget.width() * 0.01)
+        self.preview_label.setFont(font)
+        super().showEvent(event)

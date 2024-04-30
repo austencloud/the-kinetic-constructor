@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 
 from custom_tab_bar import CustomTabBar
 from styles.get_tab_stylesheet import get_tab_stylesheet
-from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
 from widgets.sequence_builder.sequence_builder import SequenceBuilder
 from widgets.turn_pattern_widget import TurnPatternWidget
 from PyQt6.QtWidgets import QTabWidget

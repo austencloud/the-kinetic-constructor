@@ -1,12 +1,9 @@
 from copy import deepcopy
-import json
 import os
-from typing import TYPE_CHECKING, Literal
-from PIL import Image
+from typing import TYPE_CHECKING
 from path_helpers import get_images_and_data_path
 from structural_variation_checker import StructuralVariationChecker
 from thumbnail_generator import ThumbnailGenerator
-from turn_pattern_variation_checker import TurnPatternVariationChecker
 from widgets.turn_pattern_converter import TurnPatternConverter
 
 if TYPE_CHECKING:

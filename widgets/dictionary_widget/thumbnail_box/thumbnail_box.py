@@ -1,0 +1,44 @@
+from typing import TYPE_CHECKING
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QVBoxLayout, QWidget
+from widgets.dictionary_widget.thumbnail_box.metadata_extractor import MetaDataExtractor
+from .base_word_label import BaseWordLabel
+from .navigation_buttons_widget import NavigationButtonsWidget
+from .thumbnail_image_label import ThumbnailImageLabel
+from .variation_number_label import VariationNumberLabel
+
+if TYPE_CHECKING:
+    from widgets.dictionary_widget.dictionary_browser import DictionaryBrowser
+
+
+class ThumbnailBox(QWidget):
+    def __init__(self, browser: "DictionaryBrowser", base_word, thumbnails) -> None:
+        super().__init__(browser)
+
+        self.base_word = base_word
+        self.thumbnails = thumbnails
+        self.browser = browser
+        self.main_widget = browser.dictionary_widget.main_widget
+        self.initial_size_set = False
+        self.current_index = 0
+
+        self._setup_components()
+        self._setup_layout()
+
+    def _setup_components(self):
+        self.metadata_extractor = MetaDataExtractor(self)
+        self.base_word_label = BaseWordLabel(self)
+        self.thumbnail_image_label = ThumbnailImageLabel(self)
+        self.variation_number_label = VariationNumberLabel(self)
+        self.navigation_buttons = NavigationButtonsWidget(self)
+
+    def _setup_layout(self):
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.base_word_label)
+        layout.addWidget(
+            self.thumbnail_image_label, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        layout.addWidget(self.navigation_buttons)
+        layout.addWidget(self.variation_number_label)
+        layout.addStretch()
+        self.setLayout(layout)
