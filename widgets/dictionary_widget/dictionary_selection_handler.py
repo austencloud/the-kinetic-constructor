@@ -25,9 +25,9 @@ class DictionarySelectionHandler:
         self, thumbnail_box, thumbnail_pixmap: "QPixmap", metadata
     ) -> None:
         self.dictionary_widget.selected_sequence_dict = metadata
-        self.dictionary_widget.preview_area.preview_label.setPixmap(
+        self.dictionary_widget.preview_area.image_label.setPixmap(
             thumbnail_pixmap.scaled(
-                self.dictionary_widget.preview_area.preview_label.size(),
+                self.dictionary_widget.preview_area.image_label.size(),
                 Qt.AspectRatioMode.KeepAspectRatio,
                 Qt.TransformationMode.SmoothTransformation,
             )

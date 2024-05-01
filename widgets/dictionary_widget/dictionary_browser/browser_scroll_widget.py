@@ -92,6 +92,32 @@ class DictionaryBrowserScrollWidget(QWidget):
     def show_variations(self, base_word):
         print(f"Show variations for {base_word}")
 
+    def get_scrollbar_width(self):
+        style = self.scroll_area.style()
+        return style.pixelMetric(QStyle.PixelMetric.PM_ScrollBarExtent)
+
+    def add_new_thumbnail_box(self, new_word, thumbnails):
+        # Find the right position based on alphabetical order
+        index = next(
+            (
+                i
+                for i, box in enumerate(self.thumbnail_boxes)
+                if box.base_word.lower() > new_word.lower()
+            ),
+            len(self.thumbnail_boxes),
+        )
+
+        # Create new ThumbnailBox
+        thumbnail_box = ThumbnailBox(self.browser, new_word, thumbnails)
+        row, col = divmod(index, 3)
+        self.grid_layout.addWidget(thumbnail_box, row, col)
+        self.thumbnail_boxes.insert(index, thumbnail_box)
+
+        # Adjust positions of subsequent thumbnail boxes if necessary
+        for i in range(index + 1, len(self.thumbnail_boxes)):
+            row, col = divmod(i, 3)
+            self.grid_layout.addWidget(self.thumbnail_boxes[i], row, col)
+
     def resize_dictionary_browser_scroll_area(self):
         scrollbar_width = (
             self.scroll_area.verticalScrollBar().isVisible()
@@ -102,8 +128,4 @@ class DictionaryBrowserScrollWidget(QWidget):
         for box in self.thumbnail_boxes:
             box.setMaximumWidth(max_width)
             box.setMaximumHeight(max_width)
-            box.thumbnail_image_label.update_thumbnail()
-
-    def get_scrollbar_width(self):
-        style = self.scroll_area.style()
-        return style.pixelMetric(QStyle.PixelMetric.PM_ScrollBarExtent)
+            box.image_label.update_thumbnail()

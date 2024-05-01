@@ -1,30 +1,27 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QPushButton, QWidget, QHBoxLayout
+from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 
 
-class NavigationButtonsWidget(QWidget):
+class ThumbnailBoxNavButtonsWidget(QWidget):
     def __init__(self, thumbnail_box: "ThumbnailBox"):
         super().__init__(thumbnail_box)
         self.thumbnail_box = thumbnail_box
         self.thumbnails = thumbnail_box.thumbnails
         self.current_index = thumbnail_box.current_index
-        self.thumbnail_label = thumbnail_box.thumbnail_image_label
+        self.thumbnail_label = thumbnail_box.image_label
         self.variation_number_label = thumbnail_box.variation_number_label
         self._setup_layout()
         self._setup_buttons()
 
-
     def _setup_buttons(self):
         button_texts = ["<", ">"]
         for text in button_texts:
-            button = QPushButton(text)
-            button.clicked.connect(self.handle_button_click)
-            button.setStyleSheet("background-color: white;")
-            button.setFont(QFont("Arial", 16, QFont.Weight.Bold))
+            button = NavButton(text, self)
             self.layout.addWidget(button)
 
     def _setup_layout(self):
@@ -41,6 +38,30 @@ class NavigationButtonsWidget(QWidget):
         self.thumbnail_label.current_index = self.current_index
         self.thumbnail_label.update_thumbnail()
         self.variation_number_label.setText(f"Variation {self.current_index + 1}")
-        self.thumbnail_box.browser.dictionary_widget.preview_area.update_preview(
-            self.thumbnails[self.current_index]
-        )
+
+        if (
+            self.thumbnail_box.image_label
+            == self.thumbnail_box.browser.dictionary_widget.selection_handler.currently_selected_thumbnail
+        ):
+            self.thumbnail_box.browser.dictionary_widget.preview_area.update_preview(
+                self.thumbnails[self.current_index]
+            )
+
+
+class NavButton(QPushButton):
+    def __init__(self, text: str, parent: ThumbnailBoxNavButtonsWidget):
+        super().__init__(text, parent)
+        self.clicked.connect(parent.handle_button_click)
+        self.setStyleSheet("background-color: white;")
+        self.setFont(QFont("Arial", 16, QFont.Weight.Bold))
+
+    # add a mouse hover event to change the background color of the button and set cursor to pointing hand
+    def enterEvent(self, event):
+        self.setStyleSheet("background-color: lightgray;")
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
+
+    # add a mouse leave event to change the background color of the button back to white
+
+    def leaveEvent(self, event):
+        self.setStyleSheet("background-color: white;")
+        self.setCursor(Qt.CursorShape.ArrowCursor)

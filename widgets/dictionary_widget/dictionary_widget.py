@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from background_manager import BackgroundManager
 from .dictionary_browser.dictionary_browser import DictionaryBrowser
 from .dictionary_selection_handler import DictionarySelectionHandler
-from .preview_area import DictionaryPreviewArea
+from .dictionary_preview_area import DictionaryPreviewArea
 from .dictionary_variation_manager import DictionaryVariationManager
 from .dictionary_sequence_populator import DictionarySequencePopulator
 
@@ -40,9 +40,7 @@ class DictionaryWidget(QWidget):
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.addWidget(self.browser, 5)
         self.layout.addWidget(self.preview_area, 3)
-        self.layout.setSpacing(0)
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.setContentsMargins(0, 0, 0, 0)
+
     def paintEvent(self, event) -> None:
         painter = QPainter(self)
         self.background_manager.paint_background(self, painter)

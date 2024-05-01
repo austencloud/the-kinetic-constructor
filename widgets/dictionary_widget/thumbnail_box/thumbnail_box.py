@@ -4,7 +4,7 @@ from PyQt6.QtGui import QShowEvent, QResizeEvent
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
 from widgets.dictionary_widget.thumbnail_box.metadata_extractor import MetaDataExtractor
 from .base_word_label import BaseWordLabel
-from .navigation_buttons_widget import NavigationButtonsWidget
+from .navigation_buttons_widget import ThumbnailBoxNavButtonsWidget
 from .thumbnail_image_label import ThumbnailImageLabel
 from .variation_number_label import VariationNumberLabel
 
@@ -34,16 +34,16 @@ class ThumbnailBox(QWidget):
         # Component setup remains unchanged
         self.metadata_extractor = MetaDataExtractor(self)
         self.base_word_label = BaseWordLabel(self)
-        self.thumbnail_image_label = ThumbnailImageLabel(self)
+        self.image_label = ThumbnailImageLabel(self)
         self.variation_number_label = VariationNumberLabel(self)
-        self.navigation_buttons = NavigationButtonsWidget(self)
+        self.navigation_buttons = ThumbnailBoxNavButtonsWidget(self)
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addWidget(self.base_word_label, 1)
         self.layout.addWidget(self.variation_number_label, 1)
         self.layout.addWidget(
-            self.thumbnail_image_label,
+            self.image_label,
             16,
             alignment=Qt.AlignmentFlag.AlignCenter,
         )
@@ -61,5 +61,6 @@ class ThumbnailBox(QWidget):
         # Calculate the width for each thumbnail box
         max_width = parent_width // 3
         self.setMaximumWidth(max_width)
+        self.setMinimumHeight(max_width)
         self.setMaximumHeight(max_width)  # Keep aspect ratio square or as needed
-        self.thumbnail_image_label.update_thumbnail()
+        self.image_label.update_thumbnail()

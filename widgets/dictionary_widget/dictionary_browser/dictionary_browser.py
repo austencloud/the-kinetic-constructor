@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from .browser_scroll_area import DictionaryBrowserScrollWidget
+from .browser_scroll_widget import DictionaryBrowserScrollWidget
 
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from widgets.dictionary_widget.dictionary_word_length_selector_widget import (
