@@ -4,7 +4,7 @@ from PyQt6.QtGui import QShowEvent, QResizeEvent
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
 from widgets.dictionary_widget.thumbnail_box.metadata_extractor import MetaDataExtractor
 from .base_word_label import BaseWordLabel
-from .navigation_buttons_widget import ThumbnailBoxNavButtonsWidget
+from .thumbnail_box_nav_buttons_widget import ThumbnailBoxNavButtonsWidget
 from .thumbnail_image_label import ThumbnailImageLabel
 from .variation_number_label import VariationNumberLabel
 
@@ -31,12 +31,11 @@ class ThumbnailBox(QWidget):
         self.layout.setSpacing(0)
 
     def _setup_components(self):
-        # Component setup remains unchanged
         self.metadata_extractor = MetaDataExtractor(self)
         self.base_word_label = BaseWordLabel(self)
         self.image_label = ThumbnailImageLabel(self)
         self.variation_number_label = VariationNumberLabel(self)
-        self.navigation_buttons = ThumbnailBoxNavButtonsWidget(self)
+        self.nav_buttons_widget = ThumbnailBoxNavButtonsWidget(self)
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -47,18 +46,16 @@ class ThumbnailBox(QWidget):
             16,
             alignment=Qt.AlignmentFlag.AlignCenter,
         )
-        self.layout.addWidget(self.navigation_buttons, 1)
+        self.layout.addWidget(self.nav_buttons_widget, 1)
         self.setStyleSheet("background-color: rgba(255, 255, 255, 0.5);")
 
     def resize_thumbnail_box(self):
-        # Calculate available width considering scrollbar presence
         scrollbar_width = (
             self.browser.scroll_widget.scroll_area.verticalScrollBar().isVisible()
             * self.browser.scroll_widget.scroll_area.verticalScrollBar().width()
         )
         parent_width = self.browser.width() - scrollbar_width
 
-        # Calculate the width for each thumbnail box
         max_width = parent_width // 3
         self.setMaximumWidth(max_width)
         self.setMinimumHeight(max_width)

@@ -3,7 +3,8 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QMessageB
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 
-from widgets.dictionary_widget.thumbnail_box.navigation_buttons_widget import (
+from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
+from widgets.dictionary_widget.thumbnail_box.thumbnail_box_nav_buttons_widget import (
     ThumbnailBoxNavButtonsWidget,
 )
 from widgets.dictionary_widget.thumbnail_box.preview_area_nav_buttons_widget import (
@@ -18,15 +19,20 @@ class DictionaryPreviewArea(QWidget):
     def __init__(self, dictionary_widget: "DictionaryWidget"):
         super().__init__(dictionary_widget)
         self.layout = QVBoxLayout(self)
-        self.image_label = QLabel(self)  # Assuming this is where the image is shown
+        self.image_label = QLabel(self)
         self.variation_number_label = QLabel("Variation 1", self)
         self.nav_buttons = PreviewAreaNavButtonsWidget(self)
-        self.layout.addWidget(self.image_label)
+        self.layout.addStretch(1)
         self.layout.addWidget(self.variation_number_label)
+        self.layout.addWidget(self.image_label)
         self.layout.addWidget(self.nav_buttons)
+        self.layout.addStretch(1)
+        self.variation_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self._setup_buttons()
         self.thumbnails = []
         self.main_widget = dictionary_widget.main_widget
         self.selected_thumbnail = None
+        self.current_thumbnail_box: ThumbnailBox = None
         self.sequence_populator = dictionary_widget.sequence_populator
         self.update_thumbnails()
 
@@ -41,25 +47,36 @@ class DictionaryPreviewArea(QWidget):
 
     def update_preview(self, index):
         if self.thumbnails and index is not None:
+            # Load the pixmap from the thumbnail path
             pixmap = QPixmap(self.thumbnails[index])
-            self.image_label.setPixmap(
-                pixmap.scaled(
-                    self.image_label.size(),
-                    Qt.AspectRatioMode.KeepAspectRatio,
-                    Qt.TransformationMode.SmoothTransformation,
-                )
+
+            # Get the width of the image_label widget (which should match the width of the preview area)
+            label_width = self.image_label.width()
+
+            # Calculate the new height maintaining the aspect ratio
+            aspect_ratio = pixmap.height() / pixmap.width()
+            new_height = int(label_width * aspect_ratio)
+
+            # Set the pixmap with the new size
+            scaled_pixmap = pixmap.scaled(
+                label_width,
+                new_height,
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation,
             )
+            self.image_label.setPixmap(scaled_pixmap)
+
+            # Update the variation number label
             self.variation_number_label.setText(f"Variation {index + 1}")
         else:
-            self.image_label.setText(
-                "No image available"
-            )  # Default text or action when no thumbnails exist
+            # Default text when there is no image available
+            self.image_label.setText("No image available")
+            self.variation_number_label.setText("No Variation")
 
-    def select_thumbnail(self, index):
-        self.update_thumbnails(
-            self.thumbnails
-        )  # Assuming you fill this list based on selection
+    def select_thumbnail(self, thumbnail_box, index):
+        self.update_thumbnails(self.thumbnails)
         self.update_preview(index)
+        self.current_thumbnail_box = thumbnail_box
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -86,21 +103,6 @@ class DictionaryPreviewArea(QWidget):
             QMessageBox.warning(
                 self, "No Selection", "Please select a thumbnail first."
             )
-
-    def update_preview(self, index):
-        if self.thumbnails and index is not None:
-            pixmap = QPixmap(self.thumbnails[index])
-            self.image_label.setPixmap(
-                pixmap.scaled(
-                    self.image_label.size(),
-                    Qt.AspectRatioMode.KeepAspectRatio,
-                    Qt.TransformationMode.SmoothTransformation,
-                )
-            )
-            self.variation_number_label.setText(f"Variation {index + 1}")
-        else:
-            self.image_label.setText("Select a sequence to display it here.")
-            self.variation_number_label.setText("No Variation")
 
     def showEvent(self, event):
         font = self.image_label.font()

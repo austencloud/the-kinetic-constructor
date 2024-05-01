@@ -44,7 +44,7 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
             == self.thumbnail_box.browser.dictionary_widget.selection_handler.currently_selected_thumbnail
         ):
             self.thumbnail_box.browser.dictionary_widget.preview_area.update_preview(
-                self.thumbnails[self.current_index]
+                self.current_index
             )
 
 

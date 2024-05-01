@@ -2,8 +2,10 @@ from PyQt6.QtCore import QObject, QTimer, pyqtSignal
 from PyQt6.QtGui import QLinearGradient, QColor, QPainter
 import math
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from PyQt6.QtWidgets import QWidget
+
 
 class BackgroundManager(QObject):
     update_required = pyqtSignal()
@@ -14,7 +16,7 @@ class BackgroundManager(QObject):
         self.color_shift = 0
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.animate_background)
-        self.timer.start(75)
+        self.timer.start(50)
 
     def animate_background(self):
         """Update the gradient and color shift for the animation."""

@@ -52,6 +52,8 @@ class ThumbnailImageLabel(QLabel):
             self,
             QPixmap(self.thumbnails[self.current_index]),
             metadata,
+            self.thumbnails,
+            self.current_index,
         )
 
     def set_selected(self, selected: bool):
