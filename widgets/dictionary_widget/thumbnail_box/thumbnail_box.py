@@ -24,6 +24,7 @@ class ThumbnailBox(QWidget):
         self.main_widget = browser.dictionary_widget.main_widget
         self.initial_size_set = False
         self.current_index = 0
+        self.browser = browser
         self.setContentsMargins(0, 0, 0, 0)
         self._setup_components()
         self._setup_layout()
@@ -50,8 +51,15 @@ class ThumbnailBox(QWidget):
         self.setStyleSheet("background-color: rgba(255, 255, 255, 0.5);")
 
     def resize_thumbnail_box(self):
-        parent_width = self.browser.width()
+        # Calculate available width considering scrollbar presence
+        scrollbar_width = (
+            self.browser.scroll_widget.scroll_area.verticalScrollBar().isVisible()
+            * self.browser.scroll_widget.scroll_area.verticalScrollBar().width()
+        )
+        parent_width = self.browser.width() - scrollbar_width
+
+        # Calculate the width for each thumbnail box
         max_width = parent_width // 3
         self.setMaximumWidth(max_width)
-        self.setMaximumHeight(max_width)
+        self.setMaximumHeight(max_width)  # Keep aspect ratio square or as needed
         self.thumbnail_image_label.update_thumbnail()

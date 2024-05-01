@@ -83,7 +83,7 @@ class AddToDictionaryManager:
         self.sequence_widget.indicator_label.show_message(message)
 
     def refresh_ui(self):
-        self.sequence_widget.main_widget.dictionary.browser.scroll_area.load_base_words()
+        self.sequence_widget.main_widget.dictionary.browser.scroll_widget.load_base_words()
 
     def get_base_word(self, sequence):
         base_sequence = []
@@ -142,7 +142,7 @@ class AddToDictionaryManager:
 
     def refresh_ui_with_new_thumbnail(self, word, thumbnails):
         # Access the DictionaryBrowserScrollArea from the main widget structure
-        dictionary_scroll_area = self.sequence_widget.main_widget.dictionary.browser.scroll_area
+        dictionary_scroll_area = (
+            self.sequence_widget.main_widget.dictionary.browser.scroll_widget
+        )
         dictionary_scroll_area.add_new_thumbnail_box(word, thumbnails)
-
-        

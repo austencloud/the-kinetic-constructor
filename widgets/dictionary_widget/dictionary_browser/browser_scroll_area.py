@@ -21,25 +21,28 @@ if TYPE_CHECKING:
     pass
 
 
-class DictionaryBrowserScrollArea(QWidget):
+class DictionaryBrowserScrollWidget(QWidget):
     def __init__(self, browser: "DictionaryBrowser"):
         super().__init__(browser)
         self.browser = browser
 
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)
-        self.scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.scroll_area.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+        )
         self.scroll_content = QWidget()
         self.grid_layout = QGridLayout(self.scroll_content)
+        self.grid_layout.setSpacing(0)
+        self.grid_layout.setContentsMargins(0, 0, 0, 0)
         self.scroll_content.setLayout(self.grid_layout)
         self.scroll_area.setWidget(self.scroll_content)
-        
-        self.layout:QVBoxLayout = QVBoxLayout(self)
+
+        self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addWidget(self.scroll_area)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setStyleSheet("background: transparent;")
-
         self.thumbnail_boxes: list[ThumbnailBox] = []
         self.load_base_words()
 
@@ -90,8 +93,16 @@ class DictionaryBrowserScrollArea(QWidget):
         print(f"Show variations for {base_word}")
 
     def resize_dictionary_browser_scroll_area(self):
-        for thumbnail_box in self.thumbnail_boxes:
-            thumbnail_box.resize_thumbnail_box()
+        scrollbar_width = (
+            self.scroll_area.verticalScrollBar().isVisible()
+            * self.scroll_area.verticalScrollBar().width()
+        )
+        parent_width = self.scroll_area.viewport().width() - scrollbar_width
+        max_width = parent_width // 3
+        for box in self.thumbnail_boxes:
+            box.setMaximumWidth(max_width)
+            box.setMaximumHeight(max_width)
+            box.thumbnail_image_label.update_thumbnail()
 
     def get_scrollbar_width(self):
         style = self.scroll_area.style()

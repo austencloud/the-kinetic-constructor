@@ -2,6 +2,10 @@
   "Ψ-": {
     "(o, 1, 1)": {
       "swap_beta_s_radial_blue_dash_w_red_dash_e": true
+    },
+    "(s, 1, 1)": {
+      "red": [0, -45],
+      "blue": [0, -45]
     }
   }
 }
