@@ -1,75 +1,51 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QPainter
+from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from background_manager import BackgroundManager
-from widgets.dictionary_widget.dictionary_browser import DictionaryBrowser
-from widgets.dictionary_widget.preview_area import DictionaryPreviewArea
-from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
-from widgets.dictionary_widget.thumbnail_box.thumbnail_click_handler import (
-    ThumbnailClickHandler,
-)
+from .dictionary_browser.dictionary_browser import DictionaryBrowser
+from .dictionary_selection_handler import DictionarySelectionHandler
+from .preview_area import DictionaryPreviewArea
 from .dictionary_variation_manager import DictionaryVariationManager
-from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
-
-from widgets.dictionary_widget.dictionary_sequence_populator import (
-    DictionarySequencePopulator,
-)
-
-from PyQt6.QtWidgets import (
-    QWidget,
-    QHBoxLayout,
-)
+from .dictionary_sequence_populator import DictionarySequencePopulator
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
 
-class DictionarySelectionHandler:
-    def __init__(self, dictionary_widget: "DictionaryWidget"):
-        self.dictionary_widget = dictionary_widget
-        self.currently_selected_thumbnail: ThumbnailBox = None
-
-    def update_selection(self, thumbnail_box):
-        if self.currently_selected_thumbnail:
-            self.currently_selected_thumbnail.set_selected(False)
-        self.currently_selected_thumbnail = thumbnail_box
-        self.currently_selected_thumbnail.set_selected(True)
-
-
 class DictionaryWidget(QWidget):
-    def __init__(self, main_widget: "MainWidget"):
+    def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
 
         self._setup_ui()
         self.selected_sequence_dict = None
 
-    def _setup_ui(self):
+    def _setup_ui(self) -> None:
+        self._setup_handlers()
         self._setup_components()
         self._setup_layout()
-        self._setup_background()
 
-    def _setup_background(self):
+    def _setup_handlers(self) -> None:
         self.background_manager = BackgroundManager(self)
-
-    def _setup_layout(self):
-        self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.layout.addWidget(self.dictionary_browser, 5)
-        self.layout.addWidget(self.preview_area, 3)
-        self.setLayout(self.layout)
-
-    def _setup_components(self):
-        # Setup handlers
         self.selection_handler = DictionarySelectionHandler(self)
-        self.thumbnail_click_handler = ThumbnailClickHandler(self)
         self.variation_manager = DictionaryVariationManager(self)
         self.sequence_populator = DictionarySequencePopulator(self)
-        # Setup areas
-        self.dictionary_browser = DictionaryBrowser(self)
+        self.background_manager.update_required.connect(self.update)
+
+    def _setup_components(self) -> None:
+        self.browser = DictionaryBrowser(self)
         self.preview_area = DictionaryPreviewArea(self)
 
-    def reload_dictionary_tab(self):
-        self.dictionary_browser.load_base_words()  # Call load_base_words to refresh the UI
-
-    def paintEvent(self, event):
+    def _setup_layout(self) -> None:
+        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.layout.addWidget(self.browser, 5)
+        self.layout.addWidget(self.preview_area, 3)
+        self.layout.setSpacing(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.setContentsMargins(0, 0, 0, 0)
+    def paintEvent(self, event) -> None:
         painter = QPainter(self)
         self.background_manager.paint_background(self, painter)
+
+    def resize_dictionary_widget(self) -> None:
+        self.browser.resize_dictionary_browser()

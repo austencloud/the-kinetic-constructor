@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox
 from PyQt6.QtCore import Qt
-
+from PyQt6.QtGui import QPixmap
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
 
@@ -13,12 +13,9 @@ class DictionaryPreviewArea(QWidget):
         self.sequence_populator = dictionary_widget.sequence_populator
         self.selected_thumbnail = None
 
-        self._setup_attributes()
-        self._setup_layout()
-
-    def _setup_attributes(self):
         self._setup_preview_label()
         self._setup_buttons()
+        self._setup_layout()
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -44,6 +41,16 @@ class DictionaryPreviewArea(QWidget):
             QMessageBox.warning(
                 self, "No Selection", "Please select a thumbnail first."
             )
+
+    def update_preview(self, thumbnail_path: str):
+        pixmap = QPixmap(thumbnail_path)
+        self.preview_label.setPixmap(
+            pixmap.scaled(
+                self.preview_label.size(),
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation
+            )
+        )
 
     def showEvent(self, event):
         font = self.preview_label.font()

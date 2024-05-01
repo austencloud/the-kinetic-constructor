@@ -1,14 +1,23 @@
 import os
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QGridLayout, QPushButton, QStyle
+from PyQt6.QtWidgets import (
+    QWidget,
+    QVBoxLayout,
+    QScrollArea,
+    QGridLayout,
+    QPushButton,
+    QStyle,
+)
 from PyQt6.QtCore import QSize
 from path_helpers import get_images_and_data_path
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
+
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
 
+
 class DictionaryBrowser(QWidget):
-    def __init__(self, dictionary_widget: "DictionaryWidget")   -> None:
+    def __init__(self, dictionary_widget: "DictionaryWidget") -> None:
         super().__init__(dictionary_widget)
         self.dictionary_widget = dictionary_widget
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -21,7 +30,6 @@ class DictionaryBrowser(QWidget):
         self.scroll_area.setWidget(self.scroll_content)
         self.scroll_area.setStyleSheet("background: transparent;")
         self.layout.addWidget(self.scroll_area)
-
 
     def load_base_words(self):
         dictionary_dir = get_images_and_data_path("dictionary")
@@ -45,21 +53,14 @@ class DictionaryBrowser(QWidget):
                 button.clicked.connect(lambda _, w=word: self.show_variations(w))
                 self.scroll_layout.addWidget(button, i // 3, i % 3)
 
-        self.scroll_content.setLayout(
-            self.scroll_layout
-        )  # Ensure the new layout is set
-        self.update()  # Refresh UI after updating the layout
-
+        self.scroll_content.setLayout(self.scroll_layout)
+        self.update()
 
     def thumbnail_area_width(self):
-        # Get the available width for a single row of thumbnails.
         scrollbar_width = 0
         if self.scroll_area.verticalScrollBar().isVisible():
             scrollbar_width = self.scroll_area.verticalScrollBar().width()
-        # Also subtract an extra space as a margin to ensure no horizontal scrollbar appears
         extra_margin = self.style().pixelMetric(QStyle.PixelMetric.PM_ScrollBarExtent)
-
-        # Adjust `3` if you need a different number of thumbnails per row.
         available_width = (
             self.scroll_area.viewport().width()
             - self.scroll_layout.horizontalSpacing() * 4
@@ -67,7 +68,6 @@ class DictionaryBrowser(QWidget):
             - extra_margin
         ) // 3
         return available_width
-
 
     def clear_layout(self):
         """Remove all widgets from the layout."""
@@ -101,7 +101,6 @@ class DictionaryBrowser(QWidget):
                 if file.endswith((".png", ".jpg", ".jpeg")):
                     return os.path.join(root, file)
         return None
-
 
     def show_variations(self, base_word):
         print(f"Show variations for {base_word}")

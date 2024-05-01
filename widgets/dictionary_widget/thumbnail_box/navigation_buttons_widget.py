@@ -9,15 +9,17 @@ if TYPE_CHECKING:
 class NavigationButtonsWidget(QWidget):
     def __init__(self, thumbnail_box: "ThumbnailBox"):
         super().__init__(thumbnail_box)
-        self.thumbnai_box = thumbnail_box
+        self.thumbnail_box = thumbnail_box
         self.thumbnails = thumbnail_box.thumbnails
         self.current_index = thumbnail_box.current_index
         self.thumbnail_label = thumbnail_box.thumbnail_image_label
         self.variation_number_label = thumbnail_box.variation_number_label
-        self.layout: QHBoxLayout = QHBoxLayout()
+        self._setup_layout()
+        self._setup_buttons()
 
-        button_texts = ["<", ">"]  # Add more button texts here if needed
 
+    def _setup_buttons(self):
+        button_texts = ["<", ">"]
         for text in button_texts:
             button = QPushButton(text)
             button.clicked.connect(self.handle_button_click)
@@ -25,6 +27,8 @@ class NavigationButtonsWidget(QWidget):
             button.setFont(QFont("Arial", 16, QFont.Weight.Bold))
             self.layout.addWidget(button)
 
+    def _setup_layout(self):
+        self.layout: QHBoxLayout = QHBoxLayout()
         self.setLayout(self.layout)
 
     def handle_button_click(self):
@@ -37,3 +41,6 @@ class NavigationButtonsWidget(QWidget):
         self.thumbnail_label.current_index = self.current_index
         self.thumbnail_label.update_thumbnail()
         self.variation_number_label.setText(f"Variation {self.current_index + 1}")
+        self.thumbnail_box.browser.dictionary_widget.preview_area.update_preview(
+            self.thumbnails[self.current_index]
+        )

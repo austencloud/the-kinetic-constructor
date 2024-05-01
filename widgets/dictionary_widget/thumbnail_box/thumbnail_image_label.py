@@ -20,6 +20,7 @@ class ThumbnailImageLabel(QLabel):
         self.metadata_extractor = thumbnail_box.metadata_extractor
         self.browser = thumbnail_box.browser
         self.update_thumbnail()
+        self.is_selected = False
 
     def update_thumbnail(self):
         pixmap = QPixmap(self.thumbnails[self.current_index])
@@ -31,27 +32,31 @@ class ThumbnailImageLabel(QLabel):
             )
         )
 
-    def eventFilter(self, obj, event: "QEvent"):
+    def eventFilter(self, obj, event: QEvent):
         if obj == self and event.type() == QEvent.Type.Enter:
             self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-            self.setStyleSheet("border: 3px solid gold")
+            self.setStyleSheet("border: 3px solid gold;")
         elif obj == self and event.type() == QEvent.Type.Leave:
-            self.unsetCursor()
-            self.setStyleSheet("border: 3px solid black")
+            self.setStyleSheet(
+                "border: 3px solid black;"
+                if not self.is_selected
+                else "border: 3px solid blue;"
+            )
         return super().eventFilter(obj, event)
 
     def thumbnail_clicked(self, event):
         metadata = self.metadata_extractor.extract_metadata_from_file(
             self.thumbnails[0]
         )
-        self.browser.dictionary_widget.thumbnail_click_handler.thumbnail_clicked(
+        self.browser.dictionary_widget.selection_handler.thumbnail_clicked(
             self,
             QPixmap(self.thumbnails[self.current_index]),
             metadata,
         )
 
-    def set_selected(self, selected):
+    def set_selected(self, selected: bool):
+        self.is_selected = selected
         if selected:
-            self.setStyleSheet("border: 3px solid gold;")
+            self.setStyleSheet("border: 3px solid blue;")
         else:
             self.setStyleSheet("border: 3px solid black;")

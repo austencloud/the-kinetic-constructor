@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton
 
 
 if TYPE_CHECKING:
-    from widgets.dictionary_widget.dictionary_browser import DictionaryBrowser
+    from widgets.dictionary_widget.dictionary_browser.dictionary_browser import DictionaryBrowser
 
 
 class DictionaryWordLengthSelectorWidget(QWidget):

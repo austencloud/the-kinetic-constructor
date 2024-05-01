@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QShowEvent, QResizeEvent
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
 from widgets.dictionary_widget.thumbnail_box.metadata_extractor import MetaDataExtractor
 from .base_word_label import BaseWordLabel
@@ -8,7 +9,9 @@ from .thumbnail_image_label import ThumbnailImageLabel
 from .variation_number_label import VariationNumberLabel
 
 if TYPE_CHECKING:
-    from widgets.dictionary_widget.dictionary_browser import DictionaryBrowser
+    from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
+        DictionaryBrowser,
+    )
 
 
 class ThumbnailBox(QWidget):
@@ -21,11 +24,13 @@ class ThumbnailBox(QWidget):
         self.main_widget = browser.dictionary_widget.main_widget
         self.initial_size_set = False
         self.current_index = 0
-
+        self.setContentsMargins(0, 0, 0, 0)
         self._setup_components()
         self._setup_layout()
+        self.layout.setSpacing(0)
 
     def _setup_components(self):
+        # Component setup remains unchanged
         self.metadata_extractor = MetaDataExtractor(self)
         self.base_word_label = BaseWordLabel(self)
         self.thumbnail_image_label = ThumbnailImageLabel(self)
@@ -33,12 +38,20 @@ class ThumbnailBox(QWidget):
         self.navigation_buttons = NavigationButtonsWidget(self)
 
     def _setup_layout(self):
-        layout = QVBoxLayout(self)
-        layout.addWidget(self.base_word_label)
-        layout.addWidget(
-            self.thumbnail_image_label, alignment=Qt.AlignmentFlag.AlignCenter
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.layout.addWidget(self.base_word_label, 1)
+        self.layout.addWidget(self.variation_number_label, 1)
+        self.layout.addWidget(
+            self.thumbnail_image_label,
+            16,
+            alignment=Qt.AlignmentFlag.AlignCenter,
         )
-        layout.addWidget(self.navigation_buttons)
-        layout.addWidget(self.variation_number_label)
-        layout.addStretch()
-        self.setLayout(layout)
+        self.layout.addWidget(self.navigation_buttons, 1)
+        self.setStyleSheet("background-color: rgba(255, 255, 255, 0.5);")
+
+    def resize_thumbnail_box(self):
+        parent_width = self.browser.width()
+        max_width = parent_width // 3
+        self.setMaximumWidth(max_width)
+        self.setMaximumHeight(max_width)
+        self.thumbnail_image_label.update_thumbnail()

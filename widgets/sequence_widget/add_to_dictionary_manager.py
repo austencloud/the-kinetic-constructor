@@ -48,7 +48,6 @@ class AddToDictionaryManager:
         self.refresh_ui()
 
     def get_variation_directory(self, word, number, start_orientations: str) -> str:
-        # This will create a directory structure like: A_ver1/(in, in)/
         base_dir = os.path.join(self.dictionary_dir, f"{word}", f"{word}_ver{number}")
         orientation_dir = start_orientations.replace(" ", "").replace(",", "_")
         master_dir = os.path.join(base_dir, orientation_dir)
@@ -72,23 +71,19 @@ class AddToDictionaryManager:
             )
             turn_pattern = f"{turn_pattern_description}"
 
-        turn_pattern = turn_pattern if turn_pattern != "base" else turn_pattern
-
         image_path = self.thumbnail_generator.generate_and_save_thumbnail(
-            sequence,
-            turn_pattern,
-            number,
-            directory,  # Passing the directory here
+            sequence, turn_pattern, number, directory
         )
         self.display_message(
             f"New turn pattern '{turn_pattern}' of '{word}' saved as {os.path.basename(image_path)}."
         )
+        return image_path  # Return the path of the new thumbnail for UI update
 
     def display_message(self, message):
         self.sequence_widget.indicator_label.show_message(message)
 
     def refresh_ui(self):
-        self.sequence_widget.main_widget.dictionary.dictionary_browser.load_base_words()
+        self.sequence_widget.main_widget.dictionary.browser.scroll_area.load_base_words()
 
     def get_base_word(self, sequence):
         base_sequence = []
@@ -128,10 +123,26 @@ class AddToDictionaryManager:
         return len(sequence) <= 1
 
     def process_new_variation(self, sequence, base_sequence, word, number):
+        thumbnails = []
         if self.sequence_has_turns(sequence):
-            self.save_variation(sequence, word, number, "current")
+            thumbnail_path = self.save_variation(sequence, word, number, "current")
+            thumbnails.append(thumbnail_path)
             self.save_variation(base_sequence, word, number, "base")
-            self.display_message(f"'{word}' with turns added to dictionary!")
+            thumbnails.append(
+                thumbnail_path
+            )  # Assuming the base sequence may use the same thumbnail
         else:
-            self.save_variation(sequence, word, number, "base")
-            self.display_message(f"'{word}' added to dictionary!")
+            thumbnail_path = self.save_variation(sequence, word, number, "base")
+            thumbnails.append(thumbnail_path)
+
+        self.display_message(f"'{word}' added to dictionary!")
+        self.refresh_ui_with_new_thumbnail(
+            word, thumbnails
+        )  # Refresh UI to display new entry
+
+    def refresh_ui_with_new_thumbnail(self, word, thumbnails):
+        # Access the DictionaryBrowserScrollArea from the main widget structure
+        dictionary_scroll_area = self.sequence_widget.main_widget.dictionary.browser.scroll_area
+        dictionary_scroll_area.add_new_thumbnail_box(word, thumbnails)
+
+        

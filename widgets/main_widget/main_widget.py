@@ -150,10 +150,8 @@ class MainWidget(QTabWidget):
                 for view in SW_beat_frame.beats:
                     if view.is_filled:
                         view.resize_beat_view()
-                    QApplication.processEvents()
-
-            QApplication.processEvents()
-
+        elif current_widget == self.dictionary:
+            self.dictionary.browser.resize_dictionary_browser()
 
     def showEvent(self, event) -> None:
         super().showEvent(event)
