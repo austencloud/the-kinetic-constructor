@@ -56,8 +56,9 @@ class ThumbnailBox(QWidget):
         )
         parent_width = self.browser.width() - scrollbar_width
 
-        max_width = parent_width // 3
-        self.setMaximumWidth(max_width)
-        self.setMinimumHeight(max_width)
-        self.setMaximumHeight(max_width)  # Keep aspect ratio square or as needed
+        width = parent_width // 3
+        self.setMinimumWidth(width)
+        self.setMaximumWidth(width)
+
+        # self.setMaximumHeight(width)
         self.image_label.update_thumbnail()

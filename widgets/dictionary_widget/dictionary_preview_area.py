@@ -89,11 +89,11 @@ class DictionaryPreviewArea(QWidget):
                 Qt.TransformationMode.SmoothTransformation,
             )
             self.image_label.setPixmap(scaled_pixmap)
-            # QApplication.processEvents()
+            self.image_label.setMaximumHeight(new_height)
+            QApplication.processEvents()
 
     def _adjust_label_for_text(self):
-        # Set minimum height to 1/5th of the parent widget's height
-        min_height = int(max(self.height() / 5, 50))  # Ensure a reasonable minimum
+        min_height = int(max(self.height() / 5, 50))
         self.image_label.setMinimumHeight(min_height)
 
     def select_thumbnail(self, thumbnail_box, index, base_word):
@@ -130,7 +130,6 @@ class DictionaryPreviewArea(QWidget):
             )
 
     def showEvent(self, event):
-        # Initial size adjustments when the widget is first shown
         super().showEvent(event)
         if self.thumbnails and self.current_index is not None:
             self.update_preview(self.current_index)

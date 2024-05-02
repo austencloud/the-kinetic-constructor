@@ -1,10 +1,12 @@
 from typing import TYPE_CHECKING
 
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QComboBox
 
 
 if TYPE_CHECKING:
-    from widgets.dictionary_widget.dictionary_browser.dictionary_browser import DictionaryBrowser
+    from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
+        DictionaryBrowser,
+    )
 
 
 class DictionaryWordLengthSelectorWidget(QWidget):
@@ -14,30 +16,14 @@ class DictionaryWordLengthSelectorWidget(QWidget):
         self.main_widget = browser.dictionary_widget.main_widget
         self.setup_ui()
 
-    def setup_ui(self) -> None:
-        self.layout = QHBoxLayout()
-        word_lengths = [2, 3, 4, 5, 6, 7, 8]
-        visibility_settings = (
-            self.main_widget.main_window.settings_manager.get_word_length_visibility()
-        )
-        for length in word_lengths:
-            button = QPushButton(f"{length} letters")
-            button.setCheckable(True)
-            button.setChecked(visibility_settings.get(length, False))
-            button.toggled.connect(
-                lambda checked, length=length: self.toggle_word_length_visibility(
-                    length, checked
-                )
-            )
-            self.layout.addWidget(button)
+    def setup_ui(self):
+        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.sort_combobox = QComboBox()
+        self.sort_combobox.addItems(["Word Length", "Alphabetical"])
+        self.sort_combobox.currentTextChanged.connect(self.on_sort_order_changed)
+        self.layout.addWidget(self.sort_combobox)
 
-        self.setLayout(self.layout)
 
-    def toggle_word_length_visibility(self, length, visible) -> None:
-        visibility_settings = (
-            self.main_widget.main_window.settings_manager.get_word_length_visibility()
-        )
-        visibility_settings[str(length)] = visible
-        self.main_widget.main_window.settings_manager.set_word_length_visibility(
-            visibility_settings
-        )
+    def on_sort_order_changed(self, sort_order):
+        # Call a method to sort the thumbnail boxes based on selected order
+        self.browser.scroll_widget.sort_thumbnails(sort_order)

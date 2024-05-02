@@ -35,9 +35,7 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
         elif sender.text() == ">":
             self.current_index = (self.current_index + 1) % len(self.thumbnails)
 
-        self.thumbnail_label.current_index = self.current_index
-        self.thumbnail_label.update_thumbnail()
-        self.variation_number_label.setText(f"Variation {self.current_index + 1}")
+        self.update_thumbnail()
 
         if (
             self.thumbnail_box.image_label
@@ -46,6 +44,11 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
             self.thumbnail_box.browser.dictionary_widget.preview_area.update_preview(
                 self.current_index
             )
+
+    def update_thumbnail(self):
+        self.thumbnail_label.current_index = self.current_index
+        self.thumbnail_label.update_thumbnail()
+        self.variation_number_label.setText(f"Variation {self.current_index + 1}")
 
 
 class NavButton(QPushButton):

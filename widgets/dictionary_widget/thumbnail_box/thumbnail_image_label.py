@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt, QEvent
 from PyQt6.QtGui import QPixmap, QCursor
-from PyQt6.QtWidgets import QLabel
+from PyQt6.QtWidgets import QLabel, QApplication
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -19,18 +19,23 @@ class ThumbnailImageLabel(QLabel):
         self.current_index = thumbnail_box.current_index
         self.metadata_extractor = thumbnail_box.metadata_extractor
         self.browser = thumbnail_box.browser
-        self.update_thumbnail()
         self.is_selected = False
 
+        self.update_thumbnail()
+
     def update_thumbnail(self):
-        pixmap = QPixmap(self.thumbnails[self.current_index])
-        self.setPixmap(
-            pixmap.scaled(
-                self.size(),
-                Qt.AspectRatioMode.KeepAspectRatio,
-                Qt.TransformationMode.SmoothTransformation,
+        if self.thumbnails and 0 <= self.current_index < len(self.thumbnails):
+            pixmap = QPixmap(self.thumbnails[self.current_index])
+            self.setPixmap(
+                pixmap.scaled(
+                    self.size(),
+                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.TransformationMode.SmoothTransformation,
+                )
             )
-        )
+            QApplication.processEvents()
+        else:
+            self.setText("No image available")
 
     def eventFilter(self, obj, event: QEvent):
         if obj == self and event.type() == QEvent.Type.Enter:

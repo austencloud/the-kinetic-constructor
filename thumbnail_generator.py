@@ -46,14 +46,7 @@ class ThumbnailGenerator:
         info.add_text("metadata", metadata.encode("utf-8"))
         return info
 
-    def _construct_master_directory(self, sequence, structural_variation_number) -> str:
-        base_word = self.manager.get_base_word(sequence)
-        base_dir = get_images_and_data_path(f"dictionary/{base_word}")
-        master_dir = os.path.join(
-            base_dir, f"{base_word}_ver{structural_variation_number}"
-        )
-        os.makedirs(master_dir, exist_ok=True)
-        return master_dir
+
 
     def _create_image_filename(
         self, sequence, structural_variation_number, turn_pattern

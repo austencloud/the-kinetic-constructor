@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QPushButton, QWidget, QHBoxLayout
+from PyQt6.QtWidgets import QPushButton, QWidget, QHBoxLayout, QApplication
 from PyQt6.QtCore import Qt
 
 
@@ -13,7 +13,7 @@ class PreviewAreaNavButtonsWidget(QWidget):
     def __init__(self, preview_area: "DictionaryPreviewArea"):
         super().__init__(preview_area)
         self.preview_area = preview_area
-        self.current_index = 0
+        self.current_index = preview_area.current_index
         self._setup_buttons()
         self.enable_buttons(False)
 
@@ -32,18 +32,20 @@ class PreviewAreaNavButtonsWidget(QWidget):
             return
         sender = self.sender()
         if sender.text() == "<":
-            self.current_index = (self.current_index - 1) % len(
+            self.current_index = (self.preview_area.current_index - 1) % len(
                 self.preview_area.thumbnails
             )
         elif sender.text() == ">":
-            self.current_index = (self.current_index + 1) % len(
+            self.current_index = (self.preview_area.current_index + 1) % len(
                 self.preview_area.thumbnails
             )
 
         self.preview_area.update_preview(self.current_index)
-        nav_buttons_widget = self.preview_area.current_thumbnail_box.nav_buttons_widget
-        nav_buttons_widget.current_index = self.current_index
-        nav_buttons_widget.handle_button_click()
+        box_nav_buttons_widget = (
+            self.preview_area.current_thumbnail_box.nav_buttons_widget
+        )
+        box_nav_buttons_widget.current_index = self.current_index
+        box_nav_buttons_widget.update_thumbnail()
 
     def enable_buttons(self, enable):
         for button in self.buttons:

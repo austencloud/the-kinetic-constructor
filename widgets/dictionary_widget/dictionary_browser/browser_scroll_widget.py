@@ -46,6 +46,9 @@ class DictionaryBrowserScrollWidget(QWidget):
         self.thumbnail_boxes: list[ThumbnailBox] = []
         self.load_base_words()
 
+    def sort_thumbnails(self, sort_order):
+        print(f"Sort thumbnail boxes based on {sort_order}")
+
     def _remove_spacing(self):
         self.grid_layout.setSpacing(0)
         self.layout.setSpacing(0)
@@ -55,31 +58,52 @@ class DictionaryBrowserScrollWidget(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
 
     def load_base_words(self):
-        dictionary_dir = get_images_and_data_path("dictionary")
-        if not os.path.exists(dictionary_dir):
-            os.makedirs(dictionary_dir)
-        base_words = sorted(
-            (
-                d
-                for d in os.listdir(dictionary_dir)
-                if os.path.isdir(os.path.join(dictionary_dir, d))
-            ),
-            key=lambda x: x.lower(),  # Sorting by the base word alphabetically
-        )
+        self.sort_and_display_thumbnails()
 
+    def sort_and_display_thumbnails(self, sort_order="Word Length"):
         self.clear_layout()
-        for i, word in enumerate(base_words):
-            thumbnails = self.find_thumbnails(os.path.join(dictionary_dir, word))
+        base_words = self.get_sorted_base_words(sort_order)
+        for i, (word, thumbnails) in enumerate(base_words):
             thumbnail_box = ThumbnailBox(self.browser, word, thumbnails)
-            row, col = divmod(i, 3)  # Assuming 3 columns layout
+            row, col = divmod(i, 3)
             self.grid_layout.addWidget(thumbnail_box, row, col)
             self.thumbnail_boxes.append(thumbnail_box)
+
+    def get_sorted_base_words(self, sort_order):
+        dictionary_dir = get_images_and_data_path("dictionary")
+        base_words = [
+            (d, self.find_thumbnails(os.path.join(dictionary_dir, d)))
+            for d in os.listdir(dictionary_dir)
+            if os.path.isdir(os.path.join(dictionary_dir, d))
+        ]
+        if sort_order == "Word Length":
+            base_words.sort(key=lambda x: (len(x[0].replace("-", "")), x[0]))
+        else:
+            base_words.sort(key=lambda x: x[0])
+        return base_words
+
+    def update_thumbnail_boxes_size(self):
+        scrollbar_width = (
+            self.scroll_area.verticalScrollBar().width()
+            if self.scroll_area.verticalScrollBar().isVisible()
+            else 0
+        )
+        parent_width = self.scroll_area.viewport().width() - scrollbar_width
+        max_width = parent_width // 3 - self.grid_layout.horizontalSpacing() * 2
+
+        for box in self.thumbnail_boxes:
+            box.setMaximumWidth(max_width)
+            box.setMaximumHeight(max_width)  # Maintain aspect ratio if necessary
+            box.resize_thumbnail_box()  # Ensure each box updates its content based on new constraints
 
     def clear_layout(self):
         while self.grid_layout.count():
             item = self.grid_layout.takeAt(0)
             if item.widget():
-                item.widget().setParent(None)
+                item.widget().setParent(None)  # Ensure widgets are properly deleted
+
+    def sort_thumbnails(self, sort_order):
+        self.sort_and_display_thumbnails(sort_order)
 
     def find_thumbnails(self, word_dir: str):
         thumbnails = []
@@ -119,13 +143,4 @@ class DictionaryBrowserScrollWidget(QWidget):
             self.grid_layout.addWidget(self.thumbnail_boxes[i], row, col)
 
     def resize_dictionary_browser_scroll_area(self):
-        scrollbar_width = (
-            self.scroll_area.verticalScrollBar().isVisible()
-            * self.scroll_area.verticalScrollBar().width()
-        )
-        parent_width = self.scroll_area.viewport().width() - scrollbar_width
-        max_width = parent_width // 3
-        for box in self.thumbnail_boxes:
-            box.setMaximumWidth(max_width)
-            box.setMaximumHeight(max_width)
-            box.image_label.update_thumbnail()
+        self.update_thumbnail_boxes_size()

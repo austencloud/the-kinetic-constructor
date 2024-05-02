@@ -29,7 +29,7 @@ class StructuralVariationChecker:
                         continue  # In case of a bad file, just skip it
 
         # No match found
-        return False, None
+        return False, "1"
 
     def are_structural_variations_identical(self, seq1, seq2):
         def structural_variation_matches(b1, b2):
