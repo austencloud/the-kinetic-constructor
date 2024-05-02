@@ -39,14 +39,15 @@ class ThumbnailBox(QWidget):
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addWidget(self.base_word_label, 1)
-        self.layout.addWidget(self.variation_number_label, 1)
+        self.layout.addStretch()
+        self.layout.addWidget(self.base_word_label)
+        self.layout.addWidget(self.variation_number_label)
         self.layout.addWidget(
             self.image_label,
-            16,
             alignment=Qt.AlignmentFlag.AlignCenter,
         )
-        self.layout.addWidget(self.nav_buttons_widget, 1)
+        self.layout.addWidget(self.nav_buttons_widget)
+        self.layout.addStretch()
         self.setStyleSheet("background-color: rgba(255, 255, 255, 0.5);")
 
     def resize_thumbnail_box(self):
@@ -60,5 +61,4 @@ class ThumbnailBox(QWidget):
         self.setMinimumWidth(width)
         self.setMaximumWidth(width)
 
-        # self.setMaximumHeight(width)
         self.image_label.update_thumbnail()

@@ -82,7 +82,7 @@ class DictionaryBrowserScrollWidget(QWidget):
             base_words.sort(key=lambda x: x[0])
         return base_words
 
-    def update_thumbnail_boxes_size(self):
+    def resize_dictionary_browser_scroll_widgth(self):
         scrollbar_width = (
             self.scroll_area.verticalScrollBar().width()
             if self.scroll_area.verticalScrollBar().isVisible()
@@ -92,8 +92,8 @@ class DictionaryBrowserScrollWidget(QWidget):
         max_width = parent_width // 3 - self.grid_layout.horizontalSpacing() * 2
 
         for box in self.thumbnail_boxes:
-            box.setMaximumWidth(max_width)
-            box.setMaximumHeight(max_width)  # Maintain aspect ratio if necessary
+            # box.setMaximumWidth(max_width)
+            # box.setMaximumHeight(max_width)  # Maintain aspect ratio if necessary
             box.resize_thumbnail_box()  # Ensure each box updates its content based on new constraints
 
     def clear_layout(self):
@@ -143,4 +143,4 @@ class DictionaryBrowserScrollWidget(QWidget):
             self.grid_layout.addWidget(self.thumbnail_boxes[i], row, col)
 
     def resize_dictionary_browser_scroll_area(self):
-        self.update_thumbnail_boxes_size()
+        self.resize_dictionary_browser_scroll_widgth()

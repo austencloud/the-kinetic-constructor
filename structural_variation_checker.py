@@ -28,7 +28,7 @@ class StructuralVariationChecker:
                     except json.JSONDecodeError:
                         continue  # In case of a bad file, just skip it
 
-        # No match found
+        # No match found 
         return False, "1"
 
     def are_structural_variations_identical(self, seq1, seq2):

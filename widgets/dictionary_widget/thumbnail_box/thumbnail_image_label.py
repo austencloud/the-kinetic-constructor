@@ -33,7 +33,7 @@ class ThumbnailImageLabel(QLabel):
                     Qt.TransformationMode.SmoothTransformation,
                 )
             )
-            QApplication.processEvents()
+            # QApplication.processEvents()
         else:
             self.setText("No image available")
 

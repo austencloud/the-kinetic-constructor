@@ -41,12 +41,13 @@ class DictionaryPreviewArea(QWidget):
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.variation_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.update_thumbnails()
-        self.layout = QVBoxLayout(self)
+        self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addStretch(1)
         self.layout.addWidget(self.base_word_label)
         self.layout.addWidget(self.variation_number_label)
         self.layout.addWidget(self.image_label)
         self.layout.addWidget(self.nav_buttons)
+        self.layout.addWidget(self.edit_sequence_button)
         self.layout.addStretch(1)
 
     def _setup_components(self):
@@ -70,27 +71,22 @@ class DictionaryPreviewArea(QWidget):
         if self.thumbnails and index is not None:
             pixmap = QPixmap(self.thumbnails[index])
             self._scale_pixmap_to_label(pixmap)
-            self.variation_number_label.setText(f"Variation {index + 1}")
-            self.current_index = index
         else:
             self.image_label.setText("Select a sequence to preview it here!")
-            self.variation_number_label.setText("")
             self._adjust_label_for_text()
 
     def _scale_pixmap_to_label(self, pixmap: QPixmap):
-        if self.image_label.width() > 0:
-            label_width = self.image_label.width()
-            aspect_ratio = pixmap.height() / pixmap.width()
-            new_height = int(label_width * aspect_ratio)
-            scaled_pixmap = pixmap.scaled(
-                label_width,
-                new_height,
-                Qt.AspectRatioMode.KeepAspectRatio,
-                Qt.TransformationMode.SmoothTransformation,
-            )
-            self.image_label.setPixmap(scaled_pixmap)
-            self.image_label.setMaximumHeight(new_height)
-            QApplication.processEvents()
+        label_width = self.image_label.width()
+        aspect_ratio = pixmap.height() / pixmap.width()
+        new_height = int(label_width * aspect_ratio)
+        scaled_pixmap = pixmap.scaled(
+            label_width,
+            new_height,
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
+        )
+        self.image_label.setPixmap(scaled_pixmap)
+        self.image_label.setMinimumHeight(new_height)
 
     def _adjust_label_for_text(self):
         min_height = int(max(self.height() / 5, 50))
@@ -106,11 +102,6 @@ class DictionaryPreviewArea(QWidget):
 
     def update_base_word_label(self):
         self.base_word_label.setText(self.base_word)
-
-    def _setup_layout(self):
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addWidget(self.image_label)
-        self.layout.addWidget(self.edit_sequence_button)
 
     def _setup_preview_image_label(self):
         default_text = "Select a sequence to display it here."
@@ -132,6 +123,13 @@ class DictionaryPreviewArea(QWidget):
     def showEvent(self, event):
         super().showEvent(event)
         if self.thumbnails and self.current_index is not None:
+            self.update_preview(self.current_index)
+        else:
+            self._adjust_label_for_text()
+
+    def resize_dictionary_preview_area(self):
+        # This function should be called whenever the splitter is moved or the window is resized.
+        if self.current_index is not None:
             self.update_preview(self.current_index)
         else:
             self._adjust_label_for_text()

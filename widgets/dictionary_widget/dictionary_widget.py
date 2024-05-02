@@ -5,14 +5,13 @@ from background_manager import BackgroundManager
 from .dictionary_browser.dictionary_browser import DictionaryBrowser
 from .dictionary_selection_handler import DictionarySelectionHandler
 from .dictionary_preview_area import DictionaryPreviewArea
-from .dictionary_variation_manager import DictionaryVariationManager
 from .dictionary_sequence_populator import DictionarySequencePopulator
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
 
-class DictionaryWidget(QSplitter):
+class DictionaryWidget(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -28,7 +27,6 @@ class DictionaryWidget(QSplitter):
     def _setup_handlers(self) -> None:
         self.background_manager = BackgroundManager(self)
         self.selection_handler = DictionarySelectionHandler(self)
-        self.variation_manager = DictionaryVariationManager(self)
         self.sequence_populator = DictionarySequencePopulator(self)
         self.background_manager.update_required.connect(self.update)
 
