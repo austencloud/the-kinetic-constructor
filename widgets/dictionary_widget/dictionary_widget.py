@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QPainter
-from PyQt6.QtWidgets import QWidget, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSplitter
 from background_manager import BackgroundManager
 from .dictionary_browser.dictionary_browser import DictionaryBrowser
 from .dictionary_selection_handler import DictionarySelectionHandler
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
 
-class DictionaryWidget(QWidget):
+class DictionaryWidget(QSplitter):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
@@ -38,7 +38,7 @@ class DictionaryWidget(QWidget):
 
     def _setup_layout(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.layout.addWidget(self.browser, 5)
+        self.layout.addWidget(self.browser, 7)
         self.layout.addWidget(self.preview_area, 3)
 
     def paintEvent(self, event) -> None:

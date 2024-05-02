@@ -1,14 +1,25 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QMessageBox
+from PyQt6.QtWidgets import (
+    QWidget,
+    QVBoxLayout,
+    QLabel,
+    QPushButton,
+    QMessageBox,
+    QApplication,
+)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 
+from widgets.dictionary_widget.thumbnail_box.base_word_label import BaseWordLabel
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box_nav_buttons_widget import (
     ThumbnailBoxNavButtonsWidget,
 )
 from widgets.dictionary_widget.thumbnail_box.preview_area_nav_buttons_widget import (
     PreviewAreaNavButtonsWidget,
+)
+from widgets.dictionary_widget.thumbnail_box.variation_number_label import (
+    VariationNumberLabel,
 )
 
 if TYPE_CHECKING:
@@ -18,46 +29,59 @@ if TYPE_CHECKING:
 class DictionaryPreviewArea(QWidget):
     def __init__(self, dictionary_widget: "DictionaryWidget"):
         super().__init__(dictionary_widget)
-        self.layout = QVBoxLayout(self)
-        self.image_label = QLabel(self)
-        self.variation_number_label = QLabel("Variation 1", self)
-        self.nav_buttons = PreviewAreaNavButtonsWidget(self)
-        self.layout.addStretch(1)
-        self.layout.addWidget(self.variation_number_label)
-        self.layout.addWidget(self.image_label)
-        self.layout.addWidget(self.nav_buttons)
-        self.layout.addStretch(1)
-        self.variation_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self._setup_buttons()
         self.thumbnails = []
+        self.current_index = 0
         self.main_widget = dictionary_widget.main_widget
         self.selected_thumbnail = None
         self.current_thumbnail_box: ThumbnailBox = None
         self.sequence_populator = dictionary_widget.sequence_populator
+        self.base_word = ""
+        self._setup_components()
+        self.image_label.setStyleSheet("font: 20pt Arial; font-weight: bold;")
+        self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.variation_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.update_thumbnails()
+        self.layout = QVBoxLayout(self)
+        self.layout.addStretch(1)
+        self.layout.addWidget(self.base_word_label)
+        self.layout.addWidget(self.variation_number_label)
+        self.layout.addWidget(self.image_label)
+        self.layout.addWidget(self.nav_buttons)
+        self.layout.addStretch(1)
+
+    def _setup_components(self):
+        self.variation_number_label = VariationNumberLabel(self.current_index)
+        self.base_word_label = BaseWordLabel(self.base_word)
+        self.image_label = QLabel("Select a sequence to preview it here!", self)
+        self.nav_buttons = PreviewAreaNavButtonsWidget(self)
+        self.edit_sequence_button = QPushButton("Edit Sequence")
+        self.edit_sequence_button.clicked.connect(self.edit_sequence)
 
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails
         if self.thumbnails:
             self.nav_buttons.enable_buttons(True)
-            self.update_preview(0)  # Start with the first thumbnail if available
+            # self.update_preview(0)  # Start with the first thumbnail if available
         else:
             self.nav_buttons.enable_buttons(False)
             self.update_preview(None)  # No thumbnails available
 
     def update_preview(self, index):
         if self.thumbnails and index is not None:
-            # Load the pixmap from the thumbnail path
             pixmap = QPixmap(self.thumbnails[index])
+            self._scale_pixmap_to_label(pixmap)
+            self.variation_number_label.setText(f"Variation {index + 1}")
+            self.current_index = index
+        else:
+            self.image_label.setText("Select a sequence to preview it here!")
+            self.variation_number_label.setText("")
+            self._adjust_label_for_text()
 
-            # Get the width of the image_label widget (which should match the width of the preview area)
+    def _scale_pixmap_to_label(self, pixmap: QPixmap):
+        if self.image_label.width() > 0:
             label_width = self.image_label.width()
-
-            # Calculate the new height maintaining the aspect ratio
             aspect_ratio = pixmap.height() / pixmap.width()
             new_height = int(label_width * aspect_ratio)
-
-            # Set the pixmap with the new size
             scaled_pixmap = pixmap.scaled(
                 label_width,
                 new_height,
@@ -65,27 +89,28 @@ class DictionaryPreviewArea(QWidget):
                 Qt.TransformationMode.SmoothTransformation,
             )
             self.image_label.setPixmap(scaled_pixmap)
+            # QApplication.processEvents()
 
-            # Update the variation number label
-            self.variation_number_label.setText(f"Variation {index + 1}")
-        else:
-            # Default text when there is no image available
-            self.image_label.setText("No image available")
-            self.variation_number_label.setText("No Variation")
+    def _adjust_label_for_text(self):
+        # Set minimum height to 1/5th of the parent widget's height
+        min_height = int(max(self.height() / 5, 50))  # Ensure a reasonable minimum
+        self.image_label.setMinimumHeight(min_height)
 
-    def select_thumbnail(self, thumbnail_box, index):
+    def select_thumbnail(self, thumbnail_box, index, base_word):
+        self.current_index = index
+        self.base_word = base_word
+        self.update_base_word_label()
         self.update_thumbnails(self.thumbnails)
         self.update_preview(index)
         self.current_thumbnail_box = thumbnail_box
+
+    def update_base_word_label(self):
+        self.base_word_label.setText(self.base_word)
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addWidget(self.image_label)
         self.layout.addWidget(self.edit_sequence_button)
-
-    def _setup_buttons(self):
-        self.edit_sequence_button = QPushButton("Edit Sequence")
-        self.edit_sequence_button.clicked.connect(self.edit_sequence)
 
     def _setup_preview_image_label(self):
         default_text = "Select a sequence to display it here."
@@ -105,7 +130,9 @@ class DictionaryPreviewArea(QWidget):
             )
 
     def showEvent(self, event):
-        font = self.image_label.font()
-        font.setPointSizeF(self.main_widget.width() * 0.01)
-        self.image_label.setFont(font)
+        # Initial size adjustments when the widget is first shown
         super().showEvent(event)
+        if self.thumbnails and self.current_index is not None:
+            self.update_preview(self.current_index)
+        else:
+            self._adjust_label_for_text()

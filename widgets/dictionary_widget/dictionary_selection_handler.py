@@ -41,5 +41,7 @@ class DictionarySelectionHandler:
         )
         self.update_selection(image_label)
         self.dictionary_widget.preview_area.select_thumbnail(
-            image_label.thumbnail_box, thumbnail_index
+            image_label.thumbnail_box,
+            thumbnail_index,
+            image_label.thumbnail_box.base_word,
         )

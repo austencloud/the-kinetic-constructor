@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 
 class VariationNumberLabel(QLabel):
-    def __init__(self, thumbnail_box: "ThumbnailBox"):
-        super().__init__(f"Variation {thumbnail_box.current_index + 1}")
+    def __init__(self, index):
+        super().__init__(f"Variation {index + 1}")
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setFont(QFont("Arial", 14, QFont.Weight.Bold))

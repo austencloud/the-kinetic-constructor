@@ -128,21 +128,17 @@ class AddToDictionaryManager:
             thumbnail_path = self.save_variation(sequence, word, number, "current")
             thumbnails.append(thumbnail_path)
             self.save_variation(base_sequence, word, number, "base")
-            thumbnails.append(
-                thumbnail_path
-            )  # Assuming the base sequence may use the same thumbnail
+            thumbnails.append(thumbnail_path)
         else:
             thumbnail_path = self.save_variation(sequence, word, number, "base")
             thumbnails.append(thumbnail_path)
 
         self.display_message(f"'{word}' added to dictionary!")
-        self.refresh_ui_with_new_thumbnail(
-            word, thumbnails
-        )  # Refresh UI to display new entry
+        self.refresh_ui_with_new_thumbnail(word, thumbnails)
 
     def refresh_ui_with_new_thumbnail(self, word, thumbnails):
-        # Access the DictionaryBrowserScrollArea from the main widget structure
         dictionary_scroll_area = (
             self.sequence_widget.main_widget.dictionary.browser.scroll_widget
         )
         dictionary_scroll_area.add_new_thumbnail_box(word, thumbnails)
+        dictionary_scroll_area.resize_dictionary_browser_scroll_area()
