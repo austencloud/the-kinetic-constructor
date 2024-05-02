@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
 
 from .beat_deletion_manager import BeatDeletionManager
-from .beat_frame_image_export_manager import BeatFrameImageExportManager
+from .sequence_image_export_manager import SequenceImageExportManager
 from .beat_frame_print_manager import BeatFramePrintManager
 from .beat_selection_overlay import SequenceWidgetBeatSelectionOverlay
 from .start_pos_beat import StartPositionBeat
@@ -35,6 +35,7 @@ class SW_Beat_Frame(QFrame):
         self._setup_components()
         self._setup_layout()
         self._populate_beat_frame()
+
 
     def _populate_beat_frame(self) -> None:
         for i in range(1, self.COLUMN_COUNT):
@@ -88,7 +89,7 @@ class SW_Beat_Frame(QFrame):
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(self)
         self.beat_deletion_manager = BeatDeletionManager(self)
-        self.export_manager = BeatFrameImageExportManager(self)
+        self.export_manager = SequenceImageExportManager(self)
         self.print_sequence_manager = BeatFramePrintManager(self)
 
     def _setup_layout(self) -> None:

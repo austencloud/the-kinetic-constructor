@@ -24,6 +24,7 @@ if TYPE_CHECKING:
 class DictionaryBrowserScrollWidget(QWidget):
     def __init__(self, browser: "DictionaryBrowser"):
         super().__init__(browser)
+        self.is_initialized = False
         self.browser = browser
 
         self.scroll_area = QScrollArea(self)
@@ -45,10 +46,7 @@ class DictionaryBrowserScrollWidget(QWidget):
         self.setStyleSheet("background: transparent;")
         self.thumbnail_boxes: list[ThumbnailBox] = []
         self.load_base_words()
-
-    def sort_thumbnails(self, sort_order):
-        print(f"Sort thumbnail boxes based on {sort_order}")
-
+        self.is_initialized = True
     def _remove_spacing(self):
         self.grid_layout.setSpacing(0)
         self.layout.setSpacing(0)
@@ -68,6 +66,7 @@ class DictionaryBrowserScrollWidget(QWidget):
             row, col = divmod(i, 3)
             self.grid_layout.addWidget(thumbnail_box, row, col)
             self.thumbnail_boxes.append(thumbnail_box)
+        self.resize_dictionary_browser_scroll_widgth()
 
     def get_sorted_base_words(self, sort_order):
         dictionary_dir = get_images_and_data_path("dictionary")
@@ -90,20 +89,18 @@ class DictionaryBrowserScrollWidget(QWidget):
         )
         parent_width = self.scroll_area.viewport().width() - scrollbar_width
         max_width = parent_width // 3 - self.grid_layout.horizontalSpacing() * 2
-
-        for box in self.thumbnail_boxes:
-            # box.setMaximumWidth(max_width)
-            # box.setMaximumHeight(max_width)  # Maintain aspect ratio if necessary
-            box.resize_thumbnail_box()  # Ensure each box updates its content based on new constraints
+        # if it's initialized
+        if self.is_initialized:
+            for box in self.thumbnail_boxes:
+                # box.setMaximumWidth(max_width)
+                # box.setMaximumHeight(max_width)  # Maintain aspect ratio if necessary
+                box.resize_thumbnail_box()  # Ensure each box updates its content based on new constraints
 
     def clear_layout(self):
         while self.grid_layout.count():
             item = self.grid_layout.takeAt(0)
             if item.widget():
                 item.widget().setParent(None)  # Ensure widgets are properly deleted
-
-    def sort_thumbnails(self, sort_order):
-        self.sort_and_display_thumbnails(sort_order)
 
     def find_thumbnails(self, word_dir: str):
         thumbnails = []

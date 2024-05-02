@@ -60,5 +60,5 @@ class ThumbnailBox(QWidget):
         width = parent_width // 3
         self.setMinimumWidth(width)
         self.setMaximumWidth(width)
-
+        
         self.image_label.update_thumbnail()

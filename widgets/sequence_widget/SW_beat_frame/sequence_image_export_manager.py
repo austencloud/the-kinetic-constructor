@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     )
 
 
-class BeatFrameImageExportManager:
+class SequenceImageExportManager:
     last_save_directory = None  # Class variable to store the last save directory
 
     def __init__(self, beat_frame: "SW_Beat_Frame") -> None:
@@ -75,8 +75,6 @@ class BeatFrameImageExportManager:
         return beat_frame_image
 
     def process_sequence_to_beats(self, sequence):
-        # Transform the sequence into visual components (QGraphicsItems or similar)
-        # This will depend heavily on how your sequence data is structured and how it should be visually represented
         from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
             SW_Beat_Frame,
         )
@@ -90,10 +88,7 @@ class BeatFrameImageExportManager:
         return filled_beats
 
     def create_beat_view_from_data(self, beat_data, number):
-        # Create a visual representation of the beat data
-        # This is a placeholder function; you'll need to define how to visually represent a beat
         new_beat_view = BeatView(self.temp_beat_frame)
-        # create a beat from the data
         beat = Beat(self.temp_beat_frame)
         beat.pictograph_dict = beat_data
         beat.updater.update_pictograph(beat_data)
@@ -124,28 +119,16 @@ class BeatFrameImageExportManager:
                     beat_number += 1
         painter.end()
 
-    def _grab_pixmap(self, view: "BeatView", width, height) -> QPixmap:
-        # Assuming `view` can be rendered to a QPixmap
-        return view.render_to_pixmap(width, height)
-
-    def _calculate_layout(self, filled_beat_count) -> tuple[int, int]:
-        # Same logic as before to calculate layout based on the number of beats
-        return super()._calculate_layout(filled_beat_count)
-
-    def get_layout_options(self) -> dict[int, tuple[int, int]]:
-        return super().get_layout_options()
 
     def _draw_beats(self, image, filled_beats, column_count, row_count) -> None:
         painter = QPainter(image)
         beat_number = 0
 
-        # Draw start position
         start_pos_pixmap = self._grab_pixmap(
             self.beat_frame.start_pos_view, self.beat_size, self.beat_size
         )
         painter.drawPixmap(0, 0, start_pos_pixmap)
 
-        # Draw beats
         for row in range(row_count):
             for col in range(1, column_count):  # Start from second column
                 if beat_number < len(filled_beats):

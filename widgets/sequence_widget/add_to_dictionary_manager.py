@@ -123,6 +123,7 @@ class AddToDictionaryManager:
         return len(sequence) <= 1
 
     def process_new_variation(self, sequence, base_sequence, word, number):
+        self.display_message(f"'{word}' added to dictionary!")
         thumbnails = []
         if self.sequence_has_turns(sequence):
             thumbnail_path = self.save_variation(sequence, word, number, "current")
@@ -133,7 +134,6 @@ class AddToDictionaryManager:
             thumbnail_path = self.save_variation(sequence, word, number, "base")
             thumbnails.append(thumbnail_path)
 
-        self.display_message(f"'{word}' added to dictionary!")
         self.refresh_ui_with_new_thumbnail(word, thumbnails)
 
     def refresh_ui_with_new_thumbnail(self, word, thumbnails):

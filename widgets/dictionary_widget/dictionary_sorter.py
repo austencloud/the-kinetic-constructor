@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     )
 
 
-class DictionaryWordLengthSelectorWidget(QWidget):
+class DictionarySorter(QWidget):
     def __init__(self, browser: "DictionaryBrowser") -> None:
         super().__init__(browser)
         self.browser = browser
@@ -23,7 +23,5 @@ class DictionaryWordLengthSelectorWidget(QWidget):
         self.sort_combobox.currentTextChanged.connect(self.on_sort_order_changed)
         self.layout.addWidget(self.sort_combobox)
 
-
     def on_sort_order_changed(self, sort_order):
-        # Call a method to sort the thumbnail boxes based on selected order
-        self.browser.scroll_widget.sort_thumbnails(sort_order)
+        self.browser.scroll_widget.sort_and_display_thumbnails(sort_order)
