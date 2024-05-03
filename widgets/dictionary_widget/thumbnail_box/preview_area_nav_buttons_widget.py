@@ -32,19 +32,27 @@ class PreviewAreaNavButtonsWidget(QWidget):
             return
         sender = self.sender()
         if sender.text() == "<":
-            self.current_index = (self.preview_area.current_index - 1) % len(
-                self.preview_area.thumbnails
-            )
+            self.preview_area.current_index = (
+                self.preview_area.current_index - 1
+            ) % len(self.preview_area.thumbnails)
         elif sender.text() == ">":
-            self.current_index = (self.preview_area.current_index + 1) % len(
-                self.preview_area.thumbnails
-            )
+            self.preview_area.current_index = (
+                self.preview_area.current_index + 1
+            ) % len(self.preview_area.thumbnails)
 
-        self.preview_area.update_preview(self.current_index)
+        self.preview_area.update_preview(self.preview_area.current_index)
+        # update the preview area's variation label
+        self.preview_area.variation_number_label.setText(
+            f"Variation {self.preview_area.current_index+ 1}"
+        )
+
+        self.preview_area.current_thumbnail_box.current_index = (
+            self.preview_area.current_index
+        )
         box_nav_buttons_widget = (
             self.preview_area.current_thumbnail_box.nav_buttons_widget
         )
-        box_nav_buttons_widget.current_index = self.current_index
+        box_nav_buttons_widget.current_index = self.preview_area.current_index
         box_nav_buttons_widget.update_thumbnail()
 
     def enable_buttons(self, enable):

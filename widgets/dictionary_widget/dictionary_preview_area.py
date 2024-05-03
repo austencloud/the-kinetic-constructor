@@ -62,10 +62,9 @@ class DictionaryPreviewArea(QWidget):
         self.thumbnails = thumbnails
         if self.thumbnails:
             self.nav_buttons.enable_buttons(True)
-            # self.update_preview(0)  # Start with the first thumbnail if available
         else:
             self.nav_buttons.enable_buttons(False)
-            self.update_preview(None)  # No thumbnails available
+            self.update_preview(None)
 
     def update_preview(self, index):
         if self.thumbnails and index is not None:

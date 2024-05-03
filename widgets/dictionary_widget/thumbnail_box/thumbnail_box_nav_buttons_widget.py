@@ -41,7 +41,12 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
             self.thumbnail_box.image_label
             == self.thumbnail_box.browser.dictionary_widget.selection_handler.currently_selected_thumbnail
         ):
-            self.thumbnail_box.browser.dictionary_widget.preview_area.update_preview(
+            preview_area = self.thumbnail_box.browser.dictionary_widget.preview_area
+            preview_area.variation_number_label.setText(
+                f"Variation {self.current_index + 1}"
+            )
+            preview_area.current_index = self.current_index
+            preview_area.update_preview(
                 self.current_index
             )
 
