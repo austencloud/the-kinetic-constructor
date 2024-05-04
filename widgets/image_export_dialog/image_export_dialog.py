@@ -21,9 +21,17 @@ class ImageExportDialog(QDialog):
         super().__init__(main_widget)
         self.setWindowTitle("Export Image Options")
         self.setModal(True)
-        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.preview_image = preview_image
 
-        # Components
+        # Calculate initial size based on main widget
+        main_width = main_widget.width()
+        main_height = main_widget.height()
+        self.resize(
+            main_width // 2, main_height // 2
+        )  # Set initial size to 50% of main widget
+
+        # Layout setup
+        self.layout: QHBoxLayout = QHBoxLayout(self)
         self.preview_panel = ExportDialogPreview(self, preview_image)
         self.button_panel = ExportDialogControlPanel(self)
 
@@ -39,5 +47,8 @@ class ImageExportDialog(QDialog):
         }
 
     def resizeEvent(self, event):
+        # Call the parent method to handle standard operations
         super().resizeEvent(event)
+        # Update child components to adjust to the new size
         self.preview_panel.update_preview(self.width(), self.height())
+        # self.button_panel.adjust_size(self.width(), self.height())

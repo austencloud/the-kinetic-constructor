@@ -123,5 +123,6 @@ class TurnPatternWidget(QWidget):
         self.apply_button.setFont(font)
         self.save_button.setFont(font)
 
-    def resize_turn_pattern_widget(self) -> None:
+    def showEvent(self, event):
         self._set_font_size()
+        super().showEvent(event)

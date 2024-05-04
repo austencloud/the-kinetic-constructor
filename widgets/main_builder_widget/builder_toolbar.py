@@ -36,13 +36,13 @@ class BuilderToolbar(QTabWidget):
             if beat_frame.start_pos_view.scene():
                 if not self.sequence_builder.option_picker.isVisible():
                     self.sequence_builder.transition_to_sequence_building()
-        self.resize_current_tab()
+        # self.resize_current_tab()
 
     def resize_current_tab(self) -> None:
         current_tab = self.currentWidget()
         if current_tab == self.sequence_builder:
             self.sequence_builder.resize_sequence_builder()
-        elif current_tab == self.dictionary:
-            self.dictionary.resize_dictionary()
+        # elif current_tab == self.dictionary:
+        #     self.dictionary.resize_dictionary()
         elif current_tab == self.turn_pattern_widget:
             self.turn_pattern_widget.resize_turn_pattern_widget()
