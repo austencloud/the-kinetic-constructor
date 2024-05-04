@@ -46,7 +46,6 @@ class MainWidget(QTabWidget):
         self._setup_default_modes()
         self._setup_letters()
         self._setup_components()
-        self.currentChanged.connect(self.on_tab_changed)
         self.setStyleSheet(get_tab_stylesheet())
         self.webcam_initialized = False  # Add an initialization flag
         self.initialize_webcam_async()  # Start webcam initialization
@@ -131,17 +130,13 @@ class MainWidget(QTabWidget):
         else:
             super().keyPressEvent(event)
 
-    def on_tab_changed(self) -> None:
-        current_widget = self.currentWidget()
-        self.resize_current_widget(current_widget)
-
-    def resize_current_widget(self, current_widget):
-        if current_widget == self.top_builder_widget:
+    def resize_widget(self, widget):
+        if widget == self.top_builder_widget:
             if not self.top_builder_widget.initialized:
                 self.top_builder_widget.initialized = True
                 self.top_builder_widget.sequence_widget.resize_sequence_widget()
                 self.top_builder_widget.builder_toolbar.resize_current_tab()
-        elif current_widget == self.sequence_recorder:
+        elif widget == self.sequence_recorder:
             if not self.sequence_recorder.initialized:
                 self.sequence_recorder.resize_sequence_recorder()
                 self.initialized = True
@@ -153,19 +148,17 @@ class MainWidget(QTabWidget):
                 for view in SW_beat_frame.beats:
                     if view.is_filled:
                         view.resize_beat_view()
-        elif current_widget == self.dictionary:
+        elif widget == self.dictionary:
             self.dictionary.browser.resize_dictionary_browser()
 
     def resize_all_widgets(self):
         starting_widget = self.currentWidget()
         for i in range(self.count()):
             self.setCurrentIndex(i)
-            self.resize_current_widget(self.currentWidget())
+            self.resize_widget(self.currentWidget())
         self.setCurrentWidget(starting_widget)
-
 
     def showEvent(self, event) -> None:
         super().showEvent(event)
         self.main_window.window_manager.set_dimensions()
         self.resize_all_widgets()
-        self.on_tab_changed()
