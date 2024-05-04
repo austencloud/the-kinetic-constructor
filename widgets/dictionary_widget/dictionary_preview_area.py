@@ -1,3 +1,5 @@
+import os
+import shutil
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QWidget,
@@ -10,6 +12,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 
+from path_helpers import get_images_and_data_path
 from widgets.dictionary_widget.thumbnail_box.base_word_label import BaseWordLabel
 from widgets.dictionary_widget.thumbnail_box.preview_area_nav_btns import (
     PreviewAreaNavButtonsWidget,
@@ -30,6 +33,7 @@ class DictionaryPreviewArea(QWidget):
         self.thumbnails = []
         self.current_index = 0
         self.main_widget = dictionary_widget.main_widget
+        self.dictionary_widget = dictionary_widget
         self.sequence_json = None
         self.current_thumbnail_box: ThumbnailBox = None
         self.sequence_populator = dictionary_widget.sequence_populator
@@ -46,6 +50,8 @@ class DictionaryPreviewArea(QWidget):
         self.layout.addWidget(self.image_label)
         self.layout.addWidget(self.nav_buttons)
         self.layout.addWidget(self.edit_sequence_button)
+        self.layout.addWidget(self.delete_variation_button)
+        self.layout.addWidget(self.delete_word_button)
         self.layout.addStretch(1)
 
     def _setup_components(self):
@@ -55,6 +61,49 @@ class DictionaryPreviewArea(QWidget):
         self.nav_buttons = PreviewAreaNavButtonsWidget(self)
         self.edit_sequence_button = QPushButton("Edit Sequence")
         self.edit_sequence_button.clicked.connect(self.edit_sequence)
+        self.delete_variation_button = QPushButton("Delete Variation", self)
+        self.delete_variation_button.clicked.connect(self.confirm_delete_variation)
+        self.delete_word_button = QPushButton("Delete Base Word", self)
+        self.delete_word_button.clicked.connect(self.confirm_delete_word)
+
+    def confirm_delete_variation(self):
+        if not self.current_thumbnail_box:
+            QMessageBox.warning(
+                self, "No Selection", "Please select a variation first."
+            )
+            return
+        reply = QMessageBox.question(
+            self,
+            "Confirm Deletion",
+            f"Are you sure you want to delete this variation of {self.base_word}?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
+        )
+        if reply == QMessageBox.StandardButton.Yes:
+            self.dictionary_widget.deletion_manager.delete_variation(
+                self.current_thumbnail_box, self.current_index
+            )
+
+    def confirm_delete_word(self):
+        reply = QMessageBox.question(
+            self,
+            "Confirm Deletion",
+            f"Are you sure you want to delete all variations of {self.base_word}?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
+        )
+        if reply == QMessageBox.StandardButton.Yes:
+            self.dictionary_widget.deletion_manager.delete_word(self.base_word)
+
+
+
+
+    def update_after_deletion(self):
+        # Refresh the UI and internal state after deletion
+        self.thumbnails.pop(self.current_index) if self.thumbnails else None
+        self.current_index = max(0, self.current_index - 1)
+        self.dictionary_widget.browser.scroll_widget.load_base_words()  # Assuming this method reloads the display
+        self.update_preview(self.current_index if self.thumbnails else None)
 
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails
@@ -65,12 +114,18 @@ class DictionaryPreviewArea(QWidget):
             self.update_preview(None)
 
     def update_preview(self, index):
+        # if the index is none, display the default text
+        if index == None:
+            self.image_label.setText("Select a sequence to preview it here!")
+            self._adjust_label_for_text()
+            # set the base word label to ""
+            # self.base_word_label.setText("")
+            self.variation_number_label.setText("")
+            return
         if self.thumbnails and index is not None:
             pixmap = QPixmap(self.thumbnails[index])
             self._scale_pixmap_to_label(pixmap)
-        else:
-            self.image_label.setText("Select a sequence to preview it here!")
-            self._adjust_label_for_text()
+
         # extract the json and save it as self.sequence_json
         if self.current_thumbnail_box:
             self.sequence_json = self.current_thumbnail_box.metadata_extractor.extract_metadata_from_file(

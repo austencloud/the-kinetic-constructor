@@ -2,6 +2,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QPainter
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSplitter
 from background_manager import BackgroundManager
+from widgets.dictionary_widget.dictionary_deletion_manager import (
+    DictionaryDeletionManager,
+)
 from .dictionary_browser.dictionary_browser import DictionaryBrowser
 from .dictionary_selection_handler import DictionarySelectionHandler
 from .dictionary_preview_area import DictionaryPreviewArea
@@ -28,6 +31,8 @@ class DictionaryWidget(QWidget):
         self.background_manager = BackgroundManager(self)
         self.selection_handler = DictionarySelectionHandler(self)
         self.sequence_populator = DictionarySequencePopulator(self)
+        self.deletion_manager = DictionaryDeletionManager(self)
+
         self.background_manager.update_required.connect(self.update)
 
     def _setup_components(self) -> None:

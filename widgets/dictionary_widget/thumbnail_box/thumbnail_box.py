@@ -20,7 +20,7 @@ class ThumbnailBox(QWidget):
         super().__init__(browser)
 
         self.base_word = base_word
-        self.thumbnails = thumbnails
+        self.thumbnails:list[str] = thumbnails
         self.browser = browser
         self.main_widget = browser.dictionary_widget.main_widget
         self.initial_size_set = False
@@ -53,8 +53,7 @@ class ThumbnailBox(QWidget):
 
     def resize_thumbnail_box(self):
         scrollbar_width = (
-            self.browser.scroll_widget.scroll_area.verticalScrollBar().isVisible()
-            * self.browser.scroll_widget.scroll_area.verticalScrollBar().width()
+            self.browser.scroll_widget.scroll_area.verticalScrollBar().width()
         )
         parent_width = self.browser.width() - scrollbar_width
 

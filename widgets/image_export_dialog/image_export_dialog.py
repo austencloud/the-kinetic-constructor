@@ -31,7 +31,6 @@ class ImageExportDialog(QDialog):
         self.preview_panel = ExportDialogPreviewPanel(self)
         self.preview_panel_label = QLabel(self)
         self.preview_panel_label.setText("Preview:")
-        #make the font bigger, center it in the label
         self.preview_panel_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.preview_panel_label.setStyleSheet("font-size: 20px")
         self.preview_panel_layout = QVBoxLayout()
