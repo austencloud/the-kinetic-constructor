@@ -63,7 +63,7 @@ class ImageExportDialog(QDialog):
     def update_preview_based_on_options(self):
         include_start_pos = self.button_panel.include_start_pos_check.isChecked()
         self.preview_panel.update_preview_with_start_pos(include_start_pos)
-
+        #resize it appropriately
     def update_preview_based_on_options(self):
         include_start_pos = self.button_panel.include_start_pos_check.isChecked()
         self.preview_panel.update_preview_with_start_pos(include_start_pos)
@@ -76,8 +76,5 @@ class ImageExportDialog(QDialog):
         }
 
     def resizeEvent(self, event):
-        # Call the parent method to handle standard operations
         super().resizeEvent(event)
-        # Update child components to adjust to the new size
-        self.preview_panel.update_preview(self.width(), self.height())
-        # self.button_panel.adjust_size(self.width(), self.height())
+        self.preview_panel.update_preview()

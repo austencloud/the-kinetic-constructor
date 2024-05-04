@@ -22,7 +22,9 @@ class SequenceImageExportManager:
         self.indicator_label = beat_frame.sequence_widget.indicator_label
         self.sequence_widget = beat_frame.sequence_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
-        self.include_start_pos = self.settings_manager.get_image_export_setting('include_start_position', True)
+        self.include_start_pos = self.settings_manager.get_image_export_setting(
+            "include_start_position", True
+        )
         self.layout_manager = ImageExportLayoutManager(self)
 
     def save_image(self):
@@ -31,15 +33,21 @@ class SequenceImageExportManager:
 
     def exec_dialog(self):
         filled_beats = [beat for beat in self.beat_frame.beats if beat.is_filled]
-        column_count, row_count = self.layout_manager.calculate_layout(len(filled_beats))
+        column_count, row_count = self.layout_manager.calculate_layout(
+            len(filled_beats)
+        )
         for beat in filled_beats:
             beat.scene().clearSelection()
 
         dialog = ImageExportDialog(self)
         if dialog.exec():
             options = dialog.get_export_options()
-            self.include_start_pos = options.get("include_start_pos", self.include_start_pos)
-            self.settings_manager.set_image_export_setting('include_start_position', self.include_start_pos)
+            self.include_start_pos = options.get(
+                "include_start_pos", self.include_start_pos
+            )
+            self.settings_manager.set_image_export_setting(
+                "include_start_position", self.include_start_pos
+            )
             beat_frame_image = self.create_image(column_count, row_count)
             self._draw_beats(
                 beat_frame_image,
@@ -52,11 +60,17 @@ class SequenceImageExportManager:
             pixmap = QPixmap.fromImage(beat_frame_image)
             print("Image created with start position included:", self.include_start_pos)
 
-    def create_beat_frame_image(self, sequence: list[dict], include_start_pos = True) -> QImage:
+    def create_sequence_image(
+        self, sequence: list[dict], include_start_pos=True
+    ) -> QImage:
         filled_beats = self.process_sequence_to_beats(sequence)
-        column_count, row_count = self.layout_manager.calculate_layout(len(filled_beats))
+        column_count, row_count = self.layout_manager.calculate_layout(
+            len(filled_beats)
+        )
         image = self.create_image(column_count, row_count)
-        self._draw_beats(image, filled_beats, column_count, row_count, include_start_pos)
+        self._draw_beats(
+            image, filled_beats, column_count, row_count, include_start_pos
+        )
         return image
 
     def process_sequence_to_beats(self, sequence):
@@ -88,7 +102,9 @@ class SequenceImageExportManager:
         image.fill(Qt.GlobalColor.white)
         return image
 
-    def _draw_beats(self, image, filled_beats, column_count, row_count, include_start_pos=True):
+    def _draw_beats(
+        self, image, filled_beats, column_count, row_count, include_start_pos=True
+    ):
         painter = QPainter(image)
         beat_number = 0
 
@@ -124,4 +140,3 @@ class SequenceImageExportManager:
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation,
         )
-
