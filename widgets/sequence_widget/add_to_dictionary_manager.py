@@ -141,4 +141,4 @@ class AddToDictionaryManager:
             self.sequence_widget.main_widget.dictionary.browser.scroll_widget
         )
         dictionary_scroll_area.add_new_thumbnail_box(word, thumbnails)
-        dictionary_scroll_area.resize_dictionary_browser_scroll_area()
+        dictionary_scroll_area.resize_dictionary_browser_scroll_widget()

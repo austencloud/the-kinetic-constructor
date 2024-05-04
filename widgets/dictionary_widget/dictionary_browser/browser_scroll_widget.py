@@ -26,6 +26,9 @@ class DictionaryBrowserScrollWidget(QWidget):
         super().__init__(browser)
         self.is_initialized = False
         self.browser = browser
+        self.thumbnail_boxes_dict = (
+            {}
+        )  # Use a dictionary to cache ThumbnailBox instances by base_word
 
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)
@@ -47,6 +50,7 @@ class DictionaryBrowserScrollWidget(QWidget):
         self.thumbnail_boxes: list[ThumbnailBox] = []
         self.load_base_words()
         self.is_initialized = True
+
     def _remove_spacing(self):
         self.grid_layout.setSpacing(0)
         self.layout.setSpacing(0)
@@ -62,11 +66,18 @@ class DictionaryBrowserScrollWidget(QWidget):
         self.clear_layout()
         base_words = self.get_sorted_base_words(sort_order)
         for i, (word, thumbnails) in enumerate(base_words):
-            thumbnail_box = ThumbnailBox(self.browser, word, thumbnails)
+            if word not in self.thumbnail_boxes_dict:
+                # Only create a new ThumbnailBox if it doesn't exist in the cache
+                thumbnail_box = ThumbnailBox(self.browser, word, thumbnails)
+                self.thumbnail_boxes_dict[word] = thumbnail_box
+            else:
+                # Update the existing thumbnail box with new thumbnails if necessary
+                self.thumbnail_boxes_dict[word].update_thumbnails(thumbnails)
+
+            thumbnail_box = self.thumbnail_boxes_dict[word]
             row, col = divmod(i, 3)
             self.grid_layout.addWidget(thumbnail_box, row, col)
-            self.thumbnail_boxes.append(thumbnail_box)
-        self.resize_dictionary_browser_scroll_widgth()
+        self.resize_dictionary_browser_scroll_widget()
 
     def get_sorted_base_words(self, sort_order):
         dictionary_dir = get_images_and_data_path("dictionary")
@@ -81,7 +92,7 @@ class DictionaryBrowserScrollWidget(QWidget):
             base_words.sort(key=lambda x: x[0])
         return base_words
 
-    def resize_dictionary_browser_scroll_widgth(self):
+    def resize_dictionary_browser_scroll_widget(self):
         scrollbar_width = (
             self.scroll_area.verticalScrollBar().width()
             if self.scroll_area.verticalScrollBar().isVisible()
@@ -89,12 +100,10 @@ class DictionaryBrowserScrollWidget(QWidget):
         )
         parent_width = self.scroll_area.viewport().width() - scrollbar_width
         max_width = parent_width // 3 - self.grid_layout.horizontalSpacing() * 2
-        # if it's initialized
         if self.is_initialized:
-            for box in self.thumbnail_boxes:
-                # box.setMaximumWidth(max_width)
-                # box.setMaximumHeight(max_width)  # Maintain aspect ratio if necessary
-                box.resize_thumbnail_box()  # Ensure each box updates its content based on new constraints
+            thumbnail_boxes: list[ThumbnailBox] = self.thumbnail_boxes_dict.values()
+            for box in thumbnail_boxes:
+                box.resize_thumbnail_box()
 
     def clear_layout(self):
         while self.grid_layout.count():
@@ -138,6 +147,3 @@ class DictionaryBrowserScrollWidget(QWidget):
         for i in range(index + 1, len(self.thumbnail_boxes)):
             row, col = divmod(i, 3)
             self.grid_layout.addWidget(self.thumbnail_boxes[i], row, col)
-
-    def resize_dictionary_browser_scroll_area(self):
-        self.resize_dictionary_browser_scroll_widgth()

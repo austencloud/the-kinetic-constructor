@@ -32,4 +32,4 @@ class DictionaryBrowser(QWidget):
         self.setContentsMargins(0, 0, 0, 0)
 
     def resize_dictionary_browser(self):
-        self.scroll_widget.resize_dictionary_browser_scroll_area()
+        self.scroll_widget.resize_dictionary_browser_scroll_widget()

@@ -36,7 +36,7 @@ class DictionarySequencePopulator:
                 self.main_widget, "Error", f"Failed to load sequence: {str(e)}"
             )
 
-    def load_sequence_from_thumbnail(self, metadata: str) -> None:
+    def load_sequence_from_json(self, metadata: str) -> None:
         if metadata:
             self.populate_sequence(metadata)
         else:
@@ -69,7 +69,7 @@ class DictionarySequencePopulator:
 
         if self.sequence_builder.start_pos_picker.isVisible():
             self.sequence_builder.transition_to_sequence_building()
-            
+
         sequence = self.json_handler.load_current_sequence_json()
 
         self.sequence_builder.option_picker.resize_option_picker()

@@ -1,4 +1,3 @@
-
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QWidget,
@@ -12,7 +11,9 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 
 from widgets.dictionary_widget.thumbnail_box.base_word_label import BaseWordLabel
-from widgets.dictionary_widget.thumbnail_box.preview_area_nav_btns import PreviewAreaNavButtonsWidget
+from widgets.dictionary_widget.thumbnail_box.preview_area_nav_btns import (
+    PreviewAreaNavButtonsWidget,
+)
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 
 from widgets.dictionary_widget.thumbnail_box.variation_number_label import (
@@ -29,7 +30,7 @@ class DictionaryPreviewArea(QWidget):
         self.thumbnails = []
         self.current_index = 0
         self.main_widget = dictionary_widget.main_widget
-        self.selected_thumbnail = None
+        self.sequence_json = None
         self.current_thumbnail_box: ThumbnailBox = None
         self.sequence_populator = dictionary_widget.sequence_populator
         self.base_word = ""
@@ -70,6 +71,11 @@ class DictionaryPreviewArea(QWidget):
         else:
             self.image_label.setText("Select a sequence to preview it here!")
             self._adjust_label_for_text()
+        # extract the json and save it as self.sequence_json
+        if self.current_thumbnail_box:
+            self.sequence_json = self.current_thumbnail_box.metadata_extractor.extract_metadata_from_file(
+                self.thumbnails[index]
+            )
 
     def _scale_pixmap_to_label(self, pixmap: QPixmap):
         label_width = self.image_label.width()
@@ -91,10 +97,10 @@ class DictionaryPreviewArea(QWidget):
     def select_thumbnail(self, thumbnail_box, index, base_word):
         self.current_index = index
         self.base_word = base_word
+        self.current_thumbnail_box = thumbnail_box
         self.update_base_word_label()
         self.update_thumbnails(self.thumbnails)
         self.update_preview(index)
-        self.current_thumbnail_box = thumbnail_box
 
     def update_base_word_label(self):
         self.base_word_label.setText(self.base_word)
@@ -105,11 +111,9 @@ class DictionaryPreviewArea(QWidget):
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def edit_sequence(self):
-        if self.selected_thumbnail:
+        if self.sequence_json:
             self.main_widget.setCurrentIndex(self.main_widget.builder_tab_index)
-            self.sequence_populator.load_sequence_from_thumbnail(
-                self.selected_thumbnail
-            )
+            self.sequence_populator.load_sequence_from_json(self.sequence_json)
 
         else:
             QMessageBox.warning(
@@ -119,13 +123,6 @@ class DictionaryPreviewArea(QWidget):
     def showEvent(self, event):
         super().showEvent(event)
         if self.thumbnails and self.current_index is not None:
-            self.update_preview(self.current_index)
-        else:
-            self._adjust_label_for_text()
-
-    def resize_dictionary_preview_area(self):
-        # This function should be called whenever the splitter is moved or the window is resized.
-        if self.current_index is not None:
             self.update_preview(self.current_index)
         else:
             self._adjust_label_for_text()

@@ -63,3 +63,9 @@ class ThumbnailBox(QWidget):
         self.setMaximumWidth(width)
         
         self.image_label.update_thumbnail()
+
+    def update_thumbnails(self, thumbnails):
+        self.thumbnails = thumbnails
+        self.current_index = 0
+        self.variation_number_label.update_index(self.current_index)
+        self.image_label.update_thumbnail()

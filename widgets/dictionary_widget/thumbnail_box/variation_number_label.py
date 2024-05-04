@@ -12,3 +12,6 @@ class VariationNumberLabel(QLabel):
         super().__init__(f"Variation {index + 1}")
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setFont(QFont("Arial", 14, QFont.Weight.Bold))
+
+    def update_index(self, index):
+        self.setText(f"Variation {index + 1}")
