@@ -90,7 +90,6 @@ class ImageExportLayoutManager:
         Define or adjust layout options for various counts of filled beats without the start position.
         Customize this as needed if different from layouts with start position.
         """
-        # Example where it might be the same initially but can be customized further
         return {
             0: (1, 1),
             1: (1, 1),
@@ -104,9 +103,9 @@ class ImageExportLayoutManager:
             9: (3, 3),
             10: (5, 2),
             11: (5, 3),
-            12: (4, 4),
-            13: (5, 4),
-            14: (5, 4),
-            15: (5, 4),
-            16: (5, 4),
+            12: (3, 4),
+            13: (4, 4),
+            14: (4, 4),
+            15: (4, 4),
+            16: (4, 4),
         }
