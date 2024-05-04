@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QImage, QPainter, QPixmap
 from path_helpers import get_my_photos_path
+from widgets.image_export_dialog.image_export_dialog import ImageExportDialog
 from widgets.sequence_widget.SW_beat_frame.beat import Beat, BeatView
 
 if TYPE_CHECKING:
@@ -20,31 +21,10 @@ class SequenceImageExportManager:
         self.sequence_widget = beat_frame.sequence_widget
 
     def save_image(self):
-        word = self.beat_frame.get_current_word()
-        if word == "":
-            self.indicator_label.show_message(
-                "You must build a sequence to save it as an image."
-            )
-            return
+        self.indicator_label.show_message("Image saved")
+        self.exec_dialog()
 
-        # Set the initial directory
-        if not self.last_save_directory:
-            dir = get_my_photos_path(f"{word}.png")
-        else:
-            dir = self.last_save_directory
-
-        version_number = 1
-        while True:
-            versioned_filename = f"{word}_v{version_number}.png"
-            if not os.path.exists(os.path.join(dir, versioned_filename)):
-                break
-            version_number += 1
-
-        file_name = f"{dir}/{versioned_filename}"
-
-        self.last_save_directory = os.path.dirname(file_name)
-
-        # Save the image (rest of your existing code to generate the image)
+    def exec_dialog(self):
         filled_beats = [beat for beat in self.beat_frame.beats if beat.is_filled]
         column_count, row_count = self._calculate_layout(len(filled_beats))
         for beat in filled_beats:
@@ -52,10 +32,13 @@ class SequenceImageExportManager:
         beat_frame_image = self.create_image(column_count, row_count)
         self._draw_beats(beat_frame_image, filled_beats, column_count, row_count)
 
-        beat_frame_image.save(file_name, "PNG")
-        self.indicator_label.show_message(f"Image saved as {file_name.split('/')[-1]}")
-        # return the image
-        return beat_frame_image
+        pixmap = QPixmap.fromImage(beat_frame_image)
+        dialog = ImageExportDialog(self.beat_frame.main_widget, pixmap)
+        if dialog.exec():
+            options = dialog.get_export_options()
+            print(
+                options
+            )  # Process these options to modify the image as needed before final save
 
     def create_image(self, column_count, row_count) -> QImage:
         self.beat_size = int(self.beat_frame.start_pos_view.beat.width())
@@ -118,7 +101,6 @@ class SequenceImageExportManager:
                     painter.drawPixmap(target_x, target_y, beat_pixmap)
                     beat_number += 1
         painter.end()
-
 
     def _draw_beats(self, image, filled_beats, column_count, row_count) -> None:
         painter = QPainter(image)

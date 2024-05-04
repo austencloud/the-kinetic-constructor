@@ -133,6 +133,9 @@ class MainWidget(QTabWidget):
 
     def on_tab_changed(self) -> None:
         current_widget = self.currentWidget()
+        self.resize_current_widget(current_widget)
+
+    def resize_current_widget(self, current_widget):
         if current_widget == self.top_builder_widget:
             if not self.top_builder_widget.initialized:
                 self.top_builder_widget.initialized = True
@@ -153,7 +156,16 @@ class MainWidget(QTabWidget):
         elif current_widget == self.dictionary:
             self.dictionary.browser.resize_dictionary_browser()
 
+    def resize_all_widgets(self):
+        starting_widget = self.currentWidget()
+        for i in range(self.count()):
+            self.setCurrentIndex(i)
+            self.resize_current_widget(self.currentWidget())
+        self.setCurrentWidget(starting_widget)
+
+
     def showEvent(self, event) -> None:
         super().showEvent(event)
         self.main_window.window_manager.set_dimensions()
+        self.resize_all_widgets()
         self.on_tab_changed()
