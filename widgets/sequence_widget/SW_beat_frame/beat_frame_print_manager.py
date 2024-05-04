@@ -77,7 +77,7 @@ class BeatFramePrintManager:
         # Use the layout logic from BeatFrameImageExportManager
         # Here, you could directly access the get_layout_options method or replicate its logic
         # For simplicity, I'm assuming you have access to that method here
-        return self.beat_frame.export_manager._calculate_layout(filled_beat_count)
+        return self.beat_frame.export_manager.layout_manager.calculate_layout(filled_beat_count)
 
     def show_preview(self) -> None:
         view = QGraphicsView(self.beat_frame_scene)

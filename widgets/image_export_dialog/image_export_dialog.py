@@ -7,6 +7,7 @@ from PyQt6.QtGui import QPixmap
 
 from widgets.image_export_dialog.export_control_panel import ExportDialogControlPanel
 from widgets.image_export_dialog.export_dialog_preview import ExportDialogPreviewPanel
+from widgets.image_export_layout_manager import ImageExportLayoutManager
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.sequence_image_export_manager import (
@@ -42,22 +43,26 @@ class ImageExportDialog(QDialog):
         self.button_panel.include_start_pos_check.setChecked(
             export_manager.include_start_pos
         )
-        self.button_panel.include_start_pos_check.toggled.connect(
-            self.update_export_setting
-        )
+
 
         # Add components to layout
         self.layout.addWidget(self.preview_panel, 1)
         self.layout.addWidget(self.button_panel, 1)
 
-        self.update_preview_based_on_options()
-
-    def update_export_setting(self):
-        new_value = self.button_panel.include_start_pos_check.isChecked()
-        self.export_manager.settings_manager.set_image_export_setting(
-            "include_start_position", new_value
+        self.button_panel.include_start_pos_check.toggled.connect(
+            self.update_export_setting_and_layout
         )
         self.update_preview_based_on_options()
+
+    def update_export_setting_and_layout(self):
+        new_value = self.button_panel.include_start_pos_check.isChecked()
+        self.export_manager.include_start_pos = new_value  # Update the manager's state
+        self.export_manager.settings_manager.set_image_export_setting("include_start_position", new_value)
+        self.update_preview_based_on_options()  # Redraw preview with the new layout settings
+
+    def update_preview_based_on_options(self):
+        include_start_pos = self.button_panel.include_start_pos_check.isChecked()
+        self.preview_panel.update_preview_with_start_pos(include_start_pos)
 
     def update_preview_based_on_options(self):
         include_start_pos = self.button_panel.include_start_pos_check.isChecked()

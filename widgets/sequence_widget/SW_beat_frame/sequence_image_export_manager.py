@@ -4,6 +4,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QImage, QPainter, QPixmap
 from path_helpers import get_my_photos_path
 from widgets.image_export_dialog.image_export_dialog import ImageExportDialog
+from widgets.image_export_layout_manager import ImageExportLayoutManager
 from widgets.sequence_widget.SW_beat_frame.beat import Beat, BeatView
 
 if TYPE_CHECKING:
@@ -22,6 +23,7 @@ class SequenceImageExportManager:
         self.sequence_widget = beat_frame.sequence_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
         self.include_start_pos = self.settings_manager.get_image_export_setting('include_start_position', True)
+        self.layout_manager = ImageExportLayoutManager(self)
 
     def save_image(self):
         self.indicator_label.show_message("Image saved")
@@ -29,7 +31,7 @@ class SequenceImageExportManager:
 
     def exec_dialog(self):
         filled_beats = [beat for beat in self.beat_frame.beats if beat.is_filled]
-        column_count, row_count = self._calculate_layout(len(filled_beats))
+        column_count, row_count = self.layout_manager.calculate_layout(len(filled_beats))
         for beat in filled_beats:
             beat.scene().clearSelection()
 
@@ -52,7 +54,7 @@ class SequenceImageExportManager:
 
     def create_beat_frame_image(self, sequence: list[dict], include_start_pos = True) -> QImage:
         filled_beats = self.process_sequence_to_beats(sequence)
-        column_count, row_count = self._calculate_layout(len(filled_beats))
+        column_count, row_count = self.layout_manager.calculate_layout(len(filled_beats))
         image = self.create_image(column_count, row_count)
         self._draw_beats(image, filled_beats, column_count, row_count, include_start_pos)
         return image
@@ -123,45 +125,3 @@ class SequenceImageExportManager:
             Qt.TransformationMode.SmoothTransformation,
         )
 
-    def _calculate_layout(self, filled_beat_count):
-        """Calculate the number of columns and rows based on the number of filled beats."""
-        if self.include_start_pos:
-            filled_beat_count += 1  # Account for the extra column for the start position
-
-        layout_options = self.get_layout_options()
-
-        if filled_beat_count in layout_options:
-            return layout_options[filled_beat_count]
-        else:
-            column_count = min(
-                filled_beat_count // self.beat_frame.ROW_COUNT + 1,
-                self.beat_frame.COLUMN_COUNT,
-            )
-            row_count = min(
-                (filled_beat_count + column_count - 1) // column_count,
-                self.beat_frame.ROW_COUNT,
-            )
-            return column_count, row_count
-
-    def get_layout_options(self) -> dict[int, tuple[int, int]]:
-        layout_options = {
-            0: (1, 1),
-            1: (2, 1),
-            2: (3, 1),
-            3: (4, 1),
-            4: (3, 2),
-            5: (4, 2),
-            6: (4, 2),
-            7: (5, 2),
-            8: (5, 2),
-            9: (4, 3),
-            10: (5, 3),
-            11: (5, 3),
-            12: (4, 4),
-            13: (5, 4),
-            14: (5, 4),
-            15: (5, 4),
-            16: (5, 4),
-        }
-
-        return layout_options
