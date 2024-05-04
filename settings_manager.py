@@ -36,6 +36,10 @@ class SettingsManager:
             "7": False,
             "8": False,
         },
+        "image_export_options": {
+            "include_start_pos": False,
+            "user_name": "TacoCat",
+        },
     }
 
     def __init__(self, main_window: "MainWindow") -> None:
@@ -58,6 +62,18 @@ class SettingsManager:
             settings = self.settings
         with open(self.settings_json, "w") as file:
             json.dump(settings, file, indent=4)
+
+    def get_image_export_setting(self, key, default=None):
+        # Retrieve specific image export settings
+        image_export_settings: dict = self.settings.get("image_export", {})
+        return image_export_settings.get(key, default)
+
+    def set_image_export_setting(self, key, value):
+        # Set specific image export settings
+        if "image_export" not in self.settings:
+            self.settings["image_export"] = {}
+        self.settings["image_export"][key] = value
+        self.save_settings()  # Save settings to file
 
     def get_setting(self, key, default=None) -> any:
         return self.settings.get(key, default)

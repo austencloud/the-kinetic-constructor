@@ -1,11 +1,14 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QPushButton, QCheckBox, QLineEdit, QWidget
+from PyQt6.QtCore import pyqtSignal
 
 if TYPE_CHECKING:
     from widgets.image_export_dialog.image_export_dialog import ImageExportDialog
 
 
 class ExportDialogControlPanel(QWidget):
+    optionChanged = pyqtSignal()
+
     def __init__(self, export_dialog: "ImageExportDialog"):
         super().__init__()
         self.parent_dialog = export_dialog
@@ -13,6 +16,8 @@ class ExportDialogControlPanel(QWidget):
 
         self.include_start_pos_check = QCheckBox("Include Start Position", self)
         self.include_start_pos_check.setChecked(True)
+        self.include_start_pos_check.toggled.connect(self.optionChanged.emit)
+
         self.add_name_field = QLineEdit("Your Name", self)
         self.add_date_field = QLineEdit("Date", self)
         self.ok_button = QPushButton("Save", self)

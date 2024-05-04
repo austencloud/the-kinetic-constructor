@@ -19,5 +19,8 @@
         "6": false,
         "7": false,
         "8": false
+    },
+    "image_export": {
+        "include_start_position": false
     }
 }
