@@ -45,3 +45,4 @@ class DictionarySelectionHandler:
             thumbnail_index,
             image_label.thumbnail_box.base_word,
         )
+        

@@ -1,3 +1,4 @@
+
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QWidget,
@@ -11,13 +12,9 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 
 from widgets.dictionary_widget.thumbnail_box.base_word_label import BaseWordLabel
+from widgets.dictionary_widget.thumbnail_box.preview_area_nav_btns import PreviewAreaNavButtonsWidget
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
-from widgets.dictionary_widget.thumbnail_box.thumbnail_box_nav_buttons_widget import (
-    ThumbnailBoxNavButtonsWidget,
-)
-from widgets.dictionary_widget.thumbnail_box.preview_area_nav_buttons_widget import (
-    PreviewAreaNavButtonsWidget,
-)
+
 from widgets.dictionary_widget.thumbnail_box.variation_number_label import (
     VariationNumberLabel,
 )

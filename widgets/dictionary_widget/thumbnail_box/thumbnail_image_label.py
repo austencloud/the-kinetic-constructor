@@ -60,10 +60,16 @@ class ThumbnailImageLabel(QLabel):
             self.thumbnails,
             self.current_index,
         )
-
+        
     def set_selected(self, selected: bool):
         self.is_selected = selected
         if selected:
             self.setStyleSheet("border: 3px solid blue;")
         else:
             self.setStyleSheet("border: 3px solid black;")
+
+    def set_pixmap(self, image_path):
+        self.setPixmap(QPixmap(image_path))
+        self.update()
+        QApplication.processEvents()
+        self.update_thumbnail()

@@ -1,10 +1,11 @@
+
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QShowEvent, QResizeEvent
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
 from widgets.dictionary_widget.thumbnail_box.metadata_extractor import MetaDataExtractor
+from widgets.dictionary_widget.thumbnail_box.thumbnail_box_nav_btns import ThumbnailBoxNavButtonsWidget
 from .base_word_label import BaseWordLabel
-from .thumbnail_box_nav_buttons_widget import ThumbnailBoxNavButtonsWidget
 from .thumbnail_image_label import ThumbnailImageLabel
 from .variation_number_label import VariationNumberLabel
 

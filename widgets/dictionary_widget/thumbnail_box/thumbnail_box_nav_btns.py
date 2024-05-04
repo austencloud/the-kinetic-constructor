@@ -46,9 +46,7 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
                 f"Variation {self.current_index + 1}"
             )
             preview_area.current_index = self.current_index
-            preview_area.update_preview(
-                self.current_index
-            )
+            preview_area.update_preview(self.current_index)
 
     def update_thumbnail(self):
         self.thumbnail_label.current_index = self.current_index
