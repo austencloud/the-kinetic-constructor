@@ -18,7 +18,7 @@ class PreviewAreaNavButtonsWidget(QWidget):
         self.enable_buttons(False)
 
     def _setup_buttons(self):
-        self.layout = QHBoxLayout(self)
+        self.layout:QHBoxLayout = QHBoxLayout(self)
         self.buttons = []
         button_texts = ["<", ">"]
         for text in button_texts:
@@ -39,9 +39,9 @@ class PreviewAreaNavButtonsWidget(QWidget):
             self.preview_area.current_index = (
                 self.preview_area.current_index + 1
             ) % len(self.preview_area.thumbnails)
-
+        QApplication.processEvents()
         self.preview_area.update_preview(self.preview_area.current_index)
-        # update the preview area's variation label
+        QApplication.processEvents()
         self.preview_area.variation_number_label.setText(
             f"Variation {self.preview_area.current_index+ 1}"
         )
