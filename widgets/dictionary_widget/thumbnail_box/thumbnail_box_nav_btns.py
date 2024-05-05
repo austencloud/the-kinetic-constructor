@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QPushButton, QWidget, QHBoxLayout
+from PyQt6.QtWidgets import QPushButton, QWidget, QHBoxLayout,  QApplication
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
@@ -46,6 +46,7 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
                 f"Variation {self.current_index + 1}"
             )
             preview_area.current_index = self.current_index
+            QApplication.processEvents()
             preview_area.update_preview(self.current_index)
 
     def update_thumbnail(self):

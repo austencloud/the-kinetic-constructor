@@ -106,6 +106,8 @@ class GE_StartPosOriPickerWidget(QWidget):
         button.setIcon(QIcon(icon_path))
         button.clicked.connect(click_function)
         button.setFixedSize(40, 40)
+        # make the cursor a pointing hand when hovering over the button
+        button.setCursor(Qt.CursorShape.PointingHandCursor)
         return button
 
     def set_orientation(self, orientation):

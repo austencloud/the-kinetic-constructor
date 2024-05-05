@@ -119,22 +119,24 @@ class DictionaryBrowserScrollWidget(QWidget):
 
     def add_new_thumbnail_box(self, new_word, thumbnails):
         # Find the right position based on alphabetical order
-        index = next(
-            (
-                i
-                for i, box in enumerate(self.thumbnail_boxes)
-                if box.base_word.lower() > new_word.lower()
-            ),
-            len(self.thumbnail_boxes),
-        )
-
-        # Create new ThumbnailBox
+        index = self.find_insert_index(new_word)
         thumbnail_box = ThumbnailBox(self.browser, new_word, thumbnails)
         row, col = divmod(index, 3)
         self.grid_layout.addWidget(thumbnail_box, row, col)
         self.thumbnail_boxes.insert(index, thumbnail_box)
+        self.update_thumbnail_sizes()
+        thumbnail_box.image_label.update_thumbnail()
 
-        for i in range(index + 1, len(self.thumbnail_boxes)):
-            row, col = divmod(i, 3)
-            self.grid_layout.addWidget(self.thumbnail_boxes[i], row, col)
-            self.thumbnail_boxes[i].resize_thumbnail_box()
+    def update_thumbnail_sizes(self):
+        for box in self.thumbnail_boxes:
+            box.resize_thumbnail_box()
+
+    def find_insert_index(self, new_word):
+        for i, box in enumerate(self.thumbnail_boxes):
+            if box.base_word.lower() > new_word.lower():
+                return i
+        return len(self.thumbnail_boxes)
+
+    def update_all_thumbnails(self):
+        for thumbnail_box in self.thumbnail_boxes_dict.values():
+            thumbnail_box.image_label.update_thumbnail()

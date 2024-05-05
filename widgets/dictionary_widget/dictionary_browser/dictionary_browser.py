@@ -33,3 +33,9 @@ class DictionaryBrowser(QWidget):
 
     def resize_dictionary_browser(self):
         self.scroll_widget.resize_dictionary_browser_scroll_widget()
+
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        # Update all thumbnail images when the widget is shown
+        self.scroll_widget.update_all_thumbnails()

@@ -21,7 +21,9 @@ class ThumbnailGenerator:
     def generate_and_save_thumbnail(
         self, sequence, turn_pattern, structural_variation_number, directory
     ):
-        beat_frame_image = self.export_manager.create_sequence_image(sequence)
+        beat_frame_image = self.export_manager.create_sequence_image(
+            sequence, include_start_pos=False
+        )
         pil_image = self.qimage_to_pil(beat_frame_image)
         metadata = json.dumps(sequence)
         info = self._create_png_info(metadata)

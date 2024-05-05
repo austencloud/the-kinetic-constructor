@@ -1,10 +1,11 @@
-
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QShowEvent, QResizeEvent
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
 from widgets.dictionary_widget.thumbnail_box.metadata_extractor import MetaDataExtractor
-from widgets.dictionary_widget.thumbnail_box.thumbnail_box_nav_btns import ThumbnailBoxNavButtonsWidget
+from widgets.dictionary_widget.thumbnail_box.thumbnail_box_nav_btns import (
+    ThumbnailBoxNavButtonsWidget,
+)
 from .base_word_label import BaseWordLabel
 from .thumbnail_image_label import ThumbnailImageLabel
 from .variation_number_label import VariationNumberLabel
@@ -20,7 +21,7 @@ class ThumbnailBox(QWidget):
         super().__init__(browser)
 
         self.base_word = base_word
-        self.thumbnails:list[str] = thumbnails
+        self.thumbnails: list[str] = thumbnails
         self.browser = browser
         self.main_widget = browser.dictionary_widget.main_widget
         self.initial_size_set = False
@@ -58,10 +59,7 @@ class ThumbnailBox(QWidget):
         parent_width = self.browser.width() - scrollbar_width
 
         width = parent_width // 3
-        self.setMinimumWidth(width)
-        self.setMaximumWidth(width)
-        
-        self.image_label.update_thumbnail()
+        self.setFixedWidth(width)
 
     def update_thumbnails(self, thumbnails):
         self.thumbnails = thumbnails
