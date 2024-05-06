@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType
 
+from Enums.letters import Letter
 from objects.prop.prop import Prop
 
 
@@ -38,21 +39,21 @@ class SwapBetaHandler:
         ) or self.pictograph.check.ends_with_layer3():
             return
 
-        if letter_type == LetterType.Type1:
-            self._handle_type1_swap()
-        elif letter_type == LetterType.Type2:
-            self._handle_type2_swap()
-        elif letter_type == LetterType.Type3:
-            self._handle_type3_swap()
-        elif letter_type == LetterType.Type4:
-            self._handle_type4_swap()
-        elif letter_type == LetterType.Type5:
-            self._handle_type5_swap()
-        elif letter_type == LetterType.Type6:
-            self._handle_type6_swap()
+        swap_handlers = {
+            LetterType.Type1: self._handle_type1_swap,
+            LetterType.Type2: self._handle_type2_swap,
+            LetterType.Type3: self._handle_type3_swap,
+            LetterType.Type4: self._handle_type4_swap,
+            LetterType.Type5: self._handle_type5_swap,
+            LetterType.Type6: self._handle_type6_swap,
+        }
+
+        swap_handler = swap_handlers.get(letter_type)
+        if swap_handler:
+            swap_handler()
 
     def _handle_type1_swap(self) -> None:
-        if self.pictograph.letter in ["G", "H"]:
+        if self.pictograph.letter in [Letter.G, Letter.H]:
             further_direction = self.ppm.dir_calculator.get_dir(
                 self.pictograph.red_motion
             )

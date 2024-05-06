@@ -1,7 +1,9 @@
 {
   "G": {
     "(0, 0)": {
-      "swap_beta_w_radial_blue_pro_sw_red_pro_sw": true
+      "swap_beta_w_radial_blue_pro_sw_red_pro_sw": true,
+      "red": [15, -45],
+      "blue": [75, -90]
     }
   }
 }
