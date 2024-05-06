@@ -18,16 +18,33 @@ class ImageExportDialog(QDialog):
         self.main_widget = export_manager.main_widget
         self.setWindowTitle("Export Image Options")
         self.setModal(True)
+        self._resize_the_dialog()
+        self._setup_preview_panel()
+        self._setup_control_panel(export_manager)
+        self._setup_layout()
+        self.update_preview_based_on_options()
 
-        # Calculate initial size based on main widget
+    def _resize_the_dialog(self):
         main_width = self.main_widget.width()
         main_height = self.main_widget.height()
-        self.resize(
-            main_width // 2, main_height // 2
-        )  # Set initial size to 50% of main widget
+        self.resize(main_width // 2, main_height // 2)
 
-        # Layout setup
+    def _setup_layout(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.layout.addLayout(self.preview_panel_layout, 1)
+        self.layout.addWidget(self.control_panel, 1)
+
+    def _setup_control_panel(self, export_manager: "SequenceImageExportManager"):
+        self.control_panel = ExportDialogControlPanel(self)
+        self.control_panel.optionChanged.connect(self.update_preview_based_on_options)
+        self.control_panel.include_start_pos_check.setChecked(
+            export_manager.include_start_pos
+        )
+        self.control_panel.include_start_pos_check.toggled.connect(
+            self.update_export_setting_and_layout
+        )
+
+    def _setup_preview_panel(self):
         self.preview_panel = ExportDialogPreviewPanel(self)
         self.preview_panel_label = QLabel(self)
         self.preview_panel_label.setText("Preview:")
@@ -36,43 +53,28 @@ class ImageExportDialog(QDialog):
         self.preview_panel_layout = QVBoxLayout()
         self.preview_panel_layout.addWidget(self.preview_panel_label)
         self.preview_panel_layout.addWidget(self.preview_panel)
-        self.button_panel = ExportDialogControlPanel(self)
-        self.button_panel.optionChanged.connect(self.update_preview_based_on_options)
-        self.button_panel.include_start_pos_check.setChecked(
-            export_manager.include_start_pos
-        )
-
-        # Add components to layout
-        self.layout.addLayout(self.preview_panel_layout, 1)
-        self.layout.addWidget(self.button_panel, 1)
-
-        self.button_panel.include_start_pos_check.toggled.connect(
-            self.update_export_setting_and_layout
-        )
-        self.update_preview_based_on_options()
 
     def update_export_setting_and_layout(self):
-        new_value = self.button_panel.include_start_pos_check.isChecked()
-        self.export_manager.include_start_pos = new_value  # Update the manager's state
+        new_value = self.control_panel.include_start_pos_check.isChecked()
+        self.export_manager.include_start_pos = new_value
         self.export_manager.settings_manager.set_image_export_setting(
             "include_start_position", new_value
         )
-        self.update_preview_based_on_options()  # Redraw preview with the new layout settings
+        self.update_preview_based_on_options()
 
     def update_preview_based_on_options(self):
-        include_start_pos = self.button_panel.include_start_pos_check.isChecked()
+        include_start_pos = self.control_panel.include_start_pos_check.isChecked()
         self.preview_panel.update_preview_with_start_pos(include_start_pos)
-        # resize it appropriately
 
     def update_preview_based_on_options(self):
-        include_start_pos = self.button_panel.include_start_pos_check.isChecked()
+        include_start_pos = self.control_panel.include_start_pos_check.isChecked()
         self.preview_panel.update_preview_with_start_pos(include_start_pos)
 
     def get_export_options(self):
         return {
-            "include_start_pos": self.button_panel.include_start_pos_check.isChecked(),
-            "user_name": self.button_panel.add_name_field.text(),
-            "export_date": self.button_panel.add_date_field.text(),
+            "include_start_pos": self.control_panel.include_start_pos_check.isChecked(),
+            "user_name": self.control_panel.add_name_field.text(),
+            "export_date": self.control_panel.add_date_field.text(),
         }
 
     def resizeEvent(self, event):

@@ -17,11 +17,11 @@ class ImageExportLayoutManager:
         # Dynamically fetch the current setting from the export manager
         return self.image_export_manager.include_start_pos
 
-    def calculate_layout(self, filled_beat_count: int) -> tuple[int, int]:
+    def calculate_layout(self, filled_beat_count: int, include_start_pos: bool) -> tuple[int, int]:
         """
         Determine the layout by delegating to the specific method based on whether the start position is included.
         """
-        if self.include_start_pos:
+        if include_start_pos:
             return self.calculate_layout_with_start(filled_beat_count)
         else:
             return self.calculate_layout_without_start(filled_beat_count)
@@ -70,7 +70,7 @@ class ImageExportLayoutManager:
             1: (2, 1),
             2: (3, 1),
             3: (4, 1),
-            4: (3, 2),
+            4: (5, 1),
             5: (4, 2),
             6: (4, 2),
             7: (5, 2),

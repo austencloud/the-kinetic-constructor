@@ -6,6 +6,7 @@ from path_helpers import get_my_photos_path
 from widgets.image_export_dialog.image_export_dialog import ImageExportDialog
 from widgets.image_export_layout_manager import ImageExportLayoutManager
 from widgets.sequence_widget.SW_beat_frame.beat import Beat, BeatView
+from PyQt6.QtWidgets import QFileDialog
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class SequenceImageExportManager:
-    last_save_directory = None  # Class variable to store the last save directory
+    last_save_directory = None 
 
     def __init__(self, beat_frame: "SW_Beat_Frame") -> None:
         self.beat_frame = beat_frame
@@ -27,14 +28,10 @@ class SequenceImageExportManager:
         )
         self.layout_manager = ImageExportLayoutManager(self)
 
-    def save_image(self):
-        self.indicator_label.show_message("Image saved")
-        self.exec_dialog()
-
     def exec_dialog(self):
         filled_beats = [beat for beat in self.beat_frame.beats if beat.is_filled]
         column_count, row_count = self.layout_manager.calculate_layout(
-            len(filled_beats)
+            len(filled_beats), self.include_start_pos
         )
         for beat in filled_beats:
             beat.scene().clearSelection()
@@ -48,24 +45,63 @@ class SequenceImageExportManager:
             self.settings_manager.set_image_export_setting(
                 "include_start_position", self.include_start_pos
             )
-            beat_frame_image = self.create_image(column_count, row_count)
+
+            sequence_image = self.create_image(column_count, row_count)
             self._draw_beats(
-                beat_frame_image,
+                sequence_image,
                 filled_beats,
                 column_count,
                 row_count,
                 self.include_start_pos,
             )
 
-            pixmap = QPixmap.fromImage(beat_frame_image)
+            self.save_image(sequence_image)
             print("Image created with start position included:", self.include_start_pos)
+
+    def save_image(self, sequence_image: QImage):
+        word = self.beat_frame.get_current_word()
+        if word == "":
+            self.indicator_label.show_message(
+                "You must build a sequence to save it as an image."
+            )
+            return
+
+        version_number = 1
+        base_word_folder = get_my_photos_path(f"{word}")
+
+        file_path = os.path.join(base_word_folder, f"{word}_v{version_number}.png")
+
+        os.makedirs(base_word_folder, exist_ok=True)
+
+        while os.path.exists(file_path):
+            version_number += 1
+            file_path = os.path.join(base_word_folder, f"{word}_v{version_number}.png")
+
+        file_name, _ = QFileDialog.getSaveFileName(
+            self.beat_frame,
+            "Save Image",
+            file_path,
+            "PNG Files (*.png);;JPEG Files (*.jpg);;All Files (*)",
+        )
+
+        if not file_name:
+            return
+
+        if sequence_image.save(file_name, "PNG"):
+            self.indicator_label.show_message(
+                f"Image saved as {os.path.basename(file_name)}"
+            )
+            self.last_save_directory = os.path.dirname(file_name)
+        else:
+            self.indicator_label.show_message("Failed to save image.")
 
     def create_sequence_image(
         self, sequence: list[dict], include_start_pos=True
     ) -> QImage:
+
         filled_beats = self.process_sequence_to_beats(sequence)
         column_count, row_count = self.layout_manager.calculate_layout(
-            len(filled_beats)
+            len(filled_beats), include_start_pos
         )
         image = self.create_image(column_count, row_count)
         self._draw_beats(
@@ -103,22 +139,20 @@ class SequenceImageExportManager:
         return image
 
     def _draw_beats(
-        self, image, filled_beats, column_count, row_count, include_start_pos=True
+        self, image, filled_beats, column_count, row_count, include_start_pos
     ):
         painter = QPainter(image)
         beat_number = 0
 
         if include_start_pos:
-            # Draw the start position at the very beginning
             start_pos_pixmap = self._grab_pixmap(
                 self.beat_frame.start_pos_view, self.beat_size, self.beat_size
             )
             painter.drawPixmap(0, 0, start_pos_pixmap)
-            start_col = 1  # Start drawing beats from the second column
+            start_col = 1
         else:
-            start_col = 0  # Start drawing from the first column if no start position
+            start_col = 0
 
-        # Adjust loop to start from the appropriate column
         for row in range(row_count):
             for col in range(start_col, column_count):
                 if beat_number < len(filled_beats):
