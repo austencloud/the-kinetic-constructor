@@ -21,24 +21,35 @@ class ThumbnailImageLabel(QLabel):
         self.browser = thumbnail_box.browser
         self.is_selected = False
 
-        self.setScaledContents(False)  # Ensure the image scales with label size
-        self.update_thumbnail()
+        self.setScaledContents(False)
+        # self.update_thumbnail()
 
     def update_thumbnail(self):
         if self.thumbnails and 0 <= self.current_index < len(self.thumbnails):
+            QApplication.processEvents()  # Force any pending layout updates
             pixmap = QPixmap(self.thumbnails[self.current_index])
             self.set_pixmap_to_fit(pixmap)
         else:
             self.setText("No image available")
 
     def set_pixmap_to_fit(self, pixmap: QPixmap):
-        # Scale pixmap to fit within the current label dimensions
-        scaled_pixmap = pixmap.scaled(
-            self.size(),
-            Qt.AspectRatioMode.KeepAspectRatio,
-            Qt.TransformationMode.SmoothTransformation,
+        sequence_length = self.metadata_extractor.get_sequence_length(
+            self.thumbnails[self.current_index]
+        )
+        if sequence_length == 1:
+            target_width = int(self.thumbnail_box.width() * 0.6) - int(
+                self.thumbnail_box.margin * 2
+            )
+        else:
+            target_width = self.thumbnail_box.width() - int(
+                self.thumbnail_box.margin * 2
+            )
+
+        scaled_pixmap = pixmap.scaledToWidth(
+            target_width, Qt.TransformationMode.SmoothTransformation
         )
         self.setPixmap(scaled_pixmap)
+        self.adjustSize()  # Adjust the label size to fit the pixmap
 
     def thumbnail_clicked(self, event):
         metadata = self.metadata_extractor.extract_metadata_from_file(

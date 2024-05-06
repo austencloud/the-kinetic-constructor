@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 class ThumbnailBox(QWidget):
     def __init__(self, browser: "DictionaryBrowser", base_word, thumbnails) -> None:
         super().__init__(browser)
-
+        self.margin = 10
         self.base_word = base_word
         self.thumbnails: list[str] = thumbnails
         self.browser = browser
@@ -50,6 +50,10 @@ class ThumbnailBox(QWidget):
         )
         self.layout.addWidget(self.nav_buttons_widget)
         self.layout.addStretch()
+        # self.layout.setSpacing(0)
+        self.layout.setContentsMargins(
+            self.margin, self.margin, self.margin, self.margin
+        )
         self.setStyleSheet("background-color: rgba(255, 255, 255, 0.5);")
 
     def resize_thumbnail_box(self):
@@ -60,6 +64,7 @@ class ThumbnailBox(QWidget):
 
         width = parent_width // 3
         self.setFixedWidth(width)
+        self.image_label.update_thumbnail()
 
     def update_thumbnails(self, thumbnails):
         self.thumbnails = thumbnails

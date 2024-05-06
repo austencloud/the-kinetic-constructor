@@ -95,6 +95,7 @@ class DictionaryBrowserScrollWidget(QWidget):
             thumbnail_boxes: list[ThumbnailBox] = self.thumbnail_boxes_dict.values()
             for box in thumbnail_boxes:
                 box.resize_thumbnail_box()
+            # self.update_all_thumbnails()
 
     def clear_layout(self):
         while self.grid_layout.count():
