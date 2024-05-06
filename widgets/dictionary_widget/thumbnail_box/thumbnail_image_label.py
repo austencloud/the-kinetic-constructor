@@ -17,7 +17,7 @@ class ThumbnailImageLabel(QLabel):
         self.mousePressEvent = self.thumbnail_clicked
         self.thumbnails = thumbnail_box.thumbnails
         self.current_index = thumbnail_box.current_index
-        self.metadata_extractor = thumbnail_box.metadata_extractor
+        self.metadata_extractor = thumbnail_box.main_widget.metadata_extractor
         self.browser = thumbnail_box.browser
         self.is_selected = False
 

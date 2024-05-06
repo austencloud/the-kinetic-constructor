@@ -33,7 +33,7 @@ class ThumbnailBox(QWidget):
         self.layout.setSpacing(0)
 
     def _setup_components(self):
-        self.metadata_extractor = MetaDataExtractor(self)
+        self.metadata_extractor = MetaDataExtractor(self.main_widget)
         self.base_word_label = BaseWordLabel(self.base_word)
         self.image_label = ThumbnailImageLabel(self)
         self.variation_number_label = VariationNumberLabel(self.current_index)

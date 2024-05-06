@@ -3,13 +3,15 @@ from PIL import Image
 from PyQt6.QtWidgets import QMessageBox
 import json
 
+
 if TYPE_CHECKING:
     from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
+    from widgets.main_widget.main_widget import MainWidget
 
 
 class MetaDataExtractor:
-    def __init__(self, thumbnail_box: "ThumbnailBox"):
-        self.thumbnail_box = thumbnail_box
+    def __init__(self, main_widget: "MainWidget"):
+        self.main_widget = main_widget
 
     def extract_metadata_from_file(self, file_path):
         # check if a file exists at the path we're passing as "file_path"
@@ -23,13 +25,13 @@ class MetaDataExtractor:
                     return json.loads(metadata)
                 else:
                     QMessageBox.warning(
-                        self.thumbnail_box.main_widget,
+                        self.main_widget,
                         "Error",
                         "No sequence metadata found in the thumbnail.",
                     )
         except Exception as e:
             QMessageBox.critical(
-                self.thumbnail_box.main_widget,
+                self.main_widget,
                 "Error",
                 f"Error loading sequence from thumbnail: {e}",
             )

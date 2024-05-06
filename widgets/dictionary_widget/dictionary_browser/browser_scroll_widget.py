@@ -58,20 +58,17 @@ class DictionaryBrowserScrollWidget(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
 
     def sort_and_display_thumbnails(self, sort_order="Word Length"):
-
         self.clear_layout()
         base_words = self.get_sorted_base_words(sort_order)
         for i, (word, thumbnails) in enumerate(base_words):
             if word not in self.thumbnail_boxes_dict:
                 thumbnail_box = ThumbnailBox(self.browser, word, thumbnails)
+                thumbnail_box.image_label.update_thumbnail()
                 self.thumbnail_boxes_dict[word] = thumbnail_box
-            else:
-                self.thumbnail_boxes_dict[word].update_thumbnails(thumbnails)
 
             thumbnail_box = self.thumbnail_boxes_dict[word]
             row, col = divmod(i, 3)
             self.grid_layout.addWidget(thumbnail_box, row, col)
-
 
     def get_sorted_base_words(self, sort_order):
         dictionary_dir = get_images_and_data_path("dictionary")

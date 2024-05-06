@@ -1,35 +1,31 @@
 import os
 import json
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager
 
 
 class StructuralVariationChecker:
-    def __init__(self, dictionary_directory):
-        self.dictionary_directory = dictionary_directory
+    def __init__(self, add_to_dictionary_manager: "AddToDictionaryManager"):
+        self.add_to_dictionary_manager = add_to_dictionary_manager
+        self.dictionary_dir = add_to_dictionary_manager.dictionary_dir
+        self.metadata_extractor = (
+            add_to_dictionary_manager.sequence_widget.main_widget.metadata_extractor
+        )
 
     def check_for_structural_variation(self, current_sequence, base_word):
-        # Path where variations are stored
-        base_path = os.path.join(self.dictionary_directory, base_word)
-        if not os.path.exists(base_path):
-            os.makedirs(base_path, exist_ok=True)
-
-        # Iterate through existing files to check for identical structural variations
-        for filename in os.listdir(base_path):
-            if filename.endswith(".json"):
-                with open(os.path.join(base_path, filename), "r") as file:
-                    try:
-                        existing_sequence = json.load(file)
-                        if self.are_structural_variations_identical(
-                            current_sequence, existing_sequence
-                        ):
-                            return (
-                                True,
-                                filename,
-                            )  # Returns True and the existing filename if match is found
-                    except json.JSONDecodeError:
-                        continue  # In case of a bad file, just skip it
-
-        # No match found 
-        return False, "1"
+        base_path = os.path.join(self.dictionary_dir, base_word)
+        for root, dirs, files in os.walk(base_path):
+            for filename in files:
+                if filename.lower().endswith((".png", ".jpg", ".jpeg")):
+                    file_path = os.path.join(root, filename)
+                    existing_sequence = self.metadata_extractor.extract_metadata_from_file(file_path)
+                    if existing_sequence and self.are_structural_variations_identical(
+                        current_sequence, existing_sequence
+                    ):
+                        return True  # Structural variation exists
+        return False  # No matching structural variation found
 
     def are_structural_variations_identical(self, seq1, seq2):
         def structural_variation_matches(b1, b2):

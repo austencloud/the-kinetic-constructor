@@ -92,7 +92,7 @@ class DictionaryPreviewArea(QWidget):
             self._scale_pixmap_to_label(pixmap)
 
         if self.current_thumbnail_box:
-            self.sequence_json = self.current_thumbnail_box.metadata_extractor.extract_metadata_from_file(
+            self.sequence_json = self.current_thumbnail_box.main_widget.metadata_extractor.extract_metadata_from_file(
                 self.thumbnails[index]
             )
 
