@@ -7,6 +7,7 @@ from .mirrored_entry_updaters import (
     StandardOrientationUpdater,
 )
 from PyQt6.QtWidgets import QApplication
+
 if TYPE_CHECKING:
     from .mirrored_entry_manager import SpecialPlacementMirroredEntryManager
 
@@ -27,7 +28,7 @@ class MirroredEntryUpdater:
             return StandardOrientationUpdater(self, arrow)
 
     def update_entry(self, arrow: Arrow):
-        ori_key = self.manager.data_updater.get_ori_key(arrow.motion)
+        ori_key = self.manager.data_updater._generate_ori_key(arrow.motion)
         letter = arrow.pictograph.letter
         letter_data, original_turn_data = (
             self.manager.data_prep._fetch_letter_data_and_original_turn_data(

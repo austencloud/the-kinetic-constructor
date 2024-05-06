@@ -20,7 +20,7 @@ class MirroredEntryCreator:
         )
 
     def create_entry(self, letter: Letter, arrow: Arrow):
-        ori_key = self.data_updater.get_ori_key(arrow.motion)
+        ori_key = self.data_updater._generate_ori_key(arrow.motion)
         letter_data, _ = self._fetch_letter_data_and_original_turn_data(
             ori_key, letter, arrow
         )
@@ -66,7 +66,9 @@ class MirroredEntryCreator:
         )
         return letter_data, letter_data.get(original_turns_tuple, {})
 
-    def _get_keys_for_mixed_start_ori(self, letter: Letter, ori_key) -> tuple[str, dict]:
+    def _get_keys_for_mixed_start_ori(
+        self, letter: Letter, ori_key
+    ) -> tuple[str, dict]:
         other_ori_key = self.data_updater.get_other_layer3_ori_key(ori_key)
         other_letter_data = self.data_updater.positioner.placement_manager.pictograph.main_widget.special_placements.get(
             other_ori_key, {}

@@ -33,7 +33,7 @@ class RotationAngleOverrideManager:
         if not self._is_valid_for_override():
             return
 
-        ori_key = self.special_positioner.data_updater.get_ori_key(
+        ori_key = self.special_positioner.data_updater._generate_ori_key(
             self.pictograph.selected_arrow.motion
         )
         data = self.pictograph.main_widget.special_placements
@@ -130,7 +130,7 @@ class RotationAngleOverrideManager:
         placements = (
             self.special_positioner.placement_manager.pictograph.main_widget.special_placements
         )
-        ori_key = self.special_positioner.data_updater.get_ori_key(arrow.motion)
+        ori_key = self.special_positioner.data_updater._generate_ori_key(arrow.motion)
         letter = arrow.pictograph.letter
         letter_data = placements[ori_key].get(letter, {})
         turns_tuple = self.turns_tuple_generator.generate_turns_tuple(self.pictograph)

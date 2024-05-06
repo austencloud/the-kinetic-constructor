@@ -12,30 +12,17 @@ class PropPlacementOverrideManager:
             self.pictograph.arrow_placement_manager.special_positioner
         )
         self.turns_tuple_generator = self.pictograph.main_widget.turns_tuple_generator
+        self.special_placements = self.pictograph.main_widget.special_placements
 
     def handle_prop_placement_override(self, key) -> None:
-        if not (
-            self.pictograph.check.ends_with_nonradial_ori()
-            or self.pictograph.check.ends_with_radial_ori()
-        ):
+        if self._is_mixed_ori():
             return
-
-        special_placements = self.pictograph.main_widget.special_placements
-
-        letter = self.pictograph.letter
-        if self.pictograph.check.ends_with_nonradial_ori():
-            beta_state = "nonradial"
-        elif self.pictograph.check.ends_with_radial_ori():
-            beta_state = "radial"
+        beta_ori = self._get_beta_ori()
+        self.letter = self.pictograph.letter
 
         if self.pictograph.check.ends_with_beta():
-            adjustment_key_str = self._generate_adjustment_key_str(letter)
-            ori_key = self.special_positioner.data_updater.get_ori_key(
-                self.pictograph.blue_motion
-            )
-            override_key = self._generate_override_key(beta_state)
-
-            letter_data = self._get_letter_data(ori_key, letter)
+            adjustment_key_str, ori_key, override_key = self._get_keys(beta_ori)
+            letter_data = self._get_letter_data(ori_key, self.letter)
             turn_data = self._get_turn_data(letter_data, adjustment_key_str)
 
             if override_key in turn_data:
@@ -44,11 +31,32 @@ class PropPlacementOverrideManager:
                 turn_data[override_key] = True
 
             letter_data[adjustment_key_str] = turn_data
-            special_placements[ori_key][letter] = letter_data
-            self._update_json_entry(letter, letter_data)
+            self.special_placements[ori_key][self.letter] = letter_data
+            self._update_json_entry(self.letter, letter_data)
             self.pictograph.updater.update_pictograph()
-        # refresh all pictographs
+
         self.pictograph.main_widget.special_placement_loader.refresh_placements()
+
+    def _get_keys(self, beta_ori):
+        adjustment_key_str = self._generate_adjustment_key_str(self.letter)
+        ori_key = self.special_positioner.data_updater._generate_ori_key(
+            self.pictograph.blue_motion
+        )
+        override_key = self._generate_override_key(beta_ori)
+        return adjustment_key_str, ori_key, override_key
+
+    def _is_mixed_ori(self):
+        return not (
+            self.pictograph.check.ends_with_nonradial_ori()
+            or self.pictograph.check.ends_with_radial_ori()
+        )
+
+    def _get_beta_ori(self):
+        if self.pictograph.check.ends_with_nonradial_ori():
+            beta_ori = "nonradial"
+        elif self.pictograph.check.ends_with_radial_ori():
+            beta_ori = "radial"
+        return beta_ori
 
     def _generate_adjustment_key_str(self, letter) -> str:
         return self.turns_tuple_generator.generate_turns_tuple(self.pictograph)
@@ -67,7 +75,7 @@ class PropPlacementOverrideManager:
         return letter_data.get(adjustment_key_str, {})
 
     def _update_json_entry(self, letter, letter_data) -> None:
-        ori_key = self.special_positioner.data_updater.get_ori_key(
+        ori_key = self.special_positioner.data_updater._generate_ori_key(
             self.pictograph.blue_motion
         )
         self.special_positioner.data_updater.update_specific_entry_in_json(

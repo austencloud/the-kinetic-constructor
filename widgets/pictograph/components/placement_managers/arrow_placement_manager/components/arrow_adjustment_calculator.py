@@ -17,7 +17,7 @@ class ArrowAdjustmentCalculator:
 
     # @lru_cache
     def get_adjustment(self, arrow: Arrow) -> QPointF:
-        
+
         if not arrow.motion.pictograph.letter:
             return
         turns_tuple = (
@@ -25,8 +25,10 @@ class ArrowAdjustmentCalculator:
                 self.placement_manager.pictograph
             )
         )
-        ori_key = self.placement_manager.special_positioner.data_updater.get_ori_key(
-            arrow.motion
+        ori_key = (
+            self.placement_manager.special_positioner.data_updater._generate_ori_key(
+                arrow.motion
+            )
         )
         special_placements = (
             self.placement_manager.pictograph.main_widget.special_placements[ori_key]

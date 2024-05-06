@@ -74,7 +74,7 @@ class SpecialPlacementDataUpdater:
         )
         return default_mgr.get_default_adjustment(arrow)
 
-    def get_ori_key(self, motion: Motion) -> str:
+    def _generate_ori_key(self, motion: Motion) -> str:
         other_motion = self.positioner.pictograph.get.other_motion(motion)
         if motion.start_ori in [IN, OUT] and other_motion.start_ori in [IN, OUT]:
             return "from_layer1"
@@ -136,7 +136,7 @@ class SpecialPlacementDataUpdater:
         turns_tuple = self.positioner.pictograph.main_widget.turns_tuple_generator.generate_turns_tuple(
             self.positioner.pictograph
         )
-        ori_key = self.get_ori_key(arrow.motion)
+        ori_key = self._generate_ori_key(arrow.motion)
 
         letter_data = self._get_letter_data(letter, ori_key)
         self._update_or_create_turn_data(letter_data, turns_tuple, arrow, adjustment)
@@ -145,8 +145,8 @@ class SpecialPlacementDataUpdater:
         logging.info(
             f"Updated {letter.value} in {ori_key} at {turns_tuple} with adjustment {adjustment}. Current values: {letter_data.get(turns_tuple)}"
         )
-    def update_specific_entry_in_json(
 
+    def update_specific_entry_in_json(
         self, letter: Letter, letter_data: dict, ori_key
     ) -> None:
         try:

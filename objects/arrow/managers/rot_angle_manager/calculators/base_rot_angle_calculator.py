@@ -33,18 +33,22 @@ class BaseRotAngleCalculator(ABC):
         special_placements = (
             self.arrow.pictograph.main_widget.special_placement_loader.special_placements
         )
-        ori_key = self.data_updater.get_ori_key(self.arrow.motion)
+        ori_key = self.data_updater._generate_ori_key(self.arrow.motion)
         letter = self.arrow.pictograph.letter.value
 
         letter_data = special_placements.get(ori_key, {}).get(letter, {})
-        
+
         rot_angle_override_key = (
             self.rot_angle_key_generator.generate_rotation_angle_override_key(
                 self.arrow
             )
         )
 
-        return bool(letter_data.get(self.arrow.pictograph.turns_tuple, {}).get(rot_angle_override_key))
+        return bool(
+            letter_data.get(self.arrow.pictograph.turns_tuple, {}).get(
+                rot_angle_override_key
+            )
+        )
 
     def _apply_rotation(self, angle: int) -> None:
         self.arrow.setTransformOriginPoint(self.arrow.boundingRect().center())

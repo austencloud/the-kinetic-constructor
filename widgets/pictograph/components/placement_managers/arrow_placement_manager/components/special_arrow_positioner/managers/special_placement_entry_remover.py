@@ -23,7 +23,7 @@ class SpecialPlacementEntryRemover:
         )
 
     def remove_special_placement_entry(self, letter: Letter, arrow: Arrow) -> None:
-        ori_key = self.data_updater.get_ori_key(arrow.motion)
+        ori_key = self.data_updater._generate_ori_key(arrow.motion)
         file_path = self._generate_file_path(ori_key, letter.value)
 
         if os.path.exists(file_path):

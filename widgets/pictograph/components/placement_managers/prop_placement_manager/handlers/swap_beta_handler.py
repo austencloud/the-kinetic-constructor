@@ -30,13 +30,12 @@ class SwapBetaHandler:
         letter_type = LetterType.get_letter_type(self.pictograph.letter)
 
         if (
-            ((
+            (
                 self.pictograph.check.ends_with_in_out_ori()
                 or self.pictograph.check.ends_with_clock_counter_ori()
             )
-            and len(self.beta_prop_positioner.classifier.small_uni) == 2)
-            or self.pictograph.check.ends_with_layer3()
-        ):
+            and len(self.beta_prop_positioner.classifier.small_uni) == 2
+        ) or self.pictograph.check.ends_with_layer3():
             return
 
         if letter_type == LetterType.Type1:
@@ -145,7 +144,7 @@ class SwapBetaHandler:
         return override_key
 
     def swap_beta_if_needed(self) -> None:
-        ori_key = self.pictograph.arrow_placement_manager.special_positioner.data_updater.get_ori_key(
+        ori_key = self.pictograph.arrow_placement_manager.special_positioner.data_updater._generate_ori_key(
             self.pictograph.blue_motion
         )
 

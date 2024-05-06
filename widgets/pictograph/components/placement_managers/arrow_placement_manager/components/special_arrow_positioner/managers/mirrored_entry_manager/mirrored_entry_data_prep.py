@@ -24,7 +24,7 @@ class MirroredEntryDataPrep:
     def _get_ori_key(self, motion):
         """Fetches the orientation key based on the motion's properties."""
         # Mimic functionality from the data updater to fetch the orientation key based on motion's direction, type, etc.
-        return self.manager.data_updater.get_ori_key(motion)
+        return self.manager.data_updater._generate_ori_key(motion)
 
     def get_keys_for_mixed_start_ori(self, letter, ori_key) -> tuple[str, dict]:
         """Fetches keys and data for mixed start orientation cases."""
