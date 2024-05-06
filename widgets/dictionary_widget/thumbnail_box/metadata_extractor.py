@@ -12,6 +12,10 @@ class MetaDataExtractor:
         self.thumbnail_box = thumbnail_box
 
     def extract_metadata_from_file(self, file_path):
+        # check if a file exists at the path we're passing as "file_path"
+        if not file_path:
+            return
+
         try:
             with Image.open(file_path) as img:
                 metadata = img.info.get("metadata")

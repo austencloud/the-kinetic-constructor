@@ -50,7 +50,6 @@ class ThumbnailBox(QWidget):
         )
         self.layout.addWidget(self.nav_buttons_widget)
         self.layout.addStretch()
-        # self.layout.setSpacing(0)
         self.layout.setContentsMargins(
             self.margin, self.margin, self.margin, self.margin
         )

@@ -46,7 +46,7 @@ class DictionaryBrowserScrollWidget(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setStyleSheet("background: transparent;")
         self.thumbnail_boxes: list[ThumbnailBox] = []
-        self.load_base_words()
+        self.sort_and_display_thumbnails()
         self.is_initialized = True
 
     def _remove_spacing(self):
@@ -57,25 +57,21 @@ class DictionaryBrowserScrollWidget(QWidget):
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
 
-    def load_base_words(self):
-        self.sort_and_display_thumbnails()
-
     def sort_and_display_thumbnails(self, sort_order="Word Length"):
+
         self.clear_layout()
         base_words = self.get_sorted_base_words(sort_order)
         for i, (word, thumbnails) in enumerate(base_words):
             if word not in self.thumbnail_boxes_dict:
-                # Only create a new ThumbnailBox if it doesn't exist in the cache
                 thumbnail_box = ThumbnailBox(self.browser, word, thumbnails)
                 self.thumbnail_boxes_dict[word] = thumbnail_box
             else:
-                # Update the existing thumbnail box with new thumbnails if necessary
                 self.thumbnail_boxes_dict[word].update_thumbnails(thumbnails)
 
             thumbnail_box = self.thumbnail_boxes_dict[word]
             row, col = divmod(i, 3)
             self.grid_layout.addWidget(thumbnail_box, row, col)
-        self.resize_dictionary_browser_scroll_widget()
+
 
     def get_sorted_base_words(self, sort_order):
         dictionary_dir = get_images_and_data_path("dictionary")
@@ -95,7 +91,6 @@ class DictionaryBrowserScrollWidget(QWidget):
             thumbnail_boxes: list[ThumbnailBox] = self.thumbnail_boxes_dict.values()
             for box in thumbnail_boxes:
                 box.resize_thumbnail_box()
-            # self.update_all_thumbnails()
 
     def clear_layout(self):
         while self.grid_layout.count():

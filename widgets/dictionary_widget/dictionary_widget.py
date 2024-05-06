@@ -23,21 +23,17 @@ class DictionaryWidget(QWidget):
         self.selected_sequence_dict = None
 
     def _setup_ui(self) -> None:
+        self.deletion_manager = DictionaryDeletionManager(self)
+        self.browser = DictionaryBrowser(self)
+        self.preview_area = DictionaryPreviewArea(self)
         self._setup_handlers()
-        self._setup_components()
         self._setup_layout()
 
     def _setup_handlers(self) -> None:
         self.background_manager = BackgroundManager(self)
         self.selection_handler = DictionarySelectionHandler(self)
         self.sequence_populator = DictionarySequencePopulator(self)
-        self.deletion_manager = DictionaryDeletionManager(self)
-
         self.background_manager.update_required.connect(self.update)
-
-    def _setup_components(self) -> None:
-        self.browser = DictionaryBrowser(self)
-        self.preview_area = DictionaryPreviewArea(self)
 
     def _setup_layout(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)

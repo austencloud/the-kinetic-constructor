@@ -36,7 +36,6 @@ class DictionaryPreviewArea(QWidget):
         self.dictionary_widget = dictionary_widget
         self.sequence_json = None
         self.current_thumbnail_box: ThumbnailBox = None
-        self.sequence_populator = dictionary_widget.sequence_populator
         self.base_word = ""
         self._setup_components()
         self.image_label.setStyleSheet("font: 20pt Arial; font-weight: bold;")
@@ -61,49 +60,17 @@ class DictionaryPreviewArea(QWidget):
         self.nav_buttons = PreviewAreaNavButtonsWidget(self)
         self.edit_sequence_button = QPushButton("Edit Sequence")
         self.edit_sequence_button.clicked.connect(self.edit_sequence)
+        self._setup_deletion_buttons()
+
+    def _setup_deletion_buttons(self):
         self.delete_variation_button = QPushButton("Delete Variation", self)
-        self.delete_variation_button.clicked.connect(self.confirm_delete_variation)
+        self.delete_variation_button.clicked.connect(
+            self.dictionary_widget.deletion_manager.confirm_delete_variation
+        )
         self.delete_word_button = QPushButton("Delete Base Word", self)
-        self.delete_word_button.clicked.connect(self.confirm_delete_word)
-
-    def confirm_delete_variation(self):
-        if not self.current_thumbnail_box:
-            QMessageBox.warning(
-                self, "No Selection", "Please select a variation first."
-            )
-            return
-        reply = QMessageBox.question(
-            self,
-            "Confirm Deletion",
-            f"Are you sure you want to delete this variation of {self.base_word}?",
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-            QMessageBox.StandardButton.No,
+        self.delete_word_button.clicked.connect(
+            self.dictionary_widget.deletion_manager.confirm_delete_word
         )
-        if reply == QMessageBox.StandardButton.Yes:
-            self.dictionary_widget.deletion_manager.delete_variation(
-                self.current_thumbnail_box, self.current_index
-            )
-
-    def confirm_delete_word(self):
-        reply = QMessageBox.question(
-            self,
-            "Confirm Deletion",
-            f"Are you sure you want to delete all variations of {self.base_word}?",
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-            QMessageBox.StandardButton.No,
-        )
-        if reply == QMessageBox.StandardButton.Yes:
-            self.dictionary_widget.deletion_manager.delete_word(self.base_word)
-
-
-
-
-    def update_after_deletion(self):
-        # Refresh the UI and internal state after deletion
-        self.thumbnails.pop(self.current_index) if self.thumbnails else None
-        self.current_index = max(0, self.current_index - 1)
-        self.dictionary_widget.browser.scroll_widget.load_base_words()  # Assuming this method reloads the display
-        self.update_preview(self.current_index if self.thumbnails else None)
 
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails
@@ -114,19 +81,16 @@ class DictionaryPreviewArea(QWidget):
             self.update_preview(None)
 
     def update_preview(self, index):
-        # if the index is none, display the default text
         if index == None:
             self.image_label.setText("Select a sequence to preview it here!")
             self._adjust_label_for_text()
-            # set the base word label to ""
-            # self.base_word_label.setText("")
+
             self.variation_number_label.setText("")
             return
         if self.thumbnails and index is not None:
             pixmap = QPixmap(self.thumbnails[index])
             self._scale_pixmap_to_label(pixmap)
 
-        # extract the json and save it as self.sequence_json
         if self.current_thumbnail_box:
             self.sequence_json = self.current_thumbnail_box.metadata_extractor.extract_metadata_from_file(
                 self.thumbnails[index]
@@ -166,6 +130,8 @@ class DictionaryPreviewArea(QWidget):
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def edit_sequence(self):
+        if not hasattr(self, "sequence_populator"):
+            self.sequence_populator = self.dictionary_widget.sequence_populator
         if self.sequence_json:
             self.main_widget.setCurrentIndex(self.main_widget.builder_tab_index)
             self.sequence_populator.load_sequence_from_json(self.sequence_json)
@@ -181,3 +147,10 @@ class DictionaryPreviewArea(QWidget):
             self.update_preview(self.current_index)
         else:
             self._adjust_label_for_text()
+
+    def reset_preview_area(self):
+        self.current_index = None
+        self.update_preview(None)
+        self.variation_number_label.setText("")
+        self.base_word = ""
+        self.base_word_label.setText(self.base_word)

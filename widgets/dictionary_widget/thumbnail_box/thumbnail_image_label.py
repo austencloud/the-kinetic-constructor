@@ -22,11 +22,9 @@ class ThumbnailImageLabel(QLabel):
         self.is_selected = False
 
         self.setScaledContents(False)
-        # self.update_thumbnail()
 
     def update_thumbnail(self):
         if self.thumbnails and 0 <= self.current_index < len(self.thumbnails):
-            QApplication.processEvents()  # Force any pending layout updates
             pixmap = QPixmap(self.thumbnails[self.current_index])
             self.set_pixmap_to_fit(pixmap)
         else:
