@@ -55,6 +55,20 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
         self.variation_number_label.setText(f"Variation {self.current_index + 1}")
 
 
+
+
+    def _setup_buttons(self):
+        self.left_button = NavButton("<", self)
+        self.right_button = NavButton(">", self)
+        self.layout.addWidget(self.left_button)
+        self.layout.addWidget(self.right_button)
+
+    def refresh(self):
+        # Enable/disable buttons based on the current index and the number of thumbnails
+        self.left_button.setEnabled(self.current_index > 0)
+        self.right_button.setEnabled(self.current_index < len(self.thumbnail_box.thumbnails) - 1)
+        self.update_thumbnail()
+
 class NavButton(QPushButton):
     def __init__(self, text: str, parent: ThumbnailBoxNavButtonsWidget):
         super().__init__(text, parent)

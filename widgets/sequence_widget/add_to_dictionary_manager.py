@@ -17,17 +17,8 @@ class AddToDictionaryManager:
         self.json_handler = (
             sequence_widget.main_widget.json_manager.current_sequence_json_handler
         )
-        self.thumbnail_generator = ThumbnailGenerator(self)
         self.dictionary_dir = get_images_and_data_path("dictionary")
-        self.structural_checker = StructuralVariationChecker(self)
-
-    def __init__(self, sequence_widget: "SequenceWidget"):
-        self.sequence_widget = sequence_widget
-        self.json_handler = (
-            sequence_widget.main_widget.json_manager.current_sequence_json_handler
-        )
         self.thumbnail_generator = ThumbnailGenerator(self)
-        self.dictionary_dir = get_images_and_data_path("dictionary")
         self.structural_checker = StructuralVariationChecker(self)
 
     def add_to_dictionary(self):
@@ -87,15 +78,13 @@ class AddToDictionaryManager:
         for dir_name in os.listdir(base_path):
             if dir_name.startswith(f"{base_word}_ver"):
                 try:
-                    # Extract the part of the filename between '_ver' and the first non-numeric character (like underscore or open parenthesis)
                     number_part = dir_name.split("_ver")[-1]
-                    # Remove any non-digit characters that might come after the version number, assuming version is immediately followed by a delimiter
                     number = int(
                         "".join(filter(str.isdigit, number_part.split("_")[0]))
                     )
                     max_number = max(max_number, number)
                 except ValueError:
-                    continue  # Skip files or directories that don't conform to the expected naming
+                    continue 
         return max_number
 
     def get_next_variation_number(self, base_word):
@@ -130,6 +119,30 @@ class AddToDictionaryManager:
         self.display_message(
             f"Saved new variation for '{base_word}' under version {variation_number}."
         )
+
+        # Assuming you collect all relevant thumbnail paths
+        thumbnails = self.collect_thumbnails(base_word)  # Recollect all thumbnails including new one
+        thumbnail_box = self.find_thumbnail_box(base_word)
+        if thumbnail_box:
+            thumbnail_box.update_thumbnails(thumbnails) 
+        self.display_message(f"Saved new variation for '{base_word}'.")
+
+
+    def collect_thumbnails(self, base_word):
+        base_path = os.path.join(self.dictionary_dir, base_word)
+        thumbnails = []
+        for root, dirs, files in os.walk(base_path):
+            for filename in files:
+                if filename.lower().endswith((".png", ".jpg", ".jpeg")):
+                    thumbnails.append(os.path.join(root, filename))
+        return thumbnails
+    
+    def find_thumbnail_box(self, base_word):
+        return self.sequence_widget.main_widget.dictionary.browser.scroll_widget.thumbnail_boxes_dict.get(
+            base_word
+        )
+    
+
 
     def get_variation_directory(self, base_word):
         base_dir = os.path.join(self.dictionary_dir, base_word)

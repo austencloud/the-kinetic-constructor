@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QShowEvent, QResizeEvent
+from PyQt6.QtGui import QShowEvent, QResizeEvent, QPixmap
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
 from widgets.dictionary_widget.thumbnail_box.metadata_extractor import MetaDataExtractor
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box_nav_btns import (
@@ -67,6 +67,11 @@ class ThumbnailBox(QWidget):
 
     def update_thumbnails(self, thumbnails):
         self.thumbnails = thumbnails
-        self.current_index = 0
-        self.variation_number_label.update_index(self.current_index)
-        self.image_label.update_thumbnail()
+        self.current_index = 0  # Reset to show the first thumbnail
+        self.image_label.set_pixmap_to_fit(QPixmap(self.thumbnails[self.current_index]))  # Update the displayed image
+        self.nav_buttons_widget.refresh()  # Update navigation buttons
+        self.variation_number_label.update_index(self.current_index + 1)
+
+    def refresh_ui(self):
+        # Call this method after updating thumbnails to refresh the UI
+        self.update_thumbnails(self.thumbnails)

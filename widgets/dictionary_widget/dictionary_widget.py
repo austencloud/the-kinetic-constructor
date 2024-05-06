@@ -37,7 +37,7 @@ class DictionaryWidget(QWidget):
 
     def _setup_layout(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.layout.addWidget(self.browser, 6)
+        self.layout.addWidget(self.browser, 5)
         self.layout.addWidget(self.preview_area, 3)
 
     def paintEvent(self, event) -> None:
