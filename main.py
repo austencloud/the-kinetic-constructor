@@ -9,7 +9,10 @@ from settings_manager import SettingsManager
 from utilities.main_window_geometry_manager import MainWindowGeometryManager
 from widgets.main_widget.main_widget import MainWidget
 from widgets.menu_bar.menu_bar import MainWindowMenuBar
+import logging
 
+# Set the logging level for PIL to WARNING to suppress debug and info messages
+logging.getLogger('PIL').setLevel(logging.WARNING)
 
 class MainWindow(QMainWindow):
     def __init__(self, profiler: Profiler) -> None:

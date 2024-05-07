@@ -17,6 +17,10 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
         self.variation_number_label = thumbnail_box.variation_number_label
         self._setup_layout()
         self._setup_buttons()
+        self.has_multiple_thumbnails = len(self.thumbnails) > 1
+        if not self.has_multiple_thumbnails:
+            self.hide()
+
 
     def _setup_buttons(self):
         button_texts = ["<", ">"]
@@ -52,7 +56,7 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
     def update_thumbnail(self):
         self.thumbnail_label.current_index = self.current_index
         self.thumbnail_label.update_thumbnail()
-        self.variation_number_label.setText(f"Variation {self.current_index + 1}")
+        self.variation_number_label.update_index(self.current_index)
 
 
 

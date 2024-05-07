@@ -84,7 +84,7 @@ class AddToDictionaryManager:
                     )
                     max_number = max(max_number, number)
                 except ValueError:
-                    continue 
+                    continue
         return max_number
 
     def get_next_variation_number(self, base_word):
@@ -120,13 +120,11 @@ class AddToDictionaryManager:
             f"Saved new variation for '{base_word}' under version {variation_number}."
         )
 
-        # Assuming you collect all relevant thumbnail paths
-        thumbnails = self.collect_thumbnails(base_word)  # Recollect all thumbnails including new one
+        thumbnails = self.collect_thumbnails(base_word)
         thumbnail_box = self.find_thumbnail_box(base_word)
         if thumbnail_box:
-            thumbnail_box.update_thumbnails(thumbnails) 
+            thumbnail_box.update_thumbnails(thumbnails)
         self.display_message(f"Saved new variation for '{base_word}'.")
-
 
     def collect_thumbnails(self, base_word):
         base_path = os.path.join(self.dictionary_dir, base_word)
@@ -136,13 +134,11 @@ class AddToDictionaryManager:
                 if filename.lower().endswith((".png", ".jpg", ".jpeg")):
                     thumbnails.append(os.path.join(root, filename))
         return thumbnails
-    
+
     def find_thumbnail_box(self, base_word):
         return self.sequence_widget.main_widget.dictionary.browser.scroll_widget.thumbnail_boxes_dict.get(
             base_word
         )
-    
-
 
     def get_variation_directory(self, base_word):
         base_dir = os.path.join(self.dictionary_dir, base_word)
@@ -166,28 +162,12 @@ class AddToDictionaryManager:
         base_word = base_word[1:]
         return base_word
 
-    def get_base_sequence(self, sequence) -> list:
-        base_sequence = deepcopy(sequence)
-        for entry in base_sequence:
-            entry["blue_attributes"]["turns"] = 0
-            entry["red_attributes"]["turns"] = 0
-
-        self.revalidate_sequence(base_sequence)
-        return base_sequence
-
     def revalidate_sequence(self, sequence):
         if not hasattr(self, "validation_engine"):
             self.validation_engine = self.json_handler.validation_engine
         self.validation_engine.sequence = sequence
         self.validation_engine.run()
         return self.validation_engine.sequence
-
-    def sequence_has_turns(self, current_sequence) -> bool:
-        return any(
-            beat.get("blue_attributes", {}).get("turns", 0) != 0
-            or beat.get("red_attributes", {}).get("turns", 0) != 0
-            for beat in current_sequence[1:]
-        )
 
     def is_sequence_invalid(self, sequence):
         return len(sequence) <= 1

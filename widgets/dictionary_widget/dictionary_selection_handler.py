@@ -46,7 +46,6 @@ class DictionarySelectionHandler:
             image_label.thumbnail_box.base_word,
         )
         #update the variation number label
-        self.dictionary_widget.preview_area.variation_number_label.setText(
-            f"Variation {thumbnail_index + 1}"
+        self.dictionary_widget.preview_area.variation_number_label.update_index(
+            thumbnail_index
         )
-        

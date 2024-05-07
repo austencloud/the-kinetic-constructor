@@ -1,5 +1,5 @@
 from PyQt6.QtCore import Qt, QEvent
-from PyQt6.QtGui import QPixmap, QCursor
+from PyQt6.QtGui import QPixmap, QCursor, QMouseEvent
 from PyQt6.QtWidgets import QLabel, QApplication
 from typing import TYPE_CHECKING
 
@@ -47,9 +47,9 @@ class ThumbnailImageLabel(QLabel):
             target_width, Qt.TransformationMode.SmoothTransformation
         )
         self.setPixmap(scaled_pixmap)
-        self.adjustSize()  # Adjust the label size to fit the pixmap
+        self.adjustSize()
 
-    def thumbnail_clicked(self, event):
+    def thumbnail_clicked(self, event: "QMouseEvent"):
         metadata = self.metadata_extractor.extract_metadata_from_file(
             self.thumbnails[0]
         )

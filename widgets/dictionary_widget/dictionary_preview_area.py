@@ -54,7 +54,7 @@ class DictionaryPreviewArea(QWidget):
         self.layout.addStretch(1)
 
     def _setup_components(self):
-        self.variation_number_label = VariationNumberLabel(self.current_index)
+        self.variation_number_label = VariationNumberLabel(self)
         self.base_word_label = BaseWordLabel(self.base_word)
         self.image_label = QLabel("Select a sequence to preview it here!", self)
         self.nav_buttons = PreviewAreaNavButtonsWidget(self)

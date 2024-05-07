@@ -36,7 +36,7 @@ class ThumbnailBox(QWidget):
         self.metadata_extractor = MetaDataExtractor(self.main_widget)
         self.base_word_label = BaseWordLabel(self.base_word)
         self.image_label = ThumbnailImageLabel(self)
-        self.variation_number_label = VariationNumberLabel(self.current_index)
+        self.variation_number_label = VariationNumberLabel(self)
         self.nav_buttons_widget = ThumbnailBoxNavButtonsWidget(self)
 
     def _setup_layout(self):
@@ -67,11 +67,13 @@ class ThumbnailBox(QWidget):
 
     def update_thumbnails(self, thumbnails):
         self.thumbnails = thumbnails
-        self.current_index = 0  # Reset to show the first thumbnail
-        self.image_label.set_pixmap_to_fit(QPixmap(self.thumbnails[self.current_index]))  # Update the displayed image
-        self.nav_buttons_widget.refresh()  # Update navigation buttons
-        self.variation_number_label.update_index(self.current_index + 1)
+        self.current_index = 0
+        self.image_label.set_pixmap_to_fit(QPixmap(self.thumbnails[self.current_index]))
+        self.nav_buttons_widget.refresh()
+        if len(self.thumbnails) == 1:
+            self.variation_number_label.hide()
+        else:
+            self.variation_number_label.update_index(self.current_index + 1)
 
     def refresh_ui(self):
-        # Call this method after updating thumbnails to refresh the UI
         self.update_thumbnails(self.thumbnails)
