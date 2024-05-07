@@ -12,4 +12,3 @@ class BaseWordLabel(QLabel):
     def __init__(self, base_word: str):
         super().__init__(base_word)
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.setFont(QFont("Arial", 20, QFont.Weight.Bold))

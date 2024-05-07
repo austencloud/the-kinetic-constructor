@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
     QApplication,
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtGui import QPixmap, QFont
 
 from path_helpers import get_images_and_data_path
 from widgets.dictionary_widget.thumbnail_box.base_word_label import BaseWordLabel
@@ -52,6 +52,7 @@ class DictionaryPreviewArea(QWidget):
         self.layout.addWidget(self.delete_variation_button)
         self.layout.addWidget(self.delete_word_button)
         self.layout.addStretch(1)
+        self.base_word_label.setFont(QFont("Arial", 30, QFont.Weight.Bold))
 
     def _setup_components(self):
         self.variation_number_label = VariationNumberLabel(self)
@@ -74,10 +75,10 @@ class DictionaryPreviewArea(QWidget):
 
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails
-        if self.thumbnails:
-            self.nav_buttons.enable_buttons(True)
+        if len(self.thumbnails) > 1:
+            self.nav_buttons.show()
         else:
-            self.nav_buttons.enable_buttons(False)
+            self.nav_buttons.hide()
             self.update_preview(None)
 
     def update_preview(self, index):

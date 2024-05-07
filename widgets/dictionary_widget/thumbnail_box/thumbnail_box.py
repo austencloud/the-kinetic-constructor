@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QShowEvent, QResizeEvent, QPixmap
+from PyQt6.QtGui import QShowEvent, QResizeEvent, QPixmap, QFont
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
 from widgets.dictionary_widget.thumbnail_box.metadata_extractor import MetaDataExtractor
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box_nav_btns import (
@@ -54,6 +54,7 @@ class ThumbnailBox(QWidget):
             self.margin, self.margin, self.margin, self.margin
         )
         self.setStyleSheet("background-color: rgba(255, 255, 255, 0.5);")
+        self.base_word_label.setFont(QFont("Arial", 20, QFont.Weight.Bold))
 
     def resize_thumbnail_box(self):
         scrollbar_width = (
