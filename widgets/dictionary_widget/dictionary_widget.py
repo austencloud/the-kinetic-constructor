@@ -46,3 +46,4 @@ class DictionaryWidget(QWidget):
 
     def resize_dictionary_widget(self) -> None:
         self.browser.resize_dictionary_browser()
+        # self.preview_area.resize_dictionary_preview_area()

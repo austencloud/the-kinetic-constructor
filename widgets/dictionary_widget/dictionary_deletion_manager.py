@@ -27,7 +27,7 @@ class DictionaryDeletionManager:
         else:
             # update the thumbnail box.thumbnails to reflect the current state after deleting the file
             thumbnail_box.current_index = 0
-                        
+
             self.dictionary_widget.browser.scroll_widget.sort_and_display_thumbnails()
             self.dictionary_widget.preview_area.reset_preview_area()
         QApplication.restoreOverrideCursor()
@@ -38,15 +38,16 @@ class DictionaryDeletionManager:
         self.dictionary_widget.browser.scroll_widget.sort_and_display_thumbnails()
 
     def confirm_delete_word(self):
+        preview_area = self.dictionary_widget.preview_area
         reply = QMessageBox.question(
-            self,
+            preview_area,
             "Confirm Deletion",
-            f"Are you sure you want to delete all variations of {self.dictionary_widget.preview_area.base_word}?",
+            f"Are you sure you want to delete all variations of {preview_area.base_word}?",
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             QMessageBox.StandardButton.No,
         )
         if reply == QMessageBox.StandardButton.Yes:
-            self.delete_word(self.dictionary_widget.preview_area.base_word)
+            self.delete_word(preview_area.base_word)
 
     def confirm_delete_variation(self):
         preview_area = self.dictionary_widget.preview_area

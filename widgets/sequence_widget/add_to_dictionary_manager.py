@@ -1,5 +1,7 @@
 from copy import deepcopy
 import os
+import re  # Ensure to import re at the top of your file
+
 from typing import TYPE_CHECKING
 from path_helpers import get_images_and_data_path
 from structural_variation_checker import StructuralVariationChecker
@@ -65,13 +67,6 @@ class AddToDictionaryManager:
         if thumbnail_box:
             thumbnail_box.resize_thumbnail_box()
 
-    def get_variation_directory(self, base_word, variation_number):
-        base_dir = os.path.join(
-            self.dictionary_dir, f"{base_word}", f"{base_word}_ver{variation_number}"
-        )
-        os.makedirs(base_dir, exist_ok=True)
-        return base_dir
-
     def get_variation_number(self, base_word):
         base_path = os.path.join(self.dictionary_dir, base_word)
         max_number = 0
@@ -89,19 +84,18 @@ class AddToDictionaryManager:
 
     def get_next_variation_number(self, base_word):
         base_path = os.path.join(self.dictionary_dir, base_word)
-        existing_numbers = [
-            int(f.split("_ver")[-1].split(".")[0])
-            for f in os.listdir(base_path)
-            if "ver" in f
-        ]
+        existing_numbers = []
+        for root, dirs, files in os.walk(base_path):
+            for file in files:
+                if "ver" in file:
+                    try:
+                        number_part = re.search(r"_ver(\d+)", file)
+                        if number_part:
+                            number = int(number_part.group(1))
+                            existing_numbers.append(number)
+                    except ValueError:
+                        continue
         return max(existing_numbers, default=0) + 1
-
-    def get_variation_directory(self, word, number, start_orientations: str) -> str:
-        base_dir = os.path.join(self.dictionary_dir, f"{word}", f"{word}_ver{number}")
-        orientation_dir = start_orientations.replace(" ", "").replace(",", "_")
-        master_dir = os.path.join(base_dir, orientation_dir)
-        os.makedirs(master_dir, exist_ok=True)
-        return master_dir
 
     def get_start_orientations(self, sequence) -> str:
         if sequence and "sequence_start_position" in sequence[0]:
@@ -112,7 +106,10 @@ class AddToDictionaryManager:
 
     def save_variation(self, sequence, base_word, variation_number):
         turn_pattern_description = TurnPatternConverter.sequence_to_pattern(sequence)
-        directory = self.get_variation_directory(base_word)
+        start_orientations = self.get_start_orientations(sequence)
+        directory = self.get_variation_directory(
+            base_word, variation_number, start_orientations
+        )
         self.thumbnail_generator.generate_and_save_thumbnail(
             sequence, turn_pattern_description, variation_number, directory
         )
@@ -140,10 +137,16 @@ class AddToDictionaryManager:
             base_word
         )
 
-    def get_variation_directory(self, base_word):
-        base_dir = os.path.join(self.dictionary_dir, base_word)
-        os.makedirs(base_dir, exist_ok=True)
-        return base_dir
+    def get_variation_directory(
+        self, base_word, variation_number, start_orientations: str
+    ) -> str:
+        base_dir = os.path.join(
+            self.dictionary_dir, f"{base_word}", f"{base_word}_ver{variation_number}"
+        )
+        orientation_dir = start_orientations.replace(" ", "").replace(",", "_")
+        master_dir = os.path.join(base_dir, orientation_dir)
+        os.makedirs(master_dir, exist_ok=True)
+        return master_dir
 
     def display_message(self, message):
         self.sequence_widget.indicator_label.show_message(message)

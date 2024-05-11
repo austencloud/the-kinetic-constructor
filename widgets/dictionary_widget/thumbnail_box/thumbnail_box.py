@@ -75,6 +75,7 @@ class ThumbnailBox(QWidget):
             self.variation_number_label.hide()
         else:
             self.variation_number_label.update_index(self.current_index + 1)
+        self.update()
 
     def refresh_ui(self):
         self.update_thumbnails(self.thumbnails)

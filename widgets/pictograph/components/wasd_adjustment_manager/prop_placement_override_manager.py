@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+from Enums.letters import Letter
+
 
 if TYPE_CHECKING:
     from .wasd_adjustment_manager import WASD_AdjustmentManager
@@ -68,8 +70,10 @@ class PropPlacementOverrideManager:
             f"red_{self.pictograph.red_motion.motion_type}_{self.pictograph.red_arrow.loc}"
         )
 
-    def _get_letter_data(self, ori_key, letter) -> dict:
-        return self.pictograph.main_widget.special_placements[ori_key].get(letter, {})
+    def _get_letter_data(self, ori_key, letter: Letter) -> dict:
+        return self.pictograph.main_widget.special_placements[ori_key].get(
+            letter.value, {}
+        )
 
     def _get_turn_data(self, letter_data, adjustment_key_str) -> dict:
         return letter_data.get(adjustment_key_str, {})

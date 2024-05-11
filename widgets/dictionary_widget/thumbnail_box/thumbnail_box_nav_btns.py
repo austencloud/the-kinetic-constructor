@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QPushButton, QWidget, QHBoxLayout,  QApplication
+from PyQt6.QtWidgets import QPushButton, QWidget, QHBoxLayout, QApplication
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
@@ -20,7 +20,6 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
         self.has_multiple_thumbnails = len(self.thumbnails) > 1
         if not self.has_multiple_thumbnails:
             self.hide()
-
 
     def _setup_buttons(self):
         button_texts = ["<", ">"]
@@ -58,9 +57,6 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
         self.thumbnail_label.update_thumbnail()
         self.variation_number_label.update_index(self.current_index)
 
-
-
-
     def _setup_buttons(self):
         self.left_button = NavButton("<", self)
         self.right_button = NavButton(">", self)
@@ -68,10 +64,19 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
         self.layout.addWidget(self.right_button)
 
     def refresh(self):
-        # Enable/disable buttons based on the current index and the number of thumbnails
         self.left_button.setEnabled(self.current_index > 0)
-        self.right_button.setEnabled(self.current_index < len(self.thumbnail_box.thumbnails) - 1)
+        self.right_button.setEnabled(
+            self.current_index < len(self.thumbnail_box.thumbnails) - 1
+        )
         self.update_thumbnail()
+        if len(self.thumbnail_box.thumbnails) == 1:
+            self.variation_number_label.hide()
+            self.hide()
+        else:
+            self.variation_number_label.show()
+            self.show()
+            self.variation_number_label.update_index(self.current_index + 1)
+
 
 class NavButton(QPushButton):
     def __init__(self, text: str, parent: ThumbnailBoxNavButtonsWidget):
