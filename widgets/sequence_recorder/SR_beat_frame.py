@@ -78,7 +78,7 @@ class SR_BeatFrame(QFrame):
     def add_scene_to_sequence(self, new_beat: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
-            self.beat_views[next_beat_index].set_beat(new_beat, next_beat_index + 1)
+            self.beat_views[next_beat_index].set_beat(new_beat, next_beat_index + 2)
 
 
     def find_next_available_beat(self) -> int:

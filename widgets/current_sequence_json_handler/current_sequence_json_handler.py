@@ -79,6 +79,12 @@ class CurrentSequenceJsonHandler:
             return []
 
     def save_current_sequence(self, sequence):
+        self.prop_type = self.main_widget.prop_type.name.lower()
+        prop_type_entry = {"prop_type": self.prop_type}
+        if sequence and "prop_type" in sequence[0]:
+            sequence[0].update(prop_type_entry)
+        else:
+            sequence.insert(0, prop_type_entry)
         with open(self.current_sequence_json, "w", encoding="utf-8") as file:
             json.dump(sequence, file, indent=4, ensure_ascii=False)
 
@@ -91,20 +97,6 @@ class CurrentSequenceJsonHandler:
         if sequence:
             return sequence[-1]["blue_attributes"]["end_ori"]
         return 0
-
-    def update_current_sequence_file(self):
-        sequence_data = self.load_current_sequence_json()
-        last_beat_view = (
-            self.main_widget.top_builder_widget.sequence_widget.beat_frame.get_last_filled_beat()
-        )
-        if (
-            hasattr(last_beat_view.beat.get, "pictograph_dict")
-            and last_beat_view.is_filled
-        ):
-            last_pictograph_dict = last_beat_view.beat.get.pictograph_dict()
-            sequence_data.append(last_pictograph_dict)
-        with open(self.current_sequence_json, "w", encoding="utf-8") as file:
-            json.dump(sequence_data, file, indent=4, ensure_ascii=False)
 
     def clear_current_sequence_file(self):
         with open(self.current_sequence_json, "w", encoding="utf-8") as file:
@@ -163,8 +155,8 @@ class CurrentSequenceJsonHandler:
     def update_start_pos_ori(self, color: Color, ori: int) -> None:
         sequence = self.load_current_sequence_json()
         if sequence:
-            sequence[0][f"{color}_attributes"]["end_ori"] = ori
-            sequence[0][f"{color}_attributes"]["start_ori"] = ori
+            sequence[1][f"{color}_attributes"]["end_ori"] = ori
+            sequence[1][f"{color}_attributes"]["start_ori"] = ori
             self.save_current_sequence(sequence)
 
     def update_rot_dir_in_json_at_index(

@@ -20,7 +20,9 @@ from widgets.dictionary_widget.thumbnail_box.preview_area_nav_btns import (
 )
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 
-from widgets.dictionary_widget.thumbnail_box.thumbnail_image_label import ThumbnailImageLabel
+from widgets.dictionary_widget.thumbnail_box.thumbnail_image_label import (
+    ThumbnailImageLabel,
+)
 from widgets.dictionary_widget.thumbnail_box.variation_number_label import (
     VariationNumberLabel,
 )
@@ -81,11 +83,26 @@ class DictionaryPreviewArea(QWidget):
         self.current_index = 0
         self.nav_buttons_widget.refresh()
 
+        if self.thumbnails:
+            self._show_buttons()
+
         if len(self.thumbnails) > 1:
             self.nav_buttons_widget.show()
-        else:
-            self.nav_buttons_widget.hide()
+        elif not self.thumbnails:
+            self._hide_buttons()
             self.update_preview(None)
+
+    def _show_buttons(self):
+        self.nav_buttons_widget.show()
+        self.delete_word_button.show()
+        self.delete_variation_button.show()
+        self.edit_sequence_button.show()
+
+    def _hide_buttons(self):
+        self.nav_buttons_widget.hide()
+        self.delete_word_button.hide()
+        self.delete_variation_button.hide()
+        self.edit_sequence_button.hide()
 
     def update_preview(self, index):
         if index == None:
@@ -143,7 +160,6 @@ class DictionaryPreviewArea(QWidget):
     def update_base_word_label(self):
         self.base_word_label.setText(self.base_word)
 
-
     def edit_sequence(self):
         if not hasattr(self, "sequence_populator"):
             self.sequence_populator = self.dictionary_widget.sequence_populator
@@ -163,7 +179,7 @@ class DictionaryPreviewArea(QWidget):
             self.update_preview(self.current_index)
         else:
             self._adjust_label_for_text()
-        
+
     def reset_preview_area(self):
         self.current_index = None
         self.update_preview(None)

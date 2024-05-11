@@ -13,14 +13,14 @@ class SequenceValidationEngine:
     ) -> None:
         self.current_sequence_json_handler = current_sequence_json_handler
         self.ori_calculator = self.current_sequence_json_handler.ori_calculator
-        
-    def validate_and_update_sequence_json(self,  is_current_sequence=False) -> None:
+
+    def validate_and_update_sequence_json(self, is_current_sequence=False) -> None:
         """Iterates through the sequence, updating start and end orientations to ensure continuity."""
         for index, _ in enumerate(self.sequence):
-            if index > 0:
+            if index > 1:
                 self.update_json_entry_start_orientation(index)
                 self.update_json_entry_end_orientation(index)
-                
+
         if is_current_sequence:
             self.current_sequence_json_handler.save_current_sequence(self.sequence)
 
@@ -44,9 +44,11 @@ class SequenceValidationEngine:
             )
             pictograph_dict[f"{color}_attributes"]["end_ori"] = end_ori
             self.sequence[index] = pictograph_dict
-            
+
     def run(self, is_current_sequence=False) -> None:
         """Public method to run the sequence validation and update process."""
         if is_current_sequence:
-            self.sequence = self.current_sequence_json_handler.load_current_sequence_json()
+            self.sequence = (
+                self.current_sequence_json_handler.load_current_sequence_json()
+            )
         self.validate_and_update_sequence_json(is_current_sequence)

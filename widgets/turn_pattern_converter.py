@@ -7,7 +7,7 @@ class TurnPatternConverter:
         """
         pattern_parts = []
         for item in sequence:
-            if "sequence_start_position" in item:
+            if "sequence_start_position" in item or "prop_type" in item:
                 continue  # Skip the item with the starting position key
 
             blue_attributes = item["blue_attributes"]

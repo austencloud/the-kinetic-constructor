@@ -39,5 +39,5 @@ class MetaDataExtractor:
     def get_sequence_length(self, file_path):
         metadata = self.extract_metadata_from_file(file_path)
         if metadata:
-            return len(metadata) - 1
+            return len(metadata) - 2
         return 0

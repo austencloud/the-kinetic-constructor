@@ -60,12 +60,10 @@ class SW_Beat_Frame(QFrame):
             if beat_view.is_filled:
                 beat_view.clear_beat()
 
-        # First entry usually sets the start position
-        if "start_pos" in sequence[0]:
-            self.start_pos_view.set_beat(sequence[0])
+        if "start_pos" in sequence[1]:
+            self.start_pos_view.set_beat(sequence[1])
             sequence = sequence[1:]  # Remove the start_pos entry if it's dedicated
 
-        # Set up each beat according to the sequence
         for idx, beat_data in enumerate(sequence):
             if idx < len(self.beats):
                 new_beat = Beat(self)
@@ -150,9 +148,9 @@ class SW_Beat_Frame(QFrame):
 
     def propogate_turn_adjustment(self, current_sequence_json) -> None:
         for i, entry in enumerate(current_sequence_json):
-            if i == 0:
+            if i == 1:
                 self.update_start_pos_from_current_sequence_json(entry)
-            else:
+            elif i > 1:
                 beat = self.beats[i - 1].beat
                 if beat:
                     if beat.pictograph_dict != entry:

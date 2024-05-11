@@ -116,7 +116,7 @@ class SequenceImageExportManager:
 
         self.temp_beat_frame = SW_Beat_Frame(self.sequence_widget)
         filled_beats = []
-        for beat_data in sequence[1:]:
+        for beat_data in sequence[2:]:
             number = sequence.index(beat_data)
             beat_view = self.create_beat_view_from_data(beat_data, number)
             filled_beats.append(beat_view)
