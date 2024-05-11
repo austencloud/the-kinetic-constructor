@@ -57,7 +57,6 @@ class SequenceWidgetButtonFrame(QFrame):
                 "callback": lambda: self.save_image_manager.exec_dialog(),
                 "tooltip": "Save Image",
             },
-
             "clear_sequence": {
                 "icon_path": "clear.svg",
                 "callback": lambda: self.clear_sequence(show_indicator=True),

@@ -36,7 +36,6 @@ class SW_Beat_Frame(QFrame):
         self._setup_layout()
         self._populate_beat_frame()
 
-
     def _populate_beat_frame(self) -> None:
         for i in range(1, self.COLUMN_COUNT):
             self._add_beat_to_layout(0, i)

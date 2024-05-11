@@ -27,8 +27,6 @@ class Beat(Pictograph):
         self.main_widget = beat_frame.main_widget
         self.view: "BeatView" = None
 
-    
-
     def add_beat_number(self, number: int) -> None:
         beat_number_item = QGraphicsTextItem(str(number))
         beat_number_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))
@@ -142,7 +140,6 @@ class BeatView(QGraphicsView):
         )
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
-
 
     def clear_beat(self) -> None:
         self.is_filled = False

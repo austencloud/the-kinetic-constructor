@@ -42,6 +42,7 @@ class GE_TurnsBoxHeader(QWidget):
         letter_type = None
         motion = pictograph.get.motion_by_color(self.turns_box.color)
         turns = motion.turns
+        is_shift = motion.check.is_shift()
         prop_rot_dir_button_mngr = self.turns_box.prop_rot_dir_button_manager
         if pictograph.letter:
             letter_type = LetterType.get_letter_type(pictograph.letter)
@@ -50,7 +51,7 @@ class GE_TurnsBoxHeader(QWidget):
             self.turns_box.vtg_dir_button_manager.hide_vtg_dir_buttons()
         else:
             if letter_type == LetterType.Type2 or letter_type == LetterType.Type3:
-                if turns:
+                if turns and not is_shift:
                     self.turns_box.vtg_dir_button_manager.show_vtg_dir_buttons()
                     if pictograph.red_motion.turns and pictograph.blue_motion.turns:
                         if (

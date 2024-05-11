@@ -42,10 +42,9 @@ class BeatDeletionManager:
         else:
             self._delete_non_first_beat(selected_beat)
 
-        #update the current sequence json to reflect the changes
+        # update the current sequence json to reflect the changes
         self.current_sequence_json_handler.clear_and_repopulate_the_current_sequence()
         self.sequence_builder.option_picker.update_option_picker()
-
 
     def _delete_non_first_beat(self, selected_beat):
         self.delete_beat(selected_beat)

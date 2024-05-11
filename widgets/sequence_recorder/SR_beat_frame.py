@@ -58,8 +58,8 @@ class SR_BeatFrame(QFrame):
                 self._add_beat_to_layout(j, i)
 
     def _setup_components(self) -> None:
-        self.selection_manager = SR_BeatSelectionManager(self)
 
+        self.selection_manager = SR_BeatSelectionManager(self)
     def _setup_layout(self) -> None:
         self.layout: QGridLayout = QGridLayout(self)
         self.layout.setSpacing(0)
