@@ -20,7 +20,7 @@ class DictionaryDeletionManager:
         os.remove(file_path)
         if len(thumbnail_box.thumbnails) == 0:
             self.delete_word(thumbnail_box.base_word)
-            self.dictionary_widget.preview_area.reset_preview_area()
+            self.dictionary_widget.preview_area.update_thumbnails()
             self.dictionary_widget.browser.scroll_widget.thumbnail_boxes_dict.pop(
                 thumbnail_box.base_word
             )
@@ -29,13 +29,14 @@ class DictionaryDeletionManager:
             thumbnail_box.current_index = 0
 
             self.dictionary_widget.browser.scroll_widget.sort_and_display_thumbnails()
-            self.dictionary_widget.preview_area.reset_preview_area()
+            self.dictionary_widget.preview_area.update_thumbnails()
         QApplication.restoreOverrideCursor()
 
     def delete_word(self, base_word):
         base_path = os.path.join(get_images_and_data_path("dictionary"), base_word)
         shutil.rmtree(base_path)
         self.dictionary_widget.browser.scroll_widget.sort_and_display_thumbnails()
+        self.dictionary_widget.preview_area.update_thumbnails()
 
     def confirm_delete_word(self):
         preview_area = self.dictionary_widget.preview_area

@@ -127,7 +127,7 @@ class SequenceImageExportManager:
         beat = Beat(self.temp_beat_frame)
         beat.pictograph_dict = beat_data
         beat.updater.update_pictograph(beat_data)
-        new_beat_view.set_beat(beat, number)
+        new_beat_view.set_beat(beat, number - 1)
         return new_beat_view
 
     def create_image(self, column_count, row_count) -> QImage:

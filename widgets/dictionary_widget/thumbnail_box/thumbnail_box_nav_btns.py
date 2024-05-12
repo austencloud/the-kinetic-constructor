@@ -64,10 +64,6 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
         self.layout.addWidget(self.right_button)
 
     def refresh(self):
-        self.left_button.setEnabled(self.current_index > 0)
-        self.right_button.setEnabled(
-            self.current_index < len(self.thumbnail_box.thumbnails) - 1
-        )
         self.update_thumbnail()
         if len(self.thumbnail_box.thumbnails) == 1:
             self.variation_number_label.hide()

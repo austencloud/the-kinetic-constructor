@@ -84,21 +84,23 @@ class DictionaryPreviewArea(QWidget):
         self.nav_buttons_widget.refresh()
 
         if self.thumbnails:
-            self._show_buttons()
+            self._show_buttons_and_labels()
 
         if len(self.thumbnails) > 1:
             self.nav_buttons_widget.show()
         elif not self.thumbnails:
-            self._hide_buttons()
+            self._hide_buttons_and_labels()
             self.update_preview(None)
 
-    def _show_buttons(self):
+    def _show_buttons_and_labels(self):
+        self.base_word_label.show()
         self.nav_buttons_widget.show()
         self.delete_word_button.show()
         self.delete_variation_button.show()
         self.edit_sequence_button.show()
 
-    def _hide_buttons(self):
+    def _hide_buttons_and_labels(self):
+        self.base_word_label.hide()
         self.nav_buttons_widget.hide()
         self.delete_word_button.hide()
         self.delete_variation_button.hide()

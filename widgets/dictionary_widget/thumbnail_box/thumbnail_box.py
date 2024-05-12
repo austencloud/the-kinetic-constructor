@@ -68,6 +68,12 @@ class ThumbnailBox(QWidget):
 
     def update_thumbnails(self, thumbnails):
         self.thumbnails = thumbnails
+        self.nav_buttons_widget.thumbnails = thumbnails
+        if self == self.browser.dictionary_widget.preview_area.current_thumbnail_box:
+            self.browser.dictionary_widget.preview_area.update_thumbnails(
+                self.thumbnails
+            )
+        self.image_label.thumbnails = thumbnails
         self.current_index = 0
         self.image_label.set_pixmap_to_fit(QPixmap(self.thumbnails[self.current_index]))
         self.nav_buttons_widget.refresh()
@@ -75,7 +81,6 @@ class ThumbnailBox(QWidget):
             self.variation_number_label.hide()
         else:
             self.variation_number_label.update_index(self.current_index + 1)
-        self.update()
 
     def refresh_ui(self):
         self.update_thumbnails(self.thumbnails)
