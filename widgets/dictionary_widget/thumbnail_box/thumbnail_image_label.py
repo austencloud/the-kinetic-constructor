@@ -32,7 +32,7 @@ class ThumbnailImageLabel(QLabel):
 
     def set_pixmap_to_fit(self, pixmap: QPixmap):
         sequence_length = self.metadata_extractor.get_sequence_length(
-            self.thumbnails[self.current_index]
+            self.thumbnail_box.thumbnails[self.thumbnail_box.current_index]
         )
         if sequence_length == 1:
             target_width = int(self.thumbnail_box.width() * 0.6) - int(

@@ -98,9 +98,10 @@ class AddToDictionaryManager:
         return max(existing_numbers, default=0) + 1
 
     def get_start_orientations(self, sequence) -> str:
-        if sequence and "sequence_start_position" in sequence[0]:
-            blue_ori = sequence[0]["blue_attributes"].get("start_ori", "none")
-            red_ori = sequence[0]["red_attributes"].get("start_ori", "none")
+        start_pos_dict = sequence[1]
+        if sequence and "sequence_start_position" in start_pos_dict:
+            blue_ori = start_pos_dict["blue_attributes"].get("start_ori", "none")
+            red_ori = start_pos_dict["red_attributes"].get("start_ori", "none")
             return f"({blue_ori},{red_ori})"
         return "none,none"
 

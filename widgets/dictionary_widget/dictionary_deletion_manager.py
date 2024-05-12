@@ -21,15 +21,15 @@ class DictionaryDeletionManager:
         if len(thumbnail_box.thumbnails) == 0:
             self.delete_word(thumbnail_box.base_word)
             self.dictionary_widget.preview_area.update_thumbnails()
+
             self.dictionary_widget.browser.scroll_widget.thumbnail_boxes_dict.pop(
                 thumbnail_box.base_word
             )
         else:
-            # update the thumbnail box.thumbnails to reflect the current state after deleting the file
             thumbnail_box.current_index = 0
-
             self.dictionary_widget.browser.scroll_widget.sort_and_display_thumbnails()
-            self.dictionary_widget.preview_area.update_thumbnails()
+            self.dictionary_widget.preview_area.update_thumbnails(thumbnail_box.thumbnails)
+            thumbnail_box.update_thumbnails(thumbnail_box.thumbnails)
         QApplication.restoreOverrideCursor()
 
     def delete_word(self, base_word):

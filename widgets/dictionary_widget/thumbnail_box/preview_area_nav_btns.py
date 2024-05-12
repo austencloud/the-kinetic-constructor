@@ -65,9 +65,7 @@ class PreviewAreaNavButtonsWidget(QWidget):
 
     def refresh(self):
         thumbnails = self.preview_area.thumbnails
-        are_multiple_thumbnails = len(thumbnails) > 1
-        self.left_button.setEnabled(are_multiple_thumbnails)
-        self.right_button.setEnabled(are_multiple_thumbnails)
+
         self.update_thumbnail()
         if len(thumbnails) == 1:
             self.variation_number_label.hide()

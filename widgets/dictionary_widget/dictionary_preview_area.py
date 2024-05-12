@@ -81,30 +81,36 @@ class DictionaryPreviewArea(QWidget):
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails
         self.current_index = 0
-        self.nav_buttons_widget.refresh()
+        # self.nav_buttons_widget.refresh()
 
         if self.thumbnails:
-            self._show_buttons_and_labels()
-
+            self.base_word_label.show()
+            self.variation_number_label.show()
+            self.delete_word_button.show()
+            self.delete_variation_button.show()
+            self.edit_sequence_button.show()
+            self.update_preview(self.current_index)
+        else:
+            self.base_word_label.hide()
+            self.variation_number_label.hide()
+            self.delete_word_button.hide()
+            self.delete_variation_button.hide()
+            self.edit_sequence_button.hide()
+            self.image_label.setText("No sequences to display.")
+            self._adjust_label_for_text()
+            self.update_preview(None)
+            return
+        
         if len(self.thumbnails) > 1:
             self.nav_buttons_widget.show()
-        elif not self.thumbnails:
-            self._hide_buttons_and_labels()
-            self.update_preview(None)
+            self.variation_number_label.show()
+        elif len(self.thumbnails) == 1:
+            self.nav_buttons_widget.hide()
+            self.variation_number_label.hide()
 
-    def _show_buttons_and_labels(self):
-        self.base_word_label.show()
-        self.nav_buttons_widget.show()
-        self.delete_word_button.show()
-        self.delete_variation_button.show()
-        self.edit_sequence_button.show()
 
-    def _hide_buttons_and_labels(self):
-        self.base_word_label.hide()
-        self.nav_buttons_widget.hide()
-        self.delete_word_button.hide()
-        self.delete_variation_button.hide()
-        self.edit_sequence_button.hide()
+
+
 
     def update_preview(self, index):
         if index == None:
@@ -118,7 +124,10 @@ class DictionaryPreviewArea(QWidget):
             self._scale_pixmap_to_label(pixmap)
 
         if self.current_thumbnail_box:
-            self.sequence_json = self.current_thumbnail_box.main_widget.metadata_extractor.extract_metadata_from_file(
+            metadata_extractor = (
+                self.current_thumbnail_box.main_widget.metadata_extractor
+            )
+            self.sequence_json = metadata_extractor.extract_metadata_from_file(
                 self.thumbnails[index]
             )
 

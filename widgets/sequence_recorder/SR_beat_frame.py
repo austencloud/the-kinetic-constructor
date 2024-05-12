@@ -60,6 +60,7 @@ class SR_BeatFrame(QFrame):
     def _setup_components(self) -> None:
 
         self.selection_manager = SR_BeatSelectionManager(self)
+
     def _setup_layout(self) -> None:
         self.layout: QGridLayout = QGridLayout(self)
         self.layout.setSpacing(0)
@@ -79,7 +80,6 @@ class SR_BeatFrame(QFrame):
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
             self.beat_views[next_beat_index].set_beat(new_beat, next_beat_index + 2)
-
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beat_views):
@@ -122,7 +122,6 @@ class SR_BeatFrame(QFrame):
                 return i
         return 0
 
-
     def clear_beat_frame(self) -> None:
         for beat_view in self.beat_views:
             beat_view.setScene(None)
@@ -132,7 +131,9 @@ class SR_BeatFrame(QFrame):
         sequence_json = self.current_sequence_json_handler.load_current_sequence_json()
         self.clear_beat_frame()
         for pictograph_dict in sequence_json:
-            if pictograph_dict.get("sequence_start_position"):
+            if pictograph_dict.get("sequence_start_position") or pictograph_dict.get(
+                "prop_type"
+            ):
                 continue
             beat = Beat(self)
             beat.updater.update_pictograph(pictograph_dict)
@@ -143,7 +144,6 @@ class SR_BeatFrame(QFrame):
                 )
             )
             self.pictograph_cache[pictograph_key] = beat
-
     @staticmethod
     def pixmap_to_cvimg(pixmap: QPixmap) -> np.ndarray:
         """Convert QPixmap to an OpenCV image format."""
@@ -191,4 +191,6 @@ class SR_BeatFrame(QFrame):
             view.setMaximumHeight(beat_view_size)
             view.resetTransform()
             if view.scene():
-                view.fitInView(view.scene().sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
+                view.fitInView(
+                    view.scene().sceneRect(), Qt.AspectRatioMode.KeepAspectRatio
+                )

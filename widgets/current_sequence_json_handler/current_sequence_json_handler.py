@@ -28,6 +28,11 @@ class CurrentSequenceJsonHandler:
 
         self.clear_current_sequence_file()  # Clears or initializes the file at the new location
 
+    def update_prop_type_in_json(self, prop_type: str) -> None:
+        sequence = self.load_current_sequence_json()
+        sequence[0]["prop_type"] = prop_type
+        self.save_current_sequence(sequence)
+
     def set_start_position_data(self, start_pos_pictograph: Pictograph) -> None:
         red_start_ori = start_pos_pictograph.pictograph_dict["red_attributes"][
             "start_ori"

@@ -66,7 +66,7 @@ class ThumbnailBox(QWidget):
         self.setFixedWidth(width)
         self.image_label.update_thumbnail()
 
-    def update_thumbnails(self, thumbnails):
+    def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails
         self.nav_buttons_widget.thumbnails = thumbnails
         if self == self.browser.dictionary_widget.preview_area.current_thumbnail_box:
