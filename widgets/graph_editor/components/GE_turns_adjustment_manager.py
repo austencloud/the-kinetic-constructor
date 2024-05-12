@@ -44,12 +44,17 @@ class GE_TurnsAdjustmentManager(QObject):
         self.turns_widget.updater._adjust_turns_for_pictograph(
             self.pictograph, adjustment
         )
+        QApplication.processEvents()
         pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
+        QApplication.processEvents()
         self.current_sequence_json_handler.update_turns_in_json_at_index(
-            pictograph_index + 1, self.color, new_turns
+            pictograph_index + 2, self.color, new_turns
         )
+        QApplication.processEvents()
         self.json_validation_engine.run(is_current_sequence=True)
+        QApplication.processEvents()
         self.main_widget.top_builder_widget.builder_toolbar.sequence_builder.option_picker.update_option_picker()
+        QApplication.processEvents()
         self.turns_adjusted.emit(new_turns)
         QApplication.restoreOverrideCursor()
 
@@ -58,7 +63,7 @@ class GE_TurnsAdjustmentManager(QObject):
         self._update_motion_properties(new_turns)
         pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
         self.current_sequence_json_handler.update_turns_in_json_at_index(
-            pictograph_index + 1, self.color, new_turns
+            pictograph_index + 2, self.color, new_turns
         )
 
         self._update_turns_display(new_turns)

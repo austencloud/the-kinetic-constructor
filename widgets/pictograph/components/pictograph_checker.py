@@ -116,15 +116,11 @@ class PictographChecker:
             "start_ori",
             "turns",
         ]
-        nested_red_required_keys = (
-            nested_blue_required_keys.copy()
-        )  # Assuming the same structure for red
+        nested_red_required_keys = nested_blue_required_keys.copy()
 
-        # Check top-level keys
         if not all(key in pictograph_dict for key in required_keys):
             return False
 
-        # Check nested keys for blue and red attributes
         for key in nested_blue_required_keys:
             if key not in pictograph_dict["blue_attributes"]:
                 return False

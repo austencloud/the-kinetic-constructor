@@ -59,7 +59,7 @@ class DictionarySequencePopulator:
         )
         self.json_handler.set_start_position_data(start_pos_beat)
         self.start_pos_view.set_start_pos(start_pos_beat)
-        for pictograph_dict in sequence_data:
+        for pictograph_dict in sequence_data[1:]:
             if pictograph_dict.get("sequence_start_position"):
                 continue
             self.sequence_widget.populate_sequence(pictograph_dict)

@@ -16,7 +16,7 @@ class GE_TurnsUpdater:
 
     def set_motion_turns(self, motion: "Motion", new_turns: Turns) -> None:
         self._update_turns_and_rotation(motion, new_turns)
-        pictograph_dict = {f"{motion.color}_turns": new_turns}
+        pictograph_dict = {f"{motion.color}_turns": new_turns, "prop_rot_dir": motion.prop_rot_dir}
         motion.pictograph.updater.update_pictograph(pictograph_dict)
 
     def _adjust_turns_for_pictograph(
@@ -53,6 +53,7 @@ class GE_TurnsUpdater:
                 self.turns_box.prop_rot_dir_button_manager.hide_prop_rot_dir_buttons()
             if self.turns_box.vtg_dir_button_manager.same_button.isVisible():
                 self.turns_box.vtg_dir_button_manager.hide_vtg_dir_buttons()
+
         elif motion.turns == 0 and new_turns > 0:
             self._set_prop_rot_dir(motion)
 

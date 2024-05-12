@@ -137,7 +137,7 @@ class CurrentSequenceJsonHandler:
         if sequence[index][f"{color}_attributes"]["turns"] > 0:
             pictograph = (
                 self.main_widget.top_builder_widget.sequence_widget.beat_frame.beats[
-                    index - 1
+                    index - 2
                 ].beat
             )
             if pictograph:
@@ -150,6 +150,7 @@ class CurrentSequenceJsonHandler:
                 prop_rot_dir = NO_ROT
                 sequence[index][f"{color}_attributes"]["prop_rot_dir"] = prop_rot_dir
 
+                
         self.save_current_sequence(sequence)
 
     def update_start_pos_ori(self, color: Color, ori: int) -> None:

@@ -41,7 +41,6 @@ class PictographUpdater:
         self._position_objects()
 
     def get_end_pos(self) -> str:
-        # get the end pos which looks like alpha1 or beta2, cut off the number and return the string
         return self.pictograph.end_pos[:-1]
 
     def _update_from_pictograph_dict(self, pictograph_dict: dict) -> None:

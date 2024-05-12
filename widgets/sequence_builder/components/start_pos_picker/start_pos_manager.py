@@ -119,7 +119,7 @@ class StartPosManager(QObject):
         self, start_pos_entry
     ) -> StartPositionBeat:
         start_position_pictograph = self.get_start_pos_pictograph(
-            start_pos_entry[0] if start_pos_entry else None
+            start_pos_entry[1] if start_pos_entry else None
         )
         start_pos_beat = StartPositionBeat(
             self.main_widget.top_builder_widget.sequence_widget.beat_frame,

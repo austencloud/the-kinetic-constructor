@@ -124,6 +124,11 @@ class DictionaryPreviewArea(QWidget):
         label_width = self.image_label.width()
         aspect_ratio = pixmap.height() / pixmap.width()
         new_height = int(label_width * aspect_ratio)
+        # if the new height exceeds the height of the preview widget, then we need to make sure that it is scaled down
+        if new_height > self.height() * 0.8:
+            new_height = int(self.height() * 0.8)
+            label_width = int(new_height / aspect_ratio)
+
         scaled_pixmap = pixmap.scaled(
             label_width,
             new_height,

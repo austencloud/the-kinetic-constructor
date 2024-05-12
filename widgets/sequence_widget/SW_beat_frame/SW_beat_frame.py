@@ -128,9 +128,6 @@ class SW_Beat_Frame(QFrame):
     def get_current_word(self) -> str:
         """
         This should go through the beats one by one and grab their letters, concatenating them to a word
-        For the start pos, you can put the start pos letter plus _ to indicate the start of a word followed by the rest of the letters
-        This can be achieved by getting pictograph.letter
-
         """
 
         word = ""
@@ -148,10 +145,12 @@ class SW_Beat_Frame(QFrame):
 
     def propogate_turn_adjustment(self, current_sequence_json) -> None:
         for i, entry in enumerate(current_sequence_json):
-            if i == 1:
+            if i == 0:
+                continue
+            elif i == 1:
                 self.update_start_pos_from_current_sequence_json(entry)
             elif i > 1:
-                beat = self.beats[i - 1].beat
+                beat = self.beats[i - 2].beat
                 if beat:
                     if beat.pictograph_dict != entry:
                         beat.updater.update_pictograph(entry)
