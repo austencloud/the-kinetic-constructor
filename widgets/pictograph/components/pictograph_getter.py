@@ -109,7 +109,7 @@ class PictographGetter:
                 "start_loc": self.blue_motion.start_loc,
                 "end_loc": self.blue_motion.end_loc,
                 "turns": self.blue_motion.turns,
-                "end_ori": self.blue_motion.end_ori,  # Assuming end orientation is handled by the Motion object
+                "end_ori": self.blue_motion.end_ori,
             },
             "red_attributes": {
                 "motion_type": self.red_motion.motion_type,
@@ -118,7 +118,7 @@ class PictographGetter:
                 "start_loc": self.red_motion.start_loc,
                 "end_loc": self.red_motion.end_loc,
                 "turns": self.red_motion.turns,
-                "end_ori": self.red_motion.end_ori,  # Assuming end orientation is handled by the Motion object
+                "end_ori": self.red_motion.end_ori,
             },
         }
 

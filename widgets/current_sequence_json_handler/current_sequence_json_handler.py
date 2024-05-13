@@ -1,5 +1,7 @@
 import json
 from Enums.MotionAttributes import Color
+from Enums.PropTypes import PropType
+from circular_word_checker import CircularWordChecker
 from constants import BLUE, DASH, NO_ROT, RED, STATIC
 from path_helpers import get_user_editable_resource_path
 from widgets.sequence_widget.SW_beat_frame.beat import BeatView
@@ -28,9 +30,20 @@ class CurrentSequenceJsonHandler:
 
         self.clear_current_sequence_file()  # Clears or initializes the file at the new location
 
-    def update_prop_type_in_json(self, prop_type: str) -> None:
+    def update_sequence_properties(self):
         sequence = self.load_current_sequence_json()
-        sequence[0]["prop_type"] = prop_type
+        if len(sequence) > 1:
+            checker = CircularWordChecker(
+                sequence[1:]
+            )  # Passing the sequence entries after metadata
+            is_circular, is_permutable = checker.check_properties()
+            sequence[0]["is_circular"] = is_circular
+            sequence[0]["is_permutable"] = is_permutable
+            self.save_current_sequence(sequence)
+
+    def update_prop_type_in_json(self, prop_type: PropType) -> None:
+        sequence = self.load_current_sequence_json()
+        sequence[0]["prop_type"] = prop_type.name.lower()
         self.save_current_sequence(sequence)
 
     def set_start_position_data(self, start_pos_pictograph: Pictograph) -> None:
@@ -67,29 +80,44 @@ class CurrentSequenceJsonHandler:
             },
         }
 
-        if self.sequence and "sequence_start_position" in self.sequence[0]:
-            self.sequence[0] = start_position_dict
+        if len(self.sequence) == 1:
+            self.sequence.append(start_position_dict)
         else:
-            self.sequence.insert(0, start_position_dict)
+            self.sequence.insert(1, start_position_dict)
 
         self.save_current_sequence(self.sequence)
 
-    def load_current_sequence_json(self) -> list[dict]:
+    def load_current_sequence_json(self) -> list:
         try:
             with open(self.current_sequence_json, "r", encoding="utf-8") as file:
                 sequence = json.load(file)
             return sequence
         except FileNotFoundError:
             print("Current sequence json not found")
-            return []
+            return [
+                {
+                    "prop_type": self.main_widget.prop_type.name.lower(),
+                    "is_circular": False,
+                    "is_permutable": False,
+                }
+            ]
 
     def save_current_sequence(self, sequence):
-        self.prop_type = self.main_widget.prop_type.name.lower()
-        prop_type_entry = {"prop_type": self.prop_type}
-        if sequence and "prop_type" in sequence[0]:
-            sequence[0].update(prop_type_entry)
+        if not sequence:
+            sequence = [
+                {
+                    "prop_type": self.main_widget.prop_type.name.lower(),
+                    "is_circular": False,
+                    "is_permutable": False,
+                }
+            ]
         else:
-            sequence.insert(0, prop_type_entry)
+            if "prop_type" not in sequence[0]:
+                sequence[0]["prop_type"] = self.main_widget.prop_type.name.lower()
+            if "is_circular" not in sequence[0]:
+                sequence[0]["is_circular"] = False
+            if "is_permutable" not in sequence[0]:
+                sequence[0]["is_permutable"] = False
         with open(self.current_sequence_json, "w", encoding="utf-8") as file:
             json.dump(sequence, file, indent=4, ensure_ascii=False)
 
@@ -105,13 +133,30 @@ class CurrentSequenceJsonHandler:
 
     def clear_current_sequence_file(self):
         with open(self.current_sequence_json, "w", encoding="utf-8") as file:
-            file.write("[]")
+            json.dump(
+                [
+                    {
+                        "prop_type": self.main_widget.prop_type.name.lower(),
+                        "is_circular": False,
+                        "is_permutable": False,
+                    }
+                ],
+                file,
+                indent=4,
+            )
 
     def update_current_sequence_file_with_beat(self, beat_view: BeatView):
         sequence_data = self.load_current_sequence_json()
-        sequence_data.append(beat_view.beat.get.pictograph_dict())
-        with open(self.current_sequence_json, "w", encoding="utf-8") as file:
-            json.dump(sequence_data, file, indent=4, ensure_ascii=False)
+        if len(sequence_data) == 0:  # Make sure there's at least the metadata entry
+            sequence_data.append(
+                {
+                    "prop_type": self.main_widget.prop_type.name.lower(),
+                    "is_circular": False,
+                }
+            )
+        sequence_data.append(beat_view.beat.pictograph_dict)
+        self.save_current_sequence(sequence_data)
+        self.update_sequence_properties()  # Recalculate circularity after each update
 
     def clear_and_repopulate_the_current_sequence(self):
         self.clear_current_sequence_file()
@@ -155,7 +200,6 @@ class CurrentSequenceJsonHandler:
                 prop_rot_dir = NO_ROT
                 sequence[index][f"{color}_attributes"]["prop_rot_dir"] = prop_rot_dir
 
-                
         self.save_current_sequence(sequence)
 
     def update_start_pos_ori(self, color: Color, ori: int) -> None:
@@ -215,44 +259,16 @@ class CurrentSequenceJsonHandler:
             sequence
         )
 
-    def get_current_turn_pattern(self) -> str:
-        sequence = self.load_current_sequence_json()
-        turn_pattern = ""
-        for i in range(1, len(sequence)):
-            if i == 17:
-                continue
-            blue_turns = sequence[i]["blue_attributes"]["turns"]
-            red_turns = sequence[i]["red_attributes"]["turns"]
-
-            if blue_turns == red_turns:
-                turn_pattern += f"{blue_turns}_"
-            elif blue_turns > 0 and red_turns > 0:
-                turn_pattern += f"L{blue_turns},R{red_turns}_"
-            elif blue_turns > 0:
-                turn_pattern += f"L{blue_turns}_"
-            elif red_turns > 0:
-                turn_pattern += f"R{red_turns}_"
-
-        turn_pattern = turn_pattern[:-1]
-        return "(" + turn_pattern + ")"
-
     def _calculate_continuous_prop_rot_dir(self, sequence, current_index, color) -> str:
-        # Define motion types that do not contribute to prop rotation direction.
         ignore_motion_types = [STATIC, DASH]
 
-        # Start from the current_index - 1 and move backwards.
         for i in range(current_index - 1, max(current_index - 16, -1), -1):
-            # Skip the very first item in the sequence
             if i == 0:
                 continue
-
-            # Check if the current pictograph's motion type should be ignored.
-            # If not, return its prop rotation direction.
             if (
                 sequence[i][f"{color}_attributes"]["motion_type"]
                 not in ignore_motion_types
             ):
                 return sequence[i][f"{color}_attributes"]["prop_rot_dir"]
 
-        # If no suitable prop rotation direction is found, return NO_ROT.
         return NO_ROT

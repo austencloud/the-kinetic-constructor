@@ -1,6 +1,6 @@
 {
     "pictograph_size": 1,
-    "prop_type": "Staff",
+    "prop_type": "Triad",
     "glyph_visibility": {
         "VTG": false,
         "TKA": true,
@@ -21,6 +21,6 @@
         "8": false
     },
     "image_export": {
-        "include_start_position": false
+        "include_start_position": true
     }
 }
