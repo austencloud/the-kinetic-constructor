@@ -22,7 +22,7 @@ class SequenceWidgetButton(QPushButton):
         self.setCursor(Qt.CursorShape.ArrowCursor)
 
 
-class SequenceWidgetButtonFrame(QFrame):
+class SW_ButtonFrame(QFrame):
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
@@ -109,7 +109,7 @@ class SequenceWidgetButtonFrame(QFrame):
         self.beat_frame.selection_manager.deselect_beat()
 
     def _clear_graph_editor(self) -> None:
-        self.graph_editor = self.sequence_widget.sequence_modifier.graph_editor
+        self.graph_editor = self.sequence_widget.graph_editor
         self.graph_editor.GE_pictograph_view.set_to_blank_grid()
         self.graph_editor.adjustment_panel.update_turns_displays(0, 0)
         self.graph_editor.adjustment_panel.update_adjustment_panel()

@@ -15,12 +15,13 @@ class SequenceModifier(QTabWidget):
         self.graph_editor = GraphEditor(self)
         self.addTab(self.graph_editor, "Graph Editor")
         self.setStyleSheet(get_tab_stylesheet())
-        size_policy = QSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
-        )
-        self.setSizePolicy(size_policy)
+        # size_policy = QSizePolicy(
+        #     QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        # )
+        # self.setSizePolicy(size_policy)
 
     def resize_sequence_modifier(self) -> None:
+
         if self.sequence_widget.beat_frame.selection_manager.selected_beat:
             self.graph_editor.adjustment_panel.hide_placeholder_widget()
         else:

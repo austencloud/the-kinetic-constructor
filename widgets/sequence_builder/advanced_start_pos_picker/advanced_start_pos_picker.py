@@ -75,6 +75,8 @@ class AdvancedStartPosPicker(QWidget):
             self._resize_variation(variation)
             variation.container.update_borders()
 
+    
+
     def calculate_view_width(self) -> int:
         max_variations_per_row = 4
         view_width = self.sequence_builder.height() // 5

@@ -40,7 +40,16 @@ class SW_BeatFrame(QFrame):
         self._setup_components()
         self._setup_layout()
         # set the background to transparent
-        
+        self.setObjectName("beat_frame")
+        self.setStyleSheet(
+            """
+            QFrame#beat_frame{
+                
+                background: transparent;
+            }
+            """
+        )
+
     def _setup_components(self) -> None:
         self.selection_manager = SequenceWidgetBeatSelectionOverlay(self)
         self.layout_manager = SW_BeatFrameLayoutManager(self)

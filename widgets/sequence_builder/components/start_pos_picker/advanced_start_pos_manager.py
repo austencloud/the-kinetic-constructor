@@ -24,34 +24,18 @@ class AdvancedStartPosManager(QObject):
         self.main_widget = advanced_start_pos_picker.sequence_builder.top_builder_widget
         self.start_pos_cache = advanced_start_pos_picker.start_pos_cache
 
-    def on_start_pos_clicked(self, clicked_start_option: Pictograph) -> None:
-        start_position_beat = StartPositionBeat(
-            self.sequence_builder.top_builder_widget,
-            self.sequence_builder.top_builder_widget.sequence_widget.beat_frame,
-        )
-        start_position_beat.updater.update_pictograph(
-            deepcopy(clicked_start_option.pictograph_dict)
-        )
-        self.sequence_builder.top_builder_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
-            start_position_beat
-        )
-        self.sequence_builder.current_pictograph = start_position_beat
-        beat_frame = self.sequence_builder.top_builder_widget.sequence_widget.beat_frame
-        start_pos_view = beat_frame.start_pos_view
-        beat_frame.selection_manager.select_beat(start_pos_view)
 
-        QApplication.processEvents()
-        self.start_position_selected.connect(
-            self.sequence_builder.transition_to_sequence_building
-        )
-        self.sequence_builder.top_builder_widget.json_manager.current_sequence_json_handler.set_start_position_data(
-            start_position_beat
-        )
-        self.start_position_selected.emit(start_position_beat)
+    def set_all_orientations_to_in(self) -> None:
+        for start_position_pictograph_list in self.advanced_start_pos_picker.start_pos_cache.values():
+            for start_position_pictograph in start_position_pictograph_list:
+                start_position_pictograph.pictograph_dict["blue_attributes"]["start_ori"] = "in"
+                start_position_pictograph.pictograph_dict["blue_attributes"]["end_ori"] = "in"
+                start_position_pictograph.pictograph_dict["red_attributes"]["start_ori"] = "in"
+                start_position_pictograph.pictograph_dict["red_attributes"]["end_ori"] = "in"
+                start_position_pictograph.updater.update_pictograph(
+                    start_position_pictograph.pictograph_dict
+                )
 
-    def hide_start_positions(self) -> None:
-        for start_position_pictograph in self.start_pos_cache.values():
-            start_position_pictograph.view.hide()
 
     def update_left_default_ori(self, left_ori: str):
         for (

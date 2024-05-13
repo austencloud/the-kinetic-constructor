@@ -30,7 +30,7 @@ class GE_VtgDirButtonManager:
         self.graph_editor = turns_box.graph_editor
         self.previous_turns = 0
         self.vtg_state = self.turns_box.vtg_dir_btn_state
-        self.beat_frame = self.graph_editor.sequence_modifier.sequence_widget.beat_frame
+        self.beat_frame = self.graph_editor.sequence_widget.beat_frame
         self.current_sequence_json_handler = (
             self.graph_editor.main_widget.json_manager.current_sequence_json_handler
         )

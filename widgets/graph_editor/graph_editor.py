@@ -14,14 +14,15 @@ from widgets.graph_editor.components.GE_pictograph_container import (
 )
 
 if TYPE_CHECKING:
+    from widgets.sequence_widget.sequence_widget import SequenceWidget
     from widgets.sequence_widget.sequence_modifier import SequenceModifier
 
 
 class GraphEditor(QFrame):
-    def __init__(self, sequence_modifier: "SequenceModifier") -> None:
+    def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__()
-        self.sequence_modifier = sequence_modifier
-        self.main_widget = sequence_modifier.main_widget
+        self.sequence_widget = sequence_widget
+        self.main_widget = sequence_widget.main_widget
         self._setup_pictograph()
         self._setup_adjustment_panel()
         self._setup_layout()
@@ -76,6 +77,6 @@ class GraphEditor(QFrame):
         self.GE_pictograph = pictograph
 
     def resize_graph_editor(self) -> None:
-        self.setFixedHeight(self.sequence_modifier.height())
+        self.setFixedHeight(int(self.sequence_widget.height() // 3.5))
         self.GE_pictograph_container.resize_GE_pictograph_container()
         self.adjustment_panel.update_adjustment_panel()

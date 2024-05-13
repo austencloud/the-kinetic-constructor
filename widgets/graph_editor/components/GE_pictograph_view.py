@@ -67,7 +67,7 @@ class GE_PictographView(PictographView):
 
     def resize_GE_pictograph_view(self) -> None:
         self.setFixedSize(
-            self.GE.sequence_modifier.height(), self.GE.sequence_modifier.height()
+            self.GE.height(), self.GE.height()
         )
         # if self.scene():
         #     self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
