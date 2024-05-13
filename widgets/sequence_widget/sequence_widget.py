@@ -1,12 +1,14 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QShowEvent
+from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import (
     QVBoxLayout,
     QWidget,
     QHBoxLayout,
     QPushButton,
     QSpinBox,
-    QScrollArea, QComboBox
+    QScrollArea,
+    QComboBox,
 )
 
 from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
@@ -31,8 +33,8 @@ class SequenceWidget(QWidget):
         self.top_builder_widget = top_builder_widget
         self.main_widget = top_builder_widget.main_widget
 
-        self._setup_cache()
         self._setup_components()
+        self._setup_cache()
         self._setup_beat_frame_layout()
         self._setup_indicator_label_layout()
         self._setup_layout()
@@ -49,7 +51,9 @@ class SequenceWidget(QWidget):
         self.my_sequence_label = MySequenceLabel(self)
 
         self.beat_combo_box = QComboBox(self)
-        self.beat_combo_box.addItems([str(i) for i in range(1, 65)])  # Values from 1 to 64
+        self.beat_combo_box.addItems(
+            [str(i) for i in range(1, 65)]
+        )  # Values from 1 to 64
         self.beat_combo_box.setCurrentIndex(15)  # Default index for 16 beats
         self.beat_combo_box.currentIndexChanged.connect(
             lambda index: self.beat_frame.layout_manager.configure_beat_frame(index + 1)
@@ -59,11 +63,37 @@ class SequenceWidget(QWidget):
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setContentsMargins(0, 0, 0, 0)
         self.scroll_area.setWidget(self.beat_frame)
+        self.scroll_area.setObjectName("sequence_scroll_area")
+        self.scroll_area.setStyleSheet(
+            """
+            QScrollArea{       
+                background: transparent;
+            }
+            """
+        )
+        self.beat_frame.setObjectName("beat_frame")
+        self.beat_frame.setStyleSheet(
+            """
+            QFrame#beat_frame{
+                
+                background: transparent;
+            }
+            """
+        )
+        # remove the border around the scroll area and beat frame
+        self.scroll_area.setFrameShape(QScrollArea.Shape.NoFrame)
+        self.beat_frame.setFrameShape(QScrollArea.Shape.NoFrame)
+        self.scroll_area.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+        )
+
 
     def _setup_beat_frame_layout(self):
         self.beat_frame_layout = QHBoxLayout()
         self.beat_frame_layout.addWidget(self.scroll_area)
         self.beat_frame_layout.addWidget(self.button_frame)
+        self.beat_frame_layout.setContentsMargins(0, 0, 0, 0)
+        self.beat_frame_layout.setSpacing(0)
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -71,16 +101,24 @@ class SequenceWidget(QWidget):
         self.layout.addWidget(self.beat_combo_box, stretch=1)
         self.layout.addLayout(self.beat_frame_layout, stretch=35)
         self.layout.addWidget(self.indicator_label, stretch=1)
-        self.layout.addWidget(self.sequence_modifier, stretch=8)
+        self.layout.addWidget(self.sequence_modifier, stretch=6)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def resizeEvent(self, event):
         self.layout.update()
         super().resizeEvent(event)
 
-    def showEvent(self, a0: QShowEvent | None) -> None:
+    def showEvent(self, event: QShowEvent):
+        super().showEvent(event)
+        # Use QTimer to defer the execution of initialization steps that need the UI to be fully ready
+        QTimer.singleShot(0, self.post_show_initialization)
+
+    def post_show_initialization(self):
+        # Perform layout configuration and other updates that need the widget to be visible
         self.resize_sequence_widget()
-        self.beat_frame.layout_manager.configure_beat_frame(16)
+        self.beat_frame.layout_manager.configure_beat_frame(
+            self.beat_combo_box.currentIndex() + 1
+        )
 
     def _setup_indicator_label_layout(self):
         self.indicator_label_layout = QHBoxLayout()

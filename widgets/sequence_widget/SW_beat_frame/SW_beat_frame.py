@@ -39,7 +39,8 @@ class SW_BeatFrame(QFrame):
             beat.hide()
         self._setup_components()
         self._setup_layout()
-
+        # set the background to transparent
+        
     def _setup_components(self) -> None:
         self.selection_manager = SequenceWidgetBeatSelectionOverlay(self)
         self.layout_manager = SW_BeatFrameLayoutManager(self)
@@ -52,6 +53,7 @@ class SW_BeatFrame(QFrame):
     def _setup_layout(self) -> None:
         self.layout: QGridLayout = QGridLayout(self)
         self.layout.setSpacing(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.addWidget(self.start_pos_view, 0, 0)

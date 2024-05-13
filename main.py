@@ -1,8 +1,8 @@
 import os
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QSplashScreen
-from PyQt6.QtGui import QPixmap
-from PyQt6.QtCore import Qt, QEvent
+from PyQt6.QtGui import QPixmap, QGuiApplication, QShowEvent, QKeyEvent
+from PyQt6.QtCore import Qt, QEvent, QTimer
 from path_helpers import get_images_and_data_path
 from profiler import Profiler
 from settings_manager import SettingsManager
@@ -12,7 +12,8 @@ from widgets.menu_bar.menu_bar import MainWindowMenuBar
 import logging
 
 # Set the logging level for PIL to WARNING to suppress debug and info messages
-logging.getLogger('PIL').setLevel(logging.WARNING)
+logging.getLogger("PIL").setLevel(logging.WARNING)
+
 
 class MainWindow(QMainWindow):
     def __init__(self, profiler: Profiler) -> None:
@@ -43,14 +44,32 @@ class MainWindow(QMainWindow):
 def main() -> None:
     app = QApplication(sys.argv)
 
+    # Get all available screens
+    screens = QGuiApplication.screens()
+
+    # Determine if the application is in development or production mode
+    dev_environment = not getattr(sys, "frozen", False)
+
+    # Select the appropriate screen based on the environment
+    # Default to the primary screen in production or the second screen in development (if available)
+    target_screen = screens[1] if dev_environment and len(screens) > 1 else screens[0]
+
     # Load and scale the splash screen image
     splash_pix = QPixmap(get_images_and_data_path("images/splash_screen.png"))
-    scaled_splash_pix = splash_pix.scaled(
-        600, 400, Qt.AspectRatioMode.KeepAspectRatio
-    )  # Adjust size as needed
-    splash = QSplashScreen(scaled_splash_pix, Qt.WindowType.WindowStaysOnTopHint)
-    splash.setWindowFlags(
-        Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.FramelessWindowHint
+    scaled_splash_pix = splash_pix.scaled(600, 400, Qt.AspectRatioMode.KeepAspectRatio)
+    splash = QSplashScreen(
+        scaled_splash_pix,
+        Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.FramelessWindowHint,
+    )
+
+    # Move the splash to the center of the selected screen
+    splash.setGeometry(
+        target_screen.geometry().x()
+        + (target_screen.geometry().width() - scaled_splash_pix.width()) // 2,
+        target_screen.geometry().y()
+        + (target_screen.geometry().height() - scaled_splash_pix.height()) // 2,
+        scaled_splash_pix.width(),
+        scaled_splash_pix.height(),
     )
     splash.showMessage(
         "Initializing...",
@@ -61,34 +80,17 @@ def main() -> None:
 
     app.processEvents()  # Ensure the splash screen is displayed immediately
 
-    steps = 4  # Example number of steps for the loading process
+    # Create the main window and configure it
     profiler = Profiler()
-
-    # Step 1
-    splash.showMessage(
-        "Setting up the main interface...",
-        Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignCenter,
-        Qt.GlobalColor.white,
-    )
-    app.processEvents()
     main_window = MainWindow(profiler)
+    main_window.show()  # Display the main window
 
-    # Additional steps...
-    for step in range(2, steps + 1):
-        splash.showMessage(
-            f"Loading step {step} of {steps}...",
-            Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignCenter,
-            Qt.GlobalColor.white,
-        )
-        app.processEvents()
-        # Simulate some loading tasks or setup operations here
+    # Finish the splash when the main window is ready
+    QTimer.singleShot(
+        1000, lambda: splash.finish(main_window)
+    )  # Close splash after a delay
 
-    splash.finish(main_window)
-    exit_code = main_window.exec_with_profiling(app)
-
-    root_directory = os.path.dirname(os.path.abspath(__file__))
-    profiler.write_profiling_stats_to_file("main_profiling_stats.txt", root_directory)
-    sys.exit(exit_code)
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":

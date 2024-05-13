@@ -152,7 +152,7 @@ class SequenceImageExportManager:
         else:
             start_col = 0
 
-        for row in range(row_count):
+        for row in range(row_count + 1):
             for col in range(start_col, column_count):
                 if beat_number < len(filled_beats):
                     beat_view = filled_beats[beat_number]
