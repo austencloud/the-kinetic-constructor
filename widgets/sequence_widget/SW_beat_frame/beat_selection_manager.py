@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 ========
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
-        SW_Beat_Frame,
+        SW_BeatFrame,
     )
 >>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409:widgets/SW/SW_beat_frame/beat_selection_overlay.py
 

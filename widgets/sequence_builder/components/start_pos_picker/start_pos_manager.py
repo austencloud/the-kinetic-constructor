@@ -23,7 +23,7 @@ class StartPosManager(QObject):
         self.start_pos_picker = start_pos_picker
         self.start_pos_frame = start_pos_picker.pictograph_frame
         self.main_widget = start_pos_picker.sequence_builder.main_widget
-        self.builder_toolbar = self.sequence_builder.builder_toolbar
+        self.top_builder_widget = self.sequence_builder.top_builder_widget
         self.start_options: dict[str, Pictograph] = {}
         self.setup_start_positions()
         self.start_position_selected.connect(
@@ -70,19 +70,19 @@ class StartPosManager(QObject):
     ) -> None:
         """Handle the start position click event."""
         start_position_beat = StartPositionBeat(
-            self.builder_toolbar.top_builder_widget.sequence_widget.beat_frame,
+            self.top_builder_widget.sequence_widget.beat_frame,
         )
         clicked_start_option.updater.update_dict_from_attributes()
         start_position_beat.updater.update_pictograph(
             deepcopy(clicked_start_option.pictograph_dict)
         )
 
-        self.sequence_builder.builder_toolbar.top_builder_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
+        self.sequence_builder.top_builder_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
             start_position_beat
         )
         self.sequence_builder.current_pictograph = start_position_beat
         beat_frame = (
-            self.sequence_builder.builder_toolbar.top_builder_widget.sequence_widget.beat_frame
+            self.sequence_builder.top_builder_widget.sequence_widget.beat_frame
         )
         start_pos_view = beat_frame.start_pos_view
         beat_frame.selection_manager.select_beat(start_pos_view)
@@ -189,16 +189,3 @@ class StartPosManager(QObject):
         pictograph.updater.update_pictograph(pictograph_dict)
         return pictograph
 
-    def update_start_pos_pictographs(self):
-        ori_picker = self.start_pos_picker.default_ori_picker
-        default_left_orientation = ori_picker.orientations[
-            ori_picker.current_left_orientation_index
-        ]
-        default_right_orientation = ori_picker.orientations[
-            ori_picker.current_right_orientation_index
-        ]
-
-        for start_option in self.start_options.values():
-            start_option.pictograph_dict["red_start_ori"] = default_right_orientation
-            start_option.pictograph_dict["blue_start_ori"] = default_left_orientation
-            start_option.updater.update_pictograph(start_option.pictograph_dict)

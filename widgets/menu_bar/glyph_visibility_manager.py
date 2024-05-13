@@ -38,7 +38,7 @@ class GlyphVisibilityManager:
             self.apply_visibility(glyph_type, pictograph)
             # if the pictograph is in the start pos picker frame then don't show the start to end pos glyph
             self.sequence_builder = (
-                self.main_window.main_widget.top_builder_widget.builder_toolbar.sequence_builder
+                self.main_window.main_widget.top_builder_widget.sequence_builder
             )
             if pictograph.letter in [Letter.α, Letter.β, Letter.Γ]:
                 # hide the start to end pos glyph

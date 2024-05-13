@@ -101,7 +101,7 @@ class MainWidget(QTabWidget):
         self.recorder_tab_index = 2
 
         # set the tab to the dictionary tab
-        self.setCurrentIndex(self.dictionary_tab_index)
+        self.setCurrentIndex(self.builder_tab_index)
 
         # self.addTab(self.letterbook, "LetterBook")
         self.initialized = True
@@ -138,7 +138,7 @@ class MainWidget(QTabWidget):
             if not self.top_builder_widget.initialized:
                 self.top_builder_widget.initialized = True
                 self.top_builder_widget.sequence_widget.resize_sequence_widget()
-                self.top_builder_widget.builder_toolbar.resize_current_tab()
+                self.top_builder_widget.sequence_builder.resize_sequence_builder()
         elif widget == self.sequence_recorder:
             if not self.sequence_recorder.initialized:
                 self.sequence_recorder.resize_sequence_recorder()

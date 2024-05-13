@@ -5,6 +5,7 @@ from PyQt6.QtGui import QPainter, QLinearGradient, QColor
 import math
 
 from widgets.main_builder_widget.builder_toolbar import BuilderToolbar
+from widgets.sequence_builder.sequence_builder import SequenceBuilder
 from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 if TYPE_CHECKING:
@@ -20,7 +21,7 @@ class TopBuilderWidget(QWidget):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.animate_background)
         self.timer.start(75)  # Adjust as needed for smoother or faster animation
-        self.builder_toolbar = BuilderToolbar(self)
+        self.sequence_builder = SequenceBuilder(self)
         self.sequence_widget = SequenceWidget(self)
         self.initialized = False
         self._setup_layout()
@@ -28,7 +29,7 @@ class TopBuilderWidget(QWidget):
     def _setup_layout(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.addWidget(self.sequence_widget, 1)
-        self.layout.addWidget(self.builder_toolbar, 1)
+        self.layout.addWidget(self.sequence_builder, 1)
 
     def animate_background(self):
         """Update the gradient and color shift for the animation."""

@@ -17,12 +17,12 @@ from widgets.pictograph.pictograph import Pictograph
 if TYPE_CHECKING:
     from widgets.sequence_recorder.SR_beat_frame import SR_BeatFrame
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
-        SW_Beat_Frame,
+        SW_BeatFrame,
     )
 
 
 class Beat(Pictograph):
-    def __init__(self, beat_frame: Union["SW_Beat_Frame", "SR_BeatFrame"]):
+    def __init__(self, beat_frame: Union["SW_BeatFrame", "SR_BeatFrame"]):
         super().__init__(beat_frame.main_widget)
         self.main_widget = beat_frame.main_widget
         self.view: "BeatView" = None
@@ -41,12 +41,11 @@ class Beat(Pictograph):
 
 
 class BeatView(QGraphicsView):
-    def __init__(self, beat_frame: "SW_Beat_Frame", number=None):
+    def __init__(self, beat_frame: "SW_BeatFrame", number=None):
         super().__init__(beat_frame)
         self.number = number  # Beat number to display
         self._disable_scrollbars()
         self.beat_frame = beat_frame
-        self.selection_manager = self.beat_frame.selection_manager
         self.beat: "Beat" = None
         self.is_start_pos = False
         self.is_filled = False
@@ -64,7 +63,7 @@ class BeatView(QGraphicsView):
 
     def mousePressEvent(self, event: QMouseEvent):
         if event.button() == Qt.MouseButton.LeftButton and self.is_filled:
-            self.selection_manager.select_beat(self)
+            self.beat_frame.selection_manager.select_beat(self)
 
     def deselect(self) -> None:
         self.is_selected = False

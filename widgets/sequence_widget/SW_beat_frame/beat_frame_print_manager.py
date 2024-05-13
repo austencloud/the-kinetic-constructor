@@ -14,12 +14,12 @@ from widgets.sequence_widget.SW_beat_frame.custom_print_dialog import (
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
-        SW_Beat_Frame,
+        SW_BeatFrame,
     )
 
 
 class BeatFramePrintManager:
-    def __init__(self, beat_frame: "SW_Beat_Frame"):
+    def __init__(self, beat_frame: "SW_BeatFrame"):
         self.beat_frame = beat_frame
         self.beat_frame_scene = QGraphicsScene()  # Using the custom scene class
         self.printer = None
@@ -78,7 +78,9 @@ class BeatFramePrintManager:
         # Here, you could directly access the get_layout_options method or replicate its logic
         # For simplicity, I'm assuming you have access to that method here
         layout_manager = self.beat_frame.export_manager.layout_manager
-        return layout_manager.calculate_layout(filled_beat_count, layout_manager.include_start_pos)
+        return layout_manager.calculate_layout(
+            filled_beat_count, layout_manager.include_start_pos
+        )
 
     def show_preview(self) -> None:
         view = QGraphicsView(self.beat_frame_scene)

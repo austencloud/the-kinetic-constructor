@@ -49,7 +49,7 @@ class OptionPicker(QWidget):
         )
         sequence = current_sequence_json_handler.load_current_sequence_json()
 
-        if sequence:
+        if len(sequence) > 1:
             next_options: dict = self.option_manager.get_next_options(sequence)
             self.scroll_area._hide_all_pictographs()
             self.scroll_area.add_and_display_relevant_pictographs(next_options)

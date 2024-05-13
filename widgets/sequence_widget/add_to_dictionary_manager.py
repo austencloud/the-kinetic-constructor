@@ -20,10 +20,10 @@ class AddToDictionaryManager:
             sequence_widget.main_widget.json_manager.current_sequence_json_handler
         )
         self.dictionary_dir = get_images_and_data_path("dictionary")
-        self.thumbnail_generator = ThumbnailGenerator(self)
         self.structural_checker = StructuralVariationChecker(self)
 
     def add_to_dictionary(self):
+        self.thumbnail_generator = ThumbnailGenerator(self)
         current_sequence = self.json_handler.load_current_sequence_json()
         if self.is_sequence_invalid(current_sequence):
             self.display_message(

@@ -26,7 +26,7 @@ class MainWidgetLayoutManager:
     def _setup_right_frame(self) -> QFrame:
         right_frame = QFrame()
         right_layout = QVBoxLayout(right_frame)
-        right_layout.addWidget(self.main_widget.top_builder_widget.builder_toolbar)
+        right_layout.addWidget(self.main_widget.top_builder_widget.sequence_builder)
         return right_frame
 
     def _setup_left_frame(self) -> QFrame:

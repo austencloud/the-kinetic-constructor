@@ -20,7 +20,7 @@ class BuilderToolbar(QTabWidget):
 
         self.setTabBar(CustomTabBar())
         self.addTab(self.sequence_builder, "Builder")
-        self.addTab(self.turn_pattern_widget, "Turn Patterns")
+        # self.addTab(self.turn_pattern_widget, "Turn Patterns")
         self.currentChanged.connect(self.on_tab_changed)
         self.setStyleSheet(get_tab_stylesheet())
 

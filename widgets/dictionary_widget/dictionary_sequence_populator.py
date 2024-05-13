@@ -18,11 +18,11 @@ class DictionarySequencePopulator:
             self.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_view
         )
         self.start_pos_manager = (
-            self.main_widget.top_builder_widget.builder_toolbar.sequence_builder.start_pos_picker.start_pos_manager
+            self.main_widget.top_builder_widget.sequence_builder.start_pos_picker.start_pos_manager
         )
         self.sequence_widget = self.main_widget.top_builder_widget.sequence_widget
         self.sequence_builder = (
-            self.main_widget.top_builder_widget.builder_toolbar.sequence_builder
+            self.main_widget.top_builder_widget.sequence_builder
         )
         self.initialized = True
 
@@ -80,4 +80,4 @@ class DictionarySequencePopulator:
                 sequence
             )
         )
-        last_beat.view.selection_manager.select_beat(last_beat.view)
+        # last_beat.view.beat_frame.selection_manager.select_beat(last_beat.view)

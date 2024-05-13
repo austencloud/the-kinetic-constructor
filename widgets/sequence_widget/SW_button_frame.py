@@ -36,9 +36,7 @@ class SequenceWidgetButtonFrame(QFrame):
     def _setup_dependencies(self):
         self.main_widget = self.sequence_widget.main_widget
         self.json_handler = self.main_widget.json_manager.current_sequence_json_handler
-        self.builder_toolbar = self.sequence_widget.top_builder_widget.builder_toolbar
-        self.sequence_constructor = self.builder_toolbar.sequence_builder
-        self.graph_editor = self.sequence_widget.sequence_modifier.graph_editor
+        self.sequence_builder = self.sequence_widget.top_builder_widget.sequence_builder
         self.beat_frame = self.sequence_widget.beat_frame
         self.save_image_manager = self.beat_frame.export_manager
         self.indicator_label = self.sequence_widget.indicator_label
@@ -95,8 +93,8 @@ class SequenceWidgetButtonFrame(QFrame):
     ) -> None:
         self._reset_beat_frame()
         if should_reset_to_start_pos_picker:
-            self.sequence_constructor.reset_to_start_pos_picker()
-        self.sequence_constructor.current_pictograph = self.beat_frame.start_pos
+            self.sequence_builder.reset_to_start_pos_picker()
+        self.sequence_builder.current_pictograph = self.beat_frame.start_pos
         self.json_handler.clear_current_sequence_file()
         if show_indicator:
             self.sequence_widget.indicator_label.show_message("Sequence cleared")
@@ -111,6 +109,7 @@ class SequenceWidgetButtonFrame(QFrame):
         self.beat_frame.selection_manager.deselect_beat()
 
     def _clear_graph_editor(self) -> None:
+        self.graph_editor = self.sequence_widget.sequence_modifier.graph_editor
         self.graph_editor.GE_pictograph_view.set_to_blank_grid()
         self.graph_editor.adjustment_panel.update_turns_displays(0, 0)
         self.graph_editor.adjustment_panel.update_adjustment_panel()

@@ -50,16 +50,21 @@ class ThumbnailImageLabel(QLabel):
         self.adjustSize()
 
     def thumbnail_clicked(self, event: "QMouseEvent"):
-        metadata = self.metadata_extractor.extract_metadata_from_file(
-            self.thumbnails[0]
-        )
-        self.browser.dictionary_widget.selection_handler.thumbnail_clicked(
-            self,
-            QPixmap(self.thumbnails[self.current_index]),
-            metadata,
-            self.thumbnails,
-            self.current_index,
-        )
+        if self.thumbnails:
+            metadata = self.metadata_extractor.extract_metadata_from_file(
+                self.thumbnails[0]
+            )
+            self.browser.dictionary_widget.selection_handler.thumbnail_clicked(
+                self,
+                QPixmap(self.thumbnails[self.current_index]),
+                metadata,
+                self.thumbnails,
+                self.current_index,
+            )
+        else:
+            self.browser.dictionary_widget.deletion_manager.delete_variation(
+                self.thumbnail_box, self.current_index
+            )
 
     def set_selected(self, selected: bool):
         self.is_selected = selected

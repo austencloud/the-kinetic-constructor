@@ -1,7 +1,12 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGridLayout, QFrame, QApplication
+from PyQt6.QtWidgets import QGridLayout, QFrame, QApplication, QInputDialog
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
+
+from widgets.image_export_layout_manager import ImageExportLayoutManager
+from widgets.sequence_widget.SW_beat_frame_layout_calculator import (
+    SW_BeatFrameLayoutManager,
+)
 
 from .beat_deletion_manager import BeatDeletionManager
 from .sequence_image_export_manager import SequenceImageExportManager
@@ -17,11 +22,7 @@ if TYPE_CHECKING:
 from .beat import Beat, BeatView
 
 
-class SW_Beat_Frame(QFrame):
-
-    COLUMN_COUNT = 5
-    ROW_COUNT = 4
-
+class SW_BeatFrame(QFrame):
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__()
         self.main_widget = sequence_widget.main_widget
@@ -30,59 +31,18 @@ class SW_Beat_Frame(QFrame):
         )
         self.sequence_widget = sequence_widget
         self.top_builder_widget = sequence_widget.top_builder_widget
-        self.beats: list[BeatView] = []
         self.sequence_changed = False
+        self.beats = [
+            BeatView(self) for _ in range(64)
+        ]  # Pre-allocate a fixed number of beat views
+        for beat in self.beats:
+            beat.hide()
         self._setup_components()
         self._setup_layout()
-        self._populate_beat_frame()
-
-    def _populate_beat_frame(self) -> None:
-        for i in range(1, self.COLUMN_COUNT):
-            self._add_beat_to_layout(0, i)
-
-        for j in range(1, 4):
-            for i in range(
-                1,
-                self.COLUMN_COUNT,
-            ):
-                self._add_beat_to_layout(j, i)
-
-    def set_sequence(self, sequence: list[dict]) -> None:
-        """
-        Sets the sequence in the beat frame by creating/updating beats based on the sequence data.
-        Each dictionary in the sequence represents one beat or start position data.
-        """
-        if not sequence:
-            return
-
-        # Clear existing beats if they are already filled
-        for beat_view in self.beats:
-            if beat_view.is_filled:
-                beat_view.clear_beat()
-
-        if "start_pos" in sequence[1]:
-            self.start_pos_view.set_beat(sequence[1])
-            sequence = sequence[1:]  # Remove the start_pos entry if it's dedicated
-
-        for idx, beat_data in enumerate(sequence):
-            if idx < len(self.beats):
-                new_beat = Beat(self)
-                self.beats[idx].set_beat(new_beat, idx)
-                new_beat.pictograph_dict = beat_data
-                new_beat.updater.update_pictograph(beat_data)
-            else:
-                # If there are more items in the sequence than views, log an error or handle it appropriately
-                print(
-                    f"Error: More sequence items than available beats. Index {idx} is out of range."
-                )
-
-    def _add_beat_to_layout(self, row: int, col: int, number=None) -> None:
-        beat_view = BeatView(self, number)
-        self.layout.addWidget(beat_view, row, col)
-        self.beats.append(beat_view)
 
     def _setup_components(self) -> None:
         self.selection_manager = SequenceWidgetBeatSelectionOverlay(self)
+        self.layout_manager = SW_BeatFrameLayoutManager(self)
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(self)
         self.beat_deletion_manager = BeatDeletionManager(self)
@@ -105,7 +65,7 @@ class SW_Beat_Frame(QFrame):
     def delete_selected_beat(self) -> None:
         self.beat_deletion_manager.delete_selected_beat()
 
-    def add_scene_to_sequence(self, new_beat: "Pictograph") -> None:
+    def add_beat_to_sequence(self, new_beat: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()
         if next_beat_index is not None:
             self.beats[next_beat_index].set_beat(new_beat, next_beat_index + 1)
@@ -169,14 +129,24 @@ class SW_Beat_Frame(QFrame):
         return 0
 
     def resize_beat_frame(self) -> None:
-        beat_view_size = int((self.width() // (self.COLUMN_COUNT)) * 0.75)
-        for view in self.beats + [self.start_pos_view]:
-            view.setMinimumWidth(beat_view_size)
-            view.setMaximumWidth(beat_view_size)
-            view.setMinimumHeight(beat_view_size)
-            view.setMaximumHeight(beat_view_size)
-            view.resetTransform()
-            if view.scene():
-                view.fitInView(
-                    view.scene().sceneRect(), Qt.AspectRatioMode.KeepAspectRatio
-                )
+        scrollbar_width = self.sequence_widget.scroll_area.verticalScrollBar().width()
+        width = int(
+            (
+                self.sequence_widget.width()
+                - self.sequence_widget.button_frame.width()
+                - scrollbar_width
+            )
+            * 0.8
+        )
+        num_cols = max(1, self.layout.columnCount() - 1)  # Excluding start position
+
+        if num_cols == 0:
+            return
+
+        beat_width = width / (num_cols + 1)  # +1 for start position column
+        beat_height = beat_width
+        beat_size = int(min(beat_width, beat_height))
+
+        for beat in self.beats:
+            beat.setFixedSize(beat_size, beat_size)
+        self.start_pos_view.setFixedSize(beat_size, beat_size)

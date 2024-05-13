@@ -40,21 +40,16 @@ class GE_TurnsAdjustmentManager(QObject):
         new_turns = self._clamp_turns(new_turns + adjustment)
         new_turns = self.convert_turn_floats_to_ints(new_turns)
         self._update_turns_display(new_turns)
-        QApplication.processEvents()
         self.turns_widget.updater._adjust_turns_for_pictograph(
             self.pictograph, adjustment
         )
-        QApplication.processEvents()
         pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
-        QApplication.processEvents()
         self.current_sequence_json_handler.update_turns_in_json_at_index(
             pictograph_index + 2, self.color, new_turns
         )
-        QApplication.processEvents()
         self.json_validation_engine.run(is_current_sequence=True)
         QApplication.processEvents()
-        self.main_widget.top_builder_widget.builder_toolbar.sequence_builder.option_picker.update_option_picker()
-        QApplication.processEvents()
+        self.main_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
         QApplication.restoreOverrideCursor()
 
@@ -68,7 +63,7 @@ class GE_TurnsAdjustmentManager(QObject):
 
         self._update_turns_display(new_turns)
         self.json_validation_engine.run(is_current_sequence=True)
-        self.main_widget.top_builder_widget.builder_toolbar.sequence_builder.option_picker.update_option_picker()
+        self.main_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
 
     def get_current_turns_value(self) -> Turns:

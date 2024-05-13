@@ -10,12 +10,12 @@ from widgets.sequence_widget.SW_beat_frame.start_pos_beat import (
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
-        SW_Beat_Frame,
+        SW_BeatFrame,
     )
 
 
 class SequenceWidgetBeatSelectionOverlay(QWidget):
-    def __init__(self, beat_frame: "SW_Beat_Frame"):
+    def __init__(self, beat_frame: "SW_BeatFrame"):
         super().__init__(beat_frame)
         self.selected_beat: Optional[BeatView | StartPositionBeatView] = None
         self.border_color = QColor("gold")
@@ -41,7 +41,6 @@ class SequenceWidgetBeatSelectionOverlay(QWidget):
             self.update_overlay_position()
             self.show()
             graph_editor.update_GE_pictograph(self.selected_beat.beat)
-            # QApplication.processEvents()
 
             graph_editor.adjustment_panel.update_turns_panel(blue_turns, red_turns)
             graph_editor.adjustment_panel.update_adjustment_panel()

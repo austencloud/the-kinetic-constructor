@@ -10,14 +10,14 @@ from PyQt6.QtWidgets import QFileDialog
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
-        SW_Beat_Frame,
+        SW_BeatFrame,
     )
 
 
 class SequenceImageExportManager:
-    last_save_directory = None 
+    last_save_directory = None
 
-    def __init__(self, beat_frame: "SW_Beat_Frame") -> None:
+    def __init__(self, beat_frame: "SW_BeatFrame") -> None:
         self.beat_frame = beat_frame
         self.main_widget = beat_frame.main_widget
         self.indicator_label = beat_frame.sequence_widget.indicator_label
@@ -111,10 +111,9 @@ class SequenceImageExportManager:
 
     def process_sequence_to_beats(self, sequence):
         from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
-            SW_Beat_Frame,
+            SW_BeatFrame,
         )
-
-        self.temp_beat_frame = SW_Beat_Frame(self.sequence_widget)
+        self.temp_beat_frame = SW_BeatFrame(self.sequence_widget)
         filled_beats = []
         for beat_data in sequence[2:]:
             number = sequence.index(beat_data)
