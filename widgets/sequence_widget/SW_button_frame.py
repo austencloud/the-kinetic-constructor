@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 
-class SequenceWidgetButton(QPushButton):
+class SW_ActionButton(QPushButton):
     def __init__(self, icon_path: str):
         super().__init__()
         self.setIcon(QIcon(icon_path))
@@ -38,12 +38,12 @@ class SW_ButtonFrame(QFrame):
         self.json_handler = self.main_widget.json_manager.current_sequence_json_handler
         self.sequence_builder = self.sequence_widget.top_builder_widget.sequence_builder
         self.beat_frame = self.sequence_widget.beat_frame
-        self.save_image_manager = self.beat_frame.export_manager
+        self.export_manager = self.beat_frame.export_manager
         self.indicator_label = self.sequence_widget.indicator_label
         self.print_sequence_manager = self.beat_frame.print_sequence_manager
 
     def _setup_buttons(self) -> None:
-        self.buttons: list[SequenceWidgetButton] = []
+        self.buttons: list[SW_ActionButton] = []
         button_dict = {
             "add_to_dictionary": {
                 "icon_path": "add_to_dictionary.svg",
@@ -52,7 +52,7 @@ class SW_ButtonFrame(QFrame):
             },
             "save_image": {
                 "icon_path": "save_image.svg",
-                "callback": lambda: self.save_image_manager.exec_dialog(),
+                "callback": lambda: self.export_manager.exec_dialog(),
                 "tooltip": "Save Image",
             },
             "clear_sequence": {
@@ -76,7 +76,7 @@ class SW_ButtonFrame(QFrame):
         self, button_name: str, icon_path: str, callback, tooltip: str
     ) -> None:
         icon = QIcon(icon_path)
-        button = SequenceWidgetButton(icon)
+        button = SW_ActionButton(icon)
         button.clicked.connect(callback)
         button.setToolTip(tooltip)  # Set the tooltip for the button
         setattr(self, f"{button_name}_button", button)

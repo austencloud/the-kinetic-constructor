@@ -8,8 +8,9 @@ if TYPE_CHECKING:
 
 
 class ExportDialogPreviewPanel(QFrame):
-    def __init__(self, export_dialog: "ImageExportDialog"):
+    def __init__(self, export_dialog: "ImageExportDialog", image=None):
         super().__init__(export_dialog)
+        self.image = image
         self.export_dialog = export_dialog
         self.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Sunken)
         self.preview_label = QLabel(self)
@@ -26,10 +27,11 @@ class ExportDialogPreviewPanel(QFrame):
 
     def update_preview_with_start_pos(self, include_start_pos: bool):
         json_sequence = self.json_handler.load_current_sequence_json()
-        sequence_image = self.export_dialog.export_manager.create_sequence_image(
-            json_sequence, include_start_pos
-        )
-        self.preview_image = QPixmap.fromImage(sequence_image)
+        if not self.image:
+            self.image = self.export_dialog.export_manager.create_sequence_image(
+                json_sequence, include_start_pos
+            )
+        self.preview_image = QPixmap.fromImage(self.image)
         self.update_preview()
 
     def update_preview(self):

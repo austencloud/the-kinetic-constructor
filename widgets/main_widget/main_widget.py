@@ -88,8 +88,8 @@ class MainWidget(QTabWidget):
 
         self._setup_special_placements()
 
-        self.dictionary = DictionaryWidget(self)
         self.top_builder_widget = TopBuilderWidget(self)
+        self.dictionary = DictionaryWidget(self)
         self.sequence_recorder = SequenceRecorder(self)
 
         self.addTab(self.top_builder_widget, "Builder")
