@@ -95,19 +95,20 @@ class DictionaryPreviewArea(QWidget):
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails
         self.current_index = 0
-        # self.nav_buttons_widget.refresh()
 
         if self.thumbnails:
             self.base_word_label.show()
             self.variation_number_label.show()
-            # self.delete_word_button.show()
+            self.button_panel.delete_word_button.show()
+            self.button_panel.save_image_button.show()
             self.button_panel.delete_variation_button.show()
             self.button_panel.edit_sequence_button.show()
             self.update_preview(self.current_index)
         else:
             self.base_word_label.hide()
             self.variation_number_label.hide()
-            # self.delete_word_button.hide()
+            self.button_panel.delete_word_button.hide()
+            self.button_panel.save_image_button.hide()
             self.button_panel.delete_variation_button.hide()
             self.button_panel.edit_sequence_button.hide()
             self.image_label.setText("No sequences to display.")

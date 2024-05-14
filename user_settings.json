@@ -22,5 +22,10 @@
     },
     "image_export": {
         "include_start_position": false
-    }
+    },
+    "grid_visibility": {
+        "layer2_normal": false,
+        "layer2_strict": false
+    },
+    "non_radial_points_visibility": false
 }

@@ -154,9 +154,7 @@ class SW_BeatFrame(QFrame):
         if num_cols == 0:
             return
 
-        beat_width = width / (num_cols + 1)  # +1 for start position column
-        beat_height = beat_width
-        beat_size = int(min(beat_width, beat_height))
+        beat_size = int(width / (5))  # +1 for start position column
 
         for beat in self.beats:
             beat.setFixedSize(beat_size, beat_size)

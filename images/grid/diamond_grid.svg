@@ -19,10 +19,10 @@
 		<circle id="w_diamond_hand_point" cx="331.9" cy="475" r="8"/>
 	</g>
 	<g>
-		<circle id="ne_diamond_layer2_point"  cx="618.1" cy="331.9" r="8.8"/>
-		<circle id="se_diamond_layer2_point"  cx="618.1" cy="618.1" r="8.8"/>
-		<circle id="sw_diamond_layer2_point"  cx="331.9" cy="618.1" r="8.8"/>
-		<circle id="nw_diamond_layer2_point"  cx="331.9" cy="331.9" r="8.8"/>
+		<circle id="ne_diamond_layer2_point" class="st0" cx="618.1" cy="331.9" r="8.8"/>
+		<circle id="se_diamond_layer2_point" class="st0" cx="618.1" cy="618.1" r="8.8"/>
+		<circle id="sw_diamond_layer2_point" class="st0" cx="331.9" cy="618.1" r="8.8"/>
+		<circle id="nw_diamond_layer2_point" class="st0" cx="331.9" cy="331.9" r="8.8"/>
 	</g>
 	<g>
 		<circle id="ne_diamond_layer2_point_strict" class="st0" cx="625" cy="325" r="8.8"/>

@@ -87,13 +87,17 @@ class GridData:
 
 
 class Grid:
-    def __init__(self, scene: "Pictograph") -> None:
+    def __init__(self, scene: "Pictograph"):
         self.scene = scene
         self.items: dict[GridModes, GridItem] = {}
+        self.layers: dict[str, GridItem] = {}
         self.grid_mode = DIAMOND
         self.grid_data = self._load_grid_data()
         self._create_grid_items(scene)
         self.center = self.grid_data.center_point.coordinates
+
+    def toggle_non_radial_points_visibility(self, visible: bool):
+        self.nonradial_layer.setVisible(visible)
 
     def _load_grid_data(self) -> GridData:
         json_path = get_images_and_data_path("data/circle_coords.json")
@@ -116,17 +120,36 @@ class Grid:
         closest_point = self.grid_data.get_point(layer, pos)
         return closest_point.name, closest_point.coordinates
 
-    def _create_grid_items(self, grid_scene: "Pictograph") -> None:
-        paths = {
-            DIAMOND: f"{GRID_DIR}diamond_grid.svg",
-            BOX: f"{GRID_DIR}box_grid.svg",
-        }
 
+    def _create_grid_items(self, pictograph: "Pictograph"):
+        # Define paths for your grid images or components
+        paths = {
+            DIAMOND: get_images_and_data_path(f"{GRID_DIR}diamond_grid.svg"),
+            BOX: get_images_and_data_path(f"{GRID_DIR}box_grid.svg")
+        }
+        # Create grid items based on the mode and paths
         for mode, path in paths.items():
-            item = GridItem(get_images_and_data_path(path))
-            grid_scene.addItem(item)
-            self.items[mode] = item
-            item.setVisible(mode == self.grid_mode)
+            grid_item = GridItem(path)
+            pictograph.addItem(grid_item)
+            grid_item.setVisible(mode == self.grid_mode)
+            self.items[mode] = grid_item
+
+
+        non_radial_path = get_images_and_data_path(f"{GRID_DIR}diamond_nonradial_points.svg")
+        non_radial_item = QGraphicsSvgItem(non_radial_path)
+        non_radial_item.setVisible(False)  # Initially hidden
+        self.scene.addItem(non_radial_item)
+        self.nonradial_layer = non_radial_item
+
+
+    def set_layer_visibility(self, layer_id, visibility):
+        if layer_id in self.layers:
+            self.layers[layer_id].setVisible(visibility)
+
+    def toggle_layer_visibility(self, layer_id):
+        if layer_id in self.layers:
+            current_visibility = self.layers[layer_id].isVisible()
+            self.layers[layer_id].setVisible(not current_visibility)
 
     def setPos(self, position: QPointF) -> None:
         for item in self.items.values():

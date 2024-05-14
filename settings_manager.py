@@ -5,6 +5,7 @@ from Enums.PropTypes import PropType
 from path_helpers import get_user_editable_resource_path
 from widgets.menu_bar.glyph_visibility_manager import GlyphVisibilityManager
 from prop_type_changer import PropTypeChanger
+from widgets.menu_bar.grid_visibility_manager import GridVisibilityManager
 
 
 if TYPE_CHECKING:
@@ -48,6 +49,7 @@ class SettingsManager:
         self.settings = self.load_settings()
         self.prop_type_changer = PropTypeChanger(main_window)
         self.glyph_visibility_manager = GlyphVisibilityManager(main_window)
+        self.grid_visibility_manager = GridVisibilityManager(self)
 
     def load_settings(self) -> dict:
         if os.path.exists(self.settings_json):

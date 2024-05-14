@@ -12,7 +12,8 @@ class DictionaryButtonPanel(QWidget):
     delete_variation_button: QPushButton
     delete_word_button: QPushButton
     edit_sequence_button: QPushButton
-
+    save_image_button: QPushButton
+    
     def __init__(self, preview_area: "DictionaryPreviewArea"):
         super().__init__(preview_area)
         self.preview_area = preview_area
