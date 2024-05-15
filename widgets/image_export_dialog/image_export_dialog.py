@@ -31,7 +31,7 @@ class ImageExportDialog(QDialog):
 
     def _setup_layout(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.layout.addLayout(self.preview_panel_layout, 1)
+        self.layout.addLayout(self.preview_layout, 1)
         self.layout.addWidget(self.control_panel, 1)
 
     def _setup_control_panel(self, export_manager: "SequenceImageExportManager"):
@@ -50,9 +50,9 @@ class ImageExportDialog(QDialog):
         self.preview_panel_label.setText("Preview:")
         self.preview_panel_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.preview_panel_label.setStyleSheet("font-size: 20px")
-        self.preview_panel_layout = QVBoxLayout()
-        self.preview_panel_layout.addWidget(self.preview_panel_label)
-        self.preview_panel_layout.addWidget(self.preview_panel)
+        self.preview_layout = QVBoxLayout()
+        self.preview_layout.addWidget(self.preview_panel_label)
+        self.preview_layout.addWidget(self.preview_panel)
 
     def update_export_setting_and_layout(self):
         new_value = self.control_panel.include_start_pos_check.isChecked()

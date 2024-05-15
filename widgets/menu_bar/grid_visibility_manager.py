@@ -29,8 +29,39 @@ class GridVisibilityManager:
         for (
             pictograph_list
         ) in self.settings_manager.main_window.main_widget.pictograph_cache.values():
-            for pictograph in pictograph_list.values():
-                if hasattr(pictograph, "grid"):
-                    pictograph.grid.toggle_non_radial_points_visibility(
+            for start_pos in pictograph_list.values():
+                if hasattr(start_pos, "grid"):
+                    start_pos.grid.toggle_non_radial_points_visibility(
+                        self.non_radial_visible
+                    )
+        # iterate over the sequence widget beat frame too
+        beat_frame = (
+            self.settings_manager.main_window.main_widget.top_builder_widget.sequence_widget.beat_frame
+        )
+        for beat_view in beat_frame.beats:
+            beat = beat_view.beat
+            if hasattr(beat, "grid"):
+                beat.grid.toggle_non_radial_points_visibility(self.non_radial_visible)
+
+        # if the start pos view is visible, apply the visibility to it too
+        start_pos_view = beat_frame.start_pos_view
+        if start_pos_view.isVisible():
+            start_pos = start_pos_view.beat
+            if hasattr(start_pos, "grid"):
+                start_pos.grid.toggle_non_radial_points_visibility(
+                    self.non_radial_visible
+                )
+
+        # iterate over the advanced start pos picker pictographs too
+        sequence_builder = (
+            self.settings_manager.main_window.main_widget.top_builder_widget.sequence_builder
+        )
+        for (
+            start_letter,
+            pictograph_list,
+        ) in sequence_builder.advanced_start_pos_picker.start_pos_cache.items():
+            for start_pos in pictograph_list:
+                if hasattr(start_pos, "grid"):
+                    start_pos.grid.toggle_non_radial_points_visibility(
                         self.non_radial_visible
                     )
