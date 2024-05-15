@@ -27,5 +27,6 @@
         "layer2_normal": false,
         "layer2_strict": false
     },
-    "non_radial_points_visibility": false
+    "non_radial_points_visibility": false,
+    "background_type": "Rainbow"
 }

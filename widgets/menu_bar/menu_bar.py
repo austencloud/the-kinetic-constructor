@@ -22,6 +22,43 @@ class MainWindowMenuBar(QMenuBar):
         self._setup_settings_menu()
         self._setup_visibility_menu()
         self._setup_prop_type_menu()
+        self._setup_backgrounds_menu()
+
+    def _setup_backgrounds_menu(self):
+        backgrounds_menu = self.addMenu("Backgrounds")
+        background_action_group = QActionGroup(self)
+        background_action_group.setExclusive(True)
+
+        # List of background managers available
+        background_types = [
+            "Rainbow",
+            "Starfield",
+            "Particle",
+            "Aurora",
+            "AttractionParticles",
+            "AuroraBorealis",
+            "WaterRipples",
+        ]
+        current_bg = self.main_widget.main_window.settings_manager.get_setting(
+            "background_type", default="Rainbow"
+        )
+
+        for bg_type in background_types:
+            action = QAction(bg_type, self, checkable=True)
+            action.setChecked(current_bg == bg_type)
+            action.triggered.connect(
+                lambda checked, bg=bg_type: (
+                    self.set_background_type(bg) if checked else None
+                )
+            )
+            backgrounds_menu.addAction(action)
+            background_action_group.addAction(action)
+
+    def set_background_type(self, bg_type: str):
+        self.main_widget.main_window.settings_manager.set_setting(
+            "background_type", bg_type
+        )
+        self.main_widget.apply_background(bg_type)
 
     def _setup_prop_type_menu(self):
         prop_type_menu = self.addMenu("Set Prop Type")
@@ -60,18 +97,18 @@ class MainWindowMenuBar(QMenuBar):
             visibility_menu.addAction(action)
 
         non_radial_action = QAction("Non-Radial Points", self, checkable=True)
-        non_radial_action.setChecked(self.main_widget.main_window.settings_manager.grid_visibility_manager.non_radial_visible)
-        non_radial_action.triggered.connect(self.grid_visibility_manager.toggle_visibility)
+        non_radial_action.setChecked(
+            self.main_widget.main_window.settings_manager.grid_visibility_manager.non_radial_visible
+        )
+        non_radial_action.triggered.connect(
+            self.grid_visibility_manager.toggle_visibility
+        )
         visibility_menu.addAction(non_radial_action)
-
-
-
 
     def toggle_glyph_visibility(self, glyph_type: str, visible: bool):
         self.glyph_visibility_manager = self.glyph_visibility_manager
         self.glyph_visibility_manager.set_glyph_visibility(glyph_type, visible)
         self.glyph_visibility_manager.apply_glyph_visibility()
-
 
     def set_prop_type(self, prop_type: PropType):
         self.main_widget.prop_type_selector.on_prop_type_changed(prop_type.name)

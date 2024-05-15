@@ -6,6 +6,16 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from Enums.PropTypes import PropType
+
+from background_managers.background_manager import (
+    AttractionParticlesBackgroundManager,
+    AuroraBackgroundManager,
+    AuroraBorealisBackgroundManager,
+    ParticleBackgroundManager,
+    RainbowBackgroundManager,
+    StarfieldBackgroundManager,
+    WaterRipplesBackgroundManager,
+)
 from objects.graphical_object.graphical_object_svg_manager import (
     GraphicalObjectSvgManager,
 )
@@ -165,3 +175,22 @@ class MainWidget(QTabWidget):
         super().showEvent(event)
         self.main_window.window_manager.set_dimensions()
         self.resize_all_widgets()
+
+    def apply_background(self, bg_type: str):
+        # Fetch the preferred background type from settings
+        if bg_type == "Rainbow":
+            self.background_manager = RainbowBackgroundManager(self)
+        elif bg_type == "Starfield":
+            self.background_manager = StarfieldBackgroundManager(self)
+        elif bg_type == "Particle":
+            self.background_manager = ParticleBackgroundManager(self)
+        elif bg_type == "Aurora":
+            self.background_manager = AuroraBackgroundManager(self)
+        elif bg_type == "AuroraBorealis":
+            self.background_manager = AuroraBorealisBackgroundManager(self)
+        elif bg_type == "AttractionParticles":
+            self.background_manager = AttractionParticlesBackgroundManager(self)
+        elif bg_type == "WaterRipples":
+            self.background_manager = WaterRipplesBackgroundManager(self)
+        # Add other conditions for different backgrounds
+        self.background_manager.update_required.connect(self.update)

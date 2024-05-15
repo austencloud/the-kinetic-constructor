@@ -1,7 +1,19 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QPainter
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSplitter
-from background_manager import BackgroundManager
+from background_managers.background_manager import (
+    BackgroundManager,
+    RainbowBackgroundManager,
+)
+from background_managers.background_manager import (
+    AttractionParticlesBackgroundManager,
+    AuroraBackgroundManager,
+    AuroraBorealisBackgroundManager,
+    ParticleBackgroundManager,
+    RainbowBackgroundManager,
+    StarfieldBackgroundManager,
+    WaterRipplesBackgroundManager,
+)
 from widgets.dictionary_widget.dictionary_deletion_manager import (
     DictionaryDeletionManager,
 )
@@ -22,6 +34,35 @@ class DictionaryWidget(QWidget):
         self._setup_ui()
         self.selected_sequence_dict = None
 
+        self._setup_background_manager()  # Setup background based on user preferences
+
+    def _setup_background_manager(self):
+        # Fetch the preferred background type from settings
+        bg_type = self.main_widget.main_window.settings_manager.get_setting(
+            "background_type", "Rainbow"
+        )
+
+        if bg_type == "Rainbow":
+            self.background_manager = RainbowBackgroundManager(self)
+        elif bg_type == "Starfield":
+            self.background_manager = StarfieldBackgroundManager(self)
+        elif bg_type == "Particle":
+            self.background_manager = ParticleBackgroundManager(self)
+        elif bg_type == "Aurora":
+            self.background_manager = AuroraBackgroundManager(self)
+        elif bg_type == "AuroraBorealis":
+            self.background_manager = AuroraBorealisBackgroundManager(self)
+        elif bg_type == "AttractionParticles":
+            self.background_manager = AttractionParticlesBackgroundManager(self)
+        elif bg_type == "WaterRipples":
+            self.background_manager = WaterRipplesBackgroundManager(self)
+        # Add other conditions for different backgrounds
+        self.background_manager.update_required.connect(self.update)
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        self.background_manager.paint_background(self, painter)
+
     def _setup_ui(self) -> None:
         self.deletion_manager = DictionaryDeletionManager(self)
         self.browser = DictionaryBrowser(self)
@@ -30,10 +71,9 @@ class DictionaryWidget(QWidget):
         self._setup_layout()
 
     def _setup_handlers(self) -> None:
-        self.background_manager = BackgroundManager(self)
         self.selection_handler = DictionarySelectionHandler(self)
         self.sequence_populator = DictionarySequencePopulator(self)
-        self.background_manager.update_required.connect(self.update)
+        # self.background_manager.update_required.connect(self.update)
 
     def _setup_layout(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)

@@ -20,12 +20,13 @@ class DictionaryBrowser(QWidget):
         self._setup_layout()
 
     def _setup_components(self):
-        self.word_length_selector_widget = DictionarySorter(self)
         self.scroll_widget = DictionaryBrowserScrollWidget(self)
+        self.sorter = DictionarySorter(self)
+        self.sorter.sort_and_display_thumbnails()
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addWidget(self.word_length_selector_widget)
+        self.layout.addWidget(self.sorter)
         self.layout.addWidget(self.scroll_widget)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -37,3 +38,4 @@ class DictionaryBrowser(QWidget):
     def showEvent(self, event):
         super().showEvent(event)
         # Update all thumbnail images when the widget is shown
+

@@ -2,6 +2,7 @@ import json
 import os
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
+from PyQt6.QtCore import QObject, pyqtSignal
 from path_helpers import get_user_editable_resource_path
 from widgets.menu_bar.glyph_visibility_manager import GlyphVisibilityManager
 from prop_type_changer import PropTypeChanger
@@ -12,7 +13,10 @@ if TYPE_CHECKING:
     from main import MainWindow
 
 
-class SettingsManager:
+class SettingsManager(QObject):
+    background_changed: pyqtSignal = pyqtSignal(str)
+
+
     MAX_COLUMN_COUNT = 8
     MIN_COLUMN_COUNT = 3
     DEFAULT_SETTINGS = {
@@ -44,6 +48,7 @@ class SettingsManager:
     }
 
     def __init__(self, main_window: "MainWindow") -> None:
+        super().__init__()
         self.settings_json = get_user_editable_resource_path("user_settings.json")
         self.main_window = main_window
         self.settings = self.load_settings()
@@ -92,16 +97,8 @@ class SettingsManager:
     def set_setting(self, key, value) -> None:
         self.settings[key] = value
         self.save_settings()
-
-    def _apply_pictograph_size(self) -> None:
-        pictograph_size = self.get_setting("pictograph_size", 1)
-        inverted_value = self.MAX_COLUMN_COUNT - (pictograph_size - 1)
-        column_count = max(
-            self.MIN_COLUMN_COUNT, min(inverted_value, self.MAX_COLUMN_COUNT)
-        )
-        self.main_window.main_widget.builder_toolbar.letterbook.scroll_area.display_manager.COLUMN_COUNT = (
-            column_count
-        )
+        if key == "background_type" and self.settings[key] != value:
+            self.background_changed.emit(value)
 
     def get_default_orientation(self, prop_type: str, hand: str) -> str:
         return self.get_setting(f"default_{hand}_orientation_{prop_type}", "in")
