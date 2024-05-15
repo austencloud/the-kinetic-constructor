@@ -60,7 +60,7 @@ class ThumbnailBox(QWidget):
         scrollbar_width = (
             self.browser.scroll_widget.scroll_area.verticalScrollBar().width()
         )
-        parent_width = self.browser.width() - scrollbar_width
+        parent_width = self.browser.scroll_widget.width() - scrollbar_width
 
         width = parent_width // 3
         self.setFixedWidth(width)

@@ -33,37 +33,41 @@ class DictionarySorter(QWidget):
 
     def sort_and_display_thumbnails(self, sort_order="Word Length"):
         self.browser.scroll_widget.clear_layout()
+        sections = set()  # Track sections for the sidebar
+
         base_words = self.get_sorted_base_words(sort_order)
         current_section = None
         row_index = 0
         column_index = 0
-        num_columns = 3  # Define the number of columns in the grid
+        num_columns = 3
 
         for word, thumbnails in base_words:
-            # Determine section based on sorting order
-            if sort_order == "Word Length":
-                section = len(word.replace("-", ""))
-            else:
-                section = word[0].upper()
+            # Determine the section based on sorting order
+            section = (
+                len(word.replace("-", ""))
+                if sort_order == "Word Length"
+                else word[0].upper()
+            )
+            sections.add(section)
 
-            # Add a new section header if needed
+            # Add a new section header if the section changes
             if section != current_section:
-                if current_section is not None:  # Ensure this isn't the first header
-                    row_index += 1  # Move to next row for new section
+                if (
+                    current_section is not None
+                ):  # Increment row only if not the first section
+                    row_index += 1  # Start new section on new row
 
                 current_section = section
-                header_title = (
-                    f'{section} {"letters" if sort_order == "Word Length" else ""}'
-                )
+                header_title = f'{section} {"characters" if sort_order == "Word Length" else "letters"}'
                 header = SectionHeader(header_title, self.browser)
                 self.browser.scroll_widget.section_headers[section] = header
                 self.browser.scroll_widget.grid_layout.addWidget(
                     header, row_index, 0, 1, num_columns
                 )
-                row_index += 1
-                column_index = 0
+                row_index += 1  # Increment row index after placing header
+                column_index = 0  # Reset column index for thumbnails
 
-            # Ensure thumbnail box is created and updated
+            # Add thumbnail boxes
             if word not in self.browser.scroll_widget.thumbnail_boxes_dict:
                 thumbnail_box = ThumbnailBox(self.browser, word, thumbnails)
                 thumbnail_box.image_label.update_thumbnail()
@@ -73,12 +77,15 @@ class DictionarySorter(QWidget):
             self.browser.scroll_widget.grid_layout.addWidget(
                 thumbnail_box, row_index, column_index
             )
-            column_index += 1  # Move to next column
+            column_index += 1
 
-            # If the current row is filled, move to the next row
-            if column_index >= num_columns:
-                column_index = 0  # Reset column index
-                row_index += 1  # Move to next row
+            # Check if row is filled
+            if column_index == num_columns:
+                column_index = 0
+                row_index += 1
+
+        # Update the sidebar with sections
+        self.browser.sidebar.update_sidebar(sorted(sections))
 
     def get_sorted_base_words(self, sort_order):
         dictionary_dir = get_images_and_data_path("dictionary")
