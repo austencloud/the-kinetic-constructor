@@ -14,10 +14,10 @@ from background_managers.background_manager import (
     StarfieldBackgroundManager,
     WaterRipplesBackgroundManager,
 )
+from widgets.dictionary_widget.dictionary_browser.dictionary_browser import DictionaryBrowser
 from widgets.dictionary_widget.dictionary_deletion_manager import (
     DictionaryDeletionManager,
 )
-from .dictionary_browser.dictionary_browser import DictionaryBrowser
 from .dictionary_selection_handler import DictionarySelectionHandler
 from .dictionary_preview_area import DictionaryPreviewArea
 from .dictionary_sequence_populator import DictionarySequencePopulator

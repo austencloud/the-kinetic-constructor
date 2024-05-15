@@ -15,11 +15,9 @@ from PyQt6.QtWidgets import (
 )
 
 if TYPE_CHECKING:
-    from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
-        DictionaryBrowser,
-    )
+    from widgets.dictionary_widget.dictionary_browser.dictionary_browser import DictionaryBrowser
+    from widgets.dictionary_widget.dictionary_browser.section_header import SectionHeader
 
-    pass
 
 
 class DictionaryBrowserScrollWidget(QWidget):
@@ -49,6 +47,7 @@ class DictionaryBrowserScrollWidget(QWidget):
         self.setStyleSheet("background: transparent;")
         self.thumbnail_boxes: list[ThumbnailBox] = []
         self.is_initialized = True
+        self.section_headers: dict[int, "SectionHeader"] = {}
 
     def _remove_spacing(self):
         self.grid_layout.setSpacing(0)

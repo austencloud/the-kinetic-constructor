@@ -1,7 +1,8 @@
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel, QVBoxLayout, QWidget
 from PyQt6.QtCore import Qt
-
-from widgets.dictionary_widget.dictionary_area import DictionaryBrowser
+if TYPE_CHECKING:
+    from widgets.dictionary_widget.dictionary_browser.dictionary_browser import DictionaryBrowser
 
 class SectionHeader(QWidget):
     def __init__(self, title, dictionary_browser: "DictionaryBrowser"):

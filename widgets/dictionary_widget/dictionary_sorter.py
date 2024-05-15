@@ -56,6 +56,7 @@ class DictionarySorter(QWidget):
                     f'{section} {"letters" if sort_order == "Word Length" else ""}'
                 )
                 header = SectionHeader(header_title, self.browser)
+                self.browser.scroll_widget.section_headers[section] = header
                 self.browser.scroll_widget.grid_layout.addWidget(
                     header, row_index, 0, 1, num_columns
                 )
