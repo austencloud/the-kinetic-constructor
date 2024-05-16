@@ -42,7 +42,6 @@ class DictionarySorter(QWidget):
         num_columns = 3
 
         for word, thumbnails in base_words:
-            # Determine the section based on sorting order
             section = (
                 len(word.replace("-", ""))
                 if sort_order == "Word Length"
@@ -50,22 +49,19 @@ class DictionarySorter(QWidget):
             )
             sections.add(section)
 
-            # Add a new section header if the section changes
             if section != current_section:
-                if (
-                    current_section is not None
-                ):  # Increment row only if not the first section
-                    row_index += 1  # Start new section on new row
+                if current_section is not None:
+                    row_index += 1
 
                 current_section = section
-                header_title = f'{section} {"characters" if sort_order == "Word Length" else "letters"}'
+                header_title = f"{section}"
                 header = SectionHeader(header_title, self.browser)
                 self.browser.scroll_widget.section_headers[section] = header
                 self.browser.scroll_widget.grid_layout.addWidget(
                     header, row_index, 0, 1, num_columns
                 )
-                row_index += 1  # Increment row index after placing header
-                column_index = 0  # Reset column index for thumbnails
+                row_index += 1
+                column_index = 0
 
             # Add thumbnail boxes
             if word not in self.browser.scroll_widget.thumbnail_boxes_dict:
