@@ -13,6 +13,7 @@ from PyQt6.QtWidgets import (
 
 from widgets.graph_editor.graph_editor import GraphEditor
 from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
+from widgets.sequence_widget.SW_beat_frame.SW_options_panel import SW_OptionsPanel
 from widgets.sequence_widget.my_sequence_label import MySequenceLabel
 from widgets.sequence_widget.sequence_modifier import SequenceModifier
 from ..indicator_label import IndicatorLabel
@@ -51,6 +52,10 @@ class SequenceWidget(QWidget):
         self.pictograph_factory = SW_PictographFactory(self)
         self.my_sequence_label = MySequenceLabel(self)
 
+        self.options_button = QPushButton("☰", self)
+        self.options_button.clicked.connect(self.show_options_panel)
+        self.options_button.setToolTip("Sequence Options")
+
         self.beat_combo_box = QComboBox(self)
         self.beat_combo_box.addItems([str(i) for i in range(1, 65)])
         self.beat_combo_box.setCurrentIndex(15)  # Default index for 16 beats
@@ -69,10 +74,29 @@ class SequenceWidget(QWidget):
             Qt.ScrollBarPolicy.ScrollBarAlwaysOff
         )
 
+    def show_options_panel(self):
+        self.options_panel = SW_OptionsPanel(self)
+        self.options_panel.exec()  # Use exec() to show the dialog modally
+
+    def apply_options(self, grow_sequence, rows, cols, num_beats, save_layout):
+        self.grow_sequence = grow_sequence
+        if grow_sequence:
+            # Logic for growing sequence automatically
+            pass  # Implement your logic for growing the sequence
+        else:
+            self.beat_frame.layout_manager.rearrange_beats(num_beats, cols, rows)
+        if save_layout:
+            self.save_layout_as_default(rows, cols)
+
+    def save_layout_as_default(self, rows, cols):
+        # Implement logic to save layout as default
+        pass
+
     def _setup_beat_frame_layout(self):
         self.beat_frame_layout = QHBoxLayout()
         self.beat_frame_layout.addWidget(self.scroll_area)
         self.beat_frame_layout.addWidget(self.button_frame)
+        self.beat_frame_layout.addWidget(self.options_button)  # Add options button here
         self.beat_frame_layout.setContentsMargins(0, 0, 0, 0)
         self.beat_frame_layout.setSpacing(0)
 

@@ -29,6 +29,13 @@ class SequenceImageExportManager:
         self.layout_manager = ImageExportLayoutManager(self)
 
     def exec_dialog(self):
+        sequence = (
+            self.beat_frame.current_sequence_json_handler.load_current_sequence_json()
+        )
+        if len(sequence) < 3:
+            self.indicator_label.show_message("The sequence is empty.")
+            return
+
         filled_beats = [beat for beat in self.beat_frame.beats if beat.is_filled]
         column_count, row_count = self.layout_manager.calculate_layout(
             len(filled_beats), self.include_start_pos
@@ -36,7 +43,7 @@ class SequenceImageExportManager:
         for beat in filled_beats:
             beat.scene().clearSelection()
 
-        dialog = ImageExportDialog(self)
+        dialog = ImageExportDialog(self, sequence)
         if dialog.exec():
             options = dialog.get_export_options()
             self.include_start_pos = options.get(
@@ -113,6 +120,7 @@ class SequenceImageExportManager:
         from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
             SW_BeatFrame,
         )
+
         self.temp_beat_frame = SW_BeatFrame(self.sequence_widget)
         filled_beats = []
         for beat_data in sequence[2:]:
