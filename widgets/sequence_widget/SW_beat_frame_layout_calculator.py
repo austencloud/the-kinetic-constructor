@@ -33,6 +33,7 @@ class SW_BeatFrameLayoutManager:
             if rows > 4
             else Qt.ScrollBarPolicy.ScrollBarAlwaysOff
         )
+
     def rearrange_beats(self, num_beats, columns, rows):
         while self.beat_frame.layout.count():
             self.beat_frame.layout.takeAt(0).widget().hide()

@@ -1,29 +1,20 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QShowEvent
 from PyQt6.QtCore import QTimer
-from PyQt6.QtWidgets import (
-    QVBoxLayout,
-    QWidget,
-    QHBoxLayout,
-    QScrollArea,
-    QComboBox,
-)
-
-from widgets.graph_editor.graph_editor import GraphEditor
-from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
-from widgets.sequence_widget.SW_beat_frame.SW_options_panel import SW_OptionsPanel
-from widgets.sequence_widget.my_sequence_label import MySequenceLabel
-from ..indicator_label import IndicatorLabel
-from .SW_pictograph_factory import (
-    SW_PictographFactory,
-)
-from .SW_beat_frame.beat import Beat
-
-from .SW_button_frame import SW_ButtonFrame
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QScrollArea, QComboBox
 from PyQt6.QtCore import Qt
 
+from ..graph_editor.graph_editor import GraphEditor
+from .SW_beat_frame.SW_beat_frame import SW_BeatFrame
+from .SW_beat_frame.SW_options_panel import SW_OptionsPanel
+from .my_sequence_label import MySequenceLabel
+from ..indicator_label import IndicatorLabel
+from .SW_pictograph_factory import SW_PictographFactory
+from .SW_beat_frame.beat import Beat
+from .SW_button_frame import SW_ButtonFrame
+
 if TYPE_CHECKING:
-    from widgets.main_widget.top_builder_widget import TopBuilderWidget
+    from ..main_widget.top_builder_widget import TopBuilderWidget
 
 
 class SequenceWidget(QWidget):
@@ -70,8 +61,27 @@ class SequenceWidget(QWidget):
         )
 
     def show_options_panel(self):
-        self.options_panel = SW_OptionsPanel(self)
+        current_state = self._get_current_beat_frame_state()
+        self.options_panel = SW_OptionsPanel(self, current_state)
         self.options_panel.exec()  # Use exec() to show the dialog modally
+
+    def _get_current_beat_frame_state(self) -> dict:
+        layout = self.beat_frame.layout
+        num_beats = sum(1 for beat in self.beat_frame.beats if beat.isVisible())
+        grow_sequence = getattr(self, "grow_sequence", False)
+        save_layout = False  # Default value, can be set based on your logic
+
+        rows, cols = (
+            layout.rowCount(),
+            layout.columnCount() - 1,
+        )
+        return {
+            "num_beats": num_beats,
+            "rows": rows,
+            "cols": cols,
+            "grow_sequence": grow_sequence,
+            "save_layout": save_layout,
+        }
 
     def apply_options(self, grow_sequence, rows, cols, num_beats, save_layout):
         self.grow_sequence = grow_sequence
