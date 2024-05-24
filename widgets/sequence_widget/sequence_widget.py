@@ -52,9 +52,7 @@ class SequenceWidget(QWidget):
         self.pictograph_factory = SW_PictographFactory(self)
         self.my_sequence_label = MySequenceLabel(self)
 
-        self.options_button = QPushButton("☰", self)
-        self.options_button.clicked.connect(self.show_options_panel)
-        self.options_button.setToolTip("Sequence Options")
+        # self._setup_options_button()
 
         self.beat_combo_box = QComboBox(self)
         self.beat_combo_box.addItems([str(i) for i in range(1, 65)])
@@ -96,7 +94,6 @@ class SequenceWidget(QWidget):
         self.beat_frame_layout = QHBoxLayout()
         self.beat_frame_layout.addWidget(self.scroll_area)
         self.beat_frame_layout.addWidget(self.button_frame)
-        self.beat_frame_layout.addWidget(self.options_button)  # Add options button here
         self.beat_frame_layout.setContentsMargins(0, 0, 0, 0)
         self.beat_frame_layout.setSpacing(0)
 
@@ -115,11 +112,9 @@ class SequenceWidget(QWidget):
 
     def showEvent(self, event: QShowEvent):
         super().showEvent(event)
-        # Use QTimer to defer the execution of initialization steps that need the UI to be fully ready
         QTimer.singleShot(0, self.post_show_initialization)
 
     def post_show_initialization(self):
-        # Perform layout configuration and other updates that need the widget to be visible
         self.resize_sequence_widget()
         self.beat_frame.layout_manager.configure_beat_frame(
             self.beat_combo_box.currentIndex() + 1

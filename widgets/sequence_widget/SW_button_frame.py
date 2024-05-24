@@ -42,6 +42,8 @@ class SW_ButtonFrame(QFrame):
         self.indicator_label = self.sequence_widget.indicator_label
         self.print_sequence_manager = self.beat_frame.print_sequence_manager
 
+
+
     def _setup_buttons(self) -> None:
         self.buttons: list[SW_ActionButton] = []
         button_dict = {
@@ -59,6 +61,11 @@ class SW_ButtonFrame(QFrame):
                 "icon_path": "clear.svg",
                 "callback": lambda: self.clear_sequence(show_indicator=True),
                 "tooltip": "Clear Sequence",
+            },
+            "layout_options": {
+                "icon_path": "hamburger_icon.svg",
+                "callback": self.sequence_widget.show_options_panel,
+                "tooltip": "Layout Options",
             },
         }
         for button_name, button_data in button_dict.items():
