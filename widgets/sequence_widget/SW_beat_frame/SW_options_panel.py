@@ -22,7 +22,7 @@ class SW_OptionsPanel(QDialog):
     def __init__(self, sequence_widget: "SequenceWidget"):
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
-        self.setWindowTitle("Options Panel")
+        self.setWindowTitle("Sequence Layout Options")
         self.layout_options = {
             4: [(2, 2), (1, 4)],
             6: [(3, 2), (2, 3)],
@@ -48,8 +48,8 @@ class SW_OptionsPanel(QDialog):
     def _setup_preview_section(self):
         self.preview_section = QWidget()
         self.preview_layout = QGridLayout(self.preview_section)
-        self.preview_section.setContentsMargins(0, 0, 0, 0)
         self.preview_layout.setSpacing(0)
+        self.preview_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def _setup_options_section(self):
         self.sequence_growth_checkbox = QCheckBox(
@@ -112,11 +112,13 @@ class SW_OptionsPanel(QDialog):
                     (self.width() // 2) // cols,
                     self.height() // rows,
                 )
-                beat_size = preview_size
+                beat_size = preview_size - 10  # Adjust size to avoid overlap
 
                 beat_number = 0
                 for row in range(rows):
-                    for col in range(cols):
+                    for col in range(
+                        1, cols + 1
+                    ):  # Start from col 1 to account for the start position
                         if beat_number < num_beats:
                             beat_view = BeatView(self.sequence_widget.beat_frame)
                             beat_view.setFixedSize(beat_size, beat_size)
@@ -126,9 +128,7 @@ class SW_OptionsPanel(QDialog):
                 # Add the start position to the preview
                 start_pos_view = BeatView(self.sequence_widget.beat_frame)
                 start_pos_view.setFixedSize(beat_size, beat_size)
-                layout.addWidget(
-                    start_pos_view, 0, 0
-                )  # Assuming the start position is at (0, 0)
+                layout.addWidget(start_pos_view, 0, 0)
 
     def apply_settings(self):
         grow_sequence = self.sequence_growth_checkbox.isChecked()
