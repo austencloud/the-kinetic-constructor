@@ -1,6 +1,5 @@
 import json
 import threading
-from PyQt6.QtWidgets import QApplication
 from PyQt6.QtGui import QKeyEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING

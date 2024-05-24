@@ -1,6 +1,4 @@
 import json
-import os
-import sys
 from typing import TYPE_CHECKING, NamedTuple, Union, Literal
 from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem

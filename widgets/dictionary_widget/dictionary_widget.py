@@ -1,8 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QPainter
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSplitter
+from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from background_managers.background_manager import (
-    BackgroundManager,
     RainbowBackgroundManager,
 )
 from background_managers.background_manager import (

@@ -15,7 +15,6 @@ from widgets.graph_editor.components.GE_pictograph_container import (
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
-    from widgets.sequence_widget.sequence_modifier import SequenceModifier
 
 
 class GraphEditor(QFrame):

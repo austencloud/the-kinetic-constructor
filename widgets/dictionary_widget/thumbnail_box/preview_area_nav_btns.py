@@ -6,7 +6,6 @@ from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_preview_area import DictionaryPreviewArea
-    from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 
 
 class PreviewAreaNavButtonsWidget(QWidget):

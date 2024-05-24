@@ -6,7 +6,6 @@ from widgets.dictionary_widget.thumbnail_box.thumbnail_image_label import (
 )
 
 if TYPE_CHECKING:
-    from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
     from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
 
 

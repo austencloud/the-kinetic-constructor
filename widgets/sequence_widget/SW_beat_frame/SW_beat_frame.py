@@ -1,9 +1,8 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGridLayout, QFrame, QApplication, QInputDialog
+from PyQt6.QtWidgets import QGridLayout, QFrame, QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
 
-from widgets.image_export_layout_manager import ImageExportLayoutManager
 from widgets.sequence_widget.SW_beat_frame_layout_calculator import (
     SW_BeatFrameLayoutManager,
 )
@@ -19,7 +18,7 @@ from widgets.pictograph.pictograph import Pictograph
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
-from .beat import Beat, BeatView
+from .beat import BeatView
 
 
 class SW_BeatFrame(QFrame):

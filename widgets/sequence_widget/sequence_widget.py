@@ -5,8 +5,6 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QWidget,
     QHBoxLayout,
-    QPushButton,
-    QSpinBox,
     QScrollArea,
     QComboBox,
 )
@@ -15,7 +13,6 @@ from widgets.graph_editor.graph_editor import GraphEditor
 from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
 from widgets.sequence_widget.SW_beat_frame.SW_options_panel import SW_OptionsPanel
 from widgets.sequence_widget.my_sequence_label import MySequenceLabel
-from widgets.sequence_widget.sequence_modifier import SequenceModifier
 from ..indicator_label import IndicatorLabel
 from .SW_pictograph_factory import (
     SW_PictographFactory,

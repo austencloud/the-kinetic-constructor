@@ -1,9 +1,7 @@
-import json
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from settings_manager import SettingsManager
-    from widgets.pictograph.pictograph import Pictograph
 
 
 class GridVisibilityManager:

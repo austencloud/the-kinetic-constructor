@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QShowEvent, QResizeEvent, QPixmap, QFont
+from PyQt6.QtGui import QPixmap, QFont
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
 from widgets.dictionary_widget.thumbnail_box.metadata_extractor import MetaDataExtractor
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box_nav_btns import (
