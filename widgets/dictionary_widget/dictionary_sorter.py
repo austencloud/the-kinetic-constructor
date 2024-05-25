@@ -1,7 +1,7 @@
 import os
 from typing import TYPE_CHECKING
 
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QComboBox
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QComboBox
 
 from path_helpers import get_images_and_data_path
 from widgets.dictionary_widget.dictionary_browser.section_header import SectionHeader

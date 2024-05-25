@@ -83,6 +83,9 @@ class OptionPickerDisplayManager:
     ) -> bool:
         """Check if a pictograph is a valid next option based on the current_pictograph."""
 
+        if not hasattr(current_beat, "end_pos"):
+            return False
+        
         if (
             current_beat.end_pos == pictograph.start_pos
             and current_beat.red_motion.end_ori == pictograph.red_motion.start_ori

@@ -1,6 +1,4 @@
 import json
-import os
-import sys
 from typing import TYPE_CHECKING, NamedTuple, Union, Literal
 from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
@@ -95,6 +93,11 @@ class Grid:
         self.grid_data = self._load_grid_data()
         self._create_grid_items(scene)
         self.center = self.grid_data.center_point.coordinates
+
+    def hide(self):
+        for item in self.items.values():
+            item.setVisible(False)
+            
 
     def toggle_non_radial_points_visibility(self, visible: bool):
         self.nonradial_layer.setVisible(visible)

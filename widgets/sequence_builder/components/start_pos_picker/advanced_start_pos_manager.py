@@ -1,11 +1,6 @@
-from copy import deepcopy
 from PyQt6.QtCore import QObject, pyqtSignal
 from widgets.pictograph.pictograph import Pictograph
-from widgets.sequence_widget.SW_beat_frame.start_pos_beat import (
-    StartPositionBeat,
-)
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker import (

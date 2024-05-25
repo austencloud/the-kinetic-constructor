@@ -32,7 +32,6 @@ class OptionPicker(QWidget):
 
     def setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        # self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.choose_your_next_pictograph_label.show()
 

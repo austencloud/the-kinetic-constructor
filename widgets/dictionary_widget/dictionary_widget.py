@@ -1,8 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QPainter
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSplitter
+from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from background_managers.background_manager import (
-    BackgroundManager,
     RainbowBackgroundManager,
 )
 from background_managers.background_manager import (
@@ -73,7 +72,6 @@ class DictionaryWidget(QWidget):
     def _setup_handlers(self) -> None:
         self.selection_handler = DictionarySelectionHandler(self)
         self.sequence_populator = DictionarySequencePopulator(self)
-        # self.background_manager.update_required.connect(self.update)
 
     def _setup_layout(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)

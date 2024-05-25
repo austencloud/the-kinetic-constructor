@@ -2,7 +2,6 @@ import sys
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QGuiApplication
 
-from path_helpers import get_app_data_path
 
 if TYPE_CHECKING:
     from main import MainWindow

@@ -14,22 +14,24 @@ class ExportDialogPreviewPanel(QFrame):
         self.export_dialog = export_dialog
         self.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Sunken)
         self.preview_label = QLabel(self)
-        self.preview_label.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Ensure alignment is centered
+        self.preview_label.setAlignment(
+            Qt.AlignmentFlag.AlignCenter
+        )  # Ensure alignment is centered
         self.preview_label.setScaledContents(True)
         self.json_handler = (
             export_dialog.main_widget.json_manager.current_sequence_json_handler
         )
 
-        # Calculate and fix the size based on initial dialog dimensions
         dialog_width = export_dialog.width() // 2
         dialog_height = export_dialog.height()  # or some other proportion
         self.setFixedSize(dialog_width, dialog_height)
 
-    def update_preview_with_start_pos(self, include_start_pos: bool):
-        json_sequence = self.json_handler.load_current_sequence_json()
+    def update_preview_with_start_pos(
+        self, include_start_pos: bool, sequence: list[dict]
+    ):
         if not self.image:
             self.image = self.export_dialog.export_manager.create_sequence_image(
-                json_sequence, include_start_pos
+                sequence, include_start_pos
             )
         self.preview_image = QPixmap.fromImage(self.image)
         self.update_preview()
@@ -53,7 +55,6 @@ class ExportDialogPreviewPanel(QFrame):
                 Qt.TransformationMode.SmoothTransformation,
             )
             self.preview_label.setPixmap(scaled_image)
-            # Center the label to ensure the pixmap is centered within the available space
             label_x = (self.width() - image_width) // 2
             label_y = (self.height() - image_height) // 2
             self.preview_label.setGeometry(label_x, label_y, image_width, image_height)

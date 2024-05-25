@@ -12,9 +12,10 @@ if TYPE_CHECKING:
 
 
 class ImageExportDialog(QDialog):
-    def __init__(self, export_manager: "SequenceImageExportManager"):
+    def __init__(self, export_manager: "SequenceImageExportManager", sequence: list[dict]):
         super().__init__(export_manager.main_widget)
         self.export_manager = export_manager
+        self.sequence = sequence
         self.main_widget = export_manager.main_widget
         self.setWindowTitle("Export Image Options")
         self.setModal(True)
@@ -64,11 +65,11 @@ class ImageExportDialog(QDialog):
 
     def update_preview_based_on_options(self):
         include_start_pos = self.control_panel.include_start_pos_check.isChecked()
-        self.preview_panel.update_preview_with_start_pos(include_start_pos)
+        self.preview_panel.update_preview_with_start_pos(include_start_pos, self.sequence)
 
     def update_preview_based_on_options(self):
         include_start_pos = self.control_panel.include_start_pos_check.isChecked()
-        self.preview_panel.update_preview_with_start_pos(include_start_pos)
+        self.preview_panel.update_preview_with_start_pos(include_start_pos, self.sequence)
 
     def get_export_options(self):
         return {

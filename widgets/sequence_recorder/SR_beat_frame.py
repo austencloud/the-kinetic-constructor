@@ -93,19 +93,12 @@ class SR_BeatFrame(QFrame):
                 return beat_view
         return self.beat_views[0]
 
-    def on_beat_adjusted(self) -> None:
-        current_sequence_json = (
-            self.current_sequence_json_handler.load_current_sequence_json()
-        )
-        self.propogate_turn_adjustment(current_sequence_json)
-        self.main_widget.top_builder_widget.sequence_builder.sequence_builder.option_picker.update_option_picker()
-
     def propogate_turn_adjustment(self, current_sequence_json) -> None:
         for i, entry in enumerate(current_sequence_json):
             if i == 0:
                 self.update_start_pos_from_current_sequence_json(entry)
             else:
-                beat = self.beat_views[i - 1].beat
+                beat = self.beat_views[i - 1].blank_beat
                 if beat:
                     if beat.pictograph_dict != entry:
                         beat.updater.update_pictograph(entry)

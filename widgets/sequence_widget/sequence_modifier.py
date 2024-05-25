@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QTabWidget, QSizePolicy
+from PyQt6.QtWidgets import QTabWidget
 from styles.get_tab_stylesheet import get_tab_stylesheet
 from widgets.graph_editor.graph_editor import GraphEditor
 

@@ -60,6 +60,11 @@ class SW_ButtonFrame(QFrame):
                 "callback": lambda: self.clear_sequence(show_indicator=True),
                 "tooltip": "Clear Sequence",
             },
+            "layout_options": {
+                "icon_path": "hamburger_icon.svg",
+                "callback": self.sequence_widget.show_options_panel,
+                "tooltip": "Layout Options",
+            },
         }
         for button_name, button_data in button_dict.items():
             icon_path = get_images_and_data_path(
@@ -92,6 +97,7 @@ class SW_ButtonFrame(QFrame):
         self, show_indicator=True, should_reset_to_start_pos_picker=True
     ) -> None:
         self._reset_beat_frame()
+
         if should_reset_to_start_pos_picker:
             self.sequence_builder.reset_to_start_pos_picker()
         self.sequence_builder.current_pictograph = self.beat_frame.start_pos
@@ -102,11 +108,14 @@ class SW_ButtonFrame(QFrame):
 
     def _reset_beat_frame(self) -> None:
         for beat_view in self.beat_frame.beats:
-            beat_view.setScene(None)
+            beat_view.setScene(beat_view.blank_beat)
             beat_view.is_filled = False
-        self.beat_frame.start_pos_view.setScene(None)
+        self.beat_frame.start_pos_view.setScene(
+            self.beat_frame.start_pos_view.blank_beat
+        )
         self.beat_frame.start_pos_view.is_filled = False
         self.beat_frame.selection_manager.deselect_beat()
+        self.beat_frame.sequence_widget.update_current_word()
 
     def _clear_graph_editor(self) -> None:
         self.graph_editor = self.sequence_widget.graph_editor

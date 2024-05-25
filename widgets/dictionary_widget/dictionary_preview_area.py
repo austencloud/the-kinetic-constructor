@@ -1,18 +1,11 @@
-import os
-import shutil
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
-    QLabel,
     QPushButton,
-    QMessageBox,
-    QApplication,
-    QHBoxLayout,
 )
-from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtGui import QPixmap, QFont, QResizeEvent, QIcon
-from path_helpers import get_images_and_data_path
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPixmap, QFont, QIcon
 from preview_area_image_label import PreviewAreaImageLabel
 from widgets.dictionary_widget.dictionary_button_panel import DictionaryButtonPanel
 from widgets.dictionary_widget.thumbnail_box.base_word_label import BaseWordLabel
@@ -21,9 +14,6 @@ from widgets.dictionary_widget.thumbnail_box.preview_area_nav_btns import (
 )
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 
-from widgets.dictionary_widget.thumbnail_box.thumbnail_image_label import (
-    ThumbnailImageLabel,
-)
 from widgets.dictionary_widget.thumbnail_box.variation_number_label import (
     VariationNumberLabel,
 )

@@ -1,8 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
-from PyQt6.QtCore import QTimer
-from PyQt6.QtGui import QPainter, QLinearGradient, QColor
-import math
+from PyQt6.QtGui import QPainter
 
 
 from background_managers.background_manager import (
@@ -14,7 +12,6 @@ from background_managers.background_manager import (
     StarfieldBackgroundManager,
     WaterRipplesBackgroundManager,
 )
-from widgets.main_builder_widget.builder_toolbar import BuilderToolbar
 from widgets.sequence_builder.sequence_builder import SequenceBuilder
 from widgets.sequence_widget.sequence_widget import SequenceWidget
 

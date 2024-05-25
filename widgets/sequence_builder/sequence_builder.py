@@ -25,7 +25,6 @@ from .components.option_picker.option_picker import OptionPicker
 
 if TYPE_CHECKING:
     from widgets.main_widget.top_builder_widget import TopBuilderWidget
-    from widgets.main_builder_widget.builder_toolbar import BuilderToolbar
     from ..main_widget.main_widget import MainWidget
 
 

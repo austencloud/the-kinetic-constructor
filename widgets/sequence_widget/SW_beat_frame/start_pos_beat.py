@@ -1,16 +1,13 @@
 from typing import TYPE_CHECKING
 
 from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QGraphicsTextItem
-from PyQt6.QtCore import QPointF
+from PyQt6.QtWidgets import QGraphicsTextItem, QGraphicsScene
+from PyQt6.QtCore import QPointF, Qt
 from widgets.sequence_widget.SW_beat_frame.beat import Beat, BeatView
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
         SW_BeatFrame,
-    )
-    from widgets.sequence_widget.SW_beat_frame.start_pos_beat import (
-        StartPositionBeat,
     )
 
 
@@ -33,8 +30,11 @@ class StartPositionBeatView(BeatView):
     def __init__(self, beat_frame: "SW_BeatFrame") -> None:
         self.beat_frame = beat_frame
         super().__init__(beat_frame)
-        self.is_filled = False
         self.is_start_pos = True
+        self.blank_beat = StartPositionBeat(self.beat_frame)
+        self.set_start_pos(self.blank_beat)
+        self.is_filled = False
+        self.blank_beat.grid.hide()
 
     def set_start_pos(self, start_pos: "StartPositionBeat") -> None:
         self.start_pos = self.beat = start_pos

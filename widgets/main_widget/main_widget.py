@@ -1,6 +1,5 @@
 import json
 import threading
-from PyQt6.QtWidgets import QApplication
 from PyQt6.QtGui import QKeyEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
@@ -28,7 +27,7 @@ from widgets.json_manager import JSON_Manager
 from widgets.main_widget.top_builder_widget import TopBuilderWidget
 
 from widgets.main_widget.letter_loader import LetterLoader
-from widgets.menu_bar.preferences_dialog import PreferencesDialog
+from widgets.menu_bar.sequence_layout_options_dialog import SequenceLayoutOptionsDialog
 from widgets.menu_bar.prop_type_selector import PropTypeSelector
 from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.components.pictograph_key_generator import (
@@ -59,7 +58,7 @@ class MainWidget(QTabWidget):
         self._setup_components()
         self.setStyleSheet(get_tab_stylesheet())
         self.webcam_initialized = False  # Add an initialization flag
-        self.initialize_webcam_async()  # Start webcam initialization
+        # self.initialize_webcam_async()  # Start webcam initialization
         self.initialized = True
 
     def initialize_webcam_async(self):
@@ -72,6 +71,7 @@ class MainWidget(QTabWidget):
         """Method to request webcam initialization via signal."""
         self.sequence_recorder.capture_frame.video_display_frame.request_init_webcam()
         print("Webcam initialization requested")
+        pass
 
     def _setup_pictograph_cache(self) -> None:
         self.pictograph_cache: dict[str, dict[str, "Pictograph"]] = {}
@@ -92,7 +92,7 @@ class MainWidget(QTabWidget):
         self.prop_type_selector = PropTypeSelector(self)
         self.turns_tuple_generator = TurnsTupleGenerator()
         self.pictograph_key_generator = PictographKeyGenerator()
-        self.preferences_dialog = PreferencesDialog(self)
+        self.layout_options_dialog = SequenceLayoutOptionsDialog(self)
         self.special_placement_loader = SpecialPlacementLoader(self)
         self.metadata_extractor = MetaDataExtractor(self)
 

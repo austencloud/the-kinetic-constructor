@@ -1,7 +1,5 @@
-import os
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import QSize, Qt
-from path_helpers import get_images_and_data_path
+from PyQt6.QtCore import Qt
 
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 
@@ -10,7 +8,6 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QScrollArea,
     QGridLayout,
-    QPushButton,
     QStyle,
 )
 

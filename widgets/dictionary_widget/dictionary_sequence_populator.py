@@ -21,9 +21,7 @@ class DictionarySequencePopulator:
             self.main_widget.top_builder_widget.sequence_builder.start_pos_picker.start_pos_manager
         )
         self.sequence_widget = self.main_widget.top_builder_widget.sequence_widget
-        self.sequence_builder = (
-            self.main_widget.top_builder_widget.sequence_builder
-        )
+        self.sequence_builder = self.main_widget.top_builder_widget.sequence_builder
         self.initialized = True
 
     def load_sequence_from_file(self, file_path: str) -> None:
@@ -64,7 +62,7 @@ class DictionarySequencePopulator:
                 continue
             self.sequence_widget.populate_sequence(pictograph_dict)
 
-        last_beat = self.sequence_widget.beat_frame.get_last_filled_beat().beat
+        last_beat = self.sequence_widget.beat_frame.get_last_filled_beat().blank_beat
         self.sequence_builder.current_pictograph = last_beat
 
         if self.sequence_builder.start_pos_picker.isVisible():

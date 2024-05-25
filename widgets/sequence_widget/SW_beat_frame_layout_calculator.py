@@ -11,7 +11,6 @@ class SW_BeatFrameLayoutManager:
     def __init__(self, beat_frame: "SW_BeatFrame"):
         self.beat_frame = beat_frame
         self.selection_manager = beat_frame.selection_manager
-        self.beats: list[BeatView] = beat_frame.beats
 
     def calculate_layout(self, beat_count: int) -> tuple[int, int]:
         layout_options = self.get_layouts()
@@ -33,6 +32,7 @@ class SW_BeatFrameLayoutManager:
             if rows > 4
             else Qt.ScrollBarPolicy.ScrollBarAlwaysOff
         )
+
     def rearrange_beats(self, num_beats, columns, rows):
         while self.beat_frame.layout.count():
             self.beat_frame.layout.takeAt(0).widget().hide()
@@ -41,16 +41,17 @@ class SW_BeatFrameLayoutManager:
         self.beat_frame.start_pos_view.show()
 
         index = 0
+        beats = self.beat_frame.beats
         for row in range(rows):
             for col in range(1, columns + 1):
                 if index < num_beats:
-                    beat_view = self.beats[index]
+                    beat_view = beats[index]
                     self.beat_frame.layout.addWidget(beat_view, row, col)
                     beat_view.show()
                     index += 1
                 else:
-                    if index < len(self.beats):
-                        self.beats[index].hide()
+                    if index < len(beats):
+                        beats[index].hide()
                         index += 1
 
         # Update the layout to reflect the new configuration

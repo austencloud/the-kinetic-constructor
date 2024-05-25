@@ -4,16 +4,16 @@ from PyQt6.QtCore import Qt
 from widgets.clickable_slider import ClickableSlider
 
 if TYPE_CHECKING:
-    from widgets.menu_bar.preferences_dialog import PreferencesDialog
+    from widgets.menu_bar.sequence_layout_options_dialog import SequenceLayoutOptionsDialog
 
 
 class PictographSizeAdjuster(QGroupBox):
     MAX_COLUMN_COUNT = 8
     MIN_COLUMN_COUNT = 3
 
-    def __init__(self, preferences_dialog: "PreferencesDialog") -> None:
+    def __init__(self, layout_options_dialog: "SequenceLayoutOptionsDialog") -> None:
         super().__init__()
-        self.preferences_dialog = preferences_dialog
+        self.layout_options_dialog = layout_options_dialog
         self._setup_size_slider()
         self._setup_layout()
 
@@ -36,14 +36,14 @@ class PictographSizeAdjuster(QGroupBox):
         column_count = max(
             self.MIN_COLUMN_COUNT, min(inverted_value, self.MAX_COLUMN_COUNT)
         )
-        self.preferences_dialog.letterbook_scroll_area.display_manager.COLUMN_COUNT = (
+        self.layout_options_dialog.letterbook_scroll_area.display_manager.COLUMN_COUNT = (
             column_count
         )
-        self.preferences_dialog.letterbook_scroll_area.update_all_pictograph_sizes()
-        self.preferences_dialog.apply_button.setEnabled(True)
+        self.layout_options_dialog.letterbook_scroll_area.update_all_pictograph_sizes()
+        self.layout_options_dialog.apply_button.setEnabled(True)
 
     def load_initial_settings(self) -> None:
-        initial_size = self.preferences_dialog.settings_manager.get_setting(
+        initial_size = self.layout_options_dialog.settings_manager.get_setting(
             "pictograph_size"
         )
         self.size_slider.setValue(initial_size)

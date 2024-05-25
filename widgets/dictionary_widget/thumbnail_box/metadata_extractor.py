@@ -5,7 +5,6 @@ import json
 
 
 if TYPE_CHECKING:
-    from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
     from widgets.main_widget.main_widget import MainWidget
 
 
