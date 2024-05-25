@@ -24,6 +24,7 @@ class SequenceWidget(QWidget):
         super().__init__()
         self.top_builder_widget = top_builder_widget
         self.main_widget = top_builder_widget.main_widget
+        self.settings_manager = self.main_widget.main_window.settings_manager
         self.default_beat_quantity = 16
         self._setup_components()
         self._configure_scroll_area()
@@ -61,7 +62,7 @@ class SequenceWidget(QWidget):
     def _get_current_beat_frame_state(self) -> dict:
         layout = self.beat_frame.layout
         num_beats = sum(1 for beat in self.beat_frame.beats if beat.isVisible())
-        grow_sequence = getattr(self, "grow_sequence", False)
+        grow_sequence = self.settings_manager.get_grow_sequence()
         save_layout = False  # Default value, can be set based on your logic
 
         rows, cols = self._calculate_current_layout()
@@ -91,19 +92,9 @@ class SequenceWidget(QWidget):
 
         return max_row + 1, max_col  # Add 1 to max_row to get the count
 
-    def apply_options(self, grow_sequence, rows, cols, num_beats, save_layout):
-        self.grow_sequence = grow_sequence
-        if grow_sequence:
-            self.beat_frame.grow_sequence = True
-        else:
-            self.beat_frame.layout_manager.rearrange_beats(num_beats, cols, rows)
-        if save_layout:
-            self.save_layout_as_default(rows, cols)
-        self.update_current_word()  # Update the current word whenever options are applied
-
-    def save_layout_as_default(self, rows, cols):
-        # Implement logic to save layout as default
-        pass
+    def apply_layout_options(self, rows, cols, num_beats):
+        self.beat_frame.layout_manager.rearrange_beats(num_beats, cols, rows)
+        self.update_current_word()
 
     def _setup_beat_frame_layout(self):
         self.beat_frame_layout = QHBoxLayout()
