@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from widgets.sequence_widget.SW_beat_frame.beat import BeatView
 
-
 if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
 
@@ -14,7 +13,7 @@ class SW_BeatFrameLayoutManager:
 
     def calculate_layout(self, beat_count: int) -> tuple[int, int]:
         layout_options = self.get_layouts()
-        return layout_options[beat_count]
+        return layout_options.get(beat_count, (1, beat_count))
 
     def configure_beat_frame(self, num_beats):
         # Assuming a method that calculates the layout based on num_beats
@@ -53,6 +52,11 @@ class SW_BeatFrameLayoutManager:
                     if index < len(beats):
                         beats[index].hide()
                         index += 1
+
+        # if there's a selected beat, update its overlay to its new position
+        if self.selection_manager.selected_beat:
+            self.selection_manager.update_overlay_position()
+            
 
         # Update the layout to reflect the new configuration
         self.beat_frame.adjustSize()

@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 
-class SW_OptionsPanel(QDialog):
+class SW_LayoutOptionsDialog(QDialog):
     def __init__(
         self, sequence_widget: "SequenceWidget", initial_state: Optional[dict] = None
     ):
@@ -34,7 +34,7 @@ class SW_OptionsPanel(QDialog):
             6: [(3, 2), (2, 3)],
             8: [(4, 2), (2, 4)],
             7: [(4, 2), (2, 4)],
-            9: [(4, 2), (2, 4), (3, 3)],
+            9: [(3, 3), (2, 5), (5, 2)],
             10: [(5, 2), (2, 5)],
             11: [(4, 3), (3, 4)],
             12: [(4, 3), (3, 4)],
@@ -99,6 +99,7 @@ class SW_OptionsPanel(QDialog):
         self.options_layout.addStretch(1)
 
     def toggle_sequence_growth(self, grow_sequence):
+        self.sequence_widget.beat_frame.grow_sequence = grow_sequence
         self.beats_combo_box.setEnabled(not grow_sequence)
         self.layout_combo_box.setEnabled(not grow_sequence)
         self.preview_section.setVisible(not grow_sequence)

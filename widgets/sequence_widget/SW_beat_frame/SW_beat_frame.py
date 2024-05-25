@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QGridLayout, QFrame, QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
 
-from widgets.sequence_widget.SW_beat_frame_layout_calculator import (
+from widgets.sequence_widget.SW_beat_frame_layout_manager import (
     SW_BeatFrameLayoutManager,
 )
 from .beat_deletion_manager import BeatDeletionManager
@@ -35,6 +35,7 @@ class SW_BeatFrame(QFrame):
         self._init_beats()
         self._setup_components()
         self._setup_layout()
+        self.grow_sequence = False
 
     def _init_beats(self):
         self.beats = [BeatView(self, number=i + 1) for i in range(64)]
@@ -78,12 +79,18 @@ class SW_BeatFrame(QFrame):
                 self.beats[next_beat_index]
             )
             self.sequence_widget.update_current_word()  # Update the current word
+            if self.grow_sequence:
+                self.adjust_layout_to_sequence_length()
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):
             if not beat.is_filled:
                 return i
         return None
+
+    def adjust_layout_to_sequence_length(self):
+        last_filled_index = self.find_next_available_beat() or len(self.beats)
+        self.layout_manager.configure_beat_frame(last_filled_index)
 
     def get_last_filled_beat(self) -> BeatView:
         for beat_view in reversed(self.beats):

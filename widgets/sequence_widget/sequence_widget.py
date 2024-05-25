@@ -8,7 +8,7 @@ from widgets.sequence_widget.current_word_label import CurrentWordLabel
 
 from ..graph_editor.graph_editor import GraphEditor
 from .SW_beat_frame.SW_beat_frame import SW_BeatFrame
-from .SW_beat_frame.SW_options_panel import SW_OptionsPanel
+from .SW_beat_frame.SW_layout_options_dialog import SW_LayoutOptionsDialog
 from .my_sequence_label import MySequenceLabel
 from ..indicator_label import IndicatorLabel
 from .SW_pictograph_factory import SW_PictographFactory
@@ -55,7 +55,7 @@ class SequenceWidget(QWidget):
 
     def show_options_panel(self):
         current_state = self._get_current_beat_frame_state()
-        self.options_panel = SW_OptionsPanel(self, current_state)
+        self.options_panel = SW_LayoutOptionsDialog(self, current_state)
         self.options_panel.exec()  # Use exec() to show the dialog modally
 
     def _get_current_beat_frame_state(self) -> dict:
@@ -86,7 +86,7 @@ class SequenceWidget(QWidget):
             item = layout.itemAt(i)
             if item and isinstance(item.widget(), BeatView):
                 position = layout.getItemPosition(i)
-                max_row = max(max_row, position[0]) 
+                max_row = max(max_row, position[0])
                 max_col = max(max_col, position[1])
 
         return max_row + 1, max_col  # Add 1 to max_row to get the count
