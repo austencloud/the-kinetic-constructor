@@ -1,8 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QShowEvent
 from PyQt6.QtCore import QTimer
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QScrollArea, QComboBox
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QScrollArea, QLabel
 from PyQt6.QtCore import Qt
+
+from widgets.sequence_widget.current_word_label import CurrentWordLabel
 
 from ..graph_editor.graph_editor import GraphEditor
 from .SW_beat_frame.SW_beat_frame import SW_BeatFrame
@@ -34,13 +36,15 @@ class SequenceWidget(QWidget):
 
     def _setup_components(self):
         self.indicator_label = IndicatorLabel(self)
+        # self.my_sequence_label = MySequenceLabel(self)
+        self.current_word_label = CurrentWordLabel(self)  # Add the current word label
         self.beat_frame = SW_BeatFrame(self)
         self.button_frame = SW_ButtonFrame(self)
         self.graph_editor = GraphEditor(self)
         self.pictograph_factory = SW_PictographFactory(self)
-        self.my_sequence_label = MySequenceLabel(self)
 
-        # self._setup_options_button()
+        self.current_word_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.update_current_word()
 
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)
@@ -97,6 +101,7 @@ class SequenceWidget(QWidget):
             self.beat_frame.layout_manager.rearrange_beats(num_beats, cols, rows)
         if save_layout:
             self.save_layout_as_default(rows, cols)
+        self.update_current_word()  # Update the current word whenever options are applied
 
     def save_layout_as_default(self, rows, cols):
         # Implement logic to save layout as default
@@ -111,7 +116,8 @@ class SequenceWidget(QWidget):
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addWidget(self.my_sequence_label, stretch=1)
+        # self.layout.addWidget(self.my_sequence_label, stretch=1)
+        self.layout.addWidget(self.current_word_label, stretch=1)
         self.layout.addLayout(self.beat_frame_layout, stretch=35)
         self.layout.addWidget(self.indicator_label, stretch=1)
         self.layout.addWidget(self.graph_editor, stretch=6)
@@ -145,9 +151,15 @@ class SequenceWidget(QWidget):
             )
         )
         self.SW_pictograph_cache[pictograph_key] = pictograph
+        self.update_current_word()  # Update the current word when a new beat is added
+
+    def update_current_word(self):
+        current_word = self.beat_frame.get_current_word()
+        self.current_word_label.setText(current_word)
 
     def resize_sequence_widget(self) -> None:
-        self.my_sequence_label.resize_my_sequence_label()
+        self.current_word_label.resize_current_word_label()
+        # self.my_sequence_label.resize_my_sequence_label()
         self.beat_frame.resize_beat_frame()
         self.graph_editor.resize_graph_editor()
         self.button_frame.resize_button_frame()

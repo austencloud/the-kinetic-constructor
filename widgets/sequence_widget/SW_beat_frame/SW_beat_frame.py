@@ -1,8 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGridLayout, QFrame, QApplication
-
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QKeyEvent, QShowEvent
+from PyQt6.QtGui import QKeyEvent
 
 from widgets.sequence_widget.SW_beat_frame_layout_calculator import (
     SW_BeatFrameLayoutManager,
@@ -78,6 +77,7 @@ class SW_BeatFrame(QFrame):
             self.current_sequence_json_handler.update_current_sequence_file_with_beat(
                 self.beats[next_beat_index]
             )
+            self.sequence_widget.update_current_word()  # Update the current word
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):
@@ -95,7 +95,7 @@ class SW_BeatFrame(QFrame):
         word = ""
         for beat_view in self.beats:
             if beat_view.is_filled:
-                word += beat_view.blank_beat.letter.value
+                word += beat_view.beat.letter.value
         return word
 
     def on_beat_adjusted(self) -> None:
@@ -111,7 +111,7 @@ class SW_BeatFrame(QFrame):
             elif i == 1:
                 self.update_start_pos_from_current_sequence_json(entry)
             elif i > 1:
-                beat = self.beats[i - 2].blank_beat
+                beat = self.beats[i - 2].beat
                 if beat:
                     if beat.pictograph_dict != entry:
                         beat.updater.update_pictograph(entry)

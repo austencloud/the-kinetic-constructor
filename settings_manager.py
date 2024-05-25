@@ -56,7 +56,7 @@ class SettingsManager(QObject):
         self.glyph_visibility_manager = GlyphVisibilityManager(main_window)
         self.grid_visibility_manager = GridVisibilityManager(self)
 
-    def load_settings(self) -> dict:
+    def load_settings(self) -> dict[str, dict]:
         if os.path.exists(self.settings_json):
             with open(self.settings_json, "r") as file:
                 return json.load(file)

@@ -1,5 +1,12 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QHBoxLayout, QListWidget, QStackedWidget
+from PyQt6.QtWidgets import (
+    QDialog,
+    QVBoxLayout,
+    QPushButton,
+    QHBoxLayout,
+    QListWidget,
+    QStackedWidget,
+)
 
 from .prop_type_selector import PropTypeSelector
 from .glyph_visibility_widget import GlyphVisibilityWidget
@@ -8,7 +15,8 @@ from .default_orientation_selector import DefaultOrientationSelector
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
-class PreferencesDialog(QDialog):
+
+class SequenceLayoutOptionsDialog(QDialog):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget.main_window)
         self.main_widget = main_widget
@@ -28,11 +36,13 @@ class PreferencesDialog(QDialog):
         self.cancel_button.clicked.connect(self.cancel_settings)
         self.reset_button = QPushButton("Reset to Defaults")
         self.reset_button.clicked.connect(self.reset_settings)
-        
+
     def _setup_layout(self) -> None:
 
         self.sections_list = QListWidget()
-        self.sections_list.addItems(["Prop Type", "Glyph Visibility", "Default Orientations"])
+        self.sections_list.addItems(
+            ["Prop Type", "Glyph Visibility", "Default Orientations"]
+        )
         self.sections_list.currentRowChanged.connect(self.change_section)
 
         self.pages_widget = QStackedWidget()
@@ -53,7 +63,6 @@ class PreferencesDialog(QDialog):
         layout = QVBoxLayout(self)
         layout.addLayout(main_layout)
         layout.addLayout(button_layout)
-
 
     def change_section(self, index: int) -> None:
         self.pages_widget.setCurrentIndex(index)

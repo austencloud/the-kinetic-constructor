@@ -27,7 +27,7 @@ from widgets.json_manager import JSON_Manager
 from widgets.main_widget.top_builder_widget import TopBuilderWidget
 
 from widgets.main_widget.letter_loader import LetterLoader
-from widgets.menu_bar.preferences_dialog import PreferencesDialog
+from widgets.menu_bar.sequence_layout_options_dialog import SequenceLayoutOptionsDialog
 from widgets.menu_bar.prop_type_selector import PropTypeSelector
 from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.components.pictograph_key_generator import (
@@ -92,7 +92,7 @@ class MainWidget(QTabWidget):
         self.prop_type_selector = PropTypeSelector(self)
         self.turns_tuple_generator = TurnsTupleGenerator()
         self.pictograph_key_generator = PictographKeyGenerator()
-        self.preferences_dialog = PreferencesDialog(self)
+        self.layout_options_dialog = SequenceLayoutOptionsDialog(self)
         self.special_placement_loader = SpecialPlacementLoader(self)
         self.metadata_extractor = MetaDataExtractor(self)
 

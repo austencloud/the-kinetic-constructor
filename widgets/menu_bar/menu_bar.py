@@ -115,7 +115,7 @@ class MainWindowMenuBar(QMenuBar):
         print(f"Prop type set to: {prop_type.name}")
 
     def open_preferences_dialog(self):
-        self.preferences_dialog = self.main_widget.preferences_dialog
+        self.preferences_dialog = self.main_widget.layout_options_dialog
         self.preferences_dialog.load_initial_settings()
         self.preferences_dialog.exec()
 

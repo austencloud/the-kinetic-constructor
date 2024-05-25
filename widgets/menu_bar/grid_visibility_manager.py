@@ -37,9 +37,12 @@ class GridVisibilityManager:
             self.settings_manager.main_window.main_widget.top_builder_widget.sequence_widget.beat_frame
         )
         for beat_view in beat_frame.beats:
-            beat = beat_view.blank_beat
-            if hasattr(beat, "grid"):
-                beat.grid.toggle_non_radial_points_visibility(self.non_radial_visible)
+            if hasattr(beat_view, "beat"):
+                beat = beat_view.beat
+                if hasattr(beat, "grid"):
+                    beat.grid.toggle_non_radial_points_visibility(
+                        self.non_radial_visible
+                    )
 
         # if the start pos view is visible, apply the visibility to it too
         start_pos_view = beat_frame.start_pos_view
@@ -63,3 +66,12 @@ class GridVisibilityManager:
                     start_pos.grid.toggle_non_radial_points_visibility(
                         self.non_radial_visible
                     )
+
+        # apply the change to the GE_BlankPictograph too
+        self.main_widget = self.settings_manager.main_window.main_widget
+        graph_editor = self.main_widget.top_builder_widget.sequence_widget.graph_editor
+        GE_blank_pictograph = graph_editor.GE_pictograph_view.blank_pictograph
+        if hasattr(GE_blank_pictograph, "grid"):
+            GE_blank_pictograph.grid.toggle_non_radial_points_visibility(
+                self.non_radial_visible
+            )
