@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
 
-class SequenceLayoutOptionsDialog(QDialog):
+class MainSettingsDialog(QDialog):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget.main_window)
         self.main_widget = main_widget

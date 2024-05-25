@@ -4,14 +4,14 @@ from PyQt6.QtCore import Qt
 from widgets.clickable_slider import ClickableSlider
 
 if TYPE_CHECKING:
-    from widgets.menu_bar.sequence_layout_options_dialog import SequenceLayoutOptionsDialog
+    from widgets.menu_bar.main_settings_dialog import MainSettingsDialog
 
 
 class PictographSizeAdjuster(QGroupBox):
     MAX_COLUMN_COUNT = 8
     MIN_COLUMN_COUNT = 3
 
-    def __init__(self, layout_options_dialog: "SequenceLayoutOptionsDialog") -> None:
+    def __init__(self, layout_options_dialog: "MainSettingsDialog") -> None:
         super().__init__()
         self.layout_options_dialog = layout_options_dialog
         self._setup_size_slider()
