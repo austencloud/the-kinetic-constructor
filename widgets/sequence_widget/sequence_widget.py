@@ -22,7 +22,7 @@ class SequenceWidget(QWidget):
         super().__init__()
         self.top_builder_widget = top_builder_widget
         self.main_widget = top_builder_widget.main_widget
-
+        self.default_beat_quantity = 16
         self._setup_components()
         self._setup_cache()
         self._setup_beat_frame_layout()
@@ -41,13 +41,6 @@ class SequenceWidget(QWidget):
         self.my_sequence_label = MySequenceLabel(self)
 
         # self._setup_options_button()
-
-        self.beat_combo_box = QComboBox(self)
-        self.beat_combo_box.addItems([str(i) for i in range(1, 65)])
-        self.beat_combo_box.setCurrentIndex(15)  # Default index for 16 beats
-        self.beat_combo_box.currentIndexChanged.connect(
-            lambda index: self.beat_frame.layout_manager.configure_beat_frame(index + 1)
-        )
 
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)
@@ -119,7 +112,6 @@ class SequenceWidget(QWidget):
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addWidget(self.my_sequence_label, stretch=1)
-        self.layout.addWidget(self.beat_combo_box, stretch=1)
         self.layout.addLayout(self.beat_frame_layout, stretch=35)
         self.layout.addWidget(self.indicator_label, stretch=1)
         self.layout.addWidget(self.graph_editor, stretch=6)
@@ -135,9 +127,7 @@ class SequenceWidget(QWidget):
 
     def post_show_initialization(self):
         self.resize_sequence_widget()
-        self.beat_frame.layout_manager.configure_beat_frame(
-            self.beat_combo_box.currentIndex() + 1
-        )
+        self.beat_frame.layout_manager.configure_beat_frame(self.default_beat_quantity)
 
     def _setup_indicator_label_layout(self):
         self.indicator_label_layout = QHBoxLayout()

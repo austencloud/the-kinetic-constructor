@@ -30,10 +30,10 @@ class StartPositionBeatView(BeatView):
     def __init__(self, beat_frame: "SW_BeatFrame") -> None:
         self.beat_frame = beat_frame
         super().__init__(beat_frame)
-        self.is_filled = False
         self.is_start_pos = True
         self.blank_beat = StartPositionBeat(self.beat_frame)
         self.set_start_pos(self.blank_beat)
+        self.is_filled = False
         self.blank_beat.grid.hide()
 
     def set_start_pos(self, start_pos: "StartPositionBeat") -> None:

@@ -71,15 +71,21 @@ class BeatView(QGraphicsView):
 
     def _add_number_text(self):
         if self.number is not None:
-            self.number_text_item = QGraphicsTextItem(str(self.number))
-            self.number_text_item.setFont(QFont("Georgia", 80, QFont.Weight.Bold))
-            self.number_text_item.setPos(QPointF(5, 5))
-            self.scene().addItem(self.number_text_item)
+            self.beat_number_item = QGraphicsTextItem(str(self.number))
+            self.beat_number_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))
+            self.beat_number_item.setPos(
+                QPointF(
+                    self.beat_number_item.boundingRect().height() // 3,
+                    self.beat_number_item.boundingRect().height() // 5,
+                )
+            )
+            self.scene().addItem(self.beat_number_item)
 
     def _add_start_text(self):
         self.start_text_item = QGraphicsTextItem("Start")
-        self.start_text_item.setFont(QFont("Georgia", 80, QFont.Weight.Bold))
-        self.start_text_item.setPos(QPointF(5, 5))
+        self.start_text_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))
+        text_padding = self.scene().height() // 28
+        self.start_text_item.setPos(QPointF(text_padding, text_padding))
         self.scene().addItem(self.start_text_item)
         self.start_text_item.setVisible(self.is_start_pos)
 
@@ -103,7 +109,7 @@ class BeatView(QGraphicsView):
         painter.end()
 
     def enterEvent(self, event):
-        if self.scene() is not None:
+        if self.is_filled:
             if not self.is_selected:
                 self.setCursor(Qt.CursorShape.PointingHandCursor)
 
