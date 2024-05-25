@@ -49,6 +49,7 @@ class BeatView(QGraphicsView):
         super().__init__(beat_frame)
         self.number = number  # Beat number to display
         self._disable_scrollbars()
+
         self.beat_frame = beat_frame
         self.is_start_pos = False
         self.is_filled = False

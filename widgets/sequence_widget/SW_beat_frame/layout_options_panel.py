@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import (
     QCheckBox,
     QComboBox,
     QPushButton,
-    QWidget,
+    QWidget, QHBoxLayout
 )
 
 if TYPE_CHECKING:
@@ -24,18 +24,49 @@ class LayoutOptionsPanel(QWidget):
         )
         self.layout_options = dialog.layout_options
 
+        self._setup_components()
         self._setup_layout()
 
-    def _setup_layout(self):
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addStretch(1)
-
+    def _setup_components(self):
         self._setup_grow_sequence_checkbox()
         self._setup_number_of_beats_dropdown()
         self._setup_layout_options_dropdown()
+        self._setup_cancel_button()
         self._setup_apply_button()
 
-        self.layout.addStretch(1)
+
+    def _setup_layout(self):
+        self.main_layout: QVBoxLayout = QVBoxLayout(self)
+        self.combobox_layout = self._setup_combobox_layout()
+        self.action_button_layout = self._setup_action_button_layout()
+
+        self.main_layout.addStretch(1)
+        self.main_layout.addWidget(self.sequence_growth_checkbox)
+        self.main_layout.addLayout(self.combobox_layout)
+        self.main_layout.addLayout(self.action_button_layout)
+        self.main_layout.addStretch(1)
+
+    def _setup_action_button_layout(self):
+        action_button_layout = QHBoxLayout()
+        action_button_layout.addWidget(self.cancel_button)
+        action_button_layout.addWidget(self.apply_button)
+        return action_button_layout
+
+    def _setup_combobox_layout(self):
+        beats_vbox = QVBoxLayout()
+        layout_options_vbox = QVBoxLayout()
+        combobox_hbox = QHBoxLayout()
+
+        beats_vbox.addWidget(self.beats_label)
+        beats_vbox.addWidget(self.beats_combo_box)
+
+        layout_options_vbox.addWidget(self.layout_label)
+        layout_options_vbox.addWidget(self.layout_combo_box)
+
+        combobox_hbox.addLayout(beats_vbox)
+        combobox_hbox.addLayout(layout_options_vbox)
+        return combobox_hbox
+
 
     def _setup_grow_sequence_checkbox(self):
         self.sequence_growth_checkbox = QCheckBox(
@@ -44,31 +75,29 @@ class LayoutOptionsPanel(QWidget):
         grow_sequence = self.settings_manager.get_grow_sequence()
         self.sequence_growth_checkbox.setChecked(grow_sequence)
         self.sequence_growth_checkbox.toggled.connect(self.dialog.update_preview)
-        self.layout.addWidget(self.sequence_growth_checkbox)
 
     def _setup_number_of_beats_dropdown(self):
         self.beats_label = QLabel("Number of Beats:")
-        self.layout.addWidget(self.beats_label)
 
         self.beats_combo_box = QComboBox(self)
         self.beats_combo_box.addItems([str(i) for i in self.layout_options.keys()])
         self.beats_combo_box.currentIndexChanged.connect(
             self.dialog._setup_layout_options
         )
-        self.layout.addWidget(self.beats_combo_box)
 
     def _setup_layout_options_dropdown(self):
         self.layout_label = QLabel("Layout Options:")
-        self.layout.addWidget(self.layout_label)
 
         self.layout_combo_box = QComboBox(self)
         self.layout_combo_box.currentIndexChanged.connect(self.dialog.update_preview)
-        self.layout.addWidget(self.layout_combo_box)
+
+    def _setup_cancel_button(self):
+        self.cancel_button = QPushButton("Cancel")
+        self.cancel_button.clicked.connect(self.dialog.close)
 
     def _setup_apply_button(self):
         self.apply_button = QPushButton("Apply")
         self.apply_button.clicked.connect(self.dialog.apply_settings)
-        self.layout.addWidget(self.apply_button)
 
     def load_settings(self):
         grow_sequence = self.settings_manager.get_grow_sequence()

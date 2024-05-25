@@ -68,11 +68,13 @@ class SW_LayoutOptionsDialog(QDialog):
 
     def _set_size(self):
         main_widget_size = self.sequence_widget.main_widget.size()
-        self.setFixedSize(main_widget_size.width() // 2, main_widget_size.height() // 2)
+        self.setFixedSize(
+            int(main_widget_size.width() // 3), int(main_widget_size.height() // 2)
+        )
 
     def _setup_main_layout(self):
-        self.main_layout = QHBoxLayout(self)
-        self.main_layout.addWidget(self.preview, 1)
+        self.main_layout = QVBoxLayout(self)
+        self.main_layout.addWidget(self.preview, 3)
         self.main_layout.addWidget(self.panel, 1)
 
     def _setup_layout_options(self):
