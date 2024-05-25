@@ -34,8 +34,6 @@ class SequenceLayoutOptionsDialog(QDialog):
         self.apply_button.clicked.connect(self.apply_settings)
         self.cancel_button = QPushButton("Cancel")
         self.cancel_button.clicked.connect(self.cancel_settings)
-        self.reset_button = QPushButton("Reset to Defaults")
-        self.reset_button.clicked.connect(self.reset_settings)
 
     def _setup_layout(self) -> None:
 
@@ -56,7 +54,6 @@ class SequenceLayoutOptionsDialog(QDialog):
 
         button_layout = QHBoxLayout()
         button_layout.addStretch(1)
-        button_layout.addWidget(self.reset_button)
         button_layout.addWidget(self.cancel_button)
         button_layout.addWidget(self.apply_button)
 
@@ -79,7 +76,6 @@ class SequenceLayoutOptionsDialog(QDialog):
 
     def reset_settings(self) -> None:
         self.prop_type_selector.reset_settings()
-        self.glyph_visibility_widget.reset_settings()
         self.default_orientation_selector.reset_settings()
 
     def load_initial_settings(self) -> None:

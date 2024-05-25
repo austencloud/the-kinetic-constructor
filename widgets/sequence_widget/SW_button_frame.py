@@ -97,6 +97,7 @@ class SW_ButtonFrame(QFrame):
         self, show_indicator=True, should_reset_to_start_pos_picker=True
     ) -> None:
         self._reset_beat_frame()
+
         if should_reset_to_start_pos_picker:
             self.sequence_builder.reset_to_start_pos_picker()
         self.sequence_builder.current_pictograph = self.beat_frame.start_pos
@@ -114,6 +115,7 @@ class SW_ButtonFrame(QFrame):
         )
         self.beat_frame.start_pos_view.is_filled = False
         self.beat_frame.selection_manager.deselect_beat()
+        self.beat_frame.sequence_widget.update_current_word()
 
     def _clear_graph_editor(self) -> None:
         self.graph_editor = self.sequence_widget.graph_editor
