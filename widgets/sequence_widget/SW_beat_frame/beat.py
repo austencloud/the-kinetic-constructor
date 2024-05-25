@@ -160,3 +160,11 @@ class BeatView(QGraphicsView):
     def clear_beat(self) -> None:
         self.is_filled = False
         self.blank_beat = None
+
+    def set_temporary_beat(self, pictograph_dict: dict) -> None:
+        self.setStyleSheet("border: 2px solid yellow;")
+        self.beat.updater.update_pictograph(pictograph_dict)
+
+    def remove_temporary_beat(self) -> None:
+        self.setStyleSheet("")
+        self.beat.clear()

@@ -18,13 +18,13 @@ from widgets.sequence_widget.SW_beat_frame.start_pos_beat import StartPositionBe
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
-
 class SW_LayoutOptionsDialog(QDialog):
     def __init__(
         self, sequence_widget: "SequenceWidget", initial_state: Optional[dict] = None
     ):
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
+        self.settings_manager = self.sequence_widget.main_widget.main_window.settings_manager
         self.setWindowTitle("Sequence Layout Options")
         self.layout_options = {
             1: [(1, 1)],
@@ -53,7 +53,28 @@ class SW_LayoutOptionsDialog(QDialog):
 
         if initial_state:
             self._initialize_from_state(initial_state)
+        else:
+            self._load_settings()
 
+    def _load_settings(self):
+        grow_sequence = self.settings_manager.get_grow_sequence()
+        self.sequence_growth_checkbox.setChecked(grow_sequence)
+
+    def apply_settings(self):
+        grow_sequence = self.sequence_growth_checkbox.isChecked()
+        self.settings_manager.set_grow_sequence(grow_sequence)
+        num_beats = int(self.beats_combo_box.currentText())
+        selected_layout = self.layout_combo_box.currentText()
+        rows, cols = map(int, selected_layout.split(" x "))
+
+        self.sequence_widget.apply_options(
+            grow_sequence,
+            rows,
+            cols,
+            num_beats,
+            self.save_layout_checkbox.isChecked(),
+        )
+        self.accept()
     def _set_size(self):
         main_widget_size = self.sequence_widget.main_widget.size()
         self.setFixedSize(main_widget_size.width() // 2, main_widget_size.height() // 2)
@@ -73,7 +94,9 @@ class SW_LayoutOptionsDialog(QDialog):
         self.sequence_growth_checkbox = QCheckBox(
             "Grow sequence with added pictographs"
         )
-        self.sequence_growth_checkbox.toggled.connect(self.toggle_sequence_growth)
+        # TODO  set this to checked depending on  if it's already set in the settings
+
+        self.sequence_growth_checkbox.toggled.connect(self.update_preview)
         self.beats_label = QLabel("Number of Beats:")
         self.beats_combo_box = QComboBox(self)
         self.beats_combo_box.addItems([str(i) for i in self.layout_options.keys()])
@@ -84,7 +107,6 @@ class SW_LayoutOptionsDialog(QDialog):
         self.save_layout_checkbox = QCheckBox("Save this layout as default")
         self.apply_button = QPushButton("Apply")
         self.apply_button.clicked.connect(self.apply_settings)
-        self.toggle_sequence_growth(False)
 
     def _setup_options_layout(self):
         self.options_layout = QVBoxLayout()
@@ -97,13 +119,6 @@ class SW_LayoutOptionsDialog(QDialog):
         self.options_layout.addWidget(self.save_layout_checkbox)
         self.options_layout.addWidget(self.apply_button)
         self.options_layout.addStretch(1)
-
-    def toggle_sequence_growth(self, grow_sequence):
-        self.sequence_widget.beat_frame.grow_sequence = grow_sequence
-        self.beats_combo_box.setEnabled(not grow_sequence)
-        self.layout_combo_box.setEnabled(not grow_sequence)
-        self.preview_section.setVisible(not grow_sequence)
-        self.update_preview()
 
     def _setup_layout_options(self):
         self.layout_combo_box.clear()
@@ -166,15 +181,25 @@ class SW_LayoutOptionsDialog(QDialog):
 
     def apply_settings(self):
         grow_sequence = self.sequence_growth_checkbox.isChecked()
-        num_beats = int(self.beats_combo_box.currentText())
-        selected_layout = self.layout_combo_box.currentText()
-        rows, cols = map(int, selected_layout.split(" x "))
+        if grow_sequence:
+            num_filled_beats = (
+                self.sequence_widget.beat_frame.find_next_available_beat() - 1 or 0
+            )
+            self.sequence_widget.beat_frame.layout_manager.configure_beat_frame(
+                num_filled_beats + 1
+            )
+            # set the beat_frame.grow_sequence to True
+            self.sequence_widget.beat_frame.grow_sequence = True
+        else:
+            num_beats = int(self.beats_combo_box.currentText())
+            selected_layout = self.layout_combo_box.currentText()
+            rows, cols = map(int, selected_layout.split(" x "))
 
-        self.sequence_widget.apply_options(
-            grow_sequence,
-            rows,
-            cols,
-            num_beats,
-            self.save_layout_checkbox.isChecked(),
-        )
+            self.sequence_widget.apply_options(
+                grow_sequence,
+                rows,
+                cols,
+                num_beats,
+                self.save_layout_checkbox.isChecked(),
+            )
         self.accept()

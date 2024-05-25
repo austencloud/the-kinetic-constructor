@@ -94,8 +94,8 @@ class SequenceWidget(QWidget):
     def apply_options(self, grow_sequence, rows, cols, num_beats, save_layout):
         self.grow_sequence = grow_sequence
         if grow_sequence:
-            # Logic for growing sequence automatically
-            pass  # Implement your logic for growing the sequence
+            self.beat_frame.grow_sequence = True
+            
         else:
             self.beat_frame.layout_manager.rearrange_beats(num_beats, cols, rows)
         if save_layout:
