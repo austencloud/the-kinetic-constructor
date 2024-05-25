@@ -45,6 +45,7 @@ class SettingsManager(QObject):
             "include_start_pos": False,
             "user_name": "TacoCat",
         },
+        "grow_sequence": True,
     }
 
     def __init__(self, main_window: "MainWindow") -> None:
@@ -69,6 +70,13 @@ class SettingsManager(QObject):
             settings = self.settings
         with open(self.settings_json, "w") as file:
             json.dump(settings, file, indent=4)
+
+    def get_grow_sequence(self) -> bool:
+        return self.settings.get("grow_sequence", False)
+    
+    def set_grow_sequence(self, grow_sequence: bool) -> None:
+        self.settings["grow_sequence"] = grow_sequence
+        self.save_settings()
 
     def get_image_export_setting(self, key, default=None):
         # Retrieve specific image export settings

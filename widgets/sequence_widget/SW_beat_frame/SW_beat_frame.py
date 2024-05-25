@@ -35,7 +35,8 @@ class SW_BeatFrame(QFrame):
         self._init_beats()
         self._setup_components()
         self._setup_layout()
-        self.grow_sequence = False
+        settings_manager = self.main_widget.main_window.settings_manager
+        self.grow_sequence = settings_manager.get_grow_sequence()
 
     def _init_beats(self):
         self.beats = [BeatView(self, number=i + 1) for i in range(64)]
@@ -61,6 +62,7 @@ class SW_BeatFrame(QFrame):
         for i, beat in enumerate(self.beats):
             row, col = divmod(i, 8)
             self.layout.addWidget(beat, row + 1, col + 1)
+        self.layout_manager.configure_beat_frame(16)
 
     def keyPressEvent(self, event: "QKeyEvent") -> None:
         if event.key() == Qt.Key.Key_Delete or event.key() == Qt.Key.Key_Backspace:

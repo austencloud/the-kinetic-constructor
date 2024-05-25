@@ -106,6 +106,9 @@ class SW_ButtonFrame(QFrame):
             self.sequence_widget.indicator_label.show_message("Sequence cleared")
         self._clear_graph_editor()
 
+        # Reset the layout to the smallest possible amount
+        self.beat_frame.layout_manager.configure_beat_frame(0)
+
     def _reset_beat_frame(self) -> None:
         for beat_view in self.beat_frame.beats:
             beat_view.setScene(beat_view.blank_beat)

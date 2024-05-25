@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from widgets.sequence_widget.SW_beat_frame.beat import BeatView
 from data.beat_frame_layouts import BEAT_FRAME_LAYOUTS
+
 if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
 
@@ -19,21 +20,22 @@ class SW_BeatFrameLayoutManager:
         grow_sequence = self.settings_manager.get_grow_sequence()
         if grow_sequence:
             num_filled_beats = self.beat_frame.find_next_available_beat() or 0
-            num_beats = num_filled_beats + 1
+            num_beats = num_filled_beats
         columns, rows = self.calculate_layout(num_beats)
-        self.rearrange_beats(num_beats + 1, columns, rows)
+        self.rearrange_beats(num_beats, columns, rows)
         selected_beat = self.selection_manager.selected_beat
         if selected_beat:
             self.selection_manager.deselect_beat()
             self.selection_manager.select_beat(selected_beat)
             self.selection_manager.update_overlay_position()
+
         self.beat_frame.sequence_widget.scroll_area.verticalScrollBarPolicy = (
             Qt.ScrollBarPolicy.ScrollBarAlwaysOn
             if rows > 4
             else Qt.ScrollBarPolicy.ScrollBarAlwaysOff
         )
 
-    def rearrange_beats(self, visible_beats, columns, rows):
+    def rearrange_beats(self, num_beats, columns, rows):
         while self.beat_frame.layout.count():
             self.beat_frame.layout.takeAt(0).widget().hide()
 
@@ -44,7 +46,7 @@ class SW_BeatFrameLayoutManager:
         beats = self.beat_frame.beats
         for row in range(rows):
             for col in range(1, columns + 1):
-                if index < visible_beats:
+                if index < num_beats:
                     beat_view = beats[index]
                     self.beat_frame.layout.addWidget(beat_view, row, col)
                     beat_view.show()
@@ -58,4 +60,3 @@ class SW_BeatFrameLayoutManager:
             self.selection_manager.update_overlay_position()
 
         self.beat_frame.adjustSize()
-

@@ -26,7 +26,7 @@ class SequenceWidget(QWidget):
         self.main_widget = top_builder_widget.main_widget
         self.default_beat_quantity = 16
         self._setup_components()
-        self._setup_scroll_area()
+        self._configure_scroll_area()
         self._setup_cache()
         self._setup_beat_frame_layout()
         self._setup_indicator_label_layout()
@@ -37,6 +37,7 @@ class SequenceWidget(QWidget):
         self.SW_pictograph_cache: dict[str, Beat] = {}
 
     def _setup_components(self):
+        self.scroll_area = QScrollArea(self)
         self.indicator_label = IndicatorLabel(self)
         self.current_word_label = CurrentWordLabel(self)  # Add the current word label
         self.beat_frame = SW_BeatFrame(self)
@@ -44,8 +45,7 @@ class SequenceWidget(QWidget):
         self.graph_editor = GraphEditor(self)
         self.pictograph_factory = SW_PictographFactory(self)
 
-    def _setup_scroll_area(self):
-        self.scroll_area = QScrollArea(self)
+    def _configure_scroll_area(self):
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setContentsMargins(0, 0, 0, 0)
         self.scroll_area.setWidget(self.beat_frame)
@@ -95,7 +95,6 @@ class SequenceWidget(QWidget):
         self.grow_sequence = grow_sequence
         if grow_sequence:
             self.beat_frame.grow_sequence = True
-            
         else:
             self.beat_frame.layout_manager.rearrange_beats(num_beats, cols, rows)
         if save_layout:
