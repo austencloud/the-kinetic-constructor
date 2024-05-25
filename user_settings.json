@@ -7,8 +7,8 @@
         "Elemental": false,
         "EndPosition": false
     },
-    "default_left_orientation": "in",
-    "default_right_orientation": "out",
+    "default_left_orientation": "out",
+    "default_right_orientation": "counter",
     "default_left_orientation_Hand": "out",
     "default_right_orientation_Hand": "in",
     "word_length_visibility": {
@@ -29,5 +29,5 @@
     },
     "non_radial_points_visibility": false,
     "background_type": "Rainbow",
-    "grow_sequence": true
+    "grow_sequence": false
 }

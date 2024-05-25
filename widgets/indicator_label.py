@@ -43,7 +43,7 @@ class IndicatorLabel(QLabel):
         self.setText(text)
         self.opacity_effect.setOpacity(1)  # Ensure the label is fully visible
         # self.show()
-        self.timer.start(5000)  # Show the message for 5 seconds
+        self.timer.start(3000)  # Show the message for 5 seconds
 
     @pyqtSlot()
     def start_fade_out(self) -> None:

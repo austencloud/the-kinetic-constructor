@@ -77,10 +77,10 @@ class SequenceBuilder(QFrame):
     def show_advanced_start_pos_picker(self) -> None:
         self.start_pos_picker.hide()
         self.layout().addWidget(self.advanced_start_pos_picker)
-        # set all the orientations of the pictorgaphs in the advanced start pos picker to be "in"
         self.advanced_start_pos_picker.show()
         self.advanced_start_pos_picker.init_ui()
         self.advanced_start_pos_picker.advanced_start_pos_manager.set_all_orientations_to_in()
+        self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
 
     def _show_option_picker(self) -> None:
         self.layout().addWidget(self.option_picker)

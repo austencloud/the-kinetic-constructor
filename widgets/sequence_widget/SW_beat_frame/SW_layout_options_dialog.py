@@ -19,6 +19,9 @@ from widgets.sequence_widget.SW_beat_frame.layout_options_panel import (
 from widgets.sequence_widget.SW_beat_frame.layout_options_preview import (
     LayoutOptionsPreview,
 )
+from widgets.sequence_widget.SW_beat_frame.layout_warning_dialog import (
+    LayoutWarningDialog,
+)
 from widgets.sequence_widget.SW_beat_frame.start_pos_beat import StartPositionBeatView
 
 if TYPE_CHECKING:
@@ -91,11 +94,11 @@ class SW_LayoutOptionsDialog(QDialog):
 
     def apply_settings(self):
         grow_sequence = self.panel.sequence_growth_checkbox.isChecked()
+        num_filled_beats = (
+            self.sequence_widget.beat_frame.find_next_available_beat() - 1 or 0
+        )
         if grow_sequence:
             self.settings_manager.set_grow_sequence(True)
-            num_filled_beats = (
-                self.sequence_widget.beat_frame.find_next_available_beat() - 1 or 0
-            )
             self.sequence_widget.beat_frame.layout_manager.configure_beat_frame(
                 num_filled_beats + 1
             )
@@ -104,6 +107,23 @@ class SW_LayoutOptionsDialog(QDialog):
             num_beats = int(self.panel.beats_combo_box.currentText())
             selected_layout = self.panel.layout_combo_box.currentText()
             rows, cols = map(int, selected_layout.split(" x "))
-            self.sequence_widget.apply_layout_options(rows, cols, num_beats)
-            
+            if num_beats < num_filled_beats:
+                if self.open_warning_dialog():
+                    self.sequence_widget.apply_layout_options(rows, cols, num_beats)
+                    # clear the remaining beats
+                    for i in range(num_beats, num_filled_beats):
+                        self.sequence_widget.beat_frame.beats[i].setScene(
+                            self.sequence_widget.beat_frame.beats[i].blank_beat
+                        )
+                    # Update the selection overlay
+                    self.sequence_widget.beat_frame.selection_manager.select_beat(
+                        self.sequence_widget.beat_frame.beats[num_beats - 1]
+                    )
+            else:
+                self.sequence_widget.apply_layout_options(rows, cols, num_beats)
         self.accept()
+
+    def open_warning_dialog(self):
+        dialog = LayoutWarningDialog(self)
+        result = dialog.exec()
+        return result == QDialog.DialogCode.Accepted

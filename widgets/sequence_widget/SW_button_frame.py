@@ -26,6 +26,7 @@ class SW_ButtonFrame(QFrame):
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
+
         self.orientations = ["in", "counter", "out", "clock"]
         self.font_size = self.sequence_widget.width() // 45
         self.add_to_dictionary_manager = AddToDictionaryManager(self.sequence_widget)
@@ -41,6 +42,7 @@ class SW_ButtonFrame(QFrame):
         self.export_manager = self.beat_frame.export_manager
         self.indicator_label = self.sequence_widget.indicator_label
         self.print_sequence_manager = self.beat_frame.print_sequence_manager
+        self.settings_manager = self.main_widget.main_window.settings_manager
 
     def _setup_buttons(self) -> None:
         self.buttons: list[SW_ActionButton] = []
@@ -55,15 +57,15 @@ class SW_ButtonFrame(QFrame):
                 "callback": lambda: self.export_manager.exec_dialog(),
                 "tooltip": "Save Image",
             },
-            "clear_sequence": {
-                "icon_path": "clear.svg",
-                "callback": lambda: self.clear_sequence(show_indicator=True),
-                "tooltip": "Clear Sequence",
-            },
             "layout_options": {
                 "icon_path": "options.svg",
                 "callback": self.sequence_widget.show_options_panel,
                 "tooltip": "Layout Options",
+            },
+            "clear_sequence": {
+                "icon_path": "clear.svg",
+                "callback": lambda: self.clear_sequence(show_indicator=True),
+                "tooltip": "Clear Sequence",
             },
         }
         for button_name, button_data in button_dict.items():
@@ -107,7 +109,8 @@ class SW_ButtonFrame(QFrame):
         self._clear_graph_editor()
 
         # Reset the layout to the smallest possible amount
-        self.beat_frame.layout_manager.configure_beat_frame(0)
+        if self.settings_manager.get_grow_sequence():
+            self.beat_frame.layout_manager.configure_beat_frame(0)
 
     def _reset_beat_frame(self) -> None:
         for beat_view in self.beat_frame.beats:

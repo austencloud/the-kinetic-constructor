@@ -24,7 +24,6 @@ class AdvancedStartPosPickerDefaultOriWidget(QWidget):
         self.settings_manager = self.main_widget.main_window.settings_manager
         self.orientations = ["in", "counter", "out", "clock"]
         self.init_ui()
-
     def init_ui(self):
         self.group_box = QGroupBox("Default Orientation Picker")
         self.group_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -63,3 +62,6 @@ class AdvancedStartPosPickerDefaultOriWidget(QWidget):
         self.advanced_start_pos_picker.advanced_start_pos_manager.update_right_default_ori(
             ori
         )
+
+    def resize_default_ori_picker(self):
+        self.setMinimumWidth(self.advanced_start_pos_picker.width())

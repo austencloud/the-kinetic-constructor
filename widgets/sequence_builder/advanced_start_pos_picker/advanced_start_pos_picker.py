@@ -14,8 +14,8 @@ from widgets.sequence_builder.components.start_pos_picker.choose_your_start_pos_
     ChooseYourStartPosLabel,
 )
 
-from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_default_ori_picker import (
-    AdvancedStartPosPickerDefaultOriPicker,
+from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_ori_picker import (
+    AdvancedStartPosOriPicker,
 )
 
 
@@ -31,7 +31,7 @@ class AdvancedStartPosPicker(QWidget):
         self.main_widget = sequence_builder.main_widget
         self.start_pos_picker = self.sequence_builder.start_pos_picker
         self.start_pos_cache: dict[str, list[Pictograph]] = {}
-        self.default_ori_widget = AdvancedStartPosPickerDefaultOriPicker(self)
+        self.ori_picker = AdvancedStartPosOriPicker(self)
         self.pictograph_frame = AdvancedStartPosPickerPictographFrame(self)
         self.choose_you_start_pos_label = ChooseYourStartPosLabel(self)
         self.pictograph_factory = AdvancedStartPosPickerPictographFactory(
@@ -40,7 +40,7 @@ class AdvancedStartPosPicker(QWidget):
         self.advanced_start_pos_manager = AdvancedStartPosManager(self)
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.grid_layout = QGridLayout()
-        self.layout.addWidget(self.default_ori_widget, 1)
+        self.layout.addWidget(self.ori_picker, 1)
         self.layout.addLayout(self.grid_layout, 16)
 
     def display_variations(self, variations: list["Pictograph"]) -> None:
@@ -75,8 +75,6 @@ class AdvancedStartPosPicker(QWidget):
             self._resize_variation(variation)
             variation.container.update_borders()
 
-    
-
     def calculate_view_width(self) -> int:
         max_variations_per_row = 4
         view_width = self.sequence_builder.height() // 5
@@ -105,4 +103,9 @@ class AdvancedStartPosPicker(QWidget):
 
     def resize_advanced_start_pos_picker(self) -> None:
         self.adjustSize()
-        self.default_ori_widget.resize_default_ori_picker()
+        self.setFixedSize(
+            # set it to match the regular start pos picker
+            self.start_pos_picker.width(),
+            self.start_pos_picker.height(),
+        )
+        self.ori_picker.resize_default_ori_picker()
