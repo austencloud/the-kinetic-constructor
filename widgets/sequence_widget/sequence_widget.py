@@ -86,7 +86,7 @@ class SequenceWidget(QWidget):
             item = layout.itemAt(i)
             if item and isinstance(item.widget(), BeatView):
                 position = layout.getItemPosition(i)
-                max_row = max(max_row, position[0])
+                max_row = max(max_row, position[0]) 
                 max_col = max(max_col, position[1])
 
         return max_row + 1, max_col  # Add 1 to max_row to get the count
