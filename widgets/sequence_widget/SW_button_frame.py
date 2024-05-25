@@ -61,7 +61,7 @@ class SW_ButtonFrame(QFrame):
                 "tooltip": "Clear Sequence",
             },
             "layout_options": {
-                "icon_path": "hamburger_icon.svg",
+                "icon_path": "options.svg",
                 "callback": self.sequence_widget.show_options_panel,
                 "tooltip": "Layout Options",
             },
