@@ -99,11 +99,11 @@ class SW_LayoutOptionsDialog(QDialog):
             self.sequence_widget.beat_frame.layout_manager.configure_beat_frame(
                 num_filled_beats + 1
             )
-            self.sequence_widget.beat_frame.grow_sequence = True
         else:
             self.settings_manager.set_grow_sequence(False)
             num_beats = int(self.panel.beats_combo_box.currentText())
             selected_layout = self.panel.layout_combo_box.currentText()
             rows, cols = map(int, selected_layout.split(" x "))
             self.sequence_widget.apply_layout_options(rows, cols, num_beats)
+            
         self.accept()

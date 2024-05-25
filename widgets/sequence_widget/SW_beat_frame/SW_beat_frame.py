@@ -29,14 +29,13 @@ class SW_BeatFrame(QFrame):
         )
         self.sequence_widget = sequence_widget
         self.top_builder_widget = sequence_widget.top_builder_widget
+        self.settings_manager = self.main_widget.main_window.settings_manager
         self.sequence_changed = False
         self.setObjectName("beat_frame")
         self.setStyleSheet("QFrame#beat_frame { background: transparent; }")
         self._init_beats()
         self._setup_components()
         self._setup_layout()
-        settings_manager = self.main_widget.main_window.settings_manager
-        self.grow_sequence = settings_manager.get_grow_sequence()
 
     def _init_beats(self):
         self.beats = [BeatView(self, number=i + 1) for i in range(64)]
@@ -81,7 +80,7 @@ class SW_BeatFrame(QFrame):
                 self.beats[next_beat_index]
             )
             self.sequence_widget.update_current_word()  # Update the current word
-            if self.grow_sequence:
+            if self.settings_manager.get_grow_sequence():
                 self.adjust_layout_to_sequence_length()
 
     def find_next_available_beat(self) -> int:

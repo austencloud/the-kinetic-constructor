@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
 from widgets.sequence_widget.SW_beat_frame.beat import BeatView
 from data.beat_frame_layouts import BEAT_FRAME_LAYOUTS
@@ -22,18 +23,15 @@ class SW_BeatFrameLayoutManager:
             num_filled_beats = self.beat_frame.find_next_available_beat() or 0
             num_beats = num_filled_beats
         columns, rows = self.calculate_layout(num_beats)
-        self.rearrange_beats(num_beats, columns, rows)
-        selected_beat = self.selection_manager.selected_beat
-        if selected_beat:
-            self.selection_manager.deselect_beat()
-            self.selection_manager.select_beat(selected_beat)
-            self.selection_manager.update_overlay_position()
 
         self.beat_frame.sequence_widget.scroll_area.verticalScrollBarPolicy = (
             Qt.ScrollBarPolicy.ScrollBarAlwaysOn
             if rows > 4
             else Qt.ScrollBarPolicy.ScrollBarAlwaysOff
         )
+        # QApplication.processEvents()
+        self.rearrange_beats(num_beats, columns, rows)
+
 
     def rearrange_beats(self, num_beats, columns, rows):
         while self.beat_frame.layout.count():
@@ -56,7 +54,9 @@ class SW_BeatFrameLayoutManager:
                         beats[index].hide()
                         index += 1
 
-        if self.selection_manager.selected_beat:
-            self.selection_manager.update_overlay_position()
-
         self.beat_frame.adjustSize()
+        selected_beat = self.selection_manager.selected_beat
+        if selected_beat:
+            self.selection_manager.deselect_beat()
+            self.selection_manager.select_beat(selected_beat)
+            self.selection_manager.update_overlay_position()

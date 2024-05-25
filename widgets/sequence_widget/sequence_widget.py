@@ -121,7 +121,7 @@ class SequenceWidget(QWidget):
 
     def post_show_initialization(self):
         self.resize_sequence_widget()
-        self.beat_frame.layout_manager.configure_beat_frame(self.default_beat_quantity)
+        # self.beat_frame.layout_manager.configure_beat_frame(self.default_beat_quantity)
 
     def _setup_indicator_label_layout(self):
         self.indicator_label_layout = QHBoxLayout()
