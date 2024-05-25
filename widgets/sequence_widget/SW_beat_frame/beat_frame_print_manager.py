@@ -41,7 +41,7 @@ class BeatFramePrintManager:
             pixmap: QPixmap = beat_view.grab()
             col = beat_index % column_count
             row = beat_index // column_count
-            beat_size = int(self.beat_frame.start_pos_view.blank_beat.width())
+            beat_size = int(self.beat_frame.start_pos_view.beat.width())
             x = col * beat_size
             y = row * beat_size
 
@@ -62,7 +62,7 @@ class BeatFramePrintManager:
         )  # Ensure this is the index in filled_beats
 
         column_count, row_count = self._calculate_layout(len(filled_beats))
-        beat_size = int(self.beat_frame.start_pos_view.blank_beat.width())
+        beat_size = int(self.beat_frame.start_pos_view.beat.width())
 
         col = beat_index % column_count
         row = beat_index // column_count

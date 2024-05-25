@@ -50,20 +50,22 @@ class BeatView(QGraphicsView):
         self.number = number  # Beat number to display
         self._disable_scrollbars()
         self.beat_frame = beat_frame
-        self.blank_beat: "Beat" = None
         self.is_start_pos = False
         self.is_filled = False
         self.is_selected = False
         self.setContentsMargins(0, 0, 0, 0)
         self.setStyleSheet("border: none; border: 1px solid black;")
         self.blank_beat = Beat(self.beat_frame)
+        self._setup_blank_beat()
+        self.resize_beat_view()
+
+    def _setup_blank_beat(self):
         self.setScene(self.blank_beat)
         self.blank_beat.view = self
         self.blank_beat = self.blank_beat
+        self.blank_beat.grid.hide()
         self._add_number_text()
         self._add_start_text()
-        self.resize_beat_view()
-        self.blank_beat.grid.hide()
 
     def _disable_scrollbars(self) -> None:
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)

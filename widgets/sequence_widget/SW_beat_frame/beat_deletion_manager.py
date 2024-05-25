@@ -40,12 +40,12 @@ class BeatDeletionManager:
             self.delete_beat(self.beats[i])
         last_beat = self.beat_frame.get_last_filled_beat()
         self.selection_manager.select_beat(last_beat)
-        self.sequence_builder.current_pictograph = last_beat.blank_beat
+        self.sequence_builder.current_pictograph = last_beat.beat
 
     def _delete_first_beat(self, selected_beat):
         self.start_pos_view = self.beat_frame.start_pos_view
         self.selection_manager.select_beat(self.start_pos_view)
-        self.sequence_builder.current_pictograph = self.start_pos_view.blank_beat
+        self.sequence_builder.current_pictograph = self.start_pos_view.beat
         self.delete_beat(selected_beat)
 
         for i in range(

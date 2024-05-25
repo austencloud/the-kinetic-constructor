@@ -47,7 +47,7 @@ class GridVisibilityManager:
         # if the start pos view is visible, apply the visibility to it too
         start_pos_view = beat_frame.start_pos_view
         if start_pos_view.isVisible():
-            start_pos = start_pos_view.blank_beat
+            start_pos = start_pos_view.beat
             if hasattr(start_pos, "grid"):
                 start_pos.grid.toggle_non_radial_points_visibility(
                     self.non_radial_visible

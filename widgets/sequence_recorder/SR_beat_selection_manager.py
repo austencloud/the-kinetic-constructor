@@ -102,20 +102,20 @@ class SR_BeatSelectionManager(QWidget):
             if self.selected_beat:
                 self.selected_beat.deselect()
             self.selected_beat = beat_view
-            blue_turns = self.selected_beat.blank_beat.blue_motion.turns
-            red_turns = self.selected_beat.blank_beat.red_motion.turns
+            blue_turns = self.selected_beat.beat.blue_motion.turns
+            red_turns = self.selected_beat.beat.red_motion.turns
             self.selected_beat.is_selected = True
             graph_editor = (
-                self.selected_beat.beat_frame.main_widget.top_builder_widget.sequence_widget.graph_editor.graph_editor
+                self.selected_beat.beat_frame.main_widget.top_builder_widget.sequence_widget.graph_editor
             )
-            graph_editor.update_GE_pictograph(self.selected_beat.blank_beat)
+            graph_editor.update_GE_pictograph(self.selected_beat.beat)
 
             graph_editor.adjustment_panel.update_turns_panel(blue_turns, red_turns)
             graph_editor.adjustment_panel.update_adjustment_panel()
 
             # Set the orientations in the graph editor's orientation changer
             if isinstance(beat_view, StartPositionBeatView):
-                start_pos_pictograph = beat_view.blank_beat
+                start_pos_pictograph = beat_view.beat
                 blue_start_pos_ori_picker = (
                     graph_editor.adjustment_panel.blue_start_pos_ori_picker
                 )

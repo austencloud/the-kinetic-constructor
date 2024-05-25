@@ -98,7 +98,7 @@ class SR_BeatFrame(QFrame):
             if i == 0:
                 self.update_start_pos_from_current_sequence_json(entry)
             else:
-                beat = self.beat_views[i - 1].blank_beat
+                beat = self.beat_views[i - 1].beat
                 if beat:
                     if beat.pictograph_dict != entry:
                         beat.updater.update_pictograph(entry)

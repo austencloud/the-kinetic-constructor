@@ -62,7 +62,7 @@ class DictionarySequencePopulator:
                 continue
             self.sequence_widget.populate_sequence(pictograph_dict)
 
-        last_beat = self.sequence_widget.beat_frame.get_last_filled_beat().blank_beat
+        last_beat = self.sequence_widget.beat_frame.get_last_filled_beat().beat
         self.sequence_builder.current_pictograph = last_beat
 
         if self.sequence_builder.start_pos_picker.isVisible():
