@@ -138,7 +138,7 @@ class SequenceImageExportManager:
         return new_beat_view
 
     def create_image(self, column_count, row_count) -> QImage:
-        self.beat_size = int(self.beat_frame.start_pos_view.beat.width())
+        self.beat_size = int(self.beat_frame.start_pos_view.blank_beat.width())
         image_width = column_count * self.beat_size
         image_height = row_count * self.beat_size
         image = QImage(image_width, image_height, QImage.Format.Format_ARGB32)

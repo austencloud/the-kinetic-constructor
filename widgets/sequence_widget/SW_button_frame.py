@@ -42,8 +42,6 @@ class SW_ButtonFrame(QFrame):
         self.indicator_label = self.sequence_widget.indicator_label
         self.print_sequence_manager = self.beat_frame.print_sequence_manager
 
-
-
     def _setup_buttons(self) -> None:
         self.buttons: list[SW_ActionButton] = []
         button_dict = {
@@ -109,9 +107,11 @@ class SW_ButtonFrame(QFrame):
 
     def _reset_beat_frame(self) -> None:
         for beat_view in self.beat_frame.beats:
-            beat_view.setScene(None)
+            beat_view.setScene(beat_view.blank_beat)
             beat_view.is_filled = False
-        self.beat_frame.start_pos_view.setScene(None)
+        self.beat_frame.start_pos_view.setScene(
+            self.beat_frame.start_pos_view.blank_beat
+        )
         self.beat_frame.start_pos_view.is_filled = False
         self.beat_frame.selection_manager.deselect_beat()
 

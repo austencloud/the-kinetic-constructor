@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Union
-from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem
-from PyQt6.QtCore import Qt, QRect, QPointF
+from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem, QGraphicsScene
+from PyQt6.QtCore import Qt, QRect, QPointF, QRectF
 from PyQt6.QtGui import (
     QMouseEvent,
     QFont,
@@ -26,18 +26,22 @@ class Beat(Pictograph):
         super().__init__(beat_frame.main_widget)
         self.main_widget = beat_frame.main_widget
         self.view: "BeatView" = None
+        self.beat_number_item: QGraphicsTextItem = None
 
     def add_beat_number(self, number: int) -> None:
-        beat_number_item = QGraphicsTextItem(str(number))
-        beat_number_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))
-        beat_number_item.setPos(
-            QPointF(
-                beat_number_item.boundingRect().height() // 3,
-                beat_number_item.boundingRect().height() // 5,
+        if not self.beat_number_item:
+            self.beat_number_item = QGraphicsTextItem(str(number))
+            self.beat_number_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))
+            self.beat_number_item.setPos(
+                QPointF(
+                    self.beat_number_item.boundingRect().height() // 3,
+                    self.beat_number_item.boundingRect().height() // 5,
+                )
             )
-        )
-        if self.view and self.view.scene():
-            self.view.scene().addItem(beat_number_item)
+            if self.view and self.view.scene():
+                self.view.scene().addItem(self.beat_number_item)
+        else:
+            self.beat_number_item.setPlainText(str(number))
 
 
 class BeatView(QGraphicsView):
@@ -46,22 +50,43 @@ class BeatView(QGraphicsView):
         self.number = number  # Beat number to display
         self._disable_scrollbars()
         self.beat_frame = beat_frame
-        self.beat: "Beat" = None
+        self.blank_beat: "Beat" = None
         self.is_start_pos = False
         self.is_filled = False
         self.is_selected = False
         self.setContentsMargins(0, 0, 0, 0)
-        # add a 2px black border
         self.setStyleSheet("border: none; border: 1px solid black;")
+        self.blank_beat = Beat(self.beat_frame)
+        self.setScene(self.blank_beat)
+        self.blank_beat.view = self
+        self.blank_beat = self.blank_beat
+        self._add_number_text()
+        self._add_start_text()
+        self.resize_beat_view()
+        self.blank_beat.grid.hide()
 
     def _disable_scrollbars(self) -> None:
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
-    def mouseDoubleClickEvent(self, event: QMouseEvent) -> None:
+    def _add_number_text(self):
+        if self.number is not None:
+            self.number_text_item = QGraphicsTextItem(str(self.number))
+            self.number_text_item.setFont(QFont("Georgia", 80, QFont.Weight.Bold))
+            self.number_text_item.setPos(QPointF(5, 5))
+            self.scene().addItem(self.number_text_item)
+
+    def _add_start_text(self):
+        self.start_text_item = QGraphicsTextItem("Start")
+        self.start_text_item.setFont(QFont("Georgia", 80, QFont.Weight.Bold))
+        self.start_text_item.setPos(QPointF(5, 5))
+        self.scene().addItem(self.start_text_item)
+        self.start_text_item.setVisible(self.is_start_pos)
+
+    def mouseDoubleClickEvent(self, event) -> None:
         self.mousePressEvent(event)
 
-    def mousePressEvent(self, event: QMouseEvent):
+    def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton and self.is_filled:
             self.beat_frame.selection_manager.select_beat(self)
 
@@ -69,26 +94,16 @@ class BeatView(QGraphicsView):
         self.is_selected = False
         self.update()
 
-    # in the paint event, place the number at the top left of the beat view using QPainter
-    def paintEvent(self, event: QPaintEvent):
+    def paintEvent(self, event):
         super().paintEvent(event)
-        if self.number is not None:
-            painter = QPainter(self.viewport())
-            painter.setPen(QColor(0, 0, 0))
-            painter.setFont(QFont("Georgia", 20, QFont.Weight.Bold))
-            painter.drawText(
-                QRect(0, 0, 50, 50), Qt.AlignmentFlag.AlignLeft, str(self.number)
-            )
-            painter.end()
+        painter = QPainter(self.viewport())
         if self.is_selected:
-            painter = QPainter(self.viewport())
             painter.setPen(QColor(0, 0, 0))
             painter.drawRect(0, 0, self.width() - 1, self.height() - 1)
-            painter.end()
+        painter.end()
 
     def enterEvent(self, event):
         if self.scene() is not None:
-            # if it's not currently selected
             if not self.is_selected:
                 self.setCursor(Qt.CursorShape.PointingHandCursor)
 
@@ -96,31 +111,22 @@ class BeatView(QGraphicsView):
         self.setCursor(Qt.CursorShape.ArrowCursor)
 
     def grab(self) -> QPixmap:
-        # Calculate the required size
         original_size = self.sceneRect().size().toSize()
         target_width = original_size.width()
         target_height = original_size.height()
-
-        # Create a QImage with the specified size and render the scene onto it
         image = QImage(target_width, target_height, QImage.Format.Format_ARGB32)
-        image.fill(Qt.GlobalColor.transparent)  # Fill with transparent background
-
+        image.fill(Qt.GlobalColor.transparent)
         painter = QPainter(image)
-        painter.setRenderHint(QPainter.RenderHint.Antialiasing)  # For smooth edges
-
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         if not self.scene():
-
-            painter.setPen(QPen(QColor(0, 0, 0), 1))
+            painter.setPen(QColor(0, 0, 0))
             painter.setBrush(QColor(0, 255, 255))
             painter.drawRect(0, 0, target_width - 1, target_height - 1)
         else:
             self.scene().render(painter)
-
         painter.setPen(QColor(0, 0, 0))
         painter.drawRect(0, 0, target_width - 1, target_height - 1)
-
         painter.end()
-
         return QPixmap.fromImage(image)
 
     def set_beat(self, start_pos: "Beat", number: int) -> None:
@@ -130,17 +136,19 @@ class BeatView(QGraphicsView):
         self.setScene(self.start_pos)
         self.resize_beat_view()
         self.beat.add_beat_number(number)
+        self.beat.view = self
 
     def resize_beat_view(self):
-        self.view_scale = (
-            self.height() / self.start_pos.width()
-            if self.start_pos
-            else self.beat.width()
+        beat_scene_size = (950, 950)
+        view_size = self.size()
+
+        self.view_scale = min(
+            view_size.width() / beat_scene_size[0],
+            view_size.height() / beat_scene_size[1],
         )
         self.resetTransform()
         self.scale(self.view_scale, self.view_scale)
 
     def clear_beat(self) -> None:
         self.is_filled = False
-        self.beat = None
-        self.setScene(None)
+        self.blank_beat = None

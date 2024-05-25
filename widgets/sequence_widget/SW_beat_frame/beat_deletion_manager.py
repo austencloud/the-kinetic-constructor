@@ -8,18 +8,17 @@ if TYPE_CHECKING:
 
 
 class BeatDeletionManager:
-    def __init__(self, sequence_builder_beat_frame: "SW_BeatFrame") -> None:
-        self.beat_frame = sequence_builder_beat_frame
-        self.beats = sequence_builder_beat_frame.beats
-        self.sequence_builder = (
-            sequence_builder_beat_frame.top_builder_widget.sequence_builder
-        )
+    def __init__(self, beat_frame: "SW_BeatFrame") -> None:
+        self.beat_frame = beat_frame
+        self.sequence_builder = beat_frame.top_builder_widget.sequence_builder
         self.selection_manager = self.beat_frame.selection_manager
         self.current_sequence_json_handler = (
             self.beat_frame.current_sequence_json_handler
         )
 
     def delete_selected_beat(self) -> None:
+        self.beats = self.beat_frame.beats
+
         self.GE_pictograph_view = (
             self.beat_frame.main_widget.top_builder_widget.sequence_widget.graph_editor.GE_pictograph_view
         )
@@ -41,12 +40,12 @@ class BeatDeletionManager:
             self.delete_beat(self.beats[i])
         last_beat = self.beat_frame.get_last_filled_beat()
         self.selection_manager.select_beat(last_beat)
-        self.sequence_builder.current_pictograph = last_beat.beat
+        self.sequence_builder.current_pictograph = last_beat.blank_beat
 
     def _delete_first_beat(self, selected_beat):
         self.start_pos_view = self.beat_frame.start_pos_view
         self.selection_manager.select_beat(self.start_pos_view)
-        self.sequence_builder.current_pictograph = self.start_pos_view.beat
+        self.sequence_builder.current_pictograph = self.start_pos_view.blank_beat
         self.delete_beat(selected_beat)
 
         for i in range(

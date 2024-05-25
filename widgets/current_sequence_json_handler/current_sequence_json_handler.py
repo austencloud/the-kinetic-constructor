@@ -188,7 +188,7 @@ class CurrentSequenceJsonHandler:
             pictograph = (
                 self.main_widget.top_builder_widget.sequence_widget.beat_frame.beats[
                     index - 2
-                ].beat
+                ].blank_beat
             )
             if pictograph:
                 motion = pictograph.get.motion_by_color(color)
@@ -250,7 +250,7 @@ class CurrentSequenceJsonHandler:
                 ]
             )
             if beat_view and beat_view.is_filled:
-                beat_view.beat.get.pictograph_dict().update(entry)
+                beat_view.blank_beat.get.pictograph_dict().update(entry)
 
         self.save_current_sequence(sequence)
         self.validation_engine.run(is_current_sequence=True)

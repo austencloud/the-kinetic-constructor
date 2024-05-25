@@ -10,7 +10,7 @@ from .SW_beat_frame.SW_options_panel import SW_OptionsPanel
 from .my_sequence_label import MySequenceLabel
 from ..indicator_label import IndicatorLabel
 from .SW_pictograph_factory import SW_PictographFactory
-from .SW_beat_frame.beat import Beat
+from .SW_beat_frame.beat import Beat, BeatView
 from .SW_button_frame import SW_ButtonFrame
 
 if TYPE_CHECKING:
@@ -56,9 +56,6 @@ class SequenceWidget(QWidget):
         self.scroll_area.setObjectName("sequence_scroll_area")
         self.scroll_area.setStyleSheet("QScrollArea{background: transparent;}")
         self.scroll_area.setFrameShape(QScrollArea.Shape.NoFrame)
-        self.scroll_area.setHorizontalScrollBarPolicy(
-            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
-        )
 
     def show_options_panel(self):
         current_state = self._get_current_beat_frame_state()
@@ -71,10 +68,8 @@ class SequenceWidget(QWidget):
         grow_sequence = getattr(self, "grow_sequence", False)
         save_layout = False  # Default value, can be set based on your logic
 
-        rows, cols = (
-            layout.rowCount(),
-            layout.columnCount() - 1,
-        )
+        rows, cols = self._calculate_current_layout()
+
         return {
             "num_beats": num_beats,
             "rows": rows,
@@ -82,6 +77,23 @@ class SequenceWidget(QWidget):
             "grow_sequence": grow_sequence,
             "save_layout": save_layout,
         }
+
+    def _calculate_current_layout(self) -> tuple:
+        layout = self.beat_frame.layout
+        row_count = layout.rowCount()
+        col_count = layout.columnCount() - 1  # Exclude the start position column
+
+        max_row = 0
+        max_col = 0
+
+        for i in range(layout.count()):
+            item = layout.itemAt(i)
+            if item and isinstance(item.widget(), BeatView):
+                position = layout.getItemPosition(i)
+                max_row = max(max_row, position[0])
+                max_col = max(max_col, position[1])
+
+        return max_row + 1, max_col  # Add 1 to max_row to get the count
 
     def apply_options(self, grow_sequence, rows, cols, num_beats, save_layout):
         self.grow_sequence = grow_sequence

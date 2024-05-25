@@ -1,12 +1,12 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGridLayout, QFrame, QApplication
+
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QKeyEvent
+from PyQt6.QtGui import QKeyEvent, QShowEvent
 
 from widgets.sequence_widget.SW_beat_frame_layout_calculator import (
     SW_BeatFrameLayoutManager,
 )
-
 from .beat_deletion_manager import BeatDeletionManager
 from .sequence_image_export_manager import SequenceImageExportManager
 from .beat_frame_print_manager import BeatFramePrintManager
@@ -31,23 +31,16 @@ class SW_BeatFrame(QFrame):
         self.sequence_widget = sequence_widget
         self.top_builder_widget = sequence_widget.top_builder_widget
         self.sequence_changed = False
-        self.beats = [
-            BeatView(self) for _ in range(64)
-        ]  # Pre-allocate a fixed number of beat views
-        for beat in self.beats:
-            beat.hide()
+        self.setObjectName("beat_frame")
+        self.setStyleSheet("QFrame#beat_frame { background: transparent; }")
+        self._init_beats()
         self._setup_components()
         self._setup_layout()
-        # set the background to transparent
-        self.setObjectName("beat_frame")
-        self.setStyleSheet(
-            """
-            QFrame#beat_frame{
-                
-                background: transparent;
-            }
-            """
-        )
+
+    def _init_beats(self):
+        self.beats = [BeatView(self, number=i + 1) for i in range(64)]
+        for beat in self.beats:
+            beat.hide()
 
     def _setup_components(self) -> None:
         self.selection_manager = SequenceWidgetBeatSelectionOverlay(self)
@@ -65,6 +58,9 @@ class SW_BeatFrame(QFrame):
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.addWidget(self.start_pos_view, 0, 0)
+        for i, beat in enumerate(self.beats):
+            row, col = divmod(i, 8)
+            self.layout.addWidget(beat, row + 1, col + 1)
 
     def keyPressEvent(self, event: "QKeyEvent") -> None:
         if event.key() == Qt.Key.Key_Delete or event.key() == Qt.Key.Key_Backspace:
@@ -85,7 +81,7 @@ class SW_BeatFrame(QFrame):
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):
-            if beat.scene() is None or beat.scene().items() == []:
+            if not beat.is_filled:
                 return i
         return None
 
@@ -96,15 +92,10 @@ class SW_BeatFrame(QFrame):
         return self.beats[0]
 
     def get_current_word(self) -> str:
-        """
-        This should go through the beats one by one and grab their letters, concatenating them to a word
-        """
-
         word = ""
         for beat_view in self.beats:
             if beat_view.is_filled:
-                word += beat_view.beat.letter.value
-
+                word += beat_view.blank_beat.letter.value
         return word
 
     def on_beat_adjusted(self) -> None:
@@ -120,7 +111,7 @@ class SW_BeatFrame(QFrame):
             elif i == 1:
                 self.update_start_pos_from_current_sequence_json(entry)
             elif i > 1:
-                beat = self.beats[i - 2].beat
+                beat = self.beats[i - 2].blank_beat
                 if beat:
                     if beat.pictograph_dict != entry:
                         beat.updater.update_pictograph(entry)
@@ -149,12 +140,13 @@ class SW_BeatFrame(QFrame):
             * 0.8
         )
         num_cols = max(1, self.layout.columnCount() - 1)  # Excluding start position
-
         if num_cols == 0:
             return
-
         beat_size = int(width / (5))  # +1 for start position column
-
         for beat in self.beats:
             beat.setFixedSize(beat_size, beat_size)
         self.start_pos_view.setFixedSize(beat_size, beat_size)
+        # size their scenes to fit in the view
+        for beat in self.beats:
+            beat.resize_beat_view()
+        self.start_pos_view.resize_beat_view()

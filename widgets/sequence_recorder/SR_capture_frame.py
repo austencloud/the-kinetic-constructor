@@ -31,7 +31,6 @@ class SR_CaptureFrame(QFrame):
 
     def _setup_layout(self) -> None:
         self.layout: QHBoxLayout = QHBoxLayout(self)
-        # self.layout.setSpacing(0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.addWidget(self.SR_beat_frame, 1)
         self.layout.addWidget(self.video_display_frame, 1)

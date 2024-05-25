@@ -20,7 +20,9 @@ from objects.prop.prop import Prop
 
 
 from widgets.pictograph.components.elemental_glyph.elemental_glyph import ElementalGlyph
-from widgets.pictograph.components.start_to_end_pos_glyph.start_to_end_pos_glyph import StartToEndPosGlyph
+from widgets.pictograph.components.start_to_end_pos_glyph.start_to_end_pos_glyph import (
+    StartToEndPosGlyph,
+)
 from widgets.pictograph.components.tka_glyph.tka_glyph import TKA_Glyph
 from widgets.pictograph.components.vtg_glyph.vtg_glyph import VTG_Glyph
 from widgets.pictograph.components.pictograph_container import (
@@ -98,9 +100,7 @@ class Pictograph(QGraphicsScene):
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.scroll_area: Union[LetterBookScrollArea, OptionPickerScrollArea] = (
-            scroll_area
-        )
+        self.scroll_area = scroll_area
         self.initializer = PictographInitializer(self)
         self.updater = PictographUpdater(self)
         self.image_renderer = PictographImageRenderer(self)

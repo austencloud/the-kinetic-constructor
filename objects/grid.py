@@ -94,6 +94,11 @@ class Grid:
         self._create_grid_items(scene)
         self.center = self.grid_data.center_point.coordinates
 
+    def hide(self):
+        for item in self.items.values():
+            item.setVisible(False)
+            
+
     def toggle_non_radial_points_visibility(self, visible: bool):
         self.nonradial_layer.setVisible(visible)
 

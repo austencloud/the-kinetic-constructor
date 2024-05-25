@@ -17,6 +17,7 @@ class PictographViewMouseEventHandler:
                 self.pictograph
             )
             return
+        
         widget_pos = event.pos()
         scene_pos = self.pictograph_view.mapToScene(widget_pos)
         items_at_pos = self.pictograph_view.scene().items(scene_pos)

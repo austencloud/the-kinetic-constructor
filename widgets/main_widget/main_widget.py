@@ -58,7 +58,7 @@ class MainWidget(QTabWidget):
         self._setup_components()
         self.setStyleSheet(get_tab_stylesheet())
         self.webcam_initialized = False  # Add an initialization flag
-        self.initialize_webcam_async()  # Start webcam initialization
+        # self.initialize_webcam_async()  # Start webcam initialization
         self.initialized = True
 
     def initialize_webcam_async(self):
@@ -71,6 +71,7 @@ class MainWidget(QTabWidget):
         """Method to request webcam initialization via signal."""
         self.sequence_recorder.capture_frame.video_display_frame.request_init_webcam()
         print("Webcam initialization requested")
+        pass
 
     def _setup_pictograph_cache(self) -> None:
         self.pictograph_cache: dict[str, dict[str, "Pictograph"]] = {}
