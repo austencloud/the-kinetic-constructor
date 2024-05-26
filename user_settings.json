@@ -39,6 +39,6 @@
             }
         },
         "current_user": "AC",
-        "include_start_position": false
+        "include_start_position": true
     }
 }

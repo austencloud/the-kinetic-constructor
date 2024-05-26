@@ -87,6 +87,10 @@ class SettingsManager(QObject):
         image_export_settings: dict = self.settings.get("image_export_options", {})
         return image_export_settings.get(key, default)
 
+    def set_setting(self, key, value):
+        self.settings[key] = value
+        self.save_settings()
+
     def set_image_export_setting(self, key, value):
         if "image_export_options" not in self.settings:
             self.settings["image_export_options"] = {}
@@ -107,9 +111,6 @@ class SettingsManager(QObject):
     def get_setting(self, key, default=None):
         return self.settings.get(key, default)
     
-    def set_setting(self, key, value):
-        self.settings[key] = value
-        self.save_settings()
 
     def get_prop_type(self) -> PropType:
         return PropType[self.get_setting("prop_type", "Staff")]

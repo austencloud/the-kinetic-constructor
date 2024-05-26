@@ -85,10 +85,9 @@ def main() -> None:
     main_window = MainWindow(profiler)
     main_window.show()  # Display the main window
 
-    # Finish the splash when the main window is ready
     QTimer.singleShot(
         1000, lambda: splash.finish(main_window)
-    )  # Close splash after a delay
+    ) 
 
     sys.exit(app.exec())
 

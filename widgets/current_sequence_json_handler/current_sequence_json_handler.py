@@ -28,7 +28,7 @@ class CurrentSequenceJsonHandler:
         self.ori_calculator = CurrentSequenceJsonOriCalculator(self)
         self.validation_engine = SequenceValidationEngine(self)
 
-        self.clear_current_sequence_file()  # Clears or initializes the file at the new location
+        # self.clear_current_sequence_file()  # Clears or initializes the file at the new location
 
     def update_sequence_properties(self):
         sequence = self.load_current_sequence_json()
@@ -157,6 +157,7 @@ class CurrentSequenceJsonHandler:
         sequence_data.append(beat_view.beat.pictograph_dict)
         self.save_current_sequence(sequence_data)
         self.update_sequence_properties()  # Recalculate circularity after each update
+        self.main_widget.main_window.settings_manager.save_settings()  # Save state on change
 
     def clear_and_repopulate_the_current_sequence(self):
         self.clear_current_sequence_file()
@@ -168,6 +169,8 @@ class CurrentSequenceJsonHandler:
         for beat_view in beat_views:
             if beat_view.is_filled:
                 self.update_current_sequence_file_with_beat(beat_view)
+        self.main_widget.main_window.settings_manager.save_settings()  # Save state on change
+
 
     def get_index_for_pictograph(self, pictograph: Pictograph):
         sequence = self.load_current_sequence_json()

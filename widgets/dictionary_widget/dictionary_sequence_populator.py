@@ -70,7 +70,6 @@ class DictionarySequencePopulator:
 
         sequence = self.json_handler.load_current_sequence_json()
 
-        self.sequence_builder.option_picker.resize_option_picker()
         scroll_area = self.sequence_builder.option_picker.scroll_area
         scroll_area.remove_irrelevant_pictographs()
         scroll_area.add_and_display_relevant_pictographs(
@@ -78,4 +77,5 @@ class DictionarySequencePopulator:
                 sequence
             )
         )
+        self.sequence_builder.option_picker.resize_option_picker()
         # last_beat.view.beat_frame.selection_manager.select_beat(last_beat.view)

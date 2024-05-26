@@ -113,6 +113,7 @@ class MainWidget(QTabWidget):
         # set the tab to the dictionary tab
         self.setCurrentIndex(self.builder_tab_index)
 
+
         # self.addTab(self.letterbook, "LetterBook")
         self.initialized = True
 
@@ -171,8 +172,12 @@ class MainWidget(QTabWidget):
             self.resize_widget(self.currentWidget())
         self.setCurrentWidget(starting_widget)
 
-    def showEvent(self, event) -> None:
+    def showEvent(self, event):
         super().showEvent(event)
+        self.load_state()
+        
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
         self.main_window.window_manager.set_dimensions()
         self.resize_all_widgets()
 
@@ -194,3 +199,23 @@ class MainWidget(QTabWidget):
             self.background_manager = WaterRipplesBackgroundManager(self)
         # Add other conditions for different backgrounds
         self.background_manager.update_required.connect(self.update)
+
+    def closeEvent(self, event):
+        self.save_state()
+        event.accept()
+
+    def save_state(self):
+        self.json_manager.current_sequence_json_handler.save_current_sequence(
+            self.json_manager.current_sequence_json_handler.load_current_sequence_json()
+        )
+        self.main_window.settings_manager.save_settings()
+
+    def load_state(self):
+        self.main_window.settings_manager.load_settings()
+        current_sequence = (
+            self.json_manager.current_sequence_json_handler.load_current_sequence_json()
+        )
+        if len(current_sequence) > 1:
+            self.top_builder_widget.sequence_builder.transition_to_sequence_building()
+            self.dictionary.sequence_populator.populate_sequence(current_sequence)
+            self.top_builder_widget.sequence_builder.option_picker.update_option_picker()
