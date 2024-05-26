@@ -20,6 +20,7 @@ from PyQt6.QtGui import QImage, QPainter, QPixmap, QFont
 from PyQt6.QtWidgets import QFileDialog
 import os
 
+
 class SequenceImageExportManager:
     last_save_directory = None
 
@@ -59,16 +60,9 @@ class SequenceImageExportManager:
                 "include_start_position", self.include_start_pos
             )
 
-            sequence_image = self.create_image(column_count, row_count)
-            self._draw_beats(
-                sequence_image,
-                filled_beats,
-                column_count,
-                row_count,
-                self.include_start_pos
+            sequence_image = self.create_sequence_image(
+                sequence, self.include_start_pos, options
             )
-            self._add_user_info_to_image(sequence_image, options)
-
             self.save_image(sequence_image)
             print("Image created with start position included:", self.include_start_pos)
 
@@ -110,9 +104,8 @@ class SequenceImageExportManager:
             self.indicator_label.show_message("Failed to save image.")
 
     def create_sequence_image(
-        self, sequence: list[dict], include_start_pos=True
+        self, sequence: list[dict], include_start_pos=True, options: dict = None
     ) -> QImage:
-
         filled_beats = self.process_sequence_to_beats(sequence)
         column_count, row_count = self.layout_manager.calculate_layout(
             len(filled_beats), include_start_pos
@@ -121,6 +114,8 @@ class SequenceImageExportManager:
         self._draw_beats(
             image, filled_beats, column_count, row_count, include_start_pos
         )
+        if options:
+            self._add_user_info_to_image(image, options)
         return image
 
     def process_sequence_to_beats(self, sequence: list[dict]):
@@ -147,7 +142,7 @@ class SequenceImageExportManager:
     def create_image(self, column_count, row_count) -> QImage:
         self.beat_size = int(self.beat_frame.start_pos_view.beat.width())
         image_width = column_count * self.beat_size
-        image_height = row_count * self.beat_size
+        image_height = row_count * self.beat_size + 50  # Extra height for text
         image = QImage(image_width, image_height, QImage.Format.Format_ARGB32)
         image.fill(Qt.GlobalColor.white)
         return image
@@ -193,14 +188,18 @@ class SequenceImageExportManager:
         painter = QPainter(image)
         font = QFont("Arial", 12)
         painter.setFont(font)
-        
+
         user_name = options.get("user_name", "Your Name")
         export_date = options.get("export_date", datetime.now().strftime("%m-%d-%Y"))
 
         # Adding text to the bottom of the image
         margin = 10
-        painter.drawText(margin, image.height() - margin, f"Created using the Kinetic Alphabet")
-        painter.drawText(margin, image.height() - 2 * margin, user_name)
-        painter.drawText(image.width() - 100, image.height() - 2 * margin, export_date)
+        painter.drawText(
+            margin, image.height() - margin - 10, f"Created using the Kinetic Alphabet"
+        )
+        painter.drawText(margin, image.height() - 2 * margin - 10, user_name)
+        painter.drawText(
+            image.width() - 100, image.height() - 2 * margin - 10, export_date
+        )
 
         painter.end()

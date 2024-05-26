@@ -52,7 +52,7 @@ class ExportDialogControlPanel(QWidget):
         self.cancel_button.clicked.connect(export_dialog.reject)
         self.add_user_button.clicked.connect(self._add_new_user)
 
-        self.optionChanged.connect(self.update_preview_based_on_options)
+        self.optionChanged.connect(lambda: self.update_preview_based_on_options)
         self.include_start_pos_check.setChecked(
             self.export_dialog.export_manager.include_start_pos
         )

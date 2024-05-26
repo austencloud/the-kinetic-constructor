@@ -44,6 +44,6 @@
             }
         },
         "current_user": "Austen Cloud",
-        "include_start_position": false
+        "include_start_position": true
     }
 }

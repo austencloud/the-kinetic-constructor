@@ -38,8 +38,12 @@ class ExportDialogPreviewPanel(QFrame):
     def update_preview_with_start_pos(
         self, include_start_pos: bool, sequence: list[dict]
     ):
+        options = {
+            "user_name": self.export_dialog.control_panel.user_combo_box.currentText(),
+            "export_date": self.export_dialog.control_panel.add_date_field.text(),
+        }
         self.image = self.export_dialog.export_manager.create_sequence_image(
-            sequence, include_start_pos
+            sequence, include_start_pos, options
         )
         self.preview_image = QPixmap.fromImage(self.image)
         self.update_preview()
