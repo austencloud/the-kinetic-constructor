@@ -28,6 +28,7 @@ class OptionPicker(QWidget):
         self.choose_your_next_pictograph_label = ChooseYourNextPictographLabel(self)
         self.setStyleSheet("background-color: rgba(0, 0, 0, 200);")
         self.setup_layout()
+        self.disabled = False
         self.hide()
 
     def setup_layout(self) -> None:
@@ -43,6 +44,8 @@ class OptionPicker(QWidget):
         self.layout.addWidget(self.scroll_area, 14)
 
     def update_option_picker(self):
+        if self.disabled:
+            return
         current_sequence_json_handler = (
             self.main_widget.json_manager.current_sequence_json_handler
         )
@@ -57,3 +60,7 @@ class OptionPicker(QWidget):
     def resize_option_picker(self) -> None:
         self.choose_your_next_pictograph_label.resize_choose_your_next_option_label()
         self.scroll_area.resize_option_picker_scroll_area()
+
+    def set_disabled(self, disabled: bool) -> None:
+        self.disabled = disabled
+        self.scroll_area.set_disabled(disabled)

@@ -38,6 +38,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
 
         self.pictograph_cache: dict[str, Pictograph] = {}
         self.stretch_index: int = -1
+        self.disabled = False
 
         self.set_layout("VBox")
         self.sections_manager = OptionPickerSectionsManager(self)
@@ -61,6 +62,8 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             pictograph.view.hide()
 
     def add_and_display_relevant_pictographs(self, next_options: list[dict]) -> None:
+        if self.disabled:
+            return
         if QApplication.overrideCursor() is None:
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         valid_next_options = []
@@ -121,6 +124,8 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             section.resize_option_picker_section_widget()
 
     def wheelEvent(self, event: QWheelEvent) -> None:
+        if self.disabled:
+            return
         modifiers = QApplication.keyboardModifiers()
         if modifiers == Qt.KeyboardModifier.ControlModifier:
             delta = event.angleDelta().y()
@@ -133,6 +138,8 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             event.ignore()
 
     def change_pictograph_size(self, increase: bool) -> None:
+        if self.disabled:
+            return
         MAX_COLUMN_COUNT = 8
         MIN_COLUMN_COUNT = 3
         current_size = self.display_manager.COLUMN_COUNT
@@ -142,3 +149,9 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         elif not increase and current_size < MAX_COLUMN_COUNT:
             self.display_manager.COLUMN_COUNT += 1
         # self.display_manager.order_and_display_pictographs()
+
+    def set_disabled(self, disabled: bool) -> None:
+        self.disabled = disabled
+        for section in self.sections_manager.sections.values():
+            for pictograph in section.pictographs.values():
+                pictograph.view.set_enabled(not disabled)

@@ -1,8 +1,5 @@
 from typing import TYPE_CHECKING, Union
-from PyQt6.QtWidgets import (
-    QGraphicsScene,
-    QGraphicsPixmapItem,
-)
+from PyQt6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QScrollArea
 from Enums.Enums import (
     Letter,
     OpenCloseStates,
@@ -100,7 +97,7 @@ class Pictograph(QGraphicsScene):
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.scroll_area = scroll_area
+        self.scroll_area: QScrollArea = scroll_area
         self.initializer = PictographInitializer(self)
         self.updater = PictographUpdater(self)
         self.image_renderer = PictographImageRenderer(self)

@@ -61,6 +61,9 @@ class SW_LayoutOptionsDialog(QDialog):
         self.panel = LayoutOptionsPanel(self)
         self.preview = LayoutOptionsPreview(self)
 
+        self._setup_cancel_button()
+        self._setup_apply_button()
+        self._setup_action_button_layout()
         self._setup_main_layout()
         self._setup_layout_options()
 
@@ -68,6 +71,21 @@ class SW_LayoutOptionsDialog(QDialog):
             self.panel.initialize_from_state(initial_state)
         else:
             self.panel.load_settings()
+
+    def _setup_cancel_button(self):
+        self.cancel_button = QPushButton("Cancel")
+        self.cancel_button.clicked.connect(self.close)
+
+    def _setup_apply_button(self):
+        self.apply_button = QPushButton("Apply")
+        self.apply_button.clicked.connect(self.apply_settings)
+
+    def _setup_action_button_layout(self):
+        self.action_button_layout = QHBoxLayout()
+        # add stretch to center the buttons
+        self.action_button_layout.addStretch(1)
+        self.action_button_layout.addWidget(self.cancel_button)
+        self.action_button_layout.addWidget(self.apply_button)
 
     def _set_size(self):
         main_widget_size = self.sequence_widget.main_widget.size()
@@ -77,8 +95,9 @@ class SW_LayoutOptionsDialog(QDialog):
 
     def _setup_main_layout(self):
         self.main_layout = QVBoxLayout(self)
-        self.main_layout.addWidget(self.preview, 3)
-        self.main_layout.addWidget(self.panel, 1)
+        self.main_layout.addWidget(self.panel, 3)
+        self.main_layout.addWidget(self.preview, 9)
+        self.main_layout.addLayout(self.action_button_layout, 1)
 
     def _setup_layout_options(self):
         self.panel.layout_combo_box.clear()
@@ -110,18 +129,42 @@ class SW_LayoutOptionsDialog(QDialog):
             if num_beats < num_filled_beats:
                 if self.open_warning_dialog():
                     self.sequence_widget.apply_layout_options(rows, cols, num_beats)
-                    # clear the remaining beats
                     for i in range(num_beats, num_filled_beats):
                         self.sequence_widget.beat_frame.beats[i].setScene(
                             self.sequence_widget.beat_frame.beats[i].blank_beat
                         )
-                    # Update the selection overlay
-                    self.sequence_widget.beat_frame.selection_manager.select_beat(
-                        self.sequence_widget.beat_frame.beats[num_beats - 1]
+                    selected_beat_index = (
+                        self.sequence_widget.beat_frame.selection_manager.selected_beat.number
+                        - 1
                     )
+                    if (
+                        selected_beat_index is not None
+                        and selected_beat_index >= num_beats
+                    ):
+                        self.sequence_widget.beat_frame.selection_manager.select_beat(
+                            self.sequence_widget.beat_frame.beats[num_beats - 1]
+                        )
+                else:
+                    return
             else:
                 self.sequence_widget.apply_layout_options(rows, cols, num_beats)
+        self.check_option_picker_state()
         self.accept()
+
+    def check_option_picker_state(self):
+        option_picker = (
+            self.sequence_widget.top_builder_widget.sequence_builder.option_picker
+        )
+        if (
+            not self.settings_manager.get_grow_sequence()
+            and self.sequence_widget.beat_frame.find_next_available_beat() - 1
+            >= sum(
+                1 for beat in self.sequence_widget.beat_frame.beats if beat.isVisible()
+            )
+        ):
+            option_picker.set_disabled(True)
+        else:
+            option_picker.set_disabled(False)
 
     def open_warning_dialog(self):
         dialog = LayoutWarningDialog(self)

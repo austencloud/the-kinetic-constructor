@@ -29,5 +29,5 @@
     },
     "non_radial_points_visibility": false,
     "background_type": "Rainbow",
-    "grow_sequence": false
+    "grow_sequence": true
 }

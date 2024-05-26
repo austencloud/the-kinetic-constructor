@@ -74,14 +74,31 @@ class SW_BeatFrame(QFrame):
 
     def add_beat_to_sequence(self, new_beat: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()
-        if next_beat_index is not None:
-            self.beats[next_beat_index].set_beat(new_beat, next_beat_index + 1)
-            self.current_sequence_json_handler.update_current_sequence_file_with_beat(
-                self.beats[next_beat_index]
-            )
-            self.sequence_widget.update_current_word()  # Update the current word
-            if self.settings_manager.get_grow_sequence():
-                self.adjust_layout_to_sequence_length()
+
+        grow_sequence = self.settings_manager.get_grow_sequence()
+        if grow_sequence:
+            if (
+                next_beat_index is not None
+                and self.beats[next_beat_index].is_filled is False
+            ):
+                self.beats[next_beat_index].set_beat(new_beat, next_beat_index + 1)
+                self.current_sequence_json_handler.update_current_sequence_file_with_beat(
+                    self.beats[next_beat_index]
+                )
+                self.sequence_widget.update_current_word()  # Update the current word
+                if self.settings_manager.get_grow_sequence():
+                    self.adjust_layout_to_sequence_length()
+        elif not grow_sequence:
+            if (
+                next_beat_index is not None
+                and self.beats[next_beat_index].is_filled is False
+                and self.beats[next_beat_index].isVisible()
+            ):
+                self.beats[next_beat_index].set_beat(new_beat, next_beat_index + 1)
+                self.current_sequence_json_handler.update_current_sequence_file_with_beat(
+                    self.beats[next_beat_index]
+                )
+                self.sequence_widget.update_current_word()
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):

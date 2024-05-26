@@ -68,6 +68,10 @@ class PictographView(QGraphicsView):
 
     ### EVENTS ###
 
+    def set_enabled(self, enabled: bool) -> None:
+        self._ignoreMouseEvents = not enabled
+        
+
     def wheelEvent(self, event) -> None:
         if self.pictograph.scroll_area:
             self.pictograph.scroll_area.wheelEvent(event)
