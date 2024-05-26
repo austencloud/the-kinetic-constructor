@@ -1,18 +1,8 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QPainter
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
-from background_managers.background_manager import (
-    RainbowBackgroundManager,
-)
-from background_managers.background_manager import (
-    AttractionParticlesBackgroundManager,
-    AuroraBackgroundManager,
-    AuroraBorealisBackgroundManager,
-    ParticleBackgroundManager,
-    RainbowBackgroundManager,
-    StarfieldBackgroundManager,
-    WaterRipplesBackgroundManager,
-)
+
+
 from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
     DictionaryBrowser,
 )

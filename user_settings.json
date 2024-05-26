@@ -25,7 +25,7 @@
         "layer2_strict": false
     },
     "non_radial_points_visibility": false,
-    "background_type": "WaterRipples",
+    "background_type": "Rainbow",
     "grow_sequence": true,
     "image_export_options": {
         "user_profiles": {

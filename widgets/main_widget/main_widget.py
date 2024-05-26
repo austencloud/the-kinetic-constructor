@@ -6,15 +6,7 @@ from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from Enums.PropTypes import PropType
 
-from background_managers.background_manager import (
-    AttractionParticlesBackgroundManager,
-    AuroraBackgroundManager,
-    AuroraBorealisBackgroundManager,
-    ParticleBackgroundManager,
-    RainbowBackgroundManager,
-    StarfieldBackgroundManager,
-    WaterRipplesBackgroundManager,
-)
+
 from objects.graphical_object.graphical_object_svg_manager import (
     GraphicalObjectSvgManager,
 )

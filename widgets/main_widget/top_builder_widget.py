@@ -3,15 +3,6 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtGui import QPainter
 
 
-from background_managers.background_manager import (
-    AttractionParticlesBackgroundManager,
-    AuroraBackgroundManager,
-    AuroraBorealisBackgroundManager,
-    ParticleBackgroundManager,
-    RainbowBackgroundManager,
-    StarfieldBackgroundManager,
-    WaterRipplesBackgroundManager,
-)
 from widgets.sequence_builder.sequence_builder import SequenceBuilder
 from widgets.sequence_widget.sequence_widget import SequenceWidget
 
@@ -49,7 +40,7 @@ class TopBuilderWidget(QWidget):
             self.main_widget.main_window.settings_manager.setup_background_manager(self)
         )
         self.background_manager.update_required.connect(self.update)
-        self.update()  # Ensure the widget is redrawn with the new background
+        self.update()
 
     def paintEvent(self, event):
         painter = QPainter(self)

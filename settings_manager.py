@@ -4,7 +4,13 @@ import os
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
 from PyQt6.QtCore import QObject, pyqtSignal
+from background_managers.aurora_background_manager import AuroraBackgroundManager
+from background_managers.aurora_borealis_background_manager import AuroraBorealisBackgroundManager
 from background_managers.background_manager import *
+from background_managers.particle_background_manager import ParticleBackgroundManager
+from background_managers.rainbow_background_manager import RainbowBackgroundManager
+from background_managers.startfield_background_manager import StarfieldBackgroundManager
+from background_managers.water_ripple_background_manager import WaterRipplesBackgroundManager
 from path_helpers import get_user_editable_resource_path
 from widgets.menu_bar.glyph_visibility_manager import GlyphVisibilityManager
 from prop_type_changer import PropTypeChanger
@@ -138,8 +144,7 @@ class SettingsManager(QObject):
             return AuroraBackgroundManager(widget)
         elif bg_type == "AuroraBorealis":
             return AuroraBorealisBackgroundManager(widget)
-        elif bg_type == "AttractionParticles":
-            return AttractionParticlesBackgroundManager(widget)
+
         elif bg_type == "WaterRipples":
             return WaterRipplesBackgroundManager(widget)
         return None

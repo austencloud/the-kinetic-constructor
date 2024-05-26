@@ -35,7 +35,6 @@ class MainWindowMenuBar(QMenuBar):
             "Starfield",
             "Particle",
             "Aurora",
-            "AttractionParticles",
             "AuroraBorealis",
             "WaterRipples",
         ]
