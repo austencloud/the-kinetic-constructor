@@ -110,12 +110,11 @@ class MainWidget(QTabWidget):
         self.dictionary_tab_index = 1
         self.recorder_tab_index = 2
 
-        # set the tab to the dictionary tab
         self.setCurrentIndex(self.builder_tab_index)
-
-
-        # self.addTab(self.letterbook, "LetterBook")
         self.initialized = True
+
+        # Apply the initial background
+        self.apply_background()
 
     def _setup_special_placements(self) -> None:
         self.special_placements: dict[
@@ -181,24 +180,13 @@ class MainWidget(QTabWidget):
         self.main_window.window_manager.set_dimensions()
         self.resize_all_widgets()
 
-    def apply_background(self, bg_type: str):
-        # Fetch the preferred background type from settings
-        if bg_type == "Rainbow":
-            self.background_manager = RainbowBackgroundManager(self)
-        elif bg_type == "Starfield":
-            self.background_manager = StarfieldBackgroundManager(self)
-        elif bg_type == "Particle":
-            self.background_manager = ParticleBackgroundManager(self)
-        elif bg_type == "Aurora":
-            self.background_manager = AuroraBackgroundManager(self)
-        elif bg_type == "AuroraBorealis":
-            self.background_manager = AuroraBorealisBackgroundManager(self)
-        elif bg_type == "AttractionParticles":
-            self.background_manager = AttractionParticlesBackgroundManager(self)
-        elif bg_type == "WaterRipples":
-            self.background_manager = WaterRipplesBackgroundManager(self)
-        # Add other conditions for different backgrounds
+    def apply_background(self):
+        self.background_manager = self.main_window.settings_manager.setup_background_manager(self)
         self.background_manager.update_required.connect(self.update)
+
+    def update_background(self, bg_type: str):
+        self.apply_background()
+        self.update()  # Ensure the widget is redrawn with the new background
 
     def closeEvent(self, event):
         self.save_state()

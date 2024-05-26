@@ -1,6 +1,6 @@
 {
     "pictograph_size": 1,
-    "prop_type": "Staff",
+    "prop_type": "Club",
     "glyph_visibility": {
         "VTG": false,
         "TKA": true,
@@ -25,14 +25,10 @@
         "layer2_strict": false
     },
     "non_radial_points_visibility": false,
-    "background_type": "Rainbow",
+    "background_type": "WaterRipples",
     "grow_sequence": true,
     "image_export_options": {
         "user_profiles": {
-            "Austen Cloud": {
-                "name": "Austen Cloud",
-                "export_date": "05-26-2024"
-            },
             "AC": {
                 "name": "AC",
                 "export_date": "05-26-2024"

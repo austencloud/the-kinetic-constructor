@@ -13,7 +13,9 @@ from background_managers.background_manager import (
     StarfieldBackgroundManager,
     WaterRipplesBackgroundManager,
 )
-from widgets.dictionary_widget.dictionary_browser.dictionary_browser import DictionaryBrowser
+from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
+    DictionaryBrowser,
+)
 from widgets.dictionary_widget.dictionary_deletion_manager import (
     DictionaryDeletionManager,
 )
@@ -33,30 +35,20 @@ class DictionaryWidget(QWidget):
         self._setup_ui()
         self.selected_sequence_dict = None
 
-        self._setup_background_manager()  # Setup background based on user preferences
+        self.background_manager = (
+            self.main_widget.main_window.settings_manager.setup_background_manager(self)
+        )
+        self.connect_signals()
 
-    def _setup_background_manager(self):
-        # Fetch the preferred background type from settings
-        bg_type = self.main_widget.main_window.settings_manager.get_setting(
-            "background_type", "Rainbow"
+    def connect_signals(self):
+        self.main_widget.main_window.settings_manager.background_changed.connect(
+            self.update_background_manager
         )
 
-        if bg_type == "Rainbow":
-            self.background_manager = RainbowBackgroundManager(self)
-        elif bg_type == "Starfield":
-            self.background_manager = StarfieldBackgroundManager(self)
-        elif bg_type == "Particle":
-            self.background_manager = ParticleBackgroundManager(self)
-        elif bg_type == "Aurora":
-            self.background_manager = AuroraBackgroundManager(self)
-        elif bg_type == "AuroraBorealis":
-            self.background_manager = AuroraBorealisBackgroundManager(self)
-        elif bg_type == "AttractionParticles":
-            self.background_manager = AttractionParticlesBackgroundManager(self)
-        elif bg_type == "WaterRipples":
-            self.background_manager = WaterRipplesBackgroundManager(self)
-        # Add other conditions for different backgrounds
+    def update_background_manager(self, bg_type: str):
+        self.background_manager = self.main_widget.main_window.settings_manager.setup_background_manager(self)
         self.background_manager.update_required.connect(self.update)
+        self.update()  # Ensure the widget is redrawn with the new background
 
     def paintEvent(self, event):
         painter = QPainter(self)

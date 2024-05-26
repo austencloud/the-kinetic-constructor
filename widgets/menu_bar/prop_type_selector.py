@@ -42,7 +42,7 @@ class PropTypeSelector(QWidget):
         new_prop_type = self.prop_type_combobox.currentText()
         self.on_prop_type_changed(new_prop_type)
 
-    def on_prop_type_changed(self, new_prop_type: str) -> None:
+    def on_prop_type_changed(self, new_prop_type: PropType) -> None:
         self.main_widget.main_window.settings_manager.set_prop_type(new_prop_type)
         self.main_widget.main_window.settings_manager.save_settings()
         self.prop_type_changer.apply_prop_type()

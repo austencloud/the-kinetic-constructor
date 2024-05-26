@@ -4,6 +4,7 @@ import os
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
 from PyQt6.QtCore import QObject, pyqtSignal
+from background_managers.background_manager import *
 from path_helpers import get_user_editable_resource_path
 from widgets.menu_bar.glyph_visibility_manager import GlyphVisibilityManager
 from prop_type_changer import PropTypeChanger
@@ -21,36 +22,35 @@ class SettingsManager(QObject):
     MIN_COLUMN_COUNT = 3
     DEFAULT_SETTINGS = {
         "pictograph_size": 1,
-        "prop_type": "Staff",
+        "prop_type": "Club",
         "glyph_visibility": {
             "VTG": False,
             "TKA": True,
-            "Elemental": True,
-            "EndPosition": True,
+            "Elemental": False,
+            "EndPosition": False,
         },
         "default_left_orientation": "out",
-        "default_right_orientation": "out",
+        "default_right_orientation": "counter",
         "default_left_orientation_Hand": "out",
         "default_right_orientation_Hand": "in",
         "word_length_visibility": {
             "2": False,
             "3": False,
             "4": False,
-            "5": False,
+            "5": True,
             "6": False,
             "7": False,
             "8": False,
         },
-        "image_export_options": {
-            "include_start_pos": False,
-            "current_user": "TacoCat",
-            "user_profiles": {
-                "TacoCat": {
-                    "name": "TacoCat",
-                },
-            },
-        },
+        "grid_visibility": {"layer2_normal": False, "layer2_strict": False},
+        "non_radial_points_visibility": False,
+        "background_type": "Rainbow",
         "grow_sequence": True,
+        "image_export_options": {
+            "user_profiles": {"AC": {"name": "AC", "export_date": "05-26-2024"}},
+            "current_user": "AC",
+            "include_start_position": True,
+        },
     }
 
     def __init__(self, main_window: "MainWindow") -> None:
@@ -110,11 +110,36 @@ class SettingsManager(QObject):
 
     def get_setting(self, key, default=None):
         return self.settings.get(key, default)
-    
 
     def get_prop_type(self) -> PropType:
         return PropType[self.get_setting("prop_type", "Staff")]
-    
+
     def set_prop_type(self, prop_type: PropType) -> None:
         self.set_setting("prop_type", prop_type.name)
-        
+
+
+    def get_background_type(self) -> str:
+        return self.settings.get("background_type", "Rainbow")
+
+    def set_background_type(self, background_type: str) -> None:
+        self.settings["background_type"] = background_type
+        self.save_settings()
+        self.background_changed.emit(background_type)
+
+    def setup_background_manager(self, widget):
+        bg_type = self.get_background_type()
+        if bg_type == "Rainbow":
+            return RainbowBackgroundManager(widget)
+        elif bg_type == "Starfield":
+            return StarfieldBackgroundManager(widget)
+        elif bg_type == "Particle":
+            return ParticleBackgroundManager(widget)
+        elif bg_type == "Aurora":
+            return AuroraBackgroundManager(widget)
+        elif bg_type == "AuroraBorealis":
+            return AuroraBorealisBackgroundManager(widget)
+        elif bg_type == "AttractionParticles":
+            return AttractionParticlesBackgroundManager(widget)
+        elif bg_type == "WaterRipples":
+            return WaterRipplesBackgroundManager(widget)
+        return None

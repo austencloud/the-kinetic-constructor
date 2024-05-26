@@ -24,7 +24,9 @@ class TopBuilderWidget(QWidget):
         super().__init__()
         self.main_widget = main_widget
 
-        self._setup_background_manager()  # Setup background based on user preferences
+        self.background_manager = (
+            self.main_widget.main_window.settings_manager.setup_background_manager(self)
+        )
 
         self.sequence_builder = SequenceBuilder(self)
         self.sequence_widget = SequenceWidget(self)
@@ -34,7 +36,7 @@ class TopBuilderWidget(QWidget):
 
     def connect_signals(self):
         self.main_widget.main_window.settings_manager.background_changed.connect(
-            self._setup_background_manager
+            self.update_background_manager
         )
 
     def _setup_layout(self):
@@ -42,27 +44,12 @@ class TopBuilderWidget(QWidget):
         self.layout.addWidget(self.sequence_widget, 1)
         self.layout.addWidget(self.sequence_builder, 1)
 
-    def _setup_background_manager(self):
-        # Fetch the preferred background type from settings
-        bg_type = self.main_widget.main_window.settings_manager.get_setting(
-            "background_type", "Rainbow"
+    def update_background_manager(self, bg_type: str):
+        self.background_manager = (
+            self.main_widget.main_window.settings_manager.setup_background_manager(self)
         )
-        if bg_type == "Rainbow":
-            self.background_manager = RainbowBackgroundManager(self)
-        elif bg_type == "Starfield":
-            self.background_manager = StarfieldBackgroundManager(self)
-        elif bg_type == "Particle":
-            self.background_manager = ParticleBackgroundManager(self)
-        elif bg_type == "Aurora":
-            self.background_manager = AuroraBackgroundManager(self)
-        elif bg_type == "AuroraBorealis":
-            self.background_manager = AuroraBorealisBackgroundManager(self)
-        elif bg_type == "AttractionParticles":
-            self.background_manager = AttractionParticlesBackgroundManager(self)
-        elif bg_type == "WaterRipples":
-            self.background_manager = WaterRipplesBackgroundManager(self)
-        # Add other conditions for different backgrounds
         self.background_manager.update_required.connect(self.update)
+        self.update()  # Ensure the widget is redrawn with the new background
 
     def paintEvent(self, event):
         painter = QPainter(self)
