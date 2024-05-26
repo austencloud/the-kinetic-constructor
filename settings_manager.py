@@ -47,7 +47,6 @@ class SettingsManager(QObject):
             "user_profiles": {
                 "TacoCat": {
                     "name": "TacoCat",
-                    "export_date": datetime.now().strftime("%m-%d-%Y"),
                 },
             },
         },

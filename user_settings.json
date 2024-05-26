@@ -20,15 +20,6 @@
         "7": false,
         "8": false
     },
-    "image_export": {
-        "include_start_position": true,
-        "user_profiles": {
-            "Austen Cloud": {
-                "name": "Austen Cloud",
-                "export_date": "05-25-2024"
-            }
-        }
-    },
     "grid_visibility": {
         "layer2_normal": false,
         "layer2_strict": false
@@ -40,10 +31,14 @@
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
-                "export_date": "05-25-2024"
+                "export_date": "05-26-2024"
+            },
+            "AC": {
+                "name": "AC",
+                "export_date": "05-26-2024"
             }
         },
-        "current_user": "Austen Cloud",
-        "include_start_position": true
+        "current_user": "AC",
+        "include_start_position": false
     }
 }

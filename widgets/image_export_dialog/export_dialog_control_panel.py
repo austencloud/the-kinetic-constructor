@@ -25,9 +25,18 @@ class ExportDialogControlPanel(QWidget):
         self.settings_manager = export_dialog.export_manager.settings_manager
         self.layout: QVBoxLayout = QVBoxLayout(self)
 
+        self.checkbox_layout = QHBoxLayout()
+
         self.include_start_pos_check = QCheckBox("Include Start Position", self)
         self.include_start_pos_check.setChecked(True)
         self.include_start_pos_check.toggled.connect(self.optionChanged.emit)
+
+        self.append_info_check = QCheckBox("Add Info", self)
+        self.append_info_check.setChecked(True)
+        self.append_info_check.toggled.connect(self.toggle_info_fields)
+
+        self.checkbox_layout.addWidget(self.include_start_pos_check)
+        self.checkbox_layout.addWidget(self.append_info_check)
 
         self.user_layout = QHBoxLayout()
         self.user_combo_box = QComboBox(self)
@@ -42,7 +51,7 @@ class ExportDialogControlPanel(QWidget):
         self._setup_buttons()
 
         self.layout.addStretch(1)
-        self.layout.addWidget(self.include_start_pos_check)
+        self.layout.addLayout(self.checkbox_layout)
         self.layout.addLayout(self.user_layout)
         self.layout.addWidget(self.add_date_field)
         self.layout.addLayout(self.button_layout)
@@ -59,6 +68,9 @@ class ExportDialogControlPanel(QWidget):
         self.include_start_pos_check.toggled.connect(
             self.export_dialog.update_export_setting_and_layout
         )
+
+        # Initial toggle state based on checkbox
+        # self.toggle_info_fields()
 
     def _setup_buttons(self):
         self.button_layout = QHBoxLayout()
@@ -113,3 +125,13 @@ class ExportDialogControlPanel(QWidget):
         self.export_dialog.preview_panel.update_preview_with_start_pos(
             include_start_pos, self.export_dialog.sequence
         )
+
+    def toggle_info_fields(self):
+        state = self.append_info_check.isChecked()
+        self.user_combo_box.setEnabled(state)
+        self.add_user_button.setEnabled(state)
+        self.add_date_field.setEnabled(state)
+        self.add_date_field.setStyleSheet("color: gray;" if not state else "")
+        self.user_combo_box.setStyleSheet("color: gray;" if not state else "")
+        self.add_user_button.setStyleSheet("color: gray;" if not state else "")
+        self.export_dialog.update_preview_based_on_options()

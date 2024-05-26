@@ -36,9 +36,11 @@ class ExportDialogPreviewPanel(QFrame):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def update_preview_with_start_pos(
-        self, include_start_pos: bool, sequence: list[dict]
+        self, include_start_pos: bool, append_info: bool, sequence: list[dict]
     ):
         options = {
+            "include_start_pos": include_start_pos,
+            "append_info": append_info,
             "user_name": self.export_dialog.control_panel.user_combo_box.currentText(),
             "export_date": self.export_dialog.control_panel.add_date_field.text(),
         }
@@ -57,7 +59,7 @@ class ExportDialogPreviewPanel(QFrame):
             image_height = int(image_width / image_aspect_ratio)
 
             if image_height > self.height():
-                image_height = self.height()
+                image_height = int(self.height() * 0.9)
                 image_width = int(image_height * image_aspect_ratio)
 
             scaled_image = self.preview_image.scaled(
@@ -68,3 +70,15 @@ class ExportDialogPreviewPanel(QFrame):
             )
             self.preview_label.setPixmap(scaled_image)
             self.preview_label.setFixedSize(scaled_image.size())
+
+    def update_preview_with_options(
+        self,
+        include_start_pos: bool,
+        sequence: list[dict],
+        options: dict,
+    ):
+        self.image = self.export_dialog.export_manager.create_sequence_image(
+            sequence, include_start_pos, options
+        )
+        self.preview_image = QPixmap.fromImage(self.image)
+        self.update_preview()

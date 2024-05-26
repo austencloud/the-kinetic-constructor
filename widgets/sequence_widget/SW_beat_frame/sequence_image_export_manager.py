@@ -2,7 +2,7 @@ from datetime import datetime
 import os
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QImage, QPainter, QPixmap
+from PyQt6.QtGui import QImage, QPainter, QPixmap, QFont
 from path_helpers import get_my_photos_path
 from widgets.image_export_dialog.image_export_dialog import ImageExportDialog
 from widgets.image_export_layout_manager import ImageExportLayoutManager
@@ -13,12 +13,6 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
         SW_BeatFrame,
     )
-
-
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QImage, QPainter, QPixmap, QFont
-from PyQt6.QtWidgets import QFileDialog
-import os
 
 
 class SequenceImageExportManager:
@@ -54,7 +48,7 @@ class SequenceImageExportManager:
         if dialog.exec():
             options = dialog.get_export_options()
             self.include_start_pos = options.get(
-                "include_start_pos", self.include_start_pos
+                "include_start_position", self.include_start_pos
             )
             self.settings_manager.set_image_export_setting(
                 "include_start_position", self.include_start_pos
@@ -100,21 +94,38 @@ class SequenceImageExportManager:
                 f"Image saved as {os.path.basename(file_name)}"
             )
             self.last_save_directory = os.path.dirname(file_name)
+            self.open_image(file_name)  # Open the image after saving
         else:
             self.indicator_label.show_message("Failed to save image.")
 
+    def open_image(self, file_path: str):
+        try:
+            if os.name == "nt":  # Windows
+                os.startfile(file_path)
+            elif os.name == "posix":  # macOS, Linux
+                subprocess.run(
+                    ["open" if sys.platform == "darwin" else "xdg-open", file_path]
+                )
+        except Exception as e:
+            self.indicator_label.show_message(f"Failed to open image: {str(e)}")
+
     def create_sequence_image(
-        self, sequence: list[dict], include_start_pos=True, options: dict = None
+        self,
+        sequence: list[dict],
+        include_start_pos=True,
+        options: dict = None,
     ) -> QImage:
         filled_beats = self.process_sequence_to_beats(sequence)
         column_count, row_count = self.layout_manager.calculate_layout(
             len(filled_beats), include_start_pos
         )
-        image = self.create_image(column_count, row_count)
+        append_info = options.get("append_info", False)
+        additional_height = 100 if append_info else 0
+        image = self.create_image(column_count, row_count, additional_height)
         self._draw_beats(
             image, filled_beats, column_count, row_count, include_start_pos
         )
-        if options:
+        if append_info and options:
             self._add_user_info_to_image(image, options)
         return image
 
@@ -139,10 +150,10 @@ class SequenceImageExportManager:
         new_beat_view.set_beat(beat, number - 1)
         return new_beat_view
 
-    def create_image(self, column_count, row_count) -> QImage:
+    def create_image(self, column_count, row_count, additional_height=0) -> QImage:
         self.beat_size = int(self.beat_frame.start_pos_view.beat.width())
         image_width = column_count * self.beat_size
-        image_height = row_count * self.beat_size + 50  # Extra height for text
+        image_height = row_count * self.beat_size + additional_height
         image = QImage(image_width, image_height, QImage.Format.Format_ARGB32)
         image.fill(Qt.GlobalColor.white)
         return image
@@ -186,20 +197,47 @@ class SequenceImageExportManager:
 
     def _add_user_info_to_image(self, image: QImage, options: dict):
         painter = QPainter(image)
-        font = QFont("Arial", 12)
-        painter.setFont(font)
 
-        user_name = options.get("user_name", "Your Name")
+        # Fonts for user name and date (bold and italic)
+        font_bold_italic = QFont("Georgia", 40, QFont.Weight.Bold)
+        font_bold_italic.setItalic(True)
+
+        # Font for created text (italic only)
+        font_italic = QFont("Georgia", 40)
+        font_italic.setItalic(True)
+
+        user_name = options.get("user_name", "TacoCat")
         export_date = options.get("export_date", datetime.now().strftime("%m-%d-%Y"))
 
-        # Adding text to the bottom of the image
-        margin = 10
+        # Remove leading zeros from date
+        export_date = "-".join([str(int(part)) for part in export_date.split("-")])
+
+        margin_from_bottom = 30
+
+        # Calculate text widths
+        painter.setFont(font_bold_italic)
+        metrics = painter.fontMetrics()
+        export_date_width = metrics.horizontalAdvance(export_date)
+
+        painter.setFont(font_italic)
+        created_text = "Created using The Kinetic Alphabet"
+        created_text_width = metrics.horizontalAdvance(created_text)
+
+        painter.setFont(font_bold_italic)
         painter.drawText(
-            margin, image.height() - margin - 10, f"Created using the Kinetic Alphabet"
+            margin_from_bottom, image.height() - margin_from_bottom, user_name
         )
-        painter.drawText(margin, image.height() - 2 * margin - 10, user_name)
+        painter.setFont(font_italic)
         painter.drawText(
-            image.width() - 100, image.height() - 2 * margin - 10, export_date
+            (image.width() - created_text_width) // 2,
+            image.height() - margin_from_bottom,
+            created_text,
+        )
+        painter.setFont(font_bold_italic)
+        painter.drawText(
+            image.width() - export_date_width - margin_from_bottom,
+            image.height() - margin_from_bottom,
+            export_date,
         )
 
         painter.end()
