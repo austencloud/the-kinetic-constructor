@@ -58,8 +58,8 @@ class SW_LayoutOptionsDialog(QDialog):
 
         self._set_size()
 
-        self.panel = LayoutOptionsPanel(self)
         self.preview = LayoutOptionsPreview(self)
+        self.panel = LayoutOptionsPanel(self)
 
         self._setup_cancel_button()
         self._setup_apply_button()

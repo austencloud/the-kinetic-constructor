@@ -28,12 +28,12 @@ class LayoutOptionsPanel(QWidget):
 
         self._setup_components()
         self._setup_layout()
+        # self._update_comboboxes_state()
 
     def _setup_components(self):
         self._setup_grow_sequence_checkbox()
         self._setup_number_of_beats_dropdown()
         self._setup_layout_options_dropdown()
-
 
     def _setup_layout(self):
         self.main_layout: QVBoxLayout = QVBoxLayout(self)
@@ -45,7 +45,6 @@ class LayoutOptionsPanel(QWidget):
         )
         self.main_layout.addLayout(self.combobox_layout)
         self.main_layout.addStretch(1)
-
 
     def _setup_combobox_layout(self):
         beats_vbox = QVBoxLayout()
@@ -60,15 +59,18 @@ class LayoutOptionsPanel(QWidget):
         layout_options_vbox.addWidget(self.layout_combo_box)
         layout_options_vbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+        combobox_hbox.addStretch(3)
         combobox_hbox.addLayout(beats_vbox)
+        combobox_hbox.addStretch(1)
         combobox_hbox.addLayout(layout_options_vbox)
+        combobox_hbox.addStretch(3)
         return combobox_hbox
 
     def _setup_grow_sequence_checkbox(self):
         self.sequence_growth_checkbox = QCheckBox("Grow sequence")
         grow_sequence = self.settings_manager.get_grow_sequence()
         self.sequence_growth_checkbox.setChecked(grow_sequence)
-        self.sequence_growth_checkbox.toggled.connect(self.dialog.update_preview)
+        self.sequence_growth_checkbox.toggled.connect(self._update_comboboxes_state)
         font = self.sequence_growth_checkbox.font()
         font_size = self.sequence_widget.width() // 60
         font.setPointSize(font_size)
@@ -98,11 +100,24 @@ class LayoutOptionsPanel(QWidget):
         self.layout_combo_box = QComboBox(self)
         self.layout_combo_box.currentIndexChanged.connect(self.dialog.update_preview)
 
+    def _update_comboboxes_state(self):
+        is_grow_sequence_checked = self.sequence_growth_checkbox.isChecked()
+        state = not is_grow_sequence_checked
 
+        self.beats_label.setEnabled(state)
+        self.beats_combo_box.setEnabled(state)
+        self.layout_label.setEnabled(state)
+        self.layout_combo_box.setEnabled(state)
+
+        color = "grey" if not state else "black"
+        self.beats_label.setStyleSheet(f"color: {color};")
+        self.layout_label.setStyleSheet(f"color: {color};")
+        self.dialog.update_preview()
 
     def load_settings(self):
         grow_sequence = self.settings_manager.get_grow_sequence()
         self.sequence_growth_checkbox.setChecked(grow_sequence)
+        self._update_comboboxes_state()
 
     def initialize_from_state(self, state: dict):
         num_beats = state.get("num_beats", 0)
@@ -114,3 +129,4 @@ class LayoutOptionsPanel(QWidget):
         self.sequence_growth_checkbox.setChecked(grow_sequence)
         self.beats_combo_box.setCurrentText(str(num_beats))
         self.layout_combo_box.setCurrentText(f"{rows} x {cols}")
+        self._update_comboboxes_state()
