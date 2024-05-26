@@ -164,14 +164,13 @@ class SW_BeatFrame(QFrame):
             )
             * 0.8
         )
-        num_cols = max(1, self.layout.columnCount() - 1)  # Excluding start position
+        num_cols = max(1, self.layout.columnCount() - 1)
         if num_cols == 0:
             return
-        beat_size = int(width / (5))  # +1 for start position column
+        beat_size = int(width / (5))
         for beat in self.beats:
             beat.setFixedSize(beat_size, beat_size)
         self.start_pos_view.setFixedSize(beat_size, beat_size)
-        # size their scenes to fit in the view
         for beat in self.beats:
             beat.resize_beat_view()
         self.start_pos_view.resize_beat_view()

@@ -166,14 +166,16 @@ class MainWidget(QTabWidget):
     def showEvent(self, event):
         super().showEvent(event)
         self.load_state()
-        
+        self.resize_all_widgets()
+
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.main_window.window_manager.set_dimensions()
-        self.resize_all_widgets()
 
     def apply_background(self):
-        self.background_manager = self.main_window.settings_manager.setup_background_manager(self)
+        self.background_manager = (
+            self.main_window.settings_manager.setup_background_manager(self)
+        )
         self.background_manager.update_required.connect(self.update)
 
     def update_background(self, bg_type: str):
