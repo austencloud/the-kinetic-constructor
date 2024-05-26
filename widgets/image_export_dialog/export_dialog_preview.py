@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QLabel, QFrame
+from PyQt6.QtWidgets import QLabel, QFrame, QVBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 
@@ -13,26 +13,34 @@ class ExportDialogPreviewPanel(QFrame):
         self.image = image
         self.export_dialog = export_dialog
         self.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Sunken)
+        self.layout: QVBoxLayout = QVBoxLayout(self)
         self.preview_label = QLabel(self)
-        self.preview_label.setAlignment(
-            Qt.AlignmentFlag.AlignCenter
-        )  # Ensure alignment is centered
-        self.preview_label.setScaledContents(True)
+        self.preview_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.preview_label.setScaledContents(False)  # Disable scaled contents
+
         self.json_handler = (
             export_dialog.main_widget.json_manager.current_sequence_json_handler
         )
 
-        dialog_width = export_dialog.width() // 2
+        dialog_width = export_dialog.width()
         dialog_height = export_dialog.height()  # or some other proportion
-        self.setFixedSize(dialog_width, dialog_height)
+        self.setMaximumSize(dialog_width, dialog_height)
+        self.preview_panel_label = QLabel(self)
+        self.preview_panel_label.setText("Preview:")
+        self.preview_panel_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.preview_panel_label.setStyleSheet("font-size: 20px")
+        self.layout.addWidget(self.preview_panel_label)
+        self.layout.addStretch(1)
+        self.layout.addWidget(self.preview_label)
+        self.layout.addStretch(1)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def update_preview_with_start_pos(
         self, include_start_pos: bool, sequence: list[dict]
     ):
-        if not self.image:
-            self.image = self.export_dialog.export_manager.create_sequence_image(
-                sequence, include_start_pos
-            )
+        self.image = self.export_dialog.export_manager.create_sequence_image(
+            sequence, include_start_pos
+        )
         self.preview_image = QPixmap.fromImage(self.image)
         self.update_preview()
 
@@ -41,7 +49,7 @@ class ExportDialogPreviewPanel(QFrame):
             image_aspect_ratio = (
                 self.preview_image.width() / self.preview_image.height()
             )
-            image_width = self.width()
+            image_width = int(self.width() * 0.9)
             image_height = int(image_width / image_aspect_ratio)
 
             if image_height > self.height():
@@ -55,6 +63,4 @@ class ExportDialogPreviewPanel(QFrame):
                 Qt.TransformationMode.SmoothTransformation,
             )
             self.preview_label.setPixmap(scaled_image)
-            label_x = (self.width() - image_width) // 2
-            label_y = (self.height() - image_height) // 2
-            self.preview_label.setGeometry(label_x, label_y, image_width, image_height)
+            self.preview_label.setFixedSize(scaled_image.size())

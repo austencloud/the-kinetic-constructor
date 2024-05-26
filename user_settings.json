@@ -21,7 +21,13 @@
         "8": false
     },
     "image_export": {
-        "include_start_position": false
+        "include_start_position": true,
+        "user_profiles": {
+            "Austen Cloud": {
+                "name": "Austen Cloud",
+                "export_date": "05-25-2024"
+            }
+        }
     },
     "grid_visibility": {
         "layer2_normal": false,
@@ -29,5 +35,15 @@
     },
     "non_radial_points_visibility": false,
     "background_type": "Rainbow",
-    "grow_sequence": true
+    "grow_sequence": true,
+    "image_export_options": {
+        "user_profiles": {
+            "Austen Cloud": {
+                "name": "Austen Cloud",
+                "export_date": "05-25-2024"
+            }
+        },
+        "current_user": "Austen Cloud",
+        "include_start_position": false
+    }
 }

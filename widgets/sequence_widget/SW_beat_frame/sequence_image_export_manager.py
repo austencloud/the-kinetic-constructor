@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
@@ -13,6 +14,11 @@ if TYPE_CHECKING:
         SW_BeatFrame,
     )
 
+
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QImage, QPainter, QPixmap, QFont
+from PyQt6.QtWidgets import QFileDialog
+import os
 
 class SequenceImageExportManager:
     last_save_directory = None
@@ -59,8 +65,9 @@ class SequenceImageExportManager:
                 filled_beats,
                 column_count,
                 row_count,
-                self.include_start_pos,
+                self.include_start_pos
             )
+            self._add_user_info_to_image(sequence_image, options)
 
             self.save_image(sequence_image)
             print("Image created with start position included:", self.include_start_pos)
@@ -116,7 +123,7 @@ class SequenceImageExportManager:
         )
         return image
 
-    def process_sequence_to_beats(self, sequence):
+    def process_sequence_to_beats(self, sequence: list[dict]):
         from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
             SW_BeatFrame,
         )
@@ -181,3 +188,19 @@ class SequenceImageExportManager:
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation,
         )
+
+    def _add_user_info_to_image(self, image: QImage, options: dict):
+        painter = QPainter(image)
+        font = QFont("Arial", 12)
+        painter.setFont(font)
+        
+        user_name = options.get("user_name", "Your Name")
+        export_date = options.get("export_date", datetime.now().strftime("%m-%d-%Y"))
+
+        # Adding text to the bottom of the image
+        margin = 10
+        painter.drawText(margin, image.height() - margin, f"Created using the Kinetic Alphabet")
+        painter.drawText(margin, image.height() - 2 * margin, user_name)
+        painter.drawText(image.width() - 100, image.height() - 2 * margin, export_date)
+
+        painter.end()
