@@ -10,13 +10,16 @@ class GridVisibilityManager:
         self.non_radial_visible = self.load_visibility_settings()
 
     def load_visibility_settings(self) -> bool:
-        return self.settings_manager.get_setting("non_radial_points_visibility", True)
+        return self.settings_manager.settings["grid_visibility"]["non_radial_points"]
 
     def save_visibility_settings(self):
-        self.settings_manager.set_setting(
-            "non_radial_points_visibility", self.non_radial_visible
+        # set the setting within the "grid_visibility" dict in the settings
+        self.settings_manager.settings["grid_visibility"]["non_radial_points"] = (
+            self.non_radial_visible
         )
         self.settings_manager.save_settings()
+
+
 
     def toggle_visibility(self):
         self.non_radial_visible = not self.non_radial_visible

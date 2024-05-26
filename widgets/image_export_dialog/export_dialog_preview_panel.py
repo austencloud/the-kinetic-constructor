@@ -25,22 +25,15 @@ class ExportDialogPreviewPanel(QFrame):
         dialog_width = export_dialog.width()
         dialog_height = export_dialog.height()  # or some other proportion
         self.setMaximumSize(dialog_width, dialog_height)
-        self.preview_panel_label = QLabel(self)
-        self.preview_panel_label.setText("Preview:")
-        self.preview_panel_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.preview_panel_label.setStyleSheet("font-size: 20px")
-        self.layout.addWidget(self.preview_panel_label)
-        self.layout.addStretch(1)
         self.layout.addWidget(self.preview_label)
-        self.layout.addStretch(1)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def update_preview_with_start_pos(
-        self, include_start_pos: bool, append_info: bool, sequence: list[dict]
+        self, include_start_pos: bool, add_info: bool, sequence: list[dict]
     ):
         options = {
             "include_start_pos": include_start_pos,
-            "append_info": append_info,
+            "add_info": add_info,
             "user_name": self.export_dialog.control_panel.user_combo_box.currentText(),
             "export_date": self.export_dialog.control_panel.add_date_field.text(),
         }
@@ -72,10 +65,7 @@ class ExportDialogPreviewPanel(QFrame):
             self.preview_label.setFixedSize(scaled_image.size())
 
     def update_preview_with_options(
-        self,
-        include_start_pos: bool,
-        sequence: list[dict],
-        options: dict,
+        self, include_start_pos: bool, sequence: list[dict], options: dict
     ):
         self.image = self.export_dialog.export_manager.create_sequence_image(
             sequence, include_start_pos, options

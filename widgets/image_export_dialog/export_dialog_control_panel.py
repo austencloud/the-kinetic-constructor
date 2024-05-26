@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
     QComboBox,
     QInputDialog,
 )
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtCore import pyqtSignal, Qt
 from datetime import datetime
 
 if TYPE_CHECKING:
@@ -23,115 +23,119 @@ class ExportDialogControlPanel(QWidget):
         super().__init__()
         self.export_dialog = export_dialog
         self.settings_manager = export_dialog.export_manager.settings_manager
-        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.user_combo_box = self.settings_manager.user_manager.user_combo_box
+
+        self._setup_checkboxes()
+        self._setup_fields()
+        self._setup_buttons()
+        self._setup_layout()
+        self._connect_signals()
+
+    def _setup_layout(self):
+        """Setup the layout of the control panel."""
+        self.user_input_layout = QHBoxLayout()
+        self.user_input_layout.addWidget(self.add_user_button, 1)
+        self.user_input_layout.addWidget(self.user_combo_box, 2)
+        self.user_input_layout.addWidget(self.add_notes_field, 5)
+        self.user_input_layout.addWidget(self.add_date_field, 2)
 
         self.checkbox_layout = QHBoxLayout()
-
-        self.include_start_pos_check = QCheckBox("Include Start Position", self)
-        self.include_start_pos_check.setChecked(True)
-        self.include_start_pos_check.toggled.connect(self.optionChanged.emit)
-
-        self.append_info_check = QCheckBox("Add Info", self)
-        self.append_info_check.setChecked(True)
-        self.append_info_check.toggled.connect(self.toggle_info_fields)
-
+        self.checkbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.checkbox_layout.addWidget(self.include_start_pos_check)
-        self.checkbox_layout.addWidget(self.append_info_check)
+        self.checkbox_layout.addWidget(self.add_info_check)
 
-        self.user_layout = QHBoxLayout()
-        self.user_combo_box = QComboBox(self)
-        self.add_user_button = QPushButton("Add User", self)
-        self.user_layout.addWidget(self.user_combo_box, 6)
-        self.user_layout.addWidget(self.add_user_button, 1)
+        self.open_dir_layout = QHBoxLayout()
+        self.open_dir_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.open_dir_layout.addWidget(self.open_directory_check)
 
-        self.add_date_field = QLineEdit(self)
-        self._set_current_date()
-        self._populate_user_profiles()
-
-        self._setup_buttons()
-
+        self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addStretch(1)
         self.layout.addLayout(self.checkbox_layout)
-        self.layout.addLayout(self.user_layout)
-        self.layout.addWidget(self.add_date_field)
-        self.layout.addLayout(self.button_layout)
-        self.layout.addStretch(1)
+        self.layout.addLayout(self.open_dir_layout)
+        self.layout.addLayout(self.user_input_layout)
 
-        self.ok_button.clicked.connect(self._save_settings_and_accept)
-        self.cancel_button.clicked.connect(export_dialog.reject)
-        self.add_user_button.clicked.connect(self._add_new_user)
-
-        self.optionChanged.connect(lambda: self.update_preview_based_on_options)
-        self.include_start_pos_check.setChecked(
-            self.export_dialog.export_manager.include_start_pos
-        )
+    def _connect_signals(self):
+        """Connect signals to their respective slots."""
+        self.optionChanged.connect(lambda: self.update_preview_based_on_options())
         self.include_start_pos_check.toggled.connect(
             self.export_dialog.update_export_setting_and_layout
         )
 
-        # Initial toggle state based on checkbox
-        # self.toggle_info_fields()
+    def _setup_checkboxes(self):
+        """Setup the checkboxes for the control panel."""
+        self.include_start_pos_check = QCheckBox("Add Start Position", self)
+        self.include_start_pos_check.setChecked(
+            self.settings_manager.get_image_export_setting(
+                "include_start_position", True
+            )
+        )
+        self.include_start_pos_check.toggled.connect(self.optionChanged.emit)
+
+        self.add_info_check = QCheckBox("Add Info", self)
+        self.add_info_check.setChecked(
+            self.settings_manager.get_image_export_setting("add_info", True)
+        )
+        self.add_info_check.toggled.connect(self.toggle_add_info)
+
+        self.open_directory_check = QCheckBox("Open file location after export", self)
+        self.open_directory_check.setChecked(
+            self.settings_manager.get_image_export_setting(
+                "open_directory_on_export", True
+            )
+        )
+        self.open_directory_check.toggled.connect(self.update_open_directory_setting)
 
     def _setup_buttons(self):
-        self.button_layout = QHBoxLayout()
-        self.ok_button = QPushButton("Save", self)
-        self.cancel_button = QPushButton("Cancel", self)
-        self.button_layout.addWidget(self.cancel_button)
-        self.button_layout.addWidget(self.ok_button)
+        """Setup the buttons for the control panel."""
+        self.add_user_button = QPushButton("Add User", self)
+        self.add_user_button.clicked.connect(
+            self.settings_manager.user_manager.add_new_user
+        )
 
-    def _set_current_date(self):
+    def _setup_fields(self):
+        """Setup the input fields for the control panel."""
+        self.add_notes_field = QLineEdit(self)
+        default_note = "Created using The Kinetic Alphabet"
+        self.add_notes_field.setText(default_note)
+
+        self.add_date_field = QLineEdit(self)
         current_date = datetime.now().strftime("%m-%d-%Y")
+        current_date = "-".join([str(int(part)) for part in current_date.split("-")])
         self.add_date_field.setText(current_date)
 
-    def _populate_user_profiles(self):
-        user_profiles = self.settings_manager.get_image_export_setting(
-            "user_profiles", {}
-        )
-        current_user = self.settings_manager.get_image_export_setting(
-            "current_user", "Your Name"
-        )
-        for user_name in user_profiles.keys():
-            self.user_combo_box.addItem(user_name)
-        if current_user in user_profiles:
-            index = self.user_combo_box.findText(current_user)
-            if index != -1:
-                self.user_combo_box.setCurrentIndex(index)
-        self.user_combo_box.currentIndexChanged.connect(self._update_current_user)
-
-    def _update_current_user(self):
-        selected_user = self.user_combo_box.currentText()
-        if selected_user:
-            self.settings_manager.set_image_export_setting(
-                "current_user", selected_user
-            )
-
-    def _add_new_user(self):
-        text, ok = QInputDialog.getText(self, "Add New User", "Enter user name:")
-        if ok and text:
-            new_user_profile = {"name": text, "export_date": self.add_date_field.text()}
-            self.settings_manager.add_or_update_user_profile(new_user_profile)
-            self.user_combo_box.addItem(text)
-            self.user_combo_box.setCurrentText(text)
-
-    def _save_settings_and_accept(self):
+    def save_settings_and_accept(self):
+        """Save the current settings and accept the dialog."""
         current_user = self.user_combo_box.currentText()
         current_date = self.add_date_field.text()
         user_profile = {"name": current_user, "export_date": current_date}
         self.settings_manager.add_or_update_user_profile(user_profile)
         self.export_dialog.accept()
 
-    def update_preview_based_on_options(self):
-        include_start_pos = self.include_start_pos_check.isChecked()
-        self.export_dialog.preview_panel.update_preview_with_start_pos(
-            include_start_pos, self.export_dialog.sequence
+    def update_open_directory_setting(self):
+        """Update the setting for opening the directory after export."""
+        self.settings_manager.set_image_export_setting(
+            "open_directory_on_export", self.open_directory_check.isChecked()
         )
 
-    def toggle_info_fields(self):
-        state = self.append_info_check.isChecked()
+    def update_preview_based_on_options(self):
+        """Update the preview panel based on the current options."""
+        include_start_pos = self.include_start_pos_check.isChecked()
+        add_info = self.add_info_check.isChecked()
+        self.export_dialog.preview_panel.update_preview_with_start_pos(
+            include_start_pos, add_info, self.export_dialog.sequence
+        )
+
+    def toggle_add_info(self):
+        """Toggle the state of the additional info fields based on the checkbox."""
+        state = self.add_info_check.isChecked()
         self.user_combo_box.setEnabled(state)
         self.add_user_button.setEnabled(state)
         self.add_date_field.setEnabled(state)
-        self.add_date_field.setStyleSheet("color: gray;" if not state else "")
-        self.user_combo_box.setStyleSheet("color: gray;" if not state else "")
-        self.add_user_button.setStyleSheet("color: gray;" if not state else "")
+        self.add_notes_field.setEnabled(state)
+        color = "gray" if not state else ""
+        self.add_date_field.setStyleSheet(f"color: {color};")
+        self.user_combo_box.setStyleSheet(f"color: {color};")
+        self.add_user_button.setStyleSheet(f"color: {color};")
+        self.add_notes_field.setStyleSheet(f"color: {color};")
         self.export_dialog.update_preview_based_on_options()
+        self.settings_manager.set_image_export_setting("add_info", state)

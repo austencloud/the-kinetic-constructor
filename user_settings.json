@@ -1,4 +1,15 @@
 {
+    "current_user": "Jesus",
+    "user_profiles": {
+        "AC": {
+            "name": "AC",
+            "export_date": "5-26-2024"
+        },
+        "Jesus": {
+            "name": "Jesus",
+            "export_date": "5-26-2024"
+        }
+    },
     "pictograph_size": 1,
     "prop_type": "Club",
     "glyph_visibility": {
@@ -7,34 +18,25 @@
         "Elemental": false,
         "EndPosition": false
     },
-    "default_left_orientation": "out",
-    "default_right_orientation": "counter",
-    "default_left_orientation_Hand": "out",
-    "default_right_orientation_Hand": "in",
-    "word_length_visibility": {
-        "2": false,
-        "3": false,
-        "4": false,
-        "5": true,
-        "6": false,
-        "7": false,
-        "8": false
-    },
     "grid_visibility": {
-        "layer2_normal": false,
-        "layer2_strict": false
+        "non_radial_points": true
     },
-    "non_radial_points_visibility": false,
-    "background_type": "Rainbow",
+    "background_type": "AuroraBorealis",
     "grow_sequence": true,
-    "image_export_options": {
+    "image_export": {
+        "include_start_position": true,
+        "add_info": true,
+        "open_directory_on_export": false,
         "user_profiles": {
             "AC": {
                 "name": "AC",
-                "export_date": "05-26-2024"
+                "export_date": "5-26-2024"
+            },
+            "Jesus": {
+                "name": "Jesus",
+                "export_date": "5-26-2024"
             }
         },
-        "current_user": "AC",
-        "include_start_position": false
+        "current_user": "Jesus"
     }
 }

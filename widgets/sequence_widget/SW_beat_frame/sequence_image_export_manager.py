@@ -1,5 +1,6 @@
 from datetime import datetime
 import os
+import subprocess
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QImage, QPainter, QPixmap, QFont
@@ -10,9 +11,7 @@ from widgets.sequence_widget.SW_beat_frame.beat import Beat, BeatView
 from PyQt6.QtWidgets import QFileDialog
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
-        SW_BeatFrame,
-    )
+    from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
 
 
 class SequenceImageExportManager:
@@ -57,7 +56,9 @@ class SequenceImageExportManager:
             sequence_image = self.create_sequence_image(
                 sequence, self.include_start_pos, options
             )
-            self.save_image(sequence_image)
+            file_name = self.save_image(sequence_image)
+            if file_name and options.get("open_directory", False):
+                self.open_directory(file_name)
             print("Image created with start position included:", self.include_start_pos)
 
     def save_image(self, sequence_image: QImage):
@@ -87,27 +88,29 @@ class SequenceImageExportManager:
         )
 
         if not file_name:
-            return
+            return None
 
         if sequence_image.save(file_name, "PNG"):
             self.indicator_label.show_message(
                 f"Image saved as {os.path.basename(file_name)}"
             )
             self.last_save_directory = os.path.dirname(file_name)
-            self.open_image(file_name)  # Open the image after saving
+            return file_name
         else:
             self.indicator_label.show_message("Failed to save image.")
+            return None
 
-    def open_image(self, file_path: str):
+    def open_directory(self, file_path: str):
+        directory = os.path.dirname(file_path)
         try:
             if os.name == "nt":  # Windows
-                os.startfile(file_path)
+                os.startfile(directory)
             elif os.name == "posix":  # macOS, Linux
                 subprocess.run(
-                    ["open" if sys.platform == "darwin" else "xdg-open", file_path]
+                    ["open" if sys.platform == "darwin" else "xdg-open", directory]
                 )
         except Exception as e:
-            self.indicator_label.show_message(f"Failed to open image: {str(e)}")
+            self.indicator_label.show_message(f"Failed to open directory: {str(e)}")
 
     def create_sequence_image(
         self,
@@ -119,20 +122,18 @@ class SequenceImageExportManager:
         column_count, row_count = self.layout_manager.calculate_layout(
             len(filled_beats), include_start_pos
         )
-        append_info = options.get("append_info", False)
-        additional_height = 100 if append_info else 0
+        add_info = options.get("add_info", False)
+        additional_height = 100 if add_info else 0
         image = self.create_image(column_count, row_count, additional_height)
         self._draw_beats(
             image, filled_beats, column_count, row_count, include_start_pos
         )
-        if append_info and options:
+        if add_info and options:
             self._add_user_info_to_image(image, options)
         return image
 
     def process_sequence_to_beats(self, sequence: list[dict]):
-        from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
-            SW_BeatFrame,
-        )
+        from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
 
         self.temp_beat_frame = SW_BeatFrame(self.sequence_widget)
         filled_beats = []
@@ -215,7 +216,7 @@ class SequenceImageExportManager:
         margin_from_bottom = 30
 
         # Calculate text widths
-        painter.setFont(font_bold_italic)
+        painter.setFont(font_italic)
         metrics = painter.fontMetrics()
         export_date_width = metrics.horizontalAdvance(export_date)
 
