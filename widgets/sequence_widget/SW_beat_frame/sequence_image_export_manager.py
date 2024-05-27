@@ -113,17 +113,14 @@ class SequenceImageExportManager:
             self.indicator_label.show_message(f"Failed to open directory: {str(e)}")
 
     def create_sequence_image(
-        self,
-        sequence: list[dict],
-        include_start_pos=True,
-        options: dict = None,
+        self, sequence: list[dict], include_start_pos=True, options: dict = None
     ) -> QImage:
         filled_beats = self.process_sequence_to_beats(sequence)
         column_count, row_count = self.layout_manager.calculate_layout(
             len(filled_beats), include_start_pos
         )
         add_info = options.get("add_info", False)
-        additional_height = 100 if add_info else 0
+        additional_height = 130 if add_info else 0
         image = self.create_image(column_count, row_count, additional_height)
         self._draw_beats(
             image, filled_beats, column_count, row_count, include_start_pos
@@ -198,13 +195,15 @@ class SequenceImageExportManager:
 
     def _add_user_info_to_image(self, image: QImage, options: dict):
         painter = QPainter(image)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        painter.setRenderHint(QPainter.RenderHint.TextAntialiasing)
 
-        # Fonts for user name and date (bold and italic)
-        font_bold_italic = QFont("Georgia", 40, QFont.Weight.Bold)
+        # Font for user name (bold and italic)
+        font_bold_italic = QFont("Georgia", 50, QFont.Weight.Bold)
         font_bold_italic.setItalic(True)
 
         # Font for created text (italic only)
-        font_italic = QFont("Georgia", 40)
+        font_italic = QFont("Georgia", 50)
         font_italic.setItalic(True)
 
         user_name = options.get("user_name", "TacoCat")
@@ -213,7 +212,7 @@ class SequenceImageExportManager:
         # Remove leading zeros from date
         export_date = "-".join([str(int(part)) for part in export_date.split("-")])
 
-        margin_from_bottom = 30
+        margin = 40
 
         # Calculate text widths
         painter.setFont(font_italic)
@@ -224,20 +223,22 @@ class SequenceImageExportManager:
         created_text = "Created using The Kinetic Alphabet"
         created_text_width = metrics.horizontalAdvance(created_text)
 
+        # Draw user name (bold and italic)
         painter.setFont(font_bold_italic)
-        painter.drawText(
-            margin_from_bottom, image.height() - margin_from_bottom, user_name
-        )
+        painter.drawText(margin, image.height() - margin, user_name)
+
+        # Draw created text (italic only)
         painter.setFont(font_italic)
         painter.drawText(
             (image.width() - created_text_width) // 2,
-            image.height() - margin_from_bottom,
+            image.height() - margin,
             created_text,
         )
-        painter.setFont(font_bold_italic)
+
+        # Draw export date (italic only) with right margin
         painter.drawText(
-            image.width() - export_date_width - margin_from_bottom,
-            image.height() - margin_from_bottom,
+            image.width() - export_date_width - margin,
+            image.height() - margin,
             export_date,
         )
 

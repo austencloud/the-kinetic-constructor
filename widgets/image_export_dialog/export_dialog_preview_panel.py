@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel, QFrame, QVBoxLayout, QSizePolicy
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtGui import QPixmap, QImage
 
 if TYPE_CHECKING:
     from widgets.image_export_dialog.image_export_dialog import ImageExportDialog
@@ -48,21 +48,22 @@ class ExportDialogPreviewPanel(QFrame):
             image_aspect_ratio = (
                 self.preview_image.width() / self.preview_image.height()
             )
-            image_width = int(self.width() * 0.9)
+            image_width = int(self.width() * 0.95)
             image_height = int(image_width / image_aspect_ratio)
 
             if image_height > self.height():
-                image_height = int(self.height() * 0.9)
+                image_height = int(self.height() * 0.95)
                 image_width = int(image_height * image_aspect_ratio)
 
-            scaled_image = self.preview_image.scaled(
-                image_width,
-                image_height,
-                Qt.AspectRatioMode.KeepAspectRatio,
-                Qt.TransformationMode.SmoothTransformation,
+            self.preview_label.setPixmap(
+                self.preview_image.scaled(
+                    image_width,
+                    image_height,
+                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.TransformationMode.SmoothTransformation,
+                )
             )
-            self.preview_label.setPixmap(scaled_image)
-            self.preview_label.setFixedSize(scaled_image.size())
+            self.preview_label.setFixedSize(image_width, image_height)
 
     def update_preview_with_options(
         self, include_start_pos: bool, sequence: list[dict], options: dict
