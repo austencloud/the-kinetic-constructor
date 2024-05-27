@@ -120,10 +120,23 @@ class SequenceImageExportManager:
             len(filled_beats), include_start_pos
         )
         add_info = options.get("add_info", False)
-        additional_height = 130 if add_info else 0
-        image = self.create_image(column_count, row_count, additional_height)
+        add_word = options.get("add_word", False)
+
+        self.word_space = 300
+        self.info_space = 130
+        additional_height_top = self.word_space if add_word else 0
+        additional_height_bottom = self.info_space if add_info else 0
+
+        image = self.create_image(
+            column_count, row_count, additional_height_top + additional_height_bottom
+        )
         self._draw_beats(
-            image, filled_beats, column_count, row_count, include_start_pos
+            image,
+            filled_beats,
+            column_count,
+            row_count,
+            include_start_pos,
+            additional_height_top,
         )
         if add_info and options:
             self._add_user_info_to_image(image, options)
@@ -134,7 +147,9 @@ class SequenceImageExportManager:
 
         self.temp_beat_frame = SW_BeatFrame(self.sequence_widget)
         filled_beats = []
-        for i, beat_data in enumerate(sequence[2:], start=2):  # Start from the third item
+        for i, beat_data in enumerate(
+            sequence[2:], start=2
+        ):  # Start from the third item, which is the first beat
             beat_view = self.create_beat_view_from_data(beat_data, i - 1)
             filled_beats.append(beat_view)
         return filled_beats
@@ -156,7 +171,13 @@ class SequenceImageExportManager:
         return image
 
     def _draw_beats(
-        self, image, filled_beats, column_count, row_count, include_start_pos
+        self,
+        image,
+        filled_beats,
+        column_count,
+        row_count,
+        include_start_pos,
+        additional_height_top,
     ):
         painter = QPainter(image)
         beat_number = 0
@@ -165,7 +186,7 @@ class SequenceImageExportManager:
             start_pos_pixmap = self._grab_pixmap(
                 self.beat_frame.start_pos_view, self.beat_size, self.beat_size
             )
-            painter.drawPixmap(0, 0, start_pos_pixmap)
+            painter.drawPixmap(0, additional_height_top, start_pos_pixmap)
             start_col = 1
         else:
             start_col = 0
@@ -178,7 +199,7 @@ class SequenceImageExportManager:
                         beat_view, self.beat_size, self.beat_size
                     )
                     target_x = col * self.beat_size
-                    target_y = row * self.beat_size
+                    target_y = row * self.beat_size + additional_height_top
                     painter.drawPixmap(target_x, target_y, beat_pixmap)
                     beat_number += 1
 
@@ -205,8 +226,14 @@ class SequenceImageExportManager:
         font_italic = QFont("Georgia", 50)
         font_italic.setItalic(True)
 
+        # Font for word (bold and larger)
+        word_font_size = 175
+        font_word = QFont("Georgia", word_font_size, QFont.Weight.DemiBold)
+
         user_name = options.get("user_name", "TacoCat")
         export_date = options.get("export_date", datetime.now().strftime("%m-%d-%Y"))
+        add_word = options.get("add_word", False)
+        word = self.beat_frame.get_current_word() if add_word else ""
 
         # Remove leading zeros from date
         export_date = "-".join([str(int(part)) for part in export_date.split("-")])
@@ -221,6 +248,17 @@ class SequenceImageExportManager:
         painter.setFont(font_italic)
         created_text = "Created using The Kinetic Alphabet"
         created_text_width = metrics.horizontalAdvance(created_text)
+
+        # Draw word at the top if add_word is True
+        if add_word:
+            painter.setFont(font_word)
+            metrics_word = painter.fontMetrics()
+            word_width = metrics_word.horizontalAdvance(word)
+            painter.drawText(
+                (image.width() - word_width) // 2,
+                word_font_size + margin,
+                word,
+            )
 
         # Draw user name (bold and italic)
         painter.setFont(font_bold_italic)

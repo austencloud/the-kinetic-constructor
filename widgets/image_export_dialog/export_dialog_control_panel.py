@@ -43,6 +43,7 @@ class ExportDialogControlPanel(QWidget):
         self.checkbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.checkbox_layout.addWidget(self.include_start_pos_check)
         self.checkbox_layout.addWidget(self.add_info_check)
+        self.checkbox_layout.addWidget(self.add_word_check)
 
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addStretch(1)
@@ -73,16 +74,24 @@ class ExportDialogControlPanel(QWidget):
         )
         self.add_info_check.toggled.connect(self.toggle_add_info)
 
+        self.add_word_check = QCheckBox("Add Word to Image", self)
+        self.add_word_check.setChecked(
+            self.settings_manager.get_image_export_setting("add_word", False)
+        )
+        self.add_word_check.toggled.connect(self.optionChanged.emit)
+
     def _setup_fields(self):
         """Setup the input fields for the control panel."""
         self.add_notes_field = QLineEdit(self)
         default_note = "Created using The Kinetic Alphabet"
         self.add_notes_field.setText(default_note)
+        self.add_notes_field.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.add_date_field = QLineEdit(self)
         current_date = datetime.now().strftime("%m-%d-%Y")
         current_date = "-".join([str(int(part)) for part in current_date.split("-")])
         self.add_date_field.setText(current_date)
+        self.add_date_field.setAlignment(Qt.AlignmentFlag.AlignRight)
 
     def _handle_user_selection(self):
         """Handle the selection of a user from the combo box."""
@@ -110,8 +119,9 @@ class ExportDialogControlPanel(QWidget):
         """Update the preview panel based on the current options."""
         include_start_pos = self.include_start_pos_check.isChecked()
         add_info = self.add_info_check.isChecked()
+        add_word = self.add_word_check.isChecked()
         self.export_dialog.preview_panel.update_preview_with_start_pos(
-            include_start_pos, add_info, self.export_dialog.sequence
+            include_start_pos, add_info, self.export_dialog.sequence, add_word
         )
 
     def toggle_add_info(self):

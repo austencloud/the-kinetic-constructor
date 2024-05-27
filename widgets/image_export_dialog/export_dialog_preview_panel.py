@@ -29,13 +29,14 @@ class ExportDialogPreviewPanel(QFrame):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def update_preview_with_start_pos(
-        self, include_start_pos: bool, add_info: bool, sequence: list[dict]
+        self, include_start_pos: bool, add_info: bool, sequence: list[dict], add_word: bool
     ):
         options = {
             "include_start_pos": include_start_pos,
             "add_info": add_info,
             "user_name": self.export_dialog.control_panel.user_combo_box.currentText(),
             "export_date": self.export_dialog.control_panel.add_date_field.text(),
+            "add_word": add_word,
         }
         self.image = self.export_dialog.export_manager.create_sequence_image(
             sequence, include_start_pos, options
