@@ -14,6 +14,7 @@ from datetime import datetime
 if TYPE_CHECKING:
     from widgets.image_export_dialog.image_export_dialog import ImageExportDialog
 
+
 class ExportDialogControlPanel(QWidget):
     optionChanged = pyqtSignal()
 
@@ -31,9 +32,12 @@ class ExportDialogControlPanel(QWidget):
     def _setup_layout(self):
         """Setup the layout of the control panel."""
         self.user_input_layout = QHBoxLayout()
-        self.user_input_layout.addWidget(self.user_combo_box, 2)
+        # stretch = 1
+        self.user_input_layout.addStretch(1)
+        self.user_input_layout.addWidget(self.user_combo_box, 1)
         self.user_input_layout.addWidget(self.add_notes_field, 7)
-        self.user_input_layout.addWidget(self.add_date_field, 2)
+        self.user_input_layout.addWidget(self.add_date_field, 1)
+        self.user_input_layout.addStretch(1)
 
         self.checkbox_layout = QHBoxLayout()
         self.checkbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -42,8 +46,8 @@ class ExportDialogControlPanel(QWidget):
 
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addStretch(1)
-        self.layout.addLayout(self.checkbox_layout)
         self.layout.addLayout(self.user_input_layout)
+        self.layout.addLayout(self.checkbox_layout)
 
     def _connect_signals(self):
         """Connect signals to their respective slots."""
@@ -85,7 +89,9 @@ class ExportDialogControlPanel(QWidget):
         selected_user = self.user_combo_box.currentText()
         if selected_user == "Edit Users":
             self.settings_manager.user_manager.open_edit_users_dialog()
-            current_user = self.settings_manager.get_image_export_setting("current_user", "TacoCat")
+            current_user = self.settings_manager.get_image_export_setting(
+                "current_user", "TacoCat"
+            )
             index = self.user_combo_box.findText(current_user)
             if index != -1:
                 self.user_combo_box.setCurrentIndex(index)

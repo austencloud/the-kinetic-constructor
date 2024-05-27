@@ -2,11 +2,12 @@
     "current_user": "AC",
     "user_profiles": {
         "AC": {
-            "name": "AC"
+            "name": "AC",
+            "export_date": "5-27-2024"
         }
     },
     "pictograph_size": 1,
-    "prop_type": "Club",
+    "prop_type": "Staff",
     "glyph_visibility": {
         "VTG": false,
         "TKA": true,
@@ -19,9 +20,9 @@
     "background_type": "AuroraBorealis",
     "grow_sequence": true,
     "image_export": {
-        "include_start_position": true,
+        "include_start_position": false,
         "add_info": true,
-        "open_directory_on_export": false,
+        "open_directory_on_export": true,
         "user_profiles": {
             "AC": {
                 "name": "AC",

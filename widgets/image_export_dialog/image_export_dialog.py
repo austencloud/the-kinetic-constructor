@@ -1,5 +1,12 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QCheckBox,QDialog, QHBoxLayout, QVBoxLayout, QLabel, QPushButton
+from PyQt6.QtWidgets import (
+    QCheckBox,
+    QDialog,
+    QHBoxLayout,
+    QVBoxLayout,
+    QLabel,
+    QPushButton,
+)
 from PyQt6.QtCore import Qt
 
 from widgets.image_export_dialog.export_dialog_control_panel import (
@@ -31,8 +38,7 @@ class ImageExportDialog(QDialog):
         self._setup_layout()
         self.update_preview_based_on_options()
 
-
-    def _setup_open_directory_check(self):
+    def _setup_open_directory_checkbox(self):
         self.open_directory_check = QCheckBox("Open file location after export", self)
         self.open_directory_check.setChecked(
             self.settings_manager.get_image_export_setting(
@@ -50,7 +56,6 @@ class ImageExportDialog(QDialog):
             "open_directory_on_export", self.open_directory_check.isChecked()
         )
 
-    
     def _setup_okay_cancel_buttons(self):
         self.ok_button = QPushButton("Save", self)
         self.ok_button.clicked.connect(self.control_panel.save_settings_and_accept)
@@ -66,7 +71,7 @@ class ImageExportDialog(QDialog):
         self.preview_panel = ExportDialogPreviewPanel(self)
         self.control_panel = ExportDialogControlPanel(self)
         self._setup_okay_cancel_buttons()
-        self._setup_open_directory_check()
+        self._setup_open_directory_checkbox()
 
     def _setup_layout(self):
         self.button_layout = QHBoxLayout()
@@ -74,8 +79,8 @@ class ImageExportDialog(QDialog):
         self.button_layout.addWidget(self.ok_button)
 
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addWidget(self.control_panel, 3)
         self.layout.addWidget(self.preview_panel, 12)
+        self.layout.addWidget(self.control_panel, 1)
         self.layout.addLayout(self.open_dir_layout, 1)
         self.layout.addLayout(self.button_layout, 1)
 

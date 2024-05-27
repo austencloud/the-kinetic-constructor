@@ -134,9 +134,8 @@ class SequenceImageExportManager:
 
         self.temp_beat_frame = SW_BeatFrame(self.sequence_widget)
         filled_beats = []
-        for beat_data in sequence[2:]:
-            number = sequence.index(beat_data)
-            beat_view = self.create_beat_view_from_data(beat_data, number)
+        for i, beat_data in enumerate(sequence[2:], start=2):  # Start from the third item
+            beat_view = self.create_beat_view_from_data(beat_data, i - 1)
             filled_beats.append(beat_view)
         return filled_beats
 
@@ -145,7 +144,7 @@ class SequenceImageExportManager:
         beat = Beat(self.temp_beat_frame)
         beat.pictograph_dict = beat_data
         beat.updater.update_pictograph(beat_data)
-        new_beat_view.set_beat(beat, number - 1)
+        new_beat_view.set_beat(beat, number)
         return new_beat_view
 
     def create_image(self, column_count, row_count, additional_height=0) -> QImage:
