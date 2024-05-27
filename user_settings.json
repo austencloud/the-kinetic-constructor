@@ -20,10 +20,10 @@
     "background_type": "AuroraBorealis",
     "grow_sequence": false,
     "image_export": {
-        "include_start_position": false,
-        "add_info": false,
+        "include_start_position": true,
+        "add_info": true,
         "open_directory_on_export": true,
         "current_user": "Jesus",
-        "add_word": false
+        "add_word": true
     }
 }

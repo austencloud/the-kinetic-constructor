@@ -22,8 +22,9 @@ class ExportDialogControlPanel(QWidget):
         super().__init__()
         self.export_dialog = export_dialog
         self.settings_manager = export_dialog.export_manager.settings_manager
-        self.user_combo_box = self.settings_manager.user_manager.user_combo_box
-
+        self.user_combo_box = QComboBox(self)
+        self.settings_manager.user_manager.populate_user_profiles(self.user_combo_box)
+        
         self._setup_checkboxes()
         self._setup_fields()
         self._setup_layout()
@@ -159,7 +160,6 @@ class ExportDialogControlPanel(QWidget):
         self.add_notes_field.setStyleSheet(f"color: {color};")
         self.update_preview_based_on_options()
         self.settings_manager.set_image_export_setting("add_info", state)
-
 
     def toggle_add_word(self):
         """Toggle the state of the add word field based on the checkbox."""

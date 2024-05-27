@@ -12,26 +12,25 @@ class UserManager(QObject):
     def __init__(self, settings_manager: "SettingsManager"):
         super().__init__()
         self.settings_manager = settings_manager
-        self.user_combo_box = QComboBox()
-        self._populate_user_profiles()
 
-    def _populate_user_profiles(self):
-        self.user_combo_box.clear()
+    def populate_user_profiles(self, user_combo_box: QComboBox):
+        self.user_combo_box = user_combo_box
+        user_combo_box.clear()
         user_profiles = self.settings_manager.settings.get("user_profiles", {})
         current_user = self.settings_manager.get_image_export_setting(
             "current_user", "TacoCat"
         )
         for user_name in user_profiles.keys():
-            self.user_combo_box.addItem(user_name)
-        self.user_combo_box.addItem("Edit Users")
+            user_combo_box.addItem(user_name)
+        user_combo_box.addItem("Edit Users")
         if current_user in user_profiles:
-            index = self.user_combo_box.findText(current_user)
+            index = user_combo_box.findText(current_user)
             if index != -1:
-                self.user_combo_box.setCurrentIndex(index)
-        self.user_combo_box.currentIndexChanged.connect(self._update_current_user)
+                user_combo_box.setCurrentIndex(index)
+        user_combo_box.currentIndexChanged.connect(self._update_current_user)
 
-    def _update_current_user(self):
-        selected_user = self.user_combo_box.currentText()
+    def _update_current_user(self, user_combo_box: QComboBox):
+        selected_user = user_combo_box.currentText()
         if selected_user == "Edit Users":
             self.open_edit_users_dialog()
         else:
@@ -40,7 +39,7 @@ class UserManager(QObject):
     def open_edit_users_dialog(self):
         dialog = EditUserProfilesDialog(self)
         if dialog.exec():
-            self._populate_user_profiles()
+            self.populate_user_profiles()
 
     def get_all_users(self):
         return list(self.settings_manager.settings.get("user_profiles", {}).keys())
