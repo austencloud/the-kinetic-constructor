@@ -29,7 +29,11 @@ class ExportDialogPreviewPanel(QFrame):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def update_preview_with_start_pos(
-        self, include_start_pos: bool, add_info: bool, sequence: list[dict], add_word: bool
+        self,
+        include_start_pos: bool,
+        add_info: bool,
+        sequence: list[dict],
+        add_word: bool,
     ):
         options = {
             "include_start_pos": include_start_pos,
@@ -38,8 +42,10 @@ class ExportDialogPreviewPanel(QFrame):
             "export_date": self.export_dialog.control_panel.add_date_field.text(),
             "add_word": add_word,
         }
-        self.image = self.export_dialog.export_manager.create_sequence_image(
-            sequence, include_start_pos, options
+        self.image = (
+            self.export_dialog.export_manager.image_creator.create_sequence_image(
+                sequence, include_start_pos, options
+            )
         )
         self.preview_image = QPixmap.fromImage(self.image)
         self.update_preview()
@@ -69,8 +75,10 @@ class ExportDialogPreviewPanel(QFrame):
     def update_preview_with_options(
         self, include_start_pos: bool, sequence: list[dict], options: dict
     ):
-        self.image = self.export_dialog.export_manager.create_sequence_image(
-            sequence, include_start_pos, options
+        self.image = (
+            self.export_dialog.export_manager.image_creator.create_sequence_image(
+                sequence, include_start_pos, options
+            )
         )
         self.preview_image = QPixmap.fromImage(self.image)
         self.update_preview()

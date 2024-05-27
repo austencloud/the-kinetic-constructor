@@ -29,6 +29,24 @@ class ExportDialogControlPanel(QWidget):
         self._setup_layout()
         self._connect_signals()
 
+    def _setup_open_directory_checkbox(self):
+        self.open_directory_check = QCheckBox("Open file location after export", self)
+        self.open_directory_check.setChecked(
+            self.settings_manager.get_image_export_setting(
+                "open_directory_on_export", True
+            )
+        )
+        self.open_directory_check.toggled.connect(self.update_open_directory_setting)
+        self.open_dir_layout = QHBoxLayout()
+        self.open_dir_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.open_dir_layout.addWidget(self.open_directory_check)
+
+    def update_open_directory_setting(self):
+        """Update the setting for opening the directory after export."""
+        self.settings_manager.set_image_export_setting(
+            "open_directory_on_export", self.open_directory_check.isChecked()
+        )
+
     def _setup_layout(self):
         """Setup the layout of the control panel."""
         self.user_input_layout = QHBoxLayout()
@@ -39,16 +57,17 @@ class ExportDialogControlPanel(QWidget):
         self.user_input_layout.addWidget(self.add_date_field, 1)
         self.user_input_layout.addStretch(1)
 
-        self.checkbox_layout = QHBoxLayout()
-        self.checkbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.checkbox_layout.addWidget(self.include_start_pos_check)
-        self.checkbox_layout.addWidget(self.add_info_check)
-        self.checkbox_layout.addWidget(self.add_word_check)
+        self.options_checkbox_layout = QHBoxLayout()
+        self.options_checkbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.options_checkbox_layout.addWidget(self.include_start_pos_check)
+        self.options_checkbox_layout.addWidget(self.add_info_check)
+        self.options_checkbox_layout.addWidget(self.add_word_check)
 
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addStretch(1)
         self.layout.addLayout(self.user_input_layout)
-        self.layout.addLayout(self.checkbox_layout)
+        self.layout.addLayout(self.options_checkbox_layout)
+        self.layout.addLayout(self.open_dir_layout)
 
     def _connect_signals(self):
         """Connect signals to their respective slots."""
@@ -78,7 +97,8 @@ class ExportDialogControlPanel(QWidget):
         self.add_word_check.setChecked(
             self.settings_manager.get_image_export_setting("add_word", False)
         )
-        self.add_word_check.toggled.connect(self.optionChanged.emit)
+        self.add_word_check.toggled.connect(self.toggle_add_word)
+        self._setup_open_directory_checkbox()
 
     def _setup_fields(self):
         """Setup the input fields for the control panel."""
@@ -113,6 +133,9 @@ class ExportDialogControlPanel(QWidget):
         current_date = self.add_date_field.text()
         user_profile = {"name": current_user, "export_date": current_date}
         self.settings_manager.add_or_update_user_profile(user_profile)
+        self.settings_manager.set_image_export_setting(
+            "add_word", self.add_word_check.isChecked()
+        )
         self.export_dialog.accept()
 
     def update_preview_based_on_options(self):
@@ -136,3 +159,11 @@ class ExportDialogControlPanel(QWidget):
         self.add_notes_field.setStyleSheet(f"color: {color};")
         self.update_preview_based_on_options()
         self.settings_manager.set_image_export_setting("add_info", state)
+
+
+    def toggle_add_word(self):
+        """Toggle the state of the add word field based on the checkbox."""
+        state = self.add_word_check.isChecked()
+        self.update_preview_based_on_options()
+        self.settings_manager.set_image_export_setting("add_word", state)
+        self.optionChanged.emit()
