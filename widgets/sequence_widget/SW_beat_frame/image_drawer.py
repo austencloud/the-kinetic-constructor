@@ -69,11 +69,11 @@ class ImageDrawer:
         )
         add_word = options.get("add_word", False)
         word = self.beat_frame.get_current_word() if add_word else ""
+        notes = options.get("notes", "No notes! ")
 
         # Calculate text widths
         export_date_width = self._get_text_width(self.font_italic, export_date)
-        created_text = "Created using The Kinetic Alphabet"
-        created_text_width = self._get_text_width(self.font_italic, created_text)
+        notes_width = self._get_text_width(self.font_italic, notes)
 
         # draw word
         if add_word:
@@ -84,15 +84,15 @@ class ImageDrawer:
             painter, image, user_name, self.font_bold_italic, self.margin, "bottom-left"
         )
 
-        # draw created text
+        # draw notes text
         self._draw_text(
             painter,
             image,
-            created_text,
+            notes,
             self.font_italic,
             self.margin,
             "bottom-center",
-            created_text_width,
+            notes_width,
         )
         # draw export date
         self._draw_text(

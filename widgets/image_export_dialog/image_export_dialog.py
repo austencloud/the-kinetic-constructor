@@ -80,6 +80,7 @@ class ImageExportDialog(QDialog):
             "user_name": self.control_panel.user_combo_box.currentText(),
             "export_date": self.control_panel.add_date_field.text(),
             "open_directory": self.control_panel.open_directory_check.isChecked(),
+            "notes": self.control_panel.notes_combo_box.currentText(),  
         }
 
     def update_preview_based_on_options(self):

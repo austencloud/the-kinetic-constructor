@@ -41,6 +41,7 @@ class ExportDialogPreviewPanel(QFrame):
             "user_name": self.export_dialog.control_panel.user_combo_box.currentText(),
             "export_date": self.export_dialog.control_panel.add_date_field.text(),
             "add_word": add_word,
+            "notes": self.export_dialog.control_panel.notes_combo_box.currentText(),
         }
         self.image = (
             self.export_dialog.export_manager.image_creator.create_sequence_image(

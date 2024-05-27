@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QComboBox,
     QInputDialog,
+    QApplication,
 )
 from PyQt6.QtCore import pyqtSignal, Qt
 from datetime import datetime
@@ -17,6 +18,7 @@ if TYPE_CHECKING:
 
 class ExportDialogControlPanel(QWidget):
     optionChanged = pyqtSignal()
+    notesChanged = pyqtSignal(str)
 
     def __init__(self, export_dialog: "ImageExportDialog"):
         super().__init__()
@@ -24,7 +26,14 @@ class ExportDialogControlPanel(QWidget):
         self.settings_manager = export_dialog.export_manager.settings_manager
         self.user_combo_box = QComboBox(self)
         self.settings_manager.user_manager.populate_user_profiles(self.user_combo_box)
-        
+
+        self.notes_combo_box = QComboBox(self)
+        self.settings_manager.notes_manager.populate_notes(self.notes_combo_box)
+        self.notes_combo_box.currentIndexChanged.connect(self._handle_note_selection)
+
+        self.previous_note = self.settings_manager.notes_manager.get_current_note()
+        self.previous_user = self.settings_manager.user_manager.get_current_user()
+
         self._setup_checkboxes()
         self._setup_fields()
         self._setup_layout()
@@ -51,10 +60,9 @@ class ExportDialogControlPanel(QWidget):
     def _setup_layout(self):
         """Setup the layout of the control panel."""
         self.user_input_layout = QHBoxLayout()
-        # stretch = 1
         self.user_input_layout.addStretch(1)
         self.user_input_layout.addWidget(self.user_combo_box, 1)
-        self.user_input_layout.addWidget(self.add_notes_field, 7)
+        self.user_input_layout.addWidget(self.notes_combo_box, 7)
         self.user_input_layout.addWidget(self.add_date_field, 1)
         self.user_input_layout.addStretch(1)
 
@@ -103,11 +111,6 @@ class ExportDialogControlPanel(QWidget):
 
     def _setup_fields(self):
         """Setup the input fields for the control panel."""
-        self.add_notes_field = QLineEdit(self)
-        default_note = "Created using The Kinetic Alphabet"
-        self.add_notes_field.setText(default_note)
-        self.add_notes_field.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
         self.add_date_field = QLineEdit(self)
         current_date = datetime.now().strftime("%m-%d-%Y")
         current_date = "-".join([str(int(part)) for part in current_date.split("-")])
@@ -118,14 +121,26 @@ class ExportDialogControlPanel(QWidget):
         """Handle the selection of a user from the combo box."""
         selected_user = self.user_combo_box.currentText()
         if selected_user == "Edit Users":
+            self.settings_manager.user_manager.previous_user = self.previous_user
             self.settings_manager.user_manager.open_edit_users_dialog()
-            current_user = self.settings_manager.get_image_export_setting(
-                "current_user", "TacoCat"
-            )
-            index = self.user_combo_box.findText(current_user)
+            index = self.user_combo_box.findText(self.previous_user)
             if index != -1:
                 self.user_combo_box.setCurrentIndex(index)
         else:
+            self.previous_user = selected_user
+            self.update_preview_based_on_options()
+
+    def _handle_note_selection(self):
+        """Handle the selection of a note from the combo box."""
+        selected_note = self.notes_combo_box.currentText()
+        if selected_note == "Edit Notes":
+            self.settings_manager.notes_manager.previous_note = self.previous_note
+            self.settings_manager.notes_manager.open_edit_notes_dialog()
+            index = self.notes_combo_box.findText(self.previous_note)
+            if index != -1:
+                self.notes_combo_box.setCurrentIndex(index)
+        else:
+            self.previous_note = selected_note
             self.update_preview_based_on_options()
 
     def save_settings_and_accept(self):
@@ -139,8 +154,12 @@ class ExportDialogControlPanel(QWidget):
         )
         self.export_dialog.accept()
 
+    # TODO - Fix the bug where the preview gets updated numberous times after a selection is made in the dialog due to
+    # the signal currentIndexChanged being emitted multiple times
+
     def update_preview_based_on_options(self):
         """Update the preview panel based on the current options."""
+        QApplication.processEvents()
         include_start_pos = self.include_start_pos_check.isChecked()
         add_info = self.add_info_check.isChecked()
         add_word = self.add_word_check.isChecked()
@@ -153,11 +172,11 @@ class ExportDialogControlPanel(QWidget):
         state = self.add_info_check.isChecked()
         self.user_combo_box.setEnabled(state)
         self.add_date_field.setEnabled(state)
-        self.add_notes_field.setEnabled(state)
+        self.notes_combo_box.setEnabled(state)
         color = "gray" if not state else ""
         self.add_date_field.setStyleSheet(f"color: {color};")
         self.user_combo_box.setStyleSheet(f"color: {color};")
-        self.add_notes_field.setStyleSheet(f"color: {color};")
+        self.notes_combo_box.setStyleSheet(f"color: {color};")
         self.update_preview_based_on_options()
         self.settings_manager.set_image_export_setting("add_info", state)
 

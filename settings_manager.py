@@ -18,6 +18,7 @@ from path_helpers import get_user_editable_resource_path
 from widgets.menu_bar.glyph_visibility_manager import GlyphVisibilityManager
 from prop_type_changer import PropTypeChanger
 from widgets.menu_bar.grid_visibility_manager import GridVisibilityManager
+from widgets.notes_manager import NotesManager
 from widgets.user_manager import UserManager
 
 
@@ -57,6 +58,7 @@ class SettingsManager(QObject):
         self.glyph_visibility_manager = GlyphVisibilityManager(main_window)
         self.grid_visibility_manager = GridVisibilityManager(self)
         self.user_manager = UserManager(self)
+        self.notes_manager = NotesManager(self)
 
     def load_settings(self) -> dict[str, dict]:
         if os.path.exists(self.settings_json):

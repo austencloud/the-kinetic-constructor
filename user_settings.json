@@ -4,6 +4,9 @@
         "AC": {
             "name": "AC",
             "export_date": "5-27-2024"
+        },
+        "Bob": {
+            "name": "Bob"
         }
     },
     "pictograph_size": 1,
@@ -25,5 +28,11 @@
         "open_directory_on_export": true,
         "current_user": "Jesus",
         "add_word": true
-    }
+    },
+    "notes": [
+        "Created using The Kinetic Alphabet",
+        "This is a new note.",
+        "Is it working?"
+    ],
+    "current_note": "This is a new note."
 }
