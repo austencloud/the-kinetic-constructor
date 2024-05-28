@@ -160,12 +160,7 @@ class MotionManipulator:
         """
         self.motion.arrow.pictograph.updater.update_pictograph()
 
-    def delete_prop(self) -> None:
-        self.motion.prop.scene.removeItem(self.motion.prop)
-        self.motion.prop.scene.removeItem(
-            self.motion.prop.scene.ghost_props[self.motion.prop.color]
-        )
-        self.motion.prop.scene.updater.update_pictograph()
+
 
     def set_prop_rot_dir(self, prop_rot_dir: str) -> None:
         self.motion.prop_rot_dir = prop_rot_dir

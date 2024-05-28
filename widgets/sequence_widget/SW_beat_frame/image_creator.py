@@ -22,7 +22,6 @@ class ImageCreator:
         self.export_manager = export_manager
         self.beat_frame = export_manager.beat_frame
         self.layout_manager = export_manager.layout_handler
-        self.image_drawer = export_manager.image_drawer
         self.beat_size = self.beat_frame.start_pos_view.beat.width()
         self.beat_factory = export_manager.beat_factory
 

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from ..SW_beat_frame.start_pos_beat import StartPositionBeatView
 from ..SW_beat_frame.beat import BeatView
-from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from .SW_beat_frame import SW_BeatFrame
@@ -15,6 +15,9 @@ class BeatDeletionManager:
         self.current_sequence_json_handler = (
             self.beat_frame.current_sequence_json_handler
         )
+        self.settings_manager = (
+            self.beat_frame.settings_manager
+        )  # Access settings manager
 
     def delete_selected_beat(self) -> None:
         self.beats = self.beat_frame.beats
@@ -32,6 +35,11 @@ class BeatDeletionManager:
             self._delete_non_first_beat(selected_beat)
 
         self.current_sequence_json_handler.clear_and_repopulate_the_current_sequence()
+        if self.settings_manager.get_grow_sequence():
+            self.beat_frame.adjust_layout_to_sequence_length()
+        self.beat_frame.sequence_widget.update_current_word()
+
+        QApplication.processEvents()
         self.sequence_builder.option_picker.update_option_picker()
 
     def _delete_non_first_beat(self, selected_beat):
@@ -56,7 +64,7 @@ class BeatDeletionManager:
 
     def _delete_start_pos(self):
         self.start_pos_view = self.beat_frame.start_pos_view
-        self.start_pos_view.setScene(None)
+        self.start_pos_view.setScene(self.start_pos_view.blank_beat)
         self.start_pos_view.is_filled = False
         self.GE_pictograph_view.set_to_blank_grid()
         for beat in self.beats:
@@ -67,10 +75,10 @@ class BeatDeletionManager:
         self.sequence_builder.reset_to_start_pos_picker()
         self.sequence_builder.option_picker.update_option_picker()
         graph_editor = (
-            self.beat_frame.main_widget.top_builder_widget.sequence_widget.graph_editor.graph_editor
+            self.beat_frame.main_widget.top_builder_widget.sequence_widget.graph_editor
         )
         graph_editor.adjustment_panel.update_adjustment_panel()
 
     def delete_beat(self, beat_view: BeatView) -> None:
-        beat_view.setScene(None)
+        beat_view.setScene(beat_view.blank_beat)
         beat_view.is_filled = False

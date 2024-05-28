@@ -5,7 +5,6 @@ from data.beat_frame_layouts import BEAT_FRAME_LAYOUTS
 if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
 
-
 class SW_BeatFrameLayoutManager:
     def __init__(self, beat_frame: "SW_BeatFrame"):
         self.beat_frame = beat_frame
@@ -27,9 +26,7 @@ class SW_BeatFrameLayoutManager:
             if rows > 4
             else Qt.ScrollBarPolicy.ScrollBarAlwaysOff
         )
-        # QApplication.processEvents()
         self.rearrange_beats(num_beats, columns, rows)
-
 
     def rearrange_beats(self, num_beats, columns, rows):
         while self.beat_frame.layout.count():

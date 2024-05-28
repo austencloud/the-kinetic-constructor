@@ -86,8 +86,7 @@ class SW_BeatFrame(QFrame):
                     self.beats[next_beat_index]
                 )
                 self.sequence_widget.update_current_word()  # Update the current word
-                if self.settings_manager.get_grow_sequence():
-                    self.adjust_layout_to_sequence_length()
+                self.adjust_layout_to_sequence_length()
         elif not grow_sequence:
             if (
                 next_beat_index is not None

@@ -1,14 +1,17 @@
 {
     "current_user": "AC",
+    "current_note": "Created using The Kinetic Alphabet",
     "user_profiles": {
         "AC": {
-            "name": "AC",
-            "export_date": "5-24-2024"
+            "name": "AC"
         },
         "Austen Cloud": {
             "name": "Austen Cloud"
         }
     },
+    "notes": [
+        "Created using The Kinetic Alphabet"
+    ],
     "pictograph_size": 1,
     "prop_type": "Staff",
     "glyph_visibility": {
@@ -28,9 +31,5 @@
         "open_directory_on_export": true,
         "current_user": "Jesus",
         "add_word": true
-    },
-    "notes": [
-        "Created using The Kinetic Alphabet"
-    ],
-    "current_note": "Created using The Kinetic Alphabet"
+    }
 }

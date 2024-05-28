@@ -54,7 +54,7 @@ class SW_ButtonFrame(QFrame):
             },
             "save_image": {
                 "icon_path": "save_image.svg",
-                "callback": lambda: self.export_manager.exec_dialog(),
+                "callback": lambda: self.export_manager.dialog_executor.exec_dialog(),
                 "tooltip": "Save Image",
             },
             "layout_options": {

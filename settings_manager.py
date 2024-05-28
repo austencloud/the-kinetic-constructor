@@ -32,22 +32,40 @@ class SettingsManager(QObject):
     MAX_COLUMN_COUNT = 8
     MIN_COLUMN_COUNT = 3
     DEFAULT_SETTINGS = {
-        "current_user": "Austen Cloud",
-        "pictograph_size": 1,
-        "prop_type": "Club",
-        "glyph_visibility": {
-            "VTG": False,
-            "TKA": True,
-            "Elemental": False,
-            "EndPosition": False,
+    "current_user": "AC",
+    "current_note": "Created using The Kinetic Alphabet",
+    "user_profiles": {
+        "AC": {
+            "name": "AC"
         },
-        "grid_visibility": {"non_radial_points": False},
-        "background_type": "Rainbow",
-        "grow_sequence": True,
-        "image_export": {
-            "include_start_position": True,
-        },
+        "Austen Cloud": {
+            "name": "Austen Cloud"
+        }
+    },
+    "notes": [
+        "Created using The Kinetic Alphabet"
+    ],
+    "pictograph_size": 1,
+    "prop_type": "Staff",
+    "glyph_visibility": {
+        "VTG": False,
+        "TKA": True,
+        "Elemental": False,
+        "EndPosition": False
+    },
+    "grid_visibility": {
+        "non_radial_points": True
+    },
+    "background_type": "AuroraBorealis",
+    "grow_sequence": True,
+    "image_export": {
+        "include_start_position": False,
+        "add_info": True,
+        "open_directory_on_export": True,
+        "current_user": "Jesus",
+        "add_word": True
     }
+}
 
     def __init__(self, main_window: "MainWindow") -> None:
         super().__init__()
