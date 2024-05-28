@@ -6,7 +6,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QImage, QPainter, QPixmap, QFont
 from path_helpers import get_my_photos_path
 from widgets.image_export_dialog.image_export_dialog import ImageExportDialog
-from widgets.image_export_layout_manager import ImageExportLayoutManager
+from widgets.image_export_layout_handler import ImageExportLayoutHandler
 from widgets.sequence_widget.SW_beat_frame.beat import Beat, BeatView
 from PyQt6.QtWidgets import QFileDialog
 
@@ -36,7 +36,7 @@ class SequenceImageExportManager:
         self.include_start_pos = self.settings_manager.get_image_export_setting(
             "include_start_position", True
         )
-        self.layout_manager = ImageExportLayoutManager(self)
+        self.layout_handler = ImageExportLayoutHandler(self)
         self.image_drawer = ImageDrawer(self)
         self.beat_factory = ImageExportBeatFactory(self)
         self.image_creator = ImageCreator(self)

@@ -20,7 +20,7 @@ class ImageCreator:
         self.beat_frame = export_manager.beat_frame
         self.indicator_label = export_manager.indicator_label
         self.sequence_widget = export_manager.sequence_widget
-        self.layout_manager = export_manager.layout_manager
+        self.layout_manager = export_manager.layout_handler
         self.image_drawer = export_manager.image_drawer
         self.beat_size = self.beat_frame.start_pos_view.beat.width()
         self.beat_factory = export_manager.beat_factory
@@ -30,7 +30,7 @@ class ImageCreator:
     def __init__(self, export_manager: "SequenceImageExportManager"):
         self.export_manager = export_manager
         self.beat_frame = export_manager.beat_frame
-        self.layout_manager = export_manager.layout_manager
+        self.layout_manager = export_manager.layout_handler
         self.image_drawer = export_manager.image_drawer
         self.beat_size = self.beat_frame.start_pos_view.beat.width()
         self.beat_factory = export_manager.beat_factory
@@ -59,6 +59,11 @@ class ImageCreator:
         )
         if options.get("add_info", False):
             self.image_drawer.draw_user_info(image, options)
+
+        if options.get("add_word", False):
+            word = self.beat_frame.get_current_word()
+            self.image_drawer.draw_word(image, word)
+
         return image
 
     def _create_image(self, column_count, row_count, additional_height=0) -> QImage:

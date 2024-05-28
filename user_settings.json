@@ -3,14 +3,14 @@
     "user_profiles": {
         "AC": {
             "name": "AC",
-            "export_date": "5-27-2024"
+            "export_date": "5-24-2024"
         },
-        "Bob": {
-            "name": "Bob"
+        "Austen Cloud": {
+            "name": "Austen Cloud"
         }
     },
     "pictograph_size": 1,
-    "prop_type": "Fan",
+    "prop_type": "Staff",
     "glyph_visibility": {
         "VTG": false,
         "TKA": true,
@@ -21,7 +21,7 @@
         "non_radial_points": true
     },
     "background_type": "AuroraBorealis",
-    "grow_sequence": false,
+    "grow_sequence": true,
     "image_export": {
         "include_start_position": true,
         "add_info": true,
@@ -30,9 +30,7 @@
         "add_word": true
     },
     "notes": [
-        "Created using The Kinetic Alphabet",
-        "This is a new note.",
-        "Is it working?"
+        "Created using The Kinetic Alphabet"
     ],
-    "current_note": "This is a new note."
+    "current_note": "Created using The Kinetic Alphabet"
 }

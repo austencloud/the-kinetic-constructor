@@ -17,7 +17,7 @@ class ImageExportDialogExecutor:
         self.beat_frame = export_manager.beat_frame
         self.indicator_label = export_manager.indicator_label
         self.settings_manager = export_manager.settings_manager
-        self.layout_manager = export_manager.layout_manager
+        self.layout_manager = export_manager.layout_handler
         self.image_creator = export_manager.image_creator
         self.image_saver = export_manager.image_saver
 

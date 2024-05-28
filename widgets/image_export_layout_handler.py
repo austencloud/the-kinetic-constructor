@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     )
 
 
-class ImageExportLayoutManager:
+class ImageExportLayoutHandler:
     def __init__(self, image_export_manager: "SequenceImageExportManager"):
         self.image_export_manager = image_export_manager
         self.beat_frame = image_export_manager.beat_frame

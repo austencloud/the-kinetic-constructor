@@ -9,8 +9,9 @@ from PyQt6.QtWidgets import (
     QInputDialog,
     QApplication,
 )
-from PyQt6.QtCore import pyqtSignal, Qt
+from PyQt6.QtCore import pyqtSignal, Qt, QTimer
 from datetime import datetime
+import requests
 
 if TYPE_CHECKING:
     from widgets.image_export_dialog.image_export_dialog import ImageExportDialog
@@ -35,9 +36,15 @@ class ExportDialogControlPanel(QWidget):
         self.previous_user = self.settings_manager.user_manager.get_current_user()
 
         self._setup_checkboxes()
-        self._setup_fields()
+        self._setup_add_date_field()
         self._setup_layout()
         self._connect_signals()
+
+        # Timer for the date field
+        self.date_update_timer = QTimer(self)
+        self.date_update_timer.setInterval(1000)  # 1 second interval
+        self.date_update_timer.setSingleShot(True)
+        self.date_update_timer.timeout.connect(self.update_preview_based_on_options)
 
     def _setup_open_directory_checkbox(self):
         self.open_directory_check = QCheckBox("Open file location after export", self)
@@ -85,6 +92,7 @@ class ExportDialogControlPanel(QWidget):
             self.export_dialog.update_export_setting_and_layout
         )
         self.user_combo_box.currentIndexChanged.connect(self._handle_user_selection)
+        self.add_date_field.textChanged.connect(self._on_date_field_text_changed)
 
     def _setup_checkboxes(self):
         """Setup the checkboxes for the control panel."""
@@ -109,13 +117,15 @@ class ExportDialogControlPanel(QWidget):
         self.add_word_check.toggled.connect(self.toggle_add_word)
         self._setup_open_directory_checkbox()
 
-    def _setup_fields(self):
+    def _setup_add_date_field(self):
         """Setup the input fields for the control panel."""
         self.add_date_field = QLineEdit(self)
         current_date = datetime.now().strftime("%m-%d-%Y")
         current_date = "-".join([str(int(part)) for part in current_date.split("-")])
         self.add_date_field.setText(current_date)
         self.add_date_field.setAlignment(Qt.AlignmentFlag.AlignRight)
+        self.add_date_field.setEnabled(False)  # Disable editing
+        self.add_date_field.setStyleSheet("color: gray;")
 
     def _handle_user_selection(self):
         """Handle the selection of a user from the combo box."""
@@ -143,6 +153,10 @@ class ExportDialogControlPanel(QWidget):
             self.previous_note = selected_note
             self.update_preview_based_on_options()
 
+    def _on_date_field_text_changed(self):
+        """Handle text changes in the date field."""
+        self.date_update_timer.start()
+
     def save_settings_and_accept(self):
         """Save the current settings and accept the dialog."""
         current_user = self.user_combo_box.currentText()
@@ -153,9 +167,6 @@ class ExportDialogControlPanel(QWidget):
             "add_word", self.add_word_check.isChecked()
         )
         self.export_dialog.accept()
-
-    # TODO - Fix the bug where the preview gets updated numberous times after a selection is made in the dialog due to
-    # the signal currentIndexChanged being emitted multiple times
 
     def update_preview_based_on_options(self):
         """Update the preview panel based on the current options."""
@@ -171,10 +182,8 @@ class ExportDialogControlPanel(QWidget):
         """Toggle the state of the additional info fields based on the checkbox."""
         state = self.add_info_check.isChecked()
         self.user_combo_box.setEnabled(state)
-        self.add_date_field.setEnabled(state)
         self.notes_combo_box.setEnabled(state)
         color = "gray" if not state else ""
-        self.add_date_field.setStyleSheet(f"color: {color};")
         self.user_combo_box.setStyleSheet(f"color: {color};")
         self.notes_combo_box.setStyleSheet(f"color: {color};")
         self.update_preview_based_on_options()

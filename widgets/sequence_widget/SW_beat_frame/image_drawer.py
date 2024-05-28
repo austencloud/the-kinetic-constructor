@@ -58,6 +58,27 @@ class ImageDrawer:
 
         painter.end()
 
+    def draw_word(self, image: QImage, word: str) -> None:
+        painter = QPainter(image)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        painter.setRenderHint(QPainter.RenderHint.TextAntialiasing)
+
+        font = self.font_word
+        metrics = QFontMetrics(font)
+        text_width = metrics.horizontalAdvance(word)
+        
+        while text_width > image.width() - 2 * self.margin:
+            font_size = font.pointSize() - 1
+            font = self._create_font(font.family(), font_size, font.weight(), font.italic())
+            metrics = QFontMetrics(font)
+            text_width = metrics.horizontalAdvance(word)
+            if font_size <= 10:  # Prevent font size from becoming too small
+                break
+
+        self._draw_text(painter, image, word, font, self.margin, "top")
+        painter.end()
+
+
     def draw_user_info(self, image: QImage, options: Dict[str, any]) -> None:
         painter = QPainter(image)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
@@ -67,43 +88,41 @@ class ImageDrawer:
         export_date = self._format_export_date(
             options.get("export_date", datetime.now().strftime("%m-%d-%Y"))
         )
-        add_word = options.get("add_word", False)
-        word = self.beat_frame.get_current_word() if add_word else ""
-        notes = options.get("notes", "No notes! ")
+        add_info = options.get("add_info", False)
+        notes = options.get("notes", "No notes!")
 
         # Calculate text widths
         export_date_width = self._get_text_width(self.font_italic, export_date)
         notes_width = self._get_text_width(self.font_italic, notes)
 
-        # draw word
-        if add_word:
-            self._draw_text(painter, image, word, self.font_word, self.margin, "top")
 
-        # draw user name
-        self._draw_text(
-            painter, image, user_name, self.font_bold_italic, self.margin, "bottom-left"
-        )
+        if add_info:
+            # Draw user name
+            self._draw_text(
+                painter, image, user_name, self.font_bold_italic, self.margin, "bottom-left"
+            )
 
-        # draw notes text
-        self._draw_text(
-            painter,
-            image,
-            notes,
-            self.font_italic,
-            self.margin,
-            "bottom-center",
-            notes_width,
-        )
-        # draw export date
-        self._draw_text(
-            painter,
-            image,
-            export_date,
-            self.font_italic,
-            self.margin,
-            "bottom-right",
-            export_date_width,
-        )
+            # Draw notes text
+            self._draw_text(
+                painter,
+                image,
+                notes,
+                self.font_italic,
+                self.margin,
+                "bottom-center",
+                notes_width,
+            )
+
+            # Draw export date
+            self._draw_text(
+                painter,
+                image,
+                export_date,
+                self.font_italic,
+                self.margin,
+                "bottom-right",
+                export_date_width,
+            )
 
         painter.end()
 
