@@ -42,10 +42,12 @@ class ImageCreator:
             len(filled_beats), include_start_pos
         )
         num_filled_beats = len(filled_beats)
-        additional_height_top, additional_height_bottom = (
-            HeightDeterminer.determine_additional_heights(options, num_filled_beats)
-        )
-
+        if options:
+            additional_height_top, additional_height_bottom = (
+                HeightDeterminer.determine_additional_heights(options, num_filled_beats)
+            )
+        else:
+            additional_height_top, additional_height_bottom = 0, 0
         image = self._create_image(
             column_count, row_count, additional_height_top + additional_height_bottom
         )
@@ -57,13 +59,13 @@ class ImageCreator:
             include_start_pos,
             additional_height_top,
         )
+        if options:
+            if options.get("add_info", False):
+                self.user_info_drawer.draw_user_info(image, options, num_filled_beats)
 
-        if options.get("add_info", False):
-            self.user_info_drawer.draw_user_info(image, options, num_filled_beats)
-
-        if options.get("add_word", False):
-            word = self.beat_frame.get_current_word()
-            self.word_drawer.draw_word(image, word, num_filled_beats)
+            if options.get("add_word", False):
+                word = self.beat_frame.get_current_word()
+                self.word_drawer.draw_word(image, word, num_filled_beats)
 
         return image
 

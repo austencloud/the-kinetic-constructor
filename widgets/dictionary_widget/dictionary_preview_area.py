@@ -179,10 +179,11 @@ class DictionaryPreviewArea(QWidget):
         else:
             self._adjust_label_for_text()
         font_size = self.width() // 20
-        self.base_word_label.setFont(
-            QFont("Georgia", font_size, QFont.Weight.DemiBold)
+        placeholder_text_font_size = self.width() // 40
+        self.base_word_label.setFont(QFont("Georgia", font_size, QFont.Weight.DemiBold))
+        self.image_label.setStyleSheet(
+            f"font: {placeholder_text_font_size}pt Arial; font-weight: bold;"
         )
-        self.image_label.setStyleSheet(f"font: {font_size}pt Arial; font-weight: bold;")
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def reset_preview_area(self):
