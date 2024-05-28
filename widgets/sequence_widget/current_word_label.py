@@ -28,6 +28,8 @@ class CurrentWordLineEdit(QLineEdit):
                 padding-bottom: 0px;
                 margin: 0px;
                 line-height: 1.0em;
+                font-family: Georgia;
+                font-weight: 600;
             }
             """
         )
@@ -74,18 +76,10 @@ class CurrentWordLabel(QWidget):
 
     def resize_current_word_label(self):
         sequence_widget_width = self.sequence_widget.width()
-        label_size = sequence_widget_width // 18
+        font_size = sequence_widget_width // 30
         font = QFont()
-        font.setPointSize(int(label_size * 0.6))
+        font.setPointSize(int(font_size))
         self.line_edit.setFont(font)
-
-        # Calculate the appropriate height for the line edit
-        fm = QFontMetrics(font)
-        baseline = fm.ascent()
-
-        total_height = baseline + fm.descent()
-        self.setFixedHeight(total_height)
-        self.line_edit.setFixedHeight(total_height)
 
     def set_current_word(self, word: str):
         self.current_word = word

@@ -34,7 +34,7 @@ class ThumbnailBox(QWidget):
 
     def _setup_components(self):
         self.metadata_extractor = MetaDataExtractor(self.main_widget)
-        self.base_word_label = BaseWordLabel(self.base_word)
+        self.base_word_label = BaseWordLabel(self)
         self.image_label = ThumbnailImageLabel(self)
         self.variation_number_label = VariationNumberLabel(self)
         self.nav_buttons_widget = ThumbnailBoxNavButtonsWidget(self)
@@ -54,7 +54,6 @@ class ThumbnailBox(QWidget):
             self.margin, self.margin, self.margin, self.margin
         )
         self.setStyleSheet("background-color: rgba(255, 255, 255, 0.5);")
-        self.base_word_label.setFont(QFont("Arial", 20, QFont.Weight.Bold))
 
     def resize_thumbnail_box(self):
         scrollbar_width = (
@@ -65,7 +64,8 @@ class ThumbnailBox(QWidget):
         width = parent_width // 3
         self.setFixedWidth(width)
         self.image_label.update_thumbnail()
-
+        self.base_word_label.resize_base_word_label()
+        
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails
         self.nav_buttons_widget.thumbnails = thumbnails

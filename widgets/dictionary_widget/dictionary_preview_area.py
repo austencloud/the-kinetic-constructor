@@ -73,7 +73,7 @@ class DictionaryPreviewArea(QWidget):
 
     def _setup_components(self):
         self.variation_number_label = VariationNumberLabel(self)
-        self.base_word_label = BaseWordLabel(self.base_word)
+        self.base_word_label = BaseWordLabel(self)
         self.image_label = PreviewAreaImageLabel(self)
         self.nav_buttons_widget = PreviewAreaNavButtonsWidget(self)
         self.image_label.setText("Select a sequence to display it here.")
