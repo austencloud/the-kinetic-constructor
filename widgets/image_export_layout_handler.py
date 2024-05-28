@@ -2,13 +2,13 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.SW_beat_frame.sequence_image_export_manager import (
-        SequenceImageExportManager,
+    from widgets.sequence_widget.SW_beat_frame.image_export_manager import (
+        ImageExportManager,
     )
 
 
 class ImageExportLayoutHandler:
-    def __init__(self, image_export_manager: "SequenceImageExportManager"):
+    def __init__(self, image_export_manager: "ImageExportManager"):
         self.image_export_manager = image_export_manager
         self.beat_frame = image_export_manager.beat_frame
 

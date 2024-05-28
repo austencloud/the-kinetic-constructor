@@ -14,15 +14,13 @@ from widgets.image_export_dialog.export_dialog_preview_panel import (
 )
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.SW_beat_frame.sequence_image_export_manager import (
-        SequenceImageExportManager,
+    from widgets.sequence_widget.SW_beat_frame.image_export_manager import (
+        ImageExportManager,
     )
 
 
 class ImageExportDialog(QDialog):
-    def __init__(
-        self, export_manager: "SequenceImageExportManager", sequence: list[dict]
-    ):
+    def __init__(self, export_manager: "ImageExportManager", sequence: list[dict]):
         super().__init__(export_manager.main_widget)
         self.export_manager = export_manager
         self.sequence = sequence
@@ -77,7 +75,7 @@ class ImageExportDialog(QDialog):
             "user_name": self.control_panel.user_combo_box.currentText(),
             "export_date": self.control_panel.add_date_field.text(),
             "open_directory": self.control_panel.open_directory_check.isChecked(),
-            "notes": self.control_panel.notes_combo_box.currentText(),  
+            "notes": self.control_panel.notes_combo_box.currentText(),
         }
 
     def update_preview_based_on_options(self):

@@ -8,16 +8,17 @@ from widgets.sequence_widget.SW_beat_frame.word_drawer import WordDrawer
 from widgets.sequence_widget.SW_beat_frame.height_determiner import HeightDeterminer
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.SW_beat_frame.sequence_image_export_manager import (
-        SequenceImageExportManager,
+    from widgets.sequence_widget.SW_beat_frame.image_export_manager import (
+        ImageExportManager,
     )
+
 
 class ImageCreator:
     """Class responsible for creating sequence images."""
 
     BASE_MARGIN = 50
 
-    def __init__(self, export_manager: "SequenceImageExportManager"):
+    def __init__(self, export_manager: "ImageExportManager"):
         self.export_manager = export_manager
         self.beat_frame = export_manager.beat_frame
         self.layout_manager = export_manager.layout_handler

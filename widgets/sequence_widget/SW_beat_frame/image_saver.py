@@ -6,13 +6,13 @@ from PyQt6.QtGui import QImage
 from path_helpers import get_my_photos_path
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.SW_beat_frame.sequence_image_export_manager import (
-        SequenceImageExportManager,
+    from widgets.sequence_widget.SW_beat_frame.image_export_manager import (
+        ImageExportManager,
     )
 
 
 class ImageSaver:
-    def __init__(self, export_manager: "SequenceImageExportManager"):
+    def __init__(self, export_manager: "ImageExportManager"):
         self.export_manager = export_manager
         self.beat_frame = export_manager.beat_frame
         self.indicator_label = export_manager.indicator_label

@@ -7,7 +7,7 @@ from widgets.sequence_widget.SW_beat_frame_layout_manager import (
     SW_BeatFrameLayoutManager,
 )
 from .beat_deletion_manager import BeatDeletionManager
-from .sequence_image_export_manager import SequenceImageExportManager
+from .image_export_manager import ImageExportManager
 from .beat_frame_print_manager import BeatFramePrintManager
 from .beat_selection_overlay import SequenceWidgetBeatSelectionOverlay
 from .start_pos_beat import StartPositionBeat
@@ -48,7 +48,7 @@ class SW_BeatFrame(QFrame):
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(self)
         self.beat_deletion_manager = BeatDeletionManager(self)
-        self.export_manager = SequenceImageExportManager(self)
+        self.export_manager = ImageExportManager(self)
         self.print_sequence_manager = BeatFramePrintManager(self)
 
     def _setup_layout(self) -> None:

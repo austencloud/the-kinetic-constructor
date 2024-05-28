@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
 
 
-class SequenceImageExportManager:
+class ImageExportManager:
     last_save_directory = None
 
     def __init__(self, beat_frame: "SW_BeatFrame") -> None:
