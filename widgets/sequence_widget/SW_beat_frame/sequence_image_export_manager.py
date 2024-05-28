@@ -37,7 +37,6 @@ class SequenceImageExportManager:
             "include_start_position", True
         )
         self.layout_handler = ImageExportLayoutHandler(self)
-        self.image_drawer = ImageDrawer(self)
         self.beat_factory = ImageExportBeatFactory(self)
         self.image_creator = ImageCreator(self)
         self.image_saver = ImageSaver(self)

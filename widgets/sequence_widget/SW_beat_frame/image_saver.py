@@ -21,7 +21,7 @@ class ImageSaver:
         word = self.beat_frame.get_current_word()
         if word == "":
             self.indicator_label.show_message(
-                "You must What is the next meeting?build a sequence to save it as an image."
+                "You must build a sequence to save it as an image."
             )
             return
 

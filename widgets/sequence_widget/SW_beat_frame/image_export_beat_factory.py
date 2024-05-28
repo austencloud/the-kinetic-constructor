@@ -20,7 +20,6 @@ class ImageExportBeatFactory:
 
     def process_sequence_to_beats(self, sequence: list[dict])-> list[BeatView]:
         from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
-
         self.temp_beat_frame = SW_BeatFrame(self.sequence_widget)
         filled_beats = []
         for i, beat_data in enumerate(sequence[2:], start=2):
