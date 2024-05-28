@@ -38,7 +38,7 @@ class DictionaryWidget(QWidget):
     def update_background_manager(self, bg_type: str):
         self.background_manager = self.main_widget.main_window.settings_manager.setup_background_manager(self)
         self.background_manager.update_required.connect(self.update)
-        self.update()  # Ensure the widget is redrawn with the new background
+        self.update() 
 
     def paintEvent(self, event):
         painter = QPainter(self)

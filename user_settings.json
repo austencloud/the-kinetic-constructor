@@ -23,7 +23,7 @@
     "background_type": "AuroraBorealis",
     "grow_sequence": true,
     "image_export": {
-        "include_start_position": true,
+        "include_start_position": false,
         "add_info": true,
         "open_directory_on_export": true,
         "current_user": "Jesus",

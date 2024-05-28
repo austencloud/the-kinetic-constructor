@@ -24,17 +24,9 @@
 
 # It would be great if the user had the ability to modify the way that all the pictographs look within their thumbnails in the dictionary tab. I want to create a way for the program to automatically save all variations of a Specific sequence in all prop types as images (or svg's more preferably). It should have a dynamic system for saving these within subfolders that should allow it to easily access the new vgs when the user changes the prop type of the overall program. Right now my program is using image thumbnails to display in the dictionary tab. But I think if they were to use these svg files and have them sorted in a really easy to access way, then we could make it more efficient. Also, I believe it will take up a lot of storage space. To develop an image for every single prop type As soon as the user wants to save a sequence. I'm thinking if this is all stored in textual data, then it could be more efficient. But I'm really not sure. I don't know if there are benefits or drawbacks to changing everything to be svgs. Maybe it would work just to have a smaller image file. I'm wondering if in order to use SVG I'm going to need to create new graphics views for every single instance a displaying the humbnail in the dictionary. My program is currently set up to assemble all of these different components using a queue graphic scene and a set of rules that it's given from a dictionary file. However, in this new setup that I'm suggesting, I'm suggesting once we assemble a pictograph We save it as svg data. And the program should know whether it should look for the existing svg data or assemble a pictograph to create it. Then it should display this svg data, basically in the exact same way it displays an image. And I'm wondering if I'm able to do that without creating a queue graphics view and a scene to make it So that it has to create an entire instance of that class every single time it needs to set one up. I want the image that is exported from the image export manager to actually be an SVG itself that it just loads as an image from the text data. Is that feasible or is that Going to cause more issues in terms of functionality because of having to set up a coordinate system for every single image?
 
-# write me the bullet point list
 
-# - Make the drop down for selecting the amount of beats in a sequence more intuitive and user friendly
-
-# - Make it so the user can see their sequence growing gradually as they add individual pictographs
 
 # - Incorporate the circular word checker to develop the rest of the word once the first rotation is made
-
-# - Redesign the image export dialog to be more intuitive and user friendly
-
-# - Fix the add start position option to properly create an image with a start position and update the thumbnail
 
 # - Redesign the dictionary tab to be more intuitive and user friendly
 
@@ -44,7 +36,7 @@
 
 # - Fix the bug causing the dictionary tab to expand the programs height indefinitely
 
-# - Reduce the size of the pictographs to improve program performance
+# - Reduce the size of the pictographs to improOK, wonderful job. Let's move on to something else.ve program performance
 
 # - Implement a system of automatically fixing words to follow a standardized naming convention
 

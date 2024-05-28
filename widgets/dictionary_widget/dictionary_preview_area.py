@@ -40,16 +40,15 @@ class DictionaryPreviewArea(QWidget):
         self.current_thumbnail_box: ThumbnailBox = None
         self.base_word = ""
         self._setup_components()
-        self.image_label.setStyleSheet("font: 20pt Arial; font-weight: bold;")
-        self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
         self.variation_number_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.button_panel = DictionaryButtonPanel(self)
         self.update_thumbnails()
 
+        self._setup_layout()
+
+    def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
-
-
-
         self.layout.addStretch(1)
         self.layout.addWidget(self.base_word_label)
         self.layout.addWidget(self.variation_number_label)
@@ -57,9 +56,6 @@ class DictionaryPreviewArea(QWidget):
         self.layout.addWidget(self.nav_buttons_widget)
         self.layout.addWidget(self.button_panel)
         self.layout.addStretch(1)
-        self.base_word_label.setFont(QFont("Arial", 30, QFont.Weight.Bold))
-
-
 
     def get_thumbnail_at_current_index(self):
         if self.thumbnails:
@@ -182,9 +178,12 @@ class DictionaryPreviewArea(QWidget):
             self.update_preview(self.current_index)
         else:
             self._adjust_label_for_text()
-        btn_size = self.width() // 10
-        icon_size = int(btn_size * 0.8)
-
+        font_size = self.width() // 20
+        self.base_word_label.setFont(
+            QFont("Georgia", font_size, QFont.Weight.DemiBold)
+        )
+        self.image_label.setStyleSheet(f"font: {font_size}pt Arial; font-weight: bold;")
+        self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def reset_preview_area(self):
         self.current_index = None

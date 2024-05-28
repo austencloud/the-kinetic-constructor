@@ -94,7 +94,7 @@ class PropOffsetCalculator:
         elif self.pictograph.check.has_all_props_of_type(PropType.BigDoubleStar):
             self.beta_offset = self.prop_placement_manager.pictograph.width() / 50
         else:
-            self.beta_offset = self.prop_placement_manager.pictograph.width() / 38
+            self.beta_offset = self.prop_placement_manager.pictograph.width() / 45
 
         offset_map = {
             LEFT: QPointF(-self.beta_offset, 0),
@@ -108,7 +108,7 @@ class PropOffsetCalculator:
     def calculate_rot_override_position_with_offset(
         self, current_position: QPointF, direction: Directions
     ) -> QPointF:
-        self.beta_offset = self.prop_placement_manager.pictograph.width() / 38
+        self.beta_offset = self.prop_placement_manager.pictograph.width() / 45
 
         offset_map = {
             LEFT: QPointF(self.beta_offset * 2, 0),

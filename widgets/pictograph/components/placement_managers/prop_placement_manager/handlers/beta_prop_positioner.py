@@ -60,7 +60,8 @@ class HandPositioner:
         self.move_hand(blue_hand, "left")
 
     def move_hand(self, prop: Prop, direction: Directions) -> None:
-        offset = self.beta_prop_positioner.prop_placement_manager.offset_calculator.calculate_new_position_with_offset(
+        offset_calculator = self.beta_prop_positioner.prop_placement_manager.offset_calculator
+        offset = offset_calculator.calculate_new_position_with_offset(
             prop.pos(), direction
         )
         prop.setPos(offset)
