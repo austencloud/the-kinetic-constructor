@@ -3,6 +3,8 @@ from PyQt6.QtGui import QPainter, QFont, QFontMetrics, QImage
 from PyQt6.QtCore import Qt
 from datetime import datetime
 
+from widgets.sequence_widget.SW_beat_frame.font_margin_helper import FontMarginHelper
+
 if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.image_creator import ImageCreator
     from widgets.sequence_widget.SW_beat_frame.image_drawer import ImageDrawer
@@ -11,8 +13,8 @@ if TYPE_CHECKING:
 class UserInfoDrawer:
     def __init__(self, image_creator: "ImageCreator"):
         self.image_creator = image_creator
-        self.font_bold_italic = QFont("Georgia", 50, QFont.Weight.Bold)
-        self.font_italic = QFont("Georgia", 50, QFont.Weight.Normal)
+        self.base_font_bold_italic = QFont("Georgia", 50, QFont.Weight.Bold)
+        self.base_font_italic = QFont("Georgia", 50, QFont.Weight.Normal)
 
     def draw_user_info(
         self,
@@ -20,12 +22,13 @@ class UserInfoDrawer:
         options: Dict[str, any],
         num_filled_beats: int,
     ) -> None:
-
-        margin = 50
-        if num_filled_beats == 1:
-            margin = 15
-        elif num_filled_beats == 2:
-            margin = 25
+        base_margin = 50
+        font_bold_italic, margin = FontMarginHelper.adjust_font_and_margin(
+            self.base_font_bold_italic, num_filled_beats, base_margin
+        )
+        font_italic, _ = FontMarginHelper.adjust_font_and_margin(
+            self.base_font_italic, num_filled_beats, base_margin
+        )
 
         painter = QPainter(image)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
@@ -38,34 +41,6 @@ class UserInfoDrawer:
         add_info = options.get("add_info", False)
         notes = options.get("notes", "No notes!")
 
-        font_bold_italic = self.font_bold_italic
-        font_italic = self.font_italic
-        if num_filled_beats == 1:
-            font_bold_italic = self._create_font(
-                font_bold_italic.family(),
-                font_bold_italic.pointSize() // 2,
-                font_bold_italic.weight(),
-                font_bold_italic.italic(),
-            )
-            font_italic = self._create_font(
-                font_italic.family(),
-                font_italic.pointSize() // 2,
-                font_italic.weight(),
-                font_italic.italic(),
-            )
-        elif num_filled_beats == 2:
-            font_bold_italic = self._create_font(
-                font_bold_italic.family(),
-                int(font_bold_italic.pointSize() // 1.5),
-                font_bold_italic.weight(),
-                font_bold_italic.italic(),
-            )
-            font_italic = self._create_font(
-                font_italic.family(),
-                int(font_italic.pointSize() // 1.5),
-                font_italic.weight(),
-                font_italic.italic(),
-            )
         # Calculate text widths
         export_date_width = self._get_text_width(font_italic, export_date)
         notes_width = self._get_text_width(font_italic, notes)
@@ -99,11 +74,6 @@ class UserInfoDrawer:
             )
 
         painter.end()
-
-    def _create_font(self, family: str, size: int, weight: int, italic: bool) -> QFont:
-        font = QFont(family, size, weight)
-        font.setItalic(italic)
-        return font
 
     def _format_export_date(self, date_str: str) -> str:
         return "-".join([str(int(part)) for part in date_str.split("-")])

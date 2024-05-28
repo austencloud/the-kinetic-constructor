@@ -1,23 +1,23 @@
 from PyQt6.QtGui import QImage
 from PyQt6.QtCore import Qt
-import os
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFileDialog
-from PyQt6.QtGui import QImage
 
-from path_helpers import get_my_photos_path
-from widgets.sequence_widget.SW_beat_frame.beat import Beat, BeatView
 from widgets.sequence_widget.SW_beat_frame.beat_drawer import BeatDrawer
 from widgets.sequence_widget.SW_beat_frame.user_info_drawer import UserInfoDrawer
 from widgets.sequence_widget.SW_beat_frame.word_drawer import WordDrawer
+from widgets.sequence_widget.SW_beat_frame.font_margin_helper import FontMarginHelper
+from widgets.sequence_widget.SW_beat_frame.height_determiner import HeightDeterminer
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.sequence_image_export_manager import (
         SequenceImageExportManager,
     )
 
-
 class ImageCreator:
+    """Class responsible for creating sequence images."""
+
+    BASE_MARGIN = 50
+
     def __init__(self, export_manager: "SequenceImageExportManager"):
         self.export_manager = export_manager
         self.beat_frame = export_manager.beat_frame
@@ -29,6 +29,7 @@ class ImageCreator:
         self._setup_drawers()
 
     def _setup_drawers(self):
+        """Set up drawer instances."""
         self.beat_drawer = BeatDrawer(self)
         self.word_drawer = WordDrawer(self)
         self.user_info_drawer = UserInfoDrawer(self)
@@ -36,20 +37,15 @@ class ImageCreator:
     def create_sequence_image(
         self, sequence: list[dict], include_start_pos=True, options: dict = None
     ) -> QImage:
+        """Create an image of the sequence."""
         filled_beats = self.beat_factory.process_sequence_to_beats(sequence)
         column_count, row_count = self.layout_manager.calculate_layout(
             len(filled_beats), include_start_pos
         )
         num_filled_beats = len(filled_beats)
-        if num_filled_beats == 1:
-            additional_height_top = 200 if options.get("add_word", False) else 0
-            additional_height_bottom = 55 if options.get("add_info", False) else 0
-        elif num_filled_beats == 2:
-            additional_height_top = 200 if options.get("add_word", False) else 0
-            additional_height_bottom = 75 if options.get("add_info", False) else 0
-        else:
-            additional_height_top = 300 if options.get("add_word", False) else 0
-            additional_height_bottom = 150 if options.get("add_info", False) else 0
+        additional_height_top, additional_height_bottom = (
+            HeightDeterminer.determine_additional_heights(options, num_filled_beats)
+        )
 
         image = self._create_image(
             column_count, row_count, additional_height_top + additional_height_bottom
@@ -64,9 +60,7 @@ class ImageCreator:
         )
 
         if options.get("add_info", False):
-            self.user_info_drawer.draw_user_info(
-                image, options, num_filled_beats
-            )
+            self.user_info_drawer.draw_user_info(image, options, num_filled_beats)
 
         if options.get("add_word", False):
             word = self.beat_frame.get_current_word()
@@ -75,6 +69,7 @@ class ImageCreator:
         return image
 
     def _create_image(self, column_count, row_count, additional_height=0) -> QImage:
+        """Create a new QImage with the given dimensions."""
         image_width = int(column_count * self.beat_size)
         image_height = int(row_count * self.beat_size + additional_height)
         image = QImage(image_width, image_height, QImage.Format.Format_ARGB32)
