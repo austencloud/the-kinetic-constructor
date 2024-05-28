@@ -1,9 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from data.beat_frame_layouts import BEAT_FRAME_LAYOUTS
+from data.beat_frame_layouts import DEFAULT_BEAT_FRAME_LAYOUTS
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
+
 
 class SW_BeatFrameLayoutManager:
     def __init__(self, beat_frame: "SW_BeatFrame"):
@@ -12,7 +13,27 @@ class SW_BeatFrameLayoutManager:
         self.settings_manager = beat_frame.main_widget.main_window.settings_manager
 
     def calculate_layout(self, beat_count: int) -> tuple[int, int]:
-        return BEAT_FRAME_LAYOUTS.get(beat_count, (1, beat_count))
+        return DEFAULT_BEAT_FRAME_LAYOUTS.get(beat_count, (1, beat_count))
+
+    def get_cols(self):
+        # get the columns that currently are visible in the current beat frame by looking at its grid layout
+        # only return the number of columns that are actually full
+        layout = self.beat_frame.layout
+        cols = 0
+        for i in range(layout.columnCount()):
+            if layout.itemAtPosition(0, i):
+                cols += 1
+        return cols - 1
+
+    def get_rows(self):
+        # get the rows that currently are visible in the current beat frame by looking at its grid layout
+        # only return the number of rows that are actually full
+        layout = self.beat_frame.layout
+        rows = 0
+        for i in range(layout.rowCount()):
+            if layout.itemAtPosition(i, 1):
+                rows += 1
+        return rows
 
     def configure_beat_frame(self, num_beats):
         grow_sequence = self.settings_manager.get_grow_sequence()

@@ -91,7 +91,7 @@ class SequenceWidget(QWidget):
 
         return max_row + 1, max_col  # Add 1 to max_row to get the count
 
-    def apply_layout_options(self, rows, cols, num_beats):
+    def apply_layout_options(self, cols, rows, num_beats):
         self.beat_frame.layout_manager.rearrange_beats(num_beats, cols, rows)
         self.update_current_word()
 

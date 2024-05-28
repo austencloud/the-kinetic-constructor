@@ -1,4 +1,4 @@
-BEAT_FRAME_LAYOUTS = {
+DEFAULT_BEAT_FRAME_LAYOUTS = {
     0: (0, 1),
     1: (1, 1),
     2: (2, 1),

@@ -24,9 +24,9 @@
         "non_radial_points": true
     },
     "background_type": "AuroraBorealis",
-    "grow_sequence": true,
+    "grow_sequence": false,
     "image_export": {
-        "include_start_position": false,
+        "include_start_position": true,
         "add_info": true,
         "open_directory_on_export": true,
         "current_user": "Jesus",

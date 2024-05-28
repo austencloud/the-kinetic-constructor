@@ -35,6 +35,7 @@ class SW_LayoutOptionsDialog(QDialog):
             2: [(1, 2)],
             3: [(1, 3), (2, 2)],
             4: [(2, 2), (1, 4)],
+            5: [(3, 2), (2, 3)],
             6: [(3, 2), (2, 3)],
             8: [(4, 2), (2, 4)],
             7: [(4, 2), (2, 4)],
@@ -74,7 +75,6 @@ class SW_LayoutOptionsDialog(QDialog):
 
     def _setup_action_button_layout(self):
         self.action_button_layout = QHBoxLayout()
-        # add stretch to center the buttons
         self.action_button_layout.addStretch(1)
         self.action_button_layout.addWidget(self.cancel_button)
         self.action_button_layout.addWidget(self.apply_button)
@@ -100,8 +100,8 @@ class SW_LayoutOptionsDialog(QDialog):
         if layouts:
             self.panel.layout_combo_box.setCurrentIndex(0)
 
-    def update_preview(self):
-        self.preview.update_preview()
+    def update_preview(self, update_from_beat_frame: bool = False):
+        self.preview.update_preview(update_from_beat_frame)
 
     def apply_settings(self):
         grow_sequence = self.panel.sequence_growth_checkbox.isChecked()
@@ -117,7 +117,7 @@ class SW_LayoutOptionsDialog(QDialog):
             self.settings_manager.set_grow_sequence(False)
             num_beats = int(self.panel.beats_combo_box.currentText())
             selected_layout = self.panel.layout_combo_box.currentText()
-            rows, cols = map(int, selected_layout.split(" x "))
+            cols, rows = map(int, selected_layout.split(" x "))
             if num_beats < num_filled_beats:
                 if self.open_warning_dialog():
                     self.sequence_widget.apply_layout_options(rows, cols, num_beats)
@@ -139,7 +139,7 @@ class SW_LayoutOptionsDialog(QDialog):
                 else:
                     return
             else:
-                self.sequence_widget.apply_layout_options(rows, cols, num_beats)
+                self.sequence_widget.apply_layout_options(cols, rows, num_beats)
         self.check_option_picker_state()
         self.accept()
 

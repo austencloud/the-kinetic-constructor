@@ -22,7 +22,7 @@ class LayoutOptionsPreview(QWidget):
         self.layout.setSpacing(0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-    def update_preview(self):
+    def update_preview(self, update_from_beat_frame: bool = False):
         for i in reversed(range(self.layout.count())):
             widget_to_remove = self.layout.itemAt(i).widget()
             self.layout.removeWidget(widget_to_remove)
@@ -31,8 +31,10 @@ class LayoutOptionsPreview(QWidget):
         if not self.dialog.panel.sequence_growth_checkbox.isChecked():
             num_beats = int(self.dialog.panel.beats_combo_box.currentText())
             selected_layout = self.dialog.panel.layout_combo_box.currentText()
+
+
             if selected_layout:
-                rows, cols = map(int, selected_layout.split(" x "))
+                cols, rows = map(int, selected_layout.split(" x "))
 
                 cols_with_start_pos = cols + 1
                 rows_with_start_pos = rows + 1

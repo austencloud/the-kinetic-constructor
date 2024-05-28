@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from PyQt6.QtGui import QShowEvent
 from PyQt6.QtWidgets import (
     QVBoxLayout,
     QLabel,
@@ -24,10 +25,9 @@ class LayoutOptionsPanel(QWidget):
             self.sequence_widget.main_widget.main_window.settings_manager
         )
         self.layout_options = dialog.layout_options
-
+        self.beat_frame = self.sequence_widget.beat_frame
         self._setup_components()
         self._setup_layout()
-        # self._update_comboboxes_state()
 
     def _setup_components(self):
         self._setup_grow_sequence_checkbox()
@@ -69,7 +69,7 @@ class LayoutOptionsPanel(QWidget):
         self.sequence_growth_checkbox = QCheckBox("Grow sequence")
         grow_sequence = self.settings_manager.get_grow_sequence()
         self.sequence_growth_checkbox.setChecked(grow_sequence)
-        self.sequence_growth_checkbox.toggled.connect(self._update_comboboxes_state)
+        self.sequence_growth_checkbox.toggled.connect(self._toggle_grow_sequence)
         font = self.sequence_growth_checkbox.font()
         font_size = self.sequence_widget.width() // 60
         font.setPointSize(font_size)
@@ -92,6 +92,7 @@ class LayoutOptionsPanel(QWidget):
         self.beats_combo_box.currentIndexChanged.connect(
             self.dialog._setup_layout_options
         )
+        # set the number of beats dropdown to the current number of beats
 
     def _setup_layout_options_dropdown(self):
         self.layout_label = QLabel("Layout Options:")
@@ -99,24 +100,37 @@ class LayoutOptionsPanel(QWidget):
         self.layout_combo_box = QComboBox(self)
         self.layout_combo_box.currentIndexChanged.connect(self.dialog.update_preview)
 
-    def _update_comboboxes_state(self):
+    def _toggle_grow_sequence(self):
         is_grow_sequence_checked = self.sequence_growth_checkbox.isChecked()
-        state = not is_grow_sequence_checked
 
-        self.beats_label.setEnabled(state)
-        self.beats_combo_box.setEnabled(state)
-        self.layout_label.setEnabled(state)
-        self.layout_combo_box.setEnabled(state)
+        self.beats_label.setEnabled(not is_grow_sequence_checked)
+        self.beats_combo_box.setEnabled(not is_grow_sequence_checked)
+        self.layout_label.setEnabled(not is_grow_sequence_checked)
+        self.layout_combo_box.setEnabled(not is_grow_sequence_checked)
 
-        color = "grey" if not state else "black"
+        color = "grey" if is_grow_sequence_checked else "black"
         self.beats_label.setStyleSheet(f"color: {color};")
         self.layout_label.setStyleSheet(f"color: {color};")
+
+        if not is_grow_sequence_checked:
+            num_beats = self.sequence_widget.beat_frame.find_next_available_beat() or 0
+            self.beats_combo_box.setCurrentText(str(num_beats))
+            self.dialog._setup_layout_options()
+            layout_option = self.get_layout_option_from_current_beat_frame_layout()
+            self.layout_combo_box.setCurrentText(layout_option)
+
         self.dialog.update_preview()
+
+    def get_layout_option_from_current_beat_frame_layout(self):
+        cols = self.beat_frame.layout_manager.get_cols()
+        rows = self.beat_frame.layout_manager.get_rows()
+
+        return f"{cols} x {rows}"
 
     def load_settings(self):
         grow_sequence = self.settings_manager.get_grow_sequence()
         self.sequence_growth_checkbox.setChecked(grow_sequence)
-        self._update_comboboxes_state()
+        self._toggle_grow_sequence()
 
     def initialize_from_state(self, state: dict):
         num_beats = state.get("num_beats", 0)
@@ -128,4 +142,12 @@ class LayoutOptionsPanel(QWidget):
         self.sequence_growth_checkbox.setChecked(grow_sequence)
         self.beats_combo_box.setCurrentText(str(num_beats))
         self.layout_combo_box.setCurrentText(f"{rows} x {cols}")
-        self._update_comboboxes_state()
+        self._toggle_grow_sequence()
+
+    def showEvent(self, event):
+        num_beats = self.sequence_widget.beat_frame.find_next_available_beat() or 0
+        self.beats_combo_box.setCurrentText(str(num_beats))
+
+        layout_option = self.get_layout_option_from_current_beat_frame_layout()
+        self.layout_combo_box.setCurrentText(layout_option)
+        self.dialog.update_preview(update_from_beat_frame=True)
