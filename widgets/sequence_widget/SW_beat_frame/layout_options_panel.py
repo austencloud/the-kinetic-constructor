@@ -137,17 +137,23 @@ class LayoutOptionsPanel(QWidget):
         rows = state.get("rows", 1)
         cols = state.get("cols", 1)
         grow_sequence = state.get("grow_sequence", False)
-        save_layout = state.get("save_layout", False)
 
         self.sequence_growth_checkbox.setChecked(grow_sequence)
         self.beats_combo_box.setCurrentText(str(num_beats))
         self.layout_combo_box.setCurrentText(f"{rows} x {cols}")
         self._toggle_grow_sequence()
 
+    def get_currently_visible_beats(self) -> int:
+        # check the beat frame for beats that are visible
+        num_beats = 0
+        for beat in self.beat_frame.beats:
+            if beat.isVisible():
+                num_beats += 1
+        return num_beats
+
     def showEvent(self, event):
-        num_beats = self.sequence_widget.beat_frame.find_next_available_beat() or 0
+        num_beats = self.get_currently_visible_beats()
         self.beats_combo_box.setCurrentText(str(num_beats))
 
         layout_option = self.get_layout_option_from_current_beat_frame_layout()
         self.layout_combo_box.setCurrentText(layout_option)
-        self.dialog.update_preview(update_from_beat_frame=True)

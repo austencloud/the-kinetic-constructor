@@ -22,7 +22,7 @@ class LayoutOptionsPreview(QWidget):
         self.layout.setSpacing(0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-    def update_preview(self, update_from_beat_frame: bool = False):
+    def update_preview(self):
         for i in reversed(range(self.layout.count())):
             widget_to_remove = self.layout.itemAt(i).widget()
             self.layout.removeWidget(widget_to_remove)

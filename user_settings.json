@@ -3,7 +3,8 @@
     "current_note": "Created using The Kinetic Alphabet",
     "user_profiles": {
         "AC": {
-            "name": "AC"
+            "name": "AC",
+            "export_date": "5-28-2024"
         },
         "Austen Cloud": {
             "name": "Austen Cloud"
@@ -24,9 +25,9 @@
         "non_radial_points": true
     },
     "background_type": "AuroraBorealis",
-    "grow_sequence": false,
+    "grow_sequence": true,
     "image_export": {
-        "include_start_position": true,
+        "include_start_position": false,
         "add_info": true,
         "open_directory_on_export": true,
         "current_user": "Jesus",

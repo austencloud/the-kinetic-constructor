@@ -100,8 +100,8 @@ class SW_LayoutOptionsDialog(QDialog):
         if layouts:
             self.panel.layout_combo_box.setCurrentIndex(0)
 
-    def update_preview(self, update_from_beat_frame: bool = False):
-        self.preview.update_preview(update_from_beat_frame)
+    def update_preview(self):
+        self.preview.update_preview()
 
     def apply_settings(self):
         grow_sequence = self.panel.sequence_growth_checkbox.isChecked()
