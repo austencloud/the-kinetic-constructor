@@ -1,11 +1,9 @@
 import os
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt
 from widgets.image_export_dialog.image_export_dialog import ImageExportDialog
 from widgets.sequence_widget.SW_beat_frame.beat import BeatView
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
     from widgets.sequence_widget.SW_beat_frame.sequence_image_export_manager import (
         SequenceImageExportManager,
     )

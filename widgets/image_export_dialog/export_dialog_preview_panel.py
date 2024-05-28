@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QLabel, QFrame, QVBoxLayout, QSizePolicy
+from PyQt6.QtWidgets import QLabel, QFrame, QVBoxLayout
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPixmap, QImage
+from PyQt6.QtGui import QPixmap
 
 if TYPE_CHECKING:
     from widgets.image_export_dialog.image_export_dialog import ImageExportDialog

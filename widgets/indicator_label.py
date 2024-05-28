@@ -1,11 +1,6 @@
-from PyQt6.QtGui import QFont, QFontDatabase
+from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import (
     QLabel,
-    QSizePolicy,
-    QVBoxLayout,
-    QWidget,
-    QHBoxLayout,
-    QScrollArea,
     QGraphicsOpacityEffect,
 )
 from PyQt6.QtCore import Qt, QTimer, QPropertyAnimation, pyqtSlot

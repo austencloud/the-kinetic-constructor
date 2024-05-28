@@ -6,9 +6,8 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QHBoxLayout,
     QVBoxLayout,
-    QGroupBox,
 )
-from PyQt6.QtGui import QFont, QColor
+from PyQt6.QtGui import QFont
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker import (

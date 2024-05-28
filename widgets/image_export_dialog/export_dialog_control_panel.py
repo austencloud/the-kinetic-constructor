@@ -6,12 +6,10 @@ from PyQt6.QtWidgets import (
     QWidget,
     QHBoxLayout,
     QComboBox,
-    QInputDialog,
     QApplication,
 )
 from PyQt6.QtCore import pyqtSignal, Qt, QTimer
 from datetime import datetime
-import requests
 
 if TYPE_CHECKING:
     from widgets.image_export_dialog.image_export_dialog import ImageExportDialog

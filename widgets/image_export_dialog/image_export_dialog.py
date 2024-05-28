@@ -1,13 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
-    QCheckBox,
     QDialog,
     QHBoxLayout,
     QVBoxLayout,
-    QLabel,
     QPushButton,
 )
-from PyQt6.QtCore import Qt
 
 from widgets.image_export_dialog.export_dialog_control_panel import (
     ExportDialogControlPanel,

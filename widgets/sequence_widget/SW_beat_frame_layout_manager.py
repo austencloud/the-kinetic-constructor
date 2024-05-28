@@ -1,7 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
-from widgets.sequence_widget.SW_beat_frame.beat import BeatView
 from data.beat_frame_layouts import BEAT_FRAME_LAYOUTS
 
 if TYPE_CHECKING:

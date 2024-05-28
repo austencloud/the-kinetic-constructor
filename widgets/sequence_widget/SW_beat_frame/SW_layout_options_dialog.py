@@ -4,15 +4,8 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QPushButton,
-    QCheckBox,
-    QLabel,
-    QGridLayout,
-    QWidget,
-    QComboBox,
 )
-from PyQt6.QtCore import Qt
 
-from widgets.sequence_widget.SW_beat_frame.beat import BeatView
 from widgets.sequence_widget.SW_beat_frame.layout_options_panel import (
     LayoutOptionsPanel,
 )
@@ -22,7 +15,6 @@ from widgets.sequence_widget.SW_beat_frame.layout_options_preview import (
 from widgets.sequence_widget.SW_beat_frame.layout_warning_dialog import (
     LayoutWarningDialog,
 )
-from widgets.sequence_widget.SW_beat_frame.start_pos_beat import StartPositionBeatView
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget

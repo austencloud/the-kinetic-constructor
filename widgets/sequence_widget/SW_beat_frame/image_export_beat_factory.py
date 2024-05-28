@@ -1,9 +1,5 @@
-import os
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFileDialog
-from PyQt6.QtGui import QImage
 
-from path_helpers import get_my_photos_path
 from widgets.sequence_widget.SW_beat_frame.beat import Beat, BeatView
 
 if TYPE_CHECKING:

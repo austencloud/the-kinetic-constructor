@@ -1,17 +1,7 @@
-from datetime import datetime
-import os
-import subprocess
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QImage, QPainter, QPixmap, QFont
-from path_helpers import get_my_photos_path
-from widgets.image_export_dialog.image_export_dialog import ImageExportDialog
 from widgets.image_export_layout_handler import ImageExportLayoutHandler
-from widgets.sequence_widget.SW_beat_frame.beat import Beat, BeatView
-from PyQt6.QtWidgets import QFileDialog
 
 from widgets.sequence_widget.SW_beat_frame.image_creator import ImageCreator
-from widgets.sequence_widget.SW_beat_frame.image_drawer import ImageDrawer
 from widgets.sequence_widget.SW_beat_frame.image_export_beat_factory import (
     ImageExportBeatFactory,
 )

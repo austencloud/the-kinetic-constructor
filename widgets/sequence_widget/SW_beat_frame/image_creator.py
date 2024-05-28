@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 from widgets.sequence_widget.SW_beat_frame.beat_drawer import BeatDrawer
 from widgets.sequence_widget.SW_beat_frame.user_info_drawer import UserInfoDrawer
 from widgets.sequence_widget.SW_beat_frame.word_drawer import WordDrawer
-from widgets.sequence_widget.SW_beat_frame.font_margin_helper import FontMarginHelper
 from widgets.sequence_widget.SW_beat_frame.height_determiner import HeightDeterminer
 
 if TYPE_CHECKING:

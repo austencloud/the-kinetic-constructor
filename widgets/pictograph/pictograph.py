@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QScrollArea
 from Enums.Enums import (
     Letter,
@@ -46,10 +46,6 @@ from .components.pictograph_initializer import PictographInitializer
 
 if TYPE_CHECKING:
 
-    from ..sequence_builder.components.option_picker.option_picker_scroll_area import (
-        OptionPickerScrollArea,
-    )
-    from ..letterbook.letterbook_scroll_area import LetterBookScrollArea
     from ..main_widget.main_widget import MainWidget
 
 

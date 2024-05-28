@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QPainter, QFont, QFontMetrics, QImage
-from PyQt6.QtCore import Qt
 
 from widgets.sequence_widget.SW_beat_frame.font_margin_helper import FontMarginHelper
 if TYPE_CHECKING:

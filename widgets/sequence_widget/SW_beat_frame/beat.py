@@ -1,15 +1,12 @@
 from typing import TYPE_CHECKING, Union
-from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem, QGraphicsScene
-from PyQt6.QtCore import Qt, QRect, QPointF, QRectF
+from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem
+from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtGui import (
-    QMouseEvent,
     QFont,
-    QPaintEvent,
     QPainter,
     QColor,
     QPixmap,
     QImage,
-    QPen,
 )
 from widgets.pictograph.pictograph import Pictograph
 

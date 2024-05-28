@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QShowEvent
 from PyQt6.QtCore import QTimer
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QScrollArea, QLabel
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QScrollArea
 from PyQt6.QtCore import Qt
 
 from widgets.sequence_widget.current_word_label import CurrentWordLabel
@@ -9,7 +9,6 @@ from widgets.sequence_widget.current_word_label import CurrentWordLabel
 from ..graph_editor.graph_editor import GraphEditor
 from .SW_beat_frame.SW_beat_frame import SW_BeatFrame
 from .SW_beat_frame.SW_layout_options_dialog import SW_LayoutOptionsDialog
-from .my_sequence_label import MySequenceLabel
 from ..indicator_label import IndicatorLabel
 from .SW_pictograph_factory import SW_PictographFactory
 from .SW_beat_frame.beat import Beat, BeatView
