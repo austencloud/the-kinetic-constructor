@@ -66,9 +66,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         valid_next_options = []
 
-        sequence = (
-            self.json_manager.loader_saver.load_current_sequence_json()
-        )
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
         for pictograph_dict in next_options:
             valid_next_options.append(pictograph_dict)
 
@@ -120,6 +118,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.setMinimumWidth(self.option_picker.sequence_builder.width())
         for section in self.sections_manager.sections.values():
             section.resize_option_picker_section_widget()
+
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         if self.disabled:
