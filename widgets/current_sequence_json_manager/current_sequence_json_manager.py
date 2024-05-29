@@ -1,28 +1,26 @@
 from typing import TYPE_CHECKING, Union
 from Enums.MotionAttributes import Color
-from .sequence_loader_saver import SequenceLoaderSaver
-from .sequence_updater import SequenceUpdater
-from .start_position_handler import StartPositionHandler
+from .json_sequence_loader_saver import JsonSequenceLoaderSaver
+from .json_sequence_updater import JsonSequenceUpdater
+from .json_start_position_handler import JsonStartPositionHandler
 from widgets.sequence_widget.SW_beat_frame.beat import BeatView
-from .motion_orientation_json_calculator import CurrentSequenceJsonOriCalculator
+from .json_ori_calculator import JsonOriCalculator
 from widgets.pictograph.pictograph import Pictograph
-from sequence_validation_engine import SequenceValidationEngine
+from widgets.current_sequence_json_manager.json_sequence_validation_engine import JsonSequenceValidationEngine
 
 if TYPE_CHECKING:
     from widgets.json_manager import JSON_Manager
-
 
 
 class CurrentSequenceJsonManager:
     def __init__(self, json_manager: "JSON_Manager") -> None:
         self.main_widget = json_manager.main_widget
 
-        self.loader_saver = SequenceLoaderSaver(self)
-        self.updater = SequenceUpdater(self)
-        self.start_position_handler = StartPositionHandler(self)
-
-        self.ori_calculator = CurrentSequenceJsonOriCalculator(self)
-        self.validation_engine = SequenceValidationEngine(self)
+        self.loader_saver = JsonSequenceLoaderSaver(self)
+        self.updater = JsonSequenceUpdater(self)
+        self.start_position_handler = JsonStartPositionHandler(self)
+        self.ori_calculator = JsonOriCalculator(self)
+        self.validation_engine = JsonSequenceValidationEngine(self)
 
     def clear_current_sequence_file(self):
         self.loader_saver.save_current_sequence([])
@@ -60,13 +58,17 @@ class CurrentSequenceJsonManager:
                 return i
         return -1
 
-    def update_turns_in_json_at_index(self, index: int, color: Color, turns: Union[int, float]) -> None:
+    def update_turns_in_json_at_index(
+        self, index: int, color: Color, turns: Union[int, float]
+    ) -> None:
         self.updater.update_turns_in_json_at_index(index, color, turns)
 
     def update_start_pos_ori(self, color: Color, ori: int) -> None:
         self.start_position_handler.update_start_pos_ori(color, ori)
 
-    def update_rot_dir_in_json_at_index(self, index: int, color: Color, prop_rot_dir: str) -> None:
+    def update_rot_dir_in_json_at_index(
+        self, index: int, color: Color, prop_rot_dir: str
+    ) -> None:
         self.updater.update_rot_dir_in_json_at_index(index, color, prop_rot_dir)
 
     def apply_turn_pattern_to_current_sequence(self, pattern: list[tuple]) -> None:

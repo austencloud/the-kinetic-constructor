@@ -3,9 +3,12 @@ from typing import TYPE_CHECKING, List, Dict
 from path_helpers import get_user_editable_resource_path
 
 if TYPE_CHECKING:
-    from widgets.current_sequence_json_manager.current_sequence_json_manager import CurrentSequenceJsonManager
+    from widgets.current_sequence_json_manager.current_sequence_json_manager import (
+        CurrentSequenceJsonManager,
+    )
 
-class SequenceLoaderSaver:
+
+class JsonSequenceLoaderSaver:
     def __init__(self, manager: "CurrentSequenceJsonManager"):
         self.manager = manager
         self.current_sequence_json = get_user_editable_resource_path(

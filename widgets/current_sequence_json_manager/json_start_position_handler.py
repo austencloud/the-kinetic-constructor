@@ -4,10 +4,12 @@ from constants import NO_ROT
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.current_sequence_json_manager.current_sequence_json_manager import CurrentSequenceJsonManager
+    from widgets.current_sequence_json_manager.current_sequence_json_manager import (
+        CurrentSequenceJsonManager,
+    )
 
 
-class StartPositionHandler:
+class JsonStartPositionHandler:
     def __init__(self, manager: "CurrentSequenceJsonManager"):
         self.manager = manager
 

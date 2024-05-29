@@ -5,10 +5,12 @@ from circular_word_checker import CircularWordChecker
 from constants import BLUE, DASH, NO_ROT, RED, STATIC
 
 if TYPE_CHECKING:
-    from widgets.current_sequence_json_manager.current_sequence_json_manager import CurrentSequenceJsonManager
+    from widgets.current_sequence_json_manager.current_sequence_json_manager import (
+        CurrentSequenceJsonManager,
+    )
 
 
-class SequenceUpdater:
+class JsonSequenceUpdater:
     def __init__(self, manager: "CurrentSequenceJsonManager"):
         self.manager = manager
 

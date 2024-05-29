@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     )
 
 
-class SequenceValidationEngine:
+class JsonSequenceValidationEngine:
     def __init__(
         self, current_sequence_json_manager: "CurrentSequenceJsonManager"
     ) -> None:
