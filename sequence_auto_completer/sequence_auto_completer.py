@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, List, Dict
-from position_maps import position_map_cw, position_map_ccw
+from data.position_maps import position_map_cw, position_map_ccw
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
 from sequence_auto_completer.new_entry_creator import NewEntryCreator

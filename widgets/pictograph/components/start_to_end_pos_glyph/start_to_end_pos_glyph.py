@@ -5,7 +5,7 @@ from PyQt6.QtSvg import QSvgRenderer
 import os
 
 from Enums.letters import Letter
-from path_helpers import get_images_and_data_path  # Assuming correct import
+from widgets.path_helpers.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph

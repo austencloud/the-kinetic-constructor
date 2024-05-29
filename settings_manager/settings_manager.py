@@ -14,11 +14,11 @@ from background_managers.startfield_background_manager import StarfieldBackgroun
 from background_managers.water_ripple_background_manager import (
     WaterRipplesBackgroundManager,
 )
-from path_helpers import get_user_editable_resource_path
 from widgets.menu_bar.glyph_visibility_manager import GlyphVisibilityManager
 from settings_manager.prop_type_changer import PropTypeChanger
 from widgets.menu_bar.grid_visibility_manager import GridVisibilityManager
 from widgets.notes_manager import NotesManager
+from widgets.path_helpers.path_helpers import get_user_editable_resource_path
 from widgets.user_manager import UserManager
 
 

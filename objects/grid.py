@@ -12,7 +12,7 @@ from Enums.Enums import GridModes
 from Enums.PropTypes import (
     strictly_placed_props,
 )
-from path_helpers import get_images_and_data_path
+from widgets.path_helpers.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
 

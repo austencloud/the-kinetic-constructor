@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFileDialog
 from PyQt6.QtGui import QImage
 
-from path_helpers import get_my_photos_path
+from widgets.path_helpers.path_helpers import get_my_photos_path
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.image_export_manager import (

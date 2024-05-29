@@ -14,7 +14,7 @@ from Enums.Enums import VTG_Directions
 
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtCore import QSize
-from path_helpers import get_images_and_data_path
+from widgets.path_helpers.path_helpers import get_images_and_data_path
 from widgets.factories.button_factory.buttons.rot_dir_buttons import VtgDirButton
 
 

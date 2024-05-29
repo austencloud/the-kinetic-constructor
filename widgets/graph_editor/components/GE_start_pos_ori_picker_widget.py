@@ -2,7 +2,7 @@ from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt, QSize, pyqtSignal, QPoint
 from constants import IN, ORI, OUT, CLOCK, COUNTER
 from typing import TYPE_CHECKING
-from path_helpers import get_images_and_data_path
+from widgets.path_helpers.path_helpers import get_images_and_data_path
 from widgets.pictograph.pictograph import Pictograph
 
 from PyQt6.QtWidgets import (
@@ -106,7 +106,9 @@ class GE_StartPosOriPickerWidget(QWidget):
     def set_orientation(self, orientation):
         self.current_orientation_index = self.orientations.index(orientation)
         self.ori_display_label.setText(orientation)
-        self.json_manager.start_position_handler.update_start_pos_ori(self.color, orientation)
+        self.json_manager.start_position_handler.update_start_pos_ori(
+            self.color, orientation
+        )
         self.json_validation_engine.run(is_current_sequence=True)
         self.ori_adjusted.emit(orientation)
         current_pictograph = (

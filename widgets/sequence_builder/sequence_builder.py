@@ -7,7 +7,7 @@ import pandas as pd
 from constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
 from Enums.Enums import LetterType
 
-from path_helpers import get_images_and_data_path
+from widgets.path_helpers.path_helpers import get_images_and_data_path
 from widgets.pictograph.components.add_to_sequence_manager import (
     AddToSequenceManager,
 )
@@ -35,8 +35,6 @@ class SequenceBuilder(QFrame):
         self.main_widget: "MainWidget" = top_builder_widget.main_widget
         self.current_pictograph: Pictograph = None
         self.json_manager = self.main_widget.json_manager
-        csv_path = get_images_and_data_path("PictographDataframe.csv")
-        self.letters_df = pd.read_csv(csv_path)
         self.start_position_picked = False
         self.pictograph_cache: dict[Letter, dict[str, Pictograph]] = {
             letter: {} for letter in Letter
@@ -121,8 +119,12 @@ class SequenceBuilder(QFrame):
         return new_pictograph
 
     def _add_turns_and_start_ori(self, pictograph_dict, sequence):
-        self.current_end_red_ori = self.json_manager.loader_saver.get_red_end_ori(sequence)
-        self.current_end_blue_ori = self.json_manager.loader_saver.get_blue_end_ori(sequence)
+        self.current_end_red_ori = self.json_manager.loader_saver.get_red_end_ori(
+            sequence
+        )
+        self.current_end_blue_ori = self.json_manager.loader_saver.get_blue_end_ori(
+            sequence
+        )
 
         pictograph_dict["red_attributes"][RED_START_ORI] = self.current_end_red_ori
         pictograph_dict["blue_attributes"][BLUE_START_ORI] = self.current_end_blue_ori

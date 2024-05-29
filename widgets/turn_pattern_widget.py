@@ -12,7 +12,10 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QInputDialog
 from PyQt6.QtGui import QFont
-from path_helpers import get_images_and_data_path, get_user_editable_resource_path
+from widgets.path_helpers.path_helpers import (
+    get_images_and_data_path,
+    get_user_editable_resource_path,
+)
 from widgets.turn_pattern_converter import TurnPatternConverter
 
 if TYPE_CHECKING:

@@ -10,7 +10,7 @@ from Enums.PropTypes import PropType
 from objects.graphical_object.graphical_object_svg_manager import (
     GraphicalObjectSvgManager,
 )
-from path_helpers import get_images_and_data_path
+from widgets.path_helpers.path_helpers import get_images_and_data_path
 from styles.get_tab_stylesheet import get_tab_stylesheet
 from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
 from widgets.dictionary_widget.thumbnail_box.metadata_extractor import MetaDataExtractor

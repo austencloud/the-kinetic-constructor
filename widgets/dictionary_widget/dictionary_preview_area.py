@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QFont, QIcon
-from preview_area_image_label import PreviewAreaImageLabel
+from dictionary.preview_area_image_label import PreviewAreaImageLabel
 from widgets.dictionary_widget.dictionary_button_panel import DictionaryButtonPanel
 from widgets.dictionary_widget.thumbnail_box.base_word_label import BaseWordLabel
 from widgets.dictionary_widget.thumbnail_box.preview_area_nav_btns import (

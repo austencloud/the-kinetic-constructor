@@ -1,7 +1,7 @@
 import os
 import shutil
 from typing import TYPE_CHECKING
-from path_helpers import get_images_and_data_path
+from widgets.path_helpers.path_helpers import get_images_and_data_path
 from PyQt6.QtWidgets import QMessageBox, QApplication
 from PyQt6.QtCore import Qt
 
@@ -28,7 +28,9 @@ class DictionaryDeletionManager:
         else:
             thumbnail_box.current_index = 0
             self.dictionary_widget.browser.scroll_widget.sort_and_display_thumbnails()
-            self.dictionary_widget.preview_area.update_thumbnails(thumbnail_box.thumbnails)
+            self.dictionary_widget.preview_area.update_thumbnails(
+                thumbnail_box.thumbnails
+            )
             thumbnail_box.update_thumbnails(thumbnail_box.thumbnails)
         QApplication.restoreOverrideCursor()
 

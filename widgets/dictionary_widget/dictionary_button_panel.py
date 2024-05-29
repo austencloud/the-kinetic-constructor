@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QApplication, QMessageBox
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QIcon
-from path_helpers import get_images_and_data_path
+from widgets.path_helpers.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_preview_area import DictionaryPreviewArea
@@ -13,7 +13,7 @@ class DictionaryButtonPanel(QWidget):
     delete_word_button: QPushButton
     edit_sequence_button: QPushButton
     save_image_button: QPushButton
-    
+
     def __init__(self, preview_area: "DictionaryPreviewArea"):
         super().__init__(preview_area)
         self.preview_area = preview_area

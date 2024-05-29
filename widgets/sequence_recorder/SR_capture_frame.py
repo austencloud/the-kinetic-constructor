@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QHBoxLayout, QSizePolicy, QFrame, QApplication
 from PyQt6.QtCore import Qt
 
-from path_helpers import get_my_videos_path
+from widgets.path_helpers.path_helpers import get_my_videos_path
 from widgets.sequence_recorder.SR_beat_frame import (
     SR_BeatFrame,
 )

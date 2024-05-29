@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 import pandas as pd
 from Enums.letters import Letter
 from constants import END_POS, IN, LETTER, START_POS
-from path_helpers import get_images_and_data_path
+from widgets.path_helpers.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
@@ -13,16 +13,16 @@ class LetterLoader:
         self.main_widget = main_widget
 
     def load_all_letters(self) -> dict[Letter, list[dict]]:
-        csv_path = get_images_and_data_path("PictographDataframe.csv")
-        df = pd.read_csv(csv_path)
-        df = df.sort_values(by=[LETTER, START_POS, END_POS])
-        df = self.add_turns_and_ori_to_pictograph_dict(df)
-        df = self.restructure_dataframe_for_new_json_format(df)
+        csv_path = get_images_and_data_path("data\\PictographDataframe.csv")
+        self.df = pd.read_csv(csv_path)
+        self.df = self.df.sort_values(by=[LETTER, START_POS, END_POS])
+        self.df = self.add_turns_and_ori_to_pictograph_dict(self.df)
+        self.df = self.restructure_dataframe_for_new_json_format(self.df)
         letters = {
-            self.get_letter_enum_by_value(letter_str): df[
-                df[LETTER] == letter_str
+            self.get_letter_enum_by_value(letter_str): self.df[
+                self.df[LETTER] == letter_str
             ].to_dict(orient="records")
-            for letter_str in df[LETTER].unique()
+            for letter_str in self.df[LETTER].unique()
         }
         # convert the turns to ints in the dict
         for letter in letters:

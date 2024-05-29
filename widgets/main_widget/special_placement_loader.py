@@ -2,7 +2,7 @@ import json
 import os
 from typing import TYPE_CHECKING
 
-from path_helpers import get_images_and_data_path
+from widgets.path_helpers.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget

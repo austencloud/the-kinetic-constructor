@@ -22,7 +22,7 @@ from constants import (
 )
 from Enums.MotionAttributes import Color, MotionType
 from Enums.PropTypes import PropType, PropTypeslist
-from path_helpers import get_images_and_data_path
+from widgets.path_helpers.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow

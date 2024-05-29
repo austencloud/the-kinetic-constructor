@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QPixmap, QImage
 import cv2
 import numpy as np
-from path_helpers import get_my_videos_path
+from widgets.path_helpers.path_helpers import get_my_videos_path
 from widgets.sequence_recorder.SR_beat_selection_manager import (
     SR_BeatSelectionManager,
 )

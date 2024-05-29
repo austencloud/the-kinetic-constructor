@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QComboBox
 
-from path_helpers import get_images_and_data_path
+from widgets.path_helpers.path_helpers import get_images_and_data_path
 from widgets.dictionary_widget.dictionary_browser.section_header import SectionHeader
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 

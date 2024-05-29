@@ -15,7 +15,7 @@ from Enums.MotionAttributes import (
 from PyQt6.QtCore import QSize
 
 
-from path_helpers import get_images_and_data_path
+from widgets.path_helpers.path_helpers import get_images_and_data_path
 from widgets.factories.button_factory.buttons.rot_dir_buttons import (
     PropRotDirButton,
 )
@@ -57,7 +57,6 @@ class GE_PropRotDirButtonManager:
     def _set_prop_rot_dir(self, prop_rot_dir: PropRotDir) -> None:
         self._update_pictographs_prop_rot_dir(prop_rot_dir)
         self._update_button_states(self.prop_rot_dir_buttons, prop_rot_dir)
-
 
     def _update_pictographs_prop_rot_dir(self, prop_rot_dir: PropRotDir) -> None:
         pictograph = self.turns_box.graph_editor.GE_pictograph
