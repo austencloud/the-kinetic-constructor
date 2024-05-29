@@ -1,15 +1,13 @@
 import json
 from typing import TYPE_CHECKING, List, Dict
 from path_helpers import get_user_editable_resource_path
-
 if TYPE_CHECKING:
-    from widgets.current_sequence_json_manager.current_sequence_json_manager import (
-        CurrentSequenceJsonManager,
-    )
+    from widgets.json_manager import JSON_Manager
+
 
 
 class JsonSequenceLoaderSaver:
-    def __init__(self, manager: "CurrentSequenceJsonManager"):
+    def __init__(self, manager: "JSON_Manager") -> None:
         self.manager = manager
         self.current_sequence_json = get_user_editable_resource_path(
             "current_sequence.json"
@@ -60,3 +58,23 @@ class JsonSequenceLoaderSaver:
 
         with open(self.current_sequence_json, "w", encoding="utf-8") as file:
             json.dump(sequence, file, indent=4, ensure_ascii=False)
+
+    def clear_current_sequence_file(self):
+        self.save_current_sequence([])
+
+    def get_index_for_pictograph(self, pictograph: Dict) -> int:
+        sequence = self.load_current_sequence_json()
+        for i, entry in enumerate(sequence):
+            if entry == pictograph:
+                return i
+        return -1
+
+    def get_red_end_ori(self, sequence):
+        if sequence:
+            return sequence[-1]["red_attributes"]["end_ori"]
+        return 0
+
+    def get_blue_end_ori(self, sequence):
+        if sequence:
+            return sequence[-1]["blue_attributes"]["end_ori"]
+        return 0

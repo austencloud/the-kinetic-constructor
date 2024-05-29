@@ -3,15 +3,15 @@ from Enums.MotionAttributes import Color
 from Enums.PropTypes import PropType
 from circular_word_checker import CircularWordChecker
 from constants import BLUE, DASH, NO_ROT, RED, STATIC
+from widgets.sequence_widget.SW_beat_frame.beat import BeatView
 
 if TYPE_CHECKING:
-    from widgets.current_sequence_json_manager.current_sequence_json_manager import (
-        CurrentSequenceJsonManager,
-    )
+    from widgets.json_manager import JSON_Manager
+
 
 
 class JsonSequenceUpdater:
-    def __init__(self, manager: "CurrentSequenceJsonManager"):
+    def __init__(self, manager: "JSON_Manager"):
         self.manager = manager
 
     def update_sequence_properties(self):
@@ -117,3 +117,31 @@ class JsonSequenceUpdater:
                 return sequence[i][f"{color}_attributes"]["prop_rot_dir"]
 
         return NO_ROT
+
+    def update_current_sequence_file_with_beat(self, beat_view: BeatView):
+        sequence_data = self.manager.loader_saver.load_current_sequence_json()
+        if len(sequence_data) == 0:  # Make sure there's at least the metadata entry
+            sequence_data.append(
+                {
+                    "prop_type": self.manager.main_widget.prop_type.name.lower(),
+                    "is_circular": False,
+                }
+            )
+        sequence_data.append(beat_view.beat.pictograph_dict)
+        self.manager.loader_saver.save_current_sequence(sequence_data)
+        self.update_sequence_properties()  # Recalculate circularity after each update
+        self.manager.main_widget.main_window.settings_manager.save_settings()  # Save state on change
+
+    def clear_and_repopulate_the_current_sequence(self):
+        self.manager.loader_saver.clear_current_sequence_file()
+        beat_frame = (
+            self.manager.main_widget.top_builder_widget.sequence_widget.beat_frame
+        )
+        beat_views = beat_frame.beats
+        start_pos = beat_frame.start_pos_view.start_pos
+        if start_pos.view.is_filled:
+            self.manager.start_position_handler.set_start_position_data(start_pos)
+        for beat_view in beat_views:
+            if beat_view.is_filled:
+                self.update_current_sequence_file_with_beat(beat_view)
+        self.manager.main_widget.main_window.settings_manager.save_settings()  # Save state on change

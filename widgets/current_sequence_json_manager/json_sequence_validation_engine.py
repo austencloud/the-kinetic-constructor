@@ -2,17 +2,13 @@ from typing import TYPE_CHECKING
 from constants import BLUE, RED
 
 if TYPE_CHECKING:
-    from widgets.current_sequence_json_manager.current_sequence_json_manager import (
-        CurrentSequenceJsonManager,
-    )
+    from widgets.json_manager import JSON_Manager
 
 
 class JsonSequenceValidationEngine:
-    def __init__(
-        self, current_sequence_json_manager: "CurrentSequenceJsonManager"
-    ) -> None:
-        self.current_sequence_json_manager = current_sequence_json_manager
-        self.ori_calculator = self.current_sequence_json_manager.ori_calculator
+    def __init__(self, json_manager: "JSON_Manager") -> None:
+        self.json_manager = json_manager
+        self.ori_calculator = self.json_manager.ori_calculator
 
     def validate_and_update_sequence_json(self, is_current_sequence=False) -> None:
         """Iterates through the sequence, updating start and end orientations to ensure continuity."""
@@ -22,9 +18,7 @@ class JsonSequenceValidationEngine:
                 self.update_json_entry_end_orientation(index)
 
         if is_current_sequence:
-            self.current_sequence_json_manager.loader_saver.save_current_sequence(
-                self.sequence
-            )
+            self.json_manager.loader_saver.save_current_sequence(self.sequence)
 
     def update_json_entry_start_orientation(self, index) -> None:
         """Updates the start orientation of the current pictograph based on the previous one's end orientation."""
@@ -50,7 +44,5 @@ class JsonSequenceValidationEngine:
     def run(self, is_current_sequence=False) -> None:
         """Public method to run the sequence validation and update process."""
         if is_current_sequence:
-            self.sequence = (
-                self.current_sequence_json_manager.loader_saver.load_current_sequence_json()
-            )
+            self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
         self.validate_and_update_sequence_json(is_current_sequence)

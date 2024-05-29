@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 class SequenceAutocompleter:
     def __init__(self, beat_frame: "SW_BeatFrame"):
-        self.json_handler = beat_frame.current_sequence_json_manager
+        self.json_manager = beat_frame.json_manager
         self.beat_frame = beat_frame
 
     def perform_auto_completion(self, sequence: List[Dict]):
@@ -43,7 +43,7 @@ class SequenceAutocompleter:
             sequence.insert(0, start_position_entry)
 
         sequence.extend(new_entries)
-        self.json_handler.save_current_sequence(sequence)
+        self.json_manager.loader_saver.save_current_sequence(sequence)
 
     def get_rotation_direction(self, sequence: List[Dict]) -> str:
         for entry in sequence:

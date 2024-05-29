@@ -21,12 +21,7 @@ class GE_TurnsAdjustmentManager(QObject):
         self.beat_frame = self.graph_editor.sequence_widget.beat_frame
         self.main_widget = self.graph_editor.main_widget
         self.json_manager = self.main_widget.json_manager
-        self.current_sequence_json_manager = (
-            self.json_manager.current_sequence_json_manager
-        )
-        self.json_validation_engine = (
-            self.current_sequence_json_manager.validation_engine
-        )
+        self.json_validation_engine = self.json_manager.validation_engine
         self.color = self.turns_widget.turns_box.color
 
         self.turns_adjusted.connect(self.beat_frame.on_beat_adjusted)
@@ -44,7 +39,7 @@ class GE_TurnsAdjustmentManager(QObject):
             self.pictograph, adjustment
         )
         pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
-        self.current_sequence_json_manager.update_turns_in_json_at_index(
+        self.json_manager.updater.update_turns_in_json_at_index(
             pictograph_index + 2, self.color, new_turns
         )
         self.json_validation_engine.run(is_current_sequence=True)
@@ -57,7 +52,7 @@ class GE_TurnsAdjustmentManager(QObject):
         self.pictograph = self.graph_editor.GE_pictograph_view.get_current_pictograph()
         self._update_motion_properties(new_turns)
         pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
-        self.current_sequence_json_manager.update_turns_in_json_at_index(
+        self.json_manager.updater.update_turns_in_json_at_index(
             pictograph_index + 2, self.color, new_turns
         )
 

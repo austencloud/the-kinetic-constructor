@@ -43,7 +43,7 @@ class SW_ButtonFrame(QFrame):
 
     def _setup_dependencies(self):
         self.main_widget = self.sequence_widget.main_widget
-        self.json_handler = self.main_widget.json_manager.current_sequence_json_manager
+        self.json_manager = self.main_widget.json_manager
         self.sequence_builder = self.sequence_widget.top_builder_widget.sequence_builder
         self.beat_frame = self.sequence_widget.beat_frame
         self.export_manager = self.beat_frame.export_manager
@@ -108,7 +108,7 @@ class SW_ButtonFrame(QFrame):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def auto_complete_sequence(self):
-        sequence = self.json_handler.load_current_sequence_json()
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
         checker = CircularWordChecker(sequence[1:])
         _, is_permutable = checker.check_properties()
 
@@ -129,7 +129,7 @@ class SW_ButtonFrame(QFrame):
         if should_reset_to_start_pos_picker:
             self.sequence_builder.reset_to_start_pos_picker()
         self.sequence_builder.current_pictograph = self.beat_frame.start_pos
-        self.json_handler.clear_current_sequence_file()
+        self.json_manager.loader_saver.clear_current_sequence_file()
         if show_indicator:
             self.sequence_widget.indicator_label.show_message("Sequence cleared")
         self._clear_graph_editor()

@@ -4,13 +4,13 @@ from constants import NO_ROT
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.current_sequence_json_manager.current_sequence_json_manager import (
-        CurrentSequenceJsonManager,
-    )
+    from widgets.json_manager import JSON_Manager
+
+
 
 
 class JsonStartPositionHandler:
-    def __init__(self, manager: "CurrentSequenceJsonManager"):
+    def __init__(self, manager: "JSON_Manager"):
         self.manager = manager
 
     def set_start_position_data(self, start_pos_pictograph: Pictograph) -> None:

@@ -13,7 +13,7 @@ class DictionarySequencePopulator:
         self.initialized = False
 
     def _init_references(self) -> None:
-        self.json_handler = self.main_widget.json_manager.current_sequence_json_manager
+        self.json_manager = self.main_widget.json_manager
         self.start_pos_view = (
             self.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_view
         )
@@ -55,7 +55,7 @@ class DictionarySequencePopulator:
         start_pos_beat = self.start_pos_manager._convert_current_sequence_json_entry_to_start_pos_pictograph(
             sequence_data
         )
-        self.json_handler.start_position_handler.set_start_position_data(start_pos_beat)
+        self.json_manager.start_position_handler.set_start_position_data(start_pos_beat)
         self.start_pos_view.set_start_pos(start_pos_beat)
         for pictograph_dict in sequence_data[1:]:
             if pictograph_dict.get("sequence_start_position"):
@@ -68,7 +68,7 @@ class DictionarySequencePopulator:
         if self.sequence_builder.start_pos_picker.isVisible():
             self.sequence_builder.transition_to_sequence_building()
 
-        sequence = self.json_handler.loader_saver.load_current_sequence_json()
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
 
         scroll_area = self.sequence_builder.option_picker.scroll_area
         scroll_area.remove_irrelevant_pictographs()

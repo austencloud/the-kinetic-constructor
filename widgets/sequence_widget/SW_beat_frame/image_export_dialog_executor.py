@@ -25,9 +25,7 @@ class ImageExportDialogExecutor:
         This method loads the current sequence, processes the beats, and opens the image export dialog.
         If the user confirms the dialog, the image is created and saved based on the selected options.
         """
-        sequence = (
-            self.beat_frame.current_sequence_json_manager.loader_saver.load_current_sequence_json()
-        )
+        sequence = self.beat_frame.json_manager.loader_saver.load_current_sequence_json()
         if len(sequence) < 3:
             self.indicator_label.show_message("The sequence is empty.")
             return

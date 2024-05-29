@@ -15,15 +15,13 @@ if TYPE_CHECKING:
 class AddToDictionaryManager:
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
-        self.json_handler = (
-            sequence_widget.main_widget.json_manager.current_sequence_json_manager
-        )
+        self.json_manager = self.sequence_widget.main_widget.json_manager
         self.dictionary_dir = get_images_and_data_path("dictionary")
         self.structural_checker = StructuralVariationChecker(self)
 
     def add_to_dictionary(self):
         self.thumbnail_generator = ThumbnailGenerator(self)
-        current_sequence = self.json_handler.load_current_sequence_json()
+        current_sequence = self.json_manager.loader_saver.load_current_sequence_json()
         if self.is_sequence_invalid(current_sequence):
             self.display_message(
                 "You must build a sequence to add it to your dictionary."
@@ -167,7 +165,7 @@ class AddToDictionaryManager:
 
     def revalidate_sequence(self, sequence):
         if not hasattr(self, "validation_engine"):
-            self.validation_engine = self.json_handler.validation_engine
+            self.validation_engine = self.json_manager.validation_engine
         self.validation_engine.sequence = sequence
         self.validation_engine.run()
         return self.validation_engine.sequence

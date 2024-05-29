@@ -23,6 +23,7 @@ class OptionPicker(QWidget):
         super().__init__(sequence_builder)
         self.sequence_builder = sequence_builder
         self.main_widget = sequence_builder.main_widget
+        self.json_manager = self.main_widget.json_manager
         self.option_manager = OptionManager(self)
         self.scroll_area = OptionPickerScrollArea(self)
         self.choose_your_next_pictograph_label = ChooseYourNextPictographLabel(self)
@@ -46,12 +47,8 @@ class OptionPicker(QWidget):
     def update_option_picker(self):
         if self.disabled:
             return
-        current_sequence_json_manager = (
-            self.main_widget.json_manager.current_sequence_json_manager
-        )
-        sequence = (
-            current_sequence_json_manager.loader_saver.load_current_sequence_json()
-        )
+
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
 
         if len(sequence) > 1:
             next_options: dict = self.option_manager.get_next_options(sequence)

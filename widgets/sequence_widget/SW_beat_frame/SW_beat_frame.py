@@ -24,9 +24,7 @@ class SW_BeatFrame(QFrame):
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__()
         self.main_widget = sequence_widget.main_widget
-        self.current_sequence_json_manager = (
-            self.main_widget.json_manager.current_sequence_json_manager
-        )
+        self.json_manager = self.main_widget.json_manager
         self.sequence_widget = sequence_widget
         self.top_builder_widget = sequence_widget.top_builder_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
@@ -82,7 +80,7 @@ class SW_BeatFrame(QFrame):
                 and self.beats[next_beat_index].is_filled is False
             ):
                 self.beats[next_beat_index].set_beat(new_beat, next_beat_index + 1)
-                self.current_sequence_json_manager.update_current_sequence_file_with_beat(
+                self.json_manager.updater.update_current_sequence_file_with_beat(
                     self.beats[next_beat_index]
                 )
                 self.sequence_widget.update_current_word()
@@ -94,7 +92,7 @@ class SW_BeatFrame(QFrame):
                 and self.beats[next_beat_index].isVisible()
             ):
                 self.beats[next_beat_index].set_beat(new_beat, next_beat_index + 1)
-                self.current_sequence_json_manager.update_current_sequence_file_with_beat(
+                self.json_manager.updater.update_current_sequence_file_with_beat(
                     self.beats[next_beat_index]
                 )
                 self.sequence_widget.update_current_word()
@@ -123,9 +121,7 @@ class SW_BeatFrame(QFrame):
         return word
 
     def on_beat_adjusted(self) -> None:
-        current_sequence_json = (
-            self.current_sequence_json_manager.loader_saver.load_current_sequence_json()
-        )
+        current_sequence_json = self.json_manager.loader_saver.load_current_sequence_json()
         self.propogate_turn_adjustment(current_sequence_json)
 
     def propogate_turn_adjustment(self, current_sequence_json) -> None:

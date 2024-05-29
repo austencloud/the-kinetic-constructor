@@ -26,9 +26,7 @@ class TurnPatternWidget(QWidget):
         super().__init__()
         self.builder_toolbar = builder_toolbar
         self.main_widget = builder_toolbar.main_widget
-        self.current_sequence_json_manager = (
-            self.builder_toolbar.main_widget.json_manager.current_sequence_json_manager
-        )
+        self.json_manager = self.builder_toolbar.main_widget.json_manager
         self.turn_patterns_path = get_user_editable_resource_path("turn_patterns.json")
         self._setup_ui()
         self.ensure_turn_patterns_file_exists()
@@ -102,9 +100,7 @@ class TurnPatternWidget(QWidget):
             self.load_turn_patterns()
 
     def get_current_turn_pattern(self) -> str:
-        sequence = (
-            self.current_sequence_json_manager.loader_saver.load_current_sequence_json()
-        )
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
         pattern = TurnPatternConverter.sequence_to_pattern(sequence)
         return pattern
 
@@ -113,7 +109,7 @@ class TurnPatternWidget(QWidget):
         if not selected_items:
             return
         pattern_str = selected_items[0].data(Qt.ItemDataRole.UserRole)
-        self.current_sequence_json_manager.apply_turn_pattern_to_current_sequence(
+        self.json_manager.updater.apply_turn_pattern_to_current_sequence(
             TurnPatternConverter.pattern_to_sequence(pattern_str)
         )
 

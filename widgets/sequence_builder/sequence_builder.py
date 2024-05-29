@@ -34,7 +34,7 @@ class SequenceBuilder(QFrame):
         self.top_builder_widget = top_builder_widget
         self.main_widget: "MainWidget" = top_builder_widget.main_widget
         self.current_pictograph: Pictograph = None
-
+        self.json_manager = self.main_widget.json_manager
         csv_path = get_images_and_data_path("PictographDataframe.csv")
         self.letters_df = pd.read_csv(csv_path)
         self.start_position_picked = False
@@ -121,9 +121,8 @@ class SequenceBuilder(QFrame):
         return new_pictograph
 
     def _add_turns_and_start_ori(self, pictograph_dict, sequence):
-        json_handler = self.main_widget.json_manager.current_sequence_json_manager
-        self.current_end_red_ori = json_handler.get_red_end_ori(sequence)
-        self.current_end_blue_ori = json_handler.get_blue_end_ori(sequence)
+        self.current_end_red_ori = self.json_manager.loader_saver.get_red_end_ori(sequence)
+        self.current_end_blue_ori = self.json_manager.loader_saver.get_blue_end_ori(sequence)
 
         pictograph_dict["red_attributes"][RED_START_ORI] = self.current_end_red_ori
         pictograph_dict["blue_attributes"][BLUE_START_ORI] = self.current_end_blue_ori
