@@ -24,7 +24,7 @@
     "grid_visibility": {
         "non_radial_points": true
     },
-    "background_type": "AuroraBorealis",
+    "background_type": "Aurora",
     "grow_sequence": true,
     "image_export": {
         "include_start_position": false,

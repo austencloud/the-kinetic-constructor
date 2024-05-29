@@ -31,8 +31,8 @@ class SR_BeatFrame(QFrame):
         self.frame_captures = []  # Store QPixmap captures here
         self.capture_frame = capture_frame
         self.main_widget: "MainWidget" = capture_frame.main_widget
-        self.current_sequence_json_handler = (
-            self.main_widget.json_manager.current_sequence_json_handler
+        self.current_sequence_json_manager = (
+            self.main_widget.json_manager.current_sequence_json_manager
         )
         self.pictograph_cache: dict[str, Beat] = {}
         self.beat_views: list[BeatView] = []
@@ -121,7 +121,9 @@ class SR_BeatFrame(QFrame):
             beat_view.is_filled = False
 
     def populate_beat_frame_scenes_from_json(self) -> None:
-        sequence_json = self.current_sequence_json_handler.load_current_sequence_json()
+        sequence_json = (
+            self.current_sequence_json_manager.loader_saver.load_current_sequence_json()
+        )
         self.clear_beat_frame()
         for pictograph_dict in sequence_json:
             if pictograph_dict.get("sequence_start_position") or pictograph_dict.get(

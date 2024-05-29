@@ -16,7 +16,7 @@ class AddToDictionaryManager:
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
         self.json_handler = (
-            sequence_widget.main_widget.json_manager.current_sequence_json_handler
+            sequence_widget.main_widget.json_manager.current_sequence_json_manager
         )
         self.dictionary_dir = get_images_and_data_path("dictionary")
         self.structural_checker = StructuralVariationChecker(self)

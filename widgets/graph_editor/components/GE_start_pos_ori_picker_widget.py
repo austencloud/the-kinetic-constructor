@@ -38,14 +38,12 @@ class GE_StartPosOriPickerWidget(QWidget):
         self.main_widget = self.ori_picker_box.graph_editor.main_widget
         self.current_orientation_index = 0
         self.orientations = [IN, COUNTER, OUT, CLOCK]
-        self.current_sequence_json_handler = (
-            self.main_widget.json_manager.current_sequence_json_handler
+        self.current_sequence_json_manager = (
+            self.main_widget.json_manager.current_sequence_json_manager
         )
-        self.beat_frame = (
-            self.ori_picker_box.graph_editor.sequence_widget.beat_frame
-        )
+        self.beat_frame = self.ori_picker_box.graph_editor.sequence_widget.beat_frame
         self.json_validation_engine = (
-            self.main_widget.json_manager.current_sequence_json_handler.validation_engine
+            self.main_widget.json_manager.current_sequence_json_manager.validation_engine
         )
         self.option_picker = (
             self.beat_frame.sequence_widget.top_builder_widget.sequence_builder.option_picker
@@ -112,7 +110,7 @@ class GE_StartPosOriPickerWidget(QWidget):
     def set_orientation(self, orientation):
         self.current_orientation_index = self.orientations.index(orientation)
         self.ori_display_label.setText(orientation)
-        self.current_sequence_json_handler.update_start_pos_ori(self.color, orientation)
+        self.current_sequence_json_manager.update_start_pos_ori(self.color, orientation)
         self.json_validation_engine.run(is_current_sequence=True)
         self.ori_adjusted.emit(orientation)
         current_pictograph = (
@@ -142,7 +140,7 @@ class GE_StartPosOriPickerWidget(QWidget):
         current_pictograph = (
             self.ori_picker_box.graph_editor.GE_pictograph_view.pictograph
         )
-        self.current_sequence_json_handler.update_start_pos_ori(self.color, new_ori)
+        self.current_sequence_json_manager.update_start_pos_ori(self.color, new_ori)
         self.json_validation_engine.run(is_current_sequence=True)
         self.ori_adjusted.emit(new_ori)
         current_pictograph.props[self.color].updater.update_prop({ORI: new_ori})

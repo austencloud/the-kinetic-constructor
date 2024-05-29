@@ -59,6 +59,6 @@ class PropTypeChanger:
                 self.replace_props(new_prop_type, start_pos)
 
         json_handler = (
-            self.main_window.main_widget.json_manager.current_sequence_json_handler
+            self.main_window.main_widget.json_manager.current_sequence_json_manager
         )
         json_handler.update_prop_type_in_json(new_prop_type)

@@ -186,15 +186,15 @@ class MainWidget(QTabWidget):
         event.accept()
 
     def save_state(self):
-        self.json_manager.current_sequence_json_handler.save_current_sequence(
-            self.json_manager.current_sequence_json_handler.load_current_sequence_json()
+        self.json_manager.current_sequence_json_manager.loader_saver.save_current_sequence(
+            self.json_manager.current_sequence_json_manager.loader_saver.load_current_sequence_json()
         )
         self.main_window.settings_manager.save_settings()
 
     def load_state(self):
         self.main_window.settings_manager.load_settings()
         current_sequence = (
-            self.json_manager.current_sequence_json_handler.load_current_sequence_json()
+            self.json_manager.current_sequence_json_manager.loader_saver.load_current_sequence_json()
         )
         if len(current_sequence) > 1:
             self.top_builder_widget.sequence_builder.transition_to_sequence_building()

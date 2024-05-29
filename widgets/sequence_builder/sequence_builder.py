@@ -121,7 +121,7 @@ class SequenceBuilder(QFrame):
         return new_pictograph
 
     def _add_turns_and_start_ori(self, pictograph_dict, sequence):
-        json_handler = self.main_widget.json_manager.current_sequence_json_handler
+        json_handler = self.main_widget.json_manager.current_sequence_json_manager
         self.current_end_red_ori = json_handler.get_red_end_ori(sequence)
         self.current_end_blue_ori = json_handler.get_blue_end_ori(sequence)
 

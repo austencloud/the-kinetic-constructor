@@ -31,8 +31,8 @@ class GE_VtgDirButtonManager:
         self.previous_turns = 0
         self.vtg_state = self.turns_box.vtg_dir_btn_state
         self.beat_frame = self.graph_editor.sequence_widget.beat_frame
-        self.current_sequence_json_handler = (
-            self.graph_editor.main_widget.json_manager.current_sequence_json_handler
+        self.current_sequence_json_manager = (
+            self.graph_editor.main_widget.json_manager.current_sequence_json_manager
         )
         self.color = self.turns_box.color
         self.vtg_dir_buttons: list[VtgDirButton] = self._setup_vtg_dir_buttons()
@@ -78,7 +78,7 @@ class GE_VtgDirButtonManager:
                         self._update_pictograph_prop_rot_dir_from_vtg_dir_setting(
                             motion, prop_rot_dir
                         )
-                        self.current_sequence_json_handler.update_rot_dir_in_json_at_index(
+                        self.current_sequence_json_manager.update_rot_dir_in_json_at_index(
                             pictograph_index + 1, self.color, prop_rot_dir
                         )
                     elif vtg_dir == OPP:
@@ -88,7 +88,7 @@ class GE_VtgDirButtonManager:
                         self._update_pictograph_prop_rot_dir_from_vtg_dir_setting(
                             motion, prop_rot_dir
                         )
-                        self.current_sequence_json_handler.update_rot_dir_in_json_at_index(
+                        self.current_sequence_json_manager.update_rot_dir_in_json_at_index(
                             pictograph_index + 1, self.color, prop_rot_dir
                         )
 

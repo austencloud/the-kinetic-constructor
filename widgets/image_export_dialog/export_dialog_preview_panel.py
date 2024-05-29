@@ -19,7 +19,7 @@ class ExportDialogPreviewPanel(QFrame):
         self.preview_label.setScaledContents(False)  # Disable scaled contents
 
         self.json_handler = (
-            export_dialog.main_widget.json_manager.current_sequence_json_handler
+            export_dialog.main_widget.json_manager.current_sequence_json_manager
         )
 
         dialog_width = export_dialog.width()

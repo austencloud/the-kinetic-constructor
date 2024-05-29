@@ -12,8 +12,8 @@ class BeatDeletionManager:
         self.beat_frame = beat_frame
         self.sequence_builder = beat_frame.top_builder_widget.sequence_builder
         self.selection_manager = self.beat_frame.selection_manager
-        self.current_sequence_json_handler = (
-            self.beat_frame.current_sequence_json_handler
+        self.current_sequence_json_manager = (
+            self.beat_frame.current_sequence_json_manager
         )
         self.settings_manager = (
             self.beat_frame.settings_manager
@@ -34,7 +34,7 @@ class BeatDeletionManager:
         else:
             self._delete_non_first_beat(selected_beat)
 
-        self.current_sequence_json_handler.clear_and_repopulate_the_current_sequence()
+        self.current_sequence_json_manager.clear_and_repopulate_the_current_sequence()
         if self.settings_manager.get_grow_sequence():
             self.beat_frame.adjust_layout_to_sequence_length()
         self.beat_frame.sequence_widget.update_current_word()
@@ -70,7 +70,7 @@ class BeatDeletionManager:
         for beat in self.beats:
             self.delete_beat(beat)
         self.selection_manager.deselect_beat()
-        self.current_sequence_json_handler.clear_current_sequence_file()
+        self.current_sequence_json_manager.clear_current_sequence_file()
         self.sequence_builder.current_pictograph = None
         self.sequence_builder.reset_to_start_pos_picker()
         self.sequence_builder.option_picker.update_option_picker()

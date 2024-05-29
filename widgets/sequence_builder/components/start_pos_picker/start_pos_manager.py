@@ -81,9 +81,7 @@ class StartPosManager(QObject):
             start_position_beat
         )
         self.sequence_builder.current_pictograph = start_position_beat
-        beat_frame = (
-            self.sequence_builder.top_builder_widget.sequence_widget.beat_frame
-        )
+        beat_frame = self.sequence_builder.top_builder_widget.sequence_widget.beat_frame
         start_pos_view = beat_frame.start_pos_view
         beat_frame.selection_manager.select_beat(start_pos_view)
 
@@ -94,7 +92,7 @@ class StartPosManager(QObject):
             self.sequence_builder.transition_to_sequence_building
         )
 
-        self.main_widget.json_manager.current_sequence_json_handler.set_start_position_data(
+        self.main_widget.json_manager.current_sequence_json_manager.start_position_handler.set_start_position_data(
             start_position_beat
         )
         self.start_position_selected.emit(start_position_beat)
@@ -188,4 +186,3 @@ class StartPosManager(QObject):
         pictograph = Pictograph(self.main_widget)
         pictograph.updater.update_pictograph(pictograph_dict)
         return pictograph
-

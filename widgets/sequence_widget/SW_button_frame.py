@@ -2,7 +2,9 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout
+from circular_word_checker import CircularWordChecker
 from path_helpers import get_images_and_data_path
+from sequence_autocompleter import SequenceAutocompleter
 from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager
 
 
@@ -22,6 +24,11 @@ class SW_ActionButton(QPushButton):
         self.setCursor(Qt.CursorShape.ArrowCursor)
 
 
+from PyQt6.QtWidgets import QMessageBox
+
+from PyQt6.QtWidgets import QMessageBox
+
+
 class SW_ButtonFrame(QFrame):
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)
@@ -36,7 +43,7 @@ class SW_ButtonFrame(QFrame):
 
     def _setup_dependencies(self):
         self.main_widget = self.sequence_widget.main_widget
-        self.json_handler = self.main_widget.json_manager.current_sequence_json_handler
+        self.json_handler = self.main_widget.json_manager.current_sequence_json_manager
         self.sequence_builder = self.sequence_widget.top_builder_widget.sequence_builder
         self.beat_frame = self.sequence_widget.beat_frame
         self.export_manager = self.beat_frame.export_manager
@@ -67,6 +74,11 @@ class SW_ButtonFrame(QFrame):
                 "callback": lambda: self.clear_sequence(show_indicator=True),
                 "tooltip": "Clear Sequence",
             },
+            "magic_wand": {
+                "icon_path": "magic_wand.svg",
+                "callback": self.auto_complete_sequence,
+                "tooltip": "Auto Complete Sequence",
+            },
         }
         for button_name, button_data in button_dict.items():
             icon_path = get_images_and_data_path(
@@ -94,6 +106,20 @@ class SW_ButtonFrame(QFrame):
         for button in self.buttons:
             self.layout.addWidget(button)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+    def auto_complete_sequence(self):
+        sequence = self.json_handler.load_current_sequence_json()
+        checker = CircularWordChecker(sequence[1:])
+        _, is_permutable = checker.check_properties()
+
+        if is_permutable:
+            self.sequence_widget.autocompleter.perform_auto_completion(sequence)
+        else:
+            QMessageBox.warning(
+                self,
+                "Auto-Complete Disabled",
+                "The sequence is not permutable and cannot be auto-completed.",
+            )
 
     def clear_sequence(
         self, show_indicator=True, should_reset_to_start_pos_picker=True

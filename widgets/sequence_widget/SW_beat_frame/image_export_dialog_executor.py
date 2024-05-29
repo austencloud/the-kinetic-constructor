@@ -26,7 +26,7 @@ class ImageExportDialogExecutor:
         If the user confirms the dialog, the image is created and saved based on the selected options.
         """
         sequence = (
-            self.beat_frame.current_sequence_json_handler.load_current_sequence_json()
+            self.beat_frame.current_sequence_json_manager.loader_saver.load_current_sequence_json()
         )
         if len(sequence) < 3:
             self.indicator_label.show_message("The sequence is empty.")

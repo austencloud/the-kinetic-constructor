@@ -4,6 +4,7 @@ from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QScrollArea
 from PyQt6.QtCore import Qt
 
+from sequence_autocompleter import SequenceAutocompleter
 from widgets.sequence_widget.current_word_label import CurrentWordLabel
 
 from ..graph_editor.graph_editor import GraphEditor
@@ -44,6 +45,7 @@ class SequenceWidget(QWidget):
         self.button_frame = SW_ButtonFrame(self)
         self.graph_editor = GraphEditor(self)
         self.pictograph_factory = SW_PictographFactory(self)
+        self.autocompleter = SequenceAutocompleter(self.beat_frame)
 
     def _configure_scroll_area(self):
         self.scroll_area.setWidgetResizable(True)

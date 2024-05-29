@@ -33,7 +33,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.option_manager = self.option_picker.option_manager
         self.option_click_handler = self.sequence_builder.option_click_handler
         self.ori_calculator = (
-            self.main_widget.json_manager.current_sequence_json_handler.ori_calculator
+            self.main_widget.json_manager.current_sequence_json_manager.ori_calculator
         )
 
         self.pictograph_cache: dict[str, Pictograph] = {}
@@ -67,10 +67,12 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         if QApplication.overrideCursor() is None:
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         valid_next_options = []
-        current_sequence_json_handler = (
-            self.main_widget.json_manager.current_sequence_json_handler
+        current_sequence_json_manager = (
+            self.main_widget.json_manager.current_sequence_json_manager
         )
-        sequence = current_sequence_json_handler.load_current_sequence_json()
+        sequence = (
+            current_sequence_json_manager.loader_saver.load_current_sequence_json()
+        )
         for pictograph_dict in next_options:
             valid_next_options.append(pictograph_dict)
 

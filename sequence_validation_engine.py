@@ -2,17 +2,17 @@ from typing import TYPE_CHECKING
 from constants import BLUE, RED
 
 if TYPE_CHECKING:
-    from widgets.current_sequence_json_handler.current_sequence_json_handler import (
-        CurrentSequenceJsonHandler,
+    from widgets.current_sequence_json_manager.current_sequence_json_manager import (
+        CurrentSequenceJsonManager,
     )
 
 
 class SequenceValidationEngine:
     def __init__(
-        self, current_sequence_json_handler: "CurrentSequenceJsonHandler"
+        self, current_sequence_json_manager: "CurrentSequenceJsonManager"
     ) -> None:
-        self.current_sequence_json_handler = current_sequence_json_handler
-        self.ori_calculator = self.current_sequence_json_handler.ori_calculator
+        self.current_sequence_json_manager = current_sequence_json_manager
+        self.ori_calculator = self.current_sequence_json_manager.ori_calculator
 
     def validate_and_update_sequence_json(self, is_current_sequence=False) -> None:
         """Iterates through the sequence, updating start and end orientations to ensure continuity."""
@@ -22,7 +22,9 @@ class SequenceValidationEngine:
                 self.update_json_entry_end_orientation(index)
 
         if is_current_sequence:
-            self.current_sequence_json_handler.save_current_sequence(self.sequence)
+            self.current_sequence_json_manager.loader_saver.save_current_sequence(
+                self.sequence
+            )
 
     def update_json_entry_start_orientation(self, index) -> None:
         """Updates the start orientation of the current pictograph based on the previous one's end orientation."""
@@ -49,6 +51,6 @@ class SequenceValidationEngine:
         """Public method to run the sequence validation and update process."""
         if is_current_sequence:
             self.sequence = (
-                self.current_sequence_json_handler.load_current_sequence_json()
+                self.current_sequence_json_manager.loader_saver.load_current_sequence_json()
             )
         self.validate_and_update_sequence_json(is_current_sequence)

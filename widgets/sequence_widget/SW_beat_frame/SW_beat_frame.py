@@ -24,8 +24,8 @@ class SW_BeatFrame(QFrame):
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__()
         self.main_widget = sequence_widget.main_widget
-        self.current_sequence_json_handler = (
-            self.main_widget.json_manager.current_sequence_json_handler
+        self.current_sequence_json_manager = (
+            self.main_widget.json_manager.current_sequence_json_manager
         )
         self.sequence_widget = sequence_widget
         self.top_builder_widget = sequence_widget.top_builder_widget
@@ -82,10 +82,10 @@ class SW_BeatFrame(QFrame):
                 and self.beats[next_beat_index].is_filled is False
             ):
                 self.beats[next_beat_index].set_beat(new_beat, next_beat_index + 1)
-                self.current_sequence_json_handler.update_current_sequence_file_with_beat(
+                self.current_sequence_json_manager.update_current_sequence_file_with_beat(
                     self.beats[next_beat_index]
                 )
-                self.sequence_widget.update_current_word()  # Update the current word
+                self.sequence_widget.update_current_word()
                 self.adjust_layout_to_sequence_length()
         elif not grow_sequence:
             if (
@@ -94,7 +94,7 @@ class SW_BeatFrame(QFrame):
                 and self.beats[next_beat_index].isVisible()
             ):
                 self.beats[next_beat_index].set_beat(new_beat, next_beat_index + 1)
-                self.current_sequence_json_handler.update_current_sequence_file_with_beat(
+                self.current_sequence_json_manager.update_current_sequence_file_with_beat(
                     self.beats[next_beat_index]
                 )
                 self.sequence_widget.update_current_word()
@@ -124,7 +124,7 @@ class SW_BeatFrame(QFrame):
 
     def on_beat_adjusted(self) -> None:
         current_sequence_json = (
-            self.current_sequence_json_handler.load_current_sequence_json()
+            self.current_sequence_json_manager.loader_saver.load_current_sequence_json()
         )
         self.propogate_turn_adjustment(current_sequence_json)
 

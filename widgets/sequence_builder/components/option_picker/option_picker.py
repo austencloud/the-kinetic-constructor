@@ -46,10 +46,12 @@ class OptionPicker(QWidget):
     def update_option_picker(self):
         if self.disabled:
             return
-        current_sequence_json_handler = (
-            self.main_widget.json_manager.current_sequence_json_handler
+        current_sequence_json_manager = (
+            self.main_widget.json_manager.current_sequence_json_manager
         )
-        sequence = current_sequence_json_handler.load_current_sequence_json()
+        sequence = (
+            current_sequence_json_manager.loader_saver.load_current_sequence_json()
+        )
 
         if len(sequence) > 1:
             next_options: dict = self.option_manager.get_next_options(sequence)

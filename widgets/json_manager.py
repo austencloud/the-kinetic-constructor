@@ -1,6 +1,8 @@
 import logging
 from typing import TYPE_CHECKING
-from widgets.current_sequence_json_handler.current_sequence_json_handler import CurrentSequenceJsonHandler
+from widgets.current_sequence_json_manager.current_sequence_json_manager import (
+    CurrentSequenceJsonManager,
+)
 
 
 if TYPE_CHECKING:
@@ -16,4 +18,4 @@ class JSON_Manager:
         self.logger = logging.getLogger(__name__)
         self.main_widget = main_widget
         self.special_placement_handler = SpecialPlacementJsonHandler()
-        self.current_sequence_json_handler = CurrentSequenceJsonHandler(self)
+        self.current_sequence_json_manager = CurrentSequenceJsonManager(self)
