@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Literal
 from objects.arrow.arrow import Arrow
-from constants import (
+from data.constants import (
     DIAMOND,
     NORTHEAST,
     SOUTHEAST,

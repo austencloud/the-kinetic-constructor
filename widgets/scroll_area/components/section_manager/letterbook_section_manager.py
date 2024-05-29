@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
 
-from constants import BLUE_TURNS, RED_TURNS
+from data.constants import BLUE_TURNS, RED_TURNS
 from Enums.Enums import LetterType
 
 

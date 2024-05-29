@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QWheelEvent
 
-from constants import BLUE, RED
+from data.constants import BLUE, RED
 from widgets.sequence_builder.components.option_picker.option_picker_pictograph_factory import (
     OptionPickerPictographFactory,
 )

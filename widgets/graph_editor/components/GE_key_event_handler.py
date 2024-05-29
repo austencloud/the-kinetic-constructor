@@ -1,4 +1,4 @@
-from constants import DOWN, LEFT, RIGHT, UP
+from data.constants import DOWN, LEFT, RIGHT, UP
 from objects.arrow.arrow import Arrow
 from objects.prop.prop import Prop
 from PyQt6.QtCore import Qt

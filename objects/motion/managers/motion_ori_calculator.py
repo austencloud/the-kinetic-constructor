@@ -1,4 +1,4 @@
-from constants import *
+from data.constants import *
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Orientations, Location, MotionType
 from Enums.Enums import Handpaths, Turns

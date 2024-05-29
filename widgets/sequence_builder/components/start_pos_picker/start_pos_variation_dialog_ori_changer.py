@@ -3,12 +3,11 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import pyqtSignal
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Color
-from constants import BLUE, RED
+from data.constants import BLUE, RED
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.start_position_picker.start_pos_variation_dialog import (
-        StartPosVariationDialog,
-    )
+    from widgets.sequence_builder.components.start_pos_picker.start_pos_variation_dialog import StartPosVariationDialog
+
 
 
 class StartPosVariationDialogOriChanger(QWidget):

@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from constants import NORTH, SOUTH, WEST, EAST, IN, OUT, CLOCK, COUNTER
+from data.constants import NORTH, SOUTH, WEST, EAST, IN, OUT, CLOCK, COUNTER
 from PyQt6.QtCore import QPointF
 
 if TYPE_CHECKING:

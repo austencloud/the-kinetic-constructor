@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from Enums.MotionAttributes import Color
-from constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
+from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
 from widgets.graph_editor.components.GE_prop_rot_dir_button_manager import (
     GE_PropRotDirButtonManager,
 )

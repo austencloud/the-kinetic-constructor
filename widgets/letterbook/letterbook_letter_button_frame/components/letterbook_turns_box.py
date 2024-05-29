@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from Enums.Enums import TurnsTabAttribute
 from Enums.MotionAttributes import Color, LeadStates, MotionType
 
-from constants import BLUE, CLOCKWISE, COLOR, COUNTER_CLOCKWISE, RED
+from data.constants import BLUE, CLOCKWISE, COLOR, COUNTER_CLOCKWISE, RED
 from widgets.letterbook.letterbook_letter_button_frame.components.letterbook_turns_box_header_widget import (
     LetterBookTurnsBoxHeader,
 )

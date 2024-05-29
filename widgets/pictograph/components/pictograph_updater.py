@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType
 from Enums.MotionAttributes import Color
-from constants import LEADING, TRAILING, RED, BLUE
+from data.constants import LEADING, TRAILING, RED, BLUE
 from objects.motion.motion import Motion
 
 if TYPE_CHECKING:

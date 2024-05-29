@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Union
 from Enums.Enums import LetterType, VTG_Directions
 
-from constants import (
+from data.constants import (
     BLUE,
     CLOCKWISE,
     COLOR,

@@ -1,7 +1,7 @@
 from Enums.Enums import LetterType
 
 from Enums.letters import LetterConditions, Letter
-from constants import *
+from data.constants import *
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
 

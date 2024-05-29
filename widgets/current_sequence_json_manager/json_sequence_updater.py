@@ -1,13 +1,12 @@
 from typing import TYPE_CHECKING, Union
 from Enums.MotionAttributes import Color
 from Enums.PropTypes import PropType
-from circular_word_checker import CircularWordChecker
-from constants import BLUE, DASH, NO_ROT, RED, STATIC
+from widgets.sequence_widget.circular_word_checker import CircularWordChecker
+from data.constants import BLUE, DASH, NO_ROT, RED, STATIC
 from widgets.sequence_widget.SW_beat_frame.beat import BeatView
 
 if TYPE_CHECKING:
     from widgets.json_manager import JSON_Manager
-
 
 
 class JsonSequenceUpdater:
@@ -17,9 +16,7 @@ class JsonSequenceUpdater:
     def update_sequence_properties(self):
         sequence = self.manager.loader_saver.load_current_sequence_json()
         if len(sequence) > 1:
-            checker = CircularWordChecker(
-                sequence[1:]
-            )  # Passing the sequence entries after metadata
+            checker = CircularWordChecker(sequence[1:])
             is_circular, is_permutable = checker.check_properties()
             sequence[0]["is_circular"] = is_circular
             sequence[0]["is_permutable"] = is_permutable

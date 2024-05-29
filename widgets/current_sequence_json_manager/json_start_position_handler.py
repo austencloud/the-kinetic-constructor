@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Color
-from constants import NO_ROT
+from data.constants import NO_ROT
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:

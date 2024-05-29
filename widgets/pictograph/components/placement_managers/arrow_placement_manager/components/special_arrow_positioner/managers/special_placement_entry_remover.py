@@ -1,7 +1,7 @@
 import os
 from typing import TYPE_CHECKING
 from Enums.letters import Letter
-from constants import BLUE, special_placements_parent_directory, RED
+from data.constants import BLUE, special_placements_parent_directory, RED
 from objects.arrow.arrow import Arrow
 from Enums.MotionAttributes import Color
 

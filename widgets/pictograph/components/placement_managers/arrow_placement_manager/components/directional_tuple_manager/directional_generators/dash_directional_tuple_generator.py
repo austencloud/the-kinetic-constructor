@@ -1,5 +1,5 @@
 from Enums.Enums import LetterType
-from constants import (
+from data.constants import (
     BLUE,
     CLOCKWISE,
     COUNTER_CLOCKWISE,

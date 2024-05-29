@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QDialog, QHBoxLayout, QPushButton
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
-from constants import IN, COUNTER, OUT, CLOCK
+from data.constants import IN, COUNTER, OUT, CLOCK
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_start_pos_ori_picker_widget import (

@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Color
-from constants import BLUE, RED
+from data.constants import BLUE, RED
 from widgets.pictograph.pictograph import Pictograph
 
 

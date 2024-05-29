@@ -1,5 +1,5 @@
 import logging
-from constants import DASH, FLOAT, PRO, ANTI, STATIC
+from data.constants import DASH, FLOAT, PRO, ANTI, STATIC
 from objects.motion.motion import Motion
 from .directional_generators.dash_directional_tuple_generator import (
     DashDirectionalGenerator,

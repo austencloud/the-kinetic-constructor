@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 
-from constants import *
+from data.constants import *
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow

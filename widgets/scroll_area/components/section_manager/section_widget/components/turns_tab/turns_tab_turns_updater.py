@@ -1,4 +1,4 @@
-from constants import MOTION_TYPE, COLOR, LEAD_STATE
+from data.constants import MOTION_TYPE, COLOR, LEAD_STATE
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:

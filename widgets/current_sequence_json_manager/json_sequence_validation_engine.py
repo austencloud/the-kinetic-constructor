@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from constants import BLUE, RED
+from data.constants import BLUE, RED
 
 if TYPE_CHECKING:
     from widgets.json_manager import JSON_Manager

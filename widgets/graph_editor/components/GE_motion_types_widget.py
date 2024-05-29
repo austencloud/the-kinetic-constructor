@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
-from constants import ICON_DIR, SWAP_ICON
+from data.constants import ICON_DIR, SWAP_ICON
 from widgets.graph_editor.components.GE_turns_box_widget import GE_TurnsBoxWidget
 
 

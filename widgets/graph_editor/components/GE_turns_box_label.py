@@ -3,7 +3,7 @@ from PyQt6.QtCore import pyqtSignal, Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 
-from constants import BLUE, RED
+from data.constants import BLUE, RED
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget

@@ -1,7 +1,7 @@
 import os
 import logging
 from typing import TYPE_CHECKING
-from constants import (
+from data.constants import (
     BLUE,
     CLOCK,
     COUNTER,

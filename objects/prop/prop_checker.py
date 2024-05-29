@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from constants import CLOCK, COUNTER, IN, OUT
+from data.constants import CLOCK, COUNTER, IN, OUT
 
 
 if TYPE_CHECKING:

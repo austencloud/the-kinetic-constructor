@@ -3,7 +3,7 @@ from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtCore import QPointF
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QGraphicsItem
-from constants import BLUE, RED
+from data.constants import BLUE, RED
 
 
 from Enums.MotionAttributes import Color

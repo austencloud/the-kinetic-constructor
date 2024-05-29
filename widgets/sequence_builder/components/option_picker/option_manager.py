@@ -1,5 +1,5 @@
 from PyQt6.QtCore import QObject, pyqtSignal
-from constants import END_POS, START_POS
+from data.constants import END_POS, START_POS
 from typing import TYPE_CHECKING
 
 from widgets.pictograph.pictograph import Pictograph

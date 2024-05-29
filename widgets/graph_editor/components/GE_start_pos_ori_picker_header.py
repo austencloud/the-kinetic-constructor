@@ -10,7 +10,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING
 
-from constants import BLUE, RED
+from data.constants import BLUE, RED
 from widgets.factories.button_factory.buttons.letterbook_adjust_turns_button import (
     LetterBookAdjustTurnsButton,
 )

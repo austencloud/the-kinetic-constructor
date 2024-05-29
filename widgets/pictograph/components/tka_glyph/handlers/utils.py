@@ -2,7 +2,7 @@
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
 
-from constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
+from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
 
 
 def load_svg_item(svg_path: str) -> QGraphicsSvgItem:

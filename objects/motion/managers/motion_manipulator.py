@@ -1,6 +1,6 @@
 from typing import Callable
 
-from constants import *
+from data.constants import *
 from data.start_end_loc_map import get_start_end_locs
 from Enums.Enums import Directions, Handpaths
 

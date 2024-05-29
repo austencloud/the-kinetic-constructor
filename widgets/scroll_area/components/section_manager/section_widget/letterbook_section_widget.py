@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QVBoxLayout, QGroupBox, QSizePolicy
 from Enums.Enums import LetterType
 
 from Enums.letters import Letter
-from constants import DASH, NO_ROT, OPP, SAME, STATIC
+from data.constants import DASH, NO_ROT, OPP, SAME, STATIC
 from .components.turns_tab.turns_tab import TurnsTab
 from .components.letterbook_section_header import LetterBookSectionHeader
 from .....pictograph.pictograph import Pictograph

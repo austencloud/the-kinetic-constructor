@@ -1,6 +1,6 @@
 from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt, QSize, pyqtSignal, QPoint
-from constants import IN, ORI, OUT, CLOCK, COUNTER
+from data.constants import IN, ORI, OUT, CLOCK, COUNTER
 from typing import TYPE_CHECKING
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from widgets.pictograph.pictograph import Pictograph

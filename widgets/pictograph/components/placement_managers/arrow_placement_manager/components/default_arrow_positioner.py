@@ -1,6 +1,6 @@
 import json
 from Enums.letters import LetterConditions
-from constants import (
+from data.constants import (
     ANTI,
     NONRADIAL,
     CLOCK,

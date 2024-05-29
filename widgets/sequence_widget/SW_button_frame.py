@@ -2,7 +2,7 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout
-from circular_word_checker import CircularWordChecker
+from widgets.sequence_widget.circular_word_checker import CircularWordChecker
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 
 

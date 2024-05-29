@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QGroupBox, QSizePolicy
 from Enums.Enums import LetterType
-from constants import OPP, SAME
+from data.constants import OPP, SAME
 from PyQt6.QtCore import Qt
 
 from widgets.scroll_area.components.section_manager.section_widget.components.option_picker_section_header import (

@@ -1,7 +1,7 @@
 import os
 from typing import TYPE_CHECKING, Any
 from PyQt6.QtGui import QPixmap
-from constants import (
+from data.constants import (
     BLUE,
     BLUE_END_LOC,
     BLUE_MOTION_TYPE,

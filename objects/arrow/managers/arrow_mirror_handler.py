@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QTransform
-from constants import ANTI, CLOCKWISE, COUNTER_CLOCKWISE
+from data.constants import ANTI, CLOCKWISE, COUNTER_CLOCKWISE
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow

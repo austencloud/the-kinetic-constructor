@@ -4,7 +4,7 @@ from PyQt6.QtSvg import QSvgRenderer
 from typing import TYPE_CHECKING, Literal
 
 from Enums.Enums import LetterType
-from constants import (
+from data.constants import (
     ALPHA1,
     ALPHA2,
     ALPHA3,

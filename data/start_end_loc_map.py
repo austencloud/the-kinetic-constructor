@@ -1,4 +1,4 @@
-from constants import *
+from data.constants import *
 from Enums.MotionAttributes import MotionType, Location, PropRotDir
 from Enums.Enums import StartEndLocationTuple
 

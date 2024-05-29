@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Union
 
-from constants import *
+from data.constants import *
 from Enums.MotionAttributes import (
     Color,
     Location,

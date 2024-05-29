@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .mirrored_entry_manager import SpecialPlacementMirroredEntryManager
-from constants import DASH, STATIC
+from data.constants import DASH, STATIC
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 

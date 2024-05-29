@@ -12,7 +12,7 @@ from PyQt6.QtGui import QFont, QColor
 from typing import TYPE_CHECKING
 
 from Enums.letters import LetterType
-from constants import BLUE, CLOCKWISE, COUNTER_CLOCKWISE, RED
+from data.constants import BLUE, CLOCKWISE, COUNTER_CLOCKWISE, RED
 from widgets.factories.button_factory.buttons.letterbook_adjust_turns_button import (
     LetterBookAdjustTurnsButton,
 )

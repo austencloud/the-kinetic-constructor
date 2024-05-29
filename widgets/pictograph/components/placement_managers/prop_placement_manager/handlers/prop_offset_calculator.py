@@ -1,5 +1,5 @@
 from Enums.PropTypes import PropType
-from constants import (
+from data.constants import (
     IN,
     OUT,
     CLOCK,

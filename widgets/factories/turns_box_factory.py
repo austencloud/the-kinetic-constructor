@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from Enums.Enums import TurnsTabAttribute
 from Enums.MotionAttributes import LeadStates, MotionType
-from constants import BLUE, RED
+from data.constants import BLUE, RED
 from widgets.letterbook.letterbook_letter_button_frame.components.letterbook_turns_box import (
     LetterBookTurnsBox,
 )

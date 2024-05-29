@@ -1,4 +1,4 @@
-from constants import ANTI, DASH, FLOAT, PRO, STATIC
+from data.constants import ANTI, DASH, FLOAT, PRO, STATIC
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from objects.motion.motion import Motion

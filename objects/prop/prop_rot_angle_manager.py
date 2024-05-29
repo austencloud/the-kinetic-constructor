@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
-from constants import IN, OUT, CLOCK, COUNTER, NORTH, SOUTH, WEST, EAST
+from data.constants import IN, OUT, CLOCK, COUNTER, NORTH, SOUTH, WEST, EAST
 
 if TYPE_CHECKING:
     from objects.prop.prop import Prop

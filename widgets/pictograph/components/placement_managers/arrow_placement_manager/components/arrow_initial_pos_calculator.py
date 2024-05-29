@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from constants import ANTI, DASH, PRO, STATIC
+from data.constants import ANTI, DASH, PRO, STATIC
 from PyQt6.QtCore import QPointF
 from objects.arrow.arrow import Arrow
 

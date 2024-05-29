@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import VTG_Directions
 
-from constants import (
+from data.constants import (
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     DASH,

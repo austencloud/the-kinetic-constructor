@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Optional
 from Enums.Enums import LetterType, Letter
 
 
-from constants import *
+from data.constants import *
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
 from Enums.MotionAttributes import Color, Location, MotionType

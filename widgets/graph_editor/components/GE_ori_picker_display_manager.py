@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 
-from constants import BLUE, RED
+from data.constants import BLUE, RED
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_start_pos_ori_picker_widget import (

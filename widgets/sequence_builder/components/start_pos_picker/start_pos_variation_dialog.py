@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QPushButton
 from Enums.MotionAttributes import Color
-from constants import BLUE, RED
+from data.constants import BLUE, RED
 from widgets.pictograph.pictograph import Pictograph
 from widgets.sequence_builder.components.start_pos_picker.start_pos_variation_dialog_ori_changer import StartPosVariationDialogOriChanger
 from widgets.sequence_builder.components.start_pos_picker.start_pos_variation_picker import StartPosVariationPicker

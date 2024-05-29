@@ -4,7 +4,7 @@ from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtWidgets import QGraphicsSceneWheelEvent, QGraphicsSceneMouseEvent
 from PyQt6.QtCore import QPointF, QEvent
-from constants import (
+from data.constants import (
     BOX,
     DIAMOND,
 )

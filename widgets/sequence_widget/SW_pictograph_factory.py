@@ -3,7 +3,7 @@ from Enums.Enums import LetterType
 
 
 from Enums.letters import Letter
-from constants import (
+from data.constants import (
     BLUE_END_LOC,
     BLUE_MOTION_TYPE,
     BLUE_PROP_ROT_DIR,

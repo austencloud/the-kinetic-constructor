@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
 from Enums.letters import LetterConditions
-from constants import *
+from data.constants import *
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph

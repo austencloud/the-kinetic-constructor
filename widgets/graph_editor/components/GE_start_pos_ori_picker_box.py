@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Color
-from constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
+from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
 from widgets.graph_editor.components.GE_start_pos_ori_picker_widget import (
     GE_StartPosOriPickerWidget,
 )

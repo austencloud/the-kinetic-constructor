@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QApplication, QPushButton
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QFont
 
-from constants import BLUE, HEX_BLUE, HEX_RED
+from data.constants import BLUE, HEX_BLUE, HEX_RED
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget

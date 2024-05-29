@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
 
-from constants import BLUE_TURNS, RED_TURNS
+from data.constants import BLUE_TURNS, RED_TURNS
 from Enums.Enums import LetterType
 
 
@@ -10,7 +10,7 @@ from .section_widget.letterbook_section_widget import LetterBookSectionWidget
 from PyQt6.QtWidgets import QGridLayout, QLabel
 
 if TYPE_CHECKING:
-    from ...letterbook_scroll_area import LetterBookScrollArea
+    from widgets.letterbook.letterbook_scroll_area import LetterBookScrollArea
 
 
 class LetterBookSectionManager:

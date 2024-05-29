@@ -4,7 +4,7 @@ from PyQt6.QtSvg import QSvgRenderer
 from typing import TYPE_CHECKING
 
 from Enums.Enums import LetterType
-from constants import (
+from data.constants import (
     QUARTER_OPP,
     QUARTER_SAME,
     SPLIT_OPP,

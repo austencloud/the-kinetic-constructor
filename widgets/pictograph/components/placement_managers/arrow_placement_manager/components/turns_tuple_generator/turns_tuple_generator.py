@@ -3,7 +3,7 @@ from typing import Union
 from Enums.Enums import LetterType, Letter
 
 from Enums.letters import LetterConditions
-from constants import *
+from data.constants import *
 from objects.arrow.arrow import Arrow
 from widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.mirrored_turns_tuple_generator import (
     MirroredTurnsTupleGenerator,

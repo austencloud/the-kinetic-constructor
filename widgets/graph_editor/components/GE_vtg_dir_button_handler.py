@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from constants import (
+from data.constants import (
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     ICON_DIR,

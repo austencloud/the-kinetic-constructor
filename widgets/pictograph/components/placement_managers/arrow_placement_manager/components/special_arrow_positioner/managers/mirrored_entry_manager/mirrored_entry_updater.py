@@ -1,4 +1,4 @@
-from constants import *
+from data.constants import *
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
 from .mirrored_entry_updaters import (

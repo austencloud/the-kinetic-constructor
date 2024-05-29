@@ -11,7 +11,7 @@ from PyQt6.QtGui import (
 from PyQt6.QtWidgets import QAbstractButton
 from PyQt6.QtSvg import QSvgRenderer
 
-from constants import BLUE, RED
+from data.constants import BLUE, RED
 
 if TYPE_CHECKING:
     from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget

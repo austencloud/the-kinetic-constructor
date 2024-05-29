@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import Handpaths
 from Enums.MotionAttributes import Color, Location
-from constants import (
+from data.constants import (
     ANTI,
     CCW_HANDPATH,
     CLOCK,

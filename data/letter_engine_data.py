@@ -1,7 +1,7 @@
 from Enums.Enums import LetterType
 from Enums.MotionAttributes import MotionType
 from Enums.letters import Letter
-from constants import ANTI, DASH, PRO, STATIC
+from data.constants import ANTI, DASH, PRO, STATIC
 
 
 motion_type_letter_groups = {

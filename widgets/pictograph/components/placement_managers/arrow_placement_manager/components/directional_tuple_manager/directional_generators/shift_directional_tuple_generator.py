@@ -1,4 +1,4 @@
-from constants import CLOCKWISE, PRO, ANTI
+from data.constants import CLOCKWISE, PRO, ANTI
 from .base_directional_tuple_generator import BaseDirectionalGenerator
 
 

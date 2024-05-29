@@ -1,5 +1,5 @@
 from objects.motion.motion import Motion
-from constants import *
+from data.constants import *
 from Enums.MotionAttributes import Location
 from Enums.Enums import SpecificPosition
 

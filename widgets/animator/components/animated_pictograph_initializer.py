@@ -8,7 +8,7 @@ from objects.motion.motion import Motion
 from objects.prop.prop import Prop
 from objects.prop.prop_classes import *
 
-from constants import *
+from data.constants import *
 from widgets.factories.prop_factory import PropFactory
 from widgets.pictograph.components.elemental_glyph.elemental_glyph import ElementalGlyph
 from widgets.pictograph.components.tka_glyph.tka_glyph import TKA_Glyph

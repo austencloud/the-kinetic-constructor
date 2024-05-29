@@ -1,4 +1,4 @@
-from constants import COLOR
+from data.constants import COLOR
 from objects.motion.motion import Motion
 from objects.prop.prop import Prop
 from typing import TYPE_CHECKING

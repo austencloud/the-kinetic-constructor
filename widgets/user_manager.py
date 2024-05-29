@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QComboBox
 from PyQt6.QtCore import QObject
 
-from edit_user_profiles_dialog import EditUserProfilesDialog
+from widgets.sequence_widget.edit_user_profiles_dialog import EditUserProfilesDialog
 
 if TYPE_CHECKING:
     from settings_manager.settings_manager import SettingsManager

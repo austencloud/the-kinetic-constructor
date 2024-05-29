@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from Enums.Enums import Letter
-from constants import LETTER
+from data.constants import LETTER
 
 
 if TYPE_CHECKING:

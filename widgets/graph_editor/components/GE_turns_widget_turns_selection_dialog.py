@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QDialog, QHBoxLayout
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
-from constants import BLUE, HEX_BLUE, HEX_RED
+from data.constants import BLUE, HEX_BLUE, HEX_RED
 from widgets.graph_editor.components.GE_direct_set_adjustment_button import DirectSetAdjustmentButton
 
 if TYPE_CHECKING:

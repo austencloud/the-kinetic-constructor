@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from constants import ANTI, PRO
+from data.constants import ANTI, PRO
 from objects.prop.prop import Prop
 from Enums.Enums import Directions
 

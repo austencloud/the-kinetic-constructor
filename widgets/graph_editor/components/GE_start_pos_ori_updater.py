@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import Turns
-from constants import *
+from data.constants import *
 
 
 if TYPE_CHECKING:

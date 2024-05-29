@@ -1,4 +1,4 @@
-from constants import (
+from data.constants import (
     DIRECTION,
     END_LOC,
     END_POS,

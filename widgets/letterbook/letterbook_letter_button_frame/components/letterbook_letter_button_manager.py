@@ -2,7 +2,7 @@ from Enums.Enums import LetterType, Letter
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QHBoxLayout, QSizePolicy
 from PyQt6.QtCore import QSize, Qt
-from constants import LETTER_BTN_ICON_DIR
+from data.constants import LETTER_BTN_ICON_DIR
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from .letterbook_letter_button_click_handler import LetterBookLetterButtonClickHandler
 from .letterbook_letter_button_styler import LetterBookLetterButtonStyler
