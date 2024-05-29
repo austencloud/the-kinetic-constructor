@@ -4,13 +4,14 @@ from Enums.letters import Letter
 
 
 if TYPE_CHECKING:
+    from settings_manager.settings_manager import SettingsManager
     from main import MainWindow
     from widgets.pictograph.pictograph import Pictograph
 
 
 class GlyphVisibilityManager:
-    def __init__(self, main_window: "MainWindow"):
-        self.main_window = main_window
+    def __init__(self, settings_manager:  "SettingsManager") -> None:
+        self.main_window = settings_manager.main_window
         self.visibility_states: dict[str, bool] = {}
 
     def toggle_visibility(self, glyph_type):

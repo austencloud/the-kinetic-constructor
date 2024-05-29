@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from path_helpers import get_images_and_data_path
 from widgets.sequence_widget.structural_variation_checker import StructuralVariationChecker
 from widgets.sequence_widget.thumbnail_generator import ThumbnailGenerator
-from turn_pattern_variation_checker import TurnPatternVariationChecker
+from widgets.sequence_widget.turn_pattern_variation_checker import TurnPatternVariationChecker
 from widgets.turn_pattern_converter import TurnPatternConverter
 
 if TYPE_CHECKING:
@@ -36,7 +36,7 @@ class AddToDictionaryManager:
         if self.structural_checker.check_for_structural_variation(
             current_sequence, base_word
         ):
-            turn_variation_checker = TurnPatternVariationChecker(base_path)
+            turn_variation_checker = TurnPatternVariationChecker(self, base_path)
             if turn_variation_checker.check_for_turn_pattern_variation(
                 current_sequence
             ):

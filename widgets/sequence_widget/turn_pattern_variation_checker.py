@@ -1,10 +1,14 @@
 import json
 import os
+from typing import TYPE_CHECKING
 from PIL import Image
+if TYPE_CHECKING:
+    from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager
 
 
 class TurnPatternVariationChecker:
-    def __init__(self, directory):
+    def __init__(self, add_to_dictionary_manager: "AddToDictionaryManager", directory: str):
+        self.manager = add_to_dictionary_manager
         self.directory = directory
 
     def check_for_turn_pattern_variation(self, sequence):

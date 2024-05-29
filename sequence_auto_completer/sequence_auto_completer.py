@@ -1,17 +1,18 @@
 from typing import TYPE_CHECKING, List, Dict
-from sequence_autocompleter.new_entry_creator import NewEntryCreator
 from position_maps import position_map_cw, position_map_ccw
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
+from sequence_auto_completer.new_entry_creator import NewEntryCreator
 
 if TYPE_CHECKING:
+    from widgets.sequence_widget.sequence_widget import SequenceWidget
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
 
 
-class SequenceAutocompleter:
-    def __init__(self, beat_frame: "SW_BeatFrame"):
-        self.json_manager = beat_frame.json_manager
-        self.beat_frame = beat_frame
+class SequenceAutoCompleter:
+    def __init__(self, sequence_widget: "SequenceWidget"):
+        self.beat_frame = sequence_widget.beat_frame
+        self.json_manager = self.beat_frame.json_manager
         self.new_entry_creator = NewEntryCreator(self)
 
     def perform_auto_completion(self, sequence: List[Dict]):
@@ -87,4 +88,3 @@ class SequenceAutocompleter:
 
         loc_map = loc_map_cw if hand_rot_dir == "cw" else loc_map_ccw
         return loc_map.get(start_loc, "s")
- 

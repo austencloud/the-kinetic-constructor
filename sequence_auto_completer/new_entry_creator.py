@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING, Dict
 
 if TYPE_CHECKING:
-    from sequence_autocompleter.sequence_autocompleter import SequenceAutocompleter
+    from sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
 
 
 class NewEntryCreator:
-    def __init__(self, autocompleter: "SequenceAutocompleter"):
+    def __init__(self, autocompleter: "SequenceAutoCompleter"):
         self.autocompleter = autocompleter
 
     def create_new_entry(

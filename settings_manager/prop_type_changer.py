@@ -5,12 +5,13 @@ from widgets.pictograph.pictograph import Pictograph
 
 
 if TYPE_CHECKING:
+    from settings_manager.settings_manager import SettingsManager
     from main import MainWindow
 
 
 class PropTypeChanger:
-    def __init__(self, main_window: "MainWindow"):
-        self.main_window = main_window
+    def __init__(self, settings_manager:  "SettingsManager") -> None:
+        self.main_window = settings_manager.main_window
 
     def replace_props(self, new_prop_type, pictograph: Pictograph):
         for color, prop in pictograph.props.items():

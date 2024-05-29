@@ -16,7 +16,7 @@ from background_managers.water_ripple_background_manager import (
 )
 from path_helpers import get_user_editable_resource_path
 from widgets.menu_bar.glyph_visibility_manager import GlyphVisibilityManager
-from prop_type_changer import PropTypeChanger
+from settings_manager.prop_type_changer import PropTypeChanger
 from widgets.menu_bar.grid_visibility_manager import GridVisibilityManager
 from widgets.notes_manager import NotesManager
 from widgets.user_manager import UserManager
@@ -72,8 +72,8 @@ class SettingsManager(QObject):
         self.settings_json = get_user_editable_resource_path("user_settings.json")
         self.main_window = main_window
         self.settings = self.load_settings()
-        self.prop_type_changer = PropTypeChanger(main_window)
-        self.glyph_visibility_manager = GlyphVisibilityManager(main_window)
+        self.prop_type_changer = PropTypeChanger(self)
+        self.glyph_visibility_manager = GlyphVisibilityManager(self)
         self.grid_visibility_manager = GridVisibilityManager(self)
         self.user_manager = UserManager(self)
         self.notes_manager = NotesManager(self)
