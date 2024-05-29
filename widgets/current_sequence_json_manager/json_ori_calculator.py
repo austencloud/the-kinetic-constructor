@@ -1,3 +1,4 @@
+from typing import TYPE_CHECKING
 from Enums.Enums import Handpaths
 from Enums.MotionAttributes import Color, Location
 from constants import (
@@ -20,11 +21,13 @@ from constants import (
     STATIC_HANDPATH,
     WEST,
 )
+if TYPE_CHECKING:
+    from widgets.json_manager import JSON_Manager
 
 
 class JsonOriCalculator:
-    def __init__(self, main_widget):
-        self.main_widget = main_widget
+    def __init__(self, json_manager: "JSON_Manager"):
+        self.main_widget = json_manager.main_widget
 
     def calculate_end_orientation(self, pictograph_dict, color: Color):
         motion_type = pictograph_dict[f"{color}_attributes"]["motion_type"]

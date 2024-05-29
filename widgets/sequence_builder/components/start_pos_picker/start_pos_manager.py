@@ -113,7 +113,7 @@ class StartPosManager(QObject):
             )
             start_option.container.styled_border_overlay.resize_styled_border_overlay()
 
-    def _convert_current_sequence_json_entry_to_start_pos_pictograph(
+    def convert_current_sequence_json_entry_to_start_pos_pictograph(
         self, start_pos_entry
     ) -> StartPositionBeat:
         start_position_pictograph = self.get_start_pos_pictograph(

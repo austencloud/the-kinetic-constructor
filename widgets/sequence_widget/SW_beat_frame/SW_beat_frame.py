@@ -28,6 +28,8 @@ class SW_BeatFrame(QFrame):
         self.sequence_widget = sequence_widget
         self.top_builder_widget = sequence_widget.top_builder_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
+
+        self.initialized = True
         self.sequence_changed = False
         self.setObjectName("beat_frame")
         self.setStyleSheet("QFrame#beat_frame { background: transparent; }")
@@ -121,7 +123,9 @@ class SW_BeatFrame(QFrame):
         return word
 
     def on_beat_adjusted(self) -> None:
-        current_sequence_json = self.json_manager.loader_saver.load_current_sequence_json()
+        current_sequence_json = (
+            self.json_manager.loader_saver.load_current_sequence_json()
+        )
         self.propogate_turn_adjustment(current_sequence_json)
 
     def propogate_turn_adjustment(self, current_sequence_json) -> None:
@@ -169,3 +173,42 @@ class SW_BeatFrame(QFrame):
         for beat in self.beats:
             beat.resize_beat_view()
         self.start_pos_view.resize_beat_view()
+
+    def populate_beat_frame_from_json(
+        self, current_sequence_json: list[dict[str, str]]
+    ) -> None:
+        self.start_pos_manager = (
+            self.main_widget.top_builder_widget.sequence_builder.start_pos_picker.start_pos_manager
+        )
+        self.sequence_builder = self.main_widget.top_builder_widget.sequence_builder
+        if not current_sequence_json:
+            return
+        self.sequence_widget.button_frame.clear_sequence(
+            show_indicator=False, should_reset_to_start_pos_picker=False
+        )
+        start_pos_beat = self.start_pos_manager.convert_current_sequence_json_entry_to_start_pos_pictograph(
+            current_sequence_json
+        )
+        self.json_manager.start_position_handler.set_start_position_data(start_pos_beat)
+        self.start_pos_view.set_start_pos(start_pos_beat)
+        for pictograph_dict in current_sequence_json[1:]:
+            if pictograph_dict.get("sequence_start_position"):
+                continue
+            self.sequence_widget.populate_sequence(pictograph_dict)
+
+        last_beat = self.sequence_widget.beat_frame.get_last_filled_beat().beat
+        self.sequence_builder.current_pictograph = last_beat
+
+        if self.sequence_builder.start_pos_picker.isVisible():
+            self.sequence_builder.transition_to_sequence_building()
+
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+
+        scroll_area = self.sequence_builder.option_picker.scroll_area
+        scroll_area.remove_irrelevant_pictographs()
+        scroll_area.add_and_display_relevant_pictographs(
+            self.sequence_builder.option_picker.option_manager.get_next_options(
+                sequence
+            )
+        )
+        self.sequence_builder.option_picker.resize_option_picker()
