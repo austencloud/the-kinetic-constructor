@@ -4,7 +4,8 @@ from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QScrollArea
 from PyQt6.QtCore import Qt
 
-from sequence_autocompleter import SequenceAutocompleter
+from sequence_autocompleter.sequence_autocompleter import SequenceAutocompleter
+from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager
 from widgets.sequence_widget.current_word_label import CurrentWordLabel
 
 from ..graph_editor.graph_editor import GraphEditor
@@ -42,6 +43,7 @@ class SequenceWidget(QWidget):
         self.indicator_label = IndicatorLabel(self)
         self.current_word_label = CurrentWordLabel(self)  # Add the current word label
         self.beat_frame = SW_BeatFrame(self)
+        self.add_to_dictionary_manager = AddToDictionaryManager(self)
         self.button_frame = SW_ButtonFrame(self)
         self.graph_editor = GraphEditor(self)
         self.pictograph_factory = SW_PictographFactory(self)

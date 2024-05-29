@@ -7,7 +7,6 @@ from PyQt6.QtCore import QPointF, QEvent
 from constants import (
     BOX,
     DIAMOND,
-    GRID_DIR,
 )
 from Enums.Enums import GridModes
 from Enums.PropTypes import (
@@ -18,6 +17,8 @@ from path_helpers import get_images_and_data_path
 if TYPE_CHECKING:
 
     from widgets.pictograph.pictograph import Pictograph
+
+GRID_DIR = "images/grid/"
 
 
 class GridItem(QGraphicsSvgItem):

@@ -5,7 +5,7 @@ from PyQt6.QtCore import QObject
 from edit_notes_dialog import EditNotesDialog
 
 if TYPE_CHECKING:
-    from settings_manager import SettingsManager
+    from settings_manager.settings_manager import SettingsManager
 
 
 class NotesManager(QObject):

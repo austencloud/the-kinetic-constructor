@@ -140,12 +140,10 @@ ANTI_TURNS = "anti_turns"
 STATIC_HANDPATH = "static_handpath"
 DASH_HANDPATH = "dash_handpath"
 
-PICTOGRAPH_DIR = "images/pictographs/"
-ARROW_DIR = "images/arrows/"
+
 PROP_DIR = "images/props/"
 LETTER_BTN_ICON_DIR = "images/letter_button_icons"
 ICON_DIR = "images/icons/"
-GRID_DIR = "images/grid/"
 
 
 STAFF = "staff"
@@ -171,21 +169,12 @@ UKULELE = "ukulele"
 CHICKEN = "chicken"
 
 
-MAIN = "main"
-OPTION = "option"
-BEAT = "beat"
-START_POS_BEAT = "start_pos_beat"
-CODEX_PICTOGRAPH = "letterbook_pictograph"
-
 DIAMOND = "diamond"
 BOX = "box"
 
 ALPHA = "alpha"
 BETA = "beta"
 GAMMA = "gamma"
-
-from enum import Enum
-
 
 ALPHA1 = "alpha1"
 ALPHA2 = "alpha2"
@@ -204,25 +193,6 @@ GAMMA6 = "gamma6"
 GAMMA7 = "gamma7"
 GAMMA8 = "gamma8"
 
-
-PRO_TURNS = "pro_turns"
-ANTI_TURNS = "anti_turns"
-DASH_TURNS = "dash_turns"
-STATIC_TURNS = "static_turns"
-
-Type1 = "Type1"
-Type2 = "Type2"
-Type3 = "Type3"
-Type4 = "Type4"
-Type5 = "Type5"
-Type6 = "Type6"
-
-DUAL_SHIFT = "dual-shift"
-SHIFT = "shift"
-CROSS_SHIFT = "cross-shift"
-DASH = "dash"
-DUAL_DASH = "dual-dash"
-STATIC = "static"
 
 ### ICONS ###
 

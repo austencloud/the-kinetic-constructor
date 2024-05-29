@@ -4,8 +4,6 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout
 from circular_word_checker import CircularWordChecker
 from path_helpers import get_images_and_data_path
-from sequence_autocompleter import SequenceAutocompleter
-from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager
 
 
 if TYPE_CHECKING:
@@ -36,7 +34,7 @@ class SW_ButtonFrame(QFrame):
 
         self.orientations = ["in", "counter", "out", "clock"]
         self.font_size = self.sequence_widget.width() // 45
-        self.add_to_dictionary_manager = AddToDictionaryManager(self.sequence_widget)
+        self.add_to_dictionary_manager = self.sequence_widget.add_to_dictionary_manager
         self._setup_dependencies()
         self._setup_buttons()
         self._setup_layout()
