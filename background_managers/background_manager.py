@@ -19,6 +19,5 @@ class BackgroundManager(QObject):
         self.timer.start(50)
 
     def animate_background(self):
-        # implement in subclass
         pass
 

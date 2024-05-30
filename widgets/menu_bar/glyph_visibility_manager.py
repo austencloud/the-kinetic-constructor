@@ -39,12 +39,10 @@ class GlyphVisibilityManager:
             self.visibility_states[glyph_type] = visibility
 
             self.apply_visibility(glyph_type, pictograph)
-            # if the pictograph is in the start pos picker frame then don't show the start to end pos glyph
             self.sequence_builder = (
                 self.main_window.main_widget.top_builder_widget.sequence_builder
             )
             if pictograph.letter in [Letter.α, Letter.β, Letter.Γ]:
-                # hide the start to end pos glyph
                 pictograph.start_to_end_pos_glyph.setVisible(False)
 
     def should_glyph_be_visible(self, glyph_type: str) -> bool:
@@ -59,7 +57,7 @@ class GlyphVisibilityManager:
         if "glyph_visibility" not in self.settings:
             self.settings["glyph_visibility"] = {}
         self.settings["glyph_visibility"][glyph_type] = visible
-        self.visibility_settings_handler.save_settings("visibility_settings")
+        self.visibility_settings_handler.set_glyph_visibility(glyph_type, visible)
         self.apply_glyph_visibility()
 
     def apply_glyph_visibility(self) -> None:

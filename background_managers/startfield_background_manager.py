@@ -28,3 +28,4 @@ class StarfieldBackgroundManager(BackgroundManager):
             ypos = int(y * widget.height())
             painter.setBrush(star_color)
             painter.drawEllipse(xpos, ypos, star_size, star_size)
+     

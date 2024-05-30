@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 class PropTypeChanger:
-    def __init__(self, settings_manager:  "SettingsManager") -> None:
+    def __init__(self, settings_manager: "SettingsManager") -> None:
         self.main_window = settings_manager.main_window
 
     def replace_props(self, new_prop_type, pictograph: Pictograph):
@@ -30,7 +30,7 @@ class PropTypeChanger:
         pictograph.updater.update_pictograph()
 
     def apply_prop_type(self) -> None:
-        prop_type = self.main_window.settings_manager.get_prop_type()
+        prop_type = self.main_window.settings_manager.global_settings.get_prop_type()
         self.main_window.main_widget.prop_type = prop_type
         self.update_props_to_type(prop_type)
 
@@ -59,7 +59,5 @@ class PropTypeChanger:
             if start_pos.view.is_filled:
                 self.replace_props(new_prop_type, start_pos)
 
-        json_handler = (
-            self.main_window.main_widget.json_manager.current_sequence_json_manager
-        )
-        json_handler.update_prop_type_in_json(new_prop_type)
+        json_manager = self.main_window.main_widget.json_manager
+        json_manager.updater.update_prop_type_in_json(new_prop_type)

@@ -15,8 +15,8 @@ class TopBuilderWidget(QWidget):
         super().__init__()
         self.main_widget = main_widget
 
-        self.background_manager = self.main_widget.main_window.settings_manager.global_settings.setup_background_manager(
-            self
+        self.global_settings = (
+            self.main_widget.main_window.settings_manager.global_settings
         )
 
         self.sequence_builder = SequenceBuilder(self)
@@ -36,12 +36,14 @@ class TopBuilderWidget(QWidget):
         self.layout.addWidget(self.sequence_builder, 1)
 
     def update_background_manager(self, bg_type: str):
-        self.background_manager = (
-            self.main_widget.main_window.settings_manager.setup_background_manager(self)
-        )
+        self.background_manager = self.global_settings.setup_background_manager(self)
         self.background_manager.update_required.connect(self.update)
         self.update()
 
     def paintEvent(self, event):
         painter = QPainter(self)
         self.background_manager.paint_background(self, painter)
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        self.background_manager = self.global_settings.setup_background_manager(self)

@@ -84,3 +84,20 @@ class CurrentWordLabel(QWidget):
     def set_current_word(self, word: str):
         self.current_word = word
         self.line_edit.setText(word)
+
+    def set_font_color(self, color: str):
+        self.line_edit.setStyleSheet(
+            f"""
+            QLineEdit {{
+                background-color: transparent;
+                border: none;
+                padding-top: 0px;
+                padding-bottom: 0px;
+                margin: 0px;
+                line-height: 1.0em;
+                font-family: Georgia;
+                font-weight: 600;
+                color: {color};
+            }}
+            """
+        )

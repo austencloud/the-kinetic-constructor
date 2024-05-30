@@ -36,7 +36,6 @@ class MainWindowMenuBar(QMenuBar):
             "Particle",
             "Aurora",
             "AuroraBorealis",
-            "WaterRipples",
         ]
         current_bg = (
             self.main_widget.main_window.settings_manager.global_settings.get_background_type()
@@ -114,7 +113,7 @@ class MainWindowMenuBar(QMenuBar):
         print(f"Prop type set to: {prop_type.name}")
 
     def open_preferences_dialog(self):
-        self.preferences_dialog = self.main_widget.layout_options_dialog
+        self.preferences_dialog = self.main_widget.main_settings_dialog
         self.preferences_dialog.load_initial_settings()
         self.preferences_dialog.exec()
 

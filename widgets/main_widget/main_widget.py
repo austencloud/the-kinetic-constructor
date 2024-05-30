@@ -72,8 +72,8 @@ class MainWidget(QTabWidget):
     def _set_prop_type(self) -> None:
         settings_path = get_images_and_data_path("settings.json")
         with open(settings_path, "r", encoding="utf-8") as file:
-            settings: dict[str, dict[str, str|bool]] = json.load(file)
-        prop_type_value = settings.get("global_settings", {}).get("prop_type", "Staff")
+            settings: dict[str, dict[str, str | bool]] = json.load(file)
+        prop_type_value = settings.get("global_settings", {}).get("prop_type", "staff")
         self.prop_type = PropType.get_prop_type(prop_type_value)
 
     def _setup_components(self) -> None:
@@ -83,7 +83,7 @@ class MainWidget(QTabWidget):
         self.prop_type_selector = PropTypeSelector(self)
         self.turns_tuple_generator = TurnsTupleGenerator()
         self.pictograph_key_generator = PictographKeyGenerator()
-        # self.layout_options_dialog = MainSettingsDialog(self)
+        self.main_settings_dialog = MainSettingsDialog(self)
         self.special_placement_loader = SpecialPlacementLoader(self)
         self.metadata_extractor = MetaDataExtractor(self)
 
@@ -105,7 +105,6 @@ class MainWidget(QTabWidget):
         self.initialized = True
 
         # Apply the initial background
-        self.apply_background()
 
     def _setup_special_placements(self) -> None:
         self.special_placements: dict[
@@ -166,6 +165,7 @@ class MainWidget(QTabWidget):
         super().showEvent(event)
         self.load_state()
         self.resize_all_widgets()
+        self.apply_background()
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
@@ -173,7 +173,9 @@ class MainWidget(QTabWidget):
 
     def apply_background(self):
         self.background_manager = (
-            self.main_window.settings_manager.global_settings.setup_background_manager(self)
+            self.main_window.settings_manager.global_settings.setup_background_manager(
+                self
+            )
         )
         self.background_manager.update_required.connect(self.update)
 

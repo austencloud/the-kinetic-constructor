@@ -25,9 +25,10 @@ class DictionaryWidget(QWidget):
         self._setup_ui()
         self.selected_sequence_dict = None
 
-        self.background_manager = (
-            self.main_widget.main_window.settings_manager.global_settings.setup_background_manager(self)
+        self.global_settings = (
+            self.main_widget.main_window.settings_manager.global_settings
         )
+        # self.background_manager = self.global_settings.setup_background_manager(self)
         self.connect_signals()
 
     def connect_signals(self):
@@ -36,9 +37,9 @@ class DictionaryWidget(QWidget):
         )
 
     def update_background_manager(self, bg_type: str):
-        self.background_manager = self.main_widget.main_window.settings_manager.global_settings.setup_background_manager(self)
+        self.background_manager = self.global_settings.setup_background_manager(self)
         self.background_manager.update_required.connect(self.update)
-        self.update() 
+        self.update()
 
     def paintEvent(self, event):
         painter = QPainter(self)
