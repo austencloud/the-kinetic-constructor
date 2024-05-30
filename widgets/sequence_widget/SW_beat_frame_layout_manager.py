@@ -36,7 +36,7 @@ class SW_BeatFrameLayoutManager:
         return rows
 
     def configure_beat_frame(self, num_beats):
-        grow_sequence = self.settings_manager.get_grow_sequence()
+        grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
         if grow_sequence:
             num_filled_beats = self.beat_frame.find_next_available_beat() or 0
             num_beats = num_filled_beats

@@ -17,7 +17,7 @@ class PropTypeSelector(QWidget):
         super().__init__()
         self.main_widget = main_widget
         self.prop_type_changer = (
-            self.main_widget.main_window.settings_manager.prop_type_changer
+            self.main_widget.main_window.settings_manager.global_settings.prop_type_changer
         )
         self._setup_prop_type_combobox()
         self._setup_layout()
@@ -34,7 +34,7 @@ class PropTypeSelector(QWidget):
 
     def load_initial_settings(self) -> None:
         initial_prop_type = (
-            self.main_widget.main_window.settings_manager.get_prop_type()
+            self.main_widget.main_window.settings_manager.global_settings.get_prop_type()
         )
         self.prop_type_combobox.setCurrentText(initial_prop_type.name)
 
@@ -43,7 +43,7 @@ class PropTypeSelector(QWidget):
         self.on_prop_type_changed(new_prop_type)
 
     def on_prop_type_changed(self, new_prop_type: PropType) -> None:
-        self.main_widget.main_window.settings_manager.set_prop_type(new_prop_type)
+        self.main_widget.main_window.settings_manager.global_settings.set_prop_type(new_prop_type)
         self.main_widget.main_window.settings_manager.save_settings()
         self.prop_type_changer.apply_prop_type()
         if hasattr(self.main_widget.main_window.menu_bar, "preferences_dialog"):

@@ -4,15 +4,17 @@ from Enums.letters import Letter
 
 
 if TYPE_CHECKING:
+    from settings_manager.visibility_settings import VisibilitySettings
     from settings_manager.settings_manager import SettingsManager
     from main import MainWindow
     from widgets.pictograph.pictograph import Pictograph
 
 
 class GlyphVisibilityManager:
-    def __init__(self, settings_manager:  "SettingsManager") -> None:
-        self.main_window = settings_manager.main_window
-        self.visibility_states: dict[str, bool] = {}
+    def __init__(self, visibility_settings_handler: "VisibilitySettings") -> None:
+        self.visibility_settings_handler = visibility_settings_handler
+        self.main_window = visibility_settings_handler.settings_manager.main_window
+        self.visibility_states = visibility_settings_handler.get_glyph_visibility()
 
     def toggle_visibility(self, glyph_type):
         if glyph_type in self.visibility_states:
@@ -50,14 +52,14 @@ class GlyphVisibilityManager:
 
     def get_glyph_visibility(self, glyph_type: str) -> bool:
         self.settings_manager = self.main_window.settings_manager
-        self.settings = self.settings_manager.settings
+        self.settings = self.visibility_settings_handler.settings
         return self.settings.get("glyph_visibility", {}).get(glyph_type, True)
 
     def set_glyph_visibility(self, glyph_type: str, visible: bool) -> None:
         if "glyph_visibility" not in self.settings:
             self.settings["glyph_visibility"] = {}
         self.settings["glyph_visibility"][glyph_type] = visible
-        self.settings_manager.save_settings()
+        self.visibility_settings_handler.save_settings("visibility_settings")
         self.apply_glyph_visibility()
 
     def apply_glyph_visibility(self) -> None:

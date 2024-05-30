@@ -1,0 +1,36 @@
+{
+    "global_settings": {
+        "prop_type": "Staff",
+        "background_type": "Aurora",
+        "grow_sequence": true
+    },
+    "image_export": {
+        "include_start_position": false,
+        "add_info": true,
+        "add_word": true,
+        "open_directory_on_export": true
+    },
+    "user_profile": {
+        "current_user": "AC",
+        "user_profiles": {
+            "AC": {
+                "name": "AC"
+            }
+        },
+        "current_note": "Created using The Kinetic Alphabet",
+        "saved_notes": [
+            "Created using The Kinetic Alphabet"
+        ]
+    },
+    "visibility": {
+        "glyph_visibility": {
+            "VTG": false,
+            "TKA": true,
+            "Elemental": false,
+            "EndPosition": false
+        },
+        "grid_visibility": {
+            "non_radial_points": false
+        }
+    }
+}

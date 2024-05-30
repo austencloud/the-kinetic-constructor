@@ -26,7 +26,7 @@ class DictionaryWidget(QWidget):
         self.selected_sequence_dict = None
 
         self.background_manager = (
-            self.main_widget.main_window.settings_manager.setup_background_manager(self)
+            self.main_widget.main_window.settings_manager.global_settings.setup_background_manager(self)
         )
         self.connect_signals()
 
@@ -36,7 +36,7 @@ class DictionaryWidget(QWidget):
         )
 
     def update_background_manager(self, bg_type: str):
-        self.background_manager = self.main_widget.main_window.settings_manager.setup_background_manager(self)
+        self.background_manager = self.main_widget.main_window.settings_manager.global_settings.setup_background_manager(self)
         self.background_manager.update_required.connect(self.update)
         self.update() 
 

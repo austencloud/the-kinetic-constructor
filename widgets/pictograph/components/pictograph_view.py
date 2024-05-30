@@ -55,12 +55,12 @@ class PictographView(QGraphicsView):
         COLUMN_COUNT = self.pictograph.scroll_area.display_manager.COLUMN_COUNT
         sections = self.pictograph.scroll_area.sections_manager.sections
         letter_type = self.pictograph.letter_type
-        
+
         view_width = int(
             (self.pictograph.scroll_area.option_picker.width() / COLUMN_COUNT)
             - ((sections[letter_type].pictograph_frame.spacing))
         )
-        
+
         outer_border_width = max(1, int(view_width * 0.015))
         inner_border_width = max(1, int(view_width * 0.015))
         view_width = view_width - (outer_border_width) - (inner_border_width)
@@ -70,7 +70,6 @@ class PictographView(QGraphicsView):
 
     def set_enabled(self, enabled: bool) -> None:
         self._ignoreMouseEvents = not enabled
-        
 
     def wheelEvent(self, event) -> None:
         if self.pictograph.scroll_area:
@@ -104,16 +103,16 @@ class PictographView(QGraphicsView):
     def showEvent(self, event):
         super().showEvent(event)
         settings_manager = self.pictograph.main_widget.main_window.settings_manager
-        current_prop_type = settings_manager.get_prop_type()
+        current_prop_type = settings_manager.global_settings.get_prop_type()
 
         if (
             self.pictograph.prop_type != current_prop_type
             and self.pictograph.__class__.__name__ != "GE_BlankPictograph"
         ):
-            settings_manager.prop_type_changer.replace_props(
+            settings_manager.global_settings.prop_type_changer.replace_props(
                 current_prop_type, self.pictograph
             )
-        settings_manager.glyph_visibility_manager.apply_current_visibility_settings(
+        settings_manager.visibility.glyph_visibility_manager.apply_current_visibility_settings(
             self.pictograph
         )
 
@@ -134,7 +133,7 @@ class PictographView(QGraphicsView):
             self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
         else:
             self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.pictograph.container.styled_border_overlay.set_gold_border()   
+        self.pictograph.container.styled_border_overlay.set_gold_border()
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
         if isinstance(self.parent(), GE_PictographContainer):

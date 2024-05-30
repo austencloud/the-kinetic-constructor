@@ -21,7 +21,7 @@ class MainWindow(QMainWindow):
         self.profiler = profiler
         self.settings_manager = SettingsManager(self)
         self.main_widget = MainWidget(self)
-        self.main_widget.layout_options_dialog.load_initial_settings()
+        # self.main_widget.layout_options_dialog.load_initial_settings()
         self.setAttribute(Qt.WidgetAttribute.WA_AcceptTouchEvents, True)
         self.window_manager = MainWindowGeometryManager(self)
         self.setCentralWidget(self.main_widget)
@@ -85,9 +85,7 @@ def main() -> None:
     main_window = MainWindow(profiler)
     main_window.show()  # Display the main window
 
-    QTimer.singleShot(
-        1000, lambda: splash.finish(main_window)
-    ) 
+    QTimer.singleShot(1000, lambda: splash.finish(main_window))
 
     sys.exit(app.exec())
 

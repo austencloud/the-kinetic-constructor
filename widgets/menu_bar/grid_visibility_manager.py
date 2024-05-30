@@ -1,25 +1,25 @@
 from typing import TYPE_CHECKING
 
+
 if TYPE_CHECKING:
     from settings_manager.settings_manager import SettingsManager
+    from settings_manager.visibility_settings import VisibilitySettings
 
 
 class GridVisibilityManager:
-    def __init__(self, settings_manager: "SettingsManager"):
-        self.settings_manager = settings_manager
+    def __init__(self, visibility_settings_handler: "VisibilitySettings") -> None:
+        self.visibility_settings_handler = visibility_settings_handler
+        self.settings_manager = visibility_settings_handler.settings_manager
         self.non_radial_visible = self.load_visibility_settings()
 
     def load_visibility_settings(self) -> bool:
-        return self.settings_manager.settings["grid_visibility"]["non_radial_points"]
+        return self.visibility_settings_handler.settings["grid_visibility"]["non_radial_points"]
 
     def save_visibility_settings(self):
-        # set the setting within the "grid_visibility" dict in the settings
-        self.settings_manager.settings["grid_visibility"]["non_radial_points"] = (
+        self.visibility_settings_handler.settings["grid_visibility"]["non_radial_points"] = (
             self.non_radial_visible
         )
         self.settings_manager.save_settings()
-
-
 
     def toggle_visibility(self):
         self.non_radial_visible = not self.non_radial_visible
@@ -35,7 +35,6 @@ class GridVisibilityManager:
                     start_pos.grid.toggle_non_radial_points_visibility(
                         self.non_radial_visible
                     )
-        # iterate over the sequence widget beat frame too
         beat_frame = (
             self.settings_manager.main_window.main_widget.top_builder_widget.sequence_widget.beat_frame
         )

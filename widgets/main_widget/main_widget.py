@@ -70,10 +70,10 @@ class MainWidget(QTabWidget):
             self.pictograph_cache[letter] = {}
 
     def _set_prop_type(self) -> None:
-        user_settings_path = get_images_and_data_path("user_settings.json")
-        with open(user_settings_path, "r", encoding="utf-8") as file:
-            user_settings: dict = json.load(file)
-        prop_type_value = user_settings.get("prop_type")
+        settings_path = get_images_and_data_path("settings.json")
+        with open(settings_path, "r", encoding="utf-8") as file:
+            settings: dict[str, dict[str, str|bool]] = json.load(file)
+        prop_type_value = settings.get("global_settings", {}).get("prop_type", "Staff")
         self.prop_type = PropType.get_prop_type(prop_type_value)
 
     def _setup_components(self) -> None:
@@ -83,7 +83,7 @@ class MainWidget(QTabWidget):
         self.prop_type_selector = PropTypeSelector(self)
         self.turns_tuple_generator = TurnsTupleGenerator()
         self.pictograph_key_generator = PictographKeyGenerator()
-        self.layout_options_dialog = MainSettingsDialog(self)
+        # self.layout_options_dialog = MainSettingsDialog(self)
         self.special_placement_loader = SpecialPlacementLoader(self)
         self.metadata_extractor = MetaDataExtractor(self)
 
@@ -173,7 +173,7 @@ class MainWidget(QTabWidget):
 
     def apply_background(self):
         self.background_manager = (
-            self.main_window.settings_manager.setup_background_manager(self)
+            self.main_window.settings_manager.global_settings.setup_background_manager(self)
         )
         self.background_manager.update_required.connect(self.update)
 

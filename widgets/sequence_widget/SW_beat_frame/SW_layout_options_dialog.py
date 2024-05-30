@@ -125,12 +125,11 @@ class SW_LayoutOptionsDialog(QDialog):
                         self.sequence_widget.beat_frame.beats[i].setScene(
                             self.sequence_widget.beat_frame.beats[i].blank_beat
                         )
-                    selected_beat = self.sequence_widget.beat_frame.selection_manager.selected_beat
+                    selected_beat = (
+                        self.sequence_widget.beat_frame.selection_manager.selected_beat
+                    )
                     if selected_beat:
-                        selected_beat_index = (
-                            selected_beat.number
-                            - 1
-                        )
+                        selected_beat_index = selected_beat.number - 1
                         if (
                             selected_beat_index is not None
                             and selected_beat_index >= num_beats
@@ -150,7 +149,7 @@ class SW_LayoutOptionsDialog(QDialog):
             self.sequence_widget.top_builder_widget.sequence_builder.option_picker
         )
         if (
-            not self.settings_manager.get_grow_sequence()
+            not self.settings_manager.global_settings.get_grow_sequence()
             and self.sequence_widget.beat_frame.find_next_available_beat() - 1
             >= sum(
                 1 for beat in self.sequence_widget.beat_frame.beats if beat.isVisible()

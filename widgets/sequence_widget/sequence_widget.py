@@ -65,7 +65,7 @@ class SequenceWidget(QWidget):
     def _get_current_beat_frame_state(self) -> dict:
         layout = self.beat_frame.layout
         num_beats = sum(1 for beat in self.beat_frame.beats if beat.isVisible())
-        grow_sequence = self.settings_manager.get_grow_sequence()
+        grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
         save_layout = False  # Default value, can be set based on your logic
 
         rows, cols = self._calculate_current_layout()

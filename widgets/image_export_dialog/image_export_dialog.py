@@ -62,7 +62,7 @@ class ImageExportDialog(QDialog):
     def update_export_setting_and_layout(self):
         new_value = self.control_panel.include_start_pos_check.isChecked()
         self.export_manager.include_start_pos = new_value
-        self.export_manager.settings_manager.set_image_export_setting(
+        self.export_manager.settings_manager.image_export.set_image_export_setting(
             "include_start_position", new_value
         )
         self.update_preview_based_on_options()

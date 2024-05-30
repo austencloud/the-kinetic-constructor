@@ -10,7 +10,7 @@ class GlyphVisibilityWidget(QWidget):
         super().__init__()
         self.main_window = main_window
         self.glyph_visibility_manager = (
-            main_window.settings_manager.glyph_visibility_manager
+            main_window.settings_manager.visibility.glyph_visibility_manager
         )
         self._setup_widgets()
         self._setup_layout()

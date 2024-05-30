@@ -75,7 +75,7 @@ class SW_BeatFrame(QFrame):
     def add_beat_to_sequence(self, new_beat: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()
 
-        grow_sequence = self.settings_manager.get_grow_sequence()
+        grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
         if grow_sequence:
             if (
                 next_beat_index is not None

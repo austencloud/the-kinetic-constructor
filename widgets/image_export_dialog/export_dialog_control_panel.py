@@ -24,14 +24,18 @@ class ExportDialogControlPanel(QWidget):
         self.export_dialog = export_dialog
         self.settings_manager = export_dialog.export_manager.settings_manager
         self.user_combo_box = QComboBox(self)
-        self.settings_manager.user_manager.populate_user_profiles(self.user_combo_box)
+        self.settings_manager.users.user_manager.populate_user_profiles(
+            self.user_combo_box
+        )
+        self.notes_manager = self.settings_manager.users.notes_manager
+        self.user_manager = self.settings_manager.users.user_manager
 
         self.notes_combo_box = QComboBox(self)
-        self.settings_manager.notes_manager.populate_notes(self.notes_combo_box)
+        self.notes_manager.populate_notes(self.notes_combo_box)
         self.notes_combo_box.currentIndexChanged.connect(self._handle_note_selection)
 
-        self.previous_note = self.settings_manager.notes_manager.get_current_note()
-        self.previous_user = self.settings_manager.user_manager.get_current_user()
+        self.previous_note = self.notes_manager.get_current_note()
+        self.previous_user = self.user_manager.get_current_user()
 
         self._setup_checkboxes()
         self._setup_add_date_field()
@@ -47,7 +51,7 @@ class ExportDialogControlPanel(QWidget):
     def _setup_open_directory_checkbox(self):
         self.open_directory_check = QCheckBox("Open file location after export", self)
         self.open_directory_check.setChecked(
-            self.settings_manager.get_image_export_setting(
+            self.settings_manager.image_export.get_image_export_setting(
                 "open_directory_on_export", True
             )
         )
@@ -58,7 +62,7 @@ class ExportDialogControlPanel(QWidget):
 
     def update_open_directory_setting(self):
         """Update the setting for opening the directory after export."""
-        self.settings_manager.set_image_export_setting(
+        self.settings_manager.image_export.set_image_export_setting(
             "open_directory_on_export", self.open_directory_check.isChecked()
         )
 
@@ -96,7 +100,7 @@ class ExportDialogControlPanel(QWidget):
         """Setup the checkboxes for the control panel."""
         self.include_start_pos_check = QCheckBox("Add Start Position", self)
         self.include_start_pos_check.setChecked(
-            self.settings_manager.get_image_export_setting(
+            self.settings_manager.image_export.get_image_export_setting(
                 "include_start_position", True
             )
         )
@@ -104,13 +108,17 @@ class ExportDialogControlPanel(QWidget):
 
         self.add_info_check = QCheckBox("Add Info", self)
         self.add_info_check.setChecked(
-            self.settings_manager.get_image_export_setting("add_info", True)
+            self.settings_manager.image_export.get_image_export_setting(
+                "add_info", True
+            )
         )
         self.add_info_check.toggled.connect(self.toggle_add_info)
 
         self.add_word_check = QCheckBox("Add Word to Image", self)
         self.add_word_check.setChecked(
-            self.settings_manager.get_image_export_setting("add_word", False)
+            self.settings_manager.image_export.get_image_export_setting(
+                "add_word", False
+            )
         )
         self.add_word_check.toggled.connect(self.toggle_add_word)
         self._setup_open_directory_checkbox()
@@ -129,8 +137,8 @@ class ExportDialogControlPanel(QWidget):
         """Handle the selection of a user from the combo box."""
         selected_user = self.user_combo_box.currentText()
         if selected_user == "Edit Users":
-            self.settings_manager.user_manager.previous_user = self.previous_user
-            self.settings_manager.user_manager.open_edit_users_dialog()
+            self.user_manager.previous_user = self.previous_user
+            self.user_manager.open_edit_users_dialog()
             index = self.user_combo_box.findText(self.previous_user)
             if index != -1:
                 self.user_combo_box.setCurrentIndex(index)
@@ -142,8 +150,8 @@ class ExportDialogControlPanel(QWidget):
         """Handle the selection of a note from the combo box."""
         selected_note = self.notes_combo_box.currentText()
         if selected_note == "Edit Notes":
-            self.settings_manager.notes_manager.previous_note = self.previous_note
-            self.settings_manager.notes_manager.open_edit_notes_dialog()
+            self.notes_manager.previous_note = self.previous_note
+            self.notes_manager.open_edit_notes_dialog()
             index = self.notes_combo_box.findText(self.previous_note)
             if index != -1:
                 self.notes_combo_box.setCurrentIndex(index)
@@ -160,8 +168,8 @@ class ExportDialogControlPanel(QWidget):
         current_user = self.user_combo_box.currentText()
         current_date = self.add_date_field.text()
         user_profile = {"name": current_user, "export_date": current_date}
-        self.settings_manager.add_or_update_user_profile(user_profile)
-        self.settings_manager.set_image_export_setting(
+        self.settings_manager.users.add_or_update_user_profile(user_profile)
+        self.settings_manager.image_export.set_image_export_setting(
             "add_word", self.add_word_check.isChecked()
         )
         self.export_dialog.accept()
@@ -185,11 +193,11 @@ class ExportDialogControlPanel(QWidget):
         self.user_combo_box.setStyleSheet(f"color: {color};")
         self.notes_combo_box.setStyleSheet(f"color: {color};")
         self.update_preview_based_on_options()
-        self.settings_manager.set_image_export_setting("add_info", state)
+        self.settings_manager.image_export.set_image_export_setting("add_info", state)
 
     def toggle_add_word(self):
         """Toggle the state of the add word field based on the checkbox."""
         state = self.add_word_check.isChecked()
         self.update_preview_based_on_options()
-        self.settings_manager.set_image_export_setting("add_word", state)
+        self.settings_manager.image_export.set_image_export_setting("add_word", state)
         self.optionChanged.emit()

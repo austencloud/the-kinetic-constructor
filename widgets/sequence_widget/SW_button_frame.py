@@ -133,7 +133,7 @@ class SW_ButtonFrame(QFrame):
         self._clear_graph_editor()
 
         # Reset the layout to the smallest possible amount
-        if self.settings_manager.get_grow_sequence():
+        if self.settings_manager.global_settings.get_grow_sequence():
             self.beat_frame.layout_manager.configure_beat_frame(0)
 
     def _reset_beat_frame(self) -> None:

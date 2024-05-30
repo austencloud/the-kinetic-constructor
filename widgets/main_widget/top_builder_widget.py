@@ -15,8 +15,8 @@ class TopBuilderWidget(QWidget):
         super().__init__()
         self.main_widget = main_widget
 
-        self.background_manager = (
-            self.main_widget.main_window.settings_manager.setup_background_manager(self)
+        self.background_manager = self.main_widget.main_window.settings_manager.global_settings.setup_background_manager(
+            self
         )
 
         self.sequence_builder = SequenceBuilder(self)

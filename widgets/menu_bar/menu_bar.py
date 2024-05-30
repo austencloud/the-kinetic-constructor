@@ -12,10 +12,10 @@ class MainWindowMenuBar(QMenuBar):
         super().__init__()
         self.main_widget = main_widget
         self.glyph_visibility_manager = (
-            self.main_widget.main_window.settings_manager.glyph_visibility_manager
+            self.main_widget.main_window.settings_manager.visibility.glyph_visibility_manager
         )
         self.grid_visibility_manager = (
-            self.main_widget.main_window.settings_manager.grid_visibility_manager
+            self.main_widget.main_window.settings_manager.visibility.grid_visibility_manager
         )
 
         self._setup_menu()
@@ -38,8 +38,8 @@ class MainWindowMenuBar(QMenuBar):
             "AuroraBorealis",
             "WaterRipples",
         ]
-        current_bg = self.main_widget.main_window.settings_manager.get_setting(
-            "background_type", default="Rainbow"
+        current_bg = (
+            self.main_widget.main_window.settings_manager.global_settings.get_background_type()
         )
 
         for bg_type in background_types:
@@ -54,7 +54,9 @@ class MainWindowMenuBar(QMenuBar):
             background_action_group.addAction(action)
 
     def set_background_type(self, bg_type: str):
-        self.main_widget.main_window.settings_manager.set_background_type(bg_type)
+        self.main_widget.main_window.settings_manager.global_settings.set_background_type(
+            bg_type
+        )
         # Signal is emitted and handled by each widget
 
     def _setup_prop_type_menu(self):
@@ -95,7 +97,7 @@ class MainWindowMenuBar(QMenuBar):
 
         non_radial_action = QAction("Non-Radial Points", self, checkable=True)
         non_radial_action.setChecked(
-            self.main_widget.main_window.settings_manager.grid_visibility_manager.non_radial_visible
+            self.main_widget.main_window.settings_manager.visibility.grid_visibility_manager.non_radial_visible
         )
         non_radial_action.triggered.connect(
             self.grid_visibility_manager.toggle_visibility

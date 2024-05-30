@@ -67,7 +67,7 @@ class LayoutOptionsPanel(QWidget):
 
     def _setup_grow_sequence_checkbox(self):
         self.sequence_growth_checkbox = QCheckBox("Grow sequence")
-        grow_sequence = self.settings_manager.get_grow_sequence()
+        grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
         self.sequence_growth_checkbox.setChecked(grow_sequence)
         self.sequence_growth_checkbox.toggled.connect(self._toggle_grow_sequence)
         font = self.sequence_growth_checkbox.font()
@@ -128,7 +128,7 @@ class LayoutOptionsPanel(QWidget):
         return f"{cols} x {rows}"
 
     def load_settings(self):
-        grow_sequence = self.settings_manager.get_grow_sequence()
+        grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
         self.sequence_growth_checkbox.setChecked(grow_sequence)
         self._toggle_grow_sequence()
 

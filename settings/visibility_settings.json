@@ -1,0 +1,11 @@
+{
+  "glyph_visibility": {
+    "VTG": false,
+    "TKA": true,
+    "Elemental": false,
+    "EndPosition": false
+  },
+  "grid_visibility": {
+    "non_radial_points": true
+  }
+}

@@ -60,7 +60,7 @@ class VTG_Glyph(QGraphicsSvgItem):
                 self.pictograph.addItem(self)
             self.position_vtg_glyph()
             visibility_manager = (
-                self.pictograph.main_widget.main_window.settings_manager.glyph_visibility_manager
+                self.pictograph.main_widget.main_window.settings_manager.visibility.glyph_visibility_manager
             )
             self.setVisible(visibility_manager.should_glyph_be_visible("VTG"))
 
