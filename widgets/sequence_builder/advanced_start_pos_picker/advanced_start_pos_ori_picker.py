@@ -91,13 +91,11 @@ class AdvancedStartPosOriPicker(QWidget):
         return header
 
     def set_left_orientation(self, ori: str) -> None:
-        self.settings_manager.set_setting("default_left_orientation", ori)
         self.advanced_start_pos_picker.advanced_start_pos_manager.update_left_default_ori(
             ori
         )
 
     def set_right_orientation(self, ori: str) -> None:
-        self.settings_manager.set_setting("default_right_orientation", ori)
         self.advanced_start_pos_picker.advanced_start_pos_manager.update_right_default_ori(
             ori
         )

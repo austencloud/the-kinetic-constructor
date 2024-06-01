@@ -24,7 +24,9 @@ class ImageExportManager:
         self.indicator_label = beat_frame.sequence_widget.indicator_label
         self.sequence_widget = beat_frame.sequence_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
-
+        self.include_start_pos = self.settings_manager.image_export.get_image_export_setting(
+            "include_start_position", True
+        )
         self.layout_handler = ImageExportLayoutHandler(self)
         self.beat_factory = ImageExportBeatFactory(self)
         self.image_creator = ImageCreator(self)

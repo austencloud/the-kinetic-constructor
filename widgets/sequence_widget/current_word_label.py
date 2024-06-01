@@ -6,15 +6,16 @@ from PyQt6.QtWidgets import (
     QLineEdit,
 )
 from PyQt6.QtCore import Qt, QRectF
-from PyQt6.QtGui import QFont, QFontMetrics, QMouseEvent
+from PyQt6.QtGui import QFont, QFontMetrics, QMouseEvent, QPainter
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 
 class CurrentWordLineEdit(QLineEdit):
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self, label: "CurrentWordLabel"):
+        super().__init__(label)
+        self.label = label
         self.setMouseTracking(True)
         self.setReadOnly(True)
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -34,6 +35,26 @@ class CurrentWordLineEdit(QLineEdit):
             """
         )
         self.setFrame(False)
+        self.kerning = 0
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        painter.setRenderHint(QPainter.RenderHint.TextAntialiasing)
+        font = self.font()
+        painter.setFont(font)
+        metrics = QFontMetrics(font)
+        text = self.text()
+        x = (
+            self.width()
+            - metrics.horizontalAdvance(text)
+            - self.kerning * (len(text) - 1)
+        ) // 2
+        y = (self.height() + metrics.ascent() - metrics.descent()) // 2
+
+        for letter in text:
+            painter.drawText(x, y, letter)
+            x += metrics.horizontalAdvance(letter) + self.kerning
 
     def mousePressEvent(self, event: QMouseEvent):
         if event.button() == Qt.MouseButton.LeftButton:
@@ -67,19 +88,18 @@ class CurrentWordLabel(QWidget):
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
         self.current_word = None
-
         self.line_edit = CurrentWordLineEdit(self)
-
         layout = QHBoxLayout()
         layout.addWidget(self.line_edit)
         self.setLayout(layout)
 
     def resize_current_word_label(self):
         sequence_widget_width = self.sequence_widget.width()
-        font_size = sequence_widget_width // 30
+        self.font_size = sequence_widget_width // 30
         font = QFont()
-        font.setPointSize(int(font_size))
+        font.setPointSize(int(self.font_size))
         self.line_edit.setFont(font)
+        self.line_edit.kerning = int(self.font_size // 8.75)
 
     def set_current_word(self, word: str):
         self.current_word = word

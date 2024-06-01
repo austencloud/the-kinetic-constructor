@@ -16,13 +16,13 @@ from objects.motion.motion import Motion
 from objects.prop.prop import Prop
 
 
-from widgets.pictograph.components.elemental_glyph.elemental_glyph import ElementalGlyph
-from widgets.pictograph.components.start_to_end_pos_glyph.start_to_end_pos_glyph import (
+from .components.elemental_glyph.elemental_glyph import ElementalGlyph
+from .components.start_to_end_pos_glyph.start_to_end_pos_glyph import (
     StartToEndPosGlyph,
 )
-from widgets.pictograph.components.tka_glyph.tka_glyph import TKA_Glyph
-from widgets.pictograph.components.vtg_glyph.vtg_glyph import VTG_Glyph
-from widgets.pictograph.components.pictograph_container import (
+from .components.tka_glyph.tka_glyph import TKA_Glyph
+from .components.vtg_glyph.vtg_glyph import VTG_Glyph
+from .components.pictograph_container import (
     PictographContainer,
 )
 

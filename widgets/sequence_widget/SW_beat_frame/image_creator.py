@@ -69,8 +69,6 @@ class ImageCreator:
 
         return image
 
-
-
     def _create_image(self, column_count, row_count, additional_height=0) -> QImage:
         """Create a new QImage with the given dimensions."""
         image_width = int(column_count * self.beat_size)

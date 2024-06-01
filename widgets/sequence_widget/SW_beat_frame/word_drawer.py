@@ -2,18 +2,23 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QPainter, QFont, QFontMetrics, QImage
 
 from widgets.sequence_widget.SW_beat_frame.font_margin_helper import FontMarginHelper
+
 if TYPE_CHECKING:
     from widgets.sequence_widget.SW_beat_frame.image_creator import ImageCreator
+
 
 class WordDrawer:
     def __init__(self, image_creator: "ImageCreator"):
         self.image_creator = image_creator
         self.base_font = QFont("Georgia", 175, QFont.Weight.DemiBold, False)
+        self.kerning = 20  # Adjust this value as needed
 
     def draw_word(self, image: QImage, word: str, num_filled_beats: int) -> None:
         base_margin = 50
-        font, margin = FontMarginHelper.adjust_font_and_margin(self.base_font, num_filled_beats, base_margin)
-        
+        font, margin = FontMarginHelper.adjust_font_and_margin(
+            self.base_font, num_filled_beats, base_margin
+        )
+
         painter = QPainter(image)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         painter.setRenderHint(QPainter.RenderHint.TextAntialiasing)
@@ -43,16 +48,16 @@ class WordDrawer:
         text_width: int = None,
     ) -> None:
         painter.setFont(font)
+        metrics = QFontMetrics(font)
+        text_height = metrics.ascent()
+
         if not text_width:
-            metrics = QFontMetrics(font)
             text_width = metrics.horizontalAdvance(text)
-            text_height = metrics.ascent()
-        else:
-            metrics = QFontMetrics(font)
-            text_height = metrics.ascent()
 
         if position == "top":
-            x = (image.width() - text_width) // 2
+            x = (image.width() - text_width - self.kerning * (len(text) - 1)) // 2
             y = text_height
 
-        painter.drawText(x, y, text)
+        for letter in text:
+            painter.drawText(x, y, letter)
+            x += metrics.horizontalAdvance(letter) + self.kerning

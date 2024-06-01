@@ -41,7 +41,7 @@ class SequenceWidget(QWidget):
     def _setup_components(self):
         self.scroll_area = QScrollArea(self)
         self.indicator_label = IndicatorLabel(self)
-        self.current_word_label = CurrentWordLabel(self)  # Add the current word label
+        self.current_word_label = CurrentWordLabel(self)
         self.beat_frame = SW_BeatFrame(self)
         self.add_to_dictionary_manager = AddToDictionaryManager(self)
         self.button_frame = SW_ButtonFrame(self)

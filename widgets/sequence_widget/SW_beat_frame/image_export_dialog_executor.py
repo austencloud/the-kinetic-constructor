@@ -42,7 +42,7 @@ class ImageExportDialogExecutor:
             self.export_manager.include_start_pos = options.get(
                 "include_start_position", self.export_manager.include_start_pos
             )
-            self.settings_manager.set_image_export_setting(
+            self.settings_manager.image_export.set_image_export_setting(
                 "include_start_position", self.export_manager.include_start_pos
             )
 
