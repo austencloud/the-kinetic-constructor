@@ -1,7 +1,7 @@
 {
     "global_settings": {
-        "prop_type": "Staff",
-        "background_type": "Rainbow",
+        "prop_type": "Triad",
+        "background_type": "Starfield",
         "grow_sequence": true
     },
     "image_export": {

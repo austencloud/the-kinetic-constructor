@@ -58,7 +58,6 @@ class OptionPicker(QWidget):
     def resize_option_picker(self) -> None:
         self.choose_your_next_pictograph_label.resize_choose_your_next_option_label()
         self.scroll_area.resize_option_picker_scroll_area()
-        
 
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled

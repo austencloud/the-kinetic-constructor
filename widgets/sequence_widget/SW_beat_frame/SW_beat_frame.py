@@ -113,7 +113,7 @@ class SW_BeatFrame(QFrame):
         for beat_view in reversed(self.beats):
             if beat_view.is_filled:
                 return beat_view
-        return self.beats[0]
+        return self.start_pos_view
 
     def get_current_word(self) -> str:
         word = ""
@@ -206,9 +206,11 @@ class SW_BeatFrame(QFrame):
 
         scroll_area = self.sequence_builder.option_picker.scroll_area
         scroll_area.remove_irrelevant_pictographs()
-        scroll_area.add_and_display_relevant_pictographs(
+        next_options = (
             self.sequence_builder.option_picker.option_manager.get_next_options(
                 sequence
             )
         )
+
+        scroll_area.add_and_display_relevant_pictographs(next_options)
         self.sequence_builder.option_picker.resize_option_picker()
