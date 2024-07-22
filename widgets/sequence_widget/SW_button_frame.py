@@ -67,15 +67,15 @@ class SW_ButtonFrame(QFrame):
                 "callback": self.sequence_widget.show_options_panel,
                 "tooltip": "Layout Options",
             },
-            "clear_sequence": {
-                "icon_path": "clear.svg",
-                "callback": lambda: self.clear_sequence(show_indicator=True),
-                "tooltip": "Clear Sequence",
-            },
             "magic_wand": {
                 "icon_path": "magic_wand.svg",
                 "callback": self.auto_complete_sequence,
                 "tooltip": "Auto Complete Sequence",
+            },
+            "clear_sequence": {
+                "icon_path": "clear.svg",
+                "callback": lambda: self.clear_sequence(show_indicator=True),
+                "tooltip": "Clear Sequence",
             },
         }
         for button_name, button_data in button_dict.items():

@@ -1,6 +1,6 @@
 {
     "global_settings": {
-        "prop_type": "Triad",
+        "prop_type": "Staff",
         "background_type": "Starfield",
         "grow_sequence": true
     },
@@ -15,7 +15,7 @@
         "user_profiles": {
             "AC": {
                 "name": "AC",
-                "export_date": "5-31-2024"
+                "export_date": "7-22-2024"
             }
         },
         "current_note": "Created using The Kinetic Alphabet",

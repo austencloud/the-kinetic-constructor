@@ -11,7 +11,8 @@ class DictionarySequencePopulator:
         self.dictionary = dictionary
         self.main_widget = dictionary.main_widget
         self.initialized = False
-
+        self._init_references()
+        
     def _init_references(self) -> None:
         self.json_manager = self.main_widget.json_manager
         self.start_pos_view = (
