@@ -1,8 +1,8 @@
 import os
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QSplashScreen
-from PyQt6.QtGui import QPixmap, QGuiApplication, QShowEvent, QKeyEvent
-from PyQt6.QtCore import Qt, QEvent, QTimer
+from PyQt6.QtGui import QPixmap, QGuiApplication
+from PyQt6.QtCore import Qt, QTimer
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from widgets.profiler import Profiler
 from settings_manager.settings_manager import SettingsManager
@@ -21,7 +21,6 @@ class MainWindow(QMainWindow):
         self.profiler = profiler
         self.settings_manager = SettingsManager(self)
         self.main_widget = MainWidget(self)
-        # self.main_widget.layout_options_dialog.load_initial_settings()
         self.setAttribute(Qt.WidgetAttribute.WA_AcceptTouchEvents, True)
         self.window_manager = MainWindowGeometryManager(self)
         self.setCentralWidget(self.main_widget)
@@ -31,9 +30,11 @@ class MainWindow(QMainWindow):
         self.show()
 
     def exec_with_profiling(self, app: QApplication) -> int:
-        for func in [app.exec, self.show]:
-            self.profiler.runcall(func)
-        return 0
+        self.profiler.enable()
+        result = app.exec()
+        self.profiler.disable()
+        self.profiler.write_profiling_stats_to_file('profiling_output.txt', os.getcwd())
+        return result
 
     def closeEvent(self, event):
         self.settings_manager.save_settings()
@@ -87,7 +88,7 @@ def main() -> None:
 
     QTimer.singleShot(1000, lambda: splash.finish(main_window))
 
-    sys.exit(app.exec())
+    sys.exit(main_window.exec_with_profiling(app))
 
 
 if __name__ == "__main__":

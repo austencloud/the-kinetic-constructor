@@ -1,14 +1,13 @@
 from PyQt6.QtWidgets import QGraphicsItemGroup
-from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
+from PyQt6.QtSvgWidgets import QGraphicsSvgItem
+
 from typing import TYPE_CHECKING, Union
 
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 
-
 if TYPE_CHECKING:
     from widgets.pictograph.components.tka_glyph.tka_glyph import TKA_Glyph
-
 
 class TurnsColumnHandler(QGraphicsItemGroup):
     def __init__(self, glyph: "TKA_Glyph") -> None:
@@ -18,6 +17,7 @@ class TurnsColumnHandler(QGraphicsItemGroup):
         self.bottom_number_item = None
         self.svg_path_prefix = get_images_and_data_path("images/numbers/")
         self.blank_svg_path = get_images_and_data_path("images/blank.svg")
+        self.number_svg_cache = {}
 
     def load_number_svg(self, number: Union[int, float]) -> QGraphicsSvgItem:
         svg_path = (
@@ -25,12 +25,19 @@ class TurnsColumnHandler(QGraphicsItemGroup):
             if number == 0
             else f"{self.svg_path_prefix}{number}.svg"
         )
-        renderer = QSvgRenderer(svg_path)
-        if renderer.isValid():
-            number_item = QGraphicsSvgItem()
-            number_item.setSharedRenderer(renderer)
-            return number_item
-        return None
+        
+        if svg_path not in self.number_svg_cache:
+            renderer = QSvgRenderer(svg_path)
+            if renderer.isValid():
+                self.number_svg_cache[svg_path] = renderer
+            else:
+                return None
+        else:
+            renderer = self.number_svg_cache[svg_path]
+
+        number_item = QGraphicsSvgItem()
+        number_item.setSharedRenderer(renderer)
+        return number_item
 
     def convert_number_to_int_if_whole_number(self, number: Union[int, float]) -> int:
         return int(number) if number == int(number) else number
