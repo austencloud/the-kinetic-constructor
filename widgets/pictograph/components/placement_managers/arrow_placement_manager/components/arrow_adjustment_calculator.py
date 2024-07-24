@@ -15,7 +15,6 @@ class ArrowAdjustmentCalculator:
     def __init__(self, placement_manager: "ArrowPlacementManager") -> None:
         self.placement_manager = placement_manager
 
-    @lru_cache(maxsize=None)
     def get_adjustment(self, arrow: Arrow) -> QPointF:
         if not arrow.motion.pictograph.letter:
             return QPointF(0, 0)  # or some default value

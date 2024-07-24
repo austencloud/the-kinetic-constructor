@@ -80,7 +80,7 @@ class StartPosManager(QObject):
         self.sequence_builder.top_builder_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
             start_position_beat
         )
-        self.sequence_builder.current_pictograph = start_position_beat
+        self.sequence_builder.last_beat = start_position_beat
         beat_frame = self.sequence_builder.top_builder_widget.sequence_widget.beat_frame
         start_pos_view = beat_frame.start_pos_view
         beat_frame.selection_manager.select_beat(start_pos_view)

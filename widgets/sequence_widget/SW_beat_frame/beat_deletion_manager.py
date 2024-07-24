@@ -46,12 +46,12 @@ class BeatDeletionManager:
             self.delete_beat(self.beats[i])
         last_beat = self.beat_frame.get_last_filled_beat()
         self.selection_manager.select_beat(last_beat)
-        self.sequence_builder.current_pictograph = last_beat.beat
+        self.sequence_builder.last_beat = last_beat.beat
 
     def _delete_first_beat(self, selected_beat):
         self.start_pos_view = self.beat_frame.start_pos_view
         self.selection_manager.select_beat(self.start_pos_view)
-        self.sequence_builder.current_pictograph = self.start_pos_view.beat
+        self.sequence_builder.last_beat = self.start_pos_view.beat
         self.delete_beat(selected_beat)
 
         for i in range(
@@ -69,7 +69,7 @@ class BeatDeletionManager:
             self.delete_beat(beat)
         self.selection_manager.deselect_beat()
         self.json_manager.loader_saver.clear_current_sequence_file()
-        self.sequence_builder.current_pictograph = None
+        self.sequence_builder.last_beat = None
         self.sequence_builder.reset_to_start_pos_picker()
         self.sequence_builder.option_picker.update_option_picker()
         graph_editor = (

@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     )
 
 
-class DictionarySorter(QWidget):
+class DictionarySorterWidget(QWidget):
     def __init__(self, browser: "DictionaryBrowser") -> None:
         super().__init__(browser)
         self.browser = browser

@@ -33,7 +33,7 @@ class SequenceBuilder(QFrame):
         super().__init__(top_builder_widget)
         self.top_builder_widget = top_builder_widget
         self.main_widget: "MainWidget" = top_builder_widget.main_widget
-        self.current_pictograph: Pictograph = None
+        self.last_beat: Pictograph = None
         self.json_manager = self.main_widget.json_manager
         self.start_position_picked = False
         self.pictograph_cache: dict[Letter, dict[str, Pictograph]] = {

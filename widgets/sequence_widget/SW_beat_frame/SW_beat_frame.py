@@ -197,7 +197,7 @@ class SW_BeatFrame(QFrame):
             self.sequence_widget.populate_sequence(pictograph_dict)
 
         last_beat = self.sequence_widget.beat_frame.get_last_filled_beat().beat
-        self.sequence_builder.current_pictograph = last_beat
+        self.sequence_builder.last_beat = last_beat
 
         if self.sequence_builder.start_pos_picker.isVisible():
             self.sequence_builder.transition_to_sequence_building()

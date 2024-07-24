@@ -26,13 +26,14 @@ class WordDrawer:
         metrics = QFontMetrics(font)
         text_width = metrics.horizontalAdvance(word)
 
-        while text_width > image.width() - 2 * margin:
+        # Adjust the font size until the text fits within the image width
+        while text_width + 2 * margin > image.width():
             font_size = font.pointSize() - 1
+            if font_size <= 10:
+                break
             font = QFont(font.family(), font_size, font.weight(), font.italic())
             metrics = QFontMetrics(font)
             text_width = metrics.horizontalAdvance(word)
-            if font_size <= 10:
-                break
 
         self._draw_text(painter, image, word, font, margin, "top")
         painter.end()
@@ -56,7 +57,7 @@ class WordDrawer:
 
         if position == "top":
             x = (image.width() - text_width - self.kerning * (len(text) - 1)) // 2
-            y = text_height
+            y = text_height + margin
 
         for letter in text:
             painter.drawText(x, y, letter)

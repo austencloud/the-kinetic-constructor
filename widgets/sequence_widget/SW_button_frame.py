@@ -126,7 +126,7 @@ class SW_ButtonFrame(QFrame):
 
         if should_reset_to_start_pos_picker:
             self.sequence_builder.reset_to_start_pos_picker()
-        self.sequence_builder.current_pictograph = self.beat_frame.start_pos
+        self.sequence_builder.last_beat = self.beat_frame.start_pos
         self.json_manager.loader_saver.clear_current_sequence_file()
         if show_indicator:
             self.sequence_widget.indicator_label.show_message("Sequence cleared")
