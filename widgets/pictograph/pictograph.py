@@ -45,6 +45,7 @@ from .components.pictograph_initializer import PictographInitializer
 
 
 if TYPE_CHECKING:
+    from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import OptionPickerScrollArea
 
     from ..main_widget.main_widget import MainWidget
 
@@ -93,7 +94,7 @@ class Pictograph(QGraphicsScene):
     ) -> None:
         super().__init__()
         self.main_widget = main_widget
-        self.scroll_area: QScrollArea = scroll_area
+        self.scroll_area: OptionPickerScrollArea = scroll_area
         self.initializer = PictographInitializer(self)
         self.updater = PictographUpdater(self)
         self.image_renderer = PictographImageRenderer(self)

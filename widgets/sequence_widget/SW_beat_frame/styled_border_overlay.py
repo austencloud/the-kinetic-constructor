@@ -41,10 +41,10 @@ class StyledBorderOverlay(QWidget):
 
     def paintEvent(self, event) -> None:
         if self.primary_color and self.secondary_color:
-            self._draw_borders()
+            painter = QPainter(self)
+            self._draw_borders(painter)
 
-    def _draw_borders(self) -> None:
-        painter = QPainter(self)
+    def _draw_borders(self, painter: QPainter) -> None:
         pen = QPen()
         outer_border = self._draw_outer_border(painter, pen)
         self._draw_inner_border(painter, pen, outer_border)
