@@ -1,7 +1,7 @@
 import os
 from typing import TYPE_CHECKING
 
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QComboBox
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QComboBox, QApplication
 
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from widgets.dictionary_widget.dictionary_browser.section_header import SectionHeader
@@ -79,6 +79,7 @@ class DictionarySorterWidget(QWidget):
             if column_index == num_columns:
                 column_index = 0
                 row_index += 1
+
 
         # Update the sidebar with sections
         self.browser.sidebar.update_sidebar(sorted(sections))
