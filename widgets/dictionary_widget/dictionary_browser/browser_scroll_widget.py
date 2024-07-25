@@ -73,15 +73,6 @@ class DictionaryBrowserScrollWidget(QWidget):
         style = self.scroll_area.style()
         return style.pixelMetric(QStyle.PixelMetric.PM_ScrollBarExtent)
 
-    def add_new_thumbnail_box(self, new_word, thumbnails):
-        # Find the right position based on alphabetical order
-        index = self.find_insert_index(new_word)
-        thumbnail_box = ThumbnailBox(self.browser, new_word, thumbnails)
-        row, col = divmod(index, 3)
-        self.grid_layout.addWidget(thumbnail_box, row, col)
-        self.thumbnail_boxes.insert(index, thumbnail_box)
-        self.update_thumbnail_sizes()
-        thumbnail_box.image_label.update_thumbnail()
 
     def update_thumbnail_sizes(self):
         for box in self.thumbnail_boxes:

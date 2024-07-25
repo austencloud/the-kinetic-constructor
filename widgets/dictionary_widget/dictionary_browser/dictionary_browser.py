@@ -35,7 +35,7 @@ class DictionaryBrowser(QWidget):
 
         self.layout.addWidget(self.sorter)
         self.scroll_layout.addWidget(self.sidebar, 1)
-        self.scroll_layout.addWidget(self.scroll_widget, 8)
+        self.scroll_layout.addWidget(self.scroll_widget, 9)
         self.layout.addLayout(self.scroll_layout)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)

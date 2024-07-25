@@ -24,6 +24,11 @@ class NavigationSidebar(QWidget):
     def _setup_scroll_area(self):
         self.scroll_content = QWidget()
         self.scroll_area = QScrollArea(self)
+        # hide the horizontal scrollbar and prevent scrolling sideways
+        self.scroll_area.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+        )
+
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setWidget(self.scroll_content)
         self.scroll_area.setStyleSheet("background: transparent;")
@@ -50,7 +55,7 @@ class NavigationSidebar(QWidget):
         self.show()
 
     def style_button(self, button: QPushButton):
-        font_size = self.browser.width() // 30
+        font_size = self.browser.width() // 35
         button.setStyleSheet(
             f"""
             QPushButton {{
@@ -73,16 +78,9 @@ class NavigationSidebar(QWidget):
         if header:
             scroll_area = self.browser.scroll_widget.scroll_area
 
-            # Get the global position of the header widget
             header_global_pos = header.mapToGlobal(QPoint(0, 0))
-
-            # Convert the global position to a position relative to the scroll area's content widget
             content_widget_pos = scroll_area.widget().mapFromGlobal(header_global_pos)
-
-            # Calculate the y-coordinate to scroll to, aiming to align the header at the top of the viewport
             vertical_pos = content_widget_pos.y()
-
-            # Set the scrollbar value to the calculated vertical position
             scroll_area.verticalScrollBar().setValue(vertical_pos)
 
     def style_all_buttons(self):
