@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QImage
 from PIL import Image, PngImagePlugin
 import numpy as np
+from datetime import datetime
 
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 
@@ -25,8 +26,12 @@ class ThumbnailGenerator:
             sequence, include_start_pos=False
         )
         pil_image = self.qimage_to_pil(beat_frame_image)
-        metadata = json.dumps(sequence)
-        info = self._create_png_info(metadata)
+        metadata = {
+            "sequence": sequence,
+            "date_added": datetime.now().isoformat()
+        }
+        metadata_str = json.dumps(metadata)
+        info = self._create_png_info(metadata_str)
         image_filename = self._create_image_filename(
             sequence, structural_variation_number, turn_pattern
         )

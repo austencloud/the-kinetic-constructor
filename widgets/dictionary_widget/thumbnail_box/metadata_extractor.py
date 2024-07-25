@@ -3,7 +3,6 @@ from PIL import Image
 from PyQt6.QtWidgets import QMessageBox
 import json
 
-
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
@@ -37,6 +36,6 @@ class MetaDataExtractor:
 
     def get_sequence_length(self, file_path):
         metadata = self.extract_metadata_from_file(file_path)
-        if metadata:
-            return len(metadata) - 2
+        if metadata and "sequence" in metadata:
+            return len(metadata["sequence"]) - 2
         return 0

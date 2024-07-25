@@ -3,11 +3,12 @@ from typing import TYPE_CHECKING
 from widgets.dictionary_widget.dictionary_browser.navigation_sidebar import (
     NavigationSidebar,
 )
+from widgets.dictionary_widget.dictionary_sorter import DictionarySorter
 from .browser_scroll_widget import DictionaryBrowserScrollWidget
 
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
-from widgets.dictionary_widget.dictionary_sorter import (
-    DictionarySorterWidget,
+from widgets.dictionary_widget.dictionary_options_widget import (
+    DictionaryOptionsWidget,
 )
 
 if TYPE_CHECKING:
@@ -26,14 +27,15 @@ class DictionaryBrowser(QWidget):
     def _setup_components(self):
         self.sidebar = NavigationSidebar(self)
         self.scroll_widget = DictionaryBrowserScrollWidget(self)
-        self.sorter = DictionarySorterWidget(self)
+        self.options_widget = DictionaryOptionsWidget(self)
+        self.sorter = DictionarySorter(self)
         self.sorter.sort_and_display_thumbnails()
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.scroll_layout = QHBoxLayout()
 
-        self.layout.addWidget(self.sorter)
+        self.layout.addWidget(self.options_widget)
         self.scroll_layout.addWidget(self.sidebar, 1)
         self.scroll_layout.addWidget(self.scroll_widget, 9)
         self.layout.addLayout(self.scroll_layout)

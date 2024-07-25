@@ -7,6 +7,7 @@ from Enums.Enums import Letter
 from Enums.PropTypes import PropType
 
 
+from metadata_updater import MetaDataUpdater
 from objects.graphical_object.graphical_object_svg_manager import (
     GraphicalObjectSvgManager,
 )
@@ -37,6 +38,9 @@ from PyQt6.QtWidgets import QTabWidget
 
 if TYPE_CHECKING:
     from main import MainWindow
+import json
+
+from widgets.path_helpers.path_helpers import get_images_and_data_path
 
 
 class MainWidget(QTabWidget):
@@ -52,6 +56,8 @@ class MainWidget(QTabWidget):
         self.webcam_initialized = False  # Add an initialization flag
         # self.initialize_webcam_async()  # Start webcam initialization
         self.initialized = True
+        metadata_updater = MetaDataUpdater(self)
+        metadata_updater.update_metadata_for_images(get_images_and_data_path("dictionary"))
 
     def initialize_webcam_async(self):
         """Start the webcam initialization in a separate thread to avoid blocking the UI."""

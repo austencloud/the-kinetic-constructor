@@ -1,12 +1,12 @@
 import os
+import json
+from datetime import datetime
 from typing import TYPE_CHECKING
-
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QComboBox, QApplication
-
-from widgets.path_helpers.path_helpers import get_images_and_data_path
+from PIL import Image
 from widgets.dictionary_widget.dictionary_browser.section_header import SectionHeader
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
-
+from widgets.path_helpers.path_helpers import get_images_and_data_path
+from .sorting_order import sorting_order, lowercase_letters
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
@@ -14,74 +14,9 @@ if TYPE_CHECKING:
     )
 
 
-class DictionarySorterWidget(QWidget):
+class DictionarySorter:
     def __init__(self, browser: "DictionaryBrowser") -> None:
-        super().__init__(browser)
         self.browser = browser
-        self.main_widget = browser.dictionary_widget.main_widget
-        self.lowercase_letters = set(["α", "β", "θ"])
-        self.setup_ui()
-
-        self.custom_order = [
-            "A",
-            "B",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "I",
-            "J",
-            "K",
-            "L",
-            "M",
-            "N",
-            "O",
-            "P",
-            "Q",
-            "R",
-            "S",
-            "T",
-            "U",
-            "V",
-            "W",
-            "X",
-            "Y",
-            "Z",
-            "Σ",
-            "Δ",
-            "θ",
-            "Ω",
-            "W-",
-            "X-",
-            "Y-",
-            "Z-",
-            "Σ-",
-            "Δ-",
-            "θ-",
-            "Ω-",
-            "Φ",
-            "Ψ",
-            "Λ",
-            "Φ-",
-            "Ψ-",
-            "Λ-",
-            "α",
-            "β",
-            "Γ",
-        ]
-
-    def setup_ui(self):
-        self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.sort_combobox = QComboBox()
-        self.sort_combobox.addItems(["Word Length", "Alphabetical"])
-        self.sort_combobox.currentTextChanged.connect(self.on_sort_order_changed)
-        self.layout.addWidget(self.sort_combobox)
-
-    def on_sort_order_changed(self, sort_order):
-        self.sort_and_display_thumbnails(sort_order)
-        self.browser.scroll_widget.scroll_area.verticalScrollBar().setValue(0)
 
     def sort_and_display_thumbnails(self, sort_order="Word Length"):
         self.browser.scroll_widget.clear_layout()
@@ -94,7 +29,7 @@ class DictionarySorterWidget(QWidget):
         num_columns = 3
 
         for word, thumbnails in base_words:
-            section = self.get_section_from_word(word, sort_order)
+            section = self.get_section_from_word(word, sort_order, thumbnails)
             sections.add(section)
 
             if section != current_section:
@@ -102,40 +37,54 @@ class DictionarySorterWidget(QWidget):
                     row_index += 1
 
                 current_section = section
-                header_title = f"{section}"
-                header = SectionHeader(header_title, self.browser)
-                self.browser.scroll_widget.section_headers[section] = header
-                self.browser.scroll_widget.grid_layout.addWidget(
-                    header, row_index, 0, 1, num_columns
-                )
+                self._add_header(row_index, num_columns, section)
                 row_index += 1
                 column_index = 0
 
-            # Add thumbnail boxes
-            if word not in self.browser.scroll_widget.thumbnail_boxes_dict:
-                thumbnail_box = ThumbnailBox(self.browser, word, thumbnails)
-                thumbnail_box.image_label.update_thumbnail()
-                self.browser.scroll_widget.thumbnail_boxes_dict[word] = thumbnail_box
-
-            thumbnail_box = self.browser.scroll_widget.thumbnail_boxes_dict[word]
-            self.browser.scroll_widget.grid_layout.addWidget(
-                thumbnail_box, row_index, column_index
-            )
+            self._add_thumbnail_box(row_index, column_index, word, thumbnails)
             column_index += 1
-            # Check if row is filled
             if column_index == num_columns:
                 column_index = 0
                 row_index += 1
 
-        # Update the sidebar with sections
+        sorted_sections = self._get_sorted_sections(sort_order, sections)
+        self.browser.sidebar.update_sidebar(sorted_sections)
+
+    def _add_header(self, row_index, num_columns, section):
+        header_title = f"{section}"
+        header = SectionHeader(header_title, self.browser)
+        self.browser.scroll_widget.section_headers[section] = header
+        self.browser.scroll_widget.grid_layout.addWidget(
+            header, row_index, 0, 1, num_columns
+        )
+
+    def _add_thumbnail_box(self, row_index, column_index, word, thumbnails):
+        if word not in self.browser.scroll_widget.thumbnail_boxes_dict:
+            thumbnail_box = ThumbnailBox(self.browser, word, thumbnails)
+            thumbnail_box.image_label.update_thumbnail()
+            self.browser.scroll_widget.thumbnail_boxes_dict[word] = thumbnail_box
+
+        thumbnail_box = self.browser.scroll_widget.thumbnail_boxes_dict[word]
+        self.browser.scroll_widget.grid_layout.addWidget(
+            thumbnail_box, row_index, column_index
+        )
+
+    def _get_sorted_sections(self, sort_order, sections):
         if sort_order == "Word Length":
             sorted_sections = sorted(
                 sections, key=lambda x: int(x) if x.isdigit() else x
             )
+        elif sort_order == "Date Added":
+            sorted_sections = sorted(
+                [s for s in sections if s != "Unknown"],
+                key=lambda x: datetime.strptime(x, "%Y-%m-%d"),
+                reverse=True,
+            )
+            if "Unknown" in sections:
+                sorted_sections.append("Unknown")
         else:
             sorted_sections = sorted(sections, key=self.custom_sort_key)
-
-        self.browser.sidebar.update_sidebar(sorted_sections)
+        return sorted_sections
 
     def get_sorted_base_words(self, sort_order):
         dictionary_dir = get_images_and_data_path("dictionary")
@@ -147,6 +96,8 @@ class DictionarySorterWidget(QWidget):
 
         if sort_order == "Word Length":
             base_words.sort(key=lambda x: (len(x[0].replace("-", "")), x[0]))
+        elif sort_order == "Date Added":
+            base_words.sort(key=lambda x: self.get_date_added(x[1]), reverse=True)
         else:
             base_words.sort(key=lambda x: x[0])
         return base_words
@@ -161,13 +112,16 @@ class DictionarySorterWidget(QWidget):
                     thumbnails.append(os.path.join(root, file))
         return thumbnails
 
-    def get_section_from_word(self, word, sort_order):
+    def get_section_from_word(self, word, sort_order, thumbnails=None):
         if sort_order == "Word Length":
             return str(len(word.replace("-", "")))
+        elif sort_order == "Date Added":
+            date_added = self.get_date_added(thumbnails)
+            return date_added.strftime("%Y-%m-%d") if date_added else "Unknown"
         else:
             section = word[:2] if len(word) > 1 and word[1] == "-" else word[0]
             if not section.isdigit():
-                if section[0] in self.lowercase_letters:
+                if section[0] in lowercase_letters:
                     section = section.lower()
                 else:
                     section = section.upper()
@@ -175,6 +129,19 @@ class DictionarySorterWidget(QWidget):
 
     def custom_sort_key(self, section):
         try:
-            return self.custom_order.index(section)
+            return sorting_order.index(section)
         except ValueError:
-            return len(self.custom_order)  # put unknown sections at the end
+            return len(sorting_order)  # put unknown sections at the end
+
+    def get_date_added(self, thumbnails):
+        dates = []
+        for thumbnail in thumbnails:
+            image = Image.open(thumbnail)
+            info = image.info
+            metadata = info.get("metadata")
+            if metadata:
+                metadata_dict = json.loads(metadata)
+                date_added = metadata_dict.get("date_added")
+                if date_added:
+                    dates.append(datetime.fromisoformat(date_added))
+        return max(dates, default=None)
