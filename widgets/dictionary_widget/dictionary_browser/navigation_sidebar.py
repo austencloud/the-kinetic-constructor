@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QPushButton, QWidget, QScrollArea
+from PyQt6.QtWidgets import QVBoxLayout, QPushButton, QWidget, QScrollArea, QLabel
 from PyQt6.QtGui import QCursor
 from PyQt6.QtCore import Qt, QPoint
 
@@ -16,56 +16,99 @@ class NavigationSidebar(QWidget):
         self._setup_scroll_area()
         self.layout: QVBoxLayout = QVBoxLayout(self.scroll_content)
         self.buttons: list[QPushButton] = []
+        self.year_labels: dict[str, QPushButton] = {}
+        self.spacer_lines: list[QLabel] = []
 
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.scroll_area)
+        main_layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(main_layout)
 
     def _setup_scroll_area(self):
         self.scroll_content = QWidget()
         self.scroll_area = QScrollArea(self)
-        # hide the horizontal scrollbar and prevent scrolling sideways
+        self.scroll_area.setContentsMargins(0, 0, 0, 0)
+        self.scroll_content.setContentsMargins(0, 0, 0, 0)
         self.scroll_area.setHorizontalScrollBarPolicy(
             Qt.ScrollBarPolicy.ScrollBarAlwaysOff
         )
-
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setWidget(self.scroll_content)
         self.scroll_area.setStyleSheet("background: transparent;")
 
-    def update_sidebar(self, sections):
+    def update_sidebar(self, sections, sort_order):
         # Clear existing buttons
         for button in self.buttons:
             self.layout.removeWidget(button)
             button.deleteLater()
+        for year_label in self.year_labels.values():
+            self.layout.removeWidget(year_label)
+            year_label.deleteLater()
+        for spacer_line in self.spacer_lines:
+            self.layout.removeWidget(spacer_line)
+            spacer_line.deleteLater()
         self.buttons.clear()
+        self.year_labels.clear()
+        self.spacer_lines.clear()
+        if sort_order == "Date Added":
+            current_year = None
+            for section in sections:
+                year = section.split("-")[2]
+                date = section
+                day = self.get_formatted_day(date)
 
-        # Create new buttons for each section
-        for section in sections:
-            button = QPushButton(str(section))
-            button.clicked.connect(
-                lambda checked, sec=section: self.scroll_to_section(sec)
-            )
-            button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-            self.layout.addWidget(button)
-            self.buttons.append(button)
+                if year != current_year:
+                    year_label = QLabel(year)
+                    year_label.setStyleSheet("font-weight: bold;")
 
-        # Ensure the sidebar is refreshed and visible
-        self.style_all_buttons()
+                    self.layout.addWidget(year_label)
+                    spacer_line = QLabel()
+                    spacer_line.setStyleSheet(
+                        "border: 1px solid black; margin: 0px 0; background: black;"
+                    )
+                    self.spacer_lines.append(spacer_line)
+                    self.layout.addWidget(spacer_line)
+
+                    self.year_labels[year] = year_label
+                    current_year = year
+
+                date_button = QPushButton(day)
+                date_button.clicked.connect(
+                    lambda checked, sec=section: self.scroll_to_section(sec)
+                )
+                date_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+                self.layout.addWidget(date_button)
+                self.buttons.append(date_button)
+        else:
+            for section in sections:
+                button = QPushButton(str(section))
+                button.clicked.connect(
+                    lambda checked, sec=section: self.scroll_to_section(sec)
+                )
+                button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+                self.layout.addWidget(button)
+                self.buttons.append(button)
+
+        self._set_styles()
         self.show()
 
+    def get_formatted_day(self, date):
+        day = date.split("-")[0].lstrip("0") + "-" + date.split("-")[1].lstrip("0")
+
+        return day
+
     def style_button(self, button: QPushButton):
-        font_size = self.browser.width() // 35
+        font_size = self.browser.width() // 40
         button.setStyleSheet(
             f"""
             QPushButton {{
                 background: transparent;
                 border: none;
                 font-size: {font_size}px;
-                font-weight: bold;
                 color: #333;
                 padding: 5px;
                 text-align: center;
+                font-weight: bold;
             }}
             QPushButton:hover {{
                 background: #f0f0f0;
@@ -73,20 +116,43 @@ class NavigationSidebar(QWidget):
         """
         )
 
+    def style_year_label(self, label: QLabel):
+        font_size = self.browser.width() // 35
+        label.setStyleSheet(
+            f"""
+            QLabel {{
+                font-size: {font_size}px;
+                color: #333;
+                padding: 5px;
+                text-align: center;
+                font-weight: bold;
+            }}
+        """
+        )
+
     def scroll_to_section(self, section):
+        if "-" in section:
+            section = (
+                section.split("-")[0].lstrip("0")
+                + "-"
+                + section.split("-")[1].lstrip("0")
+            )
         header = self.browser.scroll_widget.section_headers.get(section)
         if header:
             scroll_area = self.browser.scroll_widget.scroll_area
-
             header_global_pos = header.mapToGlobal(QPoint(0, 0))
             content_widget_pos = scroll_area.widget().mapFromGlobal(header_global_pos)
             vertical_pos = content_widget_pos.y()
             scroll_area.verticalScrollBar().setValue(vertical_pos)
 
-    def style_all_buttons(self):
+    def _set_styles(self):
         for button in self.buttons:
             self.style_button(button)
+        for year_label in self.year_labels.values():
+            self.style_year_label(year_label)
+        for spacer_line in self.spacer_lines:
+            spacer_line.setFixedHeight(1)
 
     def resizeEvent(self, event):
-        self.style_all_buttons()
+        self._set_styles()
         super().resizeEvent(event)

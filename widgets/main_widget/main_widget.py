@@ -107,7 +107,7 @@ class MainWidget(QTabWidget):
         self.dictionary_tab_index = 1
         self.recorder_tab_index = 2
 
-        self.setCurrentIndex(self.builder_tab_index)
+        self.setCurrentIndex(self.dictionary_tab_index)
         self.initialized = True
 
         # Apply the initial background

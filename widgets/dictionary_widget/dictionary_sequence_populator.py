@@ -12,7 +12,7 @@ class DictionarySequencePopulator:
         self.main_widget = dictionary.main_widget
         self.initialized = False
         self._init_references()
-        
+
     def _init_references(self) -> None:
         self.json_manager = self.main_widget.json_manager
         self.start_pos_view = (
@@ -35,9 +35,10 @@ class DictionarySequencePopulator:
             QMessageBox.critical(
                 self.main_widget, "Error", f"Failed to load sequence: {str(e)}"
             )
+
     def load_sequence_from_json(self, metadata: str) -> None:
         if metadata:
-            self.beat_frame.populate_beat_frame_from_json(metadata)
+            self.beat_frame.populate_beat_frame_from_json(metadata["sequence"])
         else:
             QMessageBox.warning(
                 self.dictionary.main_widget,

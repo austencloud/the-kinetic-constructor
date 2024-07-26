@@ -95,6 +95,8 @@ class OptionPickerSectionWidget(QGroupBox):
         pictograph.view.resize_pictograph_view()
         pictograph.view.show()
 
+
+
     def resize_option_picker_section_widget(self) -> None:
         section_width = int((self.scroll_area.width()))
         if self.letter_type in [LetterType.Type1, LetterType.Type2, LetterType.Type3]:
@@ -105,3 +107,4 @@ class OptionPickerSectionWidget(QGroupBox):
             self.setMaximumWidth(int(section_width / 3))
         for pictograph in self.pictographs.values():
             pictograph.view.resize_pictograph_view()
+        self.header.type_label.resize_section_type_label()

@@ -55,6 +55,8 @@ class OptionPicker(QWidget):
             self.scroll_area.add_and_display_relevant_pictographs(next_options)
         self.choose_your_next_pictograph_label.set_stylesheet()
 
+
+
     def resize_option_picker(self) -> None:
         self.choose_your_next_pictograph_label.resize_choose_your_next_option_label()
         self.scroll_area.resize_option_picker_scroll_area()

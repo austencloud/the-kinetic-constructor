@@ -20,7 +20,7 @@ class DictionarySorter:
 
     def sort_and_display_thumbnails(self, sort_order="Word Length"):
         self.browser.scroll_widget.clear_layout()
-        sections = set()  # Track sections for the sidebar
+        sections = {}
 
         base_words = self.get_sorted_base_words(sort_order)
         current_section = None
@@ -30,25 +30,47 @@ class DictionarySorter:
 
         for word, thumbnails in base_words:
             section = self.get_section_from_word(word, sort_order, thumbnails)
-            sections.add(section)
 
-            if section != current_section:
-                if current_section is not None:
+            if section not in sections:
+                sections[section] = []
+
+            sections[section].append((word, thumbnails))
+
+        sorted_sections = self._get_sorted_sections(sort_order, sections.keys())
+        self.browser.sidebar.update_sidebar(sorted_sections, sort_order)
+
+        for section in sorted_sections:
+            if sort_order == "Date Added":
+                year = section.split("-")[2]
+                date = section
+                day = (
+                    date.split("-")[0].lstrip("0")
+                    + "-"
+                    + date.split("-")[1].lstrip("0")
+                )
+
+                if year != current_section:
                     row_index += 1
+                    self._add_header(row_index, num_columns, year)
+                    row_index += 1
+                    current_section = year
 
-                current_section = section
+                row_index += 1
+                self._add_header(row_index, num_columns, day)
+                row_index += 1
+            else:
+                row_index += 1
                 self._add_header(row_index, num_columns, section)
                 row_index += 1
-                column_index = 0
 
-            self._add_thumbnail_box(row_index, column_index, word, thumbnails)
-            column_index += 1
-            if column_index == num_columns:
-                column_index = 0
-                row_index += 1
+            column_index = 0
 
-        sorted_sections = self._get_sorted_sections(sort_order, sections)
-        self.browser.sidebar.update_sidebar(sorted_sections)
+            for word, thumbnails in sections[section]:
+                self._add_thumbnail_box(row_index, column_index, word, thumbnails)
+                column_index += 1
+                if column_index == num_columns:
+                    column_index = 0
+                    row_index += 1
 
     def _add_header(self, row_index, num_columns, section):
         header_title = f"{section}"
@@ -77,7 +99,7 @@ class DictionarySorter:
         elif sort_order == "Date Added":
             sorted_sections = sorted(
                 [s for s in sections if s != "Unknown"],
-                key=lambda x: datetime.strptime(x, "%Y-%m-%d"),
+                key=lambda x: datetime.strptime(x, "%m-%d-%Y"),
                 reverse=True,
             )
             if "Unknown" in sections:
@@ -117,7 +139,7 @@ class DictionarySorter:
             return str(len(word.replace("-", "")))
         elif sort_order == "Date Added":
             date_added = self.get_date_added(thumbnails)
-            return date_added.strftime("%Y-%m-%d") if date_added else "Unknown"
+            return date_added.strftime("%m-%d-%Y") if date_added else "Unknown"
         else:
             section = word[:2] if len(word) > 1 and word[1] == "-" else word[0]
             if not section.isdigit():

@@ -45,7 +45,6 @@ class BasePictographScrollArea(QScrollArea):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
-        # setup group widget section at the bottom
 
     def add_section_to_layout(self, section: QWidget, section_index: int = None):
         if section_index == 0 or section_index:  # widget is a section
@@ -57,4 +56,4 @@ class BasePictographScrollArea(QScrollArea):
             elif section.__class__.__name__ == "SectionGroupWidget":
                 self.layout.insertWidget(
                     section_index, section, 4
-                )  # Set stretch factor to 4 for group widgets
+                )
