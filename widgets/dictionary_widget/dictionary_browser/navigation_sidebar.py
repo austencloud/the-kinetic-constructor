@@ -14,7 +14,6 @@ class NavigationSidebar(QWidget):
         super().__init__()
         self.browser = browser
         self._setup_scroll_area()
-        self.layout: QVBoxLayout = QVBoxLayout(self.scroll_content)
         self.buttons: list[QPushButton] = []
         self.year_labels: dict[str, QPushButton] = {}
         self.spacer_lines: list[QLabel] = []
@@ -26,6 +25,8 @@ class NavigationSidebar(QWidget):
 
     def _setup_scroll_area(self):
         self.scroll_content = QWidget()
+        self.layout: QVBoxLayout = QVBoxLayout(self.scroll_content)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setContentsMargins(0, 0, 0, 0)
         self.scroll_content.setContentsMargins(0, 0, 0, 0)

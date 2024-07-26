@@ -83,18 +83,15 @@ class PropOffsetCalculator:
     def calculate_new_position_with_offset(
         self, current_position: QPointF, direction: Directions
     ) -> QPointF:
-        if self.pictograph.check.has_all_props_of_type(PropType.Club):
-            self.beta_offset = self.prop_placement_manager.pictograph.width() / 60
-        elif self.pictograph.check.has_all_props_of_type(PropType.EightRings):
-            self.beta_offset = self.prop_placement_manager.pictograph.width() / 60
-        elif self.pictograph.check.has_all_props_of_type(PropType.BigEightRings):
-            self.beta_offset = self.prop_placement_manager.pictograph.width() / 60
-        elif self.pictograph.check.has_all_props_of_type(PropType.DoubleStar):
-            self.beta_offset = self.prop_placement_manager.pictograph.width() / 50
-        elif self.pictograph.check.has_all_props_of_type(PropType.BigDoubleStar):
-            self.beta_offset = self.prop_placement_manager.pictograph.width() / 50
-        else:
-            self.beta_offset = self.prop_placement_manager.pictograph.width() / 45
+        prop_type_map = {
+            PropType.Club: 60,
+            PropType.EightRings: 60,
+            PropType.BigEightRings: 60,
+            PropType.DoubleStar: 50,
+            PropType.BigDoubleStar: 50,
+        }
+        prop_type = self.prop_placement_manager.pictograph.prop_type
+        self.beta_offset = self.prop_placement_manager.pictograph.width() / prop_type_map.get(prop_type, 45)
 
         offset_map = {
             LEFT: QPointF(-self.beta_offset, 0),

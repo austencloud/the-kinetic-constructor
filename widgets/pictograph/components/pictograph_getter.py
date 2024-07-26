@@ -135,3 +135,4 @@ class PictographGetter:
         elif end_pos.startswith("gamma"):
             return "Γ"
         return end_pos
+
