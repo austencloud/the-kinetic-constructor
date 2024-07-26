@@ -74,7 +74,7 @@ class SpecialPlacementEntryRemover:
         else:
             new_key = key
 
-        if letter_data[mirrored_tuple][new_key]:
+        if letter_data.get(mirrored_tuple, {}).get(new_key, {}):
             del letter_data[mirrored_tuple][new_key]
             if not letter_data[mirrored_tuple]:
                 del letter_data[mirrored_tuple]

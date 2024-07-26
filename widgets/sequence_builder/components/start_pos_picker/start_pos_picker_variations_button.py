@@ -4,7 +4,6 @@ from PyQt6.QtGui import QFont, QEnterEvent
 from PyQt6.QtCore import Qt
 
 
-
 if TYPE_CHECKING:
     from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import (
         StartPosPicker,
@@ -33,8 +32,8 @@ class StartPosVariationsButton(QPushButton):
         )
 
     def resize_variations_button(self):
-        width = self.start_pos_picker.width() // 5
-        height = self.start_pos_picker.height() // 10
+        width = self.start_pos_picker.sequence_builder.width() // 5
+        height = self.start_pos_picker.sequence_builder.height() // 10
         self.setFixedSize(width, height)
         font_size = int(width // 10)
         self.setFont(QFont("Calibri", font_size, italic=True))

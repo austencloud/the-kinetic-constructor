@@ -26,7 +26,6 @@ class NavigationSidebar(QWidget):
     def _setup_scroll_area(self):
         self.scroll_content = QWidget()
         self.layout: QVBoxLayout = QVBoxLayout(self.scroll_content)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setContentsMargins(0, 0, 0, 0)
         self.scroll_content.setContentsMargins(0, 0, 0, 0)
@@ -52,6 +51,8 @@ class NavigationSidebar(QWidget):
         self.year_labels.clear()
         self.spacer_lines.clear()
         if sort_order == "Date Added":
+            self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+
             current_year = None
             for section in sections:
                 year = section.split("-")[2]
@@ -81,6 +82,8 @@ class NavigationSidebar(QWidget):
                 self.layout.addWidget(date_button)
                 self.buttons.append(date_button)
         else:
+            self.layout.setAlignment(Qt.AlignmentFlag(0))  # Remove alignment
+
             for section in sections:
                 button = QPushButton(str(section))
                 button.clicked.connect(

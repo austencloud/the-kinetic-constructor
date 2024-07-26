@@ -44,7 +44,15 @@ class AdvancedStartPosOriPicker(QWidget):
         layout = QVBoxLayout()
         header = QLabel(hand_label_text)
         header.setStyleSheet(f"color: {color}; font-weight: bold;")
-        layout.addWidget(header, alignment=Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(
+            header,
+            alignment=Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignHCenter,
+        )
+        # create a label to be a line and add it between the header and the buttons
+        line = QLabel()
+        line.setFixedHeight(4)
+        line.setStyleSheet(f"background-color: {color};")
+        layout.addWidget(line)
         layout.setSpacing(5)
 
         row1_layout = QHBoxLayout()
@@ -101,7 +109,7 @@ class AdvancedStartPosOriPicker(QWidget):
         )
 
     def resize_default_ori_picker(self) -> None:
-        width = self.advanced_start_pos_picker.width()
+        width = self.advanced_start_pos_picker.sequence_builder.width()
         header_size = width // 30
         for header in self.header_labels:
             header.setFont(QFont("Arial", header_size, QFont.Weight.Bold))

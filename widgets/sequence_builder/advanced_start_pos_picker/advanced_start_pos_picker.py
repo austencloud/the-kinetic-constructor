@@ -76,8 +76,7 @@ class AdvancedStartPosPicker(QWidget):
             variation.container.update_borders()
 
     def calculate_view_width(self) -> int:
-        max_variations_per_row = 4
-        view_width = self.sequence_builder.height() // 5
+        view_width = int(self.sequence_builder.height() // 5.5)
         return view_width
 
     def init_ui(self):
@@ -102,10 +101,4 @@ class AdvancedStartPosPicker(QWidget):
         )
 
     def resize_advanced_start_pos_picker(self) -> None:
-        self.adjustSize()
-        self.setFixedSize(
-            # set it to match the regular start pos picker
-            self.start_pos_picker.width(),
-            self.start_pos_picker.height(),
-        )
         self.ori_picker.resize_default_ori_picker()
