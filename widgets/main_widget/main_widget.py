@@ -56,7 +56,6 @@ class MainWidget(QTabWidget):
         self.webcam_initialized = False  # Add an initialization flag
         # self.initialize_webcam_async()  # Start webcam initialization
         self.initialized = True
-        metadata_updater = MetaDataUpdater(self)
 
 
     def initialize_webcam_async(self):

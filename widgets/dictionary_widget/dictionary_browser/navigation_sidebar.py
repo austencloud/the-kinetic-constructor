@@ -37,19 +37,8 @@ class NavigationSidebar(QWidget):
         self.scroll_area.setStyleSheet("background: transparent;")
 
     def update_sidebar(self, sections, sort_order):
-        # Clear existing buttons
-        for button in self.buttons:
-            self.layout.removeWidget(button)
-            button.deleteLater()
-        for year_label in self.year_labels.values():
-            self.layout.removeWidget(year_label)
-            year_label.deleteLater()
-        for spacer_line in self.spacer_lines:
-            self.layout.removeWidget(spacer_line)
-            spacer_line.deleteLater()
-        self.buttons.clear()
-        self.year_labels.clear()
-        self.spacer_lines.clear()
+        self._clear_sidebar()
+
         if sort_order == "Date Added":
             self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
@@ -94,7 +83,20 @@ class NavigationSidebar(QWidget):
                 self.buttons.append(button)
 
         self._set_styles()
-        self.show()
+
+    def _clear_sidebar(self):
+        for button in self.buttons:
+            self.layout.removeWidget(button)
+            button.deleteLater()
+        for year_label in self.year_labels.values():
+            self.layout.removeWidget(year_label)
+            year_label.deleteLater()
+        for spacer_line in self.spacer_lines:
+            self.layout.removeWidget(spacer_line)
+            spacer_line.deleteLater()
+        self.buttons.clear()
+        self.year_labels.clear()
+        self.spacer_lines.clear()
 
     def get_formatted_day(self, date):
         day = date.split("-")[0].lstrip("0") + "-" + date.split("-")[1].lstrip("0")

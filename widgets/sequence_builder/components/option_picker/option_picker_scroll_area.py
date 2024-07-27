@@ -48,7 +48,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
 
-        print("OptionPickerScrollArea initialized with layout VBox")
 
     def fix_stretch(self) -> None:
         if self.stretch_index >= 0:

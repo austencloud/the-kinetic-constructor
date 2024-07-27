@@ -43,13 +43,10 @@ class DictionaryOptionsWidget(QWidget):
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.buttons_layout: QHBoxLayout = QHBoxLayout(self)
+        self.buttons_layout: QHBoxLayout = QHBoxLayout()
 
-        # Add header label
         self.sort_by_label = QLabel("Sort:")
-        self.sort_by_label.setAlignment(
-            Qt.AlignmentFlag.AlignCenter
-        )  # Center alignment
+        self.sort_by_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.layout.addWidget(self.sort_by_label)
         self.layout.addLayout(self.buttons_layout)
@@ -80,7 +77,6 @@ class DictionaryOptionsWidget(QWidget):
         sort_by_label_font = self.sort_by_label.font()
         sort_by_label_font.setPointSize(self.browser.width() // 50)
         self.sort_by_label.setFont(sort_by_label_font)
-
 
     def _style_buttons(self):
         for button in self.buttons.values():
