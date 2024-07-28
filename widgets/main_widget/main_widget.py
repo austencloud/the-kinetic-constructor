@@ -57,7 +57,6 @@ class MainWidget(QTabWidget):
         # self.initialize_webcam_async()  # Start webcam initialization
         self.initialized = True
 
-
     def initialize_webcam_async(self):
         """Start the webcam initialization in a separate thread to avoid blocking the UI."""
         thread = threading.Thread(target=self.init_webcam, daemon=True)
