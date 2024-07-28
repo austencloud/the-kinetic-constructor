@@ -36,19 +36,19 @@ class MirroredEntryDataPrep:
             return other_ori_key, other_letter_data
         return ori_key, self._get_letter_data(ori_key, letter)
 
-    def _get_letter_data(self, ori_key: str, letter: str) -> dict:
+    def _get_letter_data(self, ori_key: str, letter: Letter) -> dict:
         """Fetches letter data for a given orientation key and letter."""
         return self.manager.data_updater.positioner.placement_manager.pictograph.main_widget.special_placements.get(
             ori_key, {}
         ).get(
-            letter, {}
+            letter.value, {}
         )
 
     def _fetch_letter_data_and_original_turn_data(
         self, ori_key: str, letter: Letter, arrow: Arrow
     ) -> tuple[dict, dict]:
         """Fetches letter data and the original turns tuple for the given arrow."""
-        letter_data = self._get_letter_data(ori_key, letter.value)
+        letter_data = self._get_letter_data(ori_key, letter)
         original_turns_tuple = self.manager.turns_tuple_generator.generate_turns_tuple(
             arrow.pictograph
         )

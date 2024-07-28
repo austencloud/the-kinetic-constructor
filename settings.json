@@ -2,7 +2,7 @@
     "global_settings": {
         "prop_type": "Staff",
         "background_type": "Rainbow",
-        "grow_sequence": false
+        "grow_sequence": true
     },
     "image_export": {
         "include_start_position": false,

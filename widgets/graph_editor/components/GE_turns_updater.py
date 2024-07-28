@@ -15,7 +15,7 @@ class GE_TurnsUpdater:
         self.turns_widget = turns_widget
 
     def set_motion_turns(self, motion: "Motion", new_turns: Turns) -> None:
-        self._update_turns_and_rotation(motion, new_turns)
+        self._update_turns_and_rot_dir(motion, new_turns)
         pictograph_dict = {f"{motion.color}_turns": new_turns, "prop_rot_dir": motion.prop_rot_dir}
         motion.pictograph.updater.update_pictograph(pictograph_dict)
 
@@ -33,7 +33,7 @@ class GE_TurnsUpdater:
         new_turns = max(0, min(3, current_turns + adjustment))
         return int(new_turns) if new_turns.is_integer() else new_turns
 
-    def _update_turns_and_rotation(self, motion: "Motion", new_turns: Turns) -> None:
+    def _update_turns_and_rot_dir(self, motion: "Motion", new_turns: Turns) -> None:
         """Update motion's turns and rotation properties based on new turn value."""
         if motion.motion_type in [DASH, STATIC]:
             self._handle_static_dash_motion(motion, new_turns)

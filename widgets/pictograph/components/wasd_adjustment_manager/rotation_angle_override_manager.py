@@ -61,7 +61,7 @@ class RotationAngleOverrideManager:
             and self.pictograph.selected_arrow.motion.motion_type in [STATIC, DASH]
         )
 
-    def _apply_override_if_needed(self, letter: str, data: dict, ori_key: str) -> None:
+    def _apply_override_if_needed(self, letter: Letter, data: dict, ori_key: str) -> None:
         rot_angle_key = self.key_generator.generate_rotation_angle_override_key(
             self.pictograph.selected_arrow
         )
@@ -70,26 +70,28 @@ class RotationAngleOverrideManager:
 
     def _apply_rotation_override(
         self,
-        letter: Letter,
+        letter_enum: Letter,
         data: dict,
         ori_key: str,
         turns_tuple: str,
         rot_angle_key: str,
     ) -> None:
-        letter_data = data[ori_key].get(letter.value, {})
+        letter_data = data[ori_key].get(letter_enum.value, {})
         turn_data = letter_data.get(turns_tuple, {})
-
         letter_data[turns_tuple] = turn_data
-        data[ori_key][letter] = letter_data
+        data[ori_key][letter_enum.value] = letter_data
+        QApplication.processEvents()
         if rot_angle_key in turn_data:
             del turn_data[rot_angle_key]
             self._update_mirrored_entry_with_rotation_override_removal(rot_angle_key)
         else:
             turn_data[rot_angle_key] = True
             self._update_mirrored_entry_with_rotation_override(turn_data)
+        QApplication.processEvents()
         self.special_positioner.data_updater.update_specific_entry_in_json(
-            letter, letter_data, ori_key
+            letter_enum, letter_data, ori_key
         )
+        QApplication.processEvents()
         self.pictograph.updater.update_pictograph()
 
     def handle_mirrored_rotation_angle_override(

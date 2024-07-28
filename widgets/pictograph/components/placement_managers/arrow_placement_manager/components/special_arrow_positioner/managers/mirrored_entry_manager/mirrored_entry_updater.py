@@ -1,3 +1,4 @@
+from Enums.letters import Letter
 from data.constants import *
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
@@ -78,14 +79,14 @@ class MirroredEntryUpdater:
     def _generate_turns_tuple(self, arrow: Arrow) -> str:
         return self.turns_tuple_generator.generate_turns_tuple(arrow.pictograph)
 
-    def _get_letter_data(self, ori_key: str, letter: str) -> dict:
+    def _get_letter_data(self, ori_key: str, letter: Letter) -> dict:
         return self.data_updater.positioner.placement_manager.pictograph.main_widget.special_placements.get(
             ori_key, {}
         ).get(
-            letter, {}
+            letter.value, {}
         )
 
-    def _get_keys_for_mixed_start_ori(self, letter, ori_key) -> tuple[str, dict]:
+    def _get_keys_for_mixed_start_ori(self, letter: Letter, ori_key) -> tuple[str, dict]:
         other_ori_key = self.data_updater.get_other_layer3_ori_key(ori_key)
         other_letter_data = self._get_letter_data(other_ori_key, letter)
         return other_ori_key, other_letter_data
