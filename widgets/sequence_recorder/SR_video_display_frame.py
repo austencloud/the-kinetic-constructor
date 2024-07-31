@@ -60,8 +60,8 @@ class SR_VideoDisplayFrame(QFrame):
             self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
             self.video_frame_rate = self.capture.get(cv2.CAP_PROP_FPS)
 
-            self.video_timer = QTimer(self)
-            self.video_timer.timeout.connect(self.update_video_feed)
+            # self.video_timer = QTimer(self)
+            # self.video_timer.timeout.connect(self.update_video_feed)
             self.update_timer_interval()
         print("Webcam initialized successfully.")
 
