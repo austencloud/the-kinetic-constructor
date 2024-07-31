@@ -27,9 +27,7 @@ from widgets.scroll_area.components.pictograph_key_generator import (
     PictographKeyGenerator,
 )
 from data.constants import DIAMOND
-from widgets.sequence_recorder.sequence_recorder import (
-    SequenceRecorder,
-)
+from widgets.sequence_recorder.sequence_recorder import SequenceRecorder
 from ..main_widget.special_placement_loader import SpecialPlacementLoader
 from ..pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
     TurnsTupleGenerator,
@@ -106,7 +104,7 @@ class MainWidget(QTabWidget):
         self.recorder_tab_index = 2
 
         self.setCurrentIndex(self.builder_tab_index)
-        
+
         self.initialized = True
 
         # Apply the initial background

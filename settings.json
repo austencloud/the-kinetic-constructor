@@ -2,7 +2,7 @@
     "global_settings": {
         "prop_type": "Staff",
         "background_type": "Rainbow",
-        "grow_sequence": true
+        "grow_sequence": false
     },
     "image_export": {
         "include_start_position": false,
@@ -15,7 +15,7 @@
         "user_profiles": {
             "AC": {
                 "name": "AC",
-                "export_date": "7-27-2024"
+                "export_date": "7-31-2024"
             }
         },
         "current_note": "Created using The Kinetic Alphabet",
@@ -31,7 +31,7 @@
             "EndPosition": false
         },
         "grid_visibility": {
-            "non_radial_points": false
+            "non_radial_points": true
         }
     }
 }
