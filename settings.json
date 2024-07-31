@@ -1,8 +1,13 @@
 {
     "global_settings": {
         "prop_type": "Staff",
+<<<<<<< HEAD
         "background_type": "Rainbow",
         "grow_sequence": false
+=======
+        "background_type": "Aurora",
+        "grow_sequence": true
+>>>>>>> 78df0381573a10e6c4f064c07557770a866173b5
     },
     "image_export": {
         "include_start_position": false,
@@ -15,7 +20,11 @@
         "user_profiles": {
             "AC": {
                 "name": "AC",
+<<<<<<< HEAD
                 "export_date": "7-31-2024"
+=======
+                "export_date": "7-30-2024"
+>>>>>>> 78df0381573a10e6c4f064c07557770a866173b5
             }
         },
         "current_note": "Created using The Kinetic Alphabet",
