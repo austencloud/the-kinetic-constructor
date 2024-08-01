@@ -7,27 +7,32 @@ from widgets.base_beat_frame import BaseBeatFrame
 from widgets.sequence_widget.SW_beat_frame_layout_manager import (
     SW_BeatFrameLayoutManager,
 )
-from .beat_deletion_manager import BeatDeletionManager
-from .image_export_manager import ImageExportManager
-from .beat_frame_print_manager import BeatFramePrintManager
-from .beat_selection_overlay import SequenceWidgetBeatSelectionOverlay
-from .start_pos_beat import StartPositionBeat
-from .start_pos_beat import StartPositionBeatView
+from widgets.sequence_widget.invisible_dictionary_beat_frame_layout_manager import InvisibleDictionaryBeatFrameLayoutManager
+from ..sequence_widget.SW_beat_frame.beat_deletion_manager import BeatDeletionManager
+from ..sequence_widget.SW_beat_frame.image_export_manager import ImageExportManager
+from ..sequence_widget.SW_beat_frame.beat_frame_print_manager import (
+    BeatFramePrintManager,
+)
+from ..sequence_widget.SW_beat_frame.beat_selection_overlay import (
+    SequenceWidgetBeatSelectionOverlay,
+)
+from ..sequence_widget.SW_beat_frame.start_pos_beat import StartPositionBeat
+from ..sequence_widget.SW_beat_frame.start_pos_beat import StartPositionBeatView
+from ..sequence_widget.SW_beat_frame.beat import Beat, BeatView
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
+    from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
-from .beat import BeatView
 
-
-class SW_BeatFrame(BaseBeatFrame):
-    def __init__(self, sequence_widget: "SequenceWidget") -> None:
-        super().__init__(sequence_widget.main_widget)
-        self.main_widget = sequence_widget.main_widget
+class InvisibleDictionaryBeatFrame(BaseBeatFrame):
+    def __init__(self, dictionary_widget: "DictionaryWidget") -> None:
+        super().__init__(dictionary_widget.main_widget)
+        self.main_widget = dictionary_widget.main_widget
         self.json_manager = self.main_widget.json_manager
-        self.sequence_widget = sequence_widget
-        self.top_builder_widget = sequence_widget.top_builder_widget
+        self.dictionary_widget = dictionary_widget
+        self.top_builder_widget = self.main_widget.top_builder_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
 
         self.initialized = True
@@ -45,11 +50,11 @@ class SW_BeatFrame(BaseBeatFrame):
 
     def _setup_components(self) -> None:
         self.selection_manager = SequenceWidgetBeatSelectionOverlay(self)
-        self.layout_manager = SW_BeatFrameLayoutManager(self)
+        self.layout_manager = InvisibleDictionaryBeatFrameLayoutManager(self)
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(self)
         self.beat_deletion_manager = BeatDeletionManager(self)
-        self.export_manager = ImageExportManager(self, SW_BeatFrame)
+        self.export_manager = ImageExportManager(self, InvisibleDictionaryBeatFrame)
         self.print_sequence_manager = BeatFramePrintManager(self)
 
     def _setup_layout(self) -> None:
@@ -86,7 +91,7 @@ class SW_BeatFrame(BaseBeatFrame):
                 self.json_manager.updater.update_current_sequence_file_with_beat(
                     self.beats[next_beat_index]
                 )
-                self.sequence_widget.update_current_word()
+                self.update_current_word()
                 self.adjust_layout_to_sequence_length()
         elif not grow_sequence:
             if (
@@ -98,7 +103,7 @@ class SW_BeatFrame(BaseBeatFrame):
                 self.json_manager.updater.update_current_sequence_file_with_beat(
                     self.beats[next_beat_index]
                 )
-                self.sequence_widget.update_current_word()
+                self.update_current_word()
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):
@@ -154,23 +159,6 @@ class SW_BeatFrame(BaseBeatFrame):
                 return i
         return 0
 
-    def resize_beat_frame(self) -> None:
-        scrollbar_width = self.sequence_widget.scroll_area.verticalScrollBar().width()
-        width = int(
-            (self.sequence_widget.width() - self.sequence_widget.button_frame.width() - scrollbar_width)
-            * 0.8
-        )
-        num_cols = max(1, self.layout.columnCount() - 1)
-        if num_cols == 0:
-            return
-        beat_size = int(width / (5))
-        for beat in self.beats:
-            beat.setFixedSize(beat_size, beat_size)
-        self.start_pos_view.setFixedSize(beat_size, beat_size)
-        for beat in self.beats:
-            beat.resize_beat_view()
-        self.start_pos_view.resize_beat_view()
-
     def populate_beat_frame_from_json(
         self, current_sequence_json: list[dict[str, str]]
     ) -> None:
@@ -180,7 +168,7 @@ class SW_BeatFrame(BaseBeatFrame):
         self.sequence_builder = self.main_widget.top_builder_widget.sequence_builder
         if not current_sequence_json:
             return
-        self.sequence_widget.button_frame.clear_sequence(
+        self.clear_sequence(
             show_indicator=False, should_reset_to_start_pos_picker=False
         )
         start_pos_beat = self.start_pos_manager.convert_current_sequence_json_entry_to_start_pos_pictograph(
@@ -191,9 +179,9 @@ class SW_BeatFrame(BaseBeatFrame):
         for pictograph_dict in current_sequence_json[1:]:
             if pictograph_dict.get("sequence_start_position"):
                 continue
-            self.sequence_widget.populate_sequence(pictograph_dict)
+            self.populate_sequence(pictograph_dict)
 
-        last_beat = self.sequence_widget.beat_frame.get_last_filled_beat().beat
+        last_beat = self.get_last_filled_beat().beat
         self.sequence_builder.last_beat = last_beat
 
         if self.sequence_builder.start_pos_picker.isVisible():
@@ -211,3 +199,34 @@ class SW_BeatFrame(BaseBeatFrame):
 
         scroll_area.add_and_display_relevant_pictographs(next_options)
         self.sequence_builder.option_picker.resize_option_picker()
+
+    def populate_sequence(self, pictograph_dict: dict) -> None:
+        pictograph = Beat(self)
+        pictograph.updater.update_pictograph(pictograph_dict)
+        self.add_beat_to_sequence(pictograph)
+        self.update_current_word()
+
+    def update_current_word(self):
+        self.current_word = self.get_current_word()
+
+    def clear_sequence(
+        self, show_indicator=True, should_reset_to_start_pos_picker=True
+    ) -> None:
+        self._reset_beat_frame()
+
+        if should_reset_to_start_pos_picker:
+            self.sequence_builder.reset_to_start_pos_picker()
+        self.sequence_builder.last_beat = self.start_pos
+        self.json_manager.loader_saver.clear_current_sequence_file()
+
+        # Reset the layout to the smallest possible amount
+        if self.settings_manager.global_settings.get_grow_sequence():
+            self.layout_manager.configure_beat_frame(0)
+
+    def _reset_beat_frame(self) -> None:
+        for beat_view in self.beats:
+            beat_view.setScene(beat_view.blank_beat)
+            beat_view.is_filled = False
+        self.start_pos_view.setScene(self.start_pos_view.blank_beat)
+        self.start_pos_view.is_filled = False
+        self.selection_manager.deselect_beat()

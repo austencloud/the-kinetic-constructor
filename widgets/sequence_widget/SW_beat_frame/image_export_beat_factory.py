@@ -1,23 +1,37 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 from widgets.sequence_widget.SW_beat_frame.beat import Beat, BeatView
 
 if TYPE_CHECKING:
+    from widgets.dictionary_widget.invisible_dictionary_beat_frame import (
+        InvisibleDictionaryBeatFrame,
+    )
+    from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
     from widgets.sequence_widget.SW_beat_frame.image_export_manager import (
         ImageExportManager,
     )
 
 
 class ImageExportBeatFactory:
-    def __init__(self, export_manager: "ImageExportManager"):
+    def __init__(
+        self,
+        export_manager: "ImageExportManager",
+        beat_frame_class: Union["SW_BeatFrame", "InvisibleDictionaryBeatFrame"],
+    ):
         self.export_manager = export_manager
-        self.beat_frame = export_manager.beat_frame
-        self.sequence_widget = export_manager.sequence_widget
+        self.beat_frame_class = beat_frame_class
 
     def process_sequence_to_beats(self, sequence: list[dict]) -> list[BeatView]:
-        from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
-
-        self.temp_beat_frame = SW_BeatFrame(self.sequence_widget)
+        # if the beat frame class is a SW_BeatFrame, then we need to pass the sequence widget
+        # if it's a InvisibleDictionaryBeatFrame, then we need to pass the dictionary widget
+        if self.beat_frame_class.__name__ == "SW_BeatFrame":
+            self.temp_beat_frame = self.beat_frame_class(
+                self.export_manager.main_widget.top_builder_widget.sequence_widget
+            )
+        elif self.beat_frame_class.__name__ == "InvisibleDictionaryBeatFrame":
+            self.temp_beat_frame = self.beat_frame_class(
+                self.export_manager.main_widget.dictionary_widget
+            )
         filled_beats = []
         for i, beat_data in enumerate(sequence[2:], start=2):
             beat_view = self.create_beat_view_from_data(beat_data, i - 1)

@@ -16,7 +16,8 @@ class FontMarginHelper:
             font_size = base_font.pointSize()
             margin = base_margin
 
+        # Ensure font_size is an integer
         adjusted_font = QFont(
-            base_font.family(), font_size, base_font.weight(), base_font.italic()
+            base_font.family(), int(font_size), base_font.weight(), base_font.italic()
         )
         return adjusted_font, margin

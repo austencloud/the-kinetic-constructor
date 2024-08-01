@@ -3,9 +3,13 @@ import re  # Ensure to import re at the top of your file
 
 from typing import TYPE_CHECKING
 from widgets.path_helpers.path_helpers import get_images_and_data_path
-from widgets.sequence_widget.structural_variation_checker import StructuralVariationChecker
+from widgets.sequence_widget.structural_variation_checker import (
+    StructuralVariationChecker,
+)
 from widgets.sequence_widget.thumbnail_generator import ThumbnailGenerator
-from widgets.sequence_widget.turn_pattern_variation_checker import TurnPatternVariationChecker
+from widgets.sequence_widget.turn_pattern_variation_checker import (
+    TurnPatternVariationChecker,
+)
 from widgets.turn_pattern_converter import TurnPatternConverter
 
 if TYPE_CHECKING:
@@ -58,7 +62,7 @@ class AddToDictionaryManager:
             )
 
         self.refresh_ui()
-        thumbnail_box = self.sequence_widget.main_widget.dictionary.browser.scroll_widget.thumbnail_boxes_dict.get(
+        thumbnail_box = self.sequence_widget.main_widget.dictionary_widget.browser.scroll_widget.thumbnail_boxes_dict.get(
             base_word
         )
         if thumbnail_box:
@@ -131,7 +135,7 @@ class AddToDictionaryManager:
         return thumbnails
 
     def find_thumbnail_box(self, base_word):
-        return self.sequence_widget.main_widget.dictionary.browser.scroll_widget.thumbnail_boxes_dict.get(
+        return self.sequence_widget.main_widget.dictionary_widget.browser.scroll_widget.thumbnail_boxes_dict.get(
             base_word
         )
 
@@ -150,7 +154,7 @@ class AddToDictionaryManager:
         self.sequence_widget.indicator_label.show_message(message)
 
     def refresh_ui(self):
-        self.sequence_widget.main_widget.dictionary.browser.sorter.sort_and_display_thumbnails()
+        self.sequence_widget.main_widget.dictionary_widget.browser.sorter.sort_and_display_thumbnails()
 
     def get_base_word(self, sequence):
         base_sequence = []

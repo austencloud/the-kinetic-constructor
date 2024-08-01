@@ -9,6 +9,7 @@ from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
 from widgets.dictionary_widget.dictionary_deletion_manager import (
     DictionaryDeletionManager,
 )
+from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
 from .dictionary_selection_handler import DictionarySelectionHandler
 from .dictionary_preview_area import DictionaryPreviewArea
 from .dictionary_sequence_populator import DictionarySequencePopulator
@@ -21,7 +22,7 @@ class DictionaryWidget(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
         self.main_widget = main_widget
-
+        self.indicator_label = main_widget.top_builder_widget.sequence_widget.indicator_label
         self._setup_ui()
         self.selected_sequence_dict = None
 
@@ -29,6 +30,8 @@ class DictionaryWidget(QWidget):
             self.main_widget.main_window.settings_manager.global_settings
         )
         self.connect_signals()
+
+
 
     def connect_signals(self):
         self.main_widget.main_window.settings_manager.background_changed.connect(
@@ -68,3 +71,5 @@ class DictionaryWidget(QWidget):
     def resize_dictionary_widget(self) -> None:
         self.browser.resize_dictionary_browser()
         # self.preview_area.resize_dictionary_preview_area()
+
+

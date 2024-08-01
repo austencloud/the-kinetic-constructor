@@ -135,8 +135,8 @@ class BeatView(QGraphicsView):
         painter.end()
         return QPixmap.fromImage(image)
 
-    def set_beat(self, start_pos: "Beat", number: int) -> None:
-        self.start_pos = self.beat = start_pos
+    def set_beat(self, beat: "Beat", number: int) -> None:
+        self.start_pos = self.beat = beat
         self.is_filled = True
         self.start_pos.view = self
         self.setScene(self.start_pos)

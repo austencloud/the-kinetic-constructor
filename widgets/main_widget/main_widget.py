@@ -92,11 +92,11 @@ class MainWidget(QTabWidget):
         self._setup_special_placements()
 
         self.top_builder_widget = TopBuilderWidget(self)
-        self.dictionary = DictionaryWidget(self)
+        self.dictionary_widget = DictionaryWidget(self)
         self.sequence_recorder = SequenceRecorder(self)
 
         self.addTab(self.top_builder_widget, "Builder")
-        self.addTab(self.dictionary, "Dictionary")
+        self.addTab(self.dictionary_widget, "Dictionary")
         self.addTab(self.sequence_recorder, "Recorder")
 
         self.builder_tab_index = 0
@@ -154,8 +154,8 @@ class MainWidget(QTabWidget):
                 for view in SW_beat_frame.beats:
                     if view.is_filled:
                         view.resize_beat_view()
-        elif widget == self.dictionary:
-            self.dictionary.browser.resize_dictionary_browser()
+        elif widget == self.dictionary_widget:
+            self.dictionary_widget.browser.resize_dictionary_browser()
 
     def resize_all_widgets(self):
         starting_widget = self.currentWidget()

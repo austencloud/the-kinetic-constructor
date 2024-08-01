@@ -23,7 +23,6 @@ class SequenceWidgetBeatSelectionOverlay(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         self.hide()
 
-
     def select_beat(self, beat_view: BeatView):
         if self.selected_beat == beat_view:
             return

@@ -2,6 +2,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QApplication, QMessageBox
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QIcon
+from widgets.dictionary_widget.invisible_dictionary_beat_frame import (
+    InvisibleDictionaryBeatFrame,
+)
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
@@ -18,6 +21,7 @@ class DictionaryButtonPanel(QWidget):
         super().__init__(preview_area)
         self.preview_area = preview_area
         self.dictionary_widget = preview_area.dictionary_widget
+
         self._setup_buttons()
 
     def _setup_buttons(self):
@@ -84,7 +88,28 @@ class DictionaryButtonPanel(QWidget):
             )
 
     def save_image(self):
-        QMessageBox.information(self, "Action", "Save Image Clicked")
+        # Extract metadata from the current preview image
+        current_thumbnail = self.preview_area.get_thumbnail_at_current_index()
+        if not current_thumbnail:
+            QMessageBox.warning(
+                self, "No Selection", "Please select a thumbnail first."
+            )
+            return
+
+        metadata = self.preview_area.sequence_json
+        if not metadata:
+            QMessageBox.warning(
+                self, "No Metadata", "No metadata found for the selected sequence."
+            )
+            return
+
+        # Get the invisible beat frame and populate it with metadata
+        self.beat_frame = InvisibleDictionaryBeatFrame(self.dictionary_widget)
+        self.beat_frame.populate_beat_frame_from_json(metadata["sequence"])
+
+        # Use the export manager associated with the beat frame to show the export dialog
+        self.export_manager = self.beat_frame.export_manager
+        self.export_manager.dialog_executor.exec_dialog()
 
     def delete_variation(self):
         QMessageBox.information(self, "Action", "Delete Variation Clicked")

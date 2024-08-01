@@ -110,23 +110,24 @@ class DictionaryPreviewArea(QWidget):
             self.variation_number_label.hide()
 
     def update_preview(self, index):
-        if index == None:
+        if index is None:
             self.image_label.setText("Select a sequence to preview it here!")
             self._adjust_label_for_text()
-
             self.variation_number_label.setText("")
             return
+
         if self.thumbnails and index is not None:
             pixmap = QPixmap(self.thumbnails[index])
             self._scale_pixmap_to_label(pixmap)
 
-        if self.current_thumbnail_box:
-            metadata_extractor = (
-                self.current_thumbnail_box.main_widget.metadata_extractor
-            )
-            self.sequence_json = metadata_extractor.extract_metadata_from_file(
-                self.thumbnails[index]
-            )
+            # Update sequence_json with the current metadata
+            if self.current_thumbnail_box:
+                metadata_extractor = (
+                    self.current_thumbnail_box.main_widget.metadata_extractor
+                )
+                self.sequence_json = metadata_extractor.extract_metadata_from_file(
+                    self.thumbnails[index]
+                )
 
     def _scale_pixmap_to_label(self, pixmap: QPixmap):
         label_width = self.image_label.width()

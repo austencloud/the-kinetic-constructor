@@ -15,9 +15,9 @@ class ImageSaver:
     def __init__(self, export_manager: "ImageExportManager"):
         self.export_manager = export_manager
         self.beat_frame = export_manager.beat_frame
-        self.indicator_label = export_manager.indicator_label
 
     def save_image(self, sequence_image: QImage):
+        self.indicator_label = self.export_manager.main_widget.top_builder_widget.sequence_widget.indicator_label
         word = self.beat_frame.get_current_word()
         if word == "":
             self.indicator_label.show_message(
