@@ -77,7 +77,7 @@ class GE_VtgDirButtonManager:
                             motion, prop_rot_dir
                         )
                         self.json_manager.updater.update_rot_dir_in_json_at_index(
-                            pictograph_index + 1, self.color, prop_rot_dir
+                            pictograph_index + 2, self.color, prop_rot_dir
                         )
                     elif vtg_dir == OPP:
                         prop_rot_dir = self._opposite_prop_rot_dir(
@@ -87,7 +87,7 @@ class GE_VtgDirButtonManager:
                             motion, prop_rot_dir
                         )
                         self.json_manager.updater.update_rot_dir_in_json_at_index(
-                            pictograph_index + 1, self.color, prop_rot_dir
+                            pictograph_index + 2, self.color, prop_rot_dir
                         )
 
     def _update_pictograph_prop_rot_dir_from_vtg_dir_setting(

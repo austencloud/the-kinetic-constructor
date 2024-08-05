@@ -16,5 +16,9 @@ class PictographAttrManager:
         for attr_name, attr_value in pictograph_dict.items():
             if attr_name == LETTER:
                 attr_value = Letter.get_letter(attr_value)
+            elif isinstance(attr_value, dict):
+                for k, v in attr_value.items():
+                    attr_name = k
+                    attr_value = v
             if attr_value is not None:
                 setattr(self.pictograph, attr_name, attr_value)

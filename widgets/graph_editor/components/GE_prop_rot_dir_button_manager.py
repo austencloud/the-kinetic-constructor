@@ -31,6 +31,9 @@ class GE_PropRotDirButtonManager:
         self.previous_turns = 0
         self.prop_rot_dir_buttons = self._setup_prop_rot_dir_buttons()
         self.buttons = self.prop_rot_dir_buttons
+        self.graph_editor = turns_box.graph_editor
+        self.beat_frame = self.graph_editor.sequence_widget.beat_frame
+        self.json_manager = self.graph_editor.main_widget.json_manager
 
     def _setup_prop_rot_dir_buttons(self) -> list[PropRotDirButton]:
         button_factory = (
@@ -77,11 +80,15 @@ class GE_PropRotDirButtonManager:
     def _update_pictograph_prop_rot_dir(
         self, motion: "Motion", prop_rot_dir: PropRotDir
     ) -> None:
+        pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
         motion.prop_rot_dir = prop_rot_dir
         pictograph_dict = {
-            motion.color + "_" + PROP_ROT_DIR: prop_rot_dir,
+            motion.color + "_attributes": {"prop_rot_dir": prop_rot_dir},
         }
         motion.pictograph.updater.update_pictograph(pictograph_dict)
+        self.json_manager.updater.update_rot_dir_in_json_at_index(
+            pictograph_index + 2, motion.color, prop_rot_dir
+        )
 
     def _update_button_states(
         self,
