@@ -1,7 +1,7 @@
 {
     "global_settings": {
         "prop_type": "Staff",
-        "background_type": "Rainbow",
+        "background_type": "Aurora",
         "grow_sequence": false
     },
     "image_export": {
@@ -15,7 +15,7 @@
         "user_profiles": {
             "AC": {
                 "name": "AC",
-                "export_date": "7-31-2024"
+                "export_date": "8-5-2024"
             }
         },
         "current_note": "Created using The Kinetic Alphabet",
