@@ -1,8 +1,8 @@
 {
     "global_settings": {
         "prop_type": "Staff",
-        "background_type": "Aurora",
-        "grow_sequence": true
+        "background_type": "Rainbow",
+        "grow_sequence": false
     },
     "image_export": {
         "include_start_position": false,

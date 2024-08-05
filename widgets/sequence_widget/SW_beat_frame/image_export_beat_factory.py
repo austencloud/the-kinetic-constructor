@@ -22,8 +22,6 @@ class ImageExportBeatFactory:
         self.beat_frame_class = beat_frame_class
 
     def process_sequence_to_beats(self, sequence: list[dict]) -> list[BeatView]:
-        # if the beat frame class is a SW_BeatFrame, then we need to pass the sequence widget
-        # if it's a InvisibleDictionaryBeatFrame, then we need to pass the dictionary widget
         if self.beat_frame_class.__name__ == "SW_BeatFrame":
             self.temp_beat_frame = self.beat_frame_class(
                 self.export_manager.main_widget.top_builder_widget.sequence_widget
