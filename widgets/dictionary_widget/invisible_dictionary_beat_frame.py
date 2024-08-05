@@ -7,7 +7,9 @@ from widgets.base_beat_frame import BaseBeatFrame
 from widgets.sequence_widget.SW_beat_frame_layout_manager import (
     SW_BeatFrameLayoutManager,
 )
-from widgets.sequence_widget.invisible_dictionary_beat_frame_layout_manager import InvisibleDictionaryBeatFrameLayoutManager
+from widgets.sequence_widget.invisible_dictionary_beat_frame_layout_manager import (
+    InvisibleDictionaryBeatFrameLayoutManager,
+)
 from ..sequence_widget.SW_beat_frame.beat_deletion_manager import BeatDeletionManager
 from ..sequence_widget.SW_beat_frame.image_export_manager import ImageExportManager
 from ..sequence_widget.SW_beat_frame.beat_frame_print_manager import (
@@ -81,29 +83,16 @@ class InvisibleDictionaryBeatFrame(BaseBeatFrame):
     def add_beat_to_sequence(self, new_beat: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()
 
-        grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
-        if grow_sequence:
-            if (
-                next_beat_index is not None
-                and self.beats[next_beat_index].is_filled is False
-            ):
-                self.beats[next_beat_index].set_beat(new_beat, next_beat_index + 1)
-                self.json_manager.updater.update_current_sequence_file_with_beat(
-                    self.beats[next_beat_index]
-                )
-                self.update_current_word()
-                self.adjust_layout_to_sequence_length()
-        elif not grow_sequence:
-            if (
-                next_beat_index is not None
-                and self.beats[next_beat_index].is_filled is False
-                and self.beats[next_beat_index].isVisible()
-            ):
-                self.beats[next_beat_index].set_beat(new_beat, next_beat_index + 1)
-                self.json_manager.updater.update_current_sequence_file_with_beat(
-                    self.beats[next_beat_index]
-                )
-                self.update_current_word()
+        if (
+            next_beat_index is not None
+            and self.beats[next_beat_index].is_filled is False
+        ):
+            self.beats[next_beat_index].set_beat(new_beat, next_beat_index + 1)
+            self.json_manager.updater.update_current_sequence_file_with_beat(
+                self.beats[next_beat_index]
+            )
+            self.update_current_word()
+            self.adjust_layout_to_sequence_length()
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):
@@ -120,13 +109,6 @@ class InvisibleDictionaryBeatFrame(BaseBeatFrame):
             if beat_view.is_filled:
                 return beat_view
         return self.start_pos_view
-
-    def get_current_word(self) -> str:
-        word = ""
-        for beat_view in self.beats:
-            if beat_view.is_filled:
-                word += beat_view.beat.letter.value
-        return word
 
     def on_beat_adjusted(self) -> None:
         current_sequence_json = (

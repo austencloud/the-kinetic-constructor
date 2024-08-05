@@ -60,10 +60,10 @@ class ImageCreator:
             additional_height_top,
         )
         if options:
-            if options.get("add_info", False):
+            if options.get("add_info"):
                 self.user_info_drawer.draw_user_info(image, options, num_filled_beats)
 
-            if options.get("add_word", False):
+            if options.get("add_word"):
                 word = self.beat_frame.get_current_word()
                 self.word_drawer.draw_word(image, word, num_filled_beats)
 

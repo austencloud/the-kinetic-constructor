@@ -116,12 +116,7 @@ class SW_BeatFrame(BaseBeatFrame):
                 return beat_view
         return self.start_pos_view
 
-    def get_current_word(self) -> str:
-        word = ""
-        for beat_view in self.beats:
-            if beat_view.is_filled:
-                word += beat_view.beat.letter.value
-        return word
+
 
     def on_beat_adjusted(self) -> None:
         current_sequence_json = (

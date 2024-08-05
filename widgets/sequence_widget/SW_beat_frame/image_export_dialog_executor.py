@@ -19,7 +19,7 @@ class ImageExportDialogExecutor:
         self.image_creator = export_manager.image_creator
         self.image_saver = export_manager.image_saver
 
-    def exec_dialog(self):
+    def exec_dialog(self, sequence: list[dict]) -> None:
         """Execute the image export dialog and handle user options.
 
         This method loads the current sequence, processes the beats, and opens the image export dialog.
@@ -28,9 +28,7 @@ class ImageExportDialogExecutor:
         self.indicator_label = (
             self.export_manager.main_widget.top_builder_widget.sequence_widget.indicator_label
         )
-        sequence = (
-            self.beat_frame.json_manager.loader_saver.load_current_sequence_json()
-        )
+
         if len(sequence) < 3:
             self.indicator_label.show_message("The sequence is empty.")
             return

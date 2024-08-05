@@ -109,7 +109,7 @@ class DictionaryButtonPanel(QWidget):
 
         # Use the export manager associated with the beat frame to show the export dialog
         self.export_manager = self.beat_frame.export_manager
-        self.export_manager.dialog_executor.exec_dialog()
+        self.export_manager.dialog_executor.exec_dialog(metadata["sequence"])
 
     def delete_variation(self):
         QMessageBox.information(self, "Action", "Delete Variation Clicked")

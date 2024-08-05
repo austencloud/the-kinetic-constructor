@@ -20,9 +20,7 @@ class BaseBeatFrame(QFrame):
         self.sequence_changed = False
         self.setObjectName("beat_frame")
         self.setStyleSheet("QFrame#beat_frame { background: transparent; }")
-        # self._init_beats()
-        # self._setup_components()
-        # self._setup_layout()
+
 
     def _init_beats(self):
         self.beats = [BeatView(self, number=i + 1) for i in range(64)]
@@ -30,7 +28,6 @@ class BaseBeatFrame(QFrame):
             beat.hide()
 
     def _setup_components(self):
-        # Placeholder for components shared between derived classes
         pass
 
     def _setup_layout(self):
@@ -41,9 +38,7 @@ class BaseBeatFrame(QFrame):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def populate_beat_frame_from_json(self, current_sequence_json):
-        # Logic to populate the beat frame from JSON data
         pass
-
 
 
     def find_next_available_beat(self) -> int:
@@ -53,5 +48,25 @@ class BaseBeatFrame(QFrame):
         return None
 
     def adjust_layout_to_sequence_length(self):
-        last_filled_index = self.find_next_available_beat() or len(self.beats)
-        self.layout_manager.configure_beat_frame(last_filled_index)
+        pass
+
+    def get_current_word(self) -> str:
+        word = ""
+        for beat_view in self.beats:
+            if beat_view.is_filled:
+                word += beat_view.beat.letter.value
+        return self.simplify_repeated_word(word)
+
+    def simplify_repeated_word(self, word: str) -> str:
+        # Function to check if the word can be constructed by repeating a pattern
+        def can_form_by_repeating(s: str, pattern: str) -> bool:
+            pattern_len = len(pattern)
+            return all(s[i:i + pattern_len] == pattern for i in range(0, len(s), pattern_len))
+
+        n = len(word)
+        # Try to find the smallest repeating unit
+        for i in range(1, n // 2 + 1):
+            pattern = word[:i]
+            if n % i == 0 and can_form_by_repeating(word, pattern):
+                return pattern
+        return word
