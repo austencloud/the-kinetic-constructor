@@ -22,7 +22,7 @@ class DictionaryOptionsWidget(QWidget):
 
         button_data = {
             "sort_by_length_button": {
-                "text": "Word Length",
+                "text": "Sequence Length",
                 "clicked": self.on_sort_by_length,
             },
             "sort_alphabetically_button": {
@@ -57,7 +57,7 @@ class DictionaryOptionsWidget(QWidget):
         self.buttons_layout.addStretch()
 
     def on_sort_by_length(self):
-        self.browser.sorter.sort_and_display_thumbnails("Word Length")
+        self.browser.sorter.sort_and_display_thumbnails("Sequence Length")
         self.browser.scroll_widget.scroll_area.verticalScrollBar().setValue(0)
 
     def on_sort_alphabetically(self):

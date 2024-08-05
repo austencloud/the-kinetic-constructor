@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 from PIL import Image
 from widgets.dictionary_widget.dictionary_browser.section_header import SectionHeader
+from widgets.dictionary_widget.thumbnail_box.metadata_extractor import MetaDataExtractor
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from .sorting_order import sorting_order, lowercase_letters
@@ -17,8 +18,9 @@ if TYPE_CHECKING:
 class DictionarySorter:
     def __init__(self, browser: "DictionaryBrowser") -> None:
         self.browser = browser
+        self.metadata_extractor = browser.main_widget.metadata_extractor
 
-    def sort_and_display_thumbnails(self, sort_order="Word Length"):
+    def sort_and_display_thumbnails(self, sort_order="Sequence Length"):
         self.browser.scroll_widget.clear_layout()
         sections = {}
 
@@ -28,8 +30,8 @@ class DictionarySorter:
         column_index = 0
         num_columns = 3
 
-        for word, thumbnails in base_words:
-            section = self.get_section_from_word(word, sort_order, thumbnails)
+        for word, thumbnails, seq_length in base_words:
+            section = self.get_section_from_word(word, sort_order, seq_length)
 
             if section not in sections:
                 sections[section] = []
@@ -92,7 +94,7 @@ class DictionarySorter:
         )
 
     def _get_sorted_sections(self, sort_order, sections):
-        if sort_order == "Word Length":
+        if sort_order == "Sequence Length":
             sorted_sections = sorted(
                 sections, key=lambda x: int(x) if x.isdigit() else x
             )
@@ -111,13 +113,17 @@ class DictionarySorter:
     def get_sorted_base_words(self, sort_order):
         dictionary_dir = get_images_and_data_path("dictionary")
         base_words = [
-            (d, self.find_thumbnails(os.path.join(dictionary_dir, d)))
+            (d, self.find_thumbnails(os.path.join(dictionary_dir, d)), None)
             for d in os.listdir(dictionary_dir)
             if os.path.isdir(os.path.join(dictionary_dir, d)) and "__pycache__" not in d
         ]
 
-        if sort_order == "Word Length":
-            base_words.sort(key=lambda x: (len(x[0].replace("-", "")), x[0]))
+        for i, (word, thumbnails, _) in enumerate(base_words):
+            sequence_length = self.get_sequence_length_from_thumbnails(thumbnails)
+            base_words[i] = (word, thumbnails, sequence_length)
+
+        if sort_order == "Sequence Length":
+            base_words.sort(key=lambda x: x[2] if x[2] is not None else float('inf'))
         elif sort_order == "Date Added":
             base_words.sort(key=lambda x: self.get_date_added(x[1]), reverse=True)
         else:
@@ -134,12 +140,11 @@ class DictionarySorter:
                     thumbnails.append(os.path.join(root, file))
         return thumbnails
 
-    def get_section_from_word(self, word, sort_order, thumbnails=None):
-        if sort_order == "Word Length":
-            return str(len(word.replace("-", "")))
+    def get_section_from_word(self, word, sort_order, sequence_length=None):
+        if sort_order == "Sequence Length":
+            return str(sequence_length) if sequence_length is not None else "Unknown"
         elif sort_order == "Date Added":
-            date_added = self.get_date_added(thumbnails)
-            return date_added.strftime("%m-%d-%Y") if date_added else "Unknown"
+            return "Unknown"  # The actual date calculation is not needed here
         else:
             section = word[:2] if len(word) > 1 and word[1] == "-" else word[0]
             if not section.isdigit():
@@ -167,3 +172,11 @@ class DictionarySorter:
                 if date_added:
                     dates.append(datetime.fromisoformat(date_added))
         return max(dates, default=None)
+
+    def get_sequence_length_from_thumbnails(self, thumbnails):
+        """Extract the sequence length from the first available thumbnail metadata."""
+        for thumbnail in thumbnails:
+            length = self.metadata_extractor.get_sequence_length(thumbnail)
+            if length:
+                return length
+        return None
