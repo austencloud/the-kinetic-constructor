@@ -64,6 +64,7 @@ class SequenceCardTabImageExporter:
                 pil_image.save(
                     os.path.join(export_path, image_filename), "PNG", pnginfo=info
                 )
+                print(f"Exported: {image_filename}")
 
     def get_all_images(self, path: str) -> list[str]:
         images = []

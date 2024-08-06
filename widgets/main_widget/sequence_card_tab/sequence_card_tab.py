@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QScrollArea,
-    QLabel, 
+    QLabel,
 )
 from PyQt6.QtGui import QPixmap, QPainter
 from PyQt6.QtCore import Qt
@@ -15,7 +15,7 @@ from widgets.main_widget.sequence_card_tab.sequence_card_image_populator import 
 from widgets.main_widget.sequence_card_tab.sequence_card_page import SequenceCardPage
 
 from widgets.main_widget.sequence_card_tab.sequence_card_tab_page_manager import (
-    SequenceCardTabPageManager,
+    SequenceCardTabPageFactory,
 )
 from widgets.sequence_card_image_exporter import SequenceCardTabImageExporter
 from widgets.sequence_card_tab_sidebar import SequenceCardTabSidebar
@@ -33,7 +33,7 @@ class SequenceCardTab(QWidget):
             self.main_widget.main_window.settings_manager.global_settings
         )
         self.sidebar = SequenceCardTabSidebar(self)
-        self.page_manager = SequenceCardTabPageManager(self)
+        self.page_factory = SequenceCardTabPageFactory(self)
         self.image_exporter = SequenceCardTabImageExporter(self)
         self.populator = SequenceCardImagePopulator(self)
         self.init_ui()
@@ -95,7 +95,7 @@ class SequenceCardTab(QWidget):
             (total_width // 2) - (2 * self.margin) - (self.sidebar.width() // 2)
         )
         self.page_height = int(self.page_width * 11 / 8.5)
-        self.pages = self.page_manager.create_pages((len(sorted_images) + 1) // 2)
+        self.pages = self.page_factory.create_pages((len(sorted_images) + 1) // 2)
 
         for image_path in sorted_images:
             pixmap = QPixmap(image_path)
