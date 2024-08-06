@@ -39,25 +39,16 @@ class SequenceCardImagePopulator:
         if self.current_page_index == -1:
             return True
 
-        # Define number of rows for each sequence length
         num_rows_per_length = {
-            4: 6,
+            4: 7,
             8: 4,
             12: 3,
             16: 2,
         }
 
-        num_rows = num_rows_per_length.get(
-            selected_length, 4
-        )  # Default to 4 rows if not specified
-
-        # Calculate the total height occupied by all current rows
-        total_used_height = (self.current_row + 1) * image_height
-
-        # Calculate the maximum allowable height based on the number of rows
+        num_rows = num_rows_per_length.get(selected_length, 4)
+        total_used_height = (self.current_row) * image_height
         max_height = num_rows * image_height
-
-        # Check if adding another row would exceed the allowed height
         return total_used_height + image_height > max_height
 
     def create_new_page(self):

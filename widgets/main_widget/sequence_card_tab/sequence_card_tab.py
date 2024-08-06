@@ -3,7 +3,8 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QScrollArea,
-    QLabel, QGridLayout
+    QLabel,
+    QGridLayout,
 )
 from PyQt6.QtGui import QPixmap, QPainter
 from PyQt6.QtCore import Qt
@@ -12,14 +13,19 @@ from typing import TYPE_CHECKING, List
 from widgets.main_widget.sequence_card_tab.sequence_card_image_populator import (
     SequenceCardImagePopulator,
 )
-from widgets.main_widget.sequence_card_tab.sequence_card_tab_page_factory import SequenceCardTabPageFactory
-from widgets.main_widget.sequence_card_tab.sequence_card_image_exporter import SequenceCardTabImageExporter
-from widgets.main_widget.sequence_card_tab.sequence_card_tab_nav_sidebar import SequenceCardTabNavSidebar
+from widgets.main_widget.sequence_card_tab.sequence_card_tab_page_factory import (
+    SequenceCardTabPageFactory,
+)
+from widgets.main_widget.sequence_card_tab.sequence_card_image_exporter import (
+    SequenceCardTabImageExporter,
+)
+from widgets.main_widget.sequence_card_tab.sequence_card_tab_nav_sidebar import (
+    SequenceCardTabNavSidebar,
+)
 from widgets.path_helpers.path_helpers import get_sequence_card_image_exporter_path
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
-
 
 
 class SequenceCardTab(QWidget):
@@ -78,7 +84,6 @@ class SequenceCardTab(QWidget):
                     images.append(os.path.join(root, file))
         return images
 
-
     def display_images(self, images: List[str]):
         filtered_images = [
             img_path
@@ -95,6 +100,7 @@ class SequenceCardTab(QWidget):
             (total_width // 2) - (2 * self.margin) - (self.nav_sidebar.width() // 2)
         )
         self.page_height = int(self.page_width * 11 / 8.5)
+        self.image_card_margin = self.page_width // 30
 
         self.populator.current_page_index = -1
         self.pages.clear()
@@ -102,7 +108,7 @@ class SequenceCardTab(QWidget):
         for image_path in sorted_images:
             pixmap = QPixmap(image_path)
 
-            max_image_width = self.page_width // 2 - self.page_width // 30
+            max_image_width = self.page_width // 2 - self.image_card_margin
             scale_factor = max_image_width / pixmap.width()
             scaled_height = int(pixmap.height() * scale_factor)
 
@@ -112,7 +118,9 @@ class SequenceCardTab(QWidget):
                 )
                 scaled_height = int(self.page_height // num_rows - self.margin * 2)
                 scale_factor = scaled_height / pixmap.height()
-                max_image_width = int(pixmap.width() * scale_factor)
+                max_image_width = int(
+                    pixmap.width() * scale_factor - self.image_card_margin
+                )
 
             scaled_pixmap = pixmap.scaled(
                 max_image_width,
@@ -124,8 +132,13 @@ class SequenceCardTab(QWidget):
             label = QLabel(self)
             label.setPixmap(scaled_pixmap)
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            
-            self.populator.add_image_to_page(label, self.nav_sidebar.selected_length, scaled_pixmap,  max_images_per_row=2)
+
+            self.populator.add_image_to_page(
+                label,
+                self.nav_sidebar.selected_length,
+                scaled_pixmap,
+                max_images_per_row=2,
+            )
 
     def get_num_rows_based_on_sequence_length(self, sequence_length: int) -> int:
         num_rows_per_length = {
