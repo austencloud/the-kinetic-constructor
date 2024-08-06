@@ -77,6 +77,7 @@ class CurrentWordLineEdit(QLineEdit):
         return QRectF(x, y - text_height, text_width, text_height)
 
     def copy_to_clipboard(self):
+        from widgets.sequence_widget.current_word_label import CurrentWordLabel
         clipboard = QApplication.clipboard()
         clipboard.setText(self.text())
         parent = self.parent()

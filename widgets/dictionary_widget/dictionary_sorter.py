@@ -31,7 +31,8 @@ class DictionarySorter:
         num_columns = 3
 
         for word, thumbnails, seq_length in base_words:
-            section = self.get_section_from_word(word, sort_order, seq_length)
+            # Pass thumbnails correctly
+            section = self.get_section_from_word(word, sort_order, seq_length, thumbnails)
 
             if section not in sections:
                 sections[section] = []
@@ -43,13 +44,12 @@ class DictionarySorter:
 
         for section in sorted_sections:
             if sort_order == "Date Added":
-                year = section.split("-")[2]
-                date = section
-                day = (
-                    date.split("-")[0].lstrip("0")
-                    + "-"
-                    + date.split("-")[1].lstrip("0")
-                )
+                if section == "Unknown":
+                    continue
+
+                year, month, day = section.split("-")
+                date = f"{month}-{day}-{year}"
+                formatted_day = f"{int(day)}-{int(month)}"
 
                 if year != current_section:
                     row_index += 1
@@ -58,7 +58,7 @@ class DictionarySorter:
                     current_section = year
 
                 row_index += 1
-                self._add_header(row_index, num_columns, day)
+                self._add_header(row_index, num_columns, formatted_day)
                 row_index += 1
             else:
                 row_index += 1
@@ -140,11 +140,14 @@ class DictionarySorter:
                     thumbnails.append(os.path.join(root, file))
         return thumbnails
 
-    def get_section_from_word(self, word, sort_order, sequence_length=None):
+    def get_section_from_word(self, word, sort_order, sequence_length=None, thumbnails=None):
         if sort_order == "Sequence Length":
             return str(sequence_length) if sequence_length is not None else "Unknown"
         elif sort_order == "Date Added":
-            return "Unknown"  # The actual date calculation is not needed here
+            if thumbnails:
+                date_added = self.get_date_added(thumbnails)
+                return date_added.strftime("%m-%d-%Y") if date_added else "Unknown"
+            return "Unknown"
         else:
             section = word[:2] if len(word) > 1 and word[1] == "-" else word[0]
             if not section.isdigit():
