@@ -1,7 +1,8 @@
 {
   "Ψ-": {
     "(0, 0)": {
-      "swap_beta_e_radial_blue_dash_s_red_dash_n": true
+      "swap_beta_e_radial_blue_dash_s_red_dash_n": true,
+      "swap_beta_s_radial_blue_dash_w_red_dash_e": true
     }
   }
 }

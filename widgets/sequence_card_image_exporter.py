@@ -15,11 +15,11 @@ from widgets.path_helpers.path_helpers import (
 )
 
 if TYPE_CHECKING:
-    from widgets.main_widget.sequence_card_tab import SequenceCardTab
+    from widgets.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
     from widgets.main_widget.main_widget import MainWidget
 
 
-class SequenceCardImageExporter:
+class SequenceCardTabImageExporter:
     def __init__(self, sequence_card_tab: "SequenceCardTab"):
         self.main_widget = sequence_card_tab.main_widget
         self.temp_beat_frame = TempBeatFrame(sequence_card_tab)
@@ -54,12 +54,16 @@ class SequenceCardImageExporter:
 
                 # Convert QImage to PIL Image and embed metadata
                 pil_image = self.qimage_to_pil(qimage)
-                metadata["date_added"] = datetime.now().isoformat()  # Add or update metadata as needed
+                metadata["date_added"] = (
+                    datetime.now().isoformat()
+                )  # Add or update metadata as needed
                 info = self._create_png_info(metadata)
 
                 # Save the exported image with metadata
                 image_filename = os.path.basename(image_path)
-                pil_image.save(os.path.join(export_path, image_filename), "PNG", pnginfo=info)
+                pil_image.save(
+                    os.path.join(export_path, image_filename), "PNG", pnginfo=info
+                )
 
     def get_all_images(self, path: str) -> list[str]:
         images = []

@@ -10,7 +10,7 @@ from Enums.PropTypes import PropType
 from objects.graphical_object.graphical_object_svg_manager import (
     GraphicalObjectSvgManager,
 )
-from widgets.main_widget.sequence_card_tab import SequenceCardTab
+from widgets.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from styles.get_tab_stylesheet import get_tab_stylesheet
 from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
@@ -105,7 +105,7 @@ class MainWidget(QTabWidget):
         self.recorder_tab_index = 2
         self.sequence_card_tab_index = 3
 
-        self.setCurrentIndex(self.builder_tab_index)
+        self.setCurrentIndex(self.sequence_card_tab_index)
         self.initialized = True
 
     def _setup_special_placements(self) -> None:

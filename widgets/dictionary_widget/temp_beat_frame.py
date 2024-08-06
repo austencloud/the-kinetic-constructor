@@ -21,7 +21,7 @@ from ..sequence_widget.SW_beat_frame.beat import Beat, BeatView
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.main_widget.sequence_card_tab import SequenceCardTab
+    from widgets.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
     from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
 
 
