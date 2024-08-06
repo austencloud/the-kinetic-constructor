@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
-    pass
 
 
 class BaseWordLabel(QLabel):

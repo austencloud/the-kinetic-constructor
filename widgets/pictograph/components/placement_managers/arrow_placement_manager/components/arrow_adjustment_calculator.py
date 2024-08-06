@@ -3,7 +3,6 @@ from PyQt6.QtCore import QPointF
 from Enums.letters import Letter
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING, Optional
-from functools import lru_cache
 
 from .directional_tuple_manager.directional_tuple_manager import DirectionalTupleManager
 

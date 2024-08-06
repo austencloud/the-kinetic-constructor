@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from settings_manager.settings_manager import SettingsManager
     from settings_manager.visibility_settings import VisibilitySettings
 
 

@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QTabBar, QTabWidget
+from PyQt6.QtWidgets import QTabBar
 from PyQt6.QtGui import QCursor
 from PyQt6.QtCore import Qt
 

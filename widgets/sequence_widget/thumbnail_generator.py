@@ -6,7 +6,6 @@ from PIL import Image, PngImagePlugin
 import numpy as np
 from datetime import datetime
 
-from widgets.path_helpers.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager

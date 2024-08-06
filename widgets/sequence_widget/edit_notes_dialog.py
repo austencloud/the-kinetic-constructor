@@ -8,7 +8,6 @@ from PyQt6.QtWidgets import (
     QLineEdit,
     QMessageBox,
     QDialogButtonBox,
-    QListWidgetItem,
 )
 from PyQt6.QtCore import Qt
 

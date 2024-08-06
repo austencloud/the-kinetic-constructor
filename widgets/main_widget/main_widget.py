@@ -7,7 +7,6 @@ from Enums.Enums import Letter
 from Enums.PropTypes import PropType
 
 
-from metadata_updater import MetaDataUpdater
 from objects.graphical_object.graphical_object_svg_manager import (
     GraphicalObjectSvgManager,
 )

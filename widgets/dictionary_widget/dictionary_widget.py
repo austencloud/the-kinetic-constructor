@@ -9,7 +9,6 @@ from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
 from widgets.dictionary_widget.dictionary_deletion_manager import (
     DictionaryDeletionManager,
 )
-from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
 from .dictionary_selection_handler import DictionarySelectionHandler
 from .dictionary_preview_area import DictionaryPreviewArea
 from .dictionary_sequence_populator import DictionarySequencePopulator

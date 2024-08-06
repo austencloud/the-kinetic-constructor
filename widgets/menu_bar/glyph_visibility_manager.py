@@ -5,8 +5,6 @@ from Enums.letters import Letter
 
 if TYPE_CHECKING:
     from settings_manager.visibility_settings import VisibilitySettings
-    from settings_manager.settings_manager import SettingsManager
-    from main import MainWindow
     from widgets.pictograph.pictograph import Pictograph
 
 

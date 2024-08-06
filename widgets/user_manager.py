@@ -6,7 +6,6 @@ from widgets.sequence_widget.edit_user_profiles_dialog import EditUserProfilesDi
 
 if TYPE_CHECKING:
     from settings_manager.user_profile_settings import UserProfileSettings
-    from settings_manager.settings_manager import SettingsManager
 
 
 class UserManager(QObject):

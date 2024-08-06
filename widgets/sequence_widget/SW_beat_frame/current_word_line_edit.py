@@ -1,17 +1,14 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
-    QHBoxLayout,
-    QWidget,
     QApplication,
     QLineEdit,
 )
 from PyQt6.QtCore import Qt, QRectF
-from PyQt6.QtGui import QFont, QFontMetrics, QMouseEvent, QPainter
+from PyQt6.QtGui import QFontMetrics, QMouseEvent, QPainter
 
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.current_word_label import CurrentWordLabel
-    from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 
 class CurrentWordLineEdit(QLineEdit):

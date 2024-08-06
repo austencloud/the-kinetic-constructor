@@ -1,14 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QGridLayout
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QKeyEvent
 
 from widgets.sequence_widget.SW_beat_frame.beat import BeatView
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
-    from widgets.sequence_widget.SW_beat_frame.image_export_manager import (
-        ImageExportManager,
-    )
 
 class BaseBeatFrame(QFrame):
     def __init__(self, main_widget: "MainWidget"):

@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QScrollArea
+from PyQt6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem
 from Enums.Enums import (
     Letter,
     OpenCloseStates,

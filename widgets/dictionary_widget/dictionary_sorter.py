@@ -4,7 +4,6 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 from PIL import Image
 from widgets.dictionary_widget.dictionary_browser.section_header import SectionHeader
-from widgets.dictionary_widget.thumbnail_box.metadata_extractor import MetaDataExtractor
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from .sorting_order import sorting_order, lowercase_letters

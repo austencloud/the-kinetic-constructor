@@ -1,12 +1,9 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGridLayout, QFrame, QApplication
+from PyQt6.QtWidgets import QGridLayout, QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
 
 from widgets.base_beat_frame import BaseBeatFrame
-from widgets.sequence_widget.SW_beat_frame_layout_manager import (
-    SW_BeatFrameLayoutManager,
-)
 from widgets.sequence_widget.invisible_dictionary_beat_frame_layout_manager import (
     InvisibleDictionaryBeatFrameLayoutManager,
 )
@@ -25,7 +22,6 @@ from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
-    from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 
 class InvisibleDictionaryBeatFrame(BaseBeatFrame):

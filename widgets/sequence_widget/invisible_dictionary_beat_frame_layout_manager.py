@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt
 from data.beat_frame_layouts import DEFAULT_BEAT_FRAME_LAYOUTS
 
 if TYPE_CHECKING:

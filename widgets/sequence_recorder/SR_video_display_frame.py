@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (
     QApplication,
     QFrame,
 )
-from PyQt6.QtCore import QTimer, Qt, pyqtSignal
+from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QImage, QPixmap, QFont
 
 from widgets.path_helpers.path_helpers import get_my_videos_path

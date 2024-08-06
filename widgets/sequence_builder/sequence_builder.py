@@ -3,11 +3,9 @@ from PyQt6.QtCore import Qt
 
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
-import pandas as pd
 from data.constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
 from Enums.Enums import LetterType
 
-from widgets.path_helpers.path_helpers import get_images_and_data_path
 from widgets.pictograph.components.add_to_sequence_manager import (
     AddToSequenceManager,
 )

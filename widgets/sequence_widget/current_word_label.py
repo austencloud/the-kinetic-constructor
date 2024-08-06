@@ -2,11 +2,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QHBoxLayout,
     QWidget,
-    QApplication,
-    QLineEdit,
 )
-from PyQt6.QtCore import Qt, QRectF
-from PyQt6.QtGui import QFont, QFontMetrics, QMouseEvent, QPainter
+from PyQt6.QtGui import QFont
 
 from widgets.sequence_widget.SW_beat_frame.current_word_line_edit import CurrentWordLineEdit
 

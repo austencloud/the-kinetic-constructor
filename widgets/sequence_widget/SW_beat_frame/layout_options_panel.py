@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QShowEvent
 from PyQt6.QtWidgets import (
     QVBoxLayout,
     QLabel,
