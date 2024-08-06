@@ -6,12 +6,14 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from widgets.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
 
+DEFAULT_IMAGE_LENGTH = 4
+
 
 class SequenceCardTabNavSidebar(QWidget):
     def __init__(self, sequence_card_tab: "SequenceCardTab"):
         super().__init__(sequence_card_tab)
         self.sequence_card_tab = sequence_card_tab
-        self.selected_length = 8  # Default selected length
+        self.selected_length = DEFAULT_IMAGE_LENGTH 
         self.labels: dict[int, QLabel] = {}
         self._setup_scroll_area()
         self._create_labels()
@@ -38,7 +40,7 @@ class SequenceCardTabNavSidebar(QWidget):
         self.scroll_area.setStyleSheet("background: transparent;")
 
     def _create_labels(self):
-        for length in range(1, 17):
+        for length in range(4, 17):
             label = QLabel(f"{length}")
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             label.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
