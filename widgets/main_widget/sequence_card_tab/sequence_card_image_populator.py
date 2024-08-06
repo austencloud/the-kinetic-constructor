@@ -11,7 +11,7 @@ class SequenceCardImagePopulator:
         self.current_row = 0
         self.current_col = 0
 
-    def add_image_to_page(self, image_label: QLabel, max_images_per_row: int):
+    def add_image_to_page(self, image_label: QLabel, image_path, max_images_per_row: int):
         if self.current_page_index == -1 or self.current_page_index >= len(self.sequence_card_tab.pages):
             self.create_new_page()
         
@@ -29,7 +29,7 @@ class SequenceCardImagePopulator:
                 self.current_row += 1
         else:
             self.create_new_page()
-            self.add_image_to_page(image_label, max_images_per_row)
+            self.add_image_to_page(image_label, image_path, max_images_per_row)
 
     def create_new_page(self):
         self.current_page_index += 1

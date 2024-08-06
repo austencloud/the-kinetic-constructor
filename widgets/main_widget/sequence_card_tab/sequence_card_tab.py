@@ -119,7 +119,8 @@ class SequenceCardTab(QWidget):
             label = QLabel(self)
             label.setPixmap(scaled_pixmap)
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            self.populator.add_image_to_page(label, max_images_per_row=2)
+            
+            self.populator.add_image_to_page(label, image_path, max_images_per_row=2)
 
     def get_sequence_length(self, image_path: str) -> int:
         return self.main_widget.metadata_extractor.get_sequence_length(image_path)
