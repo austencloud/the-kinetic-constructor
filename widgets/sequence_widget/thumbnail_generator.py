@@ -56,7 +56,7 @@ class ThumbnailGenerator:
     def _create_image_filename(
         self, sequence, structural_variation_number, turn_pattern
     ):
-        base_word = self.manager.get_base_word(sequence)
+        base_word = self.manager.sequence_widget.beat_frame.get_current_word()
         return f"{base_word}_ver{structural_variation_number}_({turn_pattern}).png"
 
     def _save_image(

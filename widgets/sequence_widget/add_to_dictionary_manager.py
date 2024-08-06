@@ -34,7 +34,7 @@ class AddToDictionaryManager:
         self.process_sequence(current_sequence)
 
     def process_sequence(self, current_sequence):
-        base_word = self.get_base_word(current_sequence)
+        base_word = self.sequence_widget.beat_frame.get_current_word()
         base_path = os.path.join(self.dictionary_dir, base_word)
 
         if self.structural_checker.check_for_structural_variation(

@@ -32,7 +32,9 @@ class DictionarySorter:
 
         for word, thumbnails, seq_length in base_words:
             # Pass thumbnails correctly
-            section = self.get_section_from_word(word, sort_order, seq_length, thumbnails)
+            section = self.get_section_from_word(
+                word, sort_order, seq_length, thumbnails
+            )
 
             if section not in sections:
                 sections[section] = []
@@ -47,8 +49,7 @@ class DictionarySorter:
                 if section == "Unknown":
                     continue
 
-                year, month, day = section.split("-")
-                date = f"{month}-{day}-{year}"
+                day, month, year = section.split("-")
                 formatted_day = f"{int(day)}-{int(month)}"
 
                 if year != current_section:
@@ -123,7 +124,7 @@ class DictionarySorter:
             base_words[i] = (word, thumbnails, sequence_length)
 
         if sort_order == "Sequence Length":
-            base_words.sort(key=lambda x: x[2] if x[2] is not None else float('inf'))
+            base_words.sort(key=lambda x: x[2] if x[2] is not None else float("inf"))
         elif sort_order == "Date Added":
             base_words.sort(key=lambda x: self.get_date_added(x[1]), reverse=True)
         else:
@@ -140,7 +141,9 @@ class DictionarySorter:
                     thumbnails.append(os.path.join(root, file))
         return thumbnails
 
-    def get_section_from_word(self, word, sort_order, sequence_length=None, thumbnails=None):
+    def get_section_from_word(
+        self, word, sort_order, sequence_length=None, thumbnails=None
+    ):
         if sort_order == "Sequence Length":
             return str(sequence_length) if sequence_length is not None else "Unknown"
         elif sort_order == "Date Added":
