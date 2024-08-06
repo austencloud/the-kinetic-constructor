@@ -1,5 +1,5 @@
-from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
@@ -7,15 +7,15 @@ if TYPE_CHECKING:
 class SequenceCardImagePopulator:
     def __init__(self, sequence_card_tab: "SequenceCardTab"):
         self.sequence_card_tab = sequence_card_tab
-        self.current_page_index = 0
+        self.current_page_index = -1
         self.current_row = 0
         self.current_col = 0
 
     def add_image_to_page(self, image_label: QLabel, max_images_per_row: int):
-        pages = self.sequence_card_tab.pages
-        if self.current_page_index >= len(pages):
-            return
-        page_layout = pages[self.current_page_index]
+        if self.current_page_index == -1 or self.current_page_index >= len(self.sequence_card_tab.pages):
+            self.create_new_page()
+        
+        page_layout = self.sequence_card_tab.pages[self.current_page_index]
 
         image_height = image_label.pixmap().height()
         row_height = image_height + self.sequence_card_tab.margin
@@ -28,10 +28,12 @@ class SequenceCardImagePopulator:
                 self.current_col = 0
                 self.current_row += 1
         else:
-            self.current_page_index += 1
-            self.current_row = 0
-            self.current_col = 0
-            if self.current_page_index < len(pages):
-                page_layout = pages[self.current_page_index]
-                page_layout.addWidget(image_label, self.current_row, self.current_col)
-                self.current_col += 1
+            self.create_new_page()
+            self.add_image_to_page(image_label, max_images_per_row)
+
+    def create_new_page(self):
+        self.current_page_index += 1
+        new_page_layout = self.sequence_card_tab.page_factory.create_page()
+        self.sequence_card_tab.pages.append(new_page_layout)
+        self.current_row = 0
+        self.current_col = 0

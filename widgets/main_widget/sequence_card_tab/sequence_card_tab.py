@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QScrollArea,
-    QLabel,
+    QLabel, QGridLayout
 )
 from PyQt6.QtGui import QPixmap, QPainter
 from PyQt6.QtCore import Qt
@@ -32,6 +32,7 @@ class SequenceCardTab(QWidget):
         self.image_exporter = SequenceCardTabImageExporter(self)
         self.populator = SequenceCardImagePopulator(self)
         self.init_ui()
+        self.pages: List[QGridLayout] = []
 
     def paintEvent(self, event) -> None:
         self.background_manager = self.global_settings.setup_background_manager(self)
@@ -75,6 +76,7 @@ class SequenceCardTab(QWidget):
                     images.append(os.path.join(root, file))
         return images
 
+
     def display_images(self, images: List[str]):
         filtered_images = [
             img_path
@@ -92,21 +94,16 @@ class SequenceCardTab(QWidget):
         )
         self.page_height = int(self.page_width * 11 / 8.5)
 
-        # Calculate the number of required pages based on images
-        images_per_page = 4  # 2 rows and 2 columns per page
-        num_required_pages = (len(sorted_images) + images_per_page - 1) // images_per_page
-
-        self.pages = self.page_factory.create_pages(num_required_pages)
+        self.populator.current_page_index = -1
+        self.pages.clear()
 
         for image_path in sorted_images:
             pixmap = QPixmap(image_path)
 
-            # Calculate the scaling factor
             max_image_width = self.page_width // 2 - self.page_width // 30
             scale_factor = max_image_width / pixmap.width()
             scaled_height = int(pixmap.height() * scale_factor)
 
-            # Ensure the image is not too tall for the page layout
             if scaled_height + self.margin * 2 > self.page_height // 3:
                 scaled_height = int(self.page_height // 3 - self.margin * 2)
                 scale_factor = scaled_height / pixmap.height()
@@ -122,7 +119,6 @@ class SequenceCardTab(QWidget):
             label = QLabel(self)
             label.setPixmap(scaled_pixmap)
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            # Populate the page with the image
             self.populator.add_image_to_page(label, max_images_per_row=2)
 
     def get_sequence_length(self, image_path: str) -> int:
