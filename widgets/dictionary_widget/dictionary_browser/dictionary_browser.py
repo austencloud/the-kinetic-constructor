@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
-from widgets.dictionary_widget.dictionary_browser.navigation_sidebar import (
-    NavigationSidebar,
+from widgets.dictionary_widget.dictionary_browser.dictionary_nav_sidebar import (
+    DictionaryNavSidebar,
 )
 from widgets.dictionary_widget.dictionary_sorter import DictionarySorter
 from .browser_scroll_widget import DictionaryBrowserScrollWidget
@@ -25,7 +25,7 @@ class DictionaryBrowser(QWidget):
         self._setup_layout()
 
     def _setup_components(self):
-        self.sidebar = NavigationSidebar(self)
+        self.sidebar = DictionaryNavSidebar(self)
         self.scroll_widget = DictionaryBrowserScrollWidget(self)
         self.options_widget = DictionaryOptionsWidget(self)
         self.sorter = DictionarySorter(self)
@@ -38,7 +38,7 @@ class DictionaryBrowser(QWidget):
         self.layout.addWidget(self.options_widget)
         self.scroll_layout.addWidget(self.sidebar, 1)
         self.scroll_layout.addWidget(self.scroll_widget, 9)
-        
+
         self.layout.addLayout(self.scroll_layout)
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)

@@ -12,18 +12,13 @@ from typing import TYPE_CHECKING, List
 from widgets.main_widget.sequence_card_tab.sequence_card_image_populator import (
     SequenceCardImagePopulator,
 )
-from widgets.main_widget.sequence_card_tab.sequence_card_page import SequenceCardPage
-
-from widgets.main_widget.sequence_card_tab.sequence_card_tab_page_manager import (
-    SequenceCardTabPageFactory,
-)
-from widgets.sequence_card_image_exporter import SequenceCardTabImageExporter
-from widgets.sequence_card_tab_sidebar import SequenceCardTabSidebar
+from widgets.main_widget.sequence_card_tab.sequence_card_tab_page_factory import SequenceCardTabPageFactory
+from widgets.main_widget.sequence_card_tab.sequence_card_image_exporter import SequenceCardTabImageExporter
+from widgets.main_widget.sequence_card_tab.sequence_card_tab_nav_sidebar import SequenceCardTabNavSidebar
 from widgets.path_helpers.path_helpers import get_sequence_card_image_exporter_path
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
-
 
 class SequenceCardTab(QWidget):
     def __init__(self, main_widget: "MainWidget"):
@@ -32,7 +27,7 @@ class SequenceCardTab(QWidget):
         self.global_settings = (
             self.main_widget.main_window.settings_manager.global_settings
         )
-        self.sidebar = SequenceCardTabSidebar(self)
+        self.sidebar = SequenceCardTabNavSidebar(self)
         self.page_factory = SequenceCardTabPageFactory(self)
         self.image_exporter = SequenceCardTabImageExporter(self)
         self.populator = SequenceCardImagePopulator(self)
@@ -51,6 +46,7 @@ class SequenceCardTab(QWidget):
         self.scroll_area.setWidgetResizable(True)
         self.scroll_content = QWidget()
         self.scroll_layout = QVBoxLayout(self.scroll_content)
+        self.scroll_area.setStyleSheet("background-color: transparent;")
         self.scroll_content.setStyleSheet("background-color: transparent;")
         self.scroll_area.setWidget(self.scroll_content)
 
@@ -95,7 +91,12 @@ class SequenceCardTab(QWidget):
             (total_width // 2) - (2 * self.margin) - (self.sidebar.width() // 2)
         )
         self.page_height = int(self.page_width * 11 / 8.5)
-        self.pages = self.page_factory.create_pages((len(sorted_images) + 1) // 2)
+
+        # Calculate the number of required pages based on images
+        images_per_page = 4  # 2 rows and 2 columns per page
+        num_required_pages = (len(sorted_images) + images_per_page - 1) // images_per_page
+
+        self.pages = self.page_factory.create_pages(num_required_pages)
 
         for image_path in sorted_images:
             pixmap = QPixmap(image_path)
@@ -129,11 +130,27 @@ class SequenceCardTab(QWidget):
 
     def refresh_sequence_cards(self):
         """Refresh the displayed sequence cards based on selected options."""
-        # Clear current pages
+        # Properly clear current pages
         for i in reversed(range(self.scroll_layout.count())):
-            widget = self.scroll_layout.itemAt(i).widget()
+            layout_item = self.scroll_layout.itemAt(i)
+            widget = layout_item.widget()
             if widget is not None:
+                # It's a widget
                 widget.deleteLater()
+            else:
+                # It's a layout or a spacer
+                self.scroll_layout.removeItem(layout_item)
+                # If it's a layout, delete its items
+                sub_layout = layout_item.layout()
+                if sub_layout is not None:
+                    while sub_layout.count():
+                        sub_item = sub_layout.takeAt(0)
+                        sub_widget = sub_item.widget()
+                        if sub_widget is not None:
+                            sub_widget.deleteLater()
+
+        # Clear the list of pages
+        self.pages.clear()
 
         # Reload images based on selected length
         self.load_images()

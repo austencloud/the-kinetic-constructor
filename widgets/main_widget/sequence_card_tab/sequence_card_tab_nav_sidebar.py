@@ -7,11 +7,11 @@ if TYPE_CHECKING:
     from widgets.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
 
 
-class SequenceCardTabSidebar(QWidget):
+class SequenceCardTabNavSidebar(QWidget):
     def __init__(self, sequence_card_tab: "SequenceCardTab"):
         super().__init__(sequence_card_tab)
         self.sequence_card_tab = sequence_card_tab
-        self.selected_length = 4  # Default selected length
+        self.selected_length = 8  # Default selected length
         self.labels: dict[int, QLabel] = {}
         self._setup_scroll_area()
         self._create_labels()
@@ -38,7 +38,7 @@ class SequenceCardTabSidebar(QWidget):
         self.scroll_area.setStyleSheet("background: transparent;")
 
     def _create_labels(self):
-        for length in range(1, 9):
+        for length in range(1, 17):
             label = QLabel(f"{length}")
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             label.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -102,6 +102,9 @@ class SequenceCardTabSidebar(QWidget):
                     font-size: {font_size}px;
                     padding: 5px;
                     font-weight: bold;
+                }}
+                QLabel:hover {{
+                    background-color: #f0f0f0;
                 }}
                 """
             )

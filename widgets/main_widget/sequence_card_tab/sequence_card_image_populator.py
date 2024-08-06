@@ -4,7 +4,6 @@ from PyQt6.QtWidgets import QLabel
 if TYPE_CHECKING:
     from widgets.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
 
-
 class SequenceCardImagePopulator:
     def __init__(self, sequence_card_tab: "SequenceCardTab"):
         self.sequence_card_tab = sequence_card_tab

@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     )
 
 
-class NavigationSidebar(QWidget):
+class DictionaryNavSidebar(QWidget):
     def __init__(self, browser: "DictionaryBrowser"):
         super().__init__()
         self.browser = browser
