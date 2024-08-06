@@ -11,7 +11,9 @@ from widgets.sequence_widget.SW_beat_frame.image_export_dialog_executor import (
 from widgets.sequence_widget.SW_beat_frame.image_saver import ImageSaver
 
 if TYPE_CHECKING:
-    from widgets.dictionary_widget.invisible_dictionary_beat_frame import InvisibleDictionaryBeatFrame
+    from widgets.dictionary_widget.temp_beat_frame import (
+        TempBeatFrame,
+    )
     from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
 
 
@@ -22,12 +24,16 @@ class ImageExportManager:
     last_save_directory = None
     include_start_pos: bool
 
-    def __init__(self, beat_frame: Union["SW_BeatFrame", "InvisibleDictionaryBeatFrame"], beat_frame_class: type) -> None:
+    def __init__(
+        self,
+        beat_frame: Union["SW_BeatFrame", "TempBeatFrame"],
+        beat_frame_class: type,
+    ) -> None:
         self.beat_frame = beat_frame
         self.main_widget = beat_frame.main_widget
-        if beat_frame_class.__name__ == 'SW_BeatFrame':
+        if beat_frame_class.__name__ == "SW_BeatFrame":
             self.sequence_widget = beat_frame.sequence_widget
-        elif beat_frame_class.__name__ == 'InvisibleDictionaryBeatFrame':
+        elif beat_frame_class.__name__ == "InvisibleDictionaryBeatFrame":
             self.dictionary_widget = beat_frame.dictionary_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
         self.include_start_pos = (

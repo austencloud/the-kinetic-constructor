@@ -20,7 +20,7 @@ class BeatDrawer:
         include_start_pos: bool,
         additional_height_top: int,
     ) -> None:
-        beat_size = int(self.beat_frame.start_pos_view.beat.width())
+        beat_size = int(self.beat_frame.start_pos_view.beat.width() * self.image_creator.beat_scale)
         painter = QPainter(image)
         beat_number = 0
 

@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QApplication, QMessageBox
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QIcon
-from widgets.dictionary_widget.invisible_dictionary_beat_frame import (
-    InvisibleDictionaryBeatFrame,
+from widgets.dictionary_widget.temp_beat_frame import (
+    TempBeatFrame,
 )
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 
@@ -104,7 +104,7 @@ class DictionaryButtonPanel(QWidget):
             return
 
         # Get the invisible beat frame and populate it with metadata
-        self.beat_frame = InvisibleDictionaryBeatFrame(self.dictionary_widget)
+        self.beat_frame = TempBeatFrame(self.dictionary_widget)
         self.beat_frame.populate_beat_frame_from_json(metadata["sequence"])
 
         # Use the export manager associated with the beat frame to show the export dialog

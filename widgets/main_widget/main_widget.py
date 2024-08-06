@@ -10,6 +10,7 @@ from Enums.PropTypes import PropType
 from objects.graphical_object.graphical_object_svg_manager import (
     GraphicalObjectSvgManager,
 )
+from widgets.main_widget.sequence_card_tab import SequenceCardTab
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from styles.get_tab_stylesheet import get_tab_stylesheet
 from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
@@ -51,7 +52,6 @@ class MainWidget(QTabWidget):
         self._setup_components()
         self.setStyleSheet(get_tab_stylesheet())
         self.webcam_initialized = False  # Add an initialization flag
-        # self.initialize_webcam_async()  # Start webcam initialization
         self.initialized = True
 
     def initialize_webcam_async(self):
@@ -93,20 +93,20 @@ class MainWidget(QTabWidget):
         self.top_builder_widget = TopBuilderWidget(self)
         self.dictionary_widget = DictionaryWidget(self)
         self.sequence_recorder = SequenceRecorder(self)
+        self.sequence_card_tab = SequenceCardTab(self)
 
         self.addTab(self.top_builder_widget, "Builder")
         self.addTab(self.dictionary_widget, "Dictionary")
         self.addTab(self.sequence_recorder, "Recorder")
+        self.addTab(self.sequence_card_tab, "Sequence Cards")
 
         self.builder_tab_index = 0
         self.dictionary_tab_index = 1
         self.recorder_tab_index = 2
+        self.sequence_card_tab_index = 3
 
         self.setCurrentIndex(self.builder_tab_index)
-
         self.initialized = True
-
-        # Apply the initial background
 
     def _setup_special_placements(self) -> None:
         self.special_placements: dict[

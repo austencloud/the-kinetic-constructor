@@ -24,7 +24,7 @@ class ImageCreator:
         self.layout_manager = export_manager.layout_handler
         self.beat_size = self.beat_frame.start_pos_view.beat.width()
         self.beat_factory = export_manager.beat_factory
-
+        self.beat_scale = 0.4
         self._setup_drawers()
 
     def _setup_drawers(self):
@@ -44,7 +44,9 @@ class ImageCreator:
         num_filled_beats = len(filled_beats)
         if options:
             additional_height_top, additional_height_bottom = (
-                HeightDeterminer.determine_additional_heights(options, num_filled_beats)
+                HeightDeterminer.determine_additional_heights(
+                    options, num_filled_beats, self.beat_scale
+                )
             )
         else:
             additional_height_top, additional_height_bottom = 0, 0
@@ -71,8 +73,10 @@ class ImageCreator:
 
     def _create_image(self, column_count, row_count, additional_height=0) -> QImage:
         """Create a new QImage with the given dimensions."""
-        image_width = int(column_count * self.beat_size)
-        image_height = int(row_count * self.beat_size + additional_height)
+        image_width = int((column_count * self.beat_size * self.beat_scale))
+        image_height = int(
+            (row_count * self.beat_size * self.beat_scale) + additional_height
+        )
         image = QImage(image_width, image_height, QImage.Format.Format_ARGB32)
         image.fill(Qt.GlobalColor.white)
         return image

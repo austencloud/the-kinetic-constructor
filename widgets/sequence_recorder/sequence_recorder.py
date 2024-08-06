@@ -23,7 +23,7 @@ class SequenceRecorder(QWidget):
         self.color_shift = 0
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.animate_background)
-        self.timer.start(100)
+        # self.timer.start(100)
 
     def animate_background(self) -> None:
         self.gradient_shift += 0.05

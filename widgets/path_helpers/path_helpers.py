@@ -130,3 +130,15 @@ def get_my_photos_path(filename) -> str:
     photos_dir = get_win32_photos_path()
     full_photos_dir = os.path.join(photos_dir, filename).replace("\\", "/")
     return full_photos_dir
+
+
+def get_sequence_card_image_exporter_path() -> str:
+    """
+    Returns the path to the directory where all images with headers and footers are exported.
+    """
+    if getattr(sys, "frozen", False):
+        export_path = get_my_photos_path("images\\sequence_card_images")
+    else:
+        export_path = get_dev_path("images\\sequence_card_images")
+    os.makedirs(export_path, exist_ok=True)
+    return export_path

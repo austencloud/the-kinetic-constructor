@@ -22,22 +22,22 @@ class UserInfoDrawer:
     ) -> None:
         base_margin = 50
         font_bold_italic, margin = FontMarginHelper.adjust_font_and_margin(
-            self.base_font_bold_italic, num_filled_beats, base_margin
+            self.base_font_bold_italic, num_filled_beats, base_margin, self.image_creator.beat_scale
         )
         font_italic, _ = FontMarginHelper.adjust_font_and_margin(
-            self.base_font_italic, num_filled_beats, base_margin
+            self.base_font_italic, num_filled_beats, base_margin, self.image_creator.beat_scale
         )
 
         painter = QPainter(image)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         painter.setRenderHint(QPainter.RenderHint.TextAntialiasing)
 
-        user_name = options.get("user_name", "TacoCat")
+        user_name = options.get("user_name", "AC")
         export_date = self._format_export_date(
             options.get("export_date", datetime.now().strftime("%m-%d-%Y"))
         )
         add_info = options.get("add_info", False)
-        notes = options.get("notes", "No notes!")
+        notes = options.get("notes", "Created using The Kinetic Alphabet")
 
         # Calculate text widths
         export_date_width = self._get_text_width(font_italic, export_date)

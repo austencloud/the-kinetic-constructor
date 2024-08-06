@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QGridLayout, QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
@@ -21,15 +21,16 @@ from ..sequence_widget.SW_beat_frame.beat import Beat, BeatView
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
+    from widgets.main_widget.sequence_card_tab import SequenceCardTab
     from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
 
 
-class InvisibleDictionaryBeatFrame(BaseBeatFrame):
-    def __init__(self, dictionary_widget: "DictionaryWidget") -> None:
-        super().__init__(dictionary_widget.main_widget)
-        self.main_widget = dictionary_widget.main_widget
+class TempBeatFrame(BaseBeatFrame):
+    def __init__(self, parent_tab: Union["DictionaryWidget", "SequenceCardTab"]):
+        super().__init__(parent_tab.main_widget)
+        self.main_widget = parent_tab.main_widget
         self.json_manager = self.main_widget.json_manager
-        self.dictionary_widget = dictionary_widget
+        self.dictionary_widget = parent_tab
         self.top_builder_widget = self.main_widget.top_builder_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
 
@@ -52,7 +53,7 @@ class InvisibleDictionaryBeatFrame(BaseBeatFrame):
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(self)
         self.beat_deletion_manager = BeatDeletionManager(self)
-        self.export_manager = ImageExportManager(self, InvisibleDictionaryBeatFrame)
+        self.export_manager = ImageExportManager(self, TempBeatFrame)
         self.print_sequence_manager = BeatFramePrintManager(self)
 
     def _setup_layout(self) -> None:

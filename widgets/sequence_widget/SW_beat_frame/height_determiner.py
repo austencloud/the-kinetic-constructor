@@ -1,6 +1,8 @@
 class HeightDeterminer:
     @staticmethod
-    def determine_additional_heights(options: dict, num_filled_beats: int):
+    def determine_additional_heights(
+        options: dict, num_filled_beats: int, beat_scale: float
+    ) -> tuple[int, int]:
         if num_filled_beats == 1:
             additional_height_top = 150 if options.get("add_word", False) else 0
             additional_height_bottom = 55 if options.get("add_info", False) else 0
@@ -10,4 +12,6 @@ class HeightDeterminer:
         else:
             additional_height_top = 300 if options.get("add_word", False) else 0
             additional_height_bottom = 150 if options.get("add_info", False) else 0
-        return additional_height_top, additional_height_bottom
+        return int(additional_height_top * beat_scale), int(
+            additional_height_bottom * beat_scale
+        )

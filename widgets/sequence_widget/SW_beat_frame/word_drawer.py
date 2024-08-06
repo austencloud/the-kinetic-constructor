@@ -11,12 +11,12 @@ class WordDrawer:
     def __init__(self, image_creator: "ImageCreator"):
         self.image_creator = image_creator
         self.base_font = QFont("Georgia", 175, QFont.Weight.DemiBold, False)
-        self.kerning = 20  # Adjust this value as needed
+        self.kerning = int(20 * image_creator.beat_scale)  # Adjust this value as needed
 
     def draw_word(self, image: QImage, word: str, num_filled_beats: int) -> None:
-        base_margin = 50
+        base_margin = 50 * self.image_creator.beat_scale
         font, margin = FontMarginHelper.adjust_font_and_margin(
-            self.base_font, num_filled_beats, base_margin
+            self.base_font, num_filled_beats, base_margin, self.image_creator.beat_scale
         )
 
         painter = QPainter(image)
@@ -57,7 +57,7 @@ class WordDrawer:
 
         if position == "top":
             x = (image.width() - text_width - self.kerning * (len(text) - 1)) // 2
-            y = text_height + margin
+            y = int(text_height + margin)
 
         for letter in text:
             painter.drawText(x, y, letter)
