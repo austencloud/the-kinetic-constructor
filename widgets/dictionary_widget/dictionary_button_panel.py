@@ -53,7 +53,8 @@ class DictionaryButtonPanel(QWidget):
                 "icon": "delete.svg",
                 "tooltip": "Delete Variation",
                 "action": lambda: self.deletion_handler.delete_variation(
-                    self.preview_area.get_thumbnail_at_current_index()
+                    self.preview_area.current_thumbnail_box,
+                    self.preview_area.current_thumbnail_box.current_index,
                 ),
             },
             "delete_word": {

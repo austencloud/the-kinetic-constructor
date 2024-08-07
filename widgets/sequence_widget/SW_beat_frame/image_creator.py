@@ -24,7 +24,7 @@ class ImageCreator:
         self.layout_manager = export_manager.layout_handler
         self.beat_size = self.beat_frame.start_pos_view.beat.width()
         self.beat_factory = export_manager.beat_factory
-        self.beat_scale = 0.4
+        self.beat_scale = 0.6
         self._setup_drawers()
 
     def _setup_drawers(self):

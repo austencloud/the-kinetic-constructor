@@ -21,13 +21,12 @@ class DictionaryDeletionManager:
         if len(thumbnail_box.thumbnails) == 0:
             self.delete_word(thumbnail_box.base_word)
             self.dictionary_widget.preview_area.update_thumbnails()
-
             self.dictionary_widget.browser.scroll_widget.thumbnail_boxes_dict.pop(
                 thumbnail_box.base_word
             )
         else:
             thumbnail_box.current_index = 0
-            self.dictionary_widget.browser.scroll_widget.sort_and_display_thumbnails()
+            self.dictionary_widget.browser.sorter.sort_and_display_thumbnails()
             self.dictionary_widget.preview_area.update_thumbnails(
                 thumbnail_box.thumbnails
             )
@@ -36,38 +35,13 @@ class DictionaryDeletionManager:
 
     def delete_word(self, base_word):
         base_path = os.path.join(get_images_and_data_path("dictionary"), base_word)
+        for root, dirs, files in os.walk(base_path):
+            for name in files:
+                file_path = os.path.join(root, name)
+                os.chmod(file_path, 0o777)
+            for name in dirs:
+                dir_path = os.path.join(root, name)
+                os.chmod(dir_path, 0o777)
+        os.chmod(base_path, 0o777)
         shutil.rmtree(base_path)
-        self.dictionary_widget.browser.scroll_widget.sort_and_display_thumbnails()
-        self.dictionary_widget.preview_area.update_thumbnails()
-
-    def confirm_delete_word(self):
-        preview_area = self.dictionary_widget.preview_area
-        reply = QMessageBox.question(
-            preview_area,
-            "Confirm Deletion",
-            f"Are you sure you want to delete all variations of {preview_area.base_word}?",
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-            QMessageBox.StandardButton.No,
-        )
-        if reply == QMessageBox.StandardButton.Yes:
-            self.delete_word(preview_area.base_word)
-
-    def confirm_delete_variation(self):
-        preview_area = self.dictionary_widget.preview_area
-        if not preview_area.current_thumbnail_box:
-            QMessageBox.warning(
-                preview_area, "No Selection", "Please select a variation first."
-            )
-            return
-        reply = QMessageBox.question(
-            preview_area,
-            "Confirm Deletion",
-            f"Are you sure you want to delete this variation of {preview_area.base_word}?",
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-            QMessageBox.StandardButton.No,
-        )
-        if reply == QMessageBox.StandardButton.Yes:
-            self.delete_variation(
-                preview_area.current_thumbnail_box,
-                preview_area.current_index,
-            )
+        self.dictionary_widget.browser.sorter.sort_and_display_thumbnails()
