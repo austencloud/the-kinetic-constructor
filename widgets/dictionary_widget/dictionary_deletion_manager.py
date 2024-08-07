@@ -28,32 +28,19 @@ class DictionaryDeletionManager:
         os.remove(file_path)
         if len(thumbnail_box.thumbnails) == 0:
             self.delete_word(thumbnail_box.base_word)
+            self.delete_empty_folders(get_images_and_data_path("dictionary"))
             self.dictionary_widget.preview_area.update_thumbnails()
             self.dictionary_widget.browser.scroll_widget.thumbnail_boxes_dict.pop(
                 thumbnail_box.base_word
             )
         else:
+            self.delete_empty_folders(get_images_and_data_path("dictionary"))
             thumbnail_box.current_index = 0
             self.dictionary_widget.browser.sorter.sort_and_display_thumbnails()
             self.dictionary_widget.preview_area.update_thumbnails(
                 thumbnail_box.thumbnails
             )
             thumbnail_box.update_thumbnails(thumbnail_box.thumbnails)
-
-        # Check and delete the parent folder if empty
-        parent_folder = os.path.dirname(file_path)
-        if self.is_folder_empty(parent_folder):
-
-            # set it to writable
-            os.chmod(parent_folder, 0o777)
-            print(f"Deleting empty folder: {parent_folder}")
-            shutil.rmtree(parent_folder)
-            # also delete the folder above if it's empty
-            parent_folder = os.path.dirname(parent_folder)
-            if self.is_folder_empty(parent_folder):
-                os.chmod(parent_folder, 0o777)
-                print(f"Deleting empty folder: {parent_folder}")
-                shutil.rmtree(parent_folder)
         QApplication.restoreOverrideCursor()
 
     def delete_word(self, base_word):
@@ -67,4 +54,18 @@ class DictionaryDeletionManager:
                 os.chmod(dir_path, 0o777)
         os.chmod(base_path, 0o777)
         shutil.rmtree(base_path)
+        self.delete_empty_folders(get_images_and_data_path("dictionary"))
         self.dictionary_widget.browser.sorter.sort_and_display_thumbnails()
+
+    def delete_empty_folders(self, root_folder):
+        def is_folder_empty(folder_path):
+            return not any(os.scandir(folder_path))
+
+        for root, dirs, files in os.walk(root_folder, topdown=False):
+            for dir_name in dirs:
+                dir_path = os.path.join(root, dir_name)
+                if is_folder_empty(dir_path):
+                    # set it to writable
+                    os.chmod(dir_path, 0o777)
+                    print(f"Deleting empty folder: {dir_path}")
+                    shutil.rmtree(dir_path)
