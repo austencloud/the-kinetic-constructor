@@ -1,10 +1,16 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QApplication, QMessageBox
+from PyQt6.QtWidgets import (
+    QWidget,
+    QHBoxLayout,
+    QPushButton,
+    QApplication,
+    QMessageBox,
+)
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QIcon
-from widgets.dictionary_widget.temp_beat_frame import (
-    TempBeatFrame,
-)
+import shutil  # Import shutil for directory removal
+import os  # Import os for file operations
+from widgets.dictionary_widget.temp_beat_frame import TempBeatFrame
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
@@ -112,7 +118,56 @@ class DictionaryButtonPanel(QWidget):
         self.export_manager.dialog_executor.exec_dialog(metadata["sequence"])
 
     def delete_variation(self):
-        QMessageBox.information(self, "Action", "Delete Variation Clicked")
+        current_thumbnail = self.preview_area.get_thumbnail_at_current_index()
+        if not current_thumbnail:
+            QMessageBox.warning(
+                self, "No Selection", "Please select a variation first."
+            )
+            return
+
+        reply = QMessageBox.question(
+            self,
+            "Delete Variation",
+            "Are you sure you want to delete this variation?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+        )
+
+        if reply == QMessageBox.StandardButton.Yes:
+            try:
+                os.remove(current_thumbnail)  # Remove the image file
+                self.preview_area.thumbnails.remove(current_thumbnail)
+                self.preview_area.update_thumbnails(self.preview_area.thumbnails)
+                QMessageBox.information(
+                    self, "Deleted", "Variation deleted successfully."
+                )
+                #refresh the browser
+                self.preview_area.dictionary_widget.browser.sorter.sort_and_display_thumbnails()
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"Could not delete variation: {e}")
 
     def delete_word(self):
-        QMessageBox.information(self, "Action", "Delete Word Clicked")
+        base_word = self.preview_area.base_word
+        if not base_word:
+            QMessageBox.warning(self, "No Selection", "Please select a word first.")
+            return
+
+        reply = QMessageBox.question(
+            self,
+            "Delete Word",
+            f"Are you sure you want to delete all variations of '{base_word}'?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+        )
+
+        if reply == QMessageBox.StandardButton.Yes:
+            base_path = os.path.join(
+                self.dictionary_widget.main_widget.top_builder_widget.sequence_widget.add_to_dictionary_manager.dictionary_dir,
+                base_word,
+            )
+            try:
+                shutil.rmtree(base_path)  # Remove the entire word directory
+                self.preview_area.update_thumbnails([])
+                QMessageBox.information(
+                    self, "Deleted", f"Word '{base_word}' deleted successfully."
+                )
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"Could not delete word: {e}")
