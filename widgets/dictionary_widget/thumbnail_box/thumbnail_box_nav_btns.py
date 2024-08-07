@@ -34,11 +34,15 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
     def handle_button_click(self):
         sender = self.sender()
         if sender.text() == "<":
-            self.current_index = (self.current_index - 1) % len(self.thumbnails)
+            self.thumbnail_box.current_index = (
+                self.thumbnail_box.current_index - 1
+            ) % len(self.thumbnails)
         elif sender.text() == ">":
-            self.current_index = (self.current_index + 1) % len(self.thumbnails)
+            self.thumbnail_box.current_index = (
+                self.thumbnail_box.current_index + 1
+            ) % len(self.thumbnails)
 
-        self.update_thumbnail(self.current_index)
+        self.update_thumbnail(self.thumbnail_box.current_index)
 
         if (
             self.thumbnail_box.image_label
@@ -46,7 +50,7 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
         ):
             preview_area = self.thumbnail_box.browser.dictionary_widget.preview_area
             preview_area.variation_number_label.setText(
-                f"Variation {self.current_index + 1}"
+                f"Variation {self.thumbnail_box.current_index + 1}"
             )
             preview_area.current_index = self.current_index
             QApplication.processEvents()

@@ -17,11 +17,6 @@ class DictionaryDeletionManager:
         self.variation_number_fixer = VariationNumberFixer()
 
     def is_folder_empty(self, folder_path):
-        """
-        Check if a folder is empty
-        :param folder_path: Path to the folder
-        :return: True if the folder is empty, False otherwise
-        """
         return not any(os.scandir(folder_path))
 
     def delete_variation(self, thumbnail_box: "ThumbnailBox", index):

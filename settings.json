@@ -1,7 +1,7 @@
 {
     "global_settings": {
         "prop_type": "Staff",
-        "background_type": "Aurora",
+        "background_type": "Starfield",
         "grow_sequence": false
     },
     "image_export": {
