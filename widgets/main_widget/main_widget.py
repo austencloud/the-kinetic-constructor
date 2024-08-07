@@ -105,7 +105,7 @@ class MainWidget(QTabWidget):
         self.recorder_tab_index = 2
         self.sequence_card_tab_index = 3
 
-        self.setCurrentIndex(self.sequence_card_tab_index)
+        self.setCurrentIndex(self.builder_tab_index)
         self.initialized = True
 
     def _setup_special_placements(self) -> None:
