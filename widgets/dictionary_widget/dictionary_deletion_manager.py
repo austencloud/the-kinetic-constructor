@@ -1,6 +1,7 @@
 import os
 import shutil
 from typing import TYPE_CHECKING
+from variation_number_fixer import VariationNumberFixer
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from PyQt6.QtWidgets import QMessageBox, QApplication
 from PyQt6.QtCore import Qt
@@ -13,6 +14,7 @@ if TYPE_CHECKING:
 class DictionaryDeletionManager:
     def __init__(self, dictionary_widget: "DictionaryWidget"):
         self.dictionary_widget = dictionary_widget
+        self.variation_number_fixer = VariationNumberFixer()
 
     def is_folder_empty(self, folder_path):
         """
@@ -28,7 +30,7 @@ class DictionaryDeletionManager:
         os.remove(file_path)
         if len(thumbnail_box.thumbnails) == 0:
             self.delete_word(thumbnail_box.base_word)
-            self.delete_empty_folders(get_images_and_data_path("dictionary"))
+
             self.dictionary_widget.preview_area.update_thumbnails()
             self.dictionary_widget.browser.scroll_widget.thumbnail_boxes_dict.pop(
                 thumbnail_box.base_word
@@ -37,6 +39,14 @@ class DictionaryDeletionManager:
             self.delete_empty_folders(get_images_and_data_path("dictionary"))
             thumbnail_box.current_index = 0
             self.dictionary_widget.browser.sorter.sort_and_display_thumbnails()
+
+            for index, thumbnail in enumerate(thumbnail_box.thumbnails):
+                if thumbnail == file_path:
+                    thumbnail_box.current_index = index
+                    thumbnail_box.thumbnails.pop(index)
+                    break
+            thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
+
             self.dictionary_widget.preview_area.update_thumbnails(
                 thumbnail_box.thumbnails
             )
@@ -55,6 +65,7 @@ class DictionaryDeletionManager:
         os.chmod(base_path, 0o777)
         shutil.rmtree(base_path)
         self.delete_empty_folders(get_images_and_data_path("dictionary"))
+        self.variation_number_fixer.ensure_sequential_versions()
         self.dictionary_widget.browser.sorter.sort_and_display_thumbnails()
 
     def delete_empty_folders(self, root_folder):

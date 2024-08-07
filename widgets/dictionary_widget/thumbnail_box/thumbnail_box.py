@@ -63,9 +63,9 @@ class ThumbnailBox(QWidget):
 
         width = parent_width // 3
         self.setFixedWidth(width)
-        self.image_label.update_thumbnail()
+        self.image_label.update_thumbnail(self.current_index)
         self.base_word_label.resize_base_word_label()
-        
+
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails
         self.nav_buttons_widget.thumbnails = thumbnails
@@ -74,7 +74,7 @@ class ThumbnailBox(QWidget):
                 self.thumbnails
             )
         self.image_label.thumbnails = thumbnails
-        self.current_index = 0
+        # self.current_index = 0
         self.image_label.set_pixmap_to_fit(QPixmap(self.thumbnails[self.current_index]))
         self.nav_buttons_widget.refresh()
         if len(self.thumbnails) == 1:

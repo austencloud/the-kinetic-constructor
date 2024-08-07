@@ -80,7 +80,9 @@ class DictionaryPreviewArea(QWidget):
 
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails
-        self.current_index = 0
+        # set the current index to whatever the lowest index that exists within the thumbnails list
+        if self.current_index >= len(self.thumbnails):
+            self.current_index = len(self.thumbnails) - 1
 
         if self.thumbnails:
             self.base_word_label.show()
@@ -118,9 +120,10 @@ class DictionaryPreviewArea(QWidget):
 
         if self.thumbnails and index is not None:
             pixmap = QPixmap(self.thumbnails[index])
-            self._scale_pixmap_to_label(pixmap)
+            # if the pixmap height is 0, we need to skip this step
+            if pixmap.height() != 0:
+                self._scale_pixmap_to_label(pixmap)
 
-            # Update sequence_json with the current metadata
             if self.current_thumbnail_box:
                 metadata_extractor = (
                     self.current_thumbnail_box.main_widget.metadata_extractor

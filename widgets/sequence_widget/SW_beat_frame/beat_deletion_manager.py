@@ -1,4 +1,6 @@
 from typing import TYPE_CHECKING
+
+from variation_number_fixer import VariationNumberFixer
 from ..SW_beat_frame.start_pos_beat import StartPositionBeatView
 from ..SW_beat_frame.beat import BeatView
 from PyQt6.QtWidgets import QApplication
@@ -13,10 +15,8 @@ class BeatDeletionManager:
         self.sequence_builder = beat_frame.top_builder_widget.sequence_builder
         self.selection_manager = self.beat_frame.selection_manager
         self.json_manager = self.beat_frame.json_manager  # Access json manager
-        self.settings_manager = (
-            self.beat_frame.settings_manager
-        )  # Access settings manager
-
+        self.settings_manager = self.beat_frame.settings_manager
+        
     def delete_selected_beat(self) -> None:
         self.beats = self.beat_frame.beats
 

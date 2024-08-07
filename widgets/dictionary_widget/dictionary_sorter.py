@@ -85,7 +85,7 @@ class DictionarySorter:
     def _add_thumbnail_box(self, row_index, column_index, word, thumbnails):
         if word not in self.browser.scroll_widget.thumbnail_boxes_dict:
             thumbnail_box = ThumbnailBox(self.browser, word, thumbnails)
-            thumbnail_box.image_label.update_thumbnail()
+            thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
             self.browser.scroll_widget.thumbnail_boxes_dict[word] = thumbnail_box
 
         thumbnail_box = self.browser.scroll_widget.thumbnail_boxes_dict[word]

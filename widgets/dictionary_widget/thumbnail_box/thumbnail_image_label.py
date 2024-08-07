@@ -16,16 +16,17 @@ class ThumbnailImageLabel(QLabel):
         self.installEventFilter(self)
         self.mousePressEvent = self.thumbnail_clicked
         self.thumbnails = thumbnail_box.thumbnails
-        self.current_index = thumbnail_box.current_index
         self.metadata_extractor = thumbnail_box.main_widget.metadata_extractor
         self.browser = thumbnail_box.browser
         self.is_selected = False
 
         self.setScaledContents(False)
 
-    def update_thumbnail(self):
-        if self.thumbnails and 0 <= self.current_index < len(self.thumbnails):
-            pixmap = QPixmap(self.thumbnails[self.current_index])
+    def update_thumbnail(self, index):
+        if self.thumbnails and 0 <= index < len(
+            self.thumbnails
+        ):
+            pixmap = QPixmap(self.thumbnails[index])
             self.set_pixmap_to_fit(pixmap)
         else:
             self.setText("No image available")
@@ -56,14 +57,14 @@ class ThumbnailImageLabel(QLabel):
             )
             self.browser.dictionary_widget.selection_handler.thumbnail_clicked(
                 self,
-                QPixmap(self.thumbnails[self.current_index]),
+                QPixmap(self.thumbnails[self.thumbnail_box.current_index]),
                 metadata,
                 self.thumbnails,
-                self.current_index,
+                self.thumbnail_box.current_index,
             )
         else:
             self.browser.dictionary_widget.deletion_manager.delete_variation(
-                self.thumbnail_box, self.current_index
+                self.thumbnail_box, self.thumbnail_box.current_index
             )
 
     def set_selected(self, selected: bool):

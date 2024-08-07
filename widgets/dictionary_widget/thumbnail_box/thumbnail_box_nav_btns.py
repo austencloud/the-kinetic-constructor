@@ -38,7 +38,7 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
         elif sender.text() == ">":
             self.current_index = (self.current_index + 1) % len(self.thumbnails)
 
-        self.update_thumbnail()
+        self.update_thumbnail(self.current_index)
 
         if (
             self.thumbnail_box.image_label
@@ -52,10 +52,9 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
             QApplication.processEvents()
             preview_area.update_preview(self.current_index)
 
-    def update_thumbnail(self):
-        self.thumbnail_label.current_index = self.current_index
-        self.thumbnail_label.update_thumbnail()
-        self.variation_number_label.update_index(self.current_index)
+    def update_thumbnail(self, index):
+        self.thumbnail_label.update_thumbnail(index)
+        self.variation_number_label.update_index(index)
 
     def _setup_buttons(self):
         self.left_button = NavButton("<", self)
@@ -64,7 +63,7 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
         self.layout.addWidget(self.right_button)
 
     def refresh(self):
-        self.update_thumbnail()
+        self.update_thumbnail(self.thumbnail_box.current_index)
         if len(self.thumbnail_box.thumbnails) == 1:
             self.variation_number_label.hide()
             self.hide()
