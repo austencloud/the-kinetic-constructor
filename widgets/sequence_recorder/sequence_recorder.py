@@ -18,12 +18,11 @@ class SequenceRecorder(QWidget):
         self.video_control_frame = SR_MainControlFrame(self)
         self.initialized = False
         self._setup_layout()
-
+        self.global_settings = (
+            self.main_widget.main_window.settings_manager.global_settings
+        )
         self.gradient_shift = 0
         self.color_shift = 0
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.animate_background)
-        # self.timer.start(100)
 
     def animate_background(self) -> None:
         self.gradient_shift += 0.05
@@ -33,19 +32,9 @@ class SequenceRecorder(QWidget):
         self.update()
 
     def paintEvent(self, event) -> None:
+        self.background_manager = self.global_settings.setup_background_manager(self)
         painter = QPainter(self)
-        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-
-        gradient = QLinearGradient(0, 0, 0, self.height())
-        for i in range(10):
-            pos = i / 10
-            hue = int((self.color_shift + pos * 100) % 360)
-            color = QColor.fromHsv(hue, 255, 255, 150)
-            adjusted_pos = pos + math.sin(self.gradient_shift + pos * math.pi) * 0.05
-            clamped_pos = max(0, min(adjusted_pos, 1))
-            gradient.setColorAt(clamped_pos, color)
-
-        painter.fillRect(self.rect(), gradient)
+        self.background_manager.paint_background(self, painter)
 
     def _setup_layout(self) -> None:
         capture_layout_hbox = QHBoxLayout()
