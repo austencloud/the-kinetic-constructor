@@ -100,7 +100,7 @@ class SequenceCardTab(QWidget):
             (total_width // 2) - (2 * self.margin) - (self.nav_sidebar.width() // 2)
         )
         self.page_height = int(self.page_width * 11 / 8.5)
-        self.image_card_margin = self.page_width // 30
+        self.image_card_margin = self.page_width // 40
 
         self.populator.current_page_index = -1
         self.pages.clear()
@@ -142,9 +142,8 @@ class SequenceCardTab(QWidget):
 
     def get_num_rows_based_on_sequence_length(self, sequence_length: int) -> int:
         num_rows_per_length = {
-            4: 6,
-            8: 4,
-            12: 3,
+            4: 7,
+            8: 5,
             16: 2,
         }
         return num_rows_per_length.get(sequence_length, 4)

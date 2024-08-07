@@ -35,19 +35,22 @@ class SequenceCardImagePopulator:
             self.current_col = 0
             self.current_row += 1
 
+        # If this was the last image added, add a bottom spacer
+        if self.is_last_image_in_page(selected_length):
+            self.add_bottom_spacer(page_layout, scaled_pixmap.height())
+
     def is_current_page_full(self, selected_length: int, image_height: int) -> bool:
         if self.current_page_index == -1:
             return True
 
         num_rows_per_length = {
-            4: 7,
-            8: 4,
-            12: 3,
-            16: 2,
+            4: 8,
+            8: 5,
+            16: 3,
         }
 
         num_rows = num_rows_per_length.get(selected_length, 4)
-        total_used_height = (self.current_row) * image_height
+        total_used_height = (self.current_row + 1) * image_height
         max_height = num_rows * image_height
         return total_used_height + image_height > max_height
 
@@ -57,3 +60,29 @@ class SequenceCardImagePopulator:
         self.sequence_card_tab.pages.append(new_page_layout)
         self.current_row = 0
         self.current_col = 0
+
+    def is_last_image_in_page(self, selected_length: int) -> bool:
+        num_rows = {
+            4: 8,
+            8: 5,
+            16: 3,
+        }.get(selected_length, 4)
+        total_possible_rows = self.current_row + 1
+        return total_possible_rows >= num_rows
+
+    def add_bottom_spacer(self, page_layout: QGridLayout, pixmap_height: int):
+        """Adds a bottom spacer row to ensure the last row of images aligns with the top."""
+        # Calculate the remaining space
+        total_height = self.sequence_card_tab.page_height
+        used_height = self.current_row * pixmap_height
+
+        remaining_height = total_height - used_height
+
+        # Add a spacer widget with the remaining height
+        if remaining_height > 0:
+            spacer = QLabel(self.sequence_card_tab)
+            spacer.setFixedHeight(remaining_height)
+            spacer.setStyleSheet("background-color: transparent;")
+            page_layout.addWidget(
+                spacer, self.current_row + 1, 0, 1, self.max_images_per_row
+            )
