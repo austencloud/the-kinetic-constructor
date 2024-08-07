@@ -18,9 +18,10 @@ class RotationAngleOverrideKeyGenerator:
 
     def generate_rotation_angle_override_key(self, arrow: Arrow) -> str:
         motion_type = arrow.motion.motion_type
-        if arrow.pictograph.check.starts_from_mixed_orientation():
+        if arrow.pictograph.letter.value in ["α", "β", "Γ"]:
+            return f"{arrow.motion.color}_rot_angle_override"
+        elif arrow.pictograph.check.starts_from_mixed_orientation():
             layer = self.get_layer(arrow)
             return f"{motion_type}_from_{layer}_rot_angle_override"
-        return f"{motion_type}_rot_angle_override"
-
-
+        else:
+            return f"{motion_type}_rot_angle_override"

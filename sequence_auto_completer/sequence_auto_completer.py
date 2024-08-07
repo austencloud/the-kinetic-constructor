@@ -47,7 +47,6 @@ class SequenceAutoCompleter:
                     sequence,
                     last_entry,
                     last_position,
-                    permutation_rot_dir,
                     next_beat_number,
                     sequence_length + entries_to_add,
                 )
@@ -79,7 +78,6 @@ class SequenceAutoCompleter:
                         sequence,
                         last_entry,
                         last_entry["end_pos"],
-                        direction,
                         next_beat_number,
                         len(sequence) + entries_to_add,
                     )

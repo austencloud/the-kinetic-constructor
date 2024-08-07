@@ -28,12 +28,10 @@ class StandardOrientationUpdater(MirroredEntryUpdaterBase):
             )
         )
         self._mirror_entry(mirrored_turns_tuple, letter)
-        # self.mirrored_entry_updater.manager.section_updater.update_pictographs_in_section(
-        #     letter_type
-        # )
+
 
     def _mirror_entry(self, mirrored_turns_tuple, letter: Letter):
-        if letter.value in ["S", "T"] or letter in Letter.get_letters_by_condition(
+        if letter.value in ["S", "T", "β"] or letter in Letter.get_letters_by_condition(
             LetterConditions.HYBRID
         ):
             return

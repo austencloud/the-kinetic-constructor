@@ -65,7 +65,7 @@ class MirroredEntryRotAngleManager:
     def _handle_mirrored_rotation_angle_override(
         self, other_letter_data, rotation_angle_override, mirrored_turns_tuple
     ):
-        key = self.manager.data_updater.positioner.pictograph.wasd_manager.rotation_angle_override_manager._generate_rotation_angle_key(
+        key = self.manager.data_updater.positioner.pictograph.wasd_manager.rotation_angle_override_manager.key_generator.generate_rotation_angle_override_key(
             self.manager.data_updater.positioner.pictograph.selected_arrow
         )
         if mirrored_turns_tuple not in other_letter_data:
@@ -77,6 +77,6 @@ class MirroredEntryRotAngleManager:
 
     def _check_for_rotation_angle_override(self, turn_data: dict) -> Optional[int]:
         for key in turn_data.keys():
-            if "rot_angle" in key:
+            if "rot_angle_override" in key:
                 return turn_data[key]
         return None

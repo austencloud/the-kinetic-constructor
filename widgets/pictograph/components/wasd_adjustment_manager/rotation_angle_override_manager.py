@@ -119,13 +119,6 @@ class RotationAngleOverrideManager:
                 self.pictograph.selected_arrow, hybrid_key
             )
 
-    def _generate_rotation_angle_key(self, arrow: Arrow) -> str:
-        motion_type = arrow.motion.motion_type
-        if arrow.pictograph.check.starts_from_mixed_orientation():
-            layer = "layer1" if arrow.motion.start_ori in [IN, OUT] else "layer2"
-            return f"{motion_type}_from_{layer}_rot_angle_override"
-        return f"{motion_type}_rot_angle_override"
-
     def get_rot_angle_override_from_placements_dict(
         self, arrow: Arrow
     ) -> Optional[int]:

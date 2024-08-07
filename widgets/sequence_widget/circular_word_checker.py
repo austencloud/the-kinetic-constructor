@@ -40,7 +40,7 @@ class CircularWordChecker:
                         rotational_permutations = False
                         break
 
-        self.is_permutable = self.is_permutable and rotational_permutations
+        self.is_permutable = self.is_permutable 
 
         return self.is_circular, self.is_permutable
 
