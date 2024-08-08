@@ -80,6 +80,9 @@ class ExportDialogControlPanel(QWidget):
         self.options_checkbox_layout.addWidget(self.include_start_pos_check)
         self.options_checkbox_layout.addWidget(self.add_info_check)
         self.options_checkbox_layout.addWidget(self.add_word_check)
+        self.options_checkbox_layout.addWidget(
+            self.include_difficulty_level_check
+        )  # New checkbox
 
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addStretch(1)
@@ -121,6 +124,17 @@ class ExportDialogControlPanel(QWidget):
             )
         )
         self.add_word_check.toggled.connect(self.toggle_add_word)
+
+        self.include_difficulty_level_check = QCheckBox(
+            "Include Difficulty Level", self
+        )  # New checkbox
+        self.include_difficulty_level_check.setChecked(False)  # Default to unchecked
+        self.include_difficulty_level_check.toggled.connect(
+            self.optionChanged.emit
+        )  # Connect to signal
+        self.include_difficulty_level_check.toggled.connect(
+            self.toggle_include_difficulty_level
+        )
         self._setup_open_directory_checkbox()
 
     def _setup_add_date_field(self):
@@ -180,8 +194,15 @@ class ExportDialogControlPanel(QWidget):
         include_start_pos = self.include_start_pos_check.isChecked()
         add_info = self.add_info_check.isChecked()
         add_word = self.add_word_check.isChecked()
+        include_difficulty_level = (
+            self.include_difficulty_level_check.isChecked()
+        )  # New option
         self.export_dialog.preview_panel.update_preview_with_start_pos(
-            include_start_pos, add_info, self.export_dialog.sequence, add_word
+            include_start_pos,
+            add_info,
+            self.export_dialog.sequence,
+            add_word,
+            include_difficulty_level,  # Pass new option
         )
 
     def toggle_add_info(self):
@@ -201,3 +222,12 @@ class ExportDialogControlPanel(QWidget):
         self.update_preview_based_on_options()
         self.settings_manager.image_export.set_image_export_setting("add_word", state)
         self.optionChanged.emit()
+
+    def toggle_include_difficulty_level(self):
+        """Toggle the state of the include difficulty level field based on the checkbox."""
+        state = self.include_difficulty_level_check.isChecked()
+        self.update_preview_based_on_options()
+        self.optionChanged.emit()
+        self.settings_manager.image_export.set_image_export_setting(
+            "include_difficulty_level", state
+        )

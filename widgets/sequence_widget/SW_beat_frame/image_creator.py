@@ -5,6 +5,9 @@ from typing import TYPE_CHECKING
 from widgets.sequence_widget.SW_beat_frame.beat_drawer import BeatDrawer
 from widgets.sequence_widget.SW_beat_frame.user_info_drawer import UserInfoDrawer
 from widgets.sequence_widget.SW_beat_frame.word_drawer import WordDrawer
+from widgets.sequence_widget.SW_beat_frame.difficulty_level_drawer import (
+    DifficultyLevelDrawer,
+)
 from widgets.sequence_widget.SW_beat_frame.height_determiner import HeightDeterminer
 
 if TYPE_CHECKING:
@@ -32,6 +35,7 @@ class ImageCreator:
         self.beat_drawer = BeatDrawer(self)
         self.word_drawer = WordDrawer(self)
         self.user_info_drawer = UserInfoDrawer(self)
+        self.difficulty_level_drawer = DifficultyLevelDrawer(self)
 
     def create_sequence_image(
         self, sequence: list[dict], include_start_pos=True, options: dict = None
@@ -68,6 +72,14 @@ class ImageCreator:
             if options.get("add_word"):
                 word = self.beat_frame.get_current_word()
                 self.word_drawer.draw_word(image, word, num_filled_beats)
+
+            if options.get("include_difficulty_level"):
+                difficulty_level = self.export_manager.sequence_widget.sequence_difficulty_evaluator.evaluate_difficulty(
+                    self.export_manager.beat_frame.json_manager.loader_saver.load_current_sequence_json()
+                )
+                self.difficulty_level_drawer.draw_difficulty_level(
+                    image, difficulty_level
+                )
 
         return image
 

@@ -11,6 +11,7 @@ class ImageExportSettings:
         "add_info": True,
         "open_directory_on_export": True,
         "add_word": True,
+        "include_difficulty_level": True,
     }
 
     def __init__(self, settings_manager: "SettingsManager") -> None:
