@@ -60,6 +60,9 @@ class BeatDeletionManager:
         ):
             self.delete_beat(self.beats[i])
 
+        self.sequence_widget = self.beat_frame.main_widget.top_builder_widget.sequence_widget
+        self.sequence_widget.difficulty_label.set_difficulty_level("")
+
     def _delete_start_pos(self):
         self.start_pos_view = self.beat_frame.start_pos_view
         self.start_pos_view.setScene(self.start_pos_view.blank_beat)

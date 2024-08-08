@@ -9,7 +9,6 @@ from PyQt6.QtWidgets import (
     QLabel,
 )
 from sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
-from sequence_difficulty_evaluator import SequenceDifficultyEvaluator
 from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
 from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager
 from widgets.sequence_widget.current_word_label import CurrentWordLabel
@@ -58,8 +57,9 @@ class SequenceWidget(QWidget):
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
 
-        self.current_word_layout = QHBoxLayout()
+        self.current_word_layout = QVBoxLayout()
         self.current_word_layout.addWidget(self.current_word_label)
+        self.current_word_layout.addWidget(self.difficulty_label)
 
         self.layout.addLayout(self.current_word_layout, 1)
         self.layout.addLayout(self.beat_frame_layout, 12)
@@ -69,12 +69,10 @@ class SequenceWidget(QWidget):
 
         self.setLayout(self.layout)
 
-        self.difficulty_label.setParent(self)
-
     def update_current_word(self):
         current_word = self.beat_frame.get_current_word()
         self.current_word_label.set_current_word(current_word)
-        self.update_difficulty_label_position()
+        # self.update_difficulty_label()
 
     def update_difficulty_label(self):
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
@@ -82,15 +80,6 @@ class SequenceWidget(QWidget):
             self.main_widget.sequence_difficulty_evaluator.evaluate_difficulty(sequence)
         )
         self.difficulty_label.set_difficulty_level(difficulty_level)
-
-    def update_difficulty_label_position(self):
-        start_pos_rect = self.beat_frame.start_pos_view.geometry()
-        current_word_rect = self.current_word_label.geometry()
-        x = start_pos_rect.left()
-        y = (
-            current_word_rect.top()
-        )  # Align the top of the difficulty label with the top of the current word label
-        self.difficulty_label.move(x, y)
 
     def _setup_cache(self):
         self.SW_pictograph_cache: dict[str, Beat] = {}
@@ -177,7 +166,6 @@ class SequenceWidget(QWidget):
             )
         )
         self.SW_pictograph_cache[pictograph_key] = pictograph
-
 
     def resize_sequence_widget(self) -> None:
         self.current_word_label.resize_current_word_label()

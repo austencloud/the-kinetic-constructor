@@ -17,9 +17,10 @@ class NewEntryCreator:
         last_position: str,
         beat_number: int,
         final_intended_sequence_length: int,
+        halved_or_quartered,
     ) -> Dict:
         previous_matching_beat = self.get_previous_matching_beat(
-            sequence, beat_number, final_intended_sequence_length
+            sequence, beat_number, final_intended_sequence_length, halved_or_quartered
         )
 
         previous_blue_end_ori = previous_entry["blue_attributes"]["end_ori"]
@@ -125,7 +126,88 @@ class NewEntryCreator:
         }
         return positions_map.get((blue_loc, red_loc))
 
-    def get_previous_matching_beat(self, sequence, beat_number, final_length):
+    def get_previous_matching_beat(
+        self, sequence, beat_number, final_length, halved_or_quartered
+    ) -> dict:
+        if halved_or_quartered == "quartered":
+            index_map = self.get_quartered_index_map()
+        elif halved_or_quartered == "halved":
+            index_map = self.get_halved_index_map()
+        return sequence[index_map[final_length][beat_number]]
+
+    def get_halved_index_map(self):
+        index_map = {
+            4: {3: 2, 4: 3},
+            6: {4: 2, 5: 3, 6: 4},
+            8: {5: 2, 6: 3, 7: 4, 8: 5},
+            10: {6: 2, 7: 3, 8: 4, 9: 5, 10: 6},
+            12: {7: 2, 8: 3, 9: 4, 10: 5, 11: 6, 12: 7},
+            14: {8: 2, 9: 3, 10: 4, 11: 5, 12: 6, 13: 7, 14: 8},
+            16: {
+                9: 2,
+                10: 3,
+                11: 4,
+                12: 5,
+                13: 6,
+                14: 7,
+                15: 8,
+                16: 9,
+            },
+            18: {
+                10: 2,
+                11: 3,
+                12: 4,
+                13: 5,
+                14: 6,
+                15: 7,
+                16: 8,
+                17: 9,
+                18: 10,
+            },
+            20: {
+                11: 2,
+                12: 3,
+                13: 4,
+                14: 5,
+                15: 6,
+                16: 7,
+                17: 8,
+                18: 9,
+                19: 10,
+                20: 11,
+            },
+            22: {
+                12: 2,
+                13: 3,
+                14: 4,
+                15: 5,
+                16: 6,
+                17: 7,
+                18: 8,
+                19: 9,
+                20: 10,
+                21: 11,
+                22: 12,
+            },
+            24: {
+                13: 2,
+                14: 3,
+                15: 4,
+                16: 5,
+                17: 6,
+                18: 7,
+                19: 8,
+                20: 9,
+                21: 10,
+                22: 11,
+                23: 12,
+                24: 13,
+            },
+        }
+
+        return index_map
+
+    def get_quartered_index_map(self):
         index_map = {
             4: {2: 2, 3: 3, 4: 4},
             8: {3: 2, 4: 3, 5: 4, 6: 5, 7: 6, 8: 7},
@@ -183,7 +265,8 @@ class NewEntryCreator:
                 24: 20,
             },
         }
-        return sequence[index_map[final_length][beat_number]]
+
+        return index_map
 
     def create_new_attributes(
         self,

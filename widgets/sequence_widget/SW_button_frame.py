@@ -124,19 +124,19 @@ class SW_ButtonFrame(QFrame):
     def clear_sequence(
         self, show_indicator=True, should_reset_to_start_pos_picker=True
     ) -> None:
+        self.json_manager.loader_saver.clear_current_sequence_file()
         self._reset_beat_frame()
 
         if should_reset_to_start_pos_picker:
             self.sequence_builder.reset_to_start_pos_picker()
         self.sequence_builder.last_beat = self.beat_frame.start_pos
-        self.json_manager.loader_saver.clear_current_sequence_file()
         if show_indicator:
             self.sequence_widget.indicator_label.show_message("Sequence cleared")
         self._clear_graph_editor()
 
-        # Reset the layout to the smallest possible amount
         if self.settings_manager.global_settings.get_grow_sequence():
             self.beat_frame.layout_manager.configure_beat_frame(0)
+        self.sequence_widget.difficulty_label.set_difficulty_level("")
 
     def _reset_beat_frame(self) -> None:
         for beat_view in self.beat_frame.beats:

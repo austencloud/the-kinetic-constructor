@@ -1,36 +1,23 @@
+from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QLabel
-from PyQt6.QtGui import QPainter, QPen, QFont
-from PyQt6.QtCore import Qt, QRectF
+from PyQt6.QtGui import QFont
+from PyQt6.QtCore import Qt
+if TYPE_CHECKING:
+    from widgets.sequence_widget.sequence_widget import SequenceWidget
+
 
 class DifficultyLabel(QLabel):
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self, sequence_widget: "SequenceWidget") -> None:
+        super().__init__(sequence_widget)
         self.difficulty_level = 1
-        self.setFixedSize(60, 60)  # Adjust the size to ensure the circle is fully visible
-        self.setToolTip("Difficulty Level")  # Add tooltip here
+        self.setFont(QFont("Arial", sequence_widget.width() // 40))
+        self.setToolTip("Difficulty Level")
+        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-    def set_difficulty_level(self, level: int):
+    def set_difficulty_level(self, level: Union[int, str]) -> None:
+        if level == "":
+            self.setText("")
+            return
         self.difficulty_level = level
+        self.setText(f"Level {self.difficulty_level}")
         self.update()
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-
-        # Inset the circle drawing to ensure it is not cut off
-        inset = 5
-        rect = self.rect().adjusted(inset, inset, -inset, -inset)
-
-        # Draw the circle
-        pen = QPen(Qt.GlobalColor.black, 2)
-        painter.setPen(pen)
-        painter.setBrush(Qt.GlobalColor.white)
-        painter.drawEllipse(rect)
-
-        # Draw the difficulty level number
-        font = QFont("Arial", 16, QFont.Weight.Bold)
-        painter.setFont(font)
-        painter.setPen(Qt.GlobalColor.black)
-        painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, str(self.difficulty_level))
-
-        painter.end()

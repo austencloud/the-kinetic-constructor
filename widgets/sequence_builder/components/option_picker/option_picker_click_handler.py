@@ -24,12 +24,8 @@ class OptionPickerClickHandler:
         if new_beat.view:
             self.sequence_builder.option_picker.choose_your_next_pictograph_label.set_text_to_loading()
             selection_manager = beat_frame.selection_manager
-            QApplication.processEvents()
             selection_manager.select_beat(new_beat.view)
-            QApplication.processEvents()
             self.sequence_builder.option_picker.update_option_picker()
-            QApplication.processEvents()
             new_beat.view.is_filled = True
             self.sequence_builder.option_picker.scroll_area.display_manager.order_and_display_pictographs()
-            QApplication.processEvents()
             self.sequence_builder.option_picker.choose_your_next_pictograph_label.set_default_text()

@@ -31,6 +31,14 @@ class SequenceAutoCompleter:
         new_entries = []
         next_beat_number = last_entry["beat"] + 1
 
+        # if it's a halved permutation, set halved_or_quartered to "halved"
+        # if it's a quartered permutation, set halved_or_quartered to "quartered"
+        
+        if self.is_halved_permutation():
+            halved_or_quartered = "halved"
+        elif self.is_quartered_permutation():
+            halved_or_quartered = "quartered"
+
         if self.is_circular_sequence(sequence):
             entries_to_add = sequence_length * 3
             new_entries = self.create_circular_entries(
@@ -49,6 +57,7 @@ class SequenceAutoCompleter:
                     last_position,
                     next_beat_number,
                     sequence_length + entries_to_add,
+                    halved_or_quartered,
                 )
                 new_entries.append(new_entry)
                 sequence.append(new_entry)
