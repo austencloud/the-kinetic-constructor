@@ -19,10 +19,13 @@ class VariationNumberLabel(QLabel):
             self.hide()
         self.parent: Union["ThumbnailBox", "DictionaryPreviewArea"] = parent
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.setFont(QFont("Arial", 14, QFont.Weight.Bold))
 
     def update_index(self, index):
         if len(self.parent.thumbnails) > 1:
             self.setText(f"Variation {index + 1}")
         else:
             self.hide()
+
+    def resizeEvent(self, event):
+        self.setFont(QFont("Arial", self.width() // 35, QFont.Weight.Bold))
+        super().resizeEvent(event)

@@ -1,7 +1,8 @@
 {
   "Λ": {
     "(0, 1, cl)": {
-      "static_from_layer1": [-70, 0]
+      "static_from_layer1": [-70, 0],
+      "static_from_layer1_rot_angle_override": true
     }
   }
 }
