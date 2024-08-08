@@ -40,7 +40,6 @@ class RotationalPermutationExecuter(PermutationExecutor):
                 next_beat_number,
                 sequence_length + entries_to_add,
                 halved_or_quartered,
-                "rotational",
             )
             new_entries.append(new_entry)
             sequence.append(new_entry)
@@ -105,20 +104,13 @@ class RotationalPermutationExecuter(PermutationExecutor):
         beat_number: int,
         final_intended_sequence_length: int,
         halved_or_quartered: str,
-        permutation_type: str,
-        color_swap: bool = False,
     ) -> dict:
-        if permutation_type == "rotational":
-            previous_matching_beat = self.get_previous_matching_beat(
-                sequence,
-                beat_number,
-                final_intended_sequence_length,
-                halved_or_quartered,
-            )
-        else:
-            previous_matching_beat = self.get_previous_matching_beat_mirrored(
-                sequence, beat_number, final_intended_sequence_length, color_swap
-            )
+        previous_matching_beat = self.get_previous_matching_beat(
+            sequence,
+            beat_number,
+            final_intended_sequence_length,
+            halved_or_quartered,
+        )
 
         new_entry = {
             "beat": beat_number,
@@ -155,14 +147,14 @@ class RotationalPermutationExecuter(PermutationExecutor):
     def calculate_new_end_pos(
         self, previous_matching_beat: dict, previous_entry: dict
     ) -> str:
-        new_blue_end_loc = self.autocompleter.rotational_permutation_executor.calculate_rotational_permuatation_new_loc(
+        new_blue_end_loc = self.calculate_rotational_permuatation_new_loc(
             previous_entry["blue_attributes"]["end_loc"],
             self.get_hand_rot_dir_from_locs(
                 previous_matching_beat["blue_attributes"]["start_loc"],
                 previous_matching_beat["blue_attributes"]["end_loc"],
             ),
         )
-        new_red_end_loc = self.autocompleter.rotational_permutation_executor.calculate_rotational_permuatation_new_loc(
+        new_red_end_loc = self.calculate_rotational_permuatation_new_loc(
             previous_entry["red_attributes"]["end_loc"],
             self.get_hand_rot_dir_from_locs(
                 previous_matching_beat["red_attributes"]["start_loc"],
@@ -265,7 +257,7 @@ class RotationalPermutationExecuter(PermutationExecutor):
             "start_ori": previous_attributes["end_ori"],
             "prop_rot_dir": previous_matching_beat_attributes["prop_rot_dir"],
             "start_loc": previous_attributes["end_loc"],
-            "end_loc": self.autocompleter.rotational_permutation_executor.calculate_rotational_permuatation_new_loc(
+            "end_loc": self.calculate_rotational_permuatation_new_loc(
                 previous_attributes["end_loc"],
                 self.get_hand_rot_dir_from_locs(
                     previous_matching_beat_attributes["start_loc"],
