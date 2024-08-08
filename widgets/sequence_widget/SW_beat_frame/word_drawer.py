@@ -13,7 +13,13 @@ class WordDrawer:
         self.base_font = QFont("Georgia", 175, QFont.Weight.DemiBold, False)
         self.kerning = int(20 * image_creator.beat_scale)  # Adjust this value as needed
 
-    def draw_word(self, image: QImage, word: str, num_filled_beats: int) -> None:
+    def draw_word(
+        self,
+        image: QImage,
+        word: str,
+        num_filled_beats: int,
+        additional_height_top: int,
+    ) -> None:
         base_margin = 50 * self.image_creator.beat_scale
         font, margin = FontMarginHelper.adjust_font_and_margin(
             self.base_font, num_filled_beats, base_margin, self.image_creator.beat_scale
@@ -25,6 +31,7 @@ class WordDrawer:
 
         metrics = QFontMetrics(font)
         text_width = metrics.horizontalAdvance(word)
+        text_height = metrics.ascent()
 
         # Adjust the font size until the text fits within the image width
         while text_width + 2 * margin > image.width():
@@ -34,8 +41,11 @@ class WordDrawer:
             font = QFont(font.family(), font_size, font.weight(), font.italic())
             metrics = QFontMetrics(font)
             text_width = metrics.horizontalAdvance(word)
+            text_height = metrics.ascent()
 
-        self._draw_text(painter, image, word, font, margin, "top")
+        self._draw_text(
+            painter, image, word, font, margin, text_height, additional_height_top
+        )
         painter.end()
 
     def _draw_text(
@@ -45,19 +55,20 @@ class WordDrawer:
         text: str,
         font: QFont,
         margin: int,
-        position: str,
+        text_height: int,
+        additional_height_top: int,
         text_width: int = None,
     ) -> None:
         painter.setFont(font)
         metrics = QFontMetrics(font)
-        text_height = metrics.ascent()
 
         if not text_width:
             text_width = metrics.horizontalAdvance(text)
 
-        if position == "top":
-            x = (image.width() - text_width - self.kerning * (len(text) - 1)) // 2
-            y = int(text_height + margin)
+        # Calculate the vertical position to center the text in the additional height on top
+        y = (additional_height_top // 2 + text_height // 2) - (text_height // 10)
+
+        x = (image.width() - text_width - self.kerning * (len(text) - 1)) // 2
 
         for letter in text:
             painter.drawText(x, y, letter)

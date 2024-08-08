@@ -71,7 +71,9 @@ class ImageCreator:
 
             if options.get("add_word"):
                 word = self.beat_frame.get_current_word()
-                self.word_drawer.draw_word(image, word, num_filled_beats)
+                self.word_drawer.draw_word(
+                    image, word, num_filled_beats, additional_height_top
+                )
 
             if options.get("include_difficulty_level"):
                 difficulty_level = self.export_manager.main_widget.sequence_difficulty_evaluator.evaluate_difficulty(
