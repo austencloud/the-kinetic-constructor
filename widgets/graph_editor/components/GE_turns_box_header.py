@@ -44,6 +44,7 @@ class GE_TurnsBoxHeader(QWidget):
         turns = motion.turns
         is_shift = motion.check.is_shift()
         prop_rot_dir_button_mngr = self.turns_box.prop_rot_dir_button_manager
+        vtg_dir_button_mngr = self.turns_box.vtg_dir_button_manager
         if pictograph.letter:
             letter_type = LetterType.get_letter_type(pictograph.letter)
         if letter_type == LetterType.Type1 or letter_type == None:
@@ -51,9 +52,10 @@ class GE_TurnsBoxHeader(QWidget):
             self.turns_box.vtg_dir_button_manager.hide_vtg_dir_buttons()
         else:
             if letter_type == LetterType.Type2 or letter_type == LetterType.Type3:
+                prop_rot_dir_button_mngr.hide_prop_rot_dir_buttons()
                 if turns and not is_shift:
                     self.turns_box.vtg_dir_button_manager.show_vtg_dir_buttons()
-                    if pictograph.red_motion.turns and pictograph.blue_motion.turns:
+                    if pictograph.red_motion.turns or pictograph.blue_motion.turns:
                         if (
                             pictograph.red_motion.prop_rot_dir
                             == pictograph.blue_motion.prop_rot_dir
@@ -64,6 +66,8 @@ class GE_TurnsBoxHeader(QWidget):
                 else:
                     self.turns_box.vtg_dir_button_manager.hide_vtg_dir_buttons()
             else:
+                vtg_dir_button_mngr.hide_vtg_dir_buttons()
+
                 if turns:
                     prop_rot_dir_button_mngr.show_prop_rot_dir_buttons()
                     if motion.prop_rot_dir == CLOCKWISE:

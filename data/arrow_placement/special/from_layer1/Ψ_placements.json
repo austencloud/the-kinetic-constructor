@@ -12,8 +12,8 @@
       "static": [100, 100]
     },
     "(cw, 0, 1)": {
-      "static": [110, -15],
-      "swap_beta_s_radial_blue_static_s_red_dash_e": true
+      "swap_beta_s_radial_blue_static_s_red_dash_e": true,
+      "swap_beta_n_radial_blue_static_n_red_dash_w": true
     },
     "(cw, 0, 2.5)": {
       "dash": [-80, 40],

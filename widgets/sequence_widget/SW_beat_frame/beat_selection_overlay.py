@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget, QApplication
 from PyQt6.QtGui import QPainter, QPen, QColor
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Optional
@@ -43,7 +43,10 @@ class SequenceWidgetBeatSelectionOverlay(QWidget):
 
             graph_editor.update_GE_pictograph(self.selected_beat.beat)
             graph_editor.adjustment_panel.update_turns_panel(blue_turns, red_turns)
+            #process events
+            QApplication.processEvents()
             graph_editor.adjustment_panel.update_adjustment_panel()
+            QApplication.processEvents()
 
             if isinstance(beat_view, StartPositionBeatView):
                 start_pos_pictograph = beat_view.beat

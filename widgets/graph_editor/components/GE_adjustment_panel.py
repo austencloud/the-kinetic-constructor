@@ -119,7 +119,6 @@ class GE_AdjustmentPanel(QFrame):
         self.layout.setSpacing(0)
         self.setLayout(self.layout)
 
-        # NOT CAUSING RESIZE BUG ###
         for box in self.turns_boxes:
             if box.isVisible():
                 box.resize_GE_turns_box()
@@ -127,6 +126,5 @@ class GE_AdjustmentPanel(QFrame):
         for ori_picker_box in self.start_pos_ori_pickers:
             if ori_picker_box.isVisible():
                 ori_picker_box.resize_GE_ori_picker_box()
-        ### NOT CAUSING RESIZE BUG ###
 
         self.placeholder_widget.set_stylesheet()
