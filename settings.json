@@ -2,10 +2,10 @@
     "global": {
         "prop_type": "Staff",
         "background_type": "Aurora",
-        "grow_sequence": false
+        "grow_sequence": true
     },
     "image_export": {
-        "include_start_position": true,
+        "include_start_position": false,
         "add_info": true,
         "open_directory_on_export": true,
         "add_word": true,
