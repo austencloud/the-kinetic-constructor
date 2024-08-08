@@ -8,7 +8,9 @@ from PyQt6.QtWidgets import (
     QScrollArea,
     QLabel,
 )
-from sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
+from sequence_auto_completer.sequence_auto_completion_manager import (
+    SequenceAutoCompletionManager,
+)
 from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
 from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager
 from widgets.sequence_widget.current_word_label import CurrentWordLabel
@@ -52,7 +54,7 @@ class SequenceWidget(QWidget):
         self.button_frame = SW_ButtonFrame(self)
         self.graph_editor = GraphEditor(self)
         self.pictograph_factory = SW_PictographFactory(self)
-        self.autocompleter = SequenceAutoCompleter(self)
+        self.autocompleter = SequenceAutoCompletionManager(self)
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
