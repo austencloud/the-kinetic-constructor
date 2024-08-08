@@ -35,7 +35,7 @@ class SequenceWidget(QWidget):
         self.json_manager = self.main_widget.json_manager
 
         self.default_beat_quantity = 16
-        self.sequence_difficulty_evaluator = SequenceDifficultyEvaluator()
+
         self._setup_components()
         self._configure_scroll_area()
         self._setup_cache()
@@ -78,8 +78,8 @@ class SequenceWidget(QWidget):
 
     def update_difficulty_label(self):
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
-        difficulty_level = self.sequence_difficulty_evaluator.evaluate_difficulty(
-            sequence
+        difficulty_level = (
+            self.main_widget.sequence_difficulty_evaluator.evaluate_difficulty(sequence)
         )
         self.difficulty_label.set_difficulty_level(difficulty_level)
 
@@ -87,7 +87,9 @@ class SequenceWidget(QWidget):
         start_pos_rect = self.beat_frame.start_pos_view.geometry()
         current_word_rect = self.current_word_label.geometry()
         x = start_pos_rect.left()
-        y = current_word_rect.top()  # Align the top of the difficulty label with the top of the current word label
+        y = (
+            current_word_rect.top()
+        )  # Align the top of the difficulty label with the top of the current word label
         self.difficulty_label.move(x, y)
 
     def _setup_cache(self):
@@ -107,7 +109,6 @@ class SequenceWidget(QWidget):
         self.options_panel.exec()  # Use exec() to show the dialog modally
 
     def _get_current_beat_frame_state(self) -> dict:
-        layout = self.beat_frame.layout
         num_beats = sum(1 for beat in self.beat_frame.beats if beat.isVisible())
         grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
         save_layout = False  # Default value, can be set based on your logic
@@ -124,8 +125,6 @@ class SequenceWidget(QWidget):
 
     def _calculate_current_layout(self) -> tuple:
         layout = self.beat_frame.layout
-        row_count = layout.rowCount()
-        col_count = layout.columnCount() - 1  # Exclude the start position column
 
         max_row = 0
         max_col = 0
@@ -178,7 +177,7 @@ class SequenceWidget(QWidget):
             )
         )
         self.SW_pictograph_cache[pictograph_key] = pictograph
-        self.update_current_word()
+
 
     def resize_sequence_widget(self) -> None:
         self.current_word_label.resize_current_word_label()

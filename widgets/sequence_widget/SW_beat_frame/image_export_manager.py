@@ -33,12 +33,12 @@ class ImageExportManager:
         self.main_widget = beat_frame.main_widget
         if beat_frame_class.__name__ == "SW_BeatFrame":
             self.sequence_widget = beat_frame.sequence_widget
-        elif beat_frame_class.__name__ == "InvisibleDictionaryBeatFrame":
+        elif beat_frame_class.__name__ == "TempBeatFrame":
             self.dictionary_widget = beat_frame.dictionary_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
         self.include_start_pos = (
             self.settings_manager.image_export.get_image_export_setting(
-                "include_start_position", True
+                "include_start_position"
             )
         )
         self.layout_handler = ImageExportLayoutHandler(self)

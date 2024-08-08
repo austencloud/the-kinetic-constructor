@@ -27,7 +27,7 @@ class DictionaryButtonPanel(QWidget):
         self.preview_area = preview_area
         self.dictionary_widget = preview_area.dictionary_widget
         self.deletion_handler = self.dictionary_widget.deletion_manager
-        self.beat_frame = TempBeatFrame(self.dictionary_widget)
+        self.temp_beat_frame = TempBeatFrame(self.dictionary_widget)
 
         self._setup_buttons()
 
@@ -114,6 +114,6 @@ class DictionaryButtonPanel(QWidget):
             )
             return
 
-        self.beat_frame.populate_beat_frame_from_json(metadata["sequence"])
-        self.export_manager = self.beat_frame.export_manager
+        self.temp_beat_frame.populate_beat_frame_from_json(metadata["sequence"])
+        self.export_manager = self.temp_beat_frame.export_manager
         self.export_manager.dialog_executor.exec_dialog(metadata["sequence"])

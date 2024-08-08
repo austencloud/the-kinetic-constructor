@@ -32,10 +32,10 @@ class SettingsManager(QObject):
                 return json.load(file)
         else:
             default_settings = {
-                "global_settings": GlobalSettings.DEFAULT_GLOBAL_SETTINGS,
-                "image_export_settings": ImageExportSettings.DEFAULT_IMAGE_EXPORT_SETTINGS,
-                "user_profile_settings": UserProfileSettings.DEFAULT_USER_SETTINGS,
-                "visibility_settings": VisibilitySettings.DEFAULT_VISIBILITY_SETTINGS,
+                "global": GlobalSettings.DEFAULT_GLOBAL_SETTINGS,
+                "image_export": ImageExportSettings.DEFAULT_IMAGE_EXPORT_SETTINGS,
+                "user_profile": UserProfileSettings.DEFAULT_USER_SETTINGS,
+                "visibility": VisibilitySettings.DEFAULT_VISIBILITY_SETTINGS,
             }
             self.save_settings(default_settings)
             return default_settings
@@ -45,3 +45,19 @@ class SettingsManager(QObject):
             settings = self.settings
         with open(self.settings_json, "w") as file:
             json.dump(settings, file, indent=4)
+
+    def save_image_export_settings(self, settings) -> None:
+        self.settings["image_export"] = settings
+        self.save_settings()
+
+    def save_user_profile_settings(self, settings) -> None:
+        self.settings["user_profile"] = settings
+        self.save_settings()
+
+    def save_visibility_settings(self, settings) -> None:
+        self.settings["visibility"] = settings
+        self.save_settings()
+
+    def save_global_settings(self, settings) -> None:
+        self.settings["global"] = settings
+        self.save_settings()

@@ -24,7 +24,7 @@ class GlobalSettings:
     def __init__(self, settings_manager: "SettingsManager") -> None:
         self.settings_manager = settings_manager
         self.settings = self.settings_manager.settings.get(
-            "global_settings", self.DEFAULT_GLOBAL_SETTINGS
+            "global", self.DEFAULT_GLOBAL_SETTINGS
         )
         self.prop_type_changer = PropTypeChanger(self.settings_manager)
 
@@ -51,7 +51,9 @@ class GlobalSettings:
         self.settings_manager.background_changed.emit(background_type)
 
     def setup_background_manager(self, widget):
-        self.sequence_widget = self.settings_manager.main_window.main_widget.top_builder_widget.sequence_widget
+        self.sequence_widget = (
+            self.settings_manager.main_window.main_widget.top_builder_widget.sequence_widget
+        )
         bg_type = self.get_background_type()
         if bg_type == "Rainbow":
             self.sequence_widget.current_word_label.set_font_color("black")

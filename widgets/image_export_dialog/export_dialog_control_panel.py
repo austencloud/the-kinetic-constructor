@@ -52,7 +52,7 @@ class ExportDialogControlPanel(QWidget):
         self.open_directory_check = QCheckBox("Open file location after export", self)
         self.open_directory_check.setChecked(
             self.settings_manager.image_export.get_image_export_setting(
-                "open_directory_on_export", True
+                "open_directory_on_export"
             )
         )
         self.open_directory_check.toggled.connect(self.update_open_directory_setting)
@@ -104,34 +104,32 @@ class ExportDialogControlPanel(QWidget):
         self.include_start_pos_check = QCheckBox("Add Start Position", self)
         self.include_start_pos_check.setChecked(
             self.settings_manager.image_export.get_image_export_setting(
-                "include_start_position", True
+                "include_start_position"
             )
         )
         self.include_start_pos_check.toggled.connect(self.optionChanged.emit)
 
         self.add_info_check = QCheckBox("Add Info", self)
         self.add_info_check.setChecked(
-            self.settings_manager.image_export.get_image_export_setting(
-                "add_info", True
-            )
+            self.settings_manager.image_export.get_image_export_setting("add_info")
         )
         self.add_info_check.toggled.connect(self.toggle_add_info)
 
         self.add_word_check = QCheckBox("Add Word to Image", self)
         self.add_word_check.setChecked(
-            self.settings_manager.image_export.get_image_export_setting(
-                "add_word", False
-            )
+            self.settings_manager.image_export.get_image_export_setting("add_word")
         )
         self.add_word_check.toggled.connect(self.toggle_add_word)
 
         self.include_difficulty_level_check = QCheckBox(
             "Include Difficulty Level", self
-        )  # New checkbox
-        self.include_difficulty_level_check.setChecked(False)  # Default to unchecked
-        self.include_difficulty_level_check.toggled.connect(
-            self.optionChanged.emit
-        )  # Connect to signal
+        )
+        self.include_difficulty_level_check.setChecked(
+            self.settings_manager.image_export.get_image_export_setting(
+                "include_difficulty_level"
+            )
+        )
+        self.include_difficulty_level_check.toggled.connect(self.optionChanged.emit)
         self.include_difficulty_level_check.toggled.connect(
             self.toggle_include_difficulty_level
         )
@@ -194,15 +192,13 @@ class ExportDialogControlPanel(QWidget):
         include_start_pos = self.include_start_pos_check.isChecked()
         add_info = self.add_info_check.isChecked()
         add_word = self.add_word_check.isChecked()
-        include_difficulty_level = (
-            self.include_difficulty_level_check.isChecked()
-        )  # New option
+        include_difficulty_level = self.include_difficulty_level_check.isChecked()
         self.export_dialog.preview_panel.update_preview_with_start_pos(
             include_start_pos,
             add_info,
             self.export_dialog.sequence,
             add_word,
-            include_difficulty_level,  # Pass new option
+            include_difficulty_level,
         )
 
     def toggle_add_info(self):

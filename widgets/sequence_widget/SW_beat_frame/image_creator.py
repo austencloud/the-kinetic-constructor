@@ -27,7 +27,7 @@ class ImageCreator:
         self.layout_manager = export_manager.layout_handler
         self.beat_size = self.beat_frame.start_pos_view.beat.width()
         self.beat_factory = export_manager.beat_factory
-        self.beat_scale = 0.6
+        self.beat_scale = 1
         self._setup_drawers()
 
     def _setup_drawers(self):
@@ -74,11 +74,11 @@ class ImageCreator:
                 self.word_drawer.draw_word(image, word, num_filled_beats)
 
             if options.get("include_difficulty_level"):
-                difficulty_level = self.export_manager.sequence_widget.sequence_difficulty_evaluator.evaluate_difficulty(
+                difficulty_level = self.export_manager.main_widget.sequence_difficulty_evaluator.evaluate_difficulty(
                     self.export_manager.beat_frame.json_manager.loader_saver.load_current_sequence_json()
                 )
                 self.difficulty_level_drawer.draw_difficulty_level(
-                    image, difficulty_level
+                    image, difficulty_level, additional_height_top
                 )
 
         return image

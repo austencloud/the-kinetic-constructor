@@ -10,6 +10,7 @@ from Enums.PropTypes import PropType
 from objects.graphical_object.graphical_object_svg_manager import (
     GraphicalObjectSvgManager,
 )
+from sequence_difficulty_evaluator import SequenceDifficultyEvaluator
 from widgets.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from styles.get_tab_stylesheet import get_tab_stylesheet
@@ -74,7 +75,7 @@ class MainWidget(QTabWidget):
         settings_path = get_images_and_data_path("settings.json")
         with open(settings_path, "r", encoding="utf-8") as file:
             settings: dict[str, dict[str, str | bool]] = json.load(file)
-        prop_type_value = settings.get("global_settings", {}).get("prop_type", "staff")
+        prop_type_value = settings.get("global", {}).get("prop_type", "staff")
         self.prop_type = PropType.get_prop_type(prop_type_value)
 
     def _setup_components(self) -> None:
@@ -87,7 +88,7 @@ class MainWidget(QTabWidget):
         self.main_settings_dialog = MainSettingsDialog(self)
         self.special_placement_loader = SpecialPlacementLoader(self)
         self.metadata_extractor = MetaDataExtractor(self)
-
+        self.sequence_difficulty_evaluator = SequenceDifficultyEvaluator()
         self._setup_special_placements()
 
         self.top_builder_widget = TopBuilderWidget(self)
