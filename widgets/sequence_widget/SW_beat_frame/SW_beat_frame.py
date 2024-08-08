@@ -116,13 +116,13 @@ class SW_BeatFrame(BaseBeatFrame):
                 return beat_view
         return self.start_pos_view
 
-
-
     def on_beat_adjusted(self) -> None:
         current_sequence_json = (
             self.json_manager.loader_saver.load_current_sequence_json()
         )
         self.propogate_turn_adjustment(current_sequence_json)
+        self.sequence_widget.update_difficulty_label()
+
 
     def propogate_turn_adjustment(self, current_sequence_json) -> None:
         for i, entry in enumerate(current_sequence_json):
@@ -152,7 +152,11 @@ class SW_BeatFrame(BaseBeatFrame):
     def resize_beat_frame(self) -> None:
         scrollbar_width = self.sequence_widget.scroll_area.verticalScrollBar().width()
         width = int(
-            (self.sequence_widget.width() - self.sequence_widget.button_frame.width() - scrollbar_width)
+            (
+                self.sequence_widget.width()
+                - self.sequence_widget.button_frame.width()
+                - scrollbar_width
+            )
             * 0.8
         )
         num_cols = max(1, self.layout.columnCount() - 1)
@@ -206,3 +210,4 @@ class SW_BeatFrame(BaseBeatFrame):
 
         scroll_area.add_and_display_relevant_pictographs(next_options)
         self.sequence_builder.option_picker.resize_option_picker()
+

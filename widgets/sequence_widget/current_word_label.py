@@ -5,7 +5,9 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QFont
 
-from widgets.sequence_widget.SW_beat_frame.current_word_line_edit import CurrentWordLineEdit
+from widgets.sequence_widget.SW_beat_frame.current_word_line_edit import (
+    CurrentWordLineEdit,
+)
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
@@ -19,6 +21,8 @@ class CurrentWordLabel(QWidget):
         self.line_edit = CurrentWordLineEdit(self)
         layout = QHBoxLayout()
         layout.addWidget(self.line_edit)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
         self.setLayout(layout)
 
     def resize_current_word_label(self):
@@ -38,7 +42,9 @@ class CurrentWordLabel(QWidget):
         # Function to check if the word can be constructed by repeating a pattern
         def can_form_by_repeating(s: str, pattern: str) -> bool:
             pattern_len = len(pattern)
-            return all(s[i:i + pattern_len] == pattern for i in range(0, len(s), pattern_len))
+            return all(
+                s[i : i + pattern_len] == pattern for i in range(0, len(s), pattern_len)
+            )
 
         n = len(word)
         # Try to find the smallest repeating unit

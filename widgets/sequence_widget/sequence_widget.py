@@ -1,15 +1,21 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QShowEvent
-from PyQt6.QtCore import QTimer
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QScrollArea
-from PyQt6.QtCore import Qt
-
+from PyQt6.QtCore import QTimer, Qt
+from PyQt6.QtWidgets import (
+    QVBoxLayout,
+    QWidget,
+    QHBoxLayout,
+    QScrollArea,
+    QLabel,
+)
 from sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
+from sequence_difficulty_evaluator import SequenceDifficultyEvaluator
+from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
 from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager
 from widgets.sequence_widget.current_word_label import CurrentWordLabel
+from widgets.sequence_widget.difficulty_label import DifficultyLabel
 
 from ..graph_editor.graph_editor import GraphEditor
-from .SW_beat_frame.SW_beat_frame import SW_BeatFrame
 from .SW_beat_frame.SW_layout_options_dialog import SW_LayoutOptionsDialog
 from ..indicator_label import IndicatorLabel
 from .SW_pictograph_factory import SW_PictographFactory
@@ -26,28 +32,66 @@ class SequenceWidget(QWidget):
         self.top_builder_widget = top_builder_widget
         self.main_widget = top_builder_widget.main_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
+        self.json_manager = self.main_widget.json_manager
+
         self.default_beat_quantity = 16
+        self.sequence_difficulty_evaluator = SequenceDifficultyEvaluator()
         self._setup_components()
         self._configure_scroll_area()
         self._setup_cache()
         self._setup_beat_frame_layout()
         self._setup_indicator_label_layout()
         self._setup_layout()
-        self.update_current_word()
-
-    def _setup_cache(self):
-        self.SW_pictograph_cache: dict[str, Beat] = {}
 
     def _setup_components(self):
         self.scroll_area = QScrollArea(self)
         self.indicator_label = IndicatorLabel(self)
         self.current_word_label = CurrentWordLabel(self)
+        self.difficulty_label = DifficultyLabel(self)
         self.beat_frame = SW_BeatFrame(self)
         self.add_to_dictionary_manager = AddToDictionaryManager(self)
         self.button_frame = SW_ButtonFrame(self)
         self.graph_editor = GraphEditor(self)
         self.pictograph_factory = SW_PictographFactory(self)
         self.autocompleter = SequenceAutoCompleter(self)
+
+    def _setup_layout(self):
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+
+        self.current_word_layout = QHBoxLayout()
+        self.current_word_layout.addWidget(self.current_word_label)
+
+        self.layout.addLayout(self.current_word_layout, 1)
+        self.layout.addLayout(self.beat_frame_layout, 12)
+        self.layout.addWidget(self.indicator_label, 1)
+        self.layout.addWidget(self.graph_editor, 6)
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.setLayout(self.layout)
+
+        self.difficulty_label.setParent(self)
+
+    def update_current_word(self):
+        current_word = self.beat_frame.get_current_word()
+        self.current_word_label.set_current_word(current_word)
+        self.update_difficulty_label_position()
+
+    def update_difficulty_label(self):
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        difficulty_level = self.sequence_difficulty_evaluator.evaluate_difficulty(
+            sequence
+        )
+        self.difficulty_label.set_difficulty_level(difficulty_level)
+
+    def update_difficulty_label_position(self):
+        start_pos_rect = self.beat_frame.start_pos_view.geometry()
+        current_word_rect = self.current_word_label.geometry()
+        x = start_pos_rect.left()
+        y = current_word_rect.top()  # Align the top of the difficulty label with the top of the current word label
+        self.difficulty_label.move(x, y)
+
+    def _setup_cache(self):
+        self.SW_pictograph_cache: dict[str, Beat] = {}
 
     def _configure_scroll_area(self):
         self.scroll_area.setWidgetResizable(True)
@@ -106,14 +150,6 @@ class SequenceWidget(QWidget):
         self.beat_frame_layout.setContentsMargins(0, 0, 0, 0)
         self.beat_frame_layout.setSpacing(0)
 
-    def _setup_layout(self):
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addWidget(self.current_word_label, 1)
-        self.layout.addLayout(self.beat_frame_layout, 12)
-        self.layout.addWidget(self.indicator_label, 1)
-        self.layout.addWidget(self.graph_editor, 6)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
     def resizeEvent(self, event):
         self.layout.update()
         super().resizeEvent(event)
@@ -124,6 +160,7 @@ class SequenceWidget(QWidget):
 
     def post_show_initialization(self):
         self.resize_sequence_widget()
+        self.update_current_word()
 
     def _setup_indicator_label_layout(self):
         self.indicator_label_layout = QHBoxLayout()
@@ -142,10 +179,6 @@ class SequenceWidget(QWidget):
         )
         self.SW_pictograph_cache[pictograph_key] = pictograph
         self.update_current_word()
-
-    def update_current_word(self):
-        current_word = self.beat_frame.get_current_word()
-        self.current_word_label.set_current_word(current_word)
 
     def resize_sequence_widget(self) -> None:
         self.current_word_label.resize_current_word_label()

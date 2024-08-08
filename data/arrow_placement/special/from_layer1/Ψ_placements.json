@@ -151,7 +151,8 @@
     "(o, 1, 1)": {
       "static_rot_angle_override": true,
       "static": [-100, 0],
-      "swap_beta_s_radial_blue_static_s_red_dash_e": true
+      "swap_beta_s_radial_blue_static_s_red_dash_e": true,
+      "swap_beta_s_radial_blue_dash_w_red_static_s": true
     },
     "(ccw, 0, 1)": {
       "static": [-100, 0],
