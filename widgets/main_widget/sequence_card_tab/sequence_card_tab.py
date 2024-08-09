@@ -46,11 +46,6 @@ class SequenceCardTab(QWidget):
         )  # Cache QWidgets instead of layouts
         self.initialized = False
 
-    def paintEvent(self, event) -> None:
-        self.background_manager = self.global_settings.setup_background_manager(self)
-        painter = QPainter(self)
-        self.background_manager.paint_background(self, painter)
-
     def init_ui(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.setLayout(self.layout)
@@ -91,8 +86,20 @@ class SequenceCardTab(QWidget):
 
     def display_cached_pages(self, selected_length: int):
         """Display the cached pages without recalculating."""
-        for page_widget in self.pages_cache[selected_length]:
-            self.scroll_layout.addWidget(page_widget)  # Add the cached QFrame
+        for i in range(0, len(self.pages_cache[selected_length]), 2):
+            # Create a new row layout for each pair of pages
+            row_layout = QHBoxLayout()
+            row_layout.setSpacing(self.margin)
+            row_layout.setContentsMargins(
+                self.margin, self.margin, self.margin, self.margin
+            )
+
+            for j in range(2):  # Only add up to two items per row
+                if i + j < len(self.pages_cache[selected_length]):
+                    page_widget = self.pages_cache[selected_length][i + j]
+                    row_layout.addWidget(page_widget)
+
+            self.scroll_layout.addLayout(row_layout)
 
     def get_all_images(self, path: str) -> List[str]:
         images = []
@@ -213,3 +220,8 @@ class SequenceCardTab(QWidget):
             self.initialized = True
             self.setCursor(Qt.CursorShape.ArrowCursor)
         super().showEvent(event)
+
+    def paintEvent(self, event) -> None:
+        self.background_manager = self.global_settings.setup_background_manager(self)
+        painter = QPainter(self)
+        self.background_manager.paint_background(self, painter)
