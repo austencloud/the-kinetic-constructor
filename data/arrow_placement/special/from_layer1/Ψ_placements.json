@@ -146,7 +146,8 @@
       "static": [-35, 10]
     },
     "(0, 0)": {
-      "swap_beta_s_radial_blue_static_s_red_dash_e": true
+      "swap_beta_s_radial_blue_static_s_red_dash_e": true,
+      "swap_beta_w_radial_blue_static_w_red_dash_s": true
     },
     "(o, 1, 1)": {
       "static_rot_angle_override": true,
