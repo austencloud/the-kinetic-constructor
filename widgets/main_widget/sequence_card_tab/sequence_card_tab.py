@@ -69,15 +69,13 @@ class SequenceCardTab(QWidget):
         self.layout.addWidget(self.nav_sidebar, 1)
         self.layout.addWidget(self.scroll_area, 15)
 
-    def showEvent(self, event):
-        if not self.initialized:
-            self.refresh_sequence_cards()
-            self.initialized = True
-
     def load_images(self):
+        self.setCursor(Qt.CursorShape.WaitCursor)
         export_path = get_sequence_card_image_exporter_path()
         images = self.get_all_images(export_path)
         self.display_images(images)
+        self.setCursor(Qt.CursorShape.ArrowCursor)
+
 
     def get_all_images(self, path: str) -> List[str]:
         images = []
@@ -173,3 +171,11 @@ class SequenceCardTab(QWidget):
 
         self.pages.clear()
         self.load_images()
+
+    def showEvent(self, event):
+        if not self.initialized:
+            self.setCursor(Qt.CursorShape.WaitCursor)
+            self.refresh_sequence_cards()
+            self.initialized = True
+            self.setCursor(Qt.CursorShape.ArrowCursor)
+        super().showEvent(event)

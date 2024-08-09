@@ -1,6 +1,6 @@
 import json
 import threading
-from PyQt6.QtGui import QKeyEvent
+from PyQt6.QtGui import QKeyEvent, QCursor
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
@@ -54,26 +54,20 @@ class MainWidget(QTabWidget):
         self.setStyleSheet(get_tab_stylesheet())
         self.webcam_initialized = False  # Add an initialization flag
         self.initialized = True
-        # on tab changed, access the globabl settings to save the most recent tab
         self.currentChanged.connect(self.on_tab_changed)
+        self.tabBar().setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
 
     def on_tab_changed(self, index):
-        if index == self.builder_tab_index:
-            self.main_window.settings_manager.global_settings.set_current_tab(
-                "sequence_builder"
-            )
-        elif index == self.dictionary_tab_index:
-            self.main_window.settings_manager.global_settings.set_current_tab(
-                "dictionary"
-            )
-        elif index == self.recorder_tab_index:
-            self.main_window.settings_manager.global_settings.set_current_tab(
-                "recorder"
-            )
-        elif index == self.sequence_card_tab_index:
-            self.main_window.settings_manager.global_settings.set_current_tab(
-                "sequence_cards"
-            )
+        tab_mapping = {
+            self.builder_tab_index: "sequence_builder",
+            self.dictionary_tab_index: "dictionary",
+            self.recorder_tab_index: "recorder",
+            self.sequence_card_tab_index: "sequence_cards"
+        }
+        current_tab = tab_mapping.get(index)
+        if current_tab:
+            self.main_window.settings_manager.global_settings.set_current_tab(current_tab)
 
     def initialize_webcam_async(self):
         """Start the webcam initialization in a separate thread to avoid blocking the UI."""
@@ -125,14 +119,15 @@ class MainWidget(QTabWidget):
             self.main_window.settings_manager.global_settings.get_current_tab()
         )
 
-        if current_tab == "sequence_builder":
-            self.setCurrentIndex(self.builder_tab_index)
-        elif current_tab == "dictionary":
-            self.setCurrentIndex(self.dictionary_tab_index)
-        elif current_tab == "recorder":
-            self.setCurrentIndex(self.recorder_tab_index)
-        elif current_tab == "sequence_cards":
-            self.setCurrentIndex(self.sequence_card_tab_index)
+        tab_mapping = {
+            "sequence_builder": self.builder_tab_index,
+            "dictionary": self.dictionary_tab_index,
+            "recorder": self.recorder_tab_index,
+            "sequence_cards": self.sequence_card_tab_index
+        }
+        current_index = tab_mapping.get(current_tab)
+        if current_index is not None:
+            self.setCurrentIndex(current_index)
 
         self.initialized = True
 
@@ -182,13 +177,12 @@ class MainWidget(QTabWidget):
     def resize_widget(self, widget):
         if widget == self.top_builder_widget:
             if not self.top_builder_widget.initialized:
+                self.top_builder_widget.resize_top_builder_widget()
                 self.top_builder_widget.initialized = True
-                self.top_builder_widget.sequence_widget.resize_sequence_widget()
-                self.top_builder_widget.sequence_builder.resize_sequence_builder()
         elif widget == self.sequence_recorder:
             if not self.sequence_recorder.initialized:
                 self.sequence_recorder.resize_sequence_recorder()
-                self.initialized = True
+                self.sequence_recorder.initialized = True
             SW_beat_frame = self.top_builder_widget.sequence_widget.beat_frame
             if SW_beat_frame.sequence_changed:
                 SW_beat_frame.sequence_changed = False
@@ -198,14 +192,14 @@ class MainWidget(QTabWidget):
                     if view.is_filled:
                         view.resize_beat_view()
         elif widget == self.dictionary_widget:
-            self.dictionary_widget.browser.resize_dictionary_browser()
+            if not self.dictionary_widget.initialized:
+                self.dictionary_widget.resize_dictionary_widget()
+                self.dictionary_widget.initialized = True
 
     def resize_all_widgets(self):
         starting_widget = self.currentWidget()
         self.currentChanged.disconnect(self.on_tab_changed)
-        for i in range(self.count()):
-            self.setCurrentIndex(i)
-            self.resize_widget(self.currentWidget())
+        self.resize_widget(self.currentWidget())
         self.setCurrentWidget(starting_widget)
         self.currentChanged.connect(self.on_tab_changed)
 

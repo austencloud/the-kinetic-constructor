@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtGui import QPainter
-
+from PyQt6.QtCore import Qt
 
 from widgets.sequence_builder.sequence_builder import SequenceBuilder
 from widgets.sequence_widget.sequence_widget import SequenceWidget
@@ -45,5 +45,14 @@ class TopBuilderWidget(QWidget):
         self.background_manager.paint_background(self, painter)
 
     def showEvent(self, event):
-        super().showEvent(event)
-        self.background_manager = self.global_settings.setup_background_manager(self)
+        if not self.initialized:
+            self.background_manager = self.global_settings.setup_background_manager(self)
+            self.setCursor(Qt.CursorShape.WaitCursor)
+            self.resize_top_builder_widget()
+            self.initialized = True
+            self.setCursor(Qt.CursorShape.ArrowCursor)
+
+
+    def resize_top_builder_widget(self):
+        self.sequence_widget.resize_sequence_widget()
+        self.sequence_builder.resize_sequence_builder()

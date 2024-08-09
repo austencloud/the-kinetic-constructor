@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QPainter
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
-
+from PyQt6.QtCore import Qt
 
 from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
     DictionaryBrowser,
@@ -31,6 +31,7 @@ class DictionaryWidget(QWidget):
             self.main_widget.main_window.settings_manager.global_settings
         )
         self.connect_signals()
+        self.initialized = False
 
     def connect_signals(self):
         self.main_widget.main_window.settings_manager.background_changed.connect(
@@ -41,10 +42,6 @@ class DictionaryWidget(QWidget):
         self.background_manager = self.global_settings.setup_background_manager(self)
         self.background_manager.update_required.connect(self.update)
         self.update()
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        self.background_manager.paint_background(self, painter)
 
     def _setup_ui(self) -> None:
         self.deletion_manager = DictionaryDeletionManager(self)
@@ -69,3 +66,10 @@ class DictionaryWidget(QWidget):
 
     def resize_dictionary_widget(self) -> None:
         self.browser.resize_dictionary_browser()
+
+    def showEvent(self, event) -> None:
+        if not self.initialized:
+            self.setCursor(Qt.CursorShape.WaitCursor)
+            self.resize_dictionary_widget()
+            self.initialized = True
+            self.setCursor(Qt.CursorShape.ArrowCursor)

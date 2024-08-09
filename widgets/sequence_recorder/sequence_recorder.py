@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QPainter
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from .SR_capture_frame import SR_CaptureFrame
 from .SR_main_control_frame import SR_MainControlFrame
@@ -49,3 +50,12 @@ class SequenceRecorder(QWidget):
     def resize_sequence_recorder(self) -> None:
         self.capture_frame.resize_capture_frame()
         self.video_control_frame.resize_control_frame()
+
+    def showEvent(self, event) -> None:
+        if not self.initialized:
+            # set the cursor to loading cursor with Qt.CursorShape.WaitCursor
+            self.setCursor(Qt.CursorShape.WaitCursor)
+            self.resize_sequence_recorder()
+            self.initialized = True
+            self.setCursor(Qt.CursorShape.ArrowCursor)
+        super().showEvent(event)

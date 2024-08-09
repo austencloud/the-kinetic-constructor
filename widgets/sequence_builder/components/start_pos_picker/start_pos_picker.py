@@ -86,7 +86,10 @@ class StartPosPicker(QWidget):
         return pictograph
 
     def resize_start_pos_picker(self) -> None:
-
         self.pictograph_frame.resize_start_pos_picker_pictograph_frame()
         self.start_pos_manager.resize_start_position_pictographs()
         self.variations_button.resize_variations_button()
+
+    def showEvent(self, event) -> None:
+        self.resize_start_pos_picker()
+        super().showEvent(event)
