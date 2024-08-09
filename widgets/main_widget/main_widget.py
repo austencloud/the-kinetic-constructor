@@ -111,15 +111,10 @@ class MainWidget(QTabWidget):
         self.sequence_difficulty_evaluator = SequenceDifficultyEvaluator()
         self._setup_special_placements()
 
-        self.top_builder_widget = TopBuilderWidget(self)
-        self.dictionary_widget = DictionaryWidget(self)
-        self.sequence_recorder = SequenceRecorder(self)
-        self.sequence_card_tab = SequenceCardTab(self)
-
-        self.addTab(self.top_builder_widget, "Builder")
-        self.addTab(self.dictionary_widget, "Dictionary")
-        self.addTab(self.sequence_recorder, "Recorder")
-        self.addTab(self.sequence_card_tab, "Sequence Cards")
+        self._setup_and_add_builder()
+        self._setup_and_add_dictionary()
+        self._setup_and_add_recorder()
+        self._setup_and_add_sequence_cards()
 
         self.builder_tab_index = 0
         self.dictionary_tab_index = 1
@@ -140,6 +135,22 @@ class MainWidget(QTabWidget):
             self.setCurrentIndex(self.sequence_card_tab_index)
 
         self.initialized = True
+
+    def _setup_and_add_sequence_cards(self):
+        self.sequence_card_tab = SequenceCardTab(self)
+        self.addTab(self.sequence_card_tab, "Sequence Cards")
+
+    def _setup_and_add_recorder(self):
+        self.sequence_recorder = SequenceRecorder(self)
+        self.addTab(self.sequence_recorder, "Recorder")
+
+    def _setup_and_add_dictionary(self):
+        self.dictionary_widget = DictionaryWidget(self)
+        self.addTab(self.dictionary_widget, "Dictionary")
+
+    def _setup_and_add_builder(self):
+        self.top_builder_widget = TopBuilderWidget(self)
+        self.addTab(self.top_builder_widget, "Builder")
 
     def _setup_special_placements(self) -> None:
         self.special_placements: dict[

@@ -41,6 +41,7 @@ class SequenceCardTab(QWidget):
         self.populator = SequenceCardImagePopulator(self)
         self.init_ui()
         self.pages: List[QGridLayout] = []
+        self.initialized = False
 
     def paintEvent(self, event) -> None:
         self.background_manager = self.global_settings.setup_background_manager(self)
@@ -69,7 +70,9 @@ class SequenceCardTab(QWidget):
         self.layout.addWidget(self.scroll_area, 15)
 
     def showEvent(self, event):
-        self.refresh_sequence_cards()
+        if not self.initialized:
+            self.refresh_sequence_cards()
+            self.initialized = True
 
     def load_images(self):
         export_path = get_sequence_card_image_exporter_path()

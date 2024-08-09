@@ -34,7 +34,7 @@ class WordDrawer:
         text_height = metrics.ascent()
 
         # Adjust the font size until the text fits within the image width
-        while text_width + 2 * margin > image.width():
+        while text_width + 2 * margin > image.width() - (image.width() // 10):
             font_size = font.pointSize() - 1
             if font_size <= 10:
                 break
