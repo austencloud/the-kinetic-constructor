@@ -1,7 +1,7 @@
-from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QPushButton, QWidget, QScrollArea, QLabel
 from PyQt6.QtGui import QCursor
 from PyQt6.QtCore import Qt, QPoint
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
@@ -17,6 +17,7 @@ class DictionaryNavSidebar(QWidget):
         self.buttons: list[QPushButton] = []
         self.year_labels: dict[str, QPushButton] = {}
         self.spacer_lines: list[QLabel] = []
+        self.selected_button: QPushButton = None  # Track the selected button
 
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.scroll_area)
@@ -65,7 +66,9 @@ class DictionaryNavSidebar(QWidget):
 
                 date_button = QPushButton(day)
                 date_button.clicked.connect(
-                    lambda checked, sec=section: self.scroll_to_section(sec)
+                    lambda checked, sec=section, btn=date_button: self.scroll_to_section(
+                        sec, btn
+                    )
                 )
                 date_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
                 self.layout.addWidget(date_button)
@@ -76,7 +79,9 @@ class DictionaryNavSidebar(QWidget):
             for section in sections:
                 button = QPushButton(str(section))
                 button.clicked.connect(
-                    lambda checked, sec=section: self.scroll_to_section(sec)
+                    lambda checked, sec=section, btn=button: self.scroll_to_section(
+                        sec, btn
+                    )
                 )
                 button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
                 self.layout.addWidget(button)
@@ -97,30 +102,44 @@ class DictionaryNavSidebar(QWidget):
         self.buttons.clear()
         self.year_labels.clear()
         self.spacer_lines.clear()
+        self.selected_button = None
 
     def get_formatted_day(self, date):
         day = date.split("-")[0].lstrip("0") + "-" + date.split("-")[1].lstrip("0")
-
         return day
 
-    def style_button(self, button: QPushButton):
+    def style_button(self, button: QPushButton, selected: bool = False):
         font_size = self.browser.width() // 40
-        button.setStyleSheet(
-            f"""
-            QPushButton {{
-                background: transparent;
-                border: none;
-                font-size: {font_size}px;
-                color: #333;
-                padding: 5px;
-                text-align: center;
-                font-weight: bold;
-            }}
-            QPushButton:hover {{
-                background: #f0f0f0;
-            }}
-        """
-        )
+        if selected:
+            button.setStyleSheet(
+                f"""
+                QPushButton {{
+                    background-color: #333;
+                    color: white;
+                    border-radius: 5px;
+                    font-size: {font_size}px;
+                    padding: 5px;
+                    font-weight: bold;
+                }}
+                """
+            )
+        else:
+            button.setStyleSheet(
+                f"""
+                QPushButton {{
+                    background: transparent;
+                    border: none;
+                    font-size: {font_size}px;
+                    color: #333;
+                    padding: 5px;
+                    text-align: center;
+                    font-weight: bold;
+                }}
+                QPushButton:hover {{
+                    background: #f0f0f0;
+                }}
+            """
+            )
 
     def style_year_label(self, label: QLabel):
         font_size = self.browser.width() // 35
@@ -136,7 +155,12 @@ class DictionaryNavSidebar(QWidget):
         """
         )
 
-    def scroll_to_section(self, section):
+    def scroll_to_section(self, section, button: QPushButton):
+        if self.selected_button:
+            self.style_button(self.selected_button, selected=False)
+        self.style_button(button, selected=True)
+        self.selected_button = button
+
         if "-" in section:
             section = (
                 section.split("-")[0].lstrip("0")
@@ -153,7 +177,8 @@ class DictionaryNavSidebar(QWidget):
 
     def _set_styles(self):
         for button in self.buttons:
-            self.style_button(button)
+            selected = button == self.selected_button
+            self.style_button(button, selected=selected)
         for year_label in self.year_labels.values():
             self.style_year_label(year_label)
         for spacer_line in self.spacer_lines:

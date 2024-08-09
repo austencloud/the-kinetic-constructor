@@ -36,6 +36,6 @@
         }
     },
     "dictionary": {
-        "sort_method": "alphabetical"
+        "sort_method": "sequence_length"
     }
 }
