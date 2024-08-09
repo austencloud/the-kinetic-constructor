@@ -65,7 +65,7 @@ class SequenceWidget(QWidget):
         self.layout.addLayout(self.current_word_layout, 1)
         self.layout.addLayout(self.beat_frame_layout, 12)
         self.layout.addWidget(self.indicator_label, 1)
-        self.layout.addWidget(self.graph_editor, 6)
+        self.layout.addWidget(self.graph_editor, 4)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.setLayout(self.layout)
