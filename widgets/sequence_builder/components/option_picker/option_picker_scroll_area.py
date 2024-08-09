@@ -48,7 +48,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setContentsMargins(0, 0, 0, 0)
 
-
     def fix_stretch(self) -> None:
         if self.stretch_index >= 0:
             item = self.layout.takeAt(self.stretch_index)
@@ -75,7 +74,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             self.set_pictograph_orientations(pictograph_dict, sequence)
             pictograph = self._get_or_create_pictograph(pictograph_dict, sequence)
             pictograph.updater.update_pictograph(pictograph_dict)
-
 
         self.display_manager.order_and_display_pictographs()
         self.layout.update()  # Ensure the layout updates
@@ -117,7 +115,6 @@ class OptionPickerScrollArea(BasePictographScrollArea):
             pictograph.view.hide()
 
     def resize_option_picker_scroll_area(self) -> None:
-        self.setMinimumWidth(self.option_picker.sequence_builder.width())
         for section in self.sections_manager.sections.values():
             section.resize_option_picker_section_widget()
 
