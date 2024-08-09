@@ -29,7 +29,9 @@ class DictionaryBrowser(QWidget):
         self.scroll_widget = DictionaryBrowserScrollWidget(self)
         self.options_widget = DictionaryOptionsWidget(self)
         self.sorter = DictionarySorter(self)
-        self.sorter.sort_and_display_thumbnails()
+        self.sorter.sort_and_display_thumbnails(
+            self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
+        )
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)

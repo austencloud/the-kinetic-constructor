@@ -3,6 +3,7 @@ import os
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QObject, pyqtSignal
 from Enums.PropTypes import PropType
+from settings_manager.dictionary_settings import DictionarySettings
 from settings_manager.image_export_settings import ImageExportSettings
 from settings_manager.user_profile_settings import UserProfileSettings
 from settings_manager.visibility_settings import VisibilitySettings
@@ -25,6 +26,7 @@ class SettingsManager(QObject):
         self.image_export = ImageExportSettings(self)
         self.users = UserProfileSettings(self)
         self.visibility = VisibilitySettings(self)
+        self.dictionary = DictionarySettings(self)
 
     def load_settings(self) -> dict:
         if os.path.exists(self.settings_json):
@@ -36,6 +38,7 @@ class SettingsManager(QObject):
                 "image_export": ImageExportSettings.DEFAULT_IMAGE_EXPORT_SETTINGS,
                 "user_profile": UserProfileSettings.DEFAULT_USER_SETTINGS,
                 "visibility": VisibilitySettings.DEFAULT_VISIBILITY_SETTINGS,
+                "dictionary": DictionarySettings.DEFAULT_DICTIONARY_SETTINGS,
             }
             self.save_settings(default_settings)
             return default_settings
@@ -60,4 +63,8 @@ class SettingsManager(QObject):
 
     def save_global_settings(self, settings) -> None:
         self.settings["global"] = settings
+        self.save_settings()
+
+    def save_dictionary_settings(self, settings) -> None:
+        self.settings["dictionary"] = settings
         self.save_settings()

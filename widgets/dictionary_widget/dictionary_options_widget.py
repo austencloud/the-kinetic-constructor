@@ -13,7 +13,7 @@ class DictionaryOptionsWidget(QWidget):
         super().__init__(browser)
         self.browser = browser
         self.main_widget = browser.dictionary_widget.main_widget
-
+        self.settings_manager = self.main_widget.main_window.settings_manager
         self._setup_sort_buttons()
         self._setup_layout()
 
@@ -54,18 +54,22 @@ class DictionaryOptionsWidget(QWidget):
 
         for button in self.buttons.values():
             self.buttons_layout.addWidget(button)
+
         self.buttons_layout.addStretch()
 
     def on_sort_by_length(self):
-        self.browser.sorter.sort_and_display_thumbnails("Sequence Length")
+        self.settings_manager.dictionary.set_sort_method("sequence_length")
+        self.browser.sorter.sort_and_display_thumbnails("sequence_length")
         self.browser.scroll_widget.scroll_area.verticalScrollBar().setValue(0)
 
     def on_sort_alphabetically(self):
-        self.browser.sorter.sort_and_display_thumbnails("Alphabetical")
+        self.settings_manager.dictionary.set_sort_method("alphabetical")
+        self.browser.sorter.sort_and_display_thumbnails("alphabetical")
         self.browser.scroll_widget.scroll_area.verticalScrollBar().setValue(0)
 
     def on_sort_by_date_added(self):
-        self.browser.sorter.sort_and_display_thumbnails("Date Added")
+        self.settings_manager.dictionary.set_sort_method("date_added")
+        self.browser.sorter.sort_and_display_thumbnails("date_added")
         self.browser.scroll_widget.scroll_area.verticalScrollBar().setValue(0)
 
     def resizeEvent(self, event):

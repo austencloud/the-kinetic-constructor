@@ -34,5 +34,8 @@
         "grid_visibility": {
             "non_radial_points": false
         }
+    },
+    "dictionary": {
+        "sort_method": "alphabetical"
     }
 }

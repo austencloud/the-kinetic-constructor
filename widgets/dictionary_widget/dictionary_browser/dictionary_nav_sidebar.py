@@ -39,7 +39,7 @@ class DictionaryNavSidebar(QWidget):
     def update_sidebar(self, sections, sort_order):
         self._clear_sidebar()
 
-        if sort_order == "Date Added":
+        if sort_order == "date_added":
             self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
             current_year = None
