@@ -91,5 +91,5 @@ class StartPosPicker(QWidget):
         self.variations_button.resize_variations_button()
 
     def showEvent(self, event) -> None:
-        self.resize_start_pos_picker()
+        # self.resize_start_pos_picker()
         super().showEvent(event)
