@@ -26,17 +26,14 @@ class SequenceCardImagePopulator:
         ):
             self.create_new_page()
 
-        # Get the layout from the current page
         page_layout = self.sequence_card_tab.pages[self.current_page_index].layout()
 
-        # Add the image label to the current page layout
         page_layout.addWidget(image_label, self.current_row, self.current_col)
         self.current_col += 1
         if self.current_col >= max_images_per_row:
             self.current_col = 0
             self.current_row += 1
 
-        # If this was the last image added, add a bottom spacer
         if self.is_last_image_in_page(selected_length):
             self.add_bottom_spacer(page_layout, scaled_pixmap.height())
 
@@ -75,10 +72,10 @@ class SequenceCardImagePopulator:
     def add_bottom_spacer(self, page_layout: QGridLayout, pixmap_height: int):
         """Adds a bottom spacer row to ensure the last row of images aligns with the top."""
         # Calculate the remaining space
-        total_height = self.sequence_card_tab.page_height
+        total_height = self.sequence_card_tab.image_displayer.page_height
         used_height = self.current_row * pixmap_height
 
-        remaining_height = total_height - used_height
+        remaining_height = total_height - used_height - self.sequence_card_tab.image_displayer.margin
 
         # Add a spacer widget with the remaining height
         if remaining_height > 0:
@@ -88,3 +85,4 @@ class SequenceCardImagePopulator:
             page_layout.addWidget(
                 spacer, self.current_row + 1, 0, 1, self.max_images_per_row
             )
+

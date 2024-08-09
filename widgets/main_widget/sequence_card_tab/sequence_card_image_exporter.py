@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from widgets.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
 
 
-class SequenceCardTabImageExporter:
+class SequenceCardImageExporter:
     def __init__(self, sequence_card_tab: "SequenceCardTab"):
         self.main_widget = sequence_card_tab.main_widget
         self.temp_beat_frame = TempBeatFrame(sequence_card_tab)
@@ -55,9 +55,7 @@ class SequenceCardTabImageExporter:
                 )
 
                 pil_image = self.qimage_to_pil(qimage)
-                metadata["date_added"] = (
-                    datetime.now().isoformat()
-                ) 
+                metadata["date_added"] = datetime.now().isoformat()
                 info = self._create_png_info(metadata)
 
                 image_filename = os.path.basename(image_path)

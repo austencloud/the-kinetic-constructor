@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 DEFAULT_SEQUENCE_LENGTH = 16
 
 
-class SequenceCardTabNavSidebar(QWidget):
+class SequenceCardNavSidebar(QWidget):
     def __init__(self, sequence_card_tab: "SequenceCardTab"):
         super().__init__(sequence_card_tab)
         self.sequence_card_tab = sequence_card_tab
@@ -54,7 +54,7 @@ class SequenceCardTabNavSidebar(QWidget):
         def handler(event):
             self.selected_length = length
             self._update_label_styles()
-            self.sequence_card_tab.refresh_sequence_cards()
+            self.sequence_card_tab.refresher.refresh_sequence_cards()
 
         return handler
 
