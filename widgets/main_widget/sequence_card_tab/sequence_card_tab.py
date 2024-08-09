@@ -41,10 +41,9 @@ class SequenceCardTab(QWidget):
         self.populator = SequenceCardImagePopulator(self)
         self.pages: List[QWidget] = []
         self.init_ui()
-        self.pages_cache: dict[int, List[QWidget]] = (
-            {}
-        )  # Cache QWidgets instead of layouts
+        self.pages_cache: dict[int, List[QWidget]] = {}
         self.initialized = False
+        self.currently_displayed_length = 16
 
     def init_ui(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)
@@ -68,30 +67,43 @@ class SequenceCardTab(QWidget):
         self.layout.addWidget(self.scroll_area, 15)
 
     def load_images(self):
-        self.setCursor(Qt.CursorShape.WaitCursor)
 
         selected_length = self.nav_sidebar.selected_length
+        self.currently_displayed_length = selected_length
 
-        # Check if pages for the selected length are already cached
         if selected_length in self.pages_cache:
             self.display_cached_pages(selected_length)
         else:
             export_path = get_sequence_card_image_exporter_path()
             images = self.get_all_images(export_path)
             self.display_images(images)
-            # Cache the pages for future use
             self.pages_cache[selected_length] = self.pages.copy()
-
-        self.setCursor(Qt.CursorShape.ArrowCursor)
 
     def display_cached_pages(self, selected_length: int):
         """Display the cached pages without recalculating."""
+        # Clear the existing widgets before adding cached ones
+        for i in reversed(range(self.scroll_layout.count())):
+            layout_item = self.scroll_layout.itemAt(i)
+            widget = layout_item.widget()
+            if widget is not None:
+                widget.setParent(None)
+            else:
+                sub_layout = layout_item.layout()
+                if sub_layout is not None:
+                    while sub_layout.count():
+                        sub_item = sub_layout.takeAt(0)
+                        sub_widget = sub_item.widget()
+                        if sub_widget is not None:
+                            sub_widget.setParent(None)
+                    self.scroll_layout.removeItem(layout_item)
+
+        # Add cached pages back into the scroll layout
         for i in range(0, len(self.pages_cache[selected_length]), 2):
             # Create a new row layout for each pair of pages
             row_layout = QHBoxLayout()
             row_layout.setSpacing(self.margin)
             row_layout.setContentsMargins(
-                self.margin, self.margin, self.margin, self.margin
+                self.margin, self.margin, self.margin, self.margin  # Consistent margins
             )
 
             for j in range(2):  # Only add up to two items per row
@@ -128,7 +140,7 @@ class SequenceCardTab(QWidget):
         self.image_card_margin = self.page_width // 40
 
         self.populator.current_page_index = -1
-        self.pages.clear()
+        # self.pages.clear()
 
         for image_path in sorted_images:
             pixmap = QPixmap(image_path)
@@ -182,26 +194,22 @@ class SequenceCardTab(QWidget):
 
     def refresh_sequence_cards(self):
         """Refresh the displayed sequence cards based on selected options."""
+        self.setCursor(Qt.CursorShape.WaitCursor)
         selected_length = self.nav_sidebar.selected_length
+        if (
+            self.initialized
+            and self.pages_cache
+            and selected_length in self.pages_cache
+        ):
+            if selected_length == self.currently_displayed_length:
+                return
 
-        for page_widget in self.pages:
-            if page_widget is not None:
-                page_widget.setParent(None)
-
-        # If the pages are cached, no need to clear and recalculate
-        if selected_length in self.pages_cache:
-            self.pages = self.pages_cache[selected_length]
-            self.display_cached_pages(selected_length)
-            return
-
-        # Clear existing layouts and recalculate if not cached
         for i in reversed(range(self.scroll_layout.count())):
             layout_item = self.scroll_layout.itemAt(i)
             widget = layout_item.widget()
             if widget is not None:
-                widget.setParent(None)  # Properly remove the widget
+                widget.setParent(None)
             else:
-                self.scroll_layout.removeItem(layout_item)
                 sub_layout = layout_item.layout()
                 if sub_layout is not None:
                     while sub_layout.count():
@@ -209,9 +217,11 @@ class SequenceCardTab(QWidget):
                         sub_widget = sub_item.widget()
                         if sub_widget is not None:
                             sub_widget.setParent(None)
+                    self.scroll_layout.removeItem(layout_item)
 
         self.pages.clear()
         self.load_images()
+        self.setCursor(Qt.CursorShape.ArrowCursor)
 
     def showEvent(self, event):
         if not self.initialized:

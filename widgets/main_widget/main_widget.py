@@ -182,12 +182,11 @@ class MainWidget(QTabWidget):
 
     def resize_all_widgets(self):
         starting_widget = self.currentWidget()
-        # disable the connection to the currentChanged signal
         self.currentChanged.disconnect(self.on_tab_changed)
-
-        self.resize_widget(self.currentWidget())
+        for i in range(self.count()):
+            self.setCurrentIndex(i)
+            self.resize_widget(self.currentWidget())
         self.setCurrentWidget(starting_widget)
-        # re-enable the connection to the currentChanged signal
         self.currentChanged.connect(self.on_tab_changed )
 
     def showEvent(self, event):
