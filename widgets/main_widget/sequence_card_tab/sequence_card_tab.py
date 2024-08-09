@@ -39,8 +39,11 @@ class SequenceCardTab(QWidget):
         self.page_factory = SequenceCardTabPageFactory(self)
         self.image_exporter = SequenceCardTabImageExporter(self)
         self.populator = SequenceCardImagePopulator(self)
+        self.pages: List[QWidget] = []
         self.init_ui()
-        self.pages: List[QGridLayout] = []
+        self.pages_cache: dict[int, List[QWidget]] = (
+            {}
+        )  # Cache QWidgets instead of layouts
         self.initialized = False
 
     def paintEvent(self, event) -> None:
@@ -71,11 +74,25 @@ class SequenceCardTab(QWidget):
 
     def load_images(self):
         self.setCursor(Qt.CursorShape.WaitCursor)
-        export_path = get_sequence_card_image_exporter_path()
-        images = self.get_all_images(export_path)
-        self.display_images(images)
+
+        selected_length = self.nav_sidebar.selected_length
+
+        # Check if pages for the selected length are already cached
+        if selected_length in self.pages_cache:
+            self.display_cached_pages(selected_length)
+        else:
+            export_path = get_sequence_card_image_exporter_path()
+            images = self.get_all_images(export_path)
+            self.display_images(images)
+            # Cache the pages for future use
+            self.pages_cache[selected_length] = self.pages.copy()
+
         self.setCursor(Qt.CursorShape.ArrowCursor)
 
+    def display_cached_pages(self, selected_length: int):
+        """Display the cached pages without recalculating."""
+        for page_widget in self.pages_cache[selected_length]:
+            self.scroll_layout.addWidget(page_widget)  # Add the cached QFrame
 
     def get_all_images(self, path: str) -> List[str]:
         images = []
@@ -134,12 +151,16 @@ class SequenceCardTab(QWidget):
             label.setPixmap(scaled_pixmap)
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+            # Add the image to the layout
             self.populator.add_image_to_page(
                 label,
                 self.nav_sidebar.selected_length,
                 scaled_pixmap,
                 max_images_per_row=2,
             )
+
+        # Cache the pages after they are created
+        self.pages_cache[self.nav_sidebar.selected_length] = self.pages.copy()
 
     def get_num_rows_based_on_sequence_length(self, sequence_length: int) -> int:
         num_rows_per_length = {
@@ -154,11 +175,24 @@ class SequenceCardTab(QWidget):
 
     def refresh_sequence_cards(self):
         """Refresh the displayed sequence cards based on selected options."""
+        selected_length = self.nav_sidebar.selected_length
+
+        for page_widget in self.pages:
+            if page_widget is not None:
+                page_widget.setParent(None)
+
+        # If the pages are cached, no need to clear and recalculate
+        if selected_length in self.pages_cache:
+            self.pages = self.pages_cache[selected_length]
+            self.display_cached_pages(selected_length)
+            return
+
+        # Clear existing layouts and recalculate if not cached
         for i in reversed(range(self.scroll_layout.count())):
             layout_item = self.scroll_layout.itemAt(i)
             widget = layout_item.widget()
             if widget is not None:
-                widget.deleteLater()
+                widget.setParent(None)  # Properly remove the widget
             else:
                 self.scroll_layout.removeItem(layout_item)
                 sub_layout = layout_item.layout()
@@ -167,7 +201,7 @@ class SequenceCardTab(QWidget):
                         sub_item = sub_layout.takeAt(0)
                         sub_widget = sub_item.widget()
                         if sub_widget is not None:
-                            sub_widget.deleteLater()
+                            sub_widget.setParent(None)
 
         self.pages.clear()
         self.load_images()

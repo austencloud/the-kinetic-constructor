@@ -26,7 +26,8 @@ class SequenceCardImagePopulator:
         ):
             self.create_new_page()
 
-        page_layout = self.sequence_card_tab.pages[self.current_page_index]
+        # Get the layout from the current page
+        page_layout = self.sequence_card_tab.pages[self.current_page_index].layout()
 
         # Add the image label to the current page layout
         page_layout.addWidget(image_label, self.current_row, self.current_col)
@@ -38,6 +39,7 @@ class SequenceCardImagePopulator:
         # If this was the last image added, add a bottom spacer
         if self.is_last_image_in_page(selected_length):
             self.add_bottom_spacer(page_layout, scaled_pixmap.height())
+
 
     def is_current_page_full(self, selected_length: int, image_height: int) -> bool:
         if self.current_page_index == -1:
