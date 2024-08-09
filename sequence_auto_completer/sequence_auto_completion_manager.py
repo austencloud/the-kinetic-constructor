@@ -1,9 +1,8 @@
-from typing import TYPE_CHECKING, List, Dict
+from typing import TYPE_CHECKING, Dict
 from sequence_auto_completer.mirrored_permutation_executor import (
     MirroredPermutationExecutor,
 )
 from sequence_auto_completer.permutation_dialog import PermutationDialog
-from sequence_auto_completer.permutation_executor_base import PermutationExecutor
 from sequence_auto_completer.rotational_permutation_executor import (
     RotationalPermutationExecuter,
 )

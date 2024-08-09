@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 
-from variation_number_fixer import VariationNumberFixer
 from ..SW_beat_frame.start_pos_beat import StartPositionBeatView
 from ..SW_beat_frame.beat import BeatView
 from PyQt6.QtWidgets import QApplication

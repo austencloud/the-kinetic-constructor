@@ -16,7 +16,6 @@ from widgets.path_helpers.path_helpers import (
 
 if TYPE_CHECKING:
     from widgets.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
-    from widgets.main_widget.main_widget import MainWidget
 
 
 class SequenceCardTabImageExporter:

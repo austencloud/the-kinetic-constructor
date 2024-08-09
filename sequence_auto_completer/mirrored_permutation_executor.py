@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from data.constants import EAST, NORTH, SOUTH, WEST
 from sequence_auto_completer.permutation_executor_base import PermutationExecutor
 
 if TYPE_CHECKING:

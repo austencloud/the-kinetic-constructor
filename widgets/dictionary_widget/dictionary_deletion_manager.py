@@ -3,7 +3,7 @@ import shutil
 from typing import TYPE_CHECKING
 from variation_number_fixer import VariationNumberFixer
 from widgets.path_helpers.path_helpers import get_images_and_data_path
-from PyQt6.QtWidgets import QMessageBox, QApplication
+from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:

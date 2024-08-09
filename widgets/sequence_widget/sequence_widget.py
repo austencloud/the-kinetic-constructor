@@ -6,7 +6,6 @@ from PyQt6.QtWidgets import (
     QWidget,
     QHBoxLayout,
     QScrollArea,
-    QLabel,
 )
 from sequence_auto_completer.sequence_auto_completion_manager import (
     SequenceAutoCompletionManager,
