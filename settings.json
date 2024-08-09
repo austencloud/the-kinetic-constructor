@@ -2,14 +2,15 @@
     "global": {
         "prop_type": "Staff",
         "background_type": "Aurora",
-        "grow_sequence": true
+        "grow_sequence": true,
+        "current_tab": "sequence_builder"
     },
     "image_export": {
         "include_start_position": false,
         "add_info": true,
         "open_directory_on_export": true,
         "add_word": true,
-        "include_difficulty_level": true
+        "add_difficulty_level": true
     },
     "user_profile": {
         "current_user": "AC",
@@ -36,6 +37,6 @@
         }
     },
     "dictionary": {
-        "sort_method": "sequence_length"
+        "sort_method": "alphabetical"
     }
 }

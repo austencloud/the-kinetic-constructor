@@ -126,7 +126,7 @@ class ExportDialogControlPanel(QWidget):
         )
         self.include_difficulty_level_check.setChecked(
             self.settings_manager.image_export.get_image_export_setting(
-                "include_difficulty_level"
+                "add_difficulty_level"
             )
         )
         self.include_difficulty_level_check.toggled.connect(self.optionChanged.emit)
@@ -225,5 +225,5 @@ class ExportDialogControlPanel(QWidget):
         self.update_preview_based_on_options()
         self.optionChanged.emit()
         self.settings_manager.image_export.set_image_export_setting(
-            "include_difficulty_level", state
+            "add_difficulty_level", state
         )

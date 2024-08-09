@@ -44,21 +44,22 @@ class SequenceCardTabImageExporter:
             )
             if metadata and "sequence" in metadata:
                 sequence = metadata["sequence"]
-                options = {"add_word": True, "add_info": True}
+                options = {
+                    "add_word": True,
+                    "add_info": True,
+                    "add_difficulty_level": True,
+                }
                 self.temp_beat_frame.populate_beat_frame_from_json(sequence)
-                # Use ImageExportManager to create an image with header and footer
                 qimage = self.export_manager.image_creator.create_sequence_image(
                     sequence, include_start_pos=False, options=options
                 )
 
-                # Convert QImage to PIL Image and embed metadata
                 pil_image = self.qimage_to_pil(qimage)
                 metadata["date_added"] = (
                     datetime.now().isoformat()
-                )  # Add or update metadata as needed
+                ) 
                 info = self._create_png_info(metadata)
 
-                # Save the exported image with metadata
                 image_filename = os.path.basename(image_path)
                 pil_image.save(
                     os.path.join(export_path, image_filename), "PNG", pnginfo=info

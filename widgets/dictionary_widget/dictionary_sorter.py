@@ -20,6 +20,8 @@ class DictionarySorter:
         self.metadata_extractor = browser.main_widget.metadata_extractor
 
     def sort_and_display_thumbnails(self, sort_method: str):
+        # highlight the selected button
+        self.highlight_appropriate_button(sort_method)
         self.browser.scroll_widget.clear_layout()
         sections = {}
 
@@ -72,6 +74,20 @@ class DictionarySorter:
                 if column_index == num_columns:
                     column_index = 0
                     row_index += 1
+
+    def highlight_appropriate_button(self, sort_method):
+        if sort_method == "sequence_length":
+            self.browser.options_widget._update_selected_button(
+                self.browser.options_widget.buttons["sort_by_length_button"]
+            )
+        elif sort_method == "date_added":
+            self.browser.options_widget._update_selected_button(
+                self.browser.options_widget.buttons["sort_date_added_button"]
+            )
+        else:
+            self.browser.options_widget._update_selected_button(
+                self.browser.options_widget.buttons["sort_alphabetically_button"]
+            )
 
     def _add_header(self, row_index, num_columns, section):
         header_title = f"{section}"

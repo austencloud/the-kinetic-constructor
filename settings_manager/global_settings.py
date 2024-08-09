@@ -19,6 +19,7 @@ class GlobalSettings:
         "prop_type": "staff",
         "background_type": "Aurora",
         "grow_sequence": True,
+        "current_tab": "sequence_builder",
     }
 
     def __init__(self, settings_manager: "SettingsManager") -> None:
@@ -71,3 +72,10 @@ class GlobalSettings:
             self.sequence_widget.current_word_label.set_font_color("black")
             return AuroraBorealisBackgroundManager(widget)
         return None
+
+    def set_current_tab(self, tab: str) -> None:
+        self.settings["current_tab"] = tab
+        self.settings_manager.save_settings()
+
+    def get_current_tab(self) -> str:
+        return self.settings.get("current_tab")

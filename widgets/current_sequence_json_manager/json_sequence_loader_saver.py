@@ -25,6 +25,9 @@ class JsonSequenceLoaderSaver:
                     "prop_type": self.manager.main_widget.prop_type.name.lower(),
                     "is_circular": False,
                     "is_permutable": False,
+                    "is_rotational_permutation": False,
+                    "is_mirrored_permutation": False,
+                    "is_colorswapped_permutation": False,
                 }
             ]
 
@@ -35,6 +38,9 @@ class JsonSequenceLoaderSaver:
                     "prop_type": self.manager.main_widget.prop_type.name.lower(),
                     "is_circular": False,
                     "is_permutable": False,
+                    "is_rotational_permutation": False,
+                    "is_mirrored_permutation": False,
+                    "is_colorswapped_permutation": False,
                 }
             ]
         else:

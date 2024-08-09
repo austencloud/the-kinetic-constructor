@@ -49,14 +49,14 @@ class DictionaryOptionsWidget(QWidget):
         self.sort_by_label = QLabel("Sort:")
         self.sort_by_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.layout.addWidget(self.sort_by_label)
+        self.buttons_layout.addWidget(self.sort_by_label)
         self.layout.addLayout(self.buttons_layout)
-        self.buttons_layout.addStretch()
+        self.buttons_layout.addStretch(2)
 
         for button in self.buttons.values():
             self.buttons_layout.addWidget(button)
-
-        self.buttons_layout.addStretch()
+            self.buttons_layout.addStretch(1)
+        self.buttons_layout.addStretch(2)
 
     def on_sort_by_length(self):
         self._update_selected_button(self.buttons["sort_by_length_button"])
@@ -77,10 +77,8 @@ class DictionaryOptionsWidget(QWidget):
         self.browser.scroll_widget.scroll_area.verticalScrollBar().setValue(0)
 
     def _update_selected_button(self, button: QPushButton):
-        # Update the stylesheet of the previously selected button
         if self.selected_button:
             self._style_button(self.selected_button, selected=False)
-        # Set the new button as selected
         self._style_button(button, selected=True)
         self.selected_button = button
 
