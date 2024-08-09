@@ -2,8 +2,11 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QScrollArea
 from PyQt6.QtGui import QPainter
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, List
+
+from widgets.main_widget.sequence_card_tab.sequence_card_page_exporter import (
+    SequenceCardPageExporter,
+)
 from .sequence_card_image_displayer import SequenceCardImageDisplayer
-from .sequence_card_image_populator import SequenceCardImagePopulator
 from .sequence_card_cached_page_displayer import SequenceCardCachedPageDisplayer
 from .sequence_card_refresher import SequenceCardRefresher
 from .sequence_card_page_factory import SequenceCardPageFactory
@@ -12,6 +15,9 @@ from .sequence_card_nav_sidebar import SequenceCardNavSidebar
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
+
+
+from PyQt6.QtWidgets import QPushButton
 
 
 class SequenceCardTab(QWidget):
@@ -27,16 +33,25 @@ class SequenceCardTab(QWidget):
         self.currently_displayed_length = 16
         self.nav_sidebar = SequenceCardNavSidebar(self)
         self.page_factory = SequenceCardPageFactory(self)
-        self.image_exporter = SequenceCardImageExporter(self)
-        self.populator = SequenceCardImagePopulator(self)
         self.cached_page_displayer = SequenceCardCachedPageDisplayer(self)
         self.image_displayer = SequenceCardImageDisplayer(self)
         self.refresher = SequenceCardRefresher(self)
+        
+        self.image_exporter = SequenceCardImageExporter(self)
+        self.page_exporter = SequenceCardPageExporter(self)
         self.init_ui()
 
     def init_ui(self):
-        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.top_layout: QHBoxLayout = QHBoxLayout()
+        self.bottom_layout: QHBoxLayout = QHBoxLayout()
+        self.layout.addLayout(self.top_layout)
+        self.layout.addLayout(self.bottom_layout)
         self.setLayout(self.layout)
+
+        export_button = QPushButton("Export Pages as Images")
+        export_button.clicked.connect(self.page_exporter.export_all_pages_as_images)
+        self.top_layout.addWidget(export_button)
 
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)
@@ -49,11 +64,11 @@ class SequenceCardTab(QWidget):
         self.scroll_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.scroll_layout.setSpacing(0)
         self.scroll_layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
-        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.bottom_layout.setSpacing(0)
+        self.bottom_layout.setContentsMargins(0, 0, 0, 0)
 
-        self.layout.addWidget(self.nav_sidebar, 1)
-        self.layout.addWidget(self.scroll_area, 15)
+        self.bottom_layout.addWidget(self.nav_sidebar, 1)
+        self.bottom_layout.addWidget(self.scroll_area, 15)
 
     def showEvent(self, event):
         if not self.initialized:

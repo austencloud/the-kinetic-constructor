@@ -45,3 +45,4 @@ class SequenceCardCachedPageDisplayer:
                     row_layout.addWidget(page_widget)
 
             self.scroll_layout.addLayout(row_layout)
+        self.sequence_card_tab.pages = self.sequence_card_tab.pages_cache[selected_length]
