@@ -2,12 +2,9 @@ from PyQt6.QtWidgets import (
     QDialog,
     QVBoxLayout,
     QLabel,
-    QCheckBox,
     QDialogButtonBox,
     QComboBox,
-    QApplication,
 )
-import sys
 
 
 class SequenceAutocompleterOptionsDialog(QDialog):

@@ -3,7 +3,7 @@ import shutil
 from typing import TYPE_CHECKING
 from variation_number_fixer import VariationNumberFixer
 from widgets.path_helpers.path_helpers import get_images_and_data_path
-from PyQt6.QtWidgets import QMessageBox, QApplication
+from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
@@ -33,7 +33,9 @@ class DictionaryDeletionManager:
         else:
             self.delete_empty_folders(get_images_and_data_path("dictionary"))
             thumbnail_box.current_index = 0
-            self.dictionary_widget.browser.sorter.sort_and_display_thumbnails()
+            self.dictionary_widget.browser.sorter.sort_and_display_thumbnails(
+                self.dictionary_widget.main_widget.main_window.settings_manager.dictionary.get_sort_method()
+            )
 
             for index, thumbnail in enumerate(thumbnail_box.thumbnails):
                 if thumbnail == file_path:
@@ -61,7 +63,9 @@ class DictionaryDeletionManager:
         shutil.rmtree(base_path)
         self.delete_empty_folders(get_images_and_data_path("dictionary"))
         self.variation_number_fixer.ensure_sequential_versions()
-        self.dictionary_widget.browser.sorter.sort_and_display_thumbnails()
+        self.dictionary_widget.browser.sorter.sort_and_display_thumbnails(
+            self.dictionary_widget.main_widget.main_window.settings_manager.dictionary.get_sort_method()
+        )
 
     def delete_empty_folders(self, root_folder):
         def is_folder_empty(folder_path):

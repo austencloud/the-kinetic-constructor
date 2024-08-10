@@ -16,17 +16,16 @@ from widgets.path_helpers.path_helpers import (
 
 if TYPE_CHECKING:
     from widgets.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
-    from widgets.main_widget.main_widget import MainWidget
 
 
-class SequenceCardTabImageExporter:
+class SequenceCardImageExporter:
     def __init__(self, sequence_card_tab: "SequenceCardTab"):
         self.main_widget = sequence_card_tab.main_widget
         self.temp_beat_frame = TempBeatFrame(sequence_card_tab)
         self.export_manager = ImageExportManager(
             self.temp_beat_frame, self.temp_beat_frame.__class__
         )
-        # self.export_all_images()
+        self.export_all_images()
 
     def export_all_images(self):
         """Exports all images with headers and footers to a temporary directory."""
@@ -45,21 +44,20 @@ class SequenceCardTabImageExporter:
             )
             if metadata and "sequence" in metadata:
                 sequence = metadata["sequence"]
-                options = {"add_word": True, "add_info": True}
+                options = {
+                    "add_word": True,
+                    "add_info": True,
+                    "add_difficulty_level": True,
+                }
                 self.temp_beat_frame.populate_beat_frame_from_json(sequence)
-                # Use ImageExportManager to create an image with header and footer
                 qimage = self.export_manager.image_creator.create_sequence_image(
                     sequence, include_start_pos=False, options=options
                 )
 
-                # Convert QImage to PIL Image and embed metadata
                 pil_image = self.qimage_to_pil(qimage)
-                metadata["date_added"] = (
-                    datetime.now().isoformat()
-                )  # Add or update metadata as needed
+                metadata["date_added"] = datetime.now().isoformat()
                 info = self._create_png_info(metadata)
 
-                # Save the exported image with metadata
                 image_filename = os.path.basename(image_path)
                 pil_image.save(
                     os.path.join(export_path, image_filename), "PNG", pnginfo=info

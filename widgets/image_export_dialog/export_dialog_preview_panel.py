@@ -39,7 +39,7 @@ class ExportDialogPreviewPanel(QFrame):
             "export_date": self.export_dialog.control_panel.add_date_field.text(),
             "add_word": add_word,
             "notes": self.export_dialog.control_panel.notes_combo_box.currentText(),
-            "include_difficulty_level": include_difficulty_level,
+            "add_difficulty_level": include_difficulty_level,
         }
         self.image = (
             self.export_dialog.export_manager.image_creator.create_sequence_image(

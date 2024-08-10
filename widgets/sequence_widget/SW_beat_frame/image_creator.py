@@ -75,7 +75,7 @@ class ImageCreator:
                     image, word, num_filled_beats, additional_height_top
                 )
 
-            if options.get("include_difficulty_level"):
+            if options.get("add_difficulty_level"):
                 difficulty_level = self.export_manager.main_widget.sequence_difficulty_evaluator.evaluate_difficulty(
                     self.export_manager.beat_frame.json_manager.loader_saver.load_current_sequence_json()
                 )

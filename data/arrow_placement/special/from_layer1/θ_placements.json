@@ -21,8 +21,7 @@
       "pro": [-35, -5]
     },
     "(o, 1, 1)": {
-      "static_rot_angle_override": true,
-      "static": [90, -10]
+      "static": [75, -10]
     },
     "(o, 1, 1.5)": {
       "pro": [-15, -10]

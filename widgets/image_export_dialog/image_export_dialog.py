@@ -76,7 +76,7 @@ class ImageExportDialog(QDialog):
             "export_date": self.control_panel.add_date_field.text(),
             "open_directory": self.control_panel.open_directory_check.isChecked(),
             "notes": self.control_panel.notes_combo_box.currentText(),
-            "include_difficulty_level": self.control_panel.include_difficulty_level_check.isChecked(),
+            "add_difficulty_level": self.control_panel.include_difficulty_level_check.isChecked(),
         }
 
     def update_preview_based_on_options(self):

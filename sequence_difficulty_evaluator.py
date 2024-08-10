@@ -5,7 +5,9 @@ class SequenceDifficultyEvaluator:
     def __init__(self):
         self.RADIAL_ORIENTATIONS = {"in", "out"}
 
-    def evaluate_difficulty(self, sequence: List[Dict]) -> int:
+    def evaluate_difficulty(self, sequence: list[dict]) -> int:
+        if len(sequence) < 3:
+            return ""
         has_non_radial_orientation = False
         has_turns = False
 
@@ -22,7 +24,7 @@ class SequenceDifficultyEvaluator:
         else:
             return 1  # Level 1: No turns, only radial orientations
 
-    def _has_turns(self, entry: Dict) -> bool:
+    def _has_turns(self, entry: dict) -> bool:
         return (
             entry["blue_attributes"]["turns"] > 0
             or entry["red_attributes"]["turns"] > 0

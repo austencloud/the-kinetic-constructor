@@ -20,8 +20,9 @@ class DifficultyLevelDrawer:
 
         # Define the size and position for the difficulty level circle
         circle_size = int(additional_height_top // 2)
-        inset = additional_height_top // 8
-        rect = QRect(inset, inset, circle_size, circle_size)
+        inset_left = additional_height_top // 8
+        inset_top = additional_height_top // 4
+        rect = QRect(inset_left, inset_top, circle_size, circle_size)
 
         # Draw the circle
         pen = QPen(Qt.GlobalColor.black, additional_height_top // 50)

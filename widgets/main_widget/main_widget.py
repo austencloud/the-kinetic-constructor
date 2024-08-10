@@ -1,6 +1,6 @@
 import json
 import threading
-from PyQt6.QtGui import QKeyEvent
+from PyQt6.QtGui import QKeyEvent, QCursor
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
@@ -54,6 +54,19 @@ class MainWidget(QTabWidget):
         self.setStyleSheet(get_tab_stylesheet())
         self.webcam_initialized = False  # Add an initialization flag
         self.initialized = True
+        # on tab changed, access the globabl settings to save the most recent tab
+        self.currentChanged.connect(self.on_tab_changed)
+        self.tabBar().setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+    def on_tab_changed(self, index):
+        if index == self.builder_tab_index:
+            self.main_window.settings_manager.global_settings.set_current_tab("sequence_builder")
+        elif index == self.dictionary_tab_index:
+            self.main_window.settings_manager.global_settings.set_current_tab("dictionary")
+        elif index == self.recorder_tab_index:
+            self.main_window.settings_manager.global_settings.set_current_tab("recorder")
+        elif index == self.sequence_card_tab_index:
+            self.main_window.settings_manager.global_settings.set_current_tab("sequence_cards")
 
     def initialize_webcam_async(self):
         """Start the webcam initialization in a separate thread to avoid blocking the UI."""
@@ -106,7 +119,17 @@ class MainWidget(QTabWidget):
         self.recorder_tab_index = 2
         self.sequence_card_tab_index = 3
 
-        self.setCurrentIndex(self.builder_tab_index)
+        current_tab = self.main_window.settings_manager.global_settings.get_current_tab()
+
+        if current_tab == "sequence_builder":
+            self.setCurrentIndex(self.builder_tab_index)
+        elif current_tab == "dictionary":
+            self.setCurrentIndex(self.dictionary_tab_index)
+        elif current_tab == "recorder":
+            self.setCurrentIndex(self.recorder_tab_index)
+        elif current_tab == "sequence_cards":
+            self.setCurrentIndex(self.sequence_card_tab_index)
+
         self.initialized = True
 
     def _setup_special_placements(self) -> None:
@@ -159,10 +182,12 @@ class MainWidget(QTabWidget):
 
     def resize_all_widgets(self):
         starting_widget = self.currentWidget()
+        self.currentChanged.disconnect(self.on_tab_changed)
         for i in range(self.count()):
             self.setCurrentIndex(i)
             self.resize_widget(self.currentWidget())
         self.setCurrentWidget(starting_widget)
+        self.currentChanged.connect(self.on_tab_changed )
 
     def showEvent(self, event):
         super().showEvent(event)

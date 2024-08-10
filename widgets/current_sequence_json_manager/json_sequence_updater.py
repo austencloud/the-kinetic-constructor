@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Union
 from Enums.MotionAttributes import Color
 from Enums.PropTypes import PropType
-from widgets.sequence_widget.circular_word_checker import CircularWordChecker
+from widgets.sequence_widget.sequence_properties_checker import SequencePropertiesChecker
 from data.constants import BLUE, DASH, NO_ROT, RED, STATIC
 from widgets.sequence_widget.SW_beat_frame.beat import BeatView
 
@@ -16,10 +16,17 @@ class JsonSequenceUpdater:
     def update_sequence_properties(self):
         sequence = self.manager.loader_saver.load_current_sequence_json()
         if len(sequence) > 1:
-            checker = CircularWordChecker(sequence[1:])
-            is_circular, is_permutable = checker.check_properties()
-            sequence[0]["is_circular"] = is_circular
-            sequence[0]["is_permutable"] = is_permutable
+            checker = SequencePropertiesChecker(sequence[1:])
+            properties = checker.check_properties()
+
+            # Update the sequence properties in the JSON
+            sequence[0]["is_circular"] = properties["is_circular"]
+            sequence[0]["is_permutable"] = properties["is_permutable"]
+            sequence[0]["is_rotational_permutation"] = properties["is_rotational_permutation"]
+            sequence[0]["is_mirrored_permutation"] = properties["is_mirrored_permutation"]
+            sequence[0]["is_colorswapped_permutation"] = properties["is_colorswapped_permutation"]
+
+            # Save the updated sequence back to the JSON
             self.manager.loader_saver.save_current_sequence(sequence)
 
     def update_prop_type_in_json(self, prop_type: PropType) -> None:
@@ -126,7 +133,7 @@ class JsonSequenceUpdater:
             )
         sequence_data.append(beat_view.beat.pictograph_dict)
         self.manager.loader_saver.save_current_sequence(sequence_data)
-        self.update_sequence_properties()  # Recalculate circularity after each update
+        self.update_sequence_properties()  # Recalculate properties after each update
         self.manager.main_widget.main_window.settings_manager.save_settings()  # Save state on change
 
     def clear_and_repopulate_the_current_sequence(self):

@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from data.constants import EAST, NORTH, SOUTH, WEST
 from sequence_auto_completer.permutation_executor_base import PermutationExecutor
 
 if TYPE_CHECKING:
@@ -9,7 +8,6 @@ if TYPE_CHECKING:
 
 # Define mirroring maps
 vertical_mirror_map = {"s": "s", "e": "w", "w": "e", "n": "n"}
-
 horizontal_mirror_map = {"s": "n", "n": "s", "e": "e", "w": "w"}
 
 
@@ -26,20 +24,23 @@ class MirroredPermutationExecutor(PermutationExecutor):
         if not self.can_perform_mirrored_permutation(sequence):
             return
         self.vertical_or_horizontal = vertical_or_horizontal
-        sequence_length = len(sequence)
+        sequence_length = len(sequence) - 2
         last_entry = sequence[-1]
         new_entries = []
         next_beat_number = last_entry["beat"] + 1
+        entries_to_add = self.determine_how_many_entries_to_add(sequence_length)
+        final_intended_sequence_length = sequence_length + entries_to_add
 
-        for i in range(sequence_length):
+        for i in range(sequence_length + 2):
             if i in [0, 1]:
                 continue
             new_entry = self.create_new_mirrored_permutation_entry(
+                sequence,
                 last_entry,
-                sequence[i],
-                next_beat_number + i,
+                next_beat_number + i - 2,
                 self.color_swap_second_half,
                 vertical_or_horizontal,
+                final_intended_sequence_length,
             )
             new_entries.append(new_entry)
             sequence.append(new_entry)
@@ -48,19 +49,30 @@ class MirroredPermutationExecutor(PermutationExecutor):
         self.autocompleter.json_manager.loader_saver.save_current_sequence(sequence)
         self.autocompleter.beat_frame.populate_beat_frame_from_json(sequence)
 
+    def determine_how_many_entries_to_add(self, sequence_length: int) -> int:
+        return sequence_length
+
     def can_perform_mirrored_permutation(self, sequence: list[dict]) -> bool:
         return sequence[1]["end_pos"] == sequence[-1]["end_pos"]
 
     def create_new_mirrored_permutation_entry(
         self,
+        sequence,
         previous_entry,
-        previous_matching_beat: dict,
-        beat: int,
+        beat_number: int,
         color_swap_second_half: bool,
         vertical_or_horizontal: str,
+        final_intended_sequence_length: int,
     ) -> dict:
+
+        previous_matching_beat = self.get_previous_matching_beat(
+            sequence,
+            beat_number,
+            final_intended_sequence_length,
+        )
+
         new_entry = {
-            "beat": beat,
+            "beat": beat_number,
             "letter": previous_matching_beat["letter"],
             "start_pos": previous_entry["end_pos"],
             "end_pos": self.get_mirrored_position(
@@ -88,14 +100,24 @@ class MirroredPermutationExecutor(PermutationExecutor):
                 new_entry, "red"
             )
         )
-
         if color_swap_second_half:
             new_entry["blue_attributes"], new_entry["red_attributes"] = (
                 new_entry["red_attributes"],
                 new_entry["blue_attributes"],
             )
-
         return new_entry
+
+    def get_previous_matching_beat(
+        self,
+        sequence: list[dict],
+        beat_number: int,
+        final_intended_sequence_length: int,
+    ) -> dict:
+        index_map = self.get_index_map(final_intended_sequence_length)
+        return sequence[index_map[beat_number]]
+
+    def get_index_map(self, length: int) -> dict[int, int]:
+        return {i: i - (length // 2) + 1 for i in range((length // 2) + 1, length + 1)}
 
     def get_mirrored_position(
         self, previous_matching_beat, vertical_or_horizontal
@@ -190,4 +212,3 @@ class MirroredPermutationExecutor(PermutationExecutor):
 
     def get_horizontal_mirrored_location(self, location: str) -> str:
         return horizontal_mirror_map.get(location, location)
-

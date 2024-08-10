@@ -213,11 +213,19 @@
       "blue": [80, 0]
     },
     "(1, 0, op)": {
-      "blue_rot_angle_override": true,
       "blue": [80, 0]
     },
     "(o, 1, 1)": {
-      "blue": [80, -15]
+      "blue": [-70, 0],
+      "blue_rot_angle_override": true,
+      "red_rot_angle_override": true,
+      "red": [-70, 0]
+    },
+    "(o, 1, 1, cl, cl)": {
+      "blue_rot_angle_override": true,
+      "red_rot_angle_override": true,
+      "blue": [-70, 0],
+      "red": [-70, 0]
     }
   }
 }

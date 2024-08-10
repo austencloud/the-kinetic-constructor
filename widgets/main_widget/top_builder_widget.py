@@ -47,3 +47,5 @@ class TopBuilderWidget(QWidget):
     def showEvent(self, event):
         super().showEvent(event)
         self.background_manager = self.global_settings.setup_background_manager(self)
+        
+    

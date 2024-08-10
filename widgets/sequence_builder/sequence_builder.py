@@ -50,6 +50,7 @@ class SequenceBuilder(QFrame):
 
         self.layout().addWidget(self.advanced_start_pos_picker)
         self.advanced_start_pos_picker.hide()  # Initially hidden
+        self.initialized = False
 
     def transition_to_sequence_building(self) -> None:
         self.start_position_picked = True
@@ -140,16 +141,17 @@ class SequenceBuilder(QFrame):
         self.start_pos_picker.show()
 
     def resize_sequence_builder(self) -> None:
-        self.setMinimumWidth(self.top_builder_widget.width() // 2)
+        # self.setMinimumWidth(self.top_builder_widget.width() // 2)
         # self.setMinimumHeight(int(self.builder_toolbar.height()))
         # if the start pos picker is visible, resize it
-        if self.start_pos_picker.isVisible():
-            self.start_pos_picker.resize_start_pos_picker()
-        elif self.advanced_start_pos_picker.isVisible():
-            self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
-        elif self.option_picker.isVisible():
-            self.option_picker.resize_option_picker()
+        # if self.start_pos_picker.isVisible():
+        self.start_pos_picker.resize_start_pos_picker()
+    # elif self.advanced_start_pos_picker.isVisible():
+        self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
+    # elif self.option_picker.isVisible():
+        self.option_picker.resize_option_picker()
 
     def get_last_added_pictograph(self, sequence):
         """Returns the last pictograph in the sequence. Assumes the sequence is not empty."""
         return sequence[-1]
+
