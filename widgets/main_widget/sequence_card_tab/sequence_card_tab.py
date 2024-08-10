@@ -36,7 +36,7 @@ class SequenceCardTab(QWidget):
         self.cached_page_displayer = SequenceCardCachedPageDisplayer(self)
         self.image_displayer = SequenceCardImageDisplayer(self)
         self.refresher = SequenceCardRefresher(self)
-        
+
         self.image_exporter = SequenceCardImageExporter(self)
         self.page_exporter = SequenceCardPageExporter(self)
         self.init_ui()
@@ -73,7 +73,7 @@ class SequenceCardTab(QWidget):
     def showEvent(self, event):
         if not self.initialized:
             self.setCursor(Qt.CursorShape.WaitCursor)
-            self.refresher.refresh_sequence_cards()
+            # self.refresher.refresh_sequence_cards()
             self.initialized = True
             self.setCursor(Qt.CursorShape.ArrowCursor)
         super().showEvent(event)

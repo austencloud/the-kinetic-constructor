@@ -3,7 +3,7 @@
         "prop_type": "Staff",
         "background_type": "Aurora",
         "grow_sequence": true,
-        "current_tab": "sequence_cards"
+        "current_tab": "sequence_builder"
     },
     "image_export": {
         "include_start_position": false,
@@ -17,7 +17,7 @@
         "user_profiles": {
             "AC": {
                 "name": "AC",
-                "export_date": "8-7-2024"
+                "export_date": "8-10-2024"
             }
         },
         "current_note": "Created using The Kinetic Alphabet",

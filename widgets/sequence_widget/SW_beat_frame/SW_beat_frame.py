@@ -124,7 +124,6 @@ class SW_BeatFrame(BaseBeatFrame):
         self.propogate_turn_adjustment(current_sequence_json)
         self.sequence_widget.update_difficulty_label()
 
-
     def propogate_turn_adjustment(self, current_sequence_json) -> None:
         for i, entry in enumerate(current_sequence_json):
             if i == 0:
@@ -160,10 +159,17 @@ class SW_BeatFrame(BaseBeatFrame):
             )
             * 0.8
         )
+
+        height = (
+            self.sequence_widget.height()
+            - self.sequence_widget.graph_editor.height() * 0.8
+        )
+
         num_cols = max(1, self.layout.columnCount() - 1)
         if num_cols == 0:
             return
-        beat_size = int(width / (5))
+
+        beat_size = min(int(width // (5)), int(height // 6))
         for beat in self.beats:
             beat.setFixedSize(beat_size, beat_size)
         self.start_pos_view.setFixedSize(beat_size, beat_size)
@@ -212,4 +218,3 @@ class SW_BeatFrame(BaseBeatFrame):
 
         scroll_area.add_and_display_relevant_pictographs(next_options)
         self.sequence_builder.option_picker.resize_option_picker()
-
