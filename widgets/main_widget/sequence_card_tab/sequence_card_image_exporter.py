@@ -25,7 +25,7 @@ class SequenceCardImageExporter:
         self.export_manager = ImageExportManager(
             self.temp_beat_frame, self.temp_beat_frame.__class__
         )
-        self.export_all_images()
+        # self.export_all_images()
 
     def export_all_images(self):
         """Exports all images with headers and footers to a temporary directory."""
