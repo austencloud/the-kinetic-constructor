@@ -34,7 +34,7 @@ class GE_TurnsDisplay(QLabel):
 
     def set_turn_display_styles(self, mouse_over=False) -> None:
         self.turns_display_font_size = int(
-            self.turns_box.adjustment_panel.graph_editor.width() / 20
+            (self.turns_box.adjustment_panel.graph_editor.width() / 20)
         )
         self.setFont(QFont("Arial", self.turns_display_font_size, QFont.Weight.Bold))
         self.setMinimumWidth(int(self.turns_box.adjustment_panel.width() / 6))
@@ -42,6 +42,7 @@ class GE_TurnsDisplay(QLabel):
         border_radius = self.width() // 4
 
         turn_display_border = int(self.width() / 20)
+        self.setMinimumHeight(int(self.turns_box.adjustment_panel.height() / 4))
         self.setMaximumHeight(int(self.turns_box.adjustment_panel.height() / 4))
         turns_box_color = self.turns_box.color
         if turns_box_color == RED:
@@ -50,7 +51,6 @@ class GE_TurnsDisplay(QLabel):
             border_color = "#2E3192"
         else:
             border_color = "black"
-
 
         self.setStyleSheet(
             f"""

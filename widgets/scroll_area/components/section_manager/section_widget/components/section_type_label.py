@@ -65,7 +65,7 @@ class SectionTypeLabel(QLabel):
         if base_class_name == "LetterBookScrollArea":
             font_size = sequence_builder.width() // 40
         elif base_class_name == "OptionPickerScrollArea":
-            font_size = sequence_builder.width() // 45
+            font_size = sequence_builder.height() // 45
         else:
             font_size = 12
         return font_size
