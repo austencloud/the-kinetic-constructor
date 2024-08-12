@@ -52,9 +52,9 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
             preview_area.variation_number_label.setText(
                 f"Variation {self.thumbnail_box.current_index + 1}"
             )
-            preview_area.current_index = self.current_index
+            preview_area.current_index = self.thumbnail_box.current_index
             QApplication.processEvents()
-            preview_area.update_preview(self.current_index)
+            preview_area.update_preview(self.thumbnail_box.current_index)
 
     def update_thumbnail(self, index):
         self.thumbnail_label.update_thumbnail(index)
@@ -74,7 +74,7 @@ class ThumbnailBoxNavButtonsWidget(QWidget):
         else:
             self.variation_number_label.show()
             self.show()
-            self.variation_number_label.update_index(self.current_index + 1)
+            self.variation_number_label.update_index(self.thumbnail_box.current_index + 1)
 
 
 class NavButton(QPushButton):

@@ -30,7 +30,7 @@ class SequenceCardImageDisplayer:
         )
 
         total_width = 8000
-        self.margin = total_width // 50
+        self.margin = total_width // 30
         self.page_width = (
             (total_width // 2) - (2 * self.margin) - (self.nav_sidebar.width() // 2)
         )
@@ -101,7 +101,11 @@ class SequenceCardImageDisplayer:
 
         page_layout = self.sequence_card_tab.pages[self.current_page_index].layout()
 
-        page_layout.addWidget(image_label, self.current_row, self.current_col)
+        # Add top spacer if this is the first row and column
+        if self.current_row == 0 and self.current_col == 0:
+            self.add_top_spacer(page_layout)
+
+        page_layout.addWidget(image_label, self.current_row + 1, self.current_col)
         self.current_col += 1
         if self.current_col >= max_images_per_row:
             self.current_col = 0
@@ -109,7 +113,6 @@ class SequenceCardImageDisplayer:
 
         if self.is_last_image_in_page(selected_length):
             self.add_bottom_spacer(page_layout, scaled_pixmap.height())
-
 
     def is_current_page_full(self, selected_length: int, image_height: int) -> bool:
         if self.current_page_index == -1:
@@ -142,13 +145,22 @@ class SequenceCardImageDisplayer:
         total_possible_rows = self.current_row + 1
         return total_possible_rows >= num_rows
 
+    def add_top_spacer(self, page_layout: QGridLayout):
+        """Adds a top spacer row to ensure the first row of images aligns with the top."""
+        self.top_spacer = QLabel(self.sequence_card_tab)
+        self.top_spacer.setFixedHeight(self.margin // 3)
+        self.top_spacer.setStyleSheet("background-color: transparent;")
+        page_layout.addWidget(self.top_spacer, 0, 0, 1, self.max_images_per_row)
+
     def add_bottom_spacer(self, page_layout: QGridLayout, pixmap_height: int):
         """Adds a bottom spacer row to ensure the last row of images aligns with the top."""
         # Calculate the remaining space
         total_height = self.sequence_card_tab.image_displayer.page_height
-        used_height = self.current_row * pixmap_height
+        used_height = self.current_row * pixmap_height + self.top_spacer.height()
 
-        remaining_height = total_height - used_height - self.sequence_card_tab.image_displayer.margin
+        remaining_height = (
+            total_height - used_height - self.sequence_card_tab.image_displayer.margin
+        )
 
         # Add a spacer widget with the remaining height
         if remaining_height > 0:
@@ -158,4 +170,3 @@ class SequenceCardImageDisplayer:
             page_layout.addWidget(
                 spacer, self.current_row + 1, 0, 1, self.max_images_per_row
             )
-

@@ -54,7 +54,7 @@ class PreviewAreaNavButtonsWidget(QWidget):
         box_nav_buttons_widget = (
             self.preview_area.current_thumbnail_box.nav_buttons_widget
         )
-        box_nav_buttons_widget.current_index = self.preview_area.current_index
+        box_nav_buttons_widget.thumbnail_box.current_index = self.preview_area.current_index
         box_nav_buttons_widget.update_thumbnail(self.preview_area.current_index)
 
     def update_thumbnail(self):

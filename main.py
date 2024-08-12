@@ -11,7 +11,6 @@ from widgets.main_widget.main_widget import MainWidget
 from widgets.menu_bar.menu_bar import MainWindowMenuBar
 import logging
 
-# Set the logging level for PIL to WARNING to suppress debug and info messages
 logging.getLogger("PIL").setLevel(logging.WARNING)
 
 

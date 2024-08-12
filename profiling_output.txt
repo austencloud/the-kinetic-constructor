@@ -2,6 +2,7 @@ Organized by total time:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
+<<<<<<< HEAD
    1784831        4.056101        0.000002             5.466688             0.000003 animate_background             background_managers\aurora_background_manager.py:8
          2        0.154005        0.077002             0.162923             0.081461 update_preview                 dictionary_widget\dictionary_preview_area.py:114
      21029        0.108335        0.000005             0.427156             0.000021 eventFilter                    thumbnail_box\thumbnail_image_label.py:83
@@ -487,12 +488,98 @@ Organized by total time:
          3        0.000002        0.000001             0.000002             0.000001 _check_is_mirrored_permutation sequence_widget\sequence_properties_checker.py:65
          3        0.000002        0.000001             0.000002             0.000001 _check_is_colorswapped_permutation sequence_widget\sequence_properties_checker.py:69
          1        0.000001        0.000001             0.000001             0.000001 showEvent                      dictionary_widget\dictionary_widget.py:70
+=======
+ 940232443     1478.689247        0.000002          1875.888726             0.000002 animate_background             background_managers\aurora_background_manager.py:8
+     99696        9.549534        0.000096           327.315725             0.003283 paintEvent                     dictionary_widget\dictionary_widget.py:62
+     99696        3.704862        0.000037           209.625416             0.002103 setup_background_manager       settings_manager\global_settings.py:54
+    922001        3.659785        0.000004            13.637708             0.000015 eventFilter                    thumbnail_box\thumbnail_image_label.py:83
+     99696        2.758742        0.000028           107.807863             0.001081 paint_background               background_managers\aurora_background_manager.py:15
+     99696        2.296047        0.000023           172.464080             0.001730 __init__                       background_managers\background_manager.py:13
+        56        1.347056        0.024055             1.460147             0.026074 update_preview                 dictionary_widget\dictionary_preview_area.py:114
+     99696        0.529989        0.000005            33.388092             0.000335 set_font_color                 sequence_widget\current_word_label.py:57
+        34        0.365021        0.010736             0.420840             0.012378 update_thumbnail               thumbnail_box\thumbnail_image_label.py:25
+        11        0.229374        0.020852             2.939060             0.267187 thumbnail_clicked              thumbnail_box\thumbnail_image_label.py:53
+     99696        0.227045        0.000002             0.307777             0.000003 get_background_type            settings_manager\global_settings.py:46
+        11        0.138315        0.012574             0.159797             0.014527 update_thumbnail               dictionary\preview_area_image_label.py:26
+         1        0.083835        0.083835             0.173557             0.173557 update_thumbnails              thumbnail_box\thumbnail_box.py:69
+        33        0.018194        0.000551             0.437924             0.013270 update_thumbnail               thumbnail_box\thumbnail_box_nav_btns.py:59
+       612        0.013410        0.000022             0.097424             0.000159 get_section_from_word          dictionary_widget\dictionary_sorter.py:158
+       408        0.012669        0.000031             0.094516             0.000232 <lambda>                       dictionary_widget\dictionary_sorter.py:143
+       816        0.010761        0.000013             0.163855             0.000201 get_date_added                 dictionary_widget\dictionary_sorter.py:183
+       612        0.008975        0.000015             0.104857             0.000171 find_thumbnails                dictionary_widget\dictionary_sorter.py:148
+        13        0.008678        0.000668             0.508368             0.039105 update_thumbnails              dictionary_widget\dictionary_preview_area.py:81
+        11        0.007372        0.000670             0.167304             0.015209 update_thumbnail               thumbnail_box\preview_area_nav_btns.py:60
+        11        0.007312        0.000665             0.973563             0.088506 select_thumbnail               dictionary_widget\dictionary_preview_area.py:156
+       725        0.007218        0.000010             0.168076             0.000232 extract_metadata_from_file     thumbnail_box\metadata_extractor.py:14
+         3        0.007081        0.002360             0.324955             0.108318 get_sorted_base_words          dictionary_widget\dictionary_sorter.py:128
+       670        0.006306        0.000009             0.016845             0.000025 is_folder_empty                dictionary_widget\dictionary_deletion_manager.py:71
+         7        0.004552        0.000650             0.019464             0.002781 handle_button_click            thumbnail_box\thumbnail_box_nav_btns.py:34
+         1        0.004538        0.004538             0.039876             0.039876 delete_empty_folders           dictionary_widget\dictionary_deletion_manager.py:70
+       658        0.004325        0.000007             0.143282             0.000218 get_sequence_length            thumbnail_box\metadata_extractor.py:38
+       612        0.003426        0.000006             0.125659             0.000205 get_sequence_length_from_thumbnails dictionary_widget\dictionary_sorter.py:196
+         3        0.002303        0.000768             0.207505             0.069168 sort_and_display_thumbnails    dictionary_widget\dictionary_sorter.py:22
+        56        0.001344        0.000024             0.088241             0.001576 _scale_pixmap_to_label         dictionary_widget\dictionary_preview_area.py:135
+        60        0.001309        0.000022             0.004526             0.000075 __init__                       dictionary_browser\section_header.py:8
+       612        0.001309        0.000002             0.296991             0.000485 _add_thumbnail_box             dictionary_widget\dictionary_sorter.py:100
+         3        0.001273        0.000424             0.004646             0.001549 update_sidebar                 dictionary_browser\dictionary_nav_sidebar.py:40
+         3        0.001063        0.000354             0.185276             0.061759 clear_layout                   dictionary_browser\browser_scroll_widget.py:57
+        60        0.000991        0.000017             0.011882             0.000198 _add_header                    dictionary_widget\dictionary_sorter.py:92
+        35        0.000951        0.000027             0.057596             0.001646 set_pixmap_to_fit              thumbnail_box\thumbnail_image_label.py:34
+         1        0.000782        0.000782             0.344303             0.344303 delete_variation               dictionary_widget\dictionary_deletion_manager.py:22
+       155        0.000677        0.000004             0.010798             0.000070 resizeEvent                    dictionary_browser\section_header.py:18
+        11        0.000562        0.000051             1.067956             0.097087 thumbnail_clicked              dictionary_widget\dictionary_selection_handler.py:24
+         5        0.000372        0.000074             0.002112             0.000422 _set_styles                    dictionary_browser\dictionary_nav_sidebar.py:178
+        11        0.000294        0.000027             0.021483             0.001953 set_pixmap_to_fit              dictionary\preview_area_image_label.py:34
+        63        0.000258        0.000004             0.001040             0.000017 update_index                   thumbnail_box\variation_number_label.py:23
+        25        0.000249        0.000010             0.487097             0.019484 handle_button_click            thumbnail_box\preview_area_nav_btns.py:32
+        11        0.000190        0.000017             0.004462             0.000406 update_selection               dictionary_widget\dictionary_selection_handler.py:17
+        11        0.000175        0.000016             0.894199             0.081291 update_nav_buttons             dictionary_widget\dictionary_preview_area.py:166
+        77        0.000165        0.000002             0.001632             0.000021 style_button                   dictionary_browser\dictionary_nav_sidebar.py:111
+        11        0.000143        0.000013             0.167614             0.015238 refresh                        thumbnail_box\preview_area_nav_btns.py:65
+         1        0.000118        0.000118             0.393286             0.393286 on_sort_by_date_added          dictionary_widget\dictionary_options_widget.py:73
+         1        0.000108        0.000108             0.304378             0.304378 on_sort_alphabetically         dictionary_widget\dictionary_options_widget.py:67
+        16        0.000084        0.000005             0.001575             0.000098 _style_button                  dictionary_widget\dictionary_options_widget.py:95
+         5        0.000082        0.000016             0.001022             0.000204 _update_selected_button        dictionary_widget\dictionary_options_widget.py:79
+       204        0.000076        0.000000             0.000076             0.000000 <lambda>                       dictionary_widget\dictionary_sorter.py:145
+         2        0.000065        0.000033             0.000701             0.000351 _style_buttons                 dictionary_widget\dictionary_options_widget.py:90
+        10        0.000061        0.000006             0.003688             0.000369 leaveEvent                     thumbnail_box\thumbnail_box_nav_btns.py:94
+         3        0.000060        0.000020             0.000142             0.000047 _clear_sidebar                 dictionary_browser\dictionary_nav_sidebar.py:92
+        10        0.000059        0.000006             0.001451             0.000145 enterEvent                     thumbnail_box\thumbnail_box_nav_btns.py:88
+         2        0.000049        0.000025             0.000799             0.000399 resizeEvent                    dictionary_widget\dictionary_options_widget.py:129
+         6        0.000046        0.000008             0.000871             0.000145 enterEvent                     thumbnail_box\preview_area_nav_btns.py:85
+        21        0.000045        0.000002             0.004272             0.000203 set_selected                   thumbnail_box\thumbnail_image_label.py:70
+         4        0.000045        0.000011             0.000157             0.000039 get_images_and_data_path       path_helpers\path_helpers.py:6
+         3        0.000043        0.000014             0.004322             0.001441 save_settings                  settings_manager\settings_manager.py:46
+        11        0.000042        0.000004             0.000072             0.000007 update_variation_number_label  dictionary_widget\dictionary_preview_area.py:170
+         6        0.000038        0.000006             0.002329             0.000388 leaveEvent                     thumbnail_box\preview_area_nav_btns.py:89
+         1        0.000036        0.000036             0.001554             0.001554 closeEvent                     tka-sequence-constructor\main.py:39
+        40        0.000029        0.000001             0.000038             0.000001 custom_sort_key                dictionary_widget\dictionary_sorter.py:177
+         1        0.000029        0.000029             0.000161             0.000161 scroll_to_section              dictionary_browser\dictionary_nav_sidebar.py:158
+        18        0.000026        0.000001             0.000036             0.000002 get_formatted_day              dictionary_browser\dictionary_nav_sidebar.py:107
+         3        0.000026        0.000009             0.000655             0.000218 highlight_appropriate_button   dictionary_widget\dictionary_sorter.py:78
+         2        0.000026        0.000013             0.000040             0.000020 resizeEvent                    thumbnail_box\variation_number_label.py:29
+         2        0.000026        0.000013             0.002869             0.001435 set_sort_method                settings_manager\dictionary_settings.py:31
+         1        0.000025        0.000025             0.000186             0.000186 <lambda>                       dictionary_browser\dictionary_nav_sidebar.py:82
+         2        0.000024        0.000012             0.001786             0.000893 resizeEvent                    dictionary_browser\dictionary_nav_sidebar.py:187
+         2        0.000023        0.000012             0.002844             0.001422 save_dictionary_settings       settings_manager\settings_manager.py:68
+        11        0.000019        0.000002             0.000098             0.000009 update_base_word_label         dictionary_widget\dictionary_preview_area.py:176
+         2        0.000019        0.000009             0.000046             0.000023 _style_sort_by_label           dictionary_widget\dictionary_options_widget.py:85
+        18        0.000014        0.000001             0.000639             0.000036 <lambda>                       dictionary_widget\dictionary_sorter.py:119
+         3        0.000014        0.000005             0.000863             0.000288 _get_sorted_sections           dictionary_widget\dictionary_sorter.py:111
+         4        0.000011        0.000003             0.000205             0.000051 style_year_label               dictionary_browser\dictionary_nav_sidebar.py:144
+         1        0.000008        0.000008             0.000058             0.000058 disable                        widgets\profiler.py:17
+         1        0.000007        0.000007             0.000981             0.000981 <lambda>                       tka-sequence-constructor\main.py:89
+         1        0.000006        0.000006             0.002555             0.002555 refresh                        thumbnail_box\thumbnail_box_nav_btns.py:69
+         1        0.000006        0.000006             0.344310             0.344310 <lambda>                       dictionary_widget\dictionary_button_panel.py:53
+         1        0.000002        0.000002             0.000002             0.000002 get_sort_method                settings_manager\dictionary_settings.py:28
+>>>>>>> 0dfa7d92e7aa30ab29c0dfc0476c553cc407b99f
 
 
 Organized by number of calls:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
+<<<<<<< HEAD
    1784831        4.056101        0.000002             5.466688             0.000003 animate_background             background_managers\aurora_background_manager.py:8
      21029        0.108335        0.000005             0.427156             0.000021 eventFilter                    thumbnail_box\thumbnail_image_label.py:83
       3898        0.062264        0.000016             0.147985             0.000038 _draw_outer_border             SW_beat_frame\styled_border_overlay.py:70
@@ -978,12 +1065,98 @@ Organized by number of calls:
          1        0.000003        0.000003             0.039792             0.039792 resize_graph_editor            graph_editor\graph_editor.py:78
          1        0.000010        0.000010             0.000034             0.000034 enterEvent                     sequence_widget\SW_button_frame.py:18
          1        0.000009        0.000009             0.000145             0.000145 leaveEvent                     sequence_widget\SW_button_frame.py:21
+=======
+ 940232443     1478.689247        0.000002          1875.888726             0.000002 animate_background             background_managers\aurora_background_manager.py:8
+    922001        3.659785        0.000004            13.637708             0.000015 eventFilter                    thumbnail_box\thumbnail_image_label.py:83
+     99696        3.704862        0.000037           209.625416             0.002103 setup_background_manager       settings_manager\global_settings.py:54
+     99696        2.758742        0.000028           107.807863             0.001081 paint_background               background_managers\aurora_background_manager.py:15
+     99696        2.296047        0.000023           172.464080             0.001730 __init__                       background_managers\background_manager.py:13
+     99696        0.227045        0.000002             0.307777             0.000003 get_background_type            settings_manager\global_settings.py:46
+     99696        9.549534        0.000096           327.315725             0.003283 paintEvent                     dictionary_widget\dictionary_widget.py:62
+     99696        0.529989        0.000005            33.388092             0.000335 set_font_color                 sequence_widget\current_word_label.py:57
+       816        0.010761        0.000013             0.163855             0.000201 get_date_added                 dictionary_widget\dictionary_sorter.py:183
+       725        0.007218        0.000010             0.168076             0.000232 extract_metadata_from_file     thumbnail_box\metadata_extractor.py:14
+       670        0.006306        0.000009             0.016845             0.000025 is_folder_empty                dictionary_widget\dictionary_deletion_manager.py:71
+       658        0.004325        0.000007             0.143282             0.000218 get_sequence_length            thumbnail_box\metadata_extractor.py:38
+       612        0.013410        0.000022             0.097424             0.000159 get_section_from_word          dictionary_widget\dictionary_sorter.py:158
+       612        0.008975        0.000015             0.104857             0.000171 find_thumbnails                dictionary_widget\dictionary_sorter.py:148
+       612        0.003426        0.000006             0.125659             0.000205 get_sequence_length_from_thumbnails dictionary_widget\dictionary_sorter.py:196
+       612        0.001309        0.000002             0.296991             0.000485 _add_thumbnail_box             dictionary_widget\dictionary_sorter.py:100
+       408        0.012669        0.000031             0.094516             0.000232 <lambda>                       dictionary_widget\dictionary_sorter.py:143
+       204        0.000076        0.000000             0.000076             0.000000 <lambda>                       dictionary_widget\dictionary_sorter.py:145
+       155        0.000677        0.000004             0.010798             0.000070 resizeEvent                    dictionary_browser\section_header.py:18
+        77        0.000165        0.000002             0.001632             0.000021 style_button                   dictionary_browser\dictionary_nav_sidebar.py:111
+        63        0.000258        0.000004             0.001040             0.000017 update_index                   thumbnail_box\variation_number_label.py:23
+        60        0.001309        0.000022             0.004526             0.000075 __init__                       dictionary_browser\section_header.py:8
+        60        0.000991        0.000017             0.011882             0.000198 _add_header                    dictionary_widget\dictionary_sorter.py:92
+        56        0.001344        0.000024             0.088241             0.001576 _scale_pixmap_to_label         dictionary_widget\dictionary_preview_area.py:135
+        56        1.347056        0.024055             1.460147             0.026074 update_preview                 dictionary_widget\dictionary_preview_area.py:114
+        40        0.000029        0.000001             0.000038             0.000001 custom_sort_key                dictionary_widget\dictionary_sorter.py:177
+        35        0.000951        0.000027             0.057596             0.001646 set_pixmap_to_fit              thumbnail_box\thumbnail_image_label.py:34
+        34        0.365021        0.010736             0.420840             0.012378 update_thumbnail               thumbnail_box\thumbnail_image_label.py:25
+        33        0.018194        0.000551             0.437924             0.013270 update_thumbnail               thumbnail_box\thumbnail_box_nav_btns.py:59
+        25        0.000249        0.000010             0.487097             0.019484 handle_button_click            thumbnail_box\preview_area_nav_btns.py:32
+        21        0.000045        0.000002             0.004272             0.000203 set_selected                   thumbnail_box\thumbnail_image_label.py:70
+        18        0.000014        0.000001             0.000639             0.000036 <lambda>                       dictionary_widget\dictionary_sorter.py:119
+        18        0.000026        0.000001             0.000036             0.000002 get_formatted_day              dictionary_browser\dictionary_nav_sidebar.py:107
+        16        0.000084        0.000005             0.001575             0.000098 _style_button                  dictionary_widget\dictionary_options_widget.py:95
+        13        0.008678        0.000668             0.508368             0.039105 update_thumbnails              dictionary_widget\dictionary_preview_area.py:81
+        11        0.000562        0.000051             1.067956             0.097087 thumbnail_clicked              dictionary_widget\dictionary_selection_handler.py:24
+        11        0.000294        0.000027             0.021483             0.001953 set_pixmap_to_fit              dictionary\preview_area_image_label.py:34
+        11        0.229374        0.020852             2.939060             0.267187 thumbnail_clicked              thumbnail_box\thumbnail_image_label.py:53
+        11        0.000190        0.000017             0.004462             0.000406 update_selection               dictionary_widget\dictionary_selection_handler.py:17
+        11        0.000143        0.000013             0.167614             0.015238 refresh                        thumbnail_box\preview_area_nav_btns.py:65
+        11        0.007312        0.000665             0.973563             0.088506 select_thumbnail               dictionary_widget\dictionary_preview_area.py:156
+        11        0.138315        0.012574             0.159797             0.014527 update_thumbnail               dictionary\preview_area_image_label.py:26
+        11        0.000019        0.000002             0.000098             0.000009 update_base_word_label         dictionary_widget\dictionary_preview_area.py:176
+        11        0.000042        0.000004             0.000072             0.000007 update_variation_number_label  dictionary_widget\dictionary_preview_area.py:170
+        11        0.000175        0.000016             0.894199             0.081291 update_nav_buttons             dictionary_widget\dictionary_preview_area.py:166
+        11        0.007372        0.000670             0.167304             0.015209 update_thumbnail               thumbnail_box\preview_area_nav_btns.py:60
+        10        0.000059        0.000006             0.001451             0.000145 enterEvent                     thumbnail_box\thumbnail_box_nav_btns.py:88
+        10        0.000061        0.000006             0.003688             0.000369 leaveEvent                     thumbnail_box\thumbnail_box_nav_btns.py:94
+         7        0.004552        0.000650             0.019464             0.002781 handle_button_click            thumbnail_box\thumbnail_box_nav_btns.py:34
+         6        0.000038        0.000006             0.002329             0.000388 leaveEvent                     thumbnail_box\preview_area_nav_btns.py:89
+         6        0.000046        0.000008             0.000871             0.000145 enterEvent                     thumbnail_box\preview_area_nav_btns.py:85
+         5        0.000082        0.000016             0.001022             0.000204 _update_selected_button        dictionary_widget\dictionary_options_widget.py:79
+         5        0.000372        0.000074             0.002112             0.000422 _set_styles                    dictionary_browser\dictionary_nav_sidebar.py:178
+         4        0.000045        0.000011             0.000157             0.000039 get_images_and_data_path       path_helpers\path_helpers.py:6
+         4        0.000011        0.000003             0.000205             0.000051 style_year_label               dictionary_browser\dictionary_nav_sidebar.py:144
+         3        0.000043        0.000014             0.004322             0.001441 save_settings                  settings_manager\settings_manager.py:46
+         3        0.000060        0.000020             0.000142             0.000047 _clear_sidebar                 dictionary_browser\dictionary_nav_sidebar.py:92
+         3        0.007081        0.002360             0.324955             0.108318 get_sorted_base_words          dictionary_widget\dictionary_sorter.py:128
+         3        0.000026        0.000009             0.000655             0.000218 highlight_appropriate_button   dictionary_widget\dictionary_sorter.py:78
+         3        0.002303        0.000768             0.207505             0.069168 sort_and_display_thumbnails    dictionary_widget\dictionary_sorter.py:22
+         3        0.001063        0.000354             0.185276             0.061759 clear_layout                   dictionary_browser\browser_scroll_widget.py:57
+         3        0.001273        0.000424             0.004646             0.001549 update_sidebar                 dictionary_browser\dictionary_nav_sidebar.py:40
+         3        0.000014        0.000005             0.000863             0.000288 _get_sorted_sections           dictionary_widget\dictionary_sorter.py:111
+         2        0.000026        0.000013             0.002869             0.001435 set_sort_method                settings_manager\dictionary_settings.py:31
+         2        0.000023        0.000012             0.002844             0.001422 save_dictionary_settings       settings_manager\settings_manager.py:68
+         2        0.000049        0.000025             0.000799             0.000399 resizeEvent                    dictionary_widget\dictionary_options_widget.py:129
+         2        0.000065        0.000033             0.000701             0.000351 _style_buttons                 dictionary_widget\dictionary_options_widget.py:90
+         2        0.000026        0.000013             0.000040             0.000020 resizeEvent                    thumbnail_box\variation_number_label.py:29
+         2        0.000024        0.000012             0.001786             0.000893 resizeEvent                    dictionary_browser\dictionary_nav_sidebar.py:187
+         2        0.000019        0.000009             0.000046             0.000023 _style_sort_by_label           dictionary_widget\dictionary_options_widget.py:85
+         1        0.083835        0.083835             0.173557             0.173557 update_thumbnails              thumbnail_box\thumbnail_box.py:69
+         1        0.000782        0.000782             0.344303             0.344303 delete_variation               dictionary_widget\dictionary_deletion_manager.py:22
+         1        0.000036        0.000036             0.001554             0.001554 closeEvent                     tka-sequence-constructor\main.py:39
+         1        0.000008        0.000008             0.000058             0.000058 disable                        widgets\profiler.py:17
+         1        0.000007        0.000007             0.000981             0.000981 <lambda>                       tka-sequence-constructor\main.py:89
+         1        0.000002        0.000002             0.000002             0.000002 get_sort_method                settings_manager\dictionary_settings.py:28
+         1        0.000006        0.000006             0.002555             0.002555 refresh                        thumbnail_box\thumbnail_box_nav_btns.py:69
+         1        0.000029        0.000029             0.000161             0.000161 scroll_to_section              dictionary_browser\dictionary_nav_sidebar.py:158
+         1        0.000118        0.000118             0.393286             0.393286 on_sort_by_date_added          dictionary_widget\dictionary_options_widget.py:73
+         1        0.000108        0.000108             0.304378             0.304378 on_sort_alphabetically         dictionary_widget\dictionary_options_widget.py:67
+         1        0.004538        0.004538             0.039876             0.039876 delete_empty_folders           dictionary_widget\dictionary_deletion_manager.py:70
+         1        0.000025        0.000025             0.000186             0.000186 <lambda>                       dictionary_browser\dictionary_nav_sidebar.py:82
+         1        0.000006        0.000006             0.344310             0.344310 <lambda>                       dictionary_widget\dictionary_button_panel.py:53
+>>>>>>> 0dfa7d92e7aa30ab29c0dfc0476c553cc407b99f
 
 
 Organized by cumulative time:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
+<<<<<<< HEAD
    1784831        4.056101        0.000002             5.466688             0.000003 animate_background             background_managers\aurora_background_manager.py:8
       2012        0.096671        0.000048             5.079146             0.002524 paintEvent                     dictionary_widget\dictionary_widget.py:62
       2191        0.089810        0.000041             4.294752             0.001960 paint_background               background_managers\aurora_background_manager.py:15
@@ -1469,3 +1642,88 @@ Organized by cumulative time:
          3        0.000002        0.000001             0.000002             0.000001 _check_is_mirrored_permutation sequence_widget\sequence_properties_checker.py:65
          3        0.000002        0.000001             0.000002             0.000001 _check_is_colorswapped_permutation sequence_widget\sequence_properties_checker.py:69
          1        0.000001        0.000001             0.000001             0.000001 showEvent                      dictionary_widget\dictionary_widget.py:70
+=======
+ 940232443     1478.689247        0.000002          1875.888726             0.000002 animate_background             background_managers\aurora_background_manager.py:8
+     99696        9.549534        0.000096           327.315725             0.003283 paintEvent                     dictionary_widget\dictionary_widget.py:62
+     99696        3.704862        0.000037           209.625416             0.002103 setup_background_manager       settings_manager\global_settings.py:54
+     99696        2.296047        0.000023           172.464080             0.001730 __init__                       background_managers\background_manager.py:13
+     99696        2.758742        0.000028           107.807863             0.001081 paint_background               background_managers\aurora_background_manager.py:15
+     99696        0.529989        0.000005            33.388092             0.000335 set_font_color                 sequence_widget\current_word_label.py:57
+    922001        3.659785        0.000004            13.637708             0.000015 eventFilter                    thumbnail_box\thumbnail_image_label.py:83
+        11        0.229374        0.020852             2.939060             0.267187 thumbnail_clicked              thumbnail_box\thumbnail_image_label.py:53
+        56        1.347056        0.024055             1.460147             0.026074 update_preview                 dictionary_widget\dictionary_preview_area.py:114
+        11        0.000562        0.000051             1.067956             0.097087 thumbnail_clicked              dictionary_widget\dictionary_selection_handler.py:24
+        11        0.007312        0.000665             0.973563             0.088506 select_thumbnail               dictionary_widget\dictionary_preview_area.py:156
+        11        0.000175        0.000016             0.894199             0.081291 update_nav_buttons             dictionary_widget\dictionary_preview_area.py:166
+        13        0.008678        0.000668             0.508368             0.039105 update_thumbnails              dictionary_widget\dictionary_preview_area.py:81
+        25        0.000249        0.000010             0.487097             0.019484 handle_button_click            thumbnail_box\preview_area_nav_btns.py:32
+        33        0.018194        0.000551             0.437924             0.013270 update_thumbnail               thumbnail_box\thumbnail_box_nav_btns.py:59
+        34        0.365021        0.010736             0.420840             0.012378 update_thumbnail               thumbnail_box\thumbnail_image_label.py:25
+         1        0.000118        0.000118             0.393286             0.393286 on_sort_by_date_added          dictionary_widget\dictionary_options_widget.py:73
+         1        0.000006        0.000006             0.344310             0.344310 <lambda>                       dictionary_widget\dictionary_button_panel.py:53
+         1        0.000782        0.000782             0.344303             0.344303 delete_variation               dictionary_widget\dictionary_deletion_manager.py:22
+         3        0.007081        0.002360             0.324955             0.108318 get_sorted_base_words          dictionary_widget\dictionary_sorter.py:128
+     99696        0.227045        0.000002             0.307777             0.000003 get_background_type            settings_manager\global_settings.py:46
+         1        0.000108        0.000108             0.304378             0.304378 on_sort_alphabetically         dictionary_widget\dictionary_options_widget.py:67
+       612        0.001309        0.000002             0.296991             0.000485 _add_thumbnail_box             dictionary_widget\dictionary_sorter.py:100
+         3        0.002303        0.000768             0.207505             0.069168 sort_and_display_thumbnails    dictionary_widget\dictionary_sorter.py:22
+         3        0.001063        0.000354             0.185276             0.061759 clear_layout                   dictionary_browser\browser_scroll_widget.py:57
+         1        0.083835        0.083835             0.173557             0.173557 update_thumbnails              thumbnail_box\thumbnail_box.py:69
+       725        0.007218        0.000010             0.168076             0.000232 extract_metadata_from_file     thumbnail_box\metadata_extractor.py:14
+        11        0.000143        0.000013             0.167614             0.015238 refresh                        thumbnail_box\preview_area_nav_btns.py:65
+        11        0.007372        0.000670             0.167304             0.015209 update_thumbnail               thumbnail_box\preview_area_nav_btns.py:60
+       816        0.010761        0.000013             0.163855             0.000201 get_date_added                 dictionary_widget\dictionary_sorter.py:183
+        11        0.138315        0.012574             0.159797             0.014527 update_thumbnail               dictionary\preview_area_image_label.py:26
+       658        0.004325        0.000007             0.143282             0.000218 get_sequence_length            thumbnail_box\metadata_extractor.py:38
+       612        0.003426        0.000006             0.125659             0.000205 get_sequence_length_from_thumbnails dictionary_widget\dictionary_sorter.py:196
+       612        0.008975        0.000015             0.104857             0.000171 find_thumbnails                dictionary_widget\dictionary_sorter.py:148
+       612        0.013410        0.000022             0.097424             0.000159 get_section_from_word          dictionary_widget\dictionary_sorter.py:158
+       408        0.012669        0.000031             0.094516             0.000232 <lambda>                       dictionary_widget\dictionary_sorter.py:143
+        56        0.001344        0.000024             0.088241             0.001576 _scale_pixmap_to_label         dictionary_widget\dictionary_preview_area.py:135
+        35        0.000951        0.000027             0.057596             0.001646 set_pixmap_to_fit              thumbnail_box\thumbnail_image_label.py:34
+         1        0.004538        0.004538             0.039876             0.039876 delete_empty_folders           dictionary_widget\dictionary_deletion_manager.py:70
+        11        0.000294        0.000027             0.021483             0.001953 set_pixmap_to_fit              dictionary\preview_area_image_label.py:34
+         7        0.004552        0.000650             0.019464             0.002781 handle_button_click            thumbnail_box\thumbnail_box_nav_btns.py:34
+       670        0.006306        0.000009             0.016845             0.000025 is_folder_empty                dictionary_widget\dictionary_deletion_manager.py:71
+        60        0.000991        0.000017             0.011882             0.000198 _add_header                    dictionary_widget\dictionary_sorter.py:92
+       155        0.000677        0.000004             0.010798             0.000070 resizeEvent                    dictionary_browser\section_header.py:18
+         3        0.001273        0.000424             0.004646             0.001549 update_sidebar                 dictionary_browser\dictionary_nav_sidebar.py:40
+        60        0.001309        0.000022             0.004526             0.000075 __init__                       dictionary_browser\section_header.py:8
+        11        0.000190        0.000017             0.004462             0.000406 update_selection               dictionary_widget\dictionary_selection_handler.py:17
+         3        0.000043        0.000014             0.004322             0.001441 save_settings                  settings_manager\settings_manager.py:46
+        21        0.000045        0.000002             0.004272             0.000203 set_selected                   thumbnail_box\thumbnail_image_label.py:70
+        10        0.000061        0.000006             0.003688             0.000369 leaveEvent                     thumbnail_box\thumbnail_box_nav_btns.py:94
+         2        0.000026        0.000013             0.002869             0.001435 set_sort_method                settings_manager\dictionary_settings.py:31
+         2        0.000023        0.000012             0.002844             0.001422 save_dictionary_settings       settings_manager\settings_manager.py:68
+         1        0.000006        0.000006             0.002555             0.002555 refresh                        thumbnail_box\thumbnail_box_nav_btns.py:69
+         6        0.000038        0.000006             0.002329             0.000388 leaveEvent                     thumbnail_box\preview_area_nav_btns.py:89
+         5        0.000372        0.000074             0.002112             0.000422 _set_styles                    dictionary_browser\dictionary_nav_sidebar.py:178
+         2        0.000024        0.000012             0.001786             0.000893 resizeEvent                    dictionary_browser\dictionary_nav_sidebar.py:187
+        77        0.000165        0.000002             0.001632             0.000021 style_button                   dictionary_browser\dictionary_nav_sidebar.py:111
+        16        0.000084        0.000005             0.001575             0.000098 _style_button                  dictionary_widget\dictionary_options_widget.py:95
+         1        0.000036        0.000036             0.001554             0.001554 closeEvent                     tka-sequence-constructor\main.py:39
+        10        0.000059        0.000006             0.001451             0.000145 enterEvent                     thumbnail_box\thumbnail_box_nav_btns.py:88
+        63        0.000258        0.000004             0.001040             0.000017 update_index                   thumbnail_box\variation_number_label.py:23
+         5        0.000082        0.000016             0.001022             0.000204 _update_selected_button        dictionary_widget\dictionary_options_widget.py:79
+         1        0.000007        0.000007             0.000981             0.000981 <lambda>                       tka-sequence-constructor\main.py:89
+         6        0.000046        0.000008             0.000871             0.000145 enterEvent                     thumbnail_box\preview_area_nav_btns.py:85
+         3        0.000014        0.000005             0.000863             0.000288 _get_sorted_sections           dictionary_widget\dictionary_sorter.py:111
+         2        0.000049        0.000025             0.000799             0.000399 resizeEvent                    dictionary_widget\dictionary_options_widget.py:129
+         2        0.000065        0.000033             0.000701             0.000351 _style_buttons                 dictionary_widget\dictionary_options_widget.py:90
+         3        0.000026        0.000009             0.000655             0.000218 highlight_appropriate_button   dictionary_widget\dictionary_sorter.py:78
+        18        0.000014        0.000001             0.000639             0.000036 <lambda>                       dictionary_widget\dictionary_sorter.py:119
+         4        0.000011        0.000003             0.000205             0.000051 style_year_label               dictionary_browser\dictionary_nav_sidebar.py:144
+         1        0.000025        0.000025             0.000186             0.000186 <lambda>                       dictionary_browser\dictionary_nav_sidebar.py:82
+         1        0.000029        0.000029             0.000161             0.000161 scroll_to_section              dictionary_browser\dictionary_nav_sidebar.py:158
+         4        0.000045        0.000011             0.000157             0.000039 get_images_and_data_path       path_helpers\path_helpers.py:6
+         3        0.000060        0.000020             0.000142             0.000047 _clear_sidebar                 dictionary_browser\dictionary_nav_sidebar.py:92
+        11        0.000019        0.000002             0.000098             0.000009 update_base_word_label         dictionary_widget\dictionary_preview_area.py:176
+       204        0.000076        0.000000             0.000076             0.000000 <lambda>                       dictionary_widget\dictionary_sorter.py:145
+        11        0.000042        0.000004             0.000072             0.000007 update_variation_number_label  dictionary_widget\dictionary_preview_area.py:170
+         1        0.000008        0.000008             0.000058             0.000058 disable                        widgets\profiler.py:17
+         2        0.000019        0.000009             0.000046             0.000023 _style_sort_by_label           dictionary_widget\dictionary_options_widget.py:85
+         2        0.000026        0.000013             0.000040             0.000020 resizeEvent                    thumbnail_box\variation_number_label.py:29
+        40        0.000029        0.000001             0.000038             0.000001 custom_sort_key                dictionary_widget\dictionary_sorter.py:177
+        18        0.000026        0.000001             0.000036             0.000002 get_formatted_day              dictionary_browser\dictionary_nav_sidebar.py:107
+         1        0.000002        0.000002             0.000002             0.000002 get_sort_method                settings_manager\dictionary_settings.py:28
+>>>>>>> 0dfa7d92e7aa30ab29c0dfc0476c553cc407b99f
