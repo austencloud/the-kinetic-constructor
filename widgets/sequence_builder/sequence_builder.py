@@ -137,8 +137,8 @@ class SequenceBuilder(QFrame):
         self.advanced_start_pos_picker.hide()
         self.layout().removeWidget(self.option_picker)
         self.layout().addWidget(self.start_pos_picker)
-        self.start_pos_picker.resize_start_pos_picker()
         self.start_pos_picker.show()
+        self.start_pos_picker.resize_start_pos_picker()
 
     def resize_sequence_builder(self) -> None:
         # self.setMinimumWidth(self.top_builder_widget.width() // 2)
