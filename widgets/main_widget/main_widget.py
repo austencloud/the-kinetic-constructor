@@ -60,13 +60,21 @@ class MainWidget(QTabWidget):
 
     def on_tab_changed(self, index):
         if index == self.builder_tab_index:
-            self.main_window.settings_manager.global_settings.set_current_tab("sequence_builder")
+            self.main_window.settings_manager.global_settings.set_current_tab(
+                "sequence_builder"
+            )
         elif index == self.dictionary_tab_index:
-            self.main_window.settings_manager.global_settings.set_current_tab("dictionary")
+            self.main_window.settings_manager.global_settings.set_current_tab(
+                "dictionary"
+            )
         elif index == self.recorder_tab_index:
-            self.main_window.settings_manager.global_settings.set_current_tab("recorder")
+            self.main_window.settings_manager.global_settings.set_current_tab(
+                "recorder"
+            )
         elif index == self.sequence_card_tab_index:
-            self.main_window.settings_manager.global_settings.set_current_tab("sequence_cards")
+            self.main_window.settings_manager.global_settings.set_current_tab(
+                "sequence_cards"
+            )
 
     def initialize_webcam_async(self):
         """Start the webcam initialization in a separate thread to avoid blocking the UI."""
@@ -119,7 +127,9 @@ class MainWidget(QTabWidget):
         self.recorder_tab_index = 2
         self.sequence_card_tab_index = 3
 
-        current_tab = self.main_window.settings_manager.global_settings.get_current_tab()
+        current_tab = (
+            self.main_window.settings_manager.global_settings.get_current_tab()
+        )
 
         if current_tab == "sequence_builder":
             self.setCurrentIndex(self.builder_tab_index)
@@ -183,11 +193,9 @@ class MainWidget(QTabWidget):
     def resize_all_widgets(self):
         starting_widget = self.currentWidget()
         self.currentChanged.disconnect(self.on_tab_changed)
-        for i in range(self.count()):
-            self.setCurrentIndex(i)
-            self.resize_widget(self.currentWidget())
+        self.resize_widget(self.currentWidget())
         self.setCurrentWidget(starting_widget)
-        self.currentChanged.connect(self.on_tab_changed )
+        self.currentChanged.connect(self.on_tab_changed)
 
     def showEvent(self, event):
         super().showEvent(event)

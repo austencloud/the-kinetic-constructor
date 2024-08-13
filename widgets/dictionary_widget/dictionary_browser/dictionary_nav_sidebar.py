@@ -109,7 +109,7 @@ class DictionaryNavSidebar(QWidget):
         return day
 
     def style_button(self, button: QPushButton, selected: bool = False):
-        font_size = self.browser.width() // 40
+        font_size = self.browser.height() // 40
         if selected:
             button.setStyleSheet(
                 f"""
@@ -142,7 +142,7 @@ class DictionaryNavSidebar(QWidget):
             )
 
     def style_year_label(self, label: QLabel):
-        font_size = self.browser.width() // 35
+        font_size = self.browser.height() // 35
         label.setStyleSheet(
             f"""
             QLabel {{

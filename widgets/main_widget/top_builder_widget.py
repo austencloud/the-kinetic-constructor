@@ -24,6 +24,7 @@ class TopBuilderWidget(QWidget):
         self.initialized = False
         self._setup_layout()
         self.connect_signals()
+        self.background_manager = None
 
     def connect_signals(self):
         self.main_widget.main_window.settings_manager.background_changed.connect(
@@ -46,6 +47,12 @@ class TopBuilderWidget(QWidget):
 
     def showEvent(self, event):
         super().showEvent(event)
-        self.background_manager = self.global_settings.setup_background_manager(self)
-        
-    
+        if self.background_manager is None:
+            self.background_manager = self.global_settings.setup_background_manager(
+                self
+            )
+            self.resize_top_builder_widget()
+
+    def resize_top_builder_widget(self):
+        self.sequence_builder.resize_sequence_builder()
+        self.sequence_widget.resize_sequence_widget()

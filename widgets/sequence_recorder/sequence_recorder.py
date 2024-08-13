@@ -22,6 +22,7 @@ class SequenceRecorder(QWidget):
         )
         self.gradient_shift = 0
         self.color_shift = 0
+        self.background_manager = None
 
     def animate_background(self) -> None:
         self.gradient_shift += 0.05
@@ -31,7 +32,10 @@ class SequenceRecorder(QWidget):
         self.update()
 
     def paintEvent(self, event) -> None:
-        self.background_manager = self.global_settings.setup_background_manager(self)
+        if not self.background_manager:
+            self.background_manager = self.global_settings.setup_background_manager(
+                self
+            )
         painter = QPainter(self)
         self.background_manager.paint_background(self, painter)
 

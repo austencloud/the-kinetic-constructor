@@ -32,6 +32,7 @@ class DictionaryWidget(QWidget):
         )
         self.connect_signals()
         self.initialized = False
+        self.background_manager = None
 
     def connect_signals(self):
         self.main_widget.main_window.settings_manager.background_changed.connect(
@@ -60,7 +61,10 @@ class DictionaryWidget(QWidget):
         self.layout.addWidget(self.preview_area, 3)
 
     def paintEvent(self, event) -> None:
-        self.background_manager = self.global_settings.setup_background_manager(self)
+        if self.background_manager is None:
+            self.background_manager = self.global_settings.setup_background_manager(
+                self
+            )
         painter = QPainter(self)
         self.background_manager.paint_background(self, painter)
 

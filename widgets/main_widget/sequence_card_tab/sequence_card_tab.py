@@ -40,6 +40,7 @@ class SequenceCardTab(QWidget):
         self.image_exporter = SequenceCardImageExporter(self)
         self.page_exporter = SequenceCardPageExporter(self)
         self.init_ui()
+        self.background_manager = None
 
     def init_ui(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -79,6 +80,9 @@ class SequenceCardTab(QWidget):
         super().showEvent(event)
 
     def paintEvent(self, event) -> None:
-        self.background_manager = self.global_settings.setup_background_manager(self)
+        if not self.background_manager:
+            self.background_manager = self.global_settings.setup_background_manager(
+                self
+            )
         painter = QPainter(self)
         self.background_manager.paint_background(self, painter)
