@@ -135,15 +135,35 @@ class DictionarySorter:
 
         for i, (word, thumbnails, _) in enumerate(base_words):
             sequence_length = self.get_sequence_length_from_thumbnails(thumbnails)
+
             base_words[i] = (word, thumbnails, sequence_length)
 
         if sort_order == "sequence_length":
             base_words.sort(key=lambda x: x[2] if x[2] is not None else float("inf"))
         elif sort_order == "date_added":
-            base_words.sort(key=lambda x: self.get_date_added(x[1]), reverse=True)
+            base_words.sort(
+                key=lambda x: self.get_date_added(x[1]) or datetime.min, reverse=True
+            )
         else:
             base_words.sort(key=lambda x: x[0])
         return base_words
+
+    def get_date_added(self, thumbnails):
+        dates = []
+        for thumbnail in thumbnails:
+            image = Image.open(thumbnail)
+            info = image.info
+            metadata = info.get("metadata")
+            if metadata:
+                metadata_dict = json.loads(metadata)
+                date_added = metadata_dict.get("date_added")
+                if date_added:
+                    try:
+                        dates.append(datetime.fromisoformat(date_added))
+                    except ValueError:
+                        pass  # Handle parsing errors if date format is incorrect
+
+        return max(dates, default=datetime.min)
 
     def find_thumbnails(self, word_dir: str):
         thumbnails = []
@@ -179,19 +199,6 @@ class DictionarySorter:
             return sorting_order.index(section)
         except ValueError:
             return len(sorting_order)  # put unknown sections at the end
-
-    def get_date_added(self, thumbnails):
-        dates = []
-        for thumbnail in thumbnails:
-            image = Image.open(thumbnail)
-            info = image.info
-            metadata = info.get("metadata")
-            if metadata:
-                metadata_dict = json.loads(metadata)
-                date_added = metadata_dict.get("date_added")
-                if date_added:
-                    dates.append(datetime.fromisoformat(date_added))
-        return max(dates, default=None)
 
     def get_sequence_length_from_thumbnails(self, thumbnails):
         """Extract the sequence length from the first available thumbnail metadata."""

@@ -45,6 +45,8 @@ class DictionaryNavSidebar(QWidget):
 
             current_year = None
             for section in sections:
+                if section == "Unknown":
+                    continue
                 year = section.split("-")[2]
                 date = section
                 day = self.get_formatted_day(date)
