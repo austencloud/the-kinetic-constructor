@@ -20,7 +20,7 @@ class DictionaryBrowser(QWidget):
         super().__init__(dictionary_widget)
         self.dictionary_widget = dictionary_widget
         self.main_widget = dictionary_widget.main_widget
-
+        self.initialized = False
         self._setup_components()
         self._setup_layout()
 
@@ -29,11 +29,14 @@ class DictionaryBrowser(QWidget):
         self.scroll_widget = DictionaryBrowserScrollWidget(self)
         self.options_widget = DictionaryOptionsWidget(self)
         self.sorter = DictionarySorter(self)
-        sort_method = (
-            self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
-        )
-        self.sorter.sort_and_display_thumbnails(sort_method)
-        
+
+    def showEvent(self, event):
+        if not self.initialized:
+            sort_method = (
+                self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
+            )
+            self.sorter.sort_and_display_thumbnails(sort_method)
+        super().showEvent(event)
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)

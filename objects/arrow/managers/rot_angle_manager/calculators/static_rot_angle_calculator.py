@@ -39,10 +39,10 @@ class StaticRotAngleCalculator(BaseRotAngleCalculator):
             WEST: {CLOCKWISE: 90, COUNTER_CLOCKWISE: 270},
         }
         static_from_nonradial_angle_override_map = {
-            NORTH: 90,
-            EAST: {CLOCKWISE: 0, COUNTER_CLOCKWISE: 180},
-            SOUTH: 270,
-            WEST: {CLOCKWISE: 180, COUNTER_CLOCKWISE: 0},
+            NORTH: 0,
+            EAST: {CLOCKWISE: 90, COUNTER_CLOCKWISE: 270},
+            SOUTH: 180,
+            WEST: {CLOCKWISE: 270, COUNTER_CLOCKWISE: 90},
         }
         if self.arrow.motion.start_ori in [IN, OUT]:
             loc_angle = static_from_radial_angle_override_map.get(self.arrow.loc)

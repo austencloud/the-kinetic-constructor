@@ -143,7 +143,7 @@ class SequenceWidget(QWidget):
         self.layout.update()
         super().resizeEvent(event)
 
-    def showEvent(self, event: QShowEvent):
+    def showEvent(self, event):
         super().showEvent(event)
         QTimer.singleShot(0, self.post_show_initialization)
 

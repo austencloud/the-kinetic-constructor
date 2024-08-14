@@ -278,12 +278,12 @@
       "static_from_layer1": [-100, -100]
     },
     "(s, 0.5, 1)": {
-      "static_from_layer1_rot_angle_override": true,
       "static_from_layer1": [-100, 0],
       "swap_beta_n_nonradial_blue_static_n_red_anti_ne": true,
       "swap_beta_s_nonradial_blue_static_s_red_anti_sw": true,
       "swap_beta_e_nonradial_blue_static_e_red_anti_ne": true,
-      "swap_beta_w_nonradial_blue_static_w_red_anti_sw": true
+      "swap_beta_w_nonradial_blue_static_w_red_anti_sw": true,
+      "static_from_layer1_rot_angle_override": true
     },
     "(s, 0.5, 1.5)": {
       "anti_from_layer2": [-50, 20]
