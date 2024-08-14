@@ -72,12 +72,12 @@ class SequenceCardTab(QWidget):
         self.bottom_layout.addWidget(self.scroll_area, 15)
 
     def showEvent(self, event):
+        super().showEvent(event)
         if not self.initialized:
             self.setCursor(Qt.CursorShape.WaitCursor)
             # self.refresher.refresh_sequence_cards()
             self.initialized = True
             self.setCursor(Qt.CursorShape.ArrowCursor)
-        super().showEvent(event)
 
     def paintEvent(self, event) -> None:
         if not self.background_manager:

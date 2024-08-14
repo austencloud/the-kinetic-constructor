@@ -24,6 +24,7 @@ class SequenceCardNavSidebar(QWidget):
         self.setLayout(main_layout)
 
     def showEvent(self, event):
+        super().showEvent(event)
         self._set_styles()
 
     def _setup_scroll_area(self):

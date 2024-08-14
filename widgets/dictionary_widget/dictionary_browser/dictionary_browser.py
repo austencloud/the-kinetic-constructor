@@ -31,12 +31,12 @@ class DictionaryBrowser(QWidget):
         self.sorter = DictionarySorter(self)
 
     def showEvent(self, event):
+        super().showEvent(event)
         if not self.initialized:
             sort_method = (
                 self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
             )
             self.sorter.sort_and_display_thumbnails(sort_method)
-        super().showEvent(event)
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)

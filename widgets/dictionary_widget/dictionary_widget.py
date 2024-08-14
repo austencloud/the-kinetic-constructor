@@ -72,6 +72,7 @@ class DictionaryWidget(QWidget):
         self.browser.resize_dictionary_browser()
 
     def showEvent(self, event) -> None:
+        super().showEvent(event)
         if not self.initialized:
             self.setCursor(Qt.CursorShape.WaitCursor)
             self.resize_dictionary_widget()

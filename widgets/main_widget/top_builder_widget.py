@@ -51,7 +51,6 @@ class TopBuilderWidget(QWidget):
             self.background_manager = self.global_settings.setup_background_manager(
                 self
             )
-            self.resize_top_builder_widget()
 
     def resize_top_builder_widget(self):
         self.sequence_builder.resize_sequence_builder()

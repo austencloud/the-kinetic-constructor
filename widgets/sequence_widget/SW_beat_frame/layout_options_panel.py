@@ -151,6 +151,7 @@ class LayoutOptionsPanel(QWidget):
         return num_beats
 
     def showEvent(self, event):
+        super().showEvent(event)
         num_beats = self.get_currently_visible_beats()
         self.beats_combo_box.setCurrentText(str(num_beats))
 
