@@ -11,7 +11,6 @@ from objects.graphical_object.graphical_object_svg_manager import (
     GraphicalObjectSvgManager,
 )
 from sequence_difficulty_evaluator import SequenceDifficultyEvaluator
-from widgets.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from styles.get_tab_stylesheet import get_tab_stylesheet
 from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
@@ -114,13 +113,13 @@ class MainWidget(QTabWidget):
 
         self.top_builder_widget = TopBuilderWidget(self)
         self.dictionary_widget = DictionaryWidget(self)
-        self.sequence_recorder = SequenceRecorder(self)
-        self.sequence_card_tab = SequenceCardTab(self)
+        # self.sequence_recorder = SequenceRecorder(self)
+        # self.sequence_card_tab = SequenceCardTab(self)
 
         self.addTab(self.top_builder_widget, "Builder")
         self.addTab(self.dictionary_widget, "Dictionary")
-        self.addTab(self.sequence_recorder, "Recorder")
-        self.addTab(self.sequence_card_tab, "Sequence Cards")
+        # self.addTab(self.sequence_recorder, "Recorder")
+        # self.addTab(self.sequence_card_tab, "Sequence Cards")
 
         self.builder_tab_index = 0
         self.dictionary_tab_index = 1
@@ -175,20 +174,20 @@ class MainWidget(QTabWidget):
                 self.top_builder_widget.initialized = True
                 self.top_builder_widget.sequence_widget.resize_sequence_widget()
                 self.top_builder_widget.sequence_builder.resize_sequence_builder()
-        elif widget == self.sequence_recorder:
-            if not self.sequence_recorder.initialized:
-                self.sequence_recorder.resize_sequence_recorder()
-                self.initialized = True
-            SW_beat_frame = self.top_builder_widget.sequence_widget.beat_frame
-            if SW_beat_frame.sequence_changed:
-                SW_beat_frame.sequence_changed = False
-                self.sequence_recorder.capture_frame.SR_beat_frame.populate_beat_frame_scenes_from_json()
-            else:
-                for view in SW_beat_frame.beats:
-                    if view.is_filled:
-                        view.resize_beat_view()
         elif widget == self.dictionary_widget:
             self.dictionary_widget.browser.resize_dictionary_browser()
+        # elif widget == self.sequence_recorder:
+        #     if not self.sequence_recorder.initialized:
+        #         self.sequence_recorder.resize_sequence_recorder()
+        #         self.initialized = True
+        #     SW_beat_frame = self.top_builder_widget.sequence_widget.beat_frame
+        #     if SW_beat_frame.sequence_changed:
+        #         SW_beat_frame.sequence_changed = False
+        #         self.sequence_recorder.capture_frame.SR_beat_frame.populate_beat_frame_scenes_from_json()
+        #     else:
+        #         for view in SW_beat_frame.beats:
+        #             if view.is_filled:
+        #                 view.resize_beat_view()
 
     def resize_all_widgets(self):
         starting_widget = self.currentWidget()
