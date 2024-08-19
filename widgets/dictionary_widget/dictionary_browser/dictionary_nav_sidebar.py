@@ -54,7 +54,7 @@ class DictionaryNavSidebar(QWidget):
                 if year != current_year:
                     year_label = QLabel(year)
                     year_label.setStyleSheet("font-weight: bold;")
-
+                    year_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
                     self.layout.addWidget(year_label)
                     spacer_line = QLabel()
                     spacer_line.setStyleSheet(

@@ -17,7 +17,7 @@
         "user_profiles": {
             "AC": {
                 "name": "AC",
-                "export_date": "8-12-2024"
+                "export_date": "8-17-2024"
             }
         },
         "current_note": "Created using The Kinetic Alphabet",
@@ -33,7 +33,7 @@
             "EndPosition": false
         },
         "grid_visibility": {
-            "non_radial_points": true
+            "non_radial_points": false
         }
     },
     "dictionary": {

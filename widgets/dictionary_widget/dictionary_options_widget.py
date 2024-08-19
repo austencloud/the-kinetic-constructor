@@ -48,7 +48,7 @@ class DictionaryOptionsWidget(QWidget):
 
         self.sort_by_label = QLabel("Sort:")
         self.sort_by_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
+        self.buttons_layout.addStretch(2)
         self.buttons_layout.addWidget(self.sort_by_label)
         self.layout.addLayout(self.buttons_layout)
         self.buttons_layout.addStretch(2)
