@@ -12,15 +12,14 @@ class PreviewAreaImageLabel(QLabel):
     def __init__(self, preview_area: "DictionaryPreviewArea"):
         super().__init__()
         self.preview_area = preview_area
-
-        self.setStyleSheet("border: 3px solid black;")
-        self.installEventFilter(self)
         self.thumbnails = preview_area.thumbnails
         self.current_index = preview_area.current_index
         self.metadata_extractor = preview_area.main_widget.metadata_extractor
         self.browser = preview_area.dictionary_widget.browser
         self.is_selected = False
-
+        self.setStyleSheet("border: 3px solid black;")
+        self.installEventFilter(self)
+        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setScaledContents(False)
 
     def update_thumbnail(self):
@@ -45,3 +44,31 @@ class PreviewAreaImageLabel(QLabel):
             target_width, Qt.TransformationMode.SmoothTransformation
         )
         self.setPixmap(scaled_pixmap)
+
+    def show_placeholder(self):
+        self.setText("Select a sequence to display it here.")
+        placeholder_text_font_size = self.preview_area.width() // 50
+        self.setStyleSheet(
+            f"font: {placeholder_text_font_size}pt Arial; font-weight: bold;"
+        )
+
+    def adjust_label_height_for_text(self):
+        min_height = int(max(self.preview_area.height() / 5, 50))
+        self.setMinimumHeight(min_height)
+
+    def scale_pixmap_to_label(self, pixmap: QPixmap):
+        label_width = int(self.preview_area.width() * 0.9)
+        aspect_ratio = pixmap.height() / pixmap.width()
+        new_height = int(label_width * aspect_ratio)
+        if new_height > self.preview_area.height() * 0.7:
+            new_height = int(self.preview_area.height() * 0.7)
+            label_width = int(new_height / aspect_ratio)
+
+        scaled_pixmap = pixmap.scaled(
+            label_width,
+            new_height,
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
+        )
+        self.setPixmap(scaled_pixmap)
+        self.setMinimumHeight(new_height)

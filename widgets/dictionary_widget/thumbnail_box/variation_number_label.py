@@ -14,7 +14,7 @@ class VariationNumberLabel(QLabel):
     def __init__(self, parent: Union["ThumbnailBox", "DictionaryPreviewArea"]):
         super().__init__(parent)
         if len(parent.thumbnails) > 1:
-            self.setText(f"Variation {parent.current_index + 1}")
+            self.setText(f"{parent.current_index + 1}/{len(parent.thumbnails)}")
         else:
             self.hide()
         self.parent: Union["ThumbnailBox", "DictionaryPreviewArea"] = parent
@@ -22,10 +22,14 @@ class VariationNumberLabel(QLabel):
 
     def update_index(self, index):
         if len(self.parent.thumbnails) > 1:
-            self.setText(f"Variation {index + 1}")
+            self.setText(f"{index + 1}/{len(self.parent.thumbnails)}")
         else:
             self.hide()
+
+    def clear(self) -> None:
+        self.setText("")
 
     def resizeEvent(self, event):
         self.setFont(QFont("Arial", self.width() // 35, QFont.Weight.Bold))
         super().resizeEvent(event)
+

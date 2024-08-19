@@ -44,8 +44,8 @@ class PreviewAreaNavButtonsWidget(QWidget):
         QApplication.processEvents()
         self.preview_area.update_preview(self.preview_area.current_index)
         QApplication.processEvents()
-        self.preview_area.variation_number_label.setText(
-            f"Variation {self.preview_area.current_index+ 1}"
+        self.preview_area.variation_number_label.update_index(
+            self.preview_area.current_index + 1
         )
 
         self.preview_area.current_thumbnail_box.current_index = (

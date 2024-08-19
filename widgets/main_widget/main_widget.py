@@ -62,6 +62,7 @@ class MainWidget(QTabWidget):
             self.main_window.settings_manager.global_settings.set_current_tab(
                 "sequence_builder"
             )
+            self.top_builder_widget.resize_top_builder_widget()
         elif index == self.dictionary_tab_index:
             self.main_window.settings_manager.global_settings.set_current_tab(
                 "dictionary"
