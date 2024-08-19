@@ -26,7 +26,7 @@ class DictionaryButtonPanel(QWidget):
         super().__init__(preview_area)
         self.preview_area = preview_area
         self.dictionary_widget = preview_area.dictionary_widget
-        self.deletion_handler = self.dictionary_widget.deletion_manager
+        self.deletion_handler = self.dictionary_widget.deletion_handler
         self.temp_beat_frame = TempBeatFrame(self.dictionary_widget)
 
         self._setup_buttons()
@@ -59,7 +59,7 @@ class DictionaryButtonPanel(QWidget):
                 "icon": "delete.svg",
                 "tooltip": "Delete Word",
                 "action": lambda: self.deletion_handler.delete_word(
-                    self.preview_area.base_word
+                    self.preview_area.word_label.word
                 ),
             },
         }

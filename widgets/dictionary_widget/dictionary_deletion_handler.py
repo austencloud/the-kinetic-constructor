@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
 
 
-class DictionaryDeletionManager:
+class DictionaryDeletionHandler:
     def __init__(self, dictionary_widget: "DictionaryWidget"):
         self.dictionary_widget = dictionary_widget
         self.variation_number_fixer = VariationNumberFixer()

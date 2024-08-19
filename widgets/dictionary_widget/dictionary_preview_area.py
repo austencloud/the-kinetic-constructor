@@ -23,10 +23,6 @@ if TYPE_CHECKING:
 
 
 class DictionaryPreviewArea(QWidget):
-    edit_sequence_button: QPushButton
-    delete_variation_button: QPushButton
-    delete_word_button: QPushButton
-
     def __init__(self, dictionary_widget: "DictionaryWidget"):
         super().__init__(dictionary_widget)
         self.thumbnails = []

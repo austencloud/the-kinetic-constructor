@@ -74,9 +74,7 @@ class ThumbnailBox(QWidget):
                 self.thumbnails
             )
         self.image_label.thumbnails = thumbnails
-        # self.current_index = 0
         self.image_label.set_pixmap_to_fit(QPixmap(self.thumbnails[self.current_index]))
-        self.nav_buttons_widget.refresh()
         if len(self.thumbnails) == 1:
             self.variation_number_label.hide()
         else:

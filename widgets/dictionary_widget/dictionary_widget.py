@@ -6,8 +6,8 @@ from PyQt6.QtCore import Qt
 from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
     DictionaryBrowser,
 )
-from widgets.dictionary_widget.dictionary_deletion_manager import (
-    DictionaryDeletionManager,
+from widgets.dictionary_widget.dictionary_deletion_handler import (
+    DictionaryDeletionHandler,
 )
 from .dictionary_selection_handler import DictionarySelectionHandler
 from .dictionary_preview_area import DictionaryPreviewArea
@@ -45,20 +45,21 @@ class DictionaryWidget(QWidget):
         self.update()
 
     def _setup_ui(self) -> None:
-        self.deletion_manager = DictionaryDeletionManager(self)
+        self._setup_handlers()
         self.browser = DictionaryBrowser(self)
         self.preview_area = DictionaryPreviewArea(self)
-        self._setup_handlers()
         self._setup_layout()
 
     def _setup_handlers(self) -> None:
+        self.deletion_handler = DictionaryDeletionHandler(self)
         self.selection_handler = DictionarySelectionHandler(self)
         self.sequence_populator = DictionarySequencePopulator(self)
 
     def _setup_layout(self) -> None:
-        self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.layout.addWidget(self.browser, 5)
-        self.layout.addWidget(self.preview_area, 3)
+        layout = QHBoxLayout(self)
+        layout.addWidget(self.browser, 5)
+        layout.addWidget(self.preview_area, 3)
+        self.setLayout(layout)
 
     def paintEvent(self, event) -> None:
         if self.background_manager is None:

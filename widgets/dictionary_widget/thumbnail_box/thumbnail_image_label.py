@@ -23,9 +23,7 @@ class ThumbnailImageLabel(QLabel):
         self.setScaledContents(False)
 
     def update_thumbnail(self, index):
-        if self.thumbnails and 0 <= index < len(
-            self.thumbnails
-        ):
+        if self.thumbnails and 0 <= index < len(self.thumbnails):
             pixmap = QPixmap(self.thumbnails[index])
             self.set_pixmap_to_fit(pixmap)
         else:
@@ -63,7 +61,7 @@ class ThumbnailImageLabel(QLabel):
                 self.thumbnail_box.current_index,
             )
         else:
-            self.browser.dictionary_widget.deletion_manager.delete_variation(
+            self.browser.dictionary_widget.deletion_handler.delete_variation(
                 self.thumbnail_box, self.thumbnail_box.current_index
             )
 

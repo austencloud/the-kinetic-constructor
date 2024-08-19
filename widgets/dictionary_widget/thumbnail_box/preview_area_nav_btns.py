@@ -41,11 +41,9 @@ class PreviewAreaNavButtonsWidget(QWidget):
             self.preview_area.current_index = (
                 self.preview_area.current_index + 1
             ) % len(self.preview_area.thumbnails)
-        QApplication.processEvents()
         self.preview_area.update_preview(self.preview_area.current_index)
-        QApplication.processEvents()
-        self.preview_area.variation_number_label.update_index(
-            self.preview_area.current_index + 1
+        self.preview_area.variation_number_label.setText(
+            f"{self.preview_area.current_index + 1}/{len(self.preview_area.thumbnails)}"
         )
 
         self.preview_area.current_thumbnail_box.current_index = (
