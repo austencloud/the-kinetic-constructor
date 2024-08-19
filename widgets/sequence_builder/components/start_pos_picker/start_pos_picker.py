@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QShowEvent
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
 
 from widgets.sequence_builder.components.start_pos_picker.start_pos_picker_variations_button import (

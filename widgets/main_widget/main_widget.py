@@ -27,7 +27,6 @@ from widgets.scroll_area.components.pictograph_key_generator import (
     PictographKeyGenerator,
 )
 from data.constants import DIAMOND
-from widgets.sequence_recorder.sequence_recorder import SequenceRecorder
 from ..main_widget.special_placement_loader import SpecialPlacementLoader
 from ..pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
     TurnsTupleGenerator,
@@ -62,7 +61,9 @@ class MainWidget(QTabWidget):
             self.main_window.settings_manager.global_settings.set_current_tab(
                 "sequence_builder"
             )
-            self.top_builder_widget.resize_top_builder_widget()
+            if not self.top_builder_widget.initialized:
+                self.top_builder_widget.initialized = True
+                self.top_builder_widget.resize_top_builder_widget()
         elif index == self.dictionary_tab_index:
             self.main_window.settings_manager.global_settings.set_current_tab(
                 "dictionary"

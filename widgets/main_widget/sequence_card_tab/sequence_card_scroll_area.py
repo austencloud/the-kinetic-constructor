@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QLabel, QScrollArea, QWidget, QVBoxLayout
+from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPixmap
 
 if TYPE_CHECKING:
     from widgets.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab

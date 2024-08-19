@@ -1,15 +1,12 @@
 from typing import TYPE_CHECKING
-
 from widgets.dictionary_widget.dictionary_browser.dictionary_nav_sidebar import (
     DictionaryNavSidebar,
 )
+from PyQt6.QtCore import QTimer
 from widgets.dictionary_widget.dictionary_sorter import DictionarySorter
 from .browser_scroll_widget import DictionaryBrowserScrollWidget
-
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
-from widgets.dictionary_widget.dictionary_options_widget import (
-    DictionaryOptionsWidget,
-)
+from widgets.dictionary_widget.dictionary_options_widget import DictionaryOptionsWidget
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
@@ -36,7 +33,14 @@ class DictionaryBrowser(QWidget):
             sort_method = (
                 self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
             )
-            self.sorter.sort_and_display_thumbnails(sort_method)
+            timer = QTimer(self)
+            timer.singleShot(
+                500, lambda: self._initialize_and_sort_thumbnails(sort_method)
+            )
+
+    def _initialize_and_sort_thumbnails(self, sort_method):
+        self.sorter.sort_and_display_thumbnails(sort_method)
+        self.initialized = True
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)

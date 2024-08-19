@@ -43,6 +43,6 @@ class DictionarySelectionHandler:
         self.preview_area.select_thumbnail(
             image_label.thumbnail_box,
             thumbnail_index,
-            image_label.thumbnail_box.base_word,
+            image_label.thumbnail_box.word,
         )
         self.preview_area.variation_number_label.update_index(thumbnail_index)

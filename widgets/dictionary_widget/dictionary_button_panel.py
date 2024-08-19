@@ -63,8 +63,7 @@ class DictionaryButtonPanel(QWidget):
                 ),
             },
         }
-
-        # Create buttons based on the data defined
+        self.layout.addStretch(2)
         for key, data in buttons_data.items():
             icon_path = get_images_and_data_path(
                 f"images/icons/sequence_widget_icons/{data['icon']}"
@@ -73,14 +72,14 @@ class DictionaryButtonPanel(QWidget):
             button.setToolTip(data["tooltip"])
             button.clicked.connect(data["action"])
             self.layout.addWidget(button)
+            self.layout.addStretch(1)
             setattr(self, f"{key}_button", button)
-            # set minimum size to be 1/10 of the dictionary widget width
-
             btn_size = int(self.dictionary_widget.width() // 10)
             icon_size = int(btn_size * 0.8)
             button.setMinimumSize(QSize(btn_size, btn_size))
             button.setMaximumSize(QSize(btn_size, btn_size))
             button.setIconSize(QSize(icon_size, icon_size))
+        self.layout.addStretch(2)
 
     def edit_sequence(self):
         if not hasattr(self, "sequence_populator"):

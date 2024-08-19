@@ -8,11 +8,11 @@ if TYPE_CHECKING:
     from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 
 
-class BaseWordLabel(QLabel):
+class WordLabel(QLabel):
     def __init__(self, thumbnail_box: "ThumbnailBox"):
         super().__init__(thumbnail_box)
         self.thumbnail_box = thumbnail_box
-        self.setText(thumbnail_box.base_word)
+        self.setText(thumbnail_box.word)
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def resize_base_word_label(self):

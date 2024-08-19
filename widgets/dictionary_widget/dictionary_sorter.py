@@ -20,10 +20,9 @@ class DictionarySorter:
         self.metadata_extractor = browser.main_widget.metadata_extractor
 
     def sort_and_display_thumbnails(self, sort_method: str):
-        # highlight the selected button
         self.highlight_appropriate_button(sort_method)
         self.browser.scroll_widget.clear_layout()
-        sections = {}
+        sections: dict[str, list[tuple[str, list[str]]]] = {}
 
         base_words = self.get_sorted_base_words(sort_method)
         current_section = None
@@ -75,6 +74,7 @@ class DictionarySorter:
                     column_index = 0
                     row_index += 1
 
+        
     def highlight_appropriate_button(self, sort_method):
         if sort_method == "sequence_length":
             self.browser.options_widget._update_selected_button(
@@ -100,6 +100,7 @@ class DictionarySorter:
     def _add_thumbnail_box(self, row_index, column_index, word, thumbnails):
         if word not in self.browser.scroll_widget.thumbnail_boxes_dict:
             thumbnail_box = ThumbnailBox(self.browser, word, thumbnails)
+            thumbnail_box.resize_thumbnail_box()
             thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
             self.browser.scroll_widget.thumbnail_boxes_dict[word] = thumbnail_box
 

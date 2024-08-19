@@ -24,11 +24,11 @@ class DictionaryDeletionHandler:
         file_path = thumbnail_box.thumbnails.pop(index)
         os.remove(file_path)
         if len(thumbnail_box.thumbnails) == 0:
-            self.delete_word(thumbnail_box.base_word)
+            self.delete_word(thumbnail_box.word)
 
             self.dictionary_widget.preview_area.update_thumbnails()
             self.dictionary_widget.browser.scroll_widget.thumbnail_boxes_dict.pop(
-                thumbnail_box.base_word
+                thumbnail_box.word
             )
         else:
             self.delete_empty_folders(get_images_and_data_path("dictionary"))

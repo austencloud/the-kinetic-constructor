@@ -6,7 +6,7 @@ from widgets.dictionary_widget.thumbnail_box.metadata_extractor import MetaDataE
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box_nav_btns import (
     ThumbnailBoxNavButtonsWidget,
 )
-from .base_word_label import BaseWordLabel
+from .word_label import WordLabel
 from .thumbnail_image_label import ThumbnailImageLabel
 from .variation_number_label import VariationNumberLabel
 
@@ -17,10 +17,10 @@ if TYPE_CHECKING:
 
 
 class ThumbnailBox(QWidget):
-    def __init__(self, browser: "DictionaryBrowser", base_word, thumbnails) -> None:
+    def __init__(self, browser: "DictionaryBrowser", word: str, thumbnails) -> None:
         super().__init__(browser)
         self.margin = 10
-        self.base_word = base_word
+        self.word = word
         self.thumbnails: list[str] = thumbnails
         self.browser = browser
         self.main_widget = browser.dictionary_widget.main_widget
@@ -34,7 +34,7 @@ class ThumbnailBox(QWidget):
 
     def _setup_components(self):
         self.metadata_extractor = MetaDataExtractor(self.main_widget)
-        self.base_word_label = BaseWordLabel(self)
+        self.word_label = WordLabel(self)
         self.image_label = ThumbnailImageLabel(self)
         self.variation_number_label = VariationNumberLabel(self)
         self.nav_buttons_widget = ThumbnailBoxNavButtonsWidget(self)
@@ -42,7 +42,7 @@ class ThumbnailBox(QWidget):
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addStretch()
-        self.layout.addWidget(self.base_word_label)
+        self.layout.addWidget(self.word_label)
         self.layout.addWidget(self.variation_number_label)
         self.layout.addWidget(
             self.image_label,
@@ -64,7 +64,7 @@ class ThumbnailBox(QWidget):
         width = parent_width // 3
         self.setFixedWidth(width)
         self.image_label.update_thumbnail(self.current_index)
-        self.base_word_label.resize_base_word_label()
+        self.word_label.resize_base_word_label()
 
     def update_thumbnails(self, thumbnails=[]):
         self.thumbnails = thumbnails

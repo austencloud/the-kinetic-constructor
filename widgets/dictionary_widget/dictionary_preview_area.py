@@ -1,11 +1,9 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel
+from PyQt6.QtWidgets import QWidget, QVBoxLayout
 
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPixmap, QFont, QIcon
+from PyQt6.QtGui import QPixmap
 from dictionary.preview_area_image_label import PreviewAreaImageLabel
 from widgets.dictionary_widget.dictionary_button_panel import DictionaryButtonPanel
-from widgets.dictionary_widget.thumbnail_box.base_word_label import BaseWordLabel
 from widgets.dictionary_widget.thumbnail_box.dictionary_preview_area_base_word_label import (
     DictionaryPreviewAreaWordLabel,
 )
@@ -30,6 +28,7 @@ class DictionaryPreviewArea(QWidget):
         self.main_widget = dictionary_widget.main_widget
         self.dictionary_widget = dictionary_widget
         self.sequence_json = None
+        self.initialized = False
         self.current_thumbnail_box: ThumbnailBox = None
         self._setup_components()
         self._hide_components()
@@ -63,7 +62,10 @@ class DictionaryPreviewArea(QWidget):
         if self.current_index >= len(self.thumbnails):
             self.current_index = len(self.thumbnails) - 1
 
-        self._show_components()
+        if not self.initialized:
+            self._show_components()
+            self.initialized = True
+
         self.update_preview(self.current_index)
 
         if len(self.thumbnails) > 1:
@@ -72,6 +74,7 @@ class DictionaryPreviewArea(QWidget):
 
         elif len(self.thumbnails) == 1:
             self.nav_buttons_widget.hide()
+            self.current_thumbnail_box.nav_buttons_widget.hide()
             self.variation_number_label.hide()
 
     def _show_components(self):
