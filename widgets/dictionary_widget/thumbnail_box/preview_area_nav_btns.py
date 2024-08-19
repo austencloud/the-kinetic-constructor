@@ -27,14 +27,14 @@ class PreviewAreaNavButtonsWidget(QWidget):
         self.left_button = PreviewAreaNavButton("<", self)
         self.right_button = PreviewAreaNavButton(">", self)
         self.layout.addStretch(1)
-        self.layout.addWidget(self.left_button)
-        self.layout.addWidget(self.right_button)
+        self.layout.addWidget(self.left_button, 6)
+        self.layout.addWidget(self.right_button, 6)
         self.layout.addStretch(1)
-
+        
     def handle_button_click(self):
         if not self.preview_area.thumbnails:
             return
-        sender = self.sender()
+        sender: QPushButton = self.sender()
         if sender.text() == "<":
             self.preview_area.current_index = (
                 self.preview_area.current_index - 1
@@ -54,9 +54,7 @@ class PreviewAreaNavButtonsWidget(QWidget):
         box_nav_buttons_widget = (
             self.preview_area.current_thumbnail_box.nav_buttons_widget
         )
-        box_nav_buttons_widget.thumbnail_box.current_index = (
-            self.preview_area.current_index
-        )
+        box_nav_buttons_widget.thumbnail_box.current_index = self.preview_area.current_index
         box_nav_buttons_widget.update_thumbnail(self.preview_area.current_index)
 
     def update_thumbnail(self):
@@ -76,24 +74,13 @@ class PreviewAreaNavButtonsWidget(QWidget):
             self.show()
             self.variation_number_label.update_index(self.current_index + 1)
 
-    def resizeEvent(self, event):
-        for button in self.buttons:
-            button.set_button_size()
-        super().resizeEvent(event)
-
 
 class PreviewAreaNavButton(QPushButton):
-    def __init__(self, text: str, nav_buttons_widget: PreviewAreaNavButtonsWidget):
-        super().__init__(text, nav_buttons_widget)
-        self.nav_buttons_widget = nav_buttons_widget
-        self.clicked.connect(nav_buttons_widget.handle_button_click)
+    def __init__(self, text: str, parent: PreviewAreaNavButtonsWidget):
+        super().__init__(text, parent)
+        self.clicked.connect(parent.handle_button_click)
         self.setStyleSheet("background-color: white;")
+        self.setFont(QFont("Arial", 16, QFont.Weight.Bold))
         self.setCursor(Qt.CursorShape.PointingHandCursor)
 
-    def set_button_size(self):
-        font_size = self.nav_buttons_widget.preview_area.width() // 50
-        self.setFont(QFont("Arial", font_size, QFont.Weight.Bold))
-        self.setFixedSize(
-            self.nav_buttons_widget.preview_area.width() // 2,
-            self.nav_buttons_widget.preview_area.height() // 20,
-        )
+    

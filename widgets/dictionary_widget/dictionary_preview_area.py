@@ -129,3 +129,5 @@ class DictionaryPreviewArea(QWidget):
             self.image_label.adjust_label_height_for_text()
         self.word_label.resize_word_label()
         self.image_label.show_placeholder()
+
+    
