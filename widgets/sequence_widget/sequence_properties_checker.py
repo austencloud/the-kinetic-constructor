@@ -1,6 +1,14 @@
+from typing import TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from widgets.main_widget.main_widget import MainWidget
+
 class SequencePropertiesChecker:
-    def __init__(self, sequence):
+    def __init__(self, main_widget: "MainWidget", sequence):
+        self.main_widget = main_widget
         self.sequence = sequence
+
         self.ends_at_start_pos = False
         self.is_permutable = False
         self.is_rotational_permutation = False
@@ -10,6 +18,7 @@ class SequencePropertiesChecker:
     def check_properties(self):
         if not self.sequence:
             return {
+                "author": self.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
                 "is_circular": False,
                 "is_permutable": False,
                 "is_rotational_permutation": False,
@@ -24,6 +33,7 @@ class SequencePropertiesChecker:
         self.is_colorswapped_permutation = self._check_is_colorswapped_permutation()
 
         return {
+            "author": self.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
             "is_circular": self.ends_at_start_pos,
             "is_permutable": self.is_permutable,
             "is_rotational_permutation": self.is_rotational_permutation,
@@ -72,6 +82,7 @@ class SequencePropertiesChecker:
 
     def get_properties(self):
         return {
+            "author": self.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
             "is_circular": self.ends_at_start_pos,
             "is_permutable": self.is_permutable,
             "is_rotational_permutation": self.is_rotational_permutation,

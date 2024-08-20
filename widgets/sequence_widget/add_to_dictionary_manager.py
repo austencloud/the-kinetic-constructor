@@ -60,8 +60,8 @@ class AddToDictionaryManager:
             self.display_message(
                 f"New structural and turn pattern variation added to '{base_word}'."
             )
-
-        self.refresh_ui()
+        if self.json_manager.main_widget.dictionary_widget.initialized:
+            self.refresh_dictionary_ui()
         thumbnail_box = self.sequence_widget.main_widget.dictionary_widget.browser.scroll_widget.thumbnail_boxes_dict.get(
             base_word
         )
@@ -153,7 +153,7 @@ class AddToDictionaryManager:
     def display_message(self, message):
         self.sequence_widget.indicator_label.show_message(message)
 
-    def refresh_ui(self):
+    def refresh_dictionary_ui(self):
         self.sequence_widget.main_widget.dictionary_widget.browser.sorter.sort_and_display_thumbnails(
             self.sequence_widget.main_widget.main_window.settings_manager.dictionary.get_sort_method()
         )

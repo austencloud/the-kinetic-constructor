@@ -7,8 +7,8 @@ if TYPE_CHECKING:
 
 
 class JsonSequenceLoaderSaver:
-    def __init__(self, manager: "JSON_Manager") -> None:
-        self.manager = manager
+    def __init__(self, json_manager: "JSON_Manager") -> None:
+        self.json_manager = json_manager
         self.current_sequence_json = get_user_editable_resource_path(
             "current_sequence.json"
         )
@@ -22,7 +22,8 @@ class JsonSequenceLoaderSaver:
             print("Current sequence json not found")
             return [
                 {
-                    "prop_type": self.manager.main_widget.prop_type.name.lower(),
+                    "author": self.json_manager.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
+                    "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
                     "is_circular": False,
                     "is_permutable": False,
                     "is_rotational_permutation": False,
@@ -35,7 +36,8 @@ class JsonSequenceLoaderSaver:
         if not sequence:
             sequence = [
                 {
-                    "prop_type": self.manager.main_widget.prop_type.name.lower(),
+                    "author": self.json_manager.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
+                    "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
                     "is_circular": False,
                     "is_permutable": False,
                     "is_rotational_permutation": False,
@@ -44,10 +46,16 @@ class JsonSequenceLoaderSaver:
                 }
             ]
         else:
+            if "author" not in sequence[0]:
+                sequence[0][
+                    "author"
+                ] = (
+                    self.json_manager.main_widget.main_window.settings_manager.users.user_manager.get_current_user()
+                )
             if "prop_type" not in sequence[0]:
                 sequence[0][
                     "prop_type"
-                ] = self.manager.main_widget.prop_type.name.lower()
+                ] = self.json_manager.main_widget.prop_type.name.lower()
             if "is_circular" not in sequence[0]:
                 sequence[0]["is_circular"] = False
             if "is_permutable" not in sequence[0]:
