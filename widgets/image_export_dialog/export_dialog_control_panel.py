@@ -24,7 +24,7 @@ class ExportDialogControlPanel(QWidget):
         self.export_dialog = export_dialog
         self.settings_manager = export_dialog.export_manager.settings_manager
         self.user_combo_box = QComboBox(self)
-        self.settings_manager.users.user_manager.populate_user_profiles(
+        self.settings_manager.users.user_manager.populate_user_profiles_combo_box(
             self.user_combo_box
         )
         self.notes_manager = self.settings_manager.users.notes_manager

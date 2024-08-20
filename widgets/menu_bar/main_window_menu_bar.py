@@ -14,8 +14,8 @@ class MainWindowMenuBar(QMenuBar):
     def __init__(self, main_widget: "MainWidget"):
         super().__init__()
         self.main_widget = main_widget
-        
-        self.user_menu = UserProfileMenu(self)
+
+        self.user_profiles_menu = UserProfileMenu(self)
         self.backgrounds_menu = BackgroundsMenu(self)
         self.prop_type_menu = PropTypeMenu(self)
         self.settings_menu = SettingsMenu(self)
@@ -25,4 +25,4 @@ class MainWindowMenuBar(QMenuBar):
         self.addMenu(self.prop_type_menu)
         self.addMenu(self.visibility_menu)
         self.addMenu(self.backgrounds_menu)
-        self.addMenu(self.user_menu)
+        self.addMenu(self.user_profiles_menu)
