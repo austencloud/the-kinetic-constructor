@@ -166,6 +166,7 @@ class SequenceWidget(QWidget):
             )
         )
         self.SW_pictograph_cache[pictograph_key] = pictograph
+        self.json_manager.updater.update_sequence_properties()  # Recalculate properties after each update
 
     def resize_sequence_widget(self) -> None:
         self.current_word_label.resize_current_word_label()

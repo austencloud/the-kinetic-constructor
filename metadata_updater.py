@@ -21,9 +21,11 @@ class SequencePropertiesCheckerStandalone:
 
         self.ends_at_start_pos = False
         self.is_permutable = False
-        self.is_rotational_permutation = False
-        self.is_mirrored_permutation = False
-        self.is_colorswapped_permutation = False
+        self.is_strictly_rotational_permutation = False
+        self.is_strictly_mirrored_permutation = False
+        self.is_strictly_colorswapped_permutation = False
+        self.is_mirror_and_color_swapped_permutation = False
+        self.is_rotational_colorswapped_permutation = False
 
     def check_properties(self):
         if not self.sequence:
@@ -32,16 +34,28 @@ class SequencePropertiesCheckerStandalone:
                 "level": 0,
                 "is_circular": False,
                 "is_permutable": False,
-                "is_rotational_permutation": False,
-                "is_mirrored_permutation": False,
-                "is_colorswapped_permutation": False,
+                "is_strictly_rotational_permutation": False,
+                "is_strictly_mirrored_permutation": False,
+                "is_strictly_colorswapped_permutation": False,
+                "is_mirror_and_color_swapped_permutation": False,
+                "is_rotational_colorswapped_permutation": False,
             }
 
         self.ends_at_start_pos = self._check_ends_at_start_pos()
         self.is_permutable = self._check_is_permutable()
-        self.is_rotational_permutation = self._check_is_rotational_permutation()
-        self.is_mirrored_permutation = self._check_is_mirrored_permutation()
-        self.is_colorswapped_permutation = self._check_is_colorswapped_permutation()
+        self.is_strictly_rotational_permutation = (
+            self._check_is_rotational_permutation()
+        )
+        self.is_strictly_mirrored_permutation = self._check_is_mirrored_permutation()
+        self.is_strictly_colorswapped_permutation = (
+            self._check_is_colorswapped_permutation()
+        )
+        self.is_mirror_and_color_swapped_permutation = (
+            self.check_is_mirrored_and_color_swapped_permutation()
+        )
+        self.is_rotational_colorswapped_permutation = (
+            self.check_is_rotational_and_colorswapped_permutation()
+        )
 
         # Assuming you have a method or a way to calculate level
         level = self._calculate_sequence_level()
@@ -51,9 +65,11 @@ class SequencePropertiesCheckerStandalone:
             "level": level,
             "is_circular": self.ends_at_start_pos,
             "is_permutable": self.is_permutable,
-            "is_rotational_permutation": self.is_rotational_permutation,
-            "is_mirrored_permutation": self.is_mirrored_permutation,
-            "is_colorswapped_permutation": self.is_colorswapped_permutation,
+            "is_strictly_rotational_permutation": self.is_strictly_rotational_permutation,
+            "is_strictly_mirrored_permutation": self.is_strictly_mirrored_permutation,
+            "is_strictly_colorswapped_permutation": self.is_strictly_colorswapped_permutation,
+            "is_mirror_and_color_swapped_permutation": self.is_mirror_and_color_swapped_permutation,
+            "is_rotational_colorswapped_permutation": self.is_rotational_colorswapped_permutation,
         }
 
     def _check_ends_at_start_pos(self) -> bool:
@@ -182,14 +198,20 @@ class MetadataUpdater:
                 "prop_type": metadata.get("prop_type", "unknown"),
                 "is_circular": sequence_properties["is_circular"],
                 "is_permutable": sequence_properties["is_permutable"],
-                "is_rotational_permutation": sequence_properties[
-                    "is_rotational_permutation"
+                "is_strictly_rotational_permutation": sequence_properties[
+                    "is_strictly_rotational_permutation"
                 ],
-                "is_mirrored_permutation": sequence_properties[
-                    "is_mirrored_permutation"
+                "is_strictly_mirrored_permutation": sequence_properties[
+                    "is_strictly_mirrored_permutation"
                 ],
-                "is_colorswapped_permutation": sequence_properties[
-                    "is_colorswapped_permutation"
+                "is_strictly_colorswapped_permutation": sequence_properties[
+                    "is_strictly_colorswapped_permutation"
+                ],
+                "is_mirror_and_color_swapped_permutation": sequence_properties[
+                    "is_mirror_and_color_swapped_permutation"
+                ],
+                "is_rotational_colorswapped_permutation": sequence_properties[
+                    "is_rotational_colorswapped_permutation"
                 ],
             }
 
@@ -206,9 +228,11 @@ class MetadataUpdater:
                         "prop_type": "unknown",
                         "is_circular": False,
                         "is_permutable": False,
-                        "is_rotational_permutation": False,
-                        "is_mirrored_permutation": False,
-                        "is_colorswapped_permutation": False,
+                        "is_strictly_rotational_permutation": False,
+                        "is_strictly_mirrored_permutation": False,
+                        "is_strictly_colorswapped_permutation": False,
+                        "is_mirror_and_color_swapped_permutation": False,
+                        "is_rotational_colorswapped_permutation": False,
                     }
                 ]
             }

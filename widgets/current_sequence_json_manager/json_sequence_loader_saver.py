@@ -27,9 +27,11 @@ class JsonSequenceLoaderSaver:
                     "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
                     "is_circular": False,
                     "is_permutable": False,
-                    "is_rotational_permutation": False,
-                    "is_mirrored_permutation": False,
-                    "is_colorswapped_permutation": False,
+                    "is_strictly_rotational_permutation": False,
+                    "is_strictly_mirrored_permutation": False,
+                    "is_strictly_colorswapped_permutation": False,
+                    "is_mirrored_color_swapped_permutation": False,
+                    "is_rotational_colorswapped_permutation": False,
                 }
             ]
 
@@ -42,9 +44,11 @@ class JsonSequenceLoaderSaver:
                     "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
                     "is_circular": False,
                     "is_permutable": False,
-                    "is_rotational_permutation": False,
-                    "is_mirrored_permutation": False,
-                    "is_colorswapped_permutation": False,
+                    "is_strictly_rotational_permutation": False,
+                    "is_strictly_mirrored_permutation": False,
+                    "is_strictly_colorswapped_permutation": False,
+                    "is_mirrored_color_swapped_permutation": False,
+                    "is_rotational_colorswapped_permutation": False,
                 }
             ]
         else:
@@ -55,8 +59,10 @@ class JsonSequenceLoaderSaver:
                     self.json_manager.main_widget.main_window.settings_manager.users.user_manager.get_current_user()
                 )
             if "level" not in sequence[0]:
-                sequence[0]["level"] = self.json_manager.main_widget.sequence_level_evaluator.get_sequence_level(
-                    sequence
+                sequence[0]["level"] = (
+                    self.json_manager.main_widget.sequence_level_evaluator.get_sequence_level(
+                        sequence
+                    )
                 )
             if "prop_type" not in sequence[0]:
                 sequence[0][

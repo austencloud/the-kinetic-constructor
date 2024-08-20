@@ -2,7 +2,9 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout
-from widgets.sequence_widget.sequence_properties_checker import SequencePropertiesChecker
+from widgets.sequence_widget.sequence_properties_manager.sequence_properties_manager import (
+    SequencePropertiesManager,
+)
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 
 
@@ -109,10 +111,12 @@ class SW_ButtonFrame(QFrame):
 
     def auto_complete_sequence(self):
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
-        self.checker = SequencePropertiesChecker(self.main_widget, sequence[1:])
-        properties = self.checker.check_properties()
+        self.sequence_properties_manager = SequencePropertiesManager(
+            self.main_widget, sequence[1:]
+        )
+        properties = self.sequence_properties_manager.check_all_properties()
         is_permutable = properties["is_permutable"]
-        
+
         if is_permutable:
             self.sequence_widget.autocompleter.perform_auto_completion(sequence)
         else:

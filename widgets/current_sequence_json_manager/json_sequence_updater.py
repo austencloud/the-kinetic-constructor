@@ -1,11 +1,12 @@
 from typing import TYPE_CHECKING, Union
 from Enums.MotionAttributes import Color
 from Enums.PropTypes import PropType
-from widgets.sequence_widget.sequence_properties_checker import (
-    SequencePropertiesChecker,
-)
+
 from data.constants import BLUE, DASH, NO_ROT, RED, STATIC
 from widgets.sequence_widget.SW_beat_frame.beat import BeatView
+from widgets.sequence_widget.sequence_properties_manager.sequence_properties_manager import (
+    SequencePropertiesManager,
+)
 
 if TYPE_CHECKING:
     from widgets.json_manager import JSON_Manager
@@ -18,25 +19,31 @@ class JsonSequenceUpdater:
     def update_sequence_properties(self):
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
         if len(sequence) > 1:
-            checker = SequencePropertiesChecker(
+            sequence_properties_manager = SequencePropertiesManager(
                 self.json_manager.main_widget, sequence[1:]
             )
-            properties = checker.check_properties()
+            properties = sequence_properties_manager.check_all_properties()
 
             # Update the sequence properties in the JSON
             sequence[0]["author"] = properties["author"]
             sequence[0]["level"] = properties["level"]
             sequence[0]["is_circular"] = properties["is_circular"]
             sequence[0]["is_permutable"] = properties["is_permutable"]
-            sequence[0]["is_rotational_permutation"] = properties[
-                "is_rotational_permutation"
+            sequence[0]["is_strictly_rotational_permutation"] = properties[
+                "is_strictly_rotational_permutation"
             ]
-            sequence[0]["is_mirrored_permutation"] = properties[
-                "is_mirrored_permutation"
+            sequence[0]["is_strictly_mirrored_permutation"] = properties[
+                "is_strictly_mirrored_permutation"
             ]
-            sequence[0]["is_colorswapped_permutation"] = properties[
-                "is_colorswapped_permutation"
+            sequence[0]["is_strictly_colorswapped_permutation"] = properties[
+                "is_strictly_colorswapped_permutation"
             ]
+            sequence[0]["is_mirrored_color_swapped_permutation"] = properties[
+                "is_mirrored_color_swapped_permutation"
+            ]
+            # sequence[0]["is_rotational_colorswapped_permutation"] = properties[
+            #     "is_rotational_colorswapped_permutation"
+            # ]
 
             # Save the updated sequence back to the JSON
             self.json_manager.loader_saver.save_current_sequence(sequence)
