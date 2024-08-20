@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     )
 
 
-class MirroredAndColorSwappedPermutationChecker:
+class MirroredColorSwappedPermutationChecker:
     def __init__(self, manager: "SequencePropertiesManager"):
         self.manager = manager
 
@@ -25,9 +25,7 @@ class MirroredAndColorSwappedPermutationChecker:
             first_entry = first_half[i]
             second_entry = second_half[i]
 
-            if not (
-                self._is_mirrored_and_color_swapped(first_entry, second_entry)
-            ):
+            if not (self._is_mirrored_and_color_swapped(first_entry, second_entry)):
                 return False
 
         return True
@@ -43,8 +41,7 @@ class MirroredAndColorSwappedPermutationChecker:
         return second_entry["end_pos"] in [
             mirrored_vertical,
             mirrored_horizontal,
-        ] 
-
+        ]
 
     def _is_color_swapped(self, first_entry, second_entry) -> bool:
         return (

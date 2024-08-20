@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     )
 
 
-class ColorSwappedPermutationChecker:
+class StrictlyColorSwappedPermutationChecker:
     def __init__(self, manager: "SequencePropertiesManager"):
         self.manager = manager
 

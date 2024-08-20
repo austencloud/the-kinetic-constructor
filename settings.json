@@ -1,8 +1,8 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Starfield",
-        "grow_sequence": true,
+        "background_type": "AuroraBorealis",
+        "grow_sequence": false,
         "current_tab": "sequence_builder"
     },
     "image_export": {

@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     )
 
 
-class MirroredPermutationChecker:
+class StrictlyMirroredPermutationChecker:
     def __init__(self, manager: "SequencePropertiesManager"):
         self.manager = manager
 
@@ -40,13 +40,10 @@ class MirroredPermutationChecker:
             first_entry["end_pos"], "horizontal"
         )
 
-        return (
-            second_entry["end_pos"]
-            in [
-                mirrored_vertical,
-                mirrored_horizontal,
-            ]
-        )
+        return second_entry["end_pos"] in [
+            mirrored_vertical,
+            mirrored_horizontal,
+        ]
 
     def _is_mirrored_orientation(self, first_entry, second_entry) -> bool:
         return (

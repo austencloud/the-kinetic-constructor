@@ -1,19 +1,19 @@
 from typing import TYPE_CHECKING
 
-from widgets.sequence_widget.sequence_properties_manager.color_swapped_permutation_checker import (
-    ColorSwappedPermutationChecker,
+from widgets.sequence_widget.sequence_properties_manager.strictly_color_swapped_permutation_checker import (
+    StrictlyColorSwappedPermutationChecker,
 )
-from widgets.sequence_widget.sequence_properties_manager.mirrored_and_color_swapped_permutation_checker import (
-    MirroredAndColorSwappedPermutationChecker,
+from widgets.sequence_widget.sequence_properties_manager.mirrored_color_swapped_permutation_checker import (
+    MirroredColorSwappedPermutationChecker,
 )
-from widgets.sequence_widget.sequence_properties_manager.mirrored_permutation_checker import (
-    MirroredPermutationChecker,
+from widgets.sequence_widget.sequence_properties_manager.strictly_mirrored_permutation_checker import (
+    StrictlyMirroredPermutationChecker,
 )
-from widgets.sequence_widget.sequence_properties_manager.rotational_and_color_swapped_permutation_checker import (
-    RotationalAndColorSwappedPermutationChecker,
+from widgets.sequence_widget.sequence_properties_manager.rotational_color_swapped_permutation_checker.rotational_color_swapped_permutation_checker import (
+    RotationalColorSwappedPermutationChecker,
 )
-from widgets.sequence_widget.sequence_properties_manager.rotational_permutation_checker import (
-    RotationalPermutationChecker,
+from widgets.sequence_widget.sequence_properties_manager.strictly_rotational_permutation_checker import (
+    StrictlyRotationalPermutationChecker,
 )
 
 if TYPE_CHECKING:
@@ -35,14 +35,14 @@ class SequencePropertiesManager:
         self.is_rotational_colorswapped_permutation = False
 
         # Instantiate the individual checkers
-        self.rotational_checker = RotationalPermutationChecker(self)
-        self.mirrored_checker = MirroredPermutationChecker(self)
-        self.color_swapped_checker = ColorSwappedPermutationChecker(self)
-        self.mirrored_color_swapped_checker = MirroredAndColorSwappedPermutationChecker(
+        self.rotational_checker = StrictlyRotationalPermutationChecker(self)
+        self.mirrored_checker = StrictlyMirroredPermutationChecker(self)
+        self.color_swapped_checker = StrictlyColorSwappedPermutationChecker(self)
+        self.mirrored_color_swapped_checker = MirroredColorSwappedPermutationChecker(
             self
         )
         self.rotational_color_swapped_checker = (
-            RotationalAndColorSwappedPermutationChecker(self)
+            RotationalColorSwappedPermutationChecker(self)
         )
 
     def check_all_properties(self):
@@ -58,9 +58,12 @@ class SequencePropertiesManager:
         self.is_mirrored_color_swapped_permutation = (
             self.mirrored_color_swapped_checker.check()
         )
-        self.is_rotational_colorswapped_permutation = (
-            self.rotational_color_swapped_checker.check()
-        )
+        if not self.is_strictly_rotational_permutation:
+            self.is_rotational_colorswapped_permutation = (
+                self.rotational_color_swapped_checker.check()
+            )
+        else:
+            self.is_rotational_colorswapped_permutation = False
 
         return {
             "author": self.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),

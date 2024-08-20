@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     )
 
 
-class RotationalPermutationChecker:
+class StrictlyRotationalPermutationChecker:
     def __init__(self, manager: "SequencePropertiesManager"):
         self.manager = manager
 
@@ -21,11 +21,11 @@ class RotationalPermutationChecker:
                 for i in range(1, len(occurrences)):
                     prev = sequence[occurrences[i - 1]]
                     curr = sequence[occurrences[i]]
-                    if not self._is_rotational_permutation(prev, curr):
+                    if not self._is_strictly_rotational_permutation(prev, curr):
                         return False
         return True
 
-    def _is_rotational_permutation(self, prev, curr) -> bool:
+    def _is_strictly_rotational_permutation(self, prev, curr) -> bool:
         return (
             prev["blue_attributes"]["motion_type"]
             == curr["blue_attributes"]["motion_type"]

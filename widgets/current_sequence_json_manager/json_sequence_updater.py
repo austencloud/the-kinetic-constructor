@@ -41,9 +41,9 @@ class JsonSequenceUpdater:
             sequence[0]["is_mirrored_color_swapped_permutation"] = properties[
                 "is_mirrored_color_swapped_permutation"
             ]
-            # sequence[0]["is_rotational_colorswapped_permutation"] = properties[
-            #     "is_rotational_colorswapped_permutation"
-            # ]
+            sequence[0]["is_rotational_colorswapped_permutation"] = properties[
+                "is_rotational_colorswapped_permutation"
+            ]
 
             # Save the updated sequence back to the JSON
             self.json_manager.loader_saver.save_current_sequence(sequence)
