@@ -1,18 +1,16 @@
 from typing import TYPE_CHECKING
 
-from widgets.sequence_widget.sequence_properties_manager.strictly_color_swapped_permutation_checker import (
+from .strictly_color_swapped_permutation_checker import (
     StrictlyColorSwappedPermutationChecker,
 )
-from widgets.sequence_widget.sequence_properties_manager.mirrored_color_swapped_permutation_checker import (
+from .mirrored_color_swapped_permutation_checker import (
     MirroredColorSwappedPermutationChecker,
 )
-from widgets.sequence_widget.sequence_properties_manager.strictly_mirrored_permutation_checker import (
-    StrictlyMirroredPermutationChecker,
-)
-from widgets.sequence_widget.sequence_properties_manager.rotational_color_swapped_permutation_checker.rotational_color_swapped_permutation_checker import (
+from .strictly_mirrored_permutation_checker import StrictlyMirroredPermutationChecker
+from .rotational_color_swapped_permutation_checker.rotational_color_swapped_permutation_checker import (
     RotationalColorSwappedPermutationChecker,
 )
-from widgets.sequence_widget.sequence_properties_manager.strictly_rotational_permutation_checker import (
+from .strictly_rotational_permutation_checker import (
     StrictlyRotationalPermutationChecker,
 )
 
@@ -51,25 +49,44 @@ class SequencePropertiesManager:
 
         self.ends_at_start_pos = self._check_ends_at_start_pos()
         self.is_permutable = self._check_is_permutable()
+
+        # Check for strictly rotational permutation first
         self.is_strictly_rotational_permutation = self.rotational_checker.check()
 
-        self.is_strictly_mirrored_permutation = self.mirrored_checker.check()
-        self.is_strictly_colorswapped_permutation = self.color_swapped_checker.check()
-        self.is_mirrored_color_swapped_permutation = (
-            self.mirrored_color_swapped_checker.check()
-        )
         if not self.is_strictly_rotational_permutation:
-            self.is_rotational_colorswapped_permutation = (
-                self.rotational_color_swapped_checker.check()
-            )
+            # If not rotational, check for strictly mirrored permutation
+            self.is_strictly_mirrored_permutation = self.mirrored_checker.check()
+
+            if not self.is_strictly_mirrored_permutation:
+                # If not mirrored, check for strictly color swapped permutation
+                self.is_strictly_colorswapped_permutation = self.color_swapped_checker.check()
+
+                if not self.is_strictly_colorswapped_permutation:
+                    # If not strictly color swapped, check for mirrored color swapped permutation
+                    self.is_mirrored_color_swapped_permutation = self.mirrored_color_swapped_checker.check()
+
+                    if not self.is_mirrored_color_swapped_permutation:
+                        # If not mirrored color swapped, check for rotational color swapped permutation
+                        self.is_rotational_colorswapped_permutation = self.rotational_color_swapped_checker.check()
+                    else:
+                        self.is_rotational_colorswapped_permutation = False
+                else:
+                    self.is_mirrored_color_swapped_permutation = False
+                    self.is_rotational_colorswapped_permutation = False
+            else:
+                self.is_strictly_colorswapped_permutation = False
+                self.is_mirrored_color_swapped_permutation = False
+                self.is_rotational_colorswapped_permutation = False
         else:
+            # If it's strictly rotational, all other permutations are false
+            self.is_strictly_mirrored_permutation = False
+            self.is_strictly_colorswapped_permutation = False
+            self.is_mirrored_color_swapped_permutation = False
             self.is_rotational_colorswapped_permutation = False
 
         return {
             "author": self.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
-            "level": self.main_widget.sequence_level_evaluator.get_sequence_level(
-                self.sequence
-            ),
+            "level": self.main_widget.sequence_level_evaluator.get_sequence_level(self.sequence),
             "is_circular": self.ends_at_start_pos,
             "is_permutable": self.is_permutable,
             "is_strictly_rotational_permutation": self.is_strictly_rotational_permutation,
