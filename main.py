@@ -8,7 +8,7 @@ from widgets.profiler import Profiler
 from settings_manager.settings_manager import SettingsManager
 from utilities.main_window_geometry_manager import MainWindowGeometryManager
 from widgets.main_widget.main_widget import MainWidget
-from widgets.menu_bar.menu_bar import MainWindowMenuBar
+from widgets.menu_bar.main_window_menu_bar import MainWindowMenuBar
 import logging
 
 logging.getLogger("PIL").setLevel(logging.WARNING)

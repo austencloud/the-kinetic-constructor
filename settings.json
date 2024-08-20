@@ -1,9 +1,9 @@
 {
     "global": {
-        "prop_type": "Staff",
-        "background_type": "Aurora",
+        "prop_type": "Club",
+        "background_type": "AuroraBorealis",
         "grow_sequence": true,
-        "current_tab": "dictionary"
+        "current_tab": "sequence_builder"
     },
     "image_export": {
         "include_start_position": false,
@@ -13,11 +13,14 @@
         "add_difficulty_level": true
     },
     "user_profile": {
-        "current_user": "AC",
+        "current_user": "Austen Cloud",
         "user_profiles": {
             "AC": {
                 "name": "AC",
                 "export_date": "8-17-2024"
+            },
+            "Austen Cloud": {
+                "name": "Austen Cloud"
             }
         },
         "current_note": "Created using The Kinetic Alphabet",
@@ -29,7 +32,7 @@
         "glyph_visibility": {
             "VTG": false,
             "TKA": true,
-            "Elemental": false,
+            "Elemental": true,
             "EndPosition": false
         },
         "grid_visibility": {

@@ -79,6 +79,7 @@ class DictionaryButtonPanel(QWidget):
             button.setMinimumSize(QSize(btn_size, btn_size))
             button.setMaximumSize(QSize(btn_size, btn_size))
             button.setIconSize(QSize(icon_size, icon_size))
+            button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.layout.addStretch(2)
 
     def edit_sequence(self):

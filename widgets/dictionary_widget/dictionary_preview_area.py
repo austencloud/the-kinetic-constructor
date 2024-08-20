@@ -79,6 +79,7 @@ class DictionaryPreviewArea(QWidget):
 
     def _show_components(self):
         self.word_label.show()
+        self.word_label.resize_word_label()
         self.variation_number_label.show()
         self.button_panel.show_buttons()
 
@@ -128,6 +129,7 @@ class DictionaryPreviewArea(QWidget):
         else:
             self.image_label.adjust_label_height_for_text()
         self.word_label.resize_word_label()
-        self.image_label.show_placeholder()
+        if not self.initialized:
+            self.image_label.show_placeholder()
 
     
