@@ -76,7 +76,7 @@ class ImageCreator:
                 )
 
             if options.get("add_difficulty_level"):
-                difficulty_level = self.export_manager.main_widget.sequence_difficulty_evaluator.evaluate_difficulty(
+                difficulty_level = self.export_manager.main_widget.sequence_level_evaluator.get_sequence_level(
                     self.export_manager.beat_frame.json_manager.loader_saver.load_current_sequence_json()
                 )
                 self.difficulty_level_drawer.draw_difficulty_level(

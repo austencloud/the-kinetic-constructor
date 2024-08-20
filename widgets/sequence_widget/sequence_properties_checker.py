@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
 
+
 class SequencePropertiesChecker:
     def __init__(self, main_widget: "MainWidget", sequence):
         self.main_widget = main_widget
@@ -19,6 +20,7 @@ class SequencePropertiesChecker:
         if not self.sequence:
             return {
                 "author": self.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
+                "level": 0,
                 "is_circular": False,
                 "is_permutable": False,
                 "is_rotational_permutation": False,
@@ -34,6 +36,9 @@ class SequencePropertiesChecker:
 
         return {
             "author": self.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
+            "level": self.main_widget.sequence_level_evaluator.get_sequence_level(
+                self.sequence
+            ),
             "is_circular": self.ends_at_start_pos,
             "is_permutable": self.is_permutable,
             "is_rotational_permutation": self.is_rotational_permutation,
@@ -52,7 +57,9 @@ class SequencePropertiesChecker:
         return current_position == start_position
 
     def _check_is_rotational_permutation(self) -> bool:
-        letter_sequence = [entry["letter"] for entry in self.sequence if "letter" in entry]
+        letter_sequence = [
+            entry["letter"] for entry in self.sequence if "letter" in entry
+        ]
         unique_letters = set(letter_sequence)
         for letter in unique_letters:
             occurrences = [i for i, x in enumerate(letter_sequence) if x == letter]
@@ -66,10 +73,14 @@ class SequencePropertiesChecker:
 
     def _is_rotational_permutation(self, prev, curr) -> bool:
         return (
-            prev["blue_attributes"]["motion_type"] == curr["blue_attributes"]["motion_type"]
-            and prev["blue_attributes"]["prop_rot_dir"] == curr["blue_attributes"]["prop_rot_dir"]
-            and prev["red_attributes"]["motion_type"] == curr["red_attributes"]["motion_type"]
-            and prev["red_attributes"]["prop_rot_dir"] == curr["red_attributes"]["prop_rot_dir"]
+            prev["blue_attributes"]["motion_type"]
+            == curr["blue_attributes"]["motion_type"]
+            and prev["blue_attributes"]["prop_rot_dir"]
+            == curr["blue_attributes"]["prop_rot_dir"]
+            and prev["red_attributes"]["motion_type"]
+            == curr["red_attributes"]["motion_type"]
+            and prev["red_attributes"]["prop_rot_dir"]
+            == curr["red_attributes"]["prop_rot_dir"]
         )
 
     def _check_is_mirrored_permutation(self) -> bool:
@@ -83,6 +94,9 @@ class SequencePropertiesChecker:
     def get_properties(self):
         return {
             "author": self.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
+            "level": self.main_widget.sequence_level_evaluator.get_sequence_level(
+                self.sequence
+            ),
             "is_circular": self.ends_at_start_pos,
             "is_permutable": self.is_permutable,
             "is_rotational_permutation": self.is_rotational_permutation,

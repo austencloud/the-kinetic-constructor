@@ -23,6 +23,7 @@ class JsonSequenceLoaderSaver:
             return [
                 {
                     "author": self.json_manager.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
+                    "level": 0,
                     "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
                     "is_circular": False,
                     "is_permutable": False,
@@ -37,6 +38,7 @@ class JsonSequenceLoaderSaver:
             sequence = [
                 {
                     "author": self.json_manager.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
+                    "level": 0,
                     "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
                     "is_circular": False,
                     "is_permutable": False,
@@ -51,6 +53,10 @@ class JsonSequenceLoaderSaver:
                     "author"
                 ] = (
                     self.json_manager.main_widget.main_window.settings_manager.users.user_manager.get_current_user()
+                )
+            if "level" not in sequence[0]:
+                sequence[0]["level"] = self.json_manager.main_widget.sequence_level_evaluator.get_sequence_level(
+                    sequence
                 )
             if "prop_type" not in sequence[0]:
                 sequence[0][

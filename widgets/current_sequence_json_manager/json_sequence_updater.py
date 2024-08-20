@@ -25,6 +25,7 @@ class JsonSequenceUpdater:
 
             # Update the sequence properties in the JSON
             sequence[0]["author"] = properties["author"]
+            sequence[0]["level"] = properties["level"]
             sequence[0]["is_circular"] = properties["is_circular"]
             sequence[0]["is_permutable"] = properties["is_permutable"]
             sequence[0]["is_rotational_permutation"] = properties[
@@ -70,6 +71,7 @@ class JsonSequenceUpdater:
                 sequence[index][f"{color}_attributes"]["prop_rot_dir"] = prop_rot_dir
 
         self.json_manager.loader_saver.save_current_sequence(sequence)
+        self.update_sequence_properties()
 
     def update_rot_dir_in_json_at_index(
         self, index: int, color: Color, prop_rot_dir: str

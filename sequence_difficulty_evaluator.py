@@ -1,12 +1,12 @@
 from typing import List, Dict
 
 
-class SequenceDifficultyEvaluator:
+class SequenceLevelEvaluator:
     def __init__(self):
         self.RADIAL_ORIENTATIONS = {"in", "out"}
 
-    def evaluate_difficulty(self, sequence: list[dict]) -> int:
-        if len(sequence) < 3:
+    def get_sequence_level(self, sequence: list[dict]) -> int:
+        if len(sequence) < 2:
             return ""
         has_non_radial_orientation = False
         has_turns = False
