@@ -67,7 +67,7 @@ class DictionaryBrowser(QWidget):
         column_index = 0
 
         for metadata in filtered_sequences:
-            word = metadata['sequence'][0]["word"]  # Assuming the word is stored here
+            word = metadata['sequence'][0]["word"] 
             thumbnails = metadata[0][
                 "thumbnails"
             ]  # Assuming thumbnails are stored here

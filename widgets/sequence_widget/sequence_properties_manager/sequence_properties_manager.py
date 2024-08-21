@@ -8,7 +8,7 @@ from .mirrored_color_swapped_permutation_checker import (
     MirroredColorSwappedPermutationChecker,
 )
 from .strictly_mirrored_permutation_checker import StrictlyMirroredPermutationChecker
-from .rotational_color_swapped_permutation_checker.rotational_color_swapped_permutation_checker import (
+from .rotational_color_swapped_permutation_checker import (
     RotationalColorSwappedPermutationChecker,
 )
 from .strictly_rotational_permutation_checker import (
