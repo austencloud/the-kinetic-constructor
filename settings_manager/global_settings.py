@@ -85,10 +85,10 @@ class GlobalSettings:
         self.main_widget.top_builder_widget.sequence_builder.start_pos_picker.choose_your_start_pos_label.setStyleSheet(
             f"color: {self.get_font_color(bg_type)};"
         )
-        self.main_widget.dictionary_widget.browser.options_widget.sort_by_label.setStyleSheet(
+        self.main_widget.dictionary_widget.browser.options_widget.sort_widget.sort_by_label.setStyleSheet(
             f"color: {self.get_font_color(bg_type)};"
         )
-        self.main_widget.dictionary_widget.browser.options_widget.style_buttons()
+        self.main_widget.dictionary_widget.browser.options_widget.sort_widget.style_buttons()
         self.main_widget.dictionary_widget.browser.nav_sidebar.set_styles()
         self.main_widget.dictionary_widget.preview_area.image_label.style_placeholder()
 

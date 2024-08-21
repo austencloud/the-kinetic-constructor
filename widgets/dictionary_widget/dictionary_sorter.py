@@ -19,6 +19,22 @@ class DictionarySorter:
         self.browser = browser
         self.metadata_extractor = browser.main_widget.metadata_extractor
 
+    def get_all_sequences_with_metadata(self):
+        """Collect all sequences and their metadata."""
+        dictionary_dir = get_images_and_data_path("dictionary")
+        sequences = []
+
+        for word in os.listdir(dictionary_dir):
+            word_dir = os.path.join(dictionary_dir, word)
+            if os.path.isdir(word_dir) and "__pycache__" not in word:
+                thumbnails = self.find_thumbnails(word_dir)
+                for thumbnail in thumbnails:
+                    metadata = self.metadata_extractor.extract_metadata_from_file(thumbnail)
+                    if metadata:
+                        sequences.append(metadata)
+
+        return sequences
+
     def sort_and_display_thumbnails(self, sort_method: str):
         self.highlight_appropriate_button(sort_method)
         self.browser.scroll_widget.clear_layout()
@@ -76,16 +92,16 @@ class DictionarySorter:
 
     def highlight_appropriate_button(self, sort_method):
         if sort_method == "sequence_length":
-            self.browser.options_widget._update_selected_button(
-                self.browser.options_widget.buttons["sort_by_length_button"]
+            self.browser.options_widget.sort_widget.update_selected_button(
+                self.browser.options_widget.sort_widget.buttons["sort_by_length_button"]
             )
         elif sort_method == "date_added":
-            self.browser.options_widget._update_selected_button(
-                self.browser.options_widget.buttons["sort_date_added_button"]
+            self.browser.options_widget.sort_widget.update_selected_button(
+                self.browser.options_widget.sort_widget.buttons["sort_date_added_button"]
             )
         else:
-            self.browser.options_widget._update_selected_button(
-                self.browser.options_widget.buttons["sort_alphabetically_button"]
+            self.browser.options_widget.sort_widget.update_selected_button(
+                self.browser.options_widget.sort_widget.buttons["sort_alphabetically_button"]
             )
 
     def _add_header(self, row_index, num_columns, section):
@@ -165,7 +181,7 @@ class DictionarySorter:
 
         return max(dates, default=datetime.min)
 
-    def find_thumbnails(self, word_dir: str):
+    def find_thumbnails(self, word_dir: str) -> list[str]:
         thumbnails = []
         for root, _, files in os.walk(word_dir):
             if "__pycache__" in root:

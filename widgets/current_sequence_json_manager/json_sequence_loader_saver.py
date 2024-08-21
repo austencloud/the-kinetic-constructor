@@ -22,6 +22,7 @@ class JsonSequenceLoaderSaver:
             print("Current sequence json not found")
             return [
                 {
+                    "word": "",
                     "author": self.json_manager.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
                     "level": 0,
                     "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
@@ -39,6 +40,7 @@ class JsonSequenceLoaderSaver:
         if not sequence:
             sequence = [
                 {
+                    "word": "",
                     "author": self.json_manager.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
                     "level": 0,
                     "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
@@ -52,6 +54,12 @@ class JsonSequenceLoaderSaver:
                 }
             ]
         else:
+            if "word" not in sequence[0]:
+                sequence[0][
+                    "word"
+                ] = (
+                    self.json_manager.main_widget.top_builder_widget.sequence_widget.button_frame.sequence_properties_manager.calculate_word()
+                )
             if "author" not in sequence[0]:
                 sequence[0][
                     "author"

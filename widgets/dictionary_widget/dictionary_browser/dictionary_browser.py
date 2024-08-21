@@ -24,8 +24,8 @@ class DictionaryBrowser(QWidget):
     def _setup_components(self):
         self.nav_sidebar = DictionaryNavSidebar(self)
         self.scroll_widget = DictionaryBrowserScrollWidget(self)
-        self.options_widget = DictionaryOptionsWidget(self)
         self.sorter = DictionarySorter(self)
+        self.options_widget = DictionaryOptionsWidget(self)
 
     def showEvent(self, event):
         super().showEvent(event)
@@ -57,3 +57,31 @@ class DictionaryBrowser(QWidget):
 
     def resize_dictionary_browser(self):
         self.scroll_widget.resize_dictionary_browser_scroll_widget()
+
+    def display_filtered_sequences(self, filtered_sequences):
+        """Display sequences based on the filtered metadata."""
+        self.scroll_widget.clear_layout()
+
+        num_columns = 3  # Assuming a grid with 3 columns
+        row_index = 0
+        column_index = 0
+
+        for metadata in filtered_sequences:
+            word = metadata['sequence'][0]["word"]  # Assuming the word is stored here
+            thumbnails = metadata[0][
+                "thumbnails"
+            ]  # Assuming thumbnails are stored here
+
+            self.sorter._add_thumbnail_box(row_index, column_index, word, thumbnails)
+
+            # Update the row and column index for the grid layout
+            column_index += 1
+            if column_index == num_columns:
+                column_index = 0
+                row_index += 1
+
+    def reset_filters(self):
+        """Reset filters and display all sequences."""
+        self._initialize_and_sort_thumbnails(
+            self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
+        )

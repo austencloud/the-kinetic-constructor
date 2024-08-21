@@ -1,16 +1,19 @@
 from typing import TYPE_CHECKING
+from PyQt6.QtGui import QFont
+
 from PyQt6.QtWidgets import (
     QHBoxLayout,
     QWidget,
 )
-from PyQt6.QtGui import QFont
 
 from widgets.sequence_widget.SW_beat_frame.current_word_line_edit import (
     CurrentWordLineEdit,
 )
+from word_simplifier import WordSimplifier
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
+
 
 
 class CurrentWordLabel(QWidget):
@@ -34,25 +37,9 @@ class CurrentWordLabel(QWidget):
         self.line_edit.kerning = int(self.font_size // 8.75)
 
     def set_current_word(self, word: str):
-        simplified_word = self.simplify_repeated_word(word)
+        simplified_word = WordSimplifier.simplify_repeated_word(word)
         self.current_word = simplified_word
         self.line_edit.setText(simplified_word)
-
-    def simplify_repeated_word(self, word: str) -> str:
-        # Function to check if the word can be constructed by repeating a pattern
-        def can_form_by_repeating(s: str, pattern: str) -> bool:
-            pattern_len = len(pattern)
-            return all(
-                s[i : i + pattern_len] == pattern for i in range(0, len(s), pattern_len)
-            )
-
-        n = len(word)
-        # Try to find the smallest repeating unit
-        for i in range(1, n // 2 + 1):
-            pattern = word[:i]
-            if n % i == 0 and can_form_by_repeating(word, pattern):
-                return pattern
-        return word
 
     def set_font_color(self, color: str):
         self.line_edit.setStyleSheet(

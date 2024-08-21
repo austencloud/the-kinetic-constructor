@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from word_simplifier import WordSimplifier
 from .strictly_color_swapped_permutation_checker import (
     StrictlyColorSwappedPermutationChecker,
 )
@@ -43,6 +44,13 @@ class SequencePropertiesManager:
             RotationalColorSwappedPermutationChecker(self)
         )
 
+    def calculate_word(self) -> str:
+        # Concatenate all letters in the sequence
+        word = ''.join(entry['letter'] for entry in self.sequence[1:])
+        # Simplify the word using the WordSimplifier
+        simplified_word = WordSimplifier.simplify_repeated_word(word)
+        return simplified_word
+
     def check_all_properties(self):
         if not self.sequence:
             return self._default_properties()
@@ -85,6 +93,7 @@ class SequencePropertiesManager:
             self.is_rotational_colorswapped_permutation = False
 
         return {
+            "word": self.calculate_word(),
             "author": self.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
             "level": self.main_widget.sequence_level_evaluator.get_sequence_level(self.sequence),
             "is_circular": self.ends_at_start_pos,
@@ -98,6 +107,7 @@ class SequencePropertiesManager:
 
     def _default_properties(self):
         return {
+            "word": "",
             "author": self.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
             "level": 0,
             "is_circular": False,

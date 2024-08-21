@@ -25,6 +25,7 @@ class JsonSequenceUpdater:
             properties = sequence_properties_manager.check_all_properties()
 
             # Update the sequence properties in the JSON
+            sequence[0]["word"] = properties["word"]
             sequence[0]["author"] = properties["author"]
             sequence[0]["level"] = properties["level"]
             sequence[0]["is_circular"] = properties["is_circular"]
