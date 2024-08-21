@@ -66,11 +66,12 @@ class DictionaryBrowser(QWidget):
         row_index = 0
         column_index = 0
 
-        for metadata_and_thumbnails_dict in filtered_sequences:
-            word = metadata_and_thumbnails_dict["metadata"]["sequence"][0]["word"]
-            thumbnails = metadata_and_thumbnails_dict["thumbnails"]
+        for metadata_and_thumbnail in filtered_sequences:
+            metadata = metadata_and_thumbnail["metadata"]
+            thumbnail = metadata_and_thumbnail["thumbnail"]
+            word = metadata["sequence"][0]["word"]
 
-            self.sorter._add_thumbnail_box(row_index, column_index, word, thumbnails)
+            self.sorter._add_thumbnail_box(row_index, column_index, word, [thumbnail])
 
             # Update the row and column index for the grid layout
             column_index += 1

@@ -31,7 +31,7 @@ class DictionarySorter:
                 for thumbnail in thumbnails:
                     metadata = self.metadata_extractor.extract_metadata_from_file(thumbnail)
                     if metadata:
-                        sequences.append({"metadata": metadata, "thumbnails": thumbnails})
+                        sequences.append({"metadata": metadata, "thumbnail": thumbnail})
 
         return sequences
 
@@ -39,7 +39,7 @@ class DictionarySorter:
     def sort_and_display_thumbnails(self, sort_method: str):
         self.highlight_appropriate_button(sort_method)
         self.browser.scroll_widget.clear_layout()
-        sections: dict[str, list[tuple[str, list[str]]]] = {}
+        self.sections: dict[str, list[tuple[str, list[str]]]] = {}
 
         base_words = self.get_sorted_base_words(sort_method)
         current_section = None
@@ -47,17 +47,9 @@ class DictionarySorter:
         column_index = 0
         num_columns = 3
 
-        for word, thumbnails, seq_length in base_words:
-            section = self.get_section_from_word(
-                word, sort_method, seq_length, thumbnails
-            )
+        self.add_words_to_sections(sort_method, base_words)
 
-            if section not in sections:
-                sections[section] = []
-
-            sections[section].append((word, thumbnails))
-
-        sorted_sections = self._get_sorted_sections(sort_method, sections.keys())
+        sorted_sections = self._get_sorted_sections(sort_method, self.sections.keys())
         self.browser.nav_sidebar.update_sidebar(sorted_sections, sort_method)
 
         for section in sorted_sections:
@@ -84,12 +76,23 @@ class DictionarySorter:
 
             column_index = 0
 
-            for word, thumbnails in sections[section]:
+            for word, thumbnails in self.sections[section]:
                 self._add_thumbnail_box(row_index, column_index, word, thumbnails)
                 column_index += 1
                 if column_index == num_columns:
                     column_index = 0
                     row_index += 1
+
+    def add_words_to_sections(self, sort_method, base_words):
+        for word, thumbnails, seq_length in base_words:
+            section = self.get_section_from_word(
+                word, sort_method, seq_length, thumbnails
+            )
+
+            if section not in self.sections:
+                self.sections[section] = []
+
+            self.sections[section].append((word, thumbnails))
 
     def highlight_appropriate_button(self, sort_method):
         if sort_method == "sequence_length":
@@ -114,16 +117,18 @@ class DictionarySorter:
         )
 
     def _add_thumbnail_box(self, row_index, column_index, word, thumbnails):
-        if word not in self.browser.scroll_widget.thumbnail_boxes_dict:
-            thumbnail_box = ThumbnailBox(self.browser, word, thumbnails)
-            thumbnail_box.resize_thumbnail_box()
-            thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
-            self.browser.scroll_widget.thumbnail_boxes_dict[word] = thumbnail_box
+        for thumbnail in thumbnails:
+            if thumbnail not in self.browser.scroll_widget.thumbnail_boxes_dict:
+                thumbnail_box = ThumbnailBox(self.browser, word, [thumbnail])
+                thumbnail_box.resize_thumbnail_box()
+                thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
+                self.browser.scroll_widget.thumbnail_boxes_dict[thumbnail] = thumbnail_box
 
-        thumbnail_box = self.browser.scroll_widget.thumbnail_boxes_dict[word]
-        self.browser.scroll_widget.grid_layout.addWidget(
-            thumbnail_box, row_index, column_index
-        )
+            thumbnail_box = self.browser.scroll_widget.thumbnail_boxes_dict[thumbnail]
+            self.browser.scroll_widget.grid_layout.addWidget(
+                thumbnail_box, row_index, column_index
+            )
+
 
     def _get_sorted_sections(self, sort_method, sections):
         if sort_method == "sequence_length":
