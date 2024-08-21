@@ -26,3 +26,4 @@ class ChooseYourStartPosLabel(QLabel):
         font_size = int(0.04 * width)
         self.setFont(QFont("Monotype Corsiva", font_size))
         self.show()
+

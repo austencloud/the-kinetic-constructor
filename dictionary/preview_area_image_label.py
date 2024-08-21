@@ -47,9 +47,18 @@ class PreviewAreaImageLabel(QLabel):
 
     def show_placeholder(self):
         self.setText("Select a sequence to display it here.")
+        self.style_placeholder()
+
+    def style_placeholder(self):
         placeholder_text_font_size = self.preview_area.width() // 50
+        global_settings = (
+            self.browser.main_widget.main_window.settings_manager.global_settings
+        )
+        font_color = global_settings.get_font_color(
+            global_settings.get_background_type()
+        )
         self.setStyleSheet(
-            f"font: {placeholder_text_font_size}pt Arial; font-weight: bold;"
+            f"font: {placeholder_text_font_size}pt Arial; font-weight: bold; color: {font_color};"
         )
 
     def adjust_label_height_for_text(self):

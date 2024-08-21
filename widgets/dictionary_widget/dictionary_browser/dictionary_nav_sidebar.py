@@ -18,6 +18,9 @@ class DictionaryNavSidebar(QWidget):
         self.year_labels: dict[str, QPushButton] = {}
         self.spacer_lines: list[QLabel] = []
         self.selected_button: QPushButton = None  # Track the selected button
+        self.settings_manager = (
+            self.browser.dictionary_widget.main_widget.main_window.settings_manager
+        )
 
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.scroll_area)
@@ -89,7 +92,7 @@ class DictionaryNavSidebar(QWidget):
                 self.layout.addWidget(button)
                 self.buttons.append(button)
 
-        self._set_styles()
+        self.set_styles()
 
     def _clear_sidebar(self):
         for button in self.buttons:
@@ -106,18 +109,25 @@ class DictionaryNavSidebar(QWidget):
         self.spacer_lines.clear()
         self.selected_button = None
 
-    def get_formatted_day(self, date):
+    def get_formatted_day(self, date: str) -> str:
         day = date.split("-")[0].lstrip("0") + "-" + date.split("-")[1].lstrip("0")
         return day
 
     def style_button(self, button: QPushButton, selected: bool = False):
         font_size = self.browser.height() // 40
+        font_color = self.settings_manager.global_settings.get_font_color(
+            self.settings_manager.global_settings.get_background_type()
+        )
+        button_background_color = (
+            "lightgray" if font_color == "black" else "#555"
+        )
+        hover_color = "lightgray" if font_color == "black" else "#555"
         if selected:
             button.setStyleSheet(
                 f"""
                 QPushButton {{
-                    background-color: #333;
-                    color: white;
+                    background-color: {button_background_color};
+                    color: {font_color};
                     border-radius: 5px;
                     font-size: {font_size}px;
                     padding: 5px;
@@ -132,24 +142,27 @@ class DictionaryNavSidebar(QWidget):
                     background: transparent;
                     border: none;
                     font-size: {font_size}px;
-                    color: #333;
+                    color: {font_color};
                     padding: 5px;
                     text-align: center;
                     font-weight: bold;
                 }}
                 QPushButton:hover {{
-                    background: #f0f0f0;
+                    background: {hover_color};
                 }}
             """
             )
 
     def style_year_label(self, label: QLabel):
         font_size = self.browser.height() // 35
+        font_color = self.settings_manager.global_settings.get_font_color(
+            self.settings_manager.global_settings.get_background_type()
+        )
         label.setStyleSheet(
             f"""
             QLabel {{
                 font-size: {font_size}px;
-                color: #333;
+                color: {font_color};
                 padding: 5px;
                 text-align: center;
                 font-weight: bold;
@@ -157,7 +170,7 @@ class DictionaryNavSidebar(QWidget):
         """
         )
 
-    def scroll_to_section(self, section, button: QPushButton):
+    def scroll_to_section(self, section: str, button: QPushButton):
         if self.selected_button:
             self.style_button(self.selected_button, selected=False)
         self.style_button(button, selected=True)
@@ -177,7 +190,7 @@ class DictionaryNavSidebar(QWidget):
             vertical_pos = content_widget_pos.y()
             scroll_area.verticalScrollBar().setValue(vertical_pos)
 
-    def _set_styles(self):
+    def set_styles(self):
         for button in self.buttons:
             selected = button == self.selected_button
             self.style_button(button, selected=selected)
@@ -187,5 +200,5 @@ class DictionaryNavSidebar(QWidget):
             spacer_line.setFixedHeight(1)
 
     def resizeEvent(self, event):
-        self._set_styles()
+        self.set_styles()
         super().resizeEvent(event)

@@ -1,9 +1,10 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from Enums.PropTypes import PropType
 from background_managers.aurora_background_manager import AuroraBackgroundManager
 from background_managers.aurora_borealis_background_manager import (
     AuroraBorealisBackgroundManager,
 )
+from background_managers.background_manager import BackgroundManager
 from background_managers.particle_background_manager import ParticleBackgroundManager
 from background_managers.rainbow_background_manager import RainbowBackgroundManager
 from background_managers.startfield_background_manager import StarfieldBackgroundManager
@@ -28,6 +29,7 @@ class GlobalSettings:
             "global", self.DEFAULT_GLOBAL_SETTINGS
         )
         self.prop_type_changer = PropTypeChanger(self.settings_manager)
+        self.main_widget = None
 
     def get_grow_sequence(self) -> bool:
         return self.settings.get("grow_sequence", False)
@@ -51,27 +53,49 @@ class GlobalSettings:
         self.settings_manager.save_settings()
         self.settings_manager.background_changed.emit(background_type)
 
-    def setup_background_manager(self, widget):
-        self.sequence_widget = (
-            self.settings_manager.main_window.main_widget.top_builder_widget.sequence_widget
-        )
+    def setup_background_manager(self, widget) -> BackgroundManager:
+        if not self.main_widget:
+            self.main_widget = self.settings_manager.main_window.main_widget
         bg_type = self.get_background_type()
+        return self.get_background_manager(bg_type, widget)
+
+    def get_background_manager(
+        self, bg_type: str, widget
+    ) -> Optional[BackgroundManager]:
+        self.update_font_colors(bg_type)
         if bg_type == "Rainbow":
-            self.sequence_widget.current_word_label.set_font_color("black")
             return RainbowBackgroundManager(widget)
         elif bg_type == "Starfield":
-            self.sequence_widget.current_word_label.set_font_color("white")
             return StarfieldBackgroundManager(widget)
         elif bg_type == "Particle":
-            self.sequence_widget.current_word_label.set_font_color("white")
             return ParticleBackgroundManager(widget)
         elif bg_type == "Aurora":
-            self.sequence_widget.current_word_label.set_font_color("black")
             return AuroraBackgroundManager(widget)
         elif bg_type == "AuroraBorealis":
-            self.sequence_widget.current_word_label.set_font_color("black")
             return AuroraBorealisBackgroundManager(widget)
         return None
+
+    def update_font_colors(self, bg_type):
+        self.main_widget.top_builder_widget.sequence_widget.current_word_label.setStyleSheet(
+            f"color: {self.get_font_color(bg_type)};"
+        )
+        self.main_widget.top_builder_widget.sequence_widget.difficulty_label.setStyleSheet(
+            f"color: {self.get_font_color(bg_type)};"
+        )
+        self.main_widget.top_builder_widget.sequence_builder.start_pos_picker.choose_your_start_pos_label.setStyleSheet(
+            f"color: {self.get_font_color(bg_type)};"
+        )
+        self.main_widget.dictionary_widget.browser.options_widget.sort_by_label.setStyleSheet(
+            f"color: {self.get_font_color(bg_type)};"
+        )
+        self.main_widget.dictionary_widget.browser.options_widget.style_buttons()
+        self.main_widget.dictionary_widget.browser.nav_sidebar.set_styles()
+        self.main_widget.dictionary_widget.preview_area.image_label.style_placeholder()
+
+    def get_font_color(self, bg_type: str) -> str:
+        if bg_type in ["Rainbow", "AuroraBorealis", "Aurora"]:
+            return "black"
+        return "white"
 
     def set_current_tab(self, tab: str) -> None:
         self.settings["current_tab"] = tab

@@ -41,7 +41,7 @@ class DictionarySorter:
             sections[section].append((word, thumbnails))
 
         sorted_sections = self._get_sorted_sections(sort_method, sections.keys())
-        self.browser.sidebar.update_sidebar(sorted_sections, sort_method)
+        self.browser.nav_sidebar.update_sidebar(sorted_sections, sort_method)
 
         for section in sorted_sections:
             if sort_method == "date_added":
@@ -74,7 +74,6 @@ class DictionarySorter:
                     column_index = 0
                     row_index += 1
 
-        
     def highlight_appropriate_button(self, sort_method):
         if sort_method == "sequence_length":
             self.browser.options_widget._update_selected_button(

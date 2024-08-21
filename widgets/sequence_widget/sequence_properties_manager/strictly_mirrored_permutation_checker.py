@@ -45,13 +45,6 @@ class StrictlyMirroredPermutationChecker:
             mirrored_horizontal,
         ]
 
-    def _is_mirrored_orientation(self, first_entry, second_entry) -> bool:
-        return (
-            first_entry["blue_attributes"]["end_ori"]
-            == second_entry["blue_attributes"]["start_ori"]
-            and first_entry["red_attributes"]["end_ori"]
-            == second_entry["red_attributes"]["start_ori"]
-        )
 
     def _get_mirrored_position(self, position, direction):
         mirrored_positions = {

@@ -22,7 +22,7 @@ class DictionaryBrowser(QWidget):
         self._setup_layout()
 
     def _setup_components(self):
-        self.sidebar = DictionaryNavSidebar(self)
+        self.nav_sidebar = DictionaryNavSidebar(self)
         self.scroll_widget = DictionaryBrowserScrollWidget(self)
         self.options_widget = DictionaryOptionsWidget(self)
         self.sorter = DictionarySorter(self)
@@ -47,7 +47,7 @@ class DictionaryBrowser(QWidget):
         self.scroll_layout = QHBoxLayout()
 
         self.layout.addWidget(self.options_widget)
-        self.scroll_layout.addWidget(self.sidebar, 1)
+        self.scroll_layout.addWidget(self.nav_sidebar, 1)
         self.scroll_layout.addWidget(self.scroll_widget, 9)
 
         self.layout.addLayout(self.scroll_layout)

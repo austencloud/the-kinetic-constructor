@@ -87,7 +87,7 @@ class DictionaryOptionsWidget(QWidget):
         sort_by_label_font.setPointSize(self.browser.width() // 50)
         self.sort_by_label.setFont(sort_by_label_font)
 
-    def _style_buttons(self):
+    def style_buttons(self):
         for button in self.buttons.values():
             selected = button == self.selected_button
             self._style_button(button, selected=selected)
@@ -97,36 +97,43 @@ class DictionaryOptionsWidget(QWidget):
         button_font.setPointSize(self.browser.width() // 65)
         button.setFont(button_font)
         button.setContentsMargins(10, 5, 10, 5)
+        font_color = self.settings_manager.global_settings.get_font_color(
+            self.settings_manager.global_settings.get_background_type()
+        )
+        button_background_color = (
+            "lightgray" if font_color == "black" else "#555"
+        )
+        hover_color = "lightgray" if font_color == "black" else "#555"
         if selected:
             button.setStyleSheet(
-                """
-                QPushButton {
-                    background-color: #333;
-                    color: white;
+                f"""
+                QPushButton {{
+                    background-color: {button_background_color};
+                    color: {font_color};
                     border-radius: 5px;
                     font-weight: bold;
                     padding: 5px;
-                }
+                }}
                 """
             )
         else:
             button.setStyleSheet(
-                """
-                QPushButton {
+                f"""
+                QPushButton {{
                     background: transparent;
                     border: none;
                     font-weight: bold;
-                    color: #333;
+                    color: {font_color};
                     padding: 5px;
                     text-align: center;
-                }
-                QPushButton:hover {
-                    background: #f0f0f0;
-                }
+                }}
+                QPushButton:hover {{
+                    background: {hover_color};
+                }}
                 """
             )
 
     def resizeEvent(self, event):
         self._style_sort_by_label()
-        self._style_buttons()
+        self.style_buttons()
         super().resizeEvent(event)
