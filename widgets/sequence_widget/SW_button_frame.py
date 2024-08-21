@@ -111,9 +111,8 @@ class SW_ButtonFrame(QFrame):
 
     def auto_complete_sequence(self):
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
-        self.sequence_properties_manager = SequencePropertiesManager(
-            self.main_widget, sequence[1:]
-        )
+        self.sequence_properties_manager = self.main_widget.sequence_properties_manager
+        self.sequence_properties_manager.instantiate_sequence(sequence)
         properties = self.sequence_properties_manager.check_all_properties()
         is_permutable = properties["is_permutable"]
 

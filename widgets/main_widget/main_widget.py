@@ -27,6 +27,7 @@ from widgets.scroll_area.components.pictograph_key_generator import (
     PictographKeyGenerator,
 )
 from data.constants import DIAMOND
+from widgets.sequence_widget.sequence_properties_manager.sequence_properties_manager import SequencePropertiesManager
 from ..main_widget.special_placement_loader import SpecialPlacementLoader
 from ..pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
     TurnsTupleGenerator,
@@ -111,6 +112,7 @@ class MainWidget(QTabWidget):
         self.special_placement_loader = SpecialPlacementLoader(self)
         self.metadata_extractor = MetaDataExtractor(self)
         self.sequence_level_evaluator = SequenceLevelEvaluator()
+        self.sequence_properties_manager = SequencePropertiesManager(self)
         self._setup_special_placements()
 
         self.top_builder_widget = TopBuilderWidget(self)

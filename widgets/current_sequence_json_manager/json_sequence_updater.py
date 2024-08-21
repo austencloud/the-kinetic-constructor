@@ -15,13 +15,13 @@ if TYPE_CHECKING:
 class JsonSequenceUpdater:
     def __init__(self, json_manager: "JSON_Manager"):
         self.json_manager = json_manager
+        self.main_widget = json_manager.main_widget
 
     def update_sequence_properties(self):
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
         if len(sequence) > 1:
-            sequence_properties_manager = SequencePropertiesManager(
-                self.json_manager.main_widget, sequence[1:]
-            )
+            sequence_properties_manager = self.main_widget.sequence_properties_manager
+            sequence_properties_manager.instantiate_sequence(sequence)
             properties = sequence_properties_manager.check_all_properties()
 
             # Update the sequence properties in the JSON

@@ -20,10 +20,9 @@ if TYPE_CHECKING:
 
 
 class SequencePropertiesManager:
-    def __init__(self, main_widget: "MainWidget", sequence):
+    def __init__(self, main_widget: "MainWidget"):
         self.main_widget = main_widget
-        self.sequence = sequence
-
+        self.sequence = None
         # Default properties
         self.ends_at_start_pos = False
         self.is_permutable = False
@@ -43,6 +42,9 @@ class SequencePropertiesManager:
         self.rotational_color_swapped_checker = (
             RotationalColorSwappedPermutationChecker(self)
         )
+
+    def instantiate_sequence(self, sequence):
+        self.sequence = sequence[1:]
 
     def calculate_word(self) -> str:
         # Concatenate all letters in the sequence
