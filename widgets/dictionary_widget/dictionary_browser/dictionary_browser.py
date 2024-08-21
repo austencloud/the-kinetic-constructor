@@ -66,11 +66,9 @@ class DictionaryBrowser(QWidget):
         row_index = 0
         column_index = 0
 
-        for metadata in filtered_sequences:
-            word = metadata['sequence'][0]["word"] 
-            thumbnails = metadata[0][
-                "thumbnails"
-            ]  # Assuming thumbnails are stored here
+        for metadata_and_thumbnails_dict in filtered_sequences:
+            word = metadata_and_thumbnails_dict["metadata"]["sequence"][0]["word"]
+            thumbnails = metadata_and_thumbnails_dict["thumbnails"]
 
             self.sorter._add_thumbnail_box(row_index, column_index, word, thumbnails)
 

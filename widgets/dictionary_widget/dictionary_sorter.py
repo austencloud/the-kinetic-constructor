@@ -20,7 +20,7 @@ class DictionarySorter:
         self.metadata_extractor = browser.main_widget.metadata_extractor
 
     def get_all_sequences_with_metadata(self):
-        """Collect all sequences and their metadata."""
+        """Collect all sequences and their metadata along with the associated thumbnail paths."""
         dictionary_dir = get_images_and_data_path("dictionary")
         sequences = []
 
@@ -31,9 +31,10 @@ class DictionarySorter:
                 for thumbnail in thumbnails:
                     metadata = self.metadata_extractor.extract_metadata_from_file(thumbnail)
                     if metadata:
-                        sequences.append(metadata)
+                        sequences.append({"metadata": metadata, "thumbnails": thumbnails})
 
         return sequences
+
 
     def sort_and_display_thumbnails(self, sort_method: str):
         self.highlight_appropriate_button(sort_method)

@@ -41,7 +41,11 @@ class DictionaryOptionsFilterWidget(QWidget):
     def _get_all_levels(self):
         # Use DictionarySorter to get all sequences with metadata
         sequences_with_metadata = self.browser.sorter.get_all_sequences_with_metadata()
-        levels = set(metadata['sequence'][0]['level'] for metadata in sequences_with_metadata if "level" in metadata['sequence'][0])
+        levels = set(
+            metadata_and_thumbnails_dict["metadata"]["sequence"][0]["level"]
+            for metadata_and_thumbnails_dict in sequences_with_metadata
+            if "level" in metadata_and_thumbnails_dict["metadata"]["sequence"][0]
+        )
         return sorted(levels)
 
     def _on_level_checkbox_state_changed(self, state):
@@ -60,9 +64,10 @@ class DictionaryOptionsFilterWidget(QWidget):
             self.browser.reset_filters()  # Show all sequences if no filter is applied
         else:
             filtered_sequences = []
-            list_of_sequence_metadata = self.browser.sorter.get_all_sequences_with_metadata()
-            for metadata in list_of_sequence_metadata:
-                if metadata['sequence'][0]['level'] in self.selected_levels:
-                    filtered_sequences.append(metadata)
+            list_of_sequences = self.browser.sorter.get_all_sequences_with_metadata()
+            for sequence in list_of_sequences:
+                metadata = sequence["metadata"]
+                if metadata["sequence"][0]["level"] in self.selected_levels:
+                    filtered_sequences.append(sequence)
 
             self.browser.display_filtered_sequences(filtered_sequences)
