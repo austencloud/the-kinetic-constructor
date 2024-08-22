@@ -5,6 +5,7 @@ from widgets.dictionary_widget.dictionary_browser.dictionary_browser_nav_sidebar
 from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtWidgets import QApplication
+from PyQt6.QtGui import QFont
 from widgets.dictionary_widget.dictionary_browser.dictionary_browser_section_manager import (
     SectionManager,
 )
@@ -46,15 +47,22 @@ class DictionaryBrowser(QWidget):
         self.options_widget = DictionaryOptionsPanel(self)
         self._setup_go_back_to_initial_selection_widget_button()
         self._setup_currently_displaying_indicator_label()
+        self._setup_number_of_currently_displayed_sequences_label()
         self.widgets: list[QWidget] = [
             self.nav_sidebar,
             self.scroll_widget,
             self.options_widget,
-            self.go_back_to_initial_selection_widget_button,
+            self.go_back_button,
             self.currently_displaying_indicator_label,
         ]
         for widget in self.widgets:
             widget.hide()
+
+    def _setup_number_of_currently_displayed_sequences_label(self):
+        self.number_of_currently_displayed_sequences_label = QLabel("")
+        self.number_of_currently_displayed_sequences_label.setAlignment(
+            Qt.AlignmentFlag.AlignCenter
+        )
 
     def _setup_currently_displaying_indicator_label(self):
         self.currently_displaying_indicator_label = QLabel("")
@@ -63,10 +71,13 @@ class DictionaryBrowser(QWidget):
         )
 
     def _setup_go_back_to_initial_selection_widget_button(self):
-        self.go_back_to_initial_selection_widget_button = QPushButton("Go Back")
-        self.go_back_to_initial_selection_widget_button.clicked.connect(
-            self.go_back_to_initial_selection_widget
-        )
+        self.go_back_button = QPushButton("Go Back")
+        self.go_back_button_layout = QHBoxLayout()
+        # align to left
+        # add it
+        self.go_back_button_layout.addWidget(self.go_back_button)
+        self.go_back_button_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        self.go_back_button.clicked.connect(self.go_back_to_initial_selection_widget)
 
     def go_back_to_initial_selection_widget(self):
         self.initial_selection_widget.show()
@@ -118,8 +129,9 @@ class DictionaryBrowser(QWidget):
 
     def _add_components_to_layout(self):
 
-        self.layout.addWidget(self.go_back_to_initial_selection_widget_button)
+        self.layout.addLayout(self.go_back_button_layout)
         self.layout.addWidget(self.currently_displaying_indicator_label)
+        self.layout.addWidget(self.number_of_currently_displayed_sequences_label)
         self.layout.addWidget(self.options_widget)
         self.layout.addWidget(self.scroll_widget)
         self.scroll_layout.addWidget(self.nav_sidebar, 1)
@@ -130,13 +142,27 @@ class DictionaryBrowser(QWidget):
             widget.show()
         # show the preview_area
         self.dictionary_widget.preview_area.show()
-        self.set_currently_display_label_font_size()
+        self.resize_currently_displaying_label()
+        self.resize_number_of_currently_displayed_sequences_label()
 
     def resize_dictionary_browser(self):
         self.scroll_widget.resize_dictionary_browser_scroll_widget()
-        self.set_currently_display_label_font_size()
+        self.resize_go_back_button()
+        self.resize_currently_displaying_label()
+        self.resize_number_of_currently_displayed_sequences_label()
 
-    def set_currently_display_label_font_size(self):
+    def resize_number_of_currently_displayed_sequences_label(self):
+        font = self.number_of_currently_displayed_sequences_label.font()
+        font.setPointSize(self.width() // 80)
+        self.number_of_currently_displayed_sequences_label.setFont(font)
+
+    def resize_go_back_button(self):
+        font = QFont()
+        font.setPointSize(self.width() // 120)
+        self.go_back_button.setFont(font)
+        self.go_back_button.setFixedWidth(self.width() // 10)
+
+    def resize_currently_displaying_label(self):
         font = self.currently_displaying_indicator_label.font()
         font.setPointSize(self.width() // 65)
         self.currently_displaying_indicator_label.setFont(font)
