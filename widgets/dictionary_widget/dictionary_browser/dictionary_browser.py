@@ -9,9 +9,8 @@ from PyQt6.QtGui import QFont
 from widgets.dictionary_widget.dictionary_browser.dictionary_browser_section_manager import (
     SectionManager,
 )
-from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget import (
-    DictionaryInitialSelectionsWidget,
-)
+
+from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.dictionary_initial_selections_widget import DictionaryInitialSelectionsWidget
 from widgets.dictionary_widget.dictionary_browser.thumbnail_box_sorter import (
     ThumbnailBoxSorter,
 )
@@ -36,7 +35,7 @@ class DictionaryBrowser(QWidget):
         self._setup_layout()
 
     def _setup_components(self):
-        self._setup_initial_selection_widget()
+        self.initial_selection_widget = DictionaryInitialSelectionsWidget(self)
         self.setup_components()
 
     def setup_components(self):
@@ -74,8 +73,7 @@ class DictionaryBrowser(QWidget):
     def _setup_go_back_to_initial_selection_widget_button(self):
         self.go_back_button = QPushButton("Go Back")
         self.go_back_button_layout = QHBoxLayout()
-        # align to left
-        # add it
+        self.go_back_button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.go_back_button_layout.addWidget(self.go_back_button)
         self.go_back_button_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.go_back_button.clicked.connect(self.go_back_to_initial_selection_widget)
@@ -91,8 +89,6 @@ class DictionaryBrowser(QWidget):
         #hide the number of currently displayed sequences label
         self.number_of_currently_displayed_sequences_label.hide()
 
-    def _setup_initial_selection_widget(self):
-        self.initial_selection_widget = DictionaryInitialSelectionsWidget(self)
 
     def showEvent(self, event):
         super().showEvent(event)
@@ -109,6 +105,7 @@ class DictionaryBrowser(QWidget):
     def apply_initial_selection(self, initial_selections):
         # set override cursor
         # QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        # hide the buttons in the nav button widget
         self.initial_selection_widget.hide()
         self._add_components_to_layout()
         QApplication.processEvents()

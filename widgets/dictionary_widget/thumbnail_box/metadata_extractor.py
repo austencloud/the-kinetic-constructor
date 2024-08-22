@@ -50,6 +50,12 @@ class MetaDataExtractor:
             return len(metadata["sequence"]) - 2
         return 0  # Default to 0 if no valid sequence length is found
 
+    def get_sequence_start_position(self, file_path):
+        metadata = self.extract_metadata_from_file(file_path)
+        if metadata and "sequence" in metadata:
+            return metadata["sequence"][1]["sequence_start_position"]
+        return
+
     def get_metadata_and_thumbnail_dict(self) -> list[dict[str, str]]:
         """Collect all sequences and their metadata along with the associated thumbnail paths."""
         dictionary_dir = get_images_and_data_path("dictionary")

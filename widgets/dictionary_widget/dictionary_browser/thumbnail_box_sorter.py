@@ -92,25 +92,91 @@ class ThumbnailBoxSorter:
     def sort_and_display_thumbnail_boxes_by_initial_selection(
         self, initial_selection: dict
     ):
-        if "letter" in initial_selection.keys():
-            if initial_selection["letter"] == "Show all":
-                self.sort_and_display_all_thumbnail_boxes_by_sort_method(
-                    self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
-                )
-            else:
-                self.display_only_thumbnails_starting_with_letter(
-                    initial_selection["letter"]
-                )
-        elif "length" in initial_selection.keys():
+        if "letter" in initial_selection:
+            self.display_only_thumbnails_starting_with_letter(
+                initial_selection["letter"]
+            )
+        elif "length" in initial_selection:
             self.display_only_thumbnails_with_sequence_length(
                 initial_selection["length"]
             )
-        elif "level" in initial_selection.keys():
+        elif "level" in initial_selection:
             self.display_only_thumbnails_with_level(initial_selection["level"])
-        elif "contains_letters" in initial_selection.keys():
+        elif "contains_letters" in initial_selection:
             self.display_only_thumbnails_containing_letters(
                 initial_selection["contains_letters"]
             )
+        elif "position" in initial_selection:
+            self.display_only_thumbnails_with_starting_position(
+                initial_selection["position"]
+            )
+
+    def display_only_thumbnails_with_starting_position(self, position: str):
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        self.browser.currently_displaying_indicator_label.setText(
+            f"Currently displaying sequences starting at {position}. Please wait..."
+        )
+        self.browser.number_of_currently_displayed_sequences_label.setText("")
+
+        self.browser.scroll_widget.clear_layout()
+        self.sections = {}
+        base_words = self._get_sorted_base_words("sequence_length")
+        row_index = 0
+        column_index = 0
+        num_columns = 3
+        num_sequences = 0
+
+        for word, thumbnails, seq_length in base_words:
+            # Filter sequences by their starting position (beat 0)
+            if self.get_sequence_starting_position(thumbnails) != position:
+                continue
+
+            section = self.section_manager.get_section_from_word(
+                word, "sequence_length", seq_length, thumbnails
+            )
+
+            if section not in self.sections:
+                self.sections[section] = []
+
+            self.sections[section].append((word, thumbnails))
+            num_sequences += 1
+
+        sorted_sections = self.section_manager.get_sorted_sections(
+            "sequence_length", self.sections.keys()
+        )
+        self.browser.nav_sidebar.update_sidebar(sorted_sections, "sequence_length")
+        QApplication.processEvents()
+
+        for section in sorted_sections:
+            row_index += 1
+            self.section_manager.add_header(row_index, num_columns, section)
+            row_index += 1
+
+            column_index = 0
+            for word, thumbnails in self.sections[section]:
+                self._add_thumbnail_box(row_index, column_index, word, thumbnails)
+                column_index += 1
+                if column_index == num_columns:
+                    column_index = 0
+                    row_index += 1
+
+        self.browser.currently_displaying_indicator_label.setText(
+            f"Currently displaying sequences starting at {position}."
+        )
+        self.browser.number_of_currently_displayed_sequences_label.setText(
+            f"Number of sequences displayed: {num_sequences}"
+        )
+        QApplication.restoreOverrideCursor()
+
+    def get_sequence_starting_position(self, thumbnails):
+        """Extract the starting position from the first thumbnail (beat 0)."""
+        for thumbnail in thumbnails:
+            start_position = self.metadata_extractor.get_sequence_start_position(
+                thumbnail
+            )
+            if start_position:
+                return start_position
+        return None
 
     def display_only_thumbnails_containing_letters(self, letters: set[str]):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
@@ -125,7 +191,7 @@ class ThumbnailBoxSorter:
             )
 
         self.browser.number_of_currently_displayed_sequences_label.setText("")
-    
+
         self.browser.scroll_widget.clear_layout()
         self.sections = {}
         base_words = self._get_sorted_base_words("sequence_length")
@@ -139,17 +205,21 @@ class ThumbnailBoxSorter:
             # Check if any of the selected letters are in the word
             if not any(letter in word for letter in letters):
                 continue
-            # if the word contains the letter and the letter is just one character, than we need to ensure that we ignore situations where the word contains that letter plus a "-" character. 
+            # if the word contains the letter and the letter is just one character, than we need to ensure that we ignore situations where the word contains that letter plus a "-" character.
             # This should include instances where the letter is in the middle of the word. For example if the word is SW-A, and the letter is W, we should not include this word in the list of words to display.
             # It should work whether the letter is at the beginning or the middle of the word. For example, if the word is W-AN, and the letter is W, we should not include this word in the list of words to display when the letter is W.
             if len(letters) == 1:
                 if len(word) > 1 and word[1] == "-":
                     continue
                 # check if the instance of the letter in the word is followed by a "-" character and if so, ignore the word
-                if word.find(letters_string) < len(word) - 1 and word[word.find(letters_string) + 1] == "-":
+                # check if the letter itself has two characters, and do not execute the following code if it does
+
+                if (
+                    word.find(letters_string) < len(word) - 1
+                    and word[word.find(letters_string) + 1] == "-"
+                ) and letters_string.find("-") != 1:
                     continue
-            
-            
+
             section = self.section_manager.get_section_from_word(
                 word, "sequence_length", seq_length, thumbnails
             )
