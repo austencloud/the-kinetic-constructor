@@ -2,8 +2,12 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
 
-from widgets.dictionary_widget.dictionary_browser.options_panel.dictionary_options_panel_filter_widget import DictionaryOptionsPanelFilterWidget
-from widgets.dictionary_widget.dictionary_browser.options_panel.dictionary_options_panel_sort_widget import DictionaryOptionsPanelSortWidget
+from widgets.dictionary_widget.dictionary_browser.options_panel.filter_widget import (
+    FilterWidget,
+)
+from widgets.dictionary_widget.dictionary_browser.options_panel.sort_widget import (
+    SortWidget,
+)
 
 
 if TYPE_CHECKING:
@@ -19,8 +23,8 @@ class DictionaryBrowserOptionsPanel(QWidget):
         self.main_widget = browser.dictionary_widget.main_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
 
-        self.sort_widget = DictionaryOptionsPanelSortWidget(self)
-        self.filter_widget = DictionaryOptionsPanelFilterWidget(self)
+        self.sort_widget = SortWidget(self)
+        self.filter_widget = FilterWidget(self)
 
         self._setup_layout()
 
@@ -28,8 +32,5 @@ class DictionaryBrowserOptionsPanel(QWidget):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        # Add the sort widget to the layout
-        self.layout.addWidget(self.sort_widget)
-
-        # Add the filter widget to the layout
         self.layout.addWidget(self.filter_widget)
+        self.layout.addWidget(self.sort_widget)

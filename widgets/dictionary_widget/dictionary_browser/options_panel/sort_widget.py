@@ -9,7 +9,9 @@ if TYPE_CHECKING:
     )
 
 
-class DictionaryOptionsPanelSortWidget(QWidget):
+class SortWidget(QWidget):
+    """ Widget for sorting the dictionary entries by sequence length, alphabetical order, or date added """
+
     def __init__(self, options_panel: "DictionaryBrowserOptionsPanel") -> None:
         super().__init__(options_panel)
         self.browser = options_panel.browser

@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     )
 
 
-class DictionaryOptionsPanelFilterWidget(QWidget):
+class FilterWidget(QWidget):
     def __init__(self, options_panel: "DictionaryBrowserOptionsPanel") -> None:
         super().__init__(options_panel)
         self.browser = options_panel.browser
