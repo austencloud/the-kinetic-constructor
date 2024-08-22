@@ -139,7 +139,17 @@ class ThumbnailBoxSorter:
             # Check if any of the selected letters are in the word
             if not any(letter in word for letter in letters):
                 continue
-
+            # if the word contains the letter and the letter is just one character, than we need to ensure that we ignore situations where the word contains that letter plus a "-" character. 
+            # This should include instances where the letter is in the middle of the word. For example if the word is SW-A, and the letter is W, we should not include this word in the list of words to display.
+            # It should work whether the letter is at the beginning or the middle of the word. For example, if the word is W-AN, and the letter is W, we should not include this word in the list of words to display when the letter is W.
+            if len(letters) == 1:
+                if len(word) > 1 and word[1] == "-":
+                    continue
+                # check if the instance of the letter in the word is followed by a "-" character and if so, ignore the word
+                if word.find(letters_string) < len(word) - 1 and word[word.find(letters_string) + 1] == "-":
+                    continue
+            
+            
             section = self.section_manager.get_section_from_word(
                 word, "sequence_length", seq_length, thumbnails
             )
@@ -278,7 +288,6 @@ class ThumbnailBoxSorter:
         self.browser.scroll_widget.clear_layout()
         self.sections = {}
         base_words = self._get_sorted_base_words("sequence_length")
-        current_section = None
         row_index = 0
         column_index = 0
         num_columns = 3
@@ -286,6 +295,8 @@ class ThumbnailBoxSorter:
         for word, thumbnails, seq_length in base_words:
             if len(letter) == 1:
                 if word[0] != letter:
+                    continue
+                elif len(word) > 1 and word[1] == "-":
                     continue
             elif len(letter) == 2:
                 if word[:2] != letter:

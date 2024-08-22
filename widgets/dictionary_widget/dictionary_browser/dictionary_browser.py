@@ -54,6 +54,7 @@ class DictionaryBrowser(QWidget):
             self.options_widget,
             self.go_back_button,
             self.currently_displaying_indicator_label,
+            self.number_of_currently_displayed_sequences_label,
         ]
         for widget in self.widgets:
             widget.hide()
@@ -87,6 +88,8 @@ class DictionaryBrowser(QWidget):
         self.dictionary_widget.preview_area.hide()
         # clear the dictionary preview area
         self.dictionary_widget.preview_area.clear_preview()
+        #hide the number of currently displayed sequences label
+        self.number_of_currently_displayed_sequences_label.hide()
 
     def _setup_initial_selection_widget(self):
         self.initial_selection_widget = DictionaryInitialSelectionsWidget(self)
