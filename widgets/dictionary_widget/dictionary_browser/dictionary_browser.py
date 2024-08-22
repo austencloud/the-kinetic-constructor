@@ -1,4 +1,7 @@
 from typing import TYPE_CHECKING
+from widgets.dictionary_widget.dictionary_browser.currently_displaying_indicator_label import (
+    CurrentlyDisplayingIndicatorLabel,
+)
 from widgets.dictionary_widget.dictionary_browser.dictionary_browser_nav_sidebar import (
     DictionaryBrowserNavSidebar,
 )
@@ -10,7 +13,9 @@ from widgets.dictionary_widget.dictionary_browser.dictionary_browser_section_man
     SectionManager,
 )
 
-from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.dictionary_initial_selections_widget import DictionaryInitialSelectionsWidget
+from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.dictionary_initial_selections_widget import (
+    DictionaryInitialSelectionsWidget,
+)
 from widgets.dictionary_widget.dictionary_browser.thumbnail_box_sorter import (
     ThumbnailBoxSorter,
 )
@@ -39,20 +44,21 @@ class DictionaryBrowser(QWidget):
         self.setup_components()
 
     def setup_components(self):
+        self.currently_displaying_label = CurrentlyDisplayingIndicatorLabel(self)
         self.nav_sidebar = DictionaryBrowserNavSidebar(self)
         self.scroll_widget = DictionaryBrowserScrollWidget(self)
         self.section_manager = SectionManager(self)
         self.thummbnail_box_sorter = ThumbnailBoxSorter(self)
         self.options_widget = DictionaryOptionsPanel(self)
+
         self._setup_go_back_to_initial_selection_widget_button()
-        self._setup_currently_displaying_indicator_label()
         self._setup_number_of_currently_displayed_sequences_label()
         self.widgets: list[QWidget] = [
             self.nav_sidebar,
             self.scroll_widget,
             self.options_widget,
             self.go_back_button,
-            self.currently_displaying_indicator_label,
+            self.currently_displaying_label,
             self.number_of_currently_displayed_sequences_label,
         ]
         for widget in self.widgets:
@@ -64,11 +70,6 @@ class DictionaryBrowser(QWidget):
             Qt.AlignmentFlag.AlignCenter
         )
 
-    def _setup_currently_displaying_indicator_label(self):
-        self.currently_displaying_indicator_label = QLabel("")
-        self.currently_displaying_indicator_label.setAlignment(
-            Qt.AlignmentFlag.AlignCenter
-        )
 
     def _setup_go_back_to_initial_selection_widget_button(self):
         self.go_back_button = QPushButton("Go Back")
@@ -86,9 +87,8 @@ class DictionaryBrowser(QWidget):
         self.dictionary_widget.preview_area.hide()
         # clear the dictionary preview area
         self.dictionary_widget.preview_area.clear_preview()
-        #hide the number of currently displayed sequences label
+        # hide the number of currently displayed sequences label
         self.number_of_currently_displayed_sequences_label.hide()
-
 
     def showEvent(self, event):
         super().showEvent(event)
@@ -130,7 +130,7 @@ class DictionaryBrowser(QWidget):
     def _add_components_to_layout(self):
 
         self.layout.addLayout(self.go_back_button_layout)
-        self.layout.addWidget(self.currently_displaying_indicator_label)
+        self.layout.addWidget(self.currently_displaying_label)
         self.layout.addWidget(self.number_of_currently_displayed_sequences_label)
         self.layout.addWidget(self.options_widget)
         self.layout.addWidget(self.scroll_widget)
@@ -163,9 +163,9 @@ class DictionaryBrowser(QWidget):
         self.go_back_button.setFixedWidth(self.width() // 10)
 
     def resize_currently_displaying_label(self):
-        font = self.currently_displaying_indicator_label.font()
+        font = self.currently_displaying_label.font()
         font.setPointSize(self.width() // 65)
-        self.currently_displaying_indicator_label.setFont(font)
+        self.currently_displaying_label.setFont(font)
 
     def display_filtered_sequences(self, filtered_sequences):
         """Display sequences based on the filtered criteria."""

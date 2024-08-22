@@ -5,6 +5,7 @@ from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
+from .currently_displaying_indicator_label import CurrentlyDisplayingIndicatorLabel
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
@@ -18,13 +19,12 @@ class ThumbnailBoxSorter:
         self.metadata_extractor = browser.main_widget.metadata_extractor
         self.main_widget = browser.main_widget
         self.section_manager = browser.section_manager
+        self.currently_displaying_label = browser.currently_displaying_label
 
     def sort_and_display_all_thumbnail_boxes_by_sort_method(
         self, sort_method: str
     ) -> None:
-        self.browser.currently_displaying_indicator_label.setText(
-            f"Currently displaying all sequences. Please wait, this will take a moment..."
-        )
+        self.currently_displaying_label.show_loading_message("all sequences")
         self.browser.options_widget.sort_widget.highlight_appropriate_button(
             sort_method
         )
@@ -81,10 +81,8 @@ class ThumbnailBoxSorter:
                 if column_index == num_columns:
                     column_index = 0
                     row_index += 1
-        self.browser.currently_displaying_indicator_label.setText(
-            f"Currently displaying all sequences."
-        )
-        # update the number of currently displayed sequences in the label
+
+        self.currently_displaying_label.show_completed_message("all sequences")
         self.browser.number_of_currently_displayed_sequences_label.setText(
             f"Number of sequences displayed: {len(base_words)}"
         )
@@ -113,8 +111,8 @@ class ThumbnailBoxSorter:
 
     def display_only_thumbnails_with_starting_position(self, position: str):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        self.browser.currently_displaying_indicator_label.setText(
-            f"Currently displaying sequences starting at {position}. Please wait..."
+        self.currently_displaying_label.show_loading_message(
+            f"sequences starting at {position}"
         )
         self.browser.number_of_currently_displayed_sequences_label.setText("")
 
@@ -127,7 +125,6 @@ class ThumbnailBoxSorter:
         num_sequences = 0
 
         for word, thumbnails, seq_length in base_words:
-            # Filter sequences by their starting position (beat 0)
             if self.get_sequence_starting_position(thumbnails) != position:
                 continue
 
@@ -160,35 +157,20 @@ class ThumbnailBoxSorter:
                     column_index = 0
                     row_index += 1
 
-        self.browser.currently_displaying_indicator_label.setText(
-            f"Currently displaying sequences starting at {position}."
+        self.currently_displaying_label.show_completed_message(
+            f"sequences starting at {position}"
         )
         self.browser.number_of_currently_displayed_sequences_label.setText(
             f"Number of sequences displayed: {num_sequences}"
         )
         QApplication.restoreOverrideCursor()
 
-    def get_sequence_starting_position(self, thumbnails):
-        """Extract the starting position from the first thumbnail (beat 0)."""
-        for thumbnail in thumbnails:
-            start_position = self.metadata_extractor.get_sequence_start_position(
-                thumbnail
-            )
-            if start_position:
-                return start_position
-        return None
-
     def display_only_thumbnails_containing_letters(self, letters: set[str]):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         letters_string = ", ".join(letters)
-        if len(letters) == 1:
-            self.browser.currently_displaying_indicator_label.setText(
-                f"Currently displaying sequences containing {letters_string}. Please wait..."
-            )
-        elif len(letters) > 1:
-            self.browser.currently_displaying_indicator_label.setText(
-                f"Currently displaying sequences containing any of: {letters_string}. Please wait..."
-            )
+        self.currently_displaying_label.show_loading_message(
+            f"sequences containing {letters_string}"
+        )
 
         self.browser.number_of_currently_displayed_sequences_label.setText("")
 
@@ -202,23 +184,18 @@ class ThumbnailBoxSorter:
         num_sequences = 0
 
         for word, thumbnails, seq_length in base_words:
-            # Check if any of the selected letters are in the word
             match_found = False
 
             for letter in letters:
-                # Exact match check
                 if letter in word:
-                    # Prevent cases like "W" matching with "W-" unless "W-" is also in the letters set
                     if (
                         len(letter) == 1
                         and f"{letter}-" in word
                         and f"{letter}-" not in letters
                     ):
                         continue
-                    # If word contains a dash after the letter, ensure it matches the full sequence
                     if letter + "-" in word and letter + "-" not in letters:
                         continue
-                    # If the letter matches exactly and is not followed by a dash, we allow it
                     if (
                         word.find(letter) < len(word) - 1
                         and word[word.find(letter) + 1] == "-"
@@ -258,16 +235,9 @@ class ThumbnailBoxSorter:
                     column_index = 0
                     row_index += 1
 
-        if len(letters) == 1:
-            self.browser.currently_displaying_indicator_label.setText(
-                f"Currently displaying sequences containing {letters_string}."
-            )
-        elif len(letters) > 1:
-            self.browser.currently_displaying_indicator_label.setText(
-                f"Currently displaying sequences containing any of: {letters_string}."
-            )
-
-        # update the number of currently displayed sequences in the label
+        self.currently_displaying_label.show_completed_message(
+            f"sequences containing {letters_string}"
+        )
         self.browser.number_of_currently_displayed_sequences_label.setText(
             f"Number of sequences displayed: {num_sequences}"
         )
@@ -276,8 +246,8 @@ class ThumbnailBoxSorter:
     def display_only_thumbnails_with_sequence_length(self, length: str):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
 
-        self.browser.currently_displaying_indicator_label.setText(
-            f"Currently displaying sequences of length {length}. Please wait..."
+        self.currently_displaying_label.show_loading_message(
+            f"sequences of length {length}"
         )
         self.browser.number_of_currently_displayed_sequences_label.setText("")
 
@@ -320,10 +290,9 @@ class ThumbnailBoxSorter:
                 if column_index == num_columns:
                     column_index = 0
                     row_index += 1
-        self.browser.currently_displaying_indicator_label.setText(
-            f"Currently displaying sequences of length {length}"
+        self.currently_displaying_label.show_completed_message(
+            f"sequences of length {length}"
         )
-        # update the number of currently displayed sequences in the label
         self.browser.number_of_currently_displayed_sequences_label.setText(
             f"Number of sequences displayed: {num_sequences}"
         )
@@ -331,12 +300,8 @@ class ThumbnailBoxSorter:
 
     def display_only_thumbnails_with_level(self, level: str):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        num_sequences = 0
 
-        self.browser.currently_displaying_indicator_label.setText(
-            f"Currently displaying level {level} sequences. Please wait..."
-        )
-
+        self.currently_displaying_label.show_loading_message(f"level {level} sequences")
         self.browser.number_of_currently_displayed_sequences_label.setText("")
         self.browser.scroll_widget.clear_layout()
         sequences = self.get_sequences_that_are_a_specific_level(level)
@@ -350,10 +315,9 @@ class ThumbnailBoxSorter:
             if column_index == num_columns:
                 column_index = 0
                 row_index += 1
-        self.browser.currently_displaying_indicator_label.setText(
-            f"Currently displaying level {level} sequences."
+        self.currently_displaying_label.show_completed_message(
+            f"level {level} sequences"
         )
-        # update the number of currently displayed sequences in the label
         self.browser.number_of_currently_displayed_sequences_label.setText(
             f"Number of sequences displayed: {num_sequences}"
         )
@@ -362,9 +326,12 @@ class ThumbnailBoxSorter:
     def display_only_thumbnails_starting_with_letter(self, letter: str):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         if letter != "Show all":
-            self.browser.currently_displaying_indicator_label.setText(
-                f"Currently displaying sequences starting with: {letter}. Please wait..."
+            self.currently_displaying_label.show_loading_message(
+                f"sequences starting with {letter}"
             )
+        else:
+            self.currently_displaying_label.show_loading_message("all sequences")
+
         self.browser.number_of_currently_displayed_sequences_label.setText("")
 
         self.browser.scroll_widget.clear_layout()
@@ -411,10 +378,11 @@ class ThumbnailBoxSorter:
                     column_index = 0
                     row_index += 1
         if letter != "Show all":
-            self.browser.currently_displaying_indicator_label.setText(
-                f"Currently displaying sequences starting with {letter}."
+            self.currently_displaying_label.show_completed_message(
+                f"sequences starting with {letter}"
             )
-        # update the number of currently displayed sequences in the label
+        else:
+            self.currently_displaying_label.show_completed_message("all sequences")
 
         self.browser.number_of_currently_displayed_sequences_label.setText(
             f"Number of sequences displayed: {num_sequences}"
@@ -503,4 +471,14 @@ class ThumbnailBoxSorter:
             length = self.metadata_extractor.get_sequence_length(thumbnail)
             if length:
                 return length
+        return None
+
+    def get_sequence_starting_position(self, thumbnails):
+        """Extract the starting position from the first thumbnail (beat 0)."""
+        for thumbnail in thumbnails:
+            start_position = self.metadata_extractor.get_sequence_start_position(
+                thumbnail
+            )
+            if start_position:
+                return start_position
         return None
