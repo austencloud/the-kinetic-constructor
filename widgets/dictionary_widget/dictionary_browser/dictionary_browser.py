@@ -101,6 +101,7 @@ class DictionaryBrowser(QWidget):
         self.initial_selection_widget.hide()
         self._add_components_to_layout()
         QApplication.processEvents()
+        # self.thummbnail_box_sorter.currently_displayed_sequences = []  # Reset before applying new filters
         self._initialize_and_sort_thumbnails(initial_selections)
         # QApplication.restoreOverrideCursor()
 

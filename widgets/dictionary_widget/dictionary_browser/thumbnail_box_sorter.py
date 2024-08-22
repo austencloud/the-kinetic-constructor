@@ -20,15 +20,76 @@ class ThumbnailBoxSorter:
         self.main_widget = browser.main_widget
         self.section_manager = browser.section_manager
         self.currently_displaying_label = browser.currently_displaying_label
-        self.num_columns = 3  # Fixed number of columns
+        self.num_columns = 3
+        self.currently_displayed_sequences = []
 
-    def sort_and_display_all_thumbnail_boxes_by_sort_method(self, sort_method: str) -> None:
+    def sort_and_display_currently_filtered_sequences_by_method(
+        self, sort_method: str
+    ) -> None:
+        self.browser.scroll_widget.clear_layout()
+        self.sections: dict[str, list[tuple[str, list[str]]]] = {}
+
+        # Sort currently displayed sequences based on the sort_method
+        if sort_method == "sequence_length":
+            self.currently_displayed_sequences.sort(
+                key=lambda x: x[2] if x[2] is not None else float("inf")
+            )
+        elif sort_method == "date_added":
+            self.currently_displayed_sequences.sort(
+                key=lambda x: self.section_manager.get_date_added(x[1]) or datetime.min,
+                reverse=True,
+            )
+        else:
+            self.currently_displayed_sequences.sort(key=lambda x: x[0])
+
+        row_index = 0
+        for word, thumbnails, seq_length in self.currently_displayed_sequences:
+            section = self.section_manager.get_section_from_word(
+                word, sort_method, seq_length, thumbnails
+            )
+
+            if section not in self.sections:
+                self.sections[section] = []
+
+            self.sections[section].append((word, thumbnails))
+
+        sorted_sections = self.section_manager.get_sorted_sections(
+            sort_method, self.sections.keys()
+        )
+        QApplication.processEvents()
+
+        for section in sorted_sections:
+            row_index += 1
+            self.section_manager.add_header(row_index, self.num_columns, section)
+            row_index += 1
+
+            column_index = 0  # Reset column index at the start of each section
+
+            for word, thumbnails in self.sections[section]:
+                self._add_thumbnail_box(row_index, column_index, word, thumbnails)
+                column_index += 1
+                if column_index == self.num_columns:
+                    column_index = 0
+                    row_index += 1
+
+        self.browser.number_of_currently_displayed_sequences_label.setText(
+            f"Number of sequences displayed: {len(self.currently_displayed_sequences)}"
+        )
+        QApplication.restoreOverrideCursor()
+
+    def sort_and_display_all_thumbnail_boxes_by_sort_method(
+        self, sort_method: str
+    ) -> None:
         self.currently_displaying_label.show_loading_message("all sequences")
-        self.browser.options_widget.sort_widget.highlight_appropriate_button(sort_method)
+        self.browser.options_widget.sort_widget.highlight_appropriate_button(
+            sort_method
+        )
         self.browser.scroll_widget.clear_layout()
         self.sections: dict[str, list[tuple[str, list[str]]]] = {}
 
         base_words = self._get_sorted_base_words(sort_method)
+        self.currently_displayed_sequences = base_words  # Track all sequences
+
         current_section = None
         row_index = 0
         column_index = 0
@@ -62,7 +123,9 @@ class ThumbnailBoxSorter:
                     current_section = year
 
                 row_index += 1
-                self.section_manager.add_header(row_index, self.num_columns, formatted_day)
+                self.section_manager.add_header(
+                    row_index, self.num_columns, formatted_day
+                )
                 row_index += 1
             else:
                 row_index += 1
@@ -83,17 +146,27 @@ class ThumbnailBoxSorter:
             f"Number of sequences displayed: {len(base_words)}"
         )
 
-    def sort_and_display_thumbnail_boxes_by_initial_selection(self, initial_selection: dict):
+    def sort_and_display_thumbnail_boxes_by_initial_selection(
+        self, initial_selection: dict
+    ):
         if "letter" in initial_selection:
-            self.display_only_thumbnails_starting_with_letter(initial_selection["letter"])
+            self.display_only_thumbnails_starting_with_letter(
+                initial_selection["letter"]
+            )
         elif "length" in initial_selection:
-            self.display_only_thumbnails_with_sequence_length(initial_selection["length"])
+            self.display_only_thumbnails_with_sequence_length(
+                initial_selection["length"]
+            )
         elif "level" in initial_selection:
             self.display_only_thumbnails_with_level(initial_selection["level"])
         elif "contains_letters" in initial_selection:
-            self.display_only_thumbnails_containing_letters(initial_selection["contains_letters"])
+            self.display_only_thumbnails_containing_letters(
+                initial_selection["contains_letters"]
+            )
         elif "position" in initial_selection:
-            self.display_only_thumbnails_with_starting_position(initial_selection["position"])
+            self.display_only_thumbnails_with_starting_position(
+                initial_selection["position"]
+            )
 
     def display_only_thumbnails_with_starting_position(self, position: str):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
@@ -104,9 +177,9 @@ class ThumbnailBoxSorter:
 
         self.browser.scroll_widget.clear_layout()
         self.sections = {}
+        self.currently_displayed_sequences = []  # Reset the list for the new filter
         base_words = self._get_sorted_base_words("sequence_length")
         row_index = 0
-        column_index = 0
         num_sequences = 0
 
         for word, thumbnails, seq_length in base_words:
@@ -121,6 +194,9 @@ class ThumbnailBoxSorter:
                 self.sections[section] = []
 
             self.sections[section].append((word, thumbnails))
+            self.currently_displayed_sequences.append(
+                (word, thumbnails, seq_length)
+            )  # Update currently displayed sequences
             num_sequences += 1
 
         sorted_sections = self.section_manager.get_sorted_sections(
@@ -156,35 +232,20 @@ class ThumbnailBoxSorter:
         self.currently_displaying_label.show_loading_message(
             f"sequences containing {letters_string}"
         )
-
         self.browser.number_of_currently_displayed_sequences_label.setText("")
 
         self.browser.scroll_widget.clear_layout()
         self.sections = {}
+        self.currently_displayed_sequences = []  # Reset the list for the new filter
         base_words = self._get_sorted_base_words("sequence_length")
-        current_section = None
         row_index = 0
-        column_index = 0
         num_sequences = 0
 
         for word, thumbnails, seq_length in base_words:
             match_found = False
 
             for letter in letters:
-                if letter in word:
-                    if (
-                        len(letter) == 1
-                        and f"{letter}-" in word
-                        and f"{letter}-" not in letters
-                    ):
-                        continue
-                    if letter + "-" in word and letter + "-" not in letters:
-                        continue
-                    if (
-                        word.find(letter) < len(word) - 1
-                        and word[word.find(letter) + 1] == "-"
-                    ):
-                        continue
+                if self._is_valid_letter_match(word, letter, letters):
                     match_found = True
                     break
 
@@ -199,12 +260,16 @@ class ThumbnailBoxSorter:
                 self.sections[section] = []
 
             self.sections[section].append((word, thumbnails))
+            self.currently_displayed_sequences.append(
+                (word, thumbnails, seq_length)
+            )  # Update currently displayed sequences
             num_sequences += 1
 
         sorted_sections = self.section_manager.get_sorted_sections(
             "sequence_length", self.sections.keys()
         )
         self.browser.nav_sidebar.update_sidebar(sorted_sections, "sequence_length")
+
         for section in sorted_sections:
             row_index += 1
             self.section_manager.add_header(row_index, self.num_columns, section)
@@ -237,11 +302,11 @@ class ThumbnailBoxSorter:
 
         self.browser.scroll_widget.clear_layout()
         self.sections = {}
+        self.currently_displayed_sequences = []  # Reset the list for the new filter
         base_words = self._get_sorted_base_words("sequence_length")
-        current_section = None
         row_index = 0
-        column_index = 0
         num_sequences = 0
+
         for word, thumbnails, seq_length in base_words:
             if seq_length != length:
                 continue
@@ -254,12 +319,17 @@ class ThumbnailBoxSorter:
                 self.sections[section] = []
 
             self.sections[section].append((word, thumbnails))
+            self.currently_displayed_sequences.append(
+                (word, thumbnails, seq_length)
+            )  # Update currently displayed sequences
             num_sequences += 1
+
         sorted_sections = self.section_manager.get_sorted_sections(
             "sequence_length", self.sections.keys()
         )
         self.browser.nav_sidebar.update_sidebar(sorted_sections, "sequence_length")
         QApplication.processEvents()
+
         for section in sorted_sections:
             row_index += 1
             self.section_manager.add_header(row_index, self.num_columns, section)
@@ -273,6 +343,7 @@ class ThumbnailBoxSorter:
                 if column_index == self.num_columns:
                     column_index = 0
                     row_index += 1
+
         self.currently_displaying_label.show_completed_message(
             f"sequences of length {length}"
         )
@@ -297,6 +368,12 @@ class ThumbnailBoxSorter:
             if column_index == self.num_columns:
                 column_index = 0
                 row_index += 1
+        # add the sequences to the currently_displayed_sequences list, including the word, thumbnails, seq_length
+        self.currently_displayed_sequences = [
+            (word, thumbnails, self.get_sequence_length_from_thumbnails(thumbnails))
+            for word, thumbnails in sequences
+        ]
+        
         self.currently_displaying_label.show_completed_message(
             f"level {level} sequences"
         )
@@ -318,10 +395,11 @@ class ThumbnailBoxSorter:
 
         self.browser.scroll_widget.clear_layout()
         self.sections = {}
+        self.currently_displayed_sequences = []  # Reset the list for the new filter
         base_words = self._get_sorted_base_words("sequence_length")
         row_index = 0
-        column_index = 0
         num_sequences = 0
+
         for word, thumbnails, seq_length in base_words:
             if len(letter) == 1:
                 if word[0] != letter:
@@ -340,11 +418,16 @@ class ThumbnailBoxSorter:
                 self.sections[section] = []
 
             self.sections[section].append((word, thumbnails))
+            self.currently_displayed_sequences.append(
+                (word, thumbnails, seq_length)
+            )  # Update currently displayed sequences
             num_sequences += 1
+
         sorted_sections = self.section_manager.get_sorted_sections(
             "sequence_length", self.sections.keys()
         )
         self.browser.nav_sidebar.update_sidebar(sorted_sections, "sequence_length")
+
         for section in sorted_sections:
             row_index += 1
             self.section_manager.add_header(row_index, self.num_columns, section)
@@ -358,6 +441,7 @@ class ThumbnailBoxSorter:
                 if column_index == self.num_columns:
                     column_index = 0
                     row_index += 1
+
         if letter != "Show all":
             self.currently_displaying_label.show_completed_message(
                 f"sequences starting with {letter}"
@@ -463,3 +547,14 @@ class ThumbnailBoxSorter:
             if start_position:
                 return start_position
         return None
+
+    def _is_valid_letter_match(self, word, letter, letters):
+        if letter in word:
+            if len(letter) == 1 and f"{letter}-" in word and f"{letter}-" not in letters:
+                return False
+            if letter + "-" in word and letter + "-" not in letters:
+                return False
+            if word.find(letter) < len(word) - 1 and word[word.find(letter) + 1] == "-":
+                return False
+            return True
+        return False

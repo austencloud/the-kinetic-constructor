@@ -91,19 +91,15 @@ class FilterChoiceWidget(QWidget):
             button.clicked.connect(handler)
             self.buttons[label] = button
 
-            # Add button and description to VBox layout
             button_vbox.addWidget(button)
             description_label = QLabel(description)
             description_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             button_vbox.addWidget(description_label)
             self.button_labels[label] = description_label
 
-            # Add the button VBox to the HBox layout
             button_layout.addLayout(button_vbox)
 
-            # Add a spacer between buttons
             button_layout.addStretch(1)
-        # Add the HBox layout to the main VBox layout
         main_layout.addLayout(button_layout)
         main_layout.addStretch(2)
         main_layout.addLayout(show_all_sequences_layout)

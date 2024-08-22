@@ -2,9 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
 
-from widgets.dictionary_widget.dictionary_browser.options_panel.filter_widget import (
-    FilterWidget,
-)
+
 from widgets.dictionary_widget.dictionary_browser.options_panel.sort_widget import (
     SortWidget,
 )
@@ -24,7 +22,6 @@ class DictionaryOptionsPanel(QWidget):
         self.settings_manager = self.main_widget.main_window.settings_manager
 
         self.sort_widget = SortWidget(self)
-        self.filter_widget = FilterWidget(self)
 
         self._setup_layout()
 
@@ -32,5 +29,4 @@ class DictionaryOptionsPanel(QWidget):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        self.layout.addWidget(self.filter_widget)
         self.layout.addWidget(self.sort_widget)
