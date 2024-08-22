@@ -4,7 +4,6 @@ from PIL import Image
 from PyQt6.QtWidgets import QMessageBox
 import json
 
-from widgets.dictionary_widget.thumbnail_box.thumbnail_extractor import ThumbnailExtractor
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
@@ -53,15 +52,12 @@ class MetaDataExtractor:
         for word in os.listdir(dictionary_dir):
             word_dir = os.path.join(dictionary_dir, word)
             if os.path.isdir(word_dir) and "__pycache__" not in word:
-                thumbnails = ThumbnailExtractor.find_thumbnails(word_dir)
+                thumbnails = self.main_widget.thumbnail_finder.find_thumbnails(word_dir)
                 for thumbnail in thumbnails:
-                    metadata = self.extract_metadata_from_file(
-                        thumbnail
-                    )
+                    metadata = self.extract_metadata_from_file(thumbnail)
                     if metadata:
                         metadata_and_thumbnail_dict.append(
                             {"metadata": metadata, "thumbnail": thumbnail}
                         )
 
         return metadata_and_thumbnail_dict
-    

@@ -43,6 +43,14 @@ class DictionarySortWidget(QWidget):
             button.setCursor(Qt.CursorShape.PointingHandCursor)
             self.buttons[button_name] = button
 
+    def highlight_appropriate_button(self, sort_method):
+        if sort_method == "sequence_length":
+            self.update_selected_button(self.buttons["sort_by_length_button"])
+        elif sort_method == "date_added":
+            self.update_selected_button(self.buttons["sort_date_added_button"])
+        else:
+            self.update_selected_button(self.buttons["sort_alphabetically_button"])
+
     def _setup_layout(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)
 

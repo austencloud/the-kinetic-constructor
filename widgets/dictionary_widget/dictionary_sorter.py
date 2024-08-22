@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 from PIL import Image
 from widgets.dictionary_widget.dictionary_browser.section_header import SectionHeader
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
-from widgets.dictionary_widget.thumbnail_box.thumbnail_extractor import ThumbnailExtractor
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from .sorting_order import sorting_order, lowercase_letters
 
@@ -19,9 +18,10 @@ class DictionarySorter:
     def __init__(self, browser: "DictionaryBrowser") -> None:
         self.browser = browser
         self.metadata_extractor = browser.main_widget.metadata_extractor
+        self.main_widget = browser.main_widget
 
     def sort_and_display_thumbnails(self, sort_method: str) -> None:
-        self.highlight_appropriate_button(sort_method)
+        self.browser.options_widget.sort_widget.highlight_appropriate_button(sort_method)
         self.browser.scroll_widget.clear_layout()
         self.sections: dict[str, list[tuple[str, list[str]]]] = {}
 
@@ -31,8 +31,15 @@ class DictionarySorter:
         column_index = 0
         num_columns = 3
 
-        self._add_words_to_sections(sort_method, base_words)
+        for word, thumbnails, seq_length in base_words:
+            section = self.get_section_from_word(
+                word, sort_method, seq_length, thumbnails
+            )
 
+            if section not in self.sections:
+                self.sections[section] = []
+
+            self.sections[section].append((word, thumbnails))
         sorted_sections = self._get_sorted_sections(sort_method, self.sections.keys())
         self.browser.nav_sidebar.update_sidebar(sorted_sections, sort_method)
 
@@ -67,34 +74,8 @@ class DictionarySorter:
                     column_index = 0
                     row_index += 1
 
-    def _add_words_to_sections(self, sort_method, base_words):
-        for word, thumbnails, seq_length in base_words:
-            section = self.get_section_from_word(
-                word, sort_method, seq_length, thumbnails
-            )
 
-            if section not in self.sections:
-                self.sections[section] = []
 
-            self.sections[section].append((word, thumbnails))
-
-    def highlight_appropriate_button(self, sort_method):
-        if sort_method == "sequence_length":
-            self.browser.options_widget.sort_widget.update_selected_button(
-                self.browser.options_widget.sort_widget.buttons["sort_by_length_button"]
-            )
-        elif sort_method == "date_added":
-            self.browser.options_widget.sort_widget.update_selected_button(
-                self.browser.options_widget.sort_widget.buttons[
-                    "sort_date_added_button"
-                ]
-            )
-        else:
-            self.browser.options_widget.sort_widget.update_selected_button(
-                self.browser.options_widget.sort_widget.buttons[
-                    "sort_alphabetically_button"
-                ]
-            )
 
     def _add_header(self, row_index, num_columns, section):
         header_title = f"{section}"
@@ -139,7 +120,13 @@ class DictionarySorter:
     def get_sorted_base_words(self, sort_order):
         dictionary_dir = get_images_and_data_path("dictionary")
         base_words = [
-            (d, ThumbnailExtractor.find_thumbnails(os.path.join(dictionary_dir, d)), None)
+            (
+                d,
+                self.main_widget.thumbnail_finder.find_thumbnails(
+                    os.path.join(dictionary_dir, d)
+                ),
+                None,
+            )
             for d in os.listdir(dictionary_dir)
             if os.path.isdir(os.path.join(dictionary_dir, d)) and "__pycache__" not in d
         ]
@@ -175,8 +162,6 @@ class DictionarySorter:
                         pass  # Handle parsing errors if date format is incorrect
 
         return max(dates, default=datetime.min)
-
-
 
     def get_section_from_word(
         self, word, sort_order, sequence_length=None, thumbnails=None

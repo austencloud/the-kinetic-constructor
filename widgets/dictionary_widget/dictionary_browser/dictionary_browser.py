@@ -3,6 +3,7 @@ from widgets.dictionary_widget.dictionary_browser.dictionary_nav_sidebar import 
     DictionaryNavSidebar,
 )
 from PyQt6.QtCore import QTimer
+
 from widgets.dictionary_widget.dictionary_sorter import DictionarySorter
 from .browser_scroll_widget import DictionaryBrowserScrollWidget
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
@@ -62,7 +63,7 @@ class DictionaryBrowser(QWidget):
         """Display sequences based on the filtered metadata."""
         self.scroll_widget.clear_layout()
 
-        num_columns = 3  # Assuming a grid with 3 columns
+        num_columns = 3
         row_index = 0
         column_index = 0
 
@@ -73,7 +74,6 @@ class DictionaryBrowser(QWidget):
 
             self.sorter._add_thumbnail_box(row_index, column_index, word, [thumbnail])
 
-            # Update the row and column index for the grid layout
             column_index += 1
             if column_index == num_columns:
                 column_index = 0

@@ -11,6 +11,7 @@ from objects.graphical_object.graphical_object_svg_manager import (
     GraphicalObjectSvgManager,
 )
 from sequence_difficulty_evaluator import SequenceLevelEvaluator
+from widgets.dictionary_widget.thumbnail_box.thumbnail_finder import ThumbnailFinder
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from styles.get_tab_stylesheet import get_tab_stylesheet
 from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
@@ -113,6 +114,7 @@ class MainWidget(QTabWidget):
         self.metadata_extractor = MetaDataExtractor(self)
         self.sequence_level_evaluator = SequenceLevelEvaluator()
         self.sequence_properties_manager = SequencePropertiesManager(self)
+        self.thumbnail_finder = ThumbnailFinder(self)
         self._setup_special_placements()
 
         self.top_builder_widget = TopBuilderWidget(self)
