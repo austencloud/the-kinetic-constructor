@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from PyQt6.QtWidgets import QApplication
+from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
@@ -18,7 +19,12 @@ class ThumbnailBoxSorter:
         self.main_widget = browser.main_widget
         self.section_manager = browser.section_manager
 
-    def sort_and_display_thumbnail_boxes_by_sort_method(self, sort_method: str) -> None:
+    def sort_and_display_all_thumbnail_boxes_by_sort_method(
+        self, sort_method: str
+    ) -> None:
+        self.browser.currently_displaying_indicator_label.setText(
+            f"Currently displaying all sequences. Please wait, this will take a moment to load..."
+        )
         self.browser.options_widget.sort_widget.highlight_appropriate_button(
             sort_method
         )
@@ -75,13 +81,17 @@ class ThumbnailBoxSorter:
                 if column_index == num_columns:
                     column_index = 0
                     row_index += 1
+        self.browser.currently_displaying_indicator_label.setText(
+            f"Currently displaying all sequences."
+        )
 
     def sort_and_display_thumbnail_boxes_by_initial_selection(
         self, initial_selection: dict
     ):
+        
         if "letter" in initial_selection.keys():
             if initial_selection["letter"] == "Show all":
-                self.sort_and_display_thumbnail_boxes_by_sort_method(
+                self.sort_and_display_all_thumbnail_boxes_by_sort_method(
                     self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
                 )
             self.display_only_thumbnails_starting_with_letter(
@@ -95,6 +105,11 @@ class ThumbnailBoxSorter:
             self.display_only_thumbnails_with_level(initial_selection["level"])
 
     def display_only_thumbnails_with_sequence_length(self, length: str):
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        
+        self.browser.currently_displaying_indicator_label.setText(
+            f"Currently displaying only sequences of length {length}. Please wait..."
+        )
         self.browser.scroll_widget.clear_layout()
         self.sections = {}
         base_words = self._get_sorted_base_words("sequence_length")
@@ -135,9 +150,15 @@ class ThumbnailBoxSorter:
                     column_index = 0
                     row_index += 1
         self.browser.currently_displaying_indicator_label.setText(
-            f"Currently displaying only sequences of length: {length}"
+            f"Currently displaying only sequences of length {length}"
         )
+        QApplication.restoreOverrideCursor()
+
     def display_only_thumbnails_with_level(self, level: str):
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        self.browser.currently_displaying_indicator_label.setText(
+            f"Currently displaying only level {level} sequences. Please wait..."
+        )
         self.browser.scroll_widget.clear_layout()
         sequences = self.get_sequences_that_are_a_specific_level(level)
         num_columns = 3
@@ -151,9 +172,18 @@ class ThumbnailBoxSorter:
                 column_index = 0
                 row_index += 1
         self.browser.currently_displaying_indicator_label.setText(
-            f"Currently displaying only sequences of level: {level}"
+            f"Currently displaying only level {level} sequences."
         )
+        QApplication.restoreOverrideCursor()
+
     def display_only_thumbnails_starting_with_letter(self, letter: str):
+        # set the cursor to waiting
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        # if the letter is not "Show all", then display the label update
+        if letter != "Show all":
+            self.browser.currently_displaying_indicator_label.setText(
+                f"Currently displaying only sequences starting with: {letter}. Please wait..."
+            )
         self.browser.scroll_widget.clear_layout()
         self.sections = {}
         base_words = self._get_sorted_base_words("sequence_length")
@@ -183,7 +213,6 @@ class ThumbnailBoxSorter:
             "sequence_length", self.sections.keys()
         )
         self.browser.nav_sidebar.update_sidebar(sorted_sections, "sequence_length")
-        QApplication.processEvents()
         for section in sorted_sections:
             row_index += 1
             self.section_manager.add_header(row_index, num_columns, section)
@@ -197,9 +226,11 @@ class ThumbnailBoxSorter:
                 if column_index == num_columns:
                     column_index = 0
                     row_index += 1
-        self.browser.currently_displaying_indicator_label.setText(
-            f"Currently displaying only sequences starting with: {letter}"
-        )
+        if letter != "Show all":
+            self.browser.currently_displaying_indicator_label.setText(
+                f"Currently displaying only sequences starting with: {letter}."
+            )
+        QApplication.restoreOverrideCursor()
 
     def _add_thumbnail_box(self, row_index, column_index, word, thumbnails):
         if word not in self.browser.scroll_widget.thumbnail_boxes_dict:

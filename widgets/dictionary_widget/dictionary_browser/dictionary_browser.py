@@ -4,6 +4,7 @@ from widgets.dictionary_widget.dictionary_browser.dictionary_browser_nav_sidebar
 )
 from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtWidgets import QPushButton
+from PyQt6.QtWidgets import QApplication
 from widgets.dictionary_widget.dictionary_browser.dictionary_browser_section_manager import (
     SectionManager,
 )
@@ -73,6 +74,8 @@ class DictionaryBrowser(QWidget):
             widget.hide()
         # hide the preview_area
         self.dictionary_widget.preview_area.hide()
+        # clear the dictionary preview area
+        self.dictionary_widget.preview_area.clear_preview()
 
     def _setup_initial_selection_widget(self):
         self.initial_selection_widget = DictionaryInitialSelectionsWidget(self)
@@ -90,9 +93,13 @@ class DictionaryBrowser(QWidget):
         self.layout.addWidget(self.initial_selection_widget)
 
     def apply_initial_selection(self, initial_selections):
+        # set override cursor
+        # QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.initial_selection_widget.hide()
         self._add_components_to_layout()
+        QApplication.processEvents()
         self._initialize_and_sort_thumbnails(initial_selections)
+        # QApplication.restoreOverrideCursor()
 
     def _initialize_and_sort_thumbnails(self, sort_method):
         self.thummbnail_box_sorter.sort_and_display_thumbnail_boxes_by_initial_selection(
@@ -123,7 +130,7 @@ class DictionaryBrowser(QWidget):
             widget.show()
         # show the preview_area
         self.dictionary_widget.preview_area.show()
-        self.resize_dictionary_browser()
+        self.set_currently_display_label_font_size()
 
     def resize_dictionary_browser(self):
         self.scroll_widget.resize_dictionary_browser_scroll_widget()

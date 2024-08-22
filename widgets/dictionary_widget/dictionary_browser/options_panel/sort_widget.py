@@ -71,7 +71,7 @@ class SortWidget(QWidget):
     def on_sort_by_length(self):
         self.update_selected_button(self.buttons["sort_by_length_button"])
         self.settings_manager.dictionary.set_sort_method("sequence_length")
-        self.browser.thummbnail_box_sorter.sort_and_display_thumbnail_boxes_by_sort_method(
+        self.browser.thummbnail_box_sorter.sort_and_display_all_thumbnail_boxes_by_sort_method(
             "sequence_length"
         )
         self.browser.scroll_widget.scroll_area.verticalScrollBar().setValue(0)
@@ -79,7 +79,7 @@ class SortWidget(QWidget):
     def on_sort_alphabetically(self):
         self.update_selected_button(self.buttons["sort_alphabetically_button"])
         self.settings_manager.dictionary.set_sort_method("alphabetical")
-        self.browser.thummbnail_box_sorter.sort_and_display_thumbnail_boxes_by_sort_method(
+        self.browser.thummbnail_box_sorter.sort_and_display_all_thumbnail_boxes_by_sort_method(
             "alphabetical"
         )
         self.browser.scroll_widget.scroll_area.verticalScrollBar().setValue(0)
@@ -87,7 +87,7 @@ class SortWidget(QWidget):
     def on_sort_by_date_added(self):
         self.update_selected_button(self.buttons["sort_date_added_button"])
         self.settings_manager.dictionary.set_sort_method("date_added")
-        self.browser.thummbnail_box_sorter.sort_and_display_thumbnail_boxes_by_sort_method(
+        self.browser.thummbnail_box_sorter.sort_and_display_all_thumbnail_boxes_by_sort_method(
             "date_added"
         )
         self.browser.scroll_widget.scroll_area.verticalScrollBar().setValue(0)

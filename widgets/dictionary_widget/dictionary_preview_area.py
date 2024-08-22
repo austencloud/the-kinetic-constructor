@@ -132,4 +132,14 @@ class DictionaryPreviewArea(QWidget):
         if not self.initialized:
             self.image_label.show_placeholder()
 
-    
+    def clear_preview(self):
+        self.image_label.show_placeholder()
+        self.image_label.adjust_label_height_for_text()
+        self.variation_number_label.clear()
+        self.word_label.clear()
+        self.current_index = 0
+        self.current_thumbnail_box = None
+        self.thumbnails = []
+        self.nav_buttons_widget.hide()
+        self.variation_number_label.hide()
+        self.initialized = False
