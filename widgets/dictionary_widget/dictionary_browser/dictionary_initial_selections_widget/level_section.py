@@ -5,8 +5,6 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton,
-    QSizePolicy,
-    QSpacerItem,
 )
 from PyQt6.QtCore import Qt
 
@@ -14,9 +12,6 @@ from PyQt6.QtCore import Qt
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.dictionary_initial_selections_widget import (
         DictionaryInitialSelectionsWidget,
-    )
-    from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
-        DictionaryBrowser,
     )
 
 

@@ -1,10 +1,9 @@
 from PyQt6.QtWidgets import QMenu
 from PyQt6.QtGui import QAction, QActionGroup
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QMenuBar, QMenu
+from PyQt6.QtWidgets import QMenu
 from PyQt6.QtGui import QActionGroup, QAction
 
-from Enums.PropTypes import PropType
 
 if TYPE_CHECKING:
     from widgets.menu_bar.main_window_menu_bar import MainWindowMenuBar

@@ -2,9 +2,6 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout
-from widgets.sequence_widget.sequence_properties_manager.sequence_properties_manager import (
-    SequencePropertiesManager,
-)
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 
 

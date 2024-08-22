@@ -1,14 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QWidget,
-    QVBoxLayout,
     QHBoxLayout,
     QLabel,
     QPushButton,
-    QSizePolicy,
-    QSpacerItem,
 )
-from PyQt6.QtCore import Qt
 
 from .contains_letter_section import ContainsLetterSection
 from .length_section import LengthSection

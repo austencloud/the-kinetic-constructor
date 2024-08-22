@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QMenu
 from PyQt6.QtGui import QAction, QActionGroup
 from Enums.PropTypes import PropType
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QMenuBar, QMenu
+from PyQt6.QtWidgets import QMenu
 from PyQt6.QtGui import QActionGroup, QAction
 
 from Enums.PropTypes import PropType

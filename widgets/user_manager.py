@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QComboBox, QMenu
+from PyQt6.QtWidgets import QComboBox
 from PyQt6.QtCore import QObject
 
 from widgets.sequence_widget.edit_user_profiles_dialog import EditUserProfilesDialog

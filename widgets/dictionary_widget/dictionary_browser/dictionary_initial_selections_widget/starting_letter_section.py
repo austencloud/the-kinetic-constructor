@@ -15,9 +15,6 @@ if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.dictionary_initial_selections_widget import (
         DictionaryInitialSelectionsWidget,
     )
-    from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
-        DictionaryBrowser,
-    )
 
 
 class StartingLetterSection(QWidget):
