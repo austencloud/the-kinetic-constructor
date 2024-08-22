@@ -154,7 +154,7 @@ class AddToDictionaryManager:
         self.sequence_widget.indicator_label.show_message(message)
 
     def refresh_dictionary_ui(self):
-        self.sequence_widget.main_widget.dictionary_widget.browser.sorter.sort_and_display_thumbnails(
+        self.sequence_widget.main_widget.dictionary_widget.browser.thummbnail_box_sorter.sort_and_display_thumbnail_boxes(
             self.sequence_widget.main_widget.main_window.settings_manager.dictionary.get_sort_method()
         )
 

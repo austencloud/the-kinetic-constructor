@@ -1,8 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
-from widgets.dictionary_widget.dictionary_options_filter_widget import DictionaryOptionsFilterWidget
-from widgets.dictionary_widget.dictionary_sort_widget import DictionarySortWidget
+
+from widgets.dictionary_widget.dictionary_browser.options_panel.dictionary_options_panel_filter_widget import DictionaryOptionsPanelFilterWidget
+from widgets.dictionary_widget.dictionary_browser.options_panel.dictionary_options_panel_sort_widget import DictionaryOptionsPanelSortWidget
+
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
@@ -10,15 +12,15 @@ if TYPE_CHECKING:
     )
 
 
-class DictionaryOptionsWidget(QWidget):
+class DictionaryBrowserOptionsPanel(QWidget):
     def __init__(self, browser: "DictionaryBrowser") -> None:
         super().__init__(browser)
         self.browser = browser
         self.main_widget = browser.dictionary_widget.main_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
 
-        self.sort_widget = DictionarySortWidget(browser)
-        self.filter_widget = DictionaryOptionsFilterWidget(browser)
+        self.sort_widget = DictionaryOptionsPanelSortWidget(self)
+        self.filter_widget = DictionaryOptionsPanelFilterWidget(self)
 
         self._setup_layout()
 

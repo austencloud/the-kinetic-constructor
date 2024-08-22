@@ -33,7 +33,7 @@ class DictionaryDeletionHandler:
         else:
             self.delete_empty_folders(get_images_and_data_path("dictionary"))
             thumbnail_box.current_index = 0
-            self.dictionary_widget.browser.sorter.sort_and_display_thumbnails(
+            self.dictionary_widget.browser.thummbnail_box_sorter.sort_and_display_thumbnail_boxes(
                 self.dictionary_widget.main_widget.main_window.settings_manager.dictionary.get_sort_method()
             )
 
@@ -63,7 +63,7 @@ class DictionaryDeletionHandler:
         shutil.rmtree(base_path)
         self.delete_empty_folders(get_images_and_data_path("dictionary"))
         self.variation_number_fixer.ensure_sequential_versions()
-        self.dictionary_widget.browser.sorter.sort_and_display_thumbnails(
+        self.dictionary_widget.browser.thummbnail_box_sorter.sort_and_display_thumbnail_boxes(
             self.dictionary_widget.main_widget.main_window.settings_manager.dictionary.get_sort_method()
         )
 

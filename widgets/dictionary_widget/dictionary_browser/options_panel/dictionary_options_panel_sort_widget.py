@@ -2,16 +2,17 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel
 from PyQt6.QtCore import Qt
 
+
 if TYPE_CHECKING:
-    from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
-        DictionaryBrowser,
+    from widgets.dictionary_widget.dictionary_browser.options_panel.dictionary_browser_options_panel import (
+        DictionaryBrowserOptionsPanel,
     )
 
 
-class DictionarySortWidget(QWidget):
-    def __init__(self, browser: "DictionaryBrowser") -> None:
-        super().__init__(browser)
-        self.browser = browser
+class DictionaryOptionsPanelSortWidget(QWidget):
+    def __init__(self, options_panel: "DictionaryBrowserOptionsPanel") -> None:
+        super().__init__(options_panel)
+        self.browser = options_panel.browser
         self.settings_manager = (
             self.browser.dictionary_widget.main_widget.main_window.settings_manager
         )
@@ -68,19 +69,25 @@ class DictionarySortWidget(QWidget):
     def on_sort_by_length(self):
         self.update_selected_button(self.buttons["sort_by_length_button"])
         self.settings_manager.dictionary.set_sort_method("sequence_length")
-        self.browser.sorter.sort_and_display_thumbnails("sequence_length")
+        self.browser.thummbnail_box_sorter.sort_and_display_thumbnail_boxes(
+            "sequence_length"
+        )
         self.browser.scroll_widget.scroll_area.verticalScrollBar().setValue(0)
 
     def on_sort_alphabetically(self):
         self.update_selected_button(self.buttons["sort_alphabetically_button"])
         self.settings_manager.dictionary.set_sort_method("alphabetical")
-        self.browser.sorter.sort_and_display_thumbnails("alphabetical")
+        self.browser.thummbnail_box_sorter.sort_and_display_thumbnail_boxes(
+            "alphabetical"
+        )
         self.browser.scroll_widget.scroll_area.verticalScrollBar().setValue(0)
 
     def on_sort_by_date_added(self):
         self.update_selected_button(self.buttons["sort_date_added_button"])
         self.settings_manager.dictionary.set_sort_method("date_added")
-        self.browser.sorter.sort_and_display_thumbnails("date_added")
+        self.browser.thummbnail_box_sorter.sort_and_display_thumbnail_boxes(
+            "date_added"
+        )
         self.browser.scroll_widget.scroll_area.verticalScrollBar().setValue(0)
 
     def update_selected_button(self, button: QPushButton):

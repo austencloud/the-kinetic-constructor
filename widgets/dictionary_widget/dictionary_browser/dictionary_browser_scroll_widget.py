@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtCore import Qt
 
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 
@@ -8,16 +8,14 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QScrollArea,
     QGridLayout,
-    QStyle,
-    QLabel,
 )
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
         DictionaryBrowser,
     )
-    from widgets.dictionary_widget.dictionary_browser.section_header import (
-        SectionHeader,
+    from widgets.dictionary_widget.dictionary_browser.dictionary_browser_section_header import (
+        DictionaryBrowserSectionHeader,
     )
 
 
@@ -31,10 +29,9 @@ class DictionaryBrowserScrollWidget(QWidget):
         self.setStyleSheet("background: transparent;")
         self.thumbnail_boxes: list[ThumbnailBox] = []
         self.is_initialized = True
-        self.section_headers: dict[int, "SectionHeader"] = {}
+        self.section_headers: dict[int, "DictionaryBrowserSectionHeader"] = {}
         self._setup_scroll_area()
         self._setup_layout()
-
 
     def _setup_layout(self):
         self.grid_layout = QGridLayout(self.scroll_content)
@@ -64,5 +61,3 @@ class DictionaryBrowserScrollWidget(QWidget):
             thumbnail_boxes: list[ThumbnailBox] = self.thumbnail_boxes_dict.values()
             for box in thumbnail_boxes:
                 box.resize_thumbnail_box()
-
-

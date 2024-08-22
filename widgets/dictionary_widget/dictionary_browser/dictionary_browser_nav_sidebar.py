@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     )
 
 
-class DictionaryNavSidebar(QWidget):
+class DictionaryBrowserNavSidebar(QWidget):
     def __init__(self, browser: "DictionaryBrowser"):
         super().__init__()
         self.browser = browser
@@ -118,9 +118,7 @@ class DictionaryNavSidebar(QWidget):
         font_color = self.settings_manager.global_settings.get_font_color(
             self.settings_manager.global_settings.get_background_type()
         )
-        button_background_color = (
-            "lightgray" if font_color == "black" else "#555"
-        )
+        button_background_color = "lightgray" if font_color == "black" else "#555"
         hover_color = "lightgray" if font_color == "black" else "#555"
         if selected:
             button.setStyleSheet(

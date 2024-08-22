@@ -1,13 +1,20 @@
 from typing import TYPE_CHECKING
-from widgets.dictionary_widget.dictionary_browser.dictionary_nav_sidebar import (
-    DictionaryNavSidebar,
+from widgets.dictionary_widget.dictionary_browser.dictionary_browser_nav_sidebar import (
+    DictionaryBrowserNavSidebar,
 )
 from PyQt6.QtCore import QTimer
 
-from widgets.dictionary_widget.dictionary_sorter import DictionarySorter
-from .browser_scroll_widget import DictionaryBrowserScrollWidget
+from widgets.dictionary_widget.dictionary_browser.dictionary_browser_section_manager import (
+    DictionaryBrowserSectionManager,
+)
+from widgets.dictionary_widget.dictionary_browser.dictionary_browser_thumbnail_box_sorter import (
+    DictionaryBrowserThumbnailBoxSorter,
+)
+from .dictionary_browser_scroll_widget import DictionaryBrowserScrollWidget
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
-from widgets.dictionary_widget.dictionary_options_widget import DictionaryOptionsWidget
+from widgets.dictionary_widget.dictionary_browser.options_panel.dictionary_browser_options_panel import (
+    DictionaryBrowserOptionsPanel,
+)
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
@@ -23,10 +30,11 @@ class DictionaryBrowser(QWidget):
         self._setup_layout()
 
     def _setup_components(self):
-        self.nav_sidebar = DictionaryNavSidebar(self)
+        self.nav_sidebar = DictionaryBrowserNavSidebar(self)
         self.scroll_widget = DictionaryBrowserScrollWidget(self)
-        self.sorter = DictionarySorter(self)
-        self.options_widget = DictionaryOptionsWidget(self)
+        self.section_manager = DictionaryBrowserSectionManager(self)
+        self.thummbnail_box_sorter = DictionaryBrowserThumbnailBoxSorter(self)
+        self.options_widget = DictionaryBrowserOptionsPanel(self)
 
     def showEvent(self, event):
         super().showEvent(event)
@@ -40,7 +48,7 @@ class DictionaryBrowser(QWidget):
             )
 
     def _initialize_and_sort_thumbnails(self, sort_method):
-        self.sorter.sort_and_display_thumbnails(sort_method)
+        self.thummbnail_box_sorter.sort_and_display_thumbnail_boxes(sort_method)
         self.initialized = True
 
     def _setup_layout(self):
@@ -60,7 +68,7 @@ class DictionaryBrowser(QWidget):
         self.scroll_widget.resize_dictionary_browser_scroll_widget()
 
     def display_filtered_sequences(self, filtered_sequences):
-        """Display sequences based on the filtered metadata."""
+        """Display sequences based on the filtered criteria."""
         self.scroll_widget.clear_layout()
 
         num_columns = 3
@@ -72,7 +80,9 @@ class DictionaryBrowser(QWidget):
             thumbnail = metadata_and_thumbnail["thumbnail"]
             word = metadata["sequence"][0]["word"]
 
-            self.sorter._add_thumbnail_box(row_index, column_index, word, [thumbnail])
+            self.thummbnail_box_sorter._add_thumbnail_box(
+                row_index, column_index, word, [thumbnail]
+            )
 
             column_index += 1
             if column_index == num_columns:

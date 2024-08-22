@@ -1,12 +1,8 @@
 import os
-import json
 from datetime import datetime
 from typing import TYPE_CHECKING
-from PIL import Image
-from widgets.dictionary_widget.dictionary_browser.section_header import SectionHeader
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 from widgets.path_helpers.path_helpers import get_images_and_data_path
-from .sorting_order import sorting_order, lowercase_letters
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
@@ -14,14 +10,17 @@ if TYPE_CHECKING:
     )
 
 
-class DictionarySorter:
+class DictionaryBrowserThumbnailBoxSorter:
     def __init__(self, browser: "DictionaryBrowser") -> None:
         self.browser = browser
         self.metadata_extractor = browser.main_widget.metadata_extractor
         self.main_widget = browser.main_widget
+        self.section_manager = browser.section_manager
 
-    def sort_and_display_thumbnails(self, sort_method: str) -> None:
-        self.browser.options_widget.sort_widget.highlight_appropriate_button(sort_method)
+    def sort_and_display_thumbnail_boxes(self, sort_method: str) -> None:
+        self.browser.options_widget.sort_widget.highlight_appropriate_button(
+            sort_method
+        )
         self.browser.scroll_widget.clear_layout()
         self.sections: dict[str, list[tuple[str, list[str]]]] = {}
 
@@ -32,7 +31,7 @@ class DictionarySorter:
         num_columns = 3
 
         for word, thumbnails, seq_length in base_words:
-            section = self.get_section_from_word(
+            section = self.section_manager.get_section_from_word(
                 word, sort_method, seq_length, thumbnails
             )
 
@@ -40,7 +39,9 @@ class DictionarySorter:
                 self.sections[section] = []
 
             self.sections[section].append((word, thumbnails))
-        sorted_sections = self._get_sorted_sections(sort_method, self.sections.keys())
+        sorted_sections = self.section_manager.get_sorted_sections(
+            sort_method, self.sections.keys()
+        )
         self.browser.nav_sidebar.update_sidebar(sorted_sections, sort_method)
 
         for section in sorted_sections:
@@ -53,16 +54,16 @@ class DictionarySorter:
 
                 if year != current_section:
                     row_index += 1
-                    self._add_header(row_index, num_columns, year)
+                    self.section_manager.add_header(row_index, num_columns, year)
                     row_index += 1
                     current_section = year
 
                 row_index += 1
-                self._add_header(row_index, num_columns, formatted_day)
+                self.section_manager.add_header(row_index, num_columns, formatted_day)
                 row_index += 1
             else:
                 row_index += 1
-                self._add_header(row_index, num_columns, section)
+                self.section_manager.add_header(row_index, num_columns, section)
                 row_index += 1
 
             column_index = 0
@@ -73,17 +74,6 @@ class DictionarySorter:
                 if column_index == num_columns:
                     column_index = 0
                     row_index += 1
-
-
-
-
-    def _add_header(self, row_index, num_columns, section):
-        header_title = f"{section}"
-        header = SectionHeader(header_title, self.browser)
-        self.browser.scroll_widget.section_headers[section] = header
-        self.browser.scroll_widget.grid_layout.addWidget(
-            header, row_index, 0, 1, num_columns
-        )
 
     def _add_thumbnail_box(self, row_index, column_index, word, thumbnails):
         for thumbnail in thumbnails:
@@ -99,23 +89,6 @@ class DictionarySorter:
             self.browser.scroll_widget.grid_layout.addWidget(
                 thumbnail_box, row_index, column_index
             )
-
-    def _get_sorted_sections(self, sort_method, sections):
-        if sort_method == "sequence_length":
-            sorted_sections = sorted(
-                sections, key=lambda x: int(x) if x.isdigit() else x
-            )
-        elif sort_method == "date_added":
-            sorted_sections = sorted(
-                [s for s in sections if s != "Unknown"],
-                key=lambda x: datetime.strptime(x, "%m-%d-%Y"),
-                reverse=True,
-            )
-            if "Unknown" in sections:
-                sorted_sections.append("Unknown")
-        else:
-            sorted_sections = sorted(sections, key=self.custom_sort_key)
-        return sorted_sections
 
     def get_sorted_base_words(self, sort_order):
         dictionary_dir = get_images_and_data_path("dictionary")
@@ -140,53 +113,12 @@ class DictionarySorter:
             base_words.sort(key=lambda x: x[2] if x[2] is not None else float("inf"))
         elif sort_order == "date_added":
             base_words.sort(
-                key=lambda x: self.get_date_added(x[1]) or datetime.min, reverse=True
+                key=lambda x: self.section_manager.get_date_added(x[1]) or datetime.min,
+                reverse=True,
             )
         else:
             base_words.sort(key=lambda x: x[0])
         return base_words
-
-    def get_date_added(self, thumbnails):
-        dates = []
-        for thumbnail in thumbnails:
-            image = Image.open(thumbnail)
-            info = image.info
-            metadata = info.get("metadata")
-            if metadata:
-                metadata_dict = json.loads(metadata)
-                date_added = metadata_dict.get("date_added")
-                if date_added:
-                    try:
-                        dates.append(datetime.fromisoformat(date_added))
-                    except ValueError:
-                        pass  # Handle parsing errors if date format is incorrect
-
-        return max(dates, default=datetime.min)
-
-    def get_section_from_word(
-        self, word, sort_order, sequence_length=None, thumbnails=None
-    ):
-        if sort_order == "sequence_length":
-            return str(sequence_length) if sequence_length is not None else "Unknown"
-        elif sort_order == "date_added":
-            if thumbnails:
-                date_added = self.get_date_added(thumbnails)
-                return date_added.strftime("%m-%d-%Y") if date_added else "Unknown"
-            return "Unknown"
-        else:
-            section = word[:2] if len(word) > 1 and word[1] == "-" else word[0]
-            if not section.isdigit():
-                if section[0] in lowercase_letters:
-                    section = section.lower()
-                else:
-                    section = section.upper()
-            return section
-
-    def custom_sort_key(self, section):
-        try:
-            return sorting_order.index(section)
-        except ValueError:
-            return len(sorting_order)  # put unknown sections at the end
 
     def get_sequence_length_from_thumbnails(self, thumbnails):
         """Extract the sequence length from the first available thumbnail metadata."""

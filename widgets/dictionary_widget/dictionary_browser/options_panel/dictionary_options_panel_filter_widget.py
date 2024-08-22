@@ -1,18 +1,19 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QCheckBox, QLabel, QScrollArea
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QCheckBox, QLabel
 from PyQt6.QtCore import Qt
 
+
 if TYPE_CHECKING:
-    from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
-        DictionaryBrowser,
+    from widgets.dictionary_widget.dictionary_browser.options_panel.dictionary_browser_options_panel import (
+        DictionaryBrowserOptionsPanel,
     )
 
 
-class DictionaryOptionsFilterWidget(QWidget):
-    def __init__(self, browser: "DictionaryBrowser") -> None:
-        super().__init__(browser)
-        self.browser = browser
-        self.main_widget = browser.dictionary_widget.main_widget
+class DictionaryOptionsPanelFilterWidget(QWidget):
+    def __init__(self, options_panel: "DictionaryBrowserOptionsPanel") -> None:
+        super().__init__(options_panel)
+        self.browser = options_panel.browser
+        self.main_widget = self.browser.dictionary_widget.main_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
 
         self.level_checkboxes = {}
@@ -40,7 +41,9 @@ class DictionaryOptionsFilterWidget(QWidget):
 
     def _get_all_levels(self):
         # Use DictionarySorter to get all sequences with metadata
-        sequences_with_metadata = self.main_widget.metadata_extractor.get_metadata_and_thumbnail_dict()
+        sequences_with_metadata = (
+            self.main_widget.metadata_extractor.get_metadata_and_thumbnail_dict()
+        )
         levels = set(
             metadata_and_thumbnails_dict["metadata"]["sequence"][0]["level"]
             for metadata_and_thumbnails_dict in sequences_with_metadata
@@ -64,7 +67,9 @@ class DictionaryOptionsFilterWidget(QWidget):
             self.browser.reset_filters()  # Show all sequences if no filter is applied
         else:
             filtered_sequences = []
-            list_of_sequences = self.main_widget.metadata_extractor.get_metadata_and_thumbnail_dict()
+            list_of_sequences = (
+                self.main_widget.metadata_extractor.get_metadata_and_thumbnail_dict()
+            )
             for sequence in list_of_sequences:
                 metadata = sequence["metadata"]
                 if metadata["sequence"][0]["level"] in self.selected_levels:
