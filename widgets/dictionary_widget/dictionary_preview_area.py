@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 
 from PyQt6.QtGui import QPixmap
-from dictionary.preview_area_image_label import PreviewAreaImageLabel
+from widgets.dictionary_widget.preview_area_image_label import PreviewAreaImageLabel
 from widgets.dictionary_widget.dictionary_button_panel import DictionaryButtonPanel
 from widgets.dictionary_widget.thumbnail_box.dictionary_preview_area_base_word_label import (
     DictionaryPreviewAreaWordLabel,

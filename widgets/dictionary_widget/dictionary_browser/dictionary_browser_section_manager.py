@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     )
 
 
-class DictionaryBrowserSectionManager:
+class SectionManager:
     def __init__(self, browser: "DictionaryBrowser"):
         self.browser = browser
 

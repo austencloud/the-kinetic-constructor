@@ -5,12 +5,12 @@ from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_browser.options_panel.dictionary_browser_options_panel import (
-        DictionaryBrowserOptionsPanel,
+        DictionaryOptionsPanel,
     )
 
 
 class FilterWidget(QWidget):
-    def __init__(self, options_panel: "DictionaryBrowserOptionsPanel") -> None:
+    def __init__(self, options_panel: "DictionaryOptionsPanel") -> None:
         super().__init__(options_panel)
         self.browser = options_panel.browser
         self.main_widget = self.browser.dictionary_widget.main_widget

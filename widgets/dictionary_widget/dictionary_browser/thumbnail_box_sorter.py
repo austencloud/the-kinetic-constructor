@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 from widgets.path_helpers.path_helpers import get_images_and_data_path
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
@@ -10,7 +11,7 @@ if TYPE_CHECKING:
     )
 
 
-class DictionaryBrowserThumbnailBoxSorter:
+class ThumbnailBoxSorter:
     def __init__(self, browser: "DictionaryBrowser") -> None:
         self.browser = browser
         self.metadata_extractor = browser.main_widget.metadata_extractor
@@ -24,7 +25,7 @@ class DictionaryBrowserThumbnailBoxSorter:
         self.browser.scroll_widget.clear_layout()
         self.sections: dict[str, list[tuple[str, list[str]]]] = {}
 
-        base_words = self.get_sorted_base_words(sort_method)
+        base_words = self._get_sorted_base_words(sort_method)
         current_section = None
         row_index = 0
         column_index = 0
@@ -76,21 +77,19 @@ class DictionaryBrowserThumbnailBoxSorter:
                     row_index += 1
 
     def _add_thumbnail_box(self, row_index, column_index, word, thumbnails):
-        for thumbnail in thumbnails:
-            if thumbnail not in self.browser.scroll_widget.thumbnail_boxes_dict:
-                thumbnail_box = ThumbnailBox(self.browser, word, [thumbnail])
-                thumbnail_box.resize_thumbnail_box()
-                thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
-                self.browser.scroll_widget.thumbnail_boxes_dict[thumbnail] = (
-                    thumbnail_box
-                )
+        if word not in self.browser.scroll_widget.thumbnail_boxes_dict:
+            thumbnail_box = ThumbnailBox(self.browser, word, thumbnails)
+            thumbnail_box.resize_thumbnail_box()
+            thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
+            self.browser.scroll_widget.thumbnail_boxes_dict[word] = thumbnail_box
 
-            thumbnail_box = self.browser.scroll_widget.thumbnail_boxes_dict[thumbnail]
-            self.browser.scroll_widget.grid_layout.addWidget(
-                thumbnail_box, row_index, column_index
-            )
+        thumbnail_box = self.browser.scroll_widget.thumbnail_boxes_dict[word]
+        self.browser.scroll_widget.grid_layout.addWidget(
+            thumbnail_box, row_index, column_index
+        )
+        QApplication.processEvents()
 
-    def get_sorted_base_words(self, sort_order):
+    def _get_sorted_base_words(self, sort_order):
         dictionary_dir = get_images_and_data_path("dictionary")
         base_words = [
             (

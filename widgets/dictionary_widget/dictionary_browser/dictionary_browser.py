@@ -5,15 +5,15 @@ from widgets.dictionary_widget.dictionary_browser.dictionary_browser_nav_sidebar
 from PyQt6.QtCore import QTimer
 
 from widgets.dictionary_widget.dictionary_browser.dictionary_browser_section_manager import (
-    DictionaryBrowserSectionManager,
+    SectionManager,
 )
-from widgets.dictionary_widget.dictionary_browser.dictionary_browser_thumbnail_box_sorter import (
-    DictionaryBrowserThumbnailBoxSorter,
+from widgets.dictionary_widget.dictionary_browser.thumbnail_box_sorter import (
+    ThumbnailBoxSorter,
 )
 from .dictionary_browser_scroll_widget import DictionaryBrowserScrollWidget
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from widgets.dictionary_widget.dictionary_browser.options_panel.dictionary_browser_options_panel import (
-    DictionaryBrowserOptionsPanel,
+    DictionaryOptionsPanel,
 )
 
 if TYPE_CHECKING:
@@ -32,9 +32,9 @@ class DictionaryBrowser(QWidget):
     def _setup_components(self):
         self.nav_sidebar = DictionaryBrowserNavSidebar(self)
         self.scroll_widget = DictionaryBrowserScrollWidget(self)
-        self.section_manager = DictionaryBrowserSectionManager(self)
-        self.thummbnail_box_sorter = DictionaryBrowserThumbnailBoxSorter(self)
-        self.options_widget = DictionaryBrowserOptionsPanel(self)
+        self.section_manager = SectionManager(self)
+        self.thummbnail_box_sorter = ThumbnailBoxSorter(self)
+        self.options_widget = DictionaryOptionsPanel(self)
 
     def showEvent(self, event):
         super().showEvent(event)

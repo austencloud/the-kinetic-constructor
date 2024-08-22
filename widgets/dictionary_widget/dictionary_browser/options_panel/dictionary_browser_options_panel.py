@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     )
 
 
-class DictionaryBrowserOptionsPanel(QWidget):
+class DictionaryOptionsPanel(QWidget):
     def __init__(self, browser: "DictionaryBrowser") -> None:
         super().__init__(browser)
         self.browser = browser
