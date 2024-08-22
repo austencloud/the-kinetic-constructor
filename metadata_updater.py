@@ -32,9 +32,7 @@ class SequencePropertiesCheckerStandalone:
         self.rotational_color_swapped_checker = RotationalColorSwappedPermutationChecker(self)
 
     def calculate_word(self) -> str:
-        # Concatenate all letters in the sequence
         word = ''.join(entry['letter'] for entry in self.sequence[1:])
-        # Simplify the word using the WordSimplifier
         simplified_word = WordSimplifier.simplify_repeated_word(word)
         return simplified_word
 

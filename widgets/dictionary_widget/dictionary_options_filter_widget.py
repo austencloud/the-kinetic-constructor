@@ -25,7 +25,7 @@ class DictionaryOptionsFilterWidget(QWidget):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.level_label = QLabel("Filter by Level:")
-        self.level_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.level_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.layout.addWidget(self.level_label)
 
         # Get all levels from the dictionary metadata
@@ -40,7 +40,7 @@ class DictionaryOptionsFilterWidget(QWidget):
 
     def _get_all_levels(self):
         # Use DictionarySorter to get all sequences with metadata
-        sequences_with_metadata = self.browser.sorter.get_all_sequences_with_metadata()
+        sequences_with_metadata = self.main_widget.metadata_extractor.get_metadata_and_thumbnail_dict()
         levels = set(
             metadata_and_thumbnails_dict["metadata"]["sequence"][0]["level"]
             for metadata_and_thumbnails_dict in sequences_with_metadata
@@ -64,7 +64,7 @@ class DictionaryOptionsFilterWidget(QWidget):
             self.browser.reset_filters()  # Show all sequences if no filter is applied
         else:
             filtered_sequences = []
-            list_of_sequences = self.browser.sorter.get_all_sequences_with_metadata()
+            list_of_sequences = self.main_widget.metadata_extractor.get_metadata_and_thumbnail_dict()
             for sequence in list_of_sequences:
                 metadata = sequence["metadata"]
                 if metadata["sequence"][0]["level"] in self.selected_levels:

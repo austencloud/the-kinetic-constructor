@@ -1,7 +1,11 @@
+import os
 from typing import TYPE_CHECKING
 from PIL import Image
 from PyQt6.QtWidgets import QMessageBox
 import json
+
+from widgets.dictionary_widget.thumbnail_box.thumbnail_extractor import ThumbnailExtractor
+from widgets.path_helpers.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
@@ -40,3 +44,24 @@ class MetaDataExtractor:
         if metadata and "sequence" in metadata:
             return len(metadata["sequence"]) - 2
         return 0  # Default to 0 if no valid sequence length is found
+
+    def get_metadata_and_thumbnail_dict(self) -> list[dict[str, str]]:
+        """Collect all sequences and their metadata along with the associated thumbnail paths."""
+        dictionary_dir = get_images_and_data_path("dictionary")
+        metadata_and_thumbnail_dict = []
+
+        for word in os.listdir(dictionary_dir):
+            word_dir = os.path.join(dictionary_dir, word)
+            if os.path.isdir(word_dir) and "__pycache__" not in word:
+                thumbnails = ThumbnailExtractor.find_thumbnails(word_dir)
+                for thumbnail in thumbnails:
+                    metadata = self.extract_metadata_from_file(
+                        thumbnail
+                    )
+                    if metadata:
+                        metadata_and_thumbnail_dict.append(
+                            {"metadata": metadata, "thumbnail": thumbnail}
+                        )
+
+        return metadata_and_thumbnail_dict
+    
