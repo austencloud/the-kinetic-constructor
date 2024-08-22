@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import (
-    QWidget,
-    QHBoxLayout,
-    QLabel,
-    QPushButton,
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
+from PyQt6.QtCore import Qt
+
+from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.filter_choice_widget import (
+    FilterChoiceWidget,
 )
 
 from .contains_letter_section import ContainsLetterSection
@@ -22,7 +22,6 @@ class DictionaryInitialSelectionsWidget(QWidget):
     def __init__(self, browser: "DictionaryBrowser"):
         super().__init__(browser)
         self.browser = browser
-        self.buttons: dict[str, QPushButton] = {}
         self.selected_letters: set[str] = set()
 
         # Initialize sections
@@ -32,25 +31,72 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.level_section = LevelSection(self)
         self.starting_position_section = StartingPositionSection(self)
 
+        # Initialize the filter choice widget
+        self.filter_choice_widget = FilterChoiceWidget(self)
+
+        # Set up the initial layout with the filter choice widget
         self._setup_ui()
 
     def _setup_ui(self):
-        layout = QHBoxLayout(self)
-        layout.addWidget(self.starting_letter_section)
-        layout.addWidget(self.contains_letter_section)
-        layout.addWidget(self.length_section)
-        layout.addWidget(self.level_section)
-        layout.addWidget(self.starting_position_section)  # New section
-        self.setLayout(layout)
+        self.main_layout = QVBoxLayout(self)
+        self.main_layout.addWidget(self.filter_choice_widget)
+        self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.setLayout(self.main_layout)
+
+    def show_filter_choice_widget(self):
+        """Show the filter choice widget and hide any active section."""
+        self._hide_all_sections()
+        self.filter_choice_widget.show()
+
+    def _hide_all_sections(self):
+        """Hide all filter sections."""
+        self.starting_letter_section.hide()
+        self.contains_letter_section.hide()
+        self.length_section.hide()
+        self.level_section.hide()
+        self.starting_position_section.hide()
+
+    def show_starting_letter_section(self):
+        self._hide_all_sections()
+        self.filter_choice_widget.hide()
+        self.starting_letter_section.show()
+        self.main_layout.addWidget(self.starting_letter_section)
+
+    def show_contains_letter_section(self):
+        self._hide_all_sections()
+        self.filter_choice_widget.hide()
+        self.contains_letter_section.show()
+        self.main_layout.addWidget(self.contains_letter_section)
+
+    def show_length_section(self):
+        self._hide_all_sections()
+        self.filter_choice_widget.hide()
+        self.length_section.show()
+        self.main_layout.addWidget(self.length_section)
+
+    def show_level_section(self):
+        self._hide_all_sections()
+        self.filter_choice_widget.hide()
+        self.level_section.show()
+        self.main_layout.addWidget(self.level_section)
+
+    def show_starting_position_section(self):
+        self._hide_all_sections()
+        self.filter_choice_widget.hide()
+        self.starting_position_section.show()
+        self.main_layout.addWidget(self.starting_position_section)
 
     def on_letter_button_clicked(self, letter: str):
         self.browser.apply_initial_selection({"letter": letter})
+        self.show_filter_choice_widget()
 
     def on_length_button_clicked(self, length: int):
         self.browser.apply_initial_selection({"length": length})
+        self.show_filter_choice_widget()
 
     def on_level_button_clicked(self, level: int):
         self.browser.apply_initial_selection({"level": level})
+        self.show_filter_choice_widget()
 
     def on_contains_letter_button_clicked(self, letter: str):
         if letter in self.selected_letters:
@@ -60,35 +106,46 @@ class DictionaryInitialSelectionsWidget(QWidget):
 
     def on_position_button_clicked(self, position: str):
         self.browser.apply_initial_selection({"position": position})
+        self.show_filter_choice_widget()
 
     def apply_contains_letter_filter(self):
         self.browser.apply_initial_selection(
             {"contains_letters": self.selected_letters}
         )
+        self.show_filter_choice_widget()
 
     def resizeEvent(self, event):
+        self.resize_initial_filter_buttons()
         self.resize_fonts_in_each_section()
         self.resize_buttons_in_each_section()
         super().resizeEvent(event)
 
+    def resize_initial_filter_buttons(self):
+        for button in self.filter_choice_widget.buttons.values():
+            button.setMaximumWidth(self.browser.width() // 5)
+
     def resize_fonts_in_each_section(self):
-        self._resize_labels(self.starting_letter_section.starting_letter_label)
-        self._resize_labels(self.length_section.length_label)
-        self._resize_labels(self.level_section.level_label)
-        self._resize_labels(self.contains_letter_section.contains_letter_label)
-        self._resize_labels(self.starting_position_section.starting_position_label)
+        sections = [
+            self.starting_letter_section,
+            self.length_section,
+            self.level_section,
+            self.contains_letter_section,
+            self.starting_position_section,
+        ]
+        for section in sections:
+            self._resize_labels(section.label)  # Directly accessing the label attribute
 
     def resize_buttons_in_each_section(self):
-        for button in self.starting_letter_section.buttons.values():
-            self._resize_buttons(button)
-        for button in self.length_section.buttons.values():
-            self._resize_buttons(button)
-        for button in self.level_section.buttons.values():
-            self._resize_buttons(button)
-        for button in self.contains_letter_section.buttons.values():
-            self._resize_buttons(button)
-        for button in self.starting_position_section.buttons.values():
-            self._resize_buttons(button)
+        sections = [
+            self.starting_letter_section,
+            self.length_section,
+            self.level_section,
+            self.contains_letter_section,
+            self.starting_position_section,
+        ]
+        for section in sections:
+            for button in section.buttons.values():
+                self._resize_buttons(button)
 
     def _resize_buttons(self, button: QPushButton):
         font = button.font()
@@ -99,5 +156,5 @@ class DictionaryInitialSelectionsWidget(QWidget):
         font = label.font()
         font.setPointSize(self.browser.width() // 100)
         label.setFont(font)
-        for button in self.buttons.values():
+        for button in self.filter_choice_widget.buttons.values():
             button.setFont(font)

@@ -203,22 +203,32 @@ class ThumbnailBoxSorter:
 
         for word, thumbnails, seq_length in base_words:
             # Check if any of the selected letters are in the word
-            if not any(letter in word for letter in letters):
-                continue
-            # if the word contains the letter and the letter is just one character, than we need to ensure that we ignore situations where the word contains that letter plus a "-" character.
-            # This should include instances where the letter is in the middle of the word. For example if the word is SW-A, and the letter is W, we should not include this word in the list of words to display.
-            # It should work whether the letter is at the beginning or the middle of the word. For example, if the word is W-AN, and the letter is W, we should not include this word in the list of words to display when the letter is W.
-            if len(letters) == 1:
-                if len(word) > 1 and word[1] == "-":
-                    continue
-                # check if the instance of the letter in the word is followed by a "-" character and if so, ignore the word
-                # check if the letter itself has two characters, and do not execute the following code if it does
+            match_found = False
 
-                if (
-                    word.find(letters_string) < len(word) - 1
-                    and word[word.find(letters_string) + 1] == "-"
-                ) and letters_string.find("-") != 1:
-                    continue
+            for letter in letters:
+                # Exact match check
+                if letter in word:
+                    # Prevent cases like "W" matching with "W-" unless "W-" is also in the letters set
+                    if (
+                        len(letter) == 1
+                        and f"{letter}-" in word
+                        and f"{letter}-" not in letters
+                    ):
+                        continue
+                    # If word contains a dash after the letter, ensure it matches the full sequence
+                    if letter + "-" in word and letter + "-" not in letters:
+                        continue
+                    # If the letter matches exactly and is not followed by a dash, we allow it
+                    if (
+                        word.find(letter) < len(word) - 1
+                        and word[word.find(letter) + 1] == "-"
+                    ):
+                        continue
+                    match_found = True
+                    break
+
+            if not match_found:
+                continue
 
             section = self.section_manager.get_section_from_word(
                 word, "sequence_length", seq_length, thumbnails
@@ -229,6 +239,7 @@ class ThumbnailBoxSorter:
 
             self.sections[section].append((word, thumbnails))
             num_sequences += 1
+
         sorted_sections = self.section_manager.get_sorted_sections(
             "sequence_length", self.sections.keys()
         )
@@ -255,6 +266,7 @@ class ThumbnailBoxSorter:
             self.browser.currently_displaying_indicator_label.setText(
                 f"Currently displaying sequences containing any of: {letters_string}."
             )
+
         # update the number of currently displayed sequences in the label
         self.browser.number_of_currently_displayed_sequences_label.setText(
             f"Number of sequences displayed: {num_sequences}"

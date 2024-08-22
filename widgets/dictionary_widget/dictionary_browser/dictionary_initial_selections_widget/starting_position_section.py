@@ -1,25 +1,19 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton
+from .filter_section_base import FilterSectionBase
 from PyQt6.QtCore import Qt
-
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.dictionary_initial_selections_widget import (
         DictionaryInitialSelectionsWidget,
     )
 
-class StartingPositionSection(QWidget):
+class StartingPositionSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
-        super().__init__(initial_selection_widget)
-        self.buttons: dict[str, QPushButton] = {}
-        self.initial_selection_widget = initial_selection_widget
-        self._setup_ui()
+        super().__init__(initial_selection_widget, "Select by Starting Position:")
+        self._add_buttons()
 
-    def _setup_ui(self):
-        layout = QVBoxLayout(self)
-        self.starting_position_label = QLabel("Select by Starting Position:")
-        self.starting_position_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.starting_position_label)
-        layout.addStretch(1)
+    def _add_buttons(self):
+        layout: QVBoxLayout = self.layout()
 
         starting_positions = ["alpha", "beta", "gamma"]
         for position in starting_positions:
