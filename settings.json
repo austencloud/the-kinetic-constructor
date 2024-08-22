@@ -40,6 +40,6 @@
         }
     },
     "dictionary": {
-        "sort_method": "sequence_length"
+        "sort_method": "alphabetical"
     }
 }

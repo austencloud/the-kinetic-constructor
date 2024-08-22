@@ -56,10 +56,9 @@ class DictionaryWidget(QWidget):
         self.sequence_populator = DictionarySequencePopulator(self)
 
     def _setup_layout(self) -> None:
-        layout = QHBoxLayout(self)
-        layout.addWidget(self.browser, 5)
-        layout.addWidget(self.preview_area, 3)
-        self.setLayout(layout)
+        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.layout.addWidget(self.browser, 5)
+        self.setLayout(self.layout)
 
     def paintEvent(self, event) -> None:
         if self.background_manager is None:

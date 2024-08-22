@@ -38,6 +38,12 @@ class MetaDataExtractor:
             )
         return None
 
+    def get_sequence_level(self, file_path):
+        metadata = self.extract_metadata_from_file(file_path)
+        if metadata and "sequence" in metadata:
+            return metadata["sequence"][0]["level"]
+        return
+
     def get_sequence_length(self, file_path):
         metadata = self.extract_metadata_from_file(file_path)
         if metadata and "sequence" in metadata:

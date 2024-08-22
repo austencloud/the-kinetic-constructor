@@ -61,3 +61,4 @@ class DictionaryBrowserScrollWidget(QWidget):
             thumbnail_boxes: list[ThumbnailBox] = self.thumbnail_boxes_dict.values()
             for box in thumbnail_boxes:
                 box.resize_thumbnail_box()
+    
