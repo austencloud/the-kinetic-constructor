@@ -2,32 +2,32 @@ Organized by total time:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
-        45        0.019502        0.000433             0.048262             0.001072 resize_buttons_in_each_section dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:138
-      5040        0.008359        0.000002             0.028729             0.000006 _resize_buttons                dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:150
-       164        0.007410        0.000045             0.960365             0.005856 paint_background               background_managers\aurora_background_manager.py:15
-       164        0.006032        0.000037             0.969056             0.005909 paintEvent                     dictionary_widget\dictionary_widget.py:63
-        45        0.001738        0.000039             0.008565             0.000190 resize_fonts_in_each_section   dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:128
-       225        0.001289        0.000006             0.004115             0.000018 _resize_labels                 dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:155
-        45        0.001264        0.000028             0.002669             0.000059 resize_labels                  dictionary_initial_selections_widget\filter_choice_widget.py:108
-        45        0.001206        0.000027             0.059075             0.001313 resizeEvent                    dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:117
-       153        0.001205        0.000008             0.002524             0.000016 animate_background             background_managers\aurora_background_manager.py:8
-        45        0.000923        0.000021             0.644873             0.014331 resizeEvent                    main_widget\main_widget.py:208
-        45        0.000718        0.000016             0.001012             0.000022 resize_initial_filter_buttons  dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:124
-        45        0.000696        0.000015             0.601607             0.013369 set_dimensions                 utilities\main_window_geometry_manager.py:14
-         1        0.000079        0.000079             0.000858             0.000858 update_font_colors             settings_manager\global_settings.py:78
-         3        0.000045        0.000015             0.000230             0.000077 _style_button                  options_panel\sort_widget.py:111
-         1        0.000031        0.000031             0.000262             0.000262 style_buttons                  options_panel\sort_widget.py:106
-         1        0.000024        0.000024             0.001598             0.001598 closeEvent                     tka-sequence-constructor\main.py:38
-         1        0.000020        0.000020             0.000928             0.000928 get_background_manager         settings_manager\global_settings.py:62
-         1        0.000020        0.000020             0.000024             0.000024 keyPressEvent                  main_widget\main_widget.py:161
-         1        0.000019        0.000019             0.000051             0.000051 __init__                       background_managers\background_manager.py:13
-         1        0.000017        0.000017             0.000953             0.000953 setup_background_manager       settings_manager\global_settings.py:56
-         1        0.000016        0.000016             0.001562             0.001562 save_settings                  settings_manager\settings_manager.py:46
-         1        0.000010        0.000010             0.000071             0.000071 style_placeholder              dictionary_widget\preview_area_image_label.py:52
-         1        0.000010        0.000010             0.002606             0.002606 <lambda>                       tka-sequence-constructor\main.py:88
-         1        0.000009        0.000009             0.000082             0.000082 disable                        widgets\profiler.py:17
-         5        0.000009        0.000002             0.000011             0.000002 get_background_type            settings_manager\global_settings.py:48
-         8        0.000007        0.000001             0.000007             0.000001 get_font_color                 settings_manager\global_settings.py:95
+        17        0.006322        0.000372             0.016694             0.000982 resize_buttons_in_each_section dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:141
+        63        0.002851        0.000045             0.412310             0.006545 paint_background               background_managers\aurora_background_manager.py:15
+      1904        0.002786        0.000001             0.010362             0.000005 _resize_buttons                dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:147
+        63        0.002691        0.000043             0.419357             0.006656 paintEvent                     dictionary_widget\dictionary_widget.py:63
+        71        0.000612        0.000009             0.001205             0.000017 animate_background             background_managers\aurora_background_manager.py:8
+        17        0.000548        0.000032             0.002406             0.000141 resize_fonts_in_each_section   dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:137
+        17        0.000535        0.000031             0.020385             0.001199 resizeEvent                    dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:126
+        85        0.000467        0.000005             0.001857             0.000022 _resize_labels                 dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:152
+        17        0.000324        0.000019             0.296623             0.017448 resizeEvent                    main_widget\main_widget.py:208
+        17        0.000260        0.000015             0.283136             0.016655 set_dimensions                 utilities\main_window_geometry_manager.py:14
+        17        0.000230        0.000014             0.000341             0.000020 resize_initial_filter_buttons  dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:133
+        17        0.000118        0.000007             0.000399             0.000023 resize_filter_choice_widget    dictionary_initial_selections_widget\filter_choice_widget.py:109
+         1        0.000111        0.000111             0.001169             0.001169 update_font_colors             settings_manager\global_settings.py:78
+         3        0.000072        0.000024             0.000365             0.000122 _style_button                  options_panel\sort_widget.py:111
+         1        0.000044        0.000044             0.000409             0.000409 style_buttons                  options_panel\sort_widget.py:106
+         1        0.000041        0.000041             0.001613             0.001613 closeEvent                     tka-sequence-constructor\main.py:38
+         1        0.000038        0.000038             0.001298             0.001298 get_background_manager         settings_manager\global_settings.py:62
+         1        0.000034        0.000034             0.000091             0.000091 __init__                       background_managers\background_manager.py:13
+         1        0.000025        0.000025             0.001333             0.001333 setup_background_manager       settings_manager\global_settings.py:56
+         1        0.000019        0.000019             0.001557             0.001557 save_settings                  settings_manager\settings_manager.py:46
+         1        0.000019        0.000019             0.000024             0.000024 keyPressEvent                  main_widget\main_widget.py:161
+         1        0.000019        0.000019             0.000116             0.000116 style_placeholder              dictionary_widget\preview_area_image_label.py:52
+         5        0.000015        0.000003             0.000017             0.000003 get_background_type            settings_manager\global_settings.py:48
+         1        0.000010        0.000010             0.002442             0.002442 <lambda>                       tka-sequence-constructor\main.py:88
+         8        0.000010        0.000001             0.000010             0.000001 get_font_color                 settings_manager\global_settings.py:95
+         1        0.000006        0.000006             0.000055             0.000055 disable                        widgets\profiler.py:17
          1        0.000003        0.000003             0.000003             0.000003 set_styles                     dictionary_browser\dictionary_browser_nav_sidebar.py:193
 
 
@@ -35,63 +35,63 @@ Organized by number of calls:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
-      5040        0.008359        0.000002             0.028729             0.000006 _resize_buttons                dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:150
-       225        0.001289        0.000006             0.004115             0.000018 _resize_labels                 dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:155
-       164        0.007410        0.000045             0.960365             0.005856 paint_background               background_managers\aurora_background_manager.py:15
-       164        0.006032        0.000037             0.969056             0.005909 paintEvent                     dictionary_widget\dictionary_widget.py:63
-       153        0.001205        0.000008             0.002524             0.000016 animate_background             background_managers\aurora_background_manager.py:8
-        45        0.000696        0.000015             0.601607             0.013369 set_dimensions                 utilities\main_window_geometry_manager.py:14
-        45        0.001738        0.000039             0.008565             0.000190 resize_fonts_in_each_section   dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:128
-        45        0.000923        0.000021             0.644873             0.014331 resizeEvent                    main_widget\main_widget.py:208
-        45        0.019502        0.000433             0.048262             0.001072 resize_buttons_in_each_section dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:138
-        45        0.001206        0.000027             0.059075             0.001313 resizeEvent                    dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:117
-        45        0.000718        0.000016             0.001012             0.000022 resize_initial_filter_buttons  dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:124
-        45        0.001264        0.000028             0.002669             0.000059 resize_labels                  dictionary_initial_selections_widget\filter_choice_widget.py:108
-         8        0.000007        0.000001             0.000007             0.000001 get_font_color                 settings_manager\global_settings.py:95
-         5        0.000009        0.000002             0.000011             0.000002 get_background_type            settings_manager\global_settings.py:48
-         3        0.000045        0.000015             0.000230             0.000077 _style_button                  options_panel\sort_widget.py:111
-         1        0.000079        0.000079             0.000858             0.000858 update_font_colors             settings_manager\global_settings.py:78
-         1        0.000016        0.000016             0.001562             0.001562 save_settings                  settings_manager\settings_manager.py:46
-         1        0.000024        0.000024             0.001598             0.001598 closeEvent                     tka-sequence-constructor\main.py:38
-         1        0.000019        0.000019             0.000051             0.000051 __init__                       background_managers\background_manager.py:13
-         1        0.000009        0.000009             0.000082             0.000082 disable                        widgets\profiler.py:17
-         1        0.000010        0.000010             0.002606             0.002606 <lambda>                       tka-sequence-constructor\main.py:88
-         1        0.000020        0.000020             0.000024             0.000024 keyPressEvent                  main_widget\main_widget.py:161
-         1        0.000017        0.000017             0.000953             0.000953 setup_background_manager       settings_manager\global_settings.py:56
+      1904        0.002786        0.000001             0.010362             0.000005 _resize_buttons                dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:147
+        85        0.000467        0.000005             0.001857             0.000022 _resize_labels                 dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:152
+        71        0.000612        0.000009             0.001205             0.000017 animate_background             background_managers\aurora_background_manager.py:8
+        63        0.002851        0.000045             0.412310             0.006545 paint_background               background_managers\aurora_background_manager.py:15
+        63        0.002691        0.000043             0.419357             0.006656 paintEvent                     dictionary_widget\dictionary_widget.py:63
+        17        0.000260        0.000015             0.283136             0.016655 set_dimensions                 utilities\main_window_geometry_manager.py:14
+        17        0.000324        0.000019             0.296623             0.017448 resizeEvent                    main_widget\main_widget.py:208
+        17        0.000118        0.000007             0.000399             0.000023 resize_filter_choice_widget    dictionary_initial_selections_widget\filter_choice_widget.py:109
+        17        0.000535        0.000031             0.020385             0.001199 resizeEvent                    dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:126
+        17        0.006322        0.000372             0.016694             0.000982 resize_buttons_in_each_section dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:141
+        17        0.000230        0.000014             0.000341             0.000020 resize_initial_filter_buttons  dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:133
+        17        0.000548        0.000032             0.002406             0.000141 resize_fonts_in_each_section   dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:137
+         8        0.000010        0.000001             0.000010             0.000001 get_font_color                 settings_manager\global_settings.py:95
+         5        0.000015        0.000003             0.000017             0.000003 get_background_type            settings_manager\global_settings.py:48
+         3        0.000072        0.000024             0.000365             0.000122 _style_button                  options_panel\sort_widget.py:111
+         1        0.000111        0.000111             0.001169             0.001169 update_font_colors             settings_manager\global_settings.py:78
+         1        0.000019        0.000019             0.000024             0.000024 keyPressEvent                  main_widget\main_widget.py:161
+         1        0.000019        0.000019             0.001557             0.001557 save_settings                  settings_manager\settings_manager.py:46
+         1        0.000041        0.000041             0.001613             0.001613 closeEvent                     tka-sequence-constructor\main.py:38
+         1        0.000034        0.000034             0.000091             0.000091 __init__                       background_managers\background_manager.py:13
+         1        0.000006        0.000006             0.000055             0.000055 disable                        widgets\profiler.py:17
+         1        0.000010        0.000010             0.002442             0.002442 <lambda>                       tka-sequence-constructor\main.py:88
+         1        0.000025        0.000025             0.001333             0.001333 setup_background_manager       settings_manager\global_settings.py:56
          1        0.000003        0.000003             0.000003             0.000003 set_styles                     dictionary_browser\dictionary_browser_nav_sidebar.py:193
-         1        0.000020        0.000020             0.000928             0.000928 get_background_manager         settings_manager\global_settings.py:62
-         1        0.000031        0.000031             0.000262             0.000262 style_buttons                  options_panel\sort_widget.py:106
-         1        0.000010        0.000010             0.000071             0.000071 style_placeholder              dictionary_widget\preview_area_image_label.py:52
+         1        0.000038        0.000038             0.001298             0.001298 get_background_manager         settings_manager\global_settings.py:62
+         1        0.000044        0.000044             0.000409             0.000409 style_buttons                  options_panel\sort_widget.py:106
+         1        0.000019        0.000019             0.000116             0.000116 style_placeholder              dictionary_widget\preview_area_image_label.py:52
 
 
 Organized by cumulative time:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
-       164        0.006032        0.000037             0.969056             0.005909 paintEvent                     dictionary_widget\dictionary_widget.py:63
-       164        0.007410        0.000045             0.960365             0.005856 paint_background               background_managers\aurora_background_manager.py:15
-        45        0.000923        0.000021             0.644873             0.014331 resizeEvent                    main_widget\main_widget.py:208
-        45        0.000696        0.000015             0.601607             0.013369 set_dimensions                 utilities\main_window_geometry_manager.py:14
-        45        0.001206        0.000027             0.059075             0.001313 resizeEvent                    dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:117
-        45        0.019502        0.000433             0.048262             0.001072 resize_buttons_in_each_section dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:138
-      5040        0.008359        0.000002             0.028729             0.000006 _resize_buttons                dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:150
-        45        0.001738        0.000039             0.008565             0.000190 resize_fonts_in_each_section   dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:128
-       225        0.001289        0.000006             0.004115             0.000018 _resize_labels                 dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:155
-        45        0.001264        0.000028             0.002669             0.000059 resize_labels                  dictionary_initial_selections_widget\filter_choice_widget.py:108
-         1        0.000010        0.000010             0.002606             0.002606 <lambda>                       tka-sequence-constructor\main.py:88
-       153        0.001205        0.000008             0.002524             0.000016 animate_background             background_managers\aurora_background_manager.py:8
-         1        0.000024        0.000024             0.001598             0.001598 closeEvent                     tka-sequence-constructor\main.py:38
-         1        0.000016        0.000016             0.001562             0.001562 save_settings                  settings_manager\settings_manager.py:46
-        45        0.000718        0.000016             0.001012             0.000022 resize_initial_filter_buttons  dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:124
-         1        0.000017        0.000017             0.000953             0.000953 setup_background_manager       settings_manager\global_settings.py:56
-         1        0.000020        0.000020             0.000928             0.000928 get_background_manager         settings_manager\global_settings.py:62
-         1        0.000079        0.000079             0.000858             0.000858 update_font_colors             settings_manager\global_settings.py:78
-         1        0.000031        0.000031             0.000262             0.000262 style_buttons                  options_panel\sort_widget.py:106
-         3        0.000045        0.000015             0.000230             0.000077 _style_button                  options_panel\sort_widget.py:111
-         1        0.000009        0.000009             0.000082             0.000082 disable                        widgets\profiler.py:17
-         1        0.000010        0.000010             0.000071             0.000071 style_placeholder              dictionary_widget\preview_area_image_label.py:52
-         1        0.000019        0.000019             0.000051             0.000051 __init__                       background_managers\background_manager.py:13
-         1        0.000020        0.000020             0.000024             0.000024 keyPressEvent                  main_widget\main_widget.py:161
-         5        0.000009        0.000002             0.000011             0.000002 get_background_type            settings_manager\global_settings.py:48
-         8        0.000007        0.000001             0.000007             0.000001 get_font_color                 settings_manager\global_settings.py:95
+        63        0.002691        0.000043             0.419357             0.006656 paintEvent                     dictionary_widget\dictionary_widget.py:63
+        63        0.002851        0.000045             0.412310             0.006545 paint_background               background_managers\aurora_background_manager.py:15
+        17        0.000324        0.000019             0.296623             0.017448 resizeEvent                    main_widget\main_widget.py:208
+        17        0.000260        0.000015             0.283136             0.016655 set_dimensions                 utilities\main_window_geometry_manager.py:14
+        17        0.000535        0.000031             0.020385             0.001199 resizeEvent                    dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:126
+        17        0.006322        0.000372             0.016694             0.000982 resize_buttons_in_each_section dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:141
+      1904        0.002786        0.000001             0.010362             0.000005 _resize_buttons                dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:147
+         1        0.000010        0.000010             0.002442             0.002442 <lambda>                       tka-sequence-constructor\main.py:88
+        17        0.000548        0.000032             0.002406             0.000141 resize_fonts_in_each_section   dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:137
+        85        0.000467        0.000005             0.001857             0.000022 _resize_labels                 dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:152
+         1        0.000041        0.000041             0.001613             0.001613 closeEvent                     tka-sequence-constructor\main.py:38
+         1        0.000019        0.000019             0.001557             0.001557 save_settings                  settings_manager\settings_manager.py:46
+         1        0.000025        0.000025             0.001333             0.001333 setup_background_manager       settings_manager\global_settings.py:56
+         1        0.000038        0.000038             0.001298             0.001298 get_background_manager         settings_manager\global_settings.py:62
+        71        0.000612        0.000009             0.001205             0.000017 animate_background             background_managers\aurora_background_manager.py:8
+         1        0.000111        0.000111             0.001169             0.001169 update_font_colors             settings_manager\global_settings.py:78
+         1        0.000044        0.000044             0.000409             0.000409 style_buttons                  options_panel\sort_widget.py:106
+        17        0.000118        0.000007             0.000399             0.000023 resize_filter_choice_widget    dictionary_initial_selections_widget\filter_choice_widget.py:109
+         3        0.000072        0.000024             0.000365             0.000122 _style_button                  options_panel\sort_widget.py:111
+        17        0.000230        0.000014             0.000341             0.000020 resize_initial_filter_buttons  dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:133
+         1        0.000019        0.000019             0.000116             0.000116 style_placeholder              dictionary_widget\preview_area_image_label.py:52
+         1        0.000034        0.000034             0.000091             0.000091 __init__                       background_managers\background_manager.py:13
+         1        0.000006        0.000006             0.000055             0.000055 disable                        widgets\profiler.py:17
+         1        0.000019        0.000019             0.000024             0.000024 keyPressEvent                  main_widget\main_widget.py:161
+         5        0.000015        0.000003             0.000017             0.000003 get_background_type            settings_manager\global_settings.py:48
+         8        0.000010        0.000001             0.000010             0.000001 get_font_color                 settings_manager\global_settings.py:95
          1        0.000003        0.000003             0.000003             0.000003 set_styles                     dictionary_browser\dictionary_browser_nav_sidebar.py:193

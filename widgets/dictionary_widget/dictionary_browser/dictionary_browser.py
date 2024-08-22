@@ -1,29 +1,19 @@
 from typing import TYPE_CHECKING
-from widgets.dictionary_widget.dictionary_browser.currently_displaying_indicator_label import (
-    CurrentlyDisplayingIndicatorLabel,
-)
-from widgets.dictionary_widget.dictionary_browser.dictionary_browser_nav_sidebar import (
-    DictionaryBrowserNavSidebar,
-)
+from .currently_displaying_indicator_label import CurrentlyDisplayingIndicatorLabel
+from .dictionary_browser_nav_sidebar import DictionaryBrowserNavSidebar
 from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtGui import QFont
-from widgets.dictionary_widget.dictionary_browser.dictionary_browser_section_manager import (
-    SectionManager,
-)
+from .dictionary_browser_section_manager import SectionManager
 
-from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.dictionary_initial_selections_widget import (
+from .dictionary_initial_selections_widget.dictionary_initial_selections_widget import (
     DictionaryInitialSelectionsWidget,
 )
-from widgets.dictionary_widget.dictionary_browser.thumbnail_box_sorter import (
-    ThumbnailBoxSorter,
-)
+from .thumbnail_box_sorter import ThumbnailBoxSorter
 from .dictionary_browser_scroll_widget import DictionaryBrowserScrollWidget
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
-from widgets.dictionary_widget.dictionary_browser.options_panel.dictionary_browser_options_panel import (
-    DictionaryOptionsPanel,
-)
+from .options_panel.dictionary_browser_options_panel import DictionaryOptionsPanel
 from PyQt6.QtWidgets import QLabel
 
 if TYPE_CHECKING:
@@ -70,7 +60,6 @@ class DictionaryBrowser(QWidget):
             Qt.AlignmentFlag.AlignCenter
         )
 
-
     def _setup_go_back_to_initial_selection_widget_button(self):
         self.go_back_button = QPushButton("Go Back")
         self.go_back_button_layout = QHBoxLayout()
@@ -101,6 +90,9 @@ class DictionaryBrowser(QWidget):
 
     def add_initial_selection_widget(self):
         self.layout.addWidget(self.initial_selection_widget)
+
+    def show_all_sequences(self):
+        self.apply_initial_selection({"letter": "Show all"})
 
     def apply_initial_selection(self, initial_selections):
         # set override cursor
@@ -140,7 +132,6 @@ class DictionaryBrowser(QWidget):
         self.dictionary_widget.layout.addWidget(self.dictionary_widget.preview_area, 3)
         for widget in self.widgets:
             widget.show()
-        # show the preview_area
         self.dictionary_widget.preview_area.show()
         self.resize_currently_displaying_label()
         self.resize_number_of_currently_displayed_sequences_label()
@@ -150,6 +141,7 @@ class DictionaryBrowser(QWidget):
         self.resize_go_back_button()
         self.resize_currently_displaying_label()
         self.resize_number_of_currently_displayed_sequences_label()
+        self.initial_selection_widget.resize_initial_selections_widget()
 
     def resize_number_of_currently_displayed_sequences_label(self):
         font = self.number_of_currently_displayed_sequences_label.font()

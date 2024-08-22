@@ -5,6 +5,9 @@ from PyQt6.QtCore import Qt
 from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.filter_choice_widget import (
     FilterChoiceWidget,
 )
+from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.filter_section_base import (
+    FilterSectionBase,
+)
 
 from .contains_letter_section import ContainsLetterSection
 from .length_section import LengthSection
@@ -31,10 +34,16 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.level_section = LevelSection(self)
         self.starting_position_section = StartingPositionSection(self)
 
-        # Initialize the filter choice widget
+        self.sections: list[FilterSectionBase] = [
+            self.starting_letter_section,
+            self.length_section,
+            self.level_section,
+            self.contains_letter_section,
+            self.starting_position_section,
+        ]
+        # Initialize filter choice widget
         self.filter_choice_widget = FilterChoiceWidget(self)
 
-        # Set up the initial layout with the filter choice widget
         self._setup_ui()
 
     def _setup_ui(self):
@@ -114,36 +123,23 @@ class DictionaryInitialSelectionsWidget(QWidget):
         )
         self.show_filter_choice_widget()
 
-    def resizeEvent(self, event):
+    def resize_initial_selections_widget(self):
         self.resize_initial_filter_buttons()
         self.resize_fonts_in_each_section()
         self.resize_buttons_in_each_section()
-        super().resizeEvent(event)
+        self.filter_choice_widget.resize_filter_choice_widget()
 
     def resize_initial_filter_buttons(self):
         for button in self.filter_choice_widget.buttons.values():
             button.setMaximumWidth(self.browser.width() // 5)
 
     def resize_fonts_in_each_section(self):
-        sections = [
-            self.starting_letter_section,
-            self.length_section,
-            self.level_section,
-            self.contains_letter_section,
-            self.starting_position_section,
-        ]
-        for section in sections:
+        for section in self.sections:
             self._resize_labels(section.label)  # Directly accessing the label attribute
 
     def resize_buttons_in_each_section(self):
-        sections = [
-            self.starting_letter_section,
-            self.length_section,
-            self.level_section,
-            self.contains_letter_section,
-            self.starting_position_section,
-        ]
-        for section in sections:
+
+        for section in self.sections:
             for button in section.buttons.values():
                 self._resize_buttons(button)
 

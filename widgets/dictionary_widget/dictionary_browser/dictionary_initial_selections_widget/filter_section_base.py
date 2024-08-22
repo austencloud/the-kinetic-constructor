@@ -7,8 +7,13 @@ if TYPE_CHECKING:
         DictionaryInitialSelectionsWidget,
     )
 
+
 class FilterSectionBase(QWidget):
-    def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget", label_text: str):
+    def __init__(
+        self,
+        initial_selection_widget: "DictionaryInitialSelectionsWidget",
+        label_text: str,
+    ):
         super().__init__(initial_selection_widget)
         self.initial_selection_widget = initial_selection_widget
         self.buttons: dict[str, QPushButton] = {}
@@ -21,7 +26,9 @@ class FilterSectionBase(QWidget):
         top_bar_layout = QHBoxLayout()
         back_button = QPushButton("Back")
         back_button.setCursor(Qt.CursorShape.PointingHandCursor)
-        back_button.clicked.connect(self.initial_selection_widget.show_filter_choice_widget)
+        back_button.clicked.connect(
+            self.initial_selection_widget.show_filter_choice_widget
+        )
         top_bar_layout.addWidget(back_button, alignment=Qt.AlignmentFlag.AlignLeft)
         top_bar_layout.addStretch(1)
 
@@ -31,6 +38,6 @@ class FilterSectionBase(QWidget):
         self.label = QLabel(label_text)
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.label)
-
+        layout.addStretch(1)
         # Set the layout
         self.setLayout(layout)
