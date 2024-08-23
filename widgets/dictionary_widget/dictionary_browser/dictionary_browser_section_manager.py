@@ -38,8 +38,7 @@ class SectionManager:
                 key=lambda x: datetime.strptime(x, "%m-%d-%Y"),
                 reverse=True,
             )
-            # for each of the sorted sections which have a year such as 07-24-2024, cut off the year before adding it as a header
-            # use the dash to cut off the year
+
             
             if "Unknown" in sections:
                 sorted_sections.append("Unknown")

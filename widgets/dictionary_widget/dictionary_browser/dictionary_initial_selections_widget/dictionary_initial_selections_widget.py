@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
 from PyQt6.QtCore import Qt
 
+from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.author_section import AuthorSection
 from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.filter_choice_widget import (
     FilterChoiceWidget,
 )
@@ -33,6 +34,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.length_section = LengthSection(self)
         self.level_section = LevelSection(self)
         self.starting_position_section = StartingPositionSection(self)
+        self.author_section = AuthorSection(self)  # Initialize AuthorSection
 
         self.sections: list[FilterSectionBase] = [
             self.starting_letter_section,
@@ -40,11 +42,18 @@ class DictionaryInitialSelectionsWidget(QWidget):
             self.level_section,
             self.contains_letter_section,
             self.starting_position_section,
+            self.author_section,  # Add the AuthorSection to the list
         ]
         # Initialize filter choice widget
         self.filter_choice_widget = FilterChoiceWidget(self)
 
         self._setup_ui()
+
+    def show_author_section(self):
+        self._hide_all_sections()
+        self.filter_choice_widget.hide()
+        self.author_section.show()
+        self.main_layout.addWidget(self.author_section)
 
     def _setup_ui(self):
         self.main_layout = QVBoxLayout(self)
@@ -64,6 +73,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.length_section.hide()
         self.level_section.hide()
         self.starting_position_section.hide()
+        self.author_section.hide()  # Hide the AuthorSection
 
     def show_starting_letter_section(self):
         self._hide_all_sections()
@@ -115,6 +125,10 @@ class DictionaryInitialSelectionsWidget(QWidget):
 
     def on_position_button_clicked(self, position: str):
         self.browser.apply_initial_selection({"position": position})
+        self.show_filter_choice_widget()
+
+    def on_author_button_clicked(self, author: str):
+        self.browser.apply_initial_selection({"author": author})
         self.show_filter_choice_widget()
 
     def apply_contains_letter_filter(self):

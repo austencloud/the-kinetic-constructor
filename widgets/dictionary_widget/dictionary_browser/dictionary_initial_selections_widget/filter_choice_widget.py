@@ -65,6 +65,11 @@ class FilterChoiceWidget(QWidget):
                 "Display sequences based on their starting position.",
                 self.initial_selection_widget.show_starting_position_section,
             ),
+            (
+                "Author",
+                "Display sequences based on their author.",
+                self.initial_selection_widget.show_author_section,
+            ),
         ]
         show_all_sequences_layout = QHBoxLayout()
         show_all_sequences_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -120,7 +125,7 @@ class FilterChoiceWidget(QWidget):
         button_font = QFont()
         button_font.setPointSize(self.initial_selection_widget.width() // 80)
         for button in self.buttons.values():
-            button.setFixedWidth(self.initial_selection_widget.width() // 6)
+            button.setFixedWidth(self.initial_selection_widget.width() // 7)
             button.setMinimumHeight(self.initial_selection_widget.height() // 10)
             button.setFont(button_font)
 

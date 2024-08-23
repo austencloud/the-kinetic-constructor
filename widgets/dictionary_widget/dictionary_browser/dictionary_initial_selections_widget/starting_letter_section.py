@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QApplication
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QApplication, QSizePolicy, QSpacerItem
 from .filter_section_base import FilterSectionBase
 from PyQt6.QtCore import Qt
 
@@ -20,6 +20,7 @@ class StartingLetterSection(FilterSectionBase):
         self.section_manager = self.browser.section_manager
         self.num_columns = self.browser.num_columns
         self.thumbnail_box_sorter = self.browser.thumbnail_box_sorter
+        self.main_widget = self.initial_selection_widget.browser.main_widget
 
     def _add_buttons(self):
         layout: QVBoxLayout = self.layout()
@@ -54,7 +55,11 @@ class StartingLetterSection(FilterSectionBase):
                     )
                     button_row_layout.addWidget(button)
                 layout.addLayout(button_row_layout)
-
+            layout.addSpacerItem(
+                QSpacerItem(
+                    20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
+                )
+            )
         layout.addStretch(1)
 
     ### STARTING LETTER ###
@@ -71,7 +76,7 @@ class StartingLetterSection(FilterSectionBase):
         self.browser.number_of_currently_displayed_words_label.setText("")
 
         self.browser.scroll_widget.clear_layout()
-        self.thumbnail_box_sorter.sections = {}
+        self.browser.sections = {}
         self.browser.currently_displayed_sequences = (
             []
         )  # Reset the list for the new filter
@@ -93,16 +98,16 @@ class StartingLetterSection(FilterSectionBase):
                 word, "sequence_length", seq_length, thumbnails
             )
 
-            if section not in self.thumbnail_box_sorter.sections:
-                self.thumbnail_box_sorter.sections[section] = []
+            if section not in self.browser.sections:
+                self.browser.sections[section] = []
 
-            self.thumbnail_box_sorter.sections[section].append((word, thumbnails))
+            self.browser.sections[section].append((word, thumbnails))
             self.browser.currently_displayed_sequences.append(
                 (word, thumbnails, seq_length)
             )
 
         sorted_sections = self.section_manager.get_sorted_sections(
-            "sequence_length", self.thumbnail_box_sorter.sections.keys()
+            "sequence_length", self.browser.sections.keys()
         )
         self.browser.nav_sidebar.update_sidebar(sorted_sections, "sequence_length")
 
@@ -113,7 +118,7 @@ class StartingLetterSection(FilterSectionBase):
 
             column_index = 0
 
-            for word, thumbnails in self.thumbnail_box_sorter.sections[section]:
+            for word, thumbnails in self.browser.sections[section]:
                 self.thumbnail_box_sorter.add_thumbnail_box(
                     row_index, column_index, word, thumbnails
                 )
@@ -135,5 +140,8 @@ class StartingLetterSection(FilterSectionBase):
 
         self.browser.number_of_currently_displayed_words_label.setText(
             f"Number of words displayed: {num_words}"
+        )
+        self.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
+            self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
         )
         QApplication.restoreOverrideCursor()

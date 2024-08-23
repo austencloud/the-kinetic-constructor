@@ -23,6 +23,7 @@ class ContainsLetterSection(FilterSectionBase):
         self.browser = initial_selection_widget.browser
         self.section_manager = self.browser.section_manager
         self.thumbnail_box_sorter = self.browser.thumbnail_box_sorter
+        self.main_widget = initial_selection_widget.browser.main_widget
 
     def _add_buttons(self):
         layout: QVBoxLayout = self.layout()
@@ -150,6 +151,10 @@ class ContainsLetterSection(FilterSectionBase):
         )
         self.browser.number_of_currently_displayed_words_label.setText(
             f"Number of words displayed: {num_words}"
+        )
+
+        self.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
+            self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
         )
         QApplication.restoreOverrideCursor()
 

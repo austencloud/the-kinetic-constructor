@@ -58,12 +58,9 @@ class ThumbnailBoxSorter:
             sort_method, self.browser.sections.keys()
         )
 
-        # Update the navigation sidebar with the filtered and sorted sections
         self.browser.nav_sidebar.update_sidebar(sorted_sections, sort_method)
-        # QApplication.processEvents()
         current_section = None
 
-        # select the appropriate button in the sort widget
         self.browser.options_widget.sort_widget.highlight_appropriate_button(
             sort_method
         )
@@ -184,13 +181,14 @@ class ThumbnailBoxSorter:
         starting_letter_section = initial_selection_widget.starting_letter_section
         level_section = initial_selection_widget.level_section
         length_section = initial_selection_widget.length_section
-
+        author_section = initial_selection_widget.author_section
         display_functions = {
             "letter": starting_letter_section.display_only_thumbnails_starting_with_letter,
             "length": length_section.display_only_thumbnails_with_sequence_length,
             "level": level_section.display_only_thumbnails_with_level,
             "contains_letters": contains_letter_section.display_only_thumbnails_containing_letters,
             "position": starting_position_section.display_only_thumbnails_with_starting_position,
+            "author": author_section.display_only_thumbnails_by_author,
         }
 
         for key, value in initial_selection.items():
