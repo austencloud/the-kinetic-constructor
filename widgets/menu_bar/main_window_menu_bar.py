@@ -35,20 +35,18 @@ class MainWindowMenuBar(QMenuBar):
 
         # Set the font size based on a percentage of the main widget's height
         font = self.font()
-        calculated_font_size = max(
-            8, min(self.main_widget.height() // 40, 14)
-        )  # Ensures the font size stays between 8 and 20
-        font.setPointSize(calculated_font_size)
+        font_size = 14
+        font.setPointSize(font_size)
         self.setFont(font)
 
         # Apply the same font size to each menu's actions (dropdown items)
         for menu in self.findChildren(QMenu):
             menu_font = menu.font()
-            menu_font.setPointSize(calculated_font_size)
+            menu_font.setPointSize(font_size)
             menu.setFont(menu_font)
             for action in menu.actions():
                 action_font = action.font()
-                action_font.setPointSize(calculated_font_size)
+                action_font.setPointSize(font_size)
                 action.setFont(action_font)
 
         # Ensure the menu bar is correctly positioned and visible

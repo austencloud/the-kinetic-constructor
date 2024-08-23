@@ -40,12 +40,12 @@ class FilterSectionBase(QWidget):
 
         # Create a top bar with the back button on the left
         top_bar_layout = QHBoxLayout()
-        back_button = QPushButton("Back")
-        back_button.setCursor(Qt.CursorShape.PointingHandCursor)
-        back_button.clicked.connect(
+        self.back_button = QPushButton("Back")
+        self.back_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.back_button.clicked.connect(
             self.initial_selection_widget.show_filter_choice_widget
         )
-        top_bar_layout.addWidget(back_button, alignment=Qt.AlignmentFlag.AlignLeft)
+        top_bar_layout.addWidget(self.back_button, alignment=Qt.AlignmentFlag.AlignLeft)
         top_bar_layout.addStretch(1)
 
         layout.addLayout(top_bar_layout)
@@ -141,3 +141,11 @@ class FilterSectionBase(QWidget):
             QApplication.restoreOverrideCursor()
 
         QTimer.singleShot(0, update_ui)
+
+    def resize_go_back_button(self):
+        self.back_button.setFixedWidth(self.browser.width() // 10)
+        self.back_button.setFixedHeight(self.browser.height() // 20)
+        font = self.back_button.font()
+        font.setPointSize(self.browser.height() // 80)
+        self.back_button.setFont(font)
+        QApplication.processEvents()

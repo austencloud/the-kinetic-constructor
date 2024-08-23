@@ -77,6 +77,7 @@ class ImageExportDialog(QDialog):
             "open_directory": self.control_panel.open_directory_check.isChecked(),
             "notes": self.control_panel.notes_combo_box.currentText(),
             "add_difficulty_level": self.control_panel.include_difficulty_level_check.isChecked(),
+            "add_beat_numbers": self.control_panel.add_beat_numbers_check.isChecked(),
         }
 
     def update_preview_based_on_options(self):

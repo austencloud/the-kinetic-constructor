@@ -31,6 +31,7 @@ class ExportDialogPreviewPanel(QFrame):
         sequence: list[dict],
         add_word: bool,
         include_difficulty_level: bool,
+        add_beat_numbers: bool,
     ):
         options = {
             "include_start_pos": include_start_pos,
@@ -40,6 +41,7 @@ class ExportDialogPreviewPanel(QFrame):
             "add_word": add_word,
             "notes": self.export_dialog.control_panel.notes_combo_box.currentText(),
             "add_difficulty_level": include_difficulty_level,
+            "add_beat_numbers": add_beat_numbers,
         }
         self.image = (
             self.export_dialog.export_manager.image_creator.create_sequence_image(
@@ -48,6 +50,7 @@ class ExportDialogPreviewPanel(QFrame):
         )
         self.preview_image = QPixmap.fromImage(self.image)
         self.update_preview()
+
 
     def update_preview(self):
         if self.preview_image:

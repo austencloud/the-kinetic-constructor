@@ -100,6 +100,8 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.filter_choice_widget.hide()
         self.level_section.show()
         self.main_layout.addWidget(self.level_section)
+        self.level_section.load_and_display_images()
+        self.level_section.resize_level_section()
 
     def show_starting_position_section(self):
         self._hide_all_sections()
@@ -144,6 +146,8 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.resize_fonts_in_each_section()
         self.resize_buttons_in_each_section()
         self.filter_choice_widget.resize_filter_choice_widget()
+        for section in self.sections:
+            section.resize_go_back_button()
 
     def resize_initial_filter_buttons(self):
         for button in self.filter_choice_widget.buttons.values():
@@ -157,6 +161,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
         for section in self.sections:
             for button in section.buttons.values():
                 self._resize_buttons(button)
+        self.level_section.resize_level_buttons()
 
     def _resize_buttons(self, button: QPushButton):
         font = button.font()
@@ -170,6 +175,3 @@ class DictionaryInitialSelectionsWidget(QWidget):
         for button in self.filter_choice_widget.buttons.values():
             button.setFont(font)
 
-    def resizeEvent(self, event):
-        self.resize_initial_selections_widget()
-        super().resizeEvent(event)

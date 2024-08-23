@@ -3,20 +3,22 @@
         "prop_type": "Staff",
         "background_type": "AuroraBorealis",
         "grow_sequence": true,
-        "current_tab": "sequence_builder"
+        "current_tab": "dictionary"
     },
     "image_export": {
-        "include_start_position": true,
-        "add_info": true,
+        "include_start_position": false,
+        "add_info": false,
         "open_directory_on_export": true,
-        "add_word": true,
-        "add_difficulty_level": true
+        "add_word": false,
+        "add_difficulty_level": false,
+        "add_beat_numbers": false
     },
     "user_profile": {
         "current_user": "Austen Cloud",
         "user_profiles": {
             "Austen Cloud": {
-                "name": "Austen Cloud"
+                "name": "Austen Cloud",
+                "export_date": "8-23-2024"
             },
             "Doc Womp": {
                 "name": "Doc Womp"
@@ -31,11 +33,11 @@
         "glyph_visibility": {
             "VTG": false,
             "TKA": true,
-            "Elemental": true,
+            "Elemental": false,
             "EndPosition": false
         },
         "grid_visibility": {
-            "non_radial_points": true
+            "non_radial_points": false
         }
     },
     "dictionary": {

@@ -36,7 +36,6 @@ class ImageCreator:
         self.word_drawer = WordDrawer(self)
         self.user_info_drawer = UserInfoDrawer(self)
         self.difficulty_level_drawer = DifficultyLevelDrawer(self)
-
     def create_sequence_image(
         self, sequence: list[dict], include_start_pos=True, options: dict = None
     ) -> QImage:
@@ -54,9 +53,12 @@ class ImageCreator:
             )
         else:
             additional_height_top, additional_height_bottom = 0, 0
+
         image = self._create_image(
             column_count, row_count, additional_height_top + additional_height_bottom
         )
+
+
         self.beat_drawer.draw_beats(
             image,
             filled_beats,
@@ -64,7 +66,10 @@ class ImageCreator:
             row_count,
             include_start_pos,
             additional_height_top,
+            add_beat_numbers = options["add_beat_numbers"] 
         )
+
+
         if options:
             if options.get("add_info"):
                 self.user_info_drawer.draw_user_info(image, options, num_filled_beats)
@@ -82,7 +87,13 @@ class ImageCreator:
                 self.difficulty_level_drawer.draw_difficulty_level(
                     image, difficulty_level, additional_height_top
                 )
+            if options.get("add_beat_numbers"):
+                for beat_view in filled_beats:
+                    beat_view.beat.beat_number_item.setVisible(True)
 
+            else:
+                for beat_view in filled_beats:
+                    beat_view.beat.beat_number_item.setVisible(False)
         return image
 
     def _create_image(self, column_count, row_count, additional_height=0) -> QImage:

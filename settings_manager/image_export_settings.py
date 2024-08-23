@@ -12,7 +12,10 @@ class ImageExportSettings:
         "open_directory_on_export": True,
         "add_word": True,
         "add_difficulty_level": True,
+        "add_beat_numbers": True,
     }
+
+
 
     def __init__(self, settings_manager: "SettingsManager") -> None:
         self.settings_manager = settings_manager

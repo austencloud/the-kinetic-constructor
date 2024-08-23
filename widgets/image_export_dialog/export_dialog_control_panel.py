@@ -66,30 +66,6 @@ class ExportDialogControlPanel(QWidget):
             "open_directory_on_export", self.open_directory_check.isChecked()
         )
 
-    def _setup_layout(self):
-        """Setup the layout of the control panel."""
-        self.user_input_layout = QHBoxLayout()
-        self.user_input_layout.addStretch(1)
-        self.user_input_layout.addWidget(self.user_combo_box, 1)
-        self.user_input_layout.addWidget(self.notes_combo_box, 7)
-        self.user_input_layout.addWidget(self.add_date_field, 1)
-        self.user_input_layout.addStretch(1)
-
-        self.options_checkbox_layout = QHBoxLayout()
-        self.options_checkbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.options_checkbox_layout.addWidget(self.include_start_pos_check)
-        self.options_checkbox_layout.addWidget(self.add_info_check)
-        self.options_checkbox_layout.addWidget(self.add_word_check)
-        self.options_checkbox_layout.addWidget(
-            self.include_difficulty_level_check
-        )  # New checkbox
-
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addStretch(1)
-        self.layout.addLayout(self.user_input_layout)
-        self.layout.addLayout(self.options_checkbox_layout)
-        self.layout.addLayout(self.open_dir_layout)
-
     def _connect_signals(self):
         """Connect signals to their respective slots."""
         self.optionChanged.connect(self.update_preview_based_on_options)
@@ -133,7 +109,40 @@ class ExportDialogControlPanel(QWidget):
         self.include_difficulty_level_check.toggled.connect(
             self.toggle_include_difficulty_level
         )
+
+        # Updated checkbox for adding beat numbers
+        self.add_beat_numbers_check = QCheckBox("Add Beat Numbers", self)
+        self.add_beat_numbers_check.setChecked(
+            self.settings_manager.image_export.get_image_export_setting(
+                "add_beat_numbers"
+            )
+        )
+        self.add_beat_numbers_check.toggled.connect(self.toggle_add_beat_numbers)
+
         self._setup_open_directory_checkbox()
+
+    def _setup_layout(self):
+        """Setup the layout of the control panel."""
+        self.user_input_layout = QHBoxLayout()
+        self.user_input_layout.addStretch(1)
+        self.user_input_layout.addWidget(self.user_combo_box, 1)
+        self.user_input_layout.addWidget(self.notes_combo_box, 7)
+        self.user_input_layout.addWidget(self.add_date_field, 1)
+        self.user_input_layout.addStretch(1)
+
+        self.options_checkbox_layout = QHBoxLayout()
+        self.options_checkbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.options_checkbox_layout.addWidget(self.include_start_pos_check)
+        self.options_checkbox_layout.addWidget(self.add_info_check)
+        self.options_checkbox_layout.addWidget(self.add_word_check)
+        self.options_checkbox_layout.addWidget(self.include_difficulty_level_check)
+        self.options_checkbox_layout.addWidget(self.add_beat_numbers_check)
+
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.layout.addStretch(1)
+        self.layout.addLayout(self.user_input_layout)
+        self.layout.addLayout(self.options_checkbox_layout)
+        self.layout.addLayout(self.open_dir_layout)
 
     def _setup_add_date_field(self):
         """Setup the input fields for the control panel."""
@@ -193,12 +202,14 @@ class ExportDialogControlPanel(QWidget):
         add_info = self.add_info_check.isChecked()
         add_word = self.add_word_check.isChecked()
         include_difficulty_level = self.include_difficulty_level_check.isChecked()
+        add_beat_numbers = self.add_beat_numbers_check.isChecked()
         self.export_dialog.preview_panel.update_preview_with_start_pos(
             include_start_pos,
             add_info,
             self.export_dialog.sequence,
             add_word,
             include_difficulty_level,
+            add_beat_numbers,
         )
 
     def toggle_add_info(self):
@@ -226,4 +237,13 @@ class ExportDialogControlPanel(QWidget):
         self.optionChanged.emit()
         self.settings_manager.image_export.set_image_export_setting(
             "add_difficulty_level", state
+        )
+
+    def toggle_add_beat_numbers(self):
+        """Toggle the state of the add beat numbers field based on the checkbox."""
+        state = self.add_beat_numbers_check.isChecked()
+        self.update_preview_based_on_options()
+        self.optionChanged.emit()
+        self.settings_manager.image_export.set_image_export_setting(
+            "add_beat_numbers", state
         )
