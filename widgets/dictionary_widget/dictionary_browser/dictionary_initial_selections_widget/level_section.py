@@ -27,7 +27,6 @@ class LevelSection(FilterSectionBase):
         self.buttons: dict[str, QPushButton] = {}
         self.labels: dict[str, QLabel] = {}
         self.level_images: dict[str, QLabel] = {}
-        self.initialized: bool = False
 
     def add_buttons(self):
         self.initialized = True

@@ -36,7 +36,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.length_section = LengthSection(self)
         self.level_section = LevelSection(self)
         self.starting_position_section = StartingPositionSection(self)
-        self.author_section = AuthorSection(self)  # Initialize AuthorSection
+        self.author_section = AuthorSection(self) 
 
         self.sections: list[FilterSectionBase] = [
             self.starting_letter_section,

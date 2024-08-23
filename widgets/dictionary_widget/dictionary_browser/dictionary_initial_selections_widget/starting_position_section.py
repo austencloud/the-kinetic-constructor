@@ -12,7 +12,6 @@ if TYPE_CHECKING:
 class StartingPositionSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select by Starting Position:")
-        self.initialized = False
 
     def add_buttons(self):
         self.initialized = True

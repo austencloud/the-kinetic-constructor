@@ -25,7 +25,6 @@ if TYPE_CHECKING:
 class ContainsLetterSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select Letters to be Contained:")
-        self.initialized = False
 
     def add_buttons(self):
         self.initialized = True

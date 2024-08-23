@@ -12,7 +12,6 @@ if TYPE_CHECKING:
 class AuthorSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select by Author:")
-        self.initialized = False
 
     def add_buttons(self):
         self.authors = self._get_unique_authors()  # Get a list of unique authors

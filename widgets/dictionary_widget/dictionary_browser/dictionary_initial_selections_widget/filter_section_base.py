@@ -34,6 +34,7 @@ class FilterSectionBase(QWidget):
         self.metadata_extractor = self.main_widget.metadata_extractor
         self._setup_ui(label_text)
         self._initialize_progress_bar()
+        self.initialized = False
 
     def _setup_ui(self, label_text: str):
         layout = QVBoxLayout(self)
@@ -145,6 +146,10 @@ class FilterSectionBase(QWidget):
 
         QTimer.singleShot(0, update_ui)
 
+    def add_buttons(self):
+        # placeholder method, implemented in subclasses
+        pass
+
     def resize_go_back_button(self):
         self.back_button.setFixedWidth(self.browser.width() // 10)
         self.back_button.setFixedHeight(self.browser.height() // 20)
@@ -152,3 +157,4 @@ class FilterSectionBase(QWidget):
         font.setPointSize(self.browser.height() // 80)
         self.back_button.setFont(font)
         QApplication.processEvents()
+
