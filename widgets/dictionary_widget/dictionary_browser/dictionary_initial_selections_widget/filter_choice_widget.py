@@ -104,7 +104,7 @@ class FilterChoiceWidget(QWidget):
             0,
             0,
             QSizePolicy.Policy.Minimum,
-            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.MinimumExpanding,
         )
         grid_layout.addItem(
             self.grid_spacer_item_1, 1, 0, 1, 3
@@ -125,12 +125,11 @@ class FilterChoiceWidget(QWidget):
             0,
             0,
             QSizePolicy.Policy.Minimum,
-            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.MinimumExpanding,
         )
         grid_layout.addItem(
             self.grid_spacer_item_2, 3, 0, 1, 3
         )  # Add spacer across all three columns
-
 
         # Add the button below the middle column in the grid layout
         grid_layout.addWidget(
@@ -147,8 +146,8 @@ class FilterChoiceWidget(QWidget):
         self._resize_grid_spacer_items()
 
     def _resize_grid_spacer_items(self):
-        self.grid_spacer_item_1.changeSize(self.height() // 10, self.height() // 15)
-        self.grid_spacer_item_2.changeSize(self.height() // 10, self.height() // 15)
+        self.grid_spacer_item_1.changeSize(0, self.height() // 15)
+        self.grid_spacer_item_2.changeSize(0, self.height() // 15)
 
     def _resize_description_label(self):
         description_label_font = QFont()

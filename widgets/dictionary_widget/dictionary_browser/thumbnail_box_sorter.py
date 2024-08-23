@@ -166,7 +166,7 @@ class ThumbnailBoxSorter:
                     column_index = 0
                     row_index += 1
 
-        self.currently_displaying_label.show_completed_message("all sequences")
+        self.currently_displaying_label.show_completed_message("", " all sequences")
         self.browser.number_of_currently_displayed_words_label.setText(
             f"Number of words: {len(base_words)}"
         )

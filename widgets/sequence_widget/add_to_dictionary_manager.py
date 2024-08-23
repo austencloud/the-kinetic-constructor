@@ -60,8 +60,8 @@ class AddToDictionaryManager:
             self.display_message(
                 f"New structural and turn pattern variation added to '{base_word}'."
             )
-        if self.json_manager.main_widget.dictionary_widget.initialized:
-            self.refresh_dictionary_ui()
+        # if self.json_manager.main_widget.dictionary_widget.initialized:
+        #     self.refresh_dictionary_ui()
         thumbnail_box = self.sequence_widget.main_widget.dictionary_widget.browser.scroll_widget.thumbnail_boxes_dict.get(
             base_word
         )

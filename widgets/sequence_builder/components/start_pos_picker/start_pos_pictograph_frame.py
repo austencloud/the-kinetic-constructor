@@ -20,7 +20,11 @@ class StartPosPickerPictographFrame(QWidget):
         self.start_positions: dict[str, Pictograph] = {}
 
     def resize_start_pos_picker_pictograph_frame(self) -> None:
-        self.setMaximumWidth(self.start_pos_picker.width())
+        self.setMaximumWidth(
+            self.start_pos_picker.width()
+            if self.start_pos_picker.isVisible()
+            else self.start_pos_picker.sequence_builder.option_picker.width()
+        )
         self.start_pos_picker.choose_your_start_pos_label.set_stylesheet()
         for button in self.variation_buttons.values():
             button.setMaximumWidth(

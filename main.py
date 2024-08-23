@@ -26,7 +26,6 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Kinetic Constructor")
         self.menu_bar = MainWindowMenuBar(self.main_widget)
         self.setMenuBar(self.menu_bar)
-        self.show()
 
     def exec_with_profiling(self, app: QApplication) -> int:
         self.profiler.enable()
@@ -92,5 +91,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-

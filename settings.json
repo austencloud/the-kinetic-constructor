@@ -3,7 +3,7 @@
         "prop_type": "Staff",
         "background_type": "AuroraBorealis",
         "grow_sequence": true,
-        "current_tab": "dictionary"
+        "current_tab": "sequence_builder"
     },
     "image_export": {
         "include_start_position": false,
@@ -30,9 +30,9 @@
     },
     "visibility": {
         "glyph_visibility": {
-            "VTG": true,
+            "VTG": false,
             "TKA": true,
-            "Elemental": true,
+            "Elemental": false,
             "EndPosition": false
         },
         "grid_visibility": {

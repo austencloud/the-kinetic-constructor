@@ -2,7 +2,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
 from PyQt6.QtCore import Qt
 
-from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.author_section import AuthorSection
+from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.author_section import (
+    AuthorSection,
+)
 from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.filter_choice_widget import (
     FilterChoiceWidget,
 )
@@ -167,3 +169,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
         label.setFont(font)
         for button in self.filter_choice_widget.buttons.values():
             button.setFont(font)
+
+    def resizeEvent(self, event):
+        self.resize_initial_selections_widget()
+        super().resizeEvent(event)
