@@ -31,10 +31,12 @@ class ContainsLetterSection(FilterSectionBase):
         layout: QVBoxLayout = self.layout()
 
         sections = [
-            [["A", "B", "C", "D", "E", "F"],
-             ["G", "H", "I", "J", "K", "L"],
-             ["M", "N", "O", "P", "Q", "R"],
-             ["S", "T", "U", "V"]],
+            [
+                ["A", "B", "C", "D", "E", "F"],
+                ["G", "H", "I", "J", "K", "L"],
+                ["M", "N", "O", "P", "Q", "R"],
+                ["S", "T", "U", "V"],
+            ],
             [["W", "X", "Y", "Z"], ["Σ", "Δ", "θ", "Ω"]],
             [["W-", "X-", "Y-", "Z-"], ["Σ-", "Δ-", "θ-", "Ω-"]],
             [["Φ", "Ψ", "Λ"]],
@@ -78,16 +80,23 @@ class ContainsLetterSection(FilterSectionBase):
         layout.addStretch(1)
 
     def display_only_thumbnails_containing_letters(self, letters: set[str]):
-        self._prepare_ui_for_filtering(f"sequences containing {', '.join(letters)}")
+        letters = self.organize_letters(letters)
+        self._prepare_ui_for_filtering(f"sequences containing \n{', '.join(letters)}")
 
         self.browser.currently_displayed_sequences = []
-        sort_method = self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
+        sort_method = (
+            self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
+        )
         base_words = self.thumbnail_box_sorter.get_sorted_base_words(sort_method)
         total_sequences = 0
 
         for word, thumbnails, seq_length in base_words:
-            if any(self._is_valid_letter_match(word, letter, letters) for letter in letters):
-                self.browser.currently_displayed_sequences.append((word, thumbnails, seq_length))
+            if any(
+                self._is_valid_letter_match(word, letter, letters) for letter in letters
+            ):
+                self.browser.currently_displayed_sequences.append(
+                    (word, thumbnails, seq_length)
+                )
                 total_sequences += 1
 
         if total_sequences == 0:
@@ -117,7 +126,7 @@ class ContainsLetterSection(FilterSectionBase):
                 percentage = int((num_words / total_sequences) * 100)
                 self.loading_progress_bar.setValue(percentage)
                 self.browser.number_of_currently_displayed_words_label.setText(
-                    f"Number of words displayed: {num_words}"
+                    f"Number of words: {num_words}"
                 )
                 QApplication.processEvents()
 
@@ -127,11 +136,34 @@ class ContainsLetterSection(FilterSectionBase):
             )
 
             self.browser.currently_displaying_label.show_completed_message(
-                " sequences containing", ', '.join(letters)
+                " sequences containing\n", ", ".join(letters)
             )
             QApplication.restoreOverrideCursor()
 
         QTimer.singleShot(0, update_ui)
+
+    def organize_letters(self, letters: set[str]) -> list[str]:
+        letter_order = [
+            ["A", "B", "C", "D", "E", "F"],
+            ["G", "H", "I", "J", "K", "L"],
+            ["M", "N", "O", "P", "Q", "R"],
+            ["S", "T", "U", "V"],
+            ["W", "X", "Y", "Z"],
+            ["Σ", "Δ", "θ", "Ω"],
+            ["W-", "X-", "Y-", "Z-"],
+            ["Σ-", "Δ-", "θ-", "Ω-"],
+            ["Φ", "Ψ", "Λ"],
+            ["Φ-", "Ψ-", "Λ-"],
+            ["α", "β", "Γ"],
+        ]
+        # make it so the letters are in the order they appear in the UI
+        ordered_letters = []
+        for row in letter_order:
+            for letter in row:
+                if letter in letters:
+                    ordered_letters.append(letter)
+        return ordered_letters
+
     def _is_valid_letter_match(self, word, letter, letters):
         if letter in word:
             if (

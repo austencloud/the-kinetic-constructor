@@ -32,13 +32,11 @@ class FilterChoiceWidget(QWidget):
         main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Add a descriptive label at the top
-        self.description_label = QLabel(
-            "Please choose a filter option below.\nEach option will display sequences based on the selected filter."
-        )
+        self.description_label = QLabel("Choose a filter:")
         self.description_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         main_layout.addStretch(4)
         main_layout.addWidget(self.description_label)
-        main_layout.addStretch(1)
+        main_layout.addStretch(2)
 
         # Create a grid layout for the filter options
         grid_layout = QGridLayout()
@@ -102,31 +100,43 @@ class FilterChoiceWidget(QWidget):
             grid_layout.addLayout(vbox, row, col)
 
         # Add an empty row between the first and second rows of buttons
-        self.grid_spacer_item = QSpacerItem(
-            self.height() // 10,
-            self.height() // 15,
+        self.grid_spacer_item_1 = QSpacerItem(
+            0,
+            0,
             QSizePolicy.Policy.Minimum,
             QSizePolicy.Policy.Expanding,
         )
         grid_layout.addItem(
-            self.grid_spacer_item, 1, 0, 1, 3
+            self.grid_spacer_item_1, 1, 0, 1, 3
         )  # Add spacer across all three columns
 
         main_layout.addLayout(grid_layout)
 
-        # Add the "Show all sequences" button
-        show_all_sequences_layout = QHBoxLayout()
-        show_all_sequences_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # Add the "Show all sequences" button to the grid layout
         show_all_sequences_button = QPushButton("Show all")
         show_all_sequences_button.setCursor(Qt.CursorShape.PointingHandCursor)
         show_all_sequences_button.clicked.connect(
             self.initial_selection_widget.browser.show_all_sequences
         )
         self.buttons["Show all sequences"] = show_all_sequences_button
-        show_all_sequences_layout.addWidget(show_all_sequences_button)
 
-        main_layout.addStretch(2)
-        main_layout.addLayout(show_all_sequences_layout)
+        # add a spacer item between the grid layout and the button
+        self.grid_spacer_item_2 = QSpacerItem(
+            0,
+            0,
+            QSizePolicy.Policy.Minimum,
+            QSizePolicy.Policy.Expanding,
+        )
+        grid_layout.addItem(
+            self.grid_spacer_item_2, 3, 0, 1, 3
+        )  # Add spacer across all three columns
+
+
+        # Add the button below the middle column in the grid layout
+        grid_layout.addWidget(
+            show_all_sequences_button, 4, 1, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+
         main_layout.addStretch(4)
         self.setLayout(main_layout)
 
@@ -134,14 +144,16 @@ class FilterChoiceWidget(QWidget):
         self._resize_buttons_labels()
         self._resize_buttons()
         self._resize_description_label()
-        self.resize_grid_spacer_item()
+        self._resize_grid_spacer_items()
 
-    def resize_grid_spacer_item(self):
-        self.grid_spacer_item.changeSize(self.height() // 10, self.height() // 15)
+    def _resize_grid_spacer_items(self):
+        self.grid_spacer_item_1.changeSize(self.height() // 10, self.height() // 15)
+        self.grid_spacer_item_2.changeSize(self.height() // 10, self.height() // 15)
 
     def _resize_description_label(self):
         description_label_font = QFont()
-        description_label_font.setPointSize(self.browser.width() // 90)
+        description_label_font.setFamily("Monotype Corsiva")
+        description_label_font.setPointSize(self.browser.width() // 60)
         self.description_label.setFont(description_label_font)
 
     def _resize_buttons(self):

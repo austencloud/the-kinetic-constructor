@@ -67,13 +67,14 @@ class FilterSectionBase(QWidget):
 
     def _style_loading_bar(self):
         self.loading_progress_bar.setFixedWidth(self.browser.width() // 3)
-        self.loading_progress_bar.setFixedHeight(self.browser.height() // 10)
+        self.loading_progress_bar.setFixedHeight(self.browser.height() // 6)
 
         # Update the font to Monotype Corsiva
         loading_bar_font = self.loading_progress_bar.percentage_label.font()
         loading_bar_font.setFamily("Monotype Corsiva")  # Set font to Monotype Corsiva
         loading_bar_font.setPointSize(self.browser.width() // 40)
         self.loading_progress_bar.percentage_label.setFont(loading_bar_font)
+        self.loading_progress_bar.loading_label.setFont(loading_bar_font)
 
     def _prepare_ui_for_filtering(self, description: str):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
@@ -123,7 +124,7 @@ class FilterSectionBase(QWidget):
                 percentage = int((num_words / total_sequences) * 100)
                 self.loading_progress_bar.setValue(percentage)
                 self.browser.number_of_currently_displayed_words_label.setText(
-                    f"Number of words displayed: {num_words}"
+                    f"Number of words: {num_words}"
                 )
                 QApplication.processEvents()
 

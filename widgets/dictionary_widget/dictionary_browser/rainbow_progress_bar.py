@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QProgressBar, QVBoxLayout, QLabel, QWidget
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPalette, QColor
 
+
 class RainbowProgressBar(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -10,13 +11,17 @@ class RainbowProgressBar(QWidget):
         self.progress_bar = QProgressBar(self)
         self.progress_bar.setTextVisible(False)  # Hide the text on the bar itself
 
+        self.loading_label = QLabel("Loading...", self)
+
         # Create the label for percentage text
         self.percentage_label = QLabel("0%", self)
         self.percentage_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        # self.percentage_label.setStyleSheet("font-size: 14px; color: #000000;")
+        self.loading_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Layout to position the progress bar and percentage label
         layout = QVBoxLayout(self)
+        layout.addWidget(self.loading_label)
+        layout.addStretch(1)
         layout.addWidget(self.percentage_label)
         # add a spacer
         layout.addStretch(1)
@@ -26,7 +31,8 @@ class RainbowProgressBar(QWidget):
         self.setLayout(layout)
 
         # Set the rainbow gradient style
-        self.progress_bar.setStyleSheet("""
+        self.progress_bar.setStyleSheet(
+            """
             QProgressBar {
                 border: 2px solid #4CAF50;
                 border-radius: 5px;
@@ -46,10 +52,10 @@ class RainbowProgressBar(QWidget):
                     stop:1 violet
                 );
             }
-        """)
+        """
+        )
 
     def setValue(self, value):
-        """ Update the progress bar value and the percentage label """
+        """Update the progress bar value and the percentage label"""
         self.progress_bar.setValue(value)
         self.percentage_label.setText(f"{value}%")
-

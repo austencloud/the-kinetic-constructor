@@ -99,7 +99,7 @@ class ThumbnailBoxSorter:
                     row_index += 1
 
         self.browser.number_of_currently_displayed_words_label.setText(
-            f"Number of words displayed: {len(self.browser.currently_displayed_sequences)}"
+            f"Number of words: {len(self.browser.currently_displayed_sequences)}"
         )
         QApplication.restoreOverrideCursor()
 
@@ -168,7 +168,7 @@ class ThumbnailBoxSorter:
 
         self.currently_displaying_label.show_completed_message("all sequences")
         self.browser.number_of_currently_displayed_words_label.setText(
-            f"Number of words displayed: {len(base_words)}"
+            f"Number of words: {len(base_words)}"
         )
 
     def sort_and_display_thumbnail_boxes_by_initial_selection(
@@ -197,7 +197,9 @@ class ThumbnailBoxSorter:
 
     ### HELPER FUNCTIONS ###
 
-    def add_thumbnail_box(self, row_index, column_index, word, thumbnails, hidden: bool = False):
+    def add_thumbnail_box(
+        self, row_index, column_index, word, thumbnails, hidden: bool = False
+    ):
         if word not in self.browser.scroll_widget.thumbnail_boxes_dict:
             thumbnail_box = ThumbnailBox(self.browser, word, thumbnails)
             thumbnail_box.resize_thumbnail_box()

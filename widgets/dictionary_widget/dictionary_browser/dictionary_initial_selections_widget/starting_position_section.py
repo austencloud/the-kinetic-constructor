@@ -8,6 +8,7 @@ if TYPE_CHECKING:
         DictionaryInitialSelectionsWidget,
     )
 
+
 class StartingPositionSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select by Starting Position:")
@@ -15,10 +16,13 @@ class StartingPositionSection(FilterSectionBase):
 
     def _add_buttons(self):
         layout: QVBoxLayout = self.layout()
-        starting_positions = ["alpha", "beta", "gamma"]
+
+        # Create a horizontal box layout for the starting position buttons
+        hbox = QHBoxLayout()
+        hbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        hbox.addStretch(4)
+        starting_positions = ["Alpha", "Beta", "Gamma"]
         for position in starting_positions:
-            hbox = QHBoxLayout()
-            hbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
             button = QPushButton(position.capitalize())
             button.setCursor(Qt.CursorShape.PointingHandCursor)
             self.buttons[f"position_{position}"] = button
@@ -27,9 +31,10 @@ class StartingPositionSection(FilterSectionBase):
                     p
                 )
             )
-            hbox.addWidget(button)
-            layout.addLayout(hbox)
-
+            hbox.addWidget(button)  # Add each button to the horizontal layout
+            hbox.addStretch(1)
+        hbox.addStretch(3)
+        layout.addLayout(hbox)  # Add the horizontal layout to the main vertical layout
         layout.addStretch(1)
 
     def display_only_thumbnails_with_starting_position(self, position: str):
@@ -40,10 +45,12 @@ class StartingPositionSection(FilterSectionBase):
         total_sequences = 0
 
         for word, thumbnails, seq_length in base_words:
-            if self.get_sequence_starting_position(thumbnails) != position:
+            if self.get_sequence_starting_position(thumbnails) != position.lower():
                 continue
 
-            self.browser.currently_displayed_sequences.append((word, thumbnails, seq_length))
+            self.browser.currently_displayed_sequences.append(
+                (word, thumbnails, seq_length)
+            )
             total_sequences += 1
 
         self._update_and_display_ui(" sequences starting at", total_sequences, position)

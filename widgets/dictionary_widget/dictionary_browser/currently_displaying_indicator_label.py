@@ -15,7 +15,7 @@ class CurrentlyDisplayingIndicatorLabel(QLabel):
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def show_loading_message(self, context: str):
-        self.setText(f"Currently displaying {context}. Please wait...")
+        self.setText(f"Currently displaying {context}.")
 
     def show_completed_message(self, filter_description_prefix, context: str):
         self.setText(f"Currently displaying{filter_description_prefix} {context}.")

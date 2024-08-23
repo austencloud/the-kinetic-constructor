@@ -80,7 +80,7 @@ class DictionaryBrowserNavSidebar(QWidget):
                 self.layout.addWidget(date_button)
                 self.buttons.append(date_button)
         else:
-            self.layout.setAlignment(Qt.AlignmentFlag(0))  # Remove alignment
+            self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
             for section in sections:
                 button = QPushButton(str(section))

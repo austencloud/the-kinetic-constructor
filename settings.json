@@ -1,7 +1,7 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Aurora",
+        "background_type": "AuroraBorealis",
         "grow_sequence": true,
         "current_tab": "dictionary"
     },
@@ -40,6 +40,6 @@
         }
     },
     "dictionary": {
-        "sort_method": "sequence_length"
+        "sort_method": "alphabetical"
     }
 }

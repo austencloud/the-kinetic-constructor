@@ -25,10 +25,12 @@ class StartingLetterSection(FilterSectionBase):
         layout: QVBoxLayout = self.layout()
 
         sections = [
-            [["A", "B", "C", "D", "E", "F"],
-             ["G", "H", "I", "J", "K", "L"],
-             ["M", "N", "O", "P", "Q", "R"],
-             ["S", "T", "U", "V"]],
+            [
+                ["A", "B", "C", "D", "E", "F"],
+                ["G", "H", "I", "J", "K", "L"],
+                ["M", "N", "O", "P", "Q", "R"],
+                ["S", "T", "U", "V"],
+            ],
             [["W", "X", "Y", "Z"], ["Σ", "Δ", "θ", "Ω"]],
             [["W-", "X-", "Y-", "Z-"], ["Σ-", "Δ-", "θ-", "Ω-"]],
             [["Φ", "Ψ", "Λ"]],
@@ -60,7 +62,13 @@ class StartingLetterSection(FilterSectionBase):
         layout.addStretch(1)
 
     def display_only_thumbnails_starting_with_letter(self, letter: str):
-        description = f"sequences starting with {letter}" if letter != "Show all" else "all sequences"
+        description = (
+            f"sequences starting with {letter}"
+            if letter != "Show all"
+            else "all sequences"
+        )
+        self.browser.nav_sidebar.clear_sidebar()
+        QApplication.processEvents()
         self._prepare_ui_for_filtering(description)
 
         self.browser.currently_displayed_sequences = []
@@ -75,7 +83,9 @@ class StartingLetterSection(FilterSectionBase):
                 if word[:2] != letter:
                     continue
 
-            self.browser.currently_displayed_sequences.append((word, thumbnails, seq_length))
+            self.browser.currently_displayed_sequences.append(
+                (word, thumbnails, seq_length)
+            )
             total_sequences += 1
 
         self._update_and_display_ui(total_sequences, letter)
@@ -90,6 +100,7 @@ class StartingLetterSection(FilterSectionBase):
 
         def update_ui():
             num_words = 0
+            # clear the nav buttons widget
 
             for index, (word, thumbnails, _) in enumerate(
                 self.browser.currently_displayed_sequences
@@ -108,7 +119,7 @@ class StartingLetterSection(FilterSectionBase):
                 percentage = int((num_words / total_sequences) * 100)
                 self.loading_progress_bar.setValue(percentage)
                 self.browser.number_of_currently_displayed_words_label.setText(
-                    f"Number of words displayed: {num_words}"
+                    f"Number of words: {num_words}"
                 )
                 QApplication.processEvents()
 
