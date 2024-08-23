@@ -25,6 +25,7 @@ class FilterChoiceWidget(QWidget):
         self.buttons: dict[str, QPushButton] = {}
         self.button_labels: dict[str, QLabel] = {}
         self.browser = initial_selection_widget.browser
+        self.main_widget = initial_selection_widget.browser.main_widget
         self._setup_ui()
 
     def _setup_ui(self):
@@ -112,7 +113,6 @@ class FilterChoiceWidget(QWidget):
 
         main_layout.addLayout(grid_layout)
 
-        # Add the "Show all sequences" button to the grid layout
         show_all_sequences_button = QPushButton("Show all")
         show_all_sequences_button.setCursor(Qt.CursorShape.PointingHandCursor)
         show_all_sequences_button.clicked.connect(
@@ -120,18 +120,14 @@ class FilterChoiceWidget(QWidget):
         )
         self.buttons["Show all sequences"] = show_all_sequences_button
 
-        # add a spacer item between the grid layout and the button
         self.grid_spacer_item_2 = QSpacerItem(
             0,
             0,
             QSizePolicy.Policy.Minimum,
             QSizePolicy.Policy.MinimumExpanding,
         )
-        grid_layout.addItem(
-            self.grid_spacer_item_2, 3, 0, 1, 3
-        )  # Add spacer across all three columns
+        grid_layout.addItem(self.grid_spacer_item_2, 3, 0, 1, 3)
 
-        # Add the button below the middle column in the grid layout
         grid_layout.addWidget(
             show_all_sequences_button, 4, 1, alignment=Qt.AlignmentFlag.AlignCenter
         )
@@ -146,8 +142,8 @@ class FilterChoiceWidget(QWidget):
         self._resize_grid_spacer_items()
 
     def _resize_grid_spacer_items(self):
-        self.grid_spacer_item_1.changeSize(0, self.height() // 15)
-        self.grid_spacer_item_2.changeSize(0, self.height() // 15)
+        self.grid_spacer_item_1.changeSize(0, self.main_widget.height() // 15)
+        self.grid_spacer_item_2.changeSize(0, self.main_widget.height() // 15)
 
     def _resize_description_label(self):
         description_label_font = QFont()

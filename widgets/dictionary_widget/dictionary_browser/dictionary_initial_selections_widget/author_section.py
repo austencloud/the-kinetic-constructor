@@ -12,22 +12,13 @@ if TYPE_CHECKING:
 class AuthorSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select by Author:")
+        self.initialized = False
+
+    def add_buttons(self):
         self.authors = self._get_unique_authors()  # Get a list of unique authors
-        self._add_buttons()
-
-    def _get_unique_authors(self):
-        """Extract unique authors from all sequences."""
-        authors = set()
-        base_words = self.thumbnail_box_sorter.get_sorted_base_words("author")
-        for word, thumbnails, seq_length in base_words:
-            author = self.main_widget.metadata_extractor.get_sequence_author(
-                thumbnails[0]
-            )
-            if author:
-                authors.add(author)
-        return sorted(authors)
-
-    def _add_buttons(self):
+        self.initialized = True
+        self.back_button.show()
+        self.label.show()
         layout: QVBoxLayout = self.layout()
 
         for author in self.authors:
@@ -46,6 +37,20 @@ class AuthorSection(FilterSectionBase):
 
         layout.addStretch(1)
 
+
+    def _get_unique_authors(self):
+        """Extract unique authors from all sequences."""
+        authors = set()
+        base_words = self.thumbnail_box_sorter.get_sorted_base_words("author")
+        for word, thumbnails, seq_length in base_words:
+            author = self.main_widget.metadata_extractor.get_sequence_author(
+                thumbnails[0]
+            )
+            if author:
+                authors.add(author)
+        return sorted(authors)
+
+
     def display_only_thumbnails_by_author(self, author: str):
         self._prepare_ui_for_filtering(f"sequences by {author}")
 
@@ -60,7 +65,9 @@ class AuthorSection(FilterSectionBase):
             if sequence_author != author:
                 continue
 
-            self.browser.currently_displayed_sequences.append((word, thumbnails, seq_length))
+            self.browser.currently_displayed_sequences.append(
+                (word, thumbnails, seq_length)
+            )
             total_sequences += 1
 
         self._update_and_display_ui(" sequences by", total_sequences, author)

@@ -12,9 +12,12 @@ if TYPE_CHECKING:
 class LengthSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select by Sequence Length:")
-        self._add_buttons()
+        self.initialized = False
 
-    def _add_buttons(self):
+    def add_buttons(self):
+        self.initialized = True
+        self.back_button.show()
+        self.label.show()
         layout: QVBoxLayout = self.layout()
 
         available_lengths = [4, 6, 8, 10, 12, 16, 20, 24, 28, 32]
@@ -34,7 +37,7 @@ class LengthSection(FilterSectionBase):
             layout.addLayout(hbox)
 
         layout.addStretch(1)
-
+        
     def display_only_thumbnails_with_sequence_length(self, length: str):
         self._prepare_ui_for_filtering(f"sequences of length {length}")
 

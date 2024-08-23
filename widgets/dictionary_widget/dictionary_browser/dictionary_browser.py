@@ -76,24 +76,18 @@ class DictionaryBrowser(QWidget):
         self.initial_selection_widget.show()
         for widget in self.widgets:
             widget.hide()
-        # hide the preview_area
         self.dictionary_widget.preview_area.hide()
-        # clear the dictionary preview area
         self.dictionary_widget.preview_area.clear_preview()
-        # hide the number of currently displayed sequences label
         self.number_of_currently_displayed_words_label.hide()
 
-    def showEvent(self, event):
-        super().showEvent(event)
-        if not self.initialized:
-            sort_method = (
-                self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
-            )
-            timer = QTimer(self)
-            self.add_initial_selection_widget()
+    # def showEvent(self, event):
+    #     super().showEvent(event)
+    #     if not self.initialized:
+    #         self.add_initial_selection_widget()
 
     def add_initial_selection_widget(self):
         self.layout.addWidget(self.initial_selection_widget)
+        # self.dictionary_widget.preview_area.hide()
 
     def show_all_sequences(self):
         self.apply_initial_selection({"letter": "Show all"})
@@ -125,6 +119,7 @@ class DictionaryBrowser(QWidget):
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
+        self.layout.addWidget(self.initial_selection_widget)
 
     def _add_components_to_layout(self):
 
@@ -150,6 +145,7 @@ class DictionaryBrowser(QWidget):
         self.resize_number_of_currently_displayed_sequences_label()
         self.initial_selection_widget.resize_initial_selections_widget()
         self.nav_sidebar.resize_nav_sidebar()
+
     def resize_number_of_currently_displayed_sequences_label(self):
         font = self.number_of_currently_displayed_words_label.font()
         font.setPointSize(self.width() // 80)

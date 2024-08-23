@@ -2,93 +2,75 @@ Organized by total time:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
-        21        0.010489        0.000499             0.081115             0.003863 scale_images                   dictionary_initial_selections_widget\level_section.py:145
-       112        0.007648        0.000068             0.516038             0.004607 paint_background               background_managers\aurora_borealis_background_manager.py:19
-        21        0.005175        0.000246             0.087212             0.004153 resizeEvent                    dictionary_initial_selections_widget\level_section.py:159
-       112        0.003966        0.000035             0.523226             0.004672 paintEvent                     dictionary_widget\dictionary_widget.py:63
-       119        0.001456        0.000012             0.003037             0.000026 animate_background             background_managers\aurora_borealis_background_manager.py:14
-        21        0.000482        0.000023             0.433224             0.020630 resizeEvent                    main_widget\main_widget.py:213
-        21        0.000321        0.000015             0.364839             0.017373 set_dimensions                 utilities\main_window_geometry_manager.py:14
-        21        0.000222        0.000011             0.000921             0.000044 rezie_label_fonts              dictionary_initial_selections_widget\level_section.py:166
-         1        0.000144        0.000144             0.001283             0.001283 update_font_colors             settings_manager\global_settings.py:78
-         3        0.000057        0.000019             0.000307             0.000102 _style_button                  options_panel\sort_widget.py:111
-         1        0.000041        0.000041             0.000903             0.000903 show_level_section             dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:97
-         1        0.000040        0.000040             0.000349             0.000349 style_buttons                  options_panel\sort_widget.py:106
-         1        0.000037        0.000037             0.001700             0.001700 closeEvent                     tka-sequence-constructor\main.py:37
-         1        0.000030        0.000030             0.001421             0.001421 get_background_manager         settings_manager\global_settings.py:62
-         1        0.000028        0.000028             0.000108             0.000108 __init__                       background_managers\aurora_borealis_background_manager.py:10
-         1        0.000025        0.000025             0.000079             0.000079 __init__                       background_managers\background_manager.py:13
-         1        0.000025        0.000025             0.001457             0.001457 setup_background_manager       settings_manager\global_settings.py:56
-         1        0.000021        0.000021             0.000287             0.000287 _hide_all_sections             dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:70
-         1        0.000021        0.000021             0.001645             0.001645 save_settings                  settings_manager\settings_manager.py:46
-         1        0.000018        0.000018             0.000023             0.000023 keyPressEvent                  main_widget\main_widget.py:165
-         1        0.000014        0.000014             0.000097             0.000097 style_placeholder              dictionary_widget\preview_area_image_label.py:52
-         5        0.000013        0.000003             0.000016             0.000003 get_background_type            settings_manager\global_settings.py:48
-         8        0.000009        0.000001             0.000009             0.000001 get_font_color                 settings_manager\global_settings.py:95
-         1        0.000009        0.000009             0.002813             0.002813 <lambda>                       tka-sequence-constructor\main.py:87
-         1        0.000006        0.000006             0.000064             0.000064 disable                        widgets\profiler.py:17
-         1        0.000003        0.000003             0.000003             0.000003 set_styles                     dictionary_browser\dictionary_browser_nav_sidebar.py:196
+        87        0.005364        0.000062             0.088222             0.001014 paint_background               background_managers\aurora_borealis_background_manager.py:19
+        87        0.002736        0.000031             0.093572             0.001076 paintEvent                     dictionary_widget\dictionary_widget.py:63
+       119        0.002081        0.000017             0.004521             0.000038 animate_background             background_managers\aurora_borealis_background_manager.py:14
+         1        0.000084        0.000084             0.000871             0.000871 update_font_colors             settings_manager\global_settings.py:78
+         3        0.000052        0.000017             0.000251             0.000084 _style_button                  options_panel\sort_widget.py:111
+         1        0.000034        0.000034             0.001678             0.001678 closeEvent                     tka-sequence-constructor\main.py:37
+         1        0.000031        0.000031             0.000282             0.000282 style_buttons                  options_panel\sort_widget.py:106
+         1        0.000022        0.000022             0.000960             0.000960 get_background_manager         settings_manager\global_settings.py:62
+         1        0.000022        0.000022             0.000120             0.000120 resizeEvent                    main_widget\main_widget.py:213
+         1        0.000021        0.000021             0.000033             0.000033 set_dimensions                 utilities\main_window_geometry_manager.py:14
+         1        0.000020        0.000020             0.001626             0.001626 save_settings                  settings_manager\settings_manager.py:46
+         1        0.000019        0.000019             0.000067             0.000067 __init__                       background_managers\aurora_borealis_background_manager.py:10
+         1        0.000018        0.000018             0.000046             0.000046 __init__                       background_managers\background_manager.py:13
+         1        0.000015        0.000015             0.000981             0.000981 setup_background_manager       settings_manager\global_settings.py:56
+         1        0.000013        0.000013             0.000072             0.000072 style_placeholder              dictionary_widget\preview_area_image_label.py:52
+         1        0.000010        0.000010             0.002440             0.002440 <lambda>                       tka-sequence-constructor\main.py:87
+         5        0.000009        0.000002             0.000011             0.000002 get_background_type            settings_manager\global_settings.py:48
+         8        0.000007        0.000001             0.000007             0.000001 get_font_color                 settings_manager\global_settings.py:95
+         1        0.000005        0.000005             0.000051             0.000051 disable                        widgets\profiler.py:17
+         1        0.000004        0.000004             0.000004             0.000004 set_styles                     dictionary_browser\dictionary_browser_nav_sidebar.py:286
 
 
 Organized by number of calls:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
-       119        0.001456        0.000012             0.003037             0.000026 animate_background             background_managers\aurora_borealis_background_manager.py:14
-       112        0.007648        0.000068             0.516038             0.004607 paint_background               background_managers\aurora_borealis_background_manager.py:19
-       112        0.003966        0.000035             0.523226             0.004672 paintEvent                     dictionary_widget\dictionary_widget.py:63
-        21        0.000321        0.000015             0.364839             0.017373 set_dimensions                 utilities\main_window_geometry_manager.py:14
-        21        0.010489        0.000499             0.081115             0.003863 scale_images                   dictionary_initial_selections_widget\level_section.py:145
-        21        0.000482        0.000023             0.433224             0.020630 resizeEvent                    main_widget\main_widget.py:213
-        21        0.000222        0.000011             0.000921             0.000044 rezie_label_fonts              dictionary_initial_selections_widget\level_section.py:166
-        21        0.005175        0.000246             0.087212             0.004153 resizeEvent                    dictionary_initial_selections_widget\level_section.py:159
-         8        0.000009        0.000001             0.000009             0.000001 get_font_color                 settings_manager\global_settings.py:95
-         5        0.000013        0.000003             0.000016             0.000003 get_background_type            settings_manager\global_settings.py:48
-         3        0.000057        0.000019             0.000307             0.000102 _style_button                  options_panel\sort_widget.py:111
-         1        0.000144        0.000144             0.001283             0.001283 update_font_colors             settings_manager\global_settings.py:78
-         1        0.000018        0.000018             0.000023             0.000023 keyPressEvent                  main_widget\main_widget.py:165
-         1        0.000021        0.000021             0.001645             0.001645 save_settings                  settings_manager\settings_manager.py:46
-         1        0.000037        0.000037             0.001700             0.001700 closeEvent                     tka-sequence-constructor\main.py:37
-         1        0.000025        0.000025             0.000079             0.000079 __init__                       background_managers\background_manager.py:13
-         1        0.000006        0.000006             0.000064             0.000064 disable                        widgets\profiler.py:17
-         1        0.000009        0.000009             0.002813             0.002813 <lambda>                       tka-sequence-constructor\main.py:87
-         1        0.000028        0.000028             0.000108             0.000108 __init__                       background_managers\aurora_borealis_background_manager.py:10
-         1        0.000025        0.000025             0.001457             0.001457 setup_background_manager       settings_manager\global_settings.py:56
-         1        0.000003        0.000003             0.000003             0.000003 set_styles                     dictionary_browser\dictionary_browser_nav_sidebar.py:196
-         1        0.000030        0.000030             0.001421             0.001421 get_background_manager         settings_manager\global_settings.py:62
-         1        0.000040        0.000040             0.000349             0.000349 style_buttons                  options_panel\sort_widget.py:106
-         1        0.000041        0.000041             0.000903             0.000903 show_level_section             dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:97
-         1        0.000021        0.000021             0.000287             0.000287 _hide_all_sections             dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:70
-         1        0.000014        0.000014             0.000097             0.000097 style_placeholder              dictionary_widget\preview_area_image_label.py:52
+       119        0.002081        0.000017             0.004521             0.000038 animate_background             background_managers\aurora_borealis_background_manager.py:14
+        87        0.005364        0.000062             0.088222             0.001014 paint_background               background_managers\aurora_borealis_background_manager.py:19
+        87        0.002736        0.000031             0.093572             0.001076 paintEvent                     dictionary_widget\dictionary_widget.py:63
+         8        0.000007        0.000001             0.000007             0.000001 get_font_color                 settings_manager\global_settings.py:95
+         5        0.000009        0.000002             0.000011             0.000002 get_background_type            settings_manager\global_settings.py:48
+         3        0.000052        0.000017             0.000251             0.000084 _style_button                  options_panel\sort_widget.py:111
+         1        0.000084        0.000084             0.000871             0.000871 update_font_colors             settings_manager\global_settings.py:78
+         1        0.000021        0.000021             0.000033             0.000033 set_dimensions                 utilities\main_window_geometry_manager.py:14
+         1        0.000020        0.000020             0.001626             0.001626 save_settings                  settings_manager\settings_manager.py:46
+         1        0.000034        0.000034             0.001678             0.001678 closeEvent                     tka-sequence-constructor\main.py:37
+         1        0.000018        0.000018             0.000046             0.000046 __init__                       background_managers\background_manager.py:13
+         1        0.000010        0.000010             0.002440             0.002440 <lambda>                       tka-sequence-constructor\main.py:87
+         1        0.000005        0.000005             0.000051             0.000051 disable                        widgets\profiler.py:17
+         1        0.000004        0.000004             0.000004             0.000004 set_styles                     dictionary_browser\dictionary_browser_nav_sidebar.py:286
+         1        0.000019        0.000019             0.000067             0.000067 __init__                       background_managers\aurora_borealis_background_manager.py:10
+         1        0.000015        0.000015             0.000981             0.000981 setup_background_manager       settings_manager\global_settings.py:56
+         1        0.000022        0.000022             0.000120             0.000120 resizeEvent                    main_widget\main_widget.py:213
+         1        0.000022        0.000022             0.000960             0.000960 get_background_manager         settings_manager\global_settings.py:62
+         1        0.000031        0.000031             0.000282             0.000282 style_buttons                  options_panel\sort_widget.py:106
+         1        0.000013        0.000013             0.000072             0.000072 style_placeholder              dictionary_widget\preview_area_image_label.py:52
 
 
 Organized by cumulative time:
 
      Calls      Total Time        Per Call      Cumulative Time       Per Call (Cum)                       Function
 -------------------------------------------------------------------------------------------------------------------
-       112        0.003966        0.000035             0.523226             0.004672 paintEvent                     dictionary_widget\dictionary_widget.py:63
-       112        0.007648        0.000068             0.516038             0.004607 paint_background               background_managers\aurora_borealis_background_manager.py:19
-        21        0.000482        0.000023             0.433224             0.020630 resizeEvent                    main_widget\main_widget.py:213
-        21        0.000321        0.000015             0.364839             0.017373 set_dimensions                 utilities\main_window_geometry_manager.py:14
-        21        0.005175        0.000246             0.087212             0.004153 resizeEvent                    dictionary_initial_selections_widget\level_section.py:159
-        21        0.010489        0.000499             0.081115             0.003863 scale_images                   dictionary_initial_selections_widget\level_section.py:145
-       119        0.001456        0.000012             0.003037             0.000026 animate_background             background_managers\aurora_borealis_background_manager.py:14
-         1        0.000009        0.000009             0.002813             0.002813 <lambda>                       tka-sequence-constructor\main.py:87
-         1        0.000037        0.000037             0.001700             0.001700 closeEvent                     tka-sequence-constructor\main.py:37
-         1        0.000021        0.000021             0.001645             0.001645 save_settings                  settings_manager\settings_manager.py:46
-         1        0.000025        0.000025             0.001457             0.001457 setup_background_manager       settings_manager\global_settings.py:56
-         1        0.000030        0.000030             0.001421             0.001421 get_background_manager         settings_manager\global_settings.py:62
-         1        0.000144        0.000144             0.001283             0.001283 update_font_colors             settings_manager\global_settings.py:78
-        21        0.000222        0.000011             0.000921             0.000044 rezie_label_fonts              dictionary_initial_selections_widget\level_section.py:166
-         1        0.000041        0.000041             0.000903             0.000903 show_level_section             dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:97
-         1        0.000040        0.000040             0.000349             0.000349 style_buttons                  options_panel\sort_widget.py:106
-         3        0.000057        0.000019             0.000307             0.000102 _style_button                  options_panel\sort_widget.py:111
-         1        0.000021        0.000021             0.000287             0.000287 _hide_all_sections             dictionary_initial_selections_widget\dictionary_initial_selections_widget.py:70
-         1        0.000028        0.000028             0.000108             0.000108 __init__                       background_managers\aurora_borealis_background_manager.py:10
-         1        0.000014        0.000014             0.000097             0.000097 style_placeholder              dictionary_widget\preview_area_image_label.py:52
-         1        0.000025        0.000025             0.000079             0.000079 __init__                       background_managers\background_manager.py:13
-         1        0.000006        0.000006             0.000064             0.000064 disable                        widgets\profiler.py:17
-         1        0.000018        0.000018             0.000023             0.000023 keyPressEvent                  main_widget\main_widget.py:165
-         5        0.000013        0.000003             0.000016             0.000003 get_background_type            settings_manager\global_settings.py:48
-         8        0.000009        0.000001             0.000009             0.000001 get_font_color                 settings_manager\global_settings.py:95
-         1        0.000003        0.000003             0.000003             0.000003 set_styles                     dictionary_browser\dictionary_browser_nav_sidebar.py:196
+        87        0.002736        0.000031             0.093572             0.001076 paintEvent                     dictionary_widget\dictionary_widget.py:63
+        87        0.005364        0.000062             0.088222             0.001014 paint_background               background_managers\aurora_borealis_background_manager.py:19
+       119        0.002081        0.000017             0.004521             0.000038 animate_background             background_managers\aurora_borealis_background_manager.py:14
+         1        0.000010        0.000010             0.002440             0.002440 <lambda>                       tka-sequence-constructor\main.py:87
+         1        0.000034        0.000034             0.001678             0.001678 closeEvent                     tka-sequence-constructor\main.py:37
+         1        0.000020        0.000020             0.001626             0.001626 save_settings                  settings_manager\settings_manager.py:46
+         1        0.000015        0.000015             0.000981             0.000981 setup_background_manager       settings_manager\global_settings.py:56
+         1        0.000022        0.000022             0.000960             0.000960 get_background_manager         settings_manager\global_settings.py:62
+         1        0.000084        0.000084             0.000871             0.000871 update_font_colors             settings_manager\global_settings.py:78
+         1        0.000031        0.000031             0.000282             0.000282 style_buttons                  options_panel\sort_widget.py:106
+         3        0.000052        0.000017             0.000251             0.000084 _style_button                  options_panel\sort_widget.py:111
+         1        0.000022        0.000022             0.000120             0.000120 resizeEvent                    main_widget\main_widget.py:213
+         1        0.000013        0.000013             0.000072             0.000072 style_placeholder              dictionary_widget\preview_area_image_label.py:52
+         1        0.000019        0.000019             0.000067             0.000067 __init__                       background_managers\aurora_borealis_background_manager.py:10
+         1        0.000005        0.000005             0.000051             0.000051 disable                        widgets\profiler.py:17
+         1        0.000018        0.000018             0.000046             0.000046 __init__                       background_managers\background_manager.py:13
+         1        0.000021        0.000021             0.000033             0.000033 set_dimensions                 utilities\main_window_geometry_manager.py:14
+         5        0.000009        0.000002             0.000011             0.000002 get_background_type            settings_manager\global_settings.py:48
+         8        0.000007        0.000001             0.000007             0.000001 get_font_color                 settings_manager\global_settings.py:95
+         1        0.000004        0.000004             0.000004             0.000004 set_styles                     dictionary_browser\dictionary_browser_nav_sidebar.py:286

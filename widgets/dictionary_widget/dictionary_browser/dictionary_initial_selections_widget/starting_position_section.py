@@ -12,9 +12,12 @@ if TYPE_CHECKING:
 class StartingPositionSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select by Starting Position:")
-        self._add_buttons()
+        self.initialized = False
 
-    def _add_buttons(self):
+    def add_buttons(self):
+        self.initialized = True
+        self.back_button.show()
+        self.label.show()
         layout: QVBoxLayout = self.layout()
 
         # Create a horizontal box layout for the starting position buttons

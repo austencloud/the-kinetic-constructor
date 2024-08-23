@@ -1,12 +1,18 @@
 import os
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QApplication
+from PyQt6.QtWidgets import (
+    QVBoxLayout,
+    QPushButton,
+    QLabel,
+    QGridLayout,
+    QSpacerItem,
+    QSizePolicy,
+)
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPixmap, QCursor
 
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from .filter_section_base import FilterSectionBase
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPixmap, QIcon, QCursor
-from PyQt6.QtWidgets import QLabel, QGridLayout
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.dictionary_initial_selections_widget import (
@@ -20,10 +26,13 @@ class LevelSection(FilterSectionBase):
         self.main_widget = initial_selection_widget.browser.main_widget
         self.buttons: dict[str, QPushButton] = {}
         self.labels: dict[str, QLabel] = {}
-        self.image_placeholders: dict[str, QLabel] = {}
-        self._add_buttons()
+        self.level_images: dict[str, QLabel] = {}
+        self.initialized: bool = False
 
-    def _add_buttons(self):
+    def add_buttons(self):
+        self.initialized = True
+        self.back_button.show()
+        self.label.show()
         layout: QVBoxLayout = self.layout()
 
         # Create a grid layout to hold the level buttons, descriptions, and images
@@ -34,9 +43,9 @@ class LevelSection(FilterSectionBase):
 
         # Level descriptions corresponding to each level
         level_descriptions = {
-            1: "Level 1 sequences use all base letters with no extra turns.",
-            2: "Level 2 sequences have turns added, but still have all radial orientations.",
-            3: "Level 3 sequences use non-radial orientations.",
+            1: "Base letters with no turns.",
+            2: "Turns added with only radial orientations.",
+            3: "Non-radial orientations.",
         }
 
         # Path where level images are stored
@@ -67,7 +76,7 @@ class LevelSection(FilterSectionBase):
             # Create the image placeholder
             image_placeholder = QLabel()
             image_placeholder.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            self.image_placeholders[f"level_{level}"] = image_placeholder
+            self.level_images[f"level_{level}"] = image_placeholder
 
             # Load and set the image
             image_path = os.path.join(image_dir, f"level_{level}.png")
@@ -77,13 +86,17 @@ class LevelSection(FilterSectionBase):
             else:
                 image_placeholder.setText("No Image Available")
 
-            # Add button, description, and image to the vertical box layout
-            level_vbox.addWidget(button)
-            level_vbox.addWidget(description_label)
-            level_vbox.addWidget(image_placeholder)
+            # Add button, description, and image to the grid layout
+            grid_layout.addWidget(button, 0, col)
+            grid_layout.addWidget(description_label, 1, col)
 
-            # Add the vertical box layout to the grid layout
-            grid_layout.addLayout(level_vbox, 0, col)
+            # Add a spacer between the description and the image
+            spacer_item = QSpacerItem(
+                20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
+            )
+            grid_layout.addItem(spacer_item, 2, col)
+
+            grid_layout.addWidget(image_placeholder, 3, col)
 
         # Add the grid layout to the main layout
         layout.addLayout(grid_layout)
@@ -143,9 +156,9 @@ class LevelSection(FilterSectionBase):
         return None
 
     def scale_images(self):
-        for level in self.image_placeholders:
-            image_placeholder = self.image_placeholders[level]
-            pixmap = image_placeholder.pixmap()
+        for level_image in self.level_images:
+            image = self.level_images[level_image]
+            pixmap = image.pixmap()
             if pixmap:
                 size = self.browser.width() // 6
                 scaled_pixmap = pixmap.scaled(
@@ -154,10 +167,11 @@ class LevelSection(FilterSectionBase):
                     Qt.AspectRatioMode.KeepAspectRatio,  # Maintain aspect ratio
                     Qt.TransformationMode.SmoothTransformation,  # Smooth scaling
                 )
-                image_placeholder.setPixmap(scaled_pixmap)
+                image.setPixmap(scaled_pixmap)
 
     def resize_level_section(self):
         self.scale_images()
+        self.resize_buttons()
         self.resize_label_fonts()
 
     def resize_label_fonts(self):

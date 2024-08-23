@@ -57,7 +57,10 @@ class FilterSectionBase(QWidget):
         layout.addStretch(1)
         # Set the layout
         self.setLayout(layout)
-
+        
+        self.back_button.hide()
+        self.label.hide()
+        
     def _initialize_progress_bar(self):
         # Initialize the custom rainbow progress bar
         self.loading_progress_bar = RainbowProgressBar(

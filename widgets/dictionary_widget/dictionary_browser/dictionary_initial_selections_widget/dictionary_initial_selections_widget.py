@@ -50,11 +50,6 @@ class DictionaryInitialSelectionsWidget(QWidget):
 
         self._setup_ui()
 
-    def show_author_section(self):
-        self._hide_all_sections()
-        self.filter_choice_widget.hide()
-        self.author_section.show()
-        self.main_layout.addWidget(self.author_section)
 
     def _setup_ui(self):
         self.main_layout = QVBoxLayout(self)
@@ -81,24 +76,32 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.filter_choice_widget.hide()
         self.starting_letter_section.show()
         self.main_layout.addWidget(self.starting_letter_section)
-
+        if not self.starting_letter_section.initialized:
+            self.starting_letter_section.add_buttons()
+            
     def show_contains_letter_section(self):
         self._hide_all_sections()
         self.filter_choice_widget.hide()
         self.contains_letter_section.show()
         self.main_layout.addWidget(self.contains_letter_section)
+        if not self.contains_letter_section.initialized:
+            self.contains_letter_section.add_buttons()
 
     def show_length_section(self):
         self._hide_all_sections()
         self.filter_choice_widget.hide()
         self.length_section.show()
         self.main_layout.addWidget(self.length_section)
+        if not self.length_section.initialized:
+            self.length_section.add_buttons()
 
     def show_level_section(self):
         self._hide_all_sections()
         self.filter_choice_widget.hide()
         self.level_section.show()
         self.main_layout.addWidget(self.level_section)
+        if not self.level_section.initialized:
+            self.level_section.add_buttons()
         self.level_section.resize_level_section()
 
     def show_starting_position_section(self):
@@ -106,6 +109,17 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.filter_choice_widget.hide()
         self.starting_position_section.show()
         self.main_layout.addWidget(self.starting_position_section)
+        if not self.starting_position_section.initialized:
+            self.starting_position_section.add_buttons()
+
+    def show_author_section(self):
+        self._hide_all_sections()
+        self.filter_choice_widget.hide()
+        self.author_section.show()
+        self.main_layout.addWidget(self.author_section)
+        if not self.author_section.initialized:
+            self.author_section.add_buttons()
+
 
     def on_letter_button_clicked(self, letter: str):
         self.browser.apply_initial_selection({"letter": letter})
