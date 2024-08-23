@@ -46,7 +46,7 @@ class StartingPositionSection(FilterSectionBase):
             self.browser.currently_displayed_sequences.append((word, thumbnails, seq_length))
             total_sequences += 1
 
-        self._update_and_display_ui(total_sequences, position)
+        self._update_and_display_ui(" sequences starting at", total_sequences, position)
 
     def get_sequence_starting_position(self, thumbnails):
         """Extract the starting position from the first thumbnail (beat 0)."""

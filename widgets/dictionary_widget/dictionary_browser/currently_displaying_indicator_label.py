@@ -17,8 +17,8 @@ class CurrentlyDisplayingIndicatorLabel(QLabel):
     def show_loading_message(self, context: str):
         self.setText(f"Currently displaying {context}. Please wait...")
 
-    def show_completed_message(self, context: str):
-        self.setText(f"Currently displaying {context}.")
+    def show_completed_message(self, filter_description_prefix, context: str):
+        self.setText(f"Currently displaying{filter_description_prefix} {context}.")
 
     def reset(self):
         self.setText("")

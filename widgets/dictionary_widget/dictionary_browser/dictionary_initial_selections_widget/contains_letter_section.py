@@ -127,7 +127,7 @@ class ContainsLetterSection(FilterSectionBase):
             )
 
             self.browser.currently_displaying_label.show_completed_message(
-                f"sequences containing {', '.join(letters)}"
+                " sequences containing", ', '.join(letters)
             )
             QApplication.restoreOverrideCursor()
 

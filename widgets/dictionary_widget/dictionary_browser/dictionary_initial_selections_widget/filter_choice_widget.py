@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QGridLayout,
     QSizePolicy,
+    QSpacerItem,
 )
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
@@ -41,10 +42,8 @@ class FilterChoiceWidget(QWidget):
 
         # Create a grid layout for the filter options
         grid_layout = QGridLayout()
-        grid_layout.setHorizontalSpacing(
-            50
-        )  # Increased Horizontal space between columns
-        grid_layout.setVerticalSpacing(30)  # Vertical space between rows
+        grid_layout.setHorizontalSpacing(50)
+        grid_layout.setVerticalSpacing(20)
         grid_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Define filter options and their descriptions
@@ -92,18 +91,26 @@ class FilterChoiceWidget(QWidget):
             description_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             self.button_labels[label] = description_label
 
-            row = index // 3  # Calculate row number
+            # Create a vertical layout for each button and its description
+            vbox = QVBoxLayout()
+            vbox.addWidget(button, alignment=Qt.AlignmentFlag.AlignCenter)
+            vbox.addWidget(description_label, alignment=Qt.AlignmentFlag.AlignCenter)
+
+            row = index // 3 * 2  # Calculate row number (doubled for spacing)
             col = index % 3  # Calculate column number
 
-            grid_layout.addWidget(
-                button, row * 2, col, alignment=Qt.AlignmentFlag.AlignCenter
-            )  # Add button to grid
-            grid_layout.addWidget(
-                description_label,
-                row * 2 + 1,
-                col,
-                alignment=Qt.AlignmentFlag.AlignCenter,
-            )  # Add label below button
+            grid_layout.addLayout(vbox, row, col)
+
+        # Add an empty row between the first and second rows of buttons
+        self.grid_spacer_item = QSpacerItem(
+            self.height() // 10,
+            self.height() // 15,
+            QSizePolicy.Policy.Minimum,
+            QSizePolicy.Policy.Expanding,
+        )
+        grid_layout.addItem(
+            self.grid_spacer_item, 1, 0, 1, 3
+        )  # Add spacer across all three columns
 
         main_layout.addLayout(grid_layout)
 
@@ -127,6 +134,10 @@ class FilterChoiceWidget(QWidget):
         self._resize_buttons_labels()
         self._resize_buttons()
         self._resize_description_label()
+        self.resize_grid_spacer_item()
+
+    def resize_grid_spacer_item(self):
+        self.grid_spacer_item.changeSize(self.height() // 10, self.height() // 15)
 
     def _resize_description_label(self):
         description_label_font = QFont()

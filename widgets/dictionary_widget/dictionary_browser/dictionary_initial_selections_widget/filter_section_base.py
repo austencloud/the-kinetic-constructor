@@ -92,7 +92,9 @@ class FilterSectionBase(QWidget):
         self.loading_progress_bar.setVisible(True)
         QApplication.processEvents()
 
-    def _update_and_display_ui(self, total_sequences: int, filter_description: str):
+    def _update_and_display_ui(
+        self, filter_description_prefix, total_sequences: int, filter_description: str
+    ):
         if total_sequences == 0:
             total_sequences = 1  # Prevent division by zero
 
@@ -102,7 +104,8 @@ class FilterSectionBase(QWidget):
 
         def update_ui():
             num_words = 0
-
+            nonlocal filter_description_prefix
+            nonlocal filter_description
             for index, (word, thumbnails, _) in enumerate(
                 self.browser.currently_displayed_sequences
             ):
@@ -128,9 +131,11 @@ class FilterSectionBase(QWidget):
             self.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
                 self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
             )
-
+            if filter_description_prefix == "level":
+                filter_description = f"level {filter_description} sequences"
+                filter_description_prefix = ""
             self.browser.currently_displaying_label.show_completed_message(
-                filter_description
+                filter_description_prefix, filter_description
             )
             QApplication.restoreOverrideCursor()
 

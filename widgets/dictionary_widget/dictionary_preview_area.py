@@ -83,6 +83,7 @@ class DictionaryPreviewArea(QWidget):
         self.variation_number_label.show()
         self.button_panel.show_buttons()
 
+
     def _hide_components(self):
         self.word_label.hide()
         self.variation_number_label.hide()

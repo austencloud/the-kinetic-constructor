@@ -47,7 +47,7 @@ class LevelSection(FilterSectionBase):
                 (word, thumbnails, self.get_sequence_length_from_thumbnails(thumbnails))
             )
 
-        self._update_and_display_ui(total_sequences, level)
+        self._update_and_display_ui("level", total_sequences, level)
 
     def get_sequences_that_are_a_specific_level(self, level: str):
         dictionary_dir = get_images_and_data_path("dictionary")

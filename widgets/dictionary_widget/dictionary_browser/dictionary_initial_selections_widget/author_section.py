@@ -63,4 +63,4 @@ class AuthorSection(FilterSectionBase):
             self.browser.currently_displayed_sequences.append((word, thumbnails, seq_length))
             total_sequences += 1
 
-        self._update_and_display_ui(total_sequences, author)
+        self._update_and_display_ui(" sequences by", total_sequences, author)

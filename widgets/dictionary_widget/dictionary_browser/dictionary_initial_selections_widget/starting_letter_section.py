@@ -119,7 +119,7 @@ class StartingLetterSection(FilterSectionBase):
             )
 
             self.browser.currently_displaying_label.show_completed_message(
-                f"sequences starting with {letter}"
+                f" sequences starting with", letter
             )
             QApplication.restoreOverrideCursor()
 

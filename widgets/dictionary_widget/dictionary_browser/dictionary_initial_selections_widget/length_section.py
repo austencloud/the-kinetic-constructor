@@ -8,6 +8,7 @@ if TYPE_CHECKING:
         DictionaryInitialSelectionsWidget,
     )
 
+
 class LengthSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select by Sequence Length:")
@@ -45,7 +46,9 @@ class LengthSection(FilterSectionBase):
             if seq_length != length:
                 continue
 
-            self.browser.currently_displayed_sequences.append((word, thumbnails, seq_length))
+            self.browser.currently_displayed_sequences.append(
+                (word, thumbnails, seq_length)
+            )
             total_sequences += 1
 
-        self._update_and_display_ui(total_sequences, length)
+        self._update_and_display_ui(" sequences of length", total_sequences, length)
