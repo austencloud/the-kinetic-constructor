@@ -27,7 +27,7 @@ class SectionManager:
             header, row_index, 0, 1, num_columns
         )
 
-    def get_sorted_sections(self, sort_method, sections):
+    def get_sorted_sections(self, sort_method, sections) -> list[str]:
         if sort_method == "sequence_length":
             sorted_sections = sorted(
                 sections, key=lambda x: int(x) if x.isdigit() else x

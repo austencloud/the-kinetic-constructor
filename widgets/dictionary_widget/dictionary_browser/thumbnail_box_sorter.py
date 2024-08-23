@@ -63,6 +63,11 @@ class ThumbnailBoxSorter:
         # QApplication.processEvents()
         current_section = None
 
+        # select the appropriate button in the sort widget
+        self.browser.options_widget.sort_widget.highlight_appropriate_button(
+            sort_method
+        )
+
         for section in sorted_sections:
             if sort_method == "date_added":
                 if section == "Unknown":
@@ -172,37 +177,25 @@ class ThumbnailBoxSorter:
     def sort_and_display_thumbnail_boxes_by_initial_selection(
         self, initial_selection: dict
     ):
-        self.starting_position_section = (
-            self.browser.initial_selection_widget.starting_position_section
-        )
-        self.contains_letter_section = (
-            self.browser.initial_selection_widget.contains_letter_section
-        )
-        self.starting_letter_section = (
-            self.browser.initial_selection_widget.starting_letter_section
-        )
-        self.level_section = self.browser.initial_selection_widget.level_section
-        self.length_section = self.browser.initial_selection_widget.length_section
-        if "letter" in initial_selection:
-            self.starting_letter_section.display_only_thumbnails_starting_with_letter(
-                initial_selection["letter"]
-            )
-        elif "length" in initial_selection:
-            self.length_section.display_only_thumbnails_with_sequence_length(
-                initial_selection["length"]
-            )
-        elif "level" in initial_selection:
-            self.level_section.display_only_thumbnails_with_level(
-                initial_selection["level"]
-            )
-        elif "contains_letters" in initial_selection:
-            self.contains_letter_section.display_only_thumbnails_containing_letters(
-                initial_selection["contains_letters"]
-            )
-        elif "position" in initial_selection:
-            self.starting_position_section.display_only_thumbnails_with_starting_position(
-                initial_selection["position"]
-            )
+        initial_selection_widget = self.browser.initial_selection_widget
+
+        starting_position_section = initial_selection_widget.starting_position_section
+        contains_letter_section = initial_selection_widget.contains_letter_section
+        starting_letter_section = initial_selection_widget.starting_letter_section
+        level_section = initial_selection_widget.level_section
+        length_section = initial_selection_widget.length_section
+
+        display_functions = {
+            "letter": starting_letter_section.display_only_thumbnails_starting_with_letter,
+            "length": length_section.display_only_thumbnails_with_sequence_length,
+            "level": level_section.display_only_thumbnails_with_level,
+            "contains_letters": contains_letter_section.display_only_thumbnails_containing_letters,
+            "position": starting_position_section.display_only_thumbnails_with_starting_position,
+        }
+
+        for key, value in initial_selection.items():
+            if key in display_functions:
+                display_functions[key](value)
 
     ### HELPER FUNCTIONS ###
 

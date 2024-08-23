@@ -87,7 +87,7 @@ class ContainsLetterSection(FilterSectionBase):
         self.browser.number_of_currently_displayed_words_label.setText("")
 
         self.browser.scroll_widget.clear_layout()
-        self.thumbnail_box_sorter.sections = {}
+        self.browser.sections = {}
         self.browser.currently_displayed_sequences = (
             []
         )  # Reset the list for the new filter
@@ -110,20 +110,16 @@ class ContainsLetterSection(FilterSectionBase):
                 word, "sequence_length", seq_length, thumbnails
             )
 
-            if section not in self.thumbnail_box_sorter.sections:
-                self.thumbnail_box_sorter.sections[section] = []
+            if section not in self.browser.sections:
+                self.browser.sections[section] = []
 
-            self.thumbnail_box_sorter.sections[section].append((word, thumbnails))
+            self.browser.sections[section].append((word, thumbnails))
             self.browser.currently_displayed_sequences.append(
                 (word, thumbnails, seq_length)
             )
-            num_words += 1
-            self.browser.number_of_currently_displayed_words_label.setText(
-                f"Number of words displayed: {num_words}"
-            )
-            QApplication.processEvents()
+
         sorted_sections = self.section_manager.get_sorted_sections(
-            "sequence_length", self.thumbnail_box_sorter.sections.keys()
+            "sequence_length", self.browser.sections.keys()
         )
         self.browser.nav_sidebar.update_sidebar(sorted_sections, "sequence_length")
 
@@ -136,7 +132,7 @@ class ContainsLetterSection(FilterSectionBase):
 
             column_index = 0
 
-            for word, thumbnails in self.thumbnail_box_sorter.sections[section]:
+            for word, thumbnails in self.browser.sections[section]:
                 self.thumbnail_box_sorter.add_thumbnail_box(
                     row_index, column_index, word, thumbnails
                 )
@@ -144,7 +140,11 @@ class ContainsLetterSection(FilterSectionBase):
                 if column_index == self.thumbnail_box_sorter.num_columns:
                     column_index = 0
                     row_index += 1
-
+                num_words += 1
+                self.browser.number_of_currently_displayed_words_label.setText(
+                    f"Number of words displayed: {num_words}"
+                )
+                QApplication.processEvents()
         self.browser.currently_displaying_label.show_completed_message(
             f"sequences containing {letters_string}"
         )

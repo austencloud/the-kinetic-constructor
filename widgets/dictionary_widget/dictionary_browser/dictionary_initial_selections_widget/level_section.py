@@ -28,11 +28,12 @@ class LevelSection(FilterSectionBase):
 
     def _add_buttons(self):
         layout: QVBoxLayout = self.layout()
-
+        button_hbox = QHBoxLayout()
+        button_hbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        button_hbox.addStretch(4)
         available_levels = [1, 2, 3]
         for level in available_levels:
-            hbox = QHBoxLayout()
-            hbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            button_hbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
             button = QPushButton(f"Level {level}")
             button.setCursor(Qt.CursorShape.PointingHandCursor)
             self.buttons[f"level_{level}"] = button
@@ -41,8 +42,12 @@ class LevelSection(FilterSectionBase):
                     l
                 )
             )
-            hbox.addWidget(button)
-            layout.addLayout(hbox)
+            button_hbox.addWidget(button)
+            button_hbox.addStretch(1)
+
+        button_hbox.addStretch(3)
+
+        layout.addLayout(button_hbox)
 
         layout.addStretch(1)
 
@@ -82,6 +87,9 @@ class LevelSection(FilterSectionBase):
         )
         self.browser.number_of_currently_displayed_words_label.setText(
             f"Number of words displayed: {num_words}"
+        )
+        self.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
+            self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
         )
         QApplication.restoreOverrideCursor()
 
