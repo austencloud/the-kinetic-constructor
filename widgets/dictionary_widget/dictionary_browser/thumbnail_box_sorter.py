@@ -197,17 +197,27 @@ class ThumbnailBoxSorter:
 
     ### HELPER FUNCTIONS ###
 
-    def add_thumbnail_box(self, row_index, column_index, word, thumbnails):
+    def add_thumbnail_box(self, row_index, column_index, word, thumbnails, hidden: bool = False):
         if word not in self.browser.scroll_widget.thumbnail_boxes_dict:
             thumbnail_box = ThumbnailBox(self.browser, word, thumbnails)
             thumbnail_box.resize_thumbnail_box()
             thumbnail_box.image_label.update_thumbnail(thumbnail_box.current_index)
             self.browser.scroll_widget.thumbnail_boxes_dict[word] = thumbnail_box
+        else:
+            thumbnail_box = self.browser.scroll_widget.thumbnail_boxes_dict[word]
 
-        thumbnail_box = self.browser.scroll_widget.thumbnail_boxes_dict[word]
+        # Hide the thumbnail box if the hidden flag is set
+        if hidden:
+            thumbnail_box.hide()
+
+        # Add the thumbnail box to the grid layout
         self.browser.scroll_widget.grid_layout.addWidget(
             thumbnail_box, row_index, column_index
         )
+
+        # Show the thumbnail box if it was hidden
+        if not hidden:
+            thumbnail_box.show()
 
     def get_sorted_base_words(self, sort_order):
         dictionary_dir = get_images_and_data_path("dictionary")

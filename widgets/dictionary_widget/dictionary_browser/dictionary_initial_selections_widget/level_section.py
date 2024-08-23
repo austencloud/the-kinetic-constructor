@@ -11,29 +11,17 @@ if TYPE_CHECKING:
         DictionaryInitialSelectionsWidget,
     )
 
-
 class LevelSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select by Level:")
         self._add_buttons()
-        self.browser = self.initial_selection_widget.browser
-        self.currently_displaying_label = (
-            self.initial_selection_widget.browser.currently_displaying_label
-        )
-        self.section_manager = self.browser.section_manager
-        self.num_columns = self.browser.num_columns
-        self.thumbnail_box_sorter = self.browser.thumbnail_box_sorter
-        self.metadata_extractor = self.browser.main_widget.metadata_extractor
-        self.main_widget = self.initial_selection_widget.browser.main_widget
 
     def _add_buttons(self):
         layout: QVBoxLayout = self.layout()
         button_hbox = QHBoxLayout()
         button_hbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        button_hbox.addStretch(4)
         available_levels = [1, 2, 3]
         for level in available_levels:
-            button_hbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
             button = QPushButton(f"Level {level}")
             button.setCursor(Qt.CursorShape.PointingHandCursor)
             self.buttons[f"level_{level}"] = button
@@ -43,59 +31,26 @@ class LevelSection(FilterSectionBase):
                 )
             )
             button_hbox.addWidget(button)
-            button_hbox.addStretch(1)
-
-        button_hbox.addStretch(3)
 
         layout.addLayout(button_hbox)
-
         layout.addStretch(1)
 
-    ### LEVEL ###
-
     def display_only_thumbnails_with_level(self, level: str):
-        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        self._prepare_ui_for_filtering(f"level {level} sequences")
 
-        self.currently_displaying_label.show_loading_message(f"level {level} sequences")
-        self.browser.number_of_currently_displayed_words_label.setText("")
-        self.browser.scroll_widget.clear_layout()
+        self.browser.currently_displayed_sequences = []
         sequences = self.get_sequences_that_are_a_specific_level(level)
-        row_index = 0
-        column_index = 0
-        num_words = 0
-        for word, thumbnails in sequences:
-            self.thumbnail_box_sorter.add_thumbnail_box(
-                row_index, column_index, word, thumbnails
-            )
-            column_index += 1
-            if column_index == self.num_columns:
-                column_index = 0
-                row_index += 1
-            num_words += 1
-            # update the num sequence label
-            self.browser.number_of_currently_displayed_words_label.setText(
-                f"Number of words displayed: {num_words}"
-            )
-            QApplication.processEvents()
-        self.browser.currently_displayed_sequences = [
-            (word, thumbnails, self.get_sequence_length_from_thumbnails(thumbnails))
-            for word, thumbnails in sequences
-        ]
+        total_sequences = len(sequences)
 
-        self.currently_displaying_label.show_completed_message(
-            f"level {level} sequences"
-        )
-        self.browser.number_of_currently_displayed_words_label.setText(
-            f"Number of words displayed: {num_words}"
-        )
-        self.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
-            self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
-        )
-        QApplication.restoreOverrideCursor()
+        for word, thumbnails in sequences:
+            self.browser.currently_displayed_sequences.append(
+                (word, thumbnails, self.get_sequence_length_from_thumbnails(thumbnails))
+            )
+
+        self._update_and_display_ui(total_sequences, level)
 
     def get_sequences_that_are_a_specific_level(self, level: str):
         dictionary_dir = get_images_and_data_path("dictionary")
-
         base_words = [
             (
                 d,
@@ -110,7 +65,6 @@ class LevelSection(FilterSectionBase):
 
         for i, (word, thumbnails, _) in enumerate(base_words):
             sequence_level = self.get_sequence_level_from_thumbnails(thumbnails)
-
             base_words[i] = (word, thumbnails, sequence_level)
 
         return [

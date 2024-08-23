@@ -142,11 +142,11 @@ class DictionaryBrowser(QWidget):
         self.resize_number_of_currently_displayed_sequences_label()
 
     def resize_dictionary_browser(self):
-        self.initial_selection_widget.resize_initial_selections_widget()
         self.scroll_widget.resize_dictionary_browser_scroll_widget()
         self.resize_go_back_button()
         self.resize_currently_displaying_label()
         self.resize_number_of_currently_displayed_sequences_label()
+        self.initial_selection_widget.resize_initial_selections_widget()
 
     def resize_number_of_currently_displayed_sequences_label(self):
         font = self.number_of_currently_displayed_words_label.font()

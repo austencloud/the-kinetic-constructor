@@ -152,7 +152,6 @@ class DictionaryInitialSelectionsWidget(QWidget):
             self._resize_labels(section.label)  # Directly accessing the label attribute
 
     def resize_buttons_in_each_section(self):
-
         for section in self.sections:
             for button in section.buttons.values():
                 self._resize_buttons(button)

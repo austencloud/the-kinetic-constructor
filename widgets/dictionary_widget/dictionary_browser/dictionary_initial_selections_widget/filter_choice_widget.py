@@ -5,8 +5,8 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton,
+    QGridLayout,
     QSizePolicy,
-    QSpacerItem,
 )
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
@@ -23,20 +23,29 @@ class FilterChoiceWidget(QWidget):
         self.initial_selection_widget = initial_selection_widget
         self.buttons: dict[str, QPushButton] = {}
         self.button_labels: dict[str, QLabel] = {}
+        self.browser = initial_selection_widget.browser
         self._setup_ui()
 
     def _setup_ui(self):
         main_layout = QVBoxLayout(self)
         main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
         # Add a descriptive label at the top
         self.description_label = QLabel(
             "Please choose a filter option below.\nEach option will display sequences based on the selected filter."
         )
         self.description_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.description_label = self.description_label
         main_layout.addStretch(4)
         main_layout.addWidget(self.description_label)
         main_layout.addStretch(1)
+
+        # Create a grid layout for the filter options
+        grid_layout = QGridLayout()
+        grid_layout.setHorizontalSpacing(
+            50
+        )  # Increased Horizontal space between columns
+        grid_layout.setVerticalSpacing(30)  # Vertical space between rows
+        grid_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Define filter options and their descriptions
         filter_options = [
@@ -71,6 +80,34 @@ class FilterChoiceWidget(QWidget):
                 self.initial_selection_widget.show_author_section,
             ),
         ]
+
+        # Add buttons and descriptions to the grid layout
+        for index, (label, description, handler) in enumerate(filter_options):
+            button = QPushButton(label)
+            button.setCursor(Qt.CursorShape.PointingHandCursor)
+            button.clicked.connect(handler)
+            self.buttons[label] = button
+
+            description_label = QLabel(description)
+            description_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.button_labels[label] = description_label
+
+            row = index // 3  # Calculate row number
+            col = index % 3  # Calculate column number
+
+            grid_layout.addWidget(
+                button, row * 2, col, alignment=Qt.AlignmentFlag.AlignCenter
+            )  # Add button to grid
+            grid_layout.addWidget(
+                description_label,
+                row * 2 + 1,
+                col,
+                alignment=Qt.AlignmentFlag.AlignCenter,
+            )  # Add label below button
+
+        main_layout.addLayout(grid_layout)
+
+        # Add the "Show all sequences" button
         show_all_sequences_layout = QHBoxLayout()
         show_all_sequences_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         show_all_sequences_button = QPushButton("Show all")
@@ -80,32 +117,7 @@ class FilterChoiceWidget(QWidget):
         )
         self.buttons["Show all sequences"] = show_all_sequences_button
         show_all_sequences_layout.addWidget(show_all_sequences_button)
-        # HBox layout for buttons
-        button_layout = QHBoxLayout()
-        button_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        # Add a spacer before the first button to center the buttons
-        button_layout.addStretch(1)
 
-        # Create buttons with descriptions below each
-        for label, description, handler in filter_options:
-            button_vbox = QVBoxLayout()
-            button_vbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-            button = QPushButton(label)
-            button.setCursor(Qt.CursorShape.PointingHandCursor)
-            button.clicked.connect(handler)
-            self.buttons[label] = button
-
-            button_vbox.addWidget(button)
-            description_label = QLabel(description)
-            description_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            button_vbox.addWidget(description_label)
-            self.button_labels[label] = description_label
-
-            button_layout.addLayout(button_vbox)
-
-            button_layout.addStretch(1)
-        main_layout.addLayout(button_layout)
         main_layout.addStretch(2)
         main_layout.addLayout(show_all_sequences_layout)
         main_layout.addStretch(4)
@@ -118,19 +130,19 @@ class FilterChoiceWidget(QWidget):
 
     def _resize_description_label(self):
         description_label_font = QFont()
-        description_label_font.setPointSize(self.initial_selection_widget.width() // 90)
+        description_label_font.setPointSize(self.browser.width() // 90)
         self.description_label.setFont(description_label_font)
 
     def _resize_buttons(self):
         button_font = QFont()
-        button_font.setPointSize(self.initial_selection_widget.width() // 80)
+        button_font.setPointSize(self.browser.width() // 80)
         for button in self.buttons.values():
-            button.setFixedWidth(self.initial_selection_widget.width() // 7)
-            button.setMinimumHeight(self.initial_selection_widget.height() // 10)
+            button.setFixedWidth(self.browser.width() // 7)
+            button.setFixedHeight(self.browser.height() // 10)
             button.setFont(button_font)
 
     def _resize_buttons_labels(self):
         font = QFont()
-        font.setPointSize(self.initial_selection_widget.width() // 170)
+        font.setPointSize(self.browser.width() // 170)
         for button_label in self.button_labels.values():
             button_label.setFont(font)

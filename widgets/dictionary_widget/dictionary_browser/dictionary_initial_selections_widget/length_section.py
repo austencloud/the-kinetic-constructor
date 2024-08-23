@@ -8,20 +8,11 @@ if TYPE_CHECKING:
         DictionaryInitialSelectionsWidget,
     )
 
-
 class LengthSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select by Sequence Length:")
         self._add_buttons()
-        self.browser = self.initial_selection_widget.browser
-        self.currently_displaying_label = (
-            self.initial_selection_widget.browser.currently_displaying_label
-        )
-        self.section_manager = self.browser.section_manager
-        self.num_columns = self.browser.num_columns
-        self.metadata_extractor = self.browser.main_widget.metadata_extractor
-        self.thumbnail_box_sorter = self.browser.thumbnail_box_sorter
-        self.main_widget = self.initial_selection_widget.browser.main_widget
+
     def _add_buttons(self):
         layout: QVBoxLayout = self.layout()
 
@@ -44,71 +35,17 @@ class LengthSection(FilterSectionBase):
         layout.addStretch(1)
 
     def display_only_thumbnails_with_sequence_length(self, length: str):
-        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        self._prepare_ui_for_filtering(f"sequences of length {length}")
 
-        self.currently_displaying_label.show_loading_message(
-            f"sequences of length {length}"
-        )
-        self.browser.number_of_currently_displayed_words_label.setText("")
-
-        self.browser.scroll_widget.clear_layout()
-        self.browser.sections = {}
-        self.browser.currently_displayed_sequences = (
-            []
-        )  # Reset the list for the new filter
+        self.browser.currently_displayed_sequences = []
         base_words = self.thumbnail_box_sorter.get_sorted_base_words("sequence_length")
-        row_index = 0
-        num_words = 0
+        total_sequences = 0
 
         for word, thumbnails, seq_length in base_words:
             if seq_length != length:
                 continue
 
-            section = self.section_manager.get_section_from_word(
-                word, "sequence_length", seq_length, thumbnails
-            )
+            self.browser.currently_displayed_sequences.append((word, thumbnails, seq_length))
+            total_sequences += 1
 
-            if section not in self.browser.sections:
-                self.browser.sections[section] = []
-
-            self.browser.sections[section].append((word, thumbnails))
-            self.browser.currently_displayed_sequences.append(
-                (word, thumbnails, seq_length)
-            )  # Update currently displayed sequences
-
-        sorted_sections = self.section_manager.get_sorted_sections(
-            "sequence_length", self.browser.sections.keys()
-        )
-        self.browser.nav_sidebar.update_sidebar(sorted_sections, "sequence_length")
-        QApplication.processEvents()
-
-        for section in sorted_sections:
-            row_index += 1
-            self.section_manager.add_header(row_index, self.num_columns, section)
-            row_index += 1
-
-            column_index = 0
-
-            for word, thumbnails in self.browser.sections[section]:
-                self.thumbnail_box_sorter.add_thumbnail_box(
-                    row_index, column_index, word, thumbnails
-                )
-                column_index += 1
-                if column_index == self.num_columns:
-                    column_index = 0
-                    row_index += 1
-                num_words += 1
-                self.browser.number_of_currently_displayed_words_label.setText(
-                    f"Number of words displayed: {num_words}"
-                )
-                QApplication.processEvents()
-        self.currently_displaying_label.show_completed_message(
-            f"sequences of length {length}"
-        )
-        self.browser.number_of_currently_displayed_words_label.setText(
-            f"Number of words displayed: {num_words}"
-        )
-        self.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
-            self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
-        )
-        QApplication.restoreOverrideCursor()
+        self._update_and_display_ui(total_sequences, length)

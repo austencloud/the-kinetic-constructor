@@ -3,7 +3,7 @@
         "prop_type": "Staff",
         "background_type": "Aurora",
         "grow_sequence": true,
-        "current_tab": "sequence_builder"
+        "current_tab": "dictionary"
     },
     "image_export": {
         "include_start_position": false,
@@ -36,10 +36,10 @@
             "EndPosition": false
         },
         "grid_visibility": {
-            "non_radial_points": true
+            "non_radial_points": false
         }
     },
     "dictionary": {
-        "sort_method": "alphabetical"
+        "sort_method": "sequence_length"
     }
 }
