@@ -26,19 +26,23 @@ class DictionaryBrowser(QWidget):
         self.dictionary_widget = dictionary_widget
         self.main_widget = dictionary_widget.main_widget
         self.initialized = False
+        self.currently_displayed_sequences = []
+        self.num_columns = 3
+        self.sections: dict[str, list[tuple[str, list[str]]]] = {}
+
         self._setup_components()
         self._setup_layout()
 
     def _setup_components(self):
-        self.initial_selection_widget = DictionaryInitialSelectionsWidget(self)
         self.setup_components()
+        self.initial_selection_widget = DictionaryInitialSelectionsWidget(self)
 
     def setup_components(self):
         self.currently_displaying_label = CurrentlyDisplayingIndicatorLabel(self)
         self.nav_sidebar = DictionaryBrowserNavSidebar(self)
         self.scroll_widget = DictionaryBrowserScrollWidget(self)
         self.section_manager = SectionManager(self)
-        self.thummbnail_box_sorter = ThumbnailBoxSorter(self)
+        self.thumbnail_box_sorter = ThumbnailBoxSorter(self)
         self.options_widget = DictionaryOptionsPanel(self)
 
         self._setup_go_back_to_initial_selection_widget_button()
@@ -49,14 +53,14 @@ class DictionaryBrowser(QWidget):
             self.options_widget,
             self.go_back_button,
             self.currently_displaying_label,
-            self.number_of_currently_displayed_sequences_label,
+            self.number_of_currently_displayed_words_label,
         ]
         for widget in self.widgets:
             widget.hide()
 
     def _setup_number_of_currently_displayed_sequences_label(self):
-        self.number_of_currently_displayed_sequences_label = QLabel("")
-        self.number_of_currently_displayed_sequences_label.setAlignment(
+        self.number_of_currently_displayed_words_label = QLabel("")
+        self.number_of_currently_displayed_words_label.setAlignment(
             Qt.AlignmentFlag.AlignCenter
         )
 
@@ -77,7 +81,7 @@ class DictionaryBrowser(QWidget):
         # clear the dictionary preview area
         self.dictionary_widget.preview_area.clear_preview()
         # hide the number of currently displayed sequences label
-        self.number_of_currently_displayed_sequences_label.hide()
+        self.number_of_currently_displayed_words_label.hide()
 
     def showEvent(self, event):
         super().showEvent(event)
@@ -106,7 +110,7 @@ class DictionaryBrowser(QWidget):
         # QApplication.restoreOverrideCursor()
 
     def _initialize_and_sort_thumbnails(self, sort_method):
-        self.thummbnail_box_sorter.sort_and_display_thumbnail_boxes_by_initial_selection(
+        self.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_initial_selection(
             sort_method
         )
         self.initialized = True
@@ -124,7 +128,7 @@ class DictionaryBrowser(QWidget):
 
         self.layout.addLayout(self.go_back_button_layout)
         self.layout.addWidget(self.currently_displaying_label)
-        self.layout.addWidget(self.number_of_currently_displayed_sequences_label)
+        self.layout.addWidget(self.number_of_currently_displayed_words_label)
         self.layout.addWidget(self.options_widget)
         self.layout.addWidget(self.scroll_widget)
         self.scroll_layout.addWidget(self.nav_sidebar, 1)
@@ -138,16 +142,16 @@ class DictionaryBrowser(QWidget):
         self.resize_number_of_currently_displayed_sequences_label()
 
     def resize_dictionary_browser(self):
+        self.initial_selection_widget.resize_initial_selections_widget()
         self.scroll_widget.resize_dictionary_browser_scroll_widget()
         self.resize_go_back_button()
         self.resize_currently_displaying_label()
         self.resize_number_of_currently_displayed_sequences_label()
-        self.initial_selection_widget.resize_initial_selections_widget()
 
     def resize_number_of_currently_displayed_sequences_label(self):
-        font = self.number_of_currently_displayed_sequences_label.font()
+        font = self.number_of_currently_displayed_words_label.font()
         font.setPointSize(self.width() // 80)
-        self.number_of_currently_displayed_sequences_label.setFont(font)
+        self.number_of_currently_displayed_words_label.setFont(font)
 
     def resize_go_back_button(self):
         font = QFont()
@@ -173,7 +177,7 @@ class DictionaryBrowser(QWidget):
             thumbnail = metadata_and_thumbnail["thumbnail"]
             word = metadata["sequence"][0]["word"]
 
-            self.thummbnail_box_sorter._add_thumbnail_box(
+            self.thumbnail_box_sorter.add_thumbnail_box(
                 row_index, column_index, word, [thumbnail]
             )
 

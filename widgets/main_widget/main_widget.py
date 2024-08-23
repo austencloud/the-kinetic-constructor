@@ -70,6 +70,9 @@ class MainWidget(QTabWidget):
             self.main_window.settings_manager.global_settings.set_current_tab(
                 "dictionary"
             )
+            if not self.dictionary_widget.initialized:
+                self.dictionary_widget.initialized = True
+                self.dictionary_widget.resize_dictionary_widget()
         elif index == self.recorder_tab_index:
             self.main_window.settings_manager.global_settings.set_current_tab(
                 "recorder"

@@ -131,7 +131,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
 
     def resize_initial_filter_buttons(self):
         for button in self.filter_choice_widget.buttons.values():
-            button.setMaximumWidth(self.browser.width() // 5)
+            button.setFixedWidth(self.browser.width() // 5)
 
     def resize_fonts_in_each_section(self):
         for section in self.sections:

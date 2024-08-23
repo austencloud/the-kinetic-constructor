@@ -42,7 +42,7 @@ class DictionaryBrowserNavSidebar(QWidget):
         self.scroll_area.setStyleSheet("background: transparent;")
 
     def update_sidebar(self, sections, sort_order):
-        self._clear_sidebar()
+        self.clear_sidebar()
 
         if sort_order == "date_added":
             self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -95,15 +95,18 @@ class DictionaryBrowserNavSidebar(QWidget):
 
         self.set_styles()
 
-    def _clear_sidebar(self):
+    def clear_sidebar(self):
         for button in self.buttons:
             self.layout.removeWidget(button)
+            button.hide()
             button.deleteLater()
         for year_label in self.year_labels.values():
             self.layout.removeWidget(year_label)
+            year_label.hide()
             year_label.deleteLater()
         for spacer_line in self.spacer_lines:
             self.layout.removeWidget(spacer_line)
+            spacer_line.hide()
             spacer_line.deleteLater()
         self.buttons.clear()
         self.year_labels.clear()
