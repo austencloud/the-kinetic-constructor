@@ -51,16 +51,16 @@ class FilterSectionBase(QWidget):
         layout.addLayout(top_bar_layout)
 
         # Add the label centered below the top bar
-        self.label = QLabel(label_text)
-        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.label)
+        self.header_label = QLabel(label_text)
+        self.header_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.header_label)
         layout.addStretch(1)
         # Set the layout
         self.setLayout(layout)
-        
+
         self.back_button.hide()
-        self.label.hide()
-        
+        self.header_label.hide()
+
     def _initialize_progress_bar(self):
         # Initialize the custom rainbow progress bar
         self.loading_progress_bar = RainbowProgressBar(

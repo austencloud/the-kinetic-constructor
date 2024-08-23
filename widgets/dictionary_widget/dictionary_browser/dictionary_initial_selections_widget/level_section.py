@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
 class LevelSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
-        super().__init__(initial_selection_widget, "Select by Level:")
+        super().__init__(initial_selection_widget, "Select by Difficulty Level:")
         self.main_widget = initial_selection_widget.browser.main_widget
         self.buttons: dict[str, QPushButton] = {}
         self.labels: dict[str, QLabel] = {}
@@ -32,7 +32,7 @@ class LevelSection(FilterSectionBase):
     def add_buttons(self):
         self.initialized = True
         self.back_button.show()
-        self.label.show()
+        self.header_label.show()
         layout: QVBoxLayout = self.layout()
 
         # Create a grid layout to hold the level buttons, descriptions, and images
@@ -101,6 +101,7 @@ class LevelSection(FilterSectionBase):
         # Add the grid layout to the main layout
         layout.addLayout(grid_layout)
         layout.addStretch(1)
+        self.resize_level_section()
 
     def display_only_thumbnails_with_level(self, level: str):
         self._prepare_ui_for_filtering(f"level {level} sequences")
@@ -172,13 +173,16 @@ class LevelSection(FilterSectionBase):
     def resize_level_section(self):
         self.scale_images()
         self.resize_buttons()
-        self.resize_label_fonts()
+        self.resize_labels()
 
-    def resize_label_fonts(self):
+    def resize_labels(self):
         for label in self.labels.values():
             font = label.font()
             font.setPointSize(self.browser.width() // 140)
             label.setFont(font)
+        font = self.header_label.font()
+        font.setPointSize(self.browser.width() // 100)
+        self.header_label.setFont(font)
 
     def resize_buttons(self):
         for button in self.buttons.values():

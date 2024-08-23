@@ -24,7 +24,7 @@ class StartingLetterSection(FilterSectionBase):
     def add_buttons(self):
         self.initialized = True
         self.back_button.show()
-        self.label.show()
+        self.header_label.show()
         layout: QVBoxLayout = self.layout()
 
         sections = [
@@ -39,7 +39,6 @@ class StartingLetterSection(FilterSectionBase):
             [["Φ", "Ψ", "Λ"]],
             [["Φ-", "Ψ-", "Λ-"]],
             [["α", "β", "Γ"]],
-            [["Show all"]],
         ]
 
         for section in sections:
@@ -62,7 +61,18 @@ class StartingLetterSection(FilterSectionBase):
                     20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
                 )
             )
+        # add a button to show all sequences
+        show_all_button_hbox = QHBoxLayout()
+        show_all_button_hbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.show_all_button = QPushButton("Show all")
+        self.show_all_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.show_all_button.clicked.connect(
+            lambda: self.initial_selection_widget.on_letter_button_clicked("Show all")
+        )
+        show_all_button_hbox.addWidget(self.show_all_button)
+        layout.addLayout(show_all_button_hbox)
         layout.addStretch(1)
+        self.resize_starting_letter_section()
 
     def display_only_thumbnails_starting_with_letter(self, letter: str):
         description = (
@@ -138,3 +148,24 @@ class StartingLetterSection(FilterSectionBase):
             QApplication.restoreOverrideCursor()
 
         QTimer.singleShot(0, update_ui)
+
+    def resize_starting_letter_section(self):
+        self.resize_buttons()
+        self.resize_label()
+
+    def resize_label(self):
+        font = self.header_label.font()
+        font.setPointSize(self.browser.width() // 100)
+        self.header_label.setFont(font)
+
+    def resize_buttons(self):
+        for button in self.buttons.values():
+            font = button.font()
+            font.setPointSize(self.browser.width() // 120)
+            button.setFont(font)
+            button.setFixedHeight(self.browser.height() // 24)
+            button.setFixedWidth(self.browser.width() // 24)
+        self.show_all_button.setFixedWidth(self.browser.width() // 6)
+        show_all_button_font = self.show_all_button.font()
+        show_all_button_font.setPointSize(self.browser.width() // 100)
+        self.show_all_button.setFont(show_all_button_font)

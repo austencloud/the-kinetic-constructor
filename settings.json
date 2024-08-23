@@ -7,11 +7,11 @@
     },
     "image_export": {
         "include_start_position": false,
-        "add_info": false,
+        "add_info": true,
         "open_directory_on_export": true,
-        "add_word": false,
-        "add_difficulty_level": false,
-        "add_beat_numbers": false
+        "add_word": true,
+        "add_difficulty_level": true,
+        "add_beat_numbers": true
     },
     "user_profile": {
         "current_user": "Austen Cloud",
@@ -41,6 +41,6 @@
         }
     },
     "dictionary": {
-        "sort_method": "date_added"
+        "sort_method": "alphabetical"
     }
 }

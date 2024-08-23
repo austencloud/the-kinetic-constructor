@@ -30,8 +30,8 @@ class ContainsLetterSection(FilterSectionBase):
     def add_buttons(self):
         self.initialized = True
         self.back_button.show()
-        self.label.show()
-        
+        self.header_label.show()
+
         layout: QVBoxLayout = self.layout()
 
         sections = [
@@ -73,15 +73,15 @@ class ContainsLetterSection(FilterSectionBase):
 
         apply_button_layout = QHBoxLayout()
         apply_button_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        apply_button = QPushButton("Apply Letter Filter")
-        self.buttons["apply_contains_letter_filter"] = apply_button
-        apply_button.clicked.connect(
+        self.apply_button = QPushButton("Apply Letter Filter")
+        self.apply_button.clicked.connect(
             self.initial_selection_widget.apply_contains_letter_filter
         )
-        apply_button_layout.addWidget(apply_button)
+        apply_button_layout.addWidget(self.apply_button)
         layout.addLayout(apply_button_layout)
 
         layout.addStretch(1)
+        self.resize_contains_letter_section()
 
     def display_only_thumbnails_containing_letters(self, letters: set[str]):
         letters = self.organize_letters(letters)
@@ -186,3 +186,24 @@ class ContainsLetterSection(FilterSectionBase):
                     return False
             return True
         return False
+
+    def resize_contains_letter_section(self):
+        self.resize_buttons()
+        self.resize_label()
+
+    def resize_label(self):
+        font = self.header_label.font()
+        font.setPointSize(self.browser.width() // 100)
+        self.header_label.setFont(font)
+
+    def resize_buttons(self):
+        for button in self.buttons.values():
+            font = button.font()
+            font.setPointSize(self.browser.width() // 120)
+            button.setFont(font)
+            button.setFixedHeight(self.browser.height() // 24)
+            button.setFixedWidth(self.browser.width() // 24)
+        self.apply_button.setFixedWidth(self.browser.width() // 6)
+        apply_button_font = self.apply_button.font()
+        apply_button_font.setPointSize(self.browser.width() // 100)
+        self.apply_button.setFont(apply_button_font)

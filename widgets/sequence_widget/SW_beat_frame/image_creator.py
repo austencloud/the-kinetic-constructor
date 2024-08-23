@@ -52,8 +52,11 @@ class ImageCreator:
                     options, num_filled_beats, self.beat_scale
                 )
             )
+            add_beat_numbers = options.get("add_beat_numbers")
         else:
             additional_height_top, additional_height_bottom = 0, 0
+            add_beat_numbers = True
+
 
         image = self._create_image(
             column_count, row_count, additional_height_top + additional_height_bottom
@@ -66,7 +69,7 @@ class ImageCreator:
             row_count,
             include_start_pos,
             additional_height_top,
-            add_beat_numbers=options["add_beat_numbers"],
+            add_beat_numbers
         )
 
         if options:

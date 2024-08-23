@@ -17,7 +17,7 @@ class StartingPositionSection(FilterSectionBase):
     def add_buttons(self):
         self.initialized = True
         self.back_button.show()
-        self.label.show()
+        self.header_label.show()
         layout: QVBoxLayout = self.layout()
 
         # Create a horizontal box layout for the starting position buttons
@@ -39,7 +39,7 @@ class StartingPositionSection(FilterSectionBase):
         hbox.addStretch(3)
         layout.addLayout(hbox)  # Add the horizontal layout to the main vertical layout
         layout.addStretch(1)
-
+        self.resize_starting_position_section()
     def display_only_thumbnails_with_starting_position(self, position: str):
         self._prepare_ui_for_filtering(f"sequences starting at {position}")
 
@@ -67,3 +67,20 @@ class StartingPositionSection(FilterSectionBase):
             if start_position:
                 return start_position
         return None
+
+    def resize_starting_position_section(self):
+        self.resize_buttons()
+        self.resize_labels()
+
+    def resize_labels(self):
+        font = self.header_label.font()
+        font.setPointSize(self.browser.width() // 100)
+        self.header_label.setFont(font)
+
+    def resize_buttons(self):
+        for button in self.buttons.values():
+            font = button.font()
+            font.setPointSize(self.browser.width() // 100)
+            button.setFont(font)
+            button.setFixedHeight(self.browser.height() // 20)
+            button.setFixedWidth(self.browser.width() // 5)

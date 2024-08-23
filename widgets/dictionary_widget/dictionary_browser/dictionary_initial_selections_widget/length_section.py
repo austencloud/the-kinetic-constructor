@@ -17,27 +17,28 @@ class LengthSection(FilterSectionBase):
     def add_buttons(self):
         self.initialized = True
         self.back_button.show()
-        self.label.show()
+        self.header_label.show()
         layout: QVBoxLayout = self.layout()
 
         available_lengths = [4, 6, 8, 10, 12, 16, 20, 24, 28, 32]
-        for i in range(0, len(available_lengths), 4):
-            hbox = QHBoxLayout()
-            hbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            for length in available_lengths[i : i + 4]:
-                button = QPushButton(str(length))
-                button.setCursor(Qt.CursorShape.PointingHandCursor)
-                self.buttons[f"length_{length}"] = button
-                button.clicked.connect(
-                    lambda checked, l=length: self.initial_selection_widget.on_length_button_clicked(
-                        l
-                    )
-                )
-                hbox.addWidget(button)
-            layout.addLayout(hbox)
+        vbox = QVBoxLayout()
+        vbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+        for length in available_lengths:
+            button = QPushButton(str(length))
+            button.setCursor(Qt.CursorShape.PointingHandCursor)
+            self.buttons[f"length_{length}"] = button
+            button.clicked.connect(
+                lambda checked, l=length: self.initial_selection_widget.on_length_button_clicked(
+                    l
+                )
+            )
+            vbox.addWidget(button)
+
+        layout.addLayout(vbox)
         layout.addStretch(1)
-        
+        self.resize_length_section()
+
     def display_only_thumbnails_with_sequence_length(self, length: str):
         self._prepare_ui_for_filtering(f"sequences of length {length}")
 
@@ -55,3 +56,20 @@ class LengthSection(FilterSectionBase):
             total_sequences += 1
 
         self._update_and_display_ui(" sequences of length", total_sequences, length)
+
+    def resize_length_section(self):
+        self.resize_buttons()
+        self.resize_label()
+
+    def resize_label(self):
+        font = self.header_label.font()
+        font.setPointSize(self.browser.width() // 100)
+        self.header_label.setFont(font)
+
+    def resize_buttons(self):
+        for button in self.buttons.values():
+            font = button.font()
+            font.setPointSize(self.browser.width() // 100)
+            button.setFont(font)
+            button.setFixedHeight(self.browser.height() // 20)
+            button.setFixedWidth(self.browser.width() // 8)

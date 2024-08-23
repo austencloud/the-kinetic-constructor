@@ -50,7 +50,6 @@ class DictionaryInitialSelectionsWidget(QWidget):
 
         self._setup_ui()
 
-
     def _setup_ui(self):
         self.main_layout = QVBoxLayout(self)
         self.main_layout.addWidget(self.filter_choice_widget)
@@ -78,7 +77,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.main_layout.addWidget(self.starting_letter_section)
         if not self.starting_letter_section.initialized:
             self.starting_letter_section.add_buttons()
-            
+
     def show_contains_letter_section(self):
         self._hide_all_sections()
         self.filter_choice_widget.hide()
@@ -102,7 +101,6 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.main_layout.addWidget(self.level_section)
         if not self.level_section.initialized:
             self.level_section.add_buttons()
-        self.level_section.resize_level_section()
 
     def show_starting_position_section(self):
         self._hide_all_sections()
@@ -119,7 +117,6 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.main_layout.addWidget(self.author_section)
         if not self.author_section.initialized:
             self.author_section.add_buttons()
-
 
     def on_letter_button_clicked(self, letter: str):
         self.browser.apply_initial_selection({"letter": letter})
@@ -155,8 +152,6 @@ class DictionaryInitialSelectionsWidget(QWidget):
 
     def resize_initial_selections_widget(self):
         self.resize_initial_filter_buttons()
-        self.resize_fonts_in_each_section()
-        self.resize_buttons_in_each_section()
         self.filter_choice_widget.resize_filter_choice_widget()
         for section in self.sections:
             section.resize_go_back_button()
@@ -165,23 +160,4 @@ class DictionaryInitialSelectionsWidget(QWidget):
         for button in self.filter_choice_widget.buttons.values():
             button.setFixedWidth(self.browser.width() // 5)
 
-    def resize_fonts_in_each_section(self):
-        for section in self.sections:
-            self._resize_labels(section.label)
 
-    def resize_buttons_in_each_section(self):
-        for section in self.sections:
-            for button in section.buttons.values():
-                self._resize_buttons(button)
-
-    def _resize_buttons(self, button: QPushButton):
-        font = button.font()
-        font.setPointSize(self.browser.width() // 100)
-        button.setFont(font)
-
-    def _resize_labels(self, label: QLabel):
-        font = label.font()
-        font.setPointSize(self.browser.width() // 100)
-        label.setFont(font)
-        for button in self.filter_choice_widget.buttons.values():
-            button.setFont(font)
