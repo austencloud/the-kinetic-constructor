@@ -1,18 +1,12 @@
-from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QLabel,
-    QPushButton,
-    QGridLayout,
-    QApplication,
-)
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPixmap, QPainter
 import os
+from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QApplication
 
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from .filter_section_base import FilterSectionBase
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPixmap, QIcon, QCursor
+from PyQt6.QtWidgets import QLabel, QGridLayout
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.dictionary_initial_selections_widget import (
@@ -27,8 +21,6 @@ class LevelSection(FilterSectionBase):
         self.buttons: dict[str, QPushButton] = {}
         self.labels: dict[str, QLabel] = {}
         self.image_placeholders: dict[str, QLabel] = {}
-        self.scaled_images: dict[str, QPixmap] = {}  # Store scaled images
-        self.images_loaded = False  # Flag to check if images are loaded
         self._add_buttons()
 
     def _add_buttons(self):
@@ -36,9 +28,9 @@ class LevelSection(FilterSectionBase):
 
         # Create a grid layout to hold the level buttons, descriptions, and images
         grid_layout = QGridLayout()
-        grid_layout.setHorizontalSpacing(50)
-        grid_layout.setVerticalSpacing(30)  # Increased vertical spacing for clarity
         grid_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        grid_layout.setHorizontalSpacing(50)
+        grid_layout.setVerticalSpacing(30)
 
         # Level descriptions corresponding to each level
         level_descriptions = {
@@ -47,7 +39,10 @@ class LevelSection(FilterSectionBase):
             3: "Level 3 sequences use non-radial orientations.",
         }
 
-        # Create buttons with descriptions and image placeholders
+        # Path where level images are stored
+        image_dir = get_images_and_data_path("images/level_images")
+
+        # Create buttons, descriptions, and images
         available_levels = [1, 2, 3]
         for col, level in enumerate(available_levels):
             # Create a vertical box layout for each level's button, description, and image
@@ -56,9 +51,6 @@ class LevelSection(FilterSectionBase):
 
             # Create the level button
             button = QPushButton(f"Level {level}")
-            button.setFixedWidth(
-                self.main_widget.width() // 5
-            )  # Make the buttons wider
             button.setCursor(Qt.CursorShape.PointingHandCursor)
             self.buttons[f"level_{level}"] = button
             button.clicked.connect(
@@ -72,97 +64,112 @@ class LevelSection(FilterSectionBase):
             description_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             self.labels[f"level_{level}"] = description_label
 
-            # Placeholder for the image
+            # Create the image placeholder
             image_placeholder = QLabel()
-            image_placeholder.setMinimumSize(
-                self.main_widget.width() // 5, self.main_widget.height() // 8
-            )
             image_placeholder.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            # Temporarily removing border to see if that helps
-            # image_placeholder.setStyleSheet("border: 1px solid black;")
-
-            # Store reference to image placeholders
             self.image_placeholders[f"level_{level}"] = image_placeholder
 
+            # Load and set the image
+            image_path = os.path.join(image_dir, f"level_{level}.png")
+            if os.path.exists(image_path):
+                pixmap = QPixmap(image_path)
+                image_placeholder.setPixmap(pixmap)
+            else:
+                image_placeholder.setText("No Image Available")
+
             # Add button, description, and image to the vertical box layout
-            level_vbox.addWidget(button, alignment=Qt.AlignmentFlag.AlignCenter)
-            level_vbox.addWidget(
-                description_label, alignment=Qt.AlignmentFlag.AlignCenter
-            )
-            level_vbox.addWidget(
-                image_placeholder, alignment=Qt.AlignmentFlag.AlignCenter
-            )
+            level_vbox.addWidget(button)
+            level_vbox.addWidget(description_label)
+            level_vbox.addWidget(image_placeholder)
 
             # Add the vertical box layout to the grid layout
-            grid_layout.addLayout(
-                level_vbox, 0, col, alignment=Qt.AlignmentFlag.AlignCenter
-            )
+            grid_layout.addLayout(level_vbox, 0, col)
 
         # Add the grid layout to the main layout
         layout.addLayout(grid_layout)
         layout.addStretch(1)
 
-    def load_and_display_images(self):
-        if not self.images_loaded:
-            self.load_images()  # Assuming load_images sets the pixmaps
-            for placeholder in self.image_placeholders.values():
-                placeholder.update()
-                placeholder.repaint()
-            self.images_loaded = True
+    def display_only_thumbnails_with_level(self, level: str):
+        self._prepare_ui_for_filtering(f"level {level} sequences")
 
-    def load_images(self):
-        """Load and scale images when the widget is shown."""
-        if not self.images_loaded:
-            image_dir = get_images_and_data_path("images\\level_images")
-            for level, image_placeholder in self.image_placeholders.items():
-                image_path = os.path.join(image_dir, f"{level}.png")
-                if os.path.exists(image_path):
-                    print(f"Loading image from: {image_path}")  # Debugging statement
-                    pixmap = QPixmap(image_path)
-                    scaled_pixmap = pixmap.scaled(
-                        image_placeholder.size(),
-                        Qt.AspectRatioMode.KeepAspectRatio,
-                        Qt.TransformationMode.SmoothTransformation,
-                    )
-                    image_placeholder.setPixmap(scaled_pixmap)
-                    self.scaled_images[level] = scaled_pixmap
-                    image_placeholder.adjustSize()  # Adjust size to fit the pixmap
-                else:
-                    print(f"Image not found at: {image_path}")  # Debugging statement
-            self.images_loaded = True
-            self.update()  # Force the widget to revalidate its display
-            self.repaint()  # Ensure the widget repaints itself
+        self.browser.currently_displayed_sequences = []
+        sequences = self.get_sequences_that_are_a_specific_level(level)
+        total_sequences = len(sequences)
+
+        for word, thumbnails in sequences:
+            self.browser.currently_displayed_sequences.append(
+                (word, thumbnails, self.get_sequence_length_from_thumbnails(thumbnails))
+            )
+
+        self._update_and_display_ui("level", total_sequences, level)
+
+    def get_sequences_that_are_a_specific_level(self, level: str):
+        dictionary_dir = get_images_and_data_path("dictionary")
+        base_words = [
+            (
+                d,
+                self.main_widget.thumbnail_finder.find_thumbnails(
+                    os.path.join(dictionary_dir, d)
+                ),
+                None,
+            )
+            for d in os.listdir(dictionary_dir)
+            if os.path.isdir(os.path.join(dictionary_dir, d)) and "__pycache__" not in d
+        ]
+
+        for i, (word, thumbnails, _) in enumerate(base_words):
+            sequence_level = self.get_sequence_level_from_thumbnails(thumbnails)
+            base_words[i] = (word, thumbnails, sequence_level)
+
+        return [
+            (word, thumbnails)
+            for word, thumbnails, sequence_level in base_words
+            if sequence_level == level
+        ]
+
+    def get_sequence_level_from_thumbnails(self, thumbnails):
+        for thumbnail in thumbnails:
+            level = self.metadata_extractor.get_sequence_level(thumbnail)
+            if level:
+                return level
+        return None
+
+    def get_sequence_length_from_thumbnails(self, thumbnails):
+        """Extract the sequence length from the first available thumbnail metadata."""
+        for thumbnail in thumbnails:
+            length = self.metadata_extractor.get_sequence_length(thumbnail)
+            if length:
+                return length
+        return None
+
+    def scale_images(self):
+        for level in self.image_placeholders:
+            image_placeholder = self.image_placeholders[level]
+            pixmap = image_placeholder.pixmap()
+            if pixmap:
+                size = self.browser.width() // 6
+                scaled_pixmap = pixmap.scaled(
+                    size,  # Desired width
+                    size,  # Desired height
+                    Qt.AspectRatioMode.KeepAspectRatio,  # Maintain aspect ratio
+                    Qt.TransformationMode.SmoothTransformation,  # Smooth scaling
+                )
+                image_placeholder.setPixmap(scaled_pixmap)
 
     def resize_level_section(self):
-        self.resize_level_buttons()
-        self.resize_level_button_labels()
-        self.resize_level_images()
+        self.scale_images()
+        self.resize_label_fonts()
 
-    def resize_level_buttons(self):
-        for button in self.buttons.values():
-            button.setFixedWidth(self.browser.width() // 5)
-            button.setFixedHeight(self.browser.height() // 10)
-
-    def resize_level_button_labels(self):
+    def resize_label_fonts(self):
         for label in self.labels.values():
             font = label.font()
-            font.setPointSize(self.browser.height() // 80)
+            font.setPointSize(self.browser.width() // 140)
             label.setFont(font)
 
-    def resize_level_images(self):
-        if self.images_loaded:
-            for level, image_placeholder in self.image_placeholders.items():
-                image_placeholder.setMinimumSize(
-                    self.browser.width() // 5, self.browser.height() // 8
-                )
-                if level in self.scaled_images:
-                    scaled_pixmap = self.scaled_images[level].scaled(
-                        image_placeholder.size(),
-                        Qt.AspectRatioMode.KeepAspectRatio,
-                        Qt.TransformationMode.SmoothTransformation,
-                    )
-                    image_placeholder.setPixmap(scaled_pixmap)
-                    image_placeholder.adjustSize()  # Adjust size to fit the pixmap
-            self.update()  # Ensure the widget updates its layout after resizing
-            self.repaint()  # Repaint the widget to apply changes
-
+    def resize_buttons(self):
+        for button in self.buttons.values():
+            font = button.font()
+            font.setPointSize(self.browser.width() // 100)
+            button.setFont(font)
+            button.setFixedHeight(self.browser.height() // 20)
+            button.setFixedWidth(self.browser.width() // 5)

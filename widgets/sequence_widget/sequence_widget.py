@@ -138,9 +138,6 @@ class SequenceWidget(QWidget):
         self.beat_frame_layout.setContentsMargins(0, 0, 0, 0)
         self.beat_frame_layout.setSpacing(0)
 
-    def resizeEvent(self, event):
-        self.layout.update()
-        super().resizeEvent(event)
 
     def showEvent(self, event):
         super().showEvent(event)

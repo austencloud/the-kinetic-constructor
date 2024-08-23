@@ -44,9 +44,8 @@ class DictionaryInitialSelectionsWidget(QWidget):
             self.level_section,
             self.contains_letter_section,
             self.starting_position_section,
-            self.author_section,  # Add the AuthorSection to the list
+            self.author_section,
         ]
-        # Initialize filter choice widget
         self.filter_choice_widget = FilterChoiceWidget(self)
 
         self._setup_ui()
@@ -100,7 +99,6 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.filter_choice_widget.hide()
         self.level_section.show()
         self.main_layout.addWidget(self.level_section)
-        self.level_section.load_and_display_images()
         self.level_section.resize_level_section()
 
     def show_starting_position_section(self):
@@ -155,13 +153,12 @@ class DictionaryInitialSelectionsWidget(QWidget):
 
     def resize_fonts_in_each_section(self):
         for section in self.sections:
-            self._resize_labels(section.label)  # Directly accessing the label attribute
+            self._resize_labels(section.label)
 
     def resize_buttons_in_each_section(self):
         for section in self.sections:
             for button in section.buttons.values():
                 self._resize_buttons(button)
-        self.level_section.resize_level_buttons()
 
     def _resize_buttons(self, button: QPushButton):
         font = button.font()
@@ -174,4 +171,3 @@ class DictionaryInitialSelectionsWidget(QWidget):
         label.setFont(font)
         for button in self.filter_choice_widget.buttons.values():
             button.setFont(font)
-

@@ -149,7 +149,7 @@ class DictionaryBrowser(QWidget):
         self.resize_currently_displaying_label()
         self.resize_number_of_currently_displayed_sequences_label()
         self.initial_selection_widget.resize_initial_selections_widget()
-
+        self.nav_sidebar.resize_nav_sidebar()
     def resize_number_of_currently_displayed_sequences_label(self):
         font = self.number_of_currently_displayed_words_label.font()
         font.setPointSize(self.width() // 80)
