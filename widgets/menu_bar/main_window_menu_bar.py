@@ -5,6 +5,7 @@ from widgets.menu_bar.backgrounds_menu import BackgroundsMenu
 from widgets.menu_bar.prop_type_menu import PropTypeMenu
 from widgets.menu_bar.settings_menu import SettingsMenu
 from widgets.menu_bar.visibility_menu import VisibilityMenu
+from PyQt6.QtWidgets import QMenu
 
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
@@ -39,6 +40,16 @@ class MainWindowMenuBar(QMenuBar):
         )  # Ensures the font size stays between 8 and 20
         font.setPointSize(calculated_font_size)
         self.setFont(font)
+
+        # Apply the same font size to each menu's actions (dropdown items)
+        for menu in self.findChildren(QMenu):
+            menu_font = menu.font()
+            menu_font.setPointSize(calculated_font_size)
+            menu.setFont(menu_font)
+            for action in menu.actions():
+                action_font = action.font()
+                action_font.setPointSize(calculated_font_size)
+                action.setFont(action_font)
 
         # Ensure the menu bar is correctly positioned and visible
         self.move(0, 0)
