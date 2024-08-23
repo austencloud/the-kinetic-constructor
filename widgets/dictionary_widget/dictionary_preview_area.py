@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
-
+from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 from widgets.dictionary_widget.preview_area_image_label import PreviewAreaImageLabel
 from widgets.dictionary_widget.dictionary_button_panel import DictionaryButtonPanel
@@ -31,11 +31,12 @@ class DictionaryPreviewArea(QWidget):
         self.initialized = False
         self.current_thumbnail_box: ThumbnailBox = None
         self._setup_components()
-        self._hide_components()
+        # self._hide_components()
         self._setup_layout()
 
     def _setup_layout(self):
         layout = QVBoxLayout(self)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addStretch(1)
         layout.addWidget(self.word_label)
         layout.addWidget(self.variation_number_label)
@@ -83,11 +84,10 @@ class DictionaryPreviewArea(QWidget):
         self.variation_number_label.show()
         self.button_panel.show_buttons()
 
-
     def _hide_components(self):
-        self.word_label.hide()
-        self.variation_number_label.hide()
-        self.button_panel.hide_buttons()
+        # self.word_label.hide()
+        # self.variation_number_label.hide()
+        # self.button_panel.hide_buttons()
         self.update_preview(None)
 
     def update_preview(self, index):
@@ -130,8 +130,8 @@ class DictionaryPreviewArea(QWidget):
         else:
             self.image_label.adjust_label_height_for_text()
         self.word_label.resize_word_label()
-        if not self.initialized:
-            self.image_label.show_placeholder()
+        # if not self.initialized:
+        #     self.image_label.show_placeholder()
 
     def clear_preview(self):
         self.image_label.show_placeholder()

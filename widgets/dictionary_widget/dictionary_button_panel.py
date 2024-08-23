@@ -80,7 +80,7 @@ class DictionaryButtonPanel(QWidget):
             button.setMaximumSize(QSize(btn_size, btn_size))
             button.setIconSize(QSize(icon_size, icon_size))
             button.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.layout.addStretch(2)
+        self.layout.addStretch(1)
 
     def edit_sequence(self):
         if not hasattr(self, "sequence_populator"):

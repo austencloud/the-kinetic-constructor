@@ -104,9 +104,11 @@ class DictionaryBrowser(QWidget):
         # hide the buttons in the nav button widget
         self.initial_selection_widget.hide()
         self._add_components_to_layout()
-        QApplication.processEvents()
         # self.thummbnail_box_sorter.currently_displayed_sequences = []  # Reset before applying new filters
         self._initialize_and_sort_thumbnails(initial_selections)
+        # update the placeholder in the preview area
+        self.dictionary_widget.preview_area.update_preview(None)
+        QApplication.processEvents()
         # QApplication.restoreOverrideCursor()
 
     def _initialize_and_sort_thumbnails(self, sort_method):
