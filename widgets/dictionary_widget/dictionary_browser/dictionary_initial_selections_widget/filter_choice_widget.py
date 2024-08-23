@@ -59,22 +59,22 @@ class FilterChoiceWidget(QWidget):
             ),
             (
                 "Sequence Length",
-                "Display sequences based on their length.",
+                "Display sequences by length.",
                 self.initial_selection_widget.show_length_section,
             ),
             (
                 "Level",
-                "Display sequences based on their difficulty level.",
+                "Display sequences by difficulty level.",
                 self.initial_selection_widget.show_level_section,
             ),
             (
                 "Starting Position",
-                "Display sequences based on their starting position.",
+                "Display sequences by starting position.",
                 self.initial_selection_widget.show_starting_position_section,
             ),
             (
                 "Author",
-                "Display sequences based on their author.",
+                "Display sequences by author.",
                 self.initial_selection_widget.show_author_section,
             ),
         ]
@@ -128,9 +128,20 @@ class FilterChoiceWidget(QWidget):
         )
         grid_layout.addItem(self.grid_spacer_item_2, 3, 0, 1, 3)
 
-        grid_layout.addWidget(
-            show_all_sequences_button, 4, 1, alignment=Qt.AlignmentFlag.AlignCenter
+        # Add description label below the "Show all sequences" button
+        show_all_description_label = QLabel("Display every sequence in the dictionary.")
+        show_all_description_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.button_labels["Show all sequences"] = show_all_description_label
+        # Create a vertical layout for the button and its description
+        show_all_vbox = QVBoxLayout()
+        show_all_vbox.addWidget(
+            show_all_sequences_button, alignment=Qt.AlignmentFlag.AlignCenter
         )
+        show_all_vbox.addWidget(
+            show_all_description_label, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+
+        grid_layout.addLayout(show_all_vbox, 4, 1)  # Centered in the grid
 
         main_layout.addStretch(4)
         self.setLayout(main_layout)
