@@ -28,7 +28,9 @@ from widgets.scroll_area.components.pictograph_key_generator import (
     PictographKeyGenerator,
 )
 from data.constants import DIAMOND
-from widgets.sequence_widget.sequence_properties_manager.sequence_properties_manager import SequencePropertiesManager
+from widgets.sequence_widget.sequence_properties_manager.sequence_properties_manager import (
+    SequencePropertiesManager,
+)
 from ..main_widget.special_placement_loader import SpecialPlacementLoader
 from ..pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
     TurnsTupleGenerator,
@@ -126,7 +128,6 @@ class MainWidget(QTabWidget):
         self.addTab(self.top_builder_widget, "Builder")
         self.addTab(self.dictionary_widget, "Dictionary")
 
-
         self.builder_tab_index = 0
         self.dictionary_tab_index = 1
         self.recorder_tab_index = 2
@@ -201,6 +202,7 @@ class MainWidget(QTabWidget):
         self.resize_widget(self.currentWidget())
         self.setCurrentWidget(starting_widget)
         self.currentChanged.connect(self.on_tab_changed)
+        self.main_window.menu_bar.resize_menu_bar()
 
     def showEvent(self, event):
         super().showEvent(event)

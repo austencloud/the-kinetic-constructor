@@ -7,7 +7,7 @@ class FontMarginHelper:
         base_font: QFont, num_filled_beats: int, base_margin: int, beat_scale
     ):
         if num_filled_beats == 1:
-            font_size = base_font.pointSize() // 2
+            font_size = base_font.pointSize() // 2.3
             margin = base_margin // 3
         elif num_filled_beats == 2:
             font_size = base_font.pointSize() // 1.5

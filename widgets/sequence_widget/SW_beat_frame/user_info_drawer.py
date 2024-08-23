@@ -32,7 +32,7 @@ class UserInfoDrawer:
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         painter.setRenderHint(QPainter.RenderHint.TextAntialiasing)
 
-        user_name = options.get("user_name", "AC")
+        user_name = options['user_name']
         export_date = self._format_export_date(
             options.get("export_date", datetime.now().strftime("%m-%d-%Y"))
         )
@@ -90,10 +90,8 @@ class UserInfoDrawer:
         if not text_width:
             metrics = QFontMetrics(font)
             text_width = metrics.horizontalAdvance(text)
-            text_height = metrics.ascent()
         else:
             metrics = QFontMetrics(font)
-            text_height = metrics.ascent()
 
         if position == "bottom-left":
             x = margin

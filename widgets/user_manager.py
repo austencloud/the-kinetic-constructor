@@ -68,8 +68,6 @@ class UserManager(QObject):
         if user_name in user_profiles:
             del user_profiles[user_name]
             self.user_profile_settings.settings["user_profiles"] = user_profiles
-            if self.user_combo_box.currentText() == user_name:
-                self.user_combo_box.setCurrentIndex(0)
             return True
         return False
 

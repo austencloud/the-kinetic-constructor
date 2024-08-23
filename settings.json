@@ -6,7 +6,7 @@
         "current_tab": "sequence_builder"
     },
     "image_export": {
-        "include_start_position": false,
+        "include_start_position": true,
         "add_info": true,
         "open_directory_on_export": true,
         "add_word": true,
@@ -15,12 +15,11 @@
     "user_profile": {
         "current_user": "Austen Cloud",
         "user_profiles": {
-            "AC": {
-                "name": "AC",
-                "export_date": "8-17-2024"
-            },
             "Austen Cloud": {
                 "name": "Austen Cloud"
+            },
+            "Doc Womp": {
+                "name": "Doc Womp"
             }
         },
         "current_note": "Created using The Kinetic Alphabet",
@@ -36,10 +35,10 @@
             "EndPosition": false
         },
         "grid_visibility": {
-            "non_radial_points": false
+            "non_radial_points": true
         }
     },
     "dictionary": {
-        "sort_method": "alphabetical"
+        "sort_method": "sequence_length"
     }
 }

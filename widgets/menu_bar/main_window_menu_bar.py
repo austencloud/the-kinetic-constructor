@@ -26,3 +26,20 @@ class MainWindowMenuBar(QMenuBar):
         self.addMenu(self.visibility_menu)
         self.addMenu(self.backgrounds_menu)
         self.addMenu(self.user_profiles_menu)
+
+    def resize_menu_bar(self):
+        # Set the height of the menu bar
+        self.setFixedHeight(self.main_widget.height() // 30)
+        self.setFixedWidth(self.main_widget.width())
+
+        # Set the font size based on a percentage of the main widget's height
+        font = self.font()
+        calculated_font_size = max(
+            8, min(self.main_widget.height() // 40, 14)
+        )  # Ensures the font size stays between 8 and 20
+        font.setPointSize(calculated_font_size)
+        self.setFont(font)
+
+        # Ensure the menu bar is correctly positioned and visible
+        self.move(0, 0)
+        self.show()
