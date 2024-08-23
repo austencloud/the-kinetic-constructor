@@ -30,9 +30,9 @@
     },
     "visibility": {
         "glyph_visibility": {
-            "VTG": false,
+            "VTG": true,
             "TKA": true,
-            "Elemental": false,
+            "Elemental": true,
             "EndPosition": false
         },
         "grid_visibility": {

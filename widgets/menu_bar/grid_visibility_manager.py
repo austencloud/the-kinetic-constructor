@@ -9,20 +9,22 @@ class GridVisibilityManager:
     def __init__(self, visibility_settings_handler: "VisibilitySettings") -> None:
         self.visibility_settings_handler = visibility_settings_handler
         self.settings_manager = visibility_settings_handler.settings_manager
-        self.non_radial_visible = self.load_visibility_settings()
+        self.non_radial_visible = self.load_nonradial_points_visibility_settings()
 
-    def load_visibility_settings(self) -> bool:
-        return self.visibility_settings_handler.settings["grid_visibility"]["non_radial_points"]
+    def load_nonradial_points_visibility_settings(self) -> bool:
+        return self.visibility_settings_handler.settings["grid_visibility"][
+            "non_radial_points"
+        ]
 
-    def save_visibility_settings(self):
-        self.visibility_settings_handler.settings["grid_visibility"]["non_radial_points"] = (
-            self.non_radial_visible
-        )
+    def save_nonradial_points_visibility_settings(self):
+        self.visibility_settings_handler.settings["grid_visibility"][
+            "non_radial_points"
+        ] = self.non_radial_visible
         self.settings_manager.save_settings()
 
     def toggle_visibility(self):
         self.non_radial_visible = not self.non_radial_visible
-        self.save_visibility_settings()
+        self.save_nonradial_points_visibility_settings()
         self.apply_visibility_to_all_pictographs()
 
     def apply_visibility_to_all_pictographs(self):

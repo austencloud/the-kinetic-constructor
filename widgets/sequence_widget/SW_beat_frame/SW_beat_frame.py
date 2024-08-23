@@ -58,6 +58,8 @@ class SW_BeatFrame(BaseBeatFrame):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # remove the nonradial points from the start pos beat view
+        self.start_pos_view.start_pos.initializer.set_nonradial_points_visibility(False)
         self.layout.addWidget(self.start_pos_view, 0, 0)
         for i, beat in enumerate(self.beats):
             row, col = divmod(i, 8)

@@ -46,6 +46,13 @@ class PictographInitializer:
         self.pictograph.vtg_glyph = self.init_vtg_glyph()
         self.pictograph.elemental_glyph = self.init_elemental_glyph()
         self.pictograph.start_to_end_pos_glyph = self.init_start_to_end_pos_glyph()
+        # set the nonradial points visibility based on user settings
+        self.set_nonradial_points_visibility(
+            self.pictograph.main_widget.main_window.settings_manager.visibility.grid_visibility_manager.load_nonradial_points_visibility_settings()
+        )
+
+    def set_nonradial_points_visibility(self, visible: bool) -> None:
+        self.pictograph.grid.toggle_non_radial_points_visibility(visible)
 
     def init_grid(self) -> Grid:
         grid = Grid(self.pictograph)
