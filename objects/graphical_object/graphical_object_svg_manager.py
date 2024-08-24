@@ -20,7 +20,7 @@ from data.constants import (
     RED,
     STATIC,
 )
-from Enums.MotionAttributes import Color, MotionType
+from Enums.MotionAttributes import MotionType
 from Enums.PropTypes import PropType, PropTypeslist
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 
@@ -47,7 +47,8 @@ class GraphicalObjectSvgManager:
                 for orientation in start_orientations:
                     self._preload_arrow_svg(motion_type, turn, orientation)
 
-        prop_types = [p for p in PropTypeslist]
+        # Preload other props, excluding hands since we'll handle them separately
+        prop_types = [p for p in PropTypeslist if p != PropType.Hand]
         for prop_type in prop_types:
             self._preload_prop_svg_path(prop_type)
 
@@ -73,7 +74,7 @@ class GraphicalObjectSvgManager:
         return svg_data.encode("utf-8")
 
     def _generate_cache_key_with_color(
-        self, object: Union["Arrow", "Prop"], color: Color
+        self, object: Union["Arrow", "Prop"], color: str
     ) -> str:
         base_key = self._generate_cache_key(object)
         color_key = f"{color}"
@@ -109,7 +110,7 @@ class GraphicalObjectSvgManager:
         svg_file = self.get_svg_file(object)
         if svg_file in self.svg_content_cache:
             return self.svg_content_cache[svg_file]
-        with open(get_images_and_data_path(svg_file), "r") as file:
+        with open(svg_file, "r") as file:
             svg_data = file.read()
         self.svg_content_cache[svg_file] = svg_data
         return svg_data
@@ -125,7 +126,15 @@ class GraphicalObjectSvgManager:
 
     def update_svg(self, object: Union["Arrow", "Prop"]) -> None:
         svg_data = self.get_svg_data(object)
-        colored_svg_data = self.set_svg_color(svg_data, object.color)
+        # For non-hand props, apply color if needed
+        # if it's a prop
+        if self.is_prop(object):
+            if object.prop_type != PropType.Hand:
+                colored_svg_data = self.set_svg_color(svg_data, object.color)
+            else:
+                colored_svg_data = svg_data.encode("utf-8")
+        elif self.is_arrow(object):
+            colored_svg_data = self.set_svg_color(svg_data, object.color)
         cache_key = self._generate_cache_key_with_color(object, object.color)
         object.renderer = self.get_or_create_renderer(colored_svg_data, cache_key)
         object.setSharedRenderer(object.renderer)
@@ -140,6 +149,11 @@ class GraphicalObjectSvgManager:
             return self._prop_svg_file(object.prop_type)
 
     def get_svg_file(self, object: Union["Arrow", "Prop"]) -> str:
+        # if the object is a prop
+        if self.is_prop(object):
+            if object.prop_type == PropType.Hand:
+                return self._hand_svg_file(object)
+
         cache_key = self._generate_cache_key(object)
         if cache_key in GraphicalObjectSvgManager.file_path_cache:
             return GraphicalObjectSvgManager.file_path_cache[cache_key]
@@ -147,6 +161,15 @@ class GraphicalObjectSvgManager:
         svg_file = self._determine_svg_file(object)
         GraphicalObjectSvgManager.file_path_cache[cache_key] = svg_file
         return svg_file
+
+    def _hand_svg_file(self, object: Union["Prop"]) -> str:
+        """Returns the correct SVG file path for a hand based on its color."""
+        if object.color == BLUE:
+            return get_images_and_data_path("images/hands/left_hand.svg")
+        elif object.color == RED:
+            return get_images_and_data_path("images/hands/right_hand.svg")
+        else:
+            raise ValueError(f"Unrecognized hand color: {object.color}")
 
     def _generate_cache_key(self, object: Union["Arrow", "Prop"]) -> str:
         """Generates a unique key for caching based on object properties."""

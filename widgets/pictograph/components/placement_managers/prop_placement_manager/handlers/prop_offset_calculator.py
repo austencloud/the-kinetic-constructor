@@ -16,7 +16,6 @@ from data.constants import (
 from PyQt6.QtCore import QPointF
 from typing import TYPE_CHECKING
 from objects.prop.prop import Prop
-from Enums.Enums import Directions
 
 if TYPE_CHECKING:
     from ..prop_placement_manager import PropPlacementManager
@@ -81,7 +80,7 @@ class PropOffsetCalculator:
         return non_hand_offsets if prop.prop_type != PropType.Hand else hand_offsets
 
     def calculate_new_position_with_offset(
-        self, current_position: QPointF, direction: Directions
+        self, current_position: QPointF, direction: str
     ) -> QPointF:
         prop_type_map = {
             PropType.Club: 60,
@@ -91,7 +90,10 @@ class PropOffsetCalculator:
             PropType.BigDoubleStar: 50,
         }
         prop_type = self.prop_placement_manager.pictograph.prop_type
-        self.beta_offset = self.prop_placement_manager.pictograph.width() / prop_type_map.get(prop_type, 45)
+        self.beta_offset = (
+            self.prop_placement_manager.pictograph.width()
+            / prop_type_map.get(prop_type, 45)
+        )
 
         offset_map = {
             LEFT: QPointF(-self.beta_offset, 0),
@@ -103,7 +105,7 @@ class PropOffsetCalculator:
         return current_position + offset
 
     def calculate_rot_override_position_with_offset(
-        self, current_position: QPointF, direction: Directions
+        self, current_position: QPointF, direction: str
     ) -> QPointF:
         self.beta_offset = self.prop_placement_manager.pictograph.width() / 45
 

@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
 from objects.prop.prop import Prop
-from Enums.Enums import Directions
 from .big_prop_positioner import BigPropPositioner
 from .prop_classifier import PropClassifier
 from .reposition_beta_props_by_letter_manager import RepositionBetaByLetterHandler
@@ -27,7 +26,7 @@ class BetaPropPositioner:
 
     def reposition_beta_props(self) -> None:
         if self.pictograph.prop_type == PropType.Hand:
-            self.hand_positioner.reposition_beta_hands()
+            # self.hand_positioner.reposition_beta_hands()
             return
         else:
             self.classifier.classify_props()
@@ -40,7 +39,7 @@ class BetaPropPositioner:
                 self.hand_positioner.reposition_beta_hands()
                 self.swap_beta_handler.swap_beta_if_needed()
 
-    def move_prop(self, prop: Prop, direction: Directions) -> None:
+    def move_prop(self, prop: Prop, direction: str) -> None:
         offset_calculator = self.prop_placement_manager.offset_calculator
         offset = offset_calculator.calculate_new_position_with_offset(
             prop.pos(), direction
@@ -59,8 +58,10 @@ class HandPositioner:
         self.move_hand(red_hand, "right")
         self.move_hand(blue_hand, "left")
 
-    def move_hand(self, prop: Prop, direction: Directions) -> None:
-        offset_calculator = self.beta_prop_positioner.prop_placement_manager.offset_calculator
+    def move_hand(self, prop: Prop, direction: str) -> None:
+        offset_calculator = (
+            self.beta_prop_positioner.prop_placement_manager.offset_calculator
+        )
         offset = offset_calculator.calculate_new_position_with_offset(
             prop.pos(), direction
         )

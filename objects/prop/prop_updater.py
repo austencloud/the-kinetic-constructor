@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Union
 
-from Enums.MotionAttributes import Color, Location, Orientations
+from Enums.MotionAttributes import  Location, Orientations
 
 if TYPE_CHECKING:
     from objects.prop.prop import Prop
@@ -17,7 +17,7 @@ class PropUpdater:
         self.prop.setFlag(self.prop.GraphicsItemFlag.ItemIsSelectable, False)
 
     def update_prop(
-        self, prop_dict: dict[str, Union[Color, Location, Orientations]] = None
+        self, prop_dict: dict[str, Union[str, Location, Orientations]] = None
     ) -> None:
 
         if prop_dict:

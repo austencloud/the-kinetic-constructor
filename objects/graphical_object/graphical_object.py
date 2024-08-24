@@ -6,7 +6,6 @@ from PyQt6.QtWidgets import QGraphicsItem
 from data.constants import BLUE, RED
 
 
-from Enums.MotionAttributes import Color
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
@@ -19,7 +18,7 @@ class GraphicalObject(QGraphicsSvgItem):
     self: Union["Arrow", "Prop"]
     ghost: Union["Arrow", "Prop"]
     is_ghost: bool = None
-    color: Color
+    color: str
     renderer: QSvgRenderer
 
     def __init__(self, pictograph: "Pictograph") -> None:

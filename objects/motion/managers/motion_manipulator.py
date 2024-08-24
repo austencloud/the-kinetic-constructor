@@ -2,7 +2,7 @@ from typing import Callable
 
 from data.constants import *
 from data.start_end_loc_map import get_start_end_locs
-from Enums.Enums import Directions, Handpaths
+from Enums.Enums import  Handpaths
 
 from typing import TYPE_CHECKING
 from Enums.MotionAttributes import Location
@@ -15,7 +15,7 @@ class MotionManipulator:
     def __init__(self, motion: "Motion"):
         self.motion = motion
 
-    def move_wasd(self, direction: Directions) -> None:
+    def move_wasd(self, direction: str) -> None:
         wasd_location_map = {
             UP: {SOUTHEAST: NORTHEAST, SOUTHWEST: NORTHWEST},
             LEFT: {NORTHEAST: NORTHWEST, SOUTHEAST: SOUTHWEST},

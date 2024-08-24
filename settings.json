@@ -1,6 +1,6 @@
 {
     "global": {
-        "prop_type": "Hand",
+        "prop_type": "Triad",
         "background_type": "AuroraBorealis",
         "grow_sequence": true,
         "current_tab": "sequence_builder"

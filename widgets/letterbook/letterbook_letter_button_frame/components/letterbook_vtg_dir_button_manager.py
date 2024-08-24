@@ -10,7 +10,6 @@ from data.constants import (
     SAME,
 )
 from Enums.MotionAttributes import (
-    Color,
     LeadStates,
     MotionType,
     PropRotDir,
@@ -104,7 +103,7 @@ class LetterBookVtgDirButtonManager:
     def update_visibility_based_on_motion(
         self,
         new_turns,
-        attribute_value: Union[Color, MotionType, LeadStates],
+        attribute_value: Union[str, MotionType, LeadStates],
     ) -> None:
         if attribute_value in [PRO, ANTI]:
             return

@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType
-from Enums.MotionAttributes import Color
 from data.constants import LEADING, TRAILING, RED, BLUE
 from objects.motion.motion import Motion
 from functools import lru_cache
@@ -72,7 +71,7 @@ class PictographUpdater:
             for motion in self.pictograph.motions.values():
                 motion.lead_state = None
 
-    def show_graphical_objects(self, color: Color) -> None:
+    def show_graphical_objects(self, color: str) -> None:
         self.pictograph.props[color].show()
         self.pictograph.arrows[color].show()
 

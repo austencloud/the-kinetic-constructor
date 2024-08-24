@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 
-from Enums.MotionAttributes import Color
 from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
 from widgets.graph_editor.components.GE_prop_rot_dir_button_manager import (
     GE_PropRotDirButtonManager,
@@ -19,7 +18,7 @@ if TYPE_CHECKING:
 
 class GE_TurnsBox(QFrame):
     def __init__(
-        self, adjustment_panel: "GE_AdjustmentPanel", pictograph: "Pictograph", color: Color
+        self, adjustment_panel: "GE_AdjustmentPanel", pictograph: "Pictograph", color: str
     ) -> None:
         super().__init__(adjustment_panel)
         self.setObjectName("GE_TurnsBox")

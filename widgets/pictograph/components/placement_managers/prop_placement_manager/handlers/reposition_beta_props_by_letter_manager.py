@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from data.constants import ANTI, PRO
 from objects.prop.prop import Prop
-from Enums.Enums import Directions
 
 if TYPE_CHECKING:
     from .beta_prop_positioner import BetaPropPositioner
@@ -153,7 +152,7 @@ class RepositionBetaByLetterHandler:
 
 
 
-    def move_prop(self, prop: Prop, direction: Directions) -> None:
+    def move_prop(self, prop: Prop, direction: str) -> None:
         offset = self.prop_placement_manager.offset_calculator.calculate_new_position_with_offset(
             prop.pos(), direction
         )

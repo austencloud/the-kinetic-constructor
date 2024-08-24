@@ -21,7 +21,7 @@ class VisibilityMenu(QMenu):
         )
 
         # Glyph visibility toggles
-        for glyph_type in ["VTG", "TKA", "Elemental", "EndPosition"]:
+        for glyph_type in ["TKA", "VTG", "Elemental", "EndPosition"]:
             action = QAction(f"{glyph_type} Glyph", self, checkable=True)
             action.setChecked(
                 self.glyph_visibility_manager.get_glyph_visibility(glyph_type)

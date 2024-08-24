@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING
 from Enums.letters import Letter
 from data.constants import BLUE, special_placements_parent_directory, RED
 from objects.arrow.arrow import Arrow
-from Enums.MotionAttributes import Color
 
 if TYPE_CHECKING:
     from .special_placement_data_updater import SpecialPlacementDataUpdater
@@ -124,7 +123,7 @@ class SpecialPlacementEntryRemover:
             f"{ori_key}/{letter}_placements.json",
         )
 
-    def _get_other_color(self, color: Color) -> Color:
+    def _get_other_color(self, color: str) -> str:
         return RED if color == BLUE else BLUE
 
     def _remove_turn_data_entry(self, letter_data: dict, turns_tuple: str, key) -> None:

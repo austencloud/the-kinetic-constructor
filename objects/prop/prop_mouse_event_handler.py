@@ -16,47 +16,9 @@ class PropMouseEventHandler:
     def __init__(self, prop: "Prop") -> None:
         self.p = prop
 
-    def handle_mouse_press(self) -> None:
-        self.p.setSelected(True)
-        if isinstance(self.p.scene, self.p.scene.__class__):
-            for item in self.p.scene.items():
-                if item != self.p:
-                    item.setSelected(False)
-            self.p.previous_location = self.p.loc
 
-    def handle_mouse_move(self, event: QGraphicsSceneMouseEvent) -> None:
-        if event.buttons() == Qt.MouseButton.LeftButton:
-            new_pos = event.scenePos() - self.p.get_center()
 
-    def handle_mouse_release(self, event: QGraphicsSceneMouseEvent) -> None:
-        if isinstance(self.p.scene, self.p.scene.__class__):
-            self.p.scene.updater.update_pictograph()
-            # self.finalize_prop_drop(event)
 
-    def update_ghost_prop_location_during_drag(self, new_pos: QPointF) -> None:
-        new_location = self.p.pictograph.grid.get_closest_hand_point(new_pos)[0][0]
-
-        if new_location != self.p.previous_location:
-            self.p.loc = new_location
-
-            if self.p.motion.motion_type == STATIC:
-                self.p.motion.arrow.loc = new_location
-                self.p.motion.start_loc = new_location
-                self.p.motion.end_loc = new_location
-
-            self.p.axis = self.p.attr_manager.get_axis_from_ori()
-            self.p.updater.update_prop()
-            self.update_arrow_location_during_prop_drag(new_location)
-
-            self.p.ghost.color = self.p.color
-            self.p.ghost.loc = self.p.loc
-            self.p.ghost.updater.update_prop()
-            self.p.scene.props[self.p.ghost.color] = self.p.ghost
-            self.p.scene.updater.update_pictograph()
-            self.p.scene.props[self.p.color] = self.p
-            new_pos = new_pos - self.p.get_center()
-            self.set_drag_pos(new_pos)
-            self.p.previous_location = new_location
 
     def update_arrow_location_during_prop_drag(
         self, new_arrow_location: Location

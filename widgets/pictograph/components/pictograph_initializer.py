@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QPointF, QPoint, Qt
-from Enums.MotionAttributes import Color, Location
+from PyQt6.QtGui import QTransform
+from Enums.MotionAttributes import Location
 from data.prop_class_mapping import prop_class_mapping
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
@@ -61,8 +62,8 @@ class PictographInitializer:
         self.pictograph.grid = grid
         return grid
 
-    def init_motions(self) -> dict[Color, Motion]:
-        motions: dict[Color, Motion] = {}
+    def init_motions(self) -> dict[str, Motion]:
+        motions: dict[str, Motion] = {}
         for color in [RED, BLUE]:
             motions[color] = self._create_motion(color)
         self.pictograph.red_motion, self.pictograph.blue_motion = (
@@ -74,7 +75,7 @@ class PictographInitializer:
             motion.end_ori = None
         return motions
 
-    def init_arrows(self) -> dict[Color, Arrow]:
+    def init_arrows(self) -> dict[str, Arrow]:
         arrows = {}
         for color in [BLUE, RED]:
             arrows[color] = self._create_arrow(color)
@@ -84,8 +85,8 @@ class PictographInitializer:
         )
         return arrows
 
-    def init_props(self) -> dict[Color, Prop]:
-        props: dict[Color, Prop] = {}
+    def init_props(self) -> dict[str, Prop]:
+        props: dict[str, Prop] = {}
         prop_type = self.pictograph.main_widget.prop_type
         for color in [RED, BLUE]:
             initial_prop_attributes = {
@@ -172,7 +173,7 @@ class PictographInitializer:
 
     ### CREATE ###
 
-    def _create_arrow(self, color: Color) -> Arrow:
+    def _create_arrow(self, color: str) -> Arrow:
         arrow_attributes = {
             COLOR: color,
             TURNS: 0,
@@ -184,7 +185,7 @@ class PictographInitializer:
         arrow.hide()
         return arrow
 
-    def _create_motion(self, color: Color) -> Motion:
+    def _create_motion(self, color: str) -> Motion:
         motion_dict = {
             COLOR: color,
             ARROW: None,

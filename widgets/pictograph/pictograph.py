@@ -6,7 +6,7 @@ from Enums.Enums import (
     SpecificPosition,
     VTG_Modes,
 )
-from Enums.MotionAttributes import Color, Location
+from Enums.MotionAttributes import Location
 
 from Enums.PropTypes import PropType
 from Enums.letters import LetterType
@@ -52,9 +52,9 @@ if TYPE_CHECKING:
 
 class Pictograph(QGraphicsScene):
     view: PictographView
-    arrows: dict[Color, Arrow]
-    props: dict[Color, Prop]
-    motions: dict[Color, Motion]
+    arrows: dict[str, Arrow]
+    props: dict[str, Prop]
+    motions: dict[str, Motion]
     letter: Letter = None
     letter_type: LetterType = None
     pictograph_dict: dict

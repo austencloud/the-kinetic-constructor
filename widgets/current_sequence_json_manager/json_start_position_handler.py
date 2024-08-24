@@ -1,12 +1,9 @@
 from typing import TYPE_CHECKING
-from Enums.MotionAttributes import Color
 from data.constants import NO_ROT
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.json_manager import JSON_Manager
-
-
 
 
 class JsonStartPositionHandler:
@@ -55,7 +52,7 @@ class JsonStartPositionHandler:
 
         self.manager.loader_saver.save_current_sequence(sequence)
 
-    def update_start_pos_ori(self, color: Color, ori: int) -> None:
+    def update_start_pos_ori(self, color: str, ori: int) -> None:
         sequence = self.manager.loader_saver.load_current_sequence_json()
         if sequence:
             sequence[1][f"{color}_attributes"]["end_ori"] = ori

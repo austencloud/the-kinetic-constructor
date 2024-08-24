@@ -245,12 +245,6 @@ class HexColors(Enum):
     COLOR_2 = "#2E3192"
 
 
-class Directions(Enum):
-    LEFT = "left"
-    RIGHT = "right"
-    UP = "up"
-    DOWN = "down"
-
 
 class GridModes(Enum):
     DIAMOND = "diamond"

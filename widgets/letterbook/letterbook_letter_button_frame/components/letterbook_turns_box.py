@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, cast
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from Enums.Enums import TurnsTabAttribute
-from Enums.MotionAttributes import Color, LeadStates, MotionType
+from Enums.MotionAttributes import  LeadStates, MotionType
 
 from data.constants import BLUE, CLOCKWISE, COLOR, COUNTER_CLOCKWISE, RED
 from widgets.letterbook.letterbook_letter_button_frame.components.letterbook_turns_box_header_widget import (
@@ -53,7 +53,7 @@ class LetterBookTurnsBox(QFrame):
         if self.attribute_type == TurnsTabAttribute.MOTION_TYPE:
             self.motion_type = cast(MotionType, self.attribute_value)
         elif self.attribute_type == TurnsTabAttribute.COLOR:
-            self.color = cast(Color, self.attribute_value)
+            self.color = cast(str, self.attribute_value)
         elif self.attribute_type == TurnsTabAttribute.LEAD_STATE:
             self.lead_state = cast(LeadStates, self.attribute_value)
 

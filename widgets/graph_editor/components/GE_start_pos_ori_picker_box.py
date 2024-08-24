@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from Enums.MotionAttributes import Color
 from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
 from widgets.graph_editor.components.GE_start_pos_ori_picker_widget import (
     GE_StartPosOriPickerWidget,
@@ -19,7 +18,7 @@ class GE_StartPosOriPickerBox(QFrame):
         self,
         adjustment_panel: "GE_AdjustmentPanel",
         start_pos: "Pictograph",
-        color: Color,
+        color: str,
     ) -> None:
         super().__init__(adjustment_panel)
         self.setObjectName("GE_StartPosOriPickerBox")

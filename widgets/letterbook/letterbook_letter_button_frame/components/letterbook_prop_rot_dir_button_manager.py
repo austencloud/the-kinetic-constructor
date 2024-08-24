@@ -16,7 +16,6 @@ from data.constants import (
     STATIC,
 )
 from Enums.MotionAttributes import (
-    Color,
     LeadStates,
     MotionType,
     PropRotDir,
@@ -156,7 +155,7 @@ class LetterBookPropRotDirButtonManager:
         self.ccw_button.unpress()
 
     def update_visibility_based_on_motion(
-        self, new_turns, attribute_value: Union[Color, MotionType, LeadStates]
+        self, new_turns, attribute_value: Union[str, MotionType, LeadStates]
     ) -> None:
         if self.turns_box.turns_panel.turns_tab.section.letter_type in [
             LetterType.Type4,

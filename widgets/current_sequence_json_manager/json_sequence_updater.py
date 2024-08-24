@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING, Union
-from Enums.MotionAttributes import Color
 from Enums.PropTypes import PropType
 
 from data.constants import BLUE, DASH, NO_ROT, RED, STATIC
@@ -52,7 +51,7 @@ class JsonSequenceUpdater:
         self.json_manager.loader_saver.save_current_sequence(sequence)
 
     def update_turns_in_json_at_index(
-        self, index: int, color: Color, turns: Union[int, float]
+        self, index: int, color: str, turns: Union[int, float]
     ) -> None:
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
         sequence[index][f"{color}_attributes"]["turns"] = turns
@@ -79,7 +78,7 @@ class JsonSequenceUpdater:
         self.update_sequence_properties()
 
     def update_rot_dir_in_json_at_index(
-        self, index: int, color: Color, prop_rot_dir: str
+        self, index: int, color: str, prop_rot_dir: str
     ) -> None:
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
         sequence[index][f"{color}_attributes"]["prop_rot_dir"] = prop_rot_dir
