@@ -1,9 +1,9 @@
 {
     "global": {
-        "prop_type": "Staff",
+        "prop_type": "Hand",
         "background_type": "AuroraBorealis",
         "grow_sequence": true,
-        "current_tab": "dictionary"
+        "current_tab": "sequence_builder"
     },
     "image_export": {
         "include_start_position": false,
