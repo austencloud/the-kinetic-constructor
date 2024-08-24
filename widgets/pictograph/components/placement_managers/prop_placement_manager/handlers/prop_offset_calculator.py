@@ -77,6 +77,7 @@ class PropOffsetCalculator:
             (COUNTER, WEST): QPointF(-y, -x),
         }
 
+
         return non_hand_offsets if prop.prop_type != PropType.Hand else hand_offsets
 
     def calculate_new_position_with_offset(
@@ -100,20 +101,6 @@ class PropOffsetCalculator:
             RIGHT: QPointF(self.beta_offset, 0),
             UP: QPointF(0, -self.beta_offset),
             DOWN: QPointF(0, self.beta_offset),
-        }
-        offset = offset_map.get(direction, QPointF(0, 0))
-        return current_position + offset
-
-    def calculate_rot_override_position_with_offset(
-        self, current_position: QPointF, direction: str
-    ) -> QPointF:
-        self.beta_offset = self.prop_placement_manager.pictograph.width() / 45
-
-        offset_map = {
-            LEFT: QPointF(self.beta_offset * 2, 0),
-            RIGHT: QPointF(-self.beta_offset * 2, 0),
-            UP: QPointF(0, self.beta_offset * 2),
-            DOWN: QPointF(0, -self.beta_offset * 2),
         }
         offset = offset_map.get(direction, QPointF(0, 0))
         return current_position + offset

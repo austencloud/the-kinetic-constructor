@@ -25,19 +25,15 @@ class BetaPropPositioner:
         self.swap_beta_handler = SwapBetaHandler(self)
 
     def reposition_beta_props(self) -> None:
-        if self.pictograph.prop_type == PropType.Hand:
-            # self.hand_positioner.reposition_beta_hands()
-            return
-        else:
-            self.classifier.classify_props()
-            if len(self.classifier.big_props) == 2:
-                self.big_prop_positioner.reposition()
-            elif len(self.classifier.small_props) == 2:
-                self.small_prop_positioner.reposition()
-                self.swap_beta_handler.swap_beta_if_needed()
-            elif self.classifier.hands:
-                self.hand_positioner.reposition_beta_hands()
-                self.swap_beta_handler.swap_beta_if_needed()
+        self.classifier.classify_props()
+        if len(self.classifier.big_props) == 2:
+            self.big_prop_positioner.reposition()
+        elif len(self.classifier.small_props) == 2:
+            self.small_prop_positioner.reposition()
+            self.swap_beta_handler.swap_beta_if_needed()
+        elif self.classifier.hands:
+            self.hand_positioner.reposition_beta_hands()
+            self.swap_beta_handler.swap_beta_if_needed()
 
     def move_prop(self, prop: Prop, direction: str) -> None:
         offset_calculator = self.prop_placement_manager.offset_calculator

@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType
 
+from Enums.PropTypes import PropType
 from Enums.letters import Letter
 from objects.prop.prop import Prop
 
@@ -121,8 +122,9 @@ class SwapBetaHandler:
 
         dash_direction = self.ppm.dir_calculator.get_dir(dash)
         static_direction = self.ppm.dir_calculator.get_opposite_dir(dash_direction)
-
-        self._swap_props(dash.prop, static.prop, static_direction, dash_direction)
+        # if the prop_type is not PropType.Hand, then we swap the props
+        if dash.prop.prop_type != PropType.Hand:
+            self._swap_props(dash.prop, static.prop, static_direction, dash_direction)
 
     def _handle_type5_swap(self) -> None:
         red_direction = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)

@@ -116,6 +116,7 @@ class PictographInitializer:
             props[RED],
             props[BLUE],
         )
+        self.pictograph.prop_type = prop_type
         return props
 
     def init_tka_glyph(self) -> TKA_Glyph:
