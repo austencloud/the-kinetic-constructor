@@ -14,7 +14,15 @@ class ArrowSvgManager:
     def __init__(self, manager: "GraphicalObjectSvgManager"):
         self.manager = manager
 
-    def get_arrow_svg_file(self, object: "Arrow") -> str:
+    def update_arrow_svg(self, arrow: "Arrow") -> None:
+        svg_file = self._get_arrow_svg_file(arrow)
+        svg_data = self.manager.file_manager.load_svg_file(svg_file)
+        colored_svg_data = self.manager.color_manager.apply_color_transformations(
+            svg_data, arrow.color
+        )
+        self._setup_arrow_svg_renderer(arrow, colored_svg_data)
+
+    def _get_arrow_svg_file(self, object: "Arrow") -> str:
         start_ori = object.motion.start_ori
         if start_ori in [IN, OUT]:
             return get_images_and_data_path(
@@ -27,15 +35,7 @@ class ArrowSvgManager:
                 f"{object.motion.motion_type}_{float(object.motion.turns)}.svg"
             )
 
-    def update_arrow_svg(self, object: "Arrow") -> None:
-        svg_file = self.get_arrow_svg_file(object)
-        svg_data = self.manager.file_manager.load_svg_file(svg_file)
-        colored_svg_data = self.manager.color_manager.apply_color_transformations(
-            svg_data, object.color
-        )
-        self.setup_svg_renderer(object, colored_svg_data)
-
-    def setup_svg_renderer(self, object: "Arrow", svg_data: str) -> None:
-        object.renderer = QSvgRenderer()
-        object.renderer.load(svg_data.encode("utf-8"))
-        object.setSharedRenderer(object.renderer)
+    def _setup_arrow_svg_renderer(self, arrow: "Arrow", svg_data: str) -> None:
+        arrow.renderer = QSvgRenderer()
+        arrow.renderer.load(svg_data.encode("utf-8"))
+        arrow.setSharedRenderer(arrow.renderer)

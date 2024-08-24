@@ -25,30 +25,29 @@ class PropSvgManager:
     def __init__(self, manager: "GraphicalObjectSvgManager"):
         self.manager = manager
 
-    def get_prop_svg_file(self, object: "Prop") -> str:
-        prop_type_str = object.prop_type.name.lower()
-        if object.prop_type == PropType.Hand:
-            return self._hand_svg_file(object)
-
-        return f"{PROP_DIR}{prop_type_str}.svg"
-
-    def _hand_svg_file(self, object: "Prop") -> str:
-        hand_color = "left" if object.color == BLUE else "right"
-        return get_images_and_data_path(f"images/hands/{hand_color}_hand.svg")
-
-
-    def update_prop_svg(self, object: "Prop") -> None:
-        svg_file = self.get_prop_svg_file(object)
+    def update_prop_svg(self, prop: "Prop") -> None:
+        svg_file = self._get_prop_svg_file(prop)
         svg_data = self.manager.file_manager.load_svg_file(svg_file)
-        if object.prop_type != PropType.Hand:
+        if prop.prop_type != PropType.Hand:
             colored_svg_data = self.manager.color_manager.apply_color_transformations(
-                svg_data, object.color
+                svg_data, prop.color
             )
         else:
             colored_svg_data = svg_data
-        self.setup_svg_renderer(object, colored_svg_data)
+        self._setup_prop_svg_renderer(prop, colored_svg_data)
 
-    def setup_svg_renderer(self, object: "Prop", svg_data: str) -> None:
-        object.renderer = QSvgRenderer()
-        object.renderer.load(svg_data.encode("utf-8"))
-        object.setSharedRenderer(object.renderer)
+    def _get_prop_svg_file(self, object: "Prop") -> str:
+        prop_type_str = object.prop_type.name.lower()
+        if object.prop_type == PropType.Hand:
+            return self._get_hand_svg_file(object)
+
+        return f"{PROP_DIR}{prop_type_str}.svg"
+
+    def _get_hand_svg_file(self, object: "Prop") -> str:
+        hand_color = "left" if object.color == BLUE else "right"
+        return get_images_and_data_path(f"images/hands/{hand_color}_hand.svg")
+
+    def _setup_prop_svg_renderer(self, prop: "Prop", svg_data: str) -> None:
+        prop.renderer = QSvgRenderer()
+        prop.renderer.load(svg_data.encode("utf-8"))
+        prop.setSharedRenderer(prop.renderer)
