@@ -73,7 +73,9 @@ class GridVisibilityManager:
         # apply the change to the GE_BlankPictograph too
         self.main_widget = self.settings_manager.main_window.main_widget
         graph_editor = self.main_widget.top_builder_widget.sequence_widget.graph_editor
-        GE_blank_pictograph = graph_editor.GE_pictograph_view.blank_pictograph
+        GE_blank_pictograph = (
+            graph_editor.pictograph_container.GE_pictograph_view.blank_pictograph
+        )
         if hasattr(GE_blank_pictograph, "grid"):
             GE_blank_pictograph.grid.toggle_non_radial_points_visibility(
                 self.non_radial_visible

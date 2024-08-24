@@ -1,8 +1,12 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
 from data.constants import BLUE, RED
-from widgets.graph_editor.adjustment_panel.GE_placeholder_text_label import GE_PlaceHolderTextLabel
-from widgets.graph_editor.adjustment_panel.start_pos_ori_picker_box.GE_start_pos_ori_picker_box import GE_StartPosOriPickerBox
+from widgets.graph_editor.adjustment_panel.GE_placeholder_text_label import (
+    GE_PlaceHolderTextLabel,
+)
+from widgets.graph_editor.adjustment_panel.start_pos_ori_picker_box.GE_start_pos_ori_picker_box import (
+    GE_StartPosOriPickerBox,
+)
 from widgets.graph_editor.adjustment_panel.turns_box.GE_turns_box import GE_TurnsBox
 
 
@@ -28,30 +32,28 @@ class GE_AdjustmentPanel(QFrame):
         self.layout.addWidget(self.placeholder_widget)
 
     def update_turns_displays(self, blue_turns: int, red_turns: int) -> None:
-        self.blue_turns_box.turns_widget.update_turns_display(
-            blue_turns
-        )
+        self.blue_turns_box.turns_widget.update_turns_display(blue_turns)
 
         self.red_turns_box.turns_widget.update_turns_display(red_turns)
 
     def _setup_placeholder_widget(self) -> None:
-        self.placeholder_widget = GE_PlaceHolderTextLabel(self) 
+        self.placeholder_widget = GE_PlaceHolderTextLabel(self)
 
     def _setup_turns_boxes(self) -> None:
         self.blue_turns_box: GE_TurnsBox = GE_TurnsBox(
-            self, self.graph_editor.GE_pictograph, BLUE
+            self, self.graph_editor.pictograph_container.GE_pictograph, BLUE
         )
         self.red_turns_box: GE_TurnsBox = GE_TurnsBox(
-            self, self.graph_editor.GE_pictograph, RED
+            self, self.graph_editor.pictograph_container.GE_pictograph, RED
         )
         self.turns_boxes = [self.blue_turns_box, self.red_turns_box]
 
     def _setup_start_pos_ori_pickers(self) -> None:
         self.blue_start_pos_ori_picker = GE_StartPosOriPickerBox(
-            self, self.graph_editor.GE_pictograph, BLUE
+            self, self.graph_editor.pictograph_container.GE_pictograph, BLUE
         )
         self.red_start_pos_ori_picker = GE_StartPosOriPickerBox(
-            self, self.graph_editor.GE_pictograph, RED
+            self, self.graph_editor.pictograph_container.GE_pictograph, RED
         )
         self.start_pos_ori_pickers = [
             self.blue_start_pos_ori_picker,
@@ -59,13 +61,15 @@ class GE_AdjustmentPanel(QFrame):
         ]
 
     def update_adjustment_panel(self) -> None:
-        pictograph = self.graph_editor.GE_pictograph_view.get_current_pictograph()
+        pictograph = (
+            self.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
+        )
         if pictograph.is_blank:
             self.show_placeholder_widget()
             self.hide_start_pos_ori_pickers()
             self.hide_turns_boxes()
             QApplication.processEvents()
-        elif self.graph_editor.GE_pictograph_view.is_start_pos:
+        elif self.graph_editor.pictograph_container.GE_pictograph_view.is_start_pos:
             self.hide_placeholder_widget()
             self.hide_turns_boxes()
             self.show_start_pos_ori_pickers()

@@ -7,22 +7,21 @@ from PyQt6.QtGui import QPainter, QPen, QColor
 from widgets.sequence_widget.SW_beat_frame.beat import Beat
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graph_editor import GraphEditor
-
-
-if TYPE_CHECKING:
+    from widgets.graph_editor.pictograph_container.GE_pictograph_container import GE_PictographContainer
     from .GE_pictograph_view import GE_BlankPictograph
+
+
 
 
 class GE_PictographView(PictographView):
     def __init__(
-        self, GE: "GraphEditor", blank_pictograph: "GE_BlankPictograph"
+        self, pictograph_container: "GE_PictographContainer", blank_pictograph: "GE_BlankPictograph"
     ) -> None:
         super().__init__(blank_pictograph)
-        self.GE = GE
+        self.graph_editor = pictograph_container.graph_editor
         self.is_start_pos = False
         self.blank_pictograph = blank_pictograph
-        self.main_widget = GE.main_widget
+        self.main_widget = self.graph_editor.main_widget
         self.setScene(blank_pictograph)
         self.setFrameShape(PictographView.Shape.Box)
 
@@ -67,7 +66,7 @@ class GE_PictographView(PictographView):
 
     def resize_GE_pictograph_view(self) -> None:
         self.setFixedSize(
-            self.GE.height(), self.GE.height()
+            self.graph_editor.height(), self.graph_editor.height()
         )
 
         scene_size = self.scene().sceneRect().size()
@@ -81,6 +80,6 @@ class GE_PictographView(PictographView):
 
 
 class GE_BlankPictograph(Pictograph):
-    def __init__(self, graph_editor: "GraphEditor") -> None:
-        super().__init__(graph_editor.main_widget)
+    def __init__(self, pictograph_container: "GE_PictographContainer") -> None:
+        super().__init__(pictograph_container.graph_editor.main_widget)
         self.is_blank = True

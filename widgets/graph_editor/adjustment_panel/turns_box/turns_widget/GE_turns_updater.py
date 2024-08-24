@@ -4,7 +4,9 @@ from Enums.MotionAttributes import PropRotDir
 from data.constants import *
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.turns_box.turns_widget.GE_turns_widget import GE_TurnsWidget
+    from widgets.graph_editor.components.turns_box.turns_widget.GE_turns_widget import (
+        GE_TurnsWidget,
+    )
     from widgets.pictograph.pictograph import Pictograph
     from objects.motion.motion import Motion
 
@@ -66,7 +68,7 @@ class GE_TurnsUpdater:
         """set the rotation direction of the motion based on the vtg directional relationship."""
         other_motion = motion.pictograph.get.other_motion(motion)
         GE_pictograph = (
-            self.turns_box.adjustment_panel.graph_editor.GE_pictograph_view.get_current_pictograph()
+            self.turns_box.adjustment_panel.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
         )
         if GE_pictograph.letter_type in [
             LetterType.Type2,

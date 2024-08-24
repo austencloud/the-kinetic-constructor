@@ -59,7 +59,9 @@ class GE_VtgDirButtonManager:
         self._update_button_states(self.vtg_dir_buttons, vtg_dir)
 
     def _update_pictographs_vtg_dir(self, vtg_dir: VTG_Directions) -> None:
-        pictograph = self.graph_editor.GE_pictograph_view.get_current_pictograph()
+        pictograph = (
+            self.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
+        )
         pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
         for motion in pictograph.motions.values():
             other_motion = pictograph.get.other_motion(motion)

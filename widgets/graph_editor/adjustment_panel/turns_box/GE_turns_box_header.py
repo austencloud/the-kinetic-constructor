@@ -36,7 +36,9 @@ class GE_TurnsBoxHeader(QWidget):
 
     def update_turns_box_header(self) -> None:
         """This is called every time the GE pictograph scene is updated in order to display the correct buttons."""
-        pictograph = self.turns_box.graph_editor.GE_pictograph_view.pictograph
+        pictograph = (
+            self.turns_box.graph_editor.pictograph_container.GE_pictograph_view.pictograph
+        )
         letter_type = None
         motion = pictograph.get.motion_by_color(self.turns_box.color)
         turns = motion.turns

@@ -67,7 +67,7 @@ class GE_TurnsBox(QFrame):
             int(
                 (
                     self.graph_editor.width()
-                    - self.graph_editor.GE_pictograph_view.width()
+                    - self.graph_editor.pictograph_container.GE_pictograph_view.width()
                 )
                 / 2
             )

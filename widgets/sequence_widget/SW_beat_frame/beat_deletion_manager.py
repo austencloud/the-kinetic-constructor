@@ -15,12 +15,12 @@ class BeatDeletionManager:
         self.selection_manager = self.beat_frame.selection_manager
         self.json_manager = self.beat_frame.json_manager  # Access json manager
         self.settings_manager = self.beat_frame.settings_manager
-        
+
     def delete_selected_beat(self) -> None:
         self.beats = self.beat_frame.beats
 
         self.GE_pictograph_view = (
-            self.beat_frame.main_widget.top_builder_widget.sequence_widget.graph_editor.GE_pictograph_view
+            self.beat_frame.main_widget.top_builder_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view
         )
         selected_beat = self.beat_frame.selection_manager.get_selected_beat()
 
@@ -59,7 +59,9 @@ class BeatDeletionManager:
         ):
             self.delete_beat(self.beats[i])
 
-        self.sequence_widget = self.beat_frame.main_widget.top_builder_widget.sequence_widget
+        self.sequence_widget = (
+            self.beat_frame.main_widget.top_builder_widget.sequence_widget
+        )
         self.sequence_widget.difficulty_label.set_difficulty_level("")
 
     def _delete_start_pos(self):
