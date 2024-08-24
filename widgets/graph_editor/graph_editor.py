@@ -2,14 +2,14 @@ from typing import TYPE_CHECKING
 from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
-from widgets.graph_editor.components.GE_adjustment_panel import GE_AdjustmentPanel
+from widgets.graph_editor.components.adjustment_panel.GE_adjustment_panel import GE_AdjustmentPanel
 from widgets.pictograph.pictograph import Pictograph
 
-from widgets.graph_editor.components.GE_pictograph_view import (
+from widgets.graph_editor.components.pictograph_container.GE_pictograph_view import (
     GE_BlankPictograph,
     GE_PictographView,
 )
-from widgets.graph_editor.components.GE_pictograph_container import (
+from widgets.graph_editor.components.pictograph_container.GE_pictograph_container import (
     GE_PictographContainer,
 )
 

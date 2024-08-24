@@ -1,15 +1,15 @@
 from typing import TYPE_CHECKING
 from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
-from widgets.graph_editor.components.GE_start_pos_ori_picker_widget import (
+from widgets.graph_editor.components.adjustment_panel.ori_picker_widget.GE_start_pos_ori_picker_widget import (
     GE_StartPosOriPickerWidget,
 )
-from widgets.graph_editor.components.GE_start_pos_ori_picker_header import (
+from widgets.graph_editor.components.adjustment_panel.start_pos_ori_picker_box.GE_start_pos_ori_picker_header import (
     GE_StartPosOriPickerBoxHeader,
 )
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_adjustment_panel import GE_AdjustmentPanel
+    from widgets.graph_editor.components.adjustment_panel.GE_adjustment_panel import GE_AdjustmentPanel
     from widgets.pictograph.pictograph import Pictograph
 
 

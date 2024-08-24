@@ -1,11 +1,11 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 from typing import TYPE_CHECKING
-from widgets.factories.button_factory.buttons.letterbook_adjust_turns_button import (
-    LetterBookAdjustTurnsButton,
-)
+
+from widgets.factories.button_factory.buttons.letterbook_adjust_turns_button import AdjustTurnsButton
+
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_start_pos_ori_picker_widget import (
+    from widgets.graph_editor.components.adjustment_panel.ori_picker_widget.GE_start_pos_ori_picker_widget import (
         GE_StartPosOriPickerWidget,
     )
 
@@ -14,7 +14,7 @@ class GE_StartPosOriPickerButtonManager:
     def __init__(self, start_pos_ori_picker: "GE_StartPosOriPickerWidget") -> None:
         self.ori_picker_widget = start_pos_ori_picker
         self.adjustments = [(-1, "-1"), (-0.5, "-0.5"), (0.5, "+0.5"), (1, "+1")]
-        self.adjust_turns_buttons: list[LetterBookAdjustTurnsButton] = []
+        self.adjust_turns_buttons: list[AdjustTurnsButton] = []
         self.button_factory = (
             self.ori_picker_widget.ori_picker_box.graph_editor.main_widget.button_factory
         )

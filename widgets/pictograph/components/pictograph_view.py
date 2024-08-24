@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QGraphicsView, QSizePolicy, QApplication
 from PyQt6.QtCore import Qt, QEvent, QTimer
 from PyQt6.QtGui import QMouseEvent, QCursor
 
-from widgets.graph_editor.components.GE_pictograph_container import (
+from widgets.graph_editor.components.pictograph_container.GE_pictograph_container import (
     GE_PictographContainer,
 )
 from widgets.pictograph.components.pictograph_context_menu_handler import (

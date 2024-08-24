@@ -7,20 +7,17 @@ from data.constants import (
     PROP_ROT_DIR,
     SAME,
 )
-from Enums.MotionAttributes import (
-    PropRotDir,
-)
+from Enums.MotionAttributes import PropRotDir
 from Enums.Enums import VTG_Directions
-
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtCore import QSize
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from widgets.factories.button_factory.buttons.rot_dir_buttons import VtgDirButton
 
-
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.turns_box.GE_turns_box import GE_TurnsBox
-
+    from widgets.graph_editor.components.adjustment_panel.turns_box.GE_turns_box import (
+        GE_TurnsBox,
+    )
     from objects.motion.motion import Motion
 
 

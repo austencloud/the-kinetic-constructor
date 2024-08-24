@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_pictograph_view import GE_BlankPictograph
+    from widgets.graph_editor.components.pictograph_container.GE_pictograph_view import GE_BlankPictograph
 
 
 class GE_PictographView(PictographView):
@@ -69,9 +69,7 @@ class GE_PictographView(PictographView):
         self.setFixedSize(
             self.GE.height(), self.GE.height()
         )
-        # if self.scene():
-        #     self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
-        # get the size of the scene compared to the size of the view, then scale the view to fit the scene
+
         scene_size = self.scene().sceneRect().size()
         view_size = self.viewport().size()
         scale_factor = min(

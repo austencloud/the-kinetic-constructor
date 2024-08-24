@@ -1,18 +1,15 @@
 from typing import TYPE_CHECKING
 
 from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
-from widgets.graph_editor.components.turns_box.GE_prop_rot_dir_button_manager import (
-    GE_PropRotDirButtonManager,
-)
-from widgets.graph_editor.components.turns_box.GE_vtg_dir_button_handler import (
-    GE_VtgDirButtonManager,
-)
+from widgets.graph_editor.components.adjustment_panel.turns_box.GE_prop_rot_dir_button_manager import GE_PropRotDirButtonManager
+from widgets.graph_editor.components.adjustment_panel.turns_box.GE_vtg_dir_button_handler import GE_VtgDirButtonManager
+
 from .GE_turns_box_header import GE_TurnsBoxHeader
 from .turns_widget.GE_turns_widget import GE_TurnsWidget
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_adjustment_panel import GE_AdjustmentPanel
+    from widgets.graph_editor.components.adjustment_panel.GE_adjustment_panel import GE_AdjustmentPanel
     from widgets.pictograph.pictograph import Pictograph
 
 

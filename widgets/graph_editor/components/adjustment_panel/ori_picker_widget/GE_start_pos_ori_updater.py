@@ -2,11 +2,8 @@ from typing import TYPE_CHECKING
 from Enums.Enums import Turns
 from data.constants import *
 
-
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_start_pos_ori_picker_widget import (
-        GE_StartPosOriPickerWidget,
-    )
+    from .GE_start_pos_ori_picker_widget import GE_StartPosOriPickerWidget
     from widgets.pictograph.pictograph import Pictograph
     from objects.motion.motion import Motion
 

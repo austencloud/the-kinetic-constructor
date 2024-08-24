@@ -1,13 +1,13 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
 from data.constants import BLUE, RED
-from widgets.graph_editor.components.GE_placeholder_text import GE_PlaceHolderTextLabel
-from widgets.graph_editor.components.GE_start_pos_ori_picker_box import GE_StartPosOriPickerBox
+from widgets.graph_editor.components.adjustment_panel.GE_placeholder_text_label import GE_PlaceHolderTextLabel
+from widgets.graph_editor.components.adjustment_panel.start_pos_ori_picker_box.GE_start_pos_ori_picker_box import GE_StartPosOriPickerBox
+from widgets.graph_editor.components.adjustment_panel.turns_box.GE_turns_box import GE_TurnsBox
 
-from .turns_box.GE_turns_box import GE_TurnsBox
 
 if TYPE_CHECKING:
-    from ..graph_editor import GraphEditor
+    from ...graph_editor import GraphEditor
 
 
 class GE_AdjustmentPanel(QFrame):

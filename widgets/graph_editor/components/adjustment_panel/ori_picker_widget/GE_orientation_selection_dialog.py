@@ -5,7 +5,7 @@ from PyQt6.QtGui import QFont
 from data.constants import IN, COUNTER, OUT, CLOCK
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_start_pos_ori_picker_widget import (
+    from widgets.graph_editor.components.adjustment_panel.ori_picker_widget.GE_start_pos_ori_picker_widget import (
         GE_StartPosOriPickerWidget,
     )
 

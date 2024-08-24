@@ -15,15 +15,15 @@ from PyQt6.QtWidgets import (
 )
 
 
-from widgets.graph_editor.components.GE_ori_picker_display_manager import (
+from widgets.graph_editor.components.adjustment_panel.ori_picker_widget.GE_ori_picker_display_manager import (
     GE_OriPickerDisplayManager,
 )
-from widgets.graph_editor.components.GE_orientation_selection_dialog import (
+from widgets.graph_editor.components.adjustment_panel.ori_picker_widget.GE_orientation_selection_dialog import (
     GE_OrientationSelectionDialog,
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_start_pos_ori_picker_box import (
+    from widgets.graph_editor.components.adjustment_panel.start_pos_ori_picker_box.GE_start_pos_ori_picker_box import (
         GE_StartPosOriPickerBox,
     )
 

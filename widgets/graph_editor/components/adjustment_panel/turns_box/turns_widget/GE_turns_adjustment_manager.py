@@ -5,7 +5,7 @@ from Enums.Enums import Turns
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.turns_box.turns_widget.GE_turns_widget import GE_TurnsWidget
+    from widgets.graph_editor.components.adjustment_panel.turns_box.turns_widget.GE_turns_widget import GE_TurnsWidget
 
 
 from PyQt6.QtCore import pyqtSignal
