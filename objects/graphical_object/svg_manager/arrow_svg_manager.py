@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 from widgets.path_helpers.path_helpers import get_images_and_data_path
+from PyQt6.QtSvg import QSvgRenderer
+from objects.arrow.arrow import Arrow
 from data.constants import (
     CLOCK,
     COUNTER,
@@ -20,14 +22,8 @@ if TYPE_CHECKING:
     )
 
 
-from typing import TYPE_CHECKING, Union
-from PyQt6.QtSvg import QSvgRenderer
-from objects.arrow.arrow import Arrow
 
-if TYPE_CHECKING:
-    from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
-        GraphicalObjectSvgManager,
-    )
+
 
 
 class ArrowSvgManager:

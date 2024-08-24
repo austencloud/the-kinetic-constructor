@@ -15,11 +15,8 @@ class PictographUpdater:
     def update_pictograph(self, pictograph_dict: dict = None) -> None:
         """
         Updates the pictograph with the given pictograph_dict.
-
         If the dict is complete, it will be assigned to the pictograph's pictograph_dict attribute.
-
         If the dict is incomplete, it will be used to update the pictograph's attributes.
-
         If there is no dict, the pictograph will update its children without reference to a dict.
         """
         if not self.pictograph.get.is_initialized:
@@ -47,33 +44,44 @@ class PictographUpdater:
     def _update_from_pictograph_dict(self, pictograph_dict: dict) -> None:
         self.pictograph.attr_manager.update_attributes(pictograph_dict)
         motion_dicts = self.get_motion_dicts_from_pictograph_dict(pictograph_dict)
+        self.pictograph.letter_type = LetterType.get_letter_type(self.pictograph.letter)
+        self.pictograph.container.update_borders()
+        red_arrow_dict, blue_arrow_dict = self.get_arrow_dicts(pictograph_dict)
+        self._update_motions(pictograph_dict, motion_dicts)
+        self._update_arrows(red_arrow_dict, blue_arrow_dict)
+        self._set_lead_states()
 
+    def _update_motions(self, pictograph_dict, motion_dicts):
         for motion in self.pictograph.motions.values():
             self.override_motion_type_if_necessary(pictograph_dict, motion)
             if motion_dicts.get(motion.color) is not None:
                 self.show_graphical_objects(motion.color)
             motion.updater.update_motion(motion_dicts[motion.color])
 
-        self.pictograph.letter_type = LetterType.get_letter_type(self.pictograph.letter)
-        self.pictograph.container.update_borders()
-
-        if self.pictograph.letter_type == LetterType.Type3:
-            self.pictograph.get.shift().arrow.updater.update_arrow()
-            self.pictograph.get.dash().arrow.updater.update_arrow()
-        else:
-            self.pictograph.arrows.get(RED).updater.update_arrow(
-                self.get_arrow_dict_from_pictograph_dict(pictograph_dict, RED)
-            )
-            self.pictograph.arrows.get(BLUE).updater.update_arrow(
-                self.get_arrow_dict_from_pictograph_dict(pictograph_dict, BLUE)
-            )
-
+    def _set_lead_states(self):
         if self.pictograph.letter in ["S", "T", "U", "V"]:
             self.pictograph.get.leading_motion().lead_state = LEADING
             self.pictograph.get.trailing_motion().lead_state = TRAILING
         else:
             for motion in self.pictograph.motions.values():
                 motion.lead_state = None
+
+    def _update_arrows(self, red_arrow_dict, blue_arrow_dict):
+        if self.pictograph.letter_type == LetterType.Type3:
+            self.pictograph.get.shift().arrow.updater.update_arrow()
+            self.pictograph.get.dash().arrow.updater.update_arrow()
+        else:
+            self.pictograph.arrows.get(RED).updater.update_arrow(
+                red_arrow_dict
+            )
+            self.pictograph.arrows.get(BLUE).updater.update_arrow(
+                blue_arrow_dict
+            )
+
+    def get_arrow_dicts(self, pictograph_dict):
+        red_arrow_dict = self.get_arrow_dict_from_pictograph_dict(pictograph_dict, RED)
+        blue_arrow_dict = self.get_arrow_dict_from_pictograph_dict(pictograph_dict, BLUE)
+        return red_arrow_dict,blue_arrow_dict
 
     def get_arrow_dict_from_pictograph_dict(self, pictograph_dict: dict, color: str) -> dict:
         # arrow dict will look like: {'color': 'blue', 'turns': 0}

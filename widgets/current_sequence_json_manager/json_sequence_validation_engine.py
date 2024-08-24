@@ -10,7 +10,7 @@ class JsonSequenceValidationEngine:
         self.json_manager = json_manager
         self.ori_calculator = self.json_manager.ori_calculator
 
-    def validate_and_update_sequence_json(self, is_current_sequence=False) -> None:
+    def validate_and_update_json_orientations(self, is_current_sequence=False) -> None:
         """Iterates through the sequence, updating start and end orientations to ensure continuity."""
         for index, _ in enumerate(self.sequence):
             if index > 1:
@@ -45,4 +45,4 @@ class JsonSequenceValidationEngine:
         """Public method to run the sequence validation and update process."""
         if is_current_sequence:
             self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
-        self.validate_and_update_sequence_json(is_current_sequence)
+        self.validate_and_update_json_orientations(is_current_sequence)
