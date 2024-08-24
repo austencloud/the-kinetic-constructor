@@ -33,12 +33,9 @@ class PropSvgManager:
         return f"{PROP_DIR}{prop_type_str}.svg"
 
     def _hand_svg_file(self, object: "Prop") -> str:
-        if object.color == BLUE:
-            return get_images_and_data_path("images/hands/left_hand.svg")
-        elif object.color == RED:
-            return get_images_and_data_path("images/hands/right_hand.svg")
-        else:
-            raise ValueError(f"Unrecognized hand color: {object.color}")
+        hand_color = "left" if object.color == BLUE else "right"
+        return get_images_and_data_path(f"images/hands/{hand_color}_hand.svg")
+
 
     def update_prop_svg(self, object: "Prop") -> None:
         svg_file = self.get_prop_svg_file(object)
