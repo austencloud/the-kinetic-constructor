@@ -27,10 +27,7 @@ class ThumbnailBoxSorter:
     ) -> None:
         self.browser.scroll_widget.clear_layout()
         self.browser.sections = {}
-        # clear the sidebar
         self.browser.nav_sidebar.clear_sidebar()
-        QApplication.processEvents()
-        # Sort currently displayed sequences based on the sort_method
         if sort_method == "sequence_length":
             self.browser.currently_displayed_sequences.sort(
                 key=lambda x: x[2] if x[2] is not None else float("inf")

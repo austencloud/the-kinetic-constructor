@@ -124,7 +124,7 @@ class TempBeatFrame(BaseBeatFrame):
                 if beat:
                     if beat.pictograph_dict != entry:
                         beat.updater.update_pictograph(entry)
-                        QApplication.processEvents()
+                        # QApplication.processEvents()
 
     def update_start_pos_from_current_sequence_json(self, entry: dict) -> None:
         entry["red_attributes"]["start_ori"] = entry["red_attributes"]["end_ori"]

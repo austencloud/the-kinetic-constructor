@@ -6,17 +6,17 @@ from data.constants import CLOCK, COUNTER, IN, OUT
 
 if TYPE_CHECKING:
     from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
-        GraphicalObjectSvgManager,
+        SvgManager,
     )
 
 
 class ArrowSvgManager:
-    def __init__(self, manager: "GraphicalObjectSvgManager"):
+    def __init__(self, manager: "SvgManager"):
         self.manager = manager
 
     def update_arrow_svg(self, arrow: "Arrow") -> None:
         svg_file = self._get_arrow_svg_file(arrow)
-        svg_data = self.manager.file_manager.load_svg_file(svg_file)
+        svg_data = self.manager.load_svg_file(svg_file)
         colored_svg_data = self.manager.color_manager.apply_color_transformations(
             svg_data, arrow.color
         )

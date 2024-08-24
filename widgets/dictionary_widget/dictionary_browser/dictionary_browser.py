@@ -80,10 +80,7 @@ class DictionaryBrowser(QWidget):
         self.dictionary_widget.preview_area.clear_preview()
         self.number_of_currently_displayed_words_label.hide()
 
-    # def showEvent(self, event):
-    #     super().showEvent(event)
-    #     if not self.initialized:
-    #         self.add_initial_selection_widget()
+
 
     def add_initial_selection_widget(self):
         self.layout.addWidget(self.initial_selection_widget)
@@ -93,17 +90,11 @@ class DictionaryBrowser(QWidget):
         self.apply_initial_selection({"letter": "Show all"})
 
     def apply_initial_selection(self, initial_selections):
-        # set override cursor
-        # QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        # hide the buttons in the nav button widget
         self.initial_selection_widget.hide()
         self._add_components_to_layout()
-        # self.thummbnail_box_sorter.currently_displayed_sequences = []  # Reset before applying new filters
         self._initialize_and_sort_thumbnails(initial_selections)
-        # update the placeholder in the preview area
         self.dictionary_widget.preview_area.update_preview(None)
         QApplication.processEvents()
-        # QApplication.restoreOverrideCursor()
 
     def _initialize_and_sort_thumbnails(self, sort_method):
         self.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_initial_selection(

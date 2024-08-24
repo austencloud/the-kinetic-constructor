@@ -2,12 +2,12 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
-        GraphicalObjectSvgManager,
+        SvgManager,
     )
 
 
 class SvgCacheManager:
-    def __init__(self, manager: "GraphicalObjectSvgManager"):
+    def __init__(self, manager: "SvgManager"):
         self.manager = manager
         self.file_path_cache = {}
         self.svg_content_cache = {}

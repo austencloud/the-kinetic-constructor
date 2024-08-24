@@ -5,7 +5,7 @@ from Enums.PropTypes import PropType
 if TYPE_CHECKING:
     from objects.prop.prop import Prop
     from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
-        GraphicalObjectSvgManager,
+        SvgManager,
     )
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 
@@ -17,17 +17,17 @@ from data.constants import BLUE, RED, PROP_DIR
 
 if TYPE_CHECKING:
     from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
-        GraphicalObjectSvgManager,
+        SvgManager,
     )
 
 
 class PropSvgManager:
-    def __init__(self, manager: "GraphicalObjectSvgManager"):
+    def __init__(self, manager: "SvgManager"):
         self.manager = manager
 
     def update_prop_svg(self, prop: "Prop") -> None:
         svg_file = self._get_prop_svg_file(prop)
-        svg_data = self.manager.file_manager.load_svg_file(svg_file)
+        svg_data = self.manager.load_svg_file(svg_file)
         if prop.prop_type != PropType.Hand:
             colored_svg_data = self.manager.color_manager.apply_color_transformations(
                 svg_data, prop.color
