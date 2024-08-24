@@ -7,9 +7,8 @@ from Enums.Enums import Letter
 from Enums.PropTypes import PropType
 
 
-from objects.graphical_object.graphical_object_svg_manager import (
-    GraphicalObjectSvgManager,
-)
+
+from objects.graphical_object.svg_manager.graphical_object_svg_manager import GraphicalObjectSvgManager
 from sequence_difficulty_evaluator import SequenceLevelEvaluator
 from widgets.dictionary_widget.thumbnail_box.thumbnail_finder import ThumbnailFinder
 from widgets.path_helpers.path_helpers import get_images_and_data_path

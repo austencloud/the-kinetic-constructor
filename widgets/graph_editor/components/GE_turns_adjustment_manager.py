@@ -38,7 +38,13 @@ class GE_TurnsAdjustmentManager(QObject):
         self.turns_widget.updater._adjust_turns_for_pictograph(
             self.pictograph, adjustment
         )
+
         pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
+        # adjust the turns for that pictograph in the beat frame too
+        matching_beat = self.beat_frame.beats[pictograph_index]
+        matching_beat.beat.pictograph_dict[f"{self.color}_attributes"]["turns"] = new_turns
+        matching_beat.beat.updater.update_pictograph(self.pictograph.pictograph_dict)
+
         self.json_manager.updater.update_turns_in_json_at_index(
             pictograph_index + 2, self.color, new_turns
         )

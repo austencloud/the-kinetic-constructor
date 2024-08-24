@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from Enums.Enums import Turns
+from data.constants import BLUE, RED
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
@@ -50,4 +51,10 @@ class MotionTurnsManager:
         self.motion.turns = turns
         self.motion.arrow.motion.turns = turns
         self.motion.updater.update_motion()
-        self.motion.arrow.updater.update_arrow()
+        other_motion_color = RED if self.motion.color == BLUE else BLUE
+        other_motion = self.motion.pictograph.get.other_motion(self.motion)
+        arrow_dict = {
+            f"{self.motion.color}_attributes": {"turns": turns},
+            f"{other_motion_color}_attributes": {"turns": other_motion.turns},
+        }
+        self.motion.arrow.updater.update_arrow(arrow_dict)

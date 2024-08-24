@@ -70,7 +70,6 @@ non_strictly_placed_props = [
     PropType.Fractalgeng,
     PropType.EightRings,
     PropType.BigEightRings,
-
 ]
 strictly_placed_props = [
     PropType.BigHoop,
@@ -81,7 +80,7 @@ strictly_placed_props = [
 
 ### LISTS FOR ITERATION ###
 
-PropTypeslist = [
+PropTypesList = [
     PropType.Staff,
     PropType.BigStaff,
     PropType.Club,

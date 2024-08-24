@@ -61,8 +61,12 @@ class PictographUpdater:
             self.pictograph.get.shift().arrow.updater.update_arrow()
             self.pictograph.get.dash().arrow.updater.update_arrow()
         else:
-            for arrow in self.pictograph.arrows.values():
-                arrow.updater.update_arrow()
+            self.pictograph.arrows.get(RED).updater.update_arrow(
+                self.get_arrow_dict_from_pictograph_dict(pictograph_dict, RED)
+            )
+            self.pictograph.arrows.get(BLUE).updater.update_arrow(
+                self.get_arrow_dict_from_pictograph_dict(pictograph_dict, BLUE)
+            )
 
         if self.pictograph.letter in ["S", "T", "U", "V"]:
             self.pictograph.get.leading_motion().lead_state = LEADING
@@ -71,6 +75,12 @@ class PictographUpdater:
             for motion in self.pictograph.motions.values():
                 motion.lead_state = None
 
+    def get_arrow_dict_from_pictograph_dict(self, pictograph_dict: dict, color: str) -> dict:
+        # arrow dict will look like: {'color': 'blue', 'turns': 0}
+        turns = pictograph_dict[f"{color}_attributes"]["turns"]
+        arrow_dict = {"color": color, "turns": turns}
+        return arrow_dict
+    
     def show_graphical_objects(self, color: str) -> None:
         self.pictograph.props[color].show()
         self.pictograph.arrows[color].show()

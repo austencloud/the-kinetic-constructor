@@ -25,6 +25,7 @@ class ArrowAttrHandler:
             value = arrow_dict.get(attr)
             if value is not None:
                 setattr(self.arrow, attr, value)
+                self.arrow.arrow_dict[attr] = value
 
     def clear_attributes(self) -> None:
         arrow_attributes = [COLOR, LOC, MOTION_TYPE, TURNS]

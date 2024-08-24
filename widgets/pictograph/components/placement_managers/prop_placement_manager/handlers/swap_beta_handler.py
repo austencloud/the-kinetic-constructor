@@ -129,13 +129,14 @@ class SwapBetaHandler:
     def _handle_type5_swap(self) -> None:
         red_direction = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
         blue_direction = self.ppm.dir_calculator.get_dir(self.pictograph.blue_motion)
+        if self.pictograph.red_motion.prop.prop_type != PropType.Hand:
 
-        self._swap_props(
-            self.pictograph.red_prop,
-            self.pictograph.blue_prop,
-            blue_direction,
-            red_direction,
-        )
+            self._swap_props(
+                self.pictograph.red_prop,
+                self.pictograph.blue_prop,
+                blue_direction,
+                red_direction,
+            )
 
     def _generate_override_key(self, prop_loc, beta_ori) -> str:
         override_key = (
