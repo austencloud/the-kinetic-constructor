@@ -14,11 +14,11 @@ from typing import TYPE_CHECKING
 from Enums.letters import LetterType
 from data.constants import BLUE, CLOCKWISE, COUNTER_CLOCKWISE, RED
 from widgets.factories.button_factory.buttons.letterbook_adjust_turns_button import (
-    LetterBookAdjustTurnsButton,
+    AdjustTurnsButton,
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_turns_box import (
+    from widgets.graph_editor.components.turns_box.GE_turns_box import (
         GE_TurnsBox,
     )
 
@@ -149,8 +149,8 @@ class GE_TurnsBoxHeader(QWidget):
         frame.setLayout(layout)
         return frame
 
-    def create_adjust_turns_button(self, text: str) -> LetterBookAdjustTurnsButton:
-        button = LetterBookAdjustTurnsButton(self)
+    def create_adjust_turns_button(self, text: str) -> AdjustTurnsButton:
+        button = AdjustTurnsButton(self)
         button.setText(text)
         return button
 

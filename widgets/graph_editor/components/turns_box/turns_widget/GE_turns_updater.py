@@ -4,7 +4,7 @@ from Enums.MotionAttributes import PropRotDir
 from data.constants import *
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
+    from widgets.graph_editor.components.turns_box.turns_widget.GE_turns_widget import GE_TurnsWidget
     from widgets.pictograph.pictograph import Pictograph
     from objects.motion.motion import Motion
 

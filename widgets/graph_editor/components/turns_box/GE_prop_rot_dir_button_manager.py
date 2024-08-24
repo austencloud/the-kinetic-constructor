@@ -21,7 +21,7 @@ from widgets.factories.button_factory.buttons.rot_dir_buttons import (
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_turns_box import GE_TurnsBox
+    from widgets.graph_editor.components.turns_box.GE_turns_box import GE_TurnsBox
     from objects.motion.motion import Motion
 
 

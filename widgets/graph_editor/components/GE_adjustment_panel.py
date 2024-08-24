@@ -2,10 +2,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
 from data.constants import BLUE, RED
 from widgets.graph_editor.components.GE_placeholder_text import GE_PlaceHolderTextLabel
-from widgets.graph_editor.components.GE_start_pos_ori_picker_box import (
-    GE_StartPosOriPickerBox,
-)
-from .GE_turns_box import GE_TurnsBox
+from widgets.graph_editor.components.GE_start_pos_ori_picker_box import GE_StartPosOriPickerBox
+
+from .turns_box.GE_turns_box import GE_TurnsBox
 
 if TYPE_CHECKING:
     from ..graph_editor import GraphEditor
@@ -29,11 +28,11 @@ class GE_AdjustmentPanel(QFrame):
         self.layout.addWidget(self.placeholder_widget)
 
     def update_turns_displays(self, blue_turns: int, red_turns: int) -> None:
-        self.blue_turns_box.turns_widget.display_manager.update_turns_display(
+        self.blue_turns_box.turns_widget.update_turns_display(
             blue_turns
         )
 
-        self.red_turns_box.turns_widget.display_manager.update_turns_display(red_turns)
+        self.red_turns_box.turns_widget.update_turns_display(red_turns)
 
     def _setup_placeholder_widget(self) -> None:
         self.placeholder_widget = GE_PlaceHolderTextLabel(self)

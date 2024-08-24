@@ -5,7 +5,7 @@ from Enums.Enums import Turns
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
+    from widgets.graph_editor.components.turns_box.turns_widget.GE_turns_widget import GE_TurnsWidget
 
 
 from PyQt6.QtCore import pyqtSignal
@@ -41,7 +41,7 @@ class GE_TurnsAdjustmentManager(QObject):
         pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
         self.json_manager.updater.update_turns_in_json_at_index(
             pictograph_index + 2, self.color, new_turns
-        )
+        ) 
         self.json_validation_engine.run(is_current_sequence=True)
         self.main_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
@@ -55,7 +55,7 @@ class GE_TurnsAdjustmentManager(QObject):
             pictograph_index + 2, self.color, new_turns
         )
 
-        self._update_turns_display(new_turns)
+        self._update_turns_display(new_turns) 
         self.json_validation_engine.run(is_current_sequence=True)
         self.main_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
@@ -64,7 +64,7 @@ class GE_TurnsAdjustmentManager(QObject):
         return self._get_turns()
 
     def _get_turns(self) -> Turns:
-        turns = self.turns_widget.display_manager.turns_display.text()
+        turns = self.turns_widget.turns_display.text()
         turns = self.convert_turns_from_str_to_num(turns)
         turns = self.convert_turn_floats_to_ints(turns)
         return turns
@@ -82,7 +82,7 @@ class GE_TurnsAdjustmentManager(QObject):
         return self.turns_widget.updater._clamp_turns(turns)
 
     def _update_turns_display(self, turns: Turns) -> None:
-        self.turns_widget.display_manager.update_turns_display(str(turns))
+        self.turns_widget.update_turns_display(str(turns))
 
     def _update_motion_properties(self, new_turns) -> None:
         self.pictograph = self.graph_editor.GE_pictograph_view.get_current_pictograph()

@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 from typing import TYPE_CHECKING
 from Enums.Enums import AdjustmentNums, AdjustmentStrs
 from widgets.factories.button_factory.buttons.letterbook_adjust_turns_button import (
-    LetterBookAdjustTurnsButton,
+    AdjustTurnsButton,
 )
 
 if TYPE_CHECKING:
@@ -15,7 +15,7 @@ class LetterBookTurnsButtonManager:
     def __init__(self, turns_widget: "LetterBookTurnsWidget") -> None:
         self.turns_widget = turns_widget
         self.adjustments = [(-1, "-1"), (-0.5, "-0.5"), (0.5, "+0.5"), (1, "+1")]
-        self.adjust_turns_buttons: list[LetterBookAdjustTurnsButton] = []
+        self.adjust_turns_buttons: list[AdjustTurnsButton] = []
 
     def setup_adjust_turns_buttons(self) -> None:
         """Create and setup adjustment buttons."""
@@ -45,14 +45,12 @@ class LetterBookTurnsButtonManager:
 
     def _create_and_add_button(
         self, adjustment: AdjustmentNums, text: AdjustmentStrs
-    ) -> LetterBookAdjustTurnsButton:
+    ) -> AdjustTurnsButton:
         """Create an adjust turns button and add it to the appropriate layout."""
         button_factory = (
             self.turns_widget.turns_box.turns_panel.turns_tab.section.scroll_area.letterbook.main_widget.button_factory
         )
-        button: LetterBookAdjustTurnsButton = button_factory.create_adjust_turns_button(
-            text
-        )
+        button: AdjustTurnsButton = button_factory.create_adjust_turns_button(text)
         button.setContentsMargins(0, 0, 0, 0)
         button.clicked.connect(
             lambda _, adj=adjustment: self.turns_widget.adjustment_manager.adjust_turns(

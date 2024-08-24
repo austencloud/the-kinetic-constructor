@@ -6,7 +6,9 @@ from typing import TYPE_CHECKING
 from data.constants import BLUE, RED
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.GE_turns_widget import GE_TurnsWidget
+    from widgets.graph_editor.components.turns_box.turns_widget.GE_turns_widget import (
+        GE_TurnsWidget,
+    )
 
 
 class GE_TurnsDisplay(QLabel):
@@ -24,12 +26,10 @@ class GE_TurnsDisplay(QLabel):
 
     def enterEvent(self, event) -> None:
         self.setCursor(Qt.CursorShape.PointingHandCursor)
-        # outline in gold
         self.set_turn_display_styles(mouse_over=True)
 
     def leaveEvent(self, event) -> None:
         self.setCursor(Qt.CursorShape.ArrowCursor)
-        # restore previous style
         self.set_turn_display_styles()
 
     def set_turn_display_styles(self, mouse_over=False) -> None:
@@ -37,13 +37,14 @@ class GE_TurnsDisplay(QLabel):
             (self.turns_box.adjustment_panel.graph_editor.width() / 20)
         )
         self.setFont(QFont("Arial", self.turns_display_font_size, QFont.Weight.Bold))
-        self.setMinimumWidth(int(self.turns_box.adjustment_panel.width() / 6))
-        self.setMaximumWidth(int(self.turns_box.adjustment_panel.width() / 6))
+        self.setFixedSize(
+            int(self.turns_box.adjustment_panel.width() / 6),
+            int(self.turns_box.adjustment_panel.height() / 4),
+        )
         border_radius = self.width() // 4
 
         turn_display_border = int(self.width() / 20)
-        self.setMinimumHeight(int(self.turns_box.adjustment_panel.height() / 4))
-        self.setMaximumHeight(int(self.turns_box.adjustment_panel.height() / 4))
+
         turns_box_color = self.turns_box.color
         if turns_box_color == RED:
             border_color = "#ED1C24"

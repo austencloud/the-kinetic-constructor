@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING
 
 from data.constants import BLUE, RED
 from widgets.factories.button_factory.buttons.letterbook_adjust_turns_button import (
-    LetterBookAdjustTurnsButton,
+    AdjustTurnsButton,
 )
 
 if TYPE_CHECKING:
@@ -92,7 +92,7 @@ class GE_StartPosOriPickerBoxHeader(QWidget):
         frame.setLayout(layout)
         return frame
 
-    def create_adjust_turns_button(self, text: str) -> LetterBookAdjustTurnsButton:
-        button = LetterBookAdjustTurnsButton(self)
+    def create_adjust_turns_button(self, text: str) -> AdjustTurnsButton:
+        button = AdjustTurnsButton(self)
         button.setText(text)
         return button
