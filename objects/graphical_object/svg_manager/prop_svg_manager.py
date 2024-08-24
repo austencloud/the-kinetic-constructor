@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from data.constants import BLUE, PROP_DIR, RED
-from Enums.PropTypes import PropType, PropTypesList
+from Enums.PropTypes import PropType
 
 if TYPE_CHECKING:
     from objects.prop.prop import Prop
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     )
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from PyQt6.QtSvg import QSvgRenderer
 from objects.prop.prop import Prop
 from Enums.PropTypes import PropType
@@ -24,13 +24,6 @@ if TYPE_CHECKING:
 class PropSvgManager:
     def __init__(self, manager: "GraphicalObjectSvgManager"):
         self.manager = manager
-
-    def preload_svgs(self):
-        prop_types = [p for p in PropTypesList if p != PropType.Hand]
-        for prop_type in prop_types:
-            cache_key = f"prop_{prop_type}"
-            file_path = get_images_and_data_path(f"images/props/{prop_type}.svg")
-            self.manager.cache_manager.file_path_cache[cache_key] = file_path
 
     def get_prop_svg_file(self, object: "Prop") -> str:
         prop_type_str = object.prop_type.name.lower()
@@ -49,7 +42,7 @@ class PropSvgManager:
 
     def update_prop_svg(self, object: "Prop") -> None:
         svg_file = self.get_prop_svg_file(object)
-        svg_data = self.manager.file_manager.get_or_load_svg_file(svg_file)
+        svg_data = self.manager.file_manager.load_svg_file(svg_file)
         if object.prop_type != PropType.Hand:
             colored_svg_data = self.manager.color_manager.apply_color_transformations(
                 svg_data, object.color

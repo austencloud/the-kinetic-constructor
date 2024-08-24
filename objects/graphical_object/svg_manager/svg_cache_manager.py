@@ -1,5 +1,4 @@
-from typing import TYPE_CHECKING, Union
-from PyQt6.QtSvg import QSvgRenderer
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
