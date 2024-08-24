@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.pictograph_container.GE_pictograph_view import GE_BlankPictograph
+    from .GE_pictograph_view import GE_BlankPictograph
 
 
 class GE_PictographView(PictographView):

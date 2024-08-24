@@ -10,10 +10,10 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from typing import TYPE_CHECKING, Union
 
-from widgets.graph_editor.components.adjustment_panel.turns_box.turns_widget.GE_adjust_turns_button import GE_AdjustTurnsButton
-from widgets.graph_editor.components.adjustment_panel.turns_box.turns_widget.GE_turns_display import GE_TurnsDisplay
 
-from widgets.graph_editor.components.adjustment_panel.turns_box.turns_widget.direct_set_dialog.GE_direct_set_dialog import GE_DirectSetDialog
+from.GE_adjust_turns_button import GE_AdjustTurnsButton
+from.GE_turns_display import GE_TurnsDisplay
+from.direct_set_dialog.GE_direct_set_dialog import GE_DirectSetDialog
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from .GE_turns_adjustment_manager import GE_TurnsAdjustmentManager
 from .GE_turns_updater import GE_TurnsUpdater

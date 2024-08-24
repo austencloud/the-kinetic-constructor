@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from data.constants import BLUE, RED
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.adjustment_panel.turns_box.turns_widget.GE_turns_widget import GE_TurnsWidget
+    from .GE_turns_widget import GE_TurnsWidget
 
 
 class GE_TurnsDisplay(QLabel):

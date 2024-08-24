@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
+from ..GE_pictograph_view import GE_PictographView
 
 
 if TYPE_CHECKING:
     from widgets.graph_editor.graph_editor import GraphEditor
-    from widgets.graph_editor.components.pictograph_container.GE_pictograph_view import GE_PictographView
 
 
 class GE_PictographContainer(QWidget):

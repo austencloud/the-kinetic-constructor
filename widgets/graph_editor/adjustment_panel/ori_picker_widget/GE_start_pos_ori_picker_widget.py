@@ -2,9 +2,10 @@ from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import Qt, QSize, pyqtSignal, QPoint
 from data.constants import IN, ORI, OUT, CLOCK, COUNTER
 from typing import TYPE_CHECKING
+from .GE_ori_picker_display_manager import GE_OriPickerDisplayManager
+from .GE_orientation_selection_dialog import GE_OrientationSelectionDialog
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from widgets.pictograph.pictograph import Pictograph
-
 from PyQt6.QtWidgets import (
     QWidget,
     QLabel,
@@ -14,16 +15,8 @@ from PyQt6.QtWidgets import (
     QApplication,
 )
 
-
-from widgets.graph_editor.components.adjustment_panel.ori_picker_widget.GE_ori_picker_display_manager import (
-    GE_OriPickerDisplayManager,
-)
-from widgets.graph_editor.components.adjustment_panel.ori_picker_widget.GE_orientation_selection_dialog import (
-    GE_OrientationSelectionDialog,
-)
-
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.adjustment_panel.start_pos_ori_picker_box.GE_start_pos_ori_picker_box import (
+    from ..start_pos_ori_picker_box.GE_start_pos_ori_picker_box import (
         GE_StartPosOriPickerBox,
     )
 

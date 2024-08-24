@@ -18,9 +18,7 @@ from widgets.factories.button_factory.buttons.letterbook_adjust_turns_button imp
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.turns_box.GE_turns_box import (
-        GE_TurnsBox,
-    )
+    from widgets.graph_editor.adjustment_panel.turns_box.GE_turns_box import GE_TurnsBox
 
 
 class GE_TurnsBoxHeader(QWidget):

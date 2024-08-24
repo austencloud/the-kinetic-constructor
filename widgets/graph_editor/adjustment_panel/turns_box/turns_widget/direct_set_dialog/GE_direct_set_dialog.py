@@ -2,11 +2,11 @@ from PyQt6.QtWidgets import QDialog, QHBoxLayout
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from data.constants import BLUE, HEX_BLUE, HEX_RED
-from widgets.graph_editor.components.adjustment_panel.turns_box.turns_widget.direct_set_dialog.GE_direct_set_adjustment_button import DirectSetAdjustmentButton
+from .GE_direct_set_adjustment_button import DirectSetAdjustmentButton
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.adjustment_panel.turns_box.turns_widget.GE_turns_widget import GE_TurnsWidget
+    from ..GE_turns_widget import GE_TurnsWidget
 
 from PyQt6.QtWidgets import QHBoxLayout, QPushButton, QFrame
 

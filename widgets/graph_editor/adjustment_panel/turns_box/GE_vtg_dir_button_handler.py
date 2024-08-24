@@ -15,9 +15,7 @@ from widgets.path_helpers.path_helpers import get_images_and_data_path
 from widgets.factories.button_factory.buttons.rot_dir_buttons import VtgDirButton
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.adjustment_panel.turns_box.GE_turns_box import (
-        GE_TurnsBox,
-    )
+    from widgets.graph_editor.adjustment_panel.turns_box.GE_turns_box import GE_TurnsBox
     from objects.motion.motion import Motion
 
 

@@ -3,9 +3,7 @@ from PyQt6.QtWidgets import QGraphicsView, QSizePolicy, QApplication
 from PyQt6.QtCore import Qt, QEvent, QTimer
 from PyQt6.QtGui import QMouseEvent, QCursor
 
-from widgets.graph_editor.components.pictograph_container.GE_pictograph_container import (
-    GE_PictographContainer,
-)
+
 from widgets.pictograph.components.pictograph_context_menu_handler import (
     PictographContextMenuHandler,
 )
@@ -133,6 +131,10 @@ class PictographView(QGraphicsView):
         QApplication.restoreOverrideCursor()
 
     def enterEvent(self, event: QEvent) -> None:
+        from widgets.graph_editor.pictograph_container.GE_pictograph_container import (
+            GE_PictographContainer,
+        )
+
         if isinstance(self.parent(), GE_PictographContainer):
             self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
         else:
@@ -140,6 +142,10 @@ class PictographView(QGraphicsView):
         self.pictograph.container.styled_border_overlay.set_gold_border()
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
+        from widgets.graph_editor.pictograph_container.GE_pictograph_container import (
+            GE_PictographContainer,
+        )
+
         if isinstance(self.parent(), GE_PictographContainer):
             if self.mouse_event_handler.is_arrow_under_cursor(event):
                 self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
