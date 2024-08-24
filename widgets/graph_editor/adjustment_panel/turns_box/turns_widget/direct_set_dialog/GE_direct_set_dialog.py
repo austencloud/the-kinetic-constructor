@@ -4,10 +4,8 @@ from typing import TYPE_CHECKING
 from data.constants import BLUE, HEX_BLUE, HEX_RED
 from .GE_direct_set_adjustment_button import DirectSetAdjustmentButton
 
-
 if TYPE_CHECKING:
     from ..GE_turns_widget import GE_TurnsWidget
-
 from PyQt6.QtWidgets import QHBoxLayout, QPushButton, QFrame
 
 

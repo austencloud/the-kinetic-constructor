@@ -14,9 +14,7 @@ from PyQt6.QtSvg import QSvgRenderer
 from data.constants import BLUE, RED
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.adjustment_panel.turns_box.turns_widget.GE_turns_widget import (
-        GE_TurnsWidget,
-    )
+    from .GE_turns_widget import GE_TurnsWidget
 
 
 class GE_AdjustTurnsButton(QAbstractButton):

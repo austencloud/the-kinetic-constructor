@@ -1,14 +1,11 @@
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtCore import QObject, Qt
 from PyQt6.QtWidgets import QApplication
+from PyQt6.QtCore import pyqtSignal
 from Enums.Enums import Turns
 
-
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.adjustment_panel.turns_box.turns_widget.GE_turns_widget import GE_TurnsWidget
-
-
-from PyQt6.QtCore import pyqtSignal
+    from .GE_turns_widget import GE_TurnsWidget
 
 
 class GE_TurnsAdjustmentManager(QObject):
@@ -41,7 +38,7 @@ class GE_TurnsAdjustmentManager(QObject):
         pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
         self.json_manager.updater.update_turns_in_json_at_index(
             pictograph_index + 2, self.color, new_turns
-        ) 
+        )
         self.json_validation_engine.run(is_current_sequence=True)
         self.main_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
@@ -55,7 +52,7 @@ class GE_TurnsAdjustmentManager(QObject):
             pictograph_index + 2, self.color, new_turns
         )
 
-        self._update_turns_display(new_turns) 
+        self._update_turns_display(new_turns)
         self.json_validation_engine.run(is_current_sequence=True)
         self.main_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
