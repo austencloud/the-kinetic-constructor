@@ -91,7 +91,7 @@ class GE_VtgDirButtonManager:
         self, motion: "Motion", prop_rot_dir: PropRotDir
     ) -> None:
         motion.prop_rot_dir = prop_rot_dir
-        pictograph_dict = {motion.color + "_" + PROP_ROT_DIR: prop_rot_dir}
+        pictograph_dict = {f"{motion.color}_attributes": {PROP_ROT_DIR: prop_rot_dir}}
         motion.pictograph.updater.update_pictograph(pictograph_dict)
 
     def _update_button_states(

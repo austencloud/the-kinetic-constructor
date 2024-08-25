@@ -45,9 +45,7 @@ class SequenceWidgetBeatSelectionOverlay(QWidget):
                 self.selected_beat.beat
             )
             graph_editor.adjustment_panel.update_turns_panel(blue_turns, red_turns)
-            QApplication.processEvents()
             graph_editor.adjustment_panel.update_adjustment_panel()
-            QApplication.processEvents()
 
             if isinstance(beat_view, StartPositionBeatView):
                 start_pos_pictograph = beat_view.beat
@@ -56,10 +54,10 @@ class SequenceWidgetBeatSelectionOverlay(QWidget):
                 )
                 red_start_pos_ori_picker = graph_editor.adjustment_panel.red_ori_picker
 
-                blue_start_pos_ori_picker.ori_picker_widget.set_initial_orientation(
+                blue_start_pos_ori_picker.ori_picker_widget.ori_display_frame.set_initial_orientation(
                     start_pos_pictograph, "blue"
                 )
-                red_start_pos_ori_picker.ori_picker_widget.set_initial_orientation(
+                red_start_pos_ori_picker.ori_picker_widget.ori_display_frame.set_initial_orientation(
                     start_pos_pictograph, "red"
                 )
 

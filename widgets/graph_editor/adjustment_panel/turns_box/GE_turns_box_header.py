@@ -87,9 +87,6 @@ class GE_TurnsBoxHeader(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
-        # Set size policy to Fixed
-        # self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-
     def _add_widgets(self) -> None:
         self.top_hbox.addStretch(1)
         self.top_hbox.addWidget(self.turns_box.prop_rot_dir_button_manager.ccw_button)
@@ -110,7 +107,7 @@ class GE_TurnsBoxHeader(QWidget):
         return separator
 
     def _setup_header_label(self) -> QLabel:
-        self.header_label = QLabel(self)
+        header_label = QLabel(self)
         color = self.turns_box.color
         text = ""
 
@@ -123,37 +120,18 @@ class GE_TurnsBoxHeader(QWidget):
 
         self.header_label_font = QFont("Arial")
         self.header_label_font.setBold(True)
-        self.header_label.setFont(self.header_label_font)
-        self.header_label.setText(text)
-        self.header_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.header_label.setStyleSheet(f"color: {font_color.name()};")
-        return self.header_label
+        header_label.setFont(self.header_label_font)
+        header_label.setText(text)
+        header_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        header_label.setStyleSheet(f"color: {font_color.name()};")
+        return header_label
+
+    def resize_turns_box_header(self) -> None:
+        self.setFixedHeight(self.turns_box.height() // 4)
+        self._resize_header_label()
 
     def _resize_header_label(self) -> None:
         font_size = self.graph_editor.width() // 40
         self.header_label_font.setPointSize(font_size)
         self.header_label.setFont(self.header_label_font)
         self.header_label.repaint()
-
-    def create_attr_header_label(
-        self, text: str, align: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter
-    ) -> QLabel:
-        attr_label = QLabel(text, self)
-        attr_label.setFont(QFont("Arial"))
-        attr_label.setAlignment(align)
-        attr_label.setContentsMargins(0, 0, 0, 0)
-        return attr_label
-
-    def create_header_frame(self, layout: QHBoxLayout | QHBoxLayout) -> QFrame:
-        frame = QFrame(self)
-        frame.setLayout(layout)
-        return frame
-
-    def create_adjust_turns_button(self, text: str) -> AdjustTurnsButton:
-        button = AdjustTurnsButton(self)
-        button.setText(text)
-        return button
-
-    def resize_GE_turns_box_header(self) -> None:
-        self.setFixedHeight(self.turns_box.height() // 4)
-        self._resize_header_label()

@@ -14,7 +14,7 @@ from PyQt6.QtSvg import QSvgRenderer
 from data.constants import BLUE, RED
 
 if TYPE_CHECKING:
-    from .GE_turns_widget import GE_TurnsWidget
+    from ..GE_turns_widget import GE_TurnsWidget
 
 
 class GE_AdjustTurnsButton(QAbstractButton):
@@ -22,10 +22,12 @@ class GE_AdjustTurnsButton(QAbstractButton):
         super().__init__(turns_widget)
         self.svg_path = svg_path
         self.turns_widget = turns_widget
+        self.turns_box = self.turns_widget.turns_box
         self.svg_renderer = QSvgRenderer(svg_path)
         self.hovered = False
         self.pressed = False  # Track whether the button is pressed
         self.setMouseTracking(True)
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
 
     def paintEvent(self, event) -> None:
         painter = QPainter(self)
@@ -86,14 +88,17 @@ class GE_AdjustTurnsButton(QAbstractButton):
 
     def setEnabled(self, enabled) -> None:
         super().setEnabled(enabled)
-        # Load the original SVG content
         svgData = QByteArray()
         with open(self.svg_path, "r") as file:
             svgData = QByteArray(file.read().encode("utf-8"))
 
         if not enabled:
-            # Replace black with gray for disabled state
             svgData.replace(b"black", b"#b5b5b5")
 
         self.svg_renderer.load(svgData)
         self.update()
+
+    def resize_adjust_turns_button(self) -> None:
+        size = int(self.turns_box.width() * 0.25)
+        self.setMaximumWidth(size)
+        self.setMaximumHeight(size)

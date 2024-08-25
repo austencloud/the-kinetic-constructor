@@ -71,24 +71,48 @@ class PictographUpdater:
             self.pictograph.get.shift().arrow.updater.update_arrow()
             self.pictograph.get.dash().arrow.updater.update_arrow()
         else:
-            self.pictograph.arrows.get(RED).updater.update_arrow(
-                red_arrow_dict
-            )
-            self.pictograph.arrows.get(BLUE).updater.update_arrow(
-                blue_arrow_dict
-            )
+            self.pictograph.arrows.get(RED).updater.update_arrow(red_arrow_dict)
+            self.pictograph.arrows.get(BLUE).updater.update_arrow(blue_arrow_dict)
 
     def get_arrow_dicts(self, pictograph_dict):
-        red_arrow_dict = self.get_arrow_dict_from_pictograph_dict(pictograph_dict, RED)
-        blue_arrow_dict = self.get_arrow_dict_from_pictograph_dict(pictograph_dict, BLUE)
-        return red_arrow_dict,blue_arrow_dict
+        if pictograph_dict.get("red_attributes") and not pictograph_dict.get(
+            "blue_attributes"
+        ):
+            red_arrow_dict = self.get_arrow_dict_from_pictograph_dict(
+                pictograph_dict, RED
+            )
+            blue_arrow_dict = None
+        elif pictograph_dict.get("blue_attributes") and not pictograph_dict.get(
+            "red_attributes"
+        ):
+            blue_arrow_dict = self.get_arrow_dict_from_pictograph_dict(
+                pictograph_dict, BLUE
+            )
+            red_arrow_dict = None
+        elif pictograph_dict.get("red_attributes") and pictograph_dict.get(
+            "blue_attributes"
+        ):
+            red_arrow_dict = self.get_arrow_dict_from_pictograph_dict(
+                pictograph_dict, RED
+            )
+            blue_arrow_dict = self.get_arrow_dict_from_pictograph_dict(
+                pictograph_dict, BLUE
+            )
+        return red_arrow_dict, blue_arrow_dict
 
-    def get_arrow_dict_from_pictograph_dict(self, pictograph_dict: dict, color: str) -> dict:
-        # arrow dict will look like: {'color': 'blue', 'turns': 0}
-        turns = pictograph_dict[f"{color}_attributes"]["turns"]
-        arrow_dict = {"color": color, "turns": turns}
+    def get_arrow_dict_from_pictograph_dict(
+        self, pictograph_dict: dict, color: str
+    ) -> dict:
+        turns = pictograph_dict[f"{color}_attributes"].get("turns", None)
+        prop_rot_dir = pictograph_dict[f"{color}_attributes"].get("prop_rot_dir", None)
+        if turns or turns == 0:
+            arrow_dict = {"color": color, "turns": turns}
+        elif prop_rot_dir:
+            arrow_dict = {"color": color, "prop_rot_dir": prop_rot_dir}
+        else:
+            arrow_dict = None
         return arrow_dict
-    
+
     def show_graphical_objects(self, color: str) -> None:
         self.pictograph.props[color].show()
         self.pictograph.arrows[color].show()

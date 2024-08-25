@@ -3,17 +3,21 @@ from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
 
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
-from widgets.graph_editor.start_pos_ori_picker_box.ori_picker_widget.GE_start_pos_ori_picker_widget import GE_StartPosOriPickerWidget
+from widgets.graph_editor.ori_picker_box.ori_picker_widget.GE_ori_picker_widget import (
+    GE_OriPickerWidget,
+)
 
 
-from .GE_start_pos_ori_picker_header import GE_StartPosOriPickerBoxHeader
+from .GE_ori_picker_header import GE_OriPickerHeader
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.adjustment_panel.GE_adjustment_panel import GE_AdjustmentPanel
+    from widgets.graph_editor.adjustment_panel.GE_adjustment_panel import (
+        GE_AdjustmentPanel,
+    )
     from widgets.pictograph.pictograph import Pictograph
 
 
-class GE_StartPosOriPickerBox(QFrame):
+class GE_OriPickerBox(QFrame):
     def __init__(
         self,
         adjustment_panel: "GE_AdjustmentPanel",
@@ -21,7 +25,6 @@ class GE_StartPosOriPickerBox(QFrame):
         color: str,
     ) -> None:
         super().__init__(adjustment_panel)
-        self.setObjectName("GE_StartPosOriPickerBox")
         self.adjustment_panel = adjustment_panel
         self.color = color
         self.start_pos = start_pos
@@ -37,22 +40,21 @@ class GE_StartPosOriPickerBox(QFrame):
         self._setup_layout()
 
     def _setup_widgets(self) -> None:
-        self.header = GE_StartPosOriPickerBoxHeader(self)
-        self.ori_picker_widget = GE_StartPosOriPickerWidget(self)
+        self.header = GE_OriPickerHeader(self)
+        self.ori_picker_widget = GE_OriPickerWidget(self)
 
     def _setup_layout(self) -> None:
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addWidget(self.header, 1)
-        self.layout.addWidget(self.ori_picker_widget, 5)
-        self.setLayout(self.layout)
+        layout: QVBoxLayout = QVBoxLayout(self)
+        layout.addWidget(self.header, 1)
+        layout.addWidget(self.ori_picker_widget, 5)
+        self.setLayout(layout)
 
     def update_styled_border(self) -> None:
+        self.setObjectName(self.__class__.__name__)
         self.setStyleSheet(
-            f"#GE_StartPosOriPickerBox {{ border: {self.border_width}px solid {self.color}; }}"
+            f"#GE_OriPickerBox {{ border: {self.border_width}px solid {self.color}; }}"
         )
 
-    def calculate_button_size(self) -> int:
-        return int((self.start_pos.view.height() // 8))
-
     def resize_GE_ori_picker_box(self) -> None:
-        self.ori_picker_widget.resize_GE_start_pos_ori_picker_widget()
+        self.header.resize_ori_picker_header()
+        self.ori_picker_widget.resize_ori_picker_widget()

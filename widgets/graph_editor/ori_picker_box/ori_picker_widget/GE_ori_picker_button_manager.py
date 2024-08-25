@@ -1,17 +1,19 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 from typing import TYPE_CHECKING
 
-from widgets.factories.button_factory.buttons.letterbook_adjust_turns_button import AdjustTurnsButton
+from widgets.factories.button_factory.buttons.letterbook_adjust_turns_button import (
+    AdjustTurnsButton,
+)
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.adjustment_panel.ori_picker_widget.GE_start_pos_ori_picker_widget import (
-        GE_StartPosOriPickerWidget,
+    from widgets.graph_editor.ori_picker_box.ori_picker_widget.GE_ori_picker_widget import (
+        GE_OriPickerWidget,
     )
 
 
-class GE_StartPosOriPickerButtonManager:
-    def __init__(self, start_pos_ori_picker: "GE_StartPosOriPickerWidget") -> None:
+class GE_OriPickerButtonManager:
+    def __init__(self, start_pos_ori_picker: "GE_OriPickerWidget") -> None:
         self.ori_picker_widget = start_pos_ori_picker
         self.adjustments = [(-1, "-1"), (-0.5, "-0.5"), (0.5, "+0.5"), (1, "+1")]
         self.adjust_turns_buttons: list[AdjustTurnsButton] = []

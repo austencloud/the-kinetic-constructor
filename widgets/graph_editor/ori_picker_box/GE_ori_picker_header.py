@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
+from PyQt6.QtGui import QFont, QColor
 from typing import TYPE_CHECKING
 
 from data.constants import BLUE, RED
@@ -16,14 +16,16 @@ from widgets.factories.button_factory.buttons.letterbook_adjust_turns_button imp
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.start_pos_ori_picker_box.GE_start_pos_ori_picker_box import GE_StartPosOriPickerBox
+    from widgets.graph_editor.ori_picker_box.GE_ori_picker_box import (
+        GE_OriPickerBox,
+    )
 
 
-class GE_StartPosOriPickerBoxHeader(QWidget):
-    def __init__(self, turns_box: "GE_StartPosOriPickerBox") -> None:
+class GE_OriPickerHeader(QWidget):
+    def __init__(self, turns_box: "GE_OriPickerBox") -> None:
         super().__init__(turns_box)
-
         self.turns_box = turns_box
+        self.graph_editor = self.turns_box.graph_editor
         self.separator: QFrame = self.create_separator()
         self.header_label: QLabel = self._setup_header_label()
         self._setup_layout()
@@ -54,43 +56,31 @@ class GE_StartPosOriPickerBoxHeader(QWidget):
         return separator
 
     def _setup_header_label(self) -> QLabel:
+        header_label = QLabel(self)
         color = self.turns_box.color
         text = ""
-        font_color = "#000000"
 
         if color == RED:
             text = "Right"
-            font_color = "#ED1C24"
+            font_color = QColor("#ED1C24")
         elif color == BLUE:
             text = "Left"
-            font_color = "#2E3192"
+            font_color = QColor("#2E3192")
 
-        font_size = self.turns_box.width() // 3
-        font_weight = "bold"
+        self.header_label_font = QFont("Arial")
+        self.header_label_font.setBold(True)
+        header_label.setFont(self.header_label_font)
+        header_label.setText(text)
+        header_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        header_label.setStyleSheet(f"color: {font_color.name()};")
+        return header_label
 
-        label = QLabel(text, self)
-        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        label.setStyleSheet(
-            f"color: {font_color}; font-size: {font_size}px; font-weight: {font_weight};"
-        )
+    def resize_ori_picker_header(self) -> None:
+        self.setFixedHeight(self.turns_box.height() // 4)
+        self._resize_header_label()
 
-        return label
-
-    def create_attr_header_label(
-        self, text: str, align: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignCenter
-    ) -> QLabel:
-        attr_label = QLabel(text, self)
-        attr_label.setFont(QFont("Arial"))
-        attr_label.setAlignment(align)
-        attr_label.setContentsMargins(0, 0, 0, 0)
-        return attr_label
-
-    def create_header_frame(self, layout: QHBoxLayout | QHBoxLayout) -> QFrame:
-        frame = QFrame(self)
-        frame.setLayout(layout)
-        return frame
-
-    def create_adjust_turns_button(self, text: str) -> AdjustTurnsButton:
-        button = AdjustTurnsButton(self)
-        button.setText(text)
-        return button
+    def _resize_header_label(self) -> None:
+        font_size = self.graph_editor.width() // 40
+        self.header_label_font.setPointSize(font_size)
+        self.header_label.setFont(self.header_label_font)
+        self.header_label.repaint()

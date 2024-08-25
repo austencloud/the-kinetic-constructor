@@ -422,7 +422,7 @@ Organized by total time:
         20        0.000080        0.000004             0.000291             0.000015 set_difficulty_level           sequence_widget\difficulty_label.py:17
          9        0.000079        0.000009             0.001092             0.000121 add_dash                       handlers\dash_handler.py:16
         18        0.000078        0.000004             0.001243             0.000069 resizeEvent                    dictionary_browser\dictionary_browser_section_header.py:20
-        10        0.000077        0.000008             0.001685             0.000169 resize_GE_ori_picker_box       start_pos_ori_picker_box\GE_start_pos_ori_picker_box.py:55
+        10        0.000077        0.000008             0.001685             0.000169 resize_GE_ori_picker_box       ori_picker_box\GE_start_pos_ori_picker_box.py:55
          8        0.000077        0.000010             0.001531             0.000191 add_header                     dictionary_browser\dictionary_browser_section_manager.py:22
          2        0.000077        0.000038             0.002801             0.001401 set_start_position_data        current_sequence_json_manager\json_start_position_handler.py:13
          7        0.000076        0.000011             1.277160             0.182451 <lambda>                       turns_widget\GE_turns_widget.py:72
@@ -537,7 +537,7 @@ Organized by total time:
         41        0.000023        0.000001             0.000023             0.000001 __init__                       handlers\dash_handler.py:12
         26        0.000023        0.000001             0.000031             0.000001 get_background_type            settings_manager\global_settings.py:48
          1        0.000023        0.000023             0.000024             0.000024 organize_letters               dictionary_initial_selections_widget\contains_letter_section.py:148
-         6        0.000023        0.000004             0.002501             0.000417 update_styled_border           start_pos_ori_picker_box\GE_start_pos_ori_picker_box.py:47
+         6        0.000023        0.000004             0.002501             0.000417 update_styled_border           ori_picker_box\GE_start_pos_ori_picker_box.py:47
          1        0.000023        0.000023             0.000971             0.000971 get_background_manager         settings_manager\global_settings.py:62
         27        0.000022        0.000001             0.000022             0.000001 __init__                       thumbnail_box\metadata_extractor.py:14
          1        0.000022        0.000022             0.000059             0.000059 __init__                       background_managers\background_manager.py:13
@@ -1070,7 +1070,7 @@ Organized by number of calls:
         10        0.000069        0.000007             0.000121             0.000012 _set_ori_label_font_size       ori_picker_widget\GE_start_pos_ori_picker_widget.py:73
         10        0.000106        0.000011             0.000145             0.000015 _set_button_size               ori_picker_widget\GE_start_pos_ori_picker_widget.py:150
         10        0.000044        0.000004             0.000066             0.000007 set_ori_display_font_size      ori_picker_widget\GE_ori_picker_display_manager.py:51
-        10        0.000077        0.000008             0.001685             0.000169 resize_GE_ori_picker_box       start_pos_ori_picker_box\GE_start_pos_ori_picker_box.py:55
+        10        0.000077        0.000008             0.001685             0.000169 resize_GE_ori_picker_box       ori_picker_box\GE_start_pos_ori_picker_box.py:55
         10        0.000051        0.000005             0.000092             0.000009 set_initial_orientation        ori_picker_widget\GE_start_pos_ori_picker_widget.py:157
          9        0.000048        0.000005             0.000080             0.000009 position_dash                  handlers\dash_handler.py:29
          9        0.000079        0.000009             0.001092             0.000121 add_dash                       handlers\dash_handler.py:16
@@ -1096,7 +1096,7 @@ Organized by number of calls:
          6        0.000025        0.000004             0.006616             0.001103 update_styled_border           turns_box\GE_turns_box.py:60
          6        0.000064        0.000011             0.033382             0.005564 resize_go_back_button          dictionary_initial_selections_widget\filter_section_base.py:153
          6        0.000134        0.000022             0.000134             0.000022 <genexpr>                      tka-sequence-constructor\word_simplifier.py:7
-         6        0.000023        0.000004             0.002501             0.000417 update_styled_border           start_pos_ori_picker_box\GE_start_pos_ori_picker_box.py:47
+         6        0.000023        0.000004             0.002501             0.000417 update_styled_border           ori_picker_box\GE_start_pos_ori_picker_box.py:47
          5        0.000044        0.000009             0.000052             0.000010 pictograph_dict                components\pictograph_getter.py:97
          5        0.000125        0.000025             0.041705             0.008341 configure_beat_frame           sequence_widget\SW_beat_frame_layout_manager.py:38
          5        0.000150        0.000030             0.041557             0.008311 rearrange_beats                sequence_widget\SW_beat_frame_layout_manager.py:52
@@ -1552,7 +1552,7 @@ Organized by cumulative time:
         48        0.001155        0.000024             0.002765             0.000058 enterEvent                     components\pictograph_view.py:133
        936        0.002134        0.000002             0.002743             0.000003 get_section                    option_picker\option_picker_section_manager.py:90
        176        0.001702        0.000010             0.002521             0.000014 _calculate_dash_location_based_on_shift calculators\dash_location_calculator.py:98
-         6        0.000023        0.000004             0.002501             0.000417 update_styled_border           start_pos_ori_picker_box\GE_start_pos_ori_picker_box.py:47
+         6        0.000023        0.000004             0.002501             0.000417 update_styled_border           ori_picker_box\GE_start_pos_ori_picker_box.py:47
         82        0.000503        0.000006             0.002424             0.000030 _create_motion                 components\pictograph_initializer.py:189
         41        0.000710        0.000017             0.002410             0.000059 __init__                       arrow_placement_manager\arrow_placement_manager.py:18
         41        0.000402        0.000010             0.002384             0.000058 init_arrows                    components\pictograph_initializer.py:78
@@ -1584,7 +1584,7 @@ Organized by cumulative time:
       1690        0.001742        0.000001             0.001742             0.000001 get_arrow_dict_from_pictograph_dict components\pictograph_updater.py:86
         41        0.000451        0.000011             0.001702             0.000042 __init__                       handlers\turns_column_handler.py:13
       1690        0.001689        0.000001             0.001689             0.000001 starts_from_standard_orientation components\pictograph_checker.py:150
-        10        0.000077        0.000008             0.001685             0.000169 resize_GE_ori_picker_box       start_pos_ori_picker_box\GE_start_pos_ori_picker_box.py:55
+        10        0.000077        0.000008             0.001685             0.000169 resize_GE_ori_picker_box       ori_picker_box\GE_start_pos_ori_picker_box.py:55
        458        0.001430        0.000003             0.001623             0.000004 <genexpr>                      dictionary_initial_selections_widget\contains_letter_section.py:97
         10        0.000256        0.000026             0.001608             0.000161 resize_GE_start_pos_ori_picker_widget ori_picker_widget\GE_start_pos_ori_picker_widget.py:144
       1668        0.001398        0.000001             0.001605             0.000001 switch_orientation             managers\motion_ori_calculator.py:37

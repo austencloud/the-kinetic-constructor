@@ -15,6 +15,7 @@ class GE_DirectSetDialog(QDialog):
         )
         self.turns_widget = turns_widget
         self.turns_box = turns_widget.turns_box
+        self.turns_display_frame = turns_widget.turns_display_frame
         self.buttons: dict[str, GE_DirectSetTurnsButton] = {}
         self._set_dialog_style()
         self._setup_buttons()
@@ -48,6 +49,20 @@ class GE_DirectSetDialog(QDialog):
             self.layout.addWidget(button)
         self.adjustSize()
 
+    def show_direct_set_dialog(self) -> None:
+        self.resize_direct_set_buttons()
+        turns_label_rect = self.turns_display_frame.turns_label.geometry()
+        global_turns_label_pos = self.turns_display_frame.turns_label.mapToGlobal(
+            self.turns_display_frame.turns_label.pos()
+        )
+        dialog_width = self.width()
+        dialog_x = (
+            global_turns_label_pos.x() + (turns_label_rect.width() - dialog_width) / 2
+        )
+        dialog_y = global_turns_label_pos.y() + turns_label_rect.height()
+        self.move(int(dialog_x), int(dialog_y))
+        self.exec()
+
     def resize_direct_set_buttons(self) -> None:
         for button in self.buttons.values():
             button.set_button_styles()
@@ -57,3 +72,4 @@ class GE_DirectSetDialog(QDialog):
     def select_turns(self, value):
         self.turns_widget.adjustment_manager.direct_set_turns(value)
         self.accept()
+

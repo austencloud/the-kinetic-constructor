@@ -21,7 +21,7 @@ from widgets.factories.button_factory.buttons.rot_dir_buttons import (
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.turns_box.GE_turns_box import GE_TurnsBox
+    from widgets.graph_editor.adjustment_panel.turns_box.GE_turns_box import GE_TurnsBox
     from objects.motion.motion import Motion
 
 
@@ -62,7 +62,7 @@ class GE_PropRotDirButtonManager:
         self._update_button_states(self.prop_rot_dir_buttons, prop_rot_dir)
 
     def _update_pictographs_prop_rot_dir(self, prop_rot_dir: PropRotDir) -> None:
-        pictograph = self.turns_box.graph_editor.GE_pictograph
+        pictograph = self.turns_box.graph_editor.pictograph_container.GE_pictograph
         for motion in pictograph.motions.values():
             if motion.motion_type in [DASH, STATIC]:
                 if motion.color == self.turns_box.color:

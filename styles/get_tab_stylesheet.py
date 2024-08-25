@@ -6,7 +6,7 @@ def get_tab_stylesheet() -> str:
         GE_TurnsBox {
             background-color: white;
         }
-        GE_StartPosOriPickerBox {
+        GE_OriPickerBox {
             background-color: white;
         }
         QTabWidget::tab-bar:top {

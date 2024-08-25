@@ -28,7 +28,6 @@ class GE_TurnsBox(QFrame):
         color: str,
     ) -> None:
         super().__init__(adjustment_panel)
-        self.setObjectName("GE_TurnsBox")
         self.adjustment_panel = adjustment_panel
         self.color = color
         self.pictograph = pictograph
@@ -50,27 +49,17 @@ class GE_TurnsBox(QFrame):
         self.turns_widget = GE_TurnsWidget(self)
 
     def _setup_layout(self) -> None:
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.setContentsMargins(0, 0, 0, 0)
-
-        self.layout.addWidget(self.header)
-        self.layout.addWidget(self.turns_widget)
-        self.setLayout(self.layout)
+        layout: QVBoxLayout = QVBoxLayout(self)
+        layout.addWidget(self.header, 1)
+        layout.addWidget(self.turns_widget, 5)
+        self.setLayout(layout)
 
     def update_styled_border(self) -> None:
+        self.setObjectName(self.__class__.__name__)
         self.setStyleSheet(
             f"#GE_TurnsBox {{ border: {self.border_width}px solid {self.color};}}"
         )
 
     def resize_GE_turns_box(self) -> None:
-        self.setMaximumWidth(
-            int(
-                (
-                    self.graph_editor.width()
-                    - self.graph_editor.pictograph_container.GE_pictograph_view.width()
-                )
-                / 2
-            )
-        )
-        self.header.resize_GE_turns_box_header()
-        self.turns_widget.resize_GE_turns_widget()
+        self.header.resize_turns_box_header()
+        self.turns_widget.resize_turns_widget()
