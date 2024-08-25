@@ -60,16 +60,7 @@ class StartingLetterSection(FilterSectionBase):
                     20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
                 )
             )
-        # add a button to show all sequences
-        show_all_button_hbox = QHBoxLayout()
-        show_all_button_hbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.show_all_button = QPushButton("Show all")
-        self.show_all_button.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.show_all_button.clicked.connect(
-            lambda: self.initial_selection_widget.on_letter_button_clicked("Show all")
-        )
-        show_all_button_hbox.addWidget(self.show_all_button)
-        layout.addLayout(show_all_button_hbox)
+
         layout.addStretch(1)
         self.resize_starting_letter_section()
 
@@ -160,11 +151,7 @@ class StartingLetterSection(FilterSectionBase):
     def resize_buttons(self):
         for button in self.buttons.values():
             font = button.font()
-            font.setPointSize(self.browser.width() // 120)
+            font.setPointSize(self.browser.width() // 100)
             button.setFont(font)
-            button.setFixedHeight(self.browser.height() // 24)
-            button.setFixedWidth(self.browser.width() // 24)
-        self.show_all_button.setFixedWidth(self.browser.width() // 6)
-        show_all_button_font = self.show_all_button.font()
-        show_all_button_font.setPointSize(self.browser.width() // 100)
-        self.show_all_button.setFont(show_all_button_font)
+            button.setFixedHeight(self.browser.height() // 20)
+            button.setFixedWidth(self.browser.width() // 20)

@@ -1,27 +1,28 @@
 {
     "global": {
-        "prop_type": "Staff",
+        "prop_type": "Hand",
         "background_type": "Aurora",
         "grow_sequence": true,
         "current_tab": "dictionary"
     },
     "image_export": {
         "include_start_position": false,
-        "add_info": true,
+        "add_info": false,
         "open_directory_on_export": true,
-        "add_word": true,
+        "add_word": false,
         "add_difficulty_level": true,
-        "add_beat_numbers": true
+        "add_beat_numbers": false
     },
     "user_profile": {
-        "current_user": "Austen Cloud",
+        "current_user": "Doc Womp",
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
                 "export_date": "8-25-2024"
             },
             "Doc Womp": {
-                "name": "Doc Womp"
+                "name": "Doc Womp",
+                "export_date": "8-25-2024"
             }
         },
         "current_note": "Created using The Kinetic Alphabet",
@@ -37,10 +38,10 @@
             "EndPosition": false
         },
         "grid_visibility": {
-            "non_radial_points": true
+            "non_radial_points": false
         }
     },
     "dictionary": {
-        "sort_method": "date_added"
+        "sort_method": "sequence_length"
     }
 }

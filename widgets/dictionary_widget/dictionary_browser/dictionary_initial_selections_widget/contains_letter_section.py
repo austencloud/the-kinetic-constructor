@@ -194,10 +194,10 @@ class ContainsLetterSection(FilterSectionBase):
     def resize_buttons(self):
         for button in self.buttons.values():
             font = button.font()
-            font.setPointSize(self.browser.width() // 120)
+            font.setPointSize(self.browser.width() // 100)
             button.setFont(font)
-            button.setFixedHeight(self.browser.height() // 24)
-            button.setFixedWidth(self.browser.width() // 24)
+            button.setFixedHeight(self.browser.height() // 20)
+            button.setFixedWidth(self.browser.width() // 20)
         self.apply_button.setFixedWidth(self.browser.width() // 6)
         apply_button_font = self.apply_button.font()
         apply_button_font.setPointSize(self.browser.width() // 100)

@@ -8,8 +8,8 @@ from PyQt6.QtWidgets import (
     QSpacerItem,
     QSizePolicy,
 )
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtCore import Qt, QEvent
+from PyQt6.QtGui import QPixmap, QCursor, QPainter, QPen
 
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from .filter_section_base import FilterSectionBase
@@ -82,6 +82,13 @@ class LevelSection(FilterSectionBase):
             if os.path.exists(image_path):
                 pixmap = QPixmap(image_path)
                 image_placeholder.setPixmap(pixmap)
+                # Make the image clickable
+                image_placeholder.setCursor(Qt.CursorShape.PointingHandCursor)
+                image_placeholder.mousePressEvent = lambda event, l=level: self.initial_selection_widget.on_level_button_clicked(
+                    l
+                )
+                # Install event filter for hover effect
+                image_placeholder.installEventFilter(self)
             else:
                 image_placeholder.setText("No Image Available")
 
@@ -102,6 +109,7 @@ class LevelSection(FilterSectionBase):
         layout.addStretch(1)
         self.resize_level_section()
 
+
     def display_only_thumbnails_with_level(self, level: str):
         self._prepare_ui_for_filtering(f"level {level} sequences")
 
@@ -115,6 +123,14 @@ class LevelSection(FilterSectionBase):
             )
 
         self._update_and_display_ui("level", total_sequences, level)
+
+    def get_sequence_length_from_thumbnails(self, thumbnails):
+        """Extract the sequence length from the first available thumbnail metadata."""
+        for thumbnail in thumbnails:
+            length = self.metadata_extractor.get_sequence_length(thumbnail)
+            if length:
+                return length
+        return None
 
     def get_sequences_that_are_a_specific_level(self, level: str):
         dictionary_dir = get_images_and_data_path("dictionary")
@@ -147,18 +163,49 @@ class LevelSection(FilterSectionBase):
                 return level
         return None
 
-    def get_sequence_length_from_thumbnails(self, thumbnails):
-        """Extract the sequence length from the first available thumbnail metadata."""
-        for thumbnail in thumbnails:
-            length = self.metadata_extractor.get_sequence_length(thumbnail)
-            if length:
-                return length
-        return None
+    def eventFilter(self, source, event):
+        if isinstance(source, QLabel):
+            if event.type() == QEvent.Type.Enter:
+                # Save the original pixmap before modifying it
+                self.original_pixmap = source.pixmap()
+                if self.original_pixmap:
+                    # Add a thicker gold border to the pixmap (e.g., 4 pixels)
+                    bordered_pixmap = self.add_border_to_pixmap(self.original_pixmap, 4, Qt.GlobalColor.yellow)
+                    source.setPixmap(bordered_pixmap)
+            elif event.type() == QEvent.Type.Leave:
+                # Reset to the original pixmap without the border
+                if hasattr(self, 'original_pixmap') and self.original_pixmap:
+                    source.setPixmap(self.original_pixmap)
+        return super().eventFilter(source, event)
+
+    def add_border_to_pixmap(self, pixmap, border_width, border_color):
+        """Add a thicker border around the pixmap."""
+        bordered_pixmap = QPixmap(pixmap.size())  # Create a new pixmap with the same size
+        bordered_pixmap.fill(Qt.GlobalColor.transparent)  # Ensure the background is transparent
+        painter = QPainter(bordered_pixmap)
+        painter.drawPixmap(0, 0, pixmap)  # Draw the original pixmap onto the new pixmap
+
+        # Set up the pen with the desired border color and width
+        pen = QPen(border_color)
+        pen.setWidth(border_width)
+        painter.setPen(pen)
+
+        # Draw the border around the pixmap, inset to ensure it stays within bounds
+        painter.drawRect(border_width // 2, border_width // 2,
+                         bordered_pixmap.width() - border_width,
+                         bordered_pixmap.height() - border_width)
+        painter.end()
+        return bordered_pixmap
+
+    def remove_border_from_pixmap(self, pixmap):
+        """Remove the border by restoring the original pixmap."""
+        # Assuming you have stored the original pixmap somewhere
+        # For simplicity, you can maintain a dictionary with QLabel as key and original QPixmap as value
+        return pixmap  # Replace with the stored original pixmap if available
 
     def scale_images(self):
-        for level_image in self.level_images:
-            image = self.level_images[level_image]
-            pixmap = image.pixmap()
+        for level_image in self.level_images.values():
+            pixmap = level_image.pixmap()
             if pixmap:
                 size = self.browser.width() // 6
                 scaled_pixmap = pixmap.scaled(
@@ -167,7 +214,7 @@ class LevelSection(FilterSectionBase):
                     Qt.AspectRatioMode.KeepAspectRatio,  # Maintain aspect ratio
                     Qt.TransformationMode.SmoothTransformation,  # Smooth scaling
                 )
-                image.setPixmap(scaled_pixmap)
+                level_image.setPixmap(scaled_pixmap)
 
     def resize_level_section(self):
         self.scale_images()

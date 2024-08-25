@@ -149,7 +149,7 @@ class FilterChoiceWidget(QWidget):
         return self.browser.current_filter
 
     def resize_filter_choice_widget(self):
-        self.setMinimumWidth(self.main_widget.width())
+        self.setMinimumWidth(int(self.main_widget.width() * 0.95))
         self._resize_buttons_labels()
         self._resize_buttons()
         self._resize_description_label()

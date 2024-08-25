@@ -85,13 +85,13 @@ class SwapBetaHandler:
     def _handle_type6_swap(self) -> None:
         red_direction = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
         blue_direction = self.ppm.dir_calculator.get_dir(self.pictograph.blue_motion)
-
-        self._swap_props(
-            self.pictograph.red_prop,
-            self.pictograph.blue_prop,
-            blue_direction,
-            red_direction,
-        )
+        if self.pictograph.red_motion.prop.prop_type != PropType.Hand:
+            self._swap_props(
+                self.pictograph.red_prop,
+                self.pictograph.blue_prop,
+                blue_direction,
+                red_direction,
+            )
 
     def _handle_type2_swap(self) -> None:
         shift = self.pictograph.get.shift()
