@@ -32,7 +32,6 @@ class GE_AdjustmentPanel(QFrame):
 
     def update_turns_displays(self, blue_turns: int, red_turns: int) -> None:
         self.blue_turns_box.turns_widget.update_turns_display(blue_turns)
-
         self.red_turns_box.turns_widget.update_turns_display(red_turns)
 
     def _setup_placeholder_widget(self) -> None:
@@ -53,17 +52,17 @@ class GE_AdjustmentPanel(QFrame):
             self.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
         )
         if pictograph.is_blank:
-            self.show_placeholder_widget()
+            self.placeholder_widget.show()
             self.hide_start_pos_ori_pickers()
             self.hide_turns_boxes()
 
         elif self.graph_editor.pictograph_container.GE_pictograph_view.is_start_pos:
-            self.hide_placeholder_widget()
+            self.placeholder_widget.hide()
             self.hide_turns_boxes()
             self.show_start_pos_ori_pickers()
 
         else:
-            self.hide_placeholder_widget()
+            self.placeholder_widget.hide()
             self.hide_start_pos_ori_pickers()
             self.show_turns_boxes()
 
@@ -71,32 +70,19 @@ class GE_AdjustmentPanel(QFrame):
 
     def hide_start_pos_ori_pickers(self) -> None:
         for picker in self.ori_picker_boxes:
-            if picker.isVisible():
-                picker.hide()
+            picker.hide()
 
     def hide_turns_boxes(self) -> None:
         for turns_box in self.turns_boxes:
-            if turns_box.isVisible():
-                turns_box.hide()
-
-    def show_placeholder_widget(self) -> None:
-        if not self.placeholder_widget.isVisible():
-            self.placeholder_widget.show()
-
-    def hide_placeholder_widget(self) -> None:
-        self.placeholder_widget.hide()
+            turns_box.hide()
 
     def show_start_pos_ori_pickers(self) -> None:
-        for picker in self.ori_picker_boxes:
-            if not picker.isVisible():
-                picker.show()
-                picker.update_styles()
+        for ori_picker_box in self.ori_picker_boxes:
+            ori_picker_box.show()
 
     def show_turns_boxes(self) -> None:
         for turns_box in self.turns_boxes:
-            if not turns_box.isVisible():
-                turns_box.show()
-                turns_box.update_styles()
+            turns_box.show()
 
     def update_turns_panel(self, blue_turns: int, red_turns: int) -> None:
         self.update_turns_displays(blue_turns, red_turns)

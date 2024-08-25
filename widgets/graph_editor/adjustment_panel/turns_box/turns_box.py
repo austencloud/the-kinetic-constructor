@@ -64,3 +64,4 @@ class TurnsBox(QFrame):
     def resize_turns_box(self) -> None:
         self.header.resize_header()
         self.turns_widget.resize_turns_widget()
+        self.update_styles()

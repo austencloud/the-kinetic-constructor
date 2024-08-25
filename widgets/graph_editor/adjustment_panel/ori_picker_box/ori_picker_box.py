@@ -53,3 +53,4 @@ class OriPickerBox(QFrame):
     def resize_ori_picker_box(self) -> None:
         self.header.resize_header()
         self.ori_picker_widget.resize_ori_picker_widget()
+        self.update_styles()

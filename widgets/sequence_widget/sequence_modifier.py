@@ -23,9 +23,9 @@ class SequenceModifier(QTabWidget):
     def resize_sequence_modifier(self) -> None:
 
         if self.sequence_widget.beat_frame.selection_manager.selected_beat:
-            self.graph_editor.adjustment_panel.hide_placeholder_widget()
+            self.graph_editor.adjustment_panel.placeholder_widget.hide()
         else:
-            self.graph_editor.adjustment_panel.show_placeholder_widget()
+            self.graph_editor.adjustment_panel.placeholder_widget.show()
 
         self.graph_editor.resize_graph_editor()
         self.graph_editor.adjustment_panel.update_adjustment_panel()
