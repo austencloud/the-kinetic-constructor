@@ -24,16 +24,13 @@ class GraphEditor(QFrame):
     def _setup_layout(self) -> None:
         self.pictograph_layout = self._setup_pictograph_layout()
         self.adjustment_panel_layout = self._setup_adjustment_panel_layout()
+        
+        layout: QHBoxLayout = QHBoxLayout(self)
+        layout.setSpacing(0)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addLayout(self.pictograph_layout)
+        layout.addLayout(self.adjustment_panel_layout)
 
-        self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.layout.setSpacing(0)
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
-
-        self.layout.addLayout(self.pictograph_layout)
-        self.layout.addLayout(self.adjustment_panel_layout)
-
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
     def _setup_pictograph_layout(self) -> None:
         pictograph_layout = QVBoxLayout()

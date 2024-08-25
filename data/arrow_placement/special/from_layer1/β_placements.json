@@ -256,6 +256,9 @@
     "(s, 3, 0.5)": {
       "blue": [0, 0],
       "blue_rot_angle": 0
+    },
+    "(0, 0)": {
+      "swap_beta_s_radial_blue_static_s_red_static_s": true
     }
   }
 }

@@ -17,6 +17,7 @@ if TYPE_CHECKING:
 class GE_AdjustmentPanel(QFrame):
     def __init__(self, graph_editor: "GraphEditor") -> None:
         self.graph_editor = graph_editor
+        self.GE_pictograph = graph_editor.pictograph_container.GE_pictograph
         super().__init__(graph_editor)
         self.setup_layouts()
 
@@ -40,20 +41,16 @@ class GE_AdjustmentPanel(QFrame):
         self.placeholder_widget = GE_PlaceHolderTextLabel(self)
 
     def _setup_turns_boxes(self) -> None:
-        self.blue_turns_box: GE_TurnsBox = GE_TurnsBox(
-            self, self.graph_editor.pictograph_container.GE_pictograph, BLUE
-        )
-        self.red_turns_box: GE_TurnsBox = GE_TurnsBox(
-            self, self.graph_editor.pictograph_container.GE_pictograph, RED
-        )
+        self.blue_turns_box: GE_TurnsBox = GE_TurnsBox(self, self.GE_pictograph, BLUE)
+        self.red_turns_box: GE_TurnsBox = GE_TurnsBox(self, self.GE_pictograph, RED)
         self.turns_boxes = [self.blue_turns_box, self.red_turns_box]
 
     def _setup_start_pos_ori_pickers(self) -> None:
         self.blue_start_pos_ori_picker = GE_StartPosOriPickerBox(
-            self, self.graph_editor.pictograph_container.GE_pictograph, BLUE
+            self, self.GE_pictograph, BLUE
         )
         self.red_start_pos_ori_picker = GE_StartPosOriPickerBox(
-            self, self.graph_editor.pictograph_container.GE_pictograph, RED
+            self, self.GE_pictograph, RED
         )
         self.start_pos_ori_pickers = [
             self.blue_start_pos_ori_picker,
@@ -69,11 +66,13 @@ class GE_AdjustmentPanel(QFrame):
             self.hide_start_pos_ori_pickers()
             self.hide_turns_boxes()
             QApplication.processEvents()
+
         elif self.graph_editor.pictograph_container.GE_pictograph_view.is_start_pos:
             self.hide_placeholder_widget()
             self.hide_turns_boxes()
             self.show_start_pos_ori_pickers()
             QApplication.processEvents()
+
         else:
             self.hide_placeholder_widget()
             self.hide_start_pos_ori_pickers()
