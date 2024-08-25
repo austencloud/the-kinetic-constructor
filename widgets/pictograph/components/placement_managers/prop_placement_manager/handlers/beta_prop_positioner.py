@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from Enums.PropTypes import PropType
 from objects.prop.prop import Prop
 from .big_prop_positioner import BigPropPositioner
 from .prop_classifier import PropClassifier

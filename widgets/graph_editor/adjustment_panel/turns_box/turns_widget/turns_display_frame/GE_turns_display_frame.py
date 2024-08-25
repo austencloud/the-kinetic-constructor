@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
-from PyQt6.QtCore import Qt
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 
 from .GE_adjust_turns_button import GE_AdjustTurnsButton
 from .GE_turns_label import GE_TurnsLabel

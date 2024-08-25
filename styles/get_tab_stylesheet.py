@@ -3,12 +3,6 @@ def get_tab_stylesheet() -> str:
         QTabWidget::pane {
             border: none; /* Remove the border */
         }
-        GE_TurnsBox {
-            background-color: white;
-        }
-        GE_OriPickerBox {
-            background-color: white;
-        }
         QTabWidget::tab-bar:top {
             top: 1px;
         }

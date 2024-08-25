@@ -28,7 +28,6 @@ from widgets.scroll_area.components.pictograph_key_generator import (
     PictographKeyGenerator,
 )
 from data.constants import DIAMOND
-from widgets.sequence_recorder.sequence_recorder import SequenceRecorder
 from widgets.sequence_widget.sequence_properties_manager.sequence_properties_manager import (
     SequencePropertiesManager,
 )

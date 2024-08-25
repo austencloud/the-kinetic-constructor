@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QPainter
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
-from PyQt6.QtCore import Qt
 
 from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (
     DictionaryBrowser,

@@ -1,14 +1,8 @@
 from typing import TYPE_CHECKING
 from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
-
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
-
-from widgets.graph_editor.ori_picker_box.ori_picker_widget.GE_ori_picker_widget import (
-    GE_OriPickerWidget,
-)
-
-
-from .GE_ori_picker_header import GE_OriPickerHeader
+from .ori_picker_widget.GE_ori_picker_widget import GE_OriPickerWidget
+from .ori_picker_header import GE_OriPickerHeader
 
 if TYPE_CHECKING:
     from widgets.graph_editor.adjustment_panel.GE_adjustment_panel import (
@@ -17,7 +11,7 @@ if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
 
 
-class GE_OriPickerBox(QFrame):
+class OriPickerBox(QFrame):
     def __init__(
         self,
         adjustment_panel: "GE_AdjustmentPanel",
@@ -50,12 +44,12 @@ class GE_OriPickerBox(QFrame):
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
 
-    def update_styled_border(self) -> None:
+    def update_styles(self) -> None:
         self.setObjectName(self.__class__.__name__)
         self.setStyleSheet(
-            f"#GE_OriPickerBox {{ border: {self.border_width}px solid {self.color}; }}"
+            f"#{self.__class__.__name__} {{ border: {self.border_width}px solid {self.color}; background-color: white;}}"
         )
 
     def resize_ori_picker_box(self) -> None:
-        self.header.resize_ori_picker_header()
+        self.header.resize_header()
         self.ori_picker_widget.resize_ori_picker_widget()

@@ -6,13 +6,13 @@ from .GE_ori_picker_display_frame import GE_OriPickerDisplayFrame
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..GE_ori_picker_box import GE_OriPickerBox
+    from ..ori_picker_box import OriPickerBox
 
 
 class GE_OriPickerWidget(QWidget):
     ori_adjusted = pyqtSignal(str)
 
-    def __init__(self, ori_picker_box: "GE_OriPickerBox") -> None:
+    def __init__(self, ori_picker_box: "OriPickerBox") -> None:
         super().__init__()
         self.ori_picker_box = ori_picker_box
         self.color = self.ori_picker_box.color

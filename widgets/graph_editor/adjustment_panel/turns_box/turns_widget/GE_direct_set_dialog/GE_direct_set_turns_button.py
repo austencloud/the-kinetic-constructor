@@ -7,9 +7,6 @@ from data.constants import BLUE, HEX_BLUE, HEX_RED
 
 if TYPE_CHECKING:
     from widgets.graph_editor.adjustment_panel.turns_box.turns_widget.GE_direct_set_dialog.GE_direct_set_dialog import GE_DirectSetDialog
-    from widgets.graph_editor.adjustment_panel.turns_box.turns_widget.GE_turns_widget import (
-        GE_TurnsWidget,
-    )
 
 
 class GE_DirectSetTurnsButton(QPushButton):

@@ -7,7 +7,6 @@ from data.constants import BLUE, RED
 
 if TYPE_CHECKING:
     from widgets.graph_editor.adjustment_panel.turns_box.turns_widget.turns_display_frame.GE_turns_display_frame import GE_TurnsDisplayFrame
-    from ..GE_turns_widget import GE_TurnsWidget
 
 
 class GE_TurnsLabel(QLabel):

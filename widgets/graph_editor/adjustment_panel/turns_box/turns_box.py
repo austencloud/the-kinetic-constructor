@@ -1,15 +1,15 @@
 from typing import TYPE_CHECKING
 
 from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
-from widgets.graph_editor.adjustment_panel.turns_box.GE_prop_rot_dir_button_manager import (
-    GE_PropRotDirButtonManager,
+from widgets.graph_editor.adjustment_panel.turns_box.prop_rot_dir_button_manager import (
+    PropRotDirButtonManager,
 )
-from widgets.graph_editor.adjustment_panel.turns_box.GE_vtg_dir_button_handler import (
-    GE_VtgDirButtonManager,
+from widgets.graph_editor.adjustment_panel.turns_box.vtg_dir_button_handler import (
+    VtgDirButtonManager,
 )
 
 
-from .GE_turns_box_header import GE_TurnsBoxHeader
+from .turns_box_header import TurnsBoxHeader
 from .turns_widget.GE_turns_widget import GE_TurnsWidget
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     )
 
 
-class GE_TurnsBox(QFrame):
+class TurnsBox(QFrame):
     def __init__(
         self,
         adjustment_panel: "GE_AdjustmentPanel",
@@ -43,9 +43,9 @@ class GE_TurnsBox(QFrame):
         self._setup_layout()
 
     def _setup_widgets(self) -> None:
-        self.vtg_dir_button_manager = GE_VtgDirButtonManager(self)
-        self.prop_rot_dir_button_manager = GE_PropRotDirButtonManager(self)
-        self.header = GE_TurnsBoxHeader(self)
+        self.vtg_dir_button_manager = VtgDirButtonManager(self)
+        self.prop_rot_dir_button_manager = PropRotDirButtonManager(self)
+        self.header = TurnsBoxHeader(self)
         self.turns_widget = GE_TurnsWidget(self)
 
     def _setup_layout(self) -> None:
@@ -55,12 +55,12 @@ class GE_TurnsBox(QFrame):
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
 
-    def update_styled_border(self) -> None:
+    def update_styles(self) -> None:
         self.setObjectName(self.__class__.__name__)
         self.setStyleSheet(
-            f"#GE_TurnsBox {{ border: {self.border_width}px solid {self.color};}}"
+            f"#{self.__class__.__name__} {{ border: {self.border_width}px solid {self.color}; background-color: white;}}"
         )
 
     def resize_turns_box(self) -> None:
-        self.header.resize_turns_box_header()
+        self.header.resize_header()
         self.turns_widget.resize_turns_widget()

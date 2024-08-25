@@ -1,14 +1,10 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
+from PyQt6.QtWidgets import QFrame, QHBoxLayout
 from data.constants import BLUE, RED
-from widgets.graph_editor.adjustment_panel.GE_placeholder_text_label import (
-    GE_PlaceHolderTextLabel,
-)
+from .GE_placeholder_text_label import GE_PlaceHolderTextLabel
 
-from widgets.graph_editor.adjustment_panel.turns_box.GE_turns_box import GE_TurnsBox
-from widgets.graph_editor.ori_picker_box.GE_ori_picker_box import (
-    GE_OriPickerBox,
-)
+from .ori_picker_box.ori_picker_box import OriPickerBox
+from .turns_box.turns_box import TurnsBox
 
 
 if TYPE_CHECKING:
@@ -43,13 +39,13 @@ class GE_AdjustmentPanel(QFrame):
         self.placeholder_widget = GE_PlaceHolderTextLabel(self)
 
     def _setup_turns_boxes(self) -> None:
-        self.blue_turns_box: GE_TurnsBox = GE_TurnsBox(self, self.GE_pictograph, BLUE)
-        self.red_turns_box: GE_TurnsBox = GE_TurnsBox(self, self.GE_pictograph, RED)
+        self.blue_turns_box: TurnsBox = TurnsBox(self, self.GE_pictograph, BLUE)
+        self.red_turns_box: TurnsBox = TurnsBox(self, self.GE_pictograph, RED)
         self.turns_boxes = [self.blue_turns_box, self.red_turns_box]
 
     def _setup_start_pos_ori_pickers(self) -> None:
-        self.blue_ori_picker = GE_OriPickerBox(self, self.GE_pictograph, BLUE)
-        self.red_ori_picker = GE_OriPickerBox(self, self.GE_pictograph, RED)
+        self.blue_ori_picker = OriPickerBox(self, self.GE_pictograph, BLUE)
+        self.red_ori_picker = OriPickerBox(self, self.GE_pictograph, RED)
         self.ori_picker_boxes = [self.blue_ori_picker, self.red_ori_picker]
 
     def update_adjustment_panel(self) -> None:
@@ -94,13 +90,13 @@ class GE_AdjustmentPanel(QFrame):
         for picker in self.ori_picker_boxes:
             if not picker.isVisible():
                 picker.show()
-                picker.update_styled_border()
+                picker.update_styles()
 
     def show_turns_boxes(self) -> None:
         for turns_box in self.turns_boxes:
             if not turns_box.isVisible():
                 turns_box.show()
-                turns_box.update_styled_border()
+                turns_box.update_styles()
 
     def update_turns_panel(self, blue_turns: int, red_turns: int) -> None:
         self.update_turns_displays(blue_turns, red_turns)

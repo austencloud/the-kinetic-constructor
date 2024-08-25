@@ -8,7 +8,7 @@ from widgets.sequence_widget.SW_beat_frame.start_pos_beat import (
 )
 from ....pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QApplication, QWidget
+from PyQt6.QtWidgets import QWidget
 
 if TYPE_CHECKING:
     from .start_pos_picker import StartPosPicker

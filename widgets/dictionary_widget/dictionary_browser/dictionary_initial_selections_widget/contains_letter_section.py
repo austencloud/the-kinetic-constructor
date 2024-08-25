@@ -6,13 +6,9 @@ from PyQt6.QtWidgets import (
     QSizePolicy,
     QSpacerItem,
     QApplication,
-    QProgressBar,
 )
 from PyQt6.QtCore import Qt, QTimer
 
-from widgets.dictionary_widget.dictionary_browser.rainbow_progress_bar import (
-    RainbowProgressBar,
-)
 
 from .filter_section_base import FilterSectionBase
 

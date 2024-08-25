@@ -7,30 +7,15 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
 )
 from PyQt6.QtCore import Qt, QSize, QPoint, pyqtSignal
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QFont
 from typing import TYPE_CHECKING
-
-from widgets.graph_editor.ori_picker_box.ori_picker_widget.GE_orientation_selection_dialog import (
-    GE_OrientationSelectionDialog,
-)
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from widgets.pictograph.pictograph import Pictograph
-
-if TYPE_CHECKING:
-    from widgets.graph_editor.ori_picker_box.ori_picker_widget.GE_ori_picker_widget import (
-        GE_OriPickerWidget,
-    )
 from data.constants import IN, COUNTER, ORI, OUT, CLOCK
-from typing import TYPE_CHECKING
-from PyQt6.QtGui import QFont
-from PyQt6.QtCore import Qt
-
 from data.constants import BLUE, RED
+from .GE_orientation_selection_dialog import GE_OrientationSelectionDialog
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.ori_picker_box.ori_picker_widget.GE_ori_picker_display_frame import (
-        GE_OriPickerDisplayFrame,
-    )
     from .GE_ori_picker_widget import GE_OriPickerWidget
 
 

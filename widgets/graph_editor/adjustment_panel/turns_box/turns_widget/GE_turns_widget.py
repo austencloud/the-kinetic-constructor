@@ -12,11 +12,11 @@ from .GE_turns_updater import GE_TurnsUpdater
 
 
 if TYPE_CHECKING:
-    from ..GE_turns_box import GE_TurnsBox
+    from ..turns_box import TurnsBox
 
 
 class GE_TurnsWidget(QWidget):
-    def __init__(self, turns_box: "GE_TurnsBox") -> None:
+    def __init__(self, turns_box: "TurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box
         self._setup_components()

@@ -9,11 +9,8 @@ from data.constants import (
     PROP_ROT_DIR,
     STATIC,
 )
-from Enums.MotionAttributes import (
-    PropRotDir,
-)
+from Enums.MotionAttributes import PropRotDir
 from PyQt6.QtCore import QSize
-
 
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from widgets.factories.button_factory.buttons.rot_dir_buttons import (
@@ -21,12 +18,12 @@ from widgets.factories.button_factory.buttons.rot_dir_buttons import (
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.adjustment_panel.turns_box.GE_turns_box import GE_TurnsBox
+    from widgets.graph_editor.adjustment_panel.turns_box.turns_box import TurnsBox
     from objects.motion.motion import Motion
 
 
-class GE_PropRotDirButtonManager:
-    def __init__(self, turns_box: "GE_TurnsBox") -> None:
+class PropRotDirButtonManager:
+    def __init__(self, turns_box: "TurnsBox") -> None:
         self.turns_box = turns_box
         self.previous_turns = 0
         self.prop_rot_dir_buttons = self._setup_prop_rot_dir_buttons()

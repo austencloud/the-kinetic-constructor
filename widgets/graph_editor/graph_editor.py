@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QSizePolicy
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 from .adjustment_panel.GE_adjustment_panel import GE_AdjustmentPanel
 from .pictograph_container.GE_pictograph_container import GE_PictographContainer
 

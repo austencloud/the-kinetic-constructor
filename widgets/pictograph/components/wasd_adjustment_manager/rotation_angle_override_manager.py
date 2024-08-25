@@ -5,7 +5,6 @@ from objects.arrow.arrow import Arrow
 from widgets.pictograph.components.wasd_adjustment_manager.rotation_angle_override_key_generator import (
     RotationAngleOverrideKeyGenerator,
 )
-from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph

@@ -6,7 +6,7 @@ from .GE_direct_set_turns_button import GE_DirectSetTurnsButton
 
 if TYPE_CHECKING:
     from ..GE_turns_widget import GE_TurnsWidget
-from PyQt6.QtWidgets import QHBoxLayout, QPushButton, QFrame
+from PyQt6.QtWidgets import QHBoxLayout
 
 class GE_DirectSetDialog(QDialog):
     def __init__(self, turns_widget: "GE_TurnsWidget") -> None:

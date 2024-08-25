@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from .currently_displaying_indicator_label import CurrentlyDisplayingIndicatorLabel
 from .dictionary_browser_nav_sidebar import DictionaryBrowserNavSidebar
-from PyQt6.QtCore import QTimer, Qt
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtGui import QFont

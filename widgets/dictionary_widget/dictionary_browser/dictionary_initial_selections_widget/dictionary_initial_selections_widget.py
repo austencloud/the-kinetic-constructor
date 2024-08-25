@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
+from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
 
 from widgets.dictionary_widget.dictionary_browser.dictionary_initial_selections_widget.author_section import (

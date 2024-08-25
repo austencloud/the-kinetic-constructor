@@ -4,8 +4,6 @@ from typing import TYPE_CHECKING
 from widgets.dictionary_widget.thumbnail_box.thumbnail_box import ThumbnailBox
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from PyQt6.QtWidgets import QApplication
-from PyQt6.QtCore import Qt
-from .currently_displaying_indicator_label import CurrentlyDisplayingIndicatorLabel
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_browser.dictionary_browser import (

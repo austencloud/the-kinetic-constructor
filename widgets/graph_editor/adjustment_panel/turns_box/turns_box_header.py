@@ -1,37 +1,23 @@
 from PyQt6.QtWidgets import (
-    QHBoxLayout,
-    QLabel,
-    QWidget,
-    QFrame,
-    QHBoxLayout,
-    QVBoxLayout,
     QApplication,
 )
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont, QColor
 from typing import TYPE_CHECKING
 
 from Enums.letters import LetterType
-from data.constants import BLUE, CLOCKWISE, COUNTER_CLOCKWISE, RED
-from widgets.factories.button_factory.buttons.letterbook_adjust_turns_button import (
-    AdjustTurnsButton,
-)
+from data.constants import CLOCKWISE, COUNTER_CLOCKWISE
+from ..base_adjustment_box_header_widget import BaseAdjustmentBoxHeaderWidget
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.adjustment_panel.turns_box.GE_turns_box import GE_TurnsBox
+    from widgets.graph_editor.adjustment_panel.turns_box.turns_box import TurnsBox
 
 
-class GE_TurnsBoxHeader(QWidget):
-    def __init__(self, turns_box: "GE_TurnsBox") -> None:
+class TurnsBoxHeader(BaseAdjustmentBoxHeaderWidget):
+    def __init__(self, turns_box: "TurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box
         self.graph_editor = self.turns_box.adjustment_panel.graph_editor
         self.main_widget = self.graph_editor.main_widget
-        self.separator: QFrame = self.create_separator()
-        self.header_label: QLabel = self._setup_header_label()
-        self._setup_layout()
         self._add_widgets()
-
         self.update_turns_box_header()
 
     def update_turns_box_header(self) -> None:
@@ -78,17 +64,6 @@ class GE_TurnsBoxHeader(QWidget):
                     prop_rot_dir_button_mngr.hide_prop_rot_dir_buttons()
         QApplication.processEvents()
 
-    def _setup_layout(self) -> None:
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.top_hbox = QHBoxLayout()
-        self.top_hbox.setAlignment(Qt.AlignmentFlag.AlignVCenter)
-        self.separator_hbox = QHBoxLayout()
-        self.layout.addLayout(self.top_hbox)
-        self.layout.addLayout(self.separator_hbox)
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
-        self.setContentsMargins(0, 0, 0, 0)
-
     def _add_widgets(self) -> None:
         self.top_hbox.addStretch(1)
         self.top_hbox.addWidget(self.turns_box.prop_rot_dir_button_manager.ccw_button)
@@ -100,40 +75,3 @@ class GE_TurnsBoxHeader(QWidget):
         self.top_hbox.addWidget(self.turns_box.prop_rot_dir_button_manager.cw_button)
         self.top_hbox.addStretch(1)
         self.separator_hbox.addWidget(self.separator)
-
-    def create_separator(self) -> QFrame:
-        separator = QFrame(self)
-        separator.setFrameShape(QFrame.Shape.HLine)
-        separator.setFrameShadow(QFrame.Shadow.Raised)
-        separator.setStyleSheet("color: #000000;")
-        return separator
-
-    def _setup_header_label(self) -> QLabel:
-        header_label = QLabel(self)
-        color = self.turns_box.color
-        text = ""
-
-        if color == RED:
-            text = "Right"
-            font_color = QColor("#ED1C24")
-        elif color == BLUE:
-            text = "Left"
-            font_color = QColor("#2E3192")
-
-        self.header_label_font = QFont("Arial")
-        self.header_label_font.setBold(True)
-        header_label.setFont(self.header_label_font)
-        header_label.setText(text)
-        header_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        header_label.setStyleSheet(f"color: {font_color.name()};")
-        return header_label
-
-    def resize_turns_box_header(self) -> None:
-        self.setFixedHeight(self.turns_box.height() // 4)
-        self._resize_header_label()
-
-    def _resize_header_label(self) -> None:
-        font_size = self.graph_editor.width() // 40
-        self.header_label_font.setPointSize(font_size)
-        self.header_label.setFont(self.header_label_font)
-        self.header_label.repaint()

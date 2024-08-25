@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Union
-from PyQt6.QtWidgets import QGridLayout, QApplication
+from PyQt6.QtWidgets import QGridLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
 
