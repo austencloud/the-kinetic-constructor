@@ -10,7 +10,7 @@ from widgets.sequence_widget.SW_beat_frame_layout_manager import (
 from .beat_deletion_manager import BeatDeletionManager
 from .image_export_manager import ImageExportManager
 from .beat_frame_print_manager import BeatFramePrintManager
-from .beat_selection_overlay import SequenceWidgetBeatSelectionOverlay
+from .beat_selection_overlay import BeatSelectionOverlay
 from .start_pos_beat import StartPositionBeat
 from .start_pos_beat import StartPositionBeatView
 from widgets.pictograph.pictograph import Pictograph
@@ -44,7 +44,7 @@ class SW_BeatFrame(BaseBeatFrame):
             beat.hide()
 
     def _setup_components(self) -> None:
-        self.selection_manager = SequenceWidgetBeatSelectionOverlay(self)
+        self.selection_overlay = BeatSelectionOverlay(self)
         self.layout_manager = SW_BeatFrameLayoutManager(self)
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(self)
@@ -178,6 +178,7 @@ class SW_BeatFrame(BaseBeatFrame):
         for beat in self.beats:
             beat.resize_beat_view()
         self.start_pos_view.resize_beat_view()
+        self.selection_overlay.update_overlay_position()
 
     def populate_beat_frame_from_json(
         self, current_sequence_json: list[dict[str, str]]

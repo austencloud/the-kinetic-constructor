@@ -80,25 +80,24 @@ class DictionaryBrowser(QWidget):
         self.dictionary_widget.preview_area.clear_preview()
         self.number_of_currently_displayed_words_label.hide()
 
-
-
     def add_initial_selection_widget(self):
         self.layout.addWidget(self.initial_selection_widget)
         # self.dictionary_widget.preview_area.hide()
 
     def show_all_sequences(self):
-        self.apply_initial_selection({"letter": "Show all"})
+        self.apply_current_filter({"letter": "Show all"})
 
-    def apply_initial_selection(self, initial_selections):
+    def apply_current_filter(self, current_filter):
+        self.current_filter = current_filter
         self.initial_selection_widget.hide()
         self._add_components_to_layout()
-        self._initialize_and_sort_thumbnails(initial_selections)
+        self._initialize_and_sort_thumbnails(current_filter)
         self.dictionary_widget.preview_area.update_preview(None)
         QApplication.processEvents()
 
-    def _initialize_and_sort_thumbnails(self, sort_method):
-        self.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_initial_selection(
-            sort_method
+    def _initialize_and_sort_thumbnails(self, current_filter):
+        self.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_current_filter(
+            current_filter
         )
         self.initialized = True
 

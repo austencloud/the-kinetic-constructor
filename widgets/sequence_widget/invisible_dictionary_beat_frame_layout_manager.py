@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 class InvisibleDictionaryBeatFrameLayoutManager:
     def __init__(self, beat_frame: "SW_BeatFrame"):
         self.beat_frame = beat_frame
-        self.selection_manager = beat_frame.selection_manager
+        # self.selection_overlay = beat_frame.selection_overlay
         self.settings_manager = beat_frame.main_widget.main_window.settings_manager
 
     def calculate_layout(self, beat_count: int) -> tuple[int, int]:
@@ -41,7 +41,6 @@ class InvisibleDictionaryBeatFrameLayoutManager:
             num_beats = num_filled_beats
         columns, rows = self.calculate_layout(num_beats)
 
-
         self.rearrange_beats(num_beats, columns, rows)
 
     def rearrange_beats(self, num_beats, columns, rows):
@@ -66,8 +65,8 @@ class InvisibleDictionaryBeatFrameLayoutManager:
                         index += 1
 
         self.beat_frame.adjustSize()
-        selected_beat = self.selection_manager.selected_beat
-        if selected_beat:
-            self.selection_manager.deselect_beat()
-            self.selection_manager.select_beat(selected_beat)
-            self.selection_manager.update_overlay_position()
+        # selected_beat = self.selection_overlay.selected_beat
+        # if selected_beat:
+        #     self.selection_overlay.deselect_beat()
+        #     self.selection_overlay.select_beat(selected_beat)
+        #     self.selection_overlay.update_overlay_position()

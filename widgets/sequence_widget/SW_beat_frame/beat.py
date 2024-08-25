@@ -94,7 +94,7 @@ class BeatView(QGraphicsView):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton and self.is_filled:
-            self.beat_frame.selection_manager.select_beat(self)
+            self.beat_frame.selection_overlay.select_beat(self)
 
     def deselect(self) -> None:
         self.is_selected = False

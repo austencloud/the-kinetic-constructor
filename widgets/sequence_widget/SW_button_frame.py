@@ -147,7 +147,7 @@ class SW_ButtonFrame(QFrame):
             self.beat_frame.start_pos_view.blank_beat
         )
         self.beat_frame.start_pos_view.is_filled = False
-        self.beat_frame.selection_manager.deselect_beat()
+        self.beat_frame.selection_overlay.deselect_beat()
         self.beat_frame.sequence_widget.update_current_word()
 
     def _clear_graph_editor(self) -> None:

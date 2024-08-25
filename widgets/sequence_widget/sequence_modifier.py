@@ -22,7 +22,7 @@ class SequenceModifier(QTabWidget):
 
     def resize_sequence_modifier(self) -> None:
 
-        if self.sequence_widget.beat_frame.selection_manager.selected_beat:
+        if self.sequence_widget.beat_frame.selection_overlay.selected_beat:
             self.graph_editor.adjustment_panel.placeholder_widget.hide()
         else:
             self.graph_editor.adjustment_panel.placeholder_widget.show()

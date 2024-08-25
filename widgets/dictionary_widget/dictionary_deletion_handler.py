@@ -33,9 +33,11 @@ class DictionaryDeletionHandler:
         else:
             self.delete_empty_folders(get_images_and_data_path("dictionary"))
             thumbnail_box.current_index = 0
-            self.dictionary_widget.browser.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
-                self.dictionary_widget.main_widget.main_window.settings_manager.dictionary.get_sort_method()
-            )
+            # remove the deleted variation from the browser's currently_displayed_sequences
+            self.dictionary_widget.browser.thumbnail_box_sorter.reload_currently_displayed_filtered_sequences()
+            # self.dictionary_widget.browser.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
+            #     self.dictionary_widget.main_widget.main_window.settings_manager.dictionary.get_sort_method()
+            # )
 
             for index, thumbnail in enumerate(thumbnail_box.thumbnails):
                 if thumbnail == file_path:
@@ -63,9 +65,11 @@ class DictionaryDeletionHandler:
         shutil.rmtree(base_path)
         self.delete_empty_folders(get_images_and_data_path("dictionary"))
         self.variation_number_fixer.ensure_sequential_versions()
-        self.dictionary_widget.browser.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
-            self.dictionary_widget.main_widget.main_window.settings_manager.dictionary.get_sort_method()
-        )
+        # reload currently displayed sequences
+        self.dictionary_widget.browser.thumbnail_box_sorter.reload_currently_displayed_filtered_sequences()
+        # self.dictionary_widget.browser.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
+        #     self.dictionary_widget.main_widget.main_window.settings_manager.dictionary.get_sort_method()
+        # )
 
     def delete_empty_folders(self, root_folder):
         def is_folder_empty(folder_path):

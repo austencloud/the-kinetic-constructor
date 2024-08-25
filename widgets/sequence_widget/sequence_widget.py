@@ -170,3 +170,4 @@ class SequenceWidget(QWidget):
         self.button_frame.resize_button_frame()
         self.graph_editor.resize_graph_editor()
         self.beat_frame.resize_beat_frame()
+        

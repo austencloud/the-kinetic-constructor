@@ -11,7 +11,7 @@ class BeatDeletionManager:
     def __init__(self, beat_frame: "SW_BeatFrame") -> None:
         self.beat_frame = beat_frame
         self.sequence_builder = beat_frame.top_builder_widget.sequence_builder
-        self.selection_manager = self.beat_frame.selection_manager
+        self.selection_overlay = self.beat_frame.selection_overlay
         self.json_manager = self.beat_frame.json_manager  # Access json manager
         self.settings_manager = self.beat_frame.settings_manager
 
@@ -21,7 +21,7 @@ class BeatDeletionManager:
         self.GE_pictograph_view = (
             self.beat_frame.main_widget.top_builder_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view
         )
-        selected_beat = self.beat_frame.selection_manager.get_selected_beat()
+        selected_beat = self.beat_frame.selection_overlay.get_selected_beat()
 
         if selected_beat.__class__ == StartPositionBeatView:
             self._delete_start_pos()
@@ -43,12 +43,12 @@ class BeatDeletionManager:
         for i in range(self.beats.index(selected_beat), len(self.beats)):
             self.delete_beat(self.beats[i])
         last_beat = self.beat_frame.get_last_filled_beat()
-        self.selection_manager.select_beat(last_beat)
+        self.selection_overlay.select_beat(last_beat)
         self.sequence_builder.last_beat = last_beat.beat
 
     def _delete_first_beat(self, selected_beat):
         self.start_pos_view = self.beat_frame.start_pos_view
-        self.selection_manager.select_beat(self.start_pos_view)
+        self.selection_overlay.select_beat(self.start_pos_view)
         self.sequence_builder.last_beat = self.start_pos_view.beat
         self.delete_beat(selected_beat)
 
@@ -70,7 +70,7 @@ class BeatDeletionManager:
         self.GE_pictograph_view.set_to_blank_grid()
         for beat in self.beats:
             self.delete_beat(beat)
-        self.selection_manager.deselect_beat()
+        self.selection_overlay.deselect_beat()
         self.json_manager.loader_saver.clear_current_sequence_file()
         self.sequence_builder.last_beat = None
         self.sequence_builder.reset_to_start_pos_picker()

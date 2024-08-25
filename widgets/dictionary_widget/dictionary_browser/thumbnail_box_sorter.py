@@ -20,12 +20,20 @@ class ThumbnailBoxSorter:
         self.currently_displaying_label = browser.currently_displaying_label
         self.num_columns = self.browser.num_columns
 
+    def reload_currently_displayed_filtered_sequences(self):
+        current_filter = (
+            self.browser.initial_selection_widget.filter_choice_widget.get_current_filter()
+        )
+        self.browser.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_current_filter(
+            current_filter
+        )
+
+
     def sort_and_display_currently_filtered_sequences_by_method(
         self, sort_method: str
     ) -> None:
         self.browser.scroll_widget.clear_layout()
         self.browser.sections = {}
-        self.browser.nav_sidebar.clear_sidebar()
         if sort_method == "sequence_length":
             self.browser.currently_displayed_sequences.sort(
                 key=lambda x: x[2] if x[2] is not None else float("inf")
@@ -98,8 +106,7 @@ class ThumbnailBoxSorter:
         )
         QApplication.restoreOverrideCursor()
 
-
-    def sort_and_display_thumbnail_boxes_by_initial_selection(
+    def sort_and_display_thumbnail_boxes_by_current_filter(
         self, initial_selection: dict
     ):
         initial_selection_widget = self.browser.initial_selection_widget
@@ -136,16 +143,13 @@ class ThumbnailBoxSorter:
         else:
             thumbnail_box = self.browser.scroll_widget.thumbnail_boxes_dict[word]
 
-        # Hide the thumbnail box if the hidden flag is set
         if hidden:
             thumbnail_box.hide()
 
-        # Add the thumbnail box to the grid layout
         self.browser.scroll_widget.grid_layout.addWidget(
             thumbnail_box, row_index, column_index
         )
 
-        # Show the thumbnail box if it was hidden
         if not hidden:
             thumbnail_box.show()
 

@@ -83,7 +83,7 @@ class StartPosManager(QObject):
         self.sequence_builder.last_beat = start_position_beat
         beat_frame = self.sequence_builder.top_builder_widget.sequence_widget.beat_frame
         start_pos_view = beat_frame.start_pos_view
-        beat_frame.selection_manager.select_beat(start_pos_view)
+        beat_frame.selection_overlay.select_beat(start_pos_view)
 
         self.main_widget.json_manager.start_position_handler.set_start_position_data(
             start_position_beat

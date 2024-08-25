@@ -13,7 +13,7 @@ from ..sequence_widget.SW_beat_frame.beat_frame_print_manager import (
     BeatFramePrintManager,
 )
 from ..sequence_widget.SW_beat_frame.beat_selection_overlay import (
-    SequenceWidgetBeatSelectionOverlay,
+    BeatSelectionOverlay,
 )
 from ..sequence_widget.SW_beat_frame.start_pos_beat import StartPositionBeat
 from ..sequence_widget.SW_beat_frame.start_pos_beat import StartPositionBeatView
@@ -48,7 +48,7 @@ class TempBeatFrame(BaseBeatFrame):
             beat.hide()
 
     def _setup_components(self) -> None:
-        self.selection_manager = SequenceWidgetBeatSelectionOverlay(self)
+        self.selection_overlay = BeatSelectionOverlay(self)
         self.layout_manager = InvisibleDictionaryBeatFrameLayoutManager(self)
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(self)
@@ -208,4 +208,4 @@ class TempBeatFrame(BaseBeatFrame):
             beat_view.is_filled = False
         self.start_pos_view.setScene(self.start_pos_view.blank_beat)
         self.start_pos_view.is_filled = False
-        self.selection_manager.deselect_beat()
+        self.selection_overlay.deselect_beat()

@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 class SW_BeatFrameLayoutManager:
     def __init__(self, beat_frame: "SW_BeatFrame"):
         self.beat_frame = beat_frame
-        self.selection_manager = beat_frame.selection_manager
+        self.selection_manager = beat_frame.selection_overlay
         self.settings_manager = beat_frame.main_widget.main_window.settings_manager
 
     def calculate_layout(self, beat_count: int) -> tuple[int, int]:

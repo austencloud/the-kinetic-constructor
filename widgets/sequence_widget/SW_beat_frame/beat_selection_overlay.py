@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     )
 
 
-class SequenceWidgetBeatSelectionOverlay(QWidget):
+class BeatSelectionOverlay(QWidget):
     def __init__(self, beat_frame: "SW_BeatFrame"):
         super().__init__(beat_frame)
         self.selected_beat: Optional[BeatView | StartPositionBeatView] = None
