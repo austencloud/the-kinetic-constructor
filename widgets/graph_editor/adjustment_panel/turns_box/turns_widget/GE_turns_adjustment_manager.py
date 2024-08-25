@@ -65,7 +65,7 @@ class GE_TurnsAdjustmentManager(QObject):
         return self._get_turns()
 
     def _get_turns(self) -> Turns:
-        turns = self.turns_widget.turns_display.text()
+        turns = self.turns_widget.turns_display_frame.turns_label.text()
         turns = self.convert_turns_from_str_to_num(turns)
         turns = self.convert_turn_floats_to_ints(turns)
         return turns

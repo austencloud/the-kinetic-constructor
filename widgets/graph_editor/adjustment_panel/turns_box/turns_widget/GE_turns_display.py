@@ -10,6 +10,7 @@ if TYPE_CHECKING:
 
 
 class GE_TurnsDisplay(QLabel):
+    """This class is the colored box that displays the turns number inside the turns box."""
     clicked = pyqtSignal()
 
     def __init__(self, turns_widget: "GE_TurnsWidget") -> None:
@@ -17,6 +18,7 @@ class GE_TurnsDisplay(QLabel):
         self.turns_box = turns_widget.turns_box
         self.turns_display_font_size = 20
         self.set_turn_display_styles()
+        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def mousePressEvent(self, event):
         super().mousePressEvent(event)

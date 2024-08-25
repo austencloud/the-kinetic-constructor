@@ -4,10 +4,9 @@ from data.constants import BLUE, RED
 from widgets.graph_editor.adjustment_panel.GE_placeholder_text_label import (
     GE_PlaceHolderTextLabel,
 )
-from widgets.graph_editor.adjustment_panel.start_pos_ori_picker_box.GE_start_pos_ori_picker_box import (
-    GE_StartPosOriPickerBox,
-)
+
 from widgets.graph_editor.adjustment_panel.turns_box.GE_turns_box import GE_TurnsBox
+from widgets.graph_editor.start_pos_ori_picker_box.GE_start_pos_ori_picker_box import GE_StartPosOriPickerBox
 
 
 if TYPE_CHECKING:
@@ -46,16 +45,9 @@ class GE_AdjustmentPanel(QFrame):
         self.turns_boxes = [self.blue_turns_box, self.red_turns_box]
 
     def _setup_start_pos_ori_pickers(self) -> None:
-        self.blue_start_pos_ori_picker = GE_StartPosOriPickerBox(
-            self, self.GE_pictograph, BLUE
-        )
-        self.red_start_pos_ori_picker = GE_StartPosOriPickerBox(
-            self, self.GE_pictograph, RED
-        )
-        self.start_pos_ori_pickers = [
-            self.blue_start_pos_ori_picker,
-            self.red_start_pos_ori_picker,
-        ]
+        self.blue_ori_picker = GE_StartPosOriPickerBox(self, self.GE_pictograph, BLUE)
+        self.red_ori_picker = GE_StartPosOriPickerBox(self, self.GE_pictograph, RED)
+        self.start_pos_ori_pickers = [self.blue_ori_picker, self.red_ori_picker]
 
     def update_adjustment_panel(self) -> None:
         pictograph = (

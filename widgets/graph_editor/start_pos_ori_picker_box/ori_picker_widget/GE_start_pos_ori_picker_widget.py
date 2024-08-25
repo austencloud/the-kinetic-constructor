@@ -16,7 +16,7 @@ from PyQt6.QtWidgets import (
 )
 
 if TYPE_CHECKING:
-    from ..start_pos_ori_picker_box.GE_start_pos_ori_picker_box import (
+    from ..GE_start_pos_ori_picker_box import (
         GE_StartPosOriPickerBox,
     )
 

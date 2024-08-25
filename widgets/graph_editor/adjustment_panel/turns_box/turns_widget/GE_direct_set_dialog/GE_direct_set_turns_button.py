@@ -6,10 +6,12 @@ from PyQt6.QtGui import QFont
 from data.constants import BLUE, HEX_BLUE, HEX_RED
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.turns_box.turns_widget.GE_turns_widget import GE_TurnsWidget
+    from widgets.graph_editor.adjustment_panel.turns_box.turns_widget.GE_turns_widget import (
+        GE_TurnsWidget,
+    )
 
 
-class DirectSetAdjustmentButton(QPushButton):
+class GE_DirectSetTurnsButton(QPushButton):
     def __init__(self, value, turns_widget: "GE_TurnsWidget") -> None:
         super().__init__(value)
         self.turns_widget = turns_widget

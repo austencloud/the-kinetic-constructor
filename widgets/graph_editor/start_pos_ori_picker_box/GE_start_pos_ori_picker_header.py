@@ -16,9 +16,7 @@ from widgets.factories.button_factory.buttons.letterbook_adjust_turns_button imp
 )
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.adjustment_panel.start_pos_ori_picker_box.GE_start_pos_ori_picker_box import (
-        GE_StartPosOriPickerBox,
-    )
+    from widgets.graph_editor.start_pos_ori_picker_box.GE_start_pos_ori_picker_box import GE_StartPosOriPickerBox
 
 
 class GE_StartPosOriPickerBoxHeader(QWidget):

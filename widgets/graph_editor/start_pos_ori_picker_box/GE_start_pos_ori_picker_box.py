@@ -3,11 +3,13 @@ from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
 
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
-from ..ori_picker_widget.GE_start_pos_ori_picker_widget import GE_StartPosOriPickerWidget
-from ..start_pos_ori_picker_box.GE_start_pos_ori_picker_header import GE_StartPosOriPickerBoxHeader
+from widgets.graph_editor.start_pos_ori_picker_box.ori_picker_widget.GE_start_pos_ori_picker_widget import GE_StartPosOriPickerWidget
+
+
+from .GE_start_pos_ori_picker_header import GE_StartPosOriPickerBoxHeader
 
 if TYPE_CHECKING:
-    from ..GE_adjustment_panel import GE_AdjustmentPanel
+    from widgets.graph_editor.adjustment_panel.GE_adjustment_panel import GE_AdjustmentPanel
     from widgets.pictograph.pictograph import Pictograph
 
 
