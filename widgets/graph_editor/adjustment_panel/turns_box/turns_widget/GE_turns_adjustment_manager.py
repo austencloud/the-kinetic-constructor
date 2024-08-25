@@ -24,9 +24,7 @@ class GE_TurnsAdjustmentManager(QObject):
         self.turns_adjusted.connect(self.beat_frame.on_beat_adjusted)
 
     def adjust_turns(self, adjustment: Union[int, float]) -> None:
-        # disable the mouse
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-
         self.pictograph = (
             self.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
         )
@@ -47,6 +45,7 @@ class GE_TurnsAdjustmentManager(QObject):
         QApplication.restoreOverrideCursor()
 
     def direct_set_turns(self, new_turns: Turns) -> None:
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.pictograph = (
             self.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
         )
@@ -60,6 +59,7 @@ class GE_TurnsAdjustmentManager(QObject):
         self.json_validation_engine.run(is_current_sequence=True)
         self.main_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
+        QApplication.restoreOverrideCursor()
 
     def get_current_turns_value(self) -> Turns:
         return self._get_turns()

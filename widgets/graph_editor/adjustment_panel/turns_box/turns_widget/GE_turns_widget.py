@@ -48,19 +48,16 @@ class GE_TurnsWidget(QWidget):
         self.layout.addStretch(1)
 
     def show_turns_selection_dialog(self) -> None:
-        self.direct_set_dialog = self.direct_set_dialog
-        label_rect = self.turns_display_frame.turns_label.geometry()
-        dialog_width = self.direct_set_dialog.width()
-
-        global_label_pos = self.turns_display_frame.turns_label.mapToGlobal(
+        self.direct_set_dialog.resize_direct_set_buttons()
+        turns_label_rect = self.turns_display_frame.turns_label.geometry()
+        global_turns_label_pos = self.turns_display_frame.turns_label.mapToGlobal(
             self.turns_display_frame.turns_label.pos()
-        )
-        dialog_x = global_label_pos.x() + (label_rect.width() - dialog_width) / 2
-        dialog_y = global_label_pos.y() + label_rect.height()
-
+        )        
+        dialog_width = self.direct_set_dialog.width()
+        dialog_x = global_turns_label_pos.x() + (turns_label_rect.width() - dialog_width) / 2
+        dialog_y = global_turns_label_pos.y() + turns_label_rect.height()
         self.direct_set_dialog.move(int(dialog_x), int(dialog_y))
         self.direct_set_dialog.exec()
-        self.direct_set_dialog.resize_direct_set_buttons()
 
     def on_turns_label_clicked(self) -> None:
         self.show_turns_selection_dialog()

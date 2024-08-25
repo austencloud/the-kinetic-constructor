@@ -6,19 +6,20 @@ from PyQt6.QtGui import QFont
 from data.constants import BLUE, HEX_BLUE, HEX_RED
 
 if TYPE_CHECKING:
+    from widgets.graph_editor.adjustment_panel.turns_box.turns_widget.GE_direct_set_dialog.GE_direct_set_dialog import GE_DirectSetDialog
     from widgets.graph_editor.adjustment_panel.turns_box.turns_widget.GE_turns_widget import (
         GE_TurnsWidget,
     )
 
 
 class GE_DirectSetTurnsButton(QPushButton):
-    def __init__(self, value, turns_widget: "GE_TurnsWidget") -> None:
+    def __init__(self, value, direct_set_dialog: "GE_DirectSetDialog") -> None:
         super().__init__(value)
-        self.turns_widget = turns_widget
+        self.turns_widget = direct_set_dialog.turns_widget
         self.turns_box = self.turns_widget.turns_box
         self.clicked.connect(self.direct_set_adjustment)
         self.setMouseTracking(True)
-
+        
     def enterEvent(self, event) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.PointingHandCursor)
 
@@ -46,4 +47,9 @@ class GE_DirectSetTurnsButton(QPushButton):
                 background-color: #f0f0f0;
             }}
         """
+        )
+
+    def resize_direct_set_turns_button(self) -> None:
+        self.setFixedSize(
+            int(self.turns_widget.width() / 2), int(self.turns_widget.width() / 2)
         )
