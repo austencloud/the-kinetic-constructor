@@ -36,7 +36,7 @@ class BeatDeletionManager:
             self.beat_frame.adjust_layout_to_sequence_length()
         self.beat_frame.sequence_widget.update_current_word()
 
-        QApplication.processEvents()
+        # QApplication.processEvents()
         self.sequence_builder.option_picker.update_option_picker()
 
     def _delete_non_first_beat(self, selected_beat):

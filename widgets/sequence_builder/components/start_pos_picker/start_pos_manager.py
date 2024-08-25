@@ -85,13 +85,6 @@ class StartPosManager(QObject):
         start_pos_view = beat_frame.start_pos_view
         beat_frame.selection_manager.select_beat(start_pos_view)
 
-        QApplication.processEvents()
-        # if it's connected, disconnect it first
-        self.start_position_selected.disconnect()
-        self.start_position_selected.connect(
-            self.sequence_builder.transition_to_sequence_building
-        )
-
         self.main_widget.json_manager.start_position_handler.set_start_position_data(
             start_position_beat
         )
