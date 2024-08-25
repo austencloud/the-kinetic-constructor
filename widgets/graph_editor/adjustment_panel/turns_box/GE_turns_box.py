@@ -61,6 +61,6 @@ class GE_TurnsBox(QFrame):
             f"#GE_TurnsBox {{ border: {self.border_width}px solid {self.color};}}"
         )
 
-    def resize_GE_turns_box(self) -> None:
+    def resize_turns_box(self) -> None:
         self.header.resize_turns_box_header()
         self.turns_widget.resize_turns_widget()

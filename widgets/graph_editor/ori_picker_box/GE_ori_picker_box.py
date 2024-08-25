@@ -56,6 +56,6 @@ class GE_OriPickerBox(QFrame):
             f"#GE_OriPickerBox {{ border: {self.border_width}px solid {self.color}; }}"
         )
 
-    def resize_GE_ori_picker_box(self) -> None:
+    def resize_ori_picker_box(self) -> None:
         self.header.resize_ori_picker_header()
         self.ori_picker_widget.resize_ori_picker_widget()

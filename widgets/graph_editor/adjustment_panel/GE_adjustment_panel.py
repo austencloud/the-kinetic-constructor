@@ -96,13 +96,14 @@ class GE_AdjustmentPanel(QFrame):
         for picker in self.start_pos_ori_pickers:
             if not picker.isVisible():
                 picker.show()
+                # picker.resize_ori_picker_box()
                 picker.update_styled_border()
 
     def show_turns_boxes(self) -> None:
         for turns_box in self.turns_boxes:
             if not turns_box.isVisible():
                 turns_box.show()
-                turns_box.resize_GE_turns_box()
+                # turns_box.resize_turns_box()
                 turns_box.update_styled_border()
 
     def update_turns_panel(self, blue_turns: int, red_turns: int) -> None:
@@ -117,10 +118,10 @@ class GE_AdjustmentPanel(QFrame):
 
         for box in self.turns_boxes:
             if box.isVisible():
-                box.resize_GE_turns_box()
+                box.resize_turns_box()
 
         for ori_picker_box in self.start_pos_ori_pickers:
             if ori_picker_box.isVisible():
-                ori_picker_box.resize_GE_ori_picker_box()
+                ori_picker_box.resize_ori_picker_box()
 
         self.placeholder_widget.set_stylesheet()

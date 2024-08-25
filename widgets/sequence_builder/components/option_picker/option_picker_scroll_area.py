@@ -80,7 +80,7 @@ class OptionPickerScrollArea(BasePictographScrollArea):
         QApplication.restoreOverrideCursor()
 
     def set_pictograph_orientations(self, pictograph_dict: dict, sequence) -> None:
-        last_pictograph = self.sequence_builder.get_last_added_pictograph(sequence)
+        last_pictograph = sequence[-1]
         pictograph_dict["red_attributes"]["start_ori"] = last_pictograph[
             "red_attributes"
         ]["end_ori"]

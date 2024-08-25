@@ -43,13 +43,6 @@ class GE_OriPickerDisplayFrame(QFrame):
     def __init__(self, ori_picker_widget: "GE_OriPickerWidget") -> None:
         super().__init__(ori_picker_widget)
         self.ori_picker_widget = ori_picker_widget
-        self._init_references()
-        self._setup_components()
-        self._setup_layout()
-        self._attach_listeners()
-        self._setup_current_orientation_display()
-
-    def _init_references(self):
         self.ori_picker_box = self.ori_picker_widget.ori_picker_box
         self.json_manager = self.ori_picker_box.graph_editor.main_widget.json_manager
         self.json_validation_engine = (
@@ -60,6 +53,10 @@ class GE_OriPickerDisplayFrame(QFrame):
         )
         self.color = self.ori_picker_box.color
         self.beat_frame = self.ori_picker_box.graph_editor.sequence_widget.beat_frame
+        self._setup_components()
+        self._setup_layout()
+        self._attach_listeners()
+        self._setup_current_orientation_display()
 
     def _setup_current_orientation_display(self) -> None:
         self.ori_display_label = self.ori_display_label
@@ -85,8 +82,8 @@ class GE_OriPickerDisplayFrame(QFrame):
 
     def _setup_rotate_buttons(self):
         path = get_images_and_data_path("images/icons")
-        self.ccw_button = self._setup_button(f"{path}/rotate_ccw.png", self.rotate_ccw)
-        self.cw_button = self._setup_button(f"{path}/rotate_cw.png", self.rotate_cw)
+        self.ccw_button = self._setup_rotate_button(f"{path}/rotate_ccw.png", self.rotate_ccw)
+        self.cw_button = self._setup_rotate_button(f"{path}/rotate_cw.png", self.rotate_cw)
         self.rotate_buttons = [self.ccw_button, self.cw_button]
 
     def _on_orientation_display_clicked(self, event) -> None:
@@ -140,11 +137,11 @@ class GE_OriPickerDisplayFrame(QFrame):
         new_ori = self.orientations[self.current_orientation_index]
         self.set_orientation(new_ori)
 
-    def _setup_button(self, icon_path: str, click_function: callable) -> QPushButton:
+    def _setup_rotate_button(self, icon_path: str, click_function: callable) -> QPushButton:
         button = QPushButton()
         button.setIcon(QIcon(icon_path))
         button.clicked.connect(click_function)
-        button.setFixedSize(40, 40)  # You can adjust this size as needed
+        button.setFixedSize(40, 40) 
         button.setCursor(Qt.CursorShape.PointingHandCursor)
         return button
 
