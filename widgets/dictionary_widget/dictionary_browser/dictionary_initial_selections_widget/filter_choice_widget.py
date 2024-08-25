@@ -146,6 +146,7 @@ class FilterChoiceWidget(QWidget):
         self.setLayout(main_layout)
 
     def resize_filter_choice_widget(self):
+        self.setMinimumWidth(self.main_widget.width())
         self._resize_buttons_labels()
         self._resize_buttons()
         self._resize_description_label()
@@ -158,19 +159,19 @@ class FilterChoiceWidget(QWidget):
     def _resize_description_label(self):
         description_label_font = QFont()
         description_label_font.setFamily("Monotype Corsiva")
-        description_label_font.setPointSize(self.browser.width() // 60)
+        description_label_font.setPointSize(self.width() // 60)
         self.description_label.setFont(description_label_font)
 
     def _resize_buttons(self):
         button_font = QFont()
-        button_font.setPointSize(self.browser.width() // 80)
+        button_font.setPointSize(self.width() // 80)
         for button in self.buttons.values():
-            button.setFixedWidth(self.browser.width() // 7)
-            button.setFixedHeight(self.browser.height() // 10)
+            button.setFixedWidth(self.width() // 7)
+            button.setFixedHeight(self.height() // 10)
             button.setFont(button_font)
 
     def _resize_buttons_labels(self):
         font = QFont()
-        font.setPointSize(self.browser.width() // 170)
+        font.setPointSize(self.width() // 170)
         for button_label in self.button_labels.values():
             button_label.setFont(font)

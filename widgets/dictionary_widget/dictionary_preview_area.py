@@ -78,6 +78,12 @@ class DictionaryPreviewArea(QWidget):
             self.current_thumbnail_box.nav_buttons_widget.hide()
             self.variation_number_label.hide()
 
+        elif len(self.thumbnails) == 0:
+            self.image_label.show_placeholder()
+            self.image_label.adjust_label_height_for_text()
+            self.variation_number_label.clear()
+            self.word_label.clear()
+
     def _show_components(self):
         self.word_label.show()
         self.word_label.resize_word_label()
