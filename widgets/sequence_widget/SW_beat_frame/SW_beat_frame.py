@@ -201,7 +201,10 @@ class SW_BeatFrame(BaseBeatFrame):
                 continue
             self.sequence_widget.populate_sequence(pictograph_dict)
         self.sequence_widget.update_current_word()
-        self.sequence_widget.update_difficulty_label()
+        if len(current_sequence_json) > 2:
+            self.sequence_widget.update_difficulty_label()
+        else:
+            self.sequence_widget.difficulty_label.set_difficulty_level("")
         last_beat = self.sequence_widget.beat_frame.get_last_filled_beat().beat
         self.sequence_builder.last_beat = last_beat
 
