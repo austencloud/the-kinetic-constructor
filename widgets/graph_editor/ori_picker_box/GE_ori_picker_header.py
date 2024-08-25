@@ -34,19 +34,17 @@ class GE_OriPickerHeader(QWidget):
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.top_hbox = QHBoxLayout()
-        self.bottom_hbox = QHBoxLayout()
+        self.separator_hbox = QHBoxLayout()
         self.layout.addLayout(self.top_hbox)
-        self.layout.addLayout(self.bottom_hbox)
+        self.layout.addLayout(self.separator_hbox)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
     def _add_widgets(self) -> None:
-        self.top_hbox.addStretch(3)
         self.top_hbox.addStretch(1)
         self.top_hbox.addWidget(self.header_label)
         self.top_hbox.addStretch(1)
-        self.top_hbox.addStretch(3)
-        self.bottom_hbox.addWidget(self.separator)
+        self.separator_hbox.addWidget(self.separator)
 
     def create_separator(self) -> QFrame:
         separator = QFrame(self)

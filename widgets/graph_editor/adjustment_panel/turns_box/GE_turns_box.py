@@ -50,8 +50,9 @@ class GE_TurnsBox(QFrame):
 
     def _setup_layout(self) -> None:
         layout: QVBoxLayout = QVBoxLayout(self)
-        layout.addWidget(self.header, 1)
-        layout.addWidget(self.turns_widget, 5)
+        layout.addWidget(self.header)
+        layout.addWidget(self.turns_widget)
+        layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
 
     def update_styled_border(self) -> None:
