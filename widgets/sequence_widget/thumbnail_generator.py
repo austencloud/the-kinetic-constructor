@@ -2,10 +2,9 @@ import os
 import json
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QImage
-from PIL import Image, PngImagePlugin
+from PIL import Image, PngImagePlugin, ImageEnhance
 import numpy as np
 from datetime import datetime
-
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager
@@ -25,10 +24,14 @@ class ThumbnailGenerator:
             sequence, include_start_pos=False
         )
         pil_image = self.qimage_to_pil(beat_frame_image)
-        metadata = {
-            "sequence": sequence,
-            "date_added": datetime.now().isoformat()
-        }
+
+        # Resize the image to 65% of the original size
+        pil_image = self._resize_image(pil_image, 0.5)
+
+        # Apply sharpening to improve clarity after resizing
+        pil_image = self._sharpen_image(pil_image)
+
+        metadata = {"sequence": sequence, "date_added": datetime.now().isoformat()}
         metadata_str = json.dumps(metadata)
         info = self._create_png_info(metadata_str)
         image_filename = self._create_image_filename(
@@ -37,6 +40,16 @@ class ThumbnailGenerator:
         image_path = os.path.join(directory, image_filename)
         self._save_image(pil_image, image_path, info)
         return image_path
+
+    def _resize_image(self, image: Image.Image, scale_factor: float) -> Image.Image:
+        new_size = (int(image.width * scale_factor), int(image.height * scale_factor))
+        return image.resize(new_size, Image.LANCZOS)
+
+    def _sharpen_image(self, image: Image.Image) -> Image.Image:
+        enhancer = ImageEnhance.Sharpness(image)
+        return enhancer.enhance(
+            1.5
+        )  # 1.0 is original sharpness; >1.0 increases sharpness
 
     def qimage_to_pil(self, qimage: QImage) -> Image.Image:
         qimage = qimage.convertToFormat(QImage.Format.Format_ARGB32)

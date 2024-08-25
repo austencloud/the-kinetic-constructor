@@ -21,7 +21,7 @@ class StartPosPickerPictographFrame(QWidget):
 
     def resize_start_pos_picker_pictograph_frame(self) -> None:
         self.setMaximumWidth(
-            self.start_pos_picker.width()
+            self.start_pos_picker.sequence_builder.width()
             if self.start_pos_picker.isVisible()
             else self.start_pos_picker.sequence_builder.option_picker.width()
         )

@@ -177,10 +177,8 @@ class MainWidget(QTabWidget):
             self.dictionary_widget.browser.resize_dictionary_browser()
 
     def resize_all_widgets(self):
-        starting_widget = self.currentWidget()
         self.currentChanged.disconnect(self.on_tab_changed)
         self.resize_starting_widget(self.currentWidget())
-        self.setCurrentWidget(starting_widget)
         self.currentChanged.connect(self.on_tab_changed)
         self.main_window.menu_bar.resize_menu_bar()
 

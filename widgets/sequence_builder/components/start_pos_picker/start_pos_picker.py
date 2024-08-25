@@ -40,6 +40,7 @@ class StartPosPicker(QWidget):
         self.setup_layout()
         self.setObjectName("StartPosPicker")
         self.setStyleSheet("background-color: white;")
+        self.initialized = False
 
     def setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
