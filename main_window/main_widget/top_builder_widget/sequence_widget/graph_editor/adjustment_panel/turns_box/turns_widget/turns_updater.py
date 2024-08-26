@@ -25,9 +25,10 @@ class TurnsUpdater:
             f"{other_motion_color}_attributes": {"turns": other_motion.turns},
         }
         motion.pictograph.updater.update_pictograph(arrow_dict)
-        self._repaint_pictograph_views(motion)
+        self._repaint_views(motion)
 
-    def _repaint_pictograph_views(self, motion: "Motion"):
+    def _repaint_views(self, motion: "Motion"):
+        """Repaint the pictograph and GE pictograph views to reflect the change."""
         motion.pictograph.view.repaint()
         GE_pictograph = (
             self.turns_box.adjustment_panel.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
