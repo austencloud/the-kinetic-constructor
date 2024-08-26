@@ -18,7 +18,7 @@ from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
 from widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
     TurnsTupleGenerator,
 )
-from widgets.sequence_difficulty_evaluator import SequenceLevelEvaluator
+from main_window.main_widget.sequence_level_evaluator import SequenceLevelEvaluator
 from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.thumbnail_finder import ThumbnailFinder
 from utilities.path_helpers import get_images_and_data_path
 from styles.get_tab_stylesheet import get_tab_stylesheet

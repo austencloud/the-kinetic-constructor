@@ -1,6 +1,14 @@
+from typing import TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from main_window.main_widget.top_builder_widget.sequence_widget.add_to_dictionary_manager.add_to_dictionary_manager import AddToDictionaryManager
+
 class TurnPatternConverter:
-    @staticmethod
-    def sequence_to_pattern(sequence: list[dict]) -> str:
+    def __init__(self, add_to_dictionary_manager: "AddToDictionaryManager"):
+        self.add_to_dictionary_manager = add_to_dictionary_manager
+
+    def sequence_to_pattern(self, sequence: list[dict]) -> str:
         """
         Convert sequence data to a more readable turn pattern string, including tuples for differing turns.
         Format turns in a beat using just the numbers separated by a comma, and different beats using an underscore.
@@ -22,8 +30,7 @@ class TurnPatternConverter:
 
         return "_".join(pattern_parts)
 
-    @staticmethod
-    def pattern_to_sequence(pattern: str) -> list[dict]:
+    def pattern_to_sequence(self, pattern: str) -> list[dict]:
         """
         Convert a more readable pattern string back to a sequence format (abstract representation).
         Handles parts split by underscores, with turns in each part split by a comma.

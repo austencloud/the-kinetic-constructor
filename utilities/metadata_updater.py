@@ -8,7 +8,7 @@ from main_window.main_widget.sequence_properties_manager.strictly_color_swapped_
 from main_window.main_widget.sequence_properties_manager.strictly_mirrored_permutation_checker import StrictlyMirroredPermutationChecker
 from main_window.main_widget.sequence_properties_manager.strictly_rotational_permutation_checker import StrictlyRotationalPermutationChecker
 from utilities.word_simplifier import WordSimplifier
-from widgets.sequence_difficulty_evaluator import SequenceLevelEvaluator
+from main_window.main_widget.sequence_level_evaluator import SequenceLevelEvaluator
 
 """This module is responsible for updating the metadata of the images in the dictionary folder.
 We are still making updates to the permutation checkers as of 8/26/2024 so please keep this around until we are done.

@@ -7,7 +7,7 @@ from .thumbnail_generator import ThumbnailGenerator
 from .turn_pattern_variation_checker import TurnPatternVariationChecker
 from utilities.path_helpers import get_images_and_data_path
 
-from widgets.turn_pattern_converter import TurnPatternConverter
+from main_window.main_widget.top_builder_widget.sequence_widget.add_to_dictionary_manager.turn_pattern_converter import TurnPatternConverter
 
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import SequenceWidget
@@ -22,6 +22,7 @@ class AddToDictionaryManager:
 
     def add_to_dictionary(self):
         self.thumbnail_generator = ThumbnailGenerator(self)
+        self.turn_pattern_converter = TurnPatternConverter(self)
         current_sequence = self.json_manager.loader_saver.load_current_sequence_json()
         if self.is_sequence_invalid(current_sequence):
             self.display_message(
@@ -104,7 +105,7 @@ class AddToDictionaryManager:
         return "none,none"
 
     def save_variation(self, sequence, base_word, variation_number):
-        turn_pattern_description = TurnPatternConverter.sequence_to_pattern(sequence)
+        turn_pattern_description = self.turn_pattern_converter.sequence_to_pattern(sequence)
         start_orientations = self.get_start_orientations(sequence)
         directory = self.get_variation_directory(
             base_word, variation_number, start_orientations

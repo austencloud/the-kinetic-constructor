@@ -7,9 +7,8 @@ from Enums.Enums import LetterType
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
-        OptionPickerScrollArea,
-    )
+    from .option_picker_scroll_area.option_picker_scroll_area import OptionPickerScrollArea
+
 
 
 class OptionPickerPictographFactory:
