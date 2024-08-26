@@ -1,10 +1,10 @@
 import os
 from typing import TYPE_CHECKING
-from widgets.image_export_dialog.image_export_dialog import ImageExportDialog
+from widgets.sequence_widget.beat_frame.image_export_manager.image_export_dialog.image_export_dialog import ImageExportDialog
 from widgets.sequence_widget.beat_frame.beat import BeatView
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.beat_frame.image_export_manager import (
+    from widgets.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
         ImageExportManager,
     )
 

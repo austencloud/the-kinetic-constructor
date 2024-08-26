@@ -8,10 +8,12 @@ from PyQt6.QtGui import QFontMetrics, QMouseEvent, QPainter
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.current_word_label import CurrentWordLabel
+    from widgets.sequence_widget.labels.current_word_label import CurrentWordLabel
 
 
 class CurrentWordLineEdit(QLineEdit):
+    """ This class allows the user to copy the word to the clipboard by clicking on it. """
+
     def __init__(self, label: "CurrentWordLabel"):
         super().__init__(label)
         self.label = label
@@ -74,7 +76,7 @@ class CurrentWordLineEdit(QLineEdit):
         return QRectF(x, y - text_height, text_width, text_height)
 
     def copy_to_clipboard(self):
-        from widgets.sequence_widget.current_word_label import CurrentWordLabel
+        from widgets.sequence_widget.labels.current_word_label import CurrentWordLabel
         clipboard = QApplication.clipboard()
         clipboard.setText(self.text())
         parent = self.parent()

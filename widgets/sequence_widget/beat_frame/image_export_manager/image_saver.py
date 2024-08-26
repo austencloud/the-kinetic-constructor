@@ -6,7 +6,7 @@ from PyQt6.QtGui import QImage
 from widgets.path_helpers.path_helpers import get_my_photos_path
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.beat_frame.image_export_manager import (
+    from widgets.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
         ImageExportManager,
     )
 

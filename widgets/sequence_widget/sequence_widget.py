@@ -1,25 +1,18 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QTimer, Qt
-from PyQt6.QtWidgets import (
-    QVBoxLayout,
-    QWidget,
-    QHBoxLayout,
-    QScrollArea,
-)
-from sequence_auto_completer.sequence_auto_completion_manager import (
-    SequenceAutoCompletionManager,
-)
-from widgets.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame
-from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager
-from widgets.sequence_widget.current_word_label import CurrentWordLabel
-from widgets.sequence_widget.difficulty_label import DifficultyLabel
-
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout
+from sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
+from widgets.sequence_widget.beat_frame.beat import Beat, BeatView
+from .beat_frame.beat_frame import SequenceWidgetBeatFrame
+from .add_to_dictionary_manager import AddToDictionaryManager
+from .labels.current_word_label import CurrentWordLabel
+from .labels.difficulty_label import DifficultyLabel
 from ..graph_editor.graph_editor import GraphEditor
 from .beat_frame.layout_options_dialog import LayoutOptionsDialog
-from ..indicator_label import IndicatorLabel
+from .labels.indicator_label import IndicatorLabel
 from .pictograph_factory import PictographFactory
-from .beat_frame.beat import Beat, BeatView
 from .button_frame import SequenceWidgetButtonFrame
+from .sequence_widget_scroll_area import SequenceWidgetScrollArea  # Import the new class
 
 if TYPE_CHECKING:
     from ..main_widget.top_builder_widget import TopBuilderWidget
@@ -36,14 +29,13 @@ class SequenceWidget(QWidget):
         self.default_beat_quantity = 16
 
         self._setup_components()
-        self._configure_scroll_area()
         self._setup_cache()
         self._setup_beat_frame_layout()
         self._setup_indicator_label_layout()
         self._setup_layout()
 
     def _setup_components(self):
-        self.scroll_area = QScrollArea(self)
+        self.scroll_area = SequenceWidgetScrollArea(self)  # Use the new scroll area class
         self.indicator_label = IndicatorLabel(self)
         self.current_word_label = CurrentWordLabel(self)
         self.difficulty_label = DifficultyLabel(self)
@@ -52,7 +44,8 @@ class SequenceWidget(QWidget):
         self.button_frame = SequenceWidgetButtonFrame(self)
         self.graph_editor = GraphEditor(self)
         self.pictograph_factory = PictographFactory(self)
-        self.autocompleter = SequenceAutoCompletionManager(self)
+        self.autocompleter = SequenceAutoCompleter(self)
+        self.scroll_area.setWidget(self.beat_frame)  # Set the beat frame in the scroll area
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -72,7 +65,6 @@ class SequenceWidget(QWidget):
     def update_current_word(self):
         current_word = self.beat_frame.get_current_word()
         self.current_word_label.set_current_word(current_word)
-        # self.update_difficulty_label()
 
     def update_difficulty_label(self):
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
@@ -83,14 +75,6 @@ class SequenceWidget(QWidget):
 
     def _setup_cache(self):
         self.SW_pictograph_cache: dict[str, Beat] = {}
-
-    def _configure_scroll_area(self):
-        self.scroll_area.setWidgetResizable(True)
-        self.scroll_area.setContentsMargins(0, 0, 0, 0)
-        self.scroll_area.setWidget(self.beat_frame)
-        self.scroll_area.setObjectName("sequence_scroll_area")
-        self.scroll_area.setStyleSheet("QScrollArea{background: transparent;}")
-        self.scroll_area.setFrameShape(QScrollArea.Shape.NoFrame)
 
     def show_options_panel(self):
         current_state = self._get_current_beat_frame_state()
@@ -133,7 +117,7 @@ class SequenceWidget(QWidget):
 
     def _setup_beat_frame_layout(self):
         self.beat_frame_layout = QHBoxLayout()
-        self.beat_frame_layout.addWidget(self.scroll_area)
+        self.beat_frame_layout.addWidget(self.scroll_area)  # Use the scroll area here
         self.beat_frame_layout.addWidget(self.button_frame)
         self.beat_frame_layout.setContentsMargins(0, 0, 0, 0)
         self.beat_frame_layout.setSpacing(0)

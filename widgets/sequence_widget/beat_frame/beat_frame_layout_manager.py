@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame
 
 
-class SW_BeatFrameLayoutManager:
+class BeatFrameLayoutManager:
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
         self.beat_frame = beat_frame
         self.selection_manager = beat_frame.selection_overlay
@@ -16,8 +16,6 @@ class SW_BeatFrameLayoutManager:
         return DEFAULT_BEAT_FRAME_LAYOUTS.get(beat_count, (1, beat_count))
 
     def get_cols(self):
-        # get the columns that currently are visible in the current beat frame by looking at its grid layout
-        # only return the number of columns that are actually full
         layout = self.beat_frame.layout
         cols = 0
         for i in range(layout.columnCount()):
@@ -26,8 +24,6 @@ class SW_BeatFrameLayoutManager:
         return cols - 1
 
     def get_rows(self):
-        # get the rows that currently are visible in the current beat frame by looking at its grid layout
-        # only return the number of rows that are actually full
         layout = self.beat_frame.layout
         rows = 0
         for i in range(layout.rowCount()):

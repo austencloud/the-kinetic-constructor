@@ -2,16 +2,16 @@ from PyQt6.QtGui import QImage
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
-from widgets.sequence_widget.beat_frame.beat_drawer import BeatDrawer
-from widgets.sequence_widget.beat_frame.user_info_drawer import UserInfoDrawer
-from widgets.sequence_widget.beat_frame.word_drawer import WordDrawer
-from widgets.sequence_widget.beat_frame.difficulty_level_drawer import (
+from widgets.sequence_widget.beat_frame.image_export_manager.image_creator.beat_drawer import BeatDrawer
+from widgets.sequence_widget.beat_frame.image_export_manager.image_creator.user_info_drawer import UserInfoDrawer
+from widgets.sequence_widget.beat_frame.image_export_manager.image_creator.word_drawer import WordDrawer
+from widgets.sequence_widget.beat_frame.image_export_manager.image_creator.difficulty_level_drawer import (
     DifficultyLevelDrawer,
 )
 from widgets.sequence_widget.beat_frame.height_determiner import HeightDeterminer
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.beat_frame.image_export_manager import (
+    from widgets.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
         ImageExportManager,
     )
 

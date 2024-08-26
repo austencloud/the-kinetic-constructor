@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Union
 from widgets.sequence_widget.beat_frame.beat import Beat, BeatView
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.beat_frame.image_export_manager import (
+    from widgets.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
         ImageExportManager,
     )
     from widgets.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame

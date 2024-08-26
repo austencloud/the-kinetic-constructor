@@ -6,15 +6,15 @@ from PyQt6.QtWidgets import (
     QPushButton,
 )
 
-from widgets.image_export_dialog.export_dialog_control_panel import (
+from widgets.sequence_widget.beat_frame.image_export_manager.image_export_dialog.export_dialog_control_panel import (
     ExportDialogControlPanel,
 )
-from widgets.image_export_dialog.export_dialog_preview_panel import (
+from widgets.sequence_widget.beat_frame.image_export_manager.image_export_dialog.export_dialog_preview_panel import (
     ExportDialogPreviewPanel,
 )
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.beat_frame.image_export_manager import (
+    from widgets.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
         ImageExportManager,
     )
 

@@ -4,11 +4,11 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
 
 from widgets.base_beat_frame import BaseBeatFrame
-from widgets.sequence_widget.beat_frame_layout_manager import (
-    SW_BeatFrameLayoutManager,
+from widgets.sequence_widget.beat_frame.beat_frame_layout_manager import (
+    BeatFrameLayoutManager,
 )
 from .beat_deletion_manager import BeatDeletionManager
-from .image_export_manager import ImageExportManager
+from .image_export_manager.image_export_manager import ImageExportManager
 from .beat_selection_overlay import BeatSelectionOverlay
 from .start_pos_beat import StartPositionBeat
 from .start_pos_beat import StartPositionBeatView
@@ -44,11 +44,14 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
 
     def _setup_components(self) -> None:
         self.selection_overlay = BeatSelectionOverlay(self)
-        self.layout_manager = SW_BeatFrameLayoutManager(self)
-        self.start_pos_view = StartPositionBeatView(self)
-        self.start_pos = StartPositionBeat(self)
+        self.layout_manager = BeatFrameLayoutManager(self)
         self.beat_deletion_manager = BeatDeletionManager(self)
         self.image_export_manager = ImageExportManager(self, SequenceWidgetBeatFrame)
+        self._setup_start_position_beat()
+
+    def _setup_start_position_beat(self):
+        self.start_pos_view = StartPositionBeatView(self)
+        self.start_pos = StartPositionBeat(self)
 
     def _setup_layout(self) -> None:
         self.layout: QGridLayout = QGridLayout(self)

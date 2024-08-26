@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 
 if TYPE_CHECKING:
-    from widgets.image_export_dialog.image_export_dialog import ImageExportDialog
+    from widgets.sequence_widget.beat_frame.image_export_manager.image_export_dialog.image_export_dialog import ImageExportDialog
 
 
 class ExportDialogPreviewPanel(QFrame):

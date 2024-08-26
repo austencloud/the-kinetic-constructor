@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING, Union
-from widgets.image_export_layout_handler import ImageExportLayoutHandler
-from widgets.sequence_widget.beat_frame.image_creator import ImageCreator
-from widgets.sequence_widget.beat_frame.image_export_beat_factory import ImageExportBeatFactory
-from widgets.sequence_widget.beat_frame.image_export_dialog_executor import ImageExportDialogExecutor
-from widgets.sequence_widget.beat_frame.image_saver import ImageSaver
+from widgets.sequence_widget.beat_frame.image_export_manager.image_export_layout_handler import ImageExportLayoutHandler
+from widgets.sequence_widget.beat_frame.image_export_manager.image_creator.image_creator import ImageCreator
+from widgets.sequence_widget.beat_frame.image_export_manager.image_export_beat_factory import ImageExportBeatFactory
+from widgets.sequence_widget.beat_frame.image_export_manager.image_export_dialog.image_export_dialog_executor import ImageExportDialogExecutor
+from widgets.sequence_widget.beat_frame.image_export_manager.image_saver import ImageSaver
 
 
 

@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 
-class SequenceAutoCompletionManager:
+class SequenceAutoCompleter:
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.beat_frame = sequence_widget.beat_frame
         self.json_manager = self.beat_frame.json_manager

@@ -2,10 +2,10 @@ from typing import TYPE_CHECKING, Dict
 from PyQt6.QtGui import QPainter, QFont, QFontMetrics, QImage
 from datetime import datetime
 
-from widgets.sequence_widget.beat_frame.font_margin_helper import FontMarginHelper
+from widgets.sequence_widget.beat_frame.image_export_manager.image_creator.font_margin_helper import FontMarginHelper
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.beat_frame.image_creator import ImageCreator
+    from widgets.sequence_widget.beat_frame.image_export_manager.image_creator.image_creator import ImageCreator
 
 
 class UserInfoDrawer:

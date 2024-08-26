@@ -12,7 +12,7 @@ from PyQt6.QtCore import pyqtSignal, Qt, QTimer
 from datetime import datetime
 
 if TYPE_CHECKING:
-    from widgets.image_export_dialog.image_export_dialog import ImageExportDialog
+    from widgets.sequence_widget.beat_frame.image_export_manager.image_export_dialog.image_export_dialog import ImageExportDialog
 
 
 class ExportDialogControlPanel(QWidget):

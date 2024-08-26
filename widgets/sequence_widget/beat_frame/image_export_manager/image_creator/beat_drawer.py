@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from widgets.sequence_widget.beat_frame.beat import BeatView
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.beat_frame.image_creator import ImageCreator
+    from widgets.sequence_widget.beat_frame.image_export_manager.image_creator.image_creator import ImageCreator
 
 
 class BeatDrawer:

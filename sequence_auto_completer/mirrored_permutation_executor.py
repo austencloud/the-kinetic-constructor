@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING
 from sequence_auto_completer.permutation_executor_base import PermutationExecutor
 
 if TYPE_CHECKING:
-    from sequence_auto_completer.sequence_auto_completion_manager import (
-        SequenceAutoCompletionManager,
+    from sequence_auto_completer.sequence_auto_completer import (
+        SequenceAutoCompleter,
     )
 
 # Define mirroring maps
@@ -14,7 +14,7 @@ horizontal_mirror_map = {"s": "n", "n": "s", "e": "e", "w": "w"}
 class MirroredPermutationExecutor(PermutationExecutor):
     def __init__(
         self,
-        autocompleter: "SequenceAutoCompletionManager",
+        autocompleter: "SequenceAutoCompleter",
         color_swap_second_half: bool,
     ):
         self.autocompleter = autocompleter

@@ -8,7 +8,7 @@ from widgets.sequence_widget.invisible_dictionary_beat_frame_layout_manager impo
     InvisibleDictionaryBeatFrameLayoutManager,
 )
 from ..sequence_widget.beat_frame.beat_deletion_manager import BeatDeletionManager
-from ..sequence_widget.beat_frame.image_export_manager import ImageExportManager
+from ..sequence_widget.beat_frame.image_export_manager.image_export_manager import ImageExportManager
 
 from ..sequence_widget.beat_frame.beat_selection_overlay import (
     BeatSelectionOverlay,

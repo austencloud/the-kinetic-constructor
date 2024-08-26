@@ -7,18 +7,18 @@ from typing import TYPE_CHECKING
 from sequence_auto_completer.permutation_executor_base import PermutationExecutor
 
 if TYPE_CHECKING:
-    from sequence_auto_completer.sequence_auto_completion_manager import (
-        SequenceAutoCompletionManager,
+    from sequence_auto_completer.sequence_auto_completer import (
+        SequenceAutoCompleter,
     )
 
 if TYPE_CHECKING:
-    from sequence_auto_completer.sequence_auto_completion_manager import (
-        SequenceAutoCompletionManager,
+    from sequence_auto_completer.sequence_auto_completer import (
+        SequenceAutoCompleter,
     )
 
 
 class RotationalPermutationExecuter(PermutationExecutor):
-    def __init__(self, autocompleter: "SequenceAutoCompletionManager"):
+    def __init__(self, autocompleter: "SequenceAutoCompleter"):
         self.autocompleter = autocompleter
 
     def create_permutations(self, sequence: list[dict]):
