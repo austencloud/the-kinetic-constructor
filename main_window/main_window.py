@@ -5,7 +5,7 @@ from .settings_manager.settings_manager import SettingsManager
 from .main_widget.main_widget import MainWidget
 from widgets.profiler import Profiler
 from main_window.main_window_geometry_manager import MainWindowGeometryManager
-from main_window.main_window_menu_bar import MainWindowMenuBar
+from main_window.menu_bar.menu_bar import MenuBar
 import logging
 
 logging.getLogger("PIL").setLevel(logging.WARNING)
@@ -21,7 +21,7 @@ class MainWindow(QMainWindow):
         self.window_manager = MainWindowGeometryManager(self)
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Kinetic Constructor")
-        self.menu_bar = MainWindowMenuBar(self)
+        self.menu_bar = MenuBar(self)
         self.setMenuBar(self.menu_bar)
 
     def exec(self, app: QApplication) -> int:

@@ -6,11 +6,11 @@ from PyQt6.QtGui import QAction
 
 
 if TYPE_CHECKING:
-    from main_window.main_window_menu_bar import MainWindowMenuBar
+    from main_window.menu_bar.menu_bar import MenuBar
 
 
 class VisibilityMenu(QMenu):
-    def __init__(self, menu_bar: "MainWindowMenuBar"):
+    def __init__(self, menu_bar: "MenuBar"):
         super().__init__("Visibility", menu_bar)
         self.menu_bar = menu_bar
         self.glyph_visibility_manager = (

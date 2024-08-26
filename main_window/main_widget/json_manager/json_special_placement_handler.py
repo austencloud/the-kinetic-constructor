@@ -2,11 +2,17 @@ import json
 import logging
 import os
 import re
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from main_window.main_widget.json_manager.json_manager import JSON_Manager
 
 
-class SpecialPlacementJsonHandler:
-    @staticmethod
-    def load_json_data(file_path) -> dict:
+class JsonSpecialPlacementHandler:
+    def __init__(self, json_manager: "JSON_Manager") -> None:
+        self.json_manager = json_manager
+
+    def load_json_data(self, file_path) -> dict:
         try:
             if os.path.exists(file_path):
                 with open(file_path, "r", encoding="utf-8") as file:
@@ -16,8 +22,7 @@ class SpecialPlacementJsonHandler:
             logging.error(f"Error loading JSON data from {file_path}: {e}")
             return {}
 
-    @staticmethod
-    def write_json_data(data, file_path) -> None:
+    def write_json_data(self, data, file_path) -> None:
         """Write JSON data to a file with specific formatting."""
         try:
             with open(file_path, "w", encoding="utf-8") as file:
@@ -26,6 +31,5 @@ class SpecialPlacementJsonHandler:
                     r"\[\s+(-?\d+),\s+(-?\d+)\s+\]", r"[\1, \2]", formatted_json_str
                 )
                 file.write(formatted_json_str)
-            # logging.info(f"Data successfully written to {file_path}")
         except IOError as e:
             logging.error(f"Failed to write to {file_path}: {e}")

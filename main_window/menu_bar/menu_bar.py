@@ -1,10 +1,9 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QMenuBar
-from widgets.menu_bar.user_profile_menu import UserProfileMenu
-from widgets.menu_bar.backgrounds_menu import BackgroundsMenu
-from widgets.menu_bar.prop_type_menu import PropTypeMenu
-from widgets.menu_bar.settings_menu import SettingsMenu
-from widgets.menu_bar.visibility_menu import VisibilityMenu
+from main_window.menu_bar.user_profile_menu import UserProfileMenu
+from main_window.menu_bar.backgrounds_menu import BackgroundsMenu
+from main_window.menu_bar.prop_type_menu import PropTypeMenu
+from main_window.menu_bar.visibility_menu import VisibilityMenu
 from PyQt6.QtWidgets import QMenu
 
 if TYPE_CHECKING:
@@ -12,7 +11,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
 
-class MainWindowMenuBar(QMenuBar):
+class MenuBar(QMenuBar):
     def __init__(self, main_window: "MainWindow"):
         super().__init__()
         self.main_widget = main_window.main_widget

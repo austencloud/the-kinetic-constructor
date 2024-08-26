@@ -6,11 +6,11 @@ from PyQt6.QtGui import QActionGroup, QAction
 
 
 if TYPE_CHECKING:
-    from main_window.main_window_menu_bar import MainWindowMenuBar
+    from main_window.menu_bar.menu_bar import MenuBar
 
 
 class BackgroundsMenu(QMenu):
-    def __init__(self, menu_bar: "MainWindowMenuBar"):
+    def __init__(self, menu_bar: "MenuBar"):
         super().__init__("Backgrounds", menu_bar)
         self.menu_bar = menu_bar
         self.settings_manager = self.menu_bar.main_widget.main_window.settings_manager

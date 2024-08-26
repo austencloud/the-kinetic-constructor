@@ -26,7 +26,6 @@ from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
 from widgets.dictionary_widget.thumbnail_box.metadata_extractor import MetaDataExtractor
 from main_window.main_widget.json_manager.json_manager import JSON_Manager
 
-from widgets.menu_bar.prop_type_selector import PropTypeSelector
 from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.components.pictograph_key_generator import (
     PictographKeyGenerator,
@@ -109,7 +108,6 @@ class MainWidget(QTabWidget):
     def _setup_components(self) -> None:
         self.json_manager = JSON_Manager(self)
         self.svg_manager = SvgManager()
-        self.prop_type_selector = PropTypeSelector(self)
         self.turns_tuple_generator = TurnsTupleGenerator()
         self.pictograph_key_generator = PictographKeyGenerator()
         self.special_placement_loader = SpecialPlacementLoader(self)

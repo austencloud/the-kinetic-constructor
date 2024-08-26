@@ -1,28 +1,14 @@
 import logging
 from typing import TYPE_CHECKING
-
-from widgets.current_sequence_json_manager.json_ori_calculator import JsonOriCalculator
-from widgets.current_sequence_json_manager.json_sequence_updater import (
-    JsonSequenceUpdater,
-)
-from widgets.current_sequence_json_manager.json_sequence_validation_engine import (
-    JsonSequenceValidationEngine,
-)
-from widgets.current_sequence_json_manager.json_start_position_handler import (
-    JsonStartPositionHandler,
-)
-
+from .json_ori_calculator import JsonOriCalculator
+from .json_sequence_updater import JsonSequenceUpdater
+from .json_sequence_validation_engine import JsonSequenceValidationEngine
+from .json_start_position_handler import JsonStartPositionHandler
+from .json_sequence_loader_saver import JsonSequenceLoaderSaver
+from .json_special_placement_handler import JsonSpecialPlacementHandler
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
-
-from widgets.current_sequence_json_manager.json_sequence_loader_saver import (
-    JsonSequenceLoaderSaver,
-)
-from widgets.pictograph.components.placement_managers.arrow_placement_manager.components.special_arrow_positioner.managers.special_placement_json_handler import (
-    SpecialPlacementJsonHandler,
-)
-
 
 class JSON_Manager:
     def __init__(self, main_widget: "MainWidget") -> None:
@@ -30,7 +16,7 @@ class JSON_Manager:
         self.main_widget = main_widget
 
         # special placement
-        self.special_placement_handler = SpecialPlacementJsonHandler()
+        self.special_placement_handler = JsonSpecialPlacementHandler(self)
 
         # current sequence
         self.loader_saver = JsonSequenceLoaderSaver(self)

@@ -4,11 +4,11 @@ from PyQt6.QtGui import QActionGroup, QAction
 
 
 if TYPE_CHECKING:
-    from main_window.main_window_menu_bar import MainWindowMenuBar
+    from main_window.menu_bar.menu_bar import MenuBar
 
 
 class UserProfileMenu(QMenu):
-    def __init__(self, menu_bar: "MainWindowMenuBar"):
+    def __init__(self, menu_bar: "MenuBar"):
         super().__init__("User Profile", menu_bar)
         self.menu_bar = menu_bar
         self.main_widget = menu_bar.main_widget
