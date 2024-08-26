@@ -3,10 +3,10 @@ from functools import partial
 from PyQt6.QtCore import QObject, pyqtSignal
 from Enums.letters import Letter
 from data.constants import END_POS, START_POS
+from widgets.pictograph.pictograph import Pictograph
 from widgets.sequence_widget.beat_frame.start_pos_beat import (
     StartPositionBeat,
 )
-from ....pictograph.pictograph import Pictograph
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
 

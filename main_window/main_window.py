@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt
 from .menu_bar_widget import MenuBarWidget
 from .settings_manager.settings_manager import SettingsManager
 from .main_widget.main_widget import MainWidget
-from widgets.profiler import Profiler
+from profiler import Profiler
 from main_window.main_window_geometry_manager import MainWindowGeometryManager
 
 

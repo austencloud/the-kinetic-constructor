@@ -4,16 +4,19 @@ from Enums.Enums import LetterType
 from data.constants import OPP, SAME
 from PyQt6.QtCore import Qt
 
-from widgets.pictograph.pictograph import Pictograph
-from widgets.scroll_area.components.section_manager.section_widget.components.option_picker_section_header import (
+from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_header import (
     OptionPickerSectionHeader,
 )
-from widgets.scroll_area.components.section_manager.section_widget.components.pictograph_frame import ScrollAreaSectionPictographFrame
-
+from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_pictograph_frame import (
+    OptionPickerSectionPictographFrame,
+)
+from widgets.pictograph.pictograph import Pictograph
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import OptionPickerScrollArea
+    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
+        OptionPickerScrollArea,
+    )
 
 
 class OptionPickerSectionWidget(QGroupBox):
@@ -27,9 +30,8 @@ class OptionPickerSectionWidget(QGroupBox):
         self.letter_type = letter_type
         self.vtg_dir_btn_state: dict[str, bool] = {SAME: False, OPP: False}
 
-
     def setup_components(self) -> None:
-        self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
+        self.pictograph_frame = OptionPickerSectionPictographFrame(self)
         self.pictographs: dict[str, Pictograph] = {}
         self.pictograph_frame.setStyleSheet("QFrame {border: none;}")
         self._setup_header()
@@ -44,7 +46,6 @@ class OptionPickerSectionWidget(QGroupBox):
         self.layout.addWidget(self.header)
         self.layout.addWidget(self.pictograph_frame)
 
-
     def _setup_header(self) -> None:
         self.header = OptionPickerSectionHeader(self)
         self.header.type_label.clicked.connect(self.toggle_section)
@@ -52,7 +53,6 @@ class OptionPickerSectionWidget(QGroupBox):
     def toggle_section(self) -> None:
         is_visible = not self.pictograph_frame.isVisible()
         self.pictograph_frame.setVisible(is_visible)
-
 
     def clear_pictographs(self) -> None:
         for pictograph_key in list(self.pictographs.keys()):
@@ -76,8 +76,6 @@ class OptionPickerSectionWidget(QGroupBox):
         self.pictograph_frame.layout.addWidget(pictograph.view)
         pictograph.view.resize_pictograph_view()
         pictograph.view.show()
-
-
 
     def resize_option_picker_section_widget(self) -> None:
         section_width = int((self.scroll_area.width()))

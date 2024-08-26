@@ -7,9 +7,9 @@ from typing import IO, Any, Callable, Optional
 
 
 class Profiler:
-    def __init__(self, exclude_modules: Optional[list[str]] = None) -> None:
+    def __init__(self) -> None:
         self.profiler: cProfile.Profile = cProfile.Profile()
-        self.exclude_modules = exclude_modules or ["PyQt6", "__main__"]
+        self.exclude_modules = "PyQt6", "__main__"
 
     def enable(self) -> None:
         self.profiler.enable()

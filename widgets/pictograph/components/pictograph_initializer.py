@@ -9,7 +9,7 @@ from objects.prop.prop import Prop
 from objects.prop.prop_classes import *
 
 from data.constants import *
-from widgets.factories.prop_factory import PropFactory
+from widgets.pictograph.components.prop_factory import PropFactory
 from widgets.pictograph.components.elemental_glyph.elemental_glyph import ElementalGlyph
 from widgets.pictograph.components.start_to_end_pos_glyph.start_to_end_pos_glyph import (
     StartToEndPosGlyph,

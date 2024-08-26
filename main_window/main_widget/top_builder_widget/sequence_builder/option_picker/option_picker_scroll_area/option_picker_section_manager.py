@@ -1,13 +1,19 @@
 from typing import TYPE_CHECKING
+
 from Enums.Enums import LetterType
+
+
 from Enums.letters import Letter
-from .option_picker_section_widget.option_picker_section_widget import OptionPickerSectionWidget
-from .section_group_widget import OptionPickerSectionGroupWidget
+
+
+from .option_picker_section_group_widget import OptionPickerSectionGroupWidget
+from .option_picker_section_widget import OptionPickerSectionWidget
+
 
 if TYPE_CHECKING:
+    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import OptionPickerScrollArea
+    from main_window.main_widget.top_builder_widget.sequence_builder.sequence_builder import SequenceBuilder
 
-    from ..option_picker_scroll_area import OptionPickerScrollArea
-    from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
 
 class OptionPickerSectionManager:

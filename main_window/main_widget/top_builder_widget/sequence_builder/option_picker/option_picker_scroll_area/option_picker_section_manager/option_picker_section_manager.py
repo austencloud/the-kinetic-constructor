@@ -1,23 +1,12 @@
 from typing import TYPE_CHECKING
-
 from Enums.Enums import LetterType
-
-
 from Enums.letters import Letter
-
-from widgets.scroll_area.components.section_manager.section_widget.section_group_widget import (
-    SectionGroupWidget,
-)
-from widgets.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_widget import (
-    OptionPickerSectionWidget,
-)
-
+from .option_picker_section_widget.option_picker_section_widget import OptionPickerSectionWidget
+from ..option_picker_section_group_widget import OptionPickerSectionGroupWidget
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
-        OptionPickerScrollArea,
-    )
 
+    from ..option_picker_scroll_area import OptionPickerScrollArea
     from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
 
@@ -62,7 +51,7 @@ class OptionPickerSectionManager:
             if section:
                 if section_type in grouped_sections:
                     if group_widget is None:
-                        group_widget = SectionGroupWidget()
+                        group_widget = OptionPickerSectionGroupWidget()
                         correct_index = self.get_correct_index_for_section(
                             grouped_sections[0]
                         )

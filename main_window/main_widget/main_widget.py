@@ -11,7 +11,7 @@ from main_window.main_widget.letter_loader import LetterLoader
 from main_window.main_widget.sequence_properties_manager.sequence_properties_manager import (
     SequencePropertiesManager,
 )
-from main_window.main_widget.top_builder_widget import TopBuilderWidget
+from main_window.main_widget.top_builder_widget.top_builder_widget import TopBuilderWidget
 from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
     SvgManager,
 )

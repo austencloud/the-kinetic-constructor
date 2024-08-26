@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     pass
 
 
-class ScrollAreaSectionPictographFrame(QFrame):
+class OptionPickerSectionPictographFrame(QFrame):
     def __init__(self, section) -> None:
         super().__init__()
         self.section = section

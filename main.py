@@ -5,7 +5,7 @@ from PyQt6.QtGui import QPixmap, QGuiApplication, QScreen
 from PyQt6.QtCore import Qt, QTimer
 from main_window.main_window import MainWindow
 from utilities.path_helpers import get_images_and_data_path
-from widgets.profiler import Profiler
+from profiler import Profiler
 
 logging.getLogger("PIL").setLevel(logging.WARNING)
 

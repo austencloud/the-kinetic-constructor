@@ -6,10 +6,11 @@ from Enums.Enums import LetterType
 from PyQt6.QtCore import pyqtSignal
 
 
+
+
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker.scroll_area.option_picker_section_widget import (
-        OptionPickerSectionWidget,
-    )
+    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_widget import OptionPickerSectionWidget
+
 
 
 class SectionTypeLabel(QLabel):
