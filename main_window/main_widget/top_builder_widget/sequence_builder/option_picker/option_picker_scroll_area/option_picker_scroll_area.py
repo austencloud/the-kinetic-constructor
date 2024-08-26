@@ -11,8 +11,8 @@ from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.o
 from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_manager import (
     OptionPickerSectionManager,
 )
-from widgets.base_widgets.base_picker_scroll_area import BasePickerScrollArea
-from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
+from base_widgets.base_picker_scroll_area import BasePickerScrollArea
+from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 from .option_picker_display_manager import (

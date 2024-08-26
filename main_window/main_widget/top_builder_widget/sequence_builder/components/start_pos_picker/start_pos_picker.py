@@ -7,7 +7,7 @@ from main_window.main_widget.top_builder_widget.sequence_builder.components.star
 from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.start_pos_pictograph_frame import (
     StartPosPickerPictographFrame,
 )
-from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
+from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 from .start_pos_manager import StartPosManager

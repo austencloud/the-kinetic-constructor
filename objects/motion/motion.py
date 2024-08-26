@@ -16,7 +16,7 @@ from Enums.MotionAttributes import (
 )
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
     from objects.arrow.arrow import Arrow
     from objects.prop.prop import Prop

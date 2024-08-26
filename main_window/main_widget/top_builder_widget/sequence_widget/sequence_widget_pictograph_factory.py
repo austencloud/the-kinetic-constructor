@@ -17,7 +17,7 @@ from data.constants import (
     START_POS,
 )
 
-from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
+from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 if TYPE_CHECKING:

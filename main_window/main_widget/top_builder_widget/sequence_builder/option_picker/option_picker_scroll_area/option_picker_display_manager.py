@@ -3,7 +3,7 @@ from Enums.Enums import LetterType, Letter
 from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
     Beat,
 )
-from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
+from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 from Enums.Enums import LetterType
 from .option_picker_section_widget import (

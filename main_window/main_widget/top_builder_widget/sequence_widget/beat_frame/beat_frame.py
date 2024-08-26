@@ -6,7 +6,7 @@ from PyQt6.QtGui import QKeyEvent
 from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat_frame_layout_manager import (
     BeatFrameLayoutManager,
 )
-from widgets.base_widgets.base_beat_frame import BaseBeatFrame
+from base_widgets.base_beat_frame import BaseBeatFrame
 
 from .beat_deletion_manager import BeatDeletionManager
 from .image_export_manager.image_export_manager import ImageExportManager
@@ -15,7 +15,7 @@ from .start_pos_beat import StartPositionBeat
 from .start_pos_beat import StartPositionBeatView
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.base_pictograph import BasePictograph
     from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
         SequenceWidget,
     )

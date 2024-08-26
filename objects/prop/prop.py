@@ -13,7 +13,7 @@ from Enums.PropTypes import PropType
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
-    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
     from objects.motion.motion import Motion
 

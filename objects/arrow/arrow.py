@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..motion.motion import Motion
-    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
+    from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 class Arrow(GraphicalObject):

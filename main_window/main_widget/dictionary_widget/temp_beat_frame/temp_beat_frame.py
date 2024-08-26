@@ -14,12 +14,12 @@ from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start
     StartPositionBeat,
     StartPositionBeatView,
 )
-from widgets.base_widgets.base_beat_frame import BaseBeatFrame
+from base_widgets.base_beat_frame import BaseBeatFrame
 from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame_layout_manager import (
     TempBeatFrameLayoutManager,
 )
 
-from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
+from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 if TYPE_CHECKING:

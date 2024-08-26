@@ -1,4 +1,4 @@
-from widgets.base_widgets.base_rot_dir_button import BaseRotDirButton
+from base_widgets.base_rot_dir_button import BaseRotDirButton
 
 
 class PropRotDirButton(BaseRotDirButton):
