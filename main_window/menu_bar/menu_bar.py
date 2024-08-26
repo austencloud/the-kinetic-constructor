@@ -80,7 +80,7 @@ class MenuBar(QMenuBar):
 
     def _adjust_font_size(self):
         font = self.font()
-        font_size = self.main_window.width() // 120
+        font_size = self.main_window.width() // 140
         font.setPointSize(font_size)
         self.setFont(font)
 

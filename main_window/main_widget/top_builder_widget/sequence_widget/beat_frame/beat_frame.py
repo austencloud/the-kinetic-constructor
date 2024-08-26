@@ -127,7 +127,8 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
             self.json_manager.loader_saver.load_current_sequence_json()
         )
         self.propogate_turn_adjustment(current_sequence_json)
-        self.sequence_widget.update_difficulty_label()
+        if len(current_sequence_json) > 2:
+            self.sequence_widget.update_difficulty_label()
 
     def propogate_turn_adjustment(self, current_sequence_json) -> None:
         for i, entry in enumerate(current_sequence_json):

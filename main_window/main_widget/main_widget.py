@@ -5,39 +5,25 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from Enums.PropTypes import PropType
-
-
-from main_window.main_widget.letter_loader import LetterLoader
-from main_window.main_widget.sequence_properties_manager.sequence_properties_manager import (
+from .letter_loader import LetterLoader
+from .sequence_properties_manager.sequence_properties_manager import (
     SequencePropertiesManager,
 )
-from main_window.main_widget.top_builder_widget.top_builder_widget import (
-    TopBuilderWidget,
-)
-from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
-    SvgManager,
-)
+from .top_builder_widget.top_builder_widget import TopBuilderWidget
+from objects.graphical_object.svg_manager.graphical_object_svg_manager import SvgManager
 
-from main_window.main_widget.sequence_level_evaluator import SequenceLevelEvaluator
-from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.thumbnail_finder import (
+from .sequence_level_evaluator import SequenceLevelEvaluator
+from .thumbnail_finder import (
     ThumbnailFinder,
 )
 from utilities.path_helpers import get_images_and_data_path
 from styles.get_tab_stylesheet import get_tab_stylesheet
-from main_window.main_widget.dictionary_widget.dictionary_widget import DictionaryWidget
-from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.metadata_extractor import (
-    MetaDataExtractor,
-)
-from main_window.main_widget.json_manager.json_manager import JSON_Manager
-
-from base_widgets.base_pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
-    TurnsTupleGenerator,
-)
+from .dictionary_widget.dictionary_widget import DictionaryWidget
+from .metadata_extractor import MetaDataExtractor
+from .json_manager.json_manager import JSON_Manager
+from .turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-
-from main_window.main_widget.pictograph_key_generator import (
-    PictographKeyGenerator,
-)
+from .pictograph_key_generator import PictographKeyGenerator
 from data.constants import DIAMOND
 
 from ..main_widget.special_placement_loader import SpecialPlacementLoader
