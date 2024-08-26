@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from widgets.notes_manager import NotesManager
+    from settings_manager.user_profile_settings.notes_manager.notes_manager import NotesManager
 
 
 class EditNotesDialog(QDialog):

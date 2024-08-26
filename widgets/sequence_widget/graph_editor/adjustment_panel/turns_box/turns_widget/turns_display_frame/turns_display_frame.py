@@ -1,18 +1,18 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
 from typing import TYPE_CHECKING
 
-from .GE_adjust_turns_button import GE_AdjustTurnsButton
-from .GE_turns_label import GE_TurnsLabel
+from .adjust_turns_button import AdjustTurnsButton
+from .turns_label import GE_TurnsLabel
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from ..GE_turns_widget import GE_TurnsWidget
+    from ..turns_widget import TurnsWidget
 
 
-class GE_TurnsDisplayFrame(QFrame):
+class TurnsDisplayFrame(QFrame):
     """This is the frame that contains the turns label and the buttons to adjust the turns."""
 
-    def __init__(self, turns_widget: "GE_TurnsWidget") -> None:
+    def __init__(self, turns_widget: "TurnsWidget") -> None:
         super().__init__(turns_widget)
         self.turns_widget = turns_widget
         self.turns_box = turns_widget.turns_box
@@ -24,8 +24,8 @@ class GE_TurnsDisplayFrame(QFrame):
     def _setup_components(self) -> None:
         plus_path = get_images_and_data_path("images/icons/plus.svg")
         minus_path = get_images_and_data_path("images/icons/minus.svg")
-        self.increment_button = GE_AdjustTurnsButton(plus_path, self)
-        self.decrement_button = GE_AdjustTurnsButton(minus_path, self)
+        self.increment_button = AdjustTurnsButton(plus_path, self)
+        self.decrement_button = AdjustTurnsButton(minus_path, self)
         self.turns_label = GE_TurnsLabel(self)
 
     def _setup_layout(self) -> None:

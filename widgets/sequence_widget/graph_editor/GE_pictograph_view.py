@@ -7,14 +7,16 @@ from PyQt6.QtGui import QPainter, QPen, QColor
 from widgets.sequence_widget.beat_frame.beat import Beat
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import GE_PictographContainer
+    from widgets.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
+        GraphEditorPictographContainer,
+    )
     from .GE_pictograph_view import GE_BlankPictograph
 
 
 class GE_PictographView(PictographView):
     def __init__(
         self,
-        pictograph_container: "GE_PictographContainer",
+        pictograph_container: "GraphEditorPictographContainer",
         blank_pictograph: "GE_BlankPictograph",
     ) -> None:
         super().__init__(blank_pictograph)
@@ -78,6 +80,6 @@ class GE_PictographView(PictographView):
 
 
 class GE_BlankPictograph(Pictograph):
-    def __init__(self, pictograph_container: "GE_PictographContainer") -> None:
+    def __init__(self, pictograph_container: "GraphEditorPictographContainer") -> None:
         super().__init__(pictograph_container.graph_editor.main_widget)
         self.is_blank = True

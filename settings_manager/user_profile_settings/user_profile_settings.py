@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
-from widgets.notes_manager import NotesManager
-from widgets.user_manager import UserManager
+from settings_manager.user_profile_settings.notes_manager.notes_manager import NotesManager
+from settings_manager.user_profile_settings.user_manager.user_manager import UserManager
 
 
 if TYPE_CHECKING:

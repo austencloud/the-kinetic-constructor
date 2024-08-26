@@ -6,15 +6,15 @@ from typing import TYPE_CHECKING
 from data.constants import BLUE, RED
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.adjustment_panel.turns_box.turns_widget.turns_display_frame.GE_turns_display_frame import GE_TurnsDisplayFrame
+    from .turns_display_frame import TurnsDisplayFrame
 
 
 class GE_TurnsLabel(QLabel):
-    """This class is the colored box that displays the turns number inside the turns display frame."""
+    """This class is the colored box that displays the turns number inside the turns box display frame of the graph editor."""
 
     clicked = pyqtSignal()
 
-    def __init__(self, turns_display_frame: "GE_TurnsDisplayFrame") -> None:
+    def __init__(self, turns_display_frame: "TurnsDisplayFrame") -> None:
         super().__init__()
         self.turns_box = turns_display_frame.turns_box
         self.turns_display_font_size = 20

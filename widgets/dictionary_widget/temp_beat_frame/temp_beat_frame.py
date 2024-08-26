@@ -54,7 +54,6 @@ class TempBeatFrame(BaseBeatFrame):
         self.layout_manager = TempBeatFrameLayoutManager(self)
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(self)
-        self.beat_deletion_manager = BeatDeletionManager(self)
         self.export_manager = ImageExportManager(self, TempBeatFrame)
 
     def _setup_layout(self) -> None:

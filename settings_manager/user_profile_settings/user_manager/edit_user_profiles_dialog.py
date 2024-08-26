@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from widgets.user_manager import UserManager
+    from settings_manager.user_profile_settings.user_manager.user_manager import UserManager
 
 
 class EditUserProfilesDialog(QDialog):

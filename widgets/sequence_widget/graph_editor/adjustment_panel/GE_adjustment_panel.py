@@ -8,7 +8,7 @@ from .turns_box.turns_box import TurnsBox
 
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.graph_editor import GraphEditor
+    from ..graph_editor import GraphEditor
 
 
 class GE_AdjustmentPanel(QFrame):

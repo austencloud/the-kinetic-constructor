@@ -1,23 +1,14 @@
 from typing import TYPE_CHECKING
-
 from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
-from widgets.graph_editor.adjustment_panel.turns_box.prop_rot_dir_button_manager import (
-    PropRotDirButtonManager,
-)
-from widgets.graph_editor.adjustment_panel.turns_box.vtg_dir_button_handler import (
-    VtgDirButtonManager,
-)
-
-
+from ..turns_box.prop_rot_dir_button_manager import PropRotDirButtonManager
+from ..turns_box.vtg_dir_button_handler import VtgDirButtonManager
 from .turns_box_header import TurnsBoxHeader
-from .turns_widget.GE_turns_widget import GE_TurnsWidget
+from .turns_widget.turns_widget import TurnsWidget
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 if TYPE_CHECKING:
+    from ..GE_adjustment_panel import GE_AdjustmentPanel
     from widgets.pictograph.pictograph import Pictograph
-    from widgets.graph_editor.adjustment_panel.GE_adjustment_panel import (
-        GE_AdjustmentPanel,
-    )
 
 
 class TurnsBox(QFrame):
@@ -46,7 +37,7 @@ class TurnsBox(QFrame):
         self.vtg_dir_button_manager = VtgDirButtonManager(self)
         self.prop_rot_dir_button_manager = PropRotDirButtonManager(self)
         self.header = TurnsBoxHeader(self)
-        self.turns_widget = GE_TurnsWidget(self)
+        self.turns_widget = TurnsWidget(self)
 
     def _setup_layout(self) -> None:
         layout: QVBoxLayout = QVBoxLayout(self)

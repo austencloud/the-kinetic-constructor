@@ -5,13 +5,13 @@ from PyQt6.QtCore import pyqtSignal
 from Enums.Enums import Turns
 
 if TYPE_CHECKING:
-    from .GE_turns_widget import GE_TurnsWidget
+    from .turns_widget import TurnsWidget
 
 
-class GE_TurnsAdjustmentManager(QObject):
+class TurnsAdjustmentManager(QObject):
     turns_adjusted = pyqtSignal(float)
 
-    def __init__(self, turns_widget: "GE_TurnsWidget") -> None:
+    def __init__(self, turns_widget: "TurnsWidget") -> None:
         super().__init__(turns_widget)
         self.turns_widget = turns_widget
         self.graph_editor = self.turns_widget.turns_box.graph_editor

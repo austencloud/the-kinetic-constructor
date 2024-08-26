@@ -4,15 +4,13 @@ from Enums.MotionAttributes import PropRotDir
 from data.constants import *
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.turns_box.turns_widget.GE_turns_widget import (
-        GE_TurnsWidget,
-    )
+    from .turns_widget import TurnsWidget
     from widgets.pictograph.pictograph import Pictograph
     from objects.motion.motion import Motion
 
 
-class GE_TurnsUpdater:
-    def __init__(self, turns_widget: "GE_TurnsWidget") -> None:
+class TurnsUpdater:
+    def __init__(self, turns_widget: "TurnsWidget") -> None:
         self.turns_box = turns_widget.turns_box
         self.turns_widget = turns_widget
 

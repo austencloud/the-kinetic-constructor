@@ -2,21 +2,20 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication, QPushButton
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QFont
-
 from data.constants import BLUE, HEX_BLUE, HEX_RED
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.adjustment_panel.turns_box.turns_widget.GE_direct_set_dialog.GE_direct_set_dialog import GE_DirectSetDialog
+    from .direct_set_turns_dialog import DirectSetTurnsDialog
 
 
-class GE_DirectSetTurnsButton(QPushButton):
-    def __init__(self, value, direct_set_dialog: "GE_DirectSetDialog") -> None:
+class DirectSetTurnsButton(QPushButton):
+    def __init__(self, value, direct_set_dialog: "DirectSetTurnsDialog") -> None:
         super().__init__(value)
         self.turns_widget = direct_set_dialog.turns_widget
         self.turns_box = self.turns_widget.turns_box
         self.clicked.connect(self.direct_set_adjustment)
         self.setMouseTracking(True)
-        
+
     def enterEvent(self, event) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.PointingHandCursor)
 

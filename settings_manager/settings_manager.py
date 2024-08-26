@@ -6,7 +6,7 @@ from Enums.PropTypes import PropType
 from settings_manager.dictionary_settings import DictionarySettings
 from settings_manager.image_export_settings import ImageExportSettings
 from settings_manager.sequence_layout_settings import SequenceLayoutSettings
-from settings_manager.user_profile_settings import UserProfileSettings
+from settings_manager.user_profile_settings.user_profile_settings import UserProfileSettings
 from settings_manager.visibility_settings import VisibilitySettings
 from widgets.path_helpers.path_helpers import get_user_editable_resource_path
 from .global_settings import GlobalSettings

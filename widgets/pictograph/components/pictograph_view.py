@@ -131,22 +131,22 @@ class PictographView(QGraphicsView):
         QApplication.restoreOverrideCursor()
 
     def enterEvent(self, event: QEvent) -> None:
-        from widgets.graph_editor.pictograph_container.GE_pictograph_container import (
-            GE_PictographContainer,
+        from widgets.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
+            GraphEditorPictographContainer,
         )
 
-        if isinstance(self.parent(), GE_PictographContainer):
+        if isinstance(self.parent(), GraphEditorPictographContainer):
             self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
         else:
             self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.pictograph.container.styled_border_overlay.set_gold_border()
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
-        from widgets.graph_editor.pictograph_container.GE_pictograph_container import (
-            GE_PictographContainer,
+        from widgets.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
+            GraphEditorPictographContainer,
         )
 
-        if isinstance(self.parent(), GE_PictographContainer):
+        if isinstance(self.parent(), GraphEditorPictographContainer):
             if self.mouse_event_handler.is_arrow_under_cursor(event):
                 self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
             else:

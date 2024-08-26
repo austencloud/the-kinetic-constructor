@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from ..graph_editor import GraphEditor
 
 
-class GE_PictographContainer(QWidget):
+class GraphEditorPictographContainer(QWidget):
     def __init__(
         self,
         graph_editor: "GraphEditor",

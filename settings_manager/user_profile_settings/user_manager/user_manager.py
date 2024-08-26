@@ -2,10 +2,10 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QComboBox
 from PyQt6.QtCore import QObject
 
-from widgets.sequence_widget.edit_user_profiles_dialog import EditUserProfilesDialog
+from settings_manager.user_profile_settings.user_manager.edit_user_profiles_dialog import EditUserProfilesDialog
 
 if TYPE_CHECKING:
-    from settings_manager.user_profile_settings import UserProfileSettings
+    from settings_manager.user_profile_settings.user_profile_settings import UserProfileSettings
 
 
 class UserManager(QObject):

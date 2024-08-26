@@ -3,19 +3,17 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Union
 
-from widgets.graph_editor.adjustment_panel.turns_box.turns_widget.turns_display_frame.GE_turns_display_frame import (
-    GE_TurnsDisplayFrame,
-)
-from .GE_direct_set_dialog.GE_direct_set_dialog import GE_DirectSetDialog
-from .GE_turns_adjustment_manager import GE_TurnsAdjustmentManager
-from .GE_turns_updater import GE_TurnsUpdater
+from widgets.sequence_widget.graph_editor.adjustment_panel.turns_box.turns_widget.direct_set_dialog.direct_set_turns_dialog import DirectSetTurnsDialog
+from .turns_display_frame.turns_display_frame import TurnsDisplayFrame
+from .turns_adjustment_manager import TurnsAdjustmentManager
+from .turns_updater import TurnsUpdater
 
 
 if TYPE_CHECKING:
     from ..turns_box import TurnsBox
 
 
-class GE_TurnsWidget(QWidget):
+class TurnsWidget(QWidget):
     def __init__(self, turns_box: "TurnsBox") -> None:
         super().__init__(turns_box)
         self.turns_box = turns_box
@@ -23,10 +21,10 @@ class GE_TurnsWidget(QWidget):
         self._setup_layout()
 
     def _setup_components(self) -> None:
-        self.adjustment_manager = GE_TurnsAdjustmentManager(self)
-        self.updater = GE_TurnsUpdater(self)
-        self.turns_display_frame = GE_TurnsDisplayFrame(self)
-        self.direct_set_dialog = GE_DirectSetDialog(self)
+        self.adjustment_manager = TurnsAdjustmentManager(self)
+        self.updater = TurnsUpdater(self)
+        self.turns_display_frame = TurnsDisplayFrame(self)
+        self.direct_set_dialog = DirectSetTurnsDialog(self)
         self._setup_turns_text()
 
     def _setup_layout(self) -> None:

@@ -14,18 +14,18 @@ from PyQt6.QtSvg import QSvgRenderer
 from data.constants import BLUE, RED
 
 if TYPE_CHECKING:
-    from ..GE_turns_widget import GE_TurnsWidget
+    from ..turns_widget import TurnsWidget
 
 
-class GE_AdjustTurnsButton(QAbstractButton):
-    def __init__(self, svg_path, turns_widget: "GE_TurnsWidget") -> None:
+class AdjustTurnsButton(QAbstractButton):
+    def __init__(self, svg_path, turns_widget: "TurnsWidget") -> None:
         super().__init__(turns_widget)
         self.svg_path = svg_path
         self.turns_widget = turns_widget
         self.turns_box = self.turns_widget.turns_box
         self.svg_renderer = QSvgRenderer(svg_path)
         self.hovered = False
-        self.pressed = False  # Track whether the button is pressed
+        self.pressed = False
         self.setMouseTracking(True)
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
 
@@ -33,7 +33,6 @@ class GE_AdjustTurnsButton(QAbstractButton):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
-        # Create a gradient effect for the button
         gradient = QLinearGradient(0, 0, 0, self.height())
         if self.pressed:
             gradient.setColorAt(0.0, QColor("#d3d3d3"))
@@ -51,7 +50,6 @@ class GE_AdjustTurnsButton(QAbstractButton):
         else:
             border_color = "black"
 
-        # Adjust the border to simulate a "raised" or "depressed" look
         if self.isEnabled():
             if self.hovered or self.pressed:
                 painter.setPen(QPen(QColor(f"{border_color}"), 5))
@@ -59,7 +57,6 @@ class GE_AdjustTurnsButton(QAbstractButton):
                 painter.setPen(QPen(QColor("black"), 2))
             painter.drawRect(self.rect().adjusted(1, 1, -1, -1))
 
-        # Center the icon
         icon_size = int(min(self.width(), self.height()) * 0.9)
         x = (self.width() - icon_size) / 2
         y = (self.height() - icon_size) / 2
