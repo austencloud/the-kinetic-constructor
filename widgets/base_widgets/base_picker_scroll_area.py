@@ -2,7 +2,6 @@ from typing import Union, TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import Qt
 
-from Enums.letters import LetterType
 
 
 if TYPE_CHECKING:

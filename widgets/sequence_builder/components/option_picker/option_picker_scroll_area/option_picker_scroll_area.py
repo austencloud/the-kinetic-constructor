@@ -9,7 +9,7 @@ from .option_picker_pictograph_factory import OptionPickerPictographFactory
 from .option_picker_section_manager.option_picker_section_manager import OptionPickerSectionManager
 from .option_picker_display_manager import OptionPickerDisplayManager
 from .....pictograph.pictograph import Pictograph
-from .....base_widgets.base_scroll_area import BasePickerScrollArea
+from .....base_widgets.base_picker_scroll_area import BasePickerScrollArea
 
 if TYPE_CHECKING:
     from ..option_picker import OptionPicker

@@ -6,7 +6,7 @@ from widgets.sequence_builder.components.option_picker.scroll_area.option_picker
 
 
 from ....pictograph.pictograph import Pictograph
-from widgets.base_widgets.base_scroll_area import BasePickerScrollArea
+from widgets.base_widgets.base_picker_scroll_area import BasePickerScrollArea
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import (
