@@ -22,7 +22,7 @@ from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.o
 from main_window.main_widget.top_builder_widget.sequence_builder.add_to_sequence_manager import (
     AddToSequenceManager,
 )
-from widgets.base_widgets.pictograph.pictograph import BasePictograph
+from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 if TYPE_CHECKING:

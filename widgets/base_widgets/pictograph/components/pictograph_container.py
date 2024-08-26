@@ -8,7 +8,7 @@ from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.style
 
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import BasePictograph
+    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 class PictographContainer(QFrame):

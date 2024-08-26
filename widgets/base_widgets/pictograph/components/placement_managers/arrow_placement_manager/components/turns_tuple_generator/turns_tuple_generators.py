@@ -3,7 +3,7 @@ from data.constants import *
 from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import BasePictograph
+    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 class BaseTurnsTupleGenerator:

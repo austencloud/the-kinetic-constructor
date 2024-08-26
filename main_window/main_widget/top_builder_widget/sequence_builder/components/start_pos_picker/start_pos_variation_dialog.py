@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QPushButton
 from data.constants import BLUE, RED
 from .start_pos_variation_dialog_ori_changer import StartPosVariationDialogOriChanger
 from .start_pos_variation_picker import StartPosVariationPicker
-from widgets.base_widgets.pictograph.pictograph import BasePictograph
+from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 

@@ -33,7 +33,7 @@ from main_window.main_widget.json_manager.json_manager import JSON_Manager
 from widgets.base_widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
     TurnsTupleGenerator,
 )
-from widgets.base_widgets.pictograph.pictograph import BasePictograph
+from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 from main_window.main_widget.pictograph_key_generator import (
     PictographKeyGenerator,

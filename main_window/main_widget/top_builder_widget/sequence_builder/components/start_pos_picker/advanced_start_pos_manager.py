@@ -1,5 +1,5 @@
 from PyQt6.QtCore import QObject, pyqtSignal
-from widgets.base_widgets.pictograph.pictograph import BasePictograph
+from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 from typing import TYPE_CHECKING
 

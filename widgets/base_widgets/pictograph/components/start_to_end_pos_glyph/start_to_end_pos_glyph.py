@@ -8,7 +8,7 @@ from Enums.letters import Letter
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import BasePictograph
+    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 class StartToEndPosGlyph(QGraphicsItemGroup):

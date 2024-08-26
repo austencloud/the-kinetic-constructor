@@ -11,7 +11,7 @@ from .components.special_arrow_positioner.special_arrow_positioner import (
 
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import BasePictograph
+    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 class ArrowPlacementManager:

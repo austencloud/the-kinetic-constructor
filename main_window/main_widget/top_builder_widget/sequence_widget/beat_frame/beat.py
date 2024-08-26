@@ -9,7 +9,7 @@ from PyQt6.QtGui import (
     QImage,
 )
 
-from widgets.base_widgets.pictograph.pictograph import BasePictograph
+from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 if TYPE_CHECKING:

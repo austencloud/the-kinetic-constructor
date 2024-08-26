@@ -4,7 +4,7 @@ from PyQt6.QtCore import QByteArray, QBuffer
 import os
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import BasePictograph
+    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 from PyQt6.QtWidgets import QGraphicsPixmapItem
 

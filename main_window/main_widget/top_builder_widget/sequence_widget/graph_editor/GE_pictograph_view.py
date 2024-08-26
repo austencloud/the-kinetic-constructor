@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPainter, QPen, QColor
 
 from widgets.base_widgets.pictograph.components.pictograph_view import PictographView
-from widgets.base_widgets.pictograph.pictograph import BasePictograph
+from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 if TYPE_CHECKING:

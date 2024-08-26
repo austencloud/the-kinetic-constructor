@@ -4,7 +4,7 @@ from .managers.special_placement_data_updater import SpecialPlacementDataUpdater
 
 if TYPE_CHECKING:
     from ...arrow_placement_manager import ArrowPlacementManager
-    from widgets.base_widgets.pictograph.pictograph import BasePictograph
+    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 class SpecialArrowPositioner:

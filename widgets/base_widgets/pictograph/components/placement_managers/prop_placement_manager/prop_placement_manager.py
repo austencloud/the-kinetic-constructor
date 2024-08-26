@@ -5,7 +5,7 @@ from .handlers.default_prop_positioner import DefaultPropPositioner
 from .handlers.prop_offset_calculator import PropOffsetCalculator
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import BasePictograph
+    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 class PropPlacementManager:

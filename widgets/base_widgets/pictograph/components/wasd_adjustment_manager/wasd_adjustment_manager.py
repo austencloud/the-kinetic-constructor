@@ -9,7 +9,7 @@ from .arrow_movement_manager import ArrowMovementManager
 from .rotation_angle_override_manager import RotationAngleOverrideManager
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import BasePictograph
+    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 class WASD_AdjustmentManager:

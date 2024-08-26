@@ -2,7 +2,7 @@ from PyQt6.QtCore import QObject, pyqtSignal
 from data.constants import END_POS, START_POS
 from typing import TYPE_CHECKING
 
-from widgets.base_widgets.pictograph.pictograph import BasePictograph
+from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 if TYPE_CHECKING:

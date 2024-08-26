@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
 from Enums.Enums import LetterType
-from widgets.base_widgets.pictograph.pictograph import BasePictograph
+from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 if TYPE_CHECKING:
     from ..start_pos_picker.start_pos_picker import StartPosPicker

@@ -5,7 +5,7 @@ from objects.arrow.arrow import Arrow
 
 if TYPE_CHECKING:
     from ...arrow_placement_manager.arrow_placement_manager import ArrowPlacementManager
-    from widgets.base_widgets.pictograph.pictograph import BasePictograph
+    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 class ArrowInitialPosCalculator:

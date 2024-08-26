@@ -3,7 +3,7 @@ from objects.prop.prop import Prop
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import BasePictograph
+    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 from PyQt6.QtWidgets import QGraphicsSceneMouseEvent
 

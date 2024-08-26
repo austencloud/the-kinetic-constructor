@@ -5,7 +5,7 @@ from data.constants import *
 
 if TYPE_CHECKING:
     from .turns_widget import TurnsWidget
-    from widgets.base_widgets.pictograph.pictograph import BasePictograph
+    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
     from objects.motion.motion import Motion
 

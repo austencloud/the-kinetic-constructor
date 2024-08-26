@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 if TYPE_CHECKING:
     from ..beat_adjustment_panel import BeatAdjustmentPanel
-    from widgets.base_widgets.pictograph.pictograph import BasePictograph
+    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 class TurnsBox(QFrame):

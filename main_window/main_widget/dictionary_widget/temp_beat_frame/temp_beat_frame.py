@@ -19,7 +19,7 @@ from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame_l
     TempBeatFrameLayoutManager,
 )
 
-from widgets.base_widgets.pictograph.pictograph import BasePictograph
+from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 if TYPE_CHECKING:

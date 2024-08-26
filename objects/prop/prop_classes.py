@@ -4,7 +4,7 @@ from Enums.PropTypes import PropType
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
-    from widgets.base_widgets.pictograph.pictograph import BasePictograph
+    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 from objects.prop.prop import Prop

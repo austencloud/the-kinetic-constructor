@@ -15,7 +15,7 @@ from .tka_glyph.tka_glyph import TKA_Glyph
 from .vtg_glyph.vtg_glyph import VTG_Glyph
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import BasePictograph
+    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 class PictographInitializer:

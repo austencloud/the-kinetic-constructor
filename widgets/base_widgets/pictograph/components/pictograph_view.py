@@ -8,7 +8,7 @@ from .pictograph_view_mouse_event_handler import PictographViewMouseEventHandler
 
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import BasePictograph
+    from widgets.base_widgets.pictograph.base_pictograph import BasePictograph
 
 
 class PictographView(QGraphicsView):
