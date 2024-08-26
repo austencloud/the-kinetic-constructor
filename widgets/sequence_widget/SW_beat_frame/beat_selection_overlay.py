@@ -9,7 +9,7 @@ from widgets.sequence_widget.SW_beat_frame.start_pos_beat import (
 )
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
+    from widgets.sequence_widget.SW_beat_frame.beat_frame import (
         SW_BeatFrame,
     )
 

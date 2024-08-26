@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
 from sequence_auto_completer.sequence_auto_completion_manager import (
     SequenceAutoCompletionManager,
 )
-from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
+from widgets.sequence_widget.SW_beat_frame.beat_frame import SW_BeatFrame
 from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager
 from widgets.sequence_widget.current_word_label import CurrentWordLabel
 from widgets.sequence_widget.difficulty_label import DifficultyLabel

@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
 from widgets.sequence_widget.SW_beat_frame.layout_options_panel import (
     LayoutOptionsPanel,
 )
-from widgets.sequence_widget.SW_beat_frame.layout_options_preview import (
+from widgets.sequence_widget.SW_beat_frame.layout_options_beat_frame import (
     LayoutOptionsBeatFrame,
 )
 from widgets.sequence_widget.SW_beat_frame.layout_warning_dialog import (
@@ -32,27 +32,10 @@ class LayoutOptionsDialog(QDialog):
             self.sequence_widget.main_widget.main_window.settings_manager
         )
         self.setWindowTitle("Layout Options")
-        self.layout_options = {
-            1: [(1, 1)],
-            2: [(1, 2)],
-            3: [(1, 3), (2, 2)],
-            4: [(2, 2), (1, 4)],
-            5: [(3, 2), (2, 3)],
-            6: [(3, 2), (2, 3)],
-            8: [(4, 2), (2, 4)],
-            7: [(4, 2), (2, 4)],
-            9: [(3, 3), (2, 5), (5, 2)],
-            10: [(5, 2), (2, 5)],
-            11: [(4, 3), (3, 4)],
-            12: [(4, 3), (3, 4)],
-            13: [(5, 3), (3, 5)],
-            14: [(4, 4), (2, 7), (7, 2)],
-            15: [(5, 3), (3, 5)],
-            16: [(4, 4), (2, 8), (8, 2)],
-        }
 
         self._set_size()
 
+        # Separate beat_frame and panel
         self.beat_frame = LayoutOptionsBeatFrame(self)
         self.panel = LayoutOptionsPanel(self)
 
@@ -60,7 +43,6 @@ class LayoutOptionsDialog(QDialog):
         self._setup_apply_button()
         self._setup_action_button_layout()
         self._setup_main_layout()
-        self._setup_layout_options()
 
         if initial_state:
             self.panel.initialize_from_state(initial_state)
@@ -89,18 +71,9 @@ class LayoutOptionsDialog(QDialog):
 
     def _setup_main_layout(self):
         self.main_layout = QVBoxLayout(self)
-        self.main_layout.addWidget(self.panel, 3)
-        self.main_layout.addWidget(self.beat_frame, 9)
+        self.main_layout.addWidget(self.panel, 3)  # Panel for settings
+        self.main_layout.addWidget(self.beat_frame, 9)  # Frame for preview
         self.main_layout.addLayout(self.action_button_layout, 1)
-
-    def _setup_layout_options(self):
-        self.panel.layout_combo_box.clear()
-        num_beats = int(self.panel.beats_combo_box.currentText())
-        layouts = self.layout_options.get(num_beats, [])
-        for layout in layouts:
-            self.panel.layout_combo_box.addItem(f"{layout[0]} x {layout[1]}")
-        if layouts:
-            self.panel.layout_combo_box.setCurrentIndex(0)
 
     def apply_settings(self):
         grow_sequence = self.panel.sequence_growth_checkbox.isChecked()

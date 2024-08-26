@@ -43,5 +43,10 @@
     },
     "dictionary": {
         "sort_method": "sequence_length"
+    },
+    "sequence_layout": {
+        "grow_sequence": true,
+        "num_beats": 3,
+        "layout_option": "1 x 3"
     }
 }

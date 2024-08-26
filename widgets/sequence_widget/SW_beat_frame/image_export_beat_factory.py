@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from widgets.dictionary_widget.temp_beat_frame import (
         TempBeatFrame,
     )
-    from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import SW_BeatFrame
+    from widgets.sequence_widget.SW_beat_frame.beat_frame import SW_BeatFrame
     from widgets.sequence_widget.SW_beat_frame.image_export_manager import (
         ImageExportManager,
     )

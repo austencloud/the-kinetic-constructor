@@ -13,7 +13,7 @@ from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.sequence_recorder.SR_beat_frame import SR_BeatFrame
-    from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
+    from widgets.sequence_widget.SW_beat_frame.beat_frame import (
         SW_BeatFrame,
     )
 

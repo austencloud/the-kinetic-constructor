@@ -4,7 +4,7 @@ from ..SW_beat_frame.start_pos_beat import StartPositionBeatView
 from ..SW_beat_frame.beat import BeatView
 
 if TYPE_CHECKING:
-    from .SW_beat_frame import SW_BeatFrame
+    from .beat_frame import SW_BeatFrame
 
 
 class BeatDeletionManager:
