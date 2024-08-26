@@ -10,7 +10,7 @@ from widgets.sequence_widget.SW_beat_frame.layout_options_panel import (
     LayoutOptionsPanel,
 )
 from widgets.sequence_widget.SW_beat_frame.layout_options_preview import (
-    LayoutOptionsPreview,
+    LayoutOptionsBeatFrame,
 )
 from widgets.sequence_widget.SW_beat_frame.layout_warning_dialog import (
     LayoutWarningDialog,
@@ -20,7 +20,9 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 
-class SW_LayoutOptionsDialog(QDialog):
+class LayoutOptionsDialog(QDialog):
+    """The dialog allows the user to select the number of beats and the layout configuration in the sequence widget."""
+
     def __init__(
         self, sequence_widget: "SequenceWidget", initial_state: Optional[dict] = None
     ):
@@ -51,7 +53,7 @@ class SW_LayoutOptionsDialog(QDialog):
 
         self._set_size()
 
-        self.preview = LayoutOptionsPreview(self)
+        self.beat_frame = LayoutOptionsBeatFrame(self)
         self.panel = LayoutOptionsPanel(self)
 
         self._setup_cancel_button()
@@ -88,7 +90,7 @@ class SW_LayoutOptionsDialog(QDialog):
     def _setup_main_layout(self):
         self.main_layout = QVBoxLayout(self)
         self.main_layout.addWidget(self.panel, 3)
-        self.main_layout.addWidget(self.preview, 9)
+        self.main_layout.addWidget(self.beat_frame, 9)
         self.main_layout.addLayout(self.action_button_layout, 1)
 
     def _setup_layout_options(self):
@@ -99,9 +101,6 @@ class SW_LayoutOptionsDialog(QDialog):
             self.panel.layout_combo_box.addItem(f"{layout[0]} x {layout[1]}")
         if layouts:
             self.panel.layout_combo_box.setCurrentIndex(0)
-
-    def update_preview(self):
-        self.preview.update_preview()
 
     def apply_settings(self):
         grow_sequence = self.panel.sequence_growth_checkbox.isChecked()

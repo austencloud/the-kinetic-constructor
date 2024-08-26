@@ -39,7 +39,8 @@ class SwapBetaHandler:
             and len(self.beta_prop_positioner.classifier.small_uni) == 2
         ) or self.pictograph.check.ends_with_layer3():
             return
-
+        if self.pictograph.red_motion.prop.prop_type == PropType.Hand:
+            return
         swap_handlers = {
             LetterType.Type1: self._handle_type1_swap,
             LetterType.Type2: self._handle_type2_swap,
@@ -54,6 +55,8 @@ class SwapBetaHandler:
             swap_handler()
 
     def _handle_type1_swap(self) -> None:
+        # if it's a hand, ignore it
+
         if self.pictograph.letter in [Letter.G, Letter.H]:
             further_direction = self.ppm.dir_calculator.get_dir(
                 self.pictograph.red_motion
@@ -83,6 +86,7 @@ class SwapBetaHandler:
             )
 
     def _handle_type6_swap(self) -> None:
+
         red_direction = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
         blue_direction = self.ppm.dir_calculator.get_dir(self.pictograph.blue_motion)
         if self.pictograph.red_motion.prop.prop_type != PropType.Hand:
@@ -123,20 +127,18 @@ class SwapBetaHandler:
         dash_direction = self.ppm.dir_calculator.get_dir(dash)
         static_direction = self.ppm.dir_calculator.get_opposite_dir(dash_direction)
         # if the prop_type is not PropType.Hand, then we swap the props
-        if dash.prop.prop_type != PropType.Hand:
-            self._swap_props(dash.prop, static.prop, static_direction, dash_direction)
+        self._swap_props(dash.prop, static.prop, static_direction, dash_direction)
 
     def _handle_type5_swap(self) -> None:
         red_direction = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
         blue_direction = self.ppm.dir_calculator.get_dir(self.pictograph.blue_motion)
-        if self.pictograph.red_motion.prop.prop_type != PropType.Hand:
 
-            self._swap_props(
-                self.pictograph.red_prop,
-                self.pictograph.blue_prop,
-                blue_direction,
-                red_direction,
-            )
+        self._swap_props(
+            self.pictograph.red_prop,
+            self.pictograph.blue_prop,
+            blue_direction,
+            red_direction,
+        )
 
     def _generate_override_key(self, prop_loc, beta_ori) -> str:
         override_key = (

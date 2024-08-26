@@ -15,7 +15,7 @@ from widgets.sequence_widget.current_word_label import CurrentWordLabel
 from widgets.sequence_widget.difficulty_label import DifficultyLabel
 
 from ..graph_editor.graph_editor import GraphEditor
-from .SW_beat_frame.SW_layout_options_dialog import SW_LayoutOptionsDialog
+from .SW_beat_frame.layout_options_dialog import LayoutOptionsDialog
 from ..indicator_label import IndicatorLabel
 from .SW_pictograph_factory import SW_PictographFactory
 from .SW_beat_frame.beat import Beat, BeatView
@@ -94,7 +94,7 @@ class SequenceWidget(QWidget):
 
     def show_options_panel(self):
         current_state = self._get_current_beat_frame_state()
-        self.options_panel = SW_LayoutOptionsDialog(self, current_state)
+        self.options_panel = LayoutOptionsDialog(self, current_state)
         self.options_panel.exec()  # Use exec() to show the dialog modally
 
     def _get_current_beat_frame_state(self) -> dict:
@@ -138,7 +138,6 @@ class SequenceWidget(QWidget):
         self.beat_frame_layout.setContentsMargins(0, 0, 0, 0)
         self.beat_frame_layout.setSpacing(0)
 
-
     def showEvent(self, event):
         super().showEvent(event)
         QTimer.singleShot(0, self.post_show_initialization)
@@ -170,4 +169,3 @@ class SequenceWidget(QWidget):
         self.button_frame.resize_button_frame()
         self.graph_editor.resize_graph_editor()
         self.beat_frame.resize_beat_frame()
-        

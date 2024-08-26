@@ -3,18 +3,21 @@ from PyQt6.QtWidgets import QGridLayout, QWidget
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.SW_beat_frame.SW_layout_options_dialog import (
-        SW_LayoutOptionsDialog,
+    from widgets.sequence_widget.SW_beat_frame.layout_options_dialog import (
+        LayoutOptionsDialog,
     )
 from widgets.sequence_widget.SW_beat_frame.beat import BeatView
 from widgets.sequence_widget.SW_beat_frame.start_pos_beat import StartPositionBeatView
 
 
-class LayoutOptionsPreview(QWidget):
-    def __init__(self, dialog: "SW_LayoutOptionsDialog"):
+class LayoutOptionsBeatFrame(QWidget):
+    """This class is responsible for displaying a preview of the selected layout options inside the layout options dialog."""
+
+    def __init__(self, dialog: "LayoutOptionsDialog"):
         super().__init__(dialog)
         self.dialog = dialog
         self.sequence_widget = dialog.sequence_widget
+        self.main_widget = self.sequence_widget.main_widget
         self._setup_layout()
 
     def _setup_layout(self):
@@ -23,15 +26,16 @@ class LayoutOptionsPreview(QWidget):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def update_preview(self):
+        # Clear the layout first
         for i in reversed(range(self.layout.count())):
             widget_to_remove = self.layout.itemAt(i).widget()
-            self.layout.removeWidget(widget_to_remove)
-            widget_to_remove.setParent(None)
+            if widget_to_remove:
+                widget_to_remove.setParent(None)
+                widget_to_remove.deleteLater()
 
         if not self.dialog.panel.sequence_growth_checkbox.isChecked():
             num_beats = int(self.dialog.panel.beats_combo_box.currentText())
             selected_layout = self.dialog.panel.layout_combo_box.currentText()
-
 
             if selected_layout:
                 cols, rows = map(int, selected_layout.split(" x "))
@@ -44,21 +48,25 @@ class LayoutOptionsPreview(QWidget):
                 )
 
                 if self.layout.count() == 0:
-                    start_pos_view = StartPositionBeatView(
-                        self.sequence_widget.beat_frame
+                    start_pos_view = StartPositionBeatView(self)
+                    start_pos_view.setParent(self)  # Ensure proper parenting
+                    self.layout.addWidget(start_pos_view, 0, 0)
+                    start_pos_view.start_pos.initializer.set_nonradial_points_visibility(
+                        False
                     )
                     start_pos_view.setFixedSize(beat_size, beat_size)
                     start_pos_view.resize_beat_view()
-                    self.layout.addWidget(start_pos_view, 0, 0)
 
                     beat_index = 0
                     for row in range(rows):
                         for col in range(1, cols + 1):
                             if beat_index < num_beats:
-                                beat_view = BeatView(
-                                    self.sequence_widget.beat_frame, beat_index + 1
-                                )
+                                beat_view = BeatView(self, beat_index + 1)
+                                beat_view.setParent(self)  # Ensure proper parenting
+                                self.layout.addWidget(beat_view, row, col)
                                 beat_view.setFixedSize(beat_size, beat_size)
                                 beat_view.resize_beat_view()
-                                self.layout.addWidget(beat_view, row, col)
                                 beat_index += 1
+                                beat_view.blank_beat.initializer.set_nonradial_points_visibility(
+                                    False
+                                )

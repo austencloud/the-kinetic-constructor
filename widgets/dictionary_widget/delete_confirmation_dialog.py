@@ -16,7 +16,7 @@ class DeleteConfirmationDialog(QDialog):
         layout = QVBoxLayout(self)
 
         # Create and style the label
-        label = QLabel("Are you sure you want to delete this variation?\nThis cannot be undone.")
+        label = QLabel("Are you sure you want to delete this variation?")
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label.setWordWrap(True)
         label_font = QFont("Arial", 11, QFont.Weight.Bold)

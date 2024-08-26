@@ -10,13 +10,16 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.SW_beat_frame.SW_layout_options_dialog import (
-        SW_LayoutOptionsDialog,
+    from widgets.sequence_widget.SW_beat_frame.layout_options_dialog import (
+        LayoutOptionsDialog,
     )
 
 
 class LayoutOptionsPanel(QWidget):
-    def __init__(self, dialog: "SW_LayoutOptionsDialog"):
+    """Displays the "grow sequence" checkbox, the number of beats dropdown,
+    and the layout options dropdown in the layout options dialog."""
+
+    def __init__(self, dialog: "LayoutOptionsDialog"):
         super().__init__(dialog)
         self.dialog = dialog
         self.sequence_widget = dialog.sequence_widget
@@ -73,7 +76,6 @@ class LayoutOptionsPanel(QWidget):
         font_size = self.sequence_widget.width() // 60
         font.setPointSize(font_size)
         self.sequence_growth_checkbox.setFont(font)
-        # increase the checkbox size
         self.sequence_growth_checkbox.setStyleSheet(
             f"QCheckBox::indicator {{ width: {font_size}px; height: {font_size}px; }}"
         )
@@ -91,13 +93,14 @@ class LayoutOptionsPanel(QWidget):
         self.beats_combo_box.currentIndexChanged.connect(
             self.dialog._setup_layout_options
         )
-        # set the number of beats dropdown to the current number of beats
 
     def _setup_layout_options_dropdown(self):
         self.layout_label = QLabel("Layout Options:")
 
         self.layout_combo_box = QComboBox(self)
-        self.layout_combo_box.currentIndexChanged.connect(self.dialog.update_preview)
+        self.layout_combo_box.currentIndexChanged.connect(
+            self.dialog.beat_frame.update_preview
+        )
 
     def _toggle_grow_sequence(self):
         is_grow_sequence_checked = self.sequence_growth_checkbox.isChecked()
@@ -118,7 +121,7 @@ class LayoutOptionsPanel(QWidget):
             layout_option = self.get_layout_option_from_current_beat_frame_layout()
             self.layout_combo_box.setCurrentText(layout_option)
 
-        self.dialog.update_preview()
+        self.dialog.beat_frame.update_preview()
 
     def get_layout_option_from_current_beat_frame_layout(self):
         cols = self.beat_frame.layout_manager.get_cols()
