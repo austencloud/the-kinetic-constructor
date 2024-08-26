@@ -5,7 +5,7 @@ from widgets.scroll_area.components.section_manager.section_widget.components.se
 )
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker.option_picker_section_widget import (
+    from widgets.sequence_builder.components.option_picker.scroll_area.option_picker_section_widget import (
         OptionPickerSectionWidget,
     )
 

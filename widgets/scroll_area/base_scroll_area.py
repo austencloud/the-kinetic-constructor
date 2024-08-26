@@ -45,12 +45,3 @@ class BasePickerScrollArea(QScrollArea):
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
-    def add_section_to_layout(self, section: QWidget, section_index: int = None):
-        if section_index == 0 or section_index:  # widget is a section
-            if section.__class__.__name__ == "OptionPickerSectionWidget":
-                if section.letter_type == LetterType.Type1:
-                    self.layout.insertWidget(section_index, section, 6)
-                else:
-                    self.layout.insertWidget(section_index, section, 4)
-            elif section.__class__.__name__ == "SectionGroupWidget":
-                self.layout.insertWidget(section_index, section, 4)

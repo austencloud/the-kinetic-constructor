@@ -8,7 +8,7 @@ from widgets.sequence_builder.components.start_pos_picker.choose_your_next_picto
     ChooseYourNextPictographLabel,
 )
 
-from .option_picker_scroll_area import OptionPickerScrollArea
+from .scroll_area.option_picker_scroll_area import OptionPickerScrollArea
 
 from typing import TYPE_CHECKING
 
@@ -17,16 +17,18 @@ if TYPE_CHECKING:
 
 
 class OptionPicker(QWidget):
-    option_selected = pyqtSignal(str)  # Signal to emit the selected option
+    """Contains the "Choose Your Next Pictograph" label and the OptionPickerScrollArea."""
+
+    option_selected = pyqtSignal(str)
 
     def __init__(self, sequence_builder: "SequenceBuilder"):
         super().__init__(sequence_builder)
         self.sequence_builder = sequence_builder
         self.main_widget = sequence_builder.main_widget
         self.json_manager = self.main_widget.json_manager
+        self.choose_your_next_pictograph_label = ChooseYourNextPictographLabel(self)
         self.option_manager = OptionManager(self)
         self.scroll_area = OptionPickerScrollArea(self)
-        self.choose_your_next_pictograph_label = ChooseYourNextPictographLabel(self)
         self.setStyleSheet("background-color: rgba(0, 0, 0, 200);")
         self.setup_layout()
         self.disabled = False

@@ -9,20 +9,6 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 
-class SequenceWidgetActionButton(QPushButton):
-    def __init__(self, icon_path: str):
-        super().__init__()
-        self.setIcon(QIcon(icon_path))
-
-    def enterEvent(self, event) -> None:
-        self.setCursor(Qt.CursorShape.PointingHandCursor)
-
-    def leaveEvent(self, event) -> None:
-        self.setCursor(Qt.CursorShape.ArrowCursor)
-
-
-
-
 class SequenceWidgetButtonFrame(QFrame):
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)
@@ -44,7 +30,7 @@ class SequenceWidgetButtonFrame(QFrame):
         self.settings_manager = self.main_widget.main_window.settings_manager
 
     def _setup_buttons(self) -> None:
-        self.buttons: list[SequenceWidgetActionButton] = []
+        self.buttons: list[QPushButton] = []
         button_dict = {
             "add_to_dictionary": {
                 "icon_path": "add_to_dictionary.svg",
@@ -63,7 +49,7 @@ class SequenceWidgetButtonFrame(QFrame):
                 "callback": self.sequence_widget.show_options_panel,
                 "tooltip": "Layout Options",
             },
-            "magic_wand": {
+            "auto_complete_sequence": {
                 "icon_path": "magic_wand.svg",
                 "callback": self.auto_complete_sequence,
                 "tooltip": "Auto Complete Sequence",
@@ -92,7 +78,9 @@ class SequenceWidgetButtonFrame(QFrame):
         button = QPushButton()
         button.clicked.connect(callback)
         button.setToolTip(tooltip)  # Set the tooltip for the button
-        button.enterEvent = lambda event: button.setCursor(Qt.CursorShape.PointingHandCursor)
+        button.enterEvent = lambda event: button.setCursor(
+            Qt.CursorShape.PointingHandCursor
+        )
         button.leaveEvent = lambda event: button.setCursor(Qt.CursorShape.ArrowCursor)
         button.setIcon(icon)
         setattr(self, f"{button_name}_button", button)

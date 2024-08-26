@@ -10,8 +10,8 @@ from .labels.difficulty_label import DifficultyLabel
 from .graph_editor.graph_editor import GraphEditor
 from .beat_frame.layout_options_dialog import LayoutOptionsDialog
 from .labels.indicator_label import IndicatorLabel
-from .pictograph_factory import SequenceWidgetPictographFactory
-from .button_frame import SequenceWidgetButtonFrame
+from .sequence_widget_pictograph_factory import SequenceWidgetPictographFactory
+from .sequence_widget_button_frame import SequenceWidgetButtonFrame
 from .sequence_widget_scroll_area import SequenceWidgetScrollArea
 
 if TYPE_CHECKING:

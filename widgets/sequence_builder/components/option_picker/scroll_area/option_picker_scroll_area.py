@@ -1,10 +1,11 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication, QWidget
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QWheelEvent
 
+from Enums.letters import LetterType
 from data.constants import BLUE, RED
-from widgets.sequence_builder.components.option_picker.option_picker_pictograph_factory import (
+from widgets.sequence_builder.components.option_picker.scroll_area.option_picker_pictograph_factory import (
     OptionPickerPictographFactory,
 )
 from widgets.sequence_builder.components.option_picker.option_picker_section_manager import (
@@ -14,11 +15,11 @@ from widgets.sequence_builder.components.option_picker.option_picker_section_man
 from .option_picker_display_manager import (
     OptionPickerDisplayManager,
 )
-from ....pictograph.pictograph import Pictograph
-from ....scroll_area.base_scroll_area import BasePickerScrollArea
+from .....pictograph.pictograph import Pictograph
+from .....scroll_area.base_scroll_area import BasePickerScrollArea
 
 if TYPE_CHECKING:
-    from .option_picker import OptionPicker
+    from ..option_picker import OptionPicker
     from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
 
@@ -150,3 +151,13 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         for section in self.sections_manager.sections.values():
             for pictograph in section.pictographs.values():
                 pictograph.view.set_enabled(not disabled)
+
+    def add_section_to_layout(self, section: QWidget, section_index: int = None):
+        if section_index == 0 or section_index:  # widget is a section
+            if section.__class__.__name__ == "OptionPickerSectionWidget":
+                if section.letter_type == LetterType.Type1:
+                    self.layout.insertWidget(section_index, section, 6)
+                else:
+                    self.layout.insertWidget(section_index, section, 4)
+            elif section.__class__.__name__ == "SectionGroupWidget":
+                self.layout.insertWidget(section_index, section, 4)

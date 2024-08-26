@@ -7,7 +7,7 @@ from PyQt6.QtCore import pyqtSignal
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker.option_picker_section_widget import (
+    from widgets.sequence_builder.components.option_picker.scroll_area.option_picker_section_widget import (
         OptionPickerSectionWidget,
     )
 

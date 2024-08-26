@@ -8,13 +8,13 @@ from widgets.scroll_area.components.section_manager.section_widget.components.op
     OptionPickerSectionHeader,
 )
 
-from ....pictograph.pictograph import Pictograph
-from ....scroll_area.components.section_manager.section_widget.components.pictograph_frame import (
+from .....pictograph.pictograph import Pictograph
+from .....scroll_area.components.section_manager.section_widget.components.pictograph_frame import (
     ScrollAreaSectionPictographFrame,
 )
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (
+    from widgets.sequence_builder.components.option_picker.scroll_area.option_picker_scroll_area import (
         OptionPickerScrollArea,
     )
 
