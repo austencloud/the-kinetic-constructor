@@ -7,7 +7,9 @@ from Enums.Enums import LetterType
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from .option_picker_scroll_area import OptionPickerScrollArea
+    from widgets.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
+        OptionPickerScrollArea,
+    )
 
 
 class OptionPickerPictographFactory:
@@ -35,16 +37,16 @@ class OptionPickerPictographFactory:
             if letter not in self.pictograph_cache:
                 self.pictograph_cache[letter] = {}
             self.pictograph_cache[letter][pictograph_key] = pictograph
-            self.scroll_area.main_widget.pictograph_cache[letter][
-                pictograph_key
-            ] = pictograph
+            # self.scroll_area.main_widget.all_pictographs[letter][
+            #     pictograph_key
+            # ] = pictograph
             letter_type = LetterType.get_letter_type(letter)
             for letter_type in LetterType:
                 if letter in letter_type.letters:
                     letter_type = letter_type
                     break
 
-            section = self.scroll_area.sections_manager.get_section(letter_type)
+            section = self.scroll_area.section_manager.get_section(letter_type)
             section.pictographs[pictograph_key] = pictograph
 
             return pictograph

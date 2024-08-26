@@ -15,11 +15,11 @@ from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picke
 from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import (
     StartPosPicker,
 )
-from ..pictograph.pictograph import Pictograph
-from .components.option_picker.option_picker_click_handler import (
+from widgets.sequence_builder.option_picker.option_picker import OptionPicker
+from widgets.sequence_builder.option_picker.option_picker_click_handler import (
     OptionPickerClickHandler,
 )
-from .components.option_picker.option_picker import OptionPicker
+from ..pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
@@ -82,7 +82,7 @@ class SequenceBuilder(QFrame):
     def _show_option_picker(self) -> None:
         self.layout().addWidget(self.option_picker)
         self.option_picker.show()
-        self.option_picker.scroll_area.sections_manager.show_all_sections()
+        self.option_picker.scroll_area.section_manager.show_all_sections()
         self.option_picker.update_option_picker()
         self.option_picker.resize_option_picker()
 
@@ -112,7 +112,7 @@ class SequenceBuilder(QFrame):
         ] = new_pictograph
         if pictograph_key not in self.pictograph_cache[letter]:
             self.pictograph_cache[letter][pictograph_key] = new_pictograph
-        section = scroll_area.sections_manager.get_section(letter_type)
+        section = scroll_area.section_manager.get_section(letter_type)
         section.pictographs[pictograph_key] = new_pictograph
         scroll_area.pictograph_cache[pictograph_key] = new_pictograph
         return new_pictograph

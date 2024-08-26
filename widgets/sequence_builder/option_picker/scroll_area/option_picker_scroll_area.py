@@ -5,18 +5,20 @@ from PyQt6.QtGui import QWheelEvent
 
 from Enums.letters import LetterType
 from data.constants import BLUE, RED
-from widgets.sequence_builder.components.option_picker.scroll_area.option_picker_pictograph_factory import (
+from widgets.base_widgets.base_picker_scroll_area import BasePickerScrollArea
+from widgets.pictograph.pictograph import Pictograph
+from widgets.sequence_builder.option_picker.option_picker_pictograph_factory import (
     OptionPickerPictographFactory,
 )
-from widgets.sequence_builder.components.option_picker.option_picker_section_manager import (
-    OptionPickerSectionsManager,
+from widgets.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_manager import (
+    OptionPickerSectionManager,
 )
+
 
 from .option_picker_display_manager import (
     OptionPickerDisplayManager,
 )
-from .....pictograph.pictograph import Pictograph
-from .....base_widgets.base_picker_scroll_area import BasePickerScrollArea
+
 
 if TYPE_CHECKING:
     from ..option_picker import OptionPicker
@@ -40,7 +42,7 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         self.disabled = False
 
         self.set_layout("VBox")  # Ensure correct layout
-        self.sections_manager = OptionPickerSectionsManager(self)
+        self.section_manager = OptionPickerSectionManager(self)
         self.display_manager = OptionPickerDisplayManager(self)
         self.pictograph_factory = OptionPickerPictographFactory(
             self, self.sequence_builder.pictograph_cache
@@ -116,7 +118,7 @@ class OptionPickerScrollArea(BasePickerScrollArea):
             pictograph.view.hide()
 
     def resize_option_picker_scroll_area(self) -> None:
-        for section in self.sections_manager.sections.values():
+        for section in self.section_manager.sections.values():
             section.resize_option_picker_section_widget()
 
     def wheelEvent(self, event: QWheelEvent) -> None:
@@ -148,7 +150,7 @@ class OptionPickerScrollArea(BasePickerScrollArea):
 
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled
-        for section in self.sections_manager.sections.values():
+        for section in self.section_manager.sections.values():
             for pictograph in section.pictographs.values():
                 pictograph.view.set_enabled(not disabled)
 

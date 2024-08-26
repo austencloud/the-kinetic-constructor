@@ -4,13 +4,13 @@ from PyQt6.QtCore import Qt
 
 
 
+
 if TYPE_CHECKING:
     from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import (
         StartPosPicker,
     )
-    from widgets.sequence_builder.components.option_picker.option_picker import (
-        OptionPicker,
-    )
+    from widgets.sequence_builder.option_picker.option_picker import OptionPicker
+
 
 
 class BasePickerScrollArea(QScrollArea):

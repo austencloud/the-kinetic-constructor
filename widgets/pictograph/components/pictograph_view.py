@@ -51,7 +51,7 @@ class PictographView(QGraphicsView):
 
     def calculate_view_width(self):
         COLUMN_COUNT = self.pictograph.scroll_area.display_manager.COLUMN_COUNT
-        sections = self.pictograph.scroll_area.sections_manager.sections
+        sections = self.pictograph.scroll_area.section_manager.sections
         letter_type = self.pictograph.letter_type
 
         view_width = min(

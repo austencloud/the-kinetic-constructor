@@ -1,7 +1,8 @@
 from typing import TYPE_CHECKING
-from ....pictograph.pictograph import Pictograph
+
 
 if TYPE_CHECKING:
+    from widgets.pictograph.pictograph import Pictograph
     from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
 

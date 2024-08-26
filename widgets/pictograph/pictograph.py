@@ -40,9 +40,10 @@ from .components.pictograph_initializer import PictographInitializer
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker.scroll_area.option_picker_scroll_area import (
+    from widgets.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
         OptionPickerScrollArea,
     )
+
     from main_window.main_widget.main_widget import MainWidget
 
 

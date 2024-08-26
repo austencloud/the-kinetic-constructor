@@ -8,19 +8,20 @@ from Enums.letters import Letter
 from widgets.scroll_area.components.section_manager.section_widget.section_group_widget import (
     SectionGroupWidget,
 )
-from widgets.sequence_builder.components.option_picker.scroll_area.option_picker_section_widget import (
+from widgets.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_widget import (
     OptionPickerSectionWidget,
 )
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker.scroll_area.option_picker_scroll_area import (
+    from widgets.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
         OptionPickerScrollArea,
     )
+
     from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
 
-class OptionPickerSectionsManager:
+class OptionPickerSectionManager:
     """Manages all of the sections in the scroll area. Individual sections are managed by the OptionPickerSectionWidget class."""
 
     SECTION_ORDER = [

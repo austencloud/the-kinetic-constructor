@@ -2,7 +2,9 @@ from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
 from widgets.pictograph.pictograph import Pictograph
 from Enums.Enums import LetterType
-from .option_picker_section_manager.option_picker_section_widget.option_picker_section_widget import OptionPickerSectionWidget
+from ..option_picker_scroll_area.option_picker_section_widget import (
+    OptionPickerSectionWidget,
+)
 from widgets.sequence_widget.beat_frame.beat import Beat
 
 if TYPE_CHECKING:
@@ -26,10 +28,10 @@ class OptionPickerDisplayManager:
 
     def add_pictograph_to_layout(self, pictograph: Pictograph, index: int) -> None:
         row, col = divmod(index, self.COLUMN_COUNT)
-        letter_type = self.scroll_area.sections_manager.get_pictograph_letter_type(
+        letter_type = self.scroll_area.section_manager.get_pictograph_letter_type(
             pictograph.letter
         )
-        section = self.scroll_area.sections_manager.get_section(letter_type)
+        section = self.scroll_area.section_manager.get_section(letter_type)
         if section:
             section.pictograph_frame.layout.addWidget(pictograph.view, row, col)
             pictograph.view.resize_pictograph_view()
@@ -51,7 +53,7 @@ class OptionPickerDisplayManager:
         for key, cached_pictograph in self.scroll_area.pictograph_cache.items():
             if self.is_pictograph_relevant(cached_pictograph, last_beat):
                 pictograph_letter_type = (
-                    self.scroll_area.sections_manager.get_pictograph_letter_type(
+                    self.scroll_area.section_manager.get_pictograph_letter_type(
                         cached_pictograph.letter
                     )
                 )
@@ -82,16 +84,16 @@ class OptionPickerDisplayManager:
 
     def clear_all_section_layouts(self):
         """Clears all widgets from all section layouts."""
-        for section in self.scroll_area.sections_manager.sections.values():
+        for section in self.scroll_area.section_manager.sections.values():
             section.clear_pictographs()
 
     def add_pictograph_to_section_layout(self, pictograph: Pictograph):
         """Add a pictograph to its corresponding section layout."""
-        letter_type = self.scroll_area.sections_manager.get_pictograph_letter_type(
+        letter_type = self.scroll_area.section_manager.get_pictograph_letter_type(
             pictograph.letter
         )
         section: OptionPickerSectionWidget = (
-            self.scroll_area.sections_manager.get_section(letter_type)
+            self.scroll_area.section_manager.get_section(letter_type)
         )
 
         if section:

@@ -4,19 +4,16 @@ from Enums.Enums import LetterType
 from data.constants import OPP, SAME
 from PyQt6.QtCore import Qt
 
+from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.components.section_manager.section_widget.components.option_picker_section_header import (
     OptionPickerSectionHeader,
 )
+from widgets.scroll_area.components.section_manager.section_widget.components.pictograph_frame import ScrollAreaSectionPictographFrame
 
-from .....pictograph.pictograph import Pictograph
-from .....scroll_area.components.section_manager.section_widget.components.pictograph_frame import (
-    ScrollAreaSectionPictographFrame,
-)
+
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker.scroll_area.option_picker_scroll_area import (
-        OptionPickerScrollArea,
-    )
+    from widgets.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import OptionPickerScrollArea
 
 
 class OptionPickerSectionWidget(QGroupBox):

@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
 
-from widgets.sequence_builder.components.option_picker.scroll_area.option_picker_pictograph_factory import (
-    OptionPickerPictographFactory,
-)
+from widgets.sequence_builder.option_picker.option_picker_pictograph_factory import OptionPickerPictographFactory
+
+
 
 
 from ....pictograph.pictograph import Pictograph
