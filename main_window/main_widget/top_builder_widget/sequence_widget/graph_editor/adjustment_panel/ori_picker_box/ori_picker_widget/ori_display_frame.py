@@ -10,7 +10,7 @@ from PyQt6.QtCore import Qt, QSize, QPoint, pyqtSignal
 from PyQt6.QtGui import QIcon, QFont
 from typing import TYPE_CHECKING
 from utilities.path_helpers import get_images_and_data_path
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 from data.constants import IN, COUNTER, ORI, OUT, CLOCK
 from data.constants import BLUE, RED
@@ -138,7 +138,7 @@ class OriDisplayFrame(QFrame):
         return button
 
     def set_initial_orientation(
-        self, start_pos_pictograph: Pictograph, color: str
+        self, start_pos_pictograph: BasePictograph, color: str
     ) -> None:
         if color == "blue":
             initial_orientation = start_pos_pictograph.pictograph_dict[

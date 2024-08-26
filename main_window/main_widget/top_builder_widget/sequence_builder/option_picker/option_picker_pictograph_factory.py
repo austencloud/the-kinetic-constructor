@@ -2,27 +2,27 @@ from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
 
 from Enums.Enums import LetterType
-from widgets.base_widgets.pictograph.pictograph import Pictograph
-
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
-    from .option_picker_scroll_area.option_picker_scroll_area import OptionPickerScrollArea
-
+    from .option_picker_scroll_area.option_picker_scroll_area import (
+        OptionPickerScrollArea,
+    )
 
 
 class OptionPickerPictographFactory:
     def __init__(
         self,
         scroll_area: "OptionPickerScrollArea",
-        pictograph_cache: dict[str, Pictograph],
+        pictograph_cache: dict[str, BasePictograph],
     ) -> None:
         self.scroll_area = scroll_area
         self.pictograph_cache = pictograph_cache
 
     def get_or_create_pictograph(
         self, pictograph_key: str, pictograph_dict=None
-    ) -> Pictograph:
+    ) -> BasePictograph:
         letter_str = pictograph_key.split("_")[0]
         letter = Letter.get_letter(letter_str)
 
@@ -62,11 +62,11 @@ class OptionPickerPictographFactory:
             pictograph = self.scroll_area.pictograph_cache.pop(key)
             pictograph.view.setParent(None)
 
-    def get_pictograph(self, pictograph_key) -> Pictograph:
+    def get_pictograph(self, pictograph_key) -> BasePictograph:
         return self.scroll_area.pictograph_cache[pictograph_key]
 
-    def create_pictograph(self) -> Pictograph:
-        pictograph = Pictograph(
+    def create_pictograph(self) -> BasePictograph:
+        pictograph = BasePictograph(
             self.scroll_area.main_widget,
             self.scroll_area,
         )

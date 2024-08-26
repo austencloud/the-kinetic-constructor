@@ -10,7 +10,7 @@ from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.o
 from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_pictograph_frame import (
     OptionPickerSectionPictographFrame,
 )
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
@@ -32,7 +32,7 @@ class OptionPickerSectionWidget(QGroupBox):
 
     def setup_components(self) -> None:
         self.pictograph_frame = OptionPickerSectionPictographFrame(self)
-        self.pictographs: dict[str, Pictograph] = {}
+        self.pictographs: dict[str, BasePictograph] = {}
         self.pictograph_frame.setStyleSheet("QFrame {border: none;}")
         self._setup_header()
         self._setup_layout()
@@ -66,7 +66,7 @@ class OptionPickerSectionWidget(QGroupBox):
         for pictograph in self.pictographs.values():
             pictograph.view.setSizePolicy(size_policy)
 
-    def add_pictograph(self, pictograph: Pictograph) -> None:
+    def add_pictograph(self, pictograph: BasePictograph) -> None:
         """Add a pictograph widget to the section layout."""
         self.pictographs[
             self.scroll_area.main_widget.pictograph_key_generator.generate_pictograph_key(

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
 from Enums.Enums import LetterType
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 if TYPE_CHECKING:
     from ..start_pos_picker.start_pos_picker import StartPosPicker
@@ -9,14 +9,16 @@ if TYPE_CHECKING:
 
 class StartPosPickerPictographFactory:
     def __init__(
-        self, start_pos_picker: "StartPosPicker", start_pos_cache: dict[str, Pictograph]
+        self,
+        start_pos_picker: "StartPosPicker",
+        start_pos_cache: dict[str, BasePictograph],
     ) -> None:
         self.start_pos_picker = start_pos_picker
         self.start_pos_cache = start_pos_cache
 
     def get_or_create_pictograph(
         self, pictograph_key: str, pictograph_dict=None
-    ) -> Pictograph:
+    ) -> BasePictograph:
         letter_str = pictograph_key.split("_")[0]
         letter = Letter.get_letter(letter_str)
 
@@ -53,11 +55,11 @@ class StartPosPickerPictographFactory:
             pictograph = self.start_pos_cache.pop(key)
             pictograph.view.setParent(None)
 
-    def get_pictograph(self, pictograph_key) -> Pictograph:
+    def get_pictograph(self, pictograph_key) -> BasePictograph:
         return self.start_pos_cache[pictograph_key]
 
-    def create_pictograph(self) -> Pictograph:
-        pictograph = Pictograph(
+    def create_pictograph(self) -> BasePictograph:
+        pictograph = BasePictograph(
             self.start_pos_picker.main_widget,
         )
         return pictograph

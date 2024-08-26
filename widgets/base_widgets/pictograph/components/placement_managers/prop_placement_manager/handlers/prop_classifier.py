@@ -9,7 +9,7 @@ from Enums.PropTypes import (
 )
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 string_to_enum_map = {
@@ -37,7 +37,7 @@ string_to_enum_map = {
 
 
 class PropClassifier:
-    def __init__(self, pictograph: "Pictograph") -> None:
+    def __init__(self, pictograph: "BasePictograph") -> None:
         self.pictograph = pictograph
         self.classify_props()
 

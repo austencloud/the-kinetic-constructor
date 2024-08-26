@@ -3,17 +3,17 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..sequence_builder import SequenceBuilder
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 class OptionPickerClickHandler:
     def __init__(self, sequence_builder: "SequenceBuilder") -> None:
         self.sequence_builder = sequence_builder
 
-    def get_click_handler(self, start_pos: "Pictograph") -> callable:
+    def get_click_handler(self, start_pos: "BasePictograph") -> callable:
         return lambda event: self.on_option_clicked(start_pos)
 
-    def on_option_clicked(self, clicked_option: "Pictograph") -> None:
+    def on_option_clicked(self, clicked_option: "BasePictograph") -> None:
         beat_frame = (
             self.sequence_builder.main_widget.top_builder_widget.sequence_widget.beat_frame
         )

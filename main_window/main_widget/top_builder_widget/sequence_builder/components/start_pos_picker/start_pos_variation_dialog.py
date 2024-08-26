@@ -1,20 +1,14 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QPushButton
-from Enums.MotionAttributes import Color
 from data.constants import BLUE, RED
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from .start_pos_variation_dialog_ori_changer import StartPosVariationDialogOriChanger
+from .start_pos_variation_picker import StartPosVariationPicker
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
-from widgets.sequence_builder.components.start_pos_picker.start_pos_variation_dialog_ori_changer import (
-    StartPosVariationDialogOriChanger,
-)
-from widgets.sequence_builder.components.start_pos_picker.start_pos_variation_picker import (
-    StartPosVariationPicker,
-)
+
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import (
-        StartPosPicker,
-    )
+    from .start_pos_picker import StartPosPicker
 
 
 class StartPosVariationDialog(QDialog):
@@ -23,7 +17,7 @@ class StartPosVariationDialog(QDialog):
         self.start_pos_picker = start_pos_picker
         self.variation_picker = StartPosVariationPicker(self)
         self.ori_changer = StartPosVariationDialogOriChanger(self)
-        self.selected_variation: Pictograph = None
+        self.selected_variation: BasePictograph = None
 
         self.setup_layout()
         self.load_default_orientations()  # Add this line
@@ -49,9 +43,9 @@ class StartPosVariationDialog(QDialog):
         )
         self.variation_picker.display_variations(self.variations)
 
-    def on_ori_changed(self, new_ori: str, color: Color) -> None:
+    def on_ori_changed(self, new_ori: str, color: str) -> None:
         for i in range(self.variation_picker.layout.count()):
-            start_pos_pictograph: Pictograph = self.variations[i]
+            start_pos_pictograph: BasePictograph = self.variations[i]
             if color == BLUE:
                 start_pos_pictograph.pictograph_dict["blue_start_ori"] = new_ori
             elif color == RED:
@@ -60,7 +54,7 @@ class StartPosVariationDialog(QDialog):
                 start_pos_pictograph.pictograph_dict
             )
 
-    def get_selected_variation(self) -> Pictograph:
+    def get_selected_variation(self) -> BasePictograph:
         return self.variation_picker.get_selected_variation()
 
     def resize_start_pos_variation_dialog(self) -> None:

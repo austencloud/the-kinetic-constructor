@@ -40,13 +40,14 @@ from .components.pictograph_initializer import PictographInitializer
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import OptionPickerScrollArea
-
+    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
+        OptionPickerScrollArea,
+    )
 
     from main_window.main_widget.main_widget import MainWidget
 
 
-class Pictograph(QGraphicsScene):
+class BasePictograph(QGraphicsScene):
     view: PictographView
     arrows: dict[str, Arrow]
     props: dict[str, Prop]

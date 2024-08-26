@@ -5,7 +5,7 @@ from Enums.letters import Letter
 
 if TYPE_CHECKING:
     from settings_manager.visibility_settings import VisibilitySettings
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 class GlyphVisibilityManager:
@@ -19,7 +19,7 @@ class GlyphVisibilityManager:
             self.visibility_states[glyph_type] = not self.visibility_states[glyph_type]
             self.apply_visibility(glyph_type)
 
-    def apply_visibility(self, glyph_type, pictograph: "Pictograph"):
+    def apply_visibility(self, glyph_type, pictograph: "BasePictograph"):
         if glyph_type == "VTG":
             pictograph.vtg_glyph.setVisible(self.visibility_states[glyph_type])
         elif glyph_type == "TKA":
@@ -31,7 +31,7 @@ class GlyphVisibilityManager:
                 self.visibility_states[glyph_type]
             )
 
-    def apply_current_visibility_settings(self, pictograph: "Pictograph"):
+    def apply_current_visibility_settings(self, pictograph: "BasePictograph"):
         for glyph_type in ["VTG", "TKA", "Elemental", "EndPosition"]:
             visibility = self.get_glyph_visibility(glyph_type)
             self.visibility_states[glyph_type] = visibility

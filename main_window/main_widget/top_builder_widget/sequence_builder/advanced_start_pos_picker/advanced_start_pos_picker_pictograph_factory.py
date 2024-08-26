@@ -4,27 +4,25 @@ from Enums.Enums import LetterType, Letter
 from Enums.Enums import LetterType
 
 
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import (
-        StartPosPicker,
-    )
+    from ..components.start_pos_picker.start_pos_picker import StartPosPicker
 
 
 class AdvancedStartPosPickerPictographFactory:
     def __init__(
         self,
         advanced_start_pos_picker: "StartPosPicker",
-        advanced_start_pos_cache: dict[str, Pictograph],
+        advanced_start_pos_cache: dict[str, BasePictograph],
     ) -> None:
         self.advanced_start_pos_picker = advanced_start_pos_picker
         self.advanced_start_pos_cache = advanced_start_pos_cache
 
     def get_or_create_pictograph(
         self, pictograph_key: str, pictograph_dict=None
-    ) -> Pictograph:
+    ) -> BasePictograph:
         letter_str = pictograph_key.split("_")[0]
         letter = Letter.get_letter(letter_str)
 
@@ -61,11 +59,11 @@ class AdvancedStartPosPickerPictographFactory:
             pictograph = self.advanced_start_pos_cache.pop(key)
             pictograph.view.setParent(None)
 
-    def get_pictograph(self, pictograph_key) -> Pictograph:
+    def get_pictograph(self, pictograph_key) -> BasePictograph:
         return self.advanced_start_pos_cache[pictograph_key]
 
-    def create_pictograph(self) -> Pictograph:
-        pictograph = Pictograph(
+    def create_pictograph(self) -> BasePictograph:
+        pictograph = BasePictograph(
             self.advanced_start_pos_picker.main_widget,
         )
         return pictograph

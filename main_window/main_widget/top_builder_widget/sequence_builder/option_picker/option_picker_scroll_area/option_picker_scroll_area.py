@@ -12,7 +12,7 @@ from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.o
     OptionPickerSectionManager,
 )
 from widgets.base_widgets.base_picker_scroll_area import BasePickerScrollArea
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 from .option_picker_display_manager import (
@@ -39,7 +39,7 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         self.option_click_handler = self.sequence_builder.option_click_handler
         self.ori_calculator = self.main_widget.json_manager.ori_calculator
         self.json_manager = self.main_widget.json_manager
-        self.pictograph_cache: dict[str, Pictograph] = {}
+        self.pictograph_cache: dict[str, BasePictograph] = {}
         self.stretch_index: int = -1
         self.disabled = False
 
@@ -99,7 +99,9 @@ class OptionPickerScrollArea(BasePickerScrollArea):
             self.ori_calculator.calculate_end_orientation(pictograph_dict, BLUE)
         )
 
-    def _get_or_create_pictograph(self, pictograph_dict: dict, sequence) -> Pictograph:
+    def _get_or_create_pictograph(
+        self, pictograph_dict: dict, sequence
+    ) -> BasePictograph:
         modified_key = self.sequence_builder.main_widget.pictograph_key_generator.generate_pictograph_key(
             pictograph_dict
         )

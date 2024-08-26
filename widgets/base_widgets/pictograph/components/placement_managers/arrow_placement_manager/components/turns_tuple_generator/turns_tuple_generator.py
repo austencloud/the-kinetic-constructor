@@ -45,7 +45,7 @@ class TurnsTupleGenerator:
         }
         self.mirrored_generator = MirroredTurnsTupleGenerator(self)
 
-    def generate_turns_tuple(self, pictograph: "Pictograph") -> str:
+    def generate_turns_tuple(self, pictograph: "BasePictograph") -> str:
         generator_key = self._get_generator_key(pictograph.letter)
         if generator_key and generator_key in self.generators:
             generator = self.generators[generator_key]

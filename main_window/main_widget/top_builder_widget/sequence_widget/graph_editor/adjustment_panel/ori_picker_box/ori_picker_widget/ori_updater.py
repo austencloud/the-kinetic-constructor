@@ -4,7 +4,7 @@ from data.constants import *
 
 if TYPE_CHECKING:
     from .ori_picker_widget import OriPickerWidget
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
     from objects.motion.motion import Motion
 
@@ -19,7 +19,7 @@ class OriUpdater:
         motion.pictograph.updater.update_pictograph(pictograph_dict)
 
     def _adjust_turns_for_pictograph(
-        self, pictograph: "Pictograph", adjustment: Turns
+        self, pictograph: "BasePictograph", adjustment: Turns
     ) -> None:
         """Adjust turns for each relevant motion in the pictograph."""
         for motion in pictograph.motions.values():

@@ -6,7 +6,7 @@ from ..GE_pictograph_view import GE_PictographView, GE_BlankPictograph
 
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
     from ..graph_editor import GraphEditor
 
@@ -26,7 +26,7 @@ class GraphEditorPictographContainer(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
 
-    def update_GE_pictograph(self, pictograph: "Pictograph") -> None:
+    def update_GE_pictograph(self, pictograph: "BasePictograph") -> None:
         self.GE_pictograph_view.set_scene(pictograph)
         self.GE_pictograph = pictograph
 

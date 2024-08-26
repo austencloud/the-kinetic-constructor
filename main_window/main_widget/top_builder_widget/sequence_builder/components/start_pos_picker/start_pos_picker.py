@@ -7,7 +7,7 @@ from main_window.main_widget.top_builder_widget.sequence_builder.components.star
 from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.start_pos_pictograph_frame import (
     StartPosPickerPictographFrame,
 )
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 from .start_pos_manager import StartPosManager
@@ -31,7 +31,7 @@ class StartPosPicker(QWidget):
         super().__init__(sequence_builder)
         self.sequence_builder = sequence_builder
         self.main_widget = sequence_builder.main_widget
-        self.start_pos_cache: dict[str, Pictograph] = {}
+        self.start_pos_cache: dict[str, BasePictograph] = {}
         self.pictograph_factory = StartPosPickerPictographFactory(
             self, self.start_pos_cache
         )
@@ -76,15 +76,15 @@ class StartPosPicker(QWidget):
         button_layout.addStretch(1)
         return button_layout
 
-    def get_variations(self, position: str) -> list[Pictograph]:
+    def get_variations(self, position: str) -> list[BasePictograph]:
         variations = []
         for pictograph_dict in self.main_widget.letters[position]:
             pictograph = self.create_pictograph_from_dict(pictograph_dict)
             variations.append(pictograph)
         return variations
 
-    def create_pictograph_from_dict(self, pictograph_dict: dict) -> Pictograph:
-        pictograph = Pictograph(self.main_widget)
+    def create_pictograph_from_dict(self, pictograph_dict: dict) -> BasePictograph:
+        pictograph = BasePictograph(self.main_widget)
         pictograph.updater.update_pictograph(pictograph_dict)
         return pictograph
 

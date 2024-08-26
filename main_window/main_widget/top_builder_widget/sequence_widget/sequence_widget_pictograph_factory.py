@@ -17,11 +17,13 @@ from data.constants import (
     START_POS,
 )
 
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import SequenceWidget
+    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
+        SequenceWidget,
+    )
 
 
 class SequenceWidgetPictographFactory:
@@ -31,7 +33,7 @@ class SequenceWidgetPictographFactory:
 
     def get_or_create_pictograph(
         self, pictograph_key: str, pictograph_dict=None
-    ) -> Pictograph:
+    ) -> BasePictograph:
         letter_str = pictograph_key.split("_")[0]
         letter = Letter.get_letter(letter_str)
         if pictograph_key in self.pictograph_cache.get(letter, {}):
@@ -56,8 +58,8 @@ class SequenceWidgetPictographFactory:
 
         raise ValueError("Pictograph dict is required for creating a new pictograph.")
 
-    def create_pictograph(self) -> Pictograph:
-        pictograph = Pictograph(self.sequence_widget.main_widget)
+    def create_pictograph(self) -> BasePictograph:
+        pictograph = BasePictograph(self.sequence_widget.main_widget)
         return pictograph
 
     def generate_pictograph_key_from_dict(self, pictograph_dict) -> str:

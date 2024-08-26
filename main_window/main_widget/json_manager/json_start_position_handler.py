@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from data.constants import NO_ROT
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
@@ -11,7 +11,7 @@ class JsonStartPositionHandler:
     def __init__(self, manager: "JSON_Manager"):
         self.manager = manager
 
-    def set_start_position_data(self, start_pos_pictograph: Pictograph) -> None:
+    def set_start_position_data(self, start_pos_pictograph: BasePictograph) -> None:
         red_start_ori = start_pos_pictograph.pictograph_dict["red_attributes"][
             "start_ori"
         ]

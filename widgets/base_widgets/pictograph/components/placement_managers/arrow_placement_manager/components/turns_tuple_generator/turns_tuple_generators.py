@@ -3,7 +3,7 @@ from data.constants import *
 from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 class BaseTurnsTupleGenerator:
@@ -12,7 +12,7 @@ class BaseTurnsTupleGenerator:
             int(motion.turns) if motion.turns in {0.0, 1.0, 2.0, 3.0} else motion.turns
         )
 
-    def set_pictograph(self, pictograph: "Pictograph"):
+    def set_pictograph(self, pictograph: "BasePictograph"):
         self.p = pictograph
 
         self.blue_motion = self.p.motions.get(BLUE)

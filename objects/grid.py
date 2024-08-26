@@ -16,7 +16,7 @@ from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
 
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 GRID_DIR = "images/grid/"
@@ -87,7 +87,7 @@ class GridData:
 
 
 class Grid:
-    def __init__(self, scene: "Pictograph"):
+    def __init__(self, scene: "BasePictograph"):
         self.scene = scene
         self.items: dict[GridModes, GridItem] = {}
         self.layers: dict[str, GridItem] = {}
@@ -124,7 +124,7 @@ class Grid:
         closest_point = self.grid_data.get_point(layer, pos)
         return closest_point.name, closest_point.coordinates
 
-    def _create_grid_items(self, pictograph: "Pictograph"):
+    def _create_grid_items(self, pictograph: "BasePictograph"):
         # Define paths for your grid images or components
         paths = {
             DIAMOND: get_images_and_data_path(f"{GRID_DIR}diamond_grid.svg"),

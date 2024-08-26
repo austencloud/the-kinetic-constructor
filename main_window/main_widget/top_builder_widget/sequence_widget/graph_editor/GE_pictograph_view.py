@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPainter, QPen, QColor
 
 from widgets.base_widgets.pictograph.components.pictograph_view import PictographView
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
@@ -60,7 +60,7 @@ class GE_PictographView(PictographView):
         )
         painter.drawRect(overlay_rect)
 
-    def get_current_pictograph(self) -> Pictograph:
+    def get_current_pictograph(self) -> BasePictograph:
         return self.scene()
 
     def set_scene(self, beat: "Beat") -> None:
@@ -84,7 +84,7 @@ class GE_PictographView(PictographView):
         self.scale(scale_factor, scale_factor)
 
 
-class GE_BlankPictograph(Pictograph):
+class GE_BlankPictograph(BasePictograph):
     def __init__(self, pictograph_container: "GraphEditorPictographContainer") -> None:
         super().__init__(pictograph_container.graph_editor.main_widget)
         self.is_blank = True

@@ -3,7 +3,9 @@ from PyQt6.QtWidgets import QGridLayout, QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
 
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat_frame_layout_manager import BeatFrameLayoutManager
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat_frame_layout_manager import (
+    BeatFrameLayoutManager,
+)
 from widgets.base_widgets.base_beat_frame import BaseBeatFrame
 
 from .beat_deletion_manager import BeatDeletionManager
@@ -13,8 +15,10 @@ from .start_pos_beat import StartPositionBeat
 from .start_pos_beat import StartPositionBeatView
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
-    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import SequenceWidget
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
+    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
+        SequenceWidget,
+    )
 
 from .beat import BeatView
 
@@ -74,7 +78,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
     def delete_selected_beat(self) -> None:
         self.beat_deletion_manager.delete_selected_beat()
 
-    def add_beat_to_sequence(self, new_beat: "Pictograph") -> None:
+    def add_beat_to_sequence(self, new_beat: "BasePictograph") -> None:
         next_beat_index = self.find_next_available_beat()
         if next_beat_index == 0:
             self.sequence_widget.difficulty_label.set_difficulty_level(1)

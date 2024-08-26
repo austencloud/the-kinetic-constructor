@@ -7,14 +7,14 @@ from .ori_picker_header import GE_OriPickerHeader
 
 if TYPE_CHECKING:
     from ..beat_adjustment_panel import BeatAdjustmentPanel
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 class OriPickerBox(QFrame):
     def __init__(
         self,
         adjustment_panel: "BeatAdjustmentPanel",
-        start_pos: "Pictograph",
+        start_pos: "BasePictograph",
         color: str,
     ) -> None:
         super().__init__(adjustment_panel)

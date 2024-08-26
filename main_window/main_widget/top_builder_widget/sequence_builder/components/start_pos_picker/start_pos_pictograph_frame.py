@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton
 from typing import TYPE_CHECKING
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
@@ -18,7 +18,7 @@ class StartPosPickerPictographFrame(QWidget):
         self.pictographs_layout = QHBoxLayout()
         self.layout.addLayout(self.pictographs_layout)
         self.variation_buttons: dict[str, QPushButton] = {}
-        self.start_positions: dict[str, Pictograph] = {}
+        self.start_positions: dict[str, BasePictograph] = {}
 
     def resize_start_pos_picker_pictograph_frame(self) -> None:
         self.setMaximumWidth(
@@ -32,7 +32,7 @@ class StartPosPickerPictographFrame(QWidget):
                 self.start_positions[list(self.start_positions.keys())[0]].view.width()
             )
 
-    def _add_start_pos_to_layout(self, start_pos: Pictograph) -> None:
+    def _add_start_pos_to_layout(self, start_pos: BasePictograph) -> None:
         start_pos.view.mousePressEvent = (
             self.clickable_option_handler.get_click_handler(start_pos)
         )

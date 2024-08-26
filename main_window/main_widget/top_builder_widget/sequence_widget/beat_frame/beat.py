@@ -9,17 +9,17 @@ from PyQt6.QtGui import (
     QImage,
 )
 
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_recorder.SR_beat_frame import SR_BeatFrame
-    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame
+    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat_frame import (
+        SequenceWidgetBeatFrame,
+    )
 
 
-
-
-class Beat(Pictograph):
+class Beat(BasePictograph):
     def __init__(self, beat_frame: Union["SequenceWidgetBeatFrame", "SR_BeatFrame"]):
         super().__init__(beat_frame.main_widget)
         self.main_widget = beat_frame.main_widget

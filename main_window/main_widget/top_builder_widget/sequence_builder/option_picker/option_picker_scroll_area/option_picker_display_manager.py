@@ -3,7 +3,7 @@ from Enums.Enums import LetterType, Letter
 from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
     Beat,
 )
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 from Enums.Enums import LetterType
 from .option_picker_section_widget import (
@@ -29,7 +29,7 @@ class OptionPickerDisplayManager:
             for index, (key, pictograph) in enumerate(ordered_pictographs.items()):
                 self.add_pictograph_to_layout(pictograph, index)
 
-    def add_pictograph_to_layout(self, pictograph: Pictograph, index: int) -> None:
+    def add_pictograph_to_layout(self, pictograph: BasePictograph, index: int) -> None:
         row, col = divmod(index, self.COLUMN_COUNT)
         letter_type = self.scroll_area.section_manager.get_pictograph_letter_type(
             pictograph.letter
@@ -41,7 +41,7 @@ class OptionPickerDisplayManager:
             pictograph.view.show()
 
     def remove_pictograph(self, pictograph_key: str) -> None:
-        pictograph_to_remove: Pictograph = self.scroll_area.pictograph_cache.pop(
+        pictograph_to_remove: BasePictograph = self.scroll_area.pictograph_cache.pop(
             pictograph_key, None
         )
         if pictograph_to_remove:
@@ -49,9 +49,9 @@ class OptionPickerDisplayManager:
 
     def get_ordered_pictographs_for_section(
         self, letter_type: LetterType
-    ) -> dict[str, Pictograph]:
+    ) -> dict[str, BasePictograph]:
         last_beat = self.scroll_area.sequence_builder.last_beat
-        relevant_pictographs: dict[str, Pictograph] = {}
+        relevant_pictographs: dict[str, BasePictograph] = {}
 
         for key, cached_pictograph in self.scroll_area.pictograph_cache.items():
             if self.is_pictograph_relevant(cached_pictograph, last_beat):
@@ -75,7 +75,7 @@ class OptionPickerDisplayManager:
         }
 
     def is_pictograph_relevant(
-        self, cached_pictograph: Pictograph, last_beat: Beat
+        self, cached_pictograph: BasePictograph, last_beat: Beat
     ) -> bool:
         """Check if a pictograph is a valid next option based on the current_pictograph."""
 
@@ -90,7 +90,7 @@ class OptionPickerDisplayManager:
         for section in self.scroll_area.section_manager.sections.values():
             section.clear_pictographs()
 
-    def add_pictograph_to_section_layout(self, pictograph: Pictograph):
+    def add_pictograph_to_section_layout(self, pictograph: BasePictograph):
         """Add a pictograph to its corresponding section layout."""
         letter_type = self.scroll_area.section_manager.get_pictograph_letter_type(
             pictograph.letter

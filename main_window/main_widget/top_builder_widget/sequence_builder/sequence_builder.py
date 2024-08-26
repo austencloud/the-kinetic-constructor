@@ -19,8 +19,10 @@ from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.o
     OptionPickerClickHandler,
 )
 
-from main_window.main_widget.top_builder_widget.sequence_builder.add_to_sequence_manager import AddToSequenceManager
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from main_window.main_widget.top_builder_widget.sequence_builder.add_to_sequence_manager import (
+    AddToSequenceManager,
+)
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
@@ -35,10 +37,10 @@ class SequenceBuilder(QFrame):
         super().__init__(top_builder_widget)
         self.top_builder_widget = top_builder_widget
         self.main_widget: "MainWidget" = top_builder_widget.main_widget
-        self.last_beat: Pictograph = None
+        self.last_beat: BasePictograph = None
         self.json_manager = self.main_widget.json_manager
         self.start_position_picked = False
-        self.pictograph_cache: dict[Letter, dict[str, Pictograph]] = {
+        self.pictograph_cache: dict[Letter, dict[str, BasePictograph]] = {
             letter: {} for letter in Letter
         }
         self.option_click_handler = OptionPickerClickHandler(self)
@@ -92,7 +94,7 @@ class SequenceBuilder(QFrame):
 
     def render_and_store_pictograph(
         self, pictograph_dict: dict, sequence
-    ) -> Pictograph:
+    ) -> BasePictograph:
         pictograph_dict = self._add_turns_and_start_ori(pictograph_dict, sequence)
         letter_str = pictograph_dict["letter"]
         letter = Letter.get_letter(letter_str)

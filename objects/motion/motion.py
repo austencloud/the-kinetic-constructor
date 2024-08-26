@@ -16,14 +16,14 @@ from Enums.MotionAttributes import (
 )
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
     from objects.arrow.arrow import Arrow
     from objects.prop.prop import Prop
 
 
 class Motion:
-    def __init__(self, pictograph: "Pictograph", motion_dict: dict) -> None:
+    def __init__(self, pictograph: "BasePictograph", motion_dict: dict) -> None:
         self.pictograph = pictograph
         self.motion_dict = motion_dict
         self.ori_calculator = MotionOriCalculator(self)
@@ -33,7 +33,7 @@ class Motion:
         self.updater = MotionUpdater(self)
         self.check = MotionChecker(self)
 
-    pictograph: "Pictograph"
+    pictograph: "BasePictograph"
     color: str
     turns: Turns
     arrow: "Arrow"

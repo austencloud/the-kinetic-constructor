@@ -4,13 +4,13 @@ from PyQt6.QtCore import QByteArray, QBuffer
 import os
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 from PyQt6.QtWidgets import QGraphicsPixmapItem
 
 
 class PictographImageRenderer:
-    def __init__(self, pictograph: "Pictograph") -> None:
+    def __init__(self, pictograph: "BasePictograph") -> None:
         self.pictograph = pictograph
 
     def render_and_cache_image(self) -> None:

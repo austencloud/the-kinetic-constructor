@@ -2,11 +2,13 @@ from typing import TYPE_CHECKING, Optional
 from Enums.letters import Letter
 from data.constants import STATIC, DASH
 from objects.arrow.arrow import Arrow
-from widgets.base_widgets.pictograph.components.wasd_adjustment_manager.rotation_angle_override_key_generator import RotationAngleOverrideKeyGenerator
+from widgets.base_widgets.pictograph.components.wasd_adjustment_manager.rotation_angle_override_key_generator import (
+    RotationAngleOverrideKeyGenerator,
+)
 
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
     from ..wasd_adjustment_manager.wasd_adjustment_manager import WASD_AdjustmentManager
 
@@ -45,7 +47,7 @@ class RotationAngleOverrideManager:
             pictograph.updater.update_pictograph()
             pictograph.arrow_placement_manager.update_arrow_placements()
 
-    def get_visible_pictographs(self) -> list["Pictograph"]:
+    def get_visible_pictographs(self) -> list["BasePictograph"]:
         visible_pictographs = []
         for pictograph_list in self.pictograph.main_widget.pictograph_cache.values():
             for pictograph in pictograph_list.values():

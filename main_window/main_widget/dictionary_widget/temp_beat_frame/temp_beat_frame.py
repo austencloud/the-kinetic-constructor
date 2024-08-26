@@ -19,7 +19,7 @@ from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame_l
     TempBeatFrameLayoutManager,
 )
 
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
@@ -71,7 +71,7 @@ class TempBeatFrame(BaseBeatFrame):
             self.layout.addWidget(beat, row + 1, col + 1)
         self.layout_manager.configure_beat_frame(16)
 
-    def add_beat_to_sequence(self, new_beat: "Pictograph") -> None:
+    def add_beat_to_sequence(self, new_beat: "BasePictograph") -> None:
         next_beat_index = self.find_next_available_beat()
 
         if (

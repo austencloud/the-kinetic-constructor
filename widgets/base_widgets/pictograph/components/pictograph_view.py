@@ -7,15 +7,14 @@ from .pictograph_context_menu_handler import PictographContextMenuHandler
 from .pictograph_view_mouse_event_handler import PictographViewMouseEventHandler
 
 
-
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 class PictographView(QGraphicsView):
     original_style: str
 
-    def __init__(self, pictograph: "Pictograph") -> None:
+    def __init__(self, pictograph: "BasePictograph") -> None:
         super().__init__(pictograph)
         self.pictograph = pictograph
         self.original_style = ""

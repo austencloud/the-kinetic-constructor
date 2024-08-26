@@ -8,11 +8,11 @@ from .handlers.turns_column_handler import TurnsColumnHandler
 from .handlers.utils import parse_turns_tuple_string
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 class TKA_Glyph(QGraphicsItemGroup):
-    def __init__(self, pictograph: "Pictograph") -> None:
+    def __init__(self, pictograph: "BasePictograph") -> None:
         super().__init__()
         self.pictograph = pictograph
         self.letter = None

@@ -7,7 +7,7 @@ from data.constants import BLUE, RED
 
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
     from objects.arrow.arrow import Arrow
     from objects.prop.prop import Prop
@@ -21,7 +21,7 @@ class GraphicalObject(QGraphicsSvgItem):
     color: str
     renderer: QSvgRenderer
 
-    def __init__(self, pictograph: "Pictograph") -> None:
+    def __init__(self, pictograph: "BasePictograph") -> None:
         super().__init__()
         self.pictograph = pictograph
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, True)

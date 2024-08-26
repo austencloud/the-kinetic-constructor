@@ -6,7 +6,7 @@ from data.constants import END_POS, START_POS
 from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import (
     StartPositionBeat,
 )
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 from typing import TYPE_CHECKING
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 
 class StartPosManager(QObject):
-    start_position_selected = pyqtSignal(Pictograph)
+    start_position_selected = pyqtSignal(BasePictograph)
 
     def __init__(self, start_pos_picker: "StartPosPicker") -> None:
         super().__init__()
@@ -26,7 +26,7 @@ class StartPosManager(QObject):
         self.start_pos_frame = start_pos_picker.pictograph_frame
         self.main_widget = start_pos_picker.sequence_builder.main_widget
         self.top_builder_widget = self.sequence_builder.top_builder_widget
-        self.start_options: dict[str, Pictograph] = {}
+        self.start_options: dict[str, BasePictograph] = {}
         self.setup_start_positions()
         self.start_position_selected.connect(
             self.sequence_builder.transition_to_sequence_building
@@ -68,7 +68,7 @@ class StartPosManager(QObject):
                     start_position_pictograph.start_to_end_pos_glyph.hide()
 
     def on_start_pos_clicked(
-        self, clicked_start_option: Pictograph, event: QWidget = None
+        self, clicked_start_option: BasePictograph, event: QWidget = None
     ) -> None:
         """Handle the start position click event."""
         start_position_beat = StartPositionBeat(
@@ -123,7 +123,7 @@ class StartPosManager(QObject):
 
         return start_pos_beat
 
-    def get_start_pos_pictograph(self, start_pos_data) -> "Pictograph":
+    def get_start_pos_pictograph(self, start_pos_data) -> "BasePictograph":
         if not start_pos_data:
             return None
         start_pos_key = start_pos_data["end_pos"]
@@ -162,7 +162,7 @@ class StartPosManager(QObject):
                 return mapping[key]
         return None
 
-    def get_all_start_positions(self) -> list["Pictograph"]:
+    def get_all_start_positions(self) -> list["BasePictograph"]:
         all_start_positions = []
         valid_letters = [Letter.α, Letter.β, Letter.Γ]
         for letter in self.main_widget.letters:
@@ -170,14 +170,14 @@ class StartPosManager(QObject):
                 all_start_positions.extend(self.get_variations(letter))
         return all_start_positions
 
-    def get_variations(self, start_pos_letter: str) -> list[Pictograph]:
+    def get_variations(self, start_pos_letter: str) -> list[BasePictograph]:
         variations = []
         for pictograph_dict in self.main_widget.letters[start_pos_letter]:
             pictograph = self.create_pictograph_from_dict(pictograph_dict)
             variations.append(pictograph)
         return variations
 
-    def create_pictograph_from_dict(self, pictograph_dict: dict) -> Pictograph:
-        pictograph = Pictograph(self.main_widget)
+    def create_pictograph_from_dict(self, pictograph_dict: dict) -> BasePictograph:
+        pictograph = BasePictograph(self.main_widget)
         pictograph.updater.update_pictograph(pictograph_dict)
         return pictograph

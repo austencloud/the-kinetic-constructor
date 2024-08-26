@@ -2,7 +2,7 @@ from PyQt6.QtCore import QObject, pyqtSignal
 from data.constants import END_POS, START_POS
 from typing import TYPE_CHECKING
 
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
@@ -12,13 +12,13 @@ if TYPE_CHECKING:
 
 
 class OptionManager(QObject):
-    option_selected = pyqtSignal(Pictograph)
+    option_selected = pyqtSignal(BasePictograph)
 
     def __init__(self, option_picker: "OptionPicker"):
         super().__init__()
         self.sequence_builder = option_picker.sequence_builder
         self.main_widget = option_picker.main_widget
-        self.start_options: dict[str, Pictograph] = {}
+        self.start_options: dict[str, BasePictograph] = {}
 
     def get_next_options(self, sequence) -> list[dict]:
         next_options = []

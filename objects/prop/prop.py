@@ -13,7 +13,7 @@ from Enums.PropTypes import PropType
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
     from objects.motion.motion import Motion
 
@@ -40,7 +40,7 @@ class Prop(GraphicalObject):
     def __init__(self, pictograph, prop_dict: dict, motion: "Motion") -> None:
         super().__init__(pictograph)
         self.motion = motion
-        self.scene: Pictograph = pictograph
+        self.scene: BasePictograph = pictograph
         self.arrow: Arrow
         self.previous_location: Location
         self.prop_dict = prop_dict

@@ -30,8 +30,10 @@ from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.
 )
 from main_window.main_widget.json_manager.json_manager import JSON_Manager
 
-from widgets.base_widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
+    TurnsTupleGenerator,
+)
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 from main_window.main_widget.pictograph_key_generator import (
     PictographKeyGenerator,
@@ -100,7 +102,7 @@ class MainWidget(QTabWidget):
         print("Webcam initialization requested")
 
     def _setup_pictograph_cache(self) -> None:
-        self.pictograph_cache: dict[str, dict[str, "Pictograph"]] = {}
+        self.pictograph_cache: dict[str, dict[str, "BasePictograph"]] = {}
         for letter in Letter:
             self.pictograph_cache[letter] = {}
 

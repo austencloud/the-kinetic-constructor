@@ -8,11 +8,11 @@ from Enums.letters import Letter
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 class StartToEndPosGlyph(QGraphicsItemGroup):
-    def __init__(self, pictograph: "Pictograph"):
+    def __init__(self, pictograph: "BasePictograph"):
         super().__init__()
         self.pictograph = pictograph
         self.glyph_visibility_manager = (

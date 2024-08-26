@@ -1,16 +1,14 @@
 from PyQt6.QtCore import QObject, pyqtSignal
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker import (
-        AdvancedStartPosPicker,
-    )
+    from ...advanced_start_pos_picker.advanced_start_pos_picker import AdvancedStartPosPicker
 
 
 class AdvancedStartPosManager(QObject):
-    start_position_selected = pyqtSignal(Pictograph)
+    start_position_selected = pyqtSignal(BasePictograph)
 
     def __init__(self, advanced_start_pos_picker: "AdvancedStartPosPicker") -> None:
         super().__init__()

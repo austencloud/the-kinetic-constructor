@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from data.constants import BLUE, RED
-from widgets.base_widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
@@ -11,7 +11,7 @@ class PropTypeChanger:
     def __init__(self, settings_manager: "SettingsManager") -> None:
         self.main_window = settings_manager.main_window
 
-    def replace_props(self, new_prop_type, pictograph: Pictograph):
+    def replace_props(self, new_prop_type, pictograph: BasePictograph):
         for color, prop in pictograph.props.items():
             new_prop = pictograph.initializer.prop_factory.create_prop_of_type(
                 prop, new_prop_type

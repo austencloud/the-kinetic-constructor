@@ -5,11 +5,11 @@ from objects.motion.motion import Motion
 from functools import lru_cache
 
 if TYPE_CHECKING:
-    from widgets.base_widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import BasePictograph
 
 
 class PictographUpdater:
-    def __init__(self, pictograph: "Pictograph") -> None:
+    def __init__(self, pictograph: "BasePictograph") -> None:
         self.pictograph = pictograph
 
     def update_pictograph(self, pictograph_dict: dict = None) -> None:
