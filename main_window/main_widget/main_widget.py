@@ -7,21 +7,25 @@ from Enums.Enums import Letter
 from Enums.PropTypes import PropType
 
 
+from main_window.main_widget.letter_loader import LetterLoader
+from main_window.main_widget.sequence_properties_manager.sequence_properties_manager import (
+    SequencePropertiesManager,
+)
+from main_window.main_widget.top_builder_widget import TopBuilderWidget
 from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
     SvgManager,
 )
-from widgets.main_widget.sequence_properties_manager.sequence_properties_manager import SequencePropertiesManager
+from widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
+    TurnsTupleGenerator,
+)
 from widgets.sequence_difficulty_evaluator import SequenceLevelEvaluator
 from widgets.dictionary_widget.thumbnail_box.thumbnail_finder import ThumbnailFinder
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from styles.get_tab_stylesheet import get_tab_stylesheet
 from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
 from widgets.dictionary_widget.thumbnail_box.metadata_extractor import MetaDataExtractor
-from widgets.json_manager import JSON_Manager
-from widgets.main_widget.top_builder_widget import TopBuilderWidget
+from main_window.main_widget.json_manager.json_manager import JSON_Manager
 
-from widgets.main_widget.letter_loader import LetterLoader
-from widgets.menu_bar.main_settings_dialog import MainSettingsDialog
 from widgets.menu_bar.prop_type_selector import PropTypeSelector
 from widgets.pictograph.pictograph import Pictograph
 from widgets.scroll_area.components.pictograph_key_generator import (
@@ -30,9 +34,7 @@ from widgets.scroll_area.components.pictograph_key_generator import (
 from data.constants import DIAMOND
 
 from ..main_widget.special_placement_loader import SpecialPlacementLoader
-from ..pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
-    TurnsTupleGenerator,
-)
+
 from PyQt6.QtWidgets import QTabWidget
 
 if TYPE_CHECKING:
@@ -110,7 +112,6 @@ class MainWidget(QTabWidget):
         self.prop_type_selector = PropTypeSelector(self)
         self.turns_tuple_generator = TurnsTupleGenerator()
         self.pictograph_key_generator = PictographKeyGenerator()
-        self.main_settings_dialog = MainSettingsDialog(self)
         self.special_placement_loader = SpecialPlacementLoader(self)
         self.metadata_extractor = MetaDataExtractor(self)
         self.sequence_level_evaluator = SequenceLevelEvaluator()

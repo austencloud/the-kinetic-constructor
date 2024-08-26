@@ -7,7 +7,7 @@ from widgets.sequence_builder.sequence_builder import SequenceBuilder
 from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 if TYPE_CHECKING:
-    from widgets.main_widget.main_widget import MainWidget
+    from main_window.main_widget.main_widget import MainWidget
 
 
 class TopBuilderWidget(QWidget):

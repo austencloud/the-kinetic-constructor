@@ -14,7 +14,7 @@ from widgets.current_sequence_json_manager.json_start_position_handler import (
 
 
 if TYPE_CHECKING:
-    from widgets.main_widget.main_widget import MainWidget
+    from main_window.main_widget.main_widget import MainWidget
 
 from widgets.current_sequence_json_manager.json_sequence_loader_saver import (
     JsonSequenceLoaderSaver,

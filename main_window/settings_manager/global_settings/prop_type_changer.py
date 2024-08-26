@@ -4,8 +4,7 @@ from widgets.pictograph.pictograph import Pictograph
 
 
 if TYPE_CHECKING:
-    from settings_manager.settings_manager import SettingsManager
-    from main import MainWindow
+    from ..settings_manager import SettingsManager
 
 
 class PropTypeChanger:

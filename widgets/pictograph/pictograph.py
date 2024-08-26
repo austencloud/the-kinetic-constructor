@@ -1,11 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem
-from Enums.Enums import (
-    Letter,
-    OpenCloseStates,
-    SpecificPosition,
-    VTG_Modes,
-)
+from Enums.Enums import Letter, OpenCloseStates, SpecificPosition, VTG_Modes
 from Enums.MotionAttributes import Location
 
 from Enums.PropTypes import PropType
@@ -45,9 +40,10 @@ from .components.pictograph_initializer import PictographInitializer
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker.scroll_area.option_picker_scroll_area import OptionPickerScrollArea
-
-    from ..main_widget.main_widget import MainWidget
+    from widgets.sequence_builder.components.option_picker.scroll_area.option_picker_scroll_area import (
+        OptionPickerScrollArea,
+    )
+    from main_window.main_widget.main_widget import MainWidget
 
 
 class Pictograph(QGraphicsScene):

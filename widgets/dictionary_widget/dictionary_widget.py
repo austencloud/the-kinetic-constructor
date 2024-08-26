@@ -13,7 +13,7 @@ from .dictionary_preview_area import DictionaryPreviewArea
 from .dictionary_sequence_populator import DictionarySequencePopulator
 
 if TYPE_CHECKING:
-    from widgets.main_widget.main_widget import MainWidget
+    from main_window.main_widget.main_widget import MainWidget
 
 
 class DictionaryWidget(QWidget):

@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from data.constants import BLUE, RED
 
 if TYPE_CHECKING:
-    from widgets.json_manager import JSON_Manager
+    from main_window.main_widget.json_manager.json_manager import JSON_Manager
 
 
 class JsonSequenceValidationEngine:

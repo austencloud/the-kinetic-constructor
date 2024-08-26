@@ -1,10 +1,8 @@
 from PyQt6.QtCore import QObject, QTimer, pyqtSignal
-from PyQt6.QtGui import QLinearGradient, QColor, QPainter
-import math
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from PyQt6.QtWidgets import QWidget
+    pass
 
 
 class BackgroundManager(QObject):

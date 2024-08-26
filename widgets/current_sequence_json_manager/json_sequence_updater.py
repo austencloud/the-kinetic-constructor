@@ -5,7 +5,7 @@ from data.constants import BLUE, DASH, NO_ROT, RED, STATIC
 from widgets.sequence_widget.beat_frame.beat import BeatView
 
 if TYPE_CHECKING:
-    from widgets.json_manager import JSON_Manager
+    from main_window.main_widget.json_manager.json_manager import JSON_Manager
 
 
 class JsonSequenceUpdater:

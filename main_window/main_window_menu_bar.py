@@ -8,21 +8,20 @@ from widgets.menu_bar.visibility_menu import VisibilityMenu
 from PyQt6.QtWidgets import QMenu
 
 if TYPE_CHECKING:
-    from widgets.main_widget.main_widget import MainWidget
+    from main_window.main_window import MainWindow
+    from main_window.main_widget.main_widget import MainWidget
 
 
 class MainWindowMenuBar(QMenuBar):
-    def __init__(self, main_widget: "MainWidget"):
+    def __init__(self, main_window: "MainWindow"):
         super().__init__()
-        self.main_widget = main_widget
+        self.main_widget = main_window.main_widget
 
         self.user_profiles_menu = UserProfileMenu(self)
         self.backgrounds_menu = BackgroundsMenu(self)
         self.prop_type_menu = PropTypeMenu(self)
-        self.settings_menu = SettingsMenu(self)
         self.visibility_menu = VisibilityMenu(self)
 
-        self.addMenu(self.settings_menu)
         self.addMenu(self.prop_type_menu)
         self.addMenu(self.visibility_menu)
         self.addMenu(self.backgrounds_menu)

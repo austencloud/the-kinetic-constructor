@@ -3,7 +3,7 @@ from data.constants import NO_ROT
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.json_manager import JSON_Manager
+    from main_window.main_widget.json_manager.json_manager import JSON_Manager
 
 
 class JsonStartPositionHandler:

@@ -8,11 +8,10 @@ from background_managers.background_manager import BackgroundManager
 from background_managers.particle_background_manager import ParticleBackgroundManager
 from background_managers.rainbow_background_manager import RainbowBackgroundManager
 from background_managers.startfield_background_manager import StarfieldBackgroundManager
-
-from settings_manager.prop_type_changer import PropTypeChanger
+from .prop_type_changer import PropTypeChanger
 
 if TYPE_CHECKING:
-    from settings_manager.settings_manager import SettingsManager
+    from ..settings_manager import SettingsManager
 
 
 class GlobalSettings:

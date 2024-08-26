@@ -16,7 +16,7 @@ from .strictly_rotational_permutation_checker import (
 )
 
 if TYPE_CHECKING:
-    from widgets.main_widget.main_widget import MainWidget
+    from main_window.main_widget.main_widget import MainWidget
 
 
 class SequencePropertiesManager:

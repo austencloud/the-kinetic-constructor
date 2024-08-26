@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout
+
 from .beat_frame.beat import Beat, BeatView
 from .sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
 from .beat_frame.beat_frame import SequenceWidgetBeatFrame
@@ -15,7 +16,7 @@ from .sequence_widget_button_frame import SequenceWidgetButtonFrame
 from .sequence_widget_scroll_area import SequenceWidgetScrollArea
 
 if TYPE_CHECKING:
-    from ..main_widget.top_builder_widget import TopBuilderWidget
+    from main_window.main_widget.top_builder_widget import TopBuilderWidget
 
 
 class SequenceWidget(QWidget):

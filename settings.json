@@ -38,7 +38,7 @@
             "EndPosition": false
         },
         "grid_visibility": {
-            "non_radial_points": true
+            "non_radial_points": false
         }
     },
     "dictionary": {

@@ -1,8 +1,8 @@
 import json
 from typing import TYPE_CHECKING
 
-from widgets.menu_bar.glyph_visibility_manager import GlyphVisibilityManager
-from widgets.menu_bar.grid_visibility_manager import GridVisibilityManager
+from main_window.settings_manager.visibility_settings.glyph_visibility_manager import GlyphVisibilityManager
+from main_window.settings_manager.visibility_settings.grid_visibility_manager import GridVisibilityManager
 
 
 if TYPE_CHECKING:

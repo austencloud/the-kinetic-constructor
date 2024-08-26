@@ -1,14 +1,11 @@
 import os
-import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QSplashScreen
-from PyQt6.QtGui import QPixmap, QGuiApplication
-from PyQt6.QtCore import Qt, QTimer
-from widgets.path_helpers.path_helpers import get_images_and_data_path
+from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtCore import Qt
+from .settings_manager.settings_manager import SettingsManager
+from .main_widget.main_widget import MainWidget
 from widgets.profiler import Profiler
-from settings_manager.settings_manager import SettingsManager
-from utilities.main_window_geometry_manager import MainWindowGeometryManager
-from widgets.main_widget.main_widget import MainWidget
-from widgets.menu_bar.main_window_menu_bar import MainWindowMenuBar
+from main_window.main_window_geometry_manager import MainWindowGeometryManager
+from main_window.main_window_menu_bar import MainWindowMenuBar
 import logging
 
 logging.getLogger("PIL").setLevel(logging.WARNING)
@@ -24,7 +21,7 @@ class MainWindow(QMainWindow):
         self.window_manager = MainWindowGeometryManager(self)
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Kinetic Constructor")
-        self.menu_bar = MainWindowMenuBar(self.main_widget)
+        self.menu_bar = MainWindowMenuBar(self)
         self.setMenuBar(self.menu_bar)
 
     def exec(self, app: QApplication) -> int:

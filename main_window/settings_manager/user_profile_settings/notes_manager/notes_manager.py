@@ -2,10 +2,10 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QComboBox
 from PyQt6.QtCore import QObject
 
-from settings_manager.user_profile_settings.notes_manager.edit_notes_dialog import EditNotesDialog
+from .edit_notes_dialog import EditNotesDialog
 
 if TYPE_CHECKING:
-    from settings_manager.user_profile_settings.user_profile_settings import UserProfileSettings
+    from ..user_profile_settings import UserProfileSettings
 
 
 class NotesManager(QObject):
