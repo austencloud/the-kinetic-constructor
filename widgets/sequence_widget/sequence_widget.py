@@ -17,9 +17,9 @@ from widgets.sequence_widget.difficulty_label import DifficultyLabel
 from ..graph_editor.graph_editor import GraphEditor
 from .beat_frame.layout_options_dialog import LayoutOptionsDialog
 from ..indicator_label import IndicatorLabel
-from .SW_pictograph_factory import SW_PictographFactory
+from .pictograph_factory import PictographFactory
 from .beat_frame.beat import Beat, BeatView
-from .SW_button_frame import SW_ButtonFrame
+from .button_frame import SequenceWidgetButtonFrame
 
 if TYPE_CHECKING:
     from ..main_widget.top_builder_widget import TopBuilderWidget
@@ -49,9 +49,9 @@ class SequenceWidget(QWidget):
         self.difficulty_label = DifficultyLabel(self)
         self.beat_frame = SequenceWidgetBeatFrame(self)
         self.add_to_dictionary_manager = AddToDictionaryManager(self)
-        self.button_frame = SW_ButtonFrame(self)
+        self.button_frame = SequenceWidgetButtonFrame(self)
         self.graph_editor = GraphEditor(self)
-        self.pictograph_factory = SW_PictographFactory(self)
+        self.pictograph_factory = PictographFactory(self)
         self.autocompleter = SequenceAutoCompletionManager(self)
 
     def _setup_layout(self):

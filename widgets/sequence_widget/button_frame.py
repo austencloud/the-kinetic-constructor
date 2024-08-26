@@ -26,12 +26,11 @@ from PyQt6.QtWidgets import QMessageBox
 from PyQt6.QtWidgets import QMessageBox
 
 
-class SW_ButtonFrame(QFrame):
+class SequenceWidgetButtonFrame(QFrame):
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
 
-        self.orientations = ["in", "counter", "out", "clock"]
         self.font_size = self.sequence_widget.width() // 45
         self.add_to_dictionary_manager = self.sequence_widget.add_to_dictionary_manager
         self._setup_dependencies()

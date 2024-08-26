@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
 
 from widgets.base_beat_frame import BaseBeatFrame
-from widgets.sequence_widget.SW_beat_frame_layout_manager import (
+from widgets.sequence_widget.beat_frame_layout_manager import (
     SW_BeatFrameLayoutManager,
 )
 from .beat_deletion_manager import BeatDeletionManager
