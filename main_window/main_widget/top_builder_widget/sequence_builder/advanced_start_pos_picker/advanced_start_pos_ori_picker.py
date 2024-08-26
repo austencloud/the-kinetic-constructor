@@ -9,8 +9,9 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtGui import QFont
 
+
 if TYPE_CHECKING:
-    from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker import (
+    from ..advanced_start_pos_picker.advanced_start_pos_picker import (
         AdvancedStartPosPicker,
     )
 
@@ -48,7 +49,6 @@ class AdvancedStartPosOriPicker(QWidget):
             header,
             alignment=Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignHCenter,
         )
-        # create a label to be a line and add it between the header and the buttons
         line = QLabel()
         line.setFixedHeight(4)
         line.setStyleSheet(f"background-color: {color};")
@@ -109,11 +109,11 @@ class AdvancedStartPosOriPicker(QWidget):
         )
 
     def resize_default_ori_picker(self) -> None:
-        width = int(self.advanced_start_pos_picker.sequence_builder.width() * 0.9)
-        header_size = width // 30
+        width = int(self.advanced_start_pos_picker.sequence_builder.width())
+        header_font_size = width // 35
         for header in self.header_labels:
-            header.setFont(QFont("Arial", header_size, QFont.Weight.Bold))
-        self.setMinimumWidth(width)
+            header.setFont(QFont("Arial", header_font_size, QFont.Weight.Bold))
+        self.setMaximumWidth(width)
 
         for button in self.left_buttons + self.right_buttons:
             button.setFixedWidth(width // 6)

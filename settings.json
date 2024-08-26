@@ -42,7 +42,7 @@
         }
     },
     "dictionary": {
-        "sort_method": "alphabetical"
+        "sort_method": "date_added"
     },
     "sequence_layout": {
         "grow_sequence": true,

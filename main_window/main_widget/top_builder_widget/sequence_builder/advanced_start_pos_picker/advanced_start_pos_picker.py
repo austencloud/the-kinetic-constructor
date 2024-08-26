@@ -33,15 +33,23 @@ class AdvancedStartPosPicker(QWidget):
         self.start_pos_cache: dict[str, list[BasePictograph]] = {}
         self.ori_picker = AdvancedStartPosOriPicker(self)
         self.pictograph_frame = AdvancedStartPosPickerPictographFrame(self)
-        self.choose_you_start_pos_label = ChooseYourStartPosLabel(self)
+        self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)
         self.pictograph_factory = AdvancedStartPosPickerPictographFactory(
             self, self.start_pos_cache
         )
         self.advanced_start_pos_manager = AdvancedStartPosManager(self)
+        self._setup_layout()
+
+    def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.grid_layout = QGridLayout()
-        self.layout.addWidget(self.ori_picker, 1)
-        self.layout.addLayout(self.grid_layout, 16)
+        self.layout.addStretch(1)
+        self.layout.addWidget(self.choose_your_start_pos_label)
+        self.layout.addStretch(1)
+        self.layout.addWidget(self.ori_picker)
+        self.layout.addStretch(1)
+        self.layout.addLayout(self.grid_layout)
+        self.layout.addStretch(1)
 
     def display_variations(self, variations: list["BasePictograph"]) -> None:
         alpha_variations = []
@@ -74,7 +82,6 @@ class AdvancedStartPosPicker(QWidget):
             self._resize_variation(variation)
             variation.container.update_borders()
 
-
     def init_ui(self):
         variations = self.start_pos_picker.start_pos_manager.get_all_start_positions()
         self.display_variations(variations)
@@ -99,3 +106,4 @@ class AdvancedStartPosPicker(QWidget):
 
     def resize_advanced_start_pos_picker(self) -> None:
         self.ori_picker.resize_default_ori_picker()
+        self.choose_your_start_pos_label.set_stylesheet()

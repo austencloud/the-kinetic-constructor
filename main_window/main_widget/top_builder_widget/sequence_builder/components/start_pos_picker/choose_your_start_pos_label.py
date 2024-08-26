@@ -5,9 +5,10 @@ from typing import TYPE_CHECKING, Union
 
 
 
+
 if TYPE_CHECKING:
-    from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker import AdvancedStartPosPicker
-    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import StartPosPicker
+    from ...advanced_start_pos_picker.advanced_start_pos_picker import AdvancedStartPosPicker
+    from ...components.start_pos_picker.start_pos_picker import StartPosPicker
 
 
 class ChooseYourStartPosLabel(QLabel):
@@ -17,7 +18,6 @@ class ChooseYourStartPosLabel(QLabel):
         self.setText("Choose your start position!")
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setGeometry(0, 0, self.start_pos_picker.width(), 50)
-        # set background to transparent
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.hide()
 
