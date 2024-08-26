@@ -3,7 +3,8 @@ from PyQt6.QtCore import Qt
 from Enums.Enums import VTG_Directions
 from Enums.MotionAttributes import PropRotDir
 
-class RotDirButton(QPushButton):
+
+class BaseRotDirButton(QPushButton):
     def __init__(self, direction) -> None:
         super().__init__()
         self.direction = direction
@@ -46,20 +47,3 @@ class RotDirButton(QPushButton):
 
     def leaveEvent(self, event) -> None:
         self.setCursor(Qt.CursorShape.ArrowCursor)
-
-class OpenCloseButton(RotDirButton):
-    def __init__(self, open_close_state: VTG_Directions) -> None:
-        super().__init__(open_close_state)
-        self.open_close_dir = open_close_state
-
-
-class VtgDirButton(RotDirButton):
-    def __init__(self, vtg_dir: VTG_Directions) -> None:
-        super().__init__(vtg_dir)
-        self.vtg_dir = vtg_dir
-
-
-class PropRotDirButton(RotDirButton):
-    def __init__(self, prop_rot_dir: PropRotDir) -> None:
-        super().__init__(prop_rot_dir)
-        self.prop_rot_dir = prop_rot_dir

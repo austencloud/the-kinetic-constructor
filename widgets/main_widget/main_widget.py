@@ -17,7 +17,6 @@ from widgets.path_helpers.path_helpers import get_images_and_data_path
 from styles.get_tab_stylesheet import get_tab_stylesheet
 from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
 from widgets.dictionary_widget.thumbnail_box.metadata_extractor import MetaDataExtractor
-from widgets.factories.button_factory.button_factory import ButtonFactory
 from widgets.json_manager import JSON_Manager
 from widgets.main_widget.top_builder_widget import TopBuilderWidget
 
@@ -55,7 +54,6 @@ class MainWidget(QTabWidget):
         self.setStyleSheet(get_tab_stylesheet())
         self.webcam_initialized = False  # Add an initialization flag
         self.initialized = True
-        # on tab changed, access the globabl settings to save the most recent tab
         self.currentChanged.connect(self.on_tab_changed)
         self.tabBar().setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
@@ -107,7 +105,6 @@ class MainWidget(QTabWidget):
         self.prop_type = PropType.get_prop_type(prop_type_value)
 
     def _setup_components(self) -> None:
-        self.button_factory = ButtonFactory()
         self.json_manager = JSON_Manager(self)
         self.svg_manager = SvgManager()
         self.prop_type_selector = PropTypeSelector(self)

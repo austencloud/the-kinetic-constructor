@@ -29,7 +29,6 @@ class MainWindowMenuBar(QMenuBar):
         self.addMenu(self.user_profiles_menu)
 
     def resize_menu_bar(self):
-        # Set the height of the menu bar
         self.setFixedHeight(self.main_widget.height() // 30)
         self.setFixedWidth(self.main_widget.width())
 

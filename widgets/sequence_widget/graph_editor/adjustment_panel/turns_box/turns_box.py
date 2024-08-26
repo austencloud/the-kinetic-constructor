@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
-from ..turns_box.prop_rot_dir_button_manager import PropRotDirButtonManager
-from ..turns_box.vtg_dir_button_handler import VtgDirButtonManager
+from .prop_rot_dir_button_manager.prop_rot_dir_button_manager import PropRotDirButtonManager
+from .vtg_dir_button_manager.vtg_dir_button_manager import VtgDirButtonManager
 from .turns_box_header import TurnsBoxHeader
 from .turns_widget.turns_widget import TurnsWidget
 from PyQt6.QtWidgets import QFrame, QVBoxLayout

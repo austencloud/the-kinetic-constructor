@@ -11,12 +11,15 @@ from Enums.MotionAttributes import PropRotDir
 from Enums.Enums import VTG_Directions
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtCore import QSize
+from PyQt6.QtGui import QIcon
 from widgets.path_helpers.path_helpers import get_images_and_data_path
-from widgets.factories.button_factory.buttons.rot_dir_buttons import VtgDirButton
+from .vtr_dir_button import VtgDirButton
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.adjustment_panel.turns_box.turns_box import TurnsBox
     from objects.motion.motion import Motion
+    from widgets.sequence_widget.graph_editor.adjustment_panel.turns_box.turns_box import (
+        TurnsBox,
+    )
 
 
 class VtgDirButtonManager:
@@ -40,19 +43,24 @@ class VtgDirButtonManager:
         self.same_button.hide()
 
     def _setup_vtg_dir_buttons(self) -> list[QPushButton]:
-        button_factory = self.graph_editor.main_widget.button_factory
         same_path = get_images_and_data_path(f"{ICON_DIR}same_direction.png")
         opp_path = get_images_and_data_path(f"{ICON_DIR}opp_direction.png")
-        self.same_button: VtgDirButton = button_factory.create_vtg_dir_button(
+        self.same_button: VtgDirButton = self.create_vtg_dir_button(
             same_path, lambda: self._set_vtg_dir(SAME), SAME
         )
-        self.opp_button: VtgDirButton = button_factory.create_vtg_dir_button(
+        self.opp_button: VtgDirButton = self.create_vtg_dir_button(
             opp_path, lambda: self._set_vtg_dir(OPP), OPP
         )
         self.same_button.unpress()
         self.opp_button.unpress()
 
         return [self.same_button, self.opp_button]
+
+    def create_vtg_dir_button(self, icon_path: str, callback, vtg_dir) -> VtgDirButton:
+        button = VtgDirButton(vtg_dir)
+        button.setIcon(QIcon(icon_path))
+        button.clicked.connect(callback)
+        return button
 
     def _set_vtg_dir(self, vtg_dir: VTG_Directions) -> None:
         self._update_pictographs_vtg_dir(vtg_dir)

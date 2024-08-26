@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import VTG_Directions
-
+from PyQt6.QtGui import QIcon
 from data.constants import (
     CLOCKWISE,
     COUNTER_CLOCKWISE,
@@ -13,12 +13,11 @@ from Enums.MotionAttributes import PropRotDir
 from PyQt6.QtCore import QSize
 
 from widgets.path_helpers.path_helpers import get_images_and_data_path
-from widgets.factories.button_factory.buttons.rot_dir_buttons import (
-    PropRotDirButton,
-)
+from .prop_rot_dir_button import PropRotDirButton
+
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.adjustment_panel.turns_box.turns_box import TurnsBox
+    from ..turns_box import TurnsBox
     from objects.motion.motion import Motion
 
 
@@ -33,17 +32,14 @@ class PropRotDirButtonManager:
         self.json_manager = self.graph_editor.main_widget.json_manager
 
     def _setup_prop_rot_dir_buttons(self) -> list[PropRotDirButton]:
-        button_factory = (
-            self.turns_box.adjustment_panel.graph_editor.main_widget.button_factory
-        )
         cw_path = get_images_and_data_path(f"{ICON_DIR}clock/clockwise.png")
         ccw_path = get_images_and_data_path(f"{ICON_DIR}clock/counter_clockwise.png")
-        self.cw_button: PropRotDirButton = button_factory.create_prop_rot_dir_button(
+        self.cw_button: PropRotDirButton = self.create_prop_rot_dir_button(
             cw_path,
             lambda: self._set_prop_rot_dir(CLOCKWISE),
             CLOCKWISE,
         )
-        self.ccw_button: PropRotDirButton = button_factory.create_prop_rot_dir_button(
+        self.ccw_button: PropRotDirButton = self.create_prop_rot_dir_button(
             ccw_path,
             lambda: self._set_prop_rot_dir(COUNTER_CLOCKWISE),
             COUNTER_CLOCKWISE,
@@ -53,6 +49,14 @@ class PropRotDirButtonManager:
         self.cw_button.hide()
         self.ccw_button.hide()
         return [self.cw_button, self.ccw_button]
+
+    def create_prop_rot_dir_button(
+        self, icon_path: str, callback, prop_rot_dir
+    ) -> PropRotDirButton:
+        button = PropRotDirButton(prop_rot_dir)
+        button.setIcon(QIcon(icon_path))
+        button.clicked.connect(callback)
+        return button
 
     def _set_prop_rot_dir(self, prop_rot_dir: PropRotDir) -> None:
         self._update_pictographs_prop_rot_dir(prop_rot_dir)
