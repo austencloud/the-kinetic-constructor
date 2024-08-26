@@ -23,7 +23,7 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 
-class PictographFactory:
+class SequenceWidgetPictographFactory:
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         self.sequence_widget = sequence_widget
         self.pictograph_cache = sequence_widget.main_widget.pictograph_cache

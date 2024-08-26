@@ -3,7 +3,7 @@
         "prop_type": "Staff",
         "background_type": "Aurora",
         "grow_sequence": true,
-        "current_tab": "sequence_builder"
+        "current_tab": "dictionary"
     },
     "image_export": {
         "include_start_position": false,
@@ -14,7 +14,7 @@
         "add_beat_numbers": false
     },
     "user_profile": {
-        "current_user": "Doc Womp",
+        "current_user": "Austen Cloud",
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",

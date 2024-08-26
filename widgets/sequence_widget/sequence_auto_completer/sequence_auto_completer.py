@@ -1,11 +1,7 @@
 from typing import TYPE_CHECKING, Dict
-from sequence_auto_completer.mirrored_permutation_executor import (
-    MirroredPermutationExecutor,
-)
-from sequence_auto_completer.permutation_dialog import PermutationDialog
-from sequence_auto_completer.rotational_permutation_executor import (
-    RotationalPermutationExecuter,
-)
+from .mirrored_permutation_executor import MirroredPermutationExecutor
+from .permutation_dialog import PermutationDialog
+from .rotational_permutation_executor import RotationalPermutationExecuter
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
 

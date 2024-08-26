@@ -2,19 +2,12 @@ from typing import TYPE_CHECKING
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
 from data.constants import EAST, NORTH, SOUTH, WEST
-
 from typing import TYPE_CHECKING
-from sequence_auto_completer.permutation_executor_base import PermutationExecutor
+from .permutation_executor_base import PermutationExecutor
 
 if TYPE_CHECKING:
-    from sequence_auto_completer.sequence_auto_completer import (
-        SequenceAutoCompleter,
-    )
+    from .sequence_auto_completer import SequenceAutoCompleter
 
-if TYPE_CHECKING:
-    from sequence_auto_completer.sequence_auto_completer import (
-        SequenceAutoCompleter,
-    )
 
 
 class RotationalPermutationExecuter(PermutationExecutor):

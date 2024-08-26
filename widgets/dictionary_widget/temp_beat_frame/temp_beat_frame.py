@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QGridLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
 
-from widgets.base_beat_frame import BaseBeatFrame
+from widgets.base_widgets.base_beat_frame import BaseBeatFrame
 from widgets.dictionary_widget.temp_beat_frame.temp_beat_frame_layout_manager import (
     TempBeatFrameLayoutManager,
 )

@@ -1,10 +1,8 @@
 from typing import TYPE_CHECKING
-from sequence_auto_completer.permutation_executor_base import PermutationExecutor
+from .permutation_executor_base import PermutationExecutor
 
 if TYPE_CHECKING:
-    from sequence_auto_completer.sequence_auto_completer import (
-        SequenceAutoCompleter,
-    )
+    from .sequence_auto_completer import SequenceAutoCompleter
 
 # Define mirroring maps
 vertical_mirror_map = {"s": "s", "e": "w", "w": "e", "n": "n"}
