@@ -3,7 +3,7 @@ import re
 import json
 from PIL import Image
 
-from widgets.path_helpers.path_helpers import get_images_and_data_path
+from utilities.path_helpers import get_images_and_data_path
 
 class VariationNumberFixer:
     def __init__(self):

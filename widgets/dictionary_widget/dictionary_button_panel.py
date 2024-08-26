@@ -10,7 +10,7 @@ from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QIcon
 
 from widgets.dictionary_widget.temp_beat_frame.temp_beat_frame import TempBeatFrame
-from widgets.path_helpers.path_helpers import get_images_and_data_path
+from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.dictionary_preview_area import DictionaryPreviewArea

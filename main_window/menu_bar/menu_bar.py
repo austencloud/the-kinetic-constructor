@@ -1,20 +1,20 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QMenuBar
+from PyQt6.QtWidgets import QMenuBar, QMenu, QApplication
+from PyQt6.QtCore import Qt, QEvent
 from main_window.menu_bar.user_profile_menu import UserProfileMenu
 from main_window.menu_bar.backgrounds_menu import BackgroundsMenu
 from main_window.menu_bar.prop_type_menu import PropTypeMenu
 from main_window.menu_bar.visibility_menu import VisibilityMenu
-from PyQt6.QtWidgets import QMenu
 
 if TYPE_CHECKING:
-    from main_window.main_window import MainWindow
-    from main_window.main_widget.main_widget import MainWidget
+    from main_window.menu_bar_widget import MenuBarWidget
 
 
 class MenuBar(QMenuBar):
-    def __init__(self, main_window: "MainWindow"):
+    def __init__(self, menu_bar_widget: "MenuBarWidget") -> None:
         super().__init__()
-        self.main_widget = main_window.main_widget
+        self.main_window = menu_bar_widget.main_window
+        self.main_widget = self.main_window.main_widget
 
         self.user_profiles_menu = UserProfileMenu(self)
         self.backgrounds_menu = BackgroundsMenu(self)
@@ -26,17 +26,64 @@ class MenuBar(QMenuBar):
         self.addMenu(self.backgrounds_menu)
         self.addMenu(self.user_profiles_menu)
 
-    def resize_menu_bar(self):
-        self.setFixedHeight(self.main_widget.height() // 30)
-        self.setFixedWidth(self.main_widget.width())
+        # Apply custom spacing and styles
+        self._apply_stylesheet()
 
-        # Set the font size based on a percentage of the main widget's height
+    def _apply_stylesheet(self):
+        spacing = self.main_window.width() // 100
+        background_color = "#F0F0F0"
+        hover_color = "#D3D3D3"
+        checkmark_size = self.main_window.width() // 100
+
+        self.setStyleSheet(
+            f"""
+            QMenuBar {{
+                background-color: {background_color};
+            }}
+            QMenuBar::item {{
+                padding: 0px {spacing}px;
+                background-color: {background_color};
+                color: black;
+            }}
+            QMenuBar::item:selected {{
+                background-color: {hover_color};  /* Change background on selection */
+            }}
+            QMenuBar::item:pressed {{
+                background-color: {hover_color};  /* Change background on press */
+            }}
+            QMenuBar::item:hover {{
+                background-color: {hover_color};  /* Change background on hover */
+                cursor: pointer;  /* Change cursor to pointer on hover */
+            }}
+            QMenu {{
+                background-color: {background_color};
+            }}
+            QMenu::item {{
+                background-color: {background_color};
+                padding: 5px 10px;
+            }}
+            QMenu::item:selected {{
+                background-color: {hover_color};  /* Slightly darker gray for selected items */
+            }}
+            QMenu::indicator {{
+                width: {checkmark_size}px;
+                height: {checkmark_size}px;
+            }}
+            """
+        )
+
+    def resize_menu_bar(self):
+        self._adjust_font_size()
+        self._apply_stylesheet()  # Update styles on resize
+        self.move(0, 0)
+        self.show()
+
+    def _adjust_font_size(self):
         font = self.font()
-        font_size = 14
+        font_size = self.main_window.width() // 120
         font.setPointSize(font_size)
         self.setFont(font)
 
-        # Apply the same font size to each menu's actions (dropdown items)
         for menu in self.findChildren(QMenu):
             menu_font = menu.font()
             menu_font.setPointSize(font_size)
@@ -46,6 +93,18 @@ class MenuBar(QMenuBar):
                 action_font.setPointSize(font_size)
                 action.setFont(action_font)
 
-        # Ensure the menu bar is correctly positioned and visible
-        self.move(0, 0)
-        self.show()
+    def enterEvent(self, event):
+        QApplication.setOverrideCursor(Qt.CursorShape.PointingHandCursor)
+        super().enterEvent(event)
+
+    def leaveEvent(self, event):
+        QApplication.restoreOverrideCursor()
+        super().leaveEvent(event)
+
+    # Override event handling to manually change the cursor for the menu bar items
+    def event(self, event):
+        if event.type() == QEvent.Type.HoverMove:
+            self.setCursor(Qt.CursorShape.PointingHandCursor)
+        elif event.type() in [QEvent.Type.Leave, QEvent.Type.HoverLeave]:
+            self.setCursor(Qt.CursorShape.ArrowCursor)
+        return super().event(event)

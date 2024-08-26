@@ -2,7 +2,7 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout, QMessageBox
-from widgets.path_helpers.path_helpers import get_images_and_data_path
+from utilities.path_helpers import get_images_and_data_path
 
 
 if TYPE_CHECKING:

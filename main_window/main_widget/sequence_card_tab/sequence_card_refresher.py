@@ -1,10 +1,10 @@
 import os
 from typing import TYPE_CHECKING, List
 from PyQt6.QtCore import Qt
-from widgets.path_helpers.path_helpers import get_sequence_card_image_exporter_path
+from utilities.path_helpers import get_sequence_card_image_exporter_path
 
 if TYPE_CHECKING:
-    from widgets.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
+    from main_window.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
 
 
 class SequenceCardRefresher:

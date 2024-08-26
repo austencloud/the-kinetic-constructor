@@ -30,7 +30,6 @@ class OptionPickerSectionWidget(QGroupBox):
         self.letter_type = letter_type
         self.vtg_dir_btn_state: dict[str, bool] = {SAME: False, OPP: False}
 
-        # remove the default frame styles
 
     def setup_components(self) -> None:
         self.pictograph_frame = ScrollAreaSectionPictographFrame(self)
@@ -56,18 +55,7 @@ class OptionPickerSectionWidget(QGroupBox):
     def toggle_section(self) -> None:
         is_visible = not self.pictograph_frame.isVisible()
         self.pictograph_frame.setVisible(is_visible)
-        if self.turns_tab:
-            self.turns_tab.setVisible(is_visible)
 
-    def reset_section(self, index: int) -> None:
-        for pictograph in self.pictographs.values():
-            for motion in pictograph.motions.values():
-                motion.turns_manager.set_turns(0)
-            pictograph.updater.update_pictograph()
-        for panel in self.turns_tab.panels:
-            for box in panel.boxes:
-                box.turns_widget.display_manager.update_turns_display("0")
-                box.prop_rot_dir_button_manager.hide_prop_rot_dir_buttons()
 
     def clear_pictographs(self) -> None:
         for pictograph_key in list(self.pictographs.keys()):

@@ -12,7 +12,7 @@ from Enums.Enums import VTG_Directions
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon
-from widgets.path_helpers.path_helpers import get_images_and_data_path
+from utilities.path_helpers import get_images_and_data_path
 from .vtr_dir_button import VtgDirButton
 
 if TYPE_CHECKING:

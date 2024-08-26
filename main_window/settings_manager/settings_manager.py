@@ -8,7 +8,7 @@ from ..settings_manager.image_export_settings import ImageExportSettings
 from ..settings_manager.sequence_layout_settings import SequenceLayoutSettings
 from ..settings_manager.user_profile_settings.user_profile_settings import UserProfileSettings
 from .visibility_settings.visibility_settings import VisibilitySettings
-from widgets.path_helpers.path_helpers import get_user_editable_resource_path
+from utilities.path_helpers import get_user_editable_resource_path
 from .global_settings.global_settings import GlobalSettings
 
 if TYPE_CHECKING:

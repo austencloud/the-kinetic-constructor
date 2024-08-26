@@ -4,10 +4,10 @@ from PIL import Image
 from PyQt6.QtWidgets import QMessageBox
 import json
 
-from widgets.path_helpers.path_helpers import get_images_and_data_path
+from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from widgets.main_widget.main_widget import MainWidget
+    from main_window.main_widget.main_widget import MainWidget
 
 
 class MetaDataExtractor:

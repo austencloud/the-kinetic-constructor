@@ -12,7 +12,7 @@ from data.constants import (
 from Enums.MotionAttributes import PropRotDir
 from PyQt6.QtCore import QSize
 
-from widgets.path_helpers.path_helpers import get_images_and_data_path
+from utilities.path_helpers import get_images_and_data_path
 from .prop_rot_dir_button import PropRotDirButton
 
 

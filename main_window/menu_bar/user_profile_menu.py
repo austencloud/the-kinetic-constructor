@@ -1,16 +1,15 @@
+from PyQt6.QtGui import QAction, QActionGroup
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QMenu
-from PyQt6.QtGui import QActionGroup, QAction
 
+from main_window.menu_bar.hoverable_menu import HoverableMenu
 
 if TYPE_CHECKING:
     from main_window.menu_bar.menu_bar import MenuBar
 
 
-class UserProfileMenu(QMenu):
+class UserProfileMenu(HoverableMenu):
     def __init__(self, menu_bar: "MenuBar"):
         super().__init__("User Profile", menu_bar)
-        self.menu_bar = menu_bar
         self.main_widget = menu_bar.main_widget
         self.user_manager = (
             self.main_widget.main_window.settings_manager.users.user_manager

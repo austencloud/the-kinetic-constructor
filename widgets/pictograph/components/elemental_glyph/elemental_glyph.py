@@ -12,7 +12,7 @@ from data.constants import (
     TOG_OPP,
     TOG_SAME,
 )
-from widgets.path_helpers.path_helpers import get_images_and_data_path
+from utilities.path_helpers import get_images_and_data_path
 
 
 if TYPE_CHECKING:

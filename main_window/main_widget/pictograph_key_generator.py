@@ -1,3 +1,4 @@
+from typing import TYPE_CHECKING
 from data.constants import (
     DIRECTION,
     END_LOC,
@@ -9,11 +10,15 @@ from data.constants import (
     START_POS,
     TIMING,
 )
+if TYPE_CHECKING:
+    from main_window.main_widget.main_widget import MainWidget
 
 
 class PictographKeyGenerator:
-    @staticmethod
-    def generate_pictograph_key(pictograph_dict: dict) -> str:
+    def __init__(self, main_widget: "MainWidget") -> None:
+        self.main_widget = main_widget
+
+    def generate_pictograph_key(self, pictograph_dict: dict) -> str:
         blue_attrs = pictograph_dict["blue_attributes"]
         red_attrs = pictograph_dict["red_attributes"]
         

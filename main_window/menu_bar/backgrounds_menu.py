@@ -1,15 +1,13 @@
-from PyQt6.QtWidgets import QMenu
 from PyQt6.QtGui import QAction, QActionGroup
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QMenu
-from PyQt6.QtGui import QActionGroup, QAction
 
+from main_window.menu_bar.hoverable_menu import HoverableMenu
 
 if TYPE_CHECKING:
     from main_window.menu_bar.menu_bar import MenuBar
 
 
-class BackgroundsMenu(QMenu):
+class BackgroundsMenu(HoverableMenu):
     def __init__(self, menu_bar: "MenuBar"):
         super().__init__("Backgrounds", menu_bar)
         self.menu_bar = menu_bar

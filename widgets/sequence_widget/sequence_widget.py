@@ -141,12 +141,7 @@ class SequenceWidget(QWidget):
         pictograph = Beat(self.beat_frame)
         pictograph.updater.update_pictograph(pictograph_dict)
         self.beat_frame.add_beat_to_sequence(pictograph)
-        pictograph_key = (
-            pictograph.main_widget.pictograph_key_generator.generate_pictograph_key(
-                pictograph_dict
-            )
-        )
-        self.SW_pictograph_cache[pictograph_key] = pictograph
+
         self.json_manager.updater.update_sequence_properties()  # Recalculate properties after each update
 
     def resize_sequence_widget(self) -> None:

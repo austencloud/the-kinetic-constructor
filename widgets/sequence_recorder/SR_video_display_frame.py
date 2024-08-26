@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QImage, QPixmap, QFont
 
-from widgets.path_helpers.path_helpers import get_my_videos_path
+from utilities.path_helpers import get_my_videos_path
 
 if TYPE_CHECKING:
     from widgets.sequence_recorder.SR_capture_frame import (

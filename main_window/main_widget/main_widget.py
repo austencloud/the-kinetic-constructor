@@ -20,14 +20,14 @@ from widgets.pictograph.components.placement_managers.arrow_placement_manager.co
 )
 from widgets.sequence_difficulty_evaluator import SequenceLevelEvaluator
 from widgets.dictionary_widget.thumbnail_box.thumbnail_finder import ThumbnailFinder
-from widgets.path_helpers.path_helpers import get_images_and_data_path
+from utilities.path_helpers import get_images_and_data_path
 from styles.get_tab_stylesheet import get_tab_stylesheet
 from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
 from widgets.dictionary_widget.thumbnail_box.metadata_extractor import MetaDataExtractor
 from main_window.main_widget.json_manager.json_manager import JSON_Manager
 
 from widgets.pictograph.pictograph import Pictograph
-from widgets.scroll_area.components.pictograph_key_generator import (
+from main_window.main_widget.pictograph_key_generator import (
     PictographKeyGenerator,
 )
 from data.constants import DIAMOND
@@ -40,7 +40,7 @@ if TYPE_CHECKING:
     from main import MainWindow
 import json
 
-from widgets.path_helpers.path_helpers import get_images_and_data_path
+from utilities.path_helpers import get_images_and_data_path
 
 
 class MainWidget(QTabWidget):
@@ -109,7 +109,7 @@ class MainWidget(QTabWidget):
         self.json_manager = JSON_Manager(self)
         self.svg_manager = SvgManager()
         self.turns_tuple_generator = TurnsTupleGenerator()
-        self.pictograph_key_generator = PictographKeyGenerator()
+        self.pictograph_key_generator = PictographKeyGenerator(self)
         self.special_placement_loader = SpecialPlacementLoader(self)
         self.metadata_extractor = MetaDataExtractor(self)
         self.sequence_level_evaluator = SequenceLevelEvaluator()
@@ -175,7 +175,7 @@ class MainWidget(QTabWidget):
         self.currentChanged.disconnect(self.on_tab_changed)
         self.resize_starting_widget(self.currentWidget())
         self.currentChanged.connect(self.on_tab_changed)
-        self.main_window.menu_bar.resize_menu_bar()
+        self.main_window.menu_bar_widget.resize_menu_bar_widget()
 
     def showEvent(self, event):
         super().showEvent(event)

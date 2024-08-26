@@ -12,8 +12,8 @@ if TYPE_CHECKING:
 
 class JSON_Manager:
     def __init__(self, main_widget: "MainWidget") -> None:
-        self.logger = logging.getLogger(__name__)
         self.main_widget = main_widget
+        self.logger = logging.getLogger(__name__)
 
         # special placement
         self.special_placement_handler = JsonSpecialPlacementHandler(self)

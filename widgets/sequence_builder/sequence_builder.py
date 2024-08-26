@@ -22,8 +22,8 @@ from .components.option_picker.option_picker_click_handler import (
 from .components.option_picker.option_picker import OptionPicker
 
 if TYPE_CHECKING:
-    from widgets.main_widget.top_builder_widget import TopBuilderWidget
-    from ..main_widget.main_widget import MainWidget
+    from main_window.main_widget.main_widget import MainWidget
+    from main_window.main_widget.top_builder_widget import TopBuilderWidget
 
 
 class SequenceBuilder(QFrame):

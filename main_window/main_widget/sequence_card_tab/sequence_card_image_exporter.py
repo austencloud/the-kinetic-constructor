@@ -9,13 +9,13 @@ from widgets.dictionary_widget.temp_beat_frame.temp_beat_frame import TempBeatFr
 from widgets.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
     ImageExportManager,
 )
-from widgets.path_helpers.path_helpers import (
+from utilities.path_helpers import (
     get_dictionary_path,
     get_sequence_card_image_exporter_path,
 )
 
 if TYPE_CHECKING:
-    from widgets.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
+    from main_window.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
 
 
 class SequenceCardImageExporter:

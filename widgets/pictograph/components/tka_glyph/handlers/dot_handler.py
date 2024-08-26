@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from Enums.Enums import VTG_Directions
 from data.constants import OPP, SAME
-from widgets.path_helpers.path_helpers import get_images_and_data_path
+from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
     from ..tka_glyph import TKA_Glyph

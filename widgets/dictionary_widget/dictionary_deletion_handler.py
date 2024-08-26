@@ -3,7 +3,7 @@ import shutil
 from typing import TYPE_CHECKING
 from widgets.dictionary_widget.variation_number_fixer import VariationNumberFixer
 from widgets.dictionary_widget.delete_confirmation_dialog import DeleteConfirmationDialog
-from widgets.path_helpers.path_helpers import get_images_and_data_path
+from utilities.path_helpers import get_images_and_data_path
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtWidgets import QDialog

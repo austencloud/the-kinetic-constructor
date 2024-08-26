@@ -1,14 +1,12 @@
 import os
-from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtWidgets import QMainWindow, QApplication
 from PyQt6.QtCore import Qt
+
+from .menu_bar_widget import MenuBarWidget
 from .settings_manager.settings_manager import SettingsManager
 from .main_widget.main_widget import MainWidget
 from widgets.profiler import Profiler
 from main_window.main_window_geometry_manager import MainWindowGeometryManager
-from main_window.menu_bar.menu_bar import MenuBar
-import logging
-
-logging.getLogger("PIL").setLevel(logging.WARNING)
 
 
 class MainWindow(QMainWindow):
@@ -21,8 +19,8 @@ class MainWindow(QMainWindow):
         self.window_manager = MainWindowGeometryManager(self)
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Kinetic Constructor")
-        self.menu_bar = MenuBar(self)
-        self.setMenuBar(self.menu_bar)
+        self.menu_bar_widget = MenuBarWidget(self)
+        self.setMenuWidget(self.menu_bar_widget)
 
     def exec(self, app: QApplication) -> int:
         self.profiler.enable()

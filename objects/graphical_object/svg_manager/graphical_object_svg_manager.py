@@ -1,4 +1,4 @@
-from widgets.path_helpers.path_helpers import get_images_and_data_path
+from utilities.path_helpers import get_images_and_data_path
 from .arrow_svg_manager import ArrowSvgManager
 from .prop_svg_manager import PropSvgManager
 from .svg_file_manager import SvgFileManager

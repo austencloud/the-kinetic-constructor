@@ -10,7 +10,7 @@ from ....pictograph.pictograph import Pictograph
 from widgets.sequence_builder.components.start_pos_picker.start_pos_pictograph_frame import (
     StartPosPickerPictographFrame,
 )
-from ....scroll_area.components.start_pos_picker_pictograph_factory import (
+from .start_pos_picker_pictograph_factory import (
     StartPosPickerPictographFactory,
 )
 from .choose_your_start_pos_label import (

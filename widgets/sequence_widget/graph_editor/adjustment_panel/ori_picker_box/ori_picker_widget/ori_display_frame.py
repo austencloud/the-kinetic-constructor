@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, QSize, QPoint, pyqtSignal
 from PyQt6.QtGui import QIcon, QFont
 from typing import TYPE_CHECKING
-from widgets.path_helpers.path_helpers import get_images_and_data_path
+from utilities.path_helpers import get_images_and_data_path
 from widgets.pictograph.pictograph import Pictograph
 from data.constants import IN, COUNTER, ORI, OUT, CLOCK
 from data.constants import BLUE, RED

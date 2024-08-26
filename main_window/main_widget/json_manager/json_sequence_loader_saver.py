@@ -1,6 +1,6 @@
 import json
 from typing import TYPE_CHECKING, List, Dict
-from widgets.path_helpers.path_helpers import get_user_editable_resource_path
+from utilities.path_helpers import get_user_editable_resource_path
 
 if TYPE_CHECKING:
     from main_window.main_widget.json_manager.json_manager import JSON_Manager

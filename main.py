@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QApplication, QSplashScreen
 from PyQt6.QtGui import QPixmap, QGuiApplication, QScreen
 from PyQt6.QtCore import Qt, QTimer
 from main_window.main_window import MainWindow
-from widgets.path_helpers.path_helpers import get_images_and_data_path
+from utilities.path_helpers import get_images_and_data_path
 from widgets.profiler import Profiler
 
 logging.getLogger("PIL").setLevel(logging.WARNING)

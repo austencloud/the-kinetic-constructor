@@ -1,15 +1,14 @@
-from PyQt6.QtWidgets import QMenu
-from PyQt6.QtGui import QAction
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QAction, QActionGroup
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QMenu
-from PyQt6.QtGui import QAction
 
+from main_window.menu_bar.hoverable_menu import HoverableMenu
 
 if TYPE_CHECKING:
     from main_window.menu_bar.menu_bar import MenuBar
 
 
-class VisibilityMenu(QMenu):
+class VisibilityMenu(HoverableMenu):
     def __init__(self, menu_bar: "MenuBar"):
         super().__init__("Visibility", menu_bar)
         self.menu_bar = menu_bar
@@ -20,7 +19,6 @@ class VisibilityMenu(QMenu):
             self.menu_bar.main_widget.main_window.settings_manager.visibility.grid_visibility_manager
         )
 
-        # Glyph visibility toggles
         for glyph_type in ["TKA", "VTG", "Elemental", "EndPosition"]:
             action = QAction(f"{glyph_type} Glyph", self, checkable=True)
             action.setChecked(

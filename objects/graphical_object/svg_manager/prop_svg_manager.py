@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
         SvgManager,
     )
-from widgets.path_helpers.path_helpers import get_images_and_data_path
+from utilities.path_helpers import get_images_and_data_path
 
 from typing import TYPE_CHECKING
 from PyQt6.QtSvg import QSvgRenderer

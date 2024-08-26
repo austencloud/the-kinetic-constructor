@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QPixmap, QImage
 import cv2
 import numpy as np
-from widgets.path_helpers.path_helpers import get_my_videos_path
+from utilities.path_helpers import get_my_videos_path
 from widgets.sequence_recorder.SR_beat_selection_manager import (
     SR_BeatSelectionManager,
 )
@@ -15,8 +15,7 @@ from widgets.sequence_widget.beat_frame.beat import Beat, BeatView
 
 if TYPE_CHECKING:
     from widgets.sequence_recorder.SR_capture_frame import SR_CaptureFrame
-    from widgets.sequence_recorder.sequence_recorder import MainWidget
-
+    from main_window.main_widget.main_widget import MainWidget
 
 
 class SR_BeatFrame(QFrame):
@@ -129,12 +128,12 @@ class SR_BeatFrame(QFrame):
             beat = Beat(self)
             beat.updater.update_pictograph(pictograph_dict)
             self.add_scene_to_sequence(beat)
-            pictograph_key = (
-                beat.main_widget.pictograph_key_generator.generate_pictograph_key(
-                    pictograph_dict
-                )
-            )
-            self.pictograph_cache[pictograph_key] = beat
+            # pictograph_key = (
+            #     beat.main_widget.pictograph_key_generator.generate_pictograph_key(
+            #         pictograph_dict
+            #     )
+            # )
+            # self.pictograph_cache[pictograph_key] = beat
 
     @staticmethod
     def pixmap_to_cvimg(pixmap: QPixmap) -> np.ndarray:
