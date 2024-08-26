@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from word_simplifier import WordSimplifier
+from widgets.word_simplifier import WordSimplifier
 from .strictly_color_swapped_permutation_checker import (
     StrictlyColorSwappedPermutationChecker,
 )

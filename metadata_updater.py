@@ -6,12 +6,16 @@ from widgets.sequence_widget.sequence_properties_manager.rotational_color_swappe
 from widgets.sequence_widget.sequence_properties_manager.strictly_color_swapped_permutation_checker import StrictlyColorSwappedPermutationChecker
 from widgets.sequence_widget.sequence_properties_manager.strictly_mirrored_permutation_checker import StrictlyMirroredPermutationChecker
 from widgets.sequence_widget.sequence_properties_manager.strictly_rotational_permutation_checker import StrictlyRotationalPermutationChecker
-from word_simplifier import WordSimplifier
-from sequence_difficulty_evaluator import SequenceLevelEvaluator
+from widgets.word_simplifier import WordSimplifier
+from widgets.sequence_difficulty_evaluator import SequenceLevelEvaluator
 from widgets.path_helpers.path_helpers import get_user_editable_resource_path
 
-
+"""This module is responsible for updating the metadata of the images in the dictionary folder.
+We are still making updates to the permutation checkers as of 8/26/2024 so please keep this around until we are done.
+After finishing the permutation checkers, we will be able to update the metadata of the images in the dictionary folder correctly."""
 class SequencePropertiesCheckerStandalone:
+
+
     def __init__(self, sequence):
         self.sequence = sequence[1:] if sequence else []
 

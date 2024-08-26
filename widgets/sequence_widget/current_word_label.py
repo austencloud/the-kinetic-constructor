@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
 from widgets.sequence_widget.beat_frame.current_word_line_edit import (
     CurrentWordLineEdit,
 )
-from word_simplifier import WordSimplifier
+from widgets.word_simplifier import WordSimplifier
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
