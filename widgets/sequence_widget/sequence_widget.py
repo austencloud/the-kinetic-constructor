@@ -4,15 +4,15 @@ from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout
 from sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
 from widgets.sequence_widget.beat_frame.beat import Beat, BeatView
 from .beat_frame.beat_frame import SequenceWidgetBeatFrame
-from .add_to_dictionary_manager import AddToDictionaryManager
+from .add_to_dictionary_manager.add_to_dictionary_manager import AddToDictionaryManager
 from .labels.current_word_label import CurrentWordLabel
 from .labels.difficulty_label import DifficultyLabel
-from ..graph_editor.graph_editor import GraphEditor
+from .graph_editor.graph_editor import GraphEditor
 from .beat_frame.layout_options_dialog import LayoutOptionsDialog
 from .labels.indicator_label import IndicatorLabel
 from .pictograph_factory import PictographFactory
 from .button_frame import SequenceWidgetButtonFrame
-from .sequence_widget_scroll_area import SequenceWidgetScrollArea  # Import the new class
+from .sequence_widget_scroll_area import SequenceWidgetScrollArea 
 
 if TYPE_CHECKING:
     from ..main_widget.top_builder_widget import TopBuilderWidget
@@ -35,17 +35,20 @@ class SequenceWidget(QWidget):
         self._setup_layout()
 
     def _setup_components(self):
-        self.scroll_area = SequenceWidgetScrollArea(self)  # Use the new scroll area class
-        self.indicator_label = IndicatorLabel(self)
-        self.current_word_label = CurrentWordLabel(self)
-        self.difficulty_label = DifficultyLabel(self)
+        self._setup_labels()
+        self.scroll_area = SequenceWidgetScrollArea(self)
         self.beat_frame = SequenceWidgetBeatFrame(self)
         self.add_to_dictionary_manager = AddToDictionaryManager(self)
         self.button_frame = SequenceWidgetButtonFrame(self)
         self.graph_editor = GraphEditor(self)
         self.pictograph_factory = PictographFactory(self)
         self.autocompleter = SequenceAutoCompleter(self)
-        self.scroll_area.setWidget(self.beat_frame)  # Set the beat frame in the scroll area
+        self.scroll_area.setWidget(self.beat_frame) 
+
+    def _setup_labels(self):
+        self.indicator_label = IndicatorLabel(self)
+        self.current_word_label = CurrentWordLabel(self)
+        self.difficulty_label = DifficultyLabel(self)
 
     def _setup_layout(self):
         self.layout: QVBoxLayout = QVBoxLayout(self)
@@ -79,13 +82,11 @@ class SequenceWidget(QWidget):
     def show_options_panel(self):
         current_state = self._get_current_beat_frame_state()
         self.options_panel = LayoutOptionsDialog(self, current_state)
-        self.options_panel.exec()  # Use exec() to show the dialog modally
+        self.options_panel.exec() 
 
     def _get_current_beat_frame_state(self) -> dict:
         num_beats = sum(1 for beat in self.beat_frame.beats if beat.isVisible())
         grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
-        save_layout = False  # Default value, can be set based on your logic
-
         rows, cols = self._calculate_current_layout()
 
         return {
@@ -93,7 +94,6 @@ class SequenceWidget(QWidget):
             "rows": rows,
             "cols": cols,
             "grow_sequence": grow_sequence,
-            "save_layout": save_layout,
         }
 
     def _calculate_current_layout(self) -> tuple:

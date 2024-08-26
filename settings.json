@@ -7,9 +7,9 @@
     },
     "image_export": {
         "include_start_position": false,
-        "add_info": false,
+        "add_info": true,
         "open_directory_on_export": true,
-        "add_word": false,
+        "add_word": true,
         "add_difficulty_level": true,
         "add_beat_numbers": false
     },
@@ -46,7 +46,7 @@
     },
     "sequence_layout": {
         "grow_sequence": true,
-        "num_beats": 3,
-        "layout_option": "1 x 3"
+        "num_beats": 2,
+        "layout_option": "1 x 2"
     }
 }

@@ -10,6 +10,7 @@ from Enums.PropTypes import PropType
 from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
     SvgManager,
 )
+from widgets.main_widget.sequence_properties_manager.sequence_properties_manager import SequencePropertiesManager
 from widgets.sequence_difficulty_evaluator import SequenceLevelEvaluator
 from widgets.dictionary_widget.thumbnail_box.thumbnail_finder import ThumbnailFinder
 from widgets.path_helpers.path_helpers import get_images_and_data_path
@@ -28,9 +29,7 @@ from widgets.scroll_area.components.pictograph_key_generator import (
     PictographKeyGenerator,
 )
 from data.constants import DIAMOND
-from widgets.sequence_widget.sequence_properties_manager.sequence_properties_manager import (
-    SequencePropertiesManager,
-)
+
 from ..main_widget.special_placement_loader import SpecialPlacementLoader
 from ..pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
     TurnsTupleGenerator,

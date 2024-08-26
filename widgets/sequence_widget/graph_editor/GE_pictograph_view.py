@@ -7,9 +7,7 @@ from PyQt6.QtGui import QPainter, QPen, QColor
 from widgets.sequence_widget.beat_frame.beat import Beat
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.pictograph_container.GE_pictograph_container import (
-        GE_PictographContainer,
-    )
+    from widgets.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import GE_PictographContainer
     from .GE_pictograph_view import GE_BlankPictograph
 
 

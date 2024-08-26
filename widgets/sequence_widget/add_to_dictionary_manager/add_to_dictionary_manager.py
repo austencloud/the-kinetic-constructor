@@ -3,11 +3,11 @@ import re  # Ensure to import re at the top of your file
 
 from typing import TYPE_CHECKING
 from widgets.path_helpers.path_helpers import get_images_and_data_path
-from widgets.sequence_widget.structural_variation_checker import (
+from widgets.sequence_widget.add_to_dictionary_manager.structural_variation_checker import (
     StructuralVariationChecker,
 )
-from widgets.sequence_widget.thumbnail_generator import ThumbnailGenerator
-from widgets.sequence_widget.turn_pattern_variation_checker import (
+from widgets.sequence_widget.add_to_dictionary_manager.thumbnail_generator import ThumbnailGenerator
+from widgets.sequence_widget.add_to_dictionary_manager.turn_pattern_variation_checker import (
     TurnPatternVariationChecker,
 )
 from widgets.turn_pattern_converter import TurnPatternConverter

@@ -2,21 +2,19 @@ from typing import TYPE_CHECKING
 from data.beat_frame_layouts import DEFAULT_BEAT_FRAME_LAYOUTS
 
 if TYPE_CHECKING:
+    from widgets.dictionary_widget.temp_beat_frame.temp_beat_frame import TempBeatFrame
     from widgets.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame
 
 
-class InvisibleDictionaryBeatFrameLayoutManager:
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
-        self.beat_frame = beat_frame
-        # self.selection_overlay = beat_frame.selection_overlay
-        self.settings_manager = beat_frame.main_widget.main_window.settings_manager
+class TempBeatFrameLayoutManager:
+    def __init__(self, temp_beat_frame: "TempBeatFrame"):
+        self.beat_frame = temp_beat_frame
+        self.settings_manager = temp_beat_frame.main_widget.main_window.settings_manager
 
     def calculate_layout(self, beat_count: int) -> tuple[int, int]:
         return DEFAULT_BEAT_FRAME_LAYOUTS.get(beat_count, (1, beat_count))
 
     def get_cols(self):
-        # get the columns that currently are visible in the current beat frame by looking at its grid layout
-        # only return the number of columns that are actually full
         layout = self.beat_frame.layout
         cols = 0
         for i in range(layout.columnCount()):
@@ -25,8 +23,6 @@ class InvisibleDictionaryBeatFrameLayoutManager:
         return cols - 1
 
     def get_rows(self):
-        # get the rows that currently are visible in the current beat frame by looking at its grid layout
-        # only return the number of rows that are actually full
         layout = self.beat_frame.layout
         rows = 0
         for i in range(layout.rowCount()):
@@ -65,8 +61,3 @@ class InvisibleDictionaryBeatFrameLayoutManager:
                         index += 1
 
         self.beat_frame.adjustSize()
-        # selected_beat = self.selection_overlay.selected_beat
-        # if selected_beat:
-        #     self.selection_overlay.deselect_beat()
-        #     self.selection_overlay.select_beat(selected_beat)
-        #     self.selection_overlay.update_overlay_position()

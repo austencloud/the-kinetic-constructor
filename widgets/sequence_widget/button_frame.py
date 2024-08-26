@@ -1,7 +1,7 @@
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout
+from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout, QMessageBox
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 
 
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
 
 
-class SW_ActionButton(QPushButton):
+class SequenceWidgetActionButton(QPushButton):
     def __init__(self, icon_path: str):
         super().__init__()
         self.setIcon(QIcon(icon_path))
@@ -21,9 +21,6 @@ class SW_ActionButton(QPushButton):
         self.setCursor(Qt.CursorShape.ArrowCursor)
 
 
-from PyQt6.QtWidgets import QMessageBox
-
-from PyQt6.QtWidgets import QMessageBox
 
 
 class SequenceWidgetButtonFrame(QFrame):
@@ -47,7 +44,7 @@ class SequenceWidgetButtonFrame(QFrame):
         self.settings_manager = self.main_widget.main_window.settings_manager
 
     def _setup_buttons(self) -> None:
-        self.buttons: list[SW_ActionButton] = []
+        self.buttons: list[SequenceWidgetActionButton] = []
         button_dict = {
             "add_to_dictionary": {
                 "icon_path": "add_to_dictionary.svg",
@@ -92,9 +89,12 @@ class SequenceWidgetButtonFrame(QFrame):
         self, button_name: str, icon_path: str, callback, tooltip: str
     ) -> None:
         icon = QIcon(icon_path)
-        button = SW_ActionButton(icon)
+        button = QPushButton()
         button.clicked.connect(callback)
         button.setToolTip(tooltip)  # Set the tooltip for the button
+        button.enterEvent = lambda event: button.setCursor(Qt.CursorShape.PointingHandCursor)
+        button.leaveEvent = lambda event: button.setCursor(Qt.CursorShape.ArrowCursor)
+        button.setIcon(icon)
         setattr(self, f"{button_name}_button", button)
         self.buttons.append(button)
 

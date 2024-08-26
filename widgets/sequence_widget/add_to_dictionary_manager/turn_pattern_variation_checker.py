@@ -3,7 +3,7 @@ import os
 from typing import TYPE_CHECKING
 from PIL import Image
 if TYPE_CHECKING:
-    from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager
+    from .add_to_dictionary_manager import AddToDictionaryManager
 
 
 class TurnPatternVariationChecker:

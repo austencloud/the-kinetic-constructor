@@ -1,11 +1,5 @@
-from PyQt6.QtWidgets import (
-    QVBoxLayout,
-)
 from typing import TYPE_CHECKING
-
-from widgets.graph_editor.adjustment_panel.base_adjustment_box_header_widget import (
-    BaseAdjustmentBoxHeaderWidget,
-)
+from ..base_adjustment_box_header_widget import BaseAdjustmentBoxHeaderWidget
 
 if TYPE_CHECKING:
     from .ori_picker_box import OriPickerBox

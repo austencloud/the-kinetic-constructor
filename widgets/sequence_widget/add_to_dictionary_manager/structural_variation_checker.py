@@ -2,7 +2,7 @@ import os
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager
+    from .add_to_dictionary_manager import AddToDictionaryManager
 
 
 class StructuralVariationChecker:
@@ -19,7 +19,9 @@ class StructuralVariationChecker:
             for filename in files:
                 if filename.lower().endswith((".png", ".jpg", ".jpeg")):
                     file_path = os.path.join(root, filename)
-                    existing_sequence = self.metadata_extractor.extract_metadata_from_file(file_path)
+                    existing_sequence = (
+                        self.metadata_extractor.extract_metadata_from_file(file_path)
+                    )
                     if existing_sequence and self.are_structural_variations_identical(
                         current_sequence, existing_sequence
                     ):

@@ -35,7 +35,6 @@ class LayoutOptionsDialog(QDialog):
 
         self._set_size()
 
-        # Separate beat_frame and panel
         self.beat_frame = LayoutOptionsBeatFrame(self)
         self.panel = LayoutOptionsPanel(self)
 

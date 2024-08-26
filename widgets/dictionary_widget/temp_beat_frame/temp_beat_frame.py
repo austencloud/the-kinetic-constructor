@@ -4,18 +4,20 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
 
 from widgets.base_beat_frame import BaseBeatFrame
-from widgets.sequence_widget.invisible_dictionary_beat_frame_layout_manager import (
-    InvisibleDictionaryBeatFrameLayoutManager,
+from widgets.dictionary_widget.temp_beat_frame.temp_beat_frame_layout_manager import (
+    TempBeatFrameLayoutManager,
 )
-from ..sequence_widget.beat_frame.beat_deletion_manager import BeatDeletionManager
-from ..sequence_widget.beat_frame.image_export_manager.image_export_manager import ImageExportManager
+from ...sequence_widget.beat_frame.beat_deletion_manager import BeatDeletionManager
+from ...sequence_widget.beat_frame.image_export_manager.image_export_manager import (
+    ImageExportManager,
+)
 
-from ..sequence_widget.beat_frame.beat_selection_overlay import (
+from ...sequence_widget.beat_frame.beat_selection_overlay import (
     BeatSelectionOverlay,
 )
-from ..sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
-from ..sequence_widget.beat_frame.start_pos_beat import StartPositionBeatView
-from ..sequence_widget.beat_frame.beat import Beat, BeatView
+from ...sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
+from ...sequence_widget.beat_frame.start_pos_beat import StartPositionBeatView
+from ...sequence_widget.beat_frame.beat import Beat, BeatView
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
@@ -24,11 +26,14 @@ if TYPE_CHECKING:
 
 
 class TempBeatFrame(BaseBeatFrame):
-    def __init__(self, parent_tab: Union["DictionaryWidget", "SequenceCardTab"]):
-        super().__init__(parent_tab.main_widget)
-        self.main_widget = parent_tab.main_widget
+    """ The purpose of this class is to create images for use within the dictionary or the sequence card tab.
+    This beat frame is never seen by the user."""
+
+    def __init__(self, dictionary: "DictionaryWidget") -> None:
+        super().__init__(dictionary.main_widget)
+        self.main_widget = dictionary.main_widget
         self.json_manager = self.main_widget.json_manager
-        self.dictionary_widget = parent_tab
+        self.dictionary_widget = dictionary
         self.top_builder_widget = self.main_widget.top_builder_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
 
@@ -46,8 +51,7 @@ class TempBeatFrame(BaseBeatFrame):
             beat.hide()
 
     def _setup_components(self) -> None:
-        self.selection_overlay = BeatSelectionOverlay(self)
-        self.layout_manager = InvisibleDictionaryBeatFrameLayoutManager(self)
+        self.layout_manager = TempBeatFrameLayoutManager(self)
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(self)
         self.beat_deletion_manager = BeatDeletionManager(self)
@@ -205,4 +209,3 @@ class TempBeatFrame(BaseBeatFrame):
             beat_view.is_filled = False
         self.start_pos_view.setScene(self.start_pos_view.blank_beat)
         self.start_pos_view.is_filled = False
-        self.selection_overlay.deselect_beat()

@@ -1,12 +1,13 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 
+
 from ..GE_pictograph_view import GE_PictographView, GE_BlankPictograph
 
 
 if TYPE_CHECKING:
     from widgets.pictograph.pictograph import Pictograph
-    from widgets.graph_editor.graph_editor import GraphEditor
+    from ..graph_editor import GraphEditor
 
 
 class GE_PictographContainer(QWidget):

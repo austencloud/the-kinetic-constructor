@@ -7,7 +7,7 @@ if TYPE_CHECKING:
         ImageExportManager,
     )
     from widgets.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame
-    from widgets.dictionary_widget.temp_beat_frame import (
+    from widgets.dictionary_widget.temp_beat_frame.temp_beat_frame import (
         TempBeatFrame,
     )
 

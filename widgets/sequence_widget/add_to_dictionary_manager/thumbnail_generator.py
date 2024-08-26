@@ -7,7 +7,7 @@ import numpy as np
 from datetime import datetime
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager
+    from .add_to_dictionary_manager import AddToDictionaryManager
 
 
 class ThumbnailGenerator:
