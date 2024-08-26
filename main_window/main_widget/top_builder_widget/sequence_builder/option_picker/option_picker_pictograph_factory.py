@@ -2,9 +2,9 @@ from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
 
 from Enums.Enums import LetterType
+from widgets.base_widgets.pictograph.pictograph import Pictograph
 
 
-from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from .option_picker_scroll_area.option_picker_scroll_area import OptionPickerScrollArea

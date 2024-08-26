@@ -1,11 +1,10 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton
 from typing import TYPE_CHECKING
-from widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import Pictograph
+
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker import (
-        AdvancedStartPosPicker,
-    )
+    from ...advanced_start_pos_picker.advanced_start_pos_picker import AdvancedStartPosPicker
 
 
 class AdvancedStartPosPickerPictographFrame(QWidget):

@@ -16,7 +16,8 @@ from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
 
-    from widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import Pictograph
+
 
 GRID_DIR = "images/grid/"
 
@@ -98,7 +99,6 @@ class Grid:
     def hide(self):
         for item in self.items.values():
             item.setVisible(False)
-            
 
     def toggle_non_radial_points_visibility(self, visible: bool):
         self.nonradial_layer.setVisible(visible)
@@ -124,12 +124,11 @@ class Grid:
         closest_point = self.grid_data.get_point(layer, pos)
         return closest_point.name, closest_point.coordinates
 
-
     def _create_grid_items(self, pictograph: "Pictograph"):
         # Define paths for your grid images or components
         paths = {
             DIAMOND: get_images_and_data_path(f"{GRID_DIR}diamond_grid.svg"),
-            BOX: get_images_and_data_path(f"{GRID_DIR}box_grid.svg")
+            BOX: get_images_and_data_path(f"{GRID_DIR}box_grid.svg"),
         }
         # Create grid items based on the mode and paths
         for mode, path in paths.items():
@@ -138,13 +137,13 @@ class Grid:
             grid_item.setVisible(mode == self.grid_mode)
             self.items[mode] = grid_item
 
-
-        non_radial_path = get_images_and_data_path(f"{GRID_DIR}diamond_nonradial_points.svg")
+        non_radial_path = get_images_and_data_path(
+            f"{GRID_DIR}diamond_nonradial_points.svg"
+        )
         non_radial_item = QGraphicsSvgItem(non_radial_path)
         non_radial_item.setVisible(False)  # Initially hidden
         self.scene.addItem(non_radial_item)
         self.nonradial_layer = non_radial_item
-
 
     def set_layer_visibility(self, layer_id, visibility):
         if layer_id in self.layers:

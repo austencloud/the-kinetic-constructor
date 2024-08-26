@@ -8,7 +8,8 @@ from PyQt6.QtGui import (
     QPixmap,
     QImage,
 )
-from widgets.pictograph.pictograph import Pictograph
+
+from widgets.base_widgets.pictograph.pictograph import Pictograph
 
 
 if TYPE_CHECKING:

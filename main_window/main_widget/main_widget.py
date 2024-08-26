@@ -11,22 +11,28 @@ from main_window.main_widget.letter_loader import LetterLoader
 from main_window.main_widget.sequence_properties_manager.sequence_properties_manager import (
     SequencePropertiesManager,
 )
-from main_window.main_widget.top_builder_widget.top_builder_widget import TopBuilderWidget
+from main_window.main_widget.top_builder_widget.top_builder_widget import (
+    TopBuilderWidget,
+)
 from objects.graphical_object.svg_manager.graphical_object_svg_manager import (
     SvgManager,
 )
-from widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
-    TurnsTupleGenerator,
-)
+
 from main_window.main_widget.sequence_level_evaluator import SequenceLevelEvaluator
-from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.thumbnail_finder import ThumbnailFinder
+from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.thumbnail_finder import (
+    ThumbnailFinder,
+)
 from utilities.path_helpers import get_images_and_data_path
 from styles.get_tab_stylesheet import get_tab_stylesheet
 from main_window.main_widget.dictionary_widget.dictionary_widget import DictionaryWidget
-from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.metadata_extractor import MetaDataExtractor
+from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.metadata_extractor import (
+    MetaDataExtractor,
+)
 from main_window.main_widget.json_manager.json_manager import JSON_Manager
 
-from widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
+from widgets.base_widgets.pictograph.pictograph import Pictograph
+
 from main_window.main_widget.pictograph_key_generator import (
     PictographKeyGenerator,
 )

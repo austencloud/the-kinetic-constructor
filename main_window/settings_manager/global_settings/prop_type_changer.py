@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from data.constants import BLUE, RED
-from widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import Pictograph
 
 
 if TYPE_CHECKING:

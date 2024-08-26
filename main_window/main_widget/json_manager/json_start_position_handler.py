@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from data.constants import NO_ROT
-from widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import Pictograph
+
 
 if TYPE_CHECKING:
     from main_window.main_widget.json_manager.json_manager import JSON_Manager

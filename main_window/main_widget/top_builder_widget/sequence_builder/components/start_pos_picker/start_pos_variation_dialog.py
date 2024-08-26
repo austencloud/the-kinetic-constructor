@@ -2,12 +2,20 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QPushButton
 from Enums.MotionAttributes import Color
 from data.constants import BLUE, RED
-from widgets.pictograph.pictograph import Pictograph
-from widgets.sequence_builder.components.start_pos_picker.start_pos_variation_dialog_ori_changer import StartPosVariationDialogOriChanger
-from widgets.sequence_builder.components.start_pos_picker.start_pos_variation_picker import StartPosVariationPicker
+from widgets.base_widgets.pictograph.pictograph import Pictograph
+
+from widgets.sequence_builder.components.start_pos_picker.start_pos_variation_dialog_ori_changer import (
+    StartPosVariationDialogOriChanger,
+)
+from widgets.sequence_builder.components.start_pos_picker.start_pos_variation_picker import (
+    StartPosVariationPicker,
+)
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import StartPosPicker
+    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import (
+        StartPosPicker,
+    )
+
 
 class StartPosVariationDialog(QDialog):
     def __init__(self, start_pos_picker: "StartPosPicker") -> None:
@@ -62,11 +70,15 @@ class StartPosVariationDialog(QDialog):
         )
 
     def load_default_orientations(self) -> None:
-        default_left_orientation = self.start_pos_picker.default_ori_picker.orientations[
-            self.start_pos_picker.default_ori_picker.current_left_orientation_index
-        ]
-        default_right_orientation = self.start_pos_picker.default_ori_picker.orientations[
-            self.start_pos_picker.default_ori_picker.current_right_orientation_index
-        ]
+        default_left_orientation = (
+            self.start_pos_picker.default_ori_picker.orientations[
+                self.start_pos_picker.default_ori_picker.current_left_orientation_index
+            ]
+        )
+        default_right_orientation = (
+            self.start_pos_picker.default_ori_picker.orientations[
+                self.start_pos_picker.default_ori_picker.current_right_orientation_index
+            ]
+        )
         self.ori_changer.set_orientation(BLUE, default_left_orientation)
         self.ori_changer.set_orientation(RED, default_right_orientation)

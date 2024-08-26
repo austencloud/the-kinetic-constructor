@@ -6,13 +6,13 @@ from .managers.arrow_attr_handler import ArrowAttrHandler
 from .managers.rot_angle_manager.arrow_rot_angle_manager import ArrowRotAngleManager
 
 from ..graphical_object.graphical_object import GraphicalObject
-from Enums.MotionAttributes import  Location
+from Enums.MotionAttributes import Location
 from Enums.Enums import Turns
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..motion.motion import Motion
-    from widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import Pictograph
 
 
 class Arrow(GraphicalObject):

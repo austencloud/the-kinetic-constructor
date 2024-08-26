@@ -11,9 +11,9 @@ from .image_export_manager.image_export_manager import ImageExportManager
 from .beat_selection_overlay import BeatSelectionOverlay
 from .start_pos_beat import StartPositionBeat
 from .start_pos_beat import StartPositionBeatView
-from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
+    from widgets.base_widgets.pictograph.pictograph import Pictograph
     from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import SequenceWidget
 
 from .beat import BeatView

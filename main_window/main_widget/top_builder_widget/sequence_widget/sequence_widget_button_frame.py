@@ -6,7 +6,9 @@ from utilities.path_helpers import get_images_and_data_path
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.sequence_widget import SequenceWidget
+    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
+        SequenceWidget,
+    )
 
 
 class SequenceWidgetButtonFrame(QFrame):

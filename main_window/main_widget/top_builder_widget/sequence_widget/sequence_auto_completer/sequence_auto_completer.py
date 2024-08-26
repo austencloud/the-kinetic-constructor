@@ -6,7 +6,9 @@ from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.sequence_widget import SequenceWidget
+    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
+        SequenceWidget,
+    )
 
 
 class SequenceAutoCompleter:

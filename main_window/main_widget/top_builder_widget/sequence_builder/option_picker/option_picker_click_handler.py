@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from widgets.pictograph.pictograph import Pictograph
-    from widgets.sequence_builder.sequence_builder import SequenceBuilder
+    from ..sequence_builder import SequenceBuilder
+    from widgets.base_widgets.pictograph.pictograph import Pictograph
 
 
 class OptionPickerClickHandler:

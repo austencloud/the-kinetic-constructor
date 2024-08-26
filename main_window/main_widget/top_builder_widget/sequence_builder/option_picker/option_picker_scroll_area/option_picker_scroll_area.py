@@ -5,10 +5,15 @@ from PyQt6.QtGui import QWheelEvent
 
 from Enums.letters import LetterType
 from data.constants import BLUE, RED
-from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_pictograph_factory import OptionPickerPictographFactory
-from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_manager import OptionPickerSectionManager
+from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_pictograph_factory import (
+    OptionPickerPictographFactory,
+)
+from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_manager import (
+    OptionPickerSectionManager,
+)
 from widgets.base_widgets.base_picker_scroll_area import BasePickerScrollArea
-from widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import Pictograph
+
 
 from .option_picker_display_manager import (
     OptionPickerDisplayManager,
@@ -16,7 +21,9 @@ from .option_picker_display_manager import (
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.sequence_builder import SequenceBuilder
+    from main_window.main_widget.top_builder_widget.sequence_builder.sequence_builder import (
+        SequenceBuilder,
+    )
     from ..option_picker import OptionPicker
 
 

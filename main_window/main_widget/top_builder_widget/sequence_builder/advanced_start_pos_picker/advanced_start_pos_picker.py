@@ -1,16 +1,26 @@
 from PyQt6.QtWidgets import QWidget, QGridLayout, QVBoxLayout
 from typing import TYPE_CHECKING
 from Enums.letters import Letter
-from main_window.main_widget.top_builder_widget.sequence_builder.advanced_start_pos_picker.advanced_start_pos_ori_picker import AdvancedStartPosOriPicker
-from main_window.main_widget.top_builder_widget.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker_pictograph_factory import AdvancedStartPosPickerPictographFactory
-from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.advanced_start_pos_manager import AdvancedStartPosManager
-from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.advanced_start_pos_picker_pictograph_frame import AdvancedStartPosPickerPictographFrame
-from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.choose_your_start_pos_label import ChooseYourStartPosLabel
-
+from main_window.main_widget.top_builder_widget.sequence_builder.advanced_start_pos_picker.advanced_start_pos_ori_picker import (
+    AdvancedStartPosOriPicker,
+)
+from main_window.main_widget.top_builder_widget.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker_pictograph_factory import (
+    AdvancedStartPosPickerPictographFactory,
+)
+from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.advanced_start_pos_manager import (
+    AdvancedStartPosManager,
+)
+from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.advanced_start_pos_picker_pictograph_frame import (
+    AdvancedStartPosPickerPictographFrame,
+)
+from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.choose_your_start_pos_label import (
+    ChooseYourStartPosLabel,
+)
 
 
 if TYPE_CHECKING:
-    from widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import Pictograph
+
     from ..sequence_builder import SequenceBuilder
 
 

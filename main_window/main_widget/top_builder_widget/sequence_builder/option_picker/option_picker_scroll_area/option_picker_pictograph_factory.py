@@ -4,10 +4,13 @@ from Enums.Enums import LetterType, Letter
 from Enums.Enums import LetterType
 
 
-from widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import Pictograph
+
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import OptionPickerScrollArea
+    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
+        OptionPickerScrollArea,
+    )
 
 
 class OptionPickerPictographFactory:

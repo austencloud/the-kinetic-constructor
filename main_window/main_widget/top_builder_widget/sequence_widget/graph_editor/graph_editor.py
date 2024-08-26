@@ -5,7 +5,9 @@ from .pictograph_container.GE_pictograph_container import GraphEditorPictographC
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.sequence_widget import SequenceWidget
+    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
+        SequenceWidget,
+    )
 
 
 class GraphEditor(QFrame):

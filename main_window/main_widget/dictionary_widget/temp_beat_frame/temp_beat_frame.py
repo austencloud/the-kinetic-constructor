@@ -3,22 +3,33 @@ from PyQt6.QtWidgets import QGridLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
 
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import Beat, BeatView
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.image_export_manager.image_export_manager import ImageExportManager
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import StartPositionBeat, StartPositionBeatView
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
+    Beat,
+    BeatView,
+)
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
+    ImageExportManager,
+)
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import (
+    StartPositionBeat,
+    StartPositionBeatView,
+)
 from widgets.base_widgets.base_beat_frame import BaseBeatFrame
 from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame_layout_manager import (
     TempBeatFrameLayoutManager,
 )
 
-from widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import Pictograph
+
 
 if TYPE_CHECKING:
-    from main_window.main_widget.dictionary_widget.dictionary_widget import DictionaryWidget
+    from main_window.main_widget.dictionary_widget.dictionary_widget import (
+        DictionaryWidget,
+    )
 
 
 class TempBeatFrame(BaseBeatFrame):
-    """ The purpose of this class is to create images for use within the dictionary or the sequence card tab.
+    """The purpose of this class is to create images for use within the dictionary or the sequence card tab.
     This beat frame is never seen by the user."""
 
     def __init__(self, dictionary: "DictionaryWidget") -> None:
@@ -59,7 +70,6 @@ class TempBeatFrame(BaseBeatFrame):
             row, col = divmod(i, 8)
             self.layout.addWidget(beat, row + 1, col + 1)
         self.layout_manager.configure_beat_frame(16)
-
 
     def add_beat_to_sequence(self, new_beat: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()

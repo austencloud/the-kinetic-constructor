@@ -5,7 +5,7 @@ from Enums.letters import Letter
 
 if TYPE_CHECKING:
     from settings_manager.visibility_settings import VisibilitySettings
-    from widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import Pictograph
 
 
 class GlyphVisibilityManager:

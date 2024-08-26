@@ -4,7 +4,8 @@ from Enums.PropTypes import PropType
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
-    from widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import Pictograph
+
 
 from objects.prop.prop import Prop
 
@@ -74,10 +75,12 @@ class EightRings(Prop):
         attributes[PROP_TYPE] = PropType.EightRings
         super().__init__(pictograph, attributes, motion)
 
+
 class BigEightRings(Prop):
     def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:
         attributes[PROP_TYPE] = PropType.BigEightRings
         super().__init__(pictograph, attributes, motion)
+
 
 class DoubleStar(Prop):
     def __init__(self, pictograph: "Pictograph", attributes, motion: "Motion") -> None:

@@ -1,22 +1,15 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
-
 from Enums.Enums import LetterType
-
-
-from widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import (
-        StartPosPicker,
-    )
+    from ..start_pos_picker.start_pos_picker import StartPosPicker
 
 
 class StartPosPickerPictographFactory:
     def __init__(
-        self,
-        start_pos_picker: "StartPosPicker",
-        start_pos_cache: dict[str, Pictograph],
+        self, start_pos_picker: "StartPosPicker", start_pos_cache: dict[str, Pictograph]
     ) -> None:
         self.start_pos_picker = start_pos_picker
         self.start_pos_cache = start_pos_cache

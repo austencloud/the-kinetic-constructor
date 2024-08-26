@@ -5,15 +5,23 @@ from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QPixmap, QImage
 import cv2
 import numpy as np
-from main_window.main_widget.sequence_recorder.SR_beat_selection_manager import SR_BeatSelectionManager
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import Beat, BeatView
+from main_window.main_widget.sequence_recorder.SR_beat_selection_manager import (
+    SR_BeatSelectionManager,
+)
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
+    Beat,
+    BeatView,
+)
 from utilities.path_helpers import get_my_videos_path
 
 
-from widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import Pictograph
+
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_recorder.SR_capture_frame import SR_CaptureFrame
+    from main_window.main_widget.sequence_recorder.SR_capture_frame import (
+        SR_CaptureFrame,
+    )
     from main_window.main_widget.main_widget import MainWidget
 
 

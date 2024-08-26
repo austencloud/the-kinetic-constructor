@@ -1,7 +1,10 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import Beat
-from widgets.pictograph.pictograph import Pictograph
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
+    Beat,
+)
+from widgets.base_widgets.pictograph.pictograph import Pictograph
+
 from Enums.Enums import LetterType
 from .option_picker_section_widget import (
     OptionPickerSectionWidget,

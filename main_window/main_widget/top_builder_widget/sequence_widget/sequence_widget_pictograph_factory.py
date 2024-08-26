@@ -17,10 +17,11 @@ from data.constants import (
     START_POS,
 )
 
-from widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import Pictograph
+
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.sequence_widget import SequenceWidget
+    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import SequenceWidget
 
 
 class SequenceWidgetPictographFactory:

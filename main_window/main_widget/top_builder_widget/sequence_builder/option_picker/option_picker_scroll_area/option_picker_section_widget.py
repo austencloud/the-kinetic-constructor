@@ -10,7 +10,7 @@ from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.o
 from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_pictograph_frame import (
     OptionPickerSectionPictographFrame,
 )
-from widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import Pictograph
 
 
 if TYPE_CHECKING:

@@ -6,7 +6,8 @@ from ..GE_pictograph_view import GE_PictographView, GE_BlankPictograph
 
 
 if TYPE_CHECKING:
-    from widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import Pictograph
+
     from ..graph_editor import GraphEditor
 
 

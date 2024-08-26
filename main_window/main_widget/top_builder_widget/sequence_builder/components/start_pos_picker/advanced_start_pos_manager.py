@@ -1,5 +1,6 @@
 from PyQt6.QtCore import QObject, pyqtSignal
-from widgets.pictograph.pictograph import Pictograph
+from widgets.base_widgets.pictograph.pictograph import Pictograph
+
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -19,18 +20,26 @@ class AdvancedStartPosManager(QObject):
         self.main_widget = advanced_start_pos_picker.sequence_builder.top_builder_widget
         self.start_pos_cache = advanced_start_pos_picker.start_pos_cache
 
-
     def set_all_orientations_to_in(self) -> None:
-        for start_position_pictograph_list in self.advanced_start_pos_picker.start_pos_cache.values():
+        for (
+            start_position_pictograph_list
+        ) in self.advanced_start_pos_picker.start_pos_cache.values():
             for start_position_pictograph in start_position_pictograph_list:
-                start_position_pictograph.pictograph_dict["blue_attributes"]["start_ori"] = "in"
-                start_position_pictograph.pictograph_dict["blue_attributes"]["end_ori"] = "in"
-                start_position_pictograph.pictograph_dict["red_attributes"]["start_ori"] = "in"
-                start_position_pictograph.pictograph_dict["red_attributes"]["end_ori"] = "in"
+                start_position_pictograph.pictograph_dict["blue_attributes"][
+                    "start_ori"
+                ] = "in"
+                start_position_pictograph.pictograph_dict["blue_attributes"][
+                    "end_ori"
+                ] = "in"
+                start_position_pictograph.pictograph_dict["red_attributes"][
+                    "start_ori"
+                ] = "in"
+                start_position_pictograph.pictograph_dict["red_attributes"][
+                    "end_ori"
+                ] = "in"
                 start_position_pictograph.updater.update_pictograph(
                     start_position_pictograph.pictograph_dict
                 )
-
 
     def update_left_default_ori(self, left_ori: str):
         for (

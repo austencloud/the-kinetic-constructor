@@ -4,7 +4,8 @@ from data.constants import *
 
 if TYPE_CHECKING:
     from .ori_picker_widget import OriPickerWidget
-    from widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import Pictograph
+
     from objects.motion.motion import Motion
 
 

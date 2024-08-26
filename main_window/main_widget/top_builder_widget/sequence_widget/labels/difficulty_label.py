@@ -2,8 +2,11 @@ from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
+
 if TYPE_CHECKING:
-    from widgets.sequence_widget.sequence_widget import SequenceWidget
+    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
+        SequenceWidget,
+    )
 
 
 class DifficultyLabel(QLabel):

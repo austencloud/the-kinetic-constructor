@@ -7,7 +7,7 @@ from .ori_picker_header import GE_OriPickerHeader
 
 if TYPE_CHECKING:
     from ..beat_adjustment_panel import BeatAdjustmentPanel
-    from widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import Pictograph
 
 
 class OriPickerBox(QFrame):

@@ -2,13 +2,12 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from typing import TYPE_CHECKING
 
 from Enums.Enums import LetterType
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.styled_border_overlay import StyledBorderOverlay
 
-from widgets.sequence_widget.beat_frame.styled_border_overlay import (
-    StyledBorderOverlay,
-)
+
 
 if TYPE_CHECKING:
-    from widgets.pictograph.pictograph import Pictograph
+    from widgets.base_widgets.pictograph.pictograph import Pictograph
 
 
 class PictographContainer(QFrame):

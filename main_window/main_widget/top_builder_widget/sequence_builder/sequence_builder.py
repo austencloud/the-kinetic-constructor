@@ -6,19 +6,28 @@ from Enums.Enums import LetterType, Letter
 from data.constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
 from Enums.Enums import LetterType
 
-from main_window.main_widget.top_builder_widget.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker import AdvancedStartPosPicker
-from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.start_pos_picker import StartPosPicker
-from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker import OptionPicker
-from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_click_handler import OptionPickerClickHandler
-from widgets.pictograph.components.add_to_sequence_manager import (
-    AddToSequenceManager,
+from main_window.main_widget.top_builder_widget.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker import (
+    AdvancedStartPosPicker,
 )
-from widgets.pictograph.pictograph import Pictograph
+from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.start_pos_picker import (
+    StartPosPicker,
+)
+from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker import (
+    OptionPicker,
+)
+from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_click_handler import (
+    OptionPickerClickHandler,
+)
+
+from main_window.main_widget.top_builder_widget.sequence_builder.add_to_sequence_manager import AddToSequenceManager
+from widgets.base_widgets.pictograph.pictograph import Pictograph
 
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
-    from main_window.main_widget.top_builder_widget.top_builder_widget import TopBuilderWidget
+    from main_window.main_widget.top_builder_widget.top_builder_widget import (
+        TopBuilderWidget,
+    )
 
 
 class SequenceBuilder(QFrame):
