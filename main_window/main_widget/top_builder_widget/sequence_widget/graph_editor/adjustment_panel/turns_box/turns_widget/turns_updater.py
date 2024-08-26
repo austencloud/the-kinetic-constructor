@@ -1,7 +1,17 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Turns
 from Enums.MotionAttributes import PropRotDir
-from data.constants import *
+from data.constants import (
+    BLUE,
+    CLOCKWISE,
+    COUNTER_CLOCKWISE,
+    DASH,
+    NO_ROT,
+    RED,
+    STATIC,
+    SAME,
+    OPP,
+)
 from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:

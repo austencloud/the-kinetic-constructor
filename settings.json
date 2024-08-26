@@ -34,7 +34,7 @@
         "glyph_visibility": {
             "VTG": false,
             "TKA": true,
-            "Elemental": true,
+            "Elemental": false,
             "EndPosition": false
         },
         "grid_visibility": {
@@ -46,7 +46,7 @@
     },
     "sequence_layout": {
         "grow_sequence": true,
-        "num_beats": 2,
-        "layout_option": "1 x 2"
+        "num_beats": 8,
+        "layout_option": "4 x 2"
     }
 }
