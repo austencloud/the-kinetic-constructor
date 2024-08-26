@@ -2,9 +2,7 @@ from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
 from widgets.pictograph.pictograph import Pictograph
 from Enums.Enums import LetterType
-from widgets.scroll_area.components.section_manager.section_widget.letterbook_section_widget import (
-    LetterBookSectionWidget,
-)
+
 from widgets.sequence_builder.components.option_picker.option_picker_section_widget import (
     OptionPickerSectionWidget,
 )
@@ -36,7 +34,7 @@ class OptionPickerDisplayManager:
         letter_type = self.scroll_area.sections_manager.get_pictograph_letter_type(
             pictograph.letter
         )
-        section: LetterBookSectionWidget = (
+        section = (
             self.scroll_area.sections_manager.get_section(letter_type)
         )
         if section:

@@ -43,11 +43,11 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
             beat.hide()
 
     def _setup_components(self) -> None:
+        self._setup_start_position_beat()
         self.selection_overlay = BeatSelectionOverlay(self)
         self.layout_manager = BeatFrameLayoutManager(self)
         self.beat_deletion_manager = BeatDeletionManager(self)
         self.image_export_manager = ImageExportManager(self, SequenceWidgetBeatFrame)
-        self._setup_start_position_beat()
 
     def _setup_start_position_beat(self):
         self.start_pos_view = StartPositionBeatView(self)

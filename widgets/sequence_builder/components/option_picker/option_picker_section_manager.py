@@ -4,9 +4,7 @@ from Enums.Enums import LetterType
 
 
 from Enums.letters import Letter
-from widgets.scroll_area.components.section_manager.section_widget.components.turns_tab.turns_tab import (
-    TurnsTab,
-)
+
 from widgets.scroll_area.components.section_manager.section_widget.section_group_widget import (
     SectionGroupWidget,
 )
@@ -38,7 +36,6 @@ class OptionPickerSectionsManager:
         self.scroll_area = scroll_area
         self.sequence_builder: "SequenceBuilder" = scroll_area.sequence_builder
         self.sections: dict[LetterType, OptionPickerSectionWidget] = {}
-        self.filter_tabs_cache: dict[LetterType, TurnsTab] = {}
         self.pictograph_cache: dict[Letter, list[LetterType]] = {}
         self.ordered_section_types: list[LetterType] = []
         self.initialized = False

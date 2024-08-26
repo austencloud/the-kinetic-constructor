@@ -15,14 +15,14 @@ from .option_picker_display_manager import (
     OptionPickerDisplayManager,
 )
 from ....pictograph.pictograph import Pictograph
-from ....scroll_area.base_scroll_area import BasePictographScrollArea
+from ....scroll_area.base_scroll_area import BasePickerScrollArea
 
 if TYPE_CHECKING:
     from .option_picker import OptionPicker
     from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
 
-class OptionPickerScrollArea(BasePictographScrollArea):
+class OptionPickerScrollArea(BasePickerScrollArea):
     MAX_COLUMN_COUNT: int = 8
     MIN_COLUMN_COUNT: int = 3
 

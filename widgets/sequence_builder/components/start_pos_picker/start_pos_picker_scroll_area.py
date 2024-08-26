@@ -6,7 +6,7 @@ from widgets.sequence_builder.components.option_picker.option_picker_pictograph_
 
 
 from ....pictograph.pictograph import Pictograph
-from widgets.scroll_area.base_scroll_area import BasePictographScrollArea
+from widgets.scroll_area.base_scroll_area import BasePickerScrollArea
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.components.start_pos_picker.start_pos_picker import (
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     )
 
 
-class StartPosPickerScrollArea(BasePictographScrollArea):
+class StartPosPickerScrollArea(BasePickerScrollArea):
     def __init__(self, start_pos_picker: "StartPosPicker"):
         super().__init__(start_pos_picker)
         self.start_pos_picker = start_pos_picker

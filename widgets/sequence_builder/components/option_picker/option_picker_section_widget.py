@@ -7,9 +7,7 @@ from PyQt6.QtCore import Qt
 from widgets.scroll_area.components.section_manager.section_widget.components.option_picker_section_header import (
     OptionPickerSectionHeader,
 )
-from ....scroll_area.components.section_manager.section_widget.components.turns_tab.turns_tab import (
-    TurnsTab,
-)
+
 from ....pictograph.pictograph import Pictograph
 from ....scroll_area.components.section_manager.section_widget.components.pictograph_frame import (
     ScrollAreaSectionPictographFrame,
@@ -31,7 +29,6 @@ class OptionPickerSectionWidget(QGroupBox):
         self.scroll_area = scroll_area
         self.letter_type = letter_type
         self.vtg_dir_btn_state: dict[str, bool] = {SAME: False, OPP: False}
-        self.turns_tab: TurnsTab = None
 
         # remove the default frame styles
 

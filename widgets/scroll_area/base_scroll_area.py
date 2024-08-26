@@ -12,12 +12,11 @@ if TYPE_CHECKING:
     from widgets.sequence_builder.components.option_picker.option_picker import (
         OptionPicker,
     )
-    from widgets.letterbook.letterbook import LetterBook
 
 
-class BasePictographScrollArea(QScrollArea):
+class BasePickerScrollArea(QScrollArea):
     def __init__(
-        self, parent: Union["StartPosPicker", "OptionPicker", "LetterBook"]
+        self, parent: Union["StartPosPicker", "OptionPicker"]
     ) -> None:
         super().__init__(parent)
         self.container = QWidget()
@@ -54,6 +53,4 @@ class BasePictographScrollArea(QScrollArea):
                 else:
                     self.layout.insertWidget(section_index, section, 4)
             elif section.__class__.__name__ == "SectionGroupWidget":
-                self.layout.insertWidget(
-                    section_index, section, 4
-                )
+                self.layout.insertWidget(section_index, section, 4)
