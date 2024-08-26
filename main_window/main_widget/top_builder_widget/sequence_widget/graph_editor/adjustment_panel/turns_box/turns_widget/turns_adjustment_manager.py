@@ -32,7 +32,7 @@ class TurnsAdjustmentManager(QObject):
         new_turns = self._clamp_turns(new_turns + adjustment)
         new_turns = self.convert_turn_floats_to_ints(new_turns)
         self._update_turns_display(new_turns)
-        self.turns_widget.updater._adjust_turns_for_pictograph(
+        self.turns_widget.turns_updater._adjust_turns_for_pictograph(
             self.pictograph, adjustment
         )
         pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
@@ -80,7 +80,7 @@ class TurnsAdjustmentManager(QObject):
             return turns
 
     def _clamp_turns(self, turns: Turns) -> Turns:
-        return self.turns_widget.updater._clamp_turns(turns)
+        return self.turns_widget.turns_updater._clamp_turns(turns)
 
     def _update_turns_display(self, turns: Turns) -> None:
         self.turns_widget.update_turns_display(str(turns))
@@ -91,4 +91,4 @@ class TurnsAdjustmentManager(QObject):
         )
         for motion in self.pictograph.motions.values():
             if motion.color == self.turns_widget.turns_box.color:
-                self.turns_widget.updater.set_motion_turns(motion, new_turns)
+                self.turns_widget.turns_updater.set_motion_turns(motion, new_turns)

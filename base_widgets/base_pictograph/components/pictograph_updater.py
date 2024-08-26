@@ -35,7 +35,7 @@ class PictographUpdater:
                 self._update_from_pictograph_dict(pictograph_dict)
                 self.pictograph.turns_tuple = self.pictograph.get.turns_tuple()
 
-        self.pictograph.tka_glyph.update_tka_glyph()  # keep this to update turns
+        self.pictograph.tka_glyph.update_tka_glyph()
         self._position_objects()
 
     def get_end_pos(self) -> str:
@@ -106,9 +106,9 @@ class PictographUpdater:
         turns = pictograph_dict[f"{color}_attributes"].get("turns", None)
         prop_rot_dir = pictograph_dict[f"{color}_attributes"].get("prop_rot_dir", None)
         if turns or turns == 0:
-            arrow_dict = {"color": color, "turns": turns}
+            arrow_dict = {"turns": turns}
         elif prop_rot_dir:
-            arrow_dict = {"color": color, "prop_rot_dir": prop_rot_dir}
+            arrow_dict = {"prop_rot_dir": prop_rot_dir}
         else:
             arrow_dict = None
         return arrow_dict

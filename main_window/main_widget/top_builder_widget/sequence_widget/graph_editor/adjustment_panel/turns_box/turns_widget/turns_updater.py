@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Turns
 from Enums.MotionAttributes import PropRotDir
 from data.constants import *
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from .turns_widget import TurnsWidget
@@ -24,6 +25,15 @@ class TurnsUpdater:
             f"{other_motion_color}_attributes": {"turns": other_motion.turns},
         }
         motion.pictograph.updater.update_pictograph(arrow_dict)
+        self._repaint_pictograph_views(motion)
+
+    def _repaint_pictograph_views(self, motion: "Motion"):
+        motion.pictograph.view.repaint()
+        GE_pictograph = (
+            self.turns_box.adjustment_panel.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
+        )
+        GE_pictograph.view.repaint()
+        QApplication.processEvents()
 
     def _adjust_turns_for_pictograph(
         self, pictograph: "BasePictograph", adjustment: Turns

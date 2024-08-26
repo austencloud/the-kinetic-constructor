@@ -36,6 +36,7 @@ class ArrowSvgManager:
             )
 
     def _setup_arrow_svg_renderer(self, arrow: "Arrow", svg_data: str) -> None:
-        arrow.renderer = QSvgRenderer()
-        arrow.renderer.load(svg_data.encode("utf-8"))
-        arrow.setSharedRenderer(arrow.renderer)
+        renderer = QSvgRenderer()
+        renderer.load(svg_data.encode("utf-8"))
+        arrow.setSharedRenderer(renderer)
+        arrow.update()

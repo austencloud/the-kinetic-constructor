@@ -22,7 +22,7 @@ class TurnsWidget(QWidget):
 
     def _setup_components(self) -> None:
         self.adjustment_manager = TurnsAdjustmentManager(self)
-        self.updater = TurnsUpdater(self)
+        self.turns_updater = TurnsUpdater(self)
         self.turns_display_frame = TurnsDisplayFrame(self)
         self.direct_set_dialog = DirectSetTurnsDialog(self)
         self._setup_turns_text()

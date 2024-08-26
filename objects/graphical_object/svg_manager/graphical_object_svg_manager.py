@@ -1,7 +1,6 @@
 from utilities.path_helpers import get_images_and_data_path
 from .arrow_svg_manager import ArrowSvgManager
 from .prop_svg_manager import PropSvgManager
-from .svg_file_manager import SvgFileManager
 from .svg_color_manager import SvgColorManager
 
 
