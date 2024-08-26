@@ -5,7 +5,7 @@ from PyQt6.QtGui import QImage
 from typing import TYPE_CHECKING
 from PIL import Image, PngImagePlugin
 import numpy as np
-from widgets.dictionary_widget.temp_beat_frame.temp_beat_frame import TempBeatFrame
+from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame import TempBeatFrame
 from widgets.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
     ImageExportManager,
 )

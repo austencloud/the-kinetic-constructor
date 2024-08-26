@@ -19,3 +19,5 @@ class BackgroundManager(QObject):
     def animate_background(self):
         pass
 
+    def paint_background(self, widget, painter):
+        pass

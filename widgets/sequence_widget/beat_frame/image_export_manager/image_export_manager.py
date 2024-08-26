@@ -9,7 +9,7 @@ from widgets.sequence_widget.beat_frame.image_export_manager.image_saver import 
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame
-    from widgets.dictionary_widget.temp_beat_frame.temp_beat_frame import (
+    from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame import (
         TempBeatFrame,
     )
 
