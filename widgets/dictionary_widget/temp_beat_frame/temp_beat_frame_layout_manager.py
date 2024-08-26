@@ -3,7 +3,6 @@ from data.beat_frame_layouts import DEFAULT_BEAT_FRAME_LAYOUTS
 
 if TYPE_CHECKING:
     from widgets.dictionary_widget.temp_beat_frame.temp_beat_frame import TempBeatFrame
-    from widgets.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame
 
 
 class TempBeatFrameLayoutManager:

@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
     QSizePolicy,
 )
 from PyQt6.QtCore import Qt, QEvent
-from PyQt6.QtGui import QPixmap, QCursor, QPainter, QPen
+from PyQt6.QtGui import QPixmap, QPainter, QPen
 
 from widgets.path_helpers.path_helpers import get_images_and_data_path
 from .filter_section_base import FilterSectionBase

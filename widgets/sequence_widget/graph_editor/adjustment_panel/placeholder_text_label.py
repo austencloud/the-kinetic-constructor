@@ -4,11 +4,11 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .GE_adjustment_panel import GE_AdjustmentPanel
+    from .beat_adjustment_panel import BeatAdjustmentPanel
 
 
-class GE_PlaceHolderTextLabel(QLabel):
-    def __init__(self, adjustment_panel: "GE_AdjustmentPanel") -> None:
+class GraphEditorPlaceHolderTextLabel(QLabel):
+    def __init__(self, adjustment_panel: "BeatAdjustmentPanel") -> None:
         super().__init__(adjustment_panel)
         self.adjustment_panel = adjustment_panel
         self.set_default_text()
@@ -19,9 +19,6 @@ class GE_PlaceHolderTextLabel(QLabel):
         self.setText(
             "This is where you'll modify each pictograph.\nSelect a start position to begin!\n--->"
         )
-
-    def set_text_to_loading(self) -> None:
-        self.setText("Loading...")
 
     def set_stylesheet(self) -> None:
         width = self.adjustment_panel.width()

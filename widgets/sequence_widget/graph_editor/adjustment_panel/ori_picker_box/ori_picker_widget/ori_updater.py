@@ -3,13 +3,13 @@ from Enums.Enums import Turns
 from data.constants import *
 
 if TYPE_CHECKING:
-    from .GE_ori_picker_widget import GE_OriPickerWidget
+    from .ori_picker_widget import OriPickerWidget
     from widgets.pictograph.pictograph import Pictograph
     from objects.motion.motion import Motion
 
 
-class GE_StartPosOriPickerUpdater:
-    def __init__(self, ori_picker_widget: "GE_OriPickerWidget") -> None:
+class OriUpdater:
+    def __init__(self, ori_picker_widget: "OriPickerWidget") -> None:
         self.ori_picker_box = ori_picker_widget.ori_picker_box
         self.turns_widget = ori_picker_widget
 

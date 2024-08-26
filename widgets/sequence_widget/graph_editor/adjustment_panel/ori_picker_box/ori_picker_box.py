@@ -1,20 +1,19 @@
 from typing import TYPE_CHECKING
 from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
-from .ori_picker_widget.GE_ori_picker_widget import GE_OriPickerWidget
+
+from .ori_picker_widget.ori_picker_widget import OriPickerWidget
 from .ori_picker_header import GE_OriPickerHeader
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.adjustment_panel.GE_adjustment_panel import (
-        GE_AdjustmentPanel,
-    )
+    from ..beat_adjustment_panel import BeatAdjustmentPanel
     from widgets.pictograph.pictograph import Pictograph
 
 
 class OriPickerBox(QFrame):
     def __init__(
         self,
-        adjustment_panel: "GE_AdjustmentPanel",
+        adjustment_panel: "BeatAdjustmentPanel",
         start_pos: "Pictograph",
         color: str,
     ) -> None:
@@ -35,7 +34,7 @@ class OriPickerBox(QFrame):
 
     def _setup_widgets(self) -> None:
         self.header = GE_OriPickerHeader(self)
-        self.ori_picker_widget = GE_OriPickerWidget(self)
+        self.ori_picker_widget = OriPickerWidget(self)
 
     def _setup_layout(self) -> None:
         layout: QVBoxLayout = QVBoxLayout(self)

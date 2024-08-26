@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLabel
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import pyqtSignal, Qt
-from .GE_ori_picker_display_frame import GE_OriPickerDisplayFrame
+from .ori_display_frame import OriDisplayFrame
 
 from typing import TYPE_CHECKING
 
@@ -9,7 +9,9 @@ if TYPE_CHECKING:
     from ..ori_picker_box import OriPickerBox
 
 
-class GE_OriPickerWidget(QWidget):
+class OriPickerWidget(QWidget):
+    """Displays the "Orientation" label and the OriDisplayFrame."""
+
     ori_adjusted = pyqtSignal(str)
 
     def __init__(self, ori_picker_box: "OriPickerBox") -> None:
@@ -22,7 +24,7 @@ class GE_OriPickerWidget(QWidget):
         self._setup_layout()
 
     def _setup_components(self) -> None:
-        self.ori_display_frame = GE_OriPickerDisplayFrame(self)
+        self.ori_display_frame = OriDisplayFrame(self)
         self.ori_text = self._setup_ori_text()
 
     def _setup_layout(self) -> None:

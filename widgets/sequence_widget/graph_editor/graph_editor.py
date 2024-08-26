@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
-from .adjustment_panel.GE_adjustment_panel import GE_AdjustmentPanel
+from .adjustment_panel.beat_adjustment_panel import BeatAdjustmentPanel
 from .pictograph_container.GE_pictograph_container import GraphEditorPictographContainer
 
 
@@ -18,7 +18,7 @@ class GraphEditor(QFrame):
 
     def _setup_components(self) -> None:
         self.pictograph_container = GraphEditorPictographContainer(self)
-        self.adjustment_panel = GE_AdjustmentPanel(self)
+        self.adjustment_panel = BeatAdjustmentPanel(self)
 
     def _setup_layout(self) -> None:
         self.pictograph_layout = self._setup_pictograph_layout()

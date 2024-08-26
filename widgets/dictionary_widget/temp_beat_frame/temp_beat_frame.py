@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGridLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
@@ -7,21 +7,16 @@ from widgets.base_widgets.base_beat_frame import BaseBeatFrame
 from widgets.dictionary_widget.temp_beat_frame.temp_beat_frame_layout_manager import (
     TempBeatFrameLayoutManager,
 )
-from ...sequence_widget.beat_frame.beat_deletion_manager import BeatDeletionManager
 from ...sequence_widget.beat_frame.image_export_manager.image_export_manager import (
     ImageExportManager,
 )
 
-from ...sequence_widget.beat_frame.beat_selection_overlay import (
-    BeatSelectionOverlay,
-)
 from ...sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 from ...sequence_widget.beat_frame.start_pos_beat import StartPositionBeatView
 from ...sequence_widget.beat_frame.beat import Beat, BeatView
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
     from widgets.dictionary_widget.dictionary_widget import DictionaryWidget
 
 

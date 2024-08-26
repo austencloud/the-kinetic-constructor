@@ -1,20 +1,22 @@
 from typing import TYPE_CHECKING
 from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
-from .prop_rot_dir_button_manager.prop_rot_dir_button_manager import PropRotDirButtonManager
+from .prop_rot_dir_button_manager.prop_rot_dir_button_manager import (
+    PropRotDirButtonManager,
+)
 from .vtg_dir_button_manager.vtg_dir_button_manager import VtgDirButtonManager
 from .turns_box_header import TurnsBoxHeader
 from .turns_widget.turns_widget import TurnsWidget
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 
 if TYPE_CHECKING:
-    from ..GE_adjustment_panel import GE_AdjustmentPanel
+    from ..beat_adjustment_panel import BeatAdjustmentPanel
     from widgets.pictograph.pictograph import Pictograph
 
 
 class TurnsBox(QFrame):
     def __init__(
         self,
-        adjustment_panel: "GE_AdjustmentPanel",
+        adjustment_panel: "BeatAdjustmentPanel",
         pictograph: "Pictograph",
         color: str,
     ) -> None:

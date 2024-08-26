@@ -1,7 +1,5 @@
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtCore import Qt
-from Enums.Enums import VTG_Directions
-from Enums.MotionAttributes import PropRotDir
 
 
 class BaseRotDirButton(QPushButton):

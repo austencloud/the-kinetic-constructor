@@ -5,13 +5,11 @@ from PyQt6.QtGui import QFont
 from data.constants import IN, COUNTER, OUT, CLOCK
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.components.adjustment_panel.ori_picker_widget.GE_start_pos_ori_picker_widget import (
-        GE_StartPosOriPickerWidget,
-    )
+    from .ori_picker_widget import OriPickerWidget
 
 
-class GE_OrientationSelectionDialog(QDialog):
-    def __init__(self, ori_picker: "GE_StartPosOriPickerWidget"):
+class OriSelectionDialog(QDialog):
+    def __init__(self, ori_picker: "OriPickerWidget"):
         super().__init__(
             ori_picker, Qt.WindowType.FramelessWindowHint | Qt.WindowType.Popup
         )

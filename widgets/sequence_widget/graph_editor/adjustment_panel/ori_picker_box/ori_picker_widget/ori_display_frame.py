@@ -13,19 +13,19 @@ from widgets.path_helpers.path_helpers import get_images_and_data_path
 from widgets.pictograph.pictograph import Pictograph
 from data.constants import IN, COUNTER, ORI, OUT, CLOCK
 from data.constants import BLUE, RED
-from .GE_orientation_selection_dialog import GE_OrientationSelectionDialog
+from .ori_selection_dialog import OriSelectionDialog
 
 if TYPE_CHECKING:
-    from .GE_ori_picker_widget import GE_OriPickerWidget
+    from .ori_picker_widget import OriPickerWidget
 
 
-class GE_OriPickerDisplayFrame(QFrame):
-    """This is the frame that contains the orientation display label and the buttons to adjust the orientation."""
+class OriDisplayFrame(QFrame):
+    """Contains the orientation display label and the buttons to adjust the orientation."""
 
     orientations = [IN, COUNTER, OUT, CLOCK]
     ori_adjusted = pyqtSignal(str)
 
-    def __init__(self, ori_picker_widget: "GE_OriPickerWidget") -> None:
+    def __init__(self, ori_picker_widget: "OriPickerWidget") -> None:
         super().__init__(ori_picker_widget)
         self.ori_picker_widget = ori_picker_widget
         self.ori_picker_box = self.ori_picker_widget.ori_picker_box
@@ -67,12 +67,16 @@ class GE_OriPickerDisplayFrame(QFrame):
 
     def _setup_rotate_buttons(self):
         path = get_images_and_data_path("images/icons")
-        self.ccw_button = self._setup_rotate_button(f"{path}/rotate_ccw.png", self.rotate_ccw)
-        self.cw_button = self._setup_rotate_button(f"{path}/rotate_cw.png", self.rotate_cw)
+        self.ccw_button = self._setup_rotate_button(
+            f"{path}/rotate_ccw.png", self.rotate_ccw
+        )
+        self.cw_button = self._setup_rotate_button(
+            f"{path}/rotate_cw.png", self.rotate_cw
+        )
         self.rotate_buttons = [self.ccw_button, self.cw_button]
 
     def _on_orientation_display_clicked(self, event) -> None:
-        dialog = GE_OrientationSelectionDialog(self)
+        dialog = OriSelectionDialog(self)
         dialog.move(self.mapToGlobal(QPoint(0, 0)))
         if dialog.exec():
             new_orientation = dialog.selected_orientation
@@ -122,11 +126,13 @@ class GE_OriPickerDisplayFrame(QFrame):
         new_ori = self.orientations[self.current_orientation_index]
         self.set_orientation(new_ori)
 
-    def _setup_rotate_button(self, icon_path: str, click_function: callable) -> QPushButton:
+    def _setup_rotate_button(
+        self, icon_path: str, click_function: callable
+    ) -> QPushButton:
         button = QPushButton()
         button.setIcon(QIcon(icon_path))
         button.clicked.connect(click_function)
-        button.setFixedSize(40, 40) 
+        button.setFixedSize(40, 40)
         button.setCursor(Qt.CursorShape.PointingHandCursor)
         return button
 
