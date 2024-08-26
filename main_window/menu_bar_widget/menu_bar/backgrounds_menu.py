@@ -1,10 +1,10 @@
 from PyQt6.QtGui import QAction, QActionGroup
 from typing import TYPE_CHECKING
 
-from main_window.menu_bar.hoverable_menu import HoverableMenu
+from .hoverable_menu import HoverableMenu
 
 if TYPE_CHECKING:
-    from main_window.menu_bar.menu_bar import MenuBar
+    from .menu_bar import MenuBar
 
 
 class BackgroundsMenu(HoverableMenu):

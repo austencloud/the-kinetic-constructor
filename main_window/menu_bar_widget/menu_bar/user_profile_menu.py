@@ -1,10 +1,10 @@
 from PyQt6.QtGui import QAction, QActionGroup
 from typing import TYPE_CHECKING
 
-from main_window.menu_bar.hoverable_menu import HoverableMenu
+from .hoverable_menu import HoverableMenu
 
 if TYPE_CHECKING:
-    from main_window.menu_bar.menu_bar import MenuBar
+    from .menu_bar import MenuBar
 
 
 class UserProfileMenu(HoverableMenu):
@@ -27,11 +27,9 @@ class UserProfileMenu(HoverableMenu):
 
     def _on_user_selection(self, user_name):
         self.set_current_user_in_user_menu(user_name)
-        # update the current sequence json file to reflect the new user
         self.main_widget.json_manager.updater.update_sequence_properties()
 
     def populate_user_profiles_menu(self):
-        # clear all the users without clearing the edit users action
         for action in self.actions():
             if action.text() != "Edit Users":
                 self.removeAction(action)
@@ -48,7 +46,6 @@ class UserProfileMenu(HoverableMenu):
             if user_name == current_user:
                 action.setChecked(True)
 
-        # move the edit users action to the bottom
         self.addAction(self.edit_users_action)
 
     def set_current_user_in_user_menu(self, user_name):

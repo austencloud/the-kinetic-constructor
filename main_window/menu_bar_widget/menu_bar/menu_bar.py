@@ -1,13 +1,13 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QMenuBar, QMenu, QApplication
 from PyQt6.QtCore import Qt, QEvent
-from main_window.menu_bar.user_profile_menu import UserProfileMenu
-from main_window.menu_bar.backgrounds_menu import BackgroundsMenu
-from main_window.menu_bar.prop_type_menu import PropTypeMenu
-from main_window.menu_bar.visibility_menu import VisibilityMenu
+from .user_profile_menu import UserProfileMenu
+from .backgrounds_menu import BackgroundsMenu
+from .prop_type_menu import PropTypeMenu
+from .visibility_menu import VisibilityMenu
 
 if TYPE_CHECKING:
-    from main_window.menu_bar_widget import MenuBarWidget
+    from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
 
 
 class MenuBar(QMenuBar):

@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
-from main_window.menu_bar.menu_bar import MenuBar
+from .menu_bar.menu_bar import MenuBar
 
 if TYPE_CHECKING:
     from main_window.main_window import MainWindow

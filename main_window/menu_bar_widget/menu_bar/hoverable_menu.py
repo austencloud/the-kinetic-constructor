@@ -5,7 +5,7 @@ from PyQt6.QtGui import QCursor
 from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
-    from main_window.menu_bar.menu_bar import MenuBar
+    from .menu_bar import MenuBar
 
 
 class HoverableMenu(QMenu):

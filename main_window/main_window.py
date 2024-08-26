@@ -2,7 +2,7 @@ import os
 from PyQt6.QtWidgets import QMainWindow, QApplication
 from PyQt6.QtCore import Qt
 
-from .menu_bar_widget import MenuBarWidget
+from .menu_bar_widget.menu_bar_widget import MenuBarWidget
 from .settings_manager.settings_manager import SettingsManager
 from .main_widget.main_widget import MainWidget
 from profiler import Profiler
@@ -16,7 +16,7 @@ class MainWindow(QMainWindow):
         self.settings_manager = SettingsManager(self)
         self.main_widget = MainWidget(self)
         self.setAttribute(Qt.WidgetAttribute.WA_AcceptTouchEvents, True)
-        self.window_manager = MainWindowGeometryManager(self)
+        self.geometry_manager = MainWindowGeometryManager(self)
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Kinetic Constructor")
         self.menu_bar_widget = MenuBarWidget(self)

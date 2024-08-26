@@ -179,7 +179,7 @@ class MainWidget(QTabWidget):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        self.main_window.window_manager.set_dimensions()
+        self.main_window.geometry_manager.set_dimensions()
 
     def apply_background(self):
         self.background_manager = (

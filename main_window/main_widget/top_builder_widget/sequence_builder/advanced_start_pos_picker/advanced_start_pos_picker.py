@@ -44,7 +44,6 @@ class AdvancedStartPosPicker(QWidget):
         self.layout.addLayout(self.grid_layout, 16)
 
     def display_variations(self, variations: list["BasePictograph"]) -> None:
-        self.view_width = self.calculate_view_width()
         alpha_variations = []
         beta_variations = []
         gamma_variations = []
@@ -75,17 +74,15 @@ class AdvancedStartPosPicker(QWidget):
             self._resize_variation(variation)
             variation.container.update_borders()
 
-    def calculate_view_width(self) -> int:
-        view_width = int(self.sequence_builder.height() // 5.5)
-        return view_width
 
     def init_ui(self):
         variations = self.start_pos_picker.start_pos_manager.get_all_start_positions()
         self.display_variations(variations)
 
     def _resize_variation(self, variation: "BasePictograph") -> None:
-        variation.view.setFixedSize(self.view_width, self.view_width)
-        variation.view.view_scale = self.view_width / variation.view.pictograph.width()
+        view_width = int(self.sequence_builder.height() // 6)
+        variation.view.setFixedSize(view_width, view_width)
+        variation.view.view_scale = view_width / variation.view.pictograph.width()
         variation.view.resetTransform()
         variation.view.scale(variation.view.view_scale, variation.view.view_scale)
         variation.container.styled_border_overlay.setFixedSize(
