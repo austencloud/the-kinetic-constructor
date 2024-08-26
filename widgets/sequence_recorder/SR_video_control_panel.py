@@ -99,12 +99,12 @@ class SR_VideoControlPanel(QFrame):
             self.record_button.setText("Stop Recording")
             self.capture_frame.start_recording()
             # self.capture_frame.video_display_frame.start_recording()
-            # self.capture_frame.SW_beat_frame.start_recording()
+            # self.capture_frame.beat_frame.start_recording()
         else:
             self.capture_frame.stop_recording()
             self.record_button.setText("Record")
             # self.capture_frame.video_display_frame.stop_recording()
-            # self.capture_frame.SW_beat_frame.stop_recording()
+            # self.capture_frame.beat_frame.stop_recording()
 
     def _populate_webcam_selector(self) -> None:
         self.webcam_selector.clear()

@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from PIL import Image, PngImagePlugin
 import numpy as np
 from widgets.dictionary_widget.temp_beat_frame import TempBeatFrame
-from widgets.sequence_widget.SW_beat_frame.image_export_manager import (
+from widgets.sequence_widget.beat_frame.image_export_manager import (
     ImageExportManager,
 )
 from widgets.path_helpers.path_helpers import (

@@ -2,9 +2,11 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QGridLayout
 from PyQt6.QtCore import Qt
 
-from widgets.sequence_widget.SW_beat_frame.beat import BeatView
+from widgets.sequence_widget.beat_frame.beat import BeatView
+
 if TYPE_CHECKING:
     from widgets.main_widget.main_widget import MainWidget
+
 
 class BaseBeatFrame(QFrame):
     def __init__(self, main_widget: "MainWidget"):
@@ -16,7 +18,6 @@ class BaseBeatFrame(QFrame):
         self.sequence_changed = False
         self.setObjectName("beat_frame")
         self.setStyleSheet("QFrame#beat_frame { background: transparent; }")
-
 
     def _init_beats(self):
         self.beats = [BeatView(self, number=i + 1) for i in range(64)]
@@ -35,7 +36,6 @@ class BaseBeatFrame(QFrame):
 
     def populate_beat_frame_from_json(self, current_sequence_json):
         pass
-
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):
@@ -57,7 +57,9 @@ class BaseBeatFrame(QFrame):
         # Function to check if the word can be constructed by repeating a pattern
         def can_form_by_repeating(s: str, pattern: str) -> bool:
             pattern_len = len(pattern)
-            return all(s[i:i + pattern_len] == pattern for i in range(0, len(s), pattern_len))
+            return all(
+                s[i : i + pattern_len] == pattern for i in range(0, len(s), pattern_len)
+            )
 
         n = len(word)
         # Try to find the smallest repeating unit

@@ -12,7 +12,7 @@ from widgets.scroll_area.components.section_manager.section_widget.letterbook_se
 from widgets.sequence_builder.components.option_picker.option_picker_section_widget import (
     OptionPickerSectionWidget,
 )
-from widgets.sequence_widget.SW_beat_frame.beat import Beat
+from widgets.sequence_widget.beat_frame.beat import Beat
 
 if TYPE_CHECKING:
     from widgets.sequence_builder.components.option_picker.option_picker_scroll_area import (

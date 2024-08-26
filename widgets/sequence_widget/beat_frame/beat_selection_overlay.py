@@ -2,32 +2,18 @@ from PyQt6.QtWidgets import QWidget, QApplication
 from PyQt6.QtGui import QPainter, QPen, QColor
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Optional
-<<<<<<<< HEAD:widgets/SW/SW_beat_frame/beat_selection_manager.py
 
-from widgets.sequence_widget.sequence_beat_frame.beat import BeatView
-from widgets.sequence_widget.sequence_beat_frame.start_pos_beat import (
-========
-from widgets.sequence_widget.SW_beat_frame.beat import BeatView
+from widgets.sequence_widget.beat_frame.beat import BeatView
+from widgets.sequence_widget.beat_frame.start_pos_beat import StartPositionBeatView
 
-from widgets.sequence_widget.SW_beat_frame.start_pos_beat import (
->>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409:widgets/SW/SW_beat_frame/beat_selection_overlay.py
-    StartPositionBeatView,
-)
 
 if TYPE_CHECKING:
-<<<<<<<< HEAD:widgets/SW/SW_beat_frame/beat_selection_manager.py
-
-    from widgets.sequence_widget.sequence_widget import SequenceWidget
-========
-    from widgets.sequence_widget.SW_beat_frame.SW_beat_frame import (
-        SW_BeatFrame,
-    )
->>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409:widgets/SW/SW_beat_frame/beat_selection_overlay.py
+    from widgets.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame
 
 
-class BeatSelectionManager(QWidget):
-    def __init__(self, sequence_widget: "SequenceWidget"):
-        super().__init__(SW)
+class BeatSelectionOverlay(QWidget):
+    def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
+        super().__init__(beat_frame)
         self.selected_beat: Optional[BeatView | StartPositionBeatView] = None
         self.border_color = QColor("gold")
         self.border_width = 4  # Adjust as needed
@@ -45,34 +31,32 @@ class BeatSelectionManager(QWidget):
             red_turns = self.selected_beat.beat.red_motion.turns
             self.selected_beat.is_selected = True
             graph_editor = (
-                self.selected_beat.beat_frame.sequence_widget.sequence_modifier.graph_editor
+                self.selected_beat.beat_frame.main_widget.top_builder_widget.sequence_widget.graph_editor
             )
-<<<<<<<< HEAD:widgets/SW/SW_beat_frame/beat_selection_manager.py
-            graph_editor.update_GE_pictgraph(self.selected_beat.beat)
-========
 
             self.update()
             self.update_overlay_position()
             self.show()
-            graph_editor.update_GE_pictograph(self.selected_beat.beat)
-            # QApplication.processEvents()
->>>>>>>> 6fa36c8ff84359dfba82ab7ab201d6bca117a409:widgets/SW/SW_beat_frame/beat_selection_overlay.py
 
+            graph_editor.pictograph_container.update_GE_pictograph(
+                self.selected_beat.beat
+            )
             graph_editor.adjustment_panel.update_turns_panel(blue_turns, red_turns)
             graph_editor.adjustment_panel.update_adjustment_panel()
-
-            # Set the orientations in the graph editor's orientation changer
             if isinstance(beat_view, StartPositionBeatView):
                 start_pos_pictograph = beat_view.beat
-                blue_start_pos_ori_picker = graph_editor.adjustment_panel.blue_start_pos_ori_picker
-                red_start_pos_ori_picker = graph_editor.adjustment_panel.red_start_pos_ori_picker
+                blue_start_pos_ori_picker = (
+                    graph_editor.adjustment_panel.blue_ori_picker
+                )
+                red_start_pos_ori_picker = graph_editor.adjustment_panel.red_ori_picker
 
-                blue_start_pos_ori_picker.ori_picker_widget.set_initial_orientation(
+                blue_start_pos_ori_picker.ori_picker_widget.ori_display_frame.set_initial_orientation(
                     start_pos_pictograph, "blue"
                 )
-                red_start_pos_ori_picker.ori_picker_widget.set_initial_orientation(
+                red_start_pos_ori_picker.ori_picker_widget.ori_display_frame.set_initial_orientation(
                     start_pos_pictograph, "red"
                 )
+            QApplication.processEvents()
 
     def deselect_beat(self):
         if self.selected_beat:

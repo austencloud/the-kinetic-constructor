@@ -15,7 +15,7 @@ class ThumbnailGenerator:
         self.manager = add_to_dictionary_manager
         self.sequence_widget = add_to_dictionary_manager.sequence_widget
         self.beat_frame = self.sequence_widget.beat_frame
-        self.export_manager = self.beat_frame.export_manager
+        self.export_manager = self.beat_frame.image_export_manager
 
     def generate_and_save_thumbnail(
         self, sequence, turn_pattern, structural_variation_number, directory

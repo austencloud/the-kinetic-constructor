@@ -3,7 +3,7 @@ from PyQt6.QtGui import QPainter, QPen, QFont, QFontMetrics, QImage
 from PyQt6.QtCore import QRect, Qt
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.SW_beat_frame.image_creator import ImageCreator
+    from widgets.sequence_widget.beat_frame.image_creator import ImageCreator
 
 
 class DifficultyLevelDrawer:

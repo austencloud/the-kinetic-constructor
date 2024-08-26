@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Union
 from Enums.PropTypes import PropType
 
 from data.constants import BLUE, DASH, NO_ROT, RED, STATIC
-from widgets.sequence_widget.SW_beat_frame.beat import BeatView
+from widgets.sequence_widget.beat_frame.beat import BeatView
 
 if TYPE_CHECKING:
     from widgets.json_manager import JSON_Manager

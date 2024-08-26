@@ -15,7 +15,6 @@ class GE_OriPickerHeader(BaseAdjustmentBoxHeaderWidget):
     def __init__(self, ori_picker_box: "OriPickerBox") -> None:
         super().__init__(ori_picker_box)
         self._add_widgets()
-        self.layout: QVBoxLayout = self._setup_layout()
 
     def _add_widgets(self) -> None:
         self.top_hbox.addStretch(1)

@@ -6,13 +6,13 @@ from PyQt6.QtWidgets import (
     QPushButton,
 )
 
-from widgets.sequence_widget.SW_beat_frame.layout_options_panel import (
+from widgets.sequence_widget.beat_frame.layout_options_panel import (
     LayoutOptionsPanel,
 )
-from widgets.sequence_widget.SW_beat_frame.layout_options_beat_frame import (
+from widgets.sequence_widget.beat_frame.layout_options_beat_frame import (
     LayoutOptionsBeatFrame,
 )
-from widgets.sequence_widget.SW_beat_frame.layout_warning_dialog import (
+from widgets.sequence_widget.beat_frame.layout_warning_dialog import (
     LayoutWarningDialog,
 )
 

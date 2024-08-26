@@ -2,10 +2,10 @@ from typing import TYPE_CHECKING, Dict
 from PyQt6.QtGui import QPainter, QFont, QFontMetrics, QImage
 from datetime import datetime
 
-from widgets.sequence_widget.SW_beat_frame.font_margin_helper import FontMarginHelper
+from widgets.sequence_widget.beat_frame.font_margin_helper import FontMarginHelper
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.SW_beat_frame.image_creator import ImageCreator
+    from widgets.sequence_widget.beat_frame.image_creator import ImageCreator
 
 
 class UserInfoDrawer:
@@ -22,17 +22,23 @@ class UserInfoDrawer:
     ) -> None:
         base_margin = 50
         font_bold_italic, margin = FontMarginHelper.adjust_font_and_margin(
-            self.base_font_bold_italic, num_filled_beats, base_margin, self.image_creator.beat_scale
+            self.base_font_bold_italic,
+            num_filled_beats,
+            base_margin,
+            self.image_creator.beat_scale,
         )
         font_italic, _ = FontMarginHelper.adjust_font_and_margin(
-            self.base_font_italic, num_filled_beats, base_margin, self.image_creator.beat_scale
+            self.base_font_italic,
+            num_filled_beats,
+            base_margin,
+            self.image_creator.beat_scale,
         )
 
         painter = QPainter(image)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         painter.setRenderHint(QPainter.RenderHint.TextAntialiasing)
 
-        user_name = options['user_name']
+        user_name = options["user_name"]
         export_date = self._format_export_date(
             options.get("export_date", datetime.now().strftime("%m-%d-%Y"))
         )

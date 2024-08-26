@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.SW_beat_frame.image_export_manager import (
+    from widgets.sequence_widget.beat_frame.image_export_manager import (
         ImageExportManager,
     )
 

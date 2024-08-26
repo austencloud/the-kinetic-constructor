@@ -9,7 +9,6 @@ from widgets.sequence_widget.SW_beat_frame_layout_manager import (
 )
 from .beat_deletion_manager import BeatDeletionManager
 from .image_export_manager import ImageExportManager
-from .beat_frame_print_manager import BeatFramePrintManager
 from .beat_selection_overlay import BeatSelectionOverlay
 from .start_pos_beat import StartPositionBeat
 from .start_pos_beat import StartPositionBeatView
@@ -21,7 +20,7 @@ if TYPE_CHECKING:
 from .beat import BeatView
 
 
-class SW_BeatFrame(BaseBeatFrame):
+class SequenceWidgetBeatFrame(BaseBeatFrame):
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget.main_widget)
         self.main_widget = sequence_widget.main_widget
@@ -49,8 +48,7 @@ class SW_BeatFrame(BaseBeatFrame):
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(self)
         self.beat_deletion_manager = BeatDeletionManager(self)
-        self.export_manager = ImageExportManager(self, SW_BeatFrame)
-        self.print_sequence_manager = BeatFramePrintManager(self)
+        self.image_export_manager = ImageExportManager(self, SequenceWidgetBeatFrame)
 
     def _setup_layout(self) -> None:
         self.layout: QGridLayout = QGridLayout(self)
@@ -58,7 +56,6 @@ class SW_BeatFrame(BaseBeatFrame):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        # remove the nonradial points from the start pos beat view
         self.start_pos_view.start_pos.initializer.set_nonradial_points_visibility(False)
         self.layout.addWidget(self.start_pos_view, 0, 0)
         for i, beat in enumerate(self.beats):

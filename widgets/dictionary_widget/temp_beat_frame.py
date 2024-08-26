@@ -7,17 +7,15 @@ from widgets.base_beat_frame import BaseBeatFrame
 from widgets.sequence_widget.invisible_dictionary_beat_frame_layout_manager import (
     InvisibleDictionaryBeatFrameLayoutManager,
 )
-from ..sequence_widget.SW_beat_frame.beat_deletion_manager import BeatDeletionManager
-from ..sequence_widget.SW_beat_frame.image_export_manager import ImageExportManager
-from ..sequence_widget.SW_beat_frame.beat_frame_print_manager import (
-    BeatFramePrintManager,
-)
-from ..sequence_widget.SW_beat_frame.beat_selection_overlay import (
+from ..sequence_widget.beat_frame.beat_deletion_manager import BeatDeletionManager
+from ..sequence_widget.beat_frame.image_export_manager import ImageExportManager
+
+from ..sequence_widget.beat_frame.beat_selection_overlay import (
     BeatSelectionOverlay,
 )
-from ..sequence_widget.SW_beat_frame.start_pos_beat import StartPositionBeat
-from ..sequence_widget.SW_beat_frame.start_pos_beat import StartPositionBeatView
-from ..sequence_widget.SW_beat_frame.beat import Beat, BeatView
+from ..sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
+from ..sequence_widget.beat_frame.start_pos_beat import StartPositionBeatView
+from ..sequence_widget.beat_frame.beat import Beat, BeatView
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
@@ -54,7 +52,6 @@ class TempBeatFrame(BaseBeatFrame):
         self.start_pos = StartPositionBeat(self)
         self.beat_deletion_manager = BeatDeletionManager(self)
         self.export_manager = ImageExportManager(self, TempBeatFrame)
-        self.print_sequence_manager = BeatFramePrintManager(self)
 
     def _setup_layout(self) -> None:
         self.layout: QGridLayout = QGridLayout(self)

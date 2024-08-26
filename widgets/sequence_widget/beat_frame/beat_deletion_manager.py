@@ -1,14 +1,15 @@
 from typing import TYPE_CHECKING
 
-from ..SW_beat_frame.start_pos_beat import StartPositionBeatView
-from ..SW_beat_frame.beat import BeatView
+from widgets.sequence_widget.beat_frame.beat import BeatView
+from widgets.sequence_widget.beat_frame.start_pos_beat import StartPositionBeatView
+
 
 if TYPE_CHECKING:
-    from .beat_frame import SW_BeatFrame
+    from .beat_frame import SequenceWidgetBeatFrame
 
 
 class BeatDeletionManager:
-    def __init__(self, beat_frame: "SW_BeatFrame") -> None:
+    def __init__(self, beat_frame: "SequenceWidgetBeatFrame") -> None:
         self.beat_frame = beat_frame
         self.sequence_builder = beat_frame.top_builder_widget.sequence_builder
         self.selection_overlay = self.beat_frame.selection_overlay

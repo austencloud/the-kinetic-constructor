@@ -1,20 +1,17 @@
 from typing import TYPE_CHECKING, Union
 from widgets.image_export_layout_handler import ImageExportLayoutHandler
+from widgets.sequence_widget.beat_frame.image_creator import ImageCreator
+from widgets.sequence_widget.beat_frame.image_export_beat_factory import ImageExportBeatFactory
+from widgets.sequence_widget.beat_frame.image_export_dialog_executor import ImageExportDialogExecutor
+from widgets.sequence_widget.beat_frame.image_saver import ImageSaver
 
-from widgets.sequence_widget.SW_beat_frame.image_creator import ImageCreator
-from widgets.sequence_widget.SW_beat_frame.image_export_beat_factory import (
-    ImageExportBeatFactory,
-)
-from widgets.sequence_widget.SW_beat_frame.image_export_dialog_executor import (
-    ImageExportDialogExecutor,
-)
-from widgets.sequence_widget.SW_beat_frame.image_saver import ImageSaver
+
 
 if TYPE_CHECKING:
+    from widgets.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame
     from widgets.dictionary_widget.temp_beat_frame import (
         TempBeatFrame,
     )
-    from widgets.sequence_widget.SW_beat_frame.beat_frame import SW_BeatFrame
 
 
 from typing import TYPE_CHECKING
@@ -26,12 +23,12 @@ class ImageExportManager:
 
     def __init__(
         self,
-        beat_frame: Union["SW_BeatFrame", "TempBeatFrame"],
+        beat_frame: Union["SequenceWidgetBeatFrame", "TempBeatFrame"],
         beat_frame_class: type,
     ) -> None:
         self.beat_frame = beat_frame
         self.main_widget = beat_frame.main_widget
-        if beat_frame_class.__name__ == "SW_BeatFrame":
+        if beat_frame_class.__name__ == "SequenceWidgetBeatFrame":
             self.sequence_widget = beat_frame.sequence_widget
         elif beat_frame_class.__name__ == "TempBeatFrame":
             self.dictionary_widget = beat_frame.dictionary_widget

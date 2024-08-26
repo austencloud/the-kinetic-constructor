@@ -43,9 +43,8 @@ class SW_ButtonFrame(QFrame):
         self.json_manager = self.main_widget.json_manager
         self.sequence_builder = self.sequence_widget.top_builder_widget.sequence_builder
         self.beat_frame = self.sequence_widget.beat_frame
-        self.export_manager = self.beat_frame.export_manager
+        self.export_manager = self.beat_frame.image_export_manager
         self.indicator_label = self.sequence_widget.indicator_label
-        self.print_sequence_manager = self.beat_frame.print_sequence_manager
         self.settings_manager = self.main_widget.main_window.settings_manager
 
     def _setup_buttons(self) -> None:

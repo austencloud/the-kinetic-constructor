@@ -1,14 +1,14 @@
 from typing import TYPE_CHECKING, Union
 
-from widgets.sequence_widget.SW_beat_frame.beat import Beat, BeatView
+from widgets.sequence_widget.beat_frame.beat import Beat, BeatView
 
 if TYPE_CHECKING:
+    from widgets.sequence_widget.beat_frame.image_export_manager import (
+        ImageExportManager,
+    )
+    from widgets.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame
     from widgets.dictionary_widget.temp_beat_frame import (
         TempBeatFrame,
-    )
-    from widgets.sequence_widget.SW_beat_frame.beat_frame import SW_BeatFrame
-    from widgets.sequence_widget.SW_beat_frame.image_export_manager import (
-        ImageExportManager,
     )
 
 
@@ -16,13 +16,13 @@ class ImageExportBeatFactory:
     def __init__(
         self,
         export_manager: "ImageExportManager",
-        beat_frame_class: Union["SW_BeatFrame", "TempBeatFrame"],
+        beat_frame_class: Union["SequenceWidgetBeatFrame", "TempBeatFrame"],
     ):
         self.export_manager = export_manager
         self.beat_frame_class = beat_frame_class
 
     def process_sequence_to_beats(self, sequence: list[dict]) -> list[BeatView]:
-        if self.beat_frame_class.__name__ == "SW_BeatFrame":
+        if self.beat_frame_class.__name__ == "SequenceWidgetBeatFrame":
             temp_beat_frame = self.beat_frame_class(
                 self.export_manager.main_widget.top_builder_widget.sequence_widget
             )

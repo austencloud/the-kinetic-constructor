@@ -2,11 +2,11 @@ from typing import TYPE_CHECKING
 from data.beat_frame_layouts import DEFAULT_BEAT_FRAME_LAYOUTS
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.SW_beat_frame.beat_frame import SW_BeatFrame
+    from widgets.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame
 
 
 class InvisibleDictionaryBeatFrameLayoutManager:
-    def __init__(self, beat_frame: "SW_BeatFrame"):
+    def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
         self.beat_frame = beat_frame
         # self.selection_overlay = beat_frame.selection_overlay
         self.settings_manager = beat_frame.main_widget.main_window.settings_manager

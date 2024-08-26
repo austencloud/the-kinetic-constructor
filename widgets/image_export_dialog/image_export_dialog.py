@@ -14,7 +14,7 @@ from widgets.image_export_dialog.export_dialog_preview_panel import (
 )
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.SW_beat_frame.image_export_manager import (
+    from widgets.sequence_widget.beat_frame.image_export_manager import (
         ImageExportManager,
     )
 

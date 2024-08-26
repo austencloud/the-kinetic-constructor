@@ -2,16 +2,16 @@ from PyQt6.QtGui import QImage
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
-from widgets.sequence_widget.SW_beat_frame.beat_drawer import BeatDrawer
-from widgets.sequence_widget.SW_beat_frame.user_info_drawer import UserInfoDrawer
-from widgets.sequence_widget.SW_beat_frame.word_drawer import WordDrawer
-from widgets.sequence_widget.SW_beat_frame.difficulty_level_drawer import (
+from widgets.sequence_widget.beat_frame.beat_drawer import BeatDrawer
+from widgets.sequence_widget.beat_frame.user_info_drawer import UserInfoDrawer
+from widgets.sequence_widget.beat_frame.word_drawer import WordDrawer
+from widgets.sequence_widget.beat_frame.difficulty_level_drawer import (
     DifficultyLevelDrawer,
 )
-from widgets.sequence_widget.SW_beat_frame.height_determiner import HeightDeterminer
+from widgets.sequence_widget.beat_frame.height_determiner import HeightDeterminer
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.SW_beat_frame.image_export_manager import (
+    from widgets.sequence_widget.beat_frame.image_export_manager import (
         ImageExportManager,
     )
 
@@ -57,7 +57,6 @@ class ImageCreator:
             additional_height_top, additional_height_bottom = 0, 0
             add_beat_numbers = True
 
-
         image = self._create_image(
             column_count, row_count, additional_height_top + additional_height_bottom
         )
@@ -69,7 +68,7 @@ class ImageCreator:
             row_count,
             include_start_pos,
             additional_height_top,
-            add_beat_numbers
+            add_beat_numbers,
         )
 
         if options:

@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.SW_beat_frame.layout_options_dialog import (
+    from widgets.sequence_widget.beat_frame.layout_options_dialog import (
         LayoutOptionsDialog,
     )
 
@@ -72,9 +72,13 @@ class LayoutOptionsPanel(QWidget):
         num_beats = int(self.beats_combo_box.currentText())
         layouts = self.layout_options.get(num_beats, [])
         for layout in layouts:
-            self.layout_combo_box.currentIndexChanged.disconnect(self.dialog.beat_frame.update_preview)
+            self.layout_combo_box.currentIndexChanged.disconnect(
+                self.dialog.beat_frame.update_preview
+            )
             self.layout_combo_box.addItem(f"{layout[0]} x {layout[1]}")
-            self.layout_combo_box.currentIndexChanged.connect(self.dialog.beat_frame.update_preview)
+            self.layout_combo_box.currentIndexChanged.connect(
+                self.dialog.beat_frame.update_preview
+            )
         if layouts:
             self.layout_combo_box.setCurrentIndex(0)
             self.save_layout_setting()
@@ -145,10 +149,12 @@ class LayoutOptionsPanel(QWidget):
     def _setup_number_of_beats_dropdown(self):
         """Setup the dropdown for the number of beats."""
         self.beats_combo_box.addItems([str(i) for i in self.layout_options.keys()])
-        
+
         # Temporarily disconnect the signal to avoid triggering _setup_layout_options prematurely
         self.beats_combo_box.blockSignals(True)
-        saved_beats = self.settings_manager.sequence_layout.get_layout_setting("num_beats")
+        saved_beats = self.settings_manager.sequence_layout.get_layout_setting(
+            "num_beats"
+        )
         self.beats_combo_box.setCurrentText(str(saved_beats))
         self.beats_combo_box.blockSignals(False)
 
@@ -157,8 +163,10 @@ class LayoutOptionsPanel(QWidget):
         self.layout_combo_box.currentIndexChanged.connect(
             self.dialog.beat_frame.update_preview
         )
-        
-        saved_layout = self.settings_manager.sequence_layout.get_layout_setting("layout_option")
+
+        saved_layout = self.settings_manager.sequence_layout.get_layout_setting(
+            "layout_option"
+        )
         self.layout_combo_box.setCurrentText(saved_layout)
 
     def _toggle_grow_sequence(self):
@@ -181,7 +189,9 @@ class LayoutOptionsPanel(QWidget):
             num_beats = self.sequence_widget.beat_frame.find_next_available_beat() or 0
             self.beats_combo_box.setCurrentText(str(num_beats))
             self._setup_layout_options()
-            layout_option = self.get_layout_option_from_current_sequence_beat_frame_layout()
+            layout_option = (
+                self.get_layout_option_from_current_sequence_beat_frame_layout()
+            )
             self.layout_combo_box.setCurrentText(layout_option)
 
         self.dialog.beat_frame.update_preview()
@@ -225,7 +235,9 @@ class LayoutOptionsPanel(QWidget):
         num_beats = int(self.beats_combo_box.currentText())
         layout_option = self.layout_combo_box.currentText()
         self.settings_manager.sequence_layout.set_layout_setting("num_beats", num_beats)
-        self.settings_manager.sequence_layout.set_layout_setting("layout_option", layout_option)
+        self.settings_manager.sequence_layout.set_layout_setting(
+            "layout_option", layout_option
+        )
 
     def showEvent(self, event):
         """Handle the show event for the panel."""

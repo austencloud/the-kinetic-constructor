@@ -3,15 +3,16 @@ from PyQt6.QtWidgets import QGridLayout, QWidget, QFrame
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.SW_beat_frame.layout_options_dialog import (
+    from widgets.sequence_widget.beat_frame.layout_options_dialog import (
         LayoutOptionsDialog,
     )
-from widgets.sequence_widget.SW_beat_frame.beat import BeatView
-from widgets.sequence_widget.SW_beat_frame.start_pos_beat import StartPositionBeatView
+from widgets.sequence_widget.beat_frame.beat import BeatView
+from widgets.sequence_widget.beat_frame.start_pos_beat import StartPositionBeatView
 
 
 class LayoutOptionsBeatFrame(QFrame):
     """This class is responsible for displaying a preview of the selected layout options inside the layout options dialog."""
+
     def __init__(self, dialog: "LayoutOptionsDialog"):
         super().__init__(dialog)
         self.dialog = dialog
@@ -50,7 +51,9 @@ class LayoutOptionsBeatFrame(QFrame):
                     start_pos_view = StartPositionBeatView(self)
                     start_pos_view.setParent(self)  # Ensure proper parenting
                     self.layout.addWidget(start_pos_view, 0, 0)
-                    start_pos_view.start_pos.initializer.set_nonradial_points_visibility(False)
+                    start_pos_view.start_pos.initializer.set_nonradial_points_visibility(
+                        False
+                    )
                     start_pos_view.setFixedSize(beat_size, beat_size)
                     start_pos_view.resize_beat_view()
 
@@ -64,4 +67,6 @@ class LayoutOptionsBeatFrame(QFrame):
                                 beat_view.setFixedSize(beat_size, beat_size)
                                 beat_view.resize_beat_view()
                                 beat_index += 1
-                                beat_view.blank_beat.initializer.set_nonradial_points_visibility(False)
+                                beat_view.blank_beat.initializer.set_nonradial_points_visibility(
+                                    False
+                                )

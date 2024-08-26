@@ -4,18 +4,20 @@ from widgets.pictograph.pictograph import Pictograph
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPainter, QPen, QColor
 
-from widgets.sequence_widget.SW_beat_frame.beat import Beat
+from widgets.sequence_widget.beat_frame.beat import Beat
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.pictograph_container.GE_pictograph_container import GE_PictographContainer
+    from widgets.graph_editor.pictograph_container.GE_pictograph_container import (
+        GE_PictographContainer,
+    )
     from .GE_pictograph_view import GE_BlankPictograph
-
-
 
 
 class GE_PictographView(PictographView):
     def __init__(
-        self, pictograph_container: "GE_PictographContainer", blank_pictograph: "GE_BlankPictograph"
+        self,
+        pictograph_container: "GE_PictographContainer",
+        blank_pictograph: "GE_BlankPictograph",
     ) -> None:
         super().__init__(blank_pictograph)
         self.graph_editor = pictograph_container.graph_editor
@@ -65,9 +67,7 @@ class GE_PictographView(PictographView):
             self.is_start_pos = False
 
     def resize_GE_pictograph_view(self) -> None:
-        self.setFixedSize(
-            self.graph_editor.height(), self.graph_editor.height()
-        )
+        self.setFixedSize(self.graph_editor.height(), self.graph_editor.height())
 
         scene_size = self.scene().sceneRect().size()
         view_size = self.viewport().size()

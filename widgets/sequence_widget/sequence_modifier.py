@@ -15,10 +15,6 @@ class SequenceModifier(QTabWidget):
         self.graph_editor = GraphEditor(self)
         self.addTab(self.graph_editor, "Graph Editor")
         self.setStyleSheet(get_tab_stylesheet())
-        # size_policy = QSizePolicy(
-        #     QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
-        # )
-        # self.setSizePolicy(size_policy)
 
     def resize_sequence_modifier(self) -> None:
 

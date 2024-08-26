@@ -9,16 +9,16 @@ from PyQt6.QtWidgets import (
 from sequence_auto_completer.sequence_auto_completion_manager import (
     SequenceAutoCompletionManager,
 )
-from widgets.sequence_widget.SW_beat_frame.beat_frame import SW_BeatFrame
+from widgets.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame
 from widgets.sequence_widget.add_to_dictionary_manager import AddToDictionaryManager
 from widgets.sequence_widget.current_word_label import CurrentWordLabel
 from widgets.sequence_widget.difficulty_label import DifficultyLabel
 
 from ..graph_editor.graph_editor import GraphEditor
-from .SW_beat_frame.layout_options_dialog import LayoutOptionsDialog
+from .beat_frame.layout_options_dialog import LayoutOptionsDialog
 from ..indicator_label import IndicatorLabel
 from .SW_pictograph_factory import SW_PictographFactory
-from .SW_beat_frame.beat import Beat, BeatView
+from .beat_frame.beat import Beat, BeatView
 from .SW_button_frame import SW_ButtonFrame
 
 if TYPE_CHECKING:
@@ -47,7 +47,7 @@ class SequenceWidget(QWidget):
         self.indicator_label = IndicatorLabel(self)
         self.current_word_label = CurrentWordLabel(self)
         self.difficulty_label = DifficultyLabel(self)
-        self.beat_frame = SW_BeatFrame(self)
+        self.beat_frame = SequenceWidgetBeatFrame(self)
         self.add_to_dictionary_manager = AddToDictionaryManager(self)
         self.button_frame = SW_ButtonFrame(self)
         self.graph_editor = GraphEditor(self)

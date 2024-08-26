@@ -13,13 +13,12 @@ from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
     from widgets.sequence_recorder.SR_beat_frame import SR_BeatFrame
-    from widgets.sequence_widget.SW_beat_frame.beat_frame import (
-        SW_BeatFrame,
-    )
+    from widgets.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame
+
 
 
 class Beat(Pictograph):
-    def __init__(self, beat_frame: Union["SW_BeatFrame", "SR_BeatFrame"]):
+    def __init__(self, beat_frame: Union["SequenceWidgetBeatFrame", "SR_BeatFrame"]):
         super().__init__(beat_frame.main_widget)
         self.main_widget = beat_frame.main_widget
         self.view: "BeatView" = None
@@ -42,7 +41,7 @@ class Beat(Pictograph):
 
 
 class BeatView(QGraphicsView):
-    def __init__(self, beat_frame: "SW_BeatFrame", number=None):
+    def __init__(self, beat_frame: "SequenceWidgetBeatFrame", number=None):
         super().__init__(beat_frame)
         self.number = number  # Beat number to display
         self._disable_scrollbars()

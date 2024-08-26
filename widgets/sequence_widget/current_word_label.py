@@ -6,14 +6,13 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from widgets.sequence_widget.SW_beat_frame.current_word_line_edit import (
+from widgets.sequence_widget.beat_frame.current_word_line_edit import (
     CurrentWordLineEdit,
 )
 from word_simplifier import WordSimplifier
 
 if TYPE_CHECKING:
     from widgets.sequence_widget.sequence_widget import SequenceWidget
-
 
 
 class CurrentWordLabel(QWidget):
