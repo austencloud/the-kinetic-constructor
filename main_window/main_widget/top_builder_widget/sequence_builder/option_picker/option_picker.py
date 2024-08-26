@@ -8,7 +8,7 @@ from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.o
 
 
 
-from .scroll_area.option_picker_scroll_area import OptionPickerScrollArea
+from .option_picker_scroll_area.option_picker_scroll_area import OptionPickerScrollArea
 
 from typing import TYPE_CHECKING
 

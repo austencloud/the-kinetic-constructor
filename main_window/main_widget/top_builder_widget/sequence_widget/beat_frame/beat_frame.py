@@ -1,32 +1,31 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGridLayout
+from PyQt6.QtWidgets import QGridLayout, QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QKeyEvent
 
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import Beat, BeatView
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.image_export_manager.image_export_manager import ImageExportManager
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import StartPositionBeat, StartPositionBeatView
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat_frame_layout_manager import BeatFrameLayoutManager
 from widgets.base_widgets.base_beat_frame import BaseBeatFrame
-from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame_layout_manager import (
-    TempBeatFrameLayoutManager,
-)
 
+from .beat_deletion_manager import BeatDeletionManager
+from .image_export_manager.image_export_manager import ImageExportManager
+from .beat_selection_overlay import BeatSelectionOverlay
+from .start_pos_beat import StartPositionBeat
+from .start_pos_beat import StartPositionBeatView
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from main_window.main_widget.dictionary_widget.dictionary_widget import DictionaryWidget
+    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import SequenceWidget
+
+from .beat import BeatView
 
 
-class TempBeatFrame(BaseBeatFrame):
-    """ The purpose of this class is to create images for use within the dictionary or the sequence card tab.
-    This beat frame is never seen by the user."""
-
-    def __init__(self, dictionary: "DictionaryWidget") -> None:
-        super().__init__(dictionary.main_widget)
-        self.main_widget = dictionary.main_widget
+class SequenceWidgetBeatFrame(BaseBeatFrame):
+    def __init__(self, sequence_widget: "SequenceWidget") -> None:
+        super().__init__(sequence_widget.main_widget)
+        self.main_widget = sequence_widget.main_widget
         self.json_manager = self.main_widget.json_manager
-        self.dictionary_widget = dictionary
-        self.top_builder_widget = self.main_widget.top_builder_widget
+        self.sequence_widget = sequence_widget
+        self.top_builder_widget = sequence_widget.top_builder_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
 
         self.initialized = True
@@ -43,10 +42,15 @@ class TempBeatFrame(BaseBeatFrame):
             beat.hide()
 
     def _setup_components(self) -> None:
-        self.layout_manager = TempBeatFrameLayoutManager(self)
+        self._setup_start_position_beat()
+        self.selection_overlay = BeatSelectionOverlay(self)
+        self.layout_manager = BeatFrameLayoutManager(self)
+        self.beat_deletion_manager = BeatDeletionManager(self)
+        self.image_export_manager = ImageExportManager(self, SequenceWidgetBeatFrame)
+
+    def _setup_start_position_beat(self):
         self.start_pos_view = StartPositionBeatView(self)
         self.start_pos = StartPositionBeat(self)
-        self.export_manager = ImageExportManager(self, TempBeatFrame)
 
     def _setup_layout(self) -> None:
         self.layout: QGridLayout = QGridLayout(self)
@@ -54,26 +58,49 @@ class TempBeatFrame(BaseBeatFrame):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.start_pos_view.start_pos.initializer.set_nonradial_points_visibility(False)
         self.layout.addWidget(self.start_pos_view, 0, 0)
         for i, beat in enumerate(self.beats):
             row, col = divmod(i, 8)
             self.layout.addWidget(beat, row + 1, col + 1)
         self.layout_manager.configure_beat_frame(16)
 
+    def keyPressEvent(self, event: "QKeyEvent") -> None:
+        if event.key() == Qt.Key.Key_Delete or event.key() == Qt.Key.Key_Backspace:
+            self.beat_deletion_manager.delete_selected_beat()
+        else:
+            super().keyPressEvent(event)
+
+    def delete_selected_beat(self) -> None:
+        self.beat_deletion_manager.delete_selected_beat()
 
     def add_beat_to_sequence(self, new_beat: "Pictograph") -> None:
         next_beat_index = self.find_next_available_beat()
-
-        if (
-            next_beat_index is not None
-            and self.beats[next_beat_index].is_filled is False
-        ):
-            self.beats[next_beat_index].set_beat(new_beat, next_beat_index + 1)
-            self.json_manager.updater.update_current_sequence_file_with_beat(
-                self.beats[next_beat_index]
-            )
-            self.update_current_word()
-            self.adjust_layout_to_sequence_length()
+        if next_beat_index == 0:
+            self.sequence_widget.difficulty_label.set_difficulty_level(1)
+        grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
+        if grow_sequence:
+            if (
+                next_beat_index is not None
+                and self.beats[next_beat_index].is_filled is False
+            ):
+                self.beats[next_beat_index].set_beat(new_beat, next_beat_index + 1)
+                self.json_manager.updater.update_current_sequence_file_with_beat(
+                    self.beats[next_beat_index]
+                )
+                self.sequence_widget.update_current_word()
+                self.adjust_layout_to_sequence_length()
+        elif not grow_sequence:
+            if (
+                next_beat_index is not None
+                and self.beats[next_beat_index].is_filled is False
+                and self.beats[next_beat_index].isVisible()
+            ):
+                self.beats[next_beat_index].set_beat(new_beat, next_beat_index + 1)
+                self.json_manager.updater.update_current_sequence_file_with_beat(
+                    self.beats[next_beat_index]
+                )
+                self.sequence_widget.update_current_word()
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):
@@ -96,6 +123,7 @@ class TempBeatFrame(BaseBeatFrame):
             self.json_manager.loader_saver.load_current_sequence_json()
         )
         self.propogate_turn_adjustment(current_sequence_json)
+        self.sequence_widget.update_difficulty_label()
 
     def propogate_turn_adjustment(self, current_sequence_json) -> None:
         for i, entry in enumerate(current_sequence_json):
@@ -108,7 +136,7 @@ class TempBeatFrame(BaseBeatFrame):
                 if beat:
                     if beat.pictograph_dict != entry:
                         beat.updater.update_pictograph(entry)
-                        # QApplication.processEvents()
+                        QApplication.processEvents()
 
     def update_start_pos_from_current_sequence_json(self, entry: dict) -> None:
         entry["red_attributes"]["start_ori"] = entry["red_attributes"]["end_ori"]
@@ -122,6 +150,35 @@ class TempBeatFrame(BaseBeatFrame):
                 return i
         return 0
 
+    def resize_beat_frame(self) -> None:
+        scrollbar_width = self.sequence_widget.scroll_area.verticalScrollBar().width()
+        width = int(
+            (
+                self.sequence_widget.width()
+                - self.sequence_widget.button_frame.width()
+                - scrollbar_width
+            )
+            * 0.8
+        )
+
+        height = (
+            self.sequence_widget.height()
+            - self.sequence_widget.graph_editor.height() * 0.8
+        )
+
+        num_cols = max(1, self.layout.columnCount() - 1)
+        if num_cols == 0:
+            return
+
+        beat_size = min(int(width // (5)), int(height // 6))
+        for beat in self.beats:
+            beat.setFixedSize(beat_size, beat_size)
+        self.start_pos_view.setFixedSize(beat_size, beat_size)
+        for beat in self.beats:
+            beat.resize_beat_view()
+        self.start_pos_view.resize_beat_view()
+        self.selection_overlay.update_overlay_position()
+
     def populate_beat_frame_from_json(
         self, current_sequence_json: list[dict[str, str]]
     ) -> None:
@@ -131,7 +188,7 @@ class TempBeatFrame(BaseBeatFrame):
         self.sequence_builder = self.main_widget.top_builder_widget.sequence_builder
         if not current_sequence_json:
             return
-        self.clear_sequence(
+        self.sequence_widget.button_frame.clear_sequence(
             show_indicator=False, should_reset_to_start_pos_picker=False
         )
         start_pos_beat = self.start_pos_manager.convert_current_sequence_json_entry_to_start_pos_pictograph(
@@ -142,9 +199,13 @@ class TempBeatFrame(BaseBeatFrame):
         for pictograph_dict in current_sequence_json[1:]:
             if pictograph_dict.get("sequence_start_position"):
                 continue
-            self.populate_sequence(pictograph_dict)
-
-        last_beat = self.get_last_filled_beat().beat
+            self.sequence_widget.populate_sequence(pictograph_dict)
+        self.sequence_widget.update_current_word()
+        if len(current_sequence_json) > 2:
+            self.sequence_widget.update_difficulty_label()
+        else:
+            self.sequence_widget.difficulty_label.set_difficulty_level("")
+        last_beat = self.sequence_widget.beat_frame.get_last_filled_beat().beat
         self.sequence_builder.last_beat = last_beat
 
         if self.sequence_builder.start_pos_picker.isVisible():
@@ -162,33 +223,3 @@ class TempBeatFrame(BaseBeatFrame):
 
         scroll_area.add_and_display_relevant_pictographs(next_options)
         self.sequence_builder.option_picker.resize_option_picker()
-
-    def populate_sequence(self, pictograph_dict: dict) -> None:
-        pictograph = Beat(self)
-        pictograph.updater.update_pictograph(pictograph_dict)
-        self.add_beat_to_sequence(pictograph)
-        self.update_current_word()
-
-    def update_current_word(self):
-        self.current_word = self.get_current_word()
-
-    def clear_sequence(
-        self, show_indicator=True, should_reset_to_start_pos_picker=True
-    ) -> None:
-        self._reset_beat_frame()
-
-        if should_reset_to_start_pos_picker:
-            self.sequence_builder.reset_to_start_pos_picker()
-        self.sequence_builder.last_beat = self.start_pos
-        self.json_manager.loader_saver.clear_current_sequence_file()
-
-        # Reset the layout to the smallest possible amount
-        if self.settings_manager.global_settings.get_grow_sequence():
-            self.layout_manager.configure_beat_frame(0)
-
-    def _reset_beat_frame(self) -> None:
-        for beat_view in self.beats:
-            beat_view.setScene(beat_view.blank_beat)
-            beat_view.is_filled = False
-        self.start_pos_view.setScene(self.start_pos_view.blank_beat)
-        self.start_pos_view.is_filled = False

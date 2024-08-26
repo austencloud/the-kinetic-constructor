@@ -5,16 +5,18 @@ from PyQt6.QtGui import QWheelEvent
 
 from Enums.letters import LetterType
 from data.constants import BLUE, RED
-from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.scroll_area.option_picker_display_manager import OptionPickerDisplayManager
-from main_window.main_widget.top_builder_widget.sequence_builder.sequence_builder import SequenceBuilder
+from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_pictograph_factory import OptionPickerPictographFactory
+from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_manager import OptionPickerSectionManager
 from widgets.base_widgets.base_picker_scroll_area import BasePickerScrollArea
 from widgets.pictograph.pictograph import Pictograph
 
-from .option_picker_section_manager import OptionPickerSectionManager
-from .option_picker_pictograph_factory import OptionPickerPictographFactory
+from .option_picker_display_manager import (
+    OptionPickerDisplayManager,
+)
 
 
 if TYPE_CHECKING:
+    from main_window.main_widget.top_builder_widget.sequence_builder.sequence_builder import SequenceBuilder
     from ..option_picker import OptionPicker
 
 
@@ -154,5 +156,5 @@ class OptionPickerScrollArea(BasePickerScrollArea):
                     self.layout.insertWidget(section_index, section, 6)
                 else:
                     self.layout.insertWidget(section_index, section, 4)
-            elif section.__class__.__name__ == "SectionGroupWidget":
+            elif section.__class__.__name__ == "OptionPickerSectionGroupWidget":
                 self.layout.insertWidget(section_index, section, 4)

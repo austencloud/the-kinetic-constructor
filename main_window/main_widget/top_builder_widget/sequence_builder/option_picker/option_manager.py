@@ -5,9 +5,8 @@ from typing import TYPE_CHECKING
 from widgets.pictograph.pictograph import Pictograph
 
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker.option_picker import (
-        OptionPicker,
-    )
+    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker import OptionPicker
+
 
 
 class OptionManager(QObject):

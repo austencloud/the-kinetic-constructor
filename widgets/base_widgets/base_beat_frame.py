@@ -2,10 +2,12 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QGridLayout
 from PyQt6.QtCore import Qt
 
-from widgets.sequence_widget.beat_frame.beat import BeatView
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import BeatView
+
+
 
 if TYPE_CHECKING:
-    from widgets.main_widget.main_widget import MainWidget
+    from main_window.main_widget.main_widget import MainWidget
 
 
 class BaseBeatFrame(QFrame):

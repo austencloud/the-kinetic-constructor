@@ -2,9 +2,13 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.beat_frame.beat import Beat
+    from main_window.main_widget.top_builder_widget.sequence_builder.sequence_builder import (
+        SequenceBuilder,
+    )
+    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
+        Beat,
+    )
     from widgets.pictograph.pictograph import Pictograph
-    from widgets.sequence_builder.sequence_builder import SequenceBuilder
 
 
 class AddToSequenceManager:
@@ -12,7 +16,9 @@ class AddToSequenceManager:
         self.sequence_builder = sequence_builder
 
     def create_new_beat(self, clicked_option: "Pictograph") -> "Beat":
-        from widgets.sequence_widget.beat_frame.beat import Beat
+        from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
+            Beat,
+        )
 
         new_beat = Beat(
             clicked_option.main_widget.top_builder_widget.sequence_widget.beat_frame
