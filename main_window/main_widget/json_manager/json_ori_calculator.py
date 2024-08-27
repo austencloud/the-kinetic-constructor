@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import Handpaths
-from Enums.MotionAttributes import  Location
+from Enums.MotionAttributes import Location
 from data.constants import (
     ANTI,
     CCW_HANDPATH,
@@ -21,6 +21,7 @@ from data.constants import (
     STATIC_HANDPATH,
     WEST,
 )
+
 if TYPE_CHECKING:
     from main_window.main_widget.json_manager.json_manager import JSON_Manager
 
@@ -31,10 +32,14 @@ class JsonOriCalculator:
 
     def calculate_end_orientation(self, pictograph_dict, color: str):
         motion_type = pictograph_dict[f"{color}_attributes"]["motion_type"]
-        turns = float(pictograph_dict[f"{color}_attributes"]["turns"])
+        if (pictograph_dict[f"{color}_attributes"]["turns"]) != "fl":
+            turns = float(pictograph_dict[f"{color}_attributes"]["turns"])
+        else:
+            turns = pictograph_dict[f"{color}_attributes"]["turns"]
         start_ori = pictograph_dict[f"{color}_attributes"]["start_ori"]
         prop_rot_dir = pictograph_dict[f"{color}_attributes"]["prop_rot_dir"]
-
+        start_loc = pictograph_dict[f"{color}_attributes"]["start_loc"]
+        end_loc = pictograph_dict[f"{color}_attributes"]["end_loc"]
         if motion_type == "float":
             handpath_direction = self.get_handpath_direction(
                 pictograph_dict[f"{color}_attributes"]["start_loc"],
@@ -43,13 +48,19 @@ class JsonOriCalculator:
             return self.calculate_float_orientation(start_ori, handpath_direction)
         else:
             return self.calculate_turn_orientation(
-                motion_type, turns, start_ori, prop_rot_dir
+                motion_type, turns, start_ori, prop_rot_dir, start_loc, end_loc
             )
 
-    def calculate_turn_orientation(self, motion_type, turns, start_ori, prop_rot_dir):
+    def calculate_turn_orientation(
+        self, motion_type, turns, start_ori, prop_rot_dir, start_loc, end_loc
+    ):
         if turns in [0, 1, 2, 3]:
             return self.calculate_whole_turn_orientation(
                 motion_type, turns, start_ori, prop_rot_dir
+            )
+        elif turns == "fl":
+            return self.calculate_float_orientation(
+                start_ori, self.get_handpath_direction(start_loc, end_loc)
             )
         else:
             return self.calculate_half_turn_orientation(

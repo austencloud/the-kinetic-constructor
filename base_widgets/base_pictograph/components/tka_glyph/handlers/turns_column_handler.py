@@ -7,9 +7,7 @@ from typing import TYPE_CHECKING, Union
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.components.tka_glyph.tka_glyph import (
-        TKA_Glyph,
-    )
+    from base_widgets.base_pictograph.components.tka_glyph.tka_glyph import TKA_Glyph
 
 
 class TurnsColumnHandler(QGraphicsItemGroup):
@@ -22,12 +20,15 @@ class TurnsColumnHandler(QGraphicsItemGroup):
         self.blank_svg_path = get_images_and_data_path("images/blank.svg")
         self.number_svg_cache = {}
 
-    def load_number_svg(self, number: Union[int, float]) -> QGraphicsSvgItem:
-        svg_path = (
-            self.blank_svg_path
-            if number == 0
-            else f"{self.svg_path_prefix}{number}.svg"
-        )
+    def load_number_svg(self, number: Union[int, float, str]) -> QGraphicsSvgItem:
+        if number == "fl":  # Handle the float case
+            svg_path = get_images_and_data_path("images/float.svg")
+        else:
+            svg_path = (
+                self.blank_svg_path
+                if number == 0
+                else f"{self.svg_path_prefix}{number}.svg"
+            )
 
         if svg_path not in self.number_svg_cache:
             renderer = QSvgRenderer(svg_path)
@@ -42,10 +43,7 @@ class TurnsColumnHandler(QGraphicsItemGroup):
         number_item.setSharedRenderer(renderer)
         return number_item
 
-    def convert_number_to_int_if_whole_number(self, number: Union[int, float]) -> int:
-        return int(number) if number == int(number) else number
-
-    def set_number(self, number: Union[int, float], is_top: bool) -> None:
+    def set_number(self, number: Union[int, float, str], is_top: bool) -> None:
         new_item = self.load_number_svg(number)
         old_item = self.top_number_item if is_top else self.bottom_number_item
 
@@ -90,7 +88,7 @@ class TurnsColumnHandler(QGraphicsItemGroup):
             self.bottom_number_item.setPos(base_pos_x, adjusted_low_pos_y)
 
     def update_turns(
-        self, top_turn: Union[int, float], bottom_turn: Union[int, float]
+        self, top_turn: Union[int, float, str], bottom_turn: Union[int, float, str]
     ) -> None:
         self.set_number(top_turn, is_top=True)
         self.set_number(bottom_turn, is_top=False)

@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from data.constants import ANTI, DASH, PRO, STATIC
+from data.constants import ANTI, DASH, FLOAT, PRO, STATIC
 from PyQt6.QtCore import QPointF
 from objects.arrow.arrow import Arrow
 
@@ -13,7 +13,7 @@ class ArrowInitialPosCalculator:
         self.pictograph: "BasePictograph" = placement_manager.pictograph
 
     def get_initial_pos(self, arrow: Arrow) -> QPointF:
-        if arrow.motion.motion_type in [PRO, ANTI]:
+        if arrow.motion.motion_type in [PRO, ANTI, FLOAT]:
             return self._get_diamond_shift_pos(arrow)
         elif arrow.motion.motion_type in [STATIC, DASH]:
             return self._get_diamond_static_dash_pos(arrow)

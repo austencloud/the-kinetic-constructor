@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 from Enums.Enums import Turns
 from .managers.motion_checker import MotionChecker
@@ -35,7 +35,7 @@ class Motion:
 
     pictograph: "BasePictograph"
     color: str
-    turns: Turns
+    turns: Union[int, str]
     arrow: "Arrow"
     prop: "Prop"
     motion_type: MotionType
@@ -45,3 +45,4 @@ class Motion:
     end_ori: Orientations
     prop_rot_dir: PropRotDir
     lead_state: LeadStates = None
+    prefloat_motion_type: str = None

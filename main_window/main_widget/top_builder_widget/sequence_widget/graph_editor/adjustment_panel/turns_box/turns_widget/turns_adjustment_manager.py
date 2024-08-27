@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 class TurnsAdjustmentManager(QObject):
-    turns_adjusted = pyqtSignal(float)
+    turns_adjusted = pyqtSignal(object)  # Signal can now handle any type
 
     def __init__(self, turns_widget: "TurnsWidget") -> None:
         super().__init__(turns_widget)

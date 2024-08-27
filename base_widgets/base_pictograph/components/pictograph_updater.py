@@ -56,6 +56,8 @@ class PictographUpdater:
             self.override_motion_type_if_necessary(pictograph_dict, motion)
             if motion_dicts.get(motion.color) is not None:
                 self.show_graphical_objects(motion.color)
+            if motion_dicts[motion.color]["turns"] == "fl":
+                motion.turns = "fl"  # Handle float explicitly
             motion.updater.update_motion(motion_dicts[motion.color])
 
     def _set_lead_states(self):

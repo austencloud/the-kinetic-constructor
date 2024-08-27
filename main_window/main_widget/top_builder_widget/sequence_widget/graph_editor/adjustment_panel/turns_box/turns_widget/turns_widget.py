@@ -43,9 +43,12 @@ class TurnsWidget(QWidget):
     def on_turns_label_clicked(self) -> None:
         self.direct_set_dialog.show_direct_set_dialog()
 
-    def update_turns_display(self, turns: Union[int, float]) -> None:
-        self.turns_display_frame.turns_label.setText(str(turns))
-        self.turns_display_frame.decrement_button.setEnabled(float(turns) > 0)
+    def update_turns_display(
+        self, turns: Union[int, float, str]
+    ) -> None:  # Add str type
+        display_value = "fl" if turns == "fl" else str(turns)  # Display 'fl' for float
+        self.turns_display_frame.turns_label.setText(display_value)
+        self.turns_display_frame.decrement_button.setEnabled(turns not in [0, "fl"])
 
     def resize_turns_widget(self) -> None:
         self.turns_display_frame.resize_turns_display_frame()

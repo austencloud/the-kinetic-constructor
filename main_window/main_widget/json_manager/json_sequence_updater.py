@@ -2,7 +2,9 @@ from typing import TYPE_CHECKING, Union
 from Enums.PropTypes import PropType
 
 from data.constants import BLUE, DASH, NO_ROT, RED, STATIC
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import BeatView
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
+    BeatView,
+)
 
 if TYPE_CHECKING:
     from main_window.main_widget.json_manager.json_manager import JSON_Manager
@@ -50,6 +52,13 @@ class JsonSequenceUpdater:
         sequence[0]["prop_type"] = prop_type.name.lower()
         self.json_manager.loader_saver.save_current_sequence(sequence)
 
+    def update_motion_type_in_json_at_index(
+        self, index: int, color: str, motion_type: str
+    ) -> None:
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence[index][f"{color}_attributes"]["motion_type"] = motion_type
+        self.json_manager.loader_saver.save_current_sequence(sequence)
+
     def update_turns_in_json_at_index(
         self, index: int, color: str, turns: Union[int, float]
     ) -> None:
@@ -59,14 +68,24 @@ class JsonSequenceUpdater:
             sequence[index], color
         )
         sequence[index][f"{color}_attributes"]["end_ori"] = end_ori
-
-        if sequence[index][f"{color}_attributes"]["turns"] > 0:
+        if sequence[index][f"{color}_attributes"]["turns"] != "fl":
+            if sequence[index][f"{color}_attributes"]["turns"] > 0:
+                pictograph = self.json_manager.main_widget.top_builder_widget.sequence_widget.beat_frame.beats[
+                    index - 2
+                ].beat
+                if pictograph:
+                    motion = pictograph.get.motion_by_color(color)
+                    prop_rot_dir = motion.prop_rot_dir
+                    sequence[index][f"{color}_attributes"][
+                        "prop_rot_dir"
+                    ] = prop_rot_dir
+        elif sequence[index][f"{color}_attributes"]["turns"] == "fl":
             pictograph = self.json_manager.main_widget.top_builder_widget.sequence_widget.beat_frame.beats[
                 index - 2
             ].beat
             if pictograph:
                 motion = pictograph.get.motion_by_color(color)
-                prop_rot_dir = motion.prop_rot_dir
+                prop_rot_dir = NO_ROT
                 sequence[index][f"{color}_attributes"]["prop_rot_dir"] = prop_rot_dir
 
         if sequence[index][f"{color}_attributes"]["motion_type"] in [DASH, STATIC]:

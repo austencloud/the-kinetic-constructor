@@ -2,6 +2,7 @@ import json
 from Enums.letters import LetterConditions
 from data.constants import (
     ANTI,
+    FLOAT,
     NONRADIAL,
     CLOCK,
     COUNTER,
@@ -35,7 +36,11 @@ class DefaultArrowPositioner:
     def _load_default_placements(
         self, motion_type: str
     ) -> dict[str, dict[str, list[int]]]:
-        json_filename = self.motion_type_files.get(motion_type)
+        if motion_type == FLOAT:
+            motion_type_to_use = PRO
+        else:
+            motion_type_to_use = motion_type
+        json_filename = self.motion_type_files.get(motion_type_to_use)
         json_path = get_images_and_data_path(
             f"data/arrow_placement/default/{json_filename}"
         )

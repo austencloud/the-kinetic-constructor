@@ -1,6 +1,7 @@
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtSvg import QSvgRenderer
-
+from PyQt6.QtWidgets import QGraphicsTextItem
+from PyQt6.QtGui import QFont
 from Enums.Enums import LetterType
 
 from typing import TYPE_CHECKING
@@ -51,3 +52,4 @@ class TKALetterHandler:
             - (self.letter_item.boundingRect().height() * 1.7)
         )
         self.letter_item.setPos(x, y)
+
