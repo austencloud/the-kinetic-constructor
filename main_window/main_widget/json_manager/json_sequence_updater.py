@@ -47,8 +47,6 @@ class JsonSequenceUpdater:
             # Save the updated sequence back to the JSON
             self.json_manager.loader_saver.save_current_sequence(sequence)
 
-
-
     def update_prop_type_in_json(self, prop_type: PropType) -> None:
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
         sequence[0]["prop_type"] = prop_type.name.lower()
@@ -61,11 +59,23 @@ class JsonSequenceUpdater:
         sequence[index][f"{color}_attributes"]["prefloat_motion_type"] = motion_type
         self.json_manager.loader_saver.save_current_sequence(sequence)
 
+    def update_prefloat_prop_rot_dir_in_json_at_index(
+        self, index: int, color: str, prop_rot_dir: str
+    ) -> None:
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence[index][f"{color}_attributes"]["prefloat_prop_rot_dir"] = prop_rot_dir
+        self.json_manager.loader_saver.save_current_sequence(sequence)
+
     def update_motion_type_in_json_at_index(
         self, index: int, color: str, motion_type: str
     ) -> None:
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
         sequence[index][f"{color}_attributes"]["motion_type"] = motion_type
+        # if the turns is not "fl", then delete the prefloat motion_type
+        if sequence[index][f"{color}_attributes"]["turns"] != "fl":
+            if "prefloat_motion_type" in sequence[index][f"{color}_attributes"]:
+                del sequence[index][f"{color}_attributes"]["prefloat_motion_type"]
+
         self.json_manager.loader_saver.save_current_sequence(sequence)
 
     def update_turns_in_json_at_index(
@@ -89,8 +99,8 @@ class JsonSequenceUpdater:
                         "prop_rot_dir"
                     ] = prop_rot_dir
                 # if there's a prefloat prop_rot_dir in the json, remove that entirely
-                if "prefloat_prop_rot_dir" in sequence[index][f"{color}_attributes"]:
-                    del sequence[index][f"{color}_attributes"]["prefloat_prop_rot_dir"]
+            if "prefloat_prop_rot_dir" in sequence[index][f"{color}_attributes"]:
+                del sequence[index][f"{color}_attributes"]["prefloat_prop_rot_dir"]
         elif sequence[index][f"{color}_attributes"]["turns"] == "fl":
             pictograph = self.json_manager.main_widget.top_builder_widget.sequence_widget.beat_frame.beats[
                 index - 2
@@ -98,11 +108,7 @@ class JsonSequenceUpdater:
             if pictograph:
                 motion = pictograph.get.motion_by_color(color)
                 prop_rot_dir = NO_ROT
-                prefloat_prop_rot_dir = motion.prefloat_prop_rot_dir
                 sequence[index][f"{color}_attributes"]["prop_rot_dir"] = prop_rot_dir
-                sequence[index][f"{color}_attributes"][
-                    "prefloat_prop_rot_dir"
-                ] = prefloat_prop_rot_dir
 
         if sequence[index][f"{color}_attributes"]["motion_type"] in [DASH, STATIC]:
             if sequence[index][f"{color}_attributes"]["turns"] == 0:
@@ -112,11 +118,15 @@ class JsonSequenceUpdater:
         self.json_manager.loader_saver.save_current_sequence(sequence)
         self.update_sequence_properties()
 
-    def update_rot_dir_in_json_at_index(
+    def update_prop_rot_dir_in_json_at_index(
         self, index: int, color: str, prop_rot_dir: str
     ) -> None:
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
         sequence[index][f"{color}_attributes"]["prop_rot_dir"] = prop_rot_dir
+        # if the turns is not "fl", then delete the prefloat prop_rot_dir
+        if sequence[index][f"{color}_attributes"]["turns"] != "fl":
+            if "prefloat_prop_rot_dir" in sequence[index][f"{color}_attributes"]:
+                del sequence[index][f"{color}_attributes"]["prefloat_prop_rot_dir"]
         self.json_manager.loader_saver.save_current_sequence(sequence)
 
     def apply_turn_pattern_to_current_sequence(self, pattern: list[tuple]) -> None:

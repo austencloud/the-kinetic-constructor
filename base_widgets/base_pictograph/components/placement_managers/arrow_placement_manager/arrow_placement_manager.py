@@ -35,4 +35,4 @@ class ArrowPlacementManager:
         adjustment = self.adjustment_calculator.get_adjustment(arrow)
         new_pos = initial_pos + adjustment - arrow.boundingRect().center()
         arrow.setPos(new_pos)
-        arrow.rot_angle_calculator.update_rotation()
+        arrow.rot_angle_manager.update_rotation()

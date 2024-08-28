@@ -43,7 +43,7 @@ class PictographUpdater:
 
     def _update_from_pictograph_dict(self, pictograph_dict: dict) -> None:
         self.pictograph.attr_manager.update_attributes(pictograph_dict)
-        motion_dicts = self.get_motion_dicts_from_pictograph_dict(pictograph_dict)
+        motion_dicts = self._get_motion_dicts(pictograph_dict)
         self.pictograph.letter_type = LetterType.get_letter_type(self.pictograph.letter)
         self.pictograph.container.update_borders()
         red_arrow_dict, blue_arrow_dict = self.get_arrow_dicts(pictograph_dict)
@@ -57,7 +57,7 @@ class PictographUpdater:
             if motion_dicts.get(motion.color) is not None:
                 self.show_graphical_objects(motion.color)
             if motion_dicts[motion.color]["turns"] == "fl":
-                motion.turns = "fl" 
+                motion.turns = "fl"
             motion.updater.update_motion(motion_dicts[motion.color])
 
     def _set_lead_states(self):
@@ -127,7 +127,7 @@ class PictographUpdater:
         if turns_key in pictograph_dict:
             motion.turns = pictograph_dict[turns_key]
 
-    def get_motion_dicts_from_pictograph_dict(self, pictograph_dict: dict) -> dict:
+    def _get_motion_dicts(self, pictograph_dict: dict) -> dict:
         # Convert the dict to a hashable type (tuple of tuples)
         hashable_dict = self._dict_to_hashable(pictograph_dict)
         return self._get_motion_dicts_from_pictograph_dict(hashable_dict)
@@ -154,7 +154,14 @@ class PictographUpdater:
                 for attr in motion_attributes
                 if attr in motion_dict
             }
-
+        if pictograph_dict.get(f"{color}_attributes").get("prefloat_motion_type"):
+            motion_dicts[color]["prefloat_motion_type"] = pictograph_dict.get(
+                f"{color}_attributes"
+            ).get("prefloat_motion_type")
+        else:
+            motion_dicts[color]["prefloat_motion_type"] = motion_dicts[color].get(
+                "motion_type"
+            )
         return motion_dicts
 
     def _dict_to_hashable(self, d):

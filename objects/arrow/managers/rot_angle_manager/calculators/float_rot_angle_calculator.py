@@ -7,17 +7,20 @@ class FloatRotAngleCalculator(BaseRotAngleCalculator):
         direction_map = self._float_direction_map()
         prop_rot_dir = self.arrow.motion.prop_rot_dir
         loc = self.arrow.loc
-        return direction_map.get(prop_rot_dir, {}).get(loc, 0)
+        handpath_direction = self.arrow.motion.ori_calculator.get_handpath_direction(
+            self.arrow.motion.start_loc, self.arrow.motion.end_loc
+        )
+        return direction_map.get(handpath_direction, {}).get(loc, 0)
 
     def _float_direction_map(self):
         return {
-            CLOCKWISE: {
+            CW_HANDPATH: {
                 NORTHEAST: 0,
                 SOUTHEAST: 90,
                 SOUTHWEST: 180,
                 NORTHWEST: 270,
             },
-            COUNTER_CLOCKWISE: {
+            CCW_HANDPATH: {
                 NORTHEAST: 270,
                 SOUTHEAST: 180,
                 SOUTHWEST: 90,

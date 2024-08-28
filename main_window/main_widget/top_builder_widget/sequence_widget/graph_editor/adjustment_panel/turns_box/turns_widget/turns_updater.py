@@ -38,34 +38,49 @@ class TurnsUpdater:
             motion.prefloat_motion_type = motion.motion_type
             motion.prefloat_prop_rot_dir = motion.prop_rot_dir
             motion.motion_type = FLOAT
-            pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
-            self.json_manager.updater.update_motion_type_in_json_at_index(
-                pictograph_index + 2, motion.color, FLOAT
+            motion.prop_rot_dir = NO_ROT
+            beat_index = self.beat_frame.get_index_of_currently_selected_beat()
+            json_index = beat_index + 2
+            self.json_manager.updater.update_turns_in_json_at_index(
+                json_index, motion.color, new_turns
             )
-            #update_prefloat_motion_type_in_json_at_index
+
+            self.json_manager.updater.update_motion_type_in_json_at_index(
+                json_index, motion.color, FLOAT
+            )
             self.json_manager.updater.update_prefloat_motion_type_in_json_at_index(
-                pictograph_index + 2, motion.color, motion.prefloat_motion_type
+                json_index, motion.color, motion.prefloat_motion_type
             )
-                
+            self.json_manager.updater.update_prop_rot_dir_in_json_at_index(
+                json_index, motion.color, motion.prop_rot_dir
+            )
+            self.json_manager.updater.update_prefloat_prop_rot_dir_in_json_at_index(
+                json_index, motion.color, motion.prefloat_prop_rot_dir
+            )
         else:
-            if motion.turns == "fl":
+            if motion.motion_type == FLOAT:
                 motion.motion_type = motion.prefloat_motion_type
-                motion.prop_rot_dir = motion.prefloat_prop_rot_dir
-            pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
-            self.json_manager.updater.update_motion_type_in_json_at_index(
-                pictograph_index + 2, motion.color, motion.motion_type
+                motion.prop_rot_dir = (
+                    self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json_at_index(
+                        self.beat_frame.get_index_of_currently_selected_beat() + 2,
+                        motion.color,
+                    )
+                )
+            beat_index = self.beat_frame.get_index_of_currently_selected_beat()
+            self.json_manager.updater.update_turns_in_json_at_index(
+                beat_index + 2, motion.color, new_turns
             )
-            self.json_manager.updater.update_rot_dir_in_json_at_index(
-                pictograph_index + 2, motion.color, motion.prop_rot_dir
+
+            self.json_manager.updater.update_motion_type_in_json_at_index(
+                beat_index + 2, motion.color, motion.motion_type
+            )
+            prefloat_prop_rot_dir = self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json_at_index(
+                beat_index + 2, motion.color
+            )
+            self.json_manager.updater.update_prop_rot_dir_in_json_at_index(
+                beat_index + 2, motion.color, prefloat_prop_rot_dir
             )
         self._update_turns(motion, new_turns)
-        other_motion_color = RED if motion.color == BLUE else BLUE
-        other_motion = motion.pictograph.get.other_motion(motion)
-        arrow_dict = {
-            f"{motion.color}_attributes": {"turns": new_turns},
-            f"{other_motion_color}_attributes": {"turns": other_motion.turns},
-        }
-        motion.pictograph.updater.update_pictograph(arrow_dict)
         self._repaint_views(motion)
 
     def _repaint_views(self, motion: "Motion"):

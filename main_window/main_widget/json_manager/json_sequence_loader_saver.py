@@ -96,6 +96,17 @@ class JsonSequenceLoaderSaver:
     def clear_current_sequence_file(self):
         self.save_current_sequence([])
 
+    def get_prefloat_prop_rot_dir_from_json_at_index(
+        self, index: int, color: str
+    ) -> int:
+        sequence = self.load_current_sequence_json()
+        if sequence:
+            return sequence[index][f"{color}_attributes"].get(
+                "prefloat_prop_rot_dir",
+                sequence[index][f"{color}_attributes"].get("prop_rot_dir", 0),
+            )
+        return 0
+
     def get_index_for_pictograph(self, pictograph: Dict) -> int:
         sequence = self.load_current_sequence_json()
         for i, entry in enumerate(sequence):

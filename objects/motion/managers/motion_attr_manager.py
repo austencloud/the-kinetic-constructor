@@ -20,10 +20,11 @@ class MotionAttrManager:
         for attribute, value in motion_dict.items():
             if value is not None:
                 setattr(self.motion, attribute, value)
-
-        if self.motion.motion_type:
-            self.motion.end_ori = self.motion.ori_calculator.get_end_ori()
-            self.motion.prefloat_motion_type = self.motion.motion_type
+        if self.motion.check.is_shift():
+            if "prefloat_motion_type" not in motion_dict:
+                self.motion.prefloat_motion_type = self.motion.motion_type
+            # if "prefloat_prop_rot_dir" not in motion_dict:
+            #     self.motion.prefloat_prop_rot_dir = self.motion.prop_rot_dir
         if self.motion.pictograph.letter in [
             Letter.S,
             Letter.T,

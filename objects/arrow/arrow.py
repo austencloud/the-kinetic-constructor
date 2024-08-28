@@ -45,7 +45,7 @@ class Arrow(GraphicalObject):
     def setup_components(self):
         self.location_calculator = ArrowLocationManager(self)
         self.mouse_event_handler = ArrowMouseEventHandler(self)
-        self.rot_angle_calculator = ArrowRotAngleManager(self)
+        self.rot_angle_manager = ArrowRotAngleManager(self)
         self.mirror_manager = ArrowMirrorHandler(self)
         self.attr_manager = ArrowAttrHandler(self)
         self.updater = ArrowUpdater(self)

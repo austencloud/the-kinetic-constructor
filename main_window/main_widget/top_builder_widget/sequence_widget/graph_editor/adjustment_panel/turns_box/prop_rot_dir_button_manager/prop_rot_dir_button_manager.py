@@ -87,7 +87,7 @@ class PropRotDirButtonManager:
             motion.color + "_attributes": {"prop_rot_dir": prop_rot_dir},
         }
         motion.pictograph.updater.update_pictograph(pictograph_dict)
-        self.json_manager.updater.update_rot_dir_in_json_at_index(
+        self.json_manager.updater.update_prop_rot_dir_in_json_at_index(
             pictograph_index + 2, motion.color, prop_rot_dir
         )
 
