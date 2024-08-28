@@ -18,7 +18,6 @@ class GE_TurnsLabel(QLabel):
         super().__init__()
         self.turns_box = turns_display_frame.turns_box
         self.turns_display_font_size = 20
-        self.set_turn_display_styles()
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def mousePressEvent(self, event):
@@ -27,13 +26,13 @@ class GE_TurnsLabel(QLabel):
 
     def enterEvent(self, event) -> None:
         self.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.set_turn_display_styles(mouse_over=True)
+        # self.resize_turns_label(mouse_over=True)
 
     def leaveEvent(self, event) -> None:
         self.setCursor(Qt.CursorShape.ArrowCursor)
-        self.set_turn_display_styles()
+        # self.resize_turns_label()
 
-    def set_turn_display_styles(self, mouse_over=False) -> None:
+    def resize_turns_label(self, mouse_over=False) -> None:
         self.turns_display_font_size = int(
             (self.turns_box.adjustment_panel.graph_editor.width() / 20)
         )

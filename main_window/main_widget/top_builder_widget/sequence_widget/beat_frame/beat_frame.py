@@ -193,9 +193,9 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         self.sequence_builder = self.main_widget.top_builder_widget.sequence_builder
         if not current_sequence_json:
             return
-        self.sequence_widget.button_frame.clear_sequence(
-            show_indicator=False, should_reset_to_start_pos_picker=False
-        )
+        # self.sequence_widget.button_frame.clear_sequence(
+        #     show_indicator=False, should_reset_to_start_pos_picker=False
+        # )
         start_pos_beat = self.start_pos_manager.convert_current_sequence_json_entry_to_start_pos_pictograph(
             current_sequence_json
         )

@@ -52,12 +52,13 @@ class TurnsDisplayFrame(QFrame):
         self.turns_label.clicked.connect(self.turns_widget.on_turns_label_clicked)
 
     def resize_turns_display_frame(self) -> None:
-        self.turns_label.set_turn_display_styles()
-        self.set_button_styles()
+        self.turns_label.resize_turns_label()
+        self.resize_adjust_turns_buttons()
 
-    def set_button_styles(self) -> None:
+    def resize_adjust_turns_buttons(self) -> None:
         for button in [self.increment_button, self.decrement_button]:
             button.resize_adjust_turns_button()
+
     def adjust_turn(self, adjustment: Union[int, float]) -> None:
         current_turns = self.turns_widget.adjustment_manager.get_current_turns_value()
         if current_turns == 0 and adjustment < 0:

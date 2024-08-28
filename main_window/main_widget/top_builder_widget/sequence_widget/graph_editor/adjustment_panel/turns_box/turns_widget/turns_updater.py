@@ -36,10 +36,18 @@ class TurnsUpdater:
 
     def set_motion_turns(self, motion: "Motion", new_turns: Turns) -> None:
         if new_turns == "fl":
-            # motion.prefloat_motion_type = motion.motion_type
-            # motion.prefloat_prop_rot_dir = motion.prop_rot_dir
             motion.motion_type = FLOAT
             motion.prop_rot_dir = NO_ROT
+        else:
+            motion.motion_type = self.json_manager.loader_saver.get_prefloat_motion_type_from_json_at_index(
+                self.beat_frame.get_index_of_currently_selected_beat() + 2,
+                motion.color,
+            )
+            motion.prop_rot_dir = self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json_at_index(
+                self.beat_frame.get_index_of_currently_selected_beat() + 2,
+                motion.color,
+            )
+        if new_turns == "fl":
             self.json_updater.set_turns_to_fl_from_num_in_json(motion, new_turns)
         elif motion.motion_type == FLOAT and new_turns != "fl":
             self.json_updater.set_turns_to_num_from_fl_in_json(motion, new_turns)
@@ -67,15 +75,7 @@ class TurnsUpdater:
                 if new_turns == "fl":
                     motion.motion_type = FLOAT
                     motion.prop_rot_dir = NO_ROT
-                else:
-                    motion.motion_type = self.json_manager.loader_saver.get_prefloat_motion_type_from_json_at_index(
-                        self.beat_frame.get_index_of_currently_selected_beat() + 2,
-                        motion.color,
-                    )
-                    motion.prop_rot_dir = self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json_at_index(
-                        self.beat_frame.get_index_of_currently_selected_beat() + 2,
-                        motion.color,
-                    )
+
                 self.set_motion_turns(motion, new_turns)
 
     def _calculate_new_turns(self, current_turns: Turns, adjustment: Turns) -> Turns:

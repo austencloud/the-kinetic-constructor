@@ -3,13 +3,18 @@ from PyQt6.QtGui import QPainter, QPen, QColor
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Optional
 
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import BeatView
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import StartPositionBeatView
-
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
+    BeatView,
+)
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import (
+    StartPositionBeatView,
+)
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame
+    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat_frame import (
+        SequenceWidgetBeatFrame,
+    )
 
 
 class BeatSelectionOverlay(QWidget):
@@ -57,7 +62,7 @@ class BeatSelectionOverlay(QWidget):
                 red_start_pos_ori_picker.ori_picker_widget.ori_display_frame.set_initial_orientation(
                     start_pos_pictograph, "red"
                 )
-            QApplication.processEvents()
+            # QApplication.processEvents()
 
     def deselect_beat(self):
         if self.selected_beat:

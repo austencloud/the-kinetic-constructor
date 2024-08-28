@@ -26,9 +26,9 @@ class DirectSetTurnsButton(QPushButton):
         print("Direct set adjustment button clicked!")
 
     def set_button_styles(self) -> None:
-        button_size = self.turns_box.width() // 2
+        button_size = self.turns_box.height() // 2
         turns_display_font_size = int(
-            self.turns_box.adjustment_panel.graph_editor.width() / 20
+            self.turns_box.adjustment_panel.graph_editor.height() / 8
         )
         self.setFixedSize(QSize(button_size, button_size))
         self.setFont(QFont("Arial", turns_display_font_size, QFont.Weight.Bold))

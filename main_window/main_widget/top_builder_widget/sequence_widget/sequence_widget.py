@@ -16,7 +16,9 @@ from .sequence_widget_button_frame import SequenceWidgetButtonFrame
 from .sequence_widget_scroll_area import SequenceWidgetScrollArea
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.top_builder_widget import TopBuilderWidget
+    from main_window.main_widget.top_builder_widget.top_builder_widget import (
+        TopBuilderWidget,
+    )
 
 
 class SequenceWidget(QWidget):
@@ -128,7 +130,7 @@ class SequenceWidget(QWidget):
         QTimer.singleShot(0, self.post_show_initialization)
 
     def post_show_initialization(self):
-        self.resize_sequence_widget()
+        # self.resize_sequence_widget()
         self.update_current_word()
 
     def _setup_indicator_label_layout(self):

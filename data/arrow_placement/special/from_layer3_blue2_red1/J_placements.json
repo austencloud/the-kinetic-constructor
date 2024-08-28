@@ -83,6 +83,10 @@
       "swap_beta_n_nonradial_blue_pro_nw_red_pro_ne": true,
       "swap_beta_w_nonradial_blue_pro_nw_red_pro_sw": true,
       "swap_beta_s_nonradial_blue_pro_se_red_pro_sw": true
+    },
+    "(fl, fl)": {
+      "blue": [30, -20],
+      "red": [-5, -40]
     }
   }
 }

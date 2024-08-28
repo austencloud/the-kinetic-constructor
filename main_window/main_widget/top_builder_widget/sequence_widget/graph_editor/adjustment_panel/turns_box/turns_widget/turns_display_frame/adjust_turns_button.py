@@ -96,6 +96,6 @@ class AdjustTurnsButton(QAbstractButton):
         self.update()
 
     def resize_adjust_turns_button(self) -> None:
-        size = int(self.turns_box.width() * 0.25)
+        size = int(self.turns_box.graph_editor.height() * 0.25)
         self.setMaximumWidth(size)
         self.setMaximumHeight(size)

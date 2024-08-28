@@ -107,12 +107,15 @@ class PictographUpdater:
     ) -> dict:
         turns = pictograph_dict[f"{color}_attributes"].get("turns", None)
         prop_rot_dir = pictograph_dict[f"{color}_attributes"].get("prop_rot_dir", None)
+        loc = pictograph_dict[f"{color}_attributes"].get("loc", None)
         if turns or turns == 0:
             arrow_dict = {"turns": turns}
         elif prop_rot_dir:
             arrow_dict = {"prop_rot_dir": prop_rot_dir}
         else:
             arrow_dict = None
+        if loc:
+            arrow_dict["loc"] = loc
         return arrow_dict
 
     def show_graphical_objects(self, color: str) -> None:
