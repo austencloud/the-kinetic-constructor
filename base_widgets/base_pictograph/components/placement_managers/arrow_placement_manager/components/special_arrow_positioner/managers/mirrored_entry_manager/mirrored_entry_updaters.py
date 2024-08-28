@@ -29,7 +29,6 @@ class StandardOrientationUpdater(MirroredEntryUpdaterBase):
         )
         self._mirror_entry(mirrored_turns_tuple, letter)
 
-
     def _mirror_entry(self, mirrored_turns_tuple, letter: Letter):
         if letter.value in ["S", "T", "β"] or letter in Letter.get_letters_by_condition(
             LetterConditions.HYBRID
@@ -57,12 +56,28 @@ class StandardOrientationUpdater(MirroredEntryUpdaterBase):
         if (
             not self.arrow.motion.turns
             == self.arrow.pictograph.get.other_arrow(self.arrow).turns
+            and self.arrow.motion.motion_type
+            == self.arrow.pictograph.get.other_arrow(self.arrow).motion.motion_type
         ):
             if mirrored_turns_tuple not in letter_data:
                 letter_data[mirrored_turns_tuple] = {}
             letter_data[mirrored_turns_tuple][
                 BLUE if self.arrow.color == RED else RED
             ] = letter_data[turns_tuple][self.arrow.color]
+            self.mirrored_entry_updater.manager.data_updater.update_specific_entry_in_json(
+                letter, letter_data, ori_key
+            )
+        elif (
+            not self.arrow.motion.turns
+            == self.arrow.pictograph.get.other_arrow(self.arrow).turns
+            and self.arrow.motion.motion_type
+            != self.arrow.pictograph.get.other_arrow(self.arrow).motion.motion_type
+        ):
+            if mirrored_turns_tuple not in letter_data:
+                letter_data[mirrored_turns_tuple] = {}
+            letter_data[mirrored_turns_tuple][
+                self.arrow.motion.motion_type
+            ] = letter_data[turns_tuple][self.arrow.motion.motion_type]
             self.mirrored_entry_updater.manager.data_updater.update_specific_entry_in_json(
                 letter, letter_data, ori_key
             )
