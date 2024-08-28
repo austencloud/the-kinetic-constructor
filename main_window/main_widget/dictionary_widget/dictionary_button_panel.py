@@ -119,13 +119,11 @@ class DictionaryButtonPanel(QWidget):
         self.export_manager.dialog_executor.exec_dialog(metadata["sequence"])
 
     def hide_buttons(self):
-        # self.delete_word_button.hide()
         self.save_image_button.hide()
         self.delete_variation_button.hide()
         self.edit_sequence_button.hide()
 
     def show_buttons(self):
-        # self.delete_word_button.show()
         self.save_image_button.show()
         self.delete_variation_button.show()
         self.edit_sequence_button.show()

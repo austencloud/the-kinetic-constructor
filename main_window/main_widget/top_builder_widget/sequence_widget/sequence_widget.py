@@ -2,6 +2,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout
 
+from main_window.main_widget.top_builder_widget.sequence_widget.sequence_clearer import SequenceClearer
+
 from .beat_frame.beat import Beat, BeatView
 from .sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
 from .beat_frame.beat_frame import SequenceWidgetBeatFrame
@@ -42,10 +44,11 @@ class SequenceWidget(QWidget):
         self.scroll_area = SequenceWidgetScrollArea(self)
         self.beat_frame = SequenceWidgetBeatFrame(self)
         self.add_to_dictionary_manager = AddToDictionaryManager(self)
+        self.autocompleter = SequenceAutoCompleter(self)
+        self.sequence_clearer = SequenceClearer(self)
         self.button_frame = SequenceWidgetButtonFrame(self)
         self.graph_editor = GraphEditor(self)
         self.pictograph_factory = SequenceWidgetPictographFactory(self)
-        self.autocompleter = SequenceAutoCompleter(self)
         self.scroll_area.setWidget(self.beat_frame)
 
     def _setup_labels(self):
@@ -83,8 +86,7 @@ class SequenceWidget(QWidget):
         self.SW_pictograph_cache: dict[str, Beat] = {}
 
     def show_options_panel(self):
-        current_state = self._get_current_beat_frame_state()
-        self.options_panel = LayoutOptionsDialog(self, current_state)
+        self.options_panel = LayoutOptionsDialog(self)
         self.options_panel.exec()
 
     def _get_current_beat_frame_state(self) -> dict:

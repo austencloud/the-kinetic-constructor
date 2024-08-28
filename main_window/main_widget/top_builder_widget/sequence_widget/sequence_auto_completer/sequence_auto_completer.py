@@ -4,7 +4,7 @@ from .permutation_dialog import PermutationDialog
 from .rotational_permutation_executor import RotationalPermutationExecuter
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
-
+from PyQt6.QtWidgets import QMessageBox
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
         SequenceWidget,
@@ -13,11 +13,28 @@ if TYPE_CHECKING:
 
 class SequenceAutoCompleter:
     def __init__(self, sequence_widget: "SequenceWidget"):
+        self.sequence_widget = sequence_widget
         self.beat_frame = sequence_widget.beat_frame
         self.json_manager = self.beat_frame.json_manager
-
+        self.main_widget = sequence_widget.main_widget
         self.rotational_permutation_executor = RotationalPermutationExecuter(self)
         self.mirrored_permutation_executor = MirroredPermutationExecutor(self, False)
+
+    def auto_complete_sequence(self):
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        self.sequence_properties_manager = self.main_widget.sequence_properties_manager
+        self.sequence_properties_manager.instantiate_sequence(sequence)
+        properties = self.sequence_properties_manager.check_all_properties()
+        is_permutable = properties["is_permutable"]
+
+        if is_permutable:
+            self.sequence_widget.autocompleter.perform_auto_completion(sequence)
+        else:
+            QMessageBox.warning(
+                self,
+                "Auto-Complete Disabled",
+                "The sequence is not permutable and cannot be auto-completed.",
+            )
 
     def perform_auto_completion(self, sequence: list[dict]):
         valid_permutations = self.get_valid_permutations(sequence)

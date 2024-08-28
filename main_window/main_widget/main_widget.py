@@ -82,10 +82,10 @@ class MainWidget(QTabWidget):
         print("Starting webcam initialization thread")
         thread.start()
 
-    def init_webcam(self):
-        """Method to request webcam initialization via signal."""
-        self.sequence_recorder.capture_frame.video_display_frame.request_init_webcam()
-        print("Webcam initialization requested")
+    # def init_webcam(self):
+    #     """Method to request webcam initialization via signal."""
+    #     self.sequence_recorder.capture_frame.video_display_frame.request_init_webcam()
+    #     print("Webcam initialization requested")
 
     def _setup_pictograph_cache(self) -> None:
         self.pictograph_cache: dict[str, dict[str, "BasePictograph"]] = {}

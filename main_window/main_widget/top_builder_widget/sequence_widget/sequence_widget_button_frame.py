@@ -53,12 +53,14 @@ class SequenceWidgetButtonFrame(QFrame):
             },
             "auto_complete_sequence": {
                 "icon_path": "magic_wand.svg",
-                "callback": self.auto_complete_sequence,
+                "callback": self.sequence_widget.autocompleter.auto_complete_sequence,
                 "tooltip": "Auto Complete Sequence",
             },
             "clear_sequence": {
                 "icon_path": "clear.svg",
-                "callback": lambda: self.clear_sequence(show_indicator=True),
+                "callback": lambda: self.sequence_widget.sequence_clearer.clear_sequence(
+                    show_indicator=True
+                ),
                 "tooltip": "Clear Sequence",
             },
         }
@@ -93,56 +95,6 @@ class SequenceWidgetButtonFrame(QFrame):
         for button in self.buttons:
             self.layout.addWidget(button)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-    def auto_complete_sequence(self):
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
-        self.sequence_properties_manager = self.main_widget.sequence_properties_manager
-        self.sequence_properties_manager.instantiate_sequence(sequence)
-        properties = self.sequence_properties_manager.check_all_properties()
-        is_permutable = properties["is_permutable"]
-
-        if is_permutable:
-            self.sequence_widget.autocompleter.perform_auto_completion(sequence)
-        else:
-            QMessageBox.warning(
-                self,
-                "Auto-Complete Disabled",
-                "The sequence is not permutable and cannot be auto-completed.",
-            )
-
-    def clear_sequence(
-        self, show_indicator=True, should_reset_to_start_pos_picker=True
-    ) -> None:
-        self.json_manager.loader_saver.clear_current_sequence_file()
-        self._reset_beat_frame()
-
-        if should_reset_to_start_pos_picker:
-            self.sequence_builder.reset_to_start_pos_picker()
-        self.sequence_builder.last_beat = self.beat_frame.start_pos
-        if show_indicator:
-            self.sequence_widget.indicator_label.show_message("Sequence cleared")
-        self._clear_graph_editor()
-
-        if self.settings_manager.global_settings.get_grow_sequence():
-            self.beat_frame.layout_manager.configure_beat_frame(0)
-        self.sequence_widget.difficulty_label.set_difficulty_level("")
-
-    def _reset_beat_frame(self) -> None:
-        for beat_view in self.beat_frame.beats:
-            beat_view.setScene(beat_view.blank_beat)
-            beat_view.is_filled = False
-        self.beat_frame.start_pos_view.setScene(
-            self.beat_frame.start_pos_view.blank_beat
-        )
-        self.beat_frame.start_pos_view.is_filled = False
-        self.beat_frame.selection_overlay.deselect_beat()
-        self.beat_frame.sequence_widget.update_current_word()
-
-    def _clear_graph_editor(self) -> None:
-        self.graph_editor = self.sequence_widget.graph_editor
-        self.graph_editor.pictograph_container.GE_pictograph_view.set_to_blank_grid()
-        self.graph_editor.adjustment_panel.update_turns_displays(0, 0)
-        self.graph_editor.adjustment_panel.update_adjustment_panel()
 
     def resize_button_frame(self) -> None:
         button_height = self.height() // 9

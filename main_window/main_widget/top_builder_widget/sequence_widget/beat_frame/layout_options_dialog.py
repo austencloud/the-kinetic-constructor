@@ -13,14 +13,13 @@ if TYPE_CHECKING:
 class LayoutOptionsDialog(QDialog):
     """The dialog allows the user to select the number of beats and the layout configuration in the sequence widget."""
 
-    def __init__(
-        self, sequence_widget: "SequenceWidget", initial_state: Optional[dict] = None
-    ):
+    def __init__(self, sequence_widget: "SequenceWidget"):
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
         self.settings_manager = (
             self.sequence_widget.main_widget.main_window.settings_manager
         )
+        initial_state = self.sequence_widget._get_current_beat_frame_state()
         self.setWindowTitle("Layout Options")
 
         self._set_size()
