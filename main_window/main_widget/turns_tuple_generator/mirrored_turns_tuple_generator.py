@@ -4,9 +4,7 @@ from Enums.Enums import LetterType
 from objects.arrow.arrow import Arrow
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.components.placement_managers.arrow_placement_manager.components.turns_tuple_generator.turns_tuple_generator import (
-        TurnsTupleGenerator,
-    )
+    from main_window.main_widget.turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
 
 
 class MirroredTurnsTupleGenerator:

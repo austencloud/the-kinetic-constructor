@@ -44,7 +44,7 @@ class TurnsTupleGenerator:
         self.mirrored_generator = MirroredTurnsTupleGenerator(self)
 
     def generate_turns_tuple(self, pictograph: "BasePictograph") -> str:
-        generator_key = self._get_generator_key(pictograph.letter)
+        generator_key = self._get_generator_key(pictograph)
         if generator_key and generator_key in self.generators:
             generator = self.generators[generator_key]
             return generator.generate_turns_tuple(pictograph)
@@ -54,7 +54,8 @@ class TurnsTupleGenerator:
         return self.mirrored_generator.generate(arrow)
 
     @lru_cache(maxsize=128)
-    def _get_generator_key(self, letter: Letter) -> str:
+    def _get_generator_key(self, pictograph: "BasePictograph") -> Union[str, LetterType]:
+        letter = pictograph.letter
         if letter.value in [
             letter.value
             for letter in letter.get_letters_by_condition(LetterConditions.TYPE1_HYBRID)
