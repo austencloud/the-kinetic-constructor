@@ -77,10 +77,10 @@ class MotionOriCalculator:
         self, start_ori: Orientations, handpath_direction: Handpaths
     ) -> Orientations:
         orientation_map = {
-            (IN, CW_HANDPATH): COUNTER,
-            (IN, CCW_HANDPATH): CLOCK,
-            (OUT, CW_HANDPATH): CLOCK,
-            (OUT, CCW_HANDPATH): COUNTER,
+            (IN, CW_HANDPATH): CLOCK,
+            (IN, CCW_HANDPATH): COUNTER,
+            (OUT, CW_HANDPATH): COUNTER,
+            (OUT, CCW_HANDPATH): CLOCK,
             (CLOCK, CW_HANDPATH): OUT,
             (CLOCK, CCW_HANDPATH): IN,
             (COUNTER, CW_HANDPATH): IN,

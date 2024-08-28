@@ -36,16 +36,27 @@ class TurnsUpdater:
     def set_motion_turns(self, motion: "Motion", new_turns: Turns) -> None:
         if new_turns == "fl":
             motion.prefloat_motion_type = motion.motion_type
+            motion.prefloat_prop_rot_dir = motion.prop_rot_dir
             motion.motion_type = FLOAT
             pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
             self.json_manager.updater.update_motion_type_in_json_at_index(
                 pictograph_index + 2, motion.color, FLOAT
             )
+            #update_prefloat_motion_type_in_json_at_index
+            self.json_manager.updater.update_prefloat_motion_type_in_json_at_index(
+                pictograph_index + 2, motion.color, motion.prefloat_motion_type
+            )
+                
         else:
-            motion.motion_type = motion.prefloat_motion_type
+            if motion.turns == "fl":
+                motion.motion_type = motion.prefloat_motion_type
+                motion.prop_rot_dir = motion.prefloat_prop_rot_dir
             pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
             self.json_manager.updater.update_motion_type_in_json_at_index(
                 pictograph_index + 2, motion.color, motion.motion_type
+            )
+            self.json_manager.updater.update_rot_dir_in_json_at_index(
+                pictograph_index + 2, motion.color, motion.prop_rot_dir
             )
         self._update_turns(motion, new_turns)
         other_motion_color = RED if motion.color == BLUE else BLUE

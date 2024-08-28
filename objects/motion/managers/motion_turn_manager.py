@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from Enums.Enums import Turns
-from data.constants import BLUE, RED
+from data.constants import BLUE, NO_ROT, RED
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion

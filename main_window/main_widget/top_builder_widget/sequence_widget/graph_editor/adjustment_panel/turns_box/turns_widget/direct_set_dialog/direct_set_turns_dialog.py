@@ -33,15 +33,16 @@ class DirectSetTurnsDialog(QDialog):
         )
 
     def _setup_buttons(self):
-        turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3", "fl"]  # Add 'fl'
+        turns_values = ["fl", "0", "0.5", "1", "1.5", "2", "2.5", "3"]  # Add 'fl'
         for value in turns_values:
             button = DirectSetTurnsButton(value, self)
             button.set_button_styles()
             button.clicked.connect(
-                lambda _, v=value: self.select_turns("fl" if v == "fl" else float(v) if "." in v else int(v))
+                lambda _, v=value: self.select_turns(
+                    "fl" if v == "fl" else float(v) if "." in v else int(v)
+                )
             )
             self.buttons[value] = button
-
 
     def _setup_layout(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)

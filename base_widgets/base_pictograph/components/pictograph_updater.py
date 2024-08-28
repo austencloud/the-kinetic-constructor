@@ -57,7 +57,7 @@ class PictographUpdater:
             if motion_dicts.get(motion.color) is not None:
                 self.show_graphical_objects(motion.color)
             if motion_dicts[motion.color]["turns"] == "fl":
-                motion.turns = "fl"  # Handle float explicitly
+                motion.turns = "fl" 
             motion.updater.update_motion(motion_dicts[motion.color])
 
     def _set_lead_states(self):

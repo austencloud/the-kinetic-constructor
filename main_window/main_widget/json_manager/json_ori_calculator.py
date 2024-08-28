@@ -111,10 +111,10 @@ class JsonOriCalculator:
 
     def calculate_float_orientation(self, start_ori, handpath_direction):
         orientation_map = {
-            (IN, CW_HANDPATH): COUNTER,
-            (IN, CCW_HANDPATH): CLOCK,
-            (OUT, CW_HANDPATH): CLOCK,
-            (OUT, CCW_HANDPATH): COUNTER,
+            (IN, CW_HANDPATH): CLOCK,
+            (IN, CCW_HANDPATH): COUNTER,
+            (OUT, CW_HANDPATH): COUNTER,
+            (OUT, CCW_HANDPATH): CLOCK,
             (CLOCK, CW_HANDPATH): OUT,
             (CLOCK, CCW_HANDPATH): IN,
             (COUNTER, CW_HANDPATH): IN,

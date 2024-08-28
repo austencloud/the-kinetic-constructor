@@ -22,7 +22,7 @@ class TurnsColumnHandler(QGraphicsItemGroup):
 
     def load_number_svg(self, number: Union[int, float, str]) -> QGraphicsSvgItem:
         if number == "fl":  # Handle the float case
-            svg_path = get_images_and_data_path("images/float.svg")
+            svg_path = get_images_and_data_path("images/numbers/float.svg")
         else:
             svg_path = (
                 self.blank_svg_path

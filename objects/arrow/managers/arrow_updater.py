@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-
+from PyQt6.QtWidgets import QApplication
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
 
@@ -16,6 +16,8 @@ class ArrowUpdater:
         )
         self.arrow.mirror_manager.update_mirror()
         self.arrow.rot_angle_calculator.update_rotation()
+        QApplication.processEvents()
         self.arrow.location_calculator.update_location()
         self.arrow.update()
         self.arrow.pictograph.update()
+

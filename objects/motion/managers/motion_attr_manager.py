@@ -23,7 +23,7 @@ class MotionAttrManager:
 
         if self.motion.motion_type:
             self.motion.end_ori = self.motion.ori_calculator.get_end_ori()
-
+            self.motion.prefloat_motion_type = self.motion.motion_type
         if self.motion.pictograph.letter in [
             Letter.S,
             Letter.T,
@@ -52,16 +52,6 @@ class MotionAttrManager:
             END_ORI: self.motion.end_ori,
         }
 
-    def _change_motion_attributes_to_static(self) -> None:
-        motion_dict = {
-            MOTION_TYPE: STATIC,
-            TURNS: 0,
-            PROP_ROT_DIR: NO_ROT,
-            START_LOC: self.motion.prop.loc,
-            END_LOC: self.motion.prop.loc,
-        }
-        self.motion.updater.update_motion(motion_dict)
-        self.motion.arrow.loc = self.motion.prop.loc
 
     def assign_lead_states(self) -> None:
         leading_motion = self.motion.pictograph.get.leading_motion()
