@@ -25,12 +25,25 @@ class TurnsAdjustmentManager(QObject):
 
     def adjust_turns(self, adjustment: Union[int, float]) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        current_turns = self.get_current_turns_value()
         self.pictograph = (
             self.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
         )
-        new_turns = self._get_turns()
-        new_turns = self._clamp_turns(new_turns + adjustment)
-        new_turns = self.convert_turn_floats_to_ints(new_turns)
+        if current_turns == "fl" and adjustment > 0:
+            # If currently at "fl" and increasing, reset to 0 or any positive value
+            new_turns = 0
+        elif current_turns == "fl" and adjustment < 0:
+            # If currently at "fl" and decreasing, do nothing or handle accordingly
+            QApplication.restoreOverrideCursor()
+            return
+        elif current_turns == 0 and adjustment < 0:
+            # If currently at 0 and decreasing, switch to "fl"
+            new_turns = "fl"
+        else:
+            # Handle normal numeric adjustment
+            new_turns = self._clamp_turns(current_turns + adjustment)
+            new_turns = self.convert_turn_floats_to_ints(new_turns)
+
         self._update_turns_display(new_turns)
         self.turns_widget.turns_updater._adjust_turns_for_pictograph(
             self.pictograph, adjustment
@@ -66,6 +79,8 @@ class TurnsAdjustmentManager(QObject):
 
     def _get_turns(self) -> Turns:
         turns = self.turns_widget.turns_display_frame.turns_label.text()
+        if turns == "fl":
+            return "fl"
         turns = self.convert_turns_from_str_to_num(turns)
         turns = self.convert_turn_floats_to_ints(turns)
         return turns
@@ -80,15 +95,15 @@ class TurnsAdjustmentManager(QObject):
             return turns
 
     def _clamp_turns(self, turns: Turns) -> Turns:
-        return self.turns_widget.turns_updater._clamp_turns(turns)
+        if isinstance(turns, (int, float)):
+            return max(0, min(3, turns))
+        return turns
 
     def _update_turns_display(self, turns: Turns) -> None:
-        self.turns_widget.update_turns_display(str(turns))
+        self.turns_widget.update_turns_display(turns)
 
     def _update_motion_properties(self, new_turns) -> None:
-        self.pictograph = (
-            self.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
-        )
+
         for motion in self.pictograph.motions.values():
             if motion.color == self.turns_widget.turns_box.color:
                 self.turns_widget.turns_updater.set_motion_turns(motion, new_turns)

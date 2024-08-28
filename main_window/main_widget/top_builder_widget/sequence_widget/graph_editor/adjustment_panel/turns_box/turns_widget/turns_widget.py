@@ -55,7 +55,7 @@ class TurnsWidget(QWidget):
     def update_turns_display(self, turns: Union[int, float, str]) -> None:
         display_value = "fl" if turns == "fl" else str(turns)
         self.turns_display_frame.turns_label.setText(display_value)
-        self.turns_display_frame.decrement_button.setEnabled(turns not in [0, "fl"])
+        self.turns_display_frame.decrement_button.setEnabled(turns not in ["fl"])
 
     def resize_turns_widget(self) -> None:
         self.turns_display_frame.resize_turns_display_frame()
@@ -79,6 +79,6 @@ class TurnsWidget(QWidget):
         font.setUnderline(True)
         self.turns_text.setFont(font)
 
-    # Add the method to set turns to "fl"
     def set_to_float(self) -> None:
+        """Set the turns to 'fl' and update the display."""
         self.adjustment_manager.direct_set_turns("fl")

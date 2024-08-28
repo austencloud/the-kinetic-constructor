@@ -24,7 +24,7 @@ class ArrowRotAngleManager:
             ANTI: AntiRotAngleCalculator,
             DASH: DashRotAngleCalculator,
             STATIC: StaticRotAngleCalculator,
-            FLOAT: FloatRotAngleCalculator,  # Add FLOAT here
+            FLOAT: FloatRotAngleCalculator,
         }
         return calculator_class_map.get(self.arrow.motion.motion_type)
 

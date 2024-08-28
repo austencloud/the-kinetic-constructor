@@ -11,7 +11,7 @@ class AttrKeyGenerator:
     def __init__(self, positioner: "SpecialArrowPositioner") -> None:
         self.positioner = positioner
 
-    def get_key(self, arrow: "Arrow") -> str:
+    def  get_key(self, arrow: "Arrow") -> str:
         if arrow.pictograph.check.starts_from_mixed_orientation():
             if self.positioner.pictograph.letter in ["S", "T"]:
                 return f"{arrow.color}_{arrow.motion.lead_state}"

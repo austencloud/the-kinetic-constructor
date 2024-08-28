@@ -1,10 +1,11 @@
 from typing import TYPE_CHECKING, Union
 from Enums.PropTypes import PropType
 
-from data.constants import BLUE, DASH, NO_ROT, RED, STATIC
+from data.constants import BLUE, DASH, FLOAT, NO_ROT, RED, STATIC
 from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
     BeatView,
 )
+from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
     from main_window.main_widget.json_manager.json_manager import JSON_Manager
@@ -59,7 +60,7 @@ class JsonSequenceUpdater:
         sequence[index][f"{color}_attributes"]["prefloat_motion_type"] = motion_type
         self.json_manager.loader_saver.save_current_sequence(sequence)
 
-    def update_prefloat_prop_rot_dir_in_json_at_index(
+    def _update_prefloat_prop_rot_dir_in_json_at_index(
         self, index: int, color: str, prop_rot_dir: str
     ) -> None:
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
@@ -107,8 +108,8 @@ class JsonSequenceUpdater:
             ].beat
             if pictograph:
                 motion = pictograph.get.motion_by_color(color)
-                prop_rot_dir = NO_ROT
-                sequence[index][f"{color}_attributes"]["prop_rot_dir"] = prop_rot_dir
+                # prop_rot_dir = NO_ROT
+                # sequence[index][f"{color}_attributes"]["prop_rot_dir"] = prop_rot_dir
 
         if sequence[index][f"{color}_attributes"]["motion_type"] in [DASH, STATIC]:
             if sequence[index][f"{color}_attributes"]["turns"] == 0:
@@ -211,3 +212,64 @@ class JsonSequenceUpdater:
             if beat_view.is_filled:
                 self.update_current_sequence_file_with_beat(beat_view)
         self.json_manager.main_widget.main_window.settings_manager.save_settings()  # Save state on change
+
+    def set_turns_from_num_to_num_in_json(self, motion: "Motion", new_turns):
+        beat_index = (
+            self.main_widget.top_builder_widget.sequence_widget.beat_frame.get_index_of_currently_selected_beat()
+        )
+        json_index = beat_index + 2
+        self.update_turns_in_json_at_index(json_index, motion.color, new_turns)
+        self.update_motion_type_in_json_at_index(
+            json_index, motion.color, motion.motion_type
+        )
+
+        self.update_prop_rot_dir_in_json_at_index(
+            json_index, motion.color, motion.prop_rot_dir
+        )
+
+    def set_turns_to_num_from_fl_in_json(self, motion: "Motion", new_turns):
+        beat_index = (
+            self.main_widget.top_builder_widget.sequence_widget.beat_frame.get_index_of_currently_selected_beat()
+        )
+        json_index = beat_index + 2
+        motion.motion_type = (
+            self.json_manager.loader_saver.get_prefloat_motion_type_from_json_at_index(
+                json_index,
+                motion.color,
+            )
+        )
+        motion.prop_rot_dir = (
+            self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json_at_index(
+                json_index,
+                motion.color,
+            )
+        )
+        self.update_turns_in_json_at_index(json_index, motion.color, new_turns)
+        self.update_motion_type_in_json_at_index(
+            json_index, motion.color, motion.motion_type
+        )
+        self.update_prop_rot_dir_in_json_at_index(
+            json_index, motion.color, motion.prop_rot_dir
+        )
+
+    def set_turns_to_fl_from_num_in_json(self, motion: "Motion", new_turns):
+
+        beat_index = (
+            self.main_widget.top_builder_widget.sequence_widget.beat_frame.get_index_of_currently_selected_beat()
+        )
+        json_index = beat_index + 2
+        self.update_turns_in_json_at_index(json_index, motion.color, new_turns)
+        self.update_prefloat_motion_type_in_json_at_index(
+            json_index, motion.color, self.json_manager.loader_saver.get_motion_type_from_json_at_index(
+                json_index, motion.color
+            )
+        )
+        self._update_prefloat_prop_rot_dir_in_json_at_index(
+            json_index, motion.color, self.json_manager.loader_saver.get_prop_rot_dir_from_json_at_index(
+                json_index, motion.color
+            )
+        )
+        self.update_motion_type_in_json_at_index(json_index, motion.color, FLOAT)
+        self.update_prop_rot_dir_in_json_at_index(
+            json_index, motion.color, NO_ROT
+        )

@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 from .adjust_turns_button import AdjustTurnsButton
 from .turns_label import GE_TurnsLabel
@@ -58,3 +58,11 @@ class TurnsDisplayFrame(QFrame):
     def set_button_styles(self) -> None:
         for button in [self.increment_button, self.decrement_button]:
             button.resize_adjust_turns_button()
+    def adjust_turn(self, adjustment: Union[int, float]) -> None:
+        current_turns = self.turns_widget.adjustment_manager.get_current_turns_value()
+        if current_turns == 0 and adjustment < 0:
+            # If the current turns are 0 and user tries to decrement, set to "fl"
+            self.turns_widget.set_to_float()
+        else:
+            # Otherwise, adjust as normal
+            self.adjustment_manager.adjust_turns(adjustment)
