@@ -17,7 +17,6 @@ class ArrowUpdater:
         )
         self.arrow.mirror_manager.update_mirror()
         self.arrow.rot_angle_manager.update_rotation()
-        QApplication.processEvents()
         self.arrow.location_calculator.update_location()
         self.arrow.update()
         self.arrow.pictograph.update()

@@ -107,6 +107,17 @@ class JsonSequenceLoaderSaver:
             )
         return 0
 
+    def get_prefloat_motion_type_from_json_at_index(
+        self, index: int, color: str
+    ) -> int:
+        sequence = self.load_current_sequence_json()
+        if sequence:
+            return sequence[index][f"{color}_attributes"].get(
+                "prefloat_motion_type",
+                sequence[index][f"{color}_attributes"].get("motion_type", 0),
+            )
+        return 0
+
     def get_index_for_pictograph(self, pictograph: Dict) -> int:
         sequence = self.load_current_sequence_json()
         for i, entry in enumerate(sequence):

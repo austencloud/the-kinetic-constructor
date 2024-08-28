@@ -41,6 +41,7 @@ class TurnsUpdater:
             motion.prop_rot_dir = NO_ROT
             beat_index = self.beat_frame.get_index_of_currently_selected_beat()
             json_index = beat_index + 2
+
             self.json_manager.updater.update_turns_in_json_at_index(
                 json_index, motion.color, new_turns
             )
@@ -59,26 +60,25 @@ class TurnsUpdater:
             )
         else:
             if motion.motion_type == FLOAT:
-                motion.motion_type = motion.prefloat_motion_type
-                motion.prop_rot_dir = (
-                    self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json_at_index(
-                        self.beat_frame.get_index_of_currently_selected_beat() + 2,
-                        motion.color,
-                    )
+                motion.motion_type = self.json_manager.loader_saver.get_prefloat_motion_type_from_json_at_index(
+                    self.beat_frame.get_index_of_currently_selected_beat() + 2,
+                    motion.color,
+                )
+                motion.prop_rot_dir = self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json_at_index(
+                    self.beat_frame.get_index_of_currently_selected_beat() + 2,
+                    motion.color,
                 )
             beat_index = self.beat_frame.get_index_of_currently_selected_beat()
+            json_index = beat_index + 2
             self.json_manager.updater.update_turns_in_json_at_index(
-                beat_index + 2, motion.color, new_turns
+                json_index, motion.color, new_turns
+            )
+            self.json_manager.updater.update_motion_type_in_json_at_index(
+                json_index, motion.color, motion.motion_type
             )
 
-            self.json_manager.updater.update_motion_type_in_json_at_index(
-                beat_index + 2, motion.color, motion.motion_type
-            )
-            prefloat_prop_rot_dir = self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json_at_index(
-                beat_index + 2, motion.color
-            )
             self.json_manager.updater.update_prop_rot_dir_in_json_at_index(
-                beat_index + 2, motion.color, prefloat_prop_rot_dir
+                json_index, motion.color, motion.prop_rot_dir
             )
         self._update_turns(motion, new_turns)
         self._repaint_views(motion)
@@ -90,7 +90,7 @@ class TurnsUpdater:
             self.turns_box.adjustment_panel.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
         )
         GE_pictograph.view.repaint()
-        QApplication.processEvents()
+        # QApplication.processEvents()
 
     def _adjust_turns_for_pictograph(
         self, pictograph: "BasePictograph", adjustment: Turns

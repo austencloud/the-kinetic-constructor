@@ -8,7 +8,7 @@ from data.constants import CLOCKWISE, COUNTER_CLOCKWISE
 from ..base_adjustment_box_header_widget import BaseAdjustmentBoxHeaderWidget
 
 if TYPE_CHECKING:
-    from widgets.graph_editor.adjustment_panel.turns_box.turns_box import TurnsBox
+    from .turns_box import TurnsBox
 
 
 class TurnsBoxHeader(BaseAdjustmentBoxHeaderWidget):
@@ -62,7 +62,7 @@ class TurnsBoxHeader(BaseAdjustmentBoxHeaderWidget):
                         prop_rot_dir_button_mngr.ccw_button.press()
                 else:
                     prop_rot_dir_button_mngr.hide_prop_rot_dir_buttons()
-        QApplication.processEvents()
+            QApplication.processEvents()
 
     def _add_widgets(self) -> None:
         self.top_hbox.addStretch(1)
