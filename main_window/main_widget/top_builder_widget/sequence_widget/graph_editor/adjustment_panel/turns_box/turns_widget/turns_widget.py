@@ -4,13 +4,12 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Union
 
 from data.constants import ANTI, FLOAT, PRO
-from main_window.main_widget.top_builder_widget.sequence_widget.graph_editor.adjustment_panel.turns_box.turns_widget.motion_type_setter import MotionTypeSetter
-
+from .motion_type_setter import MotionTypeSetter
 from .direct_set_dialog.direct_set_turns_dialog import DirectSetTurnsDialog
 from .turns_display_frame.turns_display_frame import TurnsDisplayFrame
 from .turns_adjustment_manager import TurnsAdjustmentManager
 from .turns_updater import TurnsUpdater
-from .motion_type_button_widget import MotionTypeButtonWidget  # Import the new class
+from .motion_type_label_widget import MotionTypeLabelWidget
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
@@ -30,11 +29,8 @@ class TurnsWidget(QWidget):
         self.turns_display_frame = TurnsDisplayFrame(self)
         self.direct_set_dialog = DirectSetTurnsDialog(self)
         self._setup_turns_text()
-        self.motion_type_buttons = MotionTypeButtonWidget(
-            self
-        )
+        self.motion_type_label = MotionTypeLabelWidget(self)
         self.motion_type_setter = MotionTypeSetter(self)
-
 
     def _setup_layout(self) -> None:
         layout: QVBoxLayout = QVBoxLayout(self)
@@ -43,10 +39,8 @@ class TurnsWidget(QWidget):
         layout.addWidget(self.turns_text)
         layout.addStretch(1)
         layout.addWidget(self.turns_display_frame)
-        layout.addStretch(4)
-        layout.addWidget(
-            self.motion_type_buttons
-        )  # Add the motion type buttons to the layout
+        layout.addStretch(2)
+        layout.addWidget(self.motion_type_label)
         layout.addStretch(2)
 
     def _setup_turns_text(self) -> None:
@@ -61,16 +55,18 @@ class TurnsWidget(QWidget):
         display_value = "fl" if new_turns == "fl" else str(new_turns)
         self.turns_display_frame.turns_label.setText(display_value)
         if self.turns_box.matching_motion.motion_type in [PRO, ANTI, FLOAT]:
-            self.turns_display_frame.decrement_button.setEnabled(new_turns not in ["fl"])
+            self.turns_display_frame.decrement_button.setEnabled(
+                new_turns not in ["fl"]
+            )
         else:
             self.turns_display_frame.decrement_button.setEnabled(new_turns != 0)
-        self.motion_type_buttons.update_display(motion.motion_type)
+        self.motion_type_label.update_display(motion.motion_type)
 
     def resize_turns_widget(self) -> None:
         self.turns_display_frame.resize_turns_display_frame()
         self._resize_dir_buttons()
         self._resize_turns_text()
-        self.motion_type_buttons.resize_buttons()  # Resize the motion type buttons
+        self.motion_type_label.resize_buttons()
 
     def _resize_dir_buttons(self) -> None:
         self.turns_box.prop_rot_dir_button_manager.resize_prop_rot_dir_buttons()
