@@ -13,6 +13,7 @@ from .turns_updater import TurnsUpdater
 from .motion_type_button_widget import MotionTypeButtonWidget  # Import the new class
 
 if TYPE_CHECKING:
+    from objects.motion.motion import Motion
     from ..turns_box import TurnsBox
 
 
@@ -55,13 +56,15 @@ class TurnsWidget(QWidget):
     def on_turns_label_clicked(self) -> None:
         self.direct_set_dialog.show_direct_set_dialog()
 
-    def update_turns_display(self, turns: Union[int, float, str]) -> None:
-        display_value = "fl" if turns == "fl" else str(turns)
+    def update_turns_display(self, motion: "Motion", new_turns: str) -> None:
+        self.turns_box.matching_motion = motion
+        display_value = "fl" if new_turns == "fl" else str(new_turns)
         self.turns_display_frame.turns_label.setText(display_value)
         if self.turns_box.matching_motion.motion_type in [PRO, ANTI, FLOAT]:
-            self.turns_display_frame.decrement_button.setEnabled(turns not in ["fl"])
+            self.turns_display_frame.decrement_button.setEnabled(new_turns not in ["fl"])
         else:
-            self.turns_display_frame.decrement_button.setEnabled(turns != 0)
+            self.turns_display_frame.decrement_button.setEnabled(new_turns != 0)
+        self.motion_type_buttons.update_display(motion.motion_type)
 
     def resize_turns_widget(self) -> None:
         self.turns_display_frame.resize_turns_display_frame()

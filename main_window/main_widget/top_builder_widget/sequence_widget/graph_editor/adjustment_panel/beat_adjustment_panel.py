@@ -31,9 +31,15 @@ class BeatAdjustmentPanel(QFrame):
             self.layout.addWidget(ori_picker)
         self.layout.addWidget(self.placeholder_widget)
 
-    def update_turns_displays(self, blue_turns: int, red_turns: int) -> None:
-        self.blue_turns_box.turns_widget.update_turns_display(blue_turns)
-        self.red_turns_box.turns_widget.update_turns_display(red_turns)
+    def update_turns_displays(
+        self, blue_motion: "Motion", red_motion: "Motion"
+    ) -> None:
+        self.blue_turns_box.turns_widget.update_turns_display(
+            blue_motion, blue_motion.turns
+        )
+        self.red_turns_box.turns_widget.update_turns_display(
+            red_motion, red_motion.turns
+        )
 
     def _setup_placeholder_widget(self) -> None:
         self.placeholder_widget = GraphEditorPlaceHolderTextLabel(self)
@@ -86,7 +92,7 @@ class BeatAdjustmentPanel(QFrame):
             turns_box.show()
 
     def update_turns_panel(self, blue_motion: "Motion", red_motion: "Motion") -> None:
-        self.update_turns_displays(blue_motion.turns, red_motion.turns)
+        self.update_turns_displays(blue_motion, red_motion)
         for box in self.turns_boxes:
             box.header.update_turns_box_header()
             if box.color == BLUE:
