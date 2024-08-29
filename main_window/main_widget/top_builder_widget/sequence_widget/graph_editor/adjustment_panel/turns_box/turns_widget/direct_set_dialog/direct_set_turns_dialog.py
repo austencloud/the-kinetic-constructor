@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QDialog, QHBoxLayout
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
-from data.constants import BLUE, HEX_BLUE, HEX_RED
+from data.constants import ANTI, BLUE, FLOAT, HEX_BLUE, HEX_RED, PRO
 from .direct_set_turns_button import DirectSetTurnsButton
 
 if TYPE_CHECKING:
@@ -19,8 +19,6 @@ class DirectSetTurnsDialog(QDialog):
         self.turns_display_frame = turns_widget.turns_display_frame
         self.buttons: dict[str, DirectSetTurnsButton] = {}
         self._set_dialog_style()
-        self._setup_buttons()
-        self._setup_layout()
 
     def _set_dialog_style(self):
         self.setStyleSheet(
@@ -33,7 +31,9 @@ class DirectSetTurnsDialog(QDialog):
         )
 
     def _setup_buttons(self):
-        turns_values = ["fl", "0", "0.5", "1", "1.5", "2", "2.5", "3"]  # Add 'fl'
+        turns_values = ["0", "0.5", "1", "1.5", "2", "2.5", "3"]  # Remove 'fl'
+        if self.turns_box.matching_motion.motion_type in [PRO, ANTI, FLOAT]:
+            turns_values.insert(0, "fl")
         for value in turns_values:
             button = DirectSetTurnsButton(value, self)
             button.set_button_styles()
@@ -53,6 +53,8 @@ class DirectSetTurnsDialog(QDialog):
         self.adjustSize()
 
     def show_direct_set_dialog(self) -> None:
+        self._setup_buttons()
+        self._setup_layout()
         self.resize_direct_set_buttons()
         turns_label_rect = self.turns_display_frame.turns_label.geometry()
         global_turns_label_pos = self.turns_display_frame.turns_label.mapToGlobal(

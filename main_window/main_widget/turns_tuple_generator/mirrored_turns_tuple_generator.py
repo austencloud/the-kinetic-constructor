@@ -4,7 +4,9 @@ from Enums.Enums import LetterType
 from objects.arrow.arrow import Arrow
 
 if TYPE_CHECKING:
-    from main_window.main_widget.turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
+    from main_window.main_widget.turns_tuple_generator.turns_tuple_generator import (
+        TurnsTupleGenerator,
+    )
 
 
 class MirroredTurnsTupleGenerator:
@@ -15,13 +17,14 @@ class MirroredTurnsTupleGenerator:
         letter = arrow.pictograph.letter
         letter_type = LetterType.get_letter_type(arrow.pictograph.letter)
 
-        if (
-            arrow.motion.motion_type
-            != arrow.pictograph.get.other_motion(arrow.motion).motion_type
-            or letter.value in ["S", "T"]
-            or letter_type == LetterType.Type2
-        ):
-            return self.turns_tuple_generator.generate_turns_tuple(arrow.pictograph)
+        if not arrow.pictograph.check.has_one_float():
+            if (
+                arrow.motion.motion_type
+                != arrow.pictograph.get.other_motion(arrow.motion).motion_type
+                or letter.value in ["S", "T"]
+                or letter_type == LetterType.Type2
+            ):
+                return self.turns_tuple_generator.generate_turns_tuple(arrow.pictograph)
 
         mirrored_logic = {
             LetterType.Type1: self._handle_type1,
@@ -37,6 +40,14 @@ class MirroredTurnsTupleGenerator:
         if (
             arrow.motion.motion_type
             == arrow.pictograph.get.other_motion(arrow.motion).motion_type
+            and not arrow.pictograph.check.has_one_float()
+        ):
+            items = turns_tuple.strip("()").split(", ")
+            return f"({items[1]}, {items[0]})"
+        elif (
+            arrow.motion.motion_type
+            != arrow.pictograph.get.other_motion(arrow.motion).motion_type
+            and arrow.pictograph.check.has_one_float()
         ):
             items = turns_tuple.strip("()").split(", ")
             return f"({items[1]}, {items[0]})"

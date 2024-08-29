@@ -21,7 +21,6 @@ class MirroredEntryUpdaterBase:
 
 class StandardOrientationUpdater(MirroredEntryUpdaterBase):
     def update_entry(self, letter: Letter, original_turn_data: dict):
-        letter_type = LetterType.get_letter_type(letter)
         mirrored_turns_tuple = (
             self.mirrored_entry_updater.turns_tuple_generator.generate_mirrored_tuple(
                 self.arrow
@@ -72,6 +71,7 @@ class StandardOrientationUpdater(MirroredEntryUpdaterBase):
             == self.arrow.pictograph.get.other_arrow(self.arrow).turns
             and self.arrow.motion.motion_type
             != self.arrow.pictograph.get.other_arrow(self.arrow).motion.motion_type
+            and not self.arrow.pictograph.check.has_one_float()
         ):
             if mirrored_turns_tuple not in letter_data:
                 letter_data[mirrored_turns_tuple] = {}
@@ -81,6 +81,24 @@ class StandardOrientationUpdater(MirroredEntryUpdaterBase):
             self.mirrored_entry_updater.manager.data_updater.update_specific_entry_in_json(
                 letter, letter_data, ori_key
             )
+        elif (
+            not self.arrow.motion.turns
+            == self.arrow.pictograph.get.other_arrow(self.arrow).turns
+            and self.arrow.motion.motion_type
+            != self.arrow.pictograph.get.other_arrow(self.arrow).motion.motion_type
+            and self.arrow.pictograph.check.has_one_float()
+        ):
+            if mirrored_turns_tuple not in letter_data:
+                letter_data[mirrored_turns_tuple] = {}
+            letter_data[mirrored_turns_tuple][
+                self.arrow.motion.motion_type
+            ] = self.flip_turn_data_array(letter_data[turns_tuple][self.arrow.motion.motion_type])
+            self.mirrored_entry_updater.manager.data_updater.update_specific_entry_in_json(
+                letter, letter_data, ori_key
+            )
+
+    def flip_turn_data_array(self, turn_data_array: list) -> list:
+        return [turn_data_array[1], turn_data_array[0]]
 
     def _determine_motion_attribute(self) -> str:
         letter = self.arrow.pictograph.letter

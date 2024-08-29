@@ -8,6 +8,8 @@ if TYPE_CHECKING:
 
 class BaseTurnsTupleGenerator:
     def _normalize_turns(self, motion: Motion) -> int:
+        if motion.turns == "fl":
+            return "fl"
         return (
             int(motion.turns) if motion.turns in {0.0, 1.0, 2.0, 3.0} else motion.turns
         )
@@ -23,17 +25,22 @@ class BaseTurnsTupleGenerator:
 
 
 class Type1HybridTurnsTupleGenerator(BaseTurnsTupleGenerator):
-    def generate_turns_tuple(self, pictograph) -> str:
+    def generate_turns_tuple(self, pictograph: "BasePictograph") -> str:
         super().set_pictograph(pictograph)
-        pro_motion = (
-            self.blue_motion if self.blue_motion.motion_type == PRO else self.red_motion
-        )
-        anti_motion = (
-            self.blue_motion
-            if self.blue_motion.motion_type == ANTI
-            else self.red_motion
-        )
-        return f"({pro_motion.turns}, {anti_motion.turns})"
+        # if one of the motions is not a float, proceed with the written logic
+        if not pictograph.check.has_one_float():
+            pro_motion = (
+                self.blue_motion if self.blue_motion.motion_type == PRO else self.red_motion
+            )
+            anti_motion = (
+                self.blue_motion
+                if self.blue_motion.motion_type == ANTI
+                else self.red_motion
+            )
+            return f"({pro_motion.turns}, {anti_motion.turns})"
+        elif pictograph.check.has_one_float():
+            # return blue, then red tuple
+            return f"({self._normalize_turns(self.blue_motion)}, {self._normalize_turns(self.red_motion)})"
 
 
 class Type2TurnsTupleGenerator(BaseTurnsTupleGenerator):

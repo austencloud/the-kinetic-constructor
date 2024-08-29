@@ -26,7 +26,7 @@ class DefaultPropPositioner:
             location_points = self.get_location_points(False)
 
         for location, location_point in location_points.items():
-            if prop.loc == location[0]:  # will need to upgrade for box mode
+            if prop.loc == location[0]:
                 new_coordinates = location_point.coordinates + offset
                 prop.setPos(new_coordinates)
                 return

@@ -48,6 +48,7 @@ class JsonSequenceUpdater:
             # Save the updated sequence back to the JSON
             self.json_manager.loader_saver.save_current_sequence(sequence)
 
+
     def update_prop_type_in_json(self, prop_type: PropType) -> None:
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
         sequence[0]["prop_type"] = prop_type.name.lower()
@@ -130,61 +131,6 @@ class JsonSequenceUpdater:
                 del sequence[index][f"{color}_attributes"]["prefloat_prop_rot_dir"]
         self.json_manager.loader_saver.save_current_sequence(sequence)
 
-    def apply_turn_pattern_to_current_sequence(self, pattern: list[tuple]) -> None:
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
-        min_length = min(len(sequence), len(pattern))
-        for i in range(1, min_length + 1):
-            if i == 17:
-                continue
-            blue_turns, red_turns = pattern[i - 1]
-            blue_turns = int(blue_turns) if blue_turns.is_integer() else blue_turns
-            red_turns = int(red_turns) if red_turns.is_integer() else red_turns
-
-            if i >= len(sequence):
-                break
-
-            entry = sequence[i]
-            entry["blue_attributes"]["turns"] = blue_turns
-            entry["red_attributes"]["turns"] = red_turns
-
-            if entry["blue_attributes"]["motion_type"] in [STATIC, DASH]:
-                if not blue_turns == 0:
-                    entry["blue_attributes"]["prop_rot_dir"] = (
-                        self._calculate_continuous_prop_rot_dir(sequence, i, BLUE)
-                    )
-            if entry["red_attributes"]["motion_type"] in [STATIC, DASH]:
-                if not red_turns == 0:
-                    entry["red_attributes"]["prop_rot_dir"] = (
-                        self._calculate_continuous_prop_rot_dir(sequence, i, RED)
-                    )
-
-            beat_view = self.json_manager.main_widget.top_builder_widget.sequence_widget.beat_frame.beats[
-                i - 1
-            ]
-            if beat_view and beat_view.is_filled:
-                beat_view.beat.get.pictograph_dict().update(entry)
-
-        self.json_manager.loader_saver.save_current_sequence(sequence)
-        self.json_manager.validation_engine.run(is_current_sequence=True)
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
-        self.json_manager.main_widget.top_builder_widget.sequence_widget.beat_frame.propogate_turn_adjustment(
-            sequence
-        )
-
-    def _calculate_continuous_prop_rot_dir(self, sequence, current_index, color) -> str:
-        ignore_motion_types = [STATIC, DASH]
-
-        for i in range(current_index - 1, max(current_index - 16, -1), -1):
-            if i == 0:
-                continue
-            if (
-                sequence[i][f"{color}_attributes"]["motion_type"]
-                not in ignore_motion_types
-            ):
-                return sequence[i][f"{color}_attributes"]["prop_rot_dir"]
-
-        return NO_ROT
-
     def update_current_sequence_file_with_beat(self, beat_view: BeatView):
         sequence_data = self.json_manager.loader_saver.load_current_sequence_json()
         if len(sequence_data) == 0:  # Make sure there's at least the metadata entry
@@ -260,16 +206,18 @@ class JsonSequenceUpdater:
         json_index = beat_index + 2
         self.update_turns_in_json_at_index(json_index, motion.color, new_turns)
         self.update_prefloat_motion_type_in_json_at_index(
-            json_index, motion.color, self.json_manager.loader_saver.get_motion_type_from_json_at_index(
+            json_index,
+            motion.color,
+            self.json_manager.loader_saver.get_motion_type_from_json_at_index(
                 json_index, motion.color
-            )
+            ),
         )
         self._update_prefloat_prop_rot_dir_in_json_at_index(
-            json_index, motion.color, self.json_manager.loader_saver.get_prop_rot_dir_from_json_at_index(
+            json_index,
+            motion.color,
+            self.json_manager.loader_saver.get_prop_rot_dir_from_json_at_index(
                 json_index, motion.color
-            )
+            ),
         )
         self.update_motion_type_in_json_at_index(json_index, motion.color, FLOAT)
-        self.update_prop_rot_dir_in_json_at_index(
-            json_index, motion.color, NO_ROT
-        )
+        self.update_prop_rot_dir_in_json_at_index(json_index, motion.color, NO_ROT)

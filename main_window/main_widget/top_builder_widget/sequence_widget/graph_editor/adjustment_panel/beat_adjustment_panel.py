@@ -8,6 +8,7 @@ from .turns_box.turns_box import TurnsBox
 
 
 if TYPE_CHECKING:
+    from objects.motion.motion import Motion
     from ..graph_editor import GraphEditor
 
 
@@ -84,10 +85,14 @@ class BeatAdjustmentPanel(QFrame):
         for turns_box in self.turns_boxes:
             turns_box.show()
 
-    def update_turns_panel(self, blue_turns: int, red_turns: int) -> None:
-        self.update_turns_displays(blue_turns, red_turns)
+    def update_turns_panel(self, blue_motion: "Motion", red_motion: "Motion") -> None:
+        self.update_turns_displays(blue_motion.turns, red_motion.turns)
         for box in self.turns_boxes:
             box.header.update_turns_box_header()
+            if box.color == BLUE:
+                box.matching_motion = blue_motion
+            else:
+                box.matching_motion = red_motion
 
     def resize_beat_adjustment_panel(self) -> None:
         self.layout.setContentsMargins(0, 0, 0, 0)

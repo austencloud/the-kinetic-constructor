@@ -33,8 +33,8 @@ class BeatSelectionOverlay(QWidget):
             if self.selected_beat:
                 self.selected_beat.deselect()
             self.selected_beat = beat_view
-            blue_turns = self.selected_beat.beat.blue_motion.turns
-            red_turns = self.selected_beat.beat.red_motion.turns
+            blue_motion = self.selected_beat.beat.blue_motion
+            red_motion = self.selected_beat.beat.red_motion
             self.selected_beat.is_selected = True
             graph_editor = (
                 self.selected_beat.beat_frame.main_widget.top_builder_widget.sequence_widget.graph_editor
@@ -47,7 +47,7 @@ class BeatSelectionOverlay(QWidget):
             graph_editor.pictograph_container.update_GE_pictograph(
                 self.selected_beat.beat
             )
-            graph_editor.adjustment_panel.update_turns_panel(blue_turns, red_turns)
+            graph_editor.adjustment_panel.update_turns_panel(blue_motion, red_motion)
             graph_editor.adjustment_panel.update_adjustment_panel()
             if isinstance(beat_view, StartPositionBeatView):
                 start_pos_pictograph = beat_view.beat

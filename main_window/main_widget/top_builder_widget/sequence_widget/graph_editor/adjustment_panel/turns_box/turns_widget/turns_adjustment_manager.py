@@ -30,17 +30,13 @@ class TurnsAdjustmentManager(QObject):
             self.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
         )
         if current_turns == "fl" and adjustment > 0:
-            # If currently at "fl" and increasing, reset to 0 or any positive value
             new_turns = 0
         elif current_turns == "fl" and adjustment < 0:
-            # If currently at "fl" and decreasing, do nothing or handle accordingly
             QApplication.restoreOverrideCursor()
             return
         elif current_turns == 0 and adjustment < 0:
-            # If currently at 0 and decreasing, switch to "fl"
             new_turns = "fl"
         else:
-            # Handle normal numeric adjustment
             new_turns = self._clamp_turns(current_turns + adjustment)
             new_turns = self.convert_turn_floats_to_ints(new_turns)
 

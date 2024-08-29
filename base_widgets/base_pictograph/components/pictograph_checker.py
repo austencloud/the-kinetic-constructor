@@ -189,3 +189,13 @@ class PictographChecker:
             PropType.BigBuugeng,
         ]
         return any(self.has_all_props_of_type(prop_type) for prop_type in strict_props)
+
+    def has_one_float(self) -> bool:
+        return any(
+            motion.motion_type == FLOAT for motion in self.pictograph.motions.values()
+        )
+
+    def has_two_floats(self) -> bool:
+        return all(
+            motion.motion_type == FLOAT for motion in self.pictograph.motions.values()
+        )

@@ -17,9 +17,7 @@ from .vtr_dir_button import VtgDirButton
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
-    from widgets.sequence_widget.graph_editor.adjustment_panel.turns_box.turns_box import (
-        TurnsBox,
-    )
+    from ..turns_box import TurnsBox
 
 
 class VtgDirButtonManager:
@@ -81,7 +79,7 @@ class VtgDirButtonManager:
                         self._update_pictograph_prop_rot_dir_from_vtg_dir_setting(
                             motion, prop_rot_dir
                         )
-                        self.json_manager.updater.update_rot_dir_in_json_at_index(
+                        self.json_manager.updater.update_prop_rot_dir_in_json_at_index(
                             pictograph_index + 2, self.color, prop_rot_dir
                         )
                     elif vtg_dir == OPP:
@@ -91,7 +89,7 @@ class VtgDirButtonManager:
                         self._update_pictograph_prop_rot_dir_from_vtg_dir_setting(
                             motion, prop_rot_dir
                         )
-                        self.json_manager.updater.update_rot_dir_in_json_at_index(
+                        self.json_manager.updater.update_prop_rot_dir_in_json_at_index(
                             pictograph_index + 2, self.color, prop_rot_dir
                         )
 
@@ -99,7 +97,13 @@ class VtgDirButtonManager:
         self, motion: "Motion", prop_rot_dir: PropRotDir
     ) -> None:
         motion.prop_rot_dir = prop_rot_dir
-        pictograph_dict = {f"{motion.color}_attributes": {PROP_ROT_DIR: prop_rot_dir}}
+        other_motion = motion.pictograph.get.other_motion(motion)
+        pictograph_dict = {
+            f"{motion.color}_attributes": {PROP_ROT_DIR: prop_rot_dir},
+            f"{other_motion.color}_attributes": {
+                PROP_ROT_DIR: other_motion.prop_rot_dir
+            },
+        }
         motion.pictograph.updater.update_pictograph(pictograph_dict)
 
     def _update_button_states(

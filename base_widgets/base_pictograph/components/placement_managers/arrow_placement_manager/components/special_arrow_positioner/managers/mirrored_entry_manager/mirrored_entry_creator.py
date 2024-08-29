@@ -7,7 +7,7 @@ if TYPE_CHECKING:
         SpecialPlacementMirroredEntryManager,
     )
     from ..special_placement_data_updater import SpecialPlacementDataUpdater
-    from ....turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
+    from main_window.main_widget.turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
 
 
 class MirroredEntryCreator:

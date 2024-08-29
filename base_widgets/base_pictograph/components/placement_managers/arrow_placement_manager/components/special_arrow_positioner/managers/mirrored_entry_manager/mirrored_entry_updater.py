@@ -22,7 +22,7 @@ class MirroredEntryUpdater:
         self.data_updater = self.manager.data_updater
         self.turns_tuple_generator = self.manager.turns_tuple_generator
 
-    def _get_updater(self, arrow: Arrow) -> MirroredEntryUpdaterBase:
+    def _get_mirrored_entry_updater(self, arrow: Arrow) -> MirroredEntryUpdaterBase:
         if arrow.pictograph.check.starts_from_mixed_orientation():
             return MixedOrientationUpdater(self, arrow)
         else:
@@ -37,8 +37,8 @@ class MirroredEntryUpdater:
             )
         )
 
-        updater = self._get_updater(arrow)
-        updater.update_entry(letter, original_turn_data)
+        mirrored_entry_updater = self._get_mirrored_entry_updater(arrow)
+        mirrored_entry_updater.update_entry(letter, original_turn_data)
         QApplication.processEvents()
         self.manager.data_updater.update_specific_entry_in_json(
             letter, letter_data, ori_key

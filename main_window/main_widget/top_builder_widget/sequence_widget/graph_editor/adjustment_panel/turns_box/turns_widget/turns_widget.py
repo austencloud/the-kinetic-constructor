@@ -3,6 +3,9 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Union
 
+from data.constants import ANTI, FLOAT, PRO
+from objects.motion.motion import Motion
+
 from .direct_set_dialog.direct_set_turns_dialog import DirectSetTurnsDialog
 from .turns_display_frame.turns_display_frame import TurnsDisplayFrame
 from .turns_adjustment_manager import TurnsAdjustmentManager
@@ -25,7 +28,7 @@ class TurnsWidget(QWidget):
         self.turns_display_frame = TurnsDisplayFrame(self)
         self.direct_set_dialog = DirectSetTurnsDialog(self)
         self._setup_turns_text()
-        self._setup_float_button()
+
 
     def _setup_layout(self) -> None:
         layout: QVBoxLayout = QVBoxLayout(self)
@@ -35,15 +38,6 @@ class TurnsWidget(QWidget):
         layout.addStretch(1)
         layout.addWidget(self.turns_display_frame)
         layout.addStretch(4)
-        layout.addLayout(self.float_button_layout)
-        layout.addStretch(2)
-
-    def _setup_float_button(self):
-        self.float_button_layout = QHBoxLayout()
-        self.float_button_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.float_button = QPushButton("Float", self)
-        self.float_button.clicked.connect(self.set_to_float)
-        self.float_button_layout.addWidget(self.float_button)
 
     def _setup_turns_text(self) -> None:
         self.turns_text = QLabel("Turns")
@@ -61,13 +55,6 @@ class TurnsWidget(QWidget):
         self.turns_display_frame.resize_turns_display_frame()
         self._resize_dir_buttons()
         self._resize_turns_text()
-        self._resize_float_button()  # Resize the float button
-
-    def _resize_float_button(self) -> None:
-        font_size = self.turns_box.graph_editor.width() // 40
-        font = QFont("Cambria", font_size, QFont.Weight.Bold)
-        self.float_button.setFont(font)
-        self.float_button.setMaximumWidth(self.turns_box.width() // 2)
 
     def _resize_dir_buttons(self) -> None:
         self.turns_box.prop_rot_dir_button_manager.resize_prop_rot_dir_buttons()
@@ -82,3 +69,4 @@ class TurnsWidget(QWidget):
     def set_to_float(self) -> None:
         """Set the turns to 'fl' and update the display."""
         self.adjustment_manager.direct_set_turns("fl")
+

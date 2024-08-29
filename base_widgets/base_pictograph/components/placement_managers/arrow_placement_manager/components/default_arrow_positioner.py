@@ -29,6 +29,7 @@ class DefaultArrowPositioner:
         self.motion_type_files = {
             PRO: "pro_placements.json",
             ANTI: "anti_placements.json",
+            FLOAT: "float_placements.json",
             DASH: "dash_placements.json",
             STATIC: "static_placements.json",
         }
@@ -36,11 +37,7 @@ class DefaultArrowPositioner:
     def _load_default_placements(
         self, motion_type: str
     ) -> dict[str, dict[str, list[int]]]:
-        if motion_type == FLOAT:
-            motion_type_to_use = PRO
-        else:
-            motion_type_to_use = motion_type
-        json_filename = self.motion_type_files.get(motion_type_to_use)
+        json_filename = self.motion_type_files.get(motion_type)
         json_path = get_images_and_data_path(
             f"data/arrow_placement/default/{json_filename}"
         )
@@ -72,7 +69,7 @@ class DefaultArrowPositioner:
             char = arrow.pictograph.letter.value[:-1]
             letter_suffix = f"_{char}_dash"
         elif arrow.pictograph.letter:
-            letter_suffix = f"_{arrow.pictograph.letter}"
+            letter_suffix = f"_{arrow.pictograph.letter.value}"
 
         if has_radial_props:
             key_middle = "layer1"

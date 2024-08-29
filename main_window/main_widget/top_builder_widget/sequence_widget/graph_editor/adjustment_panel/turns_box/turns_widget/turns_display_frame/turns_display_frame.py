@@ -62,8 +62,6 @@ class TurnsDisplayFrame(QFrame):
     def adjust_turn(self, adjustment: Union[int, float]) -> None:
         current_turns = self.turns_widget.adjustment_manager.get_current_turns_value()
         if current_turns == 0 and adjustment < 0:
-            # If the current turns are 0 and user tries to decrement, set to "fl"
             self.turns_widget.set_to_float()
         else:
-            # Otherwise, adjust as normal
             self.adjustment_manager.adjust_turns(adjustment)
