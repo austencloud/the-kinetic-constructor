@@ -1,6 +1,11 @@
 import os
 import logging
 from typing import TYPE_CHECKING
+from .mirrored_entry_manager.mirrored_entry_manager import (
+    MirroredEntryManager,
+)
+
+from .special_placement_entry_remover import SpecialPlacementEntryRemover
 from data.constants import (
     BLUE,
     CLOCK,
@@ -13,11 +18,6 @@ from data.constants import (
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
 from Enums.Enums import Letter
-
-from .special_placement_entry_remover import SpecialPlacementEntryRemover
-from .mirrored_entry_manager.mirrored_entry_manager import (
-    SpecialPlacementMirroredEntryManager,
-)
 
 if TYPE_CHECKING:
     from ..special_arrow_positioner import SpecialArrowPositioner
@@ -34,7 +34,7 @@ class SpecialPlacementDataUpdater:
             positioner.pictograph.main_widget.json_manager.special_placement_handler
         )
         self.entry_remover = SpecialPlacementEntryRemover(self)
-        self.mirrored_entry_manager = SpecialPlacementMirroredEntryManager(self)
+        self.mirrored_entry_manager = MirroredEntryManager(self)
 
     def _get_letter_data(self, letter: Letter, ori_key: str) -> dict:
 

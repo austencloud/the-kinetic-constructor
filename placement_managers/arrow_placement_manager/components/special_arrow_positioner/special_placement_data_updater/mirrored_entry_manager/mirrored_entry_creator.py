@@ -4,14 +4,18 @@ from objects.arrow.arrow import Arrow
 
 if TYPE_CHECKING:
     from .mirrored_entry_manager import (
-        SpecialPlacementMirroredEntryManager,
+        MirroredEntryManager,
     )
-    from ..special_placement_data_updater import SpecialPlacementDataUpdater
-    from main_window.main_widget.turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
+    from ...special_placement_data_updater.special_placement_data_updater import (
+        SpecialPlacementDataUpdater,
+    )
+    from main_window.main_widget.turns_tuple_generator.turns_tuple_generator import (
+        TurnsTupleGenerator,
+    )
 
 
 class MirroredEntryCreator:
-    def __init__(self, mirrored_entry_manager: "SpecialPlacementMirroredEntryManager"):
+    def __init__(self, mirrored_entry_manager: "MirroredEntryManager"):
         self.data_updater: SpecialPlacementDataUpdater = (
             mirrored_entry_manager.data_updater
         )

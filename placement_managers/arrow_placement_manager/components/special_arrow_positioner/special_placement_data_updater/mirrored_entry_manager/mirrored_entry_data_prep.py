@@ -3,17 +3,16 @@ from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .mirrored_entry_manager import SpecialPlacementMirroredEntryManager
+    from .mirrored_entry_manager import MirroredEntryManager
 
 
 class MirroredEntryDataPrep:
-    def __init__(self, manager: "SpecialPlacementMirroredEntryManager"):
+    def __init__(self, manager: "MirroredEntryManager"):
         self.manager = manager
 
     def is_new_entry_needed(self, arrow: Arrow) -> bool:
         """Determines if a new mirrored entry is needed for the given arrow."""
         ori_key = self._get_ori_key(arrow.motion)
-        # Check if the arrow's pictograph letter is already present in the special placements
         return (
             arrow.pictograph.letter
             not in self.manager.data_updater.positioner.placement_manager.pictograph.main_widget.special_placements.get(
@@ -23,7 +22,6 @@ class MirroredEntryDataPrep:
 
     def _get_ori_key(self, motion):
         """Fetches the orientation key based on the motion's properties."""
-        # Mimic functionality from the data updater to fetch the orientation key based on motion's direction, type, etc.
         return self.manager.data_updater._generate_ori_key(motion)
 
     def get_keys_for_mixed_start_ori(self, letter, ori_key) -> tuple[str, dict]:

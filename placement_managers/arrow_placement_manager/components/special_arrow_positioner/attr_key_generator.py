@@ -4,7 +4,7 @@ from data.constants import CLOCK, COUNTER, IN, OUT
 from objects.arrow.arrow import Arrow
 
 if TYPE_CHECKING:
-    from ..special_arrow_positioner import SpecialArrowPositioner
+    from .special_arrow_positioner import SpecialArrowPositioner
 
 
 class AttrKeyGenerator:

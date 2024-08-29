@@ -9,6 +9,8 @@ from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from objects.motion.motion import Motion
 from objects.prop.prop import Prop
+from placement_managers.arrow_placement_manager.arrow_placement_manager import ArrowPlacementManager
+from placement_managers.prop_placement_manager.prop_placement_manager import PropPlacementManager
 
 
 from .components.elemental_glyph.elemental_glyph import ElementalGlyph
@@ -24,12 +26,7 @@ from .components.pictograph_container import (
 from .components.pictograph_attr_manager import PictographAttrManager
 from .components.pictograph_checker import PictographChecker
 from .components.pictograph_getter import PictographGetter
-from .components.placement_managers.arrow_placement_manager.arrow_placement_manager import (
-    ArrowPlacementManager,
-)
-from .components.placement_managers.prop_placement_manager.prop_placement_manager import (
-    PropPlacementManager,
-)
+
 from .components.pictograph_view import PictographView
 from .components.wasd_adjustment_manager.wasd_adjustment_manager import (
     WASD_AdjustmentManager,

@@ -5,14 +5,14 @@ from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .mirrored_entry_manager import SpecialPlacementMirroredEntryManager
+    from .mirrored_entry_manager import MirroredEntryManager
 from data.constants import DASH, STATIC
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 
 class MirroredEntryRotAngleManager:
-    def __init__(self, manager: "SpecialPlacementMirroredEntryManager"):
+    def __init__(self, manager: "MirroredEntryManager"):
         self.manager = manager
 
     def update_rotation_angle_in_mirrored_entry(

@@ -1,23 +1,22 @@
 import logging
 from data.constants import DASH, FLOAT, PRO, ANTI, STATIC
 from objects.motion.motion import Motion
-from .directional_generators.dash_directional_tuple_generator import (
-    DashDirectionalGenerator,
-)
-from .directional_generators.shift_directional_tuple_generator import (
-    ShiftDirectionalGenerator,
-)
-from .directional_generators.static_directional_tuple_generator import (
-    StaticDirectionalGenerator,
-)
-from .directional_generators.base_directional_tuple_generator import (
-    BaseDirectionalGenerator,
-)
+from .dash_directional_tuple_generator import DashDirectionalGenerator
+from .shift_directional_tuple_generator import ShiftDirectionalGenerator
+from .static_directional_tuple_generator import StaticDirectionalGenerator
+from .base_directional_tuple_generator import BaseDirectionalGenerator
 
 
 class DirectionalTupleManager:
     """
-    TODO: Add docstring
+
+    DirectionalTupleManager is a class that manages the generation of directional
+    tuples for a given motion. Directional tuples are used to adjust the arrow's
+    special placement in the pictograph.
+
+    These generators ensure that we can use one tuple for each adjustment and
+    apply it correctly in each quadrant by modifying the x and y values.
+
     """
 
     def __init__(self, motion: Motion) -> None:

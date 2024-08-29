@@ -1,28 +1,26 @@
 from Enums.letters import Letter
+from .base_mirrored_entry_updater import BaseMirroredEntryUpdater
+from .mixed_orientation_updater import MixedOrientationUpdater
+from .standard_orientation_updater import StandardOrientationUpdater
 from data.constants import *
 from objects.arrow.arrow import Arrow
 from typing import TYPE_CHECKING
-from .mirrored_entry_updaters import (
-    MirroredEntryUpdaterBase,
-    MixedOrientationUpdater,
-    StandardOrientationUpdater,
-)
 from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
-    from .mirrored_entry_manager import SpecialPlacementMirroredEntryManager
+    from ..mirrored_entry_manager import MirroredEntryManager
 
 
 class MirroredEntryUpdater:
     def __init__(
         self,
-        special_placement_mirrored_entry_manager: "SpecialPlacementMirroredEntryManager",
+        special_placement_mirrored_entry_manager: "MirroredEntryManager",
     ):
         self.manager = special_placement_mirrored_entry_manager
         self.data_updater = self.manager.data_updater
         self.turns_tuple_generator = self.manager.turns_tuple_generator
 
-    def _get_mirrored_entry_updater(self, arrow: Arrow) -> MirroredEntryUpdaterBase:
+    def _get_mirrored_entry_updater(self, arrow: Arrow) -> BaseMirroredEntryUpdater:
         if arrow.pictograph.check.starts_from_mixed_orientation():
             return MixedOrientationUpdater(self, arrow)
         else:
@@ -86,7 +84,9 @@ class MirroredEntryUpdater:
             letter.value, {}
         )
 
-    def _get_keys_for_mixed_start_ori(self, letter: Letter, ori_key) -> tuple[str, dict]:
+    def _get_keys_for_mixed_start_ori(
+        self, letter: Letter, ori_key
+    ) -> tuple[str, dict]:
         other_ori_key = self.data_updater.get_other_layer3_ori_key(ori_key)
         other_letter_data = self._get_letter_data(other_ori_key, letter)
         return other_ori_key, other_letter_data
