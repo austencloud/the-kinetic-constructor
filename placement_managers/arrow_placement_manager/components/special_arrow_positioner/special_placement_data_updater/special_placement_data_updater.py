@@ -43,7 +43,7 @@ class SpecialPlacementDataUpdater:
                 ori_key
             ].get(letter.value, {})
         )
-        # TODO: fix the letterdata so it converts the Color Enum to a string.
+
         return letter_data
 
     def _update_or_create_turn_data(

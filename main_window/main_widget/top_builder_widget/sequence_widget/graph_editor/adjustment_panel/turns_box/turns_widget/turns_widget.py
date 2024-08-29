@@ -1,15 +1,16 @@
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLabel, QPushButton, QHBoxLayout
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLabel
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Union
 
 from data.constants import ANTI, FLOAT, PRO
-from objects.motion.motion import Motion
+from main_window.main_widget.top_builder_widget.sequence_widget.graph_editor.adjustment_panel.turns_box.turns_widget.motion_type_setter import MotionTypeSetter
 
 from .direct_set_dialog.direct_set_turns_dialog import DirectSetTurnsDialog
 from .turns_display_frame.turns_display_frame import TurnsDisplayFrame
 from .turns_adjustment_manager import TurnsAdjustmentManager
 from .turns_updater import TurnsUpdater
+from .motion_type_button_widget import MotionTypeButtonWidget  # Import the new class
 
 if TYPE_CHECKING:
     from ..turns_box import TurnsBox
@@ -28,6 +29,11 @@ class TurnsWidget(QWidget):
         self.turns_display_frame = TurnsDisplayFrame(self)
         self.direct_set_dialog = DirectSetTurnsDialog(self)
         self._setup_turns_text()
+        self.motion_type_buttons = MotionTypeButtonWidget(
+            self
+        )
+        self.motion_type_setter = MotionTypeSetter(self)
+
 
     def _setup_layout(self) -> None:
         layout: QVBoxLayout = QVBoxLayout(self)
@@ -37,6 +43,10 @@ class TurnsWidget(QWidget):
         layout.addStretch(1)
         layout.addWidget(self.turns_display_frame)
         layout.addStretch(4)
+        layout.addWidget(
+            self.motion_type_buttons
+        )  # Add the motion type buttons to the layout
+        layout.addStretch(2)
 
     def _setup_turns_text(self) -> None:
         self.turns_text = QLabel("Turns")
@@ -57,6 +67,7 @@ class TurnsWidget(QWidget):
         self.turns_display_frame.resize_turns_display_frame()
         self._resize_dir_buttons()
         self._resize_turns_text()
+        self.motion_type_buttons.resize_buttons()  # Resize the motion type buttons
 
     def _resize_dir_buttons(self) -> None:
         self.turns_box.prop_rot_dir_button_manager.resize_prop_rot_dir_buttons()
@@ -67,7 +78,3 @@ class TurnsWidget(QWidget):
         font = QFont("Cambria", font_size, QFont.Weight.Bold)
         font.setUnderline(True)
         self.turns_text.setFont(font)
-
-    def set_to_float(self) -> None:
-        """Set the turns to 'fl' and update the display."""
-        self.adjustment_manager.direct_set_turns("fl")
