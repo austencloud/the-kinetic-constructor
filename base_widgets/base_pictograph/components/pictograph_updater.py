@@ -37,6 +37,8 @@ class PictographUpdater:
 
         self.pictograph.tka_glyph.update_tka_glyph()
         self._position_objects()
+        if self.pictograph.view:
+            self.pictograph.view.repaint()
 
     def get_end_pos(self) -> str:
         return self.pictograph.end_pos[:-1]

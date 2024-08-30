@@ -60,6 +60,9 @@ class PropRotDirButtonManager:
 
     def _set_prop_rot_dir(self, prop_rot_dir: str) -> None:
         """Set the prop rotation direction and update the motion and letter."""
+        # if the motion's prop_rot_dir already matches what the user selected, return
+        if self.turns_box.prop_rot_dir_btn_state[prop_rot_dir]:
+            return
         pictograph = self.turns_box.graph_editor.pictograph_container.GE_pictograph
         for motion in pictograph.motions.values():
             if motion.color == self.turns_box.color:
@@ -102,8 +105,11 @@ class PropRotDirButtonManager:
             is_current_sequence=True
         )
         self.graph_editor.sequence_widget.beat_frame.on_beat_adjusted()
-        # update the option picker
         self.graph_editor.main_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker()
+        self.graph_editor.main_widget.top_builder_widget.sequence_widget.current_word_label.set_current_word(
+            self.graph_editor.sequence_widget.beat_frame.get_current_word()
+        )
+
     def _update_pictographs_prop_rot_dir(self, prop_rot_dir: str) -> None:
         pictograph = self.turns_box.graph_editor.pictograph_container.GE_pictograph
         for motion in pictograph.motions.values():
