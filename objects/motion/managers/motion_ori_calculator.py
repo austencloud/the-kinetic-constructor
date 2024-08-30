@@ -1,7 +1,27 @@
-from data.constants import *
 from typing import TYPE_CHECKING
-from Enums.MotionAttributes import Orientations, Location, MotionType
+from Enums.MotionAttributes import Location, MotionType
 from Enums.Enums import Handpaths, Turns
+from data.constants import (
+    ANTI,
+    CLOCK,
+    COUNTER,
+    CW_HANDPATH,
+    CCW_HANDPATH,
+    DASH,
+    DASH_HANDPATH,
+    PRO,
+    STATIC,
+    STATIC_HANDPATH,
+    IN,
+    OUT,
+    FLOAT,
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST,
+    CLOCKWISE,
+    COUNTER_CLOCKWISE,
+)
 
 
 if TYPE_CHECKING:
@@ -14,7 +34,7 @@ class MotionOriCalculator:
     def __init__(self, motion: "Motion") -> None:
         self.motion = motion
 
-    def get_end_ori(self) -> Orientations:
+    def get_end_ori(self) -> str:
         if self.motion.motion_type == FLOAT:  # Handle float case
             handpath_direction = self.get_handpath_direction(
                 self.motion.start_loc, self.motion.end_loc
@@ -34,20 +54,20 @@ class MotionOriCalculator:
                     self.motion.motion_type, self.motion.turns, self.motion.start_ori
                 )
 
-    def switch_orientation(self, ori: Orientations) -> Orientations:
+    def switch_orientation(self, ori: str) -> str:
         return {IN: OUT, OUT: IN, CLOCK: COUNTER, COUNTER: CLOCK}.get(ori, ori)
 
     def calculate_whole_turn_orientation(
-        self, motion_type: MotionType, turns: Turns, start_ori: Orientations
-    ) -> Orientations:
+        self, motion_type: MotionType, turns: Turns, start_ori: str
+    ) -> str:
         if motion_type in [PRO, STATIC]:
             return start_ori if turns % 2 == 0 else self.switch_orientation(start_ori)
         elif motion_type in [ANTI, DASH]:
             return self.switch_orientation(start_ori) if turns % 2 == 0 else start_ori
 
     def calculate_half_turn_orientation(
-        self, motion_type: MotionType, turns: Turns, start_ori: Orientations
-    ) -> Orientations:
+        self, motion_type: MotionType, turns: Turns, start_ori: str
+    ) -> str:
         if motion_type in [ANTI, DASH]:
             orientation_map = {
                 (IN, CLOCKWISE): (CLOCK if turns % 2 == 0.5 else COUNTER),
@@ -74,8 +94,8 @@ class MotionOriCalculator:
         return orientation_map.get((start_ori, self.motion.prop_rot_dir))
 
     def calculate_float_orientation(
-        self, start_ori: Orientations, handpath_direction: Handpaths
-    ) -> Orientations:
+        self, start_ori: str, handpath_direction: Handpaths
+    ) -> str:
         orientation_map = {
             (IN, CW_HANDPATH): CLOCK,
             (IN, CCW_HANDPATH): COUNTER,

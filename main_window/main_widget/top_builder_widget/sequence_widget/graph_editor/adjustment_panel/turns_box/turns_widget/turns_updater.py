@@ -22,7 +22,6 @@ from PyQt6.QtWidgets import QApplication
 if TYPE_CHECKING:
     from .turns_widget import TurnsWidget
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
-
     from objects.motion.motion import Motion
 
 
@@ -40,17 +39,25 @@ class TurnsUpdater:
 
     def set_motion_turns(self, motion: "Motion", new_turns: Turns) -> None:
         if new_turns == "fl":
+            # Handle float motion type
             motion.motion_type = FLOAT
             motion.prop_rot_dir = NO_ROT
         else:
-            motion.motion_type = self.json_manager.loader_saver.get_prefloat_motion_type_from_json_at_index(
+            # Retrieve prefloat motion type and prop rotation direction from JSON
+            motion.prefloat_motion_type = self.json_manager.loader_saver.get_prefloat_motion_type_from_json_at_index(
                 self.beat_frame.get_index_of_currently_selected_beat() + 2,
                 motion.color,
             )
-            motion.prop_rot_dir = self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json_at_index(
+            motion.prefloat_prop_rot_dir = self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json_at_index(
                 self.beat_frame.get_index_of_currently_selected_beat() + 2,
                 motion.color,
             )
+
+            # Update motion type and prop rotation direction based on prefloat data
+            motion.motion_type = motion.prefloat_motion_type
+            motion.prop_rot_dir = motion.prefloat_prop_rot_dir
+
+        # Handle JSON update based on the new turns
         if new_turns == "fl":
             self.json_updater.set_turns_to_fl_from_num_in_json(motion, new_turns)
         elif motion.motion_type == FLOAT and new_turns != "fl":
@@ -72,14 +79,13 @@ class TurnsUpdater:
                     motion.prop_rot_dir = NO_ROT
 
                 self.set_motion_turns(motion, new_turns)
-                # pictograph.updater.update_pictograph()
 
     def _calculate_new_turns(self, current_turns: Turns, adjustment: Turns) -> Turns:
         """Calculate new turns value based on adjustment."""
         # if the current turns is 0 and we do a negative adjustment, set the turns to fl
         if current_turns == 0 and adjustment < 0:
             return "fl"
-        # if the turns was float, and we increase it, se it to 0
+        # if the turns was float, and we increase it, set it to 0
         if current_turns == "fl" and adjustment > 0:
             return 0
         new_turns = max(0, min(3, current_turns + adjustment))
@@ -113,61 +119,15 @@ class TurnsUpdater:
 
         self.turns_box.header.update_turns_box_header()
 
-    def _determine_prop_rot_dir_for_type2_type3(
-        self, other_motion: "Motion"
-    ) -> PropRotDir:
-        """Determine the property rotation direction."""
-        vtg_state = self.turns_box.vtg_dir_btn_state
-        self.turns_box.vtg_dir_button_manager.show_vtg_dir_buttons()
-        if not vtg_state[SAME] and not vtg_state[OPP]:
-            self._set_vtg_dir_state_default()
-
-        if vtg_state[SAME]:
-            same_button = self.turns_box.vtg_dir_button_manager.same_button
-            if not same_button.is_pressed():
-                same_button.press()
-            if other_motion.prop_rot_dir != NO_ROT:
-                return other_motion.prop_rot_dir
-            else:
-                handpath_dir = other_motion.ori_calculator.get_handpath_direction(
-                    other_motion.start_loc, other_motion.end_loc
-                )
-                if handpath_dir == CW_HANDPATH:
-                    return CLOCKWISE
-                elif handpath_dir == CCW_HANDPATH:
-                    return COUNTER_CLOCKWISE
-
-        elif vtg_state[OPP]:
-            opposite_button = self.turns_box.vtg_dir_button_manager.opp_button
-            if not opposite_button.is_pressed():
-                opposite_button.press()
-            if other_motion.prop_rot_dir != NO_ROT:
-                if other_motion.prop_rot_dir == CLOCKWISE:
-                    return COUNTER_CLOCKWISE
-                elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                    return CLOCKWISE
-            elif other_motion.prop_rot_dir == NO_ROT:
-                handpath_dir = other_motion.ori_calculator.get_handpath_direction(
-                    other_motion.start_loc, other_motion.end_loc
-                )
-                if handpath_dir == CW_HANDPATH:
-                    return COUNTER_CLOCKWISE
-                elif handpath_dir == CCW_HANDPATH:
-                    return CLOCKWISE
-
     def _get_default_prop_rot_dir(self) -> PropRotDir:
+        """Get the default prop rotation direction."""
         self._set_prop_rot_dir_state_default()
         self.turns_box.prop_rot_dir_button_manager.show_prop_rot_dir_buttons()
         self.turns_box.prop_rot_dir_button_manager.cw_button.press()
         return CLOCKWISE
 
-    def _set_vtg_dir_state_default(self) -> None:
-        """set the vtg direction state to default."""
-        self.turns_box.vtg_dir_btn_state[SAME] = True
-        self.turns_box.vtg_dir_btn_state[OPP] = False
-
     def _set_prop_rot_dir_state_default(self) -> None:
-        """set the vtg direction state to default."""
+        """Set the prop rotation direction state to default."""
         self.turns_box.prop_rot_dir_btn_state[CLOCKWISE] = True
         self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE] = False
 

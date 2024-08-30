@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import VTG_Directions
 from PyQt6.QtGui import QIcon
+from Enums.letters import Letter, LetterType
 from data.constants import (
     CLOCKWISE,
     COUNTER_CLOCKWISE,
@@ -58,15 +59,55 @@ class PropRotDirButtonManager:
         return button
 
     def _set_prop_rot_dir(self, prop_rot_dir: str) -> None:
-        self._update_pictographs_prop_rot_dir(prop_rot_dir)
+        """Set the prop rotation direction and update the motion and letter."""
+        pictograph = self.turns_box.graph_editor.pictograph_container.GE_pictograph
+        for motion in pictograph.motions.values():
+            if motion.color == self.turns_box.color:
+                new_letter, updated_motion = (
+                    self.graph_editor.main_widget.letter_engine.update_motion_attributes(
+                        motion, prop_rot_dir
+                    )
+                )
+                self._update_pictograph_and_json(updated_motion, new_letter)
         self._update_button_states(self.prop_rot_dir_buttons, prop_rot_dir)
+
+    def _update_pictograph_and_json(self, motion: "Motion", new_letter: Letter) -> None:
+        """Update the pictograph and JSON with the new letter and motion attributes."""
+        pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
+        pictograph_dict = {
+            "letter": new_letter.value,
+            motion.color
+            + "_attributes": {
+                "motion_type": motion.motion_type,
+                "prop_rot_dir": motion.prop_rot_dir,
+                "end_ori": motion.end_ori,
+            },
+        }
+
+        motion.pictograph.updater.update_pictograph(pictograph_dict)
+        json_index = pictograph_index + 2
+        self.json_manager.updater.update_prop_rot_dir_in_json_at_index(
+            json_index, motion.color, motion.prop_rot_dir
+        )
+        self.json_manager.updater.update_motion_type_in_json_at_index(
+            json_index, motion.color, motion.motion_type
+        )
+        self.json_manager.updater.update_letter_in_json_at_index(
+            json_index, new_letter.value
+        )
+        self.turns_box.turns_widget.motion_type_label.update_motion_type_label(
+            motion.motion_type
+        )
+        self.graph_editor.main_widget.json_manager.validation_engine.run(
+            is_current_sequence=True
+        )
+        self.graph_editor.sequence_widget.beat_frame.on_beat_adjusted()
 
     def _update_pictographs_prop_rot_dir(self, prop_rot_dir: str) -> None:
         pictograph = self.turns_box.graph_editor.pictograph_container.GE_pictograph
         for motion in pictograph.motions.values():
-            if motion.motion_type in [DASH, STATIC]:
-                if motion.color == self.turns_box.color:
-                    self._update_pictograph_prop_rot_dir(motion, prop_rot_dir)
+            if motion.color == self.turns_box.color:
+                self._update_pictograph_prop_rot_dir(motion, prop_rot_dir)
 
     def _update_pictograph_vtg_dir(
         self, motion: "Motion", vtg_dir: VTG_Directions
@@ -122,7 +163,7 @@ class PropRotDirButtonManager:
         self.ccw_button.unpress()
 
     def resize_prop_rot_dir_buttons(self) -> None:
-        button_size = int(self.turns_box.height() * 0.2)
+        button_size = int(self.turns_box.height() * 0.25)
         icon_size = int(button_size * 0.8)
         for button in self.prop_rot_dir_buttons:
             button.setFixedSize(button_size, button_size)

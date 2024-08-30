@@ -23,8 +23,7 @@ class MotionAttrManager:
         if self.motion.check.is_shift():
             if "prefloat_motion_type" not in motion_dict:
                 self.motion.prefloat_motion_type = self.motion.motion_type
-            # if "prefloat_prop_rot_dir" not in motion_dict:
-            #     self.motion.prefloat_prop_rot_dir = self.motion.prop_rot_dir
+
         if self.motion.pictograph.letter in [
             Letter.S,
             Letter.T,

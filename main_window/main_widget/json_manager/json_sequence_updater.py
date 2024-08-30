@@ -48,7 +48,6 @@ class JsonSequenceUpdater:
             # Save the updated sequence back to the JSON
             self.json_manager.loader_saver.save_current_sequence(sequence)
 
-
     def update_prop_type_in_json(self, prop_type: PropType) -> None:
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
         sequence[0]["prop_type"] = prop_type.name.lower()
@@ -61,7 +60,7 @@ class JsonSequenceUpdater:
         sequence[index][f"{color}_attributes"]["prefloat_motion_type"] = motion_type
         self.json_manager.loader_saver.save_current_sequence(sequence)
 
-    def _update_prefloat_prop_rot_dir_in_json_at_index(
+    def update_prefloat_prop_rot_dir_in_json_at_index(
         self, index: int, color: str, prop_rot_dir: str
     ) -> None:
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
@@ -78,6 +77,11 @@ class JsonSequenceUpdater:
             if "prefloat_motion_type" in sequence[index][f"{color}_attributes"]:
                 del sequence[index][f"{color}_attributes"]["prefloat_motion_type"]
 
+        self.json_manager.loader_saver.save_current_sequence(sequence)
+
+    def update_letter_in_json_at_index(self, index: int, letter: str) -> None:
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence[index]["letter"] = letter
         self.json_manager.loader_saver.save_current_sequence(sequence)
 
     def update_turns_in_json_at_index(
@@ -212,7 +216,7 @@ class JsonSequenceUpdater:
                 json_index, motion.color
             ),
         )
-        self._update_prefloat_prop_rot_dir_in_json_at_index(
+        self.update_prefloat_prop_rot_dir_in_json_at_index(
             json_index,
             motion.color,
             self.json_manager.loader_saver.get_prop_rot_dir_from_json_at_index(
