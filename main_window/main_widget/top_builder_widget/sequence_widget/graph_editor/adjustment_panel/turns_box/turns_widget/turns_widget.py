@@ -64,13 +64,10 @@ class TurnsWidget(QWidget):
 
     def resize_turns_widget(self) -> None:
         self.turns_display_frame.resize_turns_display_frame()
-        self._resize_dir_buttons()
+        self.turns_box.prop_rot_dir_button_manager.resize_prop_rot_dir_buttons()
         self._resize_turns_text()
         self.motion_type_label.resize_buttons()
 
-    def _resize_dir_buttons(self) -> None:
-        self.turns_box.prop_rot_dir_button_manager.resize_prop_rot_dir_buttons()
-        self.turns_box.vtg_dir_button_manager.resize_vtg_dir_buttons()
 
     def _resize_turns_text(self) -> None:
         font_size = self.turns_box.graph_editor.width() // 50

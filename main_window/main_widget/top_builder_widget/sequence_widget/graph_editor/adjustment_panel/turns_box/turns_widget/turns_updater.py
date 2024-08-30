@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Turns
 from Enums.MotionAttributes import PropRotDir
 from data.constants import (
+    ANTI,
     BLUE,
     CCW_HANDPATH,
     CLOCKWISE,
@@ -10,6 +11,7 @@ from data.constants import (
     DASH,
     FLOAT,
     NO_ROT,
+    PRO,
     RED,
     STATIC,
     SAME,
@@ -85,69 +87,31 @@ class TurnsUpdater:
 
     def _update_turns(self, motion: "Motion", new_turns: Turns) -> None:
         """Update motion's turns and rotation properties based on new turn value."""
-        if motion.motion_type in [DASH, STATIC]:
-            self._handle_static_dash_motion(motion, new_turns)
+        self._handle_buttons(motion, new_turns)
         motion.turns_manager.set_motion_turns(new_turns)
 
-    def _handle_static_dash_motion(self, motion: "Motion", new_turns: Turns) -> None:
-        """Handle specific logic for static or dash motion types."""
-        vtg_dir_button_manager = self.turns_widget.turns_box.vtg_dir_button_manager
-
+    def _handle_buttons(self, motion: "Motion", new_turns: Turns) -> None:
+        """Handle the button states based on the new turns value."""
         if new_turns == 0:
-            motion.prop_rot_dir = NO_ROT
-            vtg_dir_button_manager.unpress_vtg_buttons()
-            if hasattr(self.turns_box, "prop_rot_dir_button_manager"):
+            if motion.motion_type in [DASH, STATIC]:
+                motion.prop_rot_dir = NO_ROT
                 self.turns_widget.turns_box.prop_rot_dir_button_manager.unpress_prop_rot_dir_buttons()
-            # if the prop rot dir butons are visible, hide them
+                self.turns_box.prop_rot_dir_button_manager.hide_prop_rot_dir_buttons()
+            elif motion.motion_type in [PRO, ANTI]:
+                self.turns_box.prop_rot_dir_button_manager.show_prop_rot_dir_buttons()
+        elif new_turns == "fl":
+            self.turns_widget.turns_box.prop_rot_dir_button_manager.unpress_prop_rot_dir_buttons()
             if self.turns_box.prop_rot_dir_button_manager.cw_button.isVisible():
                 self.turns_box.prop_rot_dir_button_manager.hide_prop_rot_dir_buttons()
-            if self.turns_box.vtg_dir_button_manager.same_button.isVisible():
-                self.turns_box.vtg_dir_button_manager.hide_vtg_dir_buttons()
+            motion.motion_type = FLOAT
+            motion.prop_rot_dir = NO_ROT
+        elif new_turns > 0:
+            self.turns_box.prop_rot_dir_button_manager.show_prop_rot_dir_buttons()
+            if motion.prop_rot_dir == NO_ROT:
+                motion.prop_rot_dir = self._get_default_prop_rot_dir()
+            self.turns_box.prop_rot_dir_button_manager.show_prop_rot_dir_buttons()
 
-        elif motion.turns == 0 and new_turns > 0:
-            self._set_prop_rot_dir(motion)
-
-    def _set_prop_rot_dir(self, motion: "Motion") -> None:
-        """set the rotation direction of the motion based on the vtg directional relationship."""
-        other_motion = motion.pictograph.get.other_motion(motion)
-        GE_pictograph = (
-            self.turns_box.adjustment_panel.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
-        )
-        if GE_pictograph.letter_type in [
-            LetterType.Type2,
-            LetterType.Type3,
-        ]:
-            prop_rot_dir = self._determine_prop_rot_dir_for_type2_type3(other_motion)
-            motion.prop_rot_dir = prop_rot_dir
-            if not self.turns_box.vtg_dir_button_manager.same_button.isVisible():
-                self.turns_box.vtg_dir_button_manager.show_vtg_dir_buttons()
-        elif GE_pictograph.letter_type in [
-            LetterType.Type4,
-            LetterType.Type5,
-            LetterType.Type6,
-        ]:
-            if not self.turns_box.prop_rot_dir_button_manager.cw_button.isVisible():
-                self.turns_box.prop_rot_dir_button_manager.show_prop_rot_dir_buttons()
-            self._set_prop_rot_dir_for_type4_5_6(motion)
-
-    def _set_prop_rot_dir_for_type4_5_6(self, motion: "Motion"):
-        if self.turns_box.prop_rot_dir_btn_state[CLOCKWISE]:
-            motion.prop_rot_dir = CLOCKWISE
-        elif self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE]:
-            motion.prop_rot_dir = COUNTER_CLOCKWISE
-        elif (
-            not self.turns_box.prop_rot_dir_btn_state[CLOCKWISE]
-            and not self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE]
-        ):
-            motion.prop_rot_dir = self._get_default_prop_rot_dir_for_type4_5_6()
-        if motion.prop_rot_dir == CLOCKWISE:
-            self.turns_box.prop_rot_dir_button_manager.cw_button.press()
-            self.turns_box.prop_rot_dir_btn_state[CLOCKWISE] = True
-            self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE] = False
-        elif motion.prop_rot_dir == COUNTER_CLOCKWISE:
-            self.turns_box.prop_rot_dir_button_manager.ccw_button.press()
-            self.turns_box.prop_rot_dir_btn_state[CLOCKWISE] = False
-            self.turns_box.prop_rot_dir_btn_state[COUNTER_CLOCKWISE] = True
+        self.turns_box.header.update_turns_box_header()
 
     def _determine_prop_rot_dir_for_type2_type3(
         self, other_motion: "Motion"
@@ -172,7 +136,7 @@ class TurnsUpdater:
                     return CLOCKWISE
                 elif handpath_dir == CCW_HANDPATH:
                     return COUNTER_CLOCKWISE
-                
+
         elif vtg_state[OPP]:
             opposite_button = self.turns_box.vtg_dir_button_manager.opp_button
             if not opposite_button.is_pressed():
@@ -191,7 +155,7 @@ class TurnsUpdater:
                 elif handpath_dir == CCW_HANDPATH:
                     return CLOCKWISE
 
-    def _get_default_prop_rot_dir_for_type4_5_6(self) -> PropRotDir:
+    def _get_default_prop_rot_dir(self) -> PropRotDir:
         self._set_prop_rot_dir_state_default()
         self.turns_box.prop_rot_dir_button_manager.show_prop_rot_dir_buttons()
         self.turns_box.prop_rot_dir_button_manager.cw_button.press()

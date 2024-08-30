@@ -3,7 +3,6 @@ from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
 from .prop_rot_dir_button_manager.prop_rot_dir_button_manager import (
     PropRotDirButtonManager,
 )
-from .vtg_dir_button_manager.vtg_dir_button_manager import VtgDirButtonManager
 from .turns_box_header import TurnsBoxHeader
 from .turns_widget.turns_widget import TurnsWidget
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
@@ -36,7 +35,6 @@ class TurnsBox(QFrame):
         self._setup_layout()
 
     def _setup_widgets(self) -> None:
-        self.vtg_dir_button_manager = VtgDirButtonManager(self)
         self.prop_rot_dir_button_manager = PropRotDirButtonManager(self)
         self.header = TurnsBoxHeader(self)
         self.turns_widget = TurnsWidget(self)

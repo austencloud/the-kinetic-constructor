@@ -74,7 +74,7 @@ class TurnsAdjustmentManager(QObject):
             pictograph_index + 2, self.color, new_turns
         )
         self.pictograph.motions[self.color].turns = new_turns
-        self.turns_widget.update_turns_display(self.pictograph.motions[self.color])
+        self.turns_widget.update_turns_display(self.pictograph.motions[self.color].turns)
         self.json_validation_engine.run(is_current_sequence=True)
         self.main_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)

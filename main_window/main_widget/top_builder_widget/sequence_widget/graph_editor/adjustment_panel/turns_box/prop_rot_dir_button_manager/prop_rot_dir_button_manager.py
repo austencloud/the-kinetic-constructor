@@ -9,7 +9,6 @@ from data.constants import (
     PROP_ROT_DIR,
     STATIC,
 )
-from Enums.MotionAttributes import PropRotDir
 from PyQt6.QtCore import QSize
 
 from utilities.path_helpers import get_images_and_data_path
@@ -58,11 +57,11 @@ class PropRotDirButtonManager:
         button.clicked.connect(callback)
         return button
 
-    def _set_prop_rot_dir(self, prop_rot_dir: PropRotDir) -> None:
+    def _set_prop_rot_dir(self, prop_rot_dir: str) -> None:
         self._update_pictographs_prop_rot_dir(prop_rot_dir)
         self._update_button_states(self.prop_rot_dir_buttons, prop_rot_dir)
 
-    def _update_pictographs_prop_rot_dir(self, prop_rot_dir: PropRotDir) -> None:
+    def _update_pictographs_prop_rot_dir(self, prop_rot_dir: str) -> None:
         pictograph = self.turns_box.graph_editor.pictograph_container.GE_pictograph
         for motion in pictograph.motions.values():
             if motion.motion_type in [DASH, STATIC]:
@@ -79,7 +78,7 @@ class PropRotDirButtonManager:
         motion.pictograph.updater.update_pictograph(pictograph_dict)
 
     def _update_pictograph_prop_rot_dir(
-        self, motion: "Motion", prop_rot_dir: PropRotDir
+        self, motion: "Motion", prop_rot_dir: str
     ) -> None:
         pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
         motion.prop_rot_dir = prop_rot_dir
@@ -94,7 +93,7 @@ class PropRotDirButtonManager:
     def _update_button_states(
         self,
         buttons: list[PropRotDirButton],
-        prop_rot_dir: PropRotDir,
+        prop_rot_dir: str,
     ) -> None:
         for button in buttons:
             if button.prop_rot_dir == prop_rot_dir:
@@ -112,7 +111,7 @@ class PropRotDirButtonManager:
         for button in self.prop_rot_dir_buttons:
             button.hide()
 
-    def _opposite_prop_rot_dir(self, prop_rot_dir: PropRotDir) -> PropRotDir:
+    def _opposite_prop_rot_dir(self, prop_rot_dir: str) -> str:
         return {
             CLOCKWISE: COUNTER_CLOCKWISE,
             COUNTER_CLOCKWISE: CLOCKWISE,
@@ -123,7 +122,7 @@ class PropRotDirButtonManager:
         self.ccw_button.unpress()
 
     def resize_prop_rot_dir_buttons(self) -> None:
-        button_size = int(self.turns_box.height() * 0.25)
+        button_size = int(self.turns_box.height() * 0.2)
         icon_size = int(button_size * 0.8)
         for button in self.prop_rot_dir_buttons:
             button.setFixedSize(button_size, button_size)
