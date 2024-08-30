@@ -102,7 +102,8 @@ class PropRotDirButtonManager:
             is_current_sequence=True
         )
         self.graph_editor.sequence_widget.beat_frame.on_beat_adjusted()
-
+        # update the option picker
+        self.graph_editor.main_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker()
     def _update_pictographs_prop_rot_dir(self, prop_rot_dir: str) -> None:
         pictograph = self.turns_box.graph_editor.pictograph_container.GE_pictograph
         for motion in pictograph.motions.values():
