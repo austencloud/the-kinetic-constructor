@@ -5,6 +5,7 @@ from data.constants import (
     COUNTER_CLOCKWISE,
     DASH,
     EAST,
+    FLOAT,
     NO_ROT,
     NORTH,
     PRO,
@@ -45,15 +46,17 @@ class DashDirectionalGenerator(BaseDirectionalGenerator):
                 if self.other_motion.prop_rot_dir == CLOCKWISE
                 else [(x, y), (-y, x), (-x, -y), (y, -x)]
             )
-        elif self.other_motion.motion_type == STATIC:
+        elif self.other_motion.motion_type == FLOAT:
+            return [(x, -y), (y, x), (-x, y), (-y, -x)]
+
+        elif self.other_motion.motion_type == DASH:
             if self.other_motion.prop_rot_dir == CLOCKWISE:
                 return [(x, -y), (y, x), (-x, y), (-y, -x)]
             elif self.other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
                 return [(-x, -y), (y, -x), (x, y), (-y, x)]
             else:
                 return [(x, -y), (y, x), (-x, y), (-y, -x)]
-
-        elif self.other_motion.motion_type == DASH:
+        elif self.other_motion.motion_type == STATIC:
             if self.other_motion.prop_rot_dir == CLOCKWISE:
                 return [(x, -y), (y, x), (-x, y), (-y, -x)]
             elif self.other_motion.prop_rot_dir == COUNTER_CLOCKWISE:

@@ -1,8 +1,11 @@
 from typing import TYPE_CHECKING
 from data.constants import (
+    CCW_HANDPATH,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
+    CW_HANDPATH,
     ICON_DIR,
+    NO_ROT,
     OPP,
     PROP_ROT_DIR,
     SAME,
@@ -76,6 +79,12 @@ class VtgDirButtonManager:
                     pictograph.direction = vtg_dir
                     if vtg_dir == SAME:
                         prop_rot_dir = other_motion.prop_rot_dir
+                        if prop_rot_dir == NO_ROT:
+                            prop_rot_dir = (
+                                self.get_handpath_dir_instead_of_prop_rot_dir(
+                                    other_motion
+                                )
+                            )
                         self._update_pictograph_prop_rot_dir_from_vtg_dir_setting(
                             motion, prop_rot_dir
                         )
@@ -86,12 +95,37 @@ class VtgDirButtonManager:
                         prop_rot_dir = self._opposite_prop_rot_dir(
                             other_motion.prop_rot_dir
                         )
+                        prop_rot_dir = (
+                            self.get_opposite_handpath_dir_instead_of_prop_rot_dir(
+                                other_motion
+                            )
+                        )
                         self._update_pictograph_prop_rot_dir_from_vtg_dir_setting(
                             motion, prop_rot_dir
                         )
                         self.json_manager.updater.update_prop_rot_dir_in_json_at_index(
                             pictograph_index + 2, self.color, prop_rot_dir
                         )
+
+    def get_handpath_dir_instead_of_prop_rot_dir(self, motion: "Motion") -> str:
+        handpath_dir = motion.ori_calculator.get_handpath_direction(
+            motion.start_loc, motion.end_loc
+        )
+        if handpath_dir == CW_HANDPATH:
+            return CLOCKWISE
+        elif handpath_dir == CCW_HANDPATH:
+            return COUNTER_CLOCKWISE
+
+    def get_opposite_handpath_dir_instead_of_prop_rot_dir(
+        self, motion: "Motion"
+    ) -> str:
+        handpath_dir = motion.ori_calculator.get_handpath_direction(
+            motion.start_loc, motion.end_loc
+        )
+        if handpath_dir == CW_HANDPATH:
+            return COUNTER_CLOCKWISE
+        elif handpath_dir == CCW_HANDPATH:
+            return CLOCKWISE
 
     def _update_pictograph_prop_rot_dir_from_vtg_dir_setting(
         self, motion: "Motion", prop_rot_dir: PropRotDir

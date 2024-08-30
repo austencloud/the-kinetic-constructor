@@ -157,7 +157,9 @@ class PictographUpdater:
                 for attr in motion_attributes
                 if attr in motion_dict
             }
-        if pictograph_dict.get(f"{color}_attributes").get("prefloat_motion_type"):
+        if pictograph_dict.get(f"{color}_attributes", {}).get(
+            "prefloat_motion_type", {}
+        ):
             motion_dicts[color]["prefloat_motion_type"] = pictograph_dict.get(
                 f"{color}_attributes"
             ).get("prefloat_motion_type")

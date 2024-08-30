@@ -3,8 +3,10 @@ from Enums.Enums import LetterType, Turns
 from Enums.MotionAttributes import PropRotDir
 from data.constants import (
     BLUE,
+    CCW_HANDPATH,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
+    CW_HANDPATH,
     DASH,
     FLOAT,
     NO_ROT,
@@ -55,15 +57,6 @@ class TurnsUpdater:
             self.json_updater.set_turns_from_num_to_num_in_json(motion, new_turns)
 
         self._update_turns(motion, new_turns)
-        self._repaint_views(motion)
-
-    def _repaint_views(self, motion: "Motion"):
-        """Repaint the pictograph and GE pictograph views to reflect the change."""
-        motion.pictograph.view.repaint()
-        GE_pictograph = (
-            self.turns_box.adjustment_panel.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
-        )
-        GE_pictograph.view.repaint()
 
     def _adjust_turns_for_pictograph(
         self, pictograph: "BasePictograph", adjustment: Turns
@@ -77,6 +70,7 @@ class TurnsUpdater:
                     motion.prop_rot_dir = NO_ROT
 
                 self.set_motion_turns(motion, new_turns)
+                # pictograph.updater.update_pictograph()
 
     def _calculate_new_turns(self, current_turns: Turns, adjustment: Turns) -> Turns:
         """Calculate new turns value based on adjustment."""
@@ -165,19 +159,37 @@ class TurnsUpdater:
             self._set_vtg_dir_state_default()
 
         if vtg_state[SAME]:
-            # if the button isn't pressed, press it
             same_button = self.turns_box.vtg_dir_button_manager.same_button
             if not same_button.is_pressed():
                 same_button.press()
-            return other_motion.prop_rot_dir
+            if other_motion.prop_rot_dir != NO_ROT:
+                return other_motion.prop_rot_dir
+            else:
+                handpath_dir = other_motion.ori_calculator.get_handpath_direction(
+                    other_motion.start_loc, other_motion.end_loc
+                )
+                if handpath_dir == CW_HANDPATH:
+                    return CLOCKWISE
+                elif handpath_dir == CCW_HANDPATH:
+                    return COUNTER_CLOCKWISE
+                
         elif vtg_state[OPP]:
             opposite_button = self.turns_box.vtg_dir_button_manager.opp_button
             if not opposite_button.is_pressed():
                 opposite_button.press()
-            if other_motion.prop_rot_dir == CLOCKWISE:
-                return COUNTER_CLOCKWISE
-            elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
-                return CLOCKWISE
+            if other_motion.prop_rot_dir != NO_ROT:
+                if other_motion.prop_rot_dir == CLOCKWISE:
+                    return COUNTER_CLOCKWISE
+                elif other_motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                    return CLOCKWISE
+            elif other_motion.prop_rot_dir == NO_ROT:
+                handpath_dir = other_motion.ori_calculator.get_handpath_direction(
+                    other_motion.start_loc, other_motion.end_loc
+                )
+                if handpath_dir == CW_HANDPATH:
+                    return COUNTER_CLOCKWISE
+                elif handpath_dir == CCW_HANDPATH:
+                    return CLOCKWISE
 
     def _get_default_prop_rot_dir_for_type4_5_6(self) -> PropRotDir:
         self._set_prop_rot_dir_state_default()

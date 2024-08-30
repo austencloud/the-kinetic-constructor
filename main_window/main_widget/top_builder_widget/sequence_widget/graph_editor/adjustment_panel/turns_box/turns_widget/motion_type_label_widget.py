@@ -21,9 +21,9 @@ class MotionTypeLabelWidget(QWidget):
     def _setup_components(self) -> None:
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.label.mousePressEvent = self._on_label_clicked  # Add click handler
-        self.label.enterEvent = self._on_hover_enter  # Add hover enter handler
-        self.label.leaveEvent = self._on_hover_leave  # Add hover leave handler
+        # self.label.mousePressEvent = self._on_label_clicked  # Add click handler
+        # self.label.enterEvent = self._on_hover_enter  # Add hover enter handler
+        # self.label.leaveEvent = self._on_hover_leave  # Add hover leave handler
 
         # Set initial styles
         self.label.setStyleSheet("""
@@ -57,21 +57,21 @@ class MotionTypeLabelWidget(QWidget):
         self.label.setText(motion_type.capitalize())
         turns_box_size = self.turns_widget.turns_box.size()
         border_thickness = turns_box_size.height() // 100
-        if motion_type in [PRO, ANTI, FLOAT]:
-            self.label.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-            self.label.setStyleSheet(f"""
-                padding: 5px 10px;
-                border: {border_thickness}px solid black;
-                border-radius: 5px;
-                background-color: white;
-            """)
-        elif motion_type in [DASH, STATIC]:
-            self.label.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
-            self.label.setStyleSheet(f"""
-                padding: 5px 10px;
-                border-radius: 5px;
-                background-color: white;
-            """)
+        # if motion_type in [PRO, ANTI, FLOAT]:
+        #     self.label.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        #     self.label.setStyleSheet(f"""
+        #         padding: 5px 10px;
+        #         border: {border_thickness}px solid black;
+        #         border-radius: 5px;
+        #         background-color: white;
+        #     """)
+        # elif motion_type in [DASH, STATIC]:
+        self.label.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
+        self.label.setStyleSheet(f"""
+            padding: 5px 10px;
+            border-radius: 5px;
+            background-color: white;
+        """)
 
     def update_motion_type_label(self, motion_type: str) -> None:
         """Update the motion type label based on the selected motion type."""

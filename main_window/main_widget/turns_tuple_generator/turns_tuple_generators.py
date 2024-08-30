@@ -30,7 +30,9 @@ class Type1HybridTurnsTupleGenerator(BaseTurnsTupleGenerator):
         # if one of the motions is not a float, proceed with the written logic
         if not pictograph.check.has_one_float():
             pro_motion = (
-                self.blue_motion if self.blue_motion.motion_type == PRO else self.red_motion
+                self.blue_motion
+                if self.blue_motion.motion_type == PRO
+                else self.red_motion
             )
             anti_motion = (
                 self.blue_motion
@@ -65,11 +67,20 @@ class Type3TurnsTupleGenerator(BaseTurnsTupleGenerator):
         shift = self.p.get.shift()
         dash = self.p.get.dash()
         direction = "s" if dash.prop_rot_dir == shift.prop_rot_dir else "o"
-        if dash.turns > 0 and shift.turns > 0:
-            return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
-        elif dash.turns > 0:
-            return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
-        else:
+        if dash.turns > 0:
+            if isinstance(shift.turns, int) or isinstance(shift.turns, float):
+                if shift.turns > 0:
+                    return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+                elif dash.turns > 0:
+                    return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+                else:
+                    return f"({self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+            elif shift.turns == "fl":
+                if dash.turns > 0:
+                    return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+                else:
+                    return f"({self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+        elif dash.turns == 0:
             return f"({self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
 
 

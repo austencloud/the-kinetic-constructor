@@ -40,7 +40,6 @@ class TurnsAdjustmentManager(QObject):
         else:
             new_turns = self._clamp_turns(current_turns + adjustment)
             new_turns = self.convert_turn_floats_to_ints(new_turns)
-        # self._update_motion_properties(new_turns)
 
         self.turns_widget.turns_updater._adjust_turns_for_pictograph(
             self.pictograph, adjustment
@@ -54,6 +53,15 @@ class TurnsAdjustmentManager(QObject):
         self.main_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
         QApplication.restoreOverrideCursor()
+        self._repaint_views()
+
+    def _repaint_views(self):
+        """Repaint the pictograph and GE pictograph views to reflect the change."""
+        self.pictograph.view.repaint()
+        GE_pictograph = (
+            self.turns_widget.turns_box.adjustment_panel.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
+        )
+        GE_pictograph.view.repaint()
 
     def direct_set_turns(self, new_turns: Turns) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
