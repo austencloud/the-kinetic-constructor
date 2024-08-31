@@ -96,7 +96,7 @@ class JsonSequenceLoaderSaver:
     def clear_current_sequence_file(self):
         self.save_current_sequence([])
 
-    def get_prop_rot_dir_from_json_at_index(self, index: int, color: str) -> int:
+    def get_prop_rot_dir_from_json(self, index: int, color: str) -> int:
         sequence = self.load_current_sequence_json()
         if sequence:
             return sequence[index][f"{color}_attributes"].get("prop_rot_dir", 0)

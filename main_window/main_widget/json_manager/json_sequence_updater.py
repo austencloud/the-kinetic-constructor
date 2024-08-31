@@ -214,7 +214,7 @@ class JsonSequenceUpdater:
         self.update_prefloat_prop_rot_dir_in_json(
             json_index,
             motion.color,
-            self.json_manager.loader_saver.get_prop_rot_dir_from_json_at_index(
+            self.json_manager.loader_saver.get_prop_rot_dir_from_json(
                 json_index, motion.color
             ),
         )

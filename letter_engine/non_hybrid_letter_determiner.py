@@ -1,46 +1,53 @@
 from typing import TYPE_CHECKING
 from Enums.letters import Letter
-from data.constants import COUNTER_CLOCKWISE, CLOCKWISE
+from data.constants import ANTI, COUNTER_CLOCKWISE, CLOCKWISE, FLOAT, PRO
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
     from objects.motion.motion import Motion
+    from letter_engine.letter_engine import LetterEngine
 
 
 class NonHybridShiftLetterDeterminer:
-    def __init__(self, main_widget: "MainWidget", letters: dict) -> None:
-        self.main_widget = main_widget
-        self.letters = letters
+    """
+    This is for when there is one float and one shift,
+    It ensures that we don't use hybrid letters (like C, F, I, or L)
+    to describe letters that have one float and one Pro/Anti.
+    """
 
-    def handle(self, motion: "Motion", new_motion_type: str) -> Letter:
+    def __init__(self, letter_engine: "LetterEngine"):
+        self.main_widget = letter_engine.main_widget
+        self.letters = letter_engine.letters
+
+    def determine_letter(
+        self, motion: "Motion", new_motion_type: str, swap_prop_rot_dir: bool
+    ) -> Letter:
         """Handle the case where there is one float and one shift, and the user changes the motion type of the shift."""
         other_motion = motion.pictograph.get.other_motion(motion)
-        self._update_motion_attributes(other_motion, new_motion_type)
+        self._update_motion_attributes(motion, new_motion_type, other_motion)
+        if swap_prop_rot_dir:
+            self._update_motion_attributes(other_motion, new_motion_type, motion)
         return self._find_matching_letter(motion)
 
     def _update_motion_attributes(
-        self, other_motion: "Motion", new_motion_type: str
+        self, motion: "Motion", new_motion_type: str, other_motion: "Motion"
     ) -> None:
         """Update the attributes of the other motion."""
-        other_motion.prefloat_motion_type = new_motion_type
-        json_index = self._get_json_index_for_current_beat()
+        motion.prefloat_motion_type = new_motion_type
+        if motion.motion_type == FLOAT:
+            json_index = self._get_json_index_for_current_beat()
+            self._update_json_with_prefloat_attributes(
+                json_index, motion, new_motion_type
+            )
+            motion.prefloat_prop_rot_dir = self._get_prop_rot_dir(
+                json_index, other_motion
+            )
 
-        self._update_json_with_prefloat_attributes(
-            json_index, other_motion, new_motion_type
-        )
-
-        prefloat_prop_rot_dir = self._get_prefloat_prop_rot_dir(
-            json_index, other_motion
-        )
-        other_motion.prefloat_prop_rot_dir = self._get_opposite_rotation_direction(
-            prefloat_prop_rot_dir
-        )
-
-        self.main_widget.json_manager.updater.update_prefloat_prop_rot_dir_in_json(
-            json_index,
-            other_motion.color,
-            other_motion.prefloat_prop_rot_dir,
-        )
+            self.main_widget.json_manager.updater.update_prefloat_prop_rot_dir_in_json(
+                json_index,
+                motion.color,
+                motion.prefloat_prop_rot_dir,
+            )
 
     def _update_json_with_prefloat_attributes(
         self, json_index: int, other_motion: "Motion", motion_type: str
@@ -59,14 +66,22 @@ class NonHybridShiftLetterDeterminer:
             + 2
         )
 
-    def _get_prefloat_prop_rot_dir(
-        self, json_index: int, other_motion: "Motion"
-    ) -> str:
-        """Retrieve the pre-float prop rotation direction from JSON."""
-        return self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
-            json_index,
-            other_motion.color,
-        )
+    def _get_prop_rot_dir(self, json_index: int, other_motion: "Motion") -> str:
+        """Retrieve the prop rotation direction from JSON."""
+        if other_motion.motion_type == FLOAT:
+            prop_rot_dir = self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
+                json_index,
+                other_motion.color,
+            )
+        elif other_motion.motion_type in [PRO, ANTI]:
+            prop_rot_dir = (
+                self.main_widget.json_manager.loader_saver.get_prop_rot_dir_from_json(
+                    json_index,
+                    other_motion.color,
+                )
+            )
+
+        return prop_rot_dir
 
     def _get_opposite_rotation_direction(self, rotation_direction: str) -> str:
         """Return the opposite prop rotation direction."""
@@ -85,24 +100,41 @@ class NonHybridShiftLetterDeterminer:
         float_motion = motion.pictograph.get.float_motion()
         non_float_motion = float_motion.pictograph.get.other_motion(float_motion)
 
-        return (
+        does_example_match = (
             self._is_shift_motion_type_matching(float_motion, example)
             and example[f"{float_motion.color}_attributes"]["start_loc"]
             == float_motion.start_loc
             and example[f"{float_motion.color}_attributes"]["end_loc"]
             == float_motion.end_loc
-            and example[f"{float_motion.color}_attributes"]["prop_rot_dir"]
-            == self._get_prefloat_prop_rot_dir(
-                self._get_json_index_for_current_beat(), float_motion
-            )
+            and self._is_shift_prop_rot_dir_matching(float_motion, example)
             and self._is_shift_motion_type_matching(non_float_motion, example)
             and example[f"{non_float_motion.color}_attributes"]["start_loc"]
             == non_float_motion.start_loc
             and example[f"{non_float_motion.color}_attributes"]["end_loc"]
             == non_float_motion.end_loc
-            and example[f"{non_float_motion.color}_attributes"]["prop_rot_dir"]
-            == non_float_motion.prop_rot_dir
+            and self._is_shift_prop_rot_dir_matching(non_float_motion, example)
         )
+
+        return does_example_match
+
+    def _is_shift_prop_rot_dir_matching(self, motion: "Motion", example):
+        is_rot_dir_matching = example[f"{motion.color}_attributes"][
+            "prop_rot_dir"
+        ] == self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
+            self.main_widget.top_builder_widget.sequence_widget.beat_frame.get_index_of_currently_selected_beat()
+            + 2,
+            motion.color,
+        ) or example[
+            f"{motion.color}_attributes"
+        ][
+            "prop_rot_dir"
+        ] == self.main_widget.json_manager.loader_saver.get_prop_rot_dir_from_json(
+            self.main_widget.top_builder_widget.sequence_widget.beat_frame.get_index_of_currently_selected_beat()
+            + 2,
+            motion.color,
+        )
+
+        return is_rot_dir_matching
 
     def _is_shift_motion_type_matching(self, motion: "Motion", example) -> bool:
         """Check if the motion type matches."""

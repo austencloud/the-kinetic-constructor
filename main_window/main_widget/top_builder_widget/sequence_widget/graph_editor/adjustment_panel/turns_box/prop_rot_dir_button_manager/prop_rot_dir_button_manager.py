@@ -68,7 +68,7 @@ class PropRotDirButtonManager:
             if motion.color == self.turns_box.color:
                 motion.prop_rot_dir = prop_rot_dir
                 new_letter = (
-                    self.graph_editor.main_widget.letter_engine.get_new_letter_from_motion_attributes(
+                    self.graph_editor.main_widget.letter_engine.determine_letter(
                         motion, swap_prop_rot_dir=True
                     )
                 )
