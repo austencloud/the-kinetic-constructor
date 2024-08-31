@@ -47,7 +47,6 @@ class GraphEditor(QFrame):
         adjustment_panel_layout.setSpacing(0)
         return adjustment_panel_layout
 
-
     def clear_graph_editor(self) -> None:
         self.pictograph_container.GE_pictograph_view.set_to_blank_grid()
         # self.adjustment_panel.update_turns_displays(0, 0)
@@ -57,3 +56,4 @@ class GraphEditor(QFrame):
         self.setFixedHeight(int(self.sequence_widget.height() // 3.5))
         self.pictograph_container.resize_GE_pictograph_container()
         self.adjustment_panel.update_adjustment_panel()
+        self.adjustment_panel.placeholder_widget.resize_adjustment_panel_placeholder_text()

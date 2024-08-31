@@ -24,7 +24,7 @@ class GlobalSettings:
 
     def __init__(self, settings_manager: "SettingsManager") -> None:
         self.settings_manager = settings_manager
-        self.settings = self.settings_manager.settings.get(
+        self.settings: dict = self.settings_manager.settings.get(
             "global", self.DEFAULT_GLOBAL_SETTINGS
         )
         self.prop_type_changer = PropTypeChanger(self.settings_manager)
@@ -38,7 +38,9 @@ class GlobalSettings:
         self.settings_manager.save_settings()
 
     def get_prop_type(self) -> PropType:
-        return PropType[self.settings.get("prop_type", "staff")]
+        # Ensure the key is in the correct case
+        prop_type_key = self.settings.get("prop_type", "Staff").capitalize()
+        return PropType[prop_type_key]
 
     def set_prop_type(self, prop_type: PropType) -> None:
         self.settings["prop_type"] = prop_type.name

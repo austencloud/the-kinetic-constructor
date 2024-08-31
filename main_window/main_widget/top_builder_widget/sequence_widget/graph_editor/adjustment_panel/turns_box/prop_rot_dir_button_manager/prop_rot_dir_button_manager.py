@@ -14,7 +14,7 @@ from PyQt6.QtCore import QSize
 
 from utilities.path_helpers import get_images_and_data_path
 from .prop_rot_dir_button import PropRotDirButton
-
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from ..turns_box import TurnsBox
@@ -66,12 +66,13 @@ class PropRotDirButtonManager:
         pictograph = self.turns_box.graph_editor.pictograph_container.GE_pictograph
         for motion in pictograph.motions.values():
             if motion.color == self.turns_box.color:
-                new_letter, updated_motion = (
-                    self.graph_editor.main_widget.letter_engine.update_motion_attributes(
-                        motion, prop_rot_dir
+                motion.prop_rot_dir = prop_rot_dir
+                new_letter = (
+                    self.graph_editor.main_widget.letter_engine.get_new_letter_from_motion_attributes(
+                        motion, swap_prop_rot_dir=True
                     )
                 )
-                self._update_pictograph_and_json(updated_motion, new_letter)
+                self._update_pictograph_and_json(motion, new_letter)
         self._update_button_states(self.prop_rot_dir_buttons, prop_rot_dir)
 
     def _update_pictograph_and_json(self, motion: "Motion", new_letter: Letter) -> None:
@@ -88,6 +89,8 @@ class PropRotDirButtonManager:
         }
 
         motion.pictograph.updater.update_pictograph(pictograph_dict)
+        motion.pictograph.view.repaint()
+
         json_index = pictograph_index + 2
         self.json_manager.updater.update_prop_rot_dir_in_json_at_index(
             json_index, motion.color, motion.prop_rot_dir
@@ -101,9 +104,13 @@ class PropRotDirButtonManager:
         self.turns_box.turns_widget.motion_type_label.update_motion_type_label(
             motion.motion_type
         )
+
+        # Running the validation engine
         self.graph_editor.main_widget.json_manager.validation_engine.run(
             is_current_sequence=True
         )
+
+        # Triggering updates for UI components
         self.graph_editor.sequence_widget.beat_frame.on_beat_adjusted()
         self.graph_editor.main_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker()
         self.graph_editor.main_widget.top_builder_widget.sequence_widget.current_word_label.set_current_word(

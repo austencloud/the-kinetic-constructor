@@ -48,9 +48,22 @@ class TurnsUpdater:
                 self.beat_frame.get_index_of_currently_selected_beat() + 2,
                 motion.color,
             )
-            motion.prefloat_prop_rot_dir = self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json_at_index(
+            motion.prefloat_prop_rot_dir = (
+                self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
+                    self.beat_frame.get_index_of_currently_selected_beat() + 2,
+                    motion.color,
+                )
+            )
+            # update the prefloat attributyes in the json
+            self.json_updater.update_prefloat_motion_type_in_json(
                 self.beat_frame.get_index_of_currently_selected_beat() + 2,
                 motion.color,
+                motion.prefloat_motion_type,
+            )
+            self.json_updater.update_prefloat_prop_rot_dir_in_json(
+                self.beat_frame.get_index_of_currently_selected_beat() + 2,
+                motion.color,
+                motion.prefloat_prop_rot_dir,
             )
 
             # Update motion type and prop rotation direction based on prefloat data
@@ -66,6 +79,15 @@ class TurnsUpdater:
             self.json_updater.set_turns_from_num_to_num_in_json(motion, new_turns)
 
         self._update_turns(motion, new_turns)
+        self._repaint_views(motion)
+
+    def _repaint_views(self, motion: "Motion"):
+        """Repaint the pictograph and GE pictograph views to reflect the change."""
+        motion.pictograph.view.repaint()
+        GE_pictograph = (
+            self.turns_box.adjustment_panel.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
+        )
+        GE_pictograph.view.repaint()
 
     def _adjust_turns_for_pictograph(
         self, pictograph: "BasePictograph", adjustment: Turns

@@ -87,6 +87,10 @@ class PictographGetter:
         static_map = {True: self.red_motion, False: self.blue_motion}
         return static_map.get(self.red_motion.check.is_static())
 
+    def float_motion(self) -> Motion:
+        float_map = {True: self.red_motion, False: self.blue_motion}
+        return float_map.get(self.red_motion.check.is_float())
+
     def opposite_location(self, loc: Location) -> Location:
         opposite_locations = {NORTH: SOUTH, SOUTH: NORTH, EAST: WEST, WEST: EAST}
         return opposite_locations.get(loc)

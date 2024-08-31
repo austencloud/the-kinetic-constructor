@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from Enums.PropTypes import PropType
-from letter_engine import LetterEngine
+from letter_engine.letter_engine import LetterEngine
 from .letter_loader import LetterLoader
 from .sequence_properties_manager.sequence_properties_manager import (
     SequencePropertiesManager,

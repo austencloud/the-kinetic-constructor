@@ -3,6 +3,7 @@ from Enums.Enums import LetterType
 from data.constants import LEADING, TRAILING, RED, BLUE
 from objects.motion.motion import Motion
 from functools import lru_cache
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
@@ -37,8 +38,8 @@ class PictographUpdater:
 
         self.pictograph.tka_glyph.update_tka_glyph()
         self._position_objects()
-        if self.pictograph.view:
-            self.pictograph.view.repaint()
+        # if self.pictograph.view:
+        #     self.pictograph.view.repaint()
 
     def get_end_pos(self) -> str:
         return self.pictograph.end_pos[:-1]

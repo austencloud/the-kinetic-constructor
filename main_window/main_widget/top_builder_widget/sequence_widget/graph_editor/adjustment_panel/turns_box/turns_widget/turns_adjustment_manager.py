@@ -44,6 +44,9 @@ class TurnsAdjustmentManager(QObject):
         self.turns_widget.turns_updater._adjust_turns_for_pictograph(
             self.pictograph, adjustment
         )
+        motion = self.pictograph.motions[self.color]
+        new_letter = self.main_widget.letter_engine.get_new_letter_from_motion_attributes(motion)
+        self.turns_widget.turns_box.prop_rot_dir_button_manager._update_pictograph_and_json(motion, new_letter)
         self.turns_widget.update_turns_display(matching_motion, new_turns)
         pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
         self.json_manager.updater.update_turns_in_json_at_index(
@@ -74,7 +77,9 @@ class TurnsAdjustmentManager(QObject):
             pictograph_index + 2, self.color, new_turns
         )
         self.pictograph.motions[self.color].turns = new_turns
-        self.turns_widget.update_turns_display(self.pictograph.motions[self.color], new_turns)
+        self.turns_widget.update_turns_display(
+            self.pictograph.motions[self.color], new_turns
+        )
         self.json_validation_engine.run(is_current_sequence=True)
         self.main_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)

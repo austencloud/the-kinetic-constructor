@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
 from data.constants import BLUE, RED
-from .placeholder_text_label import GraphEditorPlaceHolderTextLabel
+from .adjustment_panel_placeholder_text import AdjustmentPanelPlaceHolderText
 
 from .ori_picker_box.ori_picker_box import OriPickerBox
 from .turns_box.turns_box import TurnsBox
@@ -42,7 +42,7 @@ class BeatAdjustmentPanel(QFrame):
         )
 
     def _setup_placeholder_widget(self) -> None:
-        self.placeholder_widget = GraphEditorPlaceHolderTextLabel(self)
+        self.placeholder_widget = AdjustmentPanelPlaceHolderText(self)
 
     def _setup_turns_boxes(self) -> None:
         self.blue_turns_box: TurnsBox = TurnsBox(self, self.GE_pictograph, BLUE)
@@ -111,5 +111,5 @@ class BeatAdjustmentPanel(QFrame):
         for ori_picker_box in self.ori_picker_boxes:
             ori_picker_box.resize_ori_picker_box()
 
-        self.placeholder_widget.set_stylesheet()
+        self.placeholder_widget.resize_adjustment_panel_placeholder_text()
         QApplication.processEvents()

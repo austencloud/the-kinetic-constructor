@@ -22,7 +22,8 @@ class MotionAttrManager:
                 setattr(self.motion, attribute, value)
         if self.motion.check.is_shift():
             if "prefloat_motion_type" not in motion_dict:
-                self.motion.prefloat_motion_type = self.motion.motion_type
+                if self.motion.motion_type != FLOAT:
+                    self.motion.prefloat_motion_type = self.motion.motion_type
 
         if self.motion.pictograph.letter in [
             Letter.S,
@@ -51,7 +52,6 @@ class MotionAttrManager:
             START_ORI: self.motion.start_ori,
             END_ORI: self.motion.end_ori,
         }
-
 
     def assign_lead_states(self) -> None:
         leading_motion = self.motion.pictograph.get.leading_motion()

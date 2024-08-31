@@ -101,17 +101,14 @@ class JsonSequenceLoaderSaver:
         if sequence:
             return sequence[index][f"{color}_attributes"].get("prop_rot_dir", 0)
         return 0
-    
+
     def get_motion_type_from_json_at_index(self, index: int, color: str) -> int:
         sequence = self.load_current_sequence_json()
         if sequence:
             return sequence[index][f"{color}_attributes"].get("motion_type", 0)
         return 0
 
-
-    def get_prefloat_prop_rot_dir_from_json_at_index(
-        self, index: int, color: str
-    ) -> int:
+    def get_prefloat_prop_rot_dir_from_json(self, index: int, color: str) -> int:
         sequence = self.load_current_sequence_json()
         if sequence:
             return sequence[index][f"{color}_attributes"].get(
