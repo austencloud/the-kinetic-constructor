@@ -163,16 +163,15 @@ class MainWidget(QTabWidget):
 
     def resize_current_widget(self, starting_widget):
         if starting_widget == self.top_builder_widget:
-            self.top_builder_widget.sequence_widget.resize_sequence_widget()
-            self.top_builder_widget.sequence_builder.resize_sequence_builder()
+            self.top_builder_widget.resize_top_builder_widget()
         elif starting_widget == self.dictionary_widget:
             self.dictionary_widget.browser.resize_dictionary_browser()
 
     def showEvent(self, event):
         super().showEvent(event)
 
-        self.resize_current_widget(self.currentWidget())
         self.main_window.menu_bar_widget.resize_menu_bar_widget()
+        self.resize_current_widget(self.currentWidget())
         self.apply_background()
 
     def resizeEvent(self, event) -> None:

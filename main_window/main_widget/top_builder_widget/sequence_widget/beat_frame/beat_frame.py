@@ -216,13 +216,11 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         if self.sequence_builder.start_pos_picker.isVisible():
             self.sequence_builder.transition_to_sequence_building()
 
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
-
         scroll_area = self.sequence_builder.option_picker.scroll_area
         scroll_area.remove_irrelevant_pictographs()
         next_options = (
             self.sequence_builder.option_picker.option_manager.get_next_options(
-                sequence
+                current_sequence_json
             )
         )
 

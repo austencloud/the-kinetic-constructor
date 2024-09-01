@@ -29,7 +29,7 @@ class GraphEditorPictographContainer(QWidget):
     def update_GE_pictograph(self, pictograph: "BasePictograph") -> None:
         self.GE_pictograph_view.set_scene(pictograph)
         self.GE_pictograph = pictograph
-        self.GE_pictograph_view.repaint()
+        # self.GE_pictograph_view.repaint()
 
     def resize_GE_pictograph_container(self):
         size = self.graph_editor.height()

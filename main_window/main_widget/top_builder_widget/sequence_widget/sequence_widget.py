@@ -1,8 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QTimer, Qt
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QApplication
 
-from main_window.main_widget.top_builder_widget.sequence_widget.sequence_clearer import SequenceClearer
+from main_window.main_widget.top_builder_widget.sequence_widget.sequence_clearer import (
+    SequenceClearer,
+)
 
 from .beat_frame.beat import Beat, BeatView
 from .sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
@@ -122,8 +124,8 @@ class SequenceWidget(QWidget):
 
     def _setup_beat_frame_layout(self):
         self.beat_frame_layout = QHBoxLayout()
-        self.beat_frame_layout.addWidget(self.scroll_area)  # Use the scroll area here
-        self.beat_frame_layout.addWidget(self.button_frame)
+        self.beat_frame_layout.addWidget(self.scroll_area, 10)
+        self.beat_frame_layout.addWidget(self.button_frame, 1)
         self.beat_frame_layout.setContentsMargins(0, 0, 0, 0)
         self.beat_frame_layout.setSpacing(0)
 
@@ -132,7 +134,6 @@ class SequenceWidget(QWidget):
         QTimer.singleShot(0, self.post_show_initialization)
 
     def post_show_initialization(self):
-        # self.resize_sequence_widget()
         self.update_current_word()
 
     def _setup_indicator_label_layout(self):

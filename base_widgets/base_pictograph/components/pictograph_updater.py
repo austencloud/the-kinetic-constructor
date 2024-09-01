@@ -170,6 +170,16 @@ class PictographUpdater:
             motion_dicts[color]["prefloat_motion_type"] = motion_dicts[color].get(
                 "motion_type"
             )
+        if pictograph_dict.get(f"{color}_attributes", {}).get(
+            "prefloat_prop_rot_dir", {}
+        ):
+            motion_dicts[color]["prefloat_prop_rot_dir"] = pictograph_dict.get(
+                f"{color}_attributes"
+            ).get("prefloat_prop_rot_dir")
+        else:
+            motion_dicts[color]["prefloat_prop_rot_dir"] = motion_dicts[color].get(
+                "prop_rot_dir"
+            )
         return motion_dicts
 
     def _dict_to_hashable(self, d):

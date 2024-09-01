@@ -128,12 +128,7 @@ class JsonSequenceLoaderSaver:
             )
         return 0
 
-    def get_index_for_pictograph(self, pictograph: Dict) -> int:
-        sequence = self.load_current_sequence_json()
-        for i, entry in enumerate(sequence):
-            if entry == pictograph:
-                return i
-        return -1
+
 
     def get_red_end_ori(self, sequence):
         if sequence:
