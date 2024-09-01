@@ -2,19 +2,30 @@ import os
 import json
 from PIL import Image, PngImagePlugin
 
-from main_window.main_widget.sequence_properties_manager.mirrored_color_swapped_permutation_checker import MirroredColorSwappedPermutationChecker
-from main_window.main_widget.sequence_properties_manager.rotational_color_swapped_permutation_checker import RotationalColorSwappedPermutationChecker
-from main_window.main_widget.sequence_properties_manager.strictly_color_swapped_permutation_checker import StrictlyColorSwappedPermutationChecker
-from main_window.main_widget.sequence_properties_manager.strictly_mirrored_permutation_checker import StrictlyMirroredPermutationChecker
-from main_window.main_widget.sequence_properties_manager.strictly_rotational_permutation_checker import StrictlyRotationalPermutationChecker
+from main_window.main_widget.sequence_properties_manager.mirrored_color_swapped_permutation_checker import (
+    MirroredColorSwappedPermutationChecker,
+)
+from main_window.main_widget.sequence_properties_manager.rotational_color_swapped_permutation_checker import (
+    RotationalColorSwappedPermutationChecker,
+)
+from main_window.main_widget.sequence_properties_manager.strictly_color_swapped_permutation_checker import (
+    StrictlyColorSwappedPermutationChecker,
+)
+from main_window.main_widget.sequence_properties_manager.strictly_mirrored_permutation_checker import (
+    StrictlyMirroredPermutationChecker,
+)
+from main_window.main_widget.sequence_properties_manager.strictly_rotational_permutation_checker import (
+    StrictlyRotationalPermutationChecker,
+)
 from utilities.word_simplifier import WordSimplifier
 from main_window.main_widget.sequence_level_evaluator import SequenceLevelEvaluator
 
 """This module is responsible for updating the metadata of the images in the dictionary folder.
 We are still making updates to the permutation checkers as of 8/26/2024 so please keep this around until we are done.
 After finishing the permutation checkers, we will be able to update the metadata of the images in the dictionary folder correctly."""
-class SequencePropertiesCheckerStandalone:
 
+
+class SequencePropertiesCheckerStandalone:
 
     def __init__(self, sequence):
         self.sequence = sequence[1:] if sequence else []
@@ -32,11 +43,15 @@ class SequencePropertiesCheckerStandalone:
         self.rotational_checker = StrictlyRotationalPermutationChecker(self)
         self.mirrored_checker = StrictlyMirroredPermutationChecker(self)
         self.color_swapped_checker = StrictlyColorSwappedPermutationChecker(self)
-        self.mirrored_color_swapped_checker = MirroredColorSwappedPermutationChecker(self)
-        self.rotational_color_swapped_checker = RotationalColorSwappedPermutationChecker(self)
+        self.mirrored_color_swapped_checker = MirroredColorSwappedPermutationChecker(
+            self
+        )
+        self.rotational_color_swapped_checker = (
+            RotationalColorSwappedPermutationChecker(self)
+        )
 
     def calculate_word(self) -> str:
-        word = ''.join(entry['letter'] for entry in self.sequence[1:])
+        word = "".join(entry["letter"] for entry in self.sequence[1:])
         simplified_word = WordSimplifier.simplify_repeated_word(word)
         return simplified_word
 
@@ -56,15 +71,21 @@ class SequencePropertiesCheckerStandalone:
 
             if not self.is_strictly_mirrored_permutation:
                 # If not mirrored, check for strictly color swapped permutation
-                self.is_strictly_colorswapped_permutation = self.color_swapped_checker.check()
+                self.is_strictly_colorswapped_permutation = (
+                    self.color_swapped_checker.check()
+                )
 
                 if not self.is_strictly_colorswapped_permutation:
                     # If not strictly color swapped, check for mirrored color swapped permutation
-                    self.is_mirrored_color_swapped_permutation = self.mirrored_color_swapped_checker.check()
+                    self.is_mirrored_color_swapped_permutation = (
+                        self.mirrored_color_swapped_checker.check()
+                    )
 
                     if not self.is_mirrored_color_swapped_permutation:
                         # If not mirrored color swapped, check for rotational color swapped permutation
-                        self.is_rotational_colorswapped_permutation = self.rotational_color_swapped_checker.check()
+                        self.is_rotational_colorswapped_permutation = (
+                            self.rotational_color_swapped_checker.check()
+                        )
                     else:
                         self.is_rotational_colorswapped_permutation = False
                 else:
@@ -84,7 +105,9 @@ class SequencePropertiesCheckerStandalone:
         return {
             "word": self.calculate_word(),
             "author": "Austen Cloud",  # Default author or fetch from elsewhere
-            "level": SequenceLevelEvaluator().get_sequence_level(self.sequence),
+            "level": SequenceLevelEvaluator().get_sequence_difficulty_level(
+                self.sequence
+            ),
             "is_circular": self.ends_at_start_pos,
             "is_permutable": self.is_permutable,
             "is_strictly_rotational_permutation": self.is_strictly_rotational_permutation,
@@ -168,7 +191,8 @@ class MetadataUpdater:
                             "is_rotational_colorswapped_permutation"
                         ],
                     }
-                ] + sequence[1:]  # Keep the rest of the sequence data as it is
+                ]
+                + sequence[1:]  # Keep the rest of the sequence data as it is
             }
 
             metadata["sequence"] = new_metadata["sequence"]
@@ -216,6 +240,7 @@ class MetadataUpdater:
             print(f"Saved metadata to {file_path}")
         except Exception as e:
             print(f"Failed to save metadata to {file_path}: {e}")
+
 
 # To execute the metadata update process
 if __name__ == "__main__":

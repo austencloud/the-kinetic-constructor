@@ -68,7 +68,7 @@ class JsonSequenceLoaderSaver:
                 )
             if "level" not in sequence[0]:
                 sequence[0]["level"] = (
-                    self.json_manager.main_widget.sequence_level_evaluator.get_sequence_level(
+                    self.json_manager.main_widget.sequence_level_evaluator.get_sequence_difficulty_level(
                         sequence
                     )
                 )
@@ -127,8 +127,6 @@ class JsonSequenceLoaderSaver:
                 sequence[index][f"{color}_attributes"].get("motion_type", 0),
             )
         return 0
-
-
 
     def get_red_end_ori(self, sequence):
         if sequence:

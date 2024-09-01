@@ -79,8 +79,10 @@ class SequenceWidget(QWidget):
 
     def update_difficulty_label(self):
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
-        difficulty_level = self.main_widget.sequence_level_evaluator.get_sequence_level(
-            sequence
+        difficulty_level = (
+            self.main_widget.sequence_level_evaluator.get_sequence_difficulty_level(
+                sequence
+            )
         )
         self.difficulty_label.set_difficulty_level(difficulty_level)
 

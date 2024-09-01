@@ -5,7 +5,7 @@ class SequenceLevelEvaluator:
     def __init__(self):
         self.RADIAL_ORIENTATIONS = {"in", "out"}
 
-    def get_sequence_level(self, sequence: list[dict]) -> int:
+    def get_sequence_difficulty_level(self, sequence: list[dict]) -> int:
         if len(sequence) < 2:
             return ""
         has_non_radial_orientation = False
@@ -26,8 +26,14 @@ class SequenceLevelEvaluator:
 
     def _has_turns(self, entry: dict) -> bool:
         has_turns = False
-        if entry["blue_attributes"]["turns"] != "fl" and entry["red_attributes"]["turns"] != "fl":
-            has_turns = entry["blue_attributes"]["turns"] > 0 or entry["red_attributes"]["turns"] > 0
+        if (
+            entry["blue_attributes"]["turns"] != "fl"
+            and entry["red_attributes"]["turns"] != "fl"
+        ):
+            has_turns = (
+                entry["blue_attributes"]["turns"] > 0
+                or entry["red_attributes"]["turns"] > 0
+            )
         else:
             if entry["blue_attributes"]["turns"] == "fl":
                 if entry["red_attributes"]["turns"] == "fl":
