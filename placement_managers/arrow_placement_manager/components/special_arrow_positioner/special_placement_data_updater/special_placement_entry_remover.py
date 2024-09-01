@@ -23,7 +23,7 @@ class SpecialPlacementEntryRemover:
 
     def remove_special_placement_entry(self, letter: Letter, arrow: Arrow) -> None:
         ori_key = self.data_updater._generate_ori_key(arrow.motion)
-        file_path = self._generate_file_path(ori_key, letter.value)
+        file_path = self._generate_file_path(ori_key, letter)
 
         if os.path.exists(file_path):
             data = self.load_data(file_path)
@@ -117,11 +117,13 @@ class SpecialPlacementEntryRemover:
     def load_data(self, file_path):
         return self.data_updater.json_handler.load_json_data(file_path)
 
-    def _generate_file_path(self, ori_key: str, letter: str) -> str:
-        return os.path.join(
+    def _generate_file_path(self, ori_key: str, letter: Letter) -> str:
+        file_path = os.path.join(
             special_placements_parent_directory,
-            f"{ori_key}/{letter}_placements.json",
+            f"{ori_key}/{letter.value}_placements.json",
         )
+
+        return file_path
 
     def _get_other_color(self, color: str) -> str:
         return RED if color == BLUE else BLUE
@@ -132,3 +134,4 @@ class SpecialPlacementEntryRemover:
             del turn_data[key]
             if not turn_data:
                 del letter_data[turns_tuple]
+

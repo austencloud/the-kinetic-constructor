@@ -165,6 +165,9 @@
     },
     "(o, 0, 3)": {
       "pro_from_layer2": [40, -15]
+    },
+    "null": {
+      "float_from_layer2": [30, -45]
     }
   }
 }

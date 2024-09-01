@@ -143,10 +143,6 @@
       "red_rot_angle_override": true,
       "red": [100, 100]
     },
-    "(o, 1, 1, op, op)": {
-      "red": [80, -15],
-      "blue": [80, 0]
-    },
     "(s, 2, 0.5, cl, op)": {
       "red_rot_angle_override": true,
       "red": [100, 100]

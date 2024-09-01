@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.letters import Letter, LetterConditions, LetterType
-from data.constants import ANTI, COUNTER_CLOCKWISE, DASH, FLOAT, PRO, CLOCKWISE
+from data.constants import ANTI, COUNTER_CLOCKWISE, DASH, FLOAT, PRO, CLOCKWISE, STATIC
 from .dual_float_letter_determiner import DualFloatLetterDeterminer
 from .non_hybrid_letter_determiner import NonHybridShiftLetterDeterminer
 from objects.motion.managers.motion_ori_calculator import MotionOriCalculator
@@ -49,9 +49,13 @@ class LetterDeterminer:
                 motion, motion.motion_type, swap_prop_rot_dir
             )
 
-        elif motion_type == DASH:
+        elif motion_type in [DASH, STATIC]:
             new_motion_type = motion_type
-        if swap_prop_rot_dir and other_motion.motion_type == FLOAT:
+        if (
+            swap_prop_rot_dir
+            and other_motion.motion_type == FLOAT
+            and other_motion.pictograph.letter.get_letter_type() == LetterType.Type1
+        ):
             return self.non_hybrid_shift_letter_determiner.determine_letter(
                 motion, new_motion_type, swap_prop_rot_dir
             )
@@ -72,15 +76,15 @@ class LetterDeterminer:
         original_letter = motion.pictograph.letter
         for letter, examples in self.letters.items():
 
-            if letter_type in [LetterType.Type2, LetterType.Type3]:
-                for example in examples:
-                    if self.compare_motion_attributes_for_type2_3(motion, example):
-                        return letter
-            elif letter_type == LetterType.Type1:
+            if letter_type == LetterType.Type1:
                 for example in examples:
                     if self.compare_motion_attributes_for_type1(
                         motion, other_motion, example
                     ):
+                        return letter
+            elif letter_type in [LetterType.Type2, LetterType.Type3]:
+                for example in examples:
+                    if self.compare_motion_attributes_for_type2_3(motion, example):
                         return letter
             else:
                 return original_letter
@@ -95,10 +99,8 @@ class LetterDeterminer:
             and example[f"{motion.color}_attributes"]["end_loc"] == motion.end_loc
             and self._is_shift_prop_rot_dir_matching(motion, example)
             and self.is_shift_motion_type_matching(other_motion, example)
-            and example[f"{other_motion.color}_attributes"]["start_loc"]
-            == other_motion.start_loc
-            and example[f"{other_motion.color}_attributes"]["end_loc"]
-            == other_motion.end_loc
+            and example[f"{other_motion.color}_attributes"]["start_loc"] == other_motion.start_loc
+            and example[f"{other_motion.color}_attributes"]["end_loc"] == other_motion.end_loc
             and self._is_shift_prop_rot_dir_matching(other_motion, example)
         )
 
@@ -181,10 +183,8 @@ class LetterDeterminer:
             and example[f"{shift.color}_attributes"]["start_loc"] == shift.start_loc
             and example[f"{shift.color}_attributes"]["end_loc"] == shift.end_loc
             and self._is_shift_prop_rot_dir_matching(shift, example)
-            and example[f"{non_shift.color}_attributes"]["motion_type"]
-            == non_shift.motion_type
-            and example[f"{non_shift.color}_attributes"]["start_loc"]
-            == non_shift.start_loc
+            and example[f"{non_shift.color}_attributes"]["motion_type"] == non_shift.motion_type
+            and example[f"{non_shift.color}_attributes"]["start_loc"] == non_shift.start_loc
             and example[f"{non_shift.color}_attributes"]["end_loc"] == non_shift.end_loc
         )
 
