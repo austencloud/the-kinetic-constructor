@@ -45,7 +45,7 @@ class TurnsAdjustmentManager(QObject):
             self.pictograph, adjustment
         )
         motion = self.pictograph.motions[self.color]
-        new_letter = self.main_widget.letter_engine.determine_letter(motion)
+        new_letter = self.main_widget.letter_determiner.determine_letter(motion)
         self.turns_widget.turns_box.prop_rot_dir_button_manager._update_pictograph_and_json(
             motion, new_letter
         )

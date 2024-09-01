@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from Enums.PropTypes import PropType
-from letter_engine.letter_engine import LetterEngine
+from letter_determiner.letter_determiner import LetterDeterminer
 from .letter_loader import LetterLoader
 from .sequence_properties_manager.sequence_properties_manager import (
     SequencePropertiesManager,
@@ -151,7 +151,7 @@ class MainWidget(QTabWidget):
     def _setup_letters(self) -> None:
         self.letter_loader = LetterLoader(self)
         self.letters: dict[Letter, list[dict]] = self.letter_loader.load_all_letters()
-        self.letter_engine = LetterEngine(self)
+        self.letter_determiner = LetterDeterminer(self)
 
     ### EVENT HANDLERS ###
 

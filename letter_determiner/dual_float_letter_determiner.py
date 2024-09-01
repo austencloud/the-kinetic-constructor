@@ -3,13 +3,13 @@ from Enums.letters import Letter
 from data.constants import COUNTER_CLOCKWISE, CLOCKWISE
 
 if TYPE_CHECKING:
-    from letter_engine.letter_engine import LetterEngine
+    from .letter_determiner import LetterDeterminer
     from main_window.main_widget.main_widget import MainWidget
     from objects.motion.motion import Motion
 
 
 class DualFloatLetterDeterminer:
-    def __init__(self, letter_engine: "LetterEngine"):
+    def __init__(self, letter_engine: "LetterDeterminer"):
         self.main_widget = letter_engine.main_widget
         self.letters = letter_engine.letters
 

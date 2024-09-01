@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
 from Enums.letters import Letter, LetterConditions, LetterType
 from data.constants import ANTI, COUNTER_CLOCKWISE, DASH, FLOAT, PRO, CLOCKWISE
-from letter_engine.dual_float_letter_determiner import DualFloatLetterDeterminer
-from letter_engine.non_hybrid_letter_determiner import NonHybridShiftLetterDeterminer
+from .dual_float_letter_determiner import DualFloatLetterDeterminer
+from .non_hybrid_letter_determiner import NonHybridShiftLetterDeterminer
 from objects.motion.managers.motion_ori_calculator import MotionOriCalculator
 from objects.motion.motion import Motion
 
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
 
-class LetterEngine:
+class LetterDeterminer:
     def __init__(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
         self.letters = self.main_widget.letters
@@ -30,6 +30,8 @@ class LetterEngine:
             elif motion_type == PRO:
                 new_motion_type = ANTI
                 motion.motion_type = new_motion_type
+            else:
+                new_motion_type = motion_type
             json_index = (
                 self.main_widget.top_builder_widget.sequence_widget.beat_frame.get_index_of_currently_selected_beat()
                 + 2
@@ -44,7 +46,7 @@ class LetterEngine:
             return self.dual_float_letter_determiner.determine_letter(motion)
         elif motion_type in [PRO, ANTI] and other_motion.motion_type == FLOAT:
             return self.non_hybrid_shift_letter_determiner.determine_letter(
-                motion, motion.motion_type
+                motion, motion.motion_type, swap_prop_rot_dir
             )
 
         elif motion_type == DASH:
@@ -178,8 +180,7 @@ class LetterEngine:
             self.is_shift_motion_type_matching(shift, example)
             and example[f"{shift.color}_attributes"]["start_loc"] == shift.start_loc
             and example[f"{shift.color}_attributes"]["end_loc"] == shift.end_loc
-            and example[f"{shift.color}_attributes"]["prop_rot_dir"]
-            == shift.prop_rot_dir
+            and self._is_shift_prop_rot_dir_matching(shift, example)
             and example[f"{non_shift.color}_attributes"]["motion_type"]
             == non_shift.motion_type
             and example[f"{non_shift.color}_attributes"]["start_loc"]

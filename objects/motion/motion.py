@@ -45,5 +45,5 @@ class Motion:
     end_ori: Orientations
     prop_rot_dir: PropRotDir
     lead_state: LeadStates
-    prefloat_motion_type: str
+    prefloat_motion_type: str = None
     prefloat_prop_rot_dir: str

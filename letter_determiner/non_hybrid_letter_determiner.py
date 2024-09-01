@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 from Enums.letters import Letter
-from data.constants import ANTI, COUNTER_CLOCKWISE, CLOCKWISE, FLOAT, PRO
+from data.constants import ANTI, COUNTER_CLOCKWISE, CLOCKWISE, FLOAT, OPP, PRO
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
     from objects.motion.motion import Motion
-    from letter_engine.letter_engine import LetterEngine
+    from .letter_determiner import LetterDeterminer
 
 
 class NonHybridShiftLetterDeterminer:
@@ -15,7 +15,7 @@ class NonHybridShiftLetterDeterminer:
     to describe letters that have one float and one Pro/Anti.
     """
 
-    def __init__(self, letter_engine: "LetterEngine"):
+    def __init__(self, letter_engine: "LetterDeterminer"):
         self.main_widget = letter_engine.main_widget
         self.letters = letter_engine.letters
 
@@ -24,9 +24,10 @@ class NonHybridShiftLetterDeterminer:
     ) -> Letter:
         """Handle the case where there is one float and one shift, and the user changes the motion type of the shift."""
         other_motion = motion.pictograph.get.other_motion(motion)
-        self._update_motion_attributes(motion, new_motion_type, other_motion)
-        if swap_prop_rot_dir:
-            self._update_motion_attributes(other_motion, new_motion_type, motion)
+        if new_motion_type in [PRO, ANTI]:
+            self._update_motion_attributes(motion, new_motion_type, other_motion)
+            if swap_prop_rot_dir:
+                self._update_motion_attributes(other_motion, new_motion_type, motion)
         return self._find_matching_letter(motion)
 
     def _update_motion_attributes(
@@ -73,6 +74,8 @@ class NonHybridShiftLetterDeterminer:
                 json_index,
                 other_motion.color,
             )
+            if other_motion.pictograph.direction == OPP:
+                prop_rot_dir = self._get_opposite_rotation_direction(prop_rot_dir)
         elif other_motion.motion_type in [PRO, ANTI]:
             prop_rot_dir = (
                 self.main_widget.json_manager.loader_saver.get_prop_rot_dir_from_json(
@@ -80,6 +83,8 @@ class NonHybridShiftLetterDeterminer:
                     other_motion.color,
                 )
             )
+            if other_motion.pictograph.direction == OPP:
+                prop_rot_dir = self._get_opposite_rotation_direction(prop_rot_dir)
 
         return prop_rot_dir
 
