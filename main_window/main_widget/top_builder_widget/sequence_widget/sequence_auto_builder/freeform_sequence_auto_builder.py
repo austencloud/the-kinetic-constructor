@@ -1,8 +1,11 @@
 from typing import TYPE_CHECKING
 import random
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import SequenceWidget
+    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
+        SequenceWidget,
+    )
 
 
 class FreeFormSequenceAutoBuilder:
@@ -20,7 +23,12 @@ class FreeFormSequenceAutoBuilder:
         self.sequence = (
             self.sequence_widget.main_widget.json_manager.loader_saver.load_current_sequence_json()
         )
-        self.ori_calculator = self.sequence_widget.main_widget.json_manager.ori_calculator
+        self.ori_calculator = (
+            self.sequence_widget.main_widget.json_manager.ori_calculator
+        )
+        self.validation_engine = (
+            self.sequence_widget.main_widget.json_manager.validation_engine
+        )
 
     def build_sequence(self):
         length_of_sequence_upon_start = len(self.sequence) - 2
@@ -28,22 +36,25 @@ class FreeFormSequenceAutoBuilder:
             next_pictograph = self._generate_next_pictograph()
 
             # Calculate the correct end orientation after adding turns
-            next_pictograph["blue_attributes"]["end_ori"] = self.ori_calculator.calculate_end_orientation(
-                next_pictograph, "blue"
+            next_pictograph["blue_attributes"]["end_ori"] = (
+                self.ori_calculator.calculate_end_orientation(next_pictograph, "blue")
             )
-            next_pictograph["red_attributes"]["end_ori"] = self.ori_calculator.calculate_end_orientation(
-                next_pictograph, "red"
+            next_pictograph["red_attributes"]["end_ori"] = (
+                self.ori_calculator.calculate_end_orientation(next_pictograph, "red")
             )
 
             self.sequence.append(next_pictograph)
-            # Update the option picker with the new sequence
+            self.sequence_widget.populate_sequence(next_pictograph)
+            self.validation_engine.validate_last_pictograph()
             self.sequence_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker(
                 self.sequence
             )
-        self._finalize_sequence(self.sequence)
+
+            # Force the UI to process the updated events and refresh the layout
+            # QApplication.processEvents()
 
     def _generate_next_pictograph(self) -> dict:
-        options = self.sequence_widget.top_builder_widget.sequence_builder.option_picker.option_manager.get_next_options(
+        options = self.sequence_widget.top_builder_widget.sequence_builder.option_picker.option_getter.get_next_options(
             self.sequence
         )
         chosen_option = random.choice(options)
@@ -79,11 +90,3 @@ class FreeFormSequenceAutoBuilder:
         # Turn intensity affects the maximum number of turns
         max_turns = self.turn_intensity // 25  # Scale to 0-4 max turns
         return random.choice([0, 0.5, 1, 1.5, 2][:max_turns])
-
-    def _finalize_sequence(self, sequence: list[dict]) -> None:
-        self.sequence_widget.beat_frame.populate_beat_frame_from_json(sequence)
-        self.sequence_widget.main_widget.json_manager.validation_engine.run(True)
-        updated_sequence = (
-            self.sequence_widget.main_widget.json_manager.loader_saver.load_current_sequence_json()
-        )
-        self.sequence_widget.beat_frame.populate_beat_frame_from_json(updated_sequence)

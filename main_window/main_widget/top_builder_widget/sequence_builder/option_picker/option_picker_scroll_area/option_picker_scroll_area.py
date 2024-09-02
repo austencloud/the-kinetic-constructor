@@ -35,7 +35,7 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         super().__init__(option_picker)
         self.option_picker: "OptionPicker" = option_picker
         self.sequence_builder: "SequenceBuilder" = option_picker.sequence_builder
-        self.option_manager = self.option_picker.option_manager
+        self.option_manager = self.option_picker.option_getter
         self.option_click_handler = self.sequence_builder.option_click_handler
         self.ori_calculator = self.main_widget.json_manager.ori_calculator
         self.json_manager = self.main_widget.json_manager
@@ -81,7 +81,7 @@ class OptionPickerScrollArea(BasePickerScrollArea):
             pictograph.updater.update_pictograph(pictograph_dict)
 
         self.display_manager.order_and_display_pictographs()
-        self.layout.update()  # Ensure the layout updates
+        self.layout.update()
         QApplication.restoreOverrideCursor()
 
     def set_pictograph_orientations(self, pictograph_dict: dict, sequence) -> None:

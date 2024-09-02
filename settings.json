@@ -48,5 +48,11 @@
         "grow_sequence": true,
         "num_beats": 1,
         "layout_option": "1 x 1"
+    },
+    "auto_builder": {
+        "sequence_type": "Circular (Strict Rotational)",
+        "sequence_length": 11,
+        "turn_intensity": 50,
+        "sequence_level": 1
     }
 }

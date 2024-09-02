@@ -165,9 +165,7 @@ class TempBeatFrame(BaseBeatFrame):
         scroll_area = self.sequence_builder.option_picker.scroll_area
         scroll_area.remove_irrelevant_pictographs()
         next_options = (
-            self.sequence_builder.option_picker.option_manager.get_next_options(
-                sequence
-            )
+            self.sequence_builder.option_picker.option_getter.get_next_options(sequence)
         )
 
         scroll_area.add_and_display_relevant_pictographs(next_options)

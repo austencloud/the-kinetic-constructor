@@ -3,6 +3,8 @@ import os
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QObject, pyqtSignal
 
+from main_window.settings_manager.autobuilder_settings import AutoBuilderSettings
+
 from ..settings_manager.dictionary_settings import DictionarySettings
 from ..settings_manager.image_export_settings import ImageExportSettings
 from ..settings_manager.sequence_layout_settings import SequenceLayoutSettings
@@ -29,6 +31,7 @@ class SettingsManager(QObject):
         self.visibility = VisibilitySettings(self)
         self.dictionary = DictionarySettings(self)
         self.sequence_layout = SequenceLayoutSettings(self)  # New layout settings
+        self.auto_builder = AutoBuilderSettings(self)  # Add this line
 
     def load_settings(self) -> dict:
         if os.path.exists(self.settings_json):
@@ -73,4 +76,8 @@ class SettingsManager(QObject):
 
     def save_layout_settings(self, settings) -> None:
         self.settings["sequence_layout"] = settings
+        self.save_settings()
+
+    def save_auto_builder_settings(self, settings) -> None:
+        self.settings["auto_builder"] = settings
         self.save_settings()

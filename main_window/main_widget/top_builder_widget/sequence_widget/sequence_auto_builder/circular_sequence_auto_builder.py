@@ -32,7 +32,7 @@ class CircularSequenceAutoBuilder:
 
     def _generate_next_pictograph(self) -> dict:
         options = (
-            self.sequence_widget.top_builder_widget.sequence_builder.option_picker.option_manager.get_next_options()
+            self.sequence_widget.top_builder_widget.sequence_builder.option_picker.option_getter.get_next_options()
         )
         chosen_option = random.choice(options)
 

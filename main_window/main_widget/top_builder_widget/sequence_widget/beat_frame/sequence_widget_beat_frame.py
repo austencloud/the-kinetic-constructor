@@ -94,6 +94,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
                 )
                 self.sequence_widget.update_current_word()
                 self.adjust_layout_to_sequence_length()
+                self.sequence_builder.last_beat = self.beats[next_beat_index].beat
         elif not grow_sequence:
             if (
                 next_beat_index is not None
@@ -105,6 +106,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
                     self.beats[next_beat_index]
                 )
                 self.sequence_widget.update_current_word()
+                self.sequence_builder.last_beat = self.beats[next_beat_index].beat
 
     def find_next_available_beat(self) -> int:
         for i, beat in enumerate(self.beats):
@@ -219,11 +221,10 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         scroll_area = self.sequence_builder.option_picker.scroll_area
         scroll_area.remove_irrelevant_pictographs()
         next_options = (
-            self.sequence_builder.option_picker.option_manager.get_next_options(
+            self.sequence_builder.option_picker.option_getter.get_next_options(
                 current_sequence_json
             )
         )
 
         scroll_area.add_and_display_relevant_pictographs(next_options)
         self.sequence_builder.option_picker.resize_option_picker()
-

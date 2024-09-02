@@ -1,11 +1,12 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QApplication
 from PyQt6.QtCore import pyqtSignal, Qt
 
-from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.choose_your_next_pictograph_label import ChooseYourNextPictographLabel
-from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_manager import OptionManager
-
-
-
+from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.choose_your_next_pictograph_label import (
+    ChooseYourNextPictographLabel,
+)
+from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_manager import (
+    OptionGetter,
+)
 
 
 from .option_picker_scroll_area.option_picker_scroll_area import OptionPickerScrollArea
@@ -13,7 +14,9 @@ from .option_picker_scroll_area.option_picker_scroll_area import OptionPickerScr
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.sequence_builder import SequenceBuilder
+    from main_window.main_widget.top_builder_widget.sequence_builder.sequence_builder import (
+        SequenceBuilder,
+    )
 
 
 class OptionPicker(QWidget):
@@ -27,7 +30,7 @@ class OptionPicker(QWidget):
         self.main_widget = sequence_builder.main_widget
         self.json_manager = self.main_widget.json_manager
         self.choose_your_next_pictograph_label = ChooseYourNextPictographLabel(self)
-        self.option_manager = OptionManager(self)
+        self.option_getter = OptionGetter(self)
         self.scroll_area = OptionPickerScrollArea(self)
         self.setStyleSheet("background-color: rgba(0, 0, 0, 200);")
         self.setup_layout()
@@ -46,14 +49,14 @@ class OptionPicker(QWidget):
         self.layout.addLayout(header_label_layout, 1)
         self.layout.addWidget(self.scroll_area, 14)
 
-    def update_option_picker(self, sequence = None):
+    def update_option_picker(self, sequence=None):
         if self.disabled:
             return
         if not sequence:
             sequence = self.json_manager.loader_saver.load_current_sequence_json()
 
         if len(sequence) > 1:
-            next_options: dict = self.option_manager.get_next_options(sequence)
+            next_options: dict = self.option_getter.get_next_options(sequence)
             self.scroll_area._hide_all_pictographs()
             self.scroll_area.add_and_display_relevant_pictographs(next_options)
         self.choose_your_next_pictograph_label.set_stylesheet()
