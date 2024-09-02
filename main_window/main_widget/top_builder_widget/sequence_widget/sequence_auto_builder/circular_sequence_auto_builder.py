@@ -2,46 +2,43 @@ import random
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
-        SequenceWidget,
-    )
+    from .sequence_auto_builder import SequenceAutoBuilder
 
 
 class CircularSequenceAutoBuilder:
-    def __init__(
-        self,
-        sequence_widget: "SequenceWidget",
-        length: int,
-        turn_intensity: int,
-        level: int,
-    ):
-        self.sequence_widget = sequence_widget
-        self.length = length
-        self.turn_intensity = turn_intensity
-        self.level = level
+    def __init__(self, auto_builder_dialog: "SequenceAutoBuilder"):
+        self.auto_builder_dialog = auto_builder_dialog
+        self.sequence_widget = auto_builder_dialog.sequence_widget
+        self.sequence = (
+            self.sequence_widget.main_widget.json_manager.loader_saver.load_current_sequence_json()
+        )
 
-    def build_sequence(self):
+    def build_sequence(self, length: int, turn_intensity: int, level: int):
         sequence = []
-        word_length = self.length // 4  # Assuming 4 beats per repetition
+        word_length = length // 4  # Assuming 4 beats per repetition
         for _ in range(word_length):
-            next_pictograph = self._generate_next_pictograph()
+            next_pictograph = self._generate_next_pictograph(turn_intensity, level)
             sequence.append(next_pictograph)
 
         self._apply_strict_rotational_permutations(sequence)
         self._finalize_sequence(sequence)
 
-    def _generate_next_pictograph(self) -> dict:
-        options = (
-            self.sequence_widget.top_builder_widget.sequence_builder.option_picker.option_getter.get_next_options()
+    def _generate_next_pictograph(self, turn_intensity: int, level: int) -> dict:
+        options = self.sequence_widget.top_builder_widget.sequence_builder.option_picker.option_getter.get_next_options(
+            self.sequence
         )
         chosen_option = random.choice(options)
 
-        if self.level == 1:
+        if level == 1:
             chosen_option = self._apply_level_1_constraints(chosen_option)
-        elif self.level == 2:
-            chosen_option = self._apply_level_2_constraints(chosen_option)
-        elif self.level == 3:
-            chosen_option = self._apply_level_3_constraints(chosen_option)
+        elif level == 2:
+            chosen_option = self._apply_level_2_constraints(
+                chosen_option, turn_intensity
+            )
+        elif level == 3:
+            chosen_option = self._apply_level_3_constraints(
+                chosen_option, turn_intensity
+            )
 
         return chosen_option
 
@@ -51,21 +48,21 @@ class CircularSequenceAutoBuilder:
         pictograph["red_attributes"]["turns"] = 0
         return pictograph
 
-    def _apply_level_2_constraints(self, pictograph: dict) -> dict:
+    def _apply_level_2_constraints(self, pictograph: dict, turn_intensity: int) -> dict:
         # Randomize turns within radial constraints
-        pictograph["blue_attributes"]["turns"] = self._randomize_turns()
-        pictograph["red_attributes"]["turns"] = self._randomize_turns()
+        pictograph["blue_attributes"]["turns"] = self._randomize_turns(turn_intensity)
+        pictograph["red_attributes"]["turns"] = self._randomize_turns(turn_intensity)
         return pictograph
 
-    def _apply_level_3_constraints(self, pictograph: dict) -> dict:
+    def _apply_level_3_constraints(self, pictograph: dict, turn_intensity: int) -> dict:
         # Randomize turns with potential non-radial orientations
-        pictograph["blue_attributes"]["turns"] = self._randomize_turns()
-        pictograph["red_attributes"]["turns"] = self._randomize_turns()
+        pictograph["blue_attributes"]["turns"] = self._randomize_turns(turn_intensity)
+        pictograph["red_attributes"]["turns"] = self._randomize_turns(turn_intensity)
         return pictograph
 
-    def _randomize_turns(self) -> int:
+    def _randomize_turns(self, turn_intensity: int) -> int:
         # Turn intensity affects the maximum number of turns
-        max_turns = self.turn_intensity // 25  # Scale to 0-4 max turns
+        max_turns = turn_intensity // 25  # Scale to 0-4 max turns
         return random.choice([0, 0.5, 1, 1.5, 2][:max_turns])
 
     def _apply_strict_rotational_permutations(self, sequence: list[dict]) -> None:

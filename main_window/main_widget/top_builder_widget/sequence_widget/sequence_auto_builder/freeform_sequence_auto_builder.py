@@ -1,28 +1,18 @@
 from typing import TYPE_CHECKING
-import random
 from PyQt6.QtWidgets import QApplication
 
-if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
-        SequenceWidget,
-    )
+from data.constants import BLUE, CLOCKWISE, COUNTER_CLOCKWISE, DASH, RED, STATIC
+from .turn_intensity_manager import TurnIntensityManager
+import random
 
+if TYPE_CHECKING:
+    from .sequence_auto_builder import SequenceAutoBuilder
 
 class FreeFormSequenceAutoBuilder:
-    def __init__(
-        self,
-        sequence_widget: "SequenceWidget",
-        length: int,
-        turn_intensity: int,
-        level: int,
-    ):
-        self.sequence_widget = sequence_widget
-        self.length = length
-        self.turn_intensity = turn_intensity
-        self.level = level
-        self.sequence = (
-            self.sequence_widget.main_widget.json_manager.loader_saver.load_current_sequence_json()
-        )
+    def __init__(self, auto_builder_dialog: "SequenceAutoBuilder"):
+        self.auto_builder_dialog = auto_builder_dialog
+        self.sequence_widget = auto_builder_dialog.sequence_widget
+
         self.ori_calculator = (
             self.sequence_widget.main_widget.json_manager.ori_calculator
         )
@@ -30,41 +20,66 @@ class FreeFormSequenceAutoBuilder:
             self.sequence_widget.main_widget.json_manager.validation_engine
         )
 
-    def build_sequence(self):
+    def build_sequence(self, length: int, turn_intensity: int, level: int, max_turns: int):
+        self.sequence = (
+            self.sequence_widget.main_widget.json_manager.loader_saver.load_current_sequence_json()
+        )
+        turn_manager = TurnIntensityManager(max_turns, length, level)
+        turns = turn_manager.allocate_turns()
+
         length_of_sequence_upon_start = len(self.sequence) - 2
-        for _ in range(self.length - length_of_sequence_upon_start):
-            next_pictograph = self._generate_next_pictograph()
+        for i in range(length - length_of_sequence_upon_start):
+            next_pictograph_dict = self._generate_next_pictograph(level, turns[i])
 
-            # Calculate the correct end orientation after adding turns
-            next_pictograph["blue_attributes"]["end_ori"] = (
-                self.ori_calculator.calculate_end_orientation(next_pictograph, "blue")
-            )
-            next_pictograph["red_attributes"]["end_ori"] = (
-                self.ori_calculator.calculate_end_orientation(next_pictograph, "red")
-            )
+            self._update_end_oris(next_pictograph_dict)
+            self._update_dash_static_prop_rot_dirs(next_pictograph_dict)
 
-            self.sequence.append(next_pictograph)
-            self.sequence_widget.populate_sequence(next_pictograph)
+            self.sequence.append(next_pictograph_dict)
+            self.sequence_widget.create_new_beat_and_add_to_sequence(next_pictograph_dict)
             self.validation_engine.validate_last_pictograph()
             self.sequence_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker(
                 self.sequence
             )
+            QApplication.processEvents()
 
-            # Force the UI to process the updated events and refresh the layout
-            # QApplication.processEvents()
+    def _update_dash_static_prop_rot_dirs(self, next_pictograph_dict):
+        if (
+            next_pictograph_dict["blue_attributes"]["motion_type"] in [DASH, STATIC]
+            and next_pictograph_dict["blue_attributes"]["turns"] > 0
+        ):
+            self._set_default_prop_rot_dir(next_pictograph_dict, BLUE)
+        if (
+            next_pictograph_dict["red_attributes"]["motion_type"] in [DASH, STATIC]
+            and next_pictograph_dict["red_attributes"]["turns"] > 0
+        ):
+            self._set_default_prop_rot_dir(next_pictograph_dict, RED)
 
-    def _generate_next_pictograph(self) -> dict:
+    def _set_default_prop_rot_dir(self, next_pictograph_dict, color):
+        # Set the prop rot dir randomly between CLOCKWISE and COUNTERCLOCKWISE
+        next_pictograph_dict[color + "_attributes"]["prop_rot_dir"] = random.choice(
+            [CLOCKWISE, COUNTER_CLOCKWISE]
+        )
+
+    def _update_end_oris(self, next_pictograph_dict):
+        next_pictograph_dict["blue_attributes"]["end_ori"] = (
+            self.ori_calculator.calculate_end_orientation(next_pictograph_dict, BLUE)
+        )
+        next_pictograph_dict["red_attributes"]["end_ori"] = (
+            self.ori_calculator.calculate_end_orientation(next_pictograph_dict, RED)
+        )
+
+    def _generate_next_pictograph(self, level: int, turn: float) -> dict:
         options = self.sequence_widget.top_builder_widget.sequence_builder.option_picker.option_getter.get_next_options(
             self.sequence
         )
         chosen_option = random.choice(options)
 
-        if self.level == 1:
+        if level == 1:
             chosen_option = self._apply_level_1_constraints(chosen_option)
-        elif self.level == 2:
-            chosen_option = self._apply_level_2_constraints(chosen_option)
-        elif self.level == 3:
-            chosen_option = self._apply_level_3_constraints(chosen_option)
+        elif level == 2:
+            chosen_option = self._apply_level_2_constraints(chosen_option, turn)
+        elif level == 3:
+            chosen_option = self._apply_level_3_constraints(chosen_option, turn)
 
         return chosen_option
 
@@ -74,19 +89,14 @@ class FreeFormSequenceAutoBuilder:
         pictograph["red_attributes"]["turns"] = 0
         return pictograph
 
-    def _apply_level_2_constraints(self, pictograph: dict) -> dict:
-        # Randomize turns within radial constraints
-        pictograph["blue_attributes"]["turns"] = self._randomize_turns()
-        pictograph["red_attributes"]["turns"] = self._randomize_turns()
+    def _apply_level_2_constraints(self, pictograph: dict, turn: float) -> dict:
+        # Apply the pre-determined turn
+        pictograph["blue_attributes"]["turns"] = turn
+        pictograph["red_attributes"]["turns"] = turn
         return pictograph
 
-    def _apply_level_3_constraints(self, pictograph: dict) -> dict:
-        # Randomize turns with potential non-radial orientations
-        pictograph["blue_attributes"]["turns"] = self._randomize_turns()
-        pictograph["red_attributes"]["turns"] = self._randomize_turns()
+    def _apply_level_3_constraints(self, pictograph: dict, turn: float) -> dict:
+        # Apply the pre-determined turn with potential non-radial orientations
+        pictograph["blue_attributes"]["turns"] = turn
+        pictograph["red_attributes"]["turns"] = turn
         return pictograph
-
-    def _randomize_turns(self) -> int:
-        # Turn intensity affects the maximum number of turns
-        max_turns = self.turn_intensity // 25  # Scale to 0-4 max turns
-        return random.choice([0, 0.5, 1, 1.5, 2][:max_turns])

@@ -37,7 +37,7 @@ class CurrentWordLabel(QWidget):
         # Reduce font size until horizontal advance is shorter than sequence widget width
         while (
             self.line_edit.fontMetrics().horizontalAdvance(self.current_word)
-            > sequence_widget_width * 0.9
+            > sequence_widget_width * 0.8
         ):
             font_size -= 1
             font.setPointSize(int(font_size))

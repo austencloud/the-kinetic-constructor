@@ -8,6 +8,7 @@ class AutoBuilderSettings:
     DEFAULT_AUTO_BUILDER_SETTINGS = {
         "sequence_type": "Random Freeform",
         "sequence_length": 16,
+        "max_turns": 50,
         "turn_intensity": 50,
         "sequence_level": 1,  # 1: Level 1, 2: Level 2, 3: Level 3
     }

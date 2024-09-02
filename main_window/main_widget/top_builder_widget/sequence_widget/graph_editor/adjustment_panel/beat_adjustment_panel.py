@@ -26,7 +26,7 @@ class BeatAdjustmentPanel(QFrame):
         self._setup_placeholder_widget()
         self.layout: QHBoxLayout = QHBoxLayout(self)
         for box in self.turns_boxes:
-            self.layout.addWidget(box)
+            self.layout.addWidget(box, 1)
         for ori_picker in self.ori_picker_boxes:
             self.layout.addWidget(ori_picker)
         self.layout.addWidget(self.placeholder_widget)
