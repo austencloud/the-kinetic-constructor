@@ -46,10 +46,11 @@ class OptionPicker(QWidget):
         self.layout.addLayout(header_label_layout, 1)
         self.layout.addWidget(self.scroll_area, 14)
 
-    def update_option_picker(self):
+    def update_option_picker(self, sequence = None):
         if self.disabled:
             return
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        if not sequence:
+            sequence = self.json_manager.loader_saver.load_current_sequence_json()
 
         if len(sequence) > 1:
             next_options: dict = self.option_manager.get_next_options(sequence)

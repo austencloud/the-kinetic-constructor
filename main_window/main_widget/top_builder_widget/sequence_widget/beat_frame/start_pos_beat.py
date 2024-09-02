@@ -8,7 +8,7 @@ from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat 
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame
+    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import SequenceWidgetBeatFrame
 
 
 class StartPositionBeat(Beat):

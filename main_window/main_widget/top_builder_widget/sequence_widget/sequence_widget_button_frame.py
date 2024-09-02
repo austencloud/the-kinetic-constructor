@@ -56,6 +56,11 @@ class SequenceWidgetButtonFrame(QFrame):
                 "callback": self.sequence_widget.autocompleter.auto_complete_sequence,
                 "tooltip": "Auto Complete Sequence",
             },
+            "auto_builder": {
+                "icon_path": "auto_builder.png",  # Path to the generated icon
+                "callback": lambda: self.sequence_widget.autobuilder.exec(),
+                "tooltip": "Auto Builder",
+            },
             "clear_sequence": {
                 "icon_path": "clear.svg",
                 "callback": lambda: self.sequence_widget.sequence_clearer.clear_sequence(

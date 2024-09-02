@@ -14,7 +14,7 @@ from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_recorder.SR_beat_frame import SR_BeatFrame
-    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat_frame import (
+    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
         SequenceWidgetBeatFrame,
     )
 

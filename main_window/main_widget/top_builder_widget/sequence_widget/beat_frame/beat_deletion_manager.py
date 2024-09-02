@@ -9,7 +9,7 @@ from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start
 
 
 if TYPE_CHECKING:
-    from .beat_frame import SequenceWidgetBeatFrame
+    from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
 
 
 class BeatDeletionManager:

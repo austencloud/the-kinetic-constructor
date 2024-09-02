@@ -2,13 +2,14 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QApplication
 
+from main_window.main_widget.top_builder_widget.sequence_widget.sequence_auto_builder.sequence_auto_builder import SequenceAutoBuilder
 from main_window.main_widget.top_builder_widget.sequence_widget.sequence_clearer import (
     SequenceClearer,
 )
 
 from .beat_frame.beat import Beat, BeatView
 from .sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
-from .beat_frame.beat_frame import SequenceWidgetBeatFrame
+from .beat_frame.sequence_widget_beat_frame import SequenceWidgetBeatFrame
 from .add_to_dictionary_manager.add_to_dictionary_manager import AddToDictionaryManager
 from .labels.current_word_label import CurrentWordLabel
 from .labels.difficulty_label import DifficultyLabel
@@ -47,6 +48,7 @@ class SequenceWidget(QWidget):
         self.beat_frame = SequenceWidgetBeatFrame(self)
         self.add_to_dictionary_manager = AddToDictionaryManager(self)
         self.autocompleter = SequenceAutoCompleter(self)
+        self.autobuilder = SequenceAutoBuilder(self)
         self.sequence_clearer = SequenceClearer(self)
         self.button_frame = SequenceWidgetButtonFrame(self)
         self.graph_editor = GraphEditor(self)

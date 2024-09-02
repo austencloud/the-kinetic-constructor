@@ -8,7 +8,7 @@ from .image_saver import ImageSaver
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat_frame import (
+    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
         SequenceWidgetBeatFrame,
     )
     from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame import (
