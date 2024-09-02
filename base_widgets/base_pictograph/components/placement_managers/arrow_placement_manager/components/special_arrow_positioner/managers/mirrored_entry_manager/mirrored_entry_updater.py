@@ -39,7 +39,7 @@ class MirroredEntryUpdater:
 
         updater = self._get_updater(arrow)
         updater.update_entry(letter, original_turn_data)
-        QApplication.processEvents()
+        # QApplication.processEvents()
         self.manager.data_updater.update_specific_entry_in_json(
             letter, letter_data, ori_key
         )
@@ -86,7 +86,9 @@ class MirroredEntryUpdater:
             letter.value, {}
         )
 
-    def _get_keys_for_mixed_start_ori(self, letter: Letter, ori_key) -> tuple[str, dict]:
+    def _get_keys_for_mixed_start_ori(
+        self, letter: Letter, ori_key
+    ) -> tuple[str, dict]:
         other_ori_key = self.data_updater.get_other_layer3_ori_key(ori_key)
         other_letter_data = self._get_letter_data(other_ori_key, letter)
         return other_ori_key, other_letter_data
