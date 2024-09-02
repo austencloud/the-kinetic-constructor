@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     )
 
 
-class OptionManager(QObject):
+class OptionGetter(QObject):
     option_selected = pyqtSignal(BasePictograph)
 
     def __init__(self, option_picker: "OptionPicker"):

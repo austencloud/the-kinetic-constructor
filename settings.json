@@ -46,7 +46,14 @@
     },
     "sequence_layout": {
         "grow_sequence": true,
-        "num_beats": 1,
-        "layout_option": "1 x 1"
+        "num_beats": 16,
+        "layout_option": "4 x 4"
+    },
+    "auto_builder": {
+        "sequence_type": "Random Freeform",
+        "sequence_length": 16,
+        "turn_intensity": 1,
+        "sequence_level": 3,
+        "max_turns": 9
     }
 }

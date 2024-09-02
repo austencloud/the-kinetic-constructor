@@ -1,12 +1,17 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QTimer, Qt
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QApplication
 
-from main_window.main_widget.top_builder_widget.sequence_widget.sequence_clearer import SequenceClearer
+from main_window.main_widget.top_builder_widget.sequence_widget.sequence_auto_builder.sequence_auto_builder import (
+    SequenceAutoBuilder,
+)
+from main_window.main_widget.top_builder_widget.sequence_widget.sequence_clearer import (
+    SequenceClearer,
+)
 
 from .beat_frame.beat import Beat, BeatView
 from .sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
-from .beat_frame.beat_frame import SequenceWidgetBeatFrame
+from .beat_frame.sequence_widget_beat_frame import SequenceWidgetBeatFrame
 from .add_to_dictionary_manager.add_to_dictionary_manager import AddToDictionaryManager
 from .labels.current_word_label import CurrentWordLabel
 from .labels.difficulty_label import DifficultyLabel
@@ -45,6 +50,7 @@ class SequenceWidget(QWidget):
         self.beat_frame = SequenceWidgetBeatFrame(self)
         self.add_to_dictionary_manager = AddToDictionaryManager(self)
         self.autocompleter = SequenceAutoCompleter(self)
+        self.autobuilder = SequenceAutoBuilder(self)
         self.sequence_clearer = SequenceClearer(self)
         self.button_frame = SequenceWidgetButtonFrame(self)
         self.graph_editor = GraphEditor(self)
@@ -77,8 +83,10 @@ class SequenceWidget(QWidget):
 
     def update_difficulty_label(self):
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
-        difficulty_level = self.main_widget.sequence_level_evaluator.get_sequence_level(
-            sequence
+        difficulty_level = (
+            self.main_widget.sequence_level_evaluator.get_sequence_difficulty_level(
+                sequence
+            )
         )
         self.difficulty_label.set_difficulty_level(difficulty_level)
 
@@ -122,8 +130,8 @@ class SequenceWidget(QWidget):
 
     def _setup_beat_frame_layout(self):
         self.beat_frame_layout = QHBoxLayout()
-        self.beat_frame_layout.addWidget(self.scroll_area)  # Use the scroll area here
-        self.beat_frame_layout.addWidget(self.button_frame)
+        self.beat_frame_layout.addWidget(self.scroll_area, 10)
+        self.beat_frame_layout.addWidget(self.button_frame, 1)
         self.beat_frame_layout.setContentsMargins(0, 0, 0, 0)
         self.beat_frame_layout.setSpacing(0)
 
@@ -132,7 +140,6 @@ class SequenceWidget(QWidget):
         QTimer.singleShot(0, self.post_show_initialization)
 
     def post_show_initialization(self):
-        # self.resize_sequence_widget()
         self.update_current_word()
 
     def _setup_indicator_label_layout(self):
@@ -141,10 +148,10 @@ class SequenceWidget(QWidget):
         self.indicator_label_layout.addWidget(self.indicator_label)
         self.indicator_label_layout.addStretch(1)
 
-    def populate_sequence(self, pictograph_dict: dict) -> None:
-        pictograph = Beat(self.beat_frame)
-        pictograph.updater.update_pictograph(pictograph_dict)
-        self.beat_frame.add_beat_to_sequence(pictograph)
+    def create_new_beat_and_add_to_sequence(self, pictograph_dict: dict) -> None:
+        new_beat = Beat(self.beat_frame)
+        new_beat.updater.update_pictograph(pictograph_dict)
+        self.beat_frame.add_beat_to_sequence(new_beat)
         self.json_manager.updater.update_sequence_properties()  # Recalculate properties after each update
 
     def resize_sequence_widget(self) -> None:

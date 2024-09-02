@@ -48,7 +48,7 @@ class SequencePropertiesManager:
 
     def calculate_word(self) -> str:
         # Concatenate all letters in the sequence
-        word = ''.join(entry['letter'] for entry in self.sequence[1:])
+        word = "".join(entry["letter"] for entry in self.sequence[1:])
         # Simplify the word using the WordSimplifier
         simplified_word = WordSimplifier.simplify_repeated_word(word)
         return simplified_word
@@ -69,15 +69,21 @@ class SequencePropertiesManager:
 
             if not self.is_strictly_mirrored_permutation:
                 # If not mirrored, check for strictly color swapped permutation
-                self.is_strictly_colorswapped_permutation = self.color_swapped_checker.check()
+                self.is_strictly_colorswapped_permutation = (
+                    self.color_swapped_checker.check()
+                )
 
                 if not self.is_strictly_colorswapped_permutation:
                     # If not strictly color swapped, check for mirrored color swapped permutation
-                    self.is_mirrored_color_swapped_permutation = self.mirrored_color_swapped_checker.check()
+                    self.is_mirrored_color_swapped_permutation = (
+                        self.mirrored_color_swapped_checker.check()
+                    )
 
                     if not self.is_mirrored_color_swapped_permutation:
                         # If not mirrored color swapped, check for rotational color swapped permutation
-                        self.is_rotational_colorswapped_permutation = self.rotational_color_swapped_checker.check()
+                        self.is_rotational_colorswapped_permutation = (
+                            self.rotational_color_swapped_checker.check()
+                        )
                     else:
                         self.is_rotational_colorswapped_permutation = False
                 else:
@@ -97,7 +103,9 @@ class SequencePropertiesManager:
         return {
             "word": self.calculate_word(),
             "author": self.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
-            "level": self.main_widget.sequence_level_evaluator.get_sequence_level(self.sequence),
+            "level": self.main_widget.sequence_level_evaluator.get_sequence_difficulty_level(
+                self.sequence
+            ),
             "is_circular": self.ends_at_start_pos,
             "is_permutable": self.is_permutable,
             "is_strictly_rotational_permutation": self.is_strictly_rotational_permutation,

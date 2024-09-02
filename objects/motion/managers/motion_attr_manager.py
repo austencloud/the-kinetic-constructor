@@ -22,9 +22,10 @@ class MotionAttrManager:
                 setattr(self.motion, attribute, value)
         if self.motion.check.is_shift():
             if "prefloat_motion_type" not in motion_dict:
-                self.motion.prefloat_motion_type = self.motion.motion_type
-            # if "prefloat_prop_rot_dir" not in motion_dict:
-            #     self.motion.prefloat_prop_rot_dir = self.motion.prop_rot_dir
+                if self.motion.motion_type != FLOAT:
+                    self.motion.prefloat_motion_type = self.motion.motion_type
+            if "prefloat_prop_rot_dir" in motion_dict:
+                self.motion.prefloat_prop_rot_dir = motion_dict["prefloat_prop_rot_dir"]
         if self.motion.pictograph.letter in [
             Letter.S,
             Letter.T,
@@ -52,7 +53,6 @@ class MotionAttrManager:
             START_ORI: self.motion.start_ori,
             END_ORI: self.motion.end_ori,
         }
-
 
     def assign_lead_states(self) -> None:
         leading_motion = self.motion.pictograph.get.leading_motion()

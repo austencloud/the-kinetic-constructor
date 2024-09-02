@@ -8,6 +8,8 @@ if TYPE_CHECKING:
 
 class BaseTurnsTupleGenerator:
     def _normalize_turns(self, motion: Motion) -> int:
+        if motion.turns == "fl":
+            return "fl"
         return (
             int(motion.turns) if motion.turns in {0.0, 1.0, 2.0, 3.0} else motion.turns
         )
@@ -23,33 +25,54 @@ class BaseTurnsTupleGenerator:
 
 
 class Type1HybridTurnsTupleGenerator(BaseTurnsTupleGenerator):
-    def generate_turns_tuple(self, pictograph) -> str:
+    def generate_turns_tuple(self, pictograph: "BasePictograph") -> str:
         super().set_pictograph(pictograph)
-        pro_motion = (
-            self.blue_motion if self.blue_motion.motion_type == PRO else self.red_motion
-        )
-        anti_motion = (
-            self.blue_motion
-            if self.blue_motion.motion_type == ANTI
-            else self.red_motion
-        )
-        return f"({pro_motion.turns}, {anti_motion.turns})"
+        # if one of the motions is not a float, proceed with the written logic
+        if not pictograph.check.has_one_float():
+            pro_motion = (
+                self.blue_motion
+                if self.blue_motion.motion_type == PRO
+                else self.red_motion
+            )
+            anti_motion = (
+                self.blue_motion
+                if self.blue_motion.motion_type == ANTI
+                else self.red_motion
+            )
+            return f"({pro_motion.turns}, {anti_motion.turns})"
+        elif pictograph.check.has_one_float():
+            # return blue, then red tuple
+            return f"({self._normalize_turns(self.blue_motion)}, {self._normalize_turns(self.red_motion)})"
 
 
 class Type2TurnsTupleGenerator(BaseTurnsTupleGenerator):
-    def generate_turns_tuple(self, pictograph) -> str:
+    def generate_turns_tuple(self, pictograph: "BasePictograph") -> str:
         super().set_pictograph(pictograph)
+
         shift = (
             self.red_motion if self.red_motion.check.is_shift() else self.blue_motion
         )
         static = (
             self.red_motion if self.red_motion.check.is_static() else self.blue_motion
         )
-        if static.turns != 0 and static.prop_rot_dir != NO_ROT:
-            direction = "s" if static.prop_rot_dir == shift.prop_rot_dir else "o"
-            return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(static)})"
-        else:
-            return f"({self._normalize_turns(shift)}, {self._normalize_turns(static)})"
+        if shift.motion_type in [PRO, ANTI]:
+            if static.turns != 0 and static.prop_rot_dir != NO_ROT:
+                direction = "s" if static.prop_rot_dir == shift.prop_rot_dir else "o"
+                return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(static)})"
+            else:
+                return (
+                    f"({self._normalize_turns(shift)}, {self._normalize_turns(static)})"
+                )
+        elif shift.motion_type == FLOAT:
+            if static.turns != 0 and static.prop_rot_dir != NO_ROT:
+                direction = (
+                    "s" if static.prop_rot_dir == shift.prefloat_prop_rot_dir else "o"
+                )
+                return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(static)})"
+            else:
+                return (
+                    f"({self._normalize_turns(shift)}, {self._normalize_turns(static)})"
+                )
 
 
 class Type3TurnsTupleGenerator(BaseTurnsTupleGenerator):
@@ -57,14 +80,44 @@ class Type3TurnsTupleGenerator(BaseTurnsTupleGenerator):
         super().set_pictograph(pictograph)
         shift = self.p.get.shift()
         dash = self.p.get.dash()
-        direction = "s" if dash.prop_rot_dir == shift.prop_rot_dir else "o"
-        if dash.turns > 0 and shift.turns > 0:
-            return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
-        elif dash.turns > 0:
-            return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
-        else:
-            return f"({self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
-
+        if shift.motion_type in [PRO, ANTI]:
+            direction = "s" if dash.prop_rot_dir == shift.prop_rot_dir else "o"
+            if dash.turns > 0:
+                if isinstance(shift.turns, int) or isinstance(shift.turns, float):
+                    if shift.turns > 0:
+                        return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+                    elif dash.turns > 0:
+                        return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+                    else:
+                        return f"({self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+                elif shift.turns == "fl":
+                    if dash.turns > 0:
+                        return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+                    else:
+                        return f"({self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+            elif dash.turns == 0:
+                return (
+                    f"({self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+                )
+        elif shift.motion_type == FLOAT:
+            direction = "s" if dash.prop_rot_dir == shift.prefloat_prop_rot_dir else "o"
+            if dash.turns > 0:
+                if isinstance(shift.turns, int) or isinstance(shift.turns, float):
+                    if shift.turns > 0:
+                        return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+                    elif dash.turns > 0:
+                        return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+                    else:
+                        return f"({self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+                elif shift.turns == "fl":
+                    if dash.turns > 0:
+                        return f"({direction}, {self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+                    else:
+                        return f"({self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+            elif dash.turns == 0:
+                return (
+                    f"({self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
+                )
 
 class Type4TurnsTupleGenerator(BaseTurnsTupleGenerator):
     def generate_turns_tuple(self, pictograph) -> str:

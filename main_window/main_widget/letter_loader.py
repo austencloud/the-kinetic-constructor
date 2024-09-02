@@ -25,6 +25,10 @@ class LetterLoader:
             for letter_str in self.df[LETTER].unique()
         }
         # convert the turns to ints in the dict
+        self._convert_turns_str_to_int_or_float(letters)
+        return letters
+
+    def _convert_turns_str_to_int_or_float(self, letters):
         for letter in letters:
             for motion in letters[letter]:
                 motion["blue_attributes"]["turns"] = int(
@@ -33,7 +37,6 @@ class LetterLoader:
                 motion["red_attributes"]["turns"] = int(
                     motion["red_attributes"]["turns"]
                 )
-        return letters
 
     def add_turns_and_ori_to_pictograph_dict(self, df: pd.DataFrame) -> pd.DataFrame:
         # Example logic for assigning turns and orientations; adjust according to your specific needs

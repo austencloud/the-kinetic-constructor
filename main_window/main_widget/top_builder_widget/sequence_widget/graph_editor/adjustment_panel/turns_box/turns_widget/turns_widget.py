@@ -1,14 +1,18 @@
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLabel, QPushButton, QHBoxLayout
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLabel
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Union
 
+from data.constants import ANTI, FLOAT, PRO
+from .motion_type_setter import MotionTypeSetter
 from .direct_set_dialog.direct_set_turns_dialog import DirectSetTurnsDialog
 from .turns_display_frame.turns_display_frame import TurnsDisplayFrame
 from .turns_adjustment_manager import TurnsAdjustmentManager
 from .turns_updater import TurnsUpdater
+from .motion_type_label_widget import MotionTypeLabelWidget
 
 if TYPE_CHECKING:
+    from objects.motion.motion import Motion
     from ..turns_box import TurnsBox
 
 
@@ -25,7 +29,8 @@ class TurnsWidget(QWidget):
         self.turns_display_frame = TurnsDisplayFrame(self)
         self.direct_set_dialog = DirectSetTurnsDialog(self)
         self._setup_turns_text()
-        self._setup_float_button()
+        self.motion_type_label = MotionTypeLabelWidget(self)
+        self.motion_type_setter = MotionTypeSetter(self)
 
     def _setup_layout(self) -> None:
         layout: QVBoxLayout = QVBoxLayout(self)
@@ -34,16 +39,9 @@ class TurnsWidget(QWidget):
         layout.addWidget(self.turns_text)
         layout.addStretch(1)
         layout.addWidget(self.turns_display_frame)
-        layout.addStretch(4)
-        layout.addLayout(self.float_button_layout)
         layout.addStretch(2)
-
-    def _setup_float_button(self):
-        self.float_button_layout = QHBoxLayout()
-        self.float_button_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.float_button = QPushButton("Float", self)
-        self.float_button.clicked.connect(self.set_to_float)
-        self.float_button_layout.addWidget(self.float_button)
+        layout.addWidget(self.motion_type_label)
+        layout.addStretch(2)
 
     def _setup_turns_text(self) -> None:
         self.turns_text = QLabel("Turns")
@@ -52,33 +50,27 @@ class TurnsWidget(QWidget):
     def on_turns_label_clicked(self) -> None:
         self.direct_set_dialog.show_direct_set_dialog()
 
-    def update_turns_display(self, turns: Union[int, float, str]) -> None:
-        display_value = "fl" if turns == "fl" else str(turns)
+    def update_turns_display(self, motion: "Motion", new_turns: str) -> None:
+        self.turns_box.matching_motion = motion
+        display_value = "fl" if new_turns == "fl" else str(new_turns)
         self.turns_display_frame.turns_label.setText(display_value)
-        self.turns_display_frame.decrement_button.setEnabled(turns not in ["fl"])
+        if self.turns_box.matching_motion.motion_type in [PRO, ANTI, FLOAT]:
+            self.turns_display_frame.decrement_button.setEnabled(
+                new_turns not in ["fl"]
+            )
+        else:
+            self.turns_display_frame.decrement_button.setEnabled(new_turns != 0)
+        self.motion_type_label.update_display(motion.motion_type)
 
     def resize_turns_widget(self) -> None:
         self.turns_display_frame.resize_turns_display_frame()
-        self._resize_dir_buttons()
-        self._resize_turns_text()
-        self._resize_float_button()  # Resize the float button
-
-    def _resize_float_button(self) -> None:
-        font_size = self.turns_box.graph_editor.width() // 40
-        font = QFont("Cambria", font_size, QFont.Weight.Bold)
-        self.float_button.setFont(font)
-        self.float_button.setMaximumWidth(self.turns_box.width() // 2)
-
-    def _resize_dir_buttons(self) -> None:
         self.turns_box.prop_rot_dir_button_manager.resize_prop_rot_dir_buttons()
-        self.turns_box.vtg_dir_button_manager.resize_vtg_dir_buttons()
+        self._resize_turns_text()
+        self.motion_type_label.resize_buttons()
+
 
     def _resize_turns_text(self) -> None:
         font_size = self.turns_box.graph_editor.width() // 50
         font = QFont("Cambria", font_size, QFont.Weight.Bold)
         font.setUnderline(True)
         self.turns_text.setFont(font)
-
-    def set_to_float(self) -> None:
-        """Set the turns to 'fl' and update the display."""
-        self.adjustment_manager.direct_set_turns("fl")

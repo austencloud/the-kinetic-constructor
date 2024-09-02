@@ -14,6 +14,9 @@ class MotionChecker:
     def is_dash(self) -> bool:
         return self.motion.motion_type == DASH
 
+    def is_float(self) -> bool:
+        return self.motion.motion_type == FLOAT
+
     def is_static(self) -> bool:
         return self.motion.motion_type == STATIC
 

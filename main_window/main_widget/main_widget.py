@@ -5,6 +5,7 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from Enums.PropTypes import PropType
+from letter_determiner.letter_determiner import LetterDeterminer
 from .letter_loader import LetterLoader
 from .sequence_properties_manager.sequence_properties_manager import (
     SequencePropertiesManager,
@@ -51,6 +52,7 @@ class MainWidget(QTabWidget):
         self.initialized = True
         self.currentChanged.connect(self.on_tab_changed)
         self.tabBar().setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.load_state()
 
     def on_tab_changed(self, index):
         if index == self.builder_tab_index:
@@ -149,6 +151,7 @@ class MainWidget(QTabWidget):
     def _setup_letters(self) -> None:
         self.letter_loader = LetterLoader(self)
         self.letters: dict[Letter, list[dict]] = self.letter_loader.load_all_letters()
+        self.letter_determiner = LetterDeterminer(self)
 
     ### EVENT HANDLERS ###
 
@@ -158,23 +161,17 @@ class MainWidget(QTabWidget):
         else:
             super().keyPressEvent(event)
 
-    def resize_starting_widget(self, starting_widget):
+    def resize_current_widget(self, starting_widget):
         if starting_widget == self.top_builder_widget:
-            self.top_builder_widget.sequence_widget.resize_sequence_widget()
-            self.top_builder_widget.sequence_builder.resize_sequence_builder()
+            self.top_builder_widget.resize_top_builder_widget()
         elif starting_widget == self.dictionary_widget:
             self.dictionary_widget.browser.resize_dictionary_browser()
 
-    def resize_all_widgets(self):
-        self.currentChanged.disconnect(self.on_tab_changed)
-        self.resize_starting_widget(self.currentWidget())
-        self.currentChanged.connect(self.on_tab_changed)
-        self.main_window.menu_bar_widget.resize_menu_bar_widget()
-
     def showEvent(self, event):
         super().showEvent(event)
-        self.load_state()
-        self.resize_all_widgets()
+
+        self.main_window.menu_bar_widget.resize_menu_bar_widget()
+        self.resize_current_widget(self.currentWidget())
         self.apply_background()
 
     def resizeEvent(self, event) -> None:

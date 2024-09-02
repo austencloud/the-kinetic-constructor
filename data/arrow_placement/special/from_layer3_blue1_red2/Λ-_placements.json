@@ -2,6 +2,13 @@
   "Λ-": {
     "(ccw, 1, op)": {
       "red": [40, 55]
+    },
+    "(0, 1, op)": {
+      "dash_from_layer2_rot_angle_override": true
+    },
+    "(o, 1, 1)": {
+      "red": [-20, -145],
+      "blue": [-20, -75]
     }
   }
 }

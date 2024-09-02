@@ -3,6 +3,7 @@ from Enums.Enums import LetterType
 from data.constants import LEADING, TRAILING, RED, BLUE
 from objects.motion.motion import Motion
 from functools import lru_cache
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
@@ -37,6 +38,8 @@ class PictographUpdater:
 
         self.pictograph.tka_glyph.update_tka_glyph()
         self._position_objects()
+        # if self.pictograph.view:
+        #     self.pictograph.view.repaint()
 
     def get_end_pos(self) -> str:
         return self.pictograph.end_pos[:-1]
@@ -56,7 +59,7 @@ class PictographUpdater:
             self.override_motion_type_if_necessary(pictograph_dict, motion)
             if motion_dicts.get(motion.color) is not None:
                 self.show_graphical_objects(motion.color)
-            if motion_dicts[motion.color]["turns"] == "fl":
+            if motion_dicts[motion.color].get("turns", "") == "fl":
                 motion.turns = "fl"
             motion.updater.update_motion(motion_dicts[motion.color])
 
@@ -157,13 +160,25 @@ class PictographUpdater:
                 for attr in motion_attributes
                 if attr in motion_dict
             }
-        if pictograph_dict.get(f"{color}_attributes").get("prefloat_motion_type"):
+        if pictograph_dict.get(f"{color}_attributes", {}).get(
+            "prefloat_motion_type", {}
+        ):
             motion_dicts[color]["prefloat_motion_type"] = pictograph_dict.get(
                 f"{color}_attributes"
             ).get("prefloat_motion_type")
         else:
             motion_dicts[color]["prefloat_motion_type"] = motion_dicts[color].get(
                 "motion_type"
+            )
+        if pictograph_dict.get(f"{color}_attributes", {}).get(
+            "prefloat_prop_rot_dir", {}
+        ):
+            motion_dicts[color]["prefloat_prop_rot_dir"] = pictograph_dict.get(
+                f"{color}_attributes"
+            ).get("prefloat_prop_rot_dir")
+        else:
+            motion_dicts[color]["prefloat_prop_rot_dir"] = motion_dicts[color].get(
+                "prop_rot_dir"
             )
         return motion_dicts
 

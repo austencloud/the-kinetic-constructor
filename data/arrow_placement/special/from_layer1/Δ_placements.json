@@ -1,8 +1,7 @@
 {
   "Δ": {
     "(o, 0, 0.5)": {
-      "static": [100, 100],
-      "static_rot_angle_override": true
+      "static": [100, 100]
     },
     "(o, 0.5, 0.5)": {
       "static_rot_angle_override": true,
@@ -82,9 +81,6 @@
     },
     "(o, 2.5, 1.5)": {
       "anti": [-90, 25]
-    },
-    "(0, 0)": {
-      "anti": [45, -55]
     },
     "(0.5, 0)": {
       "anti": [-85, 55]

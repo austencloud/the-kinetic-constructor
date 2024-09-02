@@ -1,3 +1,3 @@
-pyinstaller --noconsole --add-data "user_settings.json;." --add-data "turn_patterns.json;." --add-data "PictographDataframe.csv;." --add-data "data;data" --add-data "images;images" --add-data "audio;audio" main.py
+pyinstaller --noconsole --add-data "settings.json;." --add-data "data;data" --add-data "images;images"  main.py
 
-pyinstaller --add-data "user_settings.json;." --add-data "turn_patterns.json;." --add-data "PictographDataframe.csv;." --add-data "data;data" --add-data "images;images" main.py
+pyinstaller --add-data "settings.json;." --add-data "data;data" --add-data "images;images" main.py

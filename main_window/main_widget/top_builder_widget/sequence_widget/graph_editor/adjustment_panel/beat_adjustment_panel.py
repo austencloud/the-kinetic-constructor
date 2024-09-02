@@ -1,13 +1,14 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication
 from data.constants import BLUE, RED
-from .placeholder_text_label import GraphEditorPlaceHolderTextLabel
+from .adjustment_panel_placeholder_text import AdjustmentPanelPlaceHolderText
 
 from .ori_picker_box.ori_picker_box import OriPickerBox
 from .turns_box.turns_box import TurnsBox
 
 
 if TYPE_CHECKING:
+    from objects.motion.motion import Motion
     from ..graph_editor import GraphEditor
 
 
@@ -25,17 +26,23 @@ class BeatAdjustmentPanel(QFrame):
         self._setup_placeholder_widget()
         self.layout: QHBoxLayout = QHBoxLayout(self)
         for box in self.turns_boxes:
-            self.layout.addWidget(box)
+            self.layout.addWidget(box, 1)
         for ori_picker in self.ori_picker_boxes:
             self.layout.addWidget(ori_picker)
         self.layout.addWidget(self.placeholder_widget)
 
-    def update_turns_displays(self, blue_turns: int, red_turns: int) -> None:
-        self.blue_turns_box.turns_widget.update_turns_display(blue_turns)
-        self.red_turns_box.turns_widget.update_turns_display(red_turns)
+    def update_turns_displays(
+        self, blue_motion: "Motion", red_motion: "Motion"
+    ) -> None:
+        self.blue_turns_box.turns_widget.update_turns_display(
+            blue_motion, blue_motion.turns
+        )
+        self.red_turns_box.turns_widget.update_turns_display(
+            red_motion, red_motion.turns
+        )
 
     def _setup_placeholder_widget(self) -> None:
-        self.placeholder_widget = GraphEditorPlaceHolderTextLabel(self)
+        self.placeholder_widget = AdjustmentPanelPlaceHolderText(self)
 
     def _setup_turns_boxes(self) -> None:
         self.blue_turns_box: TurnsBox = TurnsBox(self, self.GE_pictograph, BLUE)
@@ -84,10 +91,14 @@ class BeatAdjustmentPanel(QFrame):
         for turns_box in self.turns_boxes:
             turns_box.show()
 
-    def update_turns_panel(self, blue_turns: int, red_turns: int) -> None:
-        self.update_turns_displays(blue_turns, red_turns)
+    def update_turns_panel(self, blue_motion: "Motion", red_motion: "Motion") -> None:
+        self.update_turns_displays(blue_motion, red_motion)
         for box in self.turns_boxes:
             box.header.update_turns_box_header()
+            if box.color == BLUE:
+                box.matching_motion = blue_motion
+            else:
+                box.matching_motion = red_motion
 
     def resize_beat_adjustment_panel(self) -> None:
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -100,5 +111,5 @@ class BeatAdjustmentPanel(QFrame):
         for ori_picker_box in self.ori_picker_boxes:
             ori_picker_box.resize_ori_picker_box()
 
-        self.placeholder_widget.set_stylesheet()
+        self.placeholder_widget.resize_adjustment_panel_placeholder_text()
         QApplication.processEvents()

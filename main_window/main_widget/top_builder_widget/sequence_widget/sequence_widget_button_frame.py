@@ -56,6 +56,11 @@ class SequenceWidgetButtonFrame(QFrame):
                 "callback": self.sequence_widget.autocompleter.auto_complete_sequence,
                 "tooltip": "Auto Complete Sequence",
             },
+            "auto_builder": {
+                "icon_path": "auto_builder.png",  # Path to the generated icon
+                "callback": lambda: self.sequence_widget.autobuilder.exec(),
+                "tooltip": "Auto Builder",
+            },
             "clear_sequence": {
                 "icon_path": "clear.svg",
                 "callback": lambda: self.sequence_widget.sequence_clearer.clear_sequence(
@@ -97,11 +102,11 @@ class SequenceWidgetButtonFrame(QFrame):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def resize_button_frame(self) -> None:
-        button_height = self.height() // 9
+        button_height = self.sequence_widget.height() // 16
 
         for button in self.buttons:
             button.setFixedSize(button_height, button_height)
             button.setIconSize((button.size() * 0.7))
             button.setStyleSheet(f"font-size: {self.font_size}px")
 
-        self.layout.setSpacing(self.height() // 15)
+        self.layout.setSpacing(self.sequence_widget.height() // 24)

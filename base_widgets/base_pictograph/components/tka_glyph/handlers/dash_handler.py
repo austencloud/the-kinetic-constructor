@@ -14,9 +14,10 @@ class DashHandler:
         self.dash_item = None
 
     def add_dash(self) -> None:
-        dash_path = get_images_and_data_path("images/dash.svg")
-        self.dash_item = self.create_dash(dash_path)
-        self.glyph.addToGroup(self.dash_item)
+        if not self.dash_item:
+            dash_path = get_images_and_data_path("images/dash.svg")
+            self.dash_item = self.create_dash(dash_path)
+            self.glyph.addToGroup(self.dash_item)
 
     def create_dash(self, dash_path: str) -> QGraphicsSvgItem:
         renderer = QSvgRenderer(dash_path)

@@ -3,7 +3,6 @@ from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, OPP, SAME
 from .prop_rot_dir_button_manager.prop_rot_dir_button_manager import (
     PropRotDirButtonManager,
 )
-from .vtg_dir_button_manager.vtg_dir_button_manager import VtgDirButtonManager
 from .turns_box_header import TurnsBoxHeader
 from .turns_widget.turns_widget import TurnsWidget
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
@@ -26,7 +25,7 @@ class TurnsBox(QFrame):
         self.pictograph = pictograph
         self.graph_editor = self.adjustment_panel.graph_editor
         self.border_width = self.graph_editor.width() // 100
-
+        self.matching_motion = self.pictograph.get.motion_by_color(self.color)
         self.vtg_dir_btn_state: dict[str, bool] = {SAME: False, OPP: False}
         self.prop_rot_dir_btn_state: dict[str, bool] = {
             CLOCKWISE: False,
@@ -36,7 +35,6 @@ class TurnsBox(QFrame):
         self._setup_layout()
 
     def _setup_widgets(self) -> None:
-        self.vtg_dir_button_manager = VtgDirButtonManager(self)
         self.prop_rot_dir_button_manager = PropRotDirButtonManager(self)
         self.header = TurnsBoxHeader(self)
         self.turns_widget = TurnsWidget(self)

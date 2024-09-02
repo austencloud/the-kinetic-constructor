@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QApplication
 from PyQt6.QtGui import QPainter
 
 from .sequence_builder.sequence_builder import SequenceBuilder
@@ -54,3 +54,4 @@ class TopBuilderWidget(QWidget):
     def resize_top_builder_widget(self):
         self.sequence_builder.resize_sequence_builder()
         self.sequence_widget.resize_sequence_widget()
+        self.sequence_widget.beat_frame.selection_overlay.update_overlay_position()

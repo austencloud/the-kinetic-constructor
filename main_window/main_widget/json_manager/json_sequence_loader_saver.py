@@ -68,7 +68,7 @@ class JsonSequenceLoaderSaver:
                 )
             if "level" not in sequence[0]:
                 sequence[0]["level"] = (
-                    self.json_manager.main_widget.sequence_level_evaluator.get_sequence_level(
+                    self.json_manager.main_widget.sequence_level_evaluator.get_sequence_difficulty_level(
                         sequence
                     )
                 )
@@ -96,22 +96,19 @@ class JsonSequenceLoaderSaver:
     def clear_current_sequence_file(self):
         self.save_current_sequence([])
 
-    def get_prop_rot_dir_from_json_at_index(self, index: int, color: str) -> int:
+    def get_prop_rot_dir_from_json(self, index: int, color: str) -> int:
         sequence = self.load_current_sequence_json()
         if sequence:
             return sequence[index][f"{color}_attributes"].get("prop_rot_dir", 0)
         return 0
-    
+
     def get_motion_type_from_json_at_index(self, index: int, color: str) -> int:
         sequence = self.load_current_sequence_json()
         if sequence:
             return sequence[index][f"{color}_attributes"].get("motion_type", 0)
         return 0
 
-
-    def get_prefloat_prop_rot_dir_from_json_at_index(
-        self, index: int, color: str
-    ) -> int:
+    def get_prefloat_prop_rot_dir_from_json(self, index: int, color: str) -> int:
         sequence = self.load_current_sequence_json()
         if sequence:
             return sequence[index][f"{color}_attributes"].get(
@@ -130,13 +127,6 @@ class JsonSequenceLoaderSaver:
                 sequence[index][f"{color}_attributes"].get("motion_type", 0),
             )
         return 0
-
-    def get_index_for_pictograph(self, pictograph: Dict) -> int:
-        sequence = self.load_current_sequence_json()
-        for i, entry in enumerate(sequence):
-            if entry == pictograph:
-                return i
-        return -1
 
     def get_red_end_ori(self, sequence):
         if sequence:

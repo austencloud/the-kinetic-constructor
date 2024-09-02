@@ -72,6 +72,7 @@ class GE_PictographView(PictographView):
             self.is_start_pos = True
         else:
             self.is_start_pos = False
+        self.repaint()
 
     def resize_GE_pictograph_view(self) -> None:
         self.setFixedSize(self.graph_editor.height(), self.graph_editor.height())
