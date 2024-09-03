@@ -135,6 +135,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         return self.start_pos_view
 
     def on_beat_adjusted(self) -> None:
+        # QApplication.processEvents()
         current_sequence_json = (
             self.json_manager.loader_saver.load_current_sequence_json()
         )
@@ -153,7 +154,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
                 if beat:
                     if beat.pictograph_dict != entry:
                         beat.updater.update_pictograph(entry)
-                        QApplication.processEvents()
+                        # QApplication.processEvents()
 
     def update_start_pos_from_current_sequence_json(self, entry: dict) -> None:
         entry["red_attributes"]["start_ori"] = entry["red_attributes"]["end_ori"]
