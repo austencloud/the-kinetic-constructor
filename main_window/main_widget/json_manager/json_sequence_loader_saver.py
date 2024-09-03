@@ -58,7 +58,7 @@ class JsonSequenceLoaderSaver:
                 sequence[0][
                     "word"
                 ] = (
-                    self.json_manager.main_widget.top_builder_widget.sequence_widget.button_frame.sequence_properties_manager.calculate_word()
+                    self.json_manager.main_widget.sequence_properties_manager.calculate_word()
                 )
             if "author" not in sequence[0]:
                 sequence[0][

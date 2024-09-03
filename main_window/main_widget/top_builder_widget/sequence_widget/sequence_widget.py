@@ -148,10 +148,12 @@ class SequenceWidget(QWidget):
         self.indicator_label_layout.addWidget(self.indicator_label)
         self.indicator_label_layout.addStretch(1)
 
-    def create_new_beat_and_add_to_sequence(self, pictograph_dict: dict) -> None:
+    def create_new_beat_and_add_to_sequence(
+        self, pictograph_dict: dict, override_grow_sequence=False
+    ) -> None:
         new_beat = Beat(self.beat_frame)
         new_beat.updater.update_pictograph(pictograph_dict)
-        self.beat_frame.add_beat_to_sequence(new_beat)
+        self.beat_frame.add_beat_to_sequence(new_beat, override_grow_sequence)
         self.json_manager.updater.update_sequence_properties()  # Recalculate properties after each update
 
     def resize_sequence_widget(self) -> None:

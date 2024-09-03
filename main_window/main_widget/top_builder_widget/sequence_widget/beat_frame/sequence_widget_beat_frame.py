@@ -78,12 +78,12 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
     def delete_selected_beat(self) -> None:
         self.beat_deletion_manager.delete_selected_beat()
 
-    def add_beat_to_sequence(self, new_beat: "BasePictograph") -> None:
+    def add_beat_to_sequence(self, new_beat: "BasePictograph", override_grow_sequence = False) -> None:
         next_beat_index = self.find_next_available_beat()
         if next_beat_index == 0:
             self.sequence_widget.difficulty_label.set_difficulty_level(1)
         grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
-        if grow_sequence:
+        if grow_sequence and not override_grow_sequence:
             if (
                 next_beat_index is not None
                 and self.beats[next_beat_index].is_filled is False
@@ -101,7 +101,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
                 # select the beat with the selection overlay
                 # self.selection_overlay.select_beat(new_beat.view)
 
-        elif not grow_sequence:
+        elif not grow_sequence or override_grow_sequence:
             if (
                 next_beat_index is not None
                 and self.beats[next_beat_index].is_filled is False

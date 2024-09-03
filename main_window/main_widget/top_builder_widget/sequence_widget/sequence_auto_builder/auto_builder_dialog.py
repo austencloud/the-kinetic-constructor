@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QHBoxLayout,
     QStackedWidget,
+    QComboBox,
 )
 from typing import TYPE_CHECKING, cast
 
@@ -24,6 +25,8 @@ class AutoBuilderDialog(QDialog):
         self.settings_manager = (
             self.sequence_widget.main_widget.main_window.settings_manager
         )
+        self.json_manager = self.sequence_widget.json_manager
+        self.beat_frame = self.sequence_widget.beat_frame
         self.setWindowTitle("Auto Builder")
         self.setModal(True)
         self.freeform_builder = FreeFormSequenceAutoBuilder(self)
@@ -54,6 +57,13 @@ class AutoBuilderDialog(QDialog):
         # Circular Sequence Options
         self.circular_options_widget = SequenceOptionsWidget()
         self.options_stack.addWidget(self.circular_options_widget)
+
+        # Rotation Type Selection
+        self.rotation_type_combo = QComboBox()
+        self.rotation_type_combo.addItem("Quartered", "quartered")
+        self.rotation_type_combo.addItem("Halved", "halved")
+        self.rotation_type_combo.setToolTip("Select the rotation type for the circular sequence")
+        layout.addWidget(self.rotation_type_combo)
 
         layout.addWidget(self.options_stack)
         self.options_stack.setVisible(False)
@@ -102,36 +112,39 @@ class AutoBuilderDialog(QDialog):
         # Save the settings
         current_widget = cast(SequenceOptionsWidget, self.options_stack.currentWidget())
 
-        self.settings_manager.auto_builder.set_auto_builder_setting(
-            "sequence_length", current_widget.sequence_length_spinbox.value()
-        )
-        self.settings_manager.auto_builder.set_auto_builder_setting(
-            "turn_intensity",
-            current_widget.turn_settings_widget.turn_intensity_slider.value(),
-        )
-        self.settings_manager.auto_builder.set_auto_builder_setting(
-            "max_turns", current_widget.turn_settings_widget.max_turns_spinbox.value()
-        )
-        self.settings_manager.auto_builder.set_auto_builder_setting(
-            "sequence_level", current_widget.sequence_level_combo.currentIndex() + 1
-        )
+        self._update_settings(current_widget)
 
         # Extract the values to be passed to the builders
         sequence_length = current_widget.sequence_length_spinbox.value()
-        turn_intensity = (
-            current_widget.turn_settings_widget.turn_intensity_slider.value()
-        )
+        turn_intensity = current_widget.turn_settings_widget.turn_intensity_slider.value()
         max_turns = current_widget.turn_settings_widget.max_turns_spinbox.value()
         sequence_level = current_widget.sequence_level_combo.currentIndex() + 1
+        rotation_type = self.rotation_type_combo.currentData()
 
         # Execute the appropriate builder's sequence generation method
-        if self.options_stack.currentIndex() == 0:  # Freeform
-            self.freeform_builder.build_sequence(
-                sequence_length, turn_intensity, sequence_level, max_turns
-            )
-        elif self.options_stack.currentIndex() == 1:  # Circular
-            self.circular_builder.build_sequence(
-                sequence_length, turn_intensity, sequence_level, max_turns
-            )
+        builder = (
+            self.freeform_builder
+            if self.options_stack.currentIndex() == 0
+            else self.circular_builder
+        )
+        builder.build_sequence(
+            sequence_length, turn_intensity, sequence_level, max_turns, rotation_type
+        )
 
         self.accept()
+
+    def _update_settings(self, current_widget: "SequenceOptionsWidget"):
+        settings = self.settings_manager.auto_builder
+        settings.set_auto_builder_setting(
+            "sequence_length", current_widget.sequence_length_spinbox.value()
+        )
+        settings.set_auto_builder_setting(
+            "turn_intensity",
+            current_widget.turn_settings_widget.turn_intensity_slider.value(),
+        )
+        settings.set_auto_builder_setting(
+            "max_turns", current_widget.turn_settings_widget.max_turns_spinbox.value(),
+        )
+        settings.set_auto_builder_setting(
+            "sequence_level", current_widget.sequence_level_combo.currentIndex() + 1
+        )

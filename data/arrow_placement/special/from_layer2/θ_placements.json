@@ -203,6 +203,9 @@
     "(s, 3, 3)": {
       "static_rot_angle_override": true,
       "pro": [-70, 50]
+    },
+    "(o, 1, 2)": {
+      "pro": [-65, 35]
     }
   }
 }
