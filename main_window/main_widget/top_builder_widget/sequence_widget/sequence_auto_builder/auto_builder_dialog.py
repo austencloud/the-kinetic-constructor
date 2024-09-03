@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     )
 
 
-class SequenceAutoBuilder(QDialog):
+class AutoBuilderDialog(QDialog):
     def __init__(self, sequence_widget: "SequenceWidget"):
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget

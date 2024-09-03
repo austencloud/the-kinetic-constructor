@@ -2,11 +2,11 @@ import random
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .sequence_auto_builder import SequenceAutoBuilder
+    from .auto_builder_dialog import AutoBuilderDialog
 
 
 class CircularSequenceAutoBuilder:
-    def __init__(self, auto_builder_dialog: "SequenceAutoBuilder"):
+    def __init__(self, auto_builder_dialog: "AutoBuilderDialog"):
         self.auto_builder_dialog = auto_builder_dialog
         self.sequence_widget = auto_builder_dialog.sequence_widget
         self.sequence = (

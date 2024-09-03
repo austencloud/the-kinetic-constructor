@@ -6,10 +6,11 @@ from .turn_intensity_manager import TurnIntensityManager
 import random
 
 if TYPE_CHECKING:
-    from .sequence_auto_builder import SequenceAutoBuilder
+    from .auto_builder_dialog import AutoBuilderDialog
+
 
 class FreeFormSequenceAutoBuilder:
-    def __init__(self, auto_builder_dialog: "SequenceAutoBuilder"):
+    def __init__(self, auto_builder_dialog: "AutoBuilderDialog"):
         self.auto_builder_dialog = auto_builder_dialog
         self.sequence_widget = auto_builder_dialog.sequence_widget
 
@@ -20,7 +21,9 @@ class FreeFormSequenceAutoBuilder:
             self.sequence_widget.main_widget.json_manager.validation_engine
         )
 
-    def build_sequence(self, length: int, turn_intensity: int, level: int, max_turns: int):
+    def build_sequence(
+        self, length: int, turn_intensity: int, level: int, max_turns: int
+    ):
         self.sequence = (
             self.sequence_widget.main_widget.json_manager.loader_saver.load_current_sequence_json()
         )
@@ -35,7 +38,9 @@ class FreeFormSequenceAutoBuilder:
             self._update_dash_static_prop_rot_dirs(next_pictograph_dict)
 
             self.sequence.append(next_pictograph_dict)
-            self.sequence_widget.create_new_beat_and_add_to_sequence(next_pictograph_dict)
+            self.sequence_widget.create_new_beat_and_add_to_sequence(
+                next_pictograph_dict
+            )
             self.validation_engine.validate_last_pictograph()
             self.sequence_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker(
                 self.sequence

@@ -1,8 +1,8 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Aurora",
-        "grow_sequence": true,
+        "background_type": "AuroraBorealis",
+        "grow_sequence": false,
         "current_tab": "sequence_builder"
     },
     "image_export": {
@@ -11,10 +11,10 @@
         "open_directory_on_export": true,
         "add_word": true,
         "add_difficulty_level": true,
-        "add_beat_numbers": false
+        "add_beat_numbers": true
     },
     "user_profile": {
-        "current_user": "Austen Cloud",
+        "current_user": "Doc Womp",
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
@@ -22,7 +22,7 @@
             },
             "Doc Womp": {
                 "name": "Doc Womp",
-                "export_date": "8-25-2024"
+                "export_date": "9-3-2024"
             }
         },
         "current_note": "Created using The Kinetic Alphabet",
@@ -42,10 +42,10 @@
         }
     },
     "dictionary": {
-        "sort_method": "date_added"
+        "sort_method": "alphabetical"
     },
     "sequence_layout": {
-        "grow_sequence": true,
+        "grow_sequence": false,
         "num_beats": 16,
         "layout_option": "4 x 4"
     },
@@ -54,6 +54,6 @@
         "sequence_length": 16,
         "turn_intensity": 1,
         "sequence_level": 3,
-        "max_turns": 9
+        "max_turns": 16
     }
 }

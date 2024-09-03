@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QApplication
 
-from main_window.main_widget.top_builder_widget.sequence_widget.sequence_auto_builder.sequence_auto_builder import (
-    SequenceAutoBuilder,
+from main_window.main_widget.top_builder_widget.sequence_widget.sequence_auto_builder.auto_builder_dialog import (
+    AutoBuilderDialog,
 )
 from main_window.main_widget.top_builder_widget.sequence_widget.sequence_clearer import (
     SequenceClearer,
@@ -50,7 +50,7 @@ class SequenceWidget(QWidget):
         self.beat_frame = SequenceWidgetBeatFrame(self)
         self.add_to_dictionary_manager = AddToDictionaryManager(self)
         self.autocompleter = SequenceAutoCompleter(self)
-        self.autobuilder = SequenceAutoBuilder(self)
+        self.autobuilder_dialog = AutoBuilderDialog(self)
         self.sequence_clearer = SequenceClearer(self)
         self.button_frame = SequenceWidgetButtonFrame(self)
         self.graph_editor = GraphEditor(self)
