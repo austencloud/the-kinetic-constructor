@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSpinBox, QComboBox, QLabel
 
-from main_window.main_widget.top_builder_widget.sequence_widget.sequence_auto_builder.turn_settings_widget import TurnSettingsWidget
+from main_window.main_widget.top_builder_widget.sequence_widget.auto_builder.turn_settings_widget import TurnSettingsWidget
+
 
 class SequenceOptionsWidget(QWidget):
     def __init__(self):

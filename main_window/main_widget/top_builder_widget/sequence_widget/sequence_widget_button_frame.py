@@ -2,6 +2,7 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout, QMessageBox
+from main_window.main_widget.top_builder_widget.sequence_widget.auto_builder.auto_builder_selection_dialog import AutoBuilderSelectionDialog
 from utilities.path_helpers import get_images_and_data_path
 
 
@@ -57,8 +58,8 @@ class SequenceWidgetButtonFrame(QFrame):
                 "tooltip": "Auto Complete Sequence",
             },
             "auto_builder": {
-                "icon_path": "auto_builder.png",  # Path to the generated icon
-                "callback": lambda: self.sequence_widget.autobuilder_dialog.exec(),
+                "icon_path": "auto_builder.png",
+                "callback": self.open_auto_builder_selection, 
                 "tooltip": "Auto Builder",
             },
             "clear_sequence": {
@@ -86,7 +87,7 @@ class SequenceWidgetButtonFrame(QFrame):
         icon = QIcon(icon_path)
         button = QPushButton()
         button.clicked.connect(callback)
-        button.setToolTip(tooltip)  # Set the tooltip for the button
+        button.setToolTip(tooltip)
         button.enterEvent = lambda event: button.setCursor(
             Qt.CursorShape.PointingHandCursor
         )
@@ -94,6 +95,11 @@ class SequenceWidgetButtonFrame(QFrame):
         button.setIcon(icon)
         setattr(self, f"{button_name}_button", button)
         self.buttons.append(button)
+
+    def open_auto_builder_selection(self):
+        """Open the dialog to select the Freeform or Circular builder."""
+        dialog = AutoBuilderSelectionDialog(self.sequence_widget)
+        dialog.exec()
 
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)

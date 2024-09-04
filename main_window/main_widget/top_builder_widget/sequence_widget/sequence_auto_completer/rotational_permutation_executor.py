@@ -4,18 +4,18 @@ from data.halved_permutations import halved_permutations
 from data.constants import EAST, NORTH, SOUTH, WEST
 from typing import TYPE_CHECKING
 
+
+
 from .permutation_executor_base import PermutationExecutor
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_auto_builder.auto_builder_dialog import (
-        AutoBuilderDialog,
-    )
+    from main_window.main_widget.top_builder_widget.sequence_widget.auto_builder.circular_auto_builder_dialog import CircularAutoBuilderDialog
     from .sequence_auto_completer import SequenceAutoCompleter
 
 
 class RotationalPermutationExecuter(PermutationExecutor):
     def __init__(
-        self, parent_widget: Union["SequenceAutoCompleter", "AutoBuilderDialog"]
+        self, parent_widget: Union["SequenceAutoCompleter", "CircularAutoBuilderDialog"]
     ):
         self.parent_widget = parent_widget
 

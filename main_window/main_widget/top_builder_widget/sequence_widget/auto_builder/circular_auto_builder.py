@@ -14,11 +14,11 @@ from ..sequence_auto_completer.rotational_permutation_executor import (
 )
 
 if TYPE_CHECKING:
-    from .auto_builder_dialog import AutoBuilderDialog
+    from .circular_auto_builder_dialog import CircularAutoBuilderDialog
 
 
-class CircularSequenceAutoBuilder:
-    def __init__(self, auto_builder_dialog: "AutoBuilderDialog"):
+class CircularAutoBuilder:
+    def __init__(self, auto_builder_dialog: "CircularAutoBuilderDialog"):
         self.auto_builder_dialog = auto_builder_dialog
         self.sequence_widget = auto_builder_dialog.sequence_widget
         self.validation_engine = (

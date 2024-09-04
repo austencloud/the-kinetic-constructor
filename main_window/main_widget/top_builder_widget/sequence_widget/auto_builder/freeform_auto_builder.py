@@ -6,11 +6,11 @@ from .turn_intensity_manager import TurnIntensityManager
 import random
 
 if TYPE_CHECKING:
-    from .auto_builder_dialog import AutoBuilderDialog
+    from .freeform_auto_builder_dialog import FreeformAutoBuilderDialog
 
 
-class FreeFormSequenceAutoBuilder:
-    def __init__(self, auto_builder_dialog: "AutoBuilderDialog"):
+class FreeFormAutoBuilder:
+    def __init__(self, auto_builder_dialog: "FreeformAutoBuilderDialog"):
         self.auto_builder_dialog = auto_builder_dialog
         self.sequence_widget = auto_builder_dialog.sequence_widget
 
@@ -71,8 +71,12 @@ class FreeFormSequenceAutoBuilder:
         )
 
     def _update_start_oris(self, next_pictograph_dict, last_pictograph_dict):
-        next_pictograph_dict["blue_attributes"]["start_ori"] = last_pictograph_dict["blue_attributes"]["end_ori"]
-        next_pictograph_dict["red_attributes"]["start_ori"] = last_pictograph_dict["red_attributes"]["end_ori"]
+        next_pictograph_dict["blue_attributes"]["start_ori"] = last_pictograph_dict[
+            "blue_attributes"
+        ]["end_ori"]
+        next_pictograph_dict["red_attributes"]["start_ori"] = last_pictograph_dict[
+            "red_attributes"
+        ]["end_ori"]
 
     def _update_end_oris(self, next_pictograph_dict):
         next_pictograph_dict["blue_attributes"]["end_ori"] = (
