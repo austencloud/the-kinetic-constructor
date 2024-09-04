@@ -47,9 +47,12 @@ class CircularSequenceAutoBuilder:
         sequence = self.sequence
         for i in range(word_length):
             is_last_in_quarter = i == word_length - 1
+            
+            last_pictograph = sequence[-1]
             next_pictograph = self._generate_next_pictograph(
                 level, turns[i], is_last_in_quarter, rotation_type
             )
+            self._update_start_oris(next_pictograph, last_pictograph)
             self._update_end_oris(next_pictograph)
             self._update_dash_static_prop_rot_dirs(next_pictograph)
             next_pictograph = self._update_beat_number_depending_on_sequence_length(
@@ -142,6 +145,14 @@ class CircularSequenceAutoBuilder:
             )
         return random.choice(valid_options)
 
+    def _update_start_oris(self, next_pictograph_dict, last_pictograph_dict):
+        next_pictograph_dict["blue_attributes"]["start_ori"] = (
+            last_pictograph_dict["blue_attributes"]["end_ori"]
+        )
+        next_pictograph_dict["red_attributes"]["start_ori"] = (
+            last_pictograph_dict["red_attributes"]["end_ori"]
+        )
+
     def _update_end_oris(self, next_pictograph_dict):
         next_pictograph_dict["blue_attributes"]["end_ori"] = (
             self.sequence_widget.main_widget.json_manager.ori_calculator.calculate_end_orientation(
@@ -172,13 +183,10 @@ class CircularSequenceAutoBuilder:
         )
 
     def _apply_strict_rotational_permutations(self, sequence: list[dict]) -> None:
-        # Initialize the RotationalPermutationExecuter
         executor = RotationalPermutationExecuter(self.auto_builder_dialog)
         executor.create_permutations(sequence)
 
     def _finalize_sequence(self, sequence: list[dict], length: int) -> None:
-
-        # Save and display the final sequence
         self.sequence_widget.main_widget.json_manager.loader_saver.save_current_sequence(
             sequence
         )

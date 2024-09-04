@@ -58,7 +58,7 @@ class AutoBuilderDialog(QDialog):
         self.circular_options_widget = SequenceOptionsWidget()
         self.options_stack.addWidget(self.circular_options_widget)
 
-        # Rotation Type Selection
+        # Rotation Type Selection for Circular Builder
         self.rotation_type_combo = QComboBox()
         self.rotation_type_combo.addItem("Quartered", "quartered")
         self.rotation_type_combo.addItem("Halved", "halved")
@@ -119,17 +119,19 @@ class AutoBuilderDialog(QDialog):
         turn_intensity = current_widget.turn_settings_widget.turn_intensity_slider.value()
         max_turns = current_widget.turn_settings_widget.max_turns_spinbox.value()
         sequence_level = current_widget.sequence_level_combo.currentIndex() + 1
-        rotation_type = self.rotation_type_combo.currentData()
 
-        # Execute the appropriate builder's sequence generation method
-        builder = (
-            self.freeform_builder
-            if self.options_stack.currentIndex() == 0
-            else self.circular_builder
-        )
-        builder.build_sequence(
-            sequence_length, turn_intensity, sequence_level, max_turns, rotation_type
-        )
+        # Check if the circular builder is active
+        if self.options_stack.currentIndex() == 1:
+            # Circular Sequence Builder
+            rotation_type = self.rotation_type_combo.currentData()  # Get rotation type for circular
+            self.circular_builder.build_sequence(
+                sequence_length, turn_intensity, sequence_level, max_turns, rotation_type
+            )
+        else:
+            # Freeform Sequence Builder (no rotation_type)
+            self.freeform_builder.build_sequence(
+                sequence_length, turn_intensity, sequence_level, max_turns
+            )
 
         self.accept()
 
