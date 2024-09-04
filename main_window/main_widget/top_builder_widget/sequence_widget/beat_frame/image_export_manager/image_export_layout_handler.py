@@ -1,11 +1,7 @@
 from typing import TYPE_CHECKING
 
-
 if TYPE_CHECKING:
-    from widgets.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
-        ImageExportManager,
-    )
-
+    from .image_export_manager import ImageExportManager
 
 class ImageExportLayoutHandler:
     def __init__(self, image_export_manager: "ImageExportManager"):
@@ -78,27 +74,27 @@ class ImageExportLayoutHandler:
             17: (5, 5),
             18: (5, 5),
             19: (5, 5),
-            20: (5, 5),
+            20: (6, 4),
             21: (5, 6),
             22: (5, 6),
             23: (5, 6),
-            24: (5, 6),
+            24: (7, 4),
             25: (5, 7),
             26: (5, 7),
             27: (5, 7),
             28: (5, 7),
             29: (5, 8),
-            30: (5, 8),
+            30: (8, 4),
             31: (5, 8),
-            32: (5, 8),
+            32: (9, 4),
             33: (5, 9),
             34: (5, 9),
             35: (5, 9),
-            36: (5, 9),
+            36: (10, 4),
             37: (5, 10),
             38: (5, 10),
             39: (5, 10),
-            40: (5, 10),
+            40: (11, 4),
             41: (5, 11),
             42: (5, 11),
             43: (5, 11),
@@ -159,19 +155,19 @@ class ImageExportLayoutHandler:
             25: (4, 7),
             26: (4, 7),
             27: (4, 7),
-            28: (4, 7),
+            28: (7, 4),
             29: (4, 8),
             30: (4, 8),
             31: (4, 8),
-            32: (4, 8),
+            32: (8, 4),
             33: (4, 9),
             34: (4, 9),
             35: (4, 9),
-            36: (4, 9),
+            36: (9, 4),
             37: (4, 10),
             38: (4, 10),
             39: (4, 10),
-            40: (4, 10),
+            40: (10, 4),
             41: (4, 11),
             42: (4, 11),
             43: (4, 11),

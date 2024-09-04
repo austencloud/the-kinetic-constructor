@@ -6,18 +6,20 @@ from typing import TYPE_CHECKING
 
 
 
+
 from .permutation_executor_base import PermutationExecutor
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.auto_builder.circular_auto_builder_dialog import CircularAutoBuilderDialog
+    from main_window.main_widget.top_builder_widget.sequence_widget.auto_builder.circular_auto_builder import CircularAutoBuilder
+    
     from .sequence_auto_completer import SequenceAutoCompleter
 
 
 class RotationalPermutationExecuter(PermutationExecutor):
     def __init__(
-        self, parent_widget: Union["SequenceAutoCompleter", "CircularAutoBuilderDialog"]
+        self, parent_widget: "CircularAutoBuilder"
     ):
-        self.parent_widget = parent_widget
+        self.circular_auto_builder = parent_widget
 
     def create_permutations(self, sequence: list[dict]):
         start_position_entry = (
@@ -48,8 +50,8 @@ class RotationalPermutationExecuter(PermutationExecutor):
             start_position_entry["beat"] = 0
             sequence.insert(0, start_position_entry)
 
-        self.parent_widget.json_manager.loader_saver.save_current_sequence(sequence)
-        self.parent_widget.beat_frame.populate_beat_frame_from_json(sequence)
+        self.circular_auto_builder.json_manager.loader_saver.save_current_sequence(sequence)
+        self.circular_auto_builder.beat_frame.populate_beat_frame_from_json(sequence)
 
     def determine_how_many_entries_to_add(self, sequence_length: int) -> int:
         if self.is_quartered_permutation():
@@ -60,7 +62,7 @@ class RotationalPermutationExecuter(PermutationExecutor):
 
     def is_quartered_permutation(self) -> bool:
         sequence = (
-            self.parent_widget.json_manager.loader_saver.load_current_sequence_json()
+            self.circular_auto_builder.json_manager.loader_saver.load_current_sequence_json()
         )
         start_pos = sequence[1]["end_pos"]
         end_pos = sequence[-1]["end_pos"]
@@ -68,7 +70,7 @@ class RotationalPermutationExecuter(PermutationExecutor):
 
     def is_halved_permutation(self) -> bool:
         sequence = (
-            self.parent_widget.json_manager.loader_saver.load_current_sequence_json()
+            self.circular_auto_builder.json_manager.loader_saver.load_current_sequence_json()
         )
         start_pos = sequence[1]["end_pos"]
         end_pos = sequence[-1]["end_pos"]
@@ -130,12 +132,12 @@ class RotationalPermutationExecuter(PermutationExecutor):
         }
 
         new_entry["blue_attributes"]["end_ori"] = (
-            self.parent_widget.json_manager.ori_calculator.calculate_end_orientation(
+            self.circular_auto_builder.json_manager.ori_calculator.calculate_end_orientation(
                 new_entry, "blue"
             )
         )
         new_entry["red_attributes"]["end_ori"] = (
-            self.parent_widget.json_manager.ori_calculator.calculate_end_orientation(
+            self.circular_auto_builder.json_manager.ori_calculator.calculate_end_orientation(
                 new_entry, "red"
             )
         )

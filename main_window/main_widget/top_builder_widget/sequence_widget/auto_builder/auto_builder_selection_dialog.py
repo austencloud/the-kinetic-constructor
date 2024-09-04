@@ -91,11 +91,13 @@ class AutoBuilderSelectionDialog(QDialog):
         return button, layout
 
     def open_freeform_builder(self):
+        self.close()
         dialog = FreeformAutoBuilderDialog(self.sequence_widget)
         dialog.exec()
         self.accept()
 
     def open_circular_builder(self):
+        self.close()
         dialog = CircularAutoBuilderDialog(self.sequence_widget)
         dialog.exec()
         self.accept()

@@ -78,6 +78,6 @@ class SettingsManager(QObject):
         self.settings["sequence_layout"] = settings
         self.save_settings()
 
-    def save_auto_builder_settings(self, settings) -> None:
-        self.settings["auto_builder"] = settings
+    def save_auto_builder_settings(self, settings, builder_type) -> None:
+        self.settings["auto_builder"][builder_type] = settings
         self.save_settings()

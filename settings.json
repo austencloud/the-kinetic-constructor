@@ -50,10 +50,21 @@
         "layout_option": "4 x 4"
     },
     "auto_builder": {
-        "sequence_type": "Random Freeform",
-        "sequence_length": 18,
-        "turn_intensity": 0,
-        "sequence_level": 3,
-        "max_turns": 20
+        "circular_auto_builder": {
+            "sequence_type": "circular",
+            "sequence_length": 16,
+            "max_turns": 6,
+            "turn_intensity": 3,
+            "sequence_level": 2,
+            "rotation_type": "quartered",
+            "permutation_type": "rotational"
+        },
+        "freeform_auto_builder": {
+            "sequence_type": "freeform",
+            "sequence_length": 16,
+            "max_turns": 50,
+            "turn_intensity": 50,
+            "sequence_level": 1
+        }
     }
 }
