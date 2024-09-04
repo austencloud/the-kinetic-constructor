@@ -45,9 +45,13 @@ class CircularSequenceAutoBuilder:
 
         # Generate the initial segment of the sequence
         sequence = self.sequence
-        for i in range(word_length):
-            is_last_in_quarter = i == word_length - 1
-            
+        length_without_sequence_properties_or_start_pos = len(sequence) - 2
+        available_range = word_length - length_without_sequence_properties_or_start_pos
+        for i in range(available_range):
+            is_last_in_quarter = (
+                i == word_length - length_without_sequence_properties_or_start_pos - 1
+            )
+
             last_pictograph = sequence[-1]
             next_pictograph = self._generate_next_pictograph(
                 level, turns[i], is_last_in_quarter, rotation_type
@@ -68,7 +72,6 @@ class CircularSequenceAutoBuilder:
         self.sequence_widget.json_manager.loader_saver.save_current_sequence(sequence)
         self._apply_strict_rotational_permutations(sequence)
 
-        # Finalize and display the sequence
         self._finalize_sequence(sequence, length)
 
     def modify_layout_for_chosen_number_of_beats(self, beat_count):
@@ -84,7 +87,6 @@ class CircularSequenceAutoBuilder:
         )
 
         if is_last_in_quarter:
-            # Ensure that the selected pictograph ends in a valid rotational position
             expected_end_pos = self._determine_expected_end_pos(rotation_type)
             chosen_option = self._select_pictograph_with_end_pos(
                 options, expected_end_pos
@@ -146,12 +148,12 @@ class CircularSequenceAutoBuilder:
         return random.choice(valid_options)
 
     def _update_start_oris(self, next_pictograph_dict, last_pictograph_dict):
-        next_pictograph_dict["blue_attributes"]["start_ori"] = (
-            last_pictograph_dict["blue_attributes"]["end_ori"]
-        )
-        next_pictograph_dict["red_attributes"]["start_ori"] = (
-            last_pictograph_dict["red_attributes"]["end_ori"]
-        )
+        next_pictograph_dict["blue_attributes"]["start_ori"] = last_pictograph_dict[
+            "blue_attributes"
+        ]["end_ori"]
+        next_pictograph_dict["red_attributes"]["start_ori"] = last_pictograph_dict[
+            "red_attributes"
+        ]["end_ori"]
 
     def _update_end_oris(self, next_pictograph_dict):
         next_pictograph_dict["blue_attributes"]["end_ori"] = (
@@ -191,7 +193,7 @@ class CircularSequenceAutoBuilder:
             sequence
         )
         self.sequence_widget.beat_frame.populate_beat_frame_from_json(sequence)
-        self.sequence_widget.autocompleter.auto_complete_sequence()
+        # self.sequence_widget.autocompleter.auto_complete_sequence()
 
     def _update_beat_number_depending_on_sequence_length(
         self, next_pictograph_dict, sequence

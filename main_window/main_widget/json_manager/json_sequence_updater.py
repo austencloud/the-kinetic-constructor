@@ -133,13 +133,13 @@ class JsonSequenceUpdater:
 
     def update_current_sequence_file_with_beat(self, beat_view: BeatView):
         sequence_data = self.json_manager.loader_saver.load_current_sequence_json()
-        if len(sequence_data) == 0:  # Make sure there's at least the metadata entry
-            sequence_data.append(
-                {
-                    "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
-                    "is_circular": False,
-                }
-            )
+        # if len(sequence_data) == 0:  # Make sure there's at least the metadata entry
+        #     sequence_data.append(
+        #         {
+        #             "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
+        #             "is_circular": False,
+        #         }
+        #     )
         sequence_data.append(beat_view.beat.pictograph_dict)
         self.json_manager.loader_saver.save_current_sequence(sequence_data)
         self.update_sequence_properties()  # Recalculate properties after each update

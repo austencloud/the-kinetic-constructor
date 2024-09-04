@@ -14,7 +14,7 @@
         "add_beat_numbers": true
     },
     "user_profile": {
-        "current_user": "Doc Womp",
+        "current_user": "Austen Cloud",
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
@@ -51,9 +51,9 @@
     },
     "auto_builder": {
         "sequence_type": "Random Freeform",
-        "sequence_length": 16,
-        "turn_intensity": 1,
-        "sequence_level": 1,
-        "max_turns": 3
+        "sequence_length": 18,
+        "turn_intensity": 0,
+        "sequence_level": 3,
+        "max_turns": 20
     }
 }

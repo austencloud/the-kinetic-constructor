@@ -120,10 +120,7 @@
       "blue_rot_angle_override": true
     },
     "(o, 0.5, 0.5, cl, cl)": {
-      "blue_rot_angle_override": true,
-      "red_rot_angle_override": true,
-      "red": [100, 100],
-      "blue": [100, 100]
+      "red": [100, 100]
     },
     "(0.5, 0, op)": {
       "blue_rot_angle_override": true,
