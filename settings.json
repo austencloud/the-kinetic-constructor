@@ -11,18 +11,22 @@
         "open_directory_on_export": true,
         "add_word": true,
         "add_difficulty_level": true,
-        "add_beat_numbers": false
+        "add_beat_numbers": true
     },
     "user_profile": {
         "current_user": "Austen Cloud",
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
-                "export_date": "9-1-2024"
+                "export_date": "9-3-2024"
             },
             "Doc Womp": {
                 "name": "Doc Womp",
                 "export_date": "8-25-2024"
+            },
+            "Betsy Dz": {
+                "name": "Betsy Dz",
+                "export_date": "9-3-2024"
             }
         },
         "current_note": "Created using The Kinetic Alphabet",
@@ -32,10 +36,10 @@
     },
     "visibility": {
         "glyph_visibility": {
-            "VTG": false,
+            "VTG": true,
             "TKA": true,
-            "Elemental": false,
-            "EndPosition": false
+            "Elemental": true,
+            "EndPosition": true
         },
         "grid_visibility": {
             "non_radial_points": false
@@ -52,8 +56,8 @@
     "auto_builder": {
         "sequence_type": "Random Freeform",
         "sequence_length": 16,
-        "turn_intensity": 1,
-        "sequence_level": 3,
+        "turn_intensity": 0,
+        "sequence_level": 1,
         "max_turns": 9
     }
 }
