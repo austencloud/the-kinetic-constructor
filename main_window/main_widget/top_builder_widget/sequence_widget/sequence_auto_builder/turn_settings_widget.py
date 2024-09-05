@@ -1,5 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSpinBox, QSlider, QLabel
 from PyQt6.QtCore import Qt
+
+
 class TurnSettingsWidget(QWidget):
     def __init__(self):
         super().__init__()

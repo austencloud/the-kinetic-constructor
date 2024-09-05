@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 from data.beat_frame_layouts import DEFAULT_BEAT_FRAME_LAYOUTS
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.beat_frame.beat_frame import SequenceWidgetBeatFrame
+    from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
 
 
 class BeatFrameLayoutManager:
@@ -31,11 +31,12 @@ class BeatFrameLayoutManager:
                 rows += 1
         return rows
 
-    def configure_beat_frame(self, num_beats):
-        grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
-        if grow_sequence:
-            num_filled_beats = self.beat_frame.find_next_available_beat() or 0
-            num_beats = num_filled_beats
+    def configure_beat_frame(self, num_beats, override_grow_sequence=False):
+        if not override_grow_sequence:
+            grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
+            if grow_sequence:
+                num_filled_beats = self.beat_frame.find_next_available_beat() or 0
+                num_beats = num_filled_beats
         columns, rows = self.calculate_layout(num_beats)
 
         self.beat_frame.sequence_widget.scroll_area.verticalScrollBarPolicy = (

@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from Enums.PropTypes import PropType
 from letter_determiner.letter_determiner import LetterDeterminer
+from main_window.main_widget.sequence_recorder.sequence_recorder import SequenceRecorder
 from .letter_loader import LetterLoader
 from .sequence_properties_manager.sequence_properties_manager import (
     SequencePropertiesManager,
@@ -115,11 +116,12 @@ class MainWidget(QTabWidget):
 
         self.top_builder_widget = TopBuilderWidget(self)
         self.dictionary_widget = DictionaryWidget(self)
-        # self.sequence_recorder = SequenceRecorder(self)
+        self.sequence_recorder = SequenceRecorder(self)
         # self.sequence_card_tab = SequenceCardTab(self)
 
         self.addTab(self.top_builder_widget, "Builder")
         self.addTab(self.dictionary_widget, "Dictionary")
+        # self.addTab(self.sequence_recorder, "Recorder")
 
         self.builder_tab_index = 0
         self.dictionary_tab_index = 1

@@ -1,7 +1,7 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Aurora",
+        "background_type": "AuroraBorealis",
         "grow_sequence": true,
         "current_tab": "sequence_builder"
     },
@@ -14,19 +14,15 @@
         "add_beat_numbers": true
     },
     "user_profile": {
-        "current_user": "Austen Cloud",
+        "current_user": "Doc Womp",
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
-                "export_date": "9-3-2024"
+                "export_date": "8-25-2024"
             },
             "Doc Womp": {
                 "name": "Doc Womp",
                 "export_date": "8-25-2024"
-            },
-            "Betsy Dz": {
-                "name": "Betsy Dz",
-                "export_date": "9-3-2024"
             }
         },
         "current_note": "Created using The Kinetic Alphabet",
@@ -46,7 +42,7 @@
         }
     },
     "dictionary": {
-        "sort_method": "date_added"
+        "sort_method": "alphabetical"
     },
     "sequence_layout": {
         "grow_sequence": true,
@@ -56,8 +52,8 @@
     "auto_builder": {
         "sequence_type": "Random Freeform",
         "sequence_length": 16,
-        "turn_intensity": 0,
-        "sequence_level": 1,
+        "turn_intensity": 1,
+        "sequence_level": 3,
         "max_turns": 9
     }
 }

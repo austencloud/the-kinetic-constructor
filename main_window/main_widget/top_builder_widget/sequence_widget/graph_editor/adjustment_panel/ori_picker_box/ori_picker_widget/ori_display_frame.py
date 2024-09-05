@@ -156,8 +156,8 @@ class OriDisplayFrame(QFrame):
         self._resize_ori_buttons()
 
     def _resize_ori_label(self) -> None:
-        ori_label_width = int(self.ori_picker_box.width() // 1.5)
-        ori_label_height = self.ori_picker_box.height() // 4
+        ori_label_width = int(self.ori_picker_box.graph_editor.width() // 4)
+        ori_label_height = self.ori_picker_box.graph_editor.height() // 4
         self.ori_display_label.setFixedSize(ori_label_width, ori_label_height)
         border_size = int(self.ori_display_label.width() / 60)
         border_color = self._get_border_color()

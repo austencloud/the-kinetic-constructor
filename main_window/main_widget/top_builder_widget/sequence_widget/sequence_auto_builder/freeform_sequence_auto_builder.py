@@ -6,10 +6,11 @@ from .turn_intensity_manager import TurnIntensityManager
 import random
 
 if TYPE_CHECKING:
-    from .sequence_auto_builder import SequenceAutoBuilder
+    from .auto_builder_dialog import AutoBuilderDialog
+
 
 class FreeFormSequenceAutoBuilder:
-    def __init__(self, auto_builder_dialog: "SequenceAutoBuilder"):
+    def __init__(self, auto_builder_dialog: "AutoBuilderDialog"):
         self.auto_builder_dialog = auto_builder_dialog
         self.sequence_widget = auto_builder_dialog.sequence_widget
 
@@ -20,27 +21,36 @@ class FreeFormSequenceAutoBuilder:
             self.sequence_widget.main_widget.json_manager.validation_engine
         )
 
-    def build_sequence(self, length: int, turn_intensity: int, level: int, max_turns: int):
+    def build_sequence(
+        self, beat_count: int, turn_intensity: int, level: int, max_turns: int
+    ):
         self.sequence = (
             self.sequence_widget.main_widget.json_manager.loader_saver.load_current_sequence_json()
         )
-        turn_manager = TurnIntensityManager(max_turns, length, level)
+        self.modify_layout_for_chosen_number_of_beats(beat_count)
+        turn_manager = TurnIntensityManager(max_turns, beat_count, level)
         turns = turn_manager.allocate_turns()
 
         length_of_sequence_upon_start = len(self.sequence) - 2
-        for i in range(length - length_of_sequence_upon_start):
+        for i in range(beat_count - length_of_sequence_upon_start):
             next_pictograph_dict = self._generate_next_pictograph(level, turns[i])
 
-            self._update_end_oris(next_pictograph_dict)
             self._update_dash_static_prop_rot_dirs(next_pictograph_dict)
 
             self.sequence.append(next_pictograph_dict)
-            self.sequence_widget.create_new_beat_and_add_to_sequence(next_pictograph_dict)
-            self.validation_engine.validate_last_pictograph()
-            self.sequence_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker(
-                self.sequence
+            self.sequence_widget.create_new_beat_and_add_to_sequence(
+                next_pictograph_dict, override_grow_sequence=True
             )
+            self.validation_engine.validate_last_pictograph()
             QApplication.processEvents()
+        self.sequence_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker(
+            self.sequence
+        )
+
+    def modify_layout_for_chosen_number_of_beats(self, beat_count):
+        self.auto_builder_dialog.sequence_widget.beat_frame.layout_manager.configure_beat_frame(
+            beat_count, override_grow_sequence=True
+        )
 
     def _update_dash_static_prop_rot_dirs(self, next_pictograph_dict):
         if (
@@ -60,6 +70,10 @@ class FreeFormSequenceAutoBuilder:
             [CLOCKWISE, COUNTER_CLOCKWISE]
         )
 
+    def _update_start_oris(self, next_pictograph_dict, last_pictograph_dict):
+        next_pictograph_dict["blue_attributes"]["start_ori"] = last_pictograph_dict["blue_attributes"]["end_ori"]
+        next_pictograph_dict["red_attributes"]["start_ori"] = last_pictograph_dict["red_attributes"]["end_ori"]
+
     def _update_end_oris(self, next_pictograph_dict):
         next_pictograph_dict["blue_attributes"]["end_ori"] = (
             self.ori_calculator.calculate_end_orientation(next_pictograph_dict, BLUE)
@@ -72,7 +86,11 @@ class FreeFormSequenceAutoBuilder:
         options = self.sequence_widget.top_builder_widget.sequence_builder.option_picker.option_getter.get_next_options(
             self.sequence
         )
+        last_beat = self.sequence[-1]
         chosen_option = random.choice(options)
+
+        self._update_start_oris(chosen_option, last_beat)
+        self._update_end_oris(chosen_option)
 
         if level == 1:
             chosen_option = self._apply_level_1_constraints(chosen_option)

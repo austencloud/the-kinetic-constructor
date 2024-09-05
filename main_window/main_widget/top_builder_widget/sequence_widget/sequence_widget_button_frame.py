@@ -58,7 +58,7 @@ class SequenceWidgetButtonFrame(QFrame):
             },
             "auto_builder": {
                 "icon_path": "auto_builder.png",  # Path to the generated icon
-                "callback": lambda: self.sequence_widget.autobuilder.exec(),
+                "callback": lambda: self.sequence_widget.autobuilder_dialog.exec(),
                 "tooltip": "Auto Builder",
             },
             "clear_sequence": {

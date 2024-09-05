@@ -1,4 +1,4 @@
-position_map_cw = {
+quarter_position_map_cw = {
     "alpha1": "alpha2",
     "alpha2": "alpha3",
     "alpha3": "alpha4",
@@ -17,7 +17,7 @@ position_map_cw = {
     "gamma8": "gamma5",
 }
 
-position_map_ccw = {
+quarter_position_map_ccw = {
     "alpha1": "alpha4",
     "alpha4": "alpha3",
     "alpha3": "alpha2",
@@ -34,4 +34,23 @@ position_map_ccw = {
     "gamma8": "gamma7",
     "gamma7": "gamma6",
     "gamma6": "gamma5",
+}
+
+half_position_map = {
+    "alpha1": "alpha3",
+    "alpha2": "alpha4",
+    "alpha3": "alpha1",
+    "alpha4": "alpha2",
+    "beta1": "beta3",
+    "beta2": "beta4",
+    "beta3": "beta1",
+    "beta4": "beta2",
+    "gamma1": "gamma3",
+    "gamma2": "gamma4",
+    "gamma3": "gamma1",
+    "gamma4": "gamma2",
+    "gamma5": "gamma7",
+    "gamma6": "gamma8",
+    "gamma7": "gamma5",
+    "gamma8": "gamma6",
 }
