@@ -27,7 +27,11 @@ class AutoBuilderSelectionDialog(QDialog):
         # Dynamic font size based on widget size
         self.button_font_size = int(self.sequence_widget.width() * 0.03)
         self.description_font_size = int(self.sequence_widget.width() * 0.015)
+
+        self.description_labels: dict[str, QLabel] = {}
+
         self._setup_ui()
+        self.resize_dialog()
 
     def _setup_ui(self):
         layout = QVBoxLayout(self)
@@ -41,13 +45,13 @@ class AutoBuilderSelectionDialog(QDialog):
         # Create the Freeform and Circular buttons and layouts programmatically
         self.freeform_button, freeform_layout = self._create_option_button(
             "Freeform",
-            "Create a freeform sequence with custom beat options and no rotational constraints.",
+            "Randomly generated sequence",
             button_size,
             self.open_freeform_builder,
         )
         self.circular_button, circular_layout = self._create_option_button(
             "Circular",
-            "Create a circular sequence with strict rotational permutations based on a selected pattern.",
+            "Ends at starting position",
             button_size,
             self.open_circular_builder,
         )
@@ -81,6 +85,7 @@ class AutoBuilderSelectionDialog(QDialog):
         description_label.setFont(QFont("Arial", self.description_font_size))
         description_label.setWordWrap(True)
         description_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.description_labels[label.lower()] = description_label
 
         # Layout setup
         layout = QVBoxLayout()
@@ -101,3 +106,24 @@ class AutoBuilderSelectionDialog(QDialog):
         dialog = CircularAutoBuilderDialog(self.sequence_widget)
         dialog.exec()
         self.accept()
+
+    def resize_dialog(self):
+        width, height = (
+            int(self.sequence_widget.width() / 2),
+            int(self.sequence_widget.height() / 3),
+        )
+        self.resize(width, height)
+
+        button_font = QFont()
+        button_font_size = width // 30
+        button_font.setPointSize(button_font_size)
+
+        for button in self.buttons.values():
+            button.setFont(button_font)
+
+        description_font = QFont()
+        description_font_size = width // 45
+        description_font.setPointSize(description_font_size)
+
+        for label in self.description_labels.values():
+            label.setFont(description_font)

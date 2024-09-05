@@ -31,11 +31,12 @@ class AutoBuilderSettings:
     def _load_builder_settings(self, builder_type):
         """Load settings based on the builder type."""
         if builder_type == "freeform":
-            return self.settings_manager.settings.get(
+            return self.settings_manager.settings.get("auto_builder").get(
                 "freeform_auto_builder", self.DEFAULT_FREEFORM_SETTINGS
             )
+
         elif builder_type == "circular":
-            return self.settings_manager.settings.get(
+            return self.settings_manager.settings.get("auto_builder").get(
                 "circular_auto_builder", self.DEFAULT_CIRCULAR_SETTINGS
             )
         else:
@@ -56,7 +57,7 @@ class AutoBuilderSettings:
             ),
         )
 
-    def get_auto_builder_settings(self, builder_type: str):
+    def get_auto_builder_settings(self, builder_type: str) -> dict:
         """Retrieve all settings for the current builder."""
         if builder_type == "freeform":
             return self.freeform_settings
@@ -70,9 +71,7 @@ class AutoBuilderSettings:
         elif builder_type == "circular":
             settings = self.circular_settings
         settings[key] = value
-        self._save_builder_settings(
-            builder_type
-        )
+        self._save_builder_settings(builder_type)
 
     def _save_builder_settings(self, builder_type: str):
         """Save the settings for the specific builder."""
