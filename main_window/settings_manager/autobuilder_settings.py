@@ -9,7 +9,7 @@ class AutoBuilderSettings:
         "sequence_type": "freeform",
         "sequence_length": 16,
         "max_turns": 50,
-        "turn_intensity": 50,
+        "max_turn_intensity": 50,
         "sequence_level": 1,  # 1: Level 1, 2: Level 2, 3: Level 3
     }
 
@@ -17,7 +17,7 @@ class AutoBuilderSettings:
         "sequence_type": "circular",
         "sequence_length": 4,  # Circular builder requires multiples of 4
         "max_turns": 50,
-        "turn_intensity": 50,
+        "max_turn_intensity": 50,
         "sequence_level": 1,
         "rotation_type": "quartered",
         "permutation_type": "rotational",

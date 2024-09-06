@@ -22,13 +22,13 @@ class FreeFormAutoBuilder:
         )
 
     def build_sequence(
-        self, beat_count: int, turn_intensity: int, level: int, max_turns: int
+        self, beat_count: int, max_turn_intensity: int, level: int, max_turns: int
     ):
         self.sequence = (
             self.sequence_widget.main_widget.json_manager.loader_saver.load_current_sequence_json()
         )
         self.modify_layout_for_chosen_number_of_beats(beat_count)
-        turn_manager = TurnIntensityManager(max_turns, beat_count, level)
+        turn_manager = TurnIntensityManager(max_turns, beat_count, level, max_turn_intensity)
         turns = turn_manager.allocate_turns()
 
         length_of_sequence_upon_start = len(self.sequence) - 2

@@ -1,3 +1,4 @@
+from copy import deepcopy
 import random
 from typing import TYPE_CHECKING
 from data.constants import BLUE, RED, DASH, STATIC
@@ -35,7 +36,7 @@ class CircularAutoBuilder:
     def build_sequence(
         self,
         length: int,
-        turn_intensity: int,
+        max_turn_intensity: int,
         level: int,
         max_turns: int,
         rotation_type: str,
@@ -59,7 +60,9 @@ class CircularAutoBuilder:
             available_range = (
                 word_length - length_without_sequence_properties_or_start_pos
             )
-        turn_manager = TurnIntensityManager(max_turns, word_length, level)
+        turn_manager = TurnIntensityManager(max_turns, word_length, level, max_turn_intensity)
+
+        # Allocate turns while considering both the maximum turn intensity and total number of turns.
         turns = turn_manager.allocate_turns()
 
         self.modify_layout_for_chosen_number_of_beats(length)
@@ -122,9 +125,14 @@ class CircularAutoBuilder:
         rotation_type: str,
         permutation_type: str,
     ) -> dict:
+        # Get the next set of options (these come from the letters dictionary)
         options = self.sequence_widget.top_builder_widget.sequence_builder.option_picker.option_getter.get_next_options(
             self.sequence
         )
+        
+        # Ensure that we are working on a deep copy of the options to avoid modifying the original data
+        options = [deepcopy(option) for option in options]
+
         if permutation_type == "rotational":
             if is_last_in_word:
                 expected_end_pos = self._determine_rotational_end_pos(rotation_type)
@@ -143,6 +151,7 @@ class CircularAutoBuilder:
             else:
                 chosen_option = random.choice(options)
 
+        # Apply the necessary level-specific constraints
         if level == 1:
             chosen_option = self._apply_level_1_constraints(chosen_option)
         elif level == 2:
