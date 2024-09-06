@@ -130,7 +130,7 @@
     },
     "(s, 1, 1)": {
       "dash_from_layer2_rot_angle_override": true,
-      "dash_from_layer1": [0, -40]
+      "dash_from_layer1": [5, -55]
     },
     "(s, 1, 1.5)": {
       "pro_from_layer1": [-15, -10],

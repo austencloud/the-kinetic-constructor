@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QApplication
 from .adjustment_panel.beat_adjustment_panel import BeatAdjustmentPanel
 from .pictograph_container.GE_pictograph_container import GraphEditorPictographContainer
 
@@ -53,7 +53,10 @@ class GraphEditor(QFrame):
         self.adjustment_panel.update_adjustment_panel()
 
     def resize_graph_editor(self) -> None:
-        self.setFixedHeight(int(self.sequence_widget.height() // 3.5))
+        self.setFixedHeight(int(self.sequence_widget.height() // 4))
         self.pictograph_container.resize_GE_pictograph_container()
+        QApplication.processEvents()
         self.adjustment_panel.update_adjustment_panel()
+        QApplication.processEvents()
         self.adjustment_panel.placeholder_widget.resize_adjustment_panel_placeholder_text()
+        QApplication.processEvents()

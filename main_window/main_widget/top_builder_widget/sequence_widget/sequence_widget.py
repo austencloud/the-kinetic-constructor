@@ -155,6 +155,10 @@ class SequenceWidget(QWidget):
 
     def resize_sequence_widget(self) -> None:
         self.current_word_label.resize_current_word_label()
+        QApplication.processEvents()
         self.button_frame.resize_button_frame()
+        QApplication.processEvents()
         self.graph_editor.resize_graph_editor()
+        QApplication.processEvents()
         self.beat_frame.resize_beat_frame()
+        QApplication.processEvents()

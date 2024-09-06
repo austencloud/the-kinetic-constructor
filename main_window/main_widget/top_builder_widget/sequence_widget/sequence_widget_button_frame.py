@@ -108,7 +108,7 @@ class SequenceWidgetButtonFrame(QFrame):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def resize_button_frame(self) -> None:
-        button_height = self.sequence_widget.height() // 16
+        button_height = self.sequence_widget.main_widget.height() // 16
 
         for button in self.buttons:
             button.setFixedSize(button_height, button_height)

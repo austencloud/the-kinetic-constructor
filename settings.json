@@ -1,7 +1,7 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "AuroraBorealis",
+        "background_type": "Aurora",
         "grow_sequence": true,
         "current_tab": "sequence_builder"
     },
@@ -32,17 +32,17 @@
     },
     "visibility": {
         "glyph_visibility": {
-            "VTG": true,
+            "VTG": false,
             "TKA": true,
             "Elemental": true,
-            "EndPosition": true
+            "EndPosition": false
         },
         "grid_visibility": {
             "non_radial_points": false
         }
     },
     "dictionary": {
-        "sort_method": "alphabetical"
+        "sort_method": "date_added"
     },
     "sequence_layout": {
         "grow_sequence": true,
@@ -52,18 +52,18 @@
     "auto_builder": {
         "circular_auto_builder": {
             "sequence_type": "circular",
-            "sequence_length": 32,
+            "sequence_length": 16,
             "max_turns": 16,
-            "max_turn_intensity": 2,
-            "sequence_level": 2,
+            "max_turn_intensity": 1,
+            "sequence_level": 1,
             "rotation_type": "quartered",
             "permutation_type": "rotational"
         },
         "freeform_auto_builder": {
             "sequence_type": "freeform",
-            "sequence_length": 20,
+            "sequence_length": 50,
             "max_turns": 13,
-            "max_turn_intensity": 2,
+            "max_turn_intensity": 3,
             "sequence_level": 2
         }
     }

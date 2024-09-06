@@ -41,7 +41,8 @@
       "swap_beta_s_nonradial_blue_pro_se_red_dash_w": true,
       "swap_beta_w_nonradial_blue_dash_s_red_pro_nw": true,
       "swap_beta_n_nonradial_blue_pro_nw_red_dash_e": true,
-      "swap_beta_e_nonradial_blue_dash_n_red_pro_se": true
+      "swap_beta_e_nonradial_blue_dash_n_red_pro_se": true,
+      "dash": [20, 60]
     },
     "(ccw, 0, 3)": {
       "swap_beta_s_nonradial_blue_dash_w_red_pro_se": true
