@@ -60,10 +60,13 @@ class CircularAutoBuilder:
             available_range = (
                 word_length - length_without_sequence_properties_or_start_pos
             )
-        turn_manager = TurnIntensityManager(max_turns, word_length, level, max_turn_intensity)
 
-        # Allocate turns while considering both the maximum turn intensity and total number of turns.
-        turns = turn_manager.allocate_turns()
+        turn_manager = TurnIntensityManager(
+            max_turns, word_length, level, max_turn_intensity
+        )
+
+        # Allocate turns for both blue and red motions
+        turns_blue, turns_red = turn_manager.allocate_turns_for_blue_and_red()
 
         self.modify_layout_for_chosen_number_of_beats(length)
 
@@ -75,7 +78,12 @@ class CircularAutoBuilder:
 
             last_pictograph = self.sequence[-1]
             next_pictograph = self._generate_next_pictograph(
-                level, turns[i], is_last_in_word, rotation_type, permutation_type
+                level,
+                turns_blue[i],
+                turns_red[i],
+                is_last_in_word,
+                rotation_type,
+                permutation_type,
             )
             self._update_start_oris(next_pictograph, last_pictograph)
             self._update_end_oris(next_pictograph)
@@ -120,7 +128,8 @@ class CircularAutoBuilder:
     def _generate_next_pictograph(
         self,
         level: int,
-        turn: float,
+        turn_blue: float,
+        turn_red: float,
         is_last_in_word: bool,
         rotation_type: str,
         permutation_type: str,
@@ -129,7 +138,7 @@ class CircularAutoBuilder:
         options = self.sequence_widget.top_builder_widget.sequence_builder.option_picker.option_getter.get_next_options(
             self.sequence
         )
-        
+
         # Ensure that we are working on a deep copy of the options to avoid modifying the original data
         options = [deepcopy(option) for option in options]
 
@@ -155,9 +164,13 @@ class CircularAutoBuilder:
         if level == 1:
             chosen_option = self._apply_level_1_constraints(chosen_option)
         elif level == 2:
-            chosen_option = self._apply_level_2_constraints(chosen_option, turn)
+            chosen_option = self._apply_level_2_or_3_constraints(
+                chosen_option, turn_blue, turn_red
+            )
         elif level == 3:
-            chosen_option = self._apply_level_3_constraints(chosen_option, turn)
+            chosen_option = self._apply_level_2_or_3_constraints(
+                chosen_option, turn_blue, turn_red
+            )
 
         return chosen_option
 
@@ -166,15 +179,13 @@ class CircularAutoBuilder:
         pictograph["red_attributes"]["turns"] = 0
         return pictograph
 
-    def _apply_level_2_constraints(self, pictograph: dict, turn: float) -> dict:
-        pictograph["blue_attributes"]["turns"] = turn
-        pictograph["red_attributes"]["turns"] = turn
+    def _apply_level_2_or_3_constraints(
+        self, pictograph: dict, turn_blue: float, turn_red: float
+    ) -> dict:
+        pictograph["blue_attributes"]["turns"] = turn_blue
+        pictograph["red_attributes"]["turns"] = turn_red
         return pictograph
 
-    def _apply_level_3_constraints(self, pictograph: dict, turn: float) -> dict:
-        pictograph["blue_attributes"]["turns"] = turn
-        pictograph["red_attributes"]["turns"] = turn
-        return pictograph
 
     def _determine_rotational_end_pos(self, rotation_type: str) -> str:
         """Determine the expected end position based on rotation type and current sequence."""

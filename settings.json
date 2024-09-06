@@ -54,17 +54,17 @@
             "sequence_type": "circular",
             "sequence_length": 16,
             "max_turns": 16,
-            "max_turn_intensity": 1,
-            "sequence_level": 1,
+            "max_turn_intensity": 3,
+            "sequence_level": 3,
             "rotation_type": "quartered",
             "permutation_type": "rotational"
         },
         "freeform_auto_builder": {
             "sequence_type": "freeform",
-            "sequence_length": 50,
-            "max_turns": 13,
+            "sequence_length": 20,
+            "max_turns": 25,
             "max_turn_intensity": 3,
-            "sequence_level": 2
+            "sequence_level": 3
         }
     }
 }

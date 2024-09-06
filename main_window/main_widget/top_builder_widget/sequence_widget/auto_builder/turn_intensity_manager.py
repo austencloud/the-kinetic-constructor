@@ -1,7 +1,10 @@
 import random
 
+
 class TurnIntensityManager:
-    def __init__(self, max_turns: int, word_length: int, level: int, max_turn_intensity: float):
+    def __init__(
+        self, max_turns: int, word_length: int, level: int, max_turn_intensity: float
+    ):
         """
         Initialize the TurnIntensityManager with:
         - max_turns: The maximum number of total turns that can be applied.
@@ -13,38 +16,41 @@ class TurnIntensityManager:
         self.word_length = word_length
         self.level = level
         self.max_turn_intensity = max_turn_intensity
-        self.turns_allocated = [0] * word_length  # Initialize turn allocation to zero for each motion.
-        self.possible_turns = self._get_possible_turns()
+        self.turns_allocated = [
+            0
+        ] * word_length  # Initialize turn allocation to zero for each motion.
+        self.turns_allocated_blue = [0] * word_length  # Blue motion turns
+        self.turns_allocated_red = [0] * word_length  # Red motion turns
 
-    def _get_possible_turns(self):
-        """Return a list of valid turns based on the level."""
+    def allocate_turns_for_blue_and_red(self):
+        """
+        Allocate separate turns for blue and red attributes across the sequence without exceeding max_turns,
+        ensuring that no individual turn exceeds max_turn_intensity.
+        """
+        remaining_turns_blue = self.max_turns
+        remaining_turns_red = self.max_turns
+
+        # Define valid turn options for level
         if self.level == 2:
-            # Whole numbers for level 2
-            return [0, 1, 2, 3]
+            possible_turns = [0, 1, 2, 3]  # Whole numbers only
         else:
-            # Half steps for level 3
-            return [0, 0.5, 1, 1.5, 2, 2.5, 3]
+            possible_turns = [0, 0.5, 1, 1.5, 2, 2.5, 3]
 
-    def allocate_turns(self):
-        """
-        Allocate turns across the sequence without exceeding max_turns, ensuring that
-        no individual turn exceeds max_turn_intensity, and only valid turns are used.
-        """
-        remaining_turns = self.max_turns  # Total turns that can be distributed
-
-        # Filter the possible turns to only those that don't exceed the max_turn_intensity
-        valid_turns = [turn for turn in self.possible_turns if turn <= self.max_turn_intensity]
-
-        # Distribute turns across each motion within the word length
+        # Distribute turns across each motion for blue and red within the word length
         for i in range(self.word_length):
-            if remaining_turns <= 0:
+            if remaining_turns_blue <= 0 and remaining_turns_red <= 0:
                 break
 
-            # Randomly select a valid turn that does not exceed the remaining turns
-            turn_value = random.choice([t for t in valid_turns if t <= remaining_turns])
+            # Allocate turns for blue motion
+            max_turn_blue = min(self.max_turn_intensity, remaining_turns_blue)
+            turn_blue = random.choice([t for t in possible_turns if t <= max_turn_blue])
+            self.turns_allocated_blue[i] = turn_blue
+            remaining_turns_blue -= turn_blue
 
-            # Store the allocated turn and reduce the remaining turns
-            self.turns_allocated[i] = turn_value
-            remaining_turns -= turn_value
+            # Allocate turns for red motion
+            max_turn_red = min(self.max_turn_intensity, remaining_turns_red)
+            turn_red = random.choice([t for t in possible_turns if t <= max_turn_red])
+            self.turns_allocated_red[i] = turn_red
+            remaining_turns_red -= turn_red
 
-        return self.turns_allocated
+        return self.turns_allocated_blue, self.turns_allocated_red

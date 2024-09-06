@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 
@@ -28,18 +29,24 @@ class FreeFormAutoBuilder:
             self.sequence_widget.main_widget.json_manager.loader_saver.load_current_sequence_json()
         )
         self.modify_layout_for_chosen_number_of_beats(beat_count)
-        turn_manager = TurnIntensityManager(max_turns, beat_count, level, max_turn_intensity)
-        turns = turn_manager.allocate_turns()
+        turn_manager = TurnIntensityManager(
+            max_turns, beat_count, level, max_turn_intensity
+        )
+        turns_blue, turns_red = turn_manager.allocate_turns_for_blue_and_red()
 
         length_of_sequence_upon_start = len(self.sequence) - 2
         for i in range(beat_count - length_of_sequence_upon_start):
-            next_pictograph_dict = self._generate_next_pictograph(level, turns[i])
+            next_pictograph = self._generate_next_pictograph(
+                level,
+                turns_blue[i],
+                turns_red[i],
+            )
 
-            self._update_dash_static_prop_rot_dirs(next_pictograph_dict)
+            self._update_dash_static_prop_rot_dirs(next_pictograph)
 
-            self.sequence.append(next_pictograph_dict)
+            self.sequence.append(next_pictograph)
             self.sequence_widget.create_new_beat_and_add_to_sequence(
-                next_pictograph_dict, override_grow_sequence=True
+                next_pictograph, override_grow_sequence=True
             )
             self.validation_engine.validate_last_pictograph()
             QApplication.processEvents()
@@ -86,10 +93,12 @@ class FreeFormAutoBuilder:
             self.ori_calculator.calculate_end_orientation(next_pictograph_dict, RED)
         )
 
-    def _generate_next_pictograph(self, level: int, turn: float) -> dict:
+    def _generate_next_pictograph(self, level: int, turn_blue: float, turn_red: float):
         options = self.sequence_widget.top_builder_widget.sequence_builder.option_picker.option_getter.get_next_options(
             self.sequence
         )
+        options = [deepcopy(option) for option in options]
+
         last_beat = self.sequence[-1]
         chosen_option = random.choice(options)
 
@@ -99,26 +108,23 @@ class FreeFormAutoBuilder:
         if level == 1:
             chosen_option = self._apply_level_1_constraints(chosen_option)
         elif level == 2:
-            chosen_option = self._apply_level_2_constraints(chosen_option, turn)
+            chosen_option = self._apply_level_2_or_3_constraints(
+                chosen_option, turn_blue, turn_red
+            )
         elif level == 3:
-            chosen_option = self._apply_level_3_constraints(chosen_option, turn)
-
+            chosen_option = self._apply_level_2_or_3_constraints(
+                chosen_option, turn_blue, turn_red
+            )
         return chosen_option
 
     def _apply_level_1_constraints(self, pictograph: dict) -> dict:
-        # No turns, only radial orientations
         pictograph["blue_attributes"]["turns"] = 0
         pictograph["red_attributes"]["turns"] = 0
         return pictograph
 
-    def _apply_level_2_constraints(self, pictograph: dict, turn: float) -> dict:
-        # Apply the pre-determined turn
-        pictograph["blue_attributes"]["turns"] = turn
-        pictograph["red_attributes"]["turns"] = turn
-        return pictograph
-
-    def _apply_level_3_constraints(self, pictograph: dict, turn: float) -> dict:
-        # Apply the pre-determined turn with potential non-radial orientations
-        pictograph["blue_attributes"]["turns"] = turn
-        pictograph["red_attributes"]["turns"] = turn
+    def _apply_level_2_or_3_constraints(
+        self, pictograph: dict, turn_blue: float, turn_red: float
+    ) -> dict:
+        pictograph["blue_attributes"]["turns"] = turn_blue
+        pictograph["red_attributes"]["turns"] = turn_red
         return pictograph
