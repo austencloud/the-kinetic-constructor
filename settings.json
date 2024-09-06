@@ -22,7 +22,7 @@
             },
             "Doc Womp": {
                 "name": "Doc Womp",
-                "export_date": "9-3-2024"
+                "export_date": "8-25-2024"
             }
         },
         "current_note": "Created using The Kinetic Alphabet",
@@ -32,10 +32,10 @@
     },
     "visibility": {
         "glyph_visibility": {
-            "VTG": false,
+            "VTG": true,
             "TKA": true,
-            "Elemental": false,
-            "EndPosition": false
+            "Elemental": true,
+            "EndPosition": true
         },
         "grid_visibility": {
             "non_radial_points": false
