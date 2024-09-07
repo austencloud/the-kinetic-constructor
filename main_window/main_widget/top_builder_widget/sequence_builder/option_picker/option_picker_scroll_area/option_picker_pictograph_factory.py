@@ -8,7 +8,7 @@ from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
+    from main_window.main_widget.top_builder_widget.sequence_builder.manual_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
         OptionPickerScrollArea,
     )
 

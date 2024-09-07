@@ -1,7 +1,9 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType
 from Enums.letters import Letter
-from .option_picker_section_widget.option_picker_section_widget import OptionPickerSectionWidget
+from .option_picker_section_widget.option_picker_section_widget import (
+    OptionPickerSectionWidget,
+)
 from ..option_picker_section_group_widget import OptionPickerSectionGroupWidget
 
 if TYPE_CHECKING:
@@ -24,7 +26,7 @@ class OptionPickerSectionManager:
 
     def __init__(self, scroll_area: "OptionPickerScrollArea") -> None:
         self.scroll_area = scroll_area
-        self.sequence_builder: "SequenceBuilder" = scroll_area.sequence_builder
+        self.sequence_builder: "SequenceBuilder" = scroll_area.manual_builder
         self.sections: dict[LetterType, OptionPickerSectionWidget] = {}
         self.pictograph_cache: dict[Letter, list[LetterType]] = {}
         self.ordered_section_types: list[LetterType] = []

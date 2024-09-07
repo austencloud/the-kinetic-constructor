@@ -5,14 +5,15 @@ from PyQt6.QtGui import QWheelEvent
 
 from Enums.letters import LetterType
 from data.constants import BLUE, RED
+
+from base_widgets.base_picker_scroll_area import BasePickerScrollArea
+from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_pictograph_factory import (
     OptionPickerPictographFactory,
 )
 from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_manager import (
     OptionPickerSectionManager,
 )
-from base_widgets.base_picker_scroll_area import BasePickerScrollArea
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 from .option_picker_display_manager import (
@@ -21,6 +22,7 @@ from .option_picker_display_manager import (
 
 
 if TYPE_CHECKING:
+    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_widget import OptionPickerSectionWidget
     from main_window.main_widget.top_builder_widget.sequence_builder.sequence_builder import (
         SequenceBuilder,
     )
@@ -34,9 +36,9 @@ class OptionPickerScrollArea(BasePickerScrollArea):
     def __init__(self, option_picker: "OptionPicker") -> None:
         super().__init__(option_picker)
         self.option_picker: "OptionPicker" = option_picker
-        self.sequence_builder: "SequenceBuilder" = option_picker.sequence_builder
+        self.manual_builder = option_picker.manual_builder
         self.option_manager = self.option_picker.option_getter
-        self.option_click_handler = self.sequence_builder.option_click_handler
+
         self.ori_calculator = self.main_widget.json_manager.ori_calculator
         self.json_manager = self.main_widget.json_manager
         self.pictograph_cache: dict[str, BasePictograph] = {}
@@ -47,7 +49,7 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         self.section_manager = OptionPickerSectionManager(self)
         self.display_manager = OptionPickerDisplayManager(self)
         self.pictograph_factory = OptionPickerPictographFactory(
-            self, self.sequence_builder.pictograph_cache
+            self, self.manual_builder.pictograph_cache
         )
         self.setStyleSheet("background-color: transparent; border: none;")
         self.setContentsMargins(0, 0, 0, 0)
@@ -102,13 +104,13 @@ class OptionPickerScrollArea(BasePickerScrollArea):
     def _get_or_create_pictograph(
         self, pictograph_dict: dict, sequence
     ) -> BasePictograph:
-        modified_key = self.sequence_builder.main_widget.pictograph_key_generator.generate_pictograph_key(
+        modified_key = self.manual_builder.main_widget.pictograph_key_generator.generate_pictograph_key(
             pictograph_dict
         )
         if modified_key in self.pictograph_cache:
             return self.pictograph_cache[modified_key]
         else:
-            pictograph = self.sequence_builder.render_and_store_pictograph(
+            pictograph = self.manual_builder.render_and_store_pictograph(
                 pictograph_dict, sequence
             )
             self.pictograph_cache[modified_key] = pictograph
@@ -158,7 +160,7 @@ class OptionPickerScrollArea(BasePickerScrollArea):
             for pictograph in section.pictographs.values():
                 pictograph.view.set_enabled(not disabled)
 
-    def add_section_to_layout(self, section: QWidget, section_index: int = None):
+    def add_section_to_layout(self, section: "OptionPickerSectionWidget", section_index: int = None):
         if section_index == 0 or section_index:  # widget is a section
             if section.__class__.__name__ == "OptionPickerSectionWidget":
                 if section.letter_type == LetterType.Type1:

@@ -15,14 +15,17 @@ if TYPE_CHECKING:
 class BeatDeletionManager:
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame") -> None:
         self.beat_frame = beat_frame
-        self.sequence_builder = beat_frame.top_builder_widget.sequence_builder
+        self.manual_builder = None
         self.selection_overlay = self.beat_frame.selection_overlay
         self.json_manager = self.beat_frame.json_manager  # Access json manager
         self.settings_manager = self.beat_frame.settings_manager
 
     def delete_selected_beat(self) -> None:
         self.beats = self.beat_frame.beats
-
+        if not self.manual_builder:
+            self.manual_builder = (
+                self.beat_frame.main_widget.top_builder_widget.sequence_builder.manual_builder
+            )
         self.GE_pictograph_view = (
             self.beat_frame.main_widget.top_builder_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view
         )
@@ -41,7 +44,7 @@ class BeatDeletionManager:
         self.beat_frame.sequence_widget.update_current_word()
 
         # QApplication.processEvents()
-        self.sequence_builder.option_picker.update_option_picker()
+        self.manual_builder.option_picker.update_option_picker()
 
     def _delete_non_first_beat(self, selected_beat):
         self.delete_beat(selected_beat)
@@ -49,12 +52,12 @@ class BeatDeletionManager:
             self.delete_beat(self.beats[i])
         last_beat = self.beat_frame.get_last_filled_beat()
         self.selection_overlay.select_beat(last_beat)
-        self.sequence_builder.last_beat = last_beat.beat
+        self.manual_builder.last_beat = last_beat.beat
 
     def _delete_first_beat(self, selected_beat):
         self.start_pos_view = self.beat_frame.start_pos_view
         self.selection_overlay.select_beat(self.start_pos_view)
-        self.sequence_builder.last_beat = self.start_pos_view.beat
+        self.manual_builder.last_beat = self.start_pos_view.beat
         self.delete_beat(selected_beat)
 
         for i in range(
@@ -77,9 +80,9 @@ class BeatDeletionManager:
             self.delete_beat(beat)
         self.selection_overlay.deselect_beat()
         self.json_manager.loader_saver.clear_current_sequence_file()
-        self.sequence_builder.last_beat = None
-        self.sequence_builder.reset_to_start_pos_picker()
-        self.sequence_builder.option_picker.update_option_picker()
+        self.manual_builder.last_beat = None
+        self.manual_builder.reset_to_start_pos_picker()
+        self.manual_builder.option_picker.update_option_picker()
         graph_editor = (
             self.beat_frame.main_widget.top_builder_widget.sequence_widget.graph_editor
         )

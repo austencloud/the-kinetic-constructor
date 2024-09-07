@@ -147,7 +147,8 @@
     "(o, 2, 1)": {
       "blue_rot_angle": 0,
       "blue": [-30, 0],
-      "red": [-90, 5]
+      "red": [-90, 5],
+      "red_rot_angle_override": true
     },
     "(o, 1.5, 0.5)": {
       "blue_rot_angle": 0,
@@ -180,7 +181,8 @@
     "(o, 1, 2)": {
       "blue": [-100, 5],
       "red_rot_angle": 0,
-      "red": [-25, 0]
+      "red": [-25, 0],
+      "red_rot_angle_override": true
     },
     "(o, 0.5, 2.5)": {
       "red_rot_angle": 0,

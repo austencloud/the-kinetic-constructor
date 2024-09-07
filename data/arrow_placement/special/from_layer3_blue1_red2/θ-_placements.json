@@ -5,6 +5,9 @@
     },
     "(s, 1, 1)": {
       "dash_from_layer1": [5, -55]
+    },
+    "(s, 1.5, 1)": {
+      "dash_from_layer2_rot_angle_override": true
     }
   }
 }

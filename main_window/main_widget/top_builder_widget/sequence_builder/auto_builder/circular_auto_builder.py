@@ -12,24 +12,29 @@ from data.halved_permutations import halved_permutations
 from main_window.main_widget.top_builder_widget.sequence_widget.sequence_auto_completer.mirrored_permutation_executor import (
     MirroredPermutationExecutor,
 )
-from .turn_intensity_manager import TurnIntensityManager
-from ..sequence_auto_completer.rotational_permutation_executor import (
+from main_window.main_widget.top_builder_widget.sequence_widget.sequence_auto_completer.rotational_permutation_executor import (
     RotationalPermutationExecuter,
 )
+from .turn_intensity_manager import TurnIntensityManager
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
-    from .circular_auto_builder_dialog import CircularAutoBuilderDialog
+    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.circular_auto_builder_frame import (
+        CircularAutoBuilderFrame,
+    )
+    from .circular_auto_builder_frame import CircularAutoBuilderDialog
 
 
 class CircularAutoBuilder:
-    def __init__(self, auto_builder_dialog: "CircularAutoBuilderDialog"):
-        self.auto_builder_dialog = auto_builder_dialog
-        self.sequence_widget = auto_builder_dialog.sequence_widget
-        self.validation_engine = (
-            self.sequence_widget.main_widget.json_manager.validation_engine
+    def __init__(self, auto_builder_frame: "CircularAutoBuilderFrame"):
+        self.auto_builder_frame = auto_builder_frame
+        self.sequence_widget = None
+        self.top_builder_widget = (
+            auto_builder_frame.auto_builder.sequence_builder.top_builder_widget
         )
-        self.json_manager = self.sequence_widget.main_widget.json_manager
-        self.beat_frame = self.sequence_widget.beat_frame
+        self.main_widget = self.top_builder_widget.main_widget
+        self.validation_engine = self.main_widget.json_manager.validation_engine
+        self.json_manager = self.main_widget.json_manager
         self.rotational_executor = RotationalPermutationExecuter(self)
         self.mirrored_executor = MirroredPermutationExecutor(self, False)
         self.rotation_direction = None  # Track the continuous rotation direction
@@ -44,11 +49,28 @@ class CircularAutoBuilder:
         permutation_type: str,
         is_continuous_rot_dir: str,
     ):
+        if not self.sequence_widget:
+            self.sequence_widget = self.top_builder_widget.sequence_widget
         # Building the base sequence
         self.sequence = (
-            self.sequence_widget.main_widget.json_manager.loader_saver.load_current_sequence_json()
+            self.main_widget.json_manager.loader_saver.load_current_sequence_json()
         )
-        length_without_sequence_properties_or_start_pos = len(self.sequence) - 2
+
+        if is_continuous_rot_dir:
+            # Set an initial random rotation direction for both blue and red hands
+            blue_rot_dir = random.choice(["cw", "ccw"])
+            red_rot_dir = random.choice(["cw", "ccw"])
+        else:
+            blue_rot_dir = None
+            red_rot_dir = None
+        self.modify_layout_for_chosen_number_of_beats(length)
+
+        if len(self.sequence) == 1:
+            self.add_start_pos_pictograph()
+            length_without_sequence_properties_or_start_pos = len(self.sequence) - 2
+        else:
+            length_without_sequence_properties_or_start_pos = len(self.sequence) - 2
+
         if permutation_type == "rotational":
             if rotation_type == "quartered":
                 word_length = length // 4
@@ -69,19 +91,6 @@ class CircularAutoBuilder:
 
         # Allocate turns for both blue and red motions
         turns_blue, turns_red = turn_manager.allocate_turns_for_blue_and_red()
-
-        if is_continuous_rot_dir:
-            # Set an initial random rotation direction for both blue and red hands
-            blue_rot_dir = random.choice(["cw", "ccw"])
-            red_rot_dir = random.choice(["cw", "ccw"])
-        else:
-            blue_rot_dir = None
-            red_rot_dir = None
-        self.modify_layout_for_chosen_number_of_beats(length)
-
-        if len(self.sequence) == 1:
-            self.add_start_pos_pictograph()
-            length_without_sequence_properties_or_start_pos = len(self.sequence) - 2
 
         # Generate the initial segment of the sequence
         for i in range(available_range):
@@ -117,6 +126,7 @@ class CircularAutoBuilder:
                 next_pictograph, override_grow_sequence=True
             )
             self.validation_engine.validate_last_pictograph()
+            QApplication.processEvents()
 
         self._apply_permutations(self.sequence, permutation_type, rotation_type)
 
@@ -140,6 +150,9 @@ class CircularAutoBuilder:
                 ):
                     pictograph_dict = deepcopy(pictograph_dict)
                     self.sequence.append(pictograph_dict)
+                    self.sequence_widget.create_new_beat_and_add_to_sequence(
+                        pictograph_dict, override_grow_sequence=True
+                    )
                     return
 
     def _apply_permutations(
@@ -164,7 +177,7 @@ class CircularAutoBuilder:
             return (start_pos, end_pos) in halved_permutations
 
     def modify_layout_for_chosen_number_of_beats(self, beat_count):
-        self.auto_builder_dialog.sequence_widget.beat_frame.layout_manager.configure_beat_frame(
+        self.sequence_widget.beat_frame.layout_manager.configure_beat_frame(
             beat_count, override_grow_sequence=True
         )
 
@@ -181,7 +194,7 @@ class CircularAutoBuilder:
         red_rot_dir,
     ) -> dict:
         # Get the next set of options (these come from the letters dictionary)
-        options = self.sequence_widget.top_builder_widget.sequence_builder.option_picker.option_getter.get_next_options(
+        options = self.top_builder_widget.sequence_builder.manual_builder.option_picker.option_getter.get_next_options(
             self.sequence
         )
 
@@ -339,7 +352,7 @@ class CircularAutoBuilder:
         )
 
     def _apply_strict_rotational_permutations(self, sequence: list[dict]) -> None:
-        executor = RotationalPermutationExecuter(self.auto_builder_dialog)
+        executor = RotationalPermutationExecuter(self.auto_builder_frame)
         executor.create_permutations(sequence)
 
     def _update_beat_number_depending_on_sequence_length(

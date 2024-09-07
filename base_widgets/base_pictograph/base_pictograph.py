@@ -9,8 +9,12 @@ from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from objects.motion.motion import Motion
 from objects.prop.prop import Prop
-from placement_managers.arrow_placement_manager.arrow_placement_manager import ArrowPlacementManager
-from placement_managers.prop_placement_manager.prop_placement_manager import PropPlacementManager
+from placement_managers.arrow_placement_manager.arrow_placement_manager import (
+    ArrowPlacementManager,
+)
+from placement_managers.prop_placement_manager.prop_placement_manager import (
+    PropPlacementManager,
+)
 
 
 from .components.elemental_glyph.elemental_glyph import ElementalGlyph
@@ -37,9 +41,8 @@ from .components.pictograph_initializer import PictographInitializer
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
-        OptionPickerScrollArea,
-    )
+
+    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import OptionPickerScrollArea
 
     from main_window.main_widget.main_widget import MainWidget
 

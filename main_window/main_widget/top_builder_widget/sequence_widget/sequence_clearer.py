@@ -11,7 +11,7 @@ class SequenceClearer:
     def __init__(self, sequence_widget: "SequenceWidget"):
         self.sequence_widget = sequence_widget
         self.json_manager = sequence_widget.json_manager
-        self.sequence_builder = sequence_widget.top_builder_widget.sequence_builder
+        self.manual_builder = None
         self.beat_frame = sequence_widget.beat_frame
         self.settings_manager = sequence_widget.settings_manager
 
@@ -20,10 +20,13 @@ class SequenceClearer:
     ) -> None:
         self.json_manager.loader_saver.clear_current_sequence_file()
         self._reset_beat_frame()
-
+        if not self.manual_builder:
+            self.manual_builder = (
+                self.sequence_widget.main_widget.top_builder_widget.sequence_builder.manual_builder
+            )
         if should_reset_to_start_pos_picker:
-            self.sequence_builder.reset_to_start_pos_picker()
-        self.sequence_builder.last_beat = self.beat_frame.start_pos
+            self.manual_builder.reset_to_start_pos_picker()
+        self.manual_builder.last_beat = self.beat_frame.start_pos
         if show_indicator:
             self.sequence_widget.indicator_label.show_message("Sequence cleared")
         self.sequence_widget.graph_editor.clear_graph_editor()

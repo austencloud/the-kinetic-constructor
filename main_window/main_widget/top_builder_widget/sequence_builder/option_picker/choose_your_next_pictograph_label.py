@@ -3,10 +3,9 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 
+
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker.option_picker import (
-        OptionPicker,
-    )
+    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker import OptionPicker
 
 
 class ChooseYourNextPictographLabel(QLabel):
@@ -34,8 +33,8 @@ class ChooseYourNextPictographLabel(QLabel):
         )
 
     def resize_choose_your_next_option_label(self) -> None:
-        width = self.option_picker.sequence_builder.width() // 2
-        height = self.option_picker.sequence_builder.width() // 12
+        width = self.option_picker.manual_builder.width() // 2
+        height = self.option_picker.manual_builder.width() // 12
 
         self.setFixedSize(width, height)
         self.set_stylesheet()

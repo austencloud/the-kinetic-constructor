@@ -206,8 +206,8 @@ class MainWidget(QTabWidget):
         self.main_window.settings_manager.load_settings()
         current_sequence = self.json_manager.loader_saver.load_current_sequence_json()
         if len(current_sequence) > 1:
-            self.top_builder_widget.sequence_builder.transition_to_sequence_building()
+            self.top_builder_widget.sequence_builder.manual_builder.transition_to_sequence_building()
             self.top_builder_widget.sequence_widget.beat_frame.populate_beat_frame_from_json(
                 current_sequence
             )
-            self.top_builder_widget.sequence_builder.option_picker.update_option_picker()
+            self.top_builder_widget.sequence_builder.manual_builder.option_picker.update_option_picker()

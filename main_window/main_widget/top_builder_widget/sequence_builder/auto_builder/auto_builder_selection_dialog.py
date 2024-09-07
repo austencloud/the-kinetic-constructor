@@ -9,8 +9,8 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QCursor
 from typing import TYPE_CHECKING
 
-from .freeform_auto_builder_dialog import FreeformAutoBuilderDialog
-from .circular_auto_builder_dialog import CircularAutoBuilderDialog
+from .freeform_auto_builder_frame import FreeformAutoBuilderDialog
+from .circular_auto_builder_frame import CircularAutoBuilderDialog
 
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (

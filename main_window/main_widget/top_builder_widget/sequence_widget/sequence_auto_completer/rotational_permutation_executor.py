@@ -3,23 +3,22 @@ from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
 from data.constants import EAST, NORTH, SOUTH, WEST
 from typing import TYPE_CHECKING
-
-
-
+from PyQt6.QtWidgets import QApplication
 
 from .permutation_executor_base import PermutationExecutor
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.auto_builder.circular_auto_builder import CircularAutoBuilder
-    
+
+    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.circular_auto_builder import (
+        CircularAutoBuilder,
+    )
     from .sequence_auto_completer import SequenceAutoCompleter
 
 
 class RotationalPermutationExecuter(PermutationExecutor):
-    def __init__(
-        self, parent_widget: "CircularAutoBuilder"
-    ):
-        self.circular_auto_builder = parent_widget
+    def __init__(self, circular_auto_builder: "CircularAutoBuilder"):
+        self.circular_auto_builder = circular_auto_builder
+        self.validation_engine = circular_auto_builder.validation_engine
 
     def create_permutations(self, sequence: list[dict]):
         start_position_entry = (
@@ -34,24 +33,31 @@ class RotationalPermutationExecuter(PermutationExecutor):
 
         entries_to_add = self.determine_how_many_entries_to_add(sequence_length)
         for _ in range(entries_to_add):
-            new_entry = self.create_new_rotational_permutation_entry(
+            next_pictograph = self.create_new_rotational_permutation_entry(
                 sequence,
                 last_entry,
                 next_beat_number,
                 sequence_length + entries_to_add,
                 halved_or_quartered,
             )
-            new_entries.append(new_entry)
-            sequence.append(new_entry)
-            last_entry = new_entry
+            new_entries.append(next_pictograph)
+            sequence.append(next_pictograph)
+
+            sequence_widget = self.circular_auto_builder.top_builder_widget.sequence_widget
+            sequence_widget.create_new_beat_and_add_to_sequence(
+                next_pictograph, override_grow_sequence=True, update_word=False
+            )
+            self.validation_engine.validate_last_pictograph()
+            QApplication.processEvents()
+
+            last_entry = next_pictograph
             next_beat_number += 1
+
+        sequence_widget.update_current_word()
 
         if start_position_entry:
             start_position_entry["beat"] = 0
             sequence.insert(0, start_position_entry)
-
-        self.circular_auto_builder.json_manager.loader_saver.save_current_sequence(sequence)
-        self.circular_auto_builder.beat_frame.populate_beat_frame_from_json(sequence)
 
     def determine_how_many_entries_to_add(self, sequence_length: int) -> int:
         if self.is_quartered_permutation():

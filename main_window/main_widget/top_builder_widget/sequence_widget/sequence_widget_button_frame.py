@@ -2,7 +2,7 @@ from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout, QMessageBox
-from main_window.main_widget.top_builder_widget.sequence_widget.auto_builder.auto_builder_selection_dialog import AutoBuilderSelectionDialog
+
 from utilities.path_helpers import get_images_and_data_path
 
 
@@ -26,7 +26,9 @@ class SequenceWidgetButtonFrame(QFrame):
     def _setup_dependencies(self):
         self.main_widget = self.sequence_widget.main_widget
         self.json_manager = self.main_widget.json_manager
-        self.sequence_builder = self.sequence_widget.top_builder_widget.sequence_builder
+        # self.sequence_builder = (
+        #     self.sequence_widget.top_builder_widget.sequence_builder_tab_widget
+        # )
         self.beat_frame = self.sequence_widget.beat_frame
         self.export_manager = self.beat_frame.image_export_manager
         self.indicator_label = self.sequence_widget.indicator_label
@@ -52,16 +54,16 @@ class SequenceWidgetButtonFrame(QFrame):
                 "callback": self.sequence_widget.show_options_panel,
                 "tooltip": "Layout Options",
             },
-            "auto_complete_sequence": {
-                "icon_path": "magic_wand.svg",
-                "callback": self.sequence_widget.autocompleter.auto_complete_sequence,
-                "tooltip": "Auto Complete Sequence",
-            },
-            "auto_builder": {
-                "icon_path": "auto_builder.png",
-                "callback": self.open_auto_builder_selection, 
-                "tooltip": "Auto Builder",
-            },
+            # "auto_complete_sequence": {
+            #     "icon_path": "magic_wand.svg",
+            #     "callback": self.sequence_widget.autocompleter.auto_complete_sequence,
+            #     "tooltip": "Auto Complete Sequence",
+            # },
+            # "auto_builder": {
+            #     "icon_path": "auto_builder.png",
+            #     "callback": self.open_auto_builder_selection,
+            #     "tooltip": "Auto Builder",
+            # },
             "clear_sequence": {
                 "icon_path": "clear.svg",
                 "callback": lambda: self.sequence_widget.sequence_clearer.clear_sequence(
@@ -96,10 +98,10 @@ class SequenceWidgetButtonFrame(QFrame):
         setattr(self, f"{button_name}_button", button)
         self.buttons.append(button)
 
-    def open_auto_builder_selection(self):
-        """Open the dialog to select the Freeform or Circular builder."""
-        dialog = AutoBuilderSelectionDialog(self.sequence_widget)
-        dialog.exec()
+    # def open_auto_builder_selection(self):
+    #     """Open the dialog to select the Freeform or Circular builder."""
+    #     dialog = AutoBuilderSelectionDialog(self.sequence_widget)
+    #     dialog.exec()
 
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)

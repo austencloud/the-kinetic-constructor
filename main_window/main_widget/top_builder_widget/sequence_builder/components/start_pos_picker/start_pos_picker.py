@@ -21,16 +21,18 @@ from .choose_your_start_pos_label import (
 
 
 if TYPE_CHECKING:
-    from ...sequence_builder import SequenceBuilder
+    from main_window.main_widget.top_builder_widget.sequence_builder.manual_builder import (
+        ManualBuilder,
+    )
 
 
 class StartPosPicker(QWidget):
     SPACING = 10
 
-    def __init__(self, sequence_builder: "SequenceBuilder"):
-        super().__init__(sequence_builder)
-        self.sequence_builder = sequence_builder
-        self.main_widget = sequence_builder.main_widget
+    def __init__(self, manual_builder: "ManualBuilder"):
+        super().__init__(manual_builder)
+        self.manual_builder = manual_builder
+        self.main_widget = manual_builder.main_widget
         self.start_pos_cache: dict[str, BasePictograph] = {}
         self.pictograph_factory = StartPosPickerPictographFactory(
             self, self.start_pos_cache
@@ -67,7 +69,7 @@ class StartPosPicker(QWidget):
         self.variations_button = StartPosVariationsButton(self)
 
         self.variations_button.clicked.connect(
-            self.sequence_builder.show_advanced_start_pos_picker
+            self.manual_builder.show_advanced_start_pos_picker
         )
 
         button_layout = QHBoxLayout()

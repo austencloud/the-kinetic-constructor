@@ -4,8 +4,10 @@ from Enums.letters import Letter
 
 
 if TYPE_CHECKING:
-    from settings_manager.visibility_settings import VisibilitySettings
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    from main_window.settings_manager.visibility_settings.visibility_settings import (
+        VisibilitySettings,
+    )
 
 
 class GlyphVisibilityManager:

@@ -47,7 +47,7 @@ class SequenceWidget(QWidget):
         self.scroll_area = SequenceWidgetScrollArea(self)
         self.beat_frame = SequenceWidgetBeatFrame(self)
         self.add_to_dictionary_manager = AddToDictionaryManager(self)
-        self.autocompleter = SequenceAutoCompleter(self)
+        # self.autocompleter = SequenceAutoCompleter(self)
         self.sequence_clearer = SequenceClearer(self)
         self.button_frame = SequenceWidgetButtonFrame(self)
         self.graph_editor = GraphEditor(self)
@@ -146,19 +146,15 @@ class SequenceWidget(QWidget):
         self.indicator_label_layout.addStretch(1)
 
     def create_new_beat_and_add_to_sequence(
-        self, pictograph_dict: dict, override_grow_sequence=False
+        self, pictograph_dict: dict, override_grow_sequence=False, update_word=True
     ) -> None:
         new_beat = Beat(self.beat_frame)
         new_beat.updater.update_pictograph(pictograph_dict)
-        self.beat_frame.add_beat_to_sequence(new_beat, override_grow_sequence)
+        self.beat_frame.add_beat_to_sequence(new_beat, override_grow_sequence, update_word)
         self.json_manager.updater.update_sequence_properties()  # Recalculate properties after each update
 
     def resize_sequence_widget(self) -> None:
         self.current_word_label.resize_current_word_label()
-        QApplication.processEvents()
         self.button_frame.resize_button_frame()
-        QApplication.processEvents()
         self.graph_editor.resize_graph_editor()
-        QApplication.processEvents()
         self.beat_frame.resize_beat_frame()
-        QApplication.processEvents()

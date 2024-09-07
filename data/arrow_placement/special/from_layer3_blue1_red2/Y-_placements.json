@@ -33,7 +33,7 @@
     "(s, 1, 1.5)": {
       "pro_from_layer1": [-40, -35],
       "dash_from_layer1": [10, -110],
-      "pro_from_layer2": [-50, 105]
+      "pro_from_layer2": [-40, 105]
     },
     "(s, 1, 2)": {
       "pro_from_layer1": [-40, -95],

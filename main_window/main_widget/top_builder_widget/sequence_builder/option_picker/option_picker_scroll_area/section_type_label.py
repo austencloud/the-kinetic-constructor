@@ -7,7 +7,6 @@ from PyQt6.QtCore import pyqtSignal
 
 
 
-
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_widget import OptionPickerSectionWidget
 
@@ -60,13 +59,13 @@ class SectionTypeLabel(QLabel):
 
     def font_size(self):
         scroll_area = self.section_widget.scroll_area
-        sequence_builder = scroll_area.sequence_builder
+        manual_builder = scroll_area.manual_builder
         base_class_name = type(scroll_area).__name__
 
         if base_class_name == "LetterBookScrollArea":
-            font_size = sequence_builder.width() // 40
+            font_size = manual_builder.width() // 40
         elif base_class_name == "OptionPickerScrollArea":
-            font_size = sequence_builder.height() // 45
+            font_size = manual_builder.height() // 45
         else:
             font_size = 12
         return font_size

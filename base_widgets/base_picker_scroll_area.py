@@ -3,17 +3,17 @@ from PyQt6.QtWidgets import QScrollArea, QWidget, QVBoxLayout, QHBoxLayout
 from PyQt6.QtCore import Qt
 
 
-
-
-
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.start_pos_picker import StartPosPicker
-    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker import OptionPicker
+    from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.start_pos_picker import (
+        StartPosPicker,
+    )
+    from main_window.main_widget.top_builder_widget.sequence_builder.manual_builder.option_picker.option_picker import (
+        OptionPicker,
+    )
+
 
 class BasePickerScrollArea(QScrollArea):
-    def __init__(
-        self, parent: Union["StartPosPicker", "OptionPicker"]
-    ) -> None:
+    def __init__(self, parent: Union["StartPosPicker", "OptionPicker"]) -> None:
         super().__init__(parent)
         self.container = QWidget()
         self.main_widget = parent.main_widget
@@ -40,4 +40,3 @@ class BasePickerScrollArea(QScrollArea):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
-

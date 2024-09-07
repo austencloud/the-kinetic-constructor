@@ -7,20 +7,22 @@ from .turn_intensity_manager import TurnIntensityManager
 import random
 
 if TYPE_CHECKING:
-    from .freeform_auto_builder_dialog import FreeformAutoBuilderDialog
+    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.freeform_auto_builder_frame import (
+        FreeformAutoBuilderFrame,
+    )
 
 
 class FreeFormAutoBuilder:
-    def __init__(self, auto_builder_dialog: "FreeformAutoBuilderDialog"):
-        self.auto_builder_dialog = auto_builder_dialog
-        self.sequence_widget = auto_builder_dialog.sequence_widget
-
-        self.ori_calculator = (
-            self.sequence_widget.main_widget.json_manager.ori_calculator
+    def __init__(self, auto_builder_frame: "FreeformAutoBuilderFrame"):
+        self.auto_builder_frame = auto_builder_frame
+        self.sequence_widget = None
+        self.top_builder_widget = (
+            auto_builder_frame.auto_builder.sequence_builder.top_builder_widget
         )
-        self.validation_engine = (
-            self.sequence_widget.main_widget.json_manager.validation_engine
-        )
+        self.main_widget = self.top_builder_widget.main_widget
+        self.sequence_builder = auto_builder_frame.auto_builder.sequence_builder
+        self.ori_calculator = self.main_widget.json_manager.ori_calculator
+        self.validation_engine = self.main_widget.json_manager.validation_engine
 
     def build_sequence(
         self,
@@ -30,8 +32,10 @@ class FreeFormAutoBuilder:
         max_turns: int,
         is_continuous_rot_dir,
     ):
+        if not self.sequence_widget:
+            self.sequence_widget = self.top_builder_widget.sequence_widget
         self.sequence = (
-            self.sequence_widget.main_widget.json_manager.loader_saver.load_current_sequence_json()
+            self.main_widget.json_manager.loader_saver.load_current_sequence_json()
         )
         self.modify_layout_for_chosen_number_of_beats(beat_count)
         turn_manager = TurnIntensityManager(
@@ -68,12 +72,12 @@ class FreeFormAutoBuilder:
             )
             self.validation_engine.validate_last_pictograph()
             QApplication.processEvents()
-        self.sequence_widget.top_builder_widget.sequence_builder.option_picker.update_option_picker(
+        self.top_builder_widget.sequence_builder.manual_builder.option_picker.update_option_picker(
             self.sequence
         )
 
     def modify_layout_for_chosen_number_of_beats(self, beat_count):
-        self.auto_builder_dialog.sequence_widget.beat_frame.layout_manager.configure_beat_frame(
+        self.sequence_widget.beat_frame.layout_manager.configure_beat_frame(
             beat_count, override_grow_sequence=True
         )
 
@@ -131,7 +135,7 @@ class FreeFormAutoBuilder:
         blue_rot_dir,
         red_rot_dir,
     ):
-        options = self.sequence_widget.top_builder_widget.sequence_builder.option_picker.option_getter.get_next_options(
+        options = self.sequence_builder.manual_builder.option_picker.option_getter.get_next_options(
             self.sequence
         )
         options = [deepcopy(option) for option in options]

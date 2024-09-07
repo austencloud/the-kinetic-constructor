@@ -106,7 +106,7 @@ class LayoutOptionsDialog(QDialog):
 
     def check_option_picker_state(self):
         option_picker = (
-            self.sequence_widget.top_builder_widget.sequence_builder.option_picker
+            self.sequence_widget.top_builder_widget.sequence_builder.manual_builder.option_picker
         )
         if (
             not self.settings_manager.global_settings.get_grow_sequence()

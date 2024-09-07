@@ -21,15 +21,17 @@ class StartPosManager(QObject):
 
     def __init__(self, start_pos_picker: "StartPosPicker") -> None:
         super().__init__()
-        self.sequence_builder = start_pos_picker.sequence_builder
+        self.manual_builder = start_pos_picker.manual_builder
         self.start_pos_picker = start_pos_picker
         self.start_pos_frame = start_pos_picker.pictograph_frame
-        self.main_widget = start_pos_picker.sequence_builder.main_widget
-        self.top_builder_widget = self.sequence_builder.top_builder_widget
+        self.main_widget = start_pos_picker.manual_builder.main_widget
+        self.top_builder_widget = (
+            self.manual_builder.sequence_builder.top_builder_widget
+        )
         self.start_options: dict[str, BasePictograph] = {}
         self.setup_start_positions()
         self.start_position_selected.connect(
-            self.sequence_builder.transition_to_sequence_building
+            self.manual_builder.transition_to_sequence_building
         )
 
     def setup_start_positions(self) -> None:
@@ -44,7 +46,7 @@ class StartPosManager(QObject):
         for (
             letter,
             pictograph_dicts,
-        ) in self.sequence_builder.main_widget.letters.items():
+        ) in self.manual_builder.main_widget.letters.items():
             for pictograph_dict in pictograph_dicts:
                 if (
                     pictograph_dict[START_POS] == start_pos
@@ -79,11 +81,11 @@ class StartPosManager(QObject):
             deepcopy(clicked_start_option.pictograph_dict)
         )
 
-        self.sequence_builder.top_builder_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
+        self.manual_builder.sequence_builder.top_builder_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
             start_position_beat
         )
-        self.sequence_builder.last_beat = start_position_beat
-        beat_frame = self.sequence_builder.top_builder_widget.sequence_widget.beat_frame
+        self.manual_builder.last_beat = start_position_beat
+        beat_frame = self.manual_builder.sequence_builder.top_builder_widget.sequence_widget.beat_frame
         start_pos_view = beat_frame.start_pos_view
         beat_frame.selection_overlay.select_beat(start_pos_view)
 

@@ -3,7 +3,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QMessageBox
 
 if TYPE_CHECKING:
-    from main_window.main_widget.dictionary_widget.dictionary_widget import DictionaryWidget
+    from main_window.main_widget.dictionary_widget.dictionary_widget import (
+        DictionaryWidget,
+    )
 
 
 class DictionarySequencePopulator:
@@ -19,7 +21,7 @@ class DictionarySequencePopulator:
             self.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_view
         )
         self.start_pos_manager = (
-            self.main_widget.top_builder_widget.sequence_builder.start_pos_picker.start_pos_manager
+            self.main_widget.top_builder_widget.sequence_builder.manual_builder.start_pos_picker.start_pos_manager
         )
         self.sequence_widget = self.main_widget.top_builder_widget.sequence_widget
         self.sequence_builder = self.main_widget.top_builder_widget.sequence_builder

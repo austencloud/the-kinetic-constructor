@@ -12,7 +12,7 @@ class StartPosPickerPictographFrame(QWidget):
         super().__init__(start_pos_picker)
         self.start_pos_picker = start_pos_picker
         self.clickable_option_handler = (
-            self.start_pos_picker.sequence_builder.option_click_handler
+            self.start_pos_picker.manual_builder.option_click_handler
         )
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.pictographs_layout = QHBoxLayout()
@@ -22,9 +22,9 @@ class StartPosPickerPictographFrame(QWidget):
 
     def resize_start_pos_picker_pictograph_frame(self) -> None:
         self.setMaximumWidth(
-            self.start_pos_picker.sequence_builder.width()
+            self.start_pos_picker.manual_builder.width()
             if self.start_pos_picker.isVisible()
-            else self.start_pos_picker.sequence_builder.option_picker.width()
+            else self.start_pos_picker.manual_builder.option_picker.width()
         )
         self.start_pos_picker.choose_your_start_pos_label.set_stylesheet()
         for button in self.variation_buttons.values():

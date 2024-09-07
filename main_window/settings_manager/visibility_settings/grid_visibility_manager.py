@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING
 
 
+
 if TYPE_CHECKING:
-    from settings_manager.visibility_settings import VisibilitySettings
+    from main_window.settings_manager.visibility_settings.visibility_settings import VisibilitySettings
 
 
 class GridVisibilityManager:
@@ -63,7 +64,7 @@ class GridVisibilityManager:
         for (
             start_letter,
             pictograph_list,
-        ) in sequence_builder.advanced_start_pos_picker.start_pos_cache.items():
+        ) in sequence_builder.manual_builder.advanced_start_pos_picker.start_pos_cache.items():
             for start_pos in pictograph_list:
                 if hasattr(start_pos, "grid"):
                     start_pos.grid.toggle_non_radial_points_visibility(

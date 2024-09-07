@@ -6,9 +6,8 @@ from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker import (
-        OptionPicker,
-    )
+    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker import OptionPicker
+
 
 
 class OptionGetter(QObject):
@@ -16,7 +15,7 @@ class OptionGetter(QObject):
 
     def __init__(self, option_picker: "OptionPicker"):
         super().__init__()
-        self.sequence_builder = option_picker.sequence_builder
+        self.manual_builder = option_picker.manual_builder
         self.main_widget = option_picker.main_widget
         self.start_options: dict[str, BasePictograph] = {}
 

@@ -78,7 +78,9 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
     def delete_selected_beat(self) -> None:
         self.beat_deletion_manager.delete_selected_beat()
 
-    def add_beat_to_sequence(self, new_beat: "BasePictograph", override_grow_sequence = False) -> None:
+    def add_beat_to_sequence(
+        self, new_beat: "BasePictograph", override_grow_sequence=False, update_word = True
+    ) -> None:
         next_beat_index = self.find_next_available_beat()
         if next_beat_index == 0:
             self.sequence_widget.difficulty_label.set_difficulty_level(1)
@@ -92,14 +94,13 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
                 self.json_manager.updater.update_current_sequence_file_with_beat(
                     self.beats[next_beat_index]
                 )
-                self.sequence_widget.update_current_word()
+                if update_word:
+                    self.sequence_widget.update_current_word()
                 self.adjust_layout_to_sequence_length()
                 self.sequence_builder = (
                     self.main_widget.top_builder_widget.sequence_builder
                 )
-                self.sequence_builder.last_beat = self.beats[next_beat_index].beat
-                # select the beat with the selection overlay
-                # self.selection_overlay.select_beat(new_beat.view)
+                self.sequence_builder.manual_builder.last_beat = self.beats[next_beat_index].beat
 
         elif not grow_sequence or override_grow_sequence:
             if (
@@ -111,11 +112,12 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
                 self.json_manager.updater.update_current_sequence_file_with_beat(
                     self.beats[next_beat_index]
                 )
-                self.sequence_widget.update_current_word()
+                if update_word:
+                    self.sequence_widget.update_current_word()
                 self.sequence_builder = (
                     self.main_widget.top_builder_widget.sequence_builder
                 )
-                self.sequence_builder.last_beat = self.beats[next_beat_index].beat
+                self.sequence_builder.manual_builder.last_beat = self.beats[next_beat_index].beat
                 # self.selection_overlay.select_beat(new_beat.view)
 
     def find_next_available_beat(self) -> int:
@@ -202,7 +204,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         self, current_sequence_json: list[dict[str, str]]
     ) -> None:
         self.start_pos_manager = (
-            self.main_widget.top_builder_widget.sequence_builder.start_pos_picker.start_pos_manager
+            self.main_widget.top_builder_widget.sequence_builder.manual_builder.start_pos_picker.start_pos_manager
         )
         self.sequence_builder = self.main_widget.top_builder_widget.sequence_builder
         if not current_sequence_json:
@@ -225,19 +227,17 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         else:
             self.sequence_widget.difficulty_label.set_difficulty_level("")
         last_beat = self.sequence_widget.beat_frame.get_last_filled_beat().beat
-        self.sequence_builder.last_beat = last_beat
+        self.sequence_builder.manual_builder.last_beat = last_beat
 
-        if self.sequence_builder.start_pos_picker.isVisible():
-            self.sequence_builder.transition_to_sequence_building()
+        if self.sequence_builder.manual_builder.start_pos_picker.isVisible():
+            self.sequence_builder.manual_builder.transition_to_sequence_building()
 
-        scroll_area = self.sequence_builder.option_picker.scroll_area
+        scroll_area = self.sequence_builder.manual_builder.option_picker.scroll_area
         scroll_area.remove_irrelevant_pictographs()
-        next_options = (
-            self.sequence_builder.option_picker.option_getter.get_next_options(
-                current_sequence_json
-            )
+        next_options = self.sequence_builder.manual_builder.option_picker.option_getter.get_next_options(
+            current_sequence_json
         )
 
         scroll_area.add_and_display_relevant_pictographs(next_options)
-        self.sequence_builder.option_picker.resize_option_picker()
+        self.sequence_builder.manual_builder.option_picker.resize_option_picker()
         self.selection_overlay.select_beat(self.get_last_filled_beat())

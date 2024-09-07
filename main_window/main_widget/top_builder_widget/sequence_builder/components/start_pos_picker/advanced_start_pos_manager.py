@@ -14,10 +14,9 @@ class AdvancedStartPosManager(QObject):
 
     def __init__(self, advanced_start_pos_picker: "AdvancedStartPosPicker") -> None:
         super().__init__()
-        self.sequence_builder = advanced_start_pos_picker.sequence_builder
+        self.sequence_builder = advanced_start_pos_picker.manual_builder
         self.advanced_start_pos_picker = advanced_start_pos_picker
         self.pictograph_frame = advanced_start_pos_picker.pictograph_frame
-        self.main_widget = advanced_start_pos_picker.sequence_builder.top_builder_widget
         self.start_pos_cache = advanced_start_pos_picker.start_pos_cache
 
     def set_all_orientations_to_in(self) -> None:

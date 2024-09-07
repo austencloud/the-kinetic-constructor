@@ -13,6 +13,10 @@
       "static_from_layer1_rot_angle_override": true,
       "pro_from_layer2": {},
       "static_from_layer2_rot_angle_override": true
+    },
+    "(s, 2, 2)": {
+      "static_from_layer1_rot_angle_override": true,
+      "pro_from_layer2": [-50, -5]
     }
   }
 }

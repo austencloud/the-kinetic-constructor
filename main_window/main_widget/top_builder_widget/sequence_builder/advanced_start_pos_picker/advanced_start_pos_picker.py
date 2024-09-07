@@ -1,35 +1,36 @@
 from PyQt6.QtWidgets import QWidget, QGridLayout, QVBoxLayout
 from typing import TYPE_CHECKING
 from Enums.letters import Letter
-from main_window.main_widget.top_builder_widget.sequence_builder.advanced_start_pos_picker.advanced_start_pos_ori_picker import (
+from .advanced_start_pos_ori_picker import (
     AdvancedStartPosOriPicker,
 )
-from main_window.main_widget.top_builder_widget.sequence_builder.advanced_start_pos_picker.advanced_start_pos_picker_pictograph_factory import (
+from .advanced_start_pos_picker_pictograph_factory import (
     AdvancedStartPosPickerPictographFactory,
 )
-from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.advanced_start_pos_manager import (
+from ..components.start_pos_picker.advanced_start_pos_manager import (
     AdvancedStartPosManager,
 )
-from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.advanced_start_pos_picker_pictograph_frame import (
+from ..components.start_pos_picker.advanced_start_pos_picker_pictograph_frame import (
     AdvancedStartPosPickerPictographFrame,
 )
-from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.choose_your_start_pos_label import (
+from ..components.start_pos_picker.choose_your_start_pos_label import (
     ChooseYourStartPosLabel,
 )
 
 
 if TYPE_CHECKING:
+    from ..manual_builder import (
+        ManualBuilder,
+    )
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
-
-    from ..sequence_builder import SequenceBuilder
 
 
 class AdvancedStartPosPicker(QWidget):
-    def __init__(self, sequence_builder: "SequenceBuilder"):
-        super().__init__(sequence_builder)
-        self.sequence_builder = sequence_builder
-        self.main_widget = sequence_builder.main_widget
-        self.start_pos_picker = self.sequence_builder.start_pos_picker
+    def __init__(self, manual_builder: "ManualBuilder"):
+        super().__init__(manual_builder)
+        self.manual_builder = manual_builder
+        self.main_widget = manual_builder.main_widget
+        self.start_pos_picker = self.manual_builder.start_pos_picker
         self.start_pos_cache: dict[str, list[BasePictograph]] = {}
         self.ori_picker = AdvancedStartPosOriPicker(self)
         self.pictograph_frame = AdvancedStartPosPickerPictographFrame(self)
@@ -87,7 +88,7 @@ class AdvancedStartPosPicker(QWidget):
         self.display_variations(variations)
 
     def _resize_variation(self, variation: "BasePictograph") -> None:
-        view_width = int(self.sequence_builder.height() // 6)
+        view_width = int(self.manual_builder.height() // 6)
         variation.view.setFixedSize(view_width, view_width)
         variation.view.view_scale = view_width / variation.view.pictograph.width()
         variation.view.resetTransform()
@@ -100,7 +101,7 @@ class AdvancedStartPosPicker(QWidget):
         )
 
     def on_variation_selected(self, variation: "BasePictograph") -> None:
-        self.sequence_builder.start_pos_picker.start_pos_manager.on_start_pos_clicked(
+        self.manual_builder.start_pos_picker.start_pos_manager.on_start_pos_clicked(
             variation
         )
 

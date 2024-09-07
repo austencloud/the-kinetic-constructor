@@ -35,7 +35,7 @@ class OriDisplayFrame(QFrame):
             self.ori_picker_box.graph_editor.main_widget.json_manager.validation_engine
         )
         self.option_picker = (
-            self.ori_picker_box.graph_editor.sequence_widget.top_builder_widget.sequence_builder.option_picker
+            self.ori_picker_box.graph_editor.sequence_widget.top_builder_widget.sequence_builder.manual_builder.option_picker
         )
         self.color = self.ori_picker_box.color
         self.beat_frame = self.ori_picker_box.graph_editor.sequence_widget.beat_frame

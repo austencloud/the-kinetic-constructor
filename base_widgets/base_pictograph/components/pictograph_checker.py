@@ -175,7 +175,7 @@ class PictographChecker:
         )
 
     def is_in_sequence_builder(self) -> bool:
-        return hasattr(self.pictograph.scroll_area, "sequence_builder")
+        return hasattr(self.pictograph.scroll_area, "manual_builder")
 
     def has_all_props_of_type(self, prop_type: PropType) -> bool:
         return all(

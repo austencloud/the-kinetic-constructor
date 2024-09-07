@@ -109,7 +109,7 @@ class AdvancedStartPosOriPicker(QWidget):
         )
 
     def resize_default_ori_picker(self) -> None:
-        width = int(self.advanced_start_pos_picker.sequence_builder.width())
+        width = int(self.advanced_start_pos_picker.manual_builder.width())
         header_font_size = width // 35
         for header in self.header_labels:
             header.setFont(QFont("Arial", header_font_size, QFont.Weight.Bold))

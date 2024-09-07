@@ -14,8 +14,8 @@ from .option_picker_scroll_area.option_picker_scroll_area import OptionPickerScr
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.sequence_builder import (
-        SequenceBuilder,
+    from main_window.main_widget.top_builder_widget.sequence_builder.manual_builder import (
+        ManualBuilder,
     )
 
 
@@ -24,10 +24,10 @@ class OptionPicker(QWidget):
 
     option_selected = pyqtSignal(str)
 
-    def __init__(self, sequence_builder: "SequenceBuilder"):
-        super().__init__(sequence_builder)
-        self.sequence_builder = sequence_builder
-        self.main_widget = sequence_builder.main_widget
+    def __init__(self, manual_builder: "ManualBuilder"):
+        super().__init__(manual_builder)
+        self.manual_builder = manual_builder
+        self.main_widget = manual_builder.main_widget
         self.json_manager = self.main_widget.json_manager
         self.choose_your_next_pictograph_label = ChooseYourNextPictographLabel(self)
         self.option_getter = OptionGetter(self)

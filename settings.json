@@ -1,7 +1,7 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Aurora",
+        "background_type": "AuroraBorealis",
         "grow_sequence": true,
         "current_tab": "sequence_builder"
     },
@@ -18,7 +18,7 @@
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
-                "export_date": "9-6-2024"
+                "export_date": "9-7-2024"
             },
             "Doc Womp": {
                 "name": "Doc Womp",
@@ -34,7 +34,7 @@
         "glyph_visibility": {
             "VTG": false,
             "TKA": true,
-            "Elemental": false,
+            "Elemental": true,
             "EndPosition": false
         },
         "grid_visibility": {
@@ -54,8 +54,8 @@
             "sequence_type": "circular",
             "sequence_length": 16,
             "max_turns": 16,
-            "max_turn_intensity": 3,
-            "sequence_level": 2,
+            "max_turn_intensity": 1.0,
+            "sequence_level": 1,
             "rotation_type": "quartered",
             "permutation_type": "rotational",
             "continuous_rotation": true
@@ -63,8 +63,8 @@
         "freeform_auto_builder": {
             "sequence_type": "freeform",
             "sequence_length": 16,
-            "max_turns": 10,
-            "max_turn_intensity": 2,
+            "max_turns": 30,
+            "max_turn_intensity": 1.0,
             "sequence_level": 2,
             "continuous_rotation": true
         }

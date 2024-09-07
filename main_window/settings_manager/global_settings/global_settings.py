@@ -83,7 +83,7 @@ class GlobalSettings:
         self.main_widget.top_builder_widget.sequence_widget.difficulty_label.setStyleSheet(
             f"color: {self.get_font_color(bg_type)};"
         )
-        self.main_widget.top_builder_widget.sequence_builder.start_pos_picker.choose_your_start_pos_label.setStyleSheet(
+        self.main_widget.top_builder_widget.sequence_builder.manual_builder.start_pos_picker.choose_your_start_pos_label.setStyleSheet(
             f"color: {self.get_font_color(bg_type)};"
         )
         self.main_widget.dictionary_widget.browser.options_widget.sort_widget.sort_by_label.setStyleSheet(
