@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (
     QWidget,
     QGridLayout,
     QSizePolicy,
+    QCheckBox,
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
@@ -33,6 +34,9 @@ class AutoBuilderDialogBase(QDialog):
         self.comboboxes: dict[str, QComboBox] = {}
         self.labels: dict[str, QLabel] = {}
         self.buttons: dict[str, QPushButton] = {}
+        self.checkboxes: dict[str, QCheckBox] = {}
+
+        self.continuous_rotation = False  # Track if continuous rotation is enabled
 
         self._init_ui()
 
@@ -66,7 +70,6 @@ class AutoBuilderDialogBase(QDialog):
         self.max_turn_intensity_label = QLabel("Maximum Turn Intensity:")
         self.labels["max_turn_intensity"] = self.max_turn_intensity_label
         self.comboboxes["max_turn_intensity"] = self.max_turn_intensity_combo
-        # connect the signal to the slot
         self.max_turn_intensity_combo.currentIndexChanged.connect(
             self._update_max_turn_intensity
         )
@@ -81,11 +84,17 @@ class AutoBuilderDialogBase(QDialog):
         self.labels["max_turns"] = self.max_turns_label
         self.spinboxes["max_turns"] = self.max_turns_spinbox
         self._add_to_grid(self.max_turns_label, self.max_turns_spinbox, 3)
-        # connect the signal to the slot
-        self.max_turns_spinbox.valueChanged.connect(self._update_max_turns)
+
+        # Continuous Rotation Checkbox
+        self.continuous_rotation_checkbox = QCheckBox("Continuous Rotation")
+        self.continuous_rotation_checkbox.stateChanged.connect(
+            self._update_continuous_rotation
+        )
+        self.checkboxes["continuous_rotation"] = self.continuous_rotation_checkbox
+        self.grid_layout.addWidget(self.continuous_rotation_checkbox, 4, 0, 1, 2)
 
         # Spacer to push buttons to the bottom
-        self.grid_layout.setRowStretch(4, 1)
+        self.grid_layout.setRowStretch(5, 1)
 
         # Action Buttons
         self._setup_action_buttons()
@@ -188,7 +197,7 @@ class AutoBuilderDialogBase(QDialog):
         button_widget = QWidget()
         button_widget.setLayout(button_layout)
         self.grid_layout.addWidget(
-            button_widget, 6, 0, 1, 2, Qt.AlignmentFlag.AlignBottom
+            button_widget, 7, 0, 1, 2, Qt.AlignmentFlag.AlignBottom
         )
 
     def _update_visibility_based_on_level(self):
@@ -215,6 +224,15 @@ class AutoBuilderDialogBase(QDialog):
         """To be implemented in subclass for creating the sequence."""
         raise NotImplementedError
 
+    def _update_continuous_rotation(self, state):
+        if state == 2:
+            value = True
+        elif state == 0:
+            value = False
+        self.auto_builder_settings.set_auto_builder_setting(
+            "continuous_rotation", value, self.builder_type
+        )
+
     def _resize_dialog(self):
         """Resize the dialog based on the parent widget size."""
         width, height = (
@@ -234,6 +252,7 @@ class AutoBuilderDialogBase(QDialog):
             self.spinboxes,
             self.comboboxes,
             self.buttons,
+            self.checkboxes,
         ]
         for widget_dict in widget_dicts:
             for widget in widget_dict.values():

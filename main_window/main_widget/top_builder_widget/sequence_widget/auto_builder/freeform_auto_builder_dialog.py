@@ -49,6 +49,7 @@ class FreeformAutoBuilderDialog(AutoBuilderDialogBase):
             ),
             self.sequence_level_combo.currentData(),
             self.max_turns_spinbox.value(),
+            self.continuous_rotation_checkbox.isChecked(),
         )
         self.accept()
 

@@ -11,6 +11,7 @@ class AutoBuilderSettings:
         "max_turns": 50,
         "max_turn_intensity": 50,
         "sequence_level": 1,  # 1: Level 1, 2: Level 2, 3: Level 3
+        "continuous_rotation": False,
     }
 
     DEFAULT_CIRCULAR_SETTINGS = {
@@ -21,6 +22,7 @@ class AutoBuilderSettings:
         "sequence_level": 1,
         "rotation_type": "quartered",
         "permutation_type": "rotational",
+        "continuous_rotation": False,
     }
 
     def __init__(self, settings_manager: "SettingsManager") -> None:

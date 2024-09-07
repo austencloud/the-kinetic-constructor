@@ -18,7 +18,7 @@
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
-                "export_date": "8-25-2024"
+                "export_date": "9-6-2024"
             },
             "Doc Womp": {
                 "name": "Doc Womp",
@@ -34,7 +34,7 @@
         "glyph_visibility": {
             "VTG": false,
             "TKA": true,
-            "Elemental": true,
+            "Elemental": false,
             "EndPosition": false
         },
         "grid_visibility": {
@@ -42,7 +42,7 @@
         }
     },
     "dictionary": {
-        "sort_method": "date_added"
+        "sort_method": "sequence_length"
     },
     "sequence_layout": {
         "grow_sequence": true,
@@ -55,16 +55,18 @@
             "sequence_length": 16,
             "max_turns": 16,
             "max_turn_intensity": 3,
-            "sequence_level": 3,
+            "sequence_level": 2,
             "rotation_type": "quartered",
-            "permutation_type": "rotational"
+            "permutation_type": "rotational",
+            "continuous_rotation": true
         },
         "freeform_auto_builder": {
             "sequence_type": "freeform",
-            "sequence_length": 20,
-            "max_turns": 25,
-            "max_turn_intensity": 3,
-            "sequence_level": 3
+            "sequence_length": 16,
+            "max_turns": 10,
+            "max_turn_intensity": 2,
+            "sequence_level": 2,
+            "continuous_rotation": true
         }
     }
 }

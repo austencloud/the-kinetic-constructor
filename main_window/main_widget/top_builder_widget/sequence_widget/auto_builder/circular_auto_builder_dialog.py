@@ -36,7 +36,7 @@ class CircularAutoBuilderDialog(AutoBuilderDialogBase):
         self.rotation_type_label = QLabel("Rotation Type:")
         self.labels["rotation_type"] = self.rotation_type_label
         self.comboboxes["rotation_type"] = self.rotation_type_combo
-        self._add_to_grid(self.rotation_type_label, self.rotation_type_combo, 4)
+        self._add_to_grid(self.rotation_type_label, self.rotation_type_combo, 5)
 
         self.permutation_type_combo = QComboBox()
         self.permutation_type_combo.addItem("Rotational", "rotational")
@@ -47,7 +47,7 @@ class CircularAutoBuilderDialog(AutoBuilderDialogBase):
         self.permutation_type_label = QLabel("Permutation Type:")
         self.labels["permutation_type"] = self.permutation_type_label
         self.comboboxes["permutation_type"] = self.permutation_type_combo
-        self._add_to_grid(self.permutation_type_label, self.permutation_type_combo, 5)
+        self._add_to_grid(self.permutation_type_label, self.permutation_type_combo, 6)
 
     def _load_settings(self):
         """Load settings for Circular builder."""
@@ -67,6 +67,10 @@ class CircularAutoBuilderDialog(AutoBuilderDialogBase):
         )
         self.permutation_type_combo.setCurrentIndex(
             self.permutation_type_combo.findData(settings["permutation_type"])
+        )
+        # set the continuous rotation checkbox
+        self.continuous_rotation_checkbox.setChecked(
+            settings.get("continuous_rotation", False)
         )
 
         # Adjust visibility based on level and permutation type
@@ -153,5 +157,6 @@ class CircularAutoBuilderDialog(AutoBuilderDialogBase):
             self.max_turns_spinbox.value(),
             self.rotation_type_combo.currentData(),
             self.permutation_type_combo.currentData(),
+            self.continuous_rotation_checkbox.isChecked(),
         )
         self.accept()

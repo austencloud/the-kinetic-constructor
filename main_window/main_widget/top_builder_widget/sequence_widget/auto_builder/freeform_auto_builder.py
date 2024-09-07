@@ -2,7 +2,7 @@ from copy import deepcopy
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 
-from data.constants import BLUE, CLOCKWISE, COUNTER_CLOCKWISE, DASH, RED, STATIC
+from data.constants import BLUE, CLOCKWISE, COUNTER_CLOCKWISE, DASH, NO_ROT, RED, STATIC
 from .turn_intensity_manager import TurnIntensityManager
 import random
 
@@ -23,7 +23,12 @@ class FreeFormAutoBuilder:
         )
 
     def build_sequence(
-        self, beat_count: int, max_turn_intensity: int, level: int, max_turns: int
+        self,
+        beat_count: int,
+        max_turn_intensity: int,
+        level: int,
+        max_turns: int,
+        is_continuous_rot_dir,
     ):
         self.sequence = (
             self.sequence_widget.main_widget.json_manager.loader_saver.load_current_sequence_json()
@@ -33,17 +38,30 @@ class FreeFormAutoBuilder:
             max_turns, beat_count, level, max_turn_intensity
         )
         turns_blue, turns_red = turn_manager.allocate_turns_for_blue_and_red()
-
+        if is_continuous_rot_dir:
+            # Set an initial random rotation direction for both blue and red hands
+            blue_rot_dir = random.choice(["cw", "ccw"])
+            red_rot_dir = random.choice(["cw", "ccw"])
+        else:
+            blue_rot_dir = None
+            red_rot_dir = None
         length_of_sequence_upon_start = len(self.sequence) - 2
         for i in range(beat_count - length_of_sequence_upon_start):
             next_pictograph = self._generate_next_pictograph(
                 level,
                 turns_blue[i],
                 turns_red[i],
+                is_continuous_rot_dir,
+                blue_rot_dir,
+                red_rot_dir,
             )
 
-            self._update_dash_static_prop_rot_dirs(next_pictograph)
-
+            self._update_dash_static_prop_rot_dirs(
+                next_pictograph,
+                is_continuous_rot_dir,
+                blue_rot_dir,
+                red_rot_dir,
+            )
             self.sequence.append(next_pictograph)
             self.sequence_widget.create_new_beat_and_add_to_sequence(
                 next_pictograph, override_grow_sequence=True
@@ -59,17 +77,28 @@ class FreeFormAutoBuilder:
             beat_count, override_grow_sequence=True
         )
 
-    def _update_dash_static_prop_rot_dirs(self, next_pictograph_dict):
-        if (
-            next_pictograph_dict["blue_attributes"]["motion_type"] in [DASH, STATIC]
-            and next_pictograph_dict["blue_attributes"]["turns"] > 0
-        ):
-            self._set_default_prop_rot_dir(next_pictograph_dict, BLUE)
-        if (
-            next_pictograph_dict["red_attributes"]["motion_type"] in [DASH, STATIC]
-            and next_pictograph_dict["red_attributes"]["turns"] > 0
-        ):
-            self._set_default_prop_rot_dir(next_pictograph_dict, RED)
+    def _update_dash_static_prop_rot_dirs(
+        self, next_pictograph_dict, is_continuous_rot_dir, red_rot_dir, blue_rot_dir
+    ):
+        """
+        Update the prop rotation direction for dash or static motions.
+        If continuous rotation is enabled, enforce the continuous rotation direction.
+        """
+        if next_pictograph_dict["blue_attributes"]["motion_type"] in [DASH, STATIC]:
+            if is_continuous_rot_dir:
+                next_pictograph_dict["blue_attributes"]["prop_rot_dir"] = (
+                    blue_rot_dir
+                    if next_pictograph_dict["blue_attributes"]["turns"] > 0
+                    else NO_ROT
+                )
+
+        if next_pictograph_dict["red_attributes"]["motion_type"] in [DASH, STATIC]:
+            if is_continuous_rot_dir:
+                next_pictograph_dict["red_attributes"]["prop_rot_dir"] = (
+                    red_rot_dir
+                    if next_pictograph_dict["red_attributes"]["turns"] > 0
+                    else NO_ROT
+                )
 
     def _set_default_prop_rot_dir(self, next_pictograph_dict, color):
         # Set the prop rot dir randomly between CLOCKWISE and COUNTERCLOCKWISE
@@ -93,11 +122,24 @@ class FreeFormAutoBuilder:
             self.ori_calculator.calculate_end_orientation(next_pictograph_dict, RED)
         )
 
-    def _generate_next_pictograph(self, level: int, turn_blue: float, turn_red: float):
+    def _generate_next_pictograph(
+        self,
+        level: int,
+        turn_blue: float,
+        turn_red: float,
+        is_continuous_rot_dir,
+        blue_rot_dir,
+        red_rot_dir,
+    ):
         options = self.sequence_widget.top_builder_widget.sequence_builder.option_picker.option_getter.get_next_options(
             self.sequence
         )
         options = [deepcopy(option) for option in options]
+
+        if is_continuous_rot_dir:
+            options = self._filter_options_by_rotation(
+                options, blue_rot_dir, red_rot_dir
+            )
 
         last_beat = self.sequence[-1]
         chosen_option = random.choice(options)
@@ -116,6 +158,21 @@ class FreeFormAutoBuilder:
                 chosen_option, turn_blue, turn_red
             )
         return chosen_option
+
+    def _filter_options_by_rotation(
+        self, options: list[dict], blue_rot_dir, red_rot_dir
+    ) -> list[dict]:
+        """Filter options to match the rotation direction for both hands."""
+        filtered_options = []
+        for option in options:
+            if option["blue_attributes"]["prop_rot_dir"] in [
+                blue_rot_dir,
+                NO_ROT,
+            ] and option["red_attributes"]["prop_rot_dir"] in [red_rot_dir, NO_ROT]:
+                filtered_options.append(option)
+
+        # If no options match, fallback to the full list (could log a warning here)
+        return filtered_options if filtered_options else options
 
     def _apply_level_1_constraints(self, pictograph: dict) -> dict:
         pictograph["blue_attributes"]["turns"] = 0
