@@ -83,5 +83,17 @@ class AutoBuilder(QFrame):
     def resize_auto_builder(self):
         """Resize handler for the auto builder UI."""
         # Add any resize logic for components here if needed.
+        # resize the buttons
+        button_font_size = self.width() // 50
+        button_font = self.freeform_button.font()
+        button_font.setPointSize(button_font_size)
+        self.freeform_button.setFont(button_font)
+        self.circular_button.setFont(button_font)
+        # resize the title
+        title_font_size = self.width() // 40
+        title_font = self.title_label.font()
+        title_font.setPointSize(title_font_size)
+        self.title_label.setFont(title_font)
+        # resize the builder frames
         self.freeform_builder_frame._resize_freeform_auto_builder_frame()
         self.circular_builder_frame._resize_circular_auto_builder_frame()

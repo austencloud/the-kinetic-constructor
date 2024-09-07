@@ -41,7 +41,7 @@ class AuthorSection(FilterSectionBase):
         """Extract unique authors from all sequences."""
         authors = set()
         base_words = self.thumbnail_box_sorter.get_sorted_base_words("author")
-        for word, thumbnails, seq_length in base_words:
+        for _, thumbnails, _ in base_words:
             author = self.main_widget.metadata_extractor.get_sequence_author(
                 thumbnails[0]
             )

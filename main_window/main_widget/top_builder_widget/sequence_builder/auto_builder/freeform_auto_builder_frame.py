@@ -49,9 +49,9 @@ class FreeformAutoBuilderFrame(BaseAutoBuilderFrame):
 
     def _resize_freeform_auto_builder_frame(self):
         """Resize the frame based on the parent widget size."""
-        font = self.font()
+        # font = self.font()
         font_size = self.auto_builder.sequence_builder.width() // 30
-        font.setPointSize(font_size)
+        # font.setPointSize(font_size)
 
         widget_dicts: list[dict[str, QWidget]] = [
             self.labels,
@@ -62,7 +62,7 @@ class FreeformAutoBuilderFrame(BaseAutoBuilderFrame):
         ]
         for widget_dict in widget_dicts:
             for widget in widget_dict.values():
-                widget.setFont(font)
+                # widget.setFont(font)
                 widget.setStyleSheet(f"QWidget {{ font-size: {font_size}px; }}")
                 widget.updateGeometry()
                 widget.repaint()

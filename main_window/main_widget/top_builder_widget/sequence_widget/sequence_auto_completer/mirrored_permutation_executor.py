@@ -1,9 +1,11 @@
 from typing import TYPE_CHECKING
 from .permutation_executor_base import PermutationExecutor
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
-    from .sequence_auto_completer import SequenceAutoCompleter
-
+    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.circular_auto_builder import (
+        CircularAutoBuilder,
+    )
 # Define mirroring maps
 vertical_mirror_map = {"s": "s", "e": "w", "w": "e", "n": "n"}
 horizontal_mirror_map = {"s": "n", "n": "s", "e": "e", "w": "w"}
@@ -12,11 +14,12 @@ horizontal_mirror_map = {"s": "n", "n": "s", "e": "e", "w": "w"}
 class MirroredPermutationExecutor(PermutationExecutor):
     def __init__(
         self,
-        autocompleter: "SequenceAutoCompleter",
+        circular_auto_builder: "CircularAutoBuilder",
         color_swap_second_half: bool,
     ):
-        self.autocompleter = autocompleter
+        self.circular_auto_builder = circular_auto_builder
         self.color_swap_second_half = color_swap_second_half
+        self.validation_engine = circular_auto_builder.validation_engine
 
     def create_permutations(self, sequence: list[dict], vertical_or_horizontal: str):
         if not self.can_perform_mirrored_permutation(sequence):
@@ -32,7 +35,7 @@ class MirroredPermutationExecutor(PermutationExecutor):
         for i in range(sequence_length + 2):
             if i in [0, 1]:
                 continue
-            new_entry = self.create_new_mirrored_permutation_entry(
+            next_pictograph = self.create_new_mirrored_permutation_entry(
                 sequence,
                 last_entry,
                 next_beat_number + i - 2,
@@ -40,12 +43,21 @@ class MirroredPermutationExecutor(PermutationExecutor):
                 vertical_or_horizontal,
                 final_intended_sequence_length,
             )
-            new_entries.append(new_entry)
-            sequence.append(new_entry)
-            last_entry = new_entry
+            new_entries.append(next_pictograph)
+            sequence.append(next_pictograph)
 
-        self.autocompleter.json_manager.loader_saver.save_current_sequence(sequence)
-        self.autocompleter.beat_frame.populate_beat_frame_from_json(sequence)
+            sequence_widget = (
+                self.circular_auto_builder.top_builder_widget.sequence_widget
+            )
+            sequence_widget.create_new_beat_and_add_to_sequence(
+                next_pictograph, override_grow_sequence=True, update_word=False
+            )
+            self.validation_engine.validate_last_pictograph()
+            QApplication.processEvents()
+
+            last_entry = next_pictograph
+
+
 
     def determine_how_many_entries_to_add(self, sequence_length: int) -> int:
         return sequence_length
@@ -89,12 +101,12 @@ class MirroredPermutationExecutor(PermutationExecutor):
         }
 
         new_entry["blue_attributes"]["end_ori"] = (
-            self.autocompleter.json_manager.ori_calculator.calculate_end_orientation(
+            self.circular_auto_builder.json_manager.ori_calculator.calculate_end_orientation(
                 new_entry, "blue"
             )
         )
         new_entry["red_attributes"]["end_ori"] = (
-            self.autocompleter.json_manager.ori_calculator.calculate_end_orientation(
+            self.circular_auto_builder.json_manager.ori_calculator.calculate_end_orientation(
                 new_entry, "red"
             )
         )

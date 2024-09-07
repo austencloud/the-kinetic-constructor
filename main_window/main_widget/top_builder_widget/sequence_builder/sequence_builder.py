@@ -32,7 +32,6 @@ class SequenceBuilder(QTabWidget):
 
         # resize on tab change
         self.currentChanged.connect(self.resize_sequence_builder_tab_widget)
-        
 
     def resize_sequence_builder_tab_widget(self):
         self.manual_builder.resize_manual_builder()
