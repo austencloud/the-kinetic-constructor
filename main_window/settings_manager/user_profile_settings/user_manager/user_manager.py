@@ -43,7 +43,7 @@ class UserManager(QObject):
     def open_edit_users_dialog(self):
         if not self.user_profiles_menu:
             self.user_profiles_menu = (
-                self.user_profile_settings.settings_manager.main_window.menu_bar.user_profiles_menu
+                self.user_profile_settings.settings_manager.main_window.menu_bar_widget.menu_bar.user_profiles_menu
             )
         dialog = EditUserProfilesDialog(self)
         if dialog.exec():

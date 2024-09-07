@@ -9,10 +9,10 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 
+
 if TYPE_CHECKING:
-    from widgets.sequence_widget.beat_frame.layout_options_dialog import (
-        LayoutOptionsDialog,
-    )
+    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.layout_options_dialog import LayoutOptionsDialog
+
 
 
 class LayoutOptionsPanel(QWidget):

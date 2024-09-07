@@ -3,7 +3,7 @@
         "prop_type": "Staff",
         "background_type": "AuroraBorealis",
         "grow_sequence": true,
-        "current_tab": "dictionary"
+        "current_tab": "sequence_builder"
     },
     "image_export": {
         "include_start_position": false,
@@ -23,6 +23,9 @@
             "Doc Womp": {
                 "name": "Doc Womp",
                 "export_date": "8-25-2024"
+            },
+            "Betsy Dz": {
+                "name": "Betsy Dz"
             }
         },
         "current_note": "Created using The Kinetic Alphabet",
