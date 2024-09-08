@@ -136,7 +136,7 @@ class TempBeatFrame(BaseBeatFrame):
         self, current_sequence_json: list[dict[str, str]]
     ) -> None:
         self.start_pos_manager = (
-            self.main_widget.top_builder_widget.sequence_builder.start_pos_picker.start_pos_manager
+            self.main_widget.top_builder_widget.sequence_builder.manual_builder.start_pos_picker.start_pos_manager
         )
         self.sequence_builder = self.main_widget.top_builder_widget.sequence_builder
         if not current_sequence_json:
