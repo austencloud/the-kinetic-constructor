@@ -1,17 +1,8 @@
-import sys
-import logging
 from typing import TYPE_CHECKING
-import webbrowser
-from PyQt6.QtWidgets import (
-    QApplication,
-    QWidget,
-    QVBoxLayout,
-    QLabel,
-    QProgressBar,
-    QPushButton,
-)
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QProgressBar, QHBoxLayout
 from PyQt6.QtGui import QPixmap, QFont, QScreen
-from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtCore import Qt
+
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
@@ -29,58 +20,91 @@ class SplashScreen(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, False)
         self.setStyleSheet("background-color: white;")
 
-        # Main layout
-        layout = QVBoxLayout(self)
+        # Calculate the size of the splash screen (1/4 of the screen size)
+        screen_geometry = target_screen.geometry()
+        splash_screen_width = int(screen_geometry.width() // 2.5)
+        splash_screen_height = int(screen_geometry.height() // 2.5)
 
-        # Add image/logo to splash screen
-        splash_pix = QPixmap(get_images_and_data_path("images/splash_screen.png"))
-        logo_label = QLabel()
-        logo_label.setPixmap(
-            splash_pix.scaled(400, 300, Qt.AspectRatioMode.KeepAspectRatio)
-        )
-        layout.addWidget(logo_label, alignment=Qt.AlignmentFlag.AlignCenter)
+        # Set the splash screen size
+        self.setFixedSize(splash_screen_width, splash_screen_height)
+
+        # Layout for the splash screen (horizontal layout for left and right sections)
+        layout = QHBoxLayout(self)
+
+        # Left side (progress bar and text)
+        left_layout = QVBoxLayout()
 
         # Add loading message
-        self.message_label = QLabel("Initializing...")
-        self.message_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.message_label.setFont(QFont("Arial", 12))
-        self.message_label.setStyleSheet("color: black;")
-        layout.addWidget(self.message_label)
+        self.title_label = QLabel("The Kinetic Constructor")
+        title_label_font_size = int(splash_screen_height / 15)
+        self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.title_label.setFont(QFont("Monotype Corsiva", title_label_font_size))
+
+        # Add message label
+        currently_loading_label_font_size = int(splash_screen_height / 40)
+        self.currently_loading_label = QLabel("")
+        self.currently_loading_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.currently_loading_label.setFont(
+            QFont("Arial", currently_loading_label_font_size)
+        )
 
         # Add progress bar
         self.progress_bar = QProgressBar(self)
         self.progress_bar.setMaximum(100)
         self.progress_bar.setValue(0)
-        layout.addWidget(self.progress_bar)
 
         # Add clickable website link
-        self.website_label = QLabel(
-            "<a href='https://thekineticalphabet.com'>thekineticalphabet.com</a>"
+        self.info_label = QLabel("Created by Austen Cloud")
+        self.info_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.info_label.setFont(QFont("Arial", currently_loading_label_font_size))
+
+        left_layout.addStretch(1)
+        left_layout.addWidget(self.title_label)
+        left_layout.addStretch(1)
+        left_layout.addWidget(self.progress_bar)
+        left_layout.addStretch(1)
+        left_layout.addWidget(self.currently_loading_label)
+        left_layout.addStretch(1)
+        left_layout.addWidget(self.info_label)
+        left_layout.addStretch(1)
+
+        # Add the left layout to the main layout
+        layout.addLayout(left_layout)
+
+        # Right side (image/logo)
+        splash_pix = QPixmap(get_images_and_data_path("images/splash_screen.png"))
+
+        # Scale the image based on the screen size
+        scaled_splash_pix = splash_pix.scaled(
+            splash_screen_width // 2,
+            splash_screen_height,
+            Qt.AspectRatioMode.KeepAspectRatio,
         )
-        self.website_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.website_label.setFont(QFont("Arial", 10))
-        self.website_label.setStyleSheet("color: black;")
-        self.website_label.setOpenExternalLinks(True)  # Makes the link clickable
-        layout.addWidget(self.website_label)
+        logo_label = QLabel()
+        logo_label.setPixmap(scaled_splash_pix)
+
+        # Add the image to the right side of the layout
+        layout.addWidget(logo_label, alignment=Qt.AlignmentFlag.AlignRight)
 
         self._center_on_screen(target_screen)
         self.show()
 
     def _center_on_screen(self, target_screen: QScreen):
         """Center the splash screen on the target screen."""
+        screen_geometry = target_screen.geometry()
         self.setGeometry(
-            target_screen.geometry().x()
-            + (target_screen.geometry().width() - self.width()) // 2,
-            target_screen.geometry().y()
-            + (target_screen.geometry().height() - self.height()) // 2,
-            500,
-            500,
+            screen_geometry.x() + (screen_geometry.width() - self.width()) // 2,
+            screen_geometry.y() + (screen_geometry.height() - self.height()) // 2,
+            self.width(),
+            self.height(),
         )
 
     def update_progress(self, value, message=""):
         """Update progress bar and message."""
         self.progress_bar.setValue(value)
         if message:
-            self.message_label.setText(message)
+            self.currently_loading_label.setText(message)
 
-
+    def finish(self):
+        """Close the splash screen and show the main window."""
+        self.close()
