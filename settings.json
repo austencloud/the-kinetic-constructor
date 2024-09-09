@@ -75,6 +75,6 @@
             "current_auto_builder": "freeform"
         },
         "manual_builder": {},
-        "last_used_builder": "manual"
+        "last_used_builder": "auto"
     }
 }

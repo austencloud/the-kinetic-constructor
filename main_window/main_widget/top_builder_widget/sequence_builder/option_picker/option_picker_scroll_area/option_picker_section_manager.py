@@ -28,7 +28,7 @@ class OptionPickerSectionManager:
         self.pictograph_cache: dict[Letter, list[LetterType]] = {}
         self.ordered_section_types: list[LetterType] = []
         self.initialized = False
-        
+
     def initialize_sections(self) -> None:
         for letter_type in LetterType:
             self.get_section(letter_type)
@@ -93,4 +93,4 @@ class OptionPickerSectionManager:
             self.initialized = True
         for section in self.sections.values():
             section.show()
-            # section.resize_option_picker_section_widget()
+            section.resize_option_picker_section_widget()

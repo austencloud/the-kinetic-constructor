@@ -26,7 +26,7 @@ def main() -> None:
     main_window = MainWindow(profiler)
     main_window.show()
 
-    QTimer.singleShot(1000, lambda: splash_screen.finish(main_window))
+    QTimer.singleShot(0, lambda: splash_screen.finish(main_window))
 
     sys.exit(main_window.exec(app))
 
