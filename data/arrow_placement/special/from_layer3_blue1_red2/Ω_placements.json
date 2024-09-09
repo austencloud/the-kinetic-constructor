@@ -147,6 +147,9 @@
     "(s, 2.5, 2)": {
       "anti_from_layer2": [-55, 70],
       "static_from_layer1": [0, 15]
+    },
+    "(0, 0)": {
+      "anti_from_layer1": [25, -20]
     }
   }
 }

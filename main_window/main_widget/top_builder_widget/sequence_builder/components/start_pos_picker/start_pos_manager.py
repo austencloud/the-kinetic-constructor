@@ -38,9 +38,9 @@ class StartPosManager(QObject):
         """Shows options for the starting position."""
         start_pos = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
         for i, position_key in enumerate(start_pos):
-            self._add_start_position(position_key)
+            self._add_start_position_option_to_start_pos_frame(position_key)
 
-    def _add_start_position(self, position_key: str) -> None:
+    def _add_start_position_option_to_start_pos_frame(self, position_key: str) -> None:
         """Adds an option for the specified start position."""
         start_pos, end_pos = position_key.split("_")
         for (
@@ -65,11 +65,12 @@ class StartPosManager(QObject):
                     start_position_pictograph.updater.update_pictograph(pictograph_dict)
 
                     start_position_pictograph.view.mousePressEvent = partial(
-                        self.on_start_pos_clicked, start_position_pictograph
+                        self.add_start_pos_to_sequence,
+                        start_position_pictograph,
                     )
                     start_position_pictograph.start_to_end_pos_glyph.hide()
 
-    def on_start_pos_clicked(
+    def add_start_pos_to_sequence(
         self, clicked_start_option: BasePictograph, event: QWidget = None
     ) -> None:
         """Handle the start position click event."""
@@ -85,7 +86,9 @@ class StartPosManager(QObject):
             start_position_beat
         )
         self.manual_builder.last_beat = start_position_beat
-        beat_frame = self.manual_builder.sequence_builder.top_builder_widget.sequence_widget.beat_frame
+        beat_frame = (
+            self.manual_builder.sequence_builder.top_builder_widget.sequence_widget.beat_frame
+        )
         start_pos_view = beat_frame.start_pos_view
         beat_frame.selection_overlay.select_beat(start_pos_view)
 

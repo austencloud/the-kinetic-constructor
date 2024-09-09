@@ -101,7 +101,7 @@ class AdvancedStartPosPicker(QWidget):
         )
 
     def on_variation_selected(self, variation: "BasePictograph") -> None:
-        self.manual_builder.start_pos_picker.start_pos_manager.on_start_pos_clicked(
+        self.manual_builder.start_pos_picker.start_pos_manager.add_start_pos_to_sequence(
             variation
         )
 

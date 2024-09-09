@@ -3,6 +3,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 
 from data.constants import BLUE, CLOCKWISE, COUNTER_CLOCKWISE, DASH, NO_ROT, RED, STATIC
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import (
+    StartPositionBeat,
+)
 from .turn_intensity_manager import TurnIntensityManager
 import random
 
@@ -38,6 +41,13 @@ class FreeFormAutoBuilder:
             self.main_widget.json_manager.loader_saver.load_current_sequence_json()
         )
         self.modify_layout_for_chosen_number_of_beats(beat_count)
+
+        if len(self.sequence) == 1:
+            self.add_start_pos_pictograph()
+            self.sequence = (
+                self.main_widget.json_manager.loader_saver.load_current_sequence_json()
+            )
+
         turn_manager = TurnIntensityManager(
             max_turns, beat_count, level, max_turn_intensity
         )
@@ -75,6 +85,44 @@ class FreeFormAutoBuilder:
         self.top_builder_widget.sequence_builder.manual_builder.option_picker.update_option_picker(
             self.sequence
         )
+
+    def add_start_pos_pictograph(self):
+        start_pos_keys = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
+        # start_pos_keys = [
+        #     f"{prefix}{i}_{prefix}{i}"
+        #     for prefix in ["alpha", "beta", "gamma"]
+        #     for i in range(1, 5 if prefix != "gamma" else 9)
+        # ]
+        position_key = random.choice(start_pos_keys)
+        self._add_start_position_to_sequence(position_key)
+
+    def _add_start_position_to_sequence(self, position_key: str) -> None:
+        # get it from the main widget letters, amke a copy, and put it into the sequence
+        start_pos, end_pos = position_key.split("_")
+        letters = deepcopy(self.sequence_widget.main_widget.letters)
+        for (
+            _,
+            pictograph_dicts,
+        ) in letters.items():
+            for pictograph_dict in pictograph_dicts:
+                if (
+                    pictograph_dict["start_pos"] == start_pos
+                    and pictograph_dict["end_pos"] == end_pos
+                ):
+                    start_position_beat = StartPositionBeat(
+                        self.top_builder_widget.sequence_widget.beat_frame,
+                    )
+                    start_position_beat.updater.update_pictograph(
+                        deepcopy(pictograph_dict)
+                    )
+
+                    self.main_widget.json_manager.start_position_handler.set_start_position_data(
+                        start_position_beat
+                    )
+                    self.sequence_widget.beat_frame.start_pos_view.set_start_pos(
+                        start_position_beat
+                    )
+                    return
 
     def modify_layout_for_chosen_number_of_beats(self, beat_count):
         self.sequence_widget.beat_frame.layout_manager.configure_beat_frame(

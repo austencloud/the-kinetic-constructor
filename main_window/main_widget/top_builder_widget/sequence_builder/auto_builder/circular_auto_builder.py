@@ -9,6 +9,9 @@ from data.position_maps import (
 )
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import (
+    StartPositionBeat,
+)
 from main_window.main_widget.top_builder_widget.sequence_widget.sequence_auto_completer.mirrored_permutation_executor import (
     MirroredPermutationExecutor,
 )
@@ -51,13 +54,12 @@ class CircularAutoBuilder:
     ):
         if not self.sequence_widget:
             self.sequence_widget = self.top_builder_widget.sequence_widget
-        # Building the base sequence
+
         self.sequence = (
             self.main_widget.json_manager.loader_saver.load_current_sequence_json()
         )
 
         if is_continuous_rot_dir:
-            # Set an initial random rotation direction for both blue and red hands
             blue_rot_dir = random.choice(["cw", "ccw"])
             red_rot_dir = random.choice(["cw", "ccw"])
         else:
@@ -67,23 +69,20 @@ class CircularAutoBuilder:
 
         if len(self.sequence) == 1:
             self.add_start_pos_pictograph()
-            length_without_sequence_properties_or_start_pos = len(self.sequence) - 2
-        else:
-            length_without_sequence_properties_or_start_pos = len(self.sequence) - 2
+            self.sequence = (
+                self.main_widget.json_manager.loader_saver.load_current_sequence_json()
+            )
+        length_of_sequence_upon_start = len(self.sequence) - 2
 
         if permutation_type == "rotational":
             if rotation_type == "quartered":
                 word_length = length // 4
             elif rotation_type == "halved":
                 word_length = length // 2
-            available_range = (
-                word_length - length_without_sequence_properties_or_start_pos
-            )
+            available_range = word_length - length_of_sequence_upon_start
         elif permutation_type == "mirrored":
             word_length = length // 2
-            available_range = (
-                word_length - length_without_sequence_properties_or_start_pos
-            )
+            available_range = word_length - length_of_sequence_upon_start
 
         turn_manager = TurnIntensityManager(
             max_turns, word_length, level, max_turn_intensity
@@ -94,9 +93,7 @@ class CircularAutoBuilder:
 
         # Generate the initial segment of the sequence
         for i in range(available_range):
-            is_last_in_word = (
-                i == word_length - length_without_sequence_properties_or_start_pos - 1
-            )
+            is_last_in_word = i == word_length - length_of_sequence_upon_start - 1
 
             last_pictograph = self.sequence[-1]
             next_pictograph = self._generate_next_pictograph(
@@ -131,27 +128,40 @@ class CircularAutoBuilder:
         self._apply_permutations(self.sequence, permutation_type, rotation_type)
 
     def add_start_pos_pictograph(self):
-        # get one of the start positions from the default
-        start_pos = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
-        for i, position_key in enumerate(start_pos):
-            self._add_start_position_to_sequence(position_key)
+        start_pos_keys = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
+        # start_pos_keys = [
+        #     f"{prefix}{i}_{prefix}{i}"
+        #     for prefix in ["alpha", "beta", "gamma"]
+        #     for i in range(1, 5 if prefix != "gamma" else 9)
+        # ]
+        position_key = random.choice(start_pos_keys)
+        self._add_start_position_to_sequence(position_key)
 
     def _add_start_position_to_sequence(self, position_key: str) -> None:
         # get it from the main widget letters, amke a copy, and put it into the sequence
         start_pos, end_pos = position_key.split("_")
+        letters = deepcopy(self.sequence_widget.main_widget.letters)
         for (
-            letter,
+            _,
             pictograph_dicts,
-        ) in self.sequence_widget.main_widget.letters.items():
+        ) in letters.items():
             for pictograph_dict in pictograph_dicts:
                 if (
                     pictograph_dict["start_pos"] == start_pos
                     and pictograph_dict["end_pos"] == end_pos
                 ):
-                    pictograph_dict = deepcopy(pictograph_dict)
-                    self.sequence.append(pictograph_dict)
-                    self.sequence_widget.create_new_beat_and_add_to_sequence(
-                        pictograph_dict, override_grow_sequence=True
+                    start_position_beat = StartPositionBeat(
+                        self.top_builder_widget.sequence_widget.beat_frame,
+                    )
+                    start_position_beat.updater.update_pictograph(
+                        deepcopy(pictograph_dict)
+                    )
+
+                    self.main_widget.json_manager.start_position_handler.set_start_position_data(
+                        start_position_beat
+                    )
+                    self.sequence_widget.beat_frame.start_pos_view.set_start_pos(
+                        start_position_beat
                     )
                     return
 

@@ -56,16 +56,7 @@ class MotionTypeLabelWidget(QWidget):
         """Update the display based on the motion type."""
         self.label.setText(motion_type.capitalize())
         turns_box_size = self.turns_widget.turns_box.size()
-        border_thickness = turns_box_size.height() // 100
-        # if motion_type in [PRO, ANTI, FLOAT]:
-        #     self.label.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        #     self.label.setStyleSheet(f"""
-        #         padding: 5px 10px;
-        #         border: {border_thickness}px solid black;
-        #         border-radius: 5px;
-        #         background-color: white;
-        #     """)
-        # elif motion_type in [DASH, STATIC]:
+
         self.label.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
         self.label.setStyleSheet(f"""
             padding: 5px 10px;
