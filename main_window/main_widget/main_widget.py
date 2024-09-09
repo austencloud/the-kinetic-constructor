@@ -33,6 +33,7 @@ from ..main_widget.special_placement_loader import SpecialPlacementLoader
 from PyQt6.QtWidgets import QTabWidget
 
 if TYPE_CHECKING:
+    from splash_screen import SplashScreen
     from main import MainWindow
 import json
 
@@ -40,20 +41,40 @@ from utilities.path_helpers import get_images_and_data_path
 
 
 class MainWidget(QTabWidget):
-    def __init__(self, main_window: "MainWindow") -> None:
+    def __init__(self, main_window: "MainWindow", splash_screen: "SplashScreen" = None) -> None:
         super().__init__(main_window)
         self.main_window = main_window
         self.settings_manager = main_window.settings_manager
+        
+        # Pass the splash_screen reference
+        self.splash_screen = splash_screen
+
+        self.splash_screen.update_progress(5, "Setting up pictograph cache...")
         self._setup_pictograph_cache()
+        
+        self.splash_screen.update_progress(15, "Setting prop type...")
         self._set_prop_type()
+        
+        self.splash_screen.update_progress(25, "Setting up default modes...")
         self._setup_default_modes()
+        
+        self.splash_screen.update_progress(35, "Loading letters...")
         self._setup_letters()
+        
+        self.splash_screen.update_progress(50, "Setting up components...")
         self._setup_components()
+        
+        self.splash_screen.update_progress(70, "Setting up special placements...")
+        self._setup_special_placements()
+
+        self.splash_screen.update_progress(85, "Finalizing setup...")
         self.setStyleSheet(get_tab_stylesheet())
-        self.webcam_initialized = False  # Add an initialization flag
+        self.webcam_initialized = False
         self.initialized = True
         self.currentChanged.connect(self.on_tab_changed)
         self.tabBar().setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        
+        self.splash_screen.update_progress(100, "Initialization complete.")
 
     def on_tab_changed(self, index):
         if index == self.builder_tab_index:

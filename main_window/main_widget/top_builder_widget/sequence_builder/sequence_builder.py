@@ -58,16 +58,11 @@ class SequenceBuilder(QTabWidget):
             self.main_widget.settings_manager.builder_settings.set_last_used_builder(
                 "auto"
             )
-            # Save which auto builder is open
 
-        self.resize_current_tab()
+        self.resize_sequence_builder_tab_widget()
 
     def resize_sequence_builder_tab_widget(self):
         self.manual_builder.resize_manual_builder()
         self.auto_builder.resize_auto_builder()
 
-    def resize_current_tab(self):
-        if self.currentWidget() == self.manual_builder:
-            self.manual_builder.resize_manual_builder()
-        elif self.currentWidget() == self.auto_builder:
-            self.auto_builder.resize_auto_builder()
+
