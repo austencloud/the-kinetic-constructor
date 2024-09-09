@@ -1,6 +1,8 @@
 {
   "Ω": {
-    "(0, 0)": {},
+    "(0, 0)": {
+      "anti_from_layer1": [25, -20]
+    },
     "(o, 0, 0.5)": {},
     "(o, 0, 1)": {
       "static_from_layer1_rot_angle_override": true,

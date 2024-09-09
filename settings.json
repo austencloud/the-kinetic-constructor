@@ -37,7 +37,7 @@
         "glyph_visibility": {
             "VTG": false,
             "TKA": true,
-            "Elemental": false,
+            "Elemental": true,
             "EndPosition": false
         },
         "grid_visibility": {
@@ -55,13 +55,13 @@
     "auto_builder": {
         "circular_auto_builder": {
             "sequence_type": "circular",
-            "sequence_length": 20,
-            "max_turns": 20,
-            "max_turn_intensity": 2.0,
-            "sequence_level": 3,
+            "sequence_length": 16,
+            "max_turns": 30,
+            "max_turn_intensity": 1.0,
+            "sequence_level": 2,
             "rotation_type": "quartered",
             "permutation_type": "rotational",
-            "continuous_rotation": true
+            "continuous_rotation": false
         },
         "freeform_auto_builder": {
             "sequence_type": "freeform",

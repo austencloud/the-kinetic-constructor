@@ -8,6 +8,18 @@
     "(s, 1, 1)": {
       "static_rot_angle_override": true,
       "static": [-95, -10]
+    },
+    "(s, 0, 3)": {
+      "static": [-20, 0],
+      "static_rot_angle_override": true
+    },
+    "(s, 3, 3)": {
+      "static_rot_angle_override": true,
+      "static": [-20, 0]
+    },
+    "(s, 2, 1)": {
+      "static_rot_angle_override": true,
+      "static": [-100, 0]
     }
   }
 }
