@@ -11,6 +11,7 @@ from PyQt6.QtCore import QTimer
 from main_window.main_window import MainWindow
 from profiler import Profiler
 from splash_screen import SplashScreen
+from main_window.settings_manager.settings_manager import SettingsManager
 
 
 def main() -> None:
@@ -23,14 +24,17 @@ def main() -> None:
     screens = QGuiApplication.screens()
     target_screen = screens[1] if dev_environment and len(screens) > 1 else screens[0]
 
-    # Create and show the splash screen
-    splash_screen = SplashScreen(target_screen)
+    # Initialize settings manager before showing splash screen
+    settings_manager = SettingsManager(None)  # No main_window yet
+
+    # Create and show the splash screen, passing the settings manager to set the background
+    splash_screen = SplashScreen(target_screen, settings_manager)
     splash_screen.show()
     app.processEvents()  # Allows the splash screen to be rendered properly
 
     profiler = Profiler()
 
-    # Create the main window and pass in the splash screen
+    # Create the main window and pass in the splash screen and settings manager
     main_window = MainWindow(profiler, splash_screen)
 
     # Finalize splash screen once initialization is complete

@@ -1,103 +1,151 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QProgressBar, QHBoxLayout
-from PyQt6.QtGui import QPixmap, QFont, QScreen
+from PyQt6.QtGui import QPixmap, QFont, QFontMetrics, QScreen, QPainter
 from PyQt6.QtCore import Qt
 
+from main_window.main_widget.dictionary_widget.dictionary_browser.rainbow_progress_bar import (
+    RainbowProgressBar,
+)
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
     from main_window.main_window import MainWindow
+    from main_window.settings_manager.settings_manager import SettingsManager
 
 
 class SplashScreen(QWidget):
-    def __init__(self, target_screen: QScreen):
+    def __init__(self, target_screen: QScreen, settings_manager: "SettingsManager"):
         super().__init__()
+        self.target_screen = target_screen
+        self.settings_manager = settings_manager
 
-        # Set up splash screen window
+
+        self._setup_window_properties()
+        self._create_components()
+        self.background_manager = (
+            self.settings_manager.global_settings.setup_background_manager(
+                self, is_splash_screen=True
+            )
+        )
+        self._setup_layout()
+        self._center_on_screen()
+        self.show()
+
+    def _setup_window_properties(self):
+        """Set window flags, background, and size."""
         self.setWindowFlags(
             Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.FramelessWindowHint
         )
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, False)
-        self.setStyleSheet("background-color: white;")
 
-        # Calculate the size of the splash screen (1/4 of the screen size)
-        screen_geometry = target_screen.geometry()
-        splash_screen_width = int(screen_geometry.width() // 2.5)
-        splash_screen_height = int(screen_geometry.height() // 2.5)
+        screen_geometry = self.target_screen.geometry()
+        self.splash_screen_width = int(screen_geometry.width() // 2.5)
+        self.splash_screen_height = int(screen_geometry.height() // 2.5)
+        self.setFixedSize(self.splash_screen_width, self.splash_screen_height)
 
-        # Set the splash screen size
-        self.setFixedSize(splash_screen_width, splash_screen_height)
+    def _create_components(self):
+        """Create the components used in the splash screen."""
 
-        # Layout for the splash screen (horizontal layout for left and right sections)
-        layout = QHBoxLayout(self)
+        self.title_label = self._create_title_label()
+        self.currently_loading_label = self._create_label("")
+        self.created_by_label = self._create_label("Created by Austen Cloud")
 
-        # Left side (progress bar and text)
-        left_layout = QVBoxLayout()
-
-        # Add loading message
-        self.title_label = QLabel("The Kinetic Constructor")
-        title_label_font_size = int(splash_screen_height / 15)
-        self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.title_label.setFont(QFont("Monotype Corsiva", title_label_font_size))
-
-        # Add message label
-        currently_loading_label_font_size = int(splash_screen_height / 40)
-        self.currently_loading_label = QLabel("")
-        self.currently_loading_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.currently_loading_label.setFont(
-            QFont("Arial", currently_loading_label_font_size)
-        )
-
-        # Add progress bar
-        self.progress_bar = QProgressBar(self)
+        self.progress_bar = RainbowProgressBar(self)
         self.progress_bar.setMaximum(100)
         self.progress_bar.setValue(0)
+        progress_bar_font = self.progress_bar.percentage_label.font()
+        progress_bar_font.setFamily("Monotype Corsiva")  # Set font to Monotype Corsiva
+        progress_bar_font.setPointSize(self.width() // 40)
+        self.progress_bar.percentage_label.setFont(progress_bar_font)
+        self.progress_bar.loading_label.setFont(progress_bar_font)
 
-        # Add clickable website link
-        self.info_label = QLabel("Created by Austen Cloud")
-        self.info_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.info_label.setFont(QFont("Arial", currently_loading_label_font_size))
+        # Logo (image) setup
+        self.logo_label = self._setup_logo()
 
+    def _setup_layout(self):
+        """Set up the layout, adding components to the appropriate positions."""
+        layout = QVBoxLayout(self)
+        top_layout, bottom_layout = self._create_layouts()
+
+        # Left side (progress and text)
+        left_layout = QVBoxLayout()
         left_layout.addStretch(1)
         left_layout.addWidget(self.title_label)
         left_layout.addStretch(1)
-        left_layout.addWidget(self.progress_bar)
+        left_layout.addWidget(self.created_by_label)
         left_layout.addStretch(1)
         left_layout.addWidget(self.currently_loading_label)
         left_layout.addStretch(1)
-        left_layout.addWidget(self.info_label)
-        left_layout.addStretch(1)
 
-        # Add the left layout to the main layout
-        layout.addLayout(left_layout)
+        top_layout.addLayout(left_layout)
 
         # Right side (image/logo)
+        top_layout.addWidget(self.logo_label, alignment=Qt.AlignmentFlag.AlignRight)
+
+        # Add the progress bar at the bottom
+        bottom_layout.addWidget(self.progress_bar)
+
+        layout.addLayout(top_layout)
+        layout.addLayout(bottom_layout)
+
+    def _create_layouts(self):
+        """Create the top and bottom layouts."""
+        top_layout = QHBoxLayout()  # For left (text/progress) and right (logo)
+        bottom_layout = QHBoxLayout()  # For the progress bar
+        return top_layout, bottom_layout
+
+    def _create_title_label(self) -> QLabel:
+        """Create the title label with Monotype Corsiva and manage its font size."""
+        title_font = QFont("Monotype Corsiva", self.splash_screen_height // 15)
+        title_label = QLabel("The Kinetic Constructor")
+        title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title_label.setFont(title_font)
+
+        # Ensure title does not exceed allotted space using font metrics
+        font_metrics = QFontMetrics(title_font)
+        if font_metrics.horizontalAdvance(title_label.text()) > (
+            self.splash_screen_width // 2
+        ):
+            title_font.setPointSize(title_font.pointSize() - 2)
+            title_label.setFont(title_font)
+
+        return title_label
+
+    def _create_label(self, text: str) -> QLabel:
+        """Helper to create a generic label."""
+        label = QLabel(text)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        label.setFont(QFont("Arial", self.splash_screen_height // 40))
+        return label
+
+    def _setup_logo(self) -> QLabel:
+        """Set up the right-side logo image."""
         splash_pix = QPixmap(get_images_and_data_path("images/splash_screen.png"))
 
         # Scale the image based on the screen size
         scaled_splash_pix = splash_pix.scaled(
-            splash_screen_width // 2,
-            splash_screen_height,
+            self.splash_screen_width // 2,
+            self.splash_screen_height,
             Qt.AspectRatioMode.KeepAspectRatio,
         )
         logo_label = QLabel()
         logo_label.setPixmap(scaled_splash_pix)
+        return logo_label
 
-        # Add the image to the right side of the layout
-        layout.addWidget(logo_label, alignment=Qt.AlignmentFlag.AlignRight)
-
-        self._center_on_screen(target_screen)
-        self.show()
-
-    def _center_on_screen(self, target_screen: QScreen):
+    def _center_on_screen(self):
         """Center the splash screen on the target screen."""
-        screen_geometry = target_screen.geometry()
+        screen_geometry = self.target_screen.geometry()
         self.setGeometry(
             screen_geometry.x() + (screen_geometry.width() - self.width()) // 2,
             screen_geometry.y() + (screen_geometry.height() - self.height()) // 2,
             self.width(),
             self.height(),
         )
+
+    def paintEvent(self, event):
+        """Handle painting the custom background using the background manager."""
+        painter = QPainter(self)
+        self.background_manager.paint_background(self, painter)
 
     def update_progress(self, value, message=""):
         """Update progress bar and message."""

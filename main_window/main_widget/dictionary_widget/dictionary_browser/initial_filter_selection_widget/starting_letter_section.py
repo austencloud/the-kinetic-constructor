@@ -120,13 +120,13 @@ class StartingLetterSection(FilterSectionBase):
                 num_words += 1
 
                 percentage = int((num_words / total_sequences) * 100)
-                self.loading_progress_bar.setValue(percentage)
+                self.progress_bar.setValue(percentage)
                 self.browser.number_of_currently_displayed_words_label.setText(
                     f"Number of words: {num_words}"
                 )
                 QApplication.processEvents()
 
-            self.loading_progress_bar.setVisible(False)
+            self.progress_bar.setVisible(False)
 
             self.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
                 self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
