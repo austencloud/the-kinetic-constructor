@@ -1,5 +1,13 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QProgressBar, QHBoxLayout
+from PyQt6.QtWidgets import (
+    QWidget,
+    QVBoxLayout,
+    QLabel,
+    QProgressBar,
+    QHBoxLayout,
+    QSizePolicy,
+    QSpacerItem,
+)
 from PyQt6.QtGui import QPixmap, QFont, QFontMetrics, QScreen, QPainter
 from PyQt6.QtCore import Qt
 
@@ -47,7 +55,15 @@ class SplashScreen(QWidget):
 
         self.title_label = self._create_title_label()
         self.currently_loading_label = self._create_label("Importing modules...")
-        self.created_by_label = self._create_label("Created by Austen Cloud")
+        self.created_by_label = QLabel("Created by Austen Cloud")
+        self.created_by_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        created_by_font = QFont("Cambria", self.splash_screen_height // 40)
+        created_by_font.setBold(True)
+        self.created_by_label.setFont(created_by_font)
+
+        # set created by label to bold
+        created_by_font = self.created_by_label.font()
+        created_by_font.setBold(True)
 
         self.progress_bar = RainbowProgressBar(self)
         self.progress_bar.setMaximum(100)
@@ -56,7 +72,7 @@ class SplashScreen(QWidget):
         progress_bar_font.setFamily("Monotype Corsiva")  # Set font to Monotype Corsiva
         progress_bar_font.setPointSize(self.width() // 40)
         self.progress_bar.percentage_label.setFont(progress_bar_font)
-        self.progress_bar.loading_label.setFont(progress_bar_font)
+        self.progress_bar.loading_label.hide()
 
         # Logo (image) setup
         self.logo_label = self._setup_logo()
@@ -64,6 +80,8 @@ class SplashScreen(QWidget):
     def _setup_layout(self):
         """Set up the layout, adding components to the appropriate positions."""
         layout = QVBoxLayout(self)
+        
+        # Create the top layout (for text and logo)
         top_layout, bottom_layout = self._create_layouts()
 
         # Left side (progress and text)
@@ -81,11 +99,26 @@ class SplashScreen(QWidget):
         # Right side (image/logo)
         top_layout.addWidget(self.logo_label, alignment=Qt.AlignmentFlag.AlignRight)
 
+        # Add the top layout to the main layout
+        layout.addLayout(top_layout)
+
+        # Add a QSpacerItem to push the progress bar to the bottom
+        spacer_height = self.height() // 10
+        layout.addSpacerItem(
+            QSpacerItem(
+                20,
+                spacer_height,
+                QSizePolicy.Policy.Minimum,
+                QSizePolicy.Policy.Expanding,
+            )
+        )
+
         # Add the progress bar at the bottom
         bottom_layout.addWidget(self.progress_bar)
 
-        layout.addLayout(top_layout)
+        # Add the bottom layout (progress bar) to the main layout
         layout.addLayout(bottom_layout)
+
 
     def _create_layouts(self):
         """Create the top and bottom layouts."""
@@ -95,7 +128,7 @@ class SplashScreen(QWidget):
 
     def _create_title_label(self) -> QLabel:
         """Create the title label with Monotype Corsiva and manage its font size."""
-        title_font = QFont("Monotype Corsiva", self.splash_screen_height // 15)
+        title_font = QFont("Monotype Corsiva", self.splash_screen_height // 10)
         title_label = QLabel("The\nKinetic\nConstructor")
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title_label.setFont(title_font)
@@ -118,17 +151,27 @@ class SplashScreen(QWidget):
         return label
 
     def _setup_logo(self) -> QLabel:
-        """Set up the right-side logo image."""
+        """Set up the right-side logo image with square dimensions."""
+        # Load the image
         splash_pix = QPixmap(get_images_and_data_path("images/splash_screen.png"))
 
-        # Scale the image based on the screen size
+        # Get the available width and height for the logo
+        available_width = self.splash_screen_width // 2
+        available_height = self.splash_screen_height
+
+        # Scale the pixmap to fit within the available height while keeping aspect ratio
         scaled_splash_pix = splash_pix.scaled(
-            self.splash_screen_width // 2,
-            self.splash_screen_height,
+            available_width,
+            available_height,
             Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
         )
+
+        # Create QLabel for the image
         logo_label = QLabel()
         logo_label.setPixmap(scaled_splash_pix)
+        logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        logo_label.setMaximumSize(available_width, available_height)
         return logo_label
 
     def _center_on_screen(self):

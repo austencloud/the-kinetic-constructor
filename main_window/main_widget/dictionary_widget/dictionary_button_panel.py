@@ -7,13 +7,21 @@ from PyQt6.QtWidgets import (
     QMessageBox,
 )
 from PyQt6.QtCore import QSize, Qt
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QPixmap
 
-from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame import TempBeatFrame
+from main_window.main_widget.dictionary_widget.full_screen_image_overlay import (
+    FullScreenImageOverlay,
+)
+from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame import (
+    TempBeatFrame,
+)
+from main_window.main_widget.main_widget_dimmer import MainWidgetDimmer
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from main_window.main_widget.dictionary_widget.dictionary_preview_area import DictionaryPreviewArea
+    from main_window.main_widget.dictionary_widget.dictionary_preview_area import (
+        DictionaryPreviewArea,
+    )
 
 
 class DictionaryButtonPanel(QWidget):
@@ -55,14 +63,13 @@ class DictionaryButtonPanel(QWidget):
                     self.preview_area.current_thumbnail_box.current_index,
                 ),
             },
-            # "delete_word": {
-            #     "icon": "delete.svg",
-            #     "tooltip": "Delete Word",
-            #     "action": lambda: self.deletion_handler.delete_word(
-            #         self.preview_area.word_label.word
-            #     ),
-            # },
+            "view_full_screen": {
+                "icon": "eye.svg",  # Eye icon for full screen
+                "tooltip": "View Full Screen",
+                "action": self.view_full_screen,
+            },
         }
+
         self.layout.addStretch(2)
         for key, data in buttons_data.items():
             icon_path = get_images_and_data_path(
@@ -81,6 +88,28 @@ class DictionaryButtonPanel(QWidget):
             button.setIconSize(QSize(icon_size, icon_size))
             button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.layout.addStretch(1)
+
+    def view_full_screen(self):
+        """Display the current image in full screen mode."""
+        current_thumbnail = self.preview_area.get_thumbnail_at_current_index()
+        if current_thumbnail:
+            pixmap = QPixmap(current_thumbnail)
+
+            # Show dimmer for the main widget
+            # self.main_widget_dimmer = MainWidgetDimmer(self.preview_area.main_widget)
+            # self.main_widget_dimmer.show()
+
+            # Show the image using the FullScreenImageOverlay
+            full_screen_overlay = FullScreenImageOverlay(
+                self.preview_area.main_widget, pixmap
+            )
+            full_screen_overlay.show()
+
+            # Connect the overlay close event to also hide the dimmer
+            # full_screen_overlay.destroyed.connect(self.main_widget_dimmer.close)
+
+        else:
+            QMessageBox.warning(self, "No Image", "Please select an image first.")
 
     def edit_sequence(self):
         if not hasattr(self, "sequence_populator"):

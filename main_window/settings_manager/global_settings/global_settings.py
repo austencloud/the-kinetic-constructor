@@ -86,7 +86,7 @@ class GlobalSettings:
         return None
 
     def update_main_widget_font_colors(self, bg_type):
-        font = QFont()
+        sequence_builder = self.main_widget.top_builder_widget.sequence_builder
 
         self.main_widget.top_builder_widget.sequence_widget.current_word_label.setStyleSheet(
             f"color: {self.get_font_color(bg_type)};"
@@ -94,15 +94,14 @@ class GlobalSettings:
         self.main_widget.top_builder_widget.sequence_widget.difficulty_label.setStyleSheet(
             f"color: {self.get_font_color(bg_type)};"
         )
-        self.main_widget.top_builder_widget.sequence_builder.manual_builder.start_pos_picker.choose_your_start_pos_label.setStyleSheet(
+        sequence_builder.manual_builder.start_pos_picker.choose_your_start_pos_label.setStyleSheet(
             f"color: {self.get_font_color(bg_type)};"
         )
-        # update the auto builder fonts, both circular and freeform
 
-        self.main_widget.top_builder_widget.sequence_builder.auto_builder.freeform_builder_frame.update_font_colors(
+        sequence_builder.auto_builder.freeform_builder_frame.update_font_colors(
             self.get_font_color(bg_type)
         )
-        self.main_widget.top_builder_widget.sequence_builder.auto_builder.circular_builder_frame.update_font_colors(
+        sequence_builder.auto_builder.circular_builder_frame.update_font_colors(
             self.get_font_color(bg_type)
         )
 

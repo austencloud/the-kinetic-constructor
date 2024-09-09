@@ -219,7 +219,8 @@ class MainWidget(QTabWidget):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        self.main_window.geometry_manager.set_dimensions()
+        # self.main_window.geometry_manager.set_dimensions()
+        # self.main_window.showMaximized()
 
     def apply_background(self):
         self.background_manager = (
@@ -252,3 +253,6 @@ class MainWidget(QTabWidget):
                 current_sequence
             )
             self.top_builder_widget.sequence_builder.manual_builder.option_picker.update_option_picker()
+
+    def get_tab_bar_height(self):
+        return self.tabBar().height()

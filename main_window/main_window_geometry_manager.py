@@ -4,7 +4,7 @@ from PyQt6.QtGui import QGuiApplication
 
 
 if TYPE_CHECKING:
-    from main import MainWindow
+    from main_window.main_window import MainWindow
 
 
 class MainWindowGeometryManager:
@@ -29,3 +29,5 @@ class MainWindowGeometryManager:
         )
 
         self.window.setGeometry(x, y, window_width, window_height)
+        # Finally, maximize the window on the selected screen
+        # self.window.showMaximized()

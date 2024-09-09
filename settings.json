@@ -2,8 +2,8 @@
     "global": {
         "prop_type": "Staff",
         "background_type": "Aurora",
-        "grow_sequence": false,
-        "current_tab": "dictionary"
+        "grow_sequence": true,
+        "current_tab": "sequence_builder"
     },
     "image_export": {
         "include_start_position": false,
@@ -48,7 +48,7 @@
         "sort_method": "date_added"
     },
     "sequence_layout": {
-        "grow_sequence": false,
+        "grow_sequence": true,
         "num_beats": 16,
         "layout_option": "4 x 4"
     },
@@ -56,11 +56,11 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 32,
+                "sequence_length": 16,
                 "max_turns": 30,
                 "max_turn_intensity": 1.0,
-                "sequence_level": 1,
-                "rotation_type": "halved",
+                "sequence_level": 2,
+                "rotation_type": "quartered",
                 "permutation_type": "rotational",
                 "continuous_rotation": true
             },
