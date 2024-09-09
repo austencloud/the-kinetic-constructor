@@ -166,6 +166,10 @@
     },
     "(s, 3, 2)": {
       "blue": [5, -40]
+    },
+    "(cw, 1.5, 0)": {
+      "swap_beta_e_nonradial_blue_dash_n_red_dash_s": true,
+      "red": [35, 0]
     }
   }
 }

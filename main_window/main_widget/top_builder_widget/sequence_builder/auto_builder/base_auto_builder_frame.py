@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import (
     QFrame,
-    QVBoxLayout,
     QLabel,
     QComboBox,
     QSpinBox,
@@ -24,7 +23,7 @@ class BaseAutoBuilderFrame(QFrame):
         self.auto_builder = auto_builder
         self.builder_type = builder_type
         self.auto_builder_settings = (
-            auto_builder.main_widget.main_window.settings_manager.auto_builder
+            auto_builder.main_widget.main_window.settings_manager.builder_settings.auto_builder
         )
 
         # Widget dictionaries

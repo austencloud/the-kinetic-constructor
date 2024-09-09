@@ -7,7 +7,6 @@ from .option_picker_section_widget import OptionPickerSectionWidget
 if TYPE_CHECKING:
 
     from .option_picker_scroll_area import OptionPickerScrollArea
-    from ...sequence_builder import SequenceBuilder
 
 
 class OptionPickerSectionManager:

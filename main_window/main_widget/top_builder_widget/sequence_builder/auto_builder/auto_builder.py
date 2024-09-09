@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (
     QStackedWidget,
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont, QCursor
+from PyQt6.QtGui import  QCursor
 from typing import TYPE_CHECKING
 
 from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.circular_auto_builder_frame import (
@@ -39,7 +39,6 @@ class AutoBuilder(QFrame):
         # Title for the AutoBuilder
         self.title_label = QLabel("Auto Builder")
         self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.title_label.setFont(QFont("Arial", 14, QFont.Weight.Bold))
         self.layout.addWidget(self.title_label)
 
         # Button layout
@@ -72,13 +71,34 @@ class AutoBuilder(QFrame):
         self.builder_frame_container.addWidget(self.freeform_builder_frame)
         self.builder_frame_container.addWidget(self.circular_builder_frame)
 
+        self.current_auto_builder = None
+
+    def load_last_used_auto_builder(self, builder_type: str):
+        """Load the last used auto builder (Freeform or Circular)."""
+        if builder_type == "freeform":
+            self.open_freeform_builder()
+        elif builder_type == "circular":
+            self.open_circular_builder()
+
+    def get_current_auto_builder_type(self) -> str:
+        """Return the currently open auto builder type."""
+        return self.current_auto_builder
+
     def open_freeform_builder(self):
         """Switch to Freeform Auto Builder."""
+        self.current_auto_builder = "freeform"
         self.builder_frame_container.setCurrentWidget(self.freeform_builder_frame)
+        self.main_widget.settings_manager.builder_settings.auto_builder.update_current_auto_builder(
+            self.current_auto_builder
+        )
 
     def open_circular_builder(self):
         """Switch to Circular Auto Builder."""
+        self.current_auto_builder = "circular"
         self.builder_frame_container.setCurrentWidget(self.circular_builder_frame)
+        self.main_widget.settings_manager.builder_settings.auto_builder.update_current_auto_builder(
+            self.current_auto_builder
+        )
 
     def resize_auto_builder(self):
         """Resize handler for the auto builder UI."""

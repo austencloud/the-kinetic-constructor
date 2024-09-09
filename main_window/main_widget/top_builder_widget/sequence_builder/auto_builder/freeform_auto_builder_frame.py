@@ -1,15 +1,6 @@
 from PyQt6.QtWidgets import (
-    QFrame,
-    QVBoxLayout,
-    QLabel,
-    QComboBox,
-    QSpinBox,
-    QCheckBox,
-    QPushButton,
-    QGridLayout,
     QWidget,
 )
-from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
 from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.base_auto_builder_frame import (
@@ -21,9 +12,6 @@ from .freeform_auto_builder import FreeFormAutoBuilder
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.auto_builder import (
         AutoBuilder,
-    )
-    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
-        SequenceWidget,
     )
 
 

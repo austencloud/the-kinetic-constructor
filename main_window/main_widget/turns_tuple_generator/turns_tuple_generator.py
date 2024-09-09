@@ -1,6 +1,6 @@
 from functools import lru_cache
 from typing import Union
-from Enums.Enums import LetterType, Letter
+from Enums.Enums import LetterType
 
 from Enums.letters import LetterConditions
 from data.constants import *

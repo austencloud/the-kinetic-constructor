@@ -1,56 +1,46 @@
 import sys
 import logging
-from PyQt6.QtWidgets import QApplication, QSplashScreen
-from PyQt6.QtGui import QPixmap, QGuiApplication, QScreen
-from PyQt6.QtCore import Qt, QTimer
-from main_window.main_window import MainWindow
-from utilities.path_helpers import get_images_and_data_path
-from profiler import Profiler
 
+logging.basicConfig(level=logging.WARNING)
+logging.getLogger("matplotlib").setLevel(logging.WARNING)
 logging.getLogger("PIL").setLevel(logging.WARNING)
+
+from PyQt6.QtWidgets import QApplication
+from PyQt6.QtGui import QGuiApplication
+from PyQt6.QtCore import QTimer
+from main_window.main_window import MainWindow
+from profiler import Profiler
+from splash_screen import SplashScreen
+from main_window.settings_manager.settings_manager import SettingsManager
 
 
 def main() -> None:
+    logging.basicConfig(level=logging.WARNING)
+    logging.getLogger("matplotlib").setLevel(logging.WARNING)
+    logging.getLogger("PIL").setLevel(logging.WARNING)
+
     app = QApplication(sys.argv)
-    screens = QGuiApplication.screens()
     dev_environment = not getattr(sys, "frozen", False)
+    screens = QGuiApplication.screens()
     target_screen = screens[1] if dev_environment and len(screens) > 1 else screens[0]
 
-    app.processEvents()
+    # Initialize settings manager before showing splash screen
+    settings_manager = SettingsManager(None)  # No main_window yet
+
+    # Create and show the splash screen, passing the settings manager to set the background
+    splash_screen = SplashScreen(target_screen, settings_manager)
+    splash_screen.show()
+    app.processEvents()  # Allows the splash screen to be rendered properly
 
     profiler = Profiler()
-    main_window = MainWindow(profiler)
-    splash = _show_splash_screen(target_screen)
+
+    # Create the main window and pass in the splash screen and settings manager
+    main_window = MainWindow(profiler, splash_screen)
+
+    # Finalize splash screen once initialization is complete
+    QTimer.singleShot(0, lambda: splash_screen.close())
     main_window.show()
-
-    QTimer.singleShot(1000, lambda: splash.finish(main_window))
-
     sys.exit(main_window.exec(app))
-
-
-def _show_splash_screen(target_screen: QScreen) -> QSplashScreen:
-    splash_pix = QPixmap(get_images_and_data_path("images/splash_screen.png"))
-    scaled_splash_pix = splash_pix.scaled(600, 400, Qt.AspectRatioMode.KeepAspectRatio)
-    splash = QSplashScreen(
-        scaled_splash_pix,
-        Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.FramelessWindowHint,
-    )
-
-    splash.setGeometry(
-        target_screen.geometry().x()
-        + (target_screen.geometry().width() - scaled_splash_pix.width()) // 2,
-        target_screen.geometry().y()
-        + (target_screen.geometry().height() - scaled_splash_pix.height()) // 2,
-        scaled_splash_pix.width(),
-        scaled_splash_pix.height(),
-    )
-    splash.showMessage(
-        "Initializing...",
-        Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignCenter,
-        Qt.GlobalColor.white,
-    )
-    splash.show()
-    return splash
 
 
 if __name__ == "__main__":

@@ -58,3 +58,8 @@ class RainbowProgressBar(QWidget):
         """Update the progress bar value and the percentage label"""
         self.progress_bar.setValue(value)
         self.percentage_label.setText(f"{value}%")
+
+    def setMaximum(self, value):
+        """Set the maximum value for the progress bar"""
+        self.progress_bar.setMaximum(value)
+

@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QApplication, QWidget
+from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QWheelEvent
 
@@ -23,9 +23,6 @@ from .option_picker_display_manager import (
 
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_widget import OptionPickerSectionWidget
-    from main_window.main_widget.top_builder_widget.sequence_builder.sequence_builder import (
-        SequenceBuilder,
-    )
     from ..option_picker import OptionPicker
 
 

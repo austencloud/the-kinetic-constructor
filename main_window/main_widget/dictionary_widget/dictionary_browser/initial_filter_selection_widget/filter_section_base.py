@@ -64,21 +64,21 @@ class FilterSectionBase(QWidget):
 
     def _initialize_progress_bar(self):
         # Initialize the custom rainbow progress bar
-        self.loading_progress_bar = RainbowProgressBar(
+        self.progress_bar = RainbowProgressBar(
             self.browser.scroll_widget.scroll_content
         )
-        self.loading_progress_bar.setVisible(False)
+        self.progress_bar.setVisible(False)
 
-    def _style_loading_bar(self):
-        self.loading_progress_bar.setFixedWidth(self.browser.width() // 3)
-        self.loading_progress_bar.setFixedHeight(self.browser.height() // 6)
+    def _style_progress_bar(self):
+        self.progress_bar.setFixedWidth(self.browser.width() // 3)
+        self.progress_bar.setFixedHeight(self.browser.height() // 6)
 
         # Update the font to Monotype Corsiva
-        loading_bar_font = self.loading_progress_bar.percentage_label.font()
-        loading_bar_font.setFamily("Monotype Corsiva")  # Set font to Monotype Corsiva
-        loading_bar_font.setPointSize(self.browser.width() // 40)
-        self.loading_progress_bar.percentage_label.setFont(loading_bar_font)
-        self.loading_progress_bar.loading_label.setFont(loading_bar_font)
+        progress_bar_font = self.progress_bar.percentage_label.font()
+        progress_bar_font.setFamily("Monotype Corsiva")  # Set font to Monotype Corsiva
+        progress_bar_font.setPointSize(self.browser.width() // 40)
+        self.progress_bar.percentage_label.setFont(progress_bar_font)
+        self.progress_bar.loading_label.setFont(progress_bar_font)
 
     def _prepare_ui_for_filtering(self, description: str):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
@@ -86,15 +86,15 @@ class FilterSectionBase(QWidget):
         self.browser.number_of_currently_displayed_words_label.setText("")
         self.browser.scroll_widget.clear_layout()
         self.browser.scroll_widget.grid_layout.addWidget(
-            self.loading_progress_bar,
+            self.progress_bar,
             0,
             0,
             1,
             self.thumbnail_box_sorter.num_columns,
             Qt.AlignmentFlag.AlignCenter,
         )
-        self._style_loading_bar()
-        self.loading_progress_bar.setVisible(True)
+        self._style_progress_bar()
+        self.progress_bar.setVisible(True)
         QApplication.processEvents()
 
     def _update_and_display_ui(
@@ -126,13 +126,13 @@ class FilterSectionBase(QWidget):
                 num_words += 1
 
                 percentage = int((num_words / total_sequences) * 100)
-                self.loading_progress_bar.setValue(percentage)
+                self.progress_bar.setValue(percentage)
                 self.browser.number_of_currently_displayed_words_label.setText(
                     f"Number of words: {num_words}"
                 )
                 QApplication.processEvents()
 
-            self.loading_progress_bar.setVisible(False)
+            self.progress_bar.setVisible(False)
             self.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
                 self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
             )

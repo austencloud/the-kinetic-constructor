@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGridLayout
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QKeyEvent
 
 from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
     Beat,

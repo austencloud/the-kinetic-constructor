@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from data.constants import PRO, ANTI, FLOAT
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion

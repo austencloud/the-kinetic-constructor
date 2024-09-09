@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QApplication
 from typing import TYPE_CHECKING
-from Enums.letters import LetterType
-from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, FLOAT, NO_ROT
+from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, NO_ROT
 from ..base_adjustment_box_header_widget import BaseAdjustmentBoxHeaderWidget
 
 if TYPE_CHECKING:

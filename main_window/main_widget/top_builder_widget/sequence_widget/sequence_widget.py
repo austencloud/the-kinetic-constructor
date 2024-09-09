@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QTimer, Qt
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QApplication
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout
 
 
 from main_window.main_widget.top_builder_widget.sequence_widget.sequence_clearer import (

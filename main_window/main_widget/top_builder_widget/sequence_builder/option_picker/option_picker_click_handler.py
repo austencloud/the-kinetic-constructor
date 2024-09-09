@@ -5,7 +5,6 @@ if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_builder.manual_builder import (
         ManualBuilder,
     )
-    from ..sequence_builder import SequenceBuilder
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 

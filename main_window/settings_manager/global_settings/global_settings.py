@@ -11,6 +11,7 @@ from background_managers.startfield_background_manager import StarfieldBackgroun
 from .prop_type_changer import PropTypeChanger
 
 if TYPE_CHECKING:
+    from splash_screen import SplashScreen
     from ..settings_manager import SettingsManager
 
 
@@ -54,16 +55,22 @@ class GlobalSettings:
         self.settings_manager.save_settings()
         self.settings_manager.background_changed.emit(background_type)
 
-    def setup_background_manager(self, widget) -> BackgroundManager:
-        if not self.main_widget:
-            self.main_widget = self.settings_manager.main_window.main_widget
+    def setup_background_manager(
+        self, widget, is_splash_screen=False
+    ) -> BackgroundManager:
+        if not is_splash_screen:
+            if not self.main_widget:
+                self.main_widget = self.settings_manager.main_window.main_widget
         bg_type = self.get_background_type()
-        return self.get_background_manager(bg_type, widget)
+        return self.get_background_manager(bg_type, widget, is_splash_screen)
 
     def get_background_manager(
-        self, bg_type: str, widget
+        self, bg_type: str, widget, is_splash_screen=False
     ) -> Optional[BackgroundManager]:
-        self.update_font_colors(bg_type)
+        if not is_splash_screen:
+            self.update_main_widget_font_colors(bg_type)
+        else:
+            self.update_splash_screen_font_colors(widget, bg_type)
         if bg_type == "Rainbow":
             return RainbowBackgroundManager(widget)
         elif bg_type == "Starfield":
@@ -76,7 +83,7 @@ class GlobalSettings:
             return AuroraBorealisBackgroundManager(widget)
         return None
 
-    def update_font_colors(self, bg_type):
+    def update_main_widget_font_colors(self, bg_type):
         self.main_widget.top_builder_widget.sequence_widget.current_word_label.setStyleSheet(
             f"color: {self.get_font_color(bg_type)};"
         )
@@ -92,6 +99,25 @@ class GlobalSettings:
         self.main_widget.dictionary_widget.browser.options_widget.sort_widget.style_buttons()
         self.main_widget.dictionary_widget.browser.nav_sidebar.set_styles()
         self.main_widget.dictionary_widget.preview_area.image_label.style_placeholder()
+
+    def update_splash_screen_font_colors(
+        self, splash_screen: "SplashScreen", bg_type: str
+    ):
+        splash_screen.title_label.setStyleSheet(
+            f"color: {self.get_font_color(bg_type)};"
+        )
+        splash_screen.currently_loading_label.setStyleSheet(
+            f"color: {self.get_font_color(bg_type)};"
+        )
+        splash_screen.created_by_label.setStyleSheet(
+            f"color: {self.get_font_color(bg_type)};"
+        )
+        splash_screen.progress_bar.percentage_label.setStyleSheet(
+            f"color: {self.get_font_color(bg_type)};"
+        )
+        splash_screen.progress_bar.loading_label.setStyleSheet(
+            f"color: {self.get_font_color(bg_type)};"
+        )
 
     def get_font_color(self, bg_type: str) -> str:
         if bg_type in ["Rainbow", "AuroraBorealis", "Aurora"]:
