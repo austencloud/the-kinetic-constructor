@@ -54,11 +54,11 @@ class SequenceWidgetButtonFrame(QFrame):
                 "callback": self.sequence_widget.show_options_panel,
                 "tooltip": "Layout Options",
             },
-            "auto_complete_sequence": {
-                "icon_path": "magic_wand.svg",
-                "callback": self.sequence_widget.autocompleter.auto_complete_sequence,
-                "tooltip": "Auto Complete Sequence",
-            },
+            # "auto_complete_sequence": {
+            #     "icon_path": "magic_wand.svg",
+            #     "callback": self.sequence_widget.autocompleter.auto_complete_sequence,
+            #     "tooltip": "Auto Complete Sequence",
+            # },
             # "auto_builder": {
             #     "icon_path": "auto_builder.png",
             #     "callback": self.open_auto_builder_selection,
@@ -82,8 +82,6 @@ class SequenceWidgetButtonFrame(QFrame):
                 button_data["callback"],
                 button_data["tooltip"],
             )
-
-    
 
     def _setup_button(
         self, button_name: str, icon_path: str, callback, tooltip: str
