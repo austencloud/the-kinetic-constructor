@@ -64,7 +64,7 @@ class DictionaryButtonPanel(QWidget):
                 ),
             },
             "view_full_screen": {
-                "icon": "eye.svg",  # Eye icon for full screen
+                "icon": "eye.png",  # Eye icon for full screen
                 "tooltip": "View Full Screen",
                 "action": self.view_full_screen,
             },
