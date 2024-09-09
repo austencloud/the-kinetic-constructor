@@ -335,8 +335,7 @@ class CircularAutoBuilder:
                     if next_pictograph_dict["blue_attributes"]["turns"] > 0
                     else NO_ROT
                 )
-            else:
-                self._set_default_prop_rot_dir(next_pictograph_dict, BLUE)
+
 
         if next_pictograph_dict["red_attributes"]["motion_type"] in [DASH, STATIC]:
             if is_continuous_rot_dir:
@@ -345,8 +344,7 @@ class CircularAutoBuilder:
                     if next_pictograph_dict["red_attributes"]["turns"] > 0
                     else NO_ROT
                 )
-            else:
-                self._set_default_prop_rot_dir(next_pictograph_dict, RED)
+
 
     def _set_default_prop_rot_dir(self, next_pictograph_dict, color):
         """

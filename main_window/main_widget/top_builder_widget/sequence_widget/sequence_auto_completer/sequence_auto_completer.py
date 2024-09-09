@@ -5,6 +5,7 @@ from .rotational_permutation_executor import RotationalPermutationExecuter
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
 from PyQt6.QtWidgets import QMessageBox
+
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
         SequenceWidget,
@@ -17,6 +18,7 @@ class SequenceAutoCompleter:
         self.beat_frame = sequence_widget.beat_frame
         self.json_manager = self.beat_frame.json_manager
         self.main_widget = sequence_widget.main_widget
+        self.validation_engine = self.main_widget.json_manager.validation_engine
         self.rotational_permutation_executor = RotationalPermutationExecuter(self)
         self.mirrored_permutation_executor = MirroredPermutationExecutor(self, False)
 

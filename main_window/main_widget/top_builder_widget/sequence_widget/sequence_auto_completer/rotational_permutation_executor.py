@@ -43,7 +43,9 @@ class RotationalPermutationExecuter(PermutationExecutor):
             new_entries.append(next_pictograph)
             sequence.append(next_pictograph)
 
-            sequence_widget = self.circular_auto_builder.top_builder_widget.sequence_widget
+            sequence_widget = (
+                self.circular_auto_builder.main_widget.top_builder_widget.sequence_widget
+            )
             sequence_widget.create_new_beat_and_add_to_sequence(
                 next_pictograph, override_grow_sequence=True, update_word=False
             )

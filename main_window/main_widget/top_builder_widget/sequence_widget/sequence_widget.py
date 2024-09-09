@@ -47,7 +47,7 @@ class SequenceWidget(QWidget):
         self.scroll_area = SequenceWidgetScrollArea(self)
         self.beat_frame = SequenceWidgetBeatFrame(self)
         self.add_to_dictionary_manager = AddToDictionaryManager(self)
-        # self.autocompleter = SequenceAutoCompleter(self)
+        self.autocompleter = SequenceAutoCompleter(self)
         self.sequence_clearer = SequenceClearer(self)
         self.button_frame = SequenceWidgetButtonFrame(self)
         self.graph_editor = GraphEditor(self)
@@ -150,7 +150,9 @@ class SequenceWidget(QWidget):
     ) -> None:
         new_beat = Beat(self.beat_frame)
         new_beat.updater.update_pictograph(pictograph_dict)
-        self.beat_frame.add_beat_to_sequence(new_beat, override_grow_sequence, update_word)
+        self.beat_frame.add_beat_to_sequence(
+            new_beat, override_grow_sequence, update_word
+        )
         self.json_manager.updater.update_sequence_properties()  # Recalculate properties after each update
 
     def resize_sequence_widget(self) -> None:
