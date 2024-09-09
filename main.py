@@ -8,7 +8,6 @@ logging.getLogger("PIL").setLevel(logging.WARNING)
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtGui import QGuiApplication
 from PyQt6.QtCore import QTimer
-from main_window.main_window import MainWindow
 from profiler import Profiler
 from splash_screen import SplashScreen
 from main_window.settings_manager.settings_manager import SettingsManager
@@ -35,11 +34,13 @@ def main() -> None:
     profiler = Profiler()
 
     # Create the main window and pass in the splash screen and settings manager
+    from main_window.main_window import MainWindow
+
     main_window = MainWindow(profiler, splash_screen)
 
     # Finalize splash screen once initialization is complete
-    QTimer.singleShot(0, lambda: splash_screen.close())
     main_window.show()
+    QTimer.singleShot(0, lambda: splash_screen.close())
     sys.exit(main_window.exec(app))
 
 

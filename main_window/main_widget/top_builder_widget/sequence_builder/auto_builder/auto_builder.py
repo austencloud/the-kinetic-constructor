@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (
     QStackedWidget,
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import  QCursor
+from PyQt6.QtGui import QCursor
 from typing import TYPE_CHECKING
 
 from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.circular_auto_builder_frame import (
@@ -115,5 +115,5 @@ class AutoBuilder(QFrame):
         title_font.setPointSize(title_font_size)
         self.title_label.setFont(title_font)
         # resize the builder frames
-        self.freeform_builder_frame._resize_freeform_auto_builder_frame()
-        self.circular_builder_frame._resize_circular_auto_builder_frame()
+        self.freeform_builder_frame._resize_auto_builder_frame()
+        self.circular_builder_frame._resize_auto_builder_frame()

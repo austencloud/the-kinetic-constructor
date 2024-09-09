@@ -34,7 +34,7 @@ from PyQt6.QtWidgets import QTabWidget
 
 if TYPE_CHECKING:
     from splash_screen import SplashScreen
-    from main import MainWindow
+    from main_window.main_window import MainWindow
 import json
 
 from utilities.path_helpers import get_images_and_data_path
@@ -75,9 +75,7 @@ class MainWidget(QTabWidget):
         self.splash_screen.update_progress(65, "Loading Turns Tuple Generator...")
         self.turns_tuple_generator = TurnsTupleGenerator()
 
-        self.splash_screen.update_progress(
-            70, "Loading Pictograph Key Generator..."
-        )
+        self.splash_screen.update_progress(70, "Loading Pictograph Key Generator...")
         self.pictograph_key_generator = PictographKeyGenerator(self)
 
         self.splash_screen.update_progress(75, "Setting up special placements...")
@@ -91,7 +89,6 @@ class MainWidget(QTabWidget):
         self.sequence_level_evaluator = SequenceLevelEvaluator()
         self.sequence_properties_manager = SequencePropertiesManager(self)
         self.thumbnail_finder = ThumbnailFinder(self)
-
 
         self._setup_ui_components()
 
@@ -153,7 +150,6 @@ class MainWidget(QTabWidget):
         self.svg_manager = SvgManager()
         self.turns_tuple_generator = TurnsTupleGenerator()
         self.pictograph_key_generator = PictographKeyGenerator(self)
-
 
         self.metadata_extractor = MetaDataExtractor(self)
         self.sequence_level_evaluator = SequenceLevelEvaluator()

@@ -16,7 +16,7 @@ from utilities.path_helpers import get_user_editable_resource_path
 from .global_settings.global_settings import GlobalSettings
 
 if TYPE_CHECKING:
-    from main import MainWindow
+    from main_window.main_window import MainWindow
 
 
 class SettingsManager(QObject):

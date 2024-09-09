@@ -9,8 +9,10 @@ from background_managers.particle_background_manager import ParticleBackgroundMa
 from background_managers.rainbow_background_manager import RainbowBackgroundManager
 from background_managers.startfield_background_manager import StarfieldBackgroundManager
 from .prop_type_changer import PropTypeChanger
+from PyQt6.QtGui import QFont
 
 if TYPE_CHECKING:
+    from main_window.main_widget.main_widget import MainWidget
     from splash_screen import SplashScreen
     from ..settings_manager import SettingsManager
 
@@ -29,7 +31,7 @@ class GlobalSettings:
             "global", self.DEFAULT_GLOBAL_SETTINGS
         )
         self.prop_type_changer = PropTypeChanger(self.settings_manager)
-        self.main_widget = None
+        self.main_widget: "MainWidget" = None
 
     def get_grow_sequence(self) -> bool:
         return self.settings.get("grow_sequence", False)
@@ -84,6 +86,8 @@ class GlobalSettings:
         return None
 
     def update_main_widget_font_colors(self, bg_type):
+        font = QFont()
+
         self.main_widget.top_builder_widget.sequence_widget.current_word_label.setStyleSheet(
             f"color: {self.get_font_color(bg_type)};"
         )
@@ -93,6 +97,15 @@ class GlobalSettings:
         self.main_widget.top_builder_widget.sequence_builder.manual_builder.start_pos_picker.choose_your_start_pos_label.setStyleSheet(
             f"color: {self.get_font_color(bg_type)};"
         )
+        # update the auto builder fonts, both circular and freeform
+
+        self.main_widget.top_builder_widget.sequence_builder.auto_builder.freeform_builder_frame.update_font_colors(
+            self.get_font_color(bg_type)
+        )
+        self.main_widget.top_builder_widget.sequence_builder.auto_builder.circular_builder_frame.update_font_colors(
+            self.get_font_color(bg_type)
+        )
+
         self.main_widget.dictionary_widget.browser.options_widget.sort_widget.sort_by_label.setStyleSheet(
             f"color: {self.get_font_color(bg_type)};"
         )

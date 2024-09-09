@@ -179,3 +179,33 @@ class BaseAutoBuilderFrame(QFrame):
             self.continuous_rotation_checkbox.isChecked(),
             self.builder_type,
         )
+
+    def update_font_colors(self, color: str):
+        """Update the font colors for the labels."""
+        for label in self.labels.values():
+            label.setStyleSheet(f"color: {color};")
+
+        self._resize_auto_builder_frame()
+
+    def _resize_auto_builder_frame(self):
+        """Resize the frame based on the parent widget size."""
+        # font = self.font()
+        font_size = self.auto_builder.sequence_builder.width() // 30
+        # font.setPointSize(font_size)
+
+        widget_dicts: list[dict[str, QWidget]] = [
+            self.labels,
+            self.spinboxes,
+            self.comboboxes,
+            self.buttons,
+            self.checkboxes,
+        ]
+        for widget_dict in widget_dicts:
+            for widget in widget_dict.values():
+                # widget.setFont(font)
+                widget.setStyleSheet(f"QWidget {{ font-size: {font_size}px; }}")
+                widget.updateGeometry()
+                widget.repaint()
+
+        self.updateGeometry()
+        self.repaint()

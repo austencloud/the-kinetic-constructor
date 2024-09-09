@@ -19,7 +19,6 @@ class SplashScreen(QWidget):
         self.target_screen = target_screen
         self.settings_manager = settings_manager
 
-
         self._setup_window_properties()
         self._create_components()
         self.background_manager = (
@@ -47,7 +46,7 @@ class SplashScreen(QWidget):
         """Create the components used in the splash screen."""
 
         self.title_label = self._create_title_label()
-        self.currently_loading_label = self._create_label("")
+        self.currently_loading_label = self._create_label("Importing modules...")
         self.created_by_label = self._create_label("Created by Austen Cloud")
 
         self.progress_bar = RainbowProgressBar(self)
@@ -97,7 +96,7 @@ class SplashScreen(QWidget):
     def _create_title_label(self) -> QLabel:
         """Create the title label with Monotype Corsiva and manage its font size."""
         title_font = QFont("Monotype Corsiva", self.splash_screen_height // 15)
-        title_label = QLabel("The Kinetic Constructor")
+        title_label = QLabel("The\nKinetic\nConstructor")
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title_label.setFont(title_font)
 
