@@ -6,10 +6,10 @@ from Enums.Enums import LetterType
 from PyQt6.QtCore import pyqtSignal
 
 
-
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_widget import OptionPickerSectionWidget
-
+    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_widget import (
+        OptionPickerSectionWidget,
+    )
 
 
 class SectionTypeLabel(QLabel):
@@ -55,30 +55,23 @@ class SectionTypeLabel(QLabel):
 
         styled_text = f"{letter_type_str[0:4]} {letter_type_str[4]}: {styled_type_name}"
         self.setText(styled_text)
-        self.resize_section_type_label()
+        # self.resize_section_type_label()
 
-    def font_size(self):
+    def get_font_size(self):
         scroll_area = self.section_widget.scroll_area
         manual_builder = scroll_area.manual_builder
-        base_class_name = type(scroll_area).__name__
-
-        if base_class_name == "LetterBookScrollArea":
-            font_size = manual_builder.width() // 40
-        elif base_class_name == "OptionPickerScrollArea":
-            font_size = manual_builder.height() // 45
-        else:
-            font_size = 12
+        font_size = manual_builder.height() // 45
         return font_size
 
     def set_label_style(self, outline=False):
-        self.label_height = self.font_size() * 2
+        self.label_height = self.get_font_size() * 2
         self.setFixedHeight(self.label_height)
         border_style = "2px solid black" if outline else "none"
         self.setStyleSheet(
             f"QLabel {{"
             f"  background-color: rgba(255, 255, 255, 200);"
             f"  border-radius: {self.label_height // 2}px;"  # Adjust radius to maintain an oval shape
-            f"  font-size: {self.font_size()}px;"
+            f"  font-size: {self.get_font_size()}px;"
             f"  font-weight: bold;"
             f"  border: {border_style};"
             f"}}"
@@ -99,7 +92,7 @@ class SectionTypeLabel(QLabel):
     def resize_section_type_label(self) -> None:
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.label_height = self.font_size() * 2
+        self.label_height = self.get_font_size() * 2
         label_width = self.label_height * 5
 
         self.setFixedSize(label_width, self.label_height)

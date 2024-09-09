@@ -43,6 +43,7 @@ class MainWidget(QTabWidget):
     def __init__(self, main_window: "MainWindow") -> None:
         super().__init__(main_window)
         self.main_window = main_window
+        self.settings_manager = main_window.settings_manager
         self._setup_pictograph_cache()
         self._set_prop_type()
         self._setup_default_modes()
@@ -53,7 +54,6 @@ class MainWidget(QTabWidget):
         self.initialized = True
         self.currentChanged.connect(self.on_tab_changed)
         self.tabBar().setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.load_state()
 
     def on_tab_changed(self, index):
         if index == self.builder_tab_index:
@@ -171,10 +171,10 @@ class MainWidget(QTabWidget):
 
     def showEvent(self, event):
         super().showEvent(event)
-
         self.main_window.menu_bar_widget.resize_menu_bar_widget()
         self.resize_current_widget(self.currentWidget())
         self.apply_background()
+        self.load_state()
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

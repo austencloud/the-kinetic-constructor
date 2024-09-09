@@ -2,11 +2,10 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLabel
 from PyQt6.QtGui import QFont, QCursor
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
-from data.constants import PRO, ANTI, FLOAT, DASH, STATIC, RED, BLUE
+from data.constants import PRO, ANTI, FLOAT, RED, BLUE
 from .motion_type_dialog import MotionTypeDialog
 
 if TYPE_CHECKING:
-    from objects.motion.motion import Motion
     from .turns_widget import TurnsWidget
 
 

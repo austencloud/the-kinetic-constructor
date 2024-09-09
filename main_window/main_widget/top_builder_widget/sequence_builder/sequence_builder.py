@@ -28,10 +28,39 @@ class SequenceBuilder(QTabWidget):
         self.addTab(self.auto_builder, "Auto Builder")
 
         # Set initial tab to manual builder
-        self.setCurrentIndex(0)
+        self.load_last_used_builder()
 
         # resize on tab change
-        self.currentChanged.connect(self.resize_current_tab)
+        self.currentChanged.connect(self.on_tab_change)
+
+    def load_last_used_builder(self):
+        """Set the last used builder as the current tab."""
+        last_used_builder = (
+            self.main_widget.settings_manager.builder_settings.get_last_used_builder()
+        )
+
+        if last_used_builder == "manual":
+            self.setCurrentWidget(self.manual_builder)
+        else:
+            self.setCurrentWidget(self.auto_builder)
+            last_used_auto_builder = (
+                self.main_widget.settings_manager.builder_settings.auto_builder.get_current_auto_builder()
+            )
+            self.auto_builder.load_last_used_auto_builder(last_used_auto_builder)
+
+    def on_tab_change(self):
+        """Save the currently selected tab."""
+        if self.currentWidget() == self.manual_builder:
+            self.main_widget.settings_manager.builder_settings.set_last_used_builder(
+                "manual"
+            )
+        elif self.currentWidget() == self.auto_builder:
+            self.main_widget.settings_manager.builder_settings.set_last_used_builder(
+                "auto"
+            )
+            # Save which auto builder is open
+
+        self.resize_current_tab()
 
     def resize_sequence_builder_tab_widget(self):
         self.manual_builder.resize_manual_builder()

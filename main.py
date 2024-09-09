@@ -1,56 +1,36 @@
 import sys
 import logging
-from PyQt6.QtWidgets import QApplication, QSplashScreen
-from PyQt6.QtGui import QPixmap, QGuiApplication, QScreen
-from PyQt6.QtCore import Qt, QTimer
-from main_window.main_window import MainWindow
-from utilities.path_helpers import get_images_and_data_path
-from profiler import Profiler
 
+from splash_screen import SplashScreenManager
+
+logging.basicConfig(level=logging.WARNING)
+logging.getLogger("matplotlib").setLevel(logging.WARNING)
 logging.getLogger("PIL").setLevel(logging.WARNING)
+
+from PyQt6.QtWidgets import QApplication
+from PyQt6.QtGui import QGuiApplication
+from PyQt6.QtCore import QTimer
+from main_window.main_window import MainWindow
+from profiler import Profiler
 
 
 def main() -> None:
     app = QApplication(sys.argv)
-    screens = QGuiApplication.screens()
     dev_environment = not getattr(sys, "frozen", False)
+    screens = QGuiApplication.screens()
     target_screen = screens[1] if dev_environment and len(screens) > 1 else screens[0]
+
+    splash_manager = SplashScreenManager(target_screen)
 
     app.processEvents()
 
     profiler = Profiler()
     main_window = MainWindow(profiler)
-    splash = _show_splash_screen(target_screen)
     main_window.show()
 
-    QTimer.singleShot(1000, lambda: splash.finish(main_window))
+    QTimer.singleShot(0, lambda: splash_manager.finish(main_window))
 
     sys.exit(main_window.exec(app))
-
-
-def _show_splash_screen(target_screen: QScreen) -> QSplashScreen:
-    splash_pix = QPixmap(get_images_and_data_path("images/splash_screen.png"))
-    scaled_splash_pix = splash_pix.scaled(600, 400, Qt.AspectRatioMode.KeepAspectRatio)
-    splash = QSplashScreen(
-        scaled_splash_pix,
-        Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.FramelessWindowHint,
-    )
-
-    splash.setGeometry(
-        target_screen.geometry().x()
-        + (target_screen.geometry().width() - scaled_splash_pix.width()) // 2,
-        target_screen.geometry().y()
-        + (target_screen.geometry().height() - scaled_splash_pix.height()) // 2,
-        scaled_splash_pix.width(),
-        scaled_splash_pix.height(),
-    )
-    splash.showMessage(
-        "Initializing...",
-        Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignCenter,
-        Qt.GlobalColor.white,
-    )
-    splash.show()
-    return splash
 
 
 if __name__ == "__main__":

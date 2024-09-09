@@ -1,5 +1,4 @@
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QAction, QActionGroup
+from PyQt6.QtGui import QAction
 from typing import TYPE_CHECKING
 
 from .hoverable_menu import HoverableMenu

@@ -1,20 +1,17 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import VTG_Directions
 from PyQt6.QtGui import QIcon
-from Enums.letters import Letter, LetterType
+from Enums.letters import Letter
 from data.constants import (
     CLOCKWISE,
     COUNTER_CLOCKWISE,
-    DASH,
     ICON_DIR,
     PROP_ROT_DIR,
-    STATIC,
 )
 from PyQt6.QtCore import QSize
 
 from utilities.path_helpers import get_images_and_data_path
 from .prop_rot_dir_button import PropRotDirButton
-from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from ..turns_box import TurnsBox

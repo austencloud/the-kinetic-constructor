@@ -14,17 +14,18 @@ from main_window.main_widget.top_builder_widget.sequence_builder.components.star
 from main_window.main_widget.top_builder_widget.sequence_builder.add_to_sequence_manager import (
     AddToSequenceManager,
 )
-from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker import OptionPicker
-from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_click_handler import OptionPickerClickHandler
+from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker import (
+    OptionPicker,
+)
+from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_click_handler import (
+    OptionPickerClickHandler,
+)
 
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_builder.sequence_builder import (
         SequenceBuilder,
     )
     from main_window.main_widget.main_widget import MainWidget
-    from main_window.main_widget.top_builder_widget.top_builder_widget import (
-        TopBuilderWidget,
-    )
 
 
 class ManualBuilder(QFrame):
@@ -86,7 +87,7 @@ class ManualBuilder(QFrame):
         self.option_picker.show()
         self.option_picker.scroll_area.section_manager.show_all_sections()
         self.option_picker.update_option_picker()
-        self.option_picker.resize_option_picker()
+        # self.option_picker.resize_option_picker()
 
     def render_and_store_pictograph(
         self, pictograph_dict: dict, sequence

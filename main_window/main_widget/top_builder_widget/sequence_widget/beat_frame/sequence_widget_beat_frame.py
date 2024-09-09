@@ -79,7 +79,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         self.beat_deletion_manager.delete_selected_beat()
 
     def add_beat_to_sequence(
-        self, new_beat: "BasePictograph", override_grow_sequence=False, update_word = True
+        self, new_beat: "BasePictograph", override_grow_sequence=False, update_word=True
     ) -> None:
         next_beat_index = self.find_next_available_beat()
         if next_beat_index == 0:
@@ -100,7 +100,9 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
                 self.sequence_builder = (
                     self.main_widget.top_builder_widget.sequence_builder
                 )
-                self.sequence_builder.manual_builder.last_beat = self.beats[next_beat_index].beat
+                self.sequence_builder.manual_builder.last_beat = self.beats[
+                    next_beat_index
+                ].beat
 
         elif not grow_sequence or override_grow_sequence:
             if (
@@ -117,7 +119,9 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
                 self.sequence_builder = (
                     self.main_widget.top_builder_widget.sequence_builder
                 )
-                self.sequence_builder.manual_builder.last_beat = self.beats[next_beat_index].beat
+                self.sequence_builder.manual_builder.last_beat = self.beats[
+                    next_beat_index
+                ].beat
                 # self.selection_overlay.select_beat(new_beat.view)
 
     def find_next_available_beat(self) -> int:
@@ -239,5 +243,4 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         )
 
         scroll_area.add_and_display_relevant_pictographs(next_options)
-        self.sequence_builder.manual_builder.option_picker.resize_option_picker()
         self.selection_overlay.select_beat(self.get_last_filled_beat())

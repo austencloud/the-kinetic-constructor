@@ -25,7 +25,6 @@ if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.circular_auto_builder_frame import (
         CircularAutoBuilderFrame,
     )
-    from .circular_auto_builder_frame import CircularAutoBuilderDialog
 
 
 class CircularAutoBuilder:

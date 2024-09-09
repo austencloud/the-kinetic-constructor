@@ -7,7 +7,6 @@ from .option_picker_section_widget import OptionPickerSectionWidget
 if TYPE_CHECKING:
 
     from .option_picker_scroll_area import OptionPickerScrollArea
-    from ...sequence_builder import SequenceBuilder
 
 
 class OptionPickerSectionManager:
@@ -29,7 +28,7 @@ class OptionPickerSectionManager:
         self.pictograph_cache: dict[Letter, list[LetterType]] = {}
         self.ordered_section_types: list[LetterType] = []
         self.initialized = False
-
+        
     def initialize_sections(self) -> None:
         for letter_type in LetterType:
             self.get_section(letter_type)
@@ -94,4 +93,4 @@ class OptionPickerSectionManager:
             self.initialized = True
         for section in self.sections.values():
             section.show()
-            section.resize_option_picker_section_widget()
+            # section.resize_option_picker_section_widget()

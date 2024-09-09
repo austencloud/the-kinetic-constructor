@@ -33,3 +33,4 @@ class MainWindow(QMainWindow):
         self.settings_manager.save_settings()
         super().closeEvent(event)
         QApplication.instance().installEventFilter(self)
+

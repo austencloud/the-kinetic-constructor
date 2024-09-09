@@ -1,23 +1,16 @@
 from typing import TYPE_CHECKING
-from Enums.Enums import LetterType, Turns
+from Enums.Enums import Turns
 from Enums.MotionAttributes import PropRotDir
 from data.constants import (
     ANTI,
-    BLUE,
-    CCW_HANDPATH,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
-    CW_HANDPATH,
     DASH,
     FLOAT,
     NO_ROT,
     PRO,
-    RED,
     STATIC,
-    SAME,
-    OPP,
 )
-from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from .turns_widget import TurnsWidget

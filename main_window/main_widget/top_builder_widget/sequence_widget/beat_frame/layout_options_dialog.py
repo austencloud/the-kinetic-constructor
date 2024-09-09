@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QPushButton
 
 from .layout_warning_dialog import LayoutWarningDialog

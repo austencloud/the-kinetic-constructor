@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLabel
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 
 from data.constants import ANTI, FLOAT, PRO
 from .motion_type_setter import MotionTypeSetter

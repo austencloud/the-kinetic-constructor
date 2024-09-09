@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .ori_display_frame import OriDisplayFrame
-    from .ori_picker_widget import OriPickerWidget
 
 
 class OriSelectionDialog(QDialog):

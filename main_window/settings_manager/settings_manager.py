@@ -3,12 +3,14 @@ import os
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QObject, pyqtSignal
 
-from main_window.settings_manager.autobuilder_settings import AutoBuilderSettings
+from main_window.settings_manager.builder_settings import BuilderSettings
 
 from ..settings_manager.dictionary_settings import DictionarySettings
 from ..settings_manager.image_export_settings import ImageExportSettings
 from ..settings_manager.sequence_layout_settings import SequenceLayoutSettings
-from ..settings_manager.user_profile_settings.user_profile_settings import UserProfileSettings
+from ..settings_manager.user_profile_settings.user_profile_settings import (
+    UserProfileSettings,
+)
 from .visibility_settings.visibility_settings import VisibilitySettings
 from utilities.path_helpers import get_user_editable_resource_path
 from .global_settings.global_settings import GlobalSettings
@@ -30,8 +32,10 @@ class SettingsManager(QObject):
         self.users = UserProfileSettings(self)
         self.visibility = VisibilitySettings(self)
         self.dictionary = DictionarySettings(self)
-        self.sequence_layout = SequenceLayoutSettings(self)  # New layout settings
-        self.auto_builder = AutoBuilderSettings(self)  # Add this line
+        self.sequence_layout = SequenceLayoutSettings(
+            self
+        )  # New layout settingsShut your window.
+        self.builder_settings = BuilderSettings(self)
 
     def load_settings(self) -> dict:
         if os.path.exists(self.settings_json):
@@ -79,5 +83,9 @@ class SettingsManager(QObject):
         self.save_settings()
 
     def save_auto_builder_settings(self, settings, builder_type) -> None:
-        self.settings["auto_builder"][builder_type] = settings
+        self.settings["builder"]["auto_builder"][builder_type] = settings
+        self.save_settings()
+
+    def save_builder_settings(self, settings) -> None:
+        self.settings["builder"] = settings
         self.save_settings()

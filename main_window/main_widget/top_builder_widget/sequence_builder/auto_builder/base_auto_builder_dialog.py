@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QDialog,
-    QVBoxLayout,
     QHBoxLayout,
     QPushButton,
     QComboBox,
@@ -9,11 +8,9 @@ from PyQt6.QtWidgets import (
     QLabel,
     QWidget,
     QGridLayout,
-    QSizePolicy,
     QCheckBox,
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
 
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (

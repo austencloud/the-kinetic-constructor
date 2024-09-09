@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
 from data.constants import EAST, NORTH, SOUTH, WEST
@@ -12,7 +12,6 @@ if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.circular_auto_builder import (
         CircularAutoBuilder,
     )
-    from .sequence_auto_completer import SequenceAutoCompleter
 
 
 class RotationalPermutationExecuter(PermutationExecutor):

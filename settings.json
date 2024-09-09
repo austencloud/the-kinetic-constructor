@@ -18,7 +18,7 @@
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
-                "export_date": "9-8-2024"
+                "export_date": "9-7-2024"
             },
             "Doc Womp": {
                 "name": "Doc Womp",
@@ -45,31 +45,36 @@
         }
     },
     "dictionary": {
-        "sort_method": "alphabetical"
+        "sort_method": "date_added"
     },
     "sequence_layout": {
         "grow_sequence": true,
         "num_beats": 16,
         "layout_option": "4 x 4"
     },
-    "auto_builder": {
-        "circular_auto_builder": {
-            "sequence_type": "circular",
-            "sequence_length": 16,
-            "max_turns": 30,
-            "max_turn_intensity": 1.0,
-            "sequence_level": 1,
-            "rotation_type": "quartered",
-            "permutation_type": "rotational",
-            "continuous_rotation": true
+    "builder": {
+        "auto_builder": {
+            "circular_auto_builder": {
+                "sequence_type": "circular",
+                "sequence_length": 16,
+                "max_turns": 30,
+                "max_turn_intensity": 1.5,
+                "sequence_level": 3,
+                "rotation_type": "quartered",
+                "permutation_type": "rotational",
+                "continuous_rotation": true
+            },
+            "freeform_auto_builder": {
+                "sequence_type": "freeform",
+                "sequence_length": 16,
+                "max_turns": 30,
+                "max_turn_intensity": 1.0,
+                "sequence_level": 2,
+                "continuous_rotation": true
+            },
+            "current_auto_builder": "freeform"
         },
-        "freeform_auto_builder": {
-            "sequence_type": "freeform",
-            "sequence_length": 16,
-            "max_turns": 30,
-            "max_turn_intensity": 1.0,
-            "sequence_level": 2,
-            "continuous_rotation": true
-        }
+        "manual_builder": {},
+        "last_used_builder": "manual"
     }
 }
