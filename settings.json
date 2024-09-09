@@ -18,7 +18,7 @@
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
-                "export_date": "9-7-2024"
+                "export_date": "9-8-2024"
             },
             "Doc Womp": {
                 "name": "Doc Womp",
@@ -45,7 +45,7 @@
         }
     },
     "dictionary": {
-        "sort_method": "date_added"
+        "sort_method": "alphabetical"
     },
     "sequence_layout": {
         "grow_sequence": true,

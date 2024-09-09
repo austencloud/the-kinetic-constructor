@@ -155,10 +155,10 @@ class TempBeatFrame(BaseBeatFrame):
             self.populate_sequence(pictograph_dict)
 
         last_beat = self.get_last_filled_beat().beat
-        self.sequence_builder.last_beat = last_beat
+        self.sequence_builder.manual_builder.last_beat = last_beat
 
-        if self.sequence_builder.start_pos_picker.isVisible():
-            self.sequence_builder.transition_to_sequence_building()
+        if self.sequence_builder.manual_builder.start_pos_picker.isVisible():
+            self.sequence_builder.manual_builder.transition_to_sequence_building()
 
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
 
