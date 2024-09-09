@@ -18,7 +18,7 @@
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
-                "export_date": "9-7-2024"
+                "export_date": "9-8-2024"
             },
             "Doc Womp": {
                 "name": "Doc Womp",
@@ -45,7 +45,7 @@
         }
     },
     "dictionary": {
-        "sort_method": "date_added"
+        "sort_method": "alphabetical"
     },
     "sequence_layout": {
         "grow_sequence": true,
@@ -55,10 +55,10 @@
     "auto_builder": {
         "circular_auto_builder": {
             "sequence_type": "circular",
-            "sequence_length": 16,
+            "sequence_length": 20,
             "max_turns": 20,
             "max_turn_intensity": 2.0,
-            "sequence_level": 2,
+            "sequence_level": 3,
             "rotation_type": "quartered",
             "permutation_type": "rotational",
             "continuous_rotation": true
