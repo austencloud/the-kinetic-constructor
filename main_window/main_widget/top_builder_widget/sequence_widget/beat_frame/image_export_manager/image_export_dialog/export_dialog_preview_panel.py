@@ -3,8 +3,9 @@ from PyQt6.QtWidgets import QLabel, QFrame, QVBoxLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 
+
 if TYPE_CHECKING:
-    from widgets.sequence_widget.beat_frame.image_export_manager.image_export_dialog.image_export_dialog import ImageExportDialog
+    from .image_export_dialog import ImageExportDialog
 
 
 class ExportDialogPreviewPanel(QFrame):
@@ -12,6 +13,7 @@ class ExportDialogPreviewPanel(QFrame):
         super().__init__(export_dialog)
         self.image = image
         self.export_dialog = export_dialog
+        self.preview_image = None  # Store the QPixmap for sharing
         self.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Sunken)
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.preview_label = QLabel(self)
@@ -51,7 +53,6 @@ class ExportDialogPreviewPanel(QFrame):
         self.preview_image = QPixmap.fromImage(self.image)
         self.update_preview()
 
-
     def update_preview(self):
         if self.preview_image:
             image_aspect_ratio = (
@@ -73,6 +74,7 @@ class ExportDialogPreviewPanel(QFrame):
                 )
             )
             self.preview_label.setFixedSize(image_width, image_height)
+
 
     def update_preview_with_options(
         self, include_start_pos: bool, sequence: list[dict], options: dict

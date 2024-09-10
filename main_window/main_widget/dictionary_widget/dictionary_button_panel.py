@@ -1,3 +1,5 @@
+import os
+import re
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QWidget,
@@ -16,6 +18,7 @@ from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame i
     TempBeatFrame,
 )
 from main_window.main_widget.main_widget_dimmer import MainWidgetDimmer
+from sequence_sharer import SequenceSharerDialog
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
@@ -89,25 +92,17 @@ class DictionaryButtonPanel(QWidget):
             button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.layout.addStretch(1)
 
+
+
     def view_full_screen(self):
         """Display the current image in full screen mode."""
         current_thumbnail = self.preview_area.get_thumbnail_at_current_index()
         if current_thumbnail:
             pixmap = QPixmap(current_thumbnail)
-
-            # Show dimmer for the main widget
-            # self.main_widget_dimmer = MainWidgetDimmer(self.preview_area.main_widget)
-            # self.main_widget_dimmer.show()
-
-            # Show the image using the FullScreenImageOverlay
             full_screen_overlay = FullScreenImageOverlay(
                 self.preview_area.main_widget, pixmap
             )
             full_screen_overlay.show()
-
-            # Connect the overlay close event to also hide the dimmer
-            # full_screen_overlay.destroyed.connect(self.main_widget_dimmer.close)
-
         else:
             QMessageBox.warning(self, "No Image", "Please select an image first.")
 

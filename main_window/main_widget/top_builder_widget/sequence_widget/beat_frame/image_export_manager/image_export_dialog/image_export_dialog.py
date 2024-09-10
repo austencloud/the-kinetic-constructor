@@ -1,12 +1,19 @@
+import os
+import re
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QDialog, QHBoxLayout, QVBoxLayout, QPushButton
-
+from PyQt6.QtWidgets import QDialog, QHBoxLayout, QVBoxLayout, QPushButton, QMessageBox
 from .export_dialog_control_panel import ExportDialogControlPanel
 from .export_dialog_preview_panel import ExportDialogPreviewPanel
-
+from sequence_sharer import SequenceSharerDialog  # Import the SequenceSharerDialog
 
 if TYPE_CHECKING:
     from ..image_export_manager import ImageExportManager
+
+
+def sanitize_filename(filename):
+    """Sanitize the filename by replacing invalid characters."""
+    sanitized = re.sub(r"[^\w\-_.]", "_", filename)  # Replace invalid characters
+    return sanitized
 
 
 class ImageExportDialog(QDialog):
@@ -26,8 +33,40 @@ class ImageExportDialog(QDialog):
     def _setup_okay_cancel_buttons(self):
         self.ok_button = QPushButton("Save", self)
         self.ok_button.clicked.connect(self.control_panel.save_settings_and_accept)
+
         self.cancel_button = QPushButton("Cancel", self)
         self.cancel_button.clicked.connect(self.control_panel.export_dialog.reject)
+
+        # Add a "Share" button
+        self.share_button = QPushButton("Share", self)
+        self.share_button.clicked.connect(self.open_sharer_dialog)  # Open share dialog
+
+    def open_sharer_dialog(self):
+        """Open the SequenceSharerDialog to send the current preview image via email."""
+        word = self.sequence[0]["word"]
+        preview_image_path = f"{word}.png"  # Temporary file for the preview image
+        pixmap = self.preview_panel.preview_image
+        sanitized_word = sanitize_filename(word)
+
+        # Construct a full file path and ensure it's in a valid directory
+        temp_image_path = os.path.join(os.getcwd(), f"{sanitized_word}.png")
+
+        if not pixmap.save(temp_image_path):
+            QMessageBox.critical(self, "Save Error", "Failed to save the preview image.")
+            return
+
+        # Ensure the file exists and isn't empty before continuing
+        if not os.path.isfile(temp_image_path) or os.path.getsize(temp_image_path) == 0:
+            QMessageBox.critical(self, "File Error", "File is invalid or empty.")
+            return
+
+        # Open the SequenceSharer dialog
+        sharer_dialog = SequenceSharerDialog(self.main_widget, preview_image_path)
+        sharer_dialog.exec()
+
+        # Clean up the temporary image file after sending
+        if os.path.exists(preview_image_path):
+            os.remove(preview_image_path)
 
     def _resize_image_export_dialog(self):
         main_width = self.main_widget.width()
@@ -43,6 +82,9 @@ class ImageExportDialog(QDialog):
         self.button_layout = QHBoxLayout()
         self.button_layout.addWidget(self.cancel_button)
         self.button_layout.addWidget(self.ok_button)
+        self.button_layout.addWidget(
+            self.share_button
+        )  # Add the "Share" button to layout
 
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addWidget(self.preview_panel, 12)
