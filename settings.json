@@ -2,8 +2,8 @@
     "global": {
         "prop_type": "Staff",
         "background_type": "Aurora",
-        "grow_sequence": true,
-        "current_tab": "dictionary"
+        "grow_sequence": false,
+        "current_tab": "sequence_builder"
     },
     "image_export": {
         "include_start_position": false,
@@ -14,7 +14,7 @@
         "add_beat_numbers": true
     },
     "user_profile": {
-        "current_user": "Austen Cloud",
+        "current_user": "Robert Giannini",
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
@@ -26,6 +26,9 @@
             },
             "Betsy Dz": {
                 "name": "Betsy Dz"
+            },
+            "Robert Giannini": {
+                "name": "Robert Giannini"
             }
         },
         "current_note": "Created using The Kinetic Alphabet",
@@ -48,7 +51,7 @@
         "sort_method": "date_added"
     },
     "sequence_layout": {
-        "grow_sequence": true,
+        "grow_sequence": false,
         "num_beats": 16,
         "layout_option": "4 x 4"
     },
@@ -59,7 +62,7 @@
                 "sequence_length": 16,
                 "max_turns": 30,
                 "max_turn_intensity": 1.0,
-                "sequence_level": 2,
+                "sequence_level": 1,
                 "rotation_type": "quartered",
                 "permutation_type": "rotational",
                 "continuous_rotation": true
