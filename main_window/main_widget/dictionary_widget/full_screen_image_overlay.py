@@ -16,9 +16,7 @@ class FullScreenImageOverlay(QWidget):
         self.setWindowFlags(
             Qt.WindowType.FramelessWindowHint
         )  # No borders or title bar
-        self.setAttribute(
-            Qt.WidgetAttribute.WA_DeleteOnClose
-        )  # Automatically delete when closed
+
         self.setStyleSheet(
             "background-color: rgba(0, 0, 0, 0.9);"
         )  # Semi-transparent black background
@@ -72,3 +70,10 @@ class FullScreenImageOverlay(QWidget):
     def mousePressEvent(self, event):
         """Close the overlay when the image is clicked."""
         self.close()
+
+    def close(self):
+        """Close the overlay."""
+        super().close()
+        self.main_widget.dictionary_widget.preview_area.button_panel.full_screen_overlay = (
+            None
+        )

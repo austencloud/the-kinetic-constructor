@@ -37,7 +37,7 @@ class DictionaryButtonPanel(QWidget):
         self.dictionary_widget = preview_area.dictionary_widget
         self.deletion_handler = self.dictionary_widget.deletion_handler
         self.temp_beat_frame = TempBeatFrame(self.dictionary_widget)
-
+        self.full_screen_overlay = None
         self._setup_buttons()
 
     def _setup_buttons(self):
@@ -95,6 +95,8 @@ class DictionaryButtonPanel(QWidget):
         current_thumbnail = self.preview_area.get_thumbnail_at_current_index()
         if current_thumbnail:
             pixmap = QPixmap(current_thumbnail)
+            if self.full_screen_overlay:
+                self.full_screen_overlay.close()  # Close any existing overlay
             self.full_screen_overlay = FullScreenImageOverlay(
                 self.preview_area.main_widget, pixmap
             )
@@ -149,6 +151,12 @@ class DictionaryButtonPanel(QWidget):
         self.edit_sequence_button.show()
 
     def resizeEvent(self, a0: QResizeEvent | None) -> None:
-        # if the overlay is visible, trigger its resize event
-        if hasattr(self, "full_screen_overlay") and self.full_screen_overlay.isVisible():
-            self.full_screen_overlay.resizeEvent(a0)
+        # Check if the overlay exists and is not deleted before attempting to resize it
+        if hasattr(self, "full_screen_overlay"):
+            if self.full_screen_overlay:
+                try:
+                    if self.full_screen_overlay.isVisible():
+                        self.full_screen_overlay.resizeEvent(a0)
+                except RuntimeError:
+                    # Handle the case where the overlay has been deleted
+                    self.full_screen_overlay = None
