@@ -7,6 +7,7 @@ from data.position_maps import (
     quarter_position_map_cw,
     quarter_position_map_ccw,
 )
+from PyQt6.QtCore import Qt
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
 from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import (
@@ -46,11 +47,12 @@ class CircularAutoBuilder:
         length: int,
         max_turn_intensity: int,
         level: int,
-        max_turns: int,
         rotation_type: str,
         permutation_type: str,
         is_continuous_rot_dir: str,
     ):
+        # set override cursor
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         if not self.sequence_widget:
             self.sequence_widget = self.top_builder_widget.sequence_widget
 
@@ -83,9 +85,7 @@ class CircularAutoBuilder:
             word_length = length // 2
             available_range = word_length - length_of_sequence_upon_start
 
-        turn_manager = TurnIntensityManager(
-            max_turns, word_length, level, max_turn_intensity
-        )
+        turn_manager = TurnIntensityManager(word_length, level, max_turn_intensity)
 
         # Allocate turns for both blue and red motions
         turns_blue, turns_red = turn_manager.allocate_turns_for_blue_and_red()
@@ -125,6 +125,8 @@ class CircularAutoBuilder:
             QApplication.processEvents()
 
         self._apply_permutations(self.sequence, permutation_type, rotation_type)
+        self.sequence_widget.top_builder_widget.sequence_builder.manual_builder.transition_to_sequence_building()
+        QApplication.restoreOverrideCursor()
 
     def add_start_pos_pictograph(self):
         start_pos_keys = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
@@ -335,7 +337,6 @@ class CircularAutoBuilder:
                     else NO_ROT
                 )
 
-
         if next_pictograph_dict["red_attributes"]["motion_type"] in [DASH, STATIC]:
             if is_continuous_rot_dir:
                 next_pictograph_dict["red_attributes"]["prop_rot_dir"] = (
@@ -343,7 +344,6 @@ class CircularAutoBuilder:
                     if next_pictograph_dict["red_attributes"]["turns"] > 0
                     else NO_ROT
                 )
-
 
     def _set_default_prop_rot_dir(self, next_pictograph_dict, color):
         """

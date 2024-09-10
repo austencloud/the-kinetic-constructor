@@ -244,3 +244,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
 
         scroll_area.add_and_display_relevant_pictographs(next_options)
         self.selection_overlay.select_beat(self.get_last_filled_beat())
+
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
+        self.selection_overlay.update_overlay_position()

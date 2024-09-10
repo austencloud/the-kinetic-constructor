@@ -17,8 +17,6 @@ from main_window.main_widget.dictionary_widget.full_screen_image_overlay import 
 from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame import (
     TempBeatFrame,
 )
-from main_window.main_widget.main_widget_dimmer import MainWidgetDimmer
-from sequence_sharer import SequenceSharerDialog
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:

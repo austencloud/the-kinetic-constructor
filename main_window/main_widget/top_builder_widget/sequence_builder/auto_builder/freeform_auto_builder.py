@@ -8,6 +8,7 @@ from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start
 )
 from .turn_intensity_manager import TurnIntensityManager
 import random
+from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.freeform_auto_builder_frame import (
@@ -32,9 +33,10 @@ class FreeFormAutoBuilder:
         beat_count: int,
         max_turn_intensity: int,
         level: int,
-        max_turns: int,
         is_continuous_rot_dir,
     ):
+        
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         if not self.sequence_widget:
             self.sequence_widget = self.top_builder_widget.sequence_widget
         self.sequence = (
@@ -49,7 +51,7 @@ class FreeFormAutoBuilder:
             )
 
         turn_manager = TurnIntensityManager(
-            max_turns, beat_count, level, max_turn_intensity
+            beat_count, level, max_turn_intensity
         )
         turns_blue, turns_red = turn_manager.allocate_turns_for_blue_and_red()
         if is_continuous_rot_dir:
@@ -82,9 +84,13 @@ class FreeFormAutoBuilder:
             )
             self.validation_engine.validate_last_pictograph()
             QApplication.processEvents()
+        
+        self.sequence_widget.top_builder_widget.sequence_builder.manual_builder.transition_to_sequence_building()
+        
         self.top_builder_widget.sequence_builder.manual_builder.option_picker.update_option_picker(
             self.sequence
         )
+        QApplication.restoreOverrideCursor()
 
     def add_start_pos_pictograph(self):
         start_pos_keys = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]

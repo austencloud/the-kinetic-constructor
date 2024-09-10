@@ -76,16 +76,6 @@ class BaseAutoBuilderFrame(QFrame):
             self.max_turn_intensity_label, self.max_turn_intensity_combo, 2
         )
 
-        # Max Turns Spinbox
-        self.max_turns_spinbox = QSpinBox()
-        self.max_turns_spinbox.setMinimum(0)
-        self.max_turns_spinbox.setMaximum(30)
-        self.max_turns_spinbox.valueChanged.connect(self._update_max_turns)
-        self.max_turns_label = QLabel("Max Turns")
-        self.labels["max_turns"] = self.max_turns_label
-        self.spinboxes["max_turns"] = self.max_turns_spinbox
-        self._add_to_grid(self.max_turns_label, self.max_turns_spinbox, 3)
-
         # Continuous Rotation Checkbox
         self.continuous_rotation_checkbox = QCheckBox("Continuous Rotation")
         self.continuous_rotation_checkbox.stateChanged.connect(
@@ -119,7 +109,6 @@ class BaseAutoBuilderFrame(QFrame):
         self.max_turn_intensity_combo.setCurrentText(
             str(settings["max_turn_intensity"])
         )
-        self.max_turns_spinbox.setValue(settings["max_turns"])
         self.continuous_rotation_checkbox.setChecked(settings["continuous_rotation"])
         self._update_visibility_based_on_level()
 
@@ -158,8 +147,6 @@ class BaseAutoBuilderFrame(QFrame):
         is_visible = self.sequence_level_combo.currentData() > 1
         self.max_turn_intensity_label.setVisible(is_visible)
         self.max_turn_intensity_combo.setVisible(is_visible)
-        self.max_turns_label.setVisible(is_visible)
-        self.max_turns_spinbox.setVisible(is_visible)
 
     def _update_max_turn_intensity(self):
         intensity = self.max_turn_intensity_combo.currentText()
@@ -167,11 +154,6 @@ class BaseAutoBuilderFrame(QFrame):
             self.auto_builder_settings.set_auto_builder_setting(
                 "max_turn_intensity", float(intensity), self.builder_type
             )
-
-    def _update_max_turns(self):
-        self.auto_builder_settings.set_auto_builder_setting(
-            "max_turns", self.max_turns_spinbox.value(), self.builder_type
-        )
 
     def _update_continuous_rotation(self):
         self.auto_builder_settings.set_auto_builder_setting(

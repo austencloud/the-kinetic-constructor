@@ -30,7 +30,6 @@ class FreeformAutoBuilderFrame(BaseAutoBuilderFrame):
             self.sequence_length_spinbox.value(),
             float(self.max_turn_intensity_combo.currentText()),
             self.sequence_level_combo.currentData(),
-            self.max_turns_spinbox.value(),
             self.continuous_rotation_checkbox.isChecked(),
         )
         self.auto_builder.sequence_builder.manual_builder.option_picker.update_option_picker()

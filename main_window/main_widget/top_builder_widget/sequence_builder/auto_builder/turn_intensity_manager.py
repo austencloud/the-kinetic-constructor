@@ -2,9 +2,7 @@ import random
 
 
 class TurnIntensityManager:
-    def __init__(
-        self, max_turns: int, word_length: int, level: int, max_turn_intensity: float
-    ):
+    def __init__(self, word_length: int, level: int, max_turn_intensity: float):
         """
         Initialize the TurnIntensityManager with:
         - max_turns: The maximum number of total turns that can be applied.
@@ -12,7 +10,6 @@ class TurnIntensityManager:
         - level: The level which determines valid turn values (Level 2 or Level 3).
         - max_turn_intensity: The maximum number of turns allowed for any single motion.
         """
-        self.max_turns = max_turns
         self.word_length = word_length
         self.level = level
         self.max_turn_intensity = max_turn_intensity
@@ -27,8 +24,6 @@ class TurnIntensityManager:
         Allocate separate turns for blue and red attributes across the sequence without exceeding max_turns,
         ensuring that no individual turn exceeds max_turn_intensity.
         """
-        remaining_turns_blue = self.max_turns
-        remaining_turns_red = self.max_turns
 
         # Define valid turn options for level
         if self.level == 2:
@@ -38,19 +33,15 @@ class TurnIntensityManager:
 
         # Distribute turns across each motion for blue and red within the word length
         for i in range(self.word_length):
-            if remaining_turns_blue <= 0 and remaining_turns_red <= 0:
-                break
-
-            # Allocate turns for blue motion
-            max_turn_blue = min(self.max_turn_intensity, remaining_turns_blue)
-            turn_blue = random.choice([t for t in possible_turns if t <= max_turn_blue])
+            turn_blue = random.choice(
+                [t for t in possible_turns if t <= self.max_turn_intensity]
+            )
             self.turns_allocated_blue[i] = turn_blue
-            remaining_turns_blue -= turn_blue
 
             # Allocate turns for red motion
-            max_turn_red = min(self.max_turn_intensity, remaining_turns_red)
-            turn_red = random.choice([t for t in possible_turns if t <= max_turn_red])
+            turn_red = random.choice(
+                [t for t in possible_turns if t <= self.max_turn_intensity]
+            )
             self.turns_allocated_red[i] = turn_red
-            remaining_turns_red -= turn_red
 
         return self.turns_allocated_blue, self.turns_allocated_red

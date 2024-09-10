@@ -79,7 +79,7 @@ class SpecialPlacementEntryRemover:
                 del letter_data[mirrored_tuple]
 
     def _handle_mixed_start_ori_mirrored_entry_removal(
-        self, letter, arrow, ori_key, letter_data, key
+        self, letter: Letter, arrow, ori_key, letter_data, key
     ):
 
         other_ori_key = self.data_updater.get_other_layer3_ori_key(ori_key)
@@ -105,7 +105,7 @@ class SpecialPlacementEntryRemover:
                     ][key]
             if self.turns_tuple not in letter_data:
                 if other_data:
-                    del other_data[letter][mirrored_tuple]
+                    del other_data[letter.value][mirrored_tuple]
 
             elif key not in letter_data[self.turns_tuple]:
                 if other_data:

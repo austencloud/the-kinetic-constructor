@@ -118,7 +118,6 @@ class CircularAutoBuilderFrame(BaseAutoBuilderFrame):
             self.sequence_length_spinbox.value(),
             float(self.max_turn_intensity_combo.currentText()),
             self.sequence_level_combo.currentData(),
-            self.max_turns_spinbox.value(),
             self.rotation_type_combo.currentData(),
             self.permutation_type_combo.currentData(),
             self.continuous_rotation_checkbox.isChecked(),

@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QWidget
-from PyQt6.QtGui import QPainter, QPen, QColor
+from PyQt6.QtGui import QPainter, QPen, QColor, QResizeEvent
 from PyQt6.QtCore import Qt, QRect
 from typing import TYPE_CHECKING
 
@@ -106,3 +106,4 @@ class StyledBorderOverlay(QWidget):
         self.saved_primary_color = self.primary_color
         self.saved_secondary_color = self.secondary_color
         self.update_border_color_and_width("gold", "gold")
+

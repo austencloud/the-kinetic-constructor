@@ -4,16 +4,12 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QDialog, QHBoxLayout, QVBoxLayout, QPushButton, QMessageBox
 from .export_dialog_control_panel import ExportDialogControlPanel
 from .export_dialog_preview_panel import ExportDialogPreviewPanel
-from sequence_sharer import SequenceSharerDialog  # Import the SequenceSharerDialog
+from sequence_sharer_dialog.sequence_sharer_dialog import SequenceSharerDialog  # Import the SequenceSharerDialog
 
 if TYPE_CHECKING:
     from ..image_export_manager import ImageExportManager
 
 
-def sanitize_filename(filename):
-    """Sanitize the filename by replacing invalid characters."""
-    sanitized = re.sub(r"[^\w\-_.]", "_", filename)  # Replace invalid characters
-    return sanitized
 
 
 class ImageExportDialog(QDialog):
@@ -46,10 +42,8 @@ class ImageExportDialog(QDialog):
         word = self.sequence[0]["word"]
         preview_image_path = f"{word}.png"  # Temporary file for the preview image
         pixmap = self.preview_panel.preview_image
-        sanitized_word = sanitize_filename(word)
 
-        # Construct a full file path and ensure it's in a valid directory
-        temp_image_path = os.path.join(os.getcwd(), f"{sanitized_word}.png")
+        temp_image_path = os.path.join(os.getcwd(), f"{word}.png")
 
         if not pixmap.save(temp_image_path):
             QMessageBox.critical(self, "Save Error", "Failed to save the preview image.")
@@ -61,7 +55,7 @@ class ImageExportDialog(QDialog):
             return
 
         # Open the SequenceSharer dialog
-        sharer_dialog = SequenceSharerDialog(self.main_widget, preview_image_path)
+        sharer_dialog = SequenceSharerDialog(self.main_widget, preview_image_path, word)
         sharer_dialog.exec()
 
         # Clean up the temporary image file after sending

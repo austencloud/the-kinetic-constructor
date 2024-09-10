@@ -14,7 +14,7 @@
         "add_beat_numbers": true
     },
     "user_profile": {
-        "current_user": "Robert Giannini",
+        "current_user": "Austen Cloud",
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
@@ -40,7 +40,7 @@
         "glyph_visibility": {
             "VTG": false,
             "TKA": true,
-            "Elemental": true,
+            "Elemental": false,
             "EndPosition": false
         },
         "grid_visibility": {
@@ -60,9 +60,8 @@
             "circular_auto_builder": {
                 "sequence_type": "circular",
                 "sequence_length": 16,
-                "max_turns": 30,
                 "max_turn_intensity": 1.0,
-                "sequence_level": 1,
+                "sequence_level": 2,
                 "rotation_type": "quartered",
                 "permutation_type": "rotational",
                 "continuous_rotation": true
@@ -70,7 +69,6 @@
             "freeform_auto_builder": {
                 "sequence_type": "freeform",
                 "sequence_length": 16,
-                "max_turns": 30,
                 "max_turn_intensity": 1.0,
                 "sequence_level": 2,
                 "continuous_rotation": true
@@ -82,7 +80,22 @@
     },
     "sequence_sharing": {
         "emails": [
-            "austencloud@gmail.com"
+            "austencloud@gmail.com",
+            "thesideflip@gmail.com"
+        ],
+        "recipients": [
+            {
+                "name": "Austen Cloud",
+                "email": "austencloud@gmail.com"
+            },
+            {
+                "name": "Robert Giannini",
+                "email": "thesideflip@gmail.com"
+            },
+            {
+                "name": "Doc Womp",
+                "email": "akmolski@gmail.com"
+            }
         ]
     }
 }
