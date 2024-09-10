@@ -15,7 +15,7 @@ from PyQt6.QtWidgets import (
     QTextEdit,  # Use QTextEdit for multi-line input
 )
 from .email_sender import EmailSender
-
+from PyQt6.QtCore import Qt
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
@@ -30,7 +30,10 @@ class SequenceSharerDialog(QDialog):
         self.checkbox_email_map = {}
 
         self.setWindowTitle("Share Sequence Image")
-        # self.setFixedSize(500, 400)
+
+        width = int(self.main_widget.width() / 5)
+        height = int(self.main_widget.height() / 2)
+        self.setFixedSize(width, height)
 
         self.init_ui()
         self.apply_styling()
@@ -72,9 +75,9 @@ class SequenceSharerDialog(QDialog):
         )  # Format image creation time
 
         # Sanitize the month and day to remove leading zeros
-        month, day, year = creation_time.split('-')
-        month = month.lstrip('0')
-        day = day.lstrip('0')
+        month, day, year = creation_time.split("-")
+        month = month.lstrip("0")
+        day = day.lstrip("0")
         sanitized_creation_time = f"{month}-{day}-{year}"
 
         self.body_label = QLabel("Email Body:")
@@ -101,6 +104,7 @@ class SequenceSharerDialog(QDialog):
 
         self.add_recipient_button = QPushButton("Add Recipient", self)
         self.add_recipient_button.clicked.connect(self.add_recipient)
+        self.add_recipient_button.setCursor(Qt.CursorShape.PointingHandCursor)
 
         layout.addLayout(add_recipient_layout)
         layout.addWidget(self.add_recipient_button)
@@ -113,6 +117,10 @@ class SequenceSharerDialog(QDialog):
 
         self.cancel_button = QPushButton("Cancel", self)
         self.cancel_button.clicked.connect(self.reject)
+
+        # make the button cursors pointed hands
+        self.send_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.cancel_button.setCursor(Qt.CursorShape.PointingHandCursor)
 
         button_layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Policy.Expanding))
         button_layout.addWidget(self.cancel_button)
@@ -207,7 +215,13 @@ class SequenceSharerDialog(QDialog):
                     subject,
                     body,
                 )
-            QMessageBox.information(self, "Success", "Email(s) sent successfully!")
-            self.accept()  # Close the dialog on success
+                success_message = QMessageBox(self)
+                success_message.setIcon(QMessageBox.Icon.Information)
+                success_message.setText("Email(s) sent successfully!")
+                success_message.setStandardButtons(QMessageBox.StandardButton.Ok)
+                ok_button = success_message.button(QMessageBox.StandardButton.Ok)
+                ok_button.setCursor(Qt.CursorShape.PointingHandCursor)
+                success_message.exec()
+                self.accept()  # Close the dialog on success
         except Exception as e:
             QMessageBox.critical(self, "Email Error", str(e))

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel, QVBoxLayout, QWidget
 from PyQt6.QtGui import QPixmap
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QRect
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
@@ -38,10 +38,19 @@ class FullScreenImageOverlay(QWidget):
         self.set_pixmap_to_fit(pixmap)
 
         # Set dimensions to match the main widget
-        self.setGeometry(self.main_widget.geometry())
+        self._set_geometry()
+
+    def _set_geometry(self):
+        geometry = QRect()
+        geometry.setX(0)
+        geometry.setY(0)
+        geometry.setHeight(self.main_widget.main_window.height())
+        geometry.setWidth(self.main_widget.main_window.width())
+        self.setGeometry(geometry)
 
     def resizeEvent(self, event):
         """Ensure the image is resized correctly when the window is resized."""
+        self._set_geometry()
         if self.image_label.pixmap():
             self.set_pixmap_to_fit(self.image_label.pixmap())
 

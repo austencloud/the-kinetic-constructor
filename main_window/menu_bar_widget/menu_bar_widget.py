@@ -13,9 +13,7 @@ class MenuBarWidget(QWidget):
         self.main_window = main_window
         self.menu_bar = MenuBar(self)
         layout: QHBoxLayout = QHBoxLayout(self)
-        layout.addStretch(1)
         layout.addWidget(self.menu_bar)
-        layout.addStretch(1)
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
 

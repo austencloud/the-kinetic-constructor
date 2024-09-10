@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QLabel, QFrame, QVBoxLayout
+from PyQt6.QtWidgets import QLabel, QFrame, QVBoxLayout, QApplication
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 
@@ -17,16 +17,15 @@ class ExportDialogPreviewPanel(QFrame):
         self.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Sunken)
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.preview_label = QLabel(self)
-        self.preview_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.preview_label.setScaledContents(False)  # Disable scaled contents
-
-        dialog_width = export_dialog.width()
-        dialog_height = export_dialog.height()  # or some other proportion
-        self.setMaximumSize(dialog_width, dialog_height)
+        # self.preview_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # self.preview_label.setScaledContents(False)  # Disable scaled contents
+        self.layout.setSpacing(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.preview_label)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-    def update_preview_with_start_pos(
+    def update_preview(
         self,
         include_start_pos: bool,
         add_info: bool,
@@ -35,6 +34,7 @@ class ExportDialogPreviewPanel(QFrame):
         include_difficulty_level: bool,
         add_beat_numbers: bool,
     ):
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         options = {
             "include_start_pos": include_start_pos,
             "add_info": add_info,
@@ -51,9 +51,7 @@ class ExportDialogPreviewPanel(QFrame):
             )
         )
         self.preview_image = QPixmap.fromImage(self.image)
-        self.update_preview()
 
-    def update_preview(self):
         if self.preview_image:
             image_aspect_ratio = (
                 self.preview_image.width() / self.preview_image.height()
@@ -74,15 +72,4 @@ class ExportDialogPreviewPanel(QFrame):
                 )
             )
             self.preview_label.setFixedSize(image_width, image_height)
-
-
-    def update_preview_with_options(
-        self, include_start_pos: bool, sequence: list[dict], options: dict
-    ):
-        self.image = (
-            self.export_dialog.export_manager.image_creator.create_sequence_image(
-                sequence, include_start_pos, options
-            )
-        )
-        self.preview_image = QPixmap.fromImage(self.image)
-        self.update_preview()
+        QApplication.restoreOverrideCursor()

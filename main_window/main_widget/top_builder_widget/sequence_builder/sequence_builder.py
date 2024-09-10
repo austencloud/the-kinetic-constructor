@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QTabWidget
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QCursor
 from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.auto_builder import (
     AutoBuilder,
 )
@@ -32,6 +34,7 @@ class SequenceBuilder(QTabWidget):
 
         # resize on tab change
         self.currentChanged.connect(self.on_tab_change)
+        self.tabBar().setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
     def load_last_used_builder(self):
         """Set the last used builder as the current tab."""
