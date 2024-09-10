@@ -1,6 +1,6 @@
 import json
 import threading
-from PyQt6.QtGui import QKeyEvent, QCursor
+from PyQt6.QtGui import QKeyEvent, QCursor, QCloseEvent
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
@@ -19,7 +19,7 @@ from .thumbnail_finder import (
     ThumbnailFinder,
 )
 from utilities.path_helpers import get_images_and_data_path
-from styles.get_tab_stylesheet import get_tab_stylesheet
+from styles.main_widget_tab_bar_styler import MainWidgetTabBarStyler
 from .dictionary_widget.dictionary_widget import DictionaryWidget
 from .metadata_extractor import MetaDataExtractor
 from .json_manager.json_manager import JSON_Manager
@@ -51,53 +51,45 @@ class MainWidget(QTabWidget):
         # Pass the splash_screen reference
         self.splash_screen = splash_screen
 
-        self.splash_screen.update_progress(5, "Setting up pictograph cache...")
         self._setup_pictograph_cache()
-
-        self.splash_screen.update_progress(15, "Setting prop type...")
         self._set_prop_type()
-
-        self.splash_screen.update_progress(25, "Setting up default modes...")
         self._setup_default_modes()
 
-        self.splash_screen.update_progress(35, "Loading letters...")
+        self.splash_screen.update_progress(10, "Loading letters...")
         self._setup_letters()
 
         self.splash_screen.update_progress(
             50, "Setting up JSON manager and components..."
         )
-        self.splash_screen.update_progress(55, "Loading JSON Manager...")
+        self.splash_screen.update_progress(20, "Loading JSON Manager...")
         self.json_manager = JSON_Manager(self)
 
-        self.splash_screen.update_progress(60, "Loading SVG Manager...")
+        self.splash_screen.update_progress(30, "Loading SVG Manager...")
         self.svg_manager = SvgManager()
 
-        self.splash_screen.update_progress(65, "Loading Turns Tuple Generator...")
+        self.splash_screen.update_progress(40, "Loading key generators...")
         self.turns_tuple_generator = TurnsTupleGenerator()
-
-        self.splash_screen.update_progress(70, "Loading Pictograph Key Generator...")
         self.pictograph_key_generator = PictographKeyGenerator(self)
 
-        self.splash_screen.update_progress(75, "Setting up special placements...")
+        self.splash_screen.update_progress(50, "Loading special placements...")
         self.special_placement_loader = SpecialPlacementLoader(self)
         self._setup_special_placements()
 
-        self.splash_screen.update_progress(80, "Loading Metadata Extractor...")
+        self.splash_screen.update_progress(60, "Loading Metadata Extractor...")
         self.metadata_extractor = MetaDataExtractor(self)
 
-        self.splash_screen.update_progress(85, "Loading other components...")
         self.sequence_level_evaluator = SequenceLevelEvaluator()
         self.sequence_properties_manager = SequencePropertiesManager(self)
         self.thumbnail_finder = ThumbnailFinder(self)
 
         self._setup_ui_components()
-
-        self.splash_screen.update_progress(100, "Initialization complete.")
-        self.setStyleSheet(get_tab_stylesheet())
+        self.tab_bar_styler = MainWidgetTabBarStyler(self)
+        # self.setStyleSheet(self.tab_bar_styler.get_tab_stylesheet())
         self.webcam_initialized = False
         self.initialized = True
         self.currentChanged.connect(self.on_tab_changed)
         self.tabBar().setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.splash_screen.update_progress(100, "Initialization complete!")
 
     def on_tab_changed(self, index):
         if index == self.builder_tab_index:
@@ -118,21 +110,7 @@ class MainWidget(QTabWidget):
             self.main_window.settings_manager.global_settings.set_current_tab(
                 "recorder"
             )
-        # elif index == self.sequence_card_tab_index:
-        #     self.main_window.settings_manager.global_settings.set_current_tab(
-        #         "sequence_cards"
-        #     )
 
-    # def initialize_webcam_async(self):
-    #     """Start the webcam initialization in a separate thread to avoid blocking the UI."""
-    #     thread = threading.Thread(target=self.init_webcam, daemon=True)
-    #     print("Starting webcam initialization thread")
-    #     thread.start()
-
-    # def init_webcam(self):
-    #     """Method to request webcam initialization via signal."""
-    #     self.sequence_recorder.capture_frame.video_display_frame.request_init_webcam()
-    #     print("Webcam initialization requested")
     def _setup_pictograph_cache(self) -> None:
         self.pictograph_cache: dict[str, dict[str, "BasePictograph"]] = {}
         for letter in Letter:
@@ -158,14 +136,15 @@ class MainWidget(QTabWidget):
 
     def _setup_ui_components(self):
         # Initialize special_placement_loader here
-        self.splash_screen.update_progress(90, "Loading Builder...")
+        self.splash_screen.update_progress(70, "Setting up builder...")
         self.top_builder_widget = TopBuilderWidget(self)
-        self.splash_screen.update_progress(95, "Loading Dictionary...")
+        self.splash_screen.update_progress(80, "Setting up dictionary...")
         self.dictionary_widget = DictionaryWidget(self)
         # self.sequence_recorder = SequenceRecorder(self)
+        self.splash_screen.update_progress(90, "Setting up layout...")
 
-        self.addTab(self.top_builder_widget, "Builder")
-        self.addTab(self.dictionary_widget, "Dictionary")
+        self.addTab(self.top_builder_widget, "Build")
+        self.addTab(self.dictionary_widget, "Browse")
         # Add more tabs as necessary
 
         self.builder_tab_index = 0
@@ -219,8 +198,7 @@ class MainWidget(QTabWidget):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
-        # self.main_window.geometry_manager.set_dimensions()
-        # self.main_window.showMaximized()
+        self.setStyleSheet(self.tab_bar_styler.get_tab_stylesheet())
 
     def apply_background(self):
         self.background_manager = (
@@ -232,9 +210,9 @@ class MainWidget(QTabWidget):
 
     def update_background(self, bg_type: str):
         self.apply_background()
-        self.update()  # Ensure the widget is redrawn with the new background
+        self.update()
 
-    def closeEvent(self, event):
+    def closeEvent(self, event: QCloseEvent):
         self.save_state()
         event.accept()
 
@@ -255,4 +233,4 @@ class MainWidget(QTabWidget):
             self.top_builder_widget.sequence_builder.manual_builder.option_picker.update_option_picker()
 
     def get_tab_bar_height(self):
-        return self.tabBar().height()
+        return self.tab_bar_styler.tab_height

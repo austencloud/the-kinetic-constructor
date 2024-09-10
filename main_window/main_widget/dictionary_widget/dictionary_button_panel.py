@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
     QMessageBox,
 )
 from PyQt6.QtCore import QSize, Qt
-from PyQt6.QtGui import QIcon, QPixmap
+from PyQt6.QtGui import QIcon, QPixmap, QResizeEvent
 
 from main_window.main_widget.dictionary_widget.full_screen_image_overlay import (
     FullScreenImageOverlay,
@@ -90,17 +90,15 @@ class DictionaryButtonPanel(QWidget):
             button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.layout.addStretch(1)
 
-
-
     def view_full_screen(self):
         """Display the current image in full screen mode."""
         current_thumbnail = self.preview_area.get_thumbnail_at_current_index()
         if current_thumbnail:
             pixmap = QPixmap(current_thumbnail)
-            full_screen_overlay = FullScreenImageOverlay(
+            self.full_screen_overlay = FullScreenImageOverlay(
                 self.preview_area.main_widget, pixmap
             )
-            full_screen_overlay.show()
+            self.full_screen_overlay.show()
         else:
             QMessageBox.warning(self, "No Image", "Please select an image first.")
 
@@ -149,3 +147,8 @@ class DictionaryButtonPanel(QWidget):
         self.save_image_button.show()
         self.delete_variation_button.show()
         self.edit_sequence_button.show()
+
+    def resizeEvent(self, a0: QResizeEvent | None) -> None:
+        # if the overlay is visible, trigger its resize event
+        if hasattr(self, "full_screen_overlay") and self.full_screen_overlay.isVisible():
+            self.full_screen_overlay.resizeEvent(a0)

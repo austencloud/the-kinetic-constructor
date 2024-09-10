@@ -6,7 +6,7 @@
         "current_tab": "sequence_builder"
     },
     "image_export": {
-        "include_start_position": false,
+        "include_start_position": true,
         "add_info": true,
         "open_directory_on_export": true,
         "add_word": true,
@@ -76,7 +76,7 @@
             "current_auto_builder": "circular"
         },
         "manual_builder": {},
-        "last_used_builder": "auto"
+        "last_used_builder": "manual"
     },
     "sequence_sharing": {
         "emails": [

@@ -1,15 +1,26 @@
 import os
 import re
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QDialog, QHBoxLayout, QVBoxLayout, QPushButton, QMessageBox
+from PyQt6.QtWidgets import (
+    QDialog,
+    QVBoxLayout,
+    QHBoxLayout,
+    QPushButton,
+    QMessageBox,
+    QSizePolicy,
+    QCheckBox,
+    QLabel,
+    QComboBox,
+    QLineEdit,
+)
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QIcon, QResizeEvent
 from .export_dialog_control_panel import ExportDialogControlPanel
 from .export_dialog_preview_panel import ExportDialogPreviewPanel
-from sequence_sharer_dialog.sequence_sharer_dialog import SequenceSharerDialog  # Import the SequenceSharerDialog
+from sequence_sharer_dialog.sequence_sharer_dialog import SequenceSharerDialog
 
 if TYPE_CHECKING:
     from ..image_export_manager import ImageExportManager
-
-
 
 
 class ImageExportDialog(QDialog):
@@ -21,35 +32,89 @@ class ImageExportDialog(QDialog):
         self.settings_manager = export_manager.settings_manager
         self.setWindowTitle("Save Image")
         self.setModal(True)
+
         self._resize_image_export_dialog()
         self._setup_components()
         self._setup_layout()
-        self.update_preview_based_on_options()
+        # self.update_preview_based_on_options()
 
     def _setup_okay_cancel_buttons(self):
+        """Setup Save, Cancel, and Share buttons with dynamic size."""
         self.ok_button = QPushButton("Save", self)
-        self.ok_button.clicked.connect(self.control_panel.save_settings_and_accept)
-
         self.cancel_button = QPushButton("Cancel", self)
-        self.cancel_button.clicked.connect(self.control_panel.export_dialog.reject)
 
-        # Add a "Share" button
-        self.share_button = QPushButton("Share", self)
-        self.share_button.clicked.connect(self.open_sharer_dialog)  # Open share dialog
+        # connect the OK and cancel buttons to their respective functions
+        self.ok_button.clicked.connect(self.accept)
+        self.cancel_button.clicked.connect(self.reject)
+
+        # give them a pointed hand cursor
+        self.ok_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.cancel_button.setCursor(Qt.CursorShape.PointingHandCursor)
+
+        # Icon for the share button
+        icon_path = os.path.join(
+            "F:\\CODE\\tka-sequence-constructor\\images\\icons\\share.png"
+        )
+        self.share_button = QPushButton(QIcon(icon_path), "")
+        self.share_button.setToolTip("Share this image")
+        self.share_button.setIconSize(
+            self.share_button.sizeHint()
+        ) 
+
+        self.share_button.clicked.connect(self.open_sharer_dialog)
+        self.share_button.setCursor(Qt.CursorShape.PointingHandCursor)
+
+        button_height = int(self.height() * 0.08)
+        font_size = int(
+            self.height() * 0.03
+        )  # Dynamically set font size based on window height
+        for button in [self.ok_button, self.cancel_button, self.share_button]:
+            button.setMinimumHeight(button_height)
+            button.setSizePolicy(
+                QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+            )
+            button.setStyleSheet(f"font-size: {font_size}px;")  # Set dynamic text size
+
+    def _setup_components(self):
+        """Setup the components for the export dialog."""
+        self.preview_panel = ExportDialogPreviewPanel(self)
+        self.control_panel = ExportDialogControlPanel(self)
+        self._setup_okay_cancel_buttons()
+
+    def _setup_layout(self):
+        """Setup the layout of the dialog with an HBox for control panel and preview panel."""
+        # Horizontal layout for the control panel and preview panel
+        main_layout = QHBoxLayout()
+        main_layout.addWidget(self.control_panel, 1)
+        main_layout.addWidget(self.preview_panel, 3)
+
+        # Button layout (Save, Cancel, Share) at the bottom
+        button_layout = QHBoxLayout()
+        button_layout.addWidget(self.cancel_button)
+        button_layout.addWidget(self.ok_button)
+        button_layout.addWidget(self.share_button)
+
+        # Main layout with buttons at the bottom
+        layout = QVBoxLayout(self)
+        layout.addLayout(main_layout, 1)
+        layout.addLayout(button_layout)
+
+        self.setLayout(layout)
 
     def open_sharer_dialog(self):
         """Open the SequenceSharerDialog to send the current preview image via email."""
         word = self.sequence[0]["word"]
-        preview_image_path = f"{word}.png"  # Temporary file for the preview image
+        preview_image_path = f"{word}.png"
         pixmap = self.preview_panel.preview_image
 
         temp_image_path = os.path.join(os.getcwd(), f"{word}.png")
 
         if not pixmap.save(temp_image_path):
-            QMessageBox.critical(self, "Save Error", "Failed to save the preview image.")
+            QMessageBox.critical(
+                self, "Save Error", "Failed to save the preview image."
+            )
             return
 
-        # Ensure the file exists and isn't empty before continuing
         if not os.path.isfile(temp_image_path) or os.path.getsize(temp_image_path) == 0:
             QMessageBox.critical(self, "File Error", "File is invalid or empty.")
             return
@@ -63,37 +128,22 @@ class ImageExportDialog(QDialog):
             os.remove(preview_image_path)
 
     def _resize_image_export_dialog(self):
+        """Resize the dialog based on the parent window size."""
         main_width = self.main_widget.width()
         main_height = self.main_widget.height()
-        self.resize(main_width // 3, int(main_height // 1.5))
-
-    def _setup_components(self):
-        self.preview_panel = ExportDialogPreviewPanel(self)
-        self.control_panel = ExportDialogControlPanel(self)
-        self._setup_okay_cancel_buttons()
-
-    def _setup_layout(self):
-        self.button_layout = QHBoxLayout()
-        self.button_layout.addWidget(self.cancel_button)
-        self.button_layout.addWidget(self.ok_button)
-        self.button_layout.addWidget(
-            self.share_button
-        )  # Add the "Share" button to layout
-
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addWidget(self.preview_panel, 12)
-        self.layout.addWidget(self.control_panel, 1)
-        self.layout.addLayout(self.button_layout, 1)
+        self.resize(int(main_width // 1.5), int(main_height // 1.5))
 
     def update_export_setting_and_layout(self):
+        """Update export settings and refresh the layout."""
         new_value = self.control_panel.include_start_pos_check.isChecked()
         self.export_manager.include_start_pos = new_value
         self.export_manager.settings_manager.image_export.set_image_export_setting(
             "include_start_position", new_value
         )
-        self.update_preview_based_on_options()
+        # self.update_preview_based_on_options()
 
     def get_export_options(self):
+        """Get the current export options."""
         return {
             "include_start_position": self.control_panel.include_start_pos_check.isChecked(),
             "add_info": self.control_panel.add_info_check.isChecked(),
@@ -106,13 +156,30 @@ class ImageExportDialog(QDialog):
             "add_beat_numbers": self.control_panel.add_beat_numbers_check.isChecked(),
         }
 
-    def update_preview_based_on_options(self):
-        include_start_pos = self.control_panel.include_start_pos_check.isChecked()
-        options = self.get_export_options()
-        self.preview_panel.update_preview_with_options(
-            include_start_pos, self.sequence, options
-        )
-
     def showEvent(self, event):
+        """Handle dialog show events."""
         super().showEvent(event)
-        self.preview_panel.update_preview()
+
+
+    def resizeEvent(self, a0: QResizeEvent | None) -> None:
+        # set the font size for all the checkbox labels and all the comboboxes and buttons int he control panel
+        font_size = int(self.height() * 0.025)
+        for widget in self.control_panel.findChildren(QCheckBox):
+            widget.setStyleSheet(f"font-size: {font_size}px;")
+        for widget in self.control_panel.findChildren(QLabel):
+            widget.setStyleSheet(f"font-size: {font_size}px;")
+        for widget in self.control_panel.findChildren(QPushButton):
+            widget.setStyleSheet(f"font-size: {font_size}px;")
+        for widget in self.control_panel.findChildren(QComboBox):
+            widget.setStyleSheet(f"font-size: {font_size}px;")
+        for widget in self.preview_panel.findChildren(QLineEdit):
+            widget.setStyleSheet(f"font-size: {font_size}px;")
+        # resize the preview panel image to be 3/4 of the width, while maintaining aspect ratio
+        self.preview_panel.update_preview(
+            self.control_panel.include_start_pos_check.isChecked(),
+            self.control_panel.add_info_check.isChecked(),
+            self.sequence,
+            self.control_panel.add_word_check.isChecked(),
+            self.control_panel.include_difficulty_level_check.isChecked(),
+            self.control_panel.add_beat_numbers_check.isChecked(),
+        )
