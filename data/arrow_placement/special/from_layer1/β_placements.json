@@ -264,6 +264,9 @@
     },
     "(ccw, 2, 0)": {
       "swap_beta_e_radial_blue_static_e_red_static_e": true
+    },
+    "(cw, 1, 0)": {
+      "swap_beta_w_radial_blue_static_w_red_static_w": true
     }
   }
 }
