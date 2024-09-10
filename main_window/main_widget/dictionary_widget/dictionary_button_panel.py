@@ -151,12 +151,9 @@ class DictionaryButtonPanel(QWidget):
         self.edit_sequence_button.show()
 
     def resizeEvent(self, a0: QResizeEvent | None) -> None:
-        # Check if the overlay exists and is not deleted before attempting to resize it
-        if hasattr(self, "full_screen_overlay"):
-            if self.full_screen_overlay:
-                try:
-                    if self.full_screen_overlay.isVisible():
-                        self.full_screen_overlay.resizeEvent(a0)
-                except RuntimeError:
-                    # Handle the case where the overlay has been deleted
-                    self.full_screen_overlay = None
+        if self.full_screen_overlay:
+            try:
+                if self.full_screen_overlay.isVisible():
+                    self.full_screen_overlay.resizeEvent(a0)
+            except RuntimeError:
+                self.full_screen_overlay = None
