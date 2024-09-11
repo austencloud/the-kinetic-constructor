@@ -143,7 +143,7 @@ class ManualBuilder(QFrame):
         self.start_pos_picker.show()
         self.start_pos_picker.resize_start_pos_picker()
 
-    def resize_manual_builder(self) -> None:
+    def  resize_manual_builder(self) -> None:
         self.start_pos_picker.resize_start_pos_picker()
         self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
         self.option_picker.resize_option_picker()

@@ -87,30 +87,33 @@ class GlobalSettings:
 
     def update_main_widget_font_colors(self, bg_type):
         sequence_builder = self.main_widget.top_builder_widget.sequence_builder
+        dictionary = self.main_widget.dictionary_widget
+        top_builder_widget = self.main_widget.top_builder_widget
 
-        self.main_widget.top_builder_widget.sequence_widget.current_word_label.setStyleSheet(
+        top_builder_widget.sequence_widget.current_word_label.setStyleSheet(
             f"color: {self.get_font_color(bg_type)};"
         )
-        self.main_widget.top_builder_widget.sequence_widget.difficulty_label.setStyleSheet(
+        top_builder_widget.sequence_widget.difficulty_label.setStyleSheet(
             f"color: {self.get_font_color(bg_type)};"
         )
         sequence_builder.manual_builder.start_pos_picker.choose_your_start_pos_label.setStyleSheet(
             f"color: {self.get_font_color(bg_type)};"
         )
 
-        sequence_builder.auto_builder.freeform_builder_frame.update_font_colors(
+        sequence_builder.auto_builder.freeform_builder_frame._update_font_colors(
             self.get_font_color(bg_type)
         )
-        sequence_builder.auto_builder.circular_builder_frame.update_font_colors(
+        sequence_builder.auto_builder.circular_builder_frame._update_font_colors(
             self.get_font_color(bg_type)
         )
 
-        self.main_widget.dictionary_widget.browser.options_widget.sort_widget.sort_by_label.setStyleSheet(
+        dictionary.browser.options_widget.sort_widget.sort_by_label.setStyleSheet(
             f"color: {self.get_font_color(bg_type)};"
         )
-        self.main_widget.dictionary_widget.browser.options_widget.sort_widget.style_buttons()
-        self.main_widget.dictionary_widget.browser.nav_sidebar.set_styles()
-        self.main_widget.dictionary_widget.preview_area.image_label.style_placeholder()
+        dictionary.browser.options_widget.sort_widget.style_buttons()
+        dictionary.browser.nav_sidebar.set_styles()
+        dictionary.preview_area.image_label.style_placeholder()
+        dictionary.browser.initial_selection_widget.filter_choice_widget.resize_filter_choice_widget()
 
     def update_splash_screen_font_colors(
         self, splash_screen: "SplashScreen", bg_type: str
@@ -135,6 +138,9 @@ class GlobalSettings:
         if bg_type in ["Rainbow", "AuroraBorealis", "Aurora"]:
             return "black"
         return "white"
+
+    def get_current_font_color(self) -> str:
+        return self.get_font_color(self.get_background_type())
 
     def set_current_tab(self, tab: str) -> None:
         self.settings["current_tab"] = tab

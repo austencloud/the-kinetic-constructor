@@ -25,6 +25,7 @@ class FilterChoiceWidget(QWidget):
         self.button_labels: dict[str, QLabel] = {}
         self.browser = initial_selection_widget.browser
         self.main_widget = initial_selection_widget.browser.main_widget
+        self.settings_manager = self.main_widget.main_window.settings_manager
         self._setup_ui()
 
     def _setup_ui(self):
@@ -133,12 +134,23 @@ class FilterChoiceWidget(QWidget):
         self._resize_buttons_labels()
         self._resize_buttons()
         self._resize_description_label()
+        self._resize_all_labels_in_children()
+
+    def _resize_all_labels_in_children(self):
+        for filter_choice_section in self.initial_selection_widget.sections:
+            # get all the labels that are children of those widgets
+            for label in filter_choice_section.findChildren(QLabel):
+                # add to the stylesheet to make it the correct font color
+                font_color = self.settings_manager.global_settings.get_current_font_color()
+                label.setStyleSheet(f"color: {font_color};")
 
     def _resize_description_label(self):
-        description_label_font = QFont()
-        description_label_font.setFamily("Monotype Corsiva")
-        description_label_font.setPointSize(self.main_widget.width() // 60)
-        self.description_label.setFont(description_label_font)
+        font_color = self.settings_manager.global_settings.get_current_font_color()
+        font_size = self.main_widget.width() // 30
+        font_family = "Monotype Corsiva"
+        self.description_label.setStyleSheet(
+            f"font-size: {font_size}px; color: {font_color}; font-family: {font_family};"
+        )
 
     def _resize_buttons(self):
         button_font = QFont()
@@ -149,10 +161,12 @@ class FilterChoiceWidget(QWidget):
             button.setFont(button_font)
 
     def _resize_buttons_labels(self):
-        font = QFont()
-        font.setPointSize(self.main_widget.width() // 170)
+        font_size = self.main_widget.width() // 150
+        font_color = self.settings_manager.global_settings.get_current_font_color()
         for button_label in self.button_labels.values():
-            button_label.setFont(font)
+            button_label.setStyleSheet(
+                f"font-size: {font_size}px; color: {font_color};"
+            )
 
     def resizeEvent(self, a0: QResizeEvent | None) -> None:
         self.resize_filter_choice_widget()

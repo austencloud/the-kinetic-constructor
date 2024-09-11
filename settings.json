@@ -59,9 +59,9 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 32,
-                "max_turn_intensity": 1.0,
-                "sequence_level": 2,
+                "sequence_length": 16,
+                "max_turn_intensity": 1.5,
+                "sequence_level": 3,
                 "rotation_type": "quartered",
                 "permutation_type": "rotational",
                 "continuous_rotation": true
@@ -70,7 +70,7 @@
                 "sequence_type": "freeform",
                 "sequence_length": 16,
                 "max_turn_intensity": 1.0,
-                "sequence_level": 2,
+                "sequence_level": 1,
                 "continuous_rotation": true
             },
             "current_auto_builder": "circular"
