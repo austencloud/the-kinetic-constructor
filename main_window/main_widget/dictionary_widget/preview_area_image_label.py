@@ -5,7 +5,9 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.dictionary_widget.dictionary_preview_area import DictionaryPreviewArea
+    from main_window.main_widget.dictionary_widget.dictionary_preview_area import (
+        DictionaryPreviewArea,
+    )
 
 
 class PreviewAreaImageLabel(QLabel):
@@ -81,3 +83,10 @@ class PreviewAreaImageLabel(QLabel):
         )
         self.setPixmap(scaled_pixmap)
         self.setMinimumHeight(new_height)
+
+    def resize_image_label(self):
+        if self.pixmap().width():
+            self.update_thumbnail()
+        else:
+            #resize the placeholder text
+            self.style_placeholder()

@@ -2,22 +2,30 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
-from main_window.main_widget.dictionary_widget.preview_area_image_label import PreviewAreaImageLabel
-from main_window.main_widget.dictionary_widget.dictionary_button_panel import DictionaryButtonPanel
+from main_window.main_widget.dictionary_widget.preview_area_image_label import (
+    PreviewAreaImageLabel,
+)
+from main_window.main_widget.dictionary_widget.dictionary_button_panel import (
+    DictionaryButtonPanel,
+)
 from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.dictionary_preview_area_base_word_label import (
     DictionaryPreviewAreaWordLabel,
 )
 from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.preview_area_nav_btns import (
     PreviewAreaNavButtonsWidget,
 )
-from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.thumbnail_box import ThumbnailBox
+from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.thumbnail_box import (
+    ThumbnailBox,
+)
 
 from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.variation_number_label import (
     VariationNumberLabel,
 )
 
 if TYPE_CHECKING:
-    from main_window.main_widget.dictionary_widget.dictionary_widget import DictionaryWidget
+    from main_window.main_widget.dictionary_widget.dictionary_widget import (
+        DictionaryWidget,
+    )
 
 
 class DictionaryPreviewArea(QWidget):
@@ -150,3 +158,23 @@ class DictionaryPreviewArea(QWidget):
         self.nav_buttons_widget.hide()
         self.variation_number_label.hide()
         self.initialized = False
+
+    def resize_preview_area(self):
+        self.word_label.resize_word_label()
+        self.variation_number_label.resize_variation_number_label()
+        self.nav_buttons_widget.resize_nav_buttons()
+        self.image_label.adjust_label_height_for_text()
+        self.image_label.resize_image_label()
+        self.button_panel.resize_buttons()
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        # self.resize_preview_area()
+        # if self.thumbnails and self.current_index is not None:
+        #     self.update_preview(self.current_index)
+        # else:
+        #     self.image_label.adjust_label_height_for_text()
+        # self.word_label.resize_word_label()
+        # self.variation_number_label.resize_variation_number_label()
+        # self.nav_buttons_widget.resize_nav_buttons()
+        # self.button_panel.resize_buttons()

@@ -74,13 +74,17 @@ class PreviewAreaNavButtonsWidget(QWidget):
             self.show()
             self.variation_number_label.update_index(self.current_index + 1)
 
+    def resize_nav_buttons(self):
+        font_size = self.width() // 20
+        for button in self.buttons:
+            button.setFont(QFont("Arial", font_size, QFont.Weight.Bold))
 
 class PreviewAreaNavButton(QPushButton):
     def __init__(self, text: str, parent: PreviewAreaNavButtonsWidget):
         super().__init__(text, parent)
         self.clicked.connect(parent.handle_button_click)
         self.setStyleSheet("background-color: white;")
-        self.setFont(QFont("Arial", 16, QFont.Weight.Bold))
+        # self.setFont(QFont("Arial", 16, QFont.Weight.Bold))
         self.setCursor(Qt.CursorShape.PointingHandCursor)
 
     

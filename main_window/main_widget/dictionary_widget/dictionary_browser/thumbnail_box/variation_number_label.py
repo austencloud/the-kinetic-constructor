@@ -29,7 +29,5 @@ class VariationNumberLabel(QLabel):
     def clear(self) -> None:
         self.setText("")
 
-    def resizeEvent(self, event):
+    def resize_variation_number_label(self):
         self.setFont(QFont("Arial", self.width() // 35, QFont.Weight.Bold))
-        super().resizeEvent(event)
-

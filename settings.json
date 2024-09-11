@@ -48,7 +48,7 @@
         }
     },
     "dictionary": {
-        "sort_method": "date_added"
+        "sort_method": "sequence_length"
     },
     "sequence_layout": {
         "grow_sequence": false,
@@ -59,10 +59,10 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 8,
+                "sequence_length": 32,
                 "max_turn_intensity": 1.0,
                 "sequence_level": 2,
-                "rotation_type": "halved",
+                "rotation_type": "quartered",
                 "permutation_type": "rotational",
                 "continuous_rotation": true
             },
@@ -73,7 +73,7 @@
                 "sequence_level": 2,
                 "continuous_rotation": true
             },
-            "current_auto_builder": "freeform"
+            "current_auto_builder": "circular"
         },
         "manual_builder": {},
         "last_used_builder": "auto"

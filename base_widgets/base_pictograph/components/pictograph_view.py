@@ -52,7 +52,7 @@ class PictographView(QGraphicsView):
 
         view_width = min(
             int(
-                (self.pictograph.scroll_area.option_picker.width() / COLUMN_COUNT)
+                (self.pictograph.scroll_area.option_picker.main_widget.width() //2 / COLUMN_COUNT)
                 - ((sections[letter_type].pictograph_frame.spacing))
             ),
             # get the height of the option picker widget  divided by 6

@@ -21,6 +21,7 @@ class BaseAutoBuilder:
         self.main_widget = self.top_builder_widget.main_widget
         self.validation_engine = self.main_widget.json_manager.validation_engine
         self.sequence_builder = self.top_builder_widget.sequence_builder
+
     def modify_layout_for_chosen_number_of_beats(self, beat_count):
         self.sequence_widget.beat_frame.layout_manager.configure_beat_frame(
             beat_count, override_grow_sequence=True

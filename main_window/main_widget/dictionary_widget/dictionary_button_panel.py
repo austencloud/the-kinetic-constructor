@@ -157,3 +157,17 @@ class DictionaryButtonPanel(QWidget):
                     self.full_screen_overlay.resizeEvent(a0)
             except RuntimeError:
                 self.full_screen_overlay = None
+
+    def resize_buttons(self):
+        btn_size = int(self.dictionary_widget.width() // 24)
+        icon_size = int(btn_size * 0.8)
+        for button_name in [
+            "edit_sequence",
+            "save_image",
+            "delete_variation",
+            "view_full_screen",
+        ]:
+            button: QPushButton = getattr(self, f"{button_name}_button")
+            button.setMinimumSize(QSize(btn_size, btn_size))
+            button.setMaximumSize(QSize(btn_size, btn_size))
+            button.setIconSize(QSize(icon_size, icon_size))
