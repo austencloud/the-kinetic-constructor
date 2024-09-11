@@ -62,10 +62,8 @@ class SequenceBuilder(QTabWidget):
                 "auto"
             )
 
-        self.resize_sequence_builder_tab_widget()
+        self.resize_sequence_builder()
 
-    def resize_sequence_builder_tab_widget(self):
+    def resize_sequence_builder(self):
         self.manual_builder.resize_manual_builder()
         self.auto_builder.resize_auto_builder()
-
-

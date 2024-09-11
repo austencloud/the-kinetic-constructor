@@ -49,7 +49,6 @@ class GraphEditor(QFrame):
 
     def clear_graph_editor(self) -> None:
         self.pictograph_container.GE_pictograph_view.set_to_blank_grid()
-        # self.adjustment_panel.update_turns_displays(0, 0)
         self.adjustment_panel.update_adjustment_panel()
 
     def resize_graph_editor(self) -> None:

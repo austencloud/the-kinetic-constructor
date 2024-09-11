@@ -3,7 +3,7 @@
         "prop_type": "Staff",
         "background_type": "Aurora",
         "grow_sequence": true,
-        "current_tab": "dictionary"
+        "current_tab": "sequence_builder"
     },
     "image_export": {
         "include_start_position": true,
@@ -59,10 +59,10 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 16,
+                "sequence_length": 8,
                 "max_turn_intensity": 1.0,
                 "sequence_level": 2,
-                "rotation_type": "quartered",
+                "rotation_type": "halved",
                 "permutation_type": "rotational",
                 "continuous_rotation": true
             },
@@ -73,10 +73,10 @@
                 "sequence_level": 2,
                 "continuous_rotation": true
             },
-            "current_auto_builder": "circular"
+            "current_auto_builder": "freeform"
         },
         "manual_builder": {},
-        "last_used_builder": "manual"
+        "last_used_builder": "auto"
     },
     "sequence_sharing": {
         "emails": [
@@ -95,6 +95,10 @@
             {
                 "name": "Doc Womp",
                 "email": "akmolski@gmail.com"
+            },
+            {
+                "name": "Kimberly Bucki",
+                "email": "kimberly.bucki@loop.colum.edu"
             }
         ]
     }

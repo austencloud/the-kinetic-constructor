@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
     QSizePolicy,
     QSpacerItem,
 )
-from PyQt6.QtGui import QFont
+from PyQt6.QtGui import QFont, QResizeEvent
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
@@ -32,16 +32,16 @@ class FilterChoiceWidget(QWidget):
         main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Add a descriptive label at the top
+        main_layout.addStretch(2)
         self.description_label = QLabel("Choose a filter:")
         self.description_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        main_layout.addStretch(4)
         main_layout.addWidget(self.description_label)
-        main_layout.addStretch(2)
-
+        # add stretch
+        main_layout.addStretch(1)
         # Create a grid layout for the filter options
         grid_layout = QGridLayout()
         grid_layout.setHorizontalSpacing(50)
-        grid_layout.setVerticalSpacing(20)
+        grid_layout.setVerticalSpacing(30)
         grid_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Define filter options and their descriptions
@@ -94,24 +94,13 @@ class FilterChoiceWidget(QWidget):
             vbox.addWidget(button, alignment=Qt.AlignmentFlag.AlignCenter)
             vbox.addWidget(description_label, alignment=Qt.AlignmentFlag.AlignCenter)
 
-            row = index // 3 * 2  # Calculate row number (doubled for spacing)
+            row = index // 3  # Keep grid rows even
             col = index % 3  # Calculate column number
 
             grid_layout.addLayout(vbox, row, col)
 
-        # Add an empty row between the first and second rows of buttons
-        self.grid_spacer_item_1 = QSpacerItem(
-            0,
-            0,
-            QSizePolicy.Policy.Minimum,
-            QSizePolicy.Policy.MinimumExpanding,
-        )
-        grid_layout.addItem(
-            self.grid_spacer_item_1, 1, 0, 1, 3
-        )  # Add spacer across all three columns
-
         main_layout.addLayout(grid_layout)
-
+        # Add "Show All" button and description at the bottom
         show_all_sequences_button = QPushButton("Show all")
         show_all_sequences_button.setCursor(Qt.CursorShape.PointingHandCursor)
         show_all_sequences_button.clicked.connect(
@@ -119,19 +108,11 @@ class FilterChoiceWidget(QWidget):
         )
         self.buttons["Show all sequences"] = show_all_sequences_button
 
-        self.grid_spacer_item_2 = QSpacerItem(
-            0,
-            0,
-            QSizePolicy.Policy.Minimum,
-            QSizePolicy.Policy.MinimumExpanding,
-        )
-        grid_layout.addItem(self.grid_spacer_item_2, 3, 0, 1, 3)
-
-        # Add description label below the "Show all sequences" button
         show_all_description_label = QLabel("Display every sequence in the dictionary.")
         show_all_description_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.button_labels["Show all sequences"] = show_all_description_label
-        # Create a vertical layout for the button and its description
+
+        # Create a vertical layout for the "Show all" button and its description
         show_all_vbox = QVBoxLayout()
         show_all_vbox.addWidget(
             show_all_sequences_button, alignment=Qt.AlignmentFlag.AlignCenter
@@ -140,41 +121,39 @@ class FilterChoiceWidget(QWidget):
             show_all_description_label, alignment=Qt.AlignmentFlag.AlignCenter
         )
 
-        grid_layout.addLayout(show_all_vbox, 4, 1)  # Centered in the grid
+        grid_layout.addLayout(show_all_vbox, 3, 1)  # Centered in the grid
 
-        main_layout.addStretch(4)
+        main_layout.addStretch(2)
         self.setLayout(main_layout)
 
     def get_current_filter(self):
         return self.browser.current_filter
 
     def resize_filter_choice_widget(self):
-        self.setMinimumWidth(int(self.main_widget.width() * 0.95))
         self._resize_buttons_labels()
         self._resize_buttons()
         self._resize_description_label()
-        self._resize_grid_spacer_items()
-
-    def _resize_grid_spacer_items(self):
-        self.grid_spacer_item_1.changeSize(0, self.main_widget.height() // 15)
-        self.grid_spacer_item_2.changeSize(0, self.main_widget.height() // 15)
 
     def _resize_description_label(self):
         description_label_font = QFont()
         description_label_font.setFamily("Monotype Corsiva")
-        description_label_font.setPointSize(self.width() // 60)
+        description_label_font.setPointSize(self.main_widget.width() // 60)
         self.description_label.setFont(description_label_font)
 
     def _resize_buttons(self):
         button_font = QFont()
-        button_font.setPointSize(self.width() // 80)
+        button_font.setPointSize(self.main_widget.width() // 80)
         for button in self.buttons.values():
-            button.setFixedWidth(self.width() // 7)
-            button.setFixedHeight(self.height() // 10)
+            button.setFixedWidth(self.main_widget.width() // 7)
+            button.setFixedHeight(self.main_widget.height() // 10)
             button.setFont(button_font)
 
     def _resize_buttons_labels(self):
         font = QFont()
-        font.setPointSize(self.width() // 170)
+        font.setPointSize(self.main_widget.width() // 170)
         for button_label in self.button_labels.values():
             button_label.setFont(font)
+
+    def resizeEvent(self, a0: QResizeEvent | None) -> None:
+        self.resize_filter_choice_widget()
+        return super().resizeEvent(a0)

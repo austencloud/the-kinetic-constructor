@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.dictionary_widget.dictionary_browser.initial_filter_selection_widget.dictionary_initial_selections_widget import DictionaryInitialSelectionsWidget
+from main_window.main_widget.dictionary_widget.dictionary_browser.initial_filter_selection_widget.dictionary_initial_selections_widget import (
+    DictionaryInitialSelectionsWidget,
+)
 from .currently_displaying_indicator_label import CurrentlyDisplayingIndicatorLabel
 from .dictionary_browser_nav_sidebar import DictionaryBrowserNavSidebar
 from PyQt6.QtCore import Qt
@@ -12,11 +14,15 @@ from .dictionary_browser_section_manager import SectionManager
 from .thumbnail_box_sorter import ThumbnailBoxSorter
 from .dictionary_browser_scroll_widget import DictionaryBrowserScrollWidget
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
-from main_window.main_widget.dictionary_widget.dictionary_browser.dictionary_browser_options_panel.dictionary_browser_options_panel import DictionaryOptionsPanel
+from main_window.main_widget.dictionary_widget.dictionary_browser.dictionary_browser_options_panel.dictionary_browser_options_panel import (
+    DictionaryOptionsPanel,
+)
 from PyQt6.QtWidgets import QLabel
 
 if TYPE_CHECKING:
-    from main_window.main_widget.dictionary_widget.dictionary_widget import DictionaryWidget
+    from main_window.main_widget.dictionary_widget.dictionary_widget import (
+        DictionaryWidget,
+    )
 
 
 class DictionaryBrowser(QWidget):
@@ -178,3 +184,4 @@ class DictionaryBrowser(QWidget):
         self._initialize_and_sort_thumbnails(
             self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
         )
+

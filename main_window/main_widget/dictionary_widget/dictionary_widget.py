@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QPainter
+from PyQt6.QtGui import QPainter, QResizeEvent
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
 
 from main_window.main_widget.dictionary_widget.dictionary_browser.dictionary_browser import (
@@ -69,3 +69,5 @@ class DictionaryWidget(QWidget):
 
     def resize_dictionary_widget(self) -> None:
         self.browser.resize_dictionary_browser()
+
+    

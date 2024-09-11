@@ -183,10 +183,10 @@ class MainWidget(QTabWidget):
         else:
             super().keyPressEvent(event)
 
-    def resize_current_widget(self, starting_widget):
-        if starting_widget == self.top_builder_widget:
+    def resize_current_widget(self, current_widget):
+        if current_widget == self.top_builder_widget:
             self.top_builder_widget.resize_top_builder_widget()
-        elif starting_widget == self.dictionary_widget:
+        elif current_widget == self.dictionary_widget:
             self.dictionary_widget.browser.resize_dictionary_browser()
 
     def showEvent(self, event):
@@ -199,6 +199,7 @@ class MainWidget(QTabWidget):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.setStyleSheet(self.tab_bar_styler.get_tab_stylesheet())
+        # self.resize_current_widget(self.currentWidget())
 
     def apply_background(self):
         self.background_manager = (
