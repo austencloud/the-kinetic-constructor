@@ -84,7 +84,7 @@ class ContainsLetterSection(FilterSectionBase):
 
         self.browser.currently_displayed_sequences = []
         sort_method = (
-            self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
+            self.main_widget.main_window.settings_manager.dictionary_settings.get_sort_method()
         )
         base_words = self.thumbnail_box_sorter.get_sorted_base_words(sort_method)
         total_sequences = 0

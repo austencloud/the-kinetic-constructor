@@ -4,7 +4,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import QObject, pyqtSignal
 
 from main_window.settings_manager.builder_settings import BuilderSettings
-from main_window.settings_manager.sequence_sharing_settings import SequenceSharingSettings
+from main_window.settings_manager.sequence_sharing_settings import (
+    SequenceSharingSettings,
+)
 
 from ..settings_manager.dictionary_settings import DictionarySettings
 from ..settings_manager.image_export_settings import ImageExportSettings
@@ -32,7 +34,7 @@ class SettingsManager(QObject):
         self.image_export = ImageExportSettings(self)
         self.users = UserProfileSettings(self)
         self.visibility = VisibilitySettings(self)
-        self.dictionary = DictionarySettings(self)
+        self.dictionary_settings = DictionarySettings(self)
         self.sequence_layout = SequenceLayoutSettings(self)
         self.builder_settings = BuilderSettings(self)
         self.sequence_sharing = SequenceSharingSettings(self)  # New sharing settings

@@ -129,7 +129,7 @@ class StartingLetterSection(FilterSectionBase):
             self.progress_bar.setVisible(False)
 
             self.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
-                self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
+                self.main_widget.main_window.settings_manager.dictionary_settings.get_sort_method()
             )
 
             self.browser.currently_displaying_label.show_completed_message(
@@ -138,6 +138,9 @@ class StartingLetterSection(FilterSectionBase):
             QApplication.restoreOverrideCursor()
 
         QTimer.singleShot(0, update_ui)
+        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
+            "starting_letter"
+        )
 
     def resize_starting_letter_section(self):
         self.resize_buttons()
@@ -145,13 +148,13 @@ class StartingLetterSection(FilterSectionBase):
 
     def resize_label(self):
         font = self.header_label.font()
-        font.setPointSize(self.browser.width() // 100)
+        font.setPointSize(self.browser.main_widget.width() // 100)
         self.header_label.setFont(font)
 
     def resize_buttons(self):
         for button in self.buttons.values():
             font = button.font()
-            font.setPointSize(self.browser.width() // 100)
+            font.setPointSize(self.browser.main_widget.width() // 100)
             button.setFont(font)
-            button.setFixedHeight(self.browser.height() // 20)
-            button.setFixedWidth(self.browser.width() // 20)
+            button.setFixedHeight(self.browser.main_widget.height() // 20)
+            button.setFixedWidth(self.browser.main_widget.width() // 20)

@@ -7,10 +7,14 @@ from .thumbnail_generator import ThumbnailGenerator
 from .turn_pattern_variation_checker import TurnPatternVariationChecker
 from utilities.path_helpers import get_images_and_data_path
 
-from main_window.main_widget.top_builder_widget.sequence_widget.add_to_dictionary_manager.turn_pattern_converter import TurnPatternConverter
+from main_window.main_widget.top_builder_widget.sequence_widget.add_to_dictionary_manager.turn_pattern_converter import (
+    TurnPatternConverter,
+)
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import SequenceWidget
+    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
+        SequenceWidget,
+    )
 
 
 class AddToDictionaryManager:
@@ -105,7 +109,9 @@ class AddToDictionaryManager:
         return "none,none"
 
     def save_variation(self, sequence, base_word, variation_number):
-        turn_pattern_description = self.turn_pattern_converter.sequence_to_pattern(sequence)
+        turn_pattern_description = self.turn_pattern_converter.sequence_to_pattern(
+            sequence
+        )
         start_orientations = self.get_start_orientations(sequence)
         directory = self.get_variation_directory(
             base_word, variation_number, start_orientations
@@ -153,7 +159,7 @@ class AddToDictionaryManager:
 
     def refresh_dictionary_ui(self):
         self.sequence_widget.main_widget.dictionary_widget.browser.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
-            self.sequence_widget.main_widget.main_window.settings_manager.dictionary.get_sort_method()
+            self.sequence_widget.main_widget.main_window.settings_manager.dictionary_settings.get_sort_method()
         )
 
     def get_base_word(self, sequence):

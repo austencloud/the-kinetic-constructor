@@ -23,12 +23,15 @@ class DictionaryWidget(QWidget):
         self.indicator_label = (
             main_widget.top_builder_widget.sequence_widget.indicator_label
         )
-        self._setup_ui()
         self.selected_sequence_dict = None
 
         self.global_settings = (
             self.main_widget.main_window.settings_manager.global_settings
         )
+        self.dictionary_settings = (
+            self.main_widget.main_window.settings_manager.dictionary_settings
+        )
+        self._setup_ui()
         self.connect_signals()
         self.initialized = False
         self.background_manager = None

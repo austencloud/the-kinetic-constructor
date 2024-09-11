@@ -134,7 +134,7 @@ class FilterSectionBase(QWidget):
 
             self.progress_bar.setVisible(False)
             self.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
-                self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
+                self.main_widget.main_window.settings_manager.dictionary_settings.get_sort_method()
             )
             if filter_description_prefix == "level":
                 filter_description = f"level {filter_description} sequences"

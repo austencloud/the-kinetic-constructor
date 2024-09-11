@@ -145,7 +145,8 @@ class BaseAutoBuilderFrame(QFrame):
         self.auto_builder_settings.set_auto_builder_setting(
             "sequence_level", self.sequence_level_combo.currentData(), self.builder_type
         )
-
+        self._resize_auto_builder_frame()
+        
     def _update_visibility_based_on_level(self):
         """Update visibility of turn settings based on selected sequence level."""
         is_visible = self.sequence_level_combo.currentData() > 1
@@ -207,6 +208,7 @@ class BaseAutoBuilderFrame(QFrame):
             metrics = combobox.fontMetrics()
             width = metrics.horizontalAdvance(text)
             combobox.setMinimumWidth(width + 25)
+        
 
         self.updateGeometry()
         self.repaint()

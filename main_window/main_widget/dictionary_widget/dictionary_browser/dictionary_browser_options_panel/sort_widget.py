@@ -71,7 +71,7 @@ class SortWidget(QWidget):
     def on_sort_by_length(self):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.update_selected_button(self.buttons["sort_by_length_button"])
-        self.settings_manager.dictionary.set_sort_method("sequence_length")
+        self.settings_manager.dictionary_settings.set_sort_method("sequence_length")
         self.browser.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
             "sequence_length"
         )
@@ -81,7 +81,7 @@ class SortWidget(QWidget):
     def on_sort_alphabetically(self):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.update_selected_button(self.buttons["sort_alphabetically_button"])
-        self.settings_manager.dictionary.set_sort_method("alphabetical")
+        self.settings_manager.dictionary_settings.set_sort_method("alphabetical")
         self.browser.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
             "alphabetical"
         )
@@ -91,7 +91,7 @@ class SortWidget(QWidget):
     def on_sort_by_date_added(self):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.update_selected_button(self.buttons["sort_date_added_button"])
-        self.settings_manager.dictionary.set_sort_method("date_added")
+        self.settings_manager.dictionary_settings.set_sort_method("date_added")
         self.browser.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
             "date_added"
         )

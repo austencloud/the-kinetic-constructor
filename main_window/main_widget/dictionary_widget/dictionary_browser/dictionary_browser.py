@@ -84,6 +84,7 @@ class DictionaryBrowser(QWidget):
         self.dictionary_widget.preview_area.hide()
         self.dictionary_widget.preview_area.clear_preview()
         self.number_of_currently_displayed_words_label.hide()
+        self.dictionary_widget.dictionary_settings.set_current_filter(None)
 
     def add_initial_selection_widget(self):
         self.layout.addWidget(self.initial_selection_widget)
@@ -182,6 +183,5 @@ class DictionaryBrowser(QWidget):
     def reset_filters(self):
         """Reset filters and display all sequences."""
         self._initialize_and_sort_thumbnails(
-            self.main_widget.main_window.settings_manager.dictionary.get_sort_method()
+            self.main_widget.main_window.settings_manager.dictionary_settings.get_sort_method()
         )
-
