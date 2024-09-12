@@ -56,7 +56,7 @@ class DictionaryBrowser(QWidget):
             self.nav_sidebar,
             self.scroll_widget,
             self.options_widget,
-            self.go_back_button,
+            self.back_button,
             self.currently_displaying_label,
             self.number_of_currently_displayed_words_label,
         ]
@@ -70,12 +70,12 @@ class DictionaryBrowser(QWidget):
         )
 
     def _setup_go_back_to_initial_selection_widget_button(self):
-        self.go_back_button = QPushButton("Go Back")
+        self.back_button = QPushButton("Back")
         self.go_back_button_layout = QHBoxLayout()
-        self.go_back_button.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.go_back_button_layout.addWidget(self.go_back_button)
+        self.back_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.go_back_button_layout.addWidget(self.back_button)
         self.go_back_button_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        self.go_back_button.clicked.connect(self.go_back_to_initial_selection_widget)
+        self.back_button.clicked.connect(self.go_back_to_initial_selection_widget)
 
     def go_back_to_initial_selection_widget(self):
         self.initial_selection_widget.show()
@@ -85,7 +85,9 @@ class DictionaryBrowser(QWidget):
         self.dictionary_widget.preview_area.clear_preview()
         self.number_of_currently_displayed_words_label.hide()
         current_filter_section = (
-            list(self.dictionary_widget.dictionary_settings.get_current_filter().keys())[0]
+            list(
+                self.dictionary_widget.dictionary_settings.get_current_filter().keys()
+            )[0]
             if self.dictionary_widget.dictionary_settings.get_current_filter()
             else None
         )
@@ -158,10 +160,11 @@ class DictionaryBrowser(QWidget):
         self.number_of_currently_displayed_words_label.setFont(font)
 
     def resize_go_back_button(self):
-        font = QFont()
-        font.setPointSize(self.width() // 120)
-        self.go_back_button.setFont(font)
-        self.go_back_button.setFixedWidth(self.width() // 10)
+        self.back_button.setFixedWidth(self.main_widget.width() // 20)
+        self.back_button.setFixedHeight(self.main_widget.height() // 20)
+        font = self.back_button.font()
+        font.setPointSize(self.main_widget.width() // 120)
+        self.back_button.setFont(font)
 
     def resize_currently_displaying_label(self):
         font = self.currently_displaying_label.font()

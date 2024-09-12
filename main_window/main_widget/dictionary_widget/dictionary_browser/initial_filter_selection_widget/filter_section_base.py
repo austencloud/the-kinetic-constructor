@@ -150,9 +150,10 @@ class FilterSectionBase(QWidget):
         pass
 
     def resize_go_back_button(self):
-        self.back_button.setFixedWidth(self.browser.width() // 10)
-        self.back_button.setFixedHeight(self.browser.height() // 20)
+        self.back_button.setFixedWidth(self.main_widget.width() // 20)
+        self.back_button.setFixedHeight(self.main_widget.height() // 20)
         font = self.back_button.font()
-        font.setPointSize(self.browser.height() // 80)
+        font.setPointSize(self.main_widget.width() // 120)
         self.back_button.setFont(font)
         QApplication.processEvents()
+
