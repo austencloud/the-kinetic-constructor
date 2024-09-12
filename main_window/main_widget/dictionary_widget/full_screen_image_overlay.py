@@ -24,9 +24,7 @@ class FullScreenImageOverlay(QWidget):
         # Layout for the image
         layout = QVBoxLayout(self)
         self.image_label = QLabel(self)
-        self.image_label.setAlignment(
-            Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter
-        )
+        self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.image_label.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.image_label)
         layout.setSpacing(0)

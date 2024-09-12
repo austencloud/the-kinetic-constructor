@@ -139,7 +139,7 @@ class StartingLetterSection(FilterSectionBase):
 
         QTimer.singleShot(0, update_ui)
         self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
-            "starting_letter"
+            {"starting_letter": letter}
         )
 
     def resize_starting_letter_section(self):

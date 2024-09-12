@@ -130,6 +130,8 @@ class FilterChoiceWidget(QWidget):
     def get_current_filter(self):
         return self.browser.current_filter
 
+
+
     def resize_filter_choice_widget(self):
         self._resize_buttons_labels()
         self._resize_buttons()

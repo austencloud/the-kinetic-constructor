@@ -29,7 +29,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
         super().__init__(browser)
         self.browser = browser
         self.selected_letters: set[str] = set()
-
+        self.current_filter_section: str = None
         # Initialize sections
         self.starting_letter_section = StartingLetterSection(self)
         self.contains_letter_section = ContainsLetterSection(self)
@@ -102,6 +102,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
             "starting_letter"
         )
         self.starting_letter_section.resize_starting_letter_section()
+        self.current_filter_section = "starting_letter"
 
     def show_contains_letter_section(self):
         self._hide_all_sections()
@@ -113,6 +114,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.browser.dictionary_widget.dictionary_settings.set_current_section(
             "contains_letter"
         )
+        self.current_filter_section = "contains_letter"
 
     def show_length_section(self):
         self._hide_all_sections()
@@ -122,6 +124,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
         if not self.length_section.initialized:
             self.length_section.add_buttons()
         self.browser.dictionary_widget.dictionary_settings.set_current_section("length")
+        self.current_filter_section = "length"
 
     def show_level_section(self):
         self._hide_all_sections()
@@ -131,6 +134,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
         if not self.level_section.initialized:
             self.level_section.add_buttons()
         self.browser.dictionary_widget.dictionary_settings.set_current_section("level")
+        self.current_filter_section = "level"
 
     def show_starting_position_section(self):
         self._hide_all_sections()
@@ -142,6 +146,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.browser.dictionary_widget.dictionary_settings.set_current_section(
             "starting_position"
         )
+        self.current_filter_section = "starting_position"
 
     def show_author_section(self):
         self._hide_all_sections()
@@ -151,6 +156,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
         if not self.author_section.initialized:
             self.author_section.add_buttons()
         self.browser.dictionary_widget.dictionary_settings.set_current_section("author")
+        self.current_filter_section = "author"
 
     def on_letter_button_clicked(self, letter: str):
         self.browser.apply_current_filter({"letter": letter})

@@ -11,7 +11,7 @@ class DictionarySettings:
         "current_filter": {},
         "current_section": "starting_letter",
         "selected_thumbnail_index": 0,
-        "scroll_position": 0,  # Add default for scroll position
+        "scroll_position": 0,
     }
 
     def __init__(self, settings_manager: "SettingsManager") -> None:
@@ -30,7 +30,7 @@ class DictionarySettings:
     def get_current_filter(self) -> dict:
         return self.settings.get("current_filter", {})
 
-    def set_current_filter(self, current_filter: str) -> None:
+    def set_current_filter(self, current_filter: dict) -> None:
         self.settings["current_filter"] = current_filter
         self.settings_manager.save_dictionary_settings(self.settings)
 

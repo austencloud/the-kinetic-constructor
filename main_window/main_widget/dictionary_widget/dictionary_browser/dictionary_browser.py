@@ -85,10 +85,15 @@ class DictionaryBrowser(QWidget):
         self.dictionary_widget.preview_area.clear_preview()
         self.number_of_currently_displayed_words_label.hide()
         self.dictionary_widget.dictionary_settings.set_current_filter(None)
+        current_filter_section = (
+            self.initial_selection_widget.filter_choice_widget.initial_selection_widget.current_filter_section
+        )
+        self.dictionary_widget.dictionary_settings.set_current_section(
+            current_filter_section
+        )
 
     def add_initial_selection_widget(self):
         self.layout.addWidget(self.initial_selection_widget)
-        # self.dictionary_widget.preview_area.hide()
 
     def show_all_sequences(self):
         self.apply_current_filter({"letter": "Show all"})
