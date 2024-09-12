@@ -40,6 +40,9 @@ class LengthSection(FilterSectionBase):
         self.resize_length_section()
 
     def display_only_thumbnails_with_sequence_length(self, length: str):
+        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
+            {"length": length}
+        )
         self._prepare_ui_for_filtering(f"sequences of length {length}")
 
         self.browser.currently_displayed_sequences = []
@@ -57,19 +60,20 @@ class LengthSection(FilterSectionBase):
 
         self._update_and_display_ui(" sequences of length", total_sequences, length)
 
+
     def resize_length_section(self):
         self.resize_buttons()
         self.resize_label()
 
     def resize_label(self):
         font = self.header_label.font()
-        font.setPointSize(self.browser.width() // 100)
+        font.setPointSize(self.main_widget.width() // 100)
         self.header_label.setFont(font)
 
     def resize_buttons(self):
         for button in self.buttons.values():
             font = button.font()
-            font.setPointSize(self.browser.width() // 100)
+            font.setPointSize(self.main_widget.width() // 100)
             button.setFont(font)
-            button.setFixedHeight(self.browser.height() // 20)
-            button.setFixedWidth(self.browser.width() // 8)
+            button.setFixedHeight(self.main_widget.height() // 20)
+            button.setFixedWidth(self.main_widget.width() // 8)

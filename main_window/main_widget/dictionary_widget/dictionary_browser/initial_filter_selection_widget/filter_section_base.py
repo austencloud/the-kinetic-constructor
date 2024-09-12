@@ -56,7 +56,6 @@ class FilterSectionBase(QWidget):
         self.header_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.header_label)
         layout.addStretch(1)
-        # Set the layout
         self.setLayout(layout)
 
         self.back_button.hide()

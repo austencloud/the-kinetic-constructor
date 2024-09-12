@@ -109,8 +109,10 @@ class StartingPositionSection(FilterSectionBase):
         layout.addStretch(1)
         self.resize_starting_position_section()
 
-
     def display_only_thumbnails_with_starting_position(self, position: str):
+        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
+            {"starting_position": position}
+        )
         self._prepare_ui_for_filtering(f"sequences starting at {position}")
 
         self.browser.currently_displayed_sequences = []
@@ -127,6 +129,7 @@ class StartingPositionSection(FilterSectionBase):
             total_sequences += 1
 
         self._update_and_display_ui(" sequences starting at", total_sequences, position)
+
 
     def get_sequence_starting_position(self, thumbnails):
         """Extract the starting position from the first thumbnail (beat 0)."""
@@ -145,18 +148,24 @@ class StartingPositionSection(FilterSectionBase):
                 self.original_pixmap = source.pixmap()
                 if self.original_pixmap:
                     # Add a thicker gold border to the pixmap (e.g., 4 pixels)
-                    bordered_pixmap = self.add_border_to_pixmap(self.original_pixmap, 4, Qt.GlobalColor.yellow)
+                    bordered_pixmap = self.add_border_to_pixmap(
+                        self.original_pixmap, 4, Qt.GlobalColor.yellow
+                    )
                     source.setPixmap(bordered_pixmap)
             elif event.type() == QEvent.Type.Leave:
                 # Reset to the original pixmap without the border
-                if hasattr(self, 'original_pixmap') and self.original_pixmap:
+                if hasattr(self, "original_pixmap") and self.original_pixmap:
                     source.setPixmap(self.original_pixmap)
         return super().eventFilter(source, event)
 
     def add_border_to_pixmap(self, pixmap, border_width, border_color):
         """Add a thicker border around the pixmap."""
-        bordered_pixmap = QPixmap(pixmap.size())  # Create a new pixmap with the same size
-        bordered_pixmap.fill(Qt.GlobalColor.transparent)  # Ensure the background is transparent
+        bordered_pixmap = QPixmap(
+            pixmap.size()
+        )  # Create a new pixmap with the same size
+        bordered_pixmap.fill(
+            Qt.GlobalColor.transparent
+        )  # Ensure the background is transparent
         painter = QPainter(bordered_pixmap)
         painter.drawPixmap(0, 0, pixmap)  # Draw the original pixmap onto the new pixmap
 
@@ -166,9 +175,12 @@ class StartingPositionSection(FilterSectionBase):
         painter.setPen(pen)
 
         # Draw the border around the pixmap, inset to ensure it stays within bounds
-        painter.drawRect(border_width // 2, border_width // 2,
-                         bordered_pixmap.width() - border_width,
-                         bordered_pixmap.height() - border_width)
+        painter.drawRect(
+            border_width // 2,
+            border_width // 2,
+            bordered_pixmap.width() - border_width,
+            bordered_pixmap.height() - border_width,
+        )
         painter.end()
         return bordered_pixmap
 
@@ -182,7 +194,7 @@ class StartingPositionSection(FilterSectionBase):
         for position_image in self.position_images.values():
             pixmap = position_image.pixmap()
             if pixmap:
-                size = self.browser.width() // 6
+                size = self.main_widget.width() // 6
                 scaled_pixmap = pixmap.scaled(
                     size,  # Desired width
                     size,  # Desired height
@@ -199,16 +211,16 @@ class StartingPositionSection(FilterSectionBase):
     def resize_labels(self):
         for label in self.labels.values():
             font = label.font()
-            font.setPointSize(self.browser.width() // 140)
+            font.setPointSize(self.main_widget.width() // 140)
             label.setFont(font)
         font = self.header_label.font()
-        font.setPointSize(self.browser.width() // 100)
+        font.setPointSize(self.main_widget.width() // 100)
         self.header_label.setFont(font)
 
     def resize_buttons(self):
         for button in self.buttons.values():
             font = button.font()
-            font.setPointSize(self.browser.width() // 100)
+            font.setPointSize(self.main_widget.width() // 100)
             button.setFont(font)
-            button.setFixedHeight(self.browser.height() // 20)
-            button.setFixedWidth(self.browser.width() // 5)
+            button.setFixedHeight(self.main_widget.height() // 20)
+            button.setFixedWidth(self.main_widget.width() // 5)

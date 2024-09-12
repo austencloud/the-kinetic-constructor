@@ -21,6 +21,7 @@ if TYPE_CHECKING:
 class ContainsLetterSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select Letters to be Contained:")
+        self.main_widget = initial_selection_widget.browser.main_widget
 
     def add_buttons(self):
         self.initialized = True
@@ -60,11 +61,7 @@ class ContainsLetterSection(FilterSectionBase):
                     button_row_layout.addWidget(button)
                 layout.addLayout(button_row_layout)
 
-            layout.addSpacerItem(
-                QSpacerItem(
-                    20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
-                )
-            )
+            layout.addStretch(1)
 
         apply_button_layout = QHBoxLayout()
         apply_button_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -140,6 +137,9 @@ class ContainsLetterSection(FilterSectionBase):
             QApplication.restoreOverrideCursor()
 
         QTimer.singleShot(0, update_ui)
+        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
+            {"contains_letter": letters}
+        )
 
     def organize_letters(self, letters: set[str]) -> list[str]:
         letter_order = [
@@ -188,17 +188,18 @@ class ContainsLetterSection(FilterSectionBase):
 
     def resize_label(self):
         font = self.header_label.font()
-        font.setPointSize(self.browser.width() // 100)
+        font.setPointSize(self.main_widget.width() // 100)
         self.header_label.setFont(font)
 
     def resize_buttons(self):
         for button in self.buttons.values():
             font = button.font()
-            font.setPointSize(self.browser.width() // 100)
+            font.setPointSize(self.main_widget.width() // 100)
             button.setFont(font)
-            button.setFixedHeight(self.browser.height() // 20)
-            button.setFixedWidth(self.browser.width() // 20)
-        self.apply_button.setFixedWidth(self.browser.width() // 6)
+            button.setFixedHeight(self.main_widget.height() // 20)
+            button.setFixedWidth(self.main_widget.width() // 20)
+
+        self.apply_button.setFixedWidth(self.main_widget.width() // 6)
         apply_button_font = self.apply_button.font()
-        apply_button_font.setPointSize(self.browser.width() // 100)
+        apply_button_font.setPointSize(self.main_widget.width() // 100)
         self.apply_button.setFont(apply_button_font)

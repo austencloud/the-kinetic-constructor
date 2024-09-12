@@ -50,6 +50,9 @@ class AuthorSection(FilterSectionBase):
         return sorted(authors)
 
     def display_only_thumbnails_by_author(self, author: str):
+        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
+            {"author": author}
+        )
         self._prepare_ui_for_filtering(f"sequences by {author}")
 
         self.browser.currently_displayed_sequences = []
@@ -70,19 +73,20 @@ class AuthorSection(FilterSectionBase):
 
         self._update_and_display_ui(" sequences by", total_sequences, author)
 
+
     def resize_author_section(self):
         self.resize_buttons()
         self.resize_labels()
 
     def resize_labels(self):
         font = self.header_label.font()
-        font.setPointSize(self.browser.width() // 100)
+        font.setPointSize(self.main_widget.width() // 100)
         self.header_label.setFont(font)
 
     def resize_buttons(self):
         for button in self.buttons.values():
             font = button.font()
-            font.setPointSize(self.browser.width() // 100)
+            font.setPointSize(self.main_widget.width() // 100)
             button.setFont(font)
-            button.setFixedHeight(self.browser.height() // 20)
-            button.setFixedWidth(self.browser.width() // 5)
+            button.setFixedHeight(self.main_widget.height() // 20)
+            button.setFixedWidth(self.main_widget.width() // 5)

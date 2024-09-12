@@ -19,6 +19,7 @@ if TYPE_CHECKING:
 class StartingLetterSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select by Starting Letter:")
+        self.main_widget = initial_selection_widget.browser.main_widget
 
     def add_buttons(self):
         self.initialized = True
@@ -55,16 +56,16 @@ class StartingLetterSection(FilterSectionBase):
                     )
                     button_row_layout.addWidget(button)
                 layout.addLayout(button_row_layout)
-            layout.addSpacerItem(
-                QSpacerItem(
-                    20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
-                )
-            )
+            layout.addStretch(1)
+
 
         layout.addStretch(1)
         self.resize_starting_letter_section()
 
     def display_only_thumbnails_starting_with_letter(self, letter: str):
+        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
+            {"starting_letter": letter}
+        )
         description = (
             f"sequences starting with {letter}"
             if letter != "Show all"
@@ -138,9 +139,7 @@ class StartingLetterSection(FilterSectionBase):
             QApplication.restoreOverrideCursor()
 
         QTimer.singleShot(0, update_ui)
-        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
-            {"starting_letter": letter}
-        )
+
 
     def resize_starting_letter_section(self):
         self.resize_buttons()
@@ -148,13 +147,13 @@ class StartingLetterSection(FilterSectionBase):
 
     def resize_label(self):
         font = self.header_label.font()
-        font.setPointSize(self.browser.main_widget.width() // 100)
+        font.setPointSize(self.main_widget.width() // 100)
         self.header_label.setFont(font)
 
     def resize_buttons(self):
         for button in self.buttons.values():
             font = button.font()
-            font.setPointSize(self.browser.main_widget.width() // 100)
+            font.setPointSize(self.main_widget.width() // 100)
             button.setFont(font)
-            button.setFixedHeight(self.browser.main_widget.height() // 20)
-            button.setFixedWidth(self.browser.main_widget.width() // 20)
+            button.setFixedHeight(self.main_widget.height() // 20)
+            button.setFixedWidth(self.main_widget.width() // 20)

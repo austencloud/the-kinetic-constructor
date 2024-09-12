@@ -40,7 +40,10 @@ class FullScreenImageOverlay(QWidget):
         geometry = QRect()
         geometry.setX(0)
         geometry.setY(0)
-        geometry.setHeight(self.main_widget.main_window.height())
+        geometry.setHeight(
+            self.main_widget.main_window.height()
+            - self.main_widget.main_window.menu_bar_widget.height()
+        )
         geometry.setWidth(self.main_widget.main_window.width())
         self.setGeometry(geometry)
 

@@ -159,22 +159,22 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.current_filter_section = "author"
 
     def on_letter_button_clicked(self, letter: str):
-        self.browser.apply_current_filter({"letter": letter})
         self.browser.dictionary_widget.dictionary_settings.set_current_section(
             "browser"
         )
+        self.browser.apply_current_filter({"letter": letter})
 
     def on_length_button_clicked(self, length: int):
-        self.browser.apply_current_filter({"length": length})
         self.browser.dictionary_widget.dictionary_settings.set_current_section(
             "browser"
         )
+        self.browser.apply_current_filter({"length": length})
 
     def on_level_button_clicked(self, level: int):
-        self.browser.apply_current_filter({"level": level})
         self.browser.dictionary_widget.dictionary_settings.set_current_section(
             "browser"
         )
+        self.browser.apply_current_filter({"level": level})
 
     def on_contains_letter_button_clicked(self, letter: str):
         if letter in self.selected_letters:
@@ -183,22 +183,22 @@ class DictionaryInitialSelectionsWidget(QWidget):
             self.selected_letters.add(letter)
 
     def on_position_button_clicked(self, position: str):
-        self.browser.apply_current_filter({"position": position})
         self.browser.dictionary_widget.dictionary_settings.set_current_section(
             "browser"
         )
+        self.browser.apply_current_filter({"position": position})
 
     def on_author_button_clicked(self, author: str):
-        self.browser.apply_current_filter({"author": author})
         self.browser.dictionary_widget.dictionary_settings.set_current_section(
             "browser"
         )
+        self.browser.apply_current_filter({"author": author})
 
     def apply_contains_letter_filter(self):
-        self.browser.apply_current_filter({"contains_letters": self.selected_letters})
         self.browser.dictionary_widget.dictionary_settings.set_current_section(
             "browser"
         )
+        self.browser.apply_current_filter({"contains_letters": self.selected_letters})
 
     def resize_initial_selections_widget(self):
         self.resize_initial_filter_buttons()

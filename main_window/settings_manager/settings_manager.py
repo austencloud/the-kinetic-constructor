@@ -60,8 +60,8 @@ class SettingsManager(QObject):
     def save_settings(self, settings=None) -> None:
         if settings is None:
             settings = self.settings
-        with open(self.settings_json, "w") as file:
-            json.dump(settings, file, indent=4)
+        with open(self.settings_json, "w", encoding="utf-8") as file:
+            json.dump(settings, file, ensure_ascii=False, indent=4)
 
     def save_image_export_settings(self, settings) -> None:
         self.settings["image_export"] = settings
