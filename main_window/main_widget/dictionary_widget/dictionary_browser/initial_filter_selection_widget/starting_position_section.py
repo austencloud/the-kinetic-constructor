@@ -111,7 +111,7 @@ class StartingPositionSection(FilterSectionBase):
 
     def display_only_thumbnails_with_starting_position(self, position: str):
         self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
-            {"starting_position": position}
+            {"starting_position": position.lower()}
         )
         self._prepare_ui_for_filtering(f"sequences starting at {position}")
 
@@ -128,8 +128,9 @@ class StartingPositionSection(FilterSectionBase):
             )
             total_sequences += 1
 
-        self._update_and_display_ui(" sequences starting at", total_sequences, position)
-
+        self._update_and_display_ui(
+            " sequences starting at", total_sequences, position
+        )
 
     def get_sequence_starting_position(self, thumbnails):
         """Extract the starting position from the first thumbnail (beat 0)."""

@@ -41,7 +41,7 @@ class LengthSection(FilterSectionBase):
 
     def display_only_thumbnails_with_sequence_length(self, length: str):
         self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
-            {"length": length}
+            {"sequence_length": length}
         )
         self._prepare_ui_for_filtering(f"sequences of length {length}")
 

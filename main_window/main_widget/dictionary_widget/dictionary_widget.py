@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QPainter, QResizeEvent
-from PyQt6.QtWidgets import QWidget, QHBoxLayout
+from PyQt6.QtCore import QTimer
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QApplication
 
 from main_window.main_widget.dictionary_widget.dictionary_browser.dictionary_browser import (
     DictionaryBrowser,
@@ -77,4 +78,26 @@ class DictionaryWidget(QWidget):
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
         self.preview_area.resize_preview_area()
-        # self.resize_dictionary_widget()
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        QTimer.singleShot(100, self.show_initial_section)
+
+    def show_initial_section(self):
+        current_section = (
+            self.browser.dictionary_widget.dictionary_settings.get_current_section()
+        )
+        initial_selection_widget = self.browser.initial_selection_widget
+        section_map = {
+            "filter_choice": initial_selection_widget.show_filter_choice_widget,
+            "starting_letter": initial_selection_widget.show_starting_letter_section,
+            "contains_letters": initial_selection_widget.show_contains_letter_section,
+            "sequence_length": initial_selection_widget.show_length_section,
+            "level": initial_selection_widget.show_level_section,
+            "starting_position": initial_selection_widget.show_starting_position_section,
+            "author": initial_selection_widget.show_author_section,
+            "browser": self.browser.show_browser_with_filters_from_settings,
+        }
+
+        if current_section in section_map:
+            section_map[current_section]()

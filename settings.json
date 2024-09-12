@@ -48,9 +48,14 @@
         }
     },
     "dictionary": {
-        "sort_method": "sequence_length",
-        "current_section": "filter_choice",
-        "current_filter": null
+        "sort_method": "date_added",
+        "current_section": "browser",
+        "current_filter": {
+            "contains_letters": [
+                "A",
+                "D"
+            ]
+        }
     },
     "sequence_layout": {
         "grow_sequence": false,

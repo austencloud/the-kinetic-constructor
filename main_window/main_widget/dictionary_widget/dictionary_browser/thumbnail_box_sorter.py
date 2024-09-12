@@ -1,7 +1,9 @@
 import os
 from datetime import datetime
 from typing import TYPE_CHECKING
-from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.thumbnail_box import ThumbnailBox
+from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.thumbnail_box import (
+    ThumbnailBox,
+)
 from utilities.path_helpers import get_images_and_data_path
 from PyQt6.QtWidgets import QApplication
 
@@ -117,17 +119,19 @@ class ThumbnailBoxSorter:
         length_section = initial_selection_widget.length_section
         author_section = initial_selection_widget.author_section
         display_functions = {
-            "letter": starting_letter_section.display_only_thumbnails_starting_with_letter,
-            "length": length_section.display_only_thumbnails_with_sequence_length,
+            "starting_letter": starting_letter_section.display_only_thumbnails_starting_with_letter,
+            "sequence_length": length_section.display_only_thumbnails_with_sequence_length,
             "level": level_section.display_only_thumbnails_with_level,
             "contains_letters": contains_letter_section.display_only_thumbnails_containing_letters,
-            "position": starting_position_section.display_only_thumbnails_with_starting_position,
+            "starting_position": starting_position_section.display_only_thumbnails_with_starting_position,
             "author": author_section.display_only_thumbnails_by_author,
+            "show_all": self.browser.show_all_sequences,
         }
+        if initial_selection:
+            for key, value in initial_selection.items():
+                if key in display_functions:
+                    display_functions[key](value)
 
-        for key, value in initial_selection.items():
-            if key in display_functions:
-                display_functions[key](value)
 
     ### HELPER FUNCTIONS ###
 

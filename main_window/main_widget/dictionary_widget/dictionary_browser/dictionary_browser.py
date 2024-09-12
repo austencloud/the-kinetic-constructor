@@ -84,19 +84,24 @@ class DictionaryBrowser(QWidget):
         self.dictionary_widget.preview_area.hide()
         self.dictionary_widget.preview_area.clear_preview()
         self.number_of_currently_displayed_words_label.hide()
-        self.dictionary_widget.dictionary_settings.set_current_filter(None)
         current_filter_section = (
-            self.initial_selection_widget.filter_choice_widget.initial_selection_widget.current_filter_section
+            list(self.dictionary_widget.dictionary_settings.get_current_filter().keys())[0]
+            if self.dictionary_widget.dictionary_settings.get_current_filter()
+            else None
         )
         self.dictionary_widget.dictionary_settings.set_current_section(
-            current_filter_section
+            current_filter_section if current_filter_section else "filter_choice"
         )
+        self.dictionary_widget.dictionary_settings.set_current_filter(None)
+        # show the widget for the current section
+        if current_filter_section:
+            self.initial_selection_widget.show_section(current_filter_section)
 
     def add_initial_selection_widget(self):
         self.layout.addWidget(self.initial_selection_widget)
 
     def show_all_sequences(self):
-        self.apply_current_filter({"letter": "Show all"})
+        self.apply_current_filter({"starting_letter": "show_all"})
 
     def apply_current_filter(self, current_filter):
         self.current_filter = current_filter
@@ -163,30 +168,17 @@ class DictionaryBrowser(QWidget):
         font.setPointSize(self.width() // 65)
         self.currently_displaying_label.setFont(font)
 
-    def display_filtered_sequences(self, filtered_sequences):
-        """Display sequences based on the filtered criteria."""
-        self.scroll_widget.clear_layout()
-
-        num_columns = 3
-        row_index = 0
-        column_index = 0
-
-        for metadata_and_thumbnail in filtered_sequences:
-            metadata = metadata_and_thumbnail["metadata"]
-            thumbnail = metadata_and_thumbnail["thumbnail"]
-            word = metadata["sequence"][0]["word"]
-
-            self.thumbnail_box_sorter.add_thumbnail_box(
-                row_index, column_index, word, [thumbnail]
-            )
-
-            column_index += 1
-            if column_index == num_columns:
-                column_index = 0
-                row_index += 1
-
     def reset_filters(self):
         """Reset filters and display all sequences."""
         self._initialize_and_sort_thumbnails(
             self.main_widget.main_window.settings_manager.dictionary_settings.get_sort_method()
         )
+
+    def show_browser_with_filters_from_settings(self):
+        """Show browser with filters from settings."""
+        self.initial_selection_widget._hide_all_sections()
+        current_filter = (
+            self.main_widget.main_window.settings_manager.dictionary_settings.get_current_filter()
+        )
+
+        self.apply_current_filter(current_filter)

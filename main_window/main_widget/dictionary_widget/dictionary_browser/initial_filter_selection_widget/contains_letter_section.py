@@ -138,7 +138,7 @@ class ContainsLetterSection(FilterSectionBase):
 
         QTimer.singleShot(0, update_ui)
         self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
-            {"contains_letter": letters}
+            {"contains_letters": letters}
         )
 
     def organize_letters(self, letters: set[str]) -> list[str]:

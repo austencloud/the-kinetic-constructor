@@ -56,24 +56,6 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setLayout(self.main_layout)
 
-    def showEvent(self, event):
-        super().showEvent(event)
-        current_section = (
-            self.browser.dictionary_widget.dictionary_settings.get_current_section()
-        )
-        section_map = {
-            "filter_choice": self.show_filter_choice_widget,
-            "starting_letter": self.show_starting_letter_section,
-            "contains_letter": self.show_contains_letter_section,
-            "length": self.show_length_section,
-            "level": self.show_level_section,
-            "starting_position": self.show_starting_position_section,
-            "author": self.show_author_section,
-        }
-
-        if current_section in section_map:
-            section_map[current_section]()
-
     def show_filter_choice_widget(self):
         """Show the filter choice widget and hide any active section."""
         self._hide_all_sections()
@@ -112,9 +94,9 @@ class DictionaryInitialSelectionsWidget(QWidget):
         if not self.contains_letter_section.initialized:
             self.contains_letter_section.add_buttons()
         self.browser.dictionary_widget.dictionary_settings.set_current_section(
-            "contains_letter"
+            "contains_letters"
         )
-        self.current_filter_section = "contains_letter"
+        self.current_filter_section = "contains_letters"
 
     def show_length_section(self):
         self._hide_all_sections()
@@ -123,8 +105,10 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.main_layout.addWidget(self.length_section)
         if not self.length_section.initialized:
             self.length_section.add_buttons()
-        self.browser.dictionary_widget.dictionary_settings.set_current_section("length")
-        self.current_filter_section = "length"
+        self.browser.dictionary_widget.dictionary_settings.set_current_section(
+            "sequence_length"
+        )
+        self.current_filter_section = "sequence_length"
 
     def show_level_section(self):
         self._hide_all_sections()
@@ -158,17 +142,17 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.browser.dictionary_widget.dictionary_settings.set_current_section("author")
         self.current_filter_section = "author"
 
-    def on_letter_button_clicked(self, letter: str):
+    def on_starting_letter_button_clicked(self, letter: str):
         self.browser.dictionary_widget.dictionary_settings.set_current_section(
             "browser"
         )
-        self.browser.apply_current_filter({"letter": letter})
+        self.browser.apply_current_filter({"starting_letter": letter})
 
     def on_length_button_clicked(self, length: int):
         self.browser.dictionary_widget.dictionary_settings.set_current_section(
             "browser"
         )
-        self.browser.apply_current_filter({"length": length})
+        self.browser.apply_current_filter({"sequence_length": length})
 
     def on_level_button_clicked(self, level: int):
         self.browser.dictionary_widget.dictionary_settings.set_current_section(
@@ -186,7 +170,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.browser.dictionary_widget.dictionary_settings.set_current_section(
             "browser"
         )
-        self.browser.apply_current_filter({"position": position})
+        self.browser.apply_current_filter({"starting_position": position})
 
     def on_author_button_clicked(self, author: str):
         self.browser.dictionary_widget.dictionary_settings.set_current_section(
@@ -199,6 +183,18 @@ class DictionaryInitialSelectionsWidget(QWidget):
             "browser"
         )
         self.browser.apply_current_filter({"contains_letters": self.selected_letters})
+
+    def show_section(self, section: str):
+        section_map = {
+            "filter_choice": self.show_filter_choice_widget,
+            "starting_letter": self.show_starting_letter_section,
+            "contains_letters": self.show_contains_letter_section,
+            "sequence_length": self.show_length_section,
+            "level": self.show_level_section,
+            "starting_position": self.show_starting_position_section,
+            "author": self.show_author_section,
+        }
+        section_map[section]()
 
     def resize_initial_selections_widget(self):
         self.resize_initial_filter_buttons()

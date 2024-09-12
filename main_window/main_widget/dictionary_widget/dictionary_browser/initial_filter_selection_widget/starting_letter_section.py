@@ -50,14 +50,13 @@ class StartingLetterSection(FilterSectionBase):
                     button.setCursor(Qt.CursorShape.PointingHandCursor)
                     self.buttons[letter] = button
                     button.clicked.connect(
-                        lambda checked, l=letter: self.initial_selection_widget.on_letter_button_clicked(
+                        lambda checked, l=letter: self.initial_selection_widget.on_starting_letter_button_clicked(
                             l
                         )
                     )
                     button_row_layout.addWidget(button)
                 layout.addLayout(button_row_layout)
             layout.addStretch(1)
-
 
         layout.addStretch(1)
         self.resize_starting_letter_section()
@@ -68,7 +67,7 @@ class StartingLetterSection(FilterSectionBase):
         )
         description = (
             f"sequences starting with {letter}"
-            if letter != "Show all"
+            if letter != "show_all"
             else "all sequences"
         )
         self.browser.nav_sidebar.clear_sidebar()
@@ -139,7 +138,6 @@ class StartingLetterSection(FilterSectionBase):
             QApplication.restoreOverrideCursor()
 
         QTimer.singleShot(0, update_ui)
-
 
     def resize_starting_letter_section(self):
         self.resize_buttons()
