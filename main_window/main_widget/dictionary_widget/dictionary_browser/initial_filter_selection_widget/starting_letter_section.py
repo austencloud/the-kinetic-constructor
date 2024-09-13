@@ -112,6 +112,7 @@ class StartingLetterSection(FilterSectionBase):
         self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
             {"starting_letter": letter}
         )
+
         description = (
             f"sequences starting with {letter}"
             if letter != "show_all"
@@ -122,11 +123,17 @@ class StartingLetterSection(FilterSectionBase):
         self._prepare_ui_for_filtering(description)
 
         base_words = self.thumbnail_box_sorter.get_sorted_base_words("sequence_length")
-        matching_sequences = [
-            (word, thumbnails, seq_length)
-            for word, thumbnails, seq_length in base_words
-            if self._word_starts_with_letter(word, letter)
-        ]
+        if letter == "show_all":
+            matching_sequences = [
+                (word, thumbnails, seq_length)
+                for word, thumbnails, seq_length in base_words
+            ]
+        else:
+            matching_sequences = [
+                (word, thumbnails, seq_length)
+                for word, thumbnails, seq_length in base_words
+                if self._word_starts_with_letter(word, letter)
+            ]
 
         total_sequences = len(matching_sequences) or 1  # Prevent division by zero
         self.browser.currently_displayed_sequences = matching_sequences

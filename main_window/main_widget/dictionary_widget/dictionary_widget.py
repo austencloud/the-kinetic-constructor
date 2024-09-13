@@ -82,21 +82,34 @@ class DictionaryWidget(QWidget):
     def showEvent(self, event):
         super().showEvent(event)
         if self.main_widget.currentWidget() == self:
-            QTimer.singleShot(100, self.show_initial_section)
+            # QApplication.processEvents()
+            QTimer.singleShot(200, self.show_initial_section)
 
     def show_initial_section(self):
         current_section = (
             self.browser.dictionary_widget.dictionary_settings.get_current_section()
         )
         initial_selection_widget = self.browser.initial_selection_widget
+
+        # Use the generic `show_section` method with the corresponding section names
         section_map = {
-            "filter_choice": initial_selection_widget.show_filter_choice_widget,
-            "starting_letter": initial_selection_widget.show_starting_letter_section,
-            "contains_letters": initial_selection_widget.show_contains_letter_section,
-            "sequence_length": initial_selection_widget.show_length_section,
-            "level": initial_selection_widget.show_level_section,
-            "starting_position": initial_selection_widget.show_starting_position_section,
-            "author": initial_selection_widget.show_author_section,
+            "filter_choice": lambda: initial_selection_widget.show_section(
+                "filter_choice"
+            ),
+            "starting_letter": lambda: initial_selection_widget.show_section(
+                "starting_letter"
+            ),
+            "contains_letters": lambda: initial_selection_widget.show_section(
+                "contains_letters"
+            ),
+            "sequence_length": lambda: initial_selection_widget.show_section(
+                "sequence_length"
+            ),
+            "level": lambda: initial_selection_widget.show_section("level"),
+            "starting_position": lambda: initial_selection_widget.show_section(
+                "starting_position"
+            ),
+            "author": lambda: initial_selection_widget.show_section("author"),
             "browser": self.browser.show_browser_with_filters_from_settings,
         }
 

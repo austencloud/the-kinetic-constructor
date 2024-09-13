@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from .dictionary_initial_selections_widget import DictionaryInitialSelectionsWidget
 
 
-class ContainsLetterSection(FilterSectionBase):
+class ContainsLettersSection(FilterSectionBase):
     SECTIONS = [
         [
             ["A", "B", "C", "D", "E", "F"],
@@ -40,6 +40,7 @@ class ContainsLetterSection(FilterSectionBase):
         self.main_widget = initial_selection_widget.browser.main_widget
         self.selected_letters: set[str] = set()
         self.buttons: dict[str, QPushButton] = {}
+        self.add_buttons()
 
     def add_buttons(self):
         self.initialized = True
@@ -67,7 +68,7 @@ class ContainsLetterSection(FilterSectionBase):
         layout.addLayout(apply_button_layout)
 
         layout.addStretch(1)
-        self.resize_contains_letter_section()
+        self.resize_contains_letters_section()
 
     def create_letter_buttons(self, layout: QVBoxLayout):
         for section in self.SECTIONS:
@@ -207,7 +208,7 @@ class ContainsLetterSection(FilterSectionBase):
 
         return True
 
-    def resize_contains_letter_section(self):
+    def resize_contains_letters_section(self):
         self.resize_widget_font(self.header_label)
         self.resize_widget_font(self.sequence_tally_label)
         self.resize_buttons()

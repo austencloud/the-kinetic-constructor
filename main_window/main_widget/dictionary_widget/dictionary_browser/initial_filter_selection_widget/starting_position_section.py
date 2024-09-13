@@ -36,15 +36,19 @@ class StartingPositionSection(FilterSectionBase):
         self.buttons: Dict[str, QPushButton] = {}
         self.description_labels: Dict[str, QLabel] = {}
         self.position_images: Dict[str, QLabel] = {}
+        self.sequence_count_labels: Dict[str, QLabel] = {}
         self.original_pixmaps: Dict[str, QPixmap] = {}
+        self.sequence_counts: Dict[str, int] = {}
         self.add_buttons()
-
 
     def add_buttons(self):
         """Initialize the UI components for the starting position selection."""
         self.back_button.show()
         self.header_label.show()
         layout: QVBoxLayout = self.layout()
+
+        # Calculate the sequence counts per starting position
+        self.sequence_counts = self._get_sequence_counts_per_position()
 
         grid_layout = QGridLayout()
         grid_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -67,6 +71,7 @@ class StartingPositionSection(FilterSectionBase):
         button = self.create_position_button(position)
         description_label = self.create_description_label(position)
         image_placeholder = self.create_image_placeholder(position)
+        sequence_count_label = self.create_sequence_count_label(position)
 
         position_vbox.addWidget(button)
         position_vbox.addWidget(description_label)
@@ -74,6 +79,7 @@ class StartingPositionSection(FilterSectionBase):
             QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
         )
         position_vbox.addWidget(image_placeholder)
+        position_vbox.addWidget(sequence_count_label)
 
         return position_vbox
 
@@ -120,6 +126,15 @@ class StartingPositionSection(FilterSectionBase):
 
         return image_placeholder
 
+    def create_sequence_count_label(self, position: str) -> QLabel:
+        """Create a label displaying the sequence count for a position."""
+        count = self.sequence_counts.get(position.lower(), 0)
+        sequence_text = "sequence" if count == 1 else "sequences"
+        sequence_count_label = QLabel(f"{count} {sequence_text}")
+        sequence_count_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.sequence_count_labels[position] = sequence_count_label
+        return sequence_count_label
+
     def handle_position_click(self, position: str):
         """Handle clicks on position buttons."""
         self.initial_selection_widget.on_position_button_clicked(position)
@@ -128,27 +143,54 @@ class StartingPositionSection(FilterSectionBase):
         """Handle clicks on position images."""
         self.handle_position_click(position)
 
-    def display_only_thumbnails_with_starting_position(self, position: str):
-        """Display only the thumbnails that match the selected starting position."""
-        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
-            {"starting_position": position.lower()}
-        )
-        self._prepare_ui_for_filtering(f"Sequences starting at {position}")
+    def _get_all_sequences_with_positions(self) -> List[Tuple[str, List[str], str]]:
+        """Retrieve and cache all sequences along with their starting positions."""
+        if hasattr(self, "_all_sequences_with_positions"):
+            return self._all_sequences_with_positions
 
-        base_words = self.thumbnail_box_sorter.get_sorted_base_words("sequence_length")
-        matching_sequences = [
-            (word, thumbnails, seq_length)
-            for word, thumbnails, seq_length in base_words
-            if self.get_sequence_starting_position(thumbnails) == position.lower()
+        dictionary_dir = get_images_and_data_path("dictionary")
+        base_words = [
+            (
+                word,
+                self.main_widget.thumbnail_finder.find_thumbnails(
+                    os.path.join(dictionary_dir, word)
+                ),
+            )
+            for word in os.listdir(dictionary_dir)
+            if os.path.isdir(os.path.join(dictionary_dir, word))
+            and "__pycache__" not in word
         ]
 
-        total_sequences = len(matching_sequences)
-        self.browser.currently_displayed_sequences = matching_sequences
+        sequences_with_positions = []
+        for word, thumbnails in base_words:
+            position = self.get_sequence_starting_position(thumbnails)
+            if position is not None:
+                sequences_with_positions.append((word, thumbnails, position))
 
-        self._update_and_display_ui(" sequences starting at", total_sequences, position)
+        self._all_sequences_with_positions = sequences_with_positions
+        return sequences_with_positions
 
-    def get_sequence_starting_position(self, thumbnails):
-        """Extract the starting position from the first thumbnail (beat 0)."""
+    def _get_sequence_counts_per_position(self) -> Dict[str, int]:
+        """Compute the number of sequences available for each starting position."""
+        position_counts: Dict[str, int] = {}
+        sequences_with_positions = self._get_all_sequences_with_positions()
+        for _, _, position in sequences_with_positions:
+            position_counts[position] = position_counts.get(position, 0) + 1
+        return position_counts
+
+    def get_sequences_that_are_a_specific_position(
+        self, position: str
+    ) -> List[Tuple[str, List[str]]]:
+        """Retrieve sequences that correspond to a specific starting position."""
+        sequences_with_positions = self._get_all_sequences_with_positions()
+        return [
+            (word, thumbnails)
+            for word, thumbnails, seq_position in sequences_with_positions
+            if seq_position == position.lower()
+        ]
+
+    def get_sequence_starting_position(self, thumbnails: List[str]) -> str:
+        """Extract the starting position from the metadata of the thumbnails."""
         for thumbnail in thumbnails:
             start_position = self.metadata_extractor.get_sequence_start_position(
                 thumbnail
@@ -156,6 +198,31 @@ class StartingPositionSection(FilterSectionBase):
             if start_position:
                 return start_position
         return None
+
+    def display_only_thumbnails_with_starting_position(self, position: str):
+        """Display only the thumbnails that match the selected starting position."""
+        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
+            {"starting_position": position.lower()}
+        )
+        self._prepare_ui_for_filtering(f"Sequences starting at {position}")
+
+        sequences = self.get_sequences_that_are_a_specific_position(position)
+        total_sequences = len(sequences)
+
+        self.browser.currently_displayed_sequences = [
+            (word, thumbnails, self.get_sequence_length_from_thumbnails(thumbnails))
+            for word, thumbnails in sequences
+        ]
+
+        self._update_and_display_ui(" sequences starting at", total_sequences, position)
+
+    def get_sequence_length_from_thumbnails(self, thumbnails: List[str]) -> int:
+        """Extract the sequence length from the thumbnails' metadata."""
+        for thumbnail in thumbnails:
+            length = self.metadata_extractor.get_sequence_length(thumbnail)
+            if length is not None:
+                return length
+        return 0
 
     def eventFilter(self, source: QObject, event: QEvent) -> bool:
         """Handle hover events to add or remove borders on images."""
@@ -238,6 +305,11 @@ class StartingPositionSection(FilterSectionBase):
         font_size_header = max(12, self.main_widget.width() // 100)
 
         for label in self.description_labels.values():
+            font = label.font()
+            font.setPointSize(font_size_description)
+            label.setFont(font)
+
+        for label in self.sequence_count_labels.values():
             font = label.font()
             font.setPointSize(font_size_description)
             label.setFont(font)

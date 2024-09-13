@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     )
 
 
-class LengthSection(FilterSectionBase):
+class SequenceLengthSection(FilterSectionBase):
     AVAILABLE_LENGTHS = [4, 6, 8, 10, 12, 16, 20, 24, 28, 32]
 
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
@@ -74,7 +74,7 @@ class LengthSection(FilterSectionBase):
         layout.addStretch(1)
         layout.addLayout(self.grid_layout)
         layout.addStretch(1)
-        self.resize_length_section()
+        self.resize_sequence_length_section()
 
     def create_length_button(self, length: int) -> QPushButton:
         """Create and configure a QPushButton for a given sequence length."""
@@ -126,7 +126,7 @@ class LengthSection(FilterSectionBase):
 
         self._update_and_display_ui(" sequences of length", total_sequences, length)
 
-    def resize_length_section(self):
+    def resize_sequence_length_section(self):
         self.resize_buttons()
         self.resize_widget_font(self.header_label, 100)
         self.resize_sequence_count_labels()

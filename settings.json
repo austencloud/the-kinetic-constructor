@@ -3,7 +3,7 @@
         "prop_type": "Staff",
         "background_type": "Aurora",
         "grow_sequence": true,
-        "current_tab": "dictionary"
+        "current_tab": "sequence_builder"
     },
     "image_export": {
         "include_start_position": true,
@@ -49,8 +49,10 @@
     },
     "dictionary": {
         "sort_method": "date_added",
-        "current_section": "starting_position",
-        "current_filter": null
+        "current_section": "filter_choice",
+        "current_filter": {
+            "starting_letter": "show_all"
+        }
     },
     "sequence_layout": {
         "grow_sequence": false,
@@ -63,7 +65,7 @@
                 "sequence_type": "circular",
                 "sequence_length": 16,
                 "max_turn_intensity": 1.0,
-                "sequence_level": 1,
+                "sequence_level": 2,
                 "rotation_type": "quartered",
                 "permutation_type": "rotational",
                 "continuous_rotation": true
