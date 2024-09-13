@@ -1,14 +1,16 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, List
 from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QPushButton,
+    QLabel,
+    QWidget,
     QApplication,
-    QSizePolicy,
-    QSpacerItem,
 )
+from PyQt6.QtCore import Qt, QTimer, QEvent, QObject
+from PyQt6.QtGui import QFontMetrics
 from .filter_section_base import FilterSectionBase
-from PyQt6.QtCore import Qt, QTimer
+from functools import partial
 
 if TYPE_CHECKING:
     from main_window.main_widget.dictionary_widget.dictionary_browser.initial_filter_selection_widget.dictionary_initial_selections_widget import (
@@ -17,51 +19,96 @@ if TYPE_CHECKING:
 
 
 class StartingLetterSection(FilterSectionBase):
+    SECTIONS: List[List[List[str]]] = [
+        [
+            ["A", "B", "C", "D", "E", "F"],
+            ["G", "H", "I", "J", "K", "L"],
+            ["M", "N", "O", "P", "Q", "R"],
+            ["S", "T", "U", "V"],
+        ],
+        [["W", "X", "Y", "Z"], ["Σ", "Δ", "θ", "Ω"]],
+        [["W-", "X-", "Y-", "Z-"], ["Σ-", "Δ-", "θ-", "Ω-"]],
+        [["Φ", "Ψ", "Λ"]],
+        [["Φ-", "Ψ-", "Λ-"]],
+        [["α", "β", "Γ"]],
+    ]
+
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
-        super().__init__(initial_selection_widget, "Select by Starting Letter:")
+        super().__init__(initial_selection_widget, "Select by starting letter:")
         self.main_widget = initial_selection_widget.browser.main_widget
+        self.buttons: Dict[str, QPushButton] = {}
+        self.sequence_tally: Dict[str, int] = {}
+        self.sequence_tally_label = QLabel("")
+        self.add_buttons()
 
     def add_buttons(self):
         self.initialized = True
         self.back_button.show()
         self.header_label.show()
+
         layout: QVBoxLayout = self.layout()
+        self.create_letter_buttons(layout)
 
-        sections = [
-            [
-                ["A", "B", "C", "D", "E", "F"],
-                ["G", "H", "I", "J", "K", "L"],
-                ["M", "N", "O", "P", "Q", "R"],
-                ["S", "T", "U", "V"],
-            ],
-            [["W", "X", "Y", "Z"], ["Σ", "Δ", "θ", "Ω"]],
-            [["W-", "X-", "Y-", "Z-"], ["Σ-", "Δ-", "θ-", "Ω-"]],
-            [["Φ", "Ψ", "Λ"]],
-            [["Φ-", "Ψ-", "Λ-"]],
-            [["α", "β", "Γ"]],
-        ]
+        # Add stretch after buttons
+        layout.addStretch(1)
 
-        for section in sections:
-            for row in section:
-                button_row_layout = QHBoxLayout()
-                button_row_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                for letter in row:
-                    button = QPushButton(letter)
-                    button.setCursor(Qt.CursorShape.PointingHandCursor)
-                    self.buttons[letter] = button
-                    button.clicked.connect(
-                        lambda checked, l=letter: self.initial_selection_widget.on_starting_letter_button_clicked(
-                            l
-                        )
-                    )
-                    button_row_layout.addWidget(button)
-                layout.addLayout(button_row_layout)
-            layout.addStretch(1)
+        # Initialize sequence tally
+        self.sequence_tally = self._get_starting_letter_sequence_counts()
+
+        # Label to display the sequence count when hovering
+        self.sequence_tally_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.sequence_tally_label)
 
         layout.addStretch(1)
         self.resize_starting_letter_section()
 
+    def create_letter_buttons(self, layout: QVBoxLayout):
+        for section in self.SECTIONS:
+            for row in section:
+                button_row_layout = QHBoxLayout()
+                button_row_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                for letter in row:
+                    button = self.create_letter_button(letter)
+                    button_row_layout.addWidget(button)
+                layout.addLayout(button_row_layout)
+
+    def create_letter_button(self, letter: str) -> QPushButton:
+        """Create a QPushButton for a given letter."""
+        button = QPushButton(letter)
+        button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.buttons[letter] = button
+        button.setProperty("letter", letter)
+        button.installEventFilter(self)
+        # Use partial to pass the letter to the slot
+        button.clicked.connect(
+            partial(
+                self.initial_selection_widget.on_starting_letter_button_clicked,
+                letter,
+            )
+        )
+        return button
+
+    def _get_starting_letter_sequence_counts(self) -> Dict[str, int]:
+        """Tally up how many sequences start with each letter."""
+        letter_counts = {letter: 0 for letter in self.buttons.keys()}
+        base_words = self.thumbnail_box_sorter.get_sorted_base_words("sequence_length")
+
+        for word, _, _ in base_words:
+            first_letter = self.extract_first_letter(word)
+            if first_letter in letter_counts:
+                letter_counts[first_letter] += 1
+
+        return letter_counts
+
+    @staticmethod
+    def extract_first_letter(word: str) -> str:
+        """Extract the first letter or symbol from the word."""
+        if len(word) > 1 and word[1] == "-":
+            return word[:2]
+        return word[0]
+
     def display_only_thumbnails_starting_with_letter(self, letter: str):
+        """Display thumbnails of sequences starting with the specified letter."""
         self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
             {"starting_letter": letter}
         )
@@ -74,36 +121,30 @@ class StartingLetterSection(FilterSectionBase):
         QApplication.processEvents()
         self._prepare_ui_for_filtering(description)
 
-        self.browser.currently_displayed_sequences = []
         base_words = self.thumbnail_box_sorter.get_sorted_base_words("sequence_length")
-        total_sequences = 0
+        matching_sequences = [
+            (word, thumbnails, seq_length)
+            for word, thumbnails, seq_length in base_words
+            if self._word_starts_with_letter(word, letter)
+        ]
 
-        for word, thumbnails, seq_length in base_words:
-            if len(letter) == 1:
-                if word[0] != letter or (len(word) > 1 and word[1] == "-"):
-                    continue
-            elif len(letter) == 2:
-                if word[:2] != letter:
-                    continue
-
-            self.browser.currently_displayed_sequences.append(
-                (word, thumbnails, seq_length)
-            )
-            total_sequences += 1
-
+        total_sequences = len(matching_sequences) or 1  # Prevent division by zero
+        self.browser.currently_displayed_sequences = matching_sequences
         self._update_and_display_ui(total_sequences, letter)
 
-    def _update_and_display_ui(self, total_sequences, letter):
-        if total_sequences == 0:
-            total_sequences = 1  # Prevent division by zero
+    def _word_starts_with_letter(self, word: str, letter: str) -> bool:
+        """Check if the word starts with the given letter."""
+        if len(letter) == 1:
+            return word.startswith(letter) and (len(word) == 1 or word[1] != "-")
+        return word.startswith(letter)
 
+    def _update_and_display_ui(self, total_sequences: int, letter: str):
         self.browser.number_of_currently_displayed_words_label.setText(
             f"Number of words to be displayed: {total_sequences}"
         )
 
         def update_ui():
             num_words = 0
-            # clear the nav buttons widget
 
             for index, (word, thumbnails, _) in enumerate(
                 self.browser.currently_displayed_sequences
@@ -127,13 +168,12 @@ class StartingLetterSection(FilterSectionBase):
                 QApplication.processEvents()
 
             self.progress_bar.setVisible(False)
-
             self.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
                 self.main_widget.main_window.settings_manager.dictionary_settings.get_sort_method()
             )
 
             self.browser.currently_displaying_label.show_completed_message(
-                f" sequences starting with", letter
+                " sequences starting with ", letter
             )
             QApplication.restoreOverrideCursor()
 
@@ -141,17 +181,39 @@ class StartingLetterSection(FilterSectionBase):
 
     def resize_starting_letter_section(self):
         self.resize_buttons()
-        self.resize_label()
+        self.resize_widget_font(self.header_label, 100)
+        self.resize_widget_font(self.sequence_tally_label, 100)
+        self.sequence_tally_label.setMinimumHeight(self.calculate_label_height())
 
-    def resize_label(self):
-        font = self.header_label.font()
-        font.setPointSize(self.main_widget.width() // 100)
-        self.header_label.setFont(font)
+    def resize_widget_font(self, widget: QWidget, factor: int):
+        font = widget.font()
+        font.setPointSize(max(10, self.main_widget.width() // factor))
+        widget.setFont(font)
 
     def resize_buttons(self):
+        width = self.main_widget.width() // 20
+        height = self.main_widget.height() // 20
+        font_size = max(10, self.main_widget.width() // 100)
         for button in self.buttons.values():
             font = button.font()
-            font.setPointSize(self.main_widget.width() // 100)
+            font.setPointSize(font_size)
             button.setFont(font)
-            button.setFixedHeight(self.main_widget.height() // 20)
-            button.setFixedWidth(self.main_widget.width() // 20)
+            button.setFixedSize(width, height)
+
+    def calculate_label_height(self) -> int:
+        """Calculate and return the height needed for the label."""
+        font = self.sequence_tally_label.font()
+        font.setPointSize(max(10, self.main_widget.width() // 100))
+        font_metrics = QFontMetrics(font)
+        return int(font_metrics.height() * 2.1)
+
+    # Event filter to handle hover events
+    def eventFilter(self, obj: QObject, event: QEvent):
+        if event.type() == QEvent.Type.Enter:
+            letter = obj.property("letter")
+            count = self.sequence_tally.get(letter, 0)
+            sequence_text = "sequence" if count == 1 else "sequences"
+            self.sequence_tally_label.setText(f"{letter}:\n{count} {sequence_text}")
+        elif event.type() == QEvent.Type.Leave:
+            self.sequence_tally_label.clear()
+        return super().eventFilter(obj, event)

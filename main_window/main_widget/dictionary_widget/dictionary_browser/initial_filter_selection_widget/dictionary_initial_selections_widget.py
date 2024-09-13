@@ -103,11 +103,12 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.filter_choice_widget.hide()
         self.length_section.show()
         self.main_layout.addWidget(self.length_section)
-        if not self.length_section.initialized:
-            self.length_section.add_buttons()
+        # if not self.length_section.initialized:
+        #     self.length_section.add_buttons()
         self.browser.dictionary_widget.dictionary_settings.set_current_section(
             "sequence_length"
         )
+        self.length_section.resize_length_section()
         self.current_filter_section = "sequence_length"
 
     def show_level_section(self):
@@ -115,9 +116,11 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.filter_choice_widget.hide()
         self.level_section.show()
         self.main_layout.addWidget(self.level_section)
-        if not self.level_section.initialized:
-            self.level_section.add_buttons()
+        # if not self.level_section.initialized:
+        #     self.level_section.add_buttons()
+        #     self.level_section.initialized = True
         self.browser.dictionary_widget.dictionary_settings.set_current_section("level")
+        self.level_section.resize_level_section()
         self.current_filter_section = "level"
 
     def show_starting_position_section(self):
@@ -125,11 +128,12 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.filter_choice_widget.hide()
         self.starting_position_section.show()
         self.main_layout.addWidget(self.starting_position_section)
-        if not self.starting_position_section.initialized:
-            self.starting_position_section.add_buttons()
+        # if not self.starting_position_section.initialized:
+        #     self.starting_position_section.add_buttons()
         self.browser.dictionary_widget.dictionary_settings.set_current_section(
             "starting_position"
         )
+        self.starting_position_section.resize_starting_position_section()
         self.current_filter_section = "starting_position"
 
     def show_author_section(self):
@@ -178,11 +182,11 @@ class DictionaryInitialSelectionsWidget(QWidget):
         )
         self.browser.apply_current_filter({"author": author})
 
-    def apply_contains_letter_filter(self):
+    def apply_contains_letter_filter(self, letters):
         self.browser.dictionary_widget.dictionary_settings.set_current_section(
             "browser"
         )
-        self.browser.apply_current_filter({"contains_letters": self.selected_letters})
+        self.browser.apply_current_filter({"contains_letters": letters})
 
     def show_section(self, section: str):
         section_map = {

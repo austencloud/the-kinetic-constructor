@@ -1,5 +1,4 @@
-import os
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, List, Tuple
 from PyQt6.QtWidgets import (
     QVBoxLayout,
     QPushButton,
@@ -8,8 +7,10 @@ from PyQt6.QtWidgets import (
     QSpacerItem,
     QSizePolicy,
 )
-from PyQt6.QtCore import Qt, QEvent
+from PyQt6.QtCore import Qt, QEvent, QObject
 from PyQt6.QtGui import QPixmap, QPainter, QPen
+import os
+from functools import partial
 
 from utilities.path_helpers import get_images_and_data_path
 from .filter_section_base import FilterSectionBase
@@ -21,231 +22,299 @@ if TYPE_CHECKING:
 
 
 class LevelSection(FilterSectionBase):
+    LEVEL_DESCRIPTIONS = {
+        1: "Base letters with no turns.",
+        2: "Turns added with only radial orientations.",
+        3: "Non-radial orientations.",
+    }
+    AVAILABLE_LEVELS = [1, 2, 3]
+    IMAGE_DIR = get_images_and_data_path("images/level_images")
+
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select by Difficulty Level:")
         self.main_widget = initial_selection_widget.browser.main_widget
-        self.buttons: dict[str, QPushButton] = {}
-        self.labels: dict[str, QLabel] = {}
-        self.level_images: dict[str, QLabel] = {}
+        self.buttons: Dict[int, QPushButton] = {}
+        self.description_labels: Dict[int, QLabel] = {}
+        self.level_images: Dict[int, QLabel] = {}
+        self.sequence_count_labels: Dict[int, QLabel] = {}
+        self.original_pixmaps: Dict[int, QPixmap] = {}
+        self.sequence_counts: Dict[int, int] = {}
+        self.add_buttons()
 
     def add_buttons(self):
-        self.initialized = True
+        """Initialize the UI components for the level selection."""
+        # Clear existing widgets to prevent duplication
+        # self.clear_layout()
+
         self.back_button.show()
         self.header_label.show()
         layout: QVBoxLayout = self.layout()
 
-        # Create a grid layout to hold the level buttons, descriptions, and images
+        self.sequence_counts = self._get_sequence_counts_per_level()
+
         grid_layout = QGridLayout()
         grid_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         grid_layout.setHorizontalSpacing(50)
         grid_layout.setVerticalSpacing(30)
 
-        # Level descriptions corresponding to each level
-        level_descriptions = {
-            1: "Base letters with no turns.",
-            2: "Turns added with only radial orientations.",
-            3: "Non-radial orientations.",
-        }
+        for col, level in enumerate(self.AVAILABLE_LEVELS):
+            level_vbox = self.create_level_vbox(level)
+            grid_layout.addLayout(level_vbox, 0, col)
 
-        # Path where level images are stored
-        image_dir = get_images_and_data_path("images/level_images")
-
-        # Create buttons, descriptions, and images
-        available_levels = [1, 2, 3]
-        for col, level in enumerate(available_levels):
-            # Create a vertical box layout for each level's button, description, and image
-            level_vbox = QVBoxLayout()
-            level_vbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-            # Create the level button
-            button = QPushButton(f"Level {level}")
-            button.setCursor(Qt.CursorShape.PointingHandCursor)
-            self.buttons[f"level_{level}"] = button
-            button.clicked.connect(
-                lambda checked, l=level: self.initial_selection_widget.on_level_button_clicked(
-                    l
-                )
-            )
-
-            # Create a label for the description
-            description_label = QLabel(level_descriptions[level])
-            description_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            self.labels[f"level_{level}"] = description_label
-
-            # Create the image placeholder
-            image_placeholder = QLabel()
-            image_placeholder.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            self.level_images[f"level_{level}"] = image_placeholder
-
-            # Load and set the image
-            image_path = os.path.join(image_dir, f"level_{level}.png")
-            if os.path.exists(image_path):
-                pixmap = QPixmap(image_path)
-                image_placeholder.setPixmap(pixmap)
-                # Make the image clickable
-                image_placeholder.setCursor(Qt.CursorShape.PointingHandCursor)
-                image_placeholder.mousePressEvent = lambda event, l=level: self.initial_selection_widget.on_level_button_clicked(
-                    l
-                )
-                # Install event filter for hover effect
-                image_placeholder.installEventFilter(self)
-            else:
-                image_placeholder.setText("No Image Available")
-
-            # Add button, description, and image to the grid layout
-            grid_layout.addWidget(button, 0, col)
-            grid_layout.addWidget(description_label, 1, col)
-
-            # Add a spacer between the description and the image
-            spacer_item = QSpacerItem(
-                20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
-            )
-            grid_layout.addItem(spacer_item, 2, col)
-
-            grid_layout.addWidget(image_placeholder, 3, col)
-
-        # Add the grid layout to the main layout
         layout.addLayout(grid_layout)
         layout.addStretch(1)
         self.resize_level_section()
 
-    def display_only_thumbnails_with_level(self, level: str):
-        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
-            {"level": level}
+    def create_level_vbox(self, level: int) -> QVBoxLayout:
+        """Create a vertical box layout containing all components for a level."""
+        level_vbox = QVBoxLayout()
+        level_vbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        button = self.create_level_button(level)
+        description_label = self.create_description_label(level)
+        image_placeholder = self.create_image_placeholder(level)
+        sequence_count_label = self.create_sequence_count_label(level)
+
+        level_vbox.addWidget(button)
+        level_vbox.addWidget(description_label)
+        level_vbox.addItem(
+            QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
         )
+        level_vbox.addWidget(image_placeholder)
+        level_vbox.addWidget(sequence_count_label)
 
-        self._prepare_ui_for_filtering(f"level {level} sequences")
+        return level_vbox
 
-        self.browser.currently_displayed_sequences = []
-        sequences = self.get_sequences_that_are_a_specific_level(level)
-        total_sequences = len(sequences)
+    def create_level_button(self, level: int) -> QPushButton:
+        """Create and configure the level selection button."""
+        button = QPushButton(f"Level {level}")
+        button.setCursor(Qt.CursorShape.PointingHandCursor)
+        button.clicked.connect(partial(self.handle_level_click, level))
+        self.buttons[level] = button
+        return button
 
-        for word, thumbnails in sequences:
-            self.browser.currently_displayed_sequences.append(
-                (word, thumbnails, self.get_sequence_length_from_thumbnails(thumbnails))
-            )
+    def create_description_label(self, level: int) -> QLabel:
+        """Create a label for the level description."""
+        description_label = QLabel(self.LEVEL_DESCRIPTIONS.get(level, ""))
+        description_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.description_labels[level] = description_label
+        return description_label
 
-        self._update_and_display_ui("level", total_sequences, level)
+    def create_image_placeholder(self, level: int) -> QLabel:
+        """Create and configure the image placeholder for a level."""
+        image_placeholder = QLabel()
+        image_placeholder.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        image_placeholder.setProperty('level', level)  # Associate level with the label
+        self.level_images[level] = image_placeholder
 
-    def get_sequence_length_from_thumbnails(self, thumbnails):
-        """Extract the sequence length from the first available thumbnail metadata."""
-        for thumbnail in thumbnails:
-            length = self.metadata_extractor.get_sequence_length(thumbnail)
-            if length:
-                return length
-        return None
+        image_path = os.path.join(self.IMAGE_DIR, f"level_{level}.png")
+        if os.path.exists(image_path):
+            original_pixmap = QPixmap(image_path)
+            self.original_pixmaps[level] = original_pixmap  # Store the original pixmap
 
-    def get_sequences_that_are_a_specific_level(self, level: str):
+            # Make the image clickable
+            image_placeholder.setCursor(Qt.CursorShape.PointingHandCursor)
+            image_placeholder.mousePressEvent = partial(self.handle_image_click, level)
+            # Install event filter for hover effect
+            image_placeholder.installEventFilter(self)
+        else:
+            image_placeholder.setText("No Image Available")
+
+        return image_placeholder
+
+    def create_sequence_count_label(self, level: int) -> QLabel:
+        """Create a label displaying the sequence count for a level."""
+        count = self.sequence_counts.get(level, 0)
+        sequence_text = "sequence" if count == 1 else "sequences"
+        sequence_count_label = QLabel(f"{count} {sequence_text}")
+        sequence_count_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.sequence_count_labels[level] = sequence_count_label
+        return sequence_count_label
+
+    def handle_level_click(self, level: int):
+        """Handle clicks on level buttons."""
+        self.initial_selection_widget.on_level_button_clicked(level)
+
+    def handle_image_click(self, level: int, event):
+        """Handle clicks on level images."""
+        self.handle_level_click(level)
+
+    def _get_all_sequences_with_levels(self) -> List[Tuple[str, List[str], int]]:
+        """Retrieve and cache all sequences along with their levels."""
+        if hasattr(self, "_all_sequences_with_levels"):
+            return self._all_sequences_with_levels
+
         dictionary_dir = get_images_and_data_path("dictionary")
         base_words = [
             (
-                d,
+                word,
                 self.main_widget.thumbnail_finder.find_thumbnails(
-                    os.path.join(dictionary_dir, d)
+                    os.path.join(dictionary_dir, word)
                 ),
-                None,
             )
-            for d in os.listdir(dictionary_dir)
-            if os.path.isdir(os.path.join(dictionary_dir, d)) and "__pycache__" not in d
+            for word in os.listdir(dictionary_dir)
+            if os.path.isdir(os.path.join(dictionary_dir, word)) and "__pycache__" not in word
         ]
 
-        for i, (word, thumbnails, _) in enumerate(base_words):
-            sequence_level = self.get_sequence_level_from_thumbnails(thumbnails)
-            base_words[i] = (word, thumbnails, sequence_level)
+        sequences_with_levels = []
+        for word, thumbnails in base_words:
+            level = self.get_sequence_level_from_thumbnails(thumbnails)
+            if level is not None:
+                sequences_with_levels.append((word, thumbnails, level))
 
+        self._all_sequences_with_levels = sequences_with_levels
+        return sequences_with_levels
+
+    def _get_sequence_counts_per_level(self) -> Dict[int, int]:
+        """Compute the number of sequences available for each level."""
+        level_counts: Dict[int, int] = {}
+        sequences_with_levels = self._get_all_sequences_with_levels()
+        for _, _, level in sequences_with_levels:
+            level_counts[level] = level_counts.get(level, 0) + 1
+        return level_counts
+
+    def get_sequences_that_are_a_specific_level(self, level: int) -> List[Tuple[str, List[str]]]:
+        """Retrieve sequences that correspond to a specific level."""
+        sequences_with_levels = self._get_all_sequences_with_levels()
         return [
             (word, thumbnails)
-            for word, thumbnails, sequence_level in base_words
-            if sequence_level == level
+            for word, thumbnails, seq_level in sequences_with_levels
+            if seq_level == level
         ]
 
-    def get_sequence_level_from_thumbnails(self, thumbnails):
+    def get_sequence_level_from_thumbnails(self, thumbnails: List[str]) -> int:
+        """Extract the level from the metadata of the thumbnails."""
         for thumbnail in thumbnails:
             level = self.metadata_extractor.get_sequence_level(thumbnail)
-            if level:
+            if level is not None:
                 return level
         return None
 
-    def eventFilter(self, source, event):
+    def display_only_thumbnails_with_level(self, level: int):
+        """Display only the thumbnails that match the selected level."""
+        self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
+            {"level": level}
+        )
+        self._prepare_ui_for_filtering(f"Level {level} sequences")
+
+        sequences = self.get_sequences_that_are_a_specific_level(level)
+        total_sequences = len(sequences)
+
+        self.browser.currently_displayed_sequences = [
+            (word, thumbnails, self.get_sequence_length_from_thumbnails(thumbnails))
+            for word, thumbnails in sequences
+        ]
+
+        self._update_and_display_ui("level", total_sequences, level)
+
+    def get_sequence_length_from_thumbnails(self, thumbnails: List[str]) -> int:
+        """Extract the sequence length from the thumbnails' metadata."""
+        for thumbnail in thumbnails:
+            length = self.metadata_extractor.get_sequence_length(thumbnail)
+            if length is not None:
+                return length
+        return 0
+
+    def eventFilter(self, source: QObject, event: QEvent) -> bool:
+        """Handle hover events to add or remove borders on images."""
         if isinstance(source, QLabel):
-            if event.type() == QEvent.Type.Enter:
-                # Save the original pixmap before modifying it
-                self.original_pixmap = source.pixmap()
-                if self.original_pixmap:
-                    # Add a thicker gold border to the pixmap (e.g., 4 pixels)
-                    bordered_pixmap = self.add_border_to_pixmap(
-                        self.original_pixmap, 4, Qt.GlobalColor.yellow
-                    )
-                    source.setPixmap(bordered_pixmap)
-            elif event.type() == QEvent.Type.Leave:
-                # Reset to the original pixmap without the border
-                if hasattr(self, "original_pixmap") and self.original_pixmap:
-                    source.setPixmap(self.original_pixmap)
+            level = source.property('level')
+            if level is not None:
+                if event.type() == QEvent.Type.Enter:
+                    self.apply_hover_effect(level, source)
+                    return True
+                elif event.type() == QEvent.Type.Leave:
+                    self.remove_hover_effect(level, source)
+                    return True
         return super().eventFilter(source, event)
 
-    def add_border_to_pixmap(self, pixmap, border_width, border_color):
-        """Add a thicker border around the pixmap."""
-        bordered_pixmap = QPixmap(
-            pixmap.size()
-        )  # Create a new pixmap with the same size
-        bordered_pixmap.fill(
-            Qt.GlobalColor.transparent
-        )  # Ensure the background is transparent
-        painter = QPainter(bordered_pixmap)
-        painter.drawPixmap(0, 0, pixmap)  # Draw the original pixmap onto the new pixmap
+    def apply_hover_effect(self, level: int, label: QLabel):
+        """Add a border to the image when hovered."""
+        original_pixmap = self.original_pixmaps.get(level)
+        if original_pixmap:
+            bordered_pixmap = self.add_border_to_pixmap(original_pixmap, 4, Qt.GlobalColor.yellow)
+            scaled_pixmap = self.scale_pixmap(bordered_pixmap)
+            label.setPixmap(scaled_pixmap)
 
-        # Set up the pen with the desired border color and width
+    def remove_hover_effect(self, level: int, label: QLabel):
+        """Remove the border from the image when not hovered."""
+        original_pixmap = self.original_pixmaps.get(level)
+        if original_pixmap:
+            scaled_pixmap = self.scale_pixmap(original_pixmap)
+            label.setPixmap(scaled_pixmap)
+
+    def add_border_to_pixmap(
+        self, pixmap: QPixmap, border_width: int, border_color: Qt.GlobalColor
+    ) -> QPixmap:
+        """Add a border around the pixmap."""
+        bordered_pixmap = QPixmap(pixmap.size())
+        bordered_pixmap.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(bordered_pixmap)
+        painter.drawPixmap(0, 0, pixmap)
+
         pen = QPen(border_color)
         pen.setWidth(border_width)
         painter.setPen(pen)
-
-        # Draw the border around the pixmap, inset to ensure it stays within bounds
         painter.drawRect(
             border_width // 2,
             border_width // 2,
-            bordered_pixmap.width() - border_width,
-            bordered_pixmap.height() - border_width,
+            pixmap.width() - border_width,
+            pixmap.height() - border_width,
         )
         painter.end()
         return bordered_pixmap
 
-    def remove_border_from_pixmap(self, pixmap):
-        """Remove the border by restoring the original pixmap."""
-        # Assuming you have stored the original pixmap somewhere
-        # For simplicity, you can maintain a dictionary with QLabel as key and original QPixmap as value
-        return pixmap  # Replace with the stored original pixmap if available
-
     def scale_images(self):
-        for level_image in self.level_images.values():
-            pixmap = level_image.pixmap()
-            if pixmap:
-                size = self.main_widget.width() // 6
-                scaled_pixmap = pixmap.scaled(
-                    size,  # Desired width
-                    size,  # Desired height
-                    Qt.AspectRatioMode.KeepAspectRatio,  # Maintain aspect ratio
-                    Qt.TransformationMode.SmoothTransformation,  # Smooth scaling
-                )
-                level_image.setPixmap(scaled_pixmap)
+        """Scale all images to fit the current widget size."""
+        for level, label in self.level_images.items():
+            original_pixmap = self.original_pixmaps.get(level)
+            if original_pixmap:
+                scaled_pixmap = self.scale_pixmap(original_pixmap)
+                label.setPixmap(scaled_pixmap)
+
+    def scale_pixmap(self, pixmap: QPixmap) -> QPixmap:
+        """Scale a pixmap to the desired size."""
+        size = max(1, self.main_widget.width() // 6)
+        return pixmap.scaled(
+            size,
+            size,
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
+        )
 
     def resize_level_section(self):
+        """Handle resizing of the level section."""
         self.scale_images()
         self.resize_buttons()
         self.resize_labels()
 
     def resize_labels(self):
-        for label in self.labels.values():
+        """Adjust font sizes of labels during resizing."""
+        font_size_description = max(10, self.main_widget.width() // 140)
+        font_size_header = max(12, self.main_widget.width() // 100)
+
+        for label in self.description_labels.values():
             font = label.font()
-            font.setPointSize(self.main_widget.width() // 140)
+            font.setPointSize(font_size_description)
             label.setFont(font)
+
+        for label in self.sequence_count_labels.values():
+            font = label.font()
+            font.setPointSize(font_size_description)
+            label.setFont(font)
+
         font = self.header_label.font()
-        font.setPointSize(self.main_widget.width() // 100)
+        font.setPointSize(font_size_header)
         self.header_label.setFont(font)
 
     def resize_buttons(self):
+        """Adjust button sizes and fonts during resizing."""
+        button_width = max(1, self.main_widget.width() // 5)
+        button_height = max(1, self.main_widget.height() // 20)
+        font_size_button = max(10, self.main_widget.width() // 100)
+
         for button in self.buttons.values():
             font = button.font()
-            font.setPointSize(self.main_widget.width() // 100)
+            font.setPointSize(font_size_button)
             button.setFont(font)
-            button.setFixedHeight(self.main_widget.height() // 20)
-            button.setFixedWidth(self.main_widget.width() // 5)
+            button.setFixedSize(button_width, button_height)

@@ -81,6 +81,8 @@ class FilterSectionBase(QWidget):
 
     def _prepare_ui_for_filtering(self, description: str):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        self.browser.currently_displaying_label.setText("")
+        QApplication.processEvents()
         self.browser.currently_displaying_label.show_loading_message(description)
         self.browser.number_of_currently_displayed_words_label.setText("")
         self.browser.scroll_widget.clear_layout()

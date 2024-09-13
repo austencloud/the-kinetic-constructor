@@ -49,7 +49,7 @@
     },
     "dictionary": {
         "sort_method": "date_added",
-        "current_section": "sequence_length",
+        "current_section": "starting_position",
         "current_filter": null
     },
     "sequence_layout": {
@@ -62,8 +62,8 @@
             "circular_auto_builder": {
                 "sequence_type": "circular",
                 "sequence_length": 16,
-                "max_turn_intensity": 0.5,
-                "sequence_level": 3,
+                "max_turn_intensity": 1.0,
+                "sequence_level": 1,
                 "rotation_type": "quartered",
                 "permutation_type": "rotational",
                 "continuous_rotation": true
@@ -71,8 +71,8 @@
             "freeform_auto_builder": {
                 "sequence_type": "freeform",
                 "sequence_length": 16,
-                "max_turn_intensity": 0.5,
-                "sequence_level": 3,
+                "max_turn_intensity": 1.0,
+                "sequence_level": 1,
                 "continuous_rotation": true
             },
             "current_auto_builder": "circular"
@@ -81,10 +81,6 @@
         "last_used_builder": "auto"
     },
     "sequence_sharing": {
-        "emails": [
-            "austencloud@gmail.com",
-            "thesideflip@gmail.com"
-        ],
         "recipients": [
             {
                 "name": "Austen Cloud",
