@@ -195,7 +195,7 @@ class LevelSection(FilterSectionBase):
         self.initial_selection_widget.browser.dictionary_widget.dictionary_settings.set_current_filter(
             {"level": level}
         )
-        self._prepare_ui_for_filtering(f"Level {level} sequences")
+        self._prepare_ui_for_filtering(f" level {level} sequences")
 
         sequences = self.get_sequences_that_are_a_specific_level(level)
         total_sequences = len(sequences)

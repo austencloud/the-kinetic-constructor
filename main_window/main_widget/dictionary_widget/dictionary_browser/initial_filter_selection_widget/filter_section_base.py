@@ -138,7 +138,7 @@ class FilterSectionBase(QWidget):
                 self.main_widget.main_window.settings_manager.dictionary_settings.get_sort_method()
             )
             if filter_description_prefix == "level":
-                filter_description = f"level {filter_description} sequences"
+                filter_description = f" level {filter_description} sequences"
                 filter_description_prefix = ""
             self.browser.currently_displaying_label.show_completed_message(
                 filter_description_prefix, filter_description

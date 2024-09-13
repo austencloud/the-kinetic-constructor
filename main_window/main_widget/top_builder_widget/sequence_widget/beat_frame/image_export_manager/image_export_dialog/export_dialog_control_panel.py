@@ -38,24 +38,24 @@ class ExportDialogControlPanel(QWidget):
         self.previous_user = self.user_manager.get_current_user()
 
         self._setup_checkboxes()
-        self._setup_add_date_field()
+        # self._setup_add_date_field()
         self._setup_layout()
         self._connect_signals()
 
-        # Timer for the date field
-        self.date_update_timer = QTimer(self)
-        self.date_update_timer.setInterval(1000)  # 1 second interval
-        self.date_update_timer.setSingleShot(True)
-        self.date_update_timer.timeout.connect(
-            lambda: self.export_dialog.preview_panel.update_preview(
-                self.include_start_pos_check.isChecked(),
-                self.add_info_check.isChecked(),
-                self.export_dialog.sequence,
-                self.add_word_check.isChecked(),
-                self.include_difficulty_level_check.isChecked(),
-                self.add_beat_numbers_check.isChecked(),
-            )
-        )
+        # # Timer for the date field
+        # self.date_update_timer = QTimer(self)
+        # self.date_update_timer.setInterval(1000)  # 1 second interval
+        # self.date_update_timer.setSingleShot(True)
+        # self.date_update_timer.timeout.connect(
+        #     lambda: self.export_dialog.preview_panel.update_preview(
+        #         self.include_start_pos_check.isChecked(),
+        #         self.add_info_check.isChecked(),
+        #         self.export_dialog.sequence,
+        #         self.add_word_check.isChecked(),
+        #         self.include_difficulty_level_check.isChecked(),
+        #         self.add_beat_numbers_check.isChecked(),
+        #     )
+        # )
 
     def _setup_open_directory_checkbox(self):
         """Setup checkbox for opening file location after export."""
@@ -83,7 +83,7 @@ class ExportDialogControlPanel(QWidget):
             self.export_dialog.update_export_setting_and_layout
         )
         self.user_combo_box.currentIndexChanged.connect(self._handle_user_selection)
-        self.add_date_field.textChanged.connect(self._on_date_field_text_changed)
+        # self.add_date_field.textChanged.connect(self._on_date_field_text_changed)
 
     def _setup_checkboxes(self):
         """Setup the checkboxes for the control panel."""
@@ -151,7 +151,7 @@ class ExportDialogControlPanel(QWidget):
         # self.user_input_layout.addWidget(self.add_date_field, 1)
 
         self.options_checkbox_layout = QVBoxLayout()
-        self.options_checkbox_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.options_checkbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.options_checkbox_layout.addWidget(self.include_start_pos_check)
         self.options_checkbox_layout.addWidget(self.add_info_check)
         self.options_checkbox_layout.addWidget(self.add_word_check)
@@ -167,15 +167,15 @@ class ExportDialogControlPanel(QWidget):
         self.layout.addLayout(self.open_dir_layout)
         self.layout.addStretch(1)
 
-    def _setup_add_date_field(self):
-        """Setup the input field for the date."""
-        self.add_date_field = QLineEdit(self)
-        current_date = datetime.now().strftime("%m-%d-%Y")
-        current_date = "-".join([str(int(part)) for part in current_date.split("-")])
-        self.add_date_field.setText(current_date)
-        self.add_date_field.setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.add_date_field.setEnabled(False)  # Disable editing
-        self.add_date_field.setStyleSheet("color: gray;")
+    # def _setup_add_date_field(self):
+    #     """Setup the input field for the date."""
+    #     self.add_date_field = QLineEdit(self)
+    #     current_date = datetime.now().strftime("%m-%d-%Y")
+    #     current_date = "-".join([str(int(part)) for part in current_date.split("-")])
+    #     self.add_date_field.setText(current_date)
+    #     self.add_date_field.setAlignment(Qt.AlignmentFlag.AlignRight)
+    #     self.add_date_field.setEnabled(False)  # Disable editing
+    #     self.add_date_field.setStyleSheet("color: gray;")
 
     def _handle_user_selection(self):
         """Handle the selection of a user from the combo box."""

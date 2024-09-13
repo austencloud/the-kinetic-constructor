@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLabel, QFrame, QVBoxLayout, QApplication
 from PyQt6.QtCore import Qt
@@ -35,11 +36,13 @@ class ExportDialogPreviewPanel(QFrame):
         add_beat_numbers: bool,
     ):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        current_date = datetime.now().strftime("%m-%d-%Y")
+        current_date = "-".join([str(int(part)) for part in current_date.split("-")])
         options = {
             "include_start_pos": include_start_pos,
             "add_info": add_info,
             "user_name": self.export_dialog.control_panel.user_combo_box.currentText(),
-            "export_date": self.export_dialog.control_panel.add_date_field.text(),
+            "export_date": current_date,
             "add_word": add_word,
             "notes": self.export_dialog.control_panel.notes_combo_box.currentText(),
             "add_difficulty_level": include_difficulty_level,
@@ -52,6 +55,10 @@ class ExportDialogPreviewPanel(QFrame):
         )
         self.preview_image = QPixmap.fromImage(self.image)
 
+        self.resize_preview_image()
+        QApplication.restoreOverrideCursor()
+
+    def resize_preview_image(self):
         if self.preview_image:
             image_aspect_ratio = (
                 self.preview_image.width() / self.preview_image.height()
@@ -72,4 +79,3 @@ class ExportDialogPreviewPanel(QFrame):
                 )
             )
             self.preview_label.setFixedSize(image_width, image_height)
-        QApplication.restoreOverrideCursor()

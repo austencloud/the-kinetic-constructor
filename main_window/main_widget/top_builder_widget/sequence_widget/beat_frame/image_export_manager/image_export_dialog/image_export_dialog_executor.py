@@ -1,6 +1,7 @@
 import os
 from typing import TYPE_CHECKING
-
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QApplication
 from .image_export_dialog import ImageExportDialog
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import BeatView
@@ -24,6 +25,8 @@ class ImageExportDialogExecutor:
         This method loads the current sequence, processes the beats, and opens the image export dialog.
         If the user confirms the dialog, the image is created and saved based on the selected options.
         """
+        # set the cursor to busy
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.indicator_label = (
             self.export_manager.main_widget.top_builder_widget.sequence_widget.indicator_label
         )
@@ -39,6 +42,7 @@ class ImageExportDialogExecutor:
         self._clear_beat_selection(filled_beats)
 
         dialog = ImageExportDialog(self.export_manager, sequence)
+        QApplication.restoreOverrideCursor()
         if dialog.exec():
             options = dialog.get_export_options()
             self.export_manager.include_start_pos = options.get(
@@ -58,7 +62,7 @@ class ImageExportDialogExecutor:
                 "Image created with start position included:",
                 self.export_manager.include_start_pos,
             )
-
+        # restore the cursor
     def _clear_beat_selection(self, filled_beats: list["BeatView"]):
         for beat in filled_beats:
             beat.scene().clearSelection()

@@ -179,7 +179,7 @@ class DictionaryBrowser(QWidget):
 
     def show_browser_with_filters_from_settings(self):
         """Show browser with filters from settings."""
-        self.initial_selection_widget._hide_all_sections()
+        # self.initial_selection_widget._hide_all_sections()
         current_filter = (
             self.main_widget.main_window.settings_manager.dictionary_settings.get_current_filter()
         )

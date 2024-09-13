@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import re
 from typing import TYPE_CHECKING
@@ -33,9 +34,9 @@ class ImageExportDialog(QDialog):
         self.setWindowTitle("Save Image")
         self.setModal(True)
 
-        self._resize_image_export_dialog()
         self._setup_components()
         self._setup_layout()
+        self._resize_image_export_dialog()
         # self.update_preview_based_on_options()
 
     def _setup_okay_cancel_buttons(self):
@@ -133,6 +134,7 @@ class ImageExportDialog(QDialog):
         main_height = self.main_widget.height()
         self.resize(int(main_width // 1.5), int(main_height // 1.5))
 
+
     def update_export_setting_and_layout(self):
         """Update export settings and refresh the layout."""
         new_value = self.control_panel.include_start_pos_check.isChecked()
@@ -144,12 +146,14 @@ class ImageExportDialog(QDialog):
 
     def get_export_options(self):
         """Get the current export options."""
+        current_date = datetime.now().strftime("%m-%d-%Y")
+        current_date = "-".join([str(int(part)) for part in current_date.split("-")])
         return {
             "include_start_position": self.control_panel.include_start_pos_check.isChecked(),
             "add_info": self.control_panel.add_info_check.isChecked(),
             "add_word": self.control_panel.add_word_check.isChecked(),
             "user_name": self.control_panel.user_combo_box.currentText(),
-            "export_date": self.control_panel.add_date_field.text(),
+            "export_date": current_date,
             "open_directory": self.control_panel.open_directory_check.isChecked(),
             "notes": self.control_panel.notes_combo_box.currentText(),
             "add_difficulty_level": self.control_panel.include_difficulty_level_check.isChecked(),
