@@ -30,16 +30,27 @@ def increment_version(base_name, extension, existing_filenames):
 
 def handle_version_conflict(base_name, extension, existing_filenames):
     """Check if both files are version 1 and resolve conflicts."""
-    version_1_files = [f for f in existing_filenames if "_ver1" in f]
+    base_name_with_ver1 = f"{base_name}_ver1"
 
-    # If there's a conflict (multiple version 1 files), increment one of them
-    if len(version_1_files) > 1:
-        # Increment the version number for the current file
-        new_filename = increment_version(base_name, extension, existing_filenames)
-        return new_filename
+    # Check if base_name already has a version (e.g., _ver1)
+    match = version_pattern.search(base_name)
+    if match:
+        # If ver1 already exists in the name, check for conflicts
+        if base_name_with_ver1 + extension in existing_filenames:
+            # Increment version if the same ver1 exists in the parent directory
+            new_filename = increment_version(base_name, extension, existing_filenames)
+            return new_filename
+        else:
+            return f"{base_name}{extension}"
     else:
-        # No conflict, return the base name with version 1
-        return f"{base_name}_ver1{extension}"
+        # If no version number exists, start with ver1 unless it already exists
+        if base_name_with_ver1 + extension in existing_filenames:
+            # If ver1 exists, increment the version
+            new_filename = increment_version(base_name, extension, existing_filenames)
+            return new_filename
+        else:
+            # Otherwise, assign it to ver1
+            return f"{base_name_with_ver1}{extension}"
 
 
 def get_all_files_in_directory(directory):
@@ -74,18 +85,17 @@ def rename_and_move_files(directory):
 
             # Ensure we compare the full filename (including extensions) in the parent directory
             if filename in parent_files:
-                # Check for version conflicts and handle them
-                if "_ver1" in filename:
-                    # Handle potential version 1 conflicts
-                    new_filename = handle_version_conflict(base_name, extension, parent_files)
-                else:
-                    # Increment the version number to resolve conflict in the parent directory
-                    new_filename = increment_version(base_name, extension, parent_files)
-                
+                # Handle potential version conflicts
+                new_filename = handle_version_conflict(base_name, extension, parent_files)
                 new_file_path = os.path.join(parent_dir, new_filename)
             else:
                 # Move file to the parent directory (two levels up)
                 new_file_path = os.path.join(parent_dir, filename)
+
+            # If the new file path already exists, resolve conflict by incrementing version
+            if os.path.exists(new_file_path):
+                new_filename = increment_version(base_name, extension, parent_files)
+                new_file_path = os.path.join(parent_dir, new_filename)
 
             # Move the file
             print(f"Moving {file_path} to {new_file_path}")
