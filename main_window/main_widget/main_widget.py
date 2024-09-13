@@ -98,6 +98,7 @@ class MainWidget(QTabWidget):
             )
             if not self.top_builder_widget.initialized:
                 self.top_builder_widget.initialized = True
+
                 self.top_builder_widget.resize_top_builder_widget()
         elif index == self.dictionary_tab_index:
             self.main_window.settings_manager.global_settings.set_current_tab(
@@ -105,6 +106,7 @@ class MainWidget(QTabWidget):
             )
             if not self.dictionary_widget.initialized:
                 self.dictionary_widget.initialized = True
+                self.dictionary_widget.show_initial_section()
                 self.dictionary_widget.resize_dictionary_widget()
         elif index == self.recorder_tab_index:
             self.main_window.settings_manager.global_settings.set_current_tab(

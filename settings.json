@@ -3,10 +3,10 @@
         "prop_type": "Staff",
         "background_type": "Aurora",
         "grow_sequence": true,
-        "current_tab": "dictionary"
+        "current_tab": "sequence_builder"
     },
     "image_export": {
-        "include_start_position": false,
+        "include_start_position": true,
         "add_info": true,
         "open_directory_on_export": true,
         "add_word": true,
@@ -51,7 +51,7 @@
         "sort_method": "alphabetical",
         "current_section": "browser",
         "current_filter": {
-            "starting_letter": "M"
+            "starting_letter": "A"
         }
     },
     "sequence_layout": {
@@ -77,7 +77,7 @@
                 "sequence_level": 2,
                 "continuous_rotation": true
             },
-            "current_auto_builder": "circular"
+            "current_auto_builder": "freeform"
         },
         "manual_builder": {},
         "last_used_builder": "auto"

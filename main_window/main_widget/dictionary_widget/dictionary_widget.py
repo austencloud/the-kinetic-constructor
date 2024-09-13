@@ -81,9 +81,7 @@ class DictionaryWidget(QWidget):
 
     def showEvent(self, event):
         super().showEvent(event)
-        if self.main_widget.currentWidget() == self:
-            # QApplication.processEvents()
-            QTimer.singleShot(200, self.show_initial_section)
+
 
     def show_initial_section(self):
         current_section = (
