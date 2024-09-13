@@ -84,7 +84,7 @@ class FilterSectionBase(QWidget):
         self.browser.currently_displaying_label.setText("")
         QApplication.processEvents()
         self.browser.currently_displaying_label.show_loading_message(description)
-        self.browser.number_of_currently_displayed_words_label.setText("")
+        self.browser.number_of_sequences_label.setText("")
         self.browser.scroll_widget.clear_layout()
         self.browser.scroll_widget.grid_layout.addWidget(
             self.progress_bar,
@@ -104,7 +104,7 @@ class FilterSectionBase(QWidget):
         if total_sequences == 0:
             total_sequences = 1  # Prevent division by zero
 
-        self.browser.number_of_currently_displayed_words_label.setText(
+        self.browser.number_of_sequences_label.setText(
             f"Number of words to be displayed: {total_sequences}"
         )
 
@@ -128,7 +128,7 @@ class FilterSectionBase(QWidget):
 
                 percentage = int((num_words / total_sequences) * 100)
                 self.progress_bar.setValue(percentage)
-                self.browser.number_of_currently_displayed_words_label.setText(
+                self.browser.number_of_sequences_label.setText(
                     f"Number of words: {num_words}"
                 )
                 QApplication.processEvents()
@@ -158,4 +158,3 @@ class FilterSectionBase(QWidget):
         font.setPointSize(self.main_widget.width() // 120)
         self.back_button.setFont(font)
         QApplication.processEvents()
-

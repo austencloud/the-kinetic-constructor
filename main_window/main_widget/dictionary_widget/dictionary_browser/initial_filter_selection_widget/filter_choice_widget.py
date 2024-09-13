@@ -126,6 +126,7 @@ class FilterChoiceWidget(QWidget):
         main_layout.addStretch(2)
         self.setLayout(main_layout)
 
+
     def resize_filter_choice_widget(self):
         """Resize the filter choice widget and its components."""
         self._resize_buttons_labels()

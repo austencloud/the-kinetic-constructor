@@ -114,6 +114,29 @@ class SortWidget(QWidget):
             selected = button == self.selected_button
             self._style_button(button, selected=selected)
 
+    def style_labels(self):
+        self._style_sort_by_label()
+        self._style_currently_displaying_label()
+        self._style_number_of_sequences_label()
+
+    def _style_number_of_sequences_label(self):
+        font_color = self.settings_manager.global_settings.get_font_color(
+            self.settings_manager.global_settings.get_background_type()
+        )
+        font_size = self.browser.width() // 50
+        self.browser.number_of_sequences_label.setStyleSheet(
+            f"font-size: {font_size}px; color: {font_color};"
+        )
+
+    def _style_currently_displaying_label(self):
+        font_color = self.settings_manager.global_settings.get_font_color(
+            self.settings_manager.global_settings.get_background_type()
+        )
+        font_size = self.browser.width() // 50
+        self.browser.currently_displaying_label.setStyleSheet(
+            f"font-size: {font_size}px; color: {font_color};"
+        )
+
     def _style_button(self, button: QPushButton, selected: bool = False):
         button_font = button.font()
         button_font.setPointSize(self.browser.width() // 65)
@@ -154,6 +177,6 @@ class SortWidget(QWidget):
             )
 
     def resizeEvent(self, event):
-        self._style_sort_by_label()
+        self.style_labels()
         self.style_buttons()
         super().resizeEvent(event)

@@ -146,7 +146,7 @@ class StartingLetterSection(FilterSectionBase):
         return word.startswith(letter)
 
     def _update_and_display_ui(self, total_sequences: int, letter: str):
-        self.browser.number_of_currently_displayed_words_label.setText(
+        self.browser.number_of_sequences_label.setText(
             f"Number of words to be displayed: {total_sequences}"
         )
 
@@ -169,7 +169,7 @@ class StartingLetterSection(FilterSectionBase):
 
                 percentage = int((num_words / total_sequences) * 100)
                 self.progress_bar.setValue(percentage)
-                self.browser.number_of_currently_displayed_words_label.setText(
+                self.browser.number_of_sequences_label.setText(
                     f"Number of words: {num_words}"
                 )
                 QApplication.processEvents()

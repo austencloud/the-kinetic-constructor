@@ -58,16 +58,14 @@ class DictionaryBrowser(QWidget):
             self.options_widget,
             self.back_button,
             self.currently_displaying_label,
-            self.number_of_currently_displayed_words_label,
+            self.number_of_sequences_label,
         ]
         for widget in self.widgets:
             widget.hide()
 
     def _setup_number_of_currently_displayed_sequences_label(self):
-        self.number_of_currently_displayed_words_label = QLabel("")
-        self.number_of_currently_displayed_words_label.setAlignment(
-            Qt.AlignmentFlag.AlignCenter
-        )
+        self.number_of_sequences_label = QLabel("")
+        self.number_of_sequences_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def _setup_go_back_to_initial_selection_widget_button(self):
         self.back_button = QPushButton("Back")
@@ -83,7 +81,7 @@ class DictionaryBrowser(QWidget):
             widget.hide()
         self.dictionary_widget.preview_area.hide()
         self.dictionary_widget.preview_area.clear_preview()
-        self.number_of_currently_displayed_words_label.hide()
+        self.number_of_sequences_label.hide()
         current_filter_section = (
             list(
                 self.dictionary_widget.dictionary_settings.get_current_filter().keys()
@@ -133,7 +131,7 @@ class DictionaryBrowser(QWidget):
 
         self.layout.addLayout(self.go_back_button_layout)
         self.layout.addWidget(self.currently_displaying_label)
-        self.layout.addWidget(self.number_of_currently_displayed_words_label)
+        self.layout.addWidget(self.number_of_sequences_label)
         self.layout.addWidget(self.options_widget)
         self.layout.addWidget(self.scroll_widget)
         self.scroll_layout.addWidget(self.nav_sidebar, 1)
@@ -155,9 +153,9 @@ class DictionaryBrowser(QWidget):
         self.nav_sidebar.resize_nav_sidebar()
 
     def resize_number_of_currently_displayed_sequences_label(self):
-        font = self.number_of_currently_displayed_words_label.font()
+        font = self.number_of_sequences_label.font()
         font.setPointSize(self.width() // 80)
-        self.number_of_currently_displayed_words_label.setFont(font)
+        self.number_of_sequences_label.setFont(font)
 
     def resize_go_back_button(self):
         self.back_button.setFixedWidth(self.main_widget.width() // 20)

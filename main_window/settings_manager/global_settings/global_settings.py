@@ -111,6 +111,7 @@ class GlobalSettings:
             f"color: {self.get_font_color(bg_type)};"
         )
         dictionary.browser.options_widget.sort_widget.style_buttons()
+        dictionary.browser.options_widget.sort_widget.style_labels()
         dictionary.browser.nav_sidebar.set_styles()
         dictionary.preview_area.image_label.style_placeholder()
         dictionary.browser.initial_selection_widget.filter_choice_widget.resize_filter_choice_widget()

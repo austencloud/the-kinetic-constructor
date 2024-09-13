@@ -24,7 +24,7 @@ class ThumbnailBoxSorter:
 
     def reload_currently_displayed_filtered_sequences(self):
         current_filter = (
-            self.browser.initial_selection_widget.filter_choice_widget.get_current_filter()
+            self.browser.dictionary_widget.dictionary_settings.get_current_filter()
         )
         self.browser.thumbnail_box_sorter.sort_and_display_thumbnail_boxes_by_current_filter(
             current_filter
@@ -102,7 +102,7 @@ class ThumbnailBoxSorter:
                     column_index = 0
                     row_index += 1
 
-        self.browser.number_of_currently_displayed_words_label.setText(
+        self.browser.number_of_sequences_label.setText(
             f"Number of words: {len(self.browser.currently_displayed_sequences)}"
         )
         QApplication.restoreOverrideCursor()
@@ -131,7 +131,6 @@ class ThumbnailBoxSorter:
             for key, value in initial_selection.items():
                 if key in display_functions:
                     display_functions[key](value)
-
 
     ### HELPER FUNCTIONS ###
 
