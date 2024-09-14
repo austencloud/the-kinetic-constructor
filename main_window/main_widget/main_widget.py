@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from Enums.PropTypes import PropType
 from letter_determiner.letter_determiner import LetterDeterminer
+from main_window.main_widget.learn_widget.learn_widget import LearnWidget
 from main_window.main_widget.sequence_recorder.sequence_recorder import SequenceRecorder
 from .letter_loader import LetterLoader
 from .sequence_properties_manager.sequence_properties_manager import (
@@ -30,7 +31,15 @@ from data.constants import DIAMOND
 
 from ..main_widget.special_placement_loader import SpecialPlacementLoader
 
-from PyQt6.QtWidgets import QTabWidget
+from PyQt6.QtWidgets import (
+    QTabWidget,
+    QWidget,
+    QVBoxLayout,
+    QLabel,
+    QPushButton,
+    QHBoxLayout,
+    QMessageBox,
+)
 
 if TYPE_CHECKING:
     from splash_screen import SplashScreen
@@ -58,9 +67,20 @@ class MainWidget(QTabWidget):
         self.splash_screen.update_progress(10, "Loading letters...")
         self._setup_letters()
 
+        # Call the new method that initializes managers
         self.splash_screen.update_progress(
             50, "Setting up JSON manager and components..."
         )
+        self._initialize_managers()
+
+        self.splash_screen.update_progress(100, "Initialization complete!")
+
+        self._setup_ui_components()
+        self.currentChanged.connect(self.on_tab_changed)
+        self.tabBar().setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+    def _initialize_managers(self):
+        """Setup all the managers and helper components."""
         self.splash_screen.update_progress(20, "Loading JSON Manager...")
         self.json_manager = JSON_Manager(self)
 
@@ -77,19 +97,10 @@ class MainWidget(QTabWidget):
 
         self.splash_screen.update_progress(60, "Loading Metadata Extractor...")
         self.metadata_extractor = MetaDataExtractor(self)
-
+        self.tab_bar_styler = MainWidgetTabBarStyler(self)
         self.sequence_level_evaluator = SequenceLevelEvaluator()
         self.sequence_properties_manager = SequencePropertiesManager(self)
         self.thumbnail_finder = ThumbnailFinder(self)
-
-        self._setup_ui_components()
-        self.tab_bar_styler = MainWidgetTabBarStyler(self)
-        # self.setStyleSheet(self.tab_bar_styler.get_tab_stylesheet())
-        self.webcam_initialized = False
-        self.initialized = True
-        self.currentChanged.connect(self.on_tab_changed)
-        self.tabBar().setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.splash_screen.update_progress(100, "Initialization complete!")
 
     def on_tab_changed(self, index):
         if index == self.builder_tab_index:
@@ -98,7 +109,6 @@ class MainWidget(QTabWidget):
             )
             if not self.top_builder_widget.initialized:
                 self.top_builder_widget.initialized = True
-
                 self.top_builder_widget.resize_top_builder_widget()
         elif index == self.dictionary_tab_index:
             self.main_window.settings_manager.global_settings.set_current_tab(
@@ -108,6 +118,13 @@ class MainWidget(QTabWidget):
                 self.dictionary_widget.initialized = True
                 self.dictionary_widget.show_initial_section()
                 self.dictionary_widget.resize_dictionary_widget()
+        elif index == self.learn_tab_index:
+            self.main_window.settings_manager.global_settings.set_current_tab("learn")
+            if not self.learn_widget.initialized:
+                self.learn_widget.initialized = True
+                self.learn_widget.init_module_selection_screen()
+                self.learn_widget.resize_learn_widget()
+
         elif index == self.recorder_tab_index:
             self.main_window.settings_manager.global_settings.set_current_tab(
                 "recorder"
@@ -142,16 +159,19 @@ class MainWidget(QTabWidget):
         self.top_builder_widget = TopBuilderWidget(self)
         self.splash_screen.update_progress(80, "Setting up dictionary...")
         self.dictionary_widget = DictionaryWidget(self)
-        # self.sequence_recorder = SequenceRecorder(self)
         self.splash_screen.update_progress(90, "Setting up layout...")
 
         self.addTab(self.top_builder_widget, "Build")
         self.addTab(self.dictionary_widget, "Browse")
-        # Add more tabs as necessary
+
+        # Add the new learn tab
+        self.learn_widget = LearnWidget(self)
+        self.addTab(self.learn_widget, "Learn")
 
         self.builder_tab_index = 0
         self.dictionary_tab_index = 1
         self.recorder_tab_index = 2
+        self.learn_tab_index = 3
 
         # Setup the current tab based on settings
         current_tab = (
@@ -161,6 +181,7 @@ class MainWidget(QTabWidget):
             "sequence_builder": self.builder_tab_index,
             "dictionary": self.dictionary_tab_index,
             "recorder": self.recorder_tab_index,
+            "learn": self.learn_tab_index,
         }
         self.setCurrentIndex(tab_mapping.get(current_tab, 0))
 
@@ -185,23 +206,21 @@ class MainWidget(QTabWidget):
         else:
             super().keyPressEvent(event)
 
-    def resize_current_widget(self, current_widget):
-        # if current_widget == self.top_builder_widget:
+    def resize_widgets(self, current_widget):
         self.top_builder_widget.resize_top_builder_widget()
-        # elif current_widget == self.dictionary_widget:
         self.dictionary_widget.browser.resize_dictionary_browser()
+        self.learn_widget.resize_learn_widget()
 
     def showEvent(self, event):
         super().showEvent(event)
         self.main_window.menu_bar_widget.resize_menu_bar_widget()
-        self.resize_current_widget(self.currentWidget())
+        self.resize_widgets(self.currentWidget())
         self.apply_background()
         self.load_state()
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.setStyleSheet(self.tab_bar_styler.get_tab_stylesheet())
-        # self.resize_current_widget(self.currentWidget())
 
     def apply_background(self):
         self.background_manager = (
