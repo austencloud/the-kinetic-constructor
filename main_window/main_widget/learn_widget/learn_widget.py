@@ -52,11 +52,11 @@ class LearnWidget(QWidget):
     def init_module_selection_screen(self):
         """Creates the initial screen with module selections."""
         # Create title label
-        title_label = QLabel("Select Difficulty")
-        title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        title_label.setStyleSheet("font-size: 24px; font-weight: bold;")
+        self.title_label = QLabel("Select Difficulty Level:")
+        self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.title_label.setStyleSheet("font-weight: bold; font-family: Monotype Corsiva;")
         self.layout.addStretch(2)
-        self.layout.addWidget(title_label)
+        self.layout.addWidget(self.title_label)
 
         # Add vertical space before buttons
         self.layout.addStretch(2)
@@ -81,10 +81,11 @@ class LearnWidget(QWidget):
         button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.buttons[text] = button
         # Set size policy to expand dynamically with widget size
-        button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        # button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         # Add the button to the layout
         self.button_layout.addWidget(button)
+        self.button_layout.addStretch(1)
 
     def start_basic_module(self):
         """Start the basic module."""
@@ -103,12 +104,16 @@ class LearnWidget(QWidget):
         # Set button width to 1/5th of the widget's width
         for button in self.buttons.values():
             button.setFixedWidth(self.main_widget.width() // 5)
-            button.setFixedHeight(self.main_widget.height() // 5)
+            button.setFixedHeight(self.main_widget.height() // 6)
             # make the button text bigger
             font = button.font()
             font.setPointSize(self.main_widget.height() // 50)
             button.setFont(font)
-            
+        # update title label font size
+        font = self.title_label.font()
+        font.setPointSize(self.main_widget.height() // 35)
+        self.title_label.setFont(font)
+
     def paintEvent(self, event):
         """Draw the background using the background manager."""
         if self.background_manager is None:
