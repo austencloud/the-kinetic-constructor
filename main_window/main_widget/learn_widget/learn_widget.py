@@ -1,16 +1,18 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QLabel,
-    QPushButton,
-    QHBoxLayout,
-    QSizePolicy,
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QStackedLayout, QPushButton
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPainter
+
+from main_window.main_widget.learn_widget.level_1_quiz_selector import (
+    Level1QuizSelector,
 )
-from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtGui import QPainter, QResizeEvent
+from main_window.main_widget.learn_widget.level_1_0_quiz import Level_1_0_Quiz
+from main_window.main_widget.learn_widget.level_selection_widget import (
+    LevelSelectionWidget,
+)
 
 if TYPE_CHECKING:
+    from main_window.main_widget.learn_widget.learn_widget import LearnWidget
     from main_window.main_widget.main_widget import MainWidget
 
 
@@ -22,21 +24,26 @@ class LearnWidget(QWidget):
         self.global_settings = (
             self.main_widget.main_window.settings_manager.global_settings
         )
-        self.initialized = False
-        self.buttons: dict[str, QPushButton] = {}
-        # Initial layout with module selection
-        self._setup_layout()
+
+        # Use QStackedLayout to manage different screens
+        self.stack_layout = QStackedLayout()
+        self.setLayout(self.stack_layout)
+
+        # Initialize the different screens
+        self.level_selection_widget = LevelSelectionWidget(self)
+        self.level_1_quiz_selector = Level1QuizSelector(self)
+        self.level_1_quiz = Level_1_0_Quiz(self)
+
+        # Add to stack
+        self.stack_layout.addWidget(self.level_selection_widget)
+        self.stack_layout.addWidget(self.level_1_quiz_selector)
+        self.stack_layout.addWidget(self.level_1_quiz)
+
+        # Show the level selection widget by default
+        self.stack_layout.setCurrentWidget(self.level_selection_widget)
 
         # Initialize background manager and connect signals
         self.connect_background_manager()
-
-        # Initialize the module selection screen
-        self.init_module_selection_screen()
-
-    def _setup_layout(self):
-        self.layout: QVBoxLayout = QVBoxLayout()
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.setLayout(self.layout)
 
     def connect_background_manager(self):
         """Connect to the background manager to maintain consistent backgrounds."""
@@ -49,70 +56,37 @@ class LearnWidget(QWidget):
         self.background_manager.update_required.connect(self.update)
         self.update()
 
-    def init_module_selection_screen(self):
-        """Creates the initial screen with module selections."""
-        # Create title label
-        self.title_label = QLabel("Select Difficulty Level:")
-        self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.title_label.setStyleSheet("font-weight: bold; font-family: Monotype Corsiva;")
-        self.layout.addStretch(2)
-        self.layout.addWidget(self.title_label)
+    def show_level_selection_widget(self):
+        """Show the level selection screen."""
+        self.stack_layout.setCurrentWidget(self.level_selection_widget)
 
-        # Add vertical space before buttons
-        self.layout.addStretch(2)
+    def show_level_1_quiz_selector(self):
+        """Show the Level 1 quiz selector."""
+        self.stack_layout.setCurrentWidget(self.level_1_quiz_selector)
 
-        # Create buttons for each module
-        self.button_layout = QVBoxLayout()
+    def start_level_1_0_quiz(self):
+        """Start the 1.0 quiz (Pictograph -> Letter)."""
+        self.stack_layout.setCurrentWidget(self.level_1_quiz)
+        self.level_1_quiz.start_new_question()
 
-        # Add buttons with module names and callbacks
-        self.add_module_button("Basic", self.start_basic_module)
-        self.add_module_button("Intermediate", self.start_intermediate_module)
-        self.add_module_button("Advanced", self.start_advanced_module)
-
-        # Add vertical space after buttons
-
-        self.layout.addLayout(self.button_layout)
-        self.layout.addStretch(3)
-
-    def add_module_button(self, text: str, callback):
-        """Helper method to add a module button with dynamic sizing."""
-        button = QPushButton(text)
-        button.clicked.connect(callback)
-        button.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.buttons[text] = button
-        # Set size policy to expand dynamically with widget size
-        # button.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-
-        # Add the button to the layout
-        self.button_layout.addWidget(button)
-        self.button_layout.addStretch(1)
-
-    def start_basic_module(self):
-        """Start the basic module."""
-        print("Starting Basic Module")
+    def start_level_1_1_quiz(self):
+        """Start the 1.1 quiz (Letter -> Pictograph)."""
+        self.stack_layout.setCurrentWidget(self.level_1_quiz)
+        self.level_1_quiz.start_new_question()
 
     def start_intermediate_module(self):
-        """Start the intermediate module."""
         print("Starting Intermediate Module")
+        # Implement logic to handle starting intermediate module
 
     def start_advanced_module(self):
-        """Start the advanced module."""
         print("Starting Advanced Module")
+        # Implement logic to handle starting advanced module
 
     def resize_learn_widget(self) -> None:
         """Dynamically adjust button sizes and font sizes based on window size."""
-        # Set button width to 1/5th of the widget's width
-        for button in self.buttons.values():
-            button.setFixedWidth(self.main_widget.width() // 5)
-            button.setFixedHeight(self.main_widget.height() // 6)
-            # make the button text bigger
-            font = button.font()
-            font.setPointSize(self.main_widget.height() // 50)
-            button.setFont(font)
-        # update title label font size
-        font = self.title_label.font()
-        font.setPointSize(self.main_widget.height() // 35)
-        self.title_label.setFont(font)
+        self.level_1_quiz_selector.resize_level_1_quiz_selector()
+        self.level_1_quiz.resize_level_1_0_quiz()
+        self.level_selection_widget.resize_level_selection_widget()
 
     def paintEvent(self, event):
         """Draw the background using the background manager."""
@@ -122,3 +96,9 @@ class LearnWidget(QWidget):
             )
         painter = QPainter(self)
         self.background_manager.paint_background(self, painter)
+
+    def resizeEvent(self, event):
+        """Handle resize events for the widget."""
+        self.resize_learn_widget()
+        self.update()
+        super().resizeEvent(event)

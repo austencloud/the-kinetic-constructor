@@ -3,10 +3,10 @@
         "prop_type": "Staff",
         "background_type": "Aurora",
         "grow_sequence": true,
-        "current_tab": "recorder"
+        "current_tab": "dictionary"
     },
     "image_export": {
-        "include_start_position": true,
+        "include_start_position": false,
         "add_info": true,
         "open_directory_on_export": true,
         "add_word": true,
@@ -49,9 +49,9 @@
     },
     "dictionary": {
         "sort_method": "alphabetical",
-        "current_section": "filter_choice",
+        "current_section": "browser",
         "current_filter": {
-            "starting_letter": "show_all"
+            "sequence_length": 8
         }
     },
     "sequence_layout": {
@@ -80,7 +80,7 @@
             "current_auto_builder": "freeform"
         },
         "manual_builder": {},
-        "last_used_builder": "manual"
+        "last_used_builder": "auto"
     },
     "sequence_sharing": {
         "recipients": [
