@@ -2,15 +2,14 @@ import random
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout
 from PyQt6.QtCore import Qt
-from .level_1_1_quiz_pictograph_buttons_widget import (
-    Level_1_1_QuizPictographButtonsWidget,
+from .lesson_2_answers_widget import (
+    Lesson2AnswersWidget,
 )
 
 if TYPE_CHECKING:
-    from ...learn_widget import LearnWidget
+    from main_window.main_widget.learn_widget.learn_widget import LearnWidget
 
-
-class Level_1_1_Quiz(QWidget):
+class Lesson2Widget(QWidget):
     """Quiz class for showing a letter and letting the user choose the correct pictograph."""
 
     def __init__(self, learn_widget: "LearnWidget"):
@@ -18,9 +17,7 @@ class Level_1_1_Quiz(QWidget):
         self.learn_widget = learn_widget
         self.main_widget = learn_widget.main_widget
 
-        self.pictograph_buttons_widget = Level_1_1_QuizPictographButtonsWidget(
-            learn_widget
-        )
+        self.pictograph_buttons_widget = Lesson2AnswersWidget(learn_widget)
 
         self.main_layout: QVBoxLayout = QVBoxLayout()
         self.setLayout(self.main_layout)
@@ -30,7 +27,7 @@ class Level_1_1_Quiz(QWidget):
 
         self.add_back_button()
         self.main_layout.addStretch(1)
-        
+
         self.question_label = QLabel()
         self.letter_label = QLabel()
         self.letter_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -51,7 +48,7 @@ class Level_1_1_Quiz(QWidget):
     def add_back_button(self):
         """Add a back button to go back to the Level1QuizSelector."""
         self.back_button = QPushButton("Back")
-        self.back_button.clicked.connect(self.learn_widget.show_level_1_quiz_selector)
+        self.back_button.clicked.connect(self.learn_widget.show_lesson_selection_widget)
         self.back_button.setCursor(Qt.CursorShape.PointingHandCursor)
 
         back_layout = QHBoxLayout()
@@ -64,7 +61,7 @@ class Level_1_1_Quiz(QWidget):
         """Start a new question for the user."""
         self.clear_current_question()
         self.generate_question()  # Letter -> Pictograph
-        self.resize_level_1_1_quiz()
+        self.resize_lesson_2_widget()
 
     def generate_question(self):
         """Show a letter and let the user guess the corresponding pictograph."""
@@ -77,16 +74,18 @@ class Level_1_1_Quiz(QWidget):
         self.question_label.setText(f"Choose the pictograph for:")
         self.letter_label.setText(correct_letter.value)
 
-        # Generate three new wrong pictographs that are not part of the previous ones
+        # Generate three new wrong pictographs, ensuring none repeat from the last question
         wrong_pictographs = self.generate_random_wrong_pictographs(correct_letter)
 
         # Include the correct pictograph and shuffle the order
         pictographs = [correct_pictograph_dict] + wrong_pictographs
         random.shuffle(pictographs)
 
-        # Store the keys of the new pictographs to avoid repeating in the next question
+        # Store pictographs to avoid repetition
         self.previous_pictographs = set(
-            self.main_widget.pictograph_key_generator.generate_pictograph_key(pictograph)
+            self.main_widget.pictograph_key_generator.generate_pictograph_key(
+                pictograph
+            )
             for pictograph in pictographs
         )
 
@@ -94,6 +93,30 @@ class Level_1_1_Quiz(QWidget):
         self.pictograph_buttons_widget.create_pictograph_buttons(
             pictographs, correct_pictograph_dict, self.check_answer
         )
+
+    def generate_random_wrong_pictographs(self, correct_letter) -> list[dict]:
+        """Generate three random wrong pictographs, ensuring no repeats."""
+        # Exclude previously used pictographs and the correct letter's pictographs
+        available_letters = [
+            letter for letter in self.main_widget.letters if letter != correct_letter
+        ]
+
+        wrong_pictographs = []
+        while len(wrong_pictographs) < 3:
+            letter = random.choice(available_letters)
+            pictograph_dict = random.choice(self.main_widget.letters[letter])
+
+            # Ensure the new pictograph wasn't used in the previous or current question
+            pictograph_key = (
+                self.main_widget.pictograph_key_generator.generate_pictograph_key(
+                    pictograph_dict
+                )
+            )
+            if pictograph_key not in self.previous_pictographs:
+                wrong_pictographs.append(pictograph_dict)
+                self.previous_pictographs.add(pictograph_key)
+
+        return wrong_pictographs
 
     def check_answer(self, selected_pictograph, correct_pictograph):
         """Check if the selected pictograph is correct."""
@@ -109,31 +132,7 @@ class Level_1_1_Quiz(QWidget):
         """Clear the current question before generating a new one."""
         self.pictograph_buttons_widget.clear()
 
-    def generate_random_wrong_pictographs(self, correct_letter) -> list[dict]:
-        """Generate three random wrong pictographs, avoiding repeats."""
-        # Exclude previously used pictographs and the correct letter's pictographs
-        available_letters = [
-            letter
-            for letter in self.main_widget.letters
-            if letter != correct_letter
-        ]
-
-        # Get pictographs that haven't been used in the previous question
-        wrong_pictographs = []
-        while len(wrong_pictographs) < 3:
-            letter = random.choice(available_letters)
-            pictograph = random.choice(self.main_widget.letters[letter])
-
-            # Ensure the new pictograph wasn't used in the previous question
-            pictograph_key = self.main_widget.pictograph_key_generator.generate_pictograph_key(
-                pictograph
-            )
-            if pictograph_key not in self.previous_pictographs:
-                wrong_pictographs.append(pictograph)
-
-        return wrong_pictographs
-
-    def resize_level_1_1_quiz(self):
+    def resize_lesson_2_widget(self):
         """Resize the pictograph buttons and other elements based on window size."""
         self.pictograph_buttons_widget.resize_level_1_1_pictograph_buttons_widget()
         self._resize_question_label()

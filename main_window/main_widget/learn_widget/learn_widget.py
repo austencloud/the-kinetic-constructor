@@ -1,20 +1,11 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QStackedLayout, QPushButton
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QWidget, QStackedLayout
 from PyQt6.QtGui import QPainter
 
-from main_window.main_widget.learn_widget.level_1.level_1_1.level_1_1_quiz import (
-    Level_1_1_Quiz,
-)
-from main_window.main_widget.learn_widget.level_1.level_1_quiz_selector import (
-    Level1QuizSelector,
-)
-from main_window.main_widget.learn_widget.level_1.level_1_0.level_1_0_quiz import (
-    Level_1_0_Quiz,
-)
-from main_window.main_widget.learn_widget.level_selection_widget import (
-    LevelSelectionWidget,
-)
+from main_window.main_widget.learn_widget.lesson_1.lesson_1_widget import Lesson1Widget
+from main_window.main_widget.learn_widget.lesson_2.lesson_2_widget import Lesson2Widget
+from main_window.main_widget.learn_widget.lesson_selector import LessonSelector
+
 
 if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.learn_widget import LearnWidget
@@ -22,6 +13,8 @@ if TYPE_CHECKING:
 
 
 class LearnWidget(QWidget):
+    """Main widget to manage lesson selection and quizzes."""
+
     def __init__(self, main_widget: "MainWidget"):
         super().__init__(main_widget)
         self.main_widget = main_widget
@@ -30,24 +23,22 @@ class LearnWidget(QWidget):
             self.main_widget.main_window.settings_manager.global_settings
         )
 
-        # Use QStackedLayout to manage different screens
+        # Use QStackedLayout to manage different screens (lesson selection, quizzes)
         self.stack_layout = QStackedLayout()
         self.setLayout(self.stack_layout)
 
-        # Initialize the different screens
-        self.level_selection_widget = LevelSelectionWidget(self)
-        self.level_1_quiz_selector = Level1QuizSelector(self)
-        self.level_1_0_quiz = Level_1_0_Quiz(self)
-        self.level_1_1_quiz = Level_1_1_Quiz(self)
-        
-        # Add to stack
-        self.stack_layout.addWidget(self.level_selection_widget)
-        self.stack_layout.addWidget(self.level_1_quiz_selector)
-        self.stack_layout.addWidget(self.level_1_0_quiz)
-        self.stack_layout.addWidget(self.level_1_1_quiz)
+        # Initialize the different lesson screens
+        self.lesson_selector = LessonSelector(self)
+        self.lesson_1_widget = Lesson1Widget(self)
+        self.lesson_2_widget = Lesson2Widget(self)
 
-        # Show the level selection widget by default
-        self.stack_layout.setCurrentWidget(self.level_selection_widget)
+        # Add the different screens to the stack
+        self.stack_layout.addWidget(self.lesson_selector)
+        self.stack_layout.addWidget(self.lesson_1_widget)
+        self.stack_layout.addWidget(self.lesson_2_widget)
+
+        # Show the lesson selection screen by default
+        self.stack_layout.setCurrentWidget(self.lesson_selector)
 
         # Initialize background manager and connect signals
         self.connect_background_manager()
@@ -63,37 +54,25 @@ class LearnWidget(QWidget):
         self.background_manager.update_required.connect(self.update)
         self.update()
 
-    def show_level_selection_widget(self):
-        """Show the level selection screen."""
-        self.stack_layout.setCurrentWidget(self.level_selection_widget)
+    def show_lesson_selection_widget(self):
+        """Show the lesson selection screen."""
+        self.stack_layout.setCurrentWidget(self.lesson_selector)
 
-    def show_level_1_quiz_selector(self):
-        """Show the Level 1 quiz selector."""
-        self.stack_layout.setCurrentWidget(self.level_1_quiz_selector)
+    def start_lesson_1(self):
+        """Start Lesson 1 quiz (Pictograph -> Letter)."""
+        self.stack_layout.setCurrentWidget(self.lesson_1_widget)
+        self.lesson_1_widget.start_new_question()
 
-    def start_level_1_0_quiz(self):
-        """Start the 1.0 quiz (Pictograph -> Letter)."""
-        self.stack_layout.setCurrentWidget(self.level_1_0_quiz)
-        self.level_1_0_quiz.start_new_question()
-
-    def start_level_1_1_quiz(self):
-        """Start the 1.1 quiz (Letter -> Pictograph)."""
-        self.stack_layout.setCurrentWidget(self.level_1_1_quiz)
-        self.level_1_1_quiz.start_new_question()
-
-    def start_intermediate_module(self):
-        print("Starting Intermediate Module")
-        # Implement logic to handle starting intermediate module
-
-    def start_advanced_module(self):
-        print("Starting Advanced Module")
-        # Implement logic to handle starting advanced module
+    def start_lesson_2(self):
+        """Start Lesson 2 quiz (Letter -> Pictograph)."""
+        self.stack_layout.setCurrentWidget(self.lesson_2_widget)
+        self.lesson_2_widget.start_new_question()
 
     def resize_learn_widget(self) -> None:
         """Dynamically adjust button sizes and font sizes based on window size."""
-        self.level_1_quiz_selector.resize_level_1_quiz_selector()
-        self.level_1_0_quiz.resize_level_1_0_quiz()
-        self.level_selection_widget.resize_level_selection_widget()
+        self.lesson_1_widget.resize_lesson_1_widget()
+        self.lesson_2_widget.resize_lesson_2_widget()
+        self.lesson_selector.resize_lesson_selector()
 
     def paintEvent(self, event):
         """Draw the background using the background manager."""

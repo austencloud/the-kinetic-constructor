@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.learn_widget import LearnWidget
 
 
-class Level_1_0_QuizAnswerButtonsWidget(QWidget):
+class Lesson1AnswersWidget(QWidget):
     """Widget to manage answer buttons layout and actions."""
 
     def __init__(self, learn_widget: "LearnWidget"):

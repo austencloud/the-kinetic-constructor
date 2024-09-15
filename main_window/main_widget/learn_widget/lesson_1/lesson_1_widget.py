@@ -8,14 +8,14 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
 )
 from PyQt6.QtCore import Qt
-from .level_1_0_quiz_answer_buttons_widget import Level_1_0_QuizAnswerButtonsWidget
-from .level_1_0_quiz_pictograph_viewer import Level_1_0_QuizPictographViewer
+from .lesson_1_answers_widget import Lesson1AnswersWidget
+from .Lesson_1_pictograph_viewer import Lesson1PictographViewer
 
 if TYPE_CHECKING:
-    from ...learn_widget import LearnWidget
+    from ..learn_widget import LearnWidget
 
 
-class Level_1_0_Quiz(QWidget):
+class Lesson1Widget(QWidget):
     """Main quiz class, coordinating pictograph, questions, and answers."""
 
     def __init__(self, learn_widget: "LearnWidget"):
@@ -23,8 +23,8 @@ class Level_1_0_Quiz(QWidget):
         self.learn_widget = learn_widget
         self.main_widget = learn_widget.main_widget
 
-        self.pictograph_viewer = Level_1_0_QuizPictographViewer(learn_widget)
-        self.answer_buttons_widget = Level_1_0_QuizAnswerButtonsWidget(learn_widget)
+        self.pictograph_viewer = Lesson1PictographViewer(learn_widget)
+        self.answer_buttons_widget = Lesson1AnswersWidget(learn_widget)
 
         # Main layout for the quiz widget
         self.main_layout: QVBoxLayout = QVBoxLayout()
@@ -62,7 +62,7 @@ class Level_1_0_Quiz(QWidget):
     def add_back_button(self):
         """Add a back button to go back to Level1QuizSelector."""
         self.back_button = QPushButton("Back")
-        self.back_button.clicked.connect(self.learn_widget.show_level_1_quiz_selector)
+        self.back_button.clicked.connect(self.learn_widget.show_lesson_selection_widget)
         # pointing hand cursor
         self.back_button.setCursor(Qt.CursorShape.PointingHandCursor)
         # Create a horizontal layout for the back button
@@ -78,7 +78,7 @@ class Level_1_0_Quiz(QWidget):
     def start_new_question(self):
         self.clear_current_question()
         self.generate_question()  # Pictograph -> Letter
-        self.resize_level_1_0_quiz()
+        self.resize_lesson_1_widget()
 
     def generate_question(self):
         """Show a pictograph and let the user guess the corresponding letter."""
@@ -137,7 +137,7 @@ class Level_1_0_Quiz(QWidget):
         )
         return wrong_answers
 
-    def resize_level_1_0_quiz(self):
+    def resize_lesson_1_widget(self):
         """Resize the pictograph and answer buttons based on the window size."""
         self.pictograph_viewer.resize_level_1_0_quiz_pictograph_viewer()
         self.answer_buttons_widget.resize_level_1_0_answer_buttons_widget()

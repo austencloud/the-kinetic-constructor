@@ -1,15 +1,15 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QGridLayout, QHBoxLayout, QApplication
+from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from ...quiz_pictograph_factory import QuizPictographFactory
+from main_window.main_widget.learn_widget.quiz_pictograph_factory import QuizPictographFactory
 
 if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.learn_widget import LearnWidget
 
 
-class Level_1_1_QuizPictographButtonsWidget(QWidget):
+class Lesson2AnswersWidget(QWidget):
     """Widget to manage pictograph views layout and actions."""
 
     def __init__(self, learn_widget: "LearnWidget"):
