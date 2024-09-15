@@ -30,16 +30,16 @@ class Lesson1QuestionGenerator:
         wrong_answers = self.generate_random_wrong_answers(correct_letter)
 
         # Load the pictograph
-        self.lesson_1_widget.pictograph_viewer.load_pictograph(
+        self.lesson_1_widget.question_widget.load_pictograph(
             pictograph_key, correct_pictograph_dict
         )
 
         # Set the question text and create answer buttons
-        self.lesson_1_widget.question_label.setText("Choose the matching letter:")
+
         letters = [correct_letter.value] + wrong_answers
         random.shuffle(letters)
 
-        self.lesson_1_widget.answers_widget.create_answer_buttons(
+        self.lesson_1_widget.answers_widget.display_answers(
             letters, correct_letter.value, self.lesson_1_widget.check_answer
         )
 

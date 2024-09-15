@@ -19,7 +19,7 @@ class Lesson1AnswersWidget(QWidget):
         self.setLayout(self.layout)
         self.buttons: list[QPushButton] = []
 
-    def create_answer_buttons(self, letters, correct_answer, check_answer_callback):
+    def display_answers(self, letters, correct_answer, check_answer_callback):
         """Create the answer buttons and attach click events."""
         for letter in letters:
             button = QPushButton(letter)
@@ -40,7 +40,7 @@ class Lesson1AnswersWidget(QWidget):
     def resize_lesson_1_answers_widget(self):
         for button in self.buttons:
             button.setFixedSize(
-                self.main_widget.width() // 10, self.main_widget.height() // 10
+                self.main_widget.width() // 16, self.main_widget.width() // 16
             )
             font_size = self.main_widget.width() // 40
             font = button.font()

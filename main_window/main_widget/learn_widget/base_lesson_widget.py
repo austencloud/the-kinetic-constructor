@@ -14,20 +14,15 @@ class BaseLessonWidget(QWidget):
         self.learn_widget = learn_widget
         self.main_widget = learn_widget.main_widget
 
-        # Main layout
-        self.main_layout: QVBoxLayout = QVBoxLayout()
-        self.setLayout(self.main_layout)
-
-        self.question_label = QLabel()
-        self.question_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.indicator_label = QLabel("")
-        self.indicator_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        # Add back button
+        self.layout: QVBoxLayout = QVBoxLayout()
+        self.setLayout(self.layout)
+        
+        self._setup_indicator_label()
         self.add_back_button()
 
-        # Add other shared components
-        # self.main_layout.addStretch(1)
+    def _setup_indicator_label(self):
+        self.indicator_label = QLabel("")
+        self.indicator_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def add_back_button(self):
         """Add a back button to return to the lesson selection screen."""
@@ -37,7 +32,7 @@ class BaseLessonWidget(QWidget):
         back_layout = QHBoxLayout()
         back_layout.addWidget(self.back_button)
         back_layout.addStretch(1)
-        self.main_layout.insertLayout(0, back_layout)
+        self.layout.insertLayout(0, back_layout)
 
     def start_new_question(self):
         """Start a new question for the lesson."""
@@ -54,7 +49,6 @@ class BaseLessonWidget(QWidget):
         raise NotImplementedError("Subclasses must implement this method.")
 
     def check_answer(self, selected_answer, correct_answer):
-        """Check if the selected answer is correct."""
         if selected_answer == correct_answer:
             self.indicator_label.setText("Correct! Well done.")
             self.indicator_label.setStyleSheet("color: green;")
@@ -62,6 +56,7 @@ class BaseLessonWidget(QWidget):
         else:
             self.indicator_label.setText("Wrong! Try again.")
             self.indicator_label.setStyleSheet("color: red;")
+
 
     def resize_lesson_widget(self):
         """Resize the components based on window size."""
@@ -71,10 +66,10 @@ class BaseLessonWidget(QWidget):
 
     def _resize_question_label(self):
         question_label_font_size = self.learn_widget.width() // 50
-        font = self.question_label.font()
+        font = self.question_widget.question_label.font()
         font.setFamily("Monotype Corsiva")
         font.setPointSize(question_label_font_size)
-        self.question_label.setFont(font)
+        self.question_widget.question_label.setFont(font)
 
     def _resize_back_button(self):
         back_button_font_size = self.main_widget.width() // 60

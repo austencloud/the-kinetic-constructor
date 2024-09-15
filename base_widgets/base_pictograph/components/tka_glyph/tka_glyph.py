@@ -41,6 +41,7 @@ class TKA_Glyph(QGraphicsItemGroup):
         )
         self.setVisible(visibility_manager.should_glyph_be_visible("TKA"))
 
+
     def convert_to_ints(self, top_turn) -> int:
         top_turn = int(top_turn) if top_turn == int(top_turn) else top_turn
         bottom_turn = (
