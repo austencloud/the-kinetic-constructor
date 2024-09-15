@@ -26,7 +26,7 @@ class Level_1_0_QuizPictographViewer(QWidget):
         """Load and display the pictograph."""
         # Generate the pictograph using the factory
         self.pictograph = self.pictograph_factory.get_or_create_pictograph(
-            pictograph_key, pictograph_dict
+            pictograph_key, pictograph_dict, disable_gold_overlay=True
         )
 
         # Hide the letter from the pictograph

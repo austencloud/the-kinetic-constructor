@@ -12,10 +12,10 @@ class QuizPictographFactory:
         self.pictograph_cache = {}
 
     def get_or_create_pictograph(
-        self, pictograph_key: str, pictograph_dict=None
+        self, pictograph_key: str, pictograph_dict=None, disable_gold_overlay=False
     ) -> BasePictograph:
         letter_str = pictograph_key.split("_")[0]
-        
+
         # Convert the string to the Letter enum
         letter_enum = Letter.from_string(letter_str)
 
@@ -23,13 +23,15 @@ class QuizPictographFactory:
         if letter_enum in self.main_widget.letters:
             letter = self.main_widget.letters[letter_enum]
         else:
-            raise KeyError(f"Letter '{letter_str}' not found in the main_widget letters dictionary.")
-        
+            raise KeyError(
+                f"Letter '{letter_str}' not found in the main_widget letters dictionary."
+            )
+
         if pictograph_key in self.pictograph_cache.get(letter_enum, {}):
             return self.pictograph_cache[letter_enum][pictograph_key]
 
         if pictograph_dict is not None:
-            pictograph = self.create_pictograph(pictograph_dict)
+            pictograph = self.create_pictograph(pictograph_dict, disable_gold_overlay)
             if letter_enum not in self.pictograph_cache:
                 self.pictograph_cache[letter_enum] = {}
             self.pictograph_cache[letter_enum][pictograph_key] = pictograph
@@ -37,10 +39,13 @@ class QuizPictographFactory:
 
         raise ValueError("Pictograph dict is required for creating a new pictograph.")
 
-    def create_pictograph(self, pictograph_dict) -> BasePictograph:
+    def create_pictograph(
+        self, pictograph_dict, disable_gold_overlay=False
+    ) -> BasePictograph:
         pictograph = BasePictograph(
             self.main_widget, scroll_area=None  # Adjust if necessary
         )
-        pictograph.is_quiz_mode = True  # Set quiz mode flag
+        if disable_gold_overlay:
+            pictograph.disable_gold_overlay = True  # Set quiz mode flag
         pictograph.updater.update_pictograph(pictograph_dict)
         return pictograph

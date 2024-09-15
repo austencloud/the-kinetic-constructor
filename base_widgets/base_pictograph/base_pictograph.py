@@ -42,7 +42,9 @@ from .components.pictograph_initializer import PictographInitializer
 
 if TYPE_CHECKING:
 
-    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import OptionPickerScrollArea
+    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
+        OptionPickerScrollArea,
+    )
 
     from main_window.main_widget.main_widget import MainWidget
 
@@ -83,7 +85,8 @@ class BasePictograph(QGraphicsScene):
     turns_tuple: str = None
     prop_type: PropType = None
     is_blank: bool = False
-    is_quiz_mode: bool = False
+    disable_gold_overlay: bool = False
+
     def __init__(
         self,
         main_widget: "MainWidget",
