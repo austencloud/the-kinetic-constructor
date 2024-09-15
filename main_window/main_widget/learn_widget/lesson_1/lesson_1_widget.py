@@ -1,27 +1,11 @@
-import random
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QLabel,
-    QPushButton,
-    QHBoxLayout,
-)
-from PyQt6.QtCore import Qt
-
 from main_window.main_widget.learn_widget.base_lesson_widget import BaseLessonWidget
 from .lesson_1_answers_widget import Lesson1AnswersWidget
 from .Lesson_1_pictograph_container import Lesson1PictographContainer
-
+from .lesson_1_answers_widget import Lesson1AnswersWidget
+from .lesson_1_question_generator import Lesson1QuestionGenerator
 if TYPE_CHECKING:
     from ..learn_widget import LearnWidget
-
-
-from .lesson_1_answers_widget import Lesson1AnswersWidget
-
-
-from .lesson_1_question_generator import Lesson1QuestionGenerator
-
 
 class Lesson1Widget(BaseLessonWidget):
     """Lesson 1 widget, handling pictograph to letter matching."""

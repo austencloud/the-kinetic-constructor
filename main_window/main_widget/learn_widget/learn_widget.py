@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QStackedLayout
 from PyQt6.QtGui import QPainter
 
+from main_window.main_widget.learn_widget.base_lesson_widget import BaseLessonWidget
 from main_window.main_widget.learn_widget.lesson_1.lesson_1_widget import Lesson1Widget
 from main_window.main_widget.learn_widget.lesson_2.lesson_2_widget import Lesson2Widget
 from main_window.main_widget.learn_widget.lesson_selector import LessonSelector
@@ -60,19 +61,19 @@ class LearnWidget(QWidget):
 
     def start_lesson(self, lesson_number: int) -> None:
         """Start the specified lesson."""
-        if lesson_number == 1:
-            self.stack_layout.setCurrentWidget(self.lesson_1_widget)
-            self.lesson_1_widget.start_new_question()
-        elif lesson_number == 2:
-            self.stack_layout.setCurrentWidget(self.lesson_2_widget)
-            self.lesson_2_widget.start_new_question()
+        lesson_widgets: list[BaseLessonWidget] = [
+            self.lesson_1_widget,
+            self.lesson_2_widget,
+        ]
+        if lesson_number >= 1 and lesson_number <= len(lesson_widgets):
+            self.stack_layout.setCurrentWidget(lesson_widgets[lesson_number - 1])
+            lesson_widgets[lesson_number - 1].start_new_question()
 
     def resize_learn_widget(self) -> None:
         """Dynamically adjust button sizes and font sizes based on window size."""
         self.lesson_1_widget.resize_lesson_widget()
         self.lesson_2_widget.resize_lesson_widget()
         self.lesson_selector.resize_lesson_selector()
-
 
     def paintEvent(self, event) -> None:
         """Draw the background using the background manager."""
