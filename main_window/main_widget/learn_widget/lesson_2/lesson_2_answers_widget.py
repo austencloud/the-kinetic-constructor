@@ -3,41 +3,37 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.learn_widget.quiz_pictograph_factory import (
-    QuizPictographFactory,
+from main_window.main_widget.learn_widget.lesson_pictograph_factory import (
+    LessonPictographFactory,
 )
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.learn_widget import LearnWidget
+    from main_window.main_widget.learn_widget.lesson_2.lesson_2_widget import (
+        Lesson2Widget,
+    )
 
 
 class Lesson2AnswersWidget(QWidget):
-    """Widget to manage pictograph views layout and actions."""
+    """Widget responsible for displaying the pictograph answers."""
 
-    def __init__(self, learn_widget: "LearnWidget"):
-        super().__init__(learn_widget)
-        self.learn_widget = learn_widget
-        self.main_widget = learn_widget.main_widget
-        self.pictograph_factory = QuizPictographFactory(self.main_widget)
+    def __init__(self, lesson_2_widget: "Lesson2Widget"):
+        super().__init__(lesson_2_widget)
+        self.lesson_2_widget = lesson_2_widget
+        self.main_widget = lesson_2_widget.main_widget
+        self.pictograph_factory = LessonPictographFactory(self.main_widget)
 
-        # Use a horizontal box layout to organize pictographs in a row
         self.layout: QHBoxLayout = QHBoxLayout()
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setLayout(self.layout)
 
-        # Keep track of pictograph views for resizing purposes
         self.pictograph_views: list[QWidget] = []
         self.pictographs: dict[str, BasePictograph] = {}
 
-    def create_pictograph_buttons(
-        self, pictographs, correct_pictograph, check_answer_callback
-    ):
-        """Create the pictograph views and attach click events in a row."""
-        self.clear()  # Clear existing pictographs before creating new ones
+    def display_answers(self, pictographs, correct_pictograph, check_answer_callback):
+        """Display the pictographs as answer options."""
+        self.clear()
 
-        # Loop through pictographs and add them to the layout
-        for i, pictograph_dict in enumerate(pictographs):
-            # Generate the pictograph using the factory
+        for pictograph_dict in pictographs:
             pictograph_key = (
                 self.main_widget.pictograph_key_generator.generate_pictograph_key(
                     pictograph_dict
@@ -47,29 +43,25 @@ class Lesson2AnswersWidget(QWidget):
                 pictograph_key, pictograph_dict, disable_gold_overlay=False
             )
             self.pictographs[pictograph_key] = pictograph
-            # Remove mouse tracking for the pictograph (to disable hover/mouse events)
             pictograph.view.setCursor(Qt.CursorShape.PointingHandCursor)
 
-            # Connect click event directly to the view
             pictograph.view.mousePressEvent = (
                 lambda event, opt=pictograph_dict: check_answer_callback(
                     opt, correct_pictograph
                 )
             )
 
-            # Add pictograph view to the layout
             self.pictograph_views.append(pictograph.view)
 
         for view in self.pictograph_views:
             self.layout.addWidget(view)
 
     def clear(self):
-        """Clear all pictograph views."""
+        """Clear all the displayed pictographs."""
         for view in self.pictograph_views:
             self.layout.removeWidget(view)
         self.pictograph_views.clear()
         self.pictographs.clear()
-        # QApplication.processEvents()
 
     def resize_lesson_2_answers_widget(self):
         """Resize the pictograph views based on window size."""
@@ -80,6 +72,7 @@ class Lesson2AnswersWidget(QWidget):
         self._scale_pictographs()
 
     def _scale_pictographs(self):
+        """Scale the pictographs to fit properly in the view."""
         for pictograph in self.pictographs.values():
             scene_size = pictograph.sceneRect().size()
             view_size = pictograph.view.size()

@@ -23,15 +23,12 @@ class BaseLessonWidget(QWidget):
         self.question_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.indicator_label = QLabel("")
         self.indicator_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.previous_pictographs = set()
 
         # Add back button
         self.add_back_button()
 
         # Add other shared components
-        self.main_layout.addStretch(1)
-        self.main_layout.addWidget(self.question_label)
-        self.main_layout.addStretch(1)
+        # self.main_layout.addStretch(1)
 
     def add_back_button(self):
         """Add a back button to return to the lesson selection screen."""
@@ -46,7 +43,7 @@ class BaseLessonWidget(QWidget):
     def start_new_question(self):
         """Start a new question for the lesson."""
         self.clear_current_question()
-        self.generate_question()
+        self.question_generator.generate_question()
         self.resize_lesson_widget()
 
     def generate_question(self):

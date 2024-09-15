@@ -39,7 +39,7 @@
     "visibility": {
         "glyph_visibility": {
             "VTG": false,
-            "TKA": false,
+            "TKA": true,
             "Elemental": false,
             "EndPosition": false
         },
@@ -49,10 +49,8 @@
     },
     "dictionary": {
         "sort_method": "alphabetical",
-        "current_section": "browser",
-        "current_filter": {
-            "sequence_length": 8
-        }
+        "current_section": "sequence_length",
+        "current_filter": null
     },
     "sequence_layout": {
         "grow_sequence": false,

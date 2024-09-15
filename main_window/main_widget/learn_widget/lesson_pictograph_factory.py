@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
 
-class QuizPictographFactory:
+class LessonPictographFactory:
     def __init__(self, main_widget: "MainWidget"):
         self.main_widget = main_widget
         self.pictograph_cache = {}
@@ -18,14 +18,6 @@ class QuizPictographFactory:
 
         # Convert the string to the Letter enum
         letter_enum = Letter.from_string(letter_str)
-
-        # Lookup the letter enum in the main_widget letters dictionary
-        if letter_enum in self.main_widget.letters:
-            letter = self.main_widget.letters[letter_enum]
-        else:
-            raise KeyError(
-                f"Letter '{letter_str}' not found in the main_widget letters dictionary."
-            )
 
         if pictograph_key in self.pictograph_cache.get(letter_enum, {}):
             return self.pictograph_cache[letter_enum][pictograph_key]

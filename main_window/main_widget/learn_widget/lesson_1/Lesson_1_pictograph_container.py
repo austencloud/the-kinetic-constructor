@@ -2,22 +2,22 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.learn_widget.quiz_pictograph_factory import (
-    QuizPictographFactory,
+from main_window.main_widget.learn_widget.lesson_pictograph_factory import (
+    LessonPictographFactory,
 )
 
 if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.learn_widget import LearnWidget
 
 
-class Lesson1PictographViewer(QWidget):
+class Lesson1PictographContainer(QWidget):
     """Widget for displaying the pictograph and managing its size and alignment."""
 
     def __init__(self, learn_widget: "LearnWidget"):
         super().__init__(learn_widget)
         self.learn_widget = learn_widget
         self.main_widget = learn_widget.main_widget
-        self.pictograph_factory = QuizPictographFactory(self.main_widget)
+        self.pictograph_factory = LessonPictographFactory(self.main_widget)
         self.pictograph = None
 
         # Layout for centering the pictograph
