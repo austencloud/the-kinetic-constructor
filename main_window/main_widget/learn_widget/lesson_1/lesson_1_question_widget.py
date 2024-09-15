@@ -27,7 +27,7 @@ class Lesson1QuestionWidget(QWidget):
         self.layout.addStretch(3)
         self.setLayout(self.layout)
 
-    def load_pictograph(self, pictograph_key, pictograph_dict):
+    def load_pictograph(self, pictograph_dict):
         """Load and display the pictograph."""
         self.pictograph = BasePictograph(self.main_widget, scroll_area=None)
         self.pictograph.disable_gold_overlay = True

@@ -1,6 +1,7 @@
 import random
 from typing import TYPE_CHECKING
 
+from Enums.letters import Letter
 
 if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.lesson_1.lesson_1_widget import (
@@ -14,27 +15,19 @@ class Lesson1QuestionGenerator:
     def __init__(self, lesson_1_widget: "Lesson1Widget"):
         self.lesson_1_widget = lesson_1_widget
         self.main_widget = lesson_1_widget.main_widget
+        self.previous_correct_letter: Letter = None
 
     def generate_question(self):
         """Generate a question for Lesson 1."""
-        correct_letter = random.choice(list(self.main_widget.letters.keys()))
+        correct_letter = self.generate_new_correct_letter()
+        self.previous_correct_letter = correct_letter
+
         correct_pictograph_dict = random.choice(
             self.main_widget.letters[correct_letter]
         )
 
-        pictograph_key = (
-            self.main_widget.pictograph_key_generator.generate_pictograph_key(
-                correct_pictograph_dict
-            )
-        )
         wrong_answers = self.generate_random_wrong_answers(correct_letter)
-
-        # Load the pictograph
-        self.lesson_1_widget.question_widget.load_pictograph(
-            pictograph_key, correct_pictograph_dict
-        )
-
-        # Set the question text and create answer buttons
+        self.lesson_1_widget.question_widget.load_pictograph(correct_pictograph_dict)
 
         letters = [correct_letter.value] + wrong_answers
         random.shuffle(letters)
@@ -42,6 +35,13 @@ class Lesson1QuestionGenerator:
         self.lesson_1_widget.answers_widget.display_answers(
             letters, correct_letter.value, self.lesson_1_widget.check_answer
         )
+
+    def generate_new_correct_letter(self) -> Letter:
+        """Generate a new correct letter that is different from the previous one."""
+        letters = list(self.main_widget.letters.keys())
+        if self.previous_correct_letter:
+            letters.remove(self.previous_correct_letter)
+        return random.choice(letters)
 
     def generate_random_wrong_answers(self, correct_letter) -> list[str]:
         """Generate three random wrong letter answers."""
