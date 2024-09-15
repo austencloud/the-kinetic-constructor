@@ -3,10 +3,10 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QStackedLayout, QPushButton
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPainter
 
-from main_window.main_widget.learn_widget.level_1_quiz_selector import (
+from main_window.main_widget.learn_widget.level_1.level_1_quiz_selector import (
     Level1QuizSelector,
 )
-from main_window.main_widget.learn_widget.level_1_0_quiz import Level_1_0_Quiz
+from main_window.main_widget.learn_widget.level_1.level_1_0.level_1_0_quiz import Level_1_0_Quiz
 from main_window.main_widget.learn_widget.level_selection_widget import (
     LevelSelectionWidget,
 )
@@ -32,12 +32,12 @@ class LearnWidget(QWidget):
         # Initialize the different screens
         self.level_selection_widget = LevelSelectionWidget(self)
         self.level_1_quiz_selector = Level1QuizSelector(self)
-        self.level_1_quiz = Level_1_0_Quiz(self)
-
+        self.level_1_0_quiz = Level_1_0_Quiz(self)
+        # self.level_1_1_quiz = Level_1_1_Quiz(self)
         # Add to stack
         self.stack_layout.addWidget(self.level_selection_widget)
         self.stack_layout.addWidget(self.level_1_quiz_selector)
-        self.stack_layout.addWidget(self.level_1_quiz)
+        self.stack_layout.addWidget(self.level_1_0_quiz)
 
         # Show the level selection widget by default
         self.stack_layout.setCurrentWidget(self.level_selection_widget)
@@ -66,13 +66,13 @@ class LearnWidget(QWidget):
 
     def start_level_1_0_quiz(self):
         """Start the 1.0 quiz (Pictograph -> Letter)."""
-        self.stack_layout.setCurrentWidget(self.level_1_quiz)
-        self.level_1_quiz.start_new_question()
+        self.stack_layout.setCurrentWidget(self.level_1_0_quiz)
+        self.level_1_0_quiz.start_new_question()
 
     def start_level_1_1_quiz(self):
         """Start the 1.1 quiz (Letter -> Pictograph)."""
-        self.stack_layout.setCurrentWidget(self.level_1_quiz)
-        self.level_1_quiz.start_new_question()
+        self.stack_layout.setCurrentWidget(self.level_1_0_quiz)
+        self.level_1_1_quiz.start_new_question()
 
     def start_intermediate_module(self):
         print("Starting Intermediate Module")
@@ -85,7 +85,7 @@ class LearnWidget(QWidget):
     def resize_learn_widget(self) -> None:
         """Dynamically adjust button sizes and font sizes based on window size."""
         self.level_1_quiz_selector.resize_level_1_quiz_selector()
-        self.level_1_quiz.resize_level_1_0_quiz()
+        self.level_1_0_quiz.resize_level_1_0_quiz()
         self.level_selection_widget.resize_level_selection_widget()
 
     def paintEvent(self, event):

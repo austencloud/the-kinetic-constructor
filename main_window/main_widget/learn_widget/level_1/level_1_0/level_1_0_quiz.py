@@ -12,7 +12,7 @@ from .level_1_0_quiz_answer_buttons_widget import Level_1_0_QuizAnswerButtonsWid
 from .level_1_0_quiz_pictograph_viewer import Level_1_0_QuizPictographViewer
 
 if TYPE_CHECKING:
-    from .learn_widget import LearnWidget
+    from ...learn_widget import LearnWidget
 
 
 class Level_1_0_Quiz(QWidget):

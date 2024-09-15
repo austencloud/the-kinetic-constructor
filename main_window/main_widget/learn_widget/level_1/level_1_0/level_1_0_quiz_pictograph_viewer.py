@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
-from .quiz_pictograph_factory import QuizPictographFactory
+from ...quiz_pictograph_factory import QuizPictographFactory
 
 if TYPE_CHECKING:
-    from .learn_widget import LearnWidget
+    from ...learn_widget import LearnWidget
 
 
 class Level_1_0_QuizPictographViewer(QWidget):

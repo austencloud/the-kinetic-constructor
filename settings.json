@@ -3,7 +3,7 @@
         "prop_type": "Staff",
         "background_type": "Aurora",
         "grow_sequence": true,
-        "current_tab": "dictionary"
+        "current_tab": "recorder"
     },
     "image_export": {
         "include_start_position": false,
@@ -39,7 +39,7 @@
     "visibility": {
         "glyph_visibility": {
             "VTG": false,
-            "TKA": true,
+            "TKA": false,
             "Elemental": false,
             "EndPosition": false
         },
