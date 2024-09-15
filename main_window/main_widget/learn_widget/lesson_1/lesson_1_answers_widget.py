@@ -37,7 +37,7 @@ class Lesson1AnswersWidget(QWidget):
             button.deleteLater()
         self.buttons.clear()
 
-    def resize_level_1_0_answer_buttons_widget(self):
+    def resize_lesson_1_answers_widget(self):
         for button in self.buttons:
             button.setFixedSize(
                 self.main_widget.width() // 10, self.main_widget.height() // 10

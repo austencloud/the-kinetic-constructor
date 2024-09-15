@@ -2,10 +2,13 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.learn_widget.quiz_pictograph_factory import QuizPictographFactory
+from main_window.main_widget.learn_widget.quiz_pictograph_factory import (
+    QuizPictographFactory,
+)
 
 if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.learn_widget import LearnWidget
+
 
 class Lesson1PictographViewer(QWidget):
     """Widget for displaying the pictograph and managing its size and alignment."""
@@ -42,7 +45,7 @@ class Lesson1PictographViewer(QWidget):
         self.layout.addWidget(
             self.pictograph.view, alignment=Qt.AlignmentFlag.AlignCenter
         )
-        self.resize_level_1_0_quiz_pictograph_viewer()
+        self.resize_lesson_1_pictograph_viewer()
 
     def clear(self):
         """Remove the current pictograph view."""
@@ -51,7 +54,7 @@ class Lesson1PictographViewer(QWidget):
             # self.pictograph.view.deleteLater()
             self.pictograph = None
 
-    def resize_level_1_0_quiz_pictograph_viewer(self) -> None:
+    def resize_lesson_1_pictograph_viewer(self) -> None:
         if self.pictograph:
             self.resize(self.main_widget.height() // 2, self.main_widget.height() // 2)
             self.pictograph.view.resize(

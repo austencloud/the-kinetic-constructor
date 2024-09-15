@@ -4,6 +4,7 @@ from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.learn_widget import LearnWidget
+from functools import partial
 
 
 class LessonSelector(QWidget):
@@ -31,10 +32,11 @@ class LessonSelector(QWidget):
         # Add buttons for each lesson
         self.add_lesson_button(
             "Lesson 1 - Pictograph to Letter",
-            self.learn_widget.start_lesson_1,
+            partial(self.learn_widget.start_lesson, 1),
         )
         self.add_lesson_button(
-            "Lesson 2 - Letter to Pictograph", self.learn_widget.start_lesson_2
+            "Lesson 2 - Letter to Pictograph",
+            partial(self.learn_widget.start_lesson, 2),
         )
         self.layout.addStretch(2)
 
@@ -50,7 +52,6 @@ class LessonSelector(QWidget):
         """Resize title and buttons based on window size."""
         self._resize_title_label()
         self._resize_buttons()
-
 
     def _resize_title_label(self):
         title_font_size = self.main_widget.width() // 40

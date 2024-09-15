@@ -3,7 +3,9 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.learn_widget.quiz_pictograph_factory import QuizPictographFactory
+from main_window.main_widget.learn_widget.quiz_pictograph_factory import (
+    QuizPictographFactory,
+)
 
 if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.learn_widget import LearnWidget
@@ -69,7 +71,7 @@ class Lesson2AnswersWidget(QWidget):
         self.pictographs.clear()
         # QApplication.processEvents()
 
-    def resize_level_1_1_pictograph_buttons_widget(self):
+    def resize_lesson_2_answers_widget(self):
         """Resize the pictograph views based on window size."""
         for view in self.pictograph_views:
             view.setFixedSize(
