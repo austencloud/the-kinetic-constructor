@@ -19,11 +19,11 @@ class SequenceWidgetIndicatorLabel(QLabel):
         self.font_size = sequence_widget.width() // 40
         font = self.font()
         font.setPointSize(self.font_size)
-        font.setWeight(QFont.Weight.DemiBold)  # Set the font weight to DemiBold
+        font.setWeight(QFont.Weight.DemiBold)
         self.setFont(font)
-        self.setStyleSheet("color: black;")
         self.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop)
         self.clear()
+
         self.timer = QTimer(self)
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(self.start_fade_out)
@@ -31,23 +31,24 @@ class SequenceWidgetIndicatorLabel(QLabel):
         self.opacity_effect = QGraphicsOpacityEffect(self)
         self.setGraphicsEffect(self.opacity_effect)
         self.animation = QPropertyAnimation(self.opacity_effect, b"opacity")
-        self.animation.setDuration(2000)  # Duration of the fade-out in milliseconds
+        self.animation.setDuration(2000)
         self.animation.finished.connect(self.clear)
 
         self.setContentsMargins(0, 0, 0, 0)
 
     def show_message(self, text) -> None:
+        self.timer.stop()
+        self.animation.stop()
+        self.opacity_effect.setOpacity(1)
+
         self.setText(text)
-        self.opacity_effect.setOpacity(1)  # Ensure the label is fully visible
-        # self.show()
-        self.timer.start(3000)  # Show the message for 5 seconds
+        self.timer.start(1000)
 
     @pyqtSlot()
     def start_fade_out(self) -> None:
-        self.animation.setStartValue(1)  # Start fully visible
-        self.animation.setEndValue(0)  # End fully transparent
+        self.animation.setStartValue(1)
+        self.animation.setEndValue(0)
         self.animation.start()
 
     def clear(self) -> None:
         self.setText(" ")
-        # self.hide()

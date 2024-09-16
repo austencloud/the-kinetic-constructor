@@ -49,10 +49,8 @@
     },
     "dictionary": {
         "sort_method": "alphabetical",
-        "current_section": "browser",
-        "current_filter": {
-            "starting_letter": "A"
-        }
+        "current_section": "starting_position",
+        "current_filter": null
     },
     "sequence_layout": {
         "grow_sequence": false,
@@ -80,7 +78,7 @@
             "current_auto_builder": "circular"
         },
         "manual_builder": {},
-        "last_used_builder": "auto"
+        "last_used_builder": "manual"
     },
     "sequence_sharing": {
         "recipients": [

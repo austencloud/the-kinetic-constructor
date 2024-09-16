@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from .base_answers_widget import BaseAnswersWidget
 from .base_question_generator import BaseQuestionGenerator
 from .base_question_widget import BaseQuestionWidget
-from ..learn_widget_indicator_label import LearnWidgetIndicatorLabel
+from ..lesson_widget_indicator_label import LessonWidgetIndicatorLabel
 
 if TYPE_CHECKING:
     from ..learn_widget import LearnWidget
@@ -39,7 +39,7 @@ class BaseLessonWidget(QWidget):
         self.layout.addStretch(1)
 
     def _setup_indicator_label(self):
-        self.indicator_label = LearnWidgetIndicatorLabel(self)
+        self.indicator_label = LessonWidgetIndicatorLabel(self)
 
     def add_back_button(self):
         """Add a back button to return to the lesson selection screen."""

@@ -5,10 +5,12 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.base_classes.base_lesson_widget import BaseLessonWidget
+    from main_window.main_widget.learn_widget.base_classes.base_lesson_widget import (
+        BaseLessonWidget,
+    )
 
 
-class LearnWidgetIndicatorLabel(QLabel):
+class LessonWidgetIndicatorLabel(QLabel):
     def __init__(self, lesson_widget: "BaseLessonWidget") -> None:
         super().__init__(lesson_widget)
         self.lesson_widget = lesson_widget
@@ -19,6 +21,7 @@ class LearnWidgetIndicatorLabel(QLabel):
         self.setFont(font)
         self.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop)
         self.clear()
+
         self.timer = QTimer(self)
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(self.start_fade_out)
@@ -32,8 +35,11 @@ class LearnWidgetIndicatorLabel(QLabel):
         self.setContentsMargins(0, 0, 0, 0)
 
     def show_message(self, text) -> None:
-        self.setText(text)
+        self.timer.stop()
+        self.animation.stop()
         self.opacity_effect.setOpacity(1)
+
+        self.setText(text)
         self.timer.start(1000)
 
     @pyqtSlot()
