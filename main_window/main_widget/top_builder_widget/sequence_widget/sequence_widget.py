@@ -15,7 +15,7 @@ from .labels.current_word_label import CurrentWordLabel
 from .labels.difficulty_label import DifficultyLabel
 from .graph_editor.graph_editor import GraphEditor
 from .beat_frame.layout_options_dialog import LayoutOptionsDialog
-from .labels.indicator_label import IndicatorLabel
+from .labels.sequence_widget_indicator_label import SequenceWidgetIndicatorLabel
 from .sequence_widget_pictograph_factory import SequenceWidgetPictographFactory
 from .sequence_widget_button_frame import SequenceWidgetButtonFrame
 from .sequence_widget_scroll_area import SequenceWidgetScrollArea
@@ -55,7 +55,7 @@ class SequenceWidget(QWidget):
         self.scroll_area.setWidget(self.beat_frame)
 
     def _setup_labels(self):
-        self.indicator_label = IndicatorLabel(self)
+        self.indicator_label = SequenceWidgetIndicatorLabel(self)
         self.current_word_label = CurrentWordLabel(self)
         self.difficulty_label = DifficultyLabel(self)
 

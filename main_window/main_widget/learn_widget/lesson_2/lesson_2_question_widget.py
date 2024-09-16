@@ -12,6 +12,7 @@ class Lesson2QuestionWidget(QWidget):
     def __init__(self, lesson_2_widget: "Lesson2Widget") -> None:
         super().__init__(lesson_2_widget)
         self.lesson_2_widget = lesson_2_widget
+        self.main_widget = lesson_2_widget.main_widget
         self._setup_labels()
         self._setup_layout()
 
@@ -40,6 +41,14 @@ class Lesson2QuestionWidget(QWidget):
 
     def resize_lesson_2_question_widget(self) -> None:
         """Resize the question labels based on window size."""
-        font_size = self.lesson_2_widget.main_widget.width() // 50
-        self.question_label.setStyleSheet(f"font-size: {font_size}px;")
-        self.letter_label.setStyleSheet(f"font-size: {font_size}px;")
+        question_label_font_size = self.main_widget.width() // 50
+        question_label_font = self.question_label.font()
+        question_label_font.setFamily("Monotype Corsiva")
+        question_label_font.setPointSize(question_label_font_size)
+        self.question_label.setFont(question_label_font)
+
+        letter_label_font_size = self.main_widget.width() // 40
+        letter_label_font = self.letter_label.font()
+        letter_label_font.setFamily("Georgia")
+        letter_label_font.setPointSize(letter_label_font_size)
+        self.letter_label.setFont(letter_label_font)

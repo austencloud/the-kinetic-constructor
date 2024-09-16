@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     )
 
 
-class IndicatorLabel(QLabel):
+class SequenceWidgetIndicatorLabel(QLabel):
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
@@ -51,6 +51,3 @@ class IndicatorLabel(QLabel):
     def clear(self) -> None:
         self.setText(" ")
         # self.hide()
-
-    # def resize_indicator_label(self) -> None:
-    #     self.setMinimumHeight(self.sequence_widget.height() // 10)

@@ -2,6 +2,11 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout
 from PyQt6.QtCore import Qt
 
+from main_window.main_widget.learn_widget.base_question_generator import BaseQuestionGenerator
+from main_window.main_widget.learn_widget.learn_widget_indicator_label import (
+    LearnWidgetIndicatorLabel,
+)
+
 if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.learn_widget import LearnWidget
 
@@ -16,13 +21,12 @@ class BaseLessonWidget(QWidget):
 
         self.layout: QVBoxLayout = QVBoxLayout()
         self.setLayout(self.layout)
-        
+        self.question_generator: BaseQuestionGenerator = None
         self._setup_indicator_label()
         self.add_back_button()
 
     def _setup_indicator_label(self):
-        self.indicator_label = QLabel("")
-        self.indicator_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.indicator_label = LearnWidgetIndicatorLabel(self)
 
     def add_back_button(self):
         """Add a back button to return to the lesson selection screen."""
@@ -40,36 +44,19 @@ class BaseLessonWidget(QWidget):
         self.question_generator.generate_question()
         self.resize_lesson_widget()
 
-    def generate_question(self):
-        """Generate a new question for the lesson (to be implemented by subclasses)."""
-        raise NotImplementedError("Subclasses must implement this method.")
-
-    def clear_current_question(self):
-        """Clear the current question (to be implemented by subclasses)."""
-        raise NotImplementedError("Subclasses must implement this method.")
-
     def check_answer(self, selected_answer, correct_answer):
         if selected_answer == correct_answer:
-            self.indicator_label.setText("Correct! Well done.")
+            self.indicator_label.show_message("Correct! Well done.")
             self.indicator_label.setStyleSheet("color: green;")
             self.start_new_question()
         else:
-            self.indicator_label.setText("Wrong! Try again.")
+            self.indicator_label.show_message("Wrong! Try again.")
             self.indicator_label.setStyleSheet("color: red;")
-
 
     def resize_lesson_widget(self):
         """Resize the components based on window size."""
-        self._resize_question_label()
         self._resize_back_button()
         self._resize_indicator_label()
-
-    def _resize_question_label(self):
-        question_label_font_size = self.learn_widget.width() // 50
-        font = self.question_widget.question_label.font()
-        font.setFamily("Monotype Corsiva")
-        font.setPointSize(question_label_font_size)
-        self.question_widget.question_label.setFont(font)
 
     def _resize_back_button(self):
         back_button_font_size = self.main_widget.width() // 60
@@ -84,3 +71,8 @@ class BaseLessonWidget(QWidget):
         font = self.indicator_label.font()
         font.setPointSize(indicator_label_font_size)
         self.indicator_label.setFont(font)
+
+    def clear_current_question(self):
+        """Clear the current question by resetting viewer and answer buttons."""
+        self.question_widget.clear()
+        self.answers_widget.clear()

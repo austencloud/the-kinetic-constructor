@@ -152,3 +152,9 @@ class PictographView(QGraphicsView):
         self.setStyleSheet("")
         self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
         self.pictograph.container.styled_border_overlay.reset_border()
+
+    def resizeEvent(self, event):
+        """Trigger fitInView whenever the widget is resized."""
+        super().resizeEvent(event)
+        self.fitInView(self.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
+        self.pictograph.container.styled_border_overlay.resize_styled_border_overlay()

@@ -18,33 +18,28 @@ class Lesson1QuestionWidget(QWidget):
         self.main_widget = learn_widget.main_widget
         self.pictograph = None
         self.question_label = QLabel("What letter matches the pictograph?")
+        self.question_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._setup_layout()
 
-    def _setup_layout(self):
+    def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout()
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.addWidget(self.question_label)
         self.layout.addStretch(3)
         self.setLayout(self.layout)
 
-    def load_pictograph(self, pictograph_dict):
+    def load_pictograph(self, pictograph_dict) -> None:
         """Load and display the pictograph."""
         self.pictograph = BasePictograph(self.main_widget, scroll_area=None)
         self.pictograph.disable_gold_overlay = True
         self.pictograph.updater.update_pictograph(pictograph_dict)
-
-        self.pictograph.tka_glyph.setVisible(False)
-        self.pictograph.view.setCursor(Qt.CursorShape.ArrowCursor)
-        self.pictograph.view.setMouseTracking(False)
-        self.pictograph.container.styled_border_overlay.setMouseTracking(False)
-        self.pictograph.container.setCursor(Qt.CursorShape.ArrowCursor)
-
+        self.pictograph.view.leaveEvent = None
         self.layout.addWidget(
             self.pictograph.view, alignment=Qt.AlignmentFlag.AlignCenter
         )
         self.resize_lesson_1_question_widget()
 
-    def clear(self):
+    def clear(self) -> None:
         """Remove the current pictograph view."""
         if self.pictograph:
             self.layout.removeWidget(self.pictograph.view)
@@ -52,20 +47,19 @@ class Lesson1QuestionWidget(QWidget):
             self.pictograph = None
 
     def resize_lesson_1_question_widget(self) -> None:
+        self._resize_question_label()
+        self._resize_pictograph()
+
+    def _resize_question_label(self) -> None:
+        question_label_font_size = self.main_widget.width() // 50
+        font = self.question_label.font()
+        font.setFamily("Monotype Corsiva")
+        font.setPointSize(question_label_font_size)
+        self.question_label.setFont(font)
+
+    def _resize_pictograph(self) -> None:
+
         if self.pictograph:
-            self.resize(self.main_widget.height() // 2, self.main_widget.height() // 2)
-            self.pictograph.view.resize(
+            self.pictograph.view.setFixedSize(
                 self.main_widget.height() // 2, self.main_widget.height() // 2
             )
-            self._scale_pictograph()
-            self.pictograph.container.styled_border_overlay.resize_styled_border_overlay()
-
-    def _scale_pictograph(self):
-        scene_size = self.pictograph.sceneRect().size()
-        view_size = self.pictograph.view.size()
-        scale_factor = min(
-            view_size.width() / scene_size.width(),
-            view_size.height() / scene_size.height(),
-        )
-        self.pictograph.view.resetTransform()
-        self.pictograph.view.scale(scale_factor, scale_factor)

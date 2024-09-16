@@ -1,24 +1,22 @@
 import json
-import threading
+
 from PyQt6.QtGui import QKeyEvent, QCursor, QCloseEvent
 from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QTabWidget
+
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from Enums.PropTypes import PropType
 from letter_determiner.letter_determiner import LetterDeterminer
 from main_window.main_widget.learn_widget.learn_widget import LearnWidget
-from main_window.main_widget.sequence_recorder.sequence_recorder import SequenceRecorder
 from .letter_loader import LetterLoader
 from .sequence_properties_manager.sequence_properties_manager import (
     SequencePropertiesManager,
 )
 from .top_builder_widget.top_builder_widget import TopBuilderWidget
 from objects.graphical_object.svg_manager.graphical_object_svg_manager import SvgManager
-
 from .sequence_level_evaluator import SequenceLevelEvaluator
-from .thumbnail_finder import (
-    ThumbnailFinder,
-)
+from .thumbnail_finder import ThumbnailFinder
 from utilities.path_helpers import get_images_and_data_path
 from styles.main_widget_tab_bar_styler import MainWidgetTabBarStyler
 from .dictionary_widget.dictionary_widget import DictionaryWidget
@@ -28,23 +26,11 @@ from .turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from .pictograph_key_generator import PictographKeyGenerator
 from data.constants import DIAMOND
-
 from ..main_widget.special_placement_loader import SpecialPlacementLoader
-
-from PyQt6.QtWidgets import (
-    QTabWidget,
-    QWidget,
-    QVBoxLayout,
-    QLabel,
-    QPushButton,
-    QHBoxLayout,
-    QMessageBox,
-)
 
 if TYPE_CHECKING:
     from splash_screen import SplashScreen
     from main_window.main_window import MainWindow
-import json
 
 from utilities.path_helpers import get_images_and_data_path
 
@@ -64,20 +50,13 @@ class MainWidget(QTabWidget):
         self._set_prop_type()
         self._setup_default_modes()
 
-        self.splash_screen.update_progress(10, "Loading letters...")
         self._setup_letters()
-
-        # Call the new method that initializes managers
-        self.splash_screen.update_progress(
-            50, "Setting up JSON manager and components..."
-        )
         self._initialize_managers()
-
-        self.splash_screen.update_progress(100, "Initialization complete!")
 
         self._setup_ui_components()
         self.currentChanged.connect(self.on_tab_changed)
         self.tabBar().setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.splash_screen.update_progress(100, "Initialization complete!")
 
     def _initialize_managers(self):
         """Setup all the managers and helper components."""
@@ -120,15 +99,8 @@ class MainWidget(QTabWidget):
                 self.dictionary_widget.resize_dictionary_widget()
         elif index == self.learn_tab_index:
             self.main_window.settings_manager.global_settings.set_current_tab("learn")
-            if not self.learn_widget.initialized:
-                self.learn_widget.initialized = True
-                self.learn_widget.init_module_selection_screen()
-                self.learn_widget.resize_learn_widget()
+            self.learn_widget.resize_learn_widget()
 
-        elif index == self.recorder_tab_index:
-            self.main_window.settings_manager.global_settings.set_current_tab(
-                "recorder"
-            )
 
     def _setup_pictograph_cache(self) -> None:
         self.pictograph_cache: dict[str, dict[str, "BasePictograph"]] = {}
@@ -155,23 +127,20 @@ class MainWidget(QTabWidget):
 
     def _setup_ui_components(self):
         # Initialize special_placement_loader here
-        self.splash_screen.update_progress(70, "Setting up builder...")
+        self.splash_screen.update_progress(70, "Setting up build tab...")
         self.top_builder_widget = TopBuilderWidget(self)
-        self.splash_screen.update_progress(80, "Setting up dictionary...")
+        self.splash_screen.update_progress(80, "Setting up browse tab...")
         self.dictionary_widget = DictionaryWidget(self)
-        self.splash_screen.update_progress(90, "Setting up layout...")
+        self.splash_screen.update_progress(90, "Setting up learn tab...")
+        self.learn_widget = LearnWidget(self)
 
         self.addTab(self.top_builder_widget, "Build")
         self.addTab(self.dictionary_widget, "Browse")
-
-        # Add the new learn tab
-        self.learn_widget = LearnWidget(self)
         self.addTab(self.learn_widget, "Learn")
 
         self.builder_tab_index = 0
         self.dictionary_tab_index = 1
-        self.recorder_tab_index = 2
-        self.learn_tab_index = 3
+        self.learn_tab_index = 2
 
         # Setup the current tab based on settings
         current_tab = (
@@ -180,7 +149,6 @@ class MainWidget(QTabWidget):
         tab_mapping = {
             "sequence_builder": self.builder_tab_index,
             "dictionary": self.dictionary_tab_index,
-            "recorder": self.recorder_tab_index,
             "learn": self.learn_tab_index,
         }
         self.setCurrentIndex(tab_mapping.get(current_tab, 0))
@@ -194,6 +162,7 @@ class MainWidget(QTabWidget):
         self.grid_mode = DIAMOND
 
     def _setup_letters(self) -> None:
+        self.splash_screen.update_progress(10, "Loading pictograph dictionaries...")
         self.letter_loader = LetterLoader(self)
         self.letters: dict[Letter, list[dict]] = self.letter_loader.load_all_letters()
         self.letter_determiner = LetterDeterminer(self)

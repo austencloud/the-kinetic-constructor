@@ -47,7 +47,7 @@ class Lesson2QuestionGenerator:
 
     def _get_shuffled_pictographs(self, correct_pictograph):
         """Generate and shuffle the correct and wrong pictographs."""
-        wrong_pictographs = self._generate_random_wrong_pictographs(
+        wrong_pictographs = self.generate_wrong_answers(
             correct_pictograph["letter"]
         )
         pictographs = [correct_pictograph] + wrong_pictographs
@@ -57,7 +57,7 @@ class Lesson2QuestionGenerator:
 
         return pictographs
 
-    def _generate_random_wrong_pictographs(self, correct_letter: str) -> list[dict]:
+    def generate_wrong_answers(self, correct_letter: str) -> list[dict]:
         """Generate three random wrong pictographs, ensuring each has a different letter."""
         available_letters = self._get_available_letters(correct_letter)
         wrong_pictographs = []
