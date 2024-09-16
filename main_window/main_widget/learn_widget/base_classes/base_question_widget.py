@@ -15,3 +15,8 @@ class BaseQuestionWidget(QWidget):
 
     def resize_question_widget(self) -> None:
         raise NotImplementedError("This function should be implemented by the subclass.")
+    
+    def load_pictograph(self, pictograph_dict) -> None:
+        raise NotImplementedError("This function should be implemented by the subclass.")
+    
+    

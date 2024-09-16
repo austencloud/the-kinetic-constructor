@@ -19,3 +19,8 @@ class BaseAnswersWidget(QWidget):
         raise NotImplementedError(
             "This function should be implemented by the subclass."
         )
+        
+    def display_answers(self, answers) -> None:
+        raise NotImplementedError(
+            "This function should be implemented by the subclass."
+        )
