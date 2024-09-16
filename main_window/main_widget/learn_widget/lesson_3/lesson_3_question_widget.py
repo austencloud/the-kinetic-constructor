@@ -1,10 +1,8 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QLabel
+from PyQt6.QtWidgets import QVBoxLayout, QLabel, QSizePolicy, QSpacerItem
 from PyQt6.QtCore import Qt
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.learn_widget.base_classes.base_question_widget import (
-    BaseQuestionWidget,
-)
+from ..base_classes.base_question_widget import BaseQuestionWidget
 
 if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.learn_widget import LearnWidget
@@ -18,22 +16,20 @@ class Lesson3QuestionWidget(BaseQuestionWidget):
         self.learn_widget = learn_widget
         self.main_widget = learn_widget.main_widget
         self.pictograph = None
+        self.question_label = QLabel("Choose the pictograph that follows:")
+        self.question_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
         self._setup_layout()
 
     def _setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout()
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.setLayout(self.layout)
-
-    def load_pictograph(self, pictograph_dict) -> None:
-        """Load and display the pictograph."""
-        self.pictograph = BasePictograph(self.main_widget, scroll_area=None)
-        self.pictograph.disable_gold_overlay = True
-        self.pictograph.updater.update_pictograph(pictograph_dict)
-        self.layout.addWidget(
-            self.pictograph.view, alignment=Qt.AlignmentFlag.AlignCenter
+        self.layout.addWidget(self.question_label)
+        self.spacer = QSpacerItem(
+            20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
         )
-        self.resize_question_widget()
+        self.layout.addItem(self.spacer)
+        self.setLayout(self.layout)
 
     def clear(self) -> None:
         """Clear the current pictograph."""
@@ -43,7 +39,19 @@ class Lesson3QuestionWidget(BaseQuestionWidget):
             self.pictograph = None
 
     def resize_question_widget(self) -> None:
-        """Resize the question display based on window size."""
+        self._resize_question_label()
+        self._resize_pictograph()
+        self._resize_spacer()
+
+    def _resize_spacer(self) -> None:
+        self.spacer.changeSize(
+            20,
+            self.main_widget.height() // 20,
+            QSizePolicy.Policy.Minimum,
+            QSizePolicy.Policy.Expanding,
+        )
+
+    def _resize_pictograph(self) -> None:
         if self.pictograph:
             self.pictograph.view.setFixedSize(
                 self.main_widget.height() // 3, self.main_widget.height() // 3

@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QLabel
+from PyQt6.QtWidgets import QVBoxLayout, QLabel, QSpacerItem, QSizePolicy
 from PyQt6.QtCore import Qt
 
 from main_window.main_widget.learn_widget.base_classes.base_question_widget import (
@@ -31,6 +31,10 @@ class Lesson2QuestionWidget(BaseQuestionWidget):
         self.layout: QVBoxLayout = QVBoxLayout()
         self.setLayout(self.layout)
         self.layout.addWidget(self.question_label)
+        self.spacer = QSpacerItem(
+            20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding
+        )
+        self.layout.addItem(self.spacer)
         self.layout.addWidget(self.letter_label)
 
     def _update_letter_label(self, letter: str) -> None:
@@ -45,6 +49,15 @@ class Lesson2QuestionWidget(BaseQuestionWidget):
         """Resize the question labels based on window size."""
         self._resize_question_label()
         self._resize_letter_label()
+        self._resize_spacer()
+
+    def _resize_spacer(self) -> None:
+        self.spacer.changeSize(
+            20,
+            self.main_widget.height() // 20,
+            QSizePolicy.Policy.Minimum,
+            QSizePolicy.Policy.Expanding,
+        )
 
     def _resize_letter_label(self):
         letter_label_font_size = self.main_widget.width() // 40
@@ -53,9 +66,3 @@ class Lesson2QuestionWidget(BaseQuestionWidget):
         letter_label_font.setPointSize(letter_label_font_size)
         self.letter_label.setFont(letter_label_font)
 
-    def _resize_question_label(self):
-        question_label_font_size = self.main_widget.width() // 50
-        question_label_font = self.question_label.font()
-        question_label_font.setFamily("Monotype Corsiva")
-        question_label_font.setPointSize(question_label_font_size)
-        self.question_label.setFont(question_label_font)

@@ -66,18 +66,5 @@ class Lesson2AnswersWidget(BaseAnswersWidget):
         """Resize the pictograph views based on window size."""
         for view in self.pictograph_views:
             view.setFixedSize(
-                self.main_widget.height() // 3, self.main_widget.height() // 3
+                self.main_widget.height() // 4, self.main_widget.height() // 4
             )
-        # self._scale_pictographs()
-
-    def _scale_pictographs(self):
-        """Scale the pictographs to fit properly in the view."""
-        for pictograph in self.pictographs.values():
-            scene_size = pictograph.sceneRect().size()
-            view_size = pictograph.view.size()
-            scale_factor = min(
-                view_size.width() / scene_size.width(),
-                view_size.height() / scene_size.height(),
-            )
-            pictograph.view.fitInView(pictograph.sceneRect(), Qt.AspectRatioMode.KeepAspectRatio)
-            pictograph.container.styled_border_overlay.resize_styled_border_overlay()

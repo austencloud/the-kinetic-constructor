@@ -20,23 +20,24 @@ class BaseLessonWidget(QWidget):
 
         self.layout: QVBoxLayout = QVBoxLayout()
         self.setLayout(self.layout)
-        
+
         self.question_generator: BaseQuestionGenerator = None
         self.question_widget: BaseQuestionWidget = None
         self.answers_widget: BaseAnswersWidget = None
-        
+
         self._setup_indicator_label()
         self.add_back_button()
 
         self._setup_layout()
 
     def _setup_layout(self):
-        self.layout.addStretch(1)
         self.layout.addWidget(self.question_widget)
+        self.layout.addStretch(1)
         self.layout.addWidget(self.answers_widget)
+        self.layout.addStretch(1)
         self.layout.addWidget(self.indicator_label)
         self.layout.addStretch(1)
-        
+
     def _setup_indicator_label(self):
         self.indicator_label = LearnWidgetIndicatorLabel(self)
 
@@ -89,13 +90,12 @@ class BaseLessonWidget(QWidget):
         self.question_widget.clear()
         self.answers_widget.clear()
 
-
     def resize_lesson_widget(self):
         self.question_widget.resize_question_widget()
         self.answers_widget.resize_answers_widget()
         self._resize_indicator_label()
         self._resize_back_button()
-        
+
     def clear_current_question(self):
         """Clear the current question by resetting viewer and answer buttons."""
         self.question_widget.clear()
