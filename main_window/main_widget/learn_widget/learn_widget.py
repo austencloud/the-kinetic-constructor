@@ -5,6 +5,7 @@ from PyQt6.QtGui import QPainter
 from main_window.main_widget.learn_widget.base_classes.base_lesson_widget import BaseLessonWidget
 from main_window.main_widget.learn_widget.lesson_1.lesson_1_widget import Lesson1Widget
 from main_window.main_widget.learn_widget.lesson_2.lesson_2_widget import Lesson2Widget
+from main_window.main_widget.learn_widget.lesson_3.lesson_3_widget import Lesson3Widget
 from main_window.main_widget.learn_widget.lesson_selector import LessonSelector
 
 if TYPE_CHECKING:
@@ -31,11 +32,13 @@ class LearnWidget(QWidget):
         self.lesson_selector = LessonSelector(self)
         self.lesson_1_widget = Lesson1Widget(self)
         self.lesson_2_widget = Lesson2Widget(self)
+        self.lesson_3_widget = Lesson3Widget(self)
 
         # Add widgets to the stacked layout
         self.stack_layout.addWidget(self.lesson_selector)
         self.stack_layout.addWidget(self.lesson_1_widget)
         self.stack_layout.addWidget(self.lesson_2_widget)
+        self.stack_layout.addWidget(self.lesson_3_widget)
 
         # Set the initial screen
         self.stack_layout.setCurrentWidget(self.lesson_selector)
@@ -64,6 +67,7 @@ class LearnWidget(QWidget):
         lesson_widgets: list[BaseLessonWidget] = [
             self.lesson_1_widget,
             self.lesson_2_widget,
+            self.lesson_3_widget,
         ]
         if lesson_number >= 1 and lesson_number <= len(lesson_widgets):
             self.stack_layout.setCurrentWidget(lesson_widgets[lesson_number - 1])
@@ -73,6 +77,7 @@ class LearnWidget(QWidget):
         """Dynamically adjust button sizes and font sizes based on window size."""
         self.lesson_1_widget.resize_lesson_widget()
         self.lesson_2_widget.resize_lesson_widget()
+        self.lesson_3_widget.resize_lesson_widget()
         self.lesson_selector.resize_lesson_selector()
 
     def paintEvent(self, event) -> None:

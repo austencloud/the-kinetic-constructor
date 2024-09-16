@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 class LetterDeterminer:
     def __init__(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
-        self.letters = self.main_widget.letters
+        self.letters = self.main_widget.pictograph_dicts
         self.non_hybrid_shift_letter_determiner = NonHybridShiftLetterDeterminer(self)
         self.dual_float_letter_determiner = DualFloatLetterDeterminer(self)
 
@@ -99,8 +99,10 @@ class LetterDeterminer:
             and example[f"{motion.color}_attributes"]["end_loc"] == motion.end_loc
             and self._is_shift_prop_rot_dir_matching(motion, example)
             and self.is_shift_motion_type_matching(other_motion, example)
-            and example[f"{other_motion.color}_attributes"]["start_loc"] == other_motion.start_loc
-            and example[f"{other_motion.color}_attributes"]["end_loc"] == other_motion.end_loc
+            and example[f"{other_motion.color}_attributes"]["start_loc"]
+            == other_motion.start_loc
+            and example[f"{other_motion.color}_attributes"]["end_loc"]
+            == other_motion.end_loc
             and self._is_shift_prop_rot_dir_matching(other_motion, example)
         )
 
@@ -183,8 +185,10 @@ class LetterDeterminer:
             and example[f"{shift.color}_attributes"]["start_loc"] == shift.start_loc
             and example[f"{shift.color}_attributes"]["end_loc"] == shift.end_loc
             and self._is_shift_prop_rot_dir_matching(shift, example)
-            and example[f"{non_shift.color}_attributes"]["motion_type"] == non_shift.motion_type
-            and example[f"{non_shift.color}_attributes"]["start_loc"] == non_shift.start_loc
+            and example[f"{non_shift.color}_attributes"]["motion_type"]
+            == non_shift.motion_type
+            and example[f"{non_shift.color}_attributes"]["start_loc"]
+            == non_shift.start_loc
             and example[f"{non_shift.color}_attributes"]["end_loc"] == non_shift.end_loc
         )
 

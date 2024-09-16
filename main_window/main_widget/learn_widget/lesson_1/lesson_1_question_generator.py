@@ -1,7 +1,9 @@
 import random
 from typing import TYPE_CHECKING
 from Enums.letters import Letter
-from main_window.main_widget.learn_widget.base_classes.base_question_generator import BaseQuestionGenerator
+from main_window.main_widget.learn_widget.base_classes.base_question_generator import (
+    BaseQuestionGenerator,
+)
 
 
 if TYPE_CHECKING:
@@ -22,7 +24,7 @@ class Lesson1QuestionGenerator(BaseQuestionGenerator):
         self.previous_correct_letter = correct_answer
 
         correct_pictograph_dict = random.choice(
-            self.main_widget.letters[correct_answer]
+            self.main_widget.pictograph_dicts[correct_answer]
         )
 
         wrong_answers = self.generate_wrong_answers(correct_answer)
@@ -37,7 +39,7 @@ class Lesson1QuestionGenerator(BaseQuestionGenerator):
 
     def generate_correct_answer(self) -> Letter:
         """Generate a new correct letter that is different from the previous one."""
-        letters = list(self.main_widget.letters.keys())
+        letters = list(self.main_widget.pictograph_dicts.keys())
         if self.previous_correct_letter:
             letters.remove(self.previous_correct_letter)
         return random.choice(letters)
@@ -47,7 +49,7 @@ class Lesson1QuestionGenerator(BaseQuestionGenerator):
         wrong_answers = random.sample(
             [
                 letter.value
-                for letter in self.main_widget.letters
+                for letter in self.main_widget.pictograph_dicts
                 if letter != correct_answer
             ],
             3,

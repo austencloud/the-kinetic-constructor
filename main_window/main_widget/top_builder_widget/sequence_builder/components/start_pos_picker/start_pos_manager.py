@@ -46,7 +46,7 @@ class StartPosManager(QObject):
         for (
             letter,
             pictograph_dicts,
-        ) in self.manual_builder.main_widget.letters.items():
+        ) in self.manual_builder.main_widget.pictograph_dicts.items():
             for pictograph_dict in pictograph_dicts:
                 if (
                     pictograph_dict[START_POS] == start_pos
@@ -104,7 +104,9 @@ class StartPosManager(QObject):
     def resize_start_position_pictographs(self) -> None:
         spacing = 10
         for start_option in self.start_options.values():
-            view_width = int((self.start_pos_frame.start_pos_picker.width() // 4) - spacing)
+            view_width = int(
+                (self.start_pos_frame.start_pos_picker.width() // 4) - spacing
+            )
             start_option.view.setFixedSize(view_width, view_width)
             start_option.view.view_scale = view_width / start_option.width()
             start_option.view.resetTransform()
@@ -134,7 +136,7 @@ class StartPosManager(QObject):
         start_pos_key = start_pos_data["end_pos"]
         letter_str = self.start_pos_key_to_letter(start_pos_key)
         letter = Letter(letter_str)
-        matching_letter_pictographs = self.main_widget.letters.get(letter, [])
+        matching_letter_pictographs = self.main_widget.pictograph_dicts.get(letter, [])
         for pictograph_dict in matching_letter_pictographs:
             if pictograph_dict["start_pos"] == start_pos_key:
 
@@ -170,14 +172,14 @@ class StartPosManager(QObject):
     def get_all_start_positions(self) -> list["BasePictograph"]:
         all_start_positions = []
         valid_letters = [Letter.α, Letter.β, Letter.Γ]
-        for letter in self.main_widget.letters:
+        for letter in self.main_widget.pictograph_dicts:
             if letter in valid_letters:
                 all_start_positions.extend(self.get_variations(letter))
         return all_start_positions
 
     def get_variations(self, start_pos_letter: str) -> list[BasePictograph]:
         variations = []
-        for pictograph_dict in self.main_widget.letters[start_pos_letter]:
+        for pictograph_dict in self.main_widget.pictograph_dicts[start_pos_letter]:
             pictograph = self.create_pictograph_from_dict(pictograph_dict)
             variations.append(pictograph)
         return variations

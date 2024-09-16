@@ -9,7 +9,7 @@ from Enums.Enums import Letter
 from Enums.PropTypes import PropType
 from letter_determiner.letter_determiner import LetterDeterminer
 from main_window.main_widget.learn_widget.learn_widget import LearnWidget
-from .letter_loader import LetterLoader
+from .letter_loader import PictographDictLoader
 from .sequence_properties_manager.sequence_properties_manager import (
     SequencePropertiesManager,
 )
@@ -101,7 +101,6 @@ class MainWidget(QTabWidget):
             self.main_window.settings_manager.global_settings.set_current_tab("learn")
             self.learn_widget.resize_learn_widget()
 
-
     def _setup_pictograph_cache(self) -> None:
         self.pictograph_cache: dict[str, dict[str, "BasePictograph"]] = {}
         for letter in Letter:
@@ -163,8 +162,10 @@ class MainWidget(QTabWidget):
 
     def _setup_letters(self) -> None:
         self.splash_screen.update_progress(10, "Loading pictograph dictionaries...")
-        self.letter_loader = LetterLoader(self)
-        self.letters: dict[Letter, list[dict]] = self.letter_loader.load_all_letters()
+        self.pictograph_dict_loader = PictographDictLoader(self)
+        self.pictograph_dicts: dict[Letter, list[dict]] = (
+            self.pictograph_dict_loader.load_all_pictograph_dicts()
+        )
         self.letter_determiner = LetterDeterminer(self)
 
     ### EVENT HANDLERS ###

@@ -8,11 +8,11 @@ if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
 
-class LetterLoader:
+class PictographDictLoader:
     def __init__(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
 
-    def load_all_letters(self) -> dict[Letter, list[dict]]:
+    def load_all_pictograph_dicts(self) -> dict[Letter, list[dict]]:
         csv_path = get_images_and_data_path("data\\PictographDataframe.csv")
         self.df = pd.read_csv(csv_path)
         self.df = self.df.sort_values(by=[LETTER, START_POS, END_POS])

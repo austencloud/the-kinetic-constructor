@@ -141,7 +141,7 @@ class CircularAutoBuilder:
     def _add_start_position_to_sequence(self, position_key: str) -> None:
         # get it from the main widget letters, amke a copy, and put it into the sequence
         start_pos, end_pos = position_key.split("_")
-        letters = deepcopy(self.sequence_widget.main_widget.letters)
+        letters = deepcopy(self.sequence_widget.main_widget.pictograph_dicts)
         for (
             _,
             pictograph_dicts,
@@ -332,7 +332,9 @@ class CircularAutoBuilder:
         if next_pictograph_dict["blue_attributes"]["motion_type"] in [DASH, STATIC]:
             if is_continuous_rot_dir:
                 if next_pictograph_dict["blue_attributes"]["turns"] > 0:
-                    next_pictograph_dict["blue_attributes"]["prop_rot_dir"] = blue_rot_dir
+                    next_pictograph_dict["blue_attributes"][
+                        "prop_rot_dir"
+                    ] = blue_rot_dir
                 else:
                     next_pictograph_dict["blue_attributes"]["prop_rot_dir"] = NO_ROT
             else:

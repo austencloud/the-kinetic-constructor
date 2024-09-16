@@ -45,7 +45,7 @@ class BaseAutoBuilder:
         for (
             letter,
             pictograph_dicts,
-        ) in self.sequence_widget.main_widget.letters.items():
+        ) in self.sequence_widget.main_widget.pictograph_dicts.items():
             for pictograph_dict in pictograph_dicts:
                 if (
                     pictograph_dict["start_pos"] == start_pos

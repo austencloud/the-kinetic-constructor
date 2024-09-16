@@ -35,7 +35,7 @@ class FreeFormAutoBuilder:
         level: int,
         is_continuous_rot_dir,
     ):
-        
+
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         if not self.sequence_widget:
             self.sequence_widget = self.top_builder_widget.sequence_widget
@@ -50,9 +50,7 @@ class FreeFormAutoBuilder:
                 self.main_widget.json_manager.loader_saver.load_current_sequence_json()
             )
 
-        turn_manager = TurnIntensityManager(
-            beat_count, level, max_turn_intensity
-        )
+        turn_manager = TurnIntensityManager(beat_count, level, max_turn_intensity)
         turns_blue, turns_red = turn_manager.allocate_turns_for_blue_and_red()
         if is_continuous_rot_dir:
             # Set an initial random rotation direction for both blue and red hands
@@ -84,9 +82,9 @@ class FreeFormAutoBuilder:
             )
             self.validation_engine.validate_last_pictograph()
             QApplication.processEvents()
-        
+
         self.sequence_widget.top_builder_widget.sequence_builder.manual_builder.transition_to_sequence_building()
-        
+
         self.top_builder_widget.sequence_builder.manual_builder.option_picker.update_option_picker(
             self.sequence
         )
@@ -105,7 +103,7 @@ class FreeFormAutoBuilder:
     def _add_start_position_to_sequence(self, position_key: str) -> None:
         # get it from the main widget letters, amke a copy, and put it into the sequence
         start_pos, end_pos = position_key.split("_")
-        letters = deepcopy(self.sequence_widget.main_widget.letters)
+        letters = deepcopy(self.sequence_widget.main_widget.pictograph_dicts)
         for (
             _,
             pictograph_dicts,

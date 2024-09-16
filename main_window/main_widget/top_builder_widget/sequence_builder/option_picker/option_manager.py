@@ -6,8 +6,9 @@ from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker import OptionPicker
-
+    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker import (
+        OptionPicker,
+    )
 
 
 class OptionGetter(QObject):
@@ -26,7 +27,7 @@ class OptionGetter(QObject):
         start_pos = last_pictograph_dict[END_POS]
 
         if start_pos:
-            for dict_list in self.main_widget.letters.values():
+            for dict_list in self.main_widget.pictograph_dicts.values():
                 for dict in dict_list:
                     if dict[START_POS] == start_pos:
                         next_options.append(dict)

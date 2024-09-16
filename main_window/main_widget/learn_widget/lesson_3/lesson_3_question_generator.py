@@ -1,0 +1,96 @@
+import random
+from typing import TYPE_CHECKING
+from Enums.letters import Letter
+from main_window.main_widget.json_manager.json_ori_calculator import JsonOriCalculator
+from main_window.main_widget.learn_widget.base_classes.base_question_generator import (
+    BaseQuestionGenerator,
+)
+from objects.motion.managers.motion_ori_calculator import MotionOriCalculator
+
+if TYPE_CHECKING:
+    from .lesson_3_widget import Lesson3Widget
+
+
+class Lesson3QuestionGenerator(BaseQuestionGenerator):
+    """Generates questions for Lesson 3 (valid next pictograph matching)."""
+
+    def __init__(self, lesson_3_widget: "Lesson3Widget"):
+        super().__init__(lesson_3_widget)
+        self.lesson_3_widget = lesson_3_widget
+        self.previous_pictograph = None
+
+    def generate_question(self):
+        """Generate a question for Lesson 3."""
+        initial_pictograph = self.generate_initial_pictograph()
+        self.previous_pictograph = initial_pictograph
+
+        # Show the initial pictograph in the question widget
+        self.lesson_3_widget.question_widget.load_pictograph(initial_pictograph)
+
+        # Generate answers (one correct and three wrong)
+        correct_pictograph = self.generate_correct_answer(initial_pictograph)
+        wrong_pictographs = self.generate_wrong_answers(correct_pictograph)
+
+        # Add the correct pictograph to the answers and shuffle
+        pictographs = [correct_pictograph] + wrong_pictographs
+        random.shuffle(pictographs)
+
+        self.lesson_3_widget.answers_widget.display_answers(
+            pictographs, correct_pictograph, self.lesson_3_widget.check_answer
+        )
+
+    def generate_initial_pictograph(self) -> dict:
+        """Generate an initial pictograph randomly to display."""
+        # Randomly select a Letter (key) from the dictionary, then select a random pictograph from the list
+        letter = random.choice(list(self.main_widget.pictograph_dicts.keys()))
+        return random.choice(self.main_widget.pictograph_dicts[letter])
+
+    def generate_correct_answer(self, initial_pictograph: dict) -> dict:
+        """Generate a valid pictograph that can follow the initial pictograph."""
+        end_pos = initial_pictograph[
+            "end_pos"
+        ]  # Extract the end position of the initial pictograph
+
+        # Find a pictograph where the start_pos matches the end_pos of the initial pictograph
+        valid_pictographs = [
+            pictograph
+            for letter_pictographs in self.main_widget.pictograph_dicts.values()
+            for pictograph in letter_pictographs
+            if pictograph["start_pos"] == end_pos
+        ]
+
+        correct_answer = random.choice(valid_pictographs)
+        self._update_orientations_to_be_accurate(initial_pictograph, correct_answer)
+
+        return correct_answer
+
+    def _update_orientations_to_be_accurate(self, initial_pictograph, correct_answer):
+        correct_answer["blue_attributes"]["start_ori"] = initial_pictograph[
+            "blue_attributes"
+        ]["end_ori"]
+        correct_answer["blue_attributes"]["end_ori"] = (
+            self.main_widget.json_manager.ori_calculator.calculate_end_orientation(
+                correct_answer, "blue"
+            )
+        )
+
+        correct_answer["red_attributes"]["start_ori"] = initial_pictograph[
+            "red_attributes"
+        ]["end_ori"]
+        correct_answer["red_attributes"]["end_ori"] = (
+            self.main_widget.json_manager.ori_calculator.calculate_end_orientation(
+                correct_answer, "red"
+            )
+        )
+
+    def generate_wrong_answers(self, correct_pictograph: dict) -> list[dict]:
+        """Generate three random wrong pictographs that don't match the correct condition."""
+        correct_start_pos = correct_pictograph["start_pos"]
+
+        wrong_pictographs = []
+        while len(wrong_pictographs) < 3:
+            random_pictograph = self.generate_initial_pictograph()
+            # Ensure that the wrong answers have different start positions than the correct answer
+            if random_pictograph["start_pos"] != correct_start_pos:
+                wrong_pictographs.append(random_pictograph)
+        return wrong_pictographs

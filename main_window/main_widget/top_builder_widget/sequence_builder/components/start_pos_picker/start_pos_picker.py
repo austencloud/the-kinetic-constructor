@@ -80,7 +80,7 @@ class StartPosPicker(QWidget):
 
     def get_variations(self, position: str) -> list[BasePictograph]:
         variations = []
-        for pictograph_dict in self.main_widget.letters[position]:
+        for pictograph_dict in self.main_widget.pictograph_dicts[position]:
             pictograph = self.create_pictograph_from_dict(pictograph_dict)
             variations.append(pictograph)
         return variations
