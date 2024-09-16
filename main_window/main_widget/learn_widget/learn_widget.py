@@ -71,7 +71,7 @@ class LearnWidget(QWidget):
         ]
         if lesson_number >= 1 and lesson_number <= len(lesson_widgets):
             self.stack_layout.setCurrentWidget(lesson_widgets[lesson_number - 1])
-            lesson_widgets[lesson_number - 1].start_new_question()
+            lesson_widgets[lesson_number - 1].setup_mode_selection()
 
     def resize_learn_widget(self) -> None:
         """Dynamically adjust button sizes and font sizes based on window size."""

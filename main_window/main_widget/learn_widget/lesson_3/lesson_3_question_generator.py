@@ -1,11 +1,8 @@
 import random
 from typing import TYPE_CHECKING
-from Enums.letters import Letter
-from main_window.main_widget.json_manager.json_ori_calculator import JsonOriCalculator
 from main_window.main_widget.learn_widget.base_classes.base_question_generator import (
     BaseQuestionGenerator,
 )
-from objects.motion.managers.motion_ori_calculator import MotionOriCalculator
 
 if TYPE_CHECKING:
     from .lesson_3_widget import Lesson3Widget

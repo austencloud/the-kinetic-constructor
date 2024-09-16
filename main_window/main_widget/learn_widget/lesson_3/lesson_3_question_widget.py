@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QSizePolicy, QSpacerItem
 from PyQt6.QtCore import Qt
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from ..base_classes.base_question_widget import BaseQuestionWidget
 
 if TYPE_CHECKING:

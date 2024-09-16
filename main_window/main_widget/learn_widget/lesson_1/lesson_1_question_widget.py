@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QLabel, QSpacerItem, QSizePolicy
 from PyQt6.QtCore import Qt
 
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.learn_widget.base_classes.base_question_widget import (
     BaseQuestionWidget,
 )
@@ -12,7 +11,6 @@ if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.lesson_1.lesson_1_widget import (
         Lesson1Widget,
     )
-    from main_window.main_widget.learn_widget.learn_widget import LearnWidget
 
 
 class Lesson1QuestionWidget(BaseQuestionWidget):

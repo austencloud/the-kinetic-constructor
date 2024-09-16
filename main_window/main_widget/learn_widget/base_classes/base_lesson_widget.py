@@ -17,28 +17,30 @@ class BaseLessonWidget(QWidget):
         self.learn_widget = learn_widget
         super().__init__(learn_widget)
         self.main_widget = learn_widget.main_widget
-        self.main_layout: QHBoxLayout = QHBoxLayout()
-        self.quiz_layout: QVBoxLayout = QVBoxLayout()
-        
-        self.main_layout.addLayout(self.quiz_layout)
+        self.main_layout: QVBoxLayout = QVBoxLayout()
+        self.central_layout: QVBoxLayout = QVBoxLayout()
+        self.back_layout: QHBoxLayout = QHBoxLayout()
+
         self.setLayout(self.main_layout)
+
+        # Add back button and central area to the main layout
+        self.add_back_button()
+        self.main_layout.addLayout(self.central_layout)
 
         self.question_generator: BaseQuestionGenerator = None
         self.question_widget: BaseQuestionWidget = None
         self.answers_widget: BaseAnswersWidget = None
 
         self._setup_indicator_label()
-        self.add_back_button()
-
         self._setup_layout()
 
     def _setup_layout(self):
-        self.quiz_layout.addWidget(self.question_widget)
-        self.quiz_layout.addStretch(1)
-        self.quiz_layout.addWidget(self.answers_widget)
-        self.quiz_layout.addStretch(1)
-        self.quiz_layout.addWidget(self.indicator_label)
-        self.quiz_layout.addStretch(1)
+        self.central_layout.addWidget(self.question_widget)
+        self.central_layout.addStretch(1)
+        self.central_layout.addWidget(self.answers_widget)
+        self.central_layout.addStretch(1)
+        self.central_layout.addWidget(self.indicator_label)
+        self.central_layout.addStretch(1)
 
     def _setup_indicator_label(self):
         self.indicator_label = LessonWidgetIndicatorLabel(self)
@@ -48,16 +50,21 @@ class BaseLessonWidget(QWidget):
         self.back_button = QPushButton("Back")
         self.back_button.clicked.connect(self.learn_widget.show_lesson_selection_widget)
         self.back_button.setCursor(Qt.CursorShape.PointingHandCursor)
-        back_layout = QHBoxLayout()
-        back_layout.addWidget(self.back_button)
-        back_layout.addStretch(1)
-        self.quiz_layout.insertLayout(0, back_layout)
+        self.back_layout.addWidget(self.back_button)
+        self.back_layout.addStretch(1)
+        self.main_layout.addLayout(self.back_layout, 0)
 
     def start_new_question(self):
         """Start a new question for the lesson."""
         self.clear_current_question()
         self.question_generator.generate_question()
         self.resize_lesson_widget()
+
+    def resize_lesson_widget(self):
+        self.question_widget._resize_question_widget()
+        self.answers_widget.resize_answers_widget()
+        self._resize_indicator_label()
+        self._resize_back_button()
 
     def check_answer(self, selected_answer, correct_answer):
         if selected_answer == correct_answer:
@@ -67,11 +74,6 @@ class BaseLessonWidget(QWidget):
         else:
             self.indicator_label.show_message("Wrong! Try again.")
             self.indicator_label.setStyleSheet("color: red;")
-
-    def resize_lesson_widget(self):
-        """Resize the components based on window size."""
-        self._resize_back_button()
-        self._resize_indicator_label()
 
     def _resize_back_button(self):
         back_button_font_size = self.main_widget.width() // 60
@@ -87,17 +89,6 @@ class BaseLessonWidget(QWidget):
         font.setPointSize(indicator_label_font_size)
         self.indicator_label.setFont(font)
 
-    def clear_current_question(self):
-        """Clear the current question by resetting viewer and answer buttons."""
-        self.question_widget.clear()
-        self.answers_widget.clear()
-
-    def resize_lesson_widget(self):
-        self.question_widget._resize_question_widget()
-        self.answers_widget.resize_answers_widget()
-        self._resize_indicator_label()
-        self._resize_back_button()
-    
     def clear_current_question(self):
         """Clear the current question by resetting viewer and answer buttons."""
         self.question_widget.clear()
