@@ -51,18 +51,9 @@ class Lesson2QuestionWidget(BaseQuestionWidget):
         self._resize_letter_label()
         self._resize_spacer()
 
-    def _resize_spacer(self) -> None:
-        self.spacer.changeSize(
-            20,
-            self.main_widget.height() // 20,
-            QSizePolicy.Policy.Minimum,
-            QSizePolicy.Policy.Expanding,
-        )
-
     def _resize_letter_label(self):
         letter_label_font_size = self.main_widget.width() // 40
         letter_label_font = self.letter_label.font()
         letter_label_font.setFamily("Georgia")
         letter_label_font.setPointSize(letter_label_font_size)
         self.letter_label.setFont(letter_label_font)
-

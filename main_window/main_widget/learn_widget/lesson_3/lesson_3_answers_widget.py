@@ -42,7 +42,6 @@ class Lesson3AnswersWidget(BaseAnswersWidget):
             self.pictographs[pictograph_key] = pictograph
             pictograph.view.setCursor(Qt.CursorShape.PointingHandCursor)
 
-            # Capture the pictograph_dict in the lambda
             pictograph.view.mousePressEvent = (
                 lambda event, opt=pictograph_dict: check_answer_callback(
                     opt, correct_pictograph
@@ -68,3 +67,5 @@ class Lesson3AnswersWidget(BaseAnswersWidget):
             view.setFixedSize(
                 self.main_widget.height() // 4, self.main_widget.height() // 4
             )
+        spacing = self.main_widget.width() // 60
+        self.layout.setSpacing(spacing)

@@ -16,7 +16,7 @@ class Lesson3QuestionWidget(BaseQuestionWidget):
         self.learn_widget = learn_widget
         self.main_widget = learn_widget.main_widget
         self.pictograph = None
-        self.question_label = QLabel("Choose the pictograph that follows:")
+        self.question_label = QLabel("Choose the pictograph that can follow:")
         self.question_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self._setup_layout()
@@ -43,16 +43,8 @@ class Lesson3QuestionWidget(BaseQuestionWidget):
         self._resize_pictograph()
         self._resize_spacer()
 
-    def _resize_spacer(self) -> None:
-        self.spacer.changeSize(
-            20,
-            self.main_widget.height() // 20,
-            QSizePolicy.Policy.Minimum,
-            QSizePolicy.Policy.Expanding,
-        )
-
     def _resize_pictograph(self) -> None:
         if self.pictograph:
             self.pictograph.view.setFixedSize(
-                self.main_widget.height() // 3, self.main_widget.height() // 3
+                self.main_widget.height() // 4, self.main_widget.height() // 4
             )

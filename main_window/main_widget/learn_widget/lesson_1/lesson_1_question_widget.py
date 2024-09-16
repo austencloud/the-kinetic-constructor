@@ -54,13 +54,7 @@ class Lesson1QuestionWidget(BaseQuestionWidget):
         self._resize_pictograph()
         self._resize_spacer()
 
-    def _resize_spacer(self) -> None:
-        self.spacer.changeSize(
-            20,
-            self.main_widget.height() // 20,
-            QSizePolicy.Policy.Minimum,
-            QSizePolicy.Policy.Expanding,
-        )
+
 
     def _resize_pictograph(self) -> None:
         if self.pictograph:

@@ -3,7 +3,9 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.learn_widget.base_classes.base_answers_widget import BaseAnswersWidget
+from main_window.main_widget.learn_widget.base_classes.base_answers_widget import (
+    BaseAnswersWidget,
+)
 
 
 if TYPE_CHECKING:
@@ -68,3 +70,8 @@ class Lesson2AnswersWidget(BaseAnswersWidget):
             view.setFixedSize(
                 self.main_widget.height() // 4, self.main_widget.height() // 4
             )
+        spacing = self.main_widget.width() // 60
+        self.layout.setSpacing(spacing)
+
+
+60
