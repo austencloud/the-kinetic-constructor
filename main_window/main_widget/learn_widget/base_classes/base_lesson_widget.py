@@ -67,9 +67,9 @@ class BaseLessonWidget(QWidget):
     def set_mode(self, mode: str) -> None:
         """Set the quiz mode (Fixed Questions or Countdown)."""
         self.mode = mode
-        if self.mode == "Fixed Questions":
+        if self.mode == "fixed_question":
             self.start_fixed_question_mode()
-        elif self.mode == "Countdown":
+        elif self.mode == "countdown":
             self.start_countdown_mode()
 
     def start_fixed_question_mode(self):

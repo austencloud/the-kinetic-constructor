@@ -11,7 +11,7 @@ class ModeToggleWidget(QWidget):
         super().__init__()
 
         # Current mode: "Fixed Questions" by default
-        self.current_mode = "Fixed Questions"
+        self.current_mode = "fixed_question"
 
         # Layout setup
         self.layout: QHBoxLayout = QHBoxLayout()
@@ -55,14 +55,14 @@ class ModeToggleWidget(QWidget):
     def toggle_mode(self, state):
         """Toggle between the quiz modes when the PyToggle is clicked."""
         if state:
-            self.current_mode = "Countdown"
+            self.current_mode = "countdown"
         else:
-            self.current_mode = "Fixed Questions"
+            self.current_mode = "fixed_question"
         self.update_mode_label_styles()
 
     def update_mode_label_styles(self):
         """Update the styles of the mode labels to indicate the selected mode."""
-        if self.current_mode == "Fixed Questions":
+        if self.current_mode == "fixed_question":
             self.fixed_question_label.setStyleSheet("font-weight: bold; color: black;")
             self.countdown_label.setStyleSheet("font-weight: normal; color: gray;")
         else:
