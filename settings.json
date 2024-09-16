@@ -39,7 +39,7 @@
     "visibility": {
         "glyph_visibility": {
             "VTG": false,
-            "TKA": true,
+            "TKA": false,
             "Elemental": false,
             "EndPosition": false
         },
