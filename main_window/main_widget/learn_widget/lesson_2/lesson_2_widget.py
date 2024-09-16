@@ -13,17 +13,6 @@ class Lesson2Widget(BaseLessonWidget):
         self.question_widget = Lesson2QuestionWidget(self)
         self.answers_widget = Lesson2AnswersWidget(self)
         self.question_generator = Lesson2QuestionGenerator(self)
+
         self._setup_layout()
-
-    def _setup_layout(self) -> None:
-        self.layout.addStretch(1)
-        self.layout.addWidget(self.question_widget)
-        self.layout.addWidget(self.answers_widget)
-        self.layout.addWidget(self.indicator_label)
-        self.layout.addStretch(1)
-
-    def clear_current_question(self) -> None:
-        """Clear the current question by resetting both question and answer widgets."""
-        self.question_widget.clear()
-        self.answers_widget.clear()
 

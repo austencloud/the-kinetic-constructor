@@ -18,9 +18,9 @@ class Lesson1AnswersWidget(BaseAnswersWidget):
         self.layout: QHBoxLayout = QHBoxLayout()
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setLayout(self.layout)
-        self.buttons: list[QPushButton] = []
+        self.buttons: dict[str, QPushButton] = {}
 
-    def display_answers(self, letters, correct_answer, check_answer_callback):
+    def display_answers(self, letters, correct_answer, check_answer_callback) -> None:
         """Create the answer buttons and attach click events."""
         for letter in letters:
             button = QPushButton(letter)
@@ -29,17 +29,17 @@ class Lesson1AnswersWidget(BaseAnswersWidget):
                 lambda _, opt=letter: check_answer_callback(opt, correct_answer)
             )
             self.layout.addWidget(button)
-            self.buttons.append(button)
+            self.buttons[letter] = button
 
-    def clear(self):
+    def clear(self) -> None:
         """Clear all buttons."""
-        for button in self.buttons:
+        for button in self.buttons.values():
             self.layout.removeWidget(button)
             button.deleteLater()
         self.buttons.clear()
 
-    def resize_answers_widget(self):
-        for button in self.buttons:
+    def resize_answers_widget(self) -> None:
+        for button in self.buttons.values():
             button.setFixedSize(
                 self.main_widget.width() // 16, self.main_widget.width() // 16
             )
