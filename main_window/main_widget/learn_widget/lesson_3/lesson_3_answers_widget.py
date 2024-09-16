@@ -53,6 +53,15 @@ class Lesson3AnswersWidget(BaseAnswersWidget):
         for view in self.pictograph_views:
             self.layout.addWidget(view)
 
+    def disable_answer(self, answer):
+        """Disable a specific pictograph answer."""
+        pictograph_key = (
+            self.main_widget.pictograph_key_generator.generate_pictograph_key(answer)
+        )
+        wrong_answer = self.pictographs[pictograph_key]
+        wrong_answer.view.setEnabled(False)
+        wrong_answer.view.set_overlay_color("red")
+
     def clear(self):
         """Clear all the displayed pictographs."""
         for view in self.pictograph_views:

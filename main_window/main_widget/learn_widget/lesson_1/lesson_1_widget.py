@@ -16,92 +16,62 @@ class Lesson1Widget(BaseLessonWidget):
     def __init__(self, learn_widget: "LearnWidget"):
         super().__init__(learn_widget)
 
-        # Override question and answer widgets in the base class
+        # Override question and answer widgets
         self.question_widget = Lesson1QuestionWidget(self)
         self.answers_widget = Lesson1AnswersWidget(self)
         self.question_generator = Lesson1QuestionGenerator(self)
 
-        # Countdown and quiz timers
-        self.progress_label = QLabel()  # For question count or countdown timer
-        self.countdown_timer = QTimer()  # Separate timer for 3-2-1 countdown
-        self.quiz_timer = QTimer()  # Separate timer for quiz
-        self.result_label = QLabel("")
-        self.result_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # UI Elements
+        self.progress_label = self.create_label(alignment=Qt.AlignmentFlag.AlignCenter)
+        self.result_label = self.create_label(alignment=Qt.AlignmentFlag.AlignCenter)
 
-        # Timer connection for countdown and quiz
+        # Timer
+        self.quiz_timer = QTimer()  # For quiz duration (2 minutes)
         self.quiz_timer.timeout.connect(self.update_quiz_timer)
 
-        self.countdown_time = 3
-        self.quiz_time = 120
-        self.total_questions = 1
+        # Other attributes
+        self.total_questions = 5
         self.current_question = 1
 
-        # Set up mode selection first
-        self.setup_mode_selection()
+        # Set up mode selection layout
 
-    def setup_mode_selection(self):
-        """Setup the initial mode selection layout with buttons for the modes."""
-        self.clear_layout(self.central_layout)
-
-        self.mode_selection_layout = QHBoxLayout()
-        self.mode_selection_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        # Create the buttons for mode selection
-        self.fixed_question_button = QPushButton("Start Fixed Question")
-        self.countdown_button = QPushButton("Start Countdown")
-
-        self.fixed_question_button.clicked.connect(self.start_fixed_question_mode)
-        self.countdown_button.clicked.connect(self.start_countdown_mode)
-
-        # set the cursors to pointing hand
-        self.fixed_question_button.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.countdown_button.setCursor(Qt.CursorShape.PointingHandCursor)
-
-        # Add mode buttons to layout
-        self.mode_selection_layout.addWidget(self.fixed_question_button)
-        self.mode_selection_layout.addWidget(self.countdown_button)
-
-        # Add the mode selection layout to the central area
-        self.central_layout.addLayout(self.mode_selection_layout)
-        self.resize_lesson_widget()
+    def set_mode(self, mode: str) -> None:
+        """Set the quiz mode (Fixed Questions or Countdown)."""
+        self.mode = mode
+        if self.mode == "Fixed Questions":
+            self.start_fixed_question_mode()
+        elif self.mode == "Countdown":
+            self.start_countdown_mode()
 
     def start_fixed_question_mode(self):
         """Start the Fixed Question Mode by setting up the UI."""
         self.mode = "fixed_question"
-
         self.current_question = 1
         self.update_fixed_question_progress_label()
 
-        self.clear_layout(self.central_layout)
-
-        if self.countdown_timer.isActive():
-            self.countdown_timer.stop()
         if self.quiz_timer.isActive():
             self.quiz_timer.stop()
-
         self.prepare_quiz_ui()
-        self.update_fixed_question_progress_label()
+
+    def update_fixed_question_progress_label(self):
+        """Update progress display for Fixed Question Mode."""
+        self.progress_label.setText(f"{self.current_question}/{self.total_questions}")
 
     def start_countdown_mode(self):
-        """Start the Countdown Mode with a countdown and show a loading message first."""
+        """Start the Countdown Mode by setting up the UI."""
         self.mode = "countdown"
         self.clear_layout(self.central_layout)
-
-        self.quiz_layout = QVBoxLayout()
-        self.central_layout.addLayout(self.quiz_layout)
-
-        self.clear_layout(self.central_layout)
         self.prepare_quiz_ui()
-        self.start_quiz_timer()  # Start the quiz timer after the countdown
+        self.start_quiz_timer()
 
     def start_quiz_timer(self):
-        """Start the 2:00 quiz timer and update the progress label."""
-        self.quiz_time = 120  # 2 minutes for the quiz
-        self.update_quiz_timer()  # Show the initial time
-        self.quiz_timer.start(1000)  # Update every second
+        """Start the 2-minute quiz timer."""
+        self.quiz_time = 120
+        self.update_quiz_timer()
+        self.quiz_timer.start(1000)
 
     def update_quiz_timer(self):
-        """Update the quiz timer every second."""
+        """Update the quiz timer each second."""
         minutes, seconds = divmod(self.quiz_time, 60)
         self.progress_label.setText(f"Time Remaining: {minutes}:{seconds:02d}")
 
@@ -112,31 +82,79 @@ class Lesson1Widget(BaseLessonWidget):
             self.show_results()
 
     def prepare_quiz_ui(self):
-        """Prepare and switch to the quiz/challenge interface layout."""
+        """Prepare and switch to the quiz interface layout."""
         self.clear_layout(self.central_layout)
-        self.quiz_layout = QVBoxLayout()
-
-        # Add the progress or countdown above the question widget
-        self.progress_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.quiz_layout.addStretch(1)
-        self.quiz_layout.addWidget(self.progress_label)
-        self.quiz_layout.addStretch(1)
-        self.quiz_layout.addWidget(self.question_widget)
-        self.quiz_layout.addStretch(1)
-        self.quiz_layout.addWidget(self.answers_widget)
-        self.quiz_layout.addStretch(1)
-        self.quiz_layout.addWidget(self.indicator_label)
-        self.quiz_layout.addStretch(1)
-
+        self.quiz_layout = self.create_quiz_layout()
         self.central_layout.addLayout(self.quiz_layout)
         self.start_new_question()
 
-    def update_fixed_question_progress_label(self):
-        """Update progress display for Fixed Question Mode."""
-        if self.mode == "fixed_question":
-            self.progress_label.setText(
-                f"{self.current_question}/{self.total_questions}"
-            )
+    def create_quiz_layout(self) -> QVBoxLayout:
+        """Creates the layout for the quiz UI."""
+        layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addStretch(1)
+        layout.addWidget(self.progress_label)
+        layout.addStretch(1)
+        layout.addWidget(self.question_widget)
+        layout.addStretch(1)
+        layout.addWidget(self.answers_widget)
+        layout.addStretch(1)
+        layout.addWidget(self.indicator_label)
+        layout.addStretch(1)
+        return layout
+
+    def show_results(self):
+        """Display the results after the quiz or countdown ends."""
+        self.clear_layout(self.central_layout)
+        self.results_layout = self.create_results_layout()
+        self.central_layout.addLayout(self.results_layout)
+
+    def create_results_layout(self) -> QVBoxLayout:
+        """Creates the layout for the results screen."""
+        self.clear_layout(self.central_layout)
+        layout = QVBoxLayout()
+        self.result_label.setText(
+            f"Results:\nYou completed {self.current_question - 1} question"
+            f"{'s' if self.current_question - 1 != 1 else ''}."
+        )
+
+        layout.addStretch(1)
+        layout.addWidget(self.result_label)
+        layout.addStretch(1)
+        return layout
+
+    # --------------------------------------
+    # Answer Checking
+    # --------------------------------------
+    def check_answer(self, selected_answer, correct_answer):
+        """Check the answer and show feedback."""
+        if selected_answer == correct_answer:
+            self.indicator_label.show_message("Correct! Well done.")
+            self.indicator_label.setStyleSheet("color: green;")
+            self.current_question += 1
+
+            if self.mode == "fixed_question":
+                self.update_fixed_question_progress_label()
+                if self.current_question <= self.total_questions:
+                    self.start_new_question()
+                else:
+                    self.show_results()
+            elif self.mode == "countdown":
+                self.start_new_question()
+        else:
+            self.indicator_label.show_message("Wrong! Try again.")
+            self.indicator_label.setStyleSheet("color: red;")
+            self.answers_widget.disable_answer(selected_answer)
+
+    # --------------------------------------
+    # Utility Methods
+    # --------------------------------------
+    def create_label(self, alignment=None) -> QLabel:
+        """Helper to create QLabel with optional alignment."""
+        label = QLabel("")
+        if alignment:
+            label.setAlignment(alignment)
+        return label
 
     def clear_layout(self, layout: QVBoxLayout):
         """Utility to clear a layout."""
@@ -148,53 +166,9 @@ class Lesson1Widget(BaseLessonWidget):
                 elif nested_layout := item.layout():
                     self.clear_layout(nested_layout)
 
-    def show_results(self):
-        """Display the results after the quiz or countdown ends."""
-        self.clear_layout(self.central_layout)
-
-        self.results_layout = QVBoxLayout()
-        self.result_label.setText(
-            f"Results:\nYou completed {self.current_question - 1} question{'s' if self.current_question - 1 != 1 else ''}."
-        )
-
-        self.mode_selection_layout.addWidget(self.fixed_question_button)
-        self.mode_selection_layout.addWidget(self.countdown_button)
-
-        self.results_layout.addStretch(3)
-        self.results_layout.addWidget(self.result_label)
-        self.results_layout.addStretch(1)
-        self.results_layout.addLayout(self.mode_selection_layout)
-        self.results_layout.addStretch(3)
-
-        self.central_layout.addLayout(self.results_layout)
-
-    def check_answer(self, selected_answer, correct_answer):
-        if self.mode == "fixed_question":
-            if selected_answer == correct_answer:
-                self.indicator_label.show_message("Correct! Well done.")
-                self.indicator_label.setStyleSheet("color: green;")
-                self.current_question += 1
-                self.update_fixed_question_progress_label()
-                if self.current_question <= self.total_questions:
-                    self.start_new_question()
-                else:
-                    self.show_results()
-            else:
-                self.indicator_label.show_message("Wrong! Try again.")
-                self.indicator_label.setStyleSheet("color: red;")
-                self.answers_widget.disable_answer(selected_answer)
-        elif self.mode == "countdown":
-            if selected_answer == correct_answer:
-                self.indicator_label.show_message("Correct! Well done.")
-                self.indicator_label.setStyleSheet("color: green;")
-                self.current_question += 1
-                self.start_new_question()
-            else:
-                self.indicator_label.show_message("Wrong! Try again.")
-                self.indicator_label.setStyleSheet("color: red;")
-                self.answers_widget.disable_answer(selected_answer)
-
-
+    # --------------------------------------
+    # Resizing Methods
+    # --------------------------------------
     def resize_lesson_widget(self):
         """Resize UI elements dynamically."""
         self.question_widget._resize_question_widget()
@@ -203,22 +177,15 @@ class Lesson1Widget(BaseLessonWidget):
         self._resize_progress_label()
         self._resize_indicator_label()
         self._resize_back_button()
-        self._resize_mode_buttons()
-
-    def _resize_mode_buttons(self):
-        """Resize mode buttons based on window size."""
-        button_font_size = self.main_widget.width() // 50
-        for button in [self.fixed_question_button, self.countdown_button]:
-            button.setFixedHeight(self.main_widget.width() // 10)
-            button.setFixedWidth(self.main_widget.width() // 4)
-            button.setStyleSheet(f"font-size: {button_font_size}px;")
 
     def _resize_results_label(self):
         """Resize results label based on window size."""
-        results_label_font_size = self.main_widget.width() // 50
-        self.result_label.setStyleSheet(f"font-size: {results_label_font_size}px;")
+        self.result_label.setStyleSheet(
+            f"font-size: {self.main_widget.width() // 50}px;"
+        )
 
     def _resize_progress_label(self):
         """Resize progress label based on window size."""
-        progress_label_font_size = self.main_widget.width() // 60
-        self.progress_label.setStyleSheet(f"font-size: {progress_label_font_size}px;")
+        self.progress_label.setStyleSheet(
+            f"font-size: {self.main_widget.width() // 60}px;"
+        )

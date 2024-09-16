@@ -103,3 +103,7 @@ class StyledBorderOverlay(QWidget):
         self.saved_secondary_color = self.secondary_color
         self.update_border_color_and_width("gold", "gold")
 
+
+    def remove_border(self) -> None:
+        self.is_set = False
+        self.update()

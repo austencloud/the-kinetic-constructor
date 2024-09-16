@@ -1,21 +1,35 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
+from PyQt6.QtWidgets import (
+    QWidget,
+    QVBoxLayout,
+    QLabel,
+    QPushButton,
+    QHBoxLayout,
+    QSpacerItem,
+    QSizePolicy,
+)
 from PyQt6.QtCore import Qt
+from functools import partial
+
+from mode_toggle_widget import ModeToggleWidget
+from pytoggle import PyToggle
 
 if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.learn_widget import LearnWidget
-from functools import partial
 
 
 class LessonSelector(QWidget):
-    """Widget for selecting lessons in the learning module."""
+    """Widget for selecting lessons and quiz mode in the learning module."""
 
     def __init__(self, learn_widget: "LearnWidget") -> None:
         super().__init__(learn_widget)
         self.learn_widget = learn_widget
         self.main_widget = learn_widget.main_widget
+
+        # Store buttons and description labels for resizing
         self.buttons: dict[str, QPushButton] = {}
         self.description_labels: dict[str, QLabel] = {}
+
         # Layout setup
         self.layout: QVBoxLayout = QVBoxLayout()
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -25,10 +39,15 @@ class LessonSelector(QWidget):
         self.title_label = QLabel("Select a Lesson:")
         self.title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+        # Create ModeToggleWidget and center it
+        self.mode_toggle_widget = ModeToggleWidget()
+
         # Add elements to layout
         self.layout.addStretch(2)
         self.layout.addWidget(self.title_label)
-        self.layout.addStretch(2)
+        self.layout.addStretch(1)
+        self.layout.addWidget(self.mode_toggle_widget)  # Add toggle widget here
+        self.layout.addStretch(1)
 
         # Add buttons and description labels for each lesson
         self.add_lesson_button(
@@ -76,10 +95,14 @@ class LessonSelector(QWidget):
         self.layout.addLayout(lesson_layout)
         self.layout.addStretch(1)
 
+    # --------------------------------------
+    # Resizing Methods
+    # --------------------------------------
     def resize_lesson_selector(self) -> None:
         """Resize title, buttons, and descriptions based on window size."""
         self._resize_title_label()
         self._resize_lesson_layouts()
+        self._resize_toggle_button()
 
     def _resize_title_label(self):
         title_font_size = self.main_widget.width() // 50
@@ -91,13 +114,17 @@ class LessonSelector(QWidget):
     def _resize_lesson_layouts(self):
         self._resize_buttons()
         self._resize_descriptions()
+        self._resize_mode_labels()
 
-    def _resize_descriptions(self):
-        for description in self.description_labels.values():
-            description_font_size = self.main_widget.width() // 140
-            font = description.font()
-            font.setPointSize(description_font_size)
-            description.setFont(font)
+    def _resize_mode_labels(self):
+        for label in [
+            self.mode_toggle_widget.fixed_question_label,
+            self.mode_toggle_widget.countdown_label,
+        ]:
+            label_font_size = self.main_widget.width() // 85
+            font = label.font()
+            font.setPointSize(label_font_size)
+            label.setFont(font)
 
     def _resize_buttons(self):
         for button in self.buttons.values():
@@ -106,3 +133,13 @@ class LessonSelector(QWidget):
                 self.main_widget.width() // 4, self.main_widget.height() // 10
             )
             button.setStyleSheet(f"font-size: {button_font_size}px;")
+
+    def _resize_descriptions(self):
+        for description in self.description_labels.values():
+            description_font_size = self.main_widget.width() // 140
+            font = description.font()
+            font.setPointSize(description_font_size)
+            description.setFont(font)
+
+    def _resize_toggle_button(self):
+        button_font_size = self.main_widget.width() // 60

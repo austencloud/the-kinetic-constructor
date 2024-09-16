@@ -2,7 +2,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QStackedLayout
 from PyQt6.QtGui import QPainter
 
-from main_window.main_widget.learn_widget.base_classes.base_lesson_widget import BaseLessonWidget
+from main_window.main_widget.learn_widget.base_classes.base_lesson_widget import (
+    BaseLessonWidget,
+)
 from main_window.main_widget.learn_widget.lesson_1.lesson_1_widget import Lesson1Widget
 from main_window.main_widget.learn_widget.lesson_2.lesson_2_widget import Lesson2Widget
 from main_window.main_widget.learn_widget.lesson_3.lesson_3_widget import Lesson3Widget
@@ -64,14 +66,16 @@ class LearnWidget(QWidget):
 
     def start_lesson(self, lesson_number: int) -> None:
         """Start the specified lesson."""
+        selected_mode = self.lesson_selector.mode_toggle_widget.get_selected_mode()
         lesson_widgets: list[BaseLessonWidget] = [
             self.lesson_1_widget,
             self.lesson_2_widget,
             self.lesson_3_widget,
         ]
         if lesson_number >= 1 and lesson_number <= len(lesson_widgets):
-            self.stack_layout.setCurrentWidget(lesson_widgets[lesson_number - 1])
-            lesson_widgets[lesson_number - 1].setup_mode_selection()
+            lesson_widget = lesson_widgets[lesson_number - 1]
+            lesson_widget.set_mode(selected_mode)
+            self.stack_layout.setCurrentWidget(lesson_widget)
 
     def resize_learn_widget(self) -> None:
         """Dynamically adjust button sizes and font sizes based on window size."""

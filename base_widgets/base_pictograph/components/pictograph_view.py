@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsView, QSizePolicy, QApplication
-from PyQt6.QtCore import Qt, QEvent, QTimer
-from PyQt6.QtGui import QMouseEvent, QCursor
+from PyQt6.QtWidgets import QGraphicsView, QSizePolicy, QApplication, QGraphicsRectItem
+from PyQt6.QtCore import Qt, QEvent, QTimer, QEvent
+from PyQt6.QtGui import QMouseEvent, QCursor, QBrush, QColor
 
 from .pictograph_context_menu_handler import PictographContextMenuHandler
 from .pictograph_view_mouse_event_handler import PictographViewMouseEventHandler
@@ -65,6 +65,14 @@ class PictographView(QGraphicsView):
         return view_width
 
     ### EVENTS ###
+
+    def set_overlay_color(self, color: str) -> None:
+        # create an overlay the same size as the view
+        overlay = QGraphicsRectItem(self.sceneRect())
+        overlay.setBrush(QBrush(QColor(color)))
+        overlay.setOpacity(0.5)
+        self.scene().addItem(overlay)
+        
 
     def set_enabled(self, enabled: bool) -> None:
         self._ignoreMouseEvents = not enabled
