@@ -2,12 +2,13 @@ import random
 from typing import TYPE_CHECKING
 
 from Enums.letters import Letter
+from main_window.main_widget.learn_widget.base_classes.base_question_generator import BaseQuestionGenerator
 
 if TYPE_CHECKING:
     from .lesson_2_widget import Lesson2Widget
 
 
-class Lesson2QuestionGenerator:
+class Lesson2QuestionGenerator(BaseQuestionGenerator):
     """Generates questions for Lesson 2 (letter to pictograph matching)."""
 
     def __init__(self, lesson_2_widget: "Lesson2Widget") -> None:
@@ -18,20 +19,18 @@ class Lesson2QuestionGenerator:
 
     def generate_question(self):
         """Generate a question and update the question and answer widgets."""
-        correct_letter, correct_pictograph = self._get_random_correct_pictograph()
+        correct_letter, correct_pictograph = self.generate_correct_answer()
 
-        # Display the question
-        self.lesson_2_widget.question_widget.display_question(
-            "Choose the pictograph for:", correct_letter.value
+        self.lesson_2_widget.question_widget._update_letter_label(
+            correct_letter.value
         )
 
-        # Generate the answers and display them
         pictographs = self._get_shuffled_pictographs(correct_pictograph)
         self.lesson_2_widget.answers_widget.display_answers(
             pictographs, correct_pictograph, self.lesson_2_widget.check_answer
         )
 
-    def _get_random_correct_pictograph(self) -> tuple[Letter, dict]:
+    def generate_correct_answer(self) -> tuple[Letter, dict]:
         """Retrieve a random correct letter and its corresponding pictograph, avoiding repetition."""
         # Get a list of available letters excluding the previous one
         available_letters = [

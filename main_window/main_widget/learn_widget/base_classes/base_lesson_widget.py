@@ -1,14 +1,13 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout
 from PyQt6.QtCore import Qt
-
-from main_window.main_widget.learn_widget.base_question_generator import BaseQuestionGenerator
-from main_window.main_widget.learn_widget.learn_widget_indicator_label import (
-    LearnWidgetIndicatorLabel,
-)
+from .base_answers_widget import BaseAnswersWidget
+from .base_question_generator import BaseQuestionGenerator
+from .base_question_widget import BaseQuestionWidget
+from ..learn_widget_indicator_label import LearnWidgetIndicatorLabel
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.learn_widget import LearnWidget
+    from ..learn_widget import LearnWidget
 
 
 class BaseLessonWidget(QWidget):
@@ -21,7 +20,11 @@ class BaseLessonWidget(QWidget):
 
         self.layout: QVBoxLayout = QVBoxLayout()
         self.setLayout(self.layout)
+        
         self.question_generator: BaseQuestionGenerator = None
+        self.question_widget: BaseQuestionWidget = None
+        self.answers_widget: BaseAnswersWidget = None
+        
         self._setup_indicator_label()
         self.add_back_button()
 
@@ -76,3 +79,10 @@ class BaseLessonWidget(QWidget):
         """Clear the current question by resetting viewer and answer buttons."""
         self.question_widget.clear()
         self.answers_widget.clear()
+
+
+    def resize_lesson_widget(self):
+        self.question_widget.resize_question_widget()
+        self.answers_widget.resize_answers_widget()
+        self._resize_indicator_label()
+        self._resize_back_button()

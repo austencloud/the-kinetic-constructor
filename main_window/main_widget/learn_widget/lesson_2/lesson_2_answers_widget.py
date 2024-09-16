@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from main_window.main_widget.learn_widget.base_classes.base_answers_widget import BaseAnswersWidget
 
 
 if TYPE_CHECKING:
@@ -11,13 +12,12 @@ if TYPE_CHECKING:
     )
 
 
-class Lesson2AnswersWidget(QWidget):
+class Lesson2AnswersWidget(BaseAnswersWidget):
     """Widget responsible for displaying the pictograph answers."""
 
     def __init__(self, lesson_2_widget: "Lesson2Widget"):
         super().__init__(lesson_2_widget)
         self.lesson_2_widget = lesson_2_widget
-        self.main_widget = lesson_2_widget.main_widget
 
         self.layout: QHBoxLayout = QHBoxLayout()
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -62,7 +62,7 @@ class Lesson2AnswersWidget(QWidget):
         self.pictograph_views.clear()
         self.pictographs.clear()
 
-    def resize_lesson_2_answers_widget(self):
+    def resize_answers_widget(self):
         """Resize the pictograph views based on window size."""
         for view in self.pictograph_views:
             view.setFixedSize(

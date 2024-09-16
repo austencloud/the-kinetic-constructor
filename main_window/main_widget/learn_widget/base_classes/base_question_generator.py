@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.base_lesson_widget import BaseLessonWidget
+    from main_window.main_widget.learn_widget.base_classes.base_lesson_widget import BaseLessonWidget
 
 
 class BaseQuestionGenerator:

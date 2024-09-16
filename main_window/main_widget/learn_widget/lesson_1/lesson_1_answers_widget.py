@@ -1,19 +1,20 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QPushButton, QHBoxLayout
+from PyQt6.QtWidgets import QPushButton, QHBoxLayout
 from PyQt6.QtCore import Qt
+
+from ..base_classes.base_answers_widget import BaseAnswersWidget
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.learn_widget import LearnWidget
+    from ..learn_widget import LearnWidget
 
 
-class Lesson1AnswersWidget(QWidget):
+class Lesson1AnswersWidget(BaseAnswersWidget):
     """Widget to manage answer buttons layout and actions."""
 
     def __init__(self, learn_widget: "LearnWidget"):
         super().__init__(learn_widget)
         self.learn_widget = learn_widget
-        self.main_widget = learn_widget.main_widget
         self.layout: QHBoxLayout = QHBoxLayout()
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.setLayout(self.layout)
@@ -37,7 +38,7 @@ class Lesson1AnswersWidget(QWidget):
             button.deleteLater()
         self.buttons.clear()
 
-    def resize_lesson_1_answers_widget(self):
+    def resize_answers_widget(self):
         for button in self.buttons:
             button.setFixedSize(
                 self.main_widget.width() // 16, self.main_widget.width() // 16

@@ -2,10 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QStackedLayout
 from PyQt6.QtGui import QPainter
 
-from main_window.main_widget.learn_widget.base_lesson_widget import BaseLessonWidget
-from main_window.main_widget.learn_widget.learn_widget_indicator_label import (
-    LearnWidgetIndicatorLabel,
-)
+from main_window.main_widget.learn_widget.base_classes.base_lesson_widget import BaseLessonWidget
 from main_window.main_widget.learn_widget.lesson_1.lesson_1_widget import Lesson1Widget
 from main_window.main_widget.learn_widget.lesson_2.lesson_2_widget import Lesson2Widget
 from main_window.main_widget.learn_widget.lesson_selector import LessonSelector
