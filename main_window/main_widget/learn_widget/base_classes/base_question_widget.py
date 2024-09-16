@@ -21,6 +21,10 @@ class BaseQuestionWidget(QWidget):
             "This function should be implemented by the subclass."
         )
 
+    def _resize_question_widget(self) -> None:
+        raise NotImplementedError(
+            "This function should be implemented by the subclass."
+        )
 
     def load_pictograph(self, pictograph_dict) -> None:
         """Load and display the pictograph."""
@@ -32,7 +36,7 @@ class BaseQuestionWidget(QWidget):
         self.layout.addWidget(
             self.pictograph.view, alignment=Qt.AlignmentFlag.AlignCenter
         )
-        
+
     def _resize_question_label(self) -> None:
         question_label_font_size = self.main_widget.width() // 65
         font = self.question_label.font()

@@ -38,7 +38,7 @@ class Lesson3QuestionWidget(BaseQuestionWidget):
             self.pictograph.view.deleteLater()
             self.pictograph = None
 
-    def resize_question_widget(self) -> None:
+    def _resize_question_widget(self) -> None:
         self._resize_question_label()
         self._resize_pictograph()
         self._resize_spacer()

@@ -38,6 +38,10 @@ class Lesson1AnswersWidget(BaseAnswersWidget):
             button.deleteLater()
         self.buttons.clear()
 
+    def deactivate_answer(self, answer) -> None:
+        """Deactivate the button for the incorrect answer."""
+        self.buttons[answer].setDisabled(True)
+
     def resize_answers_widget(self) -> None:
         for button in self.buttons.values():
             button.setFixedSize(

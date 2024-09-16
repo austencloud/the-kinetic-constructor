@@ -14,12 +14,14 @@ class BaseLessonWidget(QWidget):
     """Base class for all lesson widgets, managing shared logic for questions and answers."""
 
     def __init__(self, learn_widget: "LearnWidget"):
-        super().__init__(learn_widget)
         self.learn_widget = learn_widget
+        super().__init__(learn_widget)
         self.main_widget = learn_widget.main_widget
-
-        self.layout: QVBoxLayout = QVBoxLayout()
-        self.setLayout(self.layout)
+        self.main_layout: QHBoxLayout = QHBoxLayout()
+        self.quiz_layout: QVBoxLayout = QVBoxLayout()
+        
+        self.main_layout.addLayout(self.quiz_layout)
+        self.setLayout(self.main_layout)
 
         self.question_generator: BaseQuestionGenerator = None
         self.question_widget: BaseQuestionWidget = None
@@ -31,12 +33,12 @@ class BaseLessonWidget(QWidget):
         self._setup_layout()
 
     def _setup_layout(self):
-        self.layout.addWidget(self.question_widget)
-        self.layout.addStretch(1)
-        self.layout.addWidget(self.answers_widget)
-        self.layout.addStretch(1)
-        self.layout.addWidget(self.indicator_label)
-        self.layout.addStretch(1)
+        self.quiz_layout.addWidget(self.question_widget)
+        self.quiz_layout.addStretch(1)
+        self.quiz_layout.addWidget(self.answers_widget)
+        self.quiz_layout.addStretch(1)
+        self.quiz_layout.addWidget(self.indicator_label)
+        self.quiz_layout.addStretch(1)
 
     def _setup_indicator_label(self):
         self.indicator_label = LessonWidgetIndicatorLabel(self)
@@ -49,7 +51,7 @@ class BaseLessonWidget(QWidget):
         back_layout = QHBoxLayout()
         back_layout.addWidget(self.back_button)
         back_layout.addStretch(1)
-        self.layout.insertLayout(0, back_layout)
+        self.quiz_layout.insertLayout(0, back_layout)
 
     def start_new_question(self):
         """Start a new question for the lesson."""
@@ -91,11 +93,11 @@ class BaseLessonWidget(QWidget):
         self.answers_widget.clear()
 
     def resize_lesson_widget(self):
-        self.question_widget.resize_question_widget()
+        self.question_widget._resize_question_widget()
         self.answers_widget.resize_answers_widget()
         self._resize_indicator_label()
         self._resize_back_button()
-
+    
     def clear_current_question(self):
         """Clear the current question by resetting viewer and answer buttons."""
         self.question_widget.clear()

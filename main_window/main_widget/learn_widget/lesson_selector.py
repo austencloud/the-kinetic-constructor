@@ -82,9 +82,9 @@ class LessonSelector(QWidget):
         self._resize_lesson_layouts()
 
     def _resize_title_label(self):
-        title_font_size = self.main_widget.width() // 40
+        title_font_size = self.main_widget.width() // 50
         font = self.title_label.font()
-        font.setFamily("Monotype Corsiva")
+        font.setFamily("Georgia")
         font.setPointSize(title_font_size)
         self.title_label.setFont(font)
 
