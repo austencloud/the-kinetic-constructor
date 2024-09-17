@@ -49,10 +49,8 @@
     },
     "dictionary": {
         "sort_method": "date_added",
-        "current_section": "browser",
-        "current_filter": {
-            "level": 3
-        }
+        "current_section": "level",
+        "current_filter": null
     },
     "sequence_layout": {
         "grow_sequence": false,
@@ -68,7 +66,7 @@
                 "sequence_level": 2,
                 "rotation_type": "quartered",
                 "permutation_type": "rotational",
-                "continuous_rotation": true
+                "continuous_rotation": false
             },
             "freeform_auto_builder": {
                 "sequence_type": "freeform",
@@ -77,7 +75,7 @@
                 "sequence_level": 3,
                 "continuous_rotation": false
             },
-            "current_auto_builder": "circular"
+            "current_auto_builder": "freeform"
         },
         "manual_builder": {},
         "last_used_builder": "auto"

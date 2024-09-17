@@ -33,7 +33,7 @@ class FreeFormAutoBuilder:
         beat_count: int,
         max_turn_intensity: int,
         level: int,
-        is_continuous_rot_dir,
+        is_continuous_rot_dir: bool,
     ):
 
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
@@ -147,6 +147,8 @@ class FreeFormAutoBuilder:
                     if next_pictograph_dict["blue_attributes"]["turns"] > 0
                     else NO_ROT
                 )
+            else:
+                self._set_random_prop_rot_dir(next_pictograph_dict, BLUE)
 
         if next_pictograph_dict["red_attributes"]["motion_type"] in [DASH, STATIC]:
             if is_continuous_rot_dir:
@@ -155,10 +157,12 @@ class FreeFormAutoBuilder:
                     if next_pictograph_dict["red_attributes"]["turns"] > 0
                     else NO_ROT
                 )
+            else:
+                self._set_random_prop_rot_dir(next_pictograph_dict, RED)
 
-    def _set_default_prop_rot_dir(self, next_pictograph_dict, color):
-        # Set the prop rot dir randomly between CLOCKWISE and COUNTERCLOCKWISE
-        next_pictograph_dict[color + "_attributes"]["prop_rot_dir"] = random.choice(
+    def _set_random_prop_rot_dir(self, pictograph_dict, color):
+        """Set a random prop rotation direction for the given color."""
+        pictograph_dict[color + "_attributes"]["prop_rot_dir"] = random.choice(
             [CLOCKWISE, COUNTER_CLOCKWISE]
         )
 
