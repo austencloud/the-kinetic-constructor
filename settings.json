@@ -66,7 +66,7 @@
                 "sequence_level": 2,
                 "rotation_type": "quartered",
                 "permutation_type": "rotational",
-                "continuous_rotation": false
+                "continuous_rotation": true
             },
             "freeform_auto_builder": {
                 "sequence_type": "freeform",
@@ -75,7 +75,7 @@
                 "sequence_level": 3,
                 "continuous_rotation": false
             },
-            "current_auto_builder": "freeform"
+            "current_auto_builder": "circular"
         },
         "manual_builder": {},
         "last_used_builder": "auto"

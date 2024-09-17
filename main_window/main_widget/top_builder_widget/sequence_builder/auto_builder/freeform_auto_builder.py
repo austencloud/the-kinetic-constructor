@@ -148,7 +148,12 @@ class FreeFormAutoBuilder:
                     else NO_ROT
                 )
             else:
-                self._set_random_prop_rot_dir(next_pictograph_dict, BLUE)
+                (
+                    self._set_random_prop_rot_dir(next_pictograph_dict, BLUE)
+                    if next_pictograph_dict["blue_attributes"]["turns"] > 0
+                    else next_pictograph_dict["blue_attributes"]["prop_rot_dir"]
+                    == NO_ROT
+                )
 
         if next_pictograph_dict["red_attributes"]["motion_type"] in [DASH, STATIC]:
             if is_continuous_rot_dir:
@@ -158,7 +163,12 @@ class FreeFormAutoBuilder:
                     else NO_ROT
                 )
             else:
-                self._set_random_prop_rot_dir(next_pictograph_dict, RED)
+                (
+                    self._set_random_prop_rot_dir(next_pictograph_dict, RED)
+                    if next_pictograph_dict["red_attributes"]["turns"] > 0
+                    else next_pictograph_dict["red_attributes"]["prop_rot_dir"]
+                    == NO_ROT
+                )
 
     def _set_random_prop_rot_dir(self, pictograph_dict, color):
         """Set a random prop rotation direction for the given color."""

@@ -323,7 +323,7 @@ class CircularAutoBuilder:
         )
 
     def _update_dash_static_prop_rot_dirs(
-        self, next_pictograph_dict, is_continuous_rot_dir, blue_rot_dir, red_rot_dir
+        self, next_pictograph_dict, is_continuous_rot_dir, red_rot_dir, blue_rot_dir
     ):
         """
         Update the prop rotation direction for dash or static motions.
@@ -331,24 +331,33 @@ class CircularAutoBuilder:
         """
         if next_pictograph_dict["blue_attributes"]["motion_type"] in [DASH, STATIC]:
             if is_continuous_rot_dir:
-                if next_pictograph_dict["blue_attributes"]["turns"] > 0:
-                    next_pictograph_dict["blue_attributes"][
-                        "prop_rot_dir"
-                    ] = blue_rot_dir
-                else:
-                    next_pictograph_dict["blue_attributes"]["prop_rot_dir"] = NO_ROT
+                next_pictograph_dict["blue_attributes"]["prop_rot_dir"] = (
+                    blue_rot_dir
+                    if next_pictograph_dict["blue_attributes"]["turns"] > 0
+                    else NO_ROT
+                )
             else:
-                self._set_random_prop_rot_dir(next_pictograph_dict, BLUE)
+                (
+                    self._set_random_prop_rot_dir(next_pictograph_dict, BLUE)
+                    if next_pictograph_dict["blue_attributes"]["turns"] > 0
+                    else next_pictograph_dict["blue_attributes"]["prop_rot_dir"]
+                    == NO_ROT
+                )
 
         if next_pictograph_dict["red_attributes"]["motion_type"] in [DASH, STATIC]:
             if is_continuous_rot_dir:
-                if next_pictograph_dict["red_attributes"]["turns"] > 0:
-                    next_pictograph_dict["red_attributes"]["prop_rot_dir"] = red_rot_dir
-                else:
-                    next_pictograph_dict["red_attributes"]["prop_rot_dir"] = NO_ROT
+                next_pictograph_dict["red_attributes"]["prop_rot_dir"] = (
+                    red_rot_dir
+                    if next_pictograph_dict["red_attributes"]["turns"] > 0
+                    else NO_ROT
+                )
             else:
-                self._set_random_prop_rot_dir(next_pictograph_dict, RED)
-
+                (
+                    self._set_random_prop_rot_dir(next_pictograph_dict, RED)
+                    if next_pictograph_dict["red_attributes"]["turns"] > 0
+                    else next_pictograph_dict["red_attributes"]["prop_rot_dir"]
+                    == NO_ROT
+                )
     def _set_random_prop_rot_dir(self, next_pictograph_dict, color):
         """
         Assign a random prop rotation direction for the given hand (color), unless continuous rotation is enabled.
