@@ -92,3 +92,8 @@ class CircularAutoBuilderFrame(BaseAutoBuilderFrame):
             ),
         )
         self.auto_builder.sequence_builder.manual_builder.option_picker.update_option_picker()
+
+    def _resize_auto_builder_frame(self):
+        super()._resize_auto_builder_frame()
+        self.permutation_type_toggle.resize_permutation_type_toggle()
+        self.rotation_type_toggle.resize_rotation_type_toggle()

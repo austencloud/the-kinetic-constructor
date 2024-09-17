@@ -23,7 +23,7 @@ class ContinuousRotationToggleWidget(QWidget):
         self._create_rotation_toggle(False)
 
         # Add the label and toggle layout to the main layout
-        self.layout.addWidget(self.rotation_label)
+        # self.layout.addWidget(self.rotation_label)
         self.layout.addLayout(self.rotation_toggle_layout)
 
     def _create_rotation_toggle(self, initial_state):
@@ -43,3 +43,14 @@ class ContinuousRotationToggleWidget(QWidget):
     def set_state(self, state):
         """Set the initial state when loading settings."""
         self.toggle.setChecked(state)
+
+    def resize_continuous_rotation_toggle(self):
+        font_size = self.auto_builder_frame.auto_builder.main_widget.width() // 60
+        self.random_label.setStyleSheet(f"font-size: {font_size}px;")
+        self.continuous_label.setStyleSheet(f"font-size: {font_size}px;")
+
+        self.random_label.updateGeometry()
+        self.continuous_label.updateGeometry()
+
+        self.random_label.repaint()
+        self.continuous_label.repaint()

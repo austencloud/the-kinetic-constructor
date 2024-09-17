@@ -59,3 +59,17 @@ class LengthAdjusterWidget(QWidget):
         """Set the initial length when loading settings."""
         self.length = length
         self.length_value_label.setText(str(self.length))
+
+    def resize_length_adjuster(self):
+        font_size = self.auto_builder_frame.auto_builder.main_widget.width() // 60
+        self.minus_button.setStyleSheet(f"font-size: {font_size}px;")
+        self.plus_button.setStyleSheet(f"font-size: {font_size}px;")
+        self.length_label.setStyleSheet(f"font-size: {font_size}px;")
+
+        self.minus_button.updateGeometry()
+        self.plus_button.updateGeometry()
+        self.length_label.updateGeometry()
+
+        self.minus_button.repaint()
+        self.plus_button.repaint()
+        self.length_label.repaint()

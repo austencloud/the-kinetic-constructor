@@ -45,3 +45,10 @@ class LevelSelectorWidget(QWidget):
     def set_level(self, level):
         """Set the initial level when loading settings."""
         self._on_level_change(level)
+
+    def resize_level_selector(self):
+        font_size = self.auto_builder_frame.auto_builder.main_widget.width() // 60
+        for button in self.level_buttons.values():
+            button.setStyleSheet(f"font-size: {font_size}px;")
+            button.updateGeometry()
+            button.repaint()

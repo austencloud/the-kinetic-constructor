@@ -72,18 +72,27 @@ class BaseAutoBuilderFrame(QFrame):
         self.length_adjuster.set_length(length)
         self.turn_intensity_adjuster.set_intensity(intensity)
         self.continuous_rotation_toggle.set_state(continuous_rotation)
+
     def _resize_auto_builder_frame(self):
         """Resize the auto builder frame based on the parent widget size."""
-        font_size = self.auto_builder.sequence_builder.width() // 30
+        self._resize_widgets()
+        self._resize_create_sequence_button()
+        self.updateGeometry()
+        self.repaint()
 
-        # Adjust widget font sizes
-        for widget in self.widgets.values():
-            widget.setStyleSheet(f"font-size: {font_size}px;")
-            widget.updateGeometry()
-            widget.repaint()
+    def _resize_widgets(self):
+        self.continuous_rotation_toggle.resize_continuous_rotation_toggle()
+        self.level_selector.resize_level_selector()
+        self.length_adjuster.resize_length_adjuster()
+        self.turn_intensity_adjuster.resize_max_turn_intensity_adjuster()
 
-        # Resize the create sequence button
-        self.create_sequence_button.setStyleSheet(f"font-size: {font_size}px;")
+    def _resize_create_sequence_button(self):
+        font_size = (
+            self.auto_builder.sequence_builder.width() // 30
+        )
+        self.create_sequence_button.setStyleSheet(
+            f"font-size: {font_size}px;"
+        )
         self.create_sequence_button.updateGeometry()
         self.create_sequence_button.repaint()
 
@@ -94,15 +103,12 @@ class BaseAutoBuilderFrame(QFrame):
             self.auto_builder.sequence_builder.height() // 10
         )
 
-        self.updateGeometry()
-        self.repaint()
-
     def _update_font_colors(self, color: str):
         """Update the font colors and optionally the font size for the labels."""
         self.font_color = color
         font_size = self.auto_builder.sequence_builder.width() // 30
         style = f"color: {color}; font-size: {font_size}px;"
-        #update all the fonts in the widgets
+        # update all the fonts in the widgets
         for widget in self.widgets.values():
             widget.setStyleSheet(style)
             widget.updateGeometry()

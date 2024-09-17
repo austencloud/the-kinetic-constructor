@@ -31,7 +31,7 @@ class RotationTypeToggleWidget(QWidget):
         self.toggle_layout.addWidget(self.quartered_label)
 
         # Add everything to the main layout
-        self.layout.addWidget(self.rotation_type_label)
+        # self.layout.addWidget(self.rotation_type_label)
         self.layout.addLayout(self.toggle_layout)
 
     def _toggle_changed(self, state):
@@ -41,3 +41,14 @@ class RotationTypeToggleWidget(QWidget):
     def set_state(self, state):
         """Set the toggle state when loading settings."""
         self.rotation_type_toggle.setChecked(state)
+
+    def resize_rotation_type_toggle(self):
+        font_size = self.circular_builder_frame.auto_builder.main_widget.width() // 60
+        self.halved_label.setStyleSheet(f"font-size: {font_size}px;")
+        self.quartered_label.setStyleSheet(f"font-size: {font_size}px;")
+        self.rotation_type_label.setStyleSheet(f"font-size: {font_size}px;")
+        self.halved_label.updateGeometry()
+        self.quartered_label.updateGeometry()
+
+        self.halved_label.repaint()
+        self.quartered_label.repaint()

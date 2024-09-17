@@ -59,3 +59,17 @@ class MaxTurnIntensityAdjusterWidget(QWidget):
         """Set the initial intensity when loading settings."""
         self.intensity = intensity
         self.intensity_value_label.setText(str(self.intensity))
+
+    def resize_max_turn_intensity_adjuster(self):
+        font_size = self.auto_builder_frame.auto_builder.main_widget.width() // 60
+        self.minus_button.setStyleSheet(f"font-size: {font_size}px;")
+        self.plus_button.setStyleSheet(f"font-size: {font_size}px;")
+        self.intensity_label.setStyleSheet(f"font-size: {font_size}px;")
+
+        self.minus_button.updateGeometry()
+        self.plus_button.updateGeometry()
+        self.intensity_label.updateGeometry()
+
+        self.minus_button.repaint()
+        self.plus_button.repaint()
+        self.intensity_label.repaint()
