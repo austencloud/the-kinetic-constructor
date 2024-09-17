@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtCore import Qt
 from ..base_classes.base_auto_builder_frame import BaseAutoBuilderFrame
-from ..widgets.permutation_type_toggle_widget import PermutationTypeToggleWidget
-from ..widgets.rotation_type_toggle_widget import RotationTypeToggleWidget
+from ..widgets.permutation_type_toggle import PermutationTypeToggle
+from ..widgets.rotation_type_toggle import RotationTypeToggle
 from .circular_auto_builder import CircularAutoBuilder
 
 if TYPE_CHECKING:
@@ -16,8 +16,8 @@ class CircularAutoBuilderFrame(BaseAutoBuilderFrame):
         self.builder = CircularAutoBuilder(self)
 
         # Instantiate Circular-specific widgets
-        self.rotation_type_toggle = RotationTypeToggleWidget(self)
-        self.permutation_type_toggle = PermutationTypeToggleWidget(self)
+        self.rotation_type_toggle = RotationTypeToggle(self)
+        self.permutation_type_toggle = PermutationTypeToggle(self)
 
         # Attach specific action for sequence creation
         self.create_sequence_button.clicked.connect(self._on_create_sequence)

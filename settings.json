@@ -77,7 +77,7 @@
                 "sequence_level": 2,
                 "continuous_rotation": false
             },
-            "current_auto_builder": "freeform"
+            "current_auto_builder": "circular"
         },
         "manual_builder": {},
         "last_used_builder": "auto"

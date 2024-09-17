@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from ..base_classes.base_auto_builder_frame import BaseAutoBuilderFrame
 
 
-class MaxTurnIntensityAdjusterWidget(QWidget):
+class MaxTurnIntensityAdjuster(QWidget):
     def __init__(self, auto_builder_frame: "BaseAutoBuilderFrame"):
         super().__init__()
         self.auto_builder_frame = auto_builder_frame

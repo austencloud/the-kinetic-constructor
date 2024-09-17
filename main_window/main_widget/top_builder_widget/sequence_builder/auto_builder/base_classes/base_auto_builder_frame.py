@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QLabel, QVBoxLayout, QPushButton, QWidget
 from PyQt6.QtCore import Qt
-from ..widgets.continuous_rotation_toggle_widget import ContinuousRotationToggleWidget
-from ..widgets.length_adjuster_widget import LengthAdjusterWidget
-from ..widgets.level_selector_widget import LevelSelectorWidget
-from ..widgets.max_turn_intensity_selector_widget import MaxTurnIntensityAdjusterWidget
+from ..widgets.continuous_rotation_toggle import ContinuousRotationToggle
+from ..widgets.length_adjuster import LengthAdjuster
+from ..widgets.level_selector import LevelSelector
+from ..widgets.max_turn_intensity_selector import MaxTurnIntensityAdjuster
 
 if TYPE_CHECKING:
     from ..auto_builder import AutoBuilder
@@ -25,10 +25,10 @@ class BaseAutoBuilderFrame(QFrame):
         self.setLayout(self.layout)
 
         # Modular widgets
-        self.level_selector = LevelSelectorWidget(self)
-        self.length_adjuster = LengthAdjusterWidget(self)
-        self.turn_intensity_adjuster = MaxTurnIntensityAdjusterWidget(self)
-        self.continuous_rotation_toggle = ContinuousRotationToggleWidget(self)
+        self.level_selector = LevelSelector(self)
+        self.length_adjuster = LengthAdjuster(self)
+        self.turn_intensity_adjuster = MaxTurnIntensityAdjuster(self)
+        self.continuous_rotation_toggle = ContinuousRotationToggle(self)
 
         self.widgets: dict[str, QWidget] = {
             "level_selector": self.level_selector,
