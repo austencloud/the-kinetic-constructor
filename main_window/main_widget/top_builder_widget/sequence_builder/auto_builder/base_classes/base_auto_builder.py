@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
         SequenceWidget,
     )
-    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.base_auto_builder_frame import (
+    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.base_classes.base_auto_builder_frame import (
         BaseAutoBuilderFrame,
     )
 

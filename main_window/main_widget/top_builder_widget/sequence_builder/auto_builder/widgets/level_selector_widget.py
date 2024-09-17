@@ -1,20 +1,30 @@
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPushButton
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QPushButton, QLabel
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
-    from ..base_auto_builder_frame import BaseAutoBuilderFrame
+    from ..base_classes.base_auto_builder_frame import BaseAutoBuilderFrame
 
 
 class LevelSelectorWidget(QWidget):
     def __init__(self, auto_builder_frame: "BaseAutoBuilderFrame"):
         super().__init__()
         self.auto_builder_frame = auto_builder_frame
-        self.layout: QHBoxLayout = QHBoxLayout()
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.layout: QVBoxLayout = QVBoxLayout()
         self.setLayout(self.layout)
+
+        self.level_label = QLabel("Level:")
+        self.level_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.level_buttons_layout = QHBoxLayout()
+        self.level_buttons_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.level_buttons: dict[str, QPushButton] = {}
         self._create_level_buttons()
+
+        # Add the label and buttons layout to the main layout
+        self.layout.addWidget(self.level_label)
+        self.layout.addLayout(self.level_buttons_layout)
 
     def _create_level_buttons(self):
         levels = [1, 2, 3]  # Level options
@@ -23,7 +33,7 @@ class LevelSelectorWidget(QWidget):
             button.setCheckable(True)
             button.setCursor(Qt.CursorShape.PointingHandCursor)
             button.clicked.connect(lambda _, l=level: self._on_level_change(l))
-            self.layout.addWidget(button)
+            self.level_buttons_layout.addWidget(button)
             self.level_buttons[f"level_{level}"] = button
 
     def _on_level_change(self, level):

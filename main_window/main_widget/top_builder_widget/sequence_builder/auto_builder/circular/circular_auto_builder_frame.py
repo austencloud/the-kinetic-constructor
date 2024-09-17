@@ -1,13 +1,13 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QLabel
+from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtCore import Qt
-from .base_auto_builder_frame import BaseAutoBuilderFrame
-from .widgets.permutation_type_toggle_widget import PermutationTypeToggleWidget
-from .widgets.rotation_type_toggle_widget import RotationTypeToggleWidget
+from ..base_classes.base_auto_builder_frame import BaseAutoBuilderFrame
+from ..widgets.permutation_type_toggle_widget import PermutationTypeToggleWidget
+from ..widgets.rotation_type_toggle_widget import RotationTypeToggleWidget
 from .circular_auto_builder import CircularAutoBuilder
 
 if TYPE_CHECKING:
-    from .auto_builder import AutoBuilder
+    from ..auto_builder import AutoBuilder
 
 
 class CircularAutoBuilderFrame(BaseAutoBuilderFrame):
@@ -23,10 +23,8 @@ class CircularAutoBuilderFrame(BaseAutoBuilderFrame):
         self.create_sequence_button.clicked.connect(self._on_create_sequence)
 
         # Add Widgets to Layout
-        self.layout.addWidget(QLabel("Rotation Type:"))
         self.layout.addWidget(self.rotation_type_toggle)
         self.layout.addStretch(1)
-        self.layout.addWidget(QLabel("Permutation Type:"))
         self.layout.addWidget(self.permutation_type_toggle)
         self.layout.addStretch(1)
         self.layout.addWidget(

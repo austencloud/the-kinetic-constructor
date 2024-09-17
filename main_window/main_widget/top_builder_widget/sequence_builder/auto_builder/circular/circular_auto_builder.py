@@ -19,11 +19,11 @@ from main_window.main_widget.top_builder_widget.sequence_widget.sequence_auto_co
 from main_window.main_widget.top_builder_widget.sequence_widget.sequence_auto_completer.rotational_permutation_executor import (
     RotationalPermutationExecuter,
 )
-from .turn_intensity_manager import TurnIntensityManager
+from ..turn_intensity_manager import TurnIntensityManager
 from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.circular_auto_builder_frame import (
+    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.circular.circular_auto_builder_frame import (
         CircularAutoBuilderFrame,
     )
 

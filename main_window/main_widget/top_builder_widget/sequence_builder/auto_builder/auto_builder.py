@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout, QTabWidget
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
-from .circular_auto_builder_frame import CircularAutoBuilderFrame
-from .freeform_auto_builder_frame import FreeformAutoBuilderFrame
+from .circular.circular_auto_builder_frame import CircularAutoBuilderFrame
+from .freeform.freeform_auto_builder_frame import FreeformAutoBuilderFrame
 
 
 if TYPE_CHECKING:

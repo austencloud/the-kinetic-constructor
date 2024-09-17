@@ -6,12 +6,12 @@ from data.constants import BLUE, CLOCKWISE, COUNTER_CLOCKWISE, DASH, NO_ROT, RED
 from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import (
     StartPositionBeat,
 )
-from .turn_intensity_manager import TurnIntensityManager
+from ..turn_intensity_manager import TurnIntensityManager
 import random
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.freeform_auto_builder_frame import (
+    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.freeform.freeform_auto_builder_frame import (
         FreeformAutoBuilderFrame,
     )
 

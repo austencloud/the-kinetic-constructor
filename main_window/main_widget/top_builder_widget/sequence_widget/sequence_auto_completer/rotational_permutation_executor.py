@@ -9,7 +9,7 @@ from .permutation_executor_base import PermutationExecutor
 
 if TYPE_CHECKING:
 
-    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.circular_auto_builder import (
+    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.circular.circular_auto_builder import (
         CircularAutoBuilder,
     )
 

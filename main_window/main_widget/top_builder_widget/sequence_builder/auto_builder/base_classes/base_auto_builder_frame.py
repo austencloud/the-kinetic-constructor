@@ -1,13 +1,13 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QLabel, QVBoxLayout, QPushButton, QWidget
 from PyQt6.QtCore import Qt
-from .widgets.continuous_rotation_toggle_widget import ContinuousRotationToggleWidget
-from .widgets.length_adjuster_widget import LengthAdjusterWidget
-from .widgets.level_selector_widget import LevelSelectorWidget
-from .widgets.max_turn_intensity_selector_widget import MaxTurnIntensityAdjusterWidget
+from ..widgets.continuous_rotation_toggle_widget import ContinuousRotationToggleWidget
+from ..widgets.length_adjuster_widget import LengthAdjusterWidget
+from ..widgets.level_selector_widget import LevelSelectorWidget
+from ..widgets.max_turn_intensity_selector_widget import MaxTurnIntensityAdjusterWidget
 
 if TYPE_CHECKING:
-    from .auto_builder import AutoBuilder
+    from ..auto_builder import AutoBuilder
 
 
 class BaseAutoBuilderFrame(QFrame):
@@ -41,13 +41,10 @@ class BaseAutoBuilderFrame(QFrame):
         self.create_sequence_button.setCursor(Qt.CursorShape.PointingHandCursor)
 
         # Add Widgets to Layout
-        self.layout.addWidget(QLabel("Level:"))
         self.layout.addWidget(self.level_selector)
         self.layout.addStretch(1)
-        self.layout.addWidget(QLabel("Length:"))
         self.layout.addWidget(self.length_adjuster)
         self.layout.addStretch(1)
-        self.layout.addWidget(QLabel("Max Turn Intensity:"))
         self.layout.addWidget(self.turn_intensity_adjuster)
         self.layout.addStretch(1)
         self.layout.addWidget(self.continuous_rotation_toggle)
@@ -75,7 +72,6 @@ class BaseAutoBuilderFrame(QFrame):
         self.length_adjuster.set_length(length)
         self.turn_intensity_adjuster.set_intensity(intensity)
         self.continuous_rotation_toggle.set_state(continuous_rotation)
-
     def _resize_auto_builder_frame(self):
         """Resize the auto builder frame based on the parent widget size."""
         font_size = self.auto_builder.sequence_builder.width() // 30
