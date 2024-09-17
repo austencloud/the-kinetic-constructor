@@ -1,13 +1,10 @@
-from PyQt6.QtWidgets import (
-    QLabel,
-    QComboBox,
-    QWidget,
-)
 from typing import TYPE_CHECKING
-
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QLabel
+from PyQt6.QtCore import Qt
 from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.base_auto_builder_frame import (
     BaseAutoBuilderFrame,
 )
+from pytoggle import PyToggle
 
 from .circular_auto_builder import CircularAutoBuilder
 
@@ -21,105 +18,145 @@ class CircularAutoBuilderFrame(BaseAutoBuilderFrame):
     def __init__(self, auto_builder: "AutoBuilder") -> None:
         super().__init__(auto_builder, "circular")
         self.builder = CircularAutoBuilder(self)
-        self.prev_rotation_type = (
-            None  # To store the previous rotation type when restricting
-        )
 
         # Add Circular-specific widgets
-        self.rotation_type_combo = QComboBox()
-        self.rotation_type_combo.addItem("Quartered", "quartered")
-        self.rotation_type_combo.addItem("Halved", "halved")
-        self.rotation_type_combo.currentIndexChanged.connect(self._update_rotation_type)
-        self.rotation_type_label = QLabel("Rotation Type")
-        self.labels["rotation_type"] = self.rotation_type_label
-        self.comboboxes["rotation_type"] = self.rotation_type_combo
-        self._add_to_grid(self.rotation_type_label, self.rotation_type_combo, 4)
-
-        self.permutation_type_combo = QComboBox()
-        self.permutation_type_combo.addItem("Rotational", "rotational")
-        self.permutation_type_combo.addItem("Mirrored", "mirrored")
-        self.permutation_type_combo.currentIndexChanged.connect(
-            self._update_permutation_type
-        )
-        self.permutation_type_label = QLabel("Permutation Type")
-        self.labels["permutation_type"] = self.permutation_type_label
-        self.comboboxes["permutation_type"] = self.permutation_type_combo
-        self._add_to_grid(self.permutation_type_label, self.permutation_type_combo, 5)
+        self._setup_circular_specific_ui()
 
         # Attach specific action for sequence creation
         self.create_sequence_button.clicked.connect(self._on_create_sequence)
+        self.apply_settings()
 
-        # Load settings
-        self._load_settings()
-
-    def _load_settings(self):
-        """Load settings for Circular builder."""
-        super()._load_settings()
-        settings = self.auto_builder_settings.get_auto_builder_settings(
-            self.builder_type
+    def apply_settings(self):
+        super().apply_settings()
+        rotation_type = self.auto_builder_settings.get_auto_builder_setting(
+            "rotation_type", self.builder_type
         )
-        self.rotation_type_combo.setCurrentIndex(
-            self.rotation_type_combo.findData(settings["rotation_type"])
-        )
-        self.permutation_type_combo.setCurrentIndex(
-            self.permutation_type_combo.findData(settings["permutation_type"])
+        permutation_type = self.auto_builder_settings.get_auto_builder_setting(
+            "permutation_type", self.builder_type
         )
 
-        self._restrict_rotation_type()  # Apply rotation type restrictions
-        self._restrict_sequence_length()  # Apply sequence length restrictions
+        # check them accordingly
+        self.rotation_type_toggle.setChecked(rotation_type == "quartered")
+        self.permutation_type_toggle.setChecked(permutation_type == "rotational")
 
-    def _restrict_sequence_length(self):
-        """Restrict sequence length options based on rotation type."""
-        if self.rotation_type_combo.currentData() == "quartered":
-            if self.sequence_length_spinbox.value() % 4 != 0:
-                self.sequence_length_spinbox.setValue(
-                    self.sequence_length_spinbox.value()
-                    + 4
-                    - self.sequence_length_spinbox.value() % 4
-                )
-            self.sequence_length_spinbox.setRange(4, 32)
-            self.sequence_length_spinbox.setSingleStep(4)
-        elif self.rotation_type_combo.currentData() == "halved":
-            self.sequence_length_spinbox.setRange(2, 32)
-            self.sequence_length_spinbox.setSingleStep(2)
+        self._update_rotation_type(rotation_type == "quartered")
+        self._update_permutation_type(permutation_type == "rotational")
 
-    def _restrict_rotation_type(self):
-        """Restrict rotation type if 'mirrored' permutation is selected."""
-        if self.permutation_type_combo.currentData() == "mirrored":
-            self.prev_rotation_type = self.rotation_type_combo.currentData()
-            self.rotation_type_combo.setCurrentIndex(
-                self.rotation_type_combo.findData("halved")
+    def _setup_circular_specific_ui(self):
+        """Setup specific UI elements for the Circular builder."""
+        # Rotation Type Toggle
+
+        self.rotation_type_toggle_layout = self._create_rotation_type_toggle_layout()
+
+        # Permutation Type Toggle
+
+        self.permutation_type_toggle_layout = (
+            self._create_permutation_type_toggle_layout()
+        )
+
+        self.layout.addLayout(self.rotation_type_toggle_layout)
+        self.layout.addStretch(1)
+        self.layout.addLayout(self.permutation_type_toggle_layout)
+        self.layout.addStretch(1)
+
+        self.layout.addWidget(
+            self.create_sequence_button, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        # self.layout.addStretch(1)
+
+    def _create_rotation_type_toggle_layout(self) -> PyToggle:
+        """Create toggle for rotation type."""
+        self.rotation_type_toggle = PyToggle()
+        self.rotation_type_toggle.stateChanged.connect(self._update_rotation_type)
+        layout = QHBoxLayout()
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        # Add labels to self.labels dict
+        self.halved_label = QLabel("Halved")
+        self.quartered_label = QLabel("Quartered")
+        self.labels["rotation_type_halved"] = self.halved_label
+        self.labels["rotation_type_quartered"] = self.quartered_label
+
+        layout.addWidget(self.halved_label)
+        layout.addWidget(self.rotation_type_toggle)
+        layout.addWidget(self.quartered_label)
+        return layout
+
+    def _create_permutation_type_toggle_layout(self) -> PyToggle:
+        """Create toggle for permutation type."""
+        self.permutation_type_toggle = PyToggle()
+        self.permutation_type_toggle.stateChanged.connect(self._update_permutation_type)
+        layout = QHBoxLayout()
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        # Add labels to self.labels dict
+        self.mirrored_label = QLabel("Mirrored")
+        self.rotational_label = QLabel("Rotated")
+        self.labels["permutation_type_mirrored"] = self.mirrored_label
+        self.labels["permutation_type_rotated"] = self.rotational_label
+
+        layout.addWidget(self.mirrored_label)
+        layout.addWidget(self.permutation_type_toggle)
+        layout.addWidget(self.rotational_label)
+        return layout
+
+    def _update_rotation_type(self, state):
+        """Update the rotation type based on toggle."""
+        rotation_type = "quartered" if state else "halved"
+        self.auto_builder_settings.set_auto_builder_setting(
+            "rotation_type", rotation_type, self.builder_type
+        )
+
+    def _update_permutation_type(self, state):
+        """Update the permutation type based on toggle."""
+        permutation_type = "rotational" if state else "mirrored"
+        self.auto_builder_settings.set_auto_builder_setting(
+            "permutation_type", permutation_type, self.builder_type
+        )
+        # if it's mirrored, hide the continuous rotation option
+        if permutation_type == "mirrored":
+            self.auto_builder_settings.set_auto_builder_setting(
+                "continuous_rotation", False, self.builder_type
             )
-            self.rotation_type_combo.setEnabled(False)
+            # self.continuous_rotation_toggle.hide()
+            # self.continuous_label.hide()
+            # self.random_label.hide()
+
+            self.halved_label.hide()
+            self.quartered_label.hide()
+            self.rotation_type_toggle.hide()
         else:
-            self.rotation_type_combo.setEnabled(True)
-            if self.prev_rotation_type:
-                self.rotation_type_combo.setCurrentIndex(
-                    self.rotation_type_combo.findData(self.prev_rotation_type)
-                )
+            # if they are hidden, show them
+            # self.continuous_rotation_toggle.show()
+            # self.continuous_label.show()
+            # self.random_label.show()
 
-    def _update_rotation_type(self):
-        self.auto_builder_settings.set_auto_builder_setting(
-            "rotation_type", self.rotation_type_combo.currentData(), self.builder_type
-        )
-        self._restrict_sequence_length()
-
-    def _update_permutation_type(self):
-        self.auto_builder_settings.set_auto_builder_setting(
-            "permutation_type",
-            self.permutation_type_combo.currentData(),
-            self.builder_type,
-        )
-        self._restrict_rotation_type()
+            self.halved_label.show()
+            self.quartered_label.show()
+            self.rotation_type_toggle.show()
 
     def _on_create_sequence(self):
         """Trigger sequence creation for Circular."""
         self.builder.build_sequence(
-            self.sequence_length_spinbox.value(),
-            float(self.max_turn_intensity_combo.currentText()),
-            self.sequence_level_combo.currentData(),
-            self.rotation_type_combo.currentData(),
-            self.permutation_type_combo.currentData(),
-            self.continuous_rotation_checkbox.isChecked(),
+            self.auto_builder_settings.get_auto_builder_setting(
+                "sequence_length", self.builder_type
+            ),
+            float(
+                self.auto_builder_settings.get_auto_builder_setting(
+                    "max_turn_intensity", self.builder_type
+                )
+            ),
+            self.auto_builder_settings.get_auto_builder_setting(
+                "sequence_level", self.builder_type
+            ),
+            self.auto_builder_settings.get_auto_builder_setting(
+                "rotation_type", self.builder_type
+            ),
+            self.auto_builder_settings.get_auto_builder_setting(
+                "permutation_type", self.builder_type
+            ),
+            self.auto_builder_settings.get_auto_builder_setting(
+                "continuous_rotation", self.builder_type
+            ),
         )
         self.auto_builder.sequence_builder.manual_builder.option_picker.update_option_picker()

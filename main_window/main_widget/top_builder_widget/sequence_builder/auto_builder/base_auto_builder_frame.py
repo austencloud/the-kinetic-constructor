@@ -1,15 +1,32 @@
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QFrame,
     QLabel,
-    QComboBox,
-    QSpinBox,
-    QCheckBox,
+    QVBoxLayout,
+    QHBoxLayout,
     QPushButton,
-    QGridLayout,
     QWidget,
+    QSlider,
 )
 from PyQt6.QtCore import Qt
+from pytoggle import PyToggle
+
+if TYPE_CHECKING:
+    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.auto_builder import (
+        AutoBuilder,
+    )
+
+
 from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import (
+    QFrame,
+    QLabel,
+    QVBoxLayout,
+    QHBoxLayout,
+    QPushButton,
+    QSlider,
+)
+from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.auto_builder import (
@@ -27,144 +44,244 @@ class BaseAutoBuilderFrame(QFrame):
         )
 
         # Widget dictionaries
-        self.spinboxes: dict[str, QSpinBox] = {}
-        self.comboboxes: dict[str, QComboBox] = {}
         self.labels: dict[str, QLabel] = {}
-        self.buttons: dict[str, QPushButton] = {}
-        self.checkboxes: dict[str, QCheckBox] = {}
-        self.grid_layout = QGridLayout()
-        self.setLayout(self.grid_layout)
-        self.font_color = "black"
+        self.turn_intensity_buttons: dict[str, QPushButton] = {}
+        self.level_buttons: dict[str, QPushButton] = {}
+        self.length_buttons: dict[str, QPushButton] = {}
+        self.turn_intensity_buttons: dict[str, QPushButton] = {}
+        self.layout: QVBoxLayout = QVBoxLayout()
+        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.setLayout(self.layout)
         self.init_shared_ui()
 
     def init_shared_ui(self):
         """Initialize the shared UI elements for all Auto Builders."""
         self._setup_ui_elements()
-        self._add_ui_elements_to_grid()
 
     def _setup_ui_elements(self):
         """Setup the UI elements."""
-        # Sequence Length Spinbox
-        self.sequence_length_spinbox = QSpinBox()
-        self.sequence_length_spinbox.setMinimum(1)
-        self.sequence_length_spinbox.setMaximum(32)
-        self.sequence_length_spinbox.valueChanged.connect(self._update_sequence_length)
-        self.sequence_length_label = QLabel("Sequence Length")
-        self.labels["sequence_length"] = self.sequence_length_label
-        self.spinboxes["sequence_length"] = self.sequence_length_spinbox
-
-        # Sequence Level ComboBox
-        self.sequence_level_combo = QComboBox()
-        self.sequence_level_combo.addItem("Level 1: Base", 1)
-        self.sequence_level_combo.addItem("Level 2: Turns", 2)
-        self.sequence_level_combo.addItem("Level 3: Non-radial", 3)
-        self.sequence_level_combo.currentIndexChanged.connect(
-            self._update_sequence_level
+        self.level_buttons_layout = self._create_level_buttons_layout()
+        self.length_adjustment_layout = self._create_length_adjustment_layout()
+        self.max_turn_intensity_layout = (
+            self._create_max_turn_intensity_adjustment_layout()
         )
-        self.sequence_level_label = QLabel("Sequence Level")
+        self.continuous_rotation_layout = self.setup_continuous_rotation_toggle()
+
+        self.create_sequence_button = QPushButton("Create Sequence")
+        self.create_sequence_button.setCursor(Qt.CursorShape.PointingHandCursor)
+
+        self.sequence_level_label = QLabel("Level:")
+        self.sequence_length_label = QLabel("Length:")
+        self.max_turn_intensity_label = QLabel("Max Turn Intensity:")
+        self.sequence_level_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.sequence_length_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.max_turn_intensity_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.labels["sequence_level"] = self.sequence_level_label
-        self.comboboxes["sequence_level"] = self.sequence_level_combo
-
-        # Max Turn Intensity ComboBox
-        self.max_turn_intensity_combo = QComboBox()
-        self.max_turn_intensity_combo.addItems([str(i) for i in range(0, 4)])
-        self.max_turn_intensity_combo.currentIndexChanged.connect(
-            self._update_max_turn_intensity
-        )
-        self.max_turn_intensity_label = QLabel("Max Turn Intensity")
+        self.labels["sequence_length"] = self.sequence_length_label
         self.labels["max_turn_intensity"] = self.max_turn_intensity_label
-        self.comboboxes["max_turn_intensity"] = self.max_turn_intensity_combo
 
-        # Continuous Rotation Checkbox
-        self.continuous_rotation_checkbox = QCheckBox("Continuous Rotation")
-        self.continuous_rotation_checkbox.stateChanged.connect(
+        # Adding components to layout
+        self.layout.addWidget(self.sequence_level_label)
+        self.layout.addLayout(self.level_buttons_layout)
+        self.layout.addStretch(1)
+        self.layout.addWidget(self.sequence_length_label)
+        self.layout.addLayout(self.length_adjustment_layout)
+        self.layout.addStretch(1)
+        self.layout.addWidget(self.max_turn_intensity_label)
+        self.layout.addLayout(self.max_turn_intensity_layout)
+        self.layout.addStretch(1)
+        self.layout.addLayout(self.continuous_rotation_layout)
+        self.layout.addStretch(1)
+        self.layout.addWidget(
+            self.create_sequence_button, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+
+    def _create_length_adjustment_layout(self) -> QHBoxLayout:
+        """Create plus and minus buttons for adjusting sequence length."""
+        layout = QHBoxLayout()
+
+        self.minus_button = QPushButton("-")
+        self.minus_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.minus_button.clicked.connect(self._decrement_sequence_length)
+
+        self.length_label = QLabel("8")  # Default sequence length
+        self.length_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.length_label.setFixedWidth(40)
+
+        self.plus_button = QPushButton("+")
+        self.plus_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.plus_button.clicked.connect(self._increment_sequence_length)
+
+        self.length_buttons["minus"] = self.minus_button
+        self.length_buttons["plus"] = self.plus_button
+
+        self.labels["sequence_length_value"] = self.length_label
+
+        layout.addStretch(8)
+        layout.addWidget(self.minus_button)
+        layout.addStretch(1)
+        layout.addWidget(self.length_label)
+        layout.addStretch(1)
+        layout.addWidget(self.plus_button)
+        layout.addStretch(8)
+
+        return layout
+
+    def _increment_sequence_length(self):
+        """Increment the sequence length."""
+        current_length = int(self.length_label.text())
+        if current_length < 32:  # Limit the max value to 32
+            new_length = current_length + 1
+            self.length_label.setText(str(new_length))
+            self._update_sequence_length(new_length)
+
+    def _decrement_sequence_length(self):
+        """Decrement the sequence length."""
+        current_length = int(self.length_label.text())
+        if current_length > 4:  # Limit the min value to 4
+            new_length = current_length - 1
+            self.length_label.setText(str(new_length))
+            self._update_sequence_length(new_length)
+
+    def apply_settings(self):
+        """Press the buttons based on the settings."""
+        level = self.auto_builder_settings.get_auto_builder_setting(
+            "sequence_level", self.builder_type
+        )
+        length = self.auto_builder_settings.get_auto_builder_setting(
+            "sequence_length", self.builder_type
+        )
+        turn_intensity = self.auto_builder_settings.get_auto_builder_setting(
+            "max_turn_intensity", self.builder_type
+        )
+        self.level_buttons[f"sequence_level_{level}"].setChecked(True)
+        self.length_label.setText(str(length))
+        self.turn_intensity_label.setText(str(turn_intensity))
+        self._update_sequence_level(level)
+        self._update_sequence_length(length)
+        self._update_max_turn_intensity(turn_intensity)
+
+    def _create_max_turn_intensity_adjustment_layout(self) -> QHBoxLayout:
+        """Create plus and minus buttons for adjusting Max Turn Intensity."""
+        layout = QHBoxLayout()
+
+        self.turn_minus_button = QPushButton("-")
+        self.turn_minus_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.turn_minus_button.clicked.connect(self._decrement_max_turn_intensity)
+
+        self.turn_intensity_label = QLabel("1")  # Default turn intensity
+        self.turn_intensity_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.turn_intensity_label.setFixedWidth(40)
+
+        self.turn_plus_button = QPushButton("+")
+        self.turn_plus_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.turn_plus_button.clicked.connect(self._increment_max_turn_intensity)
+
+        self.turn_intensity_buttons["turn_minus"] = self.turn_minus_button
+        self.turn_intensity_buttons["turn_plus"] = self.turn_plus_button
+
+        self.labels["turn_intensity_value"] = self.turn_intensity_label
+
+        layout.addStretch(8)
+        layout.addWidget(self.turn_minus_button)
+        layout.addStretch(1)
+        layout.addWidget(self.turn_intensity_label)
+        layout.addStretch(1)
+        layout.addWidget(self.turn_plus_button)
+        layout.addStretch(8)
+
+        return layout
+
+    def _increment_max_turn_intensity(self):
+        """Increment the max turn intensity."""
+        current_intensity = float(self.turn_intensity_label.text())
+        if current_intensity < 30:  # Set a max limit for turn intensity
+            new_intensity = int(current_intensity) + 1
+            self.turn_intensity_label.setText(str(new_intensity))
+            self._update_max_turn_intensity(new_intensity)
+
+    def _decrement_max_turn_intensity(self):
+        """Decrement the max turn intensity."""
+        current_intensity = float(self.turn_intensity_label.text())
+        if current_intensity > 0:  # Set a min limit for turn intensity
+            new_intensity = int(current_intensity) - 1
+            self.turn_intensity_label.setText(str(new_intensity))
+            self._update_max_turn_intensity(new_intensity)
+
+    def setup_continuous_rotation_toggle(self):
+        """Setup the continuous rotation toggle."""
+        self.continuous_label = QLabel("Continuous")
+        self.random_label = QLabel("Random")
+        self.labels["random_rotation"] = self.random_label
+        self.labels["continuous_rotation"] = self.continuous_label
+        layout = QHBoxLayout()
+        self.continuous_rotation_toggle = PyToggle()
+        self.continuous_rotation_toggle.stateChanged.connect(
             self._update_continuous_rotation
         )
-        self.checkboxes["continuous_rotation"] = self.continuous_rotation_checkbox
 
-        # Create Sequence Button
-        self.create_sequence_button = QPushButton("Create Sequence")
-        self.buttons["create_sequence"] = self.create_sequence_button
+        layout.addStretch(1)
+        layout.addWidget(self.random_label)
+        layout.addWidget(self.continuous_rotation_toggle)
+        layout.addWidget(self.continuous_label)
+        layout.addStretch(1)
 
-    def _add_ui_elements_to_grid(self):
-        """Add the UI elements to the grid layout."""
-        self._add_to_grid(self.sequence_length_label, self.sequence_length_spinbox, 0)
-        self._add_to_grid(self.sequence_level_label, self.sequence_level_combo, 1)
-        self._add_to_grid(
-            self.max_turn_intensity_label, self.max_turn_intensity_combo, 2
-        )
-        self.grid_layout.addWidget(self.continuous_rotation_checkbox, 6, 1)
-        self.grid_layout.addWidget(self.create_sequence_button, 7, 0, 1, 2)
+        return layout
 
-    def _add_to_grid(self, label: QLabel, widget: QWidget, row: int):
-        """Helper function to add label and widget to the grid layout."""
-        self.grid_layout.addWidget(label, row, 0, Qt.AlignmentFlag.AlignRight)
-        self.grid_layout.addWidget(widget, row, 1, Qt.AlignmentFlag.AlignLeft)
-
-    def _load_settings(self):
-        """Load settings for the builder."""
-        settings = self.auto_builder_settings.get_auto_builder_settings(
-            self.builder_type
-        )
-        self.sequence_length_spinbox.setValue(settings["sequence_length"])
-        self.sequence_level_combo.setCurrentIndex(
-            self.sequence_level_combo.findData(settings["sequence_level"])
-        )
-        self.max_turn_intensity_combo.setCurrentText(
-            str(settings["max_turn_intensity"])
-        )
-        self.continuous_rotation_checkbox.setChecked(settings["continuous_rotation"])
-        self._update_visibility_based_on_level()
-
-    def _update_sequence_length(self):
-        self.auto_builder_settings.set_auto_builder_setting(
-            "sequence_length", self.sequence_length_spinbox.value(), self.builder_type
-        )
-
-    def _update_sequence_level(self):
-        """Update sequence level and adjust turn intensity options accordingly."""
-        level = self.sequence_level_combo.currentData()
-        all_turns = ["0.5", "1", "1.5", "2", "2.5", "3"]
-        whole_turns = ["1", "2", "3"]
-
-        current_intensity_in_settings = (
-            self.auto_builder_settings.get_auto_builder_settings(self.builder_type)[
-                "max_turn_intensity"
-            ]
-        )
-        if level == 3:
-            self.max_turn_intensity_combo.clear()
-            self.max_turn_intensity_combo.addItems(all_turns)
-        elif level == 2:
-            self.max_turn_intensity_combo.clear()
-            self.max_turn_intensity_combo.addItems(whole_turns)
-
-        self.max_turn_intensity_combo.setCurrentText(str(current_intensity_in_settings))
-        self._update_visibility_based_on_level()
-
-        self.auto_builder_settings.set_auto_builder_setting(
-            "sequence_level", self.sequence_level_combo.currentData(), self.builder_type
-        )
-        self._resize_auto_builder_frame()
-        
-    def _update_visibility_based_on_level(self):
-        """Update visibility of turn settings based on selected sequence level."""
-        is_visible = self.sequence_level_combo.currentData() > 1
-        self.max_turn_intensity_label.setVisible(is_visible)
-        self.max_turn_intensity_combo.setVisible(is_visible)
-
-    def _update_max_turn_intensity(self):
-        intensity = self.max_turn_intensity_combo.currentText()
-        if intensity:
-            self.auto_builder_settings.set_auto_builder_setting(
-                "max_turn_intensity", float(intensity), self.builder_type
+    def _create_level_buttons_layout(self) -> QHBoxLayout:
+        """Create buttons for selecting sequence levels."""
+        layout = QHBoxLayout()
+        layout.addStretch(1)
+        levels = [1, 2, 3]  # Level options
+        for level in levels:
+            level_button = QPushButton(f"{level}")
+            level_button.setCursor(Qt.CursorShape.PointingHandCursor)
+            level_button.setCheckable(True)
+            level_button.clicked.connect(
+                lambda _, l=level: self._update_sequence_level(l)
             )
+            layout.addWidget(level_button)
+            layout.addStretch(1)
+            self.level_buttons[f"sequence_level_{level}"] = level_button
+        return layout
 
-    def _update_continuous_rotation(self):
+    def _update_sequence_length(self, length: int):
+        """Update the sequence length."""
         self.auto_builder_settings.set_auto_builder_setting(
-            "continuous_rotation",
-            self.continuous_rotation_checkbox.isChecked(),
-            self.builder_type,
+            "sequence_length", length, self.builder_type
+        )
+
+    def _update_sequence_level(self, level: int):
+        """Update sequence level based on button click."""
+        self.auto_builder_settings.set_auto_builder_setting(
+            "sequence_level", level, self.builder_type
+        )
+
+        for level_button in self.level_buttons.values():
+            level_button.setChecked(False)
+        self.level_buttons[f"sequence_level_{level}"].setChecked(True)
+
+        if level == 1:
+            self.max_turn_intensity_label.hide()
+            self.turn_minus_button.hide()
+            self.turn_plus_button.hide()
+            self.turn_intensity_label.hide()
+        else:
+            self.max_turn_intensity_label.show()
+            self.turn_minus_button.show()
+            self.turn_plus_button.show()
+            self.turn_intensity_label.show()
+
+    def _update_max_turn_intensity(self, value: float):
+        """Update Max Turn Intensity."""
+        self.auto_builder_settings.set_auto_builder_setting(
+            "max_turn_intensity", value, self.builder_type
+        )
+
+    def _update_continuous_rotation(self, state):
+        """Update continuous rotation state."""
+        self.auto_builder_settings.set_auto_builder_setting(
+            "continuous_rotation", bool(state), self.builder_type
         )
 
     def _update_font_colors(self, color: str):
@@ -172,43 +289,43 @@ class BaseAutoBuilderFrame(QFrame):
         self.font_color = color
         font_size = self.auto_builder.sequence_builder.width() // 30
         style = f"color: {color}; font-size: {font_size}px;"
-        for widget in list(self.labels.values()) + [self.continuous_rotation_checkbox]:
-            widget.setStyleSheet(style)
+        for label in self.labels.values():
+            label.setStyleSheet(style)
 
     def _resize_auto_builder_frame(self):
-        """Resize the frame based on the parent widget size."""
+        """Resize the auto builder frame based on the parent widget size."""
         font_size = self.auto_builder.sequence_builder.width() // 30
 
-        widget_dicts: list[dict[str, QWidget]] = [
-            self.labels,
-            self.checkboxes,
-        ]
-        for widget_dict in widget_dicts:
-            for widget in widget_dict.values():
-                widget.setStyleSheet(
-                    f"QWidget {{ font-size: {font_size}px; color: {self.font_color}; }}"
-                )
-                widget.updateGeometry()
-                widget.repaint()
+        # Update font size for labels and buttons
+        for label in self.labels.values():
+            label.setStyleSheet(f"font-size: {font_size}px;")
+            label.updateGeometry()
+            label.repaint()
 
-        other_widgets: list[dict[str, QWidget]] = [
-            self.spinboxes,
-            self.comboboxes,
-            self.buttons,
-        ]
+        for level_button in self.level_buttons.values():
+            level_button.setStyleSheet(f"font-size: {font_size}px;")
+            level_button.updateGeometry()
+            level_button.repaint()
 
-        for widget_dict in other_widgets:
-            for widget in widget_dict.values():
-                widget.setStyleSheet(f"QWidget {{ font-size: {font_size}px; }}")
-                widget.updateGeometry()
-                widget.repaint()
+        for sequence_length_button in self.length_buttons.values():
+            sequence_length_button.setStyleSheet(f"font-size: {font_size}px;")
+            sequence_length_button.updateGeometry()
+            sequence_length_button.repaint()
 
-        for combobox in self.comboboxes.values():
-            text = combobox.currentText()
-            metrics = combobox.fontMetrics()
-            width = metrics.horizontalAdvance(text)
-            combobox.setMinimumWidth(width + 25)
-        
+        for max_turn_intensity_button in self.turn_intensity_buttons.values():
+            max_turn_intensity_button.setStyleSheet(f"font-size: {font_size}px;")
+            max_turn_intensity_button.updateGeometry()
+            max_turn_intensity_button.repaint()
+
+        self.create_sequence_button.setStyleSheet(f"font-size: {font_size}px;")
+        self.create_sequence_button.updateGeometry()
+        self.create_sequence_button.repaint()
+        self.create_sequence_button.setFixedWidth(
+            self.auto_builder.sequence_builder.width() // 3
+        )
+        self.create_sequence_button.setFixedHeight(
+            self.auto_builder.sequence_builder.height() // 10
+        )
 
         self.updateGeometry()
         self.repaint()

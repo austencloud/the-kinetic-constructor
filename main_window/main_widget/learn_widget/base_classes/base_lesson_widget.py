@@ -46,7 +46,7 @@ class BaseLessonWidget(QWidget):
         self.result_label = self.create_label(alignment=Qt.AlignmentFlag.AlignCenter)
 
         # Default attributes for quiz modes
-        self.total_questions = 5
+        self.total_questions = 30
         self.current_question = 1
         self.quiz_time = 120
         self.mode = "fixed_question"
