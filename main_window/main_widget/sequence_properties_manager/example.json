@@ -6,7 +6,7 @@
       "prop_type": "staff",
       "is_circular": true,
       "is_permutable": true,
-      "is_rotational_permutation": true,
+      "is_rotated_permutation": true,
       "is_mirrored_permutation": false,
       "is_colorswapped_permutation": false
     },

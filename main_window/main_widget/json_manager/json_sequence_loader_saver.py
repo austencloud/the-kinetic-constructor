@@ -28,11 +28,11 @@ class JsonSequenceLoaderSaver:
                     "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
                     "is_circular": False,
                     "is_permutable": False,
-                    "is_strictly_rotational_permutation": False,
+                    "is_strictly_rotated_permutation": False,
                     "is_strictly_mirrored_permutation": False,
                     "is_strictly_colorswapped_permutation": False,
                     "is_mirrored_color_swapped_permutation": False,
-                    "is_rotational_colorswapped_permutation": False,
+                    "is_rotated_colorswapped_permutation": False,
                 }
             ]
 
@@ -46,11 +46,11 @@ class JsonSequenceLoaderSaver:
                     "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
                     "is_circular": False,
                     "is_permutable": False,
-                    "is_strictly_rotational_permutation": False,
+                    "is_strictly_rotated_permutation": False,
                     "is_strictly_mirrored_permutation": False,
                     "is_strictly_colorswapped_permutation": False,
                     "is_mirrored_color_swapped_permutation": False,
-                    "is_rotational_colorswapped_permutation": False,
+                    "is_rotated_colorswapped_permutation": False,
                 }
             ]
         else:

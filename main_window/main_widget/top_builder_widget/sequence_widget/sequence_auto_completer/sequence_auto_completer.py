@@ -1,7 +1,11 @@
 from typing import TYPE_CHECKING, Dict
-from ...sequence_builder.auto_builder.circular.permutation_executors.mirrored_permutation_executor import MirroredPermutationExecutor
+from ...sequence_builder.auto_builder.circular.permutation_executors.mirrored_permutation_executor import (
+    MirroredPermutationExecutor,
+)
 from .permutation_dialog import PermutationDialog
-from ...sequence_builder.auto_builder.circular.permutation_executors.rotated_permutation_executor import RotationalPermutationExecuter
+from ...sequence_builder.auto_builder.circular.permutation_executors.rotated_permutation_executor import (
+    RotatedPermutationExecuter,
+)
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
 from PyQt6.QtWidgets import QMessageBox
@@ -19,7 +23,7 @@ class SequenceAutoCompleter:
         self.json_manager = self.beat_frame.json_manager
         self.main_widget = sequence_widget.main_widget
         self.validation_engine = self.main_widget.json_manager.validation_engine
-        self.rotational_permutation_executor = RotationalPermutationExecuter(self)
+        self.rotated_permutation_executor = RotatedPermutationExecuter(self)
         self.mirrored_permutation_executor = MirroredPermutationExecutor(self, False)
 
     def auto_complete_sequence(self):
@@ -44,7 +48,7 @@ class SequenceAutoCompleter:
         if dialog.exec():
             option = dialog.get_options()
             if option == "rotation":
-                executor = RotationalPermutationExecuter(self)
+                executor = RotatedPermutationExecuter(self)
                 executor.create_permutations(sequence)
             elif option == "vertical_mirror":
                 executor = MirroredPermutationExecutor(self, False)

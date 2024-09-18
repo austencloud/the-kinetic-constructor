@@ -16,19 +16,19 @@ class PermutationTypeToggle(QWidget):
         self.setLayout(self.layout)
 
         self.mirrored_label = QLabel("Mirrored")
-        self.rotational_label = QLabel("Rotated")
+        self.rotated_label = QLabel("Rotated")
         self.permutation_type_toggle = PyToggle()
         self.permutation_type_toggle.stateChanged.connect(self._toggle_changed)
 
         # Add labels and toggle to layout
         self.layout.addWidget(self.mirrored_label)
         self.layout.addWidget(self.permutation_type_toggle)
-        self.layout.addWidget(self.rotational_label)
+        self.layout.addWidget(self.rotated_label)
 
         # Add everything to the main layout
 
     def _toggle_changed(self, state):
-        permutation_type = "rotational" if state else "mirrored"
+        permutation_type = "rotated" if state else "mirrored"
         self.circular_builder_frame._update_permutation_type(permutation_type)
 
     def set_state(self, state):
@@ -38,9 +38,9 @@ class PermutationTypeToggle(QWidget):
     def resize_permutation_type_toggle(self):
         font_size = self.circular_builder_frame.auto_builder.main_widget.width() // 60
         self.mirrored_label.setStyleSheet(f"font-size: {font_size}px;")
-        self.rotational_label.setStyleSheet(f"font-size: {font_size}px;")
+        self.rotated_label.setStyleSheet(f"font-size: {font_size}px;")
         self.mirrored_label.updateGeometry()
-        self.rotational_label.updateGeometry()
+        self.rotated_label.updateGeometry()
 
         self.mirrored_label.repaint()
-        self.rotational_label.repaint()
+        self.rotated_label.repaint()

@@ -102,3 +102,19 @@ class AutoBuilderBase:
     ):
         next_pictograph_dict["beat"] = len(sequence) - 1
         return next_pictograph_dict
+
+    def _filter_options_by_rotation(self, options: list[dict], blue_rot_dir, red_rot_dir) -> list[dict]:
+        """Filter options to match the rotation direction for both hands."""
+        filtered_options = [
+            option for option in options
+            if option["blue_attributes"]["prop_rot_dir"] in [blue_rot_dir, NO_ROT]
+            and option["red_attributes"]["prop_rot_dir"] in [red_rot_dir, NO_ROT]
+        ]
+        return filtered_options if filtered_options else options
+    
+    def _set_turns(
+        self, pictograph: dict, turn_blue: float, turn_red: float
+    ) -> dict:
+        pictograph["blue_attributes"]["turns"] = turn_blue
+        pictograph["red_attributes"]["turns"] = turn_red
+        return pictograph

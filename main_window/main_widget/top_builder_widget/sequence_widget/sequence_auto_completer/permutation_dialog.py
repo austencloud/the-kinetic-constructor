@@ -6,7 +6,7 @@ class PermutationDialog(QDialog):
         super().__init__()
         self.setWindowTitle("Select Permutation Type")
 
-        self.rotation_button = QPushButton("Rotational")
+        self.rotation_button = QPushButton("rotated")
         self.vertical_mirror_button = QPushButton("Vertically Mirrored")
         self.horizontal_mirror_button = QPushButton("Horizontally Mirrored")
         self.color_swap_button = QPushButton("Color Swapped")

@@ -1,12 +1,13 @@
 from typing import Dict, List, TYPE_CHECKING
 
+
 if TYPE_CHECKING:
-    from widgets.sequence_widget.sequence_properties_manager.sequence_properties_manager import (
+    from main_window.main_widget.sequence_properties_manager.sequence_properties_manager import (
         SequencePropertiesManager,
     )
 
 
-class RotationalColorSwappedPermutationChecker:
+class RotatedColorSwappedPermutationChecker:
     def __init__(self, manager: "SequencePropertiesManager"):
         self.manager = manager
         self.rotation_maps = self._initialize_rotation_maps()

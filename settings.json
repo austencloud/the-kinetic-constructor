@@ -67,7 +67,7 @@
                 "max_turn_intensity": 1,
                 "sequence_level": 2,
                 "rotation_type": "quartered",
-                "permutation_type": "rotational",
+                "permutation_type": "rotated",
                 "continuous_rotation": true
             },
             "freeform_auto_builder": {

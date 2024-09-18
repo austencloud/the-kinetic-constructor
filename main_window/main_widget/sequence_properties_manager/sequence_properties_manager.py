@@ -8,11 +8,11 @@ from .mirrored_color_swapped_permutation_checker import (
     MirroredColorSwappedPermutationChecker,
 )
 from .strictly_mirrored_permutation_checker import StrictlyMirroredPermutationChecker
-from .rotational_color_swapped_permutation_checker import (
-    RotationalColorSwappedPermutationChecker,
+from .rotated_color_swapped_permutation_checker import (
+    RotatedColorSwappedPermutationChecker,
 )
-from .strictly_rotational_permutation_checker import (
-    StrictlyRotationalPermutationChecker,
+from .strictly_rotated_permutation_checker import (
+    StrictlyRotatedPermutationChecker,
 )
 
 if TYPE_CHECKING:
@@ -26,22 +26,20 @@ class SequencePropertiesManager:
         # Default properties
         self.ends_at_start_pos = False
         self.is_permutable = False
-        self.is_strictly_rotational_permutation = False
+        self.is_strictly_rotated_permutation = False
         self.is_strictly_mirrored_permutation = False
         self.is_strictly_colorswapped_permutation = False
         self.is_mirrored_color_swapped_permutation = False
-        self.is_rotational_colorswapped_permutation = False
+        self.is_rotated_colorswapped_permutation = False
 
         # Instantiate the individual checkers
-        self.rotational_checker = StrictlyRotationalPermutationChecker(self)
+        self.rotated_checker = StrictlyRotatedPermutationChecker(self)
         self.mirrored_checker = StrictlyMirroredPermutationChecker(self)
         self.color_swapped_checker = StrictlyColorSwappedPermutationChecker(self)
         self.mirrored_color_swapped_checker = MirroredColorSwappedPermutationChecker(
             self
         )
-        self.rotational_color_swapped_checker = (
-            RotationalColorSwappedPermutationChecker(self)
-        )
+        self.rotated_color_swapped_checker = RotatedColorSwappedPermutationChecker(self)
 
     def instantiate_sequence(self, sequence):
         self.sequence = sequence[1:]
@@ -60,11 +58,11 @@ class SequencePropertiesManager:
         self.ends_at_start_pos = self._check_ends_at_start_pos()
         self.is_permutable = self._check_is_permutable()
 
-        # Check for strictly rotational permutation first
-        self.is_strictly_rotational_permutation = self.rotational_checker.check()
+        # Check for strictly rotated permutation first
+        self.is_strictly_rotated_permutation = self.rotated_checker.check()
 
-        if not self.is_strictly_rotational_permutation:
-            # If not rotational, check for strictly mirrored permutation
+        if not self.is_strictly_rotated_permutation:
+            # If not rotated, check for strictly mirrored permutation
             self.is_strictly_mirrored_permutation = self.mirrored_checker.check()
 
             if not self.is_strictly_mirrored_permutation:
@@ -80,25 +78,25 @@ class SequencePropertiesManager:
                     )
 
                     if not self.is_mirrored_color_swapped_permutation:
-                        # If not mirrored color swapped, check for rotational color swapped permutation
-                        self.is_rotational_colorswapped_permutation = (
-                            self.rotational_color_swapped_checker.check()
+                        # If not mirrored color swapped, check for rotated color swapped permutation
+                        self.is_rotated_colorswapped_permutation = (
+                            self.rotated_color_swapped_checker.check()
                         )
                     else:
-                        self.is_rotational_colorswapped_permutation = False
+                        self.is_rotated_colorswapped_permutation = False
                 else:
                     self.is_mirrored_color_swapped_permutation = False
-                    self.is_rotational_colorswapped_permutation = False
+                    self.is_rotated_colorswapped_permutation = False
             else:
                 self.is_strictly_colorswapped_permutation = False
                 self.is_mirrored_color_swapped_permutation = False
-                self.is_rotational_colorswapped_permutation = False
+                self.is_rotated_colorswapped_permutation = False
         else:
-            # If it's strictly rotational, all other permutations are false
+            # If it's strictly rotated, all other permutations are false
             self.is_strictly_mirrored_permutation = False
             self.is_strictly_colorswapped_permutation = False
             self.is_mirrored_color_swapped_permutation = False
-            self.is_rotational_colorswapped_permutation = False
+            self.is_rotated_colorswapped_permutation = False
 
         return {
             "word": self.calculate_word(),
@@ -108,11 +106,11 @@ class SequencePropertiesManager:
             ),
             "is_circular": self.ends_at_start_pos,
             "is_permutable": self.is_permutable,
-            "is_strictly_rotational_permutation": self.is_strictly_rotational_permutation,
+            "is_strictly_rotated_permutation": self.is_strictly_rotated_permutation,
             "is_strictly_mirrored_permutation": self.is_strictly_mirrored_permutation,
             "is_strictly_colorswapped_permutation": self.is_strictly_colorswapped_permutation,
             "is_mirrored_color_swapped_permutation": self.is_mirrored_color_swapped_permutation,
-            "is_rotational_colorswapped_permutation": self.is_rotational_colorswapped_permutation,
+            "is_rotated_colorswapped_permutation": self.is_rotated_colorswapped_permutation,
         }
 
     def _default_properties(self):
@@ -122,11 +120,11 @@ class SequencePropertiesManager:
             "level": 0,
             "is_circular": False,
             "is_permutable": False,
-            "is_strictly_rotational_permutation": False,
+            "is_strictly_rotated_permutation": False,
             "is_strictly_mirrored_permutation": False,
             "is_strictly_colorswapped_permutation": False,
             "is_mirrored_color_swapped_permutation": False,
-            "is_rotational_colorswapped_permutation": False,
+            "is_rotated_colorswapped_permutation": False,
         }
 
     def _check_ends_at_start_pos(self) -> bool:

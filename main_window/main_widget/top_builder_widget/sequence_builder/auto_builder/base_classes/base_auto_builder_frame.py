@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QLabel, QVBoxLayout, QPushButton, QWidget
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QPushButton, QWidget
 from PyQt6.QtCore import Qt
 from ..widgets.continuous_rotation_toggle import ContinuousRotationToggle
 from ..widgets.length_adjuster import LengthAdjuster

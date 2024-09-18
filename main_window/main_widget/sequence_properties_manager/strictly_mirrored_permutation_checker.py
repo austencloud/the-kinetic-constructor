@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from widgets.sequence_widget.sequence_properties_manager.sequence_properties_manager import (
+    from main_window.main_widget.sequence_properties_manager.sequence_properties_manager import (
         SequencePropertiesManager,
     )
 

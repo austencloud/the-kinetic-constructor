@@ -19,7 +19,7 @@ class AutoBuilderSettings:
         "max_turn_intensity": 50,
         "sequence_level": 1,
         "rotation_type": "quartered",
-        "permutation_type": "rotational",
+        "permutation_type": "rotated",
         "continuous_rotation": False,
     }
 

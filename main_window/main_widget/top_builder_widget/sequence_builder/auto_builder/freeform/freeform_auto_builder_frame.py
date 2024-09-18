@@ -1,10 +1,7 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton, QLabel
-from PyQt6.QtCore import Qt
 from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.base_classes.base_auto_builder_frame import (
     BaseAutoBuilderFrame,
 )
-from pytoggle import PyToggle
 
 from .freeform_auto_builder import FreeFormAutoBuilder
 

@@ -3,8 +3,8 @@ from PyQt6.QtWidgets import QApplication
 import random
 from copy import deepcopy
 from PyQt6.QtCore import Qt
-from data.constants import BLUE, RED, NO_ROT, CLOCKWISE, COUNTER_CLOCKWISE
-from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.base_classes.base_auto_builder import AutoBuilderBase
+from data.constants import NO_ROT
+from ..base_classes.base_auto_builder import AutoBuilderBase
 from ..turn_intensity_manager import TurnIntensityManager
 
 if TYPE_CHECKING:
@@ -88,7 +88,7 @@ class FreeFormAutoBuilder(AutoBuilderBase):
         if level == 1:
             chosen_option = self._apply_level_1_constraints(chosen_option)
         elif level == 2 or level == 3:
-            chosen_option = self._apply_level_2_or_3_constraints(chosen_option, turn_blue, turn_red)
+            chosen_option = self._set_turns(chosen_option, turn_blue, turn_red)
 
         self._update_dash_static_prop_rot_dirs(
             chosen_option,
@@ -101,23 +101,10 @@ class FreeFormAutoBuilder(AutoBuilderBase):
         )
         return chosen_option
 
-    def _filter_options_by_rotation(self, options: list[dict], blue_rot_dir, red_rot_dir) -> list[dict]:
-        """Filter options to match the rotation direction for both hands."""
-        filtered_options = []
-        for option in options:
-            if option["blue_attributes"]["prop_rot_dir"] in [blue_rot_dir, NO_ROT] and \
-               option["red_attributes"]["prop_rot_dir"] in [red_rot_dir, NO_ROT]:
-                filtered_options.append(option)
-        return filtered_options if filtered_options else options
+
 
     def _apply_level_1_constraints(self, pictograph: dict) -> dict:
         pictograph["blue_attributes"]["turns"] = 0
         pictograph["red_attributes"]["turns"] = 0
         return pictograph
 
-    def _apply_level_2_or_3_constraints(
-        self, pictograph: dict, turn_blue: float, turn_red: float
-    ) -> dict:
-        pictograph["blue_attributes"]["turns"] = turn_blue
-        pictograph["red_attributes"]["turns"] = turn_red
-        return pictograph

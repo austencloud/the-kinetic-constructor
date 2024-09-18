@@ -29,8 +29,8 @@ class JsonSequenceUpdater:
             sequence[0]["level"] = properties["level"]
             sequence[0]["is_circular"] = properties["is_circular"]
             sequence[0]["is_permutable"] = properties["is_permutable"]
-            sequence[0]["is_strictly_rotational_permutation"] = properties[
-                "is_strictly_rotational_permutation"
+            sequence[0]["is_strictly_rotated_permutation"] = properties[
+                "is_strictly_rotated_permutation"
             ]
             sequence[0]["is_strictly_mirrored_permutation"] = properties[
                 "is_strictly_mirrored_permutation"
@@ -41,8 +41,8 @@ class JsonSequenceUpdater:
             sequence[0]["is_mirrored_color_swapped_permutation"] = properties[
                 "is_mirrored_color_swapped_permutation"
             ]
-            sequence[0]["is_rotational_colorswapped_permutation"] = properties[
-                "is_rotational_colorswapped_permutation"
+            sequence[0]["is_rotated_colorswapped_permutation"] = properties[
+                "is_rotated_colorswapped_permutation"
             ]
 
             # Save the updated sequence back to the JSON

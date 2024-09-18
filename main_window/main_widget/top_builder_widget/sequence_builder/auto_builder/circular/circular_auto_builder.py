@@ -3,22 +3,31 @@ from PyQt6.QtWidgets import QApplication
 import random
 from copy import deepcopy
 from PyQt6.QtCore import Qt
-from data.constants import BLUE, NO_ROT, RED
-from data.position_maps import half_position_map, quarter_position_map_cw, quarter_position_map_ccw
+from data.constants import NO_ROT
+from data.position_maps import (
+    half_position_map,
+    quarter_position_map_cw,
+    quarter_position_map_ccw,
+)
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
-from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.base_classes.base_auto_builder import AutoBuilderBase
-from .permutation_executors.mirrored_permutation_executor import MirroredPermutationExecutor
-from .permutation_executors.rotated_permutation_executor import RotationalPermutationExecuter
+from ..base_classes.base_auto_builder import AutoBuilderBase
+from .permutation_executors.mirrored_permutation_executor import (
+    MirroredPermutationExecutor,
+)
+from .permutation_executors.rotated_permutation_executor import (
+    RotatedPermutationExecuter,
+)
 from ..turn_intensity_manager import TurnIntensityManager
 
 if TYPE_CHECKING:
     from .circular_auto_builder_frame import CircularAutoBuilderFrame
 
+
 class CircularAutoBuilder(AutoBuilderBase):
     def __init__(self, auto_builder_frame: "CircularAutoBuilderFrame"):
         super().__init__(auto_builder_frame)
-        self.rotational_executor = RotationalPermutationExecuter(self)
+        self.rotated_executor = RotatedPermutationExecuter(self)
         self.mirrored_executor = MirroredPermutationExecutor(self, False)
         self.rotation_direction = None
 
@@ -51,7 +60,7 @@ class CircularAutoBuilder(AutoBuilderBase):
             self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
         length_of_sequence_upon_start = len(self.sequence) - 2
 
-        if permutation_type == "rotational":
+        if permutation_type == "rotated":
             if rotation_type == "quartered":
                 word_length = length // 4
             elif rotation_type == "halved":
@@ -119,19 +128,25 @@ class CircularAutoBuilder(AutoBuilderBase):
         options = [deepcopy(option) for option in options]
 
         if is_continuous_rot_dir:
-            options = self._filter_options_by_rotation(options, blue_rot_dir, red_rot_dir)
+            options = self._filter_options_by_rotation(
+                options, blue_rot_dir, red_rot_dir
+            )
 
-        if permutation_type == "rotational":
+        if permutation_type == "rotated":
             if is_last_in_word:
-                expected_end_pos = self._determine_rotational_end_pos(rotation_type)
-                chosen_option = self._select_pictograph_with_end_pos(options, expected_end_pos)
+                expected_end_pos = self._determine_rotated_end_pos(rotation_type)
+                chosen_option = self._select_pictograph_with_end_pos(
+                    options, expected_end_pos
+                )
             else:
                 chosen_option = random.choice(options)
 
         elif permutation_type == "mirrored":
             if is_last_in_word:
                 expected_end_pos = self.sequence[1]["end_pos"]
-                chosen_option = self._select_pictograph_with_end_pos(options, expected_end_pos)
+                chosen_option = self._select_pictograph_with_end_pos(
+                    options, expected_end_pos
+                )
             else:
                 chosen_option = random.choice(options)
 
@@ -139,27 +154,11 @@ class CircularAutoBuilder(AutoBuilderBase):
             chosen_option = self._set_turns(chosen_option, turn_blue, turn_red)
         return chosen_option
 
-    def _filter_options_by_rotation(self, options: list[dict], blue_rot_dir, red_rot_dir) -> list[dict]:
-        """Filter options to match the rotation direction for both hands."""
-        filtered_options = []
-        for option in options:
-            if option["blue_attributes"]["prop_rot_dir"] in [blue_rot_dir, NO_ROT] and \
-               option["red_attributes"]["prop_rot_dir"] in [red_rot_dir, NO_ROT]:
-                filtered_options.append(option)
-
-        return filtered_options if filtered_options else options
-
-    def _set_turns(self, pictograph: dict, turn_blue: float, turn_red: float) -> dict:
-        pictograph["blue_attributes"]["turns"] = turn_blue
-        pictograph["red_attributes"]["turns"] = turn_red
-        return pictograph
-
-    def _determine_rotational_end_pos(self, rotation_type: str) -> str:
+    def _determine_rotated_end_pos(self, rotation_type: str) -> str:
         """Determine the expected end position based on rotation type and current sequence."""
         start_pos = self.sequence[1]["end_pos"]
 
         if rotation_type == "quartered":
-            # Randomly choose between CW and CCW for more flexibility
             if random.choice([True, False]):
                 return quarter_position_map_cw[start_pos]
             else:
@@ -170,22 +169,32 @@ class CircularAutoBuilder(AutoBuilderBase):
             print("Invalid rotation type - expected 'quartered' or 'halved'")
             return None  # Default case, should not happen
 
-    def _select_pictograph_with_end_pos(self, options: list[dict], expected_end_pos: str) -> dict:
+    def _select_pictograph_with_end_pos(
+        self, options: list[dict], expected_end_pos: str
+    ) -> dict:
         """Select a pictograph from options that has the desired end position."""
-        valid_options = [option for option in options if option["end_pos"] == expected_end_pos]
+        valid_options = [
+            option for option in options if option["end_pos"] == expected_end_pos
+        ]
         if not valid_options:
-            raise ValueError(f"No valid pictograph found with end position {expected_end_pos}.")
+            raise ValueError(
+                f"No valid pictograph found with end position {expected_end_pos}."
+            )
         return random.choice(valid_options)
 
-    def _apply_permutations(self, sequence: list[dict], permutation_type: str, rotation_type: str) -> None:
-        if permutation_type == "rotational":
-            if self.can_perform_rotational_permutation(sequence, rotation_type):
-                self.rotational_executor.create_permutations(sequence)
+    def _apply_permutations(
+        self, sequence: list[dict], permutation_type: str, rotation_type: str
+    ) -> None:
+        if permutation_type == "rotated":
+            if self.can_perform_rotationed_permutation(sequence, rotation_type):
+                self.rotated_executor.create_permutations(sequence)
         elif permutation_type == "mirrored":
             if self.mirrored_executor.can_perform_mirrored_permutation(sequence):
                 self.mirrored_executor.create_permutations(sequence, "vertical")
 
-    def can_perform_rotational_permutation(self, sequence: list[dict], rotation_type: str) -> bool:
+    def can_perform_rotationed_permutation(
+        self, sequence: list[dict], rotation_type: str
+    ) -> bool:
         start_pos = sequence[1]["end_pos"]
         end_pos = sequence[-1]["end_pos"]
         if rotation_type == "quartered":

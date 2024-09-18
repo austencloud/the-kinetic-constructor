@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout
 from PyQt6.QtCore import Qt
 from ..base_classes.base_auto_builder_frame import BaseAutoBuilderFrame
 from ..widgets.permutation_type_toggle import PermutationTypeToggle
@@ -47,7 +46,7 @@ class CircularAutoBuilderFrame(BaseAutoBuilderFrame):
 
         # Update state of the toggles
         self.rotation_type_toggle.set_state(rotation_type == "quartered")
-        self.permutation_type_toggle.set_state(permutation_type == "rotational")
+        self.permutation_type_toggle.set_state(permutation_type == "rotated")
 
     def _update_rotation_type(self, rotation_type: str):
         """Update the rotation type based on the toggle."""
