@@ -1,21 +1,12 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QLabel,
-    QPushButton,
-    QHBoxLayout,
-    QSpacerItem,
-    QSizePolicy,
-)
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
 from PyQt6.QtCore import Qt
 from functools import partial
 
-from mode_toggle_widget import ModeToggleWidget
-from pytoggle import PyToggle
+from .mode_toggle_widget import ModeToggleWidget
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.learn_widget import LearnWidget
+    from .learn_widget import LearnWidget
 
 
 class LessonSelector(QWidget):
