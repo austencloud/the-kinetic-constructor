@@ -30,6 +30,7 @@ class RotationTypeToggle(QWidget):
     def _toggle_changed(self, state):
         rotation_type = "quartered" if state else "halved"
         self.circular_builder_frame._update_rotation_type(rotation_type)
+        self.circular_builder_frame.length_adjuster.limit_length(state)
 
     def set_state(self, state):
         """Set the toggle state when loading settings."""

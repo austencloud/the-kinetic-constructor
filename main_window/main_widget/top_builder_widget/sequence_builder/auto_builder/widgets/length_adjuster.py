@@ -13,7 +13,7 @@ class LengthAdjuster(QWidget):
         self.length = 8
         self.layout: QVBoxLayout = QVBoxLayout()
         self.setLayout(self.layout)
-
+        self.adjustment_amount = 2
         self.length_label = QLabel("Length:")
         self.length_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -22,7 +22,6 @@ class LengthAdjuster(QWidget):
 
         self._create_length_adjuster()
 
-        # Add the label and buttons layout to the main layout
         self.layout.addWidget(self.length_label)
         self.layout.addLayout(self.length_buttons_layout)
 
@@ -43,15 +42,27 @@ class LengthAdjuster(QWidget):
         self.length_buttons_layout.addWidget(self.length_value_label)
         self.length_buttons_layout.addWidget(self.plus_button)
 
+    def limit_length(self, state):
+        if state:
+            self.length = (self.length // 4) * 4
+            self.length_value_label.setText(str(self.length))
+            self.auto_builder_frame._update_sequence_length(self.length)
+            self.adjustment_amount = 4
+        else:
+            self.length = (self.length // 2) * 2
+            self.length_value_label.setText(str(self.length))
+            self.auto_builder_frame._update_sequence_length(self.length)
+            self.adjustment_amount = 2
+            
     def _increment_length(self):
         if self.length < 32:
-            self.length += 1
+            self.length += self.adjustment_amount
             self.length_value_label.setText(str(self.length))
             self.auto_builder_frame._update_sequence_length(self.length)
 
     def _decrement_length(self):
         if self.length > 4:
-            self.length -= 1
+            self.length -=  self.adjustment_amount
             self.length_value_label.setText(str(self.length))
             self.auto_builder_frame._update_sequence_length(self.length)
 

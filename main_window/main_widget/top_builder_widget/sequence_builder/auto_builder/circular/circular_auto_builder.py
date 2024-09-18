@@ -10,22 +10,20 @@ from data.position_maps import (
 from PyQt6.QtCore import Qt
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import (
+from ....sequence_widget.beat_frame.start_pos_beat import (
     StartPositionBeat,
 )
-from main_window.main_widget.top_builder_widget.sequence_widget.sequence_auto_completer.mirrored_permutation_executor import (
+from ....sequence_widget.sequence_auto_completer.mirrored_permutation_executor import (
     MirroredPermutationExecutor,
 )
-from main_window.main_widget.top_builder_widget.sequence_widget.sequence_auto_completer.rotational_permutation_executor import (
+from ....sequence_widget.sequence_auto_completer.rotational_permutation_executor import (
     RotationalPermutationExecuter,
 )
 from ..turn_intensity_manager import TurnIntensityManager
 from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.circular.circular_auto_builder_frame import (
-        CircularAutoBuilderFrame,
-    )
+    from .circular_auto_builder_frame import CircularAutoBuilderFrame
 
 
 class CircularAutoBuilder:
@@ -40,7 +38,7 @@ class CircularAutoBuilder:
         self.json_manager = self.main_widget.json_manager
         self.rotational_executor = RotationalPermutationExecuter(self)
         self.mirrored_executor = MirroredPermutationExecutor(self, False)
-        self.rotation_direction = None  # Track the continuous rotation direction
+        self.rotation_direction = None
 
     def build_sequence(
         self,
@@ -243,7 +241,6 @@ class CircularAutoBuilder:
             chosen_option = self._apply_level_2_or_3_constraints(
                 chosen_option, turn_blue, turn_red
             )
-
         return chosen_option
 
     def _filter_options_by_rotation(
@@ -259,7 +256,7 @@ class CircularAutoBuilder:
                 filtered_options.append(option)
 
         # If no options match, fallback to the full list (could log a warning here)
-        return filtered_options if filtered_options else options
+        return filtered_options
 
     def _apply_level_1_constraints(self, pictograph: dict) -> dict:
         pictograph["blue_attributes"]["turns"] = 0
@@ -329,35 +326,23 @@ class CircularAutoBuilder:
         Update the prop rotation direction for dash or static motions.
         If continuous rotation is enabled, enforce the continuous rotation direction.
         """
-        if next_pictograph_dict["blue_attributes"]["motion_type"] in [DASH, STATIC]:
-            if is_continuous_rot_dir:
-                next_pictograph_dict["blue_attributes"]["prop_rot_dir"] = (
-                    blue_rot_dir
-                    if next_pictograph_dict["blue_attributes"]["turns"] > 0
-                    else NO_ROT
-                )
-            else:
-                (
-                    self._set_random_prop_rot_dir(next_pictograph_dict, BLUE)
-                    if next_pictograph_dict["blue_attributes"]["turns"] > 0
-                    else next_pictograph_dict["blue_attributes"]["prop_rot_dir"]
-                    == NO_ROT
-                )
+        def update_prop_rot_dir(color, rot_dir):
+            attributes = next_pictograph_dict[f"{color}_attributes"]
+            if attributes["motion_type"] in [DASH, STATIC]:
+                if is_continuous_rot_dir:
+                    if attributes["turns"] > 0:
+                        attributes["prop_rot_dir"] = rot_dir
+                    else:
+                        attributes["prop_rot_dir"] = NO_ROT
+                else:
+                    if attributes["turns"] > 0:
+                        self._set_random_prop_rot_dir(next_pictograph_dict, color)
+                    else:
+                        attributes["prop_rot_dir"] = NO_ROT
 
-        if next_pictograph_dict["red_attributes"]["motion_type"] in [DASH, STATIC]:
-            if is_continuous_rot_dir:
-                next_pictograph_dict["red_attributes"]["prop_rot_dir"] = (
-                    red_rot_dir
-                    if next_pictograph_dict["red_attributes"]["turns"] > 0
-                    else NO_ROT
-                )
-            else:
-                (
-                    self._set_random_prop_rot_dir(next_pictograph_dict, RED)
-                    if next_pictograph_dict["red_attributes"]["turns"] > 0
-                    else next_pictograph_dict["red_attributes"]["prop_rot_dir"]
-                    == NO_ROT
-                )
+        update_prop_rot_dir(BLUE, blue_rot_dir)
+        update_prop_rot_dir(RED, red_rot_dir)
+
     def _set_random_prop_rot_dir(self, next_pictograph_dict, color):
         """
         Assign a random prop rotation direction for the given hand (color), unless continuous rotation is enabled.
