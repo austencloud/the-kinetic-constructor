@@ -33,8 +33,8 @@ class AutoBuilder(QFrame):
         self.circular_builder_frame = CircularAutoBuilderFrame(self)
 
         # Add frames as tabs to the tab widget
-        self.tab_widget.addTab(self.freeform_builder_frame, "Freeform Builder")
-        self.tab_widget.addTab(self.circular_builder_frame, "Circular Builder")
+        self.tab_widget.addTab(self.freeform_builder_frame, "Freeform")
+        self.tab_widget.addTab(self.circular_builder_frame, "Circular")
 
         # give the tab bar a pointing hand cursor
         self.tab_widget.tabBar().setCursor(Qt.CursorShape.PointingHandCursor)

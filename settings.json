@@ -65,19 +65,19 @@
                 "sequence_type": "circular",
                 "sequence_length": 16,
                 "max_turn_intensity": 1,
-                "sequence_level": 1,
+                "sequence_level": 2,
                 "rotation_type": "quartered",
                 "permutation_type": "rotational",
                 "continuous_rotation": true
             },
             "freeform_auto_builder": {
                 "sequence_type": "freeform",
-                "sequence_length": 16,
+                "sequence_length": 12,
                 "max_turn_intensity": 1,
-                "sequence_level": 2,
-                "continuous_rotation": false
+                "sequence_level": 1,
+                "continuous_rotation": true
             },
-            "current_auto_builder": "freeform"
+            "current_auto_builder": "circular"
         },
         "manual_builder": {},
         "last_used_builder": "auto"

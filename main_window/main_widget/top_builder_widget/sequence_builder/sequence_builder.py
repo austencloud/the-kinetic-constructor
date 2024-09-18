@@ -26,8 +26,8 @@ class SequenceBuilder(QTabWidget):
         self.auto_builder = AutoBuilder(self)
 
         # Add tabs for both builders
-        self.addTab(self.manual_builder, "Manual Builder")
-        self.addTab(self.auto_builder, "Auto Builder")
+        self.addTab(self.manual_builder, "Manual")
+        self.addTab(self.auto_builder, "Auto")
 
         # Set initial tab to manual builder
         self.load_last_used_builder()

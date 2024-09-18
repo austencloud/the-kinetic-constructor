@@ -22,12 +22,11 @@ class LevelSelector(QWidget):
         self.level_buttons: dict[str, QPushButton] = {}
         self._create_level_buttons()
 
-        # Add the label and buttons layout to the main layout
         self.layout.addWidget(self.level_label)
         self.layout.addLayout(self.level_buttons_layout)
 
     def _create_level_buttons(self):
-        levels = [1, 2, 3]  # Level options
+        levels = [1, 2, 3]
         for level in levels:
             button = QPushButton(f"{level}")
             button.setCheckable(True)
@@ -41,6 +40,11 @@ class LevelSelector(QWidget):
             button.setChecked(False)
         self.level_buttons[f"level_{level}"].setChecked(True)
         self.auto_builder_frame._update_sequence_level(level)
+        if level == 1:
+            self.auto_builder_frame.turn_intensity_adjuster.hide()
+        else:
+            self.auto_builder_frame.turn_intensity_adjuster.show()
+            self.auto_builder_frame.turn_intensity_adjuster.adjust_values(level)
 
     def set_level(self, level):
         """Set the initial level when loading settings."""

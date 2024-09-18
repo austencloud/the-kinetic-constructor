@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from ..widgets.continuous_rotation_toggle import ContinuousRotationToggle
 from ..widgets.length_adjuster import LengthAdjuster
 from ..widgets.level_selector import LevelSelector
-from ..widgets.max_turn_intensity_selector import MaxTurnIntensityAdjuster
+from ..widgets.turn_intensity_adjuster import TurnIntensityAdjuster
 
 if TYPE_CHECKING:
     from ..auto_builder import AutoBuilder
@@ -27,7 +27,7 @@ class BaseAutoBuilderFrame(QFrame):
         # Modular widgets
         self.level_selector = LevelSelector(self)
         self.length_adjuster = LengthAdjuster(self)
-        self.turn_intensity_adjuster = MaxTurnIntensityAdjuster(self)
+        self.turn_intensity_adjuster = TurnIntensityAdjuster(self)
         self.continuous_rotation_toggle = ContinuousRotationToggle(self)
 
         self.widgets: dict[str, QWidget] = {
@@ -87,12 +87,8 @@ class BaseAutoBuilderFrame(QFrame):
         self.turn_intensity_adjuster.resize_max_turn_intensity_adjuster()
 
     def _resize_create_sequence_button(self):
-        font_size = (
-            self.auto_builder.sequence_builder.width() // 30
-        )
-        self.create_sequence_button.setStyleSheet(
-            f"font-size: {font_size}px;"
-        )
+        font_size = self.auto_builder.sequence_builder.width() // 30
+        self.create_sequence_button.setStyleSheet(f"font-size: {font_size}px;")
         self.create_sequence_button.updateGeometry()
         self.create_sequence_button.repaint()
 
