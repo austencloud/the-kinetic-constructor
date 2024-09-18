@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from .base_auto_builder_frame import BaseAutoBuilderFrame
 
 
-class AutoBuilderBase:
+class BaseAutoBuilder:
     def __init__(self, auto_builder_frame: "BaseAutoBuilderFrame"):
         self.auto_builder_frame = auto_builder_frame
         self.sequence_widget: "SequenceWidget" = None

@@ -141,7 +141,6 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         return self.start_pos_view
 
     def on_beat_adjusted(self) -> None:
-        # QApplication.processEvents()
         current_sequence_json = (
             self.json_manager.loader_saver.load_current_sequence_json()
         )

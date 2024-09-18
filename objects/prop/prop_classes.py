@@ -30,7 +30,7 @@ class BigStaff(Prop):
     def __init__(
         self, pictograph: "BasePictograph", attributes, motion: "Motion"
     ) -> None:
-        attributes[PROP_TYPE] = PropType.BigStaff
+        attributes[PROP_TYPE] = PropType.Bigstaff
         super().__init__(pictograph, attributes, motion)
 
 
@@ -46,7 +46,7 @@ class MiniHoop(Prop):
     def __init__(
         self, pictograph: "BasePictograph", attributes, motion: "Motion"
     ) -> None:
-        attributes[PROP_TYPE] = PropType.MiniHoop
+        attributes[PROP_TYPE] = PropType.Minihoop
         super().__init__(pictograph, attributes, motion)
 
 
@@ -78,7 +78,7 @@ class BigBuugeng(Prop):
     def __init__(
         self, pictograph: "BasePictograph", attributes, motion: "Motion"
     ) -> None:
-        attributes[PROP_TYPE] = PropType.BigBuugeng
+        attributes[PROP_TYPE] = PropType.Bigbuugeng
         super().__init__(pictograph, attributes, motion)
 
 
@@ -94,7 +94,7 @@ class EightRings(Prop):
     def __init__(
         self, pictograph: "BasePictograph", attributes, motion: "Motion"
     ) -> None:
-        attributes[PROP_TYPE] = PropType.EightRings
+        attributes[PROP_TYPE] = PropType.Eightrings
         super().__init__(pictograph, attributes, motion)
 
 
@@ -110,7 +110,7 @@ class DoubleStar(Prop):
     def __init__(
         self, pictograph: "BasePictograph", attributes, motion: "Motion"
     ) -> None:
-        attributes[PROP_TYPE] = PropType.DoubleStar
+        attributes[PROP_TYPE] = PropType.Doublestar
         super().__init__(pictograph, attributes, motion)
 
 
@@ -118,7 +118,7 @@ class BigHoop(Prop):
     def __init__(
         self, pictograph: "BasePictograph", attributes, motion: "Motion"
     ) -> None:
-        attributes[PROP_TYPE] = PropType.BigHoop
+        attributes[PROP_TYPE] = PropType.Bighoop
         super().__init__(pictograph, attributes, motion)
 
 
@@ -126,7 +126,7 @@ class BigDoubleStar(Prop):
     def __init__(
         self, pictograph: "BasePictograph", attributes, motion: "Motion"
     ) -> None:
-        attributes[PROP_TYPE] = PropType.BigDoubleStar
+        attributes[PROP_TYPE] = PropType.Bigdoublestar
         super().__init__(pictograph, attributes, motion)
 
 
