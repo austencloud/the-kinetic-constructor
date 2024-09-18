@@ -3,46 +3,41 @@ from PyQt6.QtWidgets import QApplication
 import random
 from copy import deepcopy
 from PyQt6.QtCore import Qt
-from data.constants import NO_ROT
+from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, NO_ROT
 from ..base_classes.base_auto_builder import AutoBuilderBase
 from ..turn_intensity_manager import TurnIntensityManager
 
 if TYPE_CHECKING:
     from .freeform_auto_builder_frame import FreeformAutoBuilderFrame
 
+
 class FreeFormAutoBuilder(AutoBuilderBase):
     def __init__(self, auto_builder_frame: "FreeformAutoBuilderFrame"):
         super().__init__(auto_builder_frame)
-        # Any additional initialization for FreeFormAutoBuilder can go here
 
     def build_sequence(
         self,
-        beat_count: int,
-        max_turn_intensity: int,
+        length: int,
+        turn_intensity: int,
         level: int,
         is_continuous_rot_dir: bool,
     ):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        if not self.sequence_widget:
-            self.sequence_widget = self.top_builder_widget.sequence_widget
-        self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
-        self.modify_layout_for_chosen_number_of_beats(beat_count)
+        self._initialize_sequence(length)
 
-        if len(self.sequence) == 1:
-            self.add_start_pos_pictograph()
-            self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
-
-        turn_manager = TurnIntensityManager(beat_count, level, max_turn_intensity)
-        turns_blue, turns_red = turn_manager.allocate_turns_for_blue_and_red()
         if is_continuous_rot_dir:
-            blue_rot_dir = random.choice(["cw", "ccw"])
-            red_rot_dir = random.choice(["cw", "ccw"])
+            blue_rot_dir = random.choice([CLOCKWISE, COUNTER_CLOCKWISE])
+            red_rot_dir = random.choice([CLOCKWISE, COUNTER_CLOCKWISE])
         else:
             blue_rot_dir = None
             red_rot_dir = None
 
         length_of_sequence_upon_start = len(self.sequence) - 2
-        for i in range(beat_count - length_of_sequence_upon_start):
+
+        turn_manager = TurnIntensityManager(length, level, turn_intensity)
+        turns_blue, turns_red = turn_manager.allocate_turns_for_blue_and_red()
+
+        for i in range(length - length_of_sequence_upon_start):
             next_pictograph = self._generate_next_pictograph(
                 level,
                 turns_blue[i],
@@ -59,7 +54,9 @@ class FreeFormAutoBuilder(AutoBuilderBase):
             QApplication.processEvents()
 
         self.sequence_widget.top_builder_widget.sequence_builder.manual_builder.transition_to_sequence_building()
-        self.top_builder_widget.sequence_builder.manual_builder.option_picker.update_option_picker(self.sequence)
+        self.top_builder_widget.sequence_builder.manual_builder.option_picker.update_option_picker(
+            self.sequence
+        )
         QApplication.restoreOverrideCursor()
 
     def _generate_next_pictograph(
@@ -77,19 +74,18 @@ class FreeFormAutoBuilder(AutoBuilderBase):
         options = [deepcopy(option) for option in options]
 
         if is_continuous_rot_dir:
-            options = self._filter_options_by_rotation(options, blue_rot_dir, red_rot_dir)
+            options = self._filter_options_by_rotation(
+                options, blue_rot_dir, red_rot_dir
+            )
 
         last_beat = self.sequence[-1]
         chosen_option = random.choice(options)
 
-        self._update_start_oris(chosen_option, last_beat)
-        self._update_end_oris(chosen_option)
-
-        if level == 1:
-            chosen_option = self._apply_level_1_constraints(chosen_option)
-        elif level == 2 or level == 3:
+        if level == 2 or level == 3:
             chosen_option = self._set_turns(chosen_option, turn_blue, turn_red)
 
+        self._update_start_oris(chosen_option, last_beat)
+        self._update_end_oris(chosen_option)
         self._update_dash_static_prop_rot_dirs(
             chosen_option,
             is_continuous_rot_dir,
@@ -101,10 +97,7 @@ class FreeFormAutoBuilder(AutoBuilderBase):
         )
         return chosen_option
 
-
-
     def _apply_level_1_constraints(self, pictograph: dict) -> dict:
         pictograph["blue_attributes"]["turns"] = 0
         pictograph["red_attributes"]["turns"] = 0
         return pictograph
-

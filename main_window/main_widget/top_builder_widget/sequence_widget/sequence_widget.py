@@ -153,7 +153,7 @@ class SequenceWidget(QWidget):
         self.beat_frame.add_beat_to_sequence(
             new_beat, override_grow_sequence, update_word
         )
-        self.json_manager.updater.update_sequence_properties()  # Recalculate properties after each update
+        self.json_manager.updater.update_sequence_properties()
 
     def resize_sequence_widget(self) -> None:
         self.current_word_label.resize_current_word_label()

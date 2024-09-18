@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QApplication
 import random
 from copy import deepcopy
 from PyQt6.QtCore import Qt
-from data.constants import NO_ROT
+from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, NO_ROT
 from data.position_maps import (
     half_position_map,
     quarter_position_map_cw,
@@ -29,35 +29,26 @@ class CircularAutoBuilder(AutoBuilderBase):
         super().__init__(auto_builder_frame)
         self.rotated_executor = RotatedPermutationExecuter(self)
         self.mirrored_executor = MirroredPermutationExecutor(self, False)
-        self.rotation_direction = None
 
     def build_sequence(
         self,
         length: int,
-        max_turn_intensity: int,
+        turn_intensity: int,
         level: int,
         rotation_type: str,
         permutation_type: str,
         is_continuous_rot_dir: bool,
     ):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        if not self.sequence_widget:
-            self.sequence_widget = self.top_builder_widget.sequence_widget
-
-        self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        self._initialize_sequence(length)
 
         if is_continuous_rot_dir:
-            blue_rot_dir = random.choice(["cw", "ccw"])
-            red_rot_dir = random.choice(["cw", "ccw"])
+            blue_rot_dir = random.choice([CLOCKWISE, COUNTER_CLOCKWISE])
+            red_rot_dir = random.choice([CLOCKWISE, COUNTER_CLOCKWISE])
         else:
             blue_rot_dir = None
             red_rot_dir = None
 
-        self.modify_layout_for_chosen_number_of_beats(length)
-
-        if len(self.sequence) == 1:
-            self.add_start_pos_pictograph()
-            self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
         length_of_sequence_upon_start = len(self.sequence) - 2
 
         if permutation_type == "rotated":
@@ -70,13 +61,11 @@ class CircularAutoBuilder(AutoBuilderBase):
             word_length = length // 2
             available_range = word_length - length_of_sequence_upon_start
 
-        turn_manager = TurnIntensityManager(word_length, level, max_turn_intensity)
+        turn_manager = TurnIntensityManager(word_length, level, turn_intensity)
         turns_blue, turns_red = turn_manager.allocate_turns_for_blue_and_red()
 
         for i in range(available_range):
             is_last_in_word = i == word_length - length_of_sequence_upon_start - 1
-
-            last_pictograph = self.sequence[-1]
             next_pictograph = self._generate_next_pictograph(
                 level,
                 turns_blue[i],
@@ -88,17 +77,7 @@ class CircularAutoBuilder(AutoBuilderBase):
                 blue_rot_dir,
                 red_rot_dir,
             )
-            self._update_start_oris(next_pictograph, last_pictograph)
-            self._update_end_oris(next_pictograph)
-            self._update_dash_static_prop_rot_dirs(
-                next_pictograph,
-                is_continuous_rot_dir,
-                blue_rot_dir,
-                red_rot_dir,
-            )
-            next_pictograph = self._update_beat_number_depending_on_sequence_length(
-                next_pictograph, self.sequence
-            )
+
             self.sequence.append(next_pictograph)
             self.sequence_widget.create_new_beat_and_add_to_sequence(
                 next_pictograph, override_grow_sequence=True
@@ -132,6 +111,8 @@ class CircularAutoBuilder(AutoBuilderBase):
                 options, blue_rot_dir, red_rot_dir
             )
 
+        last_beat = self.sequence[-1]
+
         if permutation_type == "rotated":
             if is_last_in_word:
                 expected_end_pos = self._determine_rotated_end_pos(rotation_type)
@@ -152,6 +133,18 @@ class CircularAutoBuilder(AutoBuilderBase):
 
         if level == 2 or level == 3:
             chosen_option = self._set_turns(chosen_option, turn_blue, turn_red)
+
+        self._update_start_oris(chosen_option, last_beat)
+        self._update_end_oris(chosen_option)
+        self._update_dash_static_prop_rot_dirs(
+            chosen_option,
+            is_continuous_rot_dir,
+            blue_rot_dir,
+            red_rot_dir,
+        )
+        chosen_option = self._update_beat_number_depending_on_sequence_length(
+            chosen_option, self.sequence
+        )
         return chosen_option
 
     def _determine_rotated_end_pos(self, rotation_type: str) -> str:
@@ -167,7 +160,7 @@ class CircularAutoBuilder(AutoBuilderBase):
             return half_position_map[start_pos]
         else:
             print("Invalid rotation type - expected 'quartered' or 'halved'")
-            return None  # Default case, should not happen
+            return None
 
     def _select_pictograph_with_end_pos(
         self, options: list[dict], expected_end_pos: str

@@ -1,7 +1,7 @@
 from copy import deepcopy
 import random
 from typing import TYPE_CHECKING
-from data.constants import BLUE, RED, DASH, STATIC, NO_ROT, CLOCKWISE, COUNTER_CLOCKWISE
+from data.constants import BLUE, IN, RED, DASH, STATIC, NO_ROT, CLOCKWISE, COUNTER_CLOCKWISE
 from ....sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 
 if TYPE_CHECKING:
@@ -22,7 +22,18 @@ class AutoBuilderBase:
         self.json_manager = self.main_widget.json_manager
         self.ori_calculator = self.main_widget.json_manager.ori_calculator
 
-    def add_start_pos_pictograph(self):
+    def _initialize_sequence(self, length):
+        if not self.sequence_widget:
+            self.sequence_widget = self.top_builder_widget.sequence_widget
+        self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        
+        if len(self.sequence) == 1:
+            self.add_start_pos_pictograph()
+            self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        self.modify_layout_for_chosen_number_of_beats(length)
+
+    def add_start_pos_pictograph(self) -> None:
+        """Add a starting position pictograph to the sequence."""
         start_pos_keys = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
         position_key = random.choice(start_pos_keys)
         self._add_start_position_to_sequence(position_key)
@@ -36,6 +47,7 @@ class AutoBuilderBase:
                     pictograph_dict["start_pos"] == start_pos
                     and pictograph_dict["end_pos"] == end_pos
                 ):
+                    self.set_start_pos_to_in_orientation(pictograph_dict)
                     start_position_beat = StartPositionBeat(
                         self.top_builder_widget.sequence_widget.beat_frame
                     )
@@ -50,6 +62,13 @@ class AutoBuilderBase:
                         start_position_beat
                     )
                     return
+
+    def set_start_pos_to_in_orientation(self, pictograph_dict: dict) -> None:
+        """Set the start position pictograph to the in orientation."""
+        pictograph_dict["blue_attributes"]["start_ori"] = IN
+        pictograph_dict["red_attributes"]["start_ori"] = IN
+        pictograph_dict["blue_attributes"]["end_ori"] = IN
+        pictograph_dict["red_attributes"]["end_ori"] = IN
 
     def modify_layout_for_chosen_number_of_beats(self, beat_count):
         self.sequence_widget.beat_frame.layout_manager.configure_beat_frame(
@@ -92,7 +111,8 @@ class AutoBuilderBase:
         update_prop_rot_dir(BLUE, blue_rot_dir)
         update_prop_rot_dir(RED, red_rot_dir)
 
-    def _set_random_prop_rot_dir(self, next_pictograph_dict, color):
+    def _set_random_prop_rot_dir(self, next_pictograph_dict: dict, color: str) -> None:
+        """Set a random prop rotation direction for the given color."""
         next_pictograph_dict[f"{color}_attributes"]["prop_rot_dir"] = random.choice(
             [CLOCKWISE, COUNTER_CLOCKWISE]
         )
