@@ -3,7 +3,7 @@
         "prop_type": "Staff",
         "background_type": "Aurora",
         "grow_sequence": true,
-        "current_tab": "sequence_builder"
+        "current_tab": "learn"
     },
     "image_export": {
         "include_start_position": true,
@@ -64,7 +64,7 @@
             "circular_auto_builder": {
                 "sequence_type": "circular",
                 "sequence_length": 16,
-                "max_turn_intensity": 1,
+                "max_turn_intensity": 2,
                 "sequence_level": 2,
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",

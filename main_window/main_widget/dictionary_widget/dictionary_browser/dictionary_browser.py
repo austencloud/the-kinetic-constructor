@@ -93,7 +93,6 @@ class DictionaryBrowser(QWidget):
             current_filter_section if current_filter_section else "filter_choice"
         )
         self.dictionary_widget.dictionary_settings.set_current_filter(None)
-        # show the widget for the current section
         if current_filter_section:
             self.initial_selection_widget.show_section(current_filter_section)
 
@@ -128,7 +127,6 @@ class DictionaryBrowser(QWidget):
         self.layout.addWidget(self.initial_selection_widget)
 
     def _add_components_to_layout(self):
-
         self.layout.addLayout(self.go_back_button_layout)
         self.layout.addWidget(self.currently_displaying_label)
         self.layout.addWidget(self.number_of_sequences_label)
@@ -177,7 +175,6 @@ class DictionaryBrowser(QWidget):
 
     def show_browser_with_filters_from_settings(self):
         """Show browser with filters from settings."""
-        # self.initial_selection_widget._hide_all_sections()
         current_filter = (
             self.main_widget.main_window.settings_manager.dictionary_settings.get_current_filter()
         )

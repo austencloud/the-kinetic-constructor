@@ -1,7 +1,16 @@
 from copy import deepcopy
 import random
 from typing import TYPE_CHECKING
-from data.constants import BLUE, IN, RED, DASH, STATIC, NO_ROT, CLOCKWISE, COUNTER_CLOCKWISE
+from data.constants import (
+    BLUE,
+    IN,
+    RED,
+    DASH,
+    STATIC,
+    NO_ROT,
+    CLOCKWISE,
+    COUNTER_CLOCKWISE,
+)
 from ....sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 
 if TYPE_CHECKING:
@@ -26,7 +35,7 @@ class AutoBuilderBase:
         if not self.sequence_widget:
             self.sequence_widget = self.top_builder_widget.sequence_widget
         self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
-        
+
         if len(self.sequence) == 1:
             self.add_start_pos_pictograph()
             self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
@@ -92,10 +101,14 @@ class AutoBuilderBase:
         )
 
     def _update_dash_static_prop_rot_dirs(
-        self, next_pictograph_dict, is_continuous_rot_dir, blue_rot_dir, red_rot_dir
+        self,
+        next_beat: dict,
+        is_continuous_rot_dir: bool,
+        blue_rot_dir: str,
+        red_rot_dir: str,
     ):
         def update_prop_rot_dir(color, rot_dir):
-            attributes = next_pictograph_dict[f"{color}_attributes"]
+            attributes = next_beat[f"{color}_attributes"]
             if attributes["motion_type"] in [DASH, STATIC]:
                 if is_continuous_rot_dir:
                     if attributes["turns"] > 0:
@@ -104,7 +117,7 @@ class AutoBuilderBase:
                         attributes["prop_rot_dir"] = NO_ROT
                 else:
                     if attributes["turns"] > 0:
-                        self._set_random_prop_rot_dir(next_pictograph_dict, color)
+                        self._set_random_prop_rot_dir(next_beat, color)
                     else:
                         attributes["prop_rot_dir"] = NO_ROT
 
@@ -123,18 +136,19 @@ class AutoBuilderBase:
         next_pictograph_dict["beat"] = len(sequence) - 1
         return next_pictograph_dict
 
-    def _filter_options_by_rotation(self, options: list[dict], blue_rot_dir, red_rot_dir) -> list[dict]:
+    def _filter_options_by_rotation(
+        self, options: list[dict], blue_rot_dir, red_rot_dir
+    ) -> list[dict]:
         """Filter options to match the rotation direction for both hands."""
         filtered_options = [
-            option for option in options
+            option
+            for option in options
             if option["blue_attributes"]["prop_rot_dir"] in [blue_rot_dir, NO_ROT]
             and option["red_attributes"]["prop_rot_dir"] in [red_rot_dir, NO_ROT]
         ]
         return filtered_options if filtered_options else options
-    
-    def _set_turns(
-        self, pictograph: dict, turn_blue: float, turn_red: float
-    ) -> dict:
+
+    def _set_turns(self, pictograph: dict, turn_blue: float, turn_red: float) -> dict:
         pictograph["blue_attributes"]["turns"] = turn_blue
         pictograph["red_attributes"]["turns"] = turn_red
         return pictograph

@@ -105,47 +105,43 @@ class CircularAutoBuilder(AutoBuilderBase):
             self.sequence
         )
         options = [deepcopy(option) for option in options]
-
         if is_continuous_rot_dir:
             options = self._filter_options_by_rotation(
                 options, blue_rot_dir, red_rot_dir
             )
-
-        last_beat = self.sequence[-1]
-
         if permutation_type == "rotated":
             if is_last_in_word:
                 expected_end_pos = self._determine_rotated_end_pos(rotation_type)
-                chosen_option = self._select_pictograph_with_end_pos(
+                next_beat = self._select_pictograph_with_end_pos(
                     options, expected_end_pos
                 )
             else:
-                chosen_option = random.choice(options)
+                next_beat = random.choice(options)
 
         elif permutation_type == "mirrored":
             if is_last_in_word:
                 expected_end_pos = self.sequence[1]["end_pos"]
-                chosen_option = self._select_pictograph_with_end_pos(
+                next_beat = self._select_pictograph_with_end_pos(
                     options, expected_end_pos
                 )
             else:
-                chosen_option = random.choice(options)
+                next_beat = random.choice(options)
 
         if level == 2 or level == 3:
-            chosen_option = self._set_turns(chosen_option, turn_blue, turn_red)
+            next_beat = self._set_turns(next_beat, turn_blue, turn_red)
 
-        self._update_start_oris(chosen_option, last_beat)
-        self._update_end_oris(chosen_option)
+        self._update_start_oris(next_beat, self.sequence[-1])
+        self._update_end_oris(next_beat)
         self._update_dash_static_prop_rot_dirs(
-            chosen_option,
+            next_beat,
             is_continuous_rot_dir,
             blue_rot_dir,
             red_rot_dir,
         )
-        chosen_option = self._update_beat_number_depending_on_sequence_length(
-            chosen_option, self.sequence
+        next_beat = self._update_beat_number_depending_on_sequence_length(
+            next_beat, self.sequence
         )
-        return chosen_option
+        return next_beat
 
     def _determine_rotated_end_pos(self, rotation_type: str) -> str:
         """Determine the expected end position based on rotation type and current sequence."""

@@ -79,23 +79,23 @@ class FreeFormAutoBuilder(AutoBuilderBase):
             )
 
         last_beat = self.sequence[-1]
-        chosen_option = random.choice(options)
+        next_beat = random.choice(options)
 
         if level == 2 or level == 3:
-            chosen_option = self._set_turns(chosen_option, turn_blue, turn_red)
+            next_beat = self._set_turns(next_beat, turn_blue, turn_red)
 
-        self._update_start_oris(chosen_option, last_beat)
-        self._update_end_oris(chosen_option)
+        self._update_start_oris(next_beat, last_beat)
+        self._update_end_oris(next_beat)
         self._update_dash_static_prop_rot_dirs(
-            chosen_option,
+            next_beat,
             is_continuous_rot_dir,
             blue_rot_dir,
             red_rot_dir,
         )
-        chosen_option = self._update_beat_number_depending_on_sequence_length(
-            chosen_option, self.sequence
+        next_beat = self._update_beat_number_depending_on_sequence_length(
+            next_beat, self.sequence
         )
-        return chosen_option
+        return next_beat
 
     def _apply_level_1_constraints(self, pictograph: dict) -> dict:
         pictograph["blue_attributes"]["turns"] = 0

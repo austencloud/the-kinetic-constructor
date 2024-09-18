@@ -14,7 +14,7 @@ class TurnIntensityAdjuster(QWidget):
         self.setLayout(self.layout)
         self.values = [1, 2, 3]
         self.intensity = 1
-        self.intensity_label = QLabel("Max Turn Intensity:")
+        self.intensity_label = QLabel("Turn Intensity:")
         self.intensity_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.intensity_buttons_layout = QHBoxLayout()
