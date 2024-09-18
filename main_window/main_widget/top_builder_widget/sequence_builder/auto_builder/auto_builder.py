@@ -14,10 +14,10 @@ if TYPE_CHECKING:
 
 
 class AutoBuilder(QFrame):
-    def __init__(self, sequence_builder_tab_widget: "SequenceBuilder") -> None:
-        super().__init__(sequence_builder_tab_widget)
-        self.sequence_builder = sequence_builder_tab_widget
-        self.main_widget: "MainWidget" = sequence_builder_tab_widget.main_widget
+    def __init__(self, sequence_builder: "SequenceBuilder") -> None:
+        super().__init__(sequence_builder)
+        self.sequence_builder = sequence_builder
+        self.main_widget: "MainWidget" = sequence_builder.main_widget
 
         # Frame layout setup
         self.layout: QVBoxLayout = QVBoxLayout(self)
