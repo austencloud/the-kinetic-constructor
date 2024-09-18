@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Dict
-from .mirrored_permutation_executor import MirroredPermutationExecutor
+from ...sequence_builder.auto_builder.circular.permutation_executors.mirrored_permutation_executor import MirroredPermutationExecutor
 from .permutation_dialog import PermutationDialog
-from .rotational_permutation_executor import RotationalPermutationExecuter
+from ...sequence_builder.auto_builder.circular.permutation_executors.rotated_permutation_executor import RotationalPermutationExecuter
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
 from PyQt6.QtWidgets import QMessageBox

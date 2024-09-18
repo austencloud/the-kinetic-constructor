@@ -3,10 +3,8 @@ from .permutation_executor_base import PermutationExecutor
 from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.circular.circular_auto_builder import (
-        CircularAutoBuilder,
-    )
-# Define mirroring maps
+    from ..circular_auto_builder import CircularAutoBuilder
+    
 vertical_mirror_map = {"s": "s", "e": "w", "w": "e", "n": "n"}
 horizontal_mirror_map = {"s": "n", "n": "s", "e": "e", "w": "w"}
 
@@ -56,8 +54,6 @@ class MirroredPermutationExecutor(PermutationExecutor):
             QApplication.processEvents()
 
             last_entry = next_pictograph
-
-
 
     def determine_how_many_entries_to_add(self, sequence_length: int) -> int:
         return sequence_length

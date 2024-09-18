@@ -13,10 +13,10 @@ from data.halved_permutations import halved_permutations
 from ....sequence_widget.beat_frame.start_pos_beat import (
     StartPositionBeat,
 )
-from ....sequence_widget.sequence_auto_completer.mirrored_permutation_executor import (
+from .permutation_executors.mirrored_permutation_executor import (
     MirroredPermutationExecutor,
 )
-from ....sequence_widget.sequence_auto_completer.rotational_permutation_executor import (
+from .permutation_executors.rotated_permutation_executor import (
     RotationalPermutationExecuter,
 )
 from ..turn_intensity_manager import TurnIntensityManager
@@ -85,10 +85,8 @@ class CircularAutoBuilder:
 
         turn_manager = TurnIntensityManager(word_length, level, max_turn_intensity)
 
-        # Allocate turns for both blue and red motions
         turns_blue, turns_red = turn_manager.allocate_turns_for_blue_and_red()
 
-        # Generate the initial segment of the sequence
         for i in range(available_range):
             is_last_in_word = i == word_length - length_of_sequence_upon_start - 1
 
@@ -128,16 +126,10 @@ class CircularAutoBuilder:
 
     def add_start_pos_pictograph(self):
         start_pos_keys = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
-        # start_pos_keys = [
-        #     f"{prefix}{i}_{prefix}{i}"
-        #     for prefix in ["alpha", "beta", "gamma"]
-        #     for i in range(1, 5 if prefix != "gamma" else 9)
-        # ]
         position_key = random.choice(start_pos_keys)
         self._add_start_position_to_sequence(position_key)
 
     def _add_start_position_to_sequence(self, position_key: str) -> None:
-        # get it from the main widget letters, amke a copy, and put it into the sequence
         start_pos, end_pos = position_key.split("_")
         letters = deepcopy(self.sequence_widget.main_widget.pictograph_dicts)
         for (
@@ -177,7 +169,6 @@ class CircularAutoBuilder:
     def can_perform_rotational_permutation(
         self, sequence: list[dict], rotation_type: str
     ) -> bool:
-        # Check if the sequence satisfies conditions for rotational or mirrored permutations
         start_pos = sequence[1]["end_pos"]
         end_pos = sequence[-1]["end_pos"]
         if rotation_type == "quartered":
@@ -202,15 +193,12 @@ class CircularAutoBuilder:
         blue_rot_dir,
         red_rot_dir,
     ) -> dict:
-        # Get the next set of options (these come from the letters dictionary)
         options = self.top_builder_widget.sequence_builder.manual_builder.option_picker.option_getter.get_next_options(
             self.sequence
         )
 
-        # Ensure that we are working on a deep copy of the options to avoid modifying the original data
         options = [deepcopy(option) for option in options]
 
-        # Filter the options to match the rotation direction if continuous rotation is enabled
         if is_continuous_rot_dir:
             options = self._filter_options_by_rotation(
                 options, blue_rot_dir, red_rot_dir
@@ -234,13 +222,8 @@ class CircularAutoBuilder:
             else:
                 chosen_option = random.choice(options)
 
-        # Apply the necessary level-specific constraints
-        if level == 1:
-            chosen_option = self._apply_level_1_constraints(chosen_option)
-        elif level == 2 or level == 3:
-            chosen_option = self._apply_level_2_or_3_constraints(
-                chosen_option, turn_blue, turn_red
-            )
+        if level == 2 or level == 3:
+            chosen_option = self._set_turns(chosen_option, turn_blue, turn_red)
         return chosen_option
 
     def _filter_options_by_rotation(
@@ -258,14 +241,7 @@ class CircularAutoBuilder:
         # If no options match, fallback to the full list (could log a warning here)
         return filtered_options
 
-    def _apply_level_1_constraints(self, pictograph: dict) -> dict:
-        pictograph["blue_attributes"]["turns"] = 0
-        pictograph["red_attributes"]["turns"] = 0
-        return pictograph
-
-    def _apply_level_2_or_3_constraints(
-        self, pictograph: dict, turn_blue: float, turn_red: float
-    ) -> dict:
+    def _set_turns(self, pictograph: dict, turn_blue: float, turn_red: float) -> dict:
         pictograph["blue_attributes"]["turns"] = turn_blue
         pictograph["red_attributes"]["turns"] = turn_red
         return pictograph
@@ -326,6 +302,7 @@ class CircularAutoBuilder:
         Update the prop rotation direction for dash or static motions.
         If continuous rotation is enabled, enforce the continuous rotation direction.
         """
+
         def update_prop_rot_dir(color, rot_dir):
             attributes = next_pictograph_dict[f"{color}_attributes"]
             if attributes["motion_type"] in [DASH, STATIC]:

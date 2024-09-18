@@ -4,14 +4,10 @@ from data.halved_permutations import halved_permutations
 from data.constants import EAST, NORTH, SOUTH, WEST
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
-
 from .permutation_executor_base import PermutationExecutor
 
 if TYPE_CHECKING:
-
-    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.circular.circular_auto_builder import (
-        CircularAutoBuilder,
-    )
+    from ..circular_auto_builder import CircularAutoBuilder
 
 
 class RotationalPermutationExecuter(PermutationExecutor):
