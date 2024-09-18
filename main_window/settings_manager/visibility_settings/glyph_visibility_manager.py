@@ -16,11 +16,6 @@ class GlyphVisibilityManager:
         self.main_window = visibility_settings_handler.settings_manager.main_window
         self.visibility_states = visibility_settings_handler.get_glyph_visibility()
 
-    def toggle_visibility(self, glyph_type):
-        if glyph_type in self.visibility_states:
-            self.visibility_states[glyph_type] = not self.visibility_states[glyph_type]
-            self.apply_visibility(glyph_type)
-
     def apply_visibility(self, glyph_type, pictograph: "BasePictograph"):
         if glyph_type == "VTG":
             pictograph.vtg_glyph.setVisible(self.visibility_states[glyph_type])
@@ -60,6 +55,16 @@ class GlyphVisibilityManager:
         self.visibility_settings_handler.set_glyph_visibility(glyph_type, visible)
         self.apply_glyph_visibility()
 
+    def set_visibilty_to_false(self, pictograph: "BasePictograph", glyph_type: str):
+        if glyph_type == "TKA":
+            pictograph.tka_glyph.setVisible(False)
+        elif glyph_type == "VTG":
+            pictograph.vtg_glyph.setVisible(False)
+        elif glyph_type == "Elemental":
+            pictograph.elemental_glyph.setVisible(False)
+        elif glyph_type == "EndPosition":
+            pictograph.start_to_end_pos_glyph.setVisible(False)
+
     def apply_glyph_visibility(self) -> None:
         for pictograph_list in self.main_window.main_widget.pictograph_cache.values():
             for pictograph in pictograph_list.values():
@@ -88,3 +93,8 @@ class GlyphVisibilityManager:
         if start_pos:
             if start_pos.view.is_filled:
                 self.apply_current_visibility_settings(start_pos)
+
+        # self.set_visibilty_to_false(
+        #     self.main_window.main_widget.learn_widget.lesson_1_widget.question_widget.pictograph,
+        #     "TKA",
+        # )

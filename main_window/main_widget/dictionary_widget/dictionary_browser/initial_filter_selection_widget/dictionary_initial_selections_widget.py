@@ -73,9 +73,6 @@ class DictionaryInitialSelectionsWidget(QWidget):
             if section_name != "filter_choice" and isinstance(
                 section, FilterSectionBase
             ):
-                # if not getattr(section, 'initialized', False):
-                #     section.add_buttons()
-                # Call resize method if it exists
                 resize_method = getattr(section, f"resize_{section_name}_section", None)
                 if callable(resize_method):
                     resize_method()

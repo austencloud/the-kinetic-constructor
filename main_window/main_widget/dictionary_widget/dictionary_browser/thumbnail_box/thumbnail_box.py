@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
-from PyQt6.QtWidgets import QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QApplication
 from main_window.main_widget.metadata_extractor import MetaDataExtractor
 from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.thumbnail_box_nav_btns import (
     ThumbnailBoxNavButtonsWidget,
@@ -64,6 +64,7 @@ class ThumbnailBox(QWidget):
     def toggle_favorite_status(self):
         self.favorite_status = not self.favorite_status
         self.word_label.update_favorite_icon(self.favorite_status)
+        QApplication.processEvents()
         self.save_favorite_status()
         # Update the icon in the word label
         # Optionally, if filtering by favorites, hide/show the thumbnail

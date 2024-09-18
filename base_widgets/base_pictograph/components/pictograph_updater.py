@@ -13,7 +13,9 @@ class PictographUpdater:
     def __init__(self, pictograph: "BasePictograph") -> None:
         self.pictograph = pictograph
 
-    def update_pictograph(self, pictograph_dict: dict = None) -> None:
+    def update_pictograph(
+        self, pictograph_dict: dict = None
+    ) -> None:
         """
         Updates the pictograph with the given pictograph_dict.
         If the dict is complete, it will be assigned to the pictograph's pictograph_dict attribute.
@@ -38,8 +40,6 @@ class PictographUpdater:
 
         self.pictograph.tka_glyph.update_tka_glyph()
         self._position_objects()
-        # if self.pictograph.view:
-        #     self.pictograph.view.repaint()
 
     def get_end_pos(self) -> str:
         return self.pictograph.end_pos[:-1]

@@ -69,7 +69,7 @@ class SequenceWidget(QWidget):
         self.layout.addLayout(self.current_word_layout, 1)
         self.layout.addLayout(self.beat_frame_layout, 12)
         self.layout.addWidget(self.indicator_label, 1)
-        self.layout.addWidget(self.graph_editor, 4)
+        self.layout.addWidget(self.graph_editor, 5)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.setLayout(self.layout)
@@ -160,3 +160,7 @@ class SequenceWidget(QWidget):
         self.button_frame.resize_button_frame()
         self.graph_editor.resize_graph_editor()
         self.beat_frame.resize_beat_frame()
+
+    def resizeEvent(self, event):
+        self.resize_sequence_widget()
+        super().resizeEvent(event)

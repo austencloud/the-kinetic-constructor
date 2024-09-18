@@ -38,7 +38,7 @@ class WordLabel(QWidget):
         self.star_icon_filled = QIcon(os.path.join(icons_path, "star_filled.png"))
 
         # Connect the button click event to toggle the favorite status
-        self.favorite_button.clicked.connect(self.toggle_favorite_status)
+        self.favorite_button.clicked.connect(self.thumbnail_box.toggle_favorite_status)
 
         # Create a layout for both the word and the star on the same line
         layout = QHBoxLayout(self)
@@ -78,9 +78,3 @@ class WordLabel(QWidget):
             self.favorite_button.setIcon(self.star_icon_filled)
         else:
             self.favorite_button.setIcon(self.star_icon_empty)
-
-    def toggle_favorite_status(self):
-        # Toggle the favorite status when the star button is clicked
-        is_favorite = self.thumbnail_box.is_favorite()
-        self.update_favorite_icon(not is_favorite)
-        self.thumbnail_box.toggle_favorite_status()

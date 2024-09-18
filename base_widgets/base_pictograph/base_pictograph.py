@@ -86,6 +86,7 @@ class BasePictograph(QGraphicsScene):
     prop_type: PropType = None
     is_blank: bool = False
     disable_gold_overlay: bool = False
+    quiz_mode: bool = False
 
     def __init__(
         self,
@@ -100,10 +101,10 @@ class BasePictograph(QGraphicsScene):
         self.image_renderer = PictographImageRenderer(self)
         self.get = PictographGetter(self)
         self.check = PictographChecker(self)
+        self.arrow_placement_manager = ArrowPlacementManager(self)
+        self.wasd_manager = WASD_AdjustmentManager(self)
         self.view = PictographView(self)
         self.container = PictographContainer(self)
         self.initializer.init_all_components()
-        self.arrow_placement_manager = ArrowPlacementManager(self)
         self.prop_placement_manager = PropPlacementManager(self)
-        self.wasd_manager = WASD_AdjustmentManager(self)
         self.attr_manager = PictographAttrManager(self)

@@ -52,10 +52,6 @@ class Lesson2QuestionGenerator(BaseQuestionGenerator):
         """Generate and shuffle the correct and wrong pictographs."""
         wrong_pictographs = self.generate_wrong_answers(correct_pictograph["letter"])
         pictographs = [correct_pictograph] + wrong_pictographs
-        pictographs = [correct_pictograph] + wrong_pictographs
-        assert (
-            correct_pictograph in pictographs
-        ), "Correct answer is missing from options"
         random.shuffle(pictographs)
 
         return pictographs
@@ -66,11 +62,14 @@ class Lesson2QuestionGenerator(BaseQuestionGenerator):
         wrong_pictographs = []
 
         while len(wrong_pictographs) < 3:
+            # Ensure the letter hasn't been used before and does not match the correct letter
             letter, pictograph_dict = self._get_random_pictograph(available_letters)
 
             if not self._is_duplicate_pictograph(letter, pictograph_dict):
                 wrong_pictographs.append(pictograph_dict)
-                available_letters.remove(letter)
+                available_letters.remove(
+                    letter
+                )  # Remove the used letter to prevent duplicates
 
         return wrong_pictographs
 

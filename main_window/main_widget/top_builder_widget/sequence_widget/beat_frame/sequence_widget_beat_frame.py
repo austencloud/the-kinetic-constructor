@@ -160,7 +160,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
                 if beat:
                     if beat.pictograph_dict != entry:
                         beat.updater.update_pictograph(entry)
-                        # QApplication.processEvents()
+                        QApplication.processEvents()
 
     def update_start_pos_from_current_sequence_json(self, entry: dict) -> None:
         entry["red_attributes"]["start_ori"] = entry["red_attributes"]["end_ori"]
@@ -201,7 +201,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         for beat in self.beats:
             beat.resize_beat_view()
         self.start_pos_view.resize_beat_view()
-        QApplication.processEvents()
+        # QApplication.processEvents()
         self.selection_overlay.update_overlay_position()
 
     def populate_beat_frame_from_json(
@@ -248,3 +248,4 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.selection_overlay.update_overlay_position()
+        self.resize_beat_frame()

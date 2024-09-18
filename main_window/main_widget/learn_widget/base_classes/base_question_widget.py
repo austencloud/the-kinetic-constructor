@@ -26,6 +26,11 @@ class BaseQuestionWidget(QWidget):
             "This function should be implemented by the subclass."
         )
 
+    def _update_letter_label(self, letter: str) -> None:
+        raise NotImplementedError(
+            "This function should be implemented by the subclass."
+        )
+
     def load_pictograph(self, pictograph_dict) -> None:
         """Load and display the pictograph."""
         self.pictograph: BasePictograph = BasePictograph(
@@ -33,6 +38,7 @@ class BaseQuestionWidget(QWidget):
         )
         self.pictograph.disable_gold_overlay = True
         self.pictograph.updater.update_pictograph(pictograph_dict)
+        self.pictograph.quiz_mode = True
         self.layout.addWidget(
             self.pictograph.view, alignment=Qt.AlignmentFlag.AlignCenter
         )

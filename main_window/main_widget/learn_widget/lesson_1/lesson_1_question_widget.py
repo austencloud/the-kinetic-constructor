@@ -1,7 +1,8 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QLabel, QSpacerItem, QSizePolicy
+from PyQt6.QtWidgets import QVBoxLayout, QLabel, QSpacerItem, QSizePolicy, QApplication
 from PyQt6.QtCore import Qt
 
+from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.learn_widget.base_classes.base_question_widget import (
     BaseQuestionWidget,
 )
@@ -39,6 +40,11 @@ class Lesson1QuestionWidget(BaseQuestionWidget):
         self.layout.addItem(self.spacer)
 
         self.setLayout(self.layout)
+
+    def load_pictograph(self, pictograph_dict) -> None:
+        """Load and display the pictograph."""
+        super().load_pictograph(pictograph_dict)
+        self.pictograph.tka_glyph.setVisible(False)
 
     def clear(self) -> None:
         """Remove the current pictograph view."""

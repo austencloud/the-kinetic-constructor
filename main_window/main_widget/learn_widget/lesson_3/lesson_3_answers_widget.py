@@ -41,7 +41,7 @@ class Lesson3AnswersWidget(BaseAnswersWidget):
             pictograph.updater.update_pictograph(pictograph_dict)
             self.pictographs[pictograph_key] = pictograph
             pictograph.view.setCursor(Qt.CursorShape.PointingHandCursor)
-
+            pictograph.quiz_mode = True
             pictograph.view.mousePressEvent = (
                 lambda event, opt=pictograph_dict: check_answer_callback(
                     opt, correct_pictograph

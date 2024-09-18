@@ -9,7 +9,7 @@ from data.constants import (
     PROP_ROT_DIR,
 )
 from PyQt6.QtCore import QSize
-
+from PyQt6.QtWidgets import QApplication
 from utilities.path_helpers import get_images_and_data_path
 from .prop_rot_dir_button import PropRotDirButton
 
@@ -87,7 +87,11 @@ class PropRotDirButtonManager:
 
         motion.pictograph.updater.update_pictograph(pictograph_dict)
         motion.pictograph.view.repaint()
-
+        GE_pictograph = (
+            self.turns_box.adjustment_panel.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
+        )
+        GE_pictograph.view.repaint()
+        QApplication.processEvents()
         json_index = pictograph_index + 2
         self.json_manager.updater.update_prop_rot_dir_in_json_at_index(
             json_index, motion.color, motion.prop_rot_dir

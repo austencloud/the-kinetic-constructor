@@ -59,7 +59,3 @@ class TopBuilderWidget(QWidget):
         self.sequence_builder.resize_sequence_builder()
         self.sequence_widget.beat_frame.selection_overlay.update_overlay_position()
 
-    def resizeEvent(self, event):
-        super().resizeEvent(event)
-        self.sequence_builder.resize_sequence_builder()
-        # self.resize_top_builder_widget()

@@ -112,4 +112,4 @@ class BeatAdjustmentPanel(QFrame):
             ori_picker_box.resize_ori_picker_box()
 
         self.placeholder_widget.resize_adjustment_panel_placeholder_text()
-        QApplication.processEvents()
+        # QApplication.processEvents()
