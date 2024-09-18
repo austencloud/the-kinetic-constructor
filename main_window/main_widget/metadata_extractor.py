@@ -1,6 +1,6 @@
 import os
 from typing import TYPE_CHECKING
-from PIL import Image
+from PIL import Image, PngImagePlugin
 from PyQt6.QtWidgets import QMessageBox
 import json
 
@@ -37,6 +37,34 @@ class MetaDataExtractor:
                 f"Error loading sequence from thumbnail: {e}",
             )
         return None
+
+    def get_favorite_status(self, file_path: str) -> bool:
+        metadata = self.extract_metadata_from_file(file_path)
+        if metadata:
+            return metadata.get("is_favorite", False)
+        return False
+
+    def set_favorite_status(self, file_path: str, is_favorite: bool):
+        try:
+            with Image.open(file_path) as img:
+                metadata = img.info.get("metadata")
+                if metadata:
+                    metadata_dict = json.loads(metadata)
+                else:
+                    metadata_dict = {}
+
+                metadata_dict["is_favorite"] = is_favorite
+
+                # Save the image with updated metadata
+                pnginfo = PngImagePlugin.PngInfo()
+                pnginfo.add_text("metadata", json.dumps(metadata_dict))
+                img.save(file_path, pnginfo=pnginfo)
+        except Exception as e:
+            QMessageBox.critical(
+                self.main_widget,
+                "Error",
+                f"Error saving favorite status to thumbnail: {e}",
+            )
 
     def get_sequence_author(self, file_path):
         metadata = self.extract_metadata_from_file(file_path)

@@ -82,7 +82,6 @@ class DictionaryWidget(QWidget):
     def showEvent(self, event):
         super().showEvent(event)
 
-
     def show_initial_section(self):
         current_section = (
             self.browser.dictionary_widget.dictionary_settings.get_current_section()

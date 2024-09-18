@@ -28,9 +28,12 @@ class ThumbnailBox(QWidget):
         self.current_index = 0
         self.browser = browser
         self.setContentsMargins(0, 0, 0, 0)
+        self.favorite_status = False  # Default favorite status
         self._setup_components()
         self._setup_layout()
         self.layout.setSpacing(0)
+        self.load_favorite_status()
+        self.word_label.update_favorite_icon(self.favorite_status)
 
     def _setup_components(self):
         self.metadata_extractor = MetaDataExtractor(self.main_widget)
@@ -53,7 +56,38 @@ class ThumbnailBox(QWidget):
         self.layout.setContentsMargins(
             self.margin, self.margin, self.margin, self.margin
         )
-        self.setStyleSheet("background-color: rgba(255, 255, 255, 0.5);")
+        # self.setStyleSheet("background-color: rgba(255, 255, 255, 0.5);")
+
+    def is_favorite(self) -> bool:
+        return self.favorite_status
+
+    def toggle_favorite_status(self):
+        self.favorite_status = not self.favorite_status
+        self.word_label.update_favorite_icon(self.favorite_status)
+        self.save_favorite_status()
+        # Update the icon in the word label
+        # Optionally, if filtering by favorites, hide/show the thumbnail
+        current_filter = (
+            self.browser.dictionary_widget.dictionary_settings.get_current_filter()
+        )
+        if current_filter and current_filter.get("favorites"):
+            if not self.favorite_status:
+                self.hide()
+            else:
+                self.show()
+
+    def load_favorite_status(self):
+        # Load favorite status from metadata
+        if self.thumbnails:
+            first_thumbnail = self.thumbnails[0]
+            self.favorite_status = self.metadata_extractor.get_favorite_status(
+                first_thumbnail
+            )
+
+    def save_favorite_status(self):
+        # Save favorite status to metadata
+        for thumbnail in self.thumbnails:
+            self.metadata_extractor.set_favorite_status(thumbnail, self.favorite_status)
 
     def resize_thumbnail_box(self):
         scrollbar_width = (

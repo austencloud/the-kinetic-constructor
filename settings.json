@@ -3,7 +3,7 @@
         "prop_type": "Staff",
         "background_type": "Aurora",
         "grow_sequence": true,
-        "current_tab": "learn"
+        "current_tab": "dictionary"
     },
     "image_export": {
         "include_start_position": true,
@@ -51,7 +51,7 @@
         "sort_method": "date_added",
         "current_section": "browser",
         "current_filter": {
-            "level": 1
+            "level": 3
         }
     },
     "sequence_layout": {
@@ -63,9 +63,9 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 16,
+                "sequence_length": 8,
                 "max_turn_intensity": 2,
-                "sequence_level": 2,
+                "sequence_level": 1,
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",
                 "continuous_rotation": true

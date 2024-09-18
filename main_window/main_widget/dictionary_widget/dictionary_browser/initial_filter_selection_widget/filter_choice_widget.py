@@ -74,6 +74,11 @@ class FilterChoiceWidget(QWidget):
                 "Display sequences by author.",
                 partial(self.initial_selection_widget.show_section, "author"),
             ),
+            (
+                "Favorites",
+                "Display your favorite sequences.",
+                partial(self.initial_selection_widget.apply_filter, "favorites", True),
+            ),
         ]
 
         # Add buttons and descriptions to the grid layout
@@ -121,11 +126,10 @@ class FilterChoiceWidget(QWidget):
         )
 
         # Center the "Show All" button in the grid
-        grid_layout.addLayout(show_all_vbox, 2, 1)
+        main_layout.addLayout(show_all_vbox)
 
         main_layout.addStretch(2)
         self.setLayout(main_layout)
-
 
     def resize_filter_choice_widget(self):
         """Resize the filter choice widget and its components."""

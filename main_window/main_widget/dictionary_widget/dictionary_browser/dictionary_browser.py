@@ -1,8 +1,10 @@
+import os
 from typing import TYPE_CHECKING
 
 from main_window.main_widget.dictionary_widget.dictionary_browser.initial_filter_selection_widget.dictionary_initial_selections_widget import (
     DictionaryInitialSelectionsWidget,
 )
+from utilities.path_helpers import get_images_and_data_path
 from .currently_displaying_indicator_label import CurrentlyDisplayingIndicatorLabel
 from .dictionary_browser_nav_sidebar import DictionaryBrowserNavSidebar
 from PyQt6.QtCore import Qt
@@ -180,3 +182,34 @@ class DictionaryBrowser(QWidget):
         )
 
         self.apply_current_filter(current_filter)
+
+    def show_favorites(self):
+        """Show only favorite sequences."""
+        dictionary_dir = get_images_and_data_path("dictionary")
+        base_words = [
+            (
+                word,
+                self.main_widget.thumbnail_finder.find_thumbnails(
+                    os.path.join(dictionary_dir, word)
+                ),
+            )
+            for word in os.listdir(dictionary_dir)
+            if os.path.isdir(os.path.join(dictionary_dir, word))
+            and "__pycache__" not in word
+        ]
+
+        favorites = []
+        for word, thumbnails in base_words:
+            for thumbnail in thumbnails:
+                if self.main_widget.metadata_extractor.get_favorite_status(thumbnail):
+                    sequence_length = self.main_widget.metadata_extractor.get_sequence_length(
+                        thumbnail
+                    )
+                    favorites.append((word, thumbnails, sequence_length))
+                    break
+
+        self.currently_displayed_sequences = favorites
+        self.thumbnail_box_sorter.sort_and_display_currently_filtered_sequences_by_method(
+            self.main_widget.main_window.settings_manager.dictionary_settings.get_sort_method()
+        )
+        self.currently_displaying_label.setText("Currently displaying favorite sequences.")

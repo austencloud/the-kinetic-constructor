@@ -125,12 +125,16 @@ class ThumbnailBoxSorter:
             "contains_letters": contains_letter_section.display_only_thumbnails_containing_letters,
             "starting_position": starting_position_section.display_only_thumbnails_with_starting_position,
             "author": author_section.display_only_thumbnails_by_author,
+            "favorites": self.browser.show_favorites,
             "show_all": self.browser.show_all_sequences,
         }
         if initial_selection:
             for key, value in initial_selection.items():
                 if key in display_functions:
-                    display_functions[key](value)
+                    if key == "favorites":
+                        display_functions[key]()
+                    else:
+                        display_functions[key](value)
 
     ### HELPER FUNCTIONS ###
 
