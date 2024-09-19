@@ -74,10 +74,10 @@
                 "sequence_level": 2,
                 "continuous_rotation": false
             },
-            "current_auto_builder": "circular"
+            "current_auto_builder": "freeform"
         },
         "manual_builder": {},
-        "last_used_builder": "auto"
+        "last_used_builder": "manual"
     },
     "sequence_sharing": {
         "recipients": [

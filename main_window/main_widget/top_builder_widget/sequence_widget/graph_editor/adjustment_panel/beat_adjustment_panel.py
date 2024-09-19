@@ -73,7 +73,6 @@ class BeatAdjustmentPanel(QFrame):
             self.hide_start_pos_ori_pickers()
             self.show_turns_boxes()
 
-        self.resize_beat_adjustment_panel()
 
     def hide_start_pos_ori_pickers(self) -> None:
         for picker in self.ori_picker_boxes:

@@ -176,7 +176,7 @@ class OriDisplayFrame(QFrame):
         )
 
     def _resize_ori_buttons(self) -> None:
-        button_size = int(self.ori_picker_box.height() // 4)
+        button_size = int(self.ori_picker_box.graph_editor.height() // 4)
         icon_size = int(button_size * 0.6)
         for button in self.rotate_buttons:
             button.setFixedSize(QSize(button_size, button_size))
