@@ -59,7 +59,7 @@ class BaseAdjustmentBoxHeaderWidget(QWidget):
             return "", QColor("#000000")
 
     def resize_header(self) -> None:
-        # self.setFixedHeight(self.adjustment_box.height() // 4)
+        self.setFixedHeight(self.adjustment_box.graph_editor.height() // 4)
         self._resize_header_label()
 
     def _resize_header_label(self) -> None:

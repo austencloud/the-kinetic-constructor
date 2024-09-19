@@ -2,7 +2,7 @@ import json
 
 from PyQt6.QtGui import QKeyEvent, QCursor, QCloseEvent
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QTabWidget
+from PyQt6.QtWidgets import QTabWidget, QApplication
 
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
@@ -58,7 +58,7 @@ class MainWidget(QTabWidget):
         self.currentChanged.connect(self.on_tab_changed)
         self.tabBar().setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.splash_screen.update_progress(100, "Initialization complete!")
-
+        QTimer.singleShot(0, self.load_state)
 
     def _initialize_managers(self):
         """Setup all the managers and helper components."""
@@ -185,13 +185,8 @@ class MainWidget(QTabWidget):
 
     def showEvent(self, event):
         super().showEvent(event)
-        # self.main_window.menu_bar_widget.resize_menu_bar_widget()
-        # self.apply_background()
-        # self.load_state()
-        QTimer.singleShot(0, self.load_state)
 
     def resizeEvent(self, event) -> None:
-        # self.resize_widgets(self.currentWidget())
         super().resizeEvent(event)
         self.setStyleSheet(self.tab_bar_styler.get_tab_stylesheet())
 

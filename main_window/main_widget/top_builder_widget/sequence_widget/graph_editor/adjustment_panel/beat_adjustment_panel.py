@@ -1,11 +1,9 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QHBoxLayout
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QStackedWidget, QWidget
 from data.constants import BLUE, RED
 from .adjustment_panel_placeholder_text import AdjustmentPanelPlaceHolderText
-
 from .ori_picker_box.ori_picker_box import OriPickerBox
 from .turns_box.turns_box import TurnsBox
-
 
 if TYPE_CHECKING:
     from objects.motion.motion import Motion
@@ -14,26 +12,79 @@ if TYPE_CHECKING:
 
 class BeatAdjustmentPanel(QFrame):
     def __init__(self, graph_editor: "GraphEditor") -> None:
+        super().__init__(graph_editor)
         self.graph_editor = graph_editor
         self.GE_pictograph = graph_editor.pictograph_container.GE_pictograph
         self.initialized = False
-        super().__init__(graph_editor)
-        self.setup_layouts()
 
-    def setup_layouts(self) -> None:
-        self._setup_turns_boxes()
-        self._setup_start_pos_ori_pickers()
-        self._setup_placeholder_widget()
-        self.layout: QHBoxLayout = QHBoxLayout(self)
-        for box in self.turns_boxes:
-            self.layout.addWidget(box, 1)
-        for ori_picker in self.ori_picker_boxes:
-            self.layout.addWidget(ori_picker)
-        self.layout.addWidget(self.placeholder_widget)
+        # Create a stacked widget
+        self.stacked_widget = QStackedWidget(self)
+
+        # Setup the main layout to take full space and stretch
+        self.main_layout = QHBoxLayout(self)
+        self.main_layout.setContentsMargins(0, 0, 0, 0)
+        self.main_layout.setSpacing(0)
+        self.main_layout.addWidget(self.stacked_widget)
+        self.setLayout(self.main_layout)
+
+        # Setup widgets and layouts
+        self._setup_widgets()
+        self._add_widgets_to_stacked_widget()
+
+    def _setup_widgets(self) -> None:
+        """Setup the different boxes and widgets for the adjustment panel."""
+        self.blue_turns_box: TurnsBox = TurnsBox(self, self.GE_pictograph, BLUE)
+        self.red_turns_box: TurnsBox = TurnsBox(self, self.GE_pictograph, RED)
+        self.blue_ori_picker = OriPickerBox(self, self.GE_pictograph, BLUE)
+        self.red_ori_picker = OriPickerBox(self, self.GE_pictograph, RED)
+        self.placeholder_widget = AdjustmentPanelPlaceHolderText(self)
+
+    def _add_widgets_to_stacked_widget(self) -> None:
+        """Add the widgets to the QStackedWidget."""
+
+        # Create individual layouts for different states and ensure full width
+        turns_widget = QWidget(self)
+        turns_layout = QHBoxLayout(turns_widget)
+        turns_layout.setContentsMargins(0, 0, 0, 0)
+        turns_layout.setSpacing(0)
+        turns_layout.addWidget(self.blue_turns_box)
+        turns_layout.addWidget(self.red_turns_box)
+        # turns_layout.addStretch()
+        self.stacked_widget.addWidget(turns_widget)
+
+        ori_picker_widget = QWidget(self)
+        ori_picker_layout = QHBoxLayout(ori_picker_widget)
+        ori_picker_layout.setContentsMargins(0, 0, 0, 0)
+        ori_picker_layout.setSpacing(0)
+        ori_picker_layout.addWidget(self.blue_ori_picker)
+        ori_picker_layout.addWidget(self.red_ori_picker)
+        # ori_picker_layout.addStretch()
+        self.stacked_widget.addWidget(ori_picker_widget)
+
+        # Add the placeholder widget to the stacked widget
+        self.stacked_widget.addWidget(self.placeholder_widget)
+
+    def update_adjustment_panel(self) -> None:
+        """Update the panel based on the current pictograph's state."""
+        pictograph = (
+            self.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
+        )
+
+        if pictograph.is_blank:
+            self.stacked_widget.setCurrentWidget(self.placeholder_widget)
+        elif self.graph_editor.pictograph_container.GE_pictograph_view.is_start_pos:
+            self.stacked_widget.setCurrentWidget(
+                self.stacked_widget.widget(1)
+            )  # Ori picker layout
+        else:
+            self.stacked_widget.setCurrentWidget(
+                self.stacked_widget.widget(0)
+            )  # Turns boxes layout
 
     def update_turns_displays(
         self, blue_motion: "Motion", red_motion: "Motion"
     ) -> None:
+        """Update the turns displays in the turns boxes."""
         self.blue_turns_box.turns_widget.update_turns_display(
             blue_motion, blue_motion.turns
         )
@@ -41,74 +92,19 @@ class BeatAdjustmentPanel(QFrame):
             red_motion, red_motion.turns
         )
 
-    def _setup_placeholder_widget(self) -> None:
-        self.placeholder_widget = AdjustmentPanelPlaceHolderText(self)
-
-    def _setup_turns_boxes(self) -> None:
-        self.blue_turns_box: TurnsBox = TurnsBox(self, self.GE_pictograph, BLUE)
-        self.red_turns_box: TurnsBox = TurnsBox(self, self.GE_pictograph, RED)
-        self.turns_boxes = [self.blue_turns_box, self.red_turns_box]
-
-    def _setup_start_pos_ori_pickers(self) -> None:
-        self.blue_ori_picker = OriPickerBox(self, self.GE_pictograph, BLUE)
-        self.red_ori_picker = OriPickerBox(self, self.GE_pictograph, RED)
-        self.ori_picker_boxes = [self.blue_ori_picker, self.red_ori_picker]
-
-    def update_adjustment_panel(self) -> None:
-        pictograph = (
-            self.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
-        )
-        if pictograph.is_blank:
-            self.placeholder_widget.show()
-            self.hide_start_pos_ori_pickers()
-            self.hide_turns_boxes()
-
-        elif self.graph_editor.pictograph_container.GE_pictograph_view.is_start_pos:
-            self.placeholder_widget.hide()
-            self.hide_turns_boxes()
-            self.show_start_pos_ori_pickers()
-
-        else:
-            self.placeholder_widget.hide()
-            self.hide_start_pos_ori_pickers()
-            self.show_turns_boxes()
-
-
-    def hide_start_pos_ori_pickers(self) -> None:
-        for picker in self.ori_picker_boxes:
-            picker.hide()
-
-    def hide_turns_boxes(self) -> None:
-        for turns_box in self.turns_boxes:
-            turns_box.hide()
-
-    def show_start_pos_ori_pickers(self) -> None:
-        for ori_picker_box in self.ori_picker_boxes:
-            ori_picker_box.show()
-
-    def show_turns_boxes(self) -> None:
-        for turns_box in self.turns_boxes:
-            turns_box.show()
-
     def update_turns_panel(self, blue_motion: "Motion", red_motion: "Motion") -> None:
+        """Update the turns panel with new motion data."""
         self.update_turns_displays(blue_motion, red_motion)
-        for box in self.turns_boxes:
+        for box in [self.blue_turns_box, self.red_turns_box]:
             box.header.update_turns_box_header()
-            if box.color == BLUE:
-                box.matching_motion = blue_motion
-            else:
-                box.matching_motion = red_motion
+            box.matching_motion = blue_motion if box.color == BLUE else red_motion
 
     def resize_beat_adjustment_panel(self) -> None:
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
-        self.setLayout(self.layout)
-
-        for turns_box in self.turns_boxes:
+        """Resize the components within the adjustment panel."""
+        for turns_box in [self.blue_turns_box, self.red_turns_box]:
             turns_box.resize_turns_box()
 
-        for ori_picker_box in self.ori_picker_boxes:
+        for ori_picker_box in [self.blue_ori_picker, self.red_ori_picker]:
             ori_picker_box.resize_ori_picker_box()
 
         self.placeholder_widget.resize_adjustment_panel_placeholder_text()
-        # QApplication.processEvents()

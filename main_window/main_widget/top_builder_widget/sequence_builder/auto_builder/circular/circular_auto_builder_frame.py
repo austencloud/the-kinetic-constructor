@@ -24,8 +24,8 @@ class CircularAutoBuilderFrame(BaseAutoBuilderFrame):
         # Add Widgets to Layout
         self.layout.addWidget(self.rotation_type_toggle)
         self.layout.addStretch(1)
-        self.layout.addWidget(self.permutation_type_toggle)
-        self.layout.addStretch(1)
+        # self.layout.addWidget(self.permutation_type_toggle)
+        # self.layout.addStretch(1)
         self.layout.addWidget(
             self.create_sequence_button, alignment=Qt.AlignmentFlag.AlignCenter
         )

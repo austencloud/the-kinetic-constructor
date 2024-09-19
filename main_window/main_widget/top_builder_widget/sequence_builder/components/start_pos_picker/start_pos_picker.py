@@ -69,7 +69,7 @@ class StartPosPicker(QWidget):
         self.variations_button = StartPosVariationsButton(self)
 
         self.variations_button.clicked.connect(
-            self.manual_builder.show_advanced_start_pos_picker
+            self.manual_builder.transition_to_advanced_start_pos_picker
         )
 
         button_layout = QHBoxLayout()
