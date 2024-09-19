@@ -41,6 +41,7 @@ class BaseAutoBuilderFrame(QFrame):
         self.create_sequence_button.setCursor(Qt.CursorShape.PointingHandCursor)
 
         # Add Widgets to Layout
+        self.layout.addStretch(1)
         self.layout.addWidget(self.level_selector)
         self.layout.addStretch(1)
         self.layout.addWidget(self.length_adjuster)

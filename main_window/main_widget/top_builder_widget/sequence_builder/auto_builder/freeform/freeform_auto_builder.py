@@ -4,14 +4,14 @@ import random
 from copy import deepcopy
 from PyQt6.QtCore import Qt
 from data.constants import CLOCKWISE, COUNTER_CLOCKWISE, NO_ROT
-from ..base_classes.base_auto_builder import AutoBuilderBase
+from ..base_classes.base_auto_builder import BaseAutoBuilder
 from ..turn_intensity_manager import TurnIntensityManager
 
 if TYPE_CHECKING:
     from .freeform_auto_builder_frame import FreeformAutoBuilderFrame
 
 
-class FreeFormAutoBuilder(AutoBuilderBase):
+class FreeFormAutoBuilder(BaseAutoBuilder):
     def __init__(self, auto_builder_frame: "FreeformAutoBuilderFrame"):
         super().__init__(auto_builder_frame)
 

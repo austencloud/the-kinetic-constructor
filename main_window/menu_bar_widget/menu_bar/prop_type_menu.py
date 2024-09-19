@@ -18,7 +18,17 @@ class PropTypeMenu(HoverableMenu):
         prop_type_action_group = QActionGroup(self)
         prop_type_action_group.setExclusive(True)
 
-        for prop_type in PropType:
+        for prop_type in [
+            PropType.Hand,
+            PropType.Staff,
+            PropType.Club,
+            PropType.Fan,
+            PropType.Triad,
+            PropType.Minihoop,
+            PropType.Buugeng,
+            PropType.Sword,
+            PropType.Ukulele,
+        ]:
             action = QAction(prop_type.name, self, checkable=True)
             action.triggered.connect(
                 lambda checked, pt=prop_type: self.set_prop_type(pt)

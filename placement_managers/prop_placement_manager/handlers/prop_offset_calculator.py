@@ -77,7 +77,6 @@ class PropOffsetCalculator:
             (COUNTER, WEST): QPointF(-y, -x),
         }
 
-
         return non_hand_offsets if prop.prop_type != PropType.Hand else hand_offsets
 
     def calculate_new_position_with_offset(
@@ -85,10 +84,10 @@ class PropOffsetCalculator:
     ) -> QPointF:
         prop_type_map = {
             PropType.Club: 60,
-            PropType.EightRings: 60,
+            PropType.Eightrings: 60,
             PropType.BigEightRings: 60,
-            PropType.DoubleStar: 50,
-            PropType.BigDoubleStar: 50,
+            PropType.Doublestar: 50,
+            PropType.Bigdoublestar: 50,
         }
         prop_type = self.prop_placement_manager.pictograph.prop_type
         self.beta_offset = (

@@ -11,7 +11,7 @@ from data.position_maps import (
 )
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
-from ..base_classes.base_auto_builder import AutoBuilderBase
+from ..base_classes.base_auto_builder import BaseAutoBuilder
 from .permutation_executors.mirrored_permutation_executor import (
     MirroredPermutationExecutor,
 )
@@ -24,7 +24,7 @@ if TYPE_CHECKING:
     from .circular_auto_builder_frame import CircularAutoBuilderFrame
 
 
-class CircularAutoBuilder(AutoBuilderBase):
+class CircularAutoBuilder(BaseAutoBuilder):
     def __init__(self, auto_builder_frame: "CircularAutoBuilderFrame"):
         super().__init__(auto_builder_frame)
         self.rotated_executor = RotatedPermutationExecuter(self)

@@ -40,7 +40,15 @@ class Lesson3QuestionGenerator(BaseQuestionGenerator):
     def generate_initial_pictograph(self) -> dict:
         """Generate an initial pictograph randomly to display."""
         # Randomly select a Letter (key) from the dictionary, then select a random pictograph from the list
-        letter = random.choice(list(self.main_widget.pictograph_dicts.keys()))
+        available_letters = list(self.main_widget.pictograph_dicts.keys())
+        # filter out only those who have a start position the same as its end position
+        available_letters = [
+            letter
+            for letter in available_letters
+            for pictograph in self.main_widget.pictograph_dicts[letter]
+            if pictograph["start_pos"] == pictograph["end_pos"]
+        ]
+        letter = random.choice(available_letters)
         return random.choice(self.main_widget.pictograph_dicts[letter])
 
     def generate_correct_answer(self, initial_pictograph: dict) -> dict:
@@ -55,6 +63,12 @@ class Lesson3QuestionGenerator(BaseQuestionGenerator):
             for letter_pictographs in self.main_widget.pictograph_dicts.values()
             for pictograph in letter_pictographs
             if pictograph["start_pos"] == end_pos
+        ]
+
+        valid_pictographs = [
+            pictograph
+            for pictograph in valid_pictographs
+            if pictograph["start_pos"] != pictograph["end_pos"]
         ]
 
         correct_answer = random.choice(valid_pictographs)
@@ -81,14 +95,20 @@ class Lesson3QuestionGenerator(BaseQuestionGenerator):
             )
         )
 
+    def generate_random_pictograph(self) -> dict:
+        while True:
+            letter = random.choice(list(self.main_widget.pictograph_dicts.keys()))
+            random_pictograph = random.choice(self.main_widget.pictograph_dicts[letter])
+            if random_pictograph["start_pos"] != random_pictograph["end_pos"]:
+                return random_pictograph
+
     def generate_wrong_answers(self, correct_pictograph: dict) -> list[dict]:
         """Generate three random wrong pictographs that don't match the correct condition."""
         correct_start_pos = correct_pictograph["start_pos"]
 
         wrong_pictographs = []
         while len(wrong_pictographs) < 3:
-            random_pictograph = self.generate_initial_pictograph()
-            # Ensure that the wrong answers have different start positions than the correct answer
+            random_pictograph = self.generate_random_pictograph()
             if random_pictograph["start_pos"] != correct_start_pos:
                 wrong_pictographs.append(random_pictograph)
         return wrong_pictographs
