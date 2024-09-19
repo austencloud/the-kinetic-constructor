@@ -185,6 +185,7 @@ class MainWidget(QTabWidget):
 
     def showEvent(self, event):
         super().showEvent(event)
+        self.resize_widgets(self.currentWidget())
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
