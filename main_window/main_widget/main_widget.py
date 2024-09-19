@@ -1,7 +1,7 @@
 import json
 
 from PyQt6.QtGui import QKeyEvent, QCursor, QCloseEvent
-from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QTabWidget
 
 from typing import TYPE_CHECKING
@@ -33,6 +33,7 @@ if TYPE_CHECKING:
     from main_window.main_window import MainWindow
 
 from utilities.path_helpers import get_images_and_data_path
+from PyQt6.QtCore import QTimer
 
 
 class MainWidget(QTabWidget):
@@ -57,8 +58,7 @@ class MainWidget(QTabWidget):
         self.currentChanged.connect(self.on_tab_changed)
         self.tabBar().setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.splash_screen.update_progress(100, "Initialization complete!")
-        # use a QTimer to load_state
-        QTimer.singleShot(0, self.load_state)
+
 
     def _initialize_managers(self):
         """Setup all the managers and helper components."""
@@ -178,18 +178,20 @@ class MainWidget(QTabWidget):
         else:
             super().keyPressEvent(event)
 
-    def resize_widgets(self):
+    def resize_widgets(self, current_widget):
         self.top_builder_widget.resize_top_builder_widget()
         self.dictionary_widget.browser.resize_dictionary_browser()
         self.learn_widget.resize_learn_widget()
 
     def showEvent(self, event):
         super().showEvent(event)
-        self.main_window.menu_bar_widget.resize_menu_bar_widget()
-        self.resize_widgets()
-        self.apply_background()
+        # self.main_window.menu_bar_widget.resize_menu_bar_widget()
+        # self.apply_background()
+        # self.load_state()
+        QTimer.singleShot(0, self.load_state)
 
     def resizeEvent(self, event) -> None:
+        # self.resize_widgets(self.currentWidget())
         super().resizeEvent(event)
         self.setStyleSheet(self.tab_bar_styler.get_tab_stylesheet())
 

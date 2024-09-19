@@ -162,5 +162,5 @@ class SequenceWidget(QWidget):
         self.beat_frame.resize_beat_frame()
 
     def resizeEvent(self, event):
-        self.resize_sequence_widget()
         super().resizeEvent(event)
+        self.resize_sequence_widget()

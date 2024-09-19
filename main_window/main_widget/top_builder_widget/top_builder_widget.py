@@ -58,4 +58,3 @@ class TopBuilderWidget(QWidget):
         self.sequence_widget.resize_sequence_widget()
         self.sequence_builder.resize_sequence_builder()
         self.sequence_widget.beat_frame.selection_overlay.update_overlay_position()
-

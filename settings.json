@@ -3,7 +3,7 @@
         "prop_type": "Staff",
         "background_type": "Starfield",
         "grow_sequence": false,
-        "current_tab": "dictionary"
+        "current_tab": "sequence_builder"
     },
     "image_export": {
         "include_start_position": false,
@@ -48,7 +48,7 @@
     },
     "dictionary": {
         "sort_method": "date_added",
-        "current_section": "browser",
+        "current_section": "filter_choice",
         "current_filter": null
     },
     "sequence_layout": {
@@ -60,7 +60,7 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 32,
+                "sequence_length": 16,
                 "max_turn_intensity": 1,
                 "sequence_level": 2,
                 "rotation_type": "quartered",

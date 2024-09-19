@@ -133,4 +133,4 @@ class SequenceWidgetButtonFrame(QFrame):
             button.setIconSize((button.size() * 0.7))
             button.setStyleSheet(f"font-size: {self.font_size}px")
 
-        self.layout.setSpacing(self.sequence_widget.height() // 24)
+        self.layout.setSpacing(self.sequence_widget.height() // 40)

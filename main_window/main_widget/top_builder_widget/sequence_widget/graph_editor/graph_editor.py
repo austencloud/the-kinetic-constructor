@@ -58,5 +58,5 @@ class GraphEditor(QFrame):
         self.adjustment_panel.placeholder_widget.resize_adjustment_panel_placeholder_text()
 
     def resizeEvent(self, event: QResizeEvent | None) -> None:
-        super().resizeEvent(event)
         self.resize_graph_editor()
+        super().resizeEvent(event)

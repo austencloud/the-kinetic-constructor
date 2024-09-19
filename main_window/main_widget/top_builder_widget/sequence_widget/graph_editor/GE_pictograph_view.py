@@ -75,7 +75,7 @@ class GE_PictographView(PictographView):
         self.repaint()
 
     def resize_GE_pictograph_view(self) -> None:
-        self.setFixedSize(self.graph_editor.height(), self.graph_editor.height())
+        # self.setFixedSize(self.graph_editor.height(), self.graph_editor.height())
 
         scene_size = self.scene().sceneRect().size()
         view_size = self.viewport().size()
