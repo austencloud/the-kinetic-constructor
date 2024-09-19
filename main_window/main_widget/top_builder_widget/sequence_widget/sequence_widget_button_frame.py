@@ -1,8 +1,11 @@
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout
+from PyQt6.QtGui import QIcon, QPixmap
+from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout, QMessageBox
 
+from main_window.main_widget.dictionary_widget.full_screen_image_overlay import (
+    FullScreenImageOverlay,
+)
 from utilities.path_helpers import get_images_and_data_path
 
 
@@ -16,7 +19,7 @@ class SequenceWidgetButtonFrame(QFrame):
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
-
+        self.full_screen_overlay = None
         self.font_size = self.sequence_widget.width() // 45
         self.add_to_dictionary_manager = self.sequence_widget.add_to_dictionary_manager
         self._setup_dependencies()
@@ -38,34 +41,34 @@ class SequenceWidgetButtonFrame(QFrame):
         self.buttons: list[QPushButton] = []
         button_dict = {
             "add_to_dictionary": {
-                "icon_path": "add_to_dictionary.svg",
+                "icon": "add_to_dictionary.svg",
                 "callback": self.add_to_dictionary_manager.add_to_dictionary,
                 "tooltip": "Add to Dictionary",
             },
             "save_image": {
-                "icon_path": "save_image.svg",
+                "icon": "save_image.svg",
                 "callback": lambda: self.export_manager.dialog_executor.exec_dialog(
                     self.beat_frame.json_manager.loader_saver.load_current_sequence_json()
                 ),
                 "tooltip": "Save Image",
             },
             "layout_options": {
-                "icon_path": "options.svg",
+                "icon": "options.svg",
                 "callback": self.sequence_widget.show_options_panel,
                 "tooltip": "Layout Options",
             },
-            # "auto_complete_sequence": {
-            #     "icon_path": "magic_wand.svg",
-            #     "callback": self.sequence_widget.autocompleter.auto_complete_sequence,
-            #     "tooltip": "Auto Complete Sequence",
-            # },
-            # "auto_builder": {
-            #     "icon_path": "auto_builder.png",
-            #     "callback": self.open_auto_builder_selection,
-            #     "tooltip": "Auto Builder",
-            # },
+            "view_full_screen": {
+                "icon": "eye.png",  # Eye icon for full screen
+                "callback": self.view_full_screen,
+                "tooltip": "View Full Screen",
+            },
+            "delete_beat": {
+                "icon": "delete.svg",
+                "callback": lambda: self.beat_frame.beat_deletion_manager.delete_selected_beat(),
+                "tooltip": "Delete Beat",
+            },
             "clear_sequence": {
-                "icon_path": "clear.svg",
+                "icon": "clear.svg",
                 "callback": lambda: self.sequence_widget.sequence_clearer.clear_sequence(
                     show_indicator=True
                 ),
@@ -73,15 +76,33 @@ class SequenceWidgetButtonFrame(QFrame):
             },
         }
         for button_name, button_data in button_dict.items():
-            icon_path = get_images_and_data_path(
-                f"images/icons/sequence_widget_icons/{button_data['icon_path']}"
+            icon = get_images_and_data_path(
+                f"images/icons/sequence_widget_icons/{button_data['icon']}"
             )
             self._setup_button(
                 button_name,
-                icon_path,
+                icon,
                 button_data["callback"],
                 button_data["tooltip"],
             )
+
+    def view_full_screen(self):
+        """Display the current image in full screen mode."""
+        current_thumbnail = self.create_thumbnail()
+        if current_thumbnail:
+            pixmap = QPixmap(current_thumbnail)
+            if self.full_screen_overlay:
+                self.full_screen_overlay.close()  # Close any existing overlay
+            self.full_screen_overlay = FullScreenImageOverlay(self.main_widget, pixmap)
+            self.full_screen_overlay.show()
+        else:
+            QMessageBox.warning(self, "No Image", "Please select an image first.")
+
+    def create_thumbnail(self):
+        # use the image export manager to create a thumbnail with custom settings specified in this function.
+        return self.sequence_widget.add_to_dictionary_manager.thumbnail_generator.generate_and_save_thumbnail(
+            self.json_manager.loader_saver.load_current_sequence_json(), 0, "temp"
+        )
 
     def _setup_button(
         self, button_name: str, icon_path: str, callback, tooltip: str

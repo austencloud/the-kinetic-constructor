@@ -18,9 +18,9 @@ class AddToDictionaryManager:
         self.json_manager = self.sequence_widget.main_widget.json_manager
         self.dictionary_dir = get_images_and_data_path("dictionary")
         self.structural_checker = StructuralVariationChecker(self)
+        self.thumbnail_generator = ThumbnailGenerator(self)
 
     def add_to_dictionary(self):
-        self.thumbnail_generator = ThumbnailGenerator(self)
         current_sequence = self.json_manager.loader_saver.load_current_sequence_json()
         if self.is_sequence_invalid(current_sequence):
             self.display_message(
@@ -70,10 +70,7 @@ class AddToDictionaryManager:
     def save_variation(self, sequence, base_word, variation_number):
         """Save the new variation in the root directory for the word."""
         base_path = os.path.join(self.dictionary_dir, base_word)
-        variation_filename = f"{base_word}_ver{variation_number}.png"
-        variation_filepath = os.path.join(base_path, variation_filename)
 
-        # Generate and save the thumbnail for the new variation
         self.thumbnail_generator.generate_and_save_thumbnail(
             sequence, variation_number, base_path
         )

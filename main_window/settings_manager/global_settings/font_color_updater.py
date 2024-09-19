@@ -62,7 +62,11 @@ class FontColorUpdater:
     ) -> None:
         sequence_widget = main_widget.top_builder_widget.sequence_widget
         self._apply_font_colors(
-            [sequence_widget.current_word_label, sequence_widget.difficulty_label],
+            [
+                sequence_widget.current_word_label,
+                sequence_widget.difficulty_label,
+                sequence_widget.indicator_label,
+            ],
             font_color,
         )
 

@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-
+from PyQt6.QtWidgets import QMessageBox
 from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
     BeatView,
 )
@@ -30,6 +30,14 @@ class BeatDeletionManager:
             self.beat_frame.main_widget.top_builder_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view
         )
         selected_beat = self.beat_frame.selection_overlay.get_selected_beat()
+        if not selected_beat:
+            # show a message saying you need to have selected a beat in order to delete one
+            self.sequence_widget = (
+                self.beat_frame.main_widget.top_builder_widget.sequence_widget
+            )
+            message = "You can't delete a beat if you haven't selected one."
+            self.sequence_widget.indicator_label.show_message(message)
+            return
 
         if selected_beat.__class__ == StartPositionBeatView:
             self._delete_start_pos()

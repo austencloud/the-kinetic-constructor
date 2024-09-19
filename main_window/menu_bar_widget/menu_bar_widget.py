@@ -17,5 +17,9 @@ class MenuBarWidget(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
 
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.resize_menu_bar_widget()
+
     def resize_menu_bar_widget(self):
         self.menu_bar.resize_menu_bar()

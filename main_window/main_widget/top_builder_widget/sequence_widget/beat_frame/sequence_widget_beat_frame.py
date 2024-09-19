@@ -75,9 +75,6 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         else:
             super().keyPressEvent(event)
 
-    def delete_selected_beat(self) -> None:
-        self.beat_deletion_manager.delete_selected_beat()
-
     def add_beat_to_sequence(
         self, new_beat: "BasePictograph", override_grow_sequence=False, update_word=True
     ) -> None:

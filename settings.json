@@ -2,16 +2,16 @@
     "global": {
         "prop_type": "Staff",
         "background_type": "Starfield",
-        "grow_sequence": true,
-        "current_tab": "sequence_builder"
+        "grow_sequence": false,
+        "current_tab": "dictionary"
     },
     "image_export": {
-        "include_start_position": true,
-        "add_info": true,
+        "include_start_position": false,
+        "add_info": false,
         "open_directory_on_export": true,
-        "add_word": true,
-        "add_difficulty_level": true,
-        "add_beat_numbers": true
+        "add_word": false,
+        "add_difficulty_level": false,
+        "add_beat_numbers": false
     },
     "user_profile": {
         "current_user": "Austen Cloud",
@@ -47,8 +47,8 @@
         }
     },
     "dictionary": {
-        "sort_method": "alphabetical",
-        "current_section": "filter_choice",
+        "sort_method": "date_added",
+        "current_section": "browser",
         "current_filter": null
     },
     "sequence_layout": {
@@ -60,11 +60,11 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 16,
+                "sequence_length": 32,
                 "max_turn_intensity": 1,
                 "sequence_level": 2,
                 "rotation_type": "quartered",
-                "permutation_type": "rotated",
+                "permutation_type": "mirrored",
                 "continuous_rotation": true
             },
             "freeform_auto_builder": {
@@ -72,7 +72,7 @@
                 "sequence_length": 16,
                 "max_turn_intensity": 1,
                 "sequence_level": 2,
-                "continuous_rotation": true
+                "continuous_rotation": false
             },
             "current_auto_builder": "circular"
         },
