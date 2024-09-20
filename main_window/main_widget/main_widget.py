@@ -97,7 +97,7 @@ class MainWidget(QTabWidget):
             )
             if not self.dictionary_widget.initialized:
                 self.dictionary_widget.initialized = True
-                self.dictionary_widget.show_initial_section()
+                # self.dictionary_widget.show_initial_section()
                 self.dictionary_widget.resize_dictionary_widget()
         elif index == self.learn_tab_index:
             self.main_window.settings_manager.global_settings.set_current_tab("learn")
@@ -186,6 +186,7 @@ class MainWidget(QTabWidget):
     def showEvent(self, event):
         super().showEvent(event)
         self.resize_widgets(self.currentWidget())
+        self.apply_background()
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

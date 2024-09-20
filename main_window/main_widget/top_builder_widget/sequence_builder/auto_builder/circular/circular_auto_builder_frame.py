@@ -47,6 +47,7 @@ class CircularAutoBuilderFrame(BaseAutoBuilderFrame):
         # Update state of the toggles
         self.rotation_type_toggle.set_state(rotation_type == "quartered")
         self.permutation_type_toggle.set_state(permutation_type == "rotated")
+        # Ensure the label styles are updated correctly based on the toggle state
 
     def _update_rotation_type(self, rotation_type: str):
         """Update the rotation type based on the toggle."""

@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
 
 from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.start_pos_picker_variations_button import (
@@ -94,3 +95,8 @@ class StartPosPicker(QWidget):
         self.pictograph_frame.resize_start_pos_picker_pictograph_frame()
         self.start_pos_manager.resize_start_position_pictographs()
         self.variations_button.resize_variations_button()
+
+    # def resizeEvent(self, a0: QResizeEvent | None) -> None:
+    # super().resizeEvent(a0)
+    # self.resize_start_pos_picker()
+    # self.update()

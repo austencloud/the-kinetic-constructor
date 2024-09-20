@@ -8,9 +8,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.lesson_selector import LessonSelector
 
 
-class LessonModeToggleWidget(
-    QWidget,
-):
+class LessonModeToggleWidget(QWidget):
     """Widget for selecting quiz modes (Fixed Questions vs Countdown)."""
 
     def __init__(self, lesson_selector: "LessonSelector"):

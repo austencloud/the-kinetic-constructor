@@ -1,6 +1,18 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QLabel
-from PyQt6.QtCore import QTimer, Qt
+from PyQt6.QtCore import (
+    QPropertyAnimation,
+    QSequentialAnimationGroup,
+    QRect,
+    QEasingCurve,
+    pyqtSlot,
+    QTimer,
+    Qt,
+)
+
+from main_window.main_widget.learn_widget.base_classes.results_widget import (
+    ResultsWidget,
+)
 
 from .base_answers_widget import BaseAnswersWidget
 from .base_question_generator import BaseQuestionGenerator
@@ -34,8 +46,8 @@ class BaseLessonWidget(QWidget):
         self.question_widget: BaseQuestionWidget = None
         self.answers_widget: BaseAnswersWidget = None
 
-        # Indicator label for feedback
-        self._setup_indicator_label()
+        self.results_widget = ResultsWidget(self)
+        self.indicator_label = LessonWidgetIndicatorLabel(self)
 
         # Timer for countdown mode
         self.quiz_timer = QTimer()
@@ -44,6 +56,11 @@ class BaseLessonWidget(QWidget):
         # Progress and result labels
         self.progress_label = self.create_label(alignment=Qt.AlignmentFlag.AlignCenter)
         self.result_label = self.create_label(alignment=Qt.AlignmentFlag.AlignCenter)
+
+        # Start Over button
+        self.start_over_button = QPushButton("Start Over")
+        self.start_over_button.clicked.connect(self.prepare_quiz_ui)
+        self.start_over_button.setCursor(Qt.CursorShape.PointingHandCursor)
 
         # Default attributes for quiz modes
         self.total_questions = 30
@@ -63,6 +80,18 @@ class BaseLessonWidget(QWidget):
         self.central_layout.addStretch(1)
         self.central_layout.addWidget(self.indicator_label)
         self.central_layout.addStretch(1)
+
+    def show_results(self):
+        """Display the results after the quiz or countdown ends with animations."""
+        self.clear_layout(self.central_layout)
+        self.central_layout.addWidget(self.results_widget)
+
+        # Set the result text dynamically
+        self.results_widget.set_result_text(
+            f"🎉 Well done!! 🎉\n\n"
+            f"You successfully completed {self.current_question - 1} question"
+            f"{'s' if self.current_question - 1 != 1 else ''}!"
+        )
 
     def set_mode(self, mode: str) -> None:
         """Set the quiz mode (Fixed Questions or Countdown)."""
@@ -111,28 +140,11 @@ class BaseLessonWidget(QWidget):
 
     def prepare_quiz_ui(self):
         """Prepare and switch to the quiz interface layout."""
+        self.current_question = 1
+        self.update_progress_label()
         self.clear_layout(self.central_layout)
         self._setup_layout()  # Rebuild the layout
         self.start_new_question()
-
-    def show_results(self):
-        """Display the results after the quiz or countdown ends."""
-        self.clear_layout(self.central_layout)
-        self.results_layout = self.create_results_layout()
-        self.central_layout.addLayout(self.results_layout)
-
-    def create_results_layout(self) -> QVBoxLayout:
-        """Creates the layout for the results screen."""
-        layout = QVBoxLayout()
-        self.result_label.setText(
-            f"Results:\nYou completed {self.current_question - 1} question"
-            f"{'s' if self.current_question - 1 != 1 else ''}."
-        )
-
-        layout.addStretch(1)
-        layout.addWidget(self.result_label)
-        layout.addStretch(1)
-        return layout
 
     def check_answer(self, selected_answer, correct_answer):
         """Check the answer and show feedback."""
@@ -169,9 +181,6 @@ class BaseLessonWidget(QWidget):
         self.back_layout.addStretch(1)
         self.main_layout.addLayout(self.back_layout, 0)
 
-    def _setup_indicator_label(self):
-        self.indicator_label = LessonWidgetIndicatorLabel(self)
-
     def create_label(self, alignment=None) -> QLabel:
         """Helper to create QLabel with optional alignment."""
         label = QLabel("")
@@ -196,6 +205,22 @@ class BaseLessonWidget(QWidget):
         self._resize_indicator_label()
         self._resize_back_button()
         self._resize_progress_label()
+        self.results_widget.resize_results_widget()
+
+    def _resize_start_over_button(self):
+        start_over_button_font_size = self.main_widget.width() // 60
+        self.start_over_button.setStyleSheet(
+            f"font-size: {start_over_button_font_size}px;"
+        )
+        self.start_over_button.setFixedSize(
+            self.main_widget.width() // 8, self.main_widget.height() // 12
+        )
+
+    def _resize_result_label(self):
+        result_label_font_size = self.main_widget.width() // 60
+        font = self.result_label.font()
+        font.setPointSize(result_label_font_size)
+        self.result_label.setFont(font)
 
     def _resize_progress_label(self):
         progress_label_font_size = self.main_widget.width() // 75

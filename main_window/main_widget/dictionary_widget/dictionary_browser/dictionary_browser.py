@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QTimer
@@ -264,6 +265,35 @@ class DictionaryBrowser(QWidget):
         self.currently_displayed_sequences = sequences
 
         self.update_and_display_ui(len(sequences), "all sequences")
+
+    def show_most_recent_sequences(self, date: datetime):
+        self.prepare_ui_for_filtering(f"most recent sequences")
+        dictionary_dir = get_images_and_data_path("dictionary")
+        base_words = [
+            (
+                word,
+                self.main_widget.thumbnail_finder.find_thumbnails(
+                    os.path.join(dictionary_dir, word)
+                ),
+            )
+            for word in os.listdir(dictionary_dir)
+            if os.path.isdir(os.path.join(dictionary_dir, word))
+            and "__pycache__" not in word
+        ]
+        most_recent = []
+        for word, thumbnails in base_words:
+            date_added = self.section_manager.get_date_added(thumbnails)
+            if date_added and date_added >= date:
+                sequence_length = (
+                    self.main_widget.metadata_extractor.get_sequence_length(
+                        thumbnails[0]
+                    )
+                )
+                most_recent.append((word, thumbnails, sequence_length))
+                # break
+
+        self.currently_displayed_sequences = most_recent
+        self.update_and_display_ui(len(most_recent), "most recent sequences")
 
     def update_and_display_ui(self, total_sequences: int, filter_description: str):
         if total_sequences == 0:

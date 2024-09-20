@@ -126,6 +126,7 @@ class ThumbnailBoxSorter:
             "starting_position": starting_position_section.display_only_thumbnails_with_starting_position,
             "author": author_section.display_only_thumbnails_by_author,
             "favorites": self.browser.show_favorites,
+            "most_recent": self.browser.show_most_recent_sequences,
             "show_all": self.browser.show_all_sequences,
         }
         if initial_selection:

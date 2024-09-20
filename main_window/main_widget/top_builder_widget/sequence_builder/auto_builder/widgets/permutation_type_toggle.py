@@ -25,15 +25,35 @@ class PermutationTypeToggle(QWidget):
         self.layout.addWidget(self.permutation_type_toggle)
         self.layout.addWidget(self.rotated_label)
 
-        # Add everything to the main layout
+        # Initial style update
+        self.update_mode_label_styles()
 
     def _toggle_changed(self, state):
         permutation_type = "rotated" if state else "mirrored"
         self.circular_builder_frame._update_permutation_type(permutation_type)
+        self.update_mode_label_styles()
+
+    def update_mode_label_styles(self):
+        """Update the styles of the labels to indicate the selected permutation type."""
+        font_color_updater = (
+            self.circular_builder_frame.auto_builder.main_widget.settings_manager.global_settings.font_color_updater
+        )
+        font_color = font_color_updater.get_font_color(
+            self.circular_builder_frame.auto_builder.main_widget.settings_manager.global_settings.get_background_type()
+        )
+        if self.permutation_type_toggle.isChecked():
+            self.mirrored_label.setStyleSheet("font-weight: normal; color: gray;")
+            self.rotated_label.setStyleSheet(f"font-weight: bold; color: {font_color};")
+        else:
+            self.mirrored_label.setStyleSheet(
+                f"font-weight: bold; color: {font_color};"
+            )
+            self.rotated_label.setStyleSheet("font-weight: normal; color: gray;")
 
     def set_state(self, state):
         """Set the toggle state when loading settings."""
         self.permutation_type_toggle.setChecked(state)
+        self.update_mode_label_styles()
 
     def resize_permutation_type_toggle(self):
         font_size = self.circular_builder_frame.auto_builder.main_widget.width() // 75

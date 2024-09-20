@@ -73,13 +73,12 @@ class BaseAutoBuilderFrame(QFrame):
         self.length_adjuster.set_length(length)
         self.turn_intensity_adjuster.set_intensity(intensity)
         self.continuous_rotation_toggle.set_state(continuous_rotation)
+        self.continuous_rotation_toggle.update_mode_label_styles()
 
     def _resize_auto_builder_frame(self):
         """Resize the auto builder frame based on the parent widget size."""
         self._resize_widgets()
         self._resize_create_sequence_button()
-        self.updateGeometry()
-        self.repaint()
 
     def _resize_widgets(self):
         self.continuous_rotation_toggle.resize_continuous_rotation_toggle()
@@ -99,8 +98,6 @@ class BaseAutoBuilderFrame(QFrame):
         self.create_sequence_button.setFixedHeight(
             self.auto_builder.sequence_builder.height() // 10
         )
-
-
 
     def _update_sequence_length(self, length: int):
         self.auto_builder_settings.set_auto_builder_setting(

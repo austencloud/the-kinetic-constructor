@@ -3,7 +3,11 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QGridLayo
 from PyQt6.QtGui import QFont, QResizeEvent
 from PyQt6.QtCore import Qt
 from functools import partial
-from .filter_section_base import FilterSectionBase
+from datetime import datetime, timedelta
+
+from main_window.main_widget.dictionary_widget.dictionary_browser.initial_filter_selection_widget.filter_section_base import (
+    FilterSectionBase,
+)
 
 if TYPE_CHECKING:
     from .dictionary_initial_selections_widget import DictionaryInitialSelectionsWidget
@@ -79,6 +83,11 @@ class FilterChoiceWidget(QWidget):
                 "Display your favorite sequences.",
                 partial(self.initial_selection_widget.apply_filter, "favorites", True),
             ),
+            (
+                "Most Recent",
+                "Display sequences created in the last week.",
+                self.show_recent_sequences,
+            ),
         ]
 
         # Add buttons and descriptions to the grid layout
@@ -103,16 +112,12 @@ class FilterChoiceWidget(QWidget):
             grid_layout.addLayout(vbox, row, col)
 
         main_layout.addLayout(grid_layout)
-
+        main_layout.addStretch(1)
         # Add "Show All" button and description at the bottom
         show_all_sequences_button = QPushButton("Show All")
         show_all_sequences_button.setCursor(Qt.CursorShape.PointingHandCursor)
         show_all_sequences_button.clicked.connect(
-            partial(
-                self.initial_selection_widget.apply_filter,
-                "show_all",
-                True,
-            )
+            partial(self.initial_selection_widget.apply_filter, "show_all", True)
         )
         self.buttons["Show All Sequences"] = show_all_sequences_button
 
@@ -134,6 +139,15 @@ class FilterChoiceWidget(QWidget):
 
         main_layout.addStretch(2)
         self.setLayout(main_layout)
+
+    def show_recent_sequences(self):
+        """Display sequences created within the last week."""
+        # Apply the "recent sequences" filter using the `apply_filter` method
+        self.initial_selection_widget.apply_filter("most_recent", self.get_last_week())
+
+    def get_last_week(self):
+        """Return the datetime of one week ago from today."""
+        return datetime.now() - timedelta(weeks=1)
 
     def resize_filter_choice_widget(self):
         """Resize the filter choice widget and its components."""
