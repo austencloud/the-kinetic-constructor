@@ -63,7 +63,7 @@
                 "sequence_length": 16,
                 "max_turn_intensity": 1,
                 "sequence_level": 2,
-                "rotation_type": "halved",
+                "rotation_type": "quartered",
                 "permutation_type": "rotated",
                 "continuous_rotation": true
             },
@@ -71,13 +71,13 @@
                 "sequence_type": "freeform",
                 "sequence_length": 16,
                 "max_turn_intensity": 1,
-                "sequence_level": 1,
+                "sequence_level": 2,
                 "continuous_rotation": false
             },
             "current_auto_builder": "freeform"
         },
         "manual_builder": {},
-        "last_used_builder": "auto"
+        "last_used_builder": "manual"
     },
     "sequence_sharing": {
         "recipients": [

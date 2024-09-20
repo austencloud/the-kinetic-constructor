@@ -100,8 +100,6 @@ class FontColorUpdater:
             freeform_builder_frame.length_adjuster.length_value_label,
             freeform_builder_frame.turn_intensity_adjuster.intensity_label,
             freeform_builder_frame.turn_intensity_adjuster.intensity_value_label,
-            freeform_builder_frame.continuous_rotation_toggle.continuous_label,
-            freeform_builder_frame.continuous_rotation_toggle.random_label,
         ]
 
     def _get_circular_builder_labels(
@@ -113,12 +111,6 @@ class FontColorUpdater:
             circular_builder_frame.length_adjuster.length_value_label,
             circular_builder_frame.turn_intensity_adjuster.intensity_label,
             circular_builder_frame.turn_intensity_adjuster.intensity_value_label,
-            circular_builder_frame.rotation_type_toggle.halved_label,
-            circular_builder_frame.rotation_type_toggle.quartered_label,
-            circular_builder_frame.continuous_rotation_toggle.continuous_label,
-            circular_builder_frame.continuous_rotation_toggle.random_label,
-            circular_builder_frame.permutation_type_toggle.rotated_label,
-            circular_builder_frame.permutation_type_toggle.mirrored_label,
         ]
 
     def _update_dictionary_widget(

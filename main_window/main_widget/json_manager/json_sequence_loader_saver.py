@@ -16,43 +16,41 @@ class JsonSequenceLoaderSaver:
     def load_current_sequence_json(self) -> List[Dict]:
         try:
             with open(self.current_sequence_json, "r", encoding="utf-8") as file:
-                sequence = json.load(file)
+                content = file.read().strip()
+                if not content:
+                    return self.get_default_sequence()
+
+                sequence = json.loads(content)
+
             return sequence
+
         except FileNotFoundError:
-            print("Current sequence json not found")
-            return [
-                {
-                    "word": "",
-                    "author": self.json_manager.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
-                    "level": 0,
-                    "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
-                    "is_circular": False,
-                    "is_permutable": False,
-                    "is_strictly_rotated_permutation": False,
-                    "is_strictly_mirrored_permutation": False,
-                    "is_strictly_colorswapped_permutation": False,
-                    "is_mirrored_color_swapped_permutation": False,
-                    "is_rotated_colorswapped_permutation": False,
-                }
-            ]
+            return self.get_default_sequence()
+
+        except json.JSONDecodeError:
+            return self.get_default_sequence()
+
+    def get_default_sequence(self) -> List[Dict]:
+        """Return a default sequence if JSON is missing, empty, or invalid."""
+        return [
+            {
+                "word": "",
+                "author": self.json_manager.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
+                "level": 0,
+                "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
+                "is_circular": False,
+                "is_permutable": False,
+                "is_strictly_rotated_permutation": False,
+                "is_strictly_mirrored_permutation": False,
+                "is_strictly_colorswapped_permutation": False,
+                "is_mirrored_color_swapped_permutation": False,
+                "is_rotated_colorswapped_permutation": False,
+            }
+        ]
 
     def save_current_sequence(self, sequence: List[Dict]):
         if not sequence:
-            sequence = [
-                {
-                    "word": "",
-                    "author": self.json_manager.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
-                    "level": 0,
-                    "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
-                    "is_circular": False,
-                    "is_permutable": False,
-                    "is_strictly_rotated_permutation": False,
-                    "is_strictly_mirrored_permutation": False,
-                    "is_strictly_colorswapped_permutation": False,
-                    "is_mirrored_color_swapped_permutation": False,
-                    "is_rotated_colorswapped_permutation": False,
-                }
-            ]
+            sequence = self.get_default_sequence()
         else:
             if "word" not in sequence[0]:
                 sequence[0][
