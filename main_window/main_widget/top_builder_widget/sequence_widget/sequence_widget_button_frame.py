@@ -101,7 +101,9 @@ class SequenceWidgetButtonFrame(QFrame):
     def create_thumbnail(self):
         # use the image export manager to create a thumbnail with custom settings specified in this function.
         return self.sequence_widget.add_to_dictionary_manager.thumbnail_generator.generate_and_save_thumbnail(
-            self.json_manager.loader_saver.load_current_sequence_json(), 0, "temp"
+            self.json_manager.loader_saver.load_current_sequence_json(),
+            0,
+            get_images_and_data_path("temp"),
         )
 
     def _setup_button(

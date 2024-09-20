@@ -1,0 +1,7 @@
+{
+  "θ": {
+    "(s, 0, 1)": {
+      "static_from_layer1_rot_angle_override": true
+    }
+  }
+}

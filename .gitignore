@@ -4,5 +4,4 @@ profiling_output.txt
 *.exe
 *.dll
 build/
-dist/
 *.log
