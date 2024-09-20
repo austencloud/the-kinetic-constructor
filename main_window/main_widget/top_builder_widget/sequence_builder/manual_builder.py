@@ -69,7 +69,8 @@ class ManualBuilder(QFrame):
         self.start_position_picked = False
         self.stacked_widget.setCurrentWidget(self.start_pos_picker)
         self.start_pos_picker.show()
-
+        self.start_pos_picker.resize_start_pos_picker()
+        
     def resize_manual_builder(self) -> None:
         """Resize the components based on the current state."""
         self.start_pos_picker.resize_start_pos_picker()
