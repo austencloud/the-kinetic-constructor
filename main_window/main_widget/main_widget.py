@@ -9,7 +9,7 @@ from Enums.Enums import Letter
 from Enums.PropTypes import PropType
 from letter_determiner.letter_determiner import LetterDeterminer
 from main_window.main_widget.learn_widget.learn_widget import LearnWidget
-from .letter_loader import PictographDictLoader
+from .pcitograph_dict_loader import PictographDictLoader
 from .sequence_properties_manager.sequence_properties_manager import (
     SequencePropertiesManager,
 )
