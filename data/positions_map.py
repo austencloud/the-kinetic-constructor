@@ -3,7 +3,7 @@ from data.constants import *
 from Enums.MotionAttributes import Location
 from Enums.Enums import SpecificPosition
 
-positions_map: dict[tuple[Location], str    ] = {
+positions_map: dict[tuple[Location], str] = {
     (SOUTH, NORTH): "alpha1",
     (WEST, EAST): "alpha2",
     (NORTH, SOUTH): "alpha3",

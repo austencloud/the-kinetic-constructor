@@ -3,7 +3,8 @@
         "prop_type": "Staff",
         "background_type": "Aurora",
         "grow_sequence": true,
-        "current_tab": "sequence_builder"
+        "current_tab": "sequence_builder",
+        "grid_mode": "diamond"
     },
     "image_export": {
         "include_start_position": false,

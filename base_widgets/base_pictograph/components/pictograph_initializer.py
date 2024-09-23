@@ -49,7 +49,7 @@ class PictographInitializer:
         self.pictograph.grid.toggle_non_radial_points_visibility(visible)
 
     def init_grid(self) -> Grid:
-        grid = Grid(self.pictograph)
+        grid = Grid(self.pictograph, self.pictograph.main_widget.grid_mode)
         grid_position = QPointF(0, 0)
         grid.setPos(grid_position)
         self.pictograph.grid = grid

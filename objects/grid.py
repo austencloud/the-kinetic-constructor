@@ -59,17 +59,19 @@ class GridLayer:
 
 
 class GridData:
-    def __init__(self, data: dict[str, Union[str, dict[str, dict[str, str]]]]) -> None:
-        self.hand_points_normal = GridLayer(data["hand_points"]["diamond"]["normal"])
-        self.hand_points_strict = GridLayer(data["hand_points"]["diamond"]["strict"])
-        self.layer2_points_normal = GridLayer(
-            data["layer2_points"]["diamond"]["normal"]
-        )
-        self.layer2_points_strict = GridLayer(
-            data["layer2_points"]["diamond"]["strict"]
-        )
-        self.outer_points = GridLayer(data["outer_points"])
-        x, y = map(float, data["center_point"].strip("()").split(", "))
+    def __init__(
+        self, data: dict[str, Union[str, dict[str, dict[str, str]]]], grid_mode: str
+    ) -> None:
+        self.grid_mode = grid_mode
+        mode_data = data[grid_mode]
+
+        self.hand_points_normal = GridLayer(mode_data["hand_points"]["normal"])
+        self.hand_points_strict = GridLayer(mode_data["hand_points"]["strict"])
+        self.layer2_points_normal = GridLayer(mode_data["layer2_points"]["normal"])
+        self.layer2_points_strict = GridLayer(mode_data["layer2_points"]["strict"])
+        self.outer_points = GridLayer(mode_data["outer_points"])
+
+        x, y = map(float, mode_data["center_point"].strip("()").split(", "))
         self.center_point = GridPoint("center_point", QPointF(x, y))
 
     def get_point(self, layer: GridLayer, pos: QPointF) -> GridPoint:
@@ -87,11 +89,11 @@ class GridData:
 
 
 class Grid:
-    def __init__(self, scene: "BasePictograph"):
+    def __init__(self, scene: "BasePictograph", grid_mode: str):
         self.scene = scene
         self.items: dict[GridModes, GridItem] = {}
         self.layers: dict[str, GridItem] = {}
-        self.grid_mode = DIAMOND
+        self.grid_mode = grid_mode  # Use grid_mode passed from MainWidget
         self.grid_data = self._load_grid_data()
         self._create_grid_items(scene)
         self.center = self.grid_data.center_point.coordinates
@@ -107,7 +109,7 @@ class Grid:
         json_path = get_images_and_data_path("data/circle_coords.json")
         with open(json_path, "r") as file:
             data = json.load(file)
-        return GridData(data)
+        return GridData(data, self.grid_mode)
 
     def get_closest_hand_point(self, pos: QPointF) -> tuple[str, QPointF]:
         strict = self.scene.main_widget.prop_type in strictly_placed_props
@@ -137,13 +139,18 @@ class Grid:
             grid_item.setVisible(mode == self.grid_mode)
             self.items[mode] = grid_item
 
-        non_radial_path = get_images_and_data_path(
-            f"{GRID_DIR}diamond_nonradial_points.svg"
-        )
-        non_radial_item = QGraphicsSvgItem(non_radial_path)
-        non_radial_item.setVisible(False)  # Initially hidden
-        self.scene.addItem(non_radial_item)
-        self.nonradial_layer = non_radial_item
+        # Load non-radial points specific to the grid mode
+        non_radial_paths = {
+            DIAMOND: get_images_and_data_path(f"{GRID_DIR}diamond_nonradial_points.svg"),
+            BOX: get_images_and_data_path(f"{GRID_DIR}box_nonradial_points.svg"),
+        }
+        non_radial_path = non_radial_paths.get(self.grid_mode)
+        if non_radial_path:
+            non_radial_item = QGraphicsSvgItem(non_radial_path)
+            non_radial_item.setVisible(False)  # Initially hidden
+            self.scene.addItem(non_radial_item)
+            self.nonradial_layer = non_radial_item
+
 
     def set_layer_visibility(self, layer_id, visibility):
         if layer_id in self.layers:

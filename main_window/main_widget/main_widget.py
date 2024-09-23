@@ -160,7 +160,8 @@ class MainWidget(QTabWidget):
         ] = self.special_placement_loader.load_special_placements()
 
     def _setup_default_modes(self) -> None:
-        self.grid_mode = DIAMOND
+        self.grid_mode = self.settings_manager.global_settings.get_grid_mode()
+
 
     def _setup_letters(self) -> None:
         self.splash_screen.update_progress(10, "Loading pictograph dictionaries...")
