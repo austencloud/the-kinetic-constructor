@@ -61,6 +61,7 @@ F,beta7,alpha5,split,opp,anti,ccw,w,n,pro,ccw,w,s
 F,beta1,alpha7,tog,opp,anti,ccw,n,e,pro,ccw,n,w
 F,beta5,alpha3,tog,opp,anti,ccw,s,w,pro,ccw,s,e
 F,beta3,alpha1,split,opp,anti,ccw,e,s,pro,ccw,e,n
+
 F,beta3,alpha5,split,opp,pro,ccw,e,n,anti,ccw,e,s
 F,beta5,alpha7,tog,opp,pro,ccw,s,e,anti,ccw,s,w
 F,beta7,alpha1,split,opp,pro,ccw,w,s,anti,ccw,w,n
@@ -96,6 +97,7 @@ I,beta7,beta5,tog,same,anti,cw,w,s,pro,ccw,w,s
 I,beta1,beta7,tog,same,anti,cw,n,w,pro,ccw,n,w
 I,beta5,beta3,tog,same,anti,cw,s,e,pro,ccw,s,e
 I,beta3,beta1,tog,same,anti,cw,e,n,pro,ccw,e,n
+
 I,beta3,beta5,tog,same,pro,cw,e,s,anti,ccw,e,s
 I,beta5,beta7,tog,same,pro,cw,s,w,anti,ccw,s,w
 I,beta7,beta1,tog,same,pro,cw,w,n,anti,ccw,w,n
@@ -104,6 +106,7 @@ I,beta7,beta5,tog,same,pro,ccw,w,s,anti,cw,w,s
 I,beta1,beta7,tog,same,pro,ccw,n,w,anti,cw,n,w
 I,beta5,beta3,tog,same,pro,ccw,s,e,anti,cw,s,e
 I,beta3,beta1,tog,same,pro,ccw,e,n,anti,cw,e,n
+
 J,alpha3,beta5,tog,opp,pro,ccw,w,s,pro,cw,e,s
 J,alpha5,beta7,split,opp,pro,ccw,n,w,pro,cw,s,w
 J,alpha7,beta1,tog,opp,pro,ccw,e,n,pro,cw,w,n
@@ -112,6 +115,7 @@ J,alpha7,beta5,tog,opp,pro,cw,e,s,pro,ccw,w,s
 J,alpha1,beta7,split,opp,pro,cw,s,w,pro,ccw,n,w
 J,alpha5,beta3,split,opp,pro,cw,n,e,pro,ccw,s,e
 J,alpha3,beta1,tog,opp,pro,cw,w,n,pro,ccw,e,n
+
 K,alpha3,beta5,tog,opp,anti,cw,w,s,anti,ccw,e,s
 K,alpha5,beta7,split,opp,anti,cw,n,w,anti,ccw,s,w
 K,alpha7,beta1,tog,opp,anti,cw,e,n,anti,ccw,w,n
@@ -120,6 +124,7 @@ K,alpha7,beta5,tog,opp,anti,ccw,e,s,anti,cw,w,s
 K,alpha1,beta7,split,opp,anti,ccw,s,w,anti,cw,n,w
 K,alpha5,beta3,split,opp,anti,ccw,n,e,anti,cw,s,e
 K,alpha3,beta1,tog,opp,anti,ccw,w,n,anti,cw,e,n
+
 L,alpha3,beta5,tog,opp,anti,cw,w,s,pro,cw,e,s
 L,alpha5,beta7,split,opp,anti,cw,n,w,pro,cw,s,w
 L,alpha7,beta1,tog,opp,anti,cw,e,n,pro,cw,w,n
@@ -128,6 +133,7 @@ L,alpha7,beta5,tog,opp,anti,ccw,e,s,pro,ccw,w,s
 L,alpha1,beta7,split,opp,anti,ccw,s,w,pro,ccw,n,w
 L,alpha5,beta3,split,opp,anti,ccw,n,e,pro,ccw,s,e
 L,alpha3,beta1,tog,opp,anti,ccw,w,n,pro,ccw,e,n
+
 L,alpha3,beta5,tog,opp,pro,ccw,w,s,anti,ccw,e,s
 L,alpha5,beta7,split,opp,pro,ccw,n,w,anti,ccw,s,w
 L,alpha7,beta1,tog,opp,pro,ccw,e,n,anti,ccw,w,n
@@ -136,6 +142,7 @@ L,alpha7,beta5,tog,opp,pro,cw,e,s,anti,cw,w,s
 L,alpha1,beta7,split,opp,pro,cw,s,w,anti,cw,n,w
 L,alpha5,beta3,split,opp,pro,cw,n,e,anti,cw,s,e
 L,alpha3,beta1,tog,opp,pro,cw,w,n,anti,cw,e,n
+
 M,gamma3,gamma13,quarter,opp,pro,ccw,n,w,pro,cw,e,s
 M,gamma5,gamma15,quarter,opp,pro,ccw,e,n,pro,cw,s,w
 M,gamma7,gamma9,quarter,opp,pro,ccw,s,e,pro,cw,w,n
@@ -144,6 +151,7 @@ M,gamma15,gamma5,quarter,opp,pro,cw,n,e,pro,ccw,w,s
 M,gamma9,gamma7,quarter,opp,pro,cw,e,s,pro,ccw,n,w
 M,gamma13,gamma3,quarter,opp,pro,cw,w,n,pro,ccw,s,e
 M,gamma11,gamma1,quarter,opp,pro,cw,s,w,pro,ccw,e,n
+
 N,gamma3,gamma13,quarter,opp,anti,cw,n,w,anti,ccw,e,s
 N,gamma5,gamma15,quarter,opp,anti,cw,e,n,anti,ccw,s,w
 N,gamma7,gamma9,quarter,opp,anti,cw,s,e,anti,ccw,w,n
@@ -152,6 +160,7 @@ N,gamma15,gamma5,quarter,opp,anti,ccw,n,e,anti,cw,w,s
 N,gamma9,gamma7,quarter,opp,anti,ccw,e,s,anti,cw,n,w
 N,gamma13,gamma3,quarter,opp,anti,ccw,w,n,anti,cw,s,e
 N,gamma11,gamma1,quarter,opp,anti,ccw,s,w,anti,cw,e,n
+
 O,gamma3,gamma13,quarter,opp,anti,cw,n,w,pro,cw,e,s
 O,gamma5,gamma15,quarter,opp,anti,cw,e,n,pro,cw,s,w
 O,gamma7,gamma9,quarter,opp,anti,cw,s,e,pro,cw,w,n

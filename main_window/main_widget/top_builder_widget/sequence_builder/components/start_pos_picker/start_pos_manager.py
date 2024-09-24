@@ -3,9 +3,7 @@ from functools import partial
 from PyQt6.QtCore import QObject, pyqtSignal
 from Enums.letters import Letter
 from data.constants import END_POS, START_POS
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import (
-    StartPositionBeat,
-)
+from ....sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
@@ -52,8 +50,8 @@ class StartPosManager(QObject):
                     pictograph_dict[START_POS] == start_pos
                     and pictograph_dict[END_POS] == end_pos
                 ):
-                    start_position_pictograph = (
-                        self.start_pos_picker.pictograph_factory.create_pictograph()
+                    start_position_pictograph = BasePictograph(
+                        self.start_pos_picker.main_widget,
                     )
                     self.start_options[letter] = start_position_pictograph
                     start_position_pictograph.letter = letter
