@@ -4,7 +4,7 @@
         "background_type": "AuroraBorealis",
         "grow_sequence": true,
         "current_tab": "sequence_builder",
-        "grid_mode": "box"
+        "grid_mode": "diamond"
     },
     "image_export": {
         "include_start_position": true,
@@ -81,7 +81,7 @@
             "current_auto_builder": "circular"
         },
         "manual_builder": {},
-        "last_used_builder": "auto"
+        "last_used_builder": "manual"
     },
     "sequence_sharing": {
         "recipients": [

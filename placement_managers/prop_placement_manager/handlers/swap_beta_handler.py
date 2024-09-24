@@ -15,6 +15,7 @@ class SwapBetaHandler:
         self.ppm = beta_prop_positioner.prop_placement_manager
         self.blue_prop = self.pictograph.blue_prop
         self.red_prop = self.pictograph.red_prop
+        self.dir_calculator = self.beta_prop_positioner.dir_calculator
 
     def _swap_props(
         self, prop_a: Prop, prop_b: Prop, direction_a: str, direction_b: str
@@ -54,12 +55,8 @@ class SwapBetaHandler:
         # if it's a hand, ignore it
 
         if self.pictograph.letter in [Letter.G, Letter.H]:
-            further_direction = self.ppm.dir_calculator.get_dir(
-                self.pictograph.red_motion
-            )
-            other_direction = self.ppm.dir_calculator.get_opposite_dir(
-                further_direction
-            )
+            further_direction = self.dir_calculator.get_dir(self.pictograph.red_motion)
+            other_direction = self.dir_calculator.get_opposite_dir(further_direction)
 
             self._swap_props(
                 self.pictograph.red_prop,
@@ -69,10 +66,8 @@ class SwapBetaHandler:
             )
 
         else:
-            red_direction = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
-            blue_direction = self.ppm.dir_calculator.get_dir(
-                self.pictograph.blue_motion
-            )
+            red_direction = self.dir_calculator.get_dir(self.pictograph.red_motion)
+            blue_direction = self.dir_calculator.get_dir(self.pictograph.blue_motion)
 
             self._swap_props(
                 self.pictograph.red_prop,
@@ -83,8 +78,8 @@ class SwapBetaHandler:
 
     def _handle_type6_swap(self) -> None:
 
-        red_direction = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
-        blue_direction = self.ppm.dir_calculator.get_dir(self.pictograph.blue_motion)
+        red_direction = self.dir_calculator.get_dir(self.pictograph.red_motion)
+        blue_direction = self.dir_calculator.get_dir(self.pictograph.blue_motion)
         if self.pictograph.red_motion.prop.prop_type != PropType.Hand:
             self._swap_props(
                 self.pictograph.red_prop,
@@ -97,8 +92,8 @@ class SwapBetaHandler:
         shift = self.pictograph.get.shift()
         static = self.pictograph.get.static()
 
-        shift_direction = self.ppm.dir_calculator.get_dir(shift)
-        static_direction = self.ppm.dir_calculator.get_opposite_dir(shift_direction)
+        shift_direction = self.dir_calculator.get_dir(shift)
+        static_direction = self.dir_calculator.get_opposite_dir(shift_direction)
 
         self._swap_props(shift.prop, static.prop, static_direction, shift_direction)
 
@@ -106,13 +101,13 @@ class SwapBetaHandler:
         shift = self.pictograph.get.shift()
         dash = self.pictograph.get.dash()
 
-        direction = self.ppm.dir_calculator.get_dir(shift)
+        direction = self.dir_calculator.get_dir(shift)
 
         if direction:
             self._swap_props(
                 self.pictograph.props[shift.color],
                 self.pictograph.props[dash.color],
-                self.ppm.dir_calculator.get_opposite_dir(direction),
+                self.dir_calculator.get_opposite_dir(direction),
                 direction,
             )
 
@@ -120,14 +115,14 @@ class SwapBetaHandler:
         dash = self.pictograph.get.dash()
         static = self.pictograph.get.static()
 
-        dash_direction = self.ppm.dir_calculator.get_dir(dash)
-        static_direction = self.ppm.dir_calculator.get_opposite_dir(dash_direction)
+        dash_direction = self.dir_calculator.get_dir(dash)
+        static_direction = self.dir_calculator.get_opposite_dir(dash_direction)
         # if the prop_type is not PropType.Hand, then we swap the props
         self._swap_props(dash.prop, static.prop, static_direction, dash_direction)
 
     def _handle_type5_swap(self) -> None:
-        red_direction = self.ppm.dir_calculator.get_dir(self.pictograph.red_motion)
-        blue_direction = self.ppm.dir_calculator.get_dir(self.pictograph.blue_motion)
+        red_direction = self.dir_calculator.get_dir(self.pictograph.red_motion)
+        blue_direction = self.dir_calculator.get_dir(self.pictograph.blue_motion)
 
         self._swap_props(
             self.pictograph.red_prop,
