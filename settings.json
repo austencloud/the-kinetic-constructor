@@ -1,17 +1,17 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Aurora",
+        "background_type": "AuroraBorealis",
         "grow_sequence": true,
-        "current_tab": "dictionary"
+        "current_tab": "sequence_builder"
     },
     "image_export": {
-        "include_start_position": false,
-        "add_info": false,
+        "include_start_position": true,
+        "add_info": true,
         "open_directory_on_export": true,
-        "add_word": false,
-        "add_difficulty_level": false,
-        "add_beat_numbers": false
+        "add_word": true,
+        "add_difficulty_level": true,
+        "add_beat_numbers": true
     },
     "user_profile": {
         "current_user": "Austen Cloud",
@@ -28,6 +28,9 @@
             },
             "Robert Giannini": {
                 "name": "Robert Giannini"
+            },
+            "Robert Bershadsky": {
+                "name": "Robert Bershadsky"
             }
         },
         "current_note": "Created using The Kinetic Alphabet",
@@ -49,9 +52,7 @@
     "dictionary": {
         "sort_method": "date_added",
         "current_section": "browser",
-        "current_filter": {
-            "level": 2
-        }
+        "current_filter": null
     },
     "sequence_layout": {
         "grow_sequence": true,
@@ -73,13 +74,13 @@
                 "sequence_type": "freeform",
                 "sequence_length": 16,
                 "max_turn_intensity": 1,
-                "sequence_level": 2,
-                "continuous_rotation": false
+                "sequence_level": 1,
+                "continuous_rotation": true
             },
-            "current_auto_builder": "freeform"
+            "current_auto_builder": "circular"
         },
         "manual_builder": {},
-        "last_used_builder": "manual"
+        "last_used_builder": "auto"
     },
     "sequence_sharing": {
         "recipients": [
@@ -106,6 +107,10 @@
             {
                 "name": "Kimberly Bucki",
                 "email": "kimberlydrewthat@gmail.com"
+            },
+            {
+                "name": "Betsy Dz",
+                "email": "elizabethdziad@gmail.com"
             }
         ]
     }
