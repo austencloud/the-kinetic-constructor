@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 from ..graphical_object.graphical_object import GraphicalObject
 from .prop_attr_manager import PropAttrManager
 from .prop_checker import PropChecker
-from .prop_mouse_event_handler import PropMouseEventHandler
 from .prop_rot_angle_manager import PropRotAngleManager
 from .prop_updater import PropUpdater
 from Enums.MotionAttributes import Location, Orientations

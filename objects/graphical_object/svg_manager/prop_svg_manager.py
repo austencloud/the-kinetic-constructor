@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from data.constants import BLUE, PROP_DIR, RED
+from data.constants import BLUE, PROP_DIR
 from Enums.PropTypes import PropType
 
 if TYPE_CHECKING:
@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtSvg import QSvgRenderer
 from objects.prop.prop import Prop
 from Enums.PropTypes import PropType
-from data.constants import BLUE, RED, PROP_DIR
+from data.constants import BLUE, PROP_DIR
 
 if TYPE_CHECKING:
     from objects.graphical_object.svg_manager.graphical_object_svg_manager import (

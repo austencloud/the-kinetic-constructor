@@ -1,5 +1,4 @@
 
-from matplotlib.pylab import f
 from data.constants import *
 from .base_location_calculator import BaseLocationCalculator
 

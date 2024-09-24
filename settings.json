@@ -3,8 +3,8 @@
         "prop_type": "Staff",
         "background_type": "Aurora",
         "grow_sequence": true,
-        "current_tab": "sequence_builder",
-        "grid_mode": "box"
+        "current_tab": "dictionary",
+        "grid_mode": "diamond"
     },
     "image_export": {
         "include_start_position": true,
@@ -49,7 +49,7 @@
     },
     "dictionary": {
         "sort_method": "date_added",
-        "current_section": "filter_choice",
+        "current_section": "browser",
         "current_filter": null
     },
     "sequence_layout": {

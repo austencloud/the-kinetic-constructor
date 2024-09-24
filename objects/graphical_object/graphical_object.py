@@ -1,9 +1,7 @@
 from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
-from PyQt6.QtCore import QPointF
 from typing import TYPE_CHECKING, Union
 from PyQt6.QtWidgets import QGraphicsItem
-from data.constants import BLUE, RED
 
 
 if TYPE_CHECKING:
