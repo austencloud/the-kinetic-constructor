@@ -6,13 +6,13 @@ from typing import TYPE_CHECKING, Literal
 from Enums.Enums import LetterType
 from data.constants import (
     ALPHA1,
-    ALPHA2,
-    ALPHA3,
-    ALPHA4,
+    alpha3,
+    alpha5,
+    alpha7,
     BETA1,
-    BETA2,
-    BETA3,
-    BETA4,
+    beta3,
+    beta5,
+    beta7,
     QUARTER_OPP,
     QUARTER_SAME,
     SPLIT_OPP,
@@ -73,16 +73,16 @@ class VTG_Glyph(QGraphicsSvgItem):
         if letter_str in ["A", "B", "C"]:
             mode = SPLIT_SAME
         elif letter_str in ["D", "E", "F"]:
-            if start_pos in [BETA2, BETA4]:
+            if start_pos in [beta3, beta7]:
                 mode = SPLIT_OPP
-            elif start_pos in [BETA1, BETA3]:
+            elif start_pos in [BETA1, beta5]:
                 mode = TOG_OPP
         elif letter_str in ["G", "H", "I"]:
             mode = TOG_SAME
         elif letter_str in ["J", "K", "L"]:
-            if start_pos in [ALPHA1, ALPHA3]:
+            if start_pos in [ALPHA1, alpha5]:
                 mode = SPLIT_OPP
-            elif start_pos in [ALPHA2, ALPHA4]:
+            elif start_pos in [alpha3, alpha7]:
                 mode = TOG_OPP
         elif letter_str in ["M", "N", "O", "P", "Q", "R"]:
             mode = QUARTER_OPP

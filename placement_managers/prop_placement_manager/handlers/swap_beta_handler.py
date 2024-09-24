@@ -1,15 +1,11 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType
-
 from Enums.PropTypes import PropType
 from Enums.letters import Letter
 from objects.prop.prop import Prop
 
-
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.components.placement_managers.prop_placement_manager.handlers.beta_prop_positioner import (
-        BetaPropPositioner,
-    )
+    from .beta_prop_positioner import BetaPropPositioner
 
 
 class SwapBetaHandler:

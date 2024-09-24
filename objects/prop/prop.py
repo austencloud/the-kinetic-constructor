@@ -3,7 +3,6 @@ from ..graphical_object.graphical_object import GraphicalObject
 from .prop_attr_manager import PropAttrManager
 from .prop_checker import PropChecker
 from .prop_mouse_event_handler import PropMouseEventHandler
-from .prop_offset_calculator import PropOffsetCalculator
 from .prop_rot_angle_manager import PropRotAngleManager
 from .prop_updater import PropUpdater
 from Enums.MotionAttributes import Location, Orientations
@@ -47,5 +46,4 @@ class Prop(GraphicalObject):
         self.attr_manager = PropAttrManager(self)
         self.rot_angle_manager = PropRotAngleManager(self)
         self.check = PropChecker(self)
-        self.offest_calculator = PropOffsetCalculator(self)
         self.updater = PropUpdater(self)

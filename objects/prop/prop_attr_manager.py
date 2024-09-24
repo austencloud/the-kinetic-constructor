@@ -17,7 +17,6 @@ class PropAttrManager:
     def __init__(self, prop: "Prop") -> None:
         self.prop = prop
         self.update_attributes(self.prop.prop_dict)
-        self.prop.set_z_value_based_on_color()
 
     def update_attributes(
         self, prop_dict: dict[str, Union[str, Location, MotionType, Turns]]
@@ -27,7 +26,7 @@ class PropAttrManager:
             value = prop_dict.get(attr)
             if value is not None:
                 setattr(self.prop, attr, value)
-        self.prop.set_z_value_based_on_color()
+        self.set_z_value_based_on_color()
 
     def clear_attributes(self) -> None:
         prop_attributes = [COLOR, LOC, LAYER, ORI, MOTION, PROP_TYPE]
@@ -55,3 +54,9 @@ class PropAttrManager:
     def get_attributes(self) -> dict[str, Union[str, Location, Orientations]]:
         prop_attributes = [attr.value for attr in PropAttribute]
         return {attr: getattr(self.prop, attr) for attr in prop_attributes}
+
+    def set_z_value_based_on_color(self) -> None:
+        if self.prop.color == RED:
+            self.prop.setZValue(5)  # Higher Z value for red props
+        elif self.prop.color == BLUE:
+            self.prop.setZValue(4)  # Lower Z value for blue props

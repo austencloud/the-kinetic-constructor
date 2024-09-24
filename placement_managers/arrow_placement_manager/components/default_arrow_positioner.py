@@ -2,6 +2,8 @@ import json
 from Enums.letters import LetterConditions
 from data.constants import (
     ANTI,
+    BOX,
+    DIAMOND,
     FLOAT,
     NONRADIAL,
     CLOCK,
@@ -26,21 +28,32 @@ import codecs
 class DefaultArrowPositioner:
     def __init__(self, placement_manager: "ArrowPlacementManager") -> None:
         self.placement_manager = placement_manager
-        self.motion_type_files = {
-            PRO: "pro_placements.json",
-            ANTI: "anti_placements.json",
-            FLOAT: "float_placements.json",
-            DASH: "dash_placements.json",
-            STATIC: "static_placements.json",
+        self.diamond_placements_files = {
+            PRO: "diamond_pro_placements.json",
+            ANTI: "diamond_anti_placements.json",
+            FLOAT: "diamond_float_placements.json",
+            DASH: "diamond_dash_placements.json",
+            STATIC: "diamond_static_placements.json",
+        }
+        self.box_placement_files = {
+            PRO: "box_pro_placements.json",
+            ANTI: "box_anti_placements.json",
+            FLOAT: "box_float_placements.json",
+            DASH: "box_dash_placements.json",
+            STATIC: "box_static_placements.json",
         }
 
     def _load_default_placements(
         self, motion_type: str
     ) -> dict[str, dict[str, list[int]]]:
-        json_filename = self.motion_type_files.get(motion_type)
-        json_path = get_images_and_data_path(
-            f"data/arrow_placement/default/{json_filename}"
-        )
+        if self.placement_manager.pictograph.main_widget.grid_mode == DIAMOND:
+            json_filename = self.diamond_placements_files.get(motion_type)
+            json_path = get_images_and_data_path(
+                f"data/arrow_placement/diamond/{json_filename}"
+            )
+        elif self.placement_manager.pictograph.main_widget.grid_mode == BOX:
+            json_filename = self.box_placement_files.get(motion_type)
+            json_path = get_images_and_data_path(f"data/arrow_placement/box/{json_filename}")
         with codecs.open(json_path, "r", encoding="utf-8") as file:
             return json.load(file)
 

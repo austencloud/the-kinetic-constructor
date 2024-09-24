@@ -1,4 +1,5 @@
 
+from matplotlib.pylab import f
 from data.constants import *
 from .base_location_calculator import BaseLocationCalculator
 
@@ -9,6 +10,10 @@ class ShiftLocationCalculator(BaseLocationCalculator):
             frozenset({EAST, SOUTH}): SOUTHEAST,
             frozenset({SOUTH, WEST}): SOUTHWEST,
             frozenset({WEST, NORTH}): NORTHWEST,
+            frozenset({NORTHEAST, NORTHWEST}): NORTH,
+            frozenset({NORTHEAST, SOUTHEAST}): EAST,
+            frozenset({SOUTHWEST, SOUTHEAST}): SOUTH,
+            frozenset({NORTHWEST, SOUTHWEST}): WEST,
         }
         return direction_pairs.get(
             frozenset({self.arrow.motion.start_loc, self.arrow.motion.end_loc}), ""

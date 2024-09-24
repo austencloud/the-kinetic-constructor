@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from .handlers.beta_prop_direction_calculator import BetaPropDirectionCalculator
 from .handlers.beta_prop_positioner import BetaPropPositioner
 from .handlers.default_prop_positioner import DefaultPropPositioner
-from .handlers.prop_offset_calculator import PropOffsetCalculator
+from .handlers.prop_offset_calculator import BetaOffsetCalculator
 
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
@@ -15,9 +15,6 @@ class PropPlacementManager:
         # Positioners
         self.default_positioner = DefaultPropPositioner(self)
         self.beta_positioner = BetaPropPositioner(self)
-
-        self.offset_calculator = PropOffsetCalculator(self)
-        self.dir_calculator = BetaPropDirectionCalculator()
 
     def update_prop_positions(self) -> None:
         for prop in self.pictograph.props.values():

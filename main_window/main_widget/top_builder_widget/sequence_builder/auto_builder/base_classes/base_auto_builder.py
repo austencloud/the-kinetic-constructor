@@ -43,7 +43,7 @@ class BaseAutoBuilder:
 
     def add_start_pos_pictograph(self) -> None:
         """Add a starting position pictograph to the sequence."""
-        start_pos_keys = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
+        start_pos_keys = ["alpha1_alpha1", "beta5_beta5", "gamma11_gamma11"]
         position_key = random.choice(start_pos_keys)
         self._add_start_position_to_sequence(position_key)
 

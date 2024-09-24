@@ -1,5 +1,14 @@
 from typing import TYPE_CHECKING
 from objects.prop.prop import Prop
+from placement_managers.prop_placement_manager.handlers.beta_prop_direction_calculator import (
+    BetaPropDirectionCalculator,
+)
+from placement_managers.prop_placement_manager.handlers.hand_positioner import (
+    HandPositioner,
+)
+from placement_managers.prop_placement_manager.handlers.prop_offset_calculator import (
+    BetaOffsetCalculator,
+)
 from .big_prop_positioner import BigPropPositioner
 from .prop_classifier import PropClassifier
 from .reposition_beta_props_by_letter_manager import RepositionBetaByLetterHandler
@@ -21,8 +30,10 @@ class BetaPropPositioner:
         self.hand_positioner = HandPositioner(self)
         self.small_prop_positioner = SmallPropPositioner(self)
         self.big_prop_positioner = BigPropPositioner(self)
+        self.dir_calculator = BetaPropDirectionCalculator(self)
         self.reposition_beta_by_letter_handler = RepositionBetaByLetterHandler(self)
         self.swap_beta_handler = SwapBetaHandler(self)
+        self.beta_offset_calculator = BetaOffsetCalculator(self)
 
     def reposition_beta_props(self) -> None:
         self.classifier.classify_props()
@@ -36,28 +47,7 @@ class BetaPropPositioner:
             self.swap_beta_handler.swap_beta_if_needed()
 
     def move_prop(self, prop: Prop, direction: str) -> None:
-        offset_calculator = self.prop_placement_manager.offset_calculator
-        offset = offset_calculator.calculate_new_position_with_offset(
-            prop.pos(), direction
-        )
-        prop.setPos(offset)
-
-
-class HandPositioner:
-    def __init__(self, beta_prop_positioner: "BetaPropPositioner") -> None:
-        self.beta_prop_positioner = beta_prop_positioner
-        self.pictograph = beta_prop_positioner.pictograph
-
-    def reposition_beta_hands(self) -> None:
-        red_hand = self.pictograph.red_prop
-        blue_hand = self.pictograph.blue_prop
-        self.move_hand(red_hand, "right")
-        self.move_hand(blue_hand, "left")
-
-    def move_hand(self, prop: Prop, direction: str) -> None:
-        offset_calculator = (
-            self.beta_prop_positioner.prop_placement_manager.offset_calculator
-        )
+        offset_calculator = self.beta_offset_calculator
         offset = offset_calculator.calculate_new_position_with_offset(
             prop.pos(), direction
         )

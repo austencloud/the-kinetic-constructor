@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from ..circular_auto_builder import CircularAutoBuilder
-    
+
 vertical_mirror_map = {"s": "s", "e": "w", "w": "e", "n": "n"}
 horizontal_mirror_map = {"s": "n", "n": "s", "e": "e", "w": "w"}
 
@@ -131,39 +131,39 @@ class MirroredPermutationExecutor(PermutationExecutor):
         mirrored_positions = {
             "vertical": {
                 "alpha1": "alpha1",
-                "alpha2": "alpha4",
-                "alpha3": "alpha3",
-                "alpha4": "alpha2",
+                "alpha3": "alpha7",
+                "alpha5": "alpha5",
+                "alpha7": "alpha3",
                 "beta1": "beta1",
-                "beta2": "beta4",
-                "beta3": "beta3",
-                "beta4": "beta2",
-                "gamma1": "gamma5",
-                "gamma2": "gamma8",
-                "gamma3": "gamma7",
-                "gamma4": "gamma6",
-                "gamma5": "gamma1",
-                "gamma6": "gamma4",
-                "gamma7": "gamma3",
-                "gamma8": "gamma2",
+                "beta3": "beta7",
+                "beta5": "beta5",
+                "beta7": "beta3",
+                "gamma1": "gamma9",
+                "gamma3": "gamma15",
+                "gamma5": "gamma13",
+                "gamma7": "gamma11",
+                "gamma9": "gamma1",
+                "gamma11": "gamma7",
+                "gamma13": "gamma5",
+                "gamma15": "gamma3",
             },
             "horizontal": {
-                "alpha1": "alpha3",
-                "alpha2": "alpha2",
-                "alpha3": "alpha1",
-                "alpha4": "alpha4",
-                "beta1": "beta3",
-                "beta2": "beta2",
-                "beta3": "beta1",
-                "beta4": "beta4",
-                "gamma1": "gamma7",
-                "gamma2": "gamma6",
-                "gamma3": "gamma5",
-                "gamma4": "gamma8",
-                "gamma5": "gamma3",
-                "gamma6": "gamma2",
-                "gamma7": "gamma1",
-                "gamma8": "gamma4",
+                "alpha1": "alpha5",
+                "alpha3": "alpha3",
+                "alpha5": "alpha1",
+                "alpha7": "alpha7",
+                "beta1": "beta5",
+                "beta3": "beta3",
+                "beta5": "beta1",
+                "beta7": "beta7",
+                "gamma1": "gamma13",
+                "gamma3": "gamma11",
+                "gamma5": "gamma9",
+                "gamma7": "gamma15",
+                "gamma9": "gamma5",
+                "gamma11": "gamma3",
+                "gamma13": "gamma1",
+                "gamma15": "gamma7",
             },
         }
         return mirrored_positions[vertical_or_horizontal][

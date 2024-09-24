@@ -31,7 +31,7 @@ class ArrowPlacementManager:
             self.update_arrow_position(arrow)
 
     def update_arrow_position(self, arrow: Arrow) -> None:
-        initial_pos = self.initial_pos_calculator.get_initial_pos(arrow)
+        initial_pos = self.initial_pos_calculator.get_initial_coords(arrow)
         adjustment = self.adjustment_calculator.get_adjustment(arrow)
         new_pos = initial_pos + adjustment - arrow.boundingRect().center()
         arrow.setPos(new_pos)

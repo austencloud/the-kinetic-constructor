@@ -3,9 +3,7 @@ from functools import partial
 from PyQt6.QtCore import QObject, pyqtSignal
 from Enums.letters import Letter
 from data.constants import END_POS, START_POS
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import (
-    StartPositionBeat,
-)
+from ....sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
@@ -36,7 +34,10 @@ class StartPosManager(QObject):
 
     def setup_start_positions(self) -> None:
         """Shows options for the starting position."""
-        start_pos = ["alpha1_alpha1", "beta3_beta3", "gamma6_gamma6"]
+        if self.top_builder_widget.main_widget.grid_mode == "diamond":
+            start_pos = ["alpha1_alpha1", "beta5_beta5", "gamma11_gamma11"]
+        elif self.top_builder_widget.main_widget.grid_mode == "box":
+            start_pos = ["alpha2_alpha2", "beta4_beta4", "gamma14_gamma14"]
         for i, position_key in enumerate(start_pos):
             self._add_start_position_option_to_start_pos_frame(position_key)
 
@@ -52,8 +53,8 @@ class StartPosManager(QObject):
                     pictograph_dict[START_POS] == start_pos
                     and pictograph_dict[END_POS] == end_pos
                 ):
-                    start_position_pictograph = (
-                        self.start_pos_picker.pictograph_factory.create_pictograph()
+                    start_position_pictograph = BasePictograph(
+                        self.start_pos_picker.main_widget,
                     )
                     self.start_options[letter] = start_position_pictograph
                     start_position_pictograph.letter = letter

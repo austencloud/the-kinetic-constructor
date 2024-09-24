@@ -1,8 +1,6 @@
 from typing import TYPE_CHECKING
 from data.constants import *
-from objects.arrow.managers.rot_angle_manager.calculators.float_rot_angle_calculator import (
-    FloatRotAngleCalculator,
-)
+from .calculators.float_rot_angle_calculator import FloatRotAngleCalculator
 from .calculators.pro_rot_angle_calculator import ProRotAngleCalculator
 from .calculators.anti_rot_angle_calculator import AntiRotAngleCalculator
 from .calculators.dash_rot_angle_calculator import DashRotAngleCalculator

@@ -29,4 +29,4 @@ class MainWindowGeometryManager:
         )
 
         self.window.setGeometry(x, y, window_width, window_height)
-        self.window.showMaximized()
+        # self.window.showMaximized()

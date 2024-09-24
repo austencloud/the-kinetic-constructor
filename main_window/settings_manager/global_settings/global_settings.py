@@ -22,6 +22,7 @@ class GlobalSettings:
         "background_type": "Aurora",
         "grow_sequence": True,
         "current_tab": "sequence_builder",
+        "grid_mode": "diamond",  # Add this line
     }
 
     def __init__(self, settings_manager: "SettingsManager") -> None:
@@ -94,3 +95,10 @@ class GlobalSettings:
 
     def get_current_tab(self) -> str:
         return self.settings.get("current_tab")
+
+    def get_grid_mode(self) -> str:
+        return self.settings.get("grid_mode", "diamond")
+
+    def set_grid_mode(self, grid_mode: str) -> None:
+        self.settings["grid_mode"] = grid_mode
+        self.settings_manager.save_settings()

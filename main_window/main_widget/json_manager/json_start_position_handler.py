@@ -23,7 +23,7 @@ class JsonStartPositionHandler:
 
         start_position_dict = {
             "beat": 0,
-            "sequence_start_position": start_pos_pictograph.end_pos[:-1],
+            "sequence_start_position": self.get_sequence_start_position(start_pos_pictograph),
             "letter": start_pos_pictograph.letter.name,
             "end_pos": start_pos_pictograph.end_pos,
             "blue_attributes": {
@@ -59,3 +59,6 @@ class JsonStartPositionHandler:
             sequence[1][f"{color}_attributes"]["end_ori"] = ori
             sequence[1][f"{color}_attributes"]["start_ori"] = ori
             self.manager.loader_saver.save_current_sequence(sequence)
+
+    def get_sequence_start_position(self, start_pos_pictograph: BasePictograph) -> str:
+        return start_pos_pictograph.end_pos.rstrip("0123456789")
