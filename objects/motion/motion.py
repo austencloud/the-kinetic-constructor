@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING, Union
 
-from Enums.Enums import Turns
 from .managers.motion_checker import MotionChecker
 from .managers.motion_attr_manager import MotionAttrManager
 from .managers.motion_manipulator import MotionManipulator
