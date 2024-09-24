@@ -1,26 +1,10 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
-
-from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.start_pos_picker_variations_button import (
-    StartPosVariationsButton,
-)
-from main_window.main_widget.top_builder_widget.sequence_builder.components.start_pos_picker.start_pos_pictograph_frame import (
-    StartPosPickerPictographFrame,
-)
+from .start_pos_picker_variations_button import StartPosVariationsButton
+from .start_pos_pictograph_frame import StartPosPickerPictographFrame
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-
-
 from .start_pos_manager import StartPosManager
-
-from .start_pos_picker_pictograph_factory import (
-    StartPosPickerPictographFactory,
-)
-from .choose_your_start_pos_label import (
-    ChooseYourStartPosLabel,
-)
-
-
+from .choose_your_start_pos_label import ChooseYourStartPosLabel
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_builder.manual_builder import (
         ManualBuilder,
@@ -35,9 +19,7 @@ class StartPosPicker(QWidget):
         self.manual_builder = manual_builder
         self.main_widget = manual_builder.main_widget
         self.start_pos_cache: dict[str, BasePictograph] = {}
-        self.pictograph_factory = StartPosPickerPictographFactory(
-            self, self.start_pos_cache
-        )
+
         self.pictograph_frame = StartPosPickerPictographFrame(self)
         self.start_pos_manager = StartPosManager(self)
         self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)
@@ -96,7 +78,3 @@ class StartPosPicker(QWidget):
         self.start_pos_manager.resize_start_position_pictographs()
         self.variations_button.resize_variations_button()
 
-    # def resizeEvent(self, a0: QResizeEvent | None) -> None:
-    # super().resizeEvent(a0)
-    # self.resize_start_pos_picker()
-    # self.update()

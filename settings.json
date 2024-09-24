@@ -7,12 +7,12 @@
         "grid_mode": "diamond"
     },
     "image_export": {
-        "include_start_position": false,
-        "add_info": false,
+        "include_start_position": true,
+        "add_info": true,
         "open_directory_on_export": true,
-        "add_word": false,
-        "add_difficulty_level": false,
-        "add_beat_numbers": false
+        "add_word": true,
+        "add_difficulty_level": true,
+        "add_beat_numbers": true
     },
     "user_profile": {
         "current_user": "Austen Cloud",
@@ -51,7 +51,7 @@
         "sort_method": "date_added",
         "current_section": "browser",
         "current_filter": {
-            "starting_letter": "A"
+            "starting_letter": "S"
         }
     },
     "sequence_layout": {
