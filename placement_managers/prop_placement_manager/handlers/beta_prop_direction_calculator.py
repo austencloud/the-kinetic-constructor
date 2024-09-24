@@ -28,7 +28,9 @@ from objects.motion.motion import Motion
 from objects.prop.prop import Prop
 
 if TYPE_CHECKING:
-    from placement_managers.prop_placement_manager.prop_placement_manager import PropPlacementManager
+    from placement_managers.prop_placement_manager.prop_placement_manager import (
+        PropPlacementManager,
+    )
 
 
 class BetaPropDirectionCalculator:
@@ -93,9 +95,13 @@ class BetaPropDirectionCalculator:
             (WEST, SOUTH): DOWN,
             # Adding diagonal directions
             (NORTHEAST, SOUTHEAST): DOWNRIGHT,
-            (NORTHEAST, NORTHWEST): UPRIGHT,
-            (SOUTHWEST, SOUTHEAST): DOWNLEFT,
+            (NORTHEAST, NORTHWEST): UPLEFT,
+            (SOUTHEAST, NORTHEAST): UPRIGHT,
+            (SOUTHEAST, SOUTHWEST): DOWNLEFT,
+            (SOUTHWEST, SOUTHEAST): UPLEFT,
             (SOUTHWEST, NORTHWEST): UPLEFT,
+            (NORTHWEST, SOUTHWEST): DOWNLEFT,
+            (NORTHWEST, NORTHEAST): DOWNRIGHT,
         }
         return direction_map.get((motion.end_loc, motion.start_loc))
 
@@ -172,7 +178,7 @@ class BetaPropDirectionCalculator:
                 return box_layer_reposition_map[RADIAL][(prop.loc, prop.color)]
             elif prop.check.is_nonradial():
                 return box_layer_reposition_map[NONRADIAL][(prop.loc, prop.color)]
-            
+
     def get_opposite_dir(self, movement: str) -> str:
         opposite_directions = {
             LEFT: RIGHT,

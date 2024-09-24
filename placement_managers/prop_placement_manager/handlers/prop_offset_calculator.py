@@ -22,7 +22,9 @@ from typing import TYPE_CHECKING
 from objects.prop.prop import Prop
 
 if TYPE_CHECKING:
-    from placement_managers.prop_placement_manager.handlers.beta_prop_positioner import BetaPropPositioner
+    from placement_managers.prop_placement_manager.handlers.beta_prop_positioner import (
+        BetaPropPositioner,
+    )
     from ..prop_placement_manager import PropPlacementManager
 
 
@@ -43,26 +45,22 @@ class BetaOffsetCalculator:
             PropType.Bigdoublestar: 50,
         }
         prop_type = self.beta_positioner.pictograph.prop_type
-        self.beta_offset = (
-            self.beta_positioner.pictograph.width()
-            / prop_type_map.get(prop_type, 45)
+        self.beta_offset = self.beta_positioner.pictograph.width() / prop_type_map.get(
+            prop_type, 45
         )
 
-        # Update offset_map to include diagonal directions
+        diagonal_offset = self.beta_offset / (2**0.5)
+
         offset_map = {
             LEFT: QPointF(-self.beta_offset, 0),
             RIGHT: QPointF(self.beta_offset, 0),
             UP: QPointF(0, -self.beta_offset),
             DOWN: QPointF(0, self.beta_offset),
-            # Diagonal directions
-            DOWNRIGHT: QPointF(self.beta_offset, self.beta_offset),
-            UPLEFT: QPointF(-self.beta_offset, -self.beta_offset),
-            DOWNLEFT: QPointF(-self.beta_offset, self.beta_offset),
-            UPRIGHT: QPointF(self.beta_offset, -self.beta_offset),
+            DOWNRIGHT: QPointF(diagonal_offset, diagonal_offset),
+            UPLEFT: QPointF(-diagonal_offset, -diagonal_offset),
+            DOWNLEFT: QPointF(-diagonal_offset, diagonal_offset),
+            UPRIGHT: QPointF(diagonal_offset, -diagonal_offset),
         }
 
-        # Get the corresponding offset for the direction, defaulting to no offset if not found
         offset = offset_map.get(direction, QPointF(0, 0))
-
-        # Return the new position by applying the calculated offset to the current position
         return current_position + offset

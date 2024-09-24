@@ -7,12 +7,20 @@ class AntiRotAngleCalculator(BaseRotAngleCalculator):
         if self.arrow.motion.start_ori in [IN, OUT]:
             direction_map = {
                 CLOCKWISE: {
+                    NORTH: 315,
+                    EAST: 225,
+                    SOUTH: 135,
+                    WEST: 45,
                     NORTHEAST: 270,
                     SOUTHEAST: 180,
                     SOUTHWEST: 90,
                     NORTHWEST: 0,
                 },
                 COUNTER_CLOCKWISE: {
+                    NORTH: 315,
+                    EAST: 45,
+                    SOUTH: 135,
+                    WEST: 225,
                     NORTHEAST: 0,
                     SOUTHEAST: 90,
                     SOUTHWEST: 180,
@@ -24,13 +32,21 @@ class AntiRotAngleCalculator(BaseRotAngleCalculator):
             if self.arrow.motion.turns in [0.5, 1.5, 2.5]:
                 direction_map = {
                     CLOCKWISE: {
-                        NORTHEAST: 270, 
+                        NORTH: 0,
+                        EAST: 90,
+                        SOUTH: 180,
+                        WEST: 270,
+                        NORTHEAST: 270,
                         SOUTHEAST: 180,
                         SOUTHWEST: 90,
-                        NORTHWEST: 360,  
+                        NORTHWEST: 360,
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTHEAST: 360, 
+                        NORTH: 0,
+                        EAST: 270,
+                        SOUTH: 180,
+                        WEST: 90,
+                        NORTHEAST: 360,
                         SOUTHEAST: 90,
                         SOUTHWEST: 180,
                         NORTHWEST: 270,
@@ -55,4 +71,3 @@ class AntiRotAngleCalculator(BaseRotAngleCalculator):
         prop_rot_dir = self.arrow.motion.prop_rot_dir
         loc = self.arrow.loc
         return direction_map.get(prop_rot_dir, {}).get(loc, 0)
-

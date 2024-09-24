@@ -16,8 +16,6 @@ class PropPlacementManager:
         self.default_positioner = DefaultPropPositioner(self)
         self.beta_positioner = BetaPropPositioner(self)
 
-        self.dir_calculator = BetaPropDirectionCalculator(self)
-
     def update_prop_positions(self) -> None:
         for prop in self.pictograph.props.values():
             self.default_positioner.set_prop_to_default_loc(prop)

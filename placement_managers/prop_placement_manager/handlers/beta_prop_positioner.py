@@ -1,5 +1,8 @@
 from typing import TYPE_CHECKING
 from objects.prop.prop import Prop
+from placement_managers.prop_placement_manager.handlers.beta_prop_direction_calculator import (
+    BetaPropDirectionCalculator,
+)
 from placement_managers.prop_placement_manager.handlers.hand_positioner import (
     HandPositioner,
 )
@@ -27,6 +30,7 @@ class BetaPropPositioner:
         self.hand_positioner = HandPositioner(self)
         self.small_prop_positioner = SmallPropPositioner(self)
         self.big_prop_positioner = BigPropPositioner(self)
+        self.dir_calculator = BetaPropDirectionCalculator(self)
         self.reposition_beta_by_letter_handler = RepositionBetaByLetterHandler(self)
         self.swap_beta_handler = SwapBetaHandler(self)
         self.beta_offset_calculator = BetaOffsetCalculator(self)

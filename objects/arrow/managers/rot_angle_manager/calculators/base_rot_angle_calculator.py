@@ -50,8 +50,3 @@ class BaseRotAngleCalculator(ABC):
             )
         )
 
-    def _apply_rotation(self, angle: int) -> None:
-        self.arrow.setTransformOriginPoint(self.arrow.boundingRect().center())
-        self.arrow.setRotation(angle)
-        if self.arrow.ghost:
-            self.arrow.ghost.setRotation(angle)
