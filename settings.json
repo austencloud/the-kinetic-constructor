@@ -51,7 +51,7 @@
         "sort_method": "date_added",
         "current_section": "browser",
         "current_filter": {
-            "level": 2
+            "starting_letter": "A"
         }
     },
     "sequence_layout": {

@@ -38,7 +38,7 @@
       "beat": 1,
       "letter": "A",
       "start_pos": "alpha1",
-      "end_pos": "alpha2",
+      "end_pos": "alpha3",
       "timing": "split",
       "direction": "same",
       "blue_attributes": {
@@ -63,8 +63,8 @@
     {
       "beat": 2,
       "letter": "A",
-      "start_pos": "alpha2",
-      "end_pos": "alpha3",
+      "start_pos": "alpha3",
+      "end_pos": "alpha5",
       "timing": "split",
       "direction": "same",
       "blue_attributes": {
@@ -89,8 +89,8 @@
     {
       "beat": 3,
       "letter": "A",
-      "start_pos": "alpha3",
-      "end_pos": "alpha4",
+      "start_pos": "alpha5",
+      "end_pos": "alpha7",
       "timing": "split",
       "direction": "same",
       "blue_attributes": {
@@ -115,7 +115,7 @@
     {
       "beat": 4,
       "letter": "A",
-      "start_pos": "alpha4",
+      "start_pos": "alpha7",
       "end_pos": "alpha1",
       "timing": "split",
       "direction": "same",
