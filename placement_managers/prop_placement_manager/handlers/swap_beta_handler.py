@@ -16,6 +16,7 @@ class SwapBetaHandler:
         self.blue_prop = self.pictograph.blue_prop
         self.red_prop = self.pictograph.red_prop
         self.dir_calculator = self.beta_prop_positioner.dir_calculator
+
     def _swap_props(
         self, prop_a: Prop, prop_b: Prop, direction_a: str, direction_b: str
     ) -> None:
@@ -54,12 +55,8 @@ class SwapBetaHandler:
         # if it's a hand, ignore it
 
         if self.pictograph.letter in [Letter.G, Letter.H]:
-            further_direction = self.dir_calculator.get_dir(
-                self.pictograph.red_motion
-            )
-            other_direction = self.dir_calculator.get_opposite_dir(
-                further_direction
-            )
+            further_direction = self.dir_calculator.get_dir(self.pictograph.red_motion)
+            other_direction = self.dir_calculator.get_opposite_dir(further_direction)
 
             self._swap_props(
                 self.pictograph.red_prop,
@@ -70,9 +67,7 @@ class SwapBetaHandler:
 
         else:
             red_direction = self.dir_calculator.get_dir(self.pictograph.red_motion)
-            blue_direction = self.dir_calculator.get_dir(
-                self.pictograph.blue_motion
-            )
+            blue_direction = self.dir_calculator.get_dir(self.pictograph.blue_motion)
 
             self._swap_props(
                 self.pictograph.red_prop,
