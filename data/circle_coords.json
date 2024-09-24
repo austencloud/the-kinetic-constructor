@@ -39,30 +39,30 @@
   "box": {
     "hand_points": {
       "normal": {
-        "ne_box_hand_point": "(476.2, 273.8)",
-        "se_box_hand_point": "(476.2, 476.2)",
-        "sw_box_hand_point": "(273.8, 476.2)",
-        "nw_box_hand_point": "(273.8, 273.8)"
+        "ne_box_hand_point": "(576.2, 373.8)",
+        "se_box_hand_point": "(576.2, 576.2)",
+        "sw_box_hand_point": "(373.8, 576.2)",
+        "nw_box_hand_point": "(373.8, 373.8)"
       },
       "strict": {
-        "ne_box_hand_point_strict": "(481.1, 268.9)",
-        "se_box_hand_point_strict": "(481.1, 481.1)",
-        "sw_box_hand_point_strict": "(268.9, 481.1)",
-        "nw_box_hand_point_strict": "(268.9, 268.9)"
+        "ne_box_hand_point_strict": "(581.1, 368.9)",
+        "se_box_hand_point_strict": "(581.1, 581.1)",
+        "sw_box_hand_point_strict": "(368.9, 581.1)",
+        "nw_box_hand_point_strict": "(368.9, 368.9)"
       }
     },
     "layer2_points": {
       "normal": {
-        "n_box_layer2_point": "(375.0, 172.6)",
-        "e_box_layer2_point": "(577.4, 375.0)",
-        "s_box_layer2_point": "(375.0, 577.4)",
-        "w_box_layer2_point": "(172.6, 375.0)"
+        "n_box_layer2_point": "(475, 272.6)",
+        "e_box_layer2_point": "(677.4, 475)",
+        "s_box_layer2_point": "(475, 677.4)",
+        "w_box_layer2_point": "(272.6, 475)"
       },
       "strict": {
-        "n_box_layer2_point_strict": "(375.0, 162.9)",
-        "e_box_layer2_point_strict": "(587.1, 375.0)",
-        "s_box_layer2_point_strict": "(375.0, 587.1)",
-        "w_box_layer2_point_strict": "(162.9, 375.0)"
+        "n_box_layer2_point_strict": "(475, 262.9)",
+        "e_box_layer2_point_strict": "(687.1, 475)",
+        "s_box_layer2_point_strict": "(475, 687.1)",
+        "w_box_layer2_point_strict": "(262.9, 475)"
       }
     },
     "outer_points": {

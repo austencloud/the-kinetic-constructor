@@ -147,9 +147,9 @@ M,gamma3,gamma13,quarter,opp,pro,ccw,n,w,pro,cw,e,s
 M,gamma5,gamma15,quarter,opp,pro,ccw,e,n,pro,cw,s,w
 M,gamma7,gamma9,quarter,opp,pro,ccw,s,e,pro,cw,w,n
 M,gamma1,gamma11,quarter,opp,pro,ccw,w,s,pro,cw,n,e
+M,gamma13,gamma3,quarter,opp,pro,cw,w,n,pro,ccw,s,e
 M,gamma15,gamma5,quarter,opp,pro,cw,n,e,pro,ccw,w,s
 M,gamma9,gamma7,quarter,opp,pro,cw,e,s,pro,ccw,n,w
-M,gamma13,gamma3,quarter,opp,pro,cw,w,n,pro,ccw,s,e
 M,gamma11,gamma1,quarter,opp,pro,cw,s,w,pro,ccw,e,n
 
 N,gamma3,gamma13,quarter,opp,anti,cw,n,w,anti,ccw,e,s

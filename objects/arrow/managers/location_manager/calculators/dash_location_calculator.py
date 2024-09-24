@@ -37,6 +37,14 @@ class DashLocationCalculator(BaseLocationCalculator):
                 (BLUE, (EAST, WEST)): SOUTH,
                 (BLUE, (SOUTH, NORTH)): WEST,
                 (BLUE, (WEST, EAST)): SOUTH,
+                (RED, (NORTHWEST, SOUTHEAST)): NORTHEAST,
+                (RED, (NORTHEAST, SOUTHWEST)): NORTHWEST,
+                (RED, (SOUTHWEST, NORTHEAST)): SOUTHEAST,
+                (RED, (SOUTHEAST, NORTHWEST)): SOUTHWEST,
+                (BLUE, (NORTHWEST, SOUTHEAST)): SOUTHWEST,
+                (BLUE, (NORTHEAST, SOUTHWEST)): SOUTHEAST,
+                (BLUE, (SOUTHWEST, NORTHEAST)): NORTHWEST,
+                (BLUE, (SOUTHEAST, NORTHWEST)): NORTHEAST,
             }
             arrow_location = location_map.get(
                 (
@@ -64,6 +72,14 @@ class DashLocationCalculator(BaseLocationCalculator):
             ((EAST, WEST), NORTH): SOUTH,
             ((SOUTH, NORTH), EAST): WEST,
             ((WEST, EAST), NORTH): SOUTH,
+            ((NORTHEAST, SOUTHWEST), NORTHWEST): SOUTHEAST,
+            ((NORTHWEST, SOUTHEAST), NORTHEAST): SOUTHWEST,
+            ((SOUTHWEST, NORTHEAST), SOUTHEAST): NORTHWEST,
+            ((SOUTHEAST, NORTHWEST), SOUTHWEST): NORTHEAST,
+            ((NORTHEAST, SOUTHWEST), SOUTHEAST): NORTHWEST,
+            ((NORTHWEST, SOUTHEAST), SOUTHWEST): NORTHEAST,
+            ((SOUTHWEST, NORTHEAST), NORTHWEST): SOUTHEAST,
+            ((SOUTHEAST, NORTHWEST), NORTHEAST): SOUTHWEST,
         }
         arrow_location = loc_map.get(
             (
@@ -82,6 +98,10 @@ class DashLocationCalculator(BaseLocationCalculator):
             (EAST, WEST): SOUTH,
             (SOUTH, NORTH): WEST,
             (WEST, EAST): NORTH,
+            (NORTHEAST, SOUTHWEST): SOUTHEAST,
+            (NORTHWEST, SOUTHEAST): NORTHEAST,
+            (SOUTHWEST, NORTHEAST): SOUTHWEST,
+            (SOUTHEAST, NORTHWEST): SOUTHEAST,
         }
         return location_map.get(
             (self.arrow.motion.start_loc, self.arrow.motion.end_loc), ""
@@ -90,8 +110,26 @@ class DashLocationCalculator(BaseLocationCalculator):
     def _dash_location_non_zero_turns(self, motion: Motion = None) -> Location:
         motion = motion if motion else self.arrow.motion
         loc_map = {
-            CLOCKWISE: {NORTH: EAST, EAST: SOUTH, SOUTH: WEST, WEST: NORTH},
-            COUNTER_CLOCKWISE: {NORTH: WEST, EAST: NORTH, SOUTH: EAST, WEST: SOUTH},
+            CLOCKWISE: {
+                NORTH: EAST,
+                EAST: SOUTH,
+                SOUTH: WEST,
+                WEST: NORTH,
+                NORTHEAST: SOUTHEAST,
+                SOUTHEAST: SOUTHWEST,
+                SOUTHWEST: NORTHWEST,
+                NORTHWEST: NORTHEAST,
+            },
+            COUNTER_CLOCKWISE: {
+                NORTH: WEST,
+                EAST: NORTH,
+                SOUTH: EAST,
+                WEST: SOUTH,
+                NORTHEAST: NORTHWEST,
+                SOUTHEAST: NORTHEAST,
+                SOUTHWEST: SOUTHEAST,
+                NORTHWEST: SOUTHWEST,
+            },
         }
         return loc_map[motion.prop_rot_dir][motion.start_loc]
 

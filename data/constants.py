@@ -104,6 +104,11 @@ RIGHT = "right"
 UP = "up"
 DOWN = "down"
 
+UPRIGHT = "upright"
+UPLEFT = "upleft"
+DOWNRIGHT = "downright"
+DOWNLEFT = "downleft"
+
 LETTER = "letter"
 PRO = "pro"
 ANTI = "anti"

@@ -168,10 +168,3 @@ class PropMouseEventHandler:
         self.p.previous_location = closest_hand_point
         self.p.scene.updater.update_pictograph()
 
-    def set_drag_pos(self, new_pos: QPointF) -> None:
-        object_length = self.p.boundingRect().width()
-        object_width = self.p.boundingRect().height()
-
-        offset = self.p.offest_calculator.get_offset(object_length, object_width)
-
-        self.p.setPos(new_pos + offset)

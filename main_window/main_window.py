@@ -21,14 +21,13 @@ class MainWindow(QMainWindow):
         self.settings_manager = SettingsManager(self)
 
         # Pass the splash_screen into MainWidget
+        self.geometry_manager = MainWindowGeometryManager(self)
         self.main_widget = MainWidget(self, splash_screen)
         self.setAttribute(Qt.WidgetAttribute.WA_AcceptTouchEvents, True)
-        self.geometry_manager = MainWindowGeometryManager(self)
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("Kinetic Constructor")
         self.menu_bar_widget = MenuBarWidget(self)
         self.setMenuWidget(self.menu_bar_widget)
-        self.geometry_manager.set_dimensions()
 
     def exec(self, app: QApplication) -> int:
         self.profiler.enable()

@@ -4,7 +4,7 @@
         "background_type": "Aurora",
         "grow_sequence": true,
         "current_tab": "sequence_builder",
-        "grid_mode": "diamond"
+        "grid_mode": "box"
     },
     "image_export": {
         "include_start_position": true,
@@ -49,10 +49,8 @@
     },
     "dictionary": {
         "sort_method": "date_added",
-        "current_section": "browser",
-        "current_filter": {
-            "starting_letter": "S"
-        }
+        "current_section": "filter_choice",
+        "current_filter": null
     },
     "sequence_layout": {
         "grow_sequence": true,
@@ -75,9 +73,9 @@
                 "sequence_length": 16,
                 "max_turn_intensity": 1,
                 "sequence_level": 2,
-                "continuous_rotation": false
+                "continuous_rotation": true
             },
-            "current_auto_builder": "freeform"
+            "current_auto_builder": "circular"
         },
         "manual_builder": {},
         "last_used_builder": "manual"

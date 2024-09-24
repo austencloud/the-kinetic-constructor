@@ -4,21 +4,13 @@ from PyQt6.QtCore import QPointF
 from PyQt6.QtSvgWidgets import QGraphicsSvgItem
 from PyQt6.QtWidgets import QGraphicsSceneWheelEvent, QGraphicsSceneMouseEvent
 from PyQt6.QtCore import QPointF, QEvent
-from data.constants import (
-    BOX,
-    DIAMOND,
-)
+from data.constants import BOX, DIAMOND
 from Enums.Enums import GridModes
-from Enums.PropTypes import (
-    strictly_placed_props,
-)
+from Enums.PropTypes import strictly_placed_props
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
-
-
 GRID_DIR = "images/grid/"
 
 
@@ -141,7 +133,9 @@ class Grid:
 
         # Load non-radial points specific to the grid mode
         non_radial_paths = {
-            DIAMOND: get_images_and_data_path(f"{GRID_DIR}diamond_nonradial_points.svg"),
+            DIAMOND: get_images_and_data_path(
+                f"{GRID_DIR}diamond_nonradial_points.svg"
+            ),
             BOX: get_images_and_data_path(f"{GRID_DIR}box_nonradial_points.svg"),
         }
         non_radial_path = non_radial_paths.get(self.grid_mode)
@@ -150,7 +144,6 @@ class Grid:
             non_radial_item.setVisible(False)  # Initially hidden
             self.scene.addItem(non_radial_item)
             self.nonradial_layer = non_radial_item
-
 
     def set_layer_visibility(self, layer_id, visibility):
         if layer_id in self.layers:

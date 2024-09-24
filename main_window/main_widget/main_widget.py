@@ -43,7 +43,7 @@ class MainWidget(QTabWidget):
         super().__init__(main_window)
         self.main_window = main_window
         self.settings_manager = main_window.settings_manager
-
+        self.initialized = False
         # Pass the splash_screen reference
         self.splash_screen = splash_screen
 
@@ -66,7 +66,7 @@ class MainWidget(QTabWidget):
         self.json_manager = JSON_Manager(self)
 
         self.splash_screen.update_progress(30, "Loading SVG Manager...")
-        self.svg_manager = SvgManager()
+        self.svg_manager = SvgManager(self)
 
         self.splash_screen.update_progress(40, "Loading key generators...")
         self.turns_tuple_generator = TurnsTupleGenerator()
@@ -115,17 +115,6 @@ class MainWidget(QTabWidget):
         prop_type_value = settings.get("global", {}).get("prop_type", "staff")
         self.prop_type = PropType.get_prop_type(prop_type_value)
 
-    def _setup_components(self) -> None:
-        self.json_manager = JSON_Manager(self)
-        self.svg_manager = SvgManager()
-        self.turns_tuple_generator = TurnsTupleGenerator()
-        self.pictograph_key_generator = PictographKeyGenerator(self)
-
-        self.metadata_extractor = MetaDataExtractor(self)
-        self.sequence_level_evaluator = SequenceLevelEvaluator()
-        self.sequence_properties_manager = SequencePropertiesManager(self)
-        self.thumbnail_finder = ThumbnailFinder(self)
-
     def _setup_ui_components(self):
         # Initialize special_placement_loader here
         self.splash_screen.update_progress(70, "Setting up build tab...")
@@ -162,7 +151,6 @@ class MainWidget(QTabWidget):
     def _setup_default_modes(self) -> None:
         self.grid_mode = self.settings_manager.global_settings.get_grid_mode()
 
-
     def _setup_letters(self) -> None:
         self.splash_screen.update_progress(10, "Loading pictograph dictionaries...")
         self.pictograph_dict_loader = PictographDictLoader(self)
@@ -188,7 +176,10 @@ class MainWidget(QTabWidget):
         super().showEvent(event)
         self.resize_widgets(self.currentWidget())
         self.apply_background()
-
+        if not self.initialized:
+            self.main_window.geometry_manager.set_dimensions()
+            self.initialized = True
+            
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.setStyleSheet(self.tab_bar_styler.get_tab_stylesheet())

@@ -34,7 +34,10 @@ class StartPosManager(QObject):
 
     def setup_start_positions(self) -> None:
         """Shows options for the starting position."""
-        start_pos = ["alpha1_alpha1", "beta5_beta5", "gamma11_gamma11"]
+        if self.top_builder_widget.main_widget.grid_mode == "diamond":
+            start_pos = ["alpha1_alpha1", "beta5_beta5", "gamma11_gamma11"]
+        elif self.top_builder_widget.main_widget.grid_mode == "box":
+            start_pos = ["alpha2_alpha2", "beta4_beta4", "gamma12_gamma12"]
         for i, position_key in enumerate(start_pos):
             self._add_start_position_option_to_start_pos_frame(position_key)
 
