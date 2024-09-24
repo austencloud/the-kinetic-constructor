@@ -68,7 +68,6 @@ class BaseLessonWidget(QWidget):
         self.quiz_time = 120
         self.mode = "fixed_question"
 
-        self._setup_layout()
 
     def _setup_layout(self):
         """Setup common UI layout."""

@@ -3,6 +3,8 @@ import random
 from typing import TYPE_CHECKING
 from data.constants import (
     BLUE,
+    BOX,
+    DIAMOND,
     IN,
     RED,
     DASH,
@@ -43,7 +45,10 @@ class BaseAutoBuilder:
 
     def add_start_pos_pictograph(self) -> None:
         """Add a starting position pictograph to the sequence."""
-        start_pos_keys = ["alpha1_alpha1", "beta5_beta5", "gamma11_gamma11"]
+        if self.auto_builder_frame.auto_builder.main_widget.grid_mode == DIAMOND:
+            start_pos_keys = ["alpha1_alpha1", "beta5_beta5", "gamma11_gamma11"]
+        elif self.auto_builder_frame.auto_builder.main_widget.grid_mode == BOX:
+            start_pos_keys = ["alpha2_alpha2", "beta4_beta4", "gamma12_gamma12"]
         position_key = random.choice(start_pos_keys)
         self._add_start_position_to_sequence(position_key)
 

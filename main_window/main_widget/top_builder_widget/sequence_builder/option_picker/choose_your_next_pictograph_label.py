@@ -18,7 +18,7 @@ class ChooseYourNextPictographLabel(QLabel):
         self.hide()
 
     def set_default_text(self) -> None:
-        self.setText("Choose your next pictograph!")
+        self.setText("Choose your next pictograph:")
 
     def set_text_to_loading(self) -> None:
         self.setText("Loading...")
@@ -29,7 +29,8 @@ class ChooseYourNextPictographLabel(QLabel):
             f"QLabel {{"
             f"  background-color: rgba(255, 255, 255, 200);"
             f"  border-radius: {self.height() // 2}px;"
-            f"  font-size: {int(0.03 * width)}px;"
+            f"  font-size: {int(0.04 * width)}px;"
+            f"  font-family: 'Monotype Corsiva';"
             f"}}"
         )
 

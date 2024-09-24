@@ -6,13 +6,23 @@ from typing import TYPE_CHECKING, Literal
 from Enums.Enums import LetterType
 from data.constants import (
     ALPHA1,
-    alpha3,
-    alpha5,
-    alpha7,
+    BOX,
+    DIAMOND,
+    ALPHA3,
+    ALPHA5,
+    ALPHA7,
     BETA1,
-    beta3,
-    beta5,
-    beta7,
+    BETA3,
+    BETA5,
+    BETA7,
+    GAMMA10,
+    GAMMA12,
+    GAMMA14,
+    GAMMA16,
+    GAMMA2,
+    GAMMA4,
+    GAMMA6,
+    GAMMA8,
     QUARTER_OPP,
     QUARTER_SAME,
     SPLIT_OPP,
@@ -53,7 +63,7 @@ class VTG_Glyph(QGraphicsSvgItem):
         vtg_mode = self.determine_vtg_mode()
         self.pictograph.vtg_mode = vtg_mode
         svg_path: str = SVG_PATHS.get(vtg_mode, "")
-        self.renderer = QSvgRenderer(svg_path)
+        self.renderer: QSvgRenderer = QSvgRenderer(svg_path)
         if self.renderer.isValid():
             self.setSharedRenderer(self.renderer)
             # if self isn't already in self.pictograph, then add it
@@ -69,26 +79,41 @@ class VTG_Glyph(QGraphicsSvgItem):
         letter_str = self.pictograph.letter.value
         mode = self.pictograph.vtg_mode
         start_pos = self.pictograph.start_pos
-
-        if letter_str in ["A", "B", "C"]:
-            mode = SPLIT_SAME
-        elif letter_str in ["D", "E", "F"]:
-            if start_pos in [beta3, beta7]:
-                mode = SPLIT_OPP
-            elif start_pos in [BETA1, beta5]:
-                mode = TOG_OPP
-        elif letter_str in ["G", "H", "I"]:
-            mode = TOG_SAME
-        elif letter_str in ["J", "K", "L"]:
-            if start_pos in [ALPHA1, alpha5]:
-                mode = SPLIT_OPP
-            elif start_pos in [alpha3, alpha7]:
-                mode = TOG_OPP
-        elif letter_str in ["M", "N", "O", "P", "Q", "R"]:
-            mode = QUARTER_OPP
-        elif letter_str in ["S", "T", "U", "V"]:
-            mode = QUARTER_SAME
-
+        if self.pictograph.main_widget.grid_mode == DIAMOND:
+            if letter_str in ["A", "B", "C"]:
+                mode = SPLIT_SAME
+            elif letter_str in ["D", "E", "F"]:
+                if start_pos in [BETA3, BETA7]:
+                    mode = SPLIT_OPP
+                elif start_pos in [BETA1, BETA5]:
+                    mode = TOG_OPP
+            elif letter_str in ["G", "H", "I"]:
+                mode = TOG_SAME
+            elif letter_str in ["J", "K", "L"]:
+                if start_pos in [ALPHA1, ALPHA5]:
+                    mode = SPLIT_OPP
+                elif start_pos in [ALPHA3, ALPHA7]:
+                    mode = TOG_OPP
+            elif letter_str in ["M", "N", "O", "P", "Q", "R"]:
+                mode = QUARTER_OPP
+            elif letter_str in ["S", "T", "U", "V"]:
+                mode = QUARTER_SAME
+        elif self.pictograph.main_widget.grid_mode == BOX:
+            if letter_str in ["A", "B", "C"]:
+                mode = SPLIT_SAME
+            elif letter_str in ["D", "E", "F"]:
+                mode = QUARTER_OPP
+            elif letter_str in ["G", "H", "I"]:
+                mode = TOG_SAME
+            elif letter_str in ["J", "K", "L"]:
+                mode = QUARTER_OPP
+            elif letter_str in ["M", "N", "O", "P", "Q", "R"]:
+                if start_pos in [GAMMA10, GAMMA8, GAMMA14, GAMMA4]:
+                    mode = SPLIT_OPP
+                elif start_pos in [GAMMA12, GAMMA16, GAMMA6, GAMMA2]:
+                    mode = TOG_OPP
+            elif letter_str in ["S", "T", "U", "V"]:
+                mode = QUARTER_SAME
         return mode
 
     def position_vtg_glyph(self) -> None:

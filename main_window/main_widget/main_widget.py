@@ -167,19 +167,19 @@ class MainWidget(QTabWidget):
         else:
             super().keyPressEvent(event)
 
-    def resize_widgets(self, current_widget):
+    def resize_widgets(self):
         self.top_builder_widget.resize_top_builder_widget()
         self.dictionary_widget.browser.resize_dictionary_browser()
         self.learn_widget.resize_learn_widget()
 
     def showEvent(self, event):
         super().showEvent(event)
-        self.resize_widgets(self.currentWidget())
+        self.resize_widgets()
         self.apply_background()
         if not self.initialized:
             self.main_window.geometry_manager.set_dimensions()
             self.initialized = True
-            
+
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.setStyleSheet(self.tab_bar_styler.get_tab_stylesheet())

@@ -2,7 +2,7 @@ from copy import deepcopy
 from functools import partial
 from PyQt6.QtCore import QObject, pyqtSignal
 from Enums.letters import Letter
-from data.constants import END_POS, START_POS
+from data.constants import BOX, DIAMOND, END_POS, START_POS
 from ....sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
@@ -32,12 +32,17 @@ class StartPosManager(QObject):
             self.manual_builder.transition_to_sequence_building
         )
 
+    def clear_start_positions(self) -> None:
+        """Clears the start positions."""
+        for start_position_pictograph in self.start_options.values():
+            start_position_pictograph.view.hide()
+
     def setup_start_positions(self) -> None:
         """Shows options for the starting position."""
-        if self.top_builder_widget.main_widget.grid_mode == "diamond":
+        if self.top_builder_widget.main_widget.grid_mode == DIAMOND:
             start_pos = ["alpha1_alpha1", "beta5_beta5", "gamma11_gamma11"]
-        elif self.top_builder_widget.main_widget.grid_mode == "box":
-            start_pos = ["alpha2_alpha2", "beta4_beta4", "gamma14_gamma14"]
+        elif self.top_builder_widget.main_widget.grid_mode == BOX:
+            start_pos = ["alpha2_alpha2", "beta4_beta4", "gamma12_gamma12"]
         for i, position_key in enumerate(start_pos):
             self._add_start_position_option_to_start_pos_frame(position_key)
 

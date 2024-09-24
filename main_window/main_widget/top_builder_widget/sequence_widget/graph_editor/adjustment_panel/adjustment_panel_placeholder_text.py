@@ -17,7 +17,7 @@ class AdjustmentPanelPlaceHolderText(QLabel):
 
     def set_default_text(self) -> None:
         self.setText(
-            "This is where you'll modify each pictograph.\nSelect a start position to begin!\n--->"
+            "This is where you'll modify each pictograph.\nSelect a pictograph to show the controls!"
         )
 
     def resize_adjustment_panel_placeholder_text(self) -> None:

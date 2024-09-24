@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Dict
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QStackedWidget
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QStackedWidget, QApplication
 from PyQt6.QtCore import Qt
 from .author_section import AuthorSection
 from .filter_choice_widget import FilterChoiceWidget

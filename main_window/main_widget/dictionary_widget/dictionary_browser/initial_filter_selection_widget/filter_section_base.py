@@ -58,8 +58,6 @@ class FilterSectionBase(QWidget):
         self.back_button.hide()
         self.header_label.hide()
 
-
-
     def add_buttons(self):
         # placeholder method, implemented in subclasses
         pass
@@ -70,4 +68,4 @@ class FilterSectionBase(QWidget):
         font = self.back_button.font()
         font.setPointSize(self.main_widget.width() // 120)
         self.back_button.setFont(font)
-        QApplication.processEvents()
+        # QApplication.processEvents()

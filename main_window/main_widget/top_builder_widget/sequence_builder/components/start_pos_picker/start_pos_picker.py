@@ -73,6 +73,8 @@ class StartPosPicker(QWidget):
         pictograph.updater.update_pictograph(pictograph_dict)
         return pictograph
 
+
+
     def resize_start_pos_picker(self) -> None:
         self.pictograph_frame.resize_start_pos_picker_pictograph_frame()
         self.start_pos_manager.resize_start_position_pictographs()

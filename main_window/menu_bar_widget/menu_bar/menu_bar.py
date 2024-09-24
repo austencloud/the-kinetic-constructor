@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QMenuBar, QMenu, QApplication
 from PyQt6.QtCore import Qt, QEvent
+
+from main_window.menu_bar_widget.menu_bar.grid_mode_menu import GridModeMenu
 from .user_profile_menu import UserProfileMenu
 from .backgrounds_menu import BackgroundsMenu
 from .prop_type_menu import PropTypeMenu
@@ -20,13 +22,14 @@ class MenuBar(QMenuBar):
         self.backgrounds_menu = BackgroundsMenu(self)
         self.prop_type_menu = PropTypeMenu(self)
         self.visibility_menu = VisibilityMenu(self)
+        self.grid_mode_menu = GridModeMenu(self)
 
         self.addMenu(self.prop_type_menu)
         self.addMenu(self.visibility_menu)
         self.addMenu(self.backgrounds_menu)
         self.addMenu(self.user_profiles_menu)
+        self.addMenu(self.grid_mode_menu)
 
-        # Apply custom spacing and styles
         self._apply_stylesheet()
 
     def _apply_stylesheet(self):
