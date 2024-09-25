@@ -71,7 +71,9 @@ class GlobalSettings:
         self, bg_type: str, widget, is_splash_screen=False
     ) -> Optional[BackgroundManager]:
         if not is_splash_screen:
-            self.font_color_updater.update_main_widget_font_colors(self.main_widget, bg_type)
+            self.font_color_updater.update_main_widget_font_colors(
+                self.main_widget, bg_type
+            )
         else:
             self.font_color_updater.update_splash_screen_font_colors(widget, bg_type)
         if bg_type == "Rainbow":
@@ -84,6 +86,7 @@ class GlobalSettings:
             return AuroraBackgroundManager(widget)
         elif bg_type == "AuroraBorealis":
             return AuroraBorealisBackgroundManager(widget)
+
         return None
 
     def get_current_font_color(self) -> str:

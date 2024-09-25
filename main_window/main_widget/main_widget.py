@@ -175,10 +175,7 @@ class MainWidget(QTabWidget):
     def showEvent(self, event):
         super().showEvent(event)
         self.apply_background()
-        if not self.initialized:
-            self.main_window.geometry_manager.set_dimensions()
-            self.initialized = True
-        # self.resize_widgets()
+
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
