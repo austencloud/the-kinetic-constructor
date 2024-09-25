@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 from Enums.Enums import Letter
 from Enums.PropTypes import PropType
 from letter_determiner.letter_determiner import LetterDeterminer
+from main_window.main_widget.grid_mode_checker import GridModeChecker
 from main_window.main_widget.learn_widget.learn_widget import LearnWidget
 from .pcitograph_dict_loader import PictographDictLoader
 from .sequence_properties_manager.sequence_properties_manager import (
@@ -82,7 +83,7 @@ class MainWidget(QTabWidget):
         self.sequence_level_evaluator = SequenceLevelEvaluator()
         self.sequence_properties_manager = SequencePropertiesManager(self)
         self.thumbnail_finder = ThumbnailFinder(self)
-
+        self.grid_mode_checker = GridModeChecker(self)
     def on_tab_changed(self, index):
         if index == self.builder_tab_index:
             self.main_window.settings_manager.global_settings.set_current_tab(

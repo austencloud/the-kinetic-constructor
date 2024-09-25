@@ -119,8 +119,12 @@ class SpecialPlacementEntryRemover:
 
     def _generate_file_path(self, ori_key: str, letter: Letter) -> str:
         file_path = os.path.join(
-            special_placements_parent_directory,
-            f"{ori_key}/{letter.value}_placements.json",
+            "data",
+            "arrow_placement",
+            self.positioner.placement_manager.pictograph.main_widget.grid_mode,
+            "special",
+            ori_key,
+            f"{letter.value}_placements.json",
         )
 
         return file_path

@@ -13,7 +13,6 @@ from data.constants import (
     IN,
     OUT,
     RED,
-    special_placements_parent_directory,
 )
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
@@ -118,7 +117,10 @@ class SpecialPlacementDataUpdater:
         self, letter: Letter, letter_data: dict, ori_key: str
     ) -> None:
         file_path = os.path.join(
-            special_placements_parent_directory,
+            "data",
+            "arrow_placement",
+            self.positioner.placement_manager.pictograph.main_widget.grid_mode,
+            "special",
             ori_key,
             f"{letter.value}_placements.json",
         )

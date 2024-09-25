@@ -19,11 +19,11 @@ class ArrowInitialPosCalculator:
             return self._get_static_coords(arrow)
 
     def _get_shift_coords(self, arrow: Arrow) -> QPointF:
-        layer = self.pictograph.grid.grid_data.layer2_points_normal
+        layer2_points = self.pictograph.grid.grid_data.layer2_points_normal
         point_name = f"{arrow.loc}_{self.pictograph.main_widget.grid_mode}_layer2_point"
-        return layer.points[point_name].coordinates
+        return layer2_points.points[point_name].coordinates
 
     def _get_static_coords(self, arrow: Arrow) -> QPointF:
-        layer = self.pictograph.grid.grid_data.hand_points_normal
+        hand_points = self.pictograph.grid.grid_data.hand_points_normal
         point_name = f"{arrow.loc}_{self.pictograph.main_widget.grid_mode}_hand_point"
-        return layer.points[point_name].coordinates
+        return hand_points.points[point_name].coordinates

@@ -7,7 +7,7 @@ current_dir = os.path.dirname(current_script_path)
 tka_sequence_constructor_dir = os.path.dirname(current_dir)
 tka_app_dir = os.path.dirname(tka_sequence_constructor_dir)
 
-special_placements_parent_directory = os.path.join("data/arrow_placement/special/")
+special_placements_parent_directory = os.path.join("")
 
 INTEGER_TURNS = [0.0, 1.0, 2.0, 3.0]
 

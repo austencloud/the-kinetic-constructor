@@ -45,5 +45,9 @@ class SpecialPlacementLoader:
 
         for _, pictograph_list in self.main_widget.pictograph_cache.items():
             for _, pictograph in pictograph_list.items():
-                pictograph.updater.update_pictograph()
-                pictograph.update()
+                grid_mode = self.main_widget.grid_mode_checker.check_grid_mode(
+                    pictograph.pictograph_dict
+                )
+                if grid_mode == self.main_widget.grid_mode:
+                    pictograph.updater.update_pictograph()
+                    pictograph.update()
