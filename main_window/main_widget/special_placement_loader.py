@@ -28,7 +28,7 @@ class SpecialPlacementLoader:
             "from_layer3_blue1_red2",
         ]:
             directory = get_images_and_data_path(
-                f"data/arrow_placement/special/{subfolder}"
+                f"data/arrow_placement/{self.main_widget.grid_mode}/special/{subfolder}"
             )
             for file_name in os.listdir(directory):
                 if file_name.endswith("_placements.json"):
