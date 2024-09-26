@@ -2,7 +2,7 @@
     "global": {
         "prop_type": "Staff",
         "background_type": "Aurora",
-        "grow_sequence": false,
+        "grow_sequence": true,
         "current_tab": "sequence_builder",
         "grid_mode": "diamond"
     },
@@ -56,7 +56,7 @@
         "current_filter": null
     },
     "sequence_layout": {
-        "grow_sequence": false,
+        "grow_sequence": true,
         "num_beats": 24,
         "layout_option": "6 x 4"
     },
@@ -81,7 +81,7 @@
             "current_auto_builder": "circular"
         },
         "manual_builder": {},
-        "last_used_builder": "manual"
+        "last_used_builder": "auto"
     },
     "sequence_sharing": {
         "recipients": [
