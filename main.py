@@ -42,13 +42,15 @@ def main() -> None:
     main_window.show()
 
     QTimer.singleShot(0, lambda: splash_screen.close())
-    # Check if we should show the welcome screen
 
+    # _show_welcome_dialog(settings_manager, main_window)
+
+    sys.exit(app.exec())
+
+def _show_welcome_dialog(settings_manager, main_window):
     welcome_dialog = WelcomeDialog(settings_manager, main_window)
     welcome_dialog.exec()
     welcome_dialog.raise_()
-
-    sys.exit(app.exec())
 
 
 if __name__ == "__main__":
