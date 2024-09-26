@@ -1,10 +1,25 @@
+from tkinter import NO
 from typing import TYPE_CHECKING
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
-from data.constants import EAST, NORTH, SOUTH, WEST
+from data.constants import (
+    CLOCKWISE,
+    COUNTER_CLOCKWISE,
+    DASH,
+    EAST,
+    NORTH,
+    NORTHEAST,
+    NORTHWEST,
+    SOUTH,
+    SOUTHEAST,
+    SOUTHWEST,
+    STATIC,
+    WEST,
+)
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 from .permutation_executor_base import PermutationExecutor
+from data.positions_map import positions_map
 
 if TYPE_CHECKING:
     from ..circular_auto_builder import CircularAutoBuilder
@@ -89,14 +104,50 @@ class RotatedPermutationExecuter(PermutationExecutor):
     def calculate_rotated_permuatation_new_loc(
         self, start_loc: str, hand_rot_dir: str
     ) -> str:
-        loc_map_cw = {"s": "w", "w": "n", "n": "e", "e": "s"}
-        loc_map_ccw = {"s": "e", "e": "n", "n": "w", "w": "s"}
-        loc_map = loc_map_cw if hand_rot_dir == "cw" else loc_map_ccw
+        loc_map_cw = {
+            SOUTH: WEST,
+            WEST: NORTH,
+            NORTH: EAST,
+            EAST: SOUTH,
+            NORTHEAST: SOUTHEAST,
+            SOUTHEAST: SOUTHWEST,
+            SOUTHWEST: NORTHWEST,
+            NORTHWEST: NORTHEAST,
+        }
+        loc_map_ccw = {
+            SOUTH: EAST,
+            EAST: NORTH,
+            NORTH: WEST,
+            WEST: SOUTH,
+            NORTHEAST: NORTHWEST,
+            NORTHWEST: SOUTHWEST,
+            SOUTHWEST: SOUTHEAST,
+            SOUTHEAST: NORTHEAST,
+        }
+        loc_map = loc_map_cw if hand_rot_dir == CLOCKWISE else loc_map_ccw
 
-        if hand_rot_dir == "dash":
-            loc_map = {"s": "n", "n": "s", "w": "e", "e": "w"}
-        elif hand_rot_dir == "static":
-            loc_map = {"s": "s", "n": "n", "w": "w", "e": "e"}
+        if hand_rot_dir == DASH:
+            loc_map = {
+                SOUTH: NORTH,
+                NORTH: SOUTH,
+                WEST: EAST,
+                EAST: WEST,
+                NORTHEAST: SOUTHWEST,
+                SOUTHEAST: NORTHWEST,
+                SOUTHWEST: NORTHEAST,
+                NORTHWEST: SOUTHEAST,
+            }
+        elif hand_rot_dir == STATIC:
+            loc_map = {
+                SOUTH: SOUTH,
+                NORTH: NORTH,
+                WEST: WEST,
+                EAST: EAST,
+                NORTHEAST: NORTHEAST,
+                SOUTHEAST: SOUTHEAST,
+                SOUTHWEST: SOUTHWEST,
+                NORTHWEST: NORTHWEST,
+            }
 
         return loc_map[start_loc]
 
@@ -164,49 +215,44 @@ class RotatedPermutationExecuter(PermutationExecutor):
                 previous_matching_beat["red_attributes"]["end_loc"],
             ),
         )
-        return self.get_numbered_position_from_locs(new_blue_end_loc, new_red_end_loc)
+        return positions_map.get((new_blue_end_loc, new_red_end_loc))
 
     def get_hand_rot_dir_from_locs(self, start_loc: str, end_loc: str) -> str:
         hand_rot_dir_map = {
-            (SOUTH, WEST): "cw",
-            (WEST, NORTH): "cw",
-            (NORTH, EAST): "cw",
-            (EAST, SOUTH): "cw",
-            (WEST, SOUTH): "ccw",
-            (NORTH, WEST): "ccw",
-            (EAST, NORTH): "ccw",
-            (SOUTH, EAST): "ccw",
-            (SOUTH, NORTH): "dash",
-            (WEST, EAST): "dash",
-            (NORTH, SOUTH): "dash",
-            (EAST, WEST): "dash",
-            (NORTH, NORTH): "static",
-            (EAST, EAST): "static",
-            (SOUTH, SOUTH): "static",
-            (WEST, WEST): "static",
+            (SOUTH, WEST): CLOCKWISE,
+            (WEST, NORTH): CLOCKWISE,
+            (NORTH, EAST): CLOCKWISE,
+            (EAST, SOUTH): CLOCKWISE,
+            (WEST, SOUTH): COUNTER_CLOCKWISE,
+            (NORTH, WEST): COUNTER_CLOCKWISE,
+            (EAST, NORTH): COUNTER_CLOCKWISE,
+            (SOUTH, EAST): COUNTER_CLOCKWISE,
+            (SOUTH, NORTH): DASH,
+            (WEST, EAST): DASH,
+            (NORTH, SOUTH): DASH,
+            (EAST, WEST): DASH,
+            (NORTH, NORTH): STATIC,
+            (EAST, EAST): STATIC,
+            (SOUTH, SOUTH): STATIC,
+            (WEST, WEST): STATIC,
+            (NORTHEAST, SOUTHEAST): CLOCKWISE,
+            (SOUTHEAST, SOUTHWEST): CLOCKWISE,
+            (SOUTHWEST, NORTHWEST): CLOCKWISE,
+            (NORTHWEST, NORTHEAST): CLOCKWISE,
+            (NORTHEAST, NORTHWEST): COUNTER_CLOCKWISE,
+            (NORTHWEST, SOUTHWEST): COUNTER_CLOCKWISE,
+            (SOUTHWEST, SOUTHEAST): COUNTER_CLOCKWISE,
+            (SOUTHEAST, NORTHEAST): COUNTER_CLOCKWISE,
+            (NORTHEAST, SOUTHWEST): DASH,
+            (SOUTHEAST, NORTHWEST): DASH,
+            (SOUTHWEST, NORTHEAST): DASH,
+            (NORTHWEST, SOUTHEAST): DASH,
+            (NORTHEAST, NORTHEAST): STATIC,
+            (SOUTHEAST, SOUTHEAST): STATIC,
+            (SOUTHWEST, SOUTHWEST): STATIC,
+            (NORTHWEST, NORTHWEST): STATIC,
         }
         return hand_rot_dir_map.get((start_loc, end_loc))
-
-    def get_numbered_position_from_locs(self, blue_loc: str, red_loc: str) -> str:
-        positions_map = {
-            (SOUTH, NORTH): "alpha1",
-            (WEST, EAST): "alpha3",
-            (NORTH, SOUTH): "alpha5",
-            (EAST, WEST): "alpha7",
-            (NORTH, NORTH): "beta1",
-            (EAST, EAST): "beta3",
-            (SOUTH, SOUTH): "beta5",
-            (WEST, WEST): "beta7",
-            (WEST, NORTH): "gamma1",
-            (NORTH, EAST): "gamma3",
-            (EAST, SOUTH): "gamma5",
-            (SOUTH, WEST): "gamma7",
-            (EAST, NORTH): "gamma9",
-            (SOUTH, EAST): "gamma11",
-            (WEST, SOUTH): "gamma13",
-            (NORTH, WEST): "gamma15",
-        }
-        return positions_map.get((blue_loc, red_loc))
 
     def get_previous_matching_beat(
         self,

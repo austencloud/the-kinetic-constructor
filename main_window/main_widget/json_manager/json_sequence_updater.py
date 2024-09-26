@@ -27,6 +27,7 @@ class JsonSequenceUpdater:
             sequence[0]["word"] = properties["word"]
             sequence[0]["author"] = properties["author"]
             sequence[0]["level"] = properties["level"]
+            sequence[0]["grid_mode"] = properties["grid_mode"]
             sequence[0]["is_circular"] = properties["is_circular"]
             sequence[0]["is_permutable"] = properties["is_permutable"]
             sequence[0]["is_strictly_rotated_permutation"] = properties[

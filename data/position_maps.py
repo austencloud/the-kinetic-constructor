@@ -1,6 +1,6 @@
 quarter_position_map_cw = {
     "alpha1": "alpha3",
-    "alpha2,": "alpha4",
+    "alpha2": "alpha4",
     "alpha3": "alpha5",
     "alpha4": "alpha6",
     "alpha5": "alpha7",

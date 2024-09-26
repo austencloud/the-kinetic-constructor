@@ -1,3 +1,4 @@
+from re import S
 from data.constants import *
 from .base_rot_angle_calculator import BaseRotAngleCalculator
 
@@ -23,6 +24,10 @@ class DashRotAngleCalculator(BaseRotAngleCalculator):
             (EAST, WEST): 180,
             (SOUTH, NORTH): 270,
             (WEST, EAST): 0,
+            (SOUTHEAST, NORTHWEST): 225,
+            (SOUTHWEST, NORTHEAST): 315,
+            (NORTHWEST, SOUTHEAST): 45,
+            (NORTHEAST, SOUTHWEST): 135,
         }
 
     def _handle_orientation_based_rotation(self) -> int:

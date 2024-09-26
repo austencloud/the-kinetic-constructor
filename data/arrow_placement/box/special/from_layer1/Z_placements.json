@@ -21,8 +21,6 @@
       "static_rot_angle_override": true,
       "static": [-100, 0]
     },
-    "(0, 0)": {
-      "swap_beta_sw_radial_blue_static_sw_red_anti_s": true
-    }
+    "(0, 0)": {}
   }
 }

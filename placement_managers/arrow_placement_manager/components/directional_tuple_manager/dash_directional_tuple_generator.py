@@ -1,17 +1,23 @@
 from Enums.Enums import LetterType
 from data.constants import (
     BLUE,
+    BOX,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
     DASH,
+    DIAMOND,
     EAST,
     FLOAT,
     NO_ROT,
     NORTH,
+    NORTHEAST,
+    NORTHWEST,
     PRO,
     ANTI,
     RED,
     SOUTH,
+    SOUTHEAST,
+    SOUTHWEST,
     STATIC,
     WEST,
 )
@@ -65,7 +71,7 @@ class DashDirectionalGenerator(BaseDirectionalGenerator):
                 return [(x, -y), (y, x), (-x, y), (-y, -x)]
 
     def _handle_type5_zero_turns(self, x: int, y: int) -> list[tuple[int, int]]:
-        Type5_zero_turns_directional_tuples = {
+        diamond_Type5_zero_turns_directional_tuples = {
             (BLUE, (NORTH, SOUTH)): [(x, y), (-y, x), (-x, -y), (y, -x)],
             (BLUE, (EAST, WEST)): [(x, y), (-y, -x), (-x, -y), (y, x)],
             (BLUE, (SOUTH, NORTH)): [(x, y), (-y, x), (-x, -y), (y, -x)],
@@ -75,6 +81,21 @@ class DashDirectionalGenerator(BaseDirectionalGenerator):
             (RED, (SOUTH, NORTH)): [(x, y), (-y, x), (-x, -y), (y, -x)],
             (RED, (WEST, EAST)): [(-x, y), (-y, -x), (-x, -y), (y, x)],
         }
-        return Type5_zero_turns_directional_tuples.get(
-            (self.motion.color, (self.motion.start_loc, self.motion.end_loc)), []
-        )
+        box_Type5_zero_turns_directional_tuples = {
+            (BLUE, (NORTHEAST, SOUTHWEST)): [(x, y), (-y, x), (-x, -y), (y, -x)],
+            (BLUE, (NORTHWEST, SOUTHEAST)): [(x, y), (-y, -x), (-x, -y), (y, x)],
+            (BLUE, (SOUTHWEST, NORTHEAST)): [(x, y), (-y, x), (-x, -y), (y, -x)],
+            (BLUE, (SOUTHEAST, NORTHWEST)): [(x, y), (-y, -x), (-x, -y), (-y, x)],
+            (RED, (NORTHEAST, SOUTHWEST)): [(x, y), (-y, -x), (-x, -y), (y, -x)],
+            (RED, (NORTHWEST, SOUTHEAST)): [(x, y), (-y, -x), (-x, -y), (y, -x)],
+            (RED, (SOUTHWEST, NORTHEAST)): [(x, y), (-y, x), (-x, -y), (y, -x)],
+            (RED, (SOUTHEAST, NORTHWEST)): [(-x, y), (-y, -x), (-x, -y), (y, x)],
+        }
+        if self.motion.pictograph.main_widget.grid_mode == DIAMOND:
+            return diamond_Type5_zero_turns_directional_tuples.get(
+                (self.motion.color, (self.motion.start_loc, self.motion.end_loc)), []
+            )
+        elif self.motion.pictograph.main_widget.grid_mode == BOX:
+            return box_Type5_zero_turns_directional_tuples.get(
+                (self.motion.color, (self.motion.start_loc, self.motion.end_loc)), []
+            )

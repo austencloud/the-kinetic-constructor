@@ -40,11 +40,11 @@ class DashLocationCalculator(BaseLocationCalculator):
                 (RED, (NORTHWEST, SOUTHEAST)): NORTHEAST,
                 (RED, (NORTHEAST, SOUTHWEST)): NORTHWEST,
                 (RED, (SOUTHWEST, NORTHEAST)): SOUTHEAST,
-                (RED, (SOUTHEAST, NORTHWEST)): SOUTHWEST,
+                (RED, (SOUTHEAST, NORTHWEST)): NORTHEAST,
                 (BLUE, (NORTHWEST, SOUTHEAST)): SOUTHWEST,
                 (BLUE, (NORTHEAST, SOUTHWEST)): SOUTHEAST,
                 (BLUE, (SOUTHWEST, NORTHEAST)): NORTHWEST,
-                (BLUE, (SOUTHEAST, NORTHWEST)): NORTHEAST,
+                (BLUE, (SOUTHEAST, NORTHWEST)): SOUTHWEST,
             }
             arrow_location = location_map.get(
                 (
@@ -100,8 +100,8 @@ class DashLocationCalculator(BaseLocationCalculator):
             (WEST, EAST): NORTH,
             (NORTHEAST, SOUTHWEST): SOUTHEAST,
             (NORTHWEST, SOUTHEAST): NORTHEAST,
-            (SOUTHWEST, NORTHEAST): SOUTHWEST,
-            (SOUTHEAST, NORTHWEST): SOUTHEAST,
+            (SOUTHWEST, NORTHEAST): NORTHWEST,
+            (SOUTHEAST, NORTHWEST): NORTHEAST,
         }
         return location_map.get(
             (self.arrow.motion.start_loc, self.arrow.motion.end_loc), ""
@@ -137,7 +137,7 @@ class DashLocationCalculator(BaseLocationCalculator):
         shift_arrow = self.pictograph.get.shift().arrow
 
         shift_location = shift_arrow.loc
-        dash_location_map = {
+        diamond_dash_location_map = {
             (NORTH, NORTHWEST): EAST,
             (NORTH, NORTHEAST): WEST,
             (NORTH, SOUTHEAST): WEST,
@@ -155,4 +155,29 @@ class DashLocationCalculator(BaseLocationCalculator):
             (WEST, SOUTHEAST): NORTH,
             (WEST, SOUTHWEST): NORTH,
         }
-        return dash_location_map.get((self.arrow.motion.start_loc, shift_location))
+        box_dash_location_map = {
+            (NORTHEAST, NORTH): SOUTHEAST,
+            (NORTHEAST, EAST): NORTHWEST,
+            (NORTHEAST, SOUTH): NORTHWEST,
+            (NORTHEAST, WEST): SOUTHEAST,
+            (SOUTHEAST, NORTH): SOUTHWEST,
+            (SOUTHEAST, EAST): SOUTHWEST,
+            (SOUTHEAST, SOUTH): NORTHEAST,
+            (SOUTHEAST, WEST): NORTHEAST,
+            (SOUTHWEST, NORTH): SOUTHEAST,
+            (SOUTHWEST, EAST): NORTHWEST,
+            (SOUTHWEST, SOUTH): NORTHWEST,
+            (SOUTHWEST, WEST): SOUTHEAST,
+            (NORTHWEST, NORTH): SOUTHWEST,
+            (NORTHWEST, EAST): SOUTHWEST,
+            (NORTHWEST, SOUTH): NORTHEAST,
+            (NORTHWEST, WEST): NORTHEAST,
+        }
+        if self.pictograph.main_widget.grid_mode == DIAMOND:
+            return diamond_dash_location_map.get(
+                (self.arrow.motion.start_loc, shift_location)
+            )
+        elif self.pictograph.main_widget.grid_mode == BOX:
+            return box_dash_location_map.get(
+                (self.arrow.motion.start_loc, shift_location)
+            )

@@ -58,7 +58,7 @@ class BasePictograph(QGraphicsScene):
     letter_type: LetterType = None
     pictograph_dict: dict
     motion_dict_list: list[dict]
-    start_pos: SpecificPosition
+    start_pos: str
     end_pos: str
     image_loaded: bool
     pixmap: QGraphicsPixmapItem

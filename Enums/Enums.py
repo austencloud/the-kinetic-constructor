@@ -218,21 +218,21 @@ class Positions(Enum):
 
 class SpecificPosition(Enum):
     ALPHA1 = "alpha1"
-    alpha3 = "alpha3"
-    alpha5 = "alpha5"
-    alpha7 = "alpha7"
+    ALPHA2 = "alpha3"
+    ALPHA3 = "alpha5"
+    ALPHA7 = "alpha7"
     BETA1 = "beta1"
-    beta3 = "beta3"
-    beta5 = "beta5"
-    beta7 = "beta7"
+    BETA3 = "beta3"
+    BETA5 = "beta5"
+    BETA7 = "beta7"
     GAMMA1 = "gamma1"
-    gamma3 = "gamma3"
-    gamma5 = "gamma5"
-    gamma7 = "gamma7"
-    gamma9 = "gamma9"
-    gamma11 = "gamma11"
-    gamma13 = "gamma13"
-    gamma15 = "gamma15"
+    GAMMA3 = "gamma3"
+    GAMMA5 = "gamma5"
+    GAMMA7 = "gamma7"
+    GAMMA9 = "gamma9"
+    GAMMA11 = "gamma11"
+    GAMMA13 = "gamma13"
+    GAMMA15 = "gamma15"
 
 
 class ShiftHandpaths(Enum):
@@ -339,8 +339,8 @@ class Pictograph_Key(Enum):
 
 class PictographAttributesDict(TypedDict):
     letter: Letter
-    start_pos: SpecificPosition
-    end_pos: SpecificPosition
+    start_pos: str
+    end_pos: str
     blue_motion_type: MotionType
     blue_prop_rot_dir: PropRotDir
     blue_start_loc: Location

@@ -38,6 +38,7 @@ class JsonSequenceLoaderSaver:
                 "author": self.json_manager.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
                 "level": 0,
                 "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
+                "grid_mode": self.json_manager.main_widget.grid_mode,
                 "is_circular": False,
                 "is_permutable": False,
                 "is_strictly_rotated_permutation": False,

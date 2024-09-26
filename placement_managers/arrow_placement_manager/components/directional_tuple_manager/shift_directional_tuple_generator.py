@@ -63,8 +63,8 @@ class ShiftDirectionalGenerator(BaseDirectionalGenerator):
         self, x: int, y: int
     ) -> list[tuple[int, int]]:
         directional_tuples = {
-            CLOCKWISE: [(x, y), (-y, x), (x, -y), (y, -x)],
-            COUNTER_CLOCKWISE: [(x, y), (-y, -x), (-x, -y), (y, x)],
+            CLOCKWISE: [(-x, y), (-y, -x), (x, -y), (y, x)],
+            COUNTER_CLOCKWISE: [(x, y), (-y, x), (-x, -y), (y, -x)],
         }
         return directional_tuples.get(self.motion.prop_rot_dir, [])
 
@@ -72,8 +72,8 @@ class ShiftDirectionalGenerator(BaseDirectionalGenerator):
         self, x: int, y: int
     ) -> list[tuple[int, int]]:
         directional_tuples = {
-            CLOCKWISE: [(x, y), (-y, -x), (-x, -y), (y, x)],
-            COUNTER_CLOCKWISE: [(x, y), (-y, -x), (-x, -y), (y, x)],
+            CLOCKWISE: [(-x, y), (-y, -x), (x, -y), (y, x)],
+            COUNTER_CLOCKWISE: [(x, y), (-y, x), (-x, -y), (y, -x)],
         }
         return directional_tuples.get(self.motion.prop_rot_dir, [])
 

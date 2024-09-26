@@ -104,6 +104,7 @@ class SequencePropertiesManager:
             "level": self.main_widget.sequence_level_evaluator.get_sequence_difficulty_level(
                 self.sequence
             ),
+            "grid_mode": self.main_widget.grid_mode,
             "is_circular": self.ends_at_start_pos,
             "is_permutable": self.is_permutable,
             "is_strictly_rotated_permutation": self.is_strictly_rotated_permutation,
@@ -118,6 +119,7 @@ class SequencePropertiesManager:
             "word": "",
             "author": self.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
             "level": 0,
+            "grid_mode": self.main_widget.grid_mode,
             "is_circular": False,
             "is_permutable": False,
             "is_strictly_rotated_permutation": False,
