@@ -190,7 +190,8 @@
     },
     "(cw, 0, 1)": {
       "red_rot_angle": 0,
-      "red": [100, -5]
+      "swap_beta_sw_radial_blue_static_sw_red_static_sw": true,
+      "swap_beta_se_radial_blue_static_se_red_static_se": true
     },
     "(s, 0.5, 0.5)": {
       "red": [100, 120],

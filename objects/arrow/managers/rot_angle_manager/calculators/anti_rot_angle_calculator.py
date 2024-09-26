@@ -32,20 +32,20 @@ class AntiRotAngleCalculator(BaseRotAngleCalculator):
             if self.arrow.motion.turns in [0.5, 1.5, 2.5]:
                 direction_map = {
                     CLOCKWISE: {
-                        NORTH: 0,
-                        EAST: 90,
-                        SOUTH: 180,
-                        WEST: 270,
+                        NORTH: 315,
+                        EAST: 225,
+                        SOUTH: 135,
+                        WEST: 45,
                         NORTHEAST: 270,
                         SOUTHEAST: 180,
                         SOUTHWEST: 90,
                         NORTHWEST: 360,
                     },
                     COUNTER_CLOCKWISE: {
-                        NORTH: 0,
-                        EAST: 270,
-                        SOUTH: 180,
-                        WEST: 90,
+                        NORTH: 315,
+                        EAST: 45,
+                        SOUTH: 135,
+                        WEST: 225,
                         NORTHEAST: 360,
                         SOUTHEAST: 90,
                         SOUTHWEST: 180,
@@ -55,12 +55,20 @@ class AntiRotAngleCalculator(BaseRotAngleCalculator):
             else:
                 direction_map = {
                     CLOCKWISE: {
+                        NORTH: 315,
+                        EAST: 225,
+                        SOUTH: 135,
+                        WEST: 45,
                         NORTHEAST: 270,
                         SOUTHEAST: 180,
                         SOUTHWEST: 90,
                         NORTHWEST: 0,
                     },
                     COUNTER_CLOCKWISE: {
+                        NORTH: 315,
+                        EAST: 45,
+                        SOUTH: 135,
+                        WEST: 225,
                         NORTHEAST: 0,
                         SOUTHEAST: 90,
                         SOUTHWEST: 180,
