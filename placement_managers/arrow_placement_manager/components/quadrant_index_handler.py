@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Literal
 from objects.arrow.arrow import Arrow
 from data.constants import (
+    BOX,
     DIAMOND,
     FLOAT,
     NORTHEAST,
@@ -32,6 +33,12 @@ class QuadrantIndexHandler:
                 return self._diamond_shift_quadrant_index(arrow.loc)
             elif arrow.motion.motion_type in [STATIC, DASH]:
                 return self._diamond_static_dash_quadrant_index(arrow.loc)
+        elif self.grid_mode == BOX:
+            if arrow.motion.motion_type in [PRO, ANTI, FLOAT]:
+                return self._box_shift_quadrant_index(arrow.loc)
+            elif arrow.motion.motion_type in [STATIC, DASH]:
+                return self._box_static_dash_quadrant_index(arrow.loc)
+            
         return 0
 
     def _diamond_shift_quadrant_index(self, location: Location) -> Literal[0, 1, 2, 3]:
@@ -51,5 +58,23 @@ class QuadrantIndexHandler:
             EAST: 1,
             SOUTH: 2,
             WEST: 3,
+        }
+        return location_to_index.get(location, 0)
+
+    def _box_shift_quadrant_index(self, location: Location) -> Literal[0, 1, 2, 3]:
+        location_to_index = {
+            NORTH: 0,
+            EAST: 1,
+            SOUTH: 2,
+            WEST: 3,
+        }
+        return location_to_index.get(location, 0)
+    
+    def _box_static_dash_quadrant_index(self, location: Location) -> Literal[0, 1, 2, 3]:
+        location_to_index = {
+            NORTHEAST: 0,
+            SOUTHEAST: 1,
+            SOUTHWEST: 2,
+            NORTHWEST: 3,
         }
         return location_to_index.get(location, 0)

@@ -3,11 +3,11 @@
         "prop_type": "Staff",
         "background_type": "Starfield",
         "grow_sequence": true,
-        "current_tab": "sequence_builder",
-        "grid_mode": "box"
+        "current_tab": "learn",
+        "grid_mode": "diamond"
     },
     "image_export": {
-        "include_start_position": true,
+        "include_start_position": false,
         "add_info": true,
         "open_directory_on_export": true,
         "add_word": true,
@@ -15,7 +15,7 @@
         "add_beat_numbers": true
     },
     "user_profile": {
-        "current_user": "Austen Cloud",
+        "current_user": "Robert Bershadsky",
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
@@ -29,6 +29,9 @@
             },
             "Robert Giannini": {
                 "name": "Robert Giannini"
+            },
+            "Robert Bershadsky": {
+                "name": "Robert Bershadsky"
             }
         },
         "current_note": "Created using The Kinetic Alphabet",
@@ -49,21 +52,21 @@
     },
     "dictionary": {
         "sort_method": "date_added",
-        "current_section": "filter_choice",
+        "current_section": "browser",
         "current_filter": null
     },
     "sequence_layout": {
-        "grow_sequence": true,
-        "num_beats": 16,
-        "layout_option": "4 x 4"
+        "grow_sequence": false,
+        "num_beats": 18,
+        "layout_option": "6 x 3"
     },
     "builder": {
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 16,
+                "sequence_length": 12,
                 "max_turn_intensity": 1,
-                "sequence_level": 2,
+                "sequence_level": 1,
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",
                 "continuous_rotation": true
@@ -72,13 +75,13 @@
                 "sequence_type": "freeform",
                 "sequence_length": 16,
                 "max_turn_intensity": 2,
-                "sequence_level": 1,
+                "sequence_level": 2,
                 "continuous_rotation": true
             },
             "current_auto_builder": "circular"
         },
         "manual_builder": {},
-        "last_used_builder": "manual"
+        "last_used_builder": "auto"
     },
     "sequence_sharing": {
         "recipients": [

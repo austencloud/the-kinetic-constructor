@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QApplication
+from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtGui import QPainter
 from .sequence_builder.sequence_builder import SequenceBuilder
 from .sequence_widget.sequence_widget import SequenceWidget

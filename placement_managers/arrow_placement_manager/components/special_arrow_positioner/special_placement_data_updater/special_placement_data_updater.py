@@ -36,7 +36,6 @@ class SpecialPlacementDataUpdater:
         self.mirrored_entry_manager = MirroredEntryManager(self)
 
     def _get_letter_data(self, letter: Letter, ori_key: str) -> dict:
-
         letter_data = (
             self.positioner.placement_manager.pictograph.main_widget.special_placements[
                 ori_key
@@ -145,7 +144,8 @@ class SpecialPlacementDataUpdater:
         self._update_placement_json_data(letter, letter_data, ori_key)
 
         logging.info(
-            f"Updated {letter.value} in {ori_key} at {turns_tuple} with adjustment {adjustment}. Current values: {letter_data.get(turns_tuple)}"
+            f"Updated {letter.value} in {ori_key} at {turns_tuple} with adjustment "
+            f"{adjustment}. Values: {letter_data.get(turns_tuple)}"
         )
 
     def update_specific_entry_in_json(

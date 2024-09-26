@@ -63,9 +63,11 @@ class CircularAutoBuilderFrame(BaseAutoBuilderFrame):
         if permutation_type == "mirrored":
             # Hide rotation type toggle when mirrored
             self.rotation_type_toggle.hide()
+            self.length_adjuster.limit_length(False)
         else:
             # Show rotation type toggle when not mirrored
             self.rotation_type_toggle.show()
+            self.length_adjuster.limit_length(True)
 
     def _on_create_sequence(self):
         """Trigger sequence creation for Circular."""

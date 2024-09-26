@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .image_export_manager import ImageExportManager
 
+
 class ImageExportLayoutHandler:
     def __init__(self, image_export_manager: "ImageExportManager"):
         self.image_export_manager = image_export_manager
@@ -145,7 +146,7 @@ class ImageExportLayoutHandler:
             15: (4, 4),
             16: (4, 4),
             17: (4, 5),
-            18: (4, 5),
+            18: (9, 2),
             19: (4, 5),
             20: (5, 4),
             21: (4, 6),

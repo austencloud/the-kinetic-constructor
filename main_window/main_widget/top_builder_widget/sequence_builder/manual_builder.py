@@ -1,5 +1,4 @@
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QApplication, QStackedWidget
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QStackedWidget
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
 from data.constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS

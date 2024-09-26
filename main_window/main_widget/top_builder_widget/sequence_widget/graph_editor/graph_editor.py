@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout
 from .adjustment_panel.beat_adjustment_panel import BeatAdjustmentPanel
 from .pictograph_container.GE_pictograph_container import GraphEditorPictographContainer

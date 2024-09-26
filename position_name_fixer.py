@@ -70,5 +70,7 @@ def update_all_metadata():
                 except Exception as e:
                     print(f'Error processing {file_path}: {e}')
 
+
+
 if __name__ == '__main__':
     update_all_metadata()

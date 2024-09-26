@@ -2,7 +2,7 @@ import json
 
 from PyQt6.QtGui import QKeyEvent, QCursor, QCloseEvent
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QTabWidget, QApplication
+from PyQt6.QtWidgets import QTabWidget
 
 from typing import TYPE_CHECKING
 from Enums.Enums import Letter
@@ -26,7 +26,6 @@ from .json_manager.json_manager import JSON_Manager
 from .turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from .pictograph_key_generator import PictographKeyGenerator
-from data.constants import DIAMOND
 from ..main_widget.special_placement_loader import SpecialPlacementLoader
 
 if TYPE_CHECKING:

@@ -7,7 +7,7 @@ if TYPE_CHECKING:
         BaseLessonWidget,
     )
 
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
 
 
 class ResultsWidget(QWidget):

@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QMessageBox
 from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
     BeatView,
 )
