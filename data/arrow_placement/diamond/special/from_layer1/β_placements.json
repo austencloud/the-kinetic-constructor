@@ -233,7 +233,10 @@
       "red_rot_angle": 0,
       "red": [-25, 0]
     },
-    "(ccw, 0, 1)": {},
+    "(ccw, 0, 1)": {
+      "swap_beta_n_radial_blue_static_n_red_static_n": true,
+      "swap_beta_s_radial_blue_static_s_red_static_s": true
+    },
     "(s, 2, 1)": {
       "blue_rot_angle": 0,
       "blue": [-25, 0],

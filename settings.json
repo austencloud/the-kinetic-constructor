@@ -1,13 +1,13 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Starfield",
+        "background_type": "AuroraBorealis",
         "grow_sequence": true,
-        "current_tab": "sequence_builder",
-        "grid_mode": "box"
+        "current_tab": "learn",
+        "grid_mode": "diamond"
     },
     "image_export": {
-        "include_start_position": false,
+        "include_start_position": true,
         "add_info": true,
         "open_directory_on_export": true,
         "add_word": true,
@@ -15,7 +15,7 @@
         "add_beat_numbers": true
     },
     "user_profile": {
-        "current_user": "Robert Bershadsky",
+        "current_user": "Austen Cloud",
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
@@ -66,7 +66,7 @@
                 "sequence_type": "circular",
                 "sequence_length": 16,
                 "max_turn_intensity": 1,
-                "sequence_level": 2,
+                "sequence_level": 3,
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",
                 "continuous_rotation": true
@@ -74,8 +74,8 @@
             "freeform_auto_builder": {
                 "sequence_type": "freeform",
                 "sequence_length": 16,
-                "max_turn_intensity": 2,
-                "sequence_level": 2,
+                "max_turn_intensity": 1,
+                "sequence_level": 3,
                 "continuous_rotation": true
             },
             "current_auto_builder": "freeform"

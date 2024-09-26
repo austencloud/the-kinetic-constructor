@@ -469,7 +469,7 @@
     "(s, 0, 0.5)": {
       "static_rot_angle": true,
       "static_rot_angle_override": true,
-      "static": [100, 80]
+      "static": [100, -100]
     },
     "(s, fl, 0.5)": {
       "static_rot_angle_override": true,
@@ -477,6 +477,11 @@
     },
     "null": {
       "static_rot_angle_override": true
+    },
+    "(0, 0.5)": {
+      "swap_beta_n_nonradial_blue_pro_nw_red_static_n": true,
+      "static_rot_angle_override": true,
+      "static": [100, 100]
     }
   }
 }

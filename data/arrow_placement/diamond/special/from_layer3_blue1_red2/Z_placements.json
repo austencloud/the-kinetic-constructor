@@ -97,7 +97,8 @@
       "static_from_layer2": [120, -100]
     },
     "(s, 0, 0.5)": {
-      "static_from_layer1": [-100, -120]
+      "static_from_layer1": [-100, -120],
+      "static_from_layer2": {}
     },
     "(s, 0, 1)": {
       "static_from_layer1": [-65, 0],
