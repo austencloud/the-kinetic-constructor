@@ -20,6 +20,10 @@
     "(s, 1, 2)": {
       "static_rot_angle_override": true,
       "static": [20, 0]
+    },
+    "(0, 0)": {
+      "swap_beta_sw_radial_blue_static_sw_red_pro_s": true,
+      "swap_beta_sw_radial_blue_pro_s_red_static_sw": true
     }
   }
 }

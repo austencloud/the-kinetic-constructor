@@ -93,12 +93,12 @@ class BetaPropDirectionCalculator:
             (EAST, SOUTH): DOWN,
             (WEST, NORTH): UP,
             (WEST, SOUTH): DOWN,
-            # Adding diagonal directions
+            
             (NORTHEAST, SOUTHEAST): DOWNRIGHT,
             (NORTHEAST, NORTHWEST): UPLEFT,
             (SOUTHEAST, NORTHEAST): UPRIGHT,
             (SOUTHEAST, SOUTHWEST): DOWNLEFT,
-            (SOUTHWEST, SOUTHEAST): UPLEFT,
+            (SOUTHWEST, SOUTHEAST): DOWNRIGHT,
             (SOUTHWEST, NORTHWEST): UPLEFT,
             (NORTHWEST, SOUTHWEST): DOWNLEFT,
             (NORTHWEST, NORTHEAST): UPRIGHT,
