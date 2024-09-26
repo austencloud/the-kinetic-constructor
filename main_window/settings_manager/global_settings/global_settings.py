@@ -22,7 +22,8 @@ class GlobalSettings:
         "background_type": "Aurora",
         "grow_sequence": True,
         "current_tab": "sequence_builder",
-        "grid_mode": "diamond",  # Add this line
+        "grid_mode": "diamond",
+        "show_welcome_screen": True,  # Add this to default settings
     }
 
     def __init__(self, settings_manager: "SettingsManager") -> None:
@@ -94,7 +95,7 @@ class GlobalSettings:
 
     def set_current_tab(self, tab: str) -> None:
         self.settings["current_tab"] = tab
-        self.settings_manager.save_settings()
+        self.settings_manager.save_global_settings(self.settings)
 
     def get_current_tab(self) -> str:
         return self.settings.get("current_tab")
@@ -104,4 +105,11 @@ class GlobalSettings:
 
     def set_grid_mode(self, grid_mode: str) -> None:
         self.settings["grid_mode"] = grid_mode
-        self.settings_manager.save_settings()
+        self.settings_manager.save_global_settings(self.settings)
+
+    def get_show_welcome_screen(self) -> bool:
+        return self.settings.get("show_welcome_screen", True)
+
+    def set_show_welcome_screen(self, show_welcome_screen: bool) -> None:
+        self.settings["show_welcome_screen"] = show_welcome_screen
+        self.settings_manager.save_global_settings(self.settings)

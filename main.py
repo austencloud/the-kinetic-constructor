@@ -1,6 +1,8 @@
 import sys
 import logging
 
+from welcome_dialog import WelcomeDialog
+
 logging.basicConfig(level=logging.WARNING)
 logging.getLogger("matplotlib").setLevel(logging.WARNING)
 logging.getLogger("PIL").setLevel(logging.WARNING)
@@ -18,30 +20,35 @@ def main() -> None:
     logging.getLogger("matplotlib").setLevel(logging.WARNING)
     logging.getLogger("PIL").setLevel(logging.WARNING)
 
+
+def main() -> None:
     app = QApplication(sys.argv)
     dev_environment = not getattr(sys, "frozen", False)
     screens = QGuiApplication.screens()
     target_screen = screens[1] if dev_environment and len(screens) > 1 else screens[0]
 
-    # Initialize settings manager before showing splash screen
-    settings_manager = SettingsManager(None)  # No main_window yet
+    settings_manager = SettingsManager(None)  # Initialize settings
 
-    # Create and show the splash screen, passing the settings manager to set the background
+    # Show the splash screen as usual
     splash_screen = SplashScreen(target_screen, settings_manager)
     splash_screen.show()
-    app.processEvents()  # Allows the splash screen to be rendered properly
+    app.processEvents()
 
+    # Continue with the rest of the program initialization
     profiler = Profiler()
-
-    # Create the main window and pass in the splash screen and settings manager
     from main_window.main_window import MainWindow
 
     main_window = MainWindow(profiler, splash_screen)
-
-    # Finalize splash screen once initialization is complete
     main_window.show()
+
     QTimer.singleShot(0, lambda: splash_screen.close())
-    sys.exit(main_window.exec(app))
+    # Check if we should show the welcome screen
+
+    welcome_dialog = WelcomeDialog(settings_manager, main_window)
+    welcome_dialog.exec()
+    welcome_dialog.raise_()
+
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":

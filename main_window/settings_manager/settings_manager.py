@@ -98,3 +98,4 @@ class SettingsManager(QObject):
     def save_sequence_sharing_settings(self, settings) -> None:
         self.settings["sequence_sharing"] = settings
         self.save_settings()
+

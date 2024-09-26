@@ -25,7 +25,7 @@ class MainWindow(QMainWindow):
         self.main_widget = MainWidget(self, splash_screen)
         self.setAttribute(Qt.WidgetAttribute.WA_AcceptTouchEvents, True)
         self.setCentralWidget(self.main_widget)
-        self.setWindowTitle("Kinetic Constructor")
+        self.setWindowTitle("The Kinetic Constructor")
         self.menu_bar_widget = MenuBarWidget(self)
         self.setMenuWidget(self.menu_bar_widget)
 

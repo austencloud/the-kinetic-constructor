@@ -39,7 +39,6 @@ D,beta2,alpha4,split,opp,pro,ccw,ne,nw,pro,cw,ne,se
 D,beta4,alpha6,split,opp,pro,ccw,se,ne,pro,cw,se,sw
 D,beta6,alpha8,split,opp,pro,ccw,sw,se,pro,cw,sw,nw
 D,beta8,alpha2,split,opp,pro,ccw,nw,sw,pro,cw,nw,ne
-
 D,beta2,alpha8,split,opp,pro,cw,ne,se,pro,ccw,ne,nw
 D,beta4,alpha2,split,opp,pro,cw,se,sw,pro,ccw,se,ne
 D,beta6,alpha4,split,opp,pro,cw,sw,nw,pro,ccw,sw,se
