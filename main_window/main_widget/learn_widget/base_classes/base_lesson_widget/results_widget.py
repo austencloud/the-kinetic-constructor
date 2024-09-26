@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.learn_widget.base_classes.base_lesson_widget import (
+    from main_window.main_widget.learn_widget.base_classes.base_lesson_widget.base_lesson_widget import (
         BaseLessonWidget,
     )
 
@@ -67,3 +67,14 @@ class ResultsWidget(QWidget):
         font.setPointSize(result_label_font_size)
         self.result_label.setFont(font)
         self.result_label.adjustSize()
+
+    def show_results(self):
+        """Display the results after the quiz or countdown ends."""
+        self.lesson_widget.clear_layout(self.lesson_widget.central_layout)
+        self.lesson_widget.central_layout.addWidget(self)
+
+        self.set_result_text(
+            f"🎉 Well done!! 🎉\n\n"
+            f"You successfully completed {self.lesson_widget.current_question - 1} question"
+            f"{'s' if self.lesson_widget.current_question - 1 != 1 else ''}!"
+        )

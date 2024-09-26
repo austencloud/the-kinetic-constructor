@@ -57,9 +57,13 @@ class DictionaryButtonPanel(QWidget):
             "delete_variation": {
                 "icon": "delete.svg",
                 "tooltip": "Delete Variation",
-                "action": lambda: self.deletion_handler.delete_variation(
-                    self.preview_area.current_thumbnail_box,
-                    self.preview_area.current_thumbnail_box.current_index,
+                "action": lambda: (
+                    self.deletion_handler.delete_variation(
+                        self.preview_area.current_thumbnail_box,
+                        ((self.preview_area.current_thumbnail_box.current_index)),
+                    )
+                    if self.preview_area.current_thumbnail_box
+                    else None
                 ),
             },
             "view_full_screen": {
@@ -76,7 +80,8 @@ class DictionaryButtonPanel(QWidget):
             )
             button = QPushButton(QIcon(icon_path), "", self, toolTip=data["tooltip"])
             button.setToolTip(data["tooltip"])
-            button.clicked.connect(data["action"])
+            if data["action"]:
+                button.clicked.connect(data["action"])
             self.layout.addWidget(button)
             self.layout.addStretch(1)
             setattr(self, f"{key}_button", button)

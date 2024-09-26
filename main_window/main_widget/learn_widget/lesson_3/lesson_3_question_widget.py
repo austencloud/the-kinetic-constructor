@@ -30,6 +30,12 @@ class Lesson3QuestionWidget(BaseQuestionWidget):
         self.layout.addItem(self.spacer)
         self.setLayout(self.layout)
 
+    def load_pictograph(self, pictograph_dict) -> None:
+        """Load and display the pictograph."""
+        super().load_pictograph(pictograph_dict)
+        if self.pictograph:
+            self.pictograph.tka_glyph.setVisible(True)
+
     def clear(self) -> None:
         """Clear the current pictograph."""
         if self.pictograph:

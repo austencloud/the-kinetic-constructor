@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
 
 if TYPE_CHECKING:
-    from .base_lesson_widget import BaseLessonWidget
+    from .base_lesson_widget.base_lesson_widget import BaseLessonWidget
 
 
 class BaseAnswersWidget(QWidget):

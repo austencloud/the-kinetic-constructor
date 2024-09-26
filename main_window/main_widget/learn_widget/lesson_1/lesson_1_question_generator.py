@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 class Lesson1QuestionGenerator(BaseQuestionGenerator):
     """Generates questions for Lesson 1 (pictograph to letter matching)."""
 
-    def __init__(self, lesson_1_widget: "Lesson1Widget"):
+    def __init__(self, lesson_1_widget: "Lesson1Widget") -> None:
         super().__init__(lesson_1_widget)
         self.lesson_1_widget = lesson_1_widget
         self.previous_correct_letter: Letter = None

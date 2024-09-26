@@ -83,6 +83,7 @@ class MainWidget(QTabWidget):
         self.sequence_properties_manager = SequencePropertiesManager(self)
         self.thumbnail_finder = ThumbnailFinder(self)
         self.grid_mode_checker = GridModeChecker(self)
+
     def on_tab_changed(self, index):
         if index == self.builder_tab_index:
             self.main_window.settings_manager.global_settings.set_current_tab(
@@ -175,7 +176,7 @@ class MainWidget(QTabWidget):
     def showEvent(self, event):
         super().showEvent(event)
         self.apply_background()
-
+        self.main_window.geometry_manager.set_dimensions()
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

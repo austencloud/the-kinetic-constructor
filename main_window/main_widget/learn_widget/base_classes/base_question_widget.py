@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 if TYPE_CHECKING:
-    from ..base_classes.base_lesson_widget import BaseLessonWidget
+    from .base_lesson_widget.base_lesson_widget import BaseLessonWidget
 
 
 class BaseQuestionWidget(QWidget):
@@ -27,6 +27,16 @@ class BaseQuestionWidget(QWidget):
         )
 
     def _update_letter_label(self, letter: str) -> None:
+        raise NotImplementedError(
+            "This function should be implemented by the subclass."
+        )
+
+    def fade_out_pictograph(self) -> None:
+        raise NotImplementedError(
+            "This function should be implemented by the subclass."
+        )
+
+    def fade_in_pictograph(self) -> None:
         raise NotImplementedError(
             "This function should be implemented by the subclass."
         )

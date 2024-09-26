@@ -40,7 +40,6 @@ def main() -> None:
 
     # Finalize splash screen once initialization is complete
     main_window.show()
-    main_window.geometry_manager.set_dimensions()
     QTimer.singleShot(0, lambda: splash_screen.close())
     sys.exit(main_window.exec(app))
 

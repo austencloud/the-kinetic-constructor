@@ -1,4 +1,4 @@
-from ..base_classes.base_lesson_widget import BaseLessonWidget
+from ..base_classes.base_lesson_widget.base_lesson_widget import BaseLessonWidget
 from .lesson_2_question_widget import Lesson2QuestionWidget
 from .lesson_2_answers_widget import Lesson2AnswersWidget
 from .lesson_2_question_generator import Lesson2QuestionGenerator
