@@ -60,7 +60,6 @@ class ManualBuilder(QFrame):
         """Transition to the advanced start position picker."""
         self.stacked_widget.setCurrentWidget(self.advanced_start_pos_picker)
         self.advanced_start_pos_picker.init_ui()
-        self.advanced_start_pos_picker.advanced_start_pos_manager.set_all_orientations_to_in()
         self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
 
     def reset_to_start_pos_picker(self) -> None:
@@ -69,7 +68,7 @@ class ManualBuilder(QFrame):
         self.stacked_widget.setCurrentWidget(self.start_pos_picker)
         self.start_pos_picker.show()
         self.start_pos_picker.resize_start_pos_picker()
-        
+
     def resize_manual_builder(self) -> None:
         """Resize the components based on the current state."""
         self.start_pos_picker.resize_start_pos_picker()

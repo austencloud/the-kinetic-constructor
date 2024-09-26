@@ -7,9 +7,7 @@ from .advanced_start_pos_ori_picker import (
 from .advanced_start_pos_picker_pictograph_factory import (
     AdvancedStartPosPickerPictographFactory,
 )
-from ..components.start_pos_picker.advanced_start_pos_manager import (
-    AdvancedStartPosManager,
-)
+
 from ..components.start_pos_picker.advanced_start_pos_picker_pictograph_frame import (
     AdvancedStartPosPickerPictographFrame,
 )
@@ -32,13 +30,12 @@ class AdvancedStartPosPicker(QWidget):
         self.main_widget = manual_builder.main_widget
         self.start_pos_picker = self.manual_builder.start_pos_picker
         self.start_pos_cache: dict[str, list[BasePictograph]] = {}
-        self.ori_picker = AdvancedStartPosOriPicker(self)
         self.pictograph_frame = AdvancedStartPosPickerPictographFrame(self)
+        self.ori_picker = AdvancedStartPosOriPicker(self)
         self.choose_your_start_pos_label = ChooseYourStartPosLabel(self)
         self.pictograph_factory = AdvancedStartPosPickerPictographFactory(
             self, self.start_pos_cache
         )
-        self.advanced_start_pos_manager = AdvancedStartPosManager(self)
         self._setup_layout()
 
     def _setup_layout(self):
