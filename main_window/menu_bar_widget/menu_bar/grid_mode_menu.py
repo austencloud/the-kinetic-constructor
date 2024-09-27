@@ -1,5 +1,6 @@
 from PyQt6.QtGui import QAction
 from PyQt6.QtWidgets import QApplication
+from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from data.constants import BOX, DIAMOND
 from .hoverable_menu import HoverableMenu
@@ -36,13 +37,14 @@ class GridModeMenu(HoverableMenu):
                 action.setChecked(False)
 
     def toggle_grid_mode(self, grid_mode: str):
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.toggle_selected_grid_mode(grid_mode)
         self.main_widget.main_window.settings_manager.global_settings.set_grid_mode(
             grid_mode.lower()
         )
         self.main_widget.main_window.settings_manager.save_settings()
         self.main_widget.grid_mode = grid_mode.lower()
-        self.main_widget.special_placement_loader.refresh_placements()  
+        self.main_widget.special_placement_loader.refresh_placements()
         self.main_widget.pictograph_dicts = (
             self.main_widget.pictograph_dict_loader.load_all_pictograph_dicts()
         )
@@ -65,4 +67,4 @@ class GridModeMenu(HoverableMenu):
             pictograph_container
         )
         pictograph_container.GE_pictograph_view.set_to_blank_grid()
-
+        QApplication.restoreOverrideCursor()
