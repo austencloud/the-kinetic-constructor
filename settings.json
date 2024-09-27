@@ -4,7 +4,7 @@
         "background_type": "Aurora",
         "grow_sequence": false,
         "current_tab": "sequence_builder",
-        "grid_mode": "box"
+        "grid_mode": "diamond"
     },
     "image_export": {
         "include_start_position": true,
@@ -78,10 +78,10 @@
                 "sequence_level": 2,
                 "continuous_rotation": true
             },
-            "current_auto_builder": "circular"
+            "current_auto_builder": "freeform"
         },
         "manual_builder": {},
-        "last_used_builder": "auto"
+        "last_used_builder": "manual"
     },
     "sequence_sharing": {
         "recipients": [
