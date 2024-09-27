@@ -9,6 +9,9 @@ from data.constants import (
     PRO,
     ANTI,
 )
+from objects.motion.managers.hand_rotation_direction_calculator import (
+    HandRotationDirectionCalculator,
+)
 from .base_directional_tuple_generator import BaseDirectionalGenerator
 
 
@@ -50,12 +53,12 @@ class ShiftDirectionalGenerator(BaseDirectionalGenerator):
     def _generate_diamond_float_directional_tuples(
         self, x: int, y: int
     ) -> list[tuple[int, int]]:
-        handpath_direction = self.motion.ori_calculator.get_handpath_direction(
+        handpath_direction = self.hand_rot_dir_calculator.get_hand_rot_dir_from_locs(
             self.motion.start_loc, self.motion.end_loc
         )
         directional_tuples = {
-            CW_HANDPATH: [(x, y), (-y, x), (-x, -y), (y, -x)],
-            CCW_HANDPATH: [(-y, -x), (x, -y), (y, x), (-x, y)],
+            CLOCKWISE: [(x, y), (-y, x), (-x, -y), (y, -x)],
+            COUNTER_CLOCKWISE: [(-y, -x), (x, -y), (y, x), (-x, y)],
         }
         return directional_tuples.get(handpath_direction, [])
 
@@ -80,11 +83,11 @@ class ShiftDirectionalGenerator(BaseDirectionalGenerator):
     def _generate_box_float_directional_tuples(
         self, x: int, y: int
     ) -> list[tuple[int, int]]:
-        handpath_direction = self.motion.ori_calculator.get_handpath_direction(
+        handpath_direction = self.hand_rot_dir_calculator.get_hand_rot_dir_from_locs(
             self.motion.start_loc, self.motion.end_loc
         )
         directional_tuples = {
-            CW_HANDPATH: [(x, y), (-y, x), (-x, -y), (y, -x)],
-            CCW_HANDPATH: [(-y, -x), (x, -y), (y, x), (-x, y)],
+            CLOCKWISE: [(x, y), (-y, x), (-x, -y), (y, -x)],
+            COUNTER_CLOCKWISE: [(-y, -x), (x, -y), (y, x), (-x, y)],
         }
         return directional_tuples.get(handpath_direction, [])

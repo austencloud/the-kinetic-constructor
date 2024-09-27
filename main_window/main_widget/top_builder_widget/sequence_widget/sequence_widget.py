@@ -17,7 +17,7 @@ from .graph_editor.graph_editor import GraphEditor
 from .beat_frame.layout_options_dialog import LayoutOptionsDialog
 from .labels.sequence_widget_indicator_label import SequenceWidgetIndicatorLabel
 from .sequence_widget_pictograph_factory import SequenceWidgetPictographFactory
-from .sequence_widget_button_frame import SequenceWidgetButtonFrame
+from .sequence_widget_button_panel import SequenceWidgetButtonPanel
 from .sequence_widget_scroll_area import SequenceWidgetScrollArea
 
 if TYPE_CHECKING:
@@ -49,7 +49,7 @@ class SequenceWidget(QWidget):
         self.add_to_dictionary_manager = AddToDictionaryManager(self)
         self.autocompleter = SequenceAutoCompleter(self)
         self.sequence_clearer = SequenceClearer(self)
-        self.button_frame = SequenceWidgetButtonFrame(self)
+        self.button_panel = SequenceWidgetButtonPanel(self)
         self.graph_editor = GraphEditor(self)
         self.pictograph_factory = SequenceWidgetPictographFactory(self)
         self.scroll_area.setWidget(self.beat_frame)
@@ -128,7 +128,7 @@ class SequenceWidget(QWidget):
     def _setup_beat_frame_layout(self):
         self.beat_frame_layout = QHBoxLayout()
         self.beat_frame_layout.addWidget(self.scroll_area, 10)
-        self.beat_frame_layout.addWidget(self.button_frame, 1)
+        self.beat_frame_layout.addWidget(self.button_panel, 1)
         self.beat_frame_layout.setContentsMargins(0, 0, 0, 0)
         self.beat_frame_layout.setSpacing(0)
 
@@ -153,11 +153,11 @@ class SequenceWidget(QWidget):
         self.beat_frame.add_beat_to_sequence(
             new_beat, override_grow_sequence, update_word
         )
-        self.json_manager.updater.update_sequence_properties()
+        self.main_widget.sequence_properties_manager.update_sequence_properties()
 
     def resize_sequence_widget(self) -> None:
         self.current_word_label.resize_current_word_label()
-        self.button_frame.resize_button_frame()
+        self.button_panel.resize_button_frame()
         self.graph_editor.resize_graph_editor()
         self.beat_frame.resize_beat_frame()
 

@@ -175,7 +175,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         width = int(
             (
                 self.sequence_widget.width()
-                - self.sequence_widget.button_frame.width()
+                - self.sequence_widget.button_panel.width()
                 - scrollbar_width
             )
             * 0.8

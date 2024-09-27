@@ -4,7 +4,7 @@
         "background_type": "Aurora",
         "grow_sequence": true,
         "current_tab": "sequence_builder",
-        "grid_mode": "diamond"
+        "grid_mode": "box"
     },
     "image_export": {
         "include_start_position": true,
@@ -52,7 +52,7 @@
     },
     "dictionary": {
         "sort_method": "date_added",
-        "current_section": "filter_choice",
+        "current_section": "browser",
         "current_filter": null
     },
     "sequence_layout": {
@@ -64,9 +64,9 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 24,
+                "sequence_length": 16,
                 "max_turn_intensity": 1,
-                "sequence_level": 3,
+                "sequence_level": 2,
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",
                 "continuous_rotation": true

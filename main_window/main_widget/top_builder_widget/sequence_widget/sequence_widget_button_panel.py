@@ -6,6 +6,10 @@ from PyQt6.QtWidgets import QPushButton, QFrame, QVBoxLayout, QMessageBox
 from main_window.main_widget.dictionary_widget.full_screen_image_overlay import (
     FullScreenImageOverlay,
 )
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import (
+    StartPositionBeat,
+    StartPositionBeatView,
+)
 from utilities.path_helpers import get_images_and_data_path
 
 
@@ -15,7 +19,7 @@ if TYPE_CHECKING:
     )
 
 
-class SequenceWidgetButtonFrame(QFrame):
+class SequenceWidgetButtonPanel(QFrame):
     def __init__(self, sequence_widget: "SequenceWidget") -> None:
         super().__init__(sequence_widget)
         self.sequence_widget = sequence_widget
@@ -88,15 +92,22 @@ class SequenceWidgetButtonFrame(QFrame):
 
     def view_full_screen(self):
         """Display the current image in full screen mode."""
-        current_thumbnail = self.create_thumbnail()
-        if current_thumbnail:
-            pixmap = QPixmap(current_thumbnail)
-            if self.full_screen_overlay:
-                self.full_screen_overlay.close()  # Close any existing overlay
-            self.full_screen_overlay = FullScreenImageOverlay(self.main_widget, pixmap)
-            self.full_screen_overlay.show()
+        last_beat = self.beat_frame.get_last_filled_beat()
+        if last_beat.__class__ == StartPositionBeatView:
+            self.indicator_label.show_message("Please build a sequence first.")
+            return
         else:
-            QMessageBox.warning(self, "No Image", "Please select an image first.")
+            current_thumbnail = self.create_thumbnail()
+            if current_thumbnail:
+                pixmap = QPixmap(current_thumbnail)
+                if self.full_screen_overlay:
+                    self.full_screen_overlay.close()  # Close any existing overlay
+                self.full_screen_overlay = FullScreenImageOverlay(
+                    self.main_widget, pixmap
+                )
+                self.full_screen_overlay.show()
+            else:
+                QMessageBox.warning(self, "No Image", "Please select an image first.")
 
     def create_thumbnail(self):
         # use the image export manager to create a thumbnail with custom settings specified in this function.

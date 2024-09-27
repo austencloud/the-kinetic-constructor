@@ -22,6 +22,9 @@ from data.constants import (
     CLOCKWISE,
     COUNTER_CLOCKWISE,
 )
+from objects.motion.managers.hand_rotation_direction_calculator import (
+    HandRotationDirectionCalculator,
+)
 
 
 if TYPE_CHECKING:
@@ -33,11 +36,14 @@ class MotionOriCalculator:
 
     def __init__(self, motion: "Motion") -> None:
         self.motion = motion
+        self.hand_rot_dir_calculator = HandRotationDirectionCalculator()
 
     def get_end_ori(self) -> str:
         if self.motion.motion_type == FLOAT:  # Handle float case
-            handpath_direction = self.get_handpath_direction(
-                self.motion.start_loc, self.motion.end_loc
+            handpath_direction = (
+                self.hand_rot_dir_calculator.get_hand_rot_dir_from_locs(
+                    self.motion.start_loc, self.motion.end_loc
+                )
             )
             return self.calculate_float_orientation(
                 self.motion.start_ori, handpath_direction
@@ -97,36 +103,14 @@ class MotionOriCalculator:
         self, start_ori: str, handpath_direction: Handpaths
     ) -> str:
         orientation_map = {
-            (IN, CW_HANDPATH): CLOCK,
-            (IN, CCW_HANDPATH): COUNTER,
-            (OUT, CW_HANDPATH): COUNTER,
-            (OUT, CCW_HANDPATH): CLOCK,
-            (CLOCK, CW_HANDPATH): OUT,
-            (CLOCK, CCW_HANDPATH): IN,
-            (COUNTER, CW_HANDPATH): IN,
-            (COUNTER, CCW_HANDPATH): OUT,
+            (IN, CLOCKWISE): CLOCK,
+            (IN, COUNTER_CLOCKWISE): COUNTER,
+            (OUT, CLOCKWISE): COUNTER,
+            (OUT, COUNTER_CLOCKWISE): CLOCK,
+            (CLOCK, CLOCKWISE): OUT,
+            (CLOCK, COUNTER_CLOCKWISE): IN,
+            (COUNTER, CLOCKWISE): IN,
+            (COUNTER, COUNTER_CLOCKWISE): OUT,
         }
         return orientation_map.get((start_ori, handpath_direction))
 
-    def get_handpath_direction(
-        self, start_loc: Location, end_loc: Location
-    ) -> Handpaths:
-        handpaths = {
-            (NORTH, EAST): CW_HANDPATH,
-            (EAST, SOUTH): CW_HANDPATH,
-            (SOUTH, WEST): CW_HANDPATH,
-            (WEST, NORTH): CW_HANDPATH,
-            (NORTH, WEST): CCW_HANDPATH,
-            (WEST, SOUTH): CCW_HANDPATH,
-            (SOUTH, EAST): CCW_HANDPATH,
-            (EAST, NORTH): CCW_HANDPATH,
-            (NORTH, SOUTH): DASH_HANDPATH,
-            (SOUTH, NORTH): DASH_HANDPATH,
-            (EAST, WEST): DASH_HANDPATH,
-            (WEST, EAST): DASH_HANDPATH,
-            (NORTH, NORTH): STATIC_HANDPATH,
-            (SOUTH, SOUTH): STATIC_HANDPATH,
-            (EAST, EAST): STATIC_HANDPATH,
-            (WEST, WEST): STATIC_HANDPATH,
-        }
-        return handpaths.get((start_loc, end_loc), STATIC_HANDPATH)

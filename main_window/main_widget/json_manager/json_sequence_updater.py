@@ -16,39 +16,6 @@ class JsonSequenceUpdater:
         self.json_manager = json_manager
         self.main_widget = json_manager.main_widget
 
-    def update_sequence_properties(self):
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
-        if len(sequence) > 1:
-            sequence_properties_manager = self.main_widget.sequence_properties_manager
-            sequence_properties_manager.instantiate_sequence(sequence)
-            properties = sequence_properties_manager.check_all_properties()
-
-            # Update the sequence properties in the JSON
-            sequence[0]["word"] = properties["word"]
-            sequence[0]["author"] = properties["author"]
-            sequence[0]["level"] = properties["level"]
-            sequence[0]["grid_mode"] = properties["grid_mode"]
-            sequence[0]["is_circular"] = properties["is_circular"]
-            sequence[0]["is_permutable"] = properties["is_permutable"]
-            sequence[0]["is_strictly_rotated_permutation"] = properties[
-                "is_strictly_rotated_permutation"
-            ]
-            sequence[0]["is_strictly_mirrored_permutation"] = properties[
-                "is_strictly_mirrored_permutation"
-            ]
-            sequence[0]["is_strictly_colorswapped_permutation"] = properties[
-                "is_strictly_colorswapped_permutation"
-            ]
-            sequence[0]["is_mirrored_color_swapped_permutation"] = properties[
-                "is_mirrored_color_swapped_permutation"
-            ]
-            sequence[0]["is_rotated_colorswapped_permutation"] = properties[
-                "is_rotated_colorswapped_permutation"
-            ]
-
-            # Save the updated sequence back to the JSON
-            self.json_manager.loader_saver.save_current_sequence(sequence)
-
     def update_prop_type_in_json(self, prop_type: PropType) -> None:
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
         sequence[0]["prop_type"] = prop_type.name.lower()
@@ -93,11 +60,12 @@ class JsonSequenceUpdater:
             sequence[index], color
         )
         sequence[index][f"{color}_attributes"]["end_ori"] = end_ori
+        beat_frame = (
+            self.json_manager.main_widget.top_builder_widget.sequence_widget.beat_frame
+        )
         if sequence[index][f"{color}_attributes"]["turns"] != "fl":
             if sequence[index][f"{color}_attributes"]["turns"] > 0:
-                pictograph = self.json_manager.main_widget.top_builder_widget.sequence_widget.beat_frame.beats[
-                    index - 2
-                ].beat
+                pictograph = beat_frame.beats[index - 2].beat
                 if pictograph:
                     motion = pictograph.get.motion_by_color(color)
                     prop_rot_dir = motion.prop_rot_dir
@@ -107,9 +75,7 @@ class JsonSequenceUpdater:
             if "prefloat_prop_rot_dir" in sequence[index][f"{color}_attributes"]:
                 del sequence[index][f"{color}_attributes"]["prefloat_prop_rot_dir"]
         elif sequence[index][f"{color}_attributes"]["turns"] == "fl":
-            pictograph = self.json_manager.main_widget.top_builder_widget.sequence_widget.beat_frame.beats[
-                index - 2
-            ].beat
+            pictograph = beat_frame.beats[index - 2].beat
             if pictograph:
                 motion = pictograph.get.motion_by_color(color)
 
@@ -119,7 +85,7 @@ class JsonSequenceUpdater:
                 sequence[index][f"{color}_attributes"]["prop_rot_dir"] = prop_rot_dir
 
         self.json_manager.loader_saver.save_current_sequence(sequence)
-        self.update_sequence_properties()
+        self.main_widget.sequence_properties_manager.update_sequence_properties()
 
     def update_prop_rot_dir_in_json_at_index(
         self, index: int, color: str, prop_rot_dir: str
@@ -134,16 +100,10 @@ class JsonSequenceUpdater:
 
     def update_current_sequence_file_with_beat(self, beat_view: BeatView):
         sequence_data = self.json_manager.loader_saver.load_current_sequence_json()
-        # if len(sequence_data) == 0:  # Make sure there's at least the metadata entry
-        #     sequence_data.append(
-        #         {
-        #             "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
-        #             "is_circular": False,
-        #         }
-        #     )
+
         sequence_data.append(beat_view.beat.pictograph_dict)
         self.json_manager.loader_saver.save_current_sequence(sequence_data)
-        self.update_sequence_properties()  # Recalculate properties after each update
+        self.main_widget.sequence_properties_manager.update_sequence_properties()
         self.json_manager.main_widget.main_window.settings_manager.save_settings()  # Save state on change
 
     def clear_and_repopulate_the_current_sequence(self):

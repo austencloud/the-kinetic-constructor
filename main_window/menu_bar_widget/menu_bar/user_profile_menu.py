@@ -1,6 +1,5 @@
 from PyQt6.QtGui import QAction, QActionGroup
 from typing import TYPE_CHECKING
-
 from .hoverable_menu import HoverableMenu
 
 if TYPE_CHECKING:
@@ -27,7 +26,7 @@ class UserProfileMenu(HoverableMenu):
 
     def _on_user_selection(self, user_name):
         self.set_current_user_in_user_menu(user_name)
-        self.main_widget.json_manager.updater.update_sequence_properties()
+        self.main_widget.sequence_properties_manager.update_sequence_properties()
 
     def populate_user_profiles_menu(self):
         for action in self.actions():

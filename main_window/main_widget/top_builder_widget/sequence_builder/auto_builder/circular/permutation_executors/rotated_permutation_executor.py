@@ -18,6 +18,8 @@ from data.constants import (
 )
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
+
+from objects.motion.managers.hand_rotation_direction_calculator import HandRotationDirectionCalculator
 from .permutation_executor_base import PermutationExecutor
 from data.positions_map import positions_map
 
@@ -29,6 +31,7 @@ class RotatedPermutationExecuter(PermutationExecutor):
     def __init__(self, circular_auto_builder: "CircularAutoBuilder"):
         self.circular_auto_builder = circular_auto_builder
         self.validation_engine = circular_auto_builder.validation_engine
+        self.hand_rot_dir_calculator = HandRotationDirectionCalculator()
 
     def create_permutations(self, sequence: list[dict]):
         start_position_entry = (
@@ -198,19 +201,17 @@ class RotatedPermutationExecuter(PermutationExecutor):
 
         return new_entry
 
-    def calculate_new_end_pos(
-        self, previous_matching_beat: dict, previous_entry: dict
-    ) -> str:
+    def calculate_new_end_pos(self, previous_matching_beat: dict, previous_entry: dict) -> str:
         new_blue_end_loc = self.calculate_rotated_permuatation_new_loc(
             previous_entry["blue_attributes"]["end_loc"],
-            self.get_hand_rot_dir_from_locs(
+            self.hand_rot_dir_calculator.get_hand_rot_dir_from_locs(
                 previous_matching_beat["blue_attributes"]["start_loc"],
                 previous_matching_beat["blue_attributes"]["end_loc"],
             ),
         )
         new_red_end_loc = self.calculate_rotated_permuatation_new_loc(
             previous_entry["red_attributes"]["end_loc"],
-            self.get_hand_rot_dir_from_locs(
+            self.hand_rot_dir_calculator.get_hand_rot_dir_from_locs(
                 previous_matching_beat["red_attributes"]["start_loc"],
                 previous_matching_beat["red_attributes"]["end_loc"],
             ),
