@@ -25,6 +25,14 @@ class AddToSequenceManager:
         )
         new_beat.setSceneRect(clicked_option.sceneRect())
         pictograph_dict = clicked_option.get.pictograph_dict()
+        
+        pictograph_dict["duration"] = 1
+        pictograph_dict = dict(
+            list(pictograph_dict.items())[:1]
+            + [("duration", 1)]
+            + list(pictograph_dict.items())[1:]
+        )
+    
         new_beat.updater.update_pictograph(pictograph_dict)
         self.sequence_builder.last_beat = new_beat
         SW_beat_frame = (

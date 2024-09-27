@@ -5,8 +5,11 @@ from PyQt6.QtGui import QImage
 from typing import TYPE_CHECKING
 from PIL import Image, PngImagePlugin
 import numpy as np
-from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame import TempBeatFrame
-from widgets.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
+from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame import (
+    TempBeatFrame,
+)
+
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
     ImageExportManager,
 )
 from utilities.path_helpers import (
@@ -15,7 +18,9 @@ from utilities.path_helpers import (
 )
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
+    from main_window.main_widget.sequence_card_tab.sequence_card_tab import (
+        SequenceCardTab,
+    )
 
 
 class SequenceCardImageExporter:

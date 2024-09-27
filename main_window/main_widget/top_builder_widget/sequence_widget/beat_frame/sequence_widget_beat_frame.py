@@ -75,6 +75,19 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         else:
             super().keyPressEvent(event)
 
+    def on_beat_duration_changed(self, changed_beat_view: BeatView):
+        index = self.beats.index(changed_beat_view)
+        current_beat_number = changed_beat_view.number + changed_beat_view.beat.duration
+        changed_beat_view.beat.pictograph_dict["duration"] = changed_beat_view.beat.duration
+        self.json_manager.updater.update_current_sequence_file_with_beat(
+            changed_beat_view
+        )
+        for beat_view in self.beats[index + 1:]:
+            beat_view.remove_beat_number()
+            beat_view.number = current_beat_number
+            beat_view.add_beat_number()
+            current_beat_number += beat_view.beat.duration if beat_view.beat else 1
+
     def add_beat_to_sequence(
         self, new_beat: "BasePictograph", override_grow_sequence=False, update_word=True
     ) -> None:
@@ -119,13 +132,15 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
                 self.sequence_builder.manual_builder.last_beat = self.beats[
                     next_beat_index
                 ].beat
-                # self.selection_overlay.select_beat(new_beat.view)
 
     def find_next_available_beat(self) -> int:
-        for i, beat in enumerate(self.beats):
-            if not beat.is_filled:
-                return i
-        return None
+        current_beat = 0
+        for beat_view in self.beats:
+            if beat_view.is_filled:
+                current_beat += beat_view.beat.duration
+            else:
+                return current_beat
+        return current_beat
 
     def adjust_layout_to_sequence_length(self):
         last_filled_index = self.find_next_available_beat() or len(self.beats)
