@@ -129,9 +129,13 @@ class RotatedPermutationExecuter(PermutationExecutor):
             SOUTHWEST: SOUTHEAST,
             SOUTHEAST: NORTHEAST,
         }
-        loc_map = loc_map_cw if hand_rot_dir == CLOCKWISE else loc_map_ccw
-
-        if hand_rot_dir == DASH:
+        if hand_rot_dir == CLOCKWISE:
+            loc_map = loc_map_cw
+            
+        elif hand_rot_dir == COUNTER_CLOCKWISE:
+            loc_map = loc_map_ccw
+            
+        elif hand_rot_dir == DASH:
             loc_map = {
                 SOUTH: NORTH,
                 NORTH: SOUTH,
@@ -142,6 +146,7 @@ class RotatedPermutationExecuter(PermutationExecutor):
                 SOUTHWEST: NORTHEAST,
                 NORTHWEST: SOUTHEAST,
             }
+            
         elif hand_rot_dir == STATIC:
             loc_map = {
                 SOUTH: SOUTH,
@@ -206,21 +211,26 @@ class RotatedPermutationExecuter(PermutationExecutor):
     def calculate_new_end_pos(
         self, previous_matching_beat: dict, previous_entry: dict
     ) -> str:
+        blue_hand_rot_dir = self.hand_rot_dir_calculator.get_hand_rot_dir_from_locs(
+            previous_matching_beat["blue_attributes"]["start_loc"],
+            previous_matching_beat["blue_attributes"]["end_loc"],
+        )
+        red_hand_rot_dir = self.hand_rot_dir_calculator.get_hand_rot_dir_from_locs(
+            previous_matching_beat["red_attributes"]["start_loc"],
+            previous_matching_beat["red_attributes"]["end_loc"],
+        )
+
         new_blue_end_loc = self.calculate_rotated_permuatation_new_loc(
             previous_entry["blue_attributes"]["end_loc"],
-            self.hand_rot_dir_calculator.get_hand_rot_dir_from_locs(
-                previous_matching_beat["blue_attributes"]["start_loc"],
-                previous_matching_beat["blue_attributes"]["end_loc"],
-            ),
+            blue_hand_rot_dir,
         )
+
         new_red_end_loc = self.calculate_rotated_permuatation_new_loc(
             previous_entry["red_attributes"]["end_loc"],
-            self.hand_rot_dir_calculator.get_hand_rot_dir_from_locs(
-                previous_matching_beat["red_attributes"]["start_loc"],
-                previous_matching_beat["red_attributes"]["end_loc"],
-            ),
+            red_hand_rot_dir,
         )
-        return positions_map.get((new_blue_end_loc, new_red_end_loc))
+        new_end_pos = positions_map.get((new_blue_end_loc, new_red_end_loc))
+        return new_end_pos
 
     def get_hand_rot_dir_from_locs(self, start_loc: str, end_loc: str) -> str:
         hand_rot_dir_map = {

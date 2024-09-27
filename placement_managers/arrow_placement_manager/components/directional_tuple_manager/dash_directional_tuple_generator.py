@@ -26,19 +26,32 @@ from .base_directional_tuple_generator import BaseDirectionalGenerator
 
 class DashDirectionalGenerator(BaseDirectionalGenerator):
     def generate_directional_tuples(self, x: int, y: int) -> list[tuple[int, int]]:
-        if (
-            self.motion.pictograph.letter_type == LetterType.Type5
-            and self.motion.turns == 0
-        ):
-            return self._handle_type5_zero_turns(x, y)
+        if self.motion.pictograph.main_widget.grid_mode == DIAMOND:
+            if (
+                self.motion.pictograph.letter_type == LetterType.Type5
+                and self.motion.turns == 0
+            ):
+                return self._handle_type5_zero_turns(x, y)
 
-        elif self.motion.prop_rot_dir == NO_ROT:
-            return self._handle_no_rotation_dash(x, y)
-        elif self.motion.prop_rot_dir == CLOCKWISE:
-            return [(x, -y), (y, x), (-x, y), (-y, -x)]
-        elif self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
-            return [(-x, -y), (y, -x), (x, y), (-y, x)]
-
+            elif self.motion.prop_rot_dir == NO_ROT:
+                return self._handle_no_rotation_dash(x, y)
+            elif self.motion.prop_rot_dir == CLOCKWISE:
+                return [(x, -y), (y, x), (-x, y), (-y, -x)]
+            elif self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                return [(-x, -y), (y, -x), (x, y), (-y, x)]
+        elif self.motion.pictograph.main_widget.grid_mode == BOX:
+            if (
+                self.motion.pictograph.letter_type == LetterType.Type5
+                and self.motion.turns == 0
+            ):
+                return self._handle_type5_zero_turns(x, y)
+            elif self.motion.prop_rot_dir == NO_ROT:
+                return self._handle_no_rotation_dash(x, y)
+            elif self.motion.prop_rot_dir == CLOCKWISE:
+                return [(x, -y), (y, x), (-x, y), (-y, -x)]
+            elif self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
+                return [(-x, -y), (y, -x), (x, y), (-y, x)]
+            
     def _handle_no_rotation_dash(self, x: int, y: int) -> list[tuple[int, int]]:
         if self.other_motion.motion_type == PRO:
             return (
