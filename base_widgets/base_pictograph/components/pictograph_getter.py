@@ -92,7 +92,16 @@ class PictographGetter:
         return float_map.get(self.red_motion.check.is_float())
 
     def opposite_location(self, loc: Location) -> Location:
-        opposite_locations = {NORTH: SOUTH, SOUTH: NORTH, EAST: WEST, WEST: EAST}
+        opposite_locations = {
+            NORTH: SOUTH,
+            SOUTH: NORTH,
+            EAST: WEST,
+            WEST: EAST,
+            NORTHEAST: SOUTHWEST,
+            SOUTHWEST: NORTHEAST,
+            SOUTHEAST: NORTHWEST,
+            NORTHWEST: SOUTHEAST,
+        }
         return opposite_locations.get(loc)
 
     def turns_tuple(self) -> tuple[int, int, int]:

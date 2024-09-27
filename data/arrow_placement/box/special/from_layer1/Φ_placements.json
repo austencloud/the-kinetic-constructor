@@ -117,9 +117,6 @@
     "(ccw, 0, 0.5)": {
       "static": [100, 100]
     },
-    "(ccw, 0, 1)": {
-      "static": [90, -10]
-    },
     "(ccw, 0, 2.5)": {
       "static_rot_angle_override": true,
       "static": [0, 30]
