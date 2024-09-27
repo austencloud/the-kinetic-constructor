@@ -71,10 +71,10 @@ class StaticRotAngleCalculator(BaseRotAngleCalculator):
             EAST: {CLOCKWISE: 270, COUNTER_CLOCKWISE: 90},
             SOUTH: 0,
             WEST: {CLOCKWISE: 90, COUNTER_CLOCKWISE: 270},
-            NORTHEAST: 225,
-            SOUTHEAST: 315,
-            SOUTHWEST: 45,
-            NORTHWEST: 135,
+            NORTHEAST: {CLOCKWISE: 225, COUNTER_CLOCKWISE: 135},
+            SOUTHEAST: {CLOCKWISE: 315, COUNTER_CLOCKWISE: 45},
+            SOUTHWEST: {CLOCKWISE: 45, COUNTER_CLOCKWISE: 315},
+            NORTHWEST: {CLOCKWISE: 135, COUNTER_CLOCKWISE: 225},
         }
         static_from_nonradial_angle_override_map = {
             NORTH: 0,
