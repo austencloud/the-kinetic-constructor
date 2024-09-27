@@ -51,7 +51,7 @@
         }
     },
     "dictionary": {
-        "sort_method": "date_added",
+        "sort_method": "alphabetical",
         "current_section": "filter_choice",
         "current_filter": null
     },
@@ -81,7 +81,7 @@
             "current_auto_builder": "circular"
         },
         "manual_builder": {},
-        "last_used_builder": "auto"
+        "last_used_builder": "manual"
     },
     "sequence_sharing": {
         "recipients": [

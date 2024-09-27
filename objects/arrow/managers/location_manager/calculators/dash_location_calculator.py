@@ -43,7 +43,7 @@ class DashLocationCalculator(BaseLocationCalculator):
                 (RED, (SOUTHEAST, NORTHWEST)): NORTHEAST,
                 (BLUE, (NORTHWEST, SOUTHEAST)): SOUTHWEST,
                 (BLUE, (NORTHEAST, SOUTHWEST)): SOUTHEAST,
-                (BLUE, (SOUTHWEST, NORTHEAST)): SOUTHEAST,
+                (BLUE, (SOUTHWEST, NORTHEAST)): NORTHWEST,
                 (BLUE, (SOUTHEAST, NORTHWEST)): SOUTHWEST,
             }
             arrow_location = location_map.get(
