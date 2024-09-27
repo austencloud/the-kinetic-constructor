@@ -43,7 +43,7 @@ class DashLocationCalculator(BaseLocationCalculator):
                 (RED, (SOUTHEAST, NORTHWEST)): NORTHEAST,
                 (BLUE, (NORTHWEST, SOUTHEAST)): SOUTHWEST,
                 (BLUE, (NORTHEAST, SOUTHWEST)): SOUTHEAST,
-                (BLUE, (SOUTHWEST, NORTHEAST)): NORTHWEST,
+                (BLUE, (SOUTHWEST, NORTHEAST)): SOUTHEAST,
                 (BLUE, (SOUTHEAST, NORTHWEST)): SOUTHWEST,
             }
             arrow_location = location_map.get(
@@ -101,7 +101,7 @@ class DashLocationCalculator(BaseLocationCalculator):
             (NORTHEAST, SOUTHWEST): SOUTHEAST,
             (NORTHWEST, SOUTHEAST): NORTHEAST,
             (SOUTHWEST, NORTHEAST): NORTHWEST,
-            (SOUTHEAST, NORTHWEST): NORTHEAST,
+            (SOUTHEAST, NORTHWEST): SOUTHWEST,
         }
         return location_map.get(
             (self.arrow.motion.start_loc, self.arrow.motion.end_loc), ""

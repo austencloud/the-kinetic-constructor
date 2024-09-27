@@ -2,7 +2,7 @@
     "global": {
         "prop_type": "Staff",
         "background_type": "Aurora",
-        "grow_sequence": true,
+        "grow_sequence": false,
         "current_tab": "sequence_builder",
         "grid_mode": "box"
     },
@@ -52,13 +52,13 @@
     },
     "dictionary": {
         "sort_method": "date_added",
-        "current_section": "browser",
+        "current_section": "filter_choice",
         "current_filter": null
     },
     "sequence_layout": {
-        "grow_sequence": true,
-        "num_beats": 24,
-        "layout_option": "6 x 4"
+        "grow_sequence": false,
+        "num_beats": 16,
+        "layout_option": "4 x 4"
     },
     "builder": {
         "auto_builder": {

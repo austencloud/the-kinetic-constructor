@@ -24,6 +24,7 @@
     },
     "(1, 1)": {
       "static_rot_angle_override": true
-    }
+    },
+    "(o, 0, 1)": {}
   }
 }

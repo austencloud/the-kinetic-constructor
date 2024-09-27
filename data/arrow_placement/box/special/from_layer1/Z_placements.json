@@ -21,6 +21,9 @@
       "static_rot_angle_override": true,
       "static": [-100, 0]
     },
-    "(0, 0)": {}
+    "(0, 0)": {},
+    "(o, 0, 1)": {
+      "anti": [0, -65]
+    }
   }
 }

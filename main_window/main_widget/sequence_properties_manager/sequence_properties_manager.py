@@ -67,7 +67,7 @@ class SequencePropertiesManager:
 
     def calculate_word(self) -> str:
         # Concatenate and simplify the letters in the sequence
-        word = "".join(entry["letter"] for entry in self.sequence)
+        word = "".join(entry["letter"] for entry in self.sequence[1:])
         return WordSimplifier.simplify_repeated_word(word)
 
     def check_all_properties(self):
