@@ -1,8 +1,7 @@
 from .managers.location_manager.arrow_location_manager import ArrowLocationManager
-from .managers.arrow_mirror_handler import ArrowMirrorHandler
-from .managers.arrow_mouse_event_handler import ArrowMouseEventHandler
+from .managers.arrow_mirror_handler import ArrowMirrorManager
 from .managers.arrow_updater import ArrowUpdater
-from .managers.arrow_attr_handler import ArrowAttrHandler
+from .managers.arrow_attr_handler import ArrowAttrManager
 from .managers.rot_angle_manager.arrow_rot_angle_manager import ArrowRotAngleManager
 
 from ..graphical_object.graphical_object import GraphicalObject
@@ -43,10 +42,9 @@ class Arrow(GraphicalObject):
         self.pictograph: BasePictograph = pictograph
 
     def setup_components(self):
-        self.location_calculator = ArrowLocationManager(self)
-        self.mouse_event_handler = ArrowMouseEventHandler(self)
+        self.location_manager = ArrowLocationManager(self)
         self.rot_angle_manager = ArrowRotAngleManager(self)
-        self.mirror_manager = ArrowMirrorHandler(self)
-        self.attr_manager = ArrowAttrHandler(self)
+        self.mirror_manager = ArrowMirrorManager(self)
+        self.attr_manager = ArrowAttrManager(self)
         self.updater = ArrowUpdater(self)
         self.initialized = True

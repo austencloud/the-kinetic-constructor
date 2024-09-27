@@ -18,7 +18,7 @@ class OptionPickerPictographFactory:
         pictograph_cache: dict[str, BasePictograph],
     ) -> None:
         self.scroll_area = scroll_area
-        self.pictograph_cache = pictograph_cache
+        self.pictograph_cache: dict[Letter, dict[str, BasePictograph]] = pictograph_cache
 
     def get_or_create_pictograph(
         self, pictograph_key: str, pictograph_dict=None

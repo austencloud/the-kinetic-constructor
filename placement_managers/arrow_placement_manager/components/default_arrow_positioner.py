@@ -2,6 +2,7 @@ import json
 from Enums.letters import LetterConditions
 from data.constants import (
     ANTI,
+    BLUE,
     BOX,
     DIAMOND,
     FLOAT,
@@ -13,6 +14,7 @@ from data.constants import (
     OUT,
     PRO,
     RADIAL,
+    RED,
     STATIC,
 )
 from objects.arrow.arrow import Arrow
@@ -28,6 +30,7 @@ import codecs
 class DefaultArrowPositioner:
     def __init__(self, placement_manager: "ArrowPlacementManager") -> None:
         self.placement_manager = placement_manager
+        self.pictograph = placement_manager.pictograph
         self.diamond_placements_files = {
             PRO: "diamond_pro_placements.json",
             ANTI: "diamond_anti_placements.json",
@@ -42,8 +45,17 @@ class DefaultArrowPositioner:
             DASH: "box_dash_placements.json",
             STATIC: "box_static_placements.json",
         }
+        self._load_all_default_placements()
 
-    def _load_default_placements(
+    def _load_all_default_placements(self):
+        self.default_placements = {}
+        motion_types = [PRO, ANTI, FLOAT, DASH, STATIC]
+        for motion_type in motion_types:
+            self.default_placements[motion_type] = (
+                self._load_default_placements_for_motion_type(motion_type)
+            )
+
+    def _load_default_placements_for_motion_type(
         self, motion_type: str
     ) -> dict[str, dict[str, list[int]]]:
         if self.placement_manager.pictograph.main_widget.grid_mode == DIAMOND:
@@ -53,11 +65,15 @@ class DefaultArrowPositioner:
             )
         elif self.placement_manager.pictograph.main_widget.grid_mode == BOX:
             json_filename = self.box_placement_files.get(motion_type)
-            json_path = get_images_and_data_path(f"data/arrow_placement/box/{json_filename}")
+            json_path = get_images_and_data_path(
+                f"data/arrow_placement/box/{json_filename}"
+            )
         with codecs.open(json_path, "r", encoding="utf-8") as file:
             return json.load(file)
 
-    def _get_adjustment_key(self, arrow: Arrow) -> str:
+    def _get_adjustment_key(self, arrow: Arrow, default_placements: dict) -> str:
+        self._load_all_default_placements()
+
         has_beta_props = arrow.pictograph.check.ends_with_beta()
         has_alpha_props = arrow.pictograph.check.ends_with_alpha()
         has_gamma_props = arrow.pictograph.check.ends_with_gamma()
@@ -67,7 +83,7 @@ class DefaultArrowPositioner:
         motion_end_ori = arrow.motion.end_ori
 
         key_suffix = "_to_"
-        motion_end_ori_key: OrientationTypes = ""
+        motion_end_ori_key = ""
         if has_hybrid_orientation:
             if motion_end_ori in [IN, OUT]:
                 motion_end_ori_key = f"{RADIAL}_"
@@ -97,7 +113,6 @@ class DefaultArrowPositioner:
         elif has_gamma_props:
             key_middle += "_gamma"
 
-        default_placements = self._load_default_placements(arrow.motion.motion_type)
         key = arrow.motion.motion_type + (
             key_suffix + motion_end_ori_key + key_middle if key_middle else ""
         )
@@ -111,15 +126,19 @@ class DefaultArrowPositioner:
             return arrow.motion.motion_type
 
     def get_default_adjustment(self, arrow: Arrow) -> tuple[int, int]:
-        motion_type_placements = self._load_default_placements(arrow.motion.motion_type)
-        adjustment_key = self._get_adjustment_key(arrow)
+        if arrow.motion.motion_type in self.default_placements:
+            default_placements = self.default_placements[arrow.motion.motion_type]
+        else:
+            default_placements = {}
+
+        adjustment_key = self._get_adjustment_key(arrow, default_placements)
 
         if (
-            adjustment_key in motion_type_placements
-            and str(arrow.motion.turns) in motion_type_placements[adjustment_key]
+            adjustment_key in default_placements
+            and str(arrow.motion.turns) in default_placements[adjustment_key]
         ):
-            return motion_type_placements[adjustment_key][str(arrow.motion.turns)]
+            return default_placements[adjustment_key][str(arrow.motion.turns)]
         else:
-            return motion_type_placements.get(arrow.motion.motion_type, {}).get(
+            return default_placements.get(arrow.motion.motion_type, {}).get(
                 str(arrow.motion.turns), (0, 0)
             )

@@ -11,7 +11,7 @@ from Enums.MotionAttributes import (
 )
 
 
-class ArrowAttrHandler:
+class ArrowAttrManager:
     def __init__(self, arrow: "Arrow") -> None:
         self.arrow = arrow
         self.arrow.color = self.arrow.arrow_dict[COLOR]

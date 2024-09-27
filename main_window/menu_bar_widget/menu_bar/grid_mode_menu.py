@@ -1,4 +1,5 @@
 from PyQt6.QtGui import QAction
+from PyQt6.QtWidgets import QApplication
 from typing import TYPE_CHECKING
 from data.constants import BOX, DIAMOND
 from .hoverable_menu import HoverableMenu
@@ -41,6 +42,7 @@ class GridModeMenu(HoverableMenu):
         )
         self.main_widget.main_window.settings_manager.save_settings()
         self.main_widget.grid_mode = grid_mode.lower()
+        self.main_widget.special_placement_loader.refresh_placements()  
         self.main_widget.pictograph_dicts = (
             self.main_widget.pictograph_dict_loader.load_all_pictograph_dicts()
         )
@@ -50,7 +52,6 @@ class GridModeMenu(HoverableMenu):
         )
         start_pos_manager.clear_start_positions()
         start_pos_manager.setup_start_positions()
-        # start_pos_manager.start_pos_picker.resize_start_pos_picker()
 
         sequence_clearer = (
             self.main_widget.top_builder_widget.sequence_widget.sequence_clearer
@@ -64,3 +65,4 @@ class GridModeMenu(HoverableMenu):
             pictograph_container
         )
         pictograph_container.GE_pictograph_view.set_to_blank_grid()
+
