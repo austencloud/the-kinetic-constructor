@@ -15,19 +15,22 @@ from data.constants import (
 )
 
 
-class HandRotationDirectionCalculator:
+class HandpathCalculator:
     """Calculates the hand rotation direction based on the start and end locations."""
 
     def __init__(self):
-        # Define reusable clockwise and counter-clockwise rotation patterns
-        clockwise_pairs = [(SOUTH, WEST), (WEST, NORTH), (NORTH, EAST), (EAST, SOUTH)]
+        clockwise_pairs = [
+            (SOUTH, WEST),
+            (WEST, NORTH),
+            (NORTH, EAST),
+            (EAST, SOUTH),
+        ]
         counter_clockwise_pairs = [
             (WEST, SOUTH),
             (NORTH, WEST),
             (EAST, NORTH),
             (SOUTH, EAST),
         ]
-
         diagonal_clockwise = [
             (NORTHEAST, SOUTHEAST),
             (SOUTHEAST, SOUTHWEST),
@@ -40,7 +43,6 @@ class HandRotationDirectionCalculator:
             (SOUTHWEST, SOUTHEAST),
             (SOUTHEAST, NORTHEAST),
         ]
-
         dash_pairs = [
             (SOUTH, NORTH),
             (WEST, EAST),
@@ -51,7 +53,6 @@ class HandRotationDirectionCalculator:
             (SOUTHWEST, NORTHEAST),
             (NORTHWEST, SOUTHEAST),
         ]
-
         static_pairs = [
             (NORTH, NORTH),
             (EAST, EAST),

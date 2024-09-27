@@ -22,8 +22,8 @@ from data.constants import (
     CLOCKWISE,
     COUNTER_CLOCKWISE,
 )
-from objects.motion.managers.hand_rotation_direction_calculator import (
-    HandRotationDirectionCalculator,
+from objects.motion.managers.handpath_calculator import (
+    HandpathCalculator,
 )
 
 
@@ -36,7 +36,7 @@ class MotionOriCalculator:
 
     def __init__(self, motion: "Motion") -> None:
         self.motion = motion
-        self.hand_rot_dir_calculator = HandRotationDirectionCalculator()
+        self.hand_rot_dir_calculator = HandpathCalculator()
 
     def get_end_ori(self) -> str:
         if self.motion.motion_type == FLOAT:  # Handle float case
@@ -113,4 +113,3 @@ class MotionOriCalculator:
             (COUNTER, COUNTER_CLOCKWISE): OUT,
         }
         return orientation_map.get((start_ori, handpath_direction))
-

@@ -9,8 +9,8 @@ from data.constants import (
     PRO,
     ANTI,
 )
-from objects.motion.managers.hand_rotation_direction_calculator import (
-    HandRotationDirectionCalculator,
+from objects.motion.managers.handpath_calculator import (
+    HandpathCalculator,
 )
 from .base_directional_tuple_generator import BaseDirectionalGenerator
 

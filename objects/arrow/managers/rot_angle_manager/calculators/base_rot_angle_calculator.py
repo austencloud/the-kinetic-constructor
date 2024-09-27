@@ -2,7 +2,9 @@ from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 
 from data.constants import *
-from objects.motion.managers.hand_rotation_direction_calculator import HandRotationDirectionCalculator
+from objects.motion.managers.handpath_calculator import (
+    HandpathCalculator,
+)
 
 if TYPE_CHECKING:
     from objects.arrow.arrow import Arrow
@@ -17,7 +19,8 @@ class BaseRotAngleCalculator(ABC):
         self.data_updater = (
             self.arrow.pictograph.arrow_placement_manager.special_positioner.data_updater
         )
-        self.hand_rotation_direction_calculator = HandRotationDirectionCalculator()
+        self.handpath_calculator = HandpathCalculator()
+
     def apply_rotation(self) -> None:
         angle = self.calculate_angle()
         self.arrow.setTransformOriginPoint(self.arrow.boundingRect().center())
@@ -50,4 +53,3 @@ class BaseRotAngleCalculator(ABC):
                 rot_angle_override_key
             )
         )
-
