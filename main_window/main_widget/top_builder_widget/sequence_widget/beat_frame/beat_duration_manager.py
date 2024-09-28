@@ -8,46 +8,36 @@ if TYPE_CHECKING:
 class BeatDurationManager:
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
         self.beat_frame = beat_frame
+        self.json_duration_updater = beat_frame.json_manager.updater.duration_updater
 
-
-class BeatDurationManager:
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
-        self.beat_frame = beat_frame
-
-
-class BeatDurationManager:
-    def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
-        self.beat_frame = beat_frame
-
-    def update_beat_duration(self, changed_beat_view: "BeatView", new_duration: int):
+    def update_beat_duration(
+        self, changed_beat_view: "BeatView", new_duration: int
+    ) -> None:
         """
-        Update the beat duration, change the beat number to reflect the new duration,
-        and update subsequent beats' numbering.
+        Update the beat duration, adjust beat numbering, and update the JSON file.
         """
         index = self.beat_frame.beats.index(changed_beat_view)
         current_beat = changed_beat_view.beat
 
-        # Update the duration of the current beat
+        # Update the beat duration in the view
         current_beat.duration = new_duration
-
-        # Update the beat number display to show the range (e.g., "1-2")
         changed_beat_view.add_beat_number(index + 1)
 
-        # Adjust subsequent beats' numbers after increasing duration
+        # Adjust subsequent beats' numbers after duration change
         self.update_beat_numbers()
 
-        # Update the sequence in JSON
-        self.beat_frame.json_manager.updater.update_current_sequence_file_with_beat(
-            changed_beat_view
+        # Delegate JSON update to JsonDurationUpdater
+        self.json_duration_updater.update_beat_duration_in_json(
+            changed_beat_view, new_duration
         )
 
-    def update_beat_numbers(self):
+    def update_beat_numbers(self) -> None:
         """
-        Update the beat numbers for all beats based on their positions and durations.
+        Update beat numbers for all beats based on their positions and durations.
         """
         current_beat_number = 1
         for beat_view in self.beat_frame.beats:
-            beat_view.remove_beat_number()  # Remove old number
+            beat_view.remove_beat_number()  # Remove the old number
 
             if beat_view.beat:
                 beat_view.add_beat_number(current_beat_number)

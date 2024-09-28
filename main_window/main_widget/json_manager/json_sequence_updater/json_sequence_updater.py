@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
+from main_window.main_widget.json_manager.json_sequence_updater.json_duration_updater import JsonDurationUpdater
 from main_window.main_widget.json_manager.json_sequence_updater.json_prop_rot_dir_updater import (
     JsonPropRotDirUpdater,
 )
@@ -28,36 +29,31 @@ class JsonSequenceUpdater:
         self.prop_type_updater = JsonPropTypeUpdater(self)
         self.letter_updater = JsonLetterUpdater(self)
         self.prop_rot_dir_updater = JsonPropRotDirUpdater(self)
+        self.duration_updater = JsonDurationUpdater(self)  # Add duration updater
 
     def update_current_sequence_file_with_beat(self, beat_view: BeatView):
+        # Normal beat addition logic
         sequence_data = self.json_manager.loader_saver.load_current_sequence_json()
+        
+        # Metadata remains unchanged
         sequence_metadata = sequence_data[0] if "word" in sequence_data[0] else {}
-        sequence_beats = [
-            entry
-            for entry in sequence_data[1:]
-            if "beat" not in entry
-            or entry.get("beat") < beat_view.number
-            or entry.get("beat") > beat_view.number + beat_view.beat.duration - 1
-        ]
+        sequence_beats = sequence_data[1:]  # Preserve existing beats
 
+        # Prepare the new beat data
         beat_data = beat_view.beat.pictograph_dict
         beat_data["duration"] = beat_view.beat.duration
         beat_data["beat"] = beat_view.number
+
+        # Add the new beat to the sequence
         sequence_beats.append(beat_data)
 
-        for beat_num in range(
-            beat_view.number + 1, beat_view.number + beat_view.beat.duration
-        ):
-            placeholder_entry = {
-                "beat": beat_num,
-                "is_placeholder": True,
-                "parent_beat": beat_view.number,
-            }
-            sequence_beats.append(placeholder_entry)
+        # Sort by beat number
+        sequence_beats.sort(key=lambda entry: entry.get("beat", float('inf')))
 
-        sequence_beats.sort(key=lambda entry: entry.get("beat", float("inf")))
+        # Save the updated sequence
         sequence_data = [sequence_metadata] + sequence_beats
         self.json_manager.loader_saver.save_current_sequence(sequence_data)
+
 
     def clear_and_repopulate_the_current_sequence(self):
         self.json_manager.loader_saver.clear_current_sequence_file()

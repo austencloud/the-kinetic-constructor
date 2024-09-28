@@ -20,7 +20,7 @@ class BeatAdder:
     def add_beat_to_sequence(
         self, new_beat: "Beat", override_grow_sequence=False, update_word=True
     ) -> None:
-        # Calculate the next available beat number, accounting for multi-beat durations
+        # Calculate the next available beat number
         next_beat_number = self.calculate_next_beat_number()
 
         # Set difficulty level for the first beat
