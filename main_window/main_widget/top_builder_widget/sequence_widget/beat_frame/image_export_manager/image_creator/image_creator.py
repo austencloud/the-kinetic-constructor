@@ -72,7 +72,7 @@ class ImageCreator:
                 self.user_info_drawer.draw_user_info(image, options, num_filled_beats)
 
             if options.get("add_word"):
-                word = self.beat_frame.get_current_word()
+                word = self.beat_frame.get.current_word()
                 self.word_drawer.draw_word(
                     image, word, num_filled_beats, additional_height_top
                 )

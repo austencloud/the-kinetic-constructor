@@ -21,7 +21,7 @@ class BeatDurationManager:
 
         # Update the beat duration in the view
         current_beat.duration = new_duration
-        changed_beat_view.add_beat_number(index + 1)
+        changed_beat_view.add_beat_number()
 
         # Adjust subsequent beats' numbers after duration change
         self.update_beat_numbers()
@@ -40,8 +40,10 @@ class BeatDurationManager:
             beat_view.remove_beat_number()  # Remove the old number
 
             if beat_view.beat:
-                beat_view.add_beat_number(current_beat_number)
+                beat_view.beat.beat_number = current_beat_number
+                beat_view.add_beat_number()
                 current_beat_number += beat_view.beat.duration
             else:
-                beat_view.add_beat_number(current_beat_number)
+                beat_view.blank_beat.beat_number = current_beat_number
+                beat_view.add_beat_number()
                 current_beat_number += 1

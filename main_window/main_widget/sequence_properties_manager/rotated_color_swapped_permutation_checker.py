@@ -111,6 +111,7 @@ class RotatedColorSwappedPermutationChecker:
         return False
 
     def _determine_beats_per_repetition(self, sequence) -> int:
+        sequence = [entry for entry in sequence if "is_placeholder" not in entry]
         length = len(sequence)
 
         # Extract the word pattern

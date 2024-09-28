@@ -59,10 +59,9 @@ class SequencePropertiesManager:
             return
 
         self.instantiate_sequence(sequence)
-        properties = self.check_all_properties()
-
-        # Update sequence with new properties
-        sequence[0].update(properties)
+        # properties = self.check_all_properties()
+        # sequence[0].update(properties)
+        
         self.json_manager.loader_saver.save_current_sequence(sequence)
 
     def calculate_word(self):

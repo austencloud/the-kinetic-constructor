@@ -22,35 +22,17 @@ class Beat(BasePictograph):
         self.duration = duration
         self.is_placeholder = False
         self.parent_beat = None
+        self.beat_number = 0  # Track the actual beat number as an integer
 
-    def add_beat_number(self, number: int) -> None:
-        """
-        Add a beat number or range of numbers to represent the beat.
-        """
-        if not self.beat_number_item:
-            beat_text = self.get_beat_number_text(number)
-            self.beat_number_item = QGraphicsTextItem(beat_text)
-            self.beat_number_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))
-            self.beat_number_item.setPos(
-                QPointF(
-                    self.beat_number_item.boundingRect().height() // 3,
-                    self.beat_number_item.boundingRect().height() // 5,
-                )
-            )
-            if self.view and self.view.scene():
-                self.view.scene().addItem(self.beat_number_item)
-        else:
-            self.beat_number_item.setPlainText(self.get_beat_number_text(number))
-
-    def get_beat_number_text(self, number: int) -> str:
+    def get_beat_number_text(self) -> str:
         """
         Return the beat number or range of numbers if this beat spans multiple beats.
         """
         if self.duration > 1:
-            end_beat = number + self.duration - 1
-            return f"{number},{end_beat}"
+            end_beat = self.beat_number + self.duration - 1
+            return f"{self.beat_number},{end_beat}"
         else:
-            return str(number)
+            return str(self.beat_number)
 
 
 class BeatView(QGraphicsView):
@@ -58,7 +40,7 @@ class BeatView(QGraphicsView):
         super().__init__(beat_frame)
         self.number = number  # Beat number to display
         self._disable_scrollbars()
-        self.beat = None
+        self.beat: "Beat" = None
         self.beat_frame = beat_frame
         self.beat_number_item = None
         self.is_start_pos = False
@@ -125,36 +107,31 @@ class BeatView(QGraphicsView):
         self.beat = beat
         self.beat.view = self
         self.is_filled = True
-        self.number = number
+        self.beat.beat_number = (
+            number  # Store the actual beat number in the Beat object
+        )
         self.is_end = is_end
         self.part_of_multibeat = self.beat.duration > 1
 
-        # Update beat number
+        # Update beat number visually
         self.setScene(self.beat)
         self.resize_beat_view()
         self.remove_beat_number()
         self.add_beat_number()
 
-    def add_beat_number(self, number=None):
+    def add_beat_number(self):
         """
         Add a beat number or a range of beat numbers to represent the beat.
-        If a number is provided, use it to update the displayed beat number.
         """
         if self.beat_number_item:
             self.remove_beat_number()  # Remove any existing beat number item first
 
-        if not number:
-            beat_number_text = (
-                self.beat.get_beat_number_text(self.number)
-                if self.beat
-                else self.blank_beat.get_beat_number_text(self.number)
-            )
-        else:
-            beat_number_text = (
-                self.beat.get_beat_number_text(number)
-                if self.beat
-                else self.blank_beat.get_beat_number_text(number)
-            )
+        # Display the beat number text (as a range if necessary)
+        beat_number_text = (
+            self.beat.get_beat_number_text()
+            if self.beat
+            else self.blank_beat.get_beat_number_text()
+        )
 
         self.beat_number_item = QGraphicsTextItem(beat_number_text)
         self.beat_number_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))

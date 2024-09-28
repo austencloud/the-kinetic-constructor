@@ -2,7 +2,9 @@ from typing import TYPE_CHECKING, List
 from PyQt6.QtGui import QPainter, QImage, QPixmap
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import BeatView
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
+    BeatView,
+)
 
 
 if TYPE_CHECKING:
@@ -26,9 +28,9 @@ class BeatDrawer:
     ) -> None:
         for beat_view in filled_beats:
             if add_beat_numbers:
-                beat_view.beat.beat_number_item.setVisible(True)
+                beat_view.beat_number_item.setVisible(True)
             else:
-                beat_view.beat.beat_number_item.setVisible(False)
+                beat_view.beat_number_item.setVisible(False)
 
         beat_size = int(
             self.beat_frame.start_pos_view.beat.width() * self.image_creator.beat_scale

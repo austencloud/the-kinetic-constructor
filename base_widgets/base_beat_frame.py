@@ -11,6 +11,7 @@ from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat_
 
 
 if TYPE_CHECKING:
+    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import StartPositionBeatView
     from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
         SequenceWidget,
     )
@@ -28,6 +29,7 @@ class BaseBeatFrame(QFrame):
         self.settings_manager = main_widget.main_window.settings_manager
         self.sequence_widget: "SequenceWidget" = None
         self.dictionary_widget: "DictionaryWidget" = None
+        self.start_pos_view: "StartPositionBeatView" = None
         self.initialized = True
         self.sequence_changed = False
         self.setObjectName("beat_frame")
