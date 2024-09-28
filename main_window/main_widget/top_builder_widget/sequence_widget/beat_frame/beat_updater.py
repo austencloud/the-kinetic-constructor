@@ -13,18 +13,32 @@ class BeatFrameUpdater:
         current_sequence_json = (
             self.beat_frame.json_manager.loader_saver.load_current_sequence_json()
         )
-        for i, entry in enumerate(current_sequence_json):
-            if i == 0:
-                continue
-            elif i == 1:
-                self.update_start_pos_from_current_sequence_json(entry)
-            elif i > 1:
-                beat = self.beat_frame.beats[i - 2].beat
-                if beat:
-                    if beat.pictograph_dict != entry:
-                        beat.updater.update_pictograph(entry)
-                        QApplication.processEvents()
-        if len(current_sequence_json) > 2:
+        # Skip the metadata entry
+        sequence_entries = current_sequence_json[1:]
+
+        # Update the start position if necessary
+        if sequence_entries and 'sequence_start_position' in sequence_entries[0]:
+            self.update_start_pos_from_current_sequence_json(sequence_entries[0])
+            beat_entries = sequence_entries[1:]
+        else:
+            beat_entries = sequence_entries
+
+        for entry in beat_entries:
+            if entry.get("is_placeholder", False):
+                continue  # Skip placeholders
+
+            beat_num = entry["beat"]
+            beat_view = self.beat_frame.get.beat_view_by_number(beat_num)
+
+            if beat_view and beat_view.beat:
+                if beat_view.beat.pictograph_dict != entry:
+                    beat_view.beat.updater.update_pictograph(entry)
+                    QApplication.processEvents()
+            else:
+                # Handle case where beat_view is not found or beat is None
+                pass  # You might want to log or handle this situation
+
+        if beat_entries:
             self.beat_frame.sequence_widget.update_difficulty_label()
 
     def update_start_pos_from_current_sequence_json(self, entry: dict) -> None:

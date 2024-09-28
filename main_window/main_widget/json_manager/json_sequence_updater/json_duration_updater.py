@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import List, Dict, Tuple, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
@@ -14,124 +14,133 @@ class JsonDurationUpdater:
     def update_beat_duration_in_json(
         self, beat_view: "BeatView", new_duration: int
     ) -> None:
-        """Main method to update beat duration and adjust subsequent beats."""
-        sequence_data = self.json_manager.loader_saver.load_current_sequence_json()
-
-        # Extract metadata and sequence beats
+        """Update beat duration and adjust subsequent beats in the sequence."""
+        sequence_data = self._load_sequence_data()
         sequence_metadata, sequence_beats = self._extract_metadata_and_beats(
             sequence_data
         )
-        # Split the beats into two parts: before and after the current beat range
-        sequence_before, sequence_after = self._split_sequence_by_beat_range(
+
+        sequence_before, current_beat_data, sequence_after = self._split_sequence(
             sequence_beats, beat_view
         )
 
-        if beat_view.beat.pictograph_dict["duration"] == 1 and new_duration > 1:
-            self._add_placeholder_beats(sequence_before, beat_view, new_duration)
-        elif beat_view.beat.pictograph_dict["duration"] > 1 and new_duration == 1:
-            sequence_after = self._remove_placeholder_beats(sequence_after, beat_view)
-
-        # Adjust the beat data and add placeholders for new duration
-        updated_beat_data = self._update_beat_data(beat_view, new_duration)
+        updated_beat_data = self._update_beat_data(current_beat_data, new_duration)
         sequence_before.append(updated_beat_data)
 
-        # Shift subsequent beats and append them to sequence
-        sequence_after = self._shift_subsequent_beats(
-            sequence_after, beat_view, new_duration
-        )
+        if new_duration > 1:
+            placeholders = self._generate_placeholders(beat_view.number, new_duration)
+            sequence_before.extend(placeholders)
+            sequence_after = self._shift_beats(sequence_after, shift=new_duration - 1)
+        elif new_duration < current_beat_data.get("duration", 1):
+            sequence_after = self._shift_beats(
+                sequence_after, shift=new_duration - current_beat_data["duration"]
+            )
+            sequence_after = self._remove_placeholders(sequence_after, beat_view.number)
+
         sequence_beats = sequence_before + sequence_after
+        self._finalize_and_save_sequence(sequence_metadata, sequence_beats)
 
-        # Sort the beats and save
-        sequence_beats = self._sort_beats(sequence_beats)
+    # --- Helper Methods ---
 
-        self._fix_beat_counts(sequence_beats)
+    def _load_sequence_data(self) -> List[Dict]:
+        """Load the current sequence JSON data."""
+        return self.json_manager.loader_saver.load_current_sequence_json()
 
-        self._save_sequence(sequence_metadata, sequence_beats)
+    def _extract_metadata_and_beats(
+        self, sequence_data: List[Dict]
+    ) -> Tuple[Dict, List[Dict]]:
+        """Separate metadata from the sequence beats."""
+        metadata = sequence_data[0] if "word" in sequence_data[0] else {}
+        beats = sequence_data[1:]
+        return metadata, beats
 
-    def _fix_beat_counts(self, sequence_beats: list) -> None:
-        """Fix the beat counts of the sequence beats."""
-        for index, entry in enumerate(sequence_beats):
-            if "beat" in entry:
-                entry["beat"] = index
-            if "parent_beat" in entry:
-                parent_beat = entry["parent_beat"]
-                for i in range(index, -1, -1):
-                    if "letter" in sequence_beats[i]:
-                        parent_beat = i
-                        break
-                entry["parent_beat"] = parent_beat
-    def _extract_metadata_and_beats(self, sequence_data: list) -> tuple:
-        """Extract metadata and beats from the sequence data."""
-        sequence_metadata = sequence_data[0] if "word" in sequence_data[0] else {}
-        sequence_beats = sequence_data[1:]
-        return sequence_metadata, sequence_beats
-
-    def _split_sequence_by_beat_range(
-        self, sequence_beats: list, beat_view: "BeatView"
-    ) -> tuple[list, list]:
-        """Split the sequence into beats before and after the current beat's range."""
-        sequence_before = []
-        sequence_after = []
+    def _split_sequence(
+        self, sequence_beats: List[Dict], beat_view: "BeatView"
+    ) -> Tuple[List[Dict], Dict, List[Dict]]:
+        """Split the sequence into parts before, at, and after the current beat."""
+        before = []
+        after = []
+        current_beat_data = None
 
         for entry in sequence_beats:
-            if "beat" in entry:
-                beat_number = entry["beat"]
-                if beat_number < beat_view.number:
-                    sequence_before.append(entry)
-                elif beat_number > beat_view.number:
-                    entry["beat"] += beat_view.beat.duration - 1
-                    sequence_after.append(entry)
+            beat_num = entry.get("beat")
+            if beat_num < beat_view.number:
+                before.append(entry)
+            elif beat_num == beat_view.number:
+                current_beat_data = entry
+            elif beat_num > beat_view.number:
+                after.append(entry)
 
-        return sequence_before, sequence_after
+        return before, current_beat_data, after
 
-    def _update_beat_data(self, beat_view: "BeatView", new_duration: int) -> dict:
-        """Update the main beat data with the new duration."""
-        beat_data = beat_view.beat.pictograph_dict
-        beat_data["duration"] = new_duration
-        beat_data["beat"] = beat_view.number
-        return beat_data
+    def _update_beat_data(self, beat_data: Dict, new_duration: int) -> Dict:
+        """Update the beat's duration."""
+        updated_data = beat_data.copy()
+        updated_data["duration"] = new_duration
+        return updated_data
 
-    def _add_placeholder_beats(
-        self, sequence_beats: list, beat_view: "BeatView", new_duration: int
-    ) -> None:
-        """Add placeholder beats for the remaining duration."""
-        for beat_num in range(beat_view.number + 1, beat_view.number + new_duration):
-            placeholder_entry = {
-                "beat": beat_num,
+    def _generate_placeholders(self, parent_beat_num: int, duration: int) -> List[Dict]:
+        """Create placeholder beats for the extended duration."""
+        placeholders = [
+            {
+                "beat": parent_beat_num + offset,
                 "is_placeholder": True,
-                "parent_beat": beat_view.number,
+                "parent_beat": parent_beat_num,
             }
-            sequence_beats.append(placeholder_entry)
-
-    def _remove_placeholder_beats(
-        self, sequence_beats: list, beat_view: "BeatView"
-    ) -> None:
-        """Remove placeholder beats for the current beat."""
-        sequence_beats = [
-            entry
-            for entry in sequence_beats
-            if entry.get("parent_beat") != beat_view.number
+            for offset in range(1, duration)
         ]
-        return sequence_beats
+        return placeholders
 
-    def _shift_subsequent_beats(
-        self, sequence_after: list, beat_view: "BeatView", new_duration: int
-    ) -> list:
-        """
-        Adjust the beat numbers of subsequent beats to account for the new duration.
-        If the duration is increased, subsequent beats should be shifted forward. If decreased, beats shift backward.
-        """
-        shift_offset = new_duration - beat_view.beat.duration
-        for beat in sequence_after:
-            beat["beat"] += shift_offset
+    def _shift_beats(self, beats: List[Dict], shift: int) -> List[Dict]:
+        """Shift beat numbers by a specified amount."""
+        if shift == 0:
+            return beats
 
-        return sequence_after
+        for beat in beats:
+            beat["beat"] += shift
+            if "parent_beat" in beat:
+                beat["parent_beat"] += shift
+        return beats
 
-    def _sort_beats(self, sequence_beats: list) -> list:
-        """Sort the beats by their beat number."""
-        return sorted(sequence_beats, key=lambda entry: entry.get("beat", float("inf")))
+    def _remove_placeholders(
+        self, beats: List[Dict], parent_beat_num: int
+    ) -> List[Dict]:
+        """Remove placeholders associated with a specific parent beat."""
+        return [beat for beat in beats if beat.get("parent_beat") != parent_beat_num]
 
-    def _save_sequence(self, sequence_metadata: dict, sequence_beats: list) -> None:
-        """Save the updated sequence with metadata and beats."""
-        sequence_data = [sequence_metadata] + sequence_beats
+    def _finalize_and_save_sequence(
+        self, metadata: Dict, sequence_beats: List[Dict]
+    ) -> None:
+        """Finalize beat numbering, remove duplicates, and save the sequence."""
+        sequence_beats = self._remove_duplicate_beats(sequence_beats)
+        sequence_beats.sort(key=lambda beat: beat["beat"])
+        self._update_beat_numbers(sequence_beats)
+        self._save_sequence(metadata, sequence_beats)
+
+    def _remove_duplicate_beats(self, beats: List[Dict]) -> List[Dict]:
+        """Eliminate duplicate beats, keeping the first occurrence."""
+        unique_beats = {}
+        for beat in beats:
+            beat_num = beat["beat"]
+            if beat_num not in unique_beats:
+                unique_beats[beat_num] = beat
+        return list(unique_beats.values())
+
+    def _update_beat_numbers(self, beats: List[Dict]) -> None:
+        """Ensure beat numbers are consecutive and update parent beat references."""
+        beat_mapping = {}
+        for index, beat in enumerate(beats):
+            old_beat_num = beat["beat"]
+            beat_mapping[old_beat_num] = index
+            beat["beat"] = index
+
+        for beat in beats:
+            if "parent_beat" in beat:
+                beat["parent_beat"] = beat_mapping.get(
+                    beat["parent_beat"], beat["parent_beat"]
+                )
+
+    def _save_sequence(self, metadata: Dict, beats: List[Dict]) -> None:
+        """Save the updated sequence."""
+        sequence_data = [metadata] + beats
         self.json_manager.loader_saver.save_current_sequence(sequence_data)

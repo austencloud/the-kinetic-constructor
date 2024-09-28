@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
-from main_window.main_widget.json_manager.json_sequence_updater.json_duration_updater import JsonDurationUpdater
+from main_window.main_widget.json_manager.json_sequence_updater.json_duration_updater import (
+    JsonDurationUpdater,
+)
 from main_window.main_widget.json_manager.json_sequence_updater.json_prop_rot_dir_updater import (
     JsonPropRotDirUpdater,
 )
@@ -29,29 +31,21 @@ class JsonSequenceUpdater:
         self.prop_type_updater = JsonPropTypeUpdater(self)
         self.letter_updater = JsonLetterUpdater(self)
         self.prop_rot_dir_updater = JsonPropRotDirUpdater(self)
-        self.duration_updater = JsonDurationUpdater(self) 
+        self.duration_updater = JsonDurationUpdater(self)
 
     def update_current_sequence_file_with_beat(self, beat_view: BeatView):
         sequence_data = self.json_manager.loader_saver.load_current_sequence_json()
         sequence_metadata = sequence_data[0] if "word" in sequence_data[0] else {}
+        sequence_beats = sequence_data[1:]
 
-        # Filter the beats without deleting placeholders
-        sequence_beats = [
-            entry
-            for entry in sequence_data[1:]
-            if "beat" not in entry or (
-                entry.get("beat") < beat_view.number
-                or entry.get("beat") > beat_view.number + beat_view.beat.duration - 1
-            )
-        ]
-
-        # Add the main beat data
-        beat_data = beat_view.beat.pictograph_dict
+        beat_data = beat_view.beat.pictograph_dict.copy()
         beat_data["duration"] = beat_view.beat.duration
-        beat_data["beat"] = beat_view.number
+        number = self.get_next_beat_number(sequence_beats)
+        beat_view.number = number
+        beat_data["beat"] = number
+
         sequence_beats.append(beat_data)
 
-        # Re-add placeholder beats if they exist
         for beat_num in range(
             beat_view.number + 1, beat_view.number + beat_view.beat.duration
         ):
@@ -64,10 +58,17 @@ class JsonSequenceUpdater:
 
         sequence_beats.sort(key=lambda entry: entry.get("beat", float("inf")))
         sequence_data = [sequence_metadata] + sequence_beats
-        
+
         self.json_manager.loader_saver.save_current_sequence(sequence_data)
 
-    def add_placeholder_entry_to_current_sequence(self, beat_num: int, parent_beat: int):
+    def get_next_beat_number(self, sequence_beats):
+        if not sequence_beats:
+            return 1
+        return max(beat["beat"] for beat in sequence_beats) + 1
+
+    def add_placeholder_entry_to_current_sequence(
+        self, beat_num: int, parent_beat: int
+    ):
         sequence_data = self.json_manager.loader_saver.load_current_sequence_json()
         sequence_metadata = sequence_data[0] if "word" in sequence_data[0] else {}
         sequence_beats = sequence_data[1:]
@@ -83,7 +84,6 @@ class JsonSequenceUpdater:
         sequence_data = [sequence_metadata] + sequence_beats
 
         self.json_manager.loader_saver.save_current_sequence(sequence_data)
-
 
     def clear_and_repopulate_the_current_sequence(self):
         self.json_manager.loader_saver.clear_current_sequence_file()

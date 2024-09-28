@@ -53,6 +53,8 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         self.key_event_handler = BeatFrameKeyEventHandler(self)
         self.resizer = BeatFrameResizer(self)
 
+
+
     def resize_beat_frame(self) -> None:
         self.resizer.resize_beat_frame()
 
