@@ -11,8 +11,9 @@ from PyQt6.QtCore import Qt
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.layout_options_dialog import LayoutOptionsDialog
-
+    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.layout_options_dialog import (
+        LayoutOptionsDialog,
+    )
 
 
 class LayoutOptionsPanel(QWidget):
@@ -202,7 +203,7 @@ class LayoutOptionsPanel(QWidget):
         self.layout_label.setStyleSheet(f"color: {color};")
 
         if not is_grow_sequence_checked:
-            num_beats = self.sequence_widget.beat_frame.find_next_available_beat() or 0
+            num_beats = self.sequence_widget.beat_frame.get.next_available_beat() or 0
             self.beats_combo_box.setCurrentText(str(num_beats))
             self._setup_layout_options()
             layout_option = (

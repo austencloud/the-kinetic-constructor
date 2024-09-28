@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Union
 
+
 from .image_export_layout_handler import ImageExportLayoutHandler
 from .image_creator.image_creator import ImageCreator
 from .image_export_beat_factory import ImageExportBeatFactory
@@ -8,6 +9,7 @@ from .image_saver import ImageSaver
 
 
 if TYPE_CHECKING:
+    from base_widgets.base_beat_frame import BaseBeatFrame
     from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
         SequenceWidgetBeatFrame,
     )
@@ -25,7 +27,7 @@ class ImageExportManager:
 
     def __init__(
         self,
-        beat_frame: Union["SequenceWidgetBeatFrame", "TempBeatFrame"],
+        beat_frame: "BaseBeatFrame",
         beat_frame_class: type,
     ) -> None:
         self.beat_frame = beat_frame

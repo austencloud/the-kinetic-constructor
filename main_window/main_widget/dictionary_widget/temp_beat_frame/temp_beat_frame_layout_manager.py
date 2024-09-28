@@ -2,7 +2,9 @@ from typing import TYPE_CHECKING
 from data.beat_frame_layouts import DEFAULT_BEAT_FRAME_LAYOUTS
 
 if TYPE_CHECKING:
-    from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame import TempBeatFrame
+    from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame import (
+        TempBeatFrame,
+    )
 
 
 class TempBeatFrameLayoutManager:
@@ -32,7 +34,7 @@ class TempBeatFrameLayoutManager:
     def configure_beat_frame(self, num_beats):
         grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
         if grow_sequence:
-            num_filled_beats = self.beat_frame.find_next_available_beat() or 0
+            num_filled_beats = self.beat_frame.get.next_available_beat() or 0
             num_beats = num_filled_beats
         columns, rows = self.calculate_layout(num_beats)
 

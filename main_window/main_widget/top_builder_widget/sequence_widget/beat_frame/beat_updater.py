@@ -1,0 +1,34 @@
+from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QApplication
+
+if TYPE_CHECKING:
+    from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
+
+
+class BeatFrameUpdater:
+    def __init__(self, beat_frame: "SequenceWidgetBeatFrame") -> None:
+        self.beat_frame = beat_frame
+
+    def update_beats_from_json(self) -> None:
+        current_sequence_json = (
+            self.beat_frame.json_manager.loader_saver.load_current_sequence_json()
+        )
+        for i, entry in enumerate(current_sequence_json):
+            if i == 0:
+                continue
+            elif i == 1:
+                self.update_start_pos_from_current_sequence_json(entry)
+            elif i > 1:
+                beat = self.beat_frame.beats[i - 2].beat
+                if beat:
+                    if beat.pictograph_dict != entry:
+                        beat.updater.update_pictograph(entry)
+                        QApplication.processEvents()
+        if len(current_sequence_json) > 2:
+            self.beat_frame.sequence_widget.update_difficulty_label()
+
+    def update_start_pos_from_current_sequence_json(self, entry: dict) -> None:
+        entry["red_attributes"]["start_ori"] = entry["red_attributes"]["end_ori"]
+        entry["blue_attributes"]["start_ori"] = entry["blue_attributes"]["end_ori"]
+        entry["start_pos"] = entry["end_pos"]
+        self.beat_frame.start_pos_view.start_pos.updater.update_pictograph(entry)

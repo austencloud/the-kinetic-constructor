@@ -33,7 +33,7 @@ class LetterDeterminer:
             else:
                 new_motion_type = motion_type
             json_index = (
-                self.main_widget.top_builder_widget.sequence_widget.beat_frame.get_index_of_currently_selected_beat()
+                self.main_widget.top_builder_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
                 + 2
             )
             self.main_widget.json_manager.updater.update_motion_type_in_json_at_index(
@@ -112,7 +112,7 @@ class LetterDeterminer:
         is_rot_dir_matching = (
             example[f"{motion.color}_attributes"]["prop_rot_dir"]
             == self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
-                self.main_widget.top_builder_widget.sequence_widget.beat_frame.get_index_of_currently_selected_beat()
+                self.main_widget.top_builder_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
                 + 2,
                 motion.color,
             )
@@ -135,7 +135,7 @@ class LetterDeterminer:
             == float_motion.end_loc
             and example[f"{float_motion.color}_attributes"]["prop_rot_dir"]
             == self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
-                self.main_widget.top_builder_widget.sequence_widget.beat_frame.get_index_of_currently_selected_beat()
+                self.main_widget.top_builder_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
                 + 2,
                 float_motion.color,
             )
@@ -162,7 +162,7 @@ class LetterDeterminer:
             == float_motion.end_loc
             and example[f"{float_motion.color}_attributes"]["prop_rot_dir"]
             == self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
-                self.main_widget.top_builder_widget.sequence_widget.beat_frame.get_index_of_currently_selected_beat()
+                self.main_widget.top_builder_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
                 + 2,
                 float_motion.color,
             )

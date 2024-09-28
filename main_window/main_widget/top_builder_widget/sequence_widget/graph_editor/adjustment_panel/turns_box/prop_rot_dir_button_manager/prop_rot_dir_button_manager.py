@@ -74,7 +74,7 @@ class PropRotDirButtonManager:
 
     def _update_pictograph_and_json(self, motion: "Motion", new_letter: Letter) -> None:
         """Update the pictograph and JSON with the new letter and motion attributes."""
-        pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
+        pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
         pictograph_dict = {
             "letter": new_letter.value,
             motion.color
@@ -112,10 +112,10 @@ class PropRotDirButtonManager:
         )
 
         # Triggering updates for UI components
-        self.graph_editor.sequence_widget.beat_frame.on_beat_adjusted()
+        self.graph_editor.sequence_widget.beat_frame.updater.update_beats_from_json()
         self.graph_editor.main_widget.top_builder_widget.sequence_builder.manual_builder.option_picker.update_option_picker()
         self.graph_editor.main_widget.top_builder_widget.sequence_widget.current_word_label.set_current_word(
-            self.graph_editor.sequence_widget.beat_frame.get_current_word()
+            self.graph_editor.sequence_widget.beat_frame.get.current_word()
         )
 
     def _update_pictographs_prop_rot_dir(self, prop_rot_dir: str) -> None:
@@ -136,7 +136,7 @@ class PropRotDirButtonManager:
     def _update_pictograph_prop_rot_dir(
         self, motion: "Motion", prop_rot_dir: str
     ) -> None:
-        pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
+        pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
         motion.prop_rot_dir = prop_rot_dir
         pictograph_dict = {
             motion.color + "_attributes": {"prop_rot_dir": prop_rot_dir},

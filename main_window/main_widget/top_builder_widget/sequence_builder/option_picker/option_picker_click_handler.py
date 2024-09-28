@@ -22,7 +22,7 @@ class OptionPickerClickHandler:
         new_beat = self.manual_builder.add_to_sequence_manager.create_new_beat(
             clicked_option
         )
-        beat_frame.add_beat_to_sequence(new_beat)
+        beat_frame.beat_adder.add_beat_to_sequence(new_beat)
         if new_beat.view:
             self.manual_builder.option_picker.choose_your_next_pictograph_label.set_text_to_loading()
             selection_manager = beat_frame.selection_overlay

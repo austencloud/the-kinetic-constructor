@@ -71,7 +71,7 @@ class TempBeatFrame(BaseBeatFrame):
         self.layout_manager.configure_beat_frame(16)
 
     def add_beat_to_sequence(self, new_beat: "BasePictograph") -> None:
-        next_beat_index = self.find_next_available_beat()
+        next_beat_index = self.get.next_available_beat()
 
         if (
             next_beat_index is not None
@@ -84,14 +84,8 @@ class TempBeatFrame(BaseBeatFrame):
             self.update_current_word()
             self.adjust_layout_to_sequence_length()
 
-    def find_next_available_beat(self) -> int:
-        for i, beat in enumerate(self.beats):
-            if not beat.is_filled:
-                return i
-        return None
-
     def adjust_layout_to_sequence_length(self):
-        last_filled_index = self.find_next_available_beat() or len(self.beats)
+        last_filled_index = self.get.next_available_beat() or len(self.beats)
         self.layout_manager.configure_beat_frame(last_filled_index)
 
     def get_last_filled_beat(self) -> BeatView:
@@ -125,11 +119,6 @@ class TempBeatFrame(BaseBeatFrame):
         entry["start_pos"] = entry["end_pos"]
         self.start_pos_view.start_pos.updater.update_pictograph(entry)
 
-    def get_index_of_currently_selected_beat(self) -> int:
-        for i, beat in enumerate(self.beats):
-            if beat.is_selected:
-                return i
-        return 0
 
     def populate_beat_frame_from_json(
         self, current_sequence_json: list[dict[str, str]]
@@ -177,7 +166,7 @@ class TempBeatFrame(BaseBeatFrame):
         self.update_current_word()
 
     def update_current_word(self):
-        self.current_word = self.get_current_word()
+        self.current_word = self.get.current_word()
 
     def clear_sequence(
         self, show_indicator=True, should_reset_to_start_pos_picker=True
@@ -185,8 +174,8 @@ class TempBeatFrame(BaseBeatFrame):
         self._reset_beat_frame()
 
         if should_reset_to_start_pos_picker:
-            self.sequence_builder.reset_to_start_pos_picker()
-        self.sequence_builder.last_beat = self.start_pos
+            self.sequence_builder.manual_builder.reset_to_start_pos_picker()
+        self.sequence_builder.manual_builder.last_beat = self.start_pos
         self.json_manager.loader_saver.clear_current_sequence_file()
 
         # Reset the layout to the smallest possible amount

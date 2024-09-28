@@ -122,7 +122,7 @@ class JsonSequenceUpdater:
 
     def set_turns_from_num_to_num_in_json(self, motion: "Motion", new_turns):
         beat_index = (
-            self.main_widget.top_builder_widget.sequence_widget.beat_frame.get_index_of_currently_selected_beat()
+            self.main_widget.top_builder_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
         )
         json_index = beat_index + 2
         self.update_turns_in_json_at_index(json_index, motion.color, new_turns)
@@ -136,7 +136,7 @@ class JsonSequenceUpdater:
 
     def set_turns_to_num_from_fl_in_json(self, motion: "Motion", new_turns):
         beat_index = (
-            self.main_widget.top_builder_widget.sequence_widget.beat_frame.get_index_of_currently_selected_beat()
+            self.main_widget.top_builder_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
         )
         json_index = beat_index + 2
         motion.motion_type = (
@@ -161,7 +161,7 @@ class JsonSequenceUpdater:
 
     def set_turns_to_fl_from_num_in_json(self, motion: "Motion", new_turns):
         beat_index = (
-            self.main_widget.top_builder_widget.sequence_widget.beat_frame.get_index_of_currently_selected_beat()
+            self.main_widget.top_builder_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
         )
         json_index = beat_index + 2
         self.update_turns_in_json_at_index(json_index, motion.color, new_turns)

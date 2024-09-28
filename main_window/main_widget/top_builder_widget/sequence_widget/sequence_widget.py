@@ -75,7 +75,7 @@ class SequenceWidget(QWidget):
         self.setLayout(self.layout)
 
     def update_current_word(self):
-        current_word = self.beat_frame.get_current_word()
+        current_word = self.beat_frame.get.current_word()
         self.current_word_label.set_current_word(current_word)
 
     def update_difficulty_label(self):
@@ -150,7 +150,7 @@ class SequenceWidget(QWidget):
     ) -> None:
         new_beat = Beat(self.beat_frame)
         new_beat.updater.update_pictograph(pictograph_dict)
-        self.beat_frame.add_beat_to_sequence(
+        self.beat_frame.beat_adder.add_beat_to_sequence(
             new_beat, override_grow_sequence, update_word
         )
         self.main_widget.sequence_properties_manager.update_sequence_properties()
