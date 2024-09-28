@@ -2,7 +2,7 @@
     "global": {
         "prop_type": "Staff",
         "background_type": "Aurora",
-        "grow_sequence": false,
+        "grow_sequence": true,
         "current_tab": "sequence_builder",
         "grid_mode": "diamond"
     },
@@ -52,11 +52,15 @@
     },
     "dictionary": {
         "sort_method": "alphabetical",
-        "current_section": "filter_choice",
-        "current_filter": null
+        "current_section": "browser",
+        "current_filter": {
+            "contains_letters": [
+                "P"
+            ]
+        }
     },
     "sequence_layout": {
-        "grow_sequence": false,
+        "grow_sequence": true,
         "num_beats": 16,
         "layout_option": "4 x 4"
     },
@@ -78,7 +82,7 @@
                 "sequence_level": 2,
                 "continuous_rotation": true
             },
-            "current_auto_builder": "freeform"
+            "current_auto_builder": "circular"
         },
         "manual_builder": {},
         "last_used_builder": "manual"

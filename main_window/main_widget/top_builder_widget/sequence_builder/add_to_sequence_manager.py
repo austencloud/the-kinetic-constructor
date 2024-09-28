@@ -12,8 +12,8 @@ if TYPE_CHECKING:
 
 
 class AddToSequenceManager:
-    def __init__(self, sequence_builder: "ManualBuilder") -> None:
-        self.sequence_builder = sequence_builder
+    def __init__(self, manual_builder: "ManualBuilder") -> None:
+        self.manual_builder = manual_builder
 
     def create_new_beat(self, clicked_option: "BasePictograph") -> "Beat":
         from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
@@ -34,9 +34,9 @@ class AddToSequenceManager:
         )
     
         new_beat.updater.update_pictograph(pictograph_dict)
-        self.sequence_builder.last_beat = new_beat
+        self.manual_builder.last_beat = new_beat
         SW_beat_frame = (
-            self.sequence_builder.main_widget.top_builder_widget.sequence_widget.beat_frame
+            self.manual_builder.main_widget.top_builder_widget.sequence_widget.beat_frame
         )
         if not SW_beat_frame.sequence_changed:
             SW_beat_frame.sequence_changed = True

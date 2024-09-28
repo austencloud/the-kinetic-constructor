@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QGridLayout
 from data.beat_frame_layouts import DEFAULT_BEAT_FRAME_LAYOUTS
 
 if TYPE_CHECKING:
@@ -11,6 +12,22 @@ class BeatFrameLayoutManager:
         self.beat_frame = beat_frame
         self.selection_manager = beat_frame.selection_overlay
         self.settings_manager = beat_frame.main_widget.main_window.settings_manager
+
+    def setup_layout(self) -> None:
+        layout: QGridLayout = QGridLayout(self.beat_frame)
+        layout.setSpacing(0)
+        layout.setContentsMargins(0, 0, 0, 0)
+        self.beat_frame.setContentsMargins(0, 0, 0, 0)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.beat_frame.start_pos_view.start_pos.initializer.set_nonradial_points_visibility(
+            False
+        )
+        layout.addWidget(self.beat_frame.start_pos_view, 0, 0)
+        for i, beat in enumerate(self.beat_frame.beats):
+            row, col = divmod(i, 8)
+            layout.addWidget(beat, row + 1, col + 1)
+        self.beat_frame.layout = layout
+        self.configure_beat_frame(16)
 
     def calculate_layout(self, beat_count: int) -> tuple[int, int]:
         return DEFAULT_BEAT_FRAME_LAYOUTS.get(beat_count, (1, beat_count))
@@ -35,7 +52,7 @@ class BeatFrameLayoutManager:
         if not override_grow_sequence:
             grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
             if grow_sequence:
-                num_filled_beats = self.beat_frame.find_next_available_beat() or 0
+                num_filled_beats = self.beat_frame.get.next_available_beat() or 0
                 num_beats = num_filled_beats
         columns, rows = self.calculate_layout(num_beats)
 
@@ -73,3 +90,9 @@ class BeatFrameLayoutManager:
             self.selection_manager.deselect_beat()
             self.selection_manager.select_beat(selected_beat)
             self.selection_manager.update_overlay_position()
+
+    def adjust_layout_to_sequence_length(self):
+        last_filled_index = self.beat_frame.get.next_available_beat() or len(
+            self.beat_frame.beats
+        )
+        self.configure_beat_frame(last_filled_index)

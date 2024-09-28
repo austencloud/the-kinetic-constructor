@@ -21,7 +21,7 @@ class TurnsAdjustmentManager(QObject):
         self.json_validation_engine = self.json_manager.validation_engine
         self.color = self.turns_widget.turns_box.color
 
-        self.turns_adjusted.connect(self.beat_frame.on_beat_adjusted)
+        self.turns_adjusted.connect(self.beat_frame.updater.update_beats_from_json)
 
     def adjust_turns(self, adjustment: Union[int, float]) -> None:
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
@@ -51,7 +51,7 @@ class TurnsAdjustmentManager(QObject):
         self.turns_widget.turns_box.prop_rot_dir_button_manager._update_pictograph_and_json(
             motion, new_letter
         )
-        pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
+        pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
         self.json_manager.updater.update_turns_in_json_at_index(
             pictograph_index + 2, self.color, new_turns
         )
@@ -76,7 +76,7 @@ class TurnsAdjustmentManager(QObject):
             self.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
         )
         self._update_motion_properties(new_turns)
-        pictograph_index = self.beat_frame.get_index_of_currently_selected_beat()
+        pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
         self.json_manager.updater.update_turns_in_json_at_index(
             pictograph_index + 2, self.color, new_turns
         )

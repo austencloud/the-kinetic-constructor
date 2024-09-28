@@ -66,7 +66,7 @@ class LayoutOptionsDialog(QDialog):
     def apply_settings(self):
         grow_sequence = self.panel.sequence_growth_checkbox.isChecked()
         num_filled_beats = (
-            self.sequence_widget.beat_frame.find_next_available_beat() - 1 or 0
+            self.sequence_widget.beat_frame.get.next_available_beat() - 1 or 0
         )
         if grow_sequence:
             self.settings_manager.global_settings.set_grow_sequence(True)
@@ -110,7 +110,7 @@ class LayoutOptionsDialog(QDialog):
         )
         if (
             not self.settings_manager.global_settings.get_grow_sequence()
-            and self.sequence_widget.beat_frame.find_next_available_beat() - 1
+            and self.sequence_widget.beat_frame.get.next_available_beat() - 1
             >= sum(
                 1 for beat in self.sequence_widget.beat_frame.beats if beat.isVisible()
             )

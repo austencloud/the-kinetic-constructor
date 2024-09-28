@@ -111,7 +111,7 @@ class OriDisplayFrame(QFrame):
 
     def _attach_listeners(self) -> None:
         self.ori_display_label.mousePressEvent = self._on_orientation_display_clicked
-        self.ori_adjusted.connect(self.beat_frame.on_beat_adjusted)
+        self.ori_adjusted.connect(self.beat_frame.updater.update_beats_from_json)
 
     def rotate_cw(self) -> None:
         self.current_orientation_index = (self.current_orientation_index + 1) % len(

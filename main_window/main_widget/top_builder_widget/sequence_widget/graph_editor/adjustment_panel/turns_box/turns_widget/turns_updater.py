@@ -33,21 +33,25 @@ class TurnsUpdater:
     def set_motion_turns(self, motion: "Motion", new_turns: Turns) -> None:
         if new_turns == "fl":
             # Handle float motion type
-            motion.prefloat_motion_type = self.json_manager.loader_saver.get_motion_type_from_json_at_index(
-                self.beat_frame.get_index_of_currently_selected_beat() + 2,
-                motion.color,
+            motion.prefloat_motion_type = (
+                self.json_manager.loader_saver.get_motion_type_from_json_at_index(
+                    self.beat_frame.get.index_of_currently_selected_beat() + 2,
+                    motion.color,
+                )
             )
-            motion.prefloat_prop_rot_dir = self.json_manager.loader_saver.get_prop_rot_dir_from_json(
-                self.beat_frame.get_index_of_currently_selected_beat() + 2,
-                motion.color,
+            motion.prefloat_prop_rot_dir = (
+                self.json_manager.loader_saver.get_prop_rot_dir_from_json(
+                    self.beat_frame.get.index_of_currently_selected_beat() + 2,
+                    motion.color,
+                )
             )
             self.json_updater.update_prefloat_motion_type_in_json(
-                self.beat_frame.get_index_of_currently_selected_beat() + 2,
+                self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 motion.color,
                 motion.prefloat_motion_type,
             )
             self.json_updater.update_prefloat_prop_rot_dir_in_json(
-                self.beat_frame.get_index_of_currently_selected_beat() + 2,
+                self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 motion.color,
                 motion.prefloat_prop_rot_dir,
             )
@@ -56,23 +60,23 @@ class TurnsUpdater:
         else:
             # Retrieve prefloat motion type and prop rotation direction from JSON
             motion.prefloat_motion_type = self.json_manager.loader_saver.get_prefloat_motion_type_from_json_at_index(
-                self.beat_frame.get_index_of_currently_selected_beat() + 2,
+                self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 motion.color,
             )
             motion.prefloat_prop_rot_dir = (
                 self.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
-                    self.beat_frame.get_index_of_currently_selected_beat() + 2,
+                    self.beat_frame.get.index_of_currently_selected_beat() + 2,
                     motion.color,
                 )
             )
             # update the prefloat attributyes in the json
             self.json_updater.update_prefloat_motion_type_in_json(
-                self.beat_frame.get_index_of_currently_selected_beat() + 2,
+                self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 motion.color,
                 motion.prefloat_motion_type,
             )
             self.json_updater.update_prefloat_prop_rot_dir_in_json(
-                self.beat_frame.get_index_of_currently_selected_beat() + 2,
+                self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 motion.color,
                 motion.prefloat_prop_rot_dir,
             )

@@ -87,8 +87,12 @@ class BeatView(QGraphicsView):
         self.add_beat_number()
 
     def display_placeholder_arrow(self):
-        arrow_item = QGraphicsPixmapItem(QPixmap(get_images_and_data_path("images\\placeholder_arrow.png")))
-        arrow_item.setPos(self.sceneRect().center() - arrow_item.boundingRect().center())
+        arrow_item = QGraphicsPixmapItem(
+            QPixmap(get_images_and_data_path("images\\placeholder_arrow.png"))
+        )
+        arrow_item.setPos(
+            self.sceneRect().center() - arrow_item.boundingRect().center()
+        )
         self.scene().addItem(arrow_item)
 
     def show_context_menu(self, position):
@@ -103,7 +107,7 @@ class BeatView(QGraphicsView):
 
     def set_duration(self, duration):
         self.beat.duration = duration
-        self.beat_frame.on_beat_duration_changed(self)
+        self.beat_frame.duration_manager.update_beat_numbers(self)
 
     def _setup_blank_beat(self):
         self.setScene(self.blank_beat)
