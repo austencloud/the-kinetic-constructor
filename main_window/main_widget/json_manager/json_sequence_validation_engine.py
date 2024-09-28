@@ -2,11 +2,11 @@ from typing import TYPE_CHECKING
 from data.constants import BLUE, RED
 
 if TYPE_CHECKING:
-    from main_window.main_widget.json_manager.json_manager import JSON_Manager
+    from main_window.main_widget.json_manager.json_manager import JsonManager
 
 
 class JsonSequenceValidationEngine:
-    def __init__(self, json_manager: "JSON_Manager") -> None:
+    def __init__(self, json_manager: "JsonManager") -> None:
         self.json_manager = json_manager
         self.ori_calculator = self.json_manager.ori_calculator
 

@@ -45,7 +45,7 @@ class TurnsUpdater:
                     motion.color,
                 )
             )
-            self.json_updater.update_prefloat_motion_type_in_json(
+            self.json_updater.motion_type_updater.update_prefloat_motion_type_in_json(
                 self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 motion.color,
                 motion.prefloat_motion_type,
@@ -70,7 +70,7 @@ class TurnsUpdater:
                 )
             )
             # update the prefloat attributyes in the json
-            self.json_updater.update_prefloat_motion_type_in_json(
+            self.json_updater.motion_type_updater.update_prefloat_motion_type_in_json(
                 self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 motion.color,
                 motion.prefloat_motion_type,
@@ -87,11 +87,17 @@ class TurnsUpdater:
 
         # Handle JSON update based on the new turns
         if new_turns == "fl":
-            self.json_updater.set_turns_to_fl_from_num_in_json(motion, new_turns)
+            self.json_updater.turns_updater.set_turns_to_fl_from_num_in_json(
+                motion, new_turns
+            )
         elif motion.motion_type == FLOAT and new_turns != "fl":
-            self.json_updater.set_turns_to_num_from_fl_in_json(motion, new_turns)
+            self.json_updater.turns_updater.set_turns_to_num_from_fl_in_json(
+                motion, new_turns
+            )
         else:
-            self.json_updater.set_turns_from_num_to_num_in_json(motion, new_turns)
+            self.json_updater.turns_updater.set_turns_from_num_to_num_in_json(
+                motion, new_turns
+            )
 
         self._update_turns(motion, new_turns)
         self._repaint_views(motion)

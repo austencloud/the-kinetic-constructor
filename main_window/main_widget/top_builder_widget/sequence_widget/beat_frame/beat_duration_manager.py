@@ -27,16 +27,19 @@ class BeatDurationManager:
         index = self.beat_frame.beats.index(changed_beat_view)
         current_beat = changed_beat_view.beat
 
-        # Update duration of the current beat
+        # Update the duration of the current beat
         current_beat.duration = new_duration
 
-        # Update the beat number display to show the range
-        changed_beat_view.add_beat_number(
-            index + 1
-        )  # Update with correct numbering, including span
+        # Update the beat number display to show the range (e.g., "1-2")
+        changed_beat_view.add_beat_number(index + 1)
 
-        # Update subsequent beats' numbering
+        # Adjust subsequent beats' numbers after increasing duration
         self.update_beat_numbers()
+
+        # Update the sequence in JSON
+        self.beat_frame.json_manager.updater.update_current_sequence_file_with_beat(
+            changed_beat_view
+        )
 
     def update_beat_numbers(self):
         """

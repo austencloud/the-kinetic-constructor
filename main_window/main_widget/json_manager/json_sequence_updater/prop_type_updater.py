@@ -1,0 +1,17 @@
+from typing import TYPE_CHECKING
+
+from Enums.PropTypes import PropType
+
+
+if TYPE_CHECKING:
+    from main_window.main_widget.json_manager.json_manager import JsonManager
+
+
+class PropTypeUpdater:
+    def __init__(self, json_manager: "JsonManager"):
+        self.json_manager = json_manager
+
+    def update_prop_type_in_json(self, prop_type: PropType) -> None:
+        sequence = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence[0]["prop_type"] = prop_type.name.lower()
+        self.json_manager.loader_saver.save_current_sequence(sequence)

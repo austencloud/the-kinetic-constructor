@@ -52,7 +52,7 @@ class TurnsAdjustmentManager(QObject):
             motion, new_letter
         )
         pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
-        self.json_manager.updater.update_turns_in_json_at_index(
+        self.json_manager.updater.turns_updater.update_turns_in_json_at_index(
             pictograph_index + 2, self.color, new_turns
         )
         self.json_validation_engine.run(is_current_sequence=True)
@@ -77,7 +77,7 @@ class TurnsAdjustmentManager(QObject):
         )
         self._update_motion_properties(new_turns)
         pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
-        self.json_manager.updater.update_turns_in_json_at_index(
+        self.json_manager.updater.turns_updater.update_turns_in_json_at_index(
             pictograph_index + 2, self.color, new_turns
         )
         self.pictograph.motions[self.color].turns = new_turns

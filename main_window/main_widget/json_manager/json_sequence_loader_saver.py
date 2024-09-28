@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING, List, Dict
 from utilities.path_helpers import get_user_editable_resource_path
 
 if TYPE_CHECKING:
-    from main_window.main_widget.json_manager.json_manager import JSON_Manager
+    from main_window.main_widget.json_manager.json_manager import JsonManager
 
 
 class JsonSequenceLoaderSaver:
-    def __init__(self, json_manager: "JSON_Manager") -> None:
+    def __init__(self, json_manager: "JsonManager") -> None:
         self.json_manager = json_manager
         self.current_sequence_json = get_user_editable_resource_path(
             "current_sequence.json"
@@ -21,13 +21,12 @@ class JsonSequenceLoaderSaver:
                     return self.get_default_sequence()
 
                 sequence = json.loads(content)
+                if not sequence or not isinstance(sequence, list):
+                    return self.get_default_sequence()
 
             return sequence
 
-        except FileNotFoundError:
-            return self.get_default_sequence()
-
-        except json.JSONDecodeError:
+        except (FileNotFoundError, json.JSONDecodeError):
             return self.get_default_sequence()
 
     def get_default_sequence(self) -> List[Dict]:

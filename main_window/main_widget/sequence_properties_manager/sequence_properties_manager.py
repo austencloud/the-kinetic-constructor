@@ -65,10 +65,18 @@ class SequencePropertiesManager:
         sequence[0].update(properties)
         self.json_manager.loader_saver.save_current_sequence(sequence)
 
-    def calculate_word(self) -> str:
-        # Concatenate and simplify the letters in the sequence
-        word = "".join(entry["letter"] for entry in self.sequence[1:])
-        return WordSimplifier.simplify_repeated_word(word)
+    def calculate_word(self):
+        if self.sequence is None or not isinstance(self.sequence, list):
+            self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
+
+        # Make sure that self.sequence is a list and has beat entries
+        if len(self.sequence) < 2:
+            return ""
+
+        word = "".join(
+            entry.get("letter", "") for entry in self.sequence[1:] if "letter" in entry
+        )
+        return word
 
     def check_all_properties(self):
         if not self.sequence:

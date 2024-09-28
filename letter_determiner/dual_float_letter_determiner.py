@@ -43,7 +43,7 @@ class DualFloatLetterDeterminer:
     def _update_json_with_prefloat_attributes(
         self, json_index: int, color: str, motion_type: str
     ) -> None:
-        self.main_widget.json_manager.updater.update_prefloat_motion_type_in_json(
+        self.main_widget.json_manager.updater.motion_type_updater.update_prefloat_motion_type_in_json(
             json_index, color, motion_type
         )
 

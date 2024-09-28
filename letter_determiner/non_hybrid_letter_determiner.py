@@ -54,7 +54,7 @@ class NonHybridShiftLetterDeterminer:
         self, json_index: int, other_motion: "Motion", motion_type: str
     ) -> None:
         """Update JSON with pre-float motion type and rotation direction."""
-        self.main_widget.json_manager.updater.update_prefloat_motion_type_in_json(
+        self.main_widget.json_manager.updater.motion_type_updater.update_prefloat_motion_type_in_json(
             json_index,
             other_motion.color,
             motion_type,

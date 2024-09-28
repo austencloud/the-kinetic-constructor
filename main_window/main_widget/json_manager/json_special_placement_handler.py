@@ -5,11 +5,11 @@ import re
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main_window.main_widget.json_manager.json_manager import JSON_Manager
+    from main_window.main_widget.json_manager.json_manager import JsonManager
 
 
 class JsonSpecialPlacementHandler:
-    def __init__(self, json_manager: "JSON_Manager") -> None:
+    def __init__(self, json_manager: "JsonManager") -> None:
         self.json_manager = json_manager
 
     def load_json_data(self, file_path) -> dict:

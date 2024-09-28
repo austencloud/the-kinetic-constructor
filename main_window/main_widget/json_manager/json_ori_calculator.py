@@ -23,11 +23,11 @@ from data.constants import (
 )
 
 if TYPE_CHECKING:
-    from main_window.main_widget.json_manager.json_manager import JSON_Manager
+    from main_window.main_widget.json_manager.json_manager import JsonManager
 
 
 class JsonOriCalculator:
-    def __init__(self, json_manager: "JSON_Manager"):
+    def __init__(self, json_manager: "JsonManager"):
         self.main_widget = json_manager.main_widget
 
     def calculate_end_orientation(self, pictograph_dict, color: str):

@@ -22,7 +22,7 @@ from utilities.path_helpers import get_images_and_data_path
 from styles.main_widget_tab_bar_styler import MainWidgetTabBarStyler
 from .dictionary_widget.dictionary_widget import DictionaryWidget
 from .metadata_extractor import MetaDataExtractor
-from .json_manager.json_manager import JSON_Manager
+from .json_manager.json_manager import JsonManager
 from .turns_tuple_generator.turns_tuple_generator import TurnsTupleGenerator
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from .pictograph_key_generator import PictographKeyGenerator
@@ -63,7 +63,7 @@ class MainWidget(QTabWidget):
     def _initialize_managers(self):
         """Setup all the managers and helper components."""
         self.splash_screen.update_progress(20, "Loading JSON Manager...")
-        self.json_manager = JSON_Manager(self)
+        self.json_manager = JsonManager(self)
 
         self.splash_screen.update_progress(30, "Loading SVG Manager...")
         self.svg_manager = SvgManager(self)

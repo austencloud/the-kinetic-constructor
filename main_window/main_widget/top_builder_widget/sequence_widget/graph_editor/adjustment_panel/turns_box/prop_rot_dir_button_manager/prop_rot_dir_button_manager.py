@@ -96,7 +96,7 @@ class PropRotDirButtonManager:
         self.json_manager.updater.update_prop_rot_dir_in_json_at_index(
             json_index, motion.color, motion.prop_rot_dir
         )
-        self.json_manager.updater.update_motion_type_in_json_at_index(
+        self.json_manager.updater.motion_type_updater.update_motion_type_in_json_at_index(
             json_index, motion.color, motion.motion_type
         )
         self.json_manager.updater.update_letter_in_json_at_index(
