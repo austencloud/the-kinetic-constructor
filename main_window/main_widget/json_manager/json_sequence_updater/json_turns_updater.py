@@ -89,7 +89,7 @@ class JsonTurnsUpdater:
         self.json_updater.motion_type_updater.update_motion_type_in_json_at_index(
             json_index, motion.color, motion.motion_type
         )
-        self.json_updater.update_prop_rot_dir_in_json_at_index(
+        self.json_updater.prop_rot_dir_updater.update_prop_rot_dir_in_json_at_index(
             json_index, motion.color, motion.prop_rot_dir
         )
 
@@ -106,7 +106,7 @@ class JsonTurnsUpdater:
                 json_index, motion.color
             ),
         )
-        self.json_updater.update_prefloat_prop_rot_dir_in_json(
+        self.json_updater.prop_rot_dir_updater.update_prefloat_prop_rot_dir_in_json(
             json_index,
             motion.color,
             self.json_manager.loader_saver.get_prop_rot_dir_from_json(
@@ -116,6 +116,6 @@ class JsonTurnsUpdater:
         self.json_updater.motion_type_updater.update_motion_type_in_json_at_index(
             json_index, motion.color, FLOAT
         )
-        self.json_updater.update_prop_rot_dir_in_json_at_index(
+        self.json_updater.prop_rot_dir_updater.update_prop_rot_dir_in_json_at_index(
             json_index, motion.color, NO_ROT
         )

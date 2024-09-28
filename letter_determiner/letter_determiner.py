@@ -39,7 +39,7 @@ class LetterDeterminer:
             self.main_widget.json_manager.updater.motion_type_updater.update_motion_type_in_json_at_index(
                 json_index, motion.color, new_motion_type
             )
-            self.main_widget.json_manager.updater.update_prop_rot_dir_in_json_at_index(
+            self.main_widget.json_manager.updater.prop_rot_dir_updater.update_prop_rot_dir_in_json_at_index(
                 json_index, motion.color, motion.prop_rot_dir
             )
         elif motion_type == FLOAT and other_motion.motion_type == FLOAT:

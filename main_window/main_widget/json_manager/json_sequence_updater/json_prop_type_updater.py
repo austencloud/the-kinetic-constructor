@@ -4,12 +4,15 @@ from Enums.PropTypes import PropType
 
 
 if TYPE_CHECKING:
+    from main_window.main_widget.json_manager.json_sequence_updater.json_sequence_updater import (
+        JsonSequenceUpdater,
+    )
     from main_window.main_widget.json_manager.json_manager import JsonManager
 
 
-class PropTypeUpdater:
-    def __init__(self, json_manager: "JsonManager"):
-        self.json_manager = json_manager
+class JsonPropTypeUpdater:
+    def __init__(self, json_updater: "JsonSequenceUpdater") -> None:
+        self.json_manager = json_updater.json_manager
 
     def update_prop_type_in_json(self, prop_type: PropType) -> None:
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
