@@ -1,7 +1,6 @@
 {
   "Z": {
     "(s, 0, 1)": {
-      "anti": [25, -35],
       "static_rot_angle_override": true,
       "static": [-70, -70]
     },
