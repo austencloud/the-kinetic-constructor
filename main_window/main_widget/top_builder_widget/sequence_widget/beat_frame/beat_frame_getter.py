@@ -35,6 +35,8 @@ class BeatFrameGetter:
         word = ""
         for beat_view in self.beat_frame.beats:
             if beat_view.is_filled:
+                if beat_view.beat.pictograph_dict.get("is_placeholder", False):
+                    continue
                 word += beat_view.beat.letter.value
         return WordSimplifier.simplify_repeated_word(word)
 

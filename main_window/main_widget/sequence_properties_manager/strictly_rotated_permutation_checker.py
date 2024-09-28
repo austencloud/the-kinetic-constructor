@@ -11,7 +11,9 @@ class StrictlyRotatedPermutationChecker:
 
     def check(self) -> bool:
         sequence = self.manager.sequence
-        letter_sequence = [entry["letter"] for entry in sequence if "letter" in entry]
+        letter_sequence = [
+            entry["letter"] for entry in sequence[1:] if "letter" in entry
+        ]
         unique_letters = set(letter_sequence)
         for letter in unique_letters:
             occurrences = [i for i, x in enumerate(letter_sequence) if x == letter]

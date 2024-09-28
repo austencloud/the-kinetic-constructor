@@ -64,7 +64,7 @@ class JsonTurnsUpdater:
             json_index, motion.color, motion.motion_type
         )
 
-        self.json_updater.update_prop_rot_dir_in_json_at_index(
+        self.json_updater.prop_rot_dir_updater.update_prop_rot_dir_in_json_at_index(
             json_index, motion.color, motion.prop_rot_dir
         )
 

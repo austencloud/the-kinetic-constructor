@@ -50,7 +50,7 @@ class TurnsUpdater:
                 motion.color,
                 motion.prefloat_motion_type,
             )
-            self.json_updater.update_prefloat_prop_rot_dir_in_json(
+            self.json_updater.prop_rot_dir_updater.update_prefloat_prop_rot_dir_in_json(
                 self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 motion.color,
                 motion.prefloat_prop_rot_dir,
@@ -75,7 +75,7 @@ class TurnsUpdater:
                 motion.color,
                 motion.prefloat_motion_type,
             )
-            self.json_updater.update_prefloat_prop_rot_dir_in_json(
+            self.json_updater.prop_rot_dir_updater.update_prefloat_prop_rot_dir_in_json(
                 self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 motion.color,
                 motion.prefloat_prop_rot_dir,

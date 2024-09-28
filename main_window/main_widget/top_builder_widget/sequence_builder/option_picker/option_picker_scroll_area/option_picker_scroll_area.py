@@ -22,7 +22,9 @@ from .option_picker_display_manager import (
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_widget import OptionPickerSectionWidget
+    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_widget import (
+        OptionPickerSectionWidget,
+    )
     from ..option_picker import OptionPicker
 
 
@@ -84,11 +86,15 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         QApplication.restoreOverrideCursor()
 
     def set_pictograph_orientations(self, pictograph_dict: dict, sequence) -> None:
-        last_pictograph = sequence[-1]
-        pictograph_dict["red_attributes"]["start_ori"] = last_pictograph[
+        last_pictograph_dict = (
+            sequence[-1]
+            if sequence[-1].get("is_placeholder", "") != True
+            else sequence[-2]
+        )
+        pictograph_dict["red_attributes"]["start_ori"] = last_pictograph_dict[
             "red_attributes"
         ]["end_ori"]
-        pictograph_dict["blue_attributes"]["start_ori"] = last_pictograph[
+        pictograph_dict["blue_attributes"]["start_ori"] = last_pictograph_dict[
             "blue_attributes"
         ]["end_ori"]
         pictograph_dict["red_attributes"]["end_ori"] = (
@@ -157,7 +163,9 @@ class OptionPickerScrollArea(BasePickerScrollArea):
             for pictograph in section.pictographs.values():
                 pictograph.view.set_enabled(not disabled)
 
-    def add_section_to_layout(self, section: "OptionPickerSectionWidget", section_index: int = None):
+    def add_section_to_layout(
+        self, section: "OptionPickerSectionWidget", section_index: int = None
+    ):
         if section_index == 0 or section_index:  # widget is a section
             if section.__class__.__name__ == "OptionPickerSectionWidget":
                 if section.letter_type == LetterType.Type1:

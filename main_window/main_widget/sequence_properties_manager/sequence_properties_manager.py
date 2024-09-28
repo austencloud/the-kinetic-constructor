@@ -140,9 +140,17 @@ class SequencePropertiesManager:
         }
 
     def _check_ends_at_start_pos(self) -> bool:
-        return self.sequence[-1]["end_pos"] == self.sequence[0]["end_pos"]
+        if self.sequence[-1].get("is_placeholder", False):
+            return self.sequence[-2]["end_pos"] == self.sequence[0]["end_pos"]
+        else:
+            return self.sequence[-1]["end_pos"] == self.sequence[0]["end_pos"]
 
     def _check_is_permutable(self) -> bool:
-        return self.sequence[-1]["end_pos"].rstrip("0123456789") == self.sequence[0][
-            "end_pos"
-        ].rstrip("0123456789")
+        if self.sequence[-1].get("is_placeholder", False):
+            return self.sequence[-2]["end_pos"].rstrip("0123456789") == self.sequence[
+                0
+            ]["end_pos"].rstrip("0123456789")
+        else:
+            return self.sequence[-1]["end_pos"].rstrip("0123456789") == self.sequence[
+                0
+            ]["end_pos"].rstrip("0123456789")

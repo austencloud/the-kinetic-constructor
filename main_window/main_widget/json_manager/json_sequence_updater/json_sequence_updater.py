@@ -29,29 +29,59 @@ class JsonSequenceUpdater:
         self.prop_type_updater = JsonPropTypeUpdater(self)
         self.letter_updater = JsonLetterUpdater(self)
         self.prop_rot_dir_updater = JsonPropRotDirUpdater(self)
-        self.duration_updater = JsonDurationUpdater(self)  # Add duration updater
+        self.duration_updater = JsonDurationUpdater(self) 
 
     def update_current_sequence_file_with_beat(self, beat_view: BeatView):
-        # Normal beat addition logic
         sequence_data = self.json_manager.loader_saver.load_current_sequence_json()
-        
-        # Metadata remains unchanged
         sequence_metadata = sequence_data[0] if "word" in sequence_data[0] else {}
-        sequence_beats = sequence_data[1:]  # Preserve existing beats
 
-        # Prepare the new beat data
+        # Filter the beats without deleting placeholders
+        sequence_beats = [
+            entry
+            for entry in sequence_data[1:]
+            if "beat" not in entry or (
+                entry.get("beat") < beat_view.number
+                or entry.get("beat") > beat_view.number + beat_view.beat.duration - 1
+            )
+        ]
+
+        # Add the main beat data
         beat_data = beat_view.beat.pictograph_dict
         beat_data["duration"] = beat_view.beat.duration
         beat_data["beat"] = beat_view.number
-
-        # Add the new beat to the sequence
         sequence_beats.append(beat_data)
 
-        # Sort by beat number
-        sequence_beats.sort(key=lambda entry: entry.get("beat", float('inf')))
+        # Re-add placeholder beats if they exist
+        for beat_num in range(
+            beat_view.number + 1, beat_view.number + beat_view.beat.duration
+        ):
+            placeholder_entry = {
+                "beat": beat_num,
+                "is_placeholder": True,
+                "parent_beat": beat_view.number,
+            }
+            sequence_beats.append(placeholder_entry)
 
-        # Save the updated sequence
+        sequence_beats.sort(key=lambda entry: entry.get("beat", float("inf")))
         sequence_data = [sequence_metadata] + sequence_beats
+        
+        self.json_manager.loader_saver.save_current_sequence(sequence_data)
+
+    def add_placeholder_entry_to_current_sequence(self, beat_num: int, parent_beat: int):
+        sequence_data = self.json_manager.loader_saver.load_current_sequence_json()
+        sequence_metadata = sequence_data[0] if "word" in sequence_data[0] else {}
+        sequence_beats = sequence_data[1:]
+
+        placeholder_entry = {
+            "beat": beat_num,
+            "is_placeholder": True,
+            "parent_beat": parent_beat,
+        }
+        sequence_beats.append(placeholder_entry)
+
+        sequence_beats.sort(key=lambda entry: entry.get("beat", float("inf")))
+        sequence_data = [sequence_metadata] + sequence_beats
+
         self.json_manager.loader_saver.save_current_sequence(sequence_data)
 
 

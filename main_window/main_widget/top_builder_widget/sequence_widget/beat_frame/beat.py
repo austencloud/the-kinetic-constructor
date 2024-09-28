@@ -20,6 +20,8 @@ class Beat(BasePictograph):
         self.view: "BeatView" = None
         self.beat_number_item: QGraphicsTextItem = None
         self.duration = duration
+        self.is_placeholder = False
+        self.parent_beat = None
 
     def add_beat_number(self, number: int) -> None:
         """

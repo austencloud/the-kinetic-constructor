@@ -1,5 +1,9 @@
 from typing import TYPE_CHECKING
 
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
+    Beat,
+)
+
 if TYPE_CHECKING:
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
 
@@ -20,25 +24,41 @@ class BeatFramePopulator:
             self.main_widget.top_builder_widget.sequence_builder.manual_builder.start_pos_picker.start_pos_manager
         )
         self.sequence_builder = self.main_widget.top_builder_widget.sequence_builder
+
         if not current_sequence_json:
             return
+
         self.sequence_widget.sequence_clearer.clear_sequence(
             show_indicator=False, should_reset_to_start_pos_picker=False
         )
+
+        # Load start position first
         start_pos_beat = self.start_pos_manager.convert_current_sequence_json_entry_to_start_pos_pictograph(
             current_sequence_json
         )
         self.json_manager.start_position_handler.set_start_position_data(start_pos_beat)
         self.start_pos_view.set_start_pos(start_pos_beat)
+
+        # Process all beats, including placeholders
         for pictograph_dict in current_sequence_json[1:]:
             if pictograph_dict.get("sequence_start_position"):
                 continue
-            self.sequence_widget.create_new_beat_and_add_to_sequence(pictograph_dict)
+            # Handle placeholder beats by creating a placeholder pictograph or beat view
+            if pictograph_dict.get("is_placeholder", False):
+                continue
+            else:
+                # Regular beats are added as usual
+                self.sequence_widget.create_new_beat_and_add_to_sequence(
+                    pictograph_dict
+                )
+
         self.sequence_widget.update_current_word()
+
         if len(current_sequence_json) > 2:
             self.sequence_widget.update_difficulty_label()
         else:
             self.sequence_widget.difficulty_label.set_difficulty_level("")
+
         last_beat = self.sequence_widget.beat_frame.get.last_filled_beat().beat
         self.sequence_builder.manual_builder.last_beat = last_beat
 
@@ -54,3 +74,11 @@ class BeatFramePopulator:
         scroll_area.add_and_display_relevant_pictographs(next_options)
         self.selection_overlay.select_beat(self.beat_frame.get.last_filled_beat())
         self.selection_overlay.update_overlay_position()
+
+    def _add_placeholder_beat(self, pictograph_dict: dict) -> None:
+        """
+        Create and add a placeholder beat to the sequence.
+        """
+        self.json_manager.updater.add_placeholder_entry_to_current_sequence(
+            pictograph_dict["beat"], pictograph_dict["parent_beat"]
+        )

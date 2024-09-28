@@ -30,7 +30,7 @@ class DualFloatLetterDeterminer:
             json_index, motion
         )
 
-        self.main_widget.json_manager.updater.update_prefloat_prop_rot_dir_in_json(
+        self.main_widget.json_manager.updater.prop_rot_dir_updater.update_prefloat_prop_rot_dir_in_json(
             json_index, motion.color, motion.prefloat_prop_rot_dir
         )
 
