@@ -6,7 +6,6 @@ from data.beat_frame_layouts import DEFAULT_BEAT_FRAME_LAYOUTS
 if TYPE_CHECKING:
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
 
-
 class BeatFrameLayoutManager:
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
         self.beat_frame = beat_frame
