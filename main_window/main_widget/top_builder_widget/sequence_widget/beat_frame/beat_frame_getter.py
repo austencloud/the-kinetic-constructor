@@ -20,7 +20,7 @@ class BeatFrameGetter:
         current_beat = 0
         for beat_view in self.beat_frame.beats:
             if beat_view.is_filled:
-                current_beat += beat_view.beat.duration
+                current_beat += 1
             else:
                 return current_beat
         return current_beat

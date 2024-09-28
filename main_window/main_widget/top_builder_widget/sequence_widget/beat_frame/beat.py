@@ -22,10 +22,12 @@ class Beat(BasePictograph):
         self.duration = duration
 
     def add_beat_number(self, number: int) -> None:
+        """
+        Add a beat number or range of numbers to represent the beat.
+        """
         if not self.beat_number_item:
             beat_text = self.get_beat_number_text(number)
             self.beat_number_item = QGraphicsTextItem(beat_text)
-            self.beat_number_item = QGraphicsTextItem(str(number))
             self.beat_number_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))
             self.beat_number_item.setPos(
                 QPointF(
@@ -38,16 +40,13 @@ class Beat(BasePictograph):
         else:
             self.beat_number_item.setPlainText(self.get_beat_number_text(number))
 
-    def remove_beat_number(self) -> None:
-        if self.beat_number_item:
-            self.view.scene().removeItem(self.beat_number_item)
-            self.beat_number_item = None
-            self.update()
-
     def get_beat_number_text(self, number: int) -> str:
+        """
+        Return the beat number or range of numbers if this beat spans multiple beats.
+        """
         if self.duration > 1:
             end_beat = number + self.duration - 1
-            return f"{number}-{end_beat}"
+            return f"{number},{end_beat}"
         else:
             return str(number)
 
@@ -75,21 +74,9 @@ class BeatView(QGraphicsView):
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)
 
-    def set_as_placeholder(self):
-        self.is_placeholder = True
-        self.part_of_multibeat = True
-        self.is_start = True
-        self.is_end = False
-        self.is_filled = True
-        self.beat = None
-        self.scene().clear()
-        self.display_placeholder_arrow()
-        self.add_beat_number()
-
     def display_placeholder_arrow(self):
-        arrow_item = QGraphicsPixmapItem(
-            QPixmap(get_images_and_data_path("images\\placeholder_arrow.png"))
-        )
+        arrow_path = get_images_and_data_path("images/placeholder_arrow.png")
+        arrow_item = QGraphicsPixmapItem(QPixmap(arrow_path))
         arrow_item.setPos(
             self.sceneRect().center() - arrow_item.boundingRect().center()
         )
@@ -97,17 +84,25 @@ class BeatView(QGraphicsView):
 
     def show_context_menu(self, position):
         menu = QMenu()
-        one_beat_action = QAction("1 Beat", self)
+        one_beat_action = QAction("1 Count", self)
         one_beat_action.triggered.connect(lambda: self.set_duration(1))
-        two_beats_action = QAction("2 Beats", self)
+        two_beats_action = QAction("2 Counts", self)
         two_beats_action.triggered.connect(lambda: self.set_duration(2))
         menu.addAction(one_beat_action)
         menu.addAction(two_beats_action)
         menu.exec(self.mapToGlobal(position))
 
     def set_duration(self, duration):
-        self.beat.duration = duration
-        self.beat_frame.duration_manager.update_beat_numbers(self)
+        self.beat_frame.duration_manager.update_beat_duration(self, duration)
+
+    def clear_beat(self):
+        """Clear the beat from this view."""
+        self.setScene(self.blank_beat)
+        self.is_filled = False
+        self.beat = None
+        self.part_of_multibeat = False
+        self.is_end = False
+        self.remove_beat_number()
 
     def _setup_blank_beat(self):
         self.setScene(self.blank_beat)
@@ -121,20 +116,57 @@ class BeatView(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
-    def add_beat_number(self):
-        if self.number is not None:
-            self.beat_number_item = QGraphicsTextItem(str(self.number))
-            self.beat_number_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))
-            self.beat_number_item.setPos(
-                QPointF(
-                    self.beat_number_item.boundingRect().height() // 3,
-                    self.beat_number_item.boundingRect().height() // 5,
-                )
+    def set_beat(self, beat: "Beat", number: int, is_end=False) -> None:
+        """
+        Set the beat and display its number or range.
+        """
+        self.beat = beat
+        self.beat.view = self
+        self.is_filled = True
+        self.number = number
+        self.is_end = is_end
+        self.part_of_multibeat = self.beat.duration > 1
+
+        # Update beat number
+        self.setScene(self.beat)
+        self.resize_beat_view()
+        self.remove_beat_number()
+        self.add_beat_number()
+
+    def add_beat_number(self, number=None):
+        """
+        Add a beat number or a range of beat numbers to represent the beat.
+        If a number is provided, use it to update the displayed beat number.
+        """
+        if self.beat_number_item:
+            self.remove_beat_number()  # Remove any existing beat number item first
+
+        if not number:
+            beat_number_text = (
+                self.beat.get_beat_number_text(self.number)
+                if self.beat
+                else self.blank_beat.get_beat_number_text(self.number)
             )
-            self.scene().addItem(self.beat_number_item)
+        else:
+            beat_number_text = (
+                self.beat.get_beat_number_text(number)
+                if self.beat
+                else self.blank_beat.get_beat_number_text(number)
+            )
+
+        self.beat_number_item = QGraphicsTextItem(beat_number_text)
+        self.beat_number_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))
+        self.beat_number_item.setPos(
+            QPointF(
+                self.beat_number_item.boundingRect().height() // 3,
+                self.beat_number_item.boundingRect().height() // 5,
+            )
+        )
+        self.scene().addItem(self.beat_number_item)
 
     def remove_beat_number(self):
-        self.scene().removeItem(self.beat_number_item)
+        if self.beat_number_item:
+            self.scene().removeItem(self.beat_number_item)
 
     def _add_start_text(self):
         self.start_text_item = QGraphicsTextItem("Start")
@@ -189,22 +221,6 @@ class BeatView(QGraphicsView):
         painter.drawRect(0, 0, target_width - 1, target_height - 1)
         painter.end()
         return QPixmap.fromImage(image)
-
-    def set_beat(self, beat: "Beat", number: int, is_end=False) -> None:
-        self.beat = beat
-        self.is_filled = True
-        self.number = number
-        self.is_end = is_end
-        self.part_of_multibeat = self.beat.duration > 1
-        self.is_placeholder = not self.is_end and self.part_of_multibeat
-
-        if self.is_placeholder:
-            self.set_as_placeholder()
-        else:
-            self.setScene(self.beat)
-            self.resize_beat_view()
-            self.add_beat_number()
-            self.beat.view = self
 
     def resize_beat_view(self):
         beat_scene_size = (950, 950)

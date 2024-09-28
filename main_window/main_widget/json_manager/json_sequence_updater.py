@@ -101,10 +101,34 @@ class JsonSequenceUpdater:
     def update_current_sequence_file_with_beat(self, beat_view: BeatView):
         sequence_data = self.json_manager.loader_saver.load_current_sequence_json()
 
-        sequence_data.append(beat_view.beat.pictograph_dict)
+        # Main entry for the beat
+        beat_data = beat_view.beat.pictograph_dict
+        beat_data["duration"] = beat_view.beat.duration
+
+        # Remove any existing entry for this beat
+        beat_number = beat_view.number
+        sequence_data = [entry for entry in sequence_data if entry.get("beat") != beat_number]
+
+        # Add placeholder entries first, if the beat spans multiple beats
+        if beat_view.beat.duration > 1:
+            placeholder_entry = {
+                "beat": beat_number,
+                "is_placeholder": True,
+                "parent_beat": beat_number + 1  # Parent beat will be the next beat
+            }
+            sequence_data.append(placeholder_entry)
+
+        # Add the main beat data after the placeholder
+        beat_data["beat"] = beat_number + beat_view.beat.duration - 1  # Main beat is at the last occupied position
+        sequence_data.append(beat_data)
+
+        # Sort sequence_data by beat numbers to ensure correct order
+        sequence_data.sort(key=lambda entry: entry.get("beat", 0))
+
+        # Save the updated sequence
         self.json_manager.loader_saver.save_current_sequence(sequence_data)
-        self.main_widget.sequence_properties_manager.update_sequence_properties()
-        self.json_manager.main_widget.main_window.settings_manager.save_settings()  # Save state on change
+
+
 
     def clear_and_repopulate_the_current_sequence(self):
         self.json_manager.loader_saver.clear_current_sequence_file()
