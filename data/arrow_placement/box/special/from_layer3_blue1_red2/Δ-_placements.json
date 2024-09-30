@@ -2,6 +2,10 @@
   "Δ-": {
     "(s, 0, 0.5)": {
       "dash_from_layer2": [55, -70]
+    },
+    "(o, 0.5, 1)": {
+      "anti_from_layer1": [-20, 135],
+      "dash_from_layer2_rot_angle_override": true
     }
   }
 }

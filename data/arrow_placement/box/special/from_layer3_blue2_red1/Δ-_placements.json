@@ -109,7 +109,6 @@
       "anti_from_layer1": [-105, 35],
       "dash_from_layer2": [55, -65]
     },
-    "(o, 0.5, 1)": {},
     "(o, 0.5, 1.5)": {},
     "(o, 0.5, 2)": {
       "anti_from_layer1": [-90, -15]
@@ -209,6 +208,10 @@
     "(o, 0, 3)": {
       "anti_from_layer2": [40, -55],
       "dash_from_layer2": [-20, -165]
+    },
+    "(o, 0.5, 1)": {
+      "dash_from_layer2_rot_angle_override": true,
+      "anti_from_layer1": {}
     }
   }
 }

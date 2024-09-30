@@ -37,6 +37,8 @@ class DashRotAngleCalculator(BaseRotAngleCalculator):
         return rotation_map.get(self.arrow.loc, 0)
 
     def _dash_orientation_rotation_map(self):
+        """Maps the start orientation to the prop rotation direction to the arrow loc"""
+
         return {
             IN: {
                 CLOCKWISE: {
@@ -98,9 +100,9 @@ class DashRotAngleCalculator(BaseRotAngleCalculator):
                     EAST: 270,
                     SOUTH: 180,
                     WEST: 90,
-                    NORTHEAST: 45,
+                    NORTHEAST: 225,
                     SOUTHEAST: 135,
-                    SOUTHWEST: 225,
+                    SOUTHWEST: 45,
                     NORTHWEST: 315,
                 },
             },
@@ -120,9 +122,9 @@ class DashRotAngleCalculator(BaseRotAngleCalculator):
                     EAST: 270,
                     SOUTH: 180,
                     WEST: 90,
-                    NORTHEAST: 45,
+                    NORTHEAST: 225,
                     SOUTHEAST: 135,
-                    SOUTHWEST: 225,
+                    SOUTHWEST: 45,
                     NORTHWEST: 315,
                 },
             },
