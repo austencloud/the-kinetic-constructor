@@ -43,7 +43,8 @@
       "static": [-80, 0]
     },
     "(o, 0.5, 1)": {
-      "static_rot_angle_override": true
+      "static_rot_angle_override": true,
+      "static": [-50, -50]
     },
     "(s, 0.5, 2)": {
       "static_rot_angle_override": true,
