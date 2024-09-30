@@ -86,7 +86,7 @@ class StaticRotAngleCalculator(BaseRotAngleCalculator):
             WEST: {CLOCKWISE: 270, COUNTER_CLOCKWISE: 90},
             NORTHEAST: 45,
             SOUTHEAST: 315,
-            SOUTHWEST: 225,
+            SOUTHWEST: {CLOCKWISE: 225, COUNTER_CLOCKWISE: 135},
             NORTHWEST: 135,
         }
         if self.arrow.motion.start_ori in [IN, OUT]:
