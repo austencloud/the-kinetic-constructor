@@ -1,3 +1,4 @@
+from tkinter import N
 from data.constants import *
 from .base_rot_angle_calculator import BaseRotAngleCalculator
 
@@ -52,15 +53,17 @@ class StaticRotAngleCalculator(BaseRotAngleCalculator):
                 NORTHEAST: 135,
                 SOUTHEAST: 225,
                 SOUTHWEST: 315,
+                NORTHWEST: 45,
             },
             COUNTER_CLOCKWISE: {
                 NORTH: 180,
                 EAST: 90,
                 SOUTH: 0,
                 WEST: 270,
-                NORTHEAST: 45,
-                SOUTHEAST: 315,
-                SOUTHWEST: 225,
+                NORTHEAST: 135,
+                SOUTHEAST: 225,
+                SOUTHWEST: 315,
+                NORTHWEST: 45,
             },
             NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
         }
