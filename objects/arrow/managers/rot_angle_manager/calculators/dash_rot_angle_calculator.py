@@ -129,8 +129,26 @@ class DashRotAngleCalculator(BaseRotAngleCalculator):
         }
 
     def _get_rot_angle_override_according_to_loc(self) -> int:
-        cw_dash_angle_override_map = {NORTH: 270, EAST: 0, SOUTH: 90, WEST: 180}
-        ccw_dash_angle_override_map = {NORTH: 270, EAST: 180, SOUTH: 90, WEST: 0}
+        cw_dash_angle_override_map = {
+            NORTH: 270,
+            EAST: 0,
+            SOUTH: 90,
+            WEST: 180,
+            NORTHEAST: 225,
+            SOUTHEAST: 135,
+            SOUTHWEST: 45,
+            NORTHWEST: 315,
+        }
+        ccw_dash_angle_override_map = {
+            NORTH: 270,
+            EAST: 180,
+            SOUTH: 90,
+            WEST: 0,
+            NORTHEAST: 315,
+            SOUTHEAST: 225,
+            SOUTHWEST: 135,
+            NORTHWEST: 45,
+        }
 
         if self.arrow.motion.prop_rot_dir == CLOCKWISE:
             loc_angle = cw_dash_angle_override_map.get(self.arrow.loc)

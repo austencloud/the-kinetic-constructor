@@ -65,6 +65,10 @@
     },
     "(o, 1.5, 3)": {
       "anti_from_layer2": [-90, 110]
+    },
+    "(s, 0, 0.5)": {
+      "static_from_layer2_rot_angle_override": true,
+      "static_from_layer2": {}
     }
   }
 }

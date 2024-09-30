@@ -17,7 +17,7 @@
       "static_from_layer1": [0, 15]
     },
     "(0.5, 0)": {
-      "pro_from_layer2": [-5, 0]
+      "pro_from_layer2": [30, 100]
     }
   }
 }
