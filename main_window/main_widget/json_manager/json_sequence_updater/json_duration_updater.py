@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple, TYPE_CHECKING
+from typing import List, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
@@ -42,21 +42,21 @@ class JsonDurationUpdater:
 
     # --- Helper Methods ---
 
-    def _load_sequence_data(self) -> List[Dict]:
+    def _load_sequence_data(self) -> list[dict]:
         """Load the current sequence JSON data."""
         return self.json_manager.loader_saver.load_current_sequence_json()
 
     def _extract_metadata_and_beats(
-        self, sequence_data: List[Dict]
-    ) -> Tuple[Dict, List[Dict]]:
+        self, sequence_data: list[dict]
+    ) -> tuple[dict, list[dict]]:
         """Separate metadata from the sequence beats."""
         metadata = sequence_data[0] if "word" in sequence_data[0] else {}
         beats = sequence_data[1:]
         return metadata, beats
 
     def _split_sequence(
-        self, sequence_beats: List[Dict], beat_view: "BeatView"
-    ) -> Tuple[List[Dict], Dict, List[Dict]]:
+        self, sequence_beats: list[dict], beat_view: "BeatView"
+    ) -> tuple[list[dict], dict, list[dict]]:
         """Split the sequence into parts before, at, and after the current beat."""
         before = []
         after = []
@@ -73,13 +73,13 @@ class JsonDurationUpdater:
 
         return before, current_beat_data, after
 
-    def _update_beat_data(self, beat_data: Dict, new_duration: int) -> Dict:
+    def _update_beat_data(self, beat_data: dict, new_duration: int) -> dict:
         """Update the beat's duration."""
         updated_data = beat_data.copy()
         updated_data["duration"] = new_duration
         return updated_data
 
-    def _generate_placeholders(self, parent_beat_num: int, duration: int) -> List[Dict]:
+    def _generate_placeholders(self, parent_beat_num: int, duration: int) -> list[dict]:
         """Create placeholder beats for the extended duration."""
         placeholders = [
             {
@@ -91,33 +91,55 @@ class JsonDurationUpdater:
         ]
         return placeholders
 
-    def _shift_beats(self, beats: List[Dict], shift: int) -> List[Dict]:
-        """Shift beat numbers by a specified amount."""
+    def _shift_beats(self, beats: List[dict], shift: int) -> List[dict]:
+        """Shift beat numbers by a specified amount and update BeatView numbers."""
         if shift == 0:
             return beats
 
+        # Create a mapping of old beat numbers to new beat numbers
+        beat_number_mapping = {}
         for beat in beats:
+            old_beat_num = beat["beat"]
             beat["beat"] += shift
             if "parent_beat" in beat:
                 beat["parent_beat"] += shift
+            beat_number_mapping[old_beat_num] = beat["beat"]
+
+        # Update BeatView numbers based on the mapping
+        self._update_beat_view_numbers(beat_number_mapping)
         return beats
 
+    def _update_beat_view_numbers(self, beat_number_mapping: dict[int, int]) -> None:
+        """Update the BeatView numbers based on the provided mapping."""
+        for (
+            beat_view
+        ) in (
+            self.json_manager.main_widget.top_builder_widget.sequence_widget.beat_frame.beats
+        ):
+            if beat_view.number in beat_number_mapping:
+                old_number = beat_view.number
+                beat_view.number = beat_number_mapping[old_number]
+                if beat_view.beat:
+                    beat_view.beat.beat_number = beat_number_mapping[old_number]
+                    beat_view.add_beat_number()
+
     def _remove_placeholders(
-        self, beats: List[Dict], parent_beat_num: int
-    ) -> List[Dict]:
+        self, beats: list[dict], parent_beat_num: int
+    ) -> list[dict]:
         """Remove placeholders associated with a specific parent beat."""
         return [beat for beat in beats if beat.get("parent_beat") != parent_beat_num]
 
     def _finalize_and_save_sequence(
-        self, metadata: Dict, sequence_beats: List[Dict]
+        self, metadata: dict, sequence_beats: list[dict]
     ) -> None:
         """Finalize beat numbering, remove duplicates, and save the sequence."""
         sequence_beats = self._remove_duplicate_beats(sequence_beats)
         sequence_beats.sort(key=lambda beat: beat["beat"])
-        self._update_beat_numbers(sequence_beats)
+        beat_number_mapping = self._update_beat_numbers(sequence_beats)
+        self._update_beat_view_numbers(beat_number_mapping)
         self._save_sequence(metadata, sequence_beats)
 
-    def _remove_duplicate_beats(self, beats: List[Dict]) -> List[Dict]:
+    def _remove_duplicate_beats(self, beats: list[dict]) -> list[dict]:
         """Eliminate duplicate beats, keeping the first occurrence."""
         unique_beats = {}
         for beat in beats:
@@ -126,7 +148,7 @@ class JsonDurationUpdater:
                 unique_beats[beat_num] = beat
         return list(unique_beats.values())
 
-    def _update_beat_numbers(self, beats: List[Dict]) -> None:
+    def _update_beat_numbers(self, beats: List[dict]) -> dict[int, int]:
         """Ensure beat numbers are consecutive and update parent beat references."""
         beat_mapping = {}
         for index, beat in enumerate(beats):
@@ -140,7 +162,9 @@ class JsonDurationUpdater:
                     beat["parent_beat"], beat["parent_beat"]
                 )
 
-    def _save_sequence(self, metadata: Dict, beats: List[Dict]) -> None:
+        return beat_mapping
+
+    def _save_sequence(self, metadata: dict, beats: list[dict]) -> None:
         """Save the updated sequence."""
         sequence_data = [metadata] + beats
         self.json_manager.loader_saver.save_current_sequence(sequence_data)

@@ -86,11 +86,11 @@ class ImageCreator:
                 )
             if options.get("add_beat_numbers"):
                 for beat_view in filled_beats:
-                    beat_view.beat.beat_number_item.setVisible(True)
+                    beat_view.beat_number_item.setVisible(True)
 
             else:
                 for beat_view in filled_beats:
-                    beat_view.beat.beat_number_item.setVisible(False)
+                    beat_view.beat_number_item.setVisible(False)
         return image
 
     def _create_image(self, column_count, row_count, additional_height=0) -> QImage:

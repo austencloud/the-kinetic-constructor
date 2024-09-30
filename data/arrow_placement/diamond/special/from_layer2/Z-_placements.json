@@ -1,7 +1,10 @@
 {
   "Z-": {
     "(s, 0, 1)": {
-      "dash": [-25, -145]
+      "dash": [-25, -145],
+      "anti": [70, -60],
+      "swap_beta_e_nonradial_blue_anti_se_red_dash_n": true,
+      "swap_beta_w_nonradial_blue_anti_nw_red_dash_s": true
     },
     "(ccw, 0, 1)": {
       "swap_beta_w_nonradial_blue_anti_nw_red_dash_n": true,

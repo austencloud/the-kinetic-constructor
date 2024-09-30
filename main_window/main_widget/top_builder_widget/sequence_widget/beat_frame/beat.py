@@ -123,8 +123,8 @@ class BeatView(QGraphicsView):
         """
         Add a beat number or a range of beat numbers to represent the beat.
         """
-        if self.beat_number_item:
-            self.remove_beat_number()  # Remove any existing beat number item first
+        # if self.beat_number_item:
+        #     self.remove_beat_number()  # Remove any existing beat number item first
 
         # Display the beat number text (as a range if necessary)
         beat_number_text = (
@@ -145,7 +145,7 @@ class BeatView(QGraphicsView):
 
     def remove_beat_number(self):
         if self.beat_number_item:
-            self.scene().removeItem(self.beat_number_item)
+            self.beat_number_item.setVisible(False)
 
     def _add_start_text(self):
         self.start_text_item = QGraphicsTextItem("Start")

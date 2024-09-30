@@ -5,7 +5,6 @@
       "static": [100, 100]
     },
     "(o, 0.5, 0.5)": {
-      "static_rot_angle_override": true,
       "static": [105, 95]
     },
     "(o, 0.5, 1)": {

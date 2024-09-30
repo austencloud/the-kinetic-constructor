@@ -16,34 +16,38 @@ class BeatDurationManager:
         """
         Update the beat duration, adjust beat numbering, and update the JSON file.
         """
-        index = self.beat_frame.beats.index(changed_beat_view)
-        current_beat = changed_beat_view.beat
-
         # Update the beat duration in the view
+        current_beat = changed_beat_view.beat
         current_beat.duration = new_duration
         changed_beat_view.add_beat_number()
-
-        # Adjust subsequent beats' numbers after duration change
-        self.update_beat_numbers()
 
         # Delegate JSON update to JsonDurationUpdater
         self.json_duration_updater.update_beat_duration_in_json(
             changed_beat_view, new_duration
         )
 
+        # After JSON update, refresh beat numbers in the UI
+        self.update_beat_numbers()
+
     def update_beat_numbers(self) -> None:
         """
-        Update beat numbers for all beats based on their positions and durations.
+        Update beat numbers for all beats based on the JSON data.
         """
-        current_beat_number = 1
-        for beat_view in self.beat_frame.beats:
-            beat_view.remove_beat_number()  # Remove the old number
+        sequence_data = (
+            self.beat_frame.json_manager.loader_saver.load_current_sequence_json()
+        )
+        sequence_beats = sequence_data[1:]  # Skip metadata
 
+        # Build a mapping from beat numbers to entries
+        beat_entries = {beat["beat"]: beat for beat in sequence_beats}
+
+        # Update BeatView numbers
+        for beat_view in self.beat_frame.beats:
             if beat_view.beat:
-                beat_view.beat.beat_number = current_beat_number
-                beat_view.add_beat_number()
-                current_beat_number += beat_view.beat.duration
+                beat_number = beat_view.number
+                if beat_number in beat_entries:
+                    beat_view.beat.beat_number = beat_number
+                    beat_view.add_beat_number()
             else:
-                beat_view.blank_beat.beat_number = current_beat_number
-                beat_view.add_beat_number()
-                current_beat_number += 1
+                # Handle blank beats or placeholders if necessary
+                pass
