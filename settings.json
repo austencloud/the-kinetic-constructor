@@ -64,8 +64,8 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 8,
-                "max_turn_intensity": 1,
+                "sequence_length": 16,
+                "max_turn_intensity": 1.5,
                 "sequence_level": 3,
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",

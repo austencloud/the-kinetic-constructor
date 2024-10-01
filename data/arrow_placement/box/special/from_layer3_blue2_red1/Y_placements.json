@@ -326,10 +326,6 @@
       "static_from_layer2": [0, -95],
       "static_from_layer2_rot_angle_override": true
     },
-    "(o, 0.5, 1.5)": {
-      "pro_from_layer2": [-60, 25],
-      "pro_from_layer1": [15, 90]
-    },
     "(o, 0.5, 2)": {
       "swap_beta_w_nonradial_blue_static_w_red_pro_nw": true,
       "swap_beta_e_nonradial_blue_static_e_red_pro_se": true,
@@ -582,6 +578,9 @@
     "(s, 0, 1)": {
       "static_from_layer2": [50, -50],
       "static_from_layer2_rot_angle_override": true
+    },
+    "(o, 0.5, 1.5)": {
+      "pro_from_layer1": [-70, 45]
     }
   }
 }
