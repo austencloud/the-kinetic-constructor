@@ -136,10 +136,10 @@ class DashRotAngleCalculator(BaseRotAngleCalculator):
             EAST: 0,
             SOUTH: 90,
             WEST: 180,
-            NORTHEAST: 225,
-            SOUTHEAST: 135,
-            SOUTHWEST: 45,
-            NORTHWEST: 315,
+            NORTHEAST: 315,
+            SOUTHEAST: 225,
+            SOUTHWEST: 135,
+            NORTHWEST: 45,
         }
         ccw_dash_angle_override_map = {
             NORTH: 270,

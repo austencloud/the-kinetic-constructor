@@ -22,8 +22,8 @@
       "static_from_layer2": [95, -105]
     },
     "(s, 0, 1)": {
-      "static_from_layer2": [50, -50],
-      "static_from_layer2_rot_angle_override": true
+      "static_from_layer2_rot_angle_override": true,
+      "static_from_layer2": [50, -50]
     },
     "(o, 1, 1)": {
       "pro_from_layer1": [60, 50],

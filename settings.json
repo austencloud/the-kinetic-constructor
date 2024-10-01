@@ -47,7 +47,7 @@
             "EndPosition": false
         },
         "grid_visibility": {
-            "non_radial_points": false
+            "non_radial_points": true
         }
     },
     "dictionary": {
@@ -81,7 +81,7 @@
             "current_auto_builder": "circular"
         },
         "manual_builder": {},
-        "last_used_builder": "manual"
+        "last_used_builder": "auto"
     },
     "sequence_sharing": {
         "recipients": [

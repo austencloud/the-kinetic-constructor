@@ -102,11 +102,6 @@
     "(o, 1.5, 0.5)": {
       "dash": [80, -25]
     },
-    "(o, 1.5, 1)": {
-      "dash": [-30, -115],
-      "pro": [-80, 120],
-      "dash_rot_angle_override": true
-    },
     "(o, 1.5, 1.5)": {
       "pro": [-80, 170],
       "dash": [25, -175]
@@ -158,6 +153,9 @@
       "swap_beta_w_nonradial_blue_dash_s_red_pro_nw": true,
       "swap_beta_n_nonradial_blue_pro_nw_red_dash_e": true,
       "swap_beta_e_nonradial_blue_dash_n_red_pro_se": true
+    },
+    "(o, 1.5, 1)": {
+      "dash": [75, 115]
     }
   }
 }

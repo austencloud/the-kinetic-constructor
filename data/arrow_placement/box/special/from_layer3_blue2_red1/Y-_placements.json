@@ -270,7 +270,8 @@
     "(o, 1.5, 1)": {
       "dash_from_layer2_rot_angle_override": true,
       "dash_from_layer2": [-15, -135],
-      "dash_from_layer1": [0, -30]
+      "pro_from_layer2": [-40, 165],
+      "dash_from_layer1": {}
     },
     "(o, 1.5, 1.5)": {
       "pro_from_layer1": [15, 20],
