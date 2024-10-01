@@ -177,7 +177,9 @@
       "swap_beta_s_radial_blue_static_s_red_dash_e": true,
       "swap_beta_w_radial_blue_static_w_red_dash_s": true,
       "swap_beta_n_radial_blue_static_n_red_dash_w": true,
-      "swap_beta_e_radial_blue_static_e_red_dash_n": true
+      "swap_beta_e_radial_blue_static_e_red_dash_n": true,
+      "swap_beta_ne_radial_blue_dash_se_red_static_ne": true,
+      "swap_beta_nw_radial_blue_dash_ne_red_static_nw": true
     },
     "(o, 0.5, 1)": {
       "static_rot_angle_override": true,
