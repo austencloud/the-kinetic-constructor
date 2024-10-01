@@ -70,8 +70,8 @@
       "swap_beta_w_nonradial_blue_anti_sw_red_static_w": true,
       "swap_beta_s_nonradial_blue_anti_sw_red_static_s": true,
       "swap_beta_n_nonradial_blue_anti_ne_red_static_n": true,
-      "static_from_layer1": {},
-      "swap_beta_nw_nonradial_blue_anti_w_red_static_nw": true
+      "swap_beta_nw_nonradial_blue_anti_w_red_static_nw": true,
+      "static_from_layer1": {}
     },
     "(o, 1, 1)": {},
     "(o, 1, 1.5)": {

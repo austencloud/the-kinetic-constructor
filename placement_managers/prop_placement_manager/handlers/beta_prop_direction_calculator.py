@@ -138,7 +138,7 @@ class BetaPropDirectionCalculator:
             (SOUTHWEST, NORTHWEST): UPLEFT,
             (SOUTHWEST, SOUTHEAST): DOWNRIGHT,
             (NORTHWEST, NORTHEAST): UPRIGHT,
-            (NORTHWEST, SOUTHEAST): DOWNLEFT,
+            (NORTHWEST, SOUTHWEST): DOWNLEFT,
         }
         return direction_map.get((motion.start_loc, motion.end_loc))
 

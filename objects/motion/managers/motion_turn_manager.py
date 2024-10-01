@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 from Enums.Enums import Turns
 from data.constants import BLUE, RED
@@ -47,7 +47,7 @@ class MotionTurnsManager:
         """Subtract a full turn from the motion"""
         self.adjust_turns(self.motion, -1)
 
-    def set_motion_turns(self, turns: Turns) -> None:
+    def set_motion_turns(self, turns: Union[str, int, float]) -> None:
         self.motion.turns = turns
         self.motion.arrow.motion.turns = turns
         other_motion_color = RED if self.motion.color == BLUE else BLUE
@@ -56,4 +56,4 @@ class MotionTurnsManager:
             f"{self.motion.color}_attributes": {"turns": turns},
             f"{other_motion_color}_attributes": {"turns": other_motion.turns},
         }
-        self.motion.arrow.updater.update_arrow(arrow_dict)
+        # self.motion.arrow.updater.update_arrow(arrow_dict)

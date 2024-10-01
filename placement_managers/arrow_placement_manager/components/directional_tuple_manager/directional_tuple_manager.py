@@ -10,12 +10,12 @@ from .base_directional_tuple_generator import BaseDirectionalGenerator
 class DirectionalTupleManager:
     """
 
-    DirectionalTupleManager is a class that manages the generation of directional
-    tuples for a given motion. Directional tuples are used to adjust the arrow's
+    DirectionalTupleManager generates directional tuples for a given motion. 
+    Directional tuples are used to adjust the arrow's
     special placement in the pictograph.
 
     These generators ensure that we can use one tuple for each adjustment and
-    apply it correctly in each quadrant by modifying the x and y values.
+    apply it correctly in each quadrant by modifying the x and y values to match.
 
     """
 

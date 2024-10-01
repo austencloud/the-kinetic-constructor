@@ -53,16 +53,16 @@ class LengthAdjuster(QWidget):
             self.length_value_label.setText(str(self.length))
             self.auto_builder_frame._update_sequence_length(self.length)
             self.adjustment_amount = 2
-            
+
     def _increment_length(self):
-        if self.length < 32:
+        if self.length < 64:
             self.length += self.adjustment_amount
             self.length_value_label.setText(str(self.length))
             self.auto_builder_frame._update_sequence_length(self.length)
 
     def _decrement_length(self):
         if self.length > 4:
-            self.length -=  self.adjustment_amount
+            self.length -= self.adjustment_amount
             self.length_value_label.setText(str(self.length))
             self.auto_builder_frame._update_sequence_length(self.length)
 
@@ -75,7 +75,7 @@ class LengthAdjuster(QWidget):
         font_size = self.auto_builder_frame.auto_builder.main_widget.width() // 75
         font = self.length_label.font()
         font.setPointSize(font_size)
-        
+
         self.minus_button.setFont(font)
         self.plus_button.setFont(font)
         self.length_label.setFont(font)
