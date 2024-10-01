@@ -168,6 +168,10 @@
     },
     "null": {
       "float_from_layer2": [30, -45]
+    },
+    "(0.5, 0)": {
+      "pro_from_layer2": [30, 105],
+      "pro_from_layer1": {}
     }
   }
 }
