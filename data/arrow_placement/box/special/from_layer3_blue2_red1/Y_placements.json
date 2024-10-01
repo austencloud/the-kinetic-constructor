@@ -104,7 +104,8 @@
       "static_from_layer1": [-100, -120]
     },
     "(s, 1, 1)": {
-      "pro_from_layer2": [-30, 135]
+      "pro_from_layer2": [-30, 135],
+      "static_from_layer1": [70, 85]
     },
     "(s, 1, 1.5)": {
       "pro_from_layer2": [-40, 80],

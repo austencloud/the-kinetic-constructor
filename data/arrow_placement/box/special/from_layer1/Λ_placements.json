@@ -329,6 +329,9 @@
     },
     "(0, 0.5, )": {
       "static": [0, 140]
+    },
+    "(s, 1, 1.5, , )": {
+      "static_rot_angle_override": true
     }
   }
 }
