@@ -158,6 +158,11 @@
       "dash": [75, 85],
       "dash_rot_angle_override": true
     },
-    "(s, 0.5, 1)": {}
+    "(s, 0.5, 1)": {
+      "dash_rot_angle_override": true
+    },
+    "(s, 1, 1.5)": {
+      "pro": [-5, 110]
+    }
   }
 }

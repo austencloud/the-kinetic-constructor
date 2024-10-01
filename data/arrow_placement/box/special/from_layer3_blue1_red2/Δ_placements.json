@@ -68,7 +68,8 @@
     },
     "(s, 0, 0.5)": {
       "static_from_layer2_rot_angle_override": true,
-      "static_from_layer2": {}
+      "static_from_layer2": {},
+      "static_from_layer1": {}
     }
   }
 }
