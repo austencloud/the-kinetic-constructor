@@ -4,7 +4,7 @@
         "background_type": "AuroraBorealis",
         "grow_sequence": true,
         "current_tab": "sequence_builder",
-        "grid_mode": "box"
+        "grid_mode": "diamond"
     },
     "image_export": {
         "include_start_position": false,
@@ -52,7 +52,7 @@
     },
     "dictionary": {
         "sort_method": "sequence_length",
-        "current_section": "filter_choice",
+        "current_section": "browser",
         "current_filter": null
     },
     "sequence_layout": {
@@ -81,7 +81,7 @@
             "current_auto_builder": "circular"
         },
         "manual_builder": {},
-        "last_used_builder": "auto"
+        "last_used_builder": "manual"
     },
     "sequence_sharing": {
         "recipients": [

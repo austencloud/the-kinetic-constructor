@@ -17,14 +17,16 @@ from .base_directional_tuple_generator import BaseDirectionalGenerator
 
 class ShiftDirectionalGenerator(BaseDirectionalGenerator):
     def generate_directional_tuples(self, x: int, y: int) -> list[tuple[int, int]]:
-
-        if self.motion.pictograph.main_widget.grid_mode == DIAMOND:
+        grid_mode = (
+            self.motion.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
+        )
+        if grid_mode == DIAMOND:
             directional_tuples = {
                 PRO: self._generate_diamond_pro_directional_tuples,
                 ANTI: self._generate_diamond_anti_directional_tuples,
                 FLOAT: self._generate_diamond_float_directional_tuples,
             }
-        elif self.motion.pictograph.main_widget.grid_mode == BOX:
+        elif grid_mode == BOX:
             directional_tuples = {
                 PRO: self._generate_box_pro_directional_tuples,
                 ANTI: self._generate_box_anti_directional_tuples,

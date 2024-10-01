@@ -49,7 +49,7 @@ class MainWidget(QTabWidget):
 
         self._setup_pictograph_cache()
         self._set_prop_type()
-        self._set_grid_mode()
+        # self.set_grid_mode()
 
         self._setup_letters()
         self._initialize_managers()
@@ -149,8 +149,30 @@ class MainWidget(QTabWidget):
             str, dict[str, dict[str, dict[str, list[int]]]]
         ] = self.special_placement_loader.load_special_placements()
 
-    def _set_grid_mode(self) -> None:
-        self.grid_mode = self.settings_manager.global_settings.get_grid_mode()
+    def set_grid_mode(self, grid_mode: str) -> None:
+        self.main_window.settings_manager.global_settings.set_grid_mode(grid_mode)
+        self.main_window.menu_bar_widget.menu_bar.grid_mode_menu.toggle_selected_grid_mode(
+            grid_mode.capitalize()
+        )
+        self.main_window.settings_manager.save_settings()
+        self.special_placement_loader.refresh_placements()
+        self.pictograph_dicts = self.pictograph_dict_loader.load_all_pictograph_dicts()
+
+        start_pos_manager = (
+            self.top_builder_widget.sequence_builder.manual_builder.start_pos_picker.start_pos_manager
+        )
+        start_pos_manager.clear_start_positions()
+        start_pos_manager.setup_start_positions()
+
+        sequence_clearer = self.top_builder_widget.sequence_widget.sequence_clearer
+        sequence_clearer.clear_sequence()
+
+        pictograph_container = (
+            self.top_builder_widget.sequence_widget.graph_editor.pictograph_container
+        )
+
+        pictograph_container.GE_pictograph_view.set_to_blank_grid()
+        self._setup_special_placements()
 
     def _setup_letters(self) -> None:
         self.splash_screen.update_progress(10, "Loading pictograph dictionaries...")

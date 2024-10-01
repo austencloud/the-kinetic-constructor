@@ -4,7 +4,9 @@ from .base_directional_tuple_generator import BaseDirectionalGenerator
 
 class StaticDirectionalGenerator(BaseDirectionalGenerator):
     def generate_directional_tuples(self, x: int, y: int) -> list[tuple[int, int]]:
-        grid_mode = self.motion.pictograph.main_widget.grid_mode
+        grid_mode = (
+            self.motion.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
+        )
         if grid_mode == DIAMOND:
             return self._generate_diamond_tuples(x, y)
         elif grid_mode == BOX:

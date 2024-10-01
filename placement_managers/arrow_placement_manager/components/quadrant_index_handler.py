@@ -25,15 +25,16 @@ if TYPE_CHECKING:
 
 class QuadrantIndexHandler:
     def __init__(self, placement_manager: "ArrowPlacementManager") -> None:
-        self.grid_mode = placement_manager.pictograph.main_widget.grid_mode
+        self.placement_manager = placement_manager
 
     def get_quadrant_index(self, arrow: Arrow) -> Literal[0, 1, 2, 3]:
-        if self.grid_mode == DIAMOND:
+        grid_mode = self.placement_manager.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
+        if grid_mode == DIAMOND:
             if arrow.motion.motion_type in [PRO, ANTI, FLOAT]:
                 return self._diamond_shift_quadrant_index(arrow.loc)
             elif arrow.motion.motion_type in [STATIC, DASH]:
                 return self._diamond_static_dash_quadrant_index(arrow.loc)
-        elif self.grid_mode == BOX:
+        elif grid_mode == BOX:
             if arrow.motion.motion_type in [PRO, ANTI, FLOAT]:
                 return self._box_shift_quadrant_index(arrow.loc)
             elif arrow.motion.motion_type in [STATIC, DASH]:

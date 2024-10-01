@@ -37,7 +37,7 @@ class JsonSequenceLoaderSaver:
                 "author": self.json_manager.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
                 "level": 0,
                 "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
-                "grid_mode": self.json_manager.main_widget.grid_mode,
+                "grid_mode": self.json_manager.main_widget.settings_manager.global_settings.get_grid_mode(),
                 "is_circular": False,
                 "is_permutable": False,
                 "is_strictly_rotated_permutation": False,
@@ -132,7 +132,7 @@ class JsonSequenceLoaderSaver:
             if sequence[-1].get("is_placeholder", "") != True
             else sequence[-2]
         )
-        
+
         if sequence:
             return last_pictograph_dict["red_attributes"]["end_ori"]
         return 0
@@ -143,7 +143,7 @@ class JsonSequenceLoaderSaver:
             if sequence[-1].get("is_placeholder", "") != True
             else sequence[-2]
         )
-        
+
         if sequence:
             return last_pictograph_dict["blue_attributes"]["end_ori"]
         return 0

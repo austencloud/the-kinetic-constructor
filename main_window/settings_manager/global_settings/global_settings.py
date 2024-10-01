@@ -104,9 +104,9 @@ class GlobalSettings:
         return self.settings.get("grid_mode", "diamond")
 
     def set_grid_mode(self, grid_mode: str) -> None:
+        self.main_widget = self.settings_manager.main_window.main_widget
         self.settings["grid_mode"] = grid_mode
         self.settings_manager.save_global_settings(self.settings)
-        self.main_widget._set_grid_mode()
 
     def get_show_welcome_screen(self) -> bool:
         return self.settings.get("show_welcome_screen", True)

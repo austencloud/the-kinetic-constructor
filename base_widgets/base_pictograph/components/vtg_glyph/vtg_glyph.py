@@ -79,7 +79,10 @@ class VTG_Glyph(QGraphicsSvgItem):
         letter_str = self.pictograph.letter.value
         mode = self.pictograph.vtg_mode
         start_pos = self.pictograph.start_pos
-        if self.pictograph.main_widget.grid_mode == DIAMOND:
+        grid_mode = (
+            self.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
+        )
+        if grid_mode == DIAMOND:
             if letter_str in ["A", "B", "C"]:
                 mode = SPLIT_SAME
             elif letter_str in ["D", "E", "F"]:
@@ -98,7 +101,7 @@ class VTG_Glyph(QGraphicsSvgItem):
                 mode = QUARTER_OPP
             elif letter_str in ["S", "T", "U", "V"]:
                 mode = QUARTER_SAME
-        elif self.pictograph.main_widget.grid_mode == BOX:
+        elif grid_mode == BOX:
             if letter_str in ["A", "B", "C"]:
                 mode = SPLIT_SAME
             elif letter_str in ["D", "E", "F"]:

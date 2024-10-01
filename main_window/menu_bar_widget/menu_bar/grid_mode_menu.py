@@ -39,32 +39,5 @@ class GridModeMenu(HoverableMenu):
     def toggle_grid_mode(self, grid_mode: str):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         self.toggle_selected_grid_mode(grid_mode)
-        self.main_widget.main_window.settings_manager.global_settings.set_grid_mode(
-            grid_mode.lower()
-        )
-        self.main_widget.main_window.settings_manager.save_settings()
-        self.main_widget.grid_mode = grid_mode.lower()
-        self.main_widget.special_placement_loader.refresh_placements()
-        self.main_widget.pictograph_dicts = (
-            self.main_widget.pictograph_dict_loader.load_all_pictograph_dicts()
-        )
-
-        start_pos_manager = (
-            self.main_widget.top_builder_widget.sequence_builder.manual_builder.start_pos_picker.start_pos_manager
-        )
-        start_pos_manager.clear_start_positions()
-        start_pos_manager.setup_start_positions()
-
-        sequence_clearer = (
-            self.main_widget.top_builder_widget.sequence_widget.sequence_clearer
-        )
-        sequence_clearer.clear_sequence()
-
-        pictograph_container = (
-            self.main_widget.top_builder_widget.sequence_widget.graph_editor.pictograph_container
-        )
-        pictograph_container.GE_pictograph_view.blank_pictograph = GE_BlankPictograph(
-            pictograph_container
-        )
-        pictograph_container.GE_pictograph_view.set_to_blank_grid()
+        self.main_widget.set_grid_mode(grid_mode.lower())
         QApplication.restoreOverrideCursor()

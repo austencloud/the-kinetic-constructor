@@ -173,11 +173,14 @@ class DashLocationCalculator(BaseLocationCalculator):
             (NORTHWEST, SOUTH): NORTHEAST,
             (NORTHWEST, WEST): NORTHEAST,
         }
-        if self.pictograph.main_widget.grid_mode == DIAMOND:
+        grid_mode = (
+            self.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
+        )
+        if grid_mode == DIAMOND:
             return diamond_dash_location_map.get(
                 (self.arrow.motion.start_loc, shift_location)
             )
-        elif self.pictograph.main_widget.grid_mode == BOX:
+        elif grid_mode == BOX:
             return box_dash_location_map.get(
                 (self.arrow.motion.start_loc, shift_location)
             )

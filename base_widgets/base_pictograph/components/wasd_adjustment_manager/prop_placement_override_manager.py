@@ -14,9 +14,9 @@ class PropPlacementOverrideManager:
             self.pictograph.arrow_placement_manager.special_positioner
         )
         self.turns_tuple_generator = self.pictograph.main_widget.turns_tuple_generator
-        self.special_placements = self.pictograph.main_widget.special_placements
 
     def handle_prop_placement_override(self, key) -> None:
+        self.special_placements = self.pictograph.main_widget.special_placements
         if self._is_mixed_ori():
             return
         beta_ori = self._get_beta_ori()

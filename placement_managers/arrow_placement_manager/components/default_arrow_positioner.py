@@ -58,12 +58,13 @@ class DefaultArrowPositioner:
     def _load_default_placements_for_motion_type(
         self, motion_type: str
     ) -> dict[str, dict[str, list[int]]]:
-        if self.placement_manager.pictograph.main_widget.grid_mode == DIAMOND:
+        grid_mode = self.placement_manager.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
+        if grid_mode == DIAMOND:
             json_filename = self.diamond_placements_files.get(motion_type)
             json_path = get_images_and_data_path(
                 f"data/arrow_placement/diamond/default/{json_filename}"
             )
-        elif self.placement_manager.pictograph.main_widget.grid_mode == BOX:
+        elif grid_mode == BOX:
             json_filename = self.box_placement_files.get(motion_type)
             json_path = get_images_and_data_path(
                 f"data/arrow_placement/box/default/{json_filename}"
