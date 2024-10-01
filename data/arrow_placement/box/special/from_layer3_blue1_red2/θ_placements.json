@@ -92,6 +92,9 @@
     "(o, 3, 2.5)": {
       "static_from_layer2_rot_angle_override": true
     },
-    "(s, 1, 0.5)": {}
+    "(s, 1, 0.5)": {},
+    "(1, 0)": {
+      "pro_from_layer1": [20, 20]
+    }
   }
 }

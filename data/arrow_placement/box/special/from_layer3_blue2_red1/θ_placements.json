@@ -5,6 +5,9 @@
     },
     "(s, 1, 0.5)": {
       "static_from_layer2": {}
+    },
+    "(1, 0)": {
+      "pro_from_layer1": [20, 20]
     }
   }
 }
