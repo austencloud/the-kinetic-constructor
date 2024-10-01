@@ -72,7 +72,7 @@ class ImageCreator:
                 self.user_info_drawer.draw_user_info(image, options, num_filled_beats)
 
             if options.get("add_word"):
-                word = self.beat_frame.get_current_word()
+                word = self.beat_frame.get.current_word()
                 self.word_drawer.draw_word(
                     image, word, num_filled_beats, additional_height_top
                 )
@@ -86,11 +86,11 @@ class ImageCreator:
                 )
             if options.get("add_beat_numbers"):
                 for beat_view in filled_beats:
-                    beat_view.beat.beat_number_item.setVisible(True)
+                    beat_view.beat_number_item.setVisible(True)
 
             else:
                 for beat_view in filled_beats:
-                    beat_view.beat.beat_number_item.setVisible(False)
+                    beat_view.beat_number_item.setVisible(False)
         return image
 
     def _create_image(self, column_count, row_count, additional_height=0) -> QImage:

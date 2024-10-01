@@ -23,6 +23,10 @@
     },
     "(s, 0, 3)": {
       "anti_from_layer2": [70, -55]
+    },
+    "(s, 0.5, 1)": {
+      "dash_from_layer1_rot_angle_override": true,
+      "dash_from_layer1": [15, 15]
     }
   }
 }

@@ -119,6 +119,7 @@ class Type3TurnsTupleGenerator(BaseTurnsTupleGenerator):
                     f"({self._normalize_turns(shift)}, {self._normalize_turns(dash)})"
                 )
 
+
 class Type4TurnsTupleGenerator(BaseTurnsTupleGenerator):
     def generate_turns_tuple(self, pictograph) -> str:
         super().set_pictograph(pictograph)
@@ -156,7 +157,8 @@ class Type56TurnsTupleGenerator(BaseTurnsTupleGenerator):
 class ColorTurnsTupleGenerator(BaseTurnsTupleGenerator):
     def generate_turns_tuple(self, pictograph) -> str:
         super().set_pictograph(pictograph)
-        return f"({self._normalize_turns(self.blue_motion)}, {self._normalize_turns(self.red_motion)})"
+        key = f"({self._normalize_turns(self.blue_motion)}, {self._normalize_turns(self.red_motion)})"
+        return key
 
 
 class LeadStateTurnsTupleGenerator(BaseTurnsTupleGenerator):

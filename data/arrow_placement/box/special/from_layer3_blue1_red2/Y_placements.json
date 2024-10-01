@@ -20,6 +20,21 @@
     },
     "(s, 0, 0.5)": {
       "static_from_layer2": [95, -105]
+    },
+    "(s, 0, 1)": {
+      "static_from_layer2_rot_angle_override": true,
+      "static_from_layer2": [50, -50]
+    },
+    "(o, 1, 1)": {
+      "pro_from_layer1": [60, 50],
+      "static_from_layer2_rot_angle_override": true,
+      "static_from_layer2": [50, -50]
+    },
+    "(o, 0.5, 1.5)": {
+      "pro_from_layer1": [-70, 45]
+    },
+    "(s, 1, 1)": {
+      "static_from_layer1": [70, 85]
     }
   }
 }

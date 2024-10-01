@@ -251,6 +251,9 @@
       "swap_beta_s_radial_blue_dash_w_red_dash_e": true,
       "swap_beta_n_radial_blue_dash_e_red_dash_w": true,
       "swap_beta_e_radial_blue_dash_s_red_dash_n": true
+    },
+    "(ccw, 0, 1)": {
+      "dash_from_layer2_rot_angle_override": true
     }
   }
 }

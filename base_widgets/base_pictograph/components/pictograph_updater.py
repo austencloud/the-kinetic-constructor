@@ -13,9 +13,7 @@ class PictographUpdater:
     def __init__(self, pictograph: "BasePictograph") -> None:
         self.pictograph = pictograph
 
-    def update_pictograph(
-        self, pictograph_dict: dict = None
-    ) -> None:
+    def update_pictograph(self, pictograph_dict: dict = None) -> None:
         """
         Updates the pictograph with the given pictograph_dict.
         If the dict is complete, it will be assigned to the pictograph's pictograph_dict attribute.
@@ -26,6 +24,10 @@ class PictographUpdater:
             self.pictograph.get.initiallize_getter()
 
         if pictograph_dict:
+            # Skip placeholder beats
+            if pictograph_dict.get("is_placeholder", False):
+                return
+            
             if self.pictograph.check.is_pictograph_dict_complete(pictograph_dict):
                 self.pictograph.pictograph_dict = pictograph_dict
                 self._update_from_pictograph_dict(pictograph_dict)

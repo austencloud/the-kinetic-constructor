@@ -6,7 +6,6 @@ from data.beat_frame_layouts import DEFAULT_BEAT_FRAME_LAYOUTS
 if TYPE_CHECKING:
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
 
-
 class BeatFrameLayoutManager:
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
         self.beat_frame = beat_frame
@@ -92,7 +91,5 @@ class BeatFrameLayoutManager:
             self.selection_manager.update_overlay_position()
 
     def adjust_layout_to_sequence_length(self):
-        last_filled_index = self.beat_frame.get.next_available_beat() or len(
-            self.beat_frame.beats
-        )
+        last_filled_index = self.beat_frame.get.next_available_beat()
         self.configure_beat_frame(last_filled_index)

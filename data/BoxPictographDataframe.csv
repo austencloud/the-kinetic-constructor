@@ -300,10 +300,10 @@ W,gamma2,alpha2,none,none,pro,ccw,nw,sw,static,no_rot,ne,ne
 W,gamma4,alpha4,none,none,pro,ccw,ne,nw,static,no_rot,se,se
 W,gamma6,alpha6,none,none,pro,ccw,se,ne,static,no_rot,sw,sw
 W,gamma8,alpha8,none,none,pro,ccw,sw,se,static,no_rot,nw,nw
-W,gamma10,alpha6,none,none,pro,cw,se,sw,static,no_rot,ne,ne
-W,gamma12,alpha8,none,none,pro,cw,sw,nw,static,no_rot,se,se
+W,gamma10,alpha2,none,none,pro,cw,se,sw,static,no_rot,ne,ne
+W,gamma12,alpha4,none,none,pro,cw,sw,nw,static,no_rot,se,se
 W,gamma14,alpha6,none,none,pro,cw,nw,ne,static,no_rot,sw,sw
-W,gamma16,alpha4,none,none,pro,cw,ne,se,static,no_rot,nw,nw
+W,gamma16,alpha8,none,none,pro,cw,ne,se,static,no_rot,nw,nw
 
 X,gamma2,alpha4,none,none,static,no_rot,nw,nw,anti,ccw,ne,se
 X,gamma4,alpha6,none,none,static,no_rot,ne,ne,anti,ccw,se,sw
@@ -318,10 +318,10 @@ X,gamma2,alpha2,none,none,anti,cw,nw,sw,static,no_rot,ne,ne
 X,gamma4,alpha4,none,none,anti,cw,ne,nw,static,no_rot,se,se
 X,gamma6,alpha6,none,none,anti,cw,se,ne,static,no_rot,sw,sw
 X,gamma8,alpha8,none,none,anti,cw,sw,se,static,no_rot,nw,nw
-X,gamma10,alpha6,none,none,anti,ccw,se,sw,static,no_rot,ne,ne
-X,gamma12,alpha8,none,none,anti,ccw,sw,nw,static,no_rot,se,se
+X,gamma10,alpha2,none,none,anti,ccw,se,sw,static,no_rot,ne,ne
+X,gamma12,alpha4,none,none,anti,ccw,sw,nw,static,no_rot,se,se
 X,gamma14,alpha6,none,none,anti,ccw,nw,ne,static,no_rot,sw,sw
-X,gamma16,alpha4,none,none,anti,ccw,ne,se,static,no_rot,nw,nw
+X,gamma16,alpha8,none,none,anti,ccw,ne,se,static,no_rot,nw,nw
 
 Y,gamma2,beta8,none,none,static,no_rot,nw,nw,pro,ccw,ne,nw
 Y,gamma4,beta2,none,none,static,no_rot,ne,ne,pro,ccw,se,ne

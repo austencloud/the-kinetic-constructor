@@ -1,23 +1,53 @@
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from .beat import BeatView
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
 
+
 class BeatDurationManager:
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
         self.beat_frame = beat_frame
+        self.json_duration_updater = beat_frame.json_manager.updater.duration_updater
 
-    def update_beat_numbers(self, changed_beat_view: "BeatView"):
-        index = self.beat_frame.beats.index(changed_beat_view)
-        current_beat_number = changed_beat_view.number + changed_beat_view.beat.duration
-        changed_beat_view.beat.pictograph_dict["duration"] = (
-            changed_beat_view.beat.duration
+    def update_beat_duration(
+        self, changed_beat_view: "BeatView", new_duration: int
+    ) -> None:
+        """
+        Update the beat duration, adjust beat numbering, and update the JSON file.
+        """
+        # Update the beat duration in the view
+        current_beat = changed_beat_view.beat
+        current_beat.duration = new_duration
+        changed_beat_view.add_beat_number()
+
+        # Delegate JSON update to JsonDurationUpdater
+        self.json_duration_updater.update_beat_duration_in_json(
+            changed_beat_view, new_duration
         )
-        self.beat_frame.json_manager.updater.update_current_sequence_file_with_beat(
-            changed_beat_view
+
+        # After JSON update, refresh beat numbers in the UI
+        self.update_beat_numbers()
+
+    def update_beat_numbers(self) -> None:
+        """
+        Update beat numbers for all beats based on the JSON data.
+        """
+        sequence_data = (
+            self.beat_frame.json_manager.loader_saver.load_current_sequence_json()
         )
-        for beat_view in self.beat_frame.beats[index + 1 :]:
-            beat_view.remove_beat_number()
-            beat_view.number = current_beat_number
-            beat_view.add_beat_number()
-            current_beat_number += beat_view.beat.duration if beat_view.beat else 1
+        sequence_beats = sequence_data[1:]  # Skip metadata
+
+        # Build a mapping from beat numbers to entries
+        beat_entries = {beat["beat"]: beat for beat in sequence_beats}
+
+        # Update BeatView numbers
+        for beat_view in self.beat_frame.beats:
+            if beat_view.beat:
+                beat_number = beat_view.number
+                if beat_number in beat_entries:
+                    beat_view.beat.beat_number = beat_number
+                    beat_view.add_beat_number()
+            else:
+                # Handle blank beats or placeholders if necessary
+                pass

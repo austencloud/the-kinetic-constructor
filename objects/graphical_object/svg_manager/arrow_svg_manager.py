@@ -42,4 +42,4 @@ class ArrowSvgManager:
         renderer = QSvgRenderer()
         renderer.load(svg_data.encode("utf-8"))
         arrow.setSharedRenderer(renderer)
-        arrow.update()
+        # arrow.update()

@@ -27,8 +27,11 @@ class SpecialPlacementLoader:
             "from_layer3_blue2_red1",
             "from_layer3_blue1_red2",
         ]:
+            grid_mode = (
+                self.main_widget.settings_manager.global_settings.get_grid_mode()
+            )
             directory = get_images_and_data_path(
-                f"data/arrow_placement/{self.main_widget.grid_mode}/special/{subfolder}"
+                f"data/arrow_placement/{grid_mode}/special/{subfolder}"
             )
             for file_name in os.listdir(directory):
                 if file_name.endswith("_placements.json"):
@@ -48,6 +51,9 @@ class SpecialPlacementLoader:
                 grid_mode = self.main_widget.grid_mode_checker.check_grid_mode(
                     pictograph.pictograph_dict
                 )
-                if grid_mode == self.main_widget.grid_mode:
+                if (
+                    grid_mode
+                    == self.main_widget.settings_manager.global_settings.get_grid_mode()
+                ):
                     pictograph.updater.update_pictograph()
                     pictograph.update()

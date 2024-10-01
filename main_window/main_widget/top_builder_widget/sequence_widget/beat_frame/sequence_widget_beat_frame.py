@@ -35,7 +35,8 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         self.layout_manager.setup_layout()
 
     def _init_beats(self):
-        self._setup_start_position_beat()
+        self.start_pos_view = StartPositionBeatView(self)
+        self.start_pos = StartPositionBeat(self)
         self.beats = [BeatView(self, number=i + 1) for i in range(64)]
         for beat in self.beats:
             beat.hide()
@@ -51,10 +52,6 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         self.updater = BeatFrameUpdater(self)
         self.key_event_handler = BeatFrameKeyEventHandler(self)
         self.resizer = BeatFrameResizer(self)
-
-    def _setup_start_position_beat(self):
-        self.start_pos_view = StartPositionBeatView(self)
-        self.start_pos = StartPositionBeat(self)
 
     def resize_beat_frame(self) -> None:
         self.resizer.resize_beat_frame()

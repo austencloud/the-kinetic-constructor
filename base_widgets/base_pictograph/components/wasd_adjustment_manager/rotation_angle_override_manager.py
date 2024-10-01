@@ -118,19 +118,3 @@ class RotationAngleOverrideManager:
                 self.pictograph.selected_arrow, hybrid_key
             )
 
-    def get_rot_angle_override_from_placements_dict(
-        self, arrow: Arrow
-    ) -> Optional[int]:
-        placements = (
-            self.special_positioner.placement_manager.pictograph.main_widget.special_placements
-        )
-        ori_key = self.special_positioner.data_updater._generate_ori_key(arrow.motion)
-        letter = arrow.pictograph.letter
-        letter_data = placements[ori_key].get(letter, {})
-        turns_tuple = self.turns_tuple_generator.generate_turns_tuple(self.pictograph)
-
-        key = self._generate_rotation_angle_key(arrow)
-
-        if turns_tuple not in letter_data:
-            letter_data[turns_tuple] = {}
-        return letter_data[turns_tuple].get(key)

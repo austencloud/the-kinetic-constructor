@@ -16,12 +16,6 @@
     "(1, 0)": {
       "red": [-10, 0]
     },
-    "(1, 0.5)": {
-      "swap_beta_e_nonradial_blue_anti_ne_red_anti_ne": true,
-      "swap_beta_n_nonradial_blue_anti_ne_red_anti_ne": true,
-      "swap_beta_w_nonradial_blue_anti_sw_red_anti_sw": true,
-      "swap_beta_s_nonradial_blue_anti_sw_red_anti_sw": true
-    },
     "(1, 1)": {
       "red": [95, -110]
     },
@@ -171,6 +165,14 @@
     },
     "(fl, 0)": {
       "float_from_layer2": [70, -120]
+    },
+    "(0.5, 0.5)": {
+      "red": [-10, 95],
+      "blue": [-5, 110]
+    },
+    "(1, 0.5)": {
+      "blue": [0, -75],
+      "red": [-30, 110]
     }
   }
 }

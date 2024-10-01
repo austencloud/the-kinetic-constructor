@@ -13,23 +13,33 @@ class PictographDictLoader:
         self.main_widget = main_widget
 
     def load_all_pictograph_dicts(self) -> dict[Letter, list[dict]]:
-        grid_mode = self.main_widget.grid_mode
-        if grid_mode == DIAMOND:
-            csv_path = get_images_and_data_path("data/DiamondPictographDataframe.csv")
-        elif grid_mode == BOX:
-            csv_path = get_images_and_data_path("data/BoxPictographDataframe.csv")
+        # Load both Box and Diamond CSV files
+        diamond_csv_path = get_images_and_data_path(
+            "data/DiamondPictographDataframe.csv"
+        )
+        box_csv_path = get_images_and_data_path("data/BoxPictographDataframe.csv")
 
-        self.df = pd.read_csv(csv_path)
-        self.df = self.df.sort_values(by=[LETTER, START_POS, END_POS])
-        self.df = self.add_turns_and_ori_to_pictograph_dict(self.df)
-        self.df = self.restructure_dataframe_for_new_json_format(self.df)
+        # Read both CSVs and combine them
+        diamond_df = pd.read_csv(diamond_csv_path)
+        box_df = pd.read_csv(box_csv_path)
+
+        # Combine the dataframes, ensuring the columns are aligned
+        combined_df = pd.concat([diamond_df, box_df], ignore_index=True)
+        combined_df = combined_df.sort_values(by=[LETTER, START_POS, END_POS])
+
+        # Apply necessary transformations
+        combined_df = self.add_turns_and_ori_to_pictograph_dict(combined_df)
+        combined_df = self.restructure_dataframe_for_new_json_format(combined_df)
+
+        # Create the dictionary with letters as keys and records as values
         letters = {
-            self.get_letter_enum_by_value(letter_str): self.df[
-                self.df[LETTER] == letter_str
+            self.get_letter_enum_by_value(letter_str): combined_df[
+                combined_df[LETTER] == letter_str
             ].to_dict(orient="records")
-            for letter_str in self.df[LETTER].unique()
+            for letter_str in combined_df[LETTER].unique()
         }
-        # convert the turns to ints in the dict
+
+        # Convert the turns to integers or floats in the dictionary
         self._convert_turns_str_to_int_or_float(letters)
         return letters
 

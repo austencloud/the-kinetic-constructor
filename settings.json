@@ -1,13 +1,13 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Starfield",
-        "grow_sequence": false,
-        "current_tab": "dictionary",
-        "grid_mode": "box"
+        "background_type": "AuroraBorealis",
+        "grow_sequence": true,
+        "current_tab": "sequence_builder",
+        "grid_mode": "diamond"
     },
     "image_export": {
-        "include_start_position": true,
+        "include_start_position": false,
         "add_info": true,
         "open_directory_on_export": true,
         "add_word": true,
@@ -43,17 +43,21 @@
         "glyph_visibility": {
             "VTG": false,
             "TKA": true,
-            "Elemental": true,
+            "Elemental": false,
             "EndPosition": false
         },
         "grid_visibility": {
-            "non_radial_points": false
+            "non_radial_points": true
         }
     },
     "dictionary": {
-        "sort_method": "date_added",
-        "current_section": "filter_choice",
-        "current_filter": null
+        "sort_method": "alphabetical",
+        "current_section": "browser",
+        "current_filter": {
+            "contains_letters": [
+                "P"
+            ]
+        }
     },
     "sequence_layout": {
         "grow_sequence": true,
@@ -64,7 +68,7 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 4,
+                "sequence_length": 16,
                 "max_turn_intensity": 1,
                 "sequence_level": 2,
                 "rotation_type": "quartered",

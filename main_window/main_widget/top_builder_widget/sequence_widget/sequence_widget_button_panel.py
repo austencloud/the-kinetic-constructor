@@ -92,7 +92,7 @@ class SequenceWidgetButtonPanel(QFrame):
 
     def view_full_screen(self):
         """Display the current image in full screen mode."""
-        last_beat = self.beat_frame.get_last_filled_beat()
+        last_beat = self.beat_frame.get.last_filled_beat()
         if last_beat.__class__ == StartPositionBeatView:
             self.indicator_label.show_message("Please build a sequence first.")
             return

@@ -105,7 +105,8 @@ class SpecialPlacementEntryRemover:
                     ][key]
             if self.turns_tuple not in letter_data:
                 if other_data:
-                    del other_data[letter.value][mirrored_tuple]
+                    if other_data[letter.value].get(mirrored_tuple, {}):
+                        del other_data[letter.value][mirrored_tuple]
 
             elif key not in letter_data[self.turns_tuple]:
                 if other_data:
@@ -118,10 +119,11 @@ class SpecialPlacementEntryRemover:
         return self.data_updater.json_handler.load_json_data(file_path)
 
     def _generate_file_path(self, ori_key: str, letter: Letter) -> str:
+        grid_mode = self.positioner.placement_manager.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
         file_path = os.path.join(
             "data",
             "arrow_placement",
-            self.positioner.placement_manager.pictograph.main_widget.grid_mode,
+            grid_mode,
             "special",
             ori_key,
             f"{letter.value}_placements.json",
@@ -138,4 +140,3 @@ class SpecialPlacementEntryRemover:
             del turn_data[key]
             if not turn_data:
                 del letter_data[turns_tuple]
-

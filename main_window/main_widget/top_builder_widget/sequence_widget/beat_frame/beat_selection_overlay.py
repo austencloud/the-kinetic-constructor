@@ -1,21 +1,12 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QPainter, QPen, QColor
-
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Optional
-
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
-    BeatView,
-)
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import (
-    StartPositionBeatView,
-)
-
+from .beat import BeatView
+from .start_pos_beat import StartPositionBeatView
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
-        SequenceWidgetBeatFrame,
-    )
+    from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
 
 
 class BeatSelectionOverlay(QWidget):
@@ -23,7 +14,7 @@ class BeatSelectionOverlay(QWidget):
         super().__init__(beat_frame)
         self.selected_beat: Optional[BeatView | StartPositionBeatView] = None
         self.border_color = QColor("gold")
-        self.border_width = 4  # Adjust as needed
+        self.border_width = 4
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
         self.hide()
 
@@ -96,4 +87,3 @@ class BeatSelectionOverlay(QWidget):
             -self.border_width // 2,
         )
         painter.drawRect(rect)
-

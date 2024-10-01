@@ -12,6 +12,8 @@ class SequenceLevelEvaluator:
         has_turns = False
 
         for entry in sequence[1:]:  # Skip the first entry with metadata
+            if entry.get("is_placeholder", False):
+                continue
             if self._has_non_radial_orientation(entry):
                 has_non_radial_orientation = True
             if self._has_turns(entry):

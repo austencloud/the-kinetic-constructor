@@ -23,7 +23,11 @@ class OptionGetter(QObject):
     def get_next_options(self, sequence) -> list[dict]:
         next_options = []
 
-        last_pictograph_dict = sequence[-1]
+        last_pictograph_dict = (
+            sequence[-1]
+            if sequence[-1].get("is_placeholder", "") != True
+            else sequence[-2]
+        )
         start_pos = last_pictograph_dict[END_POS]
 
         if start_pos:

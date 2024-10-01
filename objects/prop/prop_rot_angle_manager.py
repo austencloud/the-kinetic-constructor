@@ -49,9 +49,12 @@ class PropRotAngleManager:
         return rotation_angle if self.prop.prop_type != PropType.Hand else 0
 
     def update_prop_rot_angle(self) -> None:
-        if self.prop.pictograph.main_widget.grid_mode == DIAMOND:
+        grid_mode = (
+            self.prop.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
+        )
+        if grid_mode == DIAMOND:
             prop_rotation_angle = self.get_diamond_rotation_angle()
-        elif self.prop.pictograph.main_widget.grid_mode == BOX:
+        elif grid_mode == BOX:
             prop_rotation_angle = self.get_box_rotation_angle()
         self.prop.setTransformOriginPoint(self.prop.boundingRect().center())
         self.prop.setRotation(prop_rotation_angle)

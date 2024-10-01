@@ -19,9 +19,7 @@ from data.constants import (
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 
-from objects.motion.managers.handpath_calculator import (
-    HandpathCalculator,
-)
+from objects.motion.managers.handpath_calculator import HandpathCalculator
 from .permutation_executor_base import PermutationExecutor
 from data.positions_map import positions_map
 
@@ -131,10 +129,10 @@ class RotatedPermutationExecuter(PermutationExecutor):
         }
         if hand_rot_dir == CLOCKWISE:
             loc_map = loc_map_cw
-            
+
         elif hand_rot_dir == COUNTER_CLOCKWISE:
             loc_map = loc_map_ccw
-            
+
         elif hand_rot_dir == DASH:
             loc_map = {
                 SOUTH: NORTH,
@@ -146,7 +144,7 @@ class RotatedPermutationExecuter(PermutationExecutor):
                 SOUTHWEST: NORTHEAST,
                 NORTHWEST: SOUTHEAST,
             }
-            
+
         elif hand_rot_dir == STATIC:
             loc_map = {
                 SOUTH: SOUTH,

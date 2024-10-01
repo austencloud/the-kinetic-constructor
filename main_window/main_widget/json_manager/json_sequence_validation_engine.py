@@ -2,11 +2,11 @@ from typing import TYPE_CHECKING
 from data.constants import BLUE, RED
 
 if TYPE_CHECKING:
-    from main_window.main_widget.json_manager.json_manager import JSON_Manager
+    from main_window.main_widget.json_manager.json_manager import JsonManager
 
 
 class JsonSequenceValidationEngine:
-    def __init__(self, json_manager: "JSON_Manager") -> None:
+    def __init__(self, json_manager: "JsonManager") -> None:
         self.json_manager = json_manager
         self.ori_calculator = self.json_manager.ori_calculator
 
@@ -14,6 +14,8 @@ class JsonSequenceValidationEngine:
         """Iterates through the sequence, updating start and end orientations to ensure continuity."""
         for index, _ in enumerate(self.sequence):
             if index > 1:
+                if self.sequence[index].get("is_placeholder", False):
+                    continue
                 self.update_json_entry_start_orientation(index)
                 self.update_json_entry_end_orientation(index)
 
@@ -23,13 +25,21 @@ class JsonSequenceValidationEngine:
     def update_json_entry_start_orientation(self, index) -> None:
         """Updates the start orientation of the current pictograph based on the previous one's end orientation."""
         current_pictograph = self.sequence[index]
-        previous_pictograph = self.sequence[index - 1]
+        previous_pictograph = self.get_previous_pictograph(index)
         current_pictograph["red_attributes"]["start_ori"] = previous_pictograph[
             "red_attributes"
         ]["end_ori"]
         current_pictograph["blue_attributes"]["start_ori"] = previous_pictograph[
             "blue_attributes"
         ]["end_ori"]
+
+    def get_previous_pictograph(self, index) -> dict:
+        """Returns the previous pictograph in the sequence."""
+        if self.sequence[index - 1].get("is_placeholder", False):
+            if self.sequence[index - 2].get("is_placeholder", False):
+                return self.sequence[index - 3]
+            return self.sequence[index - 2]
+        return self.sequence[index - 1]
 
     def update_json_entry_end_orientation(self, index) -> None:
         """Recalculates and updates the end orientation of the current pictograph."""

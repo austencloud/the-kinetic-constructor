@@ -30,13 +30,11 @@ class AddToDictionaryManager:
         self.process_sequence(current_sequence)
 
     def process_sequence(self, current_sequence):
-        base_word = self.sequence_widget.beat_frame.get_current_word()
+        base_word = self.sequence_widget.beat_frame.get.current_word()
         base_path = os.path.join(self.dictionary_dir, base_word)
 
         if not os.path.exists(base_path):
-            os.makedirs(
-                base_path
-            )  # Create root folder for the word if it doesn't exist
+            os.makedirs(base_path)
 
         if self.structural_checker.check_for_structural_variation(
             current_sequence, base_word

@@ -38,11 +38,11 @@ class DashLocationCalculator(BaseLocationCalculator):
                 (BLUE, (SOUTH, NORTH)): WEST,
                 (BLUE, (WEST, EAST)): SOUTH,
                 (RED, (NORTHWEST, SOUTHEAST)): NORTHEAST,
-                (RED, (NORTHEAST, SOUTHWEST)): NORTHWEST,
+                (RED, (NORTHEAST, SOUTHWEST)): SOUTHEAST,
                 (RED, (SOUTHWEST, NORTHEAST)): SOUTHEAST,
                 (RED, (SOUTHEAST, NORTHWEST)): NORTHEAST,
                 (BLUE, (NORTHWEST, SOUTHEAST)): SOUTHWEST,
-                (BLUE, (NORTHEAST, SOUTHWEST)): SOUTHEAST,
+                (BLUE, (NORTHEAST, SOUTHWEST)): NORTHWEST,
                 (BLUE, (SOUTHWEST, NORTHEAST)): NORTHWEST,
                 (BLUE, (SOUTHEAST, NORTHWEST)): SOUTHWEST,
             }
@@ -173,11 +173,14 @@ class DashLocationCalculator(BaseLocationCalculator):
             (NORTHWEST, SOUTH): NORTHEAST,
             (NORTHWEST, WEST): NORTHEAST,
         }
-        if self.pictograph.main_widget.grid_mode == DIAMOND:
+        grid_mode = (
+            self.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
+        )
+        if grid_mode == DIAMOND:
             return diamond_dash_location_map.get(
                 (self.arrow.motion.start_loc, shift_location)
             )
-        elif self.pictograph.main_widget.grid_mode == BOX:
+        elif grid_mode == BOX:
             return box_dash_location_map.get(
                 (self.arrow.motion.start_loc, shift_location)
             )

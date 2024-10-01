@@ -1,3 +1,4 @@
+from tkinter import N
 from data.constants import *
 from .base_rot_angle_calculator import BaseRotAngleCalculator
 
@@ -15,7 +16,12 @@ class StaticRotAngleCalculator(BaseRotAngleCalculator):
         prop_rot_dir = self.arrow.motion.prop_rot_dir
         loc = self.arrow.loc
 
-        return direction_map.get(prop_rot_dir).get(loc, 0)
+        angle_dict = direction_map.get(prop_rot_dir)
+        if angle_dict is None:
+            angle = 0
+        else:
+            angle = angle_dict.get(loc, 0)
+        return angle
 
     def _radial_static_direction_map(self) -> dict[str, dict[str, int]]:
         return {
@@ -39,7 +45,6 @@ class StaticRotAngleCalculator(BaseRotAngleCalculator):
                 SOUTHWEST: 135,
                 NORTHWEST: 45,
             },
-            NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
         }
 
     def _nonradial_static_direction_map(self) -> dict[str, dict[str, int]]:
@@ -49,20 +54,21 @@ class StaticRotAngleCalculator(BaseRotAngleCalculator):
                 EAST: 270,
                 SOUTH: 0,
                 WEST: 90,
-                NORTHEAST: 135,
-                SOUTHEAST: 225,
-                SOUTHWEST: 315,
+                NORTHEAST: 225,
+                SOUTHEAST: 315,
+                SOUTHWEST: 45,
+                NORTHWEST: 135,
             },
             COUNTER_CLOCKWISE: {
                 NORTH: 180,
                 EAST: 90,
                 SOUTH: 0,
                 WEST: 270,
-                NORTHEAST: 45,
-                SOUTHEAST: 315,
-                SOUTHWEST: 225,
+                NORTHEAST: 135,
+                SOUTHEAST: 45,
+                SOUTHWEST: 315,
+                NORTHWEST: 225,
             },
-            NO_ROT: {NORTH: 0, SOUTH: 0, EAST: 0, WEST: 0},
         }
 
     def _get_rot_angle_override_according_to_loc(self) -> int:
@@ -81,10 +87,10 @@ class StaticRotAngleCalculator(BaseRotAngleCalculator):
             EAST: {CLOCKWISE: 90, COUNTER_CLOCKWISE: 270},
             SOUTH: 180,
             WEST: {CLOCKWISE: 270, COUNTER_CLOCKWISE: 90},
-            NORTHEAST: 45,
-            SOUTHEAST: 315,
-            SOUTHWEST: 225,
-            NORTHWEST: 135,
+            NORTHEAST: {CLOCKWISE: 225, COUNTER_CLOCKWISE: 315},
+            SOUTHEAST: {CLOCKWISE: 135, COUNTER_CLOCKWISE: 225},
+            SOUTHWEST: {CLOCKWISE: 45, COUNTER_CLOCKWISE: 135},
+            NORTHWEST: {CLOCKWISE: 315, COUNTER_CLOCKWISE: 45},
         }
         if self.arrow.motion.start_ori in [IN, OUT]:
             loc_angle = static_from_radial_angle_override_map.get(self.arrow.loc)

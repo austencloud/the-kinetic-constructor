@@ -1,13 +1,17 @@
 from typing import TYPE_CHECKING, Union
 
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import Beat, BeatView
-
-
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame import beat
+from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
+    Beat,
+    BeatView,
+)
 
 
 if TYPE_CHECKING:
     from .image_export_manager import ImageExportManager
-    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import SequenceWidgetBeatFrame
+    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
+        SequenceWidgetBeatFrame,
+    )
     from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame import (
         TempBeatFrame,
     )
@@ -31,12 +35,27 @@ class ImageExportBeatFactory:
             temp_beat_frame = self.beat_frame_class(
                 self.export_manager.main_widget.dictionary_widget
             )
+
         filled_beats = []
-        for i, beat_data in enumerate(sequence[2:], start=2):
+        current_beat_number = 1  # Start beat numbering from 1
+
+        for beat_data in sequence[2:]:  # Skip the metadata (first entry)
+            if beat_data.get("is_placeholder"):
+                continue  # Skip placeholder beats
+
+            # Determine beat duration
+            duration = beat_data.get("duration", 1)
+
+            # Create the beat view and assign it the correct beat range
             beat_view = self.create_beat_view_from_data(
-                beat_data, i - 1, temp_beat_frame
+                beat_data, current_beat_number, temp_beat_frame
             )
+
             filled_beats.append(beat_view)
+
+            # Increment beat number by the duration of the current beat
+            current_beat_number += duration
+
         return filled_beats
 
     def create_beat_view_from_data(self, beat_data, number, temp_beat_frame):
@@ -44,5 +63,7 @@ class ImageExportBeatFactory:
         beat = Beat(temp_beat_frame)
         beat.pictograph_dict = beat_data
         beat.updater.update_pictograph(beat_data)
+
+        # Set the beat with the actual number, not the display text
         new_beat_view.set_beat(beat, number)
         return new_beat_view

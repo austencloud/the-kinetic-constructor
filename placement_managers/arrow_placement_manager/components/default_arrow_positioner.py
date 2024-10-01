@@ -32,18 +32,18 @@ class DefaultArrowPositioner:
         self.placement_manager = placement_manager
         self.pictograph = placement_manager.pictograph
         self.diamond_placements_files = {
-            PRO: "diamond_pro_placements.json",
-            ANTI: "diamond_anti_placements.json",
-            FLOAT: "diamond_float_placements.json",
-            DASH: "diamond_dash_placements.json",
-            STATIC: "diamond_static_placements.json",
+            PRO: "default_diamond_pro_placements.json",
+            ANTI: "default_diamond_anti_placements.json",
+            FLOAT: "default_diamond_float_placements.json",
+            DASH: "default_diamond_dash_placements.json",
+            STATIC: "default_diamond_static_placements.json",
         }
         self.box_placement_files = {
-            PRO: "box_pro_placements.json",
-            ANTI: "box_anti_placements.json",
-            FLOAT: "box_float_placements.json",
-            DASH: "box_dash_placements.json",
-            STATIC: "box_static_placements.json",
+            PRO: "default_box_pro_placements.json",
+            ANTI: "default_box_anti_placements.json",
+            FLOAT: "default_box_float_placements.json",
+            DASH: "default_box_dash_placements.json",
+            STATIC: "default_box_static_placements.json",
         }
         self._load_all_default_placements()
 
@@ -58,15 +58,16 @@ class DefaultArrowPositioner:
     def _load_default_placements_for_motion_type(
         self, motion_type: str
     ) -> dict[str, dict[str, list[int]]]:
-        if self.placement_manager.pictograph.main_widget.grid_mode == DIAMOND:
+        grid_mode = self.placement_manager.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
+        if grid_mode == DIAMOND:
             json_filename = self.diamond_placements_files.get(motion_type)
             json_path = get_images_and_data_path(
-                f"data/arrow_placement/diamond/{json_filename}"
+                f"data/arrow_placement/diamond/default/{json_filename}"
             )
-        elif self.placement_manager.pictograph.main_widget.grid_mode == BOX:
+        elif grid_mode == BOX:
             json_filename = self.box_placement_files.get(motion_type)
             json_path = get_images_and_data_path(
-                f"data/arrow_placement/box/{json_filename}"
+                f"data/arrow_placement/box/default/{json_filename}"
             )
         with codecs.open(json_path, "r", encoding="utf-8") as file:
             return json.load(file)

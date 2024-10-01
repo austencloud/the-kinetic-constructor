@@ -142,6 +142,15 @@
     },
     "(s, 0, 1)": {
       "dash_from_layer2_rot_angle_override": true
+    },
+    "(s, 1.5, 1)": {
+      "anti_from_layer1": [45, 50],
+      "dash_from_layer1": [5, 30],
+      "dash_from_layer2_rot_angle_override": true
+    },
+    "(s, 1, 1.5)": {
+      "swap_beta_nw_radial_blue_anti_w_red_dash_ne": true,
+      "dash_from_layer2": {}
     }
   }
 }

@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from Enums.letters import Letter
 from data.constants import (
     BLUE,
     BOX,
@@ -40,12 +41,12 @@ class BetaPropDirectionCalculator:
     def get_dir(self, motion: Motion) -> str:
         """Determine the translation direction based on the motion type, start location, end location, and end layer."""
         if (
-            motion.pictograph.letter == "I"
+            motion.pictograph.letter == Letter.I
             and motion.pictograph.check.ends_with_radial_ori()
         ):
             return self.get_direction_for_radial_I(motion)
         elif (
-            motion.pictograph.letter == "I"
+            motion.pictograph.letter == Letter.I
             and motion.pictograph.check.ends_with_nonradial_ori()
         ):
             return self.get_direction_for_nonradial_I(motion)
@@ -67,6 +68,14 @@ class BetaPropDirectionCalculator:
             (SOUTH, BLUE): UP,
             (WEST, BLUE): LEFT,
             (WEST, RED): RIGHT,
+            (NORTHEAST, RED): UPRIGHT,
+            (NORTHEAST, BLUE): DOWNLEFT,
+            (SOUTHEAST, RED): DOWNRIGHT,
+            (SOUTHEAST, BLUE): UPLEFT,
+            (SOUTHWEST, RED): UPRIGHT,
+            (SOUTHWEST, BLUE): DOWNLEFT,
+            (NORTHWEST, RED): DOWNRIGHT,
+            (NORTHWEST, BLUE): UPLEFT,
         }
         return direction_map.get((motion.end_loc, motion.prop.color))
 
@@ -80,52 +89,58 @@ class BetaPropDirectionCalculator:
             (SOUTH, BLUE): RIGHT,
             (WEST, BLUE): UP,
             (WEST, RED): DOWN,
+            (NORTHEAST, RED): DOWNRIGHT,
+            (NORTHEAST, BLUE): UPLEFT,
+            (SOUTHEAST, RED): UPRIGHT,
+            (SOUTHEAST, BLUE): DOWNLEFT,
+            (SOUTHWEST, RED): DOWNRIGHT,
+            (SOUTHWEST, BLUE): UPLEFT,
+            (NORTHWEST, RED): UPRIGHT,
+            (NORTHWEST, BLUE): DOWNLEFT,
         }
         return direction_map.get((motion.end_loc, motion.prop.color))
 
     def get_dir_for_radial(self, motion: Motion) -> str:
         direction_map = {
-            (NORTH, EAST): RIGHT,
-            (NORTH, WEST): LEFT,
-            (SOUTH, EAST): RIGHT,
-            (SOUTH, WEST): LEFT,
-            (EAST, NORTH): UP,
-            (EAST, SOUTH): DOWN,
-            (WEST, NORTH): UP,
-            (WEST, SOUTH): DOWN,
-            
-            (NORTHEAST, SOUTHEAST): DOWNRIGHT,
-            (NORTHEAST, NORTHWEST): UPLEFT,
-            (SOUTHEAST, NORTHEAST): UPRIGHT,
-            (SOUTHEAST, SOUTHWEST): DOWNLEFT,
-            (SOUTHWEST, SOUTHEAST): DOWNRIGHT,
-            (SOUTHWEST, NORTHWEST): UPLEFT,
-            (NORTHWEST, SOUTHWEST): DOWNLEFT,
-            (NORTHWEST, NORTHEAST): UPRIGHT,
+            (EAST, NORTH): RIGHT,
+            (WEST, NORTH): LEFT,
+            (EAST, SOUTH): RIGHT,
+            (WEST, SOUTH): LEFT,
+            (NORTH, EAST): UP,
+            (SOUTH, EAST): DOWN,
+            (NORTH, WEST): UP,
+            (SOUTH, WEST): DOWN,
+            (NORTHEAST, NORTHWEST): UPRIGHT,
+            (NORTHEAST, SOUTHEAST): UPRIGHT,
+            (SOUTHEAST, NORTHEAST): DOWNRIGHT,
+            (SOUTHEAST, SOUTHWEST): DOWNRIGHT,
+            (SOUTHWEST, NORTHWEST): DOWNLEFT,
+            (SOUTHWEST, SOUTHEAST): DOWNLEFT,
+            (NORTHWEST, NORTHEAST): UPLEFT,
+            (NORTHWEST, SOUTHWEST): UPLEFT,
         }
-        return direction_map.get((motion.end_loc, motion.start_loc))
+        return direction_map.get((motion.start_loc, motion.end_loc))
 
     def get_dir_for_nonradial(self, motion: Motion) -> str:
         direction_map = {
-            (NORTH, EAST): UP,
-            (NORTH, WEST): DOWN,
-            (SOUTH, EAST): UP,
-            (SOUTH, WEST): DOWN,
-            (EAST, NORTH): RIGHT,
-            (EAST, SOUTH): LEFT,
-            (WEST, NORTH): RIGHT,
-            (WEST, SOUTH): LEFT,
-            # Adding diagonal directions
-            (NORTHEAST, SOUTHEAST): UPRIGHT,
-            (NORTHEAST, NORTHWEST): UPRIGHT,
-            (SOUTHEAST, NORTHEAST): DOWNRIGHT,
-            (SOUTHEAST, SOUTHWEST): DOWNRIGHT,
-            (SOUTHWEST, SOUTHEAST): UPLEFT,
-            (SOUTHWEST, NORTHWEST): DOWNLEFT,
-            (NORTHWEST, SOUTHWEST): UPLEFT,
+            (EAST, NORTH): UP,
+            (WEST, NORTH): DOWN,
+            (EAST, SOUTH): UP,
+            (WEST, SOUTH): DOWN,
+            (NORTH, EAST): RIGHT,
+            (SOUTH, EAST): LEFT,
+            (NORTH, WEST): RIGHT,
+            (SOUTH, WEST): LEFT,
+            (NORTHEAST, SOUTHEAST): UPLEFT,
+            (NORTHEAST, NORTHWEST): DOWNRIGHT,
+            (SOUTHEAST, NORTHEAST): UPRIGHT,
+            (SOUTHEAST, SOUTHWEST): UPRIGHT,
+            (SOUTHWEST, NORTHWEST): UPLEFT,
+            (SOUTHWEST, SOUTHEAST): DOWNRIGHT,
             (NORTHWEST, NORTHEAST): DOWNLEFT,
+            (NORTHWEST, SOUTHWEST): DOWNLEFT,
         }
-        return direction_map.get((motion.end_loc, motion.start_loc))
+        return direction_map.get((motion.start_loc, motion.end_loc))
 
     def get_dir_for_non_shift(self, prop: Prop) -> str:
         diamond_layer_reposition_map = {
@@ -172,12 +187,13 @@ class BetaPropDirectionCalculator:
                 (NORTHWEST, BLUE): UPLEFT,
             },
         }
-        if self.main_widget.grid_mode == DIAMOND:
+        grid_mode = self.main_widget.settings_manager.global_settings.get_grid_mode()
+        if grid_mode == DIAMOND:
             if prop.check.is_radial():
                 return diamond_layer_reposition_map[RADIAL][(prop.loc, prop.color)]
             elif prop.check.is_nonradial():
                 return diamond_layer_reposition_map[NONRADIAL][(prop.loc, prop.color)]
-        elif self.main_widget.grid_mode == BOX:
+        elif grid_mode == BOX:
             if prop.check.is_radial():
                 return box_layer_reposition_map[RADIAL][(prop.loc, prop.color)]
             elif prop.check.is_nonradial():

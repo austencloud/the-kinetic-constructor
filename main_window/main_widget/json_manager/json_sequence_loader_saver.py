@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING, List, Dict
 from utilities.path_helpers import get_user_editable_resource_path
 
 if TYPE_CHECKING:
-    from main_window.main_widget.json_manager.json_manager import JSON_Manager
+    from main_window.main_widget.json_manager.json_manager import JsonManager
 
 
 class JsonSequenceLoaderSaver:
-    def __init__(self, json_manager: "JSON_Manager") -> None:
+    def __init__(self, json_manager: "JsonManager") -> None:
         self.json_manager = json_manager
         self.current_sequence_json = get_user_editable_resource_path(
             "current_sequence.json"
@@ -21,13 +21,12 @@ class JsonSequenceLoaderSaver:
                     return self.get_default_sequence()
 
                 sequence = json.loads(content)
+                if not sequence or not isinstance(sequence, list):
+                    return self.get_default_sequence()
 
             return sequence
 
-        except FileNotFoundError:
-            return self.get_default_sequence()
-
-        except json.JSONDecodeError:
+        except (FileNotFoundError, json.JSONDecodeError):
             return self.get_default_sequence()
 
     def get_default_sequence(self) -> List[Dict]:
@@ -38,7 +37,7 @@ class JsonSequenceLoaderSaver:
                 "author": self.json_manager.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
                 "level": 0,
                 "prop_type": self.json_manager.main_widget.prop_type.name.lower(),
-                "grid_mode": self.json_manager.main_widget.grid_mode,
+                "grid_mode": self.json_manager.main_widget.settings_manager.global_settings.get_grid_mode(),
                 "is_circular": False,
                 "is_permutable": False,
                 "is_strictly_rotated_permutation": False,
@@ -128,11 +127,23 @@ class JsonSequenceLoaderSaver:
         return 0
 
     def get_red_end_ori(self, sequence):
+        last_pictograph_dict = (
+            sequence[-1]
+            if sequence[-1].get("is_placeholder", "") != True
+            else sequence[-2]
+        )
+
         if sequence:
-            return sequence[-1]["red_attributes"]["end_ori"]
+            return last_pictograph_dict["red_attributes"]["end_ori"]
         return 0
 
     def get_blue_end_ori(self, sequence):
+        last_pictograph_dict = (
+            sequence[-1]
+            if sequence[-1].get("is_placeholder", "") != True
+            else sequence[-2]
+        )
+
         if sequence:
-            return sequence[-1]["blue_attributes"]["end_ori"]
+            return last_pictograph_dict["blue_attributes"]["end_ori"]
         return 0

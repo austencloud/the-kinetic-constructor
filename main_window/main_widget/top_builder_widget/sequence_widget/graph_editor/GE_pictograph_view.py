@@ -35,6 +35,7 @@ class GE_PictographView(PictographView):
         self.setFrameShape(PictographView.Shape.Box)
 
     def set_to_blank_grid(self) -> None:
+        self.blank_pictograph = GE_BlankPictograph(self)
         self.setScene(self.blank_pictograph)
 
     def paintEvent(self, event) -> None:

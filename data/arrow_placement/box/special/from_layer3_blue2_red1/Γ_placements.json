@@ -36,6 +36,12 @@
     },
     "(o, 3, 3, cl, cl)": {
       "static_from_layer1_rot_angle_override": true
+    },
+    "(o, 1, 1, , )": {
+      "blue": [50, -50],
+      "red_rot_angle_override": true,
+      "red": [-50, -50],
+      "blue_rot_angle_override": true
     }
   }
 }

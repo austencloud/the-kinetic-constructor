@@ -5,6 +5,11 @@
     },
     "(0, 0)": {
       "red": [0, -130]
+    },
+    "(1.5, 1.5)": {
+      "red": [-30, 35],
+      "blue": [25, 5],
+      "swap_beta_ne_nonradial_blue_pro_e_red_pro_e": true
     }
   }
 }

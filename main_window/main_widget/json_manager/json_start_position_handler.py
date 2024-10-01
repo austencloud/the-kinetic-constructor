@@ -4,11 +4,11 @@ from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.json_manager.json_manager import JSON_Manager
+    from main_window.main_widget.json_manager.json_manager import JsonManager
 
 
 class JsonStartPositionHandler:
-    def __init__(self, manager: "JSON_Manager"):
+    def __init__(self, manager: "JsonManager"):
         self.manager = manager
 
     def set_start_position_data(self, start_pos_pictograph: BasePictograph) -> None:
@@ -23,7 +23,9 @@ class JsonStartPositionHandler:
 
         start_position_dict = {
             "beat": 0,
-            "sequence_start_position": self.get_sequence_start_position(start_pos_pictograph),
+            "sequence_start_position": self.get_sequence_start_position(
+                start_pos_pictograph
+            ),
             "letter": start_pos_pictograph.letter.name,
             "end_pos": start_pos_pictograph.end_pos,
             "blue_attributes": {

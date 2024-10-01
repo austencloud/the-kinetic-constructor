@@ -41,18 +41,18 @@ class TurnsAdjustmentManager(QObject):
             new_turns = self._clamp_turns(current_turns + adjustment)
             new_turns = self.convert_turn_floats_to_ints(new_turns)
 
+        motion = self.pictograph.motions[self.color]
         self.turns_widget.turns_updater._adjust_turns_for_pictograph(
             self.pictograph, adjustment
         )
         self.turns_widget.update_turns_display(matching_motion, new_turns)
         self._repaint_views()
-        motion = self.pictograph.motions[self.color]
         new_letter = self.main_widget.letter_determiner.determine_letter(motion)
         self.turns_widget.turns_box.prop_rot_dir_button_manager._update_pictograph_and_json(
             motion, new_letter
         )
         pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
-        self.json_manager.updater.update_turns_in_json_at_index(
+        self.json_manager.updater.turns_updater.update_turns_in_json_at_index(
             pictograph_index + 2, self.color, new_turns
         )
         self.json_validation_engine.run(is_current_sequence=True)
@@ -67,7 +67,7 @@ class TurnsAdjustmentManager(QObject):
             self.turns_widget.turns_box.adjustment_panel.graph_editor.pictograph_container.GE_pictograph_view.get_current_pictograph()
         )
         GE_pictograph.view.repaint()
-        GE_pictograph.updater.update_pictograph()
+        # GE_pictograph.updater.update_pictograph()
         QApplication.processEvents()
 
     def direct_set_turns(self, new_turns: Turns) -> None:
@@ -77,7 +77,7 @@ class TurnsAdjustmentManager(QObject):
         )
         self._update_motion_properties(new_turns)
         pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
-        self.json_manager.updater.update_turns_in_json_at_index(
+        self.json_manager.updater.turns_updater.update_turns_in_json_at_index(
             pictograph_index + 2, self.color, new_turns
         )
         self.pictograph.motions[self.color].turns = new_turns

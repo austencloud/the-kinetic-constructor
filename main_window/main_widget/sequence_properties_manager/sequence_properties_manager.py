@@ -59,16 +59,23 @@ class SequencePropertiesManager:
             return
 
         self.instantiate_sequence(sequence)
-        properties = self.check_all_properties()
+        # properties = self.check_all_properties()
+        # sequence[0].update(properties)
 
-        # Update sequence with new properties
-        sequence[0].update(properties)
         self.json_manager.loader_saver.save_current_sequence(sequence)
 
-    def calculate_word(self) -> str:
-        # Concatenate and simplify the letters in the sequence
-        word = "".join(entry["letter"] for entry in self.sequence[1:])
-        return WordSimplifier.simplify_repeated_word(word)
+    def calculate_word(self):
+        if self.sequence is None or not isinstance(self.sequence, list):
+            self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
+
+        # Make sure that self.sequence is a list and has beat entries
+        if len(self.sequence) < 2:
+            return ""
+
+        word = "".join(
+            entry.get("letter", "") for entry in self.sequence[1:] if "letter" in entry
+        )
+        return word
 
     def check_all_properties(self):
         if not self.sequence:
@@ -106,7 +113,7 @@ class SequencePropertiesManager:
             "level": self.main_widget.sequence_level_evaluator.get_sequence_difficulty_level(
                 self.sequence
             ),
-            "grid_mode": self.main_widget.grid_mode,
+            "grid_mode": self.main_widget.settings_manager.global_settings.get_grid_mode(),
             "is_circular": self.properties["ends_at_start_pos"],
             "is_permutable": self.properties["is_permutable"],
             **{
@@ -121,7 +128,7 @@ class SequencePropertiesManager:
             "word": "",
             "author": self.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
             "level": 0,
-            "grid_mode": self.main_widget.grid_mode,
+            "grid_mode": self.main_widget.settings_manager.global_settings.get_grid_mode(),
             "is_circular": False,
             "is_permutable": False,
             "is_strictly_rotated_permutation": False,
@@ -132,9 +139,17 @@ class SequencePropertiesManager:
         }
 
     def _check_ends_at_start_pos(self) -> bool:
-        return self.sequence[-1]["end_pos"] == self.sequence[0]["end_pos"]
+        if self.sequence[-1].get("is_placeholder", False):
+            return self.sequence[-2]["end_pos"] == self.sequence[0]["end_pos"]
+        else:
+            return self.sequence[-1]["end_pos"] == self.sequence[0]["end_pos"]
 
     def _check_is_permutable(self) -> bool:
-        return self.sequence[-1]["end_pos"].rstrip("0123456789") == self.sequence[0][
-            "end_pos"
-        ].rstrip("0123456789")
+        if self.sequence[-1].get("is_placeholder", False):
+            return self.sequence[-2]["end_pos"].rstrip("0123456789") == self.sequence[
+                0
+            ]["end_pos"].rstrip("0123456789")
+        else:
+            return self.sequence[-1]["end_pos"].rstrip("0123456789") == self.sequence[
+                0
+            ]["end_pos"].rstrip("0123456789")
