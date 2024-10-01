@@ -54,9 +54,9 @@ class StaticRotAngleCalculator(BaseRotAngleCalculator):
                 EAST: 270,
                 SOUTH: 0,
                 WEST: 90,
-                NORTHEAST: 225,
+                NORTHEAST: 45,
                 SOUTHEAST: 315,
-                SOUTHWEST: 45,
+                SOUTHWEST: 225,
                 NORTHWEST: 135,
             },
             COUNTER_CLOCKWISE: {

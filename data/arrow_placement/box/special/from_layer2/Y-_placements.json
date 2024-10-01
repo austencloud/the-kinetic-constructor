@@ -155,7 +155,8 @@
       "swap_beta_e_nonradial_blue_dash_n_red_pro_se": true
     },
     "(o, 1.5, 1)": {
-      "dash": [75, 115]
+      "dash": [75, 85],
+      "dash_rot_angle_override": true
     }
   }
 }
