@@ -35,9 +35,9 @@ class BeatFrameUpdater:
                     beat_view.beat.updater.update_pictograph(entry)
                     QApplication.processEvents()
             else:
-                # Handle case where beat_view is not found or beat is None
-                pass  # You might want to log or handle this situation
-
+                print(
+                    f"Beat with number {beat_num} not found in the beat frame. Skipping."
+                )
         if beat_entries:
             self.beat_frame.sequence_widget.update_difficulty_label()
 

@@ -38,11 +38,11 @@ class DashLocationCalculator(BaseLocationCalculator):
                 (BLUE, (SOUTH, NORTH)): WEST,
                 (BLUE, (WEST, EAST)): SOUTH,
                 (RED, (NORTHWEST, SOUTHEAST)): NORTHEAST,
-                (RED, (NORTHEAST, SOUTHWEST)): NORTHWEST,
+                (RED, (NORTHEAST, SOUTHWEST)): SOUTHEAST,
                 (RED, (SOUTHWEST, NORTHEAST)): SOUTHEAST,
                 (RED, (SOUTHEAST, NORTHWEST)): NORTHEAST,
                 (BLUE, (NORTHWEST, SOUTHEAST)): SOUTHWEST,
-                (BLUE, (NORTHEAST, SOUTHWEST)): SOUTHEAST,
+                (BLUE, (NORTHEAST, SOUTHWEST)): NORTHWEST,
                 (BLUE, (SOUTHWEST, NORTHEAST)): NORTHWEST,
                 (BLUE, (SOUTHEAST, NORTHWEST)): SOUTHWEST,
             }

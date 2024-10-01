@@ -55,17 +55,22 @@ class JsonTurnsUpdater:
         self.main_widget.sequence_properties_manager.update_sequence_properties()
 
     def set_turns_from_num_to_num_in_json(self, motion: "Motion", new_turns):
-        current_beat = self.main_widget.top_builder_widget.sequence_widget.beat_frame.get.currently_selected_beat()
-        current_beat_number = current_beat.number + self.get_number_of_placeholders_before_current_beat(
-            current_beat.number
+        current_beat = (
+            self.main_widget.top_builder_widget.sequence_widget.beat_frame.get.currently_selected_beat()
         )
-        self.update_turns_in_json_at_index(current_beat_number, motion.color, new_turns)
+        current_beat_number = (
+            current_beat.number
+            + self.get_number_of_placeholders_before_current_beat(current_beat.number)
+        )
+        self.update_turns_in_json_at_index(
+            current_beat_number + 1, motion.color, new_turns
+        )
         self.json_updater.motion_type_updater.update_motion_type_in_json_at_index(
-            current_beat_number, motion.color, motion.motion_type
+            current_beat_number + 1, motion.color, motion.motion_type
         )
 
         self.json_updater.prop_rot_dir_updater.update_prop_rot_dir_in_json_at_index(
-            current_beat_number, motion.color, motion.prop_rot_dir
+            current_beat_number + 1, motion.color, motion.prop_rot_dir
         )
 
     def get_number_of_placeholders_before_current_beat(self, current_beat_number):

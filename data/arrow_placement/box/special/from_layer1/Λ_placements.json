@@ -16,9 +16,6 @@
       "static": [-100, -100],
       "static_rot_angle_override": true
     },
-    "(0.5, 0, )": {
-      "dash": [-70, -90]
-    },
     "(0.5, 0, op)": {
       "dash": [-70, -90]
     },

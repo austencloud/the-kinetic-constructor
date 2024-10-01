@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from Enums.letters import Letter
 from data.constants import (
     BLUE,
     BOX,
@@ -40,12 +41,12 @@ class BetaPropDirectionCalculator:
     def get_dir(self, motion: Motion) -> str:
         """Determine the translation direction based on the motion type, start location, end location, and end layer."""
         if (
-            motion.pictograph.letter == "I"
+            motion.pictograph.letter == Letter.I
             and motion.pictograph.check.ends_with_radial_ori()
         ):
             return self.get_direction_for_radial_I(motion)
         elif (
-            motion.pictograph.letter == "I"
+            motion.pictograph.letter == Letter.I
             and motion.pictograph.check.ends_with_nonradial_ori()
         ):
             return self.get_direction_for_nonradial_I(motion)
@@ -67,6 +68,14 @@ class BetaPropDirectionCalculator:
             (SOUTH, BLUE): UP,
             (WEST, BLUE): LEFT,
             (WEST, RED): RIGHT,
+            (NORTHEAST, RED): UPRIGHT,
+            (NORTHEAST, BLUE): DOWNLEFT,
+            (SOUTHEAST, RED): DOWNRIGHT,
+            (SOUTHEAST, BLUE): UPLEFT,
+            (SOUTHWEST, RED): UPRIGHT,
+            (SOUTHWEST, BLUE): DOWNLEFT,
+            (NORTHWEST, RED): DOWNRIGHT,
+            (NORTHWEST, BLUE): UPLEFT,
         }
         return direction_map.get((motion.end_loc, motion.prop.color))
 
@@ -80,6 +89,14 @@ class BetaPropDirectionCalculator:
             (SOUTH, BLUE): RIGHT,
             (WEST, BLUE): UP,
             (WEST, RED): DOWN,
+            (NORTHEAST, RED): DOWNRIGHT,
+            (NORTHEAST, BLUE): UPLEFT,
+            (SOUTHEAST, RED): UPRIGHT,
+            (SOUTHEAST, BLUE): DOWNLEFT,
+            (SOUTHWEST, RED): DOWNRIGHT,
+            (SOUTHWEST, BLUE): UPLEFT,
+            (NORTHWEST, RED): UPRIGHT,
+            (NORTHWEST, BLUE): DOWNLEFT,
         }
         return direction_map.get((motion.end_loc, motion.prop.color))
 
@@ -93,14 +110,14 @@ class BetaPropDirectionCalculator:
             (SOUTH, EAST): DOWN,
             (NORTH, WEST): UP,
             (SOUTH, WEST): DOWN,
-            (SOUTHEAST, NORTHEAST): DOWNRIGHT,
-            (NORTHWEST, NORTHEAST): UPLEFT,
-            (SOUTHEAST, SOUTHWEST): UPRIGHT,
-            (NORTHWEST, SOUTHWEST): DOWNLEFT,
-            (SOUTHEAST, SOUTHWEST): DOWNRIGHT,
-            (NORTHEAST, NORTHWEST): UPLEFT,
-            (SOUTHWEST, NORTHWEST): DOWNLEFT,
+            (NORTHEAST, NORTHWEST): UPRIGHT,
             (NORTHEAST, SOUTHEAST): UPRIGHT,
+            (SOUTHEAST, NORTHEAST): DOWNRIGHT,
+            (SOUTHEAST, SOUTHWEST): DOWNRIGHT,
+            (SOUTHWEST, NORTHWEST): DOWNLEFT,
+            (SOUTHWEST, SOUTHEAST): DOWNLEFT,
+            (NORTHWEST, NORTHEAST): UPLEFT,
+            (NORTHWEST, SOUTHWEST): UPLEFT,
         }
         return direction_map.get((motion.start_loc, motion.end_loc))
 
@@ -114,15 +131,14 @@ class BetaPropDirectionCalculator:
             (SOUTH, EAST): LEFT,
             (NORTH, WEST): RIGHT,
             (SOUTH, WEST): LEFT,
-            # Diagonal directions
-            (SOUTHEAST, NORTHEAST): UPRIGHT,
-            (NORTHWEST, NORTHEAST): UPRIGHT,
-            (SOUTHEAST, SOUTHWEST): DOWNLEFT,
-            (NORTHWEST, SOUTHWEST): DOWNLEFT,
             (NORTHEAST, SOUTHEAST): UPLEFT,
-            (NORTHWEST, SOUTHEAST): DOWNLEFT,
+            (NORTHEAST, NORTHWEST): DOWNRIGHT,
+            (SOUTHEAST, NORTHEAST): UPRIGHT,
+            (SOUTHEAST, SOUTHWEST): DOWNLEFT,
             (SOUTHWEST, NORTHWEST): UPLEFT,
-            (SOUTHEAST, NORTHWEST): DOWNLEFT,
+            (SOUTHWEST, SOUTHEAST): DOWNRIGHT,
+            (NORTHWEST, NORTHEAST): UPRIGHT,
+            (NORTHWEST, SOUTHEAST): DOWNLEFT,
         }
         return direction_map.get((motion.start_loc, motion.end_loc))
 
