@@ -149,7 +149,8 @@
       "dash_from_layer2_rot_angle_override": true
     },
     "(s, 1, 1.5)": {
-      "dash_from_layer2": [110, 85]
+      "swap_beta_nw_radial_blue_anti_w_red_dash_ne": true,
+      "dash_from_layer2": {}
     }
   }
 }
