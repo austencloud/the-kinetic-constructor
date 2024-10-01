@@ -3,8 +3,8 @@
         "prop_type": "Staff",
         "background_type": "Starfield",
         "grow_sequence": false,
-        "current_tab": "sequence_builder",
-        "grid_mode": "diamond"
+        "current_tab": "dictionary",
+        "grid_mode": "box"
     },
     "image_export": {
         "include_start_position": true,
@@ -52,7 +52,7 @@
     },
     "dictionary": {
         "sort_method": "date_added",
-        "current_section": "browser",
+        "current_section": "filter_choice",
         "current_filter": null
     },
     "sequence_layout": {
@@ -64,7 +64,7 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 16,
+                "sequence_length": 4,
                 "max_turn_intensity": 1,
                 "sequence_level": 2,
                 "rotation_type": "quartered",
@@ -74,14 +74,14 @@
             "freeform_auto_builder": {
                 "sequence_type": "freeform",
                 "sequence_length": 16,
-                "max_turn_intensity": 1,
+                "max_turn_intensity": 2,
                 "sequence_level": 2,
                 "continuous_rotation": true
             },
-            "current_auto_builder": "circular"
+            "current_auto_builder": "freeform"
         },
         "manual_builder": {},
-        "last_used_builder": "manual"
+        "last_used_builder": "auto"
     },
     "sequence_sharing": {
         "recipients": [
