@@ -32,6 +32,19 @@ class BeatFramePopulator:
             show_indicator=False, should_reset_to_start_pos_picker=False
         )
 
+        grid_mode = current_sequence_json[0].get("grid_mode")
+        if grid_mode:
+            self.sequence_widget.main_widget.settings_manager.global_settings.set_grid_mode(
+                grid_mode
+            )
+        else:
+            grid_mode = self.main_widget.grid_mode_checker.check_grid_mode(
+                current_sequence_json[2]
+            )
+            self.sequence_widget.main_widget.settings_manager.global_settings.set_grid_mode(
+                grid_mode
+            )
+
         # Load start position first
         start_pos_beat = self.start_pos_manager.convert_current_sequence_json_entry_to_start_pos_pictograph(
             current_sequence_json

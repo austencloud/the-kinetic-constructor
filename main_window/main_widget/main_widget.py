@@ -49,7 +49,7 @@ class MainWidget(QTabWidget):
 
         self._setup_pictograph_cache()
         self._set_prop_type()
-        self._setup_default_modes()
+        self._set_grid_mode()
 
         self._setup_letters()
         self._initialize_managers()
@@ -149,7 +149,7 @@ class MainWidget(QTabWidget):
             str, dict[str, dict[str, dict[str, list[int]]]]
         ] = self.special_placement_loader.load_special_placements()
 
-    def _setup_default_modes(self) -> None:
+    def _set_grid_mode(self) -> None:
         self.grid_mode = self.settings_manager.global_settings.get_grid_mode()
 
     def _setup_letters(self) -> None:
