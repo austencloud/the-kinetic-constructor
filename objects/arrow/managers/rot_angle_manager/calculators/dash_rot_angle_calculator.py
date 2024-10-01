@@ -146,10 +146,10 @@ class DashRotAngleCalculator(BaseRotAngleCalculator):
             EAST: 180,
             SOUTH: 90,
             WEST: 0,
-            NORTHEAST: 315,
-            SOUTHEAST: 225,
-            SOUTHWEST: 135,
-            NORTHWEST: 45,
+            NORTHEAST: 45,
+            SOUTHEAST: 135,
+            SOUTHWEST: 225,
+            NORTHWEST: 315,
         }
 
         if self.arrow.motion.prop_rot_dir == CLOCKWISE:
