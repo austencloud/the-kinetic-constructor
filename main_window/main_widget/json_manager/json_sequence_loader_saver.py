@@ -52,12 +52,11 @@ class JsonSequenceLoaderSaver:
         if not sequence:
             sequence = self.get_default_sequence()
         else:
-            if "word" not in sequence[0]:
-                sequence[0][
-                    "word"
-                ] = (
-                    self.json_manager.main_widget.sequence_properties_manager.calculate_word()
-                )
+            sequence[0][
+                "word"
+            ] = (
+                self.json_manager.main_widget.sequence_properties_manager.calculate_word(sequence)
+            )
             if "author" not in sequence[0]:
                 sequence[0][
                     "author"
