@@ -72,7 +72,7 @@ class SequencePropertiesManager:
             return ""
 
         word = "".join(
-            entry.get("letter", "") for entry in sequence[1:] if "letter" in entry
+            entry.get("letter", "") for entry in sequence[2:] if "letter" in entry
         )
         return word
 
@@ -107,7 +107,9 @@ class SequencePropertiesManager:
 
     def _gather_properties(self):
         return {
-            "word": self.calculate_word(self.json_manager.loader_saver.load_current_sequence_json()),
+            "word": self.calculate_word(
+                self.json_manager.loader_saver.load_current_sequence_json()
+            ),
             "author": self.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
             "level": self.main_widget.sequence_level_evaluator.get_sequence_difficulty_level(
                 self.sequence
