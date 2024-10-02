@@ -3,7 +3,7 @@
         "prop_type": "Staff",
         "background_type": "AuroraBorealis",
         "grow_sequence": true,
-        "current_tab": "sequence_builder",
+        "current_tab": "learn",
         "grid_mode": "diamond"
     },
     "image_export": {
@@ -47,17 +47,13 @@
             "EndPosition": false
         },
         "grid_visibility": {
-            "non_radial_points": true
+            "non_radial_points": false
         }
     },
     "dictionary": {
         "sort_method": "alphabetical",
         "current_section": "browser",
-        "current_filter": {
-            "contains_letters": [
-                "P"
-            ]
-        }
+        "current_filter": null
     },
     "sequence_layout": {
         "grow_sequence": true,
@@ -69,8 +65,8 @@
             "circular_auto_builder": {
                 "sequence_type": "circular",
                 "sequence_length": 16,
-                "max_turn_intensity": 1,
-                "sequence_level": 2,
+                "max_turn_intensity": 2.5,
+                "sequence_level": 3,
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",
                 "continuous_rotation": true
@@ -78,14 +74,14 @@
             "freeform_auto_builder": {
                 "sequence_type": "freeform",
                 "sequence_length": 16,
-                "max_turn_intensity": 2,
+                "max_turn_intensity": 3,
                 "sequence_level": 2,
                 "continuous_rotation": true
             },
-            "current_auto_builder": "freeform"
+            "current_auto_builder": "circular"
         },
         "manual_builder": {},
-        "last_used_builder": "auto"
+        "last_used_builder": "manual"
     },
     "sequence_sharing": {
         "recipients": [
@@ -112,6 +108,10 @@
             {
                 "name": "Kimberly Bucki",
                 "email": "kimberlydrewthat@gmail.com"
+            },
+            {
+                "name": "Betsy Dz.",
+                "email": "elizabethdziad@gmail.com"
             }
         ]
     }

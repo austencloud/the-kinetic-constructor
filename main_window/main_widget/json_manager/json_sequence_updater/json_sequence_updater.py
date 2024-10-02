@@ -1,17 +1,9 @@
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
-from main_window.main_widget.json_manager.json_sequence_updater.json_duration_updater import (
-    JsonDurationUpdater,
-)
-from main_window.main_widget.json_manager.json_sequence_updater.json_prop_rot_dir_updater import (
-    JsonPropRotDirUpdater,
-)
-from main_window.main_widget.json_manager.json_sequence_updater.json_prop_type_updater import (
-    JsonPropTypeUpdater,
-)
-from main_window.main_widget.json_manager.json_sequence_updater.json_letter_updater import (
-    JsonLetterUpdater,
-)
+from .json_duration_updater import JsonDurationUpdater
+from .json_prop_rot_dir_updater import JsonPropRotDirUpdater
+from .json_prop_type_updater import JsonPropTypeUpdater
+from .json_letter_updater import JsonLetterUpdater
 from .json_motion_type_updater import JsonMotionTypeUpdater
 from .json_turns_updater import JsonTurnsUpdater
 from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
