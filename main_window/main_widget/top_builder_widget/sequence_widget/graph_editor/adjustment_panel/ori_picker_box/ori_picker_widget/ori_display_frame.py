@@ -157,9 +157,9 @@ class OriDisplayFrame(QFrame):
 
     def _resize_ori_label(self) -> None:
         ori_label_width = int(self.ori_picker_box.graph_editor.width() // 5)
-        ori_label_height = self.ori_picker_box.graph_editor.height() // 5
-        self.ori_display_label.setFixedSize(ori_label_width, ori_label_height)
-        border_size = int(self.ori_display_label.width() / 60)
+        ori_label_height = int(self.ori_picker_box.graph_editor.height() // 5)
+        self.ori_display_label.setMaximumSize(ori_label_width, ori_label_height)
+        border_size = int(ori_label_width / 60)
         border_color = self._get_border_color()
         font_size = int(self.ori_picker_box.graph_editor.width() // 30)
         font = QFont("Arial", font_size)
