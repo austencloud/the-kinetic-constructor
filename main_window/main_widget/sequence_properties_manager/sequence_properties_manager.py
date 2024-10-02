@@ -64,16 +64,15 @@ class SequencePropertiesManager:
 
         self.json_manager.loader_saver.save_current_sequence(sequence)
 
-    def calculate_word(self):
-        if self.sequence is None or not isinstance(self.sequence, list):
-            self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
+    def calculate_word(self, sequence):
+        if sequence is None or not isinstance(sequence, list):
+            sequence = self.json_manager.loader_saver.load_current_sequence_json()
 
-        # Make sure that self.sequence is a list and has beat entries
-        if len(self.sequence) < 2:
+        if len(sequence) < 2:
             return ""
 
         word = "".join(
-            entry.get("letter", "") for entry in self.sequence[1:] if "letter" in entry
+            entry.get("letter", "") for entry in sequence[1:] if "letter" in entry
         )
         return word
 
@@ -108,7 +107,7 @@ class SequencePropertiesManager:
 
     def _gather_properties(self):
         return {
-            "word": self.calculate_word(),
+            "word": self.calculate_word(self.json_manager.loader_saver.load_current_sequence_json()),
             "author": self.main_widget.main_window.settings_manager.users.user_manager.get_current_user(),
             "level": self.main_widget.sequence_level_evaluator.get_sequence_difficulty_level(
                 self.sequence
