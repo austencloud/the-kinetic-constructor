@@ -23,8 +23,7 @@
     },
     "(cw, 0, 2.5)": {
       "dash": [-80, 40],
-      "static_rot_angle_override": true,
-      "static": [0, 25]
+      "static_rot_angle_override": true
     },
     "(cw, 0, 3)": {
       "static_rot_angle_override": true,

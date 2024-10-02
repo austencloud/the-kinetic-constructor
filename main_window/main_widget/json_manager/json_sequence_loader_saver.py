@@ -1,6 +1,7 @@
 import json
 from typing import TYPE_CHECKING, List, Dict
 from utilities.path_helpers import get_user_editable_resource_path
+from utilities.word_simplifier import WordSimplifier
 
 if TYPE_CHECKING:
     from main_window.main_widget.json_manager.json_manager import JsonManager
@@ -52,10 +53,10 @@ class JsonSequenceLoaderSaver:
         if not sequence:
             sequence = self.get_default_sequence()
         else:
-            sequence[0][
-                "word"
-            ] = (
-                self.json_manager.main_widget.sequence_properties_manager.calculate_word(sequence)
+            sequence[0]["word"] = WordSimplifier.simplify_repeated_word(
+                self.json_manager.main_widget.sequence_properties_manager.calculate_word(
+                    sequence
+                )
             )
             if "author" not in sequence[0]:
                 sequence[0][

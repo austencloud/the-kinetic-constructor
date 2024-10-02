@@ -100,10 +100,9 @@
       "red": [0, -20]
     },
     "(s, 2, 1.5)": {
-      "red": [15, -165],
-      "blue": [-20, -95],
       "swap_beta_s_nonradial_blue_dash_e_red_dash_e": true,
-      "swap_beta_w_nonradial_blue_dash_s_red_dash_s": true
+      "swap_beta_w_nonradial_blue_dash_s_red_dash_s": true,
+      "blue": [20, 80]
     },
     "(s, 2, 2)": {
       "red": [-140, -20]
