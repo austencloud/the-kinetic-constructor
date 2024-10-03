@@ -1,14 +1,23 @@
-from functools import lru_cache
-from typing import Union
+from typing import TYPE_CHECKING, Union
 from Enums.Enums import LetterType
-
 from Enums.letters import LetterConditions
-from data.constants import *
+from .turns_tuple_generators.base_turns_tuple_generator import BaseTurnsTupleGenerator
+from .turns_tuple_generators.color_turns_tuple_generator import ColorTurnsTupleGenerator
+from .turns_tuple_generators.lambda_turns_tuple_generator import LambdaTurnsTupleGenerator
+from .turns_tuple_generators.lead_state_turns_tuple_generator import LeadStateTurnsTupleGenerator
+from .turns_tuple_generators.type1_hybrid_turns_tuple_generator import Type1HybridTurnsTupleGenerator
+from .turns_tuple_generators.type2_turns_tuple_generator import Type2TurnsTupleGenerator
+from .turns_tuple_generators.type3_turns_tuple_generator import Type3TurnsTupleGenerator
+from .turns_tuple_generators.type4_turns_tuple_generator import Type4TurnsTupleGenerator
+from .turns_tuple_generators.type56_turns_tuple_generator import Type56TurnsTupleGenerator
+from .turns_tuple_generators.gamma_turns_tuple_generator import GammaTurnsTupleGenerator
+from .turns_tuple_generators.lambda_dash_turns_tuple_generator import LambdaDashTurnsTupleGenerator
+
 from .mirrored_turns_tuple_generator import MirroredTurnsTupleGenerator
 from objects.arrow.arrow import Arrow
+if TYPE_CHECKING:
+    from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
-
-from .turns_tuple_generators import *
 
 
 class TurnsTupleGenerator:
@@ -53,7 +62,6 @@ class TurnsTupleGenerator:
     def generate_mirrored_tuple(self, arrow: Arrow) -> Union[str, None]:
         return self.mirrored_generator.generate(arrow)
 
-    @lru_cache(maxsize=128)
     def _get_generator_key(self, pictograph: "BasePictograph") -> Union[str, LetterType]:
         letter = pictograph.letter
         if letter.value in [

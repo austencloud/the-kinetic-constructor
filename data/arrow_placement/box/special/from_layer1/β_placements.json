@@ -223,7 +223,6 @@
       "swap_beta_n_radial_blue_static_n_red_static_n": true,
       "swap_beta_w_radial_blue_static_w_red_static_w": true,
       "swap_beta_s_radial_blue_static_s_red_static_s": true,
-      "swap_beta_sw_radial_blue_static_sw_red_static_sw": true,
       "swap_beta_se_radial_blue_static_se_red_static_se": true
     },
     "(o, 1, 3)": {},
