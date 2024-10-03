@@ -12,6 +12,7 @@
     },
     "(cw, 1.5, 0)": {
       "swap_beta_sw_nonradial_blue_static_sw_red_dash_se": true
-    }
+    },
+    "(ccw, 0, 1)": {}
   }
 }

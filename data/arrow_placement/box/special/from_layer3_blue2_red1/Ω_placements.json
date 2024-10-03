@@ -30,7 +30,8 @@
     },
     "(o, 0.5, 1)": {
       "static_from_layer1_rot_angle_override": true,
-      "static_from_layer1": [-70, 0]
+      "static_from_layer1": [-70, 0],
+      "anti_from_layer1": [-15, 125]
     },
     "(o, 0.5, 1.5)": {
       "static_from_layer1_rot_angle_override": true

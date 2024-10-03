@@ -8,6 +8,10 @@
       "red_rot_angle_override": true,
       "blue": [-50, -50],
       "blue_rot_angle_override": true
+    },
+    "(ccw, 1, cl)": {
+      "red_rot_angle_override": true,
+      "blue": [-50, -50]
     }
   }
 }

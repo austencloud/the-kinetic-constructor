@@ -9,9 +9,6 @@
     "(cw, oping, 0, 0.5)": {
       "static": [-90, -100]
     },
-    "(0, 0.5, op)": {
-      "static": [100, 100]
-    },
     "(0, 0.5, cl)": {
       "static": [-100, -100],
       "static_rot_angle_override": true
@@ -315,6 +312,10 @@
       "static": [100, 100]
     },
     "(o, 1, 1, op, op)": {
+      "static_rot_angle_override": true,
+      "static": [-50, -50]
+    },
+    "(s, 0.5, 1, op, cl)": {
       "static_rot_angle_override": true,
       "static": [-50, -50]
     }

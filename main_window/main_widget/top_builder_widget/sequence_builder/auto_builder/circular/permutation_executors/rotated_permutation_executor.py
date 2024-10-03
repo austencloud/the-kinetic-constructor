@@ -3,8 +3,10 @@ from typing import TYPE_CHECKING
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations
 from data.constants import (
+    CCW_HANDPATH,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
+    CW_HANDPATH,
     DASH,
     EAST,
     NORTH,
@@ -127,10 +129,10 @@ class RotatedPermutationExecuter(PermutationExecutor):
             SOUTHWEST: SOUTHEAST,
             SOUTHEAST: NORTHEAST,
         }
-        if hand_rot_dir == CLOCKWISE:
+        if hand_rot_dir == CW_HANDPATH:
             loc_map = loc_map_cw
 
-        elif hand_rot_dir == COUNTER_CLOCKWISE:
+        elif hand_rot_dir == CCW_HANDPATH:
             loc_map = loc_map_ccw
 
         elif hand_rot_dir == DASH:
@@ -321,7 +323,7 @@ class RotatedPermutationExecuter(PermutationExecutor):
             "start_loc": previous_attributes["end_loc"],
             "end_loc": self.calculate_rotated_permuatation_new_loc(
                 previous_attributes["end_loc"],
-                self.get_hand_rot_dir_from_locs(
+                self.hand_rot_dir_calculator.get_hand_rot_dir_from_locs(
                     previous_matching_beat_attributes["start_loc"],
                     previous_matching_beat_attributes["end_loc"],
                 ),

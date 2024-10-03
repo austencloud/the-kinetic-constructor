@@ -3,12 +3,9 @@
     "(0, 0)": {
       "pro_from_layer1": [70, -55]
     },
-    "(s, 1, 0.5)": {
-      "dash_from_layer1": [-100, -15]
-    },
     "(s, 1, 1)": {
-      "dash_from_layer1": [-20, -60],
-      "pro_from_layer2": [-85, 55]
+      "pro_from_layer2": [25, 95],
+      "dash_from_layer1": [35, 50]
     },
     "(s, 1, 1.5)": {
       "dash_from_layer1": [-15, -155],
@@ -175,6 +172,10 @@
       "pro_from_layer2": [30, 105],
       "pro_from_layer1": {}
     },
-    "(s, 2, 0.5)": {}
+    "(s, 2, 0.5)": {},
+    "(s, 1, 0.5)": {
+      "pro_from_layer2": [20, 100],
+      "dash_from_layer1": [-50, 90]
+    }
   }
 }

@@ -22,9 +22,6 @@
       "dash_rot_angle_override": true,
       "dash": [-5, -110]
     },
-    "(s, 0.5, 0.5)": {
-      "dash": [50, -40]
-    },
     "(s, 0.5, 1)": {
       "dash_rot_angle_override": true,
       "anti": [-60, 65]

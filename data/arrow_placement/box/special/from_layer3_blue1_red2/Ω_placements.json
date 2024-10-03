@@ -23,7 +23,8 @@
       "anti_from_layer1": [10, -80]
     },
     "(o, 0.5, 1)": {
-      "static_from_layer1": [-70, 0]
+      "static_from_layer1": [-70, 0],
+      "anti_from_layer1": [-15, 125]
     },
     "(o, 0.5, 2)": {
       "static_from_layer1": [0, 20]
