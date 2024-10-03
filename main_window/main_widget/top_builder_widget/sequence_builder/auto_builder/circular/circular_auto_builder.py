@@ -107,7 +107,7 @@ class CircularAutoBuilder(BaseAutoBuilder):
         options = [deepcopy(option) for option in options]
 
         # Filter options by selected letter types
-        options = self._filter_options_by_letter_type(options)
+        # options = self._filter_options_by_letter_type(options)
 
         if is_continuous_rot_dir:
             options = self._filter_options_by_rotation(

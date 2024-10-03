@@ -30,17 +30,3 @@ class TurnPatternConverter:
 
         return "_".join(pattern_parts)
 
-    def pattern_to_sequence(self, pattern: str) -> list[dict]:
-        """
-        Convert a more readable pattern string back to a sequence format (abstract representation).
-        Handles parts split by underscores, with turns in each part split by a comma.
-        """
-        sequence = []
-        parts = pattern.split("_")
-        for part in parts:
-            if "," in part:
-                blue_turns, red_turns = map(float, part.split(","))
-            else:
-                blue_turns, red_turns = float(part), 0
-            sequence.append({"blue_turns": blue_turns, "red_turns": red_turns})
-        return sequence

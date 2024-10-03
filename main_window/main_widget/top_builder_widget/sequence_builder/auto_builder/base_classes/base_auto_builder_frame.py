@@ -2,7 +2,9 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QPushButton, QWidget
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.widgets.letter_type_picker import LetterTypePicker
+from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.widgets.letter_type_picker import (
+    LetterTypePicker,
+)
 from ..widgets.continuous_rotation_toggle import ContinuousRotationToggle
 from ..widgets.length_adjuster import LengthAdjuster
 from ..widgets.level_selector import LevelSelector
@@ -31,15 +33,6 @@ class BaseAutoBuilderFrame(QFrame):
         self.length_adjuster = LengthAdjuster(self)
         self.turn_intensity_adjuster = TurnIntensityAdjuster(self)
         self.continuous_rotation_toggle = ContinuousRotationToggle(self)
-        self.letter_type_picker = LetterTypePicker(self)  # Instantiate LetterTypePicker
-
-        self.widgets: dict[str, QWidget] = {
-            "level_selector": self.level_selector,
-            "length_adjuster": self.length_adjuster,
-            "turn_intensity_adjuster": self.turn_intensity_adjuster,
-            "continuous_rotation_toggle": self.continuous_rotation_toggle,
-            "letter_type_picker": self.letter_type_picker,
-        }
 
         self.create_sequence_button = QPushButton("Create Sequence")
         self.create_sequence_button.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -54,12 +47,10 @@ class BaseAutoBuilderFrame(QFrame):
         self.layout.addStretch(1)
         self.layout.addWidget(self.continuous_rotation_toggle)
         self.layout.addStretch(1)
-        self.layout.addWidget(self.letter_type_picker)  # Add LetterTypePicker to layout
-        self.layout.addStretch(1)
+
         self.layout.addWidget(
             self.create_sequence_button, alignment=Qt.AlignmentFlag.AlignCenter
         )
-
 
     def apply_settings(self):
         """Apply settings to modular widgets."""
@@ -81,8 +72,6 @@ class BaseAutoBuilderFrame(QFrame):
         self.turn_intensity_adjuster.set_intensity(intensity)
         self.continuous_rotation_toggle.set_state(continuous_rotation)
         self.continuous_rotation_toggle.update_mode_label_styles()
-        self.letter_type_picker.apply_settings()  # Apply settings to LetterTypePicker
-
 
     def _resize_auto_builder_frame(self):
         """Resize the auto builder frame based on the parent widget size."""
@@ -94,8 +83,6 @@ class BaseAutoBuilderFrame(QFrame):
         self.level_selector.resize_level_selector()
         self.length_adjuster.resize_length_adjuster()
         self.turn_intensity_adjuster.resize_max_turn_intensity_adjuster()
-        self.letter_type_picker.resize_letter_type_picker()  # Resize LetterTypePicker
-
 
     def _resize_create_sequence_button(self):
         font_size = self.auto_builder.sequence_builder.width() // 30

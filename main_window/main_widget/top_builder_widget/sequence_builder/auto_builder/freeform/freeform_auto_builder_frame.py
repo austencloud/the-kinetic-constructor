@@ -1,14 +1,11 @@
 from typing import TYPE_CHECKING
-from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.base_classes.base_auto_builder_frame import (
-    BaseAutoBuilderFrame,
-)
-
+from ..base_classes.base_auto_builder_frame import BaseAutoBuilderFrame
+from PyQt6.QtCore import Qt
+from ..widgets.letter_type_picker import LetterTypePicker
 from .freeform_auto_builder import FreeFormAutoBuilder
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.auto_builder import (
-        AutoBuilder,
-    )
+    from ..auto_builder import AutoBuilder
 
 
 class FreeformAutoBuilderFrame(BaseAutoBuilderFrame):
@@ -18,6 +15,12 @@ class FreeformAutoBuilderFrame(BaseAutoBuilderFrame):
 
         # Attach specific action for sequence creation
         self.create_sequence_button.clicked.connect(self._on_create_sequence)
+        self.letter_type_picker = LetterTypePicker(self)  # Instantiate LetterTypePicker
+        self.layout.addWidget(self.letter_type_picker)  # Add LetterTypePicker to layout
+        self.layout.addStretch(1)
+        self.layout.addWidget(
+            self.create_sequence_button, alignment=Qt.AlignmentFlag.AlignCenter
+        )
         self.apply_settings()
 
     def _on_create_sequence(self):
@@ -39,3 +42,11 @@ class FreeformAutoBuilderFrame(BaseAutoBuilderFrame):
             ),
         )
         self.auto_builder.sequence_builder.manual_builder.option_picker.update_option_picker()
+
+    def apply_settings(self):
+        super().apply_settings()
+        self.letter_type_picker.apply_settings()  # Apply settings to LetterTypePicker
+
+    def _resize_widgets(self):
+        super()._resize_widgets()
+        self.letter_type_picker.resize_letter_type_picker()  # Resize LetterTypePicker

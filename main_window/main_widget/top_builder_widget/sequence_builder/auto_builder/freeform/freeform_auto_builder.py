@@ -4,6 +4,9 @@ import random
 from copy import deepcopy
 from PyQt6.QtCore import Qt
 from data.constants import CLOCKWISE, COUNTER_CLOCKWISE
+from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.widgets.letter_type_picker import (
+    LetterTypePicker,
+)
 from ..base_classes.base_auto_builder import BaseAutoBuilder
 from ..turn_intensity_manager import TurnIntensityManager
 
@@ -14,6 +17,7 @@ if TYPE_CHECKING:
 class FreeFormAutoBuilder(BaseAutoBuilder):
     def __init__(self, auto_builder_frame: "FreeformAutoBuilderFrame"):
         super().__init__(auto_builder_frame)
+        self.auto_builder_frame = auto_builder_frame
 
     def build_sequence(
         self,
@@ -100,7 +104,16 @@ class FreeFormAutoBuilder(BaseAutoBuilder):
         )
         return next_beat
 
-    def _apply_level_1_constraints(self, pictograph: dict) -> dict:
-        pictograph["blue_attributes"]["turns"] = 0
-        pictograph["red_attributes"]["turns"] = 0
-        return pictograph
+    def _filter_options_by_letter_type(self, options: list[dict]) -> list[dict]:
+        """Filter options based on selected letter types."""
+        selected_types = (
+            self.auto_builder_frame.letter_type_picker.get_selected_letter_types()
+        )
+        selected_letters = []
+        for letter_type in selected_types:
+            selected_letters.extend(letter_type.letters)
+
+        filtered_options = [
+            option for option in options if option["letter"] in selected_letters
+        ]
+        return filtered_options

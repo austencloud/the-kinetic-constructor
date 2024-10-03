@@ -118,8 +118,8 @@ class ManualBuilder(QFrame):
 
         pictograph_dict["red_attributes"][RED_START_ORI] = self.current_end_red_ori
         pictograph_dict["blue_attributes"][BLUE_START_ORI] = self.current_end_blue_ori
-        pictograph_dict[RED_TURNS] = 0
-        pictograph_dict[BLUE_TURNS] = 0
+        pictograph_dict["red_attributes"][RED_TURNS] = 0
+        pictograph_dict["blue_attributes"][BLUE_TURNS] = 0
         return pictograph_dict
 
     def get_last_added_pictograph(self, sequence):

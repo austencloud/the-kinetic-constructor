@@ -208,7 +208,8 @@
     },
     "(s, 1, 2)": {
       "static": [20, 0],
-      "static_rot_angle_override": true
+      "static_rot_angle_override": true,
+      "dash": [5, 30]
     },
     "(o, 2, 2)": {
       "swap_beta_w_radial_blue_static_w_red_dash_s": true,
