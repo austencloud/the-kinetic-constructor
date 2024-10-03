@@ -70,10 +70,7 @@
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",
                 "continuous_rotation": true,
-                "selected_letter_types": [
-                    "Type1",
-                    "Type2"
-                ]
+                "selected_letter_types": []
             },
             "freeform_auto_builder": {
                 "sequence_type": "freeform",
@@ -83,7 +80,7 @@
                 "continuous_rotation": true,
                 "selected_letter_types": [
                     "Type1",
-                    "Type2"
+                    "Type3"
                 ]
             },
             "current_auto_builder": "freeform"
