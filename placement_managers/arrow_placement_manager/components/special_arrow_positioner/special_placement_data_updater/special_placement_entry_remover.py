@@ -103,10 +103,10 @@ class SpecialPlacementEntryRemover:
                     other_letter_data[mirrored_tuple][new_key] = letter_data[
                         self.turns_tuple
                     ][key]
-            if self.turns_tuple not in letter_data:
-                if other_data:
-                    if other_data[letter.value].get(mirrored_tuple, {}):
-                        del other_data[letter.value][mirrored_tuple]
+            if other_data:
+                if other_data[letter.value].get(mirrored_tuple, {}):
+                    if other_data[letter.value].get(mirrored_tuple, {}).get(new_key):
+                        del other_data[letter.value][mirrored_tuple][new_key]
 
             elif key not in letter_data[self.turns_tuple]:
                 if other_data:

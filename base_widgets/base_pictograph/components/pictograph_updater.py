@@ -66,7 +66,7 @@ class PictographUpdater:
             motion.updater.update_motion(motion_dicts[motion.color])
 
     def _set_lead_states(self):
-        if self.pictograph.letter in ["S", "T", "U", "V"]:
+        if self.pictograph.letter.value in ["S", "T", "U", "V"]:
             self.pictograph.get.leading_motion().lead_state = LEADING
             self.pictograph.get.trailing_motion().lead_state = TRAILING
         else:

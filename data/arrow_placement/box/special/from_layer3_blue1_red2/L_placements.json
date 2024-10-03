@@ -65,6 +65,10 @@
     "(3, 1.5)": {
       "pro_from_layer1": [-95, -40],
       "pro_from_layer2": [-30, 125]
+    },
+    "(0.5, 2.5)": {
+      "anti_from_layer2": [-5, 65],
+      "pro_from_layer1": [-10, 50]
     }
   }
 }

@@ -43,7 +43,16 @@ class PictographGetter:
             if motion.motion_type == motion_type
         ]
 
-    def leading_motion(self) -> Motion:
+    def trailing_motion(self) -> Motion:
+        """
+        Determine the leading motion based on the start and end locations of the red and blue motions.
+
+        The leading motion is determined by comparing the start location of the red motion with the end location of the blue motion,
+        and the start location of the blue motion with the end location of the red motion.
+
+        Returns:
+            Motion: The leading motion, either red or blue, based on the location comparison.
+        """
         red_start = self.red_motion.start_loc
         blue_end = self.blue_motion.end_loc
         blue_start = self.blue_motion.start_loc
@@ -55,7 +64,16 @@ class PictographGetter:
         }
         return motion_map.get((self.red_motion.start_loc, self.blue_motion.end_loc))
 
-    def trailing_motion(self) -> Motion:
+    def leading_motion(self) -> Motion:
+        """
+        Determine the trailing motion based on the start and end locations of the red and blue motions.
+
+        The trailing motion is determined by comparing the start location of the red motion with the end location of the blue motion,
+        and the start location of the blue motion with the end location of the red motion.
+
+        Returns:
+            Motion: The trailing motion, either red or blue, based on the location comparison.
+        """
         red_start = self.red_motion.start_loc
         blue_end = self.blue_motion.end_loc
         blue_start = self.blue_motion.start_loc
