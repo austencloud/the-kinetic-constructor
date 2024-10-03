@@ -9,6 +9,9 @@
     "(cw, 0, 1.5)": {
       "static_from_layer1": [0, 20],
       "static_from_layer1_rot_angle_override": true
+    },
+    "(cw, 1.5, 0)": {
+      "swap_beta_sw_nonradial_blue_static_sw_red_dash_se": true
     }
   }
 }

@@ -30,7 +30,9 @@
       "static_from_layer1": [-70, 0]
     },
     "(s, 2.5, 1.5)": {
-      "static_from_layer2": [-10, 0]
+      "static_from_layer2": [-10, 0],
+      "static_from_layer2_rot_angle_override": true,
+      "anti_from_layer1": [-10, 90]
     },
     "(s, 2.5, 2)": {
       "static_from_layer2": [-10, 0]

@@ -66,8 +66,12 @@
     },
     "(s, 1.5, 2)": {
       "dash_from_layer2": [-40, -70],
-      "dash_from_layer1": [-55, -5],
-      "pro_from_layer2": [-100, 150]
+      "pro_from_layer2": [-60, 185],
+      "dash_from_layer1": [-15, 45],
+      "swap_beta_sw_radial_blue_dash_nw_red_pro_w": true,
+      "swap_beta_nw_radial_blue_dash_ne_red_pro_n": true,
+      "swap_beta_ne_radial_blue_dash_se_red_pro_e": true,
+      "swap_beta_se_radial_blue_dash_sw_red_pro_s": true
     },
     "(s, 1.5, 2.5)": {
       "dash_from_layer2": [35, -60],

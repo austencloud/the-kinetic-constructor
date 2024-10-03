@@ -121,8 +121,6 @@
     },
     "(s, 1.5, 2)": {
       "dash_from_layer2": [-40, -70],
-      "dash_from_layer1": [-55, -5],
-      "pro_from_layer2": [-100, 150],
       "swap_beta_s_radial_blue_pro_sw_red_dash_w": true,
       "swap_beta_w_radial_blue_pro_nw_red_dash_n": true,
       "swap_beta_n_radial_blue_pro_ne_red_dash_e": true,
@@ -130,7 +128,9 @@
       "swap_beta_s_radial_blue_pro_se_red_dash_e": true,
       "swap_beta_w_radial_blue_pro_sw_red_dash_s": true,
       "swap_beta_n_radial_blue_pro_nw_red_dash_w": true,
-      "swap_beta_e_radial_blue_pro_ne_red_dash_n": true
+      "swap_beta_e_radial_blue_pro_ne_red_dash_n": true,
+      "pro_from_layer2": [-60, 185],
+      "dash_from_layer1": [-15, 45]
     },
     "(s, 1.5, 2.5)": {
       "dash_from_layer2": [35, -60],
