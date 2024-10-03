@@ -142,7 +142,9 @@
     },
     "(o, 2.5, 2)": {
       "dash_from_layer1": [5, -70],
-      "pro_from_layer2": [-75, 5]
+      "pro_from_layer2": [-75, 5],
+      "dash_from_layer2": [25, 40],
+      "pro_from_layer1": [-40, 15]
     },
     "(o, 2.5, 2.5)": {
       "dash_from_layer1": [-60, -70],

@@ -61,8 +61,10 @@
       "red": [-55, 125]
     },
     "(1.5, 1.5)": {
-      "red": [-65, 175],
-      "blue": [-75, 175]
+      "red": [-65, 180],
+      "blue": [-75, 180],
+      "swap_beta_nw_radial_blue_pro_w_red_pro_n": true,
+      "swap_beta_se_radial_blue_pro_e_red_pro_s": true
     },
     "(1.5, 2)": {
       "red": [-45, -35]
