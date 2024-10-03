@@ -4,7 +4,7 @@
         "background_type": "Starfield",
         "grow_sequence": true,
         "current_tab": "sequence_builder",
-        "grid_mode": "diamond"
+        "grid_mode": "box"
     },
     "image_export": {
         "include_start_position": false,
@@ -65,8 +65,8 @@
             "circular_auto_builder": {
                 "sequence_type": "circular",
                 "sequence_length": 20,
-                "max_turn_intensity": 2,
-                "sequence_level": 2,
+                "max_turn_intensity": 3,
+                "sequence_level": 3,
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",
                 "continuous_rotation": true,
@@ -90,10 +90,10 @@
                     "Type3"
                 ]
             },
-            "current_auto_builder": "circular"
+            "current_auto_builder": "freeform"
         },
         "manual_builder": {},
-        "last_used_builder": "auto"
+        "last_used_builder": "manual"
     },
     "sequence_sharing": {
         "recipients": [

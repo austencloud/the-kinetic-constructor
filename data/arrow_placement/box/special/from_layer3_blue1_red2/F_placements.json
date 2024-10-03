@@ -9,9 +9,6 @@
       "anti_from_layer2": [-70, 125],
       "pro_from_layer1": [20, 25]
     },
-    "(1.5, 2.5)": {
-      "anti_from_layer1": [-70, 45]
-    },
     "(2, 1.5)": {
       "pro_from_layer2": [-70, 0]
     },
@@ -64,7 +61,11 @@
       "anti_from_layer1": [-25, 70]
     },
     "(1, 0.5)": {
-      "anti_from_layer2": [-15, 90]
+      "anti_from_layer2": [-15, 90],
+      "pro_from_layer2": {}
+    },
+    "(1.5, 2.5)": {
+      "anti_from_layer1": [-10, 95]
     }
   }
 }

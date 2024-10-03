@@ -1,6 +1,4 @@
 from typing import TYPE_CHECKING
-from Enums.Enums import Handpaths
-from Enums.MotionAttributes import Location
 from data.constants import (
     ANTI,
     CCW_HANDPATH,
@@ -10,17 +8,12 @@ from data.constants import (
     COUNTER_CLOCKWISE,
     CW_HANDPATH,
     DASH,
-    DASH_HANDPATH,
-    EAST,
     IN,
-    NORTH,
     OUT,
     PRO,
-    SOUTH,
     STATIC,
-    STATIC_HANDPATH,
-    WEST,
 )
+from objects.motion.managers.handpath_calculator import HandpathCalculator
 
 if TYPE_CHECKING:
     from main_window.main_widget.json_manager.json_manager import JsonManager
@@ -29,6 +22,7 @@ if TYPE_CHECKING:
 class JsonOriCalculator:
     def __init__(self, json_manager: "JsonManager"):
         self.main_widget = json_manager.main_widget
+        self.handpath_calculator = HandpathCalculator()
 
     def calculate_end_orientation(self, pictograph_dict, color: str):
         motion_type = pictograph_dict[f"{color}_attributes"]["motion_type"]
@@ -41,7 +35,7 @@ class JsonOriCalculator:
         start_loc = pictograph_dict[f"{color}_attributes"]["start_loc"]
         end_loc = pictograph_dict[f"{color}_attributes"]["end_loc"]
         if motion_type == "float":
-            handpath_direction = self.get_handpath_direction(
+            handpath_direction = self.handpath_calculator.get_hand_rot_dir_from_locs(
                 pictograph_dict[f"{color}_attributes"]["start_loc"],
                 pictograph_dict[f"{color}_attributes"]["end_loc"],
             )
@@ -60,7 +54,8 @@ class JsonOriCalculator:
             )
         elif turns == "fl":
             return self.calculate_float_orientation(
-                start_ori, self.get_handpath_direction(start_loc, end_loc)
+                start_ori,
+                self.handpath_calculator.get_hand_rot_dir_from_locs(start_loc, end_loc),
             )
         else:
             return self.calculate_half_turn_orientation(
@@ -121,29 +116,6 @@ class JsonOriCalculator:
             (COUNTER, CCW_HANDPATH): OUT,
         }
         return orientation_map.get((start_ori, handpath_direction), start_ori)
-
-    def get_handpath_direction(
-        self, start_loc: Location, end_loc: Location
-    ) -> Handpaths:
-        handpaths = {
-            (NORTH, EAST): CW_HANDPATH,
-            (EAST, SOUTH): CW_HANDPATH,
-            (SOUTH, WEST): CW_HANDPATH,
-            (WEST, NORTH): CW_HANDPATH,
-            (NORTH, WEST): CCW_HANDPATH,
-            (WEST, SOUTH): CCW_HANDPATH,
-            (SOUTH, EAST): CCW_HANDPATH,
-            (EAST, NORTH): CCW_HANDPATH,
-            (NORTH, SOUTH): DASH_HANDPATH,
-            (SOUTH, NORTH): DASH_HANDPATH,
-            (EAST, WEST): DASH_HANDPATH,
-            (WEST, EAST): DASH_HANDPATH,
-            (NORTH, NORTH): STATIC_HANDPATH,
-            (SOUTH, SOUTH): STATIC_HANDPATH,
-            (EAST, EAST): STATIC_HANDPATH,
-            (WEST, WEST): STATIC_HANDPATH,
-        }
-        return handpaths.get((start_loc, end_loc), STATIC_HANDPATH)
 
     def switch_orientation(self, ori):
         switch_map = {

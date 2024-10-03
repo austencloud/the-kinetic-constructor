@@ -1,7 +1,9 @@
 from collections import defaultdict
 from data.constants import (
+    CCW_HANDPATH,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
+    CW_HANDPATH,
     DASH,
     STATIC,
     SOUTH,
@@ -68,9 +70,9 @@ class HandpathCalculator:
         self.hand_rot_dir_map = defaultdict(
             lambda: "NO HAND ROTATION FOUND",  # Default value if a key is not found
             {
-                **{pair: CLOCKWISE for pair in clockwise_pairs + diagonal_clockwise},
+                **{pair: CW_HANDPATH for pair in clockwise_pairs + diagonal_clockwise},
                 **{
-                    pair: COUNTER_CLOCKWISE
+                    pair: CCW_HANDPATH
                     for pair in counter_clockwise_pairs + diagonal_counter_clockwise
                 },
                 **{pair: DASH for pair in dash_pairs},

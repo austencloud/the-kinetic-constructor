@@ -1,24 +1,18 @@
-from typing import TYPE_CHECKING
-from Enums.MotionAttributes import Location, MotionType
+from typing import TYPE_CHECKING, Union
+from Enums.MotionAttributes import MotionType
 from Enums.Enums import Handpaths, Turns
 from data.constants import (
     ANTI,
+    CCW_HANDPATH,
     CLOCK,
     COUNTER,
     CW_HANDPATH,
-    CCW_HANDPATH,
     DASH,
-    DASH_HANDPATH,
     PRO,
     STATIC,
-    STATIC_HANDPATH,
     IN,
     OUT,
     FLOAT,
-    NORTH,
-    EAST,
-    SOUTH,
-    WEST,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
 )
@@ -72,7 +66,7 @@ class MotionOriCalculator:
             return self.switch_orientation(start_ori) if turns % 2 == 0 else start_ori
 
     def calculate_half_turn_orientation(
-        self, motion_type: MotionType, turns: Turns, start_ori: str
+        self, motion_type: str, turns: Union[str, int, float], start_ori: str
     ) -> str:
         if motion_type in [ANTI, DASH]:
             orientation_map = {
@@ -100,16 +94,16 @@ class MotionOriCalculator:
         return orientation_map.get((start_ori, self.motion.prop_rot_dir))
 
     def calculate_float_orientation(
-        self, start_ori: str, handpath_direction: Handpaths
+        self, start_ori: str, handpath_direction: str
     ) -> str:
         orientation_map = {
-            (IN, CLOCKWISE): CLOCK,
-            (IN, COUNTER_CLOCKWISE): COUNTER,
-            (OUT, CLOCKWISE): COUNTER,
-            (OUT, COUNTER_CLOCKWISE): CLOCK,
-            (CLOCK, CLOCKWISE): OUT,
-            (CLOCK, COUNTER_CLOCKWISE): IN,
-            (COUNTER, CLOCKWISE): IN,
-            (COUNTER, COUNTER_CLOCKWISE): OUT,
+            (IN, CW_HANDPATH): CLOCK,
+            (IN, CCW_HANDPATH): COUNTER,
+            (OUT, CW_HANDPATH): COUNTER,
+            (OUT, CCW_HANDPATH): CLOCK,
+            (CLOCK, CW_HANDPATH): OUT,
+            (CLOCK, CCW_HANDPATH): IN,
+            (COUNTER, CW_HANDPATH): IN,
+            (COUNTER, CCW_HANDPATH): OUT,
         }
         return orientation_map.get((start_ori, handpath_direction))

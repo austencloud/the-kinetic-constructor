@@ -16,8 +16,8 @@ class FloatRotAngleCalculator(BaseRotAngleCalculator):
 
     def _float_direction_map(self):
         return {
-            CLOCKWISE: self._clockwise_map(),
-            COUNTER_CLOCKWISE: self._counter_clockwise_map(),
+            CW_HANDPATH: self._clockwise_map(),
+            CCW_HANDPATH: self._counter_clockwise_map(),
         }
 
     def _clockwise_map(self):
