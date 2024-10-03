@@ -92,9 +92,8 @@
       "dash": [-45, -70]
     },
     "(s, 2, 2, op, cl)": {
-      "static_rot_angle_override": true,
       "static": [0, 0],
-      "dash": [-50, -65]
+      "dash": [15, 80]
     },
     "(s, 2, 1.5, cl, op)": {
       "dash": [-65, -50]
@@ -233,9 +232,8 @@
       "dash": [-55, -70]
     },
     "(o, 2, 2, op, op)": {
-      "dash": [-50, -65],
-      "static_rot_angle_override": true,
-      "static": [0, 0]
+      "static": [0, 0],
+      "dash": [15, 85]
     },
     "(o, 2, 1, op, op)": {},
     "(o, 2, 0.5, op, op)": {

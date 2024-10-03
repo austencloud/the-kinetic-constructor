@@ -1,10 +1,10 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Aurora",
+        "background_type": "Starfield",
         "grow_sequence": true,
         "current_tab": "sequence_builder",
-        "grid_mode": "box"
+        "grid_mode": "diamond"
     },
     "image_export": {
         "include_start_position": false,
@@ -47,12 +47,12 @@
             "EndPosition": false
         },
         "grid_visibility": {
-            "non_radial_points": true
+            "non_radial_points": false
         }
     },
     "dictionary": {
         "sort_method": "date_added",
-        "current_section": "browser",
+        "current_section": "filter_choice",
         "current_filter": null
     },
     "sequence_layout": {
@@ -64,7 +64,7 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 4,
+                "sequence_length": 20,
                 "max_turn_intensity": 2,
                 "sequence_level": 2,
                 "rotation_type": "quartered",
@@ -86,10 +86,11 @@
                 "sequence_level": 2,
                 "continuous_rotation": true,
                 "selected_letter_types": [
-                    "Type1"
+                    "Type1",
+                    "Type3"
                 ]
             },
-            "current_auto_builder": "freeform"
+            "current_auto_builder": "circular"
         },
         "manual_builder": {},
         "last_used_builder": "auto"

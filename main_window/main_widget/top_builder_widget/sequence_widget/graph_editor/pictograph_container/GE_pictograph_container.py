@@ -36,7 +36,7 @@ class GraphEditorPictographContainer(QWidget):
     def resize_GE_pictograph_container(self):
         size = self.graph_editor.height()
         self.setFixedWidth(size)
-        # self.setFixedHeight(size)
+        self.setFixedHeight(size)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setSpacing(0)
         self.setLayout(self.layout)

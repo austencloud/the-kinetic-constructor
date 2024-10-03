@@ -9,7 +9,8 @@
       "static_rot_angle": 0,
       "blue": [-25, 0],
       "blue_rot_angle": 0,
-      "swap_beta_se_radial_blue_static_se_red_static_se": true
+      "swap_beta_se_radial_blue_static_se_red_static_se": true,
+      "swap_beta_sw_radial_blue_static_sw_red_static_sw": true
     },
     "(s, 1, 1.5)": {
       "blue": [-100, -5],

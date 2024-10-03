@@ -327,7 +327,6 @@ Y,gamma2,beta8,none,none,static,no_rot,nw,nw,pro,ccw,ne,nw
 Y,gamma4,beta2,none,none,static,no_rot,ne,ne,pro,ccw,se,ne
 Y,gamma6,beta4,none,none,static,no_rot,se,se,pro,ccw,sw,se
 Y,gamma8,beta6,none,none,static,no_rot,sw,sw,pro,ccw,nw,sw
-
 Y,gamma10,beta4,none,none,static,no_rot,se,se,pro,cw,ne,se
 Y,gamma12,beta6,none,none,static,no_rot,sw,sw,pro,cw,se,sw
 Y,gamma14,beta8,none,none,static,no_rot,nw,nw,pro,cw,sw,nw
@@ -337,7 +336,6 @@ Y,gamma2,beta2,none,none,pro,cw,nw,ne,static,no_rot,ne,ne
 Y,gamma4,beta4,none,none,pro,cw,ne,se,static,no_rot,se,se
 Y,gamma6,beta6,none,none,pro,cw,se,sw,static,no_rot,sw,sw
 Y,gamma8,beta8,none,none,pro,cw,sw,nw,static,no_rot,nw,nw
-
 Y,gamma10,beta2,none,none,pro,ccw,se,ne,static,no_rot,ne,ne
 Y,gamma12,beta4,none,none,pro,ccw,sw,se,static,no_rot,se,se
 Y,gamma14,beta6,none,none,pro,ccw,nw,sw,static,no_rot,sw,sw
@@ -347,7 +345,6 @@ Z,gamma2,beta8,none,none,static,no_rot,nw,nw,anti,cw,ne,nw
 Z,gamma4,beta2,none,none,static,no_rot,ne,ne,anti,cw,se,ne
 Z,gamma6,beta4,none,none,static,no_rot,se,se,anti,cw,sw,se
 Z,gamma8,beta6,none,none,static,no_rot,sw,sw,anti,cw,nw,sw
-
 Z,gamma10,beta4,none,none,static,no_rot,se,se,anti,ccw,ne,se
 Z,gamma12,beta6,none,none,static,no_rot,sw,sw,anti,ccw,se,sw
 Z,gamma14,beta8,none,none,static,no_rot,nw,nw,anti,ccw,sw,nw
@@ -357,7 +354,6 @@ Z,gamma2,beta2,none,none,anti,ccw,nw,ne,static,no_rot,ne,ne
 Z,gamma4,beta4,none,none,anti,ccw,ne,se,static,no_rot,se,se
 Z,gamma6,beta6,none,none,anti,ccw,se,sw,static,no_rot,sw,sw
 Z,gamma8,beta8,none,none,anti,ccw,sw,nw,static,no_rot,nw,nw
-
 Z,gamma10,beta2,none,none,anti,cw,se,ne,static,no_rot,ne,ne
 Z,gamma12,beta4,none,none,anti,cw,sw,se,static,no_rot,se,se
 Z,gamma14,beta6,none,none,anti,cw,nw,sw,static,no_rot,sw,sw
@@ -448,10 +444,10 @@ W-,gamma2,alpha6,none,none,pro,cw,nw,ne,dash,no_rot,ne,sw
 W-,gamma4,alpha8,none,none,pro,cw,ne,se,dash,no_rot,se,nw
 W-,gamma6,alpha2,none,none,pro,cw,se,sw,dash,no_rot,sw,ne
 W-,gamma8,alpha4,none,none,pro,cw,sw,nw,dash,no_rot,nw,se
-W-,gamma10,alpha2,none,none,pro,ccw,ne,nw,dash,no_rot,nw,se
-W-,gamma12,alpha4,none,none,pro,ccw,nw,sw,dash,no_rot,sw,ne
-W-,gamma14,alpha6,none,none,pro,ccw,se,ne,dash,no_rot,ne,sw
-W-,gamma16,alpha8,none,none,pro,ccw,sw,se,dash,no_rot,se,nw
+W-,gamma10,alpha6,none,none,pro,ccw,se,ne,dash,no_rot,ne,sw
+W-,gamma12,alpha8,none,none,pro,ccw,sw,se,dash,no_rot,se,ne
+W-,gamma14,alpha2,none,none,pro,ccw,nw,sw,dash,no_rot,sw,ne
+W-,gamma16,alpha4,none,none,pro,ccw,ne,nw,dash,no_rot,nw,se
 
 X-,gamma2,alpha8,none,none,dash,no_rot,nw,se,anti,cw,ne,nw
 X-,gamma4,alpha2,none,none,dash,no_rot,ne,sw,anti,cw,se,ne
@@ -466,10 +462,10 @@ X-,gamma2,alpha6,none,none,anti,ccw,nw,ne,dash,no_rot,ne,sw
 X-,gamma4,alpha8,none,none,anti,ccw,ne,se,dash,no_rot,se,nw
 X-,gamma6,alpha2,none,none,anti,ccw,se,sw,dash,no_rot,sw,ne
 X-,gamma8,alpha4,none,none,anti,ccw,sw,nw,dash,no_rot,nw,se
-X-,gamma10,alpha2,none,none,anti,cw,ne,nw,dash,no_rot,nw,se
-X-,gamma12,alpha4,none,none,anti,cw,nw,sw,dash,no_rot,sw,ne
-X-,gamma14,alpha6,none,none,anti,cw,se,ne,dash,no_rot,ne,sw
-X-,gamma16,alpha8,none,none,anti,cw,sw,se,dash,no_rot,se,nw
+X-,gamma10,alpha6,none,none,anti,cw,se,ne,dash,no_rot,ne,sw
+X-,gamma12,alpha8,none,none,anti,cw,sw,se,dash,no_rot,se,nw
+X-,gamma14,alpha2,none,none,anti,cw,nw,sw,dash,no_rot,sw,ne
+X-,gamma16,alpha4,none,none,anti,cw,ne,nw,dash,no_rot,nw,se
 
 Y-,gamma2,beta4,none,none,dash,no_rot,nw,se,pro,cw,ne,se
 Y-,gamma4,beta6,none,none,dash,no_rot,ne,sw,pro,cw,se,sw

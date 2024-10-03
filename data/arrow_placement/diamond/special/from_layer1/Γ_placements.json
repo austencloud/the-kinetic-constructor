@@ -194,7 +194,6 @@
       "blue": [80, 0]
     },
     "(o, 1, 2, op, op)": {
-      "blue_rot_angle_override": true,
       "blue": [80, 0]
     },
     "(o, 1, 1.5, op, op)": {
