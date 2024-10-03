@@ -1,11 +1,11 @@
 {
   "K": {
     "(0, 0.5)": {
-      "blue": [45, -55],
       "swap_beta_n_nonradial_blue_anti_nw_red_anti_ne": true,
       "swap_beta_w_nonradial_blue_anti_nw_red_anti_sw": true,
       "swap_beta_s_nonradial_blue_anti_se_red_anti_sw": true,
-      "swap_beta_e_nonradial_blue_anti_se_red_anti_ne": true
+      "swap_beta_e_nonradial_blue_anti_se_red_anti_ne": true,
+      "blue": [30, -100]
     },
     "(0, 1.5)": {
       "blue": [15, -60],

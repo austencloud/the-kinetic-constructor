@@ -17,6 +17,10 @@
     },
     "(o, 1, 1, cl, cl)": {
       "dash_from_layer2_rot_angle_override": true
+    },
+    "(o, 1, 1, op, op)": {
+      "static_from_layer1": [60, 45],
+      "dash_from_layer2_rot_angle_override": true
     }
   }
 }

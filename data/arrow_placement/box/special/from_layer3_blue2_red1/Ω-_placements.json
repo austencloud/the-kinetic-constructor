@@ -118,7 +118,7 @@
     },
     "(s, 0, 1)": {
       "anti_from_layer2": [70, -35],
-      "anti_from_layer1": [90, -50],
+      "anti_from_layer1": {},
       "dash_from_layer2_rot_angle_override": true
     },
     "(s, 0, 1.5)": {

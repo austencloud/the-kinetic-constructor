@@ -1,0 +1,12 @@
+{
+  "Γ": {
+    "(s, 0.5, 1, cl, op)": {
+      "red": [-50, 50],
+      "red_rot_angle_override": true
+    },
+    "(s, 1, 0.5)": {
+      "blue": [-50, 50],
+      "red_rot_angle_override": true
+    }
+  }
+}
