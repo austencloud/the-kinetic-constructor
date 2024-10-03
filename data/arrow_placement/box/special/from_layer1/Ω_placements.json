@@ -175,6 +175,9 @@
     },
     "(s, 1.5, 2)": {
       "static_rot_angle_override": true
+    },
+    "(o, 2, 3)": {
+      "static_rot_angle_override": true
     }
   }
 }
