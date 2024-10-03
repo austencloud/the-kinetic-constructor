@@ -165,6 +165,9 @@
       "red": [-35, 10],
       "swap_beta_ne_radial_blue_dash_nw_red_dash_nw": true,
       "swap_beta_nw_radial_blue_dash_sw_red_dash_sw": true
+    },
+    "(o, 2, 3)": {
+      "swap_beta_ne_radial_blue_dash_se_red_dash_nw": true
     }
   }
 }

@@ -40,6 +40,14 @@
       "static_rot_angle_override": true,
       "swap_beta_sw_nonradial_blue_static_sw_red_pro_s": true,
       "pro": [-55, 40]
+    },
+    "(o, 2, 3)": {
+      "static_rot_angle_override": true,
+      "static": [-10, -15]
+    },
+    "(o, 3, 1)": {
+      "static_rot_angle_override": true,
+      "static": [-70, -70]
     }
   }
 }
