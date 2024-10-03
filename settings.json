@@ -69,16 +69,24 @@
                 "sequence_level": 3,
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",
-                "continuous_rotation": true
+                "continuous_rotation": true,
+                "selected_letter_types": [
+                    "Type1",
+                    "Type2"
+                ]
             },
             "freeform_auto_builder": {
                 "sequence_type": "freeform",
                 "sequence_length": 16,
                 "max_turn_intensity": 3,
                 "sequence_level": 2,
-                "continuous_rotation": true
+                "continuous_rotation": true,
+                "selected_letter_types": [
+                    "Type1",
+                    "Type2"
+                ]
             },
-            "current_auto_builder": "circular"
+            "current_auto_builder": "freeform"
         },
         "manual_builder": {},
         "last_used_builder": "auto"

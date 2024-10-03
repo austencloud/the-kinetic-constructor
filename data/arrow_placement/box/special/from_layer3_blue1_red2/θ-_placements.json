@@ -14,6 +14,9 @@
       "dash_from_layer1_rot_angle_override": true,
       "dash_from_layer1": [50, 40],
       "pro_from_layer2": [-20, 115]
+    },
+    "(2.5, 0)": {
+      "pro_from_layer2": [20, 100]
     }
   }
 }

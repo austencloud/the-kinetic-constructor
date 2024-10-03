@@ -80,9 +80,6 @@
     "(o, 1.5, 1)": {
       "anti": [0, 45]
     },
-    "(s, 1.5, 2)": {
-      "anti": [0, 45]
-    },
     "(o, 1.5, 2)": {
       "anti": [0, 45],
       "static_rot_angle_override": true,
@@ -175,6 +172,9 @@
     },
     "(s, 1, 1)": {
       "static": [50, 50]
+    },
+    "(s, 1.5, 2)": {
+      "static_rot_angle_override": true
     }
   }
 }

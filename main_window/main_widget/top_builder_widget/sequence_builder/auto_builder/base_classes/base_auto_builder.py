@@ -156,6 +156,19 @@ class BaseAutoBuilder:
         ]
         return filtered_options if filtered_options else options
 
+    def _filter_options_by_letter_type(self, options: list[dict]) -> list[dict]:
+        """Filter options based on selected letter types."""
+        selected_types = self.auto_builder_frame.letter_type_picker.get_selected_letter_types()
+        selected_letters = []
+        for letter_type in selected_types:
+            selected_letters.extend(letter_type.letters)
+
+        filtered_options = [
+            option for option in options if option["letter"] in selected_letters
+        ]
+        return filtered_options
+
+
     def _set_turns(self, pictograph: dict, turn_blue: float, turn_red: float) -> dict:
         pictograph["blue_attributes"]["turns"] = turn_blue
         pictograph["red_attributes"]["turns"] = turn_red

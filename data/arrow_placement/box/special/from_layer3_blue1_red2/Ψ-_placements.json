@@ -62,7 +62,8 @@
     },
     "(s, 1.5, 2)": {
       "blue": {},
-      "red": [20, 80]
+      "red": [20, 80],
+      "swap_beta_ne_nonradial_blue_dash_nw_red_dash_nw": true
     },
     "(s, 2, 2)": {
       "blue": [-140, -20]
