@@ -10,6 +10,22 @@
     },
     "(ccw, 1, op)": {
       "dash_from_layer2_rot_angle_override": true
+    },
+    "(s, 2, 1)": {
+      "blue": [30, 25]
+    },
+    "(s, 1, 2, , )": {
+      "dash_from_layer2_rot_angle_override": true,
+      "blue": [100, 140],
+      "red": [0, 100]
+    },
+    "(s, 2, 1, op, cl)": {
+      "blue": [5, 65]
+    },
+    "(s, 1, 2, cl, op)": {
+      "dash_from_layer2_rot_angle_override": true,
+      "blue": [80, 110],
+      "red": [0, 100]
     }
   }
 }

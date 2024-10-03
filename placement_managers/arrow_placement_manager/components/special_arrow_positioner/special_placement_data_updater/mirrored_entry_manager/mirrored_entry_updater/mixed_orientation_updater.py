@@ -26,7 +26,7 @@ class MixedOrientationUpdater(BaseMirroredEntryUpdater):
         )
         layer = "1" if self.arrow.motion.start_ori in [IN, OUT] else "2"
 
-        if letter in ["S", "T"]:
+        if letter.value in ["S", "T"]:
             attr = self.arrow.motion.lead_state
             key = f"{attr}_from_layer{layer}"
         elif self.arrow.pictograph.check.has_hybrid_motions():

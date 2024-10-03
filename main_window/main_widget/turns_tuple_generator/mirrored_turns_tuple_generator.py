@@ -26,6 +26,9 @@ class MirroredTurnsTupleGenerator:
             ):
                 return self.turns_tuple_generator.generate_turns_tuple(arrow.pictograph)
 
+        if letter.value == "Λ-":
+            return self.handle_lambda_dash(arrow)
+
         mirrored_logic = {
             LetterType.Type1: self._handle_type1,
             LetterType.Type4: self._handle_type4,
@@ -73,3 +76,10 @@ class MirroredTurnsTupleGenerator:
             prop_rotation = "cw" if "ccw" in turns_tuple else "ccw"
             turns = turns_tuple[turns_tuple.find(",") + 2 : -1]
             return f"({prop_rotation}, {turns})"
+
+    def handle_lambda_dash(self, arrow: Arrow):
+        turns_tuple = self.turns_tuple_generator.generate_turns_tuple(arrow.pictograph)
+        if arrow.motion.turns > 0:
+            items = turns_tuple.strip("()").split(", ")
+            return f"({items[0]}, {items[2]}, {items[1]}, {items[4]}, {items[3]})"
+        return turns_tuple
