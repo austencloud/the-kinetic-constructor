@@ -572,15 +572,15 @@
       "swap_beta_e_nonradial_blue_pro_se_red_static_e": true,
       "swap_beta_w_nonradial_blue_pro_nw_red_static_w": true
     },
-    "(o, 3, 3)": {
-      "pro_from_layer2": [-55, 80]
-    },
     "(s, 0, 1)": {
       "static_from_layer2": [50, -50],
       "static_from_layer2_rot_angle_override": true
     },
     "(o, 0.5, 1.5)": {
       "pro_from_layer1": [-70, 45]
+    },
+    "(o, 3, 3)": {
+      "pro_from_layer2": [-20, 90]
     }
   }
 }

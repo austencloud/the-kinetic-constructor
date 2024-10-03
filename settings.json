@@ -82,16 +82,11 @@
             "freeform_auto_builder": {
                 "sequence_type": "freeform",
                 "sequence_length": 16,
-                "max_turn_intensity": 3,
+                "max_turn_intensity": 1,
                 "sequence_level": 2,
                 "continuous_rotation": true,
                 "selected_letter_types": [
-                    "Type1",
-                    "Type2",
-                    "Type3",
-                    "Type4",
-                    "Type5",
-                    "Type6"
+                    "Type1"
                 ]
             },
             "current_auto_builder": "freeform"

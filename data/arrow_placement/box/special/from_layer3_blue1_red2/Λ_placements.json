@@ -159,6 +159,9 @@
       "dash_from_layer2": [120, 120]
     },
     "(s, 1.5, 0.5, , )": {},
-    "(o, 1.5, 0.5, , )": {}
+    "(o, 1.5, 0.5, , )": {},
+    "(o, 1, 1, cl, cl)": {
+      "dash_from_layer2_rot_angle_override": true
+    }
   }
 }

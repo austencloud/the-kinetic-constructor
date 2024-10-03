@@ -2,7 +2,7 @@
   "Γ": {
     "(0, 1, cl)": {
       "static_from_layer1_rot_angle_override": true,
-      "red": [-70, 0]
+      "red": {}
     },
     "(0, 3, cl)": {
       "static_from_layer1_rot_angle_override": true

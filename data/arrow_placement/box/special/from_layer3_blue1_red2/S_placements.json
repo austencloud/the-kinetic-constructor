@@ -45,7 +45,9 @@
     },
     "(3, 1)": {
       "red_trailing": [-65, 40],
-      "blue_leading": [0, 10]
+      "blue_leading": [0, 10],
+      "trailing": {},
+      "leading": [-30, -15]
     },
     "(3, 1.5)": {
       "red_leading": [-100, 170]
@@ -70,6 +72,9 @@
     "(0, 0.5)": {
       "leading_from_layer2": null,
       "trailing_from_layer1": null
+    },
+    "(3, 0)": {
+      "leading": [-30, -20]
     }
   }
 }

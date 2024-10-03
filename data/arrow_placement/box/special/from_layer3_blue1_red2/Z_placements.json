@@ -211,6 +211,7 @@
     "(o, 0.5, 1)": {
       "swap_beta_s_nonradial_blue_anti_sw_red_static_s": true,
       "swap_beta_n_nonradial_blue_anti_ne_red_static_n": true
-    }
+    },
+    "(o, 2, 1)": {}
   }
 }

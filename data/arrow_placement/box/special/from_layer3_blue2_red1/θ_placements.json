@@ -9,6 +9,10 @@
     },
     "(1, 0)": {
       "pro_from_layer1": [20, 20]
+    },
+    "(o, 3, 2)": {
+      "static_from_layer2_rot_angle_override": true,
+      "pro_from_layer1": [-35, -20]
     }
   }
 }
