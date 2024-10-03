@@ -124,7 +124,8 @@
       "static": [15, 0]
     },
     "(s, 3, 3)": {
-      "pro": [-10, 5]
+      "static_rot_angle_override": true,
+      "pro": [10, 20]
     },
     "(o, 3, 0.5)": {
       "pro": [35, 0],

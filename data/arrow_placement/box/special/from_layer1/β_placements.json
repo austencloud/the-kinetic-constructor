@@ -8,7 +8,8 @@
     "(cw, 2, 0)": {
       "static_rot_angle": 0,
       "blue": [-25, 0],
-      "blue_rot_angle": 0
+      "blue_rot_angle": 0,
+      "swap_beta_se_radial_blue_static_se_red_static_se": true
     },
     "(s, 1, 1.5)": {
       "blue": [-100, -5],
@@ -246,10 +247,10 @@
       "blue": [-10, 25]
     },
     "(o, 2, 2)": {
-      "red": [-25, 0],
       "red_rot_angle": 0,
-      "blue": [-30, 0],
-      "blue_rot_angle": 0
+      "blue_rot_angle": 0,
+      "red": [-10, -30],
+      "blue": [-10, -30]
     },
     "(s, 3, 2)": {
       "blue": [-40, 0]
