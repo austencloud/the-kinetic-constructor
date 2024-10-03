@@ -13,12 +13,6 @@
       "static": [-100, -100],
       "static_rot_angle_override": true
     },
-    "(0.5, 0, op)": {
-      "dash": [-70, -90]
-    },
-    "(0.5, 0, cl)": {
-      "dash": [-65, -90]
-    },
     "(s_0.5, 0.5, op, cl)": {
       "static": [-95, -100]
     },
@@ -58,11 +52,6 @@
     "(s, 1, 0.5, op, cl)": {
       "static_rot_angle_override": true,
       "static": [100, 100]
-    },
-    "(s, 1, 0.5, cl, op)": {
-      "static_rot_angle_override": true,
-      "static": [100, 100],
-      "dash": [-20, -60]
     },
     "(s, 1.5, 0.5, op, cl)": {
       "static_rot_angle_override": true,
@@ -159,11 +148,6 @@
     "(s, 3, 0.5, cl, op)": {
       "static_rot_angle_override": true,
       "static": [100, 100]
-    },
-    "(o, 0.5, 1, op, op)": {
-      "static_rot_angle_override": true,
-      "static": [95, 15],
-      "dash": [-65, -115]
     },
     "(o, 0.5, 0.5, op, op)": {
       "static_rot_angle_override": true,
@@ -318,6 +302,7 @@
     "(s, 0.5, 1, op, cl)": {
       "static_rot_angle_override": true,
       "static": [-50, -50]
-    }
+    },
+    "(s, 1, 0.5, cl, op)": {}
   }
 }

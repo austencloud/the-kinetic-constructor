@@ -10,7 +10,6 @@
       "red": [-20, -145],
       "blue": [-20, -75]
     },
-
     "(s, 2, 1)": {
       "dash_from_layer2_rot_angle_override": true,
       "red": [100, 140],

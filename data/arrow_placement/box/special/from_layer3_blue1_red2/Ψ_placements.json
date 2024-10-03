@@ -8,9 +8,8 @@
       "swap_beta_e_radial_blue_dash_s_red_static_e": true
     },
     "(s, 1, 1)": {
-      "static_from_layer2_rot_angle_override": true,
-      "static_from_layer2": [5, -70],
-      "dash_from_layer1": [0, -60]
+      "static_from_layer2": [65, -75],
+      "dash_from_layer1": [35, 85]
     },
     "(cw, 0, 1.5)": {
       "static_from_layer1": [0, 20],
@@ -23,6 +22,9 @@
     "(cw, 1.5, 0)": {
       "swap_beta_se_radial_blue_static_se_red_dash_ne": true
     },
-    "(s, 0.5, 0.5)": {}
+    "(s, 0.5, 0.5)": {},
+    "(ccw, 1, 0)": {
+      "dash_from_layer2_rot_angle_override": true
+    }
   }
 }

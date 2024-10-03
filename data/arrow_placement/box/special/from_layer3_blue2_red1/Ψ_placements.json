@@ -2,9 +2,8 @@
   "Ψ": {
     "(0, 0)": {},
     "(s, 1, 1)": {
-      "static_from_layer2_rot_angle_override": true,
-      "static_from_layer2": [5, -70],
-      "dash_from_layer1": [0, -60]
+      "static_from_layer2": [65, -75],
+      "dash_from_layer1": [35, 85]
     },
     "(cw, 0, 1.5)": {
       "static_from_layer1": [0, 20],
@@ -13,6 +12,9 @@
     "(cw, 1.5, 0)": {
       "swap_beta_sw_nonradial_blue_static_sw_red_dash_se": true
     },
-    "(ccw, 0, 1)": {}
+    "(ccw, 0, 1)": {},
+    "(ccw, 1, 0)": {
+      "dash_from_layer2_rot_angle_override": true
+    }
   }
 }

@@ -3,11 +3,7 @@
     "(0.5, 0)": {
       "anti": [-150, 85]
     },
-    "(s, 0, 0.5)": {
-      "anti": [105, -75],
-      "static_rot_angle_override": true,
-      "static": [100, 100]
-    },
+    "(s, 0, 0.5)": {},
     "(o, 0, 0.5)": {
       "anti": [90, -95]
     },
@@ -31,10 +27,7 @@
       "static_rot_angle_override": true,
       "static": [15, 0]
     },
-    "(s, 0.5, 0.5)": {
-      "static_rot_angle_override": true,
-      "static": [100, 100]
-    },
+    "(s, 0.5, 0.5)": {},
     "(s, 0.5, 1)": {
       "anti": [-130, 105],
       "static": [-80, 0]

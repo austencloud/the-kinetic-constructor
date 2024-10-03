@@ -26,6 +26,7 @@
       "dash_from_layer2_rot_angle_override": true,
       "blue": [80, 110],
       "red": [0, 100]
-    }
+    },
+    "(s, 0.5, 0.5, op, cl)": {}
   }
 }
