@@ -77,6 +77,10 @@
     },
     "(3, 0)": {
       "leading": [-30, -20]
+    },
+    "(1, 0.5)": {
+      "trailing_from_layer1": null,
+      "leading_from_layer2": null
     }
   }
 }

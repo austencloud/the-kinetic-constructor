@@ -58,7 +58,9 @@ class DefaultArrowPositioner:
     def _load_default_placements_for_motion_type(
         self, motion_type: str
     ) -> dict[str, dict[str, list[int]]]:
-        grid_mode = self.placement_manager.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
+        grid_mode = (
+            self.placement_manager.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()
+        )
         if grid_mode == DIAMOND:
             json_filename = self.diamond_placements_files.get(motion_type)
             json_path = get_images_and_data_path(
@@ -93,11 +95,22 @@ class DefaultArrowPositioner:
         letter_suffix = ""
         if (
             arrow.pictograph.letter.value
-            and arrow.pictograph.letter
-            in arrow.pictograph.letter.get_letters_by_condition(LetterConditions.DASH)
+            and (
+                arrow.pictograph.letter
+                in arrow.pictograph.letter.get_letters_by_condition(
+                    LetterConditions.TYPE3
+                )
+            )
+            or (
+                arrow.pictograph.letter
+                in arrow.pictograph.letter.get_letters_by_condition(
+                    LetterConditions.TYPE5
+                )
+            )
         ):
             char = arrow.pictograph.letter.value[:-1]
             letter_suffix = f"_{char}_dash"
+
         elif arrow.pictograph.letter:
             letter_suffix = f"_{arrow.pictograph.letter.value}"
 

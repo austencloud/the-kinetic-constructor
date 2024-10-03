@@ -74,6 +74,10 @@
     },
     "(3, 0)": {
       "leading_from_layer1": null
+    },
+    "(1, 0.5)": {
+      "trailing": [-25, 70],
+      "leading": [30, 95]
     }
   }
 }

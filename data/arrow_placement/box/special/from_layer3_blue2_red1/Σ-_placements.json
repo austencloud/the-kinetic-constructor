@@ -16,7 +16,6 @@
       "pro_from_layer2": [-105, 65],
       "dash_from_layer2_rot_angle_override": true
     },
-    "(s, 0.5, 0.5)": {},
     "(s, 0.5, 1)": {},
     "(s, 0.5, 1.5)": {},
     "(s, 0.5, 2)": {},
@@ -112,6 +111,10 @@
     },
     "(s, 0, 1)": {
       "pro_from_layer2": [0, -30]
+    },
+    "(o, 1, 1)": {},
+    "(o, 0, 1)": {
+      "dash_from_layer2_rot_angle_override": true
     }
   }
 }

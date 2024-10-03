@@ -43,7 +43,7 @@
         "glyph_visibility": {
             "VTG": false,
             "TKA": true,
-            "Elemental": false,
+            "Elemental": true,
             "EndPosition": false
         },
         "grid_visibility": {
@@ -52,8 +52,10 @@
     },
     "dictionary": {
         "sort_method": "date_added",
-        "current_section": "filter_choice",
-        "current_filter": null
+        "current_section": "browser",
+        "current_filter": {
+            "sequence_length": 20
+        }
     },
     "sequence_layout": {
         "grow_sequence": true,
@@ -64,7 +66,7 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 20,
+                "sequence_length": 36,
                 "max_turn_intensity": 1,
                 "sequence_level": 3,
                 "rotation_type": "quartered",
@@ -83,7 +85,7 @@
                 "sequence_type": "freeform",
                 "sequence_length": 16,
                 "max_turn_intensity": 1,
-                "sequence_level": 2,
+                "sequence_level": 3,
                 "continuous_rotation": true,
                 "selected_letter_types": [
                     "Type1",

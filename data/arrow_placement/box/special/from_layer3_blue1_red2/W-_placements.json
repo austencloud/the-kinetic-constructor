@@ -79,7 +79,7 @@
       "dash_from_layer2": [55, -50]
     },
     "(o, 1, 1)": {
-      "dash_from_layer2": [0, -125]
+      "dash_from_layer2_rot_angle_override": true
     },
     "(o, 1, 2)": {
       "pro_from_layer1": [-35, 10],
@@ -148,10 +148,7 @@
       "pro_from_layer2": [-45, 20]
     },
     "(o, 0, 0.5)": {
-      "pro_from_layer2": [40, 5]
-    },
-    "(o, 0, 1)": {
-      "pro_from_layer2": [40, -15]
+      "pro_from_layer2": [0, -40]
     },
     "(o, 0, 1.5)": {
       "pro_from_layer2": [40, -15]
@@ -176,6 +173,9 @@
     "(s, 1, 0.5)": {
       "pro_from_layer2": [20, 100],
       "dash_from_layer1": [-50, 90]
+    },
+    "(o, 0, 1)": {
+      "pro_from_layer2": [0, -20]
     }
   }
 }

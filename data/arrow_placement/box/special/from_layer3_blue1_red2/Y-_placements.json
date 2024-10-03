@@ -219,8 +219,7 @@
       "dash_from_layer2_rot_angle_override": true
     },
     "(s, 0, 0.5)": {
-      "pro_from_layer1": [20, -60],
-      "dash_from_layer2": [30, -40]
+      "pro_from_layer1": [0, -55]
     },
     "(s, 0, 1)": {
       "dash_from_layer2_rot_angle_override": true,
@@ -232,6 +231,11 @@
     },
     "(0.5, 0)": {
       "pro_from_layer1": [-40, 40]
+    },
+    "(o, 0, 0.5)": {
+      "swap_beta_sw_nonradial_blue_dash_nw_red_pro_s": true,
+      "swap_beta_se_nonradial_blue_dash_sw_red_pro_e": true,
+      "swap_beta_ne_nonradial_blue_dash_se_red_pro_n": true
     }
   }
 }

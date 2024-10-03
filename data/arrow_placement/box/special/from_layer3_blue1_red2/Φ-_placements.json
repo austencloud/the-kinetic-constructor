@@ -84,8 +84,8 @@
       "dash_from_layer2_rot_angle_override": true
     },
     "(o, 1, 1)": {
-      "blue": [-10, -60],
-      "red": [0, -165]
+      "blue": {},
+      "red": [75, 80]
     },
     "(o, 1.5, 1)": {
       "dash_from_layer2_rot_angle_override": true

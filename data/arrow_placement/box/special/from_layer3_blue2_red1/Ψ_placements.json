@@ -15,6 +15,15 @@
     "(ccw, 0, 1)": {},
     "(ccw, 1, 0)": {
       "dash_from_layer2_rot_angle_override": true
+    },
+    "(o, 1, 0.5)": {
+      "dash_from_layer2_rot_angle_override": true,
+      "swap_beta_sw_nonradial_blue_dash_se_red_static_sw": true
+    },
+    "(o, 1, 1)": {
+      "static_from_layer2_rot_angle_override": true,
+      "static_from_layer2": [-70, 70],
+      "dash_from_layer1": [45, 45]
     }
   }
 }

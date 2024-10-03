@@ -305,6 +305,10 @@
     },
     "(ccw, 0, 2)": {
       "dash": [15, 0]
+    },
+    "(ccw, 1, 0)": {
+      "dash_rot_angle_override": true,
+      "swap_beta_ne_nonradial_blue_static_ne_red_dash_se": true
     }
   }
 }

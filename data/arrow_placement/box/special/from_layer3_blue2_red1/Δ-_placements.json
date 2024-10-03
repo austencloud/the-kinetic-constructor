@@ -213,7 +213,6 @@
       "dash_from_layer2": [-20, -165]
     },
     "(o, 0.5, 1)": {
-      "dash_from_layer2_rot_angle_override": true,
       "anti_from_layer1": {}
     }
   }

@@ -5,9 +5,6 @@
       "static_from_layer2_rot_angle_override": true,
       "red": [0, -95]
     },
-    "(s, 1, 1)": {
-      "blue": [130, 0]
-    },
     "(s, 2, 1)": {
       "red": [0, 110]
     },
@@ -207,6 +204,10 @@
     },
     "(s, 1, 0.5)": {
       "swap_beta_se_radial_blue_static_se_red_static_se": true
+    },
+    "(s, 1, 1)": {
+      "blue": [70, 65],
+      "red": [35, -50]
     }
   }
 }

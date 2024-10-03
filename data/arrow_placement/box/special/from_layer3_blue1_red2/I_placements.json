@@ -21,8 +21,10 @@
       "anti_from_layer1": [65, -45]
     },
     "(0.5, 0)": {
-      "pro_from_layer1": [30, 55],
-      "anti_from_layer1": [45, -100]
+      "pro_from_layer1": [-45, 40],
+      "anti_from_layer2": [25, 40],
+      "swap_beta_ne_nonradial_blue_pro_n_red_anti_n": true,
+      "anti_from_layer1": [0, -110]
     },
     "(0.5, 0.5)": {
       "pro_from_layer1": [0, 55]
@@ -49,7 +51,8 @@
       "anti_from_layer2": [5, 5]
     },
     "(1, 0.5)": {
-      "pro_from_layer1": [-40, -85]
+      "pro_from_layer1": [90, -15],
+      "anti_from_layer2": [-20, 95]
     },
     "(1, 1)": {
       "pro_from_layer1": [-95, -15],

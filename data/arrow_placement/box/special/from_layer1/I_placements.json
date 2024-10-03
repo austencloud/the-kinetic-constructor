@@ -22,9 +22,6 @@
     "(0, 2)": {
       "pro": [80, -105]
     },
-    "(0.5, 0)": {
-      "anti": [120, -95]
-    },
     "(0.5, 1.5)": {
       "pro": [55, 75]
     },
@@ -127,6 +124,13 @@
     },
     "(0, 1)": {
       "pro": [25, -95]
+    },
+    "(0.5, 0.5)": {
+      "swap_beta_ne_nonradial_blue_pro_n_red_anti_n": true,
+      "swap_beta_se_nonradial_blue_pro_e_red_anti_e": true
+    },
+    "(0.5, 0)": {
+      "anti": [-10, -95]
     }
   }
 }

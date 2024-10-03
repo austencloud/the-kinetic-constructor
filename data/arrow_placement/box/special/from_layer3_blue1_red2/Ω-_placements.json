@@ -97,14 +97,14 @@
       "anti_from_layer1": [25, -30]
     },
     "(s, 0, 0.5)": {
-      "anti_from_layer2": [5, 50],
-      "dash_from_layer1": [25, 95],
+      "anti_from_layer2": [20, -90],
       "dash_from_layer2": {},
-      "anti_from_layer1": [20, -80]
+      "anti_from_layer1": [20, -80],
+      "dash_from_layer1": {}
     },
     "(s, 0, 1)": {
-      "anti_from_layer2": [70, -35],
-      "dash_from_layer2_rot_angle_override": true
+      "dash_from_layer2": [95, 90],
+      "anti_from_layer2": [0, -75]
     },
     "(s, 0, 1.5)": {
       "anti_from_layer2": [80, -35]
@@ -161,6 +161,9 @@
     "(o, 2.5, 2.5)": {
       "dash_from_layer1": [-115, -80]
     },
-    "(s, 2, 2)": {}
+    "(s, 2, 2)": {},
+    "(s, 1, 0.5)": {
+      "anti_from_layer1": [0, -65]
+    }
   }
 }

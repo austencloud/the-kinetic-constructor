@@ -86,7 +86,9 @@
       "dash_from_layer1": [0, -90]
     },
     "(s, 0.5, 0.5)": {
-      "anti_from_layer1": [-120, 45]
+      "anti_from_layer1": [-120, 45],
+      "dash_from_layer1": {},
+      "anti_from_layer2": {}
     },
     "(s, 0.5, 1.5)": {
       "anti_from_layer1": [-100, 125],
@@ -151,6 +153,9 @@
     "(s, 1, 1.5)": {
       "swap_beta_nw_radial_blue_anti_w_red_dash_ne": true,
       "dash_from_layer2": {}
+    },
+    "(o, 1, 1)": {
+      "dash_from_layer2_rot_angle_override": true
     }
   }
 }
