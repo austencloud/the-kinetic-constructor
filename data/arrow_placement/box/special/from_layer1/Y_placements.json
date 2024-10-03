@@ -30,6 +30,16 @@
     },
     "(3, 0)": {
       "pro": [45, 15]
+    },
+    "(o, 1, 3)": {
+      "static_rot_angle_override": true,
+      "static": [-10, -15]
+    },
+    "(o, 0.5, 2.5)": {
+      "static": [-15, 15],
+      "static_rot_angle_override": true,
+      "swap_beta_sw_nonradial_blue_static_sw_red_pro_s": true,
+      "pro": [-55, 40]
     }
   }
 }

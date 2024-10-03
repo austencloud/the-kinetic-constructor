@@ -218,6 +218,9 @@
     },
     "(s, 0.5, 1.5, , )": {
       "static_rot_angle_override": true
+    },
+    "(3, 0, op)": {
+      "dash_rot_angle_override": true
     }
   }
 }

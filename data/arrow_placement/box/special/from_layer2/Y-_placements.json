@@ -163,6 +163,10 @@
     },
     "(s, 1, 1.5)": {
       "pro": [-5, 110]
+    },
+    "(o, 0, 1)": {
+      "dash_rot_angle_override": true,
+      "swap_beta_nw_nonradial_blue_pro_n_red_dash_sw": true
     }
   }
 }

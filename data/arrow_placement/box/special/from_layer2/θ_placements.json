@@ -53,7 +53,9 @@
       "static_rot_angle_override": true
     },
     "(o, 2, 3)": {
-      "static_rot_angle_override": true
+      "pro": [40, 50],
+      "static_rot_angle_override": true,
+      "static": [-10, 10]
     },
     "(o, 2, 0.5)": {
       "static_rot_angle_override": true,

@@ -67,6 +67,7 @@
     },
     "(o, 0.5, 1)": {
       "dash_rot_angle_override": true
-    }
+    },
+    "(o, 0, 1)": {}
   }
 }
