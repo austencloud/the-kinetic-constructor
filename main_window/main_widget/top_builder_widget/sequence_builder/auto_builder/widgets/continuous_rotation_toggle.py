@@ -19,10 +19,11 @@ class ContinuousRotationToggle(QWidget):
         self.continuous_label = QLabel("Continuous")
         self.toggle = PyToggle()
         self.toggle.stateChanged.connect(self._toggle_changed)
-
+        self.layout.addStretch(1)
         self.layout.addWidget(self.random_label)
         self.layout.addWidget(self.toggle)
         self.layout.addWidget(self.continuous_label)
+        self.layout.addStretch(1)
 
         # Initial style update
         self.update_mode_label_styles()

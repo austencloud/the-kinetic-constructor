@@ -50,10 +50,10 @@ class LetterTypePicker(QWidget):
 
         checkboxes_layout = QHBoxLayout()
         checkboxes_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
+        checkboxes_layout.addStretch(1)
         for checkbox in self.checkboxes.values():
             checkboxes_layout.addWidget(checkbox)
-
+            checkboxes_layout.addStretch(1)
         layout.addLayout(checkboxes_layout)
         self.setLayout(layout)
 

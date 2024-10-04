@@ -273,6 +273,10 @@
     "(0, 0)": {
       "pro_from_layer2": [0, -60],
       "anti_from_layer1": {}
+    },
+    "(fl, 2)": {
+      "float_from_layer2": [0, 0],
+      "anti_from_layer1": [0, -85]
     }
   }
 }

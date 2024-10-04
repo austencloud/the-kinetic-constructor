@@ -16,8 +16,7 @@
     },
     "(s, 1.5, 0.5)": {
       "static": [100, 110],
-      "pro": [0, 15],
-      "static_rot_angle_override": true
+      "pro": [0, 15]
     },
     "(s, 1.5, 1)": {
       "static_rot_angle_override": true,

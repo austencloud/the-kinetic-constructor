@@ -171,6 +171,10 @@
     "(3, 3)": {
       "pro_from_layer1": [-100, -30],
       "anti_from_layer1": [100, -75]
+    },
+    "(2, fl)": {
+      "float_from_layer2": [0, 0],
+      "anti_from_layer1": [0, -85]
     }
   }
 }
