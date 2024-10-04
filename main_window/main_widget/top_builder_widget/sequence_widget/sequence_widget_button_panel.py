@@ -7,7 +7,6 @@ from main_window.main_widget.dictionary_widget.full_screen_image_overlay import 
     FullScreenImageOverlay,
 )
 from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import (
-    StartPositionBeat,
     StartPositionBeatView,
 )
 from utilities.path_helpers import get_images_and_data_path

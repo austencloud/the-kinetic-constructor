@@ -1,4 +1,3 @@
-from tkinter import NO
 from typing import TYPE_CHECKING
 from data.quartered_permutations import quartered_permutations
 from data.halved_permutations import halved_permutations

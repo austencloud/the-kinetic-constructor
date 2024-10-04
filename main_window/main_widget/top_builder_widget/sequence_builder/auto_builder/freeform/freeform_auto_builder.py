@@ -4,9 +4,6 @@ import random
 from copy import deepcopy
 from PyQt6.QtCore import Qt
 from data.constants import CLOCKWISE, COUNTER_CLOCKWISE
-from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.widgets.letter_type_picker import (
-    LetterTypePicker,
-)
 from ..base_classes.base_auto_builder import BaseAutoBuilder
 from ..turn_intensity_manager import TurnIntensityManager
 

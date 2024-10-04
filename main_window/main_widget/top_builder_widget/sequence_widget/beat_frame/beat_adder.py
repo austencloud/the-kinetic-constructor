@@ -4,7 +4,6 @@ if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
         Beat,
     )
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
 
 

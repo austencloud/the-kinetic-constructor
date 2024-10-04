@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from utilities.path_helpers import get_images_and_data_path
 from PyQt6.QtSvg import QSvgRenderer
 from objects.arrow.arrow import Arrow
@@ -26,8 +26,13 @@ class ArrowSvgManager:
         start_ori = arrow.motion.start_ori
         if arrow.motion.motion_type == FLOAT:  # Handle the float case
             return get_images_and_data_path("images/arrows/float.svg")
+        arrow_turns: Union[str, int, float] = arrow.motion.turns
+        # if the turns are an int or a float, then make sure it's a float
+        if isinstance(arrow_turns, (int, float)):
+            turns = float(arrow_turns)
+        elif arrow_turns == "fl":
+            turns = "fl"
         if start_ori in [IN, OUT]:
-            turns = float(arrow.motion.turns)
             return get_images_and_data_path(
                 f"images/arrows/{arrow.motion.motion_type}/from_radial/"
                 f"{arrow.motion.motion_type}_{turns}.svg"

@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING, Union
 
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame import beat
 from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
     Beat,
     BeatView,

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 
 
 from .image_export_layout_handler import ImageExportLayoutHandler
@@ -10,12 +10,6 @@ from .image_saver import ImageSaver
 
 if TYPE_CHECKING:
     from base_widgets.base_beat_frame import BaseBeatFrame
-    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
-        SequenceWidgetBeatFrame,
-    )
-    from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame import (
-        TempBeatFrame,
-    )
 
 
 from typing import TYPE_CHECKING

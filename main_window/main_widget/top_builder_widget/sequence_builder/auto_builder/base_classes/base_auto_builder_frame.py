@@ -1,10 +1,7 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QPushButton, QWidget
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QPushButton
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.widgets.letter_type_picker import (
-    LetterTypePicker,
-)
 from ..widgets.continuous_rotation_toggle import ContinuousRotationToggle
 from ..widgets.length_adjuster import LengthAdjuster
 from ..widgets.level_selector import LevelSelector

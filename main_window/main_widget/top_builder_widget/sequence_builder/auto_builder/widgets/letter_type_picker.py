@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
@@ -75,7 +75,6 @@ class LetterTypePicker(QWidget):
 
     def get_selected_letter_types(self) -> list["LetterType"]:
         """Return a list of selected letter types."""
-        from Enums.letters import LetterType
 
         selected_types = []
         for letter_type, checkbox in self.checkboxes.items():
@@ -88,7 +87,6 @@ class LetterTypePicker(QWidget):
         saved_types = self.auto_builder_settings.get_auto_builder_setting(
             "selected_letter_types", self.auto_builder_frame.builder_type
         )
-        from Enums.letters import LetterType
 
         if saved_types is None:
             # If no settings saved, default to all selected

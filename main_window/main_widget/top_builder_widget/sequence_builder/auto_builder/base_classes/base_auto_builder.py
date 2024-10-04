@@ -2,16 +2,23 @@ from copy import deepcopy
 import random
 from typing import TYPE_CHECKING
 from data.constants import (
+    ANTI,
     BLUE,
     BOX,
     DIAMOND,
+    END_ORI,
     IN,
+    MOTION_TYPE,
+    PRO,
+    PROP_ROT_DIR,
     RED,
     DASH,
+    START_ORI,
     STATIC,
     NO_ROT,
     CLOCKWISE,
     COUNTER_CLOCKWISE,
+    TURNS,
 )
 from ....sequence_widget.beat_frame.start_pos_beat import StartPositionBeat
 
@@ -82,10 +89,10 @@ class BaseAutoBuilder:
 
     def set_start_pos_to_in_orientation(self, pictograph_dict: dict) -> None:
         """Set the start position pictograph to the in orientation."""
-        pictograph_dict["blue_attributes"]["start_ori"] = IN
-        pictograph_dict["red_attributes"]["start_ori"] = IN
-        pictograph_dict["blue_attributes"]["end_ori"] = IN
-        pictograph_dict["red_attributes"]["end_ori"] = IN
+        pictograph_dict["blue_attributes"][START_ORI] = IN
+        pictograph_dict["red_attributes"][START_ORI] = IN
+        pictograph_dict["blue_attributes"][END_ORI] = IN
+        pictograph_dict["red_attributes"][END_ORI] = IN
 
     def modify_layout_for_chosen_number_of_beats(self, beat_count):
         self.sequence_widget.beat_frame.layout_manager.configure_beat_frame(
@@ -93,18 +100,18 @@ class BaseAutoBuilder:
         )
 
     def _update_start_oris(self, next_pictograph_dict, last_pictograph_dict):
-        next_pictograph_dict["blue_attributes"]["start_ori"] = last_pictograph_dict[
+        next_pictograph_dict["blue_attributes"][START_ORI] = last_pictograph_dict[
             "blue_attributes"
-        ]["end_ori"]
-        next_pictograph_dict["red_attributes"]["start_ori"] = last_pictograph_dict[
+        ][END_ORI]
+        next_pictograph_dict["red_attributes"][START_ORI] = last_pictograph_dict[
             "red_attributes"
-        ]["end_ori"]
+        ][END_ORI]
 
     def _update_end_oris(self, next_pictograph_dict):
-        next_pictograph_dict["blue_attributes"]["end_ori"] = (
+        next_pictograph_dict["blue_attributes"][END_ORI] = (
             self.ori_calculator.calculate_end_orientation(next_pictograph_dict, BLUE)
         )
-        next_pictograph_dict["red_attributes"]["end_ori"] = (
+        next_pictograph_dict["red_attributes"][END_ORI] = (
             self.ori_calculator.calculate_end_orientation(next_pictograph_dict, RED)
         )
 
@@ -117,24 +124,24 @@ class BaseAutoBuilder:
     ):
         def update_prop_rot_dir(color, rot_dir):
             attributes = next_beat[f"{color}_attributes"]
-            if attributes["motion_type"] in [DASH, STATIC]:
+            if attributes[MOTION_TYPE] in [DASH, STATIC]:
                 if is_continuous_rot_dir:
-                    if attributes["turns"] > 0:
-                        attributes["prop_rot_dir"] = rot_dir
+                    if attributes[TURNS] > 0:
+                        attributes[PROP_ROT_DIR] = rot_dir
                     else:
-                        attributes["prop_rot_dir"] = NO_ROT
+                        attributes[PROP_ROT_DIR] = NO_ROT
                 else:
-                    if attributes["turns"] > 0:
+                    if attributes[TURNS] > 0:
                         self._set_random_prop_rot_dir(next_beat, color)
                     else:
-                        attributes["prop_rot_dir"] = NO_ROT
+                        attributes[PROP_ROT_DIR] = NO_ROT
 
         update_prop_rot_dir(BLUE, blue_rot_dir)
         update_prop_rot_dir(RED, red_rot_dir)
 
     def _set_random_prop_rot_dir(self, next_pictograph_dict: dict, color: str) -> None:
         """Set a random prop rotation direction for the given color."""
-        next_pictograph_dict[f"{color}_attributes"]["prop_rot_dir"] = random.choice(
+        next_pictograph_dict[f"{color}_attributes"][PROP_ROT_DIR] = random.choice(
             [CLOCKWISE, COUNTER_CLOCKWISE]
         )
 
@@ -151,15 +158,29 @@ class BaseAutoBuilder:
         filtered_options = [
             option
             for option in options
-            if option["blue_attributes"]["prop_rot_dir"] in [blue_rot_dir, NO_ROT]
-            and option["red_attributes"]["prop_rot_dir"] in [red_rot_dir, NO_ROT]
+            if option["blue_attributes"][PROP_ROT_DIR] in [blue_rot_dir, NO_ROT]
+            and option["red_attributes"][PROP_ROT_DIR] in [red_rot_dir, NO_ROT]
         ]
         return filtered_options if filtered_options else options
 
+    def _set_turns(self, next_beat: dict, turn_blue: float, turn_red: float) -> dict:
+        """Set the turns for blue and red attributes, adjusting motion types if necessary."""
+        # Set blue turns
+        if turn_blue == "fl":
+            next_beat["blue_attributes"][TURNS] = "fl"
+            # Ensure motion type is 'pro' or 'anti'
+            if next_beat["blue_attributes"][MOTION_TYPE] not in [PRO, ANTI]:
+                next_beat["blue_attributes"][TURNS] = 0
+        else:
+            next_beat["blue_attributes"][TURNS] = turn_blue
 
+        # Set red turns
+        if turn_red == "fl":
+            next_beat["red_attributes"][TURNS] = "fl"
+            # Ensure motion type is 'pro' or 'anti'
+            if next_beat["red_attributes"][MOTION_TYPE] not in [PRO, ANTI]:
+                next_beat["red_attributes"][TURNS] = 0
+        else:
+            next_beat["red_attributes"][TURNS] = turn_red
 
-
-    def _set_turns(self, pictograph: dict, turn_blue: float, turn_red: float) -> dict:
-        pictograph["blue_attributes"]["turns"] = turn_blue
-        pictograph["red_attributes"]["turns"] = turn_red
-        return pictograph
+        return next_beat
