@@ -82,6 +82,9 @@
     },
     "(1, fl)": {
       "float_from_layer2": [-10, 10]
+    },
+    "(0.5, fl)": {
+      "float_from_layer2": [60, -65]
     }
   }
 }

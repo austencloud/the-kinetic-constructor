@@ -142,6 +142,9 @@
     },
     "(s, 0, 1)": {
       "dash_from_layer2_rot_angle_override": true
+    },
+    "(o, 0, 0.5)": {
+      "anti_from_layer1": [45, -75]
     }
   }
 }

@@ -194,6 +194,23 @@ class RotatedPermutationExecuter(PermutationExecutor):
             ),
         }
 
+        if previous_matching_beat["blue_attributes"].get("prefloat_motion_type", ""):
+            new_entry["blue_attributes"]["prefloat_motion_type"] = (
+                previous_matching_beat["blue_attributes"]["prefloat_motion_type"]
+            )
+        if previous_matching_beat["blue_attributes"].get("prefloat_prop_rot_dir", ""):
+            new_entry["blue_attributes"]["prefloat_prop_rot_dir"] = (
+                previous_matching_beat["blue_attributes"]["prefloat_prop_rot_dir"]
+            )
+        if previous_matching_beat["red_attributes"].get("prefloat_motion_type", ""):
+            new_entry["red_attributes"]["prefloat_motion_type"] = (
+                previous_matching_beat["red_attributes"]["prefloat_motion_type"]
+            )
+        if previous_matching_beat["red_attributes"].get("prefloat_prop_rot_dir", ""):
+            new_entry["red_attributes"]["prefloat_prop_rot_dir"] = (
+                previous_matching_beat["red_attributes"]["prefloat_prop_rot_dir"]
+            )
+
         new_entry["blue_attributes"]["end_ori"] = (
             self.circular_auto_builder.json_manager.ori_calculator.calculate_end_orientation(
                 new_entry, "blue"
