@@ -14,7 +14,8 @@
       "pro_from_layer1": [70, -65]
     },
     "(0, 0)": {
-      "anti_from_layer1": [95, -110]
+      "anti_from_layer1": [-5, 0],
+      "pro_from_layer2": [40, -35]
     },
     "(0, 1.5)": {
       "pro_from_layer2": [60, -35],
@@ -267,6 +268,9 @@
     "(3, 3)": {
       "pro_from_layer1": [-100, -30],
       "anti_from_layer1": [100, -75]
+    },
+    "(fl, 0)": {
+      "float_from_layer2": [90, -110]
     }
   }
 }

@@ -9,7 +9,7 @@
     "fl": [40, 0]
   },
   "float_to_nonradial_layer3_alpha": {
-    "fl": [-40, -0]
+    "fl": [40, -0]
   },
   "float_to_layer1_beta": {
     "fl": [40, 0]

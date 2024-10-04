@@ -41,6 +41,7 @@ class BeatAdder:
         self, index: int, new_beat: "Beat", beat_number: int, update_word: bool
     ) -> None:
         self.beats[index].set_beat(new_beat, beat_number)
+        self.beat_frame.selection_overlay.select_beat(self.beats[index])
         self.json_manager.updater.update_current_sequence_file_with_beat(
             self.beats[index]
         )

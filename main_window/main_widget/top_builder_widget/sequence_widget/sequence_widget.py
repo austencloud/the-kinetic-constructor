@@ -3,6 +3,8 @@ from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout
 
 
+from data.constants import FLOAT
+from letter_determiner.letter_determiner import LetterDeterminer
 from main_window.main_widget.top_builder_widget.sequence_widget.sequence_clearer import (
     SequenceClearer,
 )
@@ -153,6 +155,11 @@ class SequenceWidget(QWidget):
         self.beat_frame.beat_adder.add_beat_to_sequence(
             new_beat, override_grow_sequence, update_word
         )
+        for motion in new_beat.motions.values():
+            if motion.motion_type == FLOAT:
+                letter = self.main_widget.letter_determiner.determine_letter(motion)
+                new_beat.letter = letter
+                new_beat.tka_glyph.update_tka_glyph()
         self.main_widget.sequence_properties_manager.update_sequence_properties()
 
     def resize_sequence_widget(self) -> None:

@@ -79,7 +79,22 @@ class MirroredTurnsTupleGenerator:
 
     def handle_lambda_dash(self, arrow: Arrow):
         turns_tuple = self.turns_tuple_generator.generate_turns_tuple(arrow.pictograph)
-        if arrow.motion.turns > 0:
+        if (
+            arrow.motion.turns > 0
+            and arrow.pictograph.get.other_arrow(arrow).motion.turns > 0
+        ):
             items = turns_tuple.strip("()").split(", ")
             return f"({items[0]}, {items[2]}, {items[1]}, {items[4]}, {items[3]})"
+        elif (
+            arrow.motion.turns > 0
+            and arrow.pictograph.get.other_arrow(arrow).motion.turns == 0
+        ):
+            items = turns_tuple.strip("()").split(", ")
+            return f"({items[1]}, {items[0]}, {items[2]})"
+        elif (
+            arrow.motion.turns == 0
+            and arrow.pictograph.get.other_arrow(arrow).motion.turns > 0
+        ):
+            items = turns_tuple.strip("()").split(", ")
+            return f"({items[1]}, {items[0]}, {items[2]})"
         return turns_tuple

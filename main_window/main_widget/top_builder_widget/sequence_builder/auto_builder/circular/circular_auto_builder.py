@@ -134,6 +134,8 @@ class CircularAutoBuilder(BaseAutoBuilder):
         if level == 2 or level == 3:
             next_beat = self._set_turns(next_beat, turn_blue, turn_red)
 
+        
+
         self._update_start_oris(next_beat, self.sequence[-1])
         self._update_end_oris(next_beat)
         self._update_dash_static_prop_rot_dirs(

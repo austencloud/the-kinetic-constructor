@@ -110,8 +110,7 @@ class JsonSequenceLoaderSaver:
         sequence = self.load_current_sequence_json()
         if sequence:
             return sequence[index][f"{color}_attributes"].get(
-                "prefloat_prop_rot_dir",
-                sequence[index][f"{color}_attributes"].get("prop_rot_dir", 0),
+                "prefloat_prop_rot_dir", ""
             )
         return 0
 

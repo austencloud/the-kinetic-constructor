@@ -16,11 +16,16 @@ class LetterDeterminer:
         self.letters = self.main_widget.pictograph_dicts
         self.non_hybrid_shift_letter_determiner = NonHybridShiftLetterDeterminer(self)
         self.dual_float_letter_determiner = DualFloatLetterDeterminer(self)
+        self.beat_frame = None
 
     def determine_letter(
         self, motion: "Motion", swap_prop_rot_dir: bool = False
     ) -> Letter:
         """Update the motion attributes based on the change in prop_rot_dir."""
+        if not self.beat_frame:
+            self.beat_frame = (
+                self.main_widget.top_builder_widget.sequence_widget.beat_frame
+            )
         other_motion = motion.pictograph.get.other_motion(motion)
         motion_type = motion.motion_type
         if swap_prop_rot_dir:
@@ -32,10 +37,7 @@ class LetterDeterminer:
                 motion.motion_type = new_motion_type
             else:
                 new_motion_type = motion_type
-            json_index = (
-                self.main_widget.top_builder_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
-                + 2
-            )
+            json_index = self.beat_frame.get.index_of_currently_selected_beat() + 2
             self.main_widget.json_manager.updater.motion_type_updater.update_motion_type_in_json_at_index(
                 json_index, motion.color, new_motion_type
             )
@@ -112,12 +114,10 @@ class LetterDeterminer:
         is_rot_dir_matching = (
             example[f"{motion.color}_attributes"]["prop_rot_dir"]
             == self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
-                self.main_widget.top_builder_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
-                + 2,
+                self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 motion.color,
             )
-            or example[f"{motion.color}_attributes"]["prop_rot_dir"]
-            == motion.prop_rot_dir
+            or example[f"{motion.color}_attributes"]["prop_rot_dir"] == motion.prop_rot_dir
         )
 
         return is_rot_dir_matching
@@ -135,8 +135,7 @@ class LetterDeterminer:
             == float_motion.end_loc
             and example[f"{float_motion.color}_attributes"]["prop_rot_dir"]
             == self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
-                self.main_widget.top_builder_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
-                + 2,
+                self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 float_motion.color,
             )
             and self.is_shift_motion_type_matching(non_float_motion, example)
@@ -162,8 +161,7 @@ class LetterDeterminer:
             == float_motion.end_loc
             and example[f"{float_motion.color}_attributes"]["prop_rot_dir"]
             == self.main_widget.json_manager.loader_saver.get_prefloat_prop_rot_dir_from_json(
-                self.main_widget.top_builder_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
-                + 2,
+                self.beat_frame.get.index_of_currently_selected_beat() + 2,
                 float_motion.color,
             )
             and self.is_shift_motion_type_matching(non_float_motion, example)
@@ -185,10 +183,8 @@ class LetterDeterminer:
             and example[f"{shift.color}_attributes"]["start_loc"] == shift.start_loc
             and example[f"{shift.color}_attributes"]["end_loc"] == shift.end_loc
             and self._is_shift_prop_rot_dir_matching(shift, example)
-            and example[f"{non_shift.color}_attributes"]["motion_type"]
-            == non_shift.motion_type
-            and example[f"{non_shift.color}_attributes"]["start_loc"]
-            == non_shift.start_loc
+            and example[f"{non_shift.color}_attributes"]["motion_type"] == non_shift.motion_type
+            and example[f"{non_shift.color}_attributes"]["start_loc"] == non_shift.start_loc
             and example[f"{non_shift.color}_attributes"]["end_loc"] == non_shift.end_loc
         )
 

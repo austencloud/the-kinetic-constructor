@@ -1,7 +1,7 @@
 {
   "Ω-": {
     "(0, 0)": {
-      "anti_from_layer1": [25, -30]
+      "anti_from_layer1": [15, -15]
     },
     "(s, 0.5, 3)": {
       "dash_from_layer2": [10, -155],

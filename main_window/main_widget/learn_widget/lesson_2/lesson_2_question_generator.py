@@ -40,9 +40,8 @@ class Lesson2QuestionGenerator(BaseQuestionGenerator):
         ]
 
         correct_letter = random.choice(available_letters)
-        correct_pictograph = random.choice(
-            self.main_widget.pictograph_dicts[correct_letter]
-        )
+        pictograph_dicts = self.filter_pictograph_dicts_by_grid_mode()
+        correct_pictograph = random.choice(pictograph_dicts[correct_letter])
 
         # Update the previous letter to the current one
         self.previous_letter = correct_letter
@@ -79,10 +78,13 @@ class Lesson2QuestionGenerator(BaseQuestionGenerator):
             if letter != correct_letter
         ]
 
-    def _get_random_pictograph(self, available_letters: list[str]) -> tuple[Letter, dict]:
+    def _get_random_pictograph(
+        self, available_letters: list[str]
+    ) -> tuple[Letter, dict]:
         """Choose a random letter and a corresponding pictograph."""
         letter = random.choice(available_letters)
-        pictograph_dict = random.choice(self.main_widget.pictograph_dicts[letter])
+        pictograph_dicts = self.filter_pictograph_dicts_by_grid_mode()
+        pictograph_dict = random.choice(pictograph_dicts[letter])
         return letter, pictograph_dict
 
     def _is_duplicate_pictograph(self, letter: str, pictograph_dict: dict) -> bool:
