@@ -89,7 +89,7 @@ class ShiftDirectionalGenerator(BaseDirectionalGenerator):
             self.motion.start_loc, self.motion.end_loc
         )
         directional_tuples = {
-            CW_HANDPATH: [(x, y), (-y, x), (-x, -y), (y, -x)],
+            CW_HANDPATH: [(-y, -x), (x, -y), (y, x), (-x, y)],
             CCW_HANDPATH: [(-y, -x), (x, -y), (y, x), (-x, y)],
         }
         return directional_tuples.get(handpath_direction, [])

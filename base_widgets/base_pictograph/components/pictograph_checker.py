@@ -147,6 +147,22 @@ class PictographChecker:
         ):
             return False
 
+    def ends_in_mixed_orientation(self) -> bool:
+        if (
+            self.pictograph.red_motion.end_ori in [CLOCK, COUNTER]
+            and self.pictograph.blue_motion.end_ori in [OUT, IN]
+            or self.pictograph.red_motion.end_ori in [OUT, IN]
+            and self.pictograph.blue_motion.end_ori in [CLOCK, COUNTER]
+        ):
+            return True
+        elif (
+            self.pictograph.red_motion.end_ori in [CLOCK, COUNTER]
+            and self.pictograph.blue_motion.end_ori in [CLOCK, COUNTER]
+            or self.pictograph.red_motion.end_ori in [OUT, IN]
+            and self.pictograph.blue_motion.end_ori in [OUT, IN]
+        ):
+            return False
+
     def starts_from_standard_orientation(self) -> bool:
         return (
             self.pictograph.red_motion.start_ori in [IN, OUT]

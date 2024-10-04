@@ -1,27 +1,27 @@
 {
   "float_to_layer1_alpha": {
-    "fl": [-15, -0]
+    "fl": [40, 0]
   },
   "float_to_layer2_alpha": {
-    "fl": [0, -40]
+    "fl": [40, 0]
   },
   "float_to_radial_layer3_alpha": {
-    "fl": [0, -0]
+    "fl": [40, 0]
   },
   "float_to_nonradial_layer3_alpha": {
     "fl": [-40, -0]
   },
   "float_to_layer1_beta": {
-    "fl": [0, -0]
+    "fl": [40, 0]
   },
   "float_to_layer2_beta": {
-    "fl": [0, -60]
+    "fl": [40, 0]
   },
   "float_to_radial_layer3_beta": {
-    "fl": [0, -0]
+    "fl": [40, 0]
   },
   "float_to_nonradial_layer3_beta": {
-    "fl": [0, -0]
+    "fl": [40, 0]
   },
   "float_to_layer1_gamma": {
     "fl": [0, -0]
@@ -30,7 +30,7 @@
     "fl": [40, 0]
   },
   "float_to_radial_layer3_gamma": {
-    "fl": [0, -0]
+    "fl": [40, 0]
   },
   "float_to_nonradial_layer3_gamma": {
     "fl": [40, 0]

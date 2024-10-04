@@ -113,7 +113,6 @@ class PropRotDirButtonManager:
 
         # Triggering updates for UI components
         self.graph_editor.sequence_widget.beat_frame.updater.update_beats_from_json()
-        self.graph_editor.main_widget.top_builder_widget.sequence_builder.manual_builder.option_picker.update_option_picker()
         self.graph_editor.main_widget.top_builder_widget.sequence_widget.current_word_label.set_current_word(
             self.graph_editor.sequence_widget.beat_frame.get.current_word()
         )

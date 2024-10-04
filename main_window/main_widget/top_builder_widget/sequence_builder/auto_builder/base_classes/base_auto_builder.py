@@ -7,6 +7,7 @@ from data.constants import (
     BOX,
     DIAMOND,
     END_ORI,
+    FLOAT,
     IN,
     MOTION_TYPE,
     PRO,
@@ -167,18 +168,34 @@ class BaseAutoBuilder:
         """Set the turns for blue and red attributes, adjusting motion types if necessary."""
         # Set blue turns
         if turn_blue == "fl":
-            next_beat["blue_attributes"][TURNS] = "fl"
-            # Ensure motion type is 'pro' or 'anti'
-            if next_beat["blue_attributes"][MOTION_TYPE] not in [PRO, ANTI]:
+            if next_beat["blue_attributes"][MOTION_TYPE] in [PRO, ANTI]:
+                next_beat["blue_attributes"][TURNS] = "fl"
+                next_beat["blue_attributes"]["prefloat_motion_type"] = next_beat[
+                    "blue_attributes"
+                ][MOTION_TYPE]
+                next_beat["blue_attributes"]["prefloat_prop_rot_dir"] = next_beat[
+                    "blue_attributes"
+                ][PROP_ROT_DIR]
+                next_beat["blue_attributes"][MOTION_TYPE] = FLOAT
+                next_beat["blue_attributes"][PROP_ROT_DIR] = NO_ROT
+            elif next_beat["blue_attributes"][MOTION_TYPE] not in [PRO, ANTI]:
                 next_beat["blue_attributes"][TURNS] = 0
         else:
             next_beat["blue_attributes"][TURNS] = turn_blue
 
         # Set red turns
         if turn_red == "fl":
-            next_beat["red_attributes"][TURNS] = "fl"
-            # Ensure motion type is 'pro' or 'anti'
-            if next_beat["red_attributes"][MOTION_TYPE] not in [PRO, ANTI]:
+            if next_beat["red_attributes"][MOTION_TYPE] in [PRO, ANTI]:
+                next_beat["red_attributes"][TURNS] = "fl"
+                next_beat["red_attributes"]["prefloat_motion_type"] = next_beat[
+                    "red_attributes"
+                ][MOTION_TYPE]
+                next_beat["red_attributes"]["prefloat_prop_rot_dir"] = next_beat[
+                    "red_attributes"
+                ][PROP_ROT_DIR]
+                next_beat["red_attributes"][MOTION_TYPE] = FLOAT
+                next_beat["red_attributes"][PROP_ROT_DIR] = NO_ROT
+            elif next_beat["red_attributes"][MOTION_TYPE] not in [PRO, ANTI]:
                 next_beat["red_attributes"][TURNS] = 0
         else:
             next_beat["red_attributes"][TURNS] = turn_red

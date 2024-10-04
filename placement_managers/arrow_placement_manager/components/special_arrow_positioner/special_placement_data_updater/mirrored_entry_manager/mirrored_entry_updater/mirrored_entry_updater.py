@@ -67,13 +67,6 @@ class MirroredEntryUpdater:
     def _determine_layer(self, arrow: Arrow) -> str:
         return "1" if arrow.motion.start_ori in [IN, OUT] else "2"
 
-    def _fetch_letter_data_and_original_turn_data(
-        self, ori_key, letter, arrow
-    ) -> tuple[dict, dict]:
-        letter_data = self._get_letter_data(ori_key, letter)
-        original_turns_tuple = self._generate_turns_tuple(arrow)
-        return letter_data, letter_data.get(original_turns_tuple, {})
-
     def _generate_turns_tuple(self, arrow: Arrow) -> str:
         return self.turns_tuple_generator.generate_turns_tuple(arrow.pictograph)
 

@@ -8,6 +8,9 @@
     "(s, 0.5, 0.5)": {},
     "(s, 2, 1)": {
       "static_from_layer2": {}
+    },
+    "null": {
+      "float_from_layer1": [40, -40]
     }
   }
 }
