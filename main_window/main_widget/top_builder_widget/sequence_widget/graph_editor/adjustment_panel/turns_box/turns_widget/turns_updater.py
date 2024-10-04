@@ -37,7 +37,7 @@ class TurnsUpdater:
 
         if new_turns == "fl":
             self._handle_float_turn(motion, beat_index)
-        else:
+        elif motion.turns == "fl" and new_turns != "fl":
             self._restore_motion_from_prefloat(motion, beat_index)
 
         self._update_turns_in_json(motion, new_turns)

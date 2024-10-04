@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType
+from Enums.letters import Letter
 from data.constants import LEADING, TRAILING, RED, BLUE
 from objects.motion.motion import Motion
 from functools import lru_cache
@@ -27,7 +28,7 @@ class PictographUpdater:
             # Skip placeholder beats
             if pictograph_dict.get("is_placeholder", False):
                 return
-            
+
             if self.pictograph.check.is_pictograph_dict_complete(pictograph_dict):
                 self.pictograph.pictograph_dict = pictograph_dict
                 self._update_from_pictograph_dict(pictograph_dict)
@@ -64,6 +65,14 @@ class PictographUpdater:
             if motion_dicts[motion.color].get("turns", "") == "fl":
                 motion.turns = "fl"
             motion.updater.update_motion(motion_dicts[motion.color])
+        for motion in self.pictograph.motions.values():
+            if motion.pictograph.letter in [
+                Letter.S,
+                Letter.T,
+                Letter.U,
+                Letter.V,
+            ]:
+                motion.attr_manager.assign_lead_states()
 
     def _set_lead_states(self):
         if self.pictograph.letter.value in ["S", "T", "U", "V"]:

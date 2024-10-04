@@ -80,7 +80,7 @@ class HandpathCalculator:
             },
         )
 
-    def get_hand_rot_dir_from_locs(self, start_loc: str, end_loc: str) -> str:
+    def get_hand_rot_dir(self, start_loc: str, end_loc: str) -> str:
         """
         Returns the hand rotation direction based on the start and end locations.
 

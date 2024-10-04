@@ -227,11 +227,11 @@ class RotatedPermutationExecuter(PermutationExecutor):
     def calculate_new_end_pos(
         self, previous_matching_beat: dict, previous_entry: dict
     ) -> str:
-        blue_hand_rot_dir = self.hand_rot_dir_calculator.get_hand_rot_dir_from_locs(
+        blue_hand_rot_dir = self.hand_rot_dir_calculator.get_hand_rot_dir(
             previous_matching_beat["blue_attributes"]["start_loc"],
             previous_matching_beat["blue_attributes"]["end_loc"],
         )
-        red_hand_rot_dir = self.hand_rot_dir_calculator.get_hand_rot_dir_from_locs(
+        red_hand_rot_dir = self.hand_rot_dir_calculator.get_hand_rot_dir(
             previous_matching_beat["red_attributes"]["start_loc"],
             previous_matching_beat["red_attributes"]["end_loc"],
         )
@@ -339,7 +339,7 @@ class RotatedPermutationExecuter(PermutationExecutor):
             "start_loc": previous_attributes["end_loc"],
             "end_loc": self.calculate_rotated_permuatation_new_loc(
                 previous_attributes["end_loc"],
-                self.hand_rot_dir_calculator.get_hand_rot_dir_from_locs(
+                self.hand_rot_dir_calculator.get_hand_rot_dir(
                     previous_matching_beat_attributes["start_loc"],
                     previous_matching_beat_attributes["end_loc"],
                 ),

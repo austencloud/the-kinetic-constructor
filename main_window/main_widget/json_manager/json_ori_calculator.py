@@ -35,7 +35,7 @@ class JsonOriCalculator:
         start_loc = pictograph_dict[f"{color}_attributes"]["start_loc"]
         end_loc = pictograph_dict[f"{color}_attributes"]["end_loc"]
         if motion_type == "float":
-            handpath_direction = self.handpath_calculator.get_hand_rot_dir_from_locs(
+            handpath_direction = self.handpath_calculator.get_hand_rot_dir(
                 pictograph_dict[f"{color}_attributes"]["start_loc"],
                 pictograph_dict[f"{color}_attributes"]["end_loc"],
             )
@@ -55,7 +55,7 @@ class JsonOriCalculator:
         elif turns == "fl":
             return self.calculate_float_orientation(
                 start_ori,
-                self.handpath_calculator.get_hand_rot_dir_from_locs(start_loc, end_loc),
+                self.handpath_calculator.get_hand_rot_dir(start_loc, end_loc),
             )
         else:
             return self.calculate_half_turn_orientation(

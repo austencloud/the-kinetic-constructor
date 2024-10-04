@@ -75,15 +75,25 @@ class PropRotDirButtonManager:
     def _update_pictograph_and_json(self, motion: "Motion", new_letter: Letter) -> None:
         """Update the pictograph and JSON with the new letter and motion attributes."""
         pictograph_index = self.beat_frame.get.index_of_currently_selected_beat()
-        pictograph_dict = {
-            "letter": new_letter.value,
-            motion.color
-            + "_attributes": {
-                "motion_type": motion.motion_type,
-                "prop_rot_dir": motion.prop_rot_dir,
-                "end_ori": motion.end_ori,
-            },
-        }
+        if new_letter:
+            pictograph_dict = {
+                "letter": new_letter.value,
+                motion.color
+                + "_attributes": {
+                    "motion_type": motion.motion_type,
+                    "prop_rot_dir": motion.prop_rot_dir,
+                    "end_ori": motion.end_ori,
+                },
+            }
+        else: 
+            pictograph_dict = {
+                motion.color
+                + "_attributes": {
+                    "motion_type": motion.motion_type,
+                    "prop_rot_dir": motion.prop_rot_dir,
+                    "end_ori": motion.end_ori,
+                },
+            }
 
         motion.pictograph.updater.update_pictograph(pictograph_dict)
         motion.pictograph.view.repaint()
@@ -99,9 +109,10 @@ class PropRotDirButtonManager:
         self.json_manager.updater.motion_type_updater.update_motion_type_in_json_at_index(
             json_index, motion.color, motion.motion_type
         )
-        self.json_manager.updater.letter_updater.update_letter_in_json_at_index(
-            json_index, new_letter.value
-        )
+        if new_letter:
+            self.json_manager.updater.letter_updater.update_letter_in_json_at_index(
+                json_index, new_letter.value
+            )
         self.turns_box.turns_widget.motion_type_label.update_motion_type_label(
             motion.motion_type
         )

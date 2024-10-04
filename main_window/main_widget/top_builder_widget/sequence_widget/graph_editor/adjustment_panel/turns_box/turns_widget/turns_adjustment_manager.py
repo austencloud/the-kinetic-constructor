@@ -3,6 +3,7 @@ from PyQt6.QtCore import QObject, Qt
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import pyqtSignal
 from Enums.Enums import Turns
+from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
     from .turns_widget import TurnsWidget
@@ -47,7 +48,13 @@ class TurnsAdjustmentManager(QObject):
         )
         self.turns_widget.update_turns_display(matching_motion, new_turns)
         self._repaint_views()
-        new_letter = self.main_widget.letter_determiner.determine_letter(motion)
+        need_to_determine_new_letter: bool = self.determine_if_new_letter_is_necessary(
+            motion, new_turns
+        )
+        if need_to_determine_new_letter:
+            new_letter = self.main_widget.letter_determiner.determine_letter(motion)
+        else:
+            new_letter = None
         self.turns_widget.turns_box.prop_rot_dir_button_manager._update_pictograph_and_json(
             motion, new_letter
         )
@@ -59,6 +66,12 @@ class TurnsAdjustmentManager(QObject):
         self.main_widget.top_builder_widget.sequence_builder.manual_builder.option_picker.update_option_picker()
         self.turns_adjusted.emit(new_turns)
         QApplication.restoreOverrideCursor()
+
+    def determine_if_new_letter_is_necessary(self, motion: Motion, new_turns) -> bool:
+        if new_turns == "fl":
+            return True
+        if motion.turns == "fl" and new_turns >= 0:
+            return True
 
     def _repaint_views(self):
         """Repaint the pictograph and GE pictograph views to reflect the change."""

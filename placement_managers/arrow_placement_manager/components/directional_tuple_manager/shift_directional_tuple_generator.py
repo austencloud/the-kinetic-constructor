@@ -55,7 +55,7 @@ class ShiftDirectionalGenerator(BaseDirectionalGenerator):
     def _generate_diamond_float_directional_tuples(
         self, x: int, y: int
     ) -> list[tuple[int, int]]:
-        handpath_direction = self.hand_rot_dir_calculator.get_hand_rot_dir_from_locs(
+        handpath_direction = self.hand_rot_dir_calculator.get_hand_rot_dir(
             self.motion.start_loc, self.motion.end_loc
         )
         directional_tuples = {
@@ -85,7 +85,7 @@ class ShiftDirectionalGenerator(BaseDirectionalGenerator):
     def _generate_box_float_directional_tuples(
         self, x: int, y: int
     ) -> list[tuple[int, int]]:
-        handpath_direction = self.hand_rot_dir_calculator.get_hand_rot_dir_from_locs(
+        handpath_direction = self.hand_rot_dir_calculator.get_hand_rot_dir(
             self.motion.start_loc, self.motion.end_loc
         )
         directional_tuples = {

@@ -28,25 +28,21 @@ class BeatAdder:
         next_beat_index = self.beat_frame.get.next_available_beat()
 
         if next_beat_index is not None and not self.beats[next_beat_index].is_filled:
-            self._set_beat_and_update(
-                next_beat_index, new_beat, next_beat_number, update_word
-            )
+            self.beats[next_beat_index].set_beat(new_beat, next_beat_number)
 
             if grow_sequence and not override_grow_sequence:
                 self._adjust_layout_and_update_sequence_builder(next_beat_index)
             elif not grow_sequence or override_grow_sequence:
                 self._update_sequence_builder(next_beat_index)
+                
+            self.beat_frame.selection_overlay.select_beat(self.beats[next_beat_index])
+            self.json_manager.updater.update_current_sequence_file_with_beat(
+                self.beats[next_beat_index]
+            )
+            if update_word:
+                self.sequence_widget.update_current_word()
 
-    def _set_beat_and_update(
-        self, index: int, new_beat: "Beat", beat_number: int, update_word: bool
-    ) -> None:
-        self.beats[index].set_beat(new_beat, beat_number)
-        self.beat_frame.selection_overlay.select_beat(self.beats[index])
-        self.json_manager.updater.update_current_sequence_file_with_beat(
-            self.beats[index]
-        )
-        if update_word:
-            self.sequence_widget.update_current_word()
+
 
     def _adjust_layout_and_update_sequence_builder(self, index: int) -> None:
         self.beat_frame.layout_manager.adjust_layout_to_sequence_length()

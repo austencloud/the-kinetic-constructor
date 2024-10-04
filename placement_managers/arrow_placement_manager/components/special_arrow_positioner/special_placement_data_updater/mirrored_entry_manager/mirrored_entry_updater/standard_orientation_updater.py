@@ -4,7 +4,9 @@ from Enums.letters import LetterConditions, Letter
 
 from data.constants import *
 from objects.arrow.arrow import Arrow
-from placement_managers.arrow_placement_manager.components.special_arrow_positioner.special_placement_data_updater.mirrored_entry_manager.mirrored_entry_updater.base_mirrored_entry_updater import BaseMirroredEntryUpdater
+from placement_managers.arrow_placement_manager.components.special_arrow_positioner.special_placement_data_updater.mirrored_entry_manager.mirrored_entry_updater.base_mirrored_entry_updater import (
+    BaseMirroredEntryUpdater,
+)
 
 
 class StandardOrientationUpdater(BaseMirroredEntryUpdater):
@@ -79,16 +81,11 @@ class StandardOrientationUpdater(BaseMirroredEntryUpdater):
             if mirrored_turns_tuple not in letter_data:
                 letter_data[mirrored_turns_tuple] = {}
             letter_data[mirrored_turns_tuple][self.arrow.motion.motion_type] = (
-                self.flip_turn_data_array(
-                    letter_data[turns_tuple][self.arrow.motion.motion_type]
-                )
+                letter_data[turns_tuple][self.arrow.motion.motion_type]
             )
             self.mirrored_entry_updater.manager.data_updater.update_specific_entry_in_json(
                 letter, letter_data, ori_key
             )
-
-    def flip_turn_data_array(self, turn_data_array: list) -> list:
-        return [turn_data_array[1], turn_data_array[0]]
 
     def _determine_motion_attribute(self) -> str:
         letter = self.arrow.pictograph.letter

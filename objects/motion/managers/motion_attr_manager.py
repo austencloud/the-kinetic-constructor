@@ -28,13 +28,7 @@ class MotionAttrManager:
                 self.motion.prefloat_motion_type = motion_dict["prefloat_motion_type"]
             if "prefloat_prop_rot_dir" in motion_dict:
                 self.motion.prefloat_prop_rot_dir = motion_dict["prefloat_prop_rot_dir"]
-        if self.motion.pictograph.letter in [
-            Letter.S,
-            Letter.T,
-            Letter.U,
-            Letter.V,
-        ]:
-            self.assign_lead_states()
+
 
     def update_prop_ori(self) -> None:
         if hasattr(self.motion, PROP) and self.motion.prop:

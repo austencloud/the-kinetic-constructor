@@ -1,15 +1,15 @@
 from typing import TYPE_CHECKING, Optional
 from Enums.Enums import LetterType, Letter
 
-
+from base_widgets.base_pictograph.components.lead_state_determiner import LeadStateDeterminer
 from data.constants import *
 from objects.arrow.arrow import Arrow
 from objects.motion.motion import Motion
 from Enums.MotionAttributes import Location, MotionType
 
-
 if TYPE_CHECKING:
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
+
 
 
 class PictographGetter:
@@ -24,6 +24,7 @@ class PictographGetter:
         self.blue_arrow = self.pictograph.blue_arrow
         self.red_arrow = self.pictograph.red_arrow
         self.turns_tuple_generator = self.pictograph.main_widget.turns_tuple_generator
+        self.lead_state_determiner = LeadStateDeterminer(self.red_motion, self.blue_motion)
 
     def motion_by_color(self, color: str) -> Motion:
         return self.pictograph.motions.get(color)
@@ -44,46 +45,10 @@ class PictographGetter:
         ]
 
     def trailing_motion(self) -> Motion:
-        """
-        Determine the leading motion based on the start and end locations of the red and blue motions.
-
-        The leading motion is determined by comparing the start location of the red motion with the end location of the blue motion,
-        and the start location of the blue motion with the end location of the red motion.
-
-        Returns:
-            Motion: The leading motion, either red or blue, based on the location comparison.
-        """
-        red_start = self.red_motion.start_loc
-        blue_end = self.blue_motion.end_loc
-        blue_start = self.blue_motion.start_loc
-        red_end = self.red_motion.end_loc
-
-        motion_map = {
-            (red_start, blue_end): self.red_motion,
-            (blue_start, red_end): self.blue_motion,
-        }
-        return motion_map.get((self.red_motion.start_loc, self.blue_motion.end_loc))
+        return self.lead_state_determiner.trailing_motion()
 
     def leading_motion(self) -> Motion:
-        """
-        Determine the trailing motion based on the start and end locations of the red and blue motions.
-
-        The trailing motion is determined by comparing the start location of the red motion with the end location of the blue motion,
-        and the start location of the blue motion with the end location of the red motion.
-
-        Returns:
-            Motion: The trailing motion, either red or blue, based on the location comparison.
-        """
-        red_start = self.red_motion.start_loc
-        blue_end = self.blue_motion.end_loc
-        blue_start = self.blue_motion.start_loc
-        red_end = self.red_motion.end_loc
-
-        motion_map = {
-            (red_start, blue_end): self.blue_motion,
-            (blue_start, red_end): self.red_motion,
-        }
-        return motion_map.get((self.red_motion.start_loc, self.blue_motion.end_loc))
+        return self.lead_state_determiner.leading_motion()
 
     def other_motion(self, motion: Motion) -> Motion:
         other_motion_map = {RED: self.blue_motion, BLUE: self.red_motion}

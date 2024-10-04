@@ -34,10 +34,8 @@ class MotionOriCalculator:
 
     def get_end_ori(self) -> str:
         if self.motion.motion_type == FLOAT:  # Handle float case
-            handpath_direction = (
-                self.hand_rot_dir_calculator.get_hand_rot_dir_from_locs(
-                    self.motion.start_loc, self.motion.end_loc
-                )
+            handpath_direction = self.hand_rot_dir_calculator.get_hand_rot_dir(
+                self.motion.start_loc, self.motion.end_loc
             )
             return self.calculate_float_orientation(
                 self.motion.start_ori, handpath_direction
