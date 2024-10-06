@@ -135,7 +135,8 @@ class TempBeatFrame(BaseBeatFrame):
         grid_mode = GridModeChecker(self.main_widget).get_grid_mode(
             current_sequence_json[2]
         )
-        self.main_widget.set_grid_mode(grid_mode)
+        self.main_widget.main_window.menu_bar_widget.grid_mode_selector.set_current_grid_mode(grid_mode)
+
         start_pos_beat = self.start_pos_manager.convert_current_sequence_json_entry_to_start_pos_pictograph(
             current_sequence_json
         )

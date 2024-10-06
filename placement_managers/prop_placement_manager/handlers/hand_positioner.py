@@ -28,7 +28,7 @@ class HandPositioner:
 
     def move_hand(self, prop: Prop, direction: str) -> None:
         offset_calculator = (
-            self.beta_prop_positioner.prop_placement_manager.beta_offset_calculator
+            self.beta_prop_positioner.beta_offset_calculator
         )
         offset = offset_calculator.calculate_new_position_with_offset(
             prop.pos(), direction

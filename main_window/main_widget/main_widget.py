@@ -151,9 +151,7 @@ class MainWidget(QTabWidget):
 
     def set_grid_mode(self, grid_mode: str) -> None:
         self.main_window.settings_manager.global_settings.set_grid_mode(grid_mode)
-        self.main_window.menu_bar_widget.menu_bar.grid_mode_menu.toggle_selected_grid_mode(
-            grid_mode.capitalize()
-        )
+
         self.main_window.settings_manager.save_settings()
         self.special_placement_loader.refresh_placements()
         self.pictograph_dicts = self.pictograph_dict_loader.load_all_pictograph_dicts()

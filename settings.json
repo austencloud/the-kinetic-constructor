@@ -1,7 +1,7 @@
 {
     "global": {
-        "prop_type": "Staff",
-        "background_type": "AuroraBorealis",
+        "prop_type": "Club",
+        "background_type": "Starfield",
         "grow_sequence": true,
         "current_tab": "sequence_builder",
         "grid_mode": "box"
@@ -41,13 +41,13 @@
     },
     "visibility": {
         "glyph_visibility": {
-            "VTG": false,
+            "VTG": true,
             "TKA": true,
             "Elemental": true,
             "EndPosition": false
         },
         "grid_visibility": {
-            "non_radial_points": false
+            "non_radial_points": true
         }
     },
     "dictionary": {
@@ -95,7 +95,7 @@
             "current_auto_builder": "circular"
         },
         "manual_builder": {},
-        "last_used_builder": "manual"
+        "last_used_builder": "auto"
     },
     "sequence_sharing": {
         "recipients": [

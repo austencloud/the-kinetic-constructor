@@ -93,8 +93,3 @@ class GlyphVisibilityManager:
         if start_pos:
             if start_pos.view.is_filled:
                 self.apply_current_visibility_settings(start_pos)
-
-        # self.set_visibilty_to_false(
-        #     self.main_window.main_widget.learn_widget.lesson_1_widget.question_widget.pictograph,
-        #     "TKA",
-        # )

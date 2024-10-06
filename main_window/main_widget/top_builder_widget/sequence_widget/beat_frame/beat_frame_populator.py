@@ -52,12 +52,16 @@ class BeatFramePopulator:
     def _set_grid_mode(self):
         grid_mode = self.current_sequence_json[0].get("grid_mode")
         if grid_mode:
-            self.main_widget.set_grid_mode(grid_mode)
+            self.main_widget.main_window.menu_bar_widget.grid_mode_selector.set_current_grid_mode(
+                grid_mode
+            )
         else:
             grid_mode = self.main_widget.grid_mode_checker.get_grid_mode(
                 self.current_sequence_json[2]
             )
-            self.main_widget.set_grid_mode(grid_mode)
+            self.main_widget.main_window.menu_bar_widget.grid_mode_selector.set_current_grid_mode(
+                grid_mode
+            )
             if not self.current_sequence_json[0].get("grid_mode"):
                 print(" Warning - no grid mode found in sequence metadata")
 
