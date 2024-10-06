@@ -69,7 +69,7 @@ class RotatedPermutationExecuter(PermutationExecutor):
             last_entry = next_pictograph
             next_beat_number += 1
 
-        sequence_widget.update_current_word()
+        sequence_widget.update_current_word_from_beats()
 
         if start_position_entry:
             start_position_entry["beat"] = 0

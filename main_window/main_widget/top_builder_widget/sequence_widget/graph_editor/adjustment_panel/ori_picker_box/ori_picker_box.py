@@ -46,7 +46,10 @@ class OriPickerBox(QFrame):
     def update_styles(self) -> None:
         self.setObjectName(self.__class__.__name__)
         self.setStyleSheet(
-            f"#{self.__class__.__name__} {{ border: {self.border_width}px solid {self.color}; background-color: white;}}"
+            f"#{self.__class__.__name__} {{ "
+            f"border: {self.border_width}px solid {self.color}; "
+            f"background-color: white; "
+            f"}}"
         )
 
     def resize_ori_picker_box(self) -> None:

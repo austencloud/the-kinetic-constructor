@@ -44,4 +44,4 @@ class SequenceClearer:
         )
         self.beat_frame.start_pos_view.is_filled = False
         self.beat_frame.selection_overlay.deselect_beat()
-        self.beat_frame.sequence_widget.update_current_word()
+        self.beat_frame.sequence_widget.update_current_word_from_beats()

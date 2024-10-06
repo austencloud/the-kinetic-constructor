@@ -165,7 +165,7 @@ class MainWidget(QTabWidget):
         start_pos_manager.setup_start_positions()
 
         sequence_clearer = self.top_builder_widget.sequence_widget.sequence_clearer
-        sequence_clearer.clear_sequence()
+        sequence_clearer.clear_sequence(show_indicator=False)
 
         pictograph_container = (
             self.top_builder_widget.sequence_widget.graph_editor.pictograph_container
@@ -232,7 +232,7 @@ class MainWidget(QTabWidget):
         if len(current_sequence) > 1:
             self.top_builder_widget.sequence_builder.manual_builder.transition_to_sequence_building()
             self.top_builder_widget.sequence_widget.beat_frame.populator.populate_beat_frame_from_json(
-                current_sequence
+                current_sequence, is_dictionary_entry=False
             )
             self.top_builder_widget.sequence_builder.manual_builder.option_picker.update_option_picker()
 

@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_builder.manual_builder import (
@@ -27,6 +27,7 @@ class OptionPickerClickHandler:
             self.manual_builder.option_picker.choose_your_next_pictograph_label.set_text_to_loading()
             selection_manager = beat_frame.selection_overlay
             selection_manager.select_beat(new_beat.view)
+            QApplication.processEvents()
             self.manual_builder.option_picker.update_option_picker()
             new_beat.view.is_filled = True
             self.manual_builder.option_picker.scroll_area.display_manager.order_and_display_pictographs()

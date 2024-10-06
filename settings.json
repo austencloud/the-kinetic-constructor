@@ -1,10 +1,10 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Aurora",
+        "background_type": "AuroraBorealis",
         "grow_sequence": true,
         "current_tab": "sequence_builder",
-        "grid_mode": "diamond"
+        "grid_mode": "box"
     },
     "image_export": {
         "include_start_position": true,
@@ -54,7 +54,7 @@
         "sort_method": "date_added",
         "current_section": "browser",
         "current_filter": {
-            "starting_letter": "I"
+            "level": 1
         }
     },
     "sequence_layout": {
@@ -66,10 +66,10 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 4,
-                "max_turn_intensity": 0,
-                "sequence_level": 1,
-                "rotation_type": "halved",
+                "sequence_length": 16,
+                "max_turn_intensity": 1,
+                "sequence_level": 2,
+                "rotation_type": "quartered",
                 "permutation_type": "rotated",
                 "continuous_rotation": true,
                 "selected_letter_types": [

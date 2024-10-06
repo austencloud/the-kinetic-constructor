@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
+from utilities.word_simplifier import WordSimplifier
 
 if TYPE_CHECKING:
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
@@ -13,63 +14,99 @@ class BeatFramePopulator:
         self.start_pos_view = beat_frame.start_pos_view
         self.selection_overlay = beat_frame.selection_overlay
         self.json_manager = beat_frame.json_manager
+        self.current_sequence_json = []  # Initialize the instance variable
 
     def populate_beat_frame_from_json(
-        self, current_sequence_json: list[dict[str, str]]
+        self,
+        current_sequence_json: list[dict[str, str]],
+        is_dictionary_entry: bool = False,
     ) -> None:
+        self.current_sequence_json = current_sequence_json  # Store the sequence JSON
+        indicator_label = self.sequence_widget.indicator_label
+        indicator_label.show_message("Loading sequence...")
         self.start_pos_manager = (
             self.main_widget.top_builder_widget.sequence_builder.manual_builder.start_pos_picker.start_pos_manager
         )
         self.sequence_builder = self.main_widget.top_builder_widget.sequence_builder
 
-        if not current_sequence_json:
+        if not self.current_sequence_json:
             return
 
-        self.sequence_widget.sequence_clearer.clear_sequence(
-            show_indicator=False, should_reset_to_start_pos_picker=False
+        if is_dictionary_entry:
+            self.sequence_widget.sequence_clearer.clear_sequence(
+                show_indicator=False, should_reset_to_start_pos_picker=False
+            )
+
+        self._set_grid_mode()
+        start_pos_beat = self._set_start_position()
+        self._update_sequence_layout(start_pos_beat)
+        self._update_sequence_word()
+        self._update_difficulty_level()
+        self._populate_beats()
+        self._finalize_sequence()
+
+        indicator_label.show_message(
+            f"{self.current_word} loaded successfully! Ready to edit."
         )
 
-
-        grid_mode = current_sequence_json[0].get("grid_mode")
+    def _set_grid_mode(self):
+        grid_mode = self.current_sequence_json[0].get("grid_mode")
         if grid_mode:
             self.main_widget.set_grid_mode(grid_mode)
         else:
             grid_mode = self.main_widget.grid_mode_checker.get_grid_mode(
-                current_sequence_json[2]
+                self.current_sequence_json[2]
             )
             self.main_widget.set_grid_mode(grid_mode)
-            # check if there is a grid mode in the sequence metadata in the 0th entry
-            # if not, add it to the entry using the sequence properties manager
-            if not current_sequence_json[0].get("grid_mode"):
+            if not self.current_sequence_json[0].get("grid_mode"):
                 print(" Warning - no grid mode found in sequence metadata")
 
-        # Load start position first
+    def _set_start_position(self):
         start_pos_beat = self.start_pos_manager.convert_current_sequence_json_entry_to_start_pos_pictograph(
-            current_sequence_json
+            self.current_sequence_json
         )
         self.json_manager.start_position_handler.set_start_position_data(start_pos_beat)
+        QApplication.processEvents()
         self.start_pos_view.set_start_pos(start_pos_beat)
-        length = len(current_sequence_json) - 2
+        return start_pos_beat
+
+    def _update_sequence_layout(self, start_pos_beat):
+        length = len(self.current_sequence_json) - 2
         self.modify_layout_for_chosen_number_of_beats(length)
-        for pictograph_dict in current_sequence_json[1:]:
-            if pictograph_dict.get("sequence_start_position"):
-                continue
-            # Handle placeholder beats by creating a placeholder pictograph or beat view
-            if pictograph_dict.get("is_placeholder", False):
-                continue
-            else:
-                # Regular beats are added as usual
-                self.sequence_widget.create_new_beat_and_add_to_sequence(
-                    pictograph_dict, override_grow_sequence=True
-                )
 
-        self.sequence_widget.update_current_word()
-
-        if len(current_sequence_json) > 2:
+    def _update_difficulty_level(self):
+        if len(self.current_sequence_json) > 2:
             self.sequence_widget.update_difficulty_label()
         else:
             self.sequence_widget.difficulty_label.set_difficulty_level("")
 
+    def _update_sequence_word(self):
+        self.current_word = "".join(
+            [
+                beat["letter"]
+                for beat in self.current_sequence_json[2:]
+                if "letter" in beat
+            ]
+        )
+        self.current_word = WordSimplifier().simplify_repeated_word(self.current_word)
+        self.sequence_widget.current_word_label.set_current_word(self.current_word)
+
+    def _populate_beats(self):
+        for pictograph_dict in self.current_sequence_json[1:]:
+            if pictograph_dict.get("sequence_start_position"):
+                continue
+            if pictograph_dict.get("is_placeholder", False):
+                continue
+            else:
+                self.sequence_widget.create_new_beat_and_add_to_sequence(
+                    pictograph_dict,
+                    override_grow_sequence=True,
+                    update_word=False,
+                    update_level=False,
+                )
+            QApplication.processEvents()
+
+    def _finalize_sequence(self):
         last_beat = self.sequence_widget.beat_frame.get.last_filled_beat().beat
         self.sequence_builder.manual_builder.last_beat = last_beat
 
@@ -79,7 +116,7 @@ class BeatFramePopulator:
         scroll_area = self.sequence_builder.manual_builder.option_picker.scroll_area
         scroll_area.remove_irrelevant_pictographs()
         next_options = self.sequence_builder.manual_builder.option_picker.option_getter.get_next_options(
-            current_sequence_json
+            self.current_sequence_json
         )
 
         scroll_area.add_and_display_relevant_pictographs(next_options)

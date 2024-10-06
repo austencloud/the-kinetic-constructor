@@ -13,9 +13,9 @@ class MenuBarWidget(QWidget):
         self.main_window = main_window
         self.menu_bar = MenuBar(self)
         layout: QHBoxLayout = QHBoxLayout(self)
-        # layout.addStretch(1)
+        layout.addStretch(1)
         layout.addWidget(self.menu_bar)
-        # layout.addStretch(1)
+        layout.addStretch(1)
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
 
@@ -24,4 +24,6 @@ class MenuBarWidget(QWidget):
         self.resize_menu_bar_widget()
 
     def resize_menu_bar_widget(self):
+        height = int(self.main_window.height() * 0.05)
+        self.setMinimumHeight(height)
         self.menu_bar.resize_menu_bar()

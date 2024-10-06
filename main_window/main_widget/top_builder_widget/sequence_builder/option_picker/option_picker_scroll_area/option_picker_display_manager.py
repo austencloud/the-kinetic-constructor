@@ -1,14 +1,12 @@
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
+from PyQt6.QtWidgets import QApplication
 from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
     Beat,
 )
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-
 from Enums.Enums import LetterType
-from .option_picker_section_widget import (
-    OptionPickerSectionWidget,
-)
+from .option_picker_section_widget import OptionPickerSectionWidget
 
 if TYPE_CHECKING:
     from .option_picker_scroll_area import OptionPickerScrollArea

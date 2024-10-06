@@ -33,7 +33,7 @@ class MenuBar(QMenuBar):
         self._apply_stylesheet()
 
     def _apply_stylesheet(self):
-        spacing = self.main_window.width() // 100
+        spacing = self.main_window.width() // 75
         background_color = "#F0F0F0"
         hover_color = "#D3D3D3"
         checkmark_size = self.main_window.width() // 100

@@ -8,6 +8,7 @@ from letter_determiner.letter_determiner import LetterDeterminer
 from main_window.main_widget.top_builder_widget.sequence_widget.sequence_clearer import (
     SequenceClearer,
 )
+from utilities.word_simplifier import WordSimplifier
 
 from .beat_frame.beat import Beat, BeatView
 from .sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
@@ -76,7 +77,7 @@ class SequenceWidget(QWidget):
 
         self.setLayout(self.layout)
 
-    def update_current_word(self):
+    def update_current_word_from_beats(self):
         current_word = self.beat_frame.get.current_word()
         self.current_word_label.set_current_word(current_word)
 
@@ -125,7 +126,7 @@ class SequenceWidget(QWidget):
 
     def apply_layout_options(self, cols, rows, num_beats):
         self.beat_frame.layout_manager.rearrange_beats(num_beats, cols, rows)
-        self.update_current_word()
+        self.update_current_word_from_beats()
 
     def _setup_beat_frame_layout(self):
         self.beat_frame_layout = QHBoxLayout()
@@ -139,7 +140,7 @@ class SequenceWidget(QWidget):
         QTimer.singleShot(0, self.post_show_initialization)
 
     def post_show_initialization(self):
-        self.update_current_word()
+        self.update_current_word_from_beats()
 
     def _setup_indicator_label_layout(self):
         self.indicator_label_layout = QHBoxLayout()
@@ -148,12 +149,16 @@ class SequenceWidget(QWidget):
         self.indicator_label_layout.addStretch(1)
 
     def create_new_beat_and_add_to_sequence(
-        self, pictograph_dict: dict, override_grow_sequence=False, update_word=True
+        self,
+        pictograph_dict: dict,
+        override_grow_sequence=False,
+        update_word=True,
+        update_level=True,
     ) -> None:
         new_beat = Beat(self.beat_frame)
         new_beat.updater.update_pictograph(pictograph_dict)
         self.beat_frame.beat_adder.add_beat_to_sequence(
-            new_beat, override_grow_sequence, update_word
+            new_beat, override_grow_sequence, update_word, update_level
         )
         for motion in new_beat.motions.values():
             if motion.motion_type == FLOAT:

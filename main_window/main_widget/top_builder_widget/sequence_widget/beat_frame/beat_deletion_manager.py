@@ -67,7 +67,7 @@ class BeatDeletionManager:
         self.json_manager.updater.clear_and_repopulate_the_current_sequence()
         if self.settings_manager.global_settings.get_grow_sequence():
             self.beat_frame.layout_manager.adjust_layout_to_sequence_length()
-        self.beat_frame.sequence_widget.update_current_word()
+        self.beat_frame.sequence_widget.update_current_word_from_beats()
         self.manual_builder.option_picker.update_option_picker()
 
     def _delete_non_first_beat(self, selected_beat: BeatView) -> None:

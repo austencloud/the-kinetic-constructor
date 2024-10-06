@@ -119,7 +119,7 @@ class BeatView(QGraphicsView):
         self.remove_beat_number()
         self.add_beat_number()
 
-    def add_beat_number(self):
+    def add_beat_number(self, beat_number_text=None) -> None:
         """
         Add a beat number or a range of beat numbers to represent the beat.
         """
@@ -127,11 +127,12 @@ class BeatView(QGraphicsView):
         #     self.remove_beat_number()  # Remove any existing beat number item first
 
         # Display the beat number text (as a range if necessary)
-        beat_number_text = (
-            self.beat.get_beat_number_text()
-            if self.beat
-            else self.blank_beat.get_beat_number_text()
-        )
+        if not beat_number_text:
+            beat_number_text = (
+                self.beat.get_beat_number_text()
+                if self.beat
+                else self.blank_beat.get_beat_number_text()
+            )
 
         self.beat_number_item = QGraphicsTextItem(beat_number_text)
         self.beat_number_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))

@@ -17,11 +17,15 @@ class BeatAdder:
         self.json_manager = self.main_widget.json_manager
 
     def add_beat_to_sequence(
-        self, new_beat: "Beat", override_grow_sequence=False, update_word=True
+        self,
+        new_beat: "Beat",
+        override_grow_sequence=False,
+        update_word=True,
+        update_level=True,
     ) -> None:
         next_beat_number = self.calculate_next_beat_number()
 
-        if next_beat_number == 1:
+        if next_beat_number and update_level == 1:
             self.sequence_widget.difficulty_label.set_difficulty_level(1)
 
         grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
@@ -34,15 +38,13 @@ class BeatAdder:
                 self._adjust_layout_and_update_sequence_builder(next_beat_index)
             elif not grow_sequence or override_grow_sequence:
                 self._update_sequence_builder(next_beat_index)
-                
+
             self.beat_frame.selection_overlay.select_beat(self.beats[next_beat_index])
             self.json_manager.updater.update_current_sequence_file_with_beat(
                 self.beats[next_beat_index]
             )
             if update_word:
-                self.sequence_widget.update_current_word()
-
-
+                self.sequence_widget.update_current_word_from_beats()
 
     def _adjust_layout_and_update_sequence_builder(self, index: int) -> None:
         self.beat_frame.layout_manager.adjust_layout_to_sequence_length()

@@ -1,16 +1,8 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QApplication
 from PyQt6.QtCore import pyqtSignal, Qt
-
-from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.choose_your_next_pictograph_label import (
-    ChooseYourNextPictographLabel,
-)
-from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_manager import (
-    OptionGetter,
-)
-
-
+from .choose_your_next_pictograph_label import ChooseYourNextPictographLabel
+from .option_manager import OptionGetter
 from .option_picker_scroll_area.option_picker_scroll_area import OptionPickerScrollArea
-
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:

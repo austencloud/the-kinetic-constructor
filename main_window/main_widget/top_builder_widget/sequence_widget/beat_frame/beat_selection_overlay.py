@@ -48,10 +48,10 @@ class BeatSelectionOverlay(QWidget):
                 )
                 red_start_pos_ori_picker = graph_editor.adjustment_panel.red_ori_picker
 
-                blue_start_pos_ori_picker.ori_picker_widget.ori_display_frame.set_initial_orientation(
+                blue_start_pos_ori_picker.ori_picker_widget.set_initial_orientation(
                     start_pos_pictograph, "blue"
                 )
-                red_start_pos_ori_picker.ori_picker_widget.ori_display_frame.set_initial_orientation(
+                red_start_pos_ori_picker.ori_picker_widget.set_initial_orientation(
                     start_pos_pictograph, "red"
                 )
             # QApplication.processEvents()

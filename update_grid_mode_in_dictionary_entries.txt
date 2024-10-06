@@ -77,7 +77,7 @@ def update_metadata_grid_mode(
         if "grid_mode" not in sequence_metadata:
             # Try to determine the grid mode from the first pictograph in the sequence
             if len(metadata["sequence"]) > 1:
-                first_pictograph = metadata["sequence"][1]
+                first_pictograph = metadata["sequence"][2]
                 grid_mode = grid_mode_checker.get_grid_mode(first_pictograph)
                 if grid_mode:
                     sequence_metadata["grid_mode"] = grid_mode

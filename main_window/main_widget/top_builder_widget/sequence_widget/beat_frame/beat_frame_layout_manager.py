@@ -1,10 +1,12 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QGridLayout
+
+from PyQt6.QtWidgets import QGridLayout, QApplication
 from data.beat_frame_layouts import DEFAULT_BEAT_FRAME_LAYOUTS
 
 if TYPE_CHECKING:
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
+
 
 class BeatFrameLayoutManager:
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
@@ -76,6 +78,8 @@ class BeatFrameLayoutManager:
                 if index < num_beats:
                     beat_view = beats[index]
                     self.beat_frame.layout.addWidget(beat_view, row, col)
+                    beat_view.remove_beat_number()
+                    beat_view.add_beat_number(str(index + 1))
                     beat_view.show()
                     index += 1
                 else:
