@@ -102,7 +102,7 @@ I,beta2,beta8,tog,same,anti,cw,ne,nw,pro,ccw,ne,nw
 I,beta8,beta6,tog,same,anti,cw,nw,sw,pro,ccw,nw,sw
 I,beta6,beta4,tog,same,anti,cw,sw,se,pro,ccw,sw,se
 I,beta4,beta2,tog,same,anti,cw,se,ne,pro,ccw,se,ne
-I,beta2,beta8,tog,same,pro,ccw,ne,se,anti,cw,ne,se
+I,beta2,beta8,tog,same,pro,ccw,ne,nw,anti,cw,ne,nw
 I,beta8,beta6,tog,same,pro,ccw,nw,sw,anti,cw,nw,sw
 I,beta6,beta4,tog,same,pro,ccw,sw,se,anti,cw,sw,se
 I,beta4,beta2,tog,same,pro,ccw,se,ne,anti,cw,se,ne
