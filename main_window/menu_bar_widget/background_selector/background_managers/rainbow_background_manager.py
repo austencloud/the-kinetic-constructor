@@ -1,6 +1,8 @@
 import random
 
-from background_managers.background_manager import BackgroundManager
+from main_window.menu_bar_widget.background_selector.background_managers.background_manager import (
+    BackgroundManager,
+)
 from PyQt6.QtGui import QLinearGradient, QColor, QPainter
 import math
 from typing import TYPE_CHECKING
@@ -37,5 +39,3 @@ class RainbowBackgroundManager(BackgroundManager):
             clamped_pos = max(0, min(adjusted_pos, 1))  # Clamp between 0 and 1
             gradient.setColorAt(clamped_pos, color)
         painter.fillRect(widget.rect(), gradient)
-
-

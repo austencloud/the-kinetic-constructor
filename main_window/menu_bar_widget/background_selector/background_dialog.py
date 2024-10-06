@@ -15,6 +15,8 @@ class BackgroundDialog:
             "Particle",
             "Aurora",
             "AuroraBorealis",
+            "Snowfall",
+            "Bubbles",
         ]
 
     def show_dialog(self):

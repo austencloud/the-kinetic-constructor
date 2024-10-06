@@ -1,5 +1,7 @@
 import random
-from background_managers.background_manager import BackgroundManager
+from main_window.menu_bar_widget.background_selector.background_managers.background_manager import (
+    BackgroundManager,
+)
 from PyQt6.QtGui import QColor, QPainter
 from PyQt6.QtWidgets import QWidget
 
