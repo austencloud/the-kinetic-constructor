@@ -154,3 +154,5 @@ class SequencePropertiesManager:
             return self.sequence[-1]["end_pos"].rstrip("0123456789") == self.sequence[
                 0
             ]["end_pos"].rstrip("0123456789")
+
+    

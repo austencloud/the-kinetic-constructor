@@ -82,7 +82,7 @@ class MainWidget(QTabWidget):
         self.sequence_level_evaluator = SequenceLevelEvaluator()
         self.sequence_properties_manager = SequencePropertiesManager(self)
         self.thumbnail_finder = ThumbnailFinder(self)
-        self.grid_mode_checker = GridModeChecker(self)
+        self.grid_mode_checker = GridModeChecker()
 
     def on_tab_changed(self, index):
         if index == self.builder_tab_index:

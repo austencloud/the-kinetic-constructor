@@ -10,8 +10,6 @@ if TYPE_CHECKING:
 class GridModeChecker:
     """Checks what grid a given pictograph is in by looking at its start and end positions"""
 
-    def __init__(self, main_widget: "MainWidget") -> None:
-        self.main_widget = main_widget
 
     def get_grid_mode(
         self, pictograph_dict

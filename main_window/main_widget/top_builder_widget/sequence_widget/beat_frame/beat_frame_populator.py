@@ -38,7 +38,10 @@ class BeatFramePopulator:
                 current_sequence_json[2]
             )
             self.main_widget.set_grid_mode(grid_mode)
-            # TODO - change the grid mode in the sequence image metadata
+            # check if there is a grid mode in the sequence metadata in the 0th entry
+            # if not, add it to the entry using the sequence properties manager
+            if not current_sequence_json[0].get("grid_mode"):
+                print(" Warning - no grid mode found in sequence metadata")
 
         # Load start position first
         start_pos_beat = self.start_pos_manager.convert_current_sequence_json_entry_to_start_pos_pictograph(
