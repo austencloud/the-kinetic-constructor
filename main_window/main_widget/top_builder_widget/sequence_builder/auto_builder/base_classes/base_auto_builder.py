@@ -49,7 +49,10 @@ class BaseAutoBuilder:
         if len(self.sequence) == 1:
             self.add_start_pos_pictograph()
             self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
-        self.modify_layout_for_chosen_number_of_beats(length)
+            
+        self.sequence_widget.beat_frame.populator.modify_layout_for_chosen_number_of_beats(
+            length
+        )
 
     def add_start_pos_pictograph(self) -> None:
         """Add a starting position pictograph to the sequence."""
@@ -94,11 +97,6 @@ class BaseAutoBuilder:
         pictograph_dict["red_attributes"][START_ORI] = IN
         pictograph_dict["blue_attributes"][END_ORI] = IN
         pictograph_dict["red_attributes"][END_ORI] = IN
-
-    def modify_layout_for_chosen_number_of_beats(self, beat_count):
-        self.sequence_widget.beat_frame.layout_manager.configure_beat_frame(
-            beat_count, override_grow_sequence=True
-        )
 
     def _update_start_oris(self, next_pictograph_dict, last_pictograph_dict):
         next_pictograph_dict["blue_attributes"][START_ORI] = last_pictograph_dict[

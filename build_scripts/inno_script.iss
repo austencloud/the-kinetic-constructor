@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "The Kinetic Constructor"
-#define MyAppVersion "0.2"
+#define MyAppVersion "0.2.1"
 #define MyAppPublisher "Austen Cloud"
 #define MyAppURL "https://www.thekineticalphabet.com/"
 #define MyAppExeName "main.exe"

@@ -108,10 +108,7 @@
     "(o, 1.5, 3, op, op)": {
       "static_from_layer1_rot_angle_override": true
     },
-    "(o, 2, 1, op, op)": {
-      "dash_from_layer2": [0, -140],
-      "static_from_layer1": [70, 5]
-    },
+    "(o, 2, 1, op, op)": {},
     "(o, 2, 1.5, op, op)": {
       "static_from_layer1_rot_angle_override": true,
       "dash_from_layer2": [0, -130]

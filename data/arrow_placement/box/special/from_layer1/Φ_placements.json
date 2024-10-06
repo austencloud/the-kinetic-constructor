@@ -184,6 +184,10 @@
     "(o, 3, 2)": {
       "static_rot_angle_override": true,
       "dash": [35, 55]
+    },
+    "(o, 2, 2)": {
+      "static_rot_angle_override": true,
+      "dash": [-20, 90]
     }
   }
 }

@@ -13,7 +13,7 @@ class GridModeChecker:
     def __init__(self, main_widget: "MainWidget") -> None:
         self.main_widget = main_widget
 
-    def check_grid_mode(
+    def get_grid_mode(
         self, pictograph_dict
     ) -> None | Literal["box"] | Literal["diamond"]:
         box_mode_positions = self.get_box_mode_positions()

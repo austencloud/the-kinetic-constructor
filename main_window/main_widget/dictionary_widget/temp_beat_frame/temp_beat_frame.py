@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGridLayout
 from PyQt6.QtCore import Qt
 
+from main_window.main_widget.grid_mode_checker import GridModeChecker
 from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
     Beat,
     BeatView,
@@ -119,7 +120,6 @@ class TempBeatFrame(BaseBeatFrame):
         entry["start_pos"] = entry["end_pos"]
         self.start_pos_view.start_pos.updater.update_pictograph(entry)
 
-
     def populate_beat_frame_from_json(
         self, current_sequence_json: list[dict[str, str]]
     ) -> None:
@@ -132,6 +132,10 @@ class TempBeatFrame(BaseBeatFrame):
         self.clear_sequence(
             show_indicator=False, should_reset_to_start_pos_picker=False
         )
+        grid_mode = GridModeChecker(self.main_widget).get_grid_mode(
+            current_sequence_json[2]
+        )
+        self.main_widget.set_grid_mode(grid_mode)
         start_pos_beat = self.start_pos_manager.convert_current_sequence_json_entry_to_start_pos_pictograph(
             current_sequence_json
         )

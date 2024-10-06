@@ -1,3 +1,20 @@
 pyinstaller --noconsole --add-data "settings.json;." --add-data "data;data" --add-data "images;images" --add-data "dictionary;dictionary" --add-data "temp;temp" main.py
 
 pyinstaller --add-data "settings.json;." --add-data "data;data" --add-data "images;images" --add-data "dictionary;dictionary" --add-data "temp;temp" main.py
+
+
+
+pyinstaller --noconfirm \
+    --hidden-import pyarrow \
+    --hidden-import matplotlib.backends.backend_agg \
+    --hidden-import numpy \
+    --add-data "settings.json;." \
+    --add-data "data;data" \
+    --add-data "images;images" \
+    --add-data "dictionary;dictionary" \
+    --add-data "temp;temp" \
+    --add-binary "C:\Windows\System32\api-ms-win-crt-runtime-l1-1-0.dll;." \
+    --add-binary "C:\Windows\System32\api-ms-win-crt-heap-l1-1-0.dll;." \
+    --add-binary "C:\Windows\System32\api-ms-win-crt-string-l1-1-0.dll;." \
+    --add-binary "C:\Windows\System32\api-ms-win-crt-math-l1-1-0.dll;." \
+    main.py

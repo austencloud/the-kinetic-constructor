@@ -7,7 +7,7 @@
         "grid_mode": "box"
     },
     "image_export": {
-        "include_start_position": false,
+        "include_start_position": true,
         "add_info": true,
         "open_directory_on_export": true,
         "add_word": true,
@@ -53,7 +53,9 @@
     "dictionary": {
         "sort_method": "date_added",
         "current_section": "browser",
-        "current_filter": null
+        "current_filter": {
+            "starting_letter": "I"
+        }
     },
     "sequence_layout": {
         "grow_sequence": true,
@@ -66,7 +68,7 @@
                 "sequence_type": "circular",
                 "sequence_length": 16,
                 "max_turn_intensity": 2,
-                "sequence_level": 3,
+                "sequence_level": 2,
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",
                 "continuous_rotation": true,

@@ -46,7 +46,7 @@ class Lesson1QuestionGenerator(BaseQuestionGenerator):
             valid_dicts.setdefault(letter, [])
             for pictograph_dict in self.main_widget.pictograph_dicts[letter]:
                 if (
-                    self.main_widget.grid_mode_checker.check_grid_mode(pictograph_dict)
+                    self.main_widget.grid_mode_checker.get_grid_mode(pictograph_dict)
                     == grid_mode
                 ):
                     valid_dicts[letter].append(pictograph_dict)

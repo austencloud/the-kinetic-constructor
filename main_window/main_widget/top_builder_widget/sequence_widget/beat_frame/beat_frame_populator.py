@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-
+from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
@@ -29,11 +29,12 @@ class BeatFramePopulator:
             show_indicator=False, should_reset_to_start_pos_picker=False
         )
 
+
         grid_mode = current_sequence_json[0].get("grid_mode")
         if grid_mode:
             self.main_widget.set_grid_mode(grid_mode)
         else:
-            grid_mode = self.main_widget.grid_mode_checker.check_grid_mode(
+            grid_mode = self.main_widget.grid_mode_checker.get_grid_mode(
                 current_sequence_json[2]
             )
             self.main_widget.set_grid_mode(grid_mode)
@@ -45,8 +46,8 @@ class BeatFramePopulator:
         )
         self.json_manager.start_position_handler.set_start_position_data(start_pos_beat)
         self.start_pos_view.set_start_pos(start_pos_beat)
-
-        # Process all beats, including placeholders
+        length = len(current_sequence_json) - 2
+        self.modify_layout_for_chosen_number_of_beats(length)
         for pictograph_dict in current_sequence_json[1:]:
             if pictograph_dict.get("sequence_start_position"):
                 continue
@@ -56,7 +57,7 @@ class BeatFramePopulator:
             else:
                 # Regular beats are added as usual
                 self.sequence_widget.create_new_beat_and_add_to_sequence(
-                    pictograph_dict
+                    pictograph_dict, override_grow_sequence=True
                 )
 
         self.sequence_widget.update_current_word()
@@ -88,4 +89,9 @@ class BeatFramePopulator:
         """
         self.json_manager.updater.add_placeholder_entry_to_current_sequence(
             pictograph_dict["beat"], pictograph_dict["parent_beat"]
+        )
+
+    def modify_layout_for_chosen_number_of_beats(self, beat_count):
+        self.beat_frame.layout_manager.configure_beat_frame(
+            beat_count, override_grow_sequence=True
         )
