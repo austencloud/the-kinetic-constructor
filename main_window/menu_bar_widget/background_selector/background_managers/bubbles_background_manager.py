@@ -2,15 +2,37 @@ import random
 from main_window.menu_bar_widget.background_selector.background_managers.background_manager import (
     BackgroundManager,
 )
-
-from PyQt6.QtGui import QColor, QPainter, QLinearGradient, QRadialGradient, QPainterPath
+from PyQt6.QtGui import (
+    QColor,
+    QPainter,
+    QLinearGradient,
+    QPixmap,
+    QRadialGradient,
+    QTransform,
+)
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import Qt, QPointF
+
+from utilities.path_helpers import get_images_and_data_path
 
 
 class BubblesBackgroundManager(BackgroundManager):
     def __init__(self, parent=None):
         super().__init__(parent)
+
+        # Define the backgrounds folder path
+        backgrounds_folder = get_images_and_data_path("images/backgrounds/")
+
+        # Load the fish images
+        self.fish_images = [
+            QPixmap(backgrounds_folder + "Tropical-Fish-Sherbert.png"),
+            QPixmap(backgrounds_folder + "Tropical-Fish-Coral.png"),
+            QPixmap(backgrounds_folder + "Tropical-Fish-Seafoam.png"),
+            QPixmap(backgrounds_folder + "orange_fish.png"),
+            QPixmap(backgrounds_folder + "blue_orange_fish.png"),
+            
+        ]
+
         # Create bubbles floating upward with additional reflection properties
         self.bubbles = [
             {
@@ -24,6 +46,11 @@ class BubblesBackgroundManager(BackgroundManager):
             for _ in range(100)
         ]
 
+        # Initialize fish that occasionally swim across the screen
+        self.fish = []
+        self.fish_timer = 0  # Time between fish appearances
+        self.spawn_fish_interval = random.randint(50, 100)  # More frequent fish spawn
+
     def animate_background(self):
         # Move the bubbles upwards
         for bubble in self.bubbles:
@@ -33,7 +60,62 @@ class BubblesBackgroundManager(BackgroundManager):
                 bubble["x"] = random.uniform(0, 1)
                 bubble["size"] = random.uniform(5, 15)
                 bubble["highlight_factor"] = random.uniform(0.7, 1.0)  # Reset highlight
+
+        # Handle fish movement
+        self.animate_fish()
+
         self.update_required.emit()
+
+    def animate_fish(self):
+        # Update existing fish positions
+        for fish in self.fish:
+            fish["x"] += fish["dx"] * fish["speed"]
+            fish["y"] += fish["dy"] * fish["speed"]
+
+        # Remove fish that have swum out of view
+        self.fish = [
+            fish
+            for fish in self.fish
+            if -0.2 <= fish["x"] <= 1.2 and -0.2 <= fish["y"] <= 1.2
+        ]
+
+        # Spawn a new fish if timer is up
+        self.fish_timer += 1
+        if self.fish_timer >= self.spawn_fish_interval:
+            self.spawn_fish()
+            self.fish_timer = 0  # Reset timer for next fish
+            self.spawn_fish_interval = random.randint(100, 200)
+
+    def spawn_fish(self):
+        """Spawns a fish from a random side of the screen."""
+        start_position_options = [
+            (-0.1, random.uniform(0.2, 0.8)),  # Left side
+            (1.1, random.uniform(0.2, 0.8)),  # Right side
+        ]
+        start_x, start_y = random.choice(start_position_options)
+
+        # Bias towards horizontal movement by making dx larger and dy smaller
+        dx = (
+            random.uniform(0.3, 1) if start_x < 0 else random.uniform(-1, -0.3)
+        )  # Horizontal bias
+        dy = random.uniform(-0.1, 0.1)  # Smaller vertical movement
+
+        normalization_factor = (dx**2 + dy**2) ** 0.5  # Normalize diagonal movement
+        dx /= normalization_factor
+        dy /= normalization_factor
+
+        # Increase fish size and set random fish image
+        self.fish.append(
+            {
+                "x": start_x,
+                "y": start_y,
+                "dx": dx,
+                "dy": dy,
+                "size": random.uniform(40, 80),  # Larger fish size
+                "speed": random.uniform(0.003, 0.005),  # Fish speed
+                "image": random.choice(self.fish_images),  # Random fish image
+            }
+        )
 
     def paint_background(self, widget: QWidget, painter: QPainter):
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
@@ -66,13 +148,15 @@ class BubblesBackgroundManager(BackgroundManager):
                 bubble["highlight_factor"],
             )
 
+        # Draw fish if any are swimming
+        self.draw_fish(painter, widget)
+
         painter.setOpacity(1.0)  # Reset opacity after drawing
 
     def draw_bubble_reflection(
         self, painter: QPainter, center: QPointF, size: int, highlight_factor: float
     ):
         """Draws a reflection highlight on the top of the bubble to simulate lighting."""
-        # Create a small, soft radial gradient for the highlight (reflection effect)
         highlight_radius = size * 0.4 * highlight_factor
         gradient = QRadialGradient(center, highlight_radius)
         gradient.setColorAt(0, QColor(255, 255, 255, 180))  # Bright reflection
@@ -81,10 +165,30 @@ class BubblesBackgroundManager(BackgroundManager):
         painter.setBrush(gradient)
         painter.drawEllipse(center, highlight_radius, highlight_radius)
 
-    def draw_underwater_ripples(self, widget: QWidget, painter: QPainter):
-        """Optional: Simulates subtle ripples of light on the underwater background."""
-        ripple_color = QColor(255, 255, 255, 30)  # Faint light ripples
-        painter.setPen(ripple_color)
-        ripple_step = 20
-        for y in range(0, widget.height(), ripple_step):
-            painter.drawLine(0, y, widget.width(), y)
+    def draw_fish(self, painter: QPainter, widget: QWidget):
+        """Draw fish swimming across the screen using the provided fish images."""
+        for fish in self.fish:
+            x = int(fish["x"] * widget.width())
+            y = int(fish["y"] * widget.height())
+            size = int(fish["size"])
+
+            # Ensure full opacity for the fish
+            painter.setOpacity(1.0)
+
+            # Scale the fish image to its size using SmoothTransformation
+            fish_image = fish["image"].scaled(
+                size,
+                size,
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation,
+            )
+
+            # Flip the fish image if it is moving left (dx < 0)
+            if fish["dx"] < 0:
+                transform = QTransform().scale(-1, 1)  # Mirror horizontally
+                fish_image = fish_image.transformed(
+                    transform, Qt.TransformationMode.SmoothTransformation
+                )
+
+            # Draw the fish at the correct position with no blending
+            painter.drawPixmap(x, y, fish_image)
