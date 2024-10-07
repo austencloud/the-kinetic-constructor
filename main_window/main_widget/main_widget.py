@@ -4,12 +4,15 @@ from PyQt6.QtGui import QKeyEvent, QCursor, QCloseEvent
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QTabWidget
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from Enums.Enums import Letter
 from Enums.PropTypes import PropType
 from letter_determiner.letter_determiner import LetterDeterminer
 from main_window.main_widget.grid_mode_checker import GridModeChecker
 from main_window.main_widget.learn_widget.learn_widget import LearnWidget
+from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
+    SequenceWidget,
+)
 from .pcitograph_dict_loader import PictographDictLoader
 from .sequence_properties_manager.sequence_properties_manager import (
     SequencePropertiesManager,
@@ -58,6 +61,9 @@ class MainWidget(QTabWidget):
 
         self._setup_ui_components()
         self.apply_background()
+        self.main_window.settings_manager.background_changed.connect(
+            self.update_background
+        )
 
         self.currentChanged.connect(self.on_tab_changed)
         self.tabBar().setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -221,7 +227,20 @@ class MainWidget(QTabWidget):
         self.background_manager.update_required.connect(self.update)
 
     def update_background(self, bg_type: str):
-        self.apply_background()
+        widgets: Union[TopBuilderWidget, DictionaryWidget, SequenceWidget] = [
+            self.top_builder_widget,
+            self.dictionary_widget,
+            self.learn_widget,
+        ]
+        for widget in widgets:
+            widget.update_background_manager(bg_type)
+        # else:
+        #     # If the current widget doesn't have update_background_manager, update self
+        #     if self.background_manager:
+        #         self.background_manager.stop_animation()
+        #     self.apply_background()
+        #     if self.background_manager:
+        #         self.background_manager.start_animation()
         self.update()
 
     def closeEvent(self, event: QCloseEvent):

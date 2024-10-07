@@ -32,18 +32,22 @@ class DictionaryWidget(QWidget):
             self.main_widget.main_window.settings_manager.dictionary_settings
         )
         self._setup_ui()
-        self.connect_signals()
+        # self.connect_signals()
         self.initialized = False
         self.background_manager = self.global_settings.setup_background_manager(self)
 
-    def connect_signals(self):
-        self.main_widget.main_window.settings_manager.background_changed.connect(
-            self.update_background_manager
-        )
+    # def connect_signals(self):
+    #     self.main_widget.main_window.settings_manager.background_changed.connect(
+    #         self.update_background_manager
+    #     )
+
 
     def update_background_manager(self, bg_type: str):
+        if self.background_manager:
+            self.background_manager.stop_animation()
         self.background_manager = self.global_settings.setup_background_manager(self)
         self.background_manager.update_required.connect(self.update)
+        self.background_manager.start_animation()
         self.update()
 
     def _setup_ui(self) -> None:

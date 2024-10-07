@@ -49,7 +49,8 @@ class TurnsBox(QFrame):
     def update_styles(self) -> None:
         self.setObjectName(self.__class__.__name__)
         self.setStyleSheet(
-            f"#{self.__class__.__name__} {{ border: {self.border_width}px solid {self.color}; background-color: white;}}"
+            f"#{self.__class__.__name__} {{ border: {self.border_width}px solid "
+            f"{self.color}; background-color: white;}}"
         )
 
     def resize_turns_box(self) -> None:

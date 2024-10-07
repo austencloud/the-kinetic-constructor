@@ -21,13 +21,13 @@ class TopBuilderWidget(QWidget):
         self.sequence_widget = SequenceWidget(self)
         self.initialized = False
         self._setup_layout()
-        self.connect_signals()
+        # self.connect_signals()
         self.background_manager = None
 
-    def connect_signals(self):
-        self.main_widget.main_window.settings_manager.background_changed.connect(
-            self.update_background_manager
-        )
+    # def connect_signals(self):
+    #     self.main_widget.main_window.settings_manager.background_changed.connect(
+    #         self.update_background_manager
+    #     )
 
     def _setup_layout(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)
@@ -35,8 +35,11 @@ class TopBuilderWidget(QWidget):
         self.layout.addWidget(self.sequence_builder, 1)
 
     def update_background_manager(self, bg_type: str):
+        if self.background_manager:
+            self.background_manager.stop_animation()
         self.background_manager = self.global_settings.setup_background_manager(self)
         self.background_manager.update_required.connect(self.update)
+        self.background_manager.start_animation()
         self.update()
 
     def paintEvent(self, event):
@@ -55,7 +58,6 @@ class TopBuilderWidget(QWidget):
         super().hideEvent(event)
         if self.background_manager:
             self.background_manager.stop_animation()
-
 
     def resize_top_builder_widget(self):
         self.sequence_widget.resize_sequence_widget()

@@ -56,7 +56,7 @@ class OriPickerWidget(QWidget):
         self._setup_layout()
         self._attach_listeners()
         # self._set_initial_orientation()
-        self.resize_ori_picker_widget()
+        # self.resize_ori_picker_widget()
 
     def _setup_components(self) -> None:
         self.orientation_text = QLabel("Orientation", self)

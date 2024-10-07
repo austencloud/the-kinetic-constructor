@@ -18,10 +18,10 @@ from main_window.menu_bar_widget.background_selector.background_managers.particl
 from main_window.menu_bar_widget.background_selector.background_managers.rainbow_background_manager import (
     RainbowBackgroundManager,
 )
-from main_window.menu_bar_widget.background_selector.background_managers.snow_background_manager import (
-    SnowBackgroundManager,
+from main_window.menu_bar_widget.background_selector.background_managers.snowfall.snowfall_background_manager import (
+    SnowfallBackgroundManager,
 )
-from main_window.menu_bar_widget.background_selector.background_managers.startfield_background_manager import (
+from main_window.menu_bar_widget.background_selector.background_managers.starfield_background_manager import (
     StarfieldBackgroundManager,
 )
 
@@ -90,7 +90,9 @@ class GlobalSettings:
         self, bg_type: str, widget, is_splash_screen=False
     ) -> Optional[BackgroundManager]:
         if not is_splash_screen:
-            main_widget = getattr(self.settings_manager.main_window, 'main_widget', None)
+            main_widget = getattr(
+                self.settings_manager.main_window, "main_widget", None
+            )
             if main_widget:
                 self.font_color_updater.update_main_widget_font_colors(
                     main_widget, bg_type
@@ -107,14 +109,13 @@ class GlobalSettings:
             "Particle": ParticleBackgroundManager,
             "Aurora": AuroraBackgroundManager,
             "AuroraBorealis": AuroraBorealisBackgroundManager,
-            "Snowfall": SnowBackgroundManager,
+            "Snowfall": SnowfallBackgroundManager,
             "Bubbles": BubblesBackgroundManager,
         }
         manager_class = background_manager_map.get(bg_type)
         if manager_class:
             return manager_class(widget)
         return None
-
 
     def get_current_font_color(self) -> str:
         return self.font_color_updater.get_font_color(self.get_background_type())

@@ -17,22 +17,36 @@ from utilities.path_helpers import get_images_and_data_path
 
 
 class BubblesBackgroundManager(BackgroundManager):
+    # Class variable to hold cached images
+    _cached_fish_images = None
+
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        # Define the backgrounds folder path
-        backgrounds_folder = get_images_and_data_path("images/backgrounds/")
+        # Check if the fish images are already cached
+        if BubblesBackgroundManager._cached_fish_images is None:
+            # Define the backgrounds folder path
+            backgrounds_folder = get_images_and_data_path("images/backgrounds/")
 
-        # Load the fish images
-        self.fish_images = [
-            QPixmap(backgrounds_folder + "Tropical-Fish-Sherbert.png"),
-            QPixmap(backgrounds_folder + "Tropical-Fish-Coral.png"),
-            QPixmap(backgrounds_folder + "Tropical-Fish-Seafoam.png"),
-            QPixmap(backgrounds_folder + "orange_fish.png"),
-            QPixmap(backgrounds_folder + "blue_orange_fish.png"),
-            
-        ]
+            # Load the fish images and store them in the class variable
+            BubblesBackgroundManager._cached_fish_images = [
+                QPixmap(backgrounds_folder + "Tropical-Fish-Sherbert.png"),
+                QPixmap(backgrounds_folder + "Tropical-Fish-Coral.png"),
+                QPixmap(backgrounds_folder + "Tropical-Fish-Seafoam.png"),
+                QPixmap(backgrounds_folder + "orange_fish.png"),
+                QPixmap(backgrounds_folder + "blue_orange_fish.png"),
+                QPixmap(backgrounds_folder + "clown_fish.png"),
+                QPixmap(backgrounds_folder + "yellow_fish.png"),
+            ]
 
+        # Use the cached images in this instance
+        self.fish_images = BubblesBackgroundManager._cached_fish_images
+
+        # Initialize bubbles and fish
+        self._initialize_bubbles()
+        self._initialize_fish()
+
+    def _initialize_bubbles(self):
         # Create bubbles floating upward with additional reflection properties
         self.bubbles = [
             {
@@ -46,6 +60,7 @@ class BubblesBackgroundManager(BackgroundManager):
             for _ in range(100)
         ]
 
+    def _initialize_fish(self):
         # Initialize fish that occasionally swim across the screen
         self.fish = []
         self.fish_timer = 0  # Time between fish appearances
@@ -113,7 +128,7 @@ class BubblesBackgroundManager(BackgroundManager):
                 "dy": dy,
                 "size": random.uniform(40, 80),  # Larger fish size
                 "speed": random.uniform(0.003, 0.005),  # Fish speed
-                "image": random.choice(self.fish_images),  # Random fish image
+                "image": random.choice(self.fish_images),  # Use cached images
             }
         )
 

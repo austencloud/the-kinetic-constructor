@@ -2,8 +2,8 @@
     "global": {
         "prop_type": "Staff",
         "background_type": "Snowfall",
-        "grow_sequence": false,
-        "current_tab": "sequence_builder",
+        "grow_sequence": true,
+        "current_tab": "dictionary",
         "grid_mode": "box"
     },
     "image_export": {
@@ -58,7 +58,7 @@
         }
     },
     "sequence_layout": {
-        "grow_sequence": false,
+        "grow_sequence": true,
         "num_beats": 16,
         "layout_option": "4 x 4"
     },

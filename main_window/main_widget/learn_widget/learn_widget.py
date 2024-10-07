@@ -46,20 +46,24 @@ class LearnWidget(QWidget):
         self.stack_layout.setCurrentWidget(self.lesson_selector)
 
         # Connect background manager
-        self.connect_background_manager()
+        # self.connect_background_manager()
         self.background_manager = self.global_settings.setup_background_manager(self)
 
-    def connect_background_manager(self) -> None:
-        """Connect to the background manager."""
-        self.main_widget.main_window.settings_manager.background_changed.connect(
-            self.update_background_manager
-        )
+    # def connect_background_manager(self) -> None:
+    #     """Connect to the background manager."""
+    #     self.main_widget.main_window.settings_manager.background_changed.connect(
+    #         self.update_background_manager
+    #     )
 
-    def update_background_manager(self, bg_type: str = None) -> None:
-        """Update the background manager."""
+
+    def update_background_manager(self, bg_type: str):
+        if self.background_manager:
+            self.background_manager.stop_animation()
         self.background_manager = self.global_settings.setup_background_manager(self)
         self.background_manager.update_required.connect(self.update)
+        self.background_manager.start_animation()
         self.update()
+
 
     def show_lesson_selection_widget(self) -> None:
         """Show the lesson selection screen."""

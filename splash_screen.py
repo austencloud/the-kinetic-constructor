@@ -29,6 +29,7 @@ class SplashScreen(QWidget):
 
         self._setup_window_properties()
         self._create_components()
+        self.main_widget = None
         self.background_manager = (
             self.settings_manager.global_settings.setup_background_manager(
                 self, is_splash_screen=True

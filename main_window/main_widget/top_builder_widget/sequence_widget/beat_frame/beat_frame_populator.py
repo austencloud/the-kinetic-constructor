@@ -114,8 +114,8 @@ class BeatFramePopulator:
         last_beat = self.sequence_widget.beat_frame.get.last_filled_beat().beat
         self.sequence_builder.manual_builder.last_beat = last_beat
 
-        if self.sequence_builder.manual_builder.start_pos_picker.isVisible():
-            self.sequence_builder.manual_builder.transition_to_sequence_building()
+        # if self.sequence_builder.manual_builder.start_pos_picker.isVisible():
+        self.sequence_builder.manual_builder.transition_to_sequence_building()
 
         scroll_area = self.sequence_builder.manual_builder.option_picker.scroll_area
         scroll_area.remove_irrelevant_pictographs()
