@@ -63,7 +63,7 @@ class RotatedPermutationExecuter(PermutationExecutor):
             sequence_widget.create_new_beat_and_add_to_sequence(
                 next_pictograph, override_grow_sequence=True, update_word=False
             )
-            self.validation_engine.validate_last_pictograph()
+            # self.validation_engine.validate_last_pictograph()
             QApplication.processEvents()
 
             last_entry = next_pictograph

@@ -82,7 +82,7 @@ class CircularAutoBuilder(BaseAutoBuilder):
             self.sequence_widget.create_new_beat_and_add_to_sequence(
                 next_pictograph, override_grow_sequence=True
             )
-            self.validation_engine.validate_last_pictograph()
+            # self.validation_engine.validate_last_pictograph()
             QApplication.processEvents()
 
         self._apply_permutations(self.sequence, permutation_type, rotation_type)
@@ -133,8 +133,6 @@ class CircularAutoBuilder(BaseAutoBuilder):
 
         if level == 2 or level == 3:
             next_beat = self._set_turns(next_beat, turn_blue, turn_red)
-
-        
 
         self._update_start_oris(next_beat, self.sequence[-1])
         self._update_end_oris(next_beat)
