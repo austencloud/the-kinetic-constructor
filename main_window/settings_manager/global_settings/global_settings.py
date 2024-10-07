@@ -79,22 +79,28 @@ class GlobalSettings:
     def setup_background_manager(
         self, widget, is_splash_screen=False
     ) -> BackgroundManager:
-        if not is_splash_screen:
-            if not self.main_widget:
-                self.main_widget = self.settings_manager.main_window.main_widget
+        # if not is_splash_screen:
+        #     if not self.main_widget:
+        #         self.main_widget = self.settings_manager.main_window.main_widget
         bg_type = self.get_background_type()
         return self.get_background_manager(bg_type, widget, is_splash_screen)
 
+    # In global_settings.py
     def get_background_manager(
         self, bg_type: str, widget, is_splash_screen=False
     ) -> Optional[BackgroundManager]:
         if not is_splash_screen:
-            self.font_color_updater.update_main_widget_font_colors(
-                self.main_widget, bg_type
-            )
+            main_widget = getattr(self.settings_manager.main_window, 'main_widget', None)
+            if main_widget:
+                self.font_color_updater.update_main_widget_font_colors(
+                    main_widget, bg_type
+                )
+            else:
+                # main_widget is not set yet; skip updating font colors
+                pass
         else:
             self.font_color_updater.update_splash_screen_font_colors(widget, bg_type)
-
+        # Rest of your code remains the same
         background_manager_map = {
             "Rainbow": RainbowBackgroundManager,
             "Starfield": StarfieldBackgroundManager,
@@ -104,11 +110,11 @@ class GlobalSettings:
             "Snowfall": SnowBackgroundManager,
             "Bubbles": BubblesBackgroundManager,
         }
-
         manager_class = background_manager_map.get(bg_type)
         if manager_class:
             return manager_class(widget)
         return None
+
 
     def get_current_font_color(self) -> str:
         return self.font_color_updater.get_font_color(self.get_background_type())

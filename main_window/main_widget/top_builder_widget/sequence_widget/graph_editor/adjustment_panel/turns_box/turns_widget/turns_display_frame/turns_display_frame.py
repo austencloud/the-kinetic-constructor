@@ -58,10 +58,3 @@ class TurnsDisplayFrame(QFrame):
     def resize_adjust_turns_buttons(self) -> None:
         for button in [self.increment_button, self.decrement_button]:
             button.resize_adjust_turns_button()
-
-    def adjust_turn(self, adjustment: Union[int, float]) -> None:
-        current_turns = self.turns_widget.adjustment_manager.get_current_turns_value()
-        if current_turns == 0 and adjustment < 0:
-            self.turns_widget.set_to_float()
-        else:
-            self.adjustment_manager.adjust_turns(adjustment)

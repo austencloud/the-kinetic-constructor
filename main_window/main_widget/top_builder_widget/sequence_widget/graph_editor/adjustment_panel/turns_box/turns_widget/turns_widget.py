@@ -68,7 +68,6 @@ class TurnsWidget(QWidget):
         self._resize_turns_text()
         self.motion_type_label.resize_buttons()
 
-
     def _resize_turns_text(self) -> None:
         font_size = self.turns_box.graph_editor.width() // 50
         font = QFont("Cambria", font_size, QFont.Weight.Bold)

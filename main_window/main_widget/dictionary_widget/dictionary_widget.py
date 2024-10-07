@@ -34,7 +34,7 @@ class DictionaryWidget(QWidget):
         self._setup_ui()
         self.connect_signals()
         self.initialized = False
-        self.background_manager = None
+        self.background_manager = self.global_settings.setup_background_manager(self)
 
     def connect_signals(self):
         self.main_widget.main_window.settings_manager.background_changed.connect(
@@ -63,10 +63,6 @@ class DictionaryWidget(QWidget):
         self.setLayout(self.layout)
 
     def paintEvent(self, event) -> None:
-        if self.background_manager is None:
-            self.background_manager = self.global_settings.setup_background_manager(
-                self
-            )
         painter = QPainter(self)
         self.background_manager.paint_background(self, painter)
 
@@ -80,6 +76,13 @@ class DictionaryWidget(QWidget):
 
     def showEvent(self, event):
         super().showEvent(event)
+        self.background_manager.start_animation()
+
+    def hideEvent(self, event):
+        super().hideEvent(event)
+        if self.background_manager:
+            self.background_manager.stop_animation()
+
 
     def show_initial_section(self):
         current_section = (

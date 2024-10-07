@@ -1,26 +1,11 @@
 import sys
 import logging
-
-from welcome_dialog import WelcomeDialog
-
 logging.basicConfig(level=logging.WARNING)
 logging.getLogger("matplotlib").setLevel(logging.WARNING)
 logging.getLogger("PIL").setLevel(logging.WARNING)
-
 from PyQt6.QtWidgets import QApplication
-from PyQt6.QtGui import QGuiApplication
 from PyQt6.QtCore import QTimer
-from profiler import Profiler
-from splash_screen import SplashScreen
-from main_window.settings_manager.settings_manager import SettingsManager
-
-
-from PyQt6.QtWidgets import QApplication, QMainWindow
 from PyQt6.QtGui import QPalette, QColor
-from PyQt6.QtCore import Qt
-
-import sys
-
 
 def main() -> None:
     app = QApplication(sys.argv)

@@ -37,9 +37,11 @@ class GE_TurnsLabel(QLabel):
             (self.turns_box.adjustment_panel.graph_editor.width() / 22)
         )
         self.setFont(QFont("Arial", self.turns_display_font_size, QFont.Weight.Bold))
-        self.setFixedSize(
-            int(self.turns_box.adjustment_panel.graph_editor.width() / 10),
-            int(self.turns_box.adjustment_panel.graph_editor.height() / 4),
+        self.setMaximumWidth(
+            int(self.turns_box.adjustment_panel.graph_editor.width() / 10)
+        )
+        self.setMaximumHeight(
+            int(self.turns_box.adjustment_panel.graph_editor.height() / 5)
         )
         border_radius = self.width() // 4
 

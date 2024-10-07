@@ -16,11 +16,10 @@ if TYPE_CHECKING:
 
 
 class FontColorUpdater:
-    def update_main_widget_font_colors(
-        self, main_widget: "MainWidget", bg_type: str
-    ) -> None:
+    def update_main_widget_font_colors(self, widget, bg_type):
+
         font_color = self.get_font_color(bg_type)
-        self._apply_widget_colors(main_widget, font_color)
+        self._apply_widget_colors(widget, font_color)
 
     def update_splash_screen_font_colors(
         self, splash_screen: "SplashScreen", bg_type: str

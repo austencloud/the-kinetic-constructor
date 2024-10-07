@@ -42,6 +42,8 @@ class MainWidget(QTabWidget):
     ) -> None:
         super().__init__(main_window)
         self.main_window = main_window
+        self.main_window.main_widget = self
+
         self.settings_manager = main_window.settings_manager
         self.initialized = False
         # Pass the splash_screen reference
@@ -55,6 +57,8 @@ class MainWidget(QTabWidget):
         self._initialize_managers()
 
         self._setup_ui_components()
+        self.apply_background()
+
         self.currentChanged.connect(self.on_tab_changed)
         self.tabBar().setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.splash_screen.update_progress(100, "Initialization complete!")
@@ -195,8 +199,14 @@ class MainWidget(QTabWidget):
 
     def showEvent(self, event):
         super().showEvent(event)
-        self.apply_background()
         self.main_window.geometry_manager.set_dimensions()
+        if self.background_manager:
+            self.background_manager.start_animation()
+
+    def hideEvent(self, event):
+        super().hideEvent(event)
+        if self.background_manager:
+            self.background_manager.stop_animation()
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

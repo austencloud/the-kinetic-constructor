@@ -47,6 +47,7 @@ class LearnWidget(QWidget):
 
         # Connect background manager
         self.connect_background_manager()
+        self.background_manager = self.global_settings.setup_background_manager(self)
 
     def connect_background_manager(self) -> None:
         """Connect to the background manager."""
@@ -86,12 +87,17 @@ class LearnWidget(QWidget):
 
     def paintEvent(self, event) -> None:
         """Draw the background using the background manager."""
-        if self.background_manager is None:
-            self.background_manager = self.global_settings.setup_background_manager(
-                self
-            )
         painter = QPainter(self)
         self.background_manager.paint_background(self, painter)
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        self.background_manager.start_animation()
+
+    def hideEvent(self, event):
+        super().hideEvent(event)
+        if self.background_manager:
+            self.background_manager.stop_animation()
 
     def resizeEvent(self, event) -> None:
         """Handle resize events for the widget."""

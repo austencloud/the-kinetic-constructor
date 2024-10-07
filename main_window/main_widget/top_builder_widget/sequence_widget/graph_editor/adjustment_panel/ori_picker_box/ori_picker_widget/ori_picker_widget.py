@@ -168,7 +168,6 @@ class OriPickerWidget(QWidget):
         button = QPushButton()
         button.setIcon(QIcon(icon_path))
         button.clicked.connect(click_function)
-        # button.setFixedSize(40, 40)
         button.setCursor(Qt.CursorShape.PointingHandCursor)
         return button
 
@@ -194,9 +193,8 @@ class OriPickerWidget(QWidget):
         padding = font_metrics.horizontalAdvance("  ")
 
         required_width = text_width + padding
-        required_height = font_metrics.height() + padding
 
-        self.ori_display_label.setFixedSize(required_width, required_height)
+        self.ori_display_label.setMinimumWidth(required_width)
 
         border_size = int(required_width / 60) or 1  # Ensure border size is at least 1
         border_color = self._get_border_color()

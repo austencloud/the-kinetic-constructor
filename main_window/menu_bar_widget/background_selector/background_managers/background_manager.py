@@ -13,11 +13,19 @@ class BackgroundManager(QObject):
         self.gradient_shift = 0
         self.color_shift = 0
         self.timer = QTimer(self)
-        # self.timer.timeout.connect(self.animate_background)
-        self.timer.start(50)
+        self.timer.timeout.connect(self.animate_background)
+        # self.timer.start(50)
 
     def animate_background(self):
         pass
 
     def paint_background(self, widget, painter):
         pass
+
+    def start_animation(self):
+        if not self.timer.isActive():
+            self.timer.start(50)
+
+    def stop_animation(self):
+        if self.timer.isActive():
+            self.timer.stop()

@@ -49,6 +49,13 @@ class TopBuilderWidget(QWidget):
             self.background_manager = self.global_settings.setup_background_manager(
                 self
             )
+        self.background_manager.start_animation()
+
+    def hideEvent(self, event):
+        super().hideEvent(event)
+        if self.background_manager:
+            self.background_manager.stop_animation()
+
 
     def resize_top_builder_widget(self):
         self.sequence_widget.resize_sequence_widget()
