@@ -21,7 +21,7 @@ from main_window.menu_bar_widget.background_selector.background_managers.rainbow
 from main_window.menu_bar_widget.background_selector.background_managers.snowfall.snowfall_background_manager import (
     SnowfallBackgroundManager,
 )
-from main_window.menu_bar_widget.background_selector.background_managers.starfield_background_manager import (
+from main_window.menu_bar_widget.background_selector.background_managers.starfield.starfield_background_manager import (
     StarfieldBackgroundManager,
 )
 

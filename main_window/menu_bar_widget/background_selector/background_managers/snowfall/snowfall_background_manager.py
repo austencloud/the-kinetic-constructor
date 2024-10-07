@@ -1,11 +1,9 @@
-import random
 from typing import TYPE_CHECKING, Union
 from main_window.menu_bar_widget.background_selector.background_managers.background_manager import (
     BackgroundManager,
 )
 from PyQt6.QtGui import QColor, QPainter, QLinearGradient
 from PyQt6.QtWidgets import QWidget
-from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
     from main_window.main_widget.dictionary_widget.dictionary_widget import (

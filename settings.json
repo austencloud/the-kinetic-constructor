@@ -1,10 +1,10 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Snowfall",
+        "background_type": "Particle",
         "grow_sequence": true,
-        "current_tab": "dictionary",
-        "grid_mode": "box"
+        "current_tab": "learn",
+        "grid_mode": "diamond"
     },
     "image_export": {
         "include_start_position": true,
@@ -54,7 +54,9 @@
         "sort_method": "date_added",
         "current_section": "browser",
         "current_filter": {
-            "level": 1
+            "contains_letters": [
+                "P"
+            ]
         }
     },
     "sequence_layout": {
