@@ -93,7 +93,7 @@ class CircularAutoBuilderFrame(BaseAutoBuilderFrame):
                 "continuous_rotation", self.builder_type
             ),
         )
-        self.auto_builder.sequence_builder.manual_builder.option_picker.update_option_picker()
+        # self.auto_builder.sequence_builder.manual_builder.option_picker.update_option_picker()
 
     def _resize_auto_builder_frame(self):
         super()._resize_auto_builder_frame()
