@@ -69,8 +69,8 @@ class GridModeChecker:
 
 
 def update_metadata_grid_mode(
-    metadata: Dict[str, Any], grid_mode_checker: GridModeChecker
-) -> Dict[str, Any]:
+    metadata: dict[str, Any], grid_mode_checker: GridModeChecker
+) -> dict[str, Any]:
     # Check if 'grid_mode' is already present in the first item of 'sequence'
     if "sequence" in metadata and len(metadata["sequence"]) > 0:
         sequence_metadata = metadata["sequence"][0]

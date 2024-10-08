@@ -8,11 +8,9 @@ from typing import TYPE_CHECKING, Union
 from Enums.Enums import Letter
 from Enums.PropTypes import PropType
 from letter_determiner.letter_determiner import LetterDeterminer
-from main_window.main_widget.grid_mode_checker import GridModeChecker
-from main_window.main_widget.learn_widget.learn_widget import LearnWidget
-from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
-    SequenceWidget,
-)
+from .grid_mode_checker import GridModeChecker
+from .learn_widget.learn_widget import LearnWidget
+from .top_builder_widget.sequence_widget.sequence_widget import SequenceWidget
 from .pcitograph_dict_loader import PictographDictLoader
 from .sequence_properties_manager.sequence_properties_manager import (
     SequencePropertiesManager,
@@ -49,12 +47,10 @@ class MainWidget(QTabWidget):
 
         self.settings_manager = main_window.settings_manager
         self.initialized = False
-        # Pass the splash_screen reference
         self.splash_screen = splash_screen
 
         self._setup_pictograph_cache()
         self._set_prop_type()
-        # self.set_grid_mode()
 
         self._setup_letters()
         self._initialize_managers()
@@ -108,7 +104,6 @@ class MainWidget(QTabWidget):
             )
             if not self.dictionary_widget.initialized:
                 self.dictionary_widget.initialized = True
-                # self.dictionary_widget.show_initial_section()
                 self.dictionary_widget.resize_dictionary_widget()
         elif index == self.learn_tab_index:
             self.main_window.settings_manager.global_settings.set_current_tab("learn")
@@ -127,7 +122,6 @@ class MainWidget(QTabWidget):
         self.prop_type = PropType.get_prop_type(prop_type_value)
 
     def _setup_ui_components(self):
-        # Initialize special_placement_loader here
         self.splash_screen.update_progress(70, "Setting up build tab...")
         self.top_builder_widget = TopBuilderWidget(self)
         self.splash_screen.update_progress(80, "Setting up browse tab...")
@@ -143,7 +137,6 @@ class MainWidget(QTabWidget):
         self.dictionary_tab_index = 1
         self.learn_tab_index = 2
 
-        # Setup the current tab based on settings
         current_tab = (
             self.main_window.settings_manager.global_settings.get_current_tab()
         )
@@ -198,11 +191,6 @@ class MainWidget(QTabWidget):
         else:
             super().keyPressEvent(event)
 
-    def resize_widgets(self):
-        self.top_builder_widget.resize_top_builder_widget()
-        self.dictionary_widget.browser.resize_dictionary_browser()
-        self.learn_widget.resize_learn_widget()
-
     def showEvent(self, event):
         super().showEvent(event)
         self.main_window.geometry_manager.set_dimensions()
@@ -227,20 +215,13 @@ class MainWidget(QTabWidget):
         self.background_manager.update_required.connect(self.update)
 
     def update_background(self, bg_type: str):
-        widgets: Union[TopBuilderWidget, DictionaryWidget, SequenceWidget] = [
+        widgets: list[Union[TopBuilderWidget, DictionaryWidget, LearnWidget]] = [
             self.top_builder_widget,
             self.dictionary_widget,
             self.learn_widget,
         ]
         for widget in widgets:
             widget.update_background_manager(bg_type)
-        # else:
-        #     # If the current widget doesn't have update_background_manager, update self
-        #     if self.background_manager:
-        #         self.background_manager.stop_animation()
-        #     self.apply_background()
-        #     if self.background_manager:
-        #         self.background_manager.start_animation()
         self.update()
 
     def closeEvent(self, event: QCloseEvent):

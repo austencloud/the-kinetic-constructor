@@ -118,6 +118,7 @@ class ThumbnailBoxSorter:
         level_section = initial_selection_widget.level_section
         length_section = initial_selection_widget.length_section
         author_section = initial_selection_widget.author_section
+        grid_mode_section = initial_selection_widget.grid_mode_section
         display_functions = {
             "starting_letter": starting_letter_section.display_only_thumbnails_starting_with_letter,
             "sequence_length": length_section.display_only_thumbnails_with_sequence_length,
@@ -127,6 +128,7 @@ class ThumbnailBoxSorter:
             "author": author_section.display_only_thumbnails_by_author,
             "favorites": self.browser.show_favorites,
             "most_recent": self.browser.show_most_recent_sequences,
+            "grid_mode": grid_mode_section.display_only_thumbnails_with_grid_mode,
             "show_all": self.browser.show_all_sequences,
         }
         if initial_selection:

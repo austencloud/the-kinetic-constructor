@@ -1,10 +1,10 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Snowfall",
+        "background_type": "Bubbles",
         "grow_sequence": true,
-        "current_tab": "sequence_builder",
-        "grid_mode": "box"
+        "current_tab": "dictionary",
+        "grid_mode": "diamond"
     },
     "image_export": {
         "include_start_position": true,
@@ -51,12 +51,10 @@
         }
     },
     "dictionary": {
-        "sort_method": "date_added",
+        "sort_method": "sequence_length",
         "current_section": "browser",
         "current_filter": {
-            "contains_letters": [
-                "P"
-            ]
+            "grid_mode": "box"
         }
     },
     "sequence_layout": {
@@ -97,7 +95,7 @@
             "current_auto_builder": "circular"
         },
         "manual_builder": {},
-        "last_used_builder": "manual"
+        "last_used_builder": "auto"
     },
     "sequence_sharing": {
         "recipients": [

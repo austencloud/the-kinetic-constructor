@@ -88,6 +88,11 @@ class FilterChoiceWidget(QWidget):
                 "Display sequences created in the last week.",
                 self.show_recent_sequences,
             ),
+            (
+                "Grid Mode",
+                "Display sequences by grid mode (Box or Diamond).",
+                partial(self.initial_selection_widget.show_section, "grid_mode"),
+            ),
         ]
 
         # Add buttons and descriptions to the grid layout

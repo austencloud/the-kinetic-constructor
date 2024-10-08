@@ -1,6 +1,10 @@
 from typing import TYPE_CHECKING, Dict
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QStackedWidget
 from PyQt6.QtCore import Qt
+
+from main_window.main_widget.dictionary_widget.dictionary_browser.initial_filter_selection_widget.grid_mode_section import (
+    GridModeSection,
+)
 from .author_section import AuthorSection
 from .filter_choice_widget import FilterChoiceWidget
 from .filter_section_base import FilterSectionBase
@@ -30,9 +34,9 @@ class DictionaryInitialSelectionsWidget(QWidget):
         self.level_section = LevelSection(self)
         self.starting_position_section = StartingPositionSection(self)
         self.author_section = AuthorSection(self)
-
+        self.grid_mode_section = GridModeSection(self)
         # Map section names to their instances
-        self.section_map: Dict[str, QWidget] = {
+        self.section_map: dict[str, QWidget] = {
             "filter_choice": self.filter_choice_widget,
             "starting_letter": self.starting_letter_section,
             "contains_letters": self.contains_letter_section,
@@ -40,6 +44,7 @@ class DictionaryInitialSelectionsWidget(QWidget):
             "level": self.level_section,
             "starting_position": self.starting_position_section,
             "author": self.author_section,
+            "grid_mode": self.grid_mode_section,
         }
 
         # Use QStackedWidget to manage sections
@@ -123,6 +128,9 @@ class DictionaryInitialSelectionsWidget(QWidget):
 
     def on_author_button_clicked(self, author: str):
         self.apply_filter("author", author)
+
+    def on_grid_mode_button_clicked(self, grid_mode: str):
+        self.apply_filter("grid_mode", grid_mode)
 
     def resize_initial_selections_widget(self):
         """Resize the initial selections widget and its components."""

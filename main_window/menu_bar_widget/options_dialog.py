@@ -13,7 +13,7 @@ class OptionsDialog(QDialog):
     def __init__(
         self,
         selector: "BaseSelector",
-        options: List[str],
+        options: list[str],
         callback: Callable[[str], None],
     ):
         super().__init__(
@@ -46,8 +46,6 @@ class OptionsDialog(QDialog):
     def select_option(self, option: str):
         self.callback(option)
         self.accept()
-
-
 
     def show_dialog(self, widget: "QWidget"):
         # Position the dialog below the widget

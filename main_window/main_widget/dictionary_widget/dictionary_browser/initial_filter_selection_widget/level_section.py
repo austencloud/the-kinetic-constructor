@@ -36,7 +36,7 @@ class LevelSection(FilterSectionBase):
         self.buttons: Dict[int, QPushButton] = {}
         self.description_labels: Dict[int, QLabel] = {}
         self.level_images: Dict[int, QLabel] = {}
-        self.sequence_count_labels: Dict[int, QLabel] = {}
+        self.sequence_count_labels: dict[int, QLabel] = {}
         self.original_pixmaps: Dict[int, QPixmap] = {}
         self.sequence_counts: Dict[int, int] = {}
         self.add_buttons()
@@ -139,7 +139,7 @@ class LevelSection(FilterSectionBase):
         """Handle clicks on level images."""
         self.handle_level_click(level)
 
-    def _get_all_sequences_with_levels(self) -> List[Tuple[str, List[str], int]]:
+    def _get_all_sequences_with_levels(self) -> List[Tuple[str, list[str], int]]:
         """Retrieve and cache all sequences along with their levels."""
         if hasattr(self, "_all_sequences_with_levels"):
             return self._all_sequences_with_levels
@@ -176,7 +176,7 @@ class LevelSection(FilterSectionBase):
 
     def get_sequences_that_are_a_specific_level(
         self, level: int
-    ) -> List[Tuple[str, List[str]]]:
+    ) -> List[Tuple[str, list[str]]]:
         """Retrieve sequences that correspond to a specific level."""
         sequences_with_levels = self._get_all_sequences_with_levels()
         return [
@@ -185,7 +185,7 @@ class LevelSection(FilterSectionBase):
             if seq_level == level
         ]
 
-    def get_sequence_level_from_thumbnails(self, thumbnails: List[str]) -> int:
+    def get_sequence_level_from_thumbnails(self, thumbnails: list[str]) -> int:
         """Extract the level from the metadata of the thumbnails."""
         for thumbnail in thumbnails:
             level = self.metadata_extractor.get_sequence_level(thumbnail)
@@ -210,7 +210,7 @@ class LevelSection(FilterSectionBase):
 
         self.browser.update_and_display_ui(total_sequences, level)
 
-    def get_sequence_length_from_thumbnails(self, thumbnails: List[str]) -> int:
+    def get_sequence_length_from_thumbnails(self, thumbnails: list[str]) -> int:
         """Extract the sequence length from the thumbnails' metadata."""
         for thumbnail in thumbnails:
             length = self.metadata_extractor.get_sequence_length(thumbnail)

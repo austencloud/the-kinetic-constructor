@@ -57,7 +57,7 @@ class SequenceAutoCompleter:
                 executor = MirroredPermutationExecutor(self, False)
                 executor.create_permutations(sequence, "horizontal")
 
-    def get_valid_permutations(self, sequence: list[dict]) -> Dict[str, bool]:
+    def get_valid_permutations(self, sequence: list[dict]) -> dict[str, bool]:
         start_pos = sequence[1]["end_pos"]
         end_pos = sequence[-1]["end_pos"]
         valid_permutations = {

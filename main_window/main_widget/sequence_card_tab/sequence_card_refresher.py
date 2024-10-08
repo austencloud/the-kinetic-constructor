@@ -4,7 +4,9 @@ from PyQt6.QtCore import Qt
 from utilities.path_helpers import get_sequence_card_image_exporter_path
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_card_tab.sequence_card_tab import SequenceCardTab
+    from main_window.main_widget.sequence_card_tab.sequence_card_tab import (
+        SequenceCardTab,
+    )
 
 
 class SequenceCardRefresher:
@@ -30,7 +32,7 @@ class SequenceCardRefresher:
             self.image_displayer.display_images(images)
             self.pages_cache[selected_length] = self.pages.copy()
 
-    def get_all_images(self, path: str) -> List[str]:
+    def get_all_images(self, path: str) -> list[str]:
         images = []
         for root, _, files in os.walk(path):
             for file in files:

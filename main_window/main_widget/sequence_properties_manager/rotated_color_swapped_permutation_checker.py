@@ -12,7 +12,7 @@ class RotatedColorSwappedPermutationChecker:
         self.manager = manager
         self.rotation_maps = self._initialize_rotation_maps()
 
-    def _initialize_rotation_maps(self) -> Dict[str, Dict[str, Dict[str, str]]]:
+    def _initialize_rotation_maps(self) -> dict[str, dict[str, dict[str, str]]]:
         return {
             "2_repetitions": {
                 "1st-2nd": {
@@ -190,7 +190,7 @@ class RotatedColorSwappedPermutationChecker:
         return True
 
     def _is_rotated_and_color_swapped(
-        self, first_entry: Dict, second_entry: Dict, rotation_map: Dict[str, str]
+        self, first_entry: Dict, second_entry: Dict, rotation_map: dict[str, str]
     ) -> bool:
         first_entry_rotated_pos = rotation_map.get(first_entry["end_pos"])
 

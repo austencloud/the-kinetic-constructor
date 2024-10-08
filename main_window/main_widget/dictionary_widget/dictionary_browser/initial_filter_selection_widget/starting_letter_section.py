@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 
 class StartingLetterSection(FilterSectionBase):
-    SECTIONS: List[List[List[str]]] = [
+    SECTIONS: List[List[list[str]]] = [
         [
             ["A", "B", "C", "D", "E", "F"],
             ["G", "H", "I", "J", "K", "L"],
@@ -36,8 +36,8 @@ class StartingLetterSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select by starting letter:")
         self.main_widget = initial_selection_widget.browser.main_widget
-        self.buttons: Dict[str, QPushButton] = {}
-        self.sequence_tally: Dict[str, int] = {}
+        self.buttons: dict[str, QPushButton] = {}
+        self.sequence_tally: dict[str, int] = {}
         self.sequence_tally_label = QLabel("")
         self.add_buttons()
 
@@ -88,7 +88,7 @@ class StartingLetterSection(FilterSectionBase):
         )
         return button
 
-    def _get_starting_letter_sequence_counts(self) -> Dict[str, int]:
+    def _get_starting_letter_sequence_counts(self) -> dict[str, int]:
         """Tally up how many sequences start with each letter."""
         letter_counts = {letter: 0 for letter in self.buttons.keys()}
         base_words = self.thumbnail_box_sorter.get_sorted_base_words("sequence_length")
@@ -144,8 +144,6 @@ class StartingLetterSection(FilterSectionBase):
         if len(letter) == 1:
             return word.startswith(letter) and (len(word) == 1 or word[1] != "-")
         return word.startswith(letter)
-
-
 
     def resize_starting_letter_section(self):
         self.resize_buttons()

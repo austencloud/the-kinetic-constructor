@@ -28,11 +28,11 @@ class AuthorSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select by Author:")
         self.main_widget = initial_selection_widget.browser.main_widget
-        self.buttons: Dict[str, QPushButton] = {}
-        self.sequence_count_labels: Dict[str, QLabel] = {}
-        self.author_images: Dict[str, QLabel] = {}
-        self.original_pixmaps: Dict[str, QPixmap] = {}
-        self.sequence_counts: Dict[str, int] = {}
+        self.buttons: dict[str, QPushButton] = {}
+        self.sequence_count_labels: dict[str, QLabel] = {}
+        self.author_images: dict[str, QLabel] = {}
+        self.original_pixmaps: dict[str, QPixmap] = {}
+        self.sequence_counts: dict[str, int] = {}
         self.add_buttons()
 
     def add_buttons(self):
@@ -101,7 +101,7 @@ class AuthorSection(FilterSectionBase):
         """Handle clicks on author buttons."""
         self.initial_selection_widget.on_author_button_clicked(author)
 
-    def _get_all_sequences_with_authors(self) -> List[Tuple[str, List[str], str]]:
+    def _get_all_sequences_with_authors(self) -> List[Tuple[str, list[str], str]]:
         """Retrieve and cache all sequences along with their authors."""
         if hasattr(self, "_all_sequences_with_authors"):
             return self._all_sequences_with_authors
@@ -128,15 +128,15 @@ class AuthorSection(FilterSectionBase):
         self._all_sequences_with_authors = sequences_with_authors
         return sequences_with_authors
 
-    def _get_sequence_counts_per_author(self) -> Dict[str, int]:
+    def _get_sequence_counts_per_author(self) -> dict[str, int]:
         """Compute the number of sequences available for each author."""
-        author_counts: Dict[str, int] = {}
+        author_counts: dict[str, int] = {}
         sequences_with_authors = self._get_all_sequences_with_authors()
         for _, _, author in sequences_with_authors:
             author_counts[author] = author_counts.get(author, 0) + 1
         return author_counts
 
-    def get_sequences_by_author(self, author: str) -> List[Tuple[str, List[str]]]:
+    def get_sequences_by_author(self, author: str) -> List[Tuple[str, list[str]]]:
         """Retrieve sequences that correspond to a specific author."""
         sequences_with_authors = self._get_all_sequences_with_authors()
         return [
@@ -145,7 +145,7 @@ class AuthorSection(FilterSectionBase):
             if seq_author == author
         ]
 
-    def get_sequence_author(self, thumbnails: List[str]) -> str:
+    def get_sequence_author(self, thumbnails: list[str]) -> str:
         """Extract the author from the metadata of the thumbnails."""
         for thumbnail in thumbnails:
             author = self.main_widget.metadata_extractor.get_sequence_author(thumbnail)
@@ -170,7 +170,7 @@ class AuthorSection(FilterSectionBase):
 
         self.browser.update_and_display_ui(total_sequences, author)
 
-    def get_sequence_length_from_thumbnails(self, thumbnails: List[str]) -> int:
+    def get_sequence_length_from_thumbnails(self, thumbnails: list[str]) -> int:
         """Extract the sequence length from the thumbnails' metadata."""
         for thumbnail in thumbnails:
             length = self.metadata_extractor.get_sequence_length(thumbnail)

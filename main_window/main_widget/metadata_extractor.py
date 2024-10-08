@@ -107,3 +107,9 @@ class MetaDataExtractor:
                         )
 
         return metadata_and_thumbnail_dict
+
+    def get_sequence_grid_mode(self, file_path):
+        metadata = self.extract_metadata_from_file(file_path)
+        if metadata and "sequence" in metadata:
+            return metadata["sequence"][0]["grid_mode"]
+        return

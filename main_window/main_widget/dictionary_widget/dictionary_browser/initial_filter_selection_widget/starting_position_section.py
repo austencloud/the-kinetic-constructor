@@ -33,12 +33,12 @@ class StartingPositionSection(FilterSectionBase):
     def __init__(self, initial_selection_widget: "DictionaryInitialSelectionsWidget"):
         super().__init__(initial_selection_widget, "Select by Starting Position:")
         self.main_widget = initial_selection_widget.browser.main_widget
-        self.buttons: Dict[str, QPushButton] = {}
-        self.description_labels: Dict[str, QLabel] = {}
-        self.position_images: Dict[str, QLabel] = {}
-        self.sequence_count_labels: Dict[str, QLabel] = {}
-        self.original_pixmaps: Dict[str, QPixmap] = {}
-        self.sequence_counts: Dict[str, int] = {}
+        self.buttons: dict[str, QPushButton] = {}
+        self.description_labels: dict[str, QLabel] = {}
+        self.position_images: dict[str, QLabel] = {}
+        self.sequence_count_labels: dict[str, QLabel] = {}
+        self.original_pixmaps: dict[str, QPixmap] = {}
+        self.sequence_counts: dict[str, int] = {}
         self.add_buttons()
 
     def add_buttons(self):
@@ -143,7 +143,7 @@ class StartingPositionSection(FilterSectionBase):
         """Handle clicks on position images."""
         self.handle_position_click(position)
 
-    def _get_all_sequences_with_positions(self) -> List[Tuple[str, List[str], str]]:
+    def _get_all_sequences_with_positions(self) -> List[Tuple[str, list[str], str]]:
         """Retrieve and cache all sequences along with their starting positions."""
         if hasattr(self, "_all_sequences_with_positions"):
             return self._all_sequences_with_positions
@@ -170,9 +170,9 @@ class StartingPositionSection(FilterSectionBase):
         self._all_sequences_with_positions = sequences_with_positions
         return sequences_with_positions
 
-    def _get_sequence_counts_per_position(self) -> Dict[str, int]:
+    def _get_sequence_counts_per_position(self) -> dict[str, int]:
         """Compute the number of sequences available for each starting position."""
-        position_counts: Dict[str, int] = {}
+        position_counts: dict[str, int] = {}
         sequences_with_positions = self._get_all_sequences_with_positions()
         for _, _, position in sequences_with_positions:
             position_counts[position] = position_counts.get(position, 0) + 1
@@ -180,7 +180,7 @@ class StartingPositionSection(FilterSectionBase):
 
     def get_sequences_that_are_a_specific_position(
         self, position: str
-    ) -> List[Tuple[str, List[str]]]:
+    ) -> List[Tuple[str, list[str]]]:
         """Retrieve sequences that correspond to a specific starting position."""
         sequences_with_positions = self._get_all_sequences_with_positions()
         return [
@@ -189,7 +189,7 @@ class StartingPositionSection(FilterSectionBase):
             if seq_position == position.lower()
         ]
 
-    def get_sequence_starting_position(self, thumbnails: List[str]) -> str:
+    def get_sequence_starting_position(self, thumbnails: list[str]) -> str:
         """Extract the starting position from the metadata of the thumbnails."""
         for thumbnail in thumbnails:
             start_position = self.metadata_extractor.get_sequence_start_position(
@@ -216,7 +216,7 @@ class StartingPositionSection(FilterSectionBase):
 
         self.browser.update_and_display_ui(total_sequences, position)
 
-    def get_sequence_length_from_thumbnails(self, thumbnails: List[str]) -> int:
+    def get_sequence_length_from_thumbnails(self, thumbnails: list[str]) -> int:
         """Extract the sequence length from the thumbnails' metadata."""
         for thumbnail in thumbnails:
             length = self.metadata_extractor.get_sequence_length(thumbnail)

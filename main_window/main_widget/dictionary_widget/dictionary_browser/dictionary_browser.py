@@ -350,3 +350,4 @@ class DictionaryBrowser(QWidget):
             QApplication.restoreOverrideCursor()
 
         QTimer.singleShot(0, update_ui)
+

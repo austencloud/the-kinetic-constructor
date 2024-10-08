@@ -17,7 +17,7 @@ class UserInfoDrawer:
     def draw_user_info(
         self,
         image: QImage,
-        options: Dict[str, any],
+        options: dict[str, any],
         num_filled_beats: int,
     ) -> None:
         base_margin = 50
