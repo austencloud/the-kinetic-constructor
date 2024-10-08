@@ -6,3 +6,4 @@ profiling_output.txt
 build/
 *.log
 dist/
+settings.json
