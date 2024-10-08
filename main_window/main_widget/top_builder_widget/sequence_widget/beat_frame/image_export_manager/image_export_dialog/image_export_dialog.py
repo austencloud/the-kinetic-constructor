@@ -36,7 +36,6 @@ class ImageExportDialog(QDialog):
         self._setup_components()
         self._setup_layout()
         self._resize_image_export_dialog()
-        # self.update_preview_based_on_options()
 
     def _setup_okay_cancel_buttons(self):
         """Setup Save, Cancel, and Share buttons with dynamic size."""
@@ -57,17 +56,13 @@ class ImageExportDialog(QDialog):
         )
         self.share_button = QPushButton(QIcon(icon_path), "")
         self.share_button.setToolTip("Share this image")
-        self.share_button.setIconSize(
-            self.share_button.sizeHint()
-        ) 
+        self.share_button.setIconSize(self.share_button.sizeHint())
 
         self.share_button.clicked.connect(self.open_sharer_dialog)
         self.share_button.setCursor(Qt.CursorShape.PointingHandCursor)
 
         button_height = int(self.height() * 0.08)
-        font_size = int(
-            self.height() * 0.03
-        )  # Dynamically set font size based on window height
+        font_size = int(self.height() * 0.03)
         for button in [self.ok_button, self.cancel_button, self.share_button]:
             button.setMinimumHeight(button_height)
             button.setSizePolicy(
@@ -133,7 +128,6 @@ class ImageExportDialog(QDialog):
         main_height = self.main_widget.height()
         self.resize(int(main_width // 1.5), int(main_height // 1.5))
 
-
     def update_export_setting_and_layout(self):
         """Update export settings and refresh the layout."""
         new_value = self.control_panel.include_start_pos_check.isChecked()
@@ -162,7 +156,6 @@ class ImageExportDialog(QDialog):
     def showEvent(self, event):
         """Handle dialog show events."""
         super().showEvent(event)
-
 
     def resizeEvent(self, a0: QResizeEvent | None) -> None:
         # set the font size for all the checkbox labels and all the comboboxes and buttons int he control panel

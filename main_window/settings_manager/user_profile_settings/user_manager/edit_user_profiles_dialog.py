@@ -12,7 +12,9 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 
 if TYPE_CHECKING:
-    from settings_manager.user_profile_settings.user_manager.user_manager import UserManager
+    from settings_manager.user_profile_settings.user_manager.user_manager import (
+        UserManager,
+    )
 
 
 class EditUserProfilesDialog(QDialog):
@@ -115,10 +117,11 @@ class EditUserProfilesDialog(QDialog):
         if selected_items:
             selected_user = selected_items[0].text()
             self.user_manager.set_current_user(selected_user)
-            user_profiles_menu = self.user_manager.user_profiles_menu.menu_bar.user_profiles_menu
-            user_profiles_menu.set_current_user_in_user_menu(selected_user)
+            user_profiles_selector = self.user_manager.user_profiles_selector
+            user_profiles_selector.set_current_user(selected_user)
         self.user_manager.save_users()
         self.accept()
+        user_profiles_selector.dialog.close_dialog()
 
     def keyPressEvent(self, event):
         if event.key() in (Qt.Key.Key_Return, Qt.Key.Key_Enter):

@@ -63,7 +63,6 @@ class ImageExportDialogExecutor:
                 "Image created with start position included:",
                 self.export_manager.include_start_pos,
             )
-        # restore the cursor
 
     def _clear_beat_selection(self, filled_beats: list["BeatView"]):
         for beat in filled_beats:

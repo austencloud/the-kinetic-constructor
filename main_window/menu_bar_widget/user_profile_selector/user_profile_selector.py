@@ -15,10 +15,11 @@ class UserProfileSelector(LabelSelector):
         self.main_widget = menu_bar_widget.main_window.main_widget
 
     def on_label_clicked(self):
-        dialog = UserProfileDialog(self)
-        dialog.show_dialog()
+        self.dialog = UserProfileDialog(self)
+        self.dialog.show_dialog()
 
     def set_current_user(self, user_name: str):
         self.set_display_text(user_name)
         self.user_manager.set_current_user(user_name)
         self.main_widget.sequence_properties_manager.update_sequence_properties()
+        

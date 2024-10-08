@@ -47,6 +47,8 @@ class OptionsDialog(QDialog):
         self.callback(option)
         self.accept()
 
+
+
     def show_dialog(self, widget: "QWidget"):
         # Position the dialog below the widget
         self.resize_dialog()

@@ -1,10 +1,10 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Bubbles",
+        "background_type": "Snowfall",
         "grow_sequence": true,
         "current_tab": "sequence_builder",
-        "grid_mode": "diamond"
+        "grid_mode": "box"
     },
     "image_export": {
         "include_start_position": true,
@@ -61,8 +61,8 @@
     },
     "sequence_layout": {
         "grow_sequence": true,
-        "num_beats": 16,
-        "layout_option": "4 x 4"
+        "num_beats": 2,
+        "layout_option": "1 x 2"
     },
     "builder": {
         "auto_builder": {
