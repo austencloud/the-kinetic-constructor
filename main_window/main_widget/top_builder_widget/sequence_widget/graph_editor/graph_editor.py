@@ -53,11 +53,8 @@ class GraphEditor(QFrame):
 
     def resize_graph_editor(self) -> None:
         self.setFixedHeight(int(self.sequence_widget.height() // 3.5))
+        self.setMaximumWidth(self.sequence_widget.width())
         self.pictograph_container.resize_GE_pictograph_container()
         self.adjustment_panel.update_adjustment_panel()
         self.adjustment_panel.placeholder_widget.resize_adjustment_panel_placeholder_text()
         self.adjustment_panel.resize_beat_adjustment_panel()
-
-    def resizeEvent(self, event) -> None:
-        self.resize_graph_editor()
-        super().resizeEvent(event)

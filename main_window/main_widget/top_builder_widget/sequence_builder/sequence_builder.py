@@ -69,5 +69,5 @@ class SequenceBuilder(QTabWidget):
         self.auto_builder.resize_auto_builder()
 
     def resizeEvent(self, event):
-        super().resizeEvent(event)
         self.resize_sequence_builder()
+        super().resizeEvent(event)

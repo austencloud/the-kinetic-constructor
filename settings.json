@@ -1,7 +1,7 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Bubbles",
+        "background_type": "Snowfall",
         "grow_sequence": true,
         "current_tab": "sequence_builder",
         "grid_mode": "diamond"
