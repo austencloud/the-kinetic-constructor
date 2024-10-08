@@ -104,11 +104,11 @@ class GlobalSettings:
             self.font_color_updater.update_splash_screen_font_colors(widget, bg_type)
         # Rest of your code remains the same
         background_manager_map = {
-            "Rainbow": RainbowBackgroundManager,
+            # "Rainbow": RainbowBackgroundManager,
             "Starfield": StarfieldBackgroundManager,
-            "Particle": ParticleBackgroundManager,
+            # "Particle": ParticleBackgroundManager,
             "Aurora": AuroraBackgroundManager,
-            "AuroraBorealis": AuroraBorealisBackgroundManager,
+            # "AuroraBorealis": AuroraBorealisBackgroundManager,
             "Snowfall": SnowfallBackgroundManager,
             "Bubbles": BubblesBackgroundManager,
         }

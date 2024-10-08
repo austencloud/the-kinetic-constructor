@@ -10,11 +10,11 @@ class BackgroundDialog:
     def __init__(self, background_selector: "BackgroundSelector"):
         self.background_selector = background_selector
         self.options = [
-            "Rainbow",
+            # "Rainbow",
             "Starfield",
-            "Particle",
+            # "Particle",
             "Aurora",
-            "AuroraBorealis",
+            # "AuroraBorealis",
             "Snowfall",
             "Bubbles",
         ]
