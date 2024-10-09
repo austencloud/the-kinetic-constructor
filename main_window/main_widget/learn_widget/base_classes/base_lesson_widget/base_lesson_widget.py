@@ -99,6 +99,7 @@ class BaseLessonWidget(QWidget):
     def prepare_quiz_ui(self):
         """Prepare and switch to the quiz interface layout."""
         self.current_question = 1
+        self.incorrect_guesses = 0
         self.update_progress_label()
         self.clear_layout(self.central_layout)
         self.layout_manager.setup_layout()
