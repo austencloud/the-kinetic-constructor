@@ -29,8 +29,10 @@ class GridModeSelector(QWidget):
         self.main_window = menu_bar_widget.main_window
         self.main_widget = self.main_window.main_widget
         self.settings_manager = self.main_window.settings_manager
-
-        current_grid_mode = self.settings_manager.global_settings.get_grid_mode().capitalize()
+        self.dialog = None
+        current_grid_mode = (
+            self.settings_manager.global_settings.get_grid_mode().capitalize()
+        )
 
         self.label = ClickableLabel(current_grid_mode)
         self.label.clicked.connect(self.on_label_clicked)
@@ -79,9 +81,11 @@ class GridModeSelector(QWidget):
     def show_grid_mode_dialog(self):
         options = ["Diamond", "Box"]
 
-        dialog = QDialog(self)
-        dialog.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.Popup)
-        dialog.setStyleSheet(
+        self.dialog = QDialog(self)
+        self.dialog.setWindowFlags(
+            Qt.WindowType.FramelessWindowHint | Qt.WindowType.Popup
+        )
+        self.dialog.setStyleSheet(
             """
             QDialog {
                 border: 2px solid black;
@@ -94,7 +98,7 @@ class GridModeSelector(QWidget):
             """
         )
 
-        layout = QVBoxLayout(dialog)
+        layout = QVBoxLayout(self.dialog)
         layout.setContentsMargins(5, 5, 5, 5)
 
         font = QFont()
@@ -105,21 +109,22 @@ class GridModeSelector(QWidget):
             button.setFont(font)
             button.setCursor(Qt.CursorShape.PointingHandCursor)
             button.clicked.connect(
-                lambda _, gm=grid_mode: self.set_current_grid_mode(gm, dialog)
+                lambda _, gm=grid_mode: self.set_current_grid_mode(gm)
             )
             layout.addWidget(button)
 
-        dialog.setLayout(layout)
-        dialog.adjustSize()
+        self.dialog.setLayout(layout)
+        self.dialog.adjustSize()
 
         # Position the dialog below the label
         global_pos = self.label.mapToGlobal(self.label.rect().bottomLeft())
-        dialog.move(global_pos)
-        dialog.exec()
+        self.dialog.move(global_pos)
+        self.dialog.exec()
 
-    def set_current_grid_mode(self, grid_mode: str, dialog: QDialog):
+    def set_current_grid_mode(self, grid_mode: str):
         self.label.setText(grid_mode.capitalize())
         self.settings_manager.global_settings.set_grid_mode(grid_mode.lower())
         self.main_widget.set_grid_mode(grid_mode.lower())
         self.settings_manager.save_settings()
-        dialog.accept()
+        if self.dialog:
+            self.dialog.accept()
