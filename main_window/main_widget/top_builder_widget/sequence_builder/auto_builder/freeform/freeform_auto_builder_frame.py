@@ -49,4 +49,4 @@ class FreeformAutoBuilderFrame(BaseAutoBuilderFrame):
 
     def _resize_widgets(self):
         super()._resize_widgets()
-        self.letter_type_picker.resize_letter_type_picker()  # Resize LetterTypePicker
+        # self.letter_type_picker.resize_letter_type_picker()  # Resize LetterTypePicker

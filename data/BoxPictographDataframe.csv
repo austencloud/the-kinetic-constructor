@@ -445,7 +445,7 @@ W-,gamma4,alpha8,none,none,pro,cw,ne,se,dash,no_rot,se,nw
 W-,gamma6,alpha2,none,none,pro,cw,se,sw,dash,no_rot,sw,ne
 W-,gamma8,alpha4,none,none,pro,cw,sw,nw,dash,no_rot,nw,se
 W-,gamma10,alpha6,none,none,pro,ccw,se,ne,dash,no_rot,ne,sw
-W-,gamma12,alpha8,none,none,pro,ccw,sw,se,dash,no_rot,se,ne
+W-,gamma12,alpha8,none,none,pro,ccw,sw,se,dash,no_rot,se,nw
 W-,gamma14,alpha2,none,none,pro,ccw,nw,sw,dash,no_rot,sw,ne
 W-,gamma16,alpha4,none,none,pro,ccw,ne,nw,dash,no_rot,nw,se
 
