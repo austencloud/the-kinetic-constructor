@@ -137,7 +137,7 @@
       "anti_from_layer2": [50, -50]
     },
     "(o, 0, 3)": {
-      "anti_from_layer1": [95, -40]
+      "anti_from_layer1": [0, -100]
     },
     "(o, 0, 1)": {
       "dash_from_layer2_rot_angle_override": true
@@ -178,7 +178,11 @@
     "(o, 2, 2)": {},
     "(o, 2, 2.5)": {},
     "(o, 2, 3)": {},
-    "(o, 2.5, 3)": {},
+    "(o, 2.5, 3)": {
+      "dash_from_layer2_rot_angle_override": true,
+      "dash_from_layer2": [70, 100],
+      "anti_from_layer1": [-30, 80]
+    },
     "(o, 2.5, 0.5)": {},
     "(o, 2.5, 1)": {
       "anti_from_layer1": [-70, 35]

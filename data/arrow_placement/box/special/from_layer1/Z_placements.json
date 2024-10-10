@@ -53,6 +53,12 @@
     "(o, 0, 2)": {
       "static_rot_angle_override": true,
       "static": [20, 10]
+    },
+    "(o, 1.5, 2.5)": {
+      "static": [-25, -5],
+      "anti": [60, 40],
+      "static_rot_angle_override": true,
+      "swap_beta_ne_nonradial_blue_anti_n_red_static_ne": true
     }
   }
 }
