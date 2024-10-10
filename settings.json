@@ -86,7 +86,7 @@
                 "sequence_length": 16,
                 "max_turn_intensity": 3,
                 "sequence_level": 3,
-                "continuous_rotation": false,
+                "continuous_rotation": true,
                 "selected_letter_types": [
                     "Dual-Shift",
                     "Shift",

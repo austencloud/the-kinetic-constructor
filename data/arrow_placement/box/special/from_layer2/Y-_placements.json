@@ -13,7 +13,8 @@
       "dash": [-20, -120]
     },
     "(s, 1.5, 2.5)": {
-      "dash": [65, -30]
+      "dash": [65, -45],
+      "swap_beta_se_radial_blue_pro_e_red_dash_ne": true
     },
     "(s, 1.5, 3)": {
       "dash": [0, -150],

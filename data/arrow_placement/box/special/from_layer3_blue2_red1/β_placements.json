@@ -231,6 +231,12 @@
     "(ccw, 1.5, 0)": {
       "blue_rot_angle_override": true,
       "red": [0, 20]
+    },
+    "(o, 1.5, 2)": {
+      "red_rot_angle_override": true,
+      "red": [20, 10],
+      "blue": [10, 25],
+      "swap_beta_nw_radial_blue_static_nw_red_static_nw": true
     }
   }
 }

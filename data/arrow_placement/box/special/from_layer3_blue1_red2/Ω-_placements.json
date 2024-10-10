@@ -67,7 +67,6 @@
       "anti_from_layer2": [-90, 70]
     },
     "(s, 2.5, 0.5)": {
-      "anti_from_layer1": [-85, 75],
       "dash_from_layer2": [70, -65],
       "dash_from_layer1": [-45, -15],
       "anti_from_layer2": [-180, 70]
@@ -78,7 +77,8 @@
     },
     "(s, 2.5, 1.5)": {
       "anti_from_layer1": [-70, 75],
-      "dash_from_layer2": [35, -105]
+      "dash_from_layer2": [35, -105],
+      "dash_from_layer1": [120, 125]
     },
     "(s, 2.5, 2)": {
       "anti_from_layer2": [-80, 30],

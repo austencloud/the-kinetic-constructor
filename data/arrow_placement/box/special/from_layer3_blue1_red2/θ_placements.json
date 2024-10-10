@@ -62,7 +62,8 @@
     },
     "(o, 1, 1)": {
       "pro_from_layer1": [-20, 0],
-      "pro_from_layer2": [-65, 80]
+      "pro_from_layer2": {},
+      "static_from_layer1": [70, 55]
     },
     "(o, 1, 2)": {
       "static_from_layer2_rot_angle_override": true

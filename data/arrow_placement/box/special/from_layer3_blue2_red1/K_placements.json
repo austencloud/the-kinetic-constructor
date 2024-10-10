@@ -67,6 +67,9 @@
     },
     "(2.5, 2.5)": {
       "blue": [-90, 40]
+    },
+    "(3, 1.5)": {
+      "swap_beta_nw_nonradial_blue_anti_w_red_anti_n": true
     }
   }
 }

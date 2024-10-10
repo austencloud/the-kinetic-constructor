@@ -29,6 +29,10 @@
     "(o, 2, 1, op, op)": {
       "dash_from_layer2": {},
       "static_from_layer1": {}
+    },
+    "(o, 3, 2.5, op, op)": {
+      "dash_from_layer1": [90, 25],
+      "static_from_layer2": [15, -15]
     }
   }
 }
