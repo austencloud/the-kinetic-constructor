@@ -125,9 +125,6 @@
       "dash_from_layer1": [-85, -90],
       "pro_from_layer2": [-50, 0]
     },
-    "(o, 2, 1)": {
-      "pro_from_layer2": [-45, -25]
-    },
     "(o, 2, 1.5)": {
       "pro_from_layer2": [-50, -20]
     },
@@ -196,6 +193,10 @@
     },
     "(o, 1, 1)": {
       "dash_from_layer2_rot_angle_override": true
+    },
+    "(o, 2, 1)": {
+      "pro_from_layer2": [0, 95],
+      "dash_from_layer1": [35, 25]
     }
   }
 }
