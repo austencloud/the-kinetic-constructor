@@ -1,3 +1,5 @@
+# quiz_timer_manager.py
+
 from PyQt6.QtCore import QTimer
 from typing import TYPE_CHECKING
 
@@ -16,17 +18,26 @@ class QuizTimerManager:
     def start_timer(self, duration):
         """Start the quiz timer."""
         self.base_widget.quiz_time = duration
-        self.timer.start(1000)
 
-    def update_timer(self):
-        """Update the quiz timer each second."""
+        # Update the timer label immediately
         minutes, seconds = divmod(self.base_widget.quiz_time, 60)
         self.base_widget.progress_label.setText(
             f"Time Remaining: {minutes}:{seconds:02d}"
         )
 
-        if self.base_widget.quiz_time > 0:
-            self.base_widget.quiz_time -= 1
+        self.timer.start(1000)
+
+    def update_timer(self):
+        """Update the quiz timer each second."""
+
+        # Decrement the quiz_time first
+        self.base_widget.quiz_time -= 1
+
+        if self.base_widget.quiz_time >= 0:
+            minutes, seconds = divmod(self.base_widget.quiz_time, 60)
+            self.base_widget.progress_label.setText(
+                f"Time Remaining: {minutes}:{seconds:02d}"
+            )
         else:
             self.timer.stop()
             self.base_widget.show_results()
