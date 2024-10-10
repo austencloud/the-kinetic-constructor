@@ -7,9 +7,9 @@
       "anti_from_layer2": [50, -50]
     },
     "(o, 0, 2.5)": {
-      "anti_from_layer2": [35, -55],
       "static_from_layer2_rot_angle_override": true,
-      "static_from_layer2": [20, 0]
+      "static_from_layer2": [20, 0],
+      "anti_from_layer2": [30, -90]
     },
     "(o, 0, 3)": {
       "anti_from_layer2": [30, -55]

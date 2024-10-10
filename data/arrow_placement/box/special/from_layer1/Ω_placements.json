@@ -37,7 +37,7 @@
     },
     "(s, 0.5, 2)": {
       "static_rot_angle_override": true,
-      "anti": [-170, 80]
+      "static_to_layer1_rot_angle_override": true
     },
     "(o, 0.5, 2)": {
       "anti": [-170, 80]

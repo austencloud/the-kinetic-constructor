@@ -59,6 +59,10 @@
       "anti": [60, 40],
       "static_rot_angle_override": true,
       "swap_beta_ne_nonradial_blue_anti_n_red_static_ne": true
+    },
+    "(o, 0, 2.5)": {
+      "static_to_layer2_rot_angle_override": true,
+      "anti": [-10, -90]
     }
   }
 }

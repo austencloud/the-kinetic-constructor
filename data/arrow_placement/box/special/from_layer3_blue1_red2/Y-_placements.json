@@ -236,6 +236,12 @@
       "swap_beta_sw_nonradial_blue_dash_nw_red_pro_s": true,
       "swap_beta_se_nonradial_blue_dash_sw_red_pro_e": true,
       "swap_beta_ne_nonradial_blue_dash_se_red_pro_n": true
+    },
+    "(s, fl, 1)": {
+      "float_from_layer2": [100, 0]
+    },
+    "null": {
+      "dash_from_layer2_rot_angle_override": true
     }
   }
 }

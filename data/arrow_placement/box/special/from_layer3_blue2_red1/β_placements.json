@@ -179,9 +179,6 @@
       "red": [-45, 0],
       "blue": [0, 40]
     },
-    "(o, 2.5, 2)": {
-      "blue": [-40, 0]
-    },
     "(o, 2.5, 2.5)": {
       "blue": [-35, 5],
       "red": [-35, 0],
@@ -236,6 +233,10 @@
       "red_rot_angle_override": true,
       "red": [20, 10],
       "blue": [10, 25],
+      "swap_beta_nw_radial_blue_static_nw_red_static_nw": true
+    },
+    "(o, 2.5, 2)": {
+      "blue": [-30, -25],
       "swap_beta_nw_radial_blue_static_nw_red_static_nw": true
     }
   }
