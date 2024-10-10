@@ -1,10 +1,9 @@
 {
   "U": {
     "(1, 1.5)": {
-      "pro_from_layer1": [-10, 0],
-      "anti_from_layer2": [-90, 105],
-      "anti_from_layer1": [-5, 40],
-      "pro_from_layer2": [-75, 80]
+      "anti_from_layer1": [30, 35],
+      "pro_from_layer2": {},
+      "pro_from_layer1": [-10, 0]
     },
     "(1.5, 0.5)": {
       "anti_from_layer1": [-105, 25],

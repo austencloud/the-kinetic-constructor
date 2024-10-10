@@ -25,6 +25,10 @@
     },
     "(o, 2, 0.5, op, op)": {
       "red": [65, 0]
+    },
+    "(o, 3, 1, op, op)": {
+      "dash_from_layer2_rot_angle_override": true,
+      "red": [80, 120]
     }
   }
 }

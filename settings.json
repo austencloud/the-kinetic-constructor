@@ -84,8 +84,8 @@
             "freeform_auto_builder": {
                 "sequence_type": "freeform",
                 "sequence_length": 16,
-                "max_turn_intensity": 1,
-                "sequence_level": 2,
+                "max_turn_intensity": 3,
+                "sequence_level": 3,
                 "continuous_rotation": false,
                 "selected_letter_types": [
                     "Dual-Shift",
@@ -96,7 +96,7 @@
                     "Static"
                 ]
             },
-            "current_auto_builder": "circular"
+            "current_auto_builder": "freeform"
         },
         "manual_builder": {},
         "last_used_builder": "auto"

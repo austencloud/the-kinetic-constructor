@@ -110,11 +110,6 @@
       "static_rot_angle_override": true,
       "dash": [-70, -105]
     },
-    "(s, 2.5, 2.5, op, cl)": {
-      "static_rot_angle_override": true,
-      "static": [0, 25],
-      "dash": [-70, -105]
-    },
     "(s, 2.5, 3, op, cl)": {
       "dash": [70, -75]
     },
@@ -304,6 +299,9 @@
     "(s, 1, 1, op, cl)": {
       "static_rot_angle_override": true,
       "static": [-50, -50]
+    },
+    "(s, 2.5, 2.5, op, cl)": {
+      "dash": [35, 125]
     }
   }
 }
