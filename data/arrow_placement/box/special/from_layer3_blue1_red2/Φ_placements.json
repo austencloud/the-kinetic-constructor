@@ -84,7 +84,8 @@
     },
     "(s, 2.5, 2)": {
       "dash_from_layer1": [-95, -35],
-      "static_from_layer2": [-15, 0]
+      "static_from_layer2": [-15, 0],
+      "dash_from_layer2": {}
     },
     "(s, 2.5, 2.5)": {
       "dash_from_layer1": [-100, -5]

@@ -35,6 +35,9 @@
     },
     "(cw, 3, 0)": {
       "dash_from_layer2_rot_angle_override": true
+    },
+    "(s, 2, 3)": {
+      "dash_from_layer1": [-30, 100]
     }
   }
 }
