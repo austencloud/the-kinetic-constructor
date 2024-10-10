@@ -74,8 +74,12 @@ class ResultsWidget(QWidget):
         self.lesson_widget.central_layout.addWidget(self)
 
         self.set_result_text(
-            f"🎉 Well done!! 🎉\n\n" + 
-            f"You successfully completed {self.lesson_widget.current_question - 1} question" +
-            f"{'s' if self.lesson_widget.current_question - 1 != 1 else ''}!\n" +
-            (f"without making any mistakes! Great job!" if incorrect_guesses == 0 else f"but you made {incorrect_guesses} mistakes. Keep on practicing!")
+            f"🎉 Well done!! 🎉\n\n"
+            + f"You successfully completed {self.lesson_widget.current_question - 1} question"
+            + f"{'s' if self.lesson_widget.current_question - 1 != 1 else ''}"
+            + (
+                f"!\nwithout making any mistakes! Great job!"
+                if incorrect_guesses == 0
+                else f" but you made {incorrect_guesses} mistakes. Keep on practicing!"
+            )
         )

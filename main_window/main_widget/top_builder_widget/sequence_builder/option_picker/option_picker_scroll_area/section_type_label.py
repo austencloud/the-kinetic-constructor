@@ -5,6 +5,11 @@ from PyQt6.QtCore import Qt
 from Enums.Enums import LetterType
 from PyQt6.QtCore import pyqtSignal
 
+from Enums.letters import Letter
+from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.letter_type_text_painter import (
+    LetterTypeTextPainter,
+)
+
 
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_widget import (
@@ -15,24 +20,6 @@ if TYPE_CHECKING:
 class SectionTypeLabel(QLabel):
     clicked = pyqtSignal()
 
-    TYPE_MAP = {
-        LetterType.Type1: "Dual-Shift",
-        LetterType.Type2: "Shift",
-        LetterType.Type3: "Cross-Shift",
-        LetterType.Type4: "Dash",
-        LetterType.Type5: "Dual-Dash",
-        LetterType.Type6: "Static",
-    }
-
-    COLORS = {
-        "Shift": "#6F2DA8",  # purple
-        "Dual": "#00b3ff",  # cyan
-        "Dash": "#26e600",  # green
-        "Cross": "#26e600",  # green
-        "Static": "#eb7d00",  # orange
-        "-": "#000000",  # black
-    }
-
     def __init__(self, section_widget: "OptionPickerSectionWidget") -> None:
         super().__init__()
         self.section_widget = section_widget
@@ -40,22 +27,15 @@ class SectionTypeLabel(QLabel):
         self.set_styled_text(section_widget.letter_type)
 
     def set_styled_text(self, letter_type: LetterType) -> None:
-        type_words = self.TYPE_MAP.get(letter_type, "").split("-")
+        # Access the description directly from the letter_type enum
         letter_type_str = letter_type.name
-        styled_words = [
-            f"<span style='color: {self.COLORS.get(word, 'black')};'>{word}</span>"
-            for word in type_words
-        ]
-
-        styled_type_name = (
-            "-".join(styled_words)
-            if "-" in self.TYPE_MAP.get(letter_type, "")
-            else "".join(styled_words)
+        styled_type_name = LetterTypeTextPainter.get_colored_text(
+            letter_type.description
         )
 
+        # Set the text to show the first part of the letter type enum followed by the styled type name
         styled_text = f"{letter_type_str[0:4]} {letter_type_str[4]}: {styled_type_name}"
         self.setText(styled_text)
-        # self.resize_section_type_label()
 
     def get_font_size(self):
         scroll_area = self.section_widget.scroll_area

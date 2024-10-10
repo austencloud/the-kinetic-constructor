@@ -6,9 +6,8 @@ from Enums.Enums import LetterType
 from PyQt6.QtCore import pyqtSignal
 
 
-
 if TYPE_CHECKING:
-    from widgets.sequence_builder.components.option_picker.option_picker_scroll_area.option_picker_section_manager.option_picker_section_widget.option_picker_section_widget import OptionPickerSectionWidget
+    from ...option_picker_section_widget import OptionPickerSectionWidget
 
 
 class SectionTypeLabel(QLabel):
@@ -58,7 +57,7 @@ class SectionTypeLabel(QLabel):
 
     def font_size(self):
         scroll_area = self.section_widget.scroll_area
-        sequence_builder = scroll_area.sequence_builder
+        sequence_builder = scroll_area.manual_builder.sequence_builder
         base_class_name = type(scroll_area).__name__
 
         if base_class_name == "LetterBookScrollArea":

@@ -477,6 +477,9 @@ class Letter(Enum):
         return LetterType.get_letter_type(self)
 
 
+from enum import Enum
+
+
 class LetterType(Enum):
     Type1 = (
         [
@@ -503,13 +506,13 @@ class LetterType(Enum):
             "U",
             "V",
         ],
-        "Type1",
+        "Dual-Shift",
     )
-    Type2 = (["W", "X", "Y", "Z", "Σ", "Δ", "θ", "Ω"], "Type2")
-    Type3 = (["W-", "X-", "Y-", "Z-", "Σ-", "Δ-", "θ-", "Ω-"], "Type3")
-    Type4 = (["Φ", "Ψ", "Λ"], "Type4")
-    Type5 = (["Φ-", "Ψ-", "Λ-"], "Type5")
-    Type6 = (["α", "β", "Γ"], "Type6")
+    Type2 = (["W", "X", "Y", "Z", "Σ", "Δ", "θ", "Ω"], "Shift")
+    Type3 = (["W-", "X-", "Y-", "Z-", "Σ-", "Δ-", "θ-", "Ω-"], "Cross-Shift")
+    Type4 = (["Φ", "Ψ", "Λ"], "Dash")
+    Type5 = (["Φ-", "Ψ-", "Λ-"], "Dual-Dash")
+    Type6 = (["α", "β", "Γ"], "Static")
 
     def __init__(self, letters, description):
         self._letters = letters
@@ -523,8 +526,13 @@ class LetterType(Enum):
     def description(self):
         return self._description
 
+    @property
+    def type_map(self):
+        """Return the description directly, as type_map is no longer necessary."""
+        return self.description
+
     @staticmethod
-    def get_letter_type(letter: Letter) -> "LetterType":
+    def get_letter_type(letter: "Letter") -> "LetterType":
         """Takes a letter enum and returns the corresponding letter type."""
         letter_str = letter.value
         for letter_type in LetterType:
