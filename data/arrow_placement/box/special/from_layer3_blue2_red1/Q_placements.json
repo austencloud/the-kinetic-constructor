@@ -9,6 +9,10 @@
     },
     "(1, 1)": {
       "blue": [0, -140]
+    },
+    "(fl, 0)": {
+      "float_from_layer2": [100, 0],
+      "anti_from_layer1": {}
     }
   }
 }

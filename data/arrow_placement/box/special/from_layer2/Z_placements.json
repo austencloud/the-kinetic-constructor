@@ -70,8 +70,8 @@
       "swap_beta_w_nonradial_blue_static_w_red_anti_sw": true
     },
     "(s, 1.5, 3)": {
-      "anti": [-130, 105],
-      "static": [0, 10]
+      "static": [20, -10],
+      "anti": [-10, 155]
     },
     "(s, 2, 1)": {
       "static_rot_angle_override": true,
