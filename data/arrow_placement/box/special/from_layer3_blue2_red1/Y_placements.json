@@ -152,7 +152,9 @@
       "swap_beta_e_radial_blue_pro_se_red_static_e": true,
       "swap_beta_s_radial_blue_pro_sw_red_static_s": true,
       "swap_beta_w_nonradial_blue_static_w_red_pro_sw": true,
-      "swap_beta_w_radial_blue_pro_nw_red_static_w": true
+      "swap_beta_w_radial_blue_pro_nw_red_static_w": true,
+      "swap_beta_se_radial_blue_pro_e_red_static_se": true,
+      "swap_beta_nw_radial_blue_pro_w_red_static_nw": true
     },
     "(s, 1.5, 0.5)": {
       "static_from_layer2_rot_angle_override": true,
@@ -392,7 +394,8 @@
       "swap_beta_w_nonradial_blue_pro_nw_red_static_w": true
     },
     "(o, 1, 3)": {
-      "pro_from_layer2": [-60, 105]
+      "pro_from_layer2": [-60, 105],
+      "pro_from_layer1": [65, 15]
     },
     "(o, 1.5, 3)": {
       "static_from_layer1": [25, 35],
