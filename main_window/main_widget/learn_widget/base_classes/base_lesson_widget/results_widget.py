@@ -1,13 +1,11 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
-
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QFrame
 
 if TYPE_CHECKING:
     from main_window.main_widget.learn_widget.base_classes.base_lesson_widget.base_lesson_widget import (
         BaseLessonWidget,
     )
-
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
 
 
 class ResultsWidget(QWidget):
@@ -18,11 +16,33 @@ class ResultsWidget(QWidget):
         self.lesson_widget = lesson_widget
         self.main_widget = lesson_widget.main_widget
 
+        # Set an object name for styling
+        self.setObjectName("ResultsWidget")
+
         # Create result label and start over button
         self.result_label = QLabel(self)
         self.result_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.result_label.setStyleSheet("color: blue; font-weight: bold;")
+        self.result_label.setStyleSheet("color: white; font-weight: bold;")
 
+        # Create a frame to hold the result label (the semi-transparent section)
+        self.result_section = QFrame(self)
+        self.result_section.setObjectName("ResultSection")
+
+        # Apply styling for the result section to give it a semi-transparent background
+        self.result_section.setStyleSheet("""
+            QFrame#ResultSection {
+                background-color: rgba(0, 0, 0, 150);  /* Semi-transparent dark background */
+                border-radius: 15px;  /* Rounded corners */
+                padding: 20px;  /* Padding around the text for better spacing */
+            }
+        """)
+        
+        # Layout for the result section
+        result_section_layout = QVBoxLayout(self.result_section)
+        result_section_layout.addWidget(self.result_label)
+        result_section_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        # Start Over button
         self.start_over_button = QPushButton("Start Over", self)
         self.start_over_button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.start_over_button.clicked.connect(self.lesson_widget.prepare_quiz_ui)
@@ -30,10 +50,12 @@ class ResultsWidget(QWidget):
         # Layout setup
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.layout.addStretch(3)
+        self.layout.setContentsMargins(20, 20, 20, 20)  # Adjust margins for rounded edges
+        self.layout.setSpacing(10)
 
-        # Add the result label and button, centering them
-        self.layout.addWidget(self.result_label, alignment=Qt.AlignmentFlag.AlignCenter)
+        # Add the result section and the start over button to the main layout
+        self.layout.addStretch(3)
+        self.layout.addWidget(self.result_section, alignment=Qt.AlignmentFlag.AlignCenter)
         self.layout.addStretch(1)
         self.layout.addWidget(
             self.start_over_button, alignment=Qt.AlignmentFlag.AlignCenter
@@ -41,6 +63,14 @@ class ResultsWidget(QWidget):
         self.layout.addStretch(3)
 
         self.setLayout(self.layout)
+
+        # Apply stylesheet for the entire widget for consistency
+        self.setStyleSheet("""
+            QWidget#ResultsWidget {
+                background-color: rgba(255, 255, 255, 200);  /* Semi-transparent white */
+                border-radius: 15px;
+            }
+        """)
 
     def set_result_text(self, text: str):
         """Set the result text for the result label."""

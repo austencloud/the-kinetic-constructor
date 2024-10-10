@@ -177,6 +177,9 @@
     },
     "(o, 1, 2)": {
       "swap_beta_ne_radial_blue_dash_se_red_dash_nw": true
+    },
+    "(cw, 0, 3)": {
+      "swap_beta_ne_radial_blue_dash_se_red_dash_nw": true
     }
   }
 }

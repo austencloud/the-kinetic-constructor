@@ -31,7 +31,6 @@ class BaseLessonWidget(QWidget):
         self.main_layout: QVBoxLayout = QVBoxLayout()
         self.central_layout: QVBoxLayout = QVBoxLayout()
         self.back_layout: QHBoxLayout = QHBoxLayout()
-
         self.setLayout(self.main_layout)
 
         # Add back button and central area to the main layout

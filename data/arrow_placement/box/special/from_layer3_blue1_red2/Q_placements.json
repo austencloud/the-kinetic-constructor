@@ -91,6 +91,9 @@
     },
     "(0, fl)": {
       "float_from_layer2": [100, 0]
+    },
+    "(fl, 3)": {
+      "anti_from_layer2": [0, -115]
     }
   }
 }

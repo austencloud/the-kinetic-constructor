@@ -282,6 +282,7 @@
       "red": [0, 30],
       "swap_beta_s_nonradial_blue_static_s_red_static_s": true,
       "swap_beta_w_nonradial_blue_static_w_red_static_w": true
-    }
+    },
+    "(ccw, 2, 0)": {}
   }
 }

@@ -1,10 +1,10 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Snowfall",
+        "background_type": "Starfield",
         "grow_sequence": true,
         "current_tab": "sequence_builder",
-        "grid_mode": "diamond"
+        "grid_mode": "box"
     },
     "image_export": {
         "include_start_position": true,
@@ -80,18 +80,13 @@
                 "sequence_level": 3,
                 "continuous_rotation": true,
                 "selected_letter_types": [
-                    "Dual-Shift",
-                    "Shift",
-                    "Cross-Shift",
-                    "Dash",
-                    "Dual-Dash",
                     "Static"
                 ]
             },
             "current_auto_builder": "circular"
         },
         "manual_builder": {},
-        "last_used_builder": "manual"
+        "last_used_builder": "auto"
     },
     "sequence_sharing": {
         "recipients": [

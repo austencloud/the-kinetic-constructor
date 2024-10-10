@@ -13,6 +13,9 @@
     "(fl, 0)": {
       "float_from_layer2": [100, 0],
       "anti_from_layer1": {}
+    },
+    "(3, fl)": {
+      "anti_from_layer2": [0, -115]
     }
   }
 }
