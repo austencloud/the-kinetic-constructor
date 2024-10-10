@@ -1,9 +1,9 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Snowfall",
+        "background_type": "Bubbles",
         "grow_sequence": true,
-        "current_tab": "sequence_builder",
+        "current_tab": "learn",
         "grid_mode": "diamond"
     },
     "image_export": {
@@ -15,7 +15,7 @@
         "add_beat_numbers": true
     },
     "user_profile": {
-        "current_user": "Austen Cloud",
+        "current_user": "Betsy Dz",
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
@@ -26,12 +26,6 @@
             },
             "Betsy Dz": {
                 "name": "Betsy Dz"
-            },
-            "Robert Giannini": {
-                "name": "Robert Giannini"
-            },
-            "Robert Bershadsky": {
-                "name": "Robert Bershadsky"
             }
         },
         "current_note": "Created using The Kinetic Alphabet",
@@ -52,13 +46,8 @@
     },
     "dictionary": {
         "sort_method": "sequence_length",
-        "current_section": "browser",
-        "current_filter": {
-            "contains_letters": [
-                "P",
-                "T"
-            ]
-        }
+        "current_section": "filter_choice",
+        "current_filter": null
     },
     "sequence_layout": {
         "grow_sequence": true,

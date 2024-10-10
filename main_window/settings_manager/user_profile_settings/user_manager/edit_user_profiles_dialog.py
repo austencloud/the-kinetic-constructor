@@ -121,7 +121,7 @@ class EditUserProfilesDialog(QDialog):
             user_profiles_selector.set_current_user(selected_user)
         self.user_manager.save_users()
         self.accept()
-        user_profiles_selector.dialog.close_dialog()
+        user_profiles_selector.dialog.accept()
 
     def keyPressEvent(self, event):
         if event.key() in (Qt.Key.Key_Return, Qt.Key.Key_Enter):

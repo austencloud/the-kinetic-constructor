@@ -1,14 +1,15 @@
+# menu_bar_widget.py
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QFrame, QLabel
 from PyQt6.QtGui import QFont
 
 from main_window.menu_bar_widget.base_selector import BaseSelector
 
-from .user_profile_selector.user_profile_selector import UserProfileSelector
+from .user_profile_selector import UserProfileSelector
 from .background_selector.background_selector import BackgroundSelector
-from .prop_type_selector.prop_type_selector import PropTypeSelector
-from .grid_mode_selector.grid_mode_selector import GridModeSelector
-from .visibility_selector.visibility_selector import VisibilitySelector
+from .prop_type_selector import PropTypeSelector
+from .grid_mode_selector import GridModeSelector
+from .visibility_selector import VisibilitySelector
 
 if TYPE_CHECKING:
     from main_window.main_window import MainWindow

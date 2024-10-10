@@ -48,7 +48,7 @@ class UserManager(QObject):
             )
         dialog = EditUserProfilesDialog(self)
         if dialog.exec():
-            self.user_profiles_selector.dialog.populate_user_profiles_dialog()
+            self.user_profiles_selector.dialog.accept()
 
     def get_all_users(self):
         return list(self.user_profile_settings.settings.get("user_profiles", {}).keys())

@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Optional
 from Enums.PropTypes import PropType
-from main_window.menu_bar_widget.background_selector.background_managers.aurora_background_manager import (
+from main_window.menu_bar_widget.background_selector.background_managers.aurora.aurora_background_manager import (
     AuroraBackgroundManager,
 )
 from main_window.menu_bar_widget.background_selector.background_managers.aurora_borealis_background_manager import (
@@ -12,12 +12,8 @@ from main_window.menu_bar_widget.background_selector.background_managers.backgro
 from main_window.menu_bar_widget.background_selector.background_managers.bubbles_background_manager import (
     BubblesBackgroundManager,
 )
-from main_window.menu_bar_widget.background_selector.background_managers.particle_background_manager import (
-    ParticleBackgroundManager,
-)
-from main_window.menu_bar_widget.background_selector.background_managers.rainbow_background_manager import (
-    RainbowBackgroundManager,
-)
+
+
 from main_window.menu_bar_widget.background_selector.background_managers.snowfall.snowfall_background_manager import (
     SnowfallBackgroundManager,
 )
@@ -104,9 +100,7 @@ class GlobalSettings:
             self.font_color_updater.update_splash_screen_font_colors(widget, bg_type)
         # Rest of your code remains the same
         background_manager_map = {
-            # "Rainbow": RainbowBackgroundManager,
             "Starfield": StarfieldBackgroundManager,
-            # "Particle": ParticleBackgroundManager,
             "Aurora": AuroraBackgroundManager,
             # "AuroraBorealis": AuroraBorealisBackgroundManager,
             "Snowfall": SnowfallBackgroundManager,

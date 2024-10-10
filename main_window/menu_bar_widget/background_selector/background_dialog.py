@@ -1,6 +1,6 @@
 # background_dialog.py
 from typing import TYPE_CHECKING
-from ..options_dialog import OptionsDialog
+from ..base_options_dialog import BaseOptionsDialog
 
 if TYPE_CHECKING:
     from .background_selector import BackgroundSelector
@@ -10,17 +10,14 @@ class BackgroundDialog:
     def __init__(self, background_selector: "BackgroundSelector"):
         self.background_selector = background_selector
         self.options = [
-            # "Rainbow",
             "Starfield",
-            # "Particle",
             "Aurora",
-            # "AuroraBorealis",
             "Snowfall",
             "Bubbles",
         ]
 
     def show_dialog(self):
-        dialog = OptionsDialog(
+        dialog = BaseOptionsDialog(
             selector=self.background_selector,
             options=self.options,
             callback=self.option_selected,

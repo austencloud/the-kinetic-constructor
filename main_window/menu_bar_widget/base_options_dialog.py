@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from PyQt6.QtWidgets import QWidget
 
 
-class OptionsDialog(QDialog):
+class BaseOptionsDialog(QDialog):
     def __init__(
         self,
         selector: "BaseSelector",
