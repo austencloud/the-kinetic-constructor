@@ -58,6 +58,12 @@
     },
     "(o, 0, 3)": {
       "anti": [0, -95]
+    },
+    "(o, 2, 2)": {
+      "swap_beta_ne_radial_blue_dash_se_red_anti_e": true,
+      "swap_beta_nw_radial_blue_dash_ne_red_anti_n": true,
+      "swap_beta_sw_radial_blue_dash_nw_red_anti_w": true,
+      "swap_beta_se_radial_blue_dash_sw_red_anti_s": true
     }
   }
 }

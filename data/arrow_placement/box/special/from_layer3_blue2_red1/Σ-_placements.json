@@ -5,11 +5,11 @@
     },
     "(0.5, 0)": {},
     "(s, 1.5, 3)": {
-      "dash_from_layer1": [-30, -70],
-      "pro_from_layer2": [-120, 150],
       "dash_from_layer2_rot_angle_override": true,
       "dash_from_layer2": [5, -160],
-      "pro_from_layer1": [25, -10]
+      "pro_from_layer1": [25, -10],
+      "pro_from_layer2": [-20, 185],
+      "dash_from_layer1": [25, 70]
     },
     "(s, 2.5, 3)": {
       "dash_from_layer1": [-40, -80],
@@ -32,7 +32,10 @@
     "(s, 1, 2)": {
       "pro_from_layer1": [0, 0]
     },
-    "(1.5, 0)": {},
+    "(1.5, 0)": {
+      "pro_from_layer2": {},
+      "dash_from_layer1": {}
+    },
     "(s, 1.5, 0.5)": {
       "pro_from_layer2": [-35, 120],
       "pro_from_layer1": [-10, 15],

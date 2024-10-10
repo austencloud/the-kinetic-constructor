@@ -114,10 +114,10 @@
       "blue": [0, 25]
     },
     "(o, 3, 1.5)": {
-      "blue": [-20, 0],
       "static_from_layer2_rot_angle_override": true,
-      "red": [-25, 0],
-      "static_from_layer1_rot_angle_override": true
+      "static_from_layer1_rot_angle_override": true,
+      "red": {},
+      "blue": {}
     },
     "(o, 1, 2)": {
       "static_from_layer1_rot_angle_override": true,
@@ -174,8 +174,8 @@
       "static_from_layer2_rot_angle_override": true
     },
     "(o, 1.5, 3)": {
-      "blue": [0, -25],
-      "red": [0, 25]
+      "blue": [-30, 5],
+      "red": [20, -5]
     },
     "(o, 2, 3)": {
       "static_from_layer1_rot_angle_override": true,

@@ -100,8 +100,8 @@
       "swap_beta_s_nonradial_blue_dash_e_red_pro_sw": true
     },
     "(s, 1.5, 0.5)": {
-      "dash_from_layer1": [-70, -105],
-      "pro_from_layer2": [-80, 115]
+      "pro_from_layer2": [-30, 165],
+      "dash_from_layer1": [-40, 70]
     },
     "(s, 1.5, 1)": {
       "pro_from_layer1": [-5, -10],

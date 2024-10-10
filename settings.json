@@ -47,7 +47,7 @@
             "EndPosition": false
         },
         "grid_visibility": {
-            "non_radial_points": false
+            "non_radial_points": true
         }
     },
     "dictionary": {
@@ -67,8 +67,8 @@
             "circular_auto_builder": {
                 "sequence_type": "circular",
                 "sequence_length": 16,
-                "max_turn_intensity": 2,
-                "sequence_level": 2,
+                "max_turn_intensity": 3,
+                "sequence_level": 3,
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",
                 "continuous_rotation": true,
@@ -87,9 +87,16 @@
                 "max_turn_intensity": 1,
                 "sequence_level": 2,
                 "continuous_rotation": false,
-                "selected_letter_types": []
+                "selected_letter_types": [
+                    "Dual-Shift",
+                    "Shift",
+                    "Cross-Shift",
+                    "Dash",
+                    "Dual-Dash",
+                    "Static"
+                ]
             },
-            "current_auto_builder": "freeform"
+            "current_auto_builder": "circular"
         },
         "manual_builder": {},
         "last_used_builder": "auto"
