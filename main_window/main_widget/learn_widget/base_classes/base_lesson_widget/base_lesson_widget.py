@@ -56,6 +56,7 @@ class BaseLessonWidget(QWidget):
         self.current_question = 1
         self.quiz_time = 120
         self.mode = "fixed_question"
+        self.incorrect_guesses = 0
 
     def _setup_layout(self):
         """Setup common UI layout."""
@@ -63,7 +64,7 @@ class BaseLessonWidget(QWidget):
 
     def show_results(self):
         """Display the results after the quiz or countdown ends."""
-        self.results_widget.show_results()
+        self.results_widget.show_results(self.incorrect_guesses)
 
     def set_mode(self, mode: str) -> None:
         """Set the quiz mode (Fixed Questions or Countdown)."""
@@ -98,6 +99,7 @@ class BaseLessonWidget(QWidget):
     def prepare_quiz_ui(self):
         """Prepare and switch to the quiz interface layout."""
         self.current_question = 1
+        self.incorrect_guesses = 0
         self.update_progress_label()
         self.clear_layout(self.central_layout)
         self.layout_manager.setup_layout()
@@ -115,13 +117,14 @@ class BaseLessonWidget(QWidget):
                 if self.current_question <= self.total_questions:
                     self.start_new_question()
                 else:
-                    self.results_widget.show_results()
+                    self.results_widget.show_results(self.incorrect_guesses)
             elif self.mode == "countdown":
                 self.start_new_question()
         else:
             self.indicator_label.show_message("Wrong! Try again.")
             self.indicator_label.setStyleSheet("color: red;")
             self.answers_widget.disable_answer(selected_answer)
+            self.incorrect_guesses += 1
 
     def start_new_question(self):
         """Start a new question for the lesson."""
