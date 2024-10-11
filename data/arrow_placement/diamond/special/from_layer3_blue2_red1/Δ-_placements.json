@@ -168,7 +168,7 @@
     "(o, 2.5, 1.5)": {
       "anti_from_layer2": [-100, 70],
       "anti_from_layer1": [-70, 85],
-      "dash_from_layer2": [25, -130]
+      "dash_from_layer2": [25, -135]
     },
     "(o, 2.5, 2)": {
       "anti_from_layer1": [-70, 5]

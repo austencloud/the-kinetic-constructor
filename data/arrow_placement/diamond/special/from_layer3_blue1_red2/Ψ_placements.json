@@ -16,6 +16,10 @@
       "static_from_layer1": [0, 20],
       "static_from_layer1_rot_angle_override": true,
       "swap_beta_e_nonradial_blue_static_e_red_dash_n": true
+    },
+    "(ccw, 0, 1)": {
+      "static_from_layer1_rot_angle_override": true,
+      "static_from_layer1": [-95, 0]
     }
   }
 }

@@ -9,6 +9,10 @@
     "(cw, 0, 1.5)": {
       "static_from_layer1": [0, 20],
       "static_from_layer1_rot_angle_override": true
+    },
+    "(ccw, 0, 1)": {
+      "static_from_layer1_rot_angle_override": true,
+      "static_from_layer1": [-95, 0]
     }
   }
 }

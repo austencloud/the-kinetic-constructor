@@ -211,6 +211,14 @@
     "(o, 0.5, 1)": {
       "swap_beta_s_nonradial_blue_anti_sw_red_static_s": true,
       "swap_beta_n_nonradial_blue_anti_ne_red_static_n": true
+    },
+    "(1.5, 0)": {
+      "swap_beta_s_nonradial_blue_anti_se_red_static_s": true,
+      "swap_beta_n_nonradial_blue_anti_nw_red_static_n": true
+    },
+    "(s, 3, 1.5)": {
+      "static_from_layer2_rot_angle_override": true,
+      "static_from_layer2": [-20, 0]
     }
   }
 }

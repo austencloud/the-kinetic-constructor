@@ -102,6 +102,10 @@
     },
     "(0, 0.5)": {
       "red": [-105, 55]
+    },
+    "(fl, 1.5)": {
+      "swap_beta_s_radial_blue_float_se_red_pro_sw": true,
+      "swap_beta_n_radial_blue_float_nw_red_pro_ne": true
     }
   }
 }
