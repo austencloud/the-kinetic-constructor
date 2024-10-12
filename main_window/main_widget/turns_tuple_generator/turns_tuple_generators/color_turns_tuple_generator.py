@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
-from main_window.main_widget.turns_tuple_generator.turns_tuple_generators.base_turns_tuple_generator import BaseTurnsTupleGenerator
+from main_window.main_widget.turns_tuple_generator.turns_tuple_generators.base_turns_tuple_generator import (
+    BaseTurnsTupleGenerator,
+)
 
 if TYPE_CHECKING:
     pass
