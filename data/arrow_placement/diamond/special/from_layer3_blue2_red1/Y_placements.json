@@ -271,7 +271,7 @@
     },
     "(o, 0, 0.5)": {
       "static_from_layer1_rot_angle_override": true,
-      "static_from_layer1": [-100, -120]
+      "static_from_layer1": [-120, -100]
     },
     "(o, 0, 1)": {
       "static_from_layer1_rot_angle_override": true,

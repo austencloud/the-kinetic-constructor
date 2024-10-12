@@ -11,7 +11,7 @@
     },
     "(0.5, 0)": {
       "trailing_from_layer2": [0, 20],
-      "leading_from_layer2": [60, -55]
+      "leading_from_layer2": null
     },
     "(0.5, 0.5)": {
       "trailing_from_layer2": null,

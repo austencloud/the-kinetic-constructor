@@ -6,7 +6,8 @@
       "swap_beta_s_nonradial_blue_pro_se_red_anti_se": true,
       "swap_beta_e_nonradial_blue_pro_se_red_anti_se": true,
       "swap_beta_n_nonradial_blue_pro_nw_red_anti_nw": true,
-      "swap_beta_s_nonradial_blue_pro_sw_red_anti_sw": true
+      "swap_beta_s_nonradial_blue_pro_sw_red_anti_sw": true,
+      "pro_from_layer1": [0, -55]
     },
     "(0, 1)": {
       "anti_from_layer2": [30, -30],

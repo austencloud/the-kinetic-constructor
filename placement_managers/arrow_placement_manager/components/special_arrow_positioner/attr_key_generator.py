@@ -36,7 +36,7 @@ class AttrKeyGenerator:
         elif arrow.pictograph.check.starts_from_standard_orientation():
             
             if arrow.pictograph.letter.value in ["S", "T"]:
-                return f"{arrow.motion.lead_state}"
+                return f"{arrow.color}_{arrow.motion.lead_state}"
             elif arrow.pictograph.check.has_hybrid_motions():
                 return arrow.motion.motion_type
             else:

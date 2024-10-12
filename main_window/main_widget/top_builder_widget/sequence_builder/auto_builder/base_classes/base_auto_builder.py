@@ -1,6 +1,7 @@
 from copy import deepcopy
 import random
 from typing import TYPE_CHECKING
+from Enums.letters import Letter, LetterConditions
 from data.constants import (
     ANTI,
     BLUE,
@@ -49,7 +50,7 @@ class BaseAutoBuilder:
         if len(self.sequence) == 1:
             self.add_start_pos_pictograph()
             self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
-            
+
         self.sequence_widget.beat_frame.populator.modify_layout_for_chosen_number_of_beats(
             length
         )
@@ -165,7 +166,13 @@ class BaseAutoBuilder:
     def _set_turns(self, next_beat: dict, turn_blue: float, turn_red: float) -> dict:
         """Set the turns for blue and red attributes, adjusting motion types if necessary."""
         # Set blue turns
+        if turn_blue == "fl" or turn_red == "fl":
+            if Letter.get_letter(next_beat["letter"]) in Letter.get_letters_by_condition(
+                LetterConditions.TYPE1_HYBRID
+            ):
+                return next_beat
         if turn_blue == "fl":
+
             if next_beat["blue_attributes"][MOTION_TYPE] in [PRO, ANTI]:
                 next_beat["blue_attributes"][TURNS] = "fl"
                 next_beat["blue_attributes"]["prefloat_motion_type"] = next_beat[
@@ -176,6 +183,7 @@ class BaseAutoBuilder:
                 ][PROP_ROT_DIR]
                 next_beat["blue_attributes"][MOTION_TYPE] = FLOAT
                 next_beat["blue_attributes"][PROP_ROT_DIR] = NO_ROT
+
             elif next_beat["blue_attributes"][MOTION_TYPE] not in [PRO, ANTI]:
                 next_beat["blue_attributes"][TURNS] = 0
         else:

@@ -585,6 +585,14 @@
     },
     "(o, 3, 3)": {
       "pro_from_layer2": [-20, 90]
+    },
+    "(s, fl, 0.5)": {
+      "static_from_layer2_rot_angle_override": true,
+      "static_from_layer2": [0, 140]
+    },
+    "null": {
+      "static_from_layer1_rot_angle_override": true,
+      "static_from_layer1": [-140, 0]
     }
   }
 }

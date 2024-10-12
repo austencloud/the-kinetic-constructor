@@ -323,6 +323,13 @@
     "(o, 0.5, 1)": {
       "static": [70, -80],
       "anti": [-20, 120]
+    },
+    "(o, fl, 0.5)": {
+      "static_rot_angle_override": true,
+      "static": [0, 160]
+    },
+    "null": {
+      "static_rot_angle_override": true
     }
   }
 }
