@@ -2,12 +2,12 @@
     "global": {
         "prop_type": "Staff",
         "background_type": "Bubbles",
-        "grow_sequence": true,
+        "grow_sequence": false,
         "current_tab": "sequence_builder",
         "grid_mode": "diamond"
     },
     "image_export": {
-        "include_start_position": true,
+        "include_start_position": false,
         "add_info": true,
         "open_directory_on_export": true,
         "add_word": true,
@@ -15,7 +15,7 @@
         "add_beat_numbers": true
     },
     "user_profile": {
-        "current_user": "Austen Cloud",
+        "current_user": "Doc Womp",
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
@@ -46,13 +46,15 @@
     },
     "dictionary": {
         "sort_method": "sequence_length",
-        "current_section": "filter_choice",
-        "current_filter": null
+        "current_section": "browser",
+        "current_filter": {
+            "starting_letter": "Î©"
+        }
     },
     "sequence_layout": {
-        "grow_sequence": true,
-        "num_beats": 2,
-        "layout_option": "1 x 2"
+        "grow_sequence": false,
+        "num_beats": 16,
+        "layout_option": "4 x 4"
     },
     "builder": {
         "auto_builder": {

@@ -379,6 +379,16 @@
     "(0, 0.5, op)": {
       "blue": [0, 0],
       "red": [0, 0]
+    },
+    "(3, 0, cl)": {
+      "red": [0, -5],
+      "blue": [20, -155],
+      "dash_rot_angle_override": true
+    },
+    "(0, 3, cl)": {
+      "blue": [0, -5],
+      "red": [20, -155],
+      "dash_rot_angle_override": true
     }
   }
 }

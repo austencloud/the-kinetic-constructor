@@ -279,8 +279,9 @@
       "pro_from_layer2": [-105, 140]
     },
     "(o, 1.5, 2)": {
-      "pro_from_layer2": [-60, 150],
-      "pro_from_layer1": [-5, -5]
+      "pro_from_layer2": [-70, 150],
+      "pro_from_layer1": [-5, -5],
+      "dash_from_layer1": [-115, -40]
     },
     "(o, 1.5, 2.5)": {
       "dash_from_layer2": [75, -35],

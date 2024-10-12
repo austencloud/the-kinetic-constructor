@@ -29,7 +29,7 @@ class UserProfileSelector(QWidget):
         self.main_window = menu_bar_widget.main_window
         self.main_widget = self.main_window.main_widget
         self.user_manager = self.main_window.settings_manager.users.user_manager
-
+        self.dialog = None
         current_user = self.user_manager.get_current_user()
 
         self.label = ClickableLabel(current_user)
@@ -80,7 +80,9 @@ class UserProfileSelector(QWidget):
         self.refresh_options()
 
         self.dialog = QDialog(self)
-        self.dialog.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.Popup)
+        self.dialog.setWindowFlags(
+            Qt.WindowType.FramelessWindowHint | Qt.WindowType.Popup
+        )
         self.dialog.setStyleSheet(
             """
             QDialog {
