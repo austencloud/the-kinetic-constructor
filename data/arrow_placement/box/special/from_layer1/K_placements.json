@@ -39,7 +39,8 @@
       "red": [55, 70]
     },
     "(2.5, fl)": {
-      "swap_beta_nw_nonradial_blue_anti_w_red_float_n": true
+      "swap_beta_nw_nonradial_blue_anti_w_red_float_n": true,
+      "swap_beta_se_nonradial_blue_anti_s_red_float_e": true
     }
   }
 }

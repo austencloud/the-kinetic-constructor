@@ -54,12 +54,19 @@ class TurnsWidget(QWidget):
         self.turns_box.matching_motion = motion
         display_value = "fl" if new_turns == "fl" else str(new_turns)
         self.turns_display_frame.turns_label.setText(display_value)
+        
         if self.turns_box.matching_motion.motion_type in [PRO, ANTI, FLOAT]:
             self.turns_display_frame.decrement_button.setEnabled(
                 new_turns not in ["fl"]
             )
         else:
             self.turns_display_frame.decrement_button.setEnabled(new_turns != 0)
+        
+        if display_value == "3":
+            self.turns_display_frame.increment_button.setEnabled(False)
+        else:
+            self.turns_display_frame.increment_button.setEnabled(True)
+        
         self.motion_type_label.update_display(motion.motion_type)
 
     def resize_turns_widget(self) -> None:
