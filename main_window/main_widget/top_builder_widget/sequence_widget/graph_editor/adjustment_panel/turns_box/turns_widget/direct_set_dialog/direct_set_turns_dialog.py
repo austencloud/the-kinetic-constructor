@@ -19,6 +19,7 @@ class DirectSetTurnsDialog(QDialog):
         self.turns_display_frame = turns_widget.turns_display_frame
         self.buttons: dict[str, DirectSetTurnsButton] = {}
         self._set_dialog_style()
+        self.layout = None
 
     def _set_dialog_style(self):
         self.setStyleSheet(
@@ -45,11 +46,12 @@ class DirectSetTurnsDialog(QDialog):
             self.buttons[value] = button
 
     def _setup_layout(self):
-        self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(0)
-        for button in self.buttons.values():
-            self.layout.addWidget(button)
+        if not self.layout:
+            self.layout: QHBoxLayout = QHBoxLayout(self)
+            self.layout.setContentsMargins(0, 0, 0, 0)
+            self.layout.setSpacing(0)
+            for button in self.buttons.values():
+                self.layout.addWidget(button)
         self.adjustSize()
 
     def show_direct_set_dialog(self) -> None:
