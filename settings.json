@@ -3,7 +3,7 @@
         "prop_type": "Staff",
         "background_type": "Snowfall",
         "grow_sequence": true,
-        "current_tab": "dictionary",
+        "current_tab": "sequence_builder",
         "grid_mode": "box"
     },
     "image_export": {

@@ -21,13 +21,8 @@ class TopBuilderWidget(QWidget):
         self.sequence_widget = SequenceWidget(self)
         self.initialized = False
         self._setup_layout()
-        # self.connect_signals()
         self.background_manager = None
 
-    # def connect_signals(self):
-    #     self.main_widget.main_window.settings_manager.background_changed.connect(
-    #         self.update_background_manager
-    #     )
 
     def _setup_layout(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)

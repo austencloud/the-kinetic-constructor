@@ -56,7 +56,6 @@ class MainWidget(QTabWidget):
         self._initialize_managers()
 
         self._setup_ui_components()
-        self.apply_background()
         self.main_window.settings_manager.background_changed.connect(
             self.update_background
         )
@@ -193,6 +192,8 @@ class MainWidget(QTabWidget):
 
     def showEvent(self, event):
         super().showEvent(event)
+        self.apply_background()
+
         self.main_window.geometry_manager.set_dimensions()
         if self.background_manager:
             self.background_manager.start_animation()
