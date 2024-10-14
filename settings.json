@@ -4,7 +4,7 @@
         "background_type": "Snowfall",
         "grow_sequence": true,
         "current_tab": "sequence_builder",
-        "grid_mode": "box"
+        "grid_mode": "diamond"
     },
     "image_export": {
         "include_start_position": false,
@@ -37,7 +37,7 @@
         "glyph_visibility": {
             "VTG": false,
             "TKA": true,
-            "Elemental": false,
+            "Elemental": true,
             "EndPosition": false
         },
         "grid_visibility": {
@@ -59,7 +59,7 @@
             "circular_auto_builder": {
                 "sequence_type": "circular",
                 "sequence_length": 16,
-                "max_turn_intensity": 0.5,
+                "max_turn_intensity": 3,
                 "sequence_level": 3,
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",
@@ -84,10 +84,10 @@
                     "Shift"
                 ]
             },
-            "current_auto_builder": "freeform"
+            "current_auto_builder": "circular"
         },
         "manual_builder": {},
-        "last_used_builder": "manual"
+        "last_used_builder": "auto"
     },
     "sequence_sharing": {
         "recipients": [

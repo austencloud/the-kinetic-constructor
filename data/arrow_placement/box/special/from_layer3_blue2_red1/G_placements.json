@@ -139,6 +139,10 @@
     },
     "(fl, 1.5)": {
       "float_from_layer2": [15, 30]
+    },
+    "(0, fl)": {
+      "pro_from_layer2": [-40, -110],
+      "float_from_layer1": [40, 20]
     }
   }
 }

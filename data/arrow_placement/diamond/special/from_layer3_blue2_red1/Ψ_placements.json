@@ -13,6 +13,15 @@
     "(ccw, 0, 1)": {
       "static_from_layer1_rot_angle_override": true,
       "static_from_layer1": [-95, 0]
+    },
+    "(o, 1.5, 1)": {
+      "static_from_layer2_rot_angle_override": true,
+      "static_from_layer2": [0, -95]
+    },
+    "(s, 1.5, 1)": {
+      "static_from_layer2_rot_angle_override": true,
+      "static_from_layer2": [-5, -90],
+      "dash_from_layer1": [10, -170]
     }
   }
 }

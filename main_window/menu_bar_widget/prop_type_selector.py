@@ -32,7 +32,7 @@ class PropTypeSelector(QWidget):
         self.settings_manager = self.main_window.settings_manager
         self.prop_type_changer = self.settings_manager.global_settings.prop_type_changer
 
-        current_prop_type = self.main_widget.prop_type.name
+        current_prop_type = self.settings_manager.global_settings.get_prop_type().name
 
         self.label = ClickableLabel(current_prop_type)
         self.label.clicked.connect(self.on_label_clicked)

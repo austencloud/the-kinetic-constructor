@@ -1,11 +1,13 @@
 import sys
 import logging
+
 logging.basicConfig(level=logging.WARNING)
 logging.getLogger("matplotlib").setLevel(logging.WARNING)
 logging.getLogger("PIL").setLevel(logging.WARNING)
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import QTimer
 from PyQt6.QtGui import QPalette, QColor
+
 
 def main() -> None:
     app = QApplication(sys.argv)

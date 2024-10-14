@@ -33,6 +33,9 @@
     },
     "(o, 1, 2)": {
       "dash_from_layer1": [25, 25]
+    },
+    "(ccw, 0, 0.5)": {
+      "swap_beta_nw_radial_blue_static_nw_red_dash_sw": true
     }
   }
 }

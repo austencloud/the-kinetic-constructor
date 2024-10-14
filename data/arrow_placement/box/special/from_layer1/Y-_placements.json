@@ -87,6 +87,9 @@
     },
     "(s, 1.5, 0.5)": {
       "dash": [-40, 110]
+    },
+    "(s, 0.5, 0.5)": {
+      "swap_beta_se_nonradial_blue_pro_e_red_dash_ne": true
     }
   }
 }

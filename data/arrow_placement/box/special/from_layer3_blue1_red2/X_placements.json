@@ -1,8 +1,5 @@
 {
   "X": {
-    "(s, 0.5, 0.5)": {
-      "anti_from_layer2": [-60, 65]
-    },
     "(o, 0.5, 1)": {
       "static_from_layer2": {},
       "anti_from_layer1": {},
