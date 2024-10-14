@@ -64,7 +64,8 @@ class OriPickerWidget(QWidget):
 
         self.ori_display_label = ClickableLabel(self)
         self.ori_display_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
+        self.ori_display_label.setCursor(Qt.CursorShape.PointingHandCursor)
+        
         path = get_images_and_data_path("images/icons")
         self.ccw_button = self._create_rotate_button(
             f"{path}/rotate_ccw.png", self.rotate_ccw

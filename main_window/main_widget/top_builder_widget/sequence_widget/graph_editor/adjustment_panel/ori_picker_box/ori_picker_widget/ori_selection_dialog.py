@@ -4,17 +4,15 @@ from PyQt6.QtGui import QFont, QFontMetrics
 from data.constants import IN, COUNTER, OUT, CLOCK, HEX_BLUE, HEX_RED
 from typing import TYPE_CHECKING
 
-
 if TYPE_CHECKING:
-    from .ori_display_frame import OriDisplayFrame
-
+    from .ori_picker_widget import OriPickerWidget
 
 class OriSelectionDialog(QDialog):
-    def __init__(self, ori_display_frame: "OriDisplayFrame"):
+    def __init__(self, ori_picker_widget: "OriPickerWidget"):
         super().__init__(
-            ori_display_frame, Qt.WindowType.FramelessWindowHint | Qt.WindowType.Popup
+            ori_picker_widget, Qt.WindowType.FramelessWindowHint | Qt.WindowType.Popup
         )
-        self.ori_display_frame = ori_display_frame
+        self.ori_picker_widget = ori_picker_widget
         self.selected_orientation = None
         self.buttons: dict[str, QPushButton] = {}
         self._set_dialog_style()
@@ -22,7 +20,7 @@ class OriSelectionDialog(QDialog):
         self._setup_layout()
 
     def _set_dialog_style(self):
-        border_color = HEX_BLUE if self.ori_display_frame.color == "blue" else HEX_RED
+        border_color = HEX_BLUE if self.ori_picker_widget.color == "blue" else HEX_RED
         self.setStyleSheet(
             f"""
             QDialog {{
@@ -47,8 +45,8 @@ class OriSelectionDialog(QDialog):
 
     def resize_buttons(self):
         """Resize buttons according to the orientation label's size."""
-        ori_label_width = self.ori_display_frame.ori_display_label.width()
-        button_height = int(self.ori_display_frame.ori_picker_box.height() // 3)
+        ori_label_width = self.ori_picker_widget.ori_display_label.width()
+        button_height = int(self.ori_picker_widget.ori_picker_box.height() // 3)
         font_size = int(button_height * 0.5)  # Font size based on button height
 
         font = QFont("Arial", font_size, QFont.Weight.Bold)
@@ -65,7 +63,7 @@ class OriSelectionDialog(QDialog):
             button.setStyleSheet(
                 f"""
                 QPushButton {{
-                    border: {border_width}px solid {HEX_BLUE if self.ori_display_frame.color == "blue" else HEX_RED};
+                    border: {border_width}px solid {HEX_BLUE if self.ori_picker_widget.color == "blue" else HEX_RED};
                     border-radius: {button_height // 2}px;
                     background-color: #ffffff;
                 }}

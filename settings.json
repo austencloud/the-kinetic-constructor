@@ -51,8 +51,8 @@
     },
     "sequence_layout": {
         "grow_sequence": true,
-        "num_beats": 1,
-        "layout_option": "1 x 1"
+        "num_beats": 3,
+        "layout_option": "1 x 3"
     },
     "builder": {
         "auto_builder": {
@@ -76,18 +76,19 @@
             "freeform_auto_builder": {
                 "sequence_type": "freeform",
                 "sequence_length": 16,
-                "max_turn_intensity": 0.5,
-                "sequence_level": 3,
+                "max_turn_intensity": 1,
+                "sequence_level": 2,
                 "continuous_rotation": true,
                 "selected_letter_types": [
                     "Dual-Shift",
-                    "Shift"
+                    "Shift",
+                    "Cross-Shift"
                 ]
             },
             "current_auto_builder": "circular"
         },
         "manual_builder": {},
-        "last_used_builder": "auto"
+        "last_used_builder": "manual"
     },
     "sequence_sharing": {
         "recipients": [

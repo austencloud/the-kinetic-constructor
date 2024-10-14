@@ -24,12 +24,16 @@
     "(o, 1.5, 1)": {
       "static_from_layer2_rot_angle_override": true,
       "static_from_layer2": [0, -95],
-      "swap_beta_n_nonradial_blue_dash_w_red_static_n": true
+      "swap_beta_n_nonradial_blue_dash_w_red_static_n": true,
+      "dash_from_layer2": [15, -140],
+      "static_from_layer1": [110, 5]
     },
     "(s, 1.5, 1)": {
       "static_from_layer2_rot_angle_override": true,
       "static_from_layer2": [-5, -90],
-      "dash_from_layer1": [10, -170]
+      "dash_from_layer1": [10, -170],
+      "static_from_layer1_rot_angle_override": true,
+      "static_from_layer1": [-90, 0]
     }
   }
 }

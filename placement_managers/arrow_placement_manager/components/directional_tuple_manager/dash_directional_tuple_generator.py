@@ -91,8 +91,8 @@ class DashDirectionalGenerator(BaseDirectionalGenerator):
     def _handle_type5_zero_turns(self, x: int, y: int) -> list[tuple[int, int]]:
         diamond_Type5_zero_turns_directional_tuples = {
             (BLUE, (NORTH, SOUTH)): [(x, y), (-y, x), (-x, -y), (y, -x)],
-            (BLUE, (EAST, WEST)): [(x, y), (-y, -x), (-x, -y), (y, x)],
-            (BLUE, (SOUTH, NORTH)): [(x, y), (-y, x), (-x, -y), (y, -x)],
+            (BLUE, (EAST, WEST)): [(x, y), (-y, -x), (x, -y), (y, x)],
+            (BLUE, (SOUTH, NORTH)): [(x, y), (-y, x), (-x, -y), (y, x)],
             (BLUE, (WEST, EAST)): [(x, y), (-y, -x), (-x, -y), (-y, x)],
             (RED, (NORTH, SOUTH)): [(x, y), (-y, -x), (-x, -y), (y, -x)],
             (RED, (EAST, WEST)): [(x, y), (-y, -x), (-x, -y), (y, -x)],

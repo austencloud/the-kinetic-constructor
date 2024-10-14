@@ -26,6 +26,7 @@ class FullScreenImageOverlay(QWidget):
         self.image_label = QLabel(self)
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.image_label.setContentsMargins(0, 0, 0, 0)
+        self.image_label.setCursor(Qt.CursorShape.PointingHandCursor)
         layout.addWidget(self.image_label)
         layout.setSpacing(0)
         layout.setContentsMargins(0, 0, 0, 0)
