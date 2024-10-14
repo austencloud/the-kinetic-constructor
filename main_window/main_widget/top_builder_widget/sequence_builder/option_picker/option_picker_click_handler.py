@@ -22,6 +22,22 @@ class OptionPickerClickHandler:
         new_beat = self.manual_builder.add_to_sequence_manager.create_new_beat(
             clicked_option
         )
+        next_beat_number = beat_frame.beat_adder.calculate_next_beat_number()
+        if (
+            next_beat_number
+            > beat_frame.sequence_widget.settings_manager.sequence_layout.get_layout_setting(
+                "num_beats"
+            )
+        ) and not beat_frame.sequence_widget.settings_manager.sequence_layout.get_layout_setting(
+            "grow_sequence"
+        ):
+            self.sequence_widget = (
+                self.manual_builder.main_widget.top_builder_widget.sequence_widget
+            )
+            self.sequence_widget.indicator_label.show_message(
+                f"Can't add the beat. Sequence length is set to {next_beat_number - 1} beats."
+            )
+            return
         beat_frame.beat_adder.add_beat_to_sequence(new_beat)
         if new_beat.view:
             self.manual_builder.option_picker.choose_your_next_pictograph_label.set_text_to_loading()

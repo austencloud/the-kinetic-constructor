@@ -24,11 +24,11 @@ class BeatAdder:
         update_level=True,
     ) -> None:
         next_beat_number = self.calculate_next_beat_number()
+        grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
 
         if next_beat_number and update_level == 1:
             self.sequence_widget.difficulty_label.set_difficulty_level(1)
 
-        grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
         next_beat_index = self.beat_frame.get.next_available_beat()
 
         if next_beat_index is not None and not self.beats[next_beat_index].is_filled:

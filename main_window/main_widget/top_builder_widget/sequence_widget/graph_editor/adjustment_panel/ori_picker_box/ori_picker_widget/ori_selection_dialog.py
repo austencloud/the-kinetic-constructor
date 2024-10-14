@@ -4,8 +4,10 @@ from PyQt6.QtGui import QFont, QFontMetrics
 from data.constants import IN, COUNTER, OUT, CLOCK, HEX_BLUE, HEX_RED
 from typing import TYPE_CHECKING
 
+
 if TYPE_CHECKING:
     from .ori_picker_widget import OriPickerWidget
+
 
 class OriSelectionDialog(QDialog):
     def __init__(self, ori_picker_widget: "OriPickerWidget"):

@@ -51,15 +51,15 @@
     },
     "sequence_layout": {
         "grow_sequence": true,
-        "num_beats": 3,
-        "layout_option": "1 x 3"
+        "num_beats": 9,
+        "layout_option": "3 x 3"
     },
     "builder": {
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
                 "sequence_length": 16,
-                "max_turn_intensity": 3,
+                "max_turn_intensity": 1,
                 "sequence_level": 3,
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",
@@ -88,7 +88,7 @@
             "current_auto_builder": "circular"
         },
         "manual_builder": {},
-        "last_used_builder": "manual"
+        "last_used_builder": "auto"
     },
     "sequence_sharing": {
         "recipients": [
