@@ -13,19 +13,13 @@
       "static": [85, -10]
     },
     "(s, 2, 0.5)": {
-      "static_rot_angle_override": true,
-      "static": [100, 110]
-    },
-    "(s, 2.5, 0.5)": {
-      "static_rot_angle_override": true,
-      "static": [100, 110]
+      "static_rot_angle_override": true
     },
     "(s, 2.5, 1)": {
       "static_rot_angle_override": true,
       "static": [85, -10]
     },
     "(s, 3, 0.5)": {
-      "static": [105, 100],
       "pro": [-40, -15],
       "static_rot_angle_override": true
     },

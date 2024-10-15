@@ -194,7 +194,7 @@ class MainWidget(QTabWidget):
         super().showEvent(event)
         self.apply_background()
 
-        self.main_window.geometry_manager.set_dimensions()
+        # self.main_window.geometry_manager.set_dimensions()
         if self.background_manager:
             self.background_manager.start_animation()
 

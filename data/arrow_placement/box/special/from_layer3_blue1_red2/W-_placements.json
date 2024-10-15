@@ -8,8 +8,8 @@
       "dash_from_layer1": [35, 50]
     },
     "(s, 1, 1.5)": {
-      "dash_from_layer1": [-15, -155],
-      "pro_from_layer2": [-70, 95]
+      "dash_from_layer1": {},
+      "pro_from_layer2": [-30, 105]
     },
     "(s, 1, 2)": {
       "pro_from_layer2": [-65, 125]

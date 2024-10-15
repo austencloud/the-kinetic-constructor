@@ -66,10 +66,6 @@
     "(s, 2, 0.5)": {
       "static": [100, 100]
     },
-    "(s, 2.5, 0.5)": {
-      "static": [100, 120],
-      "dash": [-120, -40]
-    },
     "(s, 2.5, 1)": {
       "static_rot_angle_override": true
     },
@@ -281,6 +277,9 @@
     "(o, 1, 2.5)": {
       "static_to_layer2_rot_angle_override": true,
       "dash": [45, 20]
+    },
+    "(s, 2.5, 0.5)": {
+      "swap_beta_ne_nonradial_blue_static_ne_red_dash_se": true
     }
   }
 }

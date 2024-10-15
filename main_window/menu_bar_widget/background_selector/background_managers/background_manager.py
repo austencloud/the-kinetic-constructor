@@ -24,7 +24,7 @@ class BackgroundManager(QObject):
 
     def start_animation(self):
         if not self.timer.isActive():
-            self.timer.start(50)
+            self.timer.start(200)
 
     def stop_animation(self):
         if self.timer.isActive():
