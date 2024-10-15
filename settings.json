@@ -1,10 +1,10 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Snowfall",
+        "background_type": "Aurora",
         "grow_sequence": true,
         "current_tab": "sequence_builder",
-        "grid_mode": "box"
+        "grid_mode": "diamond"
     },
     "image_export": {
         "include_start_position": false,
@@ -90,8 +90,14 @@
             },
             "current_auto_builder": "circular"
         },
-        "manual_builder": {},
-        "last_used_builder": "auto"
+        "manual_builder": {
+            "filters": {
+                "continuous_motions": true,
+                "prop_reversals": true,
+                "hand_reversals": false
+            }
+        },
+        "last_used_builder": "manual"
     },
     "sequence_sharing": {
         "recipients": [

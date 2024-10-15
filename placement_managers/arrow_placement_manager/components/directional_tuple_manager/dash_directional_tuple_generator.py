@@ -37,7 +37,7 @@ class DashDirectionalGenerator(BaseDirectionalGenerator):
                 return self._handle_type5_zero_turns(x, y)
 
             elif self.motion.prop_rot_dir == NO_ROT:
-                return self._handle_no_rotation_dash(x, y)
+                return self._handle_type5_zero_turns(x, y)
             elif self.motion.prop_rot_dir == CLOCKWISE:
                 return [(x, -y), (y, x), (-x, y), (-y, -x)]
             elif self.motion.prop_rot_dir == COUNTER_CLOCKWISE:
@@ -50,7 +50,7 @@ class DashDirectionalGenerator(BaseDirectionalGenerator):
             ):
                 return self._handle_type5_zero_turns(x, y)
             elif self.motion.prop_rot_dir == NO_ROT:
-                return self._handle_no_rotation_dash(x, y)
+                return self._handle_type5_zero_turns(x, y)
 
             elif self.motion.prop_rot_dir == CLOCKWISE:
                 return [(-y, x), (-x, -y), (y, -x), (x, y)]
@@ -100,14 +100,14 @@ class DashDirectionalGenerator(BaseDirectionalGenerator):
             (RED, (WEST, EAST)): [(-x, y), (-y, -x), (-x, -y), (y, x)],
         }
         box_Type5_zero_turns_directional_tuples = {
-            (BLUE, (NORTHEAST, SOUTHWEST)): [(x, y), (-y, x), (-x, -y), (y, x)],
-            (BLUE, (NORTHWEST, SOUTHEAST)): [(x, y), (-y, -x), (-x, -y), (y, x)],
-            (BLUE, (SOUTHWEST, NORTHEAST)): [(x, y), (-y, x), (-x, -y), (y, -x)],
-            (BLUE, (SOUTHEAST, NORTHWEST)): [(x, y), (-y, -x), (-x, -y), (-y, x)],
-            (RED, (NORTHEAST, SOUTHWEST)): [(x, y), (-y, -x), (-x, -y), (y, x)],
-            (RED, (NORTHWEST, SOUTHEAST)): [(x, y), (-y, -x), (-x, -y), (y, -x)],
-            (RED, (SOUTHWEST, NORTHEAST)): [(x, y), (-y, x), (-x, -y), (y, -x)],
-            (RED, (SOUTHEAST, NORTHWEST)): [(-x, y), (-y, -x), (-x, -y), (y, x)],
+            (BLUE, (NORTHEAST, SOUTHWEST)): [(x, y), (y, x), (-x, -y), (y, x)],
+            (BLUE, (NORTHWEST, SOUTHEAST)): [(x, -y), (-y, -x), (x, -y), (y, x)],
+            (BLUE, (SOUTHWEST, NORTHEAST)): [(x, y), (-y, -x), (-x, -y), (-y, -x)],
+            (BLUE, (SOUTHEAST, NORTHWEST)): [(-x, y), (-y, -x), (-x, y), (-y, x)],
+            (RED, (NORTHEAST, SOUTHWEST)): [(x, y), (y, x), (-x, -y), (y, x)],
+            (RED, (NORTHWEST, SOUTHEAST)): [(x, -y), (-y, -x), (x, -y), (y, -x)],
+            (RED, (SOUTHWEST, NORTHEAST)): [(x, y), (-y, -x), (-x, -y), (-y, -x)],
+            (RED, (SOUTHEAST, NORTHWEST)): [(-x, y), (-y, -x), (-x, y), (y, x)],
         }
         grid_mode = (
             self.motion.pictograph.main_widget.settings_manager.global_settings.get_grid_mode()

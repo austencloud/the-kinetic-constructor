@@ -114,13 +114,17 @@ class BeatFramePopulator:
         last_beat = self.sequence_widget.beat_frame.get.last_filled_beat().beat
         self.sequence_builder.manual_builder.last_beat = last_beat
 
-        # if self.sequence_builder.manual_builder.start_pos_picker.isVisible():
+        # Transition to sequence building if necessary
         self.sequence_builder.manual_builder.transition_to_sequence_building()
 
         scroll_area = self.sequence_builder.manual_builder.option_picker.scroll_area
         scroll_area.remove_irrelevant_pictographs()
+
+        # Retrieve filters from settings
+        filters = self.main_widget.settings_manager.builder_settings.manual_builder.get_filters()
+
         next_options = self.sequence_builder.manual_builder.option_picker.option_getter.get_next_options(
-            self.current_sequence_json
+            self.current_sequence_json, filters
         )
 
         scroll_area.add_and_display_relevant_pictographs(next_options)

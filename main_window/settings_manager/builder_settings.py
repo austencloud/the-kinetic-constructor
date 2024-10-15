@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from main_window.settings_manager.autobuilder_settings import AutoBuilderSettings
+from main_window.settings_manager.manual_builder_settings import ManualBuilderSettings
 
 if TYPE_CHECKING:
     from main_window.settings_manager.settings_manager import SettingsManager
@@ -36,7 +37,7 @@ class BuilderSettings:
 
         # Initialize manual and auto builder settings
         self.auto_builder = AutoBuilderSettings(self.settings_manager)
-        # self.manual_builder_settings = ManualBuilderSettings(self.settings_manager)
+        self.manual_builder = ManualBuilderSettings(self.settings_manager)  # Initialize manual builder settings
 
     def _load_builder_settings(self):
         return self.settings_manager.settings.get("builder", self.DEFAULT_SETTINGS)
