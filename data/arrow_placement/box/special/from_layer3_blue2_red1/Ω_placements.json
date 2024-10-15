@@ -222,6 +222,9 @@
     "(s, 0.5, 0.5)": {
       "static_from_layer2_rot_angle_override": true,
       "static_from_layer2": [0, 140]
+    },
+    "(2.5, 0)": {
+      "anti_from_layer1": [-20, 75]
     }
   }
 }

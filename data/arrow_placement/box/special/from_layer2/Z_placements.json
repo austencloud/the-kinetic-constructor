@@ -1,8 +1,6 @@
 {
   "Z": {
     "(s, 0, 1)": {
-      "static_rot_angle_override": true,
-      "static": [0, -100],
       "swap_beta_n_nonradial_blue_anti_nw_red_static_n": true,
       "swap_beta_w_nonradial_blue_static_w_red_anti_nw": true,
       "swap_beta_e_nonradial_blue_static_e_red_anti_se": true,
@@ -10,7 +8,11 @@
       "swap_beta_e_nonradial_blue_anti_se_red_static_e": true,
       "swap_beta_s_nonradial_blue_static_s_red_anti_se": true,
       "swap_beta_n_nonradial_blue_static_n_red_anti_nw": true,
-      "swap_beta_w_nonradial_blue_anti_nw_red_static_w": true
+      "swap_beta_w_nonradial_blue_anti_nw_red_static_w": true,
+      "static_rot_angle_override": true,
+      "static": [-60, 70],
+      "swap_beta_sw_nonradial_blue_static_sw_red_anti_s": true,
+      "anti": [-10, -65]
     },
     "(s, 0, 1.5)": {
       "static_rot_angle_override": true,
@@ -43,7 +45,8 @@
     },
     "(s, 0.5, 1)": {
       "static_rot_angle_override": true,
-      "static": [5, -65]
+      "static_to_layer2_rot_angle_override": true,
+      "static": [-70, 70]
     },
     "(s, 0.5, 1.5)": {
       "static_rot_angle_override": true,
@@ -74,8 +77,6 @@
       "anti": [-10, 155]
     },
     "(s, 2, 1)": {
-      "static_rot_angle_override": true,
-      "static": [5, -95],
       "swap_beta_n_nonradial_blue_anti_nw_red_static_n": true,
       "swap_beta_w_nonradial_blue_static_w_red_anti_nw": true,
       "swap_beta_e_nonradial_blue_static_e_red_anti_se": true,
@@ -83,7 +84,10 @@
       "swap_beta_e_nonradial_blue_anti_se_red_static_e": true,
       "swap_beta_s_nonradial_blue_static_s_red_anti_se": true,
       "swap_beta_n_nonradial_blue_static_n_red_anti_nw": true,
-      "swap_beta_w_nonradial_blue_anti_nw_red_static_w": true
+      "swap_beta_w_nonradial_blue_anti_nw_red_static_w": true,
+      "static_rot_angle_override": true,
+      "static": [-75, 75],
+      "swap_beta_sw_nonradial_blue_static_sw_red_anti_s": true
     },
     "(s, 2, 2)": {
       "swap_beta_n_nonradial_blue_anti_nw_red_static_n": true,
@@ -107,8 +111,9 @@
     },
     "(s, 2.5, 1)": {
       "static_rot_angle_override": true,
-      "static": [0, -65],
-      "anti": [-70, 45]
+      "anti": [-70, 45],
+      "static_to_layer2_rot_angle_override": true,
+      "static": [-70, 70]
     },
     "(s, 2.5, 1.5)": {
       "static_rot_angle_override": true,
@@ -133,9 +138,6 @@
       "swap_beta_e_nonradial_blue_static_e_red_anti_ne": true,
       "swap_beta_s_nonradial_blue_anti_sw_red_static_s": true,
       "swap_beta_w_nonradial_blue_static_w_red_anti_sw": true
-    },
-    "(o, 0, 1)": {
-      "anti": [10, 60]
     },
     "(o, 0, 1.5)": {
       "anti": [50, -50]
@@ -182,7 +184,8 @@
     },
     "(o, 1, 1)": {
       "static_rot_angle_override": true,
-      "static": [0, -100]
+      "static": [-75, 75],
+      "swap_beta_sw_nonradial_blue_static_sw_red_anti_s": true
     },
     "(o, 1, 2)": {
       "swap_beta_n_nonradial_blue_anti_nw_red_static_n": true,
@@ -202,9 +205,6 @@
       "swap_beta_s_nonradial_blue_static_s_red_anti_se": true,
       "swap_beta_n_nonradial_blue_static_n_red_anti_nw": true,
       "swap_beta_w_nonradial_blue_anti_nw_red_static_w": true
-    },
-    "(o, 1.5, 1)": {
-      "static": [0, 110]
     },
     "(o, 1.5, 1.5)": {
       "anti": [-125, 65],
@@ -228,7 +228,6 @@
     },
     "(o, 2, 1)": {
       "static_rot_angle_override": true,
-      "static": [0, -100],
       "swap_beta_n_nonradial_blue_anti_nw_red_static_n": true,
       "swap_beta_w_nonradial_blue_static_w_red_anti_nw": true,
       "swap_beta_e_nonradial_blue_static_e_red_anti_se": true,
@@ -236,7 +235,9 @@
       "swap_beta_e_nonradial_blue_anti_se_red_static_e": true,
       "swap_beta_s_nonradial_blue_static_s_red_anti_se": true,
       "swap_beta_n_nonradial_blue_static_n_red_anti_nw": true,
-      "swap_beta_w_nonradial_blue_anti_nw_red_static_w": true
+      "swap_beta_w_nonradial_blue_anti_nw_red_static_w": true,
+      "static": [-75, 75],
+      "swap_beta_sw_nonradial_blue_static_sw_red_anti_s": true
     },
     "(o, 2, 2)": {
       "swap_beta_n_nonradial_blue_anti_nw_red_static_n": true,
@@ -282,7 +283,7 @@
     },
     "(o, 3, 1)": {
       "static_rot_angle_override": true,
-      "static": [0, -95],
+      "static": [-70, 65],
       "swap_beta_n_nonradial_blue_anti_nw_red_static_n": true,
       "swap_beta_w_nonradial_blue_static_w_red_anti_nw": true,
       "swap_beta_e_nonradial_blue_static_e_red_anti_se": true,
@@ -290,7 +291,8 @@
       "swap_beta_e_nonradial_blue_anti_se_red_static_e": true,
       "swap_beta_s_nonradial_blue_static_s_red_anti_se": true,
       "swap_beta_n_nonradial_blue_static_n_red_anti_nw": true,
-      "swap_beta_w_nonradial_blue_anti_nw_red_static_w": true
+      "swap_beta_w_nonradial_blue_anti_nw_red_static_w": true,
+      "swap_beta_sw_nonradial_blue_static_sw_red_anti_s": true
     },
     "(o, 3, 2)": {
       "swap_beta_n_nonradial_blue_anti_nw_red_static_n": true,
@@ -315,10 +317,11 @@
       "swap_beta_w_nonradial_blue_anti_nw_red_static_w": true
     },
     "(s, 1, 1)": {
-      "static_rot_angle_override": true,
-      "static": [0, -90],
       "swap_beta_e_nonradial_blue_static_e_red_anti_se": true,
-      "swap_beta_w_nonradial_blue_static_w_red_anti_nw": true
+      "swap_beta_w_nonradial_blue_static_w_red_anti_nw": true,
+      "static_rot_angle_override": true,
+      "static": [-75, 75],
+      "swap_beta_sw_nonradial_blue_static_sw_red_anti_s": true
     },
     "(o, 0.5, 1)": {
       "static": [70, -80],
@@ -329,11 +332,23 @@
       "static": [0, 160]
     },
     "null": {
-      "static_rot_angle_override": true
+      "static_to_layer2_rot_angle_override": true
     },
     "(o, 0.5, 0.5)": {
       "static_rot_angle_override": true,
       "static": [0, 160]
+    },
+    "(s, fl, 1)": {
+      "static_to_layer2_rot_angle_override": true,
+      "static": [-70, 70]
+    },
+    "(s, 3, 1)": {
+      "static_rot_angle_override": true,
+      "static": [-75, 75],
+      "swap_beta_sw_nonradial_blue_static_sw_red_anti_s": true
+    },
+    "(o, 0, 1)": {
+      "anti": [-10, -65]
     }
   }
 }

@@ -313,6 +313,9 @@
     "(ccw, 1, 0)": {
       "dash_rot_angle_override": true,
       "swap_beta_ne_nonradial_blue_static_ne_red_dash_se": true
+    },
+    "(s, 2, 1)": {
+      "swap_beta_sw_nonradial_blue_dash_nw_red_static_sw": true
     }
   }
 }
