@@ -4,7 +4,7 @@
         "background_type": "Aurora",
         "grow_sequence": true,
         "current_tab": "sequence_builder",
-        "grid_mode": "box"
+        "grid_mode": "diamond"
     },
     "image_export": {
         "include_start_position": false,
@@ -91,11 +91,7 @@
             "current_auto_builder": "circular"
         },
         "manual_builder": {
-            "filters": {
-                "continuous": true,
-                "one_reversal": false,
-                "two_reversals": false
-            }
+            "filters": "continuous"
         },
         "last_used_builder": "manual"
     },

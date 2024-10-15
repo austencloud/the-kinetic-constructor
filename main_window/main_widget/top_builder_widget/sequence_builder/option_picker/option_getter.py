@@ -11,14 +11,52 @@ class OptionGetter:
         self.json_manager = self.option_picker.json_manager
         self.main_widget = self.option_picker.main_widget
 
-    def get_next_options(self, sequence: list, filters: dict) -> list:
+    def get_next_options(self, sequence: list, selected_filter: str) -> list:
         # Load all possible next options based on the current sequence
         all_next_options = self._load_all_next_options(sequence)
 
-        # Apply filters to the options
-        filtered_options = self._apply_filters(sequence, all_next_options, filters)
+        # Apply filter to the options
+        filtered_options = self._apply_filter(
+            sequence, all_next_options, selected_filter
+        )
 
         return filtered_options
+
+    def _apply_filter(self, sequence: list, options: list, selected_filter: str):
+        filtered_options = []
+
+        for pictograph_dict in options:
+            # Include options based on the selected filter
+            if selected_filter is None:
+                # "All" selected, include all options
+                filtered_options.append(pictograph_dict)
+                continue
+
+            # Implement your existing logic to categorize pictographs
+            category = self._determine_category(sequence, pictograph_dict)
+
+            if category == selected_filter:
+                filtered_options.append(pictograph_dict)
+
+        return filtered_options
+
+    def _determine_category(self, sequence: list, pictograph_dict: dict) -> str:
+
+        # Proceed with continuity checks
+        blue_continuous, red_continuous = self._check_continuity(
+            sequence, pictograph_dict
+        )
+
+        # Determine the category
+        if blue_continuous and red_continuous:
+            category = "continuous"
+        elif (blue_continuous and not red_continuous) or (
+            not blue_continuous and red_continuous
+        ):
+            category = "one_reversal"
+        else:
+            category = "two_reversals"
+        return category
 
     def _load_all_next_options(self, sequence: list) -> list:
         # Logic to load all possible next options based on the current sequence
