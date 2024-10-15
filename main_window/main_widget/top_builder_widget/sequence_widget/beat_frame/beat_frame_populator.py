@@ -118,10 +118,12 @@ class BeatFramePopulator:
         self.sequence_builder.manual_builder.transition_to_sequence_building()
 
         scroll_area = self.sequence_builder.manual_builder.option_picker.scroll_area
-        scroll_area.remove_irrelevant_pictographs()
+        scroll_area.hide_all_pictographs()
 
         # Retrieve filters from settings
-        filters = self.main_widget.settings_manager.builder_settings.manual_builder.get_filters()
+        filters = (
+            self.main_widget.settings_manager.builder_settings.manual_builder.get_filters()
+        )
 
         next_options = self.sequence_builder.manual_builder.option_picker.option_getter.get_next_options(
             self.current_sequence_json, filters

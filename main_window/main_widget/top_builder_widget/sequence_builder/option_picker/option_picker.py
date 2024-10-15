@@ -1,5 +1,7 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QApplication, QCheckBox
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QApplication
 from PyQt6.QtCore import pyqtSignal, Qt
+
+from .toggle_with_label import ToggleWithLabel  # Import the new class
 
 from .option_getter import OptionGetter
 from .choose_your_next_pictograph_label import ChooseYourNextPictographLabel
@@ -13,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class OptionPicker(QWidget):
-    """Contains the "Choose Your Next Pictograph" label, filter checkboxes, and the OptionPickerScrollArea."""
+    """Contains the 'Choose Your Next Pictograph' label, filter toggles, and the OptionPickerScrollArea."""
 
     option_selected = pyqtSignal(str)
 
@@ -22,15 +24,13 @@ class OptionPicker(QWidget):
         self.manual_builder = manual_builder
         self.main_widget = manual_builder.main_widget
         self.json_manager = self.main_widget.json_manager
+        self.disabled = False
         self.choose_your_next_pictograph_label = ChooseYourNextPictographLabel(self)
         self.option_getter = OptionGetter(self)
-        self._setup_checkboxes()
+        self._setup_toggles()
         self.scroll_area = OptionPickerScrollArea(self)
-        self.load_filters()
 
-        # self.setStyleSheet("background-color: rgba(0, 0, 0, 200);")
         self.setup_layout()
-        self.disabled = False
         self.hide()
 
     def setup_layout(self) -> None:
@@ -49,52 +49,55 @@ class OptionPicker(QWidget):
         header_label_layout.addStretch(1)
         header_layout.addLayout(header_label_layout)
 
-        checkbox_layout = QHBoxLayout()
-        checkbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        checkbox_layout.addWidget(self.continuous_checkbox)
-        checkbox_layout.addWidget(self.prop_reversal_checkbox)
-        checkbox_layout.addWidget(self.hand_reversal_checkbox)
+        # Add toggles to the layout
+        self.toggle_layout = QHBoxLayout()
+        self.toggle_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        header_layout.addLayout(checkbox_layout)
+        self.toggle_layout.addWidget(self.continuous_toggle)
+        self.toggle_layout.addWidget(self.one_reversal_toggle)
+        self.toggle_layout.addWidget(self.two_reversals_toggle)
+
+        header_layout.addLayout(self.toggle_layout)
 
         self.layout.addLayout(header_layout)
         self.layout.addWidget(self.scroll_area, 14)
 
-    def _setup_checkboxes(self):
-        self.continuous_checkbox = QCheckBox("Continuous Motions")
-        self.prop_reversal_checkbox = QCheckBox("Prop Reversals")
-        self.hand_reversal_checkbox = QCheckBox("Hand Reversals")
+    def _setup_toggles(self):
+        self.continuous_toggle = ToggleWithLabel("Continuous", self)
+        self.one_reversal_toggle = ToggleWithLabel("One Reversal", self)
+        self.two_reversals_toggle = ToggleWithLabel("Two Reversals", self)
+        self.toggles: dict[str, ToggleWithLabel] = {
+            "continuous": self.continuous_toggle,
+            "one_reversal": self.one_reversal_toggle,
+            "two_reversals": self.two_reversals_toggle,
+        }
 
-        self.continuous_checkbox.setChecked(True)
-        self.prop_reversal_checkbox.setChecked(True)
-        self.hand_reversal_checkbox.setChecked(True)
-
-        self.continuous_checkbox.stateChanged.connect(self.on_filter_changed)
-        self.prop_reversal_checkbox.stateChanged.connect(self.on_filter_changed)
-        self.hand_reversal_checkbox.stateChanged.connect(self.on_filter_changed)
+        self._load_filters()
+        for toggle_widget in self.toggles.values():
+            toggle_widget.toggle.stateChanged.connect(self.on_filter_changed)
 
     def on_filter_changed(self):
-        """Called when any of the filter checkboxes change state."""
+        """Called when any of the filter toggles change state."""
         self.save_filters()
         self.update_option_picker()
 
     def save_filters(self):
         filters = {
-            "continuous_motions": self.continuous_checkbox.isChecked(),
-            "prop_reversals": self.prop_reversal_checkbox.isChecked(),
-            "hand_reversals": self.hand_reversal_checkbox.isChecked(),
+            "continuous": self.continuous_toggle.toggle.isChecked(),
+            "one_reversal": self.one_reversal_toggle.toggle.isChecked(),
+            "two_reversals": self.two_reversals_toggle.toggle.isChecked(),
         }
         self.main_widget.settings_manager.builder_settings.manual_builder.set_filters(
             filters
         )
 
-    def load_filters(self):
+    def _load_filters(self):
         filters = (
             self.main_widget.settings_manager.builder_settings.manual_builder.get_filters()
         )
-        self.continuous_checkbox.setChecked(filters.get("continuous_motions", True))
-        self.prop_reversal_checkbox.setChecked(filters.get("prop_reversals", True))
-        self.hand_reversal_checkbox.setChecked(filters.get("hand_reversals", True))
+        self.continuous_toggle.toggle.setChecked(filters.get("continuous", True))
+        self.one_reversal_toggle.toggle.setChecked(filters.get("one_reversal", True))
+        self.two_reversals_toggle.toggle.setChecked(filters.get("two_reversals", True))
 
     def update_option_picker(self, sequence=None):
         if self.disabled:
@@ -102,24 +105,35 @@ class OptionPicker(QWidget):
         if not sequence:
             sequence = self.json_manager.loader_saver.load_current_sequence_json()
 
-        if len(sequence) > 1:
+        if len(sequence) > 2:
             # Get filter states
             filters = {
-                'continuous_motions': self.continuous_checkbox.isChecked(),
-                'prop_reversals': self.prop_reversal_checkbox.isChecked(),
-                'hand_reversals': self.hand_reversal_checkbox.isChecked()
+                "continuous": self.continuous_toggle.toggle.isChecked(),
+                "one_reversal": self.one_reversal_toggle.toggle.isChecked(),
+                "two_reversals": self.two_reversals_toggle.toggle.isChecked(),
             }
 
             next_options: list = self.option_getter.get_next_options(sequence, filters)
-            self.scroll_area._hide_all_pictographs()
+            self.scroll_area.clear_pictographs()  # Clear existing pictographs
+            self.scroll_area.add_and_display_relevant_pictographs(next_options)
+        elif len(sequence) == 2:
+            self.scroll_area.clear_pictographs()
+            next_options = self.option_getter._load_all_next_options(sequence)
             self.scroll_area.add_and_display_relevant_pictographs(next_options)
         self.choose_your_next_pictograph_label.set_stylesheet()
-
 
     def resize_option_picker(self) -> None:
         self.resize(self.manual_builder.width(), self.manual_builder.height())
         self.choose_your_next_pictograph_label.resize_choose_your_next_option_label()
         self.scroll_area.resize_option_picker_scroll_area()
+        for toggle_widget in self.toggles.values():
+            font = toggle_widget.label.font()
+            toggle_font_size = self.manual_builder.width() // 65
+            font.setPointSize(toggle_font_size)
+            font.setFamily("Georgia")
+            toggle_widget.label.setFont(font)
+        spacing = self.manual_builder.width() // 20
+        self.toggle_layout.setSpacing(spacing)
 
     def set_disabled(self, disabled: bool) -> None:
         self.disabled = disabled

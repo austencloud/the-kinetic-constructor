@@ -158,7 +158,7 @@ class TempBeatFrame(BaseBeatFrame):
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
 
         scroll_area = self.sequence_builder.manual_builder.option_picker.scroll_area
-        scroll_area.remove_irrelevant_pictographs()
+        scroll_area.hide_all_pictographs()
         next_options = self.sequence_builder.manual_builder.option_picker.option_getter.get_next_options(
             sequence
         )

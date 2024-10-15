@@ -11,19 +11,18 @@ class OptionGetter:
         self.json_manager = self.option_picker.json_manager
         self.main_widget = self.option_picker.main_widget
 
-    def get_next_options(self, sequence: list, filters: dict):
+    def get_next_options(self, sequence: list, filters: dict) -> list:
         # Load all possible next options based on the current sequence
         all_next_options = self._load_all_next_options(sequence)
 
         # Apply filters to the options
-        filtered_options = self._apply_filters(all_next_options, filters)
+        filtered_options = self._apply_filters(sequence, all_next_options, filters)
 
         return filtered_options
 
-    def _load_all_next_options(self, sequence: list):
+    def _load_all_next_options(self, sequence: list) -> list:
         # Logic to load all possible next options based on the current sequence
-        # This would typically involve analyzing the last pictograph and determining valid next steps
-        # For now, let's assume it returns a list of pictograph dictionaries
+        # This involves analyzing the last pictograph and determining valid next steps
         next_options = []
 
         last_pictograph_dict = (
@@ -40,46 +39,77 @@ class OptionGetter:
                         next_options.append(dict)
         return next_options
 
-    def _apply_filters(self, options: list, filters: dict):
-        # Filters:
-        # - continuous_motions: Include motions that are continuous
-        # - prop_reversals: Include motions that involve prop reversals
-        # - hand_reversals: Include motions that involve hand reversals
-
+    def _apply_filters(self, sequence: list, options: list, filters: dict):
         filtered_options = []
 
         for pictograph_dict in options:
-            include_pictograph = True
+            # Check if both prop_rot_dir are "no_rot"
+            blue_prop_rot_dir = pictograph_dict["blue_attributes"]["prop_rot_dir"]
+            red_prop_rot_dir = pictograph_dict["red_attributes"]["prop_rot_dir"]
+            if blue_prop_rot_dir == "no_rot" and red_prop_rot_dir == "no_rot":
+                # Always include pictographs with both prop_rot_dir as "no_rot"
+                filtered_options.append(pictograph_dict)
+                continue  # Skip further checks
 
-            # Check for continuous motions
-            if not filters["continuous_motions"]:
-                if self._is_continuous_motion(pictograph_dict):
-                    include_pictograph = False
+            # Proceed with continuity checks
+            blue_continuous, red_continuous = self._check_continuity(
+                sequence, pictograph_dict
+            )
 
-            # Check for prop reversals
-            if not filters["prop_reversals"]:
-                if self._is_prop_reversal(pictograph_dict):
-                    include_pictograph = False
+            # Determine the category
+            if blue_continuous and red_continuous:
+                category = "continuous"
+            elif (blue_continuous and not red_continuous) or (
+                not blue_continuous and red_continuous
+            ):
+                category = "one_reversal"
+            else:
+                category = "two_reversals"
 
-            # Check for hand reversals
-            if not filters["hand_reversals"]:
-                if self._is_hand_reversal(pictograph_dict):
-                    include_pictograph = False
+            # Include pictograph if its category is selected in filters
+            include_pictograph = False
+            if filters.get("continuous") and category == "continuous":
+                include_pictograph = True
+            elif filters.get("one_reversal") and category == "one_reversal":
+                include_pictograph = True
+            elif filters.get("two_reversals") and category == "two_reversals":
+                include_pictograph = True
 
             if include_pictograph:
                 filtered_options.append(pictograph_dict)
 
         return filtered_options
 
-    def _is_continuous_motion(self, pictograph_dict: dict) -> bool:
-        # Logic to determine if a pictograph represents a continuous motion
-        # This would be based on properties within the pictograph_dict
-        return pictograph_dict.get("is_continuous", False)
+    def _check_continuity(self, sequence: list, pictograph_dict: dict):
+        last_blue_dir = self._get_last_prop_rot_dir(sequence[1:], "blue")
+        last_red_dir = self._get_last_prop_rot_dir(sequence[1:], "red")
 
-    def _is_prop_reversal(self, pictograph_dict: dict) -> bool:
-        # Logic to determine if a pictograph involves a prop reversal
-        return pictograph_dict.get("is_prop_reversal", False)
+        current_blue_dir = pictograph_dict["blue_attributes"]["prop_rot_dir"]
+        current_red_dir = pictograph_dict["red_attributes"]["prop_rot_dir"]
 
-    def _is_hand_reversal(self, pictograph_dict: dict) -> bool:
-        # Logic to determine if a pictograph involves a hand reversal
-        return pictograph_dict.get("is_hand_reversal", False)
+        # For "no_rot", use last known direction
+        if current_blue_dir == "no_rot":
+            current_blue_dir = last_blue_dir
+        if current_red_dir == "no_rot":
+            current_red_dir = last_red_dir
+
+        # If still None, consider continuous
+        if last_blue_dir is None or current_blue_dir is None:
+            blue_continuous = True
+        else:
+            blue_continuous = current_blue_dir == last_blue_dir
+
+        if last_red_dir is None or current_red_dir is None:
+            red_continuous = True
+        else:
+            red_continuous = current_red_dir == last_red_dir
+
+        return blue_continuous, red_continuous
+
+    def _get_last_prop_rot_dir(self, sequence: list, color: str) -> str:
+        # color should be "blue" or "red"
+        for pictograph in reversed(sequence):
+            prop_rot_dir = pictograph[f"{color}_attributes"].get("prop_rot_dir")
+            if prop_rot_dir != "no_rot":
+                return prop_rot_dir
+        return None  # No previous direction found

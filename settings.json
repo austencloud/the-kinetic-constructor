@@ -4,7 +4,7 @@
         "background_type": "Aurora",
         "grow_sequence": true,
         "current_tab": "sequence_builder",
-        "grid_mode": "diamond"
+        "grid_mode": "box"
     },
     "image_export": {
         "include_start_position": false,
@@ -37,11 +37,11 @@
         "glyph_visibility": {
             "VTG": false,
             "TKA": true,
-            "Elemental": true,
+            "Elemental": false,
             "EndPosition": false
         },
         "grid_visibility": {
-            "non_radial_points": true
+            "non_radial_points": false
         }
     },
     "dictionary": {
@@ -76,7 +76,7 @@
             "freeform_auto_builder": {
                 "sequence_type": "freeform",
                 "sequence_length": 16,
-                "max_turn_intensity": 1,
+                "max_turn_intensity": 0.5,
                 "sequence_level": 3,
                 "continuous_rotation": true,
                 "selected_letter_types": [
@@ -92,9 +92,9 @@
         },
         "manual_builder": {
             "filters": {
-                "continuous_motions": true,
-                "prop_reversals": true,
-                "hand_reversals": false
+                "continuous": true,
+                "one_reversal": false,
+                "two_reversals": false
             }
         },
         "last_used_builder": "manual"

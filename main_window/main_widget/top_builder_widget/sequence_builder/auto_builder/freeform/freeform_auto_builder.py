@@ -69,7 +69,8 @@ class FreeFormAutoBuilder(BaseAutoBuilder):
         blue_rot_dir,
         red_rot_dir,
     ):
-        options = self.sequence_builder.manual_builder.option_picker.option_getter.get_next_options(
+        
+        options = self.sequence_builder.manual_builder.option_picker.option_getter._load_all_next_options(
             self.sequence
         )
         options = [deepcopy(option) for option in options]

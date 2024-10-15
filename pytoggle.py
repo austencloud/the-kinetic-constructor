@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QCheckBox, QApplication
+from PyQt6.QtWidgets import QCheckBox
 from PyQt6.QtCore import QPropertyAnimation, QRect, Qt, pyqtProperty, QEasingCurve
 from PyQt6.QtGui import QColor, QPainter
 
@@ -7,9 +7,11 @@ class PyToggle(QCheckBox):
     def __init__(
         self,
         width=60,
-        bg_color="#00BCff",  # Set the background color to be consistent
+        bg_color="#00BCff",        # Default background color
+        active_color="#00BCff",     # Background color when checked (if changing)
         circle_color="#DDD",
         animation_curve=QEasingCurve.Type.OutBounce,
+        change_bg_on_state=False,   # New parameter to control background color change
     ):
         super().__init__()
         self.setFixedSize(width, 28)
@@ -17,7 +19,10 @@ class PyToggle(QCheckBox):
 
         # Colors
         self._bg_color = QColor(bg_color)
+        self._active_color = QColor(active_color)
         self._circle_color = QColor(circle_color)
+
+        self._change_bg_on_state = change_bg_on_state  # Store the new parameter
 
         # Animation properties
         self._circle_position = 3  # Initial circle position
@@ -36,6 +41,7 @@ class PyToggle(QCheckBox):
         else:
             self.animation.setEndValue(3)
         self.animation.start()
+        self.update()  # Ensure the widget is redrawn when the state changes
 
     @pyqtProperty(float)
     def circle_position(self):
@@ -55,9 +61,12 @@ class PyToggle(QCheckBox):
         p = QPainter(self)
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
 
-        # Draw the background (always the same color)
+        # Determine background color based on toggle state and parameter
         rect = QRect(0, 0, self.width(), self.height())
-        p.setBrush(self._bg_color)
+        if self._change_bg_on_state and self.isChecked():
+            p.setBrush(self._active_color)
+        else:
+            p.setBrush(self._bg_color)
 
         p.setPen(Qt.PenStyle.NoPen)
         p.drawRoundedRect(rect, self.height() / 2, self.height() / 2)
