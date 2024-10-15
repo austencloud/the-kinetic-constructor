@@ -197,7 +197,7 @@
     },
     "(o, 2, 2.5)": {
       "static_from_layer2_rot_angle_override": true,
-      "dash_from_layer1": [-85, -45]
+      "dash_from_layer1": {}
     },
     "(o, 2, 3)": {
       "static_from_layer2_rot_angle_override": true,

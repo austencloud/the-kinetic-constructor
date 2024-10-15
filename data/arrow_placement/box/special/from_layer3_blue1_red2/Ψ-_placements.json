@@ -182,6 +182,9 @@
     "(s, 2.5, 3)": {
       "blue": [-10, 115],
       "red": {}
+    },
+    "(o, 2, 0.5)": {
+      "swap_beta_se_radial_blue_dash_ne_red_dash_sw": true
     }
   }
 }

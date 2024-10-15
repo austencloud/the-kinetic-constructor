@@ -238,6 +238,10 @@
     "(o, 2.5, 2)": {
       "blue": [-30, -25],
       "swap_beta_nw_radial_blue_static_nw_red_static_nw": true
+    },
+    "(s, 0.5, 2)": {
+      "red": [20, 10],
+      "blue_rot_angle_override": true
     }
   }
 }

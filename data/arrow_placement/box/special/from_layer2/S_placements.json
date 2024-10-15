@@ -93,9 +93,10 @@
       "red_trailing": [-65, 45]
     },
     "(2, 3)": {
-      "blue_trailing": [-30, -25],
       "red_trailing": [-30, 65],
-      "blue_leading": [-70, 35]
+      "blue_leading": [-70, 35],
+      "red_leading": [40, 70],
+      "blue_trailing": [30, 70]
     },
     "(2.5, 1)": {
       "blue_trailing": [-65, 40]

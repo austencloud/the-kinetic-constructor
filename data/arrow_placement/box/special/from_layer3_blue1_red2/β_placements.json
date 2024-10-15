@@ -213,6 +213,11 @@
       "red_rot_angle_override": true,
       "blue": [20, 10],
       "red": [10, 25]
+    },
+    "(s, 2, 0.5)": {
+      "blue": [20, 10],
+      "swap_beta_ne_radial_blue_static_ne_red_static_ne": true,
+      "blue_rot_angle_override": true
     }
   }
 }

@@ -172,9 +172,7 @@
       "dash_from_layer1": [-95, -60],
       "static_from_layer2": [5, 0]
     },
-    "(o, 2, 2.5)": {
-      "dash_from_layer1": [-85, -45]
-    },
+    "(o, 2, 2.5)": {},
     "(o, 2, 3)": {
       "static_from_layer2": [20, 0],
       "dash_from_layer1": [-65, -50]

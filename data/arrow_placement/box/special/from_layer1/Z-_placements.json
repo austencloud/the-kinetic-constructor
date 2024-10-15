@@ -70,6 +70,9 @@
       "swap_beta_se_radial_blue_anti_e_red_dash_ne": true,
       "swap_beta_ne_radial_blue_anti_n_red_dash_nw": true,
       "swap_beta_sw_radial_blue_anti_s_red_dash_se": true
+    },
+    "(o, 1, 1.5)": {
+      "anti": [0, -115]
     }
   }
 }

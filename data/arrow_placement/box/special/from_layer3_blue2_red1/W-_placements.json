@@ -182,7 +182,7 @@
       "pro_from_layer2": [40, -15]
     },
     "(o, fl, 1)": {
-      "float_from_layer2": [30, -45]
+      "float_from_layer2": [50, -35]
     },
     "(0.5, 0)": {
       "pro_from_layer1": [-15, 50],

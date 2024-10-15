@@ -5,7 +5,7 @@
     },
     "(s, 0, 2)": {
       "static_rot_angle_override": true,
-      "anti": [-20, 60],
+      "anti": [10, -80],
       "static": [0, 0]
     },
     "(s, 0, 2.5)": {

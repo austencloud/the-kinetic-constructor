@@ -71,7 +71,9 @@
     },
     "(s, 2.5, 2, op, cl)": {
       "static_rot_angle_override": true,
-      "static": [-5, 0]
+      "static": [-5, -5],
+      "dash": [105, 0],
+      "static_to_layer2_rot_angle_override": true
     },
     "(s, 3, 0.5, op, cl)": {
       "dash": [-5, -170]

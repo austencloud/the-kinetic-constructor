@@ -217,6 +217,10 @@
     },
     "(s, 0, 1.5)": {},
     "(s, 0, 2)": {},
-    "(s, 0, 2.5)": {}
+    "(s, 0, 2.5)": {},
+    "(o, 0, 0.5)": {
+      "anti_from_layer2": [-5, -70],
+      "swap_beta_ne_nonradial_blue_anti_n_red_dash_nw": true
+    }
   }
 }

@@ -118,6 +118,12 @@
     },
     "(o, 0.5, 3)": {
       "pro": [-95, 40]
+    },
+    "(s, 0.5, 2.5)": {
+      "static_rot_angle_override": true,
+      "static": [-10, 15],
+      "swap_beta_sw_nonradial_blue_static_sw_red_pro_s": true,
+      "pro": [-60, 20]
     }
   }
 }

@@ -33,6 +33,34 @@
     "(o, 3, 2.5, op, op)": {
       "dash_from_layer1": [90, 25],
       "static_from_layer2": [15, -15]
+    },
+    "(s, 2, 2.5, op, cl)": {
+      "dash_from_layer1": [15, 85]
+    },
+    "(s, 2.5, 1, op, cl)": {
+      "static_from_layer1_rot_angle_override": true,
+      "static_from_layer1": [-50, -50],
+      "dash_from_layer2": {}
+    },
+    "(s, 3, 2, cl, op)": {
+      "dash_from_layer2_rot_angle_override": true,
+      "dash_from_layer2": [95, 95]
+    },
+    "(o, 0.5, 2.5, op, op)": {
+      "dash_from_layer1": [30, 100],
+      "static_from_layer2": [15, -15]
+    },
+    "(o, 0.5, 3, op, op)": {
+      "dash_from_layer1": [35, 115]
+    },
+    "(o, 0.5, 2, op, op)": {
+      "static_from_layer2_rot_angle_override": true,
+      "dash_from_layer1": [40, 115]
+    },
+    "(o, 0.5, 1.5, op, op)": {
+      "dash_from_layer1": [20, 95],
+      "static_from_layer2_rot_angle_override": true,
+      "static_from_layer2": [-10, 20]
     }
   }
 }

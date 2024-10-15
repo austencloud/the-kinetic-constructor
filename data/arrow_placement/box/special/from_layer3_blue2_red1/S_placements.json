@@ -80,6 +80,13 @@
     "(1, 0.5)": {
       "trailing": [-25, 70],
       "leading": [30, 95]
+    },
+    "(2.5, 3)": {
+      "leading_from_layer1": null,
+      "trailing_from_layer2": null
+    },
+    "(3, 3)": {
+      "trailing_from_layer2": null
     }
   }
 }

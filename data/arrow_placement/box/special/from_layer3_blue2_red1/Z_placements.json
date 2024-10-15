@@ -1,10 +1,6 @@
 {
   "Z": {
     "(0, 0)": {},
-    "(o, 0, 0.5)": {
-      "static_from_layer2_rot_angle_override": true,
-      "static_from_layer2": [120, -100]
-    },
     "(o, 0, 1)": {
       "anti_from_layer1": [-10, -85]
     },
@@ -459,6 +455,11 @@
     "null": {
       "static_from_layer2_rot_angle_override": true,
       "static_from_layer2": [0, 140]
+    },
+    "(o, 0, 0.5)": {
+      "static_from_layer2_rot_angle_override": true,
+      "static_from_layer2": [0, 160],
+      "anti_from_layer1": {}
     }
   }
 }

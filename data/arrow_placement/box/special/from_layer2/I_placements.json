@@ -34,8 +34,8 @@
       "swap_beta_w_nonradial_blue_anti_nw_red_pro_nw": true
     },
     "(1, 3)": {
-      "anti": [105, -35],
-      "swap_beta_w_nonradial_blue_anti_nw_red_pro_nw": true
+      "swap_beta_w_nonradial_blue_anti_nw_red_pro_nw": true,
+      "anti": [20, -105]
     },
     "(1.5, 0.5)": {
       "anti": [-90, 25]

@@ -4,7 +4,7 @@
         "background_type": "Snowfall",
         "grow_sequence": true,
         "current_tab": "sequence_builder",
-        "grid_mode": "diamond"
+        "grid_mode": "box"
     },
     "image_export": {
         "include_start_position": false,
@@ -41,7 +41,7 @@
             "EndPosition": false
         },
         "grid_visibility": {
-            "non_radial_points": false
+            "non_radial_points": true
         }
     },
     "dictionary": {
@@ -59,7 +59,7 @@
             "circular_auto_builder": {
                 "sequence_type": "circular",
                 "sequence_length": 16,
-                "max_turn_intensity": 1,
+                "max_turn_intensity": 3,
                 "sequence_level": 3,
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",
@@ -76,16 +76,19 @@
             "freeform_auto_builder": {
                 "sequence_type": "freeform",
                 "sequence_length": 16,
-                "max_turn_intensity": 1,
-                "sequence_level": 2,
+                "max_turn_intensity": 3,
+                "sequence_level": 3,
                 "continuous_rotation": true,
                 "selected_letter_types": [
                     "Dual-Shift",
                     "Shift",
-                    "Cross-Shift"
+                    "Cross-Shift",
+                    "Dash",
+                    "Dual-Dash",
+                    "Static"
                 ]
             },
-            "current_auto_builder": "circular"
+            "current_auto_builder": "freeform"
         },
         "manual_builder": {},
         "last_used_builder": "auto"
