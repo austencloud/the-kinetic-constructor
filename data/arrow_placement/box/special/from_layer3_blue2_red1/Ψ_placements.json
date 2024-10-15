@@ -40,7 +40,22 @@
     "(cw, 0, 2.5)": {
       "static_from_layer2_rot_angle_override": true,
       "static_from_layer2": [10, 15],
-      "swap_beta_ne_radial_blue_static_ne_red_dash_nw": true
+      "swap_beta_ne_radial_blue_static_ne_red_dash_nw": true,
+      "dash_from_layer2": {}
+    },
+    "(s, 0.5, 2.5)": {
+      "static_from_layer1_rot_angle_override": true,
+      "dash_from_layer2": [70, -35]
+    },
+    "(s, 1, 2.5)": {
+      "dash_from_layer2_rot_angle_override": true
+    },
+    "(s, 1.5, 2.5)": {
+      "static_from_layer1": [15, 5],
+      "dash_from_layer2": [100, 110]
+    },
+    "(s, 2.5, 2.5)": {
+      "dash_from_layer2": [75, -50]
     }
   }
 }

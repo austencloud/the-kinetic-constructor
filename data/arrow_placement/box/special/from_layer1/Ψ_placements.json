@@ -1,9 +1,10 @@
 {
   "Ψ": {
     "(s, 1.5, 2)": {
-      "dash": [-20, -145],
       "static_rot_angle_override": true,
-      "static": [0, 20]
+      "static": [0, 20],
+      "static_to_layer1_rot_angle_override": true,
+      "dash": [145, 120]
     },
     "(o, 0, 1.5)": {
       "dash": [-80, 65]
@@ -55,10 +56,6 @@
     },
     "(s, 1, 0.5)": {
       "static": [100, 100]
-    },
-    "(s, 1.5, 3)": {
-      "static": [-15, 15],
-      "dash": [15, -180]
     },
     "(s, 2, 3)": {
       "swap_beta_nw_radial_blue_static_nw_red_dash_sw": true,
@@ -117,21 +114,8 @@
       "swap_beta_ne_nonradial_blue_static_ne_red_dash_se": true
     },
     "(s, 1.5, 1.5)": {
-      "static_rot_angle_override": true,
-      "static": [15, -20],
-      "dash": [30, -125]
-    },
-    "(s, 1.5, 2.5)": {
-      "static": [10, -45],
-      "dash": [30, -115]
-    },
-    "(s, 1.5, 0.5)": {
-      "static": [100, 120],
-      "dash": [10, -130]
-    },
-    "(s, 1.5, 1)": {
-      "dash": [-20, -165],
-      "static": [105, 10]
+      "static": [0, 30],
+      "dash": [130, 65]
     },
     "(o, 0.5, 2.5)": {
       "static": [0, -5]
@@ -175,10 +159,6 @@
       "swap_beta_nw_radial_blue_static_nw_red_dash_sw": true,
       "swap_beta_ne_radial_blue_static_ne_red_dash_nw": true,
       "swap_beta_se_radial_blue_dash_ne_red_static_se": true
-    },
-    "(o, 1.5, 1)": {
-      "static": [100, 0],
-      "dash": [-15, -165]
     },
     "(s, 1, 1)": {
       "swap_beta_n_radial_blue_dash_e_red_static_n": true,
@@ -256,6 +236,43 @@
     },
     "(o, 1.5, 1.5)": {
       "swap_beta_ne_nonradial_blue_dash_nw_red_static_ne": true
+    },
+    "(s, 1.5, 3)": {
+      "static": [0, 0],
+      "dash": [165, 155],
+      "static_to_layer1_rot_angle_override": true
+    },
+    "(s, 1.5, 1)": {
+      "static": [-80, -80],
+      "static_to_layer1_rot_angle_override": true,
+      "dash": [125, 105]
+    },
+    "(s, 1.5, 2.5)": {
+      "static": [-10, 30],
+      "static_rot_angle_override": true,
+      "dash": [120, 75]
+    },
+    "(o, 1.5, 3)": {
+      "dash": [150, 100],
+      "static_to_layer1_rot_angle_override": true
+    },
+    "(o, 1.5, 2.5)": {
+      "static_rot_angle_override": true,
+      "static": [-10, 15],
+      "dash": [130, 105]
+    },
+    "(o, 1.5, 2)": {
+      "static_to_layer1_rot_angle_override": true,
+      "dash": [120, 140],
+      "static": [0, 20]
+    },
+    "(o, 1.5, 1)": {
+      "static_to_layer1_rot_angle_override": true,
+      "static": [-85, -100],
+      "dash": [90, 115]
+    },
+    "(cw, 1.5, 0)": {
+      "dash": [110, 125]
     }
   }
 }

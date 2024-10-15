@@ -21,9 +21,11 @@
     "(s, 1, 2)": {},
     "(s, 1, 2.5)": {},
     "(s, 1.5, 3)": {
-      "dash_from_layer1": [0, -50]
+      "dash_from_layer1": [55, 35]
     },
-    "(s, 1.5, 2.5)": {},
+    "(s, 1.5, 2.5)": {
+      "dash_from_layer1": [10, 110]
+    },
     "(s, 1.5, 2)": {},
     "(s, 1.5, 1.5)": {},
     "(s, 1.5, 1)": {},
@@ -131,36 +133,37 @@
       "dash_from_layer2": [-25, -180]
     },
     "(o, 1.5, 0.5)": {
-      "dash_from_layer1": [-115, -60],
-      "anti_from_layer2": [-110, 120]
+      "anti_from_layer2": [20, 160],
+      "dash_from_layer1": [-40, 110]
     },
     "(o, 1.5, 1)": {
-      "dash_from_layer1": [0, -45]
+      "dash_from_layer1": [0, -45],
+      "anti_from_layer2": [-25, 160]
     },
     "(o, 1.5, 1.5)": {
       "dash_from_layer1": [0, -105],
-      "anti_from_layer2": [-110, 115]
+      "anti_from_layer2": [35, 140]
     },
     "(o, 1.5, 2)": {
-      "dash_from_layer1": [-40, -70],
-      "anti_from_layer2": [-135, 95]
+      "dash_from_layer1": [40, 60],
+      "anti_from_layer2": [-20, 165]
     },
     "(o, 1.5, 2.5)": {
-      "dash_from_layer1": [-120, -60],
+      "dash_from_layer1": [-50, 110],
       "anti_from_layer2": [-120, 125]
     },
     "(o, 1.5, 3)": {
-      "anti_from_layer2": [-140, 105],
+      "anti_from_layer2": [65, 120],
       "dash_from_layer1": [35, -65]
     },
     "(o, 2, 0.5)": {},
     "(o, 2, 1)": {},
     "(o, 2, 1.5)": {},
     "(o, 2, 2)": {},
-    "(o, 2, 2.5)": {},
-    "(o, 2, 3)": {
-      "anti_from_layer2": [15, -50]
+    "(o, 2, 2.5)": {
+      "dash_from_layer1": [5, 105]
     },
+    "(o, 2, 3)": {},
     "(o, 2.5, 3)": {
       "dash_from_layer1": [40, -75]
     },
