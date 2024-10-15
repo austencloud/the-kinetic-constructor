@@ -57,11 +57,12 @@
     },
     "(3, 1.5)": {
       "blue": [-30, 70],
-      "red": [-20, 15]
+      "red": [-20, 15],
+      "swap_beta_sw_nonradial_blue_pro_w_red_pro_w": true
     },
     "(2.5, 1.5)": {
-      "blue": [-115, 60],
-      "red": [5, 15]
+      "red": [5, 15],
+      "blue": [55, 105]
     },
     "(3, 2)": {
       "red": [100, -100]
@@ -146,6 +147,9 @@
     },
     "(1, 1.5)": {
       "blue": [-35, 100]
+    },
+    "(2, 1.5)": {
+      "swap_beta_sw_nonradial_blue_pro_w_red_pro_w": true
     }
   }
 }

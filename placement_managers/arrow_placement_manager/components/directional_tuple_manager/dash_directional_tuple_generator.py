@@ -100,7 +100,7 @@ class DashDirectionalGenerator(BaseDirectionalGenerator):
             (RED, (WEST, EAST)): [(-x, y), (-y, -x), (-x, -y), (y, x)],
         }
         box_Type5_zero_turns_directional_tuples = {
-            (BLUE, (NORTHEAST, SOUTHWEST)): [(x, y), (-y, x), (-x, -y), (y, -x)],
+            (BLUE, (NORTHEAST, SOUTHWEST)): [(x, y), (-y, x), (-x, -y), (y, x)],
             (BLUE, (NORTHWEST, SOUTHEAST)): [(x, y), (-y, -x), (-x, -y), (y, x)],
             (BLUE, (SOUTHWEST, NORTHEAST)): [(x, y), (-y, x), (-x, -y), (y, -x)],
             (BLUE, (SOUTHEAST, NORTHWEST)): [(x, y), (-y, -x), (-x, -y), (-y, x)],

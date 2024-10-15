@@ -5,7 +5,8 @@
     },
     "(1.5, 2)": {},
     "(1, 0)": {
-      "pro_from_layer1": [45, 50]
+      "pro_from_layer1": [45, 50],
+      "anti_from_layer1": [15, -30]
     },
     "(1, 1)": {
       "anti_from_layer1": [0, -100]
@@ -26,6 +27,22 @@
     "(0.5, 1.5)": {
       "pro_from_layer2": [15, 70],
       "anti_from_layer1": [55, 65]
+    },
+    "(1.5, 0)": {
+      "anti_from_layer1": [0, -80]
+    },
+    "(1, 3)": {
+      "anti_from_layer1": [0, -90]
+    },
+    "(1, 2.5)": {
+      "anti_from_layer1": [-20, 80]
+    },
+    "(1, 2)": {
+      "anti_from_layer1": [0, -90]
+    },
+    "(1, 1.5)": {
+      "anti_from_layer1": [45, 90],
+      "pro_from_layer2": [20, 105]
     }
   }
 }

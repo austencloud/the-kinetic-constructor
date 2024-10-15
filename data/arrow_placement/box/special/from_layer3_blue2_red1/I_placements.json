@@ -51,8 +51,8 @@
       "anti_from_layer1": [60, -65]
     },
     "(0.5, 1.5)": {
-      "pro_from_layer1": [5, 90],
-      "anti_from_layer1": [-5, 35]
+      "anti_from_layer1": [-5, 35],
+      "pro_from_layer1": [-75, 50]
     },
     "(0.5, 2)": {
       "anti_from_layer2": [75, -75],
@@ -79,10 +79,10 @@
       "anti_from_layer1": [75, -50]
     },
     "(1, 1.5)": {
-      "pro_from_layer1": [-70, -40],
-      "anti_from_layer2": [-65, 110],
       "anti_from_layer1": [-10, 65],
-      "pro_from_layer2": [-60, 95]
+      "pro_from_layer2": [-60, 95],
+      "pro_from_layer1": [95, 25],
+      "anti_from_layer2": {}
     },
     "(1, 2)": {
       "anti_from_layer2": [50, -55],
@@ -127,10 +127,10 @@
       "swap_beta_se_nonradial_blue_anti_s_red_pro_s": true
     },
     "(1.5, 1.5)": {
-      "pro_from_layer1": [20, 20],
-      "anti_from_layer2": [-115, 80],
       "pro_from_layer2": [-105, 125],
-      "anti_from_layer1": [-5, 55]
+      "anti_from_layer1": [-5, 55],
+      "anti_from_layer2": [-35, 200],
+      "pro_from_layer1": [20, -25]
     },
     "(1.5, 2)": {
       "anti_from_layer2": [105, -95],
@@ -146,12 +146,11 @@
       "swap_beta_s_nonradial_blue_anti_sw_red_pro_sw": true
     },
     "(1.5, 2.5)": {
-      "anti_from_layer2": [-95, 40],
-      "pro_from_layer1": [20, 20],
-      "anti_from_layer1": [-100, 100]
+      "anti_from_layer1": [-100, 100],
+      "anti_from_layer2": [-20, 110],
+      "pro_from_layer1": [-20, 20]
     },
     "(1.5, 3)": {
-      "anti_from_layer2": [75, -115],
       "swap_beta_e_nonradial_blue_anti_ne_red_pro_ne": true,
       "swap_beta_e_radial_blue_pro_ne_red_anti_ne": true,
       "swap_beta_w_radial_blue_pro_nw_red_anti_nw": true,
@@ -161,7 +160,8 @@
       "swap_beta_e_nonradial_blue_anti_se_red_pro_se": true,
       "swap_beta_n_nonradial_blue_anti_nw_red_pro_nw": true,
       "swap_beta_n_radial_blue_pro_nw_red_anti_nw": true,
-      "swap_beta_s_nonradial_blue_anti_sw_red_pro_sw": true
+      "swap_beta_s_nonradial_blue_anti_sw_red_pro_sw": true,
+      "anti_from_layer2": [0, -150]
     },
     "(2, 0.5)": {
       "swap_beta_e_nonradial_blue_pro_ne_red_anti_ne": true,
