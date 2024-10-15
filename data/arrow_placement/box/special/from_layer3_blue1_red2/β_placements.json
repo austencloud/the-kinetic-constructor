@@ -100,7 +100,8 @@
       "static_from_layer2_rot_angle_override": true,
       "red": [-65, 65],
       "blue": {},
-      "red_rot_angle_override": true
+      "red_rot_angle_override": true,
+      "swap_beta_se_nonradial_blue_static_se_red_static_se": true
     },
     "(o, 1, 1)": {},
     "(o, 1.5, 1)": {},

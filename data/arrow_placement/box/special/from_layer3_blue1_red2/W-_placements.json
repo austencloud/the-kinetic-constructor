@@ -55,7 +55,6 @@
       "pro_from_layer2": [-80, 20]
     },
     "(o, 0.5, 0.5)": {
-      "dash_from_layer1": [-80, -75],
       "pro_from_layer2": [-30, 30]
     },
     "(o, 0.5, 1)": {
@@ -164,7 +163,7 @@
       "pro_from_layer2": [40, -15]
     },
     "null": {
-      "float_from_layer2": [30, -45]
+      "float_from_layer2": [50, -35]
     },
     "(0.5, 0)": {
       "pro_from_layer2": [30, 105],
@@ -177,9 +176,6 @@
     },
     "(o, 0, 1)": {
       "pro_from_layer2": [0, -20]
-    },
-    "null": {
-      "float_from_layer2": [50, -35]
     }
   }
 }

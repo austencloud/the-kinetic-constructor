@@ -104,7 +104,7 @@ class DashDirectionalGenerator(BaseDirectionalGenerator):
             (BLUE, (NORTHWEST, SOUTHEAST)): [(x, y), (-y, -x), (-x, -y), (y, x)],
             (BLUE, (SOUTHWEST, NORTHEAST)): [(x, y), (-y, x), (-x, -y), (y, -x)],
             (BLUE, (SOUTHEAST, NORTHWEST)): [(x, y), (-y, -x), (-x, -y), (-y, x)],
-            (RED, (NORTHEAST, SOUTHWEST)): [(x, y), (-y, -x), (-x, -y), (y, -x)],
+            (RED, (NORTHEAST, SOUTHWEST)): [(x, y), (-y, -x), (-x, -y), (y, x)],
             (RED, (NORTHWEST, SOUTHEAST)): [(x, y), (-y, -x), (-x, -y), (y, -x)],
             (RED, (SOUTHWEST, NORTHEAST)): [(x, y), (-y, x), (-x, -y), (y, -x)],
             (RED, (SOUTHEAST, NORTHWEST)): [(-x, y), (-y, -x), (-x, -y), (y, x)],

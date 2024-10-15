@@ -27,7 +27,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("The Kinetic Constructor")
         self.menu_bar_widget = MenuBarWidget(self)
-
+        self.setMenuWidget(self.menu_bar_widget)
 
     def exec(self, app: QApplication) -> int:
         self.profiler.enable()

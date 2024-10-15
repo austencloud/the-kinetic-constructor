@@ -37,12 +37,12 @@
       "red": [120, -100]
     },
     "(s, 0.5, 1)": {
-      "blue_rot_angle_override": true,
-      "blue": [100, -100]
+      "blue": [0, 140],
+      "blue_rot_angle_override": true
     },
     "(s, 1, 0.5)": {
       "red_rot_angle_override": true,
-      "red": [100, -100]
+      "blue_rot_angle_override": true
     },
     "(s, 0.5, 2.5)": {
       "blue_rot_angle_override": true,

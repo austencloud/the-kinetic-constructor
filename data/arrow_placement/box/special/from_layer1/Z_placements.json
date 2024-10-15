@@ -158,6 +158,15 @@
       "static_rot_angle_override": true,
       "static": [-10, 15],
       "anti": [45, 15]
+    },
+    "(o, 2.5, 1)": {
+      "anti": [-10, 85],
+      "static": [45, 75]
+    },
+    "(o, 0.5, 1)": {
+      "static_to_layer1_rot_angle_override": true,
+      "static": [-70, -70],
+      "anti": [-25, 95]
     }
   }
 }
