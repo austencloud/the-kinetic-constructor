@@ -72,8 +72,10 @@
       "red": [115, 10]
     },
     "(s, 3, 1.5)": {
-      "blue": [0, 25],
-      "red": [-25, -25]
+      "blue": [-30, -5],
+      "red": [30, 0],
+      "red_rot_angle_override": true,
+      "blue_rot_angle_override": true
     },
     "(s, 3, 2)": {
       "red": [0, 25],
@@ -97,8 +99,7 @@
     "(o, 0.5, 1)": {
       "static_from_layer1_rot_angle_override": true,
       "red": [-70, -70],
-      "red_rot_angle_override": true,
-      "swap_beta_nw_radial_blue_static_nw_red_static_nw": true
+      "red_rot_angle_override": true
     },
     "(o, 0.5, 2.5)": {
       "static_from_layer1_rot_angle_override": true

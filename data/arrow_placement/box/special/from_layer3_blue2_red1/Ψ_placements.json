@@ -36,6 +36,11 @@
     },
     "(ccw, 0, 0.5)": {
       "swap_beta_nw_radial_blue_static_nw_red_dash_sw": true
+    },
+    "(cw, 0, 2.5)": {
+      "static_from_layer2_rot_angle_override": true,
+      "static_from_layer2": [10, 15],
+      "swap_beta_ne_radial_blue_static_ne_red_dash_nw": true
     }
   }
 }

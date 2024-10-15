@@ -60,8 +60,10 @@
       "blue": [115, 10]
     },
     "(s, 1.5, 3)": {
-      "red": [0, 25],
-      "blue": [-25, -25]
+      "red": [-30, -5],
+      "blue": [30, 0],
+      "red_rot_angle_override": true,
+      "blue_rot_angle_override": true
     },
     "(s, 2, 3)": {
       "blue": [0, 25],
