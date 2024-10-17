@@ -39,7 +39,12 @@
       "swap_beta_s_nonradial_blue_pro_se_red_dash_w": true,
       "swap_beta_w_nonradial_blue_dash_s_red_pro_nw": true,
       "swap_beta_n_nonradial_blue_pro_nw_red_dash_e": true,
-      "swap_beta_e_nonradial_blue_dash_n_red_pro_se": true
+      "swap_beta_e_nonradial_blue_dash_n_red_pro_se": true,
+      "swap_beta_se_nonradial_blue_pro_e_red_dash_sw": true,
+      "swap_beta_nw_nonradial_blue_pro_n_red_dash_sw": true,
+      "swap_beta_se_nonradial_blue_dash_sw_red_pro_e": true,
+      "swap_beta_sw_nonradial_blue_dash_nw_red_pro_s": true,
+      "swap_beta_ne_nonradial_blue_dash_se_red_pro_n": true
     },
     "(ccw, 0, 3)": {
       "swap_beta_s_nonradial_blue_dash_w_red_pro_se": true

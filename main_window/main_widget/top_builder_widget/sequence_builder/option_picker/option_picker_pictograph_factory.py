@@ -36,9 +36,6 @@ class OptionPickerPictographFactory:
             if letter not in self.pictograph_cache:
                 self.pictograph_cache[letter] = {}
             self.pictograph_cache[letter][pictograph_key] = pictograph
-            # self.scroll_area.main_widget.all_pictographs[letter][
-            #     pictograph_key
-            # ] = pictograph
             letter_type = LetterType.get_letter_type(letter)
             for letter_type in LetterType:
                 if letter in letter_type.letters:

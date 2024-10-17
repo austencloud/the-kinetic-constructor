@@ -61,7 +61,7 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         self.layout.addStretch(1)
         self.stretch_index = self.layout.count()
 
-    def remove_irrelevant_pictographs(self) -> None:
+    def hide_all_pictographs(self) -> None:
         for pictograph in self.pictograph_cache.values():
             pictograph.view.hide()
 
@@ -169,8 +169,13 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         if section_index == 0 or section_index:  # widget is a section
             if section.__class__.__name__ == "OptionPickerSectionWidget":
                 if section.letter_type == LetterType.Type1:
-                    self.layout.insertWidget(section_index, section, 6)
+                    self.layout.insertWidget(section_index, section, 4)
                 else:
                     self.layout.insertWidget(section_index, section, 4)
             elif section.__class__.__name__ == "OptionPickerSectionGroupWidget":
                 self.layout.insertWidget(section_index, section, 4)
+
+    def clear_pictographs(self) -> None:
+        # Clear pictographs from sections
+        self.display_manager.clear_all_section_layouts()
+        self.pictograph_cache.clear()
