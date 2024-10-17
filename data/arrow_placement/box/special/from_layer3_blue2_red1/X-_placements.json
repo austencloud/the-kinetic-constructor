@@ -121,7 +121,7 @@
     },
     "(s, 0, 2.5)": {
       "anti_from_layer2": [60, -50],
-      "anti_from_layer1": [75, -55]
+      "anti_from_layer1": {}
     },
     "(s, 0, 3)": {
       "anti_from_layer2": [70, -55]

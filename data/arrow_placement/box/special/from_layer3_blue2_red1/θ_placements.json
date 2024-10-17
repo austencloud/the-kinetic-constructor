@@ -29,8 +29,7 @@
       "static_from_layer1": [70, 55]
     },
     "null": {
-      "static_from_layer2_rot_angle_override": true,
-      "static_from_layer2": [0, 140]
+      "float_from_layer2": [40, 0]
     },
     "(o, 0.5, 0.5)": {
       "static_from_layer2_rot_angle_override": true,
@@ -57,7 +56,8 @@
       "static_from_layer1": [-140, 0]
     },
     "null": {
-      "float_from_layer2": [40, 0]
+      "static_from_layer1_rot_angle_override": true,
+      "static_from_layer1": [-140, 0]
     }
   }
 }

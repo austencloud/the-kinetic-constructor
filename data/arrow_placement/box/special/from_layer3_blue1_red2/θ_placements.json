@@ -119,6 +119,10 @@
     },
     "(s, fl, 1)": {
       "float_from_layer2": [40, 0]
+    },
+    "(s, fl, 0.5)": {
+      "static_from_layer1_rot_angle_override": true,
+      "static_from_layer1": [-140, 0]
     }
   }
 }
