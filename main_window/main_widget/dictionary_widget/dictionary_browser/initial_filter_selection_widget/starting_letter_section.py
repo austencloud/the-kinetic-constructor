@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 
 class StartingLetterSection(FilterSectionBase):
-    SECTIONS: List[List[list[str]]] = [
+    SECTIONS: list[list[list[str]]] = [
         [
             ["A", "B", "C", "D", "E", "F"],
             ["G", "H", "I", "J", "K", "L"],

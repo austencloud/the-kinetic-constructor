@@ -8,9 +8,7 @@ from .freeform.freeform_auto_builder_frame import FreeformAutoBuilderFrame
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.sequence_builder import (
-        SequenceBuilder,
-    )
+
     from main_window.main_widget.main_widget import MainWidget
 
 

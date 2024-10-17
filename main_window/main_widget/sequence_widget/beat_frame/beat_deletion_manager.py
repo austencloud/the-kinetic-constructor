@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
-    BeatView,
-)
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import (
+
+from main_window.main_widget.sequence_widget.beat_frame.beat import BeatView
+from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
     StartPositionBeatView,
 )
+
 
 if TYPE_CHECKING:
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
@@ -35,21 +35,17 @@ class BeatDeletionManager:
     def _initialize_manual_builder(self) -> None:
         """Initialize the manual builder if not already initialized."""
         if not self.manual_builder:
-            self.manual_builder = (
-                self.beat_frame.main_widget.top_builder_widget.sequence_builder.manual_builder
-            )
+            self.manual_builder = self.beat_frame.main_widget.manual_builder
 
     def _initialize_GE_pictograph_view(self) -> None:
         """Initialize the GE pictograph view."""
         self.GE_pictograph_view = (
-            self.beat_frame.main_widget.top_builder_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view
+            self.beat_frame.main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_view
         )
 
     def _show_no_beat_selected_message(self) -> None:
         """Show a message indicating no beat is selected."""
-        self.sequence_widget = (
-            self.beat_frame.main_widget.top_builder_widget.sequence_widget
-        )
+        self.sequence_widget = self.beat_frame.main_widget.sequence_widget
         message = "You can't delete a beat if you haven't selected one."
         self.sequence_widget.indicator_label.show_message(message)
 
@@ -90,7 +86,7 @@ class BeatDeletionManager:
             self.delete_beat(self.beats[i])
 
         self.sequence_widget = (
-            self.beat_frame.main_widget.top_builder_widget.sequence_widget
+            self.beat_frame.main_widget.sequence_widget
         )
         self.sequence_widget.difficulty_label.set_difficulty_level("")
 
@@ -108,7 +104,7 @@ class BeatDeletionManager:
         self.manual_builder.reset_to_start_pos_picker()
         self.manual_builder.option_picker.update_option_picker()
         graph_editor = (
-            self.beat_frame.main_widget.top_builder_widget.sequence_widget.graph_editor
+            self.beat_frame.main_widget.sequence_widget.graph_editor
         )
         graph_editor.adjustment_panel.update_adjustment_panel()
 

@@ -143,7 +143,7 @@ class StartingPositionSection(FilterSectionBase):
         """Handle clicks on position images."""
         self.handle_position_click(position)
 
-    def _get_all_sequences_with_positions(self) -> List[Tuple[str, list[str], str]]:
+    def _get_all_sequences_with_positions(self) -> list[Tuple[str, list[str], str]]:
         """Retrieve and cache all sequences along with their starting positions."""
         if hasattr(self, "_all_sequences_with_positions"):
             return self._all_sequences_with_positions
@@ -180,7 +180,7 @@ class StartingPositionSection(FilterSectionBase):
 
     def get_sequences_that_are_a_specific_position(
         self, position: str
-    ) -> List[Tuple[str, list[str]]]:
+    ) -> list[Tuple[str, list[str]]]:
         """Retrieve sequences that correspond to a specific starting position."""
         sequences_with_positions = self._get_all_sequences_with_positions()
         return [

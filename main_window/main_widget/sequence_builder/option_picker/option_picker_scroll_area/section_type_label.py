@@ -6,13 +6,13 @@ from Enums.Enums import LetterType
 from PyQt6.QtCore import pyqtSignal
 
 from Enums.letters import Letter
-from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.letter_type_text_painter import (
+from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll_area.letter_type_text_painter import (
     LetterTypeTextPainter,
 )
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_widget import (
+    from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_widget import (
         OptionPickerSectionWidget,
     )
 

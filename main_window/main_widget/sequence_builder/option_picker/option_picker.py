@@ -8,6 +8,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import pyqtSignal, Qt
 
+
 from .toggle_with_label import ToggleWithLabel  # Import the new class
 
 from .option_getter import OptionGetter
@@ -16,7 +17,7 @@ from .option_picker_scroll_area.option_picker_scroll_area import OptionPickerScr
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.manual_builder import (
+    from main_window.main_widget.sequence_builder.manual_builder import (
         ManualBuilderWidget,
     )
 

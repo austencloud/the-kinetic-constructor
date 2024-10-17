@@ -120,7 +120,7 @@ class UserProfileSelector(QWidget):
 
     def refresh_options(self):
         self.users = self.user_manager.get_all_users()
-        self.options: List[str] = self.users + ["Edit Users"]
+        self.options: list[str] = self.users + ["Edit Users"]
 
     def option_selected(self, option: str, dialog: QDialog):
         if option == "Edit Users":

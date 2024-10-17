@@ -101,7 +101,7 @@ class AuthorSection(FilterSectionBase):
         """Handle clicks on author buttons."""
         self.initial_selection_widget.on_author_button_clicked(author)
 
-    def _get_all_sequences_with_authors(self) -> List[Tuple[str, list[str], str]]:
+    def _get_all_sequences_with_authors(self) -> list[Tuple[str, list[str], str]]:
         """Retrieve and cache all sequences along with their authors."""
         if hasattr(self, "_all_sequences_with_authors"):
             return self._all_sequences_with_authors
@@ -136,7 +136,7 @@ class AuthorSection(FilterSectionBase):
             author_counts[author] = author_counts.get(author, 0) + 1
         return author_counts
 
-    def get_sequences_by_author(self, author: str) -> List[Tuple[str, list[str]]]:
+    def get_sequences_by_author(self, author: str) -> list[Tuple[str, list[str]]]:
         """Retrieve sequences that correspond to a specific author."""
         sequences_with_authors = self._get_all_sequences_with_authors()
         return [

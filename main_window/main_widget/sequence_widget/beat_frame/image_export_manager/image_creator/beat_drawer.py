@@ -2,9 +2,7 @@ from typing import TYPE_CHECKING, List
 from PyQt6.QtGui import QPainter, QImage, QPixmap
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
-    BeatView,
-)
+from main_window.main_widget.sequence_widget.beat_frame.beat import BeatView
 
 
 if TYPE_CHECKING:
@@ -19,7 +17,7 @@ class BeatDrawer:
     def draw_beats(
         self,
         image: QImage,
-        filled_beats: List[BeatView],
+        filled_beats: list[BeatView],
         column_count: int,
         row_count: int,
         include_start_pos: bool,

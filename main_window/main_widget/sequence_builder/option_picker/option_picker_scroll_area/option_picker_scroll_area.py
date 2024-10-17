@@ -8,23 +8,14 @@ from data.constants import BLUE, RED
 
 from base_widgets.base_picker_scroll_area import BasePickerScrollArea
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_pictograph_factory import (
-    OptionPickerPictographFactory,
-)
-from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_manager import (
-    OptionPickerSectionManager,
-)
-
-
-from .option_picker_display_manager import (
-    OptionPickerDisplayManager,
-)
+from .option_picker_pictograph_factory import OptionPickerPictographFactory
+from .option_picker_section_manager import OptionPickerSectionManager
+from .option_picker_display_manager import OptionPickerDisplayManager
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_widget import (
-        OptionPickerSectionWidget,
-    )
+    from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_widget import OptionPickerSectionWidget
+
     from ..option_picker import OptionPicker
 
 

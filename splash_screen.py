@@ -81,7 +81,7 @@ class SplashScreen(QWidget):
     def _setup_layout(self):
         """Set up the layout, adding components to the appropriate positions."""
         layout = QVBoxLayout(self)
-        
+
         # Create the top layout (for text and logo)
         top_layout, bottom_layout = self._create_layouts()
 
@@ -119,7 +119,6 @@ class SplashScreen(QWidget):
 
         # Add the bottom layout (progress bar) to the main layout
         layout.addLayout(bottom_layout)
-
 
     def _create_layouts(self):
         """Create the top and bottom layouts."""
@@ -189,6 +188,7 @@ class SplashScreen(QWidget):
         """Handle painting the custom background using the background manager."""
         painter = QPainter(self)
         self.background_manager.paint_background(self, painter)
+        # super().paintEvent(event)
 
     def update_progress(self, value, message=""):
         """Update progress bar and message."""

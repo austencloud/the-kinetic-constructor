@@ -2,9 +2,8 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from typing import TYPE_CHECKING
 
 from Enums.Enums import LetterType
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.styled_border_overlay import (
-    StyledBorderOverlay,
-)
+from main_window.main_widget.sequence_widget.beat_frame.styled_border_overlay import StyledBorderOverlay
+
 
 
 if TYPE_CHECKING:

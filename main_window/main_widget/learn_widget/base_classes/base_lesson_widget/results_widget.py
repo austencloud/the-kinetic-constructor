@@ -92,7 +92,7 @@ class ResultsWidget(QWidget):
         )
 
     def _resize_result_label(self):
-        result_label_font_size = self.main_widget.width() // 75
+        result_label_font_size = self.main_widget.width() // 100
         font = self.result_label.font()
         font.setPointSize(result_label_font_size)
         self.result_label.setFont(font)

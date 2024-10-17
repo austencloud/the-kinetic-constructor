@@ -16,24 +16,19 @@ from typing import TYPE_CHECKING, Union
 from Enums.Enums import Letter
 from Enums.PropTypes import PropType
 from letter_determiner.letter_determiner import LetterDeterminer
-from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.sequence_generator import (
-    SequenceGeneratorWidget,
-)
-from main_window.main_widget.top_builder_widget.sequence_builder.manual_builder import (
-    ManualBuilderWidget,
-)
-from main_window.main_widget.top_builder_widget.sequence_builder.sequence_builder import (
-    SequenceBuilder,
-)
+from main_window.main_widget.navigation_widget import NavigationWidget
+
+
+from main_window.main_widget.sequence_builder.auto_builder.sequence_generator import SequenceGeneratorWidget
+from main_window.main_widget.sequence_builder.manual_builder import ManualBuilderWidget
+from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
 from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
 from .grid_mode_checker import GridModeChecker
 from .learn_widget.learn_widget import LearnWidget
-from .top_builder_widget.sequence_widget.sequence_widget import SequenceWidget
 from .pcitograph_dict_loader import PictographDictLoader
 from .sequence_properties_manager.sequence_properties_manager import (
     SequencePropertiesManager,
 )
-from .top_builder_widget.top_builder_widget import TopBuilderWidget
 from objects.graphical_object.svg_manager.graphical_object_svg_manager import SvgManager
 from .sequence_level_evaluator import SequenceLevelEvaluator
 from .thumbnail_finder import ThumbnailFinder
@@ -110,10 +105,10 @@ class MainWidget(QWidget):
     def on_tab_changed(self, index):
 
         self.stacked_widget.setCurrentIndex(index)
-        if index in [0, 1]:  # Build or Generate tab indices
-            self.sequence_widget.show()
-        else:
-            self.sequence_widget.hide()
+        # if index in [0, 1]:  # Build or Generate tab indices
+        #     self.sequence_widget.show()
+        # else:
+        #     self.sequence_widget.hide()
 
         if index == self.build_tab_index:
             self.main_window.settings_manager.global_settings.set_current_tab("build")
@@ -156,21 +151,9 @@ class MainWidget(QWidget):
         self.menu_bar_widget = MenuBarWidget(self)
 
         self.main_layout.addWidget(self.menu_bar_widget)
-        self.tab_buttons = []
-        self.tab_layout = QHBoxLayout()
-        self.tab_layout.addStretch(2)
-        self.tab_names = ["Build", "Generate", "Browse", "Learn"]
-
-        for index, name in enumerate(self.tab_names):
-            button = QPushButton(name)
-            button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-            button.clicked.connect(lambda _, idx=index: self.on_tab_changed(idx))
-            self.tab_buttons.append(button)
-            self.tab_layout.addWidget(button)
-            self.tab_layout.addStretch(1)
-        self.tab_layout.addStretch(1)
-
-        self.main_layout.addLayout(self.tab_layout)
+        self.navigation_widget = NavigationWidget(self)
+        self.navigation_widget.tab_changed.connect(self.on_tab_changed)
+        self.main_layout.addWidget(self.navigation_widget)
 
         self.content_layout = QHBoxLayout()
         self.main_layout.addLayout(self.content_layout)
@@ -190,24 +173,11 @@ class MainWidget(QWidget):
         self.stacked_widget.addWidget(self.sequence_generator)
         self.stacked_widget.addWidget(self.dictionary_widget)
         self.stacked_widget.addWidget(self.learn_widget)
-        self.stacked_widget.setCurrentIndex(0)
 
         self.build_tab_index = 0
         self.generate_tab_index = 1
         self.dictionary_tab_index = 2
         self.learn_tab_index = 3
-
-        # self.on_tab_changed(0)
-        current_tab = (
-            self.main_window.settings_manager.global_settings.get_current_tab()
-        )
-        tab_mapping = {
-            "build": self.build_tab_index,
-            "generate": self.generate_tab_index,
-            "dictionary": self.dictionary_tab_index,
-            "learn": self.learn_tab_index,
-        }
-        # self.setCurrentIndex(tab_mapping.get(current_tab, 0))
 
     def _setup_special_placements(self) -> None:
         self.special_placements: dict[
@@ -249,16 +219,6 @@ class MainWidget(QWidget):
         else:
             super().keyPressEvent(event)
 
-    def update_background_manager(self, bg_type: str):
-        if self.background_manager:
-            self.background_manager.stop_animation()
-        self.background_manager = (
-            self.settings_manager.global_settings.setup_background_manager(self)
-        )
-        self.background_manager.update_required.connect(self.update)
-        self.background_manager.start_animation()
-        self.update()
-
     def paintEvent(self, event):
         painter = QPainter(self)
         self.background_manager.paint_background(self, painter)
@@ -279,6 +239,7 @@ class MainWidget(QWidget):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self.setStyleSheet(self.tab_bar_styler.get_tab_stylesheet())
+        self.navigation_widget.resize_navigation_widget()
 
     def apply_background(self):
         self.background_manager = (
@@ -287,18 +248,6 @@ class MainWidget(QWidget):
             )
         )
         self.background_manager.update_required.connect(self.update)
-
-    def update_background(self, bg_type: str):
-        widgets: list[Union[TopBuilderWidget, DictionaryWidget, LearnWidget]] = [
-            self.manual_builder,
-            self.sequence_generator,
-            self.dictionary_widget,
-            self.learn_widget,
-        ]
-        # for widget in widgets:
-        #     widget.update_background_manager(bg_type)
-        self.update_background_manager(bg_type)
-        self.update()
 
     def closeEvent(self, event: QCloseEvent):
         self.save_state()

@@ -91,7 +91,7 @@ class JsonDurationUpdater:
         ]
         return placeholders
 
-    def _shift_beats(self, beats: List[dict], shift: int) -> List[dict]:
+    def _shift_beats(self, beats: list[dict], shift: int) -> list[dict]:
         """Shift beat numbers by a specified amount and update BeatView numbers."""
         if shift == 0:
             return beats
@@ -148,7 +148,7 @@ class JsonDurationUpdater:
                 unique_beats[beat_num] = beat
         return list(unique_beats.values())
 
-    def _update_beat_numbers(self, beats: List[dict]) -> dict[int, int]:
+    def _update_beat_numbers(self, beats: list[dict]) -> dict[int, int]:
         """Ensure beat numbers are consecutive and update parent beat references."""
         beat_mapping = {}
         for index, beat in enumerate(beats):

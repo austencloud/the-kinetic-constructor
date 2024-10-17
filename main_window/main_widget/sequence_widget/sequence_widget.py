@@ -5,9 +5,8 @@ from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout
 
 from data.constants import FLOAT
 from letter_determiner.letter_determiner import LetterDeterminer
-from main_window.main_widget.top_builder_widget.sequence_widget.sequence_clearer import (
-    SequenceClearer,
-)
+
+from main_window.main_widget.sequence_widget.sequence_clearer import SequenceClearer
 from utilities.word_simplifier import WordSimplifier
 
 from .beat_frame.beat import Beat, BeatView
@@ -25,9 +24,6 @@ from .sequence_widget_scroll_area import SequenceWidgetScrollArea
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
-    from main_window.main_widget.top_builder_widget.top_builder_widget import (
-        TopBuilderWidget,
-    )
 
 
 class SequenceWidget(QWidget):

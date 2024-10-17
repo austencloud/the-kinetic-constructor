@@ -3,7 +3,9 @@ from PyQt6.QtGui import QPainter
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, List
 
-from main_window.main_widget.sequence_card_tab.sequence_card_page_exporter import SequenceCardPageExporter
+from main_window.main_widget.sequence_card_tab.sequence_card_page_exporter import (
+    SequenceCardPageExporter,
+)
 
 
 from .sequence_card_image_displayer import SequenceCardImageDisplayer
@@ -27,8 +29,8 @@ class SequenceCardTab(QWidget):
         self.global_settings = (
             self.main_widget.main_window.settings_manager.global_settings
         )
-        self.pages: List[QWidget] = []
-        self.pages_cache: dict[int, List[QWidget]] = {}
+        self.pages: list[QWidget] = []
+        self.pages_cache: dict[int, list[QWidget]] = {}
         self.initialized = False
         self.currently_displayed_length = 16
         self.nav_sidebar = SequenceCardNavSidebar(self)

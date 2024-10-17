@@ -14,7 +14,7 @@ class JsonSequenceLoaderSaver:
             "current_sequence.json"
         )
 
-    def load_current_sequence_json(self) -> List[Dict]:
+    def load_current_sequence_json(self) -> list[Dict]:
         try:
             with open(self.current_sequence_json, "r", encoding="utf-8") as file:
                 content = file.read().strip()
@@ -30,7 +30,7 @@ class JsonSequenceLoaderSaver:
         except (FileNotFoundError, json.JSONDecodeError):
             return self.get_default_sequence()
 
-    def get_default_sequence(self) -> List[Dict]:
+    def get_default_sequence(self) -> list[Dict]:
         """Return a default sequence if JSON is missing, empty, or invalid."""
         return [
             {
@@ -49,7 +49,7 @@ class JsonSequenceLoaderSaver:
             }
         ]
 
-    def save_current_sequence(self, sequence: List[Dict]):
+    def save_current_sequence(self, sequence: list[Dict]):
         if not sequence:
             sequence = self.get_default_sequence()
         else:

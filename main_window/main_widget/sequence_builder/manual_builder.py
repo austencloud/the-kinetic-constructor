@@ -12,7 +12,6 @@ from .option_picker.option_picker import OptionPicker
 from .option_picker.option_picker_click_handler import OptionPickerClickHandler
 
 if TYPE_CHECKING:
-    from .sequence_builder import SequenceBuilder
     from main_window.main_widget.main_widget import MainWidget
 
 
@@ -20,7 +19,7 @@ class ManualBuilderWidget(QFrame):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
-        self.last_beat: BasePictograph = None
+        self.last_beat: "BasePictograph" = None
         self.json_manager = self.main_widget.json_manager
         self.start_position_picked = False
         self.pictograph_cache: dict[Letter, dict[str, BasePictograph]] = {
@@ -42,7 +41,7 @@ class ManualBuilderWidget(QFrame):
         self.layout().addWidget(self.stacked_widget)
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self.setStyleSheet("background: transparent;")
-        
+
         self.stacked_widget.addWidget(self.start_pos_picker)
         self.stacked_widget.addWidget(self.advanced_start_pos_picker)
         self.stacked_widget.addWidget(self.option_picker)
@@ -75,6 +74,7 @@ class ManualBuilderWidget(QFrame):
         self.start_pos_picker.resize_start_pos_picker()
         self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
         self.option_picker.resize_option_picker()
+        pass
 
     def render_and_store_pictograph(
         self, pictograph_dict: dict, sequence

@@ -137,7 +137,7 @@ class PictographView(QGraphicsView):
         QApplication.restoreOverrideCursor()
 
     def enterEvent(self, event: QEvent) -> None:
-        from main_window.main_widget.top_builder_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
+        from main_window.main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
             GraphEditorPictographContainer,
         )
 
@@ -148,7 +148,7 @@ class PictographView(QGraphicsView):
         self.pictograph.container.styled_border_overlay.set_gold_border()
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
-        from main_window.main_widget.top_builder_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
+        from main_window.main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
             GraphEditorPictographContainer,
         )
 

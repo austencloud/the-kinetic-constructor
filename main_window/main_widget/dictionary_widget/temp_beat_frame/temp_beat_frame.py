@@ -3,23 +3,16 @@ from PyQt6.QtWidgets import QGridLayout
 from PyQt6.QtCore import Qt
 
 from main_window.main_widget.grid_mode_checker import GridModeChecker
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
-    Beat,
-    BeatView,
-)
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
-    ImageExportManager,
-)
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_beat import (
-    StartPositionBeat,
-    StartPositionBeatView,
-)
+
 from base_widgets.base_beat_frame import BaseBeatFrame
 from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame_layout_manager import (
     TempBeatFrameLayoutManager,
 )
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from main_window.main_widget.sequence_widget.beat_frame.beat import Beat, BeatView
+from main_window.main_widget.sequence_widget.beat_frame.image_export_manager.image_export_manager import ImageExportManager
+from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import StartPositionBeat, StartPositionBeatView
 
 
 if TYPE_CHECKING:
@@ -135,7 +128,7 @@ class TempBeatFrame(BaseBeatFrame):
         grid_mode = self.main_widget.grid_mode_checker.get_grid_mode(
             current_sequence_json[2]
         )
-        self.main_widget.main_window.menu_bar_widget.grid_mode_selector.set_current_grid_mode(
+        self.main_widget.menu_bar_widget.grid_mode_selector.set_current_grid_mode(
             grid_mode
         )
 

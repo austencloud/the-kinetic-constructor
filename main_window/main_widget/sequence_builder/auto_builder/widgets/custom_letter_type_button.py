@@ -3,15 +3,16 @@ from PyQt6.QtCore import Qt, pyqtSignal, QVariantAnimation, QEasingCurve
 from PyQt6.QtWidgets import QLabel
 from PyQt6.QtGui import QColor
 from Enums.letters import LetterType
-from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.letter_type_text_painter import (
+from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll_area.letter_type_text_painter import (
     LetterTypeTextPainter,
 )
-from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.styled_border_overlay import (
+from main_window.main_widget.sequence_widget.beat_frame.styled_border_overlay import (
     StyledBorderOverlay,
 )
 
+
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.auto_builder.widgets.letter_type_picker import (
+    from main_window.main_widget.sequence_builder.auto_builder.widgets.letter_type_picker import (
         LetterTypePicker,
     )
 

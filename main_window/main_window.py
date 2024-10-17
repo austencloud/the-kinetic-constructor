@@ -26,7 +26,6 @@ class MainWindow(QMainWindow):
         self.setAttribute(Qt.WidgetAttribute.WA_AcceptTouchEvents, True)
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("The Kinetic Constructor")
-        # self.setMenuWidget(self.menu_bar_widget)
         self.geometry_manager.set_dimensions()
 
     def exec(self, app: QApplication) -> int:

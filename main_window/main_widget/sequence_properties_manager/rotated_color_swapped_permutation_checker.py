@@ -173,8 +173,8 @@ class RotatedColorSwappedPermutationChecker:
 
     def _matches_rotated_and_color_swapped(
         self,
-        first_part: List[Dict],
-        second_part: List[Dict],
+        first_part: list[Dict],
+        second_part: list[Dict],
         repetition_type: str,
         match_type: str,
     ) -> bool:

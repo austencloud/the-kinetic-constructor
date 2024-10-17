@@ -56,7 +56,7 @@ class JsonTurnsUpdater:
 
     def set_turns_from_num_to_num_in_json(self, motion: "Motion", new_turns):
         current_beat = (
-            self.main_widget.top_builder_widget.sequence_widget.beat_frame.get.currently_selected_beat()
+            self.main_widget.sequence_widget.beat_frame.get.currently_selected_beat()
         )
         current_beat_number = (
             current_beat.number
@@ -83,7 +83,7 @@ class JsonTurnsUpdater:
 
     def set_turns_to_num_from_fl_in_json(self, motion: "Motion", new_turns):
         beat_index = (
-            self.main_widget.top_builder_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
+            self.main_widget.sequence_widget.beat_frame.get.index_of_currently_selected_beat()
         )
         json_index = beat_index + 2
         motion.motion_type = (
