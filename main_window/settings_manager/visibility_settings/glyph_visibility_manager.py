@@ -34,9 +34,7 @@ class GlyphVisibilityManager:
             self.visibility_states[glyph_type] = visibility
 
             self.apply_visibility(glyph_type, pictograph)
-            self.sequence_builder = (
-                self.main_window.main_widget.top_builder_widget.sequence_builder
-            )
+
             if pictograph.letter in [Letter.α, Letter.β, Letter.Γ]:
                 pictograph.start_to_end_pos_glyph.setVisible(False)
 
@@ -74,7 +72,7 @@ class GlyphVisibilityManager:
         for (
             beat_view
         ) in (
-            self.main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beats
+            self.main_window.main_widget.sequence_widget.beat_frame.beats
         ):
             if beat_view.is_filled:
                 self.apply_current_visibility_settings(beat_view.beat)
@@ -82,10 +80,10 @@ class GlyphVisibilityManager:
 
         start_pos = (
             (
-                self.main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_view.start_pos
+                self.main_window.main_widget.sequence_widget.beat_frame.start_pos_view.start_pos
             )
             if hasattr(
-                self.main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.start_pos_view,
+                self.main_window.main_widget.sequence_widget.beat_frame.start_pos_view,
                 "start_pos",
             )
             else None

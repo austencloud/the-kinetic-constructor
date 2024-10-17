@@ -8,16 +8,18 @@ from ..widgets.level_selector import LevelSelector
 from ..widgets.turn_intensity_adjuster import TurnIntensityAdjuster
 
 if TYPE_CHECKING:
-    from ..auto_builder import AutoBuilder
+    from ..sequence_generator import SequenceGeneratorWidget
 
 
 class BaseAutoBuilderFrame(QFrame):
-    def __init__(self, auto_builder: "AutoBuilder", builder_type: str) -> None:
-        super().__init__(auto_builder)
-        self.auto_builder = auto_builder
+    def __init__(
+        self, sequence_generator_tab: "SequenceGeneratorWidget", builder_type: str
+    ) -> None:
+        super().__init__(sequence_generator_tab)
+        self.sequence_generator_tab = sequence_generator_tab
         self.builder_type = builder_type
         self.auto_builder_settings = (
-            auto_builder.main_widget.main_window.settings_manager.builder_settings.auto_builder
+            sequence_generator_tab.main_widget.main_window.settings_manager.builder_settings.auto_builder
         )
 
         # Create Layout
@@ -82,16 +84,16 @@ class BaseAutoBuilderFrame(QFrame):
         self.turn_intensity_adjuster.resize_max_turn_intensity_adjuster()
 
     def _resize_create_sequence_button(self):
-        font_size = self.auto_builder.sequence_builder.width() // 30
+        font_size = self.sequence_generator_tab.main_widget.width() // 50
         self.create_sequence_button.setStyleSheet(f"font-size: {font_size}px;")
         self.create_sequence_button.updateGeometry()
         self.create_sequence_button.repaint()
 
         self.create_sequence_button.setFixedWidth(
-            self.auto_builder.sequence_builder.width() // 3
+            self.sequence_generator_tab.main_widget.width() // 3
         )
         self.create_sequence_button.setFixedHeight(
-            self.auto_builder.sequence_builder.height() // 10
+            self.sequence_generator_tab.main_widget.height() // 10
         )
 
     def _update_sequence_length(self, length: int):

@@ -86,7 +86,7 @@ class CircularAutoBuilder(BaseAutoBuilder):
             QApplication.processEvents()
 
         self._apply_permutations(self.sequence, permutation_type, rotation_type)
-        self.sequence_widget.top_builder_widget.sequence_builder.manual_builder.transition_to_sequence_building()
+        self.main_widget.manual_builder.transition_to_sequence_building()
         QApplication.restoreOverrideCursor()
 
     def _generate_next_pictograph(
@@ -101,7 +101,7 @@ class CircularAutoBuilder(BaseAutoBuilder):
         blue_rot_dir,
         red_rot_dir,
     ) -> dict:
-        options = self.top_builder_widget.sequence_builder.manual_builder.option_picker.option_getter._load_all_next_options(
+        options = self.main_widget.manual_builder.option_picker.option_getter._load_all_next_options(
             self.sequence
         )
         options = [deepcopy(option) for option in options]

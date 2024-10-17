@@ -25,7 +25,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
         self.main_widget = sequence_widget.main_widget
         self.json_manager = self.main_widget.json_manager
         self.sequence_widget = sequence_widget
-        self.top_builder_widget = sequence_widget.top_builder_widget
+        # self.top_builder_widget = sequence_widget.main_widget.top_builder_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
         self.layout: "QGridLayout" = None
         self.initialized = True

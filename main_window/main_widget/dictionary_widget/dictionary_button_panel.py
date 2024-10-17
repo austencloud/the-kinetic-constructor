@@ -112,7 +112,7 @@ class DictionaryButtonPanel(QWidget):
             self.sequence_populator = self.dictionary_widget.sequence_populator
         if self.preview_area.sequence_json:
             self.preview_area.main_widget.setCurrentIndex(
-                self.preview_area.main_widget.builder_tab_index
+                self.preview_area.main_widget.build_tab_index
             )
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
             self.sequence_populator.load_sequence_from_json(

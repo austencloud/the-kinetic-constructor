@@ -18,13 +18,13 @@ from ..components.start_pos_picker.choose_your_start_pos_label import (
 
 if TYPE_CHECKING:
     from ..manual_builder import (
-        ManualBuilder,
+        ManualBuilderWidget,
     )
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 class AdvancedStartPosPicker(QWidget):
-    def __init__(self, manual_builder: "ManualBuilder"):
+    def __init__(self, manual_builder: "ManualBuilderWidget"):
         super().__init__(manual_builder)
         self.manual_builder = manual_builder
         self.main_widget = manual_builder.main_widget

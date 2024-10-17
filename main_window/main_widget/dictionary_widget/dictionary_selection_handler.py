@@ -6,7 +6,9 @@ from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.
 )
 
 if TYPE_CHECKING:
-    from main_window.main_widget.dictionary_widget.dictionary_widget import DictionaryWidget
+    from main_window.main_widget.dictionary_widget.dictionary_widget import (
+        DictionaryWidget,
+    )
 
 
 class DictionarySelectionHandler:

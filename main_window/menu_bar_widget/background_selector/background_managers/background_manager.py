@@ -14,9 +14,11 @@ class BackgroundManager(QObject):
         self.color_shift = 0
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.animate_background)
-        # self.timer.start(50)
+        self.timer.start(50)
+# In your background manager's animate_background method
 
     def animate_background(self):
+        self.update_required.emit()
         pass
 
     def paint_background(self, widget, painter):

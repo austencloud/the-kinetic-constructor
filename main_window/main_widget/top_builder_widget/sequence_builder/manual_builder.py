@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QStackedWidget
+from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 from Enums.Enums import LetterType, Letter
 from data.constants import BLUE_START_ORI, BLUE_TURNS, RED_START_ORI, RED_TURNS
@@ -15,11 +16,10 @@ if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
 
-class ManualBuilder(QFrame):
-    def __init__(self, sequence_builder_tab_widget: "SequenceBuilder") -> None:
-        super().__init__(sequence_builder_tab_widget)
-        self.sequence_builder = sequence_builder_tab_widget
-        self.main_widget: "MainWidget" = sequence_builder_tab_widget.main_widget
+class ManualBuilderWidget(QFrame):
+    def __init__(self, main_widget: "MainWidget") -> None:
+        super().__init__(main_widget)
+        self.main_widget = main_widget
         self.last_beat: BasePictograph = None
         self.json_manager = self.main_widget.json_manager
         self.start_position_picked = False
@@ -40,8 +40,9 @@ class ManualBuilder(QFrame):
         self.layout().setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
         self.layout().addWidget(self.stacked_widget)
-
-        # Add the different pickers to the stacked widget
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+        self.setStyleSheet("background: transparent;")
+        
         self.stacked_widget.addWidget(self.start_pos_picker)
         self.stacked_widget.addWidget(self.advanced_start_pos_picker)
         self.stacked_widget.addWidget(self.option_picker)

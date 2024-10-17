@@ -23,9 +23,7 @@ class StartPosManager(QObject):
         self.start_pos_picker = start_pos_picker
         self.start_pos_frame = start_pos_picker.pictograph_frame
         self.main_widget = start_pos_picker.manual_builder.main_widget
-        self.top_builder_widget = (
-            self.manual_builder.sequence_builder.top_builder_widget
-        )
+        self.top_builder_widget = None
         self.start_options: dict[str, BasePictograph] = {}
         self.setup_start_positions()
         self.start_position_selected.connect(
@@ -80,21 +78,23 @@ class StartPosManager(QObject):
     def add_start_pos_to_sequence(
         self, clicked_start_option: BasePictograph, event: QWidget = None
     ) -> None:
+
         """Handle the start position click event."""
+        self.sequence_widget = self.main_widget.sequence_widget
         start_position_beat = StartPositionBeat(
-            self.top_builder_widget.sequence_widget.beat_frame,
+            self.main_widget.sequence_widget.beat_frame,
         )
         clicked_start_option.updater.update_dict_from_attributes()
         start_position_beat.updater.update_pictograph(
             deepcopy(clicked_start_option.pictograph_dict)
         )
 
-        self.manual_builder.sequence_builder.top_builder_widget.sequence_widget.beat_frame.start_pos_view.set_start_pos(
+        self.sequence_widget.beat_frame.start_pos_view.set_start_pos(
             start_position_beat
         )
         self.manual_builder.last_beat = start_position_beat
         beat_frame = (
-            self.manual_builder.sequence_builder.top_builder_widget.sequence_widget.beat_frame
+            self.sequence_widget.beat_frame
         )
         start_pos_view = beat_frame.start_pos_view
         beat_frame.selection_overlay.select_beat(start_pos_view)
@@ -129,7 +129,7 @@ class StartPosManager(QObject):
             start_pos_entry[1] if start_pos_entry else None
         )
         start_pos_beat = StartPositionBeat(
-            self.main_widget.top_builder_widget.sequence_widget.beat_frame,
+            self.main_widget.sequence_widget.beat_frame,
         )
         start_pos_beat.updater.update_pictograph(
             start_position_pictograph.pictograph_dict
@@ -154,7 +154,7 @@ class StartPosManager(QObject):
                     "red_attributes"
                 ]["end_ori"]
                 pictograph_factory = (
-                    self.main_widget.top_builder_widget.sequence_widget.pictograph_factory
+                    self.main_widget.sequence_widget.pictograph_factory
                 )
                 pictograph_key = (
                     self.main_widget.pictograph_key_generator.generate_pictograph_key(

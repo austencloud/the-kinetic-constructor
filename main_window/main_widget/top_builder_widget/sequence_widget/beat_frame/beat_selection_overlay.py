@@ -29,7 +29,7 @@ class BeatSelectionOverlay(QWidget):
             red_motion = self.selected_beat.beat.red_motion
             self.selected_beat.is_selected = True
             graph_editor = (
-                self.selected_beat.beat_frame.main_widget.top_builder_widget.sequence_widget.graph_editor
+                self.selected_beat.beat_frame.main_widget.sequence_widget.graph_editor
             )
 
             self.update()

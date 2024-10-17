@@ -3,22 +3,20 @@ from PyQt6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_builder.manual_builder import (
-        ManualBuilder,
+        ManualBuilderWidget,
     )
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 class OptionPickerClickHandler:
-    def __init__(self, manual_builder: "ManualBuilder") -> None:
+    def __init__(self, manual_builder: "ManualBuilderWidget") -> None:
         self.manual_builder = manual_builder
 
     def get_click_handler(self, start_pos: "BasePictograph") -> callable:
         return lambda event: self.on_option_clicked(start_pos)
 
     def on_option_clicked(self, clicked_option: "BasePictograph") -> None:
-        beat_frame = (
-            self.manual_builder.main_widget.top_builder_widget.sequence_widget.beat_frame
-        )
+        beat_frame = self.manual_builder.main_widget.sequence_widget.beat_frame
         new_beat = self.manual_builder.add_to_sequence_manager.create_new_beat(
             clicked_option
         )
@@ -31,9 +29,7 @@ class OptionPickerClickHandler:
         ) and not beat_frame.sequence_widget.settings_manager.sequence_layout.get_layout_setting(
             "grow_sequence"
         ):
-            self.sequence_widget = (
-                self.manual_builder.main_widget.top_builder_widget.sequence_widget
-            )
+            self.sequence_widget = self.manual_builder.main_widget.sequence_widget
             self.sequence_widget.indicator_label.show_message(
                 f"Can't add the beat. Sequence length is set to {next_beat_number - 1} beats."
             )

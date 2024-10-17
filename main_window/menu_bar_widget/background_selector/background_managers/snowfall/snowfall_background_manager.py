@@ -19,8 +19,11 @@ from .snowflake_manager import SnowflakeManager
 from .santa_manager import SantaManager
 from .shooting_star_manager import ShootingStarManager  # Import the new manager
 
+
 class SnowfallBackgroundManager(BackgroundManager):
-    def __init__(self, widget: Union["TopBuilderWidget", "DictionaryWidget", "LearnWidget"]):
+    def __init__(
+        self, widget: Union["TopBuilderWidget", "DictionaryWidget", "LearnWidget"]
+    ):
         super().__init__(widget)
         self.widget = widget
 
@@ -34,7 +37,9 @@ class SnowfallBackgroundManager(BackgroundManager):
         self.snowflake_manager.animate_snowflakes()
         self.santa_manager.animate_santa()
         self.shooting_star_manager.animate_shooting_star()  # Animate shooting stars
-        self.shooting_star_manager.manage_shooting_star(self.widget)  # Manage shooting star timing
+        self.shooting_star_manager.manage_shooting_star(
+            self.widget
+        )  # Manage shooting star timing
         self.update_required.emit()
 
     def paint_background(self, widget: QWidget, painter: QPainter):

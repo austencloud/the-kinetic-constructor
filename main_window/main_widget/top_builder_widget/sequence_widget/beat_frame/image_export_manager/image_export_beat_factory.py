@@ -28,7 +28,7 @@ class ImageExportBeatFactory:
     def process_sequence_to_beats(self, sequence: list[dict]) -> list[BeatView]:
         if self.beat_frame_class.__name__ == "SequenceWidgetBeatFrame":
             temp_beat_frame = self.beat_frame_class(
-                self.export_manager.main_widget.top_builder_widget.sequence_widget
+                self.export_manager.main_widget.sequence_widget
             )
         elif self.beat_frame_class.__name__ == "TempBeatFrame":
             temp_beat_frame = self.beat_frame_class(

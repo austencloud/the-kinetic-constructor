@@ -24,16 +24,17 @@ from .sequence_widget_button_panel import SequenceWidgetButtonPanel
 from .sequence_widget_scroll_area import SequenceWidgetScrollArea
 
 if TYPE_CHECKING:
+    from main_window.main_widget.main_widget import MainWidget
     from main_window.main_widget.top_builder_widget.top_builder_widget import (
         TopBuilderWidget,
     )
 
 
 class SequenceWidget(QWidget):
-    def __init__(self, top_builder_widget: "TopBuilderWidget") -> None:
+    def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
-        self.top_builder_widget = top_builder_widget
-        self.main_widget = top_builder_widget.main_widget
+        self.main_widget =main_widget
+        # self.top_builder_widget = main_widget.top_builder_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
         self.json_manager = self.main_widget.json_manager
 

@@ -25,9 +25,9 @@ class BeatFramePopulator:
         indicator_label = self.sequence_widget.indicator_label
         indicator_label.show_message("Loading sequence...")
         self.start_pos_manager = (
-            self.main_widget.top_builder_widget.sequence_builder.manual_builder.start_pos_picker.start_pos_manager
+            self.main_widget.manual_builder.start_pos_picker.start_pos_manager
         )
-        self.sequence_builder = self.main_widget.top_builder_widget.sequence_builder
+        self.manual_builder = self.main_widget.manual_builder
 
         if not self.current_sequence_json:
             return
@@ -52,14 +52,14 @@ class BeatFramePopulator:
     def _set_grid_mode(self):
         grid_mode = self.current_sequence_json[0].get("grid_mode")
         if grid_mode:
-            self.main_widget.main_window.menu_bar_widget.grid_mode_selector.set_current_grid_mode(
+            self.main_widget.menu_bar_widget.grid_mode_selector.set_current_grid_mode(
                 grid_mode
             )
         else:
             grid_mode = self.main_widget.grid_mode_checker.get_grid_mode(
                 self.current_sequence_json[2]
             )
-            self.main_widget.main_window.menu_bar_widget.grid_mode_selector.set_current_grid_mode(
+            self.main_widget.menu_bar_widget.grid_mode_selector.set_current_grid_mode(
                 grid_mode
             )
             if not self.current_sequence_json[0].get("grid_mode"):
@@ -112,12 +112,12 @@ class BeatFramePopulator:
 
     def _finalize_sequence(self):
         last_beat = self.sequence_widget.beat_frame.get.last_filled_beat().beat
-        self.sequence_builder.manual_builder.last_beat = last_beat
+        self.manual_builder.last_beat = last_beat
 
         # Transition to sequence building if necessary
-        self.sequence_builder.manual_builder.transition_to_sequence_building()
+        self.manual_builder.transition_to_sequence_building()
 
-        scroll_area = self.sequence_builder.manual_builder.option_picker.scroll_area
+        scroll_area = self.manual_builder.option_picker.scroll_area
         scroll_area.hide_all_pictographs()
 
         # Retrieve filters from settings
@@ -125,7 +125,7 @@ class BeatFramePopulator:
             self.main_widget.settings_manager.builder_settings.manual_builder.get_filters()
         )
 
-        next_options = self.sequence_builder.manual_builder.option_picker.option_getter.get_next_options(
+        next_options = self.manual_builder.option_picker.option_getter.get_next_options(
             self.current_sequence_json, filters
         )
 

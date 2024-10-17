@@ -35,10 +35,10 @@ class ContinuousRotationToggle(QWidget):
     def update_mode_label_styles(self):
         """Update the styles of the labels to indicate the selected rotation type."""
         font_color_updater = (
-            self.auto_builder_frame.auto_builder.main_widget.settings_manager.global_settings.font_color_updater
+            self.auto_builder_frame.sequence_generator_tab.main_widget.settings_manager.global_settings.font_color_updater
         )
         font_color = font_color_updater.get_font_color(
-            self.auto_builder_frame.auto_builder.main_widget.settings_manager.global_settings.get_background_type()
+            self.auto_builder_frame.sequence_generator_tab.main_widget.settings_manager.global_settings.get_background_type()
         )
         if self.toggle.isChecked():
             self.random_label.setStyleSheet("font-weight: normal; color: gray;")
@@ -55,7 +55,9 @@ class ContinuousRotationToggle(QWidget):
         self.update_mode_label_styles()
 
     def resize_continuous_rotation_toggle(self):
-        font_size = self.auto_builder_frame.auto_builder.main_widget.width() // 75
+        font_size = (
+            self.auto_builder_frame.sequence_generator_tab.main_widget.width() // 75
+        )
         font = self.random_label.font()
         font.setPointSize(font_size)
         self.random_label.setFont(font)

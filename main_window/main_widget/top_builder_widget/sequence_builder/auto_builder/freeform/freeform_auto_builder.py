@@ -54,10 +54,9 @@ class FreeFormAutoBuilder(BaseAutoBuilder):
             self.validation_engine.validate_last_pictograph()
             QApplication.processEvents()
 
-        self.sequence_widget.top_builder_widget.sequence_builder.manual_builder.transition_to_sequence_building()
-        self.top_builder_widget.sequence_builder.manual_builder.option_picker.update_option_picker(
-            self.sequence
-        )
+        manual_builder = self.sequence_widget.main_widget.manual_builder
+        manual_builder.transition_to_sequence_building()
+        manual_builder.option_picker.update_option_picker(self.sequence)
         QApplication.restoreOverrideCursor()
 
     def _generate_next_pictograph(
@@ -69,8 +68,8 @@ class FreeFormAutoBuilder(BaseAutoBuilder):
         blue_rot_dir,
         red_rot_dir,
     ):
-        
-        options = self.sequence_builder.manual_builder.option_picker.option_getter._load_all_next_options(
+
+        options = self.main_widget.manual_builder.option_picker.option_getter._load_all_next_options(
             self.sequence
         )
         options = [deepcopy(option) for option in options]

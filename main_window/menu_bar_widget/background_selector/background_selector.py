@@ -10,10 +10,10 @@ if TYPE_CHECKING:
 class BackgroundSelector(LabelSelector):
     def __init__(self, menu_bar_widget: "MenuBarWidget"):
         current_background = (
-            menu_bar_widget.main_window.settings_manager.global_settings.get_background_type()
+            menu_bar_widget.main_widget.settings_manager.global_settings.get_background_type()
         )
         super().__init__(menu_bar_widget, current_background)
-        self.settings_manager = self.main_window.settings_manager
+        self.settings_manager = self.main_widget.settings_manager
 
     def on_label_clicked(self):
         dialog = BackgroundDialog(self)

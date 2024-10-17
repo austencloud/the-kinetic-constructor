@@ -37,7 +37,7 @@ class TempBeatFrame(BaseBeatFrame):
         self.main_widget = dictionary.main_widget
         self.json_manager = self.main_widget.json_manager
         self.dictionary_widget = dictionary
-        self.top_builder_widget = self.main_widget.top_builder_widget
+        # self.top_builder_widget = self.main_widget.top_builder_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
 
         self.initialized = True
@@ -124,9 +124,9 @@ class TempBeatFrame(BaseBeatFrame):
         self, current_sequence_json: list[dict[str, str]]
     ) -> None:
         self.start_pos_manager = (
-            self.main_widget.top_builder_widget.sequence_builder.manual_builder.start_pos_picker.start_pos_manager
+            self.main_widget.manual_builder.start_pos_picker.start_pos_manager
         )
-        self.sequence_builder = self.main_widget.top_builder_widget.sequence_builder
+        self.manual_builder = self.main_widget.manual_builder
         if not current_sequence_json:
             return
         self.clear_sequence(
@@ -150,21 +150,21 @@ class TempBeatFrame(BaseBeatFrame):
             self.populate_sequence(pictograph_dict)
 
         last_beat = self.get_last_filled_beat().beat
-        self.sequence_builder.manual_builder.last_beat = last_beat
+        self.manual_builder.last_beat = last_beat
 
-        if self.sequence_builder.manual_builder.start_pos_picker.isVisible():
-            self.sequence_builder.manual_builder.transition_to_sequence_building()
+        if self.manual_builder.start_pos_picker.isVisible():
+            self.manual_builder.transition_to_sequence_building()
 
         sequence = self.json_manager.loader_saver.load_current_sequence_json()
 
-        scroll_area = self.sequence_builder.manual_builder.option_picker.scroll_area
+        scroll_area = self.manual_builder.option_picker.scroll_area
         scroll_area.hide_all_pictographs()
-        next_options = self.sequence_builder.manual_builder.option_picker.option_getter.get_next_options(
+        next_options = self.manual_builder.option_picker.option_getter.get_next_options(
             sequence
         )
 
         scroll_area.add_and_display_relevant_pictographs(next_options)
-        self.sequence_builder.manual_builder.option_picker.resize_option_picker()
+        self.manual_builder.option_picker.resize_option_picker()
 
     def populate_sequence(self, pictograph_dict: dict) -> None:
         pictograph = Beat(self)
@@ -181,8 +181,8 @@ class TempBeatFrame(BaseBeatFrame):
         self._reset_beat_frame()
 
         if should_reset_to_start_pos_picker:
-            self.sequence_builder.manual_builder.reset_to_start_pos_picker()
-        self.sequence_builder.manual_builder.last_beat = self.start_pos
+            self.manual_builder.reset_to_start_pos_picker()
+        self.manual_builder.last_beat = self.start_pos
         self.json_manager.loader_saver.clear_current_sequence_file()
 
         # Reset the layout to the smallest possible amount

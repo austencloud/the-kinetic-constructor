@@ -13,9 +13,13 @@ if TYPE_CHECKING:
 class VisibilitySelector(ButtonSelector):
     def __init__(self, menu_bar_widget: "MenuBarWidget"):
         super().__init__(menu_bar_widget, "Visibility")
-        self.settings_manager = self.main_window.settings_manager
-        self.glyph_visibility_manager = self.settings_manager.visibility.glyph_visibility_manager
-        self.grid_visibility_manager = self.settings_manager.visibility.grid_visibility_manager
+        self.settings_manager = self.main_widget.settings_manager
+        self.glyph_visibility_manager = (
+            self.settings_manager.visibility.glyph_visibility_manager
+        )
+        self.grid_visibility_manager = (
+            self.settings_manager.visibility.grid_visibility_manager
+        )
 
     def on_button_clicked(self):
         self.show_visibility_dialog()

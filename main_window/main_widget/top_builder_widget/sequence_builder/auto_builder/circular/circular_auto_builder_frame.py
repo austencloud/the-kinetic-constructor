@@ -6,12 +6,12 @@ from ..widgets.rotation_type_toggle import RotationTypeToggle
 from .circular_auto_builder import CircularAutoBuilder
 
 if TYPE_CHECKING:
-    from ..auto_builder import AutoBuilder
+    from ..sequence_generator import SequenceGeneratorWidget
 
 
 class CircularAutoBuilderFrame(BaseAutoBuilderFrame):
-    def __init__(self, auto_builder: "AutoBuilder") -> None:
-        super().__init__(auto_builder, "circular")
+    def __init__(self, sequence_generator_tab: "SequenceGeneratorWidget") -> None:
+        super().__init__(sequence_generator_tab, "circular")
         self.builder = CircularAutoBuilder(self)
 
         # Instantiate Circular-specific widgets

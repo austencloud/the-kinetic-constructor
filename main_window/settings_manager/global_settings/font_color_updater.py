@@ -59,7 +59,7 @@ class FontColorUpdater:
     def _update_sequence_widget(
         self, main_widget: "MainWidget", font_color: str
     ) -> None:
-        sequence_widget = main_widget.top_builder_widget.sequence_widget
+        sequence_widget = main_widget.sequence_widget
         self._apply_font_colors(
             [
                 sequence_widget.current_word_label,
@@ -72,18 +72,18 @@ class FontColorUpdater:
     def _update_sequence_builder(
         self, main_widget: "MainWidget", font_color: str
     ) -> None:
-        sequence_builder = main_widget.top_builder_widget.sequence_builder
-
+        manual_builder = main_widget.manual_builder
+        sequence_generator = main_widget.sequence_generator
         manual_labels = [
-            sequence_builder.manual_builder.start_pos_picker.choose_your_start_pos_label,
-            sequence_builder.manual_builder.advanced_start_pos_picker.choose_your_start_pos_label,
+            manual_builder.start_pos_picker.choose_your_start_pos_label,
+            manual_builder.advanced_start_pos_picker.choose_your_start_pos_label,
         ]
 
         freeform_labels = self._get_freeform_builder_labels(
-            sequence_builder.auto_builder.freeform_builder_frame
+            sequence_generator.freeform_builder_frame
         )
         circular_labels = self._get_circular_builder_labels(
-            sequence_builder.auto_builder.circular_builder_frame
+            sequence_generator.circular_builder_frame
         )
 
         self._apply_font_colors(

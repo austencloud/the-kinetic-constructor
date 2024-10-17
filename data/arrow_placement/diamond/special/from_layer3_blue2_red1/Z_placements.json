@@ -300,7 +300,9 @@
     },
     "(s, 0.5, 2.5)": {
       "static_from_layer1_rot_angle_override": true,
-      "anti_from_layer2": [-45, 45]
+      "anti_from_layer2": [-45, 45],
+      "static_from_layer2_rot_angle_override": true,
+      "anti_from_layer1": [-120, 80]
     },
     "(s, 0.5, 3)": {
       "swap_beta_n_nonradial_blue_static_n_red_anti_ne": true,

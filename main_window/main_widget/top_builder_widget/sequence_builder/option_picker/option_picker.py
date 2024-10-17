@@ -17,7 +17,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_builder.manual_builder import (
-        ManualBuilder,
+        ManualBuilderWidget,
     )
 
 
@@ -26,7 +26,7 @@ class OptionPicker(QWidget):
 
     option_selected = pyqtSignal(str)
 
-    def __init__(self, manual_builder: "ManualBuilder"):
+    def __init__(self, manual_builder: "ManualBuilderWidget"):
         super().__init__(manual_builder)
         self.manual_builder = manual_builder
         self.main_widget = manual_builder.main_widget

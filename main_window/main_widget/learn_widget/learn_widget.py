@@ -45,9 +45,7 @@ class LearnWidget(QWidget):
         # Set the initial screen
         self.stack_layout.setCurrentWidget(self.lesson_selector)
 
-        self.background_manager = self.global_settings.setup_background_manager(self)
-
-
+        # self.background_manager = self.global_settings.setup_background_manager(self)
 
     def update_background_manager(self, bg_type: str):
         if self.background_manager:
@@ -56,7 +54,6 @@ class LearnWidget(QWidget):
         self.background_manager.update_required.connect(self.update)
         self.background_manager.start_animation()
         self.update()
-
 
     def show_lesson_selection_widget(self) -> None:
         """Show the lesson selection screen."""
@@ -82,19 +79,19 @@ class LearnWidget(QWidget):
         self.lesson_3_widget.resize_lesson_widget()
         self.lesson_selector.resize_lesson_selector()
 
-    def paintEvent(self, event) -> None:
-        """Draw the background using the background manager."""
-        painter = QPainter(self)
-        self.background_manager.paint_background(self, painter)
+    # def paintEvent(self, event) -> None:
+    #     """Draw the background using the background manager."""
+    #     painter = QPainter(self)
+    #     self.background_manager.paint_background(self, painter)
 
-    def showEvent(self, event):
-        super().showEvent(event)
-        self.background_manager.start_animation()
+    # def showEvent(self, event):
+    #     super().showEvent(event)
+    #     self.background_manager.start_animation()
 
-    def hideEvent(self, event):
-        super().hideEvent(event)
-        if self.background_manager:
-            self.background_manager.stop_animation()
+    # def hideEvent(self, event):
+    #     super().hideEvent(event)
+    #     if self.background_manager:
+    #         self.background_manager.stop_animation()
 
     def resizeEvent(self, event) -> None:
         """Handle resize events for the widget."""

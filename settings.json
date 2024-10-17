@@ -1,13 +1,13 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Aurora",
+        "background_type": "Starfield",
         "grow_sequence": true,
-        "current_tab": "sequence_builder",
+        "current_tab": "generate",
         "grid_mode": "diamond"
     },
     "image_export": {
-        "include_start_position": false,
+        "include_start_position": true,
         "add_info": true,
         "open_directory_on_export": true,
         "add_word": true,
@@ -37,7 +37,7 @@
         "glyph_visibility": {
             "VTG": false,
             "TKA": true,
-            "Elemental": false,
+            "Elemental": true,
             "EndPosition": false
         },
         "grid_visibility": {
@@ -46,10 +46,8 @@
     },
     "dictionary": {
         "sort_method": "date_added",
-        "current_section": "browser",
-        "current_filter": {
-            "grid_mode": "box"
-        }
+        "current_section": "level",
+        "current_filter": null
     },
     "sequence_layout": {
         "grow_sequence": true,
@@ -61,8 +59,8 @@
             "circular_auto_builder": {
                 "sequence_type": "circular",
                 "sequence_length": 16,
-                "max_turn_intensity": 3,
-                "sequence_level": 1,
+                "max_turn_intensity": 1,
+                "sequence_level": 2,
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",
                 "continuous_rotation": true,
@@ -77,23 +75,18 @@
             },
             "freeform_auto_builder": {
                 "sequence_type": "freeform",
-                "sequence_length": 16,
-                "max_turn_intensity": 0.5,
+                "sequence_length": 24,
+                "max_turn_intensity": 2.5,
                 "sequence_level": 3,
                 "continuous_rotation": true,
                 "selected_letter_types": [
-                    "Dual-Shift",
-                    "Shift",
-                    "Cross-Shift",
-                    "Dash",
-                    "Dual-Dash",
-                    "Static"
+                    "Cross-Shift"
                 ]
             },
             "current_auto_builder": "circular"
         },
         "manual_builder": {
-            "filters": "continuous"
+            "filters": null
         },
         "last_used_builder": "manual"
     },

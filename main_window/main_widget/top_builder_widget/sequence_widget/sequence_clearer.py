@@ -22,7 +22,7 @@ class SequenceClearer:
         self._reset_beat_frame()
         if not self.manual_builder:
             self.manual_builder = (
-                self.sequence_widget.main_widget.top_builder_widget.sequence_builder.manual_builder
+                self.sequence_widget.main_widget.manual_builder
             )
         if should_reset_to_start_pos_picker:
             self.manual_builder.reset_to_start_pos_picker()

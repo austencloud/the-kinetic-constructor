@@ -12,13 +12,14 @@ from .grid_mode_selector import GridModeSelector
 from .visibility_selector import VisibilitySelector
 
 if TYPE_CHECKING:
+    from main_window.main_widget.main_widget import MainWidget
     from main_window.main_window import MainWindow
 
 
 class MenuBarWidget(QWidget):
-    def __init__(self, main_window: "MainWindow") -> None:
+    def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
-        self.main_window = main_window
+        self.main_widget = main_widget
 
         # Initialize selectors
         self.prop_type_selector = PropTypeSelector(self)
@@ -49,7 +50,7 @@ class MenuBarWidget(QWidget):
         # Set up layout
         self.layout: QHBoxLayout = QHBoxLayout(self)
         self.layout.setContentsMargins(10, 10, 10, 10)
-
+        
         self.layout.addStretch(1)
 
         # Add selectors with labels and separators
@@ -80,7 +81,7 @@ class MenuBarWidget(QWidget):
         super().resizeEvent(event)
 
     def resize_menu_bar_widget(self):
-        height = int(self.main_window.height() * 0.05)
+        height = int(self.main_widget.height() * 0.05)
         self.setFixedHeight(height)
         spacing = self.width() // 30
         self.layout.setSpacing(spacing)

@@ -41,7 +41,7 @@ class LetterTypePicker(QWidget):
 
     def get_font_size(self) -> int:
         """Return the font size based on the parent widget's width."""
-        return self.auto_builder_frame.auto_builder.sequence_builder.width() // 45
+        return self.auto_builder_frame.sequence_generator_tab.main_widget.width() // 70
 
     def _setup_layout(self):
         """Set up the HBox layout for all letter types."""

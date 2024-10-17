@@ -5,16 +5,17 @@ from .start_pos_pictograph_frame import StartPosPickerPictographFrame
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from .start_pos_manager import StartPosManager
 from .choose_your_start_pos_label import ChooseYourStartPosLabel
+
 if TYPE_CHECKING:
     from main_window.main_widget.top_builder_widget.sequence_builder.manual_builder import (
-        ManualBuilder,
+        ManualBuilderWidget,
     )
 
 
 class StartPosPicker(QWidget):
     SPACING = 10
 
-    def __init__(self, manual_builder: "ManualBuilder"):
+    def __init__(self, manual_builder: "ManualBuilderWidget"):
         super().__init__(manual_builder)
         self.manual_builder = manual_builder
         self.main_widget = manual_builder.main_widget
@@ -73,10 +74,7 @@ class StartPosPicker(QWidget):
         pictograph.updater.update_pictograph(pictograph_dict)
         return pictograph
 
-
-
     def resize_start_pos_picker(self) -> None:
         self.pictograph_frame.resize_start_pos_picker_pictograph_frame()
         self.start_pos_manager.resize_start_position_pictographs()
         self.variations_button.resize_variations_button()
-

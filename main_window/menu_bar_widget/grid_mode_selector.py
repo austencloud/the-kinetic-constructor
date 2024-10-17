@@ -26,9 +26,8 @@ class GridModeSelector(QWidget):
     def __init__(self, menu_bar_widget: "MenuBarWidget"):
         super().__init__()
         self.menu_bar_widget = menu_bar_widget
-        self.main_window = menu_bar_widget.main_window
-        self.main_widget = self.main_window.main_widget
-        self.settings_manager = self.main_window.settings_manager
+        self.main_widget = menu_bar_widget.main_widget
+        self.settings_manager = self.main_widget.settings_manager
         self.dialog = None
         current_grid_mode = (
             self.settings_manager.global_settings.get_grid_mode().capitalize()

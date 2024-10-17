@@ -33,18 +33,15 @@ class BaseAutoBuilder:
     def __init__(self, auto_builder_frame: "BaseAutoBuilderFrame"):
         self.auto_builder_frame = auto_builder_frame
         self.sequence_widget: "SequenceWidget" = None
-        self.top_builder_widget = (
-            auto_builder_frame.auto_builder.sequence_builder.top_builder_widget
-        )
-        self.main_widget = self.top_builder_widget.main_widget
-        self.sequence_builder = auto_builder_frame.auto_builder.sequence_builder
+
+        self.main_widget = auto_builder_frame.sequence_generator_tab.main_widget
         self.validation_engine = self.main_widget.json_manager.validation_engine
         self.json_manager = self.main_widget.json_manager
         self.ori_calculator = self.main_widget.json_manager.ori_calculator
 
     def _initialize_sequence(self, length):
         if not self.sequence_widget:
-            self.sequence_widget = self.top_builder_widget.sequence_widget
+            self.sequence_widget = self.main_widget.sequence_widget
         self.sequence = self.json_manager.loader_saver.load_current_sequence_json()
 
         if len(self.sequence) == 1:
@@ -58,7 +55,7 @@ class BaseAutoBuilder:
     def add_start_pos_pictograph(self) -> None:
         """Add a starting position pictograph to the sequence."""
         grid_mode = (
-            self.auto_builder_frame.auto_builder.main_widget.settings_manager.global_settings.get_grid_mode()
+            self.auto_builder_frame.sequence_generator_tab.main_widget.settings_manager.global_settings.get_grid_mode()
         )
         if grid_mode == DIAMOND:
             start_pos_keys = ["alpha1_alpha1", "beta5_beta5", "gamma11_gamma11"]
@@ -78,7 +75,7 @@ class BaseAutoBuilder:
                 ):
                     self.set_start_pos_to_in_orientation(pictograph_dict)
                     start_position_beat = StartPositionBeat(
-                        self.top_builder_widget.sequence_widget.beat_frame
+                        self.main_widget.sequence_widget.beat_frame
                     )
                     start_position_beat.updater.update_pictograph(
                         deepcopy(pictograph_dict)
@@ -167,9 +164,9 @@ class BaseAutoBuilder:
         """Set the turns for blue and red attributes, adjusting motion types if necessary."""
         # Set blue turns
         if turn_blue == "fl" or turn_red == "fl":
-            if Letter.get_letter(next_beat["letter"]) in Letter.get_letters_by_condition(
-                LetterConditions.TYPE1_HYBRID
-            ):
+            if Letter.get_letter(
+                next_beat["letter"]
+            ) in Letter.get_letters_by_condition(LetterConditions.TYPE1_HYBRID):
                 return next_beat
         if turn_blue == "fl":
 

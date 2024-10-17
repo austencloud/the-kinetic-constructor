@@ -5,12 +5,12 @@ from ..widgets.letter_type_picker import LetterTypePicker
 from .freeform_auto_builder import FreeFormAutoBuilder
 
 if TYPE_CHECKING:
-    from ..auto_builder import AutoBuilder
+    from ..sequence_generator import SequenceGeneratorWidget
 
 
 class FreeformAutoBuilderFrame(BaseAutoBuilderFrame):
-    def __init__(self, auto_builder: "AutoBuilder") -> None:
-        super().__init__(auto_builder, "freeform")
+    def __init__(self, sequence_generator_tab: "SequenceGeneratorWidget") -> None:
+        super().__init__(sequence_generator_tab, "freeform")
         self.builder = FreeFormAutoBuilder(self)
 
         # Attach specific action for sequence creation
@@ -41,7 +41,7 @@ class FreeformAutoBuilderFrame(BaseAutoBuilderFrame):
                 "continuous_rotation", self.builder_type
             ),
         )
-        self.auto_builder.sequence_builder.manual_builder.option_picker.update_option_picker()
+        self.sequence_generator_tab.main_widget.manual_builder.option_picker.update_option_picker()
 
     def apply_settings(self):
         super().apply_settings()

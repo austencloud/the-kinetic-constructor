@@ -57,7 +57,7 @@ class SectionTypeLabel(QLabel):
 
     def font_size(self):
         scroll_area = self.section_widget.scroll_area
-        sequence_builder = scroll_area.manual_builder.sequence_builder
+        sequence_builder = scroll_area.manual_builder.main_widget
         base_class_name = type(scroll_area).__name__
 
         if base_class_name == "LetterBookScrollArea":

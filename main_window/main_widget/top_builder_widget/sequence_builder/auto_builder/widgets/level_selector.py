@@ -51,7 +51,9 @@ class LevelSelector(QWidget):
         self._on_level_change(level)
 
     def resize_level_selector(self):
-        font_size = self.auto_builder_frame.auto_builder.main_widget.width() // 75
+        font_size = (
+            self.auto_builder_frame.sequence_generator_tab.main_widget.width() // 75
+        )
         for button in self.level_buttons.values():
             font = button.font()
             font.setPointSize(font_size)

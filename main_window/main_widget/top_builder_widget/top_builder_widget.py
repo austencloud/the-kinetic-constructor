@@ -17,12 +17,11 @@ class TopBuilderWidget(QWidget):
             self.main_widget.main_window.settings_manager.global_settings
         )
 
-        self.sequence_builder = SequenceBuilder(self)
-        self.sequence_widget = SequenceWidget(self)
+        self.sequence_builder = SequenceBuilder(self.main_widget)
+        self.sequence_widget = self.main_widget.sequence_widget
         self.initialized = False
         self._setup_layout()
         self.background_manager = None
-
 
     def _setup_layout(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)

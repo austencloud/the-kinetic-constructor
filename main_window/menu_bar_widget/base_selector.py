@@ -24,7 +24,7 @@ class BaseSelector(QWidget):
     def __init__(self, menu_bar_widget: "MenuBarWidget", widget: QWidget):
         super().__init__()
         self.menu_bar_widget = menu_bar_widget
-        self.main_window = menu_bar_widget.main_window
+        self.main_widget = menu_bar_widget.main_widget
         self.widget = widget
 
         # Set up layout

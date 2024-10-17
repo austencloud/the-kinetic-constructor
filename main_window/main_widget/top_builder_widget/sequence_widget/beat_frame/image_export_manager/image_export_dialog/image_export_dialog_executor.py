@@ -29,7 +29,7 @@ class ImageExportDialogExecutor:
         """
 
         self.indicator_label = (
-            self.export_manager.main_widget.top_builder_widget.sequence_widget.indicator_label
+            self.export_manager.main_widget.sequence_widget.indicator_label
         )
         if len(sequence) < 3:
             self.indicator_label.show_message("The sequence is empty.")

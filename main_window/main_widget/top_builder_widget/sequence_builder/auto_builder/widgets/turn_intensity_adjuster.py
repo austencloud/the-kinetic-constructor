@@ -65,7 +65,7 @@ class TurnIntensityAdjuster(QWidget):
     def adjust_values(self, level):
         if level == 2:
             self.values = [0, 1, 2, 3]
-        elif level == 3: 
+        elif level == 3:
             self.values = [0, 0.5, 1, 1.5, 2, 2.5, 3]
 
         if self.intensity not in self.values:
@@ -74,7 +74,9 @@ class TurnIntensityAdjuster(QWidget):
             self.auto_builder_frame._update_max_turn_intensity(self.intensity)
 
     def resize_max_turn_intensity_adjuster(self):
-        font_size = self.auto_builder_frame.auto_builder.main_widget.width() // 75
+        font_size = (
+            self.auto_builder_frame.sequence_generator_tab.main_widget.width() // 75
+        )
         font = self.intensity_label.font()
         font.setPointSize(font_size)
 
@@ -83,7 +85,7 @@ class TurnIntensityAdjuster(QWidget):
         self.intensity_label.setFont(font)
         self.intensity_value_label.setFont(font)
         self.intensity_value_label.setFixedWidth(
-            self.auto_builder_frame.auto_builder.main_widget.width() // 25
+            self.auto_builder_frame.sequence_generator_tab.main_widget.width() // 25
         )
 
         self.minus_button.updateGeometry()

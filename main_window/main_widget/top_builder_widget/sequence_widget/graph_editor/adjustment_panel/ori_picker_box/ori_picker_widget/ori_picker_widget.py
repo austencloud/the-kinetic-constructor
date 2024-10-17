@@ -46,9 +46,7 @@ class OriPickerWidget(QWidget):
         # References to other components
         self.json_manager = self.ori_picker_box.graph_editor.main_widget.json_manager
         self.json_validation_engine = self.json_manager.validation_engine
-        self.option_picker = (
-            self.ori_picker_box.graph_editor.sequence_widget.top_builder_widget.sequence_builder.manual_builder.option_picker
-        )
+        self.option_picker = None
         self.beat_frame = self.ori_picker_box.graph_editor.sequence_widget.beat_frame
 
         # Setup UI components and layout
@@ -65,7 +63,7 @@ class OriPickerWidget(QWidget):
         self.ori_display_label = ClickableLabel(self)
         self.ori_display_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.ori_display_label.setCursor(Qt.CursorShape.PointingHandCursor)
-        
+
         path = get_images_and_data_path("images/icons")
         self.ccw_button = self._create_rotate_button(
             f"{path}/rotate_ccw.png", self.rotate_ccw
@@ -134,6 +132,10 @@ class OriPickerWidget(QWidget):
         self.set_orientation(new_ori)
 
     def set_orientation(self, orientation):
+        if not self.option_picker:
+            self.option_picker = (
+                self.ori_picker_box.graph_editor.sequence_widget.main_widget.top_builder_widget.sequence_builder.manual_builder.option_picker
+            )
         self.current_orientation_index = self.orientations.index(orientation)
         self.ori_display_label.setText(orientation)
         self.json_manager.start_position_handler.update_start_pos_ori(

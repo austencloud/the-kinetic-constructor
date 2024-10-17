@@ -26,9 +26,8 @@ class UserProfileSelector(QWidget):
     def __init__(self, menu_bar_widget: "MenuBarWidget"):
         super().__init__()
         self.menu_bar_widget = menu_bar_widget
-        self.main_window = menu_bar_widget.main_window
-        self.main_widget = self.main_window.main_widget
-        self.user_manager = self.main_window.settings_manager.users.user_manager
+        self.main_widget = menu_bar_widget.main_widget
+        self.user_manager = self.main_widget.settings_manager.users.user_manager
         self.dialog = None
         current_user = self.user_manager.get_current_user()
 
