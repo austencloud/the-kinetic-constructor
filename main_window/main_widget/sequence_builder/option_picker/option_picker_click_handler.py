@@ -1,10 +1,9 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
 
+
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.manual_builder import (
-        ManualBuilderWidget,
-    )
+    from main_window.main_widget.sequence_builder.manual_builder import ManualBuilderWidget
     from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 

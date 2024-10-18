@@ -3,6 +3,8 @@ from PyQt6.QtWidgets import QGraphicsView, QSizePolicy, QApplication, QGraphicsR
 from PyQt6.QtCore import Qt, QEvent, QTimer, QEvent
 from PyQt6.QtGui import QMouseEvent, QCursor, QBrush, QColor
 
+from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import ReversalSymbolManager
+
 from .pictograph_context_menu_handler import PictographContextMenuHandler
 from .pictograph_view_mouse_event_handler import PictographViewMouseEventHandler
 
@@ -32,6 +34,7 @@ class PictographView(QGraphicsView):
         self._touchTimeout.setSingleShot(True)
         self._touchTimeout.timeout.connect(self._resetTouchState)
         self._touchTimeout.setInterval(100)  # Adjust as needed
+        self.reversal_symbol_manager = ReversalSymbolManager(self.pictograph)
 
     def resize_pictograph_view(self) -> None:
         view_width = self.calculate_view_width()
@@ -123,6 +126,7 @@ class PictographView(QGraphicsView):
             settings_manager.visibility.glyph_visibility_manager.apply_current_visibility_settings(
                 self.pictograph
             )
+        
 
     def _resetTouchState(self) -> None:
         self._ignoreNextMousePress = False

@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QApplication
+from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import ReversalDetector
 from utilities.word_simplifier import WordSimplifier
 
 if TYPE_CHECKING:
@@ -92,7 +93,7 @@ class BeatFramePopulator:
                 if "letter" in beat
             ]
         )
-        self.current_word = WordSimplifier().simplify_repeated_word(self.current_word)
+        self.current_word = WordSimplifier.simplify_repeated_word(self.current_word)
         self.sequence_widget.current_word_label.set_current_word(self.current_word)
 
     def _populate_beats(self):
@@ -103,8 +104,8 @@ class BeatFramePopulator:
             if pictograph_dict.get("is_placeholder", False):
                 continue
             else:
-                # Detect reversals
-                reversal_info = self._detect_reversal(previous_beat_dict, pictograph_dict)
+                # Use ReversalDetector
+                reversal_info = ReversalDetector.detect_reversal(previous_beat_dict, pictograph_dict)
                 # Create the beat with reversal information
                 self.sequence_widget.create_new_beat_and_add_to_sequence(
                     pictograph_dict,

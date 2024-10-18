@@ -6,7 +6,7 @@ from main_window.main_widget.json_manager.json_sequence_updater.json_sequence_up
 )
 from .json_ori_calculator import JsonOriCalculator
 
-from .json_sequence_validation_engine import JsonOrientationValidationEngine
+from .json_ori_validation_engine import JsonOrientationValidationEngine
 from .json_start_position_handler import JsonStartPositionHandler
 from .json_sequence_loader_saver import JsonSequenceLoaderSaver
 from .json_special_placement_handler import JsonSpecialPlacementHandler

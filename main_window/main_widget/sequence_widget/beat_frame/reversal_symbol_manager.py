@@ -4,74 +4,72 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsTextItem
 from PyQt6.QtGui import QFont, QColor
 
+from data.constants import HEX_BLUE, HEX_RED
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.beat_frame.beat import BeatView
-
+    from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 class ReversalSymbolManager:
-    def __init__(self, beat_view: "BeatView"):
-        self.beat_view = beat_view
-        self.scene = beat_view.scene()
+    def __init__(self, pictograph: "BasePictograph"):
+        self.pictograph = pictograph
         self.reversal_items = []
 
     def add_reversal_symbols(self):
         # Remove existing reversal symbols if any
         self.remove_reversal_symbols()
 
-        beat = self.beat_view.beat
-        if not beat:
+        if not self.pictograph:
             return
 
         reversal_items = []
-        if beat.blue_reversal and beat.red_reversal:
+        if self.pictograph.blue_reversal and self.pictograph.red_reversal:
             # Both hands reversed
             # Create two 'R's stacked vertically
-            red_R = self._create_reversal_text_item("R", color="#ED1C24")
-            blue_R = self._create_reversal_text_item("R", color="#2E3192")
+            red_R = self._create_reversal_text_item('R', color=HEX_RED)
+            blue_R = self._create_reversal_text_item('R', color=HEX_BLUE)
 
-            # Position them to the left of the grid
-            total_height = (
-                red_R.boundingRect().height() + blue_R.boundingRect().height()
-            )
-            # Decide the x position to the left of the grid
+            # Position them appropriately (adjust positions as needed)
+            total_height = red_R.boundingRect().height() + blue_R.boundingRect().height()
             x_position = 40  # Adjust as needed
+            center_y = self.pictograph.height() / 2
 
-            self.scene = self.beat_view.beat
-            red_R.setPos(x_position, (self.scene.height() - total_height) / 2)
+            red_R.setPos(
+                x_position,
+                center_y - total_height / 2
+            )
             blue_R.setPos(
                 x_position,
-                (self.scene.height() - total_height) / 2
-                + red_R.boundingRect().height(),
+                center_y - total_height / 2 + red_R.boundingRect().height()
             )
 
-            self.scene.addItem(red_R)
-            self.scene.addItem(blue_R)
+            self.pictograph.addItem(red_R)
+            self.pictograph.addItem(blue_R)
             reversal_items.extend([red_R, blue_R])
 
-        elif beat.blue_reversal or beat.red_reversal:
+        elif self.pictograph.blue_reversal or self.pictograph.red_reversal:
             # Only one hand reversed
-            color = "blue" if beat.blue_reversal else "red"
-            single_R = self._create_reversal_text_item("R", color=color)
+            color = HEX_BLUE if self.pictograph.blue_reversal else HEX_RED
+            single_R = self._create_reversal_text_item('R', color=color)
 
             # Position the 'R' to the left of the grid
-            x_position = 25  # Adjust as needed
+            x_position = 40  # Adjust as needed
 
             single_R.setPos(
-                x_position, (self.scene.height() - single_R.boundingRect().height()) / 2
+                x_position,
+                (self.pictograph.height() - single_R.boundingRect().height()) / 2
             )
 
-            self.scene.addItem(single_R)
+            self.pictograph.addItem(single_R)
             reversal_items.append(single_R)
 
         # Store the reversal items for later removal
         self.reversal_items = reversal_items
 
-    def remove_reversal_symbols(self) -> None:
+    def remove_reversal_symbols(self):
         for item in self.reversal_items:
-            self.scene.removeItem(item)
+            self.pictograph.removeItem(item)
         self.reversal_items = []
 
-    def _create_reversal_text_item(self, text, color) -> QGraphicsTextItem:
+    def _create_reversal_text_item(self, text, color):
         text_item = QGraphicsTextItem(text)
         font = QFont("Georgia", 60, QFont.Weight.Bold)
         text_item.setFont(font)

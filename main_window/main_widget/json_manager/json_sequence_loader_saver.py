@@ -146,3 +146,9 @@ class JsonSequenceLoaderSaver:
         if sequence:
             return last_pictograph_dict["blue_attributes"]["end_ori"]
         return 0
+
+    def load_last_beat_dict(self) -> Dict:
+        sequence = self.load_current_sequence_json()
+        if sequence:
+            return sequence[-1]
+        return {}

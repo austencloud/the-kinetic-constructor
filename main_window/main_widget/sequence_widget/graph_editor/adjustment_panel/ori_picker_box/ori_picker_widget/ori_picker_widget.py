@@ -134,7 +134,7 @@ class OriPickerWidget(QWidget):
     def set_orientation(self, orientation):
         if not self.option_picker:
             self.option_picker = (
-                self.ori_picker_box.graph_editor.sequence_widget.main_widget.top_builder_widget.sequence_builder.manual_builder.option_picker
+                self.ori_picker_box.graph_editor.sequence_widget.main_widget.manual_builder.option_picker
             )
         self.current_orientation_index = self.orientations.index(orientation)
         self.ori_display_label.setText(orientation)

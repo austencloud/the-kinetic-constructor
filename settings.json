@@ -1,7 +1,7 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Aurora",
+        "background_type": "Bubbles",
         "grow_sequence": true,
         "current_tab": "build",
         "grid_mode": "diamond"
@@ -37,7 +37,7 @@
         "glyph_visibility": {
             "VTG": false,
             "TKA": true,
-            "Elemental": true,
+            "Elemental": false,
             "EndPosition": false
         },
         "grid_visibility": {
@@ -88,7 +88,7 @@
             "current_auto_builder": "freeform"
         },
         "manual_builder": {
-            "filters": null
+            "filters": "continuous"
         },
         "last_used_builder": "manual"
     },

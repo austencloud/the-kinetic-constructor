@@ -16,16 +16,13 @@ from placement_managers.prop_placement_manager.prop_placement_manager import (
     PropPlacementManager,
 )
 
-
 from .components.elemental_glyph.elemental_glyph import ElementalGlyph
 from .components.start_to_end_pos_glyph.start_to_end_pos_glyph import (
     StartToEndPosGlyph,
 )
 from .components.tka_glyph.tka_glyph import TKA_Glyph
 from .components.vtg_glyph.vtg_glyph import VTG_Glyph
-from .components.pictograph_container import (
-    PictographContainer,
-)
+from .components.pictograph_container import PictographContainer
 
 from .components.pictograph_attr_manager import PictographAttrManager
 from .components.pictograph_checker import PictographChecker
@@ -41,11 +38,9 @@ from .components.pictograph_initializer import PictographInitializer
 
 
 if TYPE_CHECKING:
-
-    from main_window.main_widget.top_builder_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
+    from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
         OptionPickerScrollArea,
     )
-
     from main_window.main_widget.main_widget import MainWidget
 
 
@@ -87,6 +82,8 @@ class BasePictograph(QGraphicsScene):
     is_blank: bool = False
     disable_gold_overlay: bool = False
     quiz_mode: bool = False
+    blue_reversal = False
+    red_reversal = False
 
     def __init__(
         self,

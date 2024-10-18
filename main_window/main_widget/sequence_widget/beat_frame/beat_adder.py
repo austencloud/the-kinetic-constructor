@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import ReversalDetector
+
 if TYPE_CHECKING:
     from main_window.main_widget.sequence_widget.beat_frame.beat import (
         Beat,
@@ -32,6 +34,11 @@ class BeatAdder:
         next_beat_index = self.beat_frame.get.next_available_beat()
 
         if next_beat_index is not None and not self.beats[next_beat_index].is_filled:
+            # Detect reversals
+            last_beat_dict = self.json_manager.loader_saver.load_last_beat_dict()
+            reversal_info = ReversalDetector.detect_reversal(last_beat_dict, new_beat.pictograph_dict)
+            new_beat.blue_reversal = reversal_info.get('blue_reversal', False)
+            new_beat.red_reversal = reversal_info.get('red_reversal', False)
             self.beats[next_beat_index].set_beat(new_beat, next_beat_number)
 
             if grow_sequence and not override_grow_sequence:

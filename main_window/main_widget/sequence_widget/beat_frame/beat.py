@@ -3,7 +3,9 @@ from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem, QMenu, QGraphicsPi
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtGui import QFont, QPainter, QColor, QPixmap, QImage, QAction
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import ReversalSymbolManager
+from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import (
+    ReversalSymbolManager,
+)
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
@@ -18,6 +20,7 @@ class Beat(BasePictograph):
     ):
         super().__init__(beat_frame.main_widget)
         self.main_widget = beat_frame.main_widget
+        self.reversal_symbol_manager = ReversalSymbolManager(self)
         self.view: "BeatView" = None
         self.beat_number_item: QGraphicsTextItem = None
         self.duration = duration
@@ -26,6 +29,7 @@ class Beat(BasePictograph):
         self.beat_number = 0  # Track the actual beat number as an integer
         self.blue_reversal = False
         self.red_reversal = False
+
     def get_beat_number_text(self) -> str:
         """
         Return the beat number or range of numbers if this beat spans multiple beats.
@@ -52,7 +56,6 @@ class BeatView(QGraphicsView):
         self.is_start = False
         self.is_end = False
         self.is_placeholder = False
-        self.reversal_symbol_manager = ReversalSymbolManager(self)
         self.setContentsMargins(0, 0, 0, 0)
         self.setStyleSheet("border: none; border: 1px solid black;")
         self.blank_beat = Beat(self.beat_frame)
@@ -117,8 +120,7 @@ class BeatView(QGraphicsView):
         self.remove_beat_number()
         self.add_beat_number()
 
-        self.reversal_symbol_manager.add_reversal_symbols()
-
+        self.beat.reversal_symbol_manager.add_reversal_symbols()
 
     def add_beat_number(self, beat_number_text=None) -> None:
         """
