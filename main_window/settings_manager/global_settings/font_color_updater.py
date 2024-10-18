@@ -1,16 +1,18 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget
 
+from main_window.main_widget.sequence_builder.auto_builder.circular.circular_auto_builder_frame import (
+    CircularAutoBuilderFrame,
+)
+from main_window.main_widget.sequence_builder.auto_builder.freeform.freeform_auto_builder_frame import (
+    FreeformAutoBuilderFrame,
+)
+
 if TYPE_CHECKING:
     from ...main_widget.learn_widget.base_classes.base_lesson_widget.base_lesson_widget import (
         BaseLessonWidget,
     )
-    from ...main_widget.top_builder_widget.sequence_builder.auto_builder.circular.circular_auto_builder_frame import (
-        CircularAutoBuilderFrame,
-    )
-    from ...main_widget.top_builder_widget.sequence_builder.auto_builder.freeform.freeform_auto_builder_frame import (
-        FreeformAutoBuilderFrame,
-    )
+
     from ...main_widget.main_widget import MainWidget
     from splash_screen import SplashScreen
 
@@ -19,9 +21,9 @@ class FontColorUpdater:
     def update_main_widget_font_colors(self, widget, bg_type):
 
         font_color = self.get_font_color(bg_type)
-        self._apply_widget_colors(widget, font_color)
+        self._apply_main_widget_colors(widget, font_color)
 
-    def update_splash_screen_font_colors(
+    def apply_splash_screen_font_colors(
         self, splash_screen: "SplashScreen", bg_type: str
     ) -> None:
         font_color = self.get_font_color(bg_type)
@@ -49,12 +51,22 @@ class FontColorUpdater:
         for widget in widgets:
             self._apply_font_color(widget, color)
 
-    def _apply_widget_colors(self, main_widget: "MainWidget", font_color: str) -> None:
+    def _apply_main_widget_colors(
+        self, main_widget: "MainWidget", font_color: str
+    ) -> None:
         """Apply font colors to all relevant sections of the main widget."""
+        self._update_menu_bar_widget(main_widget, font_color)
         self._update_sequence_widget(main_widget, font_color)
         self._update_sequence_builder(main_widget, font_color)
         self._update_dictionary_widget(main_widget, font_color)
         self._update_learn_widget(main_widget, font_color)
+
+    def _update_menu_bar_widget(
+        self, main_widget: "MainWidget", font_color: str
+    ) -> None:
+        menu_bar = main_widget.menu_bar_widget
+        for label, _ in menu_bar.sections:
+            self._apply_font_color(label, font_color)
 
     def _update_sequence_widget(
         self, main_widget: "MainWidget", font_color: str
@@ -85,9 +97,11 @@ class FontColorUpdater:
         circular_labels = self._get_circular_builder_labels(
             sequence_generator.circular_builder_frame
         )
+        combo_box_label = [manual_builder.option_picker.combo_box_label]
 
         self._apply_font_colors(
-            manual_labels + freeform_labels + circular_labels, font_color
+            manual_labels + freeform_labels + circular_labels + combo_box_label,
+            font_color,
         )
 
     def _get_freeform_builder_labels(

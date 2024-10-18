@@ -40,11 +40,11 @@ class UserProfileSelector(QWidget):
         layout.addWidget(self.label)
         self.setLayout(layout)
 
-        self.style_widget()
+        # self.style_widget()
 
     def style_widget(self):
-        font_size = 12
-        font = QFont("Arial", font_size)
+        font_size = self.menu_bar_widget.menu_bar_font_size
+        font = QFont("Georgia", font_size)
         self.label.setFont(font)
 
         style_sheet = """
@@ -99,7 +99,7 @@ class UserProfileSelector(QWidget):
         layout.setContentsMargins(5, 5, 5, 5)
 
         font = QFont()
-        font.setPointSize(14)  # Adjust the font size as needed
+        font.setPointSize(self.menu_bar_widget.menu_bar_font_size)
 
         for option in self.options:
             button = QPushButton(option)

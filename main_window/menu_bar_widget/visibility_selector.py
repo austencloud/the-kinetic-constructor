@@ -55,7 +55,7 @@ class VisibilitySelector(ButtonSelector):
 
         # Create checkboxes with larger font
         font = QFont()
-        font.setPointSize(14)  # Adjust the font size as needed
+        font.setPointSize(self.menu_bar_widget.menu_bar_font_size)  # Adjust the font size as needed
 
         for option_text, checked in options.items():
             checkbox = QCheckBox(option_text)

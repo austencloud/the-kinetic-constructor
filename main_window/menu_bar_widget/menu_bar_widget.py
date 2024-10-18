@@ -78,13 +78,13 @@ class MenuBarWidget(QWidget):
         self.layout.addWidget(separator)
         self.separators.append(separator)
 
-
     def resize_menu_bar_widget(self):
+        self.menu_bar_font_size = self.main_widget.width() // 85
         spacing = self.width() // 30
         self.layout.setSpacing(spacing)
         font_size = self.main_widget.height() // 75
         for label in self.labels:
-            font = QFont("Arial", font_size)
+            font = QFont("Georgia", font_size)
             label.setFont(font)
 
         # Style selectors

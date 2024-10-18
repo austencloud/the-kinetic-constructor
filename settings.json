@@ -1,7 +1,7 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Bubbles",
+        "background_type": "Aurora",
         "grow_sequence": true,
         "current_tab": "generate",
         "grid_mode": "diamond"
@@ -15,7 +15,7 @@
         "add_beat_numbers": true
     },
     "user_profile": {
-        "current_user": "Austen Cloud",
+        "current_user": "Doc Womp",
         "user_profiles": {
             "Austen Cloud": {
                 "name": "Austen Cloud",
@@ -58,9 +58,9 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 16,
-                "max_turn_intensity": 1,
-                "sequence_level": 2,
+                "sequence_length": 20,
+                "max_turn_intensity": 0,
+                "sequence_level": 1,
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",
                 "continuous_rotation": true,
@@ -76,7 +76,7 @@
             "freeform_auto_builder": {
                 "sequence_type": "freeform",
                 "sequence_length": 16,
-                "max_turn_intensity": 0,
+                "max_turn_intensity": 1,
                 "sequence_level": 3,
                 "continuous_rotation": true,
                 "selected_letter_types": [
@@ -88,7 +88,7 @@
             "current_auto_builder": "circular"
         },
         "manual_builder": {
-            "filters": "continuous"
+            "filters": "two_reversals"
         },
         "last_used_builder": "manual"
     },

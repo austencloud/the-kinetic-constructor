@@ -63,9 +63,6 @@ class DictionaryWidget(QWidget):
         self.layout.addWidget(self.browser, 5)
         self.setLayout(self.layout)
 
-    # def paintEvent(self, event) -> None:
-    #     painter = QPainter(self)
-    #     self.background_manager.paint_background(self, painter)
 
     def resize_dictionary_widget(self) -> None:
         self.browser.resize_dictionary_browser()
@@ -75,14 +72,6 @@ class DictionaryWidget(QWidget):
         super().resizeEvent(event)
         self.preview_area.resize_preview_area()
 
-    # def showEvent(self, event):
-    #     super().showEvent(event)
-    #     # self.background_manager.start_animation()
-
-    # def hideEvent(self, event):
-    #     super().hideEvent(event)
-    #     if self.background_manager:
-    #         self.background_manager.stop_animation()
 
     def show_initial_section(self):
         current_section = (

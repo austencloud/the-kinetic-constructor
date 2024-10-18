@@ -23,7 +23,7 @@ class ChooseYourStartPosLabel(QLabel):
 
     def set_stylesheet(self) -> None:
         width = self.start_pos_picker.main_widget.width()
-        font_size = int(0.03 * width)
+        font_size = int(0.025 * width)
         self.setFont(QFont("Monotype Corsiva", font_size))
         self.show()
 

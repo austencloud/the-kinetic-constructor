@@ -34,8 +34,8 @@ class BaseSelector(QWidget):
         self.setLayout(layout)
 
     def style_widget(self):
-        font_size = 12
-        font = QFont("Arial", font_size)
+        font_size = self.menu_bar_widget.menu_bar_font_size
+        font = QFont("Georgia", font_size)
         self.widget.setFont(font)
 
         style_sheet = """

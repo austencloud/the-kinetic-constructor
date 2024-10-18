@@ -97,7 +97,7 @@ class GlobalSettings:
                 # main_widget is not set yet; skip updating font colors
                 pass
         else:
-            self.font_color_updater.update_splash_screen_font_colors(widget, bg_type)
+            self.font_color_updater.apply_splash_screen_font_colors(widget, bg_type)
         # Rest of your code remains the same
         background_manager_map = {
             "Starfield": StarfieldBackgroundManager,
