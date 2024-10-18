@@ -3,7 +3,7 @@
         "prop_type": "Staff",
         "background_type": "Aurora",
         "grow_sequence": true,
-        "current_tab": "generate",
+        "current_tab": "build",
         "grid_mode": "diamond"
     },
     "image_export": {
@@ -88,7 +88,7 @@
             "current_auto_builder": "freeform"
         },
         "manual_builder": {
-            "filters": "continuous"
+            "filters": "two_reversals"
         },
         "last_used_builder": "manual"
     },

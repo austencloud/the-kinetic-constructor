@@ -96,19 +96,40 @@ class BeatFramePopulator:
         self.sequence_widget.current_word_label.set_current_word(self.current_word)
 
     def _populate_beats(self):
-        for pictograph_dict in self.current_sequence_json[1:]:
+        previous_beat_dict = None
+        for index, pictograph_dict in enumerate(self.current_sequence_json[1:]):
             if pictograph_dict.get("sequence_start_position"):
                 continue
             if pictograph_dict.get("is_placeholder", False):
                 continue
             else:
+                # Detect reversals
+                reversal_info = self._detect_reversal(previous_beat_dict, pictograph_dict)
+                # Create the beat with reversal information
                 self.sequence_widget.create_new_beat_and_add_to_sequence(
                     pictograph_dict,
                     override_grow_sequence=True,
                     update_word=False,
                     update_level=False,
+                    reversal_info=reversal_info
                 )
+                previous_beat_dict = pictograph_dict
             QApplication.processEvents()
+
+    def _detect_reversal(self, previous_beat_dict, current_beat_dict):
+        if not previous_beat_dict:
+            return {'blue_reversal': False, 'red_reversal': False}
+
+        reversal_info = {'blue_reversal': False, 'red_reversal': False}
+
+        for hand in ['blue_attributes', 'red_attributes']:
+            prev_prop_rot_dir = previous_beat_dict.get(hand, {}).get('prop_rot_dir')
+            curr_prop_rot_dir = current_beat_dict.get(hand, {}).get('prop_rot_dir')
+            if prev_prop_rot_dir and curr_prop_rot_dir:
+                if prev_prop_rot_dir != curr_prop_rot_dir:
+                    reversal_info[f'{hand.split("_")[0]}_reversal'] = True
+
+        return reversal_info
 
     def _finalize_sequence(self):
         last_beat = self.sequence_widget.beat_frame.get.last_filled_beat().beat

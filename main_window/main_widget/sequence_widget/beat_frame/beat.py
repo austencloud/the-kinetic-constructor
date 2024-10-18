@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem, QMenu, QGraphicsPi
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtGui import QFont, QPainter, QColor, QPixmap, QImage, QAction
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import ReversalSymbolManager
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
@@ -23,7 +24,8 @@ class Beat(BasePictograph):
         self.is_placeholder = False
         self.parent_beat = None
         self.beat_number = 0  # Track the actual beat number as an integer
-
+        self.blue_reversal = False
+        self.red_reversal = False
     def get_beat_number_text(self) -> str:
         """
         Return the beat number or range of numbers if this beat spans multiple beats.
@@ -50,6 +52,7 @@ class BeatView(QGraphicsView):
         self.is_start = False
         self.is_end = False
         self.is_placeholder = False
+        self.reversal_symbol_manager = ReversalSymbolManager(self)
         self.setContentsMargins(0, 0, 0, 0)
         self.setStyleSheet("border: none; border: 1px solid black;")
         self.blank_beat = Beat(self.beat_frame)
@@ -101,23 +104,21 @@ class BeatView(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
     def set_beat(self, beat: "Beat", number: int, is_end=False) -> None:
-        """
-        Set the beat and display its number or range.
-        """
         self.beat = beat
         self.beat.view = self
         self.is_filled = True
-        self.beat.beat_number = (
-            number  # Store the actual beat number in the Beat object
-        )
+        self.beat.beat_number = number
         self.is_end = is_end
-        self.part_of_multibeat = self.beat.duration > 1
 
+        self.part_of_multibeat = self.beat.duration > 1
         # Update beat number visually
         self.setScene(self.beat)
         self.resize_beat_view()
         self.remove_beat_number()
         self.add_beat_number()
+
+        self.reversal_symbol_manager.add_reversal_symbols()
+
 
     def add_beat_number(self, beat_number_text=None) -> None:
         """

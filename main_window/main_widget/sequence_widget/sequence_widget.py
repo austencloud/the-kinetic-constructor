@@ -151,11 +151,19 @@ class SequenceWidget(QWidget):
         override_grow_sequence=False,
         update_word=True,
         update_level=True,
+        reversal_info=None
+
     ) -> None:
-        new_beat = Beat(self.beat_frame)
+        new_beat = Beat(self.beat_frame, duration=pictograph_dict.get("duration", 1))
         new_beat.updater.update_pictograph(pictograph_dict)
+        if reversal_info:
+            new_beat.blue_reversal = reversal_info.get('blue_reversal', False)
+            new_beat.red_reversal = reversal_info.get('red_reversal', False)
         self.beat_frame.beat_adder.add_beat_to_sequence(
-            new_beat, override_grow_sequence, update_word, update_level
+            new_beat,
+            override_grow_sequence=override_grow_sequence,
+            update_word=update_word,
+            update_level=update_level
         )
         for motion in new_beat.motions.values():
             if motion.motion_type == FLOAT:
