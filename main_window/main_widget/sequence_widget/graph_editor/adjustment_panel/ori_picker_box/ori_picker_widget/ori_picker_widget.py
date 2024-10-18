@@ -45,7 +45,7 @@ class OriPickerWidget(QWidget):
 
         # References to other components
         self.json_manager = self.ori_picker_box.graph_editor.main_widget.json_manager
-        self.json_validation_engine = self.json_manager.validation_engine
+        self.json_validation_engine = self.json_manager.ori_validation_engine
         self.option_picker = None
         self.beat_frame = self.ori_picker_box.graph_editor.sequence_widget.beat_frame
 

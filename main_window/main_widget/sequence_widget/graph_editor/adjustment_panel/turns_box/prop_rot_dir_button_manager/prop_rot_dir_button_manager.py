@@ -118,7 +118,7 @@ class PropRotDirButtonManager:
         )
 
         # Running the validation engine
-        self.graph_editor.main_widget.json_manager.validation_engine.run(
+        self.graph_editor.main_widget.json_manager.ori_validation_engine.run(
             is_current_sequence=True
         )
 

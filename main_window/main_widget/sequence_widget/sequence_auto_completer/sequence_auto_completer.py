@@ -22,7 +22,7 @@ class SequenceAutoCompleter:
         self.beat_frame = sequence_widget.beat_frame
         self.json_manager = self.beat_frame.json_manager
         self.main_widget = sequence_widget.main_widget
-        self.validation_engine = self.main_widget.json_manager.validation_engine
+        self.validation_engine = self.main_widget.json_manager.ori_validation_engine
         self.rotated_permutation_executor = RotatedPermutationExecuter(self)
         self.mirrored_permutation_executor = MirroredPermutationExecutor(self, False)
 

@@ -19,7 +19,7 @@ class TurnsAdjustmentManager(QObject):
         self.beat_frame = self.graph_editor.sequence_widget.beat_frame
         self.main_widget = self.graph_editor.main_widget
         self.json_manager = self.main_widget.json_manager
-        self.json_validation_engine = self.json_manager.validation_engine
+        self.json_validation_engine = self.json_manager.ori_validation_engine
         self.color = self.turns_widget.turns_box.color
 
         self.turns_adjusted.connect(self.beat_frame.updater.update_beats_from_json)

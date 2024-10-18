@@ -35,7 +35,7 @@ class BaseAutoBuilder:
         self.sequence_widget: "SequenceWidget" = None
 
         self.main_widget = auto_builder_frame.sequence_generator_tab.main_widget
-        self.validation_engine = self.main_widget.json_manager.validation_engine
+        self.validation_engine = self.main_widget.json_manager.ori_validation_engine
         self.json_manager = self.main_widget.json_manager
         self.ori_calculator = self.main_widget.json_manager.ori_calculator
 
