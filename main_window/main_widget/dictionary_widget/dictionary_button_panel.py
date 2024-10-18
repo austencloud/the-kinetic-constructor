@@ -111,9 +111,10 @@ class DictionaryButtonPanel(QWidget):
         if not hasattr(self, "sequence_populator"):
             self.sequence_populator = self.dictionary_widget.sequence_populator
         if self.preview_area.sequence_json:
-            self.preview_area.main_widget.navigation_widget.set_active_tab(
-                self.preview_area.main_widget.build_tab_index
-            )
+            self.preview_area.main_widget.navigation_widget.tab_buttons[
+                "Build ⚒️"
+            ].click()
+            QApplication.processEvents()
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
             self.sequence_populator.load_sequence_from_json(
                 self.preview_area.sequence_json

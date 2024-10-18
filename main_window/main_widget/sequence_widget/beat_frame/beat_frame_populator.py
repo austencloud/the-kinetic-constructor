@@ -105,7 +105,7 @@ class BeatFramePopulator:
                 continue
             else:
                 # Use ReversalDetector
-                reversal_info = ReversalDetector.detect_reversal(previous_beat_dict, pictograph_dict)
+                reversal_info = ReversalDetector.detect_reversal(self.current_sequence_json, pictograph_dict)
                 # Create the beat with reversal information
                 self.sequence_widget.create_new_beat_and_add_to_sequence(
                     pictograph_dict,
@@ -117,20 +117,6 @@ class BeatFramePopulator:
                 previous_beat_dict = pictograph_dict
             QApplication.processEvents()
 
-    def _detect_reversal(self, previous_beat_dict, current_beat_dict):
-        if not previous_beat_dict:
-            return {'blue_reversal': False, 'red_reversal': False}
-
-        reversal_info = {'blue_reversal': False, 'red_reversal': False}
-
-        for hand in ['blue_attributes', 'red_attributes']:
-            prev_prop_rot_dir = previous_beat_dict.get(hand, {}).get('prop_rot_dir')
-            curr_prop_rot_dir = current_beat_dict.get(hand, {}).get('prop_rot_dir')
-            if prev_prop_rot_dir and curr_prop_rot_dir:
-                if prev_prop_rot_dir != curr_prop_rot_dir:
-                    reversal_info[f'{hand.split("_")[0]}_reversal'] = True
-
-        return reversal_info
 
     def _finalize_sequence(self):
         last_beat = self.sequence_widget.beat_frame.get.last_filled_beat().beat

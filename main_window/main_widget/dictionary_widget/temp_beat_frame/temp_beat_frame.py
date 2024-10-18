@@ -148,16 +148,10 @@ class TempBeatFrame(BaseBeatFrame):
         if self.manual_builder.start_pos_picker.isVisible():
             self.manual_builder.transition_to_sequence_building()
 
-        sequence = self.json_manager.loader_saver.load_current_sequence_json()
-
         scroll_area = self.manual_builder.option_picker.scroll_area
         scroll_area.hide_all_pictographs()
-        next_options = self.manual_builder.option_picker.option_getter.get_next_options(
-            sequence
-        )
 
-        scroll_area.add_and_display_relevant_pictographs(next_options)
-        self.manual_builder.option_picker.resize_option_picker()
+
 
     def populate_sequence(self, pictograph_dict: dict) -> None:
         pictograph = Beat(self)

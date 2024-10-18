@@ -35,8 +35,8 @@ class BeatAdder:
 
         if next_beat_index is not None and not self.beats[next_beat_index].is_filled:
             # Detect reversals
-            last_beat_dict = self.json_manager.loader_saver.load_last_beat_dict()
-            reversal_info = ReversalDetector.detect_reversal(last_beat_dict, new_beat.pictograph_dict)
+            sequence_so_far = self.json_manager.loader_saver.load_current_sequence_json()
+            reversal_info = ReversalDetector.detect_reversal(sequence_so_far, new_beat.pictograph_dict)
             new_beat.blue_reversal = reversal_info.get('blue_reversal', False)
             new_beat.red_reversal = reversal_info.get('red_reversal', False)
             self.beats[next_beat_index].set_beat(new_beat, next_beat_number)

@@ -23,13 +23,16 @@ class GlyphVisibilityManager:
             pictograph.tka_glyph.setVisible(self.visibility_states[glyph_type])
         elif glyph_type == "Elemental":
             pictograph.elemental_glyph.setVisible(self.visibility_states[glyph_type])
-        elif glyph_type == "EndPosition":
+        elif glyph_type == "Positions":
             pictograph.start_to_end_pos_glyph.setVisible(
                 self.visibility_states[glyph_type]
             )
+        elif glyph_type =="Reversals":
+            pictograph.blue_reversal_symbol.setVisible(self.visibility_states[glyph_type])
+            pictograph.red_reversal_symbol.setVisible(self.visibility_states[glyph_type])
 
     def apply_current_visibility_settings(self, pictograph: "BasePictograph"):
-        for glyph_type in ["VTG", "TKA", "Elemental", "EndPosition"]:
+        for glyph_type in ["VTG", "TKA", "Elemental", "Positions", "Reversals"]:
             visibility = self.get_glyph_visibility(glyph_type)
             self.visibility_states[glyph_type] = visibility
 
@@ -60,8 +63,12 @@ class GlyphVisibilityManager:
             pictograph.vtg_glyph.setVisible(False)
         elif glyph_type == "Elemental":
             pictograph.elemental_glyph.setVisible(False)
-        elif glyph_type == "EndPosition":
+        elif glyph_type == "Positions":
             pictograph.start_to_end_pos_glyph.setVisible(False)
+        elif glyph_type == "Reversals":
+            pictograph.blue_reversal_symbol.setVisible(False)
+            pictograph.red_reversal_symbol.setVisible(False)
+
 
     def apply_glyph_visibility(self) -> None:
         for pictograph_list in self.main_window.main_widget.pictograph_cache.values():

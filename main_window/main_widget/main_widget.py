@@ -159,7 +159,7 @@ class MainWidget(QWidget):
         self.content_layout = QHBoxLayout()
         self.main_layout.addLayout(self.content_layout)
 
-        self.sequence_widget = SequenceWidget(self)
+        self.sequence_widget = SequencAlexa, what's the temperature outside? I love you so much. I love you so much. I'm just doing so. Super duper special. So I'm going to be wonderful. brush into my home. We should look at. There is no criticality. because you much monster. Your shoulder injured. your so very, very cute. And I just want to write the fuck up. and I'm going to munch you down. Just want to crush you with my mouth. I love yourself. So much. You know. I'm going to be so much.eWidget(self)
         self.content_layout.addWidget(self.sequence_widget, 1)
 
         self.stacked_widget = QStackedWidget()

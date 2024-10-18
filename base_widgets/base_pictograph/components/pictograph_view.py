@@ -34,7 +34,6 @@ class PictographView(QGraphicsView):
         self._touchTimeout.setSingleShot(True)
         self._touchTimeout.timeout.connect(self._resetTouchState)
         self._touchTimeout.setInterval(100)  # Adjust as needed
-        self.reversal_symbol_manager = ReversalSymbolManager(self.pictograph)
 
     def resize_pictograph_view(self) -> None:
         view_width = self.calculate_view_width()

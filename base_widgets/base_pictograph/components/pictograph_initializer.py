@@ -1,7 +1,12 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QPointF, QPoint, Qt
+from PyQt6.QtGui import QFont
+from PyQt6.QtWidgets import QGraphicsTextItem
 from Enums.MotionAttributes import Location
 from data.prop_class_mapping import prop_class_mapping
+from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import (
+    ReversalSymbolManager,
+)
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from objects.motion.motion import Motion
@@ -41,9 +46,15 @@ class PictographInitializer:
         self.pictograph.elemental_glyph = self.init_elemental_glyph()
         self.pictograph.start_to_end_pos_glyph = self.init_start_to_end_pos_glyph()
         # set the nonradial points visibility based on user settings
+        self.init_reversal_symbols()
+
         self.set_nonradial_points_visibility(
             self.pictograph.main_widget.main_window.settings_manager.visibility.grid_visibility_manager.load_nonradial_points_visibility_settings()
         )
+
+    def init_reversal_symbols(self) -> tuple[QGraphicsTextItem, QGraphicsTextItem]:
+        self.reversal_symbol_manager = ReversalSymbolManager(self.pictograph)
+        self.reversal_symbol_manager.update_reversal_symbols()
 
     def set_nonradial_points_visibility(self, visible: bool) -> None:
         self.pictograph.grid.toggle_non_radial_points_visibility(visible)

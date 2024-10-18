@@ -1,7 +1,7 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Bubbles",
+        "background_type": "Aurora",
         "grow_sequence": true,
         "current_tab": "build",
         "grid_mode": "diamond"
@@ -37,8 +37,10 @@
         "glyph_visibility": {
             "VTG": false,
             "TKA": true,
-            "Elemental": false,
-            "EndPosition": false
+            "Elemental": true,
+            "EndPosition": false,
+            "Reversals": true,
+            "Positions": false
         },
         "grid_visibility": {
             "non_radial_points": false
@@ -46,8 +48,10 @@
     },
     "dictionary": {
         "sort_method": "sequence_length",
-        "current_section": "filter_choice",
-        "current_filter": null
+        "current_section": "browser",
+        "current_filter": {
+            "starting_position": "gamma"
+        }
     },
     "sequence_layout": {
         "grow_sequence": true,
@@ -85,7 +89,7 @@
                     "Dual-Dash"
                 ]
             },
-            "current_auto_builder": "freeform"
+            "current_auto_builder": "circular"
         },
         "manual_builder": {
             "filters": "continuous"

@@ -26,7 +26,7 @@ class NavigationWidget(QWidget):
         self.container_layout = QVBoxLayout(self.container_frame)
         self.container_layout.setContentsMargins(0, 0, 0, 0)
 
-        self.tab_buttons: list[QPushButton] = []
+        self.tab_buttons: dict[str, QPushButton] = {}
         self.tab_layout = QHBoxLayout()
         self.tab_layout.addStretch(1)
         self.tab_names = ["Build ⚒️", "Generate 🤖", "Browse 🔍", "Learn 🧠"]
@@ -35,7 +35,7 @@ class NavigationWidget(QWidget):
             button = QPushButton(name)
             button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
             button.clicked.connect(lambda _, idx=index: self.on_button_clicked(idx))
-            self.tab_buttons.append(button)
+            self.tab_buttons[name] = button
             self.tab_layout.addWidget(button)
         self.tab_layout.addStretch(1)
 
@@ -46,14 +46,13 @@ class NavigationWidget(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.container_frame)
 
-
     def on_button_clicked(self, index):
         self.set_active_tab(index)
         self.tab_changed.emit(index)
 
     def set_active_tab(self, index):
         self.current_index = index
-        for idx, button in enumerate(self.tab_buttons):
+        for idx, button in self.tab_buttons.items():
             self.set_button_appearance(index, idx, button)
 
     def set_button_appearance(self, index, idx, button: "QPushButton"):

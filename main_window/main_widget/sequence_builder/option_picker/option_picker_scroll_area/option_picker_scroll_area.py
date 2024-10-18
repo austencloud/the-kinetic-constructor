@@ -8,14 +8,18 @@ from data.constants import BLUE, RED
 
 from base_widgets.base_picker_scroll_area import BasePickerScrollArea
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import ReversalDetector
+from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
+    ReversalDetector,
+)
 from .option_picker_pictograph_factory import OptionPickerPictographFactory
 from .option_picker_section_manager import OptionPickerSectionManager
 from .option_picker_display_manager import OptionPickerDisplayManager
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_widget import OptionPickerSectionWidget
+    from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_widget import (
+        OptionPickerSectionWidget,
+    )
 
     from ..option_picker import OptionPicker
 
@@ -57,7 +61,6 @@ class OptionPickerScrollArea(BasePickerScrollArea):
         for pictograph in self.pictograph_cache.values():
             pictograph.view.hide()
 
-
     def add_and_display_relevant_pictographs(self, next_options: list[dict]) -> None:
         if self.disabled:
             return
@@ -77,12 +80,19 @@ class OptionPickerScrollArea(BasePickerScrollArea):
             pictograph.updater.update_pictograph(pictograph_dict)
 
             # Detect reversals
-            reversal_info = ReversalDetector.detect_reversal(last_beat_dict, pictograph_dict)
-            pictograph.blue_reversal = reversal_info.get('blue_reversal', False)
-            pictograph.red_reversal = reversal_info.get('red_reversal', False)
+            sequence_so_far = (
+                self.json_manager.loader_saver.load_current_sequence_json()
+            )
+            reversal_info = ReversalDetector.detect_reversal(
+                sequence_so_far, pictograph_dict
+            )
+            pictograph.blue_reversal = reversal_info.get("blue_reversal", False)
+            pictograph.red_reversal = reversal_info.get("red_reversal", False)
+
 
             # Update the view to display reversal symbols
-            pictograph.view.reversal_symbol_manager.add_reversal_symbols()
+            pictograph.reversal_symbol_manager.update_reversal_symbols()
+            pictograph.view.update()
 
         self.display_manager.order_and_display_pictographs()
         self.layout.update()

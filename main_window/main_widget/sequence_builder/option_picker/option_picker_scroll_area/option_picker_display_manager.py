@@ -36,6 +36,8 @@ class OptionPickerDisplayManager:
             section.pictograph_frame.layout.addWidget(pictograph.view, row, col)
             pictograph.view.resize_pictograph_view()
             pictograph.view.show()
+            # hide or show the reversal symbols depending on the context
+            pictograph.reversal_symbol_manager.update_reversal_symbols()
 
     def remove_pictograph(self, pictograph_key: str) -> None:
         pictograph_to_remove: BasePictograph = self.scroll_area.pictograph_cache.pop(

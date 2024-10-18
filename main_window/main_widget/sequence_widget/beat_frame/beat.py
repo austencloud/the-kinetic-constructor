@@ -120,7 +120,7 @@ class BeatView(QGraphicsView):
         self.remove_beat_number()
         self.add_beat_number()
 
-        self.beat.reversal_symbol_manager.add_reversal_symbols()
+        self.beat.reversal_symbol_manager.update_reversal_symbols()
 
     def add_beat_number(self, beat_number_text=None) -> None:
         """

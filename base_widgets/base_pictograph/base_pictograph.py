@@ -1,10 +1,11 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem
+from PyQt6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QGraphicsTextItem
 from Enums.Enums import Letter, OpenCloseStates, SpecificPosition, VTG_Modes
 from Enums.MotionAttributes import Location
 
 from Enums.PropTypes import PropType
 from Enums.letters import LetterType
+from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import ReversalSymbolManager
 from objects.arrow.arrow import Arrow
 from objects.grid import Grid
 from objects.motion.motion import Motion
@@ -83,7 +84,9 @@ class BasePictograph(QGraphicsScene):
     disable_gold_overlay: bool = False
     quiz_mode: bool = False
     blue_reversal = False
+    blue_reversal_symbol: "QGraphicsTextItem" = None
     red_reversal = False
+    red_reversal_symbol: "QGraphicsTextItem" = None
 
     def __init__(
         self,
@@ -105,3 +108,4 @@ class BasePictograph(QGraphicsScene):
         self.initializer.init_all_components()
         self.prop_placement_manager = PropPlacementManager(self)
         self.attr_manager = PictographAttrManager(self)
+        self.reversal_symbol_manager = ReversalSymbolManager(self)

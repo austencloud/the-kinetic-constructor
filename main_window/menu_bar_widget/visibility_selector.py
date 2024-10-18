@@ -46,16 +46,18 @@ class VisibilitySelector(ButtonSelector):
         layout.setContentsMargins(5, 5, 5, 5)
 
         # Define options
-        glyph_types = ["TKA", "VTG", "Elemental", "EndPosition"]
+        glyph_types = ["TKA", "VTG", "Elemental", "Positions", "Reversals"]
         options = {
-            f"{glyph} Glyph": self.glyph_visibility_manager.get_glyph_visibility(glyph)
+            f"{glyph}": self.glyph_visibility_manager.get_glyph_visibility(glyph)
             for glyph in glyph_types
         }
         options["Non-Radial Points"] = self.grid_visibility_manager.non_radial_visible
 
         # Create checkboxes with larger font
         font = QFont()
-        font.setPointSize(self.menu_bar_widget.menu_bar_font_size)  # Adjust the font size as needed
+        font.setPointSize(
+            self.menu_bar_widget.menu_bar_font_size
+        )  # Adjust the font size as needed
 
         for option_text, checked in options.items():
             checkbox = QCheckBox(option_text)
@@ -78,6 +80,5 @@ class VisibilitySelector(ButtonSelector):
         is_checked = state == Qt.CheckState.Checked.value
         if option == "Non-Radial Points":
             self.grid_visibility_manager.set_non_radial_visibility(is_checked)
-        elif option.endswith(" Glyph"):
-            glyph = option[:-6]  # Remove ' Glyph' from the option text
-            self.glyph_visibility_manager.set_glyph_visibility(glyph, is_checked)
+        else:
+            self.glyph_visibility_manager.set_glyph_visibility(option, is_checked)
