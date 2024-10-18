@@ -45,7 +45,7 @@ class GridModeSelector(QWidget):
         self.style_widget()
 
     def style_widget(self):
-        font_size = max(self.menu_bar_widget.height() // 4, 12)
+        font_size = 12
         font = QFont("Arial", font_size)
         self.label.setFont(font)
 

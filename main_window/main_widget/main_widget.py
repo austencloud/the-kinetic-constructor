@@ -75,10 +75,10 @@ class MainWidget(QWidget):
 
         self.splash_screen.update_progress(100, "Initialization complete!")
         QTimer.singleShot(0, self.load_state)
-        self.paint_timer = QTimer(self)
-        self.paint_timer.timeout.connect(
-            lambda: self.paintEvent(QPaintEvent(self.rect()))
-        )
+        # self.paint_timer = QTimer(self)
+        # self.paint_timer.timeout.connect(
+        #     lambda: self.paintEvent(QPaintEvent(self.rect()))
+        # )
 
     def _initialize_managers(self):
         """Setup all the managers and helper components."""
@@ -181,6 +181,22 @@ class MainWidget(QWidget):
         self.dictionary_tab_index = 2
         self.learn_tab_index = 3
 
+        self.current_tab = (
+            self.main_window.settings_manager.global_settings.get_current_tab()
+        )
+        if self.current_tab == "build":
+            self.navigation_widget.on_button_clicked(self.build_tab_index)
+            self.stacked_widget.setCurrentIndex(self.build_tab_index)
+        elif self.current_tab == "generate":
+            self.navigation_widget.on_button_clicked(self.generate_tab_index)
+            self.stacked_widget.setCurrentIndex(self.generate_tab_index)
+        elif self.current_tab == "dictionary":
+            self.navigation_widget.on_button_clicked(self.dictionary_tab_index)
+            self.stacked_widget.setCurrentIndex(self.dictionary_tab_index)
+        elif self.current_tab == "learn":
+            self.navigation_widget.on_button_clicked(self.learn_tab_index)
+            self.stacked_widget.setCurrentIndex(self.learn_tab_index)
+
     def _setup_special_placements(self) -> None:
         self.special_placements: dict[
             str, dict[str, dict[str, dict[str, list[int]]]]
@@ -244,6 +260,15 @@ class MainWidget(QWidget):
         self.navigation_widget.resize_navigation_widget()
         self.menu_bar_widget.resize_menu_bar_widget()
 
+        if self.current_tab == "build":
+            self.manual_builder.resize_manual_builder()
+        elif self.current_tab == "generate":
+            self.sequence_generator.resize_sequence_generator()
+        elif self.current_tab == "dictionary":
+            self.dictionary_widget.resize_dictionary_widget()
+        elif self.current_tab == "learn":
+            self.learn_widget.resize_learn_widget()
+
     def apply_background(self):
         self.background_manager = (
             self.main_window.settings_manager.global_settings.setup_background_manager(
@@ -251,7 +276,7 @@ class MainWidget(QWidget):
             )
         )
         self.background_manager.update_required.connect(self.update)
-
+        self.background_manager.start_animation()
     def closeEvent(self, event: QCloseEvent):
         self.save_state()
         event.accept()

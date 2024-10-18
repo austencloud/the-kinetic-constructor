@@ -74,7 +74,7 @@ class ManualBuilderWidget(QFrame):
         self.start_pos_picker.resize_start_pos_picker()
         self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
         self.option_picker.resize_option_picker()
-        pass
+        # pass
 
     def render_and_store_pictograph(
         self, pictograph_dict: dict, sequence

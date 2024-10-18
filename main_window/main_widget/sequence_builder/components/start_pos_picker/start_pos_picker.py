@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout
+
 from .start_pos_picker_variations_button import StartPosVariationsButton
 from .start_pos_pictograph_frame import StartPosPickerPictographFrame
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
@@ -7,9 +8,7 @@ from .start_pos_manager import StartPosManager
 from .choose_your_start_pos_label import ChooseYourStartPosLabel
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_builder.manual_builder import (
-        ManualBuilderWidget,
-    )
+    from main_window.main_widget.sequence_builder.manual_builder import ManualBuilderWidget
 
 
 class StartPosPicker(QWidget):

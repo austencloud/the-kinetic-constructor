@@ -78,7 +78,6 @@ class StartPosManager(QObject):
     def add_start_pos_to_sequence(
         self, clicked_start_option: BasePictograph, event: QWidget = None
     ) -> None:
-
         """Handle the start position click event."""
         self.sequence_widget = self.main_widget.sequence_widget
         start_position_beat = StartPositionBeat(
@@ -93,9 +92,7 @@ class StartPosManager(QObject):
             start_position_beat
         )
         self.manual_builder.last_beat = start_position_beat
-        beat_frame = (
-            self.sequence_widget.beat_frame
-        )
+        beat_frame = self.sequence_widget.beat_frame
         start_pos_view = beat_frame.start_pos_view
         beat_frame.selection_overlay.select_beat(start_pos_view)
 
@@ -107,20 +104,6 @@ class StartPosManager(QObject):
     def hide_start_positions(self) -> None:
         for start_position_pictograph in self.start_options.values():
             start_position_pictograph.view.hide()
-
-    def resize_start_position_pictographs(self) -> None:
-        spacing = 10
-        for start_option in self.start_options.values():
-            view_width = int(
-                (self.start_pos_frame.start_pos_picker.width() // 4) - spacing
-            )
-            start_option.view.setFixedSize(view_width, view_width)
-            start_option.view.view_scale = view_width / start_option.width()
-            start_option.view.resetTransform()
-            start_option.view.scale(
-                start_option.view.view_scale, start_option.view.view_scale
-            )
-            start_option.container.styled_border_overlay.resize_styled_border_overlay()
 
     def convert_current_sequence_json_entry_to_start_pos_pictograph(
         self, start_pos_entry
@@ -153,9 +136,7 @@ class StartPosManager(QObject):
                 pictograph_dict["red_attributes"]["start_ori"] = start_pos_data[
                     "red_attributes"
                 ]["end_ori"]
-                pictograph_factory = (
-                    self.main_widget.sequence_widget.pictograph_factory
-                )
+                pictograph_factory = self.main_widget.sequence_widget.pictograph_factory
                 pictograph_key = (
                     self.main_widget.pictograph_key_generator.generate_pictograph_key(
                         pictograph_dict
@@ -241,3 +222,18 @@ class StartPosManager(QObject):
         pictograph = BasePictograph(self.main_widget)
         pictograph.updater.update_pictograph(pictograph_dict)
         return pictograph
+
+    def resize_start_position_pictographs(self) -> None:
+        spacing = 10
+        for start_option in self.start_options.values():
+            view_width = int(
+                (self.start_pos_frame.start_pos_picker.main_widget.width() // 8)
+                - spacing
+            )
+            start_option.view.setFixedSize(view_width, view_width)
+            start_option.view.view_scale = view_width / start_option.width()
+            start_option.view.resetTransform()
+            start_option.view.scale(
+                start_option.view.view_scale, start_option.view.view_scale
+            )
+            start_option.container.styled_border_overlay.resize_styled_border_overlay()

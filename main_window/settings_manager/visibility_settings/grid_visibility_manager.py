@@ -64,14 +64,14 @@ class GridVisibilityManager:
                 )
 
         # iterate over the advanced start pos picker pictographs too
-        sequence_builder = (
-            self.settings_manager.main_window.main_widget.top_builder_widget.sequence_builder
+        manual_builder = (
+            self.settings_manager.main_window.main_widget.manual_builder
         )
         for (
             start_letter,
             pictograph_list,
         ) in (
-            sequence_builder.manual_builder.advanced_start_pos_picker.start_pos_cache.items()
+            manual_builder.advanced_start_pos_picker.start_pos_cache.items()
         ):
             for start_pos in pictograph_list:
                 if hasattr(start_pos, "grid"):

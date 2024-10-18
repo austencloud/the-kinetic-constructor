@@ -43,7 +43,7 @@ def main() -> None:
 
     splash_screen = SplashScreen(target_screen, settings_manager)
     splash_screen.show()
-    app.processEvents()
+    # app.processEvents()
 
     from profiler import Profiler
 

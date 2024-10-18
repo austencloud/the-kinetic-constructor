@@ -60,7 +60,7 @@ class OptionPicker(QWidget):
         # Add combo box to the layout
         self.combo_box_layout = QHBoxLayout()
         self.combo_box_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.combo_box_label: QLabel = QLabel("Prop-reversals:")
+        self.combo_box_label: QLabel = QLabel("Show:")
         self.combo_box_layout.addWidget(self.combo_box_label)
         self.combo_box_layout.addWidget(self.filter_combo_box)
         header_layout.addLayout(self.combo_box_layout)
@@ -75,6 +75,40 @@ class OptionPicker(QWidget):
         self.filter_combo_box.addItem("One Reversal", userData="one_reversal")
         self.filter_combo_box.addItem("Two Reversals", userData="two_reversals")
         self.filter_combo_box.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.filter_combo_box.setStyleSheet(
+            """
+            QComboBox {
+            background-color: white;
+            color: black;
+            border: 1px solid gray;
+            padding: 2px 4px;
+            }
+            QComboBox QAbstractItemView {
+            background-color: white;
+            color: black;
+            selection-background-color: lightgray;
+            selection-color: black;
+            }
+            QComboBox QAbstractItemView::item:hover {
+            background-color: lightblue;
+            color: black;
+            }
+            QComboBox::drop-down {
+            border: none;
+            }
+            QComboBox::down-arrow {
+                image: url(arrow_down_icon.png); /* Replace with your icon */
+                width: 10px;
+                height: 10px;
+            }
+            QComboBox:hover {
+                border: 1px solid lightgray;
+            }
+            QComboBox:focus {
+                border: 1px solid blue;
+            }
+        """
+        )
         self._load_filter()
         self.filter_combo_box.currentIndexChanged.connect(self.on_filter_changed)
 
@@ -128,7 +162,7 @@ class OptionPicker(QWidget):
 
     def _resize_combo_box(self):
         font = self.filter_combo_box.font()
-        font_size = int(self.manual_builder.width() * 0.015)
+        font_size = int(self.manual_builder.main_widget.width() * 0.01)
         font.setPointSize(font_size)
         font.setFamily("Georgia")
         self.filter_combo_box.setFont(font)

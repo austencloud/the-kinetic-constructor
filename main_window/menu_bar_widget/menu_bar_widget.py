@@ -67,6 +67,7 @@ class MenuBarWidget(QWidget):
         section_layout.setSpacing(5)
         section_layout.addWidget(label)
         section_layout.addWidget(selector)
+        section_layout.addStretch(1)  # Add stretch to push the selector to the left
         self.layout.addLayout(section_layout)
 
     def add_separator(self):
@@ -76,12 +77,9 @@ class MenuBarWidget(QWidget):
         separator.setLineWidth(1)
         self.layout.addWidget(separator)
         self.separators.append(separator)
-    # def resizeEvent(self, event):
-    #     super().resizeEvent(event)
-    #     self.resize_menu_bar_widget()
+
 
     def resize_menu_bar_widget(self):
-        self.setMaximumWidth(self.main_widget.width())
         spacing = self.width() // 30
         self.layout.setSpacing(spacing)
         font_size = self.main_widget.height() // 75
@@ -95,3 +93,4 @@ class MenuBarWidget(QWidget):
 
         for separator in self.separators:
             separator.setLineWidth(1)
+        self.setMaximumWidth(self.main_widget.width())
