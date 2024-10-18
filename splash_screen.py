@@ -184,11 +184,11 @@ class SplashScreen(QWidget):
             self.height(),
         )
 
-    # def paintEvent(self, event):
-    #     """Handle painting the custom background using the background manager."""
-    #     painter = QPainter(self)
-    #     self.background_manager.paint_background(self, painter)
-    #     # super().paintEvent(event)
+    def paintEvent(self, event):
+        """Handle painting the custom background using the background manager."""
+        painter = QPainter(self)
+        self.background_manager.paint_background(self, painter)
+        # super().paintEvent(event)
 
     def update_progress(self, value, message=""):
         """Update progress bar and message."""

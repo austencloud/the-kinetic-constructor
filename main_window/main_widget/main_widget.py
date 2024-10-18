@@ -243,11 +243,13 @@ class MainWidget(QWidget):
 
     def showEvent(self, event):
         super().showEvent(event)
-        if self.background_manager is None:
-            self.background_manager = (
-                self.settings_manager.global_settings.setup_background_manager(self)
-            )
+        self.setup_background_manager()
         self.background_manager.start_animation()
+
+    def setup_background_manager(self):
+        self.background_manager = (
+            self.settings_manager.global_settings.setup_background_manager(self)
+        )
 
     def hideEvent(self, event):
         super().hideEvent(event)
