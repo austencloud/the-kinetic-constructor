@@ -2,7 +2,10 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.add_to_dictionary_manager.add_to_dictionary_manager import AddToDictionaryManager
+    from main_window.main_widget.sequence_widget.add_to_dictionary_manager.add_to_dictionary_manager import (
+        AddToDictionaryManager,
+    )
+
 
 class TurnPatternConverter:
     def __init__(self, add_to_dictionary_manager: "AddToDictionaryManager"):
@@ -29,4 +32,3 @@ class TurnPatternConverter:
             pattern_parts.append(pattern_part)
 
         return "_".join(pattern_parts)
-

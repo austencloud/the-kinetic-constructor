@@ -7,7 +7,7 @@ from PyQt6.QtCore import Qt, QTimer, QPropertyAnimation, pyqtSlot
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
+    from main_window.main_widget.sequence_widget.sequence_widget import (
         SequenceWidget,
     )
 

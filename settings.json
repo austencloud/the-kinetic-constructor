@@ -3,7 +3,7 @@
         "prop_type": "Staff",
         "background_type": "Aurora",
         "grow_sequence": true,
-        "current_tab": "generate",
+        "current_tab": "build",
         "grid_mode": "box"
     },
     "image_export": {
@@ -46,8 +46,10 @@
     },
     "dictionary": {
         "sort_method": "date_added",
-        "current_section": "filter_choice",
-        "current_filter": null
+        "current_section": "browser",
+        "current_filter": {
+            "sequence_length": 4
+        }
     },
     "sequence_layout": {
         "grow_sequence": true,
@@ -85,10 +87,10 @@
                     "Dual-Dash"
                 ]
             },
-            "current_auto_builder": "freeform"
+            "current_auto_builder": "circular"
         },
         "manual_builder": {
-            "filters": null
+            "filters": "continuous"
         },
         "last_used_builder": "manual"
     },

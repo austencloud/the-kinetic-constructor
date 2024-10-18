@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget  # Import QWidget
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
+    from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
         SequenceWidgetBeatFrame,
     )
 

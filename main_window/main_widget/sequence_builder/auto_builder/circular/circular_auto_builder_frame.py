@@ -6,7 +6,7 @@ from ..widgets.rotation_type_toggle import RotationTypeToggle
 from .circular_auto_builder import CircularAutoBuilder
 
 if TYPE_CHECKING:
-    from ..sequence_generator import SequenceGeneratorWidget
+    from ..sequence_generator_widget import SequenceGeneratorWidget
 
 
 class CircularAutoBuilderFrame(BaseAutoBuilderFrame):

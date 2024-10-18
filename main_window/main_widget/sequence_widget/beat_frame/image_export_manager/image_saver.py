@@ -6,7 +6,7 @@ from PyQt6.QtGui import QImage
 from utilities.path_helpers import get_my_photos_path
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
+    from main_window.main_widget.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
         ImageExportManager,
     )
 
@@ -18,7 +18,7 @@ class ImageSaver:
 
     def save_image(self, sequence_image: QImage):
         self.indicator_label = (
-            self.export_manager.main_widget.top_builder_widget.sequence_widget.indicator_label
+            self.export_manager.main_widget.sequence_widget.indicator_label
         )
         word = self.beat_frame.get.current_word()
         if word == "":

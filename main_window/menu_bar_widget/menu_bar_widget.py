@@ -46,10 +46,10 @@ class MenuBarWidget(QWidget):
 
         # Collect labels for font resizing
         self.labels = [label for label, _ in self.sections]
-
+        self.separators: list[QFrame] = []
         # Set up layout
         self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.layout.setContentsMargins(10, 10, 10, 10)
+        # self.layout.setContentsMargins(10, 10, 10, 10)
 
         self.layout.addStretch(1)
 
@@ -75,17 +75,15 @@ class MenuBarWidget(QWidget):
         separator.setFrameShadow(QFrame.Shadow.Sunken)
         separator.setLineWidth(1)
         self.layout.addWidget(separator)
-
-    def resizeEvent(self, event):
-        self.resize_menu_bar_widget()
-        super().resizeEvent(event)
+        self.separators.append(separator)
+    # def resizeEvent(self, event):
+    #     super().resizeEvent(event)
+    #     self.resize_menu_bar_widget()
 
     def resize_menu_bar_widget(self):
-        # height = int(self.main_widget.height() * 0.05)
-        # self.setFixedHeight(height)
+        self.setMaximumWidth(self.main_widget.width())
         spacing = self.width() // 30
         self.layout.setSpacing(spacing)
-        # Dynamically adjust font size based on height
         font_size = self.main_widget.height() // 75
         for label in self.labels:
             font = QFont("Arial", font_size)
@@ -94,3 +92,6 @@ class MenuBarWidget(QWidget):
         # Style selectors
         for _, selector in self.sections:
             selector.style_widget()
+
+        for separator in self.separators:
+            separator.setLineWidth(1)

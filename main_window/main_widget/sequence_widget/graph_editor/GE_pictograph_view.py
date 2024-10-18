@@ -10,10 +10,10 @@ from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
+    from main_window.main_widget.sequence_widget.graph_editor.pictograph_container.GE_pictograph_container import (
         GraphEditorPictographContainer,
     )
-    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
+    from main_window.main_widget.sequence_widget.beat_frame.beat import (
         Beat,
     )
 

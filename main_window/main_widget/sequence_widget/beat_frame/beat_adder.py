@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
+    from main_window.main_widget.sequence_widget.beat_frame.beat import (
         Beat,
     )
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
@@ -51,9 +51,7 @@ class BeatAdder:
         self._update_sequence_builder(index)
 
     def _update_sequence_builder(self, index: int) -> None:
-        self.main_widget.manual_builder.last_beat = self.beats[
-            index
-        ].beat
+        self.main_widget.manual_builder.last_beat = self.beats[index].beat
 
     def calculate_next_beat_number(self) -> int:
         """

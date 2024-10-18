@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
+    from main_window.main_widget.sequence_widget.sequence_widget import (
         SequenceWidget,
     )
 
@@ -21,9 +21,7 @@ class SequenceClearer:
         self.json_manager.loader_saver.clear_current_sequence_file()
         self._reset_beat_frame()
         if not self.manual_builder:
-            self.manual_builder = (
-                self.sequence_widget.main_widget.manual_builder
-            )
+            self.manual_builder = self.sequence_widget.main_widget.manual_builder
         if should_reset_to_start_pos_picker:
             self.manual_builder.reset_to_start_pos_picker()
         self.manual_builder.last_beat = self.beat_frame.start_pos

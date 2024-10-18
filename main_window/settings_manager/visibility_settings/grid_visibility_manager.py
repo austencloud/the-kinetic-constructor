@@ -1,9 +1,10 @@
 from typing import TYPE_CHECKING
 
 
-
 if TYPE_CHECKING:
-    from main_window.settings_manager.visibility_settings.visibility_settings import VisibilitySettings
+    from main_window.settings_manager.visibility_settings.visibility_settings import (
+        VisibilitySettings,
+    )
 
 
 class GridVisibilityManager:
@@ -43,7 +44,7 @@ class GridVisibilityManager:
                         self.non_radial_visible
                     )
         beat_frame = (
-            self.settings_manager.main_window.main_widget.top_builder_widget.sequence_widget.beat_frame
+            self.settings_manager.main_window.main_widget.sequence_widget.beat_frame
         )
         for beat_view in beat_frame.beats:
             if hasattr(beat_view, "beat"):
@@ -69,7 +70,9 @@ class GridVisibilityManager:
         for (
             start_letter,
             pictograph_list,
-        ) in sequence_builder.manual_builder.advanced_start_pos_picker.start_pos_cache.items():
+        ) in (
+            sequence_builder.manual_builder.advanced_start_pos_picker.start_pos_cache.items()
+        ):
             for start_pos in pictograph_list:
                 if hasattr(start_pos, "grid"):
                     start_pos.grid.toggle_non_radial_points_visibility(
@@ -78,7 +81,7 @@ class GridVisibilityManager:
 
         # apply the change to the GE_BlankPictograph too
         self.main_widget = self.settings_manager.main_window.main_widget
-        graph_editor = self.main_widget.top_builder_widget.sequence_widget.graph_editor
+        graph_editor = self.main_widget.sequence_widget.graph_editor
         GE_blank_pictograph = (
             graph_editor.pictograph_container.GE_pictograph_view.blank_pictograph
         )

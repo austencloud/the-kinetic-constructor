@@ -8,7 +8,7 @@ from ..widgets.level_selector import LevelSelector
 from ..widgets.turn_intensity_adjuster import TurnIntensityAdjuster
 
 if TYPE_CHECKING:
-    from ..sequence_generator import SequenceGeneratorWidget
+    from ..sequence_generator_widget import SequenceGeneratorWidget
 
 
 class BaseAutoBuilderFrame(QFrame):

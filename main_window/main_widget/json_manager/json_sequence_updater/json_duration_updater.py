@@ -1,7 +1,7 @@
 from typing import List, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
+    from main_window.main_widget.sequence_widget.beat_frame.beat import (
         BeatView,
     )
     from .json_sequence_updater import JsonSequenceUpdater
@@ -111,11 +111,7 @@ class JsonDurationUpdater:
 
     def _update_beat_view_numbers(self, beat_number_mapping: dict[int, int]) -> None:
         """Update the BeatView numbers based on the provided mapping."""
-        for (
-            beat_view
-        ) in (
-            self.json_manager.main_widget.top_builder_widget.sequence_widget.beat_frame.beats
-        ):
+        for beat_view in self.json_manager.main_widget.sequence_widget.beat_frame.beats:
             if beat_view.number in beat_number_mapping:
                 old_number = beat_view.number
                 beat_view.number = beat_number_mapping[old_number]

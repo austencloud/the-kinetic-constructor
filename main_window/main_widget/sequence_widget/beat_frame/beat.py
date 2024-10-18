@@ -6,7 +6,7 @@ from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
+    from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
         SequenceWidgetBeatFrame,
     )
 

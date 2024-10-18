@@ -23,7 +23,7 @@ class SequenceGeneratorWidget(QTabWidget):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.setLayout(self.layout)
 
-        self.layout.addWidget(self)
+        # self.layout.addWidget(self)
         self.freeform_builder_frame = FreeformAutoBuilderFrame(self)
         self.circular_builder_frame = CircularAutoBuilderFrame(self)
         self.addTab(self.freeform_builder_frame, "Freeform")
@@ -68,4 +68,3 @@ class SequenceGeneratorWidget(QTabWidget):
         # Resize the builder frames
         self.freeform_builder_frame._resize_auto_builder_frame()
         self.circular_builder_frame._resize_auto_builder_frame()
-

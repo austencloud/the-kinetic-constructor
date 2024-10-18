@@ -5,7 +5,7 @@ from ..widgets.letter_type_picker import LetterTypePicker
 from .freeform_auto_builder import FreeFormAutoBuilder
 
 if TYPE_CHECKING:
-    from ..sequence_generator import SequenceGeneratorWidget
+    from ..sequence_generator_widget import SequenceGeneratorWidget
 
 
 class FreeformAutoBuilderFrame(BaseAutoBuilderFrame):

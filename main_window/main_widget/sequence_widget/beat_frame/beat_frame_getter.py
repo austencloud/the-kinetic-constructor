@@ -4,10 +4,10 @@ from utilities.word_simplifier import WordSimplifier
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.beat import (
+    from main_window.main_widget.sequence_widget.beat_frame.beat import (
         BeatView,
     )
-    from main_window.main_widget.top_builder_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
+    from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
         SequenceWidgetBeatFrame,
     )
 

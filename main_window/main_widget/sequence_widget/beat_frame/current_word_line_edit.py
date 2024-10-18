@@ -8,7 +8,7 @@ from PyQt6.QtGui import QFontMetrics, QMouseEvent, QPainter
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.labels.current_word_label import (
+    from main_window.main_widget.sequence_widget.labels.current_word_label import (
         CurrentWordLabel,
     )
 
@@ -78,7 +78,7 @@ class CurrentWordLineEdit(QLineEdit):
         return QRectF(x, y - text_height, text_width, text_height)
 
     def copy_to_clipboard(self):
-        from main_window.main_widget.top_builder_widget.sequence_widget.labels.current_word_label import (
+        from main_window.main_widget.sequence_widget.labels.current_word_label import (
             CurrentWordLabel,
         )
 

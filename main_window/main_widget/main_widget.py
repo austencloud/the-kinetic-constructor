@@ -19,7 +19,9 @@ from letter_determiner.letter_determiner import LetterDeterminer
 from main_window.main_widget.navigation_widget import NavigationWidget
 
 
-from main_window.main_widget.sequence_builder.auto_builder.sequence_generator import SequenceGeneratorWidget
+from main_window.main_widget.sequence_builder.auto_builder.sequence_generator_widget import (
+    SequenceGeneratorWidget,
+)
 from main_window.main_widget.sequence_builder.manual_builder import ManualBuilderWidget
 from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
 from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
@@ -105,10 +107,10 @@ class MainWidget(QWidget):
     def on_tab_changed(self, index):
 
         self.stacked_widget.setCurrentIndex(index)
-        # if index in [0, 1]:  # Build or Generate tab indices
-        #     self.sequence_widget.show()
-        # else:
-        #     self.sequence_widget.hide()
+        if index in [0, 1]:  # Build or Generate tab indices
+            self.sequence_widget.show()
+        else:
+            self.sequence_widget.hide()
 
         if index == self.build_tab_index:
             self.main_window.settings_manager.global_settings.set_current_tab("build")
@@ -150,10 +152,10 @@ class MainWidget(QWidget):
         self.setLayout(self.main_layout)
         self.menu_bar_widget = MenuBarWidget(self)
 
-        self.main_layout.addWidget(self.menu_bar_widget)
         self.navigation_widget = NavigationWidget(self)
-        self.navigation_widget.tab_changed.connect(self.on_tab_changed)
         self.main_layout.addWidget(self.navigation_widget)
+        self.main_layout.addWidget(self.menu_bar_widget)
+        self.navigation_widget.tab_changed.connect(self.on_tab_changed)
 
         self.content_layout = QHBoxLayout()
         self.main_layout.addLayout(self.content_layout)
@@ -240,6 +242,7 @@ class MainWidget(QWidget):
         super().resizeEvent(event)
         self.setStyleSheet(self.tab_bar_styler.get_tab_stylesheet())
         self.navigation_widget.resize_navigation_widget()
+        self.menu_bar_widget.resize_menu_bar_widget()
 
     def apply_background(self):
         self.background_manager = (

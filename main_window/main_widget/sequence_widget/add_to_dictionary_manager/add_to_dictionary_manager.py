@@ -7,7 +7,7 @@ from .thumbnail_generator import ThumbnailGenerator
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from main_window.main_widget.top_builder_widget.sequence_widget.sequence_widget import (
+    from main_window.main_widget.sequence_widget.sequence_widget import (
         SequenceWidget,
     )
 
