@@ -186,16 +186,12 @@ class SplashScreen(QWidget):
 
     def paintEvent(self, event):
         """Handle painting the custom background using the background manager."""
-        painter = QPainter(self)
-        self.background_manager.paint_background(self, painter)
-        # super().paintEvent(event)
+        # Do not call super().paintEvent(event) here
+        with QPainter(self) as painter:
+            self.background_manager.paint_background(self, painter)
 
     def update_progress(self, value, message=""):
         """Update progress bar and message."""
         self.progress_bar.setValue(value)
         if message:
             self.currently_loading_label.setText(message)
-
-    def finish(self):
-        """Close the splash screen and show the main window."""
-        self.close()

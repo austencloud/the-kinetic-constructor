@@ -69,7 +69,6 @@ class MainWidget(QWidget):
         self._initialize_managers()
 
         self._setup_ui_components()
-        self.apply_background()
 
         self.setAttribute(Qt.WidgetAttribute.WA_OpaquePaintEvent, False)
 
@@ -243,6 +242,8 @@ class MainWidget(QWidget):
 
     def showEvent(self, event):
         super().showEvent(event)
+        self.apply_background()
+        
         self.setup_background_manager()
         self.background_manager.start_animation()
 
@@ -279,6 +280,7 @@ class MainWidget(QWidget):
         )
         self.background_manager.update_required.connect(self.update)
         self.background_manager.start_animation()
+
     def closeEvent(self, event: QCloseEvent):
         self.save_state()
         event.accept()

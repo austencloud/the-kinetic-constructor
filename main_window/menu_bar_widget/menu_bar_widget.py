@@ -22,34 +22,30 @@ class MenuBarWidget(QWidget):
         self.main_widget = main_widget
 
         # Initialize selectors
+        self.user_profile_selector = UserProfileSelector(self)
         self.prop_type_selector = PropTypeSelector(self)
         self.grid_mode_selector = GridModeSelector(self)
-        self.visibility_selector = VisibilitySelector(self)
         self.background_selector = BackgroundSelector(self)
-        self.user_profile_selector = UserProfileSelector(self)
+        self.visibility_selector = VisibilitySelector(self)
 
         # Create labels for selectors
+        self.user_profile_label = QLabel("User:")
         self.prop_type_label = QLabel("Prop:")
         self.grid_mode_label = QLabel("Grid:")
-        self.visibility_label = QLabel("Visibility:")
         self.background_label = QLabel("Background:")
-        self.user_profile_label = QLabel("User:")
+        self.visibility_label = QLabel("")
 
-        # List of sections: (label, selector)
         self.sections: list[tuple[QLabel, BaseSelector]] = [
+            (self.user_profile_label, self.user_profile_selector),
             (self.prop_type_label, self.prop_type_selector),
             (self.grid_mode_label, self.grid_mode_selector),
-            (self.visibility_label, self.visibility_selector),
             (self.background_label, self.background_selector),
-            (self.user_profile_label, self.user_profile_selector),
+            (self.visibility_label, self.visibility_selector),
         ]
 
-        # Collect labels for font resizing
         self.labels = [label for label, _ in self.sections]
         self.separators: list[QFrame] = []
-        # Set up layout
         self.layout: QHBoxLayout = QHBoxLayout(self)
-        # self.layout.setContentsMargins(10, 10, 10, 10)
 
         self.layout.addStretch(1)
 
@@ -67,7 +63,7 @@ class MenuBarWidget(QWidget):
         section_layout.setSpacing(5)
         section_layout.addWidget(label)
         section_layout.addWidget(selector)
-        section_layout.addStretch(1)  # Add stretch to push the selector to the left
+        section_layout.addStretch(1)
         self.layout.addLayout(section_layout)
 
     def add_separator(self):
@@ -79,7 +75,7 @@ class MenuBarWidget(QWidget):
         self.separators.append(separator)
 
     def resize_menu_bar_widget(self):
-        self.menu_bar_font_size = self.main_widget.width() // 85
+        self.menu_bar_font_size = self.main_widget.width() // 100
         spacing = self.width() // 30
         self.layout.setSpacing(spacing)
         font_size = self.main_widget.height() // 75

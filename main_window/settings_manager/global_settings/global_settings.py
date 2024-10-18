@@ -75,9 +75,7 @@ class GlobalSettings:
     def setup_background_manager(
         self, widget, is_splash_screen=False
     ) -> BackgroundManager:
-        # if not is_splash_screen:
-        #     if not self.main_widget:
-        #         self.main_widget = self.settings_manager.main_window.main_widget
+
         bg_type = self.get_background_type()
         return self.get_background_manager(bg_type, widget, is_splash_screen)
 
