@@ -86,6 +86,10 @@
     },
     "(s, 1, 0.5)": {
       "pro_from_layer1": [-45, -10]
+    },
+    "(s, 1, 1)": {
+      "pro_from_layer1": [-30, 5],
+      "dash_from_layer2_rot_angle_override": true
     }
   }
 }

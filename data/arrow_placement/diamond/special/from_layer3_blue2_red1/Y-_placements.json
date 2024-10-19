@@ -338,7 +338,9 @@
       "pro_from_layer1": [-55, -70]
     },
     "(0, 0)": {},
-    "(o, 0, 0.5)": {},
+    "(o, 0, 0.5)": {
+      "swap_beta_w_nonradial_blue_pro_nw_red_dash_s": true
+    },
     "(o, 0, 1)": {},
     "(o, 0, 1.5)": {},
     "(o, 0, 2)": {},

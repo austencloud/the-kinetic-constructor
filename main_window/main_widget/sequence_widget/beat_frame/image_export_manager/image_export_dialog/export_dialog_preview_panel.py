@@ -34,6 +34,7 @@ class ExportDialogPreviewPanel(QFrame):
         add_word: bool,
         include_difficulty_level: bool,
         add_beat_numbers: bool,
+        add_reversal_symbols: bool,
     ):
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         current_date = datetime.now().strftime("%m-%d-%Y")
@@ -47,6 +48,7 @@ class ExportDialogPreviewPanel(QFrame):
             "notes": self.export_dialog.control_panel.notes_combo_box.currentText(),
             "add_difficulty_level": include_difficulty_level,
             "add_beat_numbers": add_beat_numbers,
+            "add_reversal_symbols": add_reversal_symbols,
         }
         self.image = (
             self.export_dialog.export_manager.image_creator.create_sequence_image(

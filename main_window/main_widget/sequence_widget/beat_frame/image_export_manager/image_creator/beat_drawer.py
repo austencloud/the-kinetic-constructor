@@ -17,13 +17,15 @@ class BeatDrawer:
     def draw_beats(
         self,
         image: QImage,
-        filled_beats: list[BeatView],
+        filled_beats: list['BeatView'],
         column_count: int,
         row_count: int,
         include_start_pos: bool,
         additional_height_top: int,
         add_beat_numbers: bool,
     ) -> None:
+            
+        
         for beat_view in filled_beats:
             if add_beat_numbers:
                 beat_view.beat_number_item.setVisible(True)

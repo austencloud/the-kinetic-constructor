@@ -1,7 +1,8 @@
 {
   "Δ": {
     "(s, 0, 1)": {
-      "static_from_layer1": [-70, 0]
+      "static_from_layer1": [-70, 0],
+      "static_from_layer1_rot_angle_override": true
     },
     "(s, 0.5, 2)": {
       "static_from_layer2": [-25, 0],

@@ -113,6 +113,10 @@ class ExportDialogControlPanel(QWidget):
         self.add_beat_numbers_check.toggled.connect(self.toggle_add_beat_numbers)
         self.add_beat_numbers_check.setCursor(Qt.CursorShape.PointingHandCursor)
 
+        self.add_reversal_symbols_check = QCheckBox("Add Reversal Symbols", self)
+        self.add_reversal_symbols_check.toggled.connect(self.toggle_add_reversal_symbols)
+        
+
         self._setup_open_directory_checkbox()
 
     def _setup_layout(self):
@@ -134,7 +138,8 @@ class ExportDialogControlPanel(QWidget):
         self.options_checkbox_layout.addWidget(self.add_word_check)
         self.options_checkbox_layout.addWidget(self.include_difficulty_level_check)
         self.options_checkbox_layout.addWidget(self.add_beat_numbers_check)
-
+        self.options_checkbox_layout.addWidget(self.add_reversal_symbols_check)
+        
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addStretch(1)
         self.layout.addLayout(self.user_input_layout)
@@ -259,4 +264,22 @@ class ExportDialogControlPanel(QWidget):
             self.add_word_check.isChecked(),
             self.include_difficulty_level_check.isChecked(),
             self.add_beat_numbers_check.isChecked(),
+            self.add_reversal_symbols_check.isChecked(),
+        )
+
+    def toggle_add_reversal_symbols(self):
+        """Toggle the state of the add reversal symbols field based on the checkbox."""
+        state = self.add_reversal_symbols_check.isChecked()
+        self.settings_manager.image_export.set_image_export_setting(
+            "add_reversal_symbols", state
+        )
+        self.export_dialog.preview_panel.update_preview(
+            self.include_start_pos_check.isChecked(),
+            self.add_info_check.isChecked(),
+            self.export_dialog.sequence,
+            self.add_word_check.isChecked(),
+            self.include_difficulty_level_check.isChecked(),
+            self.add_beat_numbers_check.isChecked(),
+            self.add_reversal_symbols_check.isChecked(),
+
         )

@@ -13,6 +13,7 @@ class ImageExportSettings:
         "add_word": True,
         "add_difficulty_level": True,
         "add_beat_numbers": True,
+        "add_reversal_symbols": True,
     }
 
 

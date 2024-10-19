@@ -151,6 +151,7 @@ class ImageExportDialog(QDialog):
             "notes": self.control_panel.notes_combo_box.currentText(),
             "add_difficulty_level": self.control_panel.include_difficulty_level_check.isChecked(),
             "add_beat_numbers": self.control_panel.add_beat_numbers_check.isChecked(),
+            "add_reversal_symbols": self.control_panel.add_reversal_symbols_check.isChecked(),
         }
 
     def showEvent(self, event):
@@ -170,7 +171,6 @@ class ImageExportDialog(QDialog):
             widget.setStyleSheet(f"font-size: {font_size}px;")
         for widget in self.preview_panel.findChildren(QLineEdit):
             widget.setStyleSheet(f"font-size: {font_size}px;")
-        # resize the preview panel image to be 3/4 of the width, while maintaining aspect ratio
         self.preview_panel.update_preview(
             self.control_panel.include_start_pos_check.isChecked(),
             self.control_panel.add_info_check.isChecked(),
@@ -178,4 +178,5 @@ class ImageExportDialog(QDialog):
             self.control_panel.add_word_check.isChecked(),
             self.control_panel.include_difficulty_level_check.isChecked(),
             self.control_panel.add_beat_numbers_check.isChecked(),
+            self.control_panel.add_reversal_symbols_check.isChecked(),
         )

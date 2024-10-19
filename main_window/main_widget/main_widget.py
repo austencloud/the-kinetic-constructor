@@ -61,23 +61,14 @@ class MainWidget(QWidget):
         self.settings_manager = main_window.settings_manager
         self.initialized = False
         self.splash_screen = splash_screen
-
         self._setup_pictograph_cache()
         self._set_prop_type()
-
         self._setup_letters()
         self._initialize_managers()
-
         self._setup_ui_components()
-
-        self.setAttribute(Qt.WidgetAttribute.WA_OpaquePaintEvent, False)
-
         self.splash_screen.update_progress(100, "Initialization complete!")
         QTimer.singleShot(0, self.load_state)
-        # self.paint_timer = QTimer(self)
-        # self.paint_timer.timeout.connect(
-        #     lambda: self.paintEvent(QPaintEvent(self.rect()))
-        # )
+
 
     def _initialize_managers(self):
         """Setup all the managers and helper components."""
