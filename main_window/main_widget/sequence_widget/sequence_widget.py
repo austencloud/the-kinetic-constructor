@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 class SequenceWidget(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__()
-        self.main_widget =main_widget
+        self.main_widget = main_widget
         # self.top_builder_widget = main_widget.top_builder_widget
         self.settings_manager = self.main_widget.main_window.settings_manager
         self.json_manager = self.main_widget.json_manager
@@ -151,19 +151,18 @@ class SequenceWidget(QWidget):
         override_grow_sequence=False,
         update_word=True,
         update_level=True,
-        reversal_info=None
-
+        reversal_info=None,
     ) -> None:
         new_beat = Beat(self.beat_frame, duration=pictograph_dict.get("duration", 1))
         new_beat.updater.update_pictograph(pictograph_dict)
         if reversal_info:
-            new_beat.blue_reversal = reversal_info.get('blue_reversal', False)
-            new_beat.red_reversal = reversal_info.get('red_reversal', False)
+            new_beat.blue_reversal = reversal_info.get("blue_reversal", False)
+            new_beat.red_reversal = reversal_info.get("red_reversal", False)
         self.beat_frame.beat_adder.add_beat_to_sequence(
             new_beat,
             override_grow_sequence=override_grow_sequence,
             update_word=update_word,
-            update_level=update_level
+            update_level=update_level,
         )
         for motion in new_beat.motions.values():
             if motion.motion_type == FLOAT:

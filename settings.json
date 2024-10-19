@@ -1,7 +1,7 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Aurora",
+        "background_type": "Snowfall",
         "grow_sequence": true,
         "current_tab": "build",
         "grid_mode": "diamond"
@@ -50,7 +50,9 @@
         "sort_method": "sequence_length",
         "current_section": "browser",
         "current_filter": {
-            "starting_position": "gamma"
+            "contains_letters": [
+                "O"
+            ]
         }
     },
     "sequence_layout": {

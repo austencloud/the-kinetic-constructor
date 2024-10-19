@@ -156,7 +156,8 @@
     },
     "(s, 0.5, 1)": {
       "static_rot_angle_override": true,
-      "static": [-70, 0]
+      "static": [-70, 0],
+      "static_to_layer1_rot_angle_override": true
     },
     "(s, 1, 1)": {
       "static_rot_angle_override": true,

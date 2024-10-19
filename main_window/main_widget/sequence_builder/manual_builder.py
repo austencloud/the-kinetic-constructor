@@ -71,10 +71,11 @@ class ManualBuilderWidget(QFrame):
 
     def resize_manual_builder(self) -> None:
         """Resize the components based on the current state."""
+        self.setFixedWidth(self.main_widget.width() // 2)
+        self.main_widget.sequence_widget.resize_sequence_widget()
         self.start_pos_picker.resize_start_pos_picker()
         self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
         self.option_picker.resize_option_picker()
-        # pass
 
     def render_and_store_pictograph(
         self, pictograph_dict: dict, sequence

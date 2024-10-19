@@ -115,6 +115,7 @@ class DictionaryButtonPanel(QWidget):
                 "Build ⚒️"
             ].click()
             QApplication.processEvents()
+            self.dictionary_widget.main_widget.manual_builder.resize_manual_builder()
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
             self.sequence_populator.load_sequence_from_json(
                 self.preview_area.sequence_json
