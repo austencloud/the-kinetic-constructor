@@ -1,5 +1,3 @@
-# reversal_symbol_manager.py
-
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsTextItem
 from PyQt6.QtGui import QFont, QColor
@@ -21,16 +19,6 @@ class ReversalSymbolManager:
         red_R = self._create_reversal_text_item("R", color=HEX_RED)
         blue_R = self._create_reversal_text_item("R", color=HEX_BLUE)
 
-        # Position them appropriately
-        total_height = red_R.boundingRect().height() + blue_R.boundingRect().height()
-        x_position = 40  # Adjust as needed
-        center_y = self.pictograph.height() / 2
-
-        red_R.setPos(x_position, center_y - total_height / 2)
-        blue_R.setPos(
-            x_position, center_y - total_height / 2 + red_R.boundingRect().height()
-        )
-
         # Add items to the pictograph
         self.pictograph.addItem(red_R)
         self.pictograph.addItem(blue_R)
@@ -48,19 +36,40 @@ class ReversalSymbolManager:
 
     def update_reversal_symbols(self):
         # Update the visibility of the reversal symbols based on the pictograph's reversal flags
-        if self.pictograph.blue_reversal:
-            self.reversal_items[BLUE].setVisible(True)
-        else:
-            self.reversal_items[BLUE].setVisible(False)
+        blue_visible = self.pictograph.blue_reversal
+        red_visible = self.pictograph.red_reversal
 
-        if self.pictograph.red_reversal:
-            self.reversal_items[RED].setVisible(True)
-        else:
-            self.reversal_items[RED].setVisible(False)
-            
+        self.reversal_items[BLUE].setVisible(blue_visible)
+        self.reversal_items[RED].setVisible(red_visible)
+
+        x_position = 40  # Adjust as needed
+        center_y = self.pictograph.height() / 2
+
+        if blue_visible and red_visible:
+            # Both symbols are visible, position them stacked
+            red_R = self.reversal_items[RED]
+            blue_R = self.reversal_items[BLUE]
+            total_height = (
+                red_R.boundingRect().height() + blue_R.boundingRect().height()
+            )
+            red_R_y = center_y - total_height / 2
+            blue_R_y = red_R_y + red_R.boundingRect().height()
+            red_R.setPos(x_position, red_R_y)
+            blue_R.setPos(x_position, blue_R_y)
+        elif blue_visible:
+            # Only blue symbol is visible, center it vertically
+            blue_R = self.reversal_items[BLUE]
+            blue_R_y = center_y - blue_R.boundingRect().height() / 2
+            blue_R.setPos(x_position, blue_R_y)
+        elif red_visible:
+            # Only red symbol is visible, center it vertically
+            red_R = self.reversal_items[RED]
+            red_R_y = center_y - red_R.boundingRect().height() / 2
+            red_R.setPos(x_position, red_R_y)
+        # else: both are not visible, do nothing
+
         self.pictograph.update()
         self.pictograph.view.update()
-        
 
     def _create_reversal_text_item(self, text, color) -> QGraphicsTextItem:
         text_item = QGraphicsTextItem(text)
