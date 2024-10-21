@@ -3,7 +3,7 @@
         "prop_type": "Staff",
         "background_type": "Bubbles",
         "grow_sequence": true,
-        "current_tab": "build",
+        "current_tab": "dictionary",
         "grid_mode": "diamond"
     },
     "image_export": {
@@ -40,7 +40,7 @@
             "TKA": true,
             "Elemental": false,
             "EndPosition": false,
-            "Reversals": false,
+            "Reversals": true,
             "Positions": false
         },
         "grid_visibility": {
@@ -51,7 +51,7 @@
         "sort_method": "sequence_length",
         "current_section": "browser",
         "current_filter": {
-            "starting_letter": "X-"
+            "starting_letter": "Φ"
         }
     },
     "sequence_layout": {
@@ -85,15 +85,16 @@
                 "sequence_level": 2,
                 "continuous_rotation": true,
                 "selected_letter_types": [
+                    "Dual-Shift",
                     "Cross-Shift",
                     "Dash",
                     "Dual-Dash"
                 ]
             },
-            "current_auto_builder": "circular"
+            "current_auto_builder": "freeform"
         },
         "manual_builder": {
-            "filters": "continuous"
+            "filters": null
         },
         "last_used_builder": "manual"
     },

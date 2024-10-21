@@ -68,3 +68,7 @@ class SequenceGeneratorWidget(QTabWidget):
         # Resize the builder frames
         self.freeform_builder_frame._resize_auto_builder_frame()
         self.circular_builder_frame._resize_auto_builder_frame()
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.resize_sequence_generator()

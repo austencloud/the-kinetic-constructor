@@ -6,13 +6,18 @@ from PyQt6.QtCore import Qt
 
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_header import OptionPickerSectionHeader
-from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_pictograph_frame import OptionPickerSectionPictographFrame
+from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_header import (
+    OptionPickerSectionHeader,
+)
+from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_section_pictograph_frame import (
+    OptionPickerSectionPictographFrame,
+)
 
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import OptionPickerScrollArea
-
+    from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll_area.option_picker_scroll_area import (
+        OptionPickerScrollArea,
+    )
 
 
 class OptionPickerSectionWidget(QGroupBox):
@@ -74,7 +79,7 @@ class OptionPickerSectionWidget(QGroupBox):
         pictograph.view.show()
 
     def resize_option_picker_section_widget(self) -> None:
-        section_width = int((self.scroll_area.width()))
+        section_width = int((self.scroll_area.manual_builder.width()))
         if self.letter_type in [LetterType.Type1, LetterType.Type2, LetterType.Type3]:
             self.setMinimumWidth(section_width)
             self.setMaximumWidth(section_width)

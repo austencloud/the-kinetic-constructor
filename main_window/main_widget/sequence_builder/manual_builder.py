@@ -122,7 +122,12 @@ class ManualBuilderWidget(QFrame):
 
     def resize_manual_builder(self) -> None:
         """Resize the components based on the current state."""
-        # self.setMaximumWidth(int(self.main_widget.width() // 2))
+        self.setMaximumWidth(int(self.main_widget.width() // 2))
         self.start_pos_picker.resize_start_pos_picker()
         self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
         self.option_picker.resize_option_picker()
+
+    def resizeEvent(self, event) -> None:
+        """Resize the manual builder based on the current state."""
+        super().resizeEvent(event)
+        self.resize_manual_builder()

@@ -47,6 +47,10 @@ class BeatFramePopulator:
 
     def _set_grid_mode(self):
         grid_mode = self.current_sequence_json[0].get("grid_mode")
+        if grid_mode == "sweked":
+            # raise an error
+            print("Warning - sweked grid mode is not supported yet")
+            return
         if grid_mode:
             self.main_widget.menu_bar_widget.grid_mode_selector.set_current_grid_mode(
                 grid_mode

@@ -41,7 +41,7 @@ class NavigationWidget(QWidget):
 
         # Add the tab layout to the container layout
         self.container_layout.addLayout(self.tab_layout)
-
+        self.tab_changed.connect(self.main_widget.tabs_handler.on_tab_changed)
         # Set the main layout of the NavigationWidget
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.container_frame)
