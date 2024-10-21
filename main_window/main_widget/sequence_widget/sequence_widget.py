@@ -134,7 +134,7 @@ class SequenceWidget(QWidget):
 
     def showEvent(self, event):
         super().showEvent(event)
-        QTimer.singleShot(0, self.post_show_initialization)
+        # QTimer.singleShot(0, self.post_show_initialization)
 
     def post_show_initialization(self):
         self.update_current_word_from_beats()

@@ -69,14 +69,6 @@ class ManualBuilderWidget(QFrame):
         self.start_pos_picker.show()
         self.start_pos_picker.resize_start_pos_picker()
 
-    def resize_manual_builder(self) -> None:
-        """Resize the components based on the current state."""
-        self.setFixedWidth(self.main_widget.width() // 2)
-        self.main_widget.sequence_widget.resize_sequence_widget()
-        self.start_pos_picker.resize_start_pos_picker()
-        self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
-        self.option_picker.resize_option_picker()
-
     def render_and_store_pictograph(
         self, pictograph_dict: dict, sequence
     ) -> BasePictograph:
@@ -127,3 +119,10 @@ class ManualBuilderWidget(QFrame):
     def get_last_added_pictograph(self, sequence):
         """Returns the last pictograph in the sequence. Assumes the sequence is not empty."""
         return sequence[-1]
+
+    def resize_manual_builder(self) -> None:
+        """Resize the components based on the current state."""
+        # self.setMaximumWidth(int(self.main_widget.width() // 2))
+        self.start_pos_picker.resize_start_pos_picker()
+        self.advanced_start_pos_picker.resize_advanced_start_pos_picker()
+        self.option_picker.resize_option_picker()

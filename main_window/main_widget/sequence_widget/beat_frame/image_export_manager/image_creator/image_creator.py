@@ -46,6 +46,7 @@ class ImageCreator:
         self, sequence: list[dict], include_start_pos=True, options: dict = None
     ) -> QImage:
         """Create an image of the sequence."""
+
         options = self._parse_options(options)
         filled_beats = self._process_sequence(sequence)
         num_filled_beats = len(filled_beats)
@@ -88,6 +89,7 @@ class ImageCreator:
             "add_info": False,
             "add_word": False,
             "add_difficulty_level": False,
+            "add_reversal_symbols": False,
         }
         if options:
             default_options.update(options)

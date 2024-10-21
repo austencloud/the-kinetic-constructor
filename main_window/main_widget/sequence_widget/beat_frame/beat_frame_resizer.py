@@ -25,19 +25,24 @@ class BeatFrameResizer(QWidget):
 
     def calculate_dimensions(self) -> tuple[int, int]:
         scrollbar_width = self.sequence_widget.scroll_area.verticalScrollBar().width()
-        width = int(
-            (
-                self.sequence_widget.width()
-                - self.sequence_widget.button_panel.width()
-                - scrollbar_width
-            )
-            * 0.8
+
+        # Calculate available width for the beat frame
+        available_width = (
+            self.sequence_widget.main_widget.width() // 2
+            - self.sequence_widget.button_panel.width()
+            - scrollbar_width
         )
-        height = (
+
+        # Set width to the calculated available width
+        width = int(available_width * 0.8)
+
+        # Calculate available height for the beat frame
+        available_height = (
             self.sequence_widget.height()
             - self.sequence_widget.graph_editor.height() * 0.8
         )
-        return width, height
+
+        return width, available_height
 
     def calculate_beat_size(self, width: int, height: int) -> int:
         num_cols = max(1, self.beat_frame.layout.columnCount() - 1)

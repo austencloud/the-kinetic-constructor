@@ -215,6 +215,9 @@
       "swap_beta_n_radial_blue_static_n_red_dash_w": true,
       "swap_beta_e_radial_blue_static_e_red_dash_n": true,
       "swap_beta_s_radial_blue_static_s_red_dash_e": true
+    },
+    "(ccw, 1, 0)": {
+      "swap_beta_w_radial_blue_dash_n_red_static_w": true
     }
   }
 }

@@ -123,7 +123,7 @@ class GridModeSelector(QWidget):
     def set_current_grid_mode(self, grid_mode: str):
         self.label.setText(grid_mode.capitalize())
         self.settings_manager.global_settings.set_grid_mode(grid_mode.lower())
-        self.main_widget.set_grid_mode(grid_mode.lower())
+        self.main_widget.manager.set_grid_mode(grid_mode.lower())
         self.settings_manager.save_settings()
         if self.dialog:
             self.dialog.accept()

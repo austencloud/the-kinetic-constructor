@@ -20,266 +20,148 @@ class ExportDialogControlPanel(QWidget):
         super().__init__()
         self.export_dialog = export_dialog
         self.settings_manager = export_dialog.export_manager.settings_manager
-        self.user_combo_box = QComboBox(self)
-        self.settings_manager.users.user_manager.populate_user_profiles_combo_box(
-            self.user_combo_box
-        )
-        self.notes_manager = self.settings_manager.users.notes_manager
         self.user_manager = self.settings_manager.users.user_manager
+        self.notes_manager = self.settings_manager.users.notes_manager
 
+        self._setup_ui()
+        self._connect_signals()
+
+    def _setup_ui(self):
+        """Setup UI components and layout."""
+        # ComboBoxes for user and notes
+        self.user_combo_box = QComboBox(self)
+        self.user_manager.populate_user_profiles_combo_box(self.user_combo_box)
         self.notes_combo_box = QComboBox(self)
         self.notes_manager.populate_notes(self.notes_combo_box)
-        self.notes_combo_box.currentIndexChanged.connect(self._handle_note_selection)
 
         self.previous_note = self.notes_manager.get_current_note()
         self.previous_user = self.user_manager.get_current_user()
 
-        self._setup_checkboxes()
-        self._setup_layout()
-        self._connect_signals()
+        # Setup checkboxes
+        self.checkboxes = {
+            "include_start_position": self._create_checkbox(
+                "Add Start Position", "include_start_position"
+            ),
+            "add_info": self._create_checkbox("Add Info", "add_info"),
+            "add_word": self._create_checkbox("Add Word to Image", "add_word"),
+            "add_difficulty_level": self._create_checkbox(
+                "Include Difficulty Level", "add_difficulty_level"
+            ),
+            "add_beat_numbers": self._create_checkbox(
+                "Add Beat Numbers", "add_beat_numbers"
+            ),
+            "add_reversal_symbols": self._create_checkbox(
+                "Add Reversal Symbols", "add_reversal_symbols"
+            ),
+            "open_directory_on_export": self._create_checkbox(
+                "Open file location after export", "open_directory_on_export"
+            ),
+        }
+        self.include_start_pos_check = self.checkboxes["include_start_position"]
+        self.add_info_check = self.checkboxes["add_info"]
+        self.add_word_check = self.checkboxes["add_word"]
+        self.include_difficulty_level_check = self.checkboxes["add_difficulty_level"]
+        self.add_beat_numbers_check = self.checkboxes["add_beat_numbers"]
+        self.add_reversal_symbols_check = self.checkboxes["add_reversal_symbols"]
+        self.open_directory_check = self.checkboxes["open_directory_on_export"]
+        
+        # Set up the layout
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self._add_combo_boxes_to_layout()
+        self._add_checkboxes_to_layout()
 
-
-    def _setup_open_directory_checkbox(self):
-        """Setup checkbox for opening file location after export."""
-        self.open_directory_check = QCheckBox("Open file location after export", self)
-        self.open_directory_check.setChecked(
-            self.settings_manager.image_export.get_image_export_setting(
-                "open_directory_on_export"
-            )
+    def _create_checkbox(self, label: str, setting_key: str) -> QCheckBox:
+        """Create a checkbox and set its initial state based on the provided setting."""
+        checkbox = QCheckBox(label, self)
+        checkbox.setChecked(
+            self.settings_manager.image_export.get_image_export_setting(setting_key)
         )
-        self.open_directory_check.toggled.connect(self.update_open_directory_setting)
-        self.open_dir_layout = QHBoxLayout()
-        self.open_dir_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.open_dir_layout.addWidget(self.open_directory_check)
+        checkbox.setCursor(Qt.CursorShape.PointingHandCursor)
+        checkbox.toggled.connect(lambda: self._toggle_setting(checkbox, setting_key))
+        return checkbox
 
-    def update_open_directory_setting(self):
-        """Update setting for opening the directory after export."""
+    def _add_combo_boxes_to_layout(self):
+        """Add user and notes combo boxes to the layout."""
+        user_label = QLabel("User:", self)
+        user_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        notes_label = QLabel("Note:", self)
+        notes_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        user_layout = QVBoxLayout()
+        user_layout.addWidget(user_label)
+        user_layout.addWidget(self.user_combo_box)
+        user_layout.addWidget(notes_label)
+        user_layout.addWidget(self.notes_combo_box)
+
+        self.layout.addLayout(user_layout)
+
+    def _add_checkboxes_to_layout(self):
+        """Add all checkboxes to the layout."""
+        checkbox_layout = QVBoxLayout()
+        checkbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        for checkbox in self.checkboxes.values():
+            checkbox_layout.addWidget(checkbox)
+
+        self.layout.addLayout(checkbox_layout)
+
+    def _toggle_setting(self, checkbox: QCheckBox, setting_key: str):
+        """Toggle the setting based on the checkbox state and update the preview."""
         self.settings_manager.image_export.set_image_export_setting(
-            "open_directory_on_export", self.open_directory_check.isChecked()
+            setting_key, checkbox.isChecked()
+        )
+        self.export_dialog.preview_panel.update_preview(
+            self.checkboxes["include_start_position"].isChecked(),
+            self.checkboxes["add_info"].isChecked(),
+            self.export_dialog.sequence,
+            self.checkboxes["add_word"].isChecked(),
+            self.checkboxes["add_difficulty_level"].isChecked(),
+            self.checkboxes["add_beat_numbers"].isChecked(),
+            self.checkboxes["add_reversal_symbols"].isChecked(),
         )
 
     def _connect_signals(self):
-        """Connect signals to their respective slots."""
-
-        self.include_start_pos_check.toggled.connect(
-            self.export_dialog.update_export_setting_and_layout
-        )
+        """Connect signals for combo boxes."""
         self.user_combo_box.currentIndexChanged.connect(self._handle_user_selection)
-
-    def _setup_checkboxes(self):
-        """Setup the checkboxes for the control panel."""
-        self.include_start_pos_check = QCheckBox("Add Start Position", self)
-        self.include_start_pos_check.setChecked(
-            self.settings_manager.image_export.get_image_export_setting(
-                "include_start_position"
-            )
-        )
-        self.include_start_pos_check.toggled.connect(self.toggle_add_start_position)
-        self.include_start_pos_check.setCursor(Qt.CursorShape.PointingHandCursor)
-
-        self.add_info_check = QCheckBox("Add Info", self)
-        self.add_info_check.setChecked(
-            self.settings_manager.image_export.get_image_export_setting("add_info")
-        )
-        self.add_info_check.toggled.connect(self.toggle_add_info)
-        self.add_info_check.setCursor(Qt.CursorShape.PointingHandCursor)
-
-        self.add_word_check = QCheckBox("Add Word to Image", self)
-        self.add_word_check.setChecked(
-            self.settings_manager.image_export.get_image_export_setting("add_word")
-        )
-        self.add_word_check.toggled.connect(self.toggle_add_word)
-        self.add_word_check.setCursor(Qt.CursorShape.PointingHandCursor)
-
-        self.include_difficulty_level_check = QCheckBox(
-            "Include Difficulty Level", self
-        )
-        self.include_difficulty_level_check.setChecked(
-            self.settings_manager.image_export.get_image_export_setting(
-                "add_difficulty_level"
-            )
-        )
-        self.include_difficulty_level_check.toggled.connect(
-            self.toggle_include_difficulty_level
-        )
-        self.include_difficulty_level_check.setCursor(Qt.CursorShape.PointingHandCursor)
-
-        self.add_beat_numbers_check = QCheckBox("Add Beat Numbers", self)
-        self.add_beat_numbers_check.setChecked(
-            self.settings_manager.image_export.get_image_export_setting(
-                "add_beat_numbers"
-            )
-        )
-        self.add_beat_numbers_check.toggled.connect(self.toggle_add_beat_numbers)
-        self.add_beat_numbers_check.setCursor(Qt.CursorShape.PointingHandCursor)
-
-        self.add_reversal_symbols_check = QCheckBox("Add Reversal Symbols", self)
-        self.add_reversal_symbols_check.toggled.connect(self.toggle_add_reversal_symbols)
-        
-
-        self._setup_open_directory_checkbox()
-
-    def _setup_layout(self):
-        """Setup the layout of the control panel."""
-        self.user_input_layout = QVBoxLayout()
-        user_label = QLabel("User:", self)
-        user_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.user_input_layout.addWidget(user_label)
-        self.user_input_layout.addWidget(self.user_combo_box)
-        notes_label = QLabel("Note:", self)
-        notes_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.user_input_layout.addWidget(notes_label)
-        self.user_input_layout.addWidget(self.notes_combo_box)
-
-        self.options_checkbox_layout = QVBoxLayout()
-        self.options_checkbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.options_checkbox_layout.addWidget(self.include_start_pos_check)
-        self.options_checkbox_layout.addWidget(self.add_info_check)
-        self.options_checkbox_layout.addWidget(self.add_word_check)
-        self.options_checkbox_layout.addWidget(self.include_difficulty_level_check)
-        self.options_checkbox_layout.addWidget(self.add_beat_numbers_check)
-        self.options_checkbox_layout.addWidget(self.add_reversal_symbols_check)
-        
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addStretch(1)
-        self.layout.addLayout(self.user_input_layout)
-        self.layout.addStretch(1)
-        self.layout.addLayout(self.options_checkbox_layout)
-        self.layout.addStretch(1)
-        self.layout.addLayout(self.open_dir_layout)
-        self.layout.addStretch(1)
-
+        self.notes_combo_box.currentIndexChanged.connect(self._handle_note_selection)
 
     def _handle_user_selection(self):
         """Handle the selection of a user from the combo box."""
         selected_user = self.user_combo_box.currentText()
         if selected_user == "Edit Users":
-            self.user_manager.previous_user = self.previous_user
-            self.user_manager.open_edit_users_dialog()
-            index = self.user_combo_box.findText(self.previous_user)
-            if index != -1:
-                self.user_combo_box.setCurrentIndex(index)
+            self._open_edit_dialog(
+                self.user_manager, self.previous_user, self.user_combo_box
+            )
         else:
             self.previous_user = selected_user
-            self.export_dialog.preview_panel.update_preview(
-                self.include_start_pos_check.isChecked(),
-                self.add_info_check.isChecked(),
-                self.export_dialog.sequence,
-                self.add_word_check.isChecked(),
-                self.include_difficulty_level_check.isChecked(),
-                self.add_beat_numbers_check.isChecked(),
-            )
+            self._update_preview()
 
     def _handle_note_selection(self):
         """Handle the selection of a note from the combo box."""
         selected_note = self.notes_combo_box.currentText()
         if selected_note == "Edit Notes":
-            self.notes_manager.previous_note = self.previous_note
-            self.notes_manager.open_edit_notes_dialog()
-            index = self.notes_combo_box.findText(self.previous_note)
-            if index != -1:
-                self.notes_combo_box.setCurrentIndex(index)
+            self._open_edit_dialog(
+                self.notes_manager, self.previous_note, self.notes_combo_box
+            )
         else:
             self.previous_note = selected_note
-            self.export_dialog.preview_panel.update_preview(
-                self.include_start_pos_check.isChecked(),
-                self.add_info_check.isChecked(),
-                self.export_dialog.sequence,
-                self.add_word_check.isChecked(),
-                self.include_difficulty_level_check.isChecked(),
-                self.add_beat_numbers_check.isChecked(),
-            )
+            self._update_preview()
 
-    def toggle_add_info(self):
-        """Toggle the state of the additional info fields based on the checkbox."""
-        state = self.add_info_check.isChecked()
-        self.user_combo_box.setEnabled(state)
-        self.notes_combo_box.setEnabled(state)
-        color = "gray" if not state else ""
-        self.user_combo_box.setStyleSheet(f"color: {color};")
-        self.notes_combo_box.setStyleSheet(f"color: {color};")
+    def _open_edit_dialog(self, manager, previous_value, combo_box: QComboBox):
+        """Open the edit dialog for users or notes."""
+        manager.open_edit_dialog()
+        index = combo_box.findText(previous_value)
+        if index != -1:
+            combo_box.setCurrentIndex(index)
+
+    def _update_preview(self):
+        """Update the preview panel with the current settings."""
         self.export_dialog.preview_panel.update_preview(
-            self.include_start_pos_check.isChecked(),
-            self.add_info_check.isChecked(),
+            self.checkboxes["include_start_position"].isChecked(),
+            self.checkboxes["add_info"].isChecked(),
             self.export_dialog.sequence,
-            self.add_word_check.isChecked(),
-            self.include_difficulty_level_check.isChecked(),
-            self.add_beat_numbers_check.isChecked(),
-        )
-        self.settings_manager.image_export.set_image_export_setting("add_info", state)
-
-    def toggle_add_word(self):
-        """Toggle the state of the add word field based on the checkbox."""
-        state = self.add_word_check.isChecked()
-        self.settings_manager.image_export.set_image_export_setting("add_word", state)
-        self.export_dialog.preview_panel.update_preview(
-            self.include_start_pos_check.isChecked(),
-            self.add_info_check.isChecked(),
-            self.export_dialog.sequence,
-            self.add_word_check.isChecked(),
-            self.include_difficulty_level_check.isChecked(),
-            self.add_beat_numbers_check.isChecked(),
-        )
-
-    def toggle_include_difficulty_level(self):
-        """Toggle the state of the include difficulty level field based on the checkbox."""
-        state = self.include_difficulty_level_check.isChecked()
-        self.settings_manager.image_export.set_image_export_setting(
-            "add_difficulty_level", state
-        )
-        self.export_dialog.preview_panel.update_preview(
-            self.include_start_pos_check.isChecked(),
-            self.add_info_check.isChecked(),
-            self.export_dialog.sequence,
-            self.add_word_check.isChecked(),
-            self.include_difficulty_level_check.isChecked(),
-            self.add_beat_numbers_check.isChecked(),
-        )
-
-    def toggle_add_beat_numbers(self):
-        """Toggle the state of the add beat numbers field based on the checkbox."""
-        state = self.add_beat_numbers_check.isChecked()
-        self.settings_manager.image_export.set_image_export_setting(
-            "add_beat_numbers", state
-        )
-        self.export_dialog.preview_panel.update_preview(
-            self.include_start_pos_check.isChecked(),
-            self.add_info_check.isChecked(),
-            self.export_dialog.sequence,
-            self.add_word_check.isChecked(),
-            self.include_difficulty_level_check.isChecked(),
-            self.add_beat_numbers_check.isChecked(),
-        )
-
-    def toggle_add_start_position(self):
-        """Toggle the state of the add start position field based on the checkbox."""
-        state = self.include_start_pos_check.isChecked()
-        self.settings_manager.image_export.set_image_export_setting(
-            "include_start_position", state
-        )
-        self.export_dialog.preview_panel.update_preview(
-            self.include_start_pos_check.isChecked(),
-            self.add_info_check.isChecked(),
-            self.export_dialog.sequence,
-            self.add_word_check.isChecked(),
-            self.include_difficulty_level_check.isChecked(),
-            self.add_beat_numbers_check.isChecked(),
-            self.add_reversal_symbols_check.isChecked(),
-        )
-
-    def toggle_add_reversal_symbols(self):
-        """Toggle the state of the add reversal symbols field based on the checkbox."""
-        state = self.add_reversal_symbols_check.isChecked()
-        self.settings_manager.image_export.set_image_export_setting(
-            "add_reversal_symbols", state
-        )
-        self.export_dialog.preview_panel.update_preview(
-            self.include_start_pos_check.isChecked(),
-            self.add_info_check.isChecked(),
-            self.export_dialog.sequence,
-            self.add_word_check.isChecked(),
-            self.include_difficulty_level_check.isChecked(),
-            self.add_beat_numbers_check.isChecked(),
-            self.add_reversal_symbols_check.isChecked(),
-
+            self.checkboxes["add_word"].isChecked(),
+            self.checkboxes["add_difficulty_level"].isChecked(),
+            self.checkboxes["add_beat_numbers"].isChecked(),
+            self.checkboxes["add_reversal_symbols"].isChecked(),
         )
