@@ -30,14 +30,7 @@ class DictionaryWidget(QWidget):
             self.main_widget.main_window.settings_manager.dictionary_settings
         )
         self._setup_ui()
-        # self.connect_signals()
         self.initialized = False
-        # self.background_manager = self.global_settings.setup_background_manager(self)
-
-    # def connect_signals(self):
-    #     self.main_widget.main_window.settings_manager.background_changed.connect(
-    #         self.update_background_manager
-    #     )
 
     def update_background_manager(self, bg_type: str):
         if self.background_manager:
@@ -63,7 +56,6 @@ class DictionaryWidget(QWidget):
         self.layout.addWidget(self.browser, 5)
         self.setLayout(self.layout)
 
-
     def resize_dictionary_widget(self) -> None:
         self.browser.resize_dictionary_browser()
         self.preview_area.resize_preview_area()
@@ -71,7 +63,6 @@ class DictionaryWidget(QWidget):
     def resizeEvent(self, event: QResizeEvent) -> None:
         super().resizeEvent(event)
         self.preview_area.resize_preview_area()
-
 
     def show_initial_section(self):
         current_section = (

@@ -221,6 +221,9 @@
       "blue": [20, 10],
       "swap_beta_ne_radial_blue_static_ne_red_static_ne": true,
       "blue_rot_angle_override": true
+    },
+    "(ccw, 0, 0.5)": {
+      "swap_beta_se_radial_blue_static_se_red_static_se": true
     }
   }
 }

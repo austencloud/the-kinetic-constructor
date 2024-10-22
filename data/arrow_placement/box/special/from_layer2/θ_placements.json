@@ -136,7 +136,7 @@
     },
     "(s, 1, 1)": {
       "static_rot_angle_override": true,
-      "static": [0, -65]
+      "static": [-50, 50]
     },
     "(s, 1, 1.5)": {
       "static": [0, -15],

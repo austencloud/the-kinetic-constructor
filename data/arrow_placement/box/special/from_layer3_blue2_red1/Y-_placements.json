@@ -51,7 +51,7 @@
     "(s, 1, 1)": {
       "dash_from_layer1": [-35, -80],
       "pro_from_layer2": [-75, 80],
-      "pro_from_layer1": {},
+      "pro_from_layer1": [70, 25],
       "dash_from_layer2": {}
     },
     "(s, 1, 1.5)": {

@@ -36,8 +36,9 @@
     },
     "(s, 0.5, 1)": {
       "static_rot_angle_override": true,
-      "static": [0, -65],
-      "dash": [75, -35]
+      "dash": [75, -35],
+      "static_to_layer2_rot_angle_override": true,
+      "static": [-70, 70]
     },
     "(s, 0.5, 1.5)": {
       "swap_beta_s_radial_blue_static_s_red_dash_e": true,

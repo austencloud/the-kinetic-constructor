@@ -18,6 +18,7 @@ class BeatFrameResizer(QWidget):
         self.setCursor(Qt.CursorShape.SizeHorCursor)
 
     def resize_beat_frame(self) -> None:
+
         width, height = self.calculate_dimensions()
         beat_size = self.calculate_beat_size(width, height)
         self.resize_beats(beat_size)

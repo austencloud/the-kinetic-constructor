@@ -41,6 +41,8 @@ class OptionPicker(QWidget):
         self.setup_layout()
         self.hide()
 
+
+
     def setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)

@@ -1,6 +1,7 @@
+from math import floor
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import QTimer, Qt
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QSizePolicy
 
 
 from data.constants import FLOAT
@@ -71,7 +72,9 @@ class SequenceWidget(QWidget):
         self.layout.addWidget(self.indicator_label, 1)
         self.layout.addWidget(self.graph_editor, 5)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
+        size_policy: QSizePolicy = self.sizePolicy()
+        # set its policy to expand
+        size_policy.setHorizontalPolicy(QSizePolicy.Policy.Expanding)
         self.setLayout(self.layout)
 
     def update_current_word_from_beats(self):
@@ -172,6 +175,7 @@ class SequenceWidget(QWidget):
         self.main_widget.sequence_properties_manager.update_sequence_properties()
 
     def resize_sequence_widget(self) -> None:
+        # self.setMinimumWidth(floor(self.main_widget.width() * 0.5))
         self.current_word_label.resize_current_word_label()
         self.button_panel.resize_button_frame()
         self.beat_frame.resize_beat_frame()

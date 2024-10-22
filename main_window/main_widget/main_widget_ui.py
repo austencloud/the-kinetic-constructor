@@ -1,6 +1,9 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget, QSizePolicy
 
+from main_window.main_widget.learn_widget.sequence_tab_container import (
+    SequenceTabContainer,
+)
 from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
 from main_window.main_widget.navigation_widget import NavigationWidget
 from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
@@ -20,10 +23,7 @@ class MainWidgetUI:
         self.main_widget = main_widget
         self._setup_components()
         self._setup_layout()
-        self._ensure_equal_size()
         self._setup_indices()
-
-
         self._load_current_tab()
 
     def _load_current_tab(self):
@@ -41,33 +41,28 @@ class MainWidgetUI:
         self.main_widget.dictionary_widget = DictionaryWidget(self.main_widget)
         self.main_widget.learn_widget = LearnWidget(self.main_widget)
 
-    def _setup_layout(self):
-        self.main_widget.main_layout = QVBoxLayout(self.main_widget)
-        
+        # Initialize the stacked widget with tabs (build, generate, etc.)
         self.main_widget.stacked_widget = QStackedWidget()
-        self.main_widget.content_layout = QHBoxLayout()
-
-        self.main_widget.setLayout(self.main_widget.main_layout)
-        self.main_widget.main_layout.addWidget(self.main_widget.navigation_widget)
-        self.main_widget.main_layout.addWidget(self.main_widget.menu_bar_widget)
-        self.main_widget.main_layout.addLayout(self.main_widget.content_layout)
-
         self.main_widget.stacked_widget.addWidget(self.main_widget.manual_builder)
         self.main_widget.stacked_widget.addWidget(self.main_widget.sequence_generator)
         self.main_widget.stacked_widget.addWidget(self.main_widget.dictionary_widget)
         self.main_widget.stacked_widget.addWidget(self.main_widget.learn_widget)
-        self.main_widget.content_layout.addWidget(self.main_widget.sequence_widget)
-        self.main_widget.content_layout.addWidget(self.main_widget.stacked_widget)
 
-    def _ensure_equal_size(self):
-        self.main_widget.content_layout.setStretch(0, 1)  # sequence_widget
-        self.main_widget.content_layout.setStretch(1, 1)  # stacked_widget
-        self.main_widget.sequence_widget.setSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred
+        # Initialize the container that holds both sequence_widget and stacked_widget
+        self.sequence_tab_container = SequenceTabContainer(
+            self.main_widget.sequence_widget, self.main_widget.stacked_widget
         )
-        self.main_widget.stacked_widget.setSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred
-        )
+
+    def _setup_layout(self):
+        self.main_widget.main_layout = QVBoxLayout(self.main_widget)
+        self.main_widget.setLayout(self.main_widget.main_layout)
+
+        # Add navigation and menu bar widgets to the main layout
+        self.main_widget.main_layout.addWidget(self.main_widget.navigation_widget)
+        self.main_widget.main_layout.addWidget(self.main_widget.menu_bar_widget)
+
+        # Add the sequence_tab_container to the main layout
+        self.main_widget.main_layout.addWidget(self.sequence_tab_container)
 
     def _setup_indices(self):
         self.main_widget.build_tab_index = 0

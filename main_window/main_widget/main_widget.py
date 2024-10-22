@@ -57,6 +57,12 @@ class MainWidget(QWidget):
     settings_manager: "SettingsManager"
     splash_screen: "SplashScreen"
 
+    # Sub-widgets
+    manual_builder: "ManualBuilderWidget"
+    sequence_generator: "SequenceGeneratorWidget"
+    dictionary_widget: "DictionaryWidget"
+    learn_widget: "LearnWidget"
+
     # Handlers
     tabs_handler: "MainWidgetTabs"
     manager: "MainWidgetManager"
@@ -65,6 +71,17 @@ class MainWidget(QWidget):
     state_handler: "MainWidgetState"
     background_handler: "MainWidgetBackground"
 
+    # Managers and Helpers
+    svg_manager: "SvgManager"
+    turns_tuple_generator: "TurnsTupleGenerator"
+    pictograph_key_generator: "PictographKeyGenerator"
+    special_placement_loader: "SpecialPlacementLoader"
+    metadata_extractor: "MetaDataExtractor"
+    sequence_level_evaluator: "SequenceLevelEvaluator"
+    sequence_properties_manager: "SequencePropertiesManager"
+    thumbnail_finder: "ThumbnailFinder"
+    grid_mode_checker: "GridModeChecker"
+
     # Layouts and Widgets
     main_layout: QVBoxLayout
     content_layout: QHBoxLayout
@@ -72,12 +89,6 @@ class MainWidget(QWidget):
     navigation_widget: "NavigationWidget"
     sequence_widget: "SequenceWidget"
     stacked_widget: QStackedWidget
-
-    # Sub-widgets
-    manual_builder: "ManualBuilderWidget"
-    sequence_generator: "SequenceGeneratorWidget"
-    dictionary_widget: "DictionaryWidget"
-    learn_widget: "LearnWidget"
 
     # Indices for tabs
     build_tab_index: int = 0
@@ -90,17 +101,6 @@ class MainWidget(QWidget):
     background_manager: "BackgroundManager"
     json_manager: "JsonManager"
     tab_bar_styler: "MainWidgetTabBarStyler"
-
-    # Managers and Helpers
-    svg_manager: "SvgManager"
-    turns_tuple_generator: "TurnsTupleGenerator"
-    pictograph_key_generator: "PictographKeyGenerator"
-    special_placement_loader: "SpecialPlacementLoader"
-    metadata_extractor: "MetaDataExtractor"
-    sequence_level_evaluator: "SequenceLevelEvaluator"
-    sequence_properties_manager: "SequencePropertiesManager"
-    thumbnail_finder: "ThumbnailFinder"
-    grid_mode_checker: "GridModeChecker"
 
     # Other attributes
     pictograph_cache: dict[str, dict[str, "BasePictograph"]]

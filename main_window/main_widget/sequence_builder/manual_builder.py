@@ -42,6 +42,7 @@ class ManualBuilderWidget(QFrame):
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self.setStyleSheet("background: transparent;")
 
+
         self.stacked_widget.addWidget(self.start_pos_picker)
         self.stacked_widget.addWidget(self.advanced_start_pos_picker)
         self.stacked_widget.addWidget(self.option_picker)

@@ -482,6 +482,10 @@
     },
     "null": {
       "static_rot_angle_override": true
+    },
+    "(s, 1, 1)": {
+      "static_rot_angle_override": true,
+      "static": [-75, 75]
     }
   }
 }

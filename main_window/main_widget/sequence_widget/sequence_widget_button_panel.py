@@ -7,7 +7,9 @@ from main_window.main_widget.dictionary_widget.full_screen_image_overlay import 
     FullScreenImageOverlay,
 )
 
-from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import StartPositionBeatView
+from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
+    StartPositionBeatView,
+)
 from utilities.path_helpers import get_images_and_data_path
 
 
@@ -135,7 +137,7 @@ class SequenceWidgetButtonPanel(QFrame):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def resize_button_frame(self) -> None:
-        button_size = self.sequence_widget.main_widget.height() // 16
+        button_size = self.sequence_widget.main_widget.height() // 18
 
         for button in self.buttons:
             button.setFixedSize(button_size, button_size)
