@@ -115,9 +115,9 @@ class DictionaryBrowser(QWidget):
         self.back_button.clicked.connect(self.go_back_to_initial_selection_widget)
 
     def go_back_to_initial_selection_widget(self):
-        self.initial_selection_widget.show()
         for widget in self.widgets:
             widget.hide()
+        self.initial_selection_widget.show()
         self.dictionary_widget.preview_area.hide()
         self.dictionary_widget.preview_area.clear_preview()
         self.number_of_sequences_label.hide()

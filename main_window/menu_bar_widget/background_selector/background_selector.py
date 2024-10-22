@@ -23,4 +23,4 @@ class BackgroundSelector(LabelSelector):
         self.set_display_text(background)
         self.settings_manager.global_settings.set_background_type(background)
         self.settings_manager.save_settings()
-        self.main_widget.setup_background_manager()
+        self.main_widget.background_handler.setup_background_manager()
