@@ -41,8 +41,6 @@ class OptionPicker(QWidget):
         self.setup_layout()
         self.hide()
 
-
-
     def setup_layout(self) -> None:
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -158,13 +156,13 @@ class OptionPicker(QWidget):
 
     def resize_option_picker(self) -> None:
         self.resize(self.manual_builder.width(), self.manual_builder.height())
-        self.choose_your_next_pictograph_label.resize_choose_your_next_option_label()
+        self.choose_your_next_pictograph_label.resize_choose_your_next_pictograph_label()
         self.scroll_area.resize_option_picker_scroll_area()
         self._resize_combo_box()
 
     def _resize_combo_box(self):
         font = self.filter_combo_box.font()
-        font_size = int(self.manual_builder.main_widget.width() * 0.01)
+        font_size = int(self.manual_builder.main_widget.width() * 0.0075)
         font.setPointSize(font_size)
         font.setFamily("Georgia")
         self.filter_combo_box.setFont(font)

@@ -49,10 +49,8 @@
     },
     "dictionary": {
         "sort_method": "date_added",
-        "current_section": "browser",
-        "current_filter": {
-            "starting_letter": "A"
-        }
+        "current_section": "filter_choice",
+        "current_filter": null
     },
     "sequence_layout": {
         "grow_sequence": true,
@@ -82,7 +80,7 @@
                 "sequence_type": "freeform",
                 "sequence_length": 16,
                 "max_turn_intensity": 1,
-                "sequence_level": 2,
+                "sequence_level": 3,
                 "continuous_rotation": true,
                 "selected_letter_types": [
                     "Dual-Shift",
@@ -91,7 +89,7 @@
                     "Dual-Dash"
                 ]
             },
-            "current_auto_builder": "circular"
+            "current_auto_builder": "freeform"
         },
         "manual_builder": {
             "filters": "continuous"

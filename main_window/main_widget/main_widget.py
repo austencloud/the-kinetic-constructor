@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
+import main
 from main_window.main_widget.main_widget_tabs import MainWidgetTabs
 
 
@@ -15,6 +16,8 @@ from .main_widget_state import MainWidgetState
 from .main_widget_background import MainWidgetBackground
 
 if TYPE_CHECKING:
+    from .sequence_widget.beat_frame.build_tab_widget import BuildTabWidget
+    from .sequence_widget.beat_frame.generate_tab_widget import GenerateTabWidget
     from main_window.settings_manager.settings_manager import SettingsManager
     from .navigation_widget import NavigationWidget
     from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
@@ -63,6 +66,7 @@ class MainWidget(QWidget):
     dictionary_widget: "DictionaryWidget"
     learn_widget: "LearnWidget"
 
+
     # Handlers
     tabs_handler: "MainWidgetTabs"
     manager: "MainWidgetManager"
@@ -85,11 +89,15 @@ class MainWidget(QWidget):
     # Layouts and Widgets
     main_layout: QVBoxLayout
     content_layout: QHBoxLayout
+    builder_stacked_widget: QStackedWidget
+    main_stacked_widget: QStackedWidget
+    dictionary_learn_widget: QStackedWidget
+    build_generate_widget: QWidget
+    build_generate_layout: QHBoxLayout
     menu_bar_widget: "MenuBarWidget"
     navigation_widget: "NavigationWidget"
     sequence_widget: "SequenceWidget"
-    stacked_widget: QStackedWidget
-
+    
     # Indices for tabs
     build_tab_index: int = 0
     generate_tab_index: int = 1

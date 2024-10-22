@@ -72,9 +72,8 @@ class SequenceWidget(QWidget):
         self.layout.addWidget(self.indicator_label, 1)
         self.layout.addWidget(self.graph_editor, 5)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        size_policy: QSizePolicy = self.sizePolicy()
-        # set its policy to expand
-        size_policy.setHorizontalPolicy(QSizePolicy.Policy.Expanding)
+        # apply the policy
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.setLayout(self.layout)
 
     def update_current_word_from_beats(self):

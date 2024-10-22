@@ -25,18 +25,19 @@ class ChooseYourNextPictographLabel(QLabel):
 
     def set_stylesheet(self) -> None:
         width = self.option_picker.width()
+        font_size = int(0.04 * width)
         self.setStyleSheet(
             f"QLabel {{"
             f"  background-color: rgba(255, 255, 255, 200);"
             f"  border-radius: {self.height() // 2}px;"
-            f"  font-size: {int(0.04 * width)}px;"
+            f"  font-size: {font_size}px;"
             f"  font-family: 'Monotype Corsiva';"
             f"}}"
         )
 
-    def resize_choose_your_next_option_label(self) -> None:
+    def resize_choose_your_next_pictograph_label(self) -> None:
         width = self.option_picker.manual_builder.main_widget.width() // 4
-        height = self.option_picker.manual_builder.main_widget.height() // 16
+        height = self.option_picker.manual_builder.main_widget.height() // 20
 
         self.setFixedSize(width, height)
         self.set_stylesheet()
