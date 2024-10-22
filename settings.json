@@ -1,9 +1,9 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Snowfall",
-        "grow_sequence": true,
-        "current_tab": "dictionary",
+        "background_type": "Bubbles",
+        "grow_sequence": false,
+        "current_tab": "build",
         "grid_mode": "diamond"
     },
     "image_export": {
@@ -55,7 +55,7 @@
         }
     },
     "sequence_layout": {
-        "grow_sequence": true,
+        "grow_sequence": false,
         "num_beats": 16,
         "layout_option": "4 x 4"
     },
@@ -65,10 +65,10 @@
                 "sequence_type": "circular",
                 "sequence_length": 16,
                 "max_turn_intensity": 1,
-                "sequence_level": 3,
+                "sequence_level": 2,
                 "rotation_type": "quartered",
                 "permutation_type": "rotated",
-                "continuous_rotation": true,
+                "continuous_rotation": false,
                 "selected_letter_types": [
                     "Type1",
                     "Type2",
@@ -91,7 +91,7 @@
                     "Dual-Dash"
                 ]
             },
-            "current_auto_builder": "circular"
+            "current_auto_builder": "freeform"
         },
         "manual_builder": {
             "filters": "continuous"
