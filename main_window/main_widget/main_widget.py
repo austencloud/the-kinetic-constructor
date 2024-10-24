@@ -5,8 +5,8 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
 import main
-from main_window.main_widget.write_widget.write_widget import (
-    WriteWidget,
+from main_window.main_widget.write_widget.write_tab import (
+    WriteTab,
 )
 from main_window.main_widget.main_widget_tabs import MainWidgetTabs
 
@@ -68,7 +68,7 @@ class MainWidget(QWidget):
     sequence_generator: "SequenceGeneratorWidget"
     dictionary_widget: "DictionaryWidget"
     learn_widget: "LearnWidget"
-    write_widget: "WriteWidget"
+    write_widget: "WriteTab"
 
     # Handlers
     tabs_handler: "MainWidgetTabs"

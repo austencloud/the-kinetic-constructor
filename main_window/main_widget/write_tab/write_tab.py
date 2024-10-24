@@ -1,4 +1,4 @@
-# write_widget.py
+# write_tab.py
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSplitter
 
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
 
-class WriteWidget(QWidget):
+class WriteTab(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
@@ -33,6 +33,10 @@ class WriteWidget(QWidget):
         layout = QVBoxLayout(self)
         layout.addWidget(self.splitter)
         self.setLayout(layout)
+
+        # Set the title and date after the layout has been set up
+        self.timeline_widget.header_widget.set_title("My Timeline Title")
+        self.timeline_widget.header_widget.set_date("2024-10-24")
 
     def resizeEvent(self, event):
         self.timeline_widget.resize_timeline()

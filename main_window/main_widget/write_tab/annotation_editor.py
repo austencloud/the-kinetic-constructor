@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QTextEdit, QLabel
 
 if TYPE_CHECKING:
-    from .write_widget import WriteWidget
+    from .write_tab import WriteTab
 
 
 class AnnotationEditor(QWidget):
-    def __init__(self, write_tab: "WriteWidget") -> None:
+    def __init__(self, write_tab: "WriteTab") -> None:
         super().__init__(write_tab)
         self.write_tab = write_tab
 

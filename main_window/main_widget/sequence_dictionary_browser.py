@@ -10,12 +10,12 @@ from main_window.main_widget.write_widget.draggable_sequence import (
 )
 
 if TYPE_CHECKING:
-    from .write_widget.write_widget import WriteWidget
+    from .write_widget.write_tab import WriteTab
     from main_window.main_widget.sequence_widget.beat_frame.beat import BeatView
 
 
 class SequenceDictionaryBrowser(QWidget):
-    def __init__(self, write_tab: "WriteWidget") -> None:
+    def __init__(self, write_tab: "WriteTab") -> None:
         super().__init__(write_tab)
         self.write_tab = write_tab
 

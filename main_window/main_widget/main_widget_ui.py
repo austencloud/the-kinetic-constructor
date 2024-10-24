@@ -7,8 +7,8 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from main_window.main_widget.write_widget.write_widget import (
-    WriteWidget,
+from main_window.main_widget.write_widget.write_tab import (
+    WriteTab,
 )
 from main_window.main_widget.learn_widget.sequence_tab_container import (
     SequenceTabContainer,
@@ -49,7 +49,7 @@ class MainWidgetUI:
         self.main_widget.sequence_generator = SequenceGeneratorWidget(self.main_widget)
         self.main_widget.dictionary_widget = DictionaryWidget(self.main_widget)
         self.main_widget.learn_widget = LearnWidget(self.main_widget)
-        self.main_widget.write_widget = WriteWidget(self.main_widget)
+        self.main_widget.write_widget = WriteTab(self.main_widget)
 
         # Initialize builder_stacked_widget to switch between manual builder and sequence generator
         self.main_widget.builder_stacked_widget = QStackedWidget()
