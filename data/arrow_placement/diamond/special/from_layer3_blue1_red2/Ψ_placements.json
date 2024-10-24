@@ -34,6 +34,10 @@
       "dash_from_layer1": [10, -170],
       "static_from_layer1_rot_angle_override": true,
       "static_from_layer1": [-90, 0]
+    },
+    "(o, 0.5, 1)": {
+      "static_from_layer1_rot_angle_override": true,
+      "static_from_layer1": [-100, 0]
     }
   }
 }

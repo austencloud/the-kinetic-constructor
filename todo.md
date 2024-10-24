@@ -1,13 +1,12 @@
+# TODO
 
-
-# - Implement a system of analyzing a sequence to determine whether or not it has prop reversals, full reversals, or hand reversals
-
-# - Implement a system of automatically fixing words to follow a standardized naming convention
-
-# - Implement a system of allowing the user to give specific names to their variations
-
-# - Implement a system of allowing the user to select their favorites and access them easily
-
-# - Implement a system of allowing the user to modify the way pictographs look within their thumbnails
-
-# - Implement a system of automatically saving all variations of a specific sequence in all prop types as images or svgs
+- Analyze sequences for prop, full, and hand reversals
+- Standardize naming conventions automatically - reassemble pictographs
+  - Allow users to select from the middle of a circular sequence when constructing an act
+- Allow user-defined names for sequence variations
+- Customize pictograph thumbnails for prop type or visibility
+- Save all sequence variations as images or SVGs
+- Make the menu bar change depending on what widget it's inside
+- More customizable variables in the browser options panel
+- Split the Learn tab into levels
+- Fix the Font Color updater to update currently selected toggles

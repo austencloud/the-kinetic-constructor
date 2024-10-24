@@ -24,6 +24,8 @@ class Timeline(QWidget):
         # Add the content widget to the custom scroll area
         self.content_widget = QWidget()
         self.content_layout = QVBoxLayout(self.content_widget)
+        self.content_layout.setSpacing(0)
+        # self.content_layout.setContentsMargins(0, 0, 0, 0)
         self.scroll_area.setWidget(self.content_widget)
 
         # Add default rows
@@ -34,9 +36,11 @@ class Timeline(QWidget):
             self.add_row()
 
     def _setup_layout(self):
-        layout = QVBoxLayout(self)
-        layout.addWidget(self.scroll_area)
-        self.setLayout(layout)
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.layout.addWidget(self.scroll_area)
+        self.layout.setSpacing(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(self.layout)
 
     def add_row(self):
         row = TimelineRow(self)

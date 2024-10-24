@@ -4,16 +4,12 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtCore import Qt
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from main_window.main_widget.write_widget.timeline_blank_pictograph import TimelineBlankPictograph
 
 if TYPE_CHECKING:
     from main_window.main_widget.write_widget.timeline_row import TimelineRow
     from main_window.main_widget.sequence_widget.beat_frame.beat import BeatView
 
-
-class TimelineBlankPictograph(BasePictograph):
-    def __init__(self, timeline_widget: "TimelineBeatContainer") -> None:
-        super().__init__(timeline_widget.timeline_row.timeline.write_tab.main_widget)
-        self.is_blank = True
 
 
 # timeline_beat_widget.py
@@ -33,6 +29,7 @@ class TimelineBeatContainer(QFrame):
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
         self.setLayout(self.layout)
 
     def set_blank_pictograph(self):

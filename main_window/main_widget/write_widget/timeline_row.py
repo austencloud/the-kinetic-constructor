@@ -32,6 +32,8 @@ class TimelineRow(QWidget):
 
     def _setup_layout(self):
         self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
         self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.setLayout(self.layout)
 

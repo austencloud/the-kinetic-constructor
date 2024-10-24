@@ -35,7 +35,7 @@ class WriteWidget(QWidget):
         self.setLayout(layout)
 
     def resizeEvent(self, event):
-        super().resizeEvent(event)
         self.timeline_widget.resize_timeline()
         self.dictionary_browser.resize_browser()
         self.annotation_editor.resize_editor()
+        super().resizeEvent(event)

@@ -39,15 +39,6 @@ class MainWidgetEvents:
         self.main_widget.navigation_widget.resize_navigation_widget()
         self.main_widget.menu_bar_widget.resize_menu_bar_widget()
 
-        # if self.main_widget.current_tab == "build":
-        #     self.main_widget.manual_builder.resize_manual_builder()
-        # elif self.main_widget.current_tab == "generate":
-        #     self.main_widget.sequence_generator.resize_sequence_generator()
-        # elif self.main_widget.current_tab == "dictionary":
-        #     self.main_widget.dictionary_widget.resize_dictionary_widget()
-        # elif self.main_widget.current_tab == "learn":
-        #     self.main_widget.learn_widget.resize_learn_widget()
-
     def closeEvent(self, event: QCloseEvent):
         self.main_widget.state_handler.save_state()
         event.accept()
