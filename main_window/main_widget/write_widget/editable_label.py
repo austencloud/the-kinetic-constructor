@@ -1,29 +1,41 @@
+# editable_label.py
 from PyQt6.QtWidgets import QLabel, QLineEdit, QHBoxLayout, QWidget
-
+from PyQt6.QtCore import Qt
 
 class EditableLabel(QWidget):
-    def __init__(self, text="Label", parent=None):
+    def __init__(self, label_text: str, parent=None):
         super().__init__(parent)
-        self.label = QLabel(text, self)
-        self.line_edit = QLineEdit(self)
-        self.line_edit.setText(text)
-        self.line_edit.setVisible(False)
+        self.label = QLabel(label_text, self)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
+        self.edit = QLineEdit(self)
+        self.edit.setPlaceholderText(label_text)
+        self.edit.setVisible(False)
+        self.edit.returnPressed.connect(self._hide_edit)
 
-        self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.layout.addWidget(self.label)
-        self.layout.addWidget(self.line_edit)
-        self.setLayout(self.layout)
+        layout = QHBoxLayout(self)
+        layout.addWidget(self.label)
+        layout.addWidget(self.edit)
+        self.setLayout(layout)
 
-        self.label.mousePressEvent = self._edit_label
-        self.line_edit.returnPressed.connect(self._save_label)
+        self.label.mousePressEvent = self._show_edit  # Clicking the label will trigger editing
 
-    def _edit_label(self, event):
+    def _show_edit(self, event):
+        """Show the QLineEdit for editing."""
         self.label.setVisible(False)
-        self.line_edit.setVisible(True)
-        self.line_edit.setFocus()
+        self.edit.setVisible(True)
+        self.edit.setFocus()
 
-    def _save_label(self):
-        text = self.line_edit.text()
-        self.label.setText(text)
+    def _hide_edit(self):
+        """Hide the QLineEdit and show the QLabel."""
+        new_text = self.edit.text()
+        self.label.setText(new_text if new_text else self.label.text())
         self.label.setVisible(True)
-        self.line_edit.setVisible(False)
+        self.edit.setVisible(False)
+
+    def set_text(self, text: str):
+        """Programmatically set the text of the label."""
+        self.label.setText(text)
+
+    def get_text(self) -> str:
+        """Get the current text of the label."""
+        return self.label.text()

@@ -2,10 +2,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSplitter
 
-from main_window.main_widget.write_widget.music_player import (
-    MusicPlayer,
-)
-
 from .timeline import Timeline
 from ..sequence_dictionary_browser import SequenceDictionaryBrowser
 from .annotation_editor import AnnotationEditor
@@ -13,8 +9,7 @@ from .annotation_editor import AnnotationEditor
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
-# write_widget.py
-# write_widget.py
+
 class WriteWidget(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
@@ -23,14 +18,10 @@ class WriteWidget(QWidget):
         self._setup_components()
         self._setup_layout()
 
-        # Connect the splitterMoved signal to the resize function
-        self.splitter.splitterMoved.connect(self.on_splitter_moved)
-
     def _setup_components(self):
         self.timeline_widget = Timeline(self)
         self.dictionary_browser = SequenceDictionaryBrowser(self)
         self.annotation_editor = AnnotationEditor(self)
-        self.music_player = MusicPlayer(self)
 
     def _setup_layout(self):
         # Use a splitter to allow resizing between the dictionary and timeline
@@ -39,16 +30,12 @@ class WriteWidget(QWidget):
         self.splitter.addWidget(self.timeline_widget)
 
         # Main layout
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addWidget(self.splitter)
-        self.setLayout(self.layout)
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.splitter)
+        self.setLayout(layout)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self.timeline_widget.resize_timeline()  # Trigger timeline resizing
+        self.timeline_widget.resize_timeline()
         self.dictionary_browser.resize_browser()
         self.annotation_editor.resize_editor()
-
-    def on_splitter_moved(self, pos, index):
-        """Callback for when the splitter is moved to trigger resize."""
-        self.timeline_widget.resize_timeline()  # Trigger timeline resizing

@@ -1,9 +1,9 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Bubbles",
-        "grow_sequence": false,
-        "current_tab": "write",
+        "background_type": "Aurora",
+        "grow_sequence": true,
+        "current_tab": "build",
         "grid_mode": "diamond"
     },
     "image_export": {
@@ -53,9 +53,9 @@
         "current_filter": null
     },
     "sequence_layout": {
-        "grow_sequence": false,
-        "num_beats": 16,
-        "layout_option": "4 x 4"
+        "grow_sequence": true,
+        "num_beats": 15,
+        "layout_option": "5 x 3"
     },
     "builder": {
         "auto_builder": {
@@ -92,7 +92,7 @@
             "current_auto_builder": "circular"
         },
         "manual_builder": {
-            "filters": null
+            "filters": "continuous"
         },
         "last_used_builder": "manual"
     },
