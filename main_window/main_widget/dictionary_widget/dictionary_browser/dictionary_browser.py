@@ -350,3 +350,25 @@ class DictionaryBrowser(QWidget):
             QApplication.restoreOverrideCursor()
 
         QTimer.singleShot(0, update_ui)
+
+    def get_all_sequences(self):
+        dictionary_dir = get_images_and_data_path("dictionary")
+        base_words = [
+            (
+                word,
+                self.main_widget.thumbnail_finder.find_thumbnails(
+                    os.path.join(dictionary_dir, word)
+                ),
+            )
+            for word in os.listdir(dictionary_dir)
+            if os.path.isdir(os.path.join(dictionary_dir, word))
+            and "__pycache__" not in word
+        ]
+        sequences = []
+        for word, thumbnails in base_words:
+            for thumbnail in thumbnails:
+                sequence_length = (
+                    self.main_widget.metadata_extractor.get_sequence_length(thumbnail)
+                )
+                sequences.append((word, thumbnails, sequence_length))
+        return sequences

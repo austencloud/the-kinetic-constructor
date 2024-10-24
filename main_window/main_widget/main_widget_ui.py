@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget, QSizePolicy, QWidget
 
+from main_window.main_widget.choreography_tab_widget import ChoreographyTabWidget
 from main_window.main_widget.learn_widget.sequence_tab_container import (
     SequenceTabContainer,
 )
@@ -37,7 +38,8 @@ class MainWidgetUI:
         self.main_widget.sequence_generator = SequenceGeneratorWidget(self.main_widget)
         self.main_widget.dictionary_widget = DictionaryWidget(self.main_widget)
         self.main_widget.learn_widget = LearnWidget(self.main_widget)
-
+        self.main_widget.choreography_tab_widget = ChoreographyTabWidget(self.main_widget)
+        
         # Initialize builder_stacked_widget to switch between manual builder and sequence generator
         self.main_widget.builder_stacked_widget = QStackedWidget()
         self.main_widget.builder_stacked_widget.addWidget(self.main_widget.manual_builder)
@@ -63,7 +65,8 @@ class MainWidgetUI:
         # Add Build/Generate Widget and Dictionary/Learn Widget to main_stacked_widget
         self.main_widget.main_stacked_widget.addWidget(self.main_widget.build_generate_widget)  # Index 0
         self.main_widget.main_stacked_widget.addWidget(self.main_widget.dictionary_learn_widget)  # Index 1
-
+        self.main_widget.main_stacked_widget.addWidget(self.main_widget.choreography_tab_widget)  # Index 2
+        
     def _setup_layout(self):
         self.main_widget.main_layout = QVBoxLayout(self.main_widget)
         self.main_widget.setLayout(self.main_widget.main_layout)
@@ -83,6 +86,7 @@ class MainWidgetUI:
         self.main_widget.generate_tab_index = 1
         self.main_widget.dictionary_tab_index = 2
         self.main_widget.learn_tab_index = 3
+        self.main_widget.choreography_tab_index = 4
 
     def _load_current_tab(self):
         self.main_widget.current_tab = (

@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+from main_window.main_widget.act import Act
+
 
 from .image_export_layout_handler import ImageExportLayoutHandler
 from .image_creator.image_creator import ImageCreator
@@ -41,3 +43,7 @@ class ImageExportManager:
         self.image_creator = ImageCreator(self)
         self.image_saver = ImageSaver(self)
         self.dialog_executor = ImageExportDialogExecutor(self)
+
+    def create_act_image(self, act: "Act"):
+        # Similar to create_sequence_image but for the entire act
+        pass

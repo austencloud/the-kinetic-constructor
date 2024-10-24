@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
 import main
+from main_window.main_widget.choreography_tab_widget import ChoreographyTabWidget
 from main_window.main_widget.main_widget_tabs import MainWidgetTabs
 
 
@@ -65,7 +66,7 @@ class MainWidget(QWidget):
     sequence_generator: "SequenceGeneratorWidget"
     dictionary_widget: "DictionaryWidget"
     learn_widget: "LearnWidget"
-
+    choreography_tab_widget: "ChoreographyTabWidget"
 
     # Handlers
     tabs_handler: "MainWidgetTabs"
@@ -103,6 +104,7 @@ class MainWidget(QWidget):
     generate_tab_index: int = 1
     dictionary_tab_index: int = 2
     learn_tab_index: int = 3
+    choreography_tab_index: int = 4
 
     # Current state
     current_tab: str

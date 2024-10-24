@@ -29,7 +29,13 @@ class NavigationWidget(QWidget):
         self.tab_buttons: dict[str, QPushButton] = {}
         self.tab_layout = QHBoxLayout()
         self.tab_layout.addStretch(1)
-        self.tab_names = ["Build ⚒️", "Generate 🤖", "Browse 🔍", "Learn 🧠"]
+        self.tab_names = [
+            "Build ⚒️",
+            "Generate 🤖",
+            "Browse 🔍",
+            "Learn 🧠",
+            "Choreography ✍️",
+        ]
         self.current_index = 0
         for index, name in enumerate(self.tab_names):
             button = QPushButton(name)

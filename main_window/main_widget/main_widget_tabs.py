@@ -23,8 +23,10 @@ class MainWidgetTabs:
             self.main_widget.main_stacked_widget.setCurrentIndex(1)
             if index == self.main_widget.dictionary_tab_index:
                 self.main_widget.dictionary_learn_widget.setCurrentIndex(0)  # dictionary_widget
-            else:
+            elif index == self.main_widget.learn_tab_index:
                 self.main_widget.dictionary_learn_widget.setCurrentIndex(1)  # learn_widget
+            elif index == self.main_widget.choreography_tab_index:
+                self.main_widget.main_stacked_widget.setCurrentIndex(2) # choreography_tab_widget
 
         # Update the current tab in settings
         tab_names = {
@@ -32,6 +34,7 @@ class MainWidgetTabs:
             self.main_widget.generate_tab_index: "generate",
             self.main_widget.dictionary_tab_index: "dictionary",
             self.main_widget.learn_tab_index: "learn",
+            self.main_widget.choreography_tab_index: "choreography",
         }
         if index in tab_names:
             self.main_widget.settings_manager.global_settings.set_current_tab(tab_names[index])
@@ -42,6 +45,7 @@ class MainWidgetTabs:
             "generate": self.main_widget.generate_tab_index,
             "dictionary": self.main_widget.dictionary_tab_index,
             "learn": self.main_widget.learn_tab_index,
+            "choreography": self.main_widget.choreography_tab_index,
         }
 
         if self.main_widget.current_tab in tab_indices:
