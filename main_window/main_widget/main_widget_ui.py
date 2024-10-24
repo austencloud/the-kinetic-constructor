@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget, QSizePolicy, QWidget
 
-from main_window.main_widget.choreography_tab_widget import ChoreographyTabWidget
+from main_window.main_widget.choreography_tab_widget.choreography_tab_widget import ChoreographyTabWidget
 from main_window.main_widget.learn_widget.sequence_tab_container import (
     SequenceTabContainer,
 )

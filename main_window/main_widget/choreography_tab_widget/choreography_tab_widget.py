@@ -2,10 +2,12 @@
 from typing import TYPE_CHECKING, List, Dict
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QSplitter
 
-from main_window.main_widget.music_player_widget import MusicPlayerWidget
+from main_window.main_widget.choreography_tab_widget.music_player_widget import (
+    MusicPlayerWidget,
+)
 
-from .timeline_widget import TimelineWidget
-from .sequence_dictionary_browser import SequenceDictionaryBrowser
+from .timeline import Timeline
+from ..sequence_dictionary_browser import SequenceDictionaryBrowser
 from .annotation_editor import AnnotationEditor
 
 if TYPE_CHECKING:
@@ -21,7 +23,7 @@ class ChoreographyTabWidget(QWidget):
         self._setup_layout()
 
     def _setup_components(self):
-        self.timeline_widget = TimelineWidget(self)
+        self.timeline_widget = Timeline(self)
         self.dictionary_browser = SequenceDictionaryBrowser(self)
         self.annotation_editor = AnnotationEditor(self)
         self.music_player = MusicPlayerWidget(self)
@@ -33,7 +35,7 @@ class ChoreographyTabWidget(QWidget):
         self.splitter.addWidget(self.timeline_widget)
 
         # Main layout
-        self.layout:QVBoxLayout = QVBoxLayout(self)
+        self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addWidget(self.splitter)
         self.layout.addWidget(self.annotation_editor)
         self.layout.addWidget(self.music_player)

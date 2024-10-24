@@ -5,12 +5,12 @@ from PyQt6.QtCore import Qt, QMimeData, QByteArray
 from PyQt6.QtGui import QDrag
 import json
 
-from main_window.main_widget.draggable_sequence_list_widget import (
+from main_window.main_widget.choreography_tab_widget.draggable_sequence_list_widget import (
     DraggableSequenceListWidget,
 )
 
 if TYPE_CHECKING:
-    from .choreography_tab_widget import ChoreographyTabWidget
+    from .choreography_tab_widget.choreography_tab_widget import ChoreographyTabWidget
     from main_window.main_widget.sequence_widget.beat_frame.beat import BeatView
 
 

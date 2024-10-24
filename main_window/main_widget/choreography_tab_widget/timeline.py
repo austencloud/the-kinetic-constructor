@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from .choreography_tab_widget import ChoreographyTabWidget
 
 
-class TimelineWidget(QWidget):
+class Timeline(QWidget):
     def __init__(self, choreography_tab: "ChoreographyTabWidget") -> None:
         super().__init__(choreography_tab)
         self.choreography_tab = choreography_tab
