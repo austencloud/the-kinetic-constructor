@@ -3,7 +3,7 @@
         "prop_type": "Staff",
         "background_type": "Bubbles",
         "grow_sequence": false,
-        "current_tab": "choreography",
+        "current_tab": "write",
         "grid_mode": "diamond"
     },
     "image_export": {
@@ -50,9 +50,7 @@
     "dictionary": {
         "sort_method": "date_added",
         "current_section": "browser",
-        "current_filter": {
-            "starting_letter": "A"
-        }
+        "current_filter": null
     },
     "sequence_layout": {
         "grow_sequence": false,
@@ -91,10 +89,10 @@
                     "Dual-Dash"
                 ]
             },
-            "current_auto_builder": "freeform"
+            "current_auto_builder": "circular"
         },
         "manual_builder": {
-            "filters": "continuous"
+            "filters": null
         },
         "last_used_builder": "manual"
     },

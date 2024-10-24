@@ -34,7 +34,7 @@ class NavigationWidget(QWidget):
             "Generate 🤖",
             "Browse 🔍",
             "Learn 🧠",
-            "Choreography ✍️",
+            "Write ✍️",
         ]
         self.current_index = 0
         for index, name in enumerate(self.tab_names):

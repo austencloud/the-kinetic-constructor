@@ -1,15 +1,16 @@
 # commands.py
 from typing import TYPE_CHECKING
 from PyQt6.QtGui import QUndoCommand
+
 if TYPE_CHECKING:
-    from .timeline_beat_widget import TimelineBeatWidget
+    from .timeline_beat_container import TimelineBeatContainer
     from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
 
 
 class AddBeatCommand(QUndoCommand):
     def __init__(
         self,
-        beat_widget: "TimelineBeatWidget",
+        beat_widget: "TimelineBeatContainer",
         beat: "Beat",
         description: str = "Add Beat",
     ):

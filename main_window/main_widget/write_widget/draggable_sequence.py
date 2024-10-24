@@ -1,16 +1,15 @@
 # sequence_dictionary_browser.py
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QListWidget, QListWidgetItem
+from PyQt6.QtWidgets import QListWidget
 from PyQt6.QtCore import Qt, QMimeData, QByteArray
 from PyQt6.QtGui import QDrag
 import json
 
 if TYPE_CHECKING:
-    from .choreography_tab_widget import ChoreographyTabWidget
-    from main_window.main_widget.sequence_widget.beat_frame.beat import BeatView
+    pass
 
 
-class DraggableSequenceListWidget(QListWidget):
+class DraggableSequence(QListWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setDragEnabled(True)
@@ -28,4 +27,3 @@ class DraggableSequenceListWidget(QListWidget):
             drag = QDrag(self)
             drag.setMimeData(mime_data)
             drag.exec(Qt.DropAction.CopyAction)
-

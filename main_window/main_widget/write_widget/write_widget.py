@@ -1,9 +1,9 @@
-# choreography_tab_widget.py
-from typing import TYPE_CHECKING, List, Dict
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QSplitter
+# write_widget.py
+from typing import TYPE_CHECKING
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSplitter
 
-from main_window.main_widget.choreography_tab_widget.music_player_widget import (
-    MusicPlayerWidget,
+from main_window.main_widget.write_widget.music_player import (
+    MusicPlayer,
 )
 
 from .timeline import Timeline
@@ -13,8 +13,9 @@ from .annotation_editor import AnnotationEditor
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
-
-class ChoreographyTabWidget(QWidget):
+# write_widget.py
+# write_widget.py
+class WriteWidget(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
@@ -22,11 +23,14 @@ class ChoreographyTabWidget(QWidget):
         self._setup_components()
         self._setup_layout()
 
+        # Connect the splitterMoved signal to the resize function
+        self.splitter.splitterMoved.connect(self.on_splitter_moved)
+
     def _setup_components(self):
         self.timeline_widget = Timeline(self)
         self.dictionary_browser = SequenceDictionaryBrowser(self)
         self.annotation_editor = AnnotationEditor(self)
-        self.music_player = MusicPlayerWidget(self)
+        self.music_player = MusicPlayer(self)
 
     def _setup_layout(self):
         # Use a splitter to allow resizing between the dictionary and timeline
@@ -37,12 +41,14 @@ class ChoreographyTabWidget(QWidget):
         # Main layout
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addWidget(self.splitter)
-        self.layout.addWidget(self.annotation_editor)
-        self.layout.addWidget(self.music_player)
         self.setLayout(self.layout)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self.timeline_widget.resize_timeline()
+        self.timeline_widget.resize_timeline()  # Trigger timeline resizing
         self.dictionary_browser.resize_browser()
         self.annotation_editor.resize_editor()
+
+    def on_splitter_moved(self, pos, index):
+        """Callback for when the splitter is moved to trigger resize."""
+        self.timeline_widget.resize_timeline()  # Trigger timeline resizing

@@ -4,7 +4,7 @@ from PyQt6.QtCore import QTimer, Qt
 import pygame
 
 
-class MusicPlayerWidget(QWidget):
+class MusicPlayer(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self._setup_ui()

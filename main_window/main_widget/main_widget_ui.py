@@ -1,12 +1,24 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QStackedWidget, QSizePolicy, QWidget
+from PyQt6.QtWidgets import (
+    QVBoxLayout,
+    QHBoxLayout,
+    QStackedWidget,
+    QSizePolicy,
+    QWidget,
+)
 
-from main_window.main_widget.choreography_tab_widget.choreography_tab_widget import ChoreographyTabWidget
+from main_window.main_widget.write_widget.write_widget import (
+    WriteWidget,
+)
 from main_window.main_widget.learn_widget.sequence_tab_container import (
     SequenceTabContainer,
 )
-from main_window.main_widget.sequence_widget.beat_frame.build_tab_widget import BuildTabWidget
-from main_window.main_widget.sequence_widget.beat_frame.generate_tab_widget import GenerateTabWidget
+from main_window.main_widget.sequence_widget.beat_frame.build_tab_widget import (
+    BuildTabWidget,
+)
+from main_window.main_widget.sequence_widget.beat_frame.generate_tab_widget import (
+    GenerateTabWidget,
+)
 from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
 from main_window.main_widget.navigation_widget import NavigationWidget
 from main_window.main_widget.sequence_widget.sequence_widget import SequenceWidget
@@ -19,7 +31,6 @@ from main_window.main_widget.learn_widget.learn_widget import LearnWidget
 
 if TYPE_CHECKING:
     from .main_widget import MainWidget
-
 
 
 class MainWidgetUI:
@@ -38,35 +49,57 @@ class MainWidgetUI:
         self.main_widget.sequence_generator = SequenceGeneratorWidget(self.main_widget)
         self.main_widget.dictionary_widget = DictionaryWidget(self.main_widget)
         self.main_widget.learn_widget = LearnWidget(self.main_widget)
-        self.main_widget.choreography_tab_widget = ChoreographyTabWidget(self.main_widget)
-        
+        self.main_widget.write_widget = WriteWidget(self.main_widget)
+
         # Initialize builder_stacked_widget to switch between manual builder and sequence generator
         self.main_widget.builder_stacked_widget = QStackedWidget()
-        self.main_widget.builder_stacked_widget.addWidget(self.main_widget.manual_builder)
-        self.main_widget.builder_stacked_widget.addWidget(self.main_widget.sequence_generator)
+        self.main_widget.builder_stacked_widget.addWidget(
+            self.main_widget.manual_builder
+        )
+        self.main_widget.builder_stacked_widget.addWidget(
+            self.main_widget.sequence_generator
+        )
 
         # Initialize main_stacked_widget to switch between Build/Generate and Dictionary/Learn
         self.main_widget.main_stacked_widget = QStackedWidget()
 
         # Create Build/Generate Widget
         self.main_widget.build_generate_widget = QWidget()
-        self.main_widget.build_generate_layout = QHBoxLayout(self.main_widget.build_generate_widget)
-        self.main_widget.build_generate_layout.addWidget(self.main_widget.sequence_widget)
-        self.main_widget.build_generate_layout.addWidget(self.main_widget.builder_stacked_widget)
+        self.main_widget.build_generate_layout = QHBoxLayout(
+            self.main_widget.build_generate_widget
+        )
+        self.main_widget.build_generate_layout.addWidget(
+            self.main_widget.sequence_widget
+        )
+        self.main_widget.build_generate_layout.addWidget(
+            self.main_widget.builder_stacked_widget
+        )
         self.main_widget.build_generate_layout.setStretch(0, 1)
         self.main_widget.build_generate_layout.setStretch(1, 1)
-        self.main_widget.build_generate_widget.setLayout(self.main_widget.build_generate_layout)
+        self.main_widget.build_generate_widget.setLayout(
+            self.main_widget.build_generate_layout
+        )
 
         # Create Dictionary/Learn Widget
         self.main_widget.dictionary_learn_widget = QStackedWidget()
-        self.main_widget.dictionary_learn_widget.addWidget(self.main_widget.dictionary_widget)
-        self.main_widget.dictionary_learn_widget.addWidget(self.main_widget.learn_widget)
+        self.main_widget.dictionary_learn_widget.addWidget(
+            self.main_widget.dictionary_widget
+        )
+        self.main_widget.dictionary_learn_widget.addWidget(
+            self.main_widget.learn_widget
+        )
 
         # Add Build/Generate Widget and Dictionary/Learn Widget to main_stacked_widget
-        self.main_widget.main_stacked_widget.addWidget(self.main_widget.build_generate_widget)  # Index 0
-        self.main_widget.main_stacked_widget.addWidget(self.main_widget.dictionary_learn_widget)  # Index 1
-        self.main_widget.main_stacked_widget.addWidget(self.main_widget.choreography_tab_widget)  # Index 2
-        
+        self.main_widget.main_stacked_widget.addWidget(
+            self.main_widget.build_generate_widget
+        )  # Index 0
+        self.main_widget.main_stacked_widget.addWidget(
+            self.main_widget.dictionary_learn_widget
+        )  # Index 1
+        self.main_widget.main_stacked_widget.addWidget(
+            self.main_widget.write_widget
+        )  # Index 2
+
     def _setup_layout(self):
         self.main_widget.main_layout = QVBoxLayout(self.main_widget)
         self.main_widget.setLayout(self.main_widget.main_layout)
@@ -86,7 +119,7 @@ class MainWidgetUI:
         self.main_widget.generate_tab_index = 1
         self.main_widget.dictionary_tab_index = 2
         self.main_widget.learn_tab_index = 3
-        self.main_widget.choreography_tab_index = 4
+        self.main_widget.write_tab_index = 4
 
     def _load_current_tab(self):
         self.main_widget.current_tab = (

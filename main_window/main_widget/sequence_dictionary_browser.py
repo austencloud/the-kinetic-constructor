@@ -5,26 +5,26 @@ from PyQt6.QtCore import Qt, QMimeData, QByteArray
 from PyQt6.QtGui import QDrag
 import json
 
-from main_window.main_widget.choreography_tab_widget.draggable_sequence_list_widget import (
-    DraggableSequenceListWidget,
+from main_window.main_widget.write_widget.draggable_sequence import (
+    DraggableSequence,
 )
 
 if TYPE_CHECKING:
-    from .choreography_tab_widget.choreography_tab_widget import ChoreographyTabWidget
+    from .write_widget.write_widget import WriteWidget
     from main_window.main_widget.sequence_widget.beat_frame.beat import BeatView
 
 
 class SequenceDictionaryBrowser(QWidget):
-    def __init__(self, choreography_tab: "ChoreographyTabWidget") -> None:
-        super().__init__(choreography_tab)
-        self.choreography_tab = choreography_tab
+    def __init__(self, write_tab: "WriteWidget") -> None:
+        super().__init__(write_tab)
+        self.write_tab = write_tab
 
         self._setup_components()
         self._setup_layout()
         self.populate_dictionary()
 
     def _setup_components(self):
-        self.sequence_list = DraggableSequenceListWidget(self)
+        self.sequence_list = DraggableSequence(self)
 
     def _setup_layout(self):
         layout = QVBoxLayout(self)
@@ -34,7 +34,7 @@ class SequenceDictionaryBrowser(QWidget):
     def populate_dictionary(self):
         # Load sequences from the dictionary
         sequences = (
-            self.choreography_tab.main_widget.dictionary_widget.browser.get_all_sequences()
+            self.write_tab.main_widget.dictionary_widget.browser.get_all_sequences()
         )
         for sequence in sequences:
             item = QListWidgetItem(sequence[0])
