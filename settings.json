@@ -7,11 +7,11 @@
         "grid_mode": "diamond"
     },
     "image_export": {
-        "include_start_position": true,
+        "include_start_position": false,
         "add_info": true,
         "open_directory_on_export": true,
         "add_word": true,
-        "add_difficulty_level": false,
+        "add_difficulty_level": true,
         "add_beat_numbers": true,
         "add_reversal_symbols": true
     },
@@ -51,7 +51,7 @@
         "sort_method": "date_added",
         "current_section": "browser",
         "current_filter": {
-            "author": "Doc Womp"
+            "starting_letter": "A"
         }
     },
     "sequence_layout": {
