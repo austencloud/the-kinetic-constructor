@@ -1,5 +1,6 @@
-from PyQt6.QtCore import Qt, QEvent
-from PyQt6.QtGui import QPixmap, QCursor, QMouseEvent
+import json
+from PyQt6.QtCore import Qt, QEvent, QByteArray, QDataStream, QIODevice, QMimeData
+from PyQt6.QtGui import QPixmap, QCursor, QMouseEvent, QDrag
 from PyQt6.QtWidgets import QLabel, QApplication
 from typing import TYPE_CHECKING
 
@@ -50,20 +51,22 @@ class ThumbnailImageLabel(QLabel):
 
     def thumbnail_clicked(self, event: "QMouseEvent"):
         if self.thumbnails:
+            # Extract metadata and start the drag operation
+            drag = QDrag(self)
+            mime_data = QMimeData()
+
+            # Serialize the metadata into a QByteArray to send via the drag
+            data = QByteArray()
+            stream = QDataStream(data, QIODevice.OpenModeFlag.WriteOnly)
             metadata = self.metadata_extractor.extract_metadata_from_file(
-                self.thumbnails[0]
+                self.thumbnails[self.thumbnail_box.current_index]
             )
-            self.browser.dictionary_widget.selection_handler.thumbnail_clicked(
-                self,
-                QPixmap(self.thumbnails[self.thumbnail_box.current_index]),
-                metadata,
-                self.thumbnails,
-                self.thumbnail_box.current_index,
-            )
-        else:
-            self.browser.dictionary_widget.deletion_handler.delete_variation(
-                self.thumbnail_box, self.thumbnail_box.current_index
-            )
+            stream.writeQString(json.dumps(metadata))  # Send metadata as a JSON string
+
+            mime_data.setData("application/sequence-data", data)
+            drag.setMimeData(mime_data)
+
+            drag.exec(Qt.DropAction.CopyAction)
 
     def set_selected(self, selected: bool):
         self.is_selected = selected

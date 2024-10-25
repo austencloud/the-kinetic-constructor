@@ -63,7 +63,7 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 16,
+                "sequence_length": 8,
                 "max_turn_intensity": 1,
                 "sequence_level": 2,
                 "rotation_type": "halved",
@@ -129,7 +129,7 @@
         ]
     },
     "write_tab": {
-        "act_title": "Arg",
+        "act_title": "Great",
         "last_saved_act": null
     }
 }

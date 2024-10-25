@@ -2,7 +2,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt
-from main_window.main_widget.write_tab.editable_label import EditableLabel
+from main_window.main_widget.write_tab.timestamp_label import TimestampLabel
 from main_window.main_widget.write_tab.timeline_beat_container import (
     TimelineBeatContainer,
 )
@@ -25,8 +25,8 @@ class TimelineRow(QWidget):
         self._setup_components()
 
     def _setup_components(self):
-        # Setup timestamp as a QLabel but make it editable when clicked
-        self.timestamp_label = EditableLabel("0:00")  # Starting with 0:00 placeholder
+        # Use the specialized TimestampLabel instead of EditableLabel
+        self.timestamp_label = TimestampLabel("0:00")  # Starting with 0:00 placeholder
         self.layout.addWidget(self.timestamp_label)
 
     def _setup_layout(self):
@@ -46,6 +46,8 @@ class TimelineRow(QWidget):
             self.layout.addWidget(beat_container)
 
     def resize_row(self):
-        """Resize each beat in the row."""
+        """Resize each beat and the timestamp label in the row."""
+        parent_width = self.scroll_area.timeline.write_tab.width()
+        self.timestamp_label.resize_timestamp(parent_width)  # Resize timestamp label
         for beat in self.beats:
-            beat.resize_timeline_beat_container()
+            beat.resize_timeline_beat_container()  # Resize each beat container

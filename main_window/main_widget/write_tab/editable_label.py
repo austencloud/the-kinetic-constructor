@@ -3,10 +3,10 @@ from PyQt6.QtCore import Qt
 
 
 class EditableLabel(QWidget):
-    def __init__(self, label_text: str, parent=None, font_size: int = 14):
+    def __init__(self, label_text: str, parent=None):
         super().__init__(parent)
         self.label = QLabel(label_text, self)
-        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Customize QLineEdit to match QLabel style initially
         self.edit = QLineEdit(self)
@@ -25,7 +25,7 @@ class EditableLabel(QWidget):
         """Show the QLineEdit for editing with the current text pre-filled."""
         # Pre-fill with current text and align it in the center
         self.edit.setText(self.label.text())
-        self.edit.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # self.edit.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Copy the current font and styles to the edit box
         current_font = self.label.font()
@@ -56,12 +56,13 @@ class EditableLabel(QWidget):
     def resizeEvent(self, event):
         """Resize the QLineEdit to match the QLabel size."""
         self.edit.resize(self.label.size())
+        # font_size = self.label.font().pointSize()
         self.edit.setStyleSheet(
             # center it
-            f"font-size: {self.label.font().pointSize()}pt;"
+            # f"font-size: {font_size}pt;"
             "border: none;"
             "background-color: rgba(0, 0, 0, 0);"
             "color: black;"
-            # "alignment: center;"
+            "alignment: center;"
         )
         super().resizeEvent(event)

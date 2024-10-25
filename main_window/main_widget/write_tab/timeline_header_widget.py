@@ -2,7 +2,9 @@ import datetime
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
 from PyQt6.QtCore import Qt
+
 from main_window.main_widget.write_tab.editable_label import EditableLabel
+from main_window.main_widget.write_tab.title_label import TitleLabel
 
 if TYPE_CHECKING:
     from main_window.main_widget.write_tab.timeline import Timeline
@@ -35,9 +37,9 @@ class TimelineHeaderWidget(QWidget):
 
         # Load title from settings
         saved_title = self.settings_manager.write_tab_settings.get_act_title()
-        self.title_label = EditableLabel(saved_title, self, font_size=20)
+        self.title_label = TitleLabel(saved_title, self)
         self.author_label = QLabel(self)
-
+        self.title_label.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.author_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Add the labels to the layout
@@ -76,14 +78,11 @@ class TimelineHeaderWidget(QWidget):
 
     def resize_header_widget(self):
         """Resize the title label based on the timeline width."""
-        self.title_size = self.timeline.width() // 35
-        title_label_stylesheet = (
-            f"font-size: {self.title_size}px; "
-            f"font-weight: bold; "
-            f"font-family: 'Monotype Corsiva', cursive;"
-        )
-        self.title_label.label.setStyleSheet(title_label_stylesheet)
+        self.title_label.resize_title_label()
 
-        date_label_stylesheet = f"font-size: {self.title_size // 3}px;"
+        date_size = self.timeline.width() // 50
+        author_label_size = self.timeline.width() // 60
+        date_label_stylesheet = f"font-size: {date_size}px;"
+        author_label_stylesheet = f"font-size: {author_label_size}px;"
         self.date_label.setStyleSheet(date_label_stylesheet)
-        self.author_label.setStyleSheet(date_label_stylesheet)
+        self.author_label.setStyleSheet(author_label_stylesheet)
