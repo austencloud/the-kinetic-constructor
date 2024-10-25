@@ -41,9 +41,9 @@ class WriteTab(QWidget):
         self.setStyleSheet("background-color: rgba(255, 255, 255, 140);")
 
     def resizeEvent(self, event):
+        super().resizeEvent(event)
         self.timeline.resize_timeline()
         self.dictionary_browser.resize_browser()
-        super().resizeEvent(event)
 
     # connect the splitter to the resize function
     def load_most_recent_act(self):

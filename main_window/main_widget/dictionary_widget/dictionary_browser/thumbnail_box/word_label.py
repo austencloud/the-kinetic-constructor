@@ -22,44 +22,27 @@ class WordLabel(QWidget):
         self.setContentsMargins(0, 0, 0, 0)
         self.setFixedHeight(60)  # Adjust the height as needed
 
-        # Set up the word label
         self.word_label = QLabel(thumbnail_box.word)
         self.word_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        # Set up the favorite button (star icon)
         self.favorite_button = QPushButton()
         self.favorite_button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.favorite_button.setFlat(True)  # Remove button border
 
-        # Load icons for the star button
         icons_path = get_images_and_data_path("images/icons")
-
         self.star_icon_empty_path = self.get_star_outline_icon()
-
         self.star_icon_empty = QIcon(
             os.path.join(icons_path, self.star_icon_empty_path)
         )
         self.star_icon_filled = QIcon(os.path.join(icons_path, "star_filled.png"))
-
-        # Connect the button click event to toggle the favorite status
         self.favorite_button.clicked.connect(self.thumbnail_box.toggle_favorite_status)
 
-        # Create a layout for both the word and the star on the same line
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-
-        # Add an invisible spacer to the left to center the word label
         layout.addStretch(1)
-
-        # Add the word label to the layout (centered)
         layout.addWidget(self.word_label)
-
-        # Add the favorite button (aligned to the right)
         layout.addStretch(1)
-
         layout.addWidget(self.favorite_button, alignment=Qt.AlignmentFlag.AlignRight)
-
-        # Set the layout
         self.setLayout(layout)
 
     def reload_favorite_icon(self):
