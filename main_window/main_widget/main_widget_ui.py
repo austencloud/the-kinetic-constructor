@@ -8,15 +8,6 @@ from PyQt6.QtWidgets import (
 )
 
 
-from main_window.main_widget.learn_widget.sequence_tab_container import (
-    SequenceTabContainer,
-)
-from main_window.main_widget.sequence_widget.beat_frame.build_tab_widget import (
-    BuildTabWidget,
-)
-from main_window.main_widget.sequence_widget.beat_frame.generate_tab_widget import (
-    GenerateTabWidget,
-)
 from main_window.main_widget.write_tab.write_tab import WriteTab
 from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget
 from main_window.main_widget.navigation_widget import NavigationWidget

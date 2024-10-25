@@ -3,10 +3,9 @@ from data.constants import *
 from main_window.main_widget.turns_tuple_generator.turns_tuple_generators.base_turns_tuple_generator import (
     BaseTurnsTupleGenerator,
 )
-from objects.motion.motion import Motion
 
 if TYPE_CHECKING:
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
+    pass
 
 
 class GammaTurnsTupleGenerator(BaseTurnsTupleGenerator):

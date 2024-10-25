@@ -3,15 +3,10 @@ from typing import TYPE_CHECKING, Optional
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtCore import Qt
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.sequence_widget.beat_frame.act_beat_view import ActBeatView
-from main_window.main_widget.write_tab.timeline_blank_pictograph import (
-    TimelineBlankPictograph,
-)
 
 if TYPE_CHECKING:
     from main_window.main_widget.write_tab.timeline_row import TimelineRow
-    from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
     from main_window.main_widget.main_widget import MainWidget
 
 

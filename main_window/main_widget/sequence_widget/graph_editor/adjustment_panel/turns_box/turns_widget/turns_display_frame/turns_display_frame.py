@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QFrame, QHBoxLayout
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 
 from .adjust_turns_button import AdjustTurnsButton
 from .turns_label import GE_TurnsLabel

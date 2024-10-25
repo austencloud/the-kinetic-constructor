@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 from ...sequence_builder.auto_builder.circular.permutation_executors.mirrored_permutation_executor import (
     MirroredPermutationExecutor,
 )

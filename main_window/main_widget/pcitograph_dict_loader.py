@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 import pandas as pd
 from Enums.letters import Letter
-from data.constants import BOX, DIAMOND, END_POS, IN, LETTER, START_POS
+from data.constants import END_POS, IN, LETTER, START_POS
 from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:

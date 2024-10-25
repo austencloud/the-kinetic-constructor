@@ -2,7 +2,6 @@ import json
 from typing import TYPE_CHECKING
 
 from Enums.PropTypes import PropType
-from Enums.letters import Letter
 from letter_determiner.letter_determiner import LetterDeterminer
 from utilities.path_helpers import get_images_and_data_path
 
@@ -23,7 +22,6 @@ from styles.main_widget_tab_bar_styler import MainWidgetTabBarStyler
 
 if TYPE_CHECKING:
     from .main_widget import MainWidget
-    from base_widgets.base_pictograph.base_pictograph import BasePictograph
 
 
 class MainWidgetManager:

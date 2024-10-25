@@ -1,18 +1,16 @@
 # grid_mode_section.py
 
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import (
     QVBoxLayout,
     QPushButton,
     QLabel,
     QGridLayout,
-    QWidget,
     QSpacerItem,
     QSizePolicy,
 )
 from PyQt6.QtCore import Qt, QEvent, QObject
 from PyQt6.QtGui import QPixmap, QPainter, QPen
-from PyQt6.QtSvgWidgets import QSvgWidget
 from PyQt6.QtSvg import QSvgRenderer
 
 from functools import partial

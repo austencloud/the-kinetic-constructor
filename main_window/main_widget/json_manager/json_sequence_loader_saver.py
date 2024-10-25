@@ -1,5 +1,5 @@
 import json
-from typing import TYPE_CHECKING, List, Dict
+from typing import TYPE_CHECKING, Dict
 from utilities.path_helpers import get_user_editable_resource_path
 from utilities.word_simplifier import WordSimplifier
 

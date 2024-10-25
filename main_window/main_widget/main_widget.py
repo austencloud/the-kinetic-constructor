@@ -4,7 +4,6 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget
 
 from typing import TYPE_CHECKING
 from Enums.PropTypes import PropType
-import main
 from main_window.main_widget.write_tab.write_tab import WriteTab
 from main_window.main_widget.main_widget_tabs import MainWidgetTabs
 
@@ -17,8 +16,6 @@ from .main_widget_state import MainWidgetState
 from .main_widget_background import MainWidgetBackground
 
 if TYPE_CHECKING:
-    from .sequence_widget.beat_frame.build_tab_widget import BuildTabWidget
-    from .sequence_widget.beat_frame.generate_tab_widget import GenerateTabWidget
     from main_window.settings_manager.settings_manager import SettingsManager
     from .navigation_widget import NavigationWidget
     from main_window.menu_bar_widget.menu_bar_widget import MenuBarWidget

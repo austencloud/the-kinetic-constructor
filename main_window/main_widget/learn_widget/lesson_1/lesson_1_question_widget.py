@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import (
     QSizePolicy,
     QGraphicsOpacityEffect,
 )
-from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve
+from PyQt6.QtCore import Qt, QPropertyAnimation
 from main_window.main_widget.learn_widget.base_classes.base_question_widget import (
     BaseQuestionWidget,
 )

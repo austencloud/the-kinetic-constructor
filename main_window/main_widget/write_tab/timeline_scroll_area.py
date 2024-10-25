@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QScrollArea, QVBoxLayout, QWidget, QFrame
+from PyQt6.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 from PyQt6.QtGui import QColor, QPalette
 from main_window.main_widget.write_tab.timeline_row import TimelineRow
 

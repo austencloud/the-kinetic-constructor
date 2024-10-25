@@ -192,6 +192,26 @@
     },
     "(o, 2, 2.5)": {
       "dash": [-85, -50]
+    },
+    "(o, 2, 2)": {
+      "static_rot_angle_override": true,
+      "dash": [-60, -35]
+    },
+    "(o, 3, 2)": {
+      "static_rot_angle_override": true,
+      "static": [0, 0],
+      "dash": [0, -60]
+    },
+    "(o, 2.5, 2)": {
+      "static_to_layer1_rot_angle_override": true,
+      "dash": [-100, -5]
+    },
+    "(o, 1.5, 2)": {
+      "static_to_layer1_rot_angle_override": true,
+      "dash": [-20, -95]
+    },
+    "(o, 1, 2)": {
+      "static_rot_angle_override": true
     }
   }
 }

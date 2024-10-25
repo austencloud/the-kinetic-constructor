@@ -1,5 +1,5 @@
 import os
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 from utilities.path_helpers import get_sequence_card_image_exporter_path
 

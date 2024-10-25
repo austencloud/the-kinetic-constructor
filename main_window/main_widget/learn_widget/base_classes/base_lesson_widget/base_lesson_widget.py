@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QLabel
-from PyQt6.QtCore import QTimer, Qt
+from PyQt6.QtCore import Qt
 from ..base_answers_widget import BaseAnswersWidget
 from .lesson_layout_manager import LessonLayoutManager
 from .quiz_timer_manager import QuizTimerManager

@@ -1,16 +1,13 @@
 # sequence_dictionary_browser.py
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QListWidget, QListWidgetItem
-from PyQt6.QtCore import Qt, QMimeData, QByteArray
-from PyQt6.QtGui import QDrag
-import json
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QListWidgetItem
+from PyQt6.QtCore import Qt
 
 from main_window.main_widget.write_tab.draggable_sequence import DraggableSequence
 
 
 if TYPE_CHECKING:
     from main_window.main_widget.write_tab.write_tab import WriteTab
-    from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
 
 
 class SequenceDictionaryBrowser(QWidget):

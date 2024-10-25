@@ -1,5 +1,4 @@
 import random
-from re import L
 from typing import TYPE_CHECKING
 from Enums.letters import Letter
 from main_window.main_widget.learn_widget.base_classes.base_question_generator import (

@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.write_tab.act_beat_frame import ActBeatFrame
 
 # write_tab_beat.py
-from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem, QGraphicsScene
+from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtGui import QFont
 
@@ -49,9 +49,14 @@ class ActBeatView(QGraphicsView):
             self.beat.removeItem(self.beat_number_item)
 
         self.beat_number_item = QGraphicsTextItem(beat_number_text)
-        self.beat_number_item.setFont(QFont("Georgia", 24))
-        self.beat_number_item.setPos(QPointF(10, 10))  # Adjust position as needed
-        self.beat.addItem(self.beat_number_item)
+        self.beat_number_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))
+        self.beat_number_item.setPos(
+            QPointF(
+                self.beat_number_item.boundingRect().height() // 3,
+                self.beat_number_item.boundingRect().height() // 5,
+            )
+        )
+        self.scene().addItem(self.beat_number_item)
 
     def resize_act_beat_view(self):
         """Resize the beat view to fit the container."""

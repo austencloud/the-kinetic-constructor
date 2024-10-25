@@ -1,9 +1,5 @@
 # timeline_beat_widget.py
-from typing import TYPE_CHECKING, Optional
-from PyQt6.QtWidgets import QFrame, QVBoxLayout
-from PyQt6.QtGui import QResizeEvent
-from PyQt6.QtCore import Qt
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from typing import TYPE_CHECKING
 from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
 
 if TYPE_CHECKING:

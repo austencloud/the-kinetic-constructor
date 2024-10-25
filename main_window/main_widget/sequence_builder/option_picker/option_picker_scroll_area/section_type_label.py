@@ -5,7 +5,6 @@ from PyQt6.QtCore import Qt
 from Enums.Enums import LetterType
 from PyQt6.QtCore import pyqtSignal
 
-from Enums.letters import Letter
 from main_window.main_widget.sequence_builder.option_picker.option_picker_scroll_area.letter_type_text_painter import (
     LetterTypeTextPainter,
 )

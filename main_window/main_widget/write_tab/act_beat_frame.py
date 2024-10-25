@@ -2,11 +2,9 @@
 from typing import TYPE_CHECKING, List
 from PyQt6.QtWidgets import QWidget, QGridLayout, QLabel
 from main_window.main_widget.sequence_widget.beat_frame.act_beat_view import ActBeatView
-from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
 
 if TYPE_CHECKING:
     from main_window.main_widget.write_tab.write_tab import WriteTab
-    from main_window.main_widget.main_widget import MainWidget
 
 
 class ActBeatFrame(QWidget):

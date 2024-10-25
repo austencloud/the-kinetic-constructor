@@ -1,10 +1,9 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from main_window.main_widget.json_manager.json_sequence_updater.json_sequence_updater import (
         JsonSequenceUpdater,
     )
-    from main_window.main_widget.json_manager.json_manager import JsonManager
 
 
 class JsonPropRotDirUpdater:

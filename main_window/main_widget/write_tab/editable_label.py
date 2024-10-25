@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import QLabel, QLineEdit, QHBoxLayout, QWidget
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
 
 
 class EditableLabel(QWidget):

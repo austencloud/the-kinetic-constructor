@@ -11,7 +11,6 @@ if TYPE_CHECKING:
     from main_window.main_widget.write_tab.timeline_scroll_area import (
         TimelineScrollArea,
     )
-    from .timeline import Timeline
 
 
 class TimelineRow(QWidget):

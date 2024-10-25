@@ -6,7 +6,6 @@ if TYPE_CHECKING:
         JsonSequenceUpdater,
     )
 
-    from main_window.main_widget.json_manager.json_manager import JsonManager
 
 
 class JsonMotionTypeUpdater:

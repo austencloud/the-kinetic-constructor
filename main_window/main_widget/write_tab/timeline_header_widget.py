@@ -1,7 +1,7 @@
 # timeline_header_widget.py
 import datetime
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QFrame
+from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtCore import Qt
 from main_window.main_widget.write_tab.editable_label import EditableLabel
 

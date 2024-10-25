@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict, List, Tuple
+from typing import TYPE_CHECKING, Dict, Tuple
 from PyQt6.QtWidgets import (
     QVBoxLayout,
     QPushButton,

@@ -1,13 +1,8 @@
 # write_tab.py
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QScrollArea
-
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSplitter
 from .timeline import Timeline
 from ..sequence_dictionary_browser import SequenceDictionaryBrowser
-from .annotation_editor import AnnotationEditor
-from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
-    SequenceWidgetBeatFrame,
-)
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
@@ -42,8 +37,6 @@ class WriteTab(QWidget):
         self.setLayout(self.layout)
 
         self.setStyleSheet("background-color: rgba(255, 255, 255, 140);")
-
-
 
     def resizeEvent(self, event):
         self.timeline.resize_timeline()

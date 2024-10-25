@@ -1,5 +1,4 @@
 from typing import TYPE_CHECKING
-from Enums.PropTypes import PropType
 from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
 from .json_duration_updater import JsonDurationUpdater
 from .json_prop_rot_dir_updater import JsonPropRotDirUpdater

@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGridLayout
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.grid_mode_checker import GridModeChecker
 
 from base_widgets.base_beat_frame import BaseBeatFrame
 from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame_layout_manager import (
