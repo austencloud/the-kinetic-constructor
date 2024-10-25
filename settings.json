@@ -1,7 +1,7 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Bubbles",
+        "background_type": "Aurora",
         "grow_sequence": true,
         "current_tab": "write",
         "grid_mode": "diamond"
@@ -51,7 +51,7 @@
         "sort_method": "date_added",
         "current_section": "browser",
         "current_filter": {
-            "starting_letter": "A"
+            "starting_letter": "M"
         }
     },
     "sequence_layout": {

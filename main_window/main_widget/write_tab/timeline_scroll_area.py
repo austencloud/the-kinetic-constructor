@@ -47,12 +47,10 @@ class TimelineScrollArea(QScrollArea):
         row.setup_beats()  # Call setup_beats after adding the row
         self.rows[len(self.rows)] = row
 
-    def resize_timeline(self):
+    def resize_timeline_scroll_area(self):
         for row in self.rows.values():
             row.resize_row()
 
     def resizeEvent(self, event):
-        self.resize_timeline()
+        self.resize_timeline_scroll_area()
         super().resizeEvent(event)
-        if not self.initialized:
-            self.add_default_rows(8)  # Example: 8 default rows

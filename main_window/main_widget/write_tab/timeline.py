@@ -38,7 +38,11 @@ class Timeline(QWidget):
         self.layout.addWidget(self.scroll_area)  # Add scroll area for rows below
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
+        # transparent background
+        self.setStyleSheet("background: transparent;")
+
         self.setLayout(self.layout)
 
     def resize_timeline(self):
-        self.scroll_area.resize_timeline()
+        self.header_widget.resize_header_widget()
+        self.scroll_area.resize_timeline_scroll_area()

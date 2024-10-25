@@ -14,7 +14,7 @@ class ActBeatFrame(QWidget):
         super().__init__()
         self.write_tab = write_tab
         self.main_widget = write_tab.main_widget
-        self.beat_views: List[BeatView] = []
+        self.beat_views: List[ActBeatView] = []
         self.timestamps: List[QLabel] = []  # Holds timestamp labels
         self._setup_layout()
 
@@ -40,5 +40,5 @@ class ActBeatFrame(QWidget):
     def resizeEvent(self, event):
         """Resize each beat and adjust layout dynamically."""
         for view in self.beat_views:
-            view.resize_beat_view()
+            view.resize_act_beat_view()
         super().resizeEvent(event)

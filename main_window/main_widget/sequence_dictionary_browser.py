@@ -31,7 +31,6 @@ class SequenceDictionaryBrowser(QWidget):
         self.setLayout(layout)
 
     def populate_dictionary(self):
-        # Load sequences from the dictionary
         sequences = (
             self.write_tab.main_widget.dictionary_widget.browser.get_all_sequences()
         )
@@ -41,5 +40,4 @@ class SequenceDictionaryBrowser(QWidget):
             self.sequence_list.addItem(item)
 
     def resize_browser(self):
-        # Adjust size based on parent widget size
         pass

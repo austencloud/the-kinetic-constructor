@@ -7,6 +7,7 @@ from main_window.settings_manager.builder_settings import BuilderSettings
 from main_window.settings_manager.sequence_sharing_settings import (
     SequenceSharingSettings,
 )
+from main_window.settings_manager.write_tab_settings import WriteTabSettings
 
 from ..settings_manager.dictionary_settings import DictionarySettings
 from ..settings_manager.image_export_settings import ImageExportSettings
@@ -38,6 +39,7 @@ class SettingsManager(QObject):
         self.sequence_layout = SequenceLayoutSettings(self)
         self.builder_settings = BuilderSettings(self)
         self.sequence_sharing = SequenceSharingSettings(self)  # New sharing settings
+        self.write_tab_settings = WriteTabSettings(self)
 
     def load_settings(self) -> dict:
         if os.path.exists(self.settings_json):
@@ -51,7 +53,8 @@ class SettingsManager(QObject):
                 "visibility": VisibilitySettings.DEFAULT_VISIBILITY_SETTINGS,
                 "dictionary": DictionarySettings.DEFAULT_DICTIONARY_SETTINGS,
                 "sequence_layout": SequenceLayoutSettings.DEFAULT_LAYOUT_SETTINGS,
-                "builder": BuilderSettings.DEFAULT_SETTINGS,
+                "builder": BuilderSettings.DEFAULT_BUILDER_SETTINGS,
+                "write_tab": WriteTabSettings.DEFAULT_WRITE_TAB_SETTINGS,
                 "sequence_sharing": SequenceSharingSettings.DEFAULT_SEQUENCE_SHARING_SETTINGS,
             }
             self.save_settings(default_settings)
@@ -98,4 +101,3 @@ class SettingsManager(QObject):
     def save_sequence_sharing_settings(self, settings) -> None:
         self.settings["sequence_sharing"] = settings
         self.save_settings()
-

@@ -15,6 +15,7 @@ from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem, QGraphicsScene
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtGui import QFont
 
+
 class ActBeatView(QGraphicsView):
     def __init__(self, beat_frame: "ActBeatFrame", number=None):
         super().__init__()
@@ -48,17 +49,25 @@ class ActBeatView(QGraphicsView):
             self.beat.removeItem(self.beat_number_item)
 
         self.beat_number_item = QGraphicsTextItem(beat_number_text)
-        self.beat_number_item.setFont(
-            QFont("Georgia", 24)
-        )
+        self.beat_number_item.setFont(QFont("Georgia", 24))
         self.beat_number_item.setPos(QPointF(10, 10))  # Adjust position as needed
         self.beat.addItem(self.beat_number_item)
 
-
-    def resize_beat_view(self):
+    def resize_act_beat_view(self):
         """Resize the beat view to fit the container."""
-        size = int(self.beat_frame.width() // 9)
-        self.setFixedSize(size, size)
+        # size = int(self.beat_frame.write_tab.width() * 0.15)
+        # self.setFixedSize(size, size)
+
+        # Rescale the beat view to fit the container
+        beat_scene_size = (950, 950)
+        view_size = self.size()
+
+        self.view_scale = min(
+            view_size.width() / beat_scene_size[0],
+            view_size.height() / beat_scene_size[1],
+        )
+        self.resetTransform()
+        self.scale(self.view_scale, self.view_scale)
 
     def clear_beat(self):
         """Clear the beat from the view."""
@@ -68,4 +77,3 @@ class ActBeatView(QGraphicsView):
     def wheelEvent(self, event):
         """Override to prevent scrolling."""
         self.beat_frame.wheelEvent(event)
-        

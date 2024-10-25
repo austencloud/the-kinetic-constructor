@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 
 class BuilderSettings:
-    DEFAULT_SETTINGS = {
+    DEFAULT_BUILDER_SETTINGS = {
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
@@ -37,10 +37,14 @@ class BuilderSettings:
 
         # Initialize manual and auto builder settings
         self.auto_builder = AutoBuilderSettings(self.settings_manager)
-        self.manual_builder = ManualBuilderSettings(self.settings_manager)  # Initialize manual builder settings
+        self.manual_builder = ManualBuilderSettings(
+            self.settings_manager
+        )  # Initialize manual builder settings
 
     def _load_builder_settings(self):
-        return self.settings_manager.settings.get("builder", self.DEFAULT_SETTINGS)
+        return self.settings_manager.settings.get(
+            "builder", self.DEFAULT_BUILDER_SETTINGS
+        )
 
     def get_last_used_builder(self) -> str:
         return self.settings.get("last_used_builder", "manual")
