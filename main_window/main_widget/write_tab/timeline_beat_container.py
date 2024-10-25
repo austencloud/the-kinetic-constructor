@@ -64,22 +64,4 @@ class TimelineBeatContainer(QFrame):
         self.resize_timeline_beat_container()
         super().resizeEvent(event)
 
-    def dragEnterEvent(self, event: QDropEvent):
-        """Accept drag event if the source is ActThumbnailImageLabel."""
-        if isinstance(event.source(), ActThumbnailImageLabel):
-            event.acceptProposedAction()
 
-    def dropEvent(self, event: QDropEvent):
-        """Handle drop event to add the sequence to the timeline."""
-        source = event.source()
-        if isinstance(source, ActThumbnailImageLabel) and source.dragging_metadata:
-            # Retrieve the metadata directly from the source widget
-            metadata = source.dragging_metadata
-            print(f"Sequence metadata received: {metadata}")
-
-            # Use metadata to update the pictograph or other UI elements
-            self.set_pictograph(metadata)
-            event.acceptProposedAction()
-        else:
-            print("No valid metadata found for this drop event.")
-            event.ignore()

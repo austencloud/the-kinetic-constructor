@@ -66,6 +66,13 @@ class TimelineRow(QWidget):
         else:
             event.ignore()
 
+    def get_last_filled_beat(self):
+        """Get the last filled beat in the row."""
+        for beat in reversed(self.beats):
+            if beat.is_filled:
+                return beat
+        return self.beats[0]
+
     def resize_row(self):
         """Resize each beat and the timestamp label in the row."""
         parent_width = self.scroll_area.timeline.write_tab.width()

@@ -1,7 +1,7 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Aurora",
+        "background_type": "Bubbles",
         "grow_sequence": true,
         "current_tab": "write",
         "grid_mode": "diamond"
