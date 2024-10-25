@@ -43,7 +43,7 @@ class TitleLabel(EditableLabel):
 
     def resize_title_label(self):
         """Resize the title label based on the timeline width."""
-        self.title_size = self.header_widget.timeline.width() // 35
+        self.title_size = self.header_widget.write_tab.width() // 50
         title_label_stylesheet = (
             f"font-size: {self.title_size}px; "
             f"font-weight: bold; "

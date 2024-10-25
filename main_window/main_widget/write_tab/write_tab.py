@@ -1,6 +1,8 @@
-# write_tab.py
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QHBoxLayout
+from main_window.main_widget.write_tab.timeline_header_widget import (
+    TimelineHeaderWidget,
+)
 from .timeline import Timeline
 from ..act_browser import ActBrowser
 
@@ -20,32 +22,41 @@ class WriteTab(QWidget):
         self._setup_layout()
 
     def _setup_components(self):
-        self.beat_frame = ActBeatFrame(self)
-        self.beat_frame.init_act(num_beats=8, num_rows=10)
+        self.header_widget = TimelineHeaderWidget(self)
 
-        self.timeline = Timeline(self)
+        # Wrap the beat frame inside a QScrollArea
+        self.beat_scroll_area = QScrollArea(self)
+        self.beat_scroll_area.setWidgetResizable(True)
+        self.beat_scroll_area.setStyleSheet(
+            "QScrollArea { background-color: transparent; }"
+        )
+        self.beat_frame = ActBeatFrame(self)
+        self.beat_frame.init_act(num_beats=8, num_rows=10)  # Number of beats and rows
+        self.beat_scroll_area.setWidget(
+            self.beat_frame
+        )  # Set ActBeatFrame as the scrollable content
+
         self.act_browser = ActBrowser(self)
 
     def _setup_layout(self):
-        self.layout: QHBoxLayout = QHBoxLayout(self)
-        self.layout.addWidget(self.timeline, 1)
-        self.layout.addWidget(self.act_browser, 1)
-        self.setLayout(self.layout)
+        self.right_layout = QVBoxLayout()
+        self.right_layout.addWidget(self.act_browser)  # Add the ActBrowser
 
-        self.setStyleSheet("background-color: rgba(255, 255, 255, 140);")
+        self.left_layout = QVBoxLayout()
+        self.left_layout.addWidget(self.header_widget)
+        self.left_layout.addWidget(self.beat_scroll_area)  # Add scroll area for beats
+
+        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.layout.addLayout(self.left_layout, 1)
+        self.layout.addLayout(self.right_layout, 1)
+        self.setLayout(self.layout)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self.timeline.resize_timeline()
+        self.header_widget.resize_header_widget()
+        self.beat_frame.resizeEvent(event)  # Make sure the beat frame resizes correctly
         self.act_browser.resize_browser()
 
     def on_splitter_moved(self):
-        self.timeline.resize_timeline()
+        self.beat_frame.resizeEvent(None)
         self.act_browser.resize_browser()
-
-    # connect the splitter to the resize function
-    def load_most_recent_act(self):
-        """Load the most recent act and apply its settings."""
-        last_act = self.settings_manager.write_tab_settings.load_last_act()
-        if last_act:
-            pass

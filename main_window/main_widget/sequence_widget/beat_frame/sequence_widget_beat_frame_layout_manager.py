@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
 
 
-class BeatFrameLayoutManager:
+class SequenceWidgetBeatFrameLayoutManager:
     def __init__(self, beat_frame: "SequenceWidgetBeatFrame"):
         self.beat_frame = beat_frame
         self.selection_manager = beat_frame.selection_overlay

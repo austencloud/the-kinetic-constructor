@@ -30,6 +30,8 @@ class ActBrowser(QScrollArea):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self._setup_layout()
         self.populate_favorites()
+        # transparent back
+        self.setStyleSheet("background-color: rgba(0,0,0,0);")
 
     def _setup_layout(self):
         self.setWidgetResizable(True)
@@ -72,7 +74,6 @@ class ActBrowser(QScrollArea):
                 if col == max_columns:
                     col = 0
                     row += 1
-
 
     def resize_browser(self):
         """Dynamically resize each thumbnail to fit half of the ActBrowser's width."""

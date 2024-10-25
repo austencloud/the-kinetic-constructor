@@ -34,11 +34,8 @@ class ActBeatView(QGraphicsView):
         # Prevent scrolling by disabling scrolling behavior
         self.setInteractive(False)
 
-        self._setup_blank_beat()
 
-    def _setup_blank_beat(self):
-        """Set up the blank beat, adding beat number display."""
-        self.add_beat_number()
+
 
     def add_beat_number(self, beat_number_text=None):
         """Display the beat number."""
@@ -58,10 +55,14 @@ class ActBeatView(QGraphicsView):
         )
         self.scene().addItem(self.beat_number_item)
 
+    def remove_beat_number(self):
+        if self.beat_number_item:
+            self.beat_number_item.setVisible(False)
+
     def resize_act_beat_view(self):
         """Resize the beat view to fit the container."""
-        # size = int(self.beat_frame.write_tab.width() * 0.15)
-        # self.setFixedSize(size, size)
+        size = int(self.beat_frame.width() // 9)
+        self.setFixedSize(size, size)
 
         # Rescale the beat view to fit the container
         beat_scene_size = (950, 950)

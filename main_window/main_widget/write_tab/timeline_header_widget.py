@@ -7,14 +7,15 @@ from main_window.main_widget.write_tab.editable_label import EditableLabel
 from main_window.main_widget.write_tab.title_label import TitleLabel
 
 if TYPE_CHECKING:
+    from main_window.main_widget.write_tab.write_tab import WriteTab
     from main_window.main_widget.write_tab.timeline import Timeline
 
 
 class TimelineHeaderWidget(QWidget):
-    def __init__(self, timeline: "Timeline"):
-        super().__init__(timeline)
-        self.timeline = timeline
-        self.settings_manager = self.timeline.main_widget.main_window.settings_manager
+    def __init__(self, write_tab: "WriteTab"):
+        super().__init__(write_tab)
+        self.write_tab = write_tab
+        self.settings_manager = self.write_tab.main_widget.main_window.settings_manager
 
         # Setup header layout and components
         self.setObjectName("timelineHeader")
@@ -67,7 +68,7 @@ class TimelineHeaderWidget(QWidget):
 
     def display_author(self):
         author = (
-            self.timeline.main_widget.main_window.settings_manager.users.user_manager.get_current_user()
+            self.write_tab.main_widget.main_window.settings_manager.users.user_manager.get_current_user()
         )
         self.author_label.setText(f"Choreography by {author}")
 
@@ -80,8 +81,8 @@ class TimelineHeaderWidget(QWidget):
         """Resize the title label based on the timeline width."""
         self.title_label.resize_title_label()
 
-        date_size = self.timeline.width() // 50
-        author_label_size = self.timeline.width() // 60
+        date_size = self.write_tab.width() // 80
+        author_label_size = self.write_tab.width() // 80
         date_label_stylesheet = f"font-size: {date_size}px;"
         author_label_stylesheet = f"font-size: {author_label_size}px;"
         self.date_label.setStyleSheet(date_label_stylesheet)

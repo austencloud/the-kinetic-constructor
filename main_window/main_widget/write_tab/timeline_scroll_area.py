@@ -31,16 +31,7 @@ class TimelineScrollArea(QScrollArea):
 
         # Set the content widget inside the scroll area
         self.setWidget(self.content_widget)
-        self.set_translucent_background()
 
-    def set_translucent_background(self):
-        """Set the background of the scroll area to a translucent white."""
-        p = self.palette()
-        p.setColor(
-            QPalette.ColorRole.Base, QColor(255, 255, 255, 128)
-        )  # 128 for transparency
-        self.setPalette(p)
-        self.setAutoFillBackground(True)
     def add_default_rows(self, number_of_rows):
         """Add a specific number of timeline rows."""
         for _ in range(number_of_rows):

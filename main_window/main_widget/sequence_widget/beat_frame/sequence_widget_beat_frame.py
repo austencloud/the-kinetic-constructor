@@ -7,7 +7,7 @@ from .beat_frame_key_event_handler import BeatFrameKeyEventHandler
 from .beat_frame_populator import BeatFramePopulator
 from .beat_frame_resizer import BeatFrameResizer
 from .beat_updater import BeatFrameUpdater
-from .beat_frame_layout_manager import BeatFrameLayoutManager
+from .sequence_widget_beat_frame_layout_manager import SequenceWidgetBeatFrameLayoutManager
 from .beat_deletion_manager import BeatDeletionManager
 from .image_export_manager.image_export_manager import ImageExportManager
 from .beat_selection_overlay import BeatSelectionOverlay
@@ -42,7 +42,7 @@ class SequenceWidgetBeatFrame(BaseBeatFrame):
 
     def _setup_components(self) -> None:
         self.selection_overlay = BeatSelectionOverlay(self)
-        self.layout_manager = BeatFrameLayoutManager(self)
+        self.layout_manager = SequenceWidgetBeatFrameLayoutManager(self)
         self.beat_deletion_manager = BeatDeletionManager(self)
         self.image_export_manager = ImageExportManager(self, SequenceWidgetBeatFrame)
         self.populator = BeatFramePopulator(self)

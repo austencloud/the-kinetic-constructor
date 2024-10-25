@@ -1,6 +1,7 @@
 # timeline_widget.py
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
+from PyQt6.QtGui import QPalette, QColor
 
 from main_window.main_widget.write_tab.timeline_header_widget import (
     TimelineHeaderWidget,
@@ -38,9 +39,6 @@ class Timeline(QWidget):
         self.layout.addWidget(self.scroll_area)  # Add scroll area for rows below
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        # transparent background
-        self.setStyleSheet("background: transparent;")
-
         self.setLayout(self.layout)
 
     def resize_timeline(self):
