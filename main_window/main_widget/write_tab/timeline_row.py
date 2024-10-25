@@ -39,7 +39,9 @@ class TimelineRow(QWidget):
     def setup_beats(self):
         """Create beat containers and add them to the layout."""
         for i in range(8):  # Example: 8 beats per row
-            beat_container = TimelineBeatContainer(self, self.timeline.main_widget, i + 1)
+            beat_container = TimelineBeatContainer(
+                self, self.timeline.main_widget, i + 1
+            )
             self.beats.append(beat_container)
             self.layout.addWidget(beat_container)
 

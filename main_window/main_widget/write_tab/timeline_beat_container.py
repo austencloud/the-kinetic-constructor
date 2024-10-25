@@ -56,7 +56,6 @@ class TimelineBeatContainer(QFrame):
         self.act_beat_view.setFixedSize(beat_size, beat_size)
         self.act_beat_view.resize_act_beat_view()
 
-        print(f"Resized beat container for row {self.row_number} to {beat_size}px")
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         """Trigger resize when the beat container is resized."""

@@ -4,7 +4,7 @@
         "background_type": "Snowfall",
         "grow_sequence": true,
         "current_tab": "write",
-        "grid_mode": "box"
+        "grid_mode": "diamond"
     },
     "image_export": {
         "include_start_position": false,
@@ -51,7 +51,7 @@
         "sort_method": "date_added",
         "current_section": "browser",
         "current_filter": {
-            "starting_letter": "M"
+            "grid_mode": "box"
         }
     },
     "sequence_layout": {
@@ -127,5 +127,9 @@
                 "email": "elizabethdziad@gmail.com"
             }
         ]
+    },
+    "write_tab": {
+        "act_title": "Arg",
+        "last_saved_act": null
     }
 }

@@ -101,3 +101,7 @@ class SettingsManager(QObject):
     def save_sequence_sharing_settings(self, settings) -> None:
         self.settings["sequence_sharing"] = settings
         self.save_settings()
+
+    def save_write_tab_settings(self, settings) -> None:
+        self.settings["write_tab"] = settings
+        self.save_settings()

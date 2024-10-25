@@ -14,6 +14,7 @@ class WriteTab(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
         self.main_widget = main_widget
+        self.settings_manager = self.main_widget.main_window.settings_manager
 
         self._setup_components()
         self._setup_layout()
@@ -31,7 +32,8 @@ class WriteTab(QWidget):
         self.splitter.addWidget(self.timeline)
         self.splitter.setStretchFactor(0, 1)
         self.splitter.setStretchFactor(1, 2)
-
+        # connect it to eh resize function
+        self.splitter.splitterMoved.connect(self.timeline.resize_timeline)
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.addWidget(self.splitter)
         self.setLayout(self.layout)
@@ -42,3 +44,11 @@ class WriteTab(QWidget):
         self.timeline.resize_timeline()
         self.dictionary_browser.resize_browser()
         super().resizeEvent(event)
+
+    # connect the splitter to the resize function
+    def load_most_recent_act(self):
+        """Load the most recent act and apply its settings."""
+        last_act = self.settings_manager.write_tab_settings.load_last_act()
+        if last_act:
+            # Load the act data into your components (e.g., the beat frame)
+            pass  # You'll add code here to load act data

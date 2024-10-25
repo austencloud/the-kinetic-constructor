@@ -62,6 +62,6 @@ class EditableLabel(QWidget):
             "border: none;"
             "background-color: rgba(0, 0, 0, 0);"
             "color: black;"
-            "alignment: center;"
+            # "alignment: center;"
         )
         super().resizeEvent(event)
