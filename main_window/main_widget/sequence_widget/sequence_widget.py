@@ -7,10 +7,11 @@ from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QSizePolicy
 from data.constants import FLOAT
 from letter_determiner.letter_determiner import LetterDeterminer
 
+from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
 from main_window.main_widget.sequence_widget.sequence_clearer import SequenceClearer
 from utilities.word_simplifier import WordSimplifier
 
-from .beat_frame.beat import Beat, BeatView
+from .beat_frame.beat_view import BeatView
 from .sequence_auto_completer.sequence_auto_completer import SequenceAutoCompleter
 from .beat_frame.sequence_widget_beat_frame import SequenceWidgetBeatFrame
 from .add_to_dictionary_manager.add_to_dictionary_manager import AddToDictionaryManager

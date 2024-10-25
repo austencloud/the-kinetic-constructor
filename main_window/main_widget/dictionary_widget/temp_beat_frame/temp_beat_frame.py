@@ -10,9 +10,15 @@ from main_window.main_widget.dictionary_widget.temp_beat_frame.temp_beat_frame_l
 )
 
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.sequence_widget.beat_frame.beat import Beat, BeatView
-from main_window.main_widget.sequence_widget.beat_frame.image_export_manager.image_export_manager import ImageExportManager
-from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import StartPositionBeat, StartPositionBeatView
+from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
+from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
+from main_window.main_widget.sequence_widget.beat_frame.image_export_manager.image_export_manager import (
+    ImageExportManager,
+)
+from main_window.main_widget.sequence_widget.beat_frame.start_pos_beat import (
+    StartPositionBeat,
+    StartPositionBeatView,
+)
 
 
 if TYPE_CHECKING:
@@ -150,8 +156,6 @@ class TempBeatFrame(BaseBeatFrame):
 
         scroll_area = self.manual_builder.option_picker.scroll_area
         scroll_area.hide_all_pictographs()
-
-
 
     def populate_sequence(self, pictograph_dict: dict) -> None:
         pictograph = Beat(self)

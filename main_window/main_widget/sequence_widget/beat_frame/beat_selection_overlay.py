@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QWidget
 from PyQt6.QtGui import QPainter, QPen, QColor
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING, Optional
-from .beat import BeatView
+from .beat_view import BeatView
 from .start_pos_beat import StartPositionBeatView
 
 if TYPE_CHECKING:

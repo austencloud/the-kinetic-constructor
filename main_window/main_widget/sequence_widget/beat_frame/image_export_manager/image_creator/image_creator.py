@@ -2,7 +2,7 @@ from PyQt6.QtGui import QImage
 from PyQt6.QtCore import Qt
 from typing import TYPE_CHECKING
 
-from main_window.main_widget.sequence_widget.beat_frame.beat import BeatView
+from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
 from main_window.main_widget.sequence_widget.beat_frame.image_export_manager.image_creator.reversal_processor import (
     ReversalProcessor,
 )

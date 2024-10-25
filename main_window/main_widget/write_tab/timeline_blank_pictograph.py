@@ -7,8 +7,9 @@ from base_widgets.base_pictograph.base_pictograph import BasePictograph
 from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.timeline_beat_container import TimelineBeatContainer
-
+    from main_window.main_widget.write_tab.timeline_beat_container import (
+        TimelineBeatContainer,
+    )
 
 
 class TimelineBlankPictograph(Beat):

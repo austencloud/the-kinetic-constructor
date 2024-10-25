@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.sequence_builder.manual_builder import (
         ManualBuilderWidget,
     )
-    from main_window.main_widget.sequence_widget.beat_frame.beat import (
+    from main_window.main_widget.sequence_widget.beat_frame.beat_view import (
         Beat,
     )
 
@@ -19,7 +19,7 @@ class AddToSequenceManager:
         self.manual_builder = manual_builder
 
     def create_new_beat(self, clicked_option: "BasePictograph") -> "Beat":
-        from main_window.main_widget.sequence_widget.beat_frame.beat import (
+        from main_window.main_widget.sequence_widget.beat_frame.beat_view import (
             Beat,
         )
 

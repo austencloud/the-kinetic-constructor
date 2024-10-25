@@ -113,7 +113,7 @@ class SR_BeatFrame(QFrame):
         entry["blue_attributes"]["start_ori"] = entry["blue_attributes"]["end_ori"]
         entry["start_pos"] = entry["end_pos"]
 
-    def get.index_of_currently_selected_beat(self) -> int:
+    def get_index_of_currently_selected_beat(self) -> int:
         for i, beat in enumerate(self.beat_views):
             if beat.is_selected:
                 return i

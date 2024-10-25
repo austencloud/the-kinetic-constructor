@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, List
 from PyQt6.QtGui import QPainter, QImage, QPixmap
 from PyQt6.QtCore import Qt
 
-from main_window.main_widget.sequence_widget.beat_frame.beat import BeatView
+from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
 
 
 if TYPE_CHECKING:

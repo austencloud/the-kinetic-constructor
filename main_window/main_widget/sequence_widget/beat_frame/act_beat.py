@@ -1,49 +1,40 @@
-# write_tab_beat.py
-from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem, QGraphicsScene
+
+from typing import TYPE_CHECKING, Union
+from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem, QMenu, QGraphicsPixmapItem
 from PyQt6.QtCore import Qt, QPointF
-from PyQt6.QtGui import QFont
+from PyQt6.QtGui import QFont, QPainter, QColor, QPixmap, QImage, QAction
+from base_widgets.base_pictograph.base_pictograph import BasePictograph
+from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import (
+    ReversalSymbolManager,
+)
+from utilities.path_helpers import get_images_and_data_path
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.timeline_row import TimelineRow
-    from main_window.main_widget.sequence_widget.beat_frame.beat import BeatView
-    from main_window.main_widget.main_widget import MainWidget
+    from main_window.main_widget.sequence_widget.beat_frame.act_beat_view import ActBeatView
+    from main_window.main_widget.write_tab.act_beat_frame import ActBeatFrame
+    from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
+        SequenceWidgetBeatFrame,
+    )
+class ActBeat(BasePictograph):
+    def __init__(self, beat_frame: "ActBeatFrame", duration: Union[int, float] = 1):
+        super().__init__(beat_frame.main_widget)
+        self.main_widget = beat_frame.main_widget
+        self.reversal_symbol_manager = ReversalSymbolManager(self)
+        self.view: "ActBeatView" = None
+        self.beat_number_item: QGraphicsTextItem = None
+        self.duration = duration
+        self.is_placeholder = False
+        self.parent_beat = None
+        self.beat_number = 0
+        self.blue_reversal = False
+        self.red_reversal = False
 
-class ActBeatView(QGraphicsView):
-    def __init__(self, main_widget: "MainWidget", number=None):
-        super().__init__()
-        self.main_widget = main_widget
-        self.number = number  # Beat number to display
-        self.scene:QGraphicsScene = QGraphicsScene(self)
-        self.setScene(self.scene)
-        self.beat_number_item = None
-        self.setContentsMargins(0, 0, 0, 0)
-        self.setStyleSheet("border: none; border: 1px solid black;")
-        self._setup_blank_beat()
-        self.resize_beat_view()
-
-    def _setup_blank_beat(self):
-        """Set up the blank beat, adding beat number display."""
-        self.add_beat_number()
-
-    def add_beat_number(self, beat_number_text=None):
-        """Display the beat number."""
-        if not beat_number_text:
-            beat_number_text = str(self.number) if self.number else "N/A"
-
-        if self.beat_number_item:
-            self.scene.removeItem(self.beat_number_item)
-
-        self.beat_number_item = QGraphicsTextItem(beat_number_text)
-        self.beat_number_item.setFont(QFont("Georgia", 24))  # Adjust font size as needed
-        self.beat_number_item.setPos(QPointF(10, 10))  # Adjust position as needed
-        self.scene.addItem(self.beat_number_item)
-
-    def resize_beat_view(self):
-        """Resize the beat view to fit the container."""
-        self.setFixedSize(100, 100)  # Adjust size based on your design
-
-    def clear_beat(self):
-        """Clear the beat from the view."""
-        self.scene.clear()
-        self._setup_blank_beat()
+    def get_beat_number_text(self) -> str:
+        """
+        Return the beat number or range of numbers if this beat spans multiple beats.
+        """
+        if self.duration > 1:
+            end_beat = self.beat_number + self.duration - 1
+            return f"{self.beat_number},{end_beat}"
+        else:
+            return str(self.beat_number)

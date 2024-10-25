@@ -4,7 +4,7 @@ from PyQt6.QtGui import QUndoCommand
 
 if TYPE_CHECKING:
     from .timeline_beat_container import TimelineBeatContainer
-    from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
+    from main_window.main_widget.sequence_widget.beat_frame.beat_view import Beat
 
 
 class AddBeatCommand(QUndoCommand):

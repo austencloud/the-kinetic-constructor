@@ -1,6 +1,6 @@
 # write_tab.py
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSplitter
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QScrollArea
 
 from .timeline import Timeline
 from ..sequence_dictionary_browser import SequenceDictionaryBrowser
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
 
-# write_tab.py
+from .act_beat_frame import ActBeatFrame
 
 
 class WriteTab(QWidget):
@@ -25,13 +25,19 @@ class WriteTab(QWidget):
         self._setup_layout()
 
     def _setup_components(self):
+
+        # Use ActBeatFrame instead of rows of beats
+        self.beat_frame = ActBeatFrame(self)
+        self.beat_frame.init_act(
+            num_beats=8, num_rows=10
+        )  # Example: 8 beats per row, 10 rows
+
         self.timeline = Timeline(self)
         self.dictionary_browser = SequenceDictionaryBrowser(self)
         self.annotation_editor = AnnotationEditor(self)
-
-        # Instantiate SequenceWidgetBeatFrame
-        self.beat_frame = SequenceWidgetBeatFrame(self.main_widget)
-        self.beat_frame._init_beats()  # Initialize beats
+        self.scroll_area = QScrollArea(self)
+        self.scroll_area.setWidget(self.beat_frame)
+        self.scroll_area.setWidgetResizable(True)
 
     def _setup_layout(self):
         # Use a splitter to allow resizing between the dictionary and timeline
@@ -39,7 +45,7 @@ class WriteTab(QWidget):
         self.splitter.addWidget(self.dictionary_browser)
         self.splitter.addWidget(self.timeline)
 
-        # Add beat frame to layout
+        # Add ActBeatFrame to layout
         self.splitter.addWidget(self.beat_frame)
 
         # Main layout

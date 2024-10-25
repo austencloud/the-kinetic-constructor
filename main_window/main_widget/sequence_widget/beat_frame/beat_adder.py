@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import ReversalDetector
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.beat_frame.beat import (
+    from main_window.main_widget.sequence_widget.beat_frame.beat_view import (
         Beat,
     )
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame

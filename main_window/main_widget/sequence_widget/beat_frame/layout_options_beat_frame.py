@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGridLayout, QFrame
 from PyQt6.QtCore import Qt
 
-from .beat import BeatView
+from .beat_view import BeatView
 from .start_pos_beat import StartPositionBeatView
 
 

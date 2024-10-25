@@ -12,7 +12,7 @@ from .beat_deletion_manager import BeatDeletionManager
 from .image_export_manager.image_export_manager import ImageExportManager
 from .beat_selection_overlay import BeatSelectionOverlay
 from .start_pos_beat import StartPositionBeat, StartPositionBeatView
-from .beat import BeatView
+from .beat_view import BeatView
 from base_widgets.base_beat_frame import BaseBeatFrame
 
 if TYPE_CHECKING:

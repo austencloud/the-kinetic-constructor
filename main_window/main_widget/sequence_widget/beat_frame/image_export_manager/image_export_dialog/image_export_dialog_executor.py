@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import QApplication
 from .image_export_dialog import ImageExportDialog
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.beat_frame.beat import (
+    from main_window.main_widget.sequence_widget.beat_frame.beat_view import (
         BeatView,
     )
     from ..image_export_manager import ImageExportManager

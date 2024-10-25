@@ -4,7 +4,9 @@ from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QGraphicsTextItem
 from PyQt6.QtCore import QPointF
 
-from main_window.main_widget.sequence_widget.beat_frame.beat import Beat, BeatView
+from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
+from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
+
 
 
 

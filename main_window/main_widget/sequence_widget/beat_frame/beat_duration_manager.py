@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .beat import BeatView
+    from .beat_view import BeatView
     from .sequence_widget_beat_frame import SequenceWidgetBeatFrame
 
 

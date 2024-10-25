@@ -4,18 +4,21 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from PyQt6.QtGui import QResizeEvent
 from PyQt6.QtCore import Qt
 from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.sequence_widget.beat_frame.act_beat import ActBeatView
+from main_window.main_widget.sequence_widget.beat_frame.act_beat_view import ActBeatView
 from main_window.main_widget.write_tab.timeline_blank_pictograph import (
     TimelineBlankPictograph,
 )
 
 if TYPE_CHECKING:
     from main_window.main_widget.write_tab.timeline_row import TimelineRow
-    from main_window.main_widget.sequence_widget.beat_frame.beat import BeatView
+    from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
     from main_window.main_widget.main_widget import MainWidget
 
+
 class TimelineBeatContainer(QFrame):
-    def __init__(self, timeline_row: "TimelineRow", main_widget: "MainWidget", row_number: int) -> None:
+    def __init__(
+        self, timeline_row: "TimelineRow", main_widget: "MainWidget", row_number: int
+    ) -> None:
         super().__init__(timeline_row)
         self.timeline_row = timeline_row
         self.main_widget = main_widget
@@ -35,7 +38,9 @@ class TimelineBeatContainer(QFrame):
 
     def set_blank_pictograph(self):
         """Set a blank pictograph in the beat."""
-        self.pictograph_view = ActBeatView(self.main_widget, self.row_number)
+        self.pictograph_view = ActBeatView(
+            self.timeline_row.timeline.write_tab.beat_frame, self.row_number
+        )
         self.set_pictograph(self.pictograph_view)
 
     def set_pictograph(self, pictograph_view: "ActBeatView"):
@@ -51,7 +56,7 @@ class TimelineBeatContainer(QFrame):
         """Resize beat container based on timeline width."""
         print(f"Resizing beat container for row {self.row_number}")
         timeline_width = self.timeline_row.timeline.width()
-        beat_size = int(timeline_width / 10)  # Adjust the divisor for size proportions
+        beat_size = int(timeline_width / 9)  # Adjust the divisor for size proportions
         self.setFixedSize(beat_size, beat_size)
         self.pictograph_view.setFixedSize(beat_size, beat_size)
 

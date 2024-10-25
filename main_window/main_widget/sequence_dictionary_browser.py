@@ -10,7 +10,7 @@ from main_window.main_widget.write_tab.draggable_sequence import DraggableSequen
 
 if TYPE_CHECKING:
     from main_window.main_widget.write_tab.write_tab import WriteTab
-    from main_window.main_widget.sequence_widget.beat_frame.beat import BeatView
+    from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatView
 
 
 class SequenceDictionaryBrowser(QWidget):
