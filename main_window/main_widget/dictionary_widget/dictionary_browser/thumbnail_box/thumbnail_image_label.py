@@ -1,11 +1,12 @@
-import json
-from PyQt6.QtCore import Qt, QEvent, QByteArray, QDataStream, QIODevice, QMimeData
-from PyQt6.QtGui import QPixmap, QCursor, QMouseEvent, QDrag
+from PyQt6.QtCore import Qt, QEvent
+from PyQt6.QtGui import QPixmap, QCursor, QMouseEvent
 from PyQt6.QtWidgets import QLabel, QApplication
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.thumbnail_box import ThumbnailBox
+    from main_window.main_widget.dictionary_widget.dictionary_browser.thumbnail_box.thumbnail_box import (
+        ThumbnailBox,
+    )
 
 
 class ThumbnailImageLabel(QLabel):
@@ -15,7 +16,7 @@ class ThumbnailImageLabel(QLabel):
 
         self.setStyleSheet("border: 3px solid black;")
         self.installEventFilter(self)
-        self.mousePressEvent = self.thumbnail_clicked
+        # self.mousePressEvent = self.thumbnail_clicked
         self.thumbnails = thumbnail_box.thumbnails
         self.metadata_extractor = thumbnail_box.main_widget.metadata_extractor
         self.browser = thumbnail_box.browser
@@ -49,24 +50,22 @@ class ThumbnailImageLabel(QLabel):
         self.setPixmap(scaled_pixmap)
         self.adjustSize()
 
-    def thumbnail_clicked(self, event: "QMouseEvent"):
+    def mousePressEvent(self, event: "QMouseEvent"):
         if self.thumbnails:
-            # Extract metadata and start the drag operation
-            drag = QDrag(self)
-            mime_data = QMimeData()
-
-            # Serialize the metadata into a QByteArray to send via the drag
-            data = QByteArray()
-            stream = QDataStream(data, QIODevice.OpenModeFlag.WriteOnly)
             metadata = self.metadata_extractor.extract_metadata_from_file(
-                self.thumbnails[self.thumbnail_box.current_index]
+                self.thumbnails[0]
             )
-            stream.writeQString(json.dumps(metadata))  # Send metadata as a JSON string
-
-            mime_data.setData("application/sequence-data", data)
-            drag.setMimeData(mime_data)
-
-            drag.exec(Qt.DropAction.CopyAction)
+            self.browser.dictionary_widget.selection_handler.thumbnail_clicked(
+                self,
+                QPixmap(self.thumbnails[self.thumbnail_box.current_index]),
+                metadata,
+                self.thumbnails,
+                self.thumbnail_box.current_index,
+            )
+        else:
+            self.browser.dictionary_widget.deletion_handler.delete_variation(
+                self.thumbnail_box, self.thumbnail_box.current_index
+            )
 
     def set_selected(self, selected: bool):
         self.is_selected = selected

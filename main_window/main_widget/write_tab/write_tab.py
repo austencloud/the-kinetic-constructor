@@ -1,8 +1,8 @@
 # write_tab.py
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSplitter
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSplitter, QHBoxLayout
 from .timeline import Timeline
-from ..sequence_dictionary_browser import SequenceDictionaryBrowser
+from ..act_browser import ActBrowser
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
@@ -24,18 +24,12 @@ class WriteTab(QWidget):
         self.beat_frame.init_act(num_beats=8, num_rows=10)
 
         self.timeline = Timeline(self)
-        self.dictionary_browser = SequenceDictionaryBrowser(self)
+        self.act_browser = ActBrowser(self)
 
     def _setup_layout(self):
-        self.splitter = QSplitter(self)
-        self.splitter.addWidget(self.dictionary_browser)
-        self.splitter.addWidget(self.timeline)
-        self.splitter.setStretchFactor(0, 1)
-        self.splitter.setStretchFactor(1, 2)
-        # connect it to eh resize function
-        self.splitter.splitterMoved.connect(self.timeline.resize_timeline)
-        self.layout: QVBoxLayout = QVBoxLayout(self)
-        self.layout.addWidget(self.splitter)
+        self.layout: QHBoxLayout = QHBoxLayout(self)
+        self.layout.addWidget(self.timeline, 1)
+        self.layout.addWidget(self.act_browser, 1)
         self.setLayout(self.layout)
 
         self.setStyleSheet("background-color: rgba(255, 255, 255, 140);")
@@ -43,12 +37,15 @@ class WriteTab(QWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.timeline.resize_timeline()
-        self.dictionary_browser.resize_browser()
+        self.act_browser.resize_browser()
+
+    def on_splitter_moved(self):
+        self.timeline.resize_timeline()
+        self.act_browser.resize_browser()
 
     # connect the splitter to the resize function
     def load_most_recent_act(self):
         """Load the most recent act and apply its settings."""
         last_act = self.settings_manager.write_tab_settings.load_last_act()
         if last_act:
-            # Load the act data into your components (e.g., the beat frame)
-            pass  # You'll add code here to load act data
+            pass

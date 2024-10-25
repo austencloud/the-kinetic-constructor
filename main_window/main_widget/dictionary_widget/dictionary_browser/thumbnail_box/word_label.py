@@ -68,7 +68,7 @@ class WordLabel(QWidget):
         ):
             return "white_star_outline.png"
 
-    def resize_base_word_label(self):
+    def resize_word_label(self):
         # Adjust the font size of the word label and the star button's icon size
         font_size = self.thumbnail_box.width() // 18
         font = QFont("Georgia", font_size, QFont.Weight.DemiBold)

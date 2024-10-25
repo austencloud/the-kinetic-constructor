@@ -1,8 +1,10 @@
 # timeline_beat_widget.py
+import json
 from typing import TYPE_CHECKING, Optional
 from PyQt6.QtWidgets import QFrame, QVBoxLayout
-from PyQt6.QtGui import QResizeEvent
+from PyQt6.QtGui import QResizeEvent, QDropEvent
 from PyQt6.QtCore import Qt
+from main_window.main_widget.act_thumbnail_image_label import ActThumbnailImageLabel
 from main_window.main_widget.sequence_widget.beat_frame.act_beat_view import ActBeatView
 
 if TYPE_CHECKING:
@@ -19,7 +21,6 @@ class TimelineBeatContainer(QFrame):
         self.main_widget = main_widget
         self.row_number = row_number
         self.act_beat_view: Optional["ActBeatView"] = None
-
         self._setup_ui()
         self.set_blank_pictograph()
 
@@ -37,6 +38,7 @@ class TimelineBeatContainer(QFrame):
             self.timeline_row.timeline.write_tab.beat_frame, self.row_number
         )
         self.set_pictograph(self.act_beat_view)
+        self.is_filled = False
 
     def set_pictograph(self, pictograph_view: "ActBeatView"):
         """Replace the current pictograph with a new one."""
@@ -46,6 +48,7 @@ class TimelineBeatContainer(QFrame):
             if widget is not None:
                 widget.setParent(None)
         self.layout.addWidget(pictograph_view)
+        self.is_filled = True
 
     # timeline_beat_container.py
     def resize_timeline_beat_container(self):
@@ -56,8 +59,27 @@ class TimelineBeatContainer(QFrame):
         self.act_beat_view.setFixedSize(beat_size, beat_size)
         self.act_beat_view.resize_act_beat_view()
 
-
     def resizeEvent(self, event: QResizeEvent) -> None:
         """Trigger resize when the beat container is resized."""
         self.resize_timeline_beat_container()
         super().resizeEvent(event)
+
+    def dragEnterEvent(self, event: QDropEvent):
+        """Accept drag event if the source is ActThumbnailImageLabel."""
+        if isinstance(event.source(), ActThumbnailImageLabel):
+            event.acceptProposedAction()
+
+    def dropEvent(self, event: QDropEvent):
+        """Handle drop event to add the sequence to the timeline."""
+        source = event.source()
+        if isinstance(source, ActThumbnailImageLabel) and source.dragging_metadata:
+            # Retrieve the metadata directly from the source widget
+            metadata = source.dragging_metadata
+            print(f"Sequence metadata received: {metadata}")
+
+            # Use metadata to update the pictograph or other UI elements
+            self.set_pictograph(metadata)
+            event.acceptProposedAction()
+        else:
+            print("No valid metadata found for this drop event.")
+            event.ignore()

@@ -1,7 +1,7 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Snowfall",
+        "background_type": "Aurora",
         "grow_sequence": true,
         "current_tab": "write",
         "grid_mode": "diamond"
@@ -51,7 +51,7 @@
         "sort_method": "date_added",
         "current_section": "browser",
         "current_filter": {
-            "grid_mode": "box"
+            "starting_letter": "A"
         }
     },
     "sequence_layout": {
@@ -129,7 +129,7 @@
         ]
     },
     "write_tab": {
-        "act_title": "Great",
+        "act_title": "Kickass New Act",
         "last_saved_act": null
     }
 }

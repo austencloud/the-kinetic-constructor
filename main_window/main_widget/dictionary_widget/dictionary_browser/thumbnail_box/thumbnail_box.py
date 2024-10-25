@@ -36,7 +36,6 @@ class ThumbnailBox(QWidget):
         self.word_label.update_favorite_icon(self.favorite_status)
 
     def _setup_components(self):
-        self.metadata_extractor = MetaDataExtractor(self.main_widget)
         self.word_label = WordLabel(self)
         self.image_label = ThumbnailImageLabel(self)
         self.variation_number_label = VariationNumberLabel(self)
@@ -80,14 +79,16 @@ class ThumbnailBox(QWidget):
         # Load favorite status from metadata
         if self.thumbnails:
             first_thumbnail = self.thumbnails[0]
-            self.favorite_status = self.metadata_extractor.get_favorite_status(
-                first_thumbnail
+            self.favorite_status = (
+                self.main_widget.metadata_extractor.get_favorite_status(first_thumbnail)
             )
 
     def save_favorite_status(self):
         # Save favorite status to metadata
         for thumbnail in self.thumbnails:
-            self.metadata_extractor.set_favorite_status(thumbnail, self.favorite_status)
+            self.main_widget.metadata_extractor.set_favorite_status(
+                thumbnail, self.favorite_status
+            )
 
     def resize_thumbnail_box(self):
         scrollbar_width = (
@@ -98,7 +99,7 @@ class ThumbnailBox(QWidget):
         width = parent_width // 3
         self.setFixedWidth(width)
         self.image_label.update_thumbnail(self.current_index)
-        self.word_label.resize_base_word_label()
+        self.word_label.resize_word_label()
         self.resize_variation_number_label()
 
     def update_thumbnails(self, thumbnails=[]):
