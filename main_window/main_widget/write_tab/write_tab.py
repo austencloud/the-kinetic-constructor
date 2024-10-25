@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
 
+# write_tab.py
 class WriteTab(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
@@ -19,7 +20,7 @@ class WriteTab(QWidget):
         self._setup_layout()
 
     def _setup_components(self):
-        self.timeline_widget = Timeline(self)
+        self.timeline = Timeline(self)
         self.dictionary_browser = SequenceDictionaryBrowser(self)
         self.annotation_editor = AnnotationEditor(self)
 
@@ -27,7 +28,7 @@ class WriteTab(QWidget):
         # Use a splitter to allow resizing between the dictionary and timeline
         self.splitter = QSplitter(self)
         self.splitter.addWidget(self.dictionary_browser)
-        self.splitter.addWidget(self.timeline_widget)
+        self.splitter.addWidget(self.timeline)
 
         # Main layout
         layout = QVBoxLayout(self)
@@ -35,11 +36,11 @@ class WriteTab(QWidget):
         self.setLayout(layout)
 
         # Set the title and date after the layout has been set up
-        self.timeline_widget.header_widget.set_title("My Timeline Title")
-        self.timeline_widget.header_widget.set_date("2024-10-24")
+        self.timeline.header_widget.set_title("My Timeline Title")
+        self.timeline.header_widget.set_date("2024-10-24")
 
     def resizeEvent(self, event):
-        self.timeline_widget.resize_timeline()
+        self.timeline.resize_timeline()
         self.dictionary_browser.resize_browser()
         self.annotation_editor.resize_editor()
         super().resizeEvent(event)

@@ -1,13 +1,17 @@
 # custom_scroll_area.py
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QVBoxLayout, QWidget, QFrame
 from PyQt6.QtGui import QColor, QPalette
-
-from main_window.main_widget.write_widget.timeline_row import TimelineRow
+from main_window.main_widget.write_tab.timeline_row import TimelineRow
+if TYPE_CHECKING:
+    from main_window.main_widget.write_tab.timeline import Timeline
 
 
 class TimelineScrollArea(QScrollArea):
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self, timeline: "Timeline"):
+        super().__init__(timeline)
+        self.timeline = timeline
+        self.main_widget = timeline.main_widget
         self.initialized = False
         self.setWidgetResizable(True)
         self.rows: dict[int, TimelineRow] = {}

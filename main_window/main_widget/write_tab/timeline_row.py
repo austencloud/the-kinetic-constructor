@@ -34,10 +34,10 @@ class TimelineRow(QWidget):
         self.layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.setLayout(self.layout)
 
-    def setup_beats(self, main_widget):
+    def setup_beats(self):
         """Delay the creation of beats until the main_widget is available."""
         for _ in range(8):  # Example: 8 beats
-            beat_container = TimelineBeatContainer(self, main_widget)
+            beat_container = TimelineBeatContainer(self, self.timeline.main_widget)
             self.beats.append(beat_container)
             self.layout.addWidget(beat_container)
 
