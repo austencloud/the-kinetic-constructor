@@ -5,12 +5,17 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSplitter
 from .timeline import Timeline
 from ..sequence_dictionary_browser import SequenceDictionaryBrowser
 from .annotation_editor import AnnotationEditor
+from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
+    SequenceWidgetBeatFrame,
+)
 
 if TYPE_CHECKING:
     from main_window.main_widget.main_widget import MainWidget
 
 
 # write_tab.py
+
+
 class WriteTab(QWidget):
     def __init__(self, main_widget: "MainWidget") -> None:
         super().__init__(main_widget)
@@ -24,11 +29,18 @@ class WriteTab(QWidget):
         self.dictionary_browser = SequenceDictionaryBrowser(self)
         self.annotation_editor = AnnotationEditor(self)
 
+        # Instantiate SequenceWidgetBeatFrame
+        self.beat_frame = SequenceWidgetBeatFrame(self.main_widget)
+        self.beat_frame._init_beats()  # Initialize beats
+
     def _setup_layout(self):
         # Use a splitter to allow resizing between the dictionary and timeline
         self.splitter = QSplitter(self)
         self.splitter.addWidget(self.dictionary_browser)
         self.splitter.addWidget(self.timeline)
+
+        # Add beat frame to layout
+        self.splitter.addWidget(self.beat_frame)
 
         # Main layout
         layout = QVBoxLayout(self)

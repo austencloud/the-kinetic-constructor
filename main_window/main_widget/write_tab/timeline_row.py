@@ -8,14 +8,17 @@ from main_window.main_widget.write_tab.timeline_beat_container import (
 )
 
 if TYPE_CHECKING:
+    from main_window.main_widget.write_tab.timeline_scroll_area import (
+        TimelineScrollArea,
+    )
     from .timeline import Timeline
 
 
-# timeline_row.py
 class TimelineRow(QWidget):
-    def __init__(self, timeline_widget: "Timeline") -> None:
-        super().__init__(timeline_widget)
-        self.timeline = timeline_widget
+    def __init__(self, scroll_area: "TimelineScrollArea") -> None:
+        super().__init__(scroll_area)
+        self.scroll_area = scroll_area
+        self.timeline = scroll_area.timeline
         self.beats: list[TimelineBeatContainer] = []
         self.timestamp_label = None
 
@@ -35,12 +38,13 @@ class TimelineRow(QWidget):
         self.setLayout(self.layout)
 
     def setup_beats(self):
-        """Delay the creation of beats until the main_widget is available."""
-        for _ in range(8):  # Example: 8 beats
-            beat_container = TimelineBeatContainer(self, self.timeline.main_widget)
+        """Create beat containers and add them to the layout."""
+        for i in range(8):  # Example: 8 beats per row
+            beat_container = TimelineBeatContainer(self, self.timeline.main_widget, i + 1)
             self.beats.append(beat_container)
             self.layout.addWidget(beat_container)
 
     def resize_row(self):
+        """Resize each beat in the row."""
         for beat in self.beats:
             beat.resize_timeline_beat_container()

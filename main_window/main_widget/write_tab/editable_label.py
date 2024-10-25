@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QLabel, QLineEdit, QHBoxLayout, QWidget
 from PyQt6.QtCore import Qt
 
 class EditableLabel(QWidget):
-    def __init__(self, label_text: str, parent=None):
+    def __init__(self, label_text: str, parent=None, font_size: int = 14):
         super().__init__(parent)
         self.label = QLabel(label_text, self)
         self.label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
@@ -17,10 +17,15 @@ class EditableLabel(QWidget):
         layout.addWidget(self.edit)
         self.setLayout(layout)
 
-        self.label.mousePressEvent = self._show_edit  # Clicking the label will trigger editing
+        # Set the font size
+        self.label.setStyleSheet(f"font-size: {font_size}px;")
+
+        # Clicking the label will trigger editing
+        self.label.mousePressEvent = self._show_edit
 
     def _show_edit(self, event):
-        """Show the QLineEdit for editing."""
+        """Show the QLineEdit for editing with the current text pre-filled."""
+        self.edit.setText(self.label.text())  # Pre-fill with current text
         self.label.setVisible(False)
         self.edit.setVisible(True)
         self.edit.setFocus()

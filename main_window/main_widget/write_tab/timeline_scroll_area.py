@@ -1,8 +1,8 @@
-# custom_scroll_area.py
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QVBoxLayout, QWidget, QFrame
 from PyQt6.QtGui import QColor, QPalette
 from main_window.main_widget.write_tab.timeline_row import TimelineRow
+
 if TYPE_CHECKING:
     from main_window.main_widget.write_tab.timeline import Timeline
 
@@ -41,8 +41,10 @@ class TimelineScrollArea(QScrollArea):
 
     def add_row(self):
         """Add a single row to the scroll area."""
-        row = TimelineRow(self)
+        row_number = len(self.rows) + 1
+        row = TimelineRow(self)  # Pass row number for beat numbers
         self.content_layout.addWidget(row)
+        row.setup_beats()  # Call setup_beats after adding the row
         self.rows[len(self.rows)] = row
 
     def resize_timeline(self):
