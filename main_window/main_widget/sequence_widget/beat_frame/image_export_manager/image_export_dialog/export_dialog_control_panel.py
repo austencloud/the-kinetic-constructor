@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QCheckBox,
     QWidget,
-    QHBoxLayout,
     QComboBox,
     QLabel,
 )

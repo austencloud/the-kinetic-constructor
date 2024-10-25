@@ -44,16 +44,18 @@ class WriteTab(QWidget):
         self.splitter = QSplitter(self)
         self.splitter.addWidget(self.dictionary_browser)
         self.splitter.addWidget(self.timeline)
+        # self.splitter.addWidget(self.scroll_area)  # Wrap beat_frame in a scroll area
 
-        # Add ActBeatFrame to layout
-        self.splitter.addWidget(self.beat_frame)
+        # Add stretch factors to the widgets in the splitter
+        self.splitter.setStretchFactor(0, 1)  # Smaller stretch for dictionary browser
+        self.splitter.setStretchFactor(1, 2)  # Larger stretch for the beat frame (2/3 window)
 
         # Main layout
         layout = QVBoxLayout(self)
         layout.addWidget(self.splitter)
         self.setLayout(layout)
 
-        # Set the title and date after the layout has been set up
+
         self.timeline.header_widget.set_title("My Timeline Title")
         self.timeline.header_widget.set_date("2024-10-24")
 

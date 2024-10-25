@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 from PyQt6.QtGui import QPainter, QImage, QPixmap
 from PyQt6.QtCore import Qt
 

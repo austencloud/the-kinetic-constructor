@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 from PyQt6.QtGui import QPainter, QFont, QFontMetrics, QImage
 from datetime import datetime
 

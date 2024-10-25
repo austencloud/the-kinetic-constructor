@@ -12,7 +12,6 @@ if TYPE_CHECKING:
     from main_window.main_widget.write_tab.write_tab import WriteTab
 
 
-
 class Timeline(QWidget):
     def __init__(self, write_tab: "WriteTab") -> None:
         super().__init__(write_tab)
@@ -34,12 +33,12 @@ class Timeline(QWidget):
             row.setup_beats(self.main_widget)
 
     def _setup_layout(self):
-        layout = QVBoxLayout(self)
-        layout.addWidget(self.header_widget)  # Add header at the top
-        layout.addWidget(self.scroll_area)    # Add scroll area for rows below
-        layout.setSpacing(0)
-        layout.setContentsMargins(0, 0, 0, 0)
-        self.setLayout(layout)
+        self.layout: QVBoxLayout = QVBoxLayout(self)
+        self.layout.addWidget(self.header_widget)  # Add header at the top
+        self.layout.addWidget(self.scroll_area)  # Add scroll area for rows below
+        self.layout.setSpacing(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(self.layout)
 
     def resize_timeline(self):
         self.scroll_area.resize_timeline()

@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 
-from PyQt6.QtWidgets import QGridLayout, QApplication
+from PyQt6.QtWidgets import QGridLayout
 from data.beat_frame_layouts import DEFAULT_BEAT_FRAME_LAYOUTS
 
 if TYPE_CHECKING:

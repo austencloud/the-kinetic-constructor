@@ -6,9 +6,6 @@ from main_window.main_widget.sequence_widget.beat_frame.beat_view import BeatVie
 from main_window.main_widget.sequence_widget.beat_frame.image_export_manager.image_creator.reversal_processor import (
     ReversalProcessor,
 )
-from main_window.main_widget.sequence_widget.beat_frame.reversal_detector import (
-    ReversalDetector,
-)
 
 from .height_determiner import HeightDeterminer
 from .beat_drawer import BeatDrawer

@@ -1,19 +1,11 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem, QMenu, QGraphicsPixmapItem
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtGui import QFont, QPainter, QColor, QPixmap, QImage, QAction
-from base_widgets.base_pictograph.base_pictograph import BasePictograph
-from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager import (
-    ReversalSymbolManager,
-)
 from utilities.path_helpers import get_images_and_data_path
 from main_window.main_widget.sequence_widget.beat_frame.beat import Beat
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.beat_frame.act_beat_view import (
-        ActBeatView,
-    )
-    from main_window.main_widget.write_tab.act_beat_frame import ActBeatFrame
     from main_window.main_widget.sequence_widget.beat_frame.sequence_widget_beat_frame import (
         SequenceWidgetBeatFrame,
     )

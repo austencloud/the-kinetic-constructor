@@ -23,7 +23,7 @@ class TimelineBeatContainer(QFrame):
         self.timeline_row = timeline_row
         self.main_widget = main_widget
         self.row_number = row_number
-        self.pictograph_view: Optional["ActBeatView"] = None
+        self.act_beat_view: Optional["ActBeatView"] = None
 
         self._setup_ui()
         self.set_blank_pictograph()
@@ -38,27 +38,42 @@ class TimelineBeatContainer(QFrame):
 
     def set_blank_pictograph(self):
         """Set a blank pictograph in the beat."""
-        self.pictograph_view = ActBeatView(
+        self.act_beat_view = ActBeatView(
             self.timeline_row.timeline.write_tab.beat_frame, self.row_number
         )
-        self.set_pictograph(self.pictograph_view)
+        self.set_pictograph(self.act_beat_view)
 
     def set_pictograph(self, pictograph_view: "ActBeatView"):
         """Replace the current pictograph with a new one."""
-        self.pictograph_view = pictograph_view
+        self.act_beat_view = pictograph_view
         for i in reversed(range(self.layout.count())):
             widget = self.layout.takeAt(i).widget()
             if widget is not None:
                 widget.setParent(None)
         self.layout.addWidget(pictograph_view)
 
+    # timeline_beat_container.py
     def resize_timeline_beat_container(self):
         """Resize beat container based on timeline width."""
-        print(f"Resizing beat container for row {self.row_number}")
         timeline_width = self.timeline_row.timeline.width()
         beat_size = int(timeline_width / 9)  # Adjust the divisor for size proportions
         self.setFixedSize(beat_size, beat_size)
-        self.pictograph_view.setFixedSize(beat_size, beat_size)
+        self.act_beat_view.setFixedSize(beat_size, beat_size)
+
+        # Rescale the beat view to fit the container
+        beat_scene_size = (950, 950)
+        view_size = self.size()
+
+        self.view_scale = min(
+            view_size.width() / beat_scene_size[0],
+            view_size.height() / beat_scene_size[1],
+        )
+        self.act_beat_view.resetTransform()
+        self.act_beat_view.scale(self.view_scale, self.view_scale)
+
+        print(
+            f"Resized beat container for row {self.row_number} to {beat_size}px"
+        )
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         """Trigger resize when the beat container is resized."""
