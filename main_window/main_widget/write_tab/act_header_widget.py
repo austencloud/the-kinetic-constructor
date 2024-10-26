@@ -8,7 +8,6 @@ from main_window.main_widget.write_tab.title_label import TitleLabel
 
 if TYPE_CHECKING:
     from main_window.main_widget.write_tab.write_tab import WriteTab
-    from main_window.main_widget.write_tab.timeline import Timeline
 
 
 class ActHeaderWidget(QWidget):

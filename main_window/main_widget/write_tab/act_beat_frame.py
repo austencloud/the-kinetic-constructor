@@ -28,7 +28,6 @@ class ActBeatFrame(BaseBeatFrame):
         self.write_tab = write_tab
         self.main_widget = write_tab.main_widget
         self.beats: list[ActBeatView] = []
-        self.timestamps: list[Timestamp] = []  # Holds editable timestamp labels
         self.selection_overlay = BeatSelectionOverlay(self)
         self.layout_manager = ActBeatFrameLayoutManager(self)
         self.layout_manager.setup_layout()
@@ -60,8 +59,7 @@ class ActBeatFrame(BaseBeatFrame):
         for view in self.beats:
             view.resize_act_beat_view()  # Ensure that each beat is resized correctly
 
-        for timestamp in self.timestamps:
-            timestamp.resize_timestamp()
+
 
     def dragEnterEvent(self, event: "QDragEnterEvent"):
         if event.mimeData().hasFormat("application/sequence-data"):

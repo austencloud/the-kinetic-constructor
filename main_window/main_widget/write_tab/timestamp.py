@@ -1,6 +1,6 @@
 # timestamp_label.py
 from typing import TYPE_CHECKING
-from PyQt6.QtWidgets import QLineEdit
+from PyQt6.QtWidgets import QLineEdit, QSizePolicy
 from PyQt6.QtCore import Qt
 
 from main_window.main_widget.write_tab.editable_label import EditableLabel
@@ -14,6 +14,18 @@ class Timestamp(EditableLabel):
         super().__init__(timestamp_frame, label_text)
         self.timestamp_frame = timestamp_frame
         self.write_tab = timestamp_frame.write_tab
+        self.setContentsMargins(0, 0, 0, 0)
+        self.label.setContentsMargins(0, 0, 0, 0)
+        # gice it an outline on the top and bottom of the label
+        self.label.setStyleSheet(
+            "border-top: 1px solid black; border-bottom: 1px solid black; padding: 0px; margin: 0px;"
+        )
+        self.edit.setStyleSheet(
+            "border-top: 1px solid black; border-bottom: 1px solid black; padding: 0px; margin: 0px;"
+        )
+        self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        self.label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        self.edit.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
     def _show_edit(self, event):
         """Show the QLineEdit for editing with the current timestamp pre-filled."""
@@ -48,8 +60,9 @@ class Timestamp(EditableLabel):
         self.setFixedHeight(desired_height)
         self.label.setFixedHeight(desired_height)
         self.edit.setFixedHeight(desired_height)
-        font_size = int(self.write_tab.width() / 80)
+        font_size = int(self.write_tab.width() / 145)
         font = self.label.font()
         font.setPointSize(font_size)
+        font.setBold(True)
         self.label.setFont(font)
         self.edit.setFont(font)
