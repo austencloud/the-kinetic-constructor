@@ -43,6 +43,7 @@ class PictographUpdater:
 
         self.pictograph.tka_glyph.update_tka_glyph()
         self._position_objects()
+        self.pictograph.reversal_symbol_manager.update_reversal_symbols()
 
     def get_end_pos(self) -> str:
         return self.pictograph.end_pos[:-1]

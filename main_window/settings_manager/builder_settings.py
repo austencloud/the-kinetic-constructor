@@ -33,26 +33,16 @@ class BuilderSettings:
 
     def __init__(self, settings_manager: "SettingsManager") -> None:
         self.settings_manager = settings_manager
-        self.settings = self._load_builder_settings()
+        self.settings = self.settings_manager.settings  # QSettings instance
 
-        # Initialize manual and auto builder settings
+        # Initialize auto and manual builder settings
         self.auto_builder = AutoBuilderSettings(self.settings_manager)
-        self.manual_builder = ManualBuilderSettings(
-            self.settings_manager
-        )  # Initialize manual builder settings
-
-    def _load_builder_settings(self):
-        return self.settings_manager.settings.get(
-            "builder", self.DEFAULT_BUILDER_SETTINGS
-        )
+        self.manual_builder = ManualBuilderSettings(self.settings_manager)
 
     def get_last_used_builder(self) -> str:
-        return self.settings.get("last_used_builder", "manual")
+        return self.settings.value(
+            "builder/last_used_builder", self.DEFAULT_BUILDER_SETTINGS["last_used_builder"]
+        )
 
     def set_last_used_builder(self, builder_type: str):
-        """Save the last used builder ('manual' or 'auto')."""
-        self.settings["last_used_builder"] = builder_type
-        self._save_builder_settings()
-
-    def _save_builder_settings(self):
-        self.settings_manager.save_builder_settings(self.settings)
+        self.settings.setValue("builder/last_used_builder", builder_type)

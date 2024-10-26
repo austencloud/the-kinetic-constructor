@@ -48,7 +48,7 @@ class VisibilitySelector(ButtonSelector):
         # Define options
         glyph_types = ["TKA", "VTG", "Elemental", "Positions", "Reversals"]
         options = {
-            f"{glyph}": self.glyph_visibility_manager.get_glyph_visibility(glyph)
+            f"{glyph}": self.glyph_visibility_manager.should_glyph_be_visible(glyph)
             for glyph in glyph_types
         }
         options["Non-Radial Points"] = self.grid_visibility_manager.non_radial_visible
@@ -81,4 +81,5 @@ class VisibilitySelector(ButtonSelector):
         if option == "Non-Radial Points":
             self.grid_visibility_manager.set_non_radial_visibility(is_checked)
         else:
-            self.glyph_visibility_manager.set_glyph_visibility(option, is_checked)
+            # Call VisibilitySettings directly for glyph visibility settings
+            self.settings_manager.visibility.set_glyph_visibility(option, is_checked)

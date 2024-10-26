@@ -18,12 +18,6 @@ class Timestamp(EditableLabel):
         self.label.setContentsMargins(0, 0, 0, 0)
         self.edit.setContentsMargins(0, 0, 0, 0)
 
-        # Set size policies
-        self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        self.label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        self.edit.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-
-        # Remove padding and margins in style sheets
         self.label.setStyleSheet(
             "border-top: 1px solid black; border-bottom: 1px solid black; padding: 0px; margin: 0px;"
         )
@@ -44,15 +38,13 @@ class Timestamp(EditableLabel):
         self.edit.setVisible(True)
         self.edit.setFocus()
         self.edit.selectAll()
-        self.edit.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        self.edit.setAlignment(Qt.AlignmentFlag.AlignCenter)
         # transparent background
         self.edit.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
 
     def _hide_edit(self):
         """Ensure timestamp format on hiding the editor."""
         new_text = self.edit.text()
-
-
 
         self.label.setText(new_text if new_text else self.label.text())
         self.label.setVisible(True)
@@ -63,11 +55,13 @@ class Timestamp(EditableLabel):
         self.label.setText(text)
 
     def resize_timestamp(self):
-        desired_height = self.timestamp_frame.write_tab.act_beat_frame.beat_size
+        desired_height = self.timestamp_frame.write_tab.beat_scroll_area.act_beat_frame.beat_size
         self.setFixedHeight(desired_height)
         self.label.setFixedHeight(desired_height)
         self.edit.setFixedHeight(desired_height)
-
+        self.label.setFixedWidth(self.timestamp_frame.width())
+        self.edit.setFixedWidth(self.timestamp_frame.width())
+        self.setFixedWidth(self.timestamp_frame.width())
         # Adjust font size if necessary
         font_size = int(desired_height * 0.1)  # For example, 60% of the height
         font = self.label.font()

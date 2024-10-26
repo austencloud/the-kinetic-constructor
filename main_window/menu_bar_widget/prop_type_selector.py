@@ -42,7 +42,6 @@ class PropTypeSelector(QWidget):
         layout.addWidget(self.label)
         self.setLayout(layout)
 
-
     def style_widget(self):
         font_size = self.menu_bar_widget.menu_bar_font_size
         font = QFont("Georgia", font_size)
@@ -136,6 +135,5 @@ class PropTypeSelector(QWidget):
     def set_current_prop_type(self, prop_type: PropType):
         self.label.setText(prop_type.name)
         self.settings_manager.global_settings.set_prop_type(prop_type)
-        self.settings_manager.save_settings()
         self.prop_type_changer.apply_prop_type()
         self.dialog.accept()

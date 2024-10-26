@@ -49,8 +49,9 @@ class PictographInitializer:
         self.init_reversal_symbols()
 
         self.set_nonradial_points_visibility(
-            self.pictograph.main_widget.main_window.settings_manager.visibility.grid_visibility_manager.load_nonradial_points_visibility_settings()
+            self.pictograph.main_widget.main_window.settings_manager.visibility.get_grid_visibility("non_radial_points")
         )
+
 
     def init_reversal_symbols(self) -> tuple[QGraphicsTextItem, QGraphicsTextItem]:
         self.reversal_symbol_manager = ReversalSymbolManager(self.pictograph)

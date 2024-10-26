@@ -67,7 +67,7 @@ class BaseAutoBuilderFrame(QFrame):
         )
 
         self.level_selector.set_level(level)
-        self.length_adjuster.set_length(length)
+        self.length_adjuster.set_length(int(length))
         self.turn_intensity_adjuster.set_intensity(intensity)
         self.continuous_rotation_toggle.set_state(continuous_rotation)
         self.continuous_rotation_toggle.update_mode_label_styles()

@@ -16,8 +16,8 @@ class ReversalSymbolManager:
 
     def create_reversal_symbols(self):
         # Create reversal symbols for both hands
-        red_R = self._create_reversal_text_item("R", color=HEX_RED)
-        blue_R = self._create_reversal_text_item("R", color=HEX_BLUE)
+        red_R = self._create_reversal_text_item(HEX_RED)
+        blue_R = self._create_reversal_text_item(HEX_BLUE)
 
         # Add items to the pictograph
         self.pictograph.addItem(red_R)
@@ -69,10 +69,10 @@ class ReversalSymbolManager:
         # else: both are not visible, do nothing
 
         self.pictograph.update()
-        self.pictograph.view.update()
+        # self.pictograph.view.update()
 
-    def _create_reversal_text_item(self, text, color) -> QGraphicsTextItem:
-        text_item = QGraphicsTextItem(text)
+    def _create_reversal_text_item(self, color) -> QGraphicsTextItem:
+        text_item = QGraphicsTextItem("R")
         font = QFont("Georgia", 60, QFont.Weight.Bold)
         text_item.setFont(font)
         text_item.setDefaultTextColor(QColor(color))

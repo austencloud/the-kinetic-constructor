@@ -117,7 +117,9 @@ class EditUserProfilesDialog(QDialog):
         if selected_items:
             selected_user = selected_items[0].text()
             self.user_manager.set_current_user(selected_user)
-            user_profiles_selector = self.user_manager.user_profiles_selector
+            user_profiles_selector = (
+                self.user_manager.user_profile_settings.settings_manager.main_window.main_widget.menu_bar_widget.user_profile_selector
+            )
             user_profiles_selector.set_current_user(selected_user)
         self.user_manager.save_users()
         self.accept()

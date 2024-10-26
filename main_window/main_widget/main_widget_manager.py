@@ -93,24 +93,21 @@ class MainWidgetManager:
         self.main_widget.letter_determiner = LetterDeterminer(self.main_widget)
 
     def set_grid_mode(self, grid_mode: str) -> None:
-            self.main_window.settings_manager.global_settings.set_grid_mode(grid_mode)
+        # Set the grid mode and save it directly using QSettings
+        self.main_window.settings_manager.global_settings.set_grid_mode(grid_mode)
 
-            self.main_window.settings_manager.save_settings()
-            self.main_widget.special_placement_loader.refresh_placements()
-            self.pictograph_dicts = self.main_widget.pictograph_dict_loader.load_all_pictograph_dicts()
+        # Refresh placements and load any required data
+        self.main_widget.special_placement_loader.refresh_placements()
+        self.pictograph_dicts = self.main_widget.pictograph_dict_loader.load_all_pictograph_dicts()
 
-            start_pos_manager = (
-                self.main_widget.manual_builder.start_pos_picker.start_pos_manager
-            )
-            start_pos_manager.clear_start_positions()
-            start_pos_manager.setup_start_positions()
+        # Clear and re-setup necessary components based on new grid mode
+        start_pos_manager = self.main_widget.manual_builder.start_pos_picker.start_pos_manager
+        start_pos_manager.clear_start_positions()
+        start_pos_manager.setup_start_positions()
 
-            sequence_clearer = self.main_widget.sequence_widget.sequence_clearer
-            sequence_clearer.clear_sequence(show_indicator=False)
+        sequence_clearer = self.main_widget.sequence_widget.sequence_clearer
+        sequence_clearer.clear_sequence(show_indicator=False)
 
-            pictograph_container = (
-                self.main_widget.sequence_widget.graph_editor.pictograph_container
-            )
-
-            pictograph_container.GE_pictograph_view.set_to_blank_grid()
-            self._setup_special_placements()
+        pictograph_container = self.main_widget.sequence_widget.graph_editor.pictograph_container
+        pictograph_container.GE_pictograph_view.set_to_blank_grid()
+        self._setup_special_placements()

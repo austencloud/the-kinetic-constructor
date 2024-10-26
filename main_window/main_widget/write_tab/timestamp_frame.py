@@ -4,13 +4,14 @@ from PyQt6.QtCore import Qt
 from main_window.main_widget.write_tab.timestamp import Timestamp
 
 if TYPE_CHECKING:
+    from main_window.main_widget.write_tab.timestamp_scroll_area import TimestampScrollArea
     from main_window.main_widget.write_tab.write_tab import WriteTab
 
 
 class TimestampFrame(QWidget):
-    def __init__(self, write_tab: "WriteTab"):
-        super().__init__(write_tab)
-        self.write_tab = write_tab
+    def __init__(self, timestamp_scroll_area: "TimestampScrollArea"):
+        super().__init__(timestamp_scroll_area)
+        self.write_tab = timestamp_scroll_area.write_tab
         self.timestamps: dict[int, Timestamp] = {}
         self.layout: QVBoxLayout = QVBoxLayout(self)
         self.layout.setSpacing(0)

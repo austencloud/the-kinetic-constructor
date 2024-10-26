@@ -13,13 +13,12 @@ class SequenceLayoutSettings:
 
     def __init__(self, settings_manager: "SettingsManager") -> None:
         self.settings_manager = settings_manager
-        self.settings = self.settings_manager.settings.get(
-            "sequence_layout", self.DEFAULT_LAYOUT_SETTINGS
-        )
+        self.settings = self.settings_manager.settings  # QSettings instance
 
     def get_layout_setting(self, key: str):
-        return self.settings.get(key, self.DEFAULT_LAYOUT_SETTINGS.get(key))
+        return self.settings.value(
+            f"sequence_layout/{key}", self.DEFAULT_LAYOUT_SETTINGS.get(key)
+        )
 
     def set_layout_setting(self, key: str, value):
-        self.settings[key] = value
-        self.settings_manager.save_layout_settings(self.settings)
+        self.settings.setValue(f"sequence_layout/{key}", value)

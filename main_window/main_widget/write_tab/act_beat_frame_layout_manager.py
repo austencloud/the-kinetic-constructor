@@ -54,9 +54,7 @@ class ActBeatFrameLayoutManager:
         index = 0
         beats = self.beat_frame.beats
         for row in range(rows):
-            # Add the timestamp label in the first column (column 0)
-            timestamp_label = self.beat_frame.timestamps[row]
-            self.beat_frame.layout.addWidget(timestamp_label, row + 1, 0)
+
 
             # Add beats starting from column 1
             for col in range(1, columns + 1):

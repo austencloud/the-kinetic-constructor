@@ -27,6 +27,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.main_widget)
         self.setWindowTitle("The Kinetic Constructor")
         self.geometry_manager.set_dimensions()
+
     def exec(self, app: QApplication) -> int:
         self.profiler.enable()
         result = app.exec()
@@ -35,6 +36,5 @@ class MainWindow(QMainWindow):
         return result
 
     def closeEvent(self, event):
-        self.settings_manager.save_settings()
         super().closeEvent(event)
         QApplication.instance().installEventFilter(self)
