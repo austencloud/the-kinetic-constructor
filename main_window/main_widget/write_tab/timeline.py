@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 from PyQt6.QtGui import QPalette, QColor
 
-from main_window.main_widget.write_tab.timeline_header_widget import (
-    TimelineHeaderWidget,
+from main_window.main_widget.write_tab.act_header_widget import (
+    ActHeaderWidget,
 )
 from main_window.main_widget.write_tab.timeline_scroll_area import TimelineScrollArea
 from .timeline_row import TimelineRow
@@ -24,7 +24,7 @@ class Timeline(QWidget):
         self._setup_layout()
 
     def _setup_components(self):
-        self.header_widget = TimelineHeaderWidget(self)
+        self.header_widget = ActHeaderWidget(self)
         self.scroll_area = TimelineScrollArea(self)
         self.scroll_area.add_default_rows(8)  # Example: 8 default rows
 

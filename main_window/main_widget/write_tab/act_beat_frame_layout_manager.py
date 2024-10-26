@@ -2,7 +2,8 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import Qt
 
 from PyQt6.QtWidgets import QGridLayout
-from data.beat_frame_layouts import DEFAULT_BEAT_FRAME_LAYOUTS
+from data.act_beat_frame_layouts import ACT_BEAT_FRAME_LAYOUTS
+from data.beat_frame_layouts import SEQUENCE_WIDGET_BEAT_FRAME_LAYOUTS
 
 if TYPE_CHECKING:
     from main_window.main_widget.write_tab.act_beat_frame import ActBeatFrame
@@ -21,40 +22,20 @@ class ActBeatFrameLayoutManager:
         self.beat_frame.setContentsMargins(0, 0, 0, 0)
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        layout.addWidget(self.beat_frame.start_pos_view, 0, 0)
+        # Start position view can still be added at (0, 0)
+        # layout.addWidget(self.beat_frame.start_pos_view, 0, 0)
+
+        # Setup beats (this doesn't take into account the timestamp labels yet)
         for i, beat in enumerate(self.beat_frame.beats):
-            row, col = divmod(i, 8)
-            layout.addWidget(beat, row + 1, col + 1)
+            row, col = divmod(i, 9)
+            layout.addWidget(beat, row + 1, col + 1)  # Adjusted for timestamp column
+
         self.beat_frame.layout = layout
-        self.configure_beat_frame(16)
-
-    def calculate_layout(self, beat_count: int) -> tuple[int, int]:
-        return DEFAULT_BEAT_FRAME_LAYOUTS.get(beat_count, (1, beat_count))
-
-    def get_cols(self):
-        layout = self.beat_frame.layout
-        cols = 0
-        for i in range(layout.columnCount()):
-            if layout.itemAtPosition(0, i):
-                cols += 1
-        return cols - 1
-
-    def get_rows(self):
-        layout = self.beat_frame.layout
-        rows = 0
-        for i in range(layout.rowCount()):
-            if layout.itemAtPosition(i, 1):
-                rows += 1
-        return rows
 
     def configure_beat_frame(self, num_beats, override_grow_sequence=False):
-        if not override_grow_sequence:
-            grow_sequence = self.settings_manager.global_settings.get_grow_sequence()
-            if grow_sequence:
-                num_filled_beats = self.beat_frame.get.next_available_beat() or 0
-                num_beats = num_filled_beats
         columns, rows = self.calculate_layout(num_beats)
 
+        # Ensure vertical scroll when there are too many rows
         self.beat_frame.write_tab.beat_scroll_area.verticalScrollBarPolicy = (
             Qt.ScrollBarPolicy.ScrollBarAlwaysOn
             if rows > 4
@@ -63,24 +44,31 @@ class ActBeatFrameLayoutManager:
         self.rearrange_beats(num_beats, columns, rows)
 
     def rearrange_beats(self, num_beats, columns, rows):
+        # Clear the current layout and hide widgets
         while self.beat_frame.layout.count():
             self.beat_frame.layout.takeAt(0).widget().hide()
 
+        # Add the start position view at (0, 0)
         self.beat_frame.layout.addWidget(self.beat_frame.start_pos_view, 0, 0, 1, 1)
 
         index = 0
         beats = self.beat_frame.beats
         for row in range(rows):
+            # Add the timestamp label in the first column (column 0)
+            timestamp_label = self.beat_frame.timestamps[row]
+            self.beat_frame.layout.addWidget(timestamp_label, row + 1, 0)
+
+            # Add beats starting from column 1
             for col in range(1, columns + 1):
                 if index < num_beats:
                     beat_view = beats[index]
-                    self.beat_frame.layout.addWidget(beat_view, row, col)
+                    self.beat_frame.layout.addWidget(beat_view, row + 1, col)
                     beat_view.remove_beat_number()
-                    
+
                     # Reset numbering for each row from 1 to 8
                     beat_number_in_row = (index % 8) + 1
                     beat_view.add_beat_number(str(beat_number_in_row))
-                    
+
                     beat_view.show()
                     index += 1
                 else:
@@ -88,8 +76,9 @@ class ActBeatFrameLayoutManager:
                         beats[index].hide()
                         index += 1
 
-
-
     def adjust_layout_to_sequence_length(self):
         last_filled_index = self.beat_frame.get.next_available_beat()
         self.configure_beat_frame(last_filled_index)
+
+    def calculate_layout(self, beat_count: int) -> tuple[int, int]:
+        return ACT_BEAT_FRAME_LAYOUTS.get(beat_count, (1, beat_count))

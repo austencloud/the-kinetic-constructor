@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout
 from PyQt6.QtGui import QResizeEvent, QDropEvent
 from PyQt6.QtCore import Qt
 from main_window.main_widget.act_thumbnail_image_label import ActThumbnailImageLabel
-from main_window.main_widget.sequence_widget.beat_frame.act_beat_view import ActBeatView
+from main_window.main_widget.write_tab.act_beat_view import ActBeatView
 
 if TYPE_CHECKING:
     from main_window.main_widget.write_tab.timeline_row import TimelineRow
@@ -35,7 +35,7 @@ class TimelineBeatContainer(QFrame):
     def set_blank_pictograph(self):
         """Set a blank pictograph in the beat."""
         self.act_beat_view = ActBeatView(
-            self.timeline_row.timeline.write_tab.beat_frame, self.row_number
+            self.timeline_row.timeline.write_tab.act_beat_frame, self.row_number
         )
         self.set_pictograph(self.act_beat_view)
         self.is_filled = False
@@ -63,5 +63,3 @@ class TimelineBeatContainer(QFrame):
         """Trigger resize when the beat container is resized."""
         self.resize_timeline_beat_container()
         super().resizeEvent(event)
-
-

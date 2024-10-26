@@ -3,9 +3,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QGraphicsView, QGraphicsTextItem
 from PyQt6.QtCore import QPointF
 from PyQt6.QtGui import QFont
-
 from main_window.main_widget.sequence_widget.beat_frame.act_beat import ActBeat
-
 
 if TYPE_CHECKING:
     from main_window.main_widget.write_tab.act_beat_frame import ActBeatFrame
@@ -20,6 +18,7 @@ class ActBeatView(QGraphicsView):
     def __init__(self, beat_frame: "ActBeatFrame", number=None):
         super().__init__()
         self.beat_frame = beat_frame
+        self.is_filled = False
         self.number = number  # Beat number to display
         self.beat = ActBeat(beat_frame, 1)
         self.setScene(self.beat)
@@ -34,18 +33,18 @@ class ActBeatView(QGraphicsView):
         # Prevent scrolling by disabling scrolling behavior
         self.setInteractive(False)
 
-
-
-
     def add_beat_number(self, beat_number_text=None):
         """Display the beat number."""
         if not beat_number_text:
             beat_number_text = str(self.number) if self.number else "N/A"
 
+        # Print to verify the number being set
+        print(f"Adding beat number: {beat_number_text}")
+
         if self.beat_number_item:
             self.beat.removeItem(self.beat_number_item)
 
-        self.beat_number_item = QGraphicsTextItem(beat_number_text)
+        self.beat_number_item = QGraphicsTextItem(str(beat_number_text))
         self.beat_number_item.setFont(QFont("Georgia", 80, QFont.Weight.DemiBold))
         self.beat_number_item.setPos(
             QPointF(
@@ -54,6 +53,7 @@ class ActBeatView(QGraphicsView):
             )
         )
         self.scene().addItem(self.beat_number_item)
+        self.beat_number_item.setVisible(True)  # Ensure visibility
 
     def remove_beat_number(self):
         if self.beat_number_item:
@@ -61,7 +61,7 @@ class ActBeatView(QGraphicsView):
 
     def resize_act_beat_view(self):
         """Resize the beat view to fit the container."""
-        size = int(self.beat_frame.width() // 9)
+        size = self.beat_frame.beat_size
         self.setFixedSize(size, size)
 
         # Rescale the beat view to fit the container
@@ -78,7 +78,7 @@ class ActBeatView(QGraphicsView):
     def clear_beat(self):
         """Clear the beat from the view."""
         self.beat.clear()
-        self._setup_blank_beat()
+        # self._setup_blank_beat()
 
     def wheelEvent(self, event):
         """Override to prevent scrolling."""

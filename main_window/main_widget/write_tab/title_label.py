@@ -6,14 +6,14 @@ from PyQt6.QtCore import Qt
 from main_window.main_widget.write_tab.editable_label import EditableLabel
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.timeline_header_widget import (
-        TimelineHeaderWidget,
+    from main_window.main_widget.write_tab.act_header_widget import (
+        ActHeaderWidget,
     )
 
 
 class TitleLabel(EditableLabel):
-    def __init__(self, title_text, header_widget: "TimelineHeaderWidget"):
-        super().__init__(title_text, header_widget)
+    def __init__(self, title_text, header_widget: "ActHeaderWidget"):
+        super().__init__(header_widget, title_text)
         self.header_widget = header_widget
 
     def _show_edit(self, event):
@@ -43,7 +43,7 @@ class TitleLabel(EditableLabel):
 
     def resize_title_label(self):
         """Resize the title label based on the timeline width."""
-        self.title_size = self.header_widget.write_tab.width() // 50
+        self.title_size = self.header_widget.write_tab.width() // 45
         title_label_stylesheet = (
             f"font-size: {self.title_size}px; "
             f"font-weight: bold; "

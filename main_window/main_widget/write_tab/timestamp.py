@@ -1,13 +1,19 @@
 # timestamp_label.py
+from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QLineEdit
 from PyQt6.QtCore import Qt
 
 from main_window.main_widget.write_tab.editable_label import EditableLabel
 
+if TYPE_CHECKING:
+    from main_window.main_widget.write_tab.timestamp_frame import TimestampFrame
 
-class TimestampLabel(EditableLabel):
-    def __init__(self, label_text="0:00", parent=None, font_size: int = 14):
-        super().__init__(label_text, parent)
+
+class Timestamp(EditableLabel):
+    def __init__(self, timestamp_frame: "TimestampFrame", label_text="0:00"):
+        super().__init__(timestamp_frame, label_text)
+        self.timestamp_frame = timestamp_frame
+        self.write_tab = timestamp_frame.write_tab
 
     def _show_edit(self, event):
         """Show the QLineEdit for editing with the current timestamp pre-filled."""
@@ -17,7 +23,8 @@ class TimestampLabel(EditableLabel):
         self.edit.setFocus()
         self.edit.selectAll()
         self.edit.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
-        # Ensure that the timestamp format is preserved during editing
+        # transparent background
+        self.edit.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
 
     def _hide_edit(self):
         """Ensure timestamp format on hiding the editor."""
@@ -35,9 +42,13 @@ class TimestampLabel(EditableLabel):
         # You can add logic to format the timestamp here if needed
         self.label.setText(text)
 
-    def resize_timestamp(self, parent_width: int):
+    def resize_timestamp(self):
         """Resize the font size based on parent width."""
-        font_size = int(parent_width / 80)  # Adjust the divisor for size proportions
+        desired_height = self.timestamp_frame.write_tab.act_beat_frame.beat_size
+        self.setFixedHeight(desired_height)
+        self.label.setFixedHeight(desired_height)
+        self.edit.setFixedHeight(desired_height)
+        font_size = int(self.write_tab.width() / 80)
         font = self.label.font()
         font.setPointSize(font_size)
         self.label.setFont(font)

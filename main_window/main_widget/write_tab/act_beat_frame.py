@@ -1,8 +1,7 @@
-# act_beat_frame.py
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QGridLayout, QLabel
 from base_widgets.base_beat_frame import BaseBeatFrame
-from main_window.main_widget.sequence_widget.beat_frame.act_beat_view import ActBeatView
+from main_window.main_widget.write_tab.act_beat_view import ActBeatView
 from PyQt6.QtCore import Qt, QMimeData
 from PyQt6.QtWidgets import QFrame
 from PyQt6.QtGui import QDragEnterEvent, QDragMoveEvent, QDropEvent
@@ -11,6 +10,9 @@ from PyQt6.QtCore import QDataStream, QIODevice
 
 from main_window.main_widget.sequence_widget.beat_frame.beat_selection_overlay import (
     BeatSelectionOverlay,
+)
+from main_window.main_widget.write_tab.timestamp import (
+    Timestamp,
 )
 from main_window.main_widget.write_tab.act_beat_frame_layout_manager import (
     ActBeatFrameLayoutManager,
@@ -26,40 +28,40 @@ class ActBeatFrame(BaseBeatFrame):
         self.write_tab = write_tab
         self.main_widget = write_tab.main_widget
         self.beats: list[ActBeatView] = []
-        self.timestamps: list[QLabel] = []  # Holds timestamp labels
+        self.timestamps: list[Timestamp] = []  # Holds editable timestamp labels
         self.selection_overlay = BeatSelectionOverlay(self)
         self.layout_manager = ActBeatFrameLayoutManager(self)
-
         self.layout_manager.setup_layout()
 
     def init_act(self, num_beats: int, num_rows: int):
         """Initialize the act with a large grid of beats."""
         for row in range(num_rows):
-            # Add timestamp for each row
-            timestamp = QLabel(f"{row * 10}:00")  # Example: 0:00, 0:10, etc.
-            self.timestamps.append(timestamp)
-            self.layout.addWidget(timestamp, row, 0)  # Align in the first column
-
-            # Add beats for the row, initialize with None
-            for col in range(1, num_beats + 1):
-                beat_view = ActBeatView(self)  # No index-based number passed
+            # Add beats for the row
+            for col in range(num_beats):
+                beat_view = ActBeatView(self)
                 self.beats.append(beat_view)
                 self.layout.addWidget(beat_view, row, col)
-
+                beat_number = col + 1  # Number each beat in the row from 1 to 8
+                beat_view.add_beat_number(beat_number)
 
     def _setup_layout(self):
-        # Using a grid layout for both timestamps and beats
         self.layout: QGridLayout = QGridLayout(self)
-        # remove the spacing between the widgets
         self.layout.setSpacing(0)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
 
-    def resizeEvent(self, event):
+    def resize_act_beat_frame(self):
         """Resize each beat and adjust layout dynamically."""
+        width_without_scrollbar = (
+            self.width() - self.write_tab.beat_scroll_area.verticalScrollBar().width()
+        )
+        self.beat_size = int(width_without_scrollbar // 8)
+
         for view in self.beats:
             view.resize_act_beat_view()  # Ensure that each beat is resized correctly
-        super().resizeEvent(event)
+
+        for timestamp in self.timestamps:
+            timestamp.resize_timestamp()
 
     def dragEnterEvent(self, event: "QDragEnterEvent"):
         if event.mimeData().hasFormat("application/sequence-data"):

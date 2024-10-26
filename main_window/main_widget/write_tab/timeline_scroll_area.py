@@ -2,14 +2,16 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 from PyQt6.QtGui import QColor, QPalette
 from main_window.main_widget.act_thumbnail_image_label import ActThumbnailImageLabel
-from main_window.main_widget.sequence_widget.beat_frame.act_beat_view import ActBeatView
+from main_window.main_widget.write_tab.act_beat_view import ActBeatView
 from main_window.main_widget.write_tab.timeline_row import TimelineRow
 from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt, QMimeData
 from PyQt6.QtGui import QDragEnterEvent, QDropEvent
-from main_window.main_widget.write_tab.timestamp_label import TimestampLabel
-from main_window.main_widget.write_tab.timeline_beat_container import TimelineBeatContainer
+from main_window.main_widget.write_tab.timestamp import Timestamp
+from main_window.main_widget.write_tab.timeline_beat_container import (
+    TimelineBeatContainer,
+)
 import json
 
 if TYPE_CHECKING:
@@ -45,7 +47,6 @@ class TimelineScrollArea(QScrollArea):
         row.setup_beats()  # Call setup_beats after adding the row
         self.rows[len(self.rows)] = row
 
-
     def resize_timeline_scroll_area(self):
         for row in self.rows.values():
             row.resize_row()
@@ -80,18 +81,15 @@ class TimelineScrollArea(QScrollArea):
             print("No valid metadata found for this drop event.")
             event.ignore()
 
-
     def create_pictograph_view(self, pictograph_data):
         """Convert pictograph data into a view."""
         # Use your pictograph creation logic here to generate a pictograph view
-        return ActBeatView(
-            self.timeline.write_tab.beat_frame, pictograph_data
-        )
+        return ActBeatView(self.timeline.write_tab.act_beat_frame, pictograph_data)
 
     def add_pictograph_to_timeline(self, pictograph_view):
         """Add a pictograph to the timeline."""
         # Append the pictograph view to the timeline
-        next_beat =  self.get_next_empty_beat()
+        next_beat = self.get_next_empty_beat()
         next_beat.set_pictograph(pictograph_view)
 
     def update_act_browser_with_valid_sequences(self):
@@ -132,7 +130,6 @@ class TimelineScrollArea(QScrollArea):
             for beat in timeline.beats:
                 if not beat.is_filled:
                     return beat
-
 
     def set_act_browser(self, act_browser):
         """Set the Act Browser instance for the timeline."""

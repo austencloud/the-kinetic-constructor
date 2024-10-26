@@ -7,7 +7,7 @@ from main_window.main_widget.sequence_widget.beat_frame.reversal_symbol_manager 
 )
 
 if TYPE_CHECKING:
-    from main_window.main_widget.sequence_widget.beat_frame.act_beat_view import ActBeatView
+    from main_window.main_widget.write_tab.act_beat_view import ActBeatView
     from main_window.main_widget.write_tab.act_beat_frame import ActBeatFrame
 class ActBeat(BasePictograph):
     def __init__(self, beat_frame: "ActBeatFrame", duration: Union[int, float] = 1):

@@ -24,17 +24,14 @@ class ActThumbnailBox(QWidget):
         self.thumbnails = thumbnails
         self.main_widget = browser.write_tab.main_widget
         self.current_index = 0
-        self.setContentsMargins(0, 0, 0, 0)
-
+        
         self.word_label = WordLabel(self)
         self.image_label = ActThumbnailImageLabel(self)
-        self.image_label.setPixmap(QPixmap(thumbnails[0]))  # Remove static size
 
         self._setup_layout()
 
-
-
     def _setup_layout(self):
+        self.setContentsMargins(0, 0, 0, 0)
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)  # No margins in the layout
         layout.addWidget(self.word_label)
@@ -72,5 +69,4 @@ class ActThumbnailBox(QWidget):
         image = QPixmap(self.thumbnails[0])
         image = image.scaledToWidth(thumbnail_width)
         self.image_label.setPixmap(image)
-        # print(f"Resized thumbnail box for word: {self.word}")
         self.word_label.resize_word_label()

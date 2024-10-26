@@ -2,12 +2,16 @@ from typing import TYPE_CHECKING
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
 from PyQt6.QtCore import Qt, QMimeData
 from PyQt6.QtGui import QDragEnterEvent, QDropEvent
-from main_window.main_widget.write_tab.timestamp_label import TimestampLabel
-from main_window.main_widget.write_tab.timeline_beat_container import TimelineBeatContainer
+from main_window.main_widget.write_tab.timestamp import Timestamp
+from main_window.main_widget.write_tab.timeline_beat_container import (
+    TimelineBeatContainer,
+)
 import json
 
 if TYPE_CHECKING:
-    from main_window.main_widget.write_tab.timeline_scroll_area import TimelineScrollArea
+    from main_window.main_widget.write_tab.timeline_scroll_area import (
+        TimelineScrollArea,
+    )
 
 
 class TimelineRow(QWidget):
@@ -23,7 +27,7 @@ class TimelineRow(QWidget):
         self._setup_components()
 
     def _setup_components(self):
-        self.timestamp_label = TimestampLabel("0:00")  # Starting with 0:00 placeholder
+        self.timestamp_label = Timestamp("0:00")  # Starting with 0:00 placeholder
         self.layout.addWidget(self.timestamp_label)
 
     def _setup_layout(self):
@@ -36,7 +40,9 @@ class TimelineRow(QWidget):
     def setup_beats(self):
         """Create beat containers and add them to the layout."""
         for i in range(8):  # Example: 8 beats per row
-            beat_container = TimelineBeatContainer(self, self.timeline.main_widget, i + 1)
+            beat_container = TimelineBeatContainer(
+                self, self.timeline.main_widget, i + 1
+            )
             beat_container.setAcceptDrops(True)  # Enable each beat to accept drops
             self.beats.append(beat_container)
             self.layout.addWidget(beat_container)
@@ -52,14 +58,14 @@ class TimelineRow(QWidget):
         """Handle drop event to add the sequence to the timeline."""
         if event.mimeData().hasFormat("application/sequence-data"):
             data = event.mimeData().data("application/sequence-data")
-            metadata = json.loads(str(data, 'utf-8'))
+            metadata = json.loads(str(data, "utf-8"))
 
             # Process and apply the dropped sequence metadata
             print(f"Sequence metadata dropped: {metadata}")
 
             # Example: Apply the metadata to the first available beat
             for beat in self.beats:
-                if not beat.is_filled: 
+                if not beat.is_filled:
                     beat.set_pictograph(metadata)  # Set the sequence data
                     break
             event.acceptProposedAction()

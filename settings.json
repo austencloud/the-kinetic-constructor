@@ -1,7 +1,7 @@
 {
     "global": {
         "prop_type": "Staff",
-        "background_type": "Bubbles",
+        "background_type": "Aurora",
         "grow_sequence": true,
         "current_tab": "write",
         "grid_mode": "diamond"
@@ -63,7 +63,7 @@
         "auto_builder": {
             "circular_auto_builder": {
                 "sequence_type": "circular",
-                "sequence_length": 8,
+                "sequence_length": 16,
                 "max_turn_intensity": 1,
                 "sequence_level": 2,
                 "rotation_type": "halved",
@@ -129,7 +129,7 @@
         ]
     },
     "write_tab": {
-        "act_title": "Kickass New Act",
+        "act_title": "You can change this",
         "last_saved_act": null
     }
 }

@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 
 
 class EditableLabel(QWidget):
-    def __init__(self, label_text: str, parent=None):
+    def __init__(self, parent, label_text: str):
         super().__init__(parent)
         self.label = QLabel(label_text, self)
         # self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
